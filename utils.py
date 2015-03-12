@@ -4,7 +4,7 @@ import generated_def.windef as windef
 import winobject
 import copy
 import native_exec
-import generated_def.winstructs as winstructs
+from generated_def.winstructs import *
 
 # Function resolution !
 
@@ -19,7 +19,6 @@ def get_func_addr(dll_name, func_name):
         
 def enumerate_processes():
     process_entry = winobject.WinProcess()
-    #process_entry = winstructs.PROCESSENTRY32()
     process_entry.dwSize = ctypes.sizeof(process_entry)
     snap = kernel32proxy.CreateToolhelp32Snapshot(windef.TH32CS_SNAPPROCESS, 0)
     kernel32proxy.Process32First(snap, process_entry)
@@ -40,33 +39,18 @@ def enumerate_threads():
         threads.append(copy.copy(thread_entry))
     return threads
     
-class System(object):
-
-    @property
-    def processes(self):
-        return enumerate_processes()
-        
-    @property
-    def threads(self):
-        return enumerate_threads()
-
-class CurrentProcess(object):
-    get_peb = None
+def is_wow_64(hProcess):
+    try:
+        fnIsWow64Process =  get_func_addr("kernel32.dll", "IsWow64Process")
+    except kernel32proxy.Kernel32Error:
+        return False
+    IsWow64Process  = ctypes.WINFUNCTYPE(BOOL, HANDLE, ctypes.POINTER(BOOL))(fnIsWow64Process)
+    Wow64Process = BOOL()
+    res = IsWow64Process(hProcess, ctypes.byref(Wow64Process))
+    if res:
+        return bool(Wow64Process)
+    raise ctypes.WinError()
     
-    get_peb_32_code = '64a130000000c3'.decode('hex')
- 
-    def get_peb_builtin(self):
-        if self.get_peb is not None:
-            return self.get_peb
-        get_peb = native_exec.create_function(self.get_peb_32_code, [winstructs.PVOID])
-        self.get_peb = get_peb
-        return get_peb
-        
-    @property    
-    def peb(self):
-        return winobject.PEB.from_address(self.get_peb_builtin()())
-    
-        
 class VirtualProtected(object):
     def __init__(self, addr, size, new_protect):
         if (addr % 0x1000):
@@ -76,7 +60,7 @@ class VirtualProtected(object):
         self.new_protect = new_protect
         
     def __enter__(self):
-        self.old_protect = winstructs.DWORD()
+        self.old_protect = DWORD()
         kernel32proxy.VirtualProtect(self.addr, self.size, self.new_protect, ctypes.byref(self.old_protect))
         return self
         

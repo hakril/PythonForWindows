@@ -1,5 +1,6 @@
 import struct
 import sys
+# This code should really be rewritten..
 
 this_module = sys.modules[__name__]
 
@@ -164,10 +165,48 @@ class Mov_DX_Reg(object):
 
 generate_reg_modr(Mov_DX_Reg)
 
+def generate_reg_indirect_modr_byte(reg_dst_bits, reg_src_bits):
+    # reg, [reg] or [reg], reg
+    return "00{0}{1}".format(reg_dst_bits, reg_src_bits)
+    
+def generate_reg_reg_deref(instr_cls, src_first=True):
+    "generate the Mov_Reg_DReg and Mov_DReg_Reg"
+    for reg_src_name, reg_src_bits in reg_opcode.items():
+        for reg_dst_name, reg_dst_bits in reg_opcode.items():
+            if reg_dst_name in ("EBP", "ESP") or reg_src_name in ("EBP", "ESP"):
+                # Not same encoding -> Not implemented
+                continue
+            class Reg_DReg_instruction(X86Instruction):
+                mnemo = instr_cls.mnemo.format(reg_dst_name, reg_src_name)
+                name = instr_cls.name.format(reg_dst_name, reg_src_name)
+                if src_first:
+                    modr_code = generate_reg_indirect_modr_byte(reg_src_bits, reg_dst_bits)
+                else:
+                    modr_code = generate_reg_indirect_modr_byte(reg_dst_bits, reg_src_bits)
+                code = instr_cls.instruction_bits + chr(int(modr_code, 2)).encode("hex")
+            Reg_DReg_instruction.__name__ = Reg_DReg_instruction.name
+            add_instruction(Reg_DReg_instruction.__name__, Reg_DReg_instruction)
+    
+    
+class Mov_Reg_DReg(object):
+    name = 'Mov_{0}_D{1}'
+    mnemo = 'mov [{0}], {1}'
+    instruction_bits = '8B'
+    
+generate_reg_reg_deref(Mov_Reg_DReg, False)
+
+class Mov_DReg_Reg(object):
+    name = 'Mov_D{0}_{1}'
+    mnemo = 'mov {0}, [{1}]'
+    instruction_bits = '89'
+    
+generate_reg_reg_deref(Mov_DReg_Reg, True)
 
 
 def generate_reg_reg_modr_byte(reg_dst_bits, reg_src_bits):
+    # reg, reg
     return "11{0}{1}".format(reg_src_bits, reg_dst_bits)
+    
         
 def generate_reg_reg_modr(instr_cls):  
     for reg_src_name, reg_src_bits in reg_opcode.items():
@@ -209,13 +248,18 @@ class JNZ(OneBindX86Instruction):
         
     def get_code(self):
         return super(JNZ, self).get_code() + self.instr_block.get_code()
+        
+        
 
 class MultipleInstr(object):
 
-    def __init__(self):
-        self.instrs = []
+    def __init__(self, init_instrs=()):
+        self.instrs = list(init_instrs)
         
     def __iadd__(self, value):
+        if type(value) == MultipleInstr:
+            self.instrs.extend(value.instrs)
+            return self
         self.instrs.append(value)
         return self
         

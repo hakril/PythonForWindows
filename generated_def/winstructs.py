@@ -18,10 +18,11 @@ CHAR = c_char
 FARPROC = PVOID
 HGLOBAL = PVOID
 HRESULT = c_long
+ULONGLONG = c_ulonglong
 PHANDLE = POINTER(HANDLE)
 VOID = DWORD
 
-structs = ['_LIST_ENTRY', '_PEB_LDR_DATA', '_LSA_UNICODE_STRING', '_RTL_USER_PROCESS_PARAMETERS', '_PEB', '_SECURITY_ATTRIBUTES', '_SYSTEM_VERIFIER_INFORMATION', '_LDR_DATA_TABLE_ENTRY', '_PEB_LDR_DATA', '_IMAGE_FILE_HEADER', '_IMAGE_DATA_DIRECTORY', '_IMAGE_OPTIONAL_HEADER', '_IMAGE_NT_HEADERS', '_MEMORY_BASIC_INFORMATION', '_STARTUPINFOA', '_STARTUPINFOW', '_PROCESS_INFORMATION', '_FLOATING_SAVE_AREA', '_CONTEXT', 'tagPROCESSENTRY32W', 'tagPROCESSENTRY32', 'tagTHREADENTRY32', '_LUID', '_LUID_AND_ATTRIBUTES', '_TOKEN_PRIVILEGES']
+structs = ['_LIST_ENTRY', '_PEB_LDR_DATA', '_LSA_UNICODE_STRING', '_RTL_USER_PROCESS_PARAMETERS', '_PEB', '_SECURITY_ATTRIBUTES', '_SYSTEM_VERIFIER_INFORMATION', '_LDR_DATA_TABLE_ENTRY', '_PEB_LDR_DATA', '_IMAGE_FILE_HEADER', '_IMAGE_DATA_DIRECTORY', '_IMAGE_SECTION_HEADER', '_IMAGE_OPTIONAL_HEADER64', '_IMAGE_OPTIONAL_HEADER', '_IMAGE_NT_HEADERS64', '_IMAGE_NT_HEADERS', '_IMAGE_IMPORT_DESCRIPTOR', '_MEMORY_BASIC_INFORMATION', '_STARTUPINFOA', '_STARTUPINFOW', '_PROCESS_INFORMATION', '_FLOATING_SAVE_AREA', '_CONTEXT', 'tagPROCESSENTRY32W', 'tagPROCESSENTRY32', 'tagTHREADENTRY32', '_LUID', '_LUID_AND_ATTRIBUTES', '_TOKEN_PRIVILEGES', '_OSVERSIONINFOA', '_OSVERSIONINFOW', '_OSVERSIONINFOEXA', '_OSVERSIONINFOEXW']
 
 enums = ['_SYSTEM_INFORMATION_CLASS']
 
@@ -269,6 +270,60 @@ class _IMAGE_DATA_DIRECTORY(Structure):
 IMAGE_DATA_DIRECTORY = _IMAGE_DATA_DIRECTORY
 PIMAGE_DATA_DIRECTORY = POINTER(_IMAGE_DATA_DIRECTORY)
 
+# Struct _IMAGE_SECTION_HEADER definitions
+class _IMAGE_SECTION_HEADER(Structure):
+        _fields_ = [
+        ("Name", BYTE * IMAGE_SIZEOF_SHORT_NAME),
+        ("VirtualSize", DWORD),
+        ("VirtualAddress", DWORD),
+        ("SizeOfRawData", DWORD),
+        ("PointerToRawData", DWORD),
+        ("PointerToRelocations", DWORD),
+        ("PointerToLinenumbers", DWORD),
+        ("NumberOfRelocations", WORD),
+        ("NumberOfLinenumbers", WORD),
+        ("Characteristics", DWORD),
+    ]
+PIMAGE_SECTION_HEADER = POINTER(_IMAGE_SECTION_HEADER)
+IMAGE_SECTION_HEADER = _IMAGE_SECTION_HEADER
+
+# Struct _IMAGE_OPTIONAL_HEADER64 definitions
+class _IMAGE_OPTIONAL_HEADER64(Structure):
+        _fields_ = [
+        ("Magic", WORD),
+        ("MajorLinkerVersion", BYTE),
+        ("MinorLinkerVersion", BYTE),
+        ("SizeOfCode", DWORD),
+        ("SizeOfInitializedData", DWORD),
+        ("SizeOfUninitializedData", DWORD),
+        ("AddressOfEntryPoint", DWORD),
+        ("BaseOfCode", DWORD),
+        ("ImageBase", ULONGLONG),
+        ("SectionAlignment", DWORD),
+        ("FileAlignment", DWORD),
+        ("MajorOperatingSystemVersion", WORD),
+        ("MinorOperatingSystemVersion", WORD),
+        ("MajorImageVersion", WORD),
+        ("MinorImageVersion", WORD),
+        ("MajorSubsystemVersion", WORD),
+        ("MinorSubsystemVersion", WORD),
+        ("Win32VersionValue", DWORD),
+        ("SizeOfImage", DWORD),
+        ("SizeOfHeaders", DWORD),
+        ("CheckSum", DWORD),
+        ("Subsystem", WORD),
+        ("DllCharacteristics", WORD),
+        ("SizeOfStackReserve", ULONGLONG),
+        ("SizeOfStackCommit", ULONGLONG),
+        ("SizeOfHeapReserve", ULONGLONG),
+        ("SizeOfHeapCommit", ULONGLONG),
+        ("LoaderFlags", DWORD),
+        ("NumberOfRvaAndSizes", DWORD),
+        ("DataDirectory", IMAGE_DATA_DIRECTORY * IMAGE_NUMBEROF_DIRECTORY_ENTRIES),
+    ]
+PIMAGE_OPTIONAL_HEADER64 = POINTER(_IMAGE_OPTIONAL_HEADER64)
+IMAGE_OPTIONAL_HEADER64 = _IMAGE_OPTIONAL_HEADER64
+
 # Struct _IMAGE_OPTIONAL_HEADER definitions
 class _IMAGE_OPTIONAL_HEADER(Structure):
         _fields_ = [
@@ -302,20 +357,42 @@ class _IMAGE_OPTIONAL_HEADER(Structure):
         ("SizeOfHeapCommit", DWORD),
         ("LoaderFlags", DWORD),
         ("NumberOfRvaAndSizes", DWORD),
-        ("DataDirectory", PIMAGE_DATA_DIRECTORY),
+        ("DataDirectory", IMAGE_DATA_DIRECTORY * IMAGE_NUMBEROF_DIRECTORY_ENTRIES),
     ]
-PIMAGE_OPTIONAL_HEADER = POINTER(_IMAGE_OPTIONAL_HEADER)
-IMAGE_OPTIONAL_HEADER = _IMAGE_OPTIONAL_HEADER
+PIMAGE_OPTIONAL_HEADER32 = POINTER(_IMAGE_OPTIONAL_HEADER)
+IMAGE_OPTIONAL_HEADER32 = _IMAGE_OPTIONAL_HEADER
+
+# Struct _IMAGE_NT_HEADERS64 definitions
+class _IMAGE_NT_HEADERS64(Structure):
+        _fields_ = [
+        ("Signature", DWORD),
+        ("FileHeader", IMAGE_FILE_HEADER),
+        ("OptionalHeader", IMAGE_OPTIONAL_HEADER64),
+    ]
+PIMAGE_NT_HEADERS64 = POINTER(_IMAGE_NT_HEADERS64)
+IMAGE_NT_HEADERS64 = _IMAGE_NT_HEADERS64
 
 # Struct _IMAGE_NT_HEADERS definitions
 class _IMAGE_NT_HEADERS(Structure):
         _fields_ = [
         ("Signature", DWORD),
         ("FileHeader", IMAGE_FILE_HEADER),
-        ("OptionalHeader", IMAGE_OPTIONAL_HEADER),
+        ("OptionalHeader", IMAGE_OPTIONAL_HEADER32),
     ]
-PIMAGE_NT_HEADERS = POINTER(_IMAGE_NT_HEADERS)
-IMAGE_NT_HEADERS = _IMAGE_NT_HEADERS
+IMAGE_NT_HEADERS32 = _IMAGE_NT_HEADERS
+PIMAGE_NT_HEADERS32 = POINTER(_IMAGE_NT_HEADERS)
+
+# Struct _IMAGE_IMPORT_DESCRIPTOR definitions
+class _IMAGE_IMPORT_DESCRIPTOR(Structure):
+        _fields_ = [
+        ("OriginalFirstThunk", DWORD),
+        ("TimeDateStamp", DWORD),
+        ("ForwarderChain", DWORD),
+        ("Name", DWORD),
+        ("FirstThunk", DWORD),
+    ]
+IMAGE_IMPORT_DESCRIPTOR = _IMAGE_IMPORT_DESCRIPTOR
+PIMAGE_IMPORT_DESCRIPTOR = POINTER(_IMAGE_IMPORT_DESCRIPTOR)
 
 # Struct _MEMORY_BASIC_INFORMATION definitions
 class _MEMORY_BASIC_INFORMATION(Structure):
@@ -518,4 +595,74 @@ class _TOKEN_PRIVILEGES(Structure):
     ]
 TOKEN_PRIVILEGES = _TOKEN_PRIVILEGES
 PTOKEN_PRIVILEGES = POINTER(_TOKEN_PRIVILEGES)
+
+# Struct _OSVERSIONINFOA definitions
+class _OSVERSIONINFOA(Structure):
+        _fields_ = [
+        ("dwOSVersionInfoSize", DWORD),
+        ("dwMajorVersion", DWORD),
+        ("dwMinorVersion", DWORD),
+        ("dwBuildNumber", DWORD),
+        ("dwPlatformId", DWORD),
+        ("szCSDVersion", CHAR * 128),
+    ]
+POSVERSIONINFOA = POINTER(_OSVERSIONINFOA)
+OSVERSIONINFOA = _OSVERSIONINFOA
+LPOSVERSIONINFOA = POINTER(_OSVERSIONINFOA)
+
+# Struct _OSVERSIONINFOW definitions
+class _OSVERSIONINFOW(Structure):
+        _fields_ = [
+        ("dwOSVersionInfoSize", DWORD),
+        ("dwMajorVersion", DWORD),
+        ("dwMinorVersion", DWORD),
+        ("dwBuildNumber", DWORD),
+        ("dwPlatformId", DWORD),
+        ("szCSDVersion", WCHAR * 128),
+    ]
+RTL_OSVERSIONINFOW = _OSVERSIONINFOW
+PRTL_OSVERSIONINFOW = POINTER(_OSVERSIONINFOW)
+LPOSVERSIONINFOW = POINTER(_OSVERSIONINFOW)
+POSVERSIONINFOW = POINTER(_OSVERSIONINFOW)
+OSVERSIONINFOW = _OSVERSIONINFOW
+
+# Struct _OSVERSIONINFOEXA definitions
+class _OSVERSIONINFOEXA(Structure):
+        _fields_ = [
+        ("dwOSVersionInfoSize", DWORD),
+        ("dwMajorVersion", DWORD),
+        ("dwMinorVersion", DWORD),
+        ("dwBuildNumber", DWORD),
+        ("dwPlatformId", DWORD),
+        ("szCSDVersion", CHAR * 128),
+        ("wServicePackMajor", WORD),
+        ("wServicePackMinor", WORD),
+        ("wSuiteMask", WORD),
+        ("wProductType", BYTE),
+        ("wReserved", BYTE),
+    ]
+OSVERSIONINFOEXA = _OSVERSIONINFOEXA
+POSVERSIONINFOEXA = POINTER(_OSVERSIONINFOEXA)
+LPOSVERSIONINFOEXA = POINTER(_OSVERSIONINFOEXA)
+
+# Struct _OSVERSIONINFOEXW definitions
+class _OSVERSIONINFOEXW(Structure):
+        _fields_ = [
+        ("dwOSVersionInfoSize", DWORD),
+        ("dwMajorVersion", DWORD),
+        ("dwMinorVersion", DWORD),
+        ("dwBuildNumber", DWORD),
+        ("dwPlatformId", DWORD),
+        ("szCSDVersion", WCHAR * 128),
+        ("wServicePackMajor", WORD),
+        ("wServicePackMinor", WORD),
+        ("wSuiteMask", WORD),
+        ("wProductType", BYTE),
+        ("wReserved", BYTE),
+    ]
+PRTL_OSVERSIONINFOEXW = POINTER(_OSVERSIONINFOEXW)
+LPOSVERSIONINFOEXW = POINTER(_OSVERSIONINFOEXW)
+OSVERSIONINFOEXW = _OSVERSIONINFOEXW
+POSVERSIONINFOEXW = POINTER(_OSVERSIONINFOEXW)
+RTL_OSVERSIONINFOEXW = _OSVERSIONINFOEXW
 

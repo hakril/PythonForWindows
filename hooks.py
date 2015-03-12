@@ -4,9 +4,8 @@ import native_exec
 import ctypes
 import windows.generated_def.winfuncs as winfuncs
 import windows.generated_def.windef as windef
+from windows.generated_def.winstructs import *
 
-DWORD =  ctypes.wintypes.DWORD
-HANDLE =  ctypes.wintypes.HANDLE
 
 class Callback(object):
     def __init__(self, *types):
@@ -37,6 +36,7 @@ for func in winfuncs.functions:
     CallBackDeclaration.__name__ = callback_name
     add_callback_to_module(CallBackDeclaration())
     
+    
 
 class IATHook(object):
 
@@ -55,7 +55,6 @@ class IATHook(object):
         self.realfunction = ctypes.WINFUNCTYPE(*types)(IAT_entry.nonhookvalue)
         self.is_enable = False
 
-
     def transform_arguments(self, types):
         res = []
         for type in types:
@@ -66,12 +65,12 @@ class IATHook(object):
         return res
             
     def enable(self):
-        with utils.VirtualProtected(self.entry.addr, 0x4, windef.PAGE_EXECUTE_READWRITE):
+        with utils.VirtualProtected(self.entry.addr, ctypes.sizeof(PVOID), windef.PAGE_EXECUTE_READWRITE):
             self.entry.value = self.stub
         self.is_enable = True
         
     def disable(self):
-        with utils.VirtualProtected(self.entry.addr, 0x4, windef.PAGE_EXECUTE_READWRITE):
+        with utils.VirtualProtected(self.entry.addr, ctypes.sizeof(PVOID), windef.PAGE_EXECUTE_READWRITE):
             self.entry.value = self.entry.nonhookvalue
         self.is_enable = False
         
@@ -85,6 +84,7 @@ class IATHook(object):
                 adapted_args.append(ctypes.c_char_p((value)))
             else:
                 adapted_args.append(value)
+
         def real_function(*args):
             if args == ():
                 args = adapted_args

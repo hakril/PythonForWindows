@@ -62,14 +62,17 @@ class ApiProxy(object):
             doc = doc if doc else ""
             python_proxy.__doc__ = doc + "\nErrcheck:\n   " + self.error_check.__doc__
         params_name = [param[1] for param in params]
-        def check_arguments(*args):
+        def perform_call(*args):
             if len(params_name) != len(args):
+                print("ERROR:")
+                print("Expected params: {0}".format(params_name))
+                print("Just Got params: {0}".format(args))
                 raise ValueError("I do not have all parameters: how is that possible ?")
             for param_name, param_value in zip(params_name, args):
                 if param_value is NeededParameter:
                     raise TypeError("{0}: Missing Mandatory parameter <{1}>".format(self.func_name, param_name))
             return c_prototyped(*args)
-        setattr(python_proxy, "ctypes_function", check_arguments)
+        setattr(python_proxy, "ctypes_function", perform_call)
         return python_proxy
         
 class Kernel32Proxy(ApiProxy):
@@ -122,6 +125,10 @@ GetCurrentProcess = TransparentKernel32Proxy("GetCurrentProcess")
 @Kernel32Proxy("VirtualAlloc")
 def VirtualAlloc(lpAddress=0,  dwSize=NeededParameter, flAllocationType=MEM_COMMIT, flProtect=PAGE_EXECUTE_READWRITE):
     return VirtualAlloc.ctypes_function(lpAddress, dwSize, flAllocationType, flProtect)
+    
+@Kernel32Proxy("VirtualAllocEx")
+def VirtualAllocEx(hProcess, lpAddress=0,  dwSize=NeededParameter, flAllocationType=MEM_COMMIT, flProtect=PAGE_EXECUTE_READWRITE):
+    return VirtualAllocEx.ctypes_function(hProcess, lpAddress, dwSize, flAllocationType, flProtect)
     
 @Kernel32Proxy("CreateRemoteThread") 
 def CreateRemoteThread(hProcess=NeededParameter, lpThreadAttributes=None, dwStackSize=0,
@@ -193,7 +200,7 @@ def WriteProcessMemory(hProcess, lpBaseAddress, lpBuffer, nSize=None, lpNumberOf
     """Computer nSize with len(lpBuffer) if not given"""
     if nSize is None:
         nSize = len(lpBuffer)
-    return WriteProcessMemory.ctypes_function(hProcess, lpBaseAddress, lpBuffer, nSize, lpNumberOfBytesRead)
+    return WriteProcessMemory.ctypes_function(hProcess, lpBaseAddress, lpBuffer, nSize, lpNumberOfBytesWritten)
     
 @Kernel32Proxy("CreateToolhelp32Snapshot") 
 def CreateToolhelp32Snapshot(dwFlags, th32ProcessID=0):
