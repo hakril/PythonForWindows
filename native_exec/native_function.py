@@ -157,10 +157,6 @@ def generate_stub_32(callback):
     code += Mov_EAX_X(c_callback)
     code += Call_EAX()
 
-    # TODO : Remove this and setup callback as WinFuncType
-    for i in range(len(callback.argtypes)):
-        code += Pop_EBX()
-
     # Restore real return value
     code += Mov_EBX_DX(return_addr_save_addr)
     code += Push_EBX()
@@ -209,6 +205,8 @@ def generate_stub_64(callback):
     save_rdx = save_register_space_end - REG_LEN - (REG_LEN * 2)
     save_rsi = save_register_space_end - REG_LEN - (REG_LEN * 3)
     save_rdi = save_register_space_end - REG_LEN - (REG_LEN * 4)
+    save_r8 = save_register_space_end - REG_LEN - (REG_LEN * 5)
+    save_r9 = save_register_space_end - REG_LEN - (REG_LEN * 6)
 
 
     gstate_save_addr = allocator.reserve_int()
@@ -226,7 +224,6 @@ def generate_stub_64(callback):
 
     ### Shellcode ###
     code = MultipleInstr()
-    code += Int3()
     code += Mov_RAX_X(save_register_space_end)
     # A lazy working xchg RSP <-> RAX
     code += Push_RAX()
@@ -254,26 +251,29 @@ def generate_stub_64(callback):
     code += Pop_RAX()
     code += Mov_DX_RAX(return_addr_save_addr)
     # Restore parameters for real function call
-    code += Mov_RAX_X(save_rbx)
-    code += Mov_RBX_DRAX()
     code += Mov_RAX_X(save_rcx)
     code += Mov_RCX_DRAX()
     code += Mov_RAX_X(save_rdx)
     code += Mov_RDX_DRAX()
-    code += Mov_RAX_X(save_rsi)
-    code += Mov_RSI_DRAX()
-    code += Mov_RAX_X(save_rdi)
-    code += Mov_DRAX_RDI()
+    code += Mov_RAX_X(save_r8)
+    code += Mov_R8_DRAX()
+    code += Mov_RAX_X(save_r9)
+    code += Mov_R9_DRAX()
     # Call python code
+    code += Int3()
     code += Mov_RAX_X(c_callback)
     code += Reserve_space_for_call
     code += Call_RAX() # no need for stack alignement here as we poped the return addr
+    
     code += Clean_space_for_call
     # Save return value
     code += Mov_DX_RAX(return_value_save_addr)
     code += Mov_RAX_DX(return_addr_save_addr)
     # Repush real return value
     code += Push_RAX()
+    code += Mov_RAX_DX(gstate_save_addr)
+    code += Push_RAX()
+    code += Pop_RCX()
     code += Mov_RAX_X(release)
     code += Reserve_space_for_call
     code += Do_stack_alignement
@@ -297,13 +297,12 @@ def generate_stub_64(callback):
 
     # Restore return value
     code += Mov_RAX_DX(return_value_save_addr)
-    code += Int3()
     code += Ret()
     return code
 
 
 def generate_callback_stub(callback, types):
-    func_type = ctypes.CFUNCTYPE(*types)
+    func_type = ctypes.WINFUNCTYPE(*types)
     c_callable = func_type(callback)
     if windows.current_process.bitness == 32:
         stub = generate_stub_32(c_callable)
