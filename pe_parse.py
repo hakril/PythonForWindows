@@ -108,7 +108,6 @@ def PEFile(baseaddr):
         def get_IMPORT_DESCRIPTORS(self):
             import_datadir = self.get_DataDirectory()[IMAGE_DIRECTORY_ENTRY_IMPORT]
             if import_datadir.VirtualAddress == 0:
-                print("get_IMPORT_DESCRIPTORS : VirtualAddress == 0")
                 return []
             import_descriptor_addr = RVA(import_datadir.VirtualAddress).addr
             current_import_descriptor = self.IMAGE_IMPORT_DESCRIPTOR.from_address(import_descriptor_addr)
@@ -157,7 +156,6 @@ def PEFile(baseaddr):
                     else:
                         import_by_name = IMPORT_BY_NAME.from_address(baseaddr + int_entry.AddressOfData)
                         name = ctypes.c_char_p(ctypes.addressof(import_by_name) + IMPORT_BY_NAME.Name.offset).value
-                        print(name)
                         res.append((import_by_name.Hint, name))
                     int_addr += ctypes.sizeof(THUNK_DATA)
                     int_entry = THUNK_DATA.from_address(int_addr)

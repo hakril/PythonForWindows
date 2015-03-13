@@ -193,6 +193,7 @@ def generate_stub_64(callback):
     c_callback = ctypes.c_ulong.from_address(id(callback._objects['0']) + 3 * ctypes.sizeof(ctypes.c_void_p)).value
     gstate_save_addr = allocator.reserve_int()
     return_addr_save_addr = allocator.reserve_int()
+    return_value_save_addr = allocator.reserve_int()
     
     Reserve_space_for_call = MultipleInstr([Push_RDI()] * 4)
     Clean_space_for_call = MultipleInstr([Pop_RDI()] * 4)
@@ -250,6 +251,8 @@ def generate_stub_64(callback):
     code += Mov_RAX_X(c_callback)
     code += Clean_space_for_call 
     code += Call_RAX()
+    # Save return value
+    code += Mov_DX_RAX(return_value_save_addr)
     code += Mov_RAX_DX(return_addr_save_addr)
     code += Push_RAX()
     code += Mov_RAX_X(release)
@@ -267,6 +270,8 @@ def generate_stub_64(callback):
     code += Mov_RSI_DRAX()
     code += Mov_RAX_X(save_rdi)
     code += Mov_DRAX_RDI()
+    # Restore return value
+    code += Mov_RAX_DX(return_value_save_addr)
     code += Ret()
     return code
  
