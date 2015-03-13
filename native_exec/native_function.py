@@ -13,7 +13,7 @@ class PyMmap(PyObj):
     _fields_ = [("ob_addr", ctypes.c_size_t), ("ob_size", ctypes.c_size_t)]
 
 # Specific mmap class for code injection
-   
+
 class MyMap(mmap.mmap):
     """ A mmap that is never unmapped and that contains the page address """
     def __init__(self, *args, **kwarg):
@@ -40,7 +40,7 @@ class Win32MyMap(MyMap):
         #return cls(-1, size, access=access)
         access = mmap.ACCESS_READ | mmap.ACCESS_WRITE
         addr = k32api.VirtualAlloc(0, size, 0x1000, 0x40)
-  
+
         new_map = (ctypes.c_char * size).from_address(addr)
         new_map.addr = addr
         if new_map.addr == 0:
@@ -52,8 +52,8 @@ class UnixMyMap(MyMap):
     def get_map(cls, size):
         prot = mmap.PROT_EXEC | mmap.PROT_WRITE | mmap.PROT_READ
         return cls(-1, size, prot=prot)
-        
-        
+
+
 class CustomAllocator(object):
     int_size = {'32bit' : 4, '64bit' : 8}
 
@@ -80,11 +80,11 @@ class CustomAllocator(object):
         addr = self.maps[-1].addr + self.cur_offset
         self.cur_offset += size
         return addr
-        
-    def reserve_int(self):
+
+    def reserve_int(self, nb_int=1):
         int_size = self.get_int_size()
-        return self.reserve_size(int_size)
-        
+        return self.reserve_size(int_size * nb_int)
+
     def write_code(self, code):
         size = len(code)
         if size + self.cur_offset > self.cur_page_size:
@@ -93,7 +93,7 @@ class CustomAllocator(object):
         addr = self.maps[-1].addr + self.cur_offset
         self.cur_offset += size
         return addr
-        
+
 allocator = CustomAllocator()
 
 
@@ -101,12 +101,12 @@ def get_functions():
     # Windows only with python27.dll | improve this ?
     import sys
     import windows
-    
+
     PyGILState_Ensure = windows.utils.get_func_addr('python27', 'PyGILState_Ensure')
     PyObject_CallObject = windows.utils.get_func_addr('python27', 'PyObject_CallObject')
     PyGILState_Release = windows.utils.get_func_addr('python27', 'PyGILState_Release')
     return [PyGILState_Ensure, PyObject_CallObject, PyGILState_Release]
-    
+
 def analyse_callback(callback):
     if not callable(callback):
         raise ValueError("Need a callable object :)")
@@ -121,58 +121,58 @@ def analyse_callback(callback):
 def generate_stub_32(callback):
     from simple_x86 import *
     obj_id = analyse_callback(callback)
-    
+
     c_callback = ctypes.c_ulong.from_address(id(callback._objects['0']) + 3 * ctypes.sizeof(ctypes.c_void_p)).value
     gstate_save_addr = allocator.reserve_int()
     return_addr_save_addr = allocator.reserve_int()
-        
+
     save_ebx = allocator.reserve_int()
     save_ecx = allocator.reserve_int()
     save_edx = allocator.reserve_int()
     save_esi = allocator.reserve_int()
     save_edi = allocator.reserve_int()
-    
+
     ensure, objcall, release = get_functions()
-    
+
     ### Shellcode ###
     code = MultipleInstr()
-    
+
     code += Mov_DX_EBX(save_ebx)
     code += Mov_DX_ECX(save_ecx)
     code += Mov_DX_EDX(save_edx)
     code += Mov_DX_ESI(save_esi)
     code += Mov_DX_EDI(save_edi)
-    
+
     code += Mov_EAX_X(ensure)
     code += Call_EAX()
     code += Mov_DX_EAX(gstate_save_addr)
-    
+
     #Save real return addr (for good argument parsing by the callback)
-    
+
     code += Pop_EAX()
     code += Mov_DX_EAX(return_addr_save_addr)
-        
-    # Set call_real_function to 0 (no call by default)    
-        
+
+    # Set call_real_function to 0 (no call by default)
+
     code += Mov_EAX_X(c_callback)
     code += Call_EAX()
-    
+
     # TODO : Remove this and setup callback as WinFuncType
     for i in range(len(callback.argtypes)):
         code += Pop_EBX()
-         
+
     # Restore real return value
     code += Mov_EBX_DX(return_addr_save_addr)
     code += Push_EBX()
-    
+
     # Save return value
     code += Push_EAX()
     code += Mov_EBX_DX(gstate_save_addr)
     code += Push_EBX()
-    
+
     code += Mov_EAX_X(release)
     code += Call_EAX()
-    
+
     # Discard `release` argument
     code += Pop_EAX()
     # Restore return value
@@ -184,53 +184,71 @@ def generate_stub_32(callback):
     code += Mov_EDI_DX(save_edi)
     code += Ret()
     return code
-    
+
 # For windows 32 bits with stdcall
 def generate_stub_64(callback):
+    import simple_x64 as x64
     from simple_x64 import *
     obj_id = analyse_callback(callback)
-    
+
+    REG_LEN = ctypes.sizeof(ctypes.c_void_p)
+
     c_callback = ctypes.c_ulong.from_address(id(callback._objects['0']) + 3 * ctypes.sizeof(ctypes.c_void_p)).value
+
+    register_to_save = ("RBX", "RCX", "RDX", "RSI", "RDI", "R8", "R9", "R10", "R11", "R12", "R13", "R14", "R15")
+    push_all_save_register = MultipleInstr([getattr(x64, "Push_" + reg)() for reg in register_to_save])
+    pop_all_save_register = MultipleInstr([getattr(x64, "Pop_" + reg)() for reg in reversed(register_to_save)])
+    # Reserve parallel `stack`
+    save_register_space = allocator.reserve_int(len(register_to_save) + 1)
+    save_register_space += REG_LEN # The + 1 is for the second-stack xchg
+    save_register_space_end = save_register_space + (ctypes.sizeof(ctypes.c_void_p) * (len(register_to_save) ))
+
+
+    save_rbx = save_register_space_end - REG_LEN
+    save_rcx = save_register_space_end - REG_LEN - REG_LEN
+    save_rdx = save_register_space_end - REG_LEN - (REG_LEN * 2)
+    save_rsi = save_register_space_end - REG_LEN - (REG_LEN * 3)
+    save_rdi = save_register_space_end - REG_LEN - (REG_LEN * 4)
+
+
     gstate_save_addr = allocator.reserve_int()
     return_addr_save_addr = allocator.reserve_int()
     return_value_save_addr = allocator.reserve_int()
-    
+
     Reserve_space_for_call = MultipleInstr([Push_RDI()] * 4)
     Clean_space_for_call = MultipleInstr([Pop_RDI()] * 4)
+    Do_stack_alignement = MultipleInstr([Push_RDI()] * 1)
+    Remove_stack_alignement = MultipleInstr([Pop_RDI()] * 1)
 
-    save_rbx = allocator.reserve_int()
-    save_rcx = allocator.reserve_int()
-    save_rdx = allocator.reserve_int()
-    save_rsi = allocator.reserve_int()
-    save_rdi = allocator.reserve_int()
-    
+
+
     ensure, objcall, release = get_functions()
-    print("save_rbx = {0}".format(hex(save_rbx)))
-    
+
     ### Shellcode ###
     code = MultipleInstr()
-      
-    code += Mov_RAX_X(save_rbx)
-    code += Mov_DRAX_RBX()
+    code += Int3()
+    code += Mov_RAX_X(save_register_space_end)
+    # A lazy working xchg RSP <-> RAX
+    code += Push_RAX()
+    code += Push_RSP()
+    code += Pop_RAX()
+    code += Pop_RSP()
 
-    code += Mov_RAX_X(save_rcx)
-    code += Mov_DRAX_RCX()
+    code += push_all_save_register
 
-    code += Mov_RAX_X(save_rdx)
-    code += Mov_DRAX_RDX()
+    # Re-set RSP to its real value
+    code += Push_RAX()
+    code += Pop_RSP()
 
-    code += Mov_RAX_X(save_rsi)
-    code += Mov_DRAX_RSI()
 
-    code += Mov_RAX_X(save_rdi)
-    code += Mov_DRAX_RDI()
-
-    # need to save other registers ?
-    
+    code += Pop_RAX() # Remove the Push_RAX of lazy xchg
+    # GOOO
     code += Mov_RAX_X(ensure)
     code += Reserve_space_for_call
+    code += Do_stack_alignement
     code += Call_RAX()
-    code += Clean_space_for_call 
+    code += Remove_stack_alignement
+    code += Clean_space_for_call
     code += Mov_DX_RAX(gstate_save_addr)
      #Save real return addr (for good argument parsing by the callback)
     code += Pop_RAX()
@@ -246,35 +264,43 @@ def generate_stub_64(callback):
     code += Mov_RSI_DRAX()
     code += Mov_RAX_X(save_rdi)
     code += Mov_DRAX_RDI()
-    code += Reserve_space_for_call
     # Call python code
     code += Mov_RAX_X(c_callback)
-    code += Clean_space_for_call 
-    code += Call_RAX()
+    code += Reserve_space_for_call
+    code += Call_RAX() # no need for stack alignement here as we poped the return addr
+    code += Clean_space_for_call
     # Save return value
     code += Mov_DX_RAX(return_value_save_addr)
     code += Mov_RAX_DX(return_addr_save_addr)
+    # Repush real return value
     code += Push_RAX()
     code += Mov_RAX_X(release)
     code += Reserve_space_for_call
+    code += Do_stack_alignement
     code += Call_RAX()
-    code += Clean_space_for_call 
+    code += Remove_stack_alignement
+    code += Clean_space_for_call
     # Restore registers
-    code += Mov_RAX_X(save_rbx)
-    code += Mov_RBX_DRAX()
-    code += Mov_RAX_X(save_rcx)
-    code += Mov_RCX_DRAX()
-    code += Mov_RAX_X(save_rdx)
-    code += Mov_RDX_DRAX()
-    code += Mov_RAX_X(save_rsi)
-    code += Mov_RSI_DRAX()
-    code += Mov_RAX_X(save_rdi)
-    code += Mov_DRAX_RDI()
+    code += Mov_RAX_X(save_register_space)
+    # A lazy working xchg RSP <-> RAX
+    code += Push_RAX()
+    code += Push_RSP()
+    code += Pop_RAX()
+    code += Pop_RSP()
+
+    code += pop_all_save_register
+
+    # Re-set RSP to its real value
+    code += Push_RAX()
+    code += Pop_RSP()
+    code += Pop_RAX() # Remove the Push_RAX of lazy xchg
+
     # Restore return value
     code += Mov_RAX_DX(return_value_save_addr)
+    code += Int3()
     code += Ret()
     return code
- 
+
 
 def generate_callback_stub(callback, types):
     func_type = ctypes.CFUNCTYPE(*types)
@@ -286,11 +312,10 @@ def generate_callback_stub(callback, types):
     stub_addr = allocator.write_code(stub.get_code())
     generate_callback_stub.l.append((stub, c_callable))
     return stub_addr
-    
+
 generate_callback_stub.l = []
 
 def create_function(code, types):
     func_type = ctypes.CFUNCTYPE(*types)
     addr = allocator.write_code(code)
     return func_type(addr)
-    
