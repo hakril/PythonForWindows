@@ -118,7 +118,7 @@ def analyse_callback(callback):
 
 
 # For windows 32 bits with stdcall
-def generate_stub(callback):
+def generate_stub_32(callback):
     from simple_x86 import *
     obj_id = analyse_callback(callback)
     
@@ -268,38 +268,6 @@ def generate_stub_64(callback):
     code += Mov_RAX_X(save_rdi)
     code += Mov_DRAX_RDI()
     code += Ret()
-    
-
-    ###### CODE 32 %%%%%%%%
-    #
-    ##Save real return addr (for good argument parsing by the callback)
-    #
-    ## TODO : Remove this and setup callback as WinFuncType
-    #for i in range(len(callback.argtypes)):
-    #    code += Pop_EBX()
-    #     
-    ## Restore real return value
-    #code += Mov_EBX_DX(return_addr_save_addr)
-    #code += Push_EBX()
-    #
-    ## Save return value
-    #code += Push_EAX()
-    #code += Mov_EBX_DX(gstate_save_addr)
-    #code += Push_EBX()
-    #
-    #code += Mov_EAX_X(release)
-    #code += Call_EAX()
-    #
-    ## Discard `release` argument
-    #code += Pop_EAX()
-    ## Restore return value
-    #code += Pop_EAX()
-    #code += Mov_EBX_DX(save_ebx)
-    #code += Mov_ECX_DX(save_ecx)
-    #code += Mov_EDX_DX(save_edx)
-    #code += Mov_ESI_DX(save_esi)
-    #code += Mov_EDI_DX(save_edi)
-    #code += Ret()
     return code
  
 
@@ -307,7 +275,7 @@ def generate_callback_stub(callback, types):
     func_type = ctypes.CFUNCTYPE(*types)
     c_callable = func_type(callback)
     if windows.current_process.bitness == 32:
-        stub = generate_stub(c_callable)
+        stub = generate_stub_32(c_callable)
     else:
         stub = generate_stub_64(c_callable)
     stub_addr = allocator.write_code(stub.get_code())

@@ -21,6 +21,10 @@ def transform_ctypes_fields(struct, replacement):
     return [(name, replacement.get(name, type)) for name, type in struct._fields_]   
 
 def PEFile(baseaddr):
+    if windows.current_process.bitness == 32:
+        IMAGE_ORDINAL_FLAG = IMAGE_ORDINAL_FLAG32
+    else:
+        IMAGE_ORDINAL_FLAG = IMAGE_ORDINAL_FLAG64
      
     class RVA(DWORD):
         @property
@@ -148,11 +152,12 @@ def PEFile(baseaddr):
                 int_entry = THUNK_DATA.from_address(int_addr)
                 res = []
                 while int_entry.Ordinal:
-                    if int_entry.Ordinal & IMAGE_ORDINAL_FLAG32:
+                    if int_entry.Ordinal & IMAGE_ORDINAL_FLAG:
                         res += [(int_entry.Ordinal & 0x7fffffff, None)]
                     else:
                         import_by_name = IMPORT_BY_NAME.from_address(baseaddr + int_entry.AddressOfData)
                         name = ctypes.c_char_p(ctypes.addressof(import_by_name) + IMPORT_BY_NAME.Name.offset).value
+                        print(name)
                         res.append((import_by_name.Hint, name))
                     int_addr += ctypes.sizeof(THUNK_DATA)
                     int_entry = THUNK_DATA.from_address(int_addr)
