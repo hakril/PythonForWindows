@@ -4,13 +4,13 @@ from windows.hooks import *
 
 # Example of callback for IAT hooks
 
-@Callback(ctypes.c_ulong, ctypes.c_ulong)
+@Callback(ctypes.c_void_p, ctypes.c_ulong)
 def exit_callback(x, real_function):
     print("Try to quit with {0} | {1}".format(x, type(x)))
     if x == 3:
         print("TRYING TO REAL EXIT")
         return real_function(1234)
-    return 0
+    return 0x4242424243444546
 
 @CreateFileACallback
 def createfile_callback(lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile, real_function):

@@ -3,7 +3,7 @@ from ctypes import *
 from ctypes.wintypes import *
 from winstructs import *
 
-functions = ['ExitProcess', 'GetLastError', 'GetCurrentProcess', 'CreateFileA', 'CreateFileW', 'NtQuerySystemInformation', 'VirtualAlloc', 'VirtualAllocEx', 'VirtualProtect', 'VirtualQuery', 'GetModuleFileNameA', 'GetModuleFileNameW', 'CreateRemoteThread', 'VirtualProtect', 'CreateProcessA', 'CreateProcessW', 'GetThreadContext', 'SetThreadContext', 'OpenThread', 'OpenProcess', 'CloseHandle', 'ReadProcessMemory', 'WriteProcessMemory', 'CreateToolhelp32Snapshot', 'Thread32First', 'Thread32Next', 'Process32First', 'Process32Next', 'Process32FirstW', 'Process32NextW', 'GetProcAddress', 'LoadLibraryA', 'LoadLibraryW', 'OpenProcessToken', 'LookupPrivilegeValueA', 'LookupPrivilegeValueW', 'AdjustTokenPrivileges', 'FindResourceA', 'FindResourceW', 'SizeofResource', 'LoadResource', 'LockResource', 'GetVersionExA', 'GetVersionExW', 'GetVersion']
+functions = ['ExitProcess', 'GetLastError', 'GetCurrentProcess', 'CreateFileA', 'CreateFileW', 'NtQuerySystemInformation', 'VirtualAlloc', 'VirtualAllocEx', 'VirtualProtect', 'VirtualQuery', 'GetModuleFileNameA', 'GetModuleFileNameW', 'CreateRemoteThread', 'VirtualProtect', 'CreateProcessA', 'CreateProcessW', 'GetThreadContext', 'SetThreadContext', 'OpenThread', 'OpenProcess', 'CloseHandle', 'ReadProcessMemory', 'WriteProcessMemory', 'CreateToolhelp32Snapshot', 'Thread32First', 'Thread32Next', 'Process32First', 'Process32Next', 'Process32FirstW', 'Process32NextW', 'GetProcAddress', 'LoadLibraryA', 'LoadLibraryW', 'OpenProcessToken', 'LookupPrivilegeValueA', 'LookupPrivilegeValueW', 'AdjustTokenPrivileges', 'FindResourceA', 'FindResourceW', 'SizeofResource', 'LoadResource', 'LockResource', 'GetVersionExA', 'GetVersionExW', 'GetVersion', 'GetCurrentThread', 'GetCurrentProcessorNumber', 'AllocConsole', 'GetStdHandle', 'SetStdHandle', 'SetThreadAffinityMask', 'WriteFile']
 
 # ExitProcess(uExitCode):
 ExitProcessPrototype = WINFUNCTYPE(VOID, UINT)
@@ -184,4 +184,32 @@ GetVersionExWParams = ((1, 'lpVersionInformation'),)
 # GetVersion():
 GetVersionPrototype = WINFUNCTYPE(DWORD)
 GetVersionParams = ()
+
+# GetCurrentThread():
+GetCurrentThreadPrototype = WINFUNCTYPE(HANDLE)
+GetCurrentThreadParams = ()
+
+# GetCurrentProcessorNumber():
+GetCurrentProcessorNumberPrototype = WINFUNCTYPE(DWORD)
+GetCurrentProcessorNumberParams = ()
+
+# AllocConsole():
+AllocConsolePrototype = WINFUNCTYPE(BOOL)
+AllocConsoleParams = ()
+
+# GetStdHandle(nStdHandle):
+GetStdHandlePrototype = WINFUNCTYPE(HANDLE, DWORD)
+GetStdHandleParams = ((1, 'nStdHandle'),)
+
+# SetStdHandle(nStdHandle, hHandle):
+SetStdHandlePrototype = WINFUNCTYPE(BOOL, DWORD, HANDLE)
+SetStdHandleParams = ((1, 'nStdHandle'), (1, 'hHandle'))
+
+# SetThreadAffinityMask(hThread, dwThreadAffinityMask):
+SetThreadAffinityMaskPrototype = WINFUNCTYPE(DWORD, HANDLE, DWORD)
+SetThreadAffinityMaskParams = ((1, 'hThread'), (1, 'dwThreadAffinityMask'))
+
+# WriteFile(hFile, lpBuffer, nNumberOfBytesToWrite, lpNumberOfBytesWritten, lpOverlapped):
+WriteFilePrototype = WINFUNCTYPE(BOOL, HANDLE, LPCVOID, DWORD, LPDWORD, LPOVERLAPPED)
+WriteFileParams = ((1, 'hFile'), (1, 'lpBuffer'), (1, 'nNumberOfBytesToWrite'), (1, 'lpNumberOfBytesWritten'), (1, 'lpOverlapped'))
 

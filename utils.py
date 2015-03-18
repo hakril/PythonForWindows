@@ -1,8 +1,12 @@
 import ctypes
+import msvcrt
+import os
+import copy
+import sys
+
 import k32testing as kernel32proxy
 import generated_def.windef as windef
 import winobject
-import copy
 import native_exec
 from generated_def.winstructs import *
 
@@ -50,6 +54,27 @@ def is_wow_64(hProcess):
     if res:
         return bool(Wow64Process)
     raise ctypes.WinError()
+ 
+def create_file_from_handle(handle, mode="r"):
+    fd = msvcrt.open_osfhandle(handle, os.O_TEXT)
+    return os.fdopen(fd, mode, 0)
+    
+def get_handle_from_file(f):
+    return msvcrt.get_osfhandle(f.fileno())
+    
+def create_console():  
+    kernel32proxy.AllocConsole()
+    stdout_handle = kernel32proxy.GetStdHandle(windef.STD_OUTPUT_HANDLE)
+    console_stdout = create_file_from_handle(stdout_handle, "w")
+    sys.stdout = console_stdout
+    
+    stdin_handle = kernel32proxy.GetStdHandle(windef.STD_INPUT_HANDLE)
+    console_stdin = create_file_from_handle(stdin_handle, "r+")
+    sys.stdin = console_stdin
+    
+    stderr_handle = kernel32proxy.GetStdHandle(windef.STD_ERROR_HANDLE)
+    console_stderr = create_file_from_handle(stderr_handle, "w")
+    sys.stderr = console_stderr
     
 class VirtualProtected(object):
     def __init__(self, addr, size, new_protect):

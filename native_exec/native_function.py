@@ -260,7 +260,6 @@ def generate_stub_64(callback):
     code += Mov_RAX_X(save_r9)
     code += Mov_R9_DRAX()
     # Call python code
-    code += Int3()
     code += Mov_RAX_X(c_callback)
     code += Reserve_space_for_call
     code += Call_RAX() # no need for stack alignement here as we poped the return addr

@@ -120,6 +120,11 @@ LoadLibraryA = TransparentKernel32Proxy("LoadLibraryA")
 LoadLibraryW = TransparentKernel32Proxy("LoadLibraryW")
 GetLastError = TransparentKernel32Proxy("GetLastError", no_error_check)
 GetCurrentProcess = TransparentKernel32Proxy("GetCurrentProcess")
+GetCurrentProcessorNumber = TransparentKernel32Proxy("GetCurrentProcessorNumber", no_error_check)
+GetCurrentThread = TransparentKernel32Proxy("GetCurrentThread")
+AllocConsole = TransparentKernel32Proxy("AllocConsole")
+GetStdHandle = TransparentKernel32Proxy("GetStdHandle")
+SetStdHandle = TransparentKernel32Proxy("SetStdHandle")
 
 # This kind of function could be fully done by using paramflags
 @Kernel32Proxy("VirtualAlloc")
@@ -202,6 +207,14 @@ def WriteProcessMemory(hProcess, lpBaseAddress, lpBuffer, nSize=None, lpNumberOf
         nSize = len(lpBuffer)
     return WriteProcessMemory.ctypes_function(hProcess, lpBaseAddress, lpBuffer, nSize, lpNumberOfBytesWritten)
     
+@Kernel32Proxy('SetThreadAffinityMask')
+def SetThreadAffinityMask(hThread=None, dwThreadAffinityMask=NeededParameter):
+    """If hThread is not given, it will be the current thread"""
+    if hThread is None:
+        hThread = GetCurrentThread()
+    return SetThreadAffinityMask.ctypes_function(hThread, dwThreadAffinityMask)
+    
+    
 @Kernel32Proxy("CreateToolhelp32Snapshot") 
 def CreateToolhelp32Snapshot(dwFlags, th32ProcessID=0):
     return CreateToolhelp32Snapshot.ctypes_function(dwFlags, th32ProcessID)
@@ -233,6 +246,16 @@ def Process32Next(hSnapshot, lpte):
     if type(lpte) == THREADENTRY32:
         lpte = ctypes.byref(lpte)
     return  Process32Next.ctypes_function(hSnapshot, lpte)
+    
+# File stuff
+
+@Kernel32Proxy("WriteFile") 
+def WriteFile(hFile, lpBuffer, nNumberOfBytesToWrite=None, lpNumberOfBytesWritten=None, lpOverlapped=None):
+    if nNumberOfBytesToWrite is None:
+        nNumberOfBytesToWrite = len(lpBuffer)
+    if lpOverlapped is None and lpNumberOfBytesWritten is None:
+        lpNumberOfBytesWritten = ctypes.byref(DWORD())
+    return WriteFile.ctypes_function(hFile, lpBuffer, nNumberOfBytesToWrite, lpNumberOfBytesWritten, lpOverlapped)
 
     
 ###### ADVAPI32 ########
