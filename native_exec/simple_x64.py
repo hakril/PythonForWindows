@@ -58,6 +58,10 @@ class Int3(X64Instruction):
     mnemo = "int3"
     code = "CC"
     
+class Retf(X64Instruction):
+    mnemo = "retf"
+    code = "CB"
+    
     
 class SimpleRegInstructionGenerator(object):
     name = ""
@@ -65,7 +69,6 @@ class SimpleRegInstructionGenerator(object):
     
 class OneBindX64Instruction(X64Instruction):
     biding = 1
-
     
 class Mov_RAX_DX(OneBindX64Instruction):
     name = 'Mov_RAX_DX'

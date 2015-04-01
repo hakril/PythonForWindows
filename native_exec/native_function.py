@@ -121,7 +121,7 @@ def analyse_callback(callback):
 def generate_stub_32(callback):
     from simple_x86 import *
     obj_id = analyse_callback(callback)
-
+    
     c_callback = ctypes.c_ulong.from_address(id(callback._objects['0']) + 3 * ctypes.sizeof(ctypes.c_void_p)).value
     gstate_save_addr = allocator.reserve_int()
     return_addr_save_addr = allocator.reserve_int()

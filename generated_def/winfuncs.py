@@ -3,7 +3,7 @@ from ctypes import *
 from ctypes.wintypes import *
 from winstructs import *
 
-functions = ['ExitProcess', 'GetLastError', 'GetCurrentProcess', 'CreateFileA', 'CreateFileW', 'NtQuerySystemInformation', 'VirtualAlloc', 'VirtualAllocEx', 'VirtualProtect', 'VirtualQuery', 'GetModuleFileNameA', 'GetModuleFileNameW', 'CreateRemoteThread', 'VirtualProtect', 'CreateProcessA', 'CreateProcessW', 'GetThreadContext', 'SetThreadContext', 'OpenThread', 'OpenProcess', 'CloseHandle', 'ReadProcessMemory', 'WriteProcessMemory', 'CreateToolhelp32Snapshot', 'Thread32First', 'Thread32Next', 'Process32First', 'Process32Next', 'Process32FirstW', 'Process32NextW', 'GetProcAddress', 'LoadLibraryA', 'LoadLibraryW', 'OpenProcessToken', 'LookupPrivilegeValueA', 'LookupPrivilegeValueW', 'AdjustTokenPrivileges', 'FindResourceA', 'FindResourceW', 'SizeofResource', 'LoadResource', 'LockResource', 'GetVersionExA', 'GetVersionExW', 'GetVersion', 'GetCurrentThread', 'GetCurrentProcessorNumber', 'AllocConsole', 'GetStdHandle', 'SetStdHandle', 'SetThreadAffinityMask', 'WriteFile']
+functions = ['ExitProcess', 'GetLastError', 'GetCurrentProcess', 'CreateFileA', 'CreateFileW', 'NtQuerySystemInformation', 'VirtualAlloc', 'VirtualAllocEx', 'VirtualProtect', 'VirtualQuery', 'GetModuleFileNameA', 'GetModuleFileNameW', 'CreateRemoteThread', 'VirtualProtect', 'CreateProcessA', 'CreateProcessW', 'GetThreadContext', 'SetThreadContext', 'OpenThread', 'OpenProcess', 'CloseHandle', 'ReadProcessMemory', 'WriteProcessMemory', 'CreateToolhelp32Snapshot', 'Thread32First', 'Thread32Next', 'Process32First', 'Process32Next', 'Process32FirstW', 'Process32NextW', 'GetProcAddress', 'LoadLibraryA', 'LoadLibraryW', 'OpenProcessToken', 'LookupPrivilegeValueA', 'LookupPrivilegeValueW', 'AdjustTokenPrivileges', 'FindResourceA', 'FindResourceW', 'SizeofResource', 'LoadResource', 'LockResource', 'GetVersionExA', 'GetVersionExW', 'GetVersion', 'GetCurrentThread', 'GetCurrentProcessorNumber', 'AllocConsole', 'GetStdHandle', 'SetStdHandle', 'SetThreadAffinityMask', 'WriteFile', 'GetExtendedTcpTable', 'GetExtendedUdpTable', 'SetTcpEntry']
 
 # ExitProcess(uExitCode):
 ExitProcessPrototype = WINFUNCTYPE(VOID, UINT)
@@ -212,4 +212,16 @@ SetThreadAffinityMaskParams = ((1, 'hThread'), (1, 'dwThreadAffinityMask'))
 # WriteFile(hFile, lpBuffer, nNumberOfBytesToWrite, lpNumberOfBytesWritten, lpOverlapped):
 WriteFilePrototype = WINFUNCTYPE(BOOL, HANDLE, LPCVOID, DWORD, LPDWORD, LPOVERLAPPED)
 WriteFileParams = ((1, 'hFile'), (1, 'lpBuffer'), (1, 'nNumberOfBytesToWrite'), (1, 'lpNumberOfBytesWritten'), (1, 'lpOverlapped'))
+
+# GetExtendedTcpTable(pTcpTable, pdwSize, bOrder, ulAf, TableClass, Reserved):
+GetExtendedTcpTablePrototype = WINFUNCTYPE(DWORD, PVOID, PDWORD, BOOL, ULONG, TCP_TABLE_CLASS, ULONG)
+GetExtendedTcpTableParams = ((1, 'pTcpTable'), (1, 'pdwSize'), (1, 'bOrder'), (1, 'ulAf'), (1, 'TableClass'), (1, 'Reserved'))
+
+# GetExtendedUdpTable(pUdpTable, pdwSize, bOrder, ulAf, TableClass, Reserved):
+GetExtendedUdpTablePrototype = WINFUNCTYPE(DWORD, PVOID, PDWORD, BOOL, ULONG, UDP_TABLE_CLASS, ULONG)
+GetExtendedUdpTableParams = ((1, 'pUdpTable'), (1, 'pdwSize'), (1, 'bOrder'), (1, 'ulAf'), (1, 'TableClass'), (1, 'Reserved'))
+
+# SetTcpEntry(pTcpRow):
+SetTcpEntryPrototype = WINFUNCTYPE(DWORD, PMIB_TCPROW)
+SetTcpEntryParams = ((1, 'pTcpRow'),)
 
