@@ -314,6 +314,13 @@ def generate_callback_stub(callback, types):
 generate_callback_stub.l = []
 
 def create_function(code, types):
+    """Create a python function that call raw machine code
+    
+   :param str code: Raw machine code that will be called
+   :param list types: Return type and parameters type (see :mod:`ctypes`)
+   :return: the created function
+   :rtype: function
+     """
     func_type = ctypes.CFUNCTYPE(*types)
     addr = allocator.write_code(code)
     return func_type(addr)

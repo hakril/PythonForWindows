@@ -3,7 +3,7 @@ from ctypes import *
 from ctypes.wintypes import *
 from winstructs import *
 
-functions = ['ExitProcess', 'GetLastError', 'GetCurrentProcess', 'CreateFileA', 'CreateFileW', 'NtQuerySystemInformation', 'VirtualAlloc', 'VirtualAllocEx', 'VirtualProtect', 'VirtualQuery', 'GetModuleFileNameA', 'GetModuleFileNameW', 'CreateRemoteThread', 'VirtualProtect', 'CreateProcessA', 'CreateProcessW', 'GetThreadContext', 'SetThreadContext', 'OpenThread', 'OpenProcess', 'CloseHandle', 'ReadProcessMemory', 'WriteProcessMemory', 'CreateToolhelp32Snapshot', 'Thread32First', 'Thread32Next', 'Process32First', 'Process32Next', 'Process32FirstW', 'Process32NextW', 'GetProcAddress', 'LoadLibraryA', 'LoadLibraryW', 'OpenProcessToken', 'LookupPrivilegeValueA', 'LookupPrivilegeValueW', 'AdjustTokenPrivileges', 'FindResourceA', 'FindResourceW', 'SizeofResource', 'LoadResource', 'LockResource', 'GetVersionExA', 'GetVersionExW', 'GetVersion', 'GetCurrentThread', 'GetCurrentProcessorNumber', 'AllocConsole', 'GetStdHandle', 'SetStdHandle', 'SetThreadAffinityMask', 'WriteFile', 'GetExtendedTcpTable', 'GetExtendedUdpTable', 'SetTcpEntry']
+functions = ['ExitProcess', 'GetLastError', 'GetCurrentProcess', 'CreateFileA', 'CreateFileW', 'NtQuerySystemInformation', 'VirtualAlloc', 'VirtualAllocEx', 'VirtualProtect', 'VirtualQuery', 'GetModuleFileNameA', 'GetModuleFileNameW', 'CreateThread', 'CreateRemoteThread', 'VirtualProtect', 'CreateProcessA', 'CreateProcessW', 'GetThreadContext', 'SetThreadContext', 'OpenThread', 'OpenProcess', 'CloseHandle', 'ReadProcessMemory', 'WriteProcessMemory', 'CreateToolhelp32Snapshot', 'Thread32First', 'Thread32Next', 'Process32First', 'Process32Next', 'Process32FirstW', 'Process32NextW', 'GetProcAddress', 'LoadLibraryA', 'LoadLibraryW', 'OpenProcessToken', 'LookupPrivilegeValueA', 'LookupPrivilegeValueW', 'AdjustTokenPrivileges', 'FindResourceA', 'FindResourceW', 'SizeofResource', 'LoadResource', 'LockResource', 'GetVersionExA', 'GetVersionExW', 'GetVersion', 'GetCurrentThread', 'GetCurrentThreadId', 'GetCurrentProcessorNumber', 'AllocConsole', 'GetStdHandle', 'SetStdHandle', 'SetThreadAffinityMask', 'WriteFile', 'GetExtendedTcpTable', 'GetExtendedUdpTable', 'SetTcpEntry', 'AddVectoredContinueHandler', 'AddVectoredExceptionHandler', 'TerminateThread', 'ExitThread', 'RemoveVectoredExceptionHandler', 'ResumeThread', 'SuspendThread', 'WaitForSingleObject']
 
 # ExitProcess(uExitCode):
 ExitProcessPrototype = WINFUNCTYPE(VOID, UINT)
@@ -53,6 +53,10 @@ GetModuleFileNameAParams = ((1, 'hModule'), (1, 'lpFilename'), (1, 'nSize'))
 GetModuleFileNameWPrototype = WINFUNCTYPE(DWORD, HMODULE, LPWSTR, DWORD)
 GetModuleFileNameWParams = ((1, 'hModule'), (1, 'lpFilename'), (1, 'nSize'))
 
+# CreateThread(lpThreadAttributes, dwStackSize, lpStartAddress, lpParameter, dwCreationFlags, lpThreadId):
+CreateThreadPrototype = WINFUNCTYPE(HANDLE, LPSECURITY_ATTRIBUTES, SIZE_T, LPTHREAD_START_ROUTINE, LPVOID, DWORD, LPDWORD)
+CreateThreadParams = ((1, 'lpThreadAttributes'), (1, 'dwStackSize'), (1, 'lpStartAddress'), (1, 'lpParameter'), (1, 'dwCreationFlags'), (1, 'lpThreadId'))
+
 # CreateRemoteThread(hProcess, lpThreadAttributes, dwStackSize, lpStartAddress, lpParameter, dwCreationFlags, lpThreadId):
 CreateRemoteThreadPrototype = WINFUNCTYPE(HANDLE, HANDLE, LPSECURITY_ATTRIBUTES, SIZE_T, LPTHREAD_START_ROUTINE, LPVOID, DWORD, LPDWORD)
 CreateRemoteThreadParams = ((1, 'hProcess'), (1, 'lpThreadAttributes'), (1, 'dwStackSize'), (1, 'lpStartAddress'), (1, 'lpParameter'), (1, 'dwCreationFlags'), (1, 'lpThreadId'))
@@ -74,7 +78,7 @@ GetThreadContextPrototype = WINFUNCTYPE(BOOL, HANDLE, LPCONTEXT)
 GetThreadContextParams = ((1, 'hThread'), (1, 'lpContext'))
 
 # SetThreadContext(hThread, lpContext):
-SetThreadContextPrototype = WINFUNCTYPE(BOOL, HANDLE, POINTER(CONTEXT))
+SetThreadContextPrototype = WINFUNCTYPE(BOOL, HANDLE, LPCONTEXT)
 SetThreadContextParams = ((1, 'hThread'), (1, 'lpContext'))
 
 # OpenThread(dwDesiredAccess, bInheritHandle, dwThreadId):
@@ -189,6 +193,10 @@ GetVersionParams = ()
 GetCurrentThreadPrototype = WINFUNCTYPE(HANDLE)
 GetCurrentThreadParams = ()
 
+# GetCurrentThreadId():
+GetCurrentThreadIdPrototype = WINFUNCTYPE(DWORD)
+GetCurrentThreadIdParams = ()
+
 # GetCurrentProcessorNumber():
 GetCurrentProcessorNumberPrototype = WINFUNCTYPE(DWORD)
 GetCurrentProcessorNumberParams = ()
@@ -224,4 +232,36 @@ GetExtendedUdpTableParams = ((1, 'pUdpTable'), (1, 'pdwSize'), (1, 'bOrder'), (1
 # SetTcpEntry(pTcpRow):
 SetTcpEntryPrototype = WINFUNCTYPE(DWORD, PMIB_TCPROW)
 SetTcpEntryParams = ((1, 'pTcpRow'),)
+
+# AddVectoredContinueHandler(FirstHandler, VectoredHandler):
+AddVectoredContinueHandlerPrototype = WINFUNCTYPE(PVOID, ULONG, PVECTORED_EXCEPTION_HANDLER)
+AddVectoredContinueHandlerParams = ((1, 'FirstHandler'), (1, 'VectoredHandler'))
+
+# AddVectoredExceptionHandler(FirstHandler, VectoredHandler):
+AddVectoredExceptionHandlerPrototype = WINFUNCTYPE(PVOID, ULONG, PVECTORED_EXCEPTION_HANDLER)
+AddVectoredExceptionHandlerParams = ((1, 'FirstHandler'), (1, 'VectoredHandler'))
+
+# TerminateThread(hThread, dwExitCode):
+TerminateThreadPrototype = WINFUNCTYPE(BOOL, HANDLE, DWORD)
+TerminateThreadParams = ((1, 'hThread'), (1, 'dwExitCode'))
+
+# ExitThread(dwExitCode):
+ExitThreadPrototype = WINFUNCTYPE(VOID, DWORD)
+ExitThreadParams = ((1, 'dwExitCode'),)
+
+# RemoveVectoredExceptionHandler(Handler):
+RemoveVectoredExceptionHandlerPrototype = WINFUNCTYPE(ULONG, PVOID)
+RemoveVectoredExceptionHandlerParams = ((1, 'Handler'),)
+
+# ResumeThread(hThread):
+ResumeThreadPrototype = WINFUNCTYPE(DWORD, HANDLE)
+ResumeThreadParams = ((1, 'hThread'),)
+
+# SuspendThread(hThread):
+SuspendThreadPrototype = WINFUNCTYPE(DWORD, HANDLE)
+SuspendThreadParams = ((1, 'hThread'),)
+
+# WaitForSingleObject(hHandle, dwMilliseconds):
+WaitForSingleObjectPrototype = WINFUNCTYPE(DWORD, HANDLE, DWORD)
+WaitForSingleObjectParams = ((1, 'hHandle'), (1, 'dwMilliseconds'))
 

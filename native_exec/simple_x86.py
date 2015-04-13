@@ -4,8 +4,19 @@ import sys
 
 this_module = sys.modules[__name__]
 
+generated_instruction = []
+
+
 def add_instruction(name, instruction):
+    generated_instruction.append((name, instruction))
     setattr(this_module, name, instruction)
+
+def generate_module_doc():
+    doc_lines = ["Here is the list of instruction in the modules:\n\n"]
+    for name, instruction in generated_instruction:
+        doc_lines.append("    | {0} -> <{1}>".format(name, instruction.mnemo))
+        
+    this_module.__doc__ = "\n".join(doc_lines)
     
 reg_order = ['EAX', 'ECX', 'EDX', 'EBX', 'ESP', 'EBP', 'ESI', 'EDI']
 reg_opcode = {v : format(i, "03b") for i, v in enumerate(reg_order)}
@@ -43,10 +54,13 @@ class Ret(X86Instruction):
     mnemo = "ret"
     code = "C3"
     
+generated_instruction.append(("Ret", Ret))
+    
 class Int3(X86Instruction):
     mnemo = "int3"
     code = "CC"
-    
+ 
+generated_instruction.append(("Int3", Int3)) 
             
 class SimpleRegInstructionGenerator(object):
     name = ""
@@ -60,7 +74,8 @@ class OneBindX86Instruction(X86Instruction):
 class Push_X(OneBindX86Instruction):
     mnemo = "push    {0}"
     code = "68 11 11 11 11"
-    
+
+generated_instruction.append(("Push_X", Push_X))     
 
 def generate_simple_reg_instruction(instr_cls):
     for reg_name, reg_bits in reg_opcode.items():
@@ -268,4 +283,8 @@ class MultipleInstr(object):
         
     def get_mnemo(self):
         return "\n".join(i.get_mnemo() for i in self.instrs)
+        
+
+              
+generate_module_doc()
     

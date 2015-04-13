@@ -8,9 +8,23 @@ from simple_x86 import MultipleInstr
 # This code should really be rewritten..
 
 this_module = sys.modules[__name__]
+   
+generated_instruction = []
 
 def add_instruction(name, instruction):
+    generated_instruction.append((name, instruction))
     setattr(this_module, name, instruction)
+
+def generate_module_doc():
+    doc_lines = ["Here is the list of instruction in the modules:\n\n"]
+    for name, instruction in generated_instruction:
+        doc_lines.append("    | {0} -> <{1}>".format(name, instruction.mnemo))
+        
+    this_module.__doc__ = "\n".join(doc_lines)
+    
+reg_order = ['EAX', 'ECX', 'EDX', 'EBX', 'ESP', 'EBP', 'ESI', 'EDI']
+reg_opcode = {v : format(i, "03b") for i, v in enumerate(reg_order)}    
+    
     
 reg_order = ['RAX', 'RCX', 'RDX', 'RBX', 'RSP', 'RBP', 'RSI', 'RDI']
 reg_opcode = {v : format(i, "03b") for i, v in enumerate(reg_order)}
@@ -54,13 +68,19 @@ class Ret(X64Instruction):
     mnemo = "ret"
     code = "C3"
     
+generated_instruction.append(("Ret", Ret))
+    
 class Int3(X64Instruction):
     mnemo = "int3"
     code = "CC"
     
+generated_instruction.append(("Int3", Int3)) 
+    
 class Retf(X64Instruction):
     mnemo = "retf"
     code = "CB"
+    
+generated_instruction.append(("Retf", Retf)) 
     
     
 class SimpleRegInstructionGenerator(object):
@@ -75,10 +95,14 @@ class Mov_RAX_DX(OneBindX64Instruction):
     mnemo = 'mov rax, [{0}]'
     code = "48 a1 11 11 11 11 11 11 11 11"
     
+generated_instruction.append(("Mov_RAX_DX", Mov_RAX_DX)) 
+    
 class Mov_DX_RAX(OneBindX64Instruction):
     name = 'Mov_DX_RAX'
     mnemo = 'mov [{0}], rax'
     code = "48 a3 11 11 11 11 11 11 11 11"
+ 
+generated_instruction.append(("Mov_DX_RAX", Mov_DX_RAX)) 
     
 def generate_simple_reg_instruction(instr_cls, include_new_reg=False):
     for reg_name, reg_bits in reg_opcode.items():
@@ -214,4 +238,6 @@ def generate_reg_reg_deref():
     
     
 generate_reg_reg_deref()    
+
+generate_module_doc()
    

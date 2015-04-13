@@ -1,5 +1,6 @@
 import ctypes
 import windows
+import hooks
 
 from generated_def.winstructs import *
 
@@ -77,7 +78,6 @@ def PEFile(baseaddr):
             return '<{0} "{1}" ordinal {2}>'.format(self.__class__.__name__, self.name, self.ord)
 
         def set_hook(self, callback, types=None):
-            import hooks # TODO: set import at the beginning
             hook = hooks.IATHook(self, callback, types)
             self.hook = hook
             hook.enable()
@@ -85,7 +85,7 @@ def PEFile(baseaddr):
 
         def remove_hook(self):
             if self.hook is None:
-                return None
+                return False
             self.hook.disable()
             self.hook = None
             return True
@@ -242,3 +242,5 @@ def PEFile(baseaddr):
     #        return res
     #
     return current_pe
+
+tst = PEFile.__code__.co_consts[13]

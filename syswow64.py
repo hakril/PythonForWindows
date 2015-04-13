@@ -32,7 +32,7 @@ FF FF 1F 00 49 C7 C0 00  00 00 00 49 B9 40 40 40
 41 41 41 41 41 41 50 41  51 41 50 52 51 41 FF D5
 48 89 84 24 E8 00 00 00  48 83 C4 40 48 83 C4 28
 48 83 C4 20 41 5D 41 5C  41 5B 41 5A 41 59 41 58
-5F 5E 5A 59 5B 58 58                                                                                                                                               
+5F 5E 5A 59 5B 58 58
 """
 NtCreateThreadStub = Pretty_NtCreateThreadStub.replace(" ", "").replace("\n", "").decode('hex')
 
@@ -72,39 +72,39 @@ def NtCreateThreadEx_32_to_64(process, addr, param):
     shellcode = shellcode.replace("\x41" * 8, struct.pack("<Q", addr))
     shellcode = shellcode.replace("\x42" * 8, struct.pack("<Q", param))
     return execute_64bits_code_from_syswow(shellcode)
-    
+
 
 # TODO : implem remote PEB parsing
 class RemotePointerBase(ULONG64):
     pass
 
-class Remote_wchar_p(RemotePointerBase):           
+class Remote_wchar_p(RemotePointerBase):
     def __init__(self, *args):
         self.proc = None
         super(RemotePointerImp, self).__init__(*args)
-        
+
     def str(self):
         addr = self.value
         buffer = (ctypes.c_wchar * 255)()
         self.proc.read_memory_into(self.value, buffer)
         return str(ctypes.c_wchar_p(buffer[:]).value)
-                
-class Remote_LIST_ENTRY_PTR(RemotePointerBase):           
+
+class Remote_LIST_ENTRY_PTR(RemotePointerBase):
     def __init__(self, *args):
         self.proc = None
         super(RemotePointerImp, self).__init__(*args)
-        
+
     def TO_LDR_ENTRY(self):
         v = RemotePointer(LDR_DATA_TABLE_ENTRY64)(self.value - sizeof(ULONG64) *  2)
         v.proc = self.proc
         return v
-    
+
 def RemotePointer(struct):
-    class RemotePointerImp(RemotePointerBase):           
+    class RemotePointerImp(RemotePointerBase):
         def __init__(self, *args):
             self.proc = None
             super(RemotePointerImp, self).__init__(*args)
-            
+
         def contents(self):
             if self.proc is None:
                 raise ValueError("Non binded :(")
@@ -113,7 +113,7 @@ def RemotePointer(struct):
             print("set proc via contents for {0}".format(s))
             return s
     return RemotePointerImp
-    
+
 class RemoteStructure(Structure):
     def __init__(self, proc):
         self.proc = proc
@@ -123,14 +123,14 @@ class RemoteStructure(Structure):
         if value in ["_fields_", "proc"]:
             return super(RemoteStructure, self).__getattribute__(value)
         d = dict(self._fields_)
-        t = d.get(value, type(None))  
+        t = d.get(value, type(None))
         field = super(RemoteStructure, self).__getattribute__(value)
-        
+
         if isinstance(field, (RemoteStructure, RemotePointerBase)):
             print("Set proc for {0}".format(field))
             field.proc = self.proc
         return field
-    
+
 # Struct _LSA_UNICODE_STRING definitions
 class _LSA_UNICODE_STRING(RemoteStructure):
         _fields_ = [
@@ -138,13 +138,13 @@ class _LSA_UNICODE_STRING(RemoteStructure):
         ("MaximumLength", USHORT),
         ("Buffer", Remote_wchar_p),
     ]
-    
+
 PUNICODE_STRING = POINTER(_LSA_UNICODE_STRING)
 UNICODE_STRING = _LSA_UNICODE_STRING
 LSA_UNICODE_STRING = _LSA_UNICODE_STRING
-PLSA_UNICODE_STRING = POINTER(_LSA_UNICODE_STRING)    
-    
-    
+PLSA_UNICODE_STRING = POINTER(_LSA_UNICODE_STRING)
+
+
 class _LIST_ENTRY64(RemoteStructure): pass
 _LIST_ENTRY64._fields_ = [
     ("Flink", Remote_LIST_ENTRY_PTR),
@@ -170,14 +170,14 @@ class _LDR_DATA_TABLE_ENTRY64(RemoteStructure):
     ]
 LDR_DATA_TABLE_ENTRY64 = _LDR_DATA_TABLE_ENTRY64
 
- 
+
 class _PEB_LDR_DATA64(RemoteStructure):
         _fields_ = [
         ("Reserved1", BYTE * 8),
         ("Reserved2", ULONG64 * 3),
         ("InMemoryOrderModuleList", LIST_ENTRY64),
     ]
- 
+
 class _PEB64(RemoteStructure):
         _fields_ = [
         ("Reserved1", BYTE * 2),
@@ -193,10 +193,10 @@ class _PEB64(RemoteStructure):
         ("Reserved7", ULONG64 * 1),
         ("SessionId", ULONG),
     ]
-    
+
 PEB64 = _PEB64
-            
-    
-    
+
+
+
 
 

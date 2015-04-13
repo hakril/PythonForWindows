@@ -18,13 +18,17 @@ CHAR = c_char
 UCHAR = c_char
 FARPROC = PVOID
 HGLOBAL = PVOID
+PVECTORED_EXCEPTION_HANDLER = PVOID
 ULONGLONG = c_ulonglong
+LONGLONG = c_longlong
 ULONG64 = c_ulonglong
+DWORD64 = ULONG64
 PULONG64 = POINTER(ULONG64)
 PHANDLE = POINTER(HANDLE)
+LPCONTEXT = PVOID
 VOID = DWORD
 
-structs = ['_LIST_ENTRY', '_PEB_LDR_DATA', '_LSA_UNICODE_STRING', '_RTL_USER_PROCESS_PARAMETERS', '_PEB', '_SECURITY_ATTRIBUTES', '_SYSTEM_VERIFIER_INFORMATION', '_LDR_DATA_TABLE_ENTRY', '_IMAGE_FILE_HEADER', '_IMAGE_DATA_DIRECTORY', '_IMAGE_SECTION_HEADER', '_IMAGE_OPTIONAL_HEADER64', '_IMAGE_OPTIONAL_HEADER', '_IMAGE_NT_HEADERS64', '_IMAGE_NT_HEADERS', '_IMAGE_IMPORT_DESCRIPTOR', '_IMAGE_IMPORT_BY_NAME', '_MEMORY_BASIC_INFORMATION', '_STARTUPINFOA', '_STARTUPINFOW', '_PROCESS_INFORMATION', '_FLOATING_SAVE_AREA', '_CONTEXT', 'tagPROCESSENTRY32W', 'tagPROCESSENTRY32', 'tagTHREADENTRY32', '_LUID', '_LUID_AND_ATTRIBUTES', '_TOKEN_PRIVILEGES', '_OSVERSIONINFOA', '_OSVERSIONINFOW', '_OSVERSIONINFOEXA', '_OSVERSIONINFOEXW', '_OVERLAPPED', '_MIB_TCPROW_OWNER_PID', '_MIB_TCPTABLE_OWNER_PID', '_MIB_UDPROW_OWNER_PID', '_MIB_UDPTABLE_OWNER_PID', '_MIB_UDP6ROW_OWNER_PID', '_MIB_UDP6TABLE_OWNER_PID', '_MIB_TCP6ROW_OWNER_PID', '_MIB_TCP6TABLE_OWNER_PID', '_MIB_TCPROW']
+structs = ['_LIST_ENTRY', '_PEB_LDR_DATA', '_LSA_UNICODE_STRING', '_RTL_USER_PROCESS_PARAMETERS', '_PEB', '_SECURITY_ATTRIBUTES', '_SYSTEM_VERIFIER_INFORMATION', '_LDR_DATA_TABLE_ENTRY', '_IMAGE_FILE_HEADER', '_IMAGE_DATA_DIRECTORY', '_IMAGE_SECTION_HEADER', '_IMAGE_OPTIONAL_HEADER64', '_IMAGE_OPTIONAL_HEADER', '_IMAGE_NT_HEADERS64', '_IMAGE_NT_HEADERS', '_IMAGE_IMPORT_DESCRIPTOR', '_IMAGE_IMPORT_BY_NAME', '_MEMORY_BASIC_INFORMATION', '_STARTUPINFOA', '_STARTUPINFOW', '_PROCESS_INFORMATION', '_FLOATING_SAVE_AREA', '_CONTEXT32', '_M128A', '_CONTEXT64', 'tagPROCESSENTRY32W', 'tagPROCESSENTRY32', 'tagTHREADENTRY32', '_LUID', '_LUID_AND_ATTRIBUTES', '_TOKEN_PRIVILEGES', '_OSVERSIONINFOA', '_OSVERSIONINFOW', '_OSVERSIONINFOEXA', '_OSVERSIONINFOEXW', '_OVERLAPPED', '_MIB_TCPROW_OWNER_PID', '_MIB_TCPTABLE_OWNER_PID', '_MIB_UDPROW_OWNER_PID', '_MIB_UDPTABLE_OWNER_PID', '_MIB_UDP6ROW_OWNER_PID', '_MIB_UDP6TABLE_OWNER_PID', '_MIB_TCP6ROW_OWNER_PID', '_MIB_TCP6TABLE_OWNER_PID', '_MIB_TCPROW', '_EXCEPTION_RECORD', '_EXCEPTION_POINTERS64', '_EXCEPTION_POINTERS32']
 
 enums = ['_SYSTEM_INFORMATION_CLASS', '_TCP_TABLE_CLASS', '_UDP_TABLE_CLASS', '_MIB_TCP_STATE']
 
@@ -153,22 +157,53 @@ MIB_TCP_STATE_TIME_WAIT = 0xb
 MIB_TCP_STATE_DELETE_TCB = 0xc
 # Struct _LIST_ENTRY definitions
 # Self referencing struct tricks
+
+import ctypes
+
+def pretty_print_ctypes_type(t):
+    format = "{0}"
+    if issubclass(t, ctypes.Array):
+        format = "[{0}" + "* {0}]".format(t._length_)
+        t = t._type_
+      
+    if issubclass(t, ctypes._Pointer):
+        format = format.format("Pointer({0})")
+        t = t._type_
+
+    if issubclass(t, ctypes.Structure):
+        return format.format(":class:`{0}`".format(t.__name__))
+    return t
+    
+def autodoc_ctypes_struct(struct):
+    doc = ["fields:"]
+    for name, type in struct._fields_:
+        doc.append("     {0} -> {1}".format(name, pretty_print_ctypes_type(type)))
+        
+    struct.__doc__ = "\n\n".join(doc)
+    return struct
+
+
 class _LIST_ENTRY(Structure): pass
 _LIST_ENTRY._fields_ = [
     ("Flink", POINTER(_LIST_ENTRY)),
     ("Blink", POINTER(_LIST_ENTRY)),
 ]
+
+_LIST_ENTRY = autodoc_ctypes_struct(_LIST_ENTRY)
+
 PLIST_ENTRY = POINTER(_LIST_ENTRY)
 LIST_ENTRY = _LIST_ENTRY
 PRLIST_ENTRY = POINTER(_LIST_ENTRY)
 
 # Struct _PEB_LDR_DATA definitions
+@autodoc_ctypes_struct
 class _PEB_LDR_DATA(Structure):
-        _fields_ = [
+    _fields_ = [
         ("Reserved1", BYTE * 8),
         ("Reserved2", PVOID * 3),
         ("InMemoryOrderModuleList", LIST_ENTRY),
     ]
+       
 PPEB_LDR_DATA = POINTER(_PEB_LDR_DATA)
 PEB_LDR_DATA = _PEB_LDR_DATA
 
@@ -196,6 +231,7 @@ PRTL_USER_PROCESS_PARAMETERS = POINTER(_RTL_USER_PROCESS_PARAMETERS)
 RTL_USER_PROCESS_PARAMETERS = _RTL_USER_PROCESS_PARAMETERS
 
 # Struct _PEB definitions
+@autodoc_ctypes_struct
 class _PEB(Structure):
         _fields_ = [
         ("Reserved1", BYTE * 2),
@@ -522,8 +558,8 @@ class _FLOATING_SAVE_AREA(Structure):
     ]
 FLOATING_SAVE_AREA = _FLOATING_SAVE_AREA
 
-# Struct _CONTEXT definitions
-class _CONTEXT(Structure):
+# Struct _CONTEXT32 definitions
+class _CONTEXT32(Structure):
         _fields_ = [
         ("ContextFlags", DWORD),
         ("Dr0", DWORD),
@@ -551,9 +587,89 @@ class _CONTEXT(Structure):
         ("SegSs", DWORD),
         ("ExtendedRegisters", BYTE * 512),
     ]
-PCONTEXT = POINTER(_CONTEXT)
-LPCONTEXT = POINTER(_CONTEXT)
-CONTEXT = _CONTEXT
+PCONTEXT32 = POINTER(_CONTEXT32)
+CONTEXT32 = _CONTEXT32
+LPCONTEXT32 = POINTER(_CONTEXT32)
+
+# Struct _M128A definitions
+class _M128A(Structure):
+        _fields_ = [
+        ("Low", ULONGLONG),
+        ("High", LONGLONG),
+    ]
+M128A = _M128A
+PM128A = POINTER(_M128A)
+
+# Struct _CONTEXT64 definitions
+class _CONTEXT64(Structure):
+        _fields_ = [
+        ("P1Home", DWORD64),
+        ("P2Home", DWORD64),
+        ("P3Home", DWORD64),
+        ("P4Home", DWORD64),
+        ("P5Home", DWORD64),
+        ("P6Home", DWORD64),
+        ("ContextFlags", DWORD),
+        ("MxCsr", DWORD),
+        ("SegCs", WORD),
+        ("SegDs", WORD),
+        ("SegEs", WORD),
+        ("SegFs", WORD),
+        ("SegGs", WORD),
+        ("SegSs", WORD),
+        ("EFlags", DWORD),
+        ("Dr0", DWORD64),
+        ("Dr1", DWORD64),
+        ("Dr2", DWORD64),
+        ("Dr3", DWORD64),
+        ("Dr6", DWORD64),
+        ("Dr7", DWORD64),
+        ("Rax", DWORD64),
+        ("Rcx", DWORD64),
+        ("Rdx", DWORD64),
+        ("Rbx", DWORD64),
+        ("Rsp", DWORD64),
+        ("Rbp", DWORD64),
+        ("Rsi", DWORD64),
+        ("Rdi", DWORD64),
+        ("R8", DWORD64),
+        ("R9", DWORD64),
+        ("R10", DWORD64),
+        ("R11", DWORD64),
+        ("R12", DWORD64),
+        ("R13", DWORD64),
+        ("R14", DWORD64),
+        ("R15", DWORD64),
+        ("Rip", DWORD64),
+        ("Header", M128A * 2),
+        ("Legacy", M128A * 8),
+        ("Xmm0", M128A),
+        ("Xmm1", M128A),
+        ("Xmm2", M128A),
+        ("Xmm3", M128A),
+        ("Xmm4", M128A),
+        ("Xmm5", M128A),
+        ("Xmm6", M128A),
+        ("Xmm7", M128A),
+        ("Xmm8", M128A),
+        ("Xmm9", M128A),
+        ("Xmm10", M128A),
+        ("Xmm11", M128A),
+        ("Xmm12", M128A),
+        ("Xmm13", M128A),
+        ("Xmm14", M128A),
+        ("Xmm15", M128A),
+        ("VectorRegister", M128A * 26),
+        ("VectorControl", DWORD64),
+        ("DebugControl", DWORD64),
+        ("LastBranchToRip", DWORD64),
+        ("LastBranchFromRip", DWORD64),
+        ("LastExceptionToRip", DWORD64),
+        ("LastExceptionFromRip", DWORD64),
+    ]
+PCONTEXT64 = POINTER(_CONTEXT64)
+CONTEXT64 = _CONTEXT64
+LPCONTEXT64 = POINTER(_CONTEXT64)
 
 # Struct tagPROCESSENTRY32W definitions
 class tagPROCESSENTRY32W(Structure):
@@ -810,4 +926,36 @@ class _MIB_TCPROW(Structure):
     ]
 MIB_TCPROW = _MIB_TCPROW
 PMIB_TCPROW = POINTER(_MIB_TCPROW)
+
+# Struct _EXCEPTION_RECORD definitions
+# Self referencing struct tricks
+class _EXCEPTION_RECORD(Structure): pass
+_EXCEPTION_RECORD._fields_ = [
+    ("ExceptionCode", DWORD),
+    ("ExceptionFlags", DWORD),
+    ("ExceptionRecord", POINTER(_EXCEPTION_RECORD)),
+    ("ExceptionAddress", PVOID),
+    ("NumberParameters", DWORD),
+    ("ExceptionInformation", ULONG_PTR * EXCEPTION_MAXIMUM_PARAMETERS),
+]
+PEXCEPTION_RECORD = POINTER(_EXCEPTION_RECORD)
+EXCEPTION_RECORD = _EXCEPTION_RECORD
+
+# Struct _EXCEPTION_POINTERS64 definitions
+class _EXCEPTION_POINTERS64(Structure):
+        _fields_ = [
+        ("ExceptionRecord", PEXCEPTION_RECORD),
+        ("ContextRecord", PCONTEXT64),
+    ]
+EXCEPTION_POINTERS64 = _EXCEPTION_POINTERS64
+PEXCEPTION_POINTERS64 = POINTER(_EXCEPTION_POINTERS64)
+
+# Struct _EXCEPTION_POINTERS32 definitions
+class _EXCEPTION_POINTERS32(Structure):
+        _fields_ = [
+        ("ExceptionRecord", PEXCEPTION_RECORD),
+        ("ContextRecord", PCONTEXT32),
+    ]
+PEXCEPTION_POINTERS32 = POINTER(_EXCEPTION_POINTERS32)
+EXCEPTION_POINTERS32 = _EXCEPTION_POINTERS32
 

@@ -10,38 +10,37 @@ from windows.generated_def.winstructs import *
 class Callback(object):
     def __init__(self, *types):
         self.types = types
-            
+
     def __call__(self, func):
         func._types_info = self.types
         return func
-        
+
 class KnownCallback(object):
     types = ()
 
     def __call__(self, func):
         func._types_info = self.types
         return func
-        
+
 def add_callback_to_module(callback):
     setattr(sys.modules[__name__], type(callback).__name__, callback)
- 
+
 # Generate IATCallback decorator for all known functions
 for func in winfuncs.functions:
-    prototype = getattr(winfuncs, func + "Prototype") 
+    prototype = getattr(winfuncs, func + "Prototype")
     callback_name = func + "Callback"
-    
+
     class CallBackDeclaration(KnownCallback):
         types = (prototype._restype_,) +  prototype._argtypes_
-        
+
     CallBackDeclaration.__name__ = callback_name
     add_callback_to_module(CallBackDeclaration())
-    
-    
+
+
 
 class IATHook(object):
+    """Look at my hook <3"""
 
-    #callback_inject = python_native_execution.CallbackInjector()
-    
     def __init__(self, IAT_entry, callback, types=None):
         if types is None:
             if not hasattr(callback, "_types_info"):
@@ -63,17 +62,17 @@ class IATHook(object):
             else:
                 res.append(type)
         return res
-            
+
     def enable(self):
         with utils.VirtualProtected(self.entry.addr, ctypes.sizeof(PVOID), windef.PAGE_EXECUTE_READWRITE):
             self.entry.value = self.stub
         self.is_enable = True
-        
+
     def disable(self):
         with utils.VirtualProtected(self.entry.addr, ctypes.sizeof(PVOID), windef.PAGE_EXECUTE_READWRITE):
             self.entry.value = self.entry.nonhookvalue
         self.is_enable = False
-        
+
     def hook_callback(self, *args):
         original_args = args
         adapted_args = []

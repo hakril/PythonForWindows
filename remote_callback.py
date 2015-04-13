@@ -18,4 +18,3 @@ def createfile_callback(lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttr
     if "dick" in lpFileName:
         return 0x4242
     return real_function()
-    

@@ -141,6 +141,12 @@ GetCurrentThread = TransparentKernel32Proxy("GetCurrentThread")
 AllocConsole = TransparentKernel32Proxy("AllocConsole")
 GetStdHandle = TransparentKernel32Proxy("GetStdHandle")
 SetStdHandle = TransparentKernel32Proxy("SetStdHandle")
+GetCurrentThreadId = TransparentKernel32Proxy("GetCurrentThreadId")
+
+TerminateThread = TransparentKernel32Proxy("TerminateThread")
+ExitThread = TransparentKernel32Proxy("ExitThread")
+SuspendThread = TransparentKernel32Proxy("SuspendThread")
+ResumeThread = TransparentKernel32Proxy("ResumeThread")
 
 # This kind of function could be fully done by using paramflags
 @Kernel32Proxy("VirtualAlloc")
@@ -150,6 +156,10 @@ def VirtualAlloc(lpAddress=0,  dwSize=NeededParameter, flAllocationType=MEM_COMM
 @Kernel32Proxy("VirtualAllocEx")
 def VirtualAllocEx(hProcess, lpAddress=0,  dwSize=NeededParameter, flAllocationType=MEM_COMMIT, flProtect=PAGE_EXECUTE_READWRITE):
     return VirtualAllocEx.ctypes_function(hProcess, lpAddress, dwSize, flAllocationType, flProtect)
+
+@Kernel32Proxy("CreateThread")
+def CreateThread(lpThreadAttributes=None, dwStackSize=0, lpStartAddress=NeededParameter, lpParameter=NeededParameter, dwCreationFlags=0, lpThreadId=None):
+    return CreateThread.ctypes_function(lpThreadAttributes, dwStackSize, lpStartAddress, lpParameter, dwCreationFlags, lpThreadId)
 
 @Kernel32Proxy("CreateRemoteThread")
 def CreateRemoteThread(hProcess=NeededParameter, lpThreadAttributes=None, dwStackSize=0,
@@ -268,6 +278,23 @@ def WriteFile(hFile, lpBuffer, nNumberOfBytesToWrite=None, lpNumberOfBytesWritte
     if lpOverlapped is None and lpNumberOfBytesWritten is None:
         lpNumberOfBytesWritten = ctypes.byref(DWORD())
     return WriteFile.ctypes_function(hFile, lpBuffer, nNumberOfBytesToWrite, lpNumberOfBytesWritten, lpOverlapped)
+
+# Exception stuff
+@Kernel32Proxy("AddVectoredContinueHandler")
+def AddVectoredContinueHandler(FirstHandler=1, VectoredHandler=NeededParameter):
+    return AddVectoredContinueHandler.ctypes_function(FirstHandler, VectoredHandler)
+
+@Kernel32Proxy("AddVectoredExceptionHandler")
+def AddVectoredExceptionHandler(FirstHandler=1, VectoredHandler=NeededParameter):
+    return AddVectoredExceptionHandler.ctypes_function(FirstHandler, VectoredHandler)
+
+@Kernel32Proxy("RemoveVectoredExceptionHandler")
+def RemoveVectoredExceptionHandler(Handler):
+    return RemoveVectoredExceptionHandler.ctypes_function(Handler)
+
+@Kernel32Proxy("WaitForSingleObject")
+def WaitForSingleObject(hHandle, dwMilliseconds=INFINITE):
+    return WaitForSingleObject.ctypes_function(hHandle, dwMilliseconds)
 
 ###### ADVAPI32 ########
 
