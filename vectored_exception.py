@@ -47,8 +47,16 @@ class EnhancedEXCEPTION_RECORD(EXCEPTION_RECORD):
         real_code = super(EnhancedEXCEPTION_RECORD, self).ExceptionCode
         return exception_name_by_value.get(real_code, 'UNKNOW_EXCEPTION({0})'.format(hex(real_code)))
 
+    @property
+    def ExceptionAddress(self):
+        x = super(EnhancedEXCEPTION_RECORD, self).ExceptionAddress
+        if x is None:
+            return 0x0
+        return x
+
 class EnhancedCONTEXTBase(CONTEXT):
     default_dump = ()
+    pc_reg = ''
 
     def regs(self, to_dump=None):
         res = []
@@ -63,12 +71,18 @@ class EnhancedCONTEXTBase(CONTEXT):
         for name, value in regs:
             print("{0} -> {1}".format(name, hex(value)))
 
+    @property
+    def pc(self):
+        return getattr(self, self.pc_reg)
+
 class EnhancedCONTEXT32(EnhancedCONTEXTBase):
-    default_dump = ('Eip', 'Esp', 'Eax', 'Ebx', 'Ecx', 'Ebp', 'Edi', 'Esi')
+    default_dump = ('Eip', 'Esp', 'Eax', 'Ebx', 'Ecx', 'Edx', 'Ebp', 'Edi', 'Esi')
+    pc_reg = 'Eip'
 
 class EnhancedCONTEXT64(EnhancedCONTEXTBase):
-    default_dump = ('Rip', 'Rsp', 'Rax', 'Rbx', 'Rcx', 'Rbp', 'Rdi', 'Rsi',
+    default_dump = ('Rip', 'Rsp', 'Rax', 'Rbx', 'Rcx', 'Rdx', 'Rbp', 'Rdi', 'Rsi',
                     'R9', 'R10', 'R11', 'R12', 'R13', 'R14', 'R15')
+    pc_reg = 'Rip'
 
 if windows.current_process.bitness == 32:
     EnhancedCONTEXT = EnhancedCONTEXT32
@@ -93,7 +107,7 @@ class EnhancedEXCEPTION_POINTERS(ctypes.Structure):
 class VectoredException(object):
     func_type = ctypes.WINFUNCTYPE(ctypes.c_uint, ctypes.POINTER(EnhancedEXCEPTION_POINTERS))
 
-    def __init__(self):
+    def __init__(self, quit_if_fail=False):
         pass
 
     def __call__(self, func):
@@ -101,13 +115,12 @@ class VectoredException(object):
         return self.func_type(self.decorator)
 
     def decorator(self, exception_pointers):
-        print("IN DAT DECORATOR")
         try:
-            x = self.func(exception_pointers)
-            print("PROUT")
-            return x
+            return self.func(exception_pointers)
         except BaseException as e:
             print("Ignored Python Exception in Vectored Exception: {0}".format(e))
+            if quit_if_fail:
+                return windows.current_thread.quit()
             return windef.EXCEPTION_CONTINUE_SEARCH
 
 

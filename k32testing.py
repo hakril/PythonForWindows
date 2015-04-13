@@ -292,7 +292,7 @@ def AddVectoredExceptionHandler(FirstHandler=1, VectoredHandler=NeededParameter)
 def RemoveVectoredExceptionHandler(Handler):
     return RemoveVectoredExceptionHandler.ctypes_function(Handler)
 
-@Kernel32Proxy("WaitForSingleObject")
+@Kernel32Proxy("WaitForSingleObject", no_error_check)
 def WaitForSingleObject(hHandle, dwMilliseconds=INFINITE):
     return WaitForSingleObject.ctypes_function(hHandle, dwMilliseconds)
 

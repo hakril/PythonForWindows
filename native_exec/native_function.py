@@ -94,9 +94,6 @@ class CustomAllocator(object):
         self.cur_offset += size
         return addr
 
-allocator = CustomAllocator()
-
-
 def get_functions():
     # Windows only with python27.dll | improve this ?
     import sys
@@ -120,6 +117,7 @@ def analyse_callback(callback):
 # For windows 32 bits with stdcall
 def generate_stub_32(callback):
     from simple_x86 import *
+    allocator = windows.current_process.allocator
     obj_id = analyse_callback(callback)
     
     c_callback = ctypes.c_ulong.from_address(id(callback._objects['0']) + 3 * ctypes.sizeof(ctypes.c_void_p)).value
@@ -185,6 +183,7 @@ def generate_stub_32(callback):
 def generate_stub_64(callback):
     import simple_x64 as x64
     from simple_x64 import *
+    allocator = windows.current_process.allocator
     obj_id = analyse_callback(callback)
 
     REG_LEN = ctypes.sizeof(ctypes.c_void_p)
@@ -307,7 +306,7 @@ def generate_callback_stub(callback, types):
         stub = generate_stub_32(c_callable)
     else:
         stub = generate_stub_64(c_callable)
-    stub_addr = allocator.write_code(stub.get_code())
+    stub_addr = windows.current_process.allocator.write_code(stub.get_code())
     generate_callback_stub.l.append((stub, c_callable))
     return stub_addr
 
@@ -322,5 +321,5 @@ def create_function(code, types):
    :rtype: function
      """
     func_type = ctypes.CFUNCTYPE(*types)
-    addr = allocator.write_code(code)
+    addr = windows.current_process.allocator.write_code(code)
     return func_type(addr)

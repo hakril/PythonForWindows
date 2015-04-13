@@ -69,8 +69,6 @@ class System(object):
         return 32
 
 
-# May have a common class with WinProcess for is_wow_64 and stuff
-
 class WinThread(THREADENTRY32, AutoHandle):
     """Represent a thread """
     @property
@@ -167,6 +165,9 @@ class CurrentProcess(Process):
     # mov    rax,QWORD PTR gs:0x60
     # ret
     get_peb_64_code = "65488B042560000000C3".decode('hex')
+
+    allocator = native_exec.native_function.CustomAllocator()
+
 
     def get_peb_builtin(self):
         if self.get_peb is not None:
