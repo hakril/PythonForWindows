@@ -3,13 +3,16 @@
 
 import struct
 import sys
-from simple_x86 import MultipleInstr
+import codecs
+from .simple_x86 import MultipleInstr
 
 # This code should really be rewritten..
 
 this_module = sys.modules[__name__]
    
 generated_instruction = []
+
+long = int
 
 def add_instruction(name, instruction):
     generated_instruction.append((name, instruction))
@@ -21,6 +24,12 @@ def generate_module_doc():
         doc_lines.append("    | {0} -> <{1}>".format(name, instruction.mnemo))
         
     this_module.__doc__ = "\n".join(doc_lines)
+    
+def decode_hex(s):
+    return codecs.decode(s.encode(), "hex").decode()
+ 
+def encode_hex(s):
+    return codecs.encode(s.encode(), "hex").decode()
     
 reg_order = ['EAX', 'ECX', 'EDX', 'EBX', 'ESP', 'EBP', 'ESI', 'EDI']
 reg_opcode = {v : format(i, "03b") for i, v in enumerate(reg_order)}    
@@ -52,12 +61,14 @@ class X64Instruction(object):
                 raise ValueError("{0} bindings must be between 0 and 0xffffffffffffffff".format(self.__class__.__name__))
                 
     def get_unbinded_code(self):
-        return self.code.replace(" ", "").decode('hex')
+        return decode_hex(self.code.replace(" ", ""))
         
     def get_code(self):
         code = self.get_unbinded_code()
         for i in range(self.biding):
-            code = code.replace((str(i + 1) * 16).decode('hex'), struct.pack("<Q", self.bind_values[i]))
+            to_search = codecs.decode(str(i + 1) * 16, 'hex')
+            import pdb;pdb.set_trace()
+            code = code.replace(to_search, struct.pack("<Q", self.bind_values[i]))
         return code
         
     def get_mnemo(self):
@@ -151,7 +162,7 @@ def generate_reg_instruction_onebind(instr_cls):
     for reg_name, reg_bits in reg_opcode.items():
         class OneBindRegInstruction(OneBindX64Instruction):
             mnemo = instr_cls.mnemo.format(reg_name)
-            code = chr(int(instr_cls.instruction_bits + reg_bits, 2)).encode('hex')  + '11 11 11 11 11 11 11 11' # the biding
+            code = encode_hex(chr(int(instr_cls.instruction_bits + reg_bits, 2)))  + '11 11 11 11 11 11 11 11' # the biding
             if instr_cls.prefix_bin_h48:
                 code = "48" + code
         OneBindRegInstruction.__name__ = instr_cls.name.format(reg_name)
@@ -168,12 +179,12 @@ generate_reg_instruction_onebind(Mov_Reg_X)
 def get_immediat_modr_byte(register_bits):
     "Generate a modr-reg-r/m indicating a register and an immediat"
     str_bits = "11000{0}".format(register_bits)
-    return chr(int(str_bits, 2)).encode('hex')
+    return encode_hex(chr(int(str_bits, 2)))
   
 def get_simple_modr_byte(register_bits):
     "Generate a simple modr-reg-r/m for a displacement only mode"
     str_bits = "00{0}101".format(register_bits)
-    return chr(int(str_bits, 2)).encode('hex')
+    return encode_hex(chr(int(str_bits, 2)))
  
 
 #def generate_reg_indirect_modr_byte(reg_dst_bits, reg_src_bits):
@@ -204,9 +215,9 @@ def get_simple_modr_byte(register_bits):
 def generate_reg_indirect_modr_byte(reg_dst_bits, reg_src_bits, deref_first):
     # reg, [reg] or [reg], reg
     if deref_first:
-        return chr(int("00{0}{1}".format(reg_dst_bits, reg_src_bits), 2)).encode('hex')
+        return encode_hex(chr(int("00{0}{1}".format(reg_dst_bits, reg_src_bits), 2)))
     else:
-        return chr(int("00{0}{1}".format(reg_src_bits, reg_dst_bits), 2)).encode('hex')
+        return encode_hex(chr(int("00{0}{1}".format(reg_src_bits, reg_dst_bits), 2)))
     
 def generate_reg_reg_deref():
     for reg1_name, reg1_bits in all_regs.items():
@@ -216,7 +227,7 @@ def generate_reg_reg_deref():
             is_reg1_new = reg1_name in new_reg_opcode
             is_reg2_new = reg2_name in new_reg_opcode
             
-            first_byte = chr(int("1001{0}0{1}".format(int(is_reg1_new), int(is_reg2_new)), 2)).encode('hex')
+            first_byte = encode_hex(chr(int("1001{0}0{1}".format(int(is_reg1_new), int(is_reg2_new)), 2)))
             
             class DReg_Reg_instruction(X64Instruction):
                 mnemo = "mov [{0}], {1}".format(reg1_name, reg2_name)
