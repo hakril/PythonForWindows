@@ -45,10 +45,22 @@ class IphlpapiError(Kernel32Error):
 def no_error_check(func_name, result, func, args):
     """Nothing special"""
     return args
+    
+def minus_one_error_check(func_name, result, func, args):
+    if result == -1:
+        raise Kernel32Error(func_name)
+    return args
+        
 
 def kernel32_error_check(func_name, result, func, args):
     """raise Kernel32Error if result is 0"""
     if not result:
+        raise Kernel32Error(func_name)
+    return args
+    
+def kernel32_zero_check(func_name, result, func, args):
+    """raise Kernel32Error if result is NOT 0"""
+    if result:
         raise Kernel32Error(func_name)
     return args
 
@@ -145,8 +157,14 @@ GetCurrentThreadId = TransparentKernel32Proxy("GetCurrentThreadId")
 
 TerminateThread = TransparentKernel32Proxy("TerminateThread")
 ExitThread = TransparentKernel32Proxy("ExitThread")
-SuspendThread = TransparentKernel32Proxy("SuspendThread")
-ResumeThread = TransparentKernel32Proxy("ResumeThread")
+SuspendThread = TransparentKernel32Proxy("SuspendThread", minus_one_error_check)
+ResumeThread = TransparentKernel32Proxy("ResumeThread", minus_one_error_check)
+GetThreadId = TransparentKernel32Proxy("GetThreadId")
+
+
+@Kernel32Proxy("CreateFileA")
+def CreateFileA(lpFileName, dwDesiredAccess, dwShareMode=0, lpSecurityAttributes=None, dwCreationDisposition=OPEN_EXISTING, dwFlagsAndAttributes=FILE_ATTRIBUTE_NORMAL, hTemplateFile=None):
+    return CreateFileA.ctypes_function(lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile)
 
 # This kind of function could be fully done by using paramflags
 @Kernel32Proxy("VirtualAlloc")
@@ -292,7 +310,7 @@ def AddVectoredExceptionHandler(FirstHandler=1, VectoredHandler=NeededParameter)
 def RemoveVectoredExceptionHandler(Handler):
     return RemoveVectoredExceptionHandler.ctypes_function(Handler)
 
-@Kernel32Proxy("WaitForSingleObject", no_error_check)
+@Kernel32Proxy("WaitForSingleObject", kernel32_zero_check)
 def WaitForSingleObject(hHandle, dwMilliseconds=INFINITE):
     return WaitForSingleObject.ctypes_function(hHandle, dwMilliseconds)
 

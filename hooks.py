@@ -1,10 +1,10 @@
 import sys
-import utils
-import native_exec
 import ctypes
-import windows.generated_def.winfuncs as winfuncs
-import windows.generated_def.windef as windef
-from windows.generated_def.winstructs import *
+
+import windows.utils as utils
+from . import native_exec
+from .generated_def import winfuncs, windef
+from .generated_def.winstructs import *
 
 
 class Callback(object):

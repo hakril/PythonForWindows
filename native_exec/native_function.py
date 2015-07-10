@@ -5,6 +5,9 @@ import platform
 import windows
 import windows.k32testing as k32api
 
+from . import simple_x86 as x86
+#from . import simple_x64 as x64
+
 class PyObj(ctypes.Structure):
     _fields_ = [("ob_refcnt", ctypes.c_size_t),
                 ("ob_type", ctypes.c_void_p)] #must be cast
@@ -116,7 +119,7 @@ def analyse_callback(callback):
 
 # For windows 32 bits with stdcall
 def generate_stub_32(callback):
-    from simple_x86 import *
+    
     allocator = windows.current_process.allocator
     obj_id = analyse_callback(callback)
     
@@ -124,65 +127,64 @@ def generate_stub_32(callback):
     gstate_save_addr = allocator.reserve_int()
     return_addr_save_addr = allocator.reserve_int()
 
-    save_ebx = allocator.reserve_int()
-    save_ecx = allocator.reserve_int()
-    save_edx = allocator.reserve_int()
-    save_esi = allocator.reserve_int()
-    save_edi = allocator.reserve_int()
+    save_ebx = x86.create_displacement(disp=allocator.reserve_int())
+    save_ecx = x86.create_displacement(disp=allocator.reserve_int())
+    save_edx = x86.create_displacement(disp=allocator.reserve_int())
+    save_esi = x86.create_displacement(disp=allocator.reserve_int())
+    save_edi = x86.create_displacement(disp=allocator.reserve_int())
 
     ensure, objcall, release = get_functions()
 
+    code = x86.MultipleInstr()
+    
     ### Shellcode ###
-    code = MultipleInstr()
-
-    code += Mov_DX_EBX(save_ebx)
-    code += Mov_DX_ECX(save_ecx)
-    code += Mov_DX_EDX(save_edx)
-    code += Mov_DX_ESI(save_esi)
-    code += Mov_DX_EDI(save_edi)
-
-    code += Mov_EAX_X(ensure)
-    code += Call_EAX()
-    code += Mov_DX_EAX(gstate_save_addr)
-
+    code += x86.Mov(save_ebx, 'EBX')
+    code += x86.Mov(save_ecx, 'ECX')
+    code += x86.Mov(save_edx, 'EDX')
+    code += x86.Mov(save_esi, 'ESI')
+    code += x86.Mov(save_edi, 'EDI')
+    
+    code += x86.Mov('EAX', ensure)
+    code += x86.Call('EAX')
+    code += x86.Mov(gstate_save_addr, 'EAX')
+    
     #Save real return addr (for good argument parsing by the callback)
-
-    code += Pop_EAX()
-    code += Mov_DX_EAX(return_addr_save_addr)
-
+    
+    code += x86.Pop('EAX')
+    code += x86.Mov(return_addr_save_addr, 'EAX')
+    
     # Set call_real_function to 0 (no call by default)
-
-    code += Mov_EAX_X(c_callback)
-    code += Call_EAX()
-
+    
+    code += x86.Mov('EAX', c_callback)
+    code += x86.Call('EAX')
+    
     # Restore real return value
-    code += Mov_EBX_DX(return_addr_save_addr)
-    code += Push_EBX()
-
+    code += x86.Mov('EBX', return_addr_save_addr)
+    code += x86.Push('EBX')
+    
     # Save return value
-    code += Push_EAX()
-    code += Mov_EBX_DX(gstate_save_addr)
-    code += Push_EBX()
-
-    code += Mov_EAX_X(release)
-    code += Call_EAX()
-
+    code += x86.Push('EAX')
+    code += x86.Mov('EBX', gstate_save_addr)
+    code += x86.Push('EBX')
+    
+    code += x86.Mov('EAX', release)
+    code += x86.Call('EAX')
+    
     # Discard `release` argument
-    code += Pop_EAX()
+    code += x86.Pop('EAX')
     # Restore return value
-    code += Pop_EAX()
-    code += Mov_EBX_DX(save_ebx)
-    code += Mov_ECX_DX(save_ecx)
-    code += Mov_EDX_DX(save_edx)
-    code += Mov_ESI_DX(save_esi)
-    code += Mov_EDI_DX(save_edi)
-    code += Ret()
+    code += x86.Pop('EAX')
+    code += x86.Mov('EBX', save_ebx)
+    code += x86.Mov('ECX', save_ecx)
+    code += x86.Mov('EDX', save_edx)
+    code += x86.Mov('ESI', save_esi)
+    code += x86.Mov('EDI', save_edi)
+    code += x86.Ret()
     return code
 
 # For windows 32 bits with stdcall
 def generate_stub_64(callback):
-    import simple_x64 as x64
-    from simple_x64 import *
+    
     allocator = windows.current_process.allocator
     obj_id = analyse_callback(callback)
 
@@ -191,8 +193,9 @@ def generate_stub_64(callback):
     c_callback = ctypes.c_ulong.from_address(id(callback._objects['0']) + 3 * ctypes.sizeof(ctypes.c_void_p)).value
 
     register_to_save = ("RBX", "RCX", "RDX", "RSI", "RDI", "R8", "R9", "R10", "R11", "R12", "R13", "R14", "R15")
-    push_all_save_register = MultipleInstr([getattr(x64, "Push_" + reg)() for reg in register_to_save])
-    pop_all_save_register = MultipleInstr([getattr(x64, "Pop_" + reg)() for reg in reversed(register_to_save)])
+
+    push_all_save_register = x64.MultipleInstr([x64.Push(reg) for reg in register_to_save])
+    pop_all_save_register = x64.MultipleInstr([x64.Pop(reg) for reg in register_to_save])
     # Reserve parallel `stack`
     save_register_space = allocator.reserve_int(len(register_to_save) + 1)
     save_register_space += REG_LEN # The + 1 is for the second-stack xchg
@@ -208,94 +211,94 @@ def generate_stub_64(callback):
     save_r9 = save_register_space_end - REG_LEN - (REG_LEN * 6)
 
 
-    gstate_save_addr = allocator.reserve_int()
-    return_addr_save_addr = allocator.reserve_int()
-    return_value_save_addr = allocator.reserve_int()
+    gstate_save_addr = create_displacement(disp=allocator.reserve_int())
+    return_addr_save_addr = create_displacement(disp=allocator.reserve_int())
+    return_value_save_addr = create_displacement(disp=allocator.reserve_int())
 
-    Reserve_space_for_call = MultipleInstr([Push_RDI()] * 4)
-    Clean_space_for_call = MultipleInstr([Pop_RDI()] * 4)
-    Do_stack_alignement = MultipleInstr([Push_RDI()] * 1)
-    Remove_stack_alignement = MultipleInstr([Pop_RDI()] * 1)
-
+    Reserve_space_for_call = x64.MultipleInstr([Push('RDI')] * 4)
+    Clean_space_for_call = x64.MultipleInstr([Pop('RDI')] * 4)
+    Do_stack_alignement = MultipleInstr([x64.Push('RDI')] * 1)
+    Remove_stack_alignement = MultipleInstr([x64.Pop('RDI')] * 1)
 
 
     ensure, objcall, release = get_functions()
 
     ### Shellcode ###
     code = MultipleInstr()
-    code += Mov_RAX_X(save_register_space_end)
+    code += x64.Mov('RAX', save_register_space_end)
     # A lazy working xchg RSP <-> RAX
-    code += Push_RAX()
-    code += Push_RSP()
-    code += Pop_RAX()
-    code += Pop_RSP()
+    code += x64.Push('RAX')
+    code += x64.Push('RSP')
+    code += x64.Pop('RAX')
+    code += x64.Pop('RSP')
 
     code += push_all_save_register
 
     # Re-set RSP to its real value
-    code += Push_RAX()
-    code += Pop_RSP()
+    code += x64.Push('RAX')
+    code += x64.Pop('RSP')
 
 
-    code += Pop_RAX() # Remove the Push_RAX of lazy xchg
+    code += x64.Pop('RAX') # Remove the Push_RAX of lazy xchg
     # GOOO
-    code += Mov_RAX_X(ensure)
+    code += x64.Mov('RAX', ensure)
     code += Reserve_space_for_call
     code += Do_stack_alignement
-    code += Call_RAX()
+    code += x64.Call('RAX')
     code += Remove_stack_alignement
     code += Clean_space_for_call
-    code += Mov_DX_RAX(gstate_save_addr)
+    code += x64.Mov(gstate_save_addr, 'RAX')
      #Save real return addr (for good argument parsing by the callback)
-    code += Pop_RAX()
-    code += Mov_DX_RAX(return_addr_save_addr)
+    code += x64.Pop('RAX')
+    code += x64.Mov(return_addr_save_addr, 'RAX')
     # Restore parameters for real function call
-    code += Mov_RAX_X(save_rcx)
-    code += Mov_RCX_DRAX()
-    code += Mov_RAX_X(save_rdx)
-    code += Mov_RDX_DRAX()
-    code += Mov_RAX_X(save_r8)
-    code += Mov_R8_DRAX()
-    code += Mov_RAX_X(save_r9)
-    code += Mov_R9_DRAX()
+    code += x64.Mov('RAX', save_rcx)
+    code += x64.Mov('RCX', x64.create_displacement('RAX'))
+    code += x64.Mov('RAX', save_rdx)
+    code += x64.Mov('RDX', x64.create_displacement('RAX'))
+    code += x64.Mov('RAX', save_r8)
+    code += x64.Mov('R9', x64.create_displacement('RAX'))
+    code += x64.Mov('RAX', save_r9)
+    code += x64.Mov('R8', x64.create_displacement('RAX'))
     # Call python code
-    code += Mov_RAX_X(c_callback)
+    code += x64.Mov('RAX', c_callback)
     code += Reserve_space_for_call
-    code += Call_RAX() # no need for stack alignement here as we poped the return addr
+    code += x64.Call('RAX') # no need for stack alignement here as we poped the return addr
     
     code += Clean_space_for_call
     # Save return value
-    code += Mov_DX_RAX(return_value_save_addr)
-    code += Mov_RAX_DX(return_addr_save_addr)
+    code += x64.Mov(return_value_save_addr, 'RAX')
     # Repush real return value
-    code += Push_RAX()
-    code += Mov_RAX_DX(gstate_save_addr)
-    code += Push_RAX()
-    code += Pop_RCX()
-    code += Mov_RAX_X(release)
+    code += x64.Mov('RAX', return_addr_save_addr)
+    code += x64.Push('RAX')
+    # Call release(gstate_save)
+    code += x64.Mov_RAX_DX('RAX', gstate_save_addr)
+    code += x64.Push('RAX')
+    code += x64.Pop('RCX')
+    code += x64.Mov('RAX', release)
     code += Reserve_space_for_call
     code += Do_stack_alignement
-    code += Call_RAX()
+    code += x64.Call('RAX')
     code += Remove_stack_alignement
     code += Clean_space_for_call
     # Restore registers
-    code += Mov_RAX_X(save_register_space)
+    code += x64.Mov('RAX', save_register_space)
     # A lazy working xchg RSP <-> RAX
-    code += Push_RAX()
-    code += Push_RSP()
-    code += Pop_RAX()
-    code += Pop_RSP()
+    code += x64.Push('RAX')
+    code += x64.Push('RSP')
+    code += x64.Pop('RAX')
+    code += x64.Pop('RSP')
 
     code += pop_all_save_register
 
     # Re-set RSP to its real value
-    code += Push_RAX()
-    code += Pop_RSP()
-    code += Pop_RAX() # Remove the Push_RAX of lazy xchg
+    code += x64.Push('RAX')
+    code += x64.Pop('RSP')
+    code += x64.Pop('RAX') # Remove the Push_RAX of lazy xchg
 
     # Restore return value
-    code += Mov_RAX_DX(return_value_save_addr)
-    code += Ret()
+    code += x64.Mov_RAX_DX('RAX', return_value_save_addr)
+    code += x64.Ret()
     return code
 
 

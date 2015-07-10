@@ -4,11 +4,9 @@ import os
 import copy
 import sys
 
-import k32testing as kernel32proxy
-import generated_def.windef as windef
-import winobject
-import native_exec
-from generated_def.winstructs import *
+from . import k32testing as kernel32proxy
+from .generated_def import windef
+from .generated_def.winstructs import *
 
 # Function resolution !
 
@@ -21,29 +19,7 @@ def get_func_addr(dll_name, func_name):
         dll = ctypes.WinDLL(dll_name)
         return kernel32proxy.GetProcAddress(dll._handle, func_name)
 
-# Used by system.processes
-def enumerate_processes():
-    process_entry = winobject.WinProcess()
-    process_entry.dwSize = ctypes.sizeof(process_entry)
-    snap = kernel32proxy.CreateToolhelp32Snapshot(windef.TH32CS_SNAPPROCESS, 0)
-    kernel32proxy.Process32First(snap, process_entry)
-    res = []
-    res.append(swallow_ctypes_copy(process_entry))
-    while kernel32proxy.Process32Next(snap, process_entry):
-         res.append(swallow_ctypes_copy(process_entry))
-    return res
 
-# Used by system.threads
-def enumerate_threads():
-    thread_entry = winobject.WinThread()
-    thread_entry.dwSize = ctypes.sizeof(thread_entry)
-    snap = kernel32proxy.CreateToolhelp32Snapshot(windef.TH32CS_SNAPTHREAD, 0)
-    threads = []
-    kernel32proxy.Thread32First(snap, thread_entry)
-    threads.append(copy.copy(thread_entry))
-    while kernel32proxy.Thread32Next(snap, thread_entry):
-        threads.append(copy.copy(thread_entry))
-    return threads
 
 def is_wow_64(hProcess):
     try:
@@ -81,6 +57,9 @@ def create_console():
 
     stderr_handle = kernel32proxy.GetStdHandle(windef.STD_ERROR_HANDLE)
     console_stderr = create_file_from_handle(stderr_handle, "w")
+    #print(stderr_handle, console_stderr)
+    import os
+    #os.dup2(console_stderr.fileno(), 2) 
     sys.stderr = console_stderr
 
 class VirtualProtected(object):

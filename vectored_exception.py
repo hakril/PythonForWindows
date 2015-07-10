@@ -9,7 +9,6 @@ import time
 EXCEPTION_CONTINUE_SEARCH  = (0x0)
 EXCEPTION_CONTINUE_EXECUTION  = (0xffffffff)
 
-
 exception_type = [
 "EXCEPTION_ACCESS_VIOLATION",
 "EXCEPTION_DATATYPE_MISALIGNMENT",
@@ -53,36 +52,96 @@ class EnhancedEXCEPTION_RECORD(EXCEPTION_RECORD):
         if x is None:
             return 0x0
         return x
+        
+class Eflags(int):
+    _flags_ = [("CF", 1),
+                ("RES_1", 1),
+                ("PF", 1),
+                ("RES_3", 1),
+                ("AF", 1),
+                ("RES_5", 1),
+                ("ZF", 1),
+                ("SF", 1),
+                ("TF", 1),
+                ("IF", 1),
+                ("DF", 1),
+                ("OF", 1),
+                ("IOPL_1", 1),
+                ("IOPL_2", 1),
+                ("NT", 1),
+                ("RES_15",1),
+                ("RF", 1),
+                ("VM", 1),
+                ("AC", 1),
+                ("VIF", 1),
+                ("VIP", 1),
+                ("ID", 1),
+    ]
+    
+    _flag_mask_ = dict([(name, 1<< i) for i,(name, size) in enumerate(_flags_)])
+    
+    def __getattr__(self, name):
+        if name in self._flag_mask_:
+            return bool(self & self._flag_mask_[name])
+        return super(Eflags, self).__getattr_(name)
+        
+    def dump(self):
+        res = []
+        for name in self._flag_mask_:
+            if name.startswith("RES_"):
+                continue
+            if getattr(self, name):
+                res.append(name)
+        return "|".join(res)
+        
+    def __repr__(self):
+        return "{0}({1})".format(type(self).__name__, self.dump())
+        
+    __str__ = __repr__
+    
+    def __hex__(self):
+        return "{0}({1}:{2})".format(type(self).__name__, int.__hex__(self), self.dump())
 
 class EnhancedCONTEXTBase(CONTEXT):
     default_dump = ()
     pc_reg = ''
+    special_reg_type = {}
 
     def regs(self, to_dump=None):
         res = []
         if to_dump is None:
             to_dump = self.default_dump
         for name in to_dump:
-            res.append((name, getattr(self, name)))
+            value =  getattr(self, name)
+            if name in self.special_reg_type:
+                value = self.special_reg_type[name](value)
+            res.append((name, value))
         return res
 
     def dump(self, to_dump=None):
         regs = self.regs()
         for name, value in regs:
-            print("{0} -> {1}".format(name, hex(value)))
-
-    @property
-    def pc(self):
+                print("{0} -> {1}".format(name, hex(value)))
+        return None
+          
+    def get_pc(self):
         return getattr(self, self.pc_reg)
+        
+    def set_pc(self, value):
+        return setattr(self, self.pc_reg, value)
+        
+    pc = property(get_pc, set_pc, None, "Program Counter register (EIP or RIP)")
 
 class EnhancedCONTEXT32(EnhancedCONTEXTBase):
-    default_dump = ('Eip', 'Esp', 'Eax', 'Ebx', 'Ecx', 'Edx', 'Ebp', 'Edi', 'Esi')
+    default_dump = ('Eip', 'Esp', 'Eax', 'Ebx', 'Ecx', 'Edx', 'Ebp', 'Edi', 'Esi', 'EFlags')
     pc_reg = 'Eip'
+    special_reg_type = {'EFlags' : Eflags}
 
 class EnhancedCONTEXT64(EnhancedCONTEXTBase):
     default_dump = ('Rip', 'Rsp', 'Rax', 'Rbx', 'Rcx', 'Rdx', 'Rbp', 'Rdi', 'Rsi',
-                    'R9', 'R10', 'R11', 'R12', 'R13', 'R14', 'R15')
+                    'R9', 'R10', 'R11', 'R12', 'R13', 'R14', 'R15', 'EFlags')
     pc_reg = 'Rip'
+    special_reg_type = {'EFlags' : Eflags}
 
 if windows.current_process.bitness == 32:
     EnhancedCONTEXT = EnhancedCONTEXT32
@@ -107,10 +166,8 @@ class EnhancedEXCEPTION_POINTERS(ctypes.Structure):
 class VectoredException(object):
     func_type = ctypes.WINFUNCTYPE(ctypes.c_uint, ctypes.POINTER(EnhancedEXCEPTION_POINTERS))
 
-    def __init__(self, quit_if_fail=False):
-        pass
-
-    def __call__(self, func):
+    def __new__(cls, func):
+        self = object.__new__(cls)
         self.func = func
         return self.func_type(self.decorator)
 
@@ -119,14 +176,12 @@ class VectoredException(object):
             return self.func(exception_pointers)
         except BaseException as e:
             print("Ignored Python Exception in Vectored Exception: {0}".format(e))
-            if quit_if_fail:
-                return windows.current_thread.quit()
             return windef.EXCEPTION_CONTINUE_SEARCH
-
+            
 
 class WithExceptionHandler(object):
     def __init__(self, handler):
-        self.handler = handler
+        self.handler = VectoredException(handler)
 
     def __enter__(self):
         self.value = windows.k32testing.AddVectoredExceptionHandler(0, self.handler)

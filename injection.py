@@ -1,86 +1,91 @@
 import sys
 import os
-import utils
-import windows
 
+import windows
+import windows.utils as utils
+
+from .native_exec import simple_x86 as x86
+from .native_exec import simple_x64 as x64
 
 # 32 to 32 injection
 def generate_python_exec_shellcode_32(PYDLL_addr, PyInit, PyRun, PYCODE_ADDR):
-    from native_exec.simple_x86 import *
     LoadLibraryA = utils.get_func_addr('kernel32', 'LoadLibraryA')
     GetProcAddress = utils.get_func_addr('kernel32', 'GetProcAddress')
-    code = MultipleInstr()
+    print("LoadLibraryA = {0}".format(hex(LoadLibraryA)))
+    print("LoadLibraryA = {0}".format(hex(GetProcAddress)))
+          
+    code = x86.MultipleInstr()
     # Load python27.dll
-    code += Push_X(PYDLL_addr)
-    code += Mov_EAX_X(LoadLibraryA)
-    code += Call_EAX()
+    code += x86.Push(PYDLL_addr)
+    code += x86.Mov('EAX', LoadLibraryA)
+    code += x86.Call('EAX')
     # Get PyInit function into pythondll
-    code += Push_EAX()
-    code += Pop_EDI()
-    code += Push_X(PyInit)
-    code += Push_EDI()
-    code += Mov_EBX_X(GetProcAddress)
-    code += Call_EBX()
+    code += x86.Push('EAX')
+    code += x86.Pop('EDI')
+    code += x86.Push(PyInit)
+    code += x86.Push('EDI')
+    code += x86.Mov('EBX', GetProcAddress)
+    code += x86.Call('EBX')
     # Call PyInit
-    code += Call_EAX()
+    code += x86.Call('EAX')
     # Get PyRun function into pythondll
-    code += Push_X(PyRun)
-    code += Push_EDI()
-    code += Call_EBX()
+    code += x86.Push(PyRun)
+    code += x86.Push('EDI')
+    code += x86.Call('EBX')
     # Call PyRun with python code to exec
-    code += Push_X(PYCODE_ADDR)
-    code += Call_EAX()
-    code += Pop_EDI()
-    code += Ret()
+    code += x86.Push(PYCODE_ADDR)
+    code += x86.Call('EAX')
+    code += x86.Pop('EDI')
+    code += x86.Ret()
     return code.get_code()
 
 # 64 to 64 injection
 def generate_python_exec_shellcode_64(PYDLL_addr, PyInit, PyRun, PYCODE_ADDR):
-    from native_exec.simple_x64 import *
+    
     LoadLibraryA = utils.get_func_addr('kernel32', 'LoadLibraryA')
     GetProcAddress = utils.get_func_addr('kernel32', 'GetProcAddress')
 
-    Reserve_space_for_call = MultipleInstr([Push_RDI()] * 4)
-    Clean_space_for_call = MultipleInstr([Pop_RDI()] * 4)
+    Reserve_space_for_call = x64.MultipleInstr([x64.Push('RDI')] * 4)
+    Clean_space_for_call = x64.MultipleInstr([x64.Pop('RDI')] * 4)
 
-    code = MultipleInstr()
+    code = x64.MultipleInstr()
     # Do stack alignement
-    code += Push_RAX()
+    code += x64.Push('RAX')
     # Load python27.dll
-    code += Mov_RCX_X(PYDLL_addr)
-    code += Mov_RAX_X(LoadLibraryA)
+    code += x64.Mov('RCX', PYDLL_addr)
+    code += x64.Mov('RAX', LoadLibraryA)
     code += Reserve_space_for_call
-    code += Call_RAX()
+    code += x64.Call('RAX')
     code += Clean_space_for_call
-    code += Push_RAX()
-    code += Pop_RCX()
+    code += x64.Push('RAX')
+    code += x64.Pop('RCX')
     # Save RCX
-    code += Push_RCX()
+    code += x64.Push('RCX')
     # Align stack
-    code += Push_RDI()
+    code += x64.Push('RDI')
     # Get PyInit function into pythondll
     code += Reserve_space_for_call
-    code += Mov_RDX_X(PyInit)
-    code += Mov_RBX_X(GetProcAddress)
-    code += Call_RBX()
+    code += x64.Mov('RDX', PyInit)
+    code += x64.Mov('RBX', GetProcAddress)
+    code += x64.Call('RBX')
     # Call PyInit
-    code += Call_RAX()
+    code += x64.Call('RAX')
     code += Clean_space_for_call
     # Remove Stack align
-    code += Pop_RDI()
+    code += x64.Pop('RDI')
     # Restore pythondll base into rcx
-    code += Pop_RCX()
+    code += x64.Pop('RCX')
     # Get PyRun function into pythondll
-    code += Mov_RDX_X(PyRun)
+    code += x64.Mov('RDX', PyRun)
     code += Reserve_space_for_call
-    code += Call_RBX()
+    code += x64.Call('RBX')
     # Call PyInit with python code to exec
-    code += Mov_RCX_X(PYCODE_ADDR)
-    code += Call_RAX()
+    code += x64.Mov('RCX', PYCODE_ADDR)
+    code += x64.Call('RAX')
     code += Clean_space_for_call
     # Remove stack alignement
-    code += Pop_RAX()
-    code += Ret()
+    code += x64.Pop('RAX')
+    code += x64.Ret()
     return code.get_code()
 
 

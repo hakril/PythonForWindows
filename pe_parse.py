@@ -1,8 +1,8 @@
 import ctypes
 import windows
-import hooks
+import windows.hooks as hooks
 
-from generated_def.winstructs import *
+from windows.generated_def.winstructs import *
 
 # This must go to windefs
 IMAGE_DIRECTORY_ENTRY_EXPORT = 0
@@ -118,14 +118,25 @@ def PEFile(baseaddr):
                  import_descriptor_addr += ctypes.sizeof(self.IMAGE_IMPORT_DESCRIPTOR)
                  current_import_descriptor = self.IMAGE_IMPORT_DESCRIPTOR.from_address(import_descriptor_addr)
             return res
+            
+        def get_EXPORT_DIRECTORY(self):
+            export_directory_rva = self.get_DataDirectory()[IMAGE_DIRECTORY_ENTRY_EXPORT].VirtualAddress
+            if export_directory_rva == 0:
+                return None
+            export_directory_addr = baseaddr + export_directory_rva
+            return self._IMAGE_EXPORT_DIRECTORY.from_address(export_directory_addr)
 
 
-        #def get_EXPORT_DIRECTORY(self):
-        #    return self.get_OptionalHeader().get_EXPORT_DIRECTORY()
-
-        #@property
-        #def exports(self):
-        #    return self.get_EXPORT_DIRECTORY().get_exports()
+        @property
+        def exports(self):
+            res = {}
+            raw_exports = self.get_EXPORT_DIRECTORY().get_exports()
+            for id, rva_addr, rva_name in raw_exports:
+                res[id] = rva_addr.addr
+                if rva_name is not None:
+                    res[rva_name.str] = rva_addr.addr
+            return res
+            
 
         # TODO: get imports by parsing other modules exports if no INT
         @property
@@ -141,7 +152,7 @@ def PEFile(baseaddr):
                 res.setdefault(import_descriptor.Name.str.lower(),[]).extend(IAT)
             return res
 
-        # Will be usable as `self.IMPORT_DESCRIPTOR`
+        # Will be usable as `self.IMAGE_IMPORT_DESCRIPTOR`
         class IMAGE_IMPORT_DESCRIPTOR(ctypes.Structure):
             _fields_ = transform_ctypes_fields(IMAGE_IMPORT_DESCRIPTOR, {"Name" : StringRVa, "OriginalFirstThunk" : RVA, "FirstThunk" : RVA})
 
@@ -171,7 +182,25 @@ def PEFile(baseaddr):
                     iat_addr += ctypes.sizeof(THUNK_DATA)
                     iat_entry = THUNK_DATA.from_address(iat_addr)
                 return res
-
+                
+        # Will be usable as `self._IMAGE_EXPORT_DIRECTORY`
+        class _IMAGE_EXPORT_DIRECTORY(ctypes.Structure):
+            _fields_ = transform_ctypes_fields(IMAGE_EXPORT_DIRECTORY, {"Name" : StringRVa, "AddressOfFunctions" : RVA, "AddressOfNames" : RVA, "AddressOfNameOrdinals": RVA})
+            
+            def get_exports(self):
+                NameOrdinals = (WORD * self.NumberOfNames).from_address(self.AddressOfNameOrdinals.addr)
+                NameOrdinals = list(NameOrdinals)
+                Functions = (RVA * self.NumberOfFunctions).from_address(self.AddressOfFunctions.addr)
+                Names = (StringRVa * self.NumberOfNames).from_address(self.AddressOfNames.addr)
+                res = []
+                for nb,func in enumerate(Functions):
+                    if nb in NameOrdinals:
+                        name = Names[NameOrdinals.index(nb)]
+                    else:
+                        name = None
+                    res.append((nb, func, name))
+                return res
+        
     current_pe = PEFile()
 
     class IMAGE_DOS_HEADER(ctypes.Structure):
@@ -201,46 +230,7 @@ def PEFile(baseaddr):
             if windows.current_process.bitness == 32:
                 return IMAGE_NT_HEADERS32.from_address(baseaddr + self.e_lfanew)
             return IMAGE_NT_HEADERS64.from_address(baseaddr + self.e_lfanew)
-
-    #
-    #    def get_EXPORT_DIRECTORY(self):
-    #        export_directory_rva = self.DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT].VirtualAddress
-    #        if export_directory_rva == 0:
-    #            return None
-    #        export_directory_addr = baseaddr + export_directory_rva
-    #        return IMAGE_EXPORT_DIRECTORY.from_address(export_directory_addr)
-    #
-
-
-    #class IMAGE_EXPORT_DIRECTORY(ctypes.Structure):
-    #    _fields_ = [
-    #        ("Characteristics", DWORD),
-    #        ("TimeDateStamp", DWORD),
-    #        ("MajorVersion", WORD),
-    #        ("MinorVersion", WORD),
-    #        ("Name", StringRVa),
-    #        ("Base", DWORD),
-    #        ("NumberOfFunctions", DWORD),
-    #        ("NumberOfNames", DWORD),
-    #        ("AddressOfFunctions", RVA),
-    #        ("AddressOfNames", RVA),
-    #        ("AddressOfNameOrdinals", RVA),
-    #    ]
-    #
-    #    def get_exports(self):
-    #        NameOrdinals = (WORD * self.NumberOfNames).from_address(self.AddressOfNameOrdinals.addr)
-    #        NameOrdinals = list(NameOrdinals)
-    #        Functions = (RVA * self.NumberOfFunctions).from_address(self.AddressOfFunctions.addr)
-    #        Names = (StringRVa * self.NumberOfNames).from_address(self.AddressOfNames.addr)
-    #        res = []
-    #        for nb,func in enumerate(Functions):
-    #            if nb in NameOrdinals:
-    #                name = Names[NameOrdinals.index(nb)]
-    #            else:
-    #                name = None
-    #            res.append((nb, func, name))
-    #        return res
-    #
+            
     return current_pe
 
 tst = PEFile.__code__.co_consts[13]

@@ -1,14 +1,20 @@
 import ctypes
 import os
+import codecs
+import copy
 
 import windows
-import utils
-import k32testing as kernel32proxy
-import injection
-import native_exec
+import windows.k32testing as kernel32proxy
+import windows.injection as injection
+import windows.native_exec as native_exec
 
-from generated_def.winstructs import *
-import pe_parse
+from . import utils
+
+from windows.generated_def.winstructs import *
+from .generated_def import windef
+
+import windows.pe_parse as pe_parse
+
 
 
 class AutoHandle(object):
@@ -44,7 +50,7 @@ class System(object):
         :type: [:class:`WinProcess`] -- A list of Process
 
         """
-        return utils.enumerate_processes()
+        return self.enumerate_processes()
 
     @property
     def threads(self):
@@ -53,7 +59,7 @@ class System(object):
         :type: [:class:`WinThread`] -- A list of Thread
 
         """
-        return utils.enumerate_threads()
+        return self.enumerate_threads()
 
     @property
     def bitness(self):
@@ -67,6 +73,30 @@ class System(object):
         if "PROCESSOR_ARCHITEW6432" in os.environ:
             return 64
         return 32
+        
+    @staticmethod
+    def enumerate_processes():
+        process_entry = WinProcess()
+        process_entry.dwSize = ctypes.sizeof(process_entry)
+        snap = kernel32proxy.CreateToolhelp32Snapshot(windef.TH32CS_SNAPPROCESS, 0)
+        kernel32proxy.Process32First(snap, process_entry)
+        res = []
+        res.append(utils.swallow_ctypes_copy(process_entry))
+        while kernel32proxy.Process32Next(snap, process_entry):
+            res.append(utils.swallow_ctypes_copy(process_entry))
+        return res
+    
+    @staticmethod
+    def enumerate_threads():
+        thread_entry = WinThread()
+        thread_entry.dwSize = ctypes.sizeof(thread_entry)
+        snap = kernel32proxy.CreateToolhelp32Snapshot(windef.TH32CS_SNAPTHREAD, 0)
+        threads = []
+        kernel32proxy.Thread32First(snap, thread_entry)
+        threads.append(copy.copy(thread_entry))
+        while kernel32proxy.Thread32Next(snap, thread_entry):
+            threads.append(copy.copy(thread_entry))
+        return threads
 
 
 class WinThread(THREADENTRY32, AutoHandle):
@@ -85,15 +115,51 @@ class WinThread(THREADENTRY32, AutoHandle):
         """
         if hasattr(self, "_owner"):
             return self._owner
-        self._owner = [process for process in utils.enumerate_processes() if process.pid == self.th32OwnerProcessID][0]
+        try:
+            self._owner = [process for process in windows.system.processes if process.pid == self.th32OwnerProcessID][0]
+        except IndexError:
+            return None
         return self._owner
+        
+    @property
+    def context(self):
+        x =  windows.vectored_exception.EnhancedCONTEXT()
+        x.ContextFlags = CONTEXT_FULL
+        kernel32proxy.GetThreadContext(self.handle, x)
+        return x
+        
+    def set_context(self, context):
+        return kernel32proxy.SetThreadContext(self.handle, context)
+        
+    def exit(self, code=0):
+        return kernel32proxy.TerminateThread(self.handle, code)
+        
+    def resume(self):
+        return kernel32proxy.ResumeThread(self.handle)
+        
+    def suspend(self):
+        return kernel32proxy.SuspendThread(self.handle)
 
     def _get_handle(self):
         return kernel32proxy.OpenThread(dwThreadId=self.tid)
 
     def __repr__(self):
-        return '<{0} {1} owner "{2}" at {3}>'.format(self.__class__.__name__, self.tid, self.owner.name, hex(id(self)))
-
+        owner = self.owner
+        if owner is None:
+            owner_name = "<Dead process with pid {0}>".format(hex(self.th32OwnerProcessID))
+        else:
+            owner_name = owner.name
+        return '<{0} {1} owner "{2}" at {3}>'.format(self.__class__.__name__, self.tid, owner_name, hex(id(self)))
+        
+    @staticmethod    
+    def _from_handle(handle):
+        tid = kernel32proxy.GetThreadId(handle)
+        print(tid)
+        try:
+            return [t for t in System().threads if t.tid == tid][0]
+        except IndexError:
+            return (tid, handle)
+            
 class Process(AutoHandle):
     @property
     def is_wow_64(self):
@@ -123,7 +189,7 @@ class Process(AutoHandle):
         :type: [:class:`WinThread`] -- A list of Thread
 
         """
-        return [thread for thread in utils.enumerate_threads() if thread.th32OwnerProcessID == self.pid]
+        return [thread for thread in windows.system.threads if thread.th32OwnerProcessID == self.pid]
 
     def virtual_alloc(self, size):
         raise NotImplementedError("virtual_alloc")
@@ -160,11 +226,10 @@ class CurrentThread(AutoHandle):
 class CurrentProcess(Process):
     """The current process"""
     get_peb = None
-    get_peb_32_code = '64a130000000c3'.decode('hex')
-
+    get_peb_32_code = codecs.decode(b'64a130000000c3', 'hex')
     # mov    rax,QWORD PTR gs:0x60
     # ret
-    get_peb_64_code = "65488B042560000000C3".decode('hex')
+    get_peb_64_code = codecs.decode(b"65488B042560000000C3", 'hex')
 
     allocator = native_exec.native_function.CustomAllocator()
 
@@ -240,7 +305,8 @@ class CurrentProcess(Process):
         .. note::
             CreateThread https://msdn.microsoft.com/en-us/library/windows/desktop/ms682453%28v=vs.85%29.aspx
         """
-        return  kernel32proxy.CreateThread(lpStartAddress=lpStartAddress, lpParameter=lpParameter, dwCreationFlags=dwCreationFlags)
+        handle = kernel32proxy.CreateThread(lpStartAddress=lpStartAddress, lpParameter=lpParameter, dwCreationFlags=dwCreationFlags)
+        return WinThread._from_handle(handle)
 
     def exit(self, code=0):
         """Exit the process"""
@@ -257,7 +323,7 @@ class WinProcess(PROCESSENTRY32, Process):
 
         :type: str
         """
-        return self.szExeFile[:]
+        return self.szExeFile[:].decode()
 
     @property
     def pid(self):
@@ -314,7 +380,7 @@ class WinProcess(PROCESSENTRY32, Process):
         """Create a remote thread"""
         if windows.current_process.bitness == 32 and self.bitness == 64:
             return windows.syswow64.NtCreateThreadEx_32_to_64(self, addr, param)
-        return  kernel32proxy.CreateRemoteThread(hProcess=self.handle, lpStartAddress=addr, lpParameter=param)
+        return  WinThread._from_handle(kernel32proxy.CreateRemoteThread(hProcess=self.handle, lpStartAddress=addr, lpParameter=param))
 
     def load_library(self, dll_path):
         """Load the library in remote process"""

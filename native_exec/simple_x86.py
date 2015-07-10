@@ -1,290 +1,238 @@
+import collections
 import struct
 import sys
-import codecs
-# This code should really be rewritten..
 
-this_module = sys.modules[__name__]
-
-generated_instruction = []
-
-long = int
-
-
-def add_instruction(name, instruction):
-    generated_instruction.append((name, instruction))
-    setattr(this_module, name, instruction)
-
-def generate_module_doc():
-    doc_lines = ["Here is the list of instruction in the modules:\n\n"]
-    for name, instruction in generated_instruction:
-        doc_lines.append("    | {0} -> <{1}>".format(name, instruction.mnemo))
-        
-    this_module.__doc__ = "\n".join(doc_lines)
-    
-def decode_hex(s):
-    return codecs.decode(s.encode(), "hex").decode()
- 
-def encode_hex(s):
-    return codecs.encode(s.encode(), "hex").decode()
-    
-reg_order = ['EAX', 'ECX', 'EDX', 'EBX', 'ESP', 'EBP', 'ESI', 'EDI']
-reg_opcode = {v : format(i, "03b") for i, v in enumerate(reg_order)}
-
-
-class X86Instruction(object):
-    mnemo = ""
-    code = ""
-    biding = 0
-    
-    def __init__(self, *bind_values):
-        if len(bind_values) != self.biding:
-            raise ValueError("{0} expect {1} values got {2}".format(self.__class__.__name__, self.biding, len(bind_values)))
-        self.bind_values = bind_values
-        for i, v  in enumerate(bind_values):
-            if not isinstance(v, (int, long)):
-                raise ValueError("{0} bindings must be 'int' got '{1}' instead".format(self.__class__.__name__, type(v).__name__))
-            if not 0 <= v <= 0xffffffff:
-                raise ValueError("{0} bindings must be between 0 and 0xffffffff".format(self.__class__.__name__))
-                
-    def get_unbinded_code(self):
-        print(self.code)
-        return codecs.decode(self.code.replace(" ", ""), 'hex')
-        
-    def get_code(self):
-        code = self.get_unbinded_code()
-        for i in range(self.biding):
-            to_search = codecs.decode(str(i + 1) * 8, 'hex')
-            code = code.replace(to_search, struct.pack("<I", self.bind_values[i]))
-        return code
-        
-    def get_mnemo(self):
-        return self.mnemo.format(*(hex(v) for v in self.bind_values))
-
-        
-class Ret(X86Instruction):
-    mnemo = "ret"
-    code = "C3"
-    
-generated_instruction.append(("Ret", Ret))
-    
-class Int3(X86Instruction):
-    mnemo = "int3"
-    code = "CC"
- 
-generated_instruction.append(("Int3", Int3)) 
+class BitArray(object):
+    def __init__(self, size, bits):
+        self.size = size
+        if len(bits) > size:
+            raise ValueError("size > len(bits)")
             
-class SimpleRegInstructionGenerator(object):
-    name = ""
-    instruction_bits = ''
-    
-
-class OneBindX86Instruction(X86Instruction):
-    biding = 1
-
-
-class Push_X(OneBindX86Instruction):
-    mnemo = "push    {0}"
-    code = "68 11 11 11 11"
-
-generated_instruction.append(("Push_X", Push_X))     
-
-def generate_simple_reg_instruction(instr_cls):
-    for reg_name, reg_bits in reg_opcode.items():
-        class SimpleRegInstruction(X86Instruction):
-            mnemo = "{0}    {1}".format(instr_cls.mnemo, reg_name)
-            code = format(int(instr_cls.instruction_bits + reg_bits, 2), 'x')
+        bits_list = []
+        for bit in bits:
+            x = int(bit)
+            if x not in [0, 1]:
+                raise ValueError("Not expected bits value {0}".format(x))
+            bits_list.append(x)
             
-        SimpleRegInstruction.__name__ = "{0}_{1}".format(instr_cls.name, reg_name)
-        add_instruction(SimpleRegInstruction.__name__, SimpleRegInstruction)  
-    
-    
-class Push_Reg(object):
-    name = 'Push'
-    mnemo = "push"
-    instruction_bits = '01010'
-
-generate_simple_reg_instruction(Push_Reg)
-    
-class Pop_Reg(object):
-    name = 'Pop'
-    mnemo = "pop"
-    instruction_bits = '01011'
-    
-generate_simple_reg_instruction(Pop_Reg)
-
-class Call_Reg(object):
-    name = 'Call'
-    mnemo = "call"
-    instruction_bits = '1111111111010'
-    
-generate_simple_reg_instruction(Call_Reg)
-
-
-
-def generate_reg_instruction_onebind(instr_cls):
-    for reg_name, reg_bits in reg_opcode.items():
-        class OneBindRegInstruction(OneBindX86Instruction):
-            mnemo = instr_cls.mnemo.format(reg_name)
+        self.array = bits_list
+        if size > len(self.array):
+            self.array = ([0] * (size - len(self.array))) + self.array
             
-            i = int(instr_cls.instruction_bits + reg_bits, 2)
-            code = bytes([i]) + b'11 11 11 11' # the biding
+    def dump(self):
+        res = []
+        for i in range(self.size // 8):
+            c = 0
+            for x in (self.array[i * 8: (i + 1) * 8]):
+                c = (c << 1) + x
+            res.append(c)
+        return bytearray((res))
+        
+    def __getitem__(self, slice):
+        return self.array[slice]
+
+    def __setitem__(self, slice, value):
+        self.array[slice] = value
+        return True
+
+    def __repr__(self):
+        return repr(self.array)
+        
+    def __add__(self, other):
+        if not isinstance(other, BitArray):
+            return NotImplemented
+        return BitArray(self.size + other.size, self.array + other.array)
+        
+    def to_int(self):
+        return int("".join([str(i) for i in self.array]), 2)
+    
+    @classmethod
+    def from_string(cls): 
+        l = []
+        for c in bytearray(reversed(str_base)):
+            for i in range(8):
+                l.append(c & 1)
+                c = c >> 1
+        self.array = l
+    
+    @classmethod
+    def from_int(cls, size, x):
+        if x < 0:
+            x = x & ((2 ** size) - 1)
+        return cls(size, bin(x)[2:])
+
+# Rules: bytes only !!!!
+
+mem_access = collections.namedtuple('mem_access', ['base', 'index', 'squale', 'disp'])
+x86_regs = ['EAX', 'ECX', 'EDX', 'EBX', 'ESP', 'EBP', 'ESI', 'EDI']
+
+def create_displacement(base=None, index=None, squale=None, disp=0):
+    return mem_access(base, index, squale, disp)
+     
+
+class X86RegisterSelector(object):
+    size = 3 # bits
+    reg_order = ['EAX', 'ECX', 'EDX', 'EBX', 'ESP', 'EBP', 'ESI', 'EDI']
+    reg_opcode = {v : BitArray.from_int(size=3, x=i) for i, v in enumerate(reg_order)}
+    
+    def accept_arg(self, previous, args):
+        x = args[0]
+        try:
+            return (1, self.reg_opcode[x])
+        except KeyError:
+            return (None, None)
+        
+    @classmethod    
+    def get_reg_bits(cls, name):
+        return cls.reg_opcode[name]
+        
+class RawBits(BitArray):
+    def accept_arg(self, previous, args):
+        return (0, self)
+        
+class Imm32(object):
+    def accept_arg(self, previous, args):
+        x = int(args[0])
+        return (1, BitArray.from_int(32, X86.to_little_endian(x)))
+
+class ModRM(object):
+    size = 8
+    
+    def __init__(self, *sub_modrm):
+        self.sub = sub_modrm
+        
+    def accept_arg(self, previous, args):
+        if len(args) < 2:
+            raise ValueError("Missing arg for modrm")
+        arg1 = args[0]
+        arg2 = args[1]
+        for sub in self.sub:
             #import pdb;pdb.set_trace()
-            #code = encode_hex(chr(int(instr_cls.instruction_bits + reg_bits, 2)))  + b'11 11 11 11' # the biding
-            
-        OneBindRegInstruction.__name__ = instr_cls.name.format(reg_name)
-        add_instruction(OneBindRegInstruction.__name__, OneBindRegInstruction)
-
-class Mov_Reg_X(object):
-    name = 'Mov_{0}_X'
-    mnemo = 'mov {0}, {{0}}'
-    instruction_bits = '10111'
-    
-generate_reg_instruction_onebind(Mov_Reg_X)
-
-def get_immediat_modr_byte(register_bits):
-    "Generate a modr-reg-r/m indicating a register and an immediat"
-    str_bits = "11000{0}".format(register_bits)
-    return encode_hex(chr(int(str_bits, 2)))
-    
-def generate_reg_immediat_modr(instr_cls):
-    for reg_name, reg_bits in reg_opcode.items():
-        class Reg_MEM_Instruction(OneBindX86Instruction):
-            mnemo = instr_cls.mnemo.format(reg_name)
-            code = instr_cls.instruction_bits + get_immediat_modr_byte(reg_bits) + '11 11 11 11' # the biding
-            
-        Reg_MEM_Instruction.__name__ = instr_cls.name.format(reg_name)
-        add_instruction(Reg_MEM_Instruction.__name__, Reg_MEM_Instruction)
+            if sub.match(arg1, arg2):
+                d = sub(arg1, arg2, 0)
+                previous[0][-2] = d.direction
+                return (2, d.mod + d.reg + d.rm + d.after)
+            elif sub.match(arg2, arg1):
+                d = sub(arg2, arg1, 1)
+                previous[0][-2] = d.direction
+                return (2, d.mod + d.reg + d.rm + d.after)
+        return (None, None)
         
-class Add_Reg_X(object):
-    name = 'Add_{0}_X'
-    mnemo = 'add {0}, {{0}}'
-    instruction_bits = '81'
+class X86(object):
+    @staticmethod
+    def is_reg(name):
+        return name in x86_regs
+        
+    @staticmethod 
+    def is_mem_acces(data):
+        return isinstance(data, mem_access)
     
-generate_reg_immediat_modr(Add_Reg_X)        
+    @staticmethod
+    def mem_access_has_only(mem_access, names):
+        if not X86.is_mem_acces(mem_access):
+            raise ValueError("mem_access_has_only")
+        for f in mem_access._fields:
+            if getattr(mem_access, f) and f not in names:
+                return False
+        return True
+      
+    @staticmethod
+    def to_little_endian(i):
+        i = i & 0xffffffff
+        return struct.unpack("<I", struct.pack(">I", i))[0]
+    
  
-
-def get_simple_modr_byte(register_bits):
-    "Generate a simple modr-reg-r/m for a displacement only mode"
-    str_bits = "00{0}101".format(register_bits)
-    return encode_hex(chr(int(str_bits, 2)))
-
-
-def generate_reg_modr(instr_cls):
-    for reg_name, reg_bits in reg_opcode.items():
-        class Reg_MEM_Instruction(OneBindX86Instruction):
-            mnemo = instr_cls.mnemo.format(reg_name)
-            code = instr_cls.instruction_bits + get_simple_modr_byte(reg_bits) + '11 11 11 11' # the biding
+class ModRM_REG__REG(object):
+    @classmethod
+    def match(cls, arg1, arg2):
+        return X86.is_reg(arg1) and X86.is_reg(arg2)
+        
+    def __init__(self, arg1, arg2, reversed):
+        self.mod = BitArray(2, "11")
+        self.reg = X86RegisterSelector.get_reg_bits(arg2)
+        self.rm = X86RegisterSelector.get_reg_bits(arg1)
+        self.after = BitArray(0, "")
+        self.direction = 0
+        
+class ModRM_REG__DEREF_REG(object):
+    @classmethod
+    def match(cls, arg1, arg2):
+        return X86.is_reg(arg1) and arg1 not in ["ESP", "EBP"] and X86.is_mem_acces(arg2) and X86.mem_access_has_only(arg2, ["base"])
+        
+    def __init__(self, arg1, arg2, reversed):
+        self.mod = BitArray(2, "00")
+        self.reg = X86RegisterSelector.get_reg_bits(arg1)
+        self.rm = X86RegisterSelector.get_reg_bits(arg2.base)
+        self.after = BitArray(0, "")
+        self.direction = not reversed        
+        
+class ModRM_REG__DEREF_REG_IMM(object):
+    @classmethod
+    def match(cls, arg1, arg2):
+        return X86.is_reg(arg1) and X86.is_mem_acces(arg2) and X86.mem_access_has_only(arg2, ["base", "disp"])
+        
+    def __init__(self, arg1, arg2, reversed):
+        self.mod = BitArray(2, "10")
+        self.reg = X86RegisterSelector.get_reg_bits(arg1)
+        self.rm = X86RegisterSelector.get_reg_bits(arg2.base)
+        self.after = BitArray.from_int(32, X86.to_little_endian(arg2.disp))
+        self.direction = not reversed
+        
+class ModRM_REG_IMM(object):
+    @classmethod
+    def match(cls, arg1, arg2):
+        return arg1 in x86_regs and arg2 in x86_regs
+        
+    def __init__(self, arg1, arg2):
+        self.mod = BitArray(2, "11")
+        self.reg = X86RegisterSelector.get_reg_bits(arg2)
+        self.rm = X86RegisterSelector.get_reg_bits(arg1)
+        self.direction = 0
+    
+             
+class Instruction(object):
+    encoding = []
+    
+    def __init__(self, *initial_args):
+        for type_encoding in self.encoding:
+            args = list(initial_args)
+            res = []
+            for element in type_encoding:
+                arg_consum, value = element.accept_arg(res, args)
+                if arg_consum is None:
+                    break
+                res.append(value)
+                del args[:arg_consum]
+            else: # if no break
+                if args: # if still args: fail
+                    continue
+                self.value = sum(res, BitArray(0, ""))
+                return
+        raise ValueError("Cannot encode :(")
             
-        Reg_MEM_Instruction.__name__ = instr_cls.name.format(reg_name)
-        add_instruction(Reg_MEM_Instruction.__name__, Reg_MEM_Instruction)
-        
-
- 
-        
-class Mov_Reg_DX(object):
-    name = 'Mov_{0}_DX'
-    mnemo = 'mov {0}, [{{0}}]'
-    instruction_bits = '8B'
     
-generate_reg_modr(Mov_Reg_DX)
-
-class Mov_DX_Reg(object):
-    name = 'Mov_DX_{0}'
-    mnemo = 'mov [{{0}}], {0}'
-    instruction_bits = '89'
-
-generate_reg_modr(Mov_DX_Reg)
-
-def generate_reg_indirect_modr_byte(reg_dst_bits, reg_src_bits):
-    # reg, [reg] or [reg], reg
-    return "00{0}{1}".format(reg_dst_bits, reg_src_bits)
+class Push(Instruction):
+    encoding = [(RawBits.from_int(5, 0x50 >> 3), X86RegisterSelector()),
+                (RawBits.from_int(8, 0x68), Imm32())]
     
-def generate_reg_reg_deref(instr_cls, src_first=True):
-    "generate the Mov_Reg_DReg and Mov_DReg_Reg"
-    for reg_src_name, reg_src_bits in reg_opcode.items():
-        for reg_dst_name, reg_dst_bits in reg_opcode.items():
-            if reg_dst_name in ("EBP", "ESP") or reg_src_name in ("EBP", "ESP"):
-                # Not same encoding -> Not implemented
-                continue
-            class Reg_DReg_instruction(X86Instruction):
-                mnemo = instr_cls.mnemo.format(reg_dst_name, reg_src_name)
-                name = instr_cls.name.format(reg_dst_name, reg_src_name)
-                if src_first:
-                    modr_code = generate_reg_indirect_modr_byte(reg_src_bits, reg_dst_bits)
-                else:
-                    modr_code = generate_reg_indirect_modr_byte(reg_dst_bits, reg_src_bits)
-                code = encode_hex(instr_cls.instruction_bits + chr(int(modr_code, 2)))
-            Reg_DReg_instruction.__name__ = Reg_DReg_instruction.name
-            add_instruction(Reg_DReg_instruction.__name__, Reg_DReg_instruction)
+class Pop(Instruction):
+    encoding = [(RawBits.from_int(5, 0x58 >> 3), X86RegisterSelector())]
     
+class Mov(Instruction):
+    encoding = [(RawBits.from_int(8, 0x89), ModRM(ModRM_REG__REG, ModRM_REG__DEREF_REG, ModRM_REG__DEREF_REG_IMM)),
+                (RawBits.from_int(5, 0xb8 >> 3), X86RegisterSelector(), Imm32())]
     
-class Mov_Reg_DReg(object):
-    name = 'Mov_{0}_D{1}'
-    mnemo = 'mov [{0}], {1}'
-    instruction_bits = '8B'
+class Call(Instruction):
+    encoding = [(RawBits.from_int(13, 0xffd0 >> 3), X86RegisterSelector())]
     
-generate_reg_reg_deref(Mov_Reg_DReg, False)
-
-class Mov_DReg_Reg(object):
-    name = 'Mov_D{0}_{1}'
-    mnemo = 'mov {0}, [{1}]'
-    instruction_bits = '89'
-    
-generate_reg_reg_deref(Mov_DReg_Reg, True)
-
-
-def generate_reg_reg_modr_byte(reg_dst_bits, reg_src_bits):
-    # reg, reg
-    return "11{0}{1}".format(reg_src_bits, reg_dst_bits)
+class Ret(Instruction):
+    encoding = [(RawBits.from_int(8, 0xc3),)]
     
         
-def generate_reg_reg_modr(instr_cls):  
-    for reg_src_name, reg_src_bits in reg_opcode.items():
-        for reg_dst_name, reg_dst_bits in reg_opcode.items():
-            class Reg_Reg_instruction(X86Instruction):
-                mnemo = "{0} {1},{2}".format(instr_cls.mnemo, reg_dst_name, reg_src_name)
-                modr_code = format(int(generate_reg_reg_modr_byte(reg_dst_bits, reg_src_bits) , 2), 'x')
-                code = instr_cls.instruction_bits + modr_code
-            Reg_Reg_instruction.__name__ = "{0}_{1}_{2}".format(instr_cls.name, reg_dst_name, reg_src_name)
-            add_instruction(Reg_Reg_instruction.__name__, Reg_Reg_instruction)
-            
-class Test_Reg_Reg(object):
-    mnemo = "tst"
-    name = "Tst"
-    instruction_bits = "85"
-    
-generate_reg_reg_modr(Test_Reg_Reg)
-
-#### JUMP ####
-
-class JZ(OneBindX86Instruction):
-    code = "0F 84 11 11 11 11"
-    
-    def __init__(self, instr_block):
-        self.instr_block = instr_block
-        instr_block_size = len(instr_block.get_code())
-        super(JZ, self).__init__(instr_block_size)
-        
-    def get_code(self):
-        return super(JZ, self).get_code() + self.instr_block.get_code()
-        
-class JNZ(OneBindX86Instruction):
-    code = "0F 85 11 11 11 11"
-    
-    def __init__(self, instr_block):
-        self.instr_block = instr_block
-        instr_block_size = len(instr_block.get_code())
-        super(JNZ, self).__init__(instr_block_size)
-        
-    def get_code(self):
-        return super(JNZ, self).get_code() + self.instr_block.get_code()
-        
-        
-
 class MultipleInstr(object):
 
-    def __init__(self, init_instrs=()):
-        self.instrs = list(init_instrs)
+    def __init__(self):
+        self.instrs = []
         
     def __iadd__(self, value):
         if type(value) == MultipleInstr:
@@ -294,12 +242,7 @@ class MultipleInstr(object):
         return self
         
     def get_code(self):
-        return "".join(i.get_code() for i in self.instrs)
-        
-    def get_mnemo(self):
-        return "\n".join(i.get_mnemo() for i in self.instrs)
-        
+        if sys.version_info.major == 3:
+            return b"".join([x.value.dump() for x in self.instrs])
+        return "".join([str(x.value.dump()) for x in self.instrs])
 
-              
-generate_module_doc()
-    

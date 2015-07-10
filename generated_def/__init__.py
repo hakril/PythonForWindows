@@ -1,5 +1,5 @@
 import windows
-import winstructs
+from . import winstructs
 
 def bitness():
     """Return 32 or 64"""
@@ -23,5 +23,7 @@ else:
     winstructs.EXCEPTION_POINTERS = winstructs.EXCEPTION_POINTERS64
     winstructs.PEXCEPTION_POINTERS = winstructs.PEXCEPTION_POINTERS64
 
-import winfuncs
+from . import winfuncs
+
+
 

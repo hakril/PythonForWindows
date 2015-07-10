@@ -1,7 +1,7 @@
 #Generated file
 from ctypes import *
 from ctypes.wintypes import *
-from windef import *
+from .windef import *
 
 PWSTR = LPWSTR
 SIZE_T = c_ulong
@@ -28,7 +28,7 @@ PHANDLE = POINTER(HANDLE)
 LPCONTEXT = PVOID
 VOID = DWORD
 
-structs = ['_LIST_ENTRY', '_PEB_LDR_DATA', '_LSA_UNICODE_STRING', '_RTL_USER_PROCESS_PARAMETERS', '_PEB', '_SECURITY_ATTRIBUTES', '_SYSTEM_VERIFIER_INFORMATION', '_LDR_DATA_TABLE_ENTRY', '_IMAGE_FILE_HEADER', '_IMAGE_DATA_DIRECTORY', '_IMAGE_SECTION_HEADER', '_IMAGE_OPTIONAL_HEADER64', '_IMAGE_OPTIONAL_HEADER', '_IMAGE_NT_HEADERS64', '_IMAGE_NT_HEADERS', '_IMAGE_IMPORT_DESCRIPTOR', '_IMAGE_IMPORT_BY_NAME', '_MEMORY_BASIC_INFORMATION', '_STARTUPINFOA', '_STARTUPINFOW', '_PROCESS_INFORMATION', '_FLOATING_SAVE_AREA', '_CONTEXT32', '_M128A', '_CONTEXT64', 'tagPROCESSENTRY32W', 'tagPROCESSENTRY32', 'tagTHREADENTRY32', '_LUID', '_LUID_AND_ATTRIBUTES', '_TOKEN_PRIVILEGES', '_OSVERSIONINFOA', '_OSVERSIONINFOW', '_OSVERSIONINFOEXA', '_OSVERSIONINFOEXW', '_OVERLAPPED', '_MIB_TCPROW_OWNER_PID', '_MIB_TCPTABLE_OWNER_PID', '_MIB_UDPROW_OWNER_PID', '_MIB_UDPTABLE_OWNER_PID', '_MIB_UDP6ROW_OWNER_PID', '_MIB_UDP6TABLE_OWNER_PID', '_MIB_TCP6ROW_OWNER_PID', '_MIB_TCP6TABLE_OWNER_PID', '_MIB_TCPROW', '_EXCEPTION_RECORD', '_EXCEPTION_POINTERS64', '_EXCEPTION_POINTERS32']
+structs = ['_LIST_ENTRY', '_PEB_LDR_DATA', '_LSA_UNICODE_STRING', '_RTL_USER_PROCESS_PARAMETERS', '_PEB', '_SECURITY_ATTRIBUTES', '_SYSTEM_VERIFIER_INFORMATION', '_LDR_DATA_TABLE_ENTRY', '_IMAGE_FILE_HEADER', '_IMAGE_DATA_DIRECTORY', '_IMAGE_SECTION_HEADER', '_IMAGE_OPTIONAL_HEADER64', '_IMAGE_OPTIONAL_HEADER', '_IMAGE_NT_HEADERS64', '_IMAGE_NT_HEADERS', '_IMAGE_IMPORT_DESCRIPTOR', '_IMAGE_IMPORT_BY_NAME', '_IMAGE_EXPORT_DIRECTORY', '_MEMORY_BASIC_INFORMATION', '_STARTUPINFOA', '_STARTUPINFOW', '_PROCESS_INFORMATION', '_FLOATING_SAVE_AREA', '_CONTEXT32', '_M128A', '_CONTEXT64', 'tagPROCESSENTRY32W', 'tagPROCESSENTRY32', 'tagTHREADENTRY32', '_LUID', '_LUID_AND_ATTRIBUTES', '_TOKEN_PRIVILEGES', '_OSVERSIONINFOA', '_OSVERSIONINFOW', '_OSVERSIONINFOEXA', '_OSVERSIONINFOEXW', '_OVERLAPPED', '_MIB_TCPROW_OWNER_PID', '_MIB_TCPTABLE_OWNER_PID', '_MIB_UDPROW_OWNER_PID', '_MIB_UDPTABLE_OWNER_PID', '_MIB_UDP6ROW_OWNER_PID', '_MIB_UDP6TABLE_OWNER_PID', '_MIB_TCP6ROW_OWNER_PID', '_MIB_TCP6TABLE_OWNER_PID', '_MIB_TCPROW', '_EXCEPTION_RECORD', '_EXCEPTION_POINTERS64', '_EXCEPTION_POINTERS32', '_DEBUG_PROCESSOR_IDENTIFICATION_X86']
 
 enums = ['_SYSTEM_INFORMATION_CLASS', '_TCP_TABLE_CLASS', '_UDP_TABLE_CLASS', '_MIB_TCP_STATE']
 
@@ -157,53 +157,22 @@ MIB_TCP_STATE_TIME_WAIT = 0xb
 MIB_TCP_STATE_DELETE_TCB = 0xc
 # Struct _LIST_ENTRY definitions
 # Self referencing struct tricks
-
-import ctypes
-
-def pretty_print_ctypes_type(t):
-    format = "{0}"
-    if issubclass(t, ctypes.Array):
-        format = "[{0}" + "* {0}]".format(t._length_)
-        t = t._type_
-      
-    if issubclass(t, ctypes._Pointer):
-        format = format.format("Pointer({0})")
-        t = t._type_
-
-    if issubclass(t, ctypes.Structure):
-        return format.format(":class:`{0}`".format(t.__name__))
-    return t
-    
-def autodoc_ctypes_struct(struct):
-    doc = ["fields:"]
-    for name, type in struct._fields_:
-        doc.append("     {0} -> {1}".format(name, pretty_print_ctypes_type(type)))
-        
-    struct.__doc__ = "\n\n".join(doc)
-    return struct
-
-
 class _LIST_ENTRY(Structure): pass
 _LIST_ENTRY._fields_ = [
     ("Flink", POINTER(_LIST_ENTRY)),
     ("Blink", POINTER(_LIST_ENTRY)),
 ]
-
-_LIST_ENTRY = autodoc_ctypes_struct(_LIST_ENTRY)
-
 PLIST_ENTRY = POINTER(_LIST_ENTRY)
 LIST_ENTRY = _LIST_ENTRY
 PRLIST_ENTRY = POINTER(_LIST_ENTRY)
 
 # Struct _PEB_LDR_DATA definitions
-@autodoc_ctypes_struct
 class _PEB_LDR_DATA(Structure):
-    _fields_ = [
+        _fields_ = [
         ("Reserved1", BYTE * 8),
         ("Reserved2", PVOID * 3),
         ("InMemoryOrderModuleList", LIST_ENTRY),
     ]
-       
 PPEB_LDR_DATA = POINTER(_PEB_LDR_DATA)
 PEB_LDR_DATA = _PEB_LDR_DATA
 
@@ -231,7 +200,6 @@ PRTL_USER_PROCESS_PARAMETERS = POINTER(_RTL_USER_PROCESS_PARAMETERS)
 RTL_USER_PROCESS_PARAMETERS = _RTL_USER_PROCESS_PARAMETERS
 
 # Struct _PEB definitions
-@autodoc_ctypes_struct
 class _PEB(Structure):
         _fields_ = [
         ("Reserved1", BYTE * 2),
@@ -466,6 +434,24 @@ class _IMAGE_IMPORT_BY_NAME(Structure):
     ]
 PIMAGE_IMPORT_BY_NAME = POINTER(_IMAGE_IMPORT_BY_NAME)
 IMAGE_IMPORT_BY_NAME = _IMAGE_IMPORT_BY_NAME
+
+# Struct _IMAGE_EXPORT_DIRECTORY definitions
+class _IMAGE_EXPORT_DIRECTORY(Structure):
+        _fields_ = [
+        ("Characteristics", DWORD),
+        ("TimeDateStamp", DWORD),
+        ("MajorVersion", WORD),
+        ("MinorVersion", WORD),
+        ("Name", DWORD),
+        ("Base", DWORD),
+        ("NumberOfFunctions", DWORD),
+        ("NumberOfNames", DWORD),
+        ("AddressOfFunctions", DWORD),
+        ("AddressOfNames", DWORD),
+        ("AddressOfNameOrdinals", DWORD),
+    ]
+IMAGE_EXPORT_DIRECTORY = _IMAGE_EXPORT_DIRECTORY
+PIMAGE_EXPORT_DIRECTORY = POINTER(_IMAGE_EXPORT_DIRECTORY)
 
 # Struct _MEMORY_BASIC_INFORMATION definitions
 class _MEMORY_BASIC_INFORMATION(Structure):
@@ -958,4 +944,15 @@ class _EXCEPTION_POINTERS32(Structure):
     ]
 PEXCEPTION_POINTERS32 = POINTER(_EXCEPTION_POINTERS32)
 EXCEPTION_POINTERS32 = _EXCEPTION_POINTERS32
+
+# Struct _DEBUG_PROCESSOR_IDENTIFICATION_X86 definitions
+class _DEBUG_PROCESSOR_IDENTIFICATION_X86(Structure):
+        _fields_ = [
+        ("Family", ULONG),
+        ("Model", ULONG),
+        ("Stepping", ULONG),
+        ("VendorString", CHAR * 16),
+    ]
+DEBUG_PROCESSOR_IDENTIFICATION_X86 = _DEBUG_PROCESSOR_IDENTIFICATION_X86
+PDEBUG_PROCESSOR_IDENTIFICATION_X86 = POINTER(_DEBUG_PROCESSOR_IDENTIFICATION_X86)
 
