@@ -39,7 +39,7 @@ def PEFile(baseaddr):
     class StringRVa(RVA):
         @property
         def str(self):
-            return ctypes.c_char_p(self.addr).value
+            return ctypes.c_char_p(self.addr).value.decode()
 
         def __repr__(self):
             return "<DWORD {0} (String RVA to '{1}')>".format(self.value, self.str)
@@ -147,7 +147,7 @@ def PEFile(baseaddr):
                 IAT = import_descriptor.get_IAT()
                 if INT is not None:
                     for iat_entry, (ord, name) in zip(IAT, INT):
-                        iat_entry.name = name
+                        iat_entry.name = name.decode()
                         iat_entry.ord = ord
                 res.setdefault(import_descriptor.Name.str.lower(),[]).extend(IAT)
             return res

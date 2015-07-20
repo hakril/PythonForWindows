@@ -38,7 +38,7 @@ class AutoHandle(object):
         return self._handle
 
     def __del__(self):
-         if hasattr(self, "_handle"):
+         if hasattr(self, "_handle") and self._handle:
             kernel32proxy.CloseHandle(self._handle)
 
 class System(object):
@@ -219,9 +219,14 @@ class CurrentThread(AutoHandle):
     def _get_handle(self):
         return kernel32proxy.GetCurrentThread()
 
+    def __del__(self):
+        pass
+        
     def exit(self, code=0):
         """Exit the thread"""
         return kernel32proxy.ExitThread(code)
+        
+    
 
 class CurrentProcess(Process):
     """The current process"""
@@ -231,7 +236,7 @@ class CurrentProcess(Process):
     # ret
     get_peb_64_code = codecs.decode(b"65488B042560000000C3", 'hex')
 
-    allocator = native_exec.native_function.CustomAllocator()
+    allocator = native_exec.native_function.allocator
 
 
     def get_peb_builtin(self):
@@ -246,6 +251,9 @@ class CurrentProcess(Process):
 
     def _get_handle(self):
         return kernel32proxy.GetCurrentProcess()
+        
+    def __del__(self):
+        pass
 
     @property
     def pid(self):
@@ -418,7 +426,7 @@ class LoadedModule(LDR_DATA_TABLE_ENTRY):
 
         :type: str
         """
-        return self.FullDllName.Buffer
+        return self.FullDllName.Buffer.decode()
 
     def __repr__(self):
         return '<{0} "{1}" at {2}>'.format(self.__class__.__name__, self.name, hex(id(self)))

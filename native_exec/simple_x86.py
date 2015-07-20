@@ -92,7 +92,10 @@ class RawBits(BitArray):
         
 class Imm32(object):
     def accept_arg(self, previous, args):
-        x = int(args[0])
+        try:
+            x = int(args[0])
+        except TypeError:
+            return (None, None)
         return (1, BitArray.from_int(32, X86.to_little_endian(x)))
 
 class ModRM(object):
@@ -132,7 +135,10 @@ class X86(object):
         if not X86.is_mem_acces(mem_access):
             raise ValueError("mem_access_has_only")
         for f in mem_access._fields:
-            if getattr(mem_access, f) and f not in names:
+            v = getattr(mem_access, f)
+            if v and f not in names:
+                return False
+            if v is None and f in names:
                 return False
         return True
       
@@ -169,7 +175,7 @@ class ModRM_REG__DEREF_REG(object):
 class ModRM_REG__DEREF_REG_IMM(object):
     @classmethod
     def match(cls, arg1, arg2):
-        return X86.is_reg(arg1) and X86.is_mem_acces(arg2) and X86.mem_access_has_only(arg2, ["base", "disp"])
+        return X86.is_reg(arg1) and X86.is_mem_acces(arg2) and X86.mem_access_has_only(arg2, ["base", "disp"]) and arg2.base != "ESP"
         
     def __init__(self, arg1, arg2, reversed):
         self.mod = BitArray(2, "10")
@@ -178,16 +184,45 @@ class ModRM_REG__DEREF_REG_IMM(object):
         self.after = BitArray.from_int(32, X86.to_little_endian(arg2.disp))
         self.direction = not reversed
         
-class ModRM_REG_IMM(object):
+class ModRM_REG__DEREF_SIB(object):
+    # Only handle reg, [esp+x] now :(
     @classmethod
     def match(cls, arg1, arg2):
-        return arg1 in x86_regs and arg2 in x86_regs
+        return X86.is_reg(arg1) and X86.is_mem_acces(arg2) and X86.mem_access_has_only(arg2, ["base", "disp"]) and arg2.base == "ESP"
         
-    def __init__(self, arg1, arg2):
-        self.mod = BitArray(2, "11")
-        self.reg = X86RegisterSelector.get_reg_bits(arg2)
-        self.rm = X86RegisterSelector.get_reg_bits(arg1)
-        self.direction = 0
+    def __init__(self, arg1, arg2, reversed):
+        self.mod = BitArray(2, "10")
+        self.reg = X86RegisterSelector.get_reg_bits(arg1)
+        self.rm = BitArray(3, "100")
+        
+        # Todo -> def sib_from_displacement
+        sib = BitArray(8, "00100100")
+        
+        self.after = sib + BitArray.from_int(32, X86.to_little_endian(arg2.disp))
+        self.direction = not reversed
+        
+#class ModRM_REG_IMM(object):
+#    @classmethod
+#    def match(cls, arg1, arg2):
+#        return arg1 in x86_regs and arg2 in x86_regs
+#        
+#    def __init__(self, arg1, arg2):
+#        self.mod = BitArray(2, "11")
+#        self.reg = X86RegisterSelector.get_reg_bits(arg2)
+#        self.rm = X86RegisterSelector.get_reg_bits(arg1)
+#        self.direction = 0
+        
+class ModRM_REG__DEREF_IMM(object):
+    @classmethod
+    def match(cls, arg1, arg2):
+        return X86.is_reg(arg1) and X86.is_mem_acces(arg2) and X86.mem_access_has_only(arg2, ["disp"])
+        
+    def __init__(self, arg1, arg2, reversed):
+        self.mod = BitArray(2, "00")
+        self.reg = X86RegisterSelector.get_reg_bits(arg1)
+        self.rm = BitArray(3, "101")
+        self.after = BitArray.from_int(32, X86.to_little_endian(arg2.disp))
+        self.direction = not reversed
     
              
 class Instruction(object):
@@ -219,7 +254,7 @@ class Pop(Instruction):
     encoding = [(RawBits.from_int(5, 0x58 >> 3), X86RegisterSelector())]
     
 class Mov(Instruction):
-    encoding = [(RawBits.from_int(8, 0x89), ModRM(ModRM_REG__REG, ModRM_REG__DEREF_REG, ModRM_REG__DEREF_REG_IMM)),
+    encoding = [(RawBits.from_int(8, 0x89), ModRM(ModRM_REG__REG, ModRM_REG__DEREF_REG, ModRM_REG__DEREF_REG_IMM, ModRM_REG__DEREF_IMM, ModRM_REG__DEREF_SIB)),
                 (RawBits.from_int(5, 0xb8 >> 3), X86RegisterSelector(), Imm32())]
     
 class Call(Instruction):
@@ -227,6 +262,9 @@ class Call(Instruction):
     
 class Ret(Instruction):
     encoding = [(RawBits.from_int(8, 0xc3),)]
+    
+class Int3(Instruction):
+    encoding = [(RawBits.from_int(8, 0xcc),)]
     
         
 class MultipleInstr(object):

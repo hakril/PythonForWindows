@@ -331,6 +331,9 @@ class Call(Instruction):
 class Ret(Instruction):
     encoding = [(RawBits.from_int(8, 0xc3),)]
     
+class Int3(Instruction):
+    encoding = [(RawBits.from_int(8, 0xcc),)]
+    
 class Mov(Instruction):
    default_32_bits = True
    encoding = [(RawBits.from_int(8, 0x89), ModRM(ModRM_REG64__REG64, ModRM_REG__DEREF_REG)), (RawBits.from_int(5, 0xb8 >> 3), X64RegisterSelector(), Imm64()),       
