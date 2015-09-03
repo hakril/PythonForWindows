@@ -44,7 +44,6 @@ class Win32MyMap(MyMap):
         #return cls(-1, size, access=access)
         access = mmap.ACCESS_READ | mmap.ACCESS_WRITE
         addr = k32api.VirtualAlloc(0, size, 0x1000, 0x40)
-
         new_map = (ctypes.c_char * size).from_address(addr)
         new_map.addr = addr
         if new_map.addr == 0:
