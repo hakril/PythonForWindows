@@ -38,9 +38,9 @@ NtCreateThreadStub = Pretty_NtCreateThreadStub.replace(" ", "").replace("\n", ""
 
 def genere_return_32bits_stub(ret_addr):
     ret_32b = x64.MultipleInstr()
-    ret_32b += x64.Mov_RCX_X((CS_32bits << 32) + ret_addr)
-    ret_32b += x64.Push_RCX()
-    ret_32b += x64.Retf()
+    ret_32b += x64.Mov('RCX', (CS_32bits << 32) + ret_addr)
+    ret_32b += x64.Push('RCX')
+    ret_32b += x64.Retf32() #32 bits return addr
     return ret_32b.get_code()
 
 # The format of a jump to 64bits mode

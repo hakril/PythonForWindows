@@ -10,6 +10,7 @@ import windows.generated_def.winfuncs as winfuncs
 kernel32 = ctypes.windll.kernel32
 advapi32 = ctypes.windll.Advapi32
 iphlpapi = ctypes.windll.iphlpapi
+ntdll = ctypes.windll.ntdll
 
 class Kernel32Error(WindowsError):
     def __new__(cls, func_name):
@@ -114,6 +115,31 @@ class Advapi32Proxy(ApiProxy):
 class IphlpapiProxy(ApiProxy):
     APIDLL = iphlpapi
     default_error_check = staticmethod(iphlpapi_error_check)
+    
+class NtdllProxy(ApiProxy):
+    APIDLL = ntdll
+    default_error_check = staticmethod(kernel32_error_check)
+    
+class OptionalExport(object):
+    """used 'around' a Proxy decorator
+       Should be used for export that are not available everywhere (ntdll internals | 32/64 bits stuff)
+       If the export is not found the function will be None
+       
+       Example:
+            @OptionalExport(NtdllProxy('NtWow64ReadVirtualMemory64'))
+            def NtWow64ReadVirtualMemory64(...)
+            ...
+    """
+    def __init__(self, subdecorator):
+        self.subdecorator = subdecorator
+        
+    def __call__(self, f):
+        try:
+            return self.subdecorator(f)
+        except AttributeError as e:
+            print("NOT FOUND")
+            print(e)
+            return None
 
 def TransparentApiProxy(APIDLL, func_name, error_check):
     """Create a ctypes function for 'func_name' with no python arg pre-check"""
@@ -138,6 +164,7 @@ class NeededParameterType(object):
 
     def __repr__(self):
         return "NeededParameter"
+        
 
 NeededParameter = NeededParameterType()
 
@@ -313,6 +340,18 @@ def RemoveVectoredExceptionHandler(Handler):
 @Kernel32Proxy("WaitForSingleObject", kernel32_zero_check)
 def WaitForSingleObject(hHandle, dwMilliseconds=INFINITE):
     return WaitForSingleObject.ctypes_function(hHandle, dwMilliseconds)
+    
+@Kernel32Proxy("DeviceIoControl")   
+def DeviceIoControl(hDevice, dwIoControlCode, lpInBuffer, nInBufferSize=None, lpOutBuffer=NeededParameter, nOutBufferSize=None, lpBytesReturned=None, lpOverlapped=None):
+    if nInBufferSize is None:
+        nInBufferSize = len(lpInBuffer)
+    if nOutBufferSize is None:
+        nOutBufferSize = len(lpOutBuffer)
+    if lpBytesReturned is None:
+        # Some windows check 0 / others does not
+        lpBytesReturned = ctypes.byref(DWORD())
+    return DeviceIoControl.ctypes_function(hDevice, dwIoControlCode, lpInBuffer, nInBufferSize, lpOutBuffer, nOutBufferSize, lpBytesReturned, lpOverlapped)
+
 
 ###### ADVAPI32 ########
 
@@ -342,14 +381,12 @@ def AdjustTokenPrivileges(TokenHandle, DisableAllPrivileges=False, NewState=Need
 
 SetTcpEntry = TransparentIphlpapiProxy('SetTcpEntry')
 
-@IphlpapiProxy('GetExtendedTcpTable')
+@OptionalExport(IphlpapiProxy('GetExtendedTcpTable'))
 def GetExtendedTcpTable(pTcpTable, pdwSize=None, bOrder=True, ulAf=NeededParameter, TableClass=TCP_TABLE_OWNER_PID_ALL, Reserved=0):
     if pdwSize is None:
         ctypes.sizeof(pTcpTable)
     return GetExtendedTcpTable.ctypes_function(pTcpTable, pdwSize, bOrder, ulAf, TableClass, Reserved)
-
-
-
+    
 # Design 2
 # Design 2 should use the automatics args
 

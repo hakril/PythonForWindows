@@ -3,7 +3,9 @@ import msvcrt
 import os
 import copy
 import sys
+import code
 
+import windows
 from . import k32testing as kernel32proxy
 from .generated_def import windef
 from .generated_def.winstructs import *
@@ -17,10 +19,12 @@ def swallow_ctypes_copy(ctypes_object):
 
 def get_func_addr(dll_name, func_name):
         dll = ctypes.WinDLL(dll_name)
-        return kernel32proxy.GetProcAddress(dll._handle, func_name)
-
-
-
+        modules = windows.current_process.peb.modules
+        if not dll_name.lower().endswith(".dll"):
+            dll_name += ".dll"
+        mod = [x for x in modules if x.name == dll_name][0]
+        return mod.pe.exports[func_name]
+        
 def is_wow_64(hProcess):
     try:
         fnIsWow64Process =  get_func_addr("kernel32.dll", "IsWow64Process")
@@ -61,6 +65,17 @@ def create_console():
     import os
     #os.dup2(console_stderr.fileno(), 2) 
     sys.stderr = console_stderr
+    
+class FixedInteractiveConsole(code.InteractiveConsole):
+    def raw_input(self, prompt=">>>"):
+        sys.stdout.write(prompt)
+        return raw_input("")
+    
+def pop_shell():
+    create_console()
+    FixedInteractiveConsole(locals()).interact()
+    
+    
 
 class VirtualProtected(object):
     """A context manager usable like `VirtualProtect` that will restore the old protection at exit

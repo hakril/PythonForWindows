@@ -2,11 +2,16 @@ import ctypes
 import os
 import codecs
 import copy
+import time
+import struct
 
 import windows
+import windows.syswow64
 import windows.k32testing as kernel32proxy
 import windows.injection as injection
 import windows.native_exec as native_exec
+import windows.native_exec.simple_x86 as x86
+import windows.native_exec.simple_x64 as x64
 
 from . import utils
 
@@ -375,9 +380,27 @@ class WinProcess(PROCESSENTRY32, Process):
 
     def read_memory(self, addr, size):
         """Read `size` from `addr`"""
+        print("Read on page {0}".format(hex(addr & 0xfffffffffffff000)))
         buffer =  ctypes.create_string_buffer(size)
         self.low_read_memory(addr, ctypes.byref(buffer), size)
         return buffer[:]
+        
+    #Simple cache test
+    real_read = read_memory
+    
+    def read_memory(self, addr, size):
+        """Cached version for test"""
+        if not hasattr(self, "_cache_cache"):
+            self._cache_cache = {}
+        page_addr = addr & 0xfffffffffffff000
+        if page_addr in self._cache_cache:
+            print("CACHED Read on page {0}".format(hex(page_addr)))
+            page_data = self._cache_cache[page_addr]
+            return page_data[addr & 0xfff: (addr & 0xfff) + size]
+        else:
+            page_data = self.real_read(page_addr, 0x1000)
+            self._cache_cache[page_addr] = page_data
+            return page_data[addr & 0xfff: (addr & 0xfff) + size]
 
     def read_memory_into(self, addr, struct):
         """Read a :mod:`ctypes` struct from `addr`"""
@@ -400,8 +423,42 @@ class WinProcess(PROCESSENTRY32, Process):
     def execute_python(self, pycode):
         """Execute Python code into the remote process"""
         return injection.execute_python_code(self, pycode)
-
-
+        
+    def get_peb_addr(self):
+        get_peb_32_code = codecs.decode(b'64a130000000', 'hex')
+        get_peb_64_code = codecs.decode(b"65488B042560000000", 'hex')
+        dest = self.virtual_alloc(0x1000)
+        if self.bitness == 32:
+            get_peb_code = get_peb_32_code
+            store_peb = x86.MultipleInstr()
+            store_peb += x86.Mov(x86.create_displacement(disp=dest), 'EAX')
+            store_peb += x86.Ret()
+            get_peb_code += store_peb.get_code()
+            self.write_memory(dest, "\x00" * 4)
+            self.write_memory(dest + 4, get_peb_code)
+            self.create_thread(dest + 4, 0)
+            time.sleep(0.01)
+            peb_addr = struct.unpack("<I", self.read_memory(dest, 4))[0]
+            return peb_addr
+        else:
+            get_peb_code = get_peb_64_code
+            store_peb = x64.MultipleInstr()
+            store_peb += x64.Mov(x64.create_displacement(disp=dest), 'RAX')
+            store_peb += x64.Ret()
+            get_peb_code += store_peb.get_code()
+            self.write_memory(dest, "\x00" * 8)
+            self.write_memory(dest + 8, get_peb_code)
+            self.create_thread(dest + 8, 0)
+            time.sleep(0.01)
+            peb_addr = struct.unpack("<Q", self.read_memory(dest, 8))[0]
+            return peb_addr
+            
+    def peb(self):
+        if windows.current_process.bitness == 32 and self.bitness == 64:
+            return RemotePEB64(self.get_peb_addr(), self)
+        return RemotePEB(self.get_peb_addr(), self)
+        
+    
 class LoadedModule(LDR_DATA_TABLE_ENTRY):
     """An entry in the PEB Ldr list"""
     @property
@@ -418,7 +475,7 @@ class LoadedModule(LDR_DATA_TABLE_ENTRY):
 
         :type: str
         """
-        return self.BaseDllName.Buffer
+        return str(self.BaseDllName.Buffer).lower()
 
     @property
     def fullname(self):
@@ -449,17 +506,26 @@ class LIST_ENTRY_PTR(PVOID):
     def TO_LDR_ENTRY(self):
         return LDR_DATA_TABLE_ENTRY.from_address(self.value - sizeof(PVOID) *  2)
 
-
-class PEB(PEB):
+def transform_ctypes_fields(struct, replacement):
+    return [(name, replacement.get(name, type)) for name, type in struct._fields_]
+    
+class RTL_USER_PROCESS_PARAMETERS(Structure):
+    _fields_ = transform_ctypes_fields(RTL_USER_PROCESS_PARAMETERS, # The one in generated_def
+                {"ImagePathName" : WinUnicodeString,
+                 "CommandLine" : WinUnicodeString})
+    
+class PEB(Structure):
     """The PEB (Process Environment Block) of the current process"""
+    _fields_ = transform_ctypes_fields(PEB, # The one in generated_def
+                {"ProcessParameters" : POINTER(RTL_USER_PROCESS_PARAMETERS)})
+    
     @property
     def imagepath(self):
         """The ImagePathName of the PEB
 
         :type: :class:`WinUnicodeString`
         """
-        raw_imagepath = self.ProcessParameters.contents.ImagePathName
-        return WinUnicodeString.from_address(ctypes.addressof(raw_imagepath))
+        return self.ProcessParameters.contents.ImagePathName
 
     @property
     def commandline(self):
@@ -468,8 +534,7 @@ class PEB(PEB):
         :type: :class:`WinUnicodeString`
         """
         # This or changing the __repr__ of LSA_UNICODE_STRING
-        raw_cmd = self.ProcessParameters.contents.CommandLine
-        return WinUnicodeString.from_address(ctypes.addressof(raw_cmd))
+        return self.ProcessParameters.contents.CommandLine
 
     @property
     def modules(self):
@@ -485,3 +550,63 @@ class PEB(PEB):
             list_entry_ptr = ctypes.cast(current_dll.InMemoryOrderLinks.Flink, LIST_ENTRY_PTR)
             current_dll = list_entry_ptr.TO_LDR_ENTRY()
         return [LoadedModule.from_address(addressof(LDR)) for LDR in res]
+        
+import windows.remotectypes as rctypes
+        
+
+        
+        
+        
+class RemotePEB(rctypes.RemoteStructure.from_structure(PEB)):
+    RemoteLoadedModule = rctypes.RemoteStructure.from_structure(LoadedModule)
+    
+    def ptr_flink_to_remote_module(self, ptr_value):
+        return self.RemoteLoadedModule(ptr_value - ctypes.sizeof(ctypes.c_void_p) *  2, self._target)
+            
+    @property
+    def modules(self):
+        """The loaded modules present in the PEB
+
+        :type: [:class:`LoadedModule`] -- List of loaded modules
+        """
+        res = []
+        list_entry_ptr = self.Ldr.contents.InMemoryOrderModuleList.Flink.raw_value
+        
+        current_dll = self.ptr_flink_to_remote_module(list_entry_ptr)
+        while current_dll.DllBase:
+            res.append(current_dll)
+            list_entry_ptr = current_dll.InMemoryOrderLinks.Flink.raw_value
+            current_dll = self.ptr_flink_to_remote_module(list_entry_ptr)
+        return res
+  
+if CurrentProcess().bitness == 32:
+    class RemoteLoadedModule64(rctypes.transform_type_to_remote64bits(LoadedModule)):
+        @property
+        def pe(self):
+            """A PE representation of the module
+    
+            :type: :class:`windows.pe_parse.PEFile`
+            """
+            return pe_parse.PEFile(self.baseaddr, target=self._target)
+            
+    class RemotePEB64(rctypes.transform_type_to_remote64bits(PEB)):
+        #RemoteLoadedModule64 = rctypes.transform_type_to_remote64bits(LoadedModule)
+        
+        def ptr_flink_to_remote_module(self, ptr_value):
+            return RemoteLoadedModule64(ptr_value - ctypes.sizeof(rctypes.c_void_p64) *  2, self._target)
+            
+        @property
+        def modules(self):
+            """The loaded modules present in the PEB
+    
+            :type: [:class:`LoadedModule`] -- List of loaded modules
+            """
+            res = []
+            list_entry_ptr = self.Ldr.contents.InMemoryOrderModuleList.Flink.raw_value
+            
+            current_dll = self.ptr_flink_to_remote_module(list_entry_ptr)
+            while current_dll.DllBase:
+                res.append(current_dll)
+                list_entry_ptr = current_dll.InMemoryOrderLinks.Flink.raw_value
+                current_dll = self.ptr_flink_to_remote_module(list_entry_ptr)
+            return res
