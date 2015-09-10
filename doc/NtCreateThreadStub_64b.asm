@@ -16,7 +16,6 @@ MY_FUNC PROC
         push r11
         push r12
         push r13
-        ;TODO save the QUEEN (and the registers !)
         mov rax, 0h
         push rax
         mov rax, 7845646165726854h

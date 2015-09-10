@@ -14,12 +14,11 @@ import windows.native_exec.simple_x86 as x86
 import windows.native_exec.simple_x64 as x64
 
 from . import utils
-
+from  .dbgprint import dbgprint
 from windows.generated_def.winstructs import *
 from .generated_def import windef
 
 import windows.pe_parse as pe_parse
-
 
 
 class AutoHandle(object):
@@ -66,7 +65,7 @@ class System(object):
         """
         return self.enumerate_threads()
 
-    @property
+    @utils.fixedpropety
     def bitness(self):
         """The bitness of the system
 
@@ -78,7 +77,7 @@ class System(object):
         if "PROCESSOR_ARCHITEW6432" in os.environ:
             return 64
         return 32
-        
+
     @staticmethod
     def enumerate_processes():
         process_entry = WinProcess()
@@ -90,7 +89,7 @@ class System(object):
         while kernel32proxy.Process32Next(snap, process_entry):
             res.append(utils.swallow_ctypes_copy(process_entry))
         return res
-    
+
     @staticmethod
     def enumerate_threads():
         thread_entry = WinThread()
@@ -106,12 +105,12 @@ class System(object):
 
 class WinThread(THREADENTRY32, AutoHandle):
     """Represent a thread """
-    @property
+    @utils.fixedpropety
     def tid(self):
         """Thread ID"""
         return self.th32ThreadID
 
-    @property
+    @utils.fixedpropety
     def owner(self):
         """The Process owning the thread
 
@@ -125,23 +124,23 @@ class WinThread(THREADENTRY32, AutoHandle):
         except IndexError:
             return None
         return self._owner
-        
+
     @property
     def context(self):
         x =  windows.vectored_exception.EnhancedCONTEXT()
         x.ContextFlags = CONTEXT_FULL
         kernel32proxy.GetThreadContext(self.handle, x)
         return x
-        
+
     def set_context(self, context):
         return kernel32proxy.SetThreadContext(self.handle, context)
-        
+
     def exit(self, code=0):
         return kernel32proxy.TerminateThread(self.handle, code)
-        
+
     def resume(self):
         return kernel32proxy.ResumeThread(self.handle)
-        
+
     def suspend(self):
         return kernel32proxy.SuspendThread(self.handle)
 
@@ -155,8 +154,8 @@ class WinThread(THREADENTRY32, AutoHandle):
         else:
             owner_name = owner.name
         return '<{0} {1} owner "{2}" at {3}>'.format(self.__class__.__name__, self.tid, owner_name, hex(id(self)))
-        
-    @staticmethod    
+
+    @staticmethod
     def _from_handle(handle):
         tid = kernel32proxy.GetThreadId(handle)
         print(tid)
@@ -164,9 +163,9 @@ class WinThread(THREADENTRY32, AutoHandle):
             return [t for t in System().threads if t.tid == tid][0]
         except IndexError:
             return (tid, handle)
-            
+
 class Process(AutoHandle):
-    @property
+    @utils.fixedpropety
     def is_wow_64(self):
         """Is True if the process is a SysWow64 process
 
@@ -176,7 +175,7 @@ class Process(AutoHandle):
         """
         return utils.is_wow_64(self.handle)
 
-    @property
+    @utils.fixedpropety
     def bitness(self):
         """The bitness of the process
 
@@ -208,12 +207,12 @@ class Process(AutoHandle):
 
 class CurrentThread(AutoHandle):
     """The current thread"""
-    @property
+    @utils.fixedpropety
     def tid(self):
         """Thread ID"""
         return kernel32proxy.GetCurrentThreadId()
 
-    @property
+    @utils.fixedpropety
     def owner(self):
         """The current process
 
@@ -226,12 +225,12 @@ class CurrentThread(AutoHandle):
 
     def __del__(self):
         pass
-        
+
     def exit(self, code=0):
         """Exit the thread"""
         return kernel32proxy.ExitThread(code)
-        
-    
+
+
 
 class CurrentProcess(Process):
     """The current process"""
@@ -256,7 +255,7 @@ class CurrentProcess(Process):
 
     def _get_handle(self):
         return kernel32proxy.GetCurrentProcess()
-        
+
     def __del__(self):
         pass
 
@@ -269,7 +268,7 @@ class CurrentProcess(Process):
         return os.getpid()
 
     # Is there a better way ?
-    @property
+    @utils.fixedpropety
     def ppid(self):
         """Parent Process ID
 
@@ -277,7 +276,7 @@ class CurrentProcess(Process):
         """
         return [p for p in windows.system.processes if p.pid == self.pid][0].ppid
 
-    @property
+    @utils.fixedpropety
     def peb(self):
         """The Process Environment Block of the current process
 
@@ -285,11 +284,12 @@ class CurrentProcess(Process):
         """
         return PEB.from_address(self.get_peb_builtin()())
 
-    @property
+    @utils.fixedpropety
     def bitness(self):
         """The bitness of the process
 
         :returns: int -- 32 or 64"""
+        print("FAIL")
         import platform
         bits = platform.architecture()[0]
         return int(bits[:2])
@@ -309,6 +309,7 @@ class CurrentProcess(Process):
 
     def read_memory(self, addr, size):
         """Read size from adddr"""
+        dbgprint('Read CurrentProcess Memory', 'READMEM')
         buffer = (c_char * size).from_address(addr)
         return buffer[:]
 
@@ -330,7 +331,7 @@ class WinProcess(PROCESSENTRY32, Process):
     is_pythondll_injected = 0
     is_remote_slave_running = False
 
-    @property
+    @utils.fixedpropety
     def name(self):
         """Name of the process
 
@@ -338,7 +339,7 @@ class WinProcess(PROCESSENTRY32, Process):
         """
         return self.szExeFile[:].decode()
 
-    @property
+    @utils.fixedpropety
     def pid(self):
         """Process ID
 
@@ -346,7 +347,7 @@ class WinProcess(PROCESSENTRY32, Process):
         """
         return self.th32ProcessID
 
-    @property
+    @utils.fixedpropety
     def ppid(self):
         """Parent Process ID
 
@@ -373,28 +374,29 @@ class WinProcess(PROCESSENTRY32, Process):
 
     def low_read_memory(self, addr, buffer_addr, size):
         if windows.current_process.bitness == 32 and self.bitness == 64:
-            NtWow64ReadVirtualMemory64Addr = windows.utils.get_func_addr("ntdll.dll", "NtWow64ReadVirtualMemory64")
-            NtWow64ReadVirtualMemory64 = WINFUNCTYPE(HRESULT, HANDLE, ULONG64, PVOID, ULONG64, PULONG64)(NtWow64ReadVirtualMemory64Addr)
-            return NtWow64ReadVirtualMemory64(self.handle, addr, buffer_addr, size, None)
+            if not hasattr(self, "NtWow64ReadVirtualMemory64"): # TODO: better stuff : (in k32testing?)
+                NtWow64ReadVirtualMemory64Addr = windows.utils.get_func_addr("ntdll.dll", "NtWow64ReadVirtualMemory64")
+                self.NtWow64ReadVirtualMemory64 = WINFUNCTYPE(HRESULT, HANDLE, ULONG64, PVOID, ULONG64, PULONG64)(NtWow64ReadVirtualMemory64Addr)
+            return self.NtWow64ReadVirtualMemory64(self.handle, addr, buffer_addr, size, None)
         return kernel32proxy.ReadProcessMemory(self.handle, addr, lpBuffer=buffer_addr, nSize=size)
 
     def read_memory(self, addr, size):
         """Read `size` from `addr`"""
-        print("Read on page {0}".format(hex(addr & 0xfffffffffffff000)))
         buffer =  ctypes.create_string_buffer(size)
         self.low_read_memory(addr, ctypes.byref(buffer), size)
         return buffer[:]
-        
+
     #Simple cache test
     real_read = read_memory
-    
+
     def read_memory(self, addr, size):
         """Cached version for test"""
+        dbgprint('Read remote Memory of {0}'.format(self), 'READMEM')
         if not hasattr(self, "_cache_cache"):
             self._cache_cache = {}
         page_addr = addr & 0xfffffffffffff000
         if page_addr in self._cache_cache:
-            print("CACHED Read on page {0}".format(hex(page_addr)))
+            #print("CACHED Read on page {0}".format(hex(page_addr)))
             page_data = self._cache_cache[page_addr]
             return page_data[addr & 0xfff: (addr & 0xfff) + size]
         else:
@@ -423,7 +425,7 @@ class WinProcess(PROCESSENTRY32, Process):
     def execute_python(self, pycode):
         """Execute Python code into the remote process"""
         return injection.execute_python_code(self, pycode)
-        
+
     def get_peb_addr(self):
         get_peb_32_code = codecs.decode(b'64a130000000', 'hex')
         get_peb_64_code = codecs.decode(b"65488B042560000000", 'hex')
@@ -452,13 +454,14 @@ class WinProcess(PROCESSENTRY32, Process):
             time.sleep(0.01)
             peb_addr = struct.unpack("<Q", self.read_memory(dest, 8))[0]
             return peb_addr
-            
+
+    @utils.fixedpropety
     def peb(self):
         if windows.current_process.bitness == 32 and self.bitness == 64:
             return RemotePEB64(self.get_peb_addr(), self)
         return RemotePEB(self.get_peb_addr(), self)
-        
-    
+
+
 class LoadedModule(LDR_DATA_TABLE_ENTRY):
     """An entry in the PEB Ldr list"""
     @property
@@ -508,17 +511,17 @@ class LIST_ENTRY_PTR(PVOID):
 
 def transform_ctypes_fields(struct, replacement):
     return [(name, replacement.get(name, type)) for name, type in struct._fields_]
-    
+
 class RTL_USER_PROCESS_PARAMETERS(Structure):
     _fields_ = transform_ctypes_fields(RTL_USER_PROCESS_PARAMETERS, # The one in generated_def
                 {"ImagePathName" : WinUnicodeString,
                  "CommandLine" : WinUnicodeString})
-    
+
 class PEB(Structure):
     """The PEB (Process Environment Block) of the current process"""
     _fields_ = transform_ctypes_fields(PEB, # The one in generated_def
                 {"ProcessParameters" : POINTER(RTL_USER_PROCESS_PARAMETERS)})
-    
+
     @property
     def imagepath(self):
         """The ImagePathName of the PEB
@@ -550,19 +553,19 @@ class PEB(Structure):
             list_entry_ptr = ctypes.cast(current_dll.InMemoryOrderLinks.Flink, LIST_ENTRY_PTR)
             current_dll = list_entry_ptr.TO_LDR_ENTRY()
         return [LoadedModule.from_address(addressof(LDR)) for LDR in res]
-        
-import windows.remotectypes as rctypes
-        
 
-        
-        
-        
+import windows.remotectypes as rctypes
+
+
+
+
+
 class RemotePEB(rctypes.RemoteStructure.from_structure(PEB)):
     RemoteLoadedModule = rctypes.RemoteStructure.from_structure(LoadedModule)
-    
+
     def ptr_flink_to_remote_module(self, ptr_value):
         return self.RemoteLoadedModule(ptr_value - ctypes.sizeof(ctypes.c_void_p) *  2, self._target)
-            
+
     @property
     def modules(self):
         """The loaded modules present in the PEB
@@ -571,39 +574,39 @@ class RemotePEB(rctypes.RemoteStructure.from_structure(PEB)):
         """
         res = []
         list_entry_ptr = self.Ldr.contents.InMemoryOrderModuleList.Flink.raw_value
-        
+
         current_dll = self.ptr_flink_to_remote_module(list_entry_ptr)
         while current_dll.DllBase:
             res.append(current_dll)
             list_entry_ptr = current_dll.InMemoryOrderLinks.Flink.raw_value
             current_dll = self.ptr_flink_to_remote_module(list_entry_ptr)
         return res
-  
+
 if CurrentProcess().bitness == 32:
     class RemoteLoadedModule64(rctypes.transform_type_to_remote64bits(LoadedModule)):
         @property
         def pe(self):
             """A PE representation of the module
-    
+
             :type: :class:`windows.pe_parse.PEFile`
             """
             return pe_parse.PEFile(self.baseaddr, target=self._target)
-            
+
     class RemotePEB64(rctypes.transform_type_to_remote64bits(PEB)):
         #RemoteLoadedModule64 = rctypes.transform_type_to_remote64bits(LoadedModule)
-        
+
         def ptr_flink_to_remote_module(self, ptr_value):
             return RemoteLoadedModule64(ptr_value - ctypes.sizeof(rctypes.c_void_p64) *  2, self._target)
-            
+
         @property
         def modules(self):
             """The loaded modules present in the PEB
-    
+
             :type: [:class:`LoadedModule`] -- List of loaded modules
             """
             res = []
             list_entry_ptr = self.Ldr.contents.InMemoryOrderModuleList.Flink.raw_value
-            
+
             current_dll = self.ptr_flink_to_remote_module(list_entry_ptr)
             while current_dll.DllBase:
                 res.append(current_dll)

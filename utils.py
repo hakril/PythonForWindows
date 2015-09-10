@@ -10,12 +10,24 @@ from . import k32testing as kernel32proxy
 from .generated_def import windef
 from .generated_def.winstructs import *
 
-# Function resolution !
+
+def fixedpropety(f):
+    cache_name = "_" + f.__name__
+    def prop(self):
+        try:
+            return getattr(self, cache_name)
+        except AttributeError:
+            setattr(self, cache_name, f(self))
+            return getattr(self, cache_name)
+    return property(prop)
 
 def swallow_ctypes_copy(ctypes_object):
     new_copy = type(ctypes_object)()
     ctypes.memmove(ctypes.byref(new_copy), ctypes.byref(ctypes_object), ctypes.sizeof(new_copy))
     return new_copy
+
+
+# Function resolution !
 
 def get_func_addr(dll_name, func_name):
         dll = ctypes.WinDLL(dll_name)
@@ -24,7 +36,14 @@ def get_func_addr(dll_name, func_name):
             dll_name += ".dll"
         mod = [x for x in modules if x.name == dll_name][0]
         return mod.pe.exports[func_name]
-        
+
+def get_remote_func_addr(target, dll_name, func_name):
+        name_modules = [m for m in target.peb.modules if m.name == dll_name]
+        if not len(name_modules):
+            raise ValueError("Module <{0}> not loaded in target <{1}>".format(dll_name, target))
+        mod = name_modules[0]
+        return mod.pe.exports[func_name]
+
 def is_wow_64(hProcess):
     try:
         fnIsWow64Process =  get_func_addr("kernel32.dll", "IsWow64Process")
@@ -63,19 +82,19 @@ def create_console():
     console_stderr = create_file_from_handle(stderr_handle, "w")
     #print(stderr_handle, console_stderr)
     import os
-    #os.dup2(console_stderr.fileno(), 2) 
+    #os.dup2(console_stderr.fileno(), 2)
     sys.stderr = console_stderr
-    
+
 class FixedInteractiveConsole(code.InteractiveConsole):
     def raw_input(self, prompt=">>>"):
         sys.stdout.write(prompt)
         return raw_input("")
-    
+
 def pop_shell():
     create_console()
     FixedInteractiveConsole(locals()).interact()
-    
-    
+
+
 
 class VirtualProtected(object):
     """A context manager usable like `VirtualProtect` that will restore the old protection at exit

@@ -7,13 +7,28 @@ import windows.utils as utils
 from .native_exec import simple_x86 as x86
 from .native_exec import simple_x64 as x64
 
+
+def get_loadlib_getproc(target):
+    if windows.current_process.bitness == target.bitness:
+        LoadLibraryA = utils.get_func_addr('kernel32', 'LoadLibraryA')
+        GetProcAddress = utils.get_func_addr('kernel32', 'GetProcAddress')
+        return LoadLibraryA, GetProcAddress
+    else:
+        k32 = [x for x in target.peb.modules if x.name == "kernel32.dll"][0]
+        exp = k32.pe.exports
+        return exp['LoadLibraryA'], exp['GetProcAddress']
+
+
+
+
 # 32 to 32 injection
-def generate_python_exec_shellcode_32(PYDLL_addr, PyInit, PyRun, PYCODE_ADDR):
-    LoadLibraryA = utils.get_func_addr('kernel32', 'LoadLibraryA')
-    GetProcAddress = utils.get_func_addr('kernel32', 'GetProcAddress')
+def generate_python_exec_shellcode_32(target, PYDLL_addr, PyInit, PyRun, PYCODE_ADDR):
+    #LoadLibraryA = utils.get_func_addr('kernel32', 'LoadLibraryA')
+    #GetProcAddress = utils.get_func_addr('kernel32', 'GetProcAddress')
+    LoadLibraryA, GetProcAddress = get_loadlib_getproc(target)
     print("LoadLibraryA = {0}".format(hex(LoadLibraryA)))
     print("LoadLibraryA = {0}".format(hex(GetProcAddress)))
-          
+
     code = x86.MultipleInstr()
     # Load python27.dll
     code += x86.Push(PYDLL_addr)
@@ -40,10 +55,9 @@ def generate_python_exec_shellcode_32(PYDLL_addr, PyInit, PyRun, PYCODE_ADDR):
     return code.get_code()
 
 # 64 to 64 injection
-def generate_python_exec_shellcode_64(PYDLL_addr, PyInit, PyRun, PYCODE_ADDR):
-    
-    LoadLibraryA = utils.get_func_addr('kernel32', 'LoadLibraryA')
-    GetProcAddress = utils.get_func_addr('kernel32', 'GetProcAddress')
+def generate_python_exec_shellcode_64(target, PYDLL_addr, PyInit, PyRun, PYCODE_ADDR):
+
+    LoadLibraryA, GetProcAddress = get_loadlib_getproc(target)
 
     Reserve_space_for_call = x64.MultipleInstr([x64.Push('RDI')] * 4)
     Clean_space_for_call = x64.MultipleInstr([x64.Pop('RDI')] * 4)
@@ -115,9 +129,9 @@ def inject_python_command(process, code_injected, PYDLL="python27.dll\x00"):
 
     SHELLCODE_ADDR = remote_addr
     if process.bitness == 32:
-        shellcode = generate_python_exec_shellcode_32(PYDLL_addr, PyInitT_ADDR, Pyrun_ADDR, PYCODE_ADDR)
+        shellcode = generate_python_exec_shellcode_32(process, PYDLL_addr, PyInitT_ADDR, Pyrun_ADDR, PYCODE_ADDR)
     else:
-        shellcode = generate_python_exec_shellcode_64(PYDLL_addr, PyInitT_ADDR, Pyrun_ADDR, PYCODE_ADDR)
+        shellcode = generate_python_exec_shellcode_64(process, PYDLL_addr, PyInitT_ADDR, Pyrun_ADDR, PYCODE_ADDR)
     process.write_memory(SHELLCODE_ADDR, shellcode)
     return SHELLCODE_ADDR
 
@@ -127,6 +141,7 @@ def execute_python_code(process, code):
     print("me = {0}".format(windows.current_process.bitness))
     print("him = {0}".format(process.bitness))
     if windows.current_process.bitness != process.bitness:
-        raise NotImplementedError("Cannot perform 32 <-> 64 injection")
+        if windows.current_process.bitness == 64 and process.bitness == 32:
+            raise NotImplementedError("Cannot perform 64 -> 32 injection")
     shellcode_remote_addr = inject_python_command(process, code)
     return process.create_thread(shellcode_remote_addr, 0)

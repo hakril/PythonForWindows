@@ -3,6 +3,7 @@ import ctypes
 import struct
 import windows
 import windows.hooks as hooks
+import windows.utils as utils
 
 from windows.generated_def.winstructs import *
 import windows.remotectypes as rctypes
@@ -26,25 +27,32 @@ def transform_ctypes_fields(struct, replacement):
     return [(name, replacement.get(name, type)) for name, type in struct._fields_]
 
 def PEFile(baseaddr, target=None):
+    # TODO: 32 with target 32
+    #       64 with target 64
+    # For now you can do it by injecting a remote python..
     proc_bitness = windows.current_process.bitness
     if target is None:
         targetedbitness = proc_bitness
     else:
         targetedbitness = target.bitness
-        
+
     if targetedbitness == 32 and proc_bitness == 64:
         raise NotImplementedError("Parse 32bits PE with 64bits current_process")
     elif targetedbitness == 64 and proc_bitness == 32:
         ctypes_structure_transformer = rctypes.transform_type_to_remote64bits
         def create_structure_at(structcls, addr):
-            return rctypes.transform_type_to_remote64bits(structcls)(addr, target)
+           # try:
+                return rctypes.transform_type_to_remote64bits(structcls)(addr, target)
+            #except:
+                #import pdb;pdb.set_trace()
+                #return rctypes.transform_type_to_remote64bits(structcls)(addr, target)
     elif targetedbitness == proc_bitness: # Does not handle remote of same bitness..
         ctypes_structure_transformer = lambda x: x
         def create_structure_at(structcls, addr):
             return structcls.from_address(addr)
     else:
         raise NotImplementedError("Parsing {0} PE from {1} Process".format(targetedbitness, proc_bitness))
-        
+
     if targetedbitness == 32:
         IMAGE_ORDINAL_FLAG = IMAGE_ORDINAL_FLAG32
     else:
@@ -54,30 +62,19 @@ def PEFile(baseaddr, target=None):
         @property
         def addr(self):
             return baseaddr + self.value
-    
+
         def __repr__(self):
             return "<DWORD {0} (RVA to '{1}')>".format(self.value, hex(self.addr))
-            
-    #class RVA(ctypes.Structure):
-    #    _fields_ = [("Whatever", DWORD)]
-    #    @property
-    #    def addr(self):
-    #        return baseaddr + self.Whatever
-    #
-    #    def __repr__(self):
-    #        return "<DWORD {0} (RVA to '{1}')>".format(self.Whatever, hex(self.addr))
 
     class StringRVa(RVA):
-        if proc_bitness == 32 and ctypes_structure_transformer == rctypes.transform_type_to_remote64bits:
+        if proc_bitness == 32 and targetedbitness == 64:
             @property
             def str(self):
-                #return rctypes.rctypes.Remote_c_char_p64.from_buffer_with_target(struct.pack("<Q", self.addr), target)
                 return rctypes.Remote_c_char_p64(self.addr, target=target).value
-                #return ctypes_structure_transformer(ctypes.c_char_p)(self.addr, target).value.decode()
         else:
             @property
             def str(self):
-                return ctypes.c_char_p(self.addr).value.decode()        
+                return ctypes.c_char_p(self.addr).value.decode()
 
         def __repr__(self):
             return "<DWORD {0} (String RVA to '{1}')>".format(self.value, self.str)
@@ -103,7 +100,7 @@ def PEFile(baseaddr, target=None):
 
         @classmethod
         def create(cls, addr, ord, name):
-            self =  create_structure_at(cls, addr)
+            self = create_structure_at(cls, addr)
             self.addr = addr
             self.ord = ord
             self.name = name
@@ -158,7 +155,7 @@ def PEFile(baseaddr, target=None):
                  #current_import_descriptor = self.IMAGE_IMPORT_DESCRIPTOR.from_address(import_descriptor_addr)
                  current_import_descriptor = create_structure_at(self.IMAGE_IMPORT_DESCRIPTOR, import_descriptor_addr)
             return res
-            
+
         def get_EXPORT_DIRECTORY(self):
             export_directory_rva = self.get_DataDirectory()[IMAGE_DIRECTORY_ENTRY_EXPORT].VirtualAddress
             if export_directory_rva == 0:
@@ -168,19 +165,24 @@ def PEFile(baseaddr, target=None):
             #return self._IMAGE_EXPORT_DIRECTORY.from_address(export_directory_addr)
 
 
-        @property
+        @utils.fixedpropety
         def exports(self):
+            print("ASK FOR EXPORTS {0}".format(target))
+
             res = {}
-            raw_exports = self.get_EXPORT_DIRECTORY().get_exports()
+            exp_dir = self.get_EXPORT_DIRECTORY()
+            if exp_dir is None:
+                return res
+            raw_exports = exp_dir.get_exports()
             for id, rva_addr, rva_name in raw_exports:
                 res[id] = rva_addr.addr
                 if rva_name is not None:
                     res[rva_name.str] = rva_addr.addr
             return res
-            
+
 
         # TODO: get imports by parsing other modules exports if no INT
-        @property
+        @utils.fixedpropety
         def imports(self):
             res = {}
             for import_descriptor in self.get_IMPORT_DESCRIPTORS():
@@ -189,8 +191,8 @@ def PEFile(baseaddr, target=None):
                 if INT is not None:
                     for iat_entry, (ord, name) in zip(IAT, INT):
                         # str(name.decode()) -> python2 and python3 compatible for str result
-                        iat_entry.name = str(name.decode()) if name else name
                         iat_entry.ord = ord
+                        iat_entry.name = str(name.decode()) if name else ""
                 res.setdefault(import_descriptor.Name.str.lower(),[]).extend(IAT)
             return res
 
@@ -199,57 +201,45 @@ def PEFile(baseaddr, target=None):
             _fields_ = transform_ctypes_fields(IMAGE_IMPORT_DESCRIPTOR, {"Name" : StringRVa, "OriginalFirstThunk" : RVA, "FirstThunk" : RVA})
 
             def get_INT(self):
-                
+
                 if not self.OriginalFirstThunk.value:
                     return None
                 int_addr = self.OriginalFirstThunk.addr
-                #int_entry = THUNK_DATA.from_address(int_addr)
                 int_entry =  create_structure_at(THUNK_DATA, int_addr)
                 res = []
                 while int_entry.Ordinal:
                     if int_entry.Ordinal & IMAGE_ORDINAL_FLAG:
                         res += [(int_entry.Ordinal & 0x7fffffff, None)]
                     else:
-                        #import_by_name = IMPORT_BY_NAME.from_address(baseaddr + int_entry.AddressOfData)
-                        
                         import_by_name = create_structure_at(IMPORT_BY_NAME, baseaddr + int_entry.AddressOfData)
-                        
-                        if proc_bitness == 32 and ctypes_structure_transformer == rctypes.transform_type_to_remote64bits:
-                            name = rctypes.Remote_c_char_p64(baseaddr + int_entry.AddressOfData + type(import_by_name).Name.offset, target=target).value
-                            #name = rctypes.Remote_c_char_p64.from_buffer_with_target(bytearray(struct.pack("<Q", baseaddr + int_entry.AddressOfData + type(import_by_name).Name.offset)), target=target).value
+                        name_address = baseaddr + int_entry.AddressOfData + type(import_by_name).Name.offset
+                        if proc_bitness == 32 and targetedbitness == 64:
+                            name = rctypes.Remote_c_char_p64(name_address, target=target).value
                         else:
-                            name = ctypes.c_char_p(ctypes.addressof(import_by_name) + IMPORT_BY_NAME.Name.offset).value # FIXIT
-                        
-                        
+                            name = ctypes.c_char_p(name_address).value
                         res.append((import_by_name.Hint, name))
                     int_addr += ctypes.sizeof(type(int_entry))
-                    #int_entry = THUNK_DATA.from_address(int_addr)
                     int_entry =  create_structure_at(THUNK_DATA, int_addr)
                 return res
 
             def get_IAT(self):
                 iat_addr = self.FirstThunk.addr
-                #iat_entry = THUNK_DATA.from_address(iat_addr)
                 iat_entry =  create_structure_at(THUNK_DATA, iat_addr)
                 res = []
                 while iat_entry.Ordinal:
                     res.append(IATEntry.create(iat_addr, -1, "??"))
                     iat_addr += ctypes.sizeof(type(iat_entry))
-                    #iat_entry = THUNK_DATA.from_address(iat_addr)
                     iat_entry =  create_structure_at(THUNK_DATA, iat_addr)
                 return res
-                
+
         # Will be usable as `self._IMAGE_EXPORT_DIRECTORY`
         class _IMAGE_EXPORT_DIRECTORY(ctypes.Structure):
             _fields_ = transform_ctypes_fields(IMAGE_EXPORT_DIRECTORY, {"Name" : StringRVa, "AddressOfFunctions" : RVA, "AddressOfNames" : RVA, "AddressOfNameOrdinals": RVA})
-            
+
             def get_exports(self):
-                #NameOrdinals = (WORD * self.NumberOfNames).from_address(self.AddressOfNameOrdinals.addr)
                 NameOrdinals =  create_structure_at((WORD * self.NumberOfNames), self.AddressOfNameOrdinals.addr)
                 NameOrdinals = list(NameOrdinals)
-                #Functions = (RVA * self.NumberOfFunctions).from_address(self.AddressOfFunctions.addr)
                 Functions = create_structure_at((RVA * self.NumberOfFunctions), self.AddressOfFunctions.addr)
-                #Names = (StringRVa * self.NumberOfNames).from_address(self.AddressOfNames.addr)
                 Names = create_structure_at((StringRVa * self.NumberOfNames), self.AddressOfNames.addr)
                 res = []
                 for nb,func in enumerate(Functions):
@@ -259,7 +249,7 @@ def PEFile(baseaddr, target=None):
                         name = None
                     res.append((nb, func, name))
                 return res
-        
+
     current_pe = PEFile()
 
     class IMAGE_DOS_HEADER(ctypes.Structure):
@@ -286,12 +276,10 @@ def PEFile(baseaddr, target=None):
         ]
 
         def get_NT_HEADER(self):
-            
             if targetedbitness == 32:
                 return create_structure_at(IMAGE_NT_HEADERS32, baseaddr + self.e_lfanew)
             return create_structure_at(IMAGE_NT_HEADERS64, baseaddr + self.e_lfanew)
-            #return IMAGE_NT_HEADERS64.from_address(baseaddr + self.e_lfanew)
-            
+
     return current_pe
 
 tst = PEFile.__code__.co_consts[13]
