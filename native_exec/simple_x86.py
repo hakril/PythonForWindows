@@ -194,7 +194,7 @@ def accept_as_32immediat(x):
 class Imm8(object):
     def accept_arg(self, previous, args):
         try:
-            x = int(args[0], 0)
+            x = int(args[0])
         except (ValueError, TypeError):
             return (None, None)
         try:
@@ -206,7 +206,7 @@ class Imm8(object):
 class Imm16(object):
     def accept_arg(self, previous, args):
         try:
-            x = int(args[0], 0)
+            x = int(args[0])
         except (ValueError, TypeError):
             return (None, None)
         try:
@@ -218,7 +218,7 @@ class Imm16(object):
 class Imm32(object):
     def accept_arg(self, previous, args):
         try:
-            x = int(args[0], 0)
+            x = int(args[0])
         except (ValueError, TypeError):
             return (None, None)
         try:
@@ -324,7 +324,7 @@ class ModRM_REG__MEM(object):
         elif arg2.base.upper() == "EBP":
             force_displacement = 1
         else:
-            force_displacement = None
+            force_displacement = 0
 
         self.reg = X86RegisterSelector.get_reg_bits(arg1)
         self.rm = BitArray(3, "100")
@@ -408,7 +408,7 @@ class Instruction(object):
         raise ValueError("Cannot encode <{0} {1}>:(".format(type(self).__name__, initial_args))
 
     def get_code(self):
-        return self.value.dump()
+        return bytes(self.value.dump())
 
 class DelayedJump(object):
     def __init__(self, type, label):
@@ -551,7 +551,7 @@ class MultipleInstr(object):
     def get_code(self):
         if self.expected_labels:
             raise ValueError("Unresolved labels: {self.expected_labels}".format(self=self))
-        return "".join([str(x[1].get_code()) for x in sorted(self.instrs.items())])
+        return b"".join([x[1].get_code() for x in sorted(self.instrs.items())])
 
     def add_instruction(self, instruction):
         if isinstance(instruction, Label):
