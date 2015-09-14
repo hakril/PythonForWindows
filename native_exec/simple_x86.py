@@ -7,18 +7,18 @@ class BitArray(object):
         self.size = size
         if len(bits) > size:
             raise ValueError("size > len(bits)")
-            
+
         bits_list = []
         for bit in bits:
             x = int(bit)
             if x not in [0, 1]:
                 raise ValueError("Not expected bits value {0}".format(x))
             bits_list.append(x)
-            
+
         self.array = bits_list
         if size > len(self.array):
             self.array = ([0] * (size - len(self.array))) + self.array
-            
+
     def dump(self):
         res = []
         for i in range(self.size // 8):
@@ -27,7 +27,7 @@ class BitArray(object):
                 c = (c << 1) + x
             res.append(c)
         return bytearray((res))
-        
+
     def __getitem__(self, slice):
         return self.array[slice]
 
@@ -37,31 +37,31 @@ class BitArray(object):
 
     def __repr__(self):
         return repr(self.array)
-        
+
     def __add__(self, other):
         if not isinstance(other, BitArray):
             return NotImplemented
         return BitArray(self.size + other.size, self.array + other.array)
-        
+
     def to_int(self):
         return int("".join([str(i) for i in self.array]), 2)
-    
+
     @classmethod
-    def from_string(cls): 
+    def from_string(cls, str_base):
         l = []
         for c in bytearray(reversed(str_base)):
             for i in range(8):
                 l.append(c & 1)
                 c = c >> 1
-        self.array = l
-    
+        return cls(len(str_base) * 8, list(reversed(l)))
+
     @classmethod
     def from_int(cls, size, x):
         if x < 0:
             x = x & ((2 ** size) - 1)
         return cls(size, bin(x)[2:])
 
-# Rules: bytes only !!!!
+# Rule: bytes only !!!!
 
 mem_access = collections.namedtuple('mem_access', ['base', 'index', 'scale', 'disp'])
 x86_regs = ['EAX', 'ECX', 'EDX', 'EBX', 'ESP', 'EBP', 'ESI', 'EDI']
@@ -69,8 +69,12 @@ x86_regs = ['EAX', 'ECX', 'EDX', 'EBX', 'ESP', 'EBP', 'ESI', 'EDI']
 def create_displacement(base=None, index=None, scale=None, disp=0):
     if index is not None and scale is None:
         scale = 1
+    if scale and index is None:
+        raise ValueError("Cannot create displacement with scale and no index")
+    if scale and index.upper() == "ESP":
+        raise ValueError("Cannot create displacement with index == ESP")
     return mem_access(base, index, scale, disp)
-    
+
 def mem(data):
     """Parse a memory access string"""
     if not isinstance(data, str):
@@ -78,7 +82,7 @@ def mem(data):
     data = data.strip()
     if not (data.startswith("[") and data.endswith("]")):
         raise ValueError("mem acces expect <[EXPR]>")
-    # A l'arrache.. j'aime pas le parsing de trucs   
+    # A l'arrache.. j'aime pas le parsing de trucs
     data = data[1:-1]
     items = data.split("+")
     parsed_items = {}
@@ -120,79 +124,115 @@ def mem(data):
                 raise ValueError("Multiple displacement in mem expression <{0}>".format(data))
             parsed_items['disp'] = disp
     return create_displacement(**parsed_items)
-            
-    
+
+
 class X86RegisterSelector(object):
     size = 3 # bits
     reg_order = ['EAX', 'ECX', 'EDX', 'EBX', 'ESP', 'EBP', 'ESI', 'EDI']
     reg_opcode = {v : BitArray.from_int(size=3, x=i) for i, v in enumerate(reg_order)}
-    
+
     def accept_arg(self, previous, args):
         x = args[0]
         try:
             return (1, self.reg_opcode[x.upper()])
         except (KeyError, AttributeError):
             return (None, None)
-        
-    @classmethod    
+
+    @classmethod
     def get_reg_bits(cls, name):
         return cls.reg_opcode[name.upper()]
-       
+
 class RegisterEax(object):
     def accept_arg(self, previous, args):
         x = args[0]
         if isinstance(x, str) and x.upper() == 'EAX':
             return (1, BitArray(0, []))
         return None, None
-        
+
 class FixedRegister(object):
     def __init__(self, register):
         self.reg = register.upper()
-        
+
     def accept_arg(self, previous, args):
         x = args[0]
         if isinstance(x, str) and x.upper() == self.reg:
             return (1, BitArray(0, []))
         return None, None
-    
-        
+
 class RawBits(BitArray):
     def accept_arg(self, previous, args):
         return (0, self)
-        
-class Immediat(object):
-    def __init__(self, add=0):
-        self.add = add
-        
-    def __add__(self, x):
-        return type(self)(self.add + x)
-        
-class Imm32(Immediat):
+
+# Immediat value logique
+# All 8/16 bits stuff are sign extended
+
+class ImmediatOverflow(ValueError):
+    pass
+
+def accept_as_8immediat(x):
+    try:
+        return struct.pack("<b", x)
+    except struct.error:
+        raise ImmediatOverflow("8bits signed Immediat overflow")
+
+def accept_as_16immediat(x):
+    try:
+        return struct.pack("<h", x)
+    except struct.error:
+        raise ImmediatOverflow("16bits signed Immediat overflow")
+
+def accept_as_32immediat(x):
+    try:
+        return struct.pack("<i", x)
+    except struct.error:
+        pass
+    try:
+        return struct.pack("<I", x)
+    except struct.error:
+        raise ImmediatOverflow("32bits signed Immediat overflow")
+
+class Imm8(object):
     def accept_arg(self, previous, args):
         try:
-            x = int(args[0]) + self.add
+            x = int(args[0], 0)
         except (ValueError, TypeError):
             return (None, None)
-        return (1, BitArray.from_int(32, X86.to_little_endian(x, size=32)))
-        
-class Imm8(Immediat):
+        try:
+            imm8 = accept_as_16immediat(x)
+        except ImmediatOverflow:
+            return None, None
+        return (1, BitArray.from_string(imm8))
+
+class Imm16(object):
     def accept_arg(self, previous, args):
         try:
-            x = int(args[0]) + self.add
+            x = int(args[0], 0)
         except (ValueError, TypeError):
             return (None, None)
-        if not -128 <= x <= 127:
+        try:
+            imm16 = accept_as_16immediat(x)
+        except ImmediatOverflow:
+            return None, None
+        return (1, BitArray.from_string(imm16))
+
+class Imm32(object):
+    def accept_arg(self, previous, args):
+        try:
+            x = int(args[0], 0)
+        except (ValueError, TypeError):
             return (None, None)
-        return (1, BitArray.from_int(8, X86.to_little_endian(x, size=8)))
+        try:
+            imm32 = accept_as_32immediat(x)
+        except ImmediatOverflow:
+            return None, None
+        return (1, BitArray.from_string(imm32))
 
 class ModRM(object):
-    size = 8
-    
     def __init__(self, sub_modrm, accept_reverse=True, has_direction_bit=True):
         self.accept_reverse = accept_reverse
         self.has_direction_bit = has_direction_bit
         self.sub = sub_modrm
-        
+
     def accept_arg(self, previous, args):
         if len(args) < 2:
             raise ValueError("Missing arg for modrm")
@@ -212,7 +252,7 @@ class ModRM(object):
                     previous[0][-2] = d.direction
                 return (2, d.mod + d.reg + d.rm + d.after)
         return (None, None)
-        
+
 class X86(object):
     @staticmethod
     def is_reg(name):
@@ -220,11 +260,11 @@ class X86(object):
             return name.upper() in x86_regs
         except AttributeError: # Not a string
             return False
-        
-    @staticmethod 
+
+    @staticmethod
     def is_mem_acces(data):
         return isinstance(data, mem_access)
-    
+
     @staticmethod
     def mem_access_has_only(mem_access, names):
         if not X86.is_mem_acces(mem_access):
@@ -236,139 +276,120 @@ class X86(object):
             if v is None and f in names:
                 return False
         return True
-      
-    @staticmethod
-    def to_little_endian(i, size=32):
-        pack = {8: 'B', 16 : 'H', 32 : 'I'} 
-        s = pack[size]
-        mask = (1 << size) - 1
-        i = i & mask
-        return struct.unpack("<" + s, struct.pack(">" + s, i))[0]
-    
- 
+
 class ModRM_REG__REG(object):
     @classmethod
     def match(cls, arg1, arg2):
         return X86.is_reg(arg1) and X86.is_reg(arg2)
-        
+
     def __init__(self, arg1, arg2, reversed):
         self.mod = BitArray(2, "11")
         self.reg = X86RegisterSelector.get_reg_bits(arg2)
         self.rm = X86RegisterSelector.get_reg_bits(arg1)
         self.after = BitArray(0, "")
         self.direction = 0
-        
-class ModRM_REG__DEREF_REG(object):
-    @classmethod
-    def match(cls, arg1, arg2):
-        return X86.is_reg(arg1) and arg1 not in ["ESP", "EBP"] and X86.is_mem_acces(arg2) and X86.mem_access_has_only(arg2, ["base"])
-        
-    def __init__(self, arg1, arg2, reversed):
-        self.mod = BitArray(2, "00")
-        self.reg = X86RegisterSelector.get_reg_bits(arg1)
-        self.rm = X86RegisterSelector.get_reg_bits(arg2.base)
-        self.after = BitArray(0, "")
-        self.direction = not reversed        
-        
-class ModRM_REG__DEREF_REG_IMM(object):
-    @classmethod
-    def match(cls, arg1, arg2):
-        return X86.is_reg(arg1) and X86.is_mem_acces(arg2) and X86.mem_access_has_only(arg2, ["base", "disp"]) and arg2.base != "ESP"
-        
-    def __init__(self, arg1, arg2, reversed):
-        self.mod = BitArray(2, "10")
-        self.reg = X86RegisterSelector.get_reg_bits(arg1)
-        self.rm = X86RegisterSelector.get_reg_bits(arg2.base)
-        self.after = BitArray.from_int(32, X86.to_little_endian(arg2.disp))
-        self.direction = not reversed
-        
-def sib_from_mem_access(mem_access):
-    scale = {1: 0, 2 : 1, 4: 2, 8 : 3}
-    if mem_access.scale is None and mem_access.index is None:
-        return BitArray.from_int(2, 0) + BitArray.from_int(3, 0b100) + X86RegisterSelector.get_reg_bits(mem_access.base)
-    if mem_access.scale not in scale:
-        raise ValueError("Invalid scale for mem access <{0}>".format(mem_access.scale))
-    return BitArray.from_int(2, scale[mem_access.scale]) + X86RegisterSelector.get_reg_bits(mem_access.index) + X86RegisterSelector.get_reg_bits(mem_access.base)
-    
-        
-class ModRM_REG__DEREF_SIB(object):
-    # Only handle reg, [esp+x] now :(
+
+class ModRM_REG__MEM(object):
     @classmethod
     def match(cls, arg1, arg2):
         return X86.is_reg(arg1) and X86.is_mem_acces(arg2)
-        
+
     def __init__(self, arg1, arg2, reversed):
-        if not arg2.disp:
+        # ARG1 : REG
+        # ARG2 : [MEM]
+        if X86.mem_access_has_only(arg2, ["disp"]):
             self.mod = BitArray(2, "00")
+            self.reg = X86RegisterSelector.get_reg_bits(arg1)
+            self.rm = BitArray(3, "101")
+            try:
+                self.after = BitArray.from_string(accept_as_32immediat(arg2.disp))
+            except ImmediatOverflow:
+                raise ImmediatOverflow("Interger32 overflow for displacement {0}".format(hex(arg2.disp)))
+            self.direction = not reversed
+            return
+        # Those registers cannot be addressed without SIB
+        # No index -> no scale -> no SIB
+        FIRE_UP_SIB = (arg2.base and arg2.base.upper() in ["ESP", "EBP"]) or arg2.index
+
+        if not FIRE_UP_SIB:
+            self.reg = X86RegisterSelector.get_reg_bits(arg1)
+            self.rm = X86RegisterSelector.get_reg_bits(arg2.base)
+            self.compute_displacement(arg2.disp)
+            self.direction = not reversed
+            return
+        # FIRE UP THE SIB
+        # Handle no base and base == EBP special case
+        if not arg2.base:
+            force_displacement = 4
+        elif arg2.base.upper() == "EBP":
+            force_displacement = 1
         else:
-            self.mod = BitArray(2, "10")
+            force_displacement = None
+
         self.reg = X86RegisterSelector.get_reg_bits(arg1)
         self.rm = BitArray(3, "100")
-        # Todo -> def sib_from_displacement
-        sib = sib_from_mem_access(arg2)
-        if arg2.disp:
-            self.after = sib + BitArray.from_int(32, X86.to_little_endian(arg2.disp))
-        else:
-            self.after = sib
+        self.compute_displacement(arg2.disp, force_displacement)
+        self.after = self.compute_sib(arg2) + self.after
+        if not arg2.base:
+            self.mod = BitArray(2, "00")
         self.direction = not reversed
-        
-#class ModRM_REG_IMM(object):
-#    @classmethod
-#    def match(cls, arg1, arg2):
-#        return arg1 in x86_regs and arg2 in x86_regs
-#        
-#    def __init__(self, arg1, arg2):
-#        self.mod = BitArray(2, "11")
-#        self.reg = X86RegisterSelector.get_reg_bits(arg2)
-#        self.rm = X86RegisterSelector.get_reg_bits(arg1)
-#        self.direction = 0
-        
-class ModRM_REG__DEREF_IMM(object):
-    @classmethod
-    def match(cls, arg1, arg2):
-        return X86.is_reg(arg1) and X86.is_mem_acces(arg2) and X86.mem_access_has_only(arg2, ["disp"])
-        
-    def __init__(self, arg1, arg2, reversed):
-        self.mod = BitArray(2, "00")
-        self.reg = X86RegisterSelector.get_reg_bits(arg1)
-        self.rm = BitArray(3, "101")
-        self.after = BitArray.from_int(32, X86.to_little_endian(arg2.disp))
-        self.direction = not reversed
-        
+
+    def compute_displacement(self, displacement, force_displacement=0):
+        if not displacement and not force_displacement:
+            self.mod = BitArray(2, "00")
+            self.after = BitArray(0, "")
+            return
+        # Pack in a byte
+        try:
+            v = accept_as_8immediat(displacement)
+        except ImmediatOverflow:
+            v = None
+        if v is not None and force_displacement <= 1:
+            self.mod = BitArray(2, "01")
+            self.after = BitArray.from_string(v)
+            return
+        # Pack in a dword
+        try:
+            v = accept_as_32immediat(displacement)
+        except ImmediatOverflow:
+            v = None
+        if v is not None and force_displacement <= 4:
+            self.mod = BitArray(2, "10")
+            self.after = BitArray.from_string(v)
+            return
+        raise ValueError("Displacement {0} is too big".format(hex(displacement)))
+
+    def compute_sib(self, mem_access):
+        scale = {1: 0, 2 : 1, 4: 2, 8 : 3}
+        if mem_access.index is None:
+            return BitArray(2, "00") + BitArray(3, "100") + X86RegisterSelector.get_reg_bits(mem_access.base)
+        if mem_access.scale not in scale:
+            raise ValueError("Invalid scale for mem access <{0}>".format(mem_access.scale))
+        if mem_access.base is None:
+            return BitArray.from_int(2, scale[mem_access.scale]) + X86RegisterSelector.get_reg_bits(mem_access.index) + BitArray(3, "101")
+        return BitArray.from_int(2, scale[mem_access.scale]) + X86RegisterSelector.get_reg_bits(mem_access.index) + X86RegisterSelector.get_reg_bits(mem_access.base)
+
+
 class Slash(object):
     "No idea for the name: represent the modRM for single args + encoding in reg (/7 in cmp in man intel)"
-    
-    def __init__(self, reg):
+
+    def __init__(self, reg_num):
         "reg = 7 for /7"
-        self.mod = None
-        self.reg = BitArray.from_int(3, reg)
-        self.rm = None
-        
+        self.reg = x86_regs[reg_num]
+
     def accept_arg(self, previous, args):
-        x = args[0]
-        ok, bits = X86RegisterSelector().accept_arg(None, [x])
-        if ok is not None:
-            self.mod = BitArray(2, "11")
-            self.rm = bits
-            return 1, self.mod + self.reg + self.rm
-        if X86.mem_access_has_only(x, ["base"]) and x.base not in ['ESP', 'EBP']:
-            self.mod = BitArray(2, "00")
-            ok, bits = X86RegisterSelector().accept_arg(None, [x.base])
-            self.rm = bits
-            return 1, self.mod + self.reg + self.rm
-        # TODO: Other
-        
-        if X86.mem_access_has_only(x, ["base", "disp"]):
-            self.mod = BitArray(2, "10")
-            ok, bits = X86RegisterSelector().accept_arg(None, [x.base])
-            self.rm = bits
-            return 1, self.mod + self.reg + self.rm + BitArray.from_int(32, X86.to_little_endian(x.disp))
-        return None, None
-    
-         
+        if len(args) < 1:
+            raise ValueError("Missing arg for Slash")
+        # Reuse all the MODRm logique with the reg as our self.reg
+        # The sens of param is strange I need to fix the `reversed` logique
+        arg_consum, value = ModRM([ModRM_REG__REG, ModRM_REG__MEM]).accept_arg(previous, args[:1] + [self.reg] + args[1:])
+        if value is None:
+            return arg_consum, value
+        return arg_consum-1, value
+
 class Instruction(object):
     encoding = []
-    
+
     def __init__(self, *initial_args):
         for type_encoding in self.encoding:
             args = list(initial_args)
@@ -385,10 +406,10 @@ class Instruction(object):
                 self.value = sum(res, BitArray(0, ""))
                 return
         raise ValueError("Cannot encode <{0} {1}>:(".format(type(self).__name__, initial_args))
-        
+
     def get_code(self):
         return self.value.dump()
- 
+
 class DelayedJump(object):
     def __init__(self, type, label):
         self.type = type
@@ -402,121 +423,118 @@ class JmpType(Instruction):
                 return DelayedJump(cls, arg)
         return super(JmpType, cls).__new__(cls, *initial_args)
 
-
 class Push(Instruction):
     encoding = [(RawBits.from_int(5, 0x50 >> 3), X86RegisterSelector()),
                 (RawBits.from_int(8, 0x68), Imm32())]
-    
+
 class Pop(Instruction):
     encoding = [(RawBits.from_int(5, 0x58 >> 3), X86RegisterSelector())]
-    
+
 class Dec(Instruction):
     encoding = [(RawBits.from_int(5, 0x48 >> 3), X86RegisterSelector())]
-    
+
 class Inc(Instruction):
     encoding = [(RawBits.from_int(5, 0x40 >> 3), X86RegisterSelector())]
-    
+
 class Add(Instruction):
     encoding = [(RawBits.from_int(8, 0x05), RegisterEax(), Imm32()),
                 (RawBits.from_int(8, 0x81), Slash(0), Imm32()),
-                (RawBits.from_int(8, 0x01), ModRM([ModRM_REG__REG, ModRM_REG__DEREF_REG, ModRM_REG__DEREF_REG_IMM, ModRM_REG__DEREF_IMM, ModRM_REG__DEREF_SIB])),]
-                
+                (RawBits.from_int(8, 0x01), ModRM([ModRM_REG__REG, ModRM_REG__MEM])),]
+
 class Sub(Instruction):
     encoding = [(RawBits.from_int(8, 0x2D), RegisterEax(), Imm32()),
                 (RawBits.from_int(8, 0x81), Slash(5), Imm32())]
-    
+
 class Mov(Instruction):
-    encoding = [(RawBits.from_int(8, 0x89), ModRM([ModRM_REG__REG, ModRM_REG__DEREF_REG, ModRM_REG__DEREF_REG_IMM, ModRM_REG__DEREF_IMM, ModRM_REG__DEREF_SIB])),
+    encoding = [(RawBits.from_int(8, 0x89), ModRM([ModRM_REG__REG, ModRM_REG__MEM])),
                 (RawBits.from_int(5, 0xb8 >> 3), X86RegisterSelector(), Imm32())]
-                
+
 class Lea(Instruction):
-    encoding = [(RawBits.from_int(8, 0x8d), ModRM([ModRM_REG__DEREF_REG, ModRM_REG__DEREF_REG_IMM, ModRM_REG__DEREF_IMM, ModRM_REG__DEREF_SIB], accept_reverse=False, has_direction_bit=False))]
-    
+    encoding = [(RawBits.from_int(8, 0x8d), ModRM([ModRM_REG__MEM], accept_reverse=False, has_direction_bit=False))]
+
 class Call(Instruction):
     encoding = [(RawBits.from_int(13, 0xffd0 >> 3), X86RegisterSelector())]
-    
+
 class Cmp(Instruction):
     encoding = [(RawBits.from_int(8, 0x3d), RegisterEax(), Imm32()),
-                (RawBits.from_int(8, 0x81), Slash(7), Imm32()), 
-                (RawBits.from_int(8, 0x3b), ModRM([ModRM_REG__REG, ModRM_REG__DEREF_REG, ModRM_REG__DEREF_REG_IMM, ModRM_REG__DEREF_IMM, ModRM_REG__DEREF_SIB])), ]
-                
+                (RawBits.from_int(8, 0x81), Slash(7), Imm32()),
+                (RawBits.from_int(8, 0x3b), ModRM([ModRM_REG__REG, ModRM_REG__MEM])),]
+
 class Out(Instruction):
-    encoding = [(RawBits.from_int(8, 0xee), FixedRegister('DX'), FixedRegister('AL')), 
+    encoding = [(RawBits.from_int(8, 0xee), FixedRegister('DX'), FixedRegister('AL')),
                 (RawBits.from_int(16, 0x66ef), FixedRegister('DX'), FixedRegister('AX')), # Fuck-it hardcoded prefix for now
                 (RawBits.from_int(8, 0xef), FixedRegister('DX'), FixedRegister('EAX'))]
-                
+
 class In(Instruction):
-    encoding = [(RawBits.from_int(8, 0xec), FixedRegister('AL'), FixedRegister('DX')), 
+    encoding = [(RawBits.from_int(8, 0xec), FixedRegister('AL'), FixedRegister('DX')),
                 (RawBits.from_int(16, 0x66ed), FixedRegister('AX'), FixedRegister('DX')), # Fuck-it hardcoded prefix for now
                 (RawBits.from_int(8, 0xed), FixedRegister('EAX'), FixedRegister('DX'))]
 
+class JmpImm(object):
+    accept_as_Ximmediat = None
+    def __init__(self, sub):
+        self.sub = sub
 
-class JmpImm8(Immediat):
-    def __init__(self, sub):
-        self.sub = sub
     def accept_arg(self, previous, args):
         try:
-            x = int(args[0])
+            jump_size = int(args[0])
         except (ValueError, TypeError):
             return (None, None)
-        if not (-128 + self.sub) <= x <= 127:
-            return (None, None)
-        x -= self.sub
-        return (1, BitArray.from_int(8, X86.to_little_endian(x, size=8)))
-        
-class JmpImm32(Immediat):
-    def __init__(self, sub):
-        self.sub = sub
-    def accept_arg(self, previous, args):
+        jump_size -= self.sub
         try:
-            x = int(args[0])
-        except (ValueError, TypeError):
+            jmp_imm = self.accept_as_Ximmediat(jump_size)
+        except ImmediatOverflow:
             return (None, None)
-        #if not (-128 + self.ADD) <= x <= 127:
-        #    return (None, None)
-        x -= self.sub
-        return (1, BitArray.from_int(32, X86.to_little_endian(x, size=32)))
-                
+        return (1, BitArray.from_string(jmp_imm))
+
+class JmpImm8(JmpImm):
+    accept_as_Ximmediat = accept_as_8immediat
+
+class JmpImm32(JmpImm):
+    accept_as_Ximmediat = accept_as_32immediat
+
+
 class Jmp(JmpType):
     encoding = [(RawBits.from_int(8, 0xeb), JmpImm8(2)),
                 (RawBits.from_int(8, 0xe9), JmpImm32(5))]
-                
+
 class Jz(JmpType):
     encoding = [(RawBits.from_int(8, 0x74), JmpImm8(2)),
                 (RawBits.from_int(16, 0x0f84), JmpImm32(6))]
-  
+
 class Jnz(JmpType):
     encoding = [(RawBits.from_int(8, 0x75), JmpImm8(2)),
                 (RawBits.from_int(16, 0x0f85), JmpImm32(6))]
-                
+
 class Xor(Instruction):
     encoding = [(RawBits.from_int(8, 0x31), ModRM([ModRM_REG__REG]))]
-    
+
 class Ret(Instruction):
     encoding = [(RawBits.from_int(8, 0xc3),)]
-    
+
 class Nop(Instruction):
     encoding = [(RawBits.from_int(8, 0x90),)]
-    
+
 class Retf(Instruction):
     encoding = [(RawBits.from_int(8, 0xcb),)]
-    
-class _NopArtifact(Nop):
-    pass
-    
+
 class Int3(Instruction):
     encoding = [(RawBits.from_int(8, 0xcc),)]
-    
+
+class _NopArtifact(Nop):
+    """Special NOP used in shellcode reduction"""
+    pass
+
 class Label(object):
     def __init__(self, name):
         self.name = name
-        
+
 def JmpAt(addr):
     code = MultipleInstr()
     code += Push(addr)
     code += Ret()
     return code
-     
+
 class MultipleInstr(object):
     JUMP_SIZE = 6
     def __init__(self, init_instrs=()):
@@ -529,12 +547,12 @@ class MultipleInstr(object):
         self.size = 0
         for i in init_instrs:
             self += i
-        
+
     def get_code(self):
         if self.expected_labels:
             raise ValueError("Unresolved labels: {self.expected_labels}".format(self=self))
         return "".join([str(x[1].get_code()) for x in sorted(self.instrs.items())])
-        
+
     def add_instruction(self, instruction):
         if isinstance(instruction, Label):
             return self.add_label(instruction)
@@ -546,7 +564,7 @@ class MultipleInstr(object):
             self.size += len(instruction.get_code())
             return
         raise ValueError("Don't know what to do with {0} of type {1}".format(instruction, type(instruction)))
-            
+
     def add_label(self, label):
         if label.name not in self.expected_labels:
             # Label that have no jump before definition
@@ -573,7 +591,7 @@ class MultipleInstr(object):
         if not self.expected_labels:
             # No more un-resolved label (for now): time to reduce the shellcode
             self._reduce_shellcode()
-        
+
     def add_delayed_jump(self, jump):
         dst = jump.label
         if dst in self.labels:
@@ -591,7 +609,7 @@ class MultipleInstr(object):
         self.expected_labels.setdefault(dst, []).append(jump)
         self.size += self.JUMP_SIZE
         return
-        
+
     def _reduce_shellcode(self):
         to_remove = [offset for offset,instr in self.instrs.items() if type(instr) == _NopArtifact]
         while to_remove:
@@ -599,7 +617,7 @@ class MultipleInstr(object):
             # _remove_nop_artifact will change the offsets of the nop
             # Need to refresh these offset
             to_remove = [offset for offset,instr in self.instrs.items() if type(instr) == _NopArtifact]
-            
+
     def _remove_nop_artifact(self, offset):
         # Remove a NOP from the shellcode
         for src, dst in self.computed_jump:
@@ -611,20 +629,20 @@ class MultipleInstr(object):
                     new_jmp = type(old_jmp)(dst - src - 1)
                 else:
                     new_jmp = type(old_jmp)(dst - src + 1)
-                new_jmp_size = len(new_jmp.get_code()) 
+                new_jmp_size = len(new_jmp.get_code())
                 if new_jmp_size > old_jump_size:
-                    raise ValueError("Wtf jump of smaller size of bigger.. ABORT")
+                    raise ValueError("Wtf jump of smaller size is bigger.. ABORT")
                 self.instrs[src] = new_jmp
                 # Add other _NopArtifact if jump instruction size is reduced
                 for i in range(old_jump_size - new_jmp_size):
                     self.instrs[src + new_jmp_size + i] = _NopArtifact()
-                    
-        # dec offset of all Label after the NOP        
+
+        # dec offset of all Label after the NOP
         for name, labeloffset in self.labels.items():
-            if labeloffset > offset:    
+            if labeloffset > offset:
                    self.labels[name] = labeloffset - 1
-                   
-        # dec offset of all instr after the NOP           
+
+        # dec offset of all instr after the NOP
         new_instr = {}
         for instroffset, instr in self.instrs.items():
             if instroffset == offset:
@@ -644,18 +662,18 @@ class MultipleInstr(object):
         self.computed_jump = new_computed_jump
         # dec size of the shellcode
         self.size -= 1
-        
+
     def merge_shellcode(self, other):
         for offset, instr in sorted(other.instrs.items()):
             self.add_instruction(instr)
-                         
+
     def __iadd__(self, other):
         if isinstance(other, MultipleInstr):
             self.merge_shellcode(other)
         else:
             self.add_instruction(other)
         return self
-        
+
 # IDA : import windows.native_exec.simple_x86 as x86
 
 # IDA testing
@@ -666,7 +684,7 @@ try:
     in_IDA = True
 except ImportError:
     in_IDA = False
- 
+
 #def test_code():
 #    s = MultipleInstr()
 #    s += Mov('EAX', 'EAX')
@@ -689,7 +707,7 @@ except ImportError:
 #    s += Pop("EAX")
 #    s += Ret()
 #    return s
-    
+
 def test_code():
     s = MultipleInstr()
     s += Mov("Eax", "ESI")
@@ -697,18 +715,16 @@ def test_code():
     s += Dec("edi")
     s += Ret()
     return s
- 
- 
 
-if in_IDA:        
+if in_IDA:
     def reset():
         idc.MakeUnknown(idc.MinEA(), 0x1000, 0)
         for i in range(0x1000):
             idc.PatchByte(idc.MinEA() + i, 0)
-       
+
     s = test_code()
-    
+
     def tst():
         reset()
         midap.here(idc.MinEA()).write(s.get_code())
-        idc.MakeFunction(idc.MinEA()) 
+        idc.MakeFunction(idc.MinEA())
