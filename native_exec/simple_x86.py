@@ -310,7 +310,6 @@ class ModRM_REG__MEM(object):
         # Those registers cannot be addressed without SIB
         # No index -> no scale -> no SIB
         FIRE_UP_SIB = (arg2.base and arg2.base.upper() in ["ESP", "EBP"]) or arg2.index
-
         if not FIRE_UP_SIB:
             self.reg = X86RegisterSelector.get_reg_bits(arg1)
             self.rm = X86RegisterSelector.get_reg_bits(arg2.base)
