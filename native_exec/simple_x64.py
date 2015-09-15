@@ -574,6 +574,11 @@ class Pop(Instruction):
 class Call(Instruction):
     encoding = [(RawBits.from_int(8, 0xff), Slash(2))]
 
+class Xchg(Instruction):
+    default_32_bits = True
+    encoding = [(RawBits.from_int(5, 0x90 >> 3), RegisterRax(), X64RegisterSelector()),
+                (RawBits.from_int(5, 0x90 >> 3), X64RegisterSelector(), RegisterRax())]
+
 class Ret(Instruction):
     encoding = [(RawBits.from_int(8, 0xc3),)]
 

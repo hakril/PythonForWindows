@@ -381,7 +381,7 @@ class Slash(object):
             raise ValueError("Missing arg for Slash")
         # Reuse all the MODRm logique with the reg as our self.reg
         # The sens of param is strange I need to fix the `reversed` logique
-        arg_consum, value = ModRM([ModRM_REG__REG, ModRM_REG__MEM]).accept_arg(previous, args[:1] + [self.reg] + args[1:])
+        arg_consum, value = ModRM([ModRM_REG__REG, ModRM_REG__MEM], has_direction_bit=False).accept_arg(previous, args[:1] + [self.reg] + args[1:])
         if value is None:
             return arg_consum, value
         return arg_consum-1, value
@@ -451,9 +451,6 @@ class Mov(Instruction):
 class Lea(Instruction):
     encoding = [(RawBits.from_int(8, 0x8d), ModRM([ModRM_REG__MEM], accept_reverse=False, has_direction_bit=False))]
 
-class Call(Instruction):
-    encoding = [(RawBits.from_int(13, 0xffd0 >> 3), X86RegisterSelector())]
-
 class Cmp(Instruction):
     encoding = [(RawBits.from_int(8, 0x3d), RegisterEax(), Imm32()),
                 (RawBits.from_int(8, 0x81), Slash(7), Imm32()),
@@ -507,6 +504,12 @@ class Jnz(JmpType):
 
 class Xor(Instruction):
     encoding = [(RawBits.from_int(8, 0x31), ModRM([ModRM_REG__REG]))]
+
+class Xchg(Instruction):
+    encoding = [(RawBits.from_int(5, 0x90 >> 3), RegisterEax(), X86RegisterSelector()), (RawBits.from_int(5, 0x90 >> 3), X86RegisterSelector(), RegisterEax())]
+
+class Call(Instruction):
+    encoding = [(RawBits.from_int(8, 0xff), Slash(2))]
 
 class Ret(Instruction):
     encoding = [(RawBits.from_int(8, 0xc3),)]

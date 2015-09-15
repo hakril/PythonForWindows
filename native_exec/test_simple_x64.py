@@ -96,3 +96,6 @@ TestInstr(Push)(0x42)
 TestInstr(Push)(-1)
 TestInstr(Call)('RAX')
 TestInstr(Call)(mem('[RAX + RCX * 8]'))
+
+TestInstr(Xchg)('RAX', 'RSP')
+assert Xchg('RAX', 'RCX').get_code() == Xchg('RCX', 'RAX').get_code()
