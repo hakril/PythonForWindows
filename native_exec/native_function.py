@@ -145,11 +145,8 @@ def generate_stub_32(callback):
     code += x86.Mov(gstate_save_addr, 'EAX')
     
     #Save real return addr (for good argument parsing by the callback)
-    
     code += x86.Pop('EAX')
     code += x86.Mov(return_addr_save_addr, 'EAX')
-    
-    # Set call_real_function to 0 (no call by default)
     
     code += x86.Mov('EAX', c_callback)
     code += x86.Call('EAX')
@@ -213,17 +210,11 @@ def generate_stub_64(callback):
 
     ### Shellcode ###
     code = x64.MultipleInstr()
+    # Save all registers
     code += x64.Mov('RAX', save_register_space_end)
-    # A lazy working xchg RSP <-> RAX
-    code += x64.Push('RAX')
-    code += x64.Push('RSP')
-    code += x64.Pop('RAX')
-    code += x64.Pop('RSP')
+    code += x64.Xchg('RAX', 'RSP')
     code += push_all_save_register
-    # Re-set RSP to its real value
-    code += x64.Push('RAX')
-    code += x64.Pop('RSP')
-    code += x64.Pop('RAX') # Remove the Push_RAX of lazy xchg
+    code += x64.Xchg('RAX', 'RSP')
     # GOOO
     code += x64.Mov('RAX', ensure)
     code += Reserve_space_for_call
@@ -237,13 +228,13 @@ def generate_stub_64(callback):
     code += x64.Mov(return_addr_save_addr, 'RAX')
     # Restore parameters for real function call
     code += x64.Mov('RAX', save_rcx)
-    code += x64.Mov('RCX', x64.create_displacement('RAX'))
+    code += x64.Mov('RCX', x64.mem('[RAX]'))
     code += x64.Mov('RAX', save_rdx)
-    code += x64.Mov('RDX', x64.create_displacement('RAX'))
+    code += x64.Mov('RDX', x64.mem('[RAX]'))
     code += x64.Mov('RAX', save_r9)
-    code += x64.Mov('R9', x64.create_displacement('RAX'))
+    code += x64.Mov('R9', x64.mem('[RAX]'))
     code += x64.Mov('RAX', save_r8)
-    code += x64.Mov('R8', x64.create_displacement('RAX'))
+    code += x64.Mov('R8', x64.mem('[RAX]'))
     # Call python code
     code += x64.Mov('RAX', c_callback)
     code += Reserve_space_for_call
@@ -256,8 +247,7 @@ def generate_stub_64(callback):
     code += x64.Push('RAX')
     # Call release(gstate_save)
     code += x64.Mov('RAX', gstate_save_addr)
-    code += x64.Push('RAX')
-    code += x64.Pop('RCX')
+    code += x64.Mov('RCX', 'RAX')
     code += x64.Mov('RAX', release)
     code += Reserve_space_for_call
     code += Do_stack_alignement
@@ -266,16 +256,9 @@ def generate_stub_64(callback):
     code += Clean_space_for_call
     # Restore registers
     code += x64.Mov('RAX', save_register_space)
-    # A lazy working xchg RSP <-> RAX
-    code += x64.Push('RAX')
-    code += x64.Push('RSP')
-    code += x64.Pop('RAX')
-    code += x64.Pop('RSP')
+    code += x64.Xchg('RAX', 'RSP')
     code += pop_all_save_register
-    # Re-set RSP to its real value
-    code += x64.Push('RAX')
-    code += x64.Pop('RSP')
-    code += x64.Pop('RAX') # Remove the Push_RAX of lazy xchg
+    code += x64.Xchg('RAX', 'RSP')
     # Restore return value
     code += x64.Mov('RAX', return_value_save_addr)
     code += x64.Ret()
