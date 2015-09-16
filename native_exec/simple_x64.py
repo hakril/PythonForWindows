@@ -625,12 +625,12 @@ class JmpImm(object):
         try:
             jump_size = int(args[0])
         except (ValueError, TypeError):
-            return (None, None)
+            return (None, None, None)
         jump_size -= self.sub
         try:
             jmp_imm = self.accept_as_Ximmediat(jump_size)
         except ImmediatOverflow:
-            return (None, None)
+            return (None, None, None)
         return (1, BitArray.from_string(jmp_imm), None)
 
 class JmpImm8(JmpImm):
