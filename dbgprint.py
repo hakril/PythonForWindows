@@ -1,0 +1,43 @@
+import os
+import sys
+import logging
+import inspect
+
+options = {'active':False, 'cats':None}
+
+def get_stack_func_name(lvl):
+    info = inspect.stack()[lvl]
+    return info[0], info[3]
+
+def do_dbgprint(msg, type=None):
+    if (options['cats'] is None) or type.upper() in options['cats']:
+        frame, func = get_stack_func_name(2)
+        logger = logging.getLogger(frame.f_globals['__name__'] + ":" + func)
+        logger.debug(msg)
+    
+    
+def do_nothing(*args, **kwargs):
+    return None
+
+def parse_option(s):
+    if s[0] == "=":
+        s = s[1:]
+    if s:
+        cats = [x.upper() for x in s.split('-')]
+        options['cats'] = cats
+    
+    formt='DBG|%(name)s|%(message)s'
+    logging.basicConfig(format=formt, level=logging.DEBUG)
+    
+try:
+    if 'DBGPRINT' in os.environ:
+        parse_option(os.environ['DBGPRINT'])
+        dbgprint = do_dbgprint
+    elif any([opt.startswith("--DBGPRINT") for opt in sys.argv]):
+        dbgprint = do_dbgprint
+        option_str = [opt for opt in sys.argv if opt.startswith("--DBGPRINT")][0]
+        parse_option(option_str[len('--DBGPRINT'):])
+    else:
+        dbgprint = do_nothing
+except Exception as e:
+    print("dbgprint Error: {0}({1})".format(type(e), e))  
