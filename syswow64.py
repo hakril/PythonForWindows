@@ -1,39 +1,14 @@
 import struct
 import ctypes
+import codecs
 import windows
+import windows.k32testing as kernel32proxy
 import windows.native_exec.simple_x64 as x64
 from generated_def.winstructs import *
 
 # Special code for syswow64 process
 CS_32bits = 0x23
 CS_64bits = 0x33
-
-# See assembly into doc/NtCreateThreadStub_64b.asm
-Pretty_NtCreateThreadStub = """
-50 50 53 51 52 56 57 41  50 41 51 41 52 41 53 41
-54 41 55 48 C7 C0 00 00  00 00 50 48 B8 54 68 72
-65 61 64 45 78 50 48 B8  4E 74 43 72 65 61 74 65
-50 4C 8B DC 48 C7 C3 61  72 79 41 53 48 BB 4C 6F
-61 64 4C 69 62 72 53 4C  8B E4 65 48 8B 04 25 60
-00 00 00 48 8B 40 18 48  8B 40 20 48 8B D0 48 8B
-C2 48 8B 58 20 48 23 DB  74 14 48 8B 48 50 48 8B
-09 81 F9 6E 00 74 00 74  0B 48 8B 10 EB E0 68 42
-42 42 42 C3 8B 43 3C 48  03 C3 48 83 C0 18 8B 48
-70 48 03 CB 48 8B C1 50  8B 48 18 4C 8B E9 8B 50
-20 48 03 D3 48 33 C9 8B  34 8A 48 03 F3 51 49 8B
-FB 48 C7 C1 11 00 00 00  F3 A6 8B C1 59 48 FF C1
-85 C0 75 E3 48 FF C9 58  8B 50 24 48 03 D3 66 8B
-0C 4A 48 81 E1 FF FF 00  00 8B 50 1C 48 03 D3 8B
-14 8A 48 03 D3 4C 8B EA  6A 00 48 8B CC 48 C7 C2
-FF FF 1F 00 49 C7 C0 00  00 00 00 49 B9 40 40 40
-40 40 40 40 40 48 C7 C0  00 00 00 00 50 50 50 50
-50 48 B8 42 42 42 42 42  42 42 42 50 48 B8 41 41
-41 41 41 41 41 41 50 41  51 41 50 52 51 41 FF D5
-48 89 84 24 E8 00 00 00  48 83 C4 40 48 83 C4 28
-48 83 C4 20 41 5D 41 5C  41 5B 41 5A 41 59 41 58
-5F 5E 5A 59 5B 58 58
-"""
-NtCreateThreadStub = Pretty_NtCreateThreadStub.replace(" ", "").replace("\n", "").decode('hex')
 
 def genere_return_32bits_stub(ret_addr):
     ret_32b = x64.MultipleInstr()
@@ -46,6 +21,7 @@ def genere_return_32bits_stub(ret_addr):
 dummy_jump = "\xea" + struct.pack("<I", 0) + chr(CS_64bits) + "\x00\x00"
 
 def execute_64bits_code_from_syswow(shellcode):
+    """shellcode must not end by a ret"""
     if not windows.current_process.is_wow_64:
         raise ValueError("Calling execute_64bits_code_from_syswow from non-syswow process")
     addr = windows.k32testing.VirtualAlloc(dwSize=0x1000)
@@ -67,7 +43,96 @@ def execute_64bits_code_from_syswow(shellcode):
     return exec_stub()
 
 def NtCreateThreadEx_32_to_64(process, addr, param):
-    shellcode = NtCreateThreadStub.replace("\x40" * 8, struct.pack("<Q", process.handle))
-    shellcode = shellcode.replace("\x41" * 8, struct.pack("<Q", addr))
-    shellcode = shellcode.replace("\x42" * 8, struct.pack("<Q", param))
-    return execute_64bits_code_from_syswow(shellcode)
+    NtCreateThreadEx = get_NtCreateThreadEx_syswow_addr()
+    create_thread = x64.MultipleInstr()
+    # Save registers
+    #create_thread += Push('RAX')
+    create_thread += x64.Push('RBX')
+    create_thread += x64.Push('RCX')
+    create_thread += x64.Push('RDX')
+    create_thread += x64.Push('RSI')
+    create_thread += x64.Push('RDI')
+    create_thread += x64.Push('R8')
+    create_thread += x64.Push('R9')
+    create_thread += x64.Push('R10')
+    create_thread += x64.Push('R11')
+    create_thread += x64.Push('R12')
+    create_thread += x64.Push('R13')
+    # Setup args
+    create_thread += x64.Push(0)
+    create_thread += x64.Mov('RCX', 'RSP') #Arg1
+    create_thread += x64.Mov('RDX', 0x1fffff) #Arg2
+    create_thread += x64.Mov('R8', 0) #Arg3
+    create_thread += x64.Mov('R9', process.handle) #Arg4
+    create_thread += x64.Mov('RAX', 0)
+    create_thread += x64.Push('RAX') #Arg11
+    create_thread += x64.Push('RAX') #Arg10
+    create_thread += x64.Push('RAX') #Arg9
+    create_thread += x64.Push('RAX') #Arg8
+    create_thread += x64.Push('RAX') #Arg7
+    create_thread += x64.Mov('RAX', param)
+    create_thread += x64.Push('RAX') #Arg6
+    create_thread += x64.Mov('RAX', addr)
+    create_thread += x64.Push('RAX') #Arg5
+    # reserve space for register (calling convention)
+    create_thread += x64.Push('R9')
+    create_thread += x64.Push('R8')
+    create_thread += x64.Push('RDX')
+    create_thread += x64.Push('RCX')
+    # Call
+    create_thread += x64.Mov('R13', NtCreateThreadEx)
+    create_thread += x64.Call('R13')
+    # Clean stack
+    create_thread += x64.Add('RSP' , 12 * 8)
+    create_thread += x64.Pop('R13')
+    create_thread += x64.Pop('R12')
+    create_thread += x64.Pop('R11')
+    create_thread += x64.Pop('R10')
+    create_thread += x64.Pop('R9')
+    create_thread += x64.Pop('R8')
+    create_thread += x64.Pop('RDI')
+    create_thread += x64.Pop('RSI')
+    create_thread += x64.Pop('RDX')
+    create_thread += x64.Pop('RCX')
+    create_thread += x64.Pop('RBX')
+
+    return execute_64bits_code_from_syswow(create_thread.get_code())
+
+
+def get_NtCreateThreadEx_syswow_addr():
+    if get_NtCreateThreadEx_syswow_addr.value is not None:
+        return get_NtCreateThreadEx_syswow_addr.value
+    peb64 = get_current_process_syswow_peb()
+    ntdll64 = [m for m in peb64.modules if m.name == "ntdll.dll"]
+    if not ntdll64:
+        raise ValueError("Could not find ntdll.dll in syswow peb")
+    ntdll64 = ntdll64[0]
+    try:
+        get_NtCreateThreadEx_syswow_addr.value = ntdll64.pe.exports['NtCreateThreadEx']
+    except KeyError:
+        raise ValueError("Could not find NtCreateThreadEx in syswow ntdll.dll")
+    return get_NtCreateThreadEx_syswow_addr.value
+get_NtCreateThreadEx_syswow_addr.value = None
+
+def get_current_process_syswow_peb_addr():
+    current_process = windows.current_process
+    dest = current_process.virtual_alloc(0x1000)
+    get_peb_64_code = codecs.decode(b"65488B042560000000", 'hex')
+    store_peb = x64.MultipleInstr()
+    store_peb += x64.Mov(x64.create_displacement(disp=dest), 'RAX')
+    get_peb_64_code += store_peb.get_code()
+    current_process.write_memory(dest, "\x00" * 8)
+    windows.syswow64.execute_64bits_code_from_syswow(get_peb_64_code)
+    peb_addr = struct.unpack("<Q", current_process.read_memory(dest, 8))[0]
+    return peb_addr
+
+def get_current_process_syswow_peb():
+    current_process = windows.current_process
+    class CurrentProcessReadSyswow():
+        def read_memory(self, addr, size):
+            buffer_addr =  ctypes.create_string_buffer(size)
+            kernel32proxy.NtWow64ReadVirtualMemory64(current_process.handle, addr, buffer_addr, size)
+            return buffer_addr[:]
+        bitness = 64
+    peb_addr = get_current_process_syswow_peb_addr()
+    return windows.winobject.RemotePEB64(peb_addr, CurrentProcessReadSyswow())

@@ -292,7 +292,7 @@ def create_function(code, types):
     
 # Return First argument for 32 bits code
 raw_code = x86.MultipleInstr()
-raw_code += x86.Mov('EAX', x86.create_displacement(base='ESP', disp=4))
+raw_code += x86.Mov('EAX', x86.mem('[ESP + 4]'))
 raw_code += x86.Ret()
 get_callback_address_32 = create_function(raw_code.get_code(), [ctypes.c_void_p])
 
