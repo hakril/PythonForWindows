@@ -91,7 +91,7 @@ class CustomAllocator(object):
     def write_code(self, code):
         size = len(code)
         if size + self.cur_offset > self.cur_page_size:
-            self.get_new_page((payload_size + 0x1000) & ~0xfff)
+            self.get_new_page((size + 0x1000) & ~0xfff)
         self.maps[-1][self.cur_offset: self.cur_offset + size] = code
         addr = self.maps[-1].addr + self.cur_offset
         self.cur_offset += size
