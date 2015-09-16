@@ -398,6 +398,36 @@ def AdjustTokenPrivileges(TokenHandle, DisableAllPrivileges=False, NewState=Need
         BufferLength = ctypes.sizeof(NewState)
     return AdjustTokenPrivileges.ctypes_function(TokenHandle, DisableAllPrivileges, NewState, BufferLength, PreviousState, ReturnLength)
 
+# Registry stuff
+
+@Advapi32Proxy('GetTokenInformation')
+def GetTokenInformation(TokenHandle=NeededParameter, TokenInformationClass=NeededParameter, TokenInformation=None, TokenInformationLength=0, ReturnLength=None):
+    if ReturnLength is None:
+        ReturnLength = ctypes.byref(DWORD())
+    return GetTokenInformation.ctypes_function(TokenHandle, TokenInformationClass, TokenInformation, TokenInformationLength, ReturnLength)
+
+@Advapi32Proxy('RegOpenKeyExA')
+def RegOpenKeyExA(hKey, lpSubKey, ulOptions, samDesired, phkResult):
+    return RegOpenKeyExA.ctypes_function(hKey, lpSubKey, ulOptions, samDesired, phkResult)
+
+# TODO: default values? which ones ?
+
+@Advapi32Proxy('RegOpenKeyExW')
+def RegOpenKeyExW(hKey, lpSubKey, ulOptions, samDesired, phkResult):
+    return RegOpenKeyExW.ctypes_function(hKey, lpSubKey, ulOptions, samDesired, phkResult)
+
+@Advapi32Proxy('RegGetValueA')
+def RegGetValueA(hkey, lpSubKey, lpValue, dwFlags, pdwType, pvData, pcbData):
+    return RegGetValueA.ctypes_function(hkey, lpSubKey, lpValue, dwFlags, pdwType, pvData, pcbData)
+
+@Advapi32Proxy('RegGetValueW')
+def RegGetValueW(hkey, lpSubKey, lpValue, dwFlags, pdwType, pvData, pcbData):
+    return RegGetValueW.ctypes_function(hkey, lpSubKey, lpValue, dwFlags, pdwType, pvData, pcbData)
+
+@Advapi32Proxy('RegCloseKey')
+def RegCloseKey(hKey):
+    return RegCloseKey.ctypes_function(hKey)
+
 
 ###### Iphlpapi (network list and stuff) #######
 
