@@ -14,7 +14,7 @@ import windows.native_exec.simple_x86 as x86
 import windows.native_exec.simple_x64 as x64
 
 from . import utils
-from  .dbgprint import dbgprint
+from windows.dbgprint import dbgprint
 from windows.generated_def.winstructs import *
 from .generated_def import windef
 
@@ -289,7 +289,6 @@ class CurrentProcess(Process):
         """The bitness of the process
 
         :returns: int -- 32 or 64"""
-        print("FAIL")
         import platform
         bits = platform.architecture()[0]
         return int(bits[:2])
@@ -374,10 +373,10 @@ class WinProcess(PROCESSENTRY32, Process):
 
     def low_read_memory(self, addr, buffer_addr, size):
         if windows.current_process.bitness == 32 and self.bitness == 64:
-            if not hasattr(self, "NtWow64ReadVirtualMemory64"): # TODO: better stuff : (in k32testing?)
-                NtWow64ReadVirtualMemory64Addr = windows.utils.get_func_addr("ntdll.dll", "NtWow64ReadVirtualMemory64")
-                self.NtWow64ReadVirtualMemory64 = WINFUNCTYPE(HRESULT, HANDLE, ULONG64, PVOID, ULONG64, PULONG64)(NtWow64ReadVirtualMemory64Addr)
-            return self.NtWow64ReadVirtualMemory64(self.handle, addr, buffer_addr, size, None)
+            #OptionalExport can be None (see k32testing.py)
+            if kernel32proxy.NtWow64ReadVirtualMemory64 is None:
+                raise ValueError("NtWow64ReadVirtualMemory64 non available in ntdll: cannot write into 64bits processus")
+            return kernel32proxy.NtWow64ReadVirtualMemory64(self.handle, addr, buffer_addr, size)
         return kernel32proxy.ReadProcessMemory(self.handle, addr, lpBuffer=buffer_addr, nSize=size)
 
     def read_memory(self, addr, size):
@@ -386,23 +385,23 @@ class WinProcess(PROCESSENTRY32, Process):
         self.low_read_memory(addr, ctypes.byref(buffer), size)
         return buffer[:]
 
-    #Simple cache test
-    real_read = read_memory
-
-    def read_memory(self, addr, size):
-        """Cached version for test"""
-        dbgprint('Read remote Memory of {0}'.format(self), 'READMEM')
-        if not hasattr(self, "_cache_cache"):
-            self._cache_cache = {}
-        page_addr = addr & 0xfffffffffffff000
-        if page_addr in self._cache_cache:
-            #print("CACHED Read on page {0}".format(hex(page_addr)))
-            page_data = self._cache_cache[page_addr]
-            return page_data[addr & 0xfff: (addr & 0xfff) + size]
-        else:
-            page_data = self.real_read(page_addr, 0x1000)
-            self._cache_cache[page_addr] = page_data
-            return page_data[addr & 0xfff: (addr & 0xfff) + size]
+    ##Simple cache test
+    #real_read = read_memory
+    #
+    #def read_memory(self, addr, size):
+    #    """Cached version for test"""
+    #    dbgprint('Read remote Memory of {0}'.format(self), 'READMEM')
+    #    if not hasattr(self, "_cache_cache"):
+    #        self._cache_cache = {}
+    #    page_addr = addr & 0xfffffffffffff000
+    #    if page_addr in self._cache_cache:
+    #        #print("CACHED Read on page {0}".format(hex(page_addr)))
+    #        page_data = self._cache_cache[page_addr]
+    #        return page_data[addr & 0xfff: (addr & 0xfff) + size]
+    #    else:
+    #        page_data = self.real_read(page_addr, 0x1000)
+    #        self._cache_cache[page_addr] = page_data
+    #        return page_data[addr & 0xfff: (addr & 0xfff) + size]
 
     def read_memory_into(self, addr, struct):
         """Read a :mod:`ctypes` struct from `addr`"""

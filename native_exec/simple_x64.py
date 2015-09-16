@@ -617,7 +617,7 @@ class In(Instruction):
                 (RawBits.from_int(8, 0xed), FixedRegister('EAX'), FixedRegister('DX'))]
 
 class JmpImm(object):
-    accept_as_Ximmediat = None
+    accept_as_Ximmediat = (None)
     def __init__(self, sub):
         self.sub = sub
 
@@ -634,10 +634,10 @@ class JmpImm(object):
         return (1, BitArray.from_string(jmp_imm), None)
 
 class JmpImm8(JmpImm):
-    accept_as_Ximmediat = accept_as_8immediat
+    accept_as_Ximmediat = staticmethod(accept_as_8immediat)
 
 class JmpImm32(JmpImm):
-    accept_as_Ximmediat = accept_as_32immediat
+    accept_as_Ximmediat = staticmethod(accept_as_32immediat)
 
 class Jmp(JmpType):
     encoding = [(RawBits.from_int(8, 0xeb), JmpImm8(2)),

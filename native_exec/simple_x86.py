@@ -484,10 +484,10 @@ class JmpImm(object):
         return (1, BitArray.from_string(jmp_imm))
 
 class JmpImm8(JmpImm):
-    accept_as_Ximmediat = accept_as_8immediat
+    accept_as_Ximmediat = staticmethod(accept_as_8immediat)
 
 class JmpImm32(JmpImm):
-    accept_as_Ximmediat = accept_as_32immediat
+    accept_as_Ximmediat = staticmethod(accept_as_32immediat)
 
 
 class Jmp(JmpType):

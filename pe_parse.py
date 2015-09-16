@@ -167,8 +167,6 @@ def PEFile(baseaddr, target=None):
 
         @utils.fixedpropety
         def exports(self):
-            print("ASK FOR EXPORTS {0}".format(target))
-
             res = {}
             exp_dir = self.get_EXPORT_DIRECTORY()
             if exp_dir is None:
