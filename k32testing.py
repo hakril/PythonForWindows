@@ -418,25 +418,25 @@ def GetTokenInformation(TokenHandle=NeededParameter, TokenInformationClass=Neede
         ReturnLength = ctypes.byref(DWORD())
     return GetTokenInformation.ctypes_function(TokenHandle, TokenInformationClass, TokenInformation, TokenInformationLength, ReturnLength)
 
-@Advapi32Proxy('RegOpenKeyExA')
+@Advapi32Proxy('RegOpenKeyExA', kernel32_zero_check)
 def RegOpenKeyExA(hKey, lpSubKey, ulOptions, samDesired, phkResult):
     return RegOpenKeyExA.ctypes_function(hKey, lpSubKey, ulOptions, samDesired, phkResult)
 
 # TODO: default values? which ones ?
 
-@Advapi32Proxy('RegOpenKeyExW')
+@Advapi32Proxy('RegOpenKeyExW', kernel32_zero_check)
 def RegOpenKeyExW(hKey, lpSubKey, ulOptions, samDesired, phkResult):
     return RegOpenKeyExW.ctypes_function(hKey, lpSubKey, ulOptions, samDesired, phkResult)
 
-@Advapi32Proxy('RegGetValueA')
+@Advapi32Proxy('RegGetValueA', kernel32_zero_check)
 def RegGetValueA(hkey, lpSubKey, lpValue, dwFlags, pdwType, pvData, pcbData):
     return RegGetValueA.ctypes_function(hkey, lpSubKey, lpValue, dwFlags, pdwType, pvData, pcbData)
 
-@Advapi32Proxy('RegGetValueW')
+@Advapi32Proxy('RegGetValueW', kernel32_zero_check)
 def RegGetValueW(hkey, lpSubKey, lpValue, dwFlags, pdwType, pvData, pcbData):
     return RegGetValueW.ctypes_function(hkey, lpSubKey, lpValue, dwFlags, pdwType, pvData, pcbData)
 
-@Advapi32Proxy('RegCloseKey')
+@Advapi32Proxy('RegCloseKey', kernel32_zero_check)
 def RegCloseKey(hKey):
     return RegCloseKey.ctypes_function(hKey)
 
