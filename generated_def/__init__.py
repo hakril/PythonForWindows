@@ -17,6 +17,7 @@ if bitness() == 32:
     winstructs.PEXCEPTION_POINTERS = winstructs.PEXCEPTION_POINTERS32
 
     winstructs.SYSTEM_MODULE = winstructs.SYSTEM_MODULE32
+    winstructs.SYSTEM_MODULE_INFORMATION = winstructs.SYSTEM_MODULE_INFORMATION32
 else:
     winstructs.CONTEXT = winstructs.CONTEXT64
     winstructs.PCONTEXT = winstructs.PCONTEXT64
@@ -26,6 +27,7 @@ else:
     winstructs.PEXCEPTION_POINTERS = winstructs.PEXCEPTION_POINTERS64
 
     winstructs.SYSTEM_MODULE = winstructs.SYSTEM_MODULE64
+    winstructs.SYSTEM_MODULE_INFORMATION = winstructs.SYSTEM_MODULE_INFORMATION64
 
 from . import winfuncs
 

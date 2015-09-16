@@ -202,7 +202,6 @@ GetThreadId = TransparentKernel32Proxy("GetThreadId")
 def CreateFileA(lpFileName, dwDesiredAccess, dwShareMode=0, lpSecurityAttributes=None, dwCreationDisposition=OPEN_EXISTING, dwFlagsAndAttributes=FILE_ATTRIBUTE_NORMAL, hTemplateFile=None):
     return CreateFileA.ctypes_function(lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile)
 
-# This kind of function could be fully done by using paramflags
 @Kernel32Proxy("VirtualAlloc")
 def VirtualAlloc(lpAddress=0,  dwSize=NeededParameter, flAllocationType=MEM_COMMIT, flProtect=PAGE_EXECUTE_READWRITE):
     return VirtualAlloc.ctypes_function(lpAddress, dwSize, flAllocationType, flProtect)
@@ -374,7 +373,15 @@ def DeviceIoControl(hDevice, dwIoControlCode, lpInBuffer, nInBufferSize=None, lp
 def NtWow64ReadVirtualMemory64(hProcess, lpBaseAddress, lpBuffer, nSize, lpNumberOfBytesRead=None):
     return NtWow64ReadVirtualMemory64.ctypes_function(hProcess, lpBaseAddress, lpBuffer, nSize, lpNumberOfBytesRead)
 
-@NtdllProxy('NtQuerySystemInformation')
+def ntquerysysteminformation_error_check(func_name, result, func, args):
+    if result == 0:
+        return args
+    # Ignore STATUS_INFO_LENGTH_MISMATCH if SystemInformation is None
+    if result == STATUS_INFO_LENGTH_MISMATCH and args[1] is None:
+        return args
+    raise Kernel32Error("{0} failed with NTStatus {1)".format(func_name, hex(result)))
+
+@NtdllProxy('NtQuerySystemInformation', ntquerysysteminformation_error_check)
 def NtQuerySystemInformation(SystemInformationClass, SystemInformation=None, SystemInformationLength=0, ReturnLength=NeededParameter):
     if SystemInformation is not None and SystemInformation == 0:
         SystemInformationLength = ctypes.sizeof(SystemInformation)
