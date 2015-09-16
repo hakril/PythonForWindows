@@ -5,6 +5,7 @@ from ctypes.wintypes import *
 from windows.generated_def.winstructs import *
 from windows.generated_def.windef import *
 import windows.generated_def.winfuncs as winfuncs
+from windows.dbgprint import dbgprint
 
 
 kernel32 = ctypes.windll.kernel32
@@ -46,19 +47,19 @@ class IphlpapiError(Kernel32Error):
 def no_error_check(func_name, result, func, args):
     """Nothing special"""
     return args
-    
+
 def minus_one_error_check(func_name, result, func, args):
     if result == -1:
         raise Kernel32Error(func_name)
     return args
-        
+
 
 def kernel32_error_check(func_name, result, func, args):
     """raise Kernel32Error if result is 0"""
     if not result:
         raise Kernel32Error(func_name)
     return args
-    
+
 def kernel32_zero_check(func_name, result, func, args):
     """raise Kernel32Error if result is NOT 0"""
     if result:
@@ -70,6 +71,12 @@ def iphlpapi_error_check(func_name, result, func, args):
     if result:
         raise IphlpapiError(func_name, result)
     return args
+
+class ExportNotFound(AttributeError):
+        def __init__(self, func_name, api_name):
+            self.func_name = func_name
+            self.api_name = api_name
+            super(ExportNotFound, self).__init__("Function {0} not found into {1}".format(func_name, api_name))
 
 # Design 1
 class ApiProxy(object):
@@ -84,7 +91,10 @@ class ApiProxy(object):
     def __call__(self, python_proxy, ):
         prototype = getattr(winfuncs, self.func_name + "Prototype")
         params = getattr(winfuncs, self.func_name + "Params")
-        c_prototyped = prototype((self.func_name, self.APIDLL), params)
+        try:
+            c_prototyped = prototype((self.func_name, self.APIDLL), params)
+        except AttributeError:
+            raise ExportNotFound(self.func_name, self.APIDLL._name)
         c_prototyped.errcheck = self.error_check
         if (self.error_check.__doc__):
             doc = python_proxy.__doc__
@@ -115,16 +125,16 @@ class Advapi32Proxy(ApiProxy):
 class IphlpapiProxy(ApiProxy):
     APIDLL = iphlpapi
     default_error_check = staticmethod(iphlpapi_error_check)
-    
+
 class NtdllProxy(ApiProxy):
     APIDLL = ntdll
-    default_error_check = staticmethod(kernel32_error_check)
-    
+    default_error_check = staticmethod(kernel32_zero_check)
+
 class OptionalExport(object):
     """used 'around' a Proxy decorator
        Should be used for export that are not available everywhere (ntdll internals | 32/64 bits stuff)
        If the export is not found the function will be None
-       
+
        Example:
             @OptionalExport(NtdllProxy('NtWow64ReadVirtualMemory64'))
             def NtWow64ReadVirtualMemory64(...)
@@ -132,13 +142,12 @@ class OptionalExport(object):
     """
     def __init__(self, subdecorator):
         self.subdecorator = subdecorator
-        
+
     def __call__(self, f):
         try:
             return self.subdecorator(f)
-        except AttributeError as e:
-            print("NOT FOUND")
-            print(e)
+        except ExportNotFound as e:
+            dbgprint("Export <{e.func_name}> not found in <{e.api_name}>".format(e=e), "EXPORTNOTFOUND")
             return None
 
 def TransparentApiProxy(APIDLL, func_name, error_check):
@@ -164,7 +173,7 @@ class NeededParameterType(object):
 
     def __repr__(self):
         return "NeededParameter"
-        
+
 
 NeededParameter = NeededParameterType()
 
@@ -198,9 +207,17 @@ def CreateFileA(lpFileName, dwDesiredAccess, dwShareMode=0, lpSecurityAttributes
 def VirtualAlloc(lpAddress=0,  dwSize=NeededParameter, flAllocationType=MEM_COMMIT, flProtect=PAGE_EXECUTE_READWRITE):
     return VirtualAlloc.ctypes_function(lpAddress, dwSize, flAllocationType, flProtect)
 
+@Kernel32Proxy("VirtualFree")
+def VirtualFree(lpAddress, dwSize=0, dwFreeType=MEM_RELEASE):
+    return VirtualFree.ctypes_function(lpAddress, dwSize, dwFreeType)
+
 @Kernel32Proxy("VirtualAllocEx")
 def VirtualAllocEx(hProcess, lpAddress=0,  dwSize=NeededParameter, flAllocationType=MEM_COMMIT, flProtect=PAGE_EXECUTE_READWRITE):
     return VirtualAllocEx.ctypes_function(hProcess, lpAddress, dwSize, flAllocationType, flProtect)
+
+@Kernel32Proxy("VirtualFreeEx")
+def VirtualFreeEx(hProcess, lpAddress, dwSize=0, dwFreeType=MEM_RELEASE):
+    return VirtualFreeEx.ctypes_function(hProcess, lpAddress, dwSize, dwFreeType)
 
 @Kernel32Proxy("CreateThread")
 def CreateThread(lpThreadAttributes=None, dwStackSize=0, lpStartAddress=NeededParameter, lpParameter=NeededParameter, dwCreationFlags=0, lpThreadId=None):
@@ -315,7 +332,6 @@ def Process32Next(hSnapshot, lpte):
     return  Process32Next.ctypes_function(hSnapshot, lpte)
 
 # File stuff
-
 @Kernel32Proxy("WriteFile")
 def WriteFile(hFile, lpBuffer, nNumberOfBytesToWrite=None, lpNumberOfBytesWritten=None, lpOverlapped=None):
     if nNumberOfBytesToWrite is None:
@@ -340,8 +356,8 @@ def RemoveVectoredExceptionHandler(Handler):
 @Kernel32Proxy("WaitForSingleObject", kernel32_zero_check)
 def WaitForSingleObject(hHandle, dwMilliseconds=INFINITE):
     return WaitForSingleObject.ctypes_function(hHandle, dwMilliseconds)
-    
-@Kernel32Proxy("DeviceIoControl")   
+
+@Kernel32Proxy("DeviceIoControl")
 def DeviceIoControl(hDevice, dwIoControlCode, lpInBuffer, nInBufferSize=None, lpOutBuffer=NeededParameter, nOutBufferSize=None, lpBytesReturned=None, lpOverlapped=None):
     if nInBufferSize is None:
         nInBufferSize = len(lpInBuffer)
@@ -351,6 +367,12 @@ def DeviceIoControl(hDevice, dwIoControlCode, lpInBuffer, nInBufferSize=None, lp
         # Some windows check 0 / others does not
         lpBytesReturned = ctypes.byref(DWORD())
     return DeviceIoControl.ctypes_function(hDevice, dwIoControlCode, lpInBuffer, nInBufferSize, lpOutBuffer, nOutBufferSize, lpBytesReturned, lpOverlapped)
+
+#### NTDLL #####
+
+@OptionalExport(NtdllProxy('NtWow64ReadVirtualMemory64'))
+def NtWow64ReadVirtualMemory64(hProcess, lpBaseAddress, lpBuffer, nSize, lpNumberOfBytesRead=None):
+    return NtWow64ReadVirtualMemory64.ctypes_function(hProcess, lpBaseAddress, lpBuffer, nSize, lpNumberOfBytesRead)
 
 
 ###### ADVAPI32 ########
@@ -386,7 +408,3 @@ def GetExtendedTcpTable(pTcpTable, pdwSize=None, bOrder=True, ulAf=NeededParamet
     if pdwSize is None:
         ctypes.sizeof(pTcpTable)
     return GetExtendedTcpTable.ctypes_function(pTcpTable, pdwSize, bOrder, ulAf, TableClass, Reserved)
-    
-# Design 2
-# Design 2 should use the automatics args
-
