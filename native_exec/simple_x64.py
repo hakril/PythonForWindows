@@ -616,6 +616,9 @@ class In(Instruction):
                 (RawBits.from_int(16, 0x66ed), FixedRegister('AX'), FixedRegister('DX')), # Fuck-it hardcoded prefix for now
                 (RawBits.from_int(8, 0xed), FixedRegister('EAX'), FixedRegister('DX'))]
 
+class Cpuid(Instruction):
+    encoding = [(RawBits.from_int(16, 0x0fa2),)]
+
 class JmpImm(object):
     accept_as_Ximmediat = (None)
     def __init__(self, sub):

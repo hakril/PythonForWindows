@@ -82,6 +82,7 @@ TestInstr(Lea)('ECX', mem('[EDI + -0xff]'))
 
 TestInstr(Call)('EAX')
 TestInstr(Call)(mem('[EAX + ECX * 8]'))
+TestInstr(Cpuid)()
 
 TestInstr(Xchg)('EAX', 'ESP')
 assert Xchg('EAX', 'ECX').get_code() == Xchg('ECX', 'EAX').get_code()

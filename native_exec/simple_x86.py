@@ -511,6 +511,9 @@ class Xchg(Instruction):
 class Call(Instruction):
     encoding = [(RawBits.from_int(8, 0xff), Slash(2))]
 
+class Cpuid(Instruction):
+    encoding = [(RawBits.from_int(16, 0x0fa2),)]
+
 class Ret(Instruction):
     encoding = [(RawBits.from_int(8, 0xc3),)]
 
