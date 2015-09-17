@@ -149,7 +149,6 @@ def PEFile(baseaddr, target=None):
             #current_import_descriptor = self.IMAGE_IMPORT_DESCRIPTOR.from_address(import_descriptor_addr)
             res = []
             while current_import_descriptor.FirstThunk:
-                 print(current_import_descriptor.FirstThunk)
                  res.append(current_import_descriptor)
                  import_descriptor_addr += ctypes.sizeof(self.IMAGE_IMPORT_DESCRIPTOR)
                  #current_import_descriptor = self.IMAGE_IMPORT_DESCRIPTOR.from_address(import_descriptor_addr)
