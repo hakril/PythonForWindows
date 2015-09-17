@@ -96,7 +96,7 @@ def is_intel_proc():
 def is_amd_proc():
     return get_vendor_id() == "AuthenticAMD"
 
-def get_proc_model_family():
+def get_proc_family_model():
     cpuid_res = do_cpuid(1)
     if is_intel_proc():
         format = X86IntelCpuidFamilly
@@ -113,4 +113,4 @@ def get_proc_model_family():
         ComputedFamily = infos.FamilyID + infos.ExtendedFamily
     else:
         ComputedFamily = infos.FamilyID;
-    return ComputedModel, ComputedFamily
+    return ComputedFamily, ComputedModel

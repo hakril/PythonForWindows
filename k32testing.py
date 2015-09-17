@@ -379,7 +379,7 @@ def ntquerysysteminformation_error_check(func_name, result, func, args):
     # Ignore STATUS_INFO_LENGTH_MISMATCH if SystemInformation is None
     if result == STATUS_INFO_LENGTH_MISMATCH and args[1] is None:
         return args
-    raise Kernel32Error("{0} failed with NTStatus {1)".format(func_name, hex(result)))
+    raise Kernel32Error("{0} failed with NTStatus {1}".format(func_name, hex(result)))
 
 @NtdllProxy('NtQuerySystemInformation', ntquerysysteminformation_error_check)
 def NtQuerySystemInformation(SystemInformationClass, SystemInformation=None, SystemInformationLength=0, ReturnLength=NeededParameter):

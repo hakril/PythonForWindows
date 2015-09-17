@@ -94,7 +94,14 @@ def pop_shell():
     create_console()
     FixedInteractiveConsole(locals()).interact()
 
-
+def get_kernel_modules():
+    cbsize = DWORD()
+    kernel32proxy.NtQuerySystemInformation(SystemModuleInformation, None, 0, byref(cbsize))
+    raw_buffer = (cbsize.value * c_char)()
+    buffer = SYSTEM_MODULE_INFORMATION.from_address(ctypes.addressof(raw_buffer))
+    kernel32proxy.NtQuerySystemInformation(SystemModuleInformation, byref(raw_buffer), sizeof(raw_buffer), byref(cbsize))
+    modules = (SYSTEM_MODULE * buffer.ModulesCount).from_address(addressof(buffer) + SYSTEM_MODULE_INFORMATION.Modules.offset)
+    return list(modules)
 
 class VirtualProtected(object):
     """A context manager usable like `VirtualProtect` that will restore the old protection at exit

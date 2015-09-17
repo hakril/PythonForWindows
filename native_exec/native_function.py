@@ -79,7 +79,7 @@ class CustomAllocator(object):
 
     def reserve_size(self, size):
         if size + self.cur_offset > self.cur_page_size:
-            self.get_new_page((payload_size + 0x1000) & ~0xfff)
+            self.get_new_page((size + 0x1000) & ~0xfff)
         addr = self.maps[-1].addr + self.cur_offset
         self.cur_offset += size
         return addr
