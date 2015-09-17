@@ -123,6 +123,8 @@ def PEFile(baseaddr, target=None):
             self.hook.disable()
             self.hook = None
             return True
+            
+    
 
     class PEFile(object):
         def __init__(self):
@@ -163,14 +165,22 @@ def PEFile(baseaddr, target=None):
             return create_structure_at(self._IMAGE_EXPORT_DIRECTORY, export_directory_addr)
             #return self._IMAGE_EXPORT_DIRECTORY.from_address(export_directory_addr)
 
+        class PESection(ctypes_structure_transformer(IMAGE_SECTION_HEADER)):
+            @utils.fixedpropety
+            def name(self):
+                return ctypes.c_char_p(ctypes.addressof(self.Name)).value
+                
+            def __repr__(self):
+                return "<PESection \"{0}\">".format(self.name)
+            
         @utils.fixedpropety
         def sections(self):
             nt_header = self.get_NT_HEADER()
             nb_section = nt_header.FileHeader.NumberOfSections
             base_section = ctypes.addressof(nt_header) + ctypes.sizeof(nt_header)
-            IMAGE_SECTION_H = ctypes_structure_transformer(IMAGE_SECTION_HEADER)
-            sections_array = create_structure_at(IMAGE_SECTION_H * nb_section, base_section)
-            return (sections_array)
+            #IMAGE_SECTION_H = ctypes_structure_transformer(IMAGE_SECTION_HEADER)
+            sections_array = create_structure_at(self.PESection * nb_section, base_section)
+            return list(sections_array)
 
         @utils.fixedpropety
         def exports(self):
