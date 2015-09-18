@@ -72,6 +72,11 @@ def iphlpapi_error_check(func_name, result, func, args):
         raise IphlpapiError(func_name, result)
     return args
 
+def error_ntstatus(func_name, result, func, args):
+    if result:
+        raise WindowsError("{0} failed with ntstatus <{1}>".format(func_name, hex(result & 0xffffffff)))
+    return args
+
 class ExportNotFound(AttributeError):
         def __init__(self, func_name, api_name):
             self.func_name = func_name
@@ -369,7 +374,7 @@ def DeviceIoControl(hDevice, dwIoControlCode, lpInBuffer, nInBufferSize=None, lp
 
 #### NTDLL #####
 
-@OptionalExport(NtdllProxy('NtWow64ReadVirtualMemory64'))
+@OptionalExport(NtdllProxy('NtWow64ReadVirtualMemory64', error_ntstatus))
 def NtWow64ReadVirtualMemory64(hProcess, lpBaseAddress, lpBuffer, nSize, lpNumberOfBytesRead=None):
     return NtWow64ReadVirtualMemory64.ctypes_function(hProcess, lpBaseAddress, lpBuffer, nSize, lpNumberOfBytesRead)
 
