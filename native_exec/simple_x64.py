@@ -74,36 +74,113 @@ class BitArray(object):
     def copy(self):
         return type(self)(self.size, self.array)
 
-# Rules: bytes only !!!!
+# Prefix
+class Prefix(object):
+    PREFIX_VALUE = None
+    def __init__(self, next=None):
+        self.next = next
 
-mem_access = collections.namedtuple('mem_access', ['base', 'index', 'scale', 'disp'])
+    def __add__(self, other):
+        return type(self)(other)
+
+    def get_code(self):
+        return chr(self.PREFIX_VALUE) + self.next.get_code()
+
+def create_prefix(name, value):
+    prefix_type = type(name + "Type", (Prefix,), {'PREFIX_VALUE' : value})
+    setattr(sys.modules[__name__], name, prefix_type())
+
+create_prefix('LockPrefix', 0xf0)
+create_prefix('Repne', 0xf2)
+create_prefix('Rep', 0xf3)
+create_prefix('SSPrefix', 0x36)
+create_prefix('CSPrefix', 0x2e)
+create_prefix('DSPrefix', 0x3e)
+create_prefix('ESPrefix', 0x26)
+create_prefix('FSPrefix', 0x64)
+create_prefix('GSPrefix', 0x65)
+create_prefix('OperandSizeOverride', 0x66)
+create_prefix('AddressSizeOverride', 0x67)
+
+mem_access = collections.namedtuple('mem_access', ['base', 'index', 'scale', 'disp', 'prefix'])
 
 reg_order = ['RAX', 'RCX', 'RDX', 'RBX', 'RSP', 'RBP', 'RSI', 'RDI']
 new_reg_order = ['R8', 'R9', 'R10', 'R11', 'R12', 'R13', 'R14', 'R15']
 x64_regs = reg_order + new_reg_order
 
+x64_segment_selectors = {'CS' : CSPrefix, 'DS' : DSPrefix, 'ES' : ESPrefix, 'SS' : SSPrefix,
+                         'FS': FSPrefix, 'GS' : GSPrefix}
+
+class X64(object):
+    @staticmethod
+    def is_reg(name):
+        try:
+            return (name.upper() in reg_order) or X64.is_new_reg(name)
+        except AttributeError: # Not a string
+            return False
+
+    @staticmethod
+    def is_new_reg(name):
+        try:
+            return name.upper() in new_reg_order
+        except AttributeError: # Not a string
+            return False
+
+    @staticmethod
+    def is_mem_acces(data):
+        return isinstance(data, mem_access)
+
+    @staticmethod
+    def mem_access_has_only(mem_access, names):
+        if not X64.is_mem_acces(mem_access):
+            raise ValueError("mem_access_has_only")
+        for f in mem_access._fields:
+            if f != "prefix" and getattr(mem_access, f) and f not in names:
+                return False
+        if "base" in names and mem_access.base is None:
+            return False
+        return True
+
+    @staticmethod
+    def to_little_endian(i, size=64):
+        pack = {8: 'B', 16 : 'H', 32 : 'I', 64 : 'Q'}
+        s = pack[size]
+        mask = (1 << size) - 1
+        i = i & mask
+        return struct.unpack("<" + s, struct.pack(">" + s, i))[0]
 
 
-def create_displacement(base=None, index=None, scale=None, disp=0):
+def create_displacement(base=None, index=None, scale=None, disp=0, prefix=None):
     if index is not None and scale is None:
         scale = 1
     if scale and index is None:
         raise ValueError("Cannot create displacement with scale and no index")
     if scale and index.upper() == "RSP":
         raise ValueError("Cannot create displacement with index == RSP")
-    return mem_access(base, index, scale, disp)
+    return mem_access(base, index, scale, disp, prefix)
 
 def mem(data):
-    """Parse a memory access string"""
+    """Parse a memory access string of format [EXPR] or seg:[EXPR]
+       EXPR may describe: BASE | INDEX * SCALE | DISPLACEMENT or any combinaison (in this order)
+    """
     if not isinstance(data, str):
         raise TypeError("mem need a string to parse")
     data = data.strip()
+    prefix = None
     if not (data.startswith("[") and data.endswith("]")):
-        raise ValueError("mem acces expect <[EXPR]>")
+        if data[2] != ":":
+            raise ValueError("mem acces expect <[EXPR]> or <seg:[EXPR]")
+        prefix_name = data[:2].upper()
+        if prefix_name not in x64_segment_selectors:
+            raise ValueError("Unknow segment selector {0}".format(prefix_name))
+        prefix = prefix_name
+        data = data[3:]
+    if not (data.startswith("[") and data.endswith("]")):
+        raise ValueError("mem acces expect <[EXPR]> or <seg:[EXPR]")
     # A l'arrache.. j'aime pas le parsing de trucs
     data = data[1:-1]
     items = data.split("+")
-    parsed_items = {}
+    parsed_items = {'prefix' : prefix}
     for item in items:
         item = item.strip()
         # Index * scale
@@ -144,12 +221,13 @@ def mem(data):
     return create_displacement(**parsed_items)
 
 
+
 class X64RegisterSelector(object):
 
     reg_opcode = {v : BitArray.from_int(size=3, x=i) for i, v in enumerate(reg_order)}
     new_reg_opcode = {v : BitArray.from_int(size=3, x=i) for i, v in enumerate(new_reg_order)}
 
-    def accept_arg(self, previous, args):
+    def accept_arg(self, args, instr_state):
         x = args[0]
         try:
             return (1, self.reg_opcode[x.upper()], None)
@@ -167,8 +245,20 @@ class X64RegisterSelector(object):
         except KeyError:
             return cls.new_reg_opcode[name.upper()]
 
+class FixedRegister(object):
+    def __init__(self, register):
+        self.reg = register.upper()
+
+    def accept_arg(self, args, instr_state):
+        x = args[0]
+        if isinstance(x, str) and x.upper() == self.reg:
+            return 1, BitArray(0, []), None
+        return None, None, None
+
+RegisterRax = lambda: FixedRegister('RAX')
+
 class RawBits(BitArray):
-    def accept_arg(self, previous, args):
+    def accept_arg(self, args, instr_state):
         return (0, self.copy(), None)
 
 class ImmediatOverflow(ValueError):
@@ -203,7 +293,7 @@ def accept_as_64immediat(x):
         raise ImmediatOverflow("64bits signed Immediat overflow")
 
 class Imm8(object):
-    def accept_arg(self, previous, args):
+    def accept_arg(self, args, instr_state):
         try:
             x = int(args[0])
         except (ValueError, TypeError):
@@ -215,7 +305,7 @@ class Imm8(object):
         return (1, BitArray.from_string(imm8), None)
 
 class Imm16(object):
-    def accept_arg(self, previous, args):
+    def accept_arg(self, args, instr_state):
         try:
             x = int(args[0])
         except (ValueError, TypeError):
@@ -227,7 +317,7 @@ class Imm16(object):
         return (1, BitArray.from_string(imm16), None)
 
 class Imm32(object):
-    def accept_arg(self, previous, args):
+    def accept_arg(self, args, instr_state):
         try:
             x = int(args[0])
         except (ValueError, TypeError):
@@ -239,7 +329,7 @@ class Imm32(object):
         return (1, BitArray.from_string(imm32), None)
 
 class Imm64(object):
-    def accept_arg(self, previous, args):
+    def accept_arg(self, args, instr_state):
         try:
             x = int(args[0])
         except (ValueError, TypeError):
@@ -251,41 +341,27 @@ class Imm64(object):
         return (1, BitArray.from_string(imm64), None)
 
 class Mov_RAX_OFF64(object):
-
-    def accept_arg(self, previous, args):
-        if RegisterRax().accept_arg(previous, args) == (None, None, None):
+    def accept_arg(self, args, instr_state):
+        if RegisterRax().accept_arg(args, instr_state) == (None, None, None):
             return (None, None, None)
         arg2 = args[1]
         if not (X64.is_mem_acces(arg2) and X64.mem_access_has_only(arg2, ["disp"])):
             return (None, None, None)
         # Migth Raise an ImmediatOverflow bu no other encoding for this so precise error is cool
+        if arg2.prefix is not None:
+            instr_state.prefixes.append(x64_segment_selectors[arg2.prefix])
         return (2, BitArray.from_int(8, 0xa1) + BitArray.from_string(accept_as_64immediat(arg2.disp)) , BitArray.from_int(8, 0x48))
 
 class Mov_OFF64_RAX(object):
-    def accept_arg(self, previous, args):
-        if RegisterRax().accept_arg(previous, args[1:]) == (None, None, None):
+    def accept_arg(self, args, instr_state):
+        if RegisterRax().accept_arg(args[1:], instr_state) == (None, None, None):
             return (None, None, None)
         arg2 = args[0]
         if not (X64.is_mem_acces(arg2) and X64.mem_access_has_only(arg2, ["disp"])):
             return (None, None, None)
+        if arg2.prefix is not None:
+            instr_state.prefixes.append(x64_segment_selectors[arg2.prefix])
         return (2, BitArray.from_int(8, 0xa3) + BitArray.from_string(accept_as_64immediat(arg2.disp)) , BitArray.from_int(8, 0x48))
-
-class RegisterRax(object):
-    def accept_arg(self, previous, args):
-        x = args[0]
-        if isinstance(x, str) and x.upper() == 'RAX':
-            return (1, BitArray(0, []), None)
-        return None, None, None
-
-class FixedRegister(object):
-    def __init__(self, register):
-        self.reg = register.upper()
-
-    def accept_arg(self, previous, args):
-        x = args[0]
-        if isinstance(x, str) and x.upper() == self.reg:
-            return 1, BitArray(0, []), None
-        return None, None, None
 
 class ModRM(object):
     size = 8
@@ -295,77 +371,27 @@ class ModRM(object):
         self.accept_reverse = accept_reverse
         self.has_direction_bit = has_direction_bit
 
-    def accept_arg(self, previous, args):
+    def accept_arg(self, args, instr_state):
         if len(args) < 2:
             raise ValueError("Missing arg for modrm")
         arg1 = args[0]
         arg2 = args[1]
         for sub in self.sub:
             if sub.match(arg1, arg2):
-                d = sub(arg1, arg2, 0)
+                d = sub(arg1, arg2, 0, instr_state)
                 if self.has_direction_bit:
-                    previous[0][-2] = d.direction
+                    instr_state.previous[0][-2] = d.direction
                 rex = d.rex if d.is_rex_needed else None
                 return (2, d.mod + d.reg + d.rm + d.after, rex)
             elif self.accept_reverse and sub.match(arg2, arg1):
-                d = sub(arg2, arg1, 1)
+                d = sub(arg2, arg1, 1, instr_state)
                 if self.has_direction_bit:
-                    previous[0][-2] = d.direction
+                    instr_state.previous[0][-2] = d.direction
                 rex = d.rex if d.is_rex_needed else None
                 return (2, d.mod + d.reg + d.rm + d.after, rex)
         return (None, None, None)
 
-
-class X64(object):
-
-    @staticmethod
-    def is_reg(name):
-        try:
-            return (name.upper() in reg_order) or X64.is_new_reg(name)
-        except AttributeError: # Not a string
-            return False
-
-    @staticmethod
-    def is_new_reg(name):
-        try:
-            return name.upper() in new_reg_order
-        except AttributeError: # Not a string
-            return False
-
-    @staticmethod
-    def is_mem_acces(data):
-        return isinstance(data, mem_access)
-
-    @staticmethod
-    def mem_access_has_only(mem_access, names):
-        if not X64.is_mem_acces(mem_access):
-            raise ValueError("mem_access_has_only")
-        for f in mem_access._fields:
-            if getattr(mem_access, f) and f not in names:
-                return False
-        if "base" in names and mem_access.base is None:
-            return False
-        return True
-
-    @staticmethod
-    def to_little_endian(i, size=64):
-        pack = {8: 'B', 16 : 'H', 32 : 'I', 64 : 'Q'}
-        s = pack[size]
-        mask = (1 << size) - 1
-        i = i & mask
-        return struct.unpack("<" + s, struct.pack(">" + s, i))[0]
-
 # Sub ModRM encoding
-
-#class RexByte(object):
-#    def __init__(self):
-#        self.is_needed = False
-#        self.pattern = BitArray(4, "0100")
-#        self.w = BitArray(1, "0")
-#        self.r = BitArray(1, "0")
-#        self.x = BitArray(1, "0")
-#        self.b = BitArray(1, "0")
-
 
 class SubModRM(object):
     def __init__(self):
@@ -406,7 +432,7 @@ class ModRM_REG64__REG64(SubModRM):
     def match(cls, arg1, arg2):
         return (X64.is_reg(arg1) or X64.is_new_reg(arg1)) and (X64.is_reg(arg2) or X64.is_new_reg(arg2))
 
-    def __init__(self, arg1, arg2, reversed):
+    def __init__(self, arg1, arg2, reversed, instr_state):
         super(ModRM_REG64__REG64, self).__init__()
         self.mod = BitArray(2, "11")
         self.is_rex_needed = True
@@ -420,8 +446,10 @@ class ModRM_REG64__MEM(SubModRM):
     def match(cls, arg1, arg2):
         return (X64.is_reg(arg1) or X64.is_new_reg(arg1)) and X64.is_mem_acces(arg2)
 
-    def __init__(self, arg1, arg2, reversed):
+    def __init__(self, arg1, arg2, reversed, instr_state):
         super(ModRM_REG64__MEM, self).__init__()
+        if arg2.prefix is not None:
+            instr_state.prefixes.append(x64_segment_selectors[arg2.prefix])
         # ARG1 : REG
         # ARG2 : [MEM]
         # this encode [rip + disp]
@@ -510,15 +538,17 @@ class Slash(object):
         "reg = 7 for /7"
         self.reg = reg_order[reg_num]
 
-    def accept_arg(self, previous, args):
+    def accept_arg(self, args, instr_state):
         if len(args) < 1:
             raise ValueError("Missing arg for Slash")
         # Reuse all the MODRm logique with the reg as our self.reg
         # The sens of param is strange I need to fix the `reversed` logique
-        arg_consum, value, rex = ModRM([ModRM_REG64__REG64, ModRM_REG64__MEM], has_direction_bit=False).accept_arg(previous, args[:1] + [self.reg] + args[1:])
+        arg_consum, value, rex = ModRM([ModRM_REG64__REG64, ModRM_REG64__MEM], has_direction_bit=False).accept_arg(args[:1] + [self.reg] + args[1:], instr_state)
         if value is None:
             return arg_consum, value, rex
         return arg_consum-1, value, rex
+
+instr_state = collections.namedtuple('instr_state', ['previous', 'prefixes'])
 
 class Instruction(object):
     encoding = []
@@ -528,11 +558,12 @@ class Instruction(object):
         for type_encoding in self.encoding:
             args = list(initial_args)
             res = []
+            prefix = []
             full_rex = self.default_rex
             if hasattr(self, "default_32_bits") and self.default_32_bits:
                 full_rex = BitArray.from_int(8, 0x48)
             for element in type_encoding:
-                arg_consum, value, rex = element.accept_arg(res, args)
+                arg_consum, value, rex = element.accept_arg(args, instr_state(res, prefix))
                 if arg_consum is None:
                     break
                 res.append(value)
@@ -542,6 +573,7 @@ class Instruction(object):
             else: # if no break
                 if args: # if still args: fail
                     continue
+                self.prefix = prefix
                 self.value = sum(res, BitArray(0, ""))
                 if any(full_rex.array):
                     self.value = full_rex + self.value
@@ -549,7 +581,8 @@ class Instruction(object):
         raise ValueError("Cannot encode <{0} {1}>:(".format(type(self).__name__, initial_args))
 
     def get_code(self):
-        return self.value.dump()
+        prefix_opcode = b"".join(chr(p.PREFIX_VALUE) for p in self.prefix)
+        return  prefix_opcode + bytes(self.value.dump())
 
 class DelayedJump(object):
     def __init__(self, type, label):
@@ -624,7 +657,7 @@ class JmpImm(object):
     def __init__(self, sub):
         self.sub = sub
 
-    def accept_arg(self, previous, args):
+    def accept_arg(self, args, instr_state):
         try:
             jump_size = int(args[0])
         except (ValueError, TypeError):
@@ -669,9 +702,7 @@ class Jnb(JmpType):
 
 
 class Lea(Instruction):
-    #default_rex = BitArray(8, "01001000")
     refuse_reverse = True
-    #default_32_bits = False
     encoding = [(RawBits.from_int(8, 0x8d), ModRM([ModRM_REG64__MEM], accept_reverse=False, has_direction_bit=False))]
 
 class Mov(Instruction):
@@ -860,28 +891,25 @@ try:
 except ImportError:
     in_IDA = False
 
-
-def test_code():
-    s = MultipleInstr()
-    s += Mov('r8', 'r14')
-    s += Label(':SUCE')
-    s += Jnz(':END')
-    s += Add('r14', 0x12345678)
-    s += Dec('r9')
-    s += Dec('rax')
-    s += Jnz(':END')
-    s += Mov('r8', 'rdx')
-    s += Jnz(':END')
-    s += Mov('r8', 'rdx')
-    s += Jnz(':SUCE')
-    s += Mov('r9', 'r10')
-    s += Label(':END')
-    s += Ret()
-    return s
-
-
-
 if in_IDA:
+    def test_code():
+        s = MultipleInstr()
+        s += Mov('r8', 'r14')
+        s += Label(':SUCE')
+        s += Jnz(':END')
+        s += Add('r14', 0x12345678)
+        s += Dec('r9')
+        s += Dec('rax')
+        s += Jnz(':END')
+        s += Mov('r8', 'rdx')
+        s += Jnz(':END')
+        s += Mov('r8', 'rdx')
+        s += Jnz(':SUCE')
+        s += Mov('r9', 'r10')
+        s += Label(':END')
+        s += Ret()
+        return s
+
     def reset():
         idc.MakeUnknown(idc.MinEA(), 0x1000, 0)
         for i in range(0x1000):

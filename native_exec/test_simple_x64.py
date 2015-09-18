@@ -54,6 +54,12 @@ class TestInstr(object):
     def compare_mem_access(self, memaccess, capres, cap_op):
         if cap_op.type != capstone.x86.X86_OP_MEM:
             raise AssertionError("Expected Memaccess <{0}> got {1}".format(memaccess, cap_op))
+        if memaccess.prefix is not None and capres.prefix[1] != x64_segment_selectors[memaccess.prefix].PREFIX_VALUE:
+            try:
+                get_prefix = [n for n,x in x64_segment_selectors.items() if x.PREFIX_VALUE == capres.prefix[1]][0]
+            except IndexError:
+                get_prefix = None
+            raise AssertionError("Expected Segment overide <{0}> got {1}".format(memaccess.prefix, get_prefix))
         cap_mem = cap_op.mem
         if memaccess.base is None and cap_mem.base != capstone.x86.X86_REG_INVALID:
             raise AssertionError("Unexpected memaccess base <{0}>".format(capres.reg_name(cap_mem.base)))
@@ -75,8 +81,10 @@ TestInstr(Add)('RAX', mem('[RDI + 0x10]'))
 TestInstr(Add)('RAX', mem('[RSI + 0x7fffffff]'))
 TestInstr(Add)('RAX', mem('[RSI + -0x1]'))
 TestInstr(Add)('RAX', mem('[0x10]'))
+TestInstr(Add)('RAX', mem('fs:[0x10]'))
 TestInstr(Add)('RAX', mem('[RSI + RDI * 2]'))
 TestInstr(Add)('RAX', mem('[RSI + RDI * 2 + 0x10]'))
+TestInstr(Add)('RAX', mem('gs:[RSI + RDI * 2 + 0x10]'))
 TestInstr(Add)('RAX', mem('[R15 * 8 + 0x10]'))
 TestInstr(Add)('RAX', mem('[R9 + R8 * 2 + 0x7fffffff]'))
 TestInstr(Add)('RAX', mem('[R9 + R8 * 2 + -0x80000000]'))
@@ -86,11 +94,14 @@ TestInstr(Xor)('R15', mem('[RAX + R8 * 2 + 0x11223344]'))
 TestInstr(Xor)('RAX', 'RAX')
 TestInstr(Cmp)('RAX', -1)
 TestInstr(Lea)('RAX', mem('[RAX + 1]'))
+TestInstr(Lea)('RAX', mem('fs:[RAX + 1]'))
 TestInstr(Mov)('RAX', mem('[0x1122334455667788]'))
+TestInstr(Mov)('RAX', mem('gs:[0x1122334455667788]'))
+TestInstr(Mov)('RAX', mem('gs:[0x60]'))
 TestInstr(Mov)('RCX', 0x1122334455667788)
 TestInstr(Mov)('RCX', -1)
 TestInstr(Mov, immediat_accepted=-1)('RCX', 0xffffffffffffffff)
-TestInstr(Mov)(mem('[0x1122334455667788]'), 'RAX')
+TestInstr(Mov)(mem('gs:[0x1122334455667788]'), 'RAX')
 TestInstr(Push)('R15')
 TestInstr(Push)(0x42)
 TestInstr(Push)(-1)

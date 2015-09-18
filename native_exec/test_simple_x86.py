@@ -7,29 +7,29 @@ disassembleur.detail = True
 def disas(x):
     return list(disassembleur.disasm(x, 0))
 
-    
+
 class TestInstr(object):
     def __init__(self, instr_to_test):
         self.instr_to_test = instr_to_test
-        
+
     def __call__(self, *args):
         res = bytes(self.instr_to_test(*args).get_code())
         capres_list = disas(res)
         if len(capres_list) != 1:
-            raise AssertionError("Trying to disas an instruction resulted in multiple disassembled instrs") 
+            raise AssertionError("Trying to disas an instruction resulted in multiple disassembled instrs")
         capres = capres_list[0]
         print("{0} {1}".format(capres.mnemonic, capres.op_str))
         if len(res) != len(capres.bytes):
             raise AssertionError("Not all bytes have been used by the disassembler")
         self.compare_mnemo(capres)
         self.compare_args(args, capres)
-        
+
     def compare_mnemo(self, capres):
         expected = self.instr_to_test.__name__.lower()
         if expected != str(capres.mnemonic):
             raise AssertionError("Expected menmo {0} got {1}".format(expected, str(capres.mnemonic)))
         return True
-        
+
     def compare_args(self, args, capres):
         capres_op = list(capres.operands)
         if len(args) != len(capres_op):
@@ -47,10 +47,16 @@ class TestInstr(object):
                 self.compare_mem_access(op_args, capres, cap_op)
             else:
                 raise ValueError("Unknow argument {0} of type {1}".format(op_args, type(op_args)))
-                
+
     def compare_mem_access(self, memaccess, capres, cap_op):
         if cap_op.type != capstone.x86.X86_OP_MEM:
             raise AssertionError("Expected Memaccess <{0}> got {1}".format(memaccess, cap_op))
+        if memaccess.prefix is not None and capres.prefix[1] != x86_segment_selectors[memaccess.prefix].PREFIX_VALUE:
+            try:
+                get_prefix = [n for n,x in x86_segment_selectors.items() if x.PREFIX_VALUE == capres.prefix[1]][0]
+            except IndexError:
+                get_prefix = None
+            raise AssertionError("Expected Segment overide <{0}> got {1}".format(memaccess.prefix, get_prefix))
         cap_mem = cap_op.mem
         if memaccess.base is None and cap_mem.base != capstone.x86.X86_REG_INVALID:
             raise AssertionError("Unexpected memaccess base <{0}>".format(capres.reg_name(cap_mem.base)))
@@ -59,13 +65,13 @@ class TestInstr(object):
         if memaccess.index is None and cap_mem.index != capstone.x86.X86_REG_INVALID:
             raise AssertionError("Unexpected memaccess index <{0}>".format(capres.reg_name(cap_mem.base)))
         if memaccess.index is not None and capres.reg_name(cap_mem.index) != memaccess.index.lower():
-            raise AssertionError("Expected mem.index {0} got {1}".format(memaccess.index.lower(), capres.reg_name(cap_mem.index)))    
+            raise AssertionError("Expected mem.index {0} got {1}".format(memaccess.index.lower(), capres.reg_name(cap_mem.index)))
         if memaccess.scale != cap_mem.scale and not (memaccess.scale is None and cap_mem.scale == 1):
             raise AssertionError("Expected mem.scale {0} got {1}".format(memaccess.scale, cap_mem.scale))
         if memaccess.disp != cap_mem.disp:
             raise AssertionError("Expected mem.disp {0} got {1}".format(memaccess.disp, cap_mem.disp))
-                   
-            
+
+
 TestInstr(Mov)('EAX', 'ESP')
 TestInstr(Mov)('ECX', mem('[EAX]'))
 TestInstr(Mov)('EDX', mem('[ECX + 0x10]'))
@@ -74,6 +80,18 @@ TestInstr(Mov)('EDX', mem('[0x11223344]'))
 TestInstr(Mov)('EDX', mem('[ESP + EBP * 2 + 0x223344]'))
 TestInstr(Mov)(mem('[EBP + EBP * 2 + 0x223344]'), 'ESP')
 TestInstr(Mov)('ESI', mem('[ESI + EDI * 1]'))
+
+TestInstr(Mov)('EAX', mem('fs:[0x30]'))
+TestInstr(Mov)('EDI', mem('gs:[EAX + ECX * 4]'))
+
+TestInstr(Mov)('AX', 'AX')
+TestInstr(Mov)('SI', 'DI')
+
+TestInstr(Mov)('AX', 'AX')
+TestInstr(Mov)('AX', mem('fs:[0x30]'))
+TestInstr(Mov)('AX', mem('fs:[EAX + 0x30]'))
+TestInstr(Mov)('AX', mem('fs:[EAX + ECX * 4+0x30]'))
+
 TestInstr(Add)('EAX', 8)
 TestInstr(Add)('EAX', 0xffffffff)
 
