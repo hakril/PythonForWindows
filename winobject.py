@@ -235,13 +235,18 @@ class CurrentThread(AutoHandle):
 class CurrentProcess(Process):
     """The current process"""
     get_peb = None
-    get_peb_32_code = codecs.decode(b'64a130000000c3', 'hex')
-    # mov    rax,QWORD PTR gs:0x60
-    # ret
-    get_peb_64_code = codecs.decode(b"65488B042560000000C3", 'hex')
+
+    get_peb_32_code =  x86.MultipleInstr()
+    get_peb_32_code += x86.Mov('EAX', x86.mem('fs:[0x30]'))
+    get_peb_32_code += x86.Ret()
+    get_peb_32_code =  get_peb_32_code.get_code()
+
+    get_peb_64_code =  x64.MultipleInstr()
+    get_peb_64_code += x64.Mov('RAX', x64.mem('gs:[0x60]'))
+    get_peb_64_code += x64.Ret()
+    get_peb_64_code =  get_peb_64_code.get_code()
 
     allocator = native_exec.native_function.allocator
-
 
     def get_peb_builtin(self):
         if self.get_peb is not None:
@@ -426,15 +431,14 @@ class WinProcess(PROCESSENTRY32, Process):
         return injection.execute_python_code(self, pycode)
 
     def get_peb_addr(self):
-        get_peb_32_code = codecs.decode(b'64a130000000', 'hex')
-        get_peb_64_code = codecs.decode(b"65488B042560000000", 'hex')
         dest = self.virtual_alloc(0x1000)
         if self.bitness == 32:
-            get_peb_code = get_peb_32_code
+            #get_peb_code = get_peb_32_code
             store_peb = x86.MultipleInstr()
+            store_peb += x86.Mov('EAX', x86.mem('fs:[0x30]'))
             store_peb += x86.Mov(x86.create_displacement(disp=dest), 'EAX')
             store_peb += x86.Ret()
-            get_peb_code += store_peb.get_code()
+            get_peb_code = store_peb.get_code()
             self.write_memory(dest, "\x00" * 4)
             self.write_memory(dest + 4, get_peb_code)
             self.create_thread(dest + 4, 0)
@@ -442,11 +446,11 @@ class WinProcess(PROCESSENTRY32, Process):
             peb_addr = struct.unpack("<I", self.read_memory(dest, 4))[0]
             return peb_addr
         else:
-            get_peb_code = get_peb_64_code
             store_peb = x64.MultipleInstr()
+            store_peb += x64.Mov('RAX', x64.mem('gs:[0x60]'))
             store_peb += x64.Mov(x64.create_displacement(disp=dest), 'RAX')
             store_peb += x64.Ret()
-            get_peb_code += store_peb.get_code()
+            get_peb_code = store_peb.get_code()
             self.write_memory(dest, "\x00" * 8)
             self.write_memory(dest + 8, get_peb_code)
             self.create_thread(dest + 8, 0)
