@@ -547,7 +547,8 @@ class Dec(Instruction):
     encoding = [(RawBits.from_int(5, 0x48 >> 3), X86RegisterSelector())]
 
 class Inc(Instruction):
-    encoding = [(RawBits.from_int(5, 0x40 >> 3), X86RegisterSelector())]
+    encoding = [(RawBits.from_int(5, 0x40 >> 3), X86RegisterSelector()),
+                (RawBits.from_int(8, 0xff), Slash(0)),]
 
 class Add(Instruction):
     encoding = [(RawBits.from_int(8, 0x05), RegisterEax(), Imm32()),

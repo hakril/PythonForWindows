@@ -95,6 +95,9 @@ TestInstr(Mov)('AX', mem('fs:[EAX + ECX * 4+0x30]'))
 TestInstr(Add)('EAX', 8)
 TestInstr(Add)('EAX', 0xffffffff)
 
+TestInstr(Inc)('EAX')
+TestInstr(Inc)(mem('[0x42424242]'))
+
 TestInstr(Lea)('EAX', mem('[EAX + 1]'))
 TestInstr(Lea)('ECX', mem('[EDI + -0xff]'))
 
