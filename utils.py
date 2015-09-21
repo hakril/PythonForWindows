@@ -85,6 +85,20 @@ def create_console():
     #os.dup2(console_stderr.fileno(), 2)
     sys.stderr = console_stderr
 
+def create_process(path, show_windows=False):
+    proc_info = PROCESS_INFORMATION()
+    lpStartupInfo = None
+    if show_windows:
+        StartupInfo = STARTUPINFOA()
+        StartupInfo.cb = ctypes.sizeof(StartupInfo)
+        StartupInfo.dwFlags = 0
+        #StartupInfo.wShowWindow = SW_HIDE
+        lpStartupInfo = ctypes.byref(StartupInfo)
+    windows.k32testing.CreateProcessA(path, lpProcessInformation=ctypes.byref(proc_info), lpStartupInfo=lpStartupInfo)
+    proc = [p for p in windows.system.processes if p.pid == proc_info.dwProcessId][0]
+    return proc
+
+
 class FixedInteractiveConsole(code.InteractiveConsole):
     def raw_input(self, prompt=">>>"):
         sys.stdout.write(prompt)
@@ -125,4 +139,14 @@ class VirtualProtected(object):
 
     def __exit__(self, exc_type, exc_value, traceback):
         kernel32proxy.VirtualProtect(self.addr, self.size, self.old_protect.value, ctypes.byref(self.old_protect))
+        return False
+
+class DisableWow64FsRedirection(object):
+    def __enter__(self):
+        self.OldValue = PVOID()
+        kernel32proxy.Wow64DisableWow64FsRedirection(ctypes.byref(self.OldValue))
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        kernel32proxy.Wow64RevertWow64FsRedirection(self.OldValue)
         return False

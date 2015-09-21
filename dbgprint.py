@@ -40,4 +40,6 @@ try:
     else:
         dbgprint = do_nothing
 except Exception as e:
-    print("dbgprint Error: {0}({1})".format(type(e), e))  
+    dbgprint = do_nothing
+    print("dbgprint Error: {0}({1})".format(type(e), e))
+    x = type(e), e

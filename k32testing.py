@@ -160,7 +160,10 @@ def TransparentApiProxy(APIDLL, func_name, error_check):
 
     prototype = getattr(winfuncs, func_name + "Prototype")
     args = getattr(winfuncs, func_name + "Params")
-    c_prototyped = prototype((func_name, APIDLL), args)
+    try:
+        c_prototyped = prototype((func_name, APIDLL), args)
+    except AttributeError:
+        raise ExportNotFound(func_name, APIDLL._name)
     c_prototyped.errcheck = functools.wraps(error_check)(functools.partial(error_check, func_name))
     return c_prototyped
 
@@ -183,6 +186,7 @@ class NeededParameterType(object):
 NeededParameter = NeededParameterType()
 
 ExitProcess = TransparentKernel32Proxy("ExitProcess")
+TerminateProcess = TransparentKernel32Proxy("TerminateProcess")
 CloseHandle = TransparentKernel32Proxy("CloseHandle")
 GetProcAddress = TransparentKernel32Proxy("GetProcAddress")
 LoadLibraryA = TransparentKernel32Proxy("LoadLibraryA")
@@ -192,6 +196,7 @@ GetCurrentProcess = TransparentKernel32Proxy("GetCurrentProcess")
 GetCurrentProcessorNumber = TransparentKernel32Proxy("GetCurrentProcessorNumber", no_error_check)
 GetCurrentThread = TransparentKernel32Proxy("GetCurrentThread")
 AllocConsole = TransparentKernel32Proxy("AllocConsole")
+FreeConsole = TransparentKernel32Proxy("FreeConsole")
 GetStdHandle = TransparentKernel32Proxy("GetStdHandle")
 SetStdHandle = TransparentKernel32Proxy("SetStdHandle")
 GetCurrentThreadId = TransparentKernel32Proxy("GetCurrentThreadId")
@@ -202,6 +207,9 @@ SuspendThread = TransparentKernel32Proxy("SuspendThread", minus_one_error_check)
 ResumeThread = TransparentKernel32Proxy("ResumeThread", minus_one_error_check)
 GetThreadId = TransparentKernel32Proxy("GetThreadId")
 
+Wow64DisableWow64FsRedirection = OptionalExport(TransparentKernel32Proxy)("Wow64DisableWow64FsRedirection")
+Wow64RevertWow64FsRedirection =  OptionalExport(TransparentKernel32Proxy)("Wow64RevertWow64FsRedirection")
+Wow64EnableWow64FsRedirection =  OptionalExport(TransparentKernel32Proxy)("Wow64EnableWow64FsRedirection")
 
 @Kernel32Proxy("CreateFileA")
 def CreateFileA(lpFileName, dwDesiredAccess, dwShareMode=0, lpSecurityAttributes=None, dwCreationDisposition=OPEN_EXISTING, dwFlagsAndAttributes=FILE_ATTRIBUTE_NORMAL, hTemplateFile=None):
@@ -371,6 +379,7 @@ def DeviceIoControl(hDevice, dwIoControlCode, lpInBuffer, nInBufferSize=None, lp
         # Some windows check 0 / others does not
         lpBytesReturned = ctypes.byref(DWORD())
     return DeviceIoControl.ctypes_function(hDevice, dwIoControlCode, lpInBuffer, nInBufferSize, lpOutBuffer, nOutBufferSize, lpBytesReturned, lpOverlapped)
+    
 
 #### NTDLL #####
 

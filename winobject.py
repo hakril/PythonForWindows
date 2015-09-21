@@ -464,6 +464,10 @@ class WinProcess(PROCESSENTRY32, Process):
             return RemotePEB64(self.get_peb_addr(), self)
         return RemotePEB(self.get_peb_addr(), self)
 
+    def exit(self, code=0):
+        """Exit the process"""
+        return kernel32proxy.TerminateProcess(self.handle, code)
+
 
 class LoadedModule(LDR_DATA_TABLE_ENTRY):
     """An entry in the PEB Ldr list"""
