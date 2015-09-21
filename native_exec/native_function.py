@@ -96,13 +96,13 @@ class CustomAllocator(object):
         addr = self.maps[-1].addr + self.cur_offset
         self.cur_offset += size
         return addr
-        
+
 allocator = CustomAllocator()
 
 def get_functions():
     version = sys.version_info
     python_dll = "python" + str(version.major) + str(version.minor)
-    
+
     PyGILState_Ensure = windows.utils.get_func_addr(python_dll, 'PyGILState_Ensure'.encode())
     PyObject_CallObject = windows.utils.get_func_addr(python_dll, 'PyObject_CallObject'.encode())
     PyGILState_Release = windows.utils.get_func_addr(python_dll, 'PyGILState_Release'.encode())
@@ -116,12 +116,12 @@ def analyse_callback(callback):
         raise ValueError("Need a ctypes PyCFuncPtr")
     return obj_id
 
-    
+
 # For windows 32 bits with stdcall
 def generate_stub_32(callback):
     obj_id = analyse_callback(callback)
     c_callback = get_callback_address_32(callback)
-    
+
     gstate_save_addr =  x86.create_displacement(disp=allocator.reserve_int())
     return_addr_save_addr = x86.create_displacement(disp=allocator.reserve_int())
     save_ebx = x86.create_displacement(disp=allocator.reserve_int())
@@ -139,30 +139,30 @@ def generate_stub_32(callback):
     code += x86.Mov(save_edx, 'EDX')
     code += x86.Mov(save_esi, 'ESI')
     code += x86.Mov(save_edi, 'EDI')
-    
+
     code += x86.Mov('EAX', ensure)
     code += x86.Call('EAX')
     code += x86.Mov(gstate_save_addr, 'EAX')
-    
+
     #Save real return addr (for good argument parsing by the callback)
     code += x86.Pop('EAX')
     code += x86.Mov(return_addr_save_addr, 'EAX')
-    
+
     code += x86.Mov('EAX', c_callback)
     code += x86.Call('EAX')
-    
+
     # Restore real return value
     code += x86.Mov('EBX', return_addr_save_addr)
     code += x86.Push('EBX')
-    
+
     # Save return value
     code += x86.Push('EAX')
     code += x86.Mov('EBX', gstate_save_addr)
     code += x86.Push('EBX')
-    
+
     code += x86.Mov('EAX', release)
     code += x86.Call('EAX')
-    
+
     # Discard `release` argument
     code += x86.Pop('EAX')
     # Restore return value
@@ -237,9 +237,9 @@ def generate_stub_64(callback):
     code += x64.Mov('R8', x64.mem('[RAX]'))
     # Call python code
     code += x64.Mov('RAX', c_callback)
-    code += Reserve_space_for_call
     code += x64.Call('RAX') # no need for stack alignement here as we poped the return addr
-    code += Clean_space_for_call
+                            # no need for Reserve_space_for_call as we must use the previous one for
+                            # correct argument parsing
     # Save return value
     code += x64.Mov(return_value_save_addr, 'RAX')
     # Repush real return value
@@ -280,7 +280,7 @@ generate_callback_stub.l = []
 
 def create_function(code, types):
     """Create a python function that call raw machine code
-    
+
    :param str code: Raw machine code that will be called
    :param list types: Return type and parameters type (see :mod:`ctypes`)
    :return: the created function
@@ -289,7 +289,7 @@ def create_function(code, types):
     func_type = ctypes.CFUNCTYPE(*types)
     addr = allocator.write_code(code)
     return func_type(addr)
-    
+
 # Return First argument for 32 bits code
 raw_code = x86.MultipleInstr()
 raw_code += x86.Mov('EAX', x86.mem('[ESP + 4]'))

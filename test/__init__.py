@@ -1,0 +1,1 @@
+from mytest import WindowsTestCase
