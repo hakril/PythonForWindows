@@ -5,6 +5,7 @@ from ctypes.wintypes import *
 from windows.generated_def.winstructs import *
 from windows.generated_def.windef import *
 import windows.generated_def.winfuncs as winfuncs
+from windows.generated_def.ntstatus import NtStatusException
 from windows.dbgprint import dbgprint
 
 
@@ -74,7 +75,7 @@ def iphlpapi_error_check(func_name, result, func, args):
 
 def error_ntstatus(func_name, result, func, args):
     if result:
-        raise WindowsError("{0} failed with ntstatus <{1}>".format(func_name, hex(result & 0xffffffff)))
+        raise NtStatusException(result & 0xffffffff)
     return args
 
 class ExportNotFound(AttributeError):
