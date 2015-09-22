@@ -159,6 +159,9 @@ def create_displacement(base=None, index=None, scale=None, disp=0, prefix=None):
         raise ValueError("Cannot create displacement with index == RSP")
     return mem_access(base, index, scale, disp, prefix)
 
+def deref(disp):
+    return create_displacement(disp=disp)
+
 def mem(data):
     """Parse a memory access string of format [EXPR] or seg:[EXPR]
        EXPR may describe: BASE | INDEX * SCALE | DISPLACEMENT or any combinaison (in this order)
