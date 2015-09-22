@@ -538,7 +538,7 @@ class Jz(JmpType):
 class Jnz(JmpType):
     encoding = [(RawBits.from_int(8, 0x75), JmpImm8(2)),
                 (RawBits.from_int(16, 0x0f85), JmpImm32(6))]
-                
+
 class Jbe(JmpType):
     encoding = [(RawBits.from_int(8, 0x76), JmpImm8(2)),
                 (RawBits.from_int(16, 0x0f86), JmpImm32(6))]
@@ -573,6 +573,12 @@ class Sub(Instruction):
 class Mov(Instruction):
     encoding = [(RawBits.from_int(8, 0x89), ModRM([ModRM_REG__REG, ModRM_REG__MEM])),
                 (RawBits.from_int(5, 0xb8 >> 3), X86RegisterSelector(), Imm32())]
+
+class Movsb(Instruction):
+    encoding = [(RawBits.from_int(8, 0xa4),)]
+
+class Movsd(Instruction):
+    encoding = [(RawBits.from_int(8, 0xa5),)]
 
 class Lea(Instruction):
     encoding = [(RawBits.from_int(8, 0x8d), ModRM([ModRM_REG__MEM], accept_reverse=False, has_direction_bit=False))]

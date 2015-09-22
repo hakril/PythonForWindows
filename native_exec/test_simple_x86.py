@@ -9,8 +9,9 @@ def disas(x):
 
 
 class TestInstr(object):
-    def __init__(self, instr_to_test):
+    def __init__(self, instr_to_test, expected_result=None):
         self.instr_to_test = instr_to_test
+        self.expected_result = expected_result
 
     def __call__(self, *args):
         res = bytes(self.instr_to_test(*args).get_code())
@@ -31,6 +32,12 @@ class TestInstr(object):
         return True
 
     def compare_args(self, args, capres):
+        if self.expected_result is not None:
+            result = "{0} {1}".format(capres.mnemonic, capres.op_str)
+            if result != self.expected_result:
+                raise AssertionError("Bad expected result expect <{0}> got <{1}>".format(self.expected_result, result))
+            return
+
         capres_op = list(capres.operands)
         if len(args) != len(capres_op):
             raise AssertionError("Expected {0} operands got {1}".format(len(args), len(capres_op)))
@@ -104,6 +111,9 @@ TestInstr(Lea)('ECX', mem('[EDI + -0xff]'))
 TestInstr(Call)('EAX')
 TestInstr(Call)(mem('[EAX + ECX * 8]'))
 TestInstr(Cpuid)()
+
+TestInstr(Movsb, expected_result='movsb byte ptr es:[edi], byte ptr [esi]')()
+TestInstr(Movsd, expected_result='movsd dword ptr es:[edi], dword ptr [esi]')()
 
 TestInstr(Xchg)('EAX', 'ESP')
 assert Xchg('EAX', 'ECX').get_code() == Xchg('ECX', 'EAX').get_code()
