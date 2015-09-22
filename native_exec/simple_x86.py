@@ -538,6 +538,14 @@ class Jz(JmpType):
 class Jnz(JmpType):
     encoding = [(RawBits.from_int(8, 0x75), JmpImm8(2)),
                 (RawBits.from_int(16, 0x0f85), JmpImm32(6))]
+                
+class Jbe(JmpType):
+    encoding = [(RawBits.from_int(8, 0x76), JmpImm8(2)),
+                (RawBits.from_int(16, 0x0f86), JmpImm32(6))]
+
+class Jnb(JmpType):
+    encoding = [(RawBits.from_int(8, 0x73), JmpImm8(2)),
+                (RawBits.from_int(16, 0x0f83), JmpImm32(6))]
 
 class Push(Instruction):
     encoding = [(RawBits.from_int(5, 0x50 >> 3), X86RegisterSelector()),
