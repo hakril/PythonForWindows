@@ -112,3 +112,10 @@ TestInstr(Cpuid)()
 
 TestInstr(Xchg)('RAX', 'RSP')
 assert Xchg('RAX', 'RCX').get_code() == Xchg('RCX', 'RAX').get_code()
+
+code = MultipleInstr()
+code += Nop()
+code += Rep + Nop()
+code += Ret()
+print(repr(code.get_code()))
+assert code.get_code() == "\x90\xf3\x90\xc3"

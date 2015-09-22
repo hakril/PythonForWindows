@@ -660,7 +660,7 @@ class MultipleInstr(object):
         # Change DelayedJump to LabeledJump ?
         if isinstance(instruction, DelayedJump):
             return self.add_delayed_jump(instruction)
-        if isinstance(instruction, Instruction):
+        if isinstance(instruction, (Instruction, Prefix)):
             self.instrs[self.size] = instruction
             self.size += len(instruction.get_code())
             return

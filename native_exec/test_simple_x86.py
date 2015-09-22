@@ -117,3 +117,11 @@ TestInstr(Movsd, expected_result='movsd dword ptr es:[edi], dword ptr [esi]')()
 
 TestInstr(Xchg)('EAX', 'ESP')
 assert Xchg('EAX', 'ECX').get_code() == Xchg('ECX', 'EAX').get_code()
+
+
+code = MultipleInstr()
+code += Nop()
+code += Rep + Nop()
+code += Ret()
+print(repr(code.get_code()))
+assert code.get_code() == "\x90\xf3\x90\xc3"
