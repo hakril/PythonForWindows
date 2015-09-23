@@ -4,10 +4,12 @@ from simple_x64 import *
 disassembleur = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_64)
 disassembleur.detail = True
 
+
 def disas(x):
     return list(disassembleur.disasm(x, 0))
 
-mnemonic_name_exception = {'movabs' : 'mov'}
+mnemonic_name_exception = {'movabs': 'mov'}
+
 
 class TestInstr(object):
     def __init__(self, instr_to_test, immediat_accepted=None):
@@ -38,7 +40,7 @@ class TestInstr(object):
         if len(args) != len(capres_op):
             raise AssertionError("Expected {0} operands got {1}".format(len(args), len(capres_op)))
         for op_args, cap_op in zip(args, capres_op):
-            if isinstance(op_args, str): # Register
+            if isinstance(op_args, str):  # Register
                 if cap_op.type != capstone.x86.X86_OP_REG:
                     raise AssertionError("Expected args {0} operands got {1}".format(op_args, capres_op))
                 if op_args.lower() != capres.reg_name(cap_op.reg).lower():
@@ -56,7 +58,7 @@ class TestInstr(object):
             raise AssertionError("Expected Memaccess <{0}> got {1}".format(memaccess, cap_op))
         if memaccess.prefix is not None and capres.prefix[1] != x64_segment_selectors[memaccess.prefix].PREFIX_VALUE:
             try:
-                get_prefix = [n for n,x in x64_segment_selectors.items() if x.PREFIX_VALUE == capres.prefix[1]][0]
+                get_prefix = [n for n, x in x64_segment_selectors.items() if x.PREFIX_VALUE == capres.prefix[1]][0]
             except IndexError:
                 get_prefix = None
             raise AssertionError("Expected Segment overide <{0}> got {1}".format(memaccess.prefix, get_prefix))
@@ -108,8 +110,6 @@ TestInstr(Push)(-1)
 TestInstr(Call)('RAX')
 TestInstr(Call)(mem('[RAX + RCX * 8]'))
 TestInstr(Cpuid)()
-
-
 TestInstr(Xchg)('RAX', 'RSP')
 assert Xchg('RAX', 'RCX').get_code() == Xchg('RCX', 'RAX').get_code()
 

@@ -56,7 +56,7 @@ class TCP4Connection(MIB_TCPROW_OWNER_PID):
     def __repr__(self):
         if not self.established:
             return "<TCP IPV4 Listening socket on {0}:{1}>".format(self.local_addr, self.local_port)
-        return "<TCP IPV4 Connection {0}:{1} -> {2}:{3}>".format(self.local_addr, self.local_port, self.remote_addr, self.remote_port)
+        return "<TCP IPV4 Connection {s.local_addr}:{s.local_port} -> {s.remote_addr}:{s.remote_port}>".format(s=self)
 
 
 class TCP6Connection(MIB_TCP6ROW_OWNER_PID):
@@ -107,10 +107,12 @@ def get_MIB_TCPTABLE_OWNER_PID_from_buffer(buffer):
 
     class _GENERATED_MIB_TCPTABLE_OWNER_PID(ctypes.Structure):
             _fields_ = [
-            ("dwNumEntries", DWORD),
-            ("table", TCP4Connection * nb_entry),
-        ]
+                ("dwNumEntries", DWORD),
+                ("table", TCP4Connection * nb_entry),
+            ]
+
     return _GENERATED_MIB_TCPTABLE_OWNER_PID.from_buffer(buffer)
+
 
 def get_MIB_TCP6TABLE_OWNER_PID_from_buffer(buffer):
     x = windows.generated_def.winstructs.MIB_TCP6TABLE_OWNER_PID.from_buffer(buffer)
@@ -119,33 +121,32 @@ def get_MIB_TCP6TABLE_OWNER_PID_from_buffer(buffer):
     # Struct _MIB_TCP6TABLE_OWNER_PID definitions
     class _GENERATED_MIB_TCP6TABLE_OWNER_PID(Structure):
             _fields_ = [
-            ("dwNumEntries", DWORD),
-            ("table", TCP6Connection * nb_entry),
-        ]
-    return _GENERATED_MIB_TCP6TABLE_OWNER_PID.from_buffer(buffer)
+                ("dwNumEntries", DWORD),
+                ("table", TCP6Connection * nb_entry),
+            ]
 
+    return _GENERATED_MIB_TCP6TABLE_OWNER_PID.from_buffer(buffer)
 
 
 def get_tcp_ipv4_sockets():
     size = ctypes.c_uint(0)
     try:
-        windows.winproxy.GetExtendedTcpTable(None, ctypes.byref(size), ulAf=windows.generated_def.windef.AF_INET)
-    except windows.winproxy.IphlpapiError as e:
-        pass # Allow us to set size to the needed value
+        windows.winproxy.GetExtendedTcpTable(None, ctypes.byref(size), ulAf=AF_INET)
+    except windows.winproxy.IphlpapiError:
+        pass  # Allow us to set size to the needed value
     buffer = (ctypes.c_char * size.value)()
-    windows.winproxy.GetExtendedTcpTable(buffer, ctypes.byref(size), ulAf=windows.generated_def.windef.AF_INET)
+    windows.winproxy.GetExtendedTcpTable(buffer, ctypes.byref(size), ulAf=AF_INET)
     t = get_MIB_TCPTABLE_OWNER_PID_from_buffer(buffer)
     return list(t.table)
+
 
 def get_tcp_ipv6_sockets():
     size = ctypes.c_uint(0)
     try:
-        windows.winproxy.GetExtendedTcpTable(None, ctypes.byref(size), ulAf=windows.generated_def.windef.AF_INET6)
-    except windows.winproxy.IphlpapiError as e:
-        pass # Allow us to set size to the needed value
+        windows.winproxy.GetExtendedTcpTable(None, ctypes.byref(size), ulAf=AF_INET6)
+    except windows.winproxy.IphlpapiError:
+        pass  # Allow us to set size to the needed value
     buffer = (ctypes.c_char * size.value)()
-    windows.winproxy.GetExtendedTcpTable(buffer, ctypes.byref(size), ulAf=windows.generated_def.windef.AF_INET6)
+    windows.winproxy.GetExtendedTcpTable(buffer, ctypes.byref(size), ulAf=AF_INET6)
     t = get_MIB_TCP6TABLE_OWNER_PID_from_buffer(buffer)
     return list(t.table)
-
-

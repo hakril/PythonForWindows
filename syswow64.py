@@ -2,7 +2,6 @@ import struct
 import ctypes
 import codecs
 import windows
-import windows.winproxy as winproxy
 import windows.native_exec.simple_x64 as x64
 from generated_def.winstructs import *
 
@@ -10,15 +9,17 @@ from generated_def.winstructs import *
 CS_32bits = 0x23
 CS_64bits = 0x33
 
+
 def genere_return_32bits_stub(ret_addr):
     ret_32b = x64.MultipleInstr()
     ret_32b += x64.Mov('RCX', (CS_32bits << 32) + ret_addr)
     ret_32b += x64.Push('RCX')
-    ret_32b += x64.Retf32() #32 bits return addr
+    ret_32b += x64.Retf32()  # 32 bits return addr
     return ret_32b.get_code()
 
 # The format of a jump to 64bits mode
 dummy_jump = "\xea" + struct.pack("<I", 0) + chr(CS_64bits) + "\x00\x00"
+
 
 def execute_64bits_code_from_syswow(shellcode):
     """shellcode must not end by a ret"""
@@ -42,11 +43,11 @@ def execute_64bits_code_from_syswow(shellcode):
     exec_stub = ctypes.CFUNCTYPE(HRESULT)(jump_addr)
     return exec_stub()
 
+
 def NtCreateThreadEx_32_to_64(process, addr, param):
     NtCreateThreadEx = get_NtCreateThreadEx_syswow_addr()
     create_thread = x64.MultipleInstr()
     # Save registers
-    #create_thread += Push('RAX')
     create_thread += x64.Push('RBX')
     create_thread += x64.Push('RCX')
     create_thread += x64.Push('RDX')
@@ -60,20 +61,20 @@ def NtCreateThreadEx_32_to_64(process, addr, param):
     create_thread += x64.Push('R13')
     # Setup args
     create_thread += x64.Push(0)
-    create_thread += x64.Mov('RCX', 'RSP') #Arg1
-    create_thread += x64.Mov('RDX', 0x1fffff) #Arg2
-    create_thread += x64.Mov('R8', 0) #Arg3
-    create_thread += x64.Mov('R9', process.handle) #Arg4
+    create_thread += x64.Mov('RCX', 'RSP')  # Arg1
+    create_thread += x64.Mov('RDX', 0x1fffff)  # Arg2
+    create_thread += x64.Mov('R8', 0)  # Arg3
+    create_thread += x64.Mov('R9', process.handle)  # Arg4
     create_thread += x64.Mov('RAX', 0)
-    create_thread += x64.Push('RAX') #Arg11
-    create_thread += x64.Push('RAX') #Arg10
-    create_thread += x64.Push('RAX') #Arg9
-    create_thread += x64.Push('RAX') #Arg8
-    create_thread += x64.Push('RAX') #Arg7
+    create_thread += x64.Push('RAX')  # Arg11
+    create_thread += x64.Push('RAX')  # Arg10
+    create_thread += x64.Push('RAX')  # Arg9
+    create_thread += x64.Push('RAX')  # Arg8
+    create_thread += x64.Push('RAX')  # Arg7
     create_thread += x64.Mov('RAX', param)
-    create_thread += x64.Push('RAX') #Arg6
+    create_thread += x64.Push('RAX')  # Arg6
     create_thread += x64.Mov('RAX', addr)
-    create_thread += x64.Push('RAX') #Arg5
+    create_thread += x64.Push('RAX')  # Arg5
     # reserve space for register (calling convention)
     create_thread += x64.Push('R9')
     create_thread += x64.Push('R8')
@@ -83,7 +84,7 @@ def NtCreateThreadEx_32_to_64(process, addr, param):
     create_thread += x64.Mov('R13', NtCreateThreadEx)
     create_thread += x64.Call('R13')
     # Clean stack
-    create_thread += x64.Add('RSP' , 12 * 8)
+    create_thread += x64.Add('RSP', 12 * 8)
     create_thread += x64.Pop('R13')
     create_thread += x64.Pop('R12')
     create_thread += x64.Pop('R11')
@@ -95,7 +96,6 @@ def NtCreateThreadEx_32_to_64(process, addr, param):
     create_thread += x64.Pop('RDX')
     create_thread += x64.Pop('RCX')
     create_thread += x64.Pop('RBX')
-
     return execute_64bits_code_from_syswow(create_thread.get_code())
 
 
@@ -114,6 +114,7 @@ def get_NtCreateThreadEx_syswow_addr():
     return get_NtCreateThreadEx_syswow_addr.value
 get_NtCreateThreadEx_syswow_addr.value = None
 
+
 def get_current_process_syswow_peb_addr():
     current_process = windows.current_process
     dest = current_process.virtual_alloc(0x1000)
@@ -126,11 +127,13 @@ def get_current_process_syswow_peb_addr():
     peb_addr = struct.unpack("<Q", current_process.read_memory(dest, 8))[0]
     return peb_addr
 
+
 def get_current_process_syswow_peb():
     current_process = windows.current_process
+
     class CurrentProcessReadSyswow():
         def read_memory(self, addr, size):
-            buffer_addr =  ctypes.create_string_buffer(size)
+            buffer_addr = ctypes.create_string_buffer(size)
             windows.winproxy.NtWow64ReadVirtualMemory64(current_process.handle, addr, buffer_addr, size)
             return buffer_addr[:]
         bitness = 64

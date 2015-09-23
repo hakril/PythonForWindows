@@ -3,7 +3,8 @@ import ctypes
 
 import windows.utils as utils
 from . import native_exec
-from .generated_def import winfuncs, windef
+from .generated_def import winfuncs
+from .generated_def.windef import PAGE_EXECUTE_READWRITE
 from .generated_def.winstructs import *
 
 
@@ -15,12 +16,14 @@ class Callback(object):
         func._types_info = self.types
         return func
 
+
 class KnownCallback(object):
     types = ()
 
     def __call__(self, func):
         func._types_info = self.types
         return func
+
 
 def add_callback_to_module(callback):
     setattr(sys.modules[__name__], type(callback).__name__, callback)
@@ -31,11 +34,10 @@ for func in winfuncs.functions:
     callback_name = func + "Callback"
 
     class CallBackDeclaration(KnownCallback):
-        types = (prototype._restype_,) +  prototype._argtypes_
+        types = (prototype._restype_,) + prototype._argtypes_
 
     CallBackDeclaration.__name__ = callback_name
     add_callback_to_module(CallBackDeclaration())
-
 
 
 class IATHook(object):
@@ -64,17 +66,16 @@ class IATHook(object):
         return res
 
     def enable(self):
-        with utils.VirtualProtected(self.entry.addr, ctypes.sizeof(PVOID), windef.PAGE_EXECUTE_READWRITE):
+        with utils.VirtualProtected(self.entry.addr, ctypes.sizeof(PVOID), PAGE_EXECUTE_READWRITE):
             self.entry.value = self.stub
         self.is_enable = True
 
     def disable(self):
-        with utils.VirtualProtected(self.entry.addr, ctypes.sizeof(PVOID), windef.PAGE_EXECUTE_READWRITE):
+        with utils.VirtualProtected(self.entry.addr, ctypes.sizeof(PVOID), PAGE_EXECUTE_READWRITE):
             self.entry.value = self.entry.nonhookvalue
         self.is_enable = False
 
     def hook_callback(self, *args):
-        original_args = args
         adapted_args = []
         for value, type in zip(args, self.original_types[1:]):
             if type == ctypes.c_wchar_p:

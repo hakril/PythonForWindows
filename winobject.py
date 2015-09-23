@@ -1,6 +1,5 @@
 import ctypes
 import os
-import codecs
 import copy
 import time
 import struct
@@ -42,8 +41,9 @@ class AutoHandle(object):
         return self._handle
 
     def __del__(self):
-         if hasattr(self, "_handle") and self._handle:
+        if hasattr(self, "_handle") and self._handle:
             winproxy.CloseHandle(self._handle)
+
 
 class System(object):
     """Represent the current windows system python is running on"""
@@ -127,7 +127,7 @@ class WinThread(THREADENTRY32, AutoHandle):
 
     @property
     def context(self):
-        x =  windows.vectored_exception.EnhancedCONTEXT()
+        x = windows.vectored_exception.EnhancedCONTEXT()
         x.ContextFlags = CONTEXT_FULL
         winproxy.GetThreadContext(self.handle, x)
         return x
@@ -163,6 +163,7 @@ class WinThread(THREADENTRY32, AutoHandle):
             return [t for t in System().threads if t.tid == tid][0]
         except IndexError:
             return (tid, handle)
+
 
 class Process(AutoHandle):
     @utils.fixedpropety
@@ -231,20 +232,19 @@ class CurrentThread(AutoHandle):
         return winproxy.ExitThread(code)
 
 
-
 class CurrentProcess(Process):
     """The current process"""
     get_peb = None
 
-    get_peb_32_code =  x86.MultipleInstr()
+    get_peb_32_code = x86.MultipleInstr()
     get_peb_32_code += x86.Mov('EAX', x86.mem('fs:[0x30]'))
     get_peb_32_code += x86.Ret()
-    get_peb_32_code =  get_peb_32_code.get_code()
+    get_peb_32_code = get_peb_32_code.get_code()
 
-    get_peb_64_code =  x64.MultipleInstr()
+    get_peb_64_code = x64.MultipleInstr()
     get_peb_64_code += x64.Mov('RAX', x64.mem('gs:[0x60]'))
     get_peb_64_code += x64.Ret()
-    get_peb_64_code =  get_peb_64_code.get_code()
+    get_peb_64_code = get_peb_64_code.get_code()
 
     allocator = native_exec.native_function.allocator
 
@@ -330,6 +330,7 @@ class CurrentProcess(Process):
         """Exit the process"""
         return winproxy.ExitProcess(code)
 
+
 class WinProcess(PROCESSENTRY32, Process):
     """A Process on the system"""
     is_pythondll_injected = 0
@@ -378,7 +379,7 @@ class WinProcess(PROCESSENTRY32, Process):
 
     def low_read_memory(self, addr, buffer_addr, size):
         if windows.current_process.bitness == 32 and self.bitness == 64:
-            #OptionalExport can be None (see winproxy.py)
+            # OptionalExport can be None (see winproxy.py)
             if winproxy.NtWow64ReadVirtualMemory64 is None:
                 raise ValueError("NtWow64ReadVirtualMemory64 non available in ntdll: cannot write into 64bits processus")
             return winproxy.NtWow64ReadVirtualMemory64(self.handle, addr, buffer_addr, size)
@@ -386,27 +387,27 @@ class WinProcess(PROCESSENTRY32, Process):
 
     def read_memory(self, addr, size):
         """Read `size` from `addr`"""
-        buffer =  ctypes.create_string_buffer(size)
+        buffer = ctypes.create_string_buffer(size)
         self.low_read_memory(addr, ctypes.byref(buffer), size)
         return buffer[:]
 
-    ##Simple cache test
-    #real_read = read_memory
+    # Simple cache test
+    # real_read = read_memory
     #
-    #def read_memory(self, addr, size):
-    #    """Cached version for test"""
-    #    dbgprint('Read remote Memory of {0}'.format(self), 'READMEM')
-    #    if not hasattr(self, "_cache_cache"):
-    #        self._cache_cache = {}
-    #    page_addr = addr & 0xfffffffffffff000
-    #    if page_addr in self._cache_cache:
-    #        #print("CACHED Read on page {0}".format(hex(page_addr)))
-    #        page_data = self._cache_cache[page_addr]
-    #        return page_data[addr & 0xfff: (addr & 0xfff) + size]
-    #    else:
-    #        page_data = self.real_read(page_addr, 0x1000)
-    #        self._cache_cache[page_addr] = page_data
-    #        return page_data[addr & 0xfff: (addr & 0xfff) + size]
+    # def read_memory(self, addr, size):
+    #     """Cached version for test"""
+    #     dbgprint('Read remote Memory of {0}'.format(self), 'READMEM')
+    #     if not hasattr(self, "_cache_cache"):
+    #         self._cache_cache = {}
+    #     page_addr = addr & 0xfffffffffffff000
+    #     if page_addr in self._cache_cache:
+    #         #print("CACHED Read on page {0}".format(hex(page_addr)))
+    #         page_data = self._cache_cache[page_addr]
+    #         return page_data[addr & 0xfff: (addr & 0xfff) + size]
+    #     else:
+    #         page_data = self.real_read(page_addr, 0x1000)
+    #         self._cache_cache[page_addr] = page_data
+    #         return page_data[addr & 0xfff: (addr & 0xfff) + size]
 
     def read_memory_into(self, addr, struct):
         """Read a :mod:`ctypes` struct from `addr`"""
@@ -417,7 +418,7 @@ class WinProcess(PROCESSENTRY32, Process):
         """Create a remote thread"""
         if windows.current_process.bitness == 32 and self.bitness == 64:
             return windows.syswow64.NtCreateThreadEx_32_to_64(self, addr, param)
-        return  WinThread._from_handle(winproxy.CreateRemoteThread(hProcess=self.handle, lpStartAddress=addr, lpParameter=param))
+        return WinThread._from_handle(winproxy.CreateRemoteThread(hProcess=self.handle, lpStartAddress=addr, lpParameter=param))
 
     def load_library(self, dll_path):
         """Load the library in remote process"""
@@ -433,7 +434,6 @@ class WinProcess(PROCESSENTRY32, Process):
     def get_peb_addr(self):
         dest = self.virtual_alloc(0x1000)
         if self.bitness == 32:
-            #get_peb_code = get_peb_32_code
             store_peb = x86.MultipleInstr()
             store_peb += x86.Mov('EAX', x86.mem('fs:[0x30]'))
             store_peb += x86.Mov(x86.create_displacement(disp=dest), 'EAX')
@@ -506,6 +506,7 @@ class LoadedModule(LDR_DATA_TABLE_ENTRY):
         """
         return pe_parse.PEFile(self.baseaddr)
 
+
 class WinUnicodeString(LSA_UNICODE_STRING):
     """LSA_UNICODE_STRING with a nice `__repr__`"""
     def __repr__(self):
@@ -514,20 +515,25 @@ class WinUnicodeString(LSA_UNICODE_STRING):
 
 class LIST_ENTRY_PTR(PVOID):
     def TO_LDR_ENTRY(self):
-        return LDR_DATA_TABLE_ENTRY.from_address(self.value - sizeof(PVOID) *  2)
+        return LDR_DATA_TABLE_ENTRY.from_address(self.value - sizeof(PVOID) * 2)
+
 
 def transform_ctypes_fields(struct, replacement):
     return [(name, replacement.get(name, type)) for name, type in struct._fields_]
 
+
 class RTL_USER_PROCESS_PARAMETERS(Structure):
-    _fields_ = transform_ctypes_fields(RTL_USER_PROCESS_PARAMETERS, # The one in generated_def
-                {"ImagePathName" : WinUnicodeString,
-                 "CommandLine" : WinUnicodeString})
+    _fields_ = transform_ctypes_fields(RTL_USER_PROCESS_PARAMETERS,  # The one in generated_def
+                                       {"ImagePathName": WinUnicodeString,
+                                        "CommandLine": WinUnicodeString}
+                                       )
+
 
 class PEB(Structure):
     """The PEB (Process Environment Block) of the current process"""
-    _fields_ = transform_ctypes_fields(PEB, # The one in generated_def
-                {"ProcessParameters" : POINTER(RTL_USER_PROCESS_PARAMETERS)})
+    _fields_ = transform_ctypes_fields(PEB,  # The one in generated_def
+                                       {"ProcessParameters": POINTER(RTL_USER_PROCESS_PARAMETERS)}
+                                       )
 
     @property
     def imagepath(self):
@@ -564,14 +570,11 @@ class PEB(Structure):
 import windows.remotectypes as rctypes
 
 
-
-
-
 class RemotePEB(rctypes.RemoteStructure.from_structure(PEB)):
     RemoteLoadedModule = rctypes.RemoteStructure.from_structure(LoadedModule)
 
     def ptr_flink_to_remote_module(self, ptr_value):
-        return self.RemoteLoadedModule(ptr_value - ctypes.sizeof(ctypes.c_void_p) *  2, self._target)
+        return self.RemoteLoadedModule(ptr_value - ctypes.sizeof(ctypes.c_void_p) * 2, self._target)
 
     @property
     def modules(self):
@@ -589,6 +592,7 @@ class RemotePEB(rctypes.RemoteStructure.from_structure(PEB)):
             current_dll = self.ptr_flink_to_remote_module(list_entry_ptr)
         return res
 
+
 if CurrentProcess().bitness == 32:
     class RemoteLoadedModule64(rctypes.transform_type_to_remote64bits(LoadedModule)):
         @property
@@ -600,10 +604,9 @@ if CurrentProcess().bitness == 32:
             return pe_parse.PEFile(self.baseaddr, target=self._target)
 
     class RemotePEB64(rctypes.transform_type_to_remote64bits(PEB)):
-        #RemoteLoadedModule64 = rctypes.transform_type_to_remote64bits(LoadedModule)
 
         def ptr_flink_to_remote_module(self, ptr_value):
-            return RemoteLoadedModule64(ptr_value - ctypes.sizeof(rctypes.c_void_p64) *  2, self._target)
+            return RemoteLoadedModule64(ptr_value - ctypes.sizeof(rctypes.c_void_p64) * 2, self._target)
 
         @property
         def modules(self):
@@ -619,4 +622,4 @@ if CurrentProcess().bitness == 32:
                 res.append(current_dll)
                 list_entry_ptr = current_dll.InMemoryOrderLinks.Flink.raw_value
                 current_dll = self.ptr_flink_to_remote_module(list_entry_ptr)
-            return res
+                return res

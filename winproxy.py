@@ -14,13 +14,14 @@ advapi32 = ctypes.windll.Advapi32
 iphlpapi = ctypes.windll.iphlpapi
 ntdll = ctypes.windll.ntdll
 
+
 class Kernel32Error(WindowsError):
     def __new__(cls, func_name):
         win_error = ctypes.WinError()
         api_error = super(Kernel32Error, cls).__new__(cls)
         api_error.api_name = func_name
         api_error.winerror = win_error.winerror
-        api_error.strerror =  win_error.strerror
+        api_error.strerror = win_error.strerror
         api_error.args = (func_name, win_error.winerror, win_error.strerror)
         return api_error
 
@@ -30,6 +31,7 @@ class Kernel32Error(WindowsError):
     def __str__(self):
         return "{0}: {1}".format(self.api_name, super(Kernel32Error, self).__str__())
 
+
 class IphlpapiError(Kernel32Error):
 
     def __new__(cls, func_name, code):
@@ -37,17 +39,19 @@ class IphlpapiError(Kernel32Error):
         api_error = super(Kernel32Error, cls).__new__(cls)
         api_error.api_name = func_name
         api_error.winerror = win_error.winerror
-        api_error.strerror =  win_error.strerror
+        api_error.strerror = win_error.strerror
         api_error.args = (func_name, win_error.winerror, win_error.strerror)
         return api_error
 
     def __init__(self, func_name, code):
         pass
 
+
 # Error check method
 def no_error_check(func_name, result, func, args):
     """Nothing special"""
     return args
+
 
 def minus_one_error_check(func_name, result, func, args):
     if result == -1:
@@ -61,11 +65,13 @@ def kernel32_error_check(func_name, result, func, args):
         raise Kernel32Error(func_name)
     return args
 
+
 def kernel32_zero_check(func_name, result, func, args):
     """raise Kernel32Error if result is NOT 0"""
     if result:
         raise Kernel32Error(func_name)
     return args
+
 
 def iphlpapi_error_check(func_name, result, func, args):
     """raise IphlpapiError if result is NOT 0"""
@@ -73,10 +79,12 @@ def iphlpapi_error_check(func_name, result, func, args):
         raise IphlpapiError(func_name, result)
     return args
 
+
 def error_ntstatus(func_name, result, func, args):
     if result:
         raise NtStatusException(result & 0xffffffff)
     return args
+
 
 class ExportNotFound(AttributeError):
         def __init__(self, func_name, api_name):
@@ -84,7 +92,7 @@ class ExportNotFound(AttributeError):
             self.api_name = api_name
             super(ExportNotFound, self).__init__("Function {0} not found into {1}".format(func_name, api_name))
 
-# Design 1
+
 class ApiProxy(object):
     APIDLL = None
     """Create a python wrapper around a kernel32 function"""
@@ -107,6 +115,7 @@ class ApiProxy(object):
             doc = doc if doc else ""
             python_proxy.__doc__ = doc + "\nErrcheck:\n   " + self.error_check.__doc__
         params_name = [param[1] for param in params]
+
         def perform_call(*args):
             if len(params_name) != len(args):
                 print("ERROR:")
@@ -120,21 +129,26 @@ class ApiProxy(object):
         setattr(python_proxy, "ctypes_function", perform_call)
         return python_proxy
 
+
 class Kernel32Proxy(ApiProxy):
     APIDLL = kernel32
     default_error_check = staticmethod(kernel32_error_check)
+
 
 class Advapi32Proxy(ApiProxy):
     APIDLL = advapi32
     default_error_check = staticmethod(kernel32_error_check)
 
+
 class IphlpapiProxy(ApiProxy):
     APIDLL = iphlpapi
     default_error_check = staticmethod(iphlpapi_error_check)
 
+
 class NtdllProxy(ApiProxy):
     APIDLL = ntdll
     default_error_check = staticmethod(kernel32_zero_check)
+
 
 class OptionalExport(object):
     """used 'around' a Proxy decorator
@@ -156,6 +170,7 @@ class OptionalExport(object):
             dbgprint("Export <{e.func_name}> not found in <{e.api_name}>".format(e=e), "EXPORTNOTFOUND")
             return None
 
+
 def TransparentApiProxy(APIDLL, func_name, error_check):
     """Create a ctypes function for 'func_name' with no python arg pre-check"""
 
@@ -169,12 +184,14 @@ def TransparentApiProxy(APIDLL, func_name, error_check):
     return c_prototyped
 
 
-TransparentKernel32Proxy = lambda func_name, error_check=kernel32_error_check : TransparentApiProxy(kernel32, func_name, error_check)
-TransparentAdvapi32Proxy = lambda func_name, error_check=kernel32_error_check : TransparentApiProxy(advapi32, func_name, error_check)
-TransparentIphlpapiProxy = lambda func_name, error_check=iphlpapi_error_check : TransparentApiProxy(iphlpapi, func_name, error_check)
+TransparentKernel32Proxy = lambda func_name, error_check=kernel32_error_check: TransparentApiProxy(kernel32, func_name, error_check)
+TransparentAdvapi32Proxy = lambda func_name, error_check=kernel32_error_check: TransparentApiProxy(advapi32, func_name, error_check)
+TransparentIphlpapiProxy = lambda func_name, error_check=iphlpapi_error_check: TransparentApiProxy(iphlpapi, func_name, error_check)
+
 
 class NeededParameterType(object):
     _inst = None
+
     def __new__(cls):
         if cls._inst is None:
             cls._inst = super(NeededParameterType, cls).__new__(cls)
@@ -182,8 +199,6 @@ class NeededParameterType(object):
 
     def __repr__(self):
         return "NeededParameter"
-
-
 NeededParameter = NeededParameterType()
 
 ExitProcess = TransparentKernel32Proxy("ExitProcess")
@@ -201,7 +216,6 @@ FreeConsole = TransparentKernel32Proxy("FreeConsole")
 GetStdHandle = TransparentKernel32Proxy("GetStdHandle")
 SetStdHandle = TransparentKernel32Proxy("SetStdHandle")
 GetCurrentThreadId = TransparentKernel32Proxy("GetCurrentThreadId")
-
 TerminateThread = TransparentKernel32Proxy("TerminateThread")
 ExitThread = TransparentKernel32Proxy("ExitThread")
 SuspendThread = TransparentKernel32Proxy("SuspendThread", minus_one_error_check)
@@ -209,45 +223,54 @@ ResumeThread = TransparentKernel32Proxy("ResumeThread", minus_one_error_check)
 GetThreadId = TransparentKernel32Proxy("GetThreadId")
 
 Wow64DisableWow64FsRedirection = OptionalExport(TransparentKernel32Proxy)("Wow64DisableWow64FsRedirection")
-Wow64RevertWow64FsRedirection =  OptionalExport(TransparentKernel32Proxy)("Wow64RevertWow64FsRedirection")
-Wow64EnableWow64FsRedirection =  OptionalExport(TransparentKernel32Proxy)("Wow64EnableWow64FsRedirection")
+Wow64RevertWow64FsRedirection = OptionalExport(TransparentKernel32Proxy)("Wow64RevertWow64FsRedirection")
+Wow64EnableWow64FsRedirection = OptionalExport(TransparentKernel32Proxy)("Wow64EnableWow64FsRedirection")
+
 
 @Kernel32Proxy("CreateFileA")
 def CreateFileA(lpFileName, dwDesiredAccess, dwShareMode=0, lpSecurityAttributes=None, dwCreationDisposition=OPEN_EXISTING, dwFlagsAndAttributes=FILE_ATTRIBUTE_NORMAL, hTemplateFile=None):
     return CreateFileA.ctypes_function(lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile)
 
+
 @Kernel32Proxy("VirtualAlloc")
-def VirtualAlloc(lpAddress=0,  dwSize=NeededParameter, flAllocationType=MEM_COMMIT, flProtect=PAGE_EXECUTE_READWRITE):
+def VirtualAlloc(lpAddress=0, dwSize=NeededParameter, flAllocationType=MEM_COMMIT, flProtect=PAGE_EXECUTE_READWRITE):
     return VirtualAlloc.ctypes_function(lpAddress, dwSize, flAllocationType, flProtect)
+
 
 @Kernel32Proxy("VirtualFree")
 def VirtualFree(lpAddress, dwSize=0, dwFreeType=MEM_RELEASE):
     return VirtualFree.ctypes_function(lpAddress, dwSize, dwFreeType)
 
+
 @Kernel32Proxy("VirtualAllocEx")
-def VirtualAllocEx(hProcess, lpAddress=0,  dwSize=NeededParameter, flAllocationType=MEM_COMMIT, flProtect=PAGE_EXECUTE_READWRITE):
+def VirtualAllocEx(hProcess, lpAddress=0, dwSize=NeededParameter, flAllocationType=MEM_COMMIT, flProtect=PAGE_EXECUTE_READWRITE):
     return VirtualAllocEx.ctypes_function(hProcess, lpAddress, dwSize, flAllocationType, flProtect)
+
 
 @Kernel32Proxy("VirtualFreeEx")
 def VirtualFreeEx(hProcess, lpAddress, dwSize=0, dwFreeType=MEM_RELEASE):
     return VirtualFreeEx.ctypes_function(hProcess, lpAddress, dwSize, dwFreeType)
 
+
 @Kernel32Proxy("CreateThread")
 def CreateThread(lpThreadAttributes=None, dwStackSize=0, lpStartAddress=NeededParameter, lpParameter=NeededParameter, dwCreationFlags=0, lpThreadId=None):
     return CreateThread.ctypes_function(lpThreadAttributes, dwStackSize, lpStartAddress, lpParameter, dwCreationFlags, lpThreadId)
 
+
 @Kernel32Proxy("CreateRemoteThread")
 def CreateRemoteThread(hProcess=NeededParameter, lpThreadAttributes=None, dwStackSize=0,
-                           lpStartAddress=NeededParameter, lpParameter=NeededParameter, dwCreationFlags=0, lpThreadId=None):
+                       lpStartAddress=NeededParameter, lpParameter=NeededParameter, dwCreationFlags=0, lpThreadId=None):
     return CreateRemoteThread.ctypes_function(hProcess, lpThreadAttributes, dwStackSize, lpStartAddress, lpParameter, dwCreationFlags, lpThreadId)
+
 
 @Kernel32Proxy("VirtualProtect")
 def VirtualProtect(lpAddress, dwSize, flNewProtect, lpflOldProtect=0):
     return VirtualProtect.ctypes_function(lpAddress, dwSize, flNewProtect, lpflOldProtect)
 
+
 @Kernel32Proxy("CreateProcessA")
 def CreateProcessA(lpApplicationName, lpCommandLine=None, lpProcessAttributes=None, lpThreadAttributes=None, bInheritHandles=False,
-                        dwCreationFlags=0, lpEnvironment=None, lpCurrentDirectory=None, lpStartupInfo=None, lpProcessInformation=None):
+                   dwCreationFlags=0, lpEnvironment=None, lpCurrentDirectory=None, lpStartupInfo=None, lpProcessInformation=None):
     if lpStartupInfo is None:
         StartupInfo = STARTUPINFOA()
         StartupInfo.cb = ctypes.sizeof(StartupInfo)
@@ -258,9 +281,10 @@ def CreateProcessA(lpApplicationName, lpCommandLine=None, lpProcessAttributes=No
         lpProcessInformation = ctypes.byref(PROCESS_INFORMATION())
     return CreateProcessA.ctypes_function(lpApplicationName, lpCommandLine, lpProcessAttributes, lpThreadAttributes, bInheritHandles, dwCreationFlags, lpEnvironment, lpCurrentDirectory, lpStartupInfo, lpProcessInformation)
 
+
 @Kernel32Proxy("CreateProcessW")
 def CreateProcessW(lpApplicationName, lpCommandLine=None, lpProcessAttributes=None, lpThreadAttributes=None, bInheritHandles=False,
-                        dwCreationFlags=0, lpEnvironment=None, lpCurrentDirectory=None, lpStartupInfo=None, lpProcessInformation=None):
+                   dwCreationFlags=0, lpEnvironment=None, lpCurrentDirectory=None, lpStartupInfo=None, lpProcessInformation=None):
     if lpStartupInfo is None:
         StartupInfo = STARTUPINFOW()
         StartupInfo.cb = ctypes.sizeof(StartupInfo)
@@ -271,6 +295,7 @@ def CreateProcessW(lpApplicationName, lpCommandLine=None, lpProcessAttributes=No
         lpProcessInformation = ctypes.byref(PROCESS_INFORMATION())
     return CreateProcessW.ctypes_function(lpApplicationName, lpCommandLine, lpProcessAttributes, lpThreadAttributes, bInheritHandles, dwCreationFlags, lpEnvironment, lpCurrentDirectory, lpStartupInfo, lpProcessInformation)
 
+
 @Kernel32Proxy("GetThreadContext")
 def GetThreadContext(hThread, lpContext=None):
     if lpContext is None:
@@ -279,6 +304,7 @@ def GetThreadContext(hThread, lpContext=None):
         lpContext = ctypes.byref(Context)
     return GetThreadContext.ctypes_function(hThread, lpContext)
 
+
 @Kernel32Proxy("SetThreadContext")
 def SetThreadContext(hThread, lpContext):
     """ Allows to directly pass a CONTEXT and will call with byref(CONTEXT) by itself"""
@@ -286,17 +312,21 @@ def SetThreadContext(hThread, lpContext):
         lpContext = ctypes.byref(lpContext)
     return SetThreadContext.ctypes_function(hThread, lpContext)
 
+
 @Kernel32Proxy("OpenThread")
 def OpenThread(dwDesiredAccess=THREAD_ALL_ACCESS, bInheritHandle=0, dwThreadId=NeededParameter):
     return OpenThread.ctypes_function(dwDesiredAccess, bInheritHandle, dwThreadId)
+
 
 @Kernel32Proxy("OpenProcess")
 def OpenProcess(dwDesiredAccess=PROCESS_ALL_ACCESS, bInheritHandle=0, dwProcessId=NeededParameter):
     return OpenProcess.ctypes_function(dwDesiredAccess, bInheritHandle, dwProcessId)
 
+
 @Kernel32Proxy("ReadProcessMemory")
 def ReadProcessMemory(hProcess, lpBaseAddress, lpBuffer, nSize, lpNumberOfBytesRead=None):
     return ReadProcessMemory.ctypes_function(hProcess, lpBaseAddress, lpBuffer, nSize, lpNumberOfBytesRead)
+
 
 @Kernel32Proxy("WriteProcessMemory")
 def WriteProcessMemory(hProcess, lpBaseAddress, lpBuffer, nSize=None, lpNumberOfBytesWritten=None):
@@ -305,6 +335,7 @@ def WriteProcessMemory(hProcess, lpBaseAddress, lpBuffer, nSize=None, lpNumberOf
         nSize = len(lpBuffer)
     return WriteProcessMemory.ctypes_function(hProcess, lpBaseAddress, lpBuffer, nSize, lpNumberOfBytesWritten)
 
+
 @Kernel32Proxy('SetThreadAffinityMask')
 def SetThreadAffinityMask(hThread=None, dwThreadAffinityMask=NeededParameter):
     """If hThread is not given, it will be the current thread"""
@@ -312,37 +343,43 @@ def SetThreadAffinityMask(hThread=None, dwThreadAffinityMask=NeededParameter):
         hThread = GetCurrentThread()
     return SetThreadAffinityMask.ctypes_function(hThread, dwThreadAffinityMask)
 
+
 @Kernel32Proxy("CreateToolhelp32Snapshot")
 def CreateToolhelp32Snapshot(dwFlags, th32ProcessID=0):
     return CreateToolhelp32Snapshot.ctypes_function(dwFlags, th32ProcessID)
+
 
 @Kernel32Proxy("Thread32First", no_error_check)
 def Thread32First(hSnapshot, lpte):
     """Set byref(lpte) if needed"""
     if type(lpte) == THREADENTRY32:
         lpte = ctypes.byref(lpte)
-    return  Thread32First.ctypes_function(hSnapshot, lpte)
+    return Thread32First.ctypes_function(hSnapshot, lpte)
+
 
 @Kernel32Proxy("Thread32Next", no_error_check)
 def Thread32Next(hSnapshot, lpte):
     """Set byref(lpte) if needed"""
     if type(lpte) == THREADENTRY32:
         lpte = ctypes.byref(lpte)
-    return  Thread32Next.ctypes_function(hSnapshot, lpte)
+    return Thread32Next.ctypes_function(hSnapshot, lpte)
+
 
 @Kernel32Proxy("Process32First", no_error_check)
 def Process32First(hSnapshot, lpte):
     """Set byref(lpte) if needed"""
     if type(lpte) == THREADENTRY32:
         lpte = ctypes.byref(lpte)
-    return  Process32First.ctypes_function(hSnapshot, lpte)
+    return Process32First.ctypes_function(hSnapshot, lpte)
+
 
 @Kernel32Proxy("Process32Next", no_error_check)
 def Process32Next(hSnapshot, lpte):
     """Set byref(lpte) if needed"""
     if type(lpte) == THREADENTRY32:
         lpte = ctypes.byref(lpte)
-    return  Process32Next.ctypes_function(hSnapshot, lpte)
+    return Process32Next.ctypes_function(hSnapshot, lpte)
+
 
 # File stuff
 @Kernel32Proxy("WriteFile")
@@ -353,22 +390,27 @@ def WriteFile(hFile, lpBuffer, nNumberOfBytesToWrite=None, lpNumberOfBytesWritte
         lpNumberOfBytesWritten = ctypes.byref(DWORD())
     return WriteFile.ctypes_function(hFile, lpBuffer, nNumberOfBytesToWrite, lpNumberOfBytesWritten, lpOverlapped)
 
+
 # Exception stuff
 @Kernel32Proxy("AddVectoredContinueHandler")
 def AddVectoredContinueHandler(FirstHandler=1, VectoredHandler=NeededParameter):
     return AddVectoredContinueHandler.ctypes_function(FirstHandler, VectoredHandler)
 
+
 @Kernel32Proxy("AddVectoredExceptionHandler")
 def AddVectoredExceptionHandler(FirstHandler=1, VectoredHandler=NeededParameter):
     return AddVectoredExceptionHandler.ctypes_function(FirstHandler, VectoredHandler)
+
 
 @Kernel32Proxy("RemoveVectoredExceptionHandler")
 def RemoveVectoredExceptionHandler(Handler):
     return RemoveVectoredExceptionHandler.ctypes_function(Handler)
 
+
 @Kernel32Proxy("WaitForSingleObject", kernel32_zero_check)
 def WaitForSingleObject(hHandle, dwMilliseconds=INFINITE):
     return WaitForSingleObject.ctypes_function(hHandle, dwMilliseconds)
+
 
 @Kernel32Proxy("DeviceIoControl")
 def DeviceIoControl(hDevice, dwIoControlCode, lpInBuffer, nInBufferSize=None, lpOutBuffer=NeededParameter, nOutBufferSize=None, lpBytesReturned=None, lpOverlapped=None):
@@ -380,13 +422,14 @@ def DeviceIoControl(hDevice, dwIoControlCode, lpInBuffer, nInBufferSize=None, lp
         # Some windows check 0 / others does not
         lpBytesReturned = ctypes.byref(DWORD())
     return DeviceIoControl.ctypes_function(hDevice, dwIoControlCode, lpInBuffer, nInBufferSize, lpOutBuffer, nOutBufferSize, lpBytesReturned, lpOverlapped)
-    
 
-#### NTDLL #####
+
+# ### NTDLL #### #
 
 @OptionalExport(NtdllProxy('NtWow64ReadVirtualMemory64', error_ntstatus))
 def NtWow64ReadVirtualMemory64(hProcess, lpBaseAddress, lpBuffer, nSize, lpNumberOfBytesRead=None):
     return NtWow64ReadVirtualMemory64.ctypes_function(hProcess, lpBaseAddress, lpBuffer, nSize, lpNumberOfBytesRead)
+
 
 def ntquerysysteminformation_error_check(func_name, result, func, args):
     if result == 0:
@@ -396,13 +439,15 @@ def ntquerysysteminformation_error_check(func_name, result, func, args):
         return args
     raise Kernel32Error("{0} failed with NTStatus {1}".format(func_name, hex(result)))
 
+
 @NtdllProxy('NtQuerySystemInformation', ntquerysysteminformation_error_check)
 def NtQuerySystemInformation(SystemInformationClass, SystemInformation=None, SystemInformationLength=0, ReturnLength=NeededParameter):
     if SystemInformation is not None and SystemInformation == 0:
         SystemInformationLength = ctypes.sizeof(SystemInformation)
     return NtQuerySystemInformation.ctypes_function(SystemInformationClass, SystemInformation, SystemInformationLength, ReturnLength)
 
-###### ADVAPI32 ########
+
+# ##### ADVAPI32 ####### #
 
 @Advapi32Proxy('OpenProcessToken')
 def OpenProcessToken(ProcessHandle=None, DesiredAccess=NeededParameter, TokenHandle=NeededParameter):
@@ -411,19 +456,23 @@ def OpenProcessToken(ProcessHandle=None, DesiredAccess=NeededParameter, TokenHan
         ProcessHandle = GetCurrentProcess()
     return OpenProcessToken.ctypes_function(ProcessHandle, DesiredAccess, TokenHandle)
 
+
 @Advapi32Proxy('LookupPrivilegeValueA')
 def LookupPrivilegeValueA(lpSystemName=None, lpName=NeededParameter, lpLuid=NeededParameter):
     return LookupPrivilegeValueA.ctypes_function(lpSystemName, lpName, lpLuid)
 
+
 @Advapi32Proxy('LookupPrivilegeValueW')
 def LookupPrivilegeValueW(lpSystemName=None, lpName=NeededParameter, lpLuid=NeededParameter):
     return LookupPrivilegeValueW.ctypes_function(lpSystemName, lpName, lpLuid)
+
 
 @Advapi32Proxy('AdjustTokenPrivileges')
 def AdjustTokenPrivileges(TokenHandle, DisableAllPrivileges=False, NewState=NeededParameter, BufferLength=None, PreviousState=None, ReturnLength=None):
     if BufferLength is None:
         BufferLength = ctypes.sizeof(NewState)
     return AdjustTokenPrivileges.ctypes_function(TokenHandle, DisableAllPrivileges, NewState, BufferLength, PreviousState, ReturnLength)
+
 
 # Registry stuff
 
@@ -433,9 +482,11 @@ def GetTokenInformation(TokenHandle=NeededParameter, TokenInformationClass=Neede
         ReturnLength = ctypes.byref(DWORD())
     return GetTokenInformation.ctypes_function(TokenHandle, TokenInformationClass, TokenInformation, TokenInformationLength, ReturnLength)
 
+
 @Advapi32Proxy('RegOpenKeyExA', kernel32_zero_check)
 def RegOpenKeyExA(hKey, lpSubKey, ulOptions, samDesired, phkResult):
     return RegOpenKeyExA.ctypes_function(hKey, lpSubKey, ulOptions, samDesired, phkResult)
+
 
 # TODO: default values? which ones ?
 
@@ -443,22 +494,25 @@ def RegOpenKeyExA(hKey, lpSubKey, ulOptions, samDesired, phkResult):
 def RegOpenKeyExW(hKey, lpSubKey, ulOptions, samDesired, phkResult):
     return RegOpenKeyExW.ctypes_function(hKey, lpSubKey, ulOptions, samDesired, phkResult)
 
+
 @Advapi32Proxy('RegGetValueA', kernel32_zero_check)
 def RegGetValueA(hkey, lpSubKey, lpValue, dwFlags, pdwType, pvData, pcbData):
     return RegGetValueA.ctypes_function(hkey, lpSubKey, lpValue, dwFlags, pdwType, pvData, pcbData)
 
+
 @Advapi32Proxy('RegGetValueW', kernel32_zero_check)
 def RegGetValueW(hkey, lpSubKey, lpValue, dwFlags, pdwType, pvData, pcbData):
     return RegGetValueW.ctypes_function(hkey, lpSubKey, lpValue, dwFlags, pdwType, pvData, pcbData)
+
 
 @Advapi32Proxy('RegCloseKey', kernel32_zero_check)
 def RegCloseKey(hKey):
     return RegCloseKey.ctypes_function(hKey)
 
 
-###### Iphlpapi (network list and stuff) #######
-
+# ##### Iphlpapi (network list and stuff) ###### #
 SetTcpEntry = TransparentIphlpapiProxy('SetTcpEntry')
+
 
 @OptionalExport(IphlpapiProxy('GetExtendedTcpTable'))
 def GetExtendedTcpTable(pTcpTable, pdwSize=None, bOrder=True, ulAf=NeededParameter, TableClass=TCP_TABLE_OWNER_PID_ALL, Reserved=0):

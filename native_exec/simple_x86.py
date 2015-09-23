@@ -1,6 +1,6 @@
 import collections
 import struct
-import sys
+
 
 class BitArray(object):
     def __init__(self, size, bits):
@@ -61,9 +61,11 @@ class BitArray(object):
             x = x & ((2 ** size) - 1)
         return cls(size, bin(x)[2:])
 
+
 # Prefix
 class Prefix(object):
     PREFIX_VALUE = None
+
     def __init__(self, next=None):
         self.next = next
 
@@ -73,36 +75,38 @@ class Prefix(object):
     def get_code(self):
         return chr(self.PREFIX_VALUE) + self.next.get_code()
 
-def create_prefix(name, value):
-    prefix_type = type(name + "Type", (Prefix,), {'PREFIX_VALUE' : value})
-    setattr(sys.modules[__name__], name, prefix_type())
 
-create_prefix('LockPrefix', 0xf0)
-create_prefix('Repne', 0xf2)
-create_prefix('Rep', 0xf3)
-create_prefix('SSPrefix', 0x36)
-create_prefix('CSPrefix', 0x2e)
-create_prefix('DSPrefix', 0x3e)
-create_prefix('ESPrefix', 0x26)
-create_prefix('FSPrefix', 0x64)
-create_prefix('GSPrefix', 0x65)
-create_prefix('OperandSizeOverride', 0x66)
-create_prefix('AddressSizeOverride', 0x67)
+def create_prefix(name, value):
+    prefix_type = type(name + "Type", (Prefix,), {'PREFIX_VALUE': value})
+    return prefix_type()
+
+LockPrefix = create_prefix('LockPrefix', 0xf0)
+Repne = create_prefix('Repne', 0xf2)
+Rep = create_prefix('Rep', 0xf3)
+SSPrefix = create_prefix('SSPrefix', 0x36)
+CSPrefix = create_prefix('CSPrefix', 0x2e)
+DSPrefix = create_prefix('DSPrefix', 0x3e)
+ESPrefix = create_prefix('ESPrefix', 0x26)
+FSPrefix = create_prefix('FSPrefix', 0x64)
+GSPrefix = create_prefix('GSPrefix', 0x65)
+OperandSizeOverride = create_prefix('OperandSizeOverride', 0x66)
+AddressSizeOverride = create_prefix('AddressSizeOverride', 0x67)
 
 # Main informations about X86
 mem_access = collections.namedtuple('mem_access', ['base', 'index', 'scale', 'disp', 'prefix'])
 x86_regs = ['EAX', 'ECX', 'EDX', 'EBX', 'ESP', 'EBP', 'ESI', 'EDI']
 x86_16bits_regs = ['AX', 'CX', 'DX', 'BX', 'SP', 'BP', 'SI', 'DI']
 
-x86_segment_selectors = {'CS' : CSPrefix, 'DS' : DSPrefix, 'ES' : ESPrefix, 'SS' : SSPrefix,
-                         'FS': FSPrefix, 'GS' : GSPrefix}
+x86_segment_selectors = {'CS': CSPrefix, 'DS': DSPrefix, 'ES': ESPrefix, 'SS': SSPrefix,
+                         'FS': FSPrefix, 'GS': GSPrefix}
+
 
 class X86(object):
     @staticmethod
     def is_reg(name):
         try:
             return name.upper() in x86_regs + x86_16bits_regs
-        except AttributeError: # Not a string
+        except AttributeError:  # Not a string
             return False
 
     @staticmethod
@@ -141,8 +145,10 @@ def create_displacement(base=None, index=None, scale=None, disp=0, prefix=None):
         raise ValueError("Cannot create displacement with index == ESP")
     return mem_access(base, index, scale, disp, prefix)
 
+
 def deref(disp):
     return create_displacement(disp=disp)
+
 
 def mem(data):
     """Parse a memory access string of format [EXPR] or seg:[EXPR]
@@ -165,7 +171,7 @@ def mem(data):
     # A l'arrache.. j'aime pas le parsing de trucs
     data = data[1:-1]
     items = data.split("+")
-    parsed_items = {'prefix' : prefix}
+    parsed_items = {'prefix': prefix}
     for item in items:
         item = item.strip()
         # Index * scale
@@ -183,7 +189,7 @@ def mem(data):
                 raise NotImplementedError("16bits modrm")
             try:
                 scale = int(scale, 0)
-            except ValueError as e:
+            except ValueError:
                 raise ValueError("Invalid scale <{0}> in mem access".format(scale))
             parsed_items['scale'] = scale
             parsed_items['index'] = index
@@ -192,7 +198,7 @@ def mem(data):
             if X86.is_reg(item):
                 if X86.reg_size(item) == 16:
                     raise NotImplementedError("16bits modrm")
-                if not 'base' in parsed_items:
+                if 'base' not in parsed_items:
                     parsed_items['base'] = item
                     continue
                 # Already have base + index -> cannot avec another register in expression
@@ -202,19 +208,19 @@ def mem(data):
                 continue
             try:
                 disp = int(item, 0)
-            except ValueError as e:
+            except ValueError:
                 raise ValueError("Invalid base/index or displacement <{0}> in mem access".format(item))
             if 'disp' in parsed_items:
                 raise ValueError("Multiple displacement in mem expression <{0}>".format(data))
             parsed_items['disp'] = disp
     return create_displacement(**parsed_items)
 
-# Helper to get the BitArray associated to a register
 
+# Helper to get the BitArray associated to a register
 class X86RegisterSelector(object):
-    size = 3 # bits
-    reg_opcode = {v : BitArray.from_int(size=3, x=i) for i, v in enumerate(x86_regs)}
-    reg_opcode.update({v : BitArray.from_int(size=3, x=i) for i, v in enumerate(x86_16bits_regs)})
+    size = 3  # bits
+    reg_opcode = {v: BitArray.from_int(size=3, x=i) for i, v in enumerate(x86_regs)}
+    reg_opcode.update({v: BitArray.from_int(size=3, x=i) for i, v in enumerate(x86_16bits_regs)})
 
     def accept_arg(self, args, instr_state):
         x = args[0]
@@ -227,8 +233,8 @@ class X86RegisterSelector(object):
     def get_reg_bits(cls, name):
         return cls.reg_opcode[name.upper()]
 
-## Instruction Parameters
 
+# Instruction Parameters
 class FixedRegister(object):
     def __init__(self, register):
         self.reg = register.upper()
@@ -241,15 +247,17 @@ class FixedRegister(object):
 
 RegisterEax = lambda: FixedRegister('EAX')
 
+
 class RawBits(BitArray):
     def accept_arg(self, args, instr_state):
         return (0, self)
 
+
 # Immediat value logic
 # All 8/16 bits stuff are sign extended
-
 class ImmediatOverflow(ValueError):
     pass
+
 
 def accept_as_8immediat(x):
     try:
@@ -257,11 +265,13 @@ def accept_as_8immediat(x):
     except struct.error:
         raise ImmediatOverflow("8bits signed Immediat overflow")
 
+
 def accept_as_16immediat(x):
     try:
         return struct.pack("<h", x)
     except struct.error:
         raise ImmediatOverflow("16bits signed Immediat overflow")
+
 
 def accept_as_32immediat(x):
     try:
@@ -272,6 +282,7 @@ def accept_as_32immediat(x):
         return struct.pack("<I", x)
     except struct.error:
         raise ImmediatOverflow("32bits signed Immediat overflow")
+
 
 class Imm8(object):
     def accept_arg(self, args, instr_state):
@@ -285,6 +296,7 @@ class Imm8(object):
             return None, None
         return (1, BitArray.from_string(imm8))
 
+
 class Imm16(object):
     def accept_arg(self, args, instr_state):
         try:
@@ -297,6 +309,7 @@ class Imm16(object):
             return None, None
         return (1, BitArray.from_string(imm16))
 
+
 class Imm32(object):
     def accept_arg(self, args, instr_state):
         try:
@@ -308,6 +321,7 @@ class Imm32(object):
         except ImmediatOverflow:
             return None, None
         return (1, BitArray.from_string(imm32))
+
 
 class ModRM(object):
     def __init__(self, sub_modrm, accept_reverse=True, has_direction_bit=True):
@@ -336,6 +350,7 @@ class ModRM(object):
 
 
 class ModRM_REG__REG(object):
+
     @classmethod
     def match(cls, arg1, arg2):
         return X86.is_reg(arg1) and X86.is_reg(arg2)
@@ -351,7 +366,9 @@ class ModRM_REG__REG(object):
         self.after = BitArray(0, "")
         self.direction = 0
 
+
 class ModRM_REG__MEM(object):
+
     @classmethod
     def match(cls, arg1, arg2):
         return X86.is_reg(arg1) and X86.is_mem_acces(arg2)
@@ -429,7 +446,7 @@ class ModRM_REG__MEM(object):
         raise ValueError("Displacement {0} is too big".format(hex(displacement)))
 
     def compute_sib(self, mem_access):
-        scale = {1: 0, 2 : 1, 4: 2, 8 : 3}
+        scale = {1: 0, 2: 1, 4: 2, 8: 3}
         if mem_access.index is None:
             return BitArray(2, "00") + BitArray(3, "100") + X86RegisterSelector.get_reg_bits(mem_access.base)
         if mem_access.scale not in scale:
@@ -454,13 +471,15 @@ class Slash(object):
         arg_consum, value = ModRM([ModRM_REG__REG, ModRM_REG__MEM], has_direction_bit=False).accept_arg(args[:1] + [self.reg] + args[1:], instr_state)
         if value is None:
             return arg_consum, value
-        return arg_consum-1, value
+        return arg_consum - 1, value
 
 instr_state = collections.namedtuple('instr_state', ['previous', 'prefixes'])
+
 
 class Instruction(object):
     """Base class of instructions, use `encoding` to find a valid way to assemble the instruction"""
     encoding = []
+
     def __init__(self, *initial_args):
         for type_encoding in self.encoding:
             args = list(initial_args)
@@ -472,8 +491,8 @@ class Instruction(object):
                     break
                 res.append(value)
                 del args[:arg_consum]
-            else: # if no break
-                if args: # if still args: fail
+            else:  # if no break
+                if args:  # if still args: fail
                     continue
                 self.value = sum(res, BitArray(0, ""))
                 self.prefix = prefix
@@ -482,17 +501,21 @@ class Instruction(object):
 
     def get_code(self):
         prefix_opcode = b"".join(chr(p.PREFIX_VALUE) for p in self.prefix)
-        return  prefix_opcode + bytes(self.value.dump())
+        return prefix_opcode + bytes(self.value.dump())
+
 
 # Jump helpers
 class DelayedJump(object):
     """A jump to a label :NAME"""
+
     def __init__(self, type, label):
         self.type = type
         self.label = label
 
+
 class JmpType(Instruction):
     """Dispatcher between a real jump or DelayedJump if parameters is a label"""
+
     def __new__(cls, *initial_args):
         if len(initial_args) == 1:
             arg = initial_args[0]
@@ -500,10 +523,12 @@ class JmpType(Instruction):
                 return DelayedJump(cls, arg)
         return super(JmpType, cls).__new__(cls, *initial_args)
 
+
 class JmpImm(object):
     """Immediat parameters for Jump instruction
        Sub a specified size from the size to jump to `emulate` a jump from the begin address of the instruction"""
     accept_as_Ximmediat = None
+
     def __init__(self, sub):
         self.sub = sub
 
@@ -519,116 +544,147 @@ class JmpImm(object):
             return (None, None)
         return (1, BitArray.from_string(jmp_imm))
 
+
 class JmpImm8(JmpImm):
     accept_as_Ximmediat = staticmethod(accept_as_8immediat)
+
 
 class JmpImm32(JmpImm):
     accept_as_Ximmediat = staticmethod(accept_as_32immediat)
 
-## Instructions
 
+# Instructions
 class Jmp(JmpType):
     encoding = [(RawBits.from_int(8, 0xeb), JmpImm8(2)),
                 (RawBits.from_int(8, 0xe9), JmpImm32(5))]
+
 
 class Jz(JmpType):
     encoding = [(RawBits.from_int(8, 0x74), JmpImm8(2)),
                 (RawBits.from_int(16, 0x0f84), JmpImm32(6))]
 
+
 class Jnz(JmpType):
     encoding = [(RawBits.from_int(8, 0x75), JmpImm8(2)),
                 (RawBits.from_int(16, 0x0f85), JmpImm32(6))]
+
 
 class Jbe(JmpType):
     encoding = [(RawBits.from_int(8, 0x76), JmpImm8(2)),
                 (RawBits.from_int(16, 0x0f86), JmpImm32(6))]
 
+
 class Jnb(JmpType):
     encoding = [(RawBits.from_int(8, 0x73), JmpImm8(2)),
                 (RawBits.from_int(16, 0x0f83), JmpImm32(6))]
+
 
 class Push(Instruction):
     encoding = [(RawBits.from_int(5, 0x50 >> 3), X86RegisterSelector()),
                 (RawBits.from_int(8, 0x68), Imm32())]
 
+
 class Pop(Instruction):
     encoding = [(RawBits.from_int(5, 0x58 >> 3), X86RegisterSelector())]
+
 
 class Dec(Instruction):
     encoding = [(RawBits.from_int(5, 0x48 >> 3), X86RegisterSelector())]
 
+
 class Inc(Instruction):
     encoding = [(RawBits.from_int(5, 0x40 >> 3), X86RegisterSelector()),
-                (RawBits.from_int(8, 0xff), Slash(0)),]
+                (RawBits.from_int(8, 0xff), Slash(0))]
+
 
 class Add(Instruction):
     encoding = [(RawBits.from_int(8, 0x05), RegisterEax(), Imm32()),
                 (RawBits.from_int(8, 0x81), Slash(0), Imm32()),
-                (RawBits.from_int(8, 0x01), ModRM([ModRM_REG__REG, ModRM_REG__MEM])),]
+                (RawBits.from_int(8, 0x01), ModRM([ModRM_REG__REG, ModRM_REG__MEM]))]
+
 
 class Sub(Instruction):
     encoding = [(RawBits.from_int(8, 0x2D), RegisterEax(), Imm32()),
                 (RawBits.from_int(8, 0x81), Slash(5), Imm32())]
 
+
 class Mov(Instruction):
     encoding = [(RawBits.from_int(8, 0x89), ModRM([ModRM_REG__REG, ModRM_REG__MEM])),
                 (RawBits.from_int(5, 0xb8 >> 3), X86RegisterSelector(), Imm32())]
 
+
 class Movsb(Instruction):
     encoding = [(RawBits.from_int(8, 0xa4),)]
+
 
 class Movsd(Instruction):
     encoding = [(RawBits.from_int(8, 0xa5),)]
 
+
 class Lea(Instruction):
     encoding = [(RawBits.from_int(8, 0x8d), ModRM([ModRM_REG__MEM], accept_reverse=False, has_direction_bit=False))]
+
 
 class Cmp(Instruction):
     encoding = [(RawBits.from_int(8, 0x3d), RegisterEax(), Imm32()),
                 (RawBits.from_int(8, 0x81), Slash(7), Imm32()),
-                (RawBits.from_int(8, 0x3b), ModRM([ModRM_REG__REG, ModRM_REG__MEM])),]
+                (RawBits.from_int(8, 0x3b), ModRM([ModRM_REG__REG, ModRM_REG__MEM]))]
+
 
 class Out(Instruction):
     encoding = [(RawBits.from_int(8, 0xee), FixedRegister('DX'), FixedRegister('AL')),
-                (RawBits.from_int(16, 0x66ef), FixedRegister('DX'), FixedRegister('AX')), # Fuck-it hardcoded prefix for now
+                (RawBits.from_int(16, 0x66ef), FixedRegister('DX'), FixedRegister('AX')),  # Fuck-it hardcoded prefix for now
                 (RawBits.from_int(8, 0xef), FixedRegister('DX'), FixedRegister('EAX'))]
+
 
 class In(Instruction):
     encoding = [(RawBits.from_int(8, 0xec), FixedRegister('AL'), FixedRegister('DX')),
-                (RawBits.from_int(16, 0x66ed), FixedRegister('AX'), FixedRegister('DX')), # Fuck-it hardcoded prefix for now
+                (RawBits.from_int(16, 0x66ed), FixedRegister('AX'), FixedRegister('DX')),  # Fuck-it hardcoded prefix for now
                 (RawBits.from_int(8, 0xed), FixedRegister('EAX'), FixedRegister('DX'))]
+
 
 class Xor(Instruction):
     encoding = [(RawBits.from_int(8, 0x31), ModRM([ModRM_REG__REG]))]
 
+
 class Xchg(Instruction):
     encoding = [(RawBits.from_int(5, 0x90 >> 3), RegisterEax(), X86RegisterSelector()), (RawBits.from_int(5, 0x90 >> 3), X86RegisterSelector(), RegisterEax())]
+
 
 class Call(Instruction):
     encoding = [(RawBits.from_int(8, 0xff), Slash(2))]
 
+
 class Cpuid(Instruction):
     encoding = [(RawBits.from_int(16, 0x0fa2),)]
+
 
 class Ret(Instruction):
     encoding = [(RawBits.from_int(8, 0xc3),)]
 
+
 class Nop(Instruction):
     encoding = [(RawBits.from_int(8, 0x90),)]
+
 
 class Retf(Instruction):
     encoding = [(RawBits.from_int(8, 0xcb),)]
 
+
 class Int3(Instruction):
     encoding = [(RawBits.from_int(8, 0xcc),)]
+
 
 class _NopArtifact(Nop):
     """Special NOP used in shellcode reduction"""
     pass
 
+
 class Label(object):
+
     def __init__(self, name):
         self.name = name
+
 
 def JmpAt(addr):
     code = MultipleInstr()
@@ -636,8 +692,10 @@ def JmpAt(addr):
     code += Ret()
     return code
 
+
 class MultipleInstr(object):
     JUMP_SIZE = 6
+
     def __init__(self, init_instrs=()):
         self.instrs = {}
         self.labels = {}
@@ -712,12 +770,12 @@ class MultipleInstr(object):
         return
 
     def _reduce_shellcode(self):
-        to_remove = [offset for offset,instr in self.instrs.items() if type(instr) == _NopArtifact]
+        to_remove = [offset for offset, instr in self.instrs.items() if type(instr) == _NopArtifact]
         while to_remove:
             self._remove_nop_artifact(to_remove[0])
             # _remove_nop_artifact will change the offsets of the nop
             # Need to refresh these offset
-            to_remove = [offset for offset,instr in self.instrs.items() if type(instr) == _NopArtifact]
+            to_remove = [offset for offset, instr in self.instrs.items() if type(instr) == _NopArtifact]
 
     def _remove_nop_artifact(self, offset):
         # Remove a NOP from the shellcode
@@ -741,7 +799,7 @@ class MultipleInstr(object):
         # dec offset of all Label after the NOP
         for name, labeloffset in self.labels.items():
             if labeloffset > offset:
-                   self.labels[name] = labeloffset - 1
+                self.labels[name] = labeloffset - 1
 
         # dec offset of all instr after the NOP
         new_instr = {}

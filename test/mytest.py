@@ -3,7 +3,6 @@ import struct
 import time
 import os
 import textwrap
-import ctypes
 from contextlib import contextmanager
 
 sys.path.append(".")
@@ -11,7 +10,6 @@ import unittest
 import windows
 import windows.native_exec.simple_x86 as x86
 import windows.native_exec.simple_x64 as x64
-
 
 is_process_32_bits = windows.current_process.bitness == 32
 is_process_64_bits = windows.current_process.bitness == 64
@@ -24,7 +22,6 @@ windows_64bit_only = unittest.skipIf(not is_windows_64_bits, "Test for 64bits Ke
 
 process_32bit_only = unittest.skipIf(not is_process_32_bits, "Test for 32bits process only")
 process_64bit_only = unittest.skipIf(not is_process_64_bits, "Test for 64bits process only")
-
 
 
 if is_windows_32_bits:
@@ -45,6 +42,7 @@ else:
         def pop_calc_64():
             return windows.utils.create_process(r"C:\Windows\system32\calc.exe", True)
 
+
 @contextmanager
 def Calc64():
     try:
@@ -53,6 +51,7 @@ def Calc64():
     finally:
         calc.exit()
 
+
 @contextmanager
 def Calc32():
     try:
@@ -60,6 +59,7 @@ def Calc32():
         yield calc
     finally:
         calc.exit()
+
 
 class WindowsTestCase(unittest.TestCase):
 
@@ -96,7 +96,6 @@ class WindowsTestCase(unittest.TestCase):
         get_current_proc_id = k32.pe.exports['GetCurrentProcessId']
         k32_base = windows.winproxy.LoadLibraryA("kernel32.dll")
         self.assertEqual(windows.winproxy.GetProcAddress(k32_base, "GetCurrentProcessId"), get_current_proc_id)
-
 
     # Native execution
     def test_execute_to_32(self):
@@ -161,7 +160,7 @@ class WindowsTestCase(unittest.TestCase):
             if is_process_64_bits:
                 raise NotImplementedError("Python execution 64->32")
             data = calc.virtual_alloc(0x1000)
-            remote_python_code ="""
+            remote_python_code = """
                                 import ctypes
                                 import windows
                                 # windows.utils.create_console() # remove comment for debug
@@ -182,7 +181,7 @@ class WindowsTestCase(unittest.TestCase):
             k32 = mods[0]
             get_current_proc_id = k32.pe.exports['GetCurrentProcessId']
             data = calc.virtual_alloc(0x1000)
-            remote_python_code ="""
+            remote_python_code = """
                                 import ctypes
                                 import windows
                                 # windows.utils.create_console() # remove comment for debug
@@ -200,13 +199,14 @@ class WindowsTestCase(unittest.TestCase):
         RegOpenKeyExA = [n for n in pythondll_mod.pe.imports['advapi32.dll'] if n.name == "RegOpenKeyExA"][0]
 
         hook_value = []
+
         @windows.hooks.RegOpenKeyExACallback
         def open_reg_hook(hKey, lpSubKey, ulOptions, samDesired, phkResult, real_function):
             hook_value.append((hKey, lpSubKey.value))
             phkResult[0] = 12345678
             return 0
 
-        x = RegOpenKeyExA.set_hook(open_reg_hook)
+        RegOpenKeyExA.set_hook(open_reg_hook)
         import _winreg
         open_args = (0x12345678, "MY_KEY_VALUE")
         k = _winreg.OpenKey(*open_args)
@@ -221,12 +221,13 @@ class WindowsTestCase(unittest.TestCase):
         def open_reg_hook_fail(hKey, lpSubKey, ulOptions, samDesired, phkResult, real_function):
             return 0x11223344
 
-        x = RegOpenKeyExA.set_hook(open_reg_hook_fail)
+        RegOpenKeyExA.set_hook(open_reg_hook_fail)
         import _winreg
         open_args = (0x12345678, "MY_KEY_VALUE")
         with self.assertRaises(WindowsError) as ar:
-            k = _winreg.OpenKey(*open_args)
+            _winreg.OpenKey(*open_args)
         self.assertEqual(ar.exception.winerror, 0x11223344)
+
 
 if __name__ == '__main__':
     alltests = unittest.TestSuite()

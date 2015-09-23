@@ -11,7 +11,7 @@ Exported:
     current_thread : :class:`windows.winobject.CurrentThread`
 """
 
-import windows.winproxy
+from . import winproxy
 from .utils import VirtualProtected
 from .winobject import System, CurrentProcess, CurrentThread
 
@@ -19,9 +19,7 @@ system = System()
 current_process = CurrentProcess()
 current_thread = CurrentThread()
 
-
-__all__ = ["system", "VirtualProtected", 'current_process', 'current_thread']
-
-# Late import
+# Late import: other imports should go here
 # Do not move it: risk of circular import
-import windows.vectored_exception
+
+__all__ = ["system", "VirtualProtected", 'current_process', 'current_thread', 'winproxy']

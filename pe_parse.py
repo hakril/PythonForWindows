@@ -1,6 +1,4 @@
-import sys
 import ctypes
-import struct
 import windows
 import windows.hooks as hooks
 import windows.utils as utils
@@ -22,9 +20,11 @@ def RedefineCtypesStruct(struct, replacement):
     NewStruct.__name__ = struct.__name__
     return NewStruct
 
+
 # type replacement based on name
 def transform_ctypes_fields(struct, replacement):
     return [(name, replacement.get(name, type)) for name, type in struct._fields_]
+
 
 def PEFile(baseaddr, target=None):
     # TODO: 32 with target 32
@@ -40,14 +40,12 @@ def PEFile(baseaddr, target=None):
         raise NotImplementedError("Parse 32bits PE with 64bits current_process")
     elif targetedbitness == 64 and proc_bitness == 32:
         ctypes_structure_transformer = rctypes.transform_type_to_remote64bits
+
         def create_structure_at(structcls, addr):
-           # try:
                 return rctypes.transform_type_to_remote64bits(structcls)(addr, target)
-            #except:
-                #import pdb;pdb.set_trace()
-                #return rctypes.transform_type_to_remote64bits(structcls)(addr, target)
-    elif targetedbitness == proc_bitness: # Does not handle remote of same bitness..
+    elif targetedbitness == proc_bitness:  # Does not handle remote of same bitness..
         ctypes_structure_transformer = lambda x: x
+
         def create_structure_at(structcls, addr):
             return structcls.from_address(addr)
     else:
@@ -123,15 +121,13 @@ def PEFile(baseaddr, target=None):
             self.hook.disable()
             self.hook = None
             return True
-            
-    
 
     class PEFile(object):
         def __init__(self):
             self.baseaddr = baseaddr
 
         def get_DOS_HEADER(self):
-            return  create_structure_at(IMAGE_DOS_HEADER, baseaddr)
+            return create_structure_at(IMAGE_DOS_HEADER, baseaddr)
 
         def get_NT_HEADER(self):
             return self.get_DOS_HEADER().get_NT_HEADER()
@@ -148,13 +144,11 @@ def PEFile(baseaddr, target=None):
                 return []
             import_descriptor_addr = RVA(import_datadir.VirtualAddress).addr
             current_import_descriptor = create_structure_at(self.IMAGE_IMPORT_DESCRIPTOR, import_descriptor_addr)
-            #current_import_descriptor = self.IMAGE_IMPORT_DESCRIPTOR.from_address(import_descriptor_addr)
             res = []
             while current_import_descriptor.FirstThunk:
-                 res.append(current_import_descriptor)
-                 import_descriptor_addr += ctypes.sizeof(self.IMAGE_IMPORT_DESCRIPTOR)
-                 #current_import_descriptor = self.IMAGE_IMPORT_DESCRIPTOR.from_address(import_descriptor_addr)
-                 current_import_descriptor = create_structure_at(self.IMAGE_IMPORT_DESCRIPTOR, import_descriptor_addr)
+                res.append(current_import_descriptor)
+                import_descriptor_addr += ctypes.sizeof(self.IMAGE_IMPORT_DESCRIPTOR)
+                current_import_descriptor = create_structure_at(self.IMAGE_IMPORT_DESCRIPTOR, import_descriptor_addr)
             return res
 
         def get_EXPORT_DIRECTORY(self):
@@ -163,22 +157,20 @@ def PEFile(baseaddr, target=None):
                 return None
             export_directory_addr = baseaddr + export_directory_rva
             return create_structure_at(self._IMAGE_EXPORT_DIRECTORY, export_directory_addr)
-            #return self._IMAGE_EXPORT_DIRECTORY.from_address(export_directory_addr)
 
         class PESection(ctypes_structure_transformer(IMAGE_SECTION_HEADER)):
             @utils.fixedpropety
             def name(self):
                 return ctypes.c_char_p(ctypes.addressof(self.Name)).value
-                
+
             def __repr__(self):
                 return "<PESection \"{0}\">".format(self.name)
-            
+
         @utils.fixedpropety
         def sections(self):
             nt_header = self.get_NT_HEADER()
             nb_section = nt_header.FileHeader.NumberOfSections
             base_section = ctypes.addressof(nt_header) + ctypes.sizeof(nt_header)
-            #IMAGE_SECTION_H = ctypes_structure_transformer(IMAGE_SECTION_HEADER)
             sections_array = create_structure_at(self.PESection * nb_section, base_section)
             return list(sections_array)
 
@@ -195,7 +187,6 @@ def PEFile(baseaddr, target=None):
                     res[rva_name.str] = rva_addr.addr
             return res
 
-
         # TODO: get imports by parsing other modules exports if no INT
         @utils.fixedpropety
         def imports(self):
@@ -208,19 +199,18 @@ def PEFile(baseaddr, target=None):
                         # str(name.decode()) -> python2 and python3 compatible for str result
                         iat_entry.ord = ord
                         iat_entry.name = str(name.decode()) if name else ""
-                res.setdefault(import_descriptor.Name.str.lower(),[]).extend(IAT)
+                res.setdefault(import_descriptor.Name.str.lower(), []).extend(IAT)
             return res
 
         # Will be usable as `self.IMAGE_IMPORT_DESCRIPTOR`
         class IMAGE_IMPORT_DESCRIPTOR(ctypes.Structure):
-            _fields_ = transform_ctypes_fields(IMAGE_IMPORT_DESCRIPTOR, {"Name" : StringRVa, "OriginalFirstThunk" : RVA, "FirstThunk" : RVA})
+            _fields_ = transform_ctypes_fields(IMAGE_IMPORT_DESCRIPTOR, {"Name": StringRVa, "OriginalFirstThunk": RVA, "FirstThunk": RVA})
 
             def get_INT(self):
-
                 if not self.OriginalFirstThunk.value:
                     return None
                 int_addr = self.OriginalFirstThunk.addr
-                int_entry =  create_structure_at(THUNK_DATA, int_addr)
+                int_entry = create_structure_at(THUNK_DATA, int_addr)
                 res = []
                 while int_entry.Ordinal:
                     if int_entry.Ordinal & IMAGE_ORDINAL_FLAG:
@@ -234,30 +224,30 @@ def PEFile(baseaddr, target=None):
                             name = ctypes.c_char_p(name_address).value
                         res.append((import_by_name.Hint, name))
                     int_addr += ctypes.sizeof(type(int_entry))
-                    int_entry =  create_structure_at(THUNK_DATA, int_addr)
+                    int_entry = create_structure_at(THUNK_DATA, int_addr)
                 return res
 
             def get_IAT(self):
                 iat_addr = self.FirstThunk.addr
-                iat_entry =  create_structure_at(THUNK_DATA, iat_addr)
+                iat_entry = create_structure_at(THUNK_DATA, iat_addr)
                 res = []
                 while iat_entry.Ordinal:
                     res.append(IATEntry.create(iat_addr, -1, "??"))
                     iat_addr += ctypes.sizeof(type(iat_entry))
-                    iat_entry =  create_structure_at(THUNK_DATA, iat_addr)
+                    iat_entry = create_structure_at(THUNK_DATA, iat_addr)
                 return res
 
         # Will be usable as `self._IMAGE_EXPORT_DIRECTORY`
         class _IMAGE_EXPORT_DIRECTORY(ctypes.Structure):
-            _fields_ = transform_ctypes_fields(IMAGE_EXPORT_DIRECTORY, {"Name" : StringRVa, "AddressOfFunctions" : RVA, "AddressOfNames" : RVA, "AddressOfNameOrdinals": RVA})
+            _fields_ = transform_ctypes_fields(IMAGE_EXPORT_DIRECTORY, {"Name": StringRVa, "AddressOfFunctions": RVA, "AddressOfNames": RVA, "AddressOfNameOrdinals": RVA})
 
             def get_exports(self):
-                NameOrdinals =  create_structure_at((WORD * self.NumberOfNames), self.AddressOfNameOrdinals.addr)
+                NameOrdinals = create_structure_at((WORD * self.NumberOfNames), self.AddressOfNameOrdinals.addr)
                 NameOrdinals = list(NameOrdinals)
                 Functions = create_structure_at((RVA * self.NumberOfFunctions), self.AddressOfFunctions.addr)
                 Names = create_structure_at((StringRVa * self.NumberOfNames), self.AddressOfNames.addr)
                 res = []
-                for nb,func in enumerate(Functions):
+                for nb, func in enumerate(Functions):
                     if nb in NameOrdinals:
                         name = Names[NameOrdinals.index(nb)]
                     else:

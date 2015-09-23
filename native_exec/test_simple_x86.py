@@ -4,6 +4,7 @@ from simple_x86 import *
 disassembleur = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_32)
 disassembleur.detail = True
 
+
 def disas(x):
     return list(disassembleur.disasm(x, 0))
 
@@ -42,7 +43,7 @@ class TestInstr(object):
         if len(args) != len(capres_op):
             raise AssertionError("Expected {0} operands got {1}".format(len(args), len(capres_op)))
         for op_args, cap_op in zip(args, capres_op):
-            if isinstance(op_args, str): # Register
+            if isinstance(op_args, str):  # Register
                 if cap_op.type != capstone.x86.X86_OP_REG:
                     raise AssertionError("Expected args {0} operands got {1}".format(op_args, capres_op))
                 if op_args.lower() != capres.reg_name(cap_op.reg).lower():
@@ -60,7 +61,7 @@ class TestInstr(object):
             raise AssertionError("Expected Memaccess <{0}> got {1}".format(memaccess, cap_op))
         if memaccess.prefix is not None and capres.prefix[1] != x86_segment_selectors[memaccess.prefix].PREFIX_VALUE:
             try:
-                get_prefix = [n for n,x in x86_segment_selectors.items() if x.PREFIX_VALUE == capres.prefix[1]][0]
+                get_prefix = [n for n, x in x86_segment_selectors.items() if x.PREFIX_VALUE == capres.prefix[1]][0]
             except IndexError:
                 get_prefix = None
             raise AssertionError("Expected Segment overide <{0}> got {1}".format(memaccess.prefix, get_prefix))
@@ -87,37 +88,27 @@ TestInstr(Mov)('EDX', mem('[0x11223344]'))
 TestInstr(Mov)('EDX', mem('[ESP + EBP * 2 + 0x223344]'))
 TestInstr(Mov)(mem('[EBP + EBP * 2 + 0x223344]'), 'ESP')
 TestInstr(Mov)('ESI', mem('[ESI + EDI * 1]'))
-
 TestInstr(Mov)('EAX', mem('fs:[0x30]'))
 TestInstr(Mov)('EDI', mem('gs:[EAX + ECX * 4]'))
-
 TestInstr(Mov)('AX', 'AX')
 TestInstr(Mov)('SI', 'DI')
-
 TestInstr(Mov)('AX', 'AX')
 TestInstr(Mov)('AX', mem('fs:[0x30]'))
 TestInstr(Mov)('AX', mem('fs:[EAX + 0x30]'))
 TestInstr(Mov)('AX', mem('fs:[EAX + ECX * 4+0x30]'))
-
 TestInstr(Add)('EAX', 8)
 TestInstr(Add)('EAX', 0xffffffff)
-
 TestInstr(Inc)('EAX')
 TestInstr(Inc)(mem('[0x42424242]'))
-
 TestInstr(Lea)('EAX', mem('[EAX + 1]'))
 TestInstr(Lea)('ECX', mem('[EDI + -0xff]'))
-
 TestInstr(Call)('EAX')
 TestInstr(Call)(mem('[EAX + ECX * 8]'))
 TestInstr(Cpuid)()
-
 TestInstr(Movsb, expected_result='movsb byte ptr es:[edi], byte ptr [esi]')()
 TestInstr(Movsd, expected_result='movsd dword ptr es:[edi], dword ptr [esi]')()
-
 TestInstr(Xchg)('EAX', 'ESP')
 assert Xchg('EAX', 'ECX').get_code() == Xchg('ECX', 'EAX').get_code()
-
 
 code = MultipleInstr()
 code += Nop()

@@ -4,40 +4,47 @@ import ctypes.wintypes
 import itertools
 from _ctypes import _SimpleCData
 
-# 64bits pointeurs and long
 
-### Utils ####
+# ## Utils ### #
 def is_pointer(x):
     return isinstance(x, _ctypes._Pointer)
+
 
 def is_pointer_type(x):
     return issubclass(x, _ctypes._Pointer)
 
+
 def is_array(x):
     return isinstance(x, _ctypes.Array)
+
 
 def is_array_type(x):
     return issubclass(x, _ctypes.Array)
 
+
 def is_structure_type(x):
     return issubclass(x, ctypes.Structure)
+
 
 def is_union_type(x):
     return issubclass(x, ctypes.Union)
 
-#### My types ####
+# ### My types ### #
 
-## 64bits pointer types ##
+# # 64bits pointer types # #
 
 # I know direct inheritance from _SimpleCData seems bad
 # But it seems to be the only way to have the normal
 # ctypes.Structure way of working (need to investigate)
 
+
 class c_void_p64(_SimpleCData):
     _type_ = "Q"
 
+
 class c_char_p64(_SimpleCData):
     _type_ = "Q"
+
 
 class c_wchar_p64(_SimpleCData):
     _type_ = "Q"
@@ -47,10 +54,8 @@ class c_wchar_p64(_SimpleCData):
 # maybe force import before ctypes and modif stuff into ctypes ?
 
 
-## Remote Value
-
+# # Remote Value
 # Used by the RemoteStructure to access the target memory
-
 
 class RemoteValue(object):
     @classmethod
@@ -59,10 +64,12 @@ class RemoteValue(object):
         x.target = target
         return x
 
+
 class RemotePtr(RemoteValue):
     @property
     def raw_value(self):
         return ctypes.cast(self, ctypes.c_void_p).value
+
 
 class RemoteCCharP(RemotePtr, ctypes.c_char_p):
     @property
@@ -76,6 +83,7 @@ class RemoteCCharP(RemotePtr, ctypes.c_char_p):
                 break
             res.append(x)
         return "".join(res)
+
 
 class RemoteWCharP(RemotePtr, ctypes.c_char_p):
     @property
@@ -91,6 +99,7 @@ class RemoteWCharP(RemotePtr, ctypes.c_char_p):
             res.extend(x)
         return "".join(res).decode('utf16')
 
+
 class RemoteStructurePointer(RemotePtr, ctypes.c_void_p):
     @classmethod
     def from_buffer_with_target_and_ptr_type(cls, buffer, offset=0, target=None, ptr_type=None):
@@ -101,7 +110,6 @@ class RemoteStructurePointer(RemotePtr, ctypes.c_void_p):
 
     @property
     def contents(self):
-        #print(self.real_pointer_type)
         remote_pointed_type = RemoteStructure.from_structure(self.real_pointer_type._type_)
         return remote_pointed_type(self.raw_value, self.target)
 
@@ -110,9 +118,11 @@ class RemoteStructurePointer(RemotePtr, ctypes.c_void_p):
 
 
 def create_remote_array(subtype, len):
+
     class RemoteArray(_ctypes.Array):
         _length_ = len
         _type_ = subtype
+
         def __init__(self, addr, target):
             self._base_addr = addr
             self.target = target
@@ -123,16 +133,15 @@ def create_remote_array(subtype, len):
             if slice >= len:
                 raise IndexError("Access to {0} for a RemoteArray of size {1}".format(slice, len))
             item_addr = self._base_addr + (ctypes.sizeof(subtype) * slice)
-            #TODO: do better ?
+
+            # TODO: do better ?
             class TST(ctypes.Structure):
                 _fields_ = [("TST", subtype)]
             return RemoteStructure.from_structure(TST)(item_addr, target=self.target).TST
-            #return subtype(item_addr, target=self.target)
     return RemoteArray
 
 
 # 64bits pointers
-
 class RemotePtr64(RemoteValue):
     def __init__(self, value, target):
         self.target = target
@@ -144,11 +153,11 @@ class RemotePtr64(RemoteValue):
         # Even if we are a subclass of c_ulonglong
         my_addr = ctypes.addressof(self)
         return ctypes.c_ulonglong.from_address(my_addr).value
-        return ctypes.cast(self, ctypes.c_ulonglong).value
 
 
 class Remote_c_void_p64(RemotePtr64, c_void_p64):
     pass
+
 
 # base explanation:
 # RemotePtr64 for the good `raw_value` implem
@@ -158,9 +167,11 @@ class Remote_c_char_p64(c_char_p64, RemotePtr64, RemoteCCharP):
     def __repr__(self):
         return "<Remote_c_char_p64({0})>".format(self.raw_value)
 
+
 class Remote_w_char_p64(c_wchar_p64, RemotePtr64, RemoteWCharP):
     def __repr__(self):
         return "<Remote_c_char_p64({0})>".format(self.raw_value)
+
 
 class RemoteStructurePointer64(Remote_c_void_p64):
     @property
@@ -181,27 +192,27 @@ class RemoteStructurePointer64(Remote_c_void_p64):
 
 
 type_32_64_translation_table = {
-    ctypes.c_void_p : Remote_c_void_p64,
-    ctypes.c_char_p : Remote_c_char_p64,
+    ctypes.c_void_p: Remote_c_void_p64,
+    ctypes.c_char_p: Remote_c_char_p64,
     ctypes.c_wchar_p: Remote_w_char_p64,
-    }
+}
+
 
 class RemoteStructureUnion(object):
     """Target is a process object"""
     _reserved_name = ["_target", "_fields_", "_fields_dict_", "_base_addr", "_get_field_by_name",
-                        "_get_field_descrptor_by_name", "_handle_field_getattr", "_field_type_to_remote_type", "__getattribute__", "_fields_"]
+                      "_get_field_descrptor_by_name", "_handle_field_getattr", "_field_type_to_remote_type",
+                      "__getattribute__", "_fields_"]
 
     _field_type_to_remote_type = {
-            ctypes.c_char_p : RemoteCCharP,
-            ctypes.c_wchar_p : RemoteWCharP,
-            Remote_c_void_p64 : Remote_c_void_p64,
-            Remote_c_char_p64 : Remote_c_char_p64,
-            Remote_w_char_p64 : Remote_w_char_p64}
-
+        ctypes.c_char_p: RemoteCCharP,
+        ctypes.c_wchar_p: RemoteWCharP,
+        Remote_c_void_p64: Remote_c_void_p64,
+        Remote_c_char_p64: Remote_c_char_p64,
+        Remote_w_char_p64: Remote_w_char_p64
+    }
 
     def __init__(self, base_addr, target):
-        if type(base_addr) not in (int, long):
-            import pdb;pdb.set_trace()
         self._target = target
         self._base_addr = base_addr
         self._fields_dict_ = dict(self._fields_)
@@ -213,25 +224,24 @@ class RemoteStructureUnion(object):
             raise AttributeError(fieldname + "is not a field of {0}".format(type(self)))
 
     def _get_field_descrptor_by_name(self, fieldname):
-        return getattr(type(self), fieldname) # ctypes metaclass fill this for us
+        return getattr(type(self), fieldname)  # ctypes metaclass fill this for us
 
     def _handle_field_getattr(self, ftype, fosset, fsize):
         s = self._target.read_memory(self._base_addr + fosset, fsize)
         if ftype in self._field_type_to_remote_type:
             return self._field_type_to_remote_type[ftype].from_buffer_with_target(bytearray(s), target=self._target).value
-        if issubclass(ftype, _ctypes._Pointer): # Pointer
+        if issubclass(ftype, _ctypes._Pointer):  # Pointer
             return RemoteStructurePointer.from_buffer_with_target_and_ptr_type(bytearray(s), target=self._target, ptr_type=ftype)
-        if issubclass(ftype, RemotePtr64): # Pointer to remote64 bits process
+        if issubclass(ftype, RemotePtr64):  # Pointer to remote64 bits process
             return RemoteStructurePointer64.from_buffer_with_target_and_ptr_type(bytearray(s), target=self._target, ptr_type=ftype)
-        if issubclass(ftype, RemoteStructureUnion): # Structure|Union already transfomed in remote
+        if issubclass(ftype, RemoteStructureUnion):  # Structure|Union already transfomed in remote
             return ftype(self._base_addr + fosset, self._target)
-        if issubclass(ftype, ctypes.Structure): # Structure that must be transfomed
+        if issubclass(ftype, ctypes.Structure):  # Structure that must be transfomed
             return RemoteStructure.from_structure(ftype)(self._base_addr + fosset, self._target)
-        if issubclass(ftype, ctypes.Union): # Union that must be transfomed
+        if issubclass(ftype, ctypes.Union):  # Union that must be transfomed
             return RemoteUnion.from_structure(ftype)(self._base_addr + fosset, self._target)
-        if issubclass(ftype, _ctypes.Array): # Arrays
+        if issubclass(ftype, _ctypes.Array):  # Arrays
             return create_remote_array(ftype._type_, ftype._length_)(self._base_addr + fosset, self._target)
-            #return ftype.from_buffer(bytearray(s))
         # Normal types
         # Follow the ctypes usage: if it's not directly inherited from _SimpleCData
         # We do not apply the .value
@@ -241,18 +251,18 @@ class RemoteStructureUnion(object):
         return ftype.from_buffer(bytearray(s)).value
 
     def __getattribute__(self, fieldname):
-        if fieldname in type(self)._reserved_name: #Prevent recursion !
+        if fieldname in type(self)._reserved_name:  # Prevent recursion !
             return super(RemoteStructureUnion, self).__getattribute__(fieldname)
         try:
             t = self._get_field_by_name(fieldname)
-        except AttributeError as e: # Not a real attribute
+        except AttributeError:  # Not a real attribute
             return super(RemoteStructureUnion, self).__getattribute__(fieldname)
         descr = self._get_field_descrptor_by_name(fieldname)
         return self._handle_field_getattr(t, descr.offset, descr.size)
 
     @classmethod
     def from_structure(cls, structcls):
-        class MyStruct(cls, structcls): # inherit of structcls to keep property (see winobject.LoadedModule)
+        class MyStruct(cls, structcls):  # inherit of structcls to keep property (see winobject.LoadedModule)
             _fields_ = structcls._fields_
 
         MyStruct.__name__ = "Remote" + structcls.__name__
@@ -264,16 +274,19 @@ class RemoteStructureUnion(object):
         if base_cls:
             bases.append(base_cls)
         # inherit of structcls to keep property (see winobject.LoadedModule)
-        RemoteStruct = type("RemoteStruct", tuple(bases), {"_fields_" : fields})
+        RemoteStruct = type("RemoteStruct", tuple(bases), {"_fields_": fields})
         if base_cls:
             RemoteStruct.__name__ = "Remote" + base_cls.__name__
         return RemoteStruct
 
+
 class RemoteStructure(RemoteStructureUnion, ctypes.Structure):
     pass
 
+
 class RemoteUnion(RemoteStructureUnion, ctypes.Union):
     pass
+
 
 remote_struct = RemoteStructure.from_structure
 

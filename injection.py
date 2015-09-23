@@ -1,6 +1,3 @@
-import sys
-import os
-
 import windows
 import windows.utils as utils
 
@@ -21,12 +18,7 @@ def get_loadlib_getproc(target):
 
 # 32 to 32 injection
 def generate_python_exec_shellcode_32(target, PYDLL_addr, PyInit, PyRun, PYCODE_ADDR):
-    #LoadLibraryA = utils.get_func_addr('kernel32', 'LoadLibraryA')
-    #GetProcAddress = utils.get_func_addr('kernel32', 'GetProcAddress')
     LoadLibraryA, GetProcAddress = get_loadlib_getproc(target)
-    print("LoadLibraryA = {0}".format(hex(LoadLibraryA)))
-    print("LoadLibraryA = {0}".format(hex(GetProcAddress)))
-
     code = x86.MultipleInstr()
     # Load python27.dll
     code += x86.Push(PYDLL_addr)
@@ -51,6 +43,7 @@ def generate_python_exec_shellcode_32(target, PYDLL_addr, PyInit, PyRun, PYCODE_
     code += x86.Pop('EDI')
     code += x86.Ret()
     return code.get_code()
+
 
 # 64 to 64 injection
 def generate_python_exec_shellcode_64(target, PYDLL_addr, PyInit, PyRun, PYCODE_ADDR):
@@ -112,7 +105,6 @@ def inject_python_command(process, code_injected, PYDLL="python27.dll\x00"):
     process.write_memory(remote_addr, PYDLL)
     remote_addr += len(PYDLL)
 
-
     PyInitT_ADDR = remote_addr
     process.write_memory(remote_addr, PyInitT)
     remote_addr += len(PyInitT)
@@ -127,12 +119,12 @@ def inject_python_command(process, code_injected, PYDLL="python27.dll\x00"):
 
     SHELLCODE_ADDR = remote_addr
     if process.bitness == 32:
-        shellcode = generate_python_exec_shellcode_32(process, PYDLL_addr, PyInitT_ADDR, Pyrun_ADDR, PYCODE_ADDR)
+        shellcode_generator = generate_python_exec_shellcode_32
     else:
-        shellcode = generate_python_exec_shellcode_64(process, PYDLL_addr, PyInitT_ADDR, Pyrun_ADDR, PYCODE_ADDR)
+        shellcode_generator = generate_python_exec_shellcode_64
+    shellcode = shellcode_generator(process, PYDLL_addr, PyInitT_ADDR, Pyrun_ADDR, PYCODE_ADDR)
     process.write_memory(SHELLCODE_ADDR, shellcode)
     return SHELLCODE_ADDR
-
 
 
 def execute_python_code(process, code):
