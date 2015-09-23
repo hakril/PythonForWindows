@@ -187,7 +187,6 @@ def generate_stub_64(callback):
     pop_all_save_register = x64.MultipleInstr([x64.Pop(reg) for reg in reversed(register_to_save)])
     # Reserve parallel `stack`
     save_register_space = allocator.reserve_int(len(register_to_save))
-    save_register_space += REG_LEN
     save_register_space_end = save_register_space + (ctypes.sizeof(ctypes.c_void_p) * (len(register_to_save)))
 
     save_rbx = save_register_space_end - REG_LEN
