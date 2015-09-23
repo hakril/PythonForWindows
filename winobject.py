@@ -622,4 +622,4 @@ if CurrentProcess().bitness == 32:
                 res.append(current_dll)
                 list_entry_ptr = current_dll.InMemoryOrderLinks.Flink.raw_value
                 current_dll = self.ptr_flink_to_remote_module(list_entry_ptr)
-                return res
+            return res
