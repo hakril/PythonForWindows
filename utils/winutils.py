@@ -6,7 +6,7 @@ import sys
 import code
 
 import windows
-from .. import k32testing
+from .. import winproxy
 from ..generated_def import windef
 from ..generated_def.winstructs import *
 
@@ -30,7 +30,7 @@ def get_remote_func_addr(target, dll_name, func_name):
 def is_wow_64(hProcess):
     try:
         fnIsWow64Process =  get_func_addr("kernel32.dll", "IsWow64Process")
-    except k32testing.Kernel32Error:
+    except winproxy.Kernel32Error:
         return False
     IsWow64Process  = ctypes.WINFUNCTYPE(BOOL, HANDLE, ctypes.POINTER(BOOL))(fnIsWow64Process)
     Wow64Process = BOOL()
@@ -51,16 +51,16 @@ def get_handle_from_file(f):
 def create_console():
     """Create a new console displaying STDOUT
        Useful in injection of GUI process"""
-    k32testing.AllocConsole()
-    stdout_handle = k32testing.GetStdHandle(windef.STD_OUTPUT_HANDLE)
+    winproxy.AllocConsole()
+    stdout_handle = winproxy.GetStdHandle(windef.STD_OUTPUT_HANDLE)
     console_stdout = create_file_from_handle(stdout_handle, "w")
     sys.stdout = console_stdout
 
-    stdin_handle = k32testing.GetStdHandle(windef.STD_INPUT_HANDLE)
+    stdin_handle = winproxy.GetStdHandle(windef.STD_INPUT_HANDLE)
     console_stdin = create_file_from_handle(stdin_handle, "r+")
     sys.stdin = console_stdin
 
-    stderr_handle = k32testing.GetStdHandle(windef.STD_ERROR_HANDLE)
+    stderr_handle = winproxy.GetStdHandle(windef.STD_ERROR_HANDLE)
     console_stderr = create_file_from_handle(stderr_handle, "w")
     sys.stderr = console_stderr
 
@@ -72,7 +72,7 @@ def create_process(path, show_windows=False):
         StartupInfo.cb = ctypes.sizeof(StartupInfo)
         StartupInfo.dwFlags = 0
         lpStartupInfo = ctypes.byref(StartupInfo)
-    windows.k32testing.CreateProcessA(path, lpProcessInformation=ctypes.byref(proc_info), lpStartupInfo=lpStartupInfo)
+    windows.winproxy.CreateProcessA(path, lpProcessInformation=ctypes.byref(proc_info), lpStartupInfo=lpStartupInfo)
     proc = [p for p in windows.system.processes if p.pid == proc_info.dwProcessId][0]
     return proc
     
@@ -82,17 +82,17 @@ def enable_privilege(lpszPrivilege, bEnablePrivilege):
     luid = LUID()
     hToken = HANDLE()
 
-    k32testing.OpenProcessToken(k32testing.GetCurrentProcess(), TOKEN_ALL_ACCESS, byref(hToken))
-    k32testing.LookupPrivilegeValueA(None, lpszPrivilege, byref(luid))
+    winproxy.OpenProcessToken(winproxy.GetCurrentProcess(), TOKEN_ALL_ACCESS, byref(hToken))
+    winproxy.LookupPrivilegeValueA(None, lpszPrivilege, byref(luid))
     tp.PrivilegeCount = 1
     tp.Privileges[0].Luid = luid
     if bEnablePrivilege:
         tp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED
     else:
         tp.Privileges[0].Attributes = 0
-    k32testing.AdjustTokenPrivileges(hToken, False, byref(tp), sizeof(TOKEN_PRIVILEGES))
-    k32testing.CloseHandle(hToken)
-    if k32testing.GetLastError() == windef.ERROR_NOT_ALL_ASSIGNED:
+    winproxy.AdjustTokenPrivileges(hToken, False, byref(tp), sizeof(TOKEN_PRIVILEGES))
+    winproxy.CloseHandle(hToken)
+    if winproxy.GetLastError() == windef.ERROR_NOT_ALL_ASSIGNED:
         raise ValueError("Failed to get privilege {0}".format(lpszPrivilege))
     return True    
     
@@ -104,9 +104,9 @@ def check_is_elevated():
     cbsize = DWORD()
 
     bcsize = sizeof(elevation)
-    k32testing.OpenProcessToken(k32testing.GetCurrentProcess(), TOKEN_ALL_ACCESS, byref(hToken))
-    k32testing.GetTokenInformation(hToken, TokenElevation, byref(elevation), sizeof(elevation), byref(cbsize))
-    k32testing.CloseHandle(hToken)
+    winproxy.OpenProcessToken(winproxy.GetCurrentProcess(), TOKEN_ALL_ACCESS, byref(hToken))
+    winproxy.GetTokenInformation(hToken, TokenElevation, byref(elevation), sizeof(elevation), byref(cbsize))
+    winproxy.CloseHandle(hToken)
     return elevation.TokenIsElevated
     
 def check_debug():
@@ -116,9 +116,9 @@ def check_debug():
     cbsize = DWORD(1024)
     bufferres = (c_char * cbsize.value)()
 
-    k32testing.RegOpenKeyExA(HKEY_LOCAL_MACHINE, "System\\CurrentControlSet\\Control", 0, KEY_READ, byref(hkresult))
-    k32testing.RegGetValueA(hkresult, None, "SystemStartOptions", RRF_RT_REG_SZ, None, byref(bufferres), byref(cbsize))
-    k32testing.RegCloseKey(hkresult)
+    winproxy.RegOpenKeyExA(HKEY_LOCAL_MACHINE, "System\\CurrentControlSet\\Control", 0, KEY_READ, byref(hkresult))
+    winproxy.RegGetValueA(hkresult, None, "SystemStartOptions", RRF_RT_REG_SZ, None, byref(bufferres), byref(cbsize))
+    winproxy.RegCloseKey(hkresult)
     
     control = bufferres[:]
     if "DEBUG" not in control:
@@ -144,10 +144,10 @@ def pop_shell():
 def get_kernel_modules():
     cbsize = DWORD()
     
-    k32testing.NtQuerySystemInformation(SystemModuleInformation, None, 0, byref(cbsize))
+    winproxy.NtQuerySystemInformation(SystemModuleInformation, None, 0, byref(cbsize))
     raw_buffer = (cbsize.value * c_char)()
     buffer = SYSTEM_MODULE_INFORMATION.from_address(ctypes.addressof(raw_buffer))
-    k32testing.NtQuerySystemInformation(SystemModuleInformation, byref(raw_buffer), sizeof(raw_buffer), byref(cbsize))
+    winproxy.NtQuerySystemInformation(SystemModuleInformation, byref(raw_buffer), sizeof(raw_buffer), byref(cbsize))
     modules = (SYSTEM_MODULE * buffer.ModulesCount).from_address(addressof(buffer) + SYSTEM_MODULE_INFORMATION.Modules.offset)
     return list(modules)
 
@@ -168,20 +168,20 @@ class VirtualProtected(object):
 
     def __enter__(self):
         self.old_protect = DWORD()
-        k32testing.VirtualProtect(self.addr, self.size, self.new_protect, ctypes.byref(self.old_protect))
+        winproxy.VirtualProtect(self.addr, self.size, self.new_protect, ctypes.byref(self.old_protect))
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
-        k32testing.VirtualProtect(self.addr, self.size, self.old_protect.value, ctypes.byref(self.old_protect))
+        winproxy.VirtualProtect(self.addr, self.size, self.old_protect.value, ctypes.byref(self.old_protect))
         return False
 
 class DisableWow64FsRedirection(object):
     """A context manager that disable the Wow64 Fs Redirection"""
     def __enter__(self):
         self.OldValue = PVOID()
-        k32testing.Wow64DisableWow64FsRedirection(ctypes.byref(self.OldValue))
+        winproxy.Wow64DisableWow64FsRedirection(ctypes.byref(self.OldValue))
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
-        k32testing.Wow64RevertWow64FsRedirection(self.OldValue)
+        winproxy.Wow64RevertWow64FsRedirection(self.OldValue)
         return False

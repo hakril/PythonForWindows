@@ -86,16 +86,16 @@ class WindowsTestCase(unittest.TestCase):
         imp = python_module.pe.imports
         self.assertIn("kernel32.dll", imp.keys(), 'Kernel32.dll not in python imports')
         current_proc_id_iat = [f for f in imp["kernel32.dll"] if f.name == "GetCurrentProcessId"][0]
-        k32_base = windows.k32testing.LoadLibraryA("kernel32.dll")
-        self.assertEqual(windows.k32testing.GetProcAddress(k32_base, "GetCurrentProcessId"), current_proc_id_iat.value)
+        k32_base = windows.winproxy.LoadLibraryA("kernel32.dll")
+        self.assertEqual(windows.winproxy.GetProcAddress(k32_base, "GetCurrentProcessId"), current_proc_id_iat.value)
 
     def test_local_process_pe_exports(self):
         mods = [m for m in windows.current_process.peb.modules if m.name == "kernel32.dll"]
         self.assertTrue(mods, 'Could not find "kernel32.dll" in current process modules')
         k32 = mods[0]
         get_current_proc_id = k32.pe.exports['GetCurrentProcessId']
-        k32_base = windows.k32testing.LoadLibraryA("kernel32.dll")
-        self.assertEqual(windows.k32testing.GetProcAddress(k32_base, "GetCurrentProcessId"), get_current_proc_id)
+        k32_base = windows.winproxy.LoadLibraryA("kernel32.dll")
+        self.assertEqual(windows.winproxy.GetProcAddress(k32_base, "GetCurrentProcessId"), get_current_proc_id)
 
 
     # Native execution

@@ -1,5 +1,5 @@
 import windows
-import windows.k32testing
+import windows.winproxy
 import ctypes
 import socket
 import struct
@@ -51,7 +51,7 @@ class TCP4Connection(MIB_TCPROW_OWNER_PID):
         closing.dwLocalPort = self.dwLocalPort
         closing.dwRemoteAddr = self.dwRemoteAddr
         closing.dwRemotePort = self.dwRemotePort
-        return windows.k32testing.SetTcpEntry(ctypes.byref(closing))
+        return windows.winproxy.SetTcpEntry(ctypes.byref(closing))
 
     def __repr__(self):
         if not self.established:
@@ -129,22 +129,22 @@ def get_MIB_TCP6TABLE_OWNER_PID_from_buffer(buffer):
 def get_tcp_ipv4_sockets():
     size = ctypes.c_uint(0)
     try:
-        windows.k32testing.GetExtendedTcpTable(None, ctypes.byref(size), ulAf=windows.generated_def.windef.AF_INET)
-    except windows.k32testing.IphlpapiError as e:
+        windows.winproxy.GetExtendedTcpTable(None, ctypes.byref(size), ulAf=windows.generated_def.windef.AF_INET)
+    except windows.winproxy.IphlpapiError as e:
         pass # Allow us to set size to the needed value
     buffer = (ctypes.c_char * size.value)()
-    windows.k32testing.GetExtendedTcpTable(buffer, ctypes.byref(size), ulAf=windows.generated_def.windef.AF_INET)
+    windows.winproxy.GetExtendedTcpTable(buffer, ctypes.byref(size), ulAf=windows.generated_def.windef.AF_INET)
     t = get_MIB_TCPTABLE_OWNER_PID_from_buffer(buffer)
     return list(t.table)
 
 def get_tcp_ipv6_sockets():
     size = ctypes.c_uint(0)
     try:
-        windows.k32testing.GetExtendedTcpTable(None, ctypes.byref(size), ulAf=windows.generated_def.windef.AF_INET6)
-    except windows.k32testing.IphlpapiError as e:
+        windows.winproxy.GetExtendedTcpTable(None, ctypes.byref(size), ulAf=windows.generated_def.windef.AF_INET6)
+    except windows.winproxy.IphlpapiError as e:
         pass # Allow us to set size to the needed value
     buffer = (ctypes.c_char * size.value)()
-    windows.k32testing.GetExtendedTcpTable(buffer, ctypes.byref(size), ulAf=windows.generated_def.windef.AF_INET6)
+    windows.winproxy.GetExtendedTcpTable(buffer, ctypes.byref(size), ulAf=windows.generated_def.windef.AF_INET6)
     t = get_MIB_TCP6TABLE_OWNER_PID_from_buffer(buffer)
     return list(t.table)
 

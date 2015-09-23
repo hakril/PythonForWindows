@@ -4,7 +4,7 @@ import platform
 import sys
 
 import windows
-import windows.k32testing as k32api
+import windows.winproxy
 
 from . import simple_x86 as x86
 from . import simple_x64 as x64
@@ -43,7 +43,7 @@ class Win32MyMap(MyMap):
         #access = mmap.ACCESS_READ | mmap.ACCESS_WRITE
         #return cls(-1, size, access=access)
         access = mmap.ACCESS_READ | mmap.ACCESS_WRITE
-        addr = k32api.VirtualAlloc(0, size, 0x1000, 0x40)
+        addr = windows.winproxy.VirtualAlloc(0, size, 0x1000, 0x40)
         new_map = (ctypes.c_char * size).from_address(addr)
         new_map.addr = addr
         if new_map.addr == 0:

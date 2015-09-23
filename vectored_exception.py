@@ -184,9 +184,9 @@ class WithExceptionHandler(object):
         self.handler = VectoredException(handler)
 
     def __enter__(self):
-        self.value = windows.k32testing.AddVectoredExceptionHandler(0, self.handler)
+        self.value = windows.winproxy.AddVectoredExceptionHandler(0, self.handler)
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
-        windows.k32testing.RemoveVectoredExceptionHandler(self.value)
+        windows.winproxy.RemoveVectoredExceptionHandler(self.value)
         return False

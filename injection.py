@@ -19,8 +19,6 @@ def get_loadlib_getproc(target):
         return exp['LoadLibraryA'], exp['GetProcAddress']
 
 
-
-
 # 32 to 32 injection
 def generate_python_exec_shellcode_32(target, PYDLL_addr, PyInit, PyRun, PYCODE_ADDR):
     #LoadLibraryA = utils.get_func_addr('kernel32', 'LoadLibraryA')

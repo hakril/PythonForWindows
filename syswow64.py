@@ -2,7 +2,7 @@ import struct
 import ctypes
 import codecs
 import windows
-import windows.k32testing as kernel32proxy
+import windows.winproxy as winproxy
 import windows.native_exec.simple_x64 as x64
 from generated_def.winstructs import *
 
@@ -24,7 +24,7 @@ def execute_64bits_code_from_syswow(shellcode):
     """shellcode must not end by a ret"""
     if not windows.current_process.is_wow_64:
         raise ValueError("Calling execute_64bits_code_from_syswow from non-syswow process")
-    addr = windows.k32testing.VirtualAlloc(dwSize=0x1000)
+    addr = windows.winproxy.VirtualAlloc(dwSize=0x1000)
     # post-exec 32bits stub (xor eax, eax; ret)
     ret = "\xC3"
     ret_addr = addr
@@ -131,7 +131,7 @@ def get_current_process_syswow_peb():
     class CurrentProcessReadSyswow():
         def read_memory(self, addr, size):
             buffer_addr =  ctypes.create_string_buffer(size)
-            kernel32proxy.NtWow64ReadVirtualMemory64(current_process.handle, addr, buffer_addr, size)
+            windows.winproxy.NtWow64ReadVirtualMemory64(current_process.handle, addr, buffer_addr, size)
             return buffer_addr[:]
         bitness = 64
     peb_addr = get_current_process_syswow_peb_addr()

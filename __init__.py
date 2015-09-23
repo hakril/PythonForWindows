@@ -11,15 +11,17 @@ Exported:
     current_thread : :class:`windows.winobject.CurrentThread`
 """
 
-import windows.k32testing
-from .utils import  VirtualProtected
+import windows.winproxy
+from .utils import VirtualProtected
 from .winobject import System, CurrentProcess, CurrentThread
-
 
 system = System()
 current_process = CurrentProcess()
 current_thread = CurrentThread()
 
-import windows.vectored_exception
 
 __all__ = ["system", "VirtualProtected", 'current_process', 'current_thread']
+
+# Late import
+# Do not move it: risk of circular import
+import windows.vectored_exception

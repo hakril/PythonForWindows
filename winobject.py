@@ -7,7 +7,7 @@ import struct
 
 import windows
 import windows.syswow64
-import windows.k32testing as kernel32proxy
+import windows.winproxy as winproxy
 import windows.injection as injection
 import windows.native_exec as native_exec
 import windows.native_exec.simple_x86 as x86
@@ -43,7 +43,7 @@ class AutoHandle(object):
 
     def __del__(self):
          if hasattr(self, "_handle") and self._handle:
-            kernel32proxy.CloseHandle(self._handle)
+            winproxy.CloseHandle(self._handle)
 
 class System(object):
     """Represent the current windows system python is running on"""
@@ -82,11 +82,11 @@ class System(object):
     def enumerate_processes():
         process_entry = WinProcess()
         process_entry.dwSize = ctypes.sizeof(process_entry)
-        snap = kernel32proxy.CreateToolhelp32Snapshot(windef.TH32CS_SNAPPROCESS, 0)
-        kernel32proxy.Process32First(snap, process_entry)
+        snap = winproxy.CreateToolhelp32Snapshot(windef.TH32CS_SNAPPROCESS, 0)
+        winproxy.Process32First(snap, process_entry)
         res = []
         res.append(utils.swallow_ctypes_copy(process_entry))
-        while kernel32proxy.Process32Next(snap, process_entry):
+        while winproxy.Process32Next(snap, process_entry):
             res.append(utils.swallow_ctypes_copy(process_entry))
         return res
 
@@ -94,11 +94,11 @@ class System(object):
     def enumerate_threads():
         thread_entry = WinThread()
         thread_entry.dwSize = ctypes.sizeof(thread_entry)
-        snap = kernel32proxy.CreateToolhelp32Snapshot(windef.TH32CS_SNAPTHREAD, 0)
+        snap = winproxy.CreateToolhelp32Snapshot(windef.TH32CS_SNAPTHREAD, 0)
         threads = []
-        kernel32proxy.Thread32First(snap, thread_entry)
+        winproxy.Thread32First(snap, thread_entry)
         threads.append(copy.copy(thread_entry))
-        while kernel32proxy.Thread32Next(snap, thread_entry):
+        while winproxy.Thread32Next(snap, thread_entry):
             threads.append(copy.copy(thread_entry))
         return threads
 
@@ -129,23 +129,23 @@ class WinThread(THREADENTRY32, AutoHandle):
     def context(self):
         x =  windows.vectored_exception.EnhancedCONTEXT()
         x.ContextFlags = CONTEXT_FULL
-        kernel32proxy.GetThreadContext(self.handle, x)
+        winproxy.GetThreadContext(self.handle, x)
         return x
 
     def set_context(self, context):
-        return kernel32proxy.SetThreadContext(self.handle, context)
+        return winproxy.SetThreadContext(self.handle, context)
 
     def exit(self, code=0):
-        return kernel32proxy.TerminateThread(self.handle, code)
+        return winproxy.TerminateThread(self.handle, code)
 
     def resume(self):
-        return kernel32proxy.ResumeThread(self.handle)
+        return winproxy.ResumeThread(self.handle)
 
     def suspend(self):
-        return kernel32proxy.SuspendThread(self.handle)
+        return winproxy.SuspendThread(self.handle)
 
     def _get_handle(self):
-        return kernel32proxy.OpenThread(dwThreadId=self.tid)
+        return winproxy.OpenThread(dwThreadId=self.tid)
 
     def __repr__(self):
         owner = self.owner
@@ -157,7 +157,7 @@ class WinThread(THREADENTRY32, AutoHandle):
 
     @staticmethod
     def _from_handle(handle):
-        tid = kernel32proxy.GetThreadId(handle)
+        tid = winproxy.GetThreadId(handle)
         print(tid)
         try:
             return [t for t in System().threads if t.tid == tid][0]
@@ -210,7 +210,7 @@ class CurrentThread(AutoHandle):
     @utils.fixedpropety
     def tid(self):
         """Thread ID"""
-        return kernel32proxy.GetCurrentThreadId()
+        return winproxy.GetCurrentThreadId()
 
     @utils.fixedpropety
     def owner(self):
@@ -221,14 +221,14 @@ class CurrentThread(AutoHandle):
         return windows.current_process
 
     def _get_handle(self):
-        return kernel32proxy.GetCurrentThread()
+        return winproxy.GetCurrentThread()
 
     def __del__(self):
         pass
 
     def exit(self, code=0):
         """Exit the thread"""
-        return kernel32proxy.ExitThread(code)
+        return winproxy.ExitThread(code)
 
 
 
@@ -259,7 +259,7 @@ class CurrentProcess(Process):
         return get_peb
 
     def _get_handle(self):
-        return kernel32proxy.GetCurrentProcess()
+        return winproxy.GetCurrentProcess()
 
     def __del__(self):
         pass
@@ -303,7 +303,7 @@ class CurrentProcess(Process):
 
         :returns: int
         """
-        return kernel32proxy.VirtualAlloc(dwSize=size)
+        return winproxy.VirtualAlloc(dwSize=size)
 
     def write_memory(self, addr, data):
         """Write data at addr"""
@@ -323,12 +323,12 @@ class CurrentProcess(Process):
         .. note::
             CreateThread https://msdn.microsoft.com/en-us/library/windows/desktop/ms682453%28v=vs.85%29.aspx
         """
-        handle = kernel32proxy.CreateThread(lpStartAddress=lpStartAddress, lpParameter=lpParameter, dwCreationFlags=dwCreationFlags)
+        handle = winproxy.CreateThread(lpStartAddress=lpStartAddress, lpParameter=lpParameter, dwCreationFlags=dwCreationFlags)
         return WinThread._from_handle(handle)
 
     def exit(self, code=0):
         """Exit the process"""
-        return kernel32proxy.ExitProcess(code)
+        return winproxy.ExitProcess(code)
 
 class WinProcess(PROCESSENTRY32, Process):
     """A Process on the system"""
@@ -360,7 +360,7 @@ class WinProcess(PROCESSENTRY32, Process):
         return self.th32ParentProcessID
 
     def _get_handle(self):
-        return kernel32proxy.OpenProcess(dwProcessId=self.pid)
+        return winproxy.OpenProcess(dwProcessId=self.pid)
 
     def __repr__(self):
         return '<{0} "{1}" pid {2} at {3}>'.format(self.__class__.__name__, self.name, self.pid, hex(id(self)))
@@ -370,19 +370,19 @@ class WinProcess(PROCESSENTRY32, Process):
 
         :returns: int
         """
-        return kernel32proxy.VirtualAllocEx(self.handle, dwSize=size)
+        return winproxy.VirtualAllocEx(self.handle, dwSize=size)
 
     def write_memory(self, addr, data):
         """Write `data` at `addr`"""
-        return kernel32proxy.WriteProcessMemory(self.handle, addr, lpBuffer=data)
+        return winproxy.WriteProcessMemory(self.handle, addr, lpBuffer=data)
 
     def low_read_memory(self, addr, buffer_addr, size):
         if windows.current_process.bitness == 32 and self.bitness == 64:
-            #OptionalExport can be None (see k32testing.py)
-            if kernel32proxy.NtWow64ReadVirtualMemory64 is None:
+            #OptionalExport can be None (see winproxy.py)
+            if winproxy.NtWow64ReadVirtualMemory64 is None:
                 raise ValueError("NtWow64ReadVirtualMemory64 non available in ntdll: cannot write into 64bits processus")
-            return kernel32proxy.NtWow64ReadVirtualMemory64(self.handle, addr, buffer_addr, size)
-        return kernel32proxy.ReadProcessMemory(self.handle, addr, lpBuffer=buffer_addr, nSize=size)
+            return winproxy.NtWow64ReadVirtualMemory64(self.handle, addr, buffer_addr, size)
+        return winproxy.ReadProcessMemory(self.handle, addr, lpBuffer=buffer_addr, nSize=size)
 
     def read_memory(self, addr, size):
         """Read `size` from `addr`"""
@@ -417,7 +417,7 @@ class WinProcess(PROCESSENTRY32, Process):
         """Create a remote thread"""
         if windows.current_process.bitness == 32 and self.bitness == 64:
             return windows.syswow64.NtCreateThreadEx_32_to_64(self, addr, param)
-        return  WinThread._from_handle(kernel32proxy.CreateRemoteThread(hProcess=self.handle, lpStartAddress=addr, lpParameter=param))
+        return  WinThread._from_handle(winproxy.CreateRemoteThread(hProcess=self.handle, lpStartAddress=addr, lpParameter=param))
 
     def load_library(self, dll_path):
         """Load the library in remote process"""
@@ -466,7 +466,7 @@ class WinProcess(PROCESSENTRY32, Process):
 
     def exit(self, code=0):
         """Exit the process"""
-        return kernel32proxy.TerminateProcess(self.handle, code)
+        return winproxy.TerminateProcess(self.handle, code)
 
 
 class LoadedModule(LDR_DATA_TABLE_ENTRY):
