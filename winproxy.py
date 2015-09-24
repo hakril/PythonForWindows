@@ -228,7 +228,12 @@ Wow64EnableWow64FsRedirection = OptionalExport(TransparentKernel32Proxy)("Wow64E
 
 
 @Kernel32Proxy("CreateFileA")
-def CreateFileA(lpFileName, dwDesiredAccess, dwShareMode=0, lpSecurityAttributes=None, dwCreationDisposition=OPEN_EXISTING, dwFlagsAndAttributes=FILE_ATTRIBUTE_NORMAL, hTemplateFile=None):
+def CreateFileA(lpFileName, dwDesiredAccess=GENERIC_READ, dwShareMode=0, lpSecurityAttributes=None, dwCreationDisposition=OPEN_EXISTING, dwFlagsAndAttributes=FILE_ATTRIBUTE_NORMAL, hTemplateFile=None):
+    return CreateFileA.ctypes_function(lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile)
+
+
+@Kernel32Proxy("CreateFileW")
+def CreateFileW(lpFileName, dwDesiredAccess=GENERIC_READ, dwShareMode=0, lpSecurityAttributes=None, dwCreationDisposition=OPEN_EXISTING, dwFlagsAndAttributes=FILE_ATTRIBUTE_NORMAL, hTemplateFile=None):
     return CreateFileA.ctypes_function(lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile)
 
 
