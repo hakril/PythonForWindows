@@ -128,10 +128,5 @@ def inject_python_command(process, code_injected, PYDLL="python27.dll\x00"):
 
 
 def execute_python_code(process, code):
-    print("me = {0}".format(windows.current_process.bitness))
-    print("him = {0}".format(process.bitness))
-    if windows.current_process.bitness != process.bitness:
-        if windows.current_process.bitness == 64 and process.bitness == 32:
-            raise NotImplementedError("Cannot perform 64 -> 32 injection")
     shellcode_remote_addr = inject_python_command(process, code)
     return process.create_thread(shellcode_remote_addr, 0)

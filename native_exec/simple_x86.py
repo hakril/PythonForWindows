@@ -473,8 +473,30 @@ class Slash(object):
             return arg_consum, value
         return arg_consum - 1, value
 
-instr_state = collections.namedtuple('instr_state', ['previous', 'prefixes'])
+class ControlRegisterModRM(object):
+    def __init__(self, writecr = False):
+        self.writecr = writecr
 
+    def accept_arg(self, args, instr_state):
+        writecr = self.writecr
+        if len(args) < 2:
+            return None, None
+        reg = args[writecr]
+        cr = args[not writecr]
+        if not cr.lower().startswith("cr"):
+            return None, None
+        try:
+            cr_number = int(cr[2:], 10)
+        except ValueError as e:
+            raise ValueError("Invalid ControlRegister {0}".format(cr))
+        if cr_number > 7:
+            raise ValueError("Invalid ControlRegister {0}".format(cr))
+
+        modrm_params = [reg, x86_regs[cr_number]] + args[2:]
+        return ModRM([ModRM_REG__REG], has_direction_bit=False).accept_arg(modrm_params, instr_state)
+
+
+instr_state = collections.namedtuple('instr_state', ['previous', 'prefixes'])
 
 class Instruction(object):
     """Base class of instructions, use `encoding` to find a valid way to assemble the instruction"""
@@ -610,7 +632,9 @@ class Sub(Instruction):
 
 class Mov(Instruction):
     encoding = [(RawBits.from_int(8, 0x89), ModRM([ModRM_REG__REG, ModRM_REG__MEM])),
-                (RawBits.from_int(5, 0xb8 >> 3), X86RegisterSelector(), Imm32())]
+                (RawBits.from_int(5, 0xb8 >> 3), X86RegisterSelector(), Imm32()),
+                (RawBits.from_int(16, 0x0f20), ControlRegisterModRM(writecr=False)),
+                (RawBits.from_int(16, 0x0f22), ControlRegisterModRM(writecr=True))]
 
 
 class Movsb(Instruction):

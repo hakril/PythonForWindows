@@ -157,8 +157,8 @@ class WindowsTestCase(unittest.TestCase):
             k32 = mods[0]
             get_current_proc_id = k32.pe.exports['GetCurrentProcessId']
             # TODO: check get_current_proc_id value (but we cannot do 64->32 injection for now)
-            if is_process_64_bits:
-                raise NotImplementedError("Python execution 64->32")
+            #if is_process_64_bits:
+            #    raise NotImplementedError("Python execution 64->32")
             data = calc.virtual_alloc(0x1000)
             remote_python_code = """
                                 import ctypes
@@ -232,4 +232,6 @@ class WindowsTestCase(unittest.TestCase):
 if __name__ == '__main__':
     alltests = unittest.TestSuite()
     alltests.addTest(unittest.makeSuite(WindowsTestCase))
-    unittest.TextTestRunner(verbosity=2).run(alltests)
+    alltests.debug()
+    tester = unittest.TextTestRunner(verbosity=2)
+    tester.run(alltests)

@@ -26,30 +26,37 @@ def transform_ctypes_fields(struct, replacement):
     return [(name, replacement.get(name, type)) for name, type in struct._fields_]
 
 
+def get_structure_transformer_for_target(target):
+    current_bitness = windows.current_process.bitness
+    if target is None:
+        ctypes_structure_transformer = lambda x:x
+        create_structure_at = lambda structcls, addr: structcls.from_address(addr)
+        return ctypes_structure_transformer, create_structure_at
+
+    if target.bitness == 32 and current_bitness == 64:
+        ctypes_structure_transformer = rctypes.transform_type_to_remote32bits
+    elif target.bitness == 64 and current_bitness == 32:
+        ctypes_structure_transformer = rctypes.transform_type_to_remote64bits
+    elif target.bitness == current_bitness:
+        ctypes_structure_transformer = rctypes.transform_type_to_remote
+    else:
+        raise NotImplementedError("Parsing {0} PE from {1} Process".format(targetedbitness, proc_bitness))
+
+    def create_structure_at(structcls, addr):
+        return ctypes_structure_transformer(structcls)(addr, target)
+    return ctypes_structure_transformer, create_structure_at
+
+
 def PEFile(baseaddr, target=None):
-    # TODO: 32 with target 32
-    #       64 with target 64
-    # For now you can do it by injecting a remote python..
     proc_bitness = windows.current_process.bitness
     if target is None:
         targetedbitness = proc_bitness
     else:
         targetedbitness = target.bitness
 
-    if targetedbitness == 32 and proc_bitness == 64:
-        raise NotImplementedError("Parse 32bits PE with 64bits current_process")
-    elif targetedbitness == 64 and proc_bitness == 32:
-        ctypes_structure_transformer = rctypes.transform_type_to_remote64bits
+    transformers = get_structure_transformer_for_target(target)
+    ctypes_structure_transformer, create_structure_at = transformers
 
-        def create_structure_at(structcls, addr):
-                return rctypes.transform_type_to_remote64bits(structcls)(addr, target)
-    elif targetedbitness == proc_bitness:  # Does not handle remote of same bitness..
-        ctypes_structure_transformer = lambda x: x
-
-        def create_structure_at(structcls, addr):
-            return structcls.from_address(addr)
-    else:
-        raise NotImplementedError("Parsing {0} PE from {1} Process".format(targetedbitness, proc_bitness))
 
     if targetedbitness == 32:
         IMAGE_ORDINAL_FLAG = IMAGE_ORDINAL_FLAG32
@@ -65,14 +72,14 @@ def PEFile(baseaddr, target=None):
             return "<DWORD {0} (RVA to '{1}')>".format(self.value, hex(self.addr))
 
     class StringRVa(RVA):
-        if proc_bitness == 32 and targetedbitness == 64:
-            @property
-            def str(self):
-                return rctypes.Remote_c_char_p64(self.addr, target=target).value
-        else:
+        if target is None:
             @property
             def str(self):
                 return ctypes.c_char_p(self.addr).value.decode()
+        else:
+            @property
+            def str(self):
+                return create_structure_at(ctypes.c_char_p, self.addr).value.decode()
 
         def __repr__(self):
             return "<DWORD {0} (String RVA to '{1}')>".format(self.value, self.str)

@@ -1,3 +1,6 @@
+"""remote ctypes, a try to a ctypes wrapper that accept a target object for every ready operation
+Some code is copy-paste, might be userful to rewrite some part later"""
+
 import _ctypes
 import ctypes
 import ctypes.wintypes
@@ -48,6 +51,20 @@ class c_char_p64(_SimpleCData):
 
 class c_wchar_p64(_SimpleCData):
     _type_ = "Q"
+
+
+# # 32bits pointer types # #
+class c_void_p32(_SimpleCData):
+    _type_ = "I"
+
+
+class c_char_p32(_SimpleCData):
+    _type_ = "I"
+
+
+class c_wchar_p32(_SimpleCData):
+    _type_ = "I"
+
 
 # standard type translation
 # don't know how to handle size_t since it's non-distinguable from c_ulong
@@ -142,6 +159,7 @@ def create_remote_array(subtype, len):
 
 
 # 64bits pointers
+
 class RemotePtr64(RemoteValue):
     def __init__(self, value, target):
         self.target = target
@@ -198,6 +216,64 @@ type_32_64_translation_table = {
 }
 
 
+# 32bits pointers
+
+class RemotePtr32(RemoteValue):
+    def __init__(self, value, target):
+        self.target = target
+        super(RemotePtr32, self).__init__(value)
+
+    @property
+    def raw_value(self):
+        # Bypass our own 'value' implementation
+        # Even if we are a subclass of c_ulonglong
+        my_addr = ctypes.addressof(self)
+        return ctypes.c_ulong.from_address(my_addr).value
+
+
+class Remote_c_void_p32(RemotePtr32, c_void_p32):
+    pass
+
+
+# base explanation:
+# RemotePtr64 for the good `raw_value` implem
+# RemoteCCharP for the good `value` implem
+# c_char_p64 for the good _type_ (ctypes size)
+class Remote_c_char_p32(c_char_p32, RemotePtr32, RemoteCCharP):
+    def __repr__(self):
+        return "<Remote_c_char_p32({0})>".format(self.raw_value)
+
+
+class Remote_w_char_p32(c_wchar_p32, RemotePtr32, RemoteWCharP):
+    def __repr__(self):
+        return "<Remote_c_char_p32({0})>".format(self.raw_value)
+
+
+class RemoteStructurePointer32(Remote_c_void_p32):
+    @property
+    def raw_value(self):
+        return self.value
+
+    @classmethod
+    def from_buffer_with_target_and_ptr_type(cls, buffer, offset=0, target=None, ptr_type=None):
+        x = cls.from_buffer(buffer)
+        x.target = target
+        x.real_pointer_type = ptr_type
+        return x
+
+    @property
+    def contents(self):
+        remote_pointed_type = transform_type_to_remote32bits(self.real_pointer_type._sub_ctypes_)
+        return remote_pointed_type(self.raw_value, self.target)
+
+
+type_64_32_translation_table = {
+    ctypes.c_void_p: Remote_c_void_p32,
+    ctypes.c_char_p: Remote_c_char_p32,
+    ctypes.c_wchar_p: Remote_w_char_p32,
+}
+
+
 class RemoteStructureUnion(object):
     """Target is a process object"""
     _reserved_name = ["_target", "_fields_", "_fields_dict_", "_base_addr", "_get_field_by_name",
@@ -209,7 +285,10 @@ class RemoteStructureUnion(object):
         ctypes.c_wchar_p: RemoteWCharP,
         Remote_c_void_p64: Remote_c_void_p64,
         Remote_c_char_p64: Remote_c_char_p64,
-        Remote_w_char_p64: Remote_w_char_p64
+        Remote_w_char_p64: Remote_w_char_p64,
+        Remote_c_void_p32: Remote_c_void_p32,
+        Remote_c_char_p32: Remote_c_char_p32,
+        Remote_w_char_p32: Remote_w_char_p32
     }
 
     def __init__(self, base_addr, target):
@@ -234,6 +313,8 @@ class RemoteStructureUnion(object):
             return RemoteStructurePointer.from_buffer_with_target_and_ptr_type(bytearray(s), target=self._target, ptr_type=ftype)
         if issubclass(ftype, RemotePtr64):  # Pointer to remote64 bits process
             return RemoteStructurePointer64.from_buffer_with_target_and_ptr_type(bytearray(s), target=self._target, ptr_type=ftype)
+        if issubclass(ftype, RemotePtr32):  # Pointer to remote32 bits process
+            return RemoteStructurePointer32.from_buffer_with_target_and_ptr_type(bytearray(s), target=self._target, ptr_type=ftype)
         if issubclass(ftype, RemoteStructureUnion):  # Structure|Union already transfomed in remote
             return ftype(self._base_addr + fosset, self._target)
         if issubclass(ftype, ctypes.Structure):  # Structure that must be transfomed
@@ -290,37 +371,76 @@ class RemoteUnion(RemoteStructureUnion, ctypes.Union):
 
 remote_struct = RemoteStructure.from_structure
 
+# ctypes 32 -> 64 methods
+def MakePtr64(type):
+    class PointerToStruct64(Remote_c_void_p64):
+        _sub_ctypes_ = (type)
+    return PointerToStruct64
+
+def transform_structure_to_remote64bits(structcls):
+    """Create a remote structure for a 64bits target process"""
+    new_fields = []
+    for fname, ftype in structcls._fields_:
+        ftype = transform_type_to_remote64bits(ftype)
+        new_fields.append((fname, ftype))
+    return RemoteStructure.from_fields(new_fields, base_cls=structcls)
+
+def transform_union_to_remote64bits(structcls):
+    """Create a remote union for a 64bits target process"""
+    new_fields = []
+    for fname, ftype in structcls._fields_:
+        ftype = transform_type_to_remote64bits(ftype)
+        new_fields.append((fname, ftype))
+    return RemoteUnion.from_fields(new_fields, base_cls=structcls)
+
+def transform_type_to_remote64bits(ftype):
+    if is_pointer_type(ftype):
+        return MakePtr64(ftype._type_)
+    if is_array_type(ftype):
+        return create_remote_array(transform_type_to_remote64bits(ftype._type_), ftype._length_)
+    if is_structure_type(ftype):
+        return transform_structure_to_remote64bits(ftype)
+    if is_union_type(ftype):
+        return transform_union_to_remote64bits(ftype)
+    # Normal types
+    return type_32_64_translation_table.get(ftype, ftype)
+
+
+# ctypes 64 -> 32 methods
+def MakePtr32(type):
+    class PointerToStruct32(Remote_c_void_p32):
+        _sub_ctypes_ = (type)
+    return PointerToStruct32
+
+def transform_structure_to_remote32bits(structcls):
+    """Create a remote structure for a 32bits target process"""
+    new_fields = []
+    for fname, ftype in structcls._fields_:
+        ftype = transform_type_to_remote32bits(ftype)
+        new_fields.append((fname, ftype))
+    return RemoteStructure.from_fields(new_fields, base_cls=structcls)
+
+def transform_union_to_remote32bits(structcls):
+    """Create a remote union for a 32bits target process"""
+    new_fields = []
+    for fname, ftype in structcls._fields_:
+        ftype = transform_type_to_remote32bits(ftype)
+        new_fields.append((fname, ftype))
+    return RemoteUnion.from_fields(new_fields, base_cls=structcls)
+
+def transform_type_to_remote32bits(ftype):
+    if is_pointer_type(ftype):
+        return MakePtr32(ftype._type_)
+    if is_array_type(ftype):
+        return create_remote_array(transform_type_to_remote32bits(ftype._type_), ftype._length_)
+    if is_structure_type(ftype):
+        return transform_structure_to_remote32bits(ftype)
+    if is_union_type(ftype):
+        return transform_union_to_remote32bits(ftype)
+    # Normal types
+    return type_64_32_translation_table.get(ftype, ftype)
+
 if ctypes.sizeof(ctypes.c_void_p) == 4:
-    # ctypes 32 -> 64 methods
-    def MakePtr(type):
-        class PointerToStruct64(Remote_c_void_p64):
-            _sub_ctypes_ = (type)
-        return PointerToStruct64
-
-    def transform_structure_to_remote64bits(structcls):
-        """Create a remote structure for a 64bits target process"""
-        new_fields = []
-        for fname, ftype in structcls._fields_:
-            ftype = transform_type_to_remote64bits(ftype)
-            new_fields.append((fname, ftype))
-        return RemoteStructure.from_fields(new_fields, base_cls=structcls)
-
-    def transform_union_to_remote64bits(structcls):
-        """Create a remote structure for a 64bits target process"""
-        new_fields = []
-        for fname, ftype in structcls._fields_:
-            ftype = transform_type_to_remote64bits(ftype)
-            new_fields.append((fname, ftype))
-        return RemoteUnion.from_fields(new_fields, base_cls=structcls)
-
-    def transform_type_to_remote64bits(ftype):
-        if is_pointer_type(ftype):
-            return MakePtr(ftype._type_)
-        if is_array_type(ftype):
-            return create_remote_array(transform_type_to_remote64bits(ftype._type_), ftype._length_)
-        if is_structure_type(ftype):
-            return transform_structure_to_remote64bits(ftype)
-        if is_union_type(ftype):
-            return transform_union_to_remote64bits(ftype)
-        # Normal types
-        return type_32_64_translation_table.get(ftype, ftype)
+    transform_type_to_remote = transform_type_to_remote32bits
+if ctypes.sizeof(ctypes.c_void_p) == 8:
+    transform_type_to_remote = transform_type_to_remote64bits

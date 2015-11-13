@@ -158,7 +158,6 @@ class WinThread(THREADENTRY32, AutoHandle):
     @staticmethod
     def _from_handle(handle):
         tid = winproxy.GetThreadId(handle)
-        print(tid)
         try:
             return [t for t in System().threads if t.tid == tid][0]
         except IndexError:
@@ -462,6 +461,8 @@ class WinProcess(PROCESSENTRY32, Process):
     def peb(self):
         if windows.current_process.bitness == 32 and self.bitness == 64:
             return RemotePEB64(self.get_peb_addr(), self)
+        if windows.current_process.bitness == 64 and self.bitness == 32:
+            return RemotePEB32(self.get_peb_addr(), self)
         return RemotePEB(self.get_peb_addr(), self)
 
     def exit(self, code=0):
@@ -569,12 +570,20 @@ class PEB(Structure):
 
 import windows.remotectypes as rctypes
 
+class RemoteLoadedModule(rctypes.RemoteStructure.from_structure(LoadedModule)):
+    @property
+    def pe(self):
+        """A PE representation of the module
+
+        :type: :class:`windows.pe_parse.PEFile`
+        """
+        return pe_parse.PEFile(self.baseaddr, target=self._target)
+
 
 class RemotePEB(rctypes.RemoteStructure.from_structure(PEB)):
-    RemoteLoadedModule = rctypes.RemoteStructure.from_structure(LoadedModule)
 
     def ptr_flink_to_remote_module(self, ptr_value):
-        return self.RemoteLoadedModule(ptr_value - ctypes.sizeof(ctypes.c_void_p) * 2, self._target)
+        return RemoteLoadedModule(ptr_value - ctypes.sizeof(ctypes.c_void_p) * 2, self._target)
 
     @property
     def modules(self):
@@ -615,6 +624,39 @@ if CurrentProcess().bitness == 32:
             :type: [:class:`LoadedModule`] -- List of loaded modules
             """
             res = []
+            list_entry_ptr = self.Ldr.contents.InMemoryOrderModuleList.Flink.raw_value
+
+            current_dll = self.ptr_flink_to_remote_module(list_entry_ptr)
+            while current_dll.DllBase:
+                res.append(current_dll)
+                list_entry_ptr = current_dll.InMemoryOrderLinks.Flink.raw_value
+                current_dll = self.ptr_flink_to_remote_module(list_entry_ptr)
+            return res
+
+if CurrentProcess().bitness == 64:
+
+    class RemoteLoadedModule32(rctypes.transform_type_to_remote32bits(LoadedModule)):
+        @property
+        def pe(self):
+            """A PE representation of the module
+
+            :type: :class:`windows.pe_parse.PEFile`
+            """
+            return pe_parse.PEFile(self.baseaddr, target=self._target)
+
+    class RemotePEB32(rctypes.transform_type_to_remote32bits(PEB)):
+
+        def ptr_flink_to_remote_module(self, ptr_value):
+            return RemoteLoadedModule32(ptr_value - ctypes.sizeof(rctypes.c_void_p32) * 2, self._target)
+
+        @property
+        def modules(self):
+            """The loaded modules present in the PEB
+
+            :type: [:class:`LoadedModule`] -- List of loaded modules
+            """
+            res = []
+            #import pdb;pdb.set_trace()
             list_entry_ptr = self.Ldr.contents.InMemoryOrderModuleList.Flink.raw_value
 
             current_dll = self.ptr_flink_to_remote_module(list_entry_ptr)

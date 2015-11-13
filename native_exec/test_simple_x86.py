@@ -80,6 +80,14 @@ class TestInstr(object):
             raise AssertionError("Expected mem.disp {0} got {1}".format(memaccess.disp, cap_mem.disp))
 
 
+TestInstr(Mov)('EAX', 'CR3')
+TestInstr(Mov)('EDX', 'CR0')
+TestInstr(Mov)('EDI', 'CR7')
+
+TestInstr(Mov)('CR3', 'EAX')
+TestInstr(Mov)('CR0', 'EDX')
+TestInstr(Mov)('CR7', 'EDI')
+
 TestInstr(Mov)('EAX', 'ESP')
 TestInstr(Mov)('ECX', mem('[EAX]'))
 TestInstr(Mov)('EDX', mem('[ECX + 0x10]'))
