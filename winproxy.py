@@ -115,6 +115,9 @@ class ApiProxy(object):
             doc = doc if doc else ""
             python_proxy.__doc__ = doc + "\nErrcheck:\n   " + self.error_check.__doc__
         params_name = [param[1] for param in params]
+        python_proxy.prototype = prototype
+        python_proxy.params = params
+
 
         def perform_call(*args):
             if len(params_name) != len(args):
@@ -221,10 +224,12 @@ ExitThread = TransparentKernel32Proxy("ExitThread")
 SuspendThread = TransparentKernel32Proxy("SuspendThread", minus_one_error_check)
 ResumeThread = TransparentKernel32Proxy("ResumeThread", minus_one_error_check)
 GetThreadId = TransparentKernel32Proxy("GetThreadId")
+VirtualQueryEx = TransparentKernel32Proxy("VirtualQueryEx")
 
 Wow64DisableWow64FsRedirection = OptionalExport(TransparentKernel32Proxy)("Wow64DisableWow64FsRedirection")
 Wow64RevertWow64FsRedirection = OptionalExport(TransparentKernel32Proxy)("Wow64RevertWow64FsRedirection")
 Wow64EnableWow64FsRedirection = OptionalExport(TransparentKernel32Proxy)("Wow64EnableWow64FsRedirection")
+
 
 
 @Kernel32Proxy("CreateFileA")
@@ -447,10 +452,29 @@ def ntquerysysteminformation_error_check(func_name, result, func, args):
 
 @NtdllProxy('NtQuerySystemInformation', ntquerysysteminformation_error_check)
 def NtQuerySystemInformation(SystemInformationClass, SystemInformation=None, SystemInformationLength=0, ReturnLength=NeededParameter):
-    if SystemInformation is not None and SystemInformation == 0:
+    if SystemInformation is not None and SystemInformationLength == 0:
         SystemInformationLength = ctypes.sizeof(SystemInformation)
     return NtQuerySystemInformation.ctypes_function(SystemInformationClass, SystemInformation, SystemInformationLength, ReturnLength)
 
+@OptionalExport(NtdllProxy('NtQueryInformationProcess', error_ntstatus))
+def NtQueryInformationProcess(ProcessHandle, ProcessInformationClass, ProcessInformation, ProcessInformationLength=0, ReturnLength=None):
+    if ProcessInformation is not None and ProcessInformationLength == 0:
+        ProcessInformationLength = ctypes.sizeof(ProcessInformation)
+    if type(ProcessInformation) == PROCESS_BASIC_INFORMATION:
+        ProcessInformation = byref(ProcessInformation)
+    if ReturnLength is None:
+        ReturnLength = byref(ULONG())
+    return NtQueryInformationProcess.ctypes_function(ProcessHandle, ProcessInformationClass, ProcessInformation, ProcessInformationLength, ReturnLength)
+
+@OptionalExport(NtdllProxy('NtQueryVirtualMemory', error_ntstatus))
+def NtQueryVirtualMemory(ProcessHandle, BaseAddress, MemoryInformationClass, MemoryInformation=NeededParameter, MemoryInformationLength=0, ReturnLength=None):
+    if ReturnLength is None:
+        ReturnLength = byref(ULONG())
+    if MemoryInformation is not None and MemoryInformationLength == 0:
+        ProcessInformationLength = ctypes.sizeof(MemoryInformation)
+    if type(MemoryInformation) == MEMORY_BASIC_INFORMATION64:
+        MemoryInformation = byref(MemoryInformation)
+    return NtQueryVirtualMemory.ctypes_function(ProcessHandle, BaseAddress, MemoryInformationClass, MemoryInformation=NeededParameter, MemoryInformationLength=0, ReturnLength=None)
 
 # ##### ADVAPI32 ####### #
 

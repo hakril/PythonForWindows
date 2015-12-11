@@ -30,7 +30,6 @@ def get_remote_func_addr(target, dll_name, func_name):
 
 
 def is_wow_64(hProcess):
-    import ipdb;ipdb.set_trace()
     try:
         fnIsWow64Process = get_func_addr("kernel32.dll", "IsWow64Process")
     except winproxy.Kernel32Error:

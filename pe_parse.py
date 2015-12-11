@@ -225,10 +225,10 @@ def PEFile(baseaddr, target=None):
                     else:
                         import_by_name = create_structure_at(IMPORT_BY_NAME, baseaddr + int_entry.AddressOfData)
                         name_address = baseaddr + int_entry.AddressOfData + type(import_by_name).Name.offset
-                        if proc_bitness == 32 and targetedbitness == 64:
-                            name = rctypes.Remote_c_char_p64(name_address, target=target).value
-                        else:
+                        if target is None:
                             name = ctypes.c_char_p(name_address).value
+                        else:
+                            name = create_structure_at(ctypes.c_char_p, name_address).value.decode()
                         res.append((import_by_name.Hint, name))
                     int_addr += ctypes.sizeof(type(int_entry))
                     int_entry = create_structure_at(THUNK_DATA, int_addr)

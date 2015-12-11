@@ -5,6 +5,7 @@ from .windef import *
 
 PWSTR = LPWSTR
 SIZE_T = c_ulong
+PSIZE_T = POINTER(SIZE_T)
 PVOID = c_void_p
 PPS_POST_PROCESS_INIT_ROUTINE = PVOID
 NTSTATUS = DWORD
@@ -12,6 +13,7 @@ PULONG = POINTER(ULONG)
 PDWORD = POINTER(DWORD)
 LPDWORD = POINTER(DWORD)
 LPTHREAD_START_ROUTINE = PVOID
+PHANDLER_ROUTINE = PVOID
 LPBYTE = POINTER(BYTE)
 ULONG_PTR = PULONG
 CHAR = c_char
@@ -30,11 +32,13 @@ PHKEY = POINTER(HKEY)
 ACCESS_MASK = DWORD
 REGSAM = ACCESS_MASK
 LPCONTEXT = PVOID
+HCERTSTORE = PVOID
+HCRYPTMSG = PVOID
 VOID = DWORD
 
-structs = ['_LIST_ENTRY', '_PEB_LDR_DATA', '_LSA_UNICODE_STRING', '_RTL_USER_PROCESS_PARAMETERS', '_PEB', '_SECURITY_ATTRIBUTES', '_SYSTEM_VERIFIER_INFORMATION', '_LDR_DATA_TABLE_ENTRY', '_IMAGE_FILE_HEADER', '_IMAGE_DATA_DIRECTORY', '_IMAGE_SECTION_HEADER', '_IMAGE_OPTIONAL_HEADER64', '_IMAGE_OPTIONAL_HEADER', '_IMAGE_NT_HEADERS64', '_IMAGE_NT_HEADERS', '_IMAGE_IMPORT_DESCRIPTOR', '_IMAGE_IMPORT_BY_NAME', '_IMAGE_EXPORT_DIRECTORY', '_MEMORY_BASIC_INFORMATION', '_STARTUPINFOA', '_STARTUPINFOW', '_PROCESS_INFORMATION', '_FLOATING_SAVE_AREA', '_CONTEXT32', '_M128A', '_CONTEXT64', 'tagPROCESSENTRY32W', 'tagPROCESSENTRY32', 'tagTHREADENTRY32', '_LUID', '_LUID_AND_ATTRIBUTES', '_TOKEN_PRIVILEGES', '_TOKEN_ELEVATION', '_OSVERSIONINFOA', '_OSVERSIONINFOW', '_OSVERSIONINFOEXA', '_OSVERSIONINFOEXW', '_OVERLAPPED', '_MIB_TCPROW_OWNER_PID', '_MIB_TCPTABLE_OWNER_PID', '_MIB_UDPROW_OWNER_PID', '_MIB_UDPTABLE_OWNER_PID', '_MIB_UDP6ROW_OWNER_PID', '_MIB_UDP6TABLE_OWNER_PID', '_MIB_TCP6ROW_OWNER_PID', '_MIB_TCP6TABLE_OWNER_PID', '_MIB_TCPROW', '_EXCEPTION_RECORD', '_EXCEPTION_POINTERS64', '_EXCEPTION_POINTERS32', '_DEBUG_PROCESSOR_IDENTIFICATION_ALPHA', '_DEBUG_PROCESSOR_IDENTIFICATION_AMD64', '_DEBUG_PROCESSOR_IDENTIFICATION_IA64', '_DEBUG_PROCESSOR_IDENTIFICATION_X86', '_DEBUG_PROCESSOR_IDENTIFICATION_ARM', '_DEBUG_PROCESSOR_IDENTIFICATION_ALL', '_SYMBOL_INFO', '_MODLOAD_DATA', '_SYSTEM_MODULE32', '_SYSTEM_MODULE64', '_SYSTEM_MODULE_INFORMATION32', '_SYSTEM_MODULE_INFORMATION64', 'tagSAFEARRAYBOUND', 'tagSAFEARRAY']
+structs = ['_LIST_ENTRY', '_PEB_LDR_DATA', '_LSA_UNICODE_STRING', '_RTL_USER_PROCESS_PARAMETERS', '_PEB', '_SECURITY_ATTRIBUTES', '_SYSTEM_VERIFIER_INFORMATION', '_LDR_DATA_TABLE_ENTRY', '_IMAGE_FILE_HEADER', '_IMAGE_DATA_DIRECTORY', '_IMAGE_SECTION_HEADER', '_IMAGE_OPTIONAL_HEADER64', '_IMAGE_OPTIONAL_HEADER', '_IMAGE_NT_HEADERS64', '_IMAGE_NT_HEADERS', '_IMAGE_IMPORT_DESCRIPTOR', '_IMAGE_IMPORT_BY_NAME', '_IMAGE_EXPORT_DIRECTORY', '_MEMORY_BASIC_INFORMATION', '_MEMORY_BASIC_INFORMATION32', '_MEMORY_BASIC_INFORMATION64', '_STARTUPINFOA', '_STARTUPINFOW', '_PROCESS_INFORMATION', '_FLOATING_SAVE_AREA', '_CONTEXT32', '_M128A', '_CONTEXT64', 'tagPROCESSENTRY32W', 'tagPROCESSENTRY32', 'tagTHREADENTRY32', '_LUID', '_LUID_AND_ATTRIBUTES', '_TOKEN_PRIVILEGES', '_TOKEN_ELEVATION', '_OSVERSIONINFOA', '_OSVERSIONINFOW', '_OSVERSIONINFOEXA', '_OSVERSIONINFOEXW', '_OVERLAPPED', '_MIB_TCPROW_OWNER_PID', '_MIB_TCPTABLE_OWNER_PID', '_MIB_UDPROW_OWNER_PID', '_MIB_UDPTABLE_OWNER_PID', '_MIB_UDP6ROW_OWNER_PID', '_MIB_UDP6TABLE_OWNER_PID', '_MIB_TCP6ROW_OWNER_PID', '_MIB_TCP6TABLE_OWNER_PID', '_MIB_TCPROW', '_EXCEPTION_RECORD', '_EXCEPTION_RECORD32', '_EXCEPTION_RECORD64', '_EXCEPTION_POINTERS64', '_EXCEPTION_POINTERS32', '_DEBUG_PROCESSOR_IDENTIFICATION_ALPHA', '_DEBUG_PROCESSOR_IDENTIFICATION_AMD64', '_DEBUG_PROCESSOR_IDENTIFICATION_IA64', '_DEBUG_PROCESSOR_IDENTIFICATION_X86', '_DEBUG_PROCESSOR_IDENTIFICATION_ARM', '_DEBUG_PROCESSOR_IDENTIFICATION_ALL', '_SYMBOL_INFO', '_MODLOAD_DATA', '_SYSTEM_MODULE32', '_SYSTEM_MODULE64', '_SYSTEM_MODULE_INFORMATION32', '_SYSTEM_MODULE_INFORMATION64', 'tagSAFEARRAYBOUND', 'tagSAFEARRAY', '_DEBUG_BREAKPOINT_PARAMETERS', '_DEBUG_REGISTER_DESCRIPTION', '_DEBUG_STACK_FRAME', '_DEBUG_LAST_EVENT_INFO_BREAKPOINT', '_DEBUG_LAST_EVENT_INFO_EXCEPTION', '_DEBUG_LAST_EVENT_INFO_EXIT_THREAD', '_DEBUG_LAST_EVENT_INFO_EXIT_PROCESS', '_DEBUG_LAST_EVENT_INFO_LOAD_MODULE', '_DEBUG_LAST_EVENT_INFO_UNLOAD_MODULE', '_DEBUG_LAST_EVENT_INFO_SYSTEM_ERROR', '_DEBUG_SPECIFIC_FILTER_PARAMETERS', '_DEBUG_EXCEPTION_FILTER_PARAMETERS', '_GUID', '_CRYPTOAPI_BLOB', 'WINTRUST_FILE_INFO_', '_CRYPT_ATTRIBUTE', '_CTL_ENTRY', '_CRYPT_ATTRIBUTE', '_CRYPT_ATTRIBUTES', '_CRYPT_ALGORITHM_IDENTIFIER', '_CMSG_SIGNER_INFO', '_CERT_EXTENSION', '_CTL_USAGE', '_CTL_INFO', '_CTL_CONTEXT', 'WINTRUST_CATALOG_INFO_', 'WINTRUST_BLOB_INFO_', '_CRYPT_BIT_BLOB', '_CERT_PUBLIC_KEY_INFO', '_CERT_INFO', '_CERT_CONTEXT', 'WINTRUST_SGNR_INFO_', '_FILETIME', 'WINTRUST_CERT_INFO_', '_TMP_WINTRUST_UNION_TYPE', '_WINTRUST_DATA', '_PROCESS_BASIC_INFORMATION']
 
-enums = ['_SYSTEM_INFORMATION_CLASS', '_TCP_TABLE_CLASS', '_VARENUM', '_UDP_TABLE_CLASS', '_MIB_TCP_STATE', '_TOKEN_INFORMATION_CLASS', '_IMAGEHLP_SYMBOL_TYPE_INFO']
+enums = ['_SYSTEM_INFORMATION_CLASS', '_MEMORY_INFORMATION_CLASS', '_TCP_TABLE_CLASS', '_VARENUM', '_UDP_TABLE_CLASS', '_MIB_TCP_STATE', '_TOKEN_INFORMATION_CLASS', '_IMAGEHLP_SYMBOL_TYPE_INFO', '_PROCESSINFOCLASS']
 
 # Enum _SYSTEM_INFORMATION_CLASS definitions
 _SYSTEM_INFORMATION_CLASS = DWORD
@@ -123,6 +127,12 @@ SystemSuperfetchInformation = 0x4f
 SystemMemoryListInformation = 0x50
 SystemFileCacheInformationEx = 0x51
 MaxSystemInfoClass = 0x52
+
+# Enum _MEMORY_INFORMATION_CLASS definitions
+_MEMORY_INFORMATION_CLASS = DWORD
+MEMORY_INFORMATION_CLASS = _MEMORY_INFORMATION_CLASS
+
+MemoryBasicInformation = 0x0
 
 # Enum _TCP_TABLE_CLASS definitions
 _TCP_TABLE_CLASS = DWORD
@@ -306,6 +316,13 @@ TI_GET_VIRTUALBASEDISPINDEX = 0x1e
 TI_GET_IS_REFERENCE = 0x1f
 TI_GET_INDIRECTVIRTUALBASECLASS = 0x20
 IMAGEHLP_SYMBOL_TYPE_INFO_MAX = 0x21
+
+# Enum _PROCESSINFOCLASS definitions
+_PROCESSINFOCLASS = DWORD
+PROCESSINFOCLASS = _PROCESSINFOCLASS
+
+ProcessBasicInformation = 0x0
+ProcessWow64Information = 0x1a
 
 # Struct _LIST_ENTRY definitions
 # Self referencing struct tricks
@@ -618,6 +635,36 @@ class _MEMORY_BASIC_INFORMATION(Structure):
     ]
 PMEMORY_BASIC_INFORMATION = POINTER(_MEMORY_BASIC_INFORMATION)
 MEMORY_BASIC_INFORMATION = _MEMORY_BASIC_INFORMATION
+
+# Struct _MEMORY_BASIC_INFORMATION32 definitions
+class _MEMORY_BASIC_INFORMATION32(Structure):
+        _fields_ = [
+        ("BaseAddress", DWORD),
+        ("AllocationBase", DWORD),
+        ("AllocationProtect", DWORD),
+        ("RegionSize", DWORD),
+        ("State", DWORD),
+        ("Protect", DWORD),
+        ("Type", DWORD),
+    ]
+MEMORY_BASIC_INFORMATION32 = _MEMORY_BASIC_INFORMATION32
+PMEMORY_BASIC_INFORMATION32 = POINTER(_MEMORY_BASIC_INFORMATION32)
+
+# Struct _MEMORY_BASIC_INFORMATION64 definitions
+class _MEMORY_BASIC_INFORMATION64(Structure):
+        _fields_ = [
+        ("BaseAddress", ULONGLONG),
+        ("AllocationBase", ULONGLONG),
+        ("AllocationProtect", DWORD),
+        ("__alignment1", DWORD),
+        ("RegionSize", ULONGLONG),
+        ("State", DWORD),
+        ("Protect", DWORD),
+        ("Type", DWORD),
+        ("__alignment2", DWORD),
+    ]
+PMEMORY_BASIC_INFORMATION64 = POINTER(_MEMORY_BASIC_INFORMATION64)
+MEMORY_BASIC_INFORMATION64 = _MEMORY_BASIC_INFORMATION64
 
 # Struct _STARTUPINFOA definitions
 class _STARTUPINFOA(Structure):
@@ -1087,6 +1134,33 @@ _EXCEPTION_RECORD._fields_ = [
 PEXCEPTION_RECORD = POINTER(_EXCEPTION_RECORD)
 EXCEPTION_RECORD = _EXCEPTION_RECORD
 
+# Struct _EXCEPTION_RECORD32 definitions
+class _EXCEPTION_RECORD32(Structure):
+        _fields_ = [
+        ("ExceptionCode", DWORD),
+        ("ExceptionFlags", DWORD),
+        ("ExceptionRecord", DWORD),
+        ("ExceptionAddress", DWORD),
+        ("NumberParameters", DWORD),
+        ("ExceptionInformation", DWORD * EXCEPTION_MAXIMUM_PARAMETERS),
+    ]
+EXCEPTION_RECORD32 = _EXCEPTION_RECORD32
+PEXCEPTION_RECORD32 = POINTER(_EXCEPTION_RECORD32)
+
+# Struct _EXCEPTION_RECORD64 definitions
+class _EXCEPTION_RECORD64(Structure):
+        _fields_ = [
+        ("ExceptionCode", DWORD),
+        ("ExceptionFlags", DWORD),
+        ("ExceptionRecord", DWORD64),
+        ("ExceptionAddress", DWORD64),
+        ("NumberParameters", DWORD),
+        ("__unusedAlignment", DWORD),
+        ("ExceptionInformation", DWORD64 * EXCEPTION_MAXIMUM_PARAMETERS),
+    ]
+PEXCEPTION_RECORD64 = POINTER(_EXCEPTION_RECORD64)
+EXCEPTION_RECORD64 = _EXCEPTION_RECORD64
+
 # Struct _EXCEPTION_POINTERS64 definitions
 class _EXCEPTION_POINTERS64(Structure):
         _fields_ = [
@@ -1273,4 +1347,466 @@ class tagSAFEARRAY(Structure):
         ("rgsabound", SAFEARRAYBOUND * 1),
     ]
 SAFEARRAY = tagSAFEARRAY
+
+# Struct _DEBUG_BREAKPOINT_PARAMETERS definitions
+class _DEBUG_BREAKPOINT_PARAMETERS(Structure):
+        _fields_ = [
+        ("Offset", ULONG64),
+        ("Id", ULONG),
+        ("BreakType", ULONG),
+        ("ProcType", ULONG),
+        ("Flags", ULONG),
+        ("DataSize", ULONG),
+        ("DataAccessType", ULONG),
+        ("PassCount", ULONG),
+        ("CurrentPassCount", ULONG),
+        ("MatchThread", ULONG),
+        ("CommandSize", ULONG),
+        ("OffsetExpressionSize", ULONG),
+    ]
+PDEBUG_BREAKPOINT_PARAMETERS = POINTER(_DEBUG_BREAKPOINT_PARAMETERS)
+DEBUG_BREAKPOINT_PARAMETERS = _DEBUG_BREAKPOINT_PARAMETERS
+
+# Struct _DEBUG_REGISTER_DESCRIPTION definitions
+class _DEBUG_REGISTER_DESCRIPTION(Structure):
+        _fields_ = [
+        ("Type", ULONG),
+        ("Flags", ULONG),
+        ("SubregMaster", ULONG),
+        ("SubregLength", ULONG),
+        ("SubregMask", ULONG64),
+        ("SubregShift", ULONG),
+        ("Reserved0", ULONG),
+    ]
+DEBUG_REGISTER_DESCRIPTION = _DEBUG_REGISTER_DESCRIPTION
+PDEBUG_REGISTER_DESCRIPTION = POINTER(_DEBUG_REGISTER_DESCRIPTION)
+
+# Struct _DEBUG_STACK_FRAME definitions
+class _DEBUG_STACK_FRAME(Structure):
+        _fields_ = [
+        ("InstructionOffset", ULONG64),
+        ("ReturnOffset", ULONG64),
+        ("FrameOffset", ULONG64),
+        ("StackOffset", ULONG64),
+        ("FuncTableEntry", ULONG64),
+        ("Params", ULONG64 * 4),
+        ("Reserved", ULONG64 * 6),
+        ("Virtual", BOOL),
+        ("FrameNumber", ULONG),
+    ]
+PDEBUG_STACK_FRAME = POINTER(_DEBUG_STACK_FRAME)
+DEBUG_STACK_FRAME = _DEBUG_STACK_FRAME
+
+# Struct _DEBUG_LAST_EVENT_INFO_BREAKPOINT definitions
+class _DEBUG_LAST_EVENT_INFO_BREAKPOINT(Structure):
+        _fields_ = [
+        ("Id", ULONG),
+    ]
+DEBUG_LAST_EVENT_INFO_BREAKPOINT = _DEBUG_LAST_EVENT_INFO_BREAKPOINT
+PDEBUG_LAST_EVENT_INFO_BREAKPOINT = POINTER(_DEBUG_LAST_EVENT_INFO_BREAKPOINT)
+
+# Struct _DEBUG_LAST_EVENT_INFO_EXCEPTION definitions
+class _DEBUG_LAST_EVENT_INFO_EXCEPTION(Structure):
+        _fields_ = [
+        ("ExceptionRecord", EXCEPTION_RECORD64),
+        ("FirstChance", ULONG),
+    ]
+DEBUG_LAST_EVENT_INFO_EXCEPTION = _DEBUG_LAST_EVENT_INFO_EXCEPTION
+PDEBUG_LAST_EVENT_INFO_EXCEPTION = POINTER(_DEBUG_LAST_EVENT_INFO_EXCEPTION)
+
+# Struct _DEBUG_LAST_EVENT_INFO_EXIT_THREAD definitions
+class _DEBUG_LAST_EVENT_INFO_EXIT_THREAD(Structure):
+        _fields_ = [
+        ("ExitCode", ULONG),
+    ]
+PDEBUG_LAST_EVENT_INFO_EXIT_THREAD = POINTER(_DEBUG_LAST_EVENT_INFO_EXIT_THREAD)
+DEBUG_LAST_EVENT_INFO_EXIT_THREAD = _DEBUG_LAST_EVENT_INFO_EXIT_THREAD
+
+# Struct _DEBUG_LAST_EVENT_INFO_EXIT_PROCESS definitions
+class _DEBUG_LAST_EVENT_INFO_EXIT_PROCESS(Structure):
+        _fields_ = [
+        ("ExitCode", ULONG),
+    ]
+PDEBUG_LAST_EVENT_INFO_EXIT_PROCESS = POINTER(_DEBUG_LAST_EVENT_INFO_EXIT_PROCESS)
+DEBUG_LAST_EVENT_INFO_EXIT_PROCESS = _DEBUG_LAST_EVENT_INFO_EXIT_PROCESS
+
+# Struct _DEBUG_LAST_EVENT_INFO_LOAD_MODULE definitions
+class _DEBUG_LAST_EVENT_INFO_LOAD_MODULE(Structure):
+        _fields_ = [
+        ("Base", ULONG64),
+    ]
+PDEBUG_LAST_EVENT_INFO_LOAD_MODULE = POINTER(_DEBUG_LAST_EVENT_INFO_LOAD_MODULE)
+DEBUG_LAST_EVENT_INFO_LOAD_MODULE = _DEBUG_LAST_EVENT_INFO_LOAD_MODULE
+
+# Struct _DEBUG_LAST_EVENT_INFO_UNLOAD_MODULE definitions
+class _DEBUG_LAST_EVENT_INFO_UNLOAD_MODULE(Structure):
+        _fields_ = [
+        ("Base", ULONG64),
+    ]
+PDEBUG_LAST_EVENT_INFO_UNLOAD_MODULE = POINTER(_DEBUG_LAST_EVENT_INFO_UNLOAD_MODULE)
+DEBUG_LAST_EVENT_INFO_UNLOAD_MODULE = _DEBUG_LAST_EVENT_INFO_UNLOAD_MODULE
+
+# Struct _DEBUG_LAST_EVENT_INFO_SYSTEM_ERROR definitions
+class _DEBUG_LAST_EVENT_INFO_SYSTEM_ERROR(Structure):
+        _fields_ = [
+        ("Error", ULONG),
+        ("Level", ULONG),
+    ]
+PDEBUG_LAST_EVENT_INFO_SYSTEM_ERROR = POINTER(_DEBUG_LAST_EVENT_INFO_SYSTEM_ERROR)
+DEBUG_LAST_EVENT_INFO_SYSTEM_ERROR = _DEBUG_LAST_EVENT_INFO_SYSTEM_ERROR
+
+# Struct _DEBUG_SPECIFIC_FILTER_PARAMETERS definitions
+class _DEBUG_SPECIFIC_FILTER_PARAMETERS(Structure):
+        _fields_ = [
+        ("ExecutionOption", ULONG),
+        ("ContinueOption", ULONG),
+        ("TextSize", ULONG),
+        ("CommandSize", ULONG),
+        ("ArgumentSize", ULONG),
+    ]
+DEBUG_SPECIFIC_FILTER_PARAMETERS = _DEBUG_SPECIFIC_FILTER_PARAMETERS
+PDEBUG_SPECIFIC_FILTER_PARAMETERS = POINTER(_DEBUG_SPECIFIC_FILTER_PARAMETERS)
+
+# Struct _DEBUG_EXCEPTION_FILTER_PARAMETERS definitions
+class _DEBUG_EXCEPTION_FILTER_PARAMETERS(Structure):
+        _fields_ = [
+        ("ExecutionOption", ULONG),
+        ("ContinueOption", ULONG),
+        ("TextSize", ULONG),
+        ("CommandSize", ULONG),
+        ("SecondCommandSize", ULONG),
+        ("ExceptionCode", ULONG),
+    ]
+PDEBUG_EXCEPTION_FILTER_PARAMETERS = POINTER(_DEBUG_EXCEPTION_FILTER_PARAMETERS)
+DEBUG_EXCEPTION_FILTER_PARAMETERS = _DEBUG_EXCEPTION_FILTER_PARAMETERS
+
+# Struct _GUID definitions
+class _GUID(Structure):
+        _fields_ = [
+        ("Data1", ULONG),
+        ("Data2", USHORT),
+        ("Data3", USHORT),
+        ("Data4", UCHAR * 8),
+    ]
+GUID = _GUID
+
+# Struct _CRYPTOAPI_BLOB definitions
+class _CRYPTOAPI_BLOB(Structure):
+        _fields_ = [
+        ("cbData", DWORD),
+        ("pbData", POINTER(BYTE)),
+    ]
+CRYPT_INTEGER_BLOB = _CRYPTOAPI_BLOB
+PCRYPT_DATA_BLOB = POINTER(_CRYPTOAPI_BLOB)
+PCRYPT_OBJID_BLOB = POINTER(_CRYPTOAPI_BLOB)
+PCRYPT_DER_BLOB = POINTER(_CRYPTOAPI_BLOB)
+PCRL_BLOB = POINTER(_CRYPTOAPI_BLOB)
+PCRYPT_UINT_BLOB = POINTER(_CRYPTOAPI_BLOB)
+CERT_NAME_BLOB = _CRYPTOAPI_BLOB
+PCRYPT_DIGEST_BLOB = POINTER(_CRYPTOAPI_BLOB)
+PCRYPT_INTEGER_BLOB = POINTER(_CRYPTOAPI_BLOB)
+CERT_RDN_VALUE_BLOB = _CRYPTOAPI_BLOB
+PCERT_NAME_BLOB = POINTER(_CRYPTOAPI_BLOB)
+PCRYPT_HASH_BLOB = POINTER(_CRYPTOAPI_BLOB)
+CRYPT_DATA_BLOB = _CRYPTOAPI_BLOB
+DATA_BLOB = _CRYPTOAPI_BLOB
+CRYPT_UINT_BLOB = _CRYPTOAPI_BLOB
+PCERT_RDN_VALUE_BLOB = POINTER(_CRYPTOAPI_BLOB)
+CRYPT_HASH_BLOB = _CRYPTOAPI_BLOB
+CRL_BLOB = _CRYPTOAPI_BLOB
+PCERT_BLOB = POINTER(_CRYPTOAPI_BLOB)
+CRYPT_DIGEST_BLOB = _CRYPTOAPI_BLOB
+CRYPT_OBJID_BLOB = _CRYPTOAPI_BLOB
+CERT_BLOB = _CRYPTOAPI_BLOB
+CRYPT_DER_BLOB = _CRYPTOAPI_BLOB
+PDATA_BLOB = POINTER(_CRYPTOAPI_BLOB)
+PCRYPT_ATTR_BLOB = POINTER(_CRYPTOAPI_BLOB)
+CRYPT_ATTR_BLOB = _CRYPTOAPI_BLOB
+
+# Struct WINTRUST_FILE_INFO_ definitions
+class WINTRUST_FILE_INFO_(Structure):
+        _fields_ = [
+        ("cbStruct", DWORD),
+        ("pcwszFilePath", LPCWSTR),
+        ("hFile", HANDLE),
+        ("pgKnownSubject", POINTER(GUID)),
+    ]
+WINTRUST_FILE_INFO = WINTRUST_FILE_INFO_
+PWINTRUST_FILE_INFO = POINTER(WINTRUST_FILE_INFO_)
+
+# Struct _CRYPT_ATTRIBUTE definitions
+class _CRYPT_ATTRIBUTE(Structure):
+        _fields_ = [
+        ("pszObjId", LPSTR),
+        ("cValue", DWORD),
+        ("rgValue", PCRYPT_ATTR_BLOB),
+    ]
+PCRYPT_ATTRIBUTE = POINTER(_CRYPT_ATTRIBUTE)
+CRYPT_ATTRIBUTE = _CRYPT_ATTRIBUTE
+
+# Struct _CTL_ENTRY definitions
+class _CTL_ENTRY(Structure):
+        _fields_ = [
+        ("SubjectIdentifier", CRYPT_DATA_BLOB),
+        ("cAttribute", DWORD),
+        ("rgAttribute", PCRYPT_ATTRIBUTE),
+    ]
+PCTL_ENTRY = POINTER(_CTL_ENTRY)
+CTL_ENTRY = _CTL_ENTRY
+
+# Struct _CRYPT_ATTRIBUTE definitions
+class _CRYPT_ATTRIBUTE(Structure):
+        _fields_ = [
+        ("pszObjId", LPSTR),
+        ("cValue", DWORD),
+        ("rgValue", PCRYPT_ATTR_BLOB),
+    ]
+PCRYPT_ATTRIBUTE = POINTER(_CRYPT_ATTRIBUTE)
+CRYPT_ATTRIBUTE = _CRYPT_ATTRIBUTE
+
+# Struct _CRYPT_ATTRIBUTES definitions
+class _CRYPT_ATTRIBUTES(Structure):
+        _fields_ = [
+        ("cAttr", DWORD),
+        ("rgAttr", PCRYPT_ATTRIBUTE),
+    ]
+CRYPT_ATTRIBUTES = _CRYPT_ATTRIBUTES
+PCRYPT_ATTRIBUTES = POINTER(_CRYPT_ATTRIBUTES)
+
+# Struct _CRYPT_ALGORITHM_IDENTIFIER definitions
+class _CRYPT_ALGORITHM_IDENTIFIER(Structure):
+        _fields_ = [
+        ("pszObjId", LPSTR),
+        ("Parameters", CRYPT_OBJID_BLOB),
+    ]
+CRYPT_ALGORITHM_IDENTIFIER = _CRYPT_ALGORITHM_IDENTIFIER
+PCRYPT_ALGORITHM_IDENTIFIER = POINTER(_CRYPT_ALGORITHM_IDENTIFIER)
+
+# Struct _CMSG_SIGNER_INFO definitions
+class _CMSG_SIGNER_INFO(Structure):
+        _fields_ = [
+        ("dwVersion", DWORD),
+        ("Issuer", CERT_NAME_BLOB),
+        ("SerialNumber", CRYPT_INTEGER_BLOB),
+        ("HashAlgorithm", CRYPT_ALGORITHM_IDENTIFIER),
+        ("HashEncryptionAlgorithm", CRYPT_ALGORITHM_IDENTIFIER),
+        ("EncryptedHash", CRYPT_DATA_BLOB),
+        ("AuthAttrs", CRYPT_ATTRIBUTES),
+        ("UnauthAttrs", CRYPT_ATTRIBUTES),
+    ]
+CMSG_SIGNER_INFO = _CMSG_SIGNER_INFO
+PCMSG_SIGNER_INFO = POINTER(_CMSG_SIGNER_INFO)
+
+# Struct _CERT_EXTENSION definitions
+class _CERT_EXTENSION(Structure):
+        _fields_ = [
+        ("pszObjId", LPSTR),
+        ("fCritical", BOOL),
+        ("Value", CRYPT_OBJID_BLOB),
+    ]
+CERT_EXTENSION = _CERT_EXTENSION
+PCERT_EXTENSION = POINTER(_CERT_EXTENSION)
+
+# Struct _CTL_USAGE definitions
+class _CTL_USAGE(Structure):
+        _fields_ = [
+        ("cUsageIdentifier", DWORD),
+        ("rgpszUsageIdentifier", POINTER(LPSTR)),
+    ]
+CERT_ENHKEY_USAGE = _CTL_USAGE
+PCTL_USAGE = POINTER(_CTL_USAGE)
+CTL_USAGE = _CTL_USAGE
+PCERT_ENHKEY_USAGE = POINTER(_CTL_USAGE)
+
+# Struct _CTL_INFO definitions
+class _CTL_INFO(Structure):
+        _fields_ = [
+        ("dwVersion", DWORD),
+        ("SubjectUsage", CTL_USAGE),
+        ("ListIdentifier", CRYPT_DATA_BLOB),
+        ("SequenceNumber", CRYPT_INTEGER_BLOB),
+        ("ThisUpdate", FILETIME),
+        ("NextUpdate", FILETIME),
+        ("SubjectAlgorithm", CRYPT_ALGORITHM_IDENTIFIER),
+        ("cCTLEntry", DWORD),
+        ("rgCTLEntry", PCTL_ENTRY),
+        ("cExtension", DWORD),
+        ("rgExtension", PCERT_EXTENSION),
+    ]
+CTL_INFO = _CTL_INFO
+PCTL_INFO = POINTER(_CTL_INFO)
+
+# Struct _CTL_CONTEXT definitions
+class _CTL_CONTEXT(Structure):
+        _fields_ = [
+        ("dwMsgAndCertEncodingType", DWORD),
+        ("pbCtlEncoded", POINTER(BYTE)),
+        ("cbCtlEncoded", DWORD),
+        ("pCtlInfo", PCTL_INFO),
+        ("hCertStore", HCERTSTORE),
+        ("hCryptMsg", HCRYPTMSG),
+        ("pbCtlContent", POINTER(BYTE)),
+        ("cbCtlContent", DWORD),
+    ]
+PCTL_CONTEXT = POINTER(_CTL_CONTEXT)
+CTL_CONTEXT = _CTL_CONTEXT
+PCCTL_CONTEXT = POINTER(_CTL_CONTEXT)
+
+# Struct WINTRUST_CATALOG_INFO_ definitions
+class WINTRUST_CATALOG_INFO_(Structure):
+        _fields_ = [
+        ("cbStruct", DWORD),
+        ("dwCatalogVersion", DWORD),
+        ("pcwszCatalogFilePath", LPCWSTR),
+        ("pcwszMemberTag", LPCWSTR),
+        ("pcwszMemberFilePath", LPCWSTR),
+        ("hMemberFile", HANDLE),
+        ("pbCalculatedFileHash", POINTER(BYTE)),
+        ("cbCalculatedFileHash", DWORD),
+        ("pcCatalogContext", PCCTL_CONTEXT),
+    ]
+PWINTRUST_CATALOG_INFO = POINTER(WINTRUST_CATALOG_INFO_)
+WINTRUST_CATALOG_INFO = WINTRUST_CATALOG_INFO_
+
+# Struct WINTRUST_BLOB_INFO_ definitions
+class WINTRUST_BLOB_INFO_(Structure):
+        _fields_ = [
+        ("cbStruct", DWORD),
+        ("gSubject", GUID),
+        ("pcwszDisplayName", LPCWSTR),
+        ("cbMemObject", DWORD),
+        ("pbMemObject", POINTER(BYTE)),
+        ("cbMemSignedMsg", DWORD),
+        ("pbMemSignedMsg", POINTER(BYTE)),
+    ]
+PWINTRUST_BLOB_INFO = POINTER(WINTRUST_BLOB_INFO_)
+WINTRUST_BLOB_INFO = WINTRUST_BLOB_INFO_
+
+# Struct _CRYPT_BIT_BLOB definitions
+class _CRYPT_BIT_BLOB(Structure):
+        _fields_ = [
+        ("cbData", DWORD),
+        ("pbData", POINTER(BYTE)),
+        ("cUnusedBits", DWORD),
+    ]
+CRYPT_BIT_BLOB = _CRYPT_BIT_BLOB
+PCRYPT_BIT_BLOB = POINTER(_CRYPT_BIT_BLOB)
+
+# Struct _CERT_PUBLIC_KEY_INFO definitions
+class _CERT_PUBLIC_KEY_INFO(Structure):
+        _fields_ = [
+        ("Algorithm", CRYPT_ALGORITHM_IDENTIFIER),
+        ("PublicKey", CRYPT_BIT_BLOB),
+    ]
+PCERT_PUBLIC_KEY_INFO = POINTER(_CERT_PUBLIC_KEY_INFO)
+CERT_PUBLIC_KEY_INFO = _CERT_PUBLIC_KEY_INFO
+
+# Struct _CERT_INFO definitions
+class _CERT_INFO(Structure):
+        _fields_ = [
+        ("dwVersion", DWORD),
+        ("SerialNumber", CRYPT_INTEGER_BLOB),
+        ("SignatureAlgorithm", CRYPT_ALGORITHM_IDENTIFIER),
+        ("Issuer", CERT_NAME_BLOB),
+        ("NotBefore", FILETIME),
+        ("NotAfter", FILETIME),
+        ("Subject", CERT_NAME_BLOB),
+        ("SubjectPublicKeyInfo", CERT_PUBLIC_KEY_INFO),
+        ("IssuerUniqueId", CRYPT_BIT_BLOB),
+        ("SubjectUniqueId", CRYPT_BIT_BLOB),
+        ("cExtension", DWORD),
+        ("rgExtension", PCERT_EXTENSION),
+    ]
+CERT_INFO = _CERT_INFO
+PCERT_INFO = POINTER(_CERT_INFO)
+
+# Struct _CERT_CONTEXT definitions
+class _CERT_CONTEXT(Structure):
+        _fields_ = [
+        ("dwCertEncodingType", DWORD),
+        ("pbCertEncoded", POINTER(BYTE)),
+        ("cbCertEncoded", DWORD),
+        ("pCertInfo", PCERT_INFO),
+        ("hCertStore", HCERTSTORE),
+    ]
+CERT_CONTEXT = _CERT_CONTEXT
+PCERT_CONTEXT = POINTER(_CERT_CONTEXT)
+
+# Struct WINTRUST_SGNR_INFO_ definitions
+class WINTRUST_SGNR_INFO_(Structure):
+        _fields_ = [
+        ("cbStruct", DWORD),
+        ("pcwszDisplayName", LPCWSTR),
+        ("psSignerInfo", POINTER(CMSG_SIGNER_INFO)),
+        ("chStores", DWORD),
+        ("pahStores", POINTER(HCERTSTORE)),
+    ]
+WINTRUST_SGNR_INFO = WINTRUST_SGNR_INFO_
+PWINTRUST_SGNR_INFO = POINTER(WINTRUST_SGNR_INFO_)
+
+# Struct _FILETIME definitions
+class _FILETIME(Structure):
+        _fields_ = [
+        ("dwLowDateTime", DWORD),
+        ("dwHighDateTime", DWORD),
+    ]
+LPFILETIME = POINTER(_FILETIME)
+PFILETIME = POINTER(_FILETIME)
+FILETIME = _FILETIME
+
+# Struct WINTRUST_CERT_INFO_ definitions
+class WINTRUST_CERT_INFO_(Structure):
+        _fields_ = [
+        ("cbStruct", DWORD),
+        ("pcwszDisplayName", LPCWSTR),
+        ("psCertContext", POINTER(CERT_CONTEXT)),
+        ("chStores", DWORD),
+        ("pahStores", POINTER(HCERTSTORE)),
+        ("dwFlags", DWORD),
+        ("psftVerifyAsOf", POINTER(FILETIME)),
+    ]
+WINTRUST_CERT_INFO = WINTRUST_CERT_INFO_
+PWINTRUST_CERT_INFO = POINTER(WINTRUST_CERT_INFO_)
+
+# Struct _TMP_WINTRUST_UNION_TYPE definitions
+class _TMP_WINTRUST_UNION_TYPE(Union):
+        _fields_ = [
+        ("pFile", POINTER(WINTRUST_FILE_INFO_)),
+        ("pCatalog", POINTER(WINTRUST_CATALOG_INFO_)),
+        ("pBlob", POINTER(WINTRUST_BLOB_INFO_)),
+        ("pSgnr", POINTER(WINTRUST_SGNR_INFO_)),
+        ("pCert", POINTER(WINTRUST_CERT_INFO_)),
+    ]
+TMP_WINTRUST_UNION_TYPE = _TMP_WINTRUST_UNION_TYPE
+
+# Struct _WINTRUST_DATA definitions
+class _WINTRUST_DATA(Structure):
+        _fields_ = [
+        ("cbStruct", DWORD),
+        ("pPolicyCallbackData", LPVOID),
+        ("pSIPClientData", LPVOID),
+        ("dwUIChoice", DWORD),
+        ("fdwRevocationChecks", DWORD),
+        ("dwUnionChoice", DWORD),
+        ("tmp_union", TMP_WINTRUST_UNION_TYPE),
+        ("dwStateAction", DWORD),
+        ("hWVTStateData", HANDLE),
+        ("pwszURLReference", POINTER(WCHAR)),
+        ("dwProvFlags", DWORD),
+        ("dwUIContext", DWORD),
+    ]
+PWINTRUST_DATA = POINTER(_WINTRUST_DATA)
+WINTRUST_DATA = _WINTRUST_DATA
+
+# Struct _PROCESS_BASIC_INFORMATION definitions
+class _PROCESS_BASIC_INFORMATION(Structure):
+        _fields_ = [
+        ("Reserved1", PVOID),
+        ("PebBaseAddress", PPEB),
+        ("Reserved2", PVOID * 2),
+        ("UniqueProcessId", ULONG_PTR),
+        ("Reserved3", PVOID),
+    ]
+PPROCESS_BASIC_INFORMATION = POINTER(_PROCESS_BASIC_INFORMATION)
+PROCESS_BASIC_INFORMATION = _PROCESS_BASIC_INFORMATION
 

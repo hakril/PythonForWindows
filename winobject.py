@@ -5,7 +5,9 @@ import time
 import struct
 
 import windows
+import windows.network
 import windows.syswow64
+#import windows.vectored_exception
 import windows.winproxy as winproxy
 import windows.injection as injection
 import windows.native_exec as native_exec
@@ -77,6 +79,11 @@ class System(object):
         if "PROCESSOR_ARCHITEW6432" in os.environ:
             return 64
         return 32
+
+    @property
+    def network(self):
+        return windows.network.Network()
+
 
     @staticmethod
     def enumerate_processes():
@@ -203,6 +210,34 @@ class Process(AutoHandle):
         x = self.virtual_alloc(len(code))
         self.write_memory(x, code)
         return self.create_thread(x, 0)
+
+    def query_memory(self, addr):
+        if windows.current_process.bitness == 32 and self.bitness == 64:
+            res = MEMORY_BASIC_INFORMATION64()
+            try:
+                v = windows.syswow64.NtQueryVirtualMemory_32_to_64(self, addr, res)
+            except WindowsError as e:
+                if e.winerror & 0xffffffff == 0XC000000D:
+                    raise winproxy.Kernel32Error("NtQueryVirtualMemory_32_to_64")
+                raise
+            return res
+
+        info_type = {32 : MEMORY_BASIC_INFORMATION32, 64 : MEMORY_BASIC_INFORMATION64}
+        res = info_type[windows.current_process.bitness]()
+        ptr = ctypes.cast(byref(res), POINTER(MEMORY_BASIC_INFORMATION))
+        winproxy.VirtualQueryEx(self.handle, addr, ptr, sizeof(res))
+        return res
+
+    def memory_state(self):
+        addr = 0
+        res = []
+        while True:
+            try:
+                x = self.query_memory(addr)
+                yield x
+            except winproxy.Kernel32Error:
+                return
+            addr += x.RegionSize
 
 
 class CurrentThread(AutoHandle):
@@ -430,40 +465,30 @@ class WinProcess(PROCESSENTRY32, Process):
         """Execute Python code into the remote process"""
         return injection.execute_python_code(self, pycode)
 
-    def get_peb_addr(self):
-        dest = self.virtual_alloc(0x1000)
-        if self.bitness == 32:
-            store_peb = x86.MultipleInstr()
-            store_peb += x86.Mov('EAX', x86.mem('fs:[0x30]'))
-            store_peb += x86.Mov(x86.create_displacement(disp=dest), 'EAX')
-            store_peb += x86.Ret()
-            get_peb_code = store_peb.get_code()
-            self.write_memory(dest, "\x00" * 4)
-            self.write_memory(dest + 4, get_peb_code)
-            self.create_thread(dest + 4, 0)
-            time.sleep(0.01)
-            peb_addr = struct.unpack("<I", self.read_memory(dest, 4))[0]
-            return peb_addr
+    @utils.fixedpropety
+    def peb_addr(self):
+        if windows.current_process.bitness == 32 and self.bitness == 64:
+            x = windows.remotectypes.transform_type_to_remote64bits(PROCESS_BASIC_INFORMATION)
+            # Fuck-it <3
+            data = (ctypes.c_char * ctypes.sizeof(x))()
+            windows.syswow64.NtQueryInformationProcess_32_to_64(self, data, ctypes.sizeof(x))
+            peb_offset = x.PebBaseAddress.offset
+            peb_addr = struct.unpack("<Q", data[x.PebBaseAddress.offset: x.PebBaseAddress.offset+8])[0]
         else:
-            store_peb = x64.MultipleInstr()
-            store_peb += x64.Mov('RAX', x64.mem('gs:[0x60]'))
-            store_peb += x64.Mov(x64.create_displacement(disp=dest), 'RAX')
-            store_peb += x64.Ret()
-            get_peb_code = store_peb.get_code()
-            self.write_memory(dest, "\x00" * 8)
-            self.write_memory(dest + 8, get_peb_code)
-            self.create_thread(dest + 8, 0)
-            time.sleep(0.01)
-            peb_addr = struct.unpack("<Q", self.read_memory(dest, 8))[0]
-            return peb_addr
+            x = PROCESS_BASIC_INFORMATION()
+            windows.winproxy.NtQueryInformationProcess(self.handle, 0, x)
+            peb_addr = ctypes.cast(x.PebBaseAddress, PVOID).value
+        if peb_addr is None:
+            raise ValueError("Could not get peb addr of process {0}".format(self.name))
+        return peb_addr
 
     @utils.fixedpropety
     def peb(self):
         if windows.current_process.bitness == 32 and self.bitness == 64:
-            return RemotePEB64(self.get_peb_addr(), self)
+            return RemotePEB64(self.peb_addr, self)
         if windows.current_process.bitness == 64 and self.bitness == 32:
-            return RemotePEB32(self.get_peb_addr(), self)
-        return RemotePEB(self.get_peb_addr(), self)
+            return RemotePEB32(self.peb_addr, self)
+        return RemotePEB(self.peb_addr, self)
 
     def exit(self, code=0):
         """Exit the process"""

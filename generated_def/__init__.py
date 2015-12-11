@@ -30,6 +30,7 @@ else:
     winstructs.SYSTEM_MODULE_INFORMATION = winstructs.SYSTEM_MODULE_INFORMATION64
 
 from . import winfuncs
+from . import windef
 
 
 
