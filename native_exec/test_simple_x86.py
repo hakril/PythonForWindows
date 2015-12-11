@@ -106,6 +106,11 @@ TestInstr(Mov)('AX', mem('fs:[EAX + 0x30]'))
 TestInstr(Mov)('AX', mem('fs:[EAX + ECX * 4+0x30]'))
 TestInstr(Add)('EAX', 8)
 TestInstr(Add)('EAX', 0xffffffff)
+
+
+TestInstr(Sub)('ECX', 'ESP')
+TestInstr(Sub)('ECX', mem('[ESP]'))
+
 TestInstr(Inc)('EAX')
 TestInstr(Inc)(mem('[0x42424242]'))
 TestInstr(Lea)('EAX', mem('[EAX + 1]'))
@@ -116,6 +121,18 @@ TestInstr(Cpuid)()
 TestInstr(Movsb, expected_result='movsb byte ptr es:[edi], byte ptr [esi]')()
 TestInstr(Movsd, expected_result='movsd dword ptr es:[edi], dword ptr [esi]')()
 TestInstr(Xchg)('EAX', 'ESP')
+
+TestInstr(And)('ECX', 'EBX')
+TestInstr(And)('EAX', 0x11223344)
+TestInstr(And)('EAX', mem('[EAX + 1]'))
+TestInstr(And)(mem('[EAX + EAX]'), 'EDX')
+
+TestInstr(Or)('ECX', 'EBX')
+TestInstr(Or)('EAX', 0x11223344)
+TestInstr(Or)('EAX', mem('[EAX + 1]'))
+TestInstr(Or)(mem('[EAX + EAX]'), 'EDX')
+
+
 assert Xchg('EAX', 'ECX').get_code() == Xchg('ECX', 'EAX').get_code()
 
 code = MultipleInstr()

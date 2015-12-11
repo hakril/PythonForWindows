@@ -13,14 +13,20 @@ mnemonic_name_exception = {'movabs': 'mov'}
 
 
 class TestInstr(object):
-    def __init__(self, instr_to_test, immediat_accepted=None, must_fail=None):
+    def __init__(self, instr_to_test, immediat_accepted=None, must_fail=None, debug=False):
         self.instr_to_test = instr_to_test
         self.immediat_accepted = immediat_accepted
         self.must_fail = must_fail
+        self.debug = debug
 
     def __call__(self, *args):
         try:
+            if self.debug:
+                import pdb;pdb.set_trace()
+                pdb.DONE = True
             res = bytes(self.instr_to_test(*args).get_code())
+            if self.debug:
+                print(repr(res))
         except ValueError as e:
             if self.must_fail == True:
                 return True
@@ -103,6 +109,10 @@ TestInstr(Add)('RAX', mem('[R9 + R8 * 2 + 0x7fffffff]'))
 TestInstr(Add)('RAX', mem('[R9 + R8 * 2 + -0x80000000]'))
 TestInstr(Add)('RAX', mem('[-1]'))
 TestInstr(Add)('RAX', mem('[0x7fffffff]'))
+
+TestInstr(Sub)('RCX', 'RSP')
+TestInstr(Sub)('RCX', mem('[RSP]'))
+
 TestInstr(Xor)('R15', mem('[RAX + R8 * 2 + 0x11223344]'))
 TestInstr(Xor)('RAX', 'RAX')
 TestInstr(Cmp)('RAX', -1)
@@ -116,6 +126,23 @@ TestInstr(Mov)('R8', 0x1122334455667788)
 TestInstr(Mov)('RCX', -1)
 TestInstr(Mov, immediat_accepted=-1)('RCX', 0xffffffffffffffff)
 TestInstr(Mov)(mem('gs:[0x1122334455667788]'), 'RAX')
+
+TestInstr(And)('RCX', 'RBX')
+TestInstr(And)('RAX', 0x11223344)
+TestInstr(And)('RAX', mem('[RAX + 1]'))
+TestInstr(And)(mem('[RAX + 1]'), 'R8')
+TestInstr(And)(mem('[EAX + 1]'), 'R8')
+TestInstr(And)(mem('[RAX + 1]'), 'EAX')
+
+TestInstr(Or)('RCX', 'RBX')
+TestInstr(Or)('RAX', 0x11223344)
+TestInstr(Or)('RAX', mem('[RAX + 1]'))
+TestInstr(Or)(mem('[RAX + 1]'), 'R8')
+TestInstr(Or)(mem('[EAX + 1]'), 'R8')
+TestInstr(Or)(mem('[RAX + 1]'), 'EAX')
+
+
+
 TestInstr(Push)('R15')
 TestInstr(Push)(0x42)
 TestInstr(Push)(-1)
@@ -128,10 +155,17 @@ assert Xchg('RAX', 'RCX').get_code() == Xchg('RCX', 'RAX').get_code()
 # 32 / 64 bits register mixing
 TestInstr(Mov)('ECX', 'EBX')
 TestInstr(Mov)('RCX', mem('[EBX]'))
+TestInstr(Mov)('ECX', mem('[RBX]'))
+TestInstr(Mov)('ECX', mem('[EBX]'))
 TestInstr(Mov)('RCX', mem('[EBX + EBX]'))
 TestInstr(Mov)('RCX', mem('[ESP + EBX + 0x10]'))
 TestInstr(Mov)('ECX', mem('[ESP + EBX + 0x10]'))
 TestInstr(Mov)('ECX', mem('[RBX + RCX + 0x10]'))
+
+TestInstr(Mov)(mem('[RBX + RCX + 0x10]'), 'ECX')
+TestInstr(Mov)(mem('[EBX + ECX + 0x10]'), 'ECX')
+TestInstr(Mov)(mem('[EBX + ECX + 0x10]'), 'R8')
+
 
 TestInstr(Mov, must_fail=True)('RCX', 'ECX')
 TestInstr(Mov, must_fail=True)('RCX', mem('[ECX + RCX]'))

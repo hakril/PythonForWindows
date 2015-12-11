@@ -624,10 +624,24 @@ class Add(Instruction):
                 (RawBits.from_int(8, 0x81), Slash(0), Imm32()),
                 (RawBits.from_int(8, 0x01), ModRM([ModRM_REG__REG, ModRM_REG__MEM]))]
 
+class And(Instruction):
+    default_32_bits = True
+    encoding = [(RawBits.from_int(8, 0x25), RegisterEax(), Imm32()),
+                (RawBits.from_int(8, 0x81), Slash(4), Imm32()),
+                (RawBits.from_int(8, 0x21), ModRM([ModRM_REG__REG, ModRM_REG__MEM]))]
+
+
+class Or(Instruction):
+    default_32_bits = True
+    encoding = [(RawBits.from_int(8, 0x0d), RegisterEax(), Imm32()),
+                (RawBits.from_int(8, 0x81), Slash(1), Imm32()),
+                (RawBits.from_int(8, 0x09), ModRM([ModRM_REG__REG, ModRM_REG__MEM]))]
+
 
 class Sub(Instruction):
     encoding = [(RawBits.from_int(8, 0x2D), RegisterEax(), Imm32()),
-                (RawBits.from_int(8, 0x81), Slash(5), Imm32())]
+                (RawBits.from_int(8, 0x81), Slash(5), Imm32()),
+                (RawBits.from_int(8, 0x29), ModRM([ModRM_REG__REG, ModRM_REG__MEM]))]
 
 
 class Mov(Instruction):

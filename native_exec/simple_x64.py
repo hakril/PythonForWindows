@@ -574,8 +574,6 @@ class ModRM_REG64__MEM(SubModRM):
         FIRE_UP_SIB = not arg2.base or arg2.base.upper() in ["RSP", "RBP"] or arg2.index
 
         if not FIRE_UP_SIB:
-            self.is_rex_needed = True
-            self.rex[4] = 1
             self.setup_reg_as_register(arg1)
             self.setup_rm_as_mem_base(arg2.base)
             #self.setup_rm_as_register(arg2.base)
@@ -748,6 +746,20 @@ class Inc(Instruction):
     encoding = [(RawBits.from_int(8, 0xff), Slash(0))]
 
 
+class And(Instruction):
+    default_32_bits = True
+    encoding = [(RawBits.from_int(8, 0x25), RegisterRax(), Imm32()),
+                (RawBits.from_int(8, 0x81), Slash(4), Imm32()),
+                (RawBits.from_int(8, 0x21), ModRM([ModRM_REG__REG, ModRM_REG64__MEM]))]
+
+
+class Or(Instruction):
+    default_32_bits = True
+    encoding = [(RawBits.from_int(8, 0x0d), RegisterRax(), Imm32()),
+                (RawBits.from_int(8, 0x81), Slash(1), Imm32()),
+                (RawBits.from_int(8, 0x09), ModRM([ModRM_REG__REG, ModRM_REG64__MEM]))]
+
+
 class Add(Instruction):
     default_32_bits = True
     encoding = [(RawBits.from_int(8, 0x05), RegisterRax(), Imm32()),
@@ -758,7 +770,8 @@ class Add(Instruction):
 class Sub(Instruction):
     default_32_bits = True
     encoding = [(RawBits.from_int(8, 0x2D), RegisterRax(), Imm32()),
-                (RawBits.from_int(8, 0x81), Slash(5), Imm32())]
+                (RawBits.from_int(8, 0x81), Slash(5), Imm32()),
+                (RawBits.from_int(8, 0x29), ModRM([ModRM_REG__REG, ModRM_REG64__MEM]))]
 
 
 class Out(Instruction):
