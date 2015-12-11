@@ -1,4 +1,5 @@
 import capstone
+import simple_x64 as x64
 from simple_x64 import *
 
 disassembleur = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_64)
@@ -12,12 +13,22 @@ mnemonic_name_exception = {'movabs': 'mov'}
 
 
 class TestInstr(object):
-    def __init__(self, instr_to_test, immediat_accepted=None):
+    def __init__(self, instr_to_test, immediat_accepted=None, must_fail=None):
         self.instr_to_test = instr_to_test
         self.immediat_accepted = immediat_accepted
+        self.must_fail = must_fail
 
     def __call__(self, *args):
-        res = bytes(self.instr_to_test(*args).get_code())
+        try:
+            res = bytes(self.instr_to_test(*args).get_code())
+        except ValueError as e:
+            if self.must_fail == True:
+                return True
+            else:
+                raise
+        else:
+            if self.must_fail:
+                raise ValueError("Instruction did not failed as expected")
         capres_list = disas(res)
         if len(capres_list) != 1:
             raise AssertionError("Trying to disas an instruction resulted in multiple disassembled instrs")
@@ -101,6 +112,7 @@ TestInstr(Mov)('RAX', mem('[0x1122334455667788]'))
 TestInstr(Mov)('RAX', mem('gs:[0x1122334455667788]'))
 TestInstr(Mov)('RAX', mem('gs:[0x60]'))
 TestInstr(Mov)('RCX', 0x1122334455667788)
+TestInstr(Mov)('R8', 0x1122334455667788)
 TestInstr(Mov)('RCX', -1)
 TestInstr(Mov, immediat_accepted=-1)('RCX', 0xffffffffffffffff)
 TestInstr(Mov)(mem('gs:[0x1122334455667788]'), 'RAX')
@@ -112,6 +124,20 @@ TestInstr(Call)(mem('[RAX + RCX * 8]'))
 TestInstr(Cpuid)()
 TestInstr(Xchg)('RAX', 'RSP')
 assert Xchg('RAX', 'RCX').get_code() == Xchg('RCX', 'RAX').get_code()
+
+# 32 / 64 bits register mixing
+TestInstr(Mov)('ECX', 'EBX')
+TestInstr(Mov)('RCX', mem('[EBX]'))
+TestInstr(Mov)('RCX', mem('[EBX + EBX]'))
+TestInstr(Mov)('RCX', mem('[ESP + EBX + 0x10]'))
+TestInstr(Mov)('ECX', mem('[ESP + EBX + 0x10]'))
+TestInstr(Mov)('ECX', mem('[RBX + RCX + 0x10]'))
+
+TestInstr(Mov, must_fail=True)('RCX', 'ECX')
+TestInstr(Mov, must_fail=True)('RCX', mem('[ECX + RCX]'))
+TestInstr(Mov, must_fail=True)('RCX', mem('[RBX + ECX]'))
+TestInstr(Mov, must_fail=True)('ECX', mem('[ECX + RCX]'))
+TestInstr(Mov, must_fail=True)('ECX', mem('[RBX + ECX]'))
 
 code = MultipleInstr()
 code += Nop()

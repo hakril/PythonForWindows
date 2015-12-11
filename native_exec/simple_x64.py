@@ -109,6 +109,11 @@ reg_order = ['RAX', 'RCX', 'RDX', 'RBX', 'RSP', 'RBP', 'RSI', 'RDI']
 new_reg_order = ['R8', 'R9', 'R10', 'R11', 'R12', 'R13', 'R14', 'R15']
 x64_regs = reg_order + new_reg_order
 
+registers_32_bits = {'R15D': 'R15', 'R14D': 'R14', 'ESP': 'RSP', 'R9D': 'R9',
+'EDI': 'RDI', 'R11D': 'R11', 'R8D': 'R8', 'R10D': 'R10', 'EAX': 'RAX',
+'R13D': 'R13', 'EBP': 'RBP', 'R12D': 'R12', 'EDX': 'RDX', 'EBX': 'RBX',
+'ESI': 'RSI', 'ECX': 'RCX'}
+
 x64_segment_selectors = {'CS': CSPrefix, 'DS': DSPrefix, 'ES': ESPrefix, 'SS': SSPrefix,
                          'FS': FSPrefix, 'GS': GSPrefix}
 
@@ -117,7 +122,7 @@ class X64(object):
     @staticmethod
     def is_reg(name):
         try:
-            return (name.upper() in reg_order) or X64.is_new_reg(name)
+            return (name.upper() in reg_order) or X64.is_new_reg(name) or X64.is_32b_reg(name)
         except AttributeError:  # Not a string
             return False
 
@@ -125,6 +130,13 @@ class X64(object):
     def is_new_reg(name):
         try:
             return name.upper() in new_reg_order
+        except AttributeError:  # Not a string
+            return False
+
+    @staticmethod
+    def is_32b_reg(name):
+        try:
+            return name.upper() in registers_32_bits
         except AttributeError:  # Not a string
             return False
 
@@ -236,11 +248,11 @@ class X64RegisterSelector(object):
     def accept_arg(self, args, instr_state):
         x = args[0]
         try:
-            return (1, self.reg_opcode[x.upper()], None)
+            return (1, self.reg_opcode[x.upper()], BitArray(8, [0, 1, 0, 0 ,1 , 0, 0, 0]))
         except (KeyError, AttributeError):
             pass
         try:
-            return (1, self.new_reg_opcode[x.upper()], BitArray.from_int(8, 0x41))
+            return (1, self.new_reg_opcode[x.upper()], BitArray(8, [0, 1, 0, 0 ,1 , 0, 0, 1]))
         except (KeyError, AttributeError):
             return (None, None, None)
 
@@ -253,16 +265,20 @@ class X64RegisterSelector(object):
 
 
 class FixedRegister(object):
-    def __init__(self, register):
+    def __init__(self, register, is_64_bit_register=True):
         self.reg = register.upper()
+        self.is_64_bit_register = is_64_bit_register
 
     def accept_arg(self, args, instr_state):
         x = args[0]
+        rex = None
         if isinstance(x, str) and x.upper() == self.reg:
-            return 1, BitArray(0, []), None
+            if self.is_64_bit_register:
+                rex = BitArray.from_int(8, 0x48)
+            return 1, BitArray(0, []), rex
         return None, None, None
 
-RegisterRax = lambda: FixedRegister('RAX')
+RegisterRax = lambda: FixedRegister('RAX', is_64_bit_register=True)
 
 
 class RawBits(BitArray):
@@ -422,42 +438,109 @@ class SubModRM(object):
         self.rex = BitArray(8, "01000000")
         self.is_rex_needed = False
         self.direction = 0
+        # 32/64 bits data operation
+        self.is_32bits_operation = None
+        # 32/64 bits addressing operation
+        self.is_32bits_addressing = None
+
+    def setup_as_32bit_operation(self):
+        if self.is_32bits_operation == False:
+            raise ValueError("Size mismatch")
+        self.is_32bits_operation = True
+
+    def setup_as_64bit_operation(self):
+        if self.is_32bits_operation == True:
+            raise ValueError("Size mismatch")
+        self.is_32bits_operation = False
+
+    def setup_as_32bits_addressing(self):
+        if self.is_32bits_addressing == False:
+            raise ValueError("Addressing size mismatch")
+        self.is_32bits_addressing = True
+
+    def setup_as_64bits_addressing(self):
+        if self.is_32bits_addressing == True:
+            raise ValueError("Addressing size mismatch")
+        self.is_32bits_addressing = False
 
     def setup_reg_as_register(self, name):
+        if name in registers_32_bits:
+            name = registers_32_bits[name]
+            self.setup_as_32bit_operation()
+        else:
+            self.is_rex_needed = True
+            self.rex[4] = 1
+            self.setup_as_64bit_operation()
+
         self.reg = X64RegisterSelector.get_reg_bits(name)
         if X64.is_new_reg(name):
             self.is_rex_needed = True
             self.rex[5] = 1
 
     def setup_rm_as_register(self, name):
+        if name in registers_32_bits:
+            name = registers_32_bits[name]
+            self.setup_as_32bit_operation()
+        else:
+            self.rex[4] = 1
+            self.is_rex_needed = True
+            self.setup_as_64bit_operation()
+
         self.rm = X64RegisterSelector.get_reg_bits(name)
         if X64.is_new_reg(name):
             self.is_rex_needed = True
             self.rex[7] = 1
 
+    def setup_rm_as_mem_base(self, name):
+        if name in registers_32_bits:
+            name = registers_32_bits[name]
+            self.setup_as_32bits_addressing()
+        else:
+            self.setup_as_64bits_addressing()
+
+        self.rm = X64RegisterSelector.get_reg_bits(name)
+        if X64.is_new_reg(name):
+            self.is_rex_needed = True
+            self.rex[7] = 1
+
+
     def setup_sib_base_rex(self, baseregister):
+        if baseregister in registers_32_bits:
+            baseregister = registers_32_bits[baseregister]
+            self.setup_as_32bits_addressing()
+        else:
+            self.setup_as_64bits_addressing()
+
         if X64.is_new_reg(baseregister):
             self.is_rex_needed = True
             self.rex[7] = 1
         return X64RegisterSelector.get_reg_bits(baseregister)
 
     def setup_sib_index_rex(self, indexregister):
+        if indexregister in registers_32_bits:
+            indexregister = registers_32_bits[indexregister]
+            self.setup_as_32bits_addressing()
+        else:
+            self.setup_as_64bits_addressing()
+
         if X64.is_new_reg(indexregister):
             self.is_rex_needed = True
             self.rex[6] = 1
         return X64RegisterSelector.get_reg_bits(indexregister)
 
 
-class ModRM_REG64__REG64(SubModRM):
+class ModRM_REG__REG(SubModRM):
+    """handle Reg32 and Reg64"""
     @classmethod
     def match(cls, arg1, arg2):
-        return (X64.is_reg(arg1) or X64.is_new_reg(arg1)) and (X64.is_reg(arg2) or X64.is_new_reg(arg2))
+        return X64.is_reg(arg1) and X64.is_reg(arg2)
 
     def __init__(self, arg1, arg2, reversed, instr_state):
-        super(ModRM_REG64__REG64, self).__init__()
+        super(ModRM_REG__REG, self).__init__()
+
         self.mod = BitArray(2, "11")
         self.is_rex_needed = True
-        self.rex[4] = 1
+        #self.rex[4] = 1 # Setup by setup_reg_as_register or setup_rm_as_register
         self.setup_reg_as_register(arg2)
         self.setup_rm_as_register(arg1)
         self.direction = 0
@@ -466,7 +549,7 @@ class ModRM_REG64__REG64(SubModRM):
 class ModRM_REG64__MEM(SubModRM):
     @classmethod
     def match(cls, arg1, arg2):
-        return (X64.is_reg(arg1) or X64.is_new_reg(arg1)) and X64.is_mem_acces(arg2)
+        return X64.is_reg(arg1) and X64.is_mem_acces(arg2)
 
     def __init__(self, arg1, arg2, reversed, instr_state):
         super(ModRM_REG64__MEM, self).__init__()
@@ -494,9 +577,12 @@ class ModRM_REG64__MEM(SubModRM):
             self.is_rex_needed = True
             self.rex[4] = 1
             self.setup_reg_as_register(arg1)
-            self.setup_rm_as_register(arg2.base)
+            self.setup_rm_as_mem_base(arg2.base)
+            #self.setup_rm_as_register(arg2.base)
             self.compute_displacement(arg2.disp)
             self.direction = not reversed
+            if self.is_32bits_addressing == True:
+                instr_state.prefixes.append(AddressSizeOverride)
             return
         # FIRE UP THE SIB
         # Handle no base and base == EBP special case
@@ -514,6 +600,8 @@ class ModRM_REG64__MEM(SubModRM):
         if not arg2.base:
             self.mod = BitArray(2, "00")
         self.direction = not reversed
+        if self.is_32bits_addressing == True:
+            instr_state.prefixes.append(AddressSizeOverride)
 
     def compute_displacement(self, displacement, force_displacement=0):
         if not displacement and not force_displacement:
@@ -565,7 +653,7 @@ class Slash(object):
             raise ValueError("Missing arg for Slash")
         # Reuse all the MODRm logique with the reg as our self.reg
         # The sens of param is strange I need to fix the `reversed` logique
-        arg_consum, value, rex = ModRM([ModRM_REG64__REG64, ModRM_REG64__MEM], has_direction_bit=False).accept_arg(args[:1] + [self.reg] + args[1:], instr_state)
+        arg_consum, value, rex = ModRM([ModRM_REG__REG, ModRM_REG64__MEM], has_direction_bit=False).accept_arg(args[:1] + [self.reg] + args[1:], instr_state)
         if value is None:
             return arg_consum, value, rex
         return arg_consum - 1, value, rex
@@ -575,7 +663,7 @@ instr_state = collections.namedtuple('instr_state', ['previous', 'prefixes'])
 
 class Instruction(object):
     encoding = []
-    default_rex = BitArray(8, "")
+    default_rex = BitArray.from_int(8, 0x40)
 
     def __init__(self, *initial_args):
         for type_encoding in self.encoding:
@@ -583,8 +671,8 @@ class Instruction(object):
             res = []
             prefix = []
             full_rex = self.default_rex
-            if hasattr(self, "default_32_bits") and self.default_32_bits:
-                full_rex = BitArray.from_int(8, 0x48)
+            #if hasattr(self, "default_32_bits") and self.default_32_bits:
+            #    full_rex = BitArray.from_int(8, 0x48)
             for element in type_encoding:
                 arg_consum, value, rex = element.accept_arg(args, instr_state(res, prefix))
                 if arg_consum is None:
@@ -598,7 +686,7 @@ class Instruction(object):
                     continue
                 self.prefix = prefix
                 self.value = sum(res, BitArray(0, ""))
-                if any(full_rex.array):
+                if str(full_rex.dump()) != "\x40":
                     self.value = full_rex + self.value
                 return
         raise ValueError("Cannot encode <{0} {1}>:(".format(type(self).__name__, initial_args))
@@ -664,7 +752,7 @@ class Add(Instruction):
     default_32_bits = True
     encoding = [(RawBits.from_int(8, 0x05), RegisterRax(), Imm32()),
                 (RawBits.from_int(8, 0x81), Slash(0), Imm32()),
-                (RawBits.from_int(8, 0x01), ModRM([ModRM_REG64__REG64, ModRM_REG64__MEM]))]
+                (RawBits.from_int(8, 0x01), ModRM([ModRM_REG__REG, ModRM_REG64__MEM]))]
 
 
 class Sub(Instruction):
@@ -754,7 +842,7 @@ class Lea(Instruction):
 
 class Mov(Instruction):
     default_32_bits = True
-    encoding = [(Mov_RAX_OFF64(),), (Mov_OFF64_RAX(),), (RawBits.from_int(8, 0x89), ModRM([ModRM_REG64__REG64, ModRM_REG64__MEM])),
+    encoding = [(Mov_RAX_OFF64(),), (Mov_OFF64_RAX(),), (RawBits.from_int(8, 0x89), ModRM([ModRM_REG__REG, ModRM_REG64__MEM])),
                 (RawBits.from_int(5, 0xb8 >> 3), X64RegisterSelector(), Imm64())]
 
 
@@ -762,12 +850,12 @@ class Cmp(Instruction):
     default_32_bits = True
     encoding = [(RawBits.from_int(8, 0x3d), RegisterRax(), Imm32()),
                 (RawBits.from_int(8, 0x81), Slash(7), Imm32()),
-                (RawBits.from_int(8, 0x3b), ModRM([ModRM_REG64__REG64, ModRM_REG64__MEM]))]
+                (RawBits.from_int(8, 0x3b), ModRM([ModRM_REG__REG, ModRM_REG64__MEM]))]
 
 
 class Xor(Instruction):
     default_32_bits = True
-    encoding = [(RawBits.from_int(8, 0x31), ModRM([ModRM_REG64__REG64, ModRM_REG64__MEM]))]
+    encoding = [(RawBits.from_int(8, 0x31), ModRM([ModRM_REG__REG, ModRM_REG64__MEM]))]
 
 
 class Nop(Instruction):
