@@ -429,6 +429,8 @@ def transform_union_to_remote32bits(structcls):
     return RemoteUnion.from_fields(new_fields, base_cls=structcls)
 
 def transform_type_to_remote32bits(ftype):
+    if issubclass(ftype, RemoteStructureUnion):
+            return ftype
     if is_pointer_type(ftype):
         return MakePtr32(ftype._type_)
     if is_array_type(ftype):
