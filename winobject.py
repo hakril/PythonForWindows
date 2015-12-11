@@ -17,9 +17,11 @@ import windows.native_exec.simple_x64 as x64
 from . import utils
 from windows.dbgprint import dbgprint
 from windows.generated_def.winstructs import *
+from windows.generated_def.ntstatus import NtStatusException
 from .generated_def import windef
 
 import windows.pe_parse as pe_parse
+
 
 
 class AutoHandle(object):
@@ -215,9 +217,9 @@ class Process(AutoHandle):
         if windows.current_process.bitness == 32 and self.bitness == 64:
             res = MEMORY_BASIC_INFORMATION64()
             try:
-                v = windows.syswow64.NtQueryVirtualMemory_32_to_64(self, addr, res)
-            except WindowsError as e:
-                if e.winerror & 0xffffffff == 0XC000000D:
+                v = windows.syswow64.NtQueryVirtualMemory_32_to_64(ProcessHandle=self.handle, BaseAddress=addr, MemoryInformation=res)
+            except NtStatusException as e:
+                if e.code & 0xffffffff == 0XC000000D:
                     raise winproxy.Kernel32Error("NtQueryVirtualMemory_32_to_64")
                 raise
             return res
@@ -451,7 +453,7 @@ class WinProcess(PROCESSENTRY32, Process):
     def create_thread(self, addr, param):
         """Create a remote thread"""
         if windows.current_process.bitness == 32 and self.bitness == 64:
-            return windows.syswow64.NtCreateThreadEx_32_to_64(self, addr, param)
+            return windows.syswow64.NtCreateThreadEx_32_to_64(ProcessHandle=self.handle, lpStartAddress=addr, lpParameter=param)
         return WinThread._from_handle(winproxy.CreateRemoteThread(hProcess=self.handle, lpStartAddress=addr, lpParameter=param))
 
     def load_library(self, dll_path):
@@ -471,7 +473,7 @@ class WinProcess(PROCESSENTRY32, Process):
             x = windows.remotectypes.transform_type_to_remote64bits(PROCESS_BASIC_INFORMATION)
             # Fuck-it <3
             data = (ctypes.c_char * ctypes.sizeof(x))()
-            windows.syswow64.NtQueryInformationProcess_32_to_64(self, data, ctypes.sizeof(x))
+            windows.syswow64.NtQueryInformationProcess_32_to_64(self.handle, ProcessInformation=data, ProcessInformationLength=ctypes.sizeof(x))
             peb_offset = x.PebBaseAddress.offset
             peb_addr = struct.unpack("<Q", data[x.PebBaseAddress.offset: x.PebBaseAddress.offset+8])[0]
         else:

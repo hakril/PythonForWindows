@@ -1,9 +1,12 @@
 import struct
 import ctypes
 import codecs
+import functools
+
 import windows
 import windows.native_exec.simple_x64 as x64
 from generated_def.winstructs import *
+from windows.winproxy import NeededParameter, OptionalExport, NtdllProxy, error_ntstatus
 
 # Special code for syswow64 process
 CS_32bits = 0x23
@@ -23,7 +26,8 @@ dummy_jump = "\xea" + struct.pack("<I", 0) + chr(CS_64bits) + "\x00\x00"
 
 def execute_64bits_code_from_syswow(shellcode):
     """shellcode must NOT end by a ret"""
-    if not windows.current_process.is_wow_64:
+    current_process = windows.current_process
+    if not current_process.is_wow_64:
         raise ValueError("Calling execute_64bits_code_from_syswow from non-syswow process")
     addr = windows.winproxy.VirtualAlloc(dwSize=0x1000)
     # post-exec 32bits stub (xor eax, eax; ret)
@@ -36,178 +40,14 @@ def execute_64bits_code_from_syswow(shellcode):
     # Return to 32bits stub
     shellcode += genere_return_32bits_stub(ret_addr)
     # WRITE ALL THE STUBS
-    windows.current_process.write_memory(ret_addr, ret)
-    windows.current_process.write_memory(jump_addr, jump)
-    windows.current_process.write_memory(shell_code_addr, shellcode)
+    current_process.write_memory(ret_addr, ret)
+    current_process.write_memory(jump_addr, jump)
+    current_process.write_memory(shell_code_addr, shellcode)
     # Execute
     exec_stub = ctypes.CFUNCTYPE(HRESULT)(jump_addr)
     return exec_stub()
 
 
-
-def NtCreateThreadEx_32_to_64(process, addr, param):
-    NtCreateThreadEx = get_syswow_ntdll_exports()['NtCreateThreadEx']
-    create_thread = x64.MultipleInstr()
-    # Save registers
-    create_thread += x64.Push('RBX')
-    create_thread += x64.Push('RCX')
-    create_thread += x64.Push('RDX')
-    create_thread += x64.Push('RSI')
-    create_thread += x64.Push('RDI')
-    create_thread += x64.Push('R8')
-    create_thread += x64.Push('R9')
-    create_thread += x64.Push('R10')
-    create_thread += x64.Push('R11')
-    create_thread += x64.Push('R12')
-    create_thread += x64.Push('R13')
-    # Setup args
-    create_thread += x64.Push(0)
-    create_thread += x64.Mov('RCX', 'RSP')  # Arg1
-    create_thread += x64.Mov('RDX', 0x1fffff)  # Arg2
-    create_thread += x64.Mov('R8', 0)  # Arg3
-    create_thread += x64.Mov('R9', process.handle)  # Arg4
-    create_thread += x64.Mov('RAX', 0)
-    create_thread += x64.Push('RAX')  # Arg11
-    create_thread += x64.Push('RAX')  # Arg10
-    create_thread += x64.Push('RAX')  # Arg9
-    create_thread += x64.Push('RAX')  # Arg8
-    create_thread += x64.Push('RAX')  # Arg7
-    create_thread += x64.Mov('RAX', param)
-    create_thread += x64.Push('RAX')  # Arg6
-    create_thread += x64.Mov('RAX', addr)
-    create_thread += x64.Push('RAX')  # Arg5
-    # reserve space for register (calling convention)
-    create_thread += x64.Push('R9')
-    create_thread += x64.Push('R8')
-    create_thread += x64.Push('RDX')
-    create_thread += x64.Push('RCX')
-    # Call
-    create_thread += x64.Mov('R13', NtCreateThreadEx)
-    create_thread += x64.Call('R13')
-    # Clean stack
-    create_thread += x64.Add('RSP', 12 * 8)
-    create_thread += x64.Pop('R13')
-    create_thread += x64.Pop('R12')
-    create_thread += x64.Pop('R11')
-    create_thread += x64.Pop('R10')
-    create_thread += x64.Pop('R9')
-    create_thread += x64.Pop('R8')
-    create_thread += x64.Pop('RDI')
-    create_thread += x64.Pop('RSI')
-    create_thread += x64.Pop('RDX')
-    create_thread += x64.Pop('RCX')
-    create_thread += x64.Pop('RBX')
-    return execute_64bits_code_from_syswow(create_thread.get_code())
-
-# We will soon need to generate thoses stub...
-
-def NtQueryVirtualMemory_32_to_64(process, addr, result):
-    size = ctypes.sizeof(result)
-    MemoryBasicInformation = 0
-    LEN = SIZE_T()
-
-    NtQueryVirtualMemory = get_syswow_ntdll_exports()['NtQueryVirtualMemory']
-
-    query_memory = x64.MultipleInstr()
-    # Save registers
-    query_memory += x64.Push('RBX')
-    query_memory += x64.Push('RCX')
-    query_memory += x64.Push('RDX')
-    query_memory += x64.Push('RSI')
-    query_memory += x64.Push('RDI')
-    query_memory += x64.Push('R8')
-    query_memory += x64.Push('R9')
-    query_memory += x64.Push('R10')
-    query_memory += x64.Push('R11')
-    query_memory += x64.Push('R12')
-    query_memory += x64.Push('R13')
-    # Setup args
-
-    query_memory += x64.Mov('RCX', process.handle)  # Arg1
-    query_memory += x64.Mov('RDX', addr)  # Arg2
-    query_memory += x64.Mov('R8', MemoryBasicInformation)  # Arg3
-    query_memory += x64.Mov('R9', ctypes.addressof(result))  # Arg4
-    query_memory += x64.Mov('RAX', ctypes.addressof(LEN))
-    query_memory += x64.Push('RAX')  # Arg6
-    query_memory += x64.Mov('RAX', size)
-    query_memory += x64.Push('RAX')  # Arg5
-    # reserve space for register (calling convention)
-    query_memory += x64.Push('R9')
-    query_memory += x64.Push('R8')
-    query_memory += x64.Push('RDX')
-    query_memory += x64.Push('RCX')
-    # Call
-    query_memory += x64.Mov('R13', NtQueryVirtualMemory)
-    query_memory += x64.Call('R13')
-    # Clean stack
-    query_memory += x64.Add('RSP', 6 * 8)
-    query_memory += x64.Pop('R13')
-    query_memory += x64.Pop('R12')
-    query_memory += x64.Pop('R11')
-    query_memory += x64.Pop('R10')
-    query_memory += x64.Pop('R9')
-    query_memory += x64.Pop('R8')
-    query_memory += x64.Pop('RDI')
-    query_memory += x64.Pop('RSI')
-    query_memory += x64.Pop('RDX')
-    query_memory += x64.Pop('RCX')
-    query_memory += x64.Pop('RBX')
-    return execute_64bits_code_from_syswow(query_memory.get_code())
-
-
-def NtQueryInformationProcess_32_to_64(process, result, size=None):
-    ProcessBasicInformation = 0
-    if size is None:
-        size = ctypes.sizeof(size)
-    ReturnLen = ULONG()
-
-    NtQueryInformationProcess = get_syswow_ntdll_exports()['NtQueryInformationProcess']
-
-    query_memory = x64.MultipleInstr()
-    # Save registers
-    query_memory += x64.Push('RBX')
-    query_memory += x64.Push('RCX')
-    query_memory += x64.Push('RDX')
-    query_memory += x64.Push('RSI')
-    query_memory += x64.Push('RDI')
-    query_memory += x64.Push('R8')
-    query_memory += x64.Push('R9')
-    query_memory += x64.Push('R10')
-    query_memory += x64.Push('R11')
-    query_memory += x64.Push('R12')
-    query_memory += x64.Push('R13')
-    # Setup args
-
-    query_memory += x64.Mov('RCX', process.handle)  # Arg1
-    query_memory += x64.Mov('RDX', ProcessBasicInformation)  # Arg2
-    query_memory += x64.Mov('R8', ctypes.addressof(result))  # Arg3
-    query_memory += x64.Mov('R9', size)  # Arg4
-    query_memory += x64.Mov('RAX', ctypes.addressof(ReturnLen))
-    query_memory += x64.Push('RAX')  # Arg5
-    # reserve space for register (calling convention)
-    query_memory += x64.Push('R9')
-    query_memory += x64.Push('R8')
-    query_memory += x64.Push('RDX')
-    query_memory += x64.Push('RCX')
-    # Call
-    query_memory += x64.Mov('R13', NtQueryInformationProcess)
-    query_memory += x64.Call('R13')
-    # Clean stack
-    query_memory += x64.Add('RSP', 5 * 8)
-    query_memory += x64.Pop('R13')
-    query_memory += x64.Pop('R12')
-    query_memory += x64.Pop('R11')
-    query_memory += x64.Pop('R10')
-    query_memory += x64.Pop('R9')
-    query_memory += x64.Pop('R8')
-    query_memory += x64.Pop('RDI')
-    query_memory += x64.Pop('RSI')
-    query_memory += x64.Pop('RDX')
-    query_memory += x64.Pop('RCX')
-    query_memory += x64.Pop('RBX')
-    return execute_64bits_code_from_syswow(query_memory.get_code())
-
-    
 def generate_syswow64_call(target):
     nb_args = len(target.prototype._argtypes_)
     target_addr = get_syswow_ntdll_exports()[target.__name__]
@@ -290,6 +130,7 @@ def try_generate_stub_target(shellcode, argument_buffer, target):
     windows.current_process.write_memory(shell_code_addr, shellcode)
     # Execute
     native_caller = ctypes.CFUNCTYPE(c_ulong)(jump_addr)
+    native_caller.errcheck = target.errcheck
     # Generate the wrapper function that fill the argument_buffer
     expected_arguments_number = len(target.prototype._argtypes_)
 
@@ -338,6 +179,7 @@ def get_current_process_syswow_peb():
     peb_addr = get_current_process_syswow_peb_addr()
     return windows.winobject.RemotePEB64(peb_addr, CurrentProcessReadSyswow())
 
+
 def get_syswow_ntdll_exports():
     if get_syswow_ntdll_exports.value is not None:
         return get_syswow_ntdll_exports.value
@@ -350,3 +192,59 @@ def get_syswow_ntdll_exports():
     get_syswow_ntdll_exports.value = exports
     return exports
 get_syswow_ntdll_exports.value = None
+
+
+class Syswow64ApiProxy(object):
+    APIDLL = None
+    """Create a python wrapper around a function"""
+    def __init__(self, winproxy_function):
+        self.winproxy_function = winproxy_function
+        self.raw_call = None
+        self.params_name = [param[1] for param in winproxy_function.params]
+
+    def __call__(self, python_proxy):
+        def perform_call(*args):
+            if len(self.params_name) != len(args):
+                print("ERROR:")
+                print("Expected params: {0}".format(self.params_name))
+                print("Just Got params: {0}".format(args))
+                raise ValueError("I do not have all parameters: how is that possible ?")
+            for param_name, param_value in zip(self.params_name, args):
+                if param_value is NeededParameter:
+                    raise TypeError("{0}: Missing Mandatory parameter <{1}>".format(self.winproxy_function.__name__, param_name))
+
+            if self.raw_call is None:
+                self.raw_call = generate_syswow64_call(self.winproxy_function)
+            return self.raw_call(*args)
+        setattr(python_proxy, "ctypes_function", perform_call)
+        return python_proxy
+
+
+@Syswow64ApiProxy(windows.winproxy.NtCreateThreadEx)
+def NtCreateThreadEx_32_to_64(ThreadHandle=None, DesiredAccess=0x1fffff, ObjectAttributes=0, ProcessHandle=NeededParameter, lpStartAddress=NeededParameter, lpParameter=NeededParameter, CreateSuspended=0, dwStackSize=0, Unknown1=0, Unknown2=0, Unknown3=0):
+    if ThreadHandle is None:
+        ThreadHandle = byref(HANDLE())
+    return NtCreateThreadEx_32_to_64.ctypes_function(ThreadHandle, DesiredAccess, ObjectAttributes, ProcessHandle, lpStartAddress, lpParameter, CreateSuspended, dwStackSize, Unknown1, Unknown2, Unknown3)
+
+
+ProcessBasicInformation = 0
+@Syswow64ApiProxy(windows.winproxy.NtQueryInformationProcess)
+def NtQueryInformationProcess_32_to_64(ProcessHandle, ProcessInformationClass=ProcessBasicInformation, ProcessInformation=NeededParameter, ProcessInformationLength=0, ReturnLength=None):
+    if ProcessInformation is not None and ProcessInformationLength == 0:
+        ProcessInformationLength = ctypes.sizeof(ProcessInformation)
+    if type(ProcessInformation) == PROCESS_BASIC_INFORMATION:
+        ProcessInformation = byref(ProcessInformation)
+    if ReturnLength is None:
+        ReturnLength = byref(ULONG())
+    return NtQueryInformationProcess_32_to_64.ctypes_function(ProcessHandle, ProcessInformationClass, ProcessInformation, ProcessInformationLength, ReturnLength)
+
+
+@Syswow64ApiProxy(windows.winproxy.NtQueryVirtualMemory)
+def NtQueryVirtualMemory_32_to_64(ProcessHandle, BaseAddress, MemoryInformationClass=MemoryBasicInformation, MemoryInformation=NeededParameter, MemoryInformationLength=0, ReturnLength=None):
+    if ReturnLength is None:
+        ReturnLength = byref(ULONG())
+    if MemoryInformation is not None and MemoryInformationLength == 0:
+        MemoryInformationLength = ctypes.sizeof(MemoryInformation)
+    if type(MemoryInformation) == MEMORY_BASIC_INFORMATION64:
+        MemoryInformation = byref(MemoryInformation)
+    return NtQueryVirtualMemory_32_to_64.ctypes_function(ProcessHandle, BaseAddress, MemoryInformationClass, MemoryInformation, MemoryInformationLength, ReturnLength)

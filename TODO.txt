@@ -1,0 +1,2 @@
+TODO:
+    - get thread context (clean code + 32<->64 compat)

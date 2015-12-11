@@ -117,6 +117,7 @@ class ApiProxy(object):
         params_name = [param[1] for param in params]
         python_proxy.prototype = prototype
         python_proxy.params = params
+        python_proxy.errcheck = self.error_check
 
 
         def perform_call(*args):
@@ -456,6 +457,7 @@ def NtQuerySystemInformation(SystemInformationClass, SystemInformation=None, Sys
         SystemInformationLength = ctypes.sizeof(SystemInformation)
     return NtQuerySystemInformation.ctypes_function(SystemInformationClass, SystemInformation, SystemInformationLength, ReturnLength)
 
+
 @OptionalExport(NtdllProxy('NtQueryInformationProcess', error_ntstatus))
 def NtQueryInformationProcess(ProcessHandle, ProcessInformationClass, ProcessInformation, ProcessInformationLength=0, ReturnLength=None):
     if ProcessInformation is not None and ProcessInformationLength == 0:
@@ -466,6 +468,7 @@ def NtQueryInformationProcess(ProcessHandle, ProcessInformationClass, ProcessInf
         ReturnLength = byref(ULONG())
     return NtQueryInformationProcess.ctypes_function(ProcessHandle, ProcessInformationClass, ProcessInformation, ProcessInformationLength, ReturnLength)
 
+
 @OptionalExport(NtdllProxy('NtQueryVirtualMemory', error_ntstatus))
 def NtQueryVirtualMemory(ProcessHandle, BaseAddress, MemoryInformationClass, MemoryInformation=NeededParameter, MemoryInformationLength=0, ReturnLength=None):
     if ReturnLength is None:
@@ -475,6 +478,14 @@ def NtQueryVirtualMemory(ProcessHandle, BaseAddress, MemoryInformationClass, Mem
     if type(MemoryInformation) == MEMORY_BASIC_INFORMATION64:
         MemoryInformation = byref(MemoryInformation)
     return NtQueryVirtualMemory.ctypes_function(ProcessHandle, BaseAddress, MemoryInformationClass, MemoryInformation=NeededParameter, MemoryInformationLength=0, ReturnLength=None)
+
+
+@OptionalExport(NtdllProxy('NtCreateThreadEx', error_ntstatus))
+def NtCreateThreadEx(ThreadHandle=None, DesiredAccess=0x1fffff, ObjectAttributes=0, ProcessHandle=NeededParameter, lpStartAddress=NeededParameter, lpParameter=NeededParameter, CreateSuspended=0, dwStackSize=0, Unknown1=0, Unknown2=0, Unknown=0):
+    if ThreadHandle is None:
+        ThreadHandle = byref(HANDLE())
+    return NtCreateThreadEx.ctypes_function(ThreadHandle, DesiredAccess, ObjectAttributes, ProcessHandle, lpStartAddress, lpParameter, CreateSuspended, dwStackSize, Unknown1, Unknown2, Unknown3)
+
 
 # ##### ADVAPI32 ####### #
 
