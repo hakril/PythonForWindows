@@ -1,5 +1,6 @@
 import struct
 import ctypes
+from ctypes import byref
 import codecs
 import functools
 
@@ -29,7 +30,9 @@ def execute_64bits_code_from_syswow(shellcode):
     current_process = windows.current_process
     if not current_process.is_wow_64:
         raise ValueError("Calling execute_64bits_code_from_syswow from non-syswow process")
-    addr = windows.winproxy.VirtualAlloc(dwSize=0x1000)
+    # 1 -> ret | 8 -> ljump
+    size_to_alloc = len(shellcode) + len(genere_return_32bits_stub(0xffffffff)) + 1 + 8
+    addr = windows.current_process.allocator.reserve_size(size_to_alloc)
     # post-exec 32bits stub (xor eax, eax; ret)
     ret = "\xC3"
     ret_addr = addr
@@ -55,11 +58,13 @@ def generate_syswow64_call(target):
 
     argument_buffer_len = (nb_args * 8)
     argument_buffer = windows.current_process.allocator.reserve_size(argument_buffer_len)
+    alignement_information = windows.current_process.allocator.reserve_size(8)
 
-    nb_args_on_stack = nb_args - 4
+    nb_args_on_stack = max(nb_args - 4, 0)
 
     code_64b = x64.MultipleInstr()
     # Save registers
+
     code_64b += x64.Push('RBX')
     code_64b += x64.Push('RCX')
     code_64b += x64.Push('RDX')
@@ -71,7 +76,12 @@ def generate_syswow64_call(target):
     code_64b += x64.Push('R11')
     code_64b += x64.Push('R12')
     code_64b += x64.Push('R13')
+    # Alignment stuff :)
 
+    code_64b += x64.Mov('RCX', 'RSP')
+    code_64b += x64.And('RCX', 0x0f)
+    code_64b += x64.Mov(x64.deref(alignement_information), 'RCX')
+    code_64b += x64.Sub('RSP', 'RCX')
     # retrieve argument from the argument buffer
     if nb_args >= 1:
         code_64b += x64.Mov('RCX', x64.create_displacement(disp=argument_buffer))
@@ -84,7 +94,6 @@ def generate_syswow64_call(target):
     for i in range(nb_args_on_stack):
         code_64b += x64.Mov('RAX',  x64.create_displacement(disp=argument_buffer + 8 * (nb_args - 1 - i)))
         code_64b += x64.Push('RAX')
-
     # reserve space for register (calling convention)
     code_64b += x64.Push('R9')
     code_64b += x64.Push('R8')
@@ -93,6 +102,8 @@ def generate_syswow64_call(target):
     # Call
     code_64b += x64.Mov('R13', target_addr)
     code_64b += x64.Call('R13')
+    # Realign stack :)
+    code_64b += x64.Add('RSP', x64.deref(alignement_information))
     # Clean stack
     code_64b += x64.Add('RSP', (4 + nb_args_on_stack) * 8)
     code_64b += x64.Pop('R13')
@@ -107,14 +118,14 @@ def generate_syswow64_call(target):
     code_64b += x64.Pop('RCX')
     code_64b += x64.Pop('RBX')
     return try_generate_stub_target(code_64b.get_code(), argument_buffer, target)
-    # TODO: this code should be a winfuct of type prototype :)
 
 
 def try_generate_stub_target(shellcode, argument_buffer, target):
     """shellcode must NOT end by a ret"""
     if not windows.current_process.is_wow_64:
         raise ValueError("Calling execute_64bits_code_from_syswow from non-syswow process")
-    addr = windows.winproxy.VirtualAlloc(dwSize=0x1000)
+    size_to_alloc = len(shellcode) + len(genere_return_32bits_stub(0xffffffff)) + 1 + 8
+    addr = windows.current_process.allocator.reserve_size(size_to_alloc)
     # post-exec 32bits stub (ret)
     ret = "\xC3"
     ret_addr = addr
@@ -248,3 +259,10 @@ def NtQueryVirtualMemory_32_to_64(ProcessHandle, BaseAddress, MemoryInformationC
     if type(MemoryInformation) == MEMORY_BASIC_INFORMATION64:
         MemoryInformation = byref(MemoryInformation)
     return NtQueryVirtualMemory_32_to_64.ctypes_function(ProcessHandle, BaseAddress, MemoryInformationClass, MemoryInformation, MemoryInformationLength, ReturnLength)
+
+
+@Syswow64ApiProxy(windows.winproxy.NtGetContextThread)
+def NtGetContextThread_32_to_64(hThread, lpContext):
+    if type(lpContext) == windows.vectored_exception.EnhancedCONTEXT64:
+        lpContext = byref(lpContext)
+    return NtGetContextThread_32_to_64.ctypes_function(hThread, lpContext)

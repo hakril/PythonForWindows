@@ -230,6 +230,7 @@ VirtualQueryEx = TransparentKernel32Proxy("VirtualQueryEx")
 Wow64DisableWow64FsRedirection = OptionalExport(TransparentKernel32Proxy)("Wow64DisableWow64FsRedirection")
 Wow64RevertWow64FsRedirection = OptionalExport(TransparentKernel32Proxy)("Wow64RevertWow64FsRedirection")
 Wow64EnableWow64FsRedirection = OptionalExport(TransparentKernel32Proxy)("Wow64EnableWow64FsRedirection")
+Wow64GetThreadContext = OptionalExport(TransparentKernel32Proxy)("Wow64GetThreadContext")
 
 
 
@@ -450,6 +451,10 @@ def ntquerysysteminformation_error_check(func_name, result, func, args):
         return args
     raise Kernel32Error("{0} failed with NTStatus {1}".format(func_name, hex(result)))
 
+@NtdllProxy("NtGetContextThread", error_ntstatus)
+def NtGetContextThread(hThread, lpContext):
+    return NtGetContextThread.ctypes_function(hThread, lpContext)
+
 
 @NtdllProxy('NtQuerySystemInformation', ntquerysysteminformation_error_check)
 def NtQuerySystemInformation(SystemInformationClass, SystemInformation=None, SystemInformationLength=0, ReturnLength=NeededParameter):
@@ -467,6 +472,15 @@ def NtQueryInformationProcess(ProcessHandle, ProcessInformationClass, ProcessInf
     if ReturnLength is None:
         ReturnLength = byref(ULONG())
     return NtQueryInformationProcess.ctypes_function(ProcessHandle, ProcessInformationClass, ProcessInformation, ProcessInformationLength, ReturnLength)
+
+
+@NtdllProxy('NtQueryInformationThread', error_ntstatus)
+def NtQueryInformationThread(ThreadHandle, ThreadInformationClass, ThreadInformation, ThreadInformationLength=0, ReturnLength=None):
+    if ReturnLength is None:
+        ReturnLength = byref(ULONG())
+    if ThreadInformation is not None and ThreadInformationLength == 0:
+        ThreadInformationLength = ctypes.sizeof(ThreadInformation)
+    return NtQueryInformationThread.ctypes_function(ThreadHandle, ThreadInformationClass, ThreadInformation, ThreadInformationLength, ReturnLength)
 
 
 @OptionalExport(NtdllProxy('NtQueryVirtualMemory', error_ntstatus))

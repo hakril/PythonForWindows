@@ -22,4 +22,7 @@ current_thread = CurrentThread()
 # Late import: other imports should go here
 # Do not move it: risk of circular import
 
+import windows.vectored_exception
+import windows.wmi
+
 __all__ = ["system", "VirtualProtected", 'current_process', 'current_thread', 'winproxy']
