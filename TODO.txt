@@ -1,2 +1,8 @@
 TODO:
-    - get thread context (clean code + 32<->64 compat)
+    - ProcessMemory object ? (metasm like)
+
+FIXME:
+    - WMI
+        - COM initialisation when injected in another process
+        - The CoInitialize might be already called
+        - Fix that

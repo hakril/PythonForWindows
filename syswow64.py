@@ -54,8 +54,6 @@ def execute_64bits_code_from_syswow(shellcode):
 def generate_syswow64_call(target):
     nb_args = len(target.prototype._argtypes_)
     target_addr = get_syswow_ntdll_exports()[target.__name__]
-    print hex(target_addr)
-
     argument_buffer_len = (nb_args * 8)
     argument_buffer = windows.current_process.allocator.reserve_size(argument_buffer_len)
     alignement_information = windows.current_process.allocator.reserve_size(8)
@@ -76,8 +74,8 @@ def generate_syswow64_call(target):
     code_64b += x64.Push('R11')
     code_64b += x64.Push('R12')
     code_64b += x64.Push('R13')
-    # Alignment stuff :)
 
+    # Alignment stuff :)
     code_64b += x64.Mov('RCX', 'RSP')
     code_64b += x64.And('RCX', 0x0f)
     code_64b += x64.Mov(x64.deref(alignement_information), 'RCX')
@@ -167,16 +165,14 @@ def try_generate_stub_target(shellcode, argument_buffer, target):
 
 def get_current_process_syswow_peb_addr():
     current_process = windows.current_process
-    dest = current_process.virtual_alloc(0x1000)
-    get_peb_64_code = codecs.decode(b"65488B042560000000", 'hex')
-    store_peb = x64.MultipleInstr()
-    store_peb += x64.Mov(x64.create_displacement(disp=dest), 'RAX')
-    get_peb_64_code += store_peb.get_code()
+    dest = current_process.allocator.reserve_size(8)
+    get_peb_64_code = x64.MultipleInstr()
+    get_peb_64_code += x64.Mov('RAX', x64.mem('gs:[0x60]'))
+    get_peb_64_code += x64.Mov(x64.create_displacement(disp=dest), 'RAX')
     current_process.write_memory(dest, "\x00" * 8)
-    windows.syswow64.execute_64bits_code_from_syswow(get_peb_64_code)
+    execute_64bits_code_from_syswow(get_peb_64_code.get_code())
     peb_addr = struct.unpack("<Q", current_process.read_memory(dest, 8))[0]
     return peb_addr
-
 
 def get_current_process_syswow_peb():
     current_process = windows.current_process
@@ -250,6 +246,16 @@ def NtQueryInformationProcess_32_to_64(ProcessHandle, ProcessInformationClass=Pr
     return NtQueryInformationProcess_32_to_64.ctypes_function(ProcessHandle, ProcessInformationClass, ProcessInformation, ProcessInformationLength, ReturnLength)
 
 
+@Syswow64ApiProxy(windows.winproxy.NtQueryInformationThread)
+def NtQueryInformationThread_32_to_64(ThreadHandle, ThreadInformationClass, ThreadInformation, ThreadInformationLength=0, ReturnLength=None):
+    if ReturnLength is None:
+        ReturnLength = byref(ULONG())
+    if ThreadInformation is not None and ThreadInformationLength == 0:
+        ThreadInformationLength = ctypes.sizeof(ThreadInformation)
+    return NtQueryInformationThread_32_to_64.ctypes_function(ThreadHandle, ThreadInformationClass, ThreadInformation, ThreadInformationLength, ReturnLength)
+
+
+
 @Syswow64ApiProxy(windows.winproxy.NtQueryVirtualMemory)
 def NtQueryVirtualMemory_32_to_64(ProcessHandle, BaseAddress, MemoryInformationClass=MemoryBasicInformation, MemoryInformation=NeededParameter, MemoryInformationLength=0, ReturnLength=None):
     if ReturnLength is None:
@@ -266,3 +272,5 @@ def NtGetContextThread_32_to_64(hThread, lpContext):
     if type(lpContext) == windows.vectored_exception.EnhancedCONTEXT64:
         lpContext = byref(lpContext)
     return NtGetContextThread_32_to_64.ctypes_function(hThread, lpContext)
+
+

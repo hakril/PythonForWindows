@@ -235,6 +235,7 @@ class WindowsTestCase(unittest.TestCase):
             with self.assertRaises(windows.injection.RemotePythonError) as ar:
                 t = calc.execute_python("import time;time.sleep(0.1); raise ValueError('BYE')")
 
+    @windows_64bit_only
     def test_thread_exit_value_64(self):
         with Calc64() as calc:
             res = calc.execute_python("import time;time.sleep(0.1); 2")
@@ -242,6 +243,37 @@ class WindowsTestCase(unittest.TestCase):
             with self.assertRaises(windows.injection.RemotePythonError) as ar:
                 t = calc.execute_python("import time;time.sleep(0.1); raise ValueError('BYE')")
 
+    def test_thread_start_address_32(self):
+        with Calc32() as calc:
+            t = calc.threads[0]
+            t.start_address  # No better idea right now that checking for crash/exception
+
+    @windows_64bit_only
+    def test_thread_start_address_64(self):
+        with Calc64() as calc:
+            t = calc.threads[0]
+            t.start_address  # No better idea right now that checking for crash/exception
+
+    def test_get_context_address_32(self):
+        with Calc32() as calc:
+            code = x86.MultipleInstr()
+            code += x86.Mov("EAX", 0x42424242)
+            code += x86.Label(":LOOP")
+            code += x86.Jmp(":LOOP")
+            t = calc.execute(code.get_code())
+            cont = t.context
+            self.assertEqual(cont.Eax, 0x42424242)
+
+    @windows_64bit_only
+    def test_get_context_address_64(self):
+        with Calc64() as calc:
+            code = x64.MultipleInstr()
+            code += x64.Mov("RAX", 0x4242424243434343)
+            code += x64.Label(":LOOP")
+            code += x64.Jmp(":LOOP")
+            t = calc.execute(code.get_code())
+            cont = t.context
+            self.assertEqual(cont.Rax, 0x4242424243434343)
 
 
 if __name__ == '__main__':

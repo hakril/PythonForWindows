@@ -36,19 +36,39 @@ exception_type = [
 # exception_name_by_value[0x80000001] -> EXCEPTION_GUARD_PAGE(0x80000001L)
 exception_name_by_value = dict([(x, x) for x in [getattr(windows.generated_def.windef, name) for name in exception_type]])
 
+def generate_enhanced_exception_record(base, name_suffix=""):
+    class EnhancedEXCEPTION_RECORD(base):
+        @property
+        def ExceptionCode(self):
+            real_code = super(EnhancedEXCEPTION_RECORD, self).ExceptionCode
+            return exception_name_by_value.get(real_code, 'UNKNOW_EXCEPTION({0})'.format(hex(real_code)))
 
-class EnhancedEXCEPTION_RECORD(EXCEPTION_RECORD):
-    @property
-    def ExceptionCode(self):
-        real_code = super(EnhancedEXCEPTION_RECORD, self).ExceptionCode
-        return exception_name_by_value.get(real_code, 'UNKNOW_EXCEPTION({0})'.format(hex(real_code)))
+        @property
+        def ExceptionAddress(self):
+            x = super(EnhancedEXCEPTION_RECORD, self).ExceptionAddress
+            if x is None:
+                return 0x0
+            return x
+    EnhancedEXCEPTION_RECORD.__name__ += name_suffix
+    return EnhancedEXCEPTION_RECORD
 
-    @property
-    def ExceptionAddress(self):
-        x = super(EnhancedEXCEPTION_RECORD, self).ExceptionAddress
-        if x is None:
-            return 0x0
-        return x
+EnhancedEXCEPTION_RECORD = generate_enhanced_exception_record(EXCEPTION_RECORD)
+EnhancedEXCEPTION_RECORD32 = generate_enhanced_exception_record(EXCEPTION_RECORD32, "32")
+EnhancedEXCEPTION_RECORD64 = generate_enhanced_exception_record(EXCEPTION_RECORD64, "64")
+
+
+#class EnhancedEXCEPTION_RECORD(EXCEPTION_RECORD):
+#    @property
+#    def ExceptionCode(self):
+#        real_code = super(EnhancedEXCEPTION_RECORD, self).ExceptionCode
+#        return exception_name_by_value.get(real_code, 'UNKNOW_EXCEPTION({0})'.format(hex(real_code)))
+#
+#    @property
+#    def ExceptionAddress(self):
+#        x = super(EnhancedEXCEPTION_RECORD, self).ExceptionAddress
+#        if x is None:
+#            return 0x0
+#        return x
 
 
 class Eflags(int):
@@ -101,7 +121,7 @@ class Eflags(int):
         return "{0}({1}:{2})".format(type(self).__name__, int.__hex__(self), self.dump())
 
 
-class EnhancedCONTEXTBase(CONTEXT):
+class EnhancedCONTEXTBase():
     default_dump = ()
     pc_reg = ''
     special_reg_type = {}
@@ -132,19 +152,48 @@ class EnhancedCONTEXTBase(CONTEXT):
     pc = property(get_pc, set_pc, None, "Program Counter register (EIP or RIP)")
 
 
-class EnhancedCONTEXT32(EnhancedCONTEXTBase):
+class EnhancedCONTEXT32(EnhancedCONTEXTBase, CONTEXT32):
+    default_dump = ('Eip', 'Esp', 'Eax', 'Ebx', 'Ecx', 'Edx', 'Ebp', 'Edi', 'Esi', 'EFlags')
+    pc_reg = 'Eip'
+    special_reg_type = {'EFlags': Eflags}
+
+class EnhancedCONTEXTWOW64(EnhancedCONTEXTBase, WOW64_CONTEXT):
     default_dump = ('Eip', 'Esp', 'Eax', 'Ebx', 'Ecx', 'Edx', 'Ebp', 'Edi', 'Esi', 'EFlags')
     pc_reg = 'Eip'
     special_reg_type = {'EFlags': Eflags}
 
 
-class EnhancedCONTEXT64(EnhancedCONTEXTBase):
+class EnhancedCONTEXT64(EnhancedCONTEXTBase, CONTEXT64):
     default_dump = ('Rip', 'Rsp', 'Rax', 'Rbx', 'Rcx', 'Rdx', 'Rbp', 'Rdi', 'Rsi',
                     'R9', 'R10', 'R11', 'R12', 'R13', 'R14', 'R15', 'EFlags')
     pc_reg = 'Rip'
     special_reg_type = {'EFlags': Eflags}
 
-if windows.current_process.bitness == 32:
+    @classmethod
+    def new_aligned(cls):
+        """Return a new EnhancedCONTEXT64 aligned on 16 bits
+           temporary workaround or horrible hack ? choose your side
+        """
+        size = ctypes.sizeof(cls)
+        nb_qword = (size + 8) / ctypes.sizeof(ULONGLONG)
+        buffer = (nb_qword * ULONGLONG)()
+        struct_address = ctypes.addressof(buffer)
+        if (struct_address & 0xf) not in [0, 8]:
+            raise ValueError("ULONGLONG array not aligned on 8")
+        if (struct_address & 0xf) == 8:
+            struct_address += 8
+        self = cls.from_address(struct_address)
+        # Keep the raw buffer alive
+        self._buffer = buffer
+        return self
+
+def bitness():
+    """Return 32 or 64"""
+    import platform
+    bits = platform.architecture()[0]
+    return int(bits[:2])
+
+if bitness() == 32:
     EnhancedCONTEXT = EnhancedCONTEXT32
 else:
     EnhancedCONTEXT = EnhancedCONTEXT64
@@ -192,3 +241,17 @@ class WithExceptionHandler(object):
     def __exit__(self, exc_type, exc_value, traceback):
         windows.winproxy.RemoveVectoredExceptionHandler(self.value)
         return False
+
+class DumpContextOnException(WithExceptionHandler):
+        def __init__(self, exit=False):
+            self.exit = exit
+            super(DumpContextOnException, self).__init__(self.print_context_result)
+
+        def print_context_result(self, exception_pointers):
+            except_record = exception_pointers[0].ExceptionRecord[0]
+            exception_pointers[0].dump()
+            sys.stdout.flush()
+            if self.exit:
+                windows.current_process.exit()
+            return 0
+

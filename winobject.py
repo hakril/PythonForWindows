@@ -139,13 +139,43 @@ class WinThread(THREADENTRY32, AutoHandle):
 
     @property
     def context(self):
-        x = windows.vectored_exception.EnhancedCONTEXT()
+        if self.owner.bitness == 32 and windows.current_process.bitness == 64:
+            # Wow64
+            x = windows.vectored_exception.EnhancedCONTEXTWOW64()
+            x.ContextFlags = CONTEXT_FULL
+            winproxy.Wow64GetThreadContext(self.handle, x)
+            return x
+
+        if self.owner.bitness == 64 and windows.current_process.bitness == 32:
+            x = windows.vectored_exception.EnhancedCONTEXT64.new_aligned()
+            x.ContextFlags = CONTEXT_FULL
+            windows.syswow64.NtGetContextThread_32_to_64(self.handle, x)
+            return x
+
+        if self.owner.bitness == 32:
+            x = windows.vectored_exception.EnhancedCONTEXT32()
+        else:
+            x = windows.vectored_exception.EnhancedCONTEXT64.new_aligned()
         x.ContextFlags = CONTEXT_FULL
         winproxy.GetThreadContext(self.handle, x)
         return x
 
     def set_context(self, context):
         return winproxy.SetThreadContext(self.handle, context)
+
+    @property
+    def start_address(self):
+        if windows.current_process.bitness == 32 and self.owner.bitness == 64:
+            res = ULONGLONG()
+            windows.syswow64.NtQueryInformationThread_32_to_64(self.handle, ThreadQuerySetWin32StartAddress, byref(res), ctypes.sizeof(res))
+            return res.value
+        res_size = max(self.owner.bitness, windows.current_process.bitness)
+        if res_size == 32:
+            res = ULONG()
+        else:
+            res = ULONGLONG()
+        winproxy.NtQueryInformationThread(self.handle, ThreadQuerySetWin32StartAddress, byref(res), ctypes.sizeof(res))
+        return res.value
 
     def exit(self, code=0):
         return winproxy.TerminateThread(self.handle, code)
@@ -536,9 +566,15 @@ class WinProcess(PROCESSENTRY32, Process):
             windows.syswow64.NtQueryInformationProcess_32_to_64(self.handle, ProcessInformation=data, ProcessInformationLength=ctypes.sizeof(x))
             peb_offset = x.PebBaseAddress.offset
             peb_addr = struct.unpack("<Q", data[x.PebBaseAddress.offset: x.PebBaseAddress.offset+8])[0]
+        elif windows.current_process.bitness == 64 and self.bitness == 32:
+            information_type = 26
+            y = ULONGLONG()
+            windows.winproxy.NtQueryInformationProcess(self.handle, information_type, byref(y), sizeof(y))
+            peb_addr = y.value
         else:
+            information_type = 0
             x = PROCESS_BASIC_INFORMATION()
-            windows.winproxy.NtQueryInformationProcess(self.handle, 0, x)
+            windows.winproxy.NtQueryInformationProcess(self.handle, information_type, x)
             peb_addr = ctypes.cast(x.PebBaseAddress, PVOID).value
         if peb_addr is None:
             raise ValueError("Could not get peb addr of process {0}".format(self.name))
