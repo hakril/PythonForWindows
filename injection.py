@@ -1,3 +1,6 @@
+import struct
+import ctypes
+
 import windows
 import windows.utils as utils
 
@@ -55,7 +58,7 @@ def generate_python_exec_shellcode_64(target, PYDLL_addr, PyInit, PyRun, PYCODE_
 
     code = x64.MultipleInstr()
     # Do stack alignement
-    code += x64.Push('RAX')
+    code += x64.Push('RCX')
     # Load python27.dll
     code += x64.Mov('RCX', PYDLL_addr)
     code += x64.Mov('RAX', LoadLibraryA)
@@ -89,7 +92,7 @@ def generate_python_exec_shellcode_64(target, PYDLL_addr, PyInit, PyRun, PYCODE_
     code += x64.Call('RAX')
     code += Clean_space_for_call
     # Remove stack alignement
-    code += x64.Pop('RAX')
+    code += x64.Pop('RCX')
     code += x64.Ret()
     return code.get_code()
 
@@ -130,3 +133,39 @@ def inject_python_command(process, code_injected, PYDLL="python27.dll\x00"):
 def execute_python_code(process, code):
     shellcode_remote_addr = inject_python_command(process, code)
     return process.create_thread(shellcode_remote_addr, 0)
+
+retrieve_exc = r"""
+import traceback
+import sys
+addr = {0}
+txt = "".join(traceback.format_exception(sys.last_type, sys.last_value, sys.last_traceback))
+import ctypes
+
+size = ctypes.c_uint.from_address(addr)
+size.value = len(txt)
+buff = (ctypes.c_char * len(txt)).from_address(addr + ctypes.sizeof(ctypes.c_uint))
+buff[:] = txt
+"""
+
+def retrieve_last_exception_data(process):
+    # TODO : FREE THIS
+    mem = process.virtual_alloc(0x1000)
+    execute_python_code(process, retrieve_exc.format(mem))
+    size = struct.unpack("<I", process.read_memory(mem, ctypes.sizeof(ctypes.c_uint)))[0]
+    data = process.read_memory(mem + ctypes.sizeof(ctypes.c_uint), size)
+    return data
+
+class RemotePythonError(Exception):
+    pass
+
+def safe_execute_python(process, code):
+    t = execute_python_code(process, code)
+    t.wait() # Wait terminaison of the thread
+    if t.exit_code == 0:
+        return True
+    if t.exit_code != 0xffffffff:
+        raise ValueError("Unknown exit code {0}".format(hex(t.exit_code)))
+    data = retrieve_last_exception_data(process)
+    raise RemotePythonError(data)
+
+

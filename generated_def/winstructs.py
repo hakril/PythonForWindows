@@ -858,7 +858,6 @@ PM128A = POINTER(_M128A)
 
 # Struct _CONTEXT64 definitions
 class _CONTEXT64(Structure):
-        _pack_ = 8
         _fields_ = [
         ("P1Home", DWORD64),
         ("P2Home", DWORD64),

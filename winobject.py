@@ -25,7 +25,7 @@ import windows.pe_parse as pe_parse
 
 
 class AutoHandle(object):
-    """An abstract class that allow easy handle creation/destruction"""
+    """An abstract class that allow easy handle creation/destruction/wait"""
     def _get_handle(self):
         raise NotImplementedError("{0} is abstract".format(type(self).__name__))
 
@@ -43,6 +43,9 @@ class AutoHandle(object):
             return self._handle
         self._handle = self._get_handle()
         return self._handle
+
+    def wait(self, timeout=INFINITE):
+        return winproxy.WaitForSingleObject(self.handle, timeout)
 
     def __del__(self):
         if hasattr(self, "_handle") and self._handle:
@@ -156,6 +159,16 @@ class WinThread(THREADENTRY32, AutoHandle):
     def _get_handle(self):
         return winproxy.OpenThread(dwThreadId=self.tid)
 
+    @property
+    def is_exit(self):
+        return self.exit_code != STILL_ACTIVE
+
+    @property
+    def exit_code(self):
+        res = DWORD()
+        winproxy.GetExitCodeThread(self.handle, byref(res))
+        return res.value
+
     def __repr__(self):
         owner = self.owner
         if owner is None:
@@ -168,9 +181,32 @@ class WinThread(THREADENTRY32, AutoHandle):
     def _from_handle(handle):
         tid = winproxy.GetThreadId(handle)
         try:
-            return [t for t in System().threads if t.tid == tid][0]
+            # Really useful ?
+            thread = [t for t in System().threads if t.tid == tid][0]
+            # set AutoHandle _handle
+            thread._handle = handle
+            return thread
         except IndexError:
-            return (tid, handle)
+            return DeadThread(handle, tid)
+
+class DeadThread(AutoHandle):
+    """A simple object arround an already dead thread"""
+    def __init__(self, handle, tid=None):
+        if tid is None:
+            tid = winproxy.GetThreadId(handle)
+        self.tid = tid
+        # set AutoHandle _handle
+        self._handle = handle
+
+    @property
+    def is_exit(self):
+        return self.exit_code != STILL_ACTIVE
+
+    @property
+    def exit_code(self):
+        res = DWORD()
+        winproxy.GetExitCodeThread(self.handle, byref(res))
+        return res.value
 
 
 class Process(AutoHandle):
@@ -206,6 +242,16 @@ class Process(AutoHandle):
 
     def virtual_alloc(self, size):
         raise NotImplementedError("virtual_alloc")
+
+    @property
+    def exit_code(self):
+        res = DWORD()
+        winproxy.GetExitCodeProcess(self.handle, byref(res))
+        return res.value
+
+    @property
+    def is_exit(self):
+        return self.exit_code == STILL_ACTIVE
 
     def execute(self, code):
         """Execute some raw code in the context of the process"""
@@ -266,6 +312,10 @@ class CurrentThread(AutoHandle):
     def exit(self, code=0):
         """Exit the thread"""
         return winproxy.ExitThread(code)
+
+    def wait(self):
+        """Raise ValueError to prevent deadlock :D"""
+        raise ValueError("wait() on current thread")
 
 
 class CurrentProcess(Process):
@@ -348,7 +398,7 @@ class CurrentProcess(Process):
         return True
 
     def read_memory(self, addr, size):
-        """Read size from adddr"""
+        """Read size from addr"""
         dbgprint('Read CurrentProcess Memory', 'READMEM')
         buffer = (c_char * size).from_address(addr)
         return buffer[:]
@@ -365,6 +415,10 @@ class CurrentProcess(Process):
     def exit(self, code=0):
         """Exit the process"""
         return winproxy.ExitProcess(code)
+
+    def wait(self):
+        """Raise ValueError to prevent deadlock :D"""
+        raise ValueError("wait() on current thread")
 
 
 class WinProcess(PROCESSENTRY32, Process):
@@ -453,7 +507,9 @@ class WinProcess(PROCESSENTRY32, Process):
     def create_thread(self, addr, param):
         """Create a remote thread"""
         if windows.current_process.bitness == 32 and self.bitness == 64:
-            return windows.syswow64.NtCreateThreadEx_32_to_64(ProcessHandle=self.handle, lpStartAddress=addr, lpParameter=param)
+            thread_handle = HANDLE()
+            windows.syswow64.NtCreateThreadEx_32_to_64(ThreadHandle=byref(thread_handle) ,ProcessHandle=self.handle, lpStartAddress=addr, lpParameter=param)
+            return WinThread._from_handle(thread_handle.value)
         return WinThread._from_handle(winproxy.CreateRemoteThread(hProcess=self.handle, lpStartAddress=addr, lpParameter=param))
 
     def load_library(self, dll_path):
@@ -464,6 +520,10 @@ class WinProcess(PROCESSENTRY32, Process):
         return self.create_thread(LoadLibrary, x)
 
     def execute_python(self, pycode):
+        """Execute Python code into the remote process"""
+        return injection.safe_execute_python(self, pycode)
+
+    def execute_python_unsafe(self, pycode):
         """Execute Python code into the remote process"""
         return injection.execute_python_code(self, pycode)
 

@@ -129,7 +129,7 @@ class WindowsTestCase(unittest.TestCase):
         with Calc64() as calc:
             data = calc.virtual_alloc(0x1000)
             calc.execute_python('import ctypes; ctypes.c_uint.from_address({0}).value = 0x42424242'.format(data))
-            time.sleep(0.1)
+            #time.sleep(0.1)
             dword = struct.unpack("<I", calc.read_memory(data, 4))[0]
             self.assertEqual(dword, 0x42424242)
 
@@ -137,7 +137,7 @@ class WindowsTestCase(unittest.TestCase):
         with Calc32() as calc:
             data = calc.virtual_alloc(0x1000)
             calc.execute_python('import ctypes; ctypes.c_uint.from_address({0}).value = 0x42424242'.format(data))
-            time.sleep(0.1)
+            #time.sleep(0.1)
             dword = struct.unpack("<I", calc.read_memory(data, 4))[0]
             self.assertEqual(dword, 0x42424242)
 
@@ -169,7 +169,7 @@ class WindowsTestCase(unittest.TestCase):
                                 ctypes.c_uint.from_address({1}).value = GetCurrentProcessId
                                 """.format(os.getcwd(), data)
             calc.execute_python(textwrap.dedent(remote_python_code))
-            time.sleep(0.5)
+            #time.sleep(0.5)
             dword = struct.unpack("<I", calc.read_memory(data, 4))[0]
             self.assertEqual(dword, get_current_proc_id)
 
@@ -190,7 +190,7 @@ class WindowsTestCase(unittest.TestCase):
                                 ctypes.c_ulonglong.from_address({1}).value = GetCurrentProcessId
                                 """.format(os.getcwd(), data)
             calc.execute_python(textwrap.dedent(remote_python_code))
-            time.sleep(0.5)
+            #time.sleep(0.5)
             dword = struct.unpack("<Q", calc.read_memory(data, 8))[0]
             self.assertEqual(dword, get_current_proc_id)
 
@@ -227,6 +227,21 @@ class WindowsTestCase(unittest.TestCase):
         with self.assertRaises(WindowsError) as ar:
             _winreg.OpenKey(*open_args)
         self.assertEqual(ar.exception.winerror, 0x11223344)
+
+    def test_thread_exit_value_32(self):
+        with Calc32() as calc:
+            res = calc.execute_python("import time;time.sleep(0.1); 2")
+            self.assertEqual(res, True)
+            with self.assertRaises(windows.injection.RemotePythonError) as ar:
+                t = calc.execute_python("import time;time.sleep(0.1); raise ValueError('BYE')")
+
+    def test_thread_exit_value_64(self):
+        with Calc64() as calc:
+            res = calc.execute_python("import time;time.sleep(0.1); 2")
+            self.assertEqual(res, True)
+            with self.assertRaises(windows.injection.RemotePythonError) as ar:
+                t = calc.execute_python("import time;time.sleep(0.1); raise ValueError('BYE')")
+
 
 
 if __name__ == '__main__':

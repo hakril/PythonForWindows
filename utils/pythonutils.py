@@ -11,7 +11,7 @@ def fixedpropety(f):
         except AttributeError:
             setattr(self, cache_name, f(self))
             return getattr(self, cache_name)
-    return property(prop)
+    return property(prop, doc=f.__doc__)
 
 
 def swallow_ctypes_copy(ctypes_object):
