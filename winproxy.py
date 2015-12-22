@@ -9,12 +9,6 @@ from windows.generated_def.ntstatus import NtStatusException
 from windows.dbgprint import dbgprint
 
 
-kernel32 = ctypes.windll.kernel32
-advapi32 = ctypes.windll.Advapi32
-iphlpapi = ctypes.windll.iphlpapi
-ntdll = ctypes.windll.ntdll
-
-
 class Kernel32Error(WindowsError):
     def __new__(cls, func_name):
         win_error = ctypes.WinError()
@@ -101,23 +95,28 @@ class ApiProxy(object):
         if error_check is None:
             error_check = self.default_error_check
         self.error_check = functools.wraps(error_check)(functools.partial(error_check, func_name))
+        self._cprototyped = None
 
     def __call__(self, python_proxy, ):
         prototype = getattr(winfuncs, self.func_name + "Prototype")
         params = getattr(winfuncs, self.func_name + "Params")
-        try:
-            c_prototyped = prototype((self.func_name, self.APIDLL), params)
-        except AttributeError:
-            raise ExportNotFound(self.func_name, self.APIDLL._name)
-        c_prototyped.errcheck = self.error_check
+        python_proxy.prototype = prototype
+        python_proxy.params = params
+        python_proxy.errcheck = self.error_check
+        params_name = [param[1] for param in params]
         if (self.error_check.__doc__):
             doc = python_proxy.__doc__
             doc = doc if doc else ""
             python_proxy.__doc__ = doc + "\nErrcheck:\n   " + self.error_check.__doc__
-        params_name = [param[1] for param in params]
-        python_proxy.prototype = prototype
-        python_proxy.params = params
-        python_proxy.errcheck = self.error_check
+
+
+        def generate_ctypes_function():
+            try:
+                c_prototyped = prototype((self.func_name, getattr(ctypes.windll, self.APIDLL)), params)
+            except AttributeError:
+                raise ExportNotFound(self.func_name, self.APIDLL)
+            c_prototyped.errcheck = self.error_check
+            self._cprototyped = c_prototyped
 
 
         def perform_call(*args):
@@ -129,28 +128,31 @@ class ApiProxy(object):
             for param_name, param_value in zip(params_name, args):
                 if param_value is NeededParameter:
                     raise TypeError("{0}: Missing Mandatory parameter <{1}>".format(self.func_name, param_name))
-            return c_prototyped(*args)
+            if self._cprototyped is None:
+                generate_ctypes_function()
+            return self._cprototyped(*args)
+
         setattr(python_proxy, "ctypes_function", perform_call)
         return python_proxy
 
 
 class Kernel32Proxy(ApiProxy):
-    APIDLL = kernel32
+    APIDLL = "kernel32"
     default_error_check = staticmethod(kernel32_error_check)
 
 
 class Advapi32Proxy(ApiProxy):
-    APIDLL = advapi32
+    APIDLL = "advapi32"
     default_error_check = staticmethod(kernel32_error_check)
 
 
 class IphlpapiProxy(ApiProxy):
-    APIDLL = iphlpapi
+    APIDLL = "iphlpapi"
     default_error_check = staticmethod(iphlpapi_error_check)
 
 
 class NtdllProxy(ApiProxy):
-    APIDLL = ntdll
+    APIDLL = "ntdll"
     default_error_check = staticmethod(kernel32_zero_check)
 
 
@@ -174,23 +176,30 @@ class OptionalExport(object):
             dbgprint("Export <{e.func_name}> not found in <{e.api_name}>".format(e=e), "EXPORTNOTFOUND")
             return None
 
+class TransparentApiProxy(object):
+    def __init__(self, DLLNAME, func_name, error_check):
+        self.dll_name = DLLNAME
+        self.func_name = func_name
+        self.error_check = error_check
+        self._ctypes_function = None
 
-def TransparentApiProxy(APIDLL, func_name, error_check):
-    """Create a ctypes function for 'func_name' with no python arg pre-check"""
+        self.prototype = getattr(winfuncs, func_name + "Prototype")
+        self.args = getattr(winfuncs, func_name + "Params")
 
-    prototype = getattr(winfuncs, func_name + "Prototype")
-    args = getattr(winfuncs, func_name + "Params")
-    try:
-        c_prototyped = prototype((func_name, APIDLL), args)
-    except AttributeError:
-        raise ExportNotFound(func_name, APIDLL._name)
-    c_prototyped.errcheck = functools.wraps(error_check)(functools.partial(error_check, func_name))
-    return c_prototyped
+    def __call__(self, *args, **kwargs):
+        if self._ctypes_function is None:
+            try:
+                c_prototyped = self.prototype((self.func_name, getattr(ctypes.windll, self.dll_name)), self.args)
+            except AttributeError:
+                raise ExportNotFound(func_name, APIDLL)
+            c_prototyped.errcheck = functools.wraps(self.error_check)(functools.partial(self.error_check, self.func_name))
+            self._ctypes_function = c_prototyped
+        return self._ctypes_function(*args, **kwargs)
 
 
-TransparentKernel32Proxy = lambda func_name, error_check=kernel32_error_check: TransparentApiProxy(kernel32, func_name, error_check)
-TransparentAdvapi32Proxy = lambda func_name, error_check=kernel32_error_check: TransparentApiProxy(advapi32, func_name, error_check)
-TransparentIphlpapiProxy = lambda func_name, error_check=iphlpapi_error_check: TransparentApiProxy(iphlpapi, func_name, error_check)
+TransparentKernel32Proxy = lambda func_name, error_check=kernel32_error_check: TransparentApiProxy("kernel32", func_name, error_check)
+TransparentAdvapi32Proxy = lambda func_name, error_check=kernel32_error_check: TransparentApiProxy("advapi32", func_name, error_check)
+TransparentIphlpapiProxy = lambda func_name, error_check=iphlpapi_error_check: TransparentApiProxy("iphlpapi", func_name, error_check)
 
 
 class NeededParameterType(object):
@@ -226,12 +235,13 @@ SuspendThread = TransparentKernel32Proxy("SuspendThread", minus_one_error_check)
 ResumeThread = TransparentKernel32Proxy("ResumeThread", minus_one_error_check)
 GetThreadId = TransparentKernel32Proxy("GetThreadId")
 VirtualQueryEx = TransparentKernel32Proxy("VirtualQueryEx")
+GetExitCodeThread = TransparentKernel32Proxy("GetExitCodeThread")
+GetExitCodeProcess = TransparentKernel32Proxy("GetExitCodeProcess")
 
 Wow64DisableWow64FsRedirection = OptionalExport(TransparentKernel32Proxy)("Wow64DisableWow64FsRedirection")
 Wow64RevertWow64FsRedirection = OptionalExport(TransparentKernel32Proxy)("Wow64RevertWow64FsRedirection")
 Wow64EnableWow64FsRedirection = OptionalExport(TransparentKernel32Proxy)("Wow64EnableWow64FsRedirection")
 Wow64GetThreadContext = OptionalExport(TransparentKernel32Proxy)("Wow64GetThreadContext")
-
 
 
 @Kernel32Proxy("CreateFileA")
