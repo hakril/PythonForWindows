@@ -1,5 +1,6 @@
 import struct
 import ctypes
+import os
 
 import windows
 import windows.utils as utils
@@ -130,7 +131,22 @@ def inject_python_command(process, code_injected, PYDLL="python27.dll\x00"):
     return SHELLCODE_ADDR
 
 
+def validate_python_dll_presence(process):
+    if windows.current_process.bitness == process.bitness:
+        return True
+    if windows.current_process.bitness == 32 and process.bitness == 64:
+        with windows.utils.DisableWow64FsRedirection():
+            if not os.path.exists(r"C:\system32\python27.dll"):
+                raise ValueError("Could not find Python DLL to inject")
+            return True
+    if windows.current_process.bitness == 64 and process.bitness == 32:
+        if not os.path.exists(r"C:\Windows\SysWOW64\python27.dll"):
+            raise ValueError("Could not find Python DLL to inject")
+        return True
+    raise NotImplementedError("Unknown bitness")
+
 def execute_python_code(process, code):
+    validate_python_dll_presence(process)
     shellcode_remote_addr = inject_python_command(process, code)
     return process.create_thread(shellcode_remote_addr, 0)
 
