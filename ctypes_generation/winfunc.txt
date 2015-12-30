@@ -1,0 +1,650 @@
+VOID WINAPI ExitProcess(
+  _In_  UINT uExitCode
+);
+
+BOOL WINAPI TerminateProcess(
+  _In_ HANDLE hProcess,
+  _In_ UINT   uExitCode
+);
+
+DWORD WINAPI GetLastError();
+
+HANDLE WINAPI GetCurrentProcess();
+
+HANDLE WINAPI CreateFileA(
+    __in     LPCSTR lpFileName,
+    __in     DWORD dwDesiredAccess,
+    __in     DWORD dwShareMode,
+    __in_opt LPSECURITY_ATTRIBUTES lpSecurityAttributes,
+    __in     DWORD dwCreationDisposition,
+    __in     DWORD dwFlagsAndAttributes,
+    __in_opt HANDLE hTemplateFile
+    );
+
+HANDLE WINAPI CreateFileW(
+    __in     LPCWSTR lpFileName,
+    __in     DWORD dwDesiredAccess,
+    __in     DWORD dwShareMode,
+    __in_opt LPSECURITY_ATTRIBUTES lpSecurityAttributes,
+    __in     DWORD dwCreationDisposition,
+    __in     DWORD dwFlagsAndAttributes,
+    __in_opt HANDLE hTemplateFile
+    );
+
+
+NTSTATUS WINAPI NtQuerySystemInformation(
+  _In_       SYSTEM_INFORMATION_CLASS SystemInformationClass,
+  _Inout_    PVOID SystemInformation,
+  _In_       ULONG SystemInformationLength,
+  _Out_opt_  PULONG ReturnLength
+);
+
+NTSTATUS WINAPI NtQueryInformationProcess(
+  _In_      HANDLE           ProcessHandle,
+  _In_      PROCESSINFOCLASS ProcessInformationClass,
+  _Out_     PVOID            ProcessInformation,
+  _In_      ULONG            ProcessInformationLength,
+  _Out_opt_ PULONG           ReturnLength
+);
+
+NTSTATUS WINAPI NtQueryVirtualMemory(
+  _In_      HANDLE                   ProcessHandle,
+  _In_opt_  PVOID                    BaseAddress,
+  _In_      MEMORY_INFORMATION_CLASS MemoryInformationClass,
+  _Out_     PVOID                    MemoryInformation,
+  _In_      SIZE_T                   MemoryInformationLength,
+  _Out_opt_ PSIZE_T                  ReturnLength
+);
+
+NTSTATUS NtCreateThreadEx(
+        PHANDLE                 ThreadHandle,
+        ACCESS_MASK             DesiredAccess,
+        LPVOID                  ObjectAttributes,
+        HANDLE                  ProcessHandle,
+        LPTHREAD_START_ROUTINE  lpStartAddress,
+        LPVOID                  lpParameter,
+        BOOL                    CreateSuspended,
+        DWORD                   dwStackSize,
+        DWORD                   Unknown1,
+        DWORD                   Unknown2,
+        LPVOID                  Unknown3
+);
+
+NTSTATUS WINAPI NtQueryInformationThread (
+    _In_ HANDLE ThreadHandle,
+    _In_ THREAD_INFORMATION_CLASS ThreadInformationClass,
+    _Out_ PVOID ThreadInformation,
+    _In_ ULONG ThreadInformationLength,
+    _Out_ PULONG ReturnLength
+);
+
+BOOL WINAPI GetExitCodeThread(
+    _In_  HANDLE hThread,
+    _Out_ LPDWORD lpExitCode
+);
+
+BOOL WINAPI GetExitCodeProcess(
+    __in  HANDLE hProcess,
+    __out LPDWORD lpExitCode
+);
+
+LPVOID WINAPI VirtualAlloc(
+  _In_opt_  LPVOID lpAddress,
+  _In_      SIZE_T dwSize,
+  _In_      DWORD flAllocationType,
+  _In_      DWORD flProtect
+);
+
+LPVOID WINAPI VirtualAllocEx(
+  _In_      HANDLE hProcess,
+  _In_opt_  LPVOID lpAddress,
+  _In_      SIZE_T dwSize,
+  _In_      DWORD flAllocationType,
+  _In_      DWORD flProtect
+);
+
+BOOL WINAPI VirtualFree(
+  _In_ LPVOID lpAddress,
+  _In_ SIZE_T dwSize,
+  _In_ DWORD  dwFreeType
+);
+
+BOOL WINAPI VirtualFreeEx(
+  _In_ HANDLE hProcess,
+  _In_ LPVOID lpAddress,
+  _In_ SIZE_T dwSize,
+  _In_ DWORD  dwFreeType
+);
+
+BOOL WINAPI VirtualProtect(
+  _In_   LPVOID lpAddress,
+  _In_   SIZE_T dwSize,
+  _In_   DWORD flNewProtect,
+  _Out_  PDWORD lpflOldProtect
+);
+
+DWORD VirtualQuery(
+  LPCVOID lpAddress,
+  PMEMORY_BASIC_INFORMATION lpBuffer,
+  DWORD dwLength
+);
+
+SIZE_T WINAPI VirtualQueryEx(
+    _In_     HANDLE hProcess,
+    _In_opt_ LPCVOID lpAddress,
+    _Out_ PMEMORY_BASIC_INFORMATION lpBuffer,
+    _In_     SIZE_T dwLength
+    );
+
+
+DWORD WINAPI GetModuleFileNameA(
+  _In_opt_  HMODULE hModule,
+  _Out_     LPSTR lpFilename,
+  _In_      DWORD nSize
+);
+
+DWORD WINAPI GetModuleFileNameW(
+  _In_opt_  HMODULE hModule,
+  _Out_     LPWSTR lpFilename,
+  _In_      DWORD nSize
+);
+
+HANDLE WINAPI CreateThread(
+  _In_opt_   LPSECURITY_ATTRIBUTES lpThreadAttributes,
+  _In_       SIZE_T dwStackSize,
+  _In_       LPTHREAD_START_ROUTINE lpStartAddress,
+  _In_opt_   LPVOID lpParameter,
+  _In_       DWORD dwCreationFlags,
+  _Out_opt_  LPDWORD lpThreadId
+);
+
+HANDLE WINAPI CreateRemoteThread(
+  _In_   HANDLE hProcess,
+  _In_   LPSECURITY_ATTRIBUTES lpThreadAttributes,
+  _In_   SIZE_T dwStackSize,
+  _In_   LPTHREAD_START_ROUTINE lpStartAddress,
+  _In_   LPVOID lpParameter,
+  _In_   DWORD dwCreationFlags,
+  _Out_  LPDWORD lpThreadId
+);
+
+BOOL WINAPI VirtualProtect(
+  _In_   LPVOID lpAddress,
+  _In_   SIZE_T dwSize,
+  _In_   DWORD flNewProtect,
+  _Out_  PDWORD lpflOldProtect
+);
+
+BOOL WINAPI CreateProcessA(
+    __in_opt    LPCSTR lpApplicationName,
+    __inout_opt LPSTR lpCommandLine,
+    __in_opt    LPSECURITY_ATTRIBUTES lpProcessAttributes,
+    __in_opt    LPSECURITY_ATTRIBUTES lpThreadAttributes,
+    __in        BOOL bInheritHandles,
+    __in        DWORD dwCreationFlags,
+    __in_opt    LPVOID lpEnvironment,
+    __in_opt    LPCSTR lpCurrentDirectory,
+    __in        LPSTARTUPINFOA lpStartupInfo,
+    __out       LPPROCESS_INFORMATION lpProcessInformation
+);
+
+BOOL WINAPI CreateProcessW(
+    __in_opt    LPCWSTR lpApplicationName,
+    __inout_opt LPWSTR lpCommandLine,
+    __in_opt    LPSECURITY_ATTRIBUTES lpProcessAttributes,
+    __in_opt    LPSECURITY_ATTRIBUTES lpThreadAttributes,
+    __in        BOOL bInheritHandles,
+    __in        DWORD dwCreationFlags,
+    __in_opt    LPVOID lpEnvironment,
+    __in_opt    LPCWSTR lpCurrentDirectory,
+    __in        LPSTARTUPINFOW lpStartupInfo,
+    __out       LPPROCESS_INFORMATION lpProcessInformation
+);
+
+BOOL WINAPI GetThreadContext(
+    __in    HANDLE hThread,
+    __inout LPCONTEXT lpContext
+);
+
+BOOL WINAPI NtGetContextThread(
+    __in    HANDLE hThread,
+    __inout LPCONTEXT lpContext
+);
+
+BOOL WINAPI SetThreadContext(
+    __in HANDLE hThread,
+    __in CONST LPCONTEXT lpContext
+);
+
+HANDLE WINAPI OpenThread(
+    __in DWORD dwDesiredAccess,
+    __in BOOL bInheritHandle,
+    __in DWORD dwThreadId
+);
+
+HANDLE WINAPI OpenProcess(
+    __in DWORD dwDesiredAccess,
+    __in BOOL bInheritHandle,
+    __in DWORD dwProcessId
+);
+
+BOOL WINAPI CloseHandle(
+    __in HANDLE hObject
+);
+
+BOOL WINAPI ReadProcessMemory(
+  _In_   HANDLE hProcess,
+  _In_   LPCVOID lpBaseAddress,
+  _Out_  LPVOID lpBuffer,
+  _In_   SIZE_T nSize,
+  _Out_  SIZE_T *lpNumberOfBytesRead
+);
+
+BOOL WINAPI NtWow64ReadVirtualMemory64(
+  _In_   HANDLE hProcess,
+  _In_   ULONG64 lpBaseAddress,
+  _Out_  LPVOID lpBuffer,
+  _In_   ULONG64 nSize,
+  _Out_  PULONG64 *lpNumberOfBytesRead
+);
+
+BOOL WINAPI WriteProcessMemory(
+  _In_   HANDLE hProcess,
+  _In_   LPVOID lpBaseAddress,
+  _In_   LPCVOID lpBuffer,
+  _In_   SIZE_T nSize,
+  _Out_  SIZE_T *lpNumberOfBytesWritten
+);
+
+HANDLE WINAPI CreateToolhelp32Snapshot(
+  _In_  DWORD dwFlags,
+  _In_  DWORD th32ProcessID
+);
+
+BOOL WINAPI Thread32First(
+  _In_     HANDLE hSnapshot,
+  _Inout_  LPTHREADENTRY32 lpte
+);
+
+BOOL WINAPI Thread32Next(
+  _In_   HANDLE hSnapshot,
+  _Out_  LPTHREADENTRY32 lpte
+);
+
+BOOL WINAPI Process32First(
+  _In_     HANDLE hSnapshot,
+  _Inout_  LPPROCESSENTRY32 lppe
+);
+
+BOOL WINAPI Process32Next(
+  _In_   HANDLE hSnapshot,
+  _Out_  LPPROCESSENTRY32 lppe
+);
+
+BOOL Process32FirstW(
+    HANDLE hSnapshot,
+    LPPROCESSENTRY32W lppe
+);
+
+BOOL Process32NextW(
+    HANDLE hSnapshot,
+    LPPROCESSENTRY32W lppe
+);
+
+FARPROC WINAPI GetProcAddress(
+  _In_  HMODULE hModule,
+  _In_  LPCSTR lpProcName
+);
+
+
+HMODULE WINAPI LoadLibraryA(
+    __in LPCSTR lpFileName
+);
+
+HMODULE WINAPI LoadLibraryW(
+    __in LPCWSTR lpFileName
+);
+
+BOOL WINAPI OpenProcessToken(
+  _In_   HANDLE ProcessHandle,
+  _In_   DWORD DesiredAccess,
+  _Out_  PHANDLE TokenHandle
+);
+
+BOOL WINAPI LookupPrivilegeValueA(
+    __in_opt LPCSTR lpSystemName,
+    __in     LPCSTR lpName,
+    __out    PLUID   lpLuid
+);
+
+BOOL WINAPI LookupPrivilegeValueW(
+    __in_opt LPCWSTR lpSystemName,
+    __in     LPCWSTR lpName,
+    __out    PLUID   lpLuid
+);
+
+BOOL WINAPI AdjustTokenPrivileges(
+  _In_       HANDLE TokenHandle,
+  _In_       BOOL DisableAllPrivileges,
+  _In_opt_   PTOKEN_PRIVILEGES NewState,
+  _In_       DWORD BufferLength,
+  _Out_opt_  PTOKEN_PRIVILEGES PreviousState,
+  _Out_opt_  PDWORD ReturnLength
+);
+
+HRSRC WINAPI FindResourceA(
+    __in_opt HMODULE hModule,
+    __in     LPCSTR lpName,
+    __in     LPCSTR lpType
+);
+
+HRSRC WINAPI FindResourceW(
+    __in_opt HMODULE hModule,
+    __in     LPCWSTR lpName,
+    __in     LPCWSTR lpType
+);
+
+DWORD WINAPI SizeofResource(
+  _In_opt_  HMODULE hModule,
+  _In_      HRSRC hResInfo
+);
+
+HGLOBAL WINAPI LoadResource(
+  _In_opt_  HMODULE hModule,
+  _In_      HRSRC hResInfo
+);
+
+LPVOID WINAPI LockResource(
+  _In_  HGLOBAL hResData
+);
+
+BOOL WINAPI GetVersionExA(
+    __inout LPOSVERSIONINFOA lpVersionInformation
+);
+
+BOOL WINAPI GetVersionExW(
+    __inout LPOSVERSIONINFOW lpVersionInformation
+);
+
+DWORD GetVersion();
+
+HANDLE GetCurrentThread();
+
+DWORD GetCurrentThreadId();
+
+DWORD GetCurrentProcessorNumber();
+
+BOOL AllocConsole();
+
+BOOL FreeConsole();
+
+HANDLE WINAPI GetStdHandle(
+  _In_  DWORD nStdHandle
+);
+
+BOOL WINAPI SetStdHandle(
+  _In_  DWORD nStdHandle,
+  _In_  HANDLE hHandle
+);
+
+DWORD WINAPI SetThreadAffinityMask(
+  _In_  HANDLE hThread,
+  _In_  DWORD dwThreadAffinityMask
+);
+
+BOOL WINAPI WriteFile(
+  _In_         HANDLE hFile,
+  _In_         LPCVOID lpBuffer,
+  _In_         DWORD nNumberOfBytesToWrite,
+  _Out_opt_    LPDWORD lpNumberOfBytesWritten,
+  _Inout_opt_  LPOVERLAPPED lpOverlapped
+);
+
+DWORD WINAPI GetExtendedTcpTable(
+  _Out_    PVOID pTcpTable,
+  _Inout_  PDWORD pdwSize,
+  _In_     BOOL bOrder,
+  _In_     ULONG ulAf,
+  _In_     TCP_TABLE_CLASS TableClass,
+  _In_     ULONG Reserved
+);
+
+DWORD WINAPI GetExtendedUdpTable(
+  _Out_    PVOID pUdpTable,
+  _Inout_  PDWORD pdwSize,
+  _In_     BOOL bOrder,
+  _In_     ULONG ulAf,
+  _In_     UDP_TABLE_CLASS TableClass,
+  _In_     ULONG Reserved
+);
+
+DWORD WINAPI SetTcpEntry(
+  _In_  PMIB_TCPROW pTcpRow
+);
+
+PVOID WINAPI AddVectoredContinueHandler(
+  _In_  ULONG FirstHandler,
+  _In_  PVECTORED_EXCEPTION_HANDLER VectoredHandler
+);
+
+
+PVOID WINAPI AddVectoredExceptionHandler(
+  _In_  ULONG FirstHandler,
+  _In_  PVECTORED_EXCEPTION_HANDLER VectoredHandler
+);
+
+BOOL WINAPI TerminateThread(
+  _Inout_  HANDLE hThread,
+  _In_     DWORD dwExitCode
+);
+
+VOID WINAPI ExitThread(
+  _In_  DWORD dwExitCode
+);
+
+ULONG WINAPI RemoveVectoredExceptionHandler(
+  _In_  PVOID Handler
+);
+
+DWORD WINAPI ResumeThread(
+  _In_  HANDLE hThread
+);
+
+DWORD WINAPI SuspendThread(
+  _In_  HANDLE hThread
+);
+
+
+
+DWORD WINAPI WaitForSingleObject(
+  _In_  HANDLE hHandle,
+  _In_  DWORD dwMilliseconds
+);
+
+DWORD WINAPI GetThreadId(
+ _In_ HANDLE Thread
+ );
+
+HMODULE WINAPI LoadLibraryExA(
+  _In_       LPCSTR lpFileName,
+  _Reserved_ HANDLE  hFile,
+  _In_       DWORD   dwFlags
+);
+
+HMODULE WINAPI LoadLibraryExW(
+  _In_       LPCWSTR lpFileName,
+  _Reserved_ HANDLE  hFile,
+  _In_       DWORD   dwFlags
+);
+
+BOOL WINAPI SymInitialize(
+  _In_     HANDLE hProcess,
+  _In_opt_ LPCSTR UserSearchPath,
+  _In_     BOOL   fInvadeProcess
+);
+
+BOOL WINAPI SymFromName(
+  _In_    HANDLE       hProcess,
+  _In_    LPCSTR       Name,
+  _Inout_ PSYMBOL_INFO Symbol
+);
+
+DWORD64 WINAPI SymLoadModuleEx(
+  _In_ HANDLE        hProcess,
+  _In_ HANDLE        hFile,
+  _In_ LPCSTR        ImageName,
+  _In_ LPCSTR        ModuleName,
+  _In_ DWORD64       BaseOfDll,
+  _In_ DWORD         DllSize,
+  _In_ PMODLOAD_DATA Data,
+  _In_ DWORD         Flags
+);
+
+DWORD WINAPI SymSetOptions(
+  _In_ DWORD SymOptions
+);
+
+BOOL WINAPI SymGetTypeInfo(
+  _In_  HANDLE                    hProcess,
+  _In_  DWORD64                   ModBase,
+  _In_  ULONG                     TypeId,
+  _In_  IMAGEHLP_SYMBOL_TYPE_INFO GetType,
+  _Out_ PVOID                     pInfo
+);
+
+BOOL WINAPI DeviceIoControl(
+  _In_        HANDLE       hDevice,
+  _In_        DWORD        dwIoControlCode,
+  _In_opt_    LPVOID       lpInBuffer,
+  _In_        DWORD        nInBufferSize,
+  _Out_opt_   LPVOID       lpOutBuffer,
+  _In_        DWORD        nOutBufferSize,
+  _Out_opt_   LPDWORD      lpBytesReturned,
+  _Inout_opt_ LPOVERLAPPED lpOverlapped
+);
+
+BOOL WINAPI GetTokenInformation(
+  _In_      HANDLE                  TokenHandle,
+  _In_      TOKEN_INFORMATION_CLASS TokenInformationClass,
+  _Out_opt_ LPVOID                  TokenInformation,
+  _In_      DWORD                   TokenInformationLength,
+  _Out_     PDWORD                  ReturnLength
+);
+
+LONG WINAPI RegOpenKeyExA(
+  _In_     HKEY    hKey,
+  _In_opt_ LPCSTR lpSubKey,
+  _In_     DWORD   ulOptions,
+  _In_     REGSAM  samDesired,
+  _Out_    PHKEY   phkResult
+);
+
+LONG WINAPI RegOpenKeyExW(
+  _In_     HKEY    hKey,
+  _In_opt_ LPWSTR lpSubKey,
+  _In_     DWORD   ulOptions,
+  _In_     REGSAM  samDesired,
+  _Out_    PHKEY   phkResult
+);
+
+LONG WINAPI RegGetValueA(
+  _In_        HKEY    hkey,
+  _In_opt_    LPCSTR lpSubKey,
+  _In_opt_    LPCSTR lpValue,
+  _In_opt_    DWORD   dwFlags,
+  _Out_opt_   LPDWORD pdwType,
+  _Out_opt_   PVOID   pvData,
+  _Inout_opt_ LPDWORD pcbData
+);
+
+LONG WINAPI RegGetValueW(
+  _In_        HKEY    hkey,
+  _In_opt_    LPWSTR lpSubKey,
+  _In_opt_    LPWSTR lpValue,
+  _In_opt_    DWORD   dwFlags,
+  _Out_opt_   LPDWORD pdwType,
+  _Out_opt_   PVOID   pvData,
+  _Inout_opt_ LPDWORD pcbData
+);
+
+LONG WINAPI RegCloseKey(
+  _In_ HKEY hKey
+);
+
+BOOL WINAPI Wow64DisableWow64FsRedirection(
+  _Out_ PVOID *OldValue
+);
+
+BOOL WINAPI Wow64RevertWow64FsRedirection(
+  _In_ PVOID OldValue
+);
+
+BOOLEAN WINAPI Wow64EnableWow64FsRedirection(
+  _In_ BOOLEAN Wow64FsEnableRedirection
+);
+
+BOOL WINAPI Wow64GetThreadContext(
+    _In_    HANDLE hThread,
+    _Inout_ PWOW64_CONTEXT lpContext
+);
+
+BOOL WINAPI SetConsoleCtrlHandler(
+  _In_opt_ PHANDLER_ROUTINE HandlerRoutine,
+  _In_     BOOL             Add
+);
+
+LONG WINAPI WinVerifyTrust(
+    _In_opt_ HWND hwnd,
+    _In_ GUID *pgActionID,
+    _Inout_ LPVOID pWVTData
+);
+
+HGLOBAL WINAPI GlobalAlloc(
+  _In_ UINT   uFlags,
+  _In_ SIZE_T dwBytes
+);
+
+HGLOBAL WINAPI GlobalFree(
+  _In_ HGLOBAL hMem
+);
+
+BOOL WINAPI GlobalUnlock(
+  _In_ HGLOBAL hMem
+);
+
+LPVOID WINAPI GlobalLock(
+  _In_ HGLOBAL hMem
+);
+
+BOOL WINAPI OpenClipboard(
+  _In_opt_ HWND hWndNewOwner
+);
+
+BOOL WINAPI EmptyClipboard();
+
+BOOL WINAPI CloseClipboard();
+
+HANDLE WINAPI SetClipboardData(
+  _In_     UINT   uFormat,
+  _In_opt_ HANDLE hMem
+);
+
+HANDLE WINAPI GetClipboardData(
+  _In_ UINT uFormat
+);
+
+UINT WINAPI EnumClipboardFormats(
+  _In_ UINT format
+);
+
+INT WINAPI GetClipboardFormatNameA(
+  _In_  UINT   format,
+  _Out_ LPCSTR lpszFormatName,
+  _In_  INT    cchMaxCount
+);
+
+INT WINAPI GetClipboardFormatNameW(
+  _In_  UINT   format,
+  _Out_ LPCWSTR lpszFormatName,
+  _In_  INT    cchMaxCount
+);

@@ -1,0 +1,1462 @@
+typedef struct _LIST_ENTRY {
+   struct _LIST_ENTRY *Flink;
+   struct _LIST_ENTRY *Blink;
+} LIST_ENTRY, *PLIST_ENTRY, *RESTRICTED_POINTER PRLIST_ENTRY;
+
+
+typedef struct _PEB_LDR_DATA {
+  BYTE       Reserved1[8];
+  PVOID      Reserved2[3];
+  LIST_ENTRY InMemoryOrderModuleList;
+} PEB_LDR_DATA, *PPEB_LDR_DATA;
+
+
+typedef struct _LSA_UNICODE_STRING {
+  USHORT Length;
+  USHORT MaximumLength;
+  PWSTR  Buffer;
+} LSA_UNICODE_STRING, *PLSA_UNICODE_STRING, UNICODE_STRING, *PUNICODE_STRING;
+
+typedef struct _RTL_USER_PROCESS_PARAMETERS {
+  BYTE           Reserved1[16];
+  PVOID          Reserved2[10];
+  UNICODE_STRING ImagePathName;
+  UNICODE_STRING CommandLine;
+} RTL_USER_PROCESS_PARAMETERS, *PRTL_USER_PROCESS_PARAMETERS;
+
+
+typedef struct _PEB {
+  BYTE                          Reserved1[2];
+  BYTE                          BeingDebugged;
+  BYTE                          Reserved2[1];
+  PVOID                         Reserved3[2];
+  PPEB_LDR_DATA                 Ldr;
+  PRTL_USER_PROCESS_PARAMETERS  ProcessParameters;
+  BYTE                          Reserved4[104];
+  PVOID                         Reserved5[52];
+  PPS_POST_PROCESS_INIT_ROUTINE PostProcessInitRoutine;
+  BYTE                          Reserved6[128];
+  PVOID                         Reserved7[1];
+  ULONG                         SessionId;
+} PEB, *PPEB;
+
+
+typedef struct _SECURITY_ATTRIBUTES {
+  DWORD  nLength;
+  LPVOID lpSecurityDescriptor;
+  BOOL   bInheritHandle;
+} SECURITY_ATTRIBUTES, *PSECURITY_ATTRIBUTES, *LPSECURITY_ATTRIBUTES;
+
+
+typedef struct _SYSTEM_VERIFIER_INFORMATION {
+    ULONG NextEntryOffset;
+    ULONG Level;
+    UNICODE_STRING DriverName;
+
+    ULONG RaiseIrqls;
+    ULONG AcquireSpinLocks;
+    ULONG SynchronizeExecutions;
+    ULONG AllocationsAttempted;
+
+    ULONG AllocationsSucceeded;
+    ULONG AllocationsSucceededSpecialPool;
+    ULONG AllocationsWithNoTag;
+    ULONG TrimRequests;
+
+    ULONG Trims;
+    ULONG AllocationsFailed;
+    ULONG AllocationsFailedDeliberately;
+    ULONG Loads;
+
+    ULONG Unloads;
+    ULONG UnTrackedPool;
+    ULONG CurrentPagedPoolAllocations;
+    ULONG CurrentNonPagedPoolAllocations;
+
+    ULONG PeakPagedPoolAllocations;
+    ULONG PeakNonPagedPoolAllocations;
+
+    SIZE_T PagedPoolUsageInBytes;
+    SIZE_T NonPagedPoolUsageInBytes;
+    SIZE_T PeakPagedPoolUsageInBytes;
+    SIZE_T PeakNonPagedPoolUsageInBytes;
+
+} SYSTEM_VERIFIER_INFORMATION, *PSYSTEM_VERIFIER_INFORMATION;
+
+typedef enum _SYSTEM_INFORMATION_CLASS {
+    SystemBasicInformation,
+    SystemProcessorInformation,
+    SystemPerformanceInformation,
+    SystemTimeOfDayInformation,
+    SystemPathInformation,
+    SystemProcessInformation,
+    SystemCallCountInformation,
+    SystemDeviceInformation,
+    SystemProcessorPerformanceInformation,
+    SystemFlagsInformation,
+    SystemCallTimeInformation,
+    SystemModuleInformation,
+    SystemLocksInformation,
+    SystemStackTraceInformation,
+    SystemPagedPoolInformation,
+    SystemNonPagedPoolInformation,
+    SystemHandleInformation,
+    SystemObjectInformation,
+    SystemPageFileInformation,
+    SystemVdmInstemulInformation,
+    SystemVdmBopInformation,
+    SystemFileCacheInformation,
+    SystemPoolTagInformation,
+    SystemInterruptInformation,
+    SystemDpcBehaviorInformation,
+    SystemFullMemoryInformation,
+    SystemLoadGdiDriverInformation,
+    SystemUnloadGdiDriverInformation,
+    SystemTimeAdjustmentInformation,
+    SystemSummaryMemoryInformation,
+    SystemMirrorMemoryInformation,
+    SystemPerformanceTraceInformation,
+    SystemObsolete0,
+    SystemExceptionInformation,
+    SystemCrashDumpStateInformation,
+    SystemKernelDebuggerInformation,
+    SystemContextSwitchInformation,
+    SystemRegistryQuotaInformation,
+    SystemExtendServiceTableInformation,
+    SystemPrioritySeperation,
+    SystemVerifierAddDriverInformation,
+    SystemVerifierRemoveDriverInformation,
+    SystemProcessorIdleInformation,
+    SystemLegacyDriverInformation,
+    SystemCurrentTimeZoneInformation,
+    SystemLookasideInformation,
+    SystemTimeSlipNotification,
+    SystemSessionCreate,
+    SystemSessionDetach,
+    SystemSessionInformation,
+    SystemRangeStartInformation,
+    SystemVerifierInformation,
+    SystemVerifierThunkExtend,
+    SystemSessionProcessInformation,
+    SystemLoadGdiDriverInSystemSpace,
+    SystemNumaProcessorMap,
+    SystemPrefetcherInformation,
+    SystemExtendedProcessInformation,
+    SystemRecommendedSharedDataAlignment,
+    SystemComPlusPackage,
+    SystemNumaAvailableMemory,
+    SystemProcessorPowerInformation,
+    SystemEmulationBasicInformation,
+    SystemEmulationProcessorInformation,
+    SystemExtendedHandleInformation,
+    SystemLostDelayedWriteInformation,
+    SystemBigPoolInformation,
+    SystemSessionPoolTagInformation,
+    SystemSessionMappedViewInformation,
+    SystemHotpatchInformation,
+    SystemObjectSecurityMode,
+    SystemWatchdogTimerHandler,
+    SystemWatchdogTimerInformation,
+    SystemLogicalProcessorInformation,
+    SystemWow64SharedInformation,
+    SystemRegisterFirmwareTableInformationHandler,
+    SystemFirmwareTableInformation,
+    SystemModuleInformationEx,
+    SystemVerifierTriageInformation,
+    SystemSuperfetchInformation,
+    SystemMemoryListInformation,
+    SystemFileCacheInformationEx,
+    MaxSystemInfoClass
+} SYSTEM_INFORMATION_CLASS;
+
+
+typedef enum _MEMORY_INFORMATION_CLASS {
+    MemoryBasicInformation
+} MEMORY_INFORMATION_CLASS;
+
+typedef enum _THREAD_INFORMATION_CLASS {
+    ThreadBasicInformation,
+    ThreadTimes,
+    ThreadPriority,
+    ThreadBasePriority,
+    ThreadAffinityMask,
+    ThreadImpersonationToken,
+    ThreadDescriptorTableEntry,
+    ThreadEnableAlignmentFaultFixup,
+    ThreadEventPair,
+    ThreadQuerySetWin32StartAddress,
+    ThreadZeroTlsCell,
+    ThreadPerformanceCount,
+    ThreadAmILastThread,
+    ThreadIdealProcessor,
+    ThreadPriorityBoost,
+    ThreadSetTlsArrayAddress,
+    ThreadIsIoPending,
+    ThreadHideFromDebugger
+} THREAD_INFORMATION_CLASS, *PTHREAD_INFORMATION_CLASS;
+
+typedef enum _TCP_TABLE_CLASS {
+  TCP_TABLE_BASIC_LISTENER,
+  TCP_TABLE_BASIC_CONNECTIONS,
+  TCP_TABLE_BASIC_ALL,
+  TCP_TABLE_OWNER_PID_LISTENER,
+  TCP_TABLE_OWNER_PID_CONNECTIONS,
+  TCP_TABLE_OWNER_PID_ALL,
+  TCP_TABLE_OWNER_MODULE_LISTENER,
+  TCP_TABLE_OWNER_MODULE_CONNECTIONS,
+  TCP_TABLE_OWNER_MODULE_ALL
+} TCP_TABLE_CLASS;
+
+typedef enum _VARENUM{
+    VT_EMPTY	= 0,
+	VT_NULL	= 1,
+	VT_I2	= 2,
+	VT_I4	= 3,
+	VT_R4	= 4,
+	VT_R8	= 5,
+	VT_CY	= 6,
+	VT_DATE	= 7,
+	VT_BSTR	= 8,
+	VT_DISPATCH	= 9,
+	VT_ERROR	= 10,
+	VT_BOOL	= 11,
+	VT_VARIANT	= 12,
+	VT_UNKNOWN	= 13,
+	VT_DECIMAL	= 14,
+	VT_I1	= 16,
+	VT_UI1	= 17,
+	VT_UI2	= 18,
+	VT_UI4	= 19,
+	VT_I8	= 20,
+	VT_UI8	= 21,
+	VT_INT	= 22,
+	VT_UINT	= 23,
+	VT_VOID	= 24,
+	VT_HRESULT	= 25,
+	VT_PTR	= 26,
+	VT_SAFEARRAY	= 27,
+	VT_CARRAY	= 28,
+	VT_USERDEFINED	= 29,
+	VT_LPSTR	= 30,
+	VT_LPWSTR	= 31,
+	VT_RECORD	= 36,
+	VT_INT_PTR	= 37,
+	VT_UINT_PTR	= 38,
+	VT_FILETIME	= 64,
+	VT_BLOB	= 65,
+	VT_STREAM	= 66,
+	VT_STORAGE	= 67,
+	VT_STREAMED_OBJECT	= 68,
+	VT_STORED_OBJECT	= 69,
+	VT_BLOB_OBJECT	= 70,
+	VT_CF	= 71,
+	VT_CLSID	= 72,
+	VT_VERSIONED_STREAM	= 73,
+	VT_BSTR_BLOB	= 0xfff,
+	VT_VECTOR	= 0x1000,
+	VT_ARRAY	= 0x2000,
+	VT_BYREF	= 0x4000,
+	VT_RESERVED	= 0x8000,
+	VT_ILLEGAL	= 0xffff,
+	VT_ILLEGALMASKED	= 0xfff,
+	VT_TYPEMASK	= 0xfff
+} VARENUM;
+
+typedef enum  _UDP_TABLE_CLASS{
+  UDP_TABLE_BASIC,
+  UDP_TABLE_OWNER_PID,
+  UDP_TABLE_OWNER_MODULE
+} UDP_TABLE_CLASS;
+
+typedef enum _MIB_TCP_STATE{
+    MIB_TCP_STATE_CLOSED     =  1,
+    MIB_TCP_STATE_LISTEN     =  2,
+    MIB_TCP_STATE_SYN_SENT   =  3,
+    MIB_TCP_STATE_SYN_RCVD   =  4,
+    MIB_TCP_STATE_ESTAB      =  5,
+    MIB_TCP_STATE_FIN_WAIT1  =  6,
+    MIB_TCP_STATE_FIN_WAIT2  =  7,
+    MIB_TCP_STATE_CLOSE_WAIT =  8,
+    MIB_TCP_STATE_CLOSING    =  9,
+    MIB_TCP_STATE_LAST_ACK   = 10,
+    MIB_TCP_STATE_TIME_WAIT  = 11,
+    MIB_TCP_STATE_DELETE_TCB = 12,
+} MIB_TCP_STATE;
+
+typedef enum _TOKEN_INFORMATION_CLASS {
+  TokenInvalid,
+  TokenUser,
+  TokenGroups,
+  TokenPrivileges,
+  TokenOwner,
+  TokenPrimaryGroup,
+  TokenDefaultDacl,
+  TokenSource,
+  TokenType,
+  TokenImpersonationLevel,
+  TokenStatistics,
+  TokenRestrictedSids,
+  TokenSessionId,
+  TokenGroupsAndPrivileges,
+  TokenSessionReference,
+  TokenSandBoxInert,
+  TokenAuditPolicy,
+  TokenOrigin,
+  TokenElevationType,
+  TokenLinkedToken,
+  TokenElevation,
+  TokenHasRestrictions,
+  TokenAccessInformation,
+  TokenVirtualizationAllowed,
+  TokenVirtualizationEnabled,
+  TokenIntegrityLevel,
+  TokenUIAccess,
+  TokenMandatoryPolicy,
+  TokenLogonSid,
+  TokenIsAppContainer,
+  TokenCapabilities,
+  TokenAppContainerSid,
+  TokenAppContainerNumber,
+  TokenUserClaimAttributes,
+  TokenDeviceClaimAttributes,
+  TokenRestrictedUserClaimAttributes,
+  TokenRestrictedDeviceClaimAttributes,
+  TokenDeviceGroups,
+  TokenRestrictedDeviceGroups,
+  TokenSecurityAttributes,
+  TokenIsRestricted,
+  MaxTokenInfoClass,
+} TOKEN_INFORMATION_CLASS, *PTOKEN_INFORMATION_CLASS;
+
+typedef struct _LDR_DATA_TABLE_ENTRY {
+    PVOID Reserved1[2];
+    LIST_ENTRY InMemoryOrderLinks;
+    PVOID Reserved2[2];
+    PVOID DllBase;
+    PVOID EntryPoint;
+    PVOID Reserved3;
+    UNICODE_STRING FullDllName;
+    UNICODE_STRING BaseDllName;
+    PVOID Reserved5[3];
+    ULONG CheckSum;
+    ULONG TimeDateStamp;
+} LDR_DATA_TABLE_ENTRY, *PLDR_DATA_TABLE_ENTRY;
+
+
+typedef struct _IMAGE_FILE_HEADER {
+  WORD  Machine;
+  WORD  NumberOfSections;
+  DWORD TimeDateStamp;
+  DWORD PointerToSymbolTable;
+  DWORD NumberOfSymbols;
+  WORD  SizeOfOptionalHeader;
+  WORD  Characteristics;
+} IMAGE_FILE_HEADER, *PIMAGE_FILE_HEADER;
+
+typedef struct _IMAGE_DATA_DIRECTORY {
+  DWORD VirtualAddress;
+  DWORD Size;
+} IMAGE_DATA_DIRECTORY, *PIMAGE_DATA_DIRECTORY;
+
+
+typedef struct _IMAGE_SECTION_HEADER {
+  BYTE  Name[IMAGE_SIZEOF_SHORT_NAME];
+  DWORD VirtualSize;
+  DWORD VirtualAddress;
+  DWORD SizeOfRawData;
+  DWORD PointerToRawData;
+  DWORD PointerToRelocations;
+  DWORD PointerToLinenumbers;
+  WORD  NumberOfRelocations;
+  WORD  NumberOfLinenumbers;
+  DWORD Characteristics;
+} IMAGE_SECTION_HEADER, *PIMAGE_SECTION_HEADER;
+
+typedef struct _IMAGE_OPTIONAL_HEADER64 {
+    WORD        Magic;
+    BYTE        MajorLinkerVersion;
+    BYTE        MinorLinkerVersion;
+    DWORD       SizeOfCode;
+    DWORD       SizeOfInitializedData;
+    DWORD       SizeOfUninitializedData;
+    DWORD       AddressOfEntryPoint;
+    DWORD       BaseOfCode;
+    ULONGLONG   ImageBase;
+    DWORD       SectionAlignment;
+    DWORD       FileAlignment;
+    WORD        MajorOperatingSystemVersion;
+    WORD        MinorOperatingSystemVersion;
+    WORD        MajorImageVersion;
+    WORD        MinorImageVersion;
+    WORD        MajorSubsystemVersion;
+    WORD        MinorSubsystemVersion;
+    DWORD       Win32VersionValue;
+    DWORD       SizeOfImage;
+    DWORD       SizeOfHeaders;
+    DWORD       CheckSum;
+    WORD        Subsystem;
+    WORD        DllCharacteristics;
+    ULONGLONG   SizeOfStackReserve;
+    ULONGLONG   SizeOfStackCommit;
+    ULONGLONG   SizeOfHeapReserve;
+    ULONGLONG   SizeOfHeapCommit;
+    DWORD       LoaderFlags;
+    DWORD       NumberOfRvaAndSizes;
+    IMAGE_DATA_DIRECTORY DataDirectory[IMAGE_NUMBEROF_DIRECTORY_ENTRIES];
+} IMAGE_OPTIONAL_HEADER64, *PIMAGE_OPTIONAL_HEADER64;
+
+
+typedef struct _IMAGE_OPTIONAL_HEADER {
+    WORD    Magic;
+    BYTE    MajorLinkerVersion;
+    BYTE    MinorLinkerVersion;
+    DWORD   SizeOfCode;
+    DWORD   SizeOfInitializedData;
+    DWORD   SizeOfUninitializedData;
+    DWORD   AddressOfEntryPoint;
+    DWORD   BaseOfCode;
+    DWORD   BaseOfData;
+    DWORD   ImageBase;
+    DWORD   SectionAlignment;
+    DWORD   FileAlignment;
+    WORD    MajorOperatingSystemVersion;
+    WORD    MinorOperatingSystemVersion;
+    WORD    MajorImageVersion;
+    WORD    MinorImageVersion;
+    WORD    MajorSubsystemVersion;
+    WORD    MinorSubsystemVersion;
+    DWORD   Win32VersionValue;
+    DWORD   SizeOfImage;
+    DWORD   SizeOfHeaders;
+    DWORD   CheckSum;
+    WORD    Subsystem;
+    WORD    DllCharacteristics;
+    DWORD   SizeOfStackReserve;
+    DWORD   SizeOfStackCommit;
+    DWORD   SizeOfHeapReserve;
+    DWORD   SizeOfHeapCommit;
+    DWORD   LoaderFlags;
+    DWORD   NumberOfRvaAndSizes;
+    IMAGE_DATA_DIRECTORY DataDirectory[IMAGE_NUMBEROF_DIRECTORY_ENTRIES];
+} IMAGE_OPTIONAL_HEADER32, *PIMAGE_OPTIONAL_HEADER32;
+
+typedef struct _IMAGE_NT_HEADERS64 {
+    DWORD Signature;
+    IMAGE_FILE_HEADER FileHeader;
+    IMAGE_OPTIONAL_HEADER64 OptionalHeader;
+} IMAGE_NT_HEADERS64, *PIMAGE_NT_HEADERS64;
+
+typedef struct _IMAGE_NT_HEADERS {
+    DWORD Signature;
+    IMAGE_FILE_HEADER FileHeader;
+    IMAGE_OPTIONAL_HEADER32 OptionalHeader;
+} IMAGE_NT_HEADERS32, *PIMAGE_NT_HEADERS32;
+
+typedef struct _IMAGE_IMPORT_DESCRIPTOR {
+    DWORD   OriginalFirstThunk;
+    DWORD   TimeDateStamp;
+    DWORD   ForwarderChain;
+    DWORD   Name;
+    DWORD   FirstThunk;
+} IMAGE_IMPORT_DESCRIPTOR, *PIMAGE_IMPORT_DESCRIPTOR;
+
+typedef struct _IMAGE_IMPORT_BY_NAME {
+    WORD    Hint;
+    BYTE    Name[1];
+} IMAGE_IMPORT_BY_NAME, *PIMAGE_IMPORT_BY_NAME;
+
+typedef struct _IMAGE_EXPORT_DIRECTORY {
+    DWORD   Characteristics;
+    DWORD   TimeDateStamp;
+    WORD    MajorVersion;
+    WORD    MinorVersion;
+    DWORD   Name;
+    DWORD   Base;
+    DWORD   NumberOfFunctions;
+    DWORD   NumberOfNames;
+    DWORD   AddressOfFunctions;
+    DWORD   AddressOfNames;
+    DWORD   AddressOfNameOrdinals;
+} IMAGE_EXPORT_DIRECTORY, *PIMAGE_EXPORT_DIRECTORY;
+
+typedef struct _MEMORY_BASIC_INFORMATION {
+  PVOID  BaseAddress;
+  PVOID  AllocationBase;
+  DWORD  AllocationProtect;
+  SIZE_T RegionSize;
+  DWORD  State;
+  DWORD  Protect;
+  DWORD  Type;
+} MEMORY_BASIC_INFORMATION, *PMEMORY_BASIC_INFORMATION;
+
+typedef struct _MEMORY_BASIC_INFORMATION32 {
+    DWORD BaseAddress;
+    DWORD AllocationBase;
+    DWORD AllocationProtect;
+    DWORD RegionSize;
+    DWORD State;
+    DWORD Protect;
+    DWORD Type;
+} MEMORY_BASIC_INFORMATION32, *PMEMORY_BASIC_INFORMATION32;
+
+typedef struct _MEMORY_BASIC_INFORMATION64 {
+    ULONGLONG BaseAddress;
+    ULONGLONG AllocationBase;
+    DWORD     AllocationProtect;
+    DWORD     __alignment1;
+    ULONGLONG RegionSize;
+    DWORD     State;
+    DWORD     Protect;
+    DWORD     Type;
+    DWORD     __alignment2;
+} MEMORY_BASIC_INFORMATION64, *PMEMORY_BASIC_INFORMATION64;
+
+typedef struct _STARTUPINFOA {
+    DWORD   cb;
+    LPSTR   lpReserved;
+    LPSTR   lpDesktop;
+    LPSTR   lpTitle;
+    DWORD   dwX;
+    DWORD   dwY;
+    DWORD   dwXSize;
+    DWORD   dwYSize;
+    DWORD   dwXCountChars;
+    DWORD   dwYCountChars;
+    DWORD   dwFillAttribute;
+    DWORD   dwFlags;
+    WORD    wShowWindow;
+    WORD    cbReserved2;
+    LPBYTE  lpReserved2;
+    HANDLE  hStdInput;
+    HANDLE  hStdOutput;
+    HANDLE  hStdError;
+} STARTUPINFOA, *LPSTARTUPINFOA;
+typedef struct _STARTUPINFOW {
+    DWORD   cb;
+    LPWSTR  lpReserved;
+    LPWSTR  lpDesktop;
+    LPWSTR  lpTitle;
+    DWORD   dwX;
+    DWORD   dwY;
+    DWORD   dwXSize;
+    DWORD   dwYSize;
+    DWORD   dwXCountChars;
+    DWORD   dwYCountChars;
+    DWORD   dwFillAttribute;
+    DWORD   dwFlags;
+    WORD    wShowWindow;
+    WORD    cbReserved2;
+    LPBYTE  lpReserved2;
+    HANDLE  hStdInput;
+    HANDLE  hStdOutput;
+    HANDLE  hStdError;
+} STARTUPINFOW, *LPSTARTUPINFOW;
+
+typedef struct _PROCESS_INFORMATION {
+    HANDLE hProcess;
+    HANDLE hThread;
+    DWORD dwProcessId;
+    DWORD dwThreadId;
+} PROCESS_INFORMATION, *PPROCESS_INFORMATION, *LPPROCESS_INFORMATION;
+
+
+typedef struct _FLOATING_SAVE_AREA {
+    DWORD   ControlWord;
+    DWORD   StatusWord;
+    DWORD   TagWord;
+    DWORD   ErrorOffset;
+    DWORD   ErrorSelector;
+    DWORD   DataOffset;
+    DWORD   DataSelector;
+    BYTE    RegisterArea[80];
+    DWORD   Cr0NpxState;
+} FLOATING_SAVE_AREA;
+
+typedef struct _CONTEXT32 {
+
+    DWORD ContextFlags;
+
+    DWORD   Dr0;
+    DWORD   Dr1;
+    DWORD   Dr2;
+    DWORD   Dr3;
+    DWORD   Dr6;
+    DWORD   Dr7;
+
+    FLOATING_SAVE_AREA FloatSave;
+
+    DWORD   SegGs;
+    DWORD   SegFs;
+    DWORD   SegEs;
+    DWORD   SegDs;
+
+    DWORD   Edi;
+    DWORD   Esi;
+    DWORD   Ebx;
+    DWORD   Edx;
+    DWORD   Ecx;
+    DWORD   Eax;
+
+    DWORD   Ebp;
+    DWORD   Eip;
+    DWORD   SegCs;
+    DWORD   EFlags;
+    DWORD   Esp;
+    DWORD   SegSs;
+
+    BYTE    ExtendedRegisters[512];
+
+} CONTEXT32, *PCONTEXT32, *LPCONTEXT32;
+
+typedef struct _WOW64_FLOATING_SAVE_AREA {
+    DWORD   ControlWord;
+    DWORD   StatusWord;
+    DWORD   TagWord;
+    DWORD   ErrorOffset;
+    DWORD   ErrorSelector;
+    DWORD   DataOffset;
+    DWORD   DataSelector;
+    BYTE    RegisterArea[WOW64_SIZE_OF_80387_REGISTERS];
+    DWORD   Cr0NpxState;
+} WOW64_FLOATING_SAVE_AREA;
+
+typedef struct _WOW64_CONTEXT {
+
+    DWORD ContextFlags;
+
+    DWORD   Dr0;
+    DWORD   Dr1;
+    DWORD   Dr2;
+    DWORD   Dr3;
+    DWORD   Dr6;
+    DWORD   Dr7;
+
+    WOW64_FLOATING_SAVE_AREA FloatSave;
+
+    DWORD   SegGs;
+    DWORD   SegFs;
+    DWORD   SegEs;
+    DWORD   SegDs;
+
+    DWORD   Edi;
+    DWORD   Esi;
+    DWORD   Ebx;
+    DWORD   Edx;
+    DWORD   Ecx;
+    DWORD   Eax;
+    DWORD   Ebp;
+    DWORD   Eip;
+    DWORD   SegCs;
+    DWORD   EFlags;
+    DWORD   Esp;
+    DWORD   SegSs;
+
+    BYTE    ExtendedRegisters[WOW64_MAXIMUM_SUPPORTED_EXTENSION];
+
+} WOW64_CONTEXT, *PWOW64_CONTEXT;
+
+
+typedef struct _M128A {
+    ULONGLONG Low;
+    LONGLONG High;
+} M128A, *PM128A;
+
+typedef struct _CONTEXT64 {
+
+    DWORD64 P1Home;
+    DWORD64 P2Home;
+    DWORD64 P3Home;
+    DWORD64 P4Home;
+    DWORD64 P5Home;
+    DWORD64 P6Home;
+
+    DWORD ContextFlags;
+    DWORD MxCsr;
+
+    WORD   SegCs;
+    WORD   SegDs;
+    WORD   SegEs;
+    WORD   SegFs;
+    WORD   SegGs;
+    WORD   SegSs;
+    DWORD EFlags;
+
+    DWORD64 Dr0;
+    DWORD64 Dr1;
+    DWORD64 Dr2;
+    DWORD64 Dr3;
+    DWORD64 Dr6;
+    DWORD64 Dr7;
+
+
+    DWORD64 Rax;
+    DWORD64 Rcx;
+    DWORD64 Rdx;
+    DWORD64 Rbx;
+    DWORD64 Rsp;
+    DWORD64 Rbp;
+    DWORD64 Rsi;
+    DWORD64 Rdi;
+    DWORD64 R8;
+    DWORD64 R9;
+    DWORD64 R10;
+    DWORD64 R11;
+    DWORD64 R12;
+    DWORD64 R13;
+    DWORD64 R14;
+    DWORD64 R15;
+
+    DWORD64 Rip;
+
+    M128A Header[2];
+    M128A Legacy[8];
+    M128A Xmm0;
+    M128A Xmm1;
+    M128A Xmm2;
+    M128A Xmm3;
+    M128A Xmm4;
+    M128A Xmm5;
+    M128A Xmm6;
+    M128A Xmm7;
+    M128A Xmm8;
+    M128A Xmm9;
+    M128A Xmm10;
+    M128A Xmm11;
+    M128A Xmm12;
+    M128A Xmm13;
+    M128A Xmm14;
+    M128A Xmm15;
+
+    M128A VectorRegister[26];
+    DWORD64 VectorControl;
+
+    DWORD64 DebugControl;
+    DWORD64 LastBranchToRip;
+    DWORD64 LastBranchFromRip;
+    DWORD64 LastExceptionToRip;
+    DWORD64 LastExceptionFromRip;
+} CONTEXT64, *PCONTEXT64, *LPCONTEXT64;
+
+
+typedef struct tagPROCESSENTRY32W
+{
+    DWORD   dwSize;
+    DWORD   cntUsage;
+    DWORD   th32ProcessID;
+    ULONG_PTR th32DefaultHeapID;
+    DWORD   th32ModuleID;
+    DWORD   cntThreads;
+    DWORD   th32ParentProcessID;
+    LONG    pcPriClassBase;
+    DWORD   dwFlags;
+    WCHAR   szExeFile[MAX_PATH];
+} PROCESSENTRY32W, *PPROCESSENTRY32W, *LPPROCESSENTRY32W;
+
+
+typedef struct tagPROCESSENTRY32
+{
+    DWORD   dwSize;
+    DWORD   cntUsage;
+    DWORD   th32ProcessID;
+    ULONG_PTR th32DefaultHeapID;
+    DWORD   th32ModuleID;
+    DWORD   cntThreads;
+    DWORD   th32ParentProcessID;
+    LONG    pcPriClassBase;
+    DWORD   dwFlags;
+    CHAR    szExeFile[MAX_PATH];
+} PROCESSENTRY32, *PPROCESSENTRY32, *LPPROCESSENTRY32;
+
+
+typedef struct tagTHREADENTRY32 {
+  DWORD dwSize;
+  DWORD cntUsage;
+  DWORD th32ThreadID;
+  DWORD th32OwnerProcessID;
+  LONG  tpBasePri;
+  LONG  tpDeltaPri;
+  DWORD dwFlags;
+} THREADENTRY32, *PTHREADENTRY32, *LPTHREADENTRY32;
+
+typedef struct _LUID {
+  DWORD LowPart;
+  LONG  HighPart;
+} LUID, *PLUID;
+
+
+typedef struct _LUID_AND_ATTRIBUTES {
+  LUID  Luid;
+  DWORD Attributes;
+} LUID_AND_ATTRIBUTES, *PLUID_AND_ATTRIBUTES;
+
+typedef struct _TOKEN_PRIVILEGES {
+  DWORD               PrivilegeCount;
+  LUID_AND_ATTRIBUTES Privileges[ANYSIZE_ARRAY];
+} TOKEN_PRIVILEGES, *PTOKEN_PRIVILEGES;
+
+typedef struct _TOKEN_ELEVATION {
+  DWORD TokenIsElevated;
+} TOKEN_ELEVATION, *PTOKEN_ELEVATION;
+
+typedef struct _OSVERSIONINFOA {
+    DWORD dwOSVersionInfoSize;
+    DWORD dwMajorVersion;
+    DWORD dwMinorVersion;
+    DWORD dwBuildNumber;
+    DWORD dwPlatformId;
+    CHAR   szCSDVersion[ 128 ];
+} OSVERSIONINFOA, *POSVERSIONINFOA, *LPOSVERSIONINFOA;
+
+typedef struct _OSVERSIONINFOW {
+    DWORD dwOSVersionInfoSize;
+    DWORD dwMajorVersion;
+    DWORD dwMinorVersion;
+    DWORD dwBuildNumber;
+    DWORD dwPlatformId;
+    WCHAR  szCSDVersion[ 128 ];
+} OSVERSIONINFOW, *POSVERSIONINFOW, *LPOSVERSIONINFOW, RTL_OSVERSIONINFOW, *PRTL_OSVERSIONINFOW;
+
+typedef struct _OSVERSIONINFOEXA {
+    DWORD dwOSVersionInfoSize;
+    DWORD dwMajorVersion;
+    DWORD dwMinorVersion;
+    DWORD dwBuildNumber;
+    DWORD dwPlatformId;
+    CHAR   szCSDVersion[ 128 ];
+    WORD   wServicePackMajor;
+    WORD   wServicePackMinor;
+    WORD   wSuiteMask;
+    BYTE  wProductType;
+    BYTE  wReserved;
+} OSVERSIONINFOEXA, *POSVERSIONINFOEXA, *LPOSVERSIONINFOEXA;
+
+typedef struct _OSVERSIONINFOEXW {
+    DWORD dwOSVersionInfoSize;
+    DWORD dwMajorVersion;
+    DWORD dwMinorVersion;
+    DWORD dwBuildNumber;
+    DWORD dwPlatformId;
+    WCHAR  szCSDVersion[ 128 ];
+    WORD   wServicePackMajor;
+    WORD   wServicePackMinor;
+    WORD   wSuiteMask;
+    BYTE  wProductType;
+    BYTE  wReserved;
+} OSVERSIONINFOEXW, *POSVERSIONINFOEXW, *LPOSVERSIONINFOEXW, RTL_OSVERSIONINFOEXW, *PRTL_OSVERSIONINFOEXW;
+
+
+typedef struct _OVERLAPPED {
+  ULONG_PTR Internal;
+  ULONG_PTR InternalHigh;
+  PVOID  Pointer;
+  HANDLE    hEvent;
+} OVERLAPPED, *LPOVERLAPPED;
+
+typedef struct _MIB_TCPROW_OWNER_PID {
+  DWORD dwState;
+  DWORD dwLocalAddr;
+  DWORD dwLocalPort;
+  DWORD dwRemoteAddr;
+  DWORD dwRemotePort;
+  DWORD dwOwningPid;
+} MIB_TCPROW_OWNER_PID, *PMIB_TCPROW_OWNER_PID;
+
+typedef struct _MIB_TCPTABLE_OWNER_PID{
+  DWORD                dwNumEntries;
+  MIB_TCPROW_OWNER_PID table[ANY_SIZE];
+} MIB_TCPTABLE_OWNER_PID, *PMIB_TCPTABLE_OWNER_PID;
+
+typedef struct _MIB_UDPROW_OWNER_PID {
+  DWORD dwLocalAddr;
+  DWORD dwLocalPort;
+  DWORD dwOwningPid;
+} MIB_UDPROW_OWNER_PID, *PMIB_UDPROW_OWNER_PID;
+
+typedef struct _MIB_UDPTABLE_OWNER_PID {
+  DWORD                dwNumEntries;
+  MIB_UDPROW_OWNER_PID table[ANY_SIZE];
+} MIB_UDPTABLE_OWNER_PID, *PMIB_UDPTABLE_OWNER_PID;
+
+
+typedef struct _MIB_UDP6ROW_OWNER_PID {
+  UCHAR ucLocalAddr[16];
+  DWORD dwLocalScopeId;
+  DWORD dwLocalPort;
+  DWORD dwOwningPid;
+} MIB_UDP6ROW_OWNER_PID, *PMIB_UDP6ROW_OWNER_PID;
+
+typedef struct _MIB_UDP6TABLE_OWNER_PID{
+  DWORD                 dwNumEntries;
+  MIB_UDP6ROW_OWNER_PID table[ANY_SIZE];
+} MIB_UDP6TABLE_OWNER_PID, *PMIB_UDP6TABLE_OWNER_PID;
+
+typedef struct _MIB_TCP6ROW_OWNER_PID {
+  UCHAR ucLocalAddr[16];
+  DWORD dwLocalScopeId;
+  DWORD dwLocalPort;
+  UCHAR ucRemoteAddr[16];
+  DWORD dwRemoteScopeId;
+  DWORD dwRemotePort;
+  DWORD dwState;
+  DWORD dwOwningPid;
+} MIB_TCP6ROW_OWNER_PID, *PMIB_TCP6ROW_OWNER_PID;
+
+typedef struct _MIB_TCP6TABLE_OWNER_PID {
+  DWORD                 dwNumEntries;
+  MIB_TCP6ROW_OWNER_PID table[ANY_SIZE];
+} MIB_TCP6TABLE_OWNER_PID, *PMIB_TCP6TABLE_OWNER_PID;
+
+typedef struct _MIB_TCPROW {
+  DWORD dwState;
+  DWORD dwLocalAddr;
+  DWORD dwLocalPort;
+  DWORD dwRemoteAddr;
+  DWORD dwRemotePort;
+} MIB_TCPROW, *PMIB_TCPROW;
+
+typedef struct _EXCEPTION_RECORD {
+  DWORD                    ExceptionCode;
+  DWORD                    ExceptionFlags;
+  struct _EXCEPTION_RECORD  *ExceptionRecord;
+  PVOID                    ExceptionAddress;
+  DWORD                    NumberParameters;
+  ULONG_PTR                ExceptionInformation[EXCEPTION_MAXIMUM_PARAMETERS];
+} EXCEPTION_RECORD, *PEXCEPTION_RECORD;
+
+typedef struct _EXCEPTION_RECORD32 {
+    DWORD    ExceptionCode;
+    DWORD ExceptionFlags;
+    DWORD ExceptionRecord;
+    DWORD ExceptionAddress;
+    DWORD NumberParameters;
+    DWORD ExceptionInformation[EXCEPTION_MAXIMUM_PARAMETERS];
+} EXCEPTION_RECORD32, *PEXCEPTION_RECORD32;
+
+typedef struct _EXCEPTION_RECORD64 {
+    DWORD    ExceptionCode;
+    DWORD ExceptionFlags;
+    DWORD64 ExceptionRecord;
+    DWORD64 ExceptionAddress;
+    DWORD NumberParameters;
+    DWORD __unusedAlignment;
+    DWORD64 ExceptionInformation[EXCEPTION_MAXIMUM_PARAMETERS];
+} EXCEPTION_RECORD64, *PEXCEPTION_RECORD64;
+
+
+typedef struct _EXCEPTION_POINTERS64 {
+  PEXCEPTION_RECORD ExceptionRecord;
+  PCONTEXT64          ContextRecord;
+} EXCEPTION_POINTERS64, *PEXCEPTION_POINTERS64;
+
+
+typedef struct _EXCEPTION_POINTERS32 {
+  PEXCEPTION_RECORD ExceptionRecord;
+  PCONTEXT32          ContextRecord;
+} EXCEPTION_POINTERS32, *PEXCEPTION_POINTERS32;
+
+
+typedef struct _DEBUG_PROCESSOR_IDENTIFICATION_ALPHA
+{
+    ULONG Type;
+    ULONG Revision;
+} DEBUG_PROCESSOR_IDENTIFICATION_ALPHA, *PDEBUG_PROCESSOR_IDENTIFICATION_ALPHA;
+
+typedef struct _DEBUG_PROCESSOR_IDENTIFICATION_AMD64
+{
+    ULONG Family;
+    ULONG Model;
+    ULONG Stepping;
+    CHAR  VendorString[16];
+} DEBUG_PROCESSOR_IDENTIFICATION_AMD64, *PDEBUG_PROCESSOR_IDENTIFICATION_AMD64;
+
+typedef struct _DEBUG_PROCESSOR_IDENTIFICATION_IA64
+{
+    ULONG Model;
+    ULONG Revision;
+    ULONG Family;
+    ULONG ArchRev;
+    CHAR  VendorString[16];
+} DEBUG_PROCESSOR_IDENTIFICATION_IA64, *PDEBUG_PROCESSOR_IDENTIFICATION_IA64;
+
+typedef struct _DEBUG_PROCESSOR_IDENTIFICATION_X86
+{
+    ULONG Family;
+    ULONG Model;
+    ULONG Stepping;
+    CHAR  VendorString[16];
+} DEBUG_PROCESSOR_IDENTIFICATION_X86, *PDEBUG_PROCESSOR_IDENTIFICATION_X86;
+
+typedef struct _DEBUG_PROCESSOR_IDENTIFICATION_ARM
+{
+    ULONG Type;
+    ULONG Revision;
+} DEBUG_PROCESSOR_IDENTIFICATION_ARM, *PDEBUG_PROCESSOR_IDENTIFICATION_ARM;
+
+typedef union _DEBUG_PROCESSOR_IDENTIFICATION_ALL
+{
+    DEBUG_PROCESSOR_IDENTIFICATION_ALPHA Alpha;
+    DEBUG_PROCESSOR_IDENTIFICATION_AMD64 Amd64;
+    DEBUG_PROCESSOR_IDENTIFICATION_IA64  Ia64;
+    DEBUG_PROCESSOR_IDENTIFICATION_X86   X86;
+    DEBUG_PROCESSOR_IDENTIFICATION_ARM   Arm;
+} DEBUG_PROCESSOR_IDENTIFICATION_ALL, *PDEBUG_PROCESSOR_IDENTIFICATION_ALL;
+
+typedef enum _IMAGEHLP_SYMBOL_TYPE_INFO {
+    TI_GET_SYMTAG,
+    TI_GET_SYMNAME,
+    TI_GET_LENGTH,
+    TI_GET_TYPE,
+    TI_GET_TYPEID,
+    TI_GET_BASETYPE,
+    TI_GET_ARRAYINDEXTYPEID,
+    TI_FINDCHILDREN,
+    TI_GET_DATAKIND,
+    TI_GET_ADDRESSOFFSET,
+    TI_GET_OFFSET,
+    TI_GET_VALUE,
+    TI_GET_COUNT,
+    TI_GET_CHILDRENCOUNT,
+    TI_GET_BITPOSITION,
+    TI_GET_VIRTUALBASECLASS,
+    TI_GET_VIRTUALTABLESHAPEID,
+    TI_GET_VIRTUALBASEPOINTEROFFSET,
+    TI_GET_CLASSPARENTID,
+    TI_GET_NESTED,
+    TI_GET_SYMINDEX,
+    TI_GET_LEXICALPARENT,
+    TI_GET_ADDRESS,
+    TI_GET_THISADJUST,
+    TI_GET_UDTKIND,
+    TI_IS_EQUIV_TO,
+    TI_GET_CALLING_CONVENTION,
+    TI_IS_CLOSE_EQUIV_TO,
+    TI_GTIEX_REQS_VALID,
+    TI_GET_VIRTUALBASEOFFSET,
+    TI_GET_VIRTUALBASEDISPINDEX,
+    TI_GET_IS_REFERENCE,
+    TI_GET_INDIRECTVIRTUALBASECLASS,
+    IMAGEHLP_SYMBOL_TYPE_INFO_MAX,
+} IMAGEHLP_SYMBOL_TYPE_INFO;
+
+typedef struct _SYMBOL_INFO {
+  ULONG   SizeOfStruct;
+  ULONG   TypeIndex;
+  ULONG64 Reserved[2];
+  ULONG   Index;
+  ULONG   Size;
+  ULONG64 ModBase;
+  ULONG   Flags;
+  ULONG64 Value;
+  ULONG64 Address;
+  ULONG   Register;
+  ULONG   Scope;
+  ULONG   Tag;
+  ULONG   NameLen;
+  ULONG   MaxNameLen;
+  CHAR   Name[1];
+} SYMBOL_INFO, *PSYMBOL_INFO;
+
+typedef struct _MODLOAD_DATA {
+  DWORD ssize;
+  DWORD ssig;
+  PVOID data;
+  DWORD size;
+  DWORD flags;
+} MODLOAD_DATA, *PMODLOAD_DATA;
+
+typedef struct _SYSTEM_MODULE32
+{
+    ULONG Reserved[2];
+    ULONG Base;
+    ULONG Size;
+    ULONG Flags;
+    USHORT Index;
+    USHORT Unknown;
+    USHORT LoadCount;
+    USHORT ModuleNameOffset;
+    CHAR   ImageName[256];
+} SYSTEM_MODULE32, *PSYSTEM_MODULE32;
+
+typedef struct _SYSTEM_MODULE64
+{
+    ULONG Reserved[4];
+    ULONG64 Base;
+    ULONG Size;
+    ULONG Flags;
+    USHORT Index;
+    USHORT Unknown;
+    USHORT LoadCount;
+    USHORT ModuleNameOffset;
+    CHAR   ImageName[256];
+} SYSTEM_MODULE64, *PSYSTEM_MODULE64;
+
+typedef struct _SYSTEM_MODULE_INFORMATION32
+{
+  ULONG                ModulesCount;
+  SYSTEM_MODULE32        Modules[0];
+} SYSTEM_MODULE_INFORMATION32, *PSYSTEM_MODULE_INFORMATION32;
+
+typedef struct _SYSTEM_MODULE_INFORMATION64
+{
+  ULONG                ModulesCount;
+  SYSTEM_MODULE64        Modules[0];
+} SYSTEM_MODULE_INFORMATION64, *PSYSTEM_MODULE_INFORMATION64;
+
+
+typedef struct tagSAFEARRAYBOUND
+{
+    ULONG cElements;
+    LONG lLbound;
+} 	SAFEARRAYBOUND, *LPSAFEARRAYBOUND;
+
+
+typedef struct tagSAFEARRAY
+{
+  USHORT cDims;
+  USHORT fFeatures;
+  ULONG cbElements;
+  ULONG cLocks;
+  PVOID pvData;
+  SAFEARRAYBOUND rgsabound[ 1 ];
+} 	SAFEARRAY;
+
+typedef struct _DEBUG_BREAKPOINT_PARAMETERS {
+  ULONG64 Offset;
+  ULONG   Id;
+  ULONG   BreakType;
+  ULONG   ProcType;
+  ULONG   Flags;
+  ULONG   DataSize;
+  ULONG   DataAccessType;
+  ULONG   PassCount;
+  ULONG   CurrentPassCount;
+  ULONG   MatchThread;
+  ULONG   CommandSize;
+  ULONG   OffsetExpressionSize;
+} DEBUG_BREAKPOINT_PARAMETERS, *PDEBUG_BREAKPOINT_PARAMETERS;
+
+
+typedef struct _DEBUG_REGISTER_DESCRIPTION {
+  ULONG   Type;
+  ULONG   Flags;
+  ULONG   SubregMaster;
+  ULONG   SubregLength;
+  ULONG64 SubregMask;
+  ULONG   SubregShift;
+  ULONG   Reserved0;
+} DEBUG_REGISTER_DESCRIPTION, *PDEBUG_REGISTER_DESCRIPTION;
+
+
+typedef struct _DEBUG_STACK_FRAME {
+  ULONG64 InstructionOffset;
+  ULONG64 ReturnOffset;
+  ULONG64 FrameOffset;
+  ULONG64 StackOffset;
+  ULONG64 FuncTableEntry;
+  ULONG64 Params[4];
+  ULONG64 Reserved[6];
+  BOOL    Virtual;
+  ULONG   FrameNumber;
+} DEBUG_STACK_FRAME, *PDEBUG_STACK_FRAME;
+
+
+typedef struct _DEBUG_LAST_EVENT_INFO_BREAKPOINT
+{
+    ULONG Id;
+} DEBUG_LAST_EVENT_INFO_BREAKPOINT, *PDEBUG_LAST_EVENT_INFO_BREAKPOINT;
+
+typedef struct _DEBUG_LAST_EVENT_INFO_EXCEPTION
+{
+    EXCEPTION_RECORD64 ExceptionRecord;
+    ULONG FirstChance;
+} DEBUG_LAST_EVENT_INFO_EXCEPTION, *PDEBUG_LAST_EVENT_INFO_EXCEPTION;
+
+typedef struct _DEBUG_LAST_EVENT_INFO_EXIT_THREAD
+{
+    ULONG ExitCode;
+} DEBUG_LAST_EVENT_INFO_EXIT_THREAD, *PDEBUG_LAST_EVENT_INFO_EXIT_THREAD;
+
+typedef struct _DEBUG_LAST_EVENT_INFO_EXIT_PROCESS
+{
+    ULONG ExitCode;
+} DEBUG_LAST_EVENT_INFO_EXIT_PROCESS, *PDEBUG_LAST_EVENT_INFO_EXIT_PROCESS;
+
+typedef struct _DEBUG_LAST_EVENT_INFO_LOAD_MODULE
+{
+    ULONG64 Base;
+} DEBUG_LAST_EVENT_INFO_LOAD_MODULE, *PDEBUG_LAST_EVENT_INFO_LOAD_MODULE;
+
+typedef struct _DEBUG_LAST_EVENT_INFO_UNLOAD_MODULE
+{
+    ULONG64 Base;
+} DEBUG_LAST_EVENT_INFO_UNLOAD_MODULE, *PDEBUG_LAST_EVENT_INFO_UNLOAD_MODULE;
+
+typedef struct _DEBUG_LAST_EVENT_INFO_SYSTEM_ERROR
+{
+    ULONG Error;
+    ULONG Level;
+} DEBUG_LAST_EVENT_INFO_SYSTEM_ERROR, *PDEBUG_LAST_EVENT_INFO_SYSTEM_ERROR;
+
+
+typedef struct _DEBUG_SPECIFIC_FILTER_PARAMETERS {
+  ULONG ExecutionOption;
+  ULONG ContinueOption;
+  ULONG TextSize;
+  ULONG CommandSize;
+  ULONG ArgumentSize;
+} DEBUG_SPECIFIC_FILTER_PARAMETERS, *PDEBUG_SPECIFIC_FILTER_PARAMETERS;
+
+
+typedef struct _DEBUG_EXCEPTION_FILTER_PARAMETERS {
+  ULONG ExecutionOption;
+  ULONG ContinueOption;
+  ULONG TextSize;
+  ULONG CommandSize;
+  ULONG SecondCommandSize;
+  ULONG ExceptionCode;
+} DEBUG_EXCEPTION_FILTER_PARAMETERS, *PDEBUG_EXCEPTION_FILTER_PARAMETERS;
+
+
+typedef enum _PROCESSINFOCLASS {
+    ProcessBasicInformation = 0,
+    ProcessWow64Information = 26
+} PROCESSINFOCLASS;
+
+typedef struct _GUID {
+    ULONG  Data1;
+    USHORT Data2;
+    USHORT Data3;
+    UCHAR  Data4[ 8 ];
+} GUID;
+
+typedef struct _CRYPTOAPI_BLOB {
+    DWORD   cbData;
+    BYTE    *pbData;
+} CRYPT_INTEGER_BLOB, *PCRYPT_INTEGER_BLOB,
+CRYPT_UINT_BLOB, *PCRYPT_UINT_BLOB,
+CRYPT_OBJID_BLOB, *PCRYPT_OBJID_BLOB,
+CERT_NAME_BLOB, *PCERT_NAME_BLOB,
+CERT_RDN_VALUE_BLOB, *PCERT_RDN_VALUE_BLOB,
+CERT_BLOB, *PCERT_BLOB,
+CRL_BLOB, *PCRL_BLOB,
+DATA_BLOB, *PDATA_BLOB,
+CRYPT_DATA_BLOB, *PCRYPT_DATA_BLOB,
+CRYPT_HASH_BLOB, *PCRYPT_HASH_BLOB,
+CRYPT_DIGEST_BLOB, *PCRYPT_DIGEST_BLOB,
+CRYPT_DER_BLOB, *PCRYPT_DER_BLOB,
+CRYPT_ATTR_BLOB, *PCRYPT_ATTR_BLOB;
+
+typedef struct WINTRUST_FILE_INFO_
+{
+    DWORD           cbStruct;
+    LPCWSTR         pcwszFilePath;
+    HANDLE          hFile;
+    GUID            *pgKnownSubject;
+} WINTRUST_FILE_INFO, *PWINTRUST_FILE_INFO;
+
+
+typedef struct _CRYPT_ATTRIBUTE {
+    LPSTR               pszObjId;
+    DWORD               cValue;
+    PCRYPT_ATTR_BLOB    rgValue;
+} CRYPT_ATTRIBUTE, *PCRYPT_ATTRIBUTE;
+
+
+typedef struct _CTL_ENTRY {
+    CRYPT_DATA_BLOB     SubjectIdentifier;
+    DWORD               cAttribute;
+    PCRYPT_ATTRIBUTE    rgAttribute;
+} CTL_ENTRY, *PCTL_ENTRY;
+
+
+typedef struct _CRYPT_ATTRIBUTE {
+    LPSTR               pszObjId;
+    DWORD               cValue;
+    PCRYPT_ATTR_BLOB    rgValue;
+} CRYPT_ATTRIBUTE, *PCRYPT_ATTRIBUTE;
+
+typedef struct _CRYPT_ATTRIBUTES {
+    DWORD                cAttr;
+    PCRYPT_ATTRIBUTE     rgAttr;
+} CRYPT_ATTRIBUTES, *PCRYPT_ATTRIBUTES;
+
+
+typedef struct _CRYPT_ALGORITHM_IDENTIFIER {
+    LPSTR               pszObjId;
+    CRYPT_OBJID_BLOB    Parameters;
+} CRYPT_ALGORITHM_IDENTIFIER, *PCRYPT_ALGORITHM_IDENTIFIER;
+
+typedef struct _CMSG_SIGNER_INFO {
+    DWORD                       dwVersion;
+    CERT_NAME_BLOB              Issuer;
+    CRYPT_INTEGER_BLOB          SerialNumber;
+    CRYPT_ALGORITHM_IDENTIFIER  HashAlgorithm;
+    CRYPT_ALGORITHM_IDENTIFIER  HashEncryptionAlgorithm;
+    CRYPT_DATA_BLOB             EncryptedHash;
+    CRYPT_ATTRIBUTES            AuthAttrs;
+    CRYPT_ATTRIBUTES            UnauthAttrs;
+} CMSG_SIGNER_INFO, *PCMSG_SIGNER_INFO;
+
+
+typedef struct _CERT_EXTENSION {
+    LPSTR               pszObjId;
+    BOOL                fCritical;
+    CRYPT_OBJID_BLOB    Value;
+} CERT_EXTENSION, *PCERT_EXTENSION;
+
+typedef struct _CTL_USAGE {
+    DWORD               cUsageIdentifier;
+    LPSTR               *rgpszUsageIdentifier;
+} CTL_USAGE, *PCTL_USAGE, CERT_ENHKEY_USAGE, *PCERT_ENHKEY_USAGE;
+
+typedef struct _CTL_INFO {
+    DWORD                       dwVersion;
+    CTL_USAGE                   SubjectUsage;
+    CRYPT_DATA_BLOB             ListIdentifier;
+    CRYPT_INTEGER_BLOB          SequenceNumber;
+    FILETIME                    ThisUpdate;
+    FILETIME                    NextUpdate;
+    CRYPT_ALGORITHM_IDENTIFIER  SubjectAlgorithm;
+    DWORD                       cCTLEntry;
+    PCTL_ENTRY                  rgCTLEntry;
+    DWORD                       cExtension;
+    PCERT_EXTENSION             rgExtension;
+} CTL_INFO, *PCTL_INFO;
+
+typedef struct _CTL_CONTEXT {
+    DWORD                   dwMsgAndCertEncodingType;
+    BYTE                    *pbCtlEncoded;
+    DWORD                   cbCtlEncoded;
+    PCTL_INFO               pCtlInfo;
+    HCERTSTORE              hCertStore;
+    HCRYPTMSG               hCryptMsg;
+    BYTE                    *pbCtlContent;
+    DWORD                   cbCtlContent;
+} CTL_CONTEXT, *PCTL_CONTEXT, *PCCTL_CONTEXT;
+
+
+typedef struct WINTRUST_CATALOG_INFO_
+{
+    DWORD           cbStruct;
+    DWORD           dwCatalogVersion;
+    LPCWSTR         pcwszCatalogFilePath;
+    LPCWSTR         pcwszMemberTag;
+    LPCWSTR         pcwszMemberFilePath;
+    HANDLE          hMemberFile;
+    BYTE            *pbCalculatedFileHash;
+    DWORD           cbCalculatedFileHash;
+    PCCTL_CONTEXT   pcCatalogContext;
+} WINTRUST_CATALOG_INFO, *PWINTRUST_CATALOG_INFO;
+
+
+typedef struct WINTRUST_BLOB_INFO_
+{
+    DWORD           cbStruct;
+    GUID            gSubject;
+    LPCWSTR         pcwszDisplayName;
+    DWORD           cbMemObject;
+    BYTE            *pbMemObject;
+    DWORD           cbMemSignedMsg;
+    BYTE            *pbMemSignedMsg;
+} WINTRUST_BLOB_INFO, *PWINTRUST_BLOB_INFO;
+
+
+typedef struct _CRYPT_BIT_BLOB {
+    DWORD   cbData;
+    BYTE    *pbData;
+    DWORD   cUnusedBits;
+} CRYPT_BIT_BLOB, *PCRYPT_BIT_BLOB;
+
+typedef struct _CERT_PUBLIC_KEY_INFO {
+    CRYPT_ALGORITHM_IDENTIFIER    Algorithm;
+    CRYPT_BIT_BLOB                PublicKey;
+} CERT_PUBLIC_KEY_INFO, *PCERT_PUBLIC_KEY_INFO;
+
+typedef struct _CERT_INFO {
+    DWORD                       dwVersion;
+    CRYPT_INTEGER_BLOB          SerialNumber;
+    CRYPT_ALGORITHM_IDENTIFIER  SignatureAlgorithm;
+    CERT_NAME_BLOB              Issuer;
+    FILETIME                    NotBefore;
+    FILETIME                    NotAfter;
+    CERT_NAME_BLOB              Subject;
+    CERT_PUBLIC_KEY_INFO        SubjectPublicKeyInfo;
+    CRYPT_BIT_BLOB              IssuerUniqueId;
+    CRYPT_BIT_BLOB              SubjectUniqueId;
+    DWORD                       cExtension;
+    PCERT_EXTENSION             rgExtension;
+} CERT_INFO, *PCERT_INFO;
+
+
+typedef struct _CERT_CONTEXT {
+    DWORD                   dwCertEncodingType;
+    BYTE                    *pbCertEncoded;
+    DWORD                   cbCertEncoded;
+    PCERT_INFO              pCertInfo;
+    HCERTSTORE              hCertStore;
+} CERT_CONTEXT, *PCERT_CONTEXT;
+
+
+typedef struct WINTRUST_SGNR_INFO_
+{
+    DWORD           cbStruct;
+    LPCWSTR         pcwszDisplayName;
+    CMSG_SIGNER_INFO *psSignerInfo;
+    DWORD           chStores;
+    HCERTSTORE      *pahStores;
+} WINTRUST_SGNR_INFO, *PWINTRUST_SGNR_INFO;
+
+
+typedef struct _FILETIME {
+    DWORD dwLowDateTime;
+    DWORD dwHighDateTime;
+} FILETIME, *PFILETIME, *LPFILETIME;
+
+typedef struct WINTRUST_CERT_INFO_
+{
+    DWORD           cbStruct;
+    LPCWSTR         pcwszDisplayName;
+    CERT_CONTEXT    *psCertContext;
+    DWORD           chStores;
+    HCERTSTORE      *pahStores;
+    DWORD           dwFlags;
+    FILETIME        *psftVerifyAsOf;
+} WINTRUST_CERT_INFO, *PWINTRUST_CERT_INFO;
+
+
+typedef union _TMP_WINTRUST_UNION_TYPE
+{
+        struct WINTRUST_FILE_INFO_      *pFile;
+        struct WINTRUST_CATALOG_INFO_   *pCatalog;
+        struct WINTRUST_BLOB_INFO_      *pBlob;
+        struct WINTRUST_SGNR_INFO_      *pSgnr;
+        struct WINTRUST_CERT_INFO_      *pCert;
+} TMP_WINTRUST_UNION_TYPE;
+
+
+typedef struct _WINTRUST_DATA
+{
+    DWORD           cbStruct;
+    LPVOID          pPolicyCallbackData;
+    LPVOID          pSIPClientData;
+    DWORD           dwUIChoice;
+    DWORD           fdwRevocationChecks;
+    DWORD           dwUnionChoice;
+
+    TMP_WINTRUST_UNION_TYPE tmp_union;
+
+    DWORD           dwStateAction;
+    HANDLE          hWVTStateData;
+    WCHAR           *pwszURLReference;
+    DWORD           dwProvFlags;
+    DWORD           dwUIContext;
+} WINTRUST_DATA, *PWINTRUST_DATA;
+
+
+typedef struct _PROCESS_BASIC_INFORMATION {
+    PVOID Reserved1;
+    PPEB PebBaseAddress;
+    PVOID Reserved2[2];
+    ULONG_PTR UniqueProcessId;
+    PVOID Reserved3;
+} PROCESS_BASIC_INFORMATION, *PPROCESS_BASIC_INFORMATION;
