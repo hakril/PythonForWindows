@@ -27,7 +27,6 @@ class Kernel32Error(WindowsError):
 
 
 class IphlpapiError(Kernel32Error):
-
     def __new__(cls, func_name, code):
         win_error = ctypes.WinError(code)
         api_error = super(Kernel32Error, cls).__new__(cls)
@@ -146,6 +145,11 @@ class Advapi32Proxy(ApiProxy):
     default_error_check = staticmethod(kernel32_error_check)
 
 
+class User32Proxy(ApiProxy):
+    APIDLL = "user32"
+    default_error_check = staticmethod(kernel32_error_check)
+
+
 class IphlpapiProxy(ApiProxy):
     APIDLL = "iphlpapi"
     default_error_check = staticmethod(iphlpapi_error_check)
@@ -199,6 +203,7 @@ class TransparentApiProxy(object):
 
 TransparentKernel32Proxy = lambda func_name, error_check=kernel32_error_check: TransparentApiProxy("kernel32", func_name, error_check)
 TransparentAdvapi32Proxy = lambda func_name, error_check=kernel32_error_check: TransparentApiProxy("advapi32", func_name, error_check)
+TransparentUser32Proxy = lambda func_name, error_check=kernel32_error_check: TransparentApiProxy("user32", func_name, error_check)
 TransparentIphlpapiProxy = lambda func_name, error_check=iphlpapi_error_check: TransparentApiProxy("iphlpapi", func_name, error_check)
 
 
@@ -237,6 +242,11 @@ GetThreadId = TransparentKernel32Proxy("GetThreadId")
 VirtualQueryEx = TransparentKernel32Proxy("VirtualQueryEx")
 GetExitCodeThread = TransparentKernel32Proxy("GetExitCodeThread")
 GetExitCodeProcess = TransparentKernel32Proxy("GetExitCodeProcess")
+
+GlobalAlloc = TransparentKernel32Proxy("GlobalAlloc")
+GlobalFree = TransparentKernel32Proxy("GlobalFree")
+GlobalLock = TransparentKernel32Proxy("GlobalLock")
+GlobalUnlock = TransparentKernel32Proxy("GlobalUnlock", error_check=no_error_check)
 
 Wow64DisableWow64FsRedirection = OptionalExport(TransparentKernel32Proxy)("Wow64DisableWow64FsRedirection")
 Wow64RevertWow64FsRedirection = OptionalExport(TransparentKernel32Proxy)("Wow64RevertWow64FsRedirection")
@@ -583,3 +593,24 @@ def GetExtendedTcpTable(pTcpTable, pdwSize=None, bOrder=True, ulAf=NeededParamet
     if pdwSize is None:
         ctypes.sizeof(pTcpTable)
     return GetExtendedTcpTable.ctypes_function(pTcpTable, pdwSize, bOrder, ulAf, TableClass, Reserved)
+
+
+# User32 #
+
+EmptyClipboard = TransparentUser32Proxy("EmptyClipboard")
+CloseClipboard = TransparentUser32Proxy("CloseClipboard")
+SetClipboardData = TransparentUser32Proxy("SetClipboardData")
+GetClipboardData = TransparentUser32Proxy("GetClipboardData")
+GetClipboardFormatNameA = TransparentUser32Proxy("GetClipboardFormatNameA")
+GetClipboardFormatNameW = TransparentUser32Proxy("GetClipboardFormatNameW")
+
+def check_zero_and_getlasterror(func_name, result, func, args):
+    if not result and GetLastError() != 0:
+        raise Kernel32Error(func_name)
+    return args
+
+EnumClipboardFormats = TransparentUser32Proxy("EnumClipboardFormats", error_check=check_zero_and_getlasterror)
+
+@User32Proxy("OpenClipboard")
+def OpenClipboard(hWndNewOwner=None):
+    return OpenClipboard.ctypes_function(hWndNewOwner)
