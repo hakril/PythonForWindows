@@ -126,6 +126,8 @@ TestInstr(Mov)('R8', 0x1122334455667788)
 TestInstr(Mov)('RCX', -1)
 TestInstr(Mov, immediat_accepted=-1)('RCX', 0xffffffffffffffff)
 TestInstr(Mov)(mem('gs:[0x1122334455667788]'), 'RAX')
+TestInstr(Mov)(mem('[RAX]'), 0x11223344)
+TestInstr(Mov)(mem('[EAX]'), 0x11223344)
 
 TestInstr(And)('RCX', 'RBX')
 TestInstr(And)('RAX', 0x11223344)

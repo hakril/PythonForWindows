@@ -10,11 +10,15 @@ def disas(x):
 
 
 class TestInstr(object):
-    def __init__(self, instr_to_test, expected_result=None):
+    def __init__(self, instr_to_test, expected_result=None, debug=False):
         self.instr_to_test = instr_to_test
         self.expected_result = expected_result
+        self.debug = debug
 
     def __call__(self, *args):
+        if self.debug:
+            import pdb;pdb.set_trace()
+            pdb.DONE = True
         res = bytes(self.instr_to_test(*args).get_code())
         capres_list = disas(res)
         if len(capres_list) != 1:
@@ -106,6 +110,10 @@ TestInstr(Mov)('AX', mem('fs:[EAX + 0x30]'))
 TestInstr(Mov)('AX', mem('fs:[EAX + ECX * 4+0x30]'))
 TestInstr(Add)('EAX', 8)
 TestInstr(Add)('EAX', 0xffffffff)
+
+TestInstr(Add)(mem('[EAX]'), 10)
+TestInstr(Mov)('EAX', mem('fs:[0xfffc]'))
+TestInstr(Mov)(mem('fs:[0xfffc]'), 0)
 
 
 TestInstr(Sub)('ECX', 'ESP')

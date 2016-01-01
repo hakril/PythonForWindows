@@ -483,6 +483,8 @@ class ControlRegisterModRM(object):
             return None, None
         reg = args[writecr]
         cr = args[not writecr]
+        if not isinstance(cr, str):
+            return None, None
         if not cr.lower().startswith("cr"):
             return None, None
         try:
@@ -646,6 +648,7 @@ class Sub(Instruction):
 
 class Mov(Instruction):
     encoding = [(RawBits.from_int(8, 0x89), ModRM([ModRM_REG__REG, ModRM_REG__MEM])),
+                (RawBits.from_int(8, 0xc7), Slash(0), Imm32()),
                 (RawBits.from_int(5, 0xb8 >> 3), X86RegisterSelector(), Imm32()),
                 (RawBits.from_int(16, 0x0f20), ControlRegisterModRM(writecr=False)),
                 (RawBits.from_int(16, 0x0f22), ControlRegisterModRM(writecr=True))]
@@ -747,7 +750,7 @@ class MultipleInstr(object):
 
     def get_code(self):
         if self.expected_labels:
-            raise ValueError("Unresolved labels: {self.expected_labels}".format(self=self))
+            raise ValueError("Unresolved labels: {0}".format(self.expected_labels.keys()))
         return b"".join([x[1].get_code() for x in sorted(self.instrs.items())])
 
     def add_instruction(self, instruction):
@@ -870,6 +873,38 @@ class MultipleInstr(object):
         else:
             self.add_instruction(other)
         return self
+
+
+def split_in_instruction(str):
+    for line in str.split("\n"):
+        if not line:
+            continue
+        for instr in line.split(";"):
+            if not instr:
+                continue
+            yield instr.strip()
+
+def assemble(str):
+    """Play test"""
+    shellcode = MultipleInstr()
+    for instr in split_in_instruction(str):
+        data = instr.split(" ", 1)
+        mnemo, args_raw = data[0], data[1:]
+        try:
+            instr_object = globals()[mnemo.capitalize()]
+        except:
+            raise ValueError("Unknow mnemonic <{0}>".format(mnemo))
+
+        args = []
+        if args_raw:
+            for arg in args_raw[0].split(","):
+                arg = arg.strip()
+                if (arg[0] == "[" or arg[2:4] == ":[") and arg[-1] == "]":
+                    print("MEM")
+                    arg = mem(arg)
+                args.append(arg)
+        shellcode += instr_object(*args)
+    return shellcode.get_code()
 
 # IDA : import windows.native_exec.simple_x86 as x86
 # IDA testing

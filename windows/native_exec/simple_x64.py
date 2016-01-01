@@ -651,7 +651,11 @@ class Slash(object):
             raise ValueError("Missing arg for Slash")
         # Reuse all the MODRm logique with the reg as our self.reg
         # The sens of param is strange I need to fix the `reversed` logique
-        arg_consum, value, rex = ModRM([ModRM_REG__REG, ModRM_REG64__MEM], has_direction_bit=False).accept_arg(args[:1] + [self.reg] + args[1:], instr_state)
+        try:
+            arg_consum, value, rex = ModRM([ModRM_REG__REG, ModRM_REG64__MEM], has_direction_bit=False).accept_arg(args[:1] + [self.reg] + args[1:], instr_state)
+        except ValueError as e:
+            # Size mismatch
+            return None, None, None
         if value is None:
             return arg_consum, value, rex
         return arg_consum - 1, value, rex
@@ -855,7 +859,9 @@ class Lea(Instruction):
 
 class Mov(Instruction):
     default_32_bits = True
-    encoding = [(Mov_RAX_OFF64(),), (Mov_OFF64_RAX(),), (RawBits.from_int(8, 0x89), ModRM([ModRM_REG__REG, ModRM_REG64__MEM])),
+    encoding = [(Mov_RAX_OFF64(),), (Mov_OFF64_RAX(),),
+                (RawBits.from_int(8, 0xc7), Slash(0), Imm32()),
+                (RawBits.from_int(8, 0x89), ModRM([ModRM_REG__REG, ModRM_REG64__MEM])),
                 (RawBits.from_int(5, 0xb8 >> 3), X64RegisterSelector(), Imm64())]
 
 
