@@ -9,7 +9,7 @@ There is no external dependencies but it relies heavily on the ctypes modules.
 Some of this code is clean (IMHO) and some parts are just a wreck that work for now.
 Let say that the codebase evolves with my needs and my curiosity.
 
-You can find some examples of code in the `sample/` directory.
+You can find some examples of code in the `samples/` directory.
 
 ## Overview
 
@@ -31,7 +31,7 @@ You can also make some operation of threads (suspend/resume/wait/get( or set) co
 ### IAT Hook
 
 This codebase is born from my need to have IAT hooks implemented in Python.
-So the features is present (see `sample`)
+So the features is present (see `samples/`)
 
 
 ### Winproxy
