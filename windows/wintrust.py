@@ -2,6 +2,7 @@ import ctypes
 import struct
 import windows
 from windows.generated_def.winstructs import *
+from windows.winproxy import WinVerifyTrust
 
 IID_PACK = "<I", "<H", "<H", "<B", "<B", "<B", "<B", "<B", "<B", "<B", "<B"
 def get_IID_from_raw(raw):
@@ -12,7 +13,9 @@ def get_IID_from_raw(raw):
 WINTRUST_ACTION_GENERIC_VERIFY_V2_RAW = (0xaac56b, 0xcd44,  0x11d0,
                     0x8c, 0xc2, 0x0, 0xc0, 0x4f, 0xc2, 0x95, 0xee)
 
-WINTRUST_ACTION_GENERIC_VERIFY_V2 = get_IID_from_raw(WINTRUST_ACTION_GENERIC_VERIFY_V2_RAW)
+WINTRUST_ACTION_GENERIC_VERIFY_V2_STR = get_IID_from_raw(WINTRUST_ACTION_GENERIC_VERIFY_V2_RAW)
+# Otherwise there is a problem with `Data4` of `type c_char_Array_8` containing 0x00 (0x8c, 0xc2, 0x0, 0xc0, 0x4f, 0xc2, 0x95, 0xee)
+WINTRUST_ACTION_GENERIC_VERIFY_V2 = GUID.from_address(ctypes.addressof(WINTRUST_ACTION_GENERIC_VERIFY_V2_STR))
 
 WTD_UI_ALL    = 1
 WTD_UI_NONE   = 2
@@ -45,7 +48,6 @@ def check_signature(filename):
     WVTPolicyGUID =  WINTRUST_ACTION_GENERIC_VERIFY_V2
 
     win_trust_data = WINTRUST_DATA()
-
     win_trust_data.cbStruct = ctypes.sizeof(WINTRUST_DATA)
     win_trust_data.pPolicyCallbackData = None
     win_trust_data.pSIPClientData = None
@@ -58,12 +60,7 @@ def check_signature(filename):
     win_trust_data.dwUIContext = 0
     win_trust_data.tmp_union.pFile = ctypes.pointer(file_data)
 
-    WinVerifyTrust = ctypes.WinDLL("wintrust").WinVerifyTrust
-
     x = WinVerifyTrust(None, ctypes.byref(WVTPolicyGUID), ctypes.byref(win_trust_data))
-
     win_trust_data.dwStateAction = WTD_STATEACTION_CLOSE
-
     WinVerifyTrust(None, ctypes.byref(WVTPolicyGUID), ctypes.byref(win_trust_data))
-
     return x & 0xffffffff

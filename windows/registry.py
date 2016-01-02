@@ -14,16 +14,15 @@ class ExpectWindowsError(object):
     def __exit__(self, etype, e, tb):
         return (etype == WindowsError and e.winerror == self.errornumber)
 
-
 KeyValue = collections.namedtuple("KeyValue", ["name", "value", "type"])
 
 class PyHKey(object):
     def __init__(self, surkey, name, sam=_winreg.KEY_READ):
         self.surkey = surkey
-        self._phkey = None
         self.name = name
         self.fullname = self.surkey.fullname + "\\" + self.name if self.name else self.surkey.name
         self.sam = sam
+        self._phkey = None
 
     def __repr__(self):
         return '<PyHKey "{0}">'.format(self.fullname)
@@ -32,8 +31,10 @@ class PyHKey(object):
     def phkey(self):
         if self._phkey is not None:
             return self._phkey
-        print("OPEN <{0}, {1}>".format(self.surkey.phkey, self.name))
-        self._phkey = _winreg.OpenKeyEx(self.surkey.phkey, self.name, 0, self.sam)
+        try:
+            self._phkey = _winreg.OpenKeyEx(self.surkey.phkey, self.name, 0, self.sam)
+        except WindowsError as e:
+            raise WindowsError("Could not open registry key <{0}>".format(self.fullname))
         return self._phkey
 
     @property
@@ -54,11 +55,12 @@ class PyHKey(object):
 
     def open_subkey(self, name):
         return PyHKey(self, name, self.sam)
-        
+
     def reopen(self, new_sam):
         return PyHKey(self.surkey, self.name, new_sam)
-        
+
     __getitem__ = open_subkey
+
 
 class DummyPHKEY(object):
     def __init__(self, phkey, name):
@@ -67,16 +69,31 @@ class DummyPHKEY(object):
 
 
 HKEY_LOCAL_MACHINE = PyHKey(DummyPHKEY(_winreg.HKEY_LOCAL_MACHINE, "HKEY_LOCAL_MACHINE"), "", _winreg.KEY_READ)
-
 HKEY_CLASSES_ROOT = PyHKey(DummyPHKEY(_winreg.HKEY_CLASSES_ROOT, "HKEY_CLASSES_ROOT"), "", _winreg.KEY_READ )
-
 HKEY_CURRENT_USER = PyHKey(DummyPHKEY(_winreg.HKEY_CURRENT_USER, "HKEY_CURRENT_USER"), "", _winreg.KEY_READ)
-
 HKEY_DYN_DATA = PyHKey(DummyPHKEY(_winreg.HKEY_DYN_DATA, "HKEY_DYN_DATA"), "", _winreg.KEY_READ)
-
 HKEY_PERFORMANCE_DATA = PyHKey(DummyPHKEY(_winreg.HKEY_PERFORMANCE_DATA, "HKEY_PERFORMANCE_DATA"), "", _winreg.KEY_READ)
-
 HKEY_USERS = PyHKey(DummyPHKEY(_winreg.HKEY_USERS, "HKEY_USERS"), "", _winreg.KEY_READ )
 
 
-HKEY_CURRENT_USER[r"Software\Microsoft\Windows\CurrentVersion\Run"].values
+class Registry(object):
+
+    registry_base_keys = {
+        "HKEY_LOCAL_MACHINE" : HKEY_LOCAL_MACHINE,
+        "HKEY_CLASSES_ROOT" : HKEY_CLASSES_ROOT,
+        "HKEY_CURRENT_USER" : HKEY_CURRENT_USER,
+        "HKEY_DYN_DATA" : HKEY_DYN_DATA,
+        "HKEY_PERFORMANCE_DATA": HKEY_PERFORMANCE_DATA,
+        "HKEY_USERS" : HKEY_USERS
+    }
+
+    def __getitem__(self, name):
+        if name in self.registry_base_keys:
+            return self.registry_base_keys[name]
+        if "\\" not in name:
+            raise ValueError("Unknow registry base key <{0}>".format(name))
+        base_name, subkey = name.split("\\", 1)
+        if base_name not in self.registry_base_keys:
+            raise ValueError("Unknow registry base key <{0}>".format(base_name))
+        return self.registry_base_keys[base_name][subkey]
+

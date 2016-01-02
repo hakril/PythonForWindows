@@ -54,6 +54,10 @@ class AutoHandle(object):
 
 class System(object):
     """Represent the current windows system python is running on"""
+
+    network = windows.network.Network()
+    registry = windows.registry.Registry()
+
     @property
     def processes(self):
         """The list of running processes
@@ -84,11 +88,6 @@ class System(object):
         if "PROCESSOR_ARCHITEW6432" in os.environ:
             return 64
         return 32
-
-    @property
-    def network(self):
-        return windows.network.Network()
-
 
     @staticmethod
     def enumerate_processes():
