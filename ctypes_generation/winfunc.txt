@@ -648,3 +648,9 @@ INT WINAPI GetClipboardFormatNameW(
   _Out_ LPCWSTR lpszFormatName,
   _In_  INT    cchMaxCount
 );
+
+LONG WINAPI WinVerifyTrust(
+  _In_ HWND   hWnd,
+  _In_ GUID   *pgActionID,
+  _In_ LPVOID pWVTData
+);
