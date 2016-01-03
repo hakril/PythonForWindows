@@ -10,11 +10,9 @@ Contents:
 
 .. toctree::
    :maxdepth: 2
+   :numbered:
 
-   test.rst
-   pe_parse.rst
-   native_exec.rst
-   rem_python.rst
+   windows.rst
    utils.rst
 
 

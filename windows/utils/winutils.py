@@ -43,18 +43,18 @@ def is_wow_64(hProcess):
 
 
 def create_file_from_handle(handle, mode="r"):
-    """Return a Python :class:`file` arround a windows HANDLE"""
+    """Return a Python :class:`file` around a ``Windows`` HANDLE"""
     fd = msvcrt.open_osfhandle(handle, os.O_TEXT)
     return os.fdopen(fd, mode, 0)
 
 
 def get_handle_from_file(f):
-    """Get the windows HANDLE of a python :class:`file`"""
+    """Get the ``Windows`` HANDLE of a python :class:`file`"""
     return msvcrt.get_osfhandle(f.fileno())
 
 
 def create_console():
-    """Create a new console displaying STDOUT
+    """Create a new console displaying STDOUT.
        Useful in injection of GUI process"""
     winproxy.AllocConsole()
     stdout_handle = winproxy.GetStdHandle(windef.STD_OUTPUT_HANDLE)
@@ -71,6 +71,7 @@ def create_console():
 
 
 def create_process(path, show_windows=False):
+    """A convenient wrapper arround :func:`windows.winproxy.CreateProcessA`"""
     proc_info = PROCESS_INFORMATION()
     lpStartupInfo = None
     if show_windows:
@@ -84,7 +85,11 @@ def create_process(path, show_windows=False):
 
 
 def enable_privilege(lpszPrivilege, bEnablePrivilege):
-    """Enable of disable a privilege: enable_privilege(SE_DEBUG_NAME, True)"""
+    """
+    Enable or disable a privilege::
+
+        enable_privilege(SE_DEBUG_NAME, True)
+    """
     tp = TOKEN_PRIVILEGES()
     luid = LUID()
     hToken = HANDLE()
@@ -105,7 +110,7 @@ def enable_privilege(lpszPrivilege, bEnablePrivilege):
 
 
 def check_is_elevated():
-    """Return True if process is Admin"""
+    """Return ``True`` if process is Admin"""
     hToken = HANDLE()
     elevation = TOKEN_ELEVATION()
     cbsize = DWORD()
@@ -117,8 +122,10 @@ def check_is_elevated():
 
 
 def check_debug():
-    """Check that kernel is in debug mode
-       beware if NOUMEX (https://msdn.microsoft.com/en-us/library/windows/hardware/ff556253(v=vs.85).aspx#_______noumex______)"""
+    """Check that kernel is in debug mode (beware of NOUMEX):
+
+       https://msdn.microsoft.com/en-us/library/windows/hardware/ff556253(v=vs.85).aspx#_______noumex______
+    """
     hkresult = HKEY()
     cbsize = DWORD(1024)
     bufferres = (c_char * cbsize.value)()
@@ -163,9 +170,8 @@ def get_kernel_modules():
 
 
 class VirtualProtected(object):
-    """A context manager usable like `VirtualProtect` that will restore the old protection at exit
-
-    Example::
+    """
+    A context manager usable like `VirtualProtect` that will restore the old protection at exit ::
 
         with utils.VirtualProtected(IATentry.addr, ctypes.sizeof(PVOID), windef.PAGE_EXECUTE_READWRITE):
             IATentry.value = 0x42424242
@@ -188,7 +194,14 @@ class VirtualProtected(object):
 
 
 class DisableWow64FsRedirection(object):
-    """A context manager that disable the Wow64 Fs Redirection"""
+    """
+    A context manager that disable the SysWow64 Filesystem Redirection ::
+
+        if is_process_32_bits:
+            def pop_calc_64():
+                with windows.utils.DisableWow64FsRedirection():
+                    return windows.utils.create_process(r"C:\Windows\system32\calc.exe", True)
+    """
     def __enter__(self):
         if windows.current_process.bitness == 64:
             return self

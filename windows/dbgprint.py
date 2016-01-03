@@ -12,7 +12,7 @@ def get_stack_func_name(lvl):
 
 
 def do_dbgprint(msg, type=None):
-    if (options['cats'] is None) or type.upper() in options['cats']:
+    if ("ALL" in options['cats']) or type.upper() in options['cats']:
         frame, func = get_stack_func_name(2)
         logger = logging.getLogger(frame.f_globals['__name__'] + ":" + func)
         logger.debug(msg)
@@ -26,7 +26,7 @@ def parse_option(s):
     if s[0] == "=":
         s = s[1:]
     if s:
-        cats = [x.upper() for x in s.split('-')]
+        cats = [x.upper().strip() for x in s.split('-')]
         options['cats'] = cats
 
     formt = 'DBG|%(name)s|%(message)s'

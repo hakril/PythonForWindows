@@ -24,5 +24,6 @@ current_thread = CurrentThread()
 
 import windows.vectored_exception
 import windows.wmi
+import windows.utils
 
 __all__ = ["system", "VirtualProtected", 'current_process', 'current_thread', 'winproxy']

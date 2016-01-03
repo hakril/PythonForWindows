@@ -6,6 +6,7 @@ import struct
 
 import windows
 import windows.network
+import windows.registry
 import windows.syswow64
 #import windows.vectored_exception
 import windows.winproxy as winproxy
@@ -33,10 +34,12 @@ class AutoHandle(object):
     def handle(self):
         """A handle on the object
 
+        :type: HANDLE
+
+
            .. note::
                 The handle is automaticaly closed when the object is destroyed
 
-           :type: int
 
         """
         if hasattr(self, "_handle"):
@@ -53,10 +56,10 @@ class AutoHandle(object):
 
 
 class System(object):
-    """Represent the current windows system python is running on"""
+    """Represent the current ``Windows`` system ``Python`` is running on"""
 
-    network = windows.network.Network()
-    registry = windows.registry.Registry()
+    network = windows.network.Network()  # Object of class :class:`windows.network.Network`
+    registry = windows.registry.Registry()  # Object of class :class:`windows.registry.Registry`
 
     @property
     def processes(self):
@@ -80,7 +83,7 @@ class System(object):
     def bitness(self):
         """The bitness of the system
 
-        :type: int -- 32 or 64
+        :type: :class:`int` -- 32 or 64
 
         """
         if os.environ["PROCESSOR_ARCHITECTURE"].lower() != "x86":
