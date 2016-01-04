@@ -7,7 +7,7 @@ import simple_x64 as x64
 from windows.generated_def.winstructs import *
 
 
-def bitness():
+def _bitness():
     """Return 32 or 64"""
     import platform
     bits = platform.architecture()[0]
@@ -15,11 +15,13 @@ def bitness():
 
 
 class X86CpuidResult(ctypes.Structure):
+    """Raw result of the CPUID instruction"""
     _fields_ = [("EAX", DWORD),
                 ("EBX", DWORD),
                 ("ECX", DWORD),
                 ("EDX", DWORD)]
-
+    fields = [f[0] for f in _fields_]
+    """Fields of the Structure"""
 
 class X64CpuidResult(ctypes.Structure):
     _fields_ = [("RAX", ULONG64),
@@ -37,6 +39,8 @@ class X86IntelCpuidFamilly(ctypes.Structure):
                 ("ExtendedModel", DWORD, 4),
                 ("ExtendedFamily", DWORD, 8),
                 ("Reserved", DWORD, 2)]
+    fields = [f[0] for f in _fields_]
+    """Fields of the Structure"""
 
 
 class X86AmdCpuidFamilly(ctypes.Structure):
@@ -47,7 +51,8 @@ class X86AmdCpuidFamilly(ctypes.Structure):
                 ("ExtendedModel", DWORD, 4),
                 ("ExtendedFamily", DWORD, 8),
                 ("Reserved", DWORD, 2)]
-
+    fields = [f[0] for f in _fields_]
+    """Fields of the Structure"""
 
 cpuid32_code = x86.MultipleInstr()
 cpuid32_code += x86.Push('EDI')
@@ -77,39 +82,64 @@ do_cpuid64 = native_function.create_function(cpuid64_code.get_code(), [DWORD, DW
 
 
 def x86_cpuid(req):
+    """Perform a CPUID in 32bits mode
+
+        :rtype: :class:`X86CpuidResult`
+    """
     cpuid_res = X86CpuidResult()
     do_cpuid32(req, ctypes.addressof(cpuid_res))
     return cpuid_res
 
 
 def x64_cpuid(req):
+    """Perform a CPUID in 64bits mode
+
+        :rtype: :class:`X86CpuidResult`
+    """
     cpuid_res = X64CpuidResult()
     do_cpuid64(req, ctypes.addressof(cpuid_res))
     # For now assembler cannot do 32bits register in x64
     return X86CpuidResult(cpuid_res.RAX, cpuid_res.RBX, cpuid_res.RCX, cpuid_res.RDX)
 
 
-if bitness() == 32:
-    do_cpuid = x86_cpuid
+if _bitness() == 32:
+    _do_cpuid = x86_cpuid
 else:
-    do_cpuid = x64_cpuid
+    _do_cpuid = x64_cpuid
+
+def do_cpuid(req):
+    """Perform a CPUID for the current process bitness
+
+        :rtype: :class:`X86CpuidResult`
+    """
+    return _do_cpuid(req)
 
 
 def get_vendor_id():
+    """Extract the VendorId string from CPUID
+
+        :rtype: :class:`str`
+    """
     cpuid_res = do_cpuid(0)
     return struct.pack("<III", cpuid_res.EBX, cpuid_res.EDX, cpuid_res.ECX)
 
 
 # platform.processor() could do the trick
 def is_intel_proc():
+    """get_vendor_id() == 'GenuineIntel'"""
     return get_vendor_id() == "GenuineIntel"
 
 
 def is_amd_proc():
+    """get_vendor_id() == 'AuthenticAMD'"""
     return get_vendor_id() == "AuthenticAMD"
 
 
 def get_proc_family_model():
+    """Extract the family and model based on vendorId
+
+        :rtype: (ComputedFamily, ComputedModel)
+    """
     cpuid_res = do_cpuid(1)
     if is_intel_proc():
         format = X86IntelCpuidFamilly
