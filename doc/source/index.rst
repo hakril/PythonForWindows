@@ -13,6 +13,7 @@ Contents:
    :numbered:
 
    windows.rst
+   winproxy.rst
    utils.rst
 
 
