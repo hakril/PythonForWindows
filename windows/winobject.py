@@ -32,15 +32,12 @@ class AutoHandle(object):
 
     @property
     def handle(self):
-        """A handle on the object
+        """An handle on the object
 
         :type: HANDLE
 
-
            .. note::
                 The handle is automaticaly closed when the object is destroyed
-
-
         """
         if hasattr(self, "_handle"):
             return self._handle
@@ -48,6 +45,7 @@ class AutoHandle(object):
         return self._handle
 
     def wait(self, timeout=INFINITE):
+        """Wait for the object"""
         return winproxy.WaitForSingleObject(self.handle, timeout)
 
     def __del__(self):
@@ -167,6 +165,10 @@ class WinThread(THREADENTRY32, AutoHandle):
 
     @property
     def start_address(self):
+        """The start address of the thread
+        
+            :type: :class:`int`
+        """
         if windows.current_process.bitness == 32 and self.owner.bitness == 64:
             res = ULONGLONG()
             windows.syswow64.NtQueryInformationThread_32_to_64(self.handle, ThreadQuerySetWin32StartAddress, byref(res), ctypes.sizeof(res))
@@ -180,12 +182,15 @@ class WinThread(THREADENTRY32, AutoHandle):
         return res.value
 
     def exit(self, code=0):
+        """Exit the thread"""
         return winproxy.TerminateThread(self.handle, code)
 
     def resume(self):
+        """Resume the thread"""
         return winproxy.ResumeThread(self.handle)
 
     def suspend(self):
+        """Suspend the thread"""
         return winproxy.SuspendThread(self.handle)
 
     def _get_handle(self):
@@ -193,10 +198,18 @@ class WinThread(THREADENTRY32, AutoHandle):
 
     @property
     def is_exit(self):
+        """Is ``True`` if the thread is terminated
+        
+        :type: :class:`bool`
+        """
         return self.exit_code != STILL_ACTIVE
 
     @property
     def exit_code(self):
+        """The exit code of the thread : ``STILL_ACTIVE`` means the process is not dead
+        
+        :type: :class:`int`
+        """
         res = DWORD()
         winproxy.GetExitCodeThread(self.handle, byref(res))
         return res.value
@@ -222,7 +235,7 @@ class WinThread(THREADENTRY32, AutoHandle):
             return DeadThread(handle, tid)
 
 class DeadThread(AutoHandle):
-    """A simple object arround an already dead thread"""
+    """An already dead thread"""
     def __init__(self, handle, tid=None):
         if tid is None:
             tid = winproxy.GetThreadId(handle)
@@ -232,10 +245,18 @@ class DeadThread(AutoHandle):
 
     @property
     def is_exit(self):
+        """Is ``True`` if the thread is terminated
+        
+        :type: :class:`bool`
+        """
         return self.exit_code != STILL_ACTIVE
 
     @property
     def exit_code(self):
+        """The exit code of the thread : ``STILL_ACTIVE`` means the process is not dead
+        
+        :type: :class:`int`
+        """
         res = DWORD()
         winproxy.GetExitCodeThread(self.handle, byref(res))
         return res.value
@@ -244,11 +265,9 @@ class DeadThread(AutoHandle):
 class Process(AutoHandle):
     @utils.fixedpropety
     def is_wow_64(self):
-        """Is True if the process is a SysWow64 process
+        """Is ``True`` if the process is a SysWow64 process (32bit process on 64bits system).
 
-        This means a 32bits process on a 64bits system
-
-        :type: bool
+        :type: :class:`bool`
         """
         return utils.is_wow_64(self.handle)
 
@@ -256,7 +275,7 @@ class Process(AutoHandle):
     def bitness(self):
         """The bitness of the process
 
-        :returns: int -- 32 or 64"""
+        :returns: :class:`int` -- 32 or 64"""
         if windows.system.bitness == 32:
             return 32
         if self.is_wow_64:
@@ -268,7 +287,6 @@ class Process(AutoHandle):
         """The threads of the process
 
         :type: [:class:`WinThread`] -- A list of Thread
-
         """
         return [thread for thread in windows.system.threads if thread.th32OwnerProcessID == self.pid]
 
@@ -277,12 +295,20 @@ class Process(AutoHandle):
 
     @property
     def exit_code(self):
+        """The exit code of the process : ``STILL_ACTIVE`` means the process is not dead
+        
+        :type: :class:`int`
+        """
         res = DWORD()
         winproxy.GetExitCodeProcess(self.handle, byref(res))
         return res.value
 
     @property
     def is_exit(self):
+        """Is ``True`` if the process is terminated
+        
+        :type: :class:`bool`
+        """
         return self.exit_code == STILL_ACTIVE
 
     def execute(self, code):
@@ -292,6 +318,10 @@ class Process(AutoHandle):
         return self.create_thread(x, 0)
 
     def query_memory(self, addr):
+        """Query the memory informations about page at ```addr``
+        
+            :rtype: :class:`MEMORY_BASIC_INFORMATION`
+        """
         if windows.current_process.bitness == 32 and self.bitness == 64:
             res = MEMORY_BASIC_INFORMATION64()
             try:
@@ -309,6 +339,10 @@ class Process(AutoHandle):
         return res
 
     def memory_state(self):
+        """Yield the memory information for the whole address space of the process
+        
+            :yield: :class:`MEMORY_BASIC_INFORMATION`
+        """
         addr = 0
         res = []
         while True:
@@ -386,7 +420,7 @@ class CurrentProcess(Process):
     def pid(self):
         """Process ID
 
-        :type: int
+        :type: :class:`int`
         """
         return os.getpid()
 
@@ -395,7 +429,7 @@ class CurrentProcess(Process):
     def ppid(self):
         """Parent Process ID
 
-        :type: int
+        :type: :class:`int`
         """
         return [p for p in windows.system.processes if p.pid == self.pid][0].ppid
 
@@ -411,7 +445,7 @@ class CurrentProcess(Process):
     def bitness(self):
         """The bitness of the process
 
-        :returns: int -- 32 or 64"""
+        :type: :class:`int` -- 32 or 64"""
         import platform
         bits = platform.architecture()[0]
         return int(bits[:2])
@@ -419,7 +453,7 @@ class CurrentProcess(Process):
     def virtual_alloc(self, size):
         """Allocate memory in the current process
 
-        :returns: int
+        :returns: :class:`int`
         """
         return winproxy.VirtualAlloc(dwSize=size)
 
@@ -440,6 +474,8 @@ class CurrentProcess(Process):
 
         .. note::
             CreateThread https://msdn.microsoft.com/en-us/library/windows/desktop/ms682453%28v=vs.85%29.aspx
+        
+            :rtype: :class:`WinThread` or :class:`DeadThread`
         """
         handle = winproxy.CreateThread(lpStartAddress=lpStartAddress, lpParameter=lpParameter, dwCreationFlags=dwCreationFlags)
         return WinThread._from_handle(handle)
@@ -462,7 +498,7 @@ class WinProcess(PROCESSENTRY32, Process):
     def name(self):
         """Name of the process
 
-        :type: str
+        :type: :class:`str`
         """
         return self.szExeFile[:].decode()
 
@@ -470,7 +506,7 @@ class WinProcess(PROCESSENTRY32, Process):
     def pid(self):
         """Process ID
 
-        :type: int
+        :type: :class:`int`
         """
         return self.th32ProcessID
 
@@ -478,7 +514,7 @@ class WinProcess(PROCESSENTRY32, Process):
     def ppid(self):
         """Parent Process ID
 
-        :type: int
+        :type: :class:`int`
         """
         return self.th32ParentProcessID
 
@@ -491,7 +527,7 @@ class WinProcess(PROCESSENTRY32, Process):
     def virtual_alloc(self, size):
         """Allocate memory in the process
 
-        :returns: int
+        :rtype: :class:`int` 
         """
         return winproxy.VirtualAllocEx(self.handle, dwSize=size)
 
@@ -532,12 +568,17 @@ class WinProcess(PROCESSENTRY32, Process):
     #         return page_data[addr & 0xfff: (addr & 0xfff) + size]
 
     def read_memory_into(self, addr, struct):
-        """Read a :mod:`ctypes` struct from `addr`"""
+        """Read a :mod:`ctypes` struct from `addr`
+        
+            :returns: struct"""
         self.low_read_memory(addr, ctypes.byref(struct), ctypes.sizeof(struct))
         return struct
 
     def create_thread(self, addr, param):
-        """Create a remote thread"""
+        """Create a remote thread
+        
+            :rtype: :class:`WinThread` or :class:`DeadThread`
+        """
         if windows.current_process.bitness == 32 and self.bitness == 64:
             thread_handle = HANDLE()
             windows.syswow64.NtCreateThreadEx_32_to_64(ThreadHandle=byref(thread_handle) ,ProcessHandle=self.handle, lpStartAddress=addr, lpParameter=param)
@@ -552,15 +593,25 @@ class WinProcess(PROCESSENTRY32, Process):
         return self.create_thread(LoadLibrary, x)
 
     def execute_python(self, pycode):
-        """Execute Python code into the remote process"""
+        """Execute Python code into the remote process.  
+        
+        This function waits for the remote process to end and
+        raises an exception if the remote thread raised one"""
         return injection.safe_execute_python(self, pycode)
 
     def execute_python_unsafe(self, pycode):
-        """Execute Python code into the remote process"""
+        """Execute Python code into the remote process.
+        
+           Unsafe means that no information are returned about the execution of the thread
+        """
         return injection.execute_python_code(self, pycode)
 
     @utils.fixedpropety
     def peb_addr(self):
+        """The address of the PEB
+        
+            :type: :class:`int`
+         """
         if windows.current_process.bitness == 32 and self.bitness == 64:
             x = windows.remotectypes.transform_type_to_remote64bits(PROCESS_BASIC_INFORMATION)
             # Fuck-it <3
@@ -584,6 +635,10 @@ class WinProcess(PROCESSENTRY32, Process):
 
     @utils.fixedpropety
     def peb(self):
+        """The PEB of the remote process (see :mod:`remotectypes`)
+        
+            :type: :class:`PEB`
+        """
         if windows.current_process.bitness == 32 and self.bitness == 64:
             return RemotePEB64(self.peb_addr, self)
         if windows.current_process.bitness == 64 and self.bitness == 32:
@@ -599,9 +654,9 @@ class LoadedModule(LDR_DATA_TABLE_ENTRY):
     """An entry in the PEB Ldr list"""
     @property
     def baseaddr(self):
-        """base address of the module
+        """Base address of the module
 
-        :type: int
+        :type: :class:`int`
         """
         return self.DllBase
 
@@ -609,7 +664,7 @@ class LoadedModule(LDR_DATA_TABLE_ENTRY):
     def name(self):
         """Name of the module
 
-        :type: str
+        :type: :class:`str`
         """
         return str(self.BaseDllName.Buffer).lower()
 
@@ -617,7 +672,7 @@ class LoadedModule(LDR_DATA_TABLE_ENTRY):
     def fullname(self):
         """Full name of the module (path)
 
-        :type: str
+        :type: :class:`str`
         """
         return self.FullDllName.Buffer.decode()
 
@@ -635,6 +690,9 @@ class LoadedModule(LDR_DATA_TABLE_ENTRY):
 
 class WinUnicodeString(LSA_UNICODE_STRING):
     """LSA_UNICODE_STRING with a nice `__repr__`"""
+    fields = [f[0] for f in LSA_UNICODE_STRING._fields_]
+    """The fields of the structure"""
+    
     def __repr__(self):
         return """<{0} "{1}" at {2}>""".format(type(self).__name__, self.Buffer, hex(id(self)))
 

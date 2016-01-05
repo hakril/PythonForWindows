@@ -16,6 +16,8 @@ Contents:
    winproxy.rst
    utils.rst
    native_exec.rst
+   various.rst
+   sample.rst
 
 
 Indices and tables

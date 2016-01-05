@@ -14,7 +14,8 @@ The submodules that you might use by themself are:
     * :mod:`windows.winproxy`
     * :mod:`windows.utils`
     
-    
+.. _object_system:
+ 
 The ``system`` object
 """""""""""""""""""""
 
