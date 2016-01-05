@@ -12,26 +12,44 @@ class TCP4Connection(MIB_TCPROW_OWNER_PID):
 
     @property
     def established(self):
+        """``True`` if connection is established else it's a listening socket"""
         return self.dwState == MIB_TCP_STATE_ESTAB
 
     @property
     def remote_port(self):
+        """:type: :class:`int`"""
+        if not self.established:
+            return None
         return socket.ntohs(self.dwRemotePort)
 
     @property
     def local_port(self):
+        """:type: :class:`int`"""
         return socket.ntohs(self.dwLocalPort)
 
     @property
     def local_addr(self):
+        """Local address IP (x.x.x.x)
+
+        :type: :class:`str`"""
         return socket.inet_ntoa(struct.pack("<I", self.dwLocalAddr))
 
     @property
     def remote_addr(self):
+        """remote address IP (x.x.x.x)
+
+        :type: :class:`str`"""
+        if not self.established:
+            return None
         return socket.inet_ntoa(struct.pack("<I", self.dwRemoteAddr))
 
     @property
     def remote_proto(self):
+        """Identification of the protocol associated with the remote port.
+           Equals ``remote_port`` if no protocol is associated with it.
+
+           :type: :class:`str` or :class:`int`
+        """
         try:
             return socket.getservbyport(self.remote_port, 'tcp')
         except socket.error:
@@ -39,12 +57,19 @@ class TCP4Connection(MIB_TCPROW_OWNER_PID):
 
     @property
     def remote_host(self):
+        """Identification of the remote hostname.
+           Equals ``remote_addr`` if resolution fail
+
+           :type: :class:`str` or :class:`int`
+        """
+
         try:
             return socket.gethostbyaddr(self.remote_addr)
         except socket.error:
             return self.remote_addr
 
     def close(self):
+        """Close the connection <require elevated process>"""
         closing = MIB_TCPROW()
         closing.dwState = MIB_TCP_STATE_DELETE_TCB
         closing.dwLocalAddr = self.dwLocalAddr
@@ -66,30 +91,45 @@ class TCP6Connection(MIB_TCP6ROW_OWNER_PID):
 
     @property
     def established(self):
+        """``True`` if connection is established else it's a listening socket"""
         return self.dwState == MIB_TCP_STATE_ESTAB
 
     @property
     def remote_port(self):
+        """:type: :class:`int`"""
+        if not self.established:
+            return None
         return socket.ntohs(self.dwRemotePort)
 
     @property
     def local_port(self):
+        """:type: :class:`int`"""
         return socket.ntohs(self.dwLocalPort)
 
     @property
     def local_addr(self):
+        """Local address IP
+
+        :type: :class:`str`"""
         return self._str_ipv6_addr(self.ucLocalAddr)
 
     @property
     def remote_addr(self):
+        """remote address IP
+
+        :type: :class:`str`"""
+        if not self.established:
+            return None
         return self._str_ipv6_addr(self.ucRemoteAddr)
 
     @property
     def remote_proto(self):
+        """Equals to self.remote_port for Ipv6"""
         return self.remote_port
 
     @property
     def remote_host(self):
+        """Equals to self.remote_addr for Ipv6"""
         return self.remote_addr
 
     def close(self):
@@ -157,4 +197,12 @@ class Network(object):
 
 
     ipv4 = property(lambda self: self._get_tcp_ipv4_sockets())
+    """List of TCP IPv4 socket (connection and listening)
+
+        :type: [:class:`TCP4Connection`]"""
+
     ipv6 = property(lambda self: self._get_tcp_ipv6_sockets())
+    """List of TCP IPv6 socket (connection and listening)
+
+      :type: [:class:`TCP6Connection`]
+    """

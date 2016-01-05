@@ -1,7 +1,7 @@
 Samples of code
 ===============
 
-.. _sample_current_process:       
+.. _sample_current_process:
 
 ``windows.current_process``
 """""""""""""""""""""""""""
@@ -23,9 +23,9 @@ Output::
     Allocated memory is at <0x3f0000>
     Writing 'SOME STUFF' in allocation memory
     Reading memory : <'SOME STUFF\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'>
-    
-.. _sample_remote_process:       
-    
+
+.. _sample_remote_process:
+
 Remote process : :class:`WinProcess`
 """"""""""""""""""""""""""""""""""""
 
@@ -61,12 +61,12 @@ Output::
     File "<string>", line 3, in <module>
     File "<string>", line 2, in func
     ImportError: No module named FAKE_MODULE
-    
+
     That's all ! killing the calc
-    
-    
-.. _sample_peb_exploration:   
-    
+
+
+.. _sample_peb_exploration:
+
 :class:`PEB` exploration
 """"""""""""""""""""""""
 
@@ -97,3 +97,30 @@ Output::
     Import DLL dependancies are (without api-*): [u'ntdll.dll', u'kernelbase.dll']
     IAT Entry for ntdll!NtCreateFile = <IATEntry "NtCreateFile" ordinal 253> | addr = 0x77541128L
     Sections: [<PESection ".text">, <PESection ".rdata">, <PESection ".data">, <PESection ".rsrc">, <PESection ".reloc">]
+
+
+.. _sample_network_exploration:
+
+:class:`Network` - socket exploration
+"""""""""""""""""""""""""""""""""""""
+
+.. literalinclude:: ..\..\samples\network.py
+
+Output::
+
+    (cmd λ) python.exe  network.py
+    Working on ipv4
+    == Listening ==
+    Some listening connections: [<TCP IPV4 Listening socket on 0.0.0.0:80>, <TCP IPV4 Listening socket on 0.0.0.0:135>, <TCP IPV4 Listening socket on 0.0.0.0:443>]
+    Listening ports are : [80, 135, 443, 445, 902, 912, 5357, 49152, 49153, 49154, 49155, 49157, 49159, 8307, 25340, 139, 139]
+    == Established ==
+    Some established connections: [<TCP IPV4 Connection 127.0.0.1:25340 -> 127.0.0.1:49472>, <TCP IPV4 Connection 127.0.0.1:49173 -> 127.0.0.1:49174>, <TCP IPV4 Connection 127.0.0.1:49174 -> 127.0.0.1:49173>]
+    == connection to localhost:80 ==
+    Our connection is [<TCP IPV4 Connection 127.0.0.1:49616 -> 127.0.0.1:80>]
+    Sending YOP
+    Closing socket
+    Sending LAIT
+    Traceback (most recent call last):
+    File ".\network.py", line 45, in <module>
+        s.send("LAIT")
+    socket.error: [Errno 10054] An existing connection was forcibly closed by the remote host

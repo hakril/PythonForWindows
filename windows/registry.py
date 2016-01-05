@@ -17,6 +17,7 @@ class ExpectWindowsError(object):
 KeyValue = collections.namedtuple("KeyValue", ["name", "value", "type"])
 
 class PyHKey(object):
+    """A windows registry key"""
     def __init__(self, surkey, name, sam=_winreg.KEY_READ):
         self.surkey = surkey
         self.name = name
@@ -77,6 +78,7 @@ HKEY_USERS = PyHKey(DummyPHKEY(_winreg.HKEY_USERS, "HKEY_USERS"), "", _winreg.KE
 
 
 class Registry(object):
+    """The ``Windows`` registry: a read only mapping"""
 
     registry_base_keys = {
         "HKEY_LOCAL_MACHINE" : HKEY_LOCAL_MACHINE,
@@ -88,6 +90,14 @@ class Registry(object):
     }
 
     def __getitem__(self, name):
+        """Get a registry key::
+
+            registry[r"HKEY_LOCAL_MACHINE\\Software"]
+            registry["HKEY_LOCAL_MACHINE"]["Software"]
+
+        :rtype: :class:`PyHKey`
+        """
+
         if name in self.registry_base_keys:
             return self.registry_base_keys[name]
         if "\\" not in name:

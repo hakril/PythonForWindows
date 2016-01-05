@@ -13,7 +13,7 @@ CurrentProcess
 .. autoclass:: CurrentProcess
    :members:
    :inherited-members:
-   
+
 CurrentThread
 '''''''''''''
 
@@ -39,13 +39,13 @@ WinThread
 .. autoclass:: WinThread
    :members:
    :inherited-members:
-   
+
 
 .. autoclass:: DeadThread
    :members:
    :inherited-members:
-   
-   
+
+
 PEB Exploration
 """""""""""""""
 
@@ -59,10 +59,14 @@ The :class:`PEB` is accessible via ``process.peb`` and is of type :class:`PEB`.
 .. autoclass:: PEB
    :members:
    :inherited-members:
-   
+
 .. autoclass:: WinUnicodeString
 
-.. autoclass:: LoadedModule  
-   
+.. autoclass:: LoadedModule
+
+
+.. warning::
+
+    TODO: pe_parse.PEFile (sorry) but example at :ref:`sample_peb_exploration`
 
 

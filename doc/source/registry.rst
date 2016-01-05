@@ -1,8 +1,10 @@
 Registry
-""""""""
+========
 
 .. module:: windows.registry
 
-REGISTRY
 
-.. class:: Registry
+.. autoclass:: Registry
+    :special-members: __getitem__
+
+.. autoclass:: PyHKey

@@ -139,9 +139,6 @@ Another example from a project::
         out_ioctl += x86.Mov('EAX', 0x0C000000D)
         out_ioctl += x86.Ret()
 
-.. note::
-
-    TODO: prefix
 
 :mod:`windows.native_exec.simple_x64` -- X64 Assembler
 """"""""""""""""""""""""""""""""""""""""""""""""""""""

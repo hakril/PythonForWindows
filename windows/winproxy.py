@@ -28,16 +28,19 @@ class Kernel32Error(WindowsError):
 
 class IphlpapiError(Kernel32Error):
 
-    def __new__(cls, func_name, code):
+    def __new__(cls, func_name, code, strerror=None):
         win_error = ctypes.WinError(code)
         api_error = super(Kernel32Error, cls).__new__(cls)
         api_error.api_name = func_name
         api_error.winerror = win_error.winerror
-        api_error.strerror = win_error.strerror
-        api_error.args = (func_name, win_error.winerror, win_error.strerror)
+        if strerror is not None:
+            api_error.strerror = strerror
+        else:
+            api_error.strerror = win_error.strerror
+        api_error.args = (func_name, api_error.winerror, api_error.strerror)
         return api_error
 
-    def __init__(self, func_name, code):
+    def __init__(self, func_name, code, strerror=None):
         pass
 
 
@@ -580,7 +583,16 @@ def RegCloseKey(hKey):
 
 
 # ##### Iphlpapi (network list and stuff) ###### #
-SetTcpEntry = TransparentIphlpapiProxy('SetTcpEntry')
+
+def set_tcp_entry_error_check(func_name, result, func, args):
+    """raise IphlpapiError if result is NOT 0 -- pretty print error 317"""
+    if result:
+        if result == 317:
+            raise IphlpapiError(func_name, result, "<require elevated process>".format(func_name))
+        raise IphlpapiError(func_name, result)
+    return args
+
+SetTcpEntry = TransparentIphlpapiProxy('SetTcpEntry', error_check=set_tcp_entry_error_check)
 
 
 @OptionalExport(IphlpapiProxy('GetExtendedTcpTable'))
