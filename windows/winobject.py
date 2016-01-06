@@ -685,7 +685,7 @@ class LoadedModule(LDR_DATA_TABLE_ENTRY):
 
         :type: :class:`windows.pe_parse.PEFile`
         """
-        return pe_parse.PEFile(self.baseaddr)
+        return pe_parse.GetPEFile(self.baseaddr)
 
 
 class WinUnicodeString(LSA_UNICODE_STRING):
@@ -760,7 +760,7 @@ class RemoteLoadedModule(rctypes.RemoteStructure.from_structure(LoadedModule)):
 
         :type: :class:`windows.pe_parse.PEFile`
         """
-        return pe_parse.PEFile(self.baseaddr, target=self._target)
+        return pe_parse.GetPEFile(self.baseaddr, target=self._target)
 
 
 class RemotePEB(rctypes.RemoteStructure.from_structure(PEB)):
@@ -793,7 +793,7 @@ if CurrentProcess().bitness == 32:
 
             :type: :class:`windows.pe_parse.PEFile`
             """
-            return pe_parse.PEFile(self.baseaddr, target=self._target)
+            return pe_parse.GetPEFile(self.baseaddr, target=self._target)
 
     class RemotePEB64(rctypes.transform_type_to_remote64bits(PEB)):
 
@@ -825,7 +825,7 @@ if CurrentProcess().bitness == 64:
 
             :type: :class:`windows.pe_parse.PEFile`
             """
-            return pe_parse.PEFile(self.baseaddr, target=self._target)
+            return pe_parse.GetPEFile(self.baseaddr, target=self._target)
 
     class RemotePEB32(rctypes.transform_type_to_remote32bits(PEB)):
 

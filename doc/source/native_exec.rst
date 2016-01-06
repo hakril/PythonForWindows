@@ -1,14 +1,15 @@
+.. module:: windows.native_exec
+
 ``windows.native_exec`` -- Native Code Execution
 ************************************************
 
-.. currentmodule:: windows.native_exec
 
 The  :mod:`windows.native_exec` allows to create `Python` functions calling native code.
 it also provide a simple assembler for x86 and x64.
 
 The :mod:`windows.native_exec` provides those functions:
 
-.. automodule:: windows.native_exec
+.. autofunction:: windows.native_exec.create_function
 
 The :mod:`windows.native_exec` also contains some submodules:
     * :mod:`windows.native_exec.cpuid`

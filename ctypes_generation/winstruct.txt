@@ -1460,3 +1460,13 @@ typedef struct _PROCESS_BASIC_INFORMATION {
     ULONG_PTR UniqueProcessId;
     PVOID Reserved3;
 } PROCESS_BASIC_INFORMATION, *PPROCESS_BASIC_INFORMATION;
+
+typedef struct _JIT_DEBUG_INFO {
+    DWORD dwSize;
+    DWORD dwProcessorArchitecture;
+    DWORD dwThreadID;
+    DWORD dwReserved0;
+    ULONG64 lpExceptionAddress;
+    ULONG64 lpExceptionRecord;
+    ULONG64 lpContextRecord;
+} JIT_DEBUG_INFO, *LPJIT_DEBUG_INFO;

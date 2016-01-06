@@ -9,6 +9,7 @@ from .generated_def.winstructs import *
 
 
 class Callback(object):
+    """Give type information to hook callback"""
     def __init__(self, *types):
         self.types = types
 
@@ -66,11 +67,13 @@ class IATHook(object):
         return res
 
     def enable(self):
+        """Enable the IAT hook"""
         with utils.VirtualProtected(self.entry.addr, ctypes.sizeof(PVOID), PAGE_EXECUTE_READWRITE):
             self.entry.value = self.stub
         self.is_enable = True
 
     def disable(self):
+        """Disable the IAT hook"""
         with utils.VirtualProtected(self.entry.addr, ctypes.sizeof(PVOID), PAGE_EXECUTE_READWRITE):
             self.entry.value = self.entry.nonhookvalue
         self.is_enable = False

@@ -24,8 +24,8 @@ def open_reg_hook(hKey, lpSubKey, ulOptions, samDesired, phkResult, real_functio
         return 42
     print("<in hook> Non-secret key : calling normal function")
     return real_function()
-    
-    
+
+
 # Get the peb of our process
 peb = windows.current_process.peb
 
@@ -38,7 +38,7 @@ adv_imports = pythondll_module.pe.imports['advapi32.dll']
 # Get RegOpenKeyExA iat entry
 RegOpenKeyExA_iat = [n for n in adv_imports if n.name == "RegOpenKeyExA"][0]
 
-# Setup our hook 
+# Setup our hook
 
 RegOpenKeyExA_iat.set_hook(open_reg_hook)
 
@@ -48,6 +48,7 @@ print("Asking for <MY_SECRET_KEY>")
 v = _winreg.OpenKey(1234567, "MY_SECRET_KEY")
 print("Result = " + hex(v.handle))
 
+print("")
 print("Asking for <MY_FAIL_KEY>")
 try:
     v = _winreg.OpenKey(1234567, "MY_FAIL_KEY")
@@ -55,6 +56,7 @@ try:
 except WindowsError as e:
     print(repr(e))
 
+print("")
 print("Asking for <HKEY_CURRENT_USER/Software>")
 try:
     v = _winreg.OpenKey(_winreg.HKEY_CURRENT_USER, "Software")

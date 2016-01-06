@@ -99,6 +99,31 @@ Output::
     Sections: [<PESection ".text">, <PESection ".rdata">, <PESection ".data">, <PESection ".rsrc">, <PESection ".reloc">]
 
 
+.. _sample_iat_hook:
+
+IAT hooking
+"""""""""""
+
+.. literalinclude:: ..\..\samples\iat_hook.py
+
+Output::
+
+    (cmd λ) python iat_hook.py
+    Asking for <MY_SECRET_KEY>
+    <in hook> Hook called | hKey = 0x12d687 | lpSubKey = <MY_SECRET_KEY>
+    <in hook> Secret key asked, returning magic handle 0x12345678
+    Result = 0x12345678
+
+    Asking for <MY_FAIL_KEY>
+    <in hook> Hook called | hKey = 0x12d687 | lpSubKey = <MY_FAIL_KEY>
+    <in hook> Asked for a failing key: returning 0x2a
+    WindowsError(42, 'Windows Error 0x2A')
+
+    Asking for <HKEY_CURRENT_USER/Software>
+    <in hook> Hook called | hKey = 0x80000001L | lpSubKey = <Software>
+    <in hook> Non-secret key : calling normal function
+    Result = 0x108
+
 .. _sample_network_exploration:
 
 :class:`Network` - socket exploration

@@ -24,6 +24,8 @@ sys.path.append(os.path.abspath(__file__ + "..\..\..\.."))
 
 print("Adding <{0}>".format(sys.path[-1]))
 
+os.environ["SPHINX_BUILD"] = "1"
+
 
 # -- General configuration ------------------------------------------------
 

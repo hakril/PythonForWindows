@@ -17,6 +17,9 @@ Contents:
    utils.rst
    native_exec.rst
    various.rst
+   iat_hook.rst
+   wip.rst
+   internals.rst
    sample.rst
 
 

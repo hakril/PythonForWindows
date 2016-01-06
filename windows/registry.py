@@ -40,6 +40,7 @@ class PyHKey(object):
 
     @property
     def subkeys(self):
+        """The subkeys of the registry key"""
         res = []
         with ExpectWindowsError(259):
             for i in itertools.count():
@@ -48,6 +49,7 @@ class PyHKey(object):
 
     @property
     def values(self):
+        """The values of the registry key"""
         res = []
         with ExpectWindowsError(259):
             for i in itertools.count():
@@ -78,7 +80,7 @@ HKEY_USERS = PyHKey(DummyPHKEY(_winreg.HKEY_USERS, "HKEY_USERS"), "", _winreg.KE
 
 
 class Registry(object):
-    """The ``Windows`` registry: a read only mapping"""
+    """The ``Windows`` registry: a read only (for now) mapping"""
 
     registry_base_keys = {
         "HKEY_LOCAL_MACHINE" : HKEY_LOCAL_MACHINE,

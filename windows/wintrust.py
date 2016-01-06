@@ -38,7 +38,10 @@ WTD_STATEACTION_AUTO_CACHE       = 0x00000003
 WTD_STATEACTION_AUTO_CACHE_FLUSH = 0x00000004
 
 def check_signature(filename):
-    print("Filename is <{0}>".format(repr(filename)))
+    """Check if ``filename`` is a valid signed file
+
+        :return: 0 if file have a valid signature
+    """
     file_data = WINTRUST_FILE_INFO()
     file_data.cbStruct = ctypes.sizeof(WINTRUST_FILE_INFO)
     file_data.pcwszFilePath = filename

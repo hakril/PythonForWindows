@@ -111,6 +111,7 @@ class SimpleVariant(ctypes.Structure):
         return bool(self.aslong)
 
 class WmiRequester(object):
+    """Perform WMI request: NOT STABLE"""
     INSTANCE = None
     def __new__(cls):
         if cls.INSTANCE is not None:
@@ -136,6 +137,10 @@ class WmiRequester(object):
 
 
     def select(self, frm, attrs):
+        """Select `attrs` from ``frm``
+
+            :rtype: list of dict
+        """
         enumerator = IEnumWbemClassObject()
         self.service.ExecQuery("WQL", "select * from {0}".format(frm), 0x20, 0, ctypes.byref(enumerator))
 

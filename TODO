@@ -1,6 +1,7 @@
 TODO:
     - Documentation
     - ProcessMemory object ? (metasm like)
+    - Extend Registry feature (write + read 1 key)
 
 FIXME:
     - WMI

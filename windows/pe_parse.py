@@ -47,7 +47,12 @@ def get_structure_transformer_for_target(target):
     return ctypes_structure_transformer, create_structure_at
 
 
-def PEFile(baseaddr, target=None):
+def GetPEFile(baseaddr, target=None):
+    """Return a :class:`PEFile` to explore a PE loaded at `baseaddr` in process `target`.
+    If target is ``None`` it refers the curent process
+
+    :rtype: :class:`PEFile`
+    """
     proc_bitness = windows.current_process.bitness
     if target is None:
         targetedbitness = proc_bitness
@@ -100,8 +105,13 @@ def PEFile(baseaddr, target=None):
         ]
 
     class IATEntry(ctypes.Structure):
+        """Represent an entry in the IAT of a module
+    |   Can be used to get resolved value and setup hook
+        """
         _fields_ = [
             ("value", PVOID)]
+
+
 
         @classmethod
         def create(cls, addr, ord, name):
@@ -117,12 +127,25 @@ def PEFile(baseaddr, target=None):
             return '<{0} "{1}" ordinal {2}>'.format(self.__class__.__name__, self.name, self.ord)
 
         def set_hook(self, callback, types=None):
+            """Setup a hook on the entry and return it.
+
+            :param callback: the hook
+
+                .. note::
+
+                    see :ref:`hook_protocol`
+
+            :rtype: :class:`windows.hooks.IATHook`
+            """
+
+
             hook = hooks.IATHook(self, callback, types)
             self.hook = hook
             hook.enable()
             return hook
 
         def remove_hook(self):
+            """Remove the hook on the entry"""
             if self.hook is None:
                 return False
             self.hook.disable()
@@ -130,6 +153,7 @@ def PEFile(baseaddr, target=None):
             return True
 
     class PEFile(object):
+        """Represent a PE loaded in a process (current or remote)"""
         def __init__(self):
             self.baseaddr = baseaddr
 
@@ -183,6 +207,10 @@ def PEFile(baseaddr, target=None):
 
         @utils.fixedpropety
         def exports(self):
+            """The exports of the PE in a dict. Keys are ordinal (:class:`int`) and name (:class:`str`).
+             The values are the addresses of the exports.
+
+                :type: {(:class:`int` or :class:`str`) : :class:`int`}"""
             res = {}
             exp_dir = self.get_EXPORT_DIRECTORY()
             if exp_dir is None:
@@ -197,6 +225,11 @@ def PEFile(baseaddr, target=None):
         # TODO: get imports by parsing other modules exports if no INT
         @utils.fixedpropety
         def imports(self):
+            """The imports of the PE in a dict.
+            Keys are the names of DLL to import from and values are :class:`list`
+            of :class:`IATEntry`
+
+                :type: {:class:`str` : [:class:`IATEntry`]}"""
             res = {}
             for import_descriptor in self.get_IMPORT_DESCRIPTORS():
                 INT = import_descriptor.get_INT()
@@ -293,5 +326,3 @@ def PEFile(baseaddr, target=None):
             return create_structure_at(IMAGE_NT_HEADERS64, baseaddr + self.e_lfanew)
 
     return current_pe
-
-tst = PEFile.__code__.co_consts[13]
