@@ -25,8 +25,8 @@ PythonForWindows offers objects around processes and allows you to:
 - Explore the PEB (Process Environment Block)
 - Execute `native` and `Python` code in the context of a process.
 
-I try by best to make those features available for every cross-bitness processes (`32 <-> 64` in both ways).
-This involve relying on non-documented `Windows` function/behaviour and also injecting code in the 64bits world of a `Syswow64` process.
+I try my best to make those features available for every cross-bitness processes (`32 <-> 64` in both ways).
+This involves relying on non-documented `Windows` functions/behaviours and also injecting code in the 64bits world of a `Syswow64` process.
 All those operations are also available for the `current_process`.
 
 You can also make some operation on threads (suspend/resume/wait/get(or set) context/ kill)
@@ -35,7 +35,7 @@ You can also make some operation on threads (suspend/resume/wait/get(or set) con
 ### IAT Hook
 
 This codebase is born from my need to have IAT hooks implemented in Python.
-So the features is present (see online documentation)
+So the features is present (See [online documentation][ONLINE_IATHOOK] about IAT hooks).
 
 
 ### Winproxy
@@ -53,7 +53,7 @@ a simple x86/x64 assembler.
 
 ## Other stuff
 
-Some code are just exploration and need improvement like:
+Some code are just explorations and need improvements like:
 
 - Wintrust
 - WMI
@@ -65,3 +65,4 @@ Some code are just exploration and need improvement like:
 [SAMPLE_DIR]: https://github.com/hakril/PythonForWindows/tree/master/samples
 [ONLINE_DOC]: http://hakril.github.io/PythonForWindows/
 [ONLINE_SAMPLE]: http://hakril.github.io/PythonForWindows/sample.html
+[ONLINE_IATHOOK]: http://hakril.github.io/PythonForWindows/iat_hook.html

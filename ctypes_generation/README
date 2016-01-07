@@ -1,9 +1,8 @@
 == ctypes_generation ==
 
-I promise i will make a real README at the root of the project.
-I don't have the need (nor want to code) a full C parser but i need to parse some windows definition
-to generate some python function/struct/flags.
-So, there are 3 dumb parser used to generate:
+I don't have the need for (nor want to code) a full C parser but I need to parse some
+windows definitions to generate some python functions/structs/flags.
+So, there are 3 dumb parsers used to generate:
     - function prototype
     - ctypes struct definition
     - flags (int with name)
