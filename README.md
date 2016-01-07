@@ -9,7 +9,8 @@ There is no external dependencies but it relies heavily on the `ctypes` module.
 Some of this code is clean (IMHO) and some parts are just a wreck that works for now.
 Let's say that the codebase evolves with my needs and my curiosity.
 
-You can find some examples of code in the [samples directory][SAMPLE_DIR].
+Complete online documentation is available [here][ONLINE_DOC]
+You can find some examples of code in the [samples directory][SAMPLE_DIR] or [online][ONLINE_SAMPLE].
 
 Parts of PythonForWindows are used in the [LKD project][LKD_GITHUB].
 
@@ -19,10 +20,10 @@ Parts of PythonForWindows are used in the [LKD project][LKD_GITHUB].
 
 PythonForWindows offers objects around processes and allows you to:
 
-    - Retrieve basic process informations (pid, name, ppid, bitness, ...)
-    - Perform basic interprocess operation (allocation, create thread, read/write memory)
-    - Explore the PEB (Process Environment Block)
-    - Execute `native` and `Python` code in the context of a process.
+- Retrieve basic process informations (pid, name, ppid, bitness, ...)
+- Perform basic interprocess operation (allocation, create thread, read/write memory)
+- Explore the PEB (Process Environment Block)
+- Execute `native` and `Python` code in the context of a process.
 
 I try by best to make those features available for every cross-bitness processes (`32 <-> 64` in both ways).
 This involve relying on non-documented `Windows` function/behaviour and also injecting code in the 64bits world of a `Syswow64` process.
@@ -54,11 +55,13 @@ a simple x86/x64 assembler.
 
 Some code are just exploration and need improvement like:
 
-    - Wintrust
-    - WMI
-    - Exception
-    - COM
+- Wintrust
+- WMI
+- Exception
+- COM
 
 
 [LKD_GITHUB]: https://github.com/sogeti-esec-lab/LKD/
 [SAMPLE_DIR]: https://github.com/hakril/PythonForWindows/tree/master/samples
+[ONLINE_DOC]: http://hakril.github.io/PythonForWindows/
+[ONLINE_SAMPLE]: http://hakril.github.io/PythonForWindows/sample.html
