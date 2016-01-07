@@ -143,6 +143,10 @@ class WindowsTestCase(unittest.TestCase):
 
     def test_parse_remote_32_peb(self):
         with Calc32() as calc:
+            # Wait for PEB initialization
+            # Yeah a don't know but on 32bits system the parsing might begin before
+            # InMemoryOrderModuleList is setup..
+            import time; time.sleep(0.1)
             self.assertEqual(calc.peb.modules[0].name, "calc.exe")
 
     @windows_64bit_only
@@ -152,6 +156,10 @@ class WindowsTestCase(unittest.TestCase):
 
     def test_parse_remote_32_pe(self):
         with Calc32() as calc:
+            # Wait for PEB initialization
+            # Yeah a don't know but on 32bits system the parsing might begin before
+            # InMemoryOrderModuleList is setup..
+            import time; time.sleep(0.1)
             mods = [m for m in calc.peb.modules if m.name == "kernel32.dll"]
             self.assertTrue(mods, 'Could not find "kernel32.dll" in calc32')
             k32 = mods[0]
@@ -261,6 +269,7 @@ class WindowsTestCase(unittest.TestCase):
             code += x86.Label(":LOOP")
             code += x86.Jmp(":LOOP")
             t = calc.execute(code.get_code())
+            time.sleep(0.5)
             cont = t.context
             self.assertEqual(cont.Eax, 0x42424242)
 
@@ -272,6 +281,7 @@ class WindowsTestCase(unittest.TestCase):
             code += x64.Label(":LOOP")
             code += x64.Jmp(":LOOP")
             t = calc.execute(code.get_code())
+            time.sleep(0.5)
             cont = t.context
             self.assertEqual(cont.Rax, 0x4242424243434343)
 
