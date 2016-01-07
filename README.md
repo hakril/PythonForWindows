@@ -9,7 +9,7 @@ There is no external dependencies but it relies heavily on the `ctypes` module.
 Some of this code is clean (IMHO) and some parts are just a wreck that works for now.
 Let's say that the codebase evolves with my needs and my curiosity.
 
-You can find some examples of code in the `samples/` directory.
+You can find some examples of code in the [samples directory][SAMPLE_DIR].
 
 Parts of PythonForWindows are used in the [LKD project][LKD_GITHUB].
 
@@ -18,6 +18,7 @@ Parts of PythonForWindows are used in the [LKD project][LKD_GITHUB].
 ### Processes / Threads
 
 PythonForWindows offers objects around processes and allows you to:
+
     - Retrieve basic process informations (pid, name, ppid, bitness, ...)
     - Perform basic interprocess operation (allocation, create thread, read/write memory)
     - Explore the PEB (Process Environment Block)
@@ -52,6 +53,7 @@ a simple x86/x64 assembler.
 ## Other stuff
 
 Some code are just exploration and need improvement like:
+
     - Wintrust
     - WMI
     - Exception
@@ -59,3 +61,4 @@ Some code are just exploration and need improvement like:
 
 
 [LKD_GITHUB]: https://github.com/sogeti-esec-lab/LKD/
+[SAMPLE_DIR]: https://github.com/hakril/PythonForWindows/tree/master/samples
