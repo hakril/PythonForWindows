@@ -136,7 +136,7 @@ class X86(object):
 
 
 def create_displacement(base=None, index=None, scale=None, disp=0, prefix=None):
-    """Create an X86 memory access description"""
+    """Creates a X86 memory access description"""
     if index is not None and scale is None:
         scale = 1
     if scale and index is None:
@@ -147,12 +147,14 @@ def create_displacement(base=None, index=None, scale=None, disp=0, prefix=None):
 
 
 def deref(disp):
+    """Create a memory access for an immediate value ``Ex: [0x42424242]``"""
     return create_displacement(disp=disp)
 
 
 def mem(data):
-    """Parse a memory access string of format [EXPR] or seg:[EXPR]
-       EXPR may describe: BASE | INDEX * SCALE | DISPLACEMENT or any combinaison (in this order)
+    """Parse a memory access string of format ``[EXPR]`` or ``seg:[EXPR]``
+
+       ``EXPR`` may describe: ``BASE | INDEX * SCALE | DISPLACEMENT`` or any combinaison (in this order)
     """
     if not isinstance(data, str):
         raise TypeError("mem need a string to parse")

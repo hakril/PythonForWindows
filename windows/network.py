@@ -58,7 +58,7 @@ class TCP4Connection(MIB_TCPROW_OWNER_PID):
     @property
     def remote_host(self):
         """Identification of the remote hostname.
-           Equals ``remote_addr`` if resolution fail
+           Equals ``remote_addr`` if the resolution fails
 
            :type: :class:`str` or :class:`int`
         """
@@ -124,12 +124,12 @@ class TCP6Connection(MIB_TCP6ROW_OWNER_PID):
 
     @property
     def remote_proto(self):
-        """Equals to self.remote_port for Ipv6"""
+        """Equals to ``self.remote_port`` for Ipv6"""
         return self.remote_port
 
     @property
     def remote_host(self):
-        """Equals to self.remote_addr for Ipv6"""
+        """Equals to ``self.remote_addr`` for Ipv6"""
         return self.remote_addr
 
     def close(self):

@@ -202,7 +202,6 @@ get_syswow_ntdll_exports.value = None
 
 
 class Syswow64ApiProxy(object):
-    APIDLL = None
     """Create a python wrapper around a function"""
     def __init__(self, winproxy_function):
         self.winproxy_function = winproxy_function

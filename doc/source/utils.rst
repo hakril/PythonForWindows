@@ -1,4 +1,4 @@
-``windows.utils`` -- Pythonic Windows Utilities
+``windows.utils`` -- Windows Utilities
 ***********************************************
 
 .. module:: windows.utils
@@ -14,13 +14,13 @@ VirtualProtected
 
 .. autoclass:: windows.utils.VirtualProtected
     :no-show-inheritance:
-    
+
 DisableWow64FsRedirection
 '''''''''''''''''''''''''
 
 .. autoclass:: windows.utils.DisableWow64FsRedirection
     :no-show-inheritance:
-    
+
 Helper functions
 """"""""""""""""
 

@@ -8,7 +8,7 @@ from windows.generated_def.winstructs import *
 
 
 def _bitness():
-    """Return 32 or 64"""
+    """Returns 32 or 64"""
     import platform
     bits = platform.architecture()[0]
     return int(bits[:2])
@@ -82,7 +82,7 @@ do_cpuid64 = native_function.create_function(cpuid64_code.get_code(), [DWORD, DW
 
 
 def x86_cpuid(req):
-    """Perform a CPUID in 32bits mode
+    """Performs a CPUID in 32bits mode
 
         :rtype: :class:`X86CpuidResult`
     """
@@ -92,7 +92,7 @@ def x86_cpuid(req):
 
 
 def x64_cpuid(req):
-    """Perform a CPUID in 64bits mode
+    """Performs a CPUID in 64bits mode
 
         :rtype: :class:`X86CpuidResult`
     """
@@ -108,7 +108,7 @@ else:
     _do_cpuid = x64_cpuid
 
 def do_cpuid(req):
-    """Perform a CPUID for the current process bitness
+    """Performs a CPUID for the current process bitness
 
         :rtype: :class:`X86CpuidResult`
     """
@@ -116,7 +116,7 @@ def do_cpuid(req):
 
 
 def get_vendor_id():
-    """Extract the VendorId string from CPUID
+    """Extracts the VendorId string from CPUID
 
         :rtype: :class:`str`
     """
@@ -136,7 +136,7 @@ def is_amd_proc():
 
 
 def get_proc_family_model():
-    """Extract the family and model based on vendorId
+    """Extracts the family and model based on vendorId
 
         :rtype: (ComputedFamily, ComputedModel)
     """

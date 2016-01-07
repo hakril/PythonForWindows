@@ -5,8 +5,8 @@ IAT hooking
 
     See sample :ref:`sample_iat_hook`
 
-Put a IAT hook
-''''''''''''''
+Putting an IAT hook
+'''''''''''''''''''
 
 To setup your IAT hook you just need:
 
@@ -71,7 +71,7 @@ A hook callback must also embed some :ref:`Type Information <type_information>`
 Callback type information
 --------------------------
 
-In order make the magic behind Python Hook Callback, :mod:`ctypes` need to have type information about the API parameters.
+In order make the magic behind hook callback, :mod:`ctypes` needs to have type information about the API parameters.
 
 There is (again) two ways to give those informations to your hook callback. Both techniques use a decorator to setup type information to the callback.
 

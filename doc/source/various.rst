@@ -2,13 +2,14 @@ The :mod:`windows` objects
 ==========================
 
 Through the :ref:`system <object_system>` object many classes representing various `Windows`
-part are accessible.
+parts are accessible.
 
 This sections describes them by group of relation.
 
 .. toctree::
-    :maxdepth: 2
+    :maxdepth: 3
 
     process.rst
     registry.rst
     network.rst
+    com.rst

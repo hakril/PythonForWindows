@@ -149,3 +149,42 @@ Output::
     File ".\network.py", line 45, in <module>
         s.send("LAIT")
     socket.error: [Errno 10054] An existing connection was forcibly closed by the remote host
+
+
+.. _sample_registry:
+
+:class:`Registry`
+"""""""""""""""""
+
+.. literalinclude:: ..\..\samples\registry.py
+
+Output::
+
+    (cmd λ) python.exe registry.py
+    Registry is <<windows.registry.Registry object at 0x02941290>>
+    HKEY_CURRENT_USER is <<PyHKey "HKEY_CURRENT_USER">>
+    HKEY_CURRENT_USER subkeys names are:
+    ['AppEvents',
+    'AppXBackupContentType',
+    'Console',
+    'Control Panel',
+    'Environment',
+    'EUDC',
+    'Identities',
+    'Keyboard Layout',
+    'Network',
+    'Printers',
+    'Software',
+    'System',
+    'Volatile Environment']
+    Opening 'Software' in HKEY_CURRENT_USER: <PyHKey "HKEY_CURRENT_USER\Software">
+    We can also open it in one access: <PyHKey "HKEY_CURRENT_USER\Sofware">
+    Looking at CurrentVersion
+    Key is <PyHKey "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion">
+    values are:
+    [KeyValue(name='SoftwareType', value=u'System', type=1),
+    KeyValue(name='RegisteredOwner', value=u'hakril', type=1),
+    KeyValue(name='InstallDate', value=0, type=4),
+    ...
+    KeyValue(name='PathName', value=u'C:\\Windows', type=1)]
+    registered owner = <KeyValue(name='RegisteredOwner', value=u'hakril', type=1)>

@@ -13,7 +13,7 @@ import windows
 @windows.hooks.RegOpenKeyExACallback
 def open_reg_hook(hKey, lpSubKey, ulOptions, samDesired, phkResult, real_function):
     print("<in hook> Hook called | hKey = {0} | lpSubKey = <{1}>".format(hex(hKey), lpSubKey.value))
-    # Out hook can choose to call the real_function or not
+    # Our hook can choose to call the real_function or not
     if "SECRET" in lpSubKey.value:
         print("<in hook> Secret key asked, returning magic handle 0x12345678")
         # We must respect the hooked method return-value interface
@@ -39,11 +39,9 @@ adv_imports = pythondll_module.pe.imports['advapi32.dll']
 RegOpenKeyExA_iat = [n for n in adv_imports if n.name == "RegOpenKeyExA"][0]
 
 # Setup our hook
-
 RegOpenKeyExA_iat.set_hook(open_reg_hook)
 
 # Use python native module _winreg that call 'RegOpenKeyExA'
-
 print("Asking for <MY_SECRET_KEY>")
 v = _winreg.OpenKey(1234567, "MY_SECRET_KEY")
 print("Result = " + hex(v.handle))

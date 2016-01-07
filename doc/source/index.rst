@@ -13,10 +13,10 @@ Contents:
    :numbered:
 
    windows.rst
+   various.rst
+   native_exec.rst
    winproxy.rst
    utils.rst
-   native_exec.rst
-   various.rst
    iat_hook.rst
    wip.rst
    internals.rst
@@ -28,4 +28,5 @@ Indices and tables
 
 * :ref:`modindex`
 * :ref:`search`
+* :ref:`genindex`
 

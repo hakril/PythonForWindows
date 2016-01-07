@@ -48,10 +48,13 @@ def get_structure_transformer_for_target(target):
 
 
 def GetPEFile(baseaddr, target=None):
-    """Return a :class:`PEFile` to explore a PE loaded at `baseaddr` in process `target`.
-    If target is ``None`` it refers the curent process
+    """Returns a :class:`PEFile` to explore a PE loaded at `baseaddr` in process `target`.
 
     :rtype: :class:`PEFile`
+
+    .. note::
+
+        If target is ``None`` it refers to the curent process
     """
     proc_bitness = windows.current_process.bitness
     if target is None:
@@ -106,7 +109,7 @@ def GetPEFile(baseaddr, target=None):
 
     class IATEntry(ctypes.Structure):
         """Represent an entry in the IAT of a module
-    |   Can be used to get resolved value and setup hook
+        Can be used to get resolved value and setup hook
         """
         _fields_ = [
             ("value", PVOID)]
@@ -136,8 +139,13 @@ def GetPEFile(baseaddr, target=None):
                     see :ref:`hook_protocol`
 
             :rtype: :class:`windows.hooks.IATHook`
-            """
 
+            .. warning::
+
+                This works only for PEFile with the current process as target.
+            """
+            if target is not None:
+                raise NotImplementedError("Setting hook in remote process (use python code injection)")
 
             hook = hooks.IATHook(self, callback, types)
             self.hook = hook

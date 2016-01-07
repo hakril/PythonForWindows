@@ -13,13 +13,11 @@ Should it juste be part of :mod:`windows.utils` ?
 .. autofunction:: windows.wintrust.check_signature
 
 
+.. module:: windows.wmi
 
 WMI -- WMI request
 """"""""""""""""""
 
 Unstable code: not fully tested, ugly COM initialisation
-
-
-.. module:: windows.wmi
 
 .. autoclass:: windows.wmi.WmiRequester

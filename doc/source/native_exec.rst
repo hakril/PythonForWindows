@@ -4,10 +4,10 @@
 ************************************************
 
 
-The  :mod:`windows.native_exec` allows to create `Python` functions calling native code.
-it also provide a simple assembler for x86 and x64.
+:mod:`windows.native_exec` allows to create `Python` functions calling native code.
+it also provides a simple assembler for x86 and x64.
 
-The :mod:`windows.native_exec` provides those functions:
+:mod:`windows.native_exec` provides those functions:
 
 .. autofunction:: windows.native_exec.create_function
 
@@ -47,7 +47,7 @@ Demo::
 The :mod:`windows.native_exec.simple_x86` module allows to create simple x86 code.
 
 Its features are:
-    * Forward - Backward jump (using label)
+    * Forward - Backward jump (using labels)
     * Non-string interface for conditional/context dependent generation
 
 
@@ -59,12 +59,13 @@ The assembler instructions are `Python` object that may accept arguments represe
 the mnemonic operands.
 
 These parameters can be of type:
-    * str (register)
-    * int (int)
-    * mem_access (memory access)
+    * :class:`str` (register)
+    * :class:`int` (int)
+    * :class:`mem_access` (memory access)
 
 .. autoclass:: windows.native_exec.simple_x86.mem_access
     :members: prefix, base, index, scale, disp
+    :exclude-members: count
 
 The :class:`mem_access` object can be created:
     * By hand
@@ -72,6 +73,7 @@ The :class:`mem_access` object can be created:
     * Using :func:`mem`
 
 .. autofunction:: windows.native_exec.simple_x86.create_displacement
+.. autofunction:: windows.native_exec.simple_x86.deref
 .. autofunction:: windows.native_exec.simple_x86.mem
 
 Instruction assembling::
@@ -116,6 +118,7 @@ Another example from a project::
         INPUT_BUFFER_PORT =  x86.mem('[ECX + 4]')
         INPUT_BUFFER_VALUE = x86.mem('[ECX + 8]')
 
+        out_ioctl = x86.MultipleInstr()
         out_ioctl += x86.Cmp(IO_STACK_INPUT_BUFFER_LEN, 0xc)  # size indicator / port / value
         out_ioctl += x86.Jnz(":FAIL")
         out_ioctl +=    x86.Mov('ECX', IO_STACK_INPUT_BUFFER)
@@ -139,6 +142,9 @@ Another example from a project::
         out_ioctl += x86.Label(":FAIL")
         out_ioctl += x86.Mov('EAX', 0x0C000000D)
         out_ioctl += x86.Ret()
+
+        out_ioctl.get_code()
+        '\x81~\x08\x0c\x00\x00\x00u&\x8bN\x10\x8bQ\x04\x8bA\x08\x8b\t\x81\xf9\x01\x00\x00\x00u\x03\xee\xeb\r\x81\xf9\x02\x00\x00\x00u\x04f\xef\xeb\x01\xef1\xc0\xc3\xc7\xc0\r\x00\x00\xc0\xc3'
 
 
 :mod:`windows.native_exec.simple_x64` -- X64 Assembler

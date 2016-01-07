@@ -2,7 +2,9 @@ The ``windows`` module
 **********************
 
 The ``windows`` module is the module installed by :file:`setup.py` (that does not exists right now).
-This module export some object representing the current state of the system. It also offers some submodules aimed to help the interface with ``Windows`` and native code exection.
+
+This module exports some objects representing the current state of the system.
+It also offers some submodules aimed to help the interfacing with ``Windows`` and native code execution.
 
 The defaults objects accessible in ``windows`` are:
     * ``system`` of type :class:`windows.winobject.System`
@@ -18,6 +20,8 @@ The submodules that you might use by themself are:
 
 The ``system`` object
 """""""""""""""""""""
+
+.. currentmodule:: windows.winobject
 
 .. autoclass:: windows.winobject.System
     :no-show-inheritance:

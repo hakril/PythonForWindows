@@ -12,6 +12,7 @@ CurrentProcess
 
 .. autoclass:: CurrentProcess
    :members:
+   :show-inheritance:
    :inherited-members:
 
 CurrentThread
@@ -19,6 +20,7 @@ CurrentThread
 
 .. autoclass:: CurrentThread
    :members:
+   :show-inheritance:
    :inherited-members:
 
 WinProcess
@@ -30,6 +32,7 @@ WinProcess
 
 .. autoclass:: WinProcess
    :members:
+   :show-inheritance:
    :inherited-members:
 
 
@@ -38,11 +41,13 @@ WinThread
 
 .. autoclass:: WinThread
    :members:
+   :show-inheritance:
    :inherited-members:
 
 
 .. autoclass:: DeadThread
    :members:
+   :show-inheritance:
    :inherited-members:
 
 
@@ -56,17 +61,23 @@ The :class:`PEB` is accessible via ``process.peb`` and is of type :class:`PEB`.
 
     See sample :ref:`sample_peb_exploration`
 
+PEB
+'''
+
 .. autoclass:: PEB
    :members:
    :inherited-members:
 
 .. autoclass:: WinUnicodeString
 
+LoadedModule
+''''''''''''
+
 .. autoclass:: LoadedModule
 
 
-PEFile
-""""""
+PEFile - Parsing loaded PE
+""""""""""""""""""""""""""
 
 :mod:`windows.pe_parse`
 '''''''''''''''''''''''
@@ -75,8 +86,13 @@ PEFile
 
 .. autofunction:: windows.pe_parse.GetPEFile
 
+PEFile
+^^^^^^
+
 .. autoclass:: PEFile
 
+IATEntry
+^^^^^^^^
 
 .. autoclass:: IATEntry
 

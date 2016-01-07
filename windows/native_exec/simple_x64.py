@@ -1059,7 +1059,7 @@ if in_IDA:
     def test_code():
         s = MultipleInstr()
         s += Mov('r8', 'r14')
-        s += Label(':SUCE')
+        s += Label(':A_POLITICALLY_CORRECT_LABEL_NAME')
         s += Jnz(':END')
         s += Add('r14', 0x12345678)
         s += Dec('r9')
@@ -1068,7 +1068,7 @@ if in_IDA:
         s += Mov('r8', 'rdx')
         s += Jnz(':END')
         s += Mov('r8', 'rdx')
-        s += Jnz(':SUCE')
+        s += Jnz(':A_POLITICALLY_CORRECT_LABEL_NAME')
         s += Mov('r9', 'r10')
         s += Label(':END')
         s += Ret()

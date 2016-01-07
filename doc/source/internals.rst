@@ -17,13 +17,13 @@ So I made a wrapper around :mod:`ctypes` that is able to do two things:
 
     This is done by replacing the ``c_void_p``/``c_char_p`` by ``DWORD`` or
     ``QWORD`` and rewriting a wrapper around the :mod:`ctypes` ``POINTER`` and other stuff.
-    I might not works for every structure by i didn't have any problem for now.
+    It might not works for every structure by i didn't have any problem for now.
 
     - Read the memory in another process
 
     For this one I rewrote a class that use the standard :mod:`ctypes` structure
-    offset-size calcultation, extract those information when asked for a field and read it from the target process.
-    We just need to take care of special cases:  ``POINTER`` / ``ARRAY`` / ``STRING``
+    offset-size calculation, extracts those information when asked for a field and read it from the target process.
+    We just need to take care of special cases:  ``POINTER`` / ``ARRAY`` / ``STRING`` / ..
 
 We also need to be carreful about the inheritance, we need to inherit from "hidden"
 :class:`ctypes` classes to keep the magic working.
@@ -85,7 +85,7 @@ With these information we are able to know
     * The name of the API
     * The number of arguments
 
-With that I generate the correct x64 stub (using :mod:`windows.native_exec.simple_x64`). With the function:
+Then I generate the correct x64 stub (using :mod:`windows.native_exec.simple_x64`) with the function:
 
 .. function:: generate_syswow64_call
 
@@ -100,10 +100,10 @@ For now I allocate a buffer where a python wrapper copy the parameters and the x
 The final result is a ``Python`` function like the one in :mod:`windows.winproxy`
 
     * It copies the arguments in the buffer
-    * Jump on the 32->64 stub
+    * Jumps on the 32->64 stub
     * X64 bits code retrieves the arguments in the buffer and setup the registers and the stack for the call
-    * Call the API
-    * Return to 32bits mode.
+    * Calls the API
+    * Returns to 32bits mode.
 
 .. class:: Syswow64ApiProxy
 

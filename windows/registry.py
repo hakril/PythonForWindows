@@ -1,7 +1,10 @@
 import _winreg
-import windows
 import itertools
-import collections
+from collections import namedtuple
+
+import windows
+from windows.generated_def.windef import KEY_READ
+
 
 
 class ExpectWindowsError(object):
@@ -14,11 +17,14 @@ class ExpectWindowsError(object):
     def __exit__(self, etype, e, tb):
         return (etype == WindowsError and e.winerror == self.errornumber)
 
-KeyValue = collections.namedtuple("KeyValue", ["name", "value", "type"])
+
+KeyValue = namedtuple("KeyValue", ["name", "value", "type"])
+"""A registry value (name, value, type)"""
+
 
 class PyHKey(object):
     """A windows registry key"""
-    def __init__(self, surkey, name, sam=_winreg.KEY_READ):
+    def __init__(self, surkey, name, sam=KEY_READ):
         self.surkey = surkey
         self.name = name
         self.fullname = self.surkey.fullname + "\\" + self.name if self.name else self.surkey.name
@@ -40,7 +46,9 @@ class PyHKey(object):
 
     @property
     def subkeys(self):
-        """The subkeys of the registry key"""
+        """The subkeys of the registry key
+
+        :type: [:class:`PyHKey`] - A list of keys"""
         res = []
         with ExpectWindowsError(259):
             for i in itertools.count():
@@ -49,14 +57,28 @@ class PyHKey(object):
 
     @property
     def values(self):
-        """The values of the registry key"""
+        """The values of the registry key
+
+        :type: [:class:`KeyValue`] - A list of values"""
         res = []
         with ExpectWindowsError(259):
             for i in itertools.count():
                 res.append(_winreg.EnumValue(self.phkey, i))
         return [KeyValue(*r) for r in res]
 
+    def get(self, value_name):
+        """Retrieves the value ``value_name``
+
+        :rtype: :class:`KeyValue`
+        """
+        data = _winreg.QueryValueEx(self.phkey, value_name)
+        return KeyValue(value_name, data[0], data[1])
+
     def open_subkey(self, name):
+        """Open the subkey ``name``
+
+        :rtype: :class:`PyHKey`
+        """
         return PyHKey(self, name, self.sam)
 
     def reopen(self, new_sam):
@@ -108,4 +130,3 @@ class Registry(object):
         if base_name not in self.registry_base_keys:
             raise ValueError("Unknow registry base key <{0}>".format(base_name))
         return self.registry_base_keys[base_name][subkey]
-

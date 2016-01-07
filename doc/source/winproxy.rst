@@ -3,15 +3,15 @@
 
 .. module:: windows.winproxy
 
-The :mod:`windows.winproxy` module tries to be a pythontic wrapper around windows API of various DLL.
-It also hevily relies on :mod:`ctypes`.
+:mod:`windows.winproxy` tries to be a pythontic wrapper around windows API of various DLL.
+It also heavily relies on :mod:`ctypes` and :mod:`windows.generated_def.winfuncs`
 
-Here are the thing to know about :mod:`windows.winproxy`
-    * All of this is based on :mod:`windows.generated_def.winfunc`
+Here are the things to know about :mod:`windows.winproxy`
+    * All of this is based on :mod:`windows.generated_def.winfuncs`
     * DLL is loaded the first time an API of it is called
     * All parameters can be passed by ordinal or keyword
-    * The call with fail if an argument with default value ``NeededParamater`` have be called without another value.
-    * The call will raise a subclasse of :class:`WindowsError` if it fail.
+    * The call will fail if an argument with default value ``NeededParamater`` have been called without another value.
+    * The call will raise a subclass of :class:`WindowsError` if it fails.
     * Some functions are 'transparent proxy' it means that all parameters are mandatory
 
 Example: ``VirtualAlloc``
@@ -60,7 +60,7 @@ Calling it
     TypeError: VirtualAlloc: Missing Mandatory parameter <dwSize>
     """
 
-    # Error raise exception
+    # Error raises exception
     windows.winproxy.VirtualAlloc(dwSize=0xffffffff)
     """
     Traceback (most recent call last):

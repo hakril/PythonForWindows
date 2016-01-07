@@ -40,7 +40,7 @@ print("Reading allocated memory : <{0}>".format(repr(calc.read_memory(addr, 20))
 
 # Remote Execution
 
-print("Execution some native code in our calc (write 0x424242 at allocated address + return 0x1337")
+print("Execution some native code in our calc (write 0x424242 at allocated address + return 0x1337)")
 
 if calc.bitness == 32:
     # Let's generate some native code
@@ -54,7 +54,7 @@ else:
     code += x64.Mov(x64.mem("[RAX]"), 0x42424242)
     code += x64.Mov("RAX", 0x1337)
     code += x64.Ret()
-    
+
 print("Executing native code !")
 t = calc.execute(code.get_code())
 t.wait()
@@ -80,10 +80,10 @@ try:
 except windows.injection.RemotePythonError as e:
     print("Remote ERROR !")
     print(e)
-    
+
 print("That's all ! killing the calc")
 calc.exit()
-    
+
 
 
 
