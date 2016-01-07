@@ -1,15 +1,17 @@
 # PythonForWindows
 
-PythonForWindows is a base of code aimed to make interaction with `Windows` (on X86/X64) easier (with both 32 and 64 bits Python).
+PythonForWindows is a base of code aimed to make interaction with `Windows` (on X86/X64) easier (for both 32 and 64 bits Python).
 Its goal is to offer abstractions around some of the OS features in a (I hope) pythonic way.
-It also tries to make the barrier between python and native execution thiner in both ways.
-There is no external dependencies but it relies heavily on the `ctypes` modules.
+It also tries to make the barrier between python and native execution thinner in both ways.
+There is no external dependencies but it relies heavily on the `ctypes` module.
 
 
 Some of this code is clean (IMHO) and some parts are just a wreck that works for now.
 Let's say that the codebase evolves with my needs and my curiosity.
 
 You can find some examples of code in the `samples/` directory.
+
+Parts of PythonForWindows are used in the [LKD project][LKD_GITHUB].
 
 ## Overview
 
@@ -55,3 +57,5 @@ Some code are just exploration and need improvement like:
     - Exception
     - COM
 
+
+[LKD_GITHUB]: https://github.com/sogeti-esec-lab/LKD/
