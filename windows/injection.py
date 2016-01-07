@@ -136,7 +136,7 @@ def validate_python_dll_presence(process):
         return True
     if windows.current_process.bitness == 32 and process.bitness == 64:
         with windows.utils.DisableWow64FsRedirection():
-            if not os.path.exists(r"C:\system32\python27.dll"):
+            if not os.path.exists(r"C:\Windows\system32\python27.dll"):
                 raise ValueError("Could not find Python DLL to inject")
             return True
     if windows.current_process.bitness == 64 and process.bitness == 32:
