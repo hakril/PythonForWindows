@@ -293,7 +293,8 @@ class WindowsAPITestCase(unittest.TestCase):
 
 if __name__ == '__main__':
     alltests = unittest.TestSuite()
-    alltests.addTest(unittest.makeSuite(WindowsTestCase), unittest.makeSuite(WindowsAPITestCase))
+    alltests.addTest(unittest.makeSuite(WindowsTestCase))
+    alltests.addTest(unittest.makeSuite(WindowsAPITestCase))
     alltests.debug()
     tester = unittest.TextTestRunner(verbosity=2)
     tester.run(alltests)

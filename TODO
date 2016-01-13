@@ -8,6 +8,3 @@ FIXME:
         - COM initialisation when injected in another process
         - The CoInitialize might be already called
         - Fix that
-
-    - Add INVALID_HANDLE_VALUE to windef
-        - change error_check of CreateFile(A|W)
