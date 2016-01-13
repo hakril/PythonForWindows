@@ -111,8 +111,14 @@ common_header = "#Generated file\n"
 
 defs_header = common_header + """
 import sys
+import platform
 if sys.version_info.major == 3:
     long = int
+
+bits = platform.architecture()[0]
+bitness =  int(bits[:2])
+
+NATIVE_WORD_MAX_VALUE = 0xffffffff if bitness == 32 else 0xffffffffffffffff
 
 class Flag(long):
     def __new__(cls, name, value):

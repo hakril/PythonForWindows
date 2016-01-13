@@ -285,10 +285,15 @@ class WindowsTestCase(unittest.TestCase):
             cont = t.context
             self.assertEqual(cont.Rax, 0x4242424243434343)
 
+class WindowsAPITestCase(unittest.TestCase):
+    def test_createfileA_fail(self):
+        with self.assertRaises(WindowsError) as ar:
+            windows.winproxy.CreateFileA("NONEXISTFILE.FILE")
+
 
 if __name__ == '__main__':
     alltests = unittest.TestSuite()
-    alltests.addTest(unittest.makeSuite(WindowsTestCase))
+    alltests.addTest(unittest.makeSuite(WindowsTestCase), unittest.makeSuite(WindowsAPITestCase))
     alltests.debug()
     tester = unittest.TextTestRunner(verbosity=2)
     tester.run(alltests)

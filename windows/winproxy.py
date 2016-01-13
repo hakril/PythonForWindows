@@ -252,12 +252,19 @@ Wow64EnableWow64FsRedirection = OptionalExport(TransparentKernel32Proxy)("Wow64E
 Wow64GetThreadContext = OptionalExport(TransparentKernel32Proxy)("Wow64GetThreadContext")
 
 
-@Kernel32Proxy("CreateFileA")
+def CreateFile_error_check(func_name, result, func, args):
+    """raise Kernel32Error if result is NOT 0"""
+    if result == INVALID_HANDLE_VALUE:
+        raise Kernel32Error(func_name)
+    return args
+
+
+@Kernel32Proxy("CreateFileA", error_check=CreateFile_error_check)
 def CreateFileA(lpFileName, dwDesiredAccess=GENERIC_READ, dwShareMode=0, lpSecurityAttributes=None, dwCreationDisposition=OPEN_EXISTING, dwFlagsAndAttributes=FILE_ATTRIBUTE_NORMAL, hTemplateFile=None):
     return CreateFileA.ctypes_function(lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile)
 
 
-@Kernel32Proxy("CreateFileW")
+@Kernel32Proxy("CreateFileW", error_check=CreateFile_error_check)
 def CreateFileW(lpFileName, dwDesiredAccess=GENERIC_READ, dwShareMode=0, lpSecurityAttributes=None, dwCreationDisposition=OPEN_EXISTING, dwFlagsAndAttributes=FILE_ATTRIBUTE_NORMAL, hTemplateFile=None):
     return CreateFileA.ctypes_function(lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile)
 

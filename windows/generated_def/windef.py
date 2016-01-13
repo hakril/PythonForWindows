@@ -1,8 +1,14 @@
 #Generated file
 
 import sys
+import platform
 if sys.version_info.major == 3:
     long = int
+
+bits = platform.architecture()[0]
+bitness =  int(bits[:2])
+
+NATIVE_WORD_MAX_VALUE = 0xffffffff if bitness == 32 else 0xffffffffffffffff
 
 class Flag(long):
     def __new__(cls, name, value):
@@ -16,6 +22,7 @@ class Flag(long):
 
     __str__ = __repr__
 
+INVALID_HANDLE_VALUE = Flag("INVALID_HANDLE_VALUE", ( ( -1 ) & NATIVE_WORD_MAX_VALUE ))
 NULL = Flag("NULL", 0)
 MAX_PATH = Flag("MAX_PATH", 260)
 ANYSIZE_ARRAY = Flag("ANYSIZE_ARRAY", 1)

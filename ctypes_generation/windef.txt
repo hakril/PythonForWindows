@@ -1,3 +1,4 @@
+#define INVALID_HANDLE_VALUE ((-1) & NATIVE_WORD_MAX_VALUE)
 #define NULL    0
 #define MAX_PATH          260
 #define ANYSIZE_ARRAY 1
