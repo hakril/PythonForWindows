@@ -44,21 +44,21 @@ else:
 
 
 @contextmanager
-def Calc64():
+def Calc64(exit_code=0):
     try:
         calc = pop_calc_64()
         yield calc
     finally:
-        calc.exit()
+        calc.exit(exit_code)
 
 
 @contextmanager
-def Calc32():
+def Calc32(exit_code=0):
     try:
         calc = pop_calc_32()
         yield calc
     finally:
-        calc.exit()
+        calc.exit(exit_code)
 
 
 class WindowsTestCase(unittest.TestCase):
@@ -284,6 +284,13 @@ class WindowsTestCase(unittest.TestCase):
             time.sleep(0.5)
             cont = t.context
             self.assertEqual(cont.Rax, 0x4242424243434343)
+
+    def test_process_is_exit(self):
+        with Calc32(exit_code=42) as calc:
+            self.assertEqual(calc.is_exit, False)
+        # out of context manager: process is exit
+        self.assertEqual(calc.exit_code, 42)
+        self.assertEqual(calc.is_exit, True)
 
 class WindowsAPITestCase(unittest.TestCase):
     def test_createfileA_fail(self):

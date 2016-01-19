@@ -311,7 +311,7 @@ class Process(AutoHandle):
 
         :type: :class:`bool`
         """
-        return self.exit_code == STILL_ACTIVE
+        return self.exit_code != STILL_ACTIVE
 
     def execute(self, code):
         """Execute some native code in the context of the process
