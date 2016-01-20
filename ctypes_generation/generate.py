@@ -24,8 +24,10 @@ TYPE_EQUIVALENCE = [
     ('ULONG_PTR','PULONG'),
     ('CHAR', 'c_char'),
     ('UCHAR', 'c_char'),
+    ('PUCHAR', 'POINTER(UCHAR)'),
     ('FARPROC', 'PVOID'),
     ('HGLOBAL', 'PVOID'),
+    ('PSID', 'PVOID'),
     ('PVECTORED_EXCEPTION_HANDLER', 'PVOID'),
     #('HRESULT', 'c_long'), # VERY BAD : real HRESULT raise by itself -> way better
     ('ULONGLONG', 'c_ulonglong'),

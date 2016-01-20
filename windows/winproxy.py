@@ -461,6 +461,22 @@ def DeviceIoControl(hDevice, dwIoControlCode, lpInBuffer, nInBufferSize=None, lp
     return DeviceIoControl.ctypes_function(hDevice, dwIoControlCode, lpInBuffer, nInBufferSize, lpOutBuffer, nOutBufferSize, lpBytesReturned, lpOverlapped)
 
 
+# Debug API
+
+DebugBreak = TransparentKernel32Proxy("DebugBreak")
+ContinueDebugEvent = TransparentKernel32Proxy("ContinueDebugEvent")
+DebugActiveProcess = TransparentKernel32Proxy("DebugActiveProcess")
+DebugActiveProcessStop = TransparentKernel32Proxy("DebugActiveProcessStop")
+DebugSetProcessKillOnExit = TransparentKernel32Proxy("DebugSetProcessKillOnExit")
+DebugBreakProcess = TransparentKernel32Proxy("DebugBreakProcess")
+
+@Kernel32Proxy("WaitForDebugEvent")
+def WaitForDebugEvent(lpDebugEvent, dwMilliseconds=INFINITE):
+    return WaitForDebugEvent.ctypes_function(lpDebugEvent, dwMilliseconds)
+
+
+
+
 # ### NTDLL #### #
 
 @OptionalExport(NtdllProxy('NtWow64ReadVirtualMemory64', error_ntstatus))
@@ -553,7 +569,10 @@ def AdjustTokenPrivileges(TokenHandle, DisableAllPrivileges=False, NewState=Need
     return AdjustTokenPrivileges.ctypes_function(TokenHandle, DisableAllPrivileges, NewState, BufferLength, PreviousState, ReturnLength)
 
 
-# Registry stuff
+# Token stuff
+
+GetSidSubAuthorityCount = TransparentAdvapi32Proxy("GetSidSubAuthorityCount")
+GetSidSubAuthority = TransparentAdvapi32Proxy("GetSidSubAuthority")
 
 @Advapi32Proxy('GetTokenInformation')
 def GetTokenInformation(TokenHandle=NeededParameter, TokenInformationClass=NeededParameter, TokenInformation=None, TokenInformationLength=0, ReturnLength=None):
@@ -566,6 +585,7 @@ def GetTokenInformation(TokenHandle=NeededParameter, TokenInformationClass=Neede
 def RegOpenKeyExA(hKey, lpSubKey, ulOptions, samDesired, phkResult):
     return RegOpenKeyExA.ctypes_function(hKey, lpSubKey, ulOptions, samDesired, phkResult)
 
+    # Registry stuff
 
 # TODO: default values? which ones ?
 

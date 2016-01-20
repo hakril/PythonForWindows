@@ -654,3 +654,75 @@ LONG WINAPI WinVerifyTrust(
   _In_ GUID   *pgActionID,
   _In_ LPVOID pWVTData
 );
+
+BOOL WINAPI OpenProcessToken (
+    __in        HANDLE ProcessHandle,
+    __in        DWORD DesiredAccess,
+    __deref_out PHANDLE TokenHandle
+);
+
+BOOL WINAPI OpenThreadToken (
+    __in        HANDLE ThreadHandle,
+    __in        DWORD DesiredAccess,
+    __in        BOOL OpenAsSelf,
+    __deref_out PHANDLE TokenHandle
+);
+
+
+BOOL WINAPI GetTokenInformation (
+    __in      HANDLE TokenHandle,
+    __in      TOKEN_INFORMATION_CLASS TokenInformationClass,
+    __out     LPVOID TokenInformation,
+    __in      DWORD TokenInformationLength,
+    __out     PDWORD ReturnLength
+);
+
+BOOL WINAPI SetTokenInformation (
+    __in HANDLE TokenHandle,
+    __in TOKEN_INFORMATION_CLASS TokenInformationClass,
+    __in LPVOID TokenInformation,
+    __in DWORD TokenInformationLength
+);
+
+PSID_IDENTIFIER_AUTHORITY WINAPI GetSidIdentifierAuthority (
+    __in PSID pSid
+    );
+
+PDWORD WINAPI GetSidSubAuthority (
+    __in PSID pSid,
+    __in DWORD nSubAuthority
+    );
+
+PUCHAR WINAPI GetSidSubAuthorityCount (
+    __in PSID pSid
+    );
+
+
+VOID DebugBreak();
+
+BOOL WINAPI WaitForDebugEvent(
+    __in LPDEBUG_EVENT lpDebugEvent,
+    __in DWORD dwMilliseconds
+    );
+
+BOOL WINAPI ContinueDebugEvent(
+    __in DWORD dwProcessId,
+    __in DWORD dwThreadId,
+    __in DWORD dwContinueStatus
+    );
+
+BOOL WINAPI DebugActiveProcess(
+    __in DWORD dwProcessId
+    );
+
+BOOL WINAPI DebugActiveProcessStop(
+    __in DWORD dwProcessId
+    );
+
+BOOL WINAPI DebugSetProcessKillOnExit(
+    __in BOOL KillOnExit
+    );
+
+BOOL WINAPI DebugBreakProcess (
+    __in HANDLE Process
+    );

@@ -27,6 +27,8 @@ import windows.pe_parse as pe_parse
 
 class AutoHandle(object):
     """An abstract class that allow easy handle creation/destruction/wait"""
+     # Big bypass to prevent missing reference at programm close..
+    CLOSE_FUNCTION = ctypes.WinDLL("kernel32").CloseHandle
     def _get_handle(self):
         raise NotImplementedError("{0} is abstract".format(type(self).__name__))
 
@@ -50,7 +52,7 @@ class AutoHandle(object):
 
     def __del__(self):
         if hasattr(self, "_handle") and self._handle:
-            winproxy.CloseHandle(self._handle)
+            self.CLOSE_FUNCTION(self._handle)
 
 
 class System(object):
@@ -358,6 +360,13 @@ class Process(AutoHandle):
                 return
             addr += x.RegionSize
 
+    @utils.fixedpropety
+    def token(self):
+        """TODO: DOC"""
+        token_handle = HANDLE()
+        winproxy.OpenProcessToken(self.handle, TOKEN_ALL_ACCESS, byref(token_handle))
+        return Token(token_handle.value)
+
 
 class CurrentThread(AutoHandle):
     """The current thread"""
@@ -663,6 +672,41 @@ class WinProcess(PROCESSENTRY32, Process):
         """Exit the process"""
         return winproxy.TerminateProcess(self.handle, code)
 
+# Create ProcessToken and Thread Token objects ?
+class Token(AutoHandle):
+    def __init__(self, handle):
+        self._handle = handle
+
+    @property
+    def integrity(self):
+        buffer_size = self.get_required_information_size(TokenIntegrityLevel)
+        buffer = ctypes.c_buffer(buffer_size)
+        self.get_informations(TokenIntegrityLevel, buffer)
+
+        sid = ctypes.cast(buffer, POINTER(TOKEN_MANDATORY_LABEL))[0].Label.Sid
+        count = winproxy.GetSidSubAuthorityCount(sid)
+        integrity = winproxy.GetSidSubAuthority(sid, ord(count[0]) - 1)[0]
+        return integrity
+
+    @property
+    def is_elevated(self):
+        """``True`` if process is Admin"""
+        elevation = TOKEN_ELEVATION()
+        self.get_informations(TokenElevation, elevation)
+        return bool(elevation.TokenIsElevated)
+
+    def get_informations(self, info_type, data):
+        cbsize = DWORD()
+        winproxy.GetTokenInformation(self.handle, info_type, ctypes.byref(data), ctypes.sizeof(data), ctypes.byref(cbsize))
+        return cbsize.value
+
+    def get_required_information_size(self, info_type):
+        cbsize = DWORD()
+        try:
+            winproxy.GetTokenInformation(self.handle, info_type, None, 0, ctypes.byref(cbsize))
+        except WindowsError:
+            pass
+        return cbsize.value
 
 class LoadedModule(LDR_DATA_TABLE_ENTRY):
     """An entry in the PEB Ldr list"""
