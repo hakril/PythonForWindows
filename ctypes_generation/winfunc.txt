@@ -726,3 +726,7 @@ BOOL WINAPI DebugSetProcessKillOnExit(
 BOOL WINAPI DebugBreakProcess (
     __in HANDLE Process
     );
+
+DWORD WINAPI GetProcessId(
+  _In_ HANDLE Process
+);

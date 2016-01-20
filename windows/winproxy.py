@@ -162,6 +162,10 @@ class WinTrustProxy(ApiProxy):
     APIDLL = "wintrust"
     default_error_check = staticmethod(no_error_check)
 
+class Ole32Proxy(ApiProxy):
+    APIDLL = "ole32"
+    default_error_check = staticmethod(no_error_check)
+
 
 
 class OptionalExport(object):
@@ -245,6 +249,8 @@ GetThreadId = TransparentKernel32Proxy("GetThreadId")
 VirtualQueryEx = TransparentKernel32Proxy("VirtualQueryEx")
 GetExitCodeThread = TransparentKernel32Proxy("GetExitCodeThread")
 GetExitCodeProcess = TransparentKernel32Proxy("GetExitCodeProcess")
+GetProcessId = TransparentKernel32Proxy("GetProcessId")
+
 
 Wow64DisableWow64FsRedirection = OptionalExport(TransparentKernel32Proxy)("Wow64DisableWow64FsRedirection")
 Wow64RevertWow64FsRedirection = OptionalExport(TransparentKernel32Proxy)("Wow64RevertWow64FsRedirection")

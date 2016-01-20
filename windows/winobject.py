@@ -512,6 +512,14 @@ class WinProcess(PROCESSENTRY32, Process):
     is_pythondll_injected = 0
     is_remote_slave_running = False
 
+    @staticmethod
+    def _from_handle(handle):
+        pid = winproxy.GetProcessId(handle)
+        proc = [p for p in windows.system.processes if p.pid == pid][0]
+        proc._handle = handle
+        return proc
+
+
     @utils.fixedpropety
     def name(self):
         """Name of the process
@@ -571,6 +579,23 @@ class WinProcess(PROCESSENTRY32, Process):
         buffer = ctypes.create_string_buffer(size)
         self.low_read_memory(addr, ctypes.byref(buffer), size)
         return buffer[:]
+
+    def read_char(self, addr):
+        sizeof_char = sizeof(CHAR)
+        return struct.unpack("<B", self.read_memory(addr, sizeof_char))[0]
+
+    def read_dword(self, addr):
+        sizeof_dword = sizeof(DWORD)
+        return struct.unpack("<I", self.read_memory(addr, sizeof_dword))[0]
+
+    def read_qword(self, addr):
+        sizeof_qword = sizeof(ULONG64)
+        return struct.unpack("<Q", self.read_memory(addr, sizeof_qword))[0]
+
+    def read_ptr(self, addr):
+        if self.bitness == 32:
+            return self.read_dword(addr)
+        return self.read_qword(addr)
 
     # Simple cache test
     # real_read = read_memory
