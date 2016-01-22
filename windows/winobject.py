@@ -52,6 +52,7 @@ class AutoHandle(object):
 
     def __del__(self):
         if hasattr(self, "_handle") and self._handle:
+            print("Del HANDLE {0} ({1})".format((self), self._handle))
             self.CLOSE_FUNCTION(self._handle)
 
 
@@ -233,6 +234,7 @@ class WinThread(THREADENTRY32, AutoHandle):
             # Really useful ?
             thread = [t for t in System().threads if t.tid == tid][0]
             # set AutoHandle _handle
+            print("New thread from handle {0}".format(handle))
             thread._handle = handle
             return thread
         except IndexError:
@@ -517,6 +519,7 @@ class WinProcess(PROCESSENTRY32, Process):
         pid = winproxy.GetProcessId(handle)
         proc = [p for p in windows.system.processes if p.pid == pid][0]
         proc._handle = handle
+        print("New Process from handle {0}".format(handle))
         return proc
 
 
@@ -692,6 +695,25 @@ class WinProcess(PROCESSENTRY32, Process):
         if windows.current_process.bitness == 64 and self.bitness == 32:
             return RemotePEB32(self.peb_addr, self)
         return RemotePEB(self.peb_addr, self)
+
+    @utils.fixedpropety
+    def peb_syswow(self):
+        if not self.is_wow_64:
+            raise ValueError("Not a syswow process")
+        if windows.current_process.bitness == 64:
+            information_type = 0
+            x = PROCESS_BASIC_INFORMATION()
+            windows.winproxy.NtQueryInformationProcess(self.handle, information_type, x)
+            peb_addr = ctypes.cast(x.PebBaseAddress, PVOID).value
+            return RemotePEB(peb_addr, self)
+        else: #current is 32bits
+            x = windows.remotectypes.transform_type_to_remote64bits(PROCESS_BASIC_INFORMATION)
+            # Fuck-it <3
+            data = (ctypes.c_char * ctypes.sizeof(x))()
+            windows.syswow64.NtQueryInformationProcess_32_to_64(self.handle, ProcessInformation=data, ProcessInformationLength=ctypes.sizeof(x))
+            peb_offset = x.PebBaseAddress.offset
+            peb_addr = struct.unpack("<Q", data[x.PebBaseAddress.offset: x.PebBaseAddress.offset+8])[0]
+            return RemotePEB64(peb_addr, windows.syswow64.ReadSyswow64Process(self))
 
     def exit(self, code=0):
         """Exit the process"""

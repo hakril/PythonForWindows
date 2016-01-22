@@ -3,6 +3,8 @@ TODO:
     - ProcessMemory object ? (metasm like)
     - Extend Registry feature (write)
 
+    - remove pe_parse.transform_ctypes_fields (use utils.transform_ctypes_fields)
+
 FIXME:
     - WMI
         - COM initialisation when injected in another process

@@ -57,19 +57,11 @@ EnhancedEXCEPTION_RECORD32 = generate_enhanced_exception_record(EXCEPTION_RECORD
 EnhancedEXCEPTION_RECORD64 = generate_enhanced_exception_record(EXCEPTION_RECORD64, "64")
 
 
-#class EnhancedEXCEPTION_RECORD(EXCEPTION_RECORD):
-#    @property
-#    def ExceptionCode(self):
-#        real_code = super(EnhancedEXCEPTION_RECORD, self).ExceptionCode
-#        return exception_name_by_value.get(real_code, 'UNKNOW_EXCEPTION({0})'.format(hex(real_code)))
-#
-#    @property
-#    def ExceptionAddress(self):
-#        x = super(EnhancedEXCEPTION_RECORD, self).ExceptionAddress
-#        if x is None:
-#            return 0x0
-#        return x
+class EEXCEPTION_DEBUG_INFO32(ctypes.Structure):
+    _fields_ = windows.utils.transform_ctypes_fields(EXCEPTION_DEBUG_INFO, {"ExceptionRecord": EnhancedEXCEPTION_RECORD32})
 
+class EEXCEPTION_DEBUG_INFO64(ctypes.Structure):
+    _fields_ = windows.utils.transform_ctypes_fields(EXCEPTION_DEBUG_INFO, {"ExceptionRecord": EnhancedEXCEPTION_RECORD64})
 
 class Eflags(int):
     _flags_ = [("CF", 1),
@@ -119,7 +111,6 @@ class Eflags(int):
 
     def __hex__(self):
         return "{0}({1}:{2})".format(type(self).__name__, int.__hex__(self), self.dump())
-
 
 class EnhancedCONTEXTBase():
     default_dump = ()

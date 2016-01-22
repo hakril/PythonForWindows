@@ -70,7 +70,7 @@ def create_console():
     sys.stderr = console_stderr
 
 
-def create_process(path, show_windows=False):
+def create_process(path, dwCreationFlags=0, show_windows=False):
     """A convenient wrapper arround :func:`windows.winproxy.CreateProcessA`"""
     proc_info = PROCESS_INFORMATION()
     lpStartupInfo = None
@@ -79,7 +79,7 @@ def create_process(path, show_windows=False):
         StartupInfo.cb = ctypes.sizeof(StartupInfo)
         StartupInfo.dwFlags = 0
         lpStartupInfo = ctypes.byref(StartupInfo)
-    windows.winproxy.CreateProcessA(path, lpProcessInformation=ctypes.byref(proc_info), lpStartupInfo=lpStartupInfo)
+    windows.winproxy.CreateProcessA(path, dwCreationFlags=dwCreationFlags, lpProcessInformation=ctypes.byref(proc_info), lpStartupInfo=lpStartupInfo)
     proc = [p for p in windows.system.processes if p.pid == proc_info.dwProcessId][0]
     return proc
 

@@ -26,21 +26,21 @@ process_64bit_only = unittest.skipIf(not is_process_64_bits, "Test for 64bits pr
 
 if is_windows_32_bits:
     def pop_calc_32():
-        return windows.utils.create_process(r"C:\Windows\system32\calc.exe", True)
+        return windows.utils.create_process(r"C:\Windows\system32\calc.exe", show_windows=True)
 
     def pop_calc_64():
         raise WindowsError("Cannot create calc64 in 32bits system")
 else:
     def pop_calc_32():
-        return windows.utils.create_process(r"C:\Windows\syswow64\calc.exe", True)
+        return windows.utils.create_process(r"C:\Windows\syswow64\calc.exe", show_windows=True)
 
     if is_process_32_bits:
         def pop_calc_64():
             with windows.utils.DisableWow64FsRedirection():
-                return windows.utils.create_process(r"C:\Windows\system32\calc.exe", True)
+                return windows.utils.create_process(r"C:\Windows\system32\calc.exe", show_windows=True)
     else:
         def pop_calc_64():
-            return windows.utils.create_process(r"C:\Windows\system32\calc.exe", True)
+            return windows.utils.create_process(r"C:\Windows\system32\calc.exe", show_windows=True)
 
 
 @contextmanager
