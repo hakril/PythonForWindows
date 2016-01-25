@@ -22,17 +22,11 @@ class DEBUG_EVENT(DEBUG_EVENT):
 
 class Debugger(object):
 
-    dwDebugEventCode_handlers = {}
-
-    def handle_dwDebugEventCode(code_number, d=dwDebugEventCode_handlers):
-        def wrapper(f):
-            d[code_number] = (f)
-            return f
-        return wrapper
-
     def __init__(self, target):
     # Todo: accept PID / String / WinProcess
+        self._init_dispatch_handlers()
         self.target = target
+        self.is_target_launched = False
         #winproxy.DebugActiveProcess(target.pid)
         self.processes = {}
         self.threads = {}
@@ -40,7 +34,23 @@ class Debugger(object):
         self.current_thread = None
 
         self.breakpoints = {}
+        self._pending_breakpoints = {} #Breakpoints to put in new process
         self._break_metadata = {}
+
+
+    def _init_dispatch_handlers(self):
+        dbg_evt_dispatch = {}
+        dbg_evt_dispatch[EXCEPTION_DEBUG_EVENT] = self._handle_exception
+        dbg_evt_dispatch[CREATE_THREAD_DEBUG_EVENT] = self._handle_create_thread
+        dbg_evt_dispatch[CREATE_PROCESS_DEBUG_EVENT] = self._handle_create_process
+        dbg_evt_dispatch[EXIT_PROCESS_DEBUG_EVENT] = self._handle_exit_process
+        dbg_evt_dispatch[EXIT_THREAD_DEBUG_EVENT] = self._handle_exit_thread
+        dbg_evt_dispatch[LOAD_DLL_DEBUG_EVENT] = self._handle_load_dll
+        dbg_evt_dispatch[UNLOAD_DLL_DEBUG_EVENT] = self._handle_unload_dll
+        dbg_evt_dispatch[RIP_EVENT] = self._handle_rip
+        dbg_evt_dispatch[OUTPUT_DEBUG_STRING_EVENT] = self._handle_output_debug_string
+        self._DebugEventCode_dispatch = dbg_evt_dispatch
+        # TODO: breakpoint type dispatch
 
     def _debug_event_generator(self):
         while True:
@@ -57,20 +67,21 @@ class Debugger(object):
         self.current_process = self.processes[debug_event.dwProcessId]
         self.current_thread = self.threads[debug_event.dwThreadId]
 
-
     def _dispatch_debug_event(self, debug_event):
-        handler = self.dwDebugEventCode_handlers.get(debug_event.dwDebugEventCode, self._handle_unknown_debug_event)
-        return handler(self, debug_event)
+        handler = self._DebugEventCode_dispatch.get(debug_event.dwDebugEventCode, self._handle_unknown_debug_event)
+        return handler(debug_event)
 
     def _dispatch_breakpoint(self, exception, addr):
         bp = self.breakpoints[addr]
-        return bp(exception)
+        return bp(self, exception)
 
     def _setup_breakpoint(self, addr, type, target):
         if type != 0:
             raise NotImplementedError("BP TYPE != 0 (TODO)")
         if target is None:
             targets = self.processes.items()
+            # Raise on multiple pending ?
+            self._pending_breakpoints[addr] = (addr, type, target)
         else:
             targets = [(target.pid, target)]
         for pid, process in targets:
@@ -79,12 +90,31 @@ class Debugger(object):
             process.write_memory(addr, "\xcc")
         return
 
-    @staticmethod
+    def _setup_pending_breakpoints(self, target):
+        for addr, (bp_info) in self._pending_breakpoints.items():
+            # Valid addr ? (in non-loaded module: raise / pass ?)
+            expected_target = bp_info[2]
+            if expected_target is None or expected_target.pid == target.pid:
+                self._setup_breakpoint(bp_info[0], bp_info[1], target)
+                print("BP PLACED IN {0}".format(target))
+
+    def _activate_single_step(self, thread):
+        raise NotImplementedError("TODO")
+        regs = self.get_context(thread)
+        regs.EFlags |= (1 << 8)
+        self.set_context(thread, regs)
+        
+    def _desactivate_single_step(self, thread):
+        regs = self.get_context(thread)
+        raise NotImplementedError("TODO")
+        regs.EFlags &= ~(1 << 8)
+        self.set_context(thread, regs)
+
     def _handle_unknown_debug_event(self, debug_event):
         raise NotImplementedError("dwDebugEventCode = {0}".format(debug_event.dwDebugEventCode))
 
-    @handle_dwDebugEventCode(EXCEPTION_DEBUG_EVENT)
     def _handle_exception(self, debug_event):
+        """Handle EXCEPTION_DEBUG_EVENT"""
         exception = debug_event.u.Exception
         self._update_debugger_state(debug_event)
         if self.current_process.bitness == 32:
@@ -94,23 +124,22 @@ class Debugger(object):
 
         excp_code = exception.ExceptionRecord.ExceptionCode
         excp_addr = exception.ExceptionRecord.ExceptionAddress
-
+        print("Exception {0} at {1}".format(excp_code, hex(excp_addr)))
         if excp_code == EXCEPTION_BREAKPOINT and excp_addr in self.breakpoints:
             self._dispatch_breakpoint(exception, excp_addr)
         else: # Do not trigger self.on_exception if breakpoint was registered
             self.on_exception(exception)
 
 
-
-    @handle_dwDebugEventCode(CREATE_THREAD_DEBUG_EVENT)
     def _handle_create_thread(self, debug_event):
+        """Handle CREATE_THREAD_DEBUG_EVENT"""
         create_thread = debug_event.u.CreateThread
         self.current_thread = WinThread._from_handle(create_thread.hThread)
         self.threads[self.current_thread.tid] = self.current_thread
         self.on_create_thread(create_thread)
 
-    @handle_dwDebugEventCode(CREATE_PROCESS_DEBUG_EVENT)
     def _handle_create_process(self, debug_event):
+        """Handle CREATE_PROCESS_DEBUG_EVENT"""
         create_process = debug_event.u.CreateProcessInfo
 
         self.current_process = WinProcess._from_handle(create_process.hProcess)
@@ -118,11 +147,12 @@ class Debugger(object):
         self.threads[self.current_thread.tid] = self.current_thread
         self.processes[self.current_process.pid] = self.current_process
         self._update_debugger_state(debug_event)
+        self._setup_pending_breakpoints(self.current_process)
         self.on_create_process(create_process)
         # TODO: clode hFile
 
-    @handle_dwDebugEventCode(EXIT_PROCESS_DEBUG_EVENT)
     def _handle_exit_process(self, debug_event):
+        """Handle EXIT_PROCESS_DEBUG_EVENT"""
         self._update_debugger_state(debug_event)
         exit_process = debug_event.u.ExitProcess
         self.on_exit_process(exit_process)
@@ -131,9 +161,8 @@ class Debugger(object):
         # Should we make another handle instead ?
         del self.current_process._handle
 
-
-    @handle_dwDebugEventCode(EXIT_THREAD_DEBUG_EVENT)
     def _handle_exit_thread(self, debug_event):
+        """Handle EXIT_THREAD_DEBUG_EVENT"""
         self._update_debugger_state(debug_event)
         exit_thread = debug_event.u.ExitThread
         self.on_exit_thread(exit_thread)
@@ -142,26 +171,26 @@ class Debugger(object):
         # Should we make another handle instead ?
         del self.current_thread._handle
 
-    @handle_dwDebugEventCode(LOAD_DLL_DEBUG_EVENT)
     def _handle_load_dll(self, debug_event):
+        """Handle LOAD_DLL_DEBUG_EVENT"""
         self._update_debugger_state(debug_event)
         load_dll = debug_event.u.LoadDll
         self.on_load_dll(load_dll)
 
-    @handle_dwDebugEventCode(UNLOAD_DLL_DEBUG_EVENT)
     def _handle_unload_dll(self, debug_event):
+        """Handle UNLOAD_DLL_DEBUG_EVENT"""
         self._update_debugger_state(debug_event)
         unload_dll = debug_event.u.UnloadDll
         self.on_unload_dll(unload_dll)
 
-    @handle_dwDebugEventCode(OUTPUT_DEBUG_STRING_EVENT)
     def _handle_output_debug_string(self, debug_event):
+        """Handle OUTPUT_DEBUG_STRING_EVENT"""
         self._update_debugger_state(debug_event)
         debug_string = debug_event.u.DebugString
         self.on_output_debug_string(debug_string)
 
-    @handle_dwDebugEventCode(RIP_EVENT)
     def _handle_rip(self, debug_event):
+        """Handle RIP_EVENT"""
         self._update_debugger_state(debug_event)
         rip_info = debug_event.u.RipInfo
         self.on_rip(rip_info)
@@ -196,7 +225,6 @@ class Debugger(object):
         pass
 
     # Public API
-
     def loop(self):
         for x, debug_event in enumerate(self._debug_event_generator()):
             self._dispatch_debug_event(debug_event)
@@ -207,15 +235,16 @@ class Debugger(object):
 
     def add_bp(self, bp, addr=None, target=None):
         """TODO: use type for hardware breakpoints"""
+        call_target = bp
         if getattr(bp, "addr", None) is not None:
-            self.breakpoints[bp.addr] = bp.trigger
-            self._setup_breakpoint(addr, bp.type, target)
-            return
+            addr = bp.addr
+            call_target = bp.trigger
+            # if addr is not None: raise ?
 
         # Non object breakpoint
         if addr is None:
             raise ValueError("No address: need a valid <bp.addr> or <addr> parameter")
-        self.breakpoints[addr] = bp
+        self.breakpoints[addr] = call_target
         self._setup_breakpoint(addr, bp.type, target)
         return True
 
