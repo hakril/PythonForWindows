@@ -9,6 +9,11 @@ import windows.native_exec.simple_x64 as x64
 from windows.generated_def.winstructs import *
 from .generated_def import windef
 
+from collections import defaultdict
+
+
+STANDARD_BP = "BP"
+HARDWARE_EXEC_BP = "HXBP"
 
 class DEBUG_EVENT(DEBUG_EVENT):
     KNOWN_EVENT_CODE = dict((x,x) for x in [EXCEPTION_DEBUG_EVENT,
@@ -33,9 +38,17 @@ class Debugger(object):
         self.current_process = None
         self.current_thread = None
 
+        # List of breakpoints
         self.breakpoints = {}
-        self._pending_breakpoints = {} #Breakpoints to put in new process
-        self._break_metadata = {}
+
+        self._pending_breakpoints = {} #Breakpoints to put in new process / threads
+
+        # Values rewritten by "\xcc"
+        self._memory_save = defaultdict(dict)
+        # Dict of {tid : {drx taken : BP}}
+        self._hardware_breakpoint = defaultdict(dict)
+        # Breakpoints to reput..
+        self._breakpoint_to_reput = {}
 
 
     def _init_dispatch_handlers(self):
@@ -73,43 +86,89 @@ class Debugger(object):
 
     def _dispatch_breakpoint(self, exception, addr):
         bp = self.breakpoints[addr]
-        return bp(self, exception)
+        bp.trigger(self, exception)
+        return bp
 
-    def _setup_breakpoint(self, addr, type, target):
-        if type != 0:
-            raise NotImplementedError("BP TYPE != 0 (TODO)")
-        if target is None:
-            targets = self.processes.items()
-            # Raise on multiple pending ?
-            self._pending_breakpoints[addr] = (addr, type, target)
-        else:
-            targets = [(target.pid, target)]
-        for pid, process in targets:
-            self._break_metadata[pid] = process.read_memory(addr, 1)
-            print("Write BP: {0} at {1}".format(process, addr))
-            process.write_memory(addr, "\xcc")
-        return
+    #  Breakpoint stuff
+    #def _setup_breakpoint(self, bp, target):
+    #    if bp.type != 0:
+    #        raise NotImplementedError("BP TYPE != 0 (TODO)")
+    #    if target is None:
+    #        targets = self.processes.items()
+    #        # Raise on multiple pending at same addr ?
+    #        # We will add the pending breakpoint to other new processes
+    #        self._pending_breakpoints[bp.addr] = (bp, target)
+    #    else:
+    #        targets = [(target.pid, target)]
+    #
+    #    for pid, process in targets:
+    #        self._break_metadata[pid][bp.addr] = process.read_memory(bp.addr, 1)
+    #        #print("Write BP: {0} at {1}".format(process, addr))
+    #        process.write_memory(bp.addr, "\xcc")
+    #    return
+
+
+    def _setup_breakpoint_BP(self, bp, targets):
+        for target in targets:
+            if not isinstance(target, WinProcess):
+                raise ValueError("Cannot put standard breakpoint on target {0} (not a process)".format(target))
+            self._memory_save[target.pid][bp.addr] = target.read_memory(bp.addr, 1)
+            #print("Write BP: {0} at {1}".format(process, addr))
+            target.write_memory(bp.addr, "\xcc")
+
+    def _setup_breakpoint_HXBP(self, bp, targets):
+        all_threads = []
+        for target in targets:
+            if isinstance(target, WinProcess):
+                for t in target.threads:
+                    all_threads.append(t)
+            elif isinstance(target, WinThread):
+                all_threads.append(target)
+            else:
+                raise ValueError("Unknow HXBP target type for <{0}>".format(target))
+
+        for target_thread in all_threads:
+            x = self._hardware_breakpoint[target_thread.tid]
+            if all(pos in x for pos in range(4)):
+                raise ValueError("Cannot put {0} in {1} (DRx full)".format(bp, target_thread))
+            empty_drx = str([pos for pos in range(4) if pos not in x][0])
+            #print("Empty DRx = {0}".format(empty_drx))
+            ctx = target_thread.context
+            ctx.EDr7.GE = 1
+            ctx.EDr7.LE = 1
+
+            setattr(ctx.EDr7, "L" + empty_drx, 1)
+            setattr(ctx, "Dr" + empty_drx, bp.addr)
+            x[int(empty_drx)] = bp
+
+            target_thread.set_context(ctx)
+
 
     def _setup_pending_breakpoints(self, target):
-        for addr, (bp_info) in self._pending_breakpoints.items():
+        # TODO: good format of data ? (dict and we just use values)
+        # TODO: need to handle threads ?
+        # TODO: handle target/expected_target is a thread :)
+        # Can it happen ?
+        pending_todo = list(self._pending_breakpoints.values())
+        for bp, expected_target in pending_todo:
             # Valid addr ? (in non-loaded module: raise / pass ?)
-            expected_target = bp_info[2]
             if expected_target is None or expected_target.pid == target.pid:
-                self._setup_breakpoint(bp_info[0], bp_info[1], target)
-                print("BP PLACED IN {0}".format(target))
+                _setup_method = getattr(self, "_setup_breakpoint_" + bp.type)
+                _setup_method(bp, [target])
+                # TODO REMOVE PENDING HERE if target is not None..
 
-    def _activate_single_step(self, thread):
-        raise NotImplementedError("TODO")
-        regs = self.get_context(thread)
+
+    def _pass_breakpoint(self, addr):
+        process = self.current_process
+        thread = self.current_thread
+        process.write_memory(addr, self._memory_save[process.pid][addr])
+        regs = thread.context
         regs.EFlags |= (1 << 8)
-        self.set_context(thread, regs)
-        
-    def _desactivate_single_step(self, thread):
-        regs = self.get_context(thread)
-        raise NotImplementedError("TODO")
-        regs.EFlags &= ~(1 << 8)
-        self.set_context(thread, regs)
+        regs.Eip -= 1
+        thread.set_context(regs)
+        self._breakpoint_to_reput[thread.tid] = addr #Register pending breakpoint for next single step
 
+    # debug event handlers
     def _handle_unknown_debug_event(self, debug_event):
         raise NotImplementedError("dwDebugEventCode = {0}".format(debug_event.dwDebugEventCode))
 
@@ -124,9 +183,25 @@ class Debugger(object):
 
         excp_code = exception.ExceptionRecord.ExceptionCode
         excp_addr = exception.ExceptionRecord.ExceptionAddress
-        print("Exception {0} at {1}".format(excp_code, hex(excp_addr)))
         if excp_code == EXCEPTION_BREAKPOINT and excp_addr in self.breakpoints:
             self._dispatch_breakpoint(exception, excp_addr)
+            self._pass_breakpoint(excp_addr)
+            return
+        elif excp_code == EXCEPTION_SINGLE_STEP:
+            if self.current_thread.tid in self._breakpoint_to_reput:
+                addr = self._breakpoint_to_reput[self.current_thread.tid]
+                del self._breakpoint_to_reput[self.current_thread.tid]
+                # Re-put the breakpoint
+                self.current_process.write_memory(addr, "\xcc")
+            elif excp_addr in self.breakpoints:
+                # Verif that's not a standard BP ?
+                bp = self.breakpoints[excp_addr]
+                bp.trigger(self, exception)
+                ctx = self.current_thread.context
+                ctx.EEFlags.RF = 1
+                self.current_thread.set_context(ctx)
+            else:
+                self.on_exception(exception)
         else: # Do not trigger self.on_exception if breakpoint was registered
             self.on_exception(exception)
 
@@ -136,6 +211,7 @@ class Debugger(object):
         create_thread = debug_event.u.CreateThread
         self.current_thread = WinThread._from_handle(create_thread.hThread)
         self.threads[self.current_thread.tid] = self.current_thread
+        self._setup_pending_breakpoints(self.current_thread)
         self.on_create_thread(create_thread)
 
     def _handle_create_process(self, debug_event):
@@ -195,8 +271,45 @@ class Debugger(object):
         rip_info = debug_event.u.RipInfo
         self.on_rip(rip_info)
 
-    # Public callback
+    # Public API
+    def loop(self):
+        for debug_event in self._debug_event_generator():
+            self._dispatch_debug_event(debug_event)
+            self._finish_debug_event(debug_event, windef.DBG_CONTINUE)
+            if not self.processes:
+                # No More process to debug
+                break
 
+    def add_bp(self, bp, addr=None, type=None, target=None):
+        """TODO: use type for hardware breakpoints"""
+        if getattr(bp, "addr", None) is None:
+            if addr is None or type is None:
+                raise ValueError("SUCK YOUR NONE")
+            bp = ProxyBreakpoint(bp, addr, type)
+        else:
+            if addr is not None or type is not None:
+                raise ValueError("Given <addr|type> by parameters but BP object have them")
+        del addr
+        del type
+        if target is None:
+            # Raise on multiple pending at same addr ?
+            # We will add the pending breakpoint to other new processes
+            if bp.addr in self._pending_breakpoints:
+                raise ValueError("Pending breakpoint already at {0}".format(hex(bp.addr)))
+            self._pending_breakpoints[bp.addr] = (bp, target)
+            targets = self.processes.values()
+            if targets is None:
+                return
+        else:
+            targets = [target]
+        if bp.addr in self.breakpoints:
+            raise ValueError("Breakpoint already at {0}".format(hex(bp.addr)))
+        self.breakpoints[bp.addr] = bp
+        _setup_method = getattr(self, "_setup_breakpoint_" + bp.type)
+        _setup_method(bp, targets)
+        return True
+
+    # Public callback
     def on_exception(self, exception):
         pass
 
@@ -224,36 +337,26 @@ class Debugger(object):
     def on_rip(self, rip_info):
         pass
 
-    # Public API
-    def loop(self):
-        for x, debug_event in enumerate(self._debug_event_generator()):
-            self._dispatch_debug_event(debug_event)
-            self._finish_debug_event(debug_event, windef.DBG_CONTINUE)
-            if not self.processes:
-                # No More process to debug
-                break
-
-    def add_bp(self, bp, addr=None, target=None):
-        """TODO: use type for hardware breakpoints"""
-        call_target = bp
-        if getattr(bp, "addr", None) is not None:
-            addr = bp.addr
-            call_target = bp.trigger
-            # if addr is not None: raise ?
-
-        # Non object breakpoint
-        if addr is None:
-            raise ValueError("No address: need a valid <bp.addr> or <addr> parameter")
-        self.breakpoints[addr] = call_target
-        self._setup_breakpoint(addr, bp.type, target)
-        return True
-
 
 class Breakpoint(object):
-    type = 0 # REAL BP
+    type = "BP" # REAL BP
     def __init__(self, addr):
         self.addr = addr
 
-    def trigger(self, exception):
+    def trigger(self, dbg, exception):
         pass
+
+class ProxyBreakpoint(Breakpoint):
+    def __init__(self, target, addr, type):
+        self.target = target
+        self.addr = addr
+        self.type = type
+
+    def trigger(self, dbg, exception):
+        return self.target(dbg, exception)
+
+class HXBreakpoint(Breakpoint):
+    type = HARDWARE_EXEC_BP
+
+
 

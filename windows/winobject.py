@@ -3,6 +3,7 @@ import os
 import copy
 import time
 import struct
+import itertools
 
 import windows
 import windows.network
@@ -52,7 +53,6 @@ class AutoHandle(object):
 
     def __del__(self):
         if hasattr(self, "_handle") and self._handle:
-            print("Del HANDLE {0} ({1})".format((self), self._handle))
             self.CLOSE_FUNCTION(self._handle)
 
 
@@ -147,13 +147,13 @@ class WinThread(THREADENTRY32, AutoHandle):
         if self.owner.bitness == 32 and windows.current_process.bitness == 64:
             # Wow64
             x = windows.vectored_exception.EnhancedCONTEXTWOW64()
-            x.ContextFlags = CONTEXT_FULL
+            x.ContextFlags = CONTEXT_ALL
             winproxy.Wow64GetThreadContext(self.handle, x)
             return x
 
         if self.owner.bitness == 64 and windows.current_process.bitness == 32:
             x = windows.vectored_exception.EnhancedCONTEXT64.new_aligned()
-            x.ContextFlags = CONTEXT_FULL
+            x.ContextFlags = CONTEXT_ALL
             windows.syswow64.NtGetContextThread_32_to_64(self.handle, x)
             return x
 
@@ -161,7 +161,7 @@ class WinThread(THREADENTRY32, AutoHandle):
             x = windows.vectored_exception.EnhancedCONTEXT32()
         else:
             x = windows.vectored_exception.EnhancedCONTEXT64.new_aligned()
-        x.ContextFlags = CONTEXT_FULL
+        x.ContextFlags = CONTEXT_ALL
         winproxy.GetThreadContext(self.handle, x)
         return x
 
@@ -234,7 +234,6 @@ class WinThread(THREADENTRY32, AutoHandle):
             # Really useful ?
             thread = [t for t in System().threads if t.tid == tid][0]
             # set AutoHandle _handle
-            print("New thread from handle {0}".format(handle))
             thread._handle = handle
             return thread
         except IndexError:
@@ -519,7 +518,6 @@ class WinProcess(PROCESSENTRY32, Process):
         pid = winproxy.GetProcessId(handle)
         proc = [p for p in windows.system.processes if p.pid == pid][0]
         proc._handle = handle
-        print("New Process from handle {0}".format(handle))
         return proc
 
 
@@ -599,6 +597,27 @@ class WinProcess(PROCESSENTRY32, Process):
         if self.bitness == 32:
             return self.read_dword(addr)
         return self.read_qword(addr)
+
+    def read_string(self, addr):
+        res = []
+        for i in itertools.count():
+            x = self.read_memory(addr + (i * 0x100), 0x100)
+            if "\x00" in x:
+                res.append(x.split("\x00", 1)[0])
+                break
+            res.append(x)
+        return "".join(res)
+
+    def read_wstring(self, addr):
+        res = []
+        for i in itertools.count():
+            x = self.read_memory(addr + (i * 0x100), 0x100)
+            utf16_chars = ["".join(c) for c in zip(*[iter(x)] * 2)]
+            if "\x00\x00" in utf16_chars:
+                res.extend(utf16_chars[:utf16_chars.index("\x00\x00")])
+                break
+            res.extend(x)
+        return "".join(res).decode('utf16')
 
     # Simple cache test
     # real_read = read_memory

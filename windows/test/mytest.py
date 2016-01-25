@@ -8,8 +8,11 @@ from contextlib import contextmanager
 sys.path.append(".")
 import unittest
 import windows
+import windows.debug
 import windows.native_exec.simple_x86 as x86
 import windows.native_exec.simple_x64 as x64
+
+from windows.generated_def.winstructs import *
 
 is_process_32_bits = windows.current_process.bitness == 32
 is_process_64_bits = windows.current_process.bitness == 64
@@ -25,22 +28,22 @@ process_64bit_only = unittest.skipIf(not is_process_64_bits, "Test for 64bits pr
 
 
 if is_windows_32_bits:
-    def pop_calc_32():
-        return windows.utils.create_process(r"C:\Windows\system32\calc.exe", show_windows=True)
+    def pop_calc_32(dwCreationFlags):
+        return windows.utils.create_process(r"C:\Windows\system32\calc.exe", dwCreationFlags=dwCreationFlags, show_windows=True)
 
-    def pop_calc_64():
+    def pop_calc_64(dwCreationFlags):
         raise WindowsError("Cannot create calc64 in 32bits system")
 else:
-    def pop_calc_32():
-        return windows.utils.create_process(r"C:\Windows\syswow64\calc.exe", show_windows=True)
+    def pop_calc_32(dwCreationFlags):
+        return windows.utils.create_process(r"C:\Windows\syswow64\calc.exe", dwCreationFlags=dwCreationFlags, show_windows=True)
 
     if is_process_32_bits:
-        def pop_calc_64():
+        def pop_calc_64(dwCreationFlags):
             with windows.utils.DisableWow64FsRedirection():
-                return windows.utils.create_process(r"C:\Windows\system32\calc.exe", show_windows=True)
+                return windows.utils.create_process(r"C:\Windows\system32\calc.exe", dwCreationFlags=dwCreationFlags, show_windows=True)
     else:
-        def pop_calc_64():
-            return windows.utils.create_process(r"C:\Windows\system32\calc.exe", show_windows=True)
+        def pop_calc_64(dwCreationFlags):
+            return windows.utils.create_process(r"C:\Windows\system32\calc.exe", dwCreationFlags=dwCreationFlags, show_windows=True)
 
 
 @contextmanager
@@ -298,10 +301,154 @@ class WindowsAPITestCase(unittest.TestCase):
             windows.winproxy.CreateFileA("NONEXISTFILE.FILE")
 
 
+class DebuggerTestCase(unittest.TestCase):
+
+    def debuggable_calc_32(self):
+        return windows.utils.create_process(r"C:\python27\python.exe", dwCreationFlags=DEBUG_PROCESS | CREATE_NEW_CONSOLE, show_windows=True)
+
+    def test_init_breakpoint_callback(self):
+        TEST_CASE = self
+        class MyDbg(windows.debug.Debugger):
+            def on_exception(self, exception):
+                TEST_CASE.assertEqual(exception.ExceptionRecord.ExceptionCode, EXCEPTION_BREAKPOINT)
+                self.current_process.exit()
+
+        calc = pop_calc_32(dwCreationFlags=DEBUG_PROCESS)
+        d = MyDbg(calc)
+        d.loop()
+
+    def test_simple_standard_breakpoint(self):
+        TEST_CASE = self
+
+        class TSTBP(windows.debug.Breakpoint):
+            def trigger(self, dbg, exc):
+                TEST_CASE.assertEqual(dbg.current_process.pid, calc.pid)
+                TEST_CASE.assertEqual(dbg.current_process.read_memory(self.addr, 1), "\xcc")
+                TEST_CASE.assertEqual(dbg.current_thread.context.pc - 1, self.addr)
+                d.current_process.exit()
+
+        calc = pop_calc_32(dwCreationFlags=DEBUG_PROCESS)
+        d = windows.debug.Debugger(calc)
+        d.add_bp(TSTBP(windows.current_process.peb.modules[1].pe.exports["LdrLoadDll"]))
+        d.loop()
+
+    def test_simple_hwx_breakpoint(self):
+        TEST_CASE = self
+
+        class TSTBP(windows.debug.HXBreakpoint):
+            def trigger(self, dbg, exc):
+                TEST_CASE.assertEqual(dbg.current_process.pid, calc.pid)
+                TEST_CASE.assertEqual(dbg.current_thread.context.pc, self.addr)
+                TEST_CASE.assertNotEqual(dbg.current_thread.context.Dr7, 0)
+                d.current_process.exit()
+
+        calc = pop_calc_32(dwCreationFlags=DEBUG_PROCESS)
+        d = windows.debug.Debugger(calc)
+        d.add_bp(TSTBP(windows.current_process.peb.modules[1].pe.exports["LdrLoadDll"]))
+        d.loop()
+
+    def test_multiple_hwx_breakpoint(self):
+        TEST_CASE = self
+        data = [0]
+        class TSTBP(windows.debug.HXBreakpoint):
+            def __init__(self, addr, expec_before):
+                self.addr = addr
+                self.expec_before = expec_before
+
+            def trigger(self, dbg, exc):
+                TEST_CASE.assertEqual(dbg.current_process.pid, calc.pid)
+                TEST_CASE.assertEqual(dbg.current_thread.context.pc, self.addr)
+                TEST_CASE.assertNotEqual(dbg.current_thread.context.Dr7, 0)
+                TEST_CASE.assertEqual(data[0], self.expec_before)
+                TEST_CASE.assertNotEqual(dbg.current_process.read_memory(self.addr, 1), "\xcc")
+                data[0] += 1
+                if data[0] == 4:
+                    d.current_process.exit()
+
+        calc = pop_calc_32(dwCreationFlags=DEBUG_PROCESS)
+        d = windows.debug.Debugger(calc)
+        addr = calc.virtual_alloc(0x1000)
+        calc.write_memory(addr, "\x90" * 8)
+        d.add_bp(TSTBP(addr, 0))
+        d.add_bp(TSTBP(addr + 1, 1))
+        d.add_bp(TSTBP(addr + 2, 2))
+        d.add_bp(TSTBP(addr + 3, 3))
+
+        calc.create_thread(addr, 0)
+        d.loop()
+        # Used to verif we actually called the Breakpoints
+        TEST_CASE.assertEqual(data[0], 4)
+
+    def test_four_hwx_breakpoint_fail(self):
+        TEST_CASE = self
+        data = [0]
+
+        class TSTBP(windows.debug.HXBreakpoint):
+            def __init__(self, addr, expec_before):
+                self.addr = addr
+                self.expec_before = expec_before
+
+            def trigger(self, dbg, exc):
+                raise NotImplementedError("Should fail before")
+
+        calc = pop_calc_32(dwCreationFlags=DEBUG_PROCESS)
+        d = windows.debug.Debugger(calc)
+        addr = calc.virtual_alloc(0x1000)
+        calc.write_memory(addr, "\x90" * 8)
+        d.add_bp(TSTBP(addr, 0))
+        d.add_bp(TSTBP(addr + 1, 1))
+        d.add_bp(TSTBP(addr + 2, 2))
+        d.add_bp(TSTBP(addr + 3, 3))
+        d.add_bp(TSTBP(addr + 4, 4))
+
+        calc.create_thread(addr, 0)
+        with self.assertRaises(ValueError) as e:
+            d.loop()
+        self.assertIn("DRx", e.exception.message)
+        # Used to verif we actually NOT called the Breakpoints
+        TEST_CASE.assertEqual(data[0], 0)
+
+    def test_hwx_breakpoint_are_on_all_thread(self):
+        TEST_CASE = self
+        data = [0]
+
+        class MyDbg(windows.debug.Debugger):
+            def on_create_thread(self, exception):
+                # Check that later created thread have their HWX breakpoint :)
+                TEST_CASE.assertNotEqual(self.current_thread.context.Dr7, 0)
+
+        class TSTBP(windows.debug.HXBreakpoint):
+            def __init__(self, addr, expec_before):
+                self.addr = addr
+                self.expec_before = expec_before
+
+            def trigger(self, dbg, exc):
+                TEST_CASE.assertNotEqual(len(dbg.current_process.threads), 1)
+                for t in dbg.current_process.threads:
+                    print(hex(t.context.Dr7))
+                    TEST_CASE.assertNotEqual(t.context.Dr7, 0)
+                if data[0] == 0: #First time we got it ! create new thread
+                    data[0] = 1
+                    calc.create_thread(addr, 0)
+                else:
+                    d.current_process.exit()
+
+        calc = pop_calc_32(dwCreationFlags=DEBUG_PROCESS)
+        d = MyDbg(calc)
+        addr = calc.virtual_alloc(0x1000)
+        calc.write_memory(addr, "\x90" * 2)
+        d.add_bp(TSTBP(addr, 0))
+        calc.create_thread(addr, 0)
+        d.loop()
+        # Used to verif we actually called the Breakpoints
+        TEST_CASE.assertEqual(data[0], 1)
+
+
 if __name__ == '__main__':
     alltests = unittest.TestSuite()
     alltests.addTest(unittest.makeSuite(WindowsTestCase))
     alltests.addTest(unittest.makeSuite(WindowsAPITestCase))
+    alltests.addTest(unittest.makeSuite(DebuggerTestCase))
     alltests.debug()
     tester = unittest.TextTestRunner(verbosity=2)
     tester.run(alltests)

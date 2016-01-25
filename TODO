@@ -4,6 +4,11 @@ TODO:
     - Extend Registry feature (write)
 
     - remove pe_parse.transform_ctypes_fields (use utils.transform_ctypes_fields)
+    - DBG
+        - Verif multiple bp at same place..
+        - Verif multiple pending at same place
+        - Clean / (rethink?) vectored_exception (+rename exception.py? context.py?)
+        - Test !! (bp, BP_HX, bp on only on process, bp_hx on only one thread..)
 
 FIXME:
     - WMI
