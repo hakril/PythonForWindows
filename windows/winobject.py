@@ -26,6 +26,7 @@ import windows.pe_parse as pe_parse
 
 
 
+
 class AutoHandle(object):
     """An abstract class that allow easy handle creation/destruction/wait"""
      # Big bypass to prevent missing reference at programm close..
@@ -45,6 +46,7 @@ class AutoHandle(object):
         if hasattr(self, "_handle"):
             return self._handle
         self._handle = self._get_handle()
+        dbgprint("Open handle {0} for {1}".format(hex(self._handle), self), "HANDLE")
         return self._handle
 
     def wait(self, timeout=INFINITE):
@@ -53,6 +55,7 @@ class AutoHandle(object):
 
     def __del__(self):
         if hasattr(self, "_handle") and self._handle:
+            dbgprint("Closing Handle {0} for {1}".format(hex(self._handle), self), "HANDLE")
             self.CLOSE_FUNCTION(self._handle)
 
 
@@ -235,8 +238,10 @@ class WinThread(THREADENTRY32, AutoHandle):
             thread = [t for t in System().threads if t.tid == tid][0]
             # set AutoHandle _handle
             thread._handle = handle
+            dbgprint("Thread {0} from handle {1}".format(thread, hex(handle)), "HANDLE")
             return thread
         except IndexError:
+            dbgprint("DeadThread from handle {0}".format(hex(handle)), "HANDLE")
             return DeadThread(handle, tid)
 
 class DeadThread(AutoHandle):
@@ -518,6 +523,7 @@ class WinProcess(PROCESSENTRY32, Process):
         pid = winproxy.GetProcessId(handle)
         proc = [p for p in windows.system.processes if p.pid == pid][0]
         proc._handle = handle
+        dbgprint("Process {0} from handle {1}".format(proc, hex(handle)), "HANDLE")
         return proc
 
 
@@ -737,6 +743,9 @@ class WinProcess(PROCESSENTRY32, Process):
     def exit(self, code=0):
         """Exit the process"""
         return winproxy.TerminateProcess(self.handle, code)
+
+
+
 
 # Create ProcessToken and Thread Token objects ?
 class Token(AutoHandle):

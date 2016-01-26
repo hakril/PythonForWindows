@@ -2,6 +2,7 @@ import windows
 import windows.winproxy as winproxy
 
 from windows.winobject import WinProcess, WinThread
+from windows.dbgprint import dbgprint
 
 import windows.native_exec.simple_x86 as x86
 import windows.native_exec.simple_x64 as x64
@@ -126,13 +127,11 @@ class Debugger(object):
                 all_threads.append(target)
             else:
                 raise ValueError("Unknow HXBP target type for <{0}>".format(target))
-
         for target_thread in all_threads:
             x = self._hardware_breakpoint[target_thread.tid]
             if all(pos in x for pos in range(4)):
                 raise ValueError("Cannot put {0} in {1} (DRx full)".format(bp, target_thread))
             empty_drx = str([pos for pos in range(4) if pos not in x][0])
-            #print("Empty DRx = {0}".format(empty_drx))
             ctx = target_thread.context
             ctx.EDr7.GE = 1
             ctx.EDr7.LE = 1
@@ -140,7 +139,6 @@ class Debugger(object):
             setattr(ctx.EDr7, "L" + empty_drx, 1)
             setattr(ctx, "Dr" + empty_drx, bp.addr)
             x[int(empty_drx)] = bp
-
             target_thread.set_context(ctx)
 
 
@@ -153,6 +151,12 @@ class Debugger(object):
         for bp, expected_target in pending_todo:
             # Valid addr ? (in non-loaded module: raise / pass ?)
             if expected_target is None or expected_target.pid == target.pid:
+                if isinstance(target, WinThread):
+                    x = self._hardware_breakpoint[target.tid]
+                    # Ignore BP on thread_create that have already been
+                    # put by the process_create event
+                    if bp in x.values():
+                        continue
                 _setup_method = getattr(self, "_setup_breakpoint_" + bp.type)
                 _setup_method(bp, [target])
                 # TODO REMOVE PENDING HERE if target is not None..
@@ -206,13 +210,7 @@ class Debugger(object):
             self.on_exception(exception)
 
 
-    def _handle_create_thread(self, debug_event):
-        """Handle CREATE_THREAD_DEBUG_EVENT"""
-        create_thread = debug_event.u.CreateThread
-        self.current_thread = WinThread._from_handle(create_thread.hThread)
-        self.threads[self.current_thread.tid] = self.current_thread
-        self._setup_pending_breakpoints(self.current_thread)
-        self.on_create_thread(create_thread)
+
 
     def _handle_create_process(self, debug_event):
         """Handle CREATE_PROCESS_DEBUG_EVENT"""
@@ -232,10 +230,21 @@ class Debugger(object):
         self._update_debugger_state(debug_event)
         exit_process = debug_event.u.ExitProcess
         self.on_exit_process(exit_process)
+        del self.threads[self.current_thread.tid]
         del self.processes[self.current_process.pid]
         # Hack IT, ContinueDebugEvent will close the HANDLE for us
         # Should we make another handle instead ?
+        dbgprint("Removing handle {0} for {1} (will be closed by continueDebugEvent".format(hex(self.current_process._handle), self.current_process), "HANDLE")
         del self.current_process._handle
+        del self.current_thread._handle
+
+    def _handle_create_thread(self, debug_event):
+        """Handle CREATE_THREAD_DEBUG_EVENT"""
+        create_thread = debug_event.u.CreateThread
+        self.current_thread = WinThread._from_handle(create_thread.hThread)
+        self.threads[self.current_thread.tid] = self.current_thread
+        self._setup_pending_breakpoints(self.current_thread)
+        self.on_create_thread(create_thread)
 
     def _handle_exit_thread(self, debug_event):
         """Handle EXIT_THREAD_DEBUG_EVENT"""
@@ -245,6 +254,7 @@ class Debugger(object):
         del self.threads[self.current_thread.tid]
         # Hack IT, ContinueDebugEvent will close the HANDLE for us
         # Should we make another handle instead ?
+        dbgprint("Removing handle {0} for {1} (will be closed by continueDebugEvent".format(hex(self.current_thread._handle), self.current_thread), "HANDLE")
         del self.current_thread._handle
 
     def _handle_load_dll(self, debug_event):
