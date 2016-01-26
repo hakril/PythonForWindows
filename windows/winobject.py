@@ -745,8 +745,6 @@ class WinProcess(PROCESSENTRY32, Process):
         return winproxy.TerminateProcess(self.handle, code)
 
 
-
-
 # Create ProcessToken and Thread Token objects ?
 class Token(AutoHandle):
     def __init__(self, handle):

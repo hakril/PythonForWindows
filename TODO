@@ -10,8 +10,17 @@ TODO:
         - Clean / (rethink?) vectored_exception (+rename exception.py? context.py?)
         - Test !! (bp, BP_HX, bp on only on process, bp_hx on only one thread..)
 
+    - Injection with suspended process ?
+        - FIX/add test (inject suspended 32 -> 64)
+    - VEH:
+        - reprise sur erreur
+        - reprise context modification
+
 FIXME:
     - WMI
         - COM initialisation when injected in another process
         - The CoInitialize might be already called
         - Fix that
+
+    - setup.py build seems to raise an error
+    - winutils.create_process : use WinProcess._from_handle

@@ -12,7 +12,6 @@ from .generated_def import windef
 
 from collections import defaultdict
 
-
 STANDARD_BP = "BP"
 HARDWARE_EXEC_BP = "HXBP"
 
@@ -38,12 +37,9 @@ class Debugger(object):
         self.threads = {}
         self.current_process = None
         self.current_thread = None
-
         # List of breakpoints
         self.breakpoints = {}
-
         self._pending_breakpoints = {} #Breakpoints to put in new process / threads
-
         # Values rewritten by "\xcc"
         self._memory_save = defaultdict(dict)
         # Dict of {tid : {drx taken : BP}}
@@ -89,24 +85,6 @@ class Debugger(object):
         bp = self.breakpoints[addr]
         bp.trigger(self, exception)
         return bp
-
-    #  Breakpoint stuff
-    #def _setup_breakpoint(self, bp, target):
-    #    if bp.type != 0:
-    #        raise NotImplementedError("BP TYPE != 0 (TODO)")
-    #    if target is None:
-    #        targets = self.processes.items()
-    #        # Raise on multiple pending at same addr ?
-    #        # We will add the pending breakpoint to other new processes
-    #        self._pending_breakpoints[bp.addr] = (bp, target)
-    #    else:
-    #        targets = [(target.pid, target)]
-    #
-    #    for pid, process in targets:
-    #        self._break_metadata[pid][bp.addr] = process.read_memory(bp.addr, 1)
-    #        #print("Write BP: {0} at {1}".format(process, addr))
-    #        process.write_memory(bp.addr, "\xcc")
-    #    return
 
 
     def _setup_breakpoint_BP(self, bp, targets):
@@ -210,8 +188,6 @@ class Debugger(object):
             self.on_exception(exception)
 
 
-
-
     def _handle_create_process(self, debug_event):
         """Handle CREATE_PROCESS_DEBUG_EVENT"""
         create_process = debug_event.u.CreateProcessInfo
@@ -287,7 +263,6 @@ class Debugger(object):
             self._dispatch_debug_event(debug_event)
             self._finish_debug_event(debug_event, windef.DBG_CONTINUE)
             if not self.processes:
-                # No More process to debug
                 break
 
     def add_bp(self, bp, addr=None, type=None, target=None):

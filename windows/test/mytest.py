@@ -54,8 +54,6 @@ def Calc64(exit_code=0):
     finally:
         calc.exit(exit_code)
 
-
-
 @contextmanager
 def Calc32(exit_code=0):
     try:
