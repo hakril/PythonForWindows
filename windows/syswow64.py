@@ -187,6 +187,8 @@ def get_current_process_syswow_peb():
     return windows.winobject.RemotePEB64(peb_addr, CurrentProcessReadSyswow())
 
 
+
+
 class ReadSyswow64Process(object):
         def __init__(self, target):
             self.target = target
@@ -283,5 +285,9 @@ def NtGetContextThread_32_to_64(hThread, lpContext):
     if type(lpContext) == windows.vectored_exception.EnhancedCONTEXT64:
         lpContext = byref(lpContext)
     return NtGetContextThread_32_to_64.ctypes_function(hThread, lpContext)
+
+@Syswow64ApiProxy(windows.winproxy.LdrLoadDll)
+def LdrLoadDll_32_to_64(PathToFile, Flags, ModuleFileName, ModuleHandle):
+    return LdrLoadDll_32_to_64.ctypes_function(PathToFile, Flags, ModuleFileName, ModuleHandle)
 
 

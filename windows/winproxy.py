@@ -307,7 +307,9 @@ def CreateRemoteThread(hProcess=NeededParameter, lpThreadAttributes=None, dwStac
 
 
 @Kernel32Proxy("VirtualProtect")
-def VirtualProtect(lpAddress, dwSize, flNewProtect, lpflOldProtect=0):
+def VirtualProtect(lpAddress, dwSize, flNewProtect, lpflOldProtect=None):
+    if lpflOldProtect is None:
+        lpflOldProtect = ctypes.byref(DWORD())
     return VirtualProtect.ctypes_function(lpAddress, dwSize, flNewProtect, lpflOldProtect)
 
 
@@ -501,6 +503,10 @@ def ntquerysysteminformation_error_check(func_name, result, func, args):
 @NtdllProxy("NtGetContextThread", error_ntstatus)
 def NtGetContextThread(hThread, lpContext):
     return NtGetContextThread.ctypes_function(hThread, lpContext)
+
+@NtdllProxy("LdrLoadDll", error_ntstatus)
+def LdrLoadDll(PathToFile, Flags, ModuleFileName, ModuleHandle):
+    return LdrLoadDll.ctypes_function(PathToFile, Flags, ModuleFileName, ModuleHandle)
 
 
 @NtdllProxy('NtQuerySystemInformation', ntquerysysteminformation_error_check)

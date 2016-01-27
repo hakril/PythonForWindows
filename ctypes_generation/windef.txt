@@ -557,3 +557,51 @@
 #define REG_RESOURCE_REQUIREMENTS_LIST ( 10 )
 #define REG_QWORD                   ( 11 )
 #define REG_QWORD_LITTLE_ENDIAN     ( 11 )
+
+
+#define IMAGE_FILE_RELOCS_STRIPPED           0x0001
+#define IMAGE_FILE_EXECUTABLE_IMAGE          0x0002
+#define IMAGE_FILE_LINE_NUMS_STRIPPED        0x0004
+#define IMAGE_FILE_LOCAL_SYMS_STRIPPED       0x0008
+#define IMAGE_FILE_AGGRESIVE_WS_TRIM         0x0010
+#define IMAGE_FILE_LARGE_ADDRESS_AWARE       0x0020
+#define IMAGE_FILE_BYTES_REVERSED_LO         0x0080
+#define IMAGE_FILE_32BIT_MACHINE             0x0100
+#define IMAGE_FILE_DEBUG_STRIPPED            0x0200
+#define IMAGE_FILE_REMOVABLE_RUN_FROM_SWAP   0x0400
+#define IMAGE_FILE_NET_RUN_FROM_SWAP         0x0800
+#define IMAGE_FILE_SYSTEM                    0x1000
+#define IMAGE_FILE_DLL                       0x2000
+#define IMAGE_FILE_UP_SYSTEM_ONLY            0x4000
+#define IMAGE_FILE_BYTES_REVERSED_HI         0x8000
+
+#define IMAGE_FILE_MACHINE_UNKNOWN           0
+#define IMAGE_FILE_MACHINE_I386              0x014c
+#define IMAGE_FILE_MACHINE_R3000             0x0162
+#define IMAGE_FILE_MACHINE_R4000             0x0166
+#define IMAGE_FILE_MACHINE_R10000            0x0168
+#define IMAGE_FILE_MACHINE_WCEMIPSV2         0x0169
+#define IMAGE_FILE_MACHINE_ALPHA             0x0184
+#define IMAGE_FILE_MACHINE_SH3               0x01a2
+#define IMAGE_FILE_MACHINE_SH3DSP            0x01a3
+#define IMAGE_FILE_MACHINE_SH3E              0x01a4
+#define IMAGE_FILE_MACHINE_SH4               0x01a6
+#define IMAGE_FILE_MACHINE_SH5               0x01a8
+#define IMAGE_FILE_MACHINE_ARM               0x01c0
+#define IMAGE_FILE_MACHINE_THUMB             0x01c2
+#define IMAGE_FILE_MACHINE_ARMNT             0x01c4
+#define IMAGE_FILE_MACHINE_AM33              0x01d3
+#define IMAGE_FILE_MACHINE_POWERPC           0x01F0
+#define IMAGE_FILE_MACHINE_POWERPCFP         0x01f1
+#define IMAGE_FILE_MACHINE_IA64              0x0200
+#define IMAGE_FILE_MACHINE_MIPS16            0x0266
+#define IMAGE_FILE_MACHINE_ALPHA64           0x0284
+#define IMAGE_FILE_MACHINE_MIPSFPU           0x0366
+#define IMAGE_FILE_MACHINE_MIPSFPU16         0x0466
+#define IMAGE_FILE_MACHINE_AXP64             IMAGE_FILE_MACHINE_ALPHA64
+#define IMAGE_FILE_MACHINE_TRICORE           0x0520
+#define IMAGE_FILE_MACHINE_CEF               0x0CEF
+#define IMAGE_FILE_MACHINE_EBC               0x0EBC
+#define IMAGE_FILE_MACHINE_AMD64             0x8664
+#define IMAGE_FILE_MACHINE_M32R              0x9041
+#define IMAGE_FILE_MACHINE_CEE               0xC0EE

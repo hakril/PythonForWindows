@@ -31,6 +31,12 @@ HANDLE WINAPI CreateFileW(
     __in_opt HANDLE hTemplateFile
     );
 
+NTSTATUS WINAPI LdrLoadDll(
+  __in_opt LPCWSTR               PathToFile,
+  __in_opt ULONG                Flags,
+  _In_ PUNICODE_STRING      ModuleFileName,
+  _Out_ PHANDLE             ModuleHandle
+);
 
 NTSTATUS WINAPI NtQuerySystemInformation(
   _In_       SYSTEM_INFORMATION_CLASS SystemInformationClass,
@@ -730,3 +736,5 @@ BOOL WINAPI DebugBreakProcess (
 DWORD WINAPI GetProcessId(
   _In_ HANDLE Process
 );
+
+
