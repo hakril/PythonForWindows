@@ -5,6 +5,8 @@ import time
 import struct
 import itertools
 
+from contextlib import contextmanager
+
 import windows
 import windows.network
 import windows.registry
@@ -321,14 +323,22 @@ class Process(AutoHandle):
         """
         return self.exit_code != STILL_ACTIVE
 
-    def execute(self, code):
+    #@contextmanager
+    #def allocated_memory(self, size):
+    #    addr = self.virtual_alloc(size)
+    #    try:
+    #        yield addr
+    #    finally:
+    #        windows.winproxy.VirtualFreeEx(self.handle, size)
+
+    def execute(self, code, parameter=0):
         """Execute some native code in the context of the process
 
            :return: The return value of the native code
            :rtype: :class:`int`"""
         x = self.virtual_alloc(len(code))
         self.write_memory(x, code)
-        return self.create_thread(x, 0)
+        return self.create_thread(x, parameter)
 
     def query_memory(self, addr):
         """Query the memory informations about page at ``addr``
@@ -365,6 +375,60 @@ class Process(AutoHandle):
             except winproxy.Kernel32Error:
                 return
             addr += x.RegionSize
+
+    def read_char(self, addr):
+        sizeof_char = sizeof(CHAR)
+        return struct.unpack("<B", self.read_memory(addr, sizeof_char))[0]
+
+    def read_dword(self, addr):
+        sizeof_dword = sizeof(DWORD)
+        return struct.unpack("<I", self.read_memory(addr, sizeof_dword))[0]
+
+    def read_qword(self, addr):
+        sizeof_qword = sizeof(ULONG64)
+        return struct.unpack("<Q", self.read_memory(addr, sizeof_qword))[0]
+
+    def read_ptr(self, addr):
+        if self.bitness == 32:
+            return self.read_dword(addr)
+        return self.read_qword(addr)
+
+    def read_string(self, addr):
+        res = []
+        for i in itertools.count():
+            x = self.read_memory(addr + (i * 0x100), 0x100)
+            if "\x00" in x:
+                res.append(x.split("\x00", 1)[0])
+                break
+            res.append(x)
+        return "".join(res)
+
+    def read_wstring(self, addr):
+        res = []
+        for i in itertools.count():
+            x = self.read_memory(addr + (i * 0x100), 0x100)
+            utf16_chars = ["".join(c) for c in zip(*[iter(x)] * 2)]
+            if "\x00\x00" in utf16_chars:
+                res.extend(utf16_chars[:utf16_chars.index("\x00\x00")])
+                break
+            res.extend(x)
+        return "".join(res).decode('utf16')
+
+    def write_byte(self, addr, byte):
+        """write a byte to virtual memory"""
+        return self.write_memory(addr, struct.pack("<B", byte))
+
+    def write_word(self, addr, word):
+        """write a word to virtual memory"""
+        return self.write_memory(addr, struct.pack("<H", word))
+
+    def write_dword(self, addr, dword):
+        """write a dword to virtual memory"""
+        return self.write_memory(addr, struct.pack("<I", dword))
+
+    def write_qword(self, addr, qword):
+        """write a qword to virtual memory"""
+        return self.write_memory(addr, struct.pack("<Q", qword))
 
     @utils.fixedpropety
     def token(self):
@@ -587,44 +651,6 @@ class WinProcess(PROCESSENTRY32, Process):
         self.low_read_memory(addr, ctypes.byref(buffer), size)
         return buffer[:]
 
-    def read_char(self, addr):
-        sizeof_char = sizeof(CHAR)
-        return struct.unpack("<B", self.read_memory(addr, sizeof_char))[0]
-
-    def read_dword(self, addr):
-        sizeof_dword = sizeof(DWORD)
-        return struct.unpack("<I", self.read_memory(addr, sizeof_dword))[0]
-
-    def read_qword(self, addr):
-        sizeof_qword = sizeof(ULONG64)
-        return struct.unpack("<Q", self.read_memory(addr, sizeof_qword))[0]
-
-    def read_ptr(self, addr):
-        if self.bitness == 32:
-            return self.read_dword(addr)
-        return self.read_qword(addr)
-
-    def read_string(self, addr):
-        res = []
-        for i in itertools.count():
-            x = self.read_memory(addr + (i * 0x100), 0x100)
-            if "\x00" in x:
-                res.append(x.split("\x00", 1)[0])
-                break
-            res.append(x)
-        return "".join(res)
-
-    def read_wstring(self, addr):
-        res = []
-        for i in itertools.count():
-            x = self.read_memory(addr + (i * 0x100), 0x100)
-            utf16_chars = ["".join(c) for c in zip(*[iter(x)] * 2)]
-            if "\x00\x00" in utf16_chars:
-                res.extend(utf16_chars[:utf16_chars.index("\x00\x00")])
-                break
-            res.extend(x)
-        return "".join(res).decode('utf16')
-
     # Simple cache test
     # real_read = read_memory
     #
@@ -667,6 +693,12 @@ class WinProcess(PROCESSENTRY32, Process):
         self.write_memory(x, dll_path)
         LoadLibrary = utils.get_func_addr('kernel32', 'LoadLibraryA')
         return self.create_thread(LoadLibrary, x)
+
+    def tst_load_library(self, dll_path, target_addr):
+        """Load the library in remote process"""
+        x = self.virtual_alloc(0x1000)
+        self.write_memory(x, dll_path)
+        return self.create_thread(target_addr, x)
 
     def execute_python(self, pycode):
         """Execute Python code into the remote process.
@@ -906,8 +938,9 @@ class RemotePEB(rctypes.RemoteStructure.from_structure(PEB)):
         :type: [:class:`LoadedModule`] -- List of loaded modules
         """
         res = []
+        if not self.Ldr.value:
+                raise ValueError("PEB->Ldr is NULL: cannot walk the module list")
         list_entry_ptr = self.Ldr.contents.InMemoryOrderModuleList.Flink.raw_value
-
         current_dll = self.ptr_flink_to_remote_module(list_entry_ptr)
         while current_dll.DllBase:
             res.append(current_dll)
@@ -938,8 +971,9 @@ if CurrentProcess().bitness == 32:
             :type: [:class:`LoadedModule`] -- List of loaded modules
             """
             res = []
+            if not self.Ldr.value:
+                raise ValueError("PEB->Ldr is NULL: cannot walk the module list")
             list_entry_ptr = self.Ldr.contents.InMemoryOrderModuleList.Flink.raw_value
-
             current_dll = self.ptr_flink_to_remote_module(list_entry_ptr)
             while current_dll.DllBase:
                 res.append(current_dll)
@@ -970,9 +1004,9 @@ if CurrentProcess().bitness == 64:
             :type: [:class:`LoadedModule`] -- List of loaded modules
             """
             res = []
-            #import pdb;pdb.set_trace()
+            if not self.Ldr.value:
+                raise ValueError("PEB->Ldr is NULL: cannot walk the module list")
             list_entry_ptr = self.Ldr.contents.InMemoryOrderModuleList.Flink.raw_value
-
             current_dll = self.ptr_flink_to_remote_module(list_entry_ptr)
             while current_dll.DllBase:
                 res.append(current_dll)

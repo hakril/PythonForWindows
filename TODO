@@ -16,6 +16,9 @@ TODO:
         - reprise sur erreur
         - reprise context modification
 
+    - Free all the virtual_alloc
+        - Real API arround alloc/free memory in WinProcess..
+
 FIXME:
     - WMI
         - COM initialisation when injected in another process
