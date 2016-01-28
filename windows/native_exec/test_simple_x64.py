@@ -13,9 +13,10 @@ mnemonic_name_exception = {'movabs': 'mov'}
 
 
 class TestInstr(object):
-    def __init__(self, instr_to_test, immediat_accepted=None, must_fail=None, debug=False):
+    def __init__(self, instr_to_test, expected_result=None, immediat_accepted=None, must_fail=None, debug=False):
         self.instr_to_test = instr_to_test
         self.immediat_accepted = immediat_accepted
+        self.expected_result = expected_result
         self.must_fail = must_fail
         self.debug = debug
 
@@ -40,6 +41,11 @@ class TestInstr(object):
             raise AssertionError("Trying to disas an instruction resulted in multiple disassembled instrs")
         capres = capres_list[0]
         print("{0} {1}".format(capres.mnemonic, capres.op_str))
+        if self.expected_result is not None:
+            if "{0} {1}".format(capres.mnemonic, capres.op_str) == self.expected_result:
+                return True
+            else:
+                raise AssertionError("Expected result <{0}> got <{1}>".format(self.expected_result, "{0} {1}".format(capres.mnemonic, capres.op_str)))
         if len(res) != len(capres.bytes):
             raise AssertionError("Not all bytes have been used by the disassembler")
         self.compare_mnemo(capres)
@@ -128,6 +134,7 @@ TestInstr(Mov, immediat_accepted=-1)('RCX', 0xffffffffffffffff)
 TestInstr(Mov)(mem('gs:[0x1122334455667788]'), 'RAX')
 TestInstr(Mov)(mem('[RAX]'), 0x11223344)
 TestInstr(Mov)(mem('[EAX]'), 0x11223344)
+TestInstr(Mov)(mem('[RBX]'), 0x11223344)
 
 TestInstr(And)('RCX', 'RBX')
 TestInstr(And)('RAX', 0x11223344)
@@ -143,6 +150,15 @@ TestInstr(Or)(mem('[RAX + 1]'), 'R8')
 TestInstr(Or)(mem('[EAX + 1]'), 'R8')
 TestInstr(Or)(mem('[RAX + 1]'), 'EAX')
 
+# I really don't know why it's the inverse
+# But I don't care, it's Test dude..
+TestInstr(Test, expected_result="test r11, rax")('RAX', 'R11')
+TestInstr(Test, expected_result="test edi, eax")('EAX', 'EDI')
+TestInstr(Test)('RCX', 'RCX')
+
+TestInstr(Test)(mem('[RDI + 0x100]'), 'RCX')
+
+assert Test(mem('[RDI + 0x100]'), 'RCX').get_code() == Test('RCX', mem('[RDI + 0x100]')).get_code()
 
 
 TestInstr(Push)('R15')
@@ -167,6 +183,21 @@ TestInstr(Mov)('ECX', mem('[RBX + RCX + 0x10]'))
 TestInstr(Mov)(mem('[RBX + RCX + 0x10]'), 'ECX')
 TestInstr(Mov)(mem('[EBX + ECX + 0x10]'), 'ECX')
 TestInstr(Mov)(mem('[EBX + ECX + 0x10]'), 'R8')
+
+TestInstr(Not)('RAX')
+TestInstr(Not)(mem('[RAX]'))
+
+
+TestInstr(ScasB, expected_result="scasb al, byte ptr [rdi]")()
+TestInstr(ScasW, expected_result="scasw ax, word ptr [rdi]")()
+TestInstr(ScasD, expected_result="scasd eax, dword ptr [rdi]")()
+TestInstr(ScasQ, expected_result="scasq rax, qword ptr [rdi]")()
+
+TestInstr(CmpsB, expected_result="cmpsb byte ptr [rsi], byte ptr [rdi]")()
+TestInstr(CmpsW, expected_result="cmpsw word ptr [rsi], word ptr [rdi]")()
+TestInstr(CmpsD, expected_result="cmpsd dword ptr [rsi], dword ptr [rdi]")()
+TestInstr(CmpsQ, expected_result="cmpsq qword ptr [rsi], qword ptr [rdi]")()
+
 
 
 TestInstr(Mov, must_fail=True)('RCX', 'ECX')

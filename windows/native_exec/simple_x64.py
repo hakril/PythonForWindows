@@ -722,9 +722,6 @@ class Pop(Instruction):
     encoding = [(RawBits.from_int(5, 0x58 >> 3), X64RegisterSelector())]
 
 
-class Call(Instruction):
-    encoding = [(RawBits.from_int(8, 0xff), Slash(2))]
-
 
 class Xchg(Instruction):
     default_32_bits = True
@@ -820,6 +817,10 @@ class JmpImm8(JmpImm):
 class JmpImm32(JmpImm):
     accept_as_Ximmediat = staticmethod(accept_as_32immediat)
 
+class Call(JmpType):
+    encoding = [(RawBits.from_int(8, 0xe8), JmpImm32(5)),
+                (RawBits.from_int(8, 0xff), Slash(2))]
+
 
 class Jmp(JmpType):
     encoding = [(RawBits.from_int(8, 0xeb), JmpImm8(2)),
@@ -867,9 +868,16 @@ class Mov(Instruction):
 
 class Cmp(Instruction):
     default_32_bits = True
+
     encoding = [(RawBits.from_int(8, 0x3d), RegisterRax(), Imm32()),
                 (RawBits.from_int(8, 0x81), Slash(7), Imm32()),
                 (RawBits.from_int(8, 0x3b), ModRM([ModRM_REG__REG, ModRM_REG64__MEM]))]
+
+class Test(Instruction):
+    default_32_bits = True
+    refuse_reverse = True
+    encoding = [(RawBits.from_int(8, 0xf7), Slash(7), Imm32()),
+                (RawBits.from_int(8, 0x85), ModRM([ModRM_REG__REG, ModRM_REG64__MEM], has_direction_bit=False))]
 
 
 class Xor(Instruction):
@@ -879,6 +887,47 @@ class Xor(Instruction):
 
 class Nop(Instruction):
     encoding = [(RawBits.from_int(8, 0x90),)]
+
+class Not(Instruction):
+    default_32_bits = True
+    encoding = [(RawBits.from_int(8, 0xF7), Slash(2))]
+
+class ScasB(Instruction):
+    default_32_bits = True
+    encoding = [(RawBits.from_int(8, 0xAE),)]
+
+
+class ScasW(Instruction):
+    default_32_bits = True
+    encoding = [(RawBits.from_int(16,  0x66AF),)]
+
+
+class ScasD(Instruction):
+    default_32_bits = True
+    encoding = [(RawBits.from_int(8, 0xAF),)]
+
+class ScasQ(Instruction):
+    encoding = [(RawBits.from_int(16, 0x48AF),)]
+
+
+class CmpsB(Instruction):
+    default_32_bits = True
+    encoding = [(RawBits.from_int(8, 0xa6),)]
+
+
+class CmpsW(Instruction):
+    default_32_bits = True
+    encoding = [(RawBits.from_int(16, 0x66A7),)]
+
+
+class CmpsD(Instruction):
+    default_32_bits = True
+    encoding = [(RawBits.from_int(8, 0xa7),)]
+
+
+class CmpsQ(Instruction):
+    default_32_bits = True
+    encoding = [(RawBits.from_int(16, 0x48A7),)]
 
 
 class Retf(Instruction):
@@ -922,7 +971,7 @@ class MultipleInstr(object):
 
     def get_code(self):
         if self.expected_labels:
-            raise ValueError("Unresolved labels: {self.expected_labels}".format(self=self))
+            raise ValueError("Unresolved labels: {0}".format(self.expected_labels.keys()))
         return b"".join([bytes(x[1].get_code()) for x in sorted(self.instrs.items())])
 
     def add_instruction(self, instruction):
@@ -1036,7 +1085,12 @@ class MultipleInstr(object):
         self.size -= 1
 
     def merge_shellcode(self, other):
+        shared_labels = set(self.labels) & set(other.labels)
+        if shared_labels:
+            raise ValueError("Cannot merge shellcode: shared labels {0}".format(shared_labels))
         for offset, instr in sorted(other.instrs.items()):
+            for label_name in [name for name, label_offset in other.labels.items() if label_offset == offset]:
+                self.add_instruction(Label(label_name))
             self.add_instruction(instr)
 
     def __iadd__(self, other):

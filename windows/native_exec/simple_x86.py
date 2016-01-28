@@ -580,6 +580,11 @@ class JmpImm32(JmpImm):
 
 
 # Instructions
+
+class Call(JmpType):
+    encoding = [(RawBits.from_int(8, 0xe8), JmpImm32(5)),
+                (RawBits.from_int(8, 0xff), Slash(2))]
+
 class Jmp(JmpType):
     encoding = [(RawBits.from_int(8, 0xeb), JmpImm8(2)),
                 (RawBits.from_int(8, 0xe9), JmpImm32(5))]
@@ -674,6 +679,11 @@ class Cmp(Instruction):
                 (RawBits.from_int(8, 0x3b), ModRM([ModRM_REG__REG, ModRM_REG__MEM]))]
 
 
+class Test(Instruction):
+    encoding = [(RawBits.from_int(8, 0xf7), Slash(7), Imm32()),
+                (RawBits.from_int(8, 0x85), ModRM([ModRM_REG__REG, ModRM_REG__MEM], has_direction_bit=False))]
+
+
 class Out(Instruction):
     encoding = [(RawBits.from_int(8, 0xee), FixedRegister('DX'), FixedRegister('AL')),
                 (RawBits.from_int(16, 0x66ef), FixedRegister('DX'), FixedRegister('AX')),  # Fuck-it hardcoded prefix for now
@@ -694,8 +704,7 @@ class Xchg(Instruction):
     encoding = [(RawBits.from_int(5, 0x90 >> 3), RegisterEax(), X86RegisterSelector()), (RawBits.from_int(5, 0x90 >> 3), X86RegisterSelector(), RegisterEax())]
 
 
-class Call(Instruction):
-    encoding = [(RawBits.from_int(8, 0xff), Slash(2))]
+
 
 
 class Cpuid(Instruction):
@@ -706,9 +715,36 @@ class Ret(Instruction):
     encoding = [(RawBits.from_int(8, 0xc3),)]
 
 
+class ScasB(Instruction):
+    encoding = [(RawBits.from_int(8, 0xAE),)]
+
+class ScasW(Instruction):
+    encoding = [(RawBits.from_int(16,  0x66AF),)]
+
+class ScasD(Instruction):
+    encoding = [(RawBits.from_int(8, 0xAF),)]
+
+
+class CmpsB(Instruction):
+    default_32_bits = True
+    encoding = [(RawBits.from_int(8, 0xa6),)]
+
+
+class CmpsW(Instruction):
+    default_32_bits = True
+    encoding = [(RawBits.from_int(16, 0x66A7),)]
+
+
+class CmpsD(Instruction):
+    default_32_bits = True
+    encoding = [(RawBits.from_int(8, 0xa7),)]
+
+
 class Nop(Instruction):
     encoding = [(RawBits.from_int(8, 0x90),)]
 
+class Not(Instruction):
+    encoding = [(RawBits.from_int(8, 0xF7), Slash(2))]
 
 class Retf(Instruction):
     encoding = [(RawBits.from_int(8, 0xcb),)]
@@ -866,7 +902,12 @@ class MultipleInstr(object):
         self.size -= 1
 
     def merge_shellcode(self, other):
+        shared_labels = set(self.labels) & set(other.labels)
+        if shared_labels:
+            raise ValueError("Cannot merge shellcode: shared labels {0}".format(shared_labels))
         for offset, instr in sorted(other.instrs.items()):
+            for label_name in [name for name, label_offset in other.labels.items() if label_offset == offset]:
+                self.add_instruction(Label(label_name))
             self.add_instruction(instr)
 
     def __iadd__(self, other):

@@ -140,6 +140,25 @@ TestInstr(Or)('EAX', 0x11223344)
 TestInstr(Or)('EAX', mem('[EAX + 1]'))
 TestInstr(Or)(mem('[EAX + EAX]'), 'EDX')
 
+TestInstr(Not)('EAX')
+TestInstr(Not)(mem('[EAX]'))
+
+TestInstr(ScasB, expected_result="scasb al, byte ptr es:[edi]")()
+TestInstr(ScasW, expected_result="scasw ax, word ptr es:[edi]")()
+TestInstr(ScasD, expected_result="scasd eax, dword ptr es:[edi]")()
+
+TestInstr(CmpsB, expected_result="cmpsb byte ptr [esi], byte ptr es:[edi]")()
+TestInstr(CmpsW, expected_result="cmpsw word ptr [esi], word ptr es:[edi]")()
+TestInstr(CmpsD, expected_result="cmpsd dword ptr [esi], dword ptr es:[edi]")()
+
+
+TestInstr(Test)('EAX', 'EAX')
+TestInstr(Test, expected_result="test edi, ecx  ")('ECX', 'EDI')
+
+TestInstr(Test)(mem('[ECX + 0x100]'), 'ECX')
+
+assert Test(mem('[ECX + 0x100]'), 'ECX').get_code() == Test('ECX', mem('[ECX + 0x100]')).get_code()
+
 
 assert Xchg('EAX', 'ECX').get_code() == Xchg('ECX', 'EAX').get_code()
 
