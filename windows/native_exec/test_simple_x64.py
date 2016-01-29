@@ -164,6 +164,10 @@ assert Test(mem('[RDI + 0x100]'), 'RCX').get_code() == Test('RCX', mem('[RDI + 0
 TestInstr(Push)('R15')
 TestInstr(Push)(0x42)
 TestInstr(Push)(-1)
+TestInstr(Push)(mem("[ECX]"))
+TestInstr(Push)(mem("[RCX]"))
+
+
 TestInstr(Call)('RAX')
 TestInstr(Call)(mem('[RAX + RCX * 8]'))
 TestInstr(Cpuid)()

@@ -612,7 +612,8 @@ class Jnb(JmpType):
 
 class Push(Instruction):
     encoding = [(RawBits.from_int(5, 0x50 >> 3), X86RegisterSelector()),
-                (RawBits.from_int(8, 0x68), Imm32())]
+                (RawBits.from_int(8, 0x68), Imm32()),
+                (RawBits.from_int(8, 0xff), Slash(6))]
 
 
 class Pop(Instruction):

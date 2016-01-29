@@ -115,6 +115,8 @@ TestInstr(Add)(mem('[EAX]'), 10)
 TestInstr(Mov)('EAX', mem('fs:[0xfffc]'))
 TestInstr(Mov)(mem('fs:[0xfffc]'), 0)
 
+TestInstr(Push)('ECX')
+TestInstr(Push)(mem('[ECX + 8]'))
 
 TestInstr(Sub)('ECX', 'ESP')
 TestInstr(Sub)('ECX', mem('[ESP]'))
@@ -153,7 +155,7 @@ TestInstr(CmpsD, expected_result="cmpsd dword ptr [esi], dword ptr es:[edi]")()
 
 
 TestInstr(Test)('EAX', 'EAX')
-TestInstr(Test, expected_result="test edi, ecx  ")('ECX', 'EDI')
+TestInstr(Test, expected_result="test edi, ecx")('ECX', 'EDI')
 
 TestInstr(Test)(mem('[ECX + 0x100]'), 'ECX')
 

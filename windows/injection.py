@@ -8,42 +8,47 @@ import windows.utils as utils
 from .native_exec import simple_x86 as x86
 from .native_exec import simple_x64 as x64
 
-from windows.native_exec.nativeutils import GetProcAddress64
+from windows.native_exec.nativeutils import GetProcAddress64, GetProcAddress32
 
 from windows.dbgprint import dbgprint
 
 
-def load_dll_in_remote_process(target, dll_name):
-    rpeb = target.peb
-    if rpeb.Ldr:
-        # LDR est parcourable, ca va etre deja plus simple..
-        modules = rpeb.modules
-        if any(mod.name == dll_name for mod in modules):
-            # DLL already loaded
-            dbgprint("DLL already present in DLL", "DLLINJECT")
-            return True
-        k32 = [mod for mod in modules if mod.name.lower() == "kernel32.dll"]
-        if k32:
-            # We have kernel32 \o/
-            k32 = k32[0]
-            try:
-                load_libraryA = k32.pe.exports["LoadLibraryA"]
-            except KeyError:
-                raise ValueError("Kernel32 have no export <LoadLibraryA> (wtf)")
+def perform_manual_getproc_loadlib_32(target, dll_name):
+    dll = "KERNEL32.DLL\x00".encode("utf-16-le")
+    api = "LoadLibraryA\x00"
+    dll_to_load = dll_name + "\x00"
 
-            addr = target.virtual_alloc(0x1000)
-            target.write_memory(addr, dll_name + "\x00")
-            t = target.create_thread(load_libraryA, addr)
-            t.wait()
-            windows.winproxy.VirtualFreeEx(target.handle, addr)
-            dbgprint("DLL Injected via (LoadLibray)", "DLLINJECT")
-            return True
-    # Hardcore mode
-    # We don't have k32 or PEB->Ldr
-    # Go inject a GetProcAddress(LoadLib) + LoadLib shellcode :D
-    if target.bitness == 32:
-        raise NotImplementedError("Manuel GetProcAddress 32bits")
+    RemoteManualLoadLibray = x86.MultipleInstr()
+    code = RemoteManualLoadLibray
+    code += x86.Mov("ECX", x86.mem("[ESP + 4]"))
+    code += x86.Push(x86.mem("[ECX + 4]"))
+    code += x86.Push(x86.mem("[ECX]"))
+    code += x86.Call(":FUNC_GETPROCADDRESS32")
+    code += x86.Push(x86.mem("[ECX + 8]"))
+    code += x86.Call("EAX") # LoadLibrary
+    code += x86.Pop("ECX")
+    code += x86.Pop("ECX")
+    code += x86.Ret()
 
+    RemoteManualLoadLibray += GetProcAddress32
+
+    addr = target.virtual_alloc(0x1000)
+    addr2 = addr + len(dll)
+    addr3 = addr2 + len(api)
+    addr4 = addr3 + len(dll_to_load)
+
+    target.write_memory(addr, dll)
+    target.write_memory(addr2, api)
+    target.write_memory(addr3, dll_to_load)
+    target.write_qword(addr4, addr)
+    target.write_qword(addr4 + 4, addr2)
+    target.write_qword(addr4 + 0x8, addr3)
+
+    t = target.execute(RemoteManualLoadLibray.get_code(), addr4)
+    t.wait()
+    return True
+
+def perform_manual_getproc_loadlib_64(target, dll_name):
     dll = "KERNEL32.DLL\x00".encode("utf-16-le")
     api = "LoadLibraryA\x00"
     dll_to_load = dll_name + "\x00"
@@ -80,8 +85,40 @@ def load_dll_in_remote_process(target, dll_name):
 
     t = target.execute(RemoteManualLoadLibray.get_code(), addr4)
     t.wait()
-    dbgprint("DLL Injected via manual GetProc(LoadLibray)", "DLLINJECT")
     return True
+
+
+def load_dll_in_remote_process(target, dll_name):
+    rpeb = target.peb
+    if rpeb.Ldr:
+        # LDR est parcourable, ca va etre deja plus simple..
+        modules = rpeb.modules
+        if any(mod.name == dll_name for mod in modules):
+            # DLL already loaded
+            dbgprint("DLL already present in target", "DLLINJECT")
+            return True
+        k32 = [mod for mod in modules if mod.name.lower() == "kernel32.dll"]
+        if k32:
+            # We have kernel32 \o/
+            k32 = k32[0]
+            try:
+                load_libraryA = k32.pe.exports["LoadLibraryA"]
+            except KeyError:
+                raise ValueError("Kernel32 have no export <LoadLibraryA> (wtf)")
+
+            addr = target.virtual_alloc(0x1000)
+            target.write_memory(addr, dll_name + "\x00")
+            t = target.create_thread(load_libraryA, addr)
+            t.wait()
+            windows.winproxy.VirtualFreeEx(target.handle, addr)
+            dbgprint("DLL Injected via LoadLibray", "DLLINJECT")
+            return True
+    # Hardcore mode
+    # We don't have k32 or PEB->Ldr
+    # Go inject a GetProcAddress(LoadLib) + LoadLib shellcode :D
+    if target.bitness == 32:
+        return perform_manual_getproc_loadlib_32(target, dll_name)
+    return perform_manual_getproc_loadlib_64(target, dll_name)
 
 python_function_32_bits = {}
 # 32 to 32 injection
@@ -163,10 +200,8 @@ def generate_python_exec_shellcode_64(target, PYCODE_ADDR, PyDll):
     Py_Initialize = Py_exports["Py_Initialize"]
     PyRun_SimpleString = Py_exports["PyRun_SimpleString"]
 
-
     Reserve_space_for_call = x64.MultipleInstr([x64.Push('RDI')] * 4)
     Clean_space_for_call = x64.MultipleInstr([x64.Pop('RDI')] * 4)
-
     code = x64.MultipleInstr()
     # Do stack alignement
     code += x64.Push('RCX')
@@ -189,7 +224,6 @@ def generate_python_exec_shellcode_64(target, PYCODE_ADDR, PyDll):
     code += x64.Call('RAX')
     code += x64.Mov('RCX', 'R15')
     code += x64.Mov('R15', 'RAX')
-
     code += x64.Mov('RAX', PyGILState_Release)
     code += x64.Call('RAX')
     code += x64.Cmp("RDI", 0)

@@ -3,6 +3,7 @@ import struct
 import time
 import os
 import textwrap
+import random
 from contextlib import contextmanager
 
 sys.path.append(".")
@@ -11,8 +12,11 @@ import windows
 import windows.debug
 import windows.native_exec.simple_x86 as x86
 import windows.native_exec.simple_x64 as x64
+import windows.native_exec.nativeutils as nativeutils
 
 from windows.generated_def.winstructs import *
+
+
 
 is_process_32_bits = windows.current_process.bitness == 32
 is_process_64_bits = windows.current_process.bitness == 64
@@ -299,6 +303,59 @@ class WindowsAPITestCase(unittest.TestCase):
         with self.assertRaises(WindowsError) as ar:
             windows.winproxy.CreateFileA("NONEXISTFILE.FILE")
 
+class NativeUtilsTestCase(unittest.TestCase):
+
+    @process_64bit_only
+    def test_strlenw64(self):
+        strlenw64 = windows.native_exec.create_function(nativeutils.StrlenW64.get_code(), [UINT, LPCWSTR])
+        self.assertEqual(strlenw64("YOLO"), 4)
+        self.assertEqual(strlenw64(""), 0)
+
+    @process_64bit_only
+    def test_strlena64(self):
+        strlena64 = windows.native_exec.create_function(nativeutils.StrlenA64.get_code(), [UINT, LPCSTR])
+        self.assertEqual(strlena64("YOLO"), 4)
+        self.assertEqual(strlena64(""), 0)
+
+    @process_64bit_only
+    def test_getprocaddr64(self):
+        getprocaddr64 = windows.native_exec.create_function(nativeutils.GetProcAddress64.get_code(), [ULONG64, LPCWSTR, LPCSTR])
+        k32 = [mod for mod in windows.current_process.peb.modules if mod.name == "kernel32.dll"][0]
+        exports = [(x,y) for x,y in k32.pe.exports.items() if isinstance(x, basestring)]
+
+        for i in range(15):
+            name, addr = random.choice(exports)
+            name = name.encode()
+            compute_addr = getprocaddr64("KERNEL32.DLL", name)
+            # Put name in test to know which function caused the assert fails
+            self.assertEqual((name, hex(addr)), (name, hex(compute_addr)))
+
+    @process_32bit_only
+    def test_strlenw32(self):
+        strlenw32 = windows.native_exec.create_function(nativeutils.StrlenW32.get_code(), [UINT, LPCWSTR])
+        self.assertEqual(strlenw32("YOLO"), 4)
+        self.assertEqual(strlenw32(""), 0)
+
+    @process_32bit_only
+    def test_strlena32(self):
+        strlena32 = windows.native_exec.create_function(nativeutils.StrlenA32.get_code(), [UINT, LPCSTR])
+        self.assertEqual(strlena32("YOLO"), 4)
+        self.assertEqual(strlena32(""), 0)
+
+    @process_32bit_only
+    def test_getprocaddr32(self):
+        getprocaddr32 = windows.native_exec.create_function(nativeutils.GetProcAddress32.get_code(), [UINT, LPCWSTR, LPCSTR])
+        k32 = [mod for mod in windows.current_process.peb.modules if mod.name == "kernel32.dll"][0]
+        exports = [(x,y) for x,y in k32.pe.exports.items() if isinstance(x, basestring)]
+
+
+        for i in range(1500):
+            name, addr = random.choice(exports)
+            name = name.encode()
+            compute_addr = getprocaddr32("KERNEL32.DLL", name)
+            # Put name in test to know which function caused the assert fails
+            self.assertEqual((name, hex(addr)), (name, hex(compute_addr)))
+
 
 class DebuggerTestCase(unittest.TestCase):
 
@@ -447,6 +504,7 @@ if __name__ == '__main__':
     alltests.addTest(unittest.makeSuite(WindowsTestCase))
     alltests.addTest(unittest.makeSuite(WindowsAPITestCase))
     alltests.addTest(unittest.makeSuite(DebuggerTestCase))
+    alltests.addTest(unittest.makeSuite(NativeUtilsTestCase))
     alltests.debug()
     tester = unittest.TextTestRunner(verbosity=2)
     tester.run(alltests)

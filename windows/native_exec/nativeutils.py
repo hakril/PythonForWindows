@@ -1,6 +1,7 @@
 import windows
 
 import windows.native_exec.simple_x64 as x64
+import windows.native_exec.simple_x86 as x86
 from windows.generated_def.winstructs import *
 
 
@@ -26,7 +27,7 @@ StrlenA64 += x64.Label(":FUNC_STRLENA64")
 StrlenA64 += x64.Push("RCX")
 StrlenA64 += x64.Push("RDI")
 StrlenA64 += x64.Mov("RDI", "RCX")
-StrlenA64 += x64.Xor("RAX", "rax")
+StrlenA64 += x64.Xor("RAX", "RAX")
 StrlenA64 += x64.Xor("RCX", "RCX")
 StrlenA64 += x64.Dec("RCX")
 StrlenA64 += x64.Repne + x64.ScasB()
@@ -85,7 +86,7 @@ GetProcAddress64 += x64.Add("RCX",  "RBX") # ;rcx = export_dir
 GetProcAddress64 += x64.Mov("RAX", "RCX") # ;RAX = export_dir
 GetProcAddress64 += x64.Push("RAX") # ;Save it for after function search
 # ; EBX = BASE | EAX = EXPORT DIR
-GetProcAddress64 += x64.Mov("ECX",  x64.mem("[RAX  + 24] ")) # rax = PEBASE RVA
+GetProcAddress64 += x64.Mov("ECX",  x64.mem("[RAX  + 24] "))
 GetProcAddress64 += x64.Mov("R13", "RCX") # ;r13 = NB names
 GetProcAddress64 += x64.Mov("EDX",  x64.mem("[RAX  + 32] ")) # EDX = names array RVA
 GetProcAddress64 += x64.Add("RDX",  "RBX") #  RDX = names array
@@ -98,6 +99,7 @@ GetProcAddress64 +=     x64.Mov("RCX", "R12")
 GetProcAddress64 +=     x64.Call(":FUNC_STRLENA64") # TODO: mov outside the loop :D
 GetProcAddress64 +=     x64.Mov("RCX", "RAX")
 GetProcAddress64 +=     x64.Mov("RDI", "R12")
+GetProcAddress64 +=     x64.Inc("RCX")
 GetProcAddress64 +=     x64.Rep + x64.CmpsB()
 GetProcAddress64 +=     x64.Mov("EAX", "ECX")
 GetProcAddress64 +=     x64.Pop("RCX")
@@ -136,3 +138,131 @@ GetProcAddress64 += StrlenW64
 GetProcAddress64 += StrlenA64
 
 
+
+###### 32 bits #######
+
+
+StrlenW32  = x86.MultipleInstr()
+StrlenW32 += x86.Label(":FUNC_STRLENW32")
+StrlenW32 += x86.Push("EDI")
+StrlenW32 += x86.Mov("EDI", x86.mem("[ESP + 8]"))
+StrlenW32 += x86.Push("ECX")
+StrlenW32 += x86.Xor("EAX", "EAX")
+StrlenW32 += x86.Xor("ECX", "ECX")
+StrlenW32 += x86.Dec("ECX")
+StrlenW32 += x86.Repne + x86.ScasW()
+StrlenW32 += x86.Not("ECX")
+StrlenW32 += x86.Dec("ECX")
+StrlenW32 += x86.Mov("EAX", "ECX")
+StrlenW32 += x86.Pop("ECX")
+StrlenW32 += x86.Pop("EDI")
+StrlenW32 += x86.Ret()
+
+
+StrlenA32  = x86.MultipleInstr()
+StrlenA32 += x86.Label(":FUNC_STRLENA32")
+StrlenA32 += x86.Push("EDI")
+StrlenA32 += x86.Mov("EDI", x86.mem("[ESP + 8]"))
+StrlenA32 += x86.Push("ECX")
+StrlenA32 += x86.Xor("EAX", "EAX")
+StrlenA32 += x86.Xor("ECX", "ECX")
+StrlenA32 += x86.Dec("ECX")
+StrlenA32 += x86.Repne + x86.ScasB()
+StrlenA32 += x86.Not("ECX")
+StrlenA32 += x86.Dec("ECX")
+StrlenA32 += x86.Mov("EAX", "ECX")
+StrlenA32 += x86.Pop("ECX")
+StrlenA32 += x86.Pop("EDI")
+StrlenA32 += x86.Ret()
+
+
+GetProcAddress32  = x86.MultipleInstr()
+GetProcAddress32 += x86.Label(":FUNC_GETPROCADDRESS32")
+GetProcAddress32 += x86.Push("EBX")
+GetProcAddress32 += x86.Push("ECX")
+GetProcAddress32 += x86.Push("EDI")
+GetProcAddress32 += x86.Push("ESI")
+GetProcAddress32 += x86.Push("EBP")
+GetProcAddress32 += x86.Mov("EAX", x86.mem("FS:[0x30]"))
+GetProcAddress32 += x86.Mov("EAX", x86.mem("[EAX + 0xC]"))
+GetProcAddress32 += x86.Mov("EAX", x86.mem("[EAX + 0xC]")) # ; RAX on the first elt of the list (first module)
+GetProcAddress32 += x86.Mov("EDX", "EAX")
+GetProcAddress32 += x86.Label(":a_dest")
+GetProcAddress32 +=     x86.Mov("EAX", "EDX")
+GetProcAddress32 +=     x86.Mov("EBX", x86.mem("[EAX + 0x18]")) # EBX : first base ! (base of current module)
+GetProcAddress32 +=     x86.Cmp("EBX", 0)
+GetProcAddress32 +=     x86.Jz(":NOT_FOUND")
+GetProcAddress32 +=     x86.Mov("ECX", x86.mem("[EAX + 0x30]")) # RCX = NAME (UNICODE_STRING.Buffer)
+GetProcAddress32 +=     x86.Push("ECX")
+GetProcAddress32 +=     x86.Call(":FUNC_STRLENW32")
+GetProcAddress32 +=     x86.Pop("EDI") # Current name
+GetProcAddress32 +=     x86.Mov("ECX", "EAX")
+GetProcAddress32 +=     x86.Mov("ESI", x86.mem("[ESP + 0x18]"))
+GetProcAddress32 +=     x86.Rep + x86.CmpsW()
+GetProcAddress32 +=     x86.Test("ECX", "ECX")
+GetProcAddress32 +=     x86.Jz(":DLL_FOUND")
+GetProcAddress32 +=     x86.Mov("EDX", x86.mem("[EDX]"))
+GetProcAddress32 += x86.Jmp(":a_dest")
+GetProcAddress32 += x86.Label(":DLL_FOUND")
+GetProcAddress32 += x86.Mov("EAX",  x86.mem("[EBX + 0x3c]")) # rax = PEBASE RVA
+GetProcAddress32 += x86.Add("EAX",  "EBX") # RAX = PEBASE
+GetProcAddress32 += x86.Add("EAX",  0x18) # ;OPTIONAL HEADER
+GetProcAddress32 += x86.Mov("ECX",  x86.mem("[EAX + 0x60]")) # ;ecx = RVA export dir
+GetProcAddress32 += x86.Add("ECX",  "EBX") # ;ecx = export_dir
+GetProcAddress32 += x86.Mov("EAX",  "ECX")
+GetProcAddress32 += x86.Push("EAX") # Save it
+# ; EBX = BASE | EAX = EXPORT DIR
+GetProcAddress32 += x86.Mov("ECX",  x86.mem("[EAX  + 24] "))
+GetProcAddress32 += x86.Mov("EBP", "ECX") # ;EBP = NB names
+GetProcAddress32 += x86.Mov("EDX",  x86.mem("[EAX  + 32] ")) # EDX = names array RVA
+GetProcAddress32 += x86.Add("EDX",  "EBX") #  RDX = names array
+GetProcAddress32 += x86.Xor("ECX",  "ECX")
+GetProcAddress32 +=     x86.Mov("ESI", x86.mem("[ESP + 0x20]"))
+GetProcAddress32 += x86.Label(":SEARCH_LOOP")
+GetProcAddress32 +=     x86.Mov("EDI", x86.mem("[EDX + ECX * 4]")) # ;Get function name RVA
+GetProcAddress32 +=     x86.Add("EDI", "EBX") # ;Get name addr
+GetProcAddress32 +=     x86.Push("ECX") # Save current index
+GetProcAddress32 +=     x86.Push("ESI")
+GetProcAddress32 +=     x86.Call(":FUNC_STRLENA32")
+GetProcAddress32 +=     x86.Mov("ECX", "EAX")
+GetProcAddress32 +=     x86.Push("EDI")
+GetProcAddress32 +=     x86.Call(":FUNC_STRLENA32")
+GetProcAddress32 +=     x86.Pop("EDI")
+GetProcAddress32 +=     x86.Cmp("EAX", "ECX")
+GetProcAddress32 += x86.Jnz(":ABORT_STRCMP")
+GetProcAddress32 += x86.Inc("ECX")
+GetProcAddress32 +=     x86.Rep + x86.CmpsB()
+GetProcAddress32 += x86.Label(":ABORT_STRCMP")
+GetProcAddress32 +=     x86.Pop("ESI")
+GetProcAddress32 +=     x86.Mov("EAX", "ECX")
+GetProcAddress32 +=     x86.Pop("ECX")
+GetProcAddress32 +=     x86.Inc("ECX")
+GetProcAddress32 +=     x86.Test("EAX", "EAX")
+GetProcAddress32 += x86.Jnz(":SEARCH_LOOP")
+
+GetProcAddress32 += x86.Dec("ECX")
+#GetProcAddress32 += x86.Int3()
+#GetProcAddress32 += x86.Int3() # da poi(edx + (ecx * 4)) + ebx; da esi
+GetProcAddress32 += x86.Pop("EAX") # ;Restore export_dir addr
+GetProcAddress32 += x86.Mov("EDX", x86.mem("[EAX + 36]")) # ;EDX = AddressOfNameOrdinals RVX
+GetProcAddress32 += x86.Add("EDX", "EBX")
+#GetProcAddress32 += x86.Mov("ECX", x86.mem("[EDX + ECX * 2]"))
+GetProcAddress32 += x86.OperandSizeOverride + x86.Mov("ECX", x86.mem("[EDX + ECX * 2]"))
+# ; ecx = Ieme ordinal (short array)
+GetProcAddress32 += x86.And('ECX', 0xffff)
+GetProcAddress32 += x86.Mov("EDX", x86.mem("[EAX + 28]")) # ; AddressOfFunctions RVA
+GetProcAddress32 += x86.Add("EDX", "EBX")
+GetProcAddress32 += x86.Mov("EDX", x86.mem("[EDX + ECX * 4]"))
+GetProcAddress32 += x86.Add("EDX", "EBX")
+GetProcAddress32 += x86.Mov("EAX", "EDX")
+GetProcAddress32 += x86.Pop("EBP")
+GetProcAddress32 += x86.Pop("ESI")
+GetProcAddress32 += x86.Pop("EDI")
+GetProcAddress32 += x86.Pop("ECX")
+GetProcAddress32 += x86.Pop("EBX")
+GetProcAddress32 += x86.Ret()
+GetProcAddress32 += x86.Label(":NOT_FOUND")
+GetProcAddress32 += x86.Xor("EAX", "EAX")
+GetProcAddress32 += x86.Ret()
+GetProcAddress32 += StrlenW32
+GetProcAddress32 += StrlenA32
