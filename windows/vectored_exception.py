@@ -301,7 +301,9 @@ class VectoredException(object):
     def __new__(cls, func):
         self = object.__new__(cls)
         self.func = func
-        return self.func_type(self.decorator)
+        v = self.func_type(self.decorator)
+        v.self = self
+        return v
 
     def decorator(self, exception_pointers):
         try:

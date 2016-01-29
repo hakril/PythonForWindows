@@ -83,61 +83,133 @@ def load_dll_in_remote_process(target, dll_name):
     dbgprint("DLL Injected via manual GetProc(LoadLibray)", "DLLINJECT")
     return True
 
-
+python_function_32_bits = {}
 # 32 to 32 injection
-def generate_python_exec_shellcode_32(target, PyInit, PyRun, PYCODE_ADDR):
-    code = x86.MultipleInstr()
-    # Call PyInit
+def generate_python_exec_shellcode_32(target, PYCODE_ADDR, PyDll):
+    if not python_function_32_bits:
+        pymodule = [mod for mod in target.peb.modules if mod.name == PyDll][0]
+        Py_exports = pymodule.pe.exports
+        python_function_32_bits["PyEval_InitThreads"] = Py_exports["PyEval_InitThreads"]
+        python_function_32_bits["Py_IsInitialized"] = Py_exports["Py_IsInitialized"]
+        python_function_32_bits["PyGILState_Release"] = Py_exports["PyGILState_Release"]
+        python_function_32_bits["PyGILState_Ensure"] = Py_exports["PyGILState_Ensure"]
+        python_function_32_bits["PyEval_SaveThread"] = Py_exports["PyEval_SaveThread"]
+        python_function_32_bits["Py_Initialize"] = Py_exports["Py_Initialize"]
+        python_function_32_bits["PyRun_SimpleString"] = Py_exports["PyRun_SimpleString"]
+    Py_exports = python_function_32_bits
+    PyEval_InitThreads = Py_exports["PyEval_InitThreads"]
+    Py_IsInitialized = Py_exports["Py_IsInitialized"]
+    PyGILState_Release = Py_exports["PyGILState_Release"]
+    PyGILState_Ensure = Py_exports["PyGILState_Ensure"]
+    PyEval_SaveThread = Py_exports["PyEval_SaveThread"]
+    Py_Initialize = Py_exports["Py_Initialize"]
+    PyRun_SimpleString = Py_exports["PyRun_SimpleString"]
 
-    code += x86.Mov('EAX', PyInit)
+    code = x86.MultipleInstr()
+    code += x86.Mov('EAX', Py_IsInitialized)
     code += x86.Call('EAX')
-    # Get PyRun function into pythondll
-    # Call PyRun with python code to exec
+    code += x86.Mov("EDI", "EAX")
+    code += x86.Cmp("EAX", 0)
+    code += x86.Jnz(":DO_ENSURE")
+    # Python Initilisation code
+    # init multithread (for other injection)
+    code +=     x86.Mov('EAX', PyEval_InitThreads)
+    code +=     x86.Call('EAX')
+    code +=     x86.Mov('EAX', Py_Initialize)
+    code +=     x86.Call('EAX')
+    code += x86.Label(":DO_ENSURE")
+    code += x86.Mov('EAX', PyGILState_Ensure)
+    code += x86.Call('EAX')
+    code += x86.Push('EAX')
     code += x86.Push(PYCODE_ADDR)
-    code += x86.Mov('EAX', PyRun)
+    code += x86.Mov('EAX', PyRun_SimpleString)
     code += x86.Call('EAX')
+    code += x86.Mov("ESI", "EAX")
+    code += x86.Mov('EAX', PyGILState_Release)
+    code += x86.Call('EAX')
+    code += x86.Pop('EAX')
+    code += x86.Cmp("EDI", 0)
+    code += x86.Jnz(":RETURN")
+    # If PyEval_InitThreads was called (init done in this thread)
+    # We must release the GIL
+    code +=     x86.Mov('EAX', PyEval_SaveThread)
+    code +=     x86.Call('EAX')
+    code += x86.Label(":RETURN")
+    code += x86.Mov("EAX", "ESI")
     code += x86.Pop("EDI")
     code += x86.Ret()
     return code.get_code()
 
 
+python_function_64_bits = {}
 # 64 to 64 injection
-def generate_python_exec_shellcode_64(target, PyInit, PyRun, PYCODE_ADDR):
+def generate_python_exec_shellcode_64(target, PYCODE_ADDR, PyDll):
+    if not python_function_64_bits:
+        pymodule = [mod for mod in target.peb.modules if mod.name == PyDll][0]
+        Py_exports = pymodule.pe.exports
+        python_function_64_bits["PyEval_InitThreads"] = Py_exports["PyEval_InitThreads"]
+        python_function_64_bits["Py_IsInitialized"] = Py_exports["Py_IsInitialized"]
+        python_function_64_bits["PyGILState_Release"] = Py_exports["PyGILState_Release"]
+        python_function_64_bits["PyGILState_Ensure"] = Py_exports["PyGILState_Ensure"]
+        python_function_64_bits["PyEval_SaveThread"] = Py_exports["PyEval_SaveThread"]
+        python_function_64_bits["Py_Initialize"] = Py_exports["Py_Initialize"]
+        python_function_64_bits["PyRun_SimpleString"] = Py_exports["PyRun_SimpleString"]
+    Py_exports = python_function_64_bits
+    PyEval_InitThreads = Py_exports["PyEval_InitThreads"]
+    Py_IsInitialized = Py_exports["Py_IsInitialized"]
+    PyGILState_Release = Py_exports["PyGILState_Release"]
+    PyGILState_Ensure = Py_exports["PyGILState_Ensure"]
+    PyEval_SaveThread = Py_exports["PyEval_SaveThread"]
+    Py_Initialize = Py_exports["Py_Initialize"]
+    PyRun_SimpleString = Py_exports["PyRun_SimpleString"]
+
+
     Reserve_space_for_call = x64.MultipleInstr([x64.Push('RDI')] * 4)
     Clean_space_for_call = x64.MultipleInstr([x64.Pop('RDI')] * 4)
 
     code = x64.MultipleInstr()
     # Do stack alignement
     code += x64.Push('RCX')
-    # Load python27.dll
-    # Get PyInit function into pythondll
     code += Reserve_space_for_call
-    code += x64.Mov('RAX', PyInit)
-    # Call PyInit
+    code += x64.Mov('RAX', Py_IsInitialized)
     code += x64.Call('RAX')
-    code += Clean_space_for_call
-    code += Reserve_space_for_call
-    code += x64.Mov('RAX', PyRun)
+    code += x64.Mov("RDI", "RAX")
+    code += x64.Cmp("RAX", 0)
+    code += x64.Jnz(":DO_ENSURE")
+    code +=     x64.Mov('RAX', PyEval_InitThreads)
+    code +=     x64.Call('RAX')
+    code +=     x64.Mov('RAX', Py_Initialize)
+    code +=     x64.Call('RAX')
+    code += x64.Label(":DO_ENSURE")
+    code += x64.Mov('RAX', PyGILState_Ensure)
+    code += x64.Call('RAX')
+    code += x64.Mov('R15', 'RAX')
+    code += x64.Mov('RAX', PyRun_SimpleString)
     code += x64.Mov('RCX', PYCODE_ADDR)
-    # Call PyRun
     code += x64.Call('RAX')
+    code += x64.Mov('RCX', 'R15')
+    code += x64.Mov('R15', 'RAX')
+
+    code += x64.Mov('RAX', PyGILState_Release)
+    code += x64.Call('RAX')
+    code += x64.Cmp("RDI", 0)
+    code += x64.Jnz(":RETURN")
+    # If PyEval_InitThreads was called (init done in this thread)
+    # We must release the GIL
+    code +=     x64.Mov('RAX', PyEval_SaveThread)
+    code +=     x64.Call('RAX')
+    code += x64.Label(":RETURN")
     code += Clean_space_for_call
     # Remove stack alignement
     code += x64.Pop('RCX')
+    code += x64.Mov("RAX", "R15")
     code += x64.Ret()
     return code.get_code()
 
 
 def inject_python_command(target, code_injected, PYDLL):
     """Postulate: PYDLL is already loaded in target process"""
-    PyInit = "Py_Initialize\x00"
-    Pyrun = "PyRun_SimpleString\x00"
     PYCODE = code_injected + "\x00"
-
-    pymodule = [mod for mod in target.peb.modules if mod.name == PYDLL][0]
-    Py_exports = pymodule.pe.exports
-    PyInit = Py_exports["Py_Initialize"]
-    Pyrun = Py_exports["PyRun_SimpleString"]
 
     remote_addr = target.virtual_alloc(len(PYCODE) + 0x100)
     target.write_memory(remote_addr, PYCODE)
@@ -148,7 +220,7 @@ def inject_python_command(target, code_injected, PYDLL):
     else:
         shellcode_generator = generate_python_exec_shellcode_64
 
-    shellcode = shellcode_generator(target, PyInit, Pyrun, remote_addr)
+    shellcode = shellcode_generator(target, remote_addr, PYDLL)
     target.write_memory(SHELLCODE_ADDR, shellcode)
     return SHELLCODE_ADDR
 
