@@ -290,4 +290,6 @@ def NtGetContextThread_32_to_64(hThread, lpContext):
 def LdrLoadDll_32_to_64(PathToFile, Flags, ModuleFileName, ModuleHandle):
     return LdrLoadDll_32_to_64.ctypes_function(PathToFile, Flags, ModuleFileName, ModuleHandle)
 
-
+@Syswow64ApiProxy(windows.winproxy.NtSetContextThread)
+def NtSetContextThread_32_to_64(hThread, lpContext):
+    return NtSetContextThread_32_to_64.ctypes_function(hThread, lpContext)

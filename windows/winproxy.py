@@ -352,10 +352,11 @@ def GetThreadContext(hThread, lpContext=None):
 
 @Kernel32Proxy("SetThreadContext")
 def SetThreadContext(hThread, lpContext):
-    """ Allows to directly pass a CONTEXT and will call with byref(CONTEXT) by itself"""
-    if type(lpContext) == CONTEXT:
-        lpContext = ctypes.byref(lpContext)
     return SetThreadContext.ctypes_function(hThread, lpContext)
+
+@Kernel32Proxy("Wow64SetThreadContext")
+def Wow64SetThreadContext(hThread, lpContext):
+    return Wow64SetThreadContext.ctypes_function(hThread, lpContext)
 
 
 @Kernel32Proxy("OpenThread")
@@ -553,6 +554,10 @@ def NtCreateThreadEx(ThreadHandle=None, DesiredAccess=0x1fffff, ObjectAttributes
         ThreadHandle = byref(HANDLE())
     return NtCreateThreadEx.ctypes_function(ThreadHandle, DesiredAccess, ObjectAttributes, ProcessHandle, lpStartAddress, lpParameter, CreateSuspended, dwStackSize, Unknown1, Unknown2, Unknown3)
 
+
+@NtdllProxy("NtSetContextThread", error_ntstatus)
+def NtSetContextThread(hThread, lpContext):
+    return NtSetContextThread.ctypes_function(hThread, lpContext)
 
 # ##### ADVAPI32 ####### #
 

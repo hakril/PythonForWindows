@@ -298,6 +298,48 @@ class WindowsTestCase(unittest.TestCase):
         self.assertEqual(calc.exit_code, 42)
         self.assertEqual(calc.is_exit, True)
 
+    def test_set_thread_context_32(self):
+        code =  x86.MultipleInstr()
+        code += x86.Label(":LOOP")
+        code += x86.Jmp(":LOOP")
+        data_len = len(code.get_code())
+        code += x86.Ret()
+
+        with Calc32() as calc:
+            t = calc.execute(code.get_code())
+            time.sleep(0.1)
+            self.assertEqual(calc.is_exit, False)
+            t.suspend()
+            ctx = t.context
+            ctx.Eip += data_len
+            ctx.Eax = 0x11223344
+            t.set_context(ctx)
+            t.resume()
+            time.sleep(0.1)
+        self.assertEqual(t.exit_code, 0x11223344)
+
+
+    @windows_64bit_only
+    def test_set_thread_context_64(self):
+        code =  x64.MultipleInstr()
+        code += x64.Label(":LOOP")
+        code += x64.Jmp(":LOOP")
+        data_len = len(code.get_code())
+        code += x64.Ret()
+
+        with Calc64() as calc:
+            t = calc.execute(code.get_code())
+            time.sleep(0.1)
+            self.assertEqual(calc.is_exit, False)
+            t.suspend()
+            ctx = t.context
+            ctx.Rip += data_len
+            ctx.Rax = 0x11223344
+            t.set_context(ctx)
+            t.resume()
+            time.sleep(0.1)
+        self.assertEqual(t.exit_code, 0x11223344)
+
 class WindowsAPITestCase(unittest.TestCase):
     def test_createfileA_fail(self):
         with self.assertRaises(WindowsError) as ar:
@@ -323,8 +365,7 @@ class NativeUtilsTestCase(unittest.TestCase):
         k32 = [mod for mod in windows.current_process.peb.modules if mod.name == "kernel32.dll"][0]
         exports = [(x,y) for x,y in k32.pe.exports.items() if isinstance(x, basestring)]
 
-        for i in range(15):
-            name, addr = random.choice(exports)
+        for name, addr in exports:
             name = name.encode()
             compute_addr = getprocaddr64("KERNEL32.DLL", name)
             # Put name in test to know which function caused the assert fails
@@ -348,9 +389,7 @@ class NativeUtilsTestCase(unittest.TestCase):
         k32 = [mod for mod in windows.current_process.peb.modules if mod.name == "kernel32.dll"][0]
         exports = [(x,y) for x,y in k32.pe.exports.items() if isinstance(x, basestring)]
 
-
-        for i in range(1500):
-            name, addr = random.choice(exports)
+        for name, addr in exports:
             name = name.encode()
             compute_addr = getprocaddr32("KERNEL32.DLL", name)
             # Put name in test to know which function caused the assert fails

@@ -189,7 +189,7 @@ class EDr7(ctypes.Structure):
                ("LEN3", DWORD, 2),
                ]
 
-class EnhancedCONTEXTBase():
+class EnhancedCONTEXTBase(object):
     default_dump = ()
     pc_reg = ''
     special_reg_type = {}

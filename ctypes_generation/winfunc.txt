@@ -222,6 +222,12 @@ BOOL WINAPI SetThreadContext(
     __in CONST LPCONTEXT lpContext
 );
 
+BOOL WINAPI NtSetContextThread(
+    __in HANDLE hThread,
+    __in CONST LPCONTEXT lpContext
+);
+
+
 HANDLE WINAPI OpenThread(
     __in DWORD dwDesiredAccess,
     __in BOOL bInheritHandle,
@@ -737,4 +743,8 @@ DWORD WINAPI GetProcessId(
   _In_ HANDLE Process
 );
 
+BOOL WINAPI Wow64SetThreadContext(
+    __in HANDLE hThread,
+    __in CONST WOW64_CONTEXT *lpContext
+);
 

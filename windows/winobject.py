@@ -171,7 +171,11 @@ class WinThread(THREADENTRY32, AutoHandle):
         return x
 
     def set_context(self, context):
-        return winproxy.SetThreadContext(self.handle, context)
+        if self.owner.bitness == windows.current_process.bitness:
+            return winproxy.SetThreadContext(self.handle, context)
+        if windows.current_process.bitness == 64 and self.owner.bitness == 32:
+            return winproxy.Wow64SetThreadContext(self.handle, context)
+        return windows.syswow64.NtSetContextThread_32_to_64(self.handle, ctypes.byref(context))
 
     @property
     def start_address(self):
