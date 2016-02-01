@@ -86,7 +86,6 @@ class Debugger(object):
         bp.trigger(self, exception)
         return bp
 
-
     def _setup_breakpoint_BP(self, bp, targets):
         for target in targets:
             if not isinstance(target, WinProcess):
@@ -154,10 +153,41 @@ class Debugger(object):
     def _handle_unknown_debug_event(self, debug_event):
         raise NotImplementedError("dwDebugEventCode = {0}".format(debug_event.dwDebugEventCode))
 
+    def _handle_syswow64_exception(self, debug_event):
+        exception = debug_event.u.Exception
+        self._update_debugger_state(debug_event)
+        exception.__class__ = windows.vectored_exception.EEXCEPTION_DEBUG_INFO64
+        excp_code = exception.ExceptionRecord.ExceptionCode
+        excp_addr = exception.ExceptionRecord.ExceptionAddress
+        if excp_code in [EXCEPTION_BREAKPOINT, 0x4000001f] and excp_addr in self.breakpoints:
+            self._dispatch_breakpoint(exception, excp_addr)
+            self._pass_breakpoint(excp_addr)
+            return
+        elif excp_code in [EXCEPTION_SINGLE_STEP, 0x4000001e]:
+            if self.current_thread.tid in self._breakpoint_to_reput:
+                addr = self._breakpoint_to_reput[self.current_thread.tid]
+                del self._breakpoint_to_reput[self.current_thread.tid]
+                # Re-put the breakpoint
+                self.current_process.write_memory(addr, "\xcc")
+            elif excp_addr in self.breakpoints:
+                # Verif that's not a standard BP ?
+                bp = self.breakpoints[excp_addr]
+                bp.trigger(self, exception)
+                ctx = self.current_thread.context
+                ctx.EEFlags.RF = 1
+                self.current_thread.set_context(ctx)
+            else:
+                self.on_exception(exception)
+        else: # Do not trigger self.on_exception if breakpoint was registered
+            self.on_exception(exception)
+
     def _handle_exception(self, debug_event):
         """Handle EXCEPTION_DEBUG_EVENT"""
         exception = debug_event.u.Exception
         self._update_debugger_state(debug_event)
+        if windows.current_process.bitness == 64 and self.current_process.bitness == 32:
+            return self._handle_syswow64_exception(debug_event)
+
         if self.current_process.bitness == 32:
             exception.__class__ = windows.vectored_exception.EEXCEPTION_DEBUG_INFO32
         else:

@@ -28,6 +28,9 @@ TODO:
         - CRASH if API is not found..
         - fail when resolving xxxW function
 
+    - Debugger:
+        - clean Syswow64 debugging code (_handle_syswow64_exception)
+
 FIXME:
     - WMI
         - COM initialisation when injected in another process

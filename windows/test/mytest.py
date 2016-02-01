@@ -423,8 +423,16 @@ class DebuggerTestCase(unittest.TestCase):
                 d.current_process.exit()
 
         calc = pop_calc_32(dwCreationFlags=DEBUG_PROCESS)
+
+        if windows.current_process.bitness == 32:
+            LdrLoadDll32 = windows.current_process.peb.modules[1].pe.exports["LdrLoadDll"]
+        else:
+            calcref = pop_calc_32()
+            LdrLoadDll32 = calcref.peb.modules[1].pe.exports["LdrLoadDll"]
+            calcref.exit()
+
         d = windows.debug.Debugger(calc)
-        d.add_bp(TSTBP(windows.current_process.peb.modules[1].pe.exports["LdrLoadDll"]))
+        d.add_bp(TSTBP(LdrLoadDll32))
         d.loop()
 
     def test_simple_hwx_breakpoint(self):
@@ -438,8 +446,16 @@ class DebuggerTestCase(unittest.TestCase):
                 d.current_process.exit()
 
         calc = pop_calc_32(dwCreationFlags=DEBUG_PROCESS)
+
+        if windows.current_process.bitness == 32:
+            LdrLoadDll32 = windows.current_process.peb.modules[1].pe.exports["LdrLoadDll"]
+        else:
+            calcref = pop_calc_32()
+            LdrLoadDll32 = calcref.peb.modules[1].pe.exports["LdrLoadDll"]
+            calcref.exit()
+
         d = windows.debug.Debugger(calc)
-        d.add_bp(TSTBP(windows.current_process.peb.modules[1].pe.exports["LdrLoadDll"]))
+        d.add_bp(TSTBP(LdrLoadDll32))
         d.loop()
 
     def test_multiple_hwx_breakpoint(self):
@@ -489,7 +505,7 @@ class DebuggerTestCase(unittest.TestCase):
         calc = pop_calc_32(dwCreationFlags=DEBUG_PROCESS)
         d = windows.debug.Debugger(calc)
         addr = calc.virtual_alloc(0x1000)
-        calc.write_memory(addr, "\x90" * 8)
+        calc.write_memory(addr, "\x90" * 8 + "\xc3")
         d.add_bp(TSTBP(addr, 0))
         d.add_bp(TSTBP(addr + 1, 1))
         d.add_bp(TSTBP(addr + 2, 2))
@@ -530,7 +546,7 @@ class DebuggerTestCase(unittest.TestCase):
         calc = pop_calc_32(dwCreationFlags=DEBUG_PROCESS)
         d = MyDbg(calc)
         addr = calc.virtual_alloc(0x1000)
-        calc.write_memory(addr, "\x90" * 2)
+        calc.write_memory(addr, "\x90" * 2 + "\xc3")
         d.add_bp(TSTBP(addr, 0))
         calc.create_thread(addr, 0)
         d.loop()

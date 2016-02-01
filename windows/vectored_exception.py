@@ -41,7 +41,7 @@ def generate_enhanced_exception_record(base, name_suffix=""):
         @property
         def ExceptionCode(self):
             real_code = super(EnhancedEXCEPTION_RECORD, self).ExceptionCode
-            return exception_name_by_value.get(real_code, 'UNKNOW_EXCEPTION({0})'.format(hex(real_code)))
+            return exception_name_by_value.get(real_code, windows.generated_def.windef.Flag("UNKNOW_EXCEPTION", real_code))
 
         @property
         def ExceptionAddress(self):
