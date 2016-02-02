@@ -371,6 +371,9 @@ class NativeUtilsTestCase(unittest.TestCase):
             # Put name in test to know which function caused the assert fails
             self.assertEqual((name, hex(addr)), (name, hex(compute_addr)))
 
+        self.assertEqual(getprocaddr64("YOLO.DLL", "whatever"), 0xfffffffffffffffe)
+        self.assertEqual(getprocaddr64("KERNEL32.DLL", "YOLOAPI"), 0xffffffffffffffff)
+
     @process_32bit_only
     def test_strlenw32(self):
         strlenw32 = windows.native_exec.create_function(nativeutils.StrlenW32.get_code(), [UINT, LPCWSTR])
@@ -394,6 +397,10 @@ class NativeUtilsTestCase(unittest.TestCase):
             compute_addr = getprocaddr32("KERNEL32.DLL", name)
             # Put name in test to know which function caused the assert fails
             self.assertEqual((name, hex(addr)), (name, hex(compute_addr)))
+
+
+        self.assertEqual(getprocaddr32("YOLO.DLL", "whatever"), 0xfffffffe)
+        self.assertEqual(getprocaddr32("KERNEL32.DLL", "YOLOAPI"), 0xffffffff)
 
 
 class DebuggerTestCase(unittest.TestCase):

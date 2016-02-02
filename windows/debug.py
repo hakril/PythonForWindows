@@ -83,8 +83,8 @@ class Debugger(object):
 
     def _dispatch_breakpoint(self, exception, addr):
         bp = self.breakpoints[addr]
-        bp.trigger(self, exception)
-        return bp
+        x = bp.trigger(self, exception)
+        return x
 
     def _setup_breakpoint_BP(self, bp, targets):
         for target in targets:
@@ -153,58 +153,30 @@ class Debugger(object):
     def _handle_unknown_debug_event(self, debug_event):
         raise NotImplementedError("dwDebugEventCode = {0}".format(debug_event.dwDebugEventCode))
 
-    def _handle_syswow64_exception(self, debug_event):
-        exception = debug_event.u.Exception
-        self._update_debugger_state(debug_event)
-        exception.__class__ = windows.vectored_exception.EEXCEPTION_DEBUG_INFO64
-        excp_code = exception.ExceptionRecord.ExceptionCode
-        excp_addr = exception.ExceptionRecord.ExceptionAddress
-        if excp_code in [EXCEPTION_BREAKPOINT, 0x4000001f] and excp_addr in self.breakpoints:
-            self._dispatch_breakpoint(exception, excp_addr)
-            self._pass_breakpoint(excp_addr)
-            return
-        elif excp_code in [EXCEPTION_SINGLE_STEP, 0x4000001e]:
-            if self.current_thread.tid in self._breakpoint_to_reput:
-                addr = self._breakpoint_to_reput[self.current_thread.tid]
-                del self._breakpoint_to_reput[self.current_thread.tid]
-                # Re-put the breakpoint
-                self.current_process.write_memory(addr, "\xcc")
-            elif excp_addr in self.breakpoints:
-                # Verif that's not a standard BP ?
-                bp = self.breakpoints[excp_addr]
-                bp.trigger(self, exception)
-                ctx = self.current_thread.context
-                ctx.EEFlags.RF = 1
-                self.current_thread.set_context(ctx)
-            else:
-                self.on_exception(exception)
-        else: # Do not trigger self.on_exception if breakpoint was registered
-            self.on_exception(exception)
-
     def _handle_exception(self, debug_event):
         """Handle EXCEPTION_DEBUG_EVENT"""
         exception = debug_event.u.Exception
         self._update_debugger_state(debug_event)
-        if windows.current_process.bitness == 64 and self.current_process.bitness == 32:
-            return self._handle_syswow64_exception(debug_event)
 
-        if self.current_process.bitness == 32:
+        if windows.current_process.bitness == 32:
             exception.__class__ = windows.vectored_exception.EEXCEPTION_DEBUG_INFO32
         else:
             exception.__class__ = windows.vectored_exception.EEXCEPTION_DEBUG_INFO64
 
         excp_code = exception.ExceptionRecord.ExceptionCode
         excp_addr = exception.ExceptionRecord.ExceptionAddress
-        if excp_code == EXCEPTION_BREAKPOINT and excp_addr in self.breakpoints:
-            self._dispatch_breakpoint(exception, excp_addr)
+
+        if excp_code in [EXCEPTION_BREAKPOINT, STATUS_WX86_BREAKPOINT] and excp_addr in self.breakpoints:
+            continue_flag = self._dispatch_breakpoint(exception, excp_addr)
             self._pass_breakpoint(excp_addr)
-            return
-        elif excp_code == EXCEPTION_SINGLE_STEP:
+            return continue_flag
+        elif excp_code in [EXCEPTION_SINGLE_STEP, STATUS_WX86_SINGLE_STEP]:
             if self.current_thread.tid in self._breakpoint_to_reput:
                 addr = self._breakpoint_to_reput[self.current_thread.tid]
                 del self._breakpoint_to_reput[self.current_thread.tid]
                 # Re-put the breakpoint
                 self.current_process.write_memory(addr, "\xcc")
+                return DBG_CONTINUE
             elif excp_addr in self.breakpoints:
                 # Verif that's not a standard BP ?
                 bp = self.breakpoints[excp_addr]
@@ -212,10 +184,11 @@ class Debugger(object):
                 ctx = self.current_thread.context
                 ctx.EEFlags.RF = 1
                 self.current_thread.set_context(ctx)
+                return DBG_CONTINUE
             else:
-                self.on_exception(exception)
+                return self.on_exception(exception)
         else: # Do not trigger self.on_exception if breakpoint was registered
-            self.on_exception(exception)
+            return self.on_exception(exception)
 
 
     def _handle_create_process(self, debug_event):
@@ -228,14 +201,14 @@ class Debugger(object):
         self.processes[self.current_process.pid] = self.current_process
         self._update_debugger_state(debug_event)
         self._setup_pending_breakpoints(self.current_process)
-        self.on_create_process(create_process)
+        return self.on_create_process(create_process)
         # TODO: clode hFile
 
     def _handle_exit_process(self, debug_event):
         """Handle EXIT_PROCESS_DEBUG_EVENT"""
         self._update_debugger_state(debug_event)
         exit_process = debug_event.u.ExitProcess
-        self.on_exit_process(exit_process)
+        retvalue = self.on_exit_process(exit_process)
         del self.threads[self.current_thread.tid]
         del self.processes[self.current_process.pid]
         # Hack IT, ContinueDebugEvent will close the HANDLE for us
@@ -243,6 +216,7 @@ class Debugger(object):
         dbgprint("Removing handle {0} for {1} (will be closed by continueDebugEvent".format(hex(self.current_process._handle), self.current_process), "HANDLE")
         del self.current_process._handle
         del self.current_thread._handle
+        return retvalue
 
     def _handle_create_thread(self, debug_event):
         """Handle CREATE_THREAD_DEBUG_EVENT"""
@@ -250,48 +224,52 @@ class Debugger(object):
         self.current_thread = WinThread._from_handle(create_thread.hThread)
         self.threads[self.current_thread.tid] = self.current_thread
         self._setup_pending_breakpoints(self.current_thread)
-        self.on_create_thread(create_thread)
+        return self.on_create_thread(create_thread)
+
 
     def _handle_exit_thread(self, debug_event):
         """Handle EXIT_THREAD_DEBUG_EVENT"""
         self._update_debugger_state(debug_event)
         exit_thread = debug_event.u.ExitThread
-        self.on_exit_thread(exit_thread)
+        retvalue = self.on_exit_thread(exit_thread)
         del self.threads[self.current_thread.tid]
         # Hack IT, ContinueDebugEvent will close the HANDLE for us
         # Should we make another handle instead ?
         dbgprint("Removing handle {0} for {1} (will be closed by continueDebugEvent".format(hex(self.current_thread._handle), self.current_thread), "HANDLE")
         del self.current_thread._handle
+        return retvalue
 
     def _handle_load_dll(self, debug_event):
         """Handle LOAD_DLL_DEBUG_EVENT"""
         self._update_debugger_state(debug_event)
         load_dll = debug_event.u.LoadDll
-        self.on_load_dll(load_dll)
+        return self.on_load_dll(load_dll)
 
     def _handle_unload_dll(self, debug_event):
         """Handle UNLOAD_DLL_DEBUG_EVENT"""
         self._update_debugger_state(debug_event)
         unload_dll = debug_event.u.UnloadDll
-        self.on_unload_dll(unload_dll)
+        return self.on_unload_dll(unload_dll)
 
     def _handle_output_debug_string(self, debug_event):
         """Handle OUTPUT_DEBUG_STRING_EVENT"""
         self._update_debugger_state(debug_event)
         debug_string = debug_event.u.DebugString
-        self.on_output_debug_string(debug_string)
+        return self.on_output_debug_string(debug_string)
 
     def _handle_rip(self, debug_event):
         """Handle RIP_EVENT"""
         self._update_debugger_state(debug_event)
         rip_info = debug_event.u.RipInfo
-        self.on_rip(rip_info)
+        return self.on_rip(rip_info)
 
     # Public API
     def loop(self):
         for debug_event in self._debug_event_generator():
-            self._dispatch_debug_event(debug_event)
-            self._finish_debug_event(debug_event, windef.DBG_CONTINUE)
+            dbg_continue_flag = self._dispatch_debug_event(debug_event)
+            if dbg_continue_flag is None:
+                dbg_continue_flag = DBG_CONTINUE
+            self._finish_debug_event(debug_event, dbg_continue_flag)
             if not self.processes:
                 break
 

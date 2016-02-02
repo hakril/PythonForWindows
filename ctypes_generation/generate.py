@@ -1,11 +1,13 @@
 import sys
 import os
 import os.path
+import re
 
 import dummy_wintypes
 import struct_parser
 import func_parser
 import def_parser
+
 
 
 TYPE_EQUIVALENCE = [
@@ -54,10 +56,12 @@ known_type = dummy_wintypes.names + list([x[0] for x in TYPE_EQUIVALENCE])
 FUNC_FILE = "winfunc.txt"
 STRUCT_FILE = "winstruct.txt"
 DEF_FILE = "windef.txt"
+NTSTATUS_FILE = "ntstatus.txt"
 
 GENERATED_STRUCT_FILE = "winstructs"
 GENERATED_FUNC_FILE = "winfuncs"
 GENERATED_DEF_FILE = "windef"
+GENERATED_NTSTATUS_FILE = "ntstatus"
 
 OUT_DIRS = ["..\windows\generated_def"]
 if len(sys.argv) > 1:
@@ -204,6 +208,14 @@ structs, enums = struct_parser.WinStructParser(structs_code).parse()
 validate_structs(structs, enums, defs)
 verif_funcs_type(funcs, structs, enums)
 
+
+# Create Flags for ntstatus
+nt_status_defs = []
+for line in open(NTSTATUS_FILE):
+    code, name, descr = line.split("|", 2)
+    nt_status_defs.append(def_parser.WinDef(name, code))
+defs = nt_status_defs + defs
+
 defs_ctypes = generate_defs_ctypes(defs)
 funcs_ctypes = generate_funcs_ctypes(funcs)
 structs_ctypes = generate_struct_ctypes(structs, enums)
@@ -215,6 +227,43 @@ for out_dir in OUT_DIRS:
 write_to_out_file(GENERATED_DEF_FILE, defs_ctypes)
 write_to_out_file(GENERATED_FUNC_FILE, funcs_ctypes)
 write_to_out_file(GENERATED_STRUCT_FILE, structs_ctypes)
+
+
+NTSTATUS_HEAD = """
+class NtStatusException(Exception):
+    ALL_STATUS = {}
+    def __init__(self , code):
+        try:
+            x = self.ALL_STATUS[code]
+        except KeyError:
+            x = (code, 'UNKNOW_ERROR', 'Error non documented in ntstatus.py')
+        self.code = x[0]
+        self.name = x[1]
+        self.descr = x[2]
+
+        return super(NtStatusException, self).__init__(*x)
+
+    def __str__(self):
+        return "{e.name}(0x{e.code:x}): {e.descr}".format(e=self)
+
+    @classmethod
+    def register_ntstatus(cls, code, name, descr):
+        if code in cls.ALL_STATUS:
+            return # Use the first def
+        cls.ALL_STATUS[code] = (code, name, descr)
+"""
+
+nt_status_exceptions = [NTSTATUS_HEAD]
+for line in open(NTSTATUS_FILE):
+    code, name, descr = line.split("|", 2)
+    code = int(code, 0)
+    b = descr
+    descr = re.sub(" +", " ", descr[:-1]) # remove \n
+    descr = descr.replace('"', "'")
+    nt_status_exceptions.append('NtStatusException.register_ntstatus({0}, "{1}", "{2}")'.format(hex(code), name, descr))
+
+
+write_to_out_file(GENERATED_NTSTATUS_FILE, "\n".join(nt_status_exceptions))
 
 for out_dir in OUT_DIRS:
     print("Files generated in <{0}>".format(os.path.abspath(out_dir)))

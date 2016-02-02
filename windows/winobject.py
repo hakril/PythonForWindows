@@ -309,6 +309,9 @@ class Process(AutoHandle):
     def virtual_alloc(self, size):
         raise NotImplementedError("virtual_alloc")
 
+    def virtual_free(self):
+        raise NotImplementedError("virtual_free")
+
     @property
     def exit_code(self):
         """The exit code of the process : ``STILL_ACTIVE`` means the process is not dead
@@ -327,13 +330,13 @@ class Process(AutoHandle):
         """
         return self.exit_code != STILL_ACTIVE
 
-    #@contextmanager
-    #def allocated_memory(self, size):
-    #    addr = self.virtual_alloc(size)
-    #    try:
-    #        yield addr
-    #    finally:
-    #        windows.winproxy.VirtualFreeEx(self.handle, size)
+    @contextmanager
+    def allocated_memory(self, size):
+        addr = self.virtual_alloc(size)
+        try:
+            yield addr
+        finally:
+            windows.winproxy.VirtualFreeEx(self.handle, addr)
 
     def execute(self, code, parameter=0):
         """Execute some native code in the context of the process
@@ -548,6 +551,10 @@ class CurrentProcess(Process):
         """
         return winproxy.VirtualAlloc(dwSize=size)
 
+    def virtual_free(self, addr):
+        """Free memory in the process by virtual_alloc"""
+        return winproxy.VirtualFree(addr)
+
     def write_memory(self, addr, data):
         """Write data at addr"""
         buffertype = (c_char * len(data)).from_address(addr)
@@ -632,6 +639,10 @@ class WinProcess(PROCESSENTRY32, Process):
         :rtype: :class:`int`
         """
         return winproxy.VirtualAllocEx(self.handle, dwSize=size)
+
+    def virtual_free(self, addr):
+        """Free memory in the process by virtual_alloc"""
+        return winproxy.VirtualFreeEx(self.handle, addr)
 
     def write_memory(self, addr, data):
         """Write `data` at `addr`"""
