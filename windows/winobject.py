@@ -32,7 +32,7 @@ import windows.pe_parse as pe_parse
 class AutoHandle(object):
     """An abstract class that allow easy handle creation/destruction/wait"""
      # Big bypass to prevent missing reference at programm close..
-    CLOSE_FUNCTION = ctypes.WinDLL("kernel32").CloseHandle
+    _close_function = ctypes.WinDLL("kernel32").CloseHandle
     def _get_handle(self):
         raise NotImplementedError("{0} is abstract".format(type(self).__name__))
 
@@ -58,7 +58,7 @@ class AutoHandle(object):
     def __del__(self):
         if hasattr(self, "_handle") and self._handle:
             dbgprint("Closing Handle {0} for {1}".format(hex(self._handle), self), "HANDLE")
-            self.CLOSE_FUNCTION(self._handle)
+            self._close_function(self._handle)
 
 
 class System(object):
@@ -343,7 +343,7 @@ class Process(AutoHandle):
 
            :return: The return value of the native code
            :rtype: :class:`int`"""
-        x = self.virtual_alloc(len(code))
+        x = self.virtual_alloc(len(code)) #Todo: free this ? when ? how ? reuse ?
         self.write_memory(x, code)
         return self.create_thread(x, parameter)
 
@@ -704,16 +704,7 @@ class WinProcess(PROCESSENTRY32, Process):
 
     def load_library(self, dll_path):
         """Load the library in remote process"""
-        x = self.virtual_alloc(0x1000)
-        self.write_memory(x, dll_path)
-        LoadLibrary = utils.get_func_addr('kernel32', 'LoadLibraryA')
-        return self.create_thread(LoadLibrary, x)
-
-    def tst_load_library(self, dll_path, target_addr):
-        """Load the library in remote process"""
-        x = self.virtual_alloc(0x1000)
-        self.write_memory(x, dll_path)
-        return self.create_thread(target_addr, x)
+        return windows.injection.load_dll_in_remote_process(self, dll_path)
 
     def execute_python(self, pycode):
         """Execute Python code into the remote process.

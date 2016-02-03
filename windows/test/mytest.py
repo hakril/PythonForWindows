@@ -51,17 +51,17 @@ else:
 
 
 @contextmanager
-def Calc64(exit_code=0):
+def Calc64(dwCreationFlags=0, exit_code=0):
     try:
-        calc = pop_calc_64()
+        calc = pop_calc_64(dwCreationFlags)
         yield calc
     finally:
         calc.exit(exit_code)
 
 @contextmanager
-def Calc32(exit_code=0):
+def Calc32(dwCreationFlags=0, exit_code=0):
     try:
-        calc = pop_calc_32()
+        calc = pop_calc_32(dwCreationFlags)
         yield calc
     finally:
         calc.exit(exit_code)
@@ -146,6 +146,32 @@ class WindowsTestCase(unittest.TestCase):
             #time.sleep(0.1)
             dword = struct.unpack("<I", calc.read_memory(data, 4))[0]
             self.assertEqual(dword, 0x42424242)
+
+    def test_execute_python_to_32_suspended(self):
+        with Calc32(dwCreationFlags=CREATE_SUSPENDED) as calc:
+            data = calc.virtual_alloc(0x1000)
+            calc.execute_python('import ctypes; ctypes.c_uint.from_address({0}).value = 0x42424242'.format(data))
+            dword = struct.unpack("<I", calc.read_memory(data, 4))[0]
+            self.assertEqual(dword, 0x42424242)
+            # Check calc32 is still suspended:
+                # 1 thread
+                # suspend count == 1
+            self.assertEqual(len(calc.threads), 1)
+            self.assertEqual(calc.threads[0].suspend(), 1)
+
+    @windows_64bit_only
+    def test_execute_python_to_64_suspended(self):
+        with Calc64(dwCreationFlags=CREATE_SUSPENDED) as calc:
+            data = calc.virtual_alloc(0x1000)
+            calc.execute_python('import ctypes; ctypes.c_uint.from_address({0}).value = 0x42424242'.format(data))
+            dword = struct.unpack("<I", calc.read_memory(data, 4))[0]
+            self.assertEqual(dword, 0x42424242)
+            # Check calc32 is still suspended:
+                # 1 thread
+                # suspend count == 1
+            self.assertEqual(len(calc.threads), 1)
+            self.assertEqual(calc.threads[0].suspend(), 1)
+
 
     def test_parse_remote_32_peb(self):
         with Calc32() as calc:
@@ -340,6 +366,20 @@ class WindowsTestCase(unittest.TestCase):
             time.sleep(0.1)
         self.assertEqual(t.exit_code, 0x11223344)
 
+    def test_load_library_32(self):
+        DLL = "wintrust.dll"
+        with Calc32() as calc:
+            calc.load_library(DLL)
+            self.assertIn(DLL, [m.name for m in calc.peb.modules])
+
+    @windows_64bit_only
+    def test_load_library_64(self):
+        DLL = "wintrust.dll"
+        with Calc64() as calc:
+            calc.load_library(DLL)
+            self.assertIn(DLL, [m.name for m in calc.peb.modules])
+
+
 class WindowsAPITestCase(unittest.TestCase):
     def test_createfileA_fail(self):
         with self.assertRaises(WindowsError) as ar:
@@ -439,6 +479,33 @@ class DebuggerTestCase(unittest.TestCase):
             calcref.exit()
 
         d = windows.debug.Debugger(calc)
+        d.add_bp(TSTBP(LdrLoadDll32))
+        d.loop()
+
+    def test_standard_breakpoint_multiple_threads(self):
+        TEST_CASE = self
+        data = [0]
+
+        class TSTBP(windows.debug.Breakpoint):
+            def trigger(self, dbg, exc):
+                TEST_CASE.assertEqual(dbg.current_process.pid, calc.pid)
+                TEST_CASE.assertEqual(dbg.current_process.read_memory(self.addr, 1), "\xcc")
+                TEST_CASE.assertEqual(dbg.current_thread.context.pc - 1, self.addr)
+                d.current_process.exit()
+
+        calc = pop_calc_32(dwCreationFlags=DEBUG_PROCESS)
+
+        if windows.current_process.bitness == 32:
+            LdrLoadDll32 = windows.current_process.peb.modules[1].pe.exports["LdrLoadDll"]
+        else:
+            calcref = pop_calc_32()
+            LdrLoadDll32 = calcref.peb.modules[1].pe.exports["LdrLoadDll"]
+            calcref.exit()
+
+        d = windows.debug.Debugger(calc)
+        calc.execute("\xc3")
+        calc.execute("\xc3")
+        calc.execute("\xc3")
         d.add_bp(TSTBP(LdrLoadDll32))
         d.loop()
 

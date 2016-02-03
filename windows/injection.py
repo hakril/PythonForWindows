@@ -32,20 +32,20 @@ def perform_manual_getproc_loadlib_32(target, dll_name):
 
     RemoteManualLoadLibray += GetProcAddress32
 
-    addr = target.virtual_alloc(0x1000)
-    addr2 = addr + len(dll)
-    addr3 = addr2 + len(api)
-    addr4 = addr3 + len(dll_to_load)
+    with target.allocated_memory(0x1000) as addr:
+        addr2 = addr + len(dll)
+        addr3 = addr2 + len(api)
+        addr4 = addr3 + len(dll_to_load)
 
-    target.write_memory(addr, dll)
-    target.write_memory(addr2, api)
-    target.write_memory(addr3, dll_to_load)
-    target.write_qword(addr4, addr)
-    target.write_qword(addr4 + 4, addr2)
-    target.write_qword(addr4 + 0x8, addr3)
+        target.write_memory(addr, dll)
+        target.write_memory(addr2, api)
+        target.write_memory(addr3, dll_to_load)
+        target.write_qword(addr4, addr)
+        target.write_qword(addr4 + 4, addr2)
+        target.write_qword(addr4 + 0x8, addr3)
 
-    t = target.execute(RemoteManualLoadLibray.get_code(), addr4)
-    t.wait()
+        t = target.execute(RemoteManualLoadLibray.get_code(), addr4)
+        t.wait()
     return True
 
 def perform_manual_getproc_loadlib_64(target, dll_name):
@@ -71,20 +71,20 @@ def perform_manual_getproc_loadlib_64(target, dll_name):
 
     RemoteManualLoadLibray += GetProcAddress64
 
-    addr = target.virtual_alloc(0x1000)
-    addr2 = addr + len(dll)
-    addr3 = addr2 + len(api)
-    addr4 = addr3 + len(dll_to_load)
+    with target.allocated_memory(0x1000) as addr:
+        addr2 = addr + len(dll)
+        addr3 = addr2 + len(api)
+        addr4 = addr3 + len(dll_to_load)
 
-    target.write_memory(addr, dll)
-    target.write_memory(addr2, api)
-    target.write_memory(addr3, dll_to_load)
-    target.write_qword(addr4, addr)
-    target.write_qword(addr4 + 8, addr2)
-    target.write_qword(addr4 + 0x10, addr3)
+        target.write_memory(addr, dll)
+        target.write_memory(addr2, api)
+        target.write_memory(addr3, dll_to_load)
+        target.write_qword(addr4, addr)
+        target.write_qword(addr4 + 8, addr2)
+        target.write_qword(addr4 + 0x10, addr3)
 
-    t = target.execute(RemoteManualLoadLibray.get_code(), addr4)
-    t.wait()
+        t = target.execute(RemoteManualLoadLibray.get_code(), addr4)
+        t.wait()
     return True
 
 
@@ -106,11 +106,10 @@ def load_dll_in_remote_process(target, dll_name):
             except KeyError:
                 raise ValueError("Kernel32 have no export <LoadLibraryA> (wtf)")
 
-            addr = target.virtual_alloc(0x1000)
-            target.write_memory(addr, dll_name + "\x00")
-            t = target.create_thread(load_libraryA, addr)
-            t.wait()
-            windows.winproxy.VirtualFreeEx(target.handle, addr)
+            with target.allocated_memory(0x1000) as addr:
+                target.write_memory(addr, dll_name + "\x00")
+                t = target.create_thread(load_libraryA, addr)
+                t.wait()
             dbgprint("DLL Injected via LoadLibray", "DLLINJECT")
             return True
     # Hardcore mode
@@ -244,7 +243,7 @@ def generate_python_exec_shellcode_64(target, PYCODE_ADDR, PyDll):
 def inject_python_command(target, code_injected, PYDLL):
     """Postulate: PYDLL is already loaded in target process"""
     PYCODE = code_injected + "\x00"
-
+    # TODO: free this (how ? when ?)
     remote_addr = target.virtual_alloc(len(PYCODE) + 0x100)
     target.write_memory(remote_addr, PYCODE)
     SHELLCODE_ADDR = remote_addr + len(PYCODE)
@@ -295,11 +294,10 @@ buff[:] = txt
 """
 
 def retrieve_last_exception_data(process):
-    # TODO : FREE THIS
-    mem = process.virtual_alloc(0x1000)
-    execute_python_code(process, retrieve_exc.format(mem))
-    size = struct.unpack("<I", process.read_memory(mem, ctypes.sizeof(ctypes.c_uint)))[0]
-    data = process.read_memory(mem + ctypes.sizeof(ctypes.c_uint), size)
+    with process.allocated_memory(0x1000) as mem:
+        execute_python_code(process, retrieve_exc.format(mem))
+        size = struct.unpack("<I", process.read_memory(mem, ctypes.sizeof(ctypes.c_uint)))[0]
+        data = process.read_memory(mem + ctypes.sizeof(ctypes.c_uint), size)
     return data
 
 class RemotePythonError(Exception):

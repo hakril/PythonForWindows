@@ -129,6 +129,8 @@ class Debugger(object):
             # Valid addr ? (in non-loaded module: raise / pass ?)
             if expected_target is None or expected_target.pid == target.pid:
                 if isinstance(target, WinThread):
+                    if bp.type == STANDARD_BP:
+                        continue # Standard BP are set on wide process, nothing to do on a thread
                     x = self._hardware_breakpoint[target.tid]
                     # Ignore BP on thread_create that have already been
                     # put by the process_create event
@@ -332,7 +334,7 @@ class Debugger(object):
 
 
 class Breakpoint(object):
-    type = "BP" # REAL BP
+    type = STANDARD_BP # REAL BP
     def __init__(self, addr):
         self.addr = addr
 
