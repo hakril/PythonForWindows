@@ -10,6 +10,7 @@ This sections describes them by group of relation.
     :maxdepth: 3
 
     process.rst
+    exception.rst
     registry.rst
     network.rst
     com.rst

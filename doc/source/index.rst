@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
 Welcome to PythonForWindows's documentation!
-=====================================
+============================================
 
 Contents:
 
@@ -17,6 +17,7 @@ Contents:
    native_exec.rst
    winproxy.rst
    utils.rst
+   debug.rst
    iat_hook.rst
    wip.rst
    internals.rst

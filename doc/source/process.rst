@@ -50,6 +50,13 @@ WinThread
    :show-inheritance:
    :inherited-members:
 
+Token
+'''''
+
+.. autoclass:: Token
+   :members:
+   :inherited-members:
+
 
 PEB Exploration
 """""""""""""""

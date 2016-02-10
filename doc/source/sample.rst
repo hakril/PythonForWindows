@@ -188,3 +188,97 @@ Output::
     ...
     KeyValue(name='PathName', value=u'C:\\Windows', type=1)]
     registered owner = <KeyValue(name='RegisteredOwner', value=u'hakril', type=1)>
+
+
+.. _sample_vectoredexception:
+
+:func:`VectoredException`
+"""""""""""""""""""""""""
+
+In local process
+''''''''''''''''
+
+.. literalinclude:: ..\..\samples\veh_segv.py
+
+Output::
+
+    (cmd λ) python.exe veh_segv.py
+    Protected page is at <0x1db0000>
+    Setting page protection to <PAGE_NOACCESS>
+
+    ==Entry of VEH handler==
+    Instr at 0x1d1ab574 accessed to addr 0x1db0000
+    Resetting page protection to <PAGE_READWRITE>
+    ==Entry of VEH handler==
+    Exception of type EXCEPTION_SINGLE_STEP(0x80000004L)
+    Resetting page protection to <PAGE_NOACCESS>
+    Value 1 read
+
+    ==Entry of VEH handler==
+    Instr at 0x1d1ab574 accessed to addr 0x1db0010
+    Resetting page protection to <PAGE_READWRITE>
+    ==Entry of VEH handler==
+    Exception of type EXCEPTION_SINGLE_STEP(0x80000004L)
+    Resetting page protection to <PAGE_NOACCESS>
+    Value 2 read
+
+
+In remote process
+'''''''''''''''''
+
+.. literalinclude:: ..\..\samples\remote_veh_segv.py
+
+Output::
+
+    (cmd λ) python .exe.\samples\remote_veh_segv.py
+    (In another console)
+
+    Tracing execution in module: <gdi32.dll>
+    Protected page is at 0x7ffa3c700000L
+
+    Instr at 0x7ffa3c70f0f0L accessed to addr 0x7ffa3c70f0f0L (gdi32.dll)
+    Exception of type EXCEPTION_SINGLE_STEP(0x80000004L)
+    Resetting page protection to <PAGE_READWRITE>
+
+    Instr at 0x7ffa3c70f0f5L accessed to addr 0x7ffa3c70f0f5L (gdi32.dll)
+    Exception of type EXCEPTION_SINGLE_STEP(0x80000004L)
+    Resetting page protection to <PAGE_READWRITE>
+
+    Instr at 0x7ffa3c70f0faL accessed to addr 0x7ffa3c70f0faL (gdi32.dll)
+    Exception of type EXCEPTION_SINGLE_STEP(0x80000004L)
+    Resetting page protection to <PAGE_READWRITE>
+
+    Instr at 0x7ffa3c70f0ffL accessed to addr 0x7ffa3c70f0ffL (gdi32.dll)
+    Exception of type EXCEPTION_SINGLE_STEP(0x80000004L)
+    Resetting page protection to <PAGE_READWRITE>
+
+    Instr at 0x7ffa3c70f100L accessed to addr 0x7ffa3c70f100L (gdi32.dll)
+    No more tracing !
+
+
+.. _sample_debugger:
+
+Debugging
+"""""""""
+
+.. literalinclude:: ..\..\samples\debugger.py
+
+Ouput::
+
+    (cmd λ) python.exe .\samples\debugger.py
+    Loading <KERNEL32.DLL>
+    Got exception EXCEPTION_BREAKPOINT(0x80000003L) at 0x77a73bad
+    Loading <C:\Windows\system32\IMM32.DLL>
+    Loading <C:\Windows\system32\uxtheme.dll>
+    Loading <C:\Windows\system32\uxtheme.dll>
+    Loading <C:\Windows\system32\uxtheme.dll>
+    Loading <C:\Windows\system32\uxtheme.dll>
+    Loading <kernel32.dll>
+    Loading <C:\Windows\WinSxS\x86_microsoft.windows.gdiplus_6595b64144ccf1df_1.1.9600.17415_none_dad8722c5bcc2d8f\gdiplus.dll>
+    Loading <comctl32.dll>
+    Loading <comctl32.dll>
+    Loading <comctl32.dll>
+    Loading <C:\Windows\system32\shell32.dll>
+    Loading <C:\Windows\SYSTEM32\WINMM.dll>
+    Loading <C:\Windows\system32\ole32.dll>
+    Ask to load <ole32.dll>: exiting process

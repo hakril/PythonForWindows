@@ -181,3 +181,56 @@ Demo::
 
 
 
+:mod:`windows.native_exec.nativeutils` -- Native utility functions
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+.. module:: windows.native_exec.nativeutils
+
+This module contains some native-code functions that can be used for various purposes.
+Each function export a label that allow another :class:`MultipleInstr` to call the code of the function.
+
+The current functions are:
+
+    * ``StrlenW64`` A 64bits wide-string STRLEN (``Label(":FUNC_STRLENW64")``)
+    * ``StrlenA64`` A 64bits ASCII STRLEN (``Label(":FUNC_STRLENA64")``)
+    * ``GetProcAddress64`` A 64bits export resolver (``Label(":FUNC_GETPROCADDRESS64")``)
+
+        * Arg1: The DLL (wstring)
+        * Arg2: The API (string)
+        * Return value:
+
+            * 0xfffffffffffffffe if the DLL is not found
+            * 0xffffffffffffffff if the API is not found
+            * The address of the function
+
+    * ``StrlenW32`` A 32bits wide-string STRLEN (``Label(":FUNC_STRLENW32")``)
+    * ``StrlenA32`` A 32bits ASCII STRLEN (``Label(":FUNC_STRLENA32")``)
+    * ``GetProcAddress32`` A 32bits export resolver (``Label(":FUNC_GETPROCADDRESS32")``)
+
+        * Arg1: The DLL (wstring)
+        * Arg2: The API (string)
+        * Return value:
+
+            * 0xfffffffe if the DLL is not found
+            * 0xffffffff if the API is not found
+            * The address of the function
+
+To use those functions in a :class:`MultipleInstr` just call the label in your code and append the function at
+the end of your :class:`MultipleInstr`
+
+
+Example::
+
+        RemoteManualLoadLibray = x86.MultipleInstr()
+
+        RemoteManualLoadLibray += x86.Mov("ECX", x86.mem("[ESP + 4]"))
+        RemoteManualLoadLibray += x86.Push(x86.mem("[ECX + 4]"))
+        RemoteManualLoadLibray += x86.Push(x86.mem("[ECX]"))
+        RemoteManualLoadLibray += x86.Call(":FUNC_GETPROCADDRESS32")
+        RemoteManualLoadLibray += x86.Push(x86.mem("[ECX + 8]"))
+        RemoteManualLoadLibray += x86.Call("EAX") # LoadLibrary
+        RemoteManualLoadLibray += x86.Pop("ECX")
+        RemoteManualLoadLibray += x86.Pop("ECX")
+        RemoteManualLoadLibray += x86.Ret()
+
+        RemoteManualLoadLibray += GetProcAddress32

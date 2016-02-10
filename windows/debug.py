@@ -32,7 +32,7 @@ class Debugger(object):
     def __init__(self, target, already_debuggable=False):
         """``target`` must be a WinProcess.
 
-        ``already_debuggable`` must be set to ``True`` if process is already expecting a debugger (created with DEBUG_PROCESS)"""
+        ``already_debuggable`` must be set to ``True`` if process is already expecting a debugger (created with ``DEBUG_PROCESS``)"""
         self._init_dispatch_handlers()
         self.target = target
         self.is_target_launched = False
@@ -45,7 +45,6 @@ class Debugger(object):
         # List of breakpoints
         self.breakpoints = {}
         self._pending_breakpoints = {} #Breakpoints to put in new process / threads
-        self._pending_address = {} # Breakpoints that address have not been resolved yet
         # Values rewritten by "\xcc"
         self._memory_save = defaultdict(dict)
         # Dict of {tid : {drx taken : BP}}
@@ -54,12 +53,6 @@ class Debugger(object):
         self._breakpoint_to_reput = {}
 
         self._module_by_process = {}
-
-        #TODO: remove this: THIS IS A TEST
-        self._breakpoints_new_targets = {}
-        self._breakpoint_resolvable_address = {}
-
-        self._pending_breakpoints_new = {}
 
         self._pending_breakpoints_new = defaultdict(list)
 
@@ -103,7 +96,6 @@ class Debugger(object):
         return x
 
     def _resolve(self, addr, target):
-        print("Resolving <{0}> for {1}".format(addr, self.current_process))
         if not isinstance(addr, basestring):
             return addr
         dll, api = addr.split("!")
@@ -397,58 +389,11 @@ class Debugger(object):
             if not self.processes:
                 break
 
-    #def add_bp(self, bp, addr=None, type=None, target=None):
-    #    """Add a breakpoint, bp can be:
-    #
-    #        * a :class:`Breakpoint` (addr and type must be None)
-    #        * any callable (addr and type must NOT be None)
-    #
-    #        If the ``bp`` type is ``STANDARD_BP``, target can be None (all targets) or a process.
-    #
-    #        If the ``bp`` type is ``HARDWARE_EXEC_BP``, target can be None (all targets), a process or a thread.
-    #    """
-    #    if getattr(bp, "addr", None) is None:
-    #        if addr is None or type is None:
-    #            raise ValueError("SUCK YOUR NONE")
-    #        bp = ProxyBreakpoint(bp, addr, type)
-    #    else:
-    #        if addr is not None or type is not None:
-    #            raise ValueError("Given <addr|type> by parameters but BP object have them")
-    #    del addr
-    #    del type
-    #    if target is None:
-    #        # Raise on multiple pending at same addr ?
-    #        # We will add the pending breakpoint to other new processes
-    #        if bp.addr in self._pending_breakpoints:
-    #            raise ValueError("Pending breakpoint already at {0}".format(hex(bp.addr)))
-    #        self._pending_breakpoints[bp.addr] = (bp, target)
-    #        targets = self.processes.values()
-    #        if targets is None:
-    #            return
-    #    else:
-    #        targets = [target]
-    #    if bp.addr in self.breakpoints:
-    #        raise ValueError("Breakpoint already at {0}".format(hex(bp.addr)))
-    #
-    #    #self.breakpoints[bp.addr] = bp
-    #
-    #    if isinstance(bp.addr, basestring):
-    #        dll, api = bp.addr.split("!")
-    #        dll = dll.lower()
-    #        if dll not in self._pending_address: #TODO: default dict
-    #            self._pending_address[dll] = []
-    #        self._pending_address[dll].append((api, bp))
-    #
-    #    _setup_method = getattr(self, "_setup_breakpoint_" + bp.type)
-    #    _setup_method(bp, targets)
-    #    return True
-
-
     def add_bp(self, bp, addr=None, type=None, target=None):
         """Add a breakpoint, bp can be:
 
             * a :class:`Breakpoint` (addr and type must be None)
-            * any callable (addr and type must NOT be None)
+            * any callable (addr and type must NOT be None) (NON-TESTED)
 
             If the ``bp`` type is ``STANDARD_BP``, target can be None (all targets) or a process.
 
