@@ -26,18 +26,21 @@ def transform_ctypes_fields(struct, replacement):
     return [(name, replacement.get(name, type)) for name, type in struct._fields_]
 
 
-def get_structure_transformer_for_target(target):
+def get_structure_transformer_for_target(target, targetbitness=None):
     current_bitness = windows.current_process.bitness
     if target is None:
         ctypes_structure_transformer = lambda x:x
         create_structure_at = lambda structcls, addr: structcls.from_address(addr)
         return ctypes_structure_transformer, create_structure_at
 
-    if target.bitness == 32 and current_bitness == 64:
+    if targetbitness is None:
+        targetbitness = target.bitness
+
+    if targetbitness == 32 and current_bitness == 64:
         ctypes_structure_transformer = rctypes.transform_type_to_remote32bits
-    elif target.bitness == 64 and current_bitness == 32:
+    elif targetbitness == 64 and current_bitness == 32:
         ctypes_structure_transformer = rctypes.transform_type_to_remote64bits
-    elif target.bitness == current_bitness:
+    elif targetbitness == current_bitness:
         ctypes_structure_transformer = rctypes.transform_type_to_remote
     else:
         raise NotImplementedError("Parsing {0} PE from {1} Process".format(targetedbitness, proc_bitness))
@@ -46,8 +49,19 @@ def get_structure_transformer_for_target(target):
         return ctypes_structure_transformer(structcls)(addr, target)
     return ctypes_structure_transformer, create_structure_at
 
+def get_pe_bitness(baseaddr, target):
+    # We can force bitness as the filed we access are bitness-independant
+    pe = GetPEFile(baseaddr, target, force_bitness=32)
+    machine = pe.get_NT_HEADER().FileHeader.Machine
+    if machine == 0x14c:
+        return 32
+    elif machine == 0x8664:
+        return 64
+    else:
+        raise ValueError("Unknow PE target machine <0x{0:x}>".format(machine))
 
-def GetPEFile(baseaddr, target=None):
+
+def GetPEFile(baseaddr, target=None, force_bitness=None):
     """Returns a :class:`PEFile` to explore a PE loaded at `baseaddr` in process `target`.
 
     :rtype: :class:`PEFile`
@@ -57,14 +71,14 @@ def GetPEFile(baseaddr, target=None):
         If target is ``None`` it refers to the curent process
     """
     proc_bitness = windows.current_process.bitness
-    if target is None:
-        targetedbitness = proc_bitness
+
+    if force_bitness is None:
+        targetedbitness = get_pe_bitness(baseaddr, target)
     else:
-        targetedbitness = target.bitness
+        targetedbitness = force_bitness
 
-    transformers = get_structure_transformer_for_target(target)
+    transformers = get_structure_transformer_for_target(target, targetedbitness)
     ctypes_structure_transformer, create_structure_at = transformers
-
 
     if targetedbitness == 32:
         IMAGE_ORDINAL_FLAG = IMAGE_ORDINAL_FLAG32
@@ -164,6 +178,7 @@ def GetPEFile(baseaddr, target=None):
         """Represent a PE loaded in a process (current or remote)"""
         def __init__(self):
             self.baseaddr = baseaddr
+            self.bitness = targetedbitness
 
         def get_DOS_HEADER(self):
             return create_structure_at(IMAGE_DOS_HEADER, baseaddr)
@@ -345,5 +360,4 @@ def GetPEFile(baseaddr, target=None):
             if targetedbitness == 32:
                 return create_structure_at(IMAGE_NT_HEADERS32, baseaddr + self.e_lfanew)
             return create_structure_at(IMAGE_NT_HEADERS64, baseaddr + self.e_lfanew)
-
     return current_pe

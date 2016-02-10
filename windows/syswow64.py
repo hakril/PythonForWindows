@@ -187,13 +187,10 @@ def get_current_process_syswow_peb():
     return windows.winobject.RemotePEB64(peb_addr, CurrentProcessReadSyswow())
 
 
-
-
 class ReadSyswow64Process(object):
         def __init__(self, target):
             self.target = target
             self.bitness = target.bitness
-            pass
 
         def read_memory(self, addr, size):
             buffer_addr = ctypes.create_string_buffer(size)
@@ -282,7 +279,7 @@ def NtQueryVirtualMemory_32_to_64(ProcessHandle, BaseAddress, MemoryInformationC
 
 @Syswow64ApiProxy(windows.winproxy.NtGetContextThread)
 def NtGetContextThread_32_to_64(hThread, lpContext):
-    if type(lpContext) == windows.vectored_exception.EnhancedCONTEXT64:
+    if type(lpContext) == windows.exception.ECONTEXT64:
         lpContext = byref(lpContext)
     return NtGetContextThread_32_to_64.ctypes_function(hThread, lpContext)
 

@@ -103,6 +103,7 @@ class Debugger(object):
         return x
 
     def _resolve(self, addr, target):
+        print("Resolving <{0}> for {1}".format(addr, self.current_process))
         if not isinstance(addr, basestring):
             return addr
         dll, api = addr.split("!")
@@ -115,6 +116,12 @@ class Debugger(object):
             return None
         # TODO: optim exports are the same for whole system (32 vs 64 bits)
         # I don't have to reparse the exports each time..
+        # Try to interpret api as an int
+        try:
+            api_int = int(api, 0)
+            return mod[0].baseaddr + api_int
+        except ValueError:
+            pass
         exports = mod[0].exports
         if api not in exports:
             raise ValueError("Unknown API <{0}> in DLL {1}".format(api, dll))
@@ -124,13 +131,15 @@ class Debugger(object):
     def add_pending_breakpoint(self, bp, target):
         self._pending_breakpoints_new[target].append(bp)
 
-    def _setup_breakpoint(self, bp, targets):
+    def _setup_breakpoint(self, bp, target):
         _setup_method = getattr(self, "_setup_breakpoint_" + bp.type)
-        if targets is None:
+        if target is None:
             if bp.type == STANDARD_BP: #TODO: better..
                 targets = self.processes
             else:
                 targets = self.threads
+        else:
+            targets = [target]
         for target in targets:
             return _setup_method(bp, target)
 
@@ -277,9 +286,13 @@ class Debugger(object):
 
 
     def _get_loaded_dll(self, load_dll):
+        name_sufix = ""
+        pe = windows.pe_parse.GetPEFile(load_dll.lpBaseOfDll, self.current_process)
+        if self.current_process.bitness == 32 and pe.bitness == 64:
+            name_sufix = "64"
+
         if not load_dll.lpImageName:
-            pe = windows.pe_parse.GetPEFile(load_dll.lpBaseOfDll, self.current_process)
-            return pe.export_name
+            return pe.export_name + name_sufix
         try:
             addr = self.current_process.read_ptr(load_dll.lpImageName)
         except:
@@ -287,11 +300,11 @@ class Debugger(object):
 
         if not addr:
             pe = windows.pe_parse.GetPEFile(load_dll.lpBaseOfDll, self.current_process)
-            return pe.export_name
+            return pe.export_name + name_sufix
 
         if load_dll.fUnicode:
-            return self.current_process.read_wstring(addr)
-        return self.current_process.read_string(addr)
+            return self.current_process.read_wstring(addr) + name_sufix
+        return self.current_process.read_string(addr) + name_sufix
 
     def _handle_create_process(self, debug_event):
         """Handle CREATE_PROCESS_DEBUG_EVENT"""
@@ -456,7 +469,7 @@ class Debugger(object):
             self.add_pending_breakpoint(bp, None)
         elif target is not None:
             # Check that targets are accepted
-            if target not in self.processes + self.threads:
+            if target not in self.processes.values() + self.threads.values():
                 if target == self.target: # Original target (that have not been lauched yet)
                     return self.add_pending_breakpoint(bp, target)
                 else:
