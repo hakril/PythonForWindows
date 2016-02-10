@@ -33,7 +33,7 @@ import os
 
 if bool(os.environ.get("SPHINX_BUILD", 0)):
     # I know it's shameful
-    # But it's the only way I can think of right know to get a full class
+    # But it's the only way I can think of right now to get a full class
     # of PEFile for documentation purpose u_u
 
     ppe = windows.current_process.peb.modules[0].pe

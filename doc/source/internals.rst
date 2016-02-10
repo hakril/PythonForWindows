@@ -120,5 +120,9 @@ Existing function are:
 
 .. function:: NtGetContextThread_32_to_64
 
+.. function:: NtSetContextThread_32_to_64
+
+.. function:: LdrLoadDll_32_to_64
+
 
 .. _heaven_gate: http://rce.co/knockin-on-heavens-gate-dynamic-processor-mode-switching/

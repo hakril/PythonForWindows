@@ -7,8 +7,8 @@ TODO:
     - DBG
         - Verif multiple bp at same place..
         - Verif multiple pending at same place
-        - Clean / (rethink?) vectored_exception (+rename exception.py? context.py?)
         - Test !! (bp, BP_HX, bp on only on process, bp_hx on only one thread..)
+		- test breakpoint with specific target
 
 
     - Threading
@@ -24,8 +24,9 @@ TODO:
     - Winproxy:
         - rethink OptionalExport ? not useful with lazy resolution (or we need to force resolution..)
 
-    - Debugger
-        - TODO: test breakpoint with specific target
+	- Readme
+
+		- Debugger ? Veh ?
 
 
 FIXME:
@@ -38,10 +39,3 @@ FIXME:
     - winutils.create_process : use WinProcess._from_handle
 
     - Push("[ECX]") in simple_x64 as a "H" rex and i think it should not..
-
-Documentation:
-    - debug.py
-    - exception.py
-    - WinProcess/WinThread new methods
-    - the new samples
-    - native_exec.nativeutils

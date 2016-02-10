@@ -80,35 +80,43 @@ Functions in :mod:`windows.winproxy`
 
 Transparent proxies:
 
-* AllocConsole
-* CloseHandle
-* ExitProcess
-* ExitThread
-* FreeConsole
-* GetCurrentProcess
-* GetCurrentProcessorNumber
-* GetCurrentThread
-* GetCurrentThreadId
-* GetExitCodeProcess
-* GetExitCodeThread
-* GetLastError
-* GetProcAddress
-* GetStdHandle
-* GetThreadId
-* LoadLibraryA
-* LoadLibraryW
-* ResumeThread
-* SetStdHandle
-* SetTcpEntry
-* SuspendThread
-* TerminateProcess
-* TerminateThread
-* VirtualQueryEx
-* Wow64DisableWow64FsRedirection
-* Wow64EnableWow64FsRedirection
-* Wow64GetThreadContext
-* Wow64RevertWow64FsRedirection
-
+* AllocConsole()
+* CloseHandle(hObject)
+* ContinueDebugEvent(dwProcessId, dwThreadId, dwContinueStatus)
+* DebugActiveProcess(dwProcessId)
+* DebugActiveProcessStop(dwProcessId)
+* DebugBreak()
+* DebugBreakProcess(Process)
+* DebugSetProcessKillOnExit(KillOnExit)
+* ExitProcess(uExitCode)
+* ExitThread(dwExitCode)
+* FreeConsole()
+* GetCurrentProcess()
+* GetCurrentProcessorNumber()
+* GetCurrentThread()
+* GetCurrentThreadId()
+* GetExitCodeProcess(hProcess, lpExitCode)
+* GetExitCodeThread(hThread, lpExitCode)
+* GetLastError()
+* GetProcAddress(hModule, lpProcName)
+* GetProcessId(Process)
+* GetSidSubAuthority(pSid, nSubAuthority)
+* GetSidSubAuthorityCount(pSid)
+* GetStdHandle(nStdHandle)
+* GetThreadId(Thread)
+* LoadLibraryA(lpFileName)
+* LoadLibraryW(lpFileName)
+* ResumeThread(hThread)
+* SetStdHandle(nStdHandle, hHandle)
+* SetTcpEntry(pTcpRow)
+* SuspendThread(hThread)
+* TerminateProcess(hProcess, uExitCode)
+* TerminateThread(hThread, dwExitCode)
+* VirtualQueryEx(hProcess, lpAddress, lpBuffer, dwLength)
+* Wow64DisableWow64FsRedirection(OldValue)
+* Wow64EnableWow64FsRedirection(Wow64FsEnableRedirection)
+* Wow64GetThreadContext(hThread, lpContext)
+* Wow64RevertWow64FsRedirection(OldValue)
 Functions:
 
 * AddVectoredContinueHandler::
@@ -133,13 +141,13 @@ Functions:
 
     CreateFileA(lpFileName, dwDesiredAccess=GENERIC_READ(0x80000000L), dwShareMode=0, lpSecurityAttributes=None, dwCreationDisposition=OPEN_EXISTING(0x3L), dwFlagsAndAttributes=FILE_ATTRIBUTE_NORMAL(0x80L), hTemplateFile=None)
     Errcheck:
-       raise Kernel32Error if result is 0
+       raise Kernel32Error if result is NOT 0
 
 * CreateFileW::
 
     CreateFileW(lpFileName, dwDesiredAccess=GENERIC_READ(0x80000000L), dwShareMode=0, lpSecurityAttributes=None, dwCreationDisposition=OPEN_EXISTING(0x3L), dwFlagsAndAttributes=FILE_ATTRIBUTE_NORMAL(0x80L), hTemplateFile=None)
     Errcheck:
-       raise Kernel32Error if result is 0
+       raise Kernel32Error if result is NOT 0
 
 * CreateProcessA::
 
@@ -183,6 +191,18 @@ Functions:
     Errcheck:
        raise IphlpapiError if result is NOT 0
 
+* GetMappedFileNameA::
+
+    GetMappedFileNameA(hProcess, lpv, lpFilename, nSize=None)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* GetMappedFileNameW::
+
+    GetMappedFileNameW(hProcess, lpv, lpFilename, nSize=None)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
 * GetThreadContext::
 
     GetThreadContext(hThread, lpContext=None)
@@ -194,6 +214,10 @@ Functions:
     GetTokenInformation(TokenHandle=NeededParameter, TokenInformationClass=NeededParameter, TokenInformation=None, TokenInformationLength=0, ReturnLength=None)
     Errcheck:
        raise Kernel32Error if result is 0
+
+* LdrLoadDll::
+
+    LdrLoadDll(PathToFile, Flags, ModuleFileName, ModuleHandle)
 
 * LookupPrivilegeValueA::
 
@@ -230,6 +254,10 @@ Functions:
 * NtQueryVirtualMemory::
 
     NtQueryVirtualMemory(ProcessHandle, BaseAddress, MemoryInformationClass, MemoryInformation=NeededParameter, MemoryInformationLength=0, ReturnLength=None)
+
+* NtSetContextThread::
+
+    NtSetContextThread(hThread, lpContext)
 
 * NtWow64ReadVirtualMemory64::
 
@@ -288,7 +316,7 @@ Functions:
 
 * RegGetValueW::
 
-    RegGetValueW(hkey, lpSubKey, lpValue, dwFlags, pdwType, pvData, pcbData)
+    RegGetValueW(hkey, lpSubKey=None, lpValue=NeededParameter, dwFlags=0, pdwType=None, pvData=None, pcbData=None)
     Errcheck:
        raise Kernel32Error if result is NOT 0
 
@@ -320,7 +348,6 @@ Functions:
 * SetThreadContext::
 
     SetThreadContext(hThread, lpContext)
-    Allows to directly pass a CONTEXT and will call with byref(CONTEXT) by itself
     Errcheck:
        raise Kernel32Error if result is 0
 
@@ -364,7 +391,13 @@ Functions:
 
 * VirtualProtect::
 
-    VirtualProtect(lpAddress, dwSize, flNewProtect, lpflOldProtect=0)
+    VirtualProtect(lpAddress, dwSize, flNewProtect, lpflOldProtect=None)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* WaitForDebugEvent::
+
+    WaitForDebugEvent(lpDebugEvent, dwMilliseconds=INFINITE(0xffffffffL))
     Errcheck:
        raise Kernel32Error if result is 0
 
@@ -380,6 +413,12 @@ Functions:
     Errcheck:
        Nothing special
 
+* Wow64SetThreadContext::
+
+    Wow64SetThreadContext(hThread, lpContext)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
 * WriteFile::
 
     WriteFile(hFile, lpBuffer, nNumberOfBytesToWrite=None, lpNumberOfBytesWritten=None, lpOverlapped=None)
@@ -392,4 +431,3 @@ Functions:
     Computer nSize with len(lpBuffer) if not given
     Errcheck:
        raise Kernel32Error if result is 0
-
