@@ -197,10 +197,15 @@ def GetPEFile(baseaddr, target=None):
             export_directory_addr = baseaddr + export_directory_rva
             return create_structure_at(self._IMAGE_EXPORT_DIRECTORY, export_directory_addr)
 
-        class PESection(ctypes_structure_transformer(IMAGE_SECTION_HEADER)):
-            @utils.fixedpropety
-            def name(self):
-                return ctypes.c_char_p(ctypes.addressof(self.Name)).value
+        class PESection((IMAGE_SECTION_HEADER)):
+            if target is None:
+                @property
+                def name(self):
+                    return ctypes.c_char_p(self.Name).value.decode()
+            else:
+                @property
+                def name(self):
+                    return create_structure_at(ctypes.c_char_p, self._base_addr).value.decode()
 
             def __repr__(self):
                 return "<PESection \"{0}\">".format(self.name)
@@ -209,8 +214,11 @@ def GetPEFile(baseaddr, target=None):
         def sections(self):
             nt_header = self.get_NT_HEADER()
             nb_section = nt_header.FileHeader.NumberOfSections
-            base_section = ctypes.addressof(nt_header) + ctypes.sizeof(nt_header)
-            sections_array = create_structure_at(self.PESection * nb_section, base_section)
+            if target is None:
+                base_section = ctypes.addressof(nt_header) + ctypes.sizeof(nt_header)
+            else:
+                base_section = nt_header._base_addr + ctypes.sizeof(nt_header)
+            sections_array = create_structure_at((self.PESection * nb_section), base_section)
             return list(sections_array)
 
         @utils.fixedpropety
@@ -229,6 +237,11 @@ def GetPEFile(baseaddr, target=None):
                 if rva_name is not None:
                     res[rva_name.str] = rva_addr.addr
             return res
+
+        @utils.fixedpropety
+        def export_name(self):
+            """The Name attribute of the ``EXPORT_DIRECTORY``"""
+            return self.get_EXPORT_DIRECTORY().Name.str
 
         # TODO: get imports by parsing other modules exports if no INT
         @utils.fixedpropety

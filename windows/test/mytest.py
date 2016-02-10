@@ -16,6 +16,7 @@ import windows.native_exec.nativeutils as nativeutils
 
 from windows.generated_def.winstructs import *
 
+from windows.native_exec.nativeutils import GetProcAddress64, GetProcAddress32
 
 
 is_process_32_bits = windows.current_process.bitness == 32
@@ -195,6 +196,7 @@ class WindowsTestCase(unittest.TestCase):
             mods = [m for m in calc.peb.modules if m.name == "kernel32.dll"]
             self.assertTrue(mods, 'Could not find "kernel32.dll" in calc32')
             k32 = mods[0]
+            mods[0].pe.sections # Just see if it's parse
             get_current_proc_id = k32.pe.exports['GetCurrentProcessId']
             # TODO: check get_current_proc_id value (but we cannot do 64->32 injection for now)
             #if is_process_64_bits:
@@ -219,6 +221,7 @@ class WindowsTestCase(unittest.TestCase):
             mods = [m for m in calc.peb.modules if m.name == "kernel32.dll"]
             self.assertTrue(mods, 'Could not find "kernel32.dll" in calc32')
             k32 = mods[0]
+            mods[0].pe.sections
             get_current_proc_id = k32.pe.exports['GetCurrentProcessId']
             data = calc.virtual_alloc(0x1000)
             remote_python_code = """
@@ -456,7 +459,7 @@ class DebuggerTestCase(unittest.TestCase):
                 self.current_process.exit()
 
         calc = pop_calc_32(dwCreationFlags=DEBUG_PROCESS)
-        d = MyDbg(calc)
+        d = MyDbg(calc, already_debuggable=True)
         d.loop()
 
     def test_simple_standard_breakpoint(self):
@@ -478,7 +481,7 @@ class DebuggerTestCase(unittest.TestCase):
             LdrLoadDll32 = calcref.peb.modules[1].pe.exports["LdrLoadDll"]
             calcref.exit()
 
-        d = windows.debug.Debugger(calc)
+        d = windows.debug.Debugger(calc, already_debuggable=True)
         d.add_bp(TSTBP(LdrLoadDll32))
         d.loop()
 
@@ -491,6 +494,7 @@ class DebuggerTestCase(unittest.TestCase):
                 TEST_CASE.assertEqual(dbg.current_process.pid, calc.pid)
                 TEST_CASE.assertEqual(dbg.current_process.read_memory(self.addr, 1), "\xcc")
                 TEST_CASE.assertEqual(dbg.current_thread.context.pc - 1, self.addr)
+                data[0] += 1
                 d.current_process.exit()
 
         calc = pop_calc_32(dwCreationFlags=DEBUG_PROCESS)
@@ -502,7 +506,7 @@ class DebuggerTestCase(unittest.TestCase):
             LdrLoadDll32 = calcref.peb.modules[1].pe.exports["LdrLoadDll"]
             calcref.exit()
 
-        d = windows.debug.Debugger(calc)
+        d = windows.debug.Debugger(calc, already_debuggable=True)
         calc.execute("\xc3")
         calc.execute("\xc3")
         calc.execute("\xc3")
@@ -528,7 +532,7 @@ class DebuggerTestCase(unittest.TestCase):
             LdrLoadDll32 = calcref.peb.modules[1].pe.exports["LdrLoadDll"]
             calcref.exit()
 
-        d = windows.debug.Debugger(calc)
+        d = windows.debug.Debugger(calc, already_debuggable=True)
         d.add_bp(TSTBP(LdrLoadDll32))
         d.loop()
 
@@ -551,7 +555,7 @@ class DebuggerTestCase(unittest.TestCase):
                     d.current_process.exit()
 
         calc = pop_calc_32(dwCreationFlags=DEBUG_PROCESS)
-        d = windows.debug.Debugger(calc)
+        d = windows.debug.Debugger(calc, already_debuggable=True)
         addr = calc.virtual_alloc(0x1000)
         calc.write_memory(addr, "\x90" * 8)
         d.add_bp(TSTBP(addr, 0))
@@ -577,7 +581,7 @@ class DebuggerTestCase(unittest.TestCase):
                 raise NotImplementedError("Should fail before")
 
         calc = pop_calc_32(dwCreationFlags=DEBUG_PROCESS)
-        d = windows.debug.Debugger(calc)
+        d = windows.debug.Debugger(calc, already_debuggable=True)
         addr = calc.virtual_alloc(0x1000)
         calc.write_memory(addr, "\x90" * 8 + "\xc3")
         d.add_bp(TSTBP(addr, 0))
@@ -609,8 +613,8 @@ class DebuggerTestCase(unittest.TestCase):
 
             def trigger(self, dbg, exc):
                 TEST_CASE.assertNotEqual(len(dbg.current_process.threads), 1)
-                for t in dbg.current_process.threads:
-                    TEST_CASE.assertNotEqual(t.context.Dr7, 0)
+                #for t in dbg.current_process.threads:
+                #    TEST_CASE.assertNotEqual(t.context.Dr7, 0)
                 if data[0] == 0: #First time we got it ! create new thread
                     data[0] = 1
                     calc.create_thread(addr, 0)
@@ -618,7 +622,7 @@ class DebuggerTestCase(unittest.TestCase):
                     d.current_process.exit()
 
         calc = pop_calc_32(dwCreationFlags=DEBUG_PROCESS)
-        d = MyDbg(calc)
+        d = MyDbg(calc, already_debuggable=True)
         addr = calc.virtual_alloc(0x1000)
         calc.write_memory(addr, "\x90" * 2 + "\xc3")
         d.add_bp(TSTBP(addr, 0))
@@ -626,6 +630,104 @@ class DebuggerTestCase(unittest.TestCase):
         d.loop()
         # Used to verif we actually called the Breakpoints
         TEST_CASE.assertEqual(data[0], 1)
+
+    def test_simple_breakpoint_name_addr(self):
+        TEST_CASE = self
+        data = [0]
+        class TSTBP(windows.debug.Breakpoint):
+            def trigger(self, dbg, exc):
+                addr = exc.ExceptionRecord.ExceptionAddress
+                TEST_CASE.assertEqual(dbg.current_process.pid, calc.pid)
+                TEST_CASE.assertEqual(dbg.current_process.read_memory(addr, 1), "\xcc")
+                TEST_CASE.assertEqual(dbg.current_thread.context.pc - 1, addr)
+                data[0] += 1
+                d.current_process.exit()
+
+        calc = pop_calc_32(dwCreationFlags=DEBUG_PROCESS)
+
+        d = windows.debug.Debugger(calc, already_debuggable=True)
+        d.add_bp(TSTBP("ntdll.dll!LdrLoadDll"))
+        d.loop()
+        TEST_CASE.assertEqual(data[0], 1)
+
+    def test_simple_hardware_breakpoint_name_addr(self):
+        TEST_CASE = self
+        data = [0]
+        class TSTBP(windows.debug.HXBreakpoint):
+            def trigger(self, dbg, exc):
+                addr = exc.ExceptionRecord.ExceptionAddress
+                TEST_CASE.assertEqual(dbg.current_process.pid, calc.pid)
+                TEST_CASE.assertEqual(dbg.current_thread.context.pc, dbg._resolve(self.addr, dbg.current_process))
+                TEST_CASE.assertNotEqual(dbg.current_thread.context.Dr7, 0)
+                TEST_CASE.assertNotEqual(dbg.current_process.read_memory(addr, 1), "\xcc")
+                data[0] += 1
+                d.current_process.exit()
+
+        calc = pop_calc_32(dwCreationFlags=DEBUG_PROCESS)
+        d = windows.debug.Debugger(calc, already_debuggable=True)
+        d.add_bp(TSTBP("ntdll.dll!LdrLoadDll"))
+        d.loop()
+        TEST_CASE.assertEqual(data[0], 1)
+
+    def perform_manual_getproc_loadlib_32_yolo(self, target, dll_name):
+        dll = "KERNEL32.DLL\x00".encode("utf-16-le")
+        api = "LoadLibraryA\x00"
+        dll_to_load = dll_name + "\x00"
+
+        RemoteManualLoadLibray = x86.MultipleInstr()
+        code = RemoteManualLoadLibray
+        code += x86.Mov("ECX", x86.mem("[ESP + 4]"))
+        code += x86.Push(x86.mem("[ECX + 4]"))
+        code += x86.Push(x86.mem("[ECX]"))
+        code += x86.Call(":FUNC_GETPROCADDRESS32")
+        code += x86.Push(x86.mem("[ECX + 8]"))
+        code += x86.Call("EAX") # LoadLibrary
+        code += x86.Pop("ECX")
+        code += x86.Pop("ECX")
+        code += x86.Ret()
+        RemoteManualLoadLibray += GetProcAddress32
+
+        addr = target.virtual_alloc(0x1000)
+        addr2 = addr + len(dll)
+        addr3 = addr2 + len(api)
+        addr4 = addr3 + len(dll_to_load)
+        target.write_memory(addr, dll)
+        target.write_memory(addr2, api)
+        target.write_memory(addr3, dll_to_load)
+        target.write_qword(addr4, addr)
+        target.write_qword(addr4 + 4, addr2)
+        target.write_qword(addr4 + 0x8, addr3)
+        t = target.execute(RemoteManualLoadLibray.get_code(), addr4)
+        return t
+
+
+    def test_hardware_breakpoint_name_addr(self):
+        TEST_CASE = self
+        data = [0]
+        class TSTBP(windows.debug.HXBreakpoint):
+            def trigger(self, dbg, exc):
+                addr = exc.ExceptionRecord.ExceptionAddress
+                TEST_CASE.assertEqual(dbg.current_process.pid, calc.pid)
+                TEST_CASE.assertEqual(dbg.current_thread.context.pc, dbg._resolve(self.addr, dbg.current_process))
+                TEST_CASE.assertNotEqual(dbg.current_thread.context.Dr7, 0)
+                TEST_CASE.assertNotEqual(dbg.current_process.read_memory(addr, 1), "\xcc")
+                data[0] += 1
+                if data[0] == 1:
+                    # Perform a loaddll in a new thread :)
+                    # See if it's trigger a bp
+                    t = TEST_CASE.perform_manual_getproc_loadlib_32_yolo(dbg.current_process, "wintrust.dll")
+                    self.new_thread = t
+                if hasattr(self, "new_thread") and dbg.current_thread.tid == self.new_thread.tid:
+                    for t in dbg.current_process.threads:
+                        TEST_CASE.assertNotEqual(t.context.Dr7, 0)
+                    d.current_process.exit()
+
+        calc = pop_calc_32(dwCreationFlags=DEBUG_PROCESS)
+        d = windows.debug.Debugger(calc, already_debuggable=True)
+        d.add_bp(TSTBP("ntdll.dll!LdrLoadDll"))
+        # Code that will load wintrust !
+        d.loop()
+        #TEST_CASE.assertEqual(data[0], 1)
 
 
 if __name__ == '__main__':
