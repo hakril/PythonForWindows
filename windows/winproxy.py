@@ -136,6 +136,7 @@ class ApiProxy(object):
             return self._cprototyped(*args)
 
         setattr(python_proxy, "ctypes_function", perform_call)
+        setattr(python_proxy, "force_resolution", generate_ctypes_function)
         return python_proxy
 
 
@@ -166,7 +167,9 @@ class Ole32Proxy(ApiProxy):
     APIDLL = "ole32"
     default_error_check = staticmethod(no_error_check)
 
-
+class PsapiProxy(ApiProxy):
+    APIDLL = "psapi"
+    default_error_check = staticmethod(kernel32_error_check)
 
 class OptionalExport(object):
     """used 'around' a Proxy decorator
@@ -183,7 +186,9 @@ class OptionalExport(object):
 
     def __call__(self, f):
         try:
-            return self.subdecorator(f)
+            x = self.subdecorator(f)
+            x.force_resolution()
+            return x
         except ExportNotFound as e:
             dbgprint("Export <{e.func_name}> not found in <{e.api_name}>".format(e=e), "EXPORTNOTFOUND")
             return None
@@ -200,13 +205,16 @@ class TransparentApiProxy(object):
 
     def __call__(self, *args, **kwargs):
         if self._ctypes_function is None:
-            try:
-                c_prototyped = self.prototype((self.func_name, getattr(ctypes.windll, self.dll_name)), self.args)
-            except AttributeError:
-                raise ExportNotFound(func_name, APIDLL)
-            c_prototyped.errcheck = functools.wraps(self.error_check)(functools.partial(self.error_check, self.func_name))
-            self._ctypes_function = c_prototyped
+            self.force_resolution()
         return self._ctypes_function(*args, **kwargs)
+
+    def force_resolution(self):
+        try:
+            c_prototyped = self.prototype((self.func_name, getattr(ctypes.windll, self.dll_name)), self.args)
+        except AttributeError:
+            raise ExportNotFound(func_name, APIDLL)
+        c_prototyped.errcheck = functools.wraps(self.error_check)(functools.partial(self.error_check, self.func_name))
+        self._ctypes_function = c_prototyped
 
 
 TransparentKernel32Proxy = lambda func_name, error_check=kernel32_error_check: TransparentApiProxy("kernel32", func_name, error_check)
@@ -469,6 +477,34 @@ def DeviceIoControl(hDevice, dwIoControlCode, lpInBuffer, nInBufferSize=None, lp
         lpBytesReturned = ctypes.byref(DWORD())
     return DeviceIoControl.ctypes_function(hDevice, dwIoControlCode, lpInBuffer, nInBufferSize, lpOutBuffer, nOutBufferSize, lpBytesReturned, lpOverlapped)
 
+
+# TODO: might be in another DLL depending of version
+# Should handle this..
+
+@OptionalExport(Kernel32Proxy("GetMappedFileNameW"))
+def GetMappedFileNameW(hProcess, lpv, lpFilename, nSize=None):
+    if nSize is None:
+        nSize = ctypes.sizeof(lpFilename)
+    return GetMappedFileNameW.ctypes_function(hProcess, lpv, lpFilename, nSize)
+
+@OptionalExport(Kernel32Proxy("GetMappedFileNameA"))
+def GetMappedFileNameA(hProcess, lpv, lpFilename, nSize=None):
+    if nSize is None:
+        nSize = ctypes.sizeof(lpFilename)
+    return GetMappedFileNameA.ctypes_function(hProcess, lpv, lpFilename, nSize)
+
+if GetMappedFileNameA is None:
+    @PsapiProxy("GetMappedFileNameW")
+    def GetMappedFileNameW(hProcess, lpv, lpFilename, nSize=None):
+        if nSize is None:
+            nSize = ctypes.sizeof(lpFilename)
+        return GetMappedFileNameW.ctypes_function(hProcess, lpv, lpFilename, nSize)
+
+    @PsapiProxy("GetMappedFileNameA")
+    def GetMappedFileNameA(hProcess, lpv, lpFilename, nSize=None):
+        if nSize is None:
+            nSize = ctypes.sizeof(lpFilename)
+        return GetMappedFileNameA.ctypes_function(hProcess, lpv, lpFilename, nSize)
 
 # Debug API
 

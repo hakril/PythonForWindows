@@ -45,6 +45,7 @@ NTSTATUS WINAPI NtQuerySystemInformation(
   _Out_opt_  PULONG ReturnLength
 );
 
+
 NTSTATUS WINAPI NtQueryInformationProcess(
   _In_      HANDLE           ProcessHandle,
   _In_      PROCESSINFOCLASS ProcessInformationClass,
@@ -748,3 +749,16 @@ BOOL WINAPI Wow64SetThreadContext(
     __in CONST WOW64_CONTEXT *lpContext
 );
 
+DWORD WINAPI GetMappedFileNameW (
+    __in HANDLE hProcess,
+    __in LPVOID lpv,
+    __out PVOID lpFilename,
+    __in DWORD nSize
+);
+
+DWORD WINAPI GetMappedFileNameA (
+    __in HANDLE hProcess,
+    __in LPVOID lpv,
+    __out PVOID lpFilename,
+    __in DWORD nSize
+);
