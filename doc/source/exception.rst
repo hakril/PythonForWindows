@@ -7,11 +7,14 @@ Exception and Context related structures
 This module regroups all the Exception/Context related structures and functions.
 Most of the structures are the Windows structure with a prefix ``E`` (For enhanced)
 
-Those structure have the same fields that the normal windows ones but its types might vary for a simpler use.
+Those structure have the same fields that the normal windows ones but their types might vary for a simpler use.
 
 
 This module also define the decorator :func:`VectoredException` which allows to play with ``Vectored Exception Handler`` in Python
-See sample :ref:`sample_vectoredexception`
+
+.. note::
+
+    See sample :ref:`sample_vectoredexception` samples
 
 Exception Records
 '''''''''''''''''

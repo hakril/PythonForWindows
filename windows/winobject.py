@@ -331,8 +331,8 @@ class Process(AutoHandle):
     def execute(self, code, parameter=0):
         """Execute some native code in the context of the process
 
-           :return: The return value of the native code
-           :rtype: :class:`int`"""
+           :return: The thread executing the code
+           :rtype: :class:`WinThread` or :class:`DeadThread`"""
         x = self.virtual_alloc(len(code)) #Todo: free this ? when ? how ? reuse ?
         self.write_memory(x, code)
         return self.create_thread(x, parameter)
