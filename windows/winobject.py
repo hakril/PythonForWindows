@@ -475,7 +475,7 @@ class Process(AutoHandle):
 
 class CurrentThread(AutoHandle):
     """The current thread"""
-    @utils.fixedpropety
+    @property #It's not a fixedpropety because executing thread might change
     def tid(self):
         """Thread ID
 

@@ -316,19 +316,20 @@ class VectoredException(object):
             return windef.EXCEPTION_CONTINUE_SEARCH
 
 
-class WithExceptionHandler(object):
-    def __init__(self, handler):
+class VectoredExceptionHandler(object):
+    def __init__(self, pos, handler):
         self.handler = VectoredException(handler)
+        self.pos = pos
 
     def __enter__(self):
-        self.value = windows.winproxy.AddVectoredExceptionHandler(0, self.handler)
+        self.value = windows.winproxy.AddVectoredExceptionHandler(self.pos, self.handler)
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
         windows.winproxy.RemoveVectoredExceptionHandler(self.value)
         return False
 
-class DumpContextOnException(WithExceptionHandler):
+class DumpContextOnException(VectoredExceptionHandler):
         def __init__(self, exit=False):
             self.exit = exit
             super(DumpContextOnException, self).__init__(self.print_context_result)

@@ -423,8 +423,14 @@ class Debugger(object):
 
     # Public callback
     def on_exception(self, exception):
-        """Called on exception event other that known breakpoint"""
-        pass
+        """Called on exception event other that known breakpoint
+
+           The default behaviour is to return ``DBG_CONTINUE`` for the known exception code
+           and ``DBG_EXCEPTION_NOT_HANDLED`` else
+        """
+        if not exception.ExceptionRecord.ExceptionCode in windows.exception.exception_name_by_value:
+            return DBG_EXCEPTION_NOT_HANDLED
+        return DBG_CONTINUE
 
     def on_create_process(self, create_process):
         """Called on create_process event"""
@@ -499,9 +505,15 @@ class LocalDebugger(object):
         self.breakpoints = {}
         self._memory_save = {}
         self._reput_breakpoint = {}
+        self._hxbp_breakpoint = defaultdict(dict)
 
         self.callback_vectored = VectoredException(self.callback)
         windows.winproxy.AddVectoredExceptionHandler(0, self.callback_vectored)
+
+        self.setup_hxbp_callback_vectored =  VectoredException(self.setup_hxbp_callback)
+        self.hxbp_info = None
+
+        self.code = windows.native_exec.create_function("\xcc\xc3", [PVOID])
 
     def get_exception_code(self):
         return self.current_exception[0].ExceptionRecord[0].ExceptionCode
@@ -522,10 +534,11 @@ class LocalDebugger(object):
     def callback(self, exc):
         self.current_exception = exc
         exp_code = self.get_exception_code()
-        exp_addr = self.get_exception_context().get_pc()
+        context = self.get_exception_context()
+        exp_addr = context.pc
 
         if exp_code == EXCEPTION_BREAKPOINT and exp_addr in self.breakpoints:
-            continue_value = self.breakpoints[exp_addr].trigger(self, exc)
+            res = self.breakpoints[exp_addr].trigger(self, exc)
             single_step = self.get_exception_context().EEFlags.TF # single step activated by breakpoint
             return self._pass_breakpoint(exp_addr, single_step)
 
@@ -538,17 +551,90 @@ class LocalDebugger(object):
             if single_step:
                 return self.on_exception(exc)
             return windef.EXCEPTION_CONTINUE_EXECUTION
-        return self.on_exception(exc)
+        elif exp_code == EXCEPTION_SINGLE_STEP and exp_addr in self._hxbp_breakpoint[windows.current_thread.tid]:
+            res = self._hxbp_breakpoint[windows.current_thread.tid][exp_addr].trigger(self, exc)
+            context.EEFlags.RF = 1
+            return EXCEPTION_CONTINUE_EXECUTION
+        res = self.on_exception(exc)
+        return EXCEPTION_CONTINUE_EXECUTION
 
     def on_exception(self, exc):
+        if not self.get_exception_code() in windows.exception.exception_name_by_value:
+            return windef.EXCEPTION_CONTINUE_SEARCH
         return windef.EXCEPTION_CONTINUE_EXECUTION
 
-    def add_bp(self, bp):
+    def add_bp(self, bp, targets=None):
+        if bp.type == HARDWARE_EXEC_BP:
+            return self.add_bp_hxbp(bp, targets)
         if bp.type != STANDARD_BP:
-            raise NotImplementedError("Add non standard-BP in LocalKernelDebugger")
+            raise NotImplementedError("Unknow BP type {0}".format(bp.type))
+        if targets is not None:
+            raise ValueError("LocalDebugger: STANDARD_BP doest not support targets {0}".format(targets))
         self.breakpoints[bp.addr] = bp
         self._memory_save[bp.addr] = windows.current_process.read_memory(bp.addr, 1)
-
         with windows.utils.VirtualProtected(bp.addr, 1, PAGE_EXECUTE_READWRITE):
             windows.current_process.write_memory(bp.addr, "\xcc")
         return
+
+    def add_bp_hxbp(self, bp, targets=None):
+        if bp.type != HARDWARE_EXEC_BP:
+            raise NotImplementedError("Add non standard-BP in LocalDebugger")
+        if targets is None:
+            targets = windows.current_process.threads
+        for thread in targets:
+            if thread.owner.pid != windows.current_process.pid:
+                raise ValueError("Cannot add HXBP to target in remote process {0}".format(thread))
+            if thread.tid == windows.current_thread.tid:
+                self.setup_hxbp_self_thread(bp.addr)
+            else:
+                self.setup_hxbp_other_thread(bp.addr, thread)
+            self._hxbp_breakpoint[thread.tid][bp.addr] = bp
+
+    def setup_hxbp_callback(self, exc):
+        self.current_exception = exc
+
+        exp_code = self.get_exception_code()
+        context = self.get_exception_context()
+        exp_addr = context.pc
+
+        hxbp_used = self.setup_hxbp_in_context(context, self.data)
+
+        windows.current_process.write_memory(exp_addr, "\x90")
+        # Raising in the VEH is a bad idea..
+        # So better give the information to triggerer..
+        if hxbp_used is not None:
+            self.get_exception_context().Eax = exp_addr
+        else:
+            self.get_exception_context().Eax = 0
+        return windef.EXCEPTION_CONTINUE_EXECUTION
+
+
+    def setup_hxbp_in_context(self, context, addr):
+        for i in range(4):
+            is_used = getattr(context.EDr7, "L" + str(i))
+            empty_drx = str(i)
+            if not is_used:
+                context.EDr7.GE = 1
+                context.EDr7.LE = 1
+                setattr(context.EDr7, "L" + empty_drx, 1)
+                setattr(context, "Dr" + empty_drx, addr)
+                return i
+        return None
+
+    def setup_hxbp_self_thread(self, addr):
+        self.data = addr
+        with windows.exception.VectoredExceptionHandler(1, self.setup_hxbp_callback):
+            x = self.code()
+            if x is None:
+                raise ValueError("Could not setup HXBP")
+            windows.current_process.write_memory(x, "\xcc")
+        return
+
+    def setup_hxbp_other_thread(self, addr, thread):
+        thread.suspend()
+        ctx = thread.context
+        x = self.setup_hxbp_in_context(ctx, addr)
+        if x is None:
+            raise ValueError("Could not setup HXBP in {0}".format(thread))
+        thread.set_context(ctx)
+        thread.resume()
