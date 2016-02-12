@@ -261,6 +261,9 @@ Output::
 Debugging
 """""""""
 
+:class:`Debugger`
+'''''''''''''''''
+
 .. literalinclude:: ..\..\samples\debugger.py
 
 Ouput::
@@ -282,3 +285,58 @@ Ouput::
     Loading <C:\Windows\SYSTEM32\WINMM.dll>
     Loading <C:\Windows\system32\ole32.dll>
     Ask to load <ole32.dll>: exiting process
+
+
+.. _sample_local_debugger:
+
+:class:`LocalDebugger`
+''''''''''''''''''''''
+
+In current process
+^^^^^^^^^^^^^^^^^^
+
+.. literalinclude:: ..\..\samples\local_debugger.py
+
+Ouput::
+
+    (cmd λ) python.exe .\samples\local_debugger.py
+    Your main thread is 3864
+    Code addr = 0x46000b
+    GOT AN HXBP <3 at 0x46000b
+    EXCEPTION !!!! Got a EXCEPTION_SINGLE_STEP(0x80000004L) at 0x46000c
+    EXCEPTION !!!! Got a EXCEPTION_SINGLE_STEP(0x80000004L) at 0x46000d
+    EXCEPTION !!!! Got a EXCEPTION_SINGLE_STEP(0x80000004L) at 0x46000e
+    EXCEPTION !!!! Got a EXCEPTION_SINGLE_STEP(0x80000004L) at 0x46000f
+    EXCEPTION !!!! Got a EXCEPTION_SINGLE_STEP(0x80000004L) at 0x460010
+    EXCEPTION !!!! Got a EXCEPTION_SINGLE_STEP(0x80000004L) at 0x460011
+
+
+In remote process
+^^^^^^^^^^^^^^^^^
+
+.. literalinclude:: ..\..\samples\local_debugger_remote_process.py
+
+Ouput::
+
+    (cmd λ) python.exe .\samples\local_debugger_remote_process.py
+    (In another console)
+    I AM LOADING <C:\Windows\system32\uxtheme.dll>
+    I AM LOADING <C:\Windows\system32\uxtheme.dll>
+    I AM LOADING <C:\Windows\system32\uxtheme.dll>
+    I AM LOADING <C:\Windows\system32\uxtheme.dll>
+    I AM LOADING <kernel32.dll>
+    I AM LOADING <C:\Windows\WinSxS\x86_microsoft.windows.gdiplus_6595b64144ccf1df_1.1.9600.17415_none_dad8722c5bcc2d8f\gdiplus.dll>
+    I AM LOADING <comctl32.dll>
+    I AM LOADING <comctl32.dll>
+    I AM LOADING <comctl32.dll>
+    I AM LOADING <comctl32.dll>
+    I AM LOADING <comctl32.dll>
+    I AM LOADING <comctl32>
+    I AM LOADING <C:\Windows\SysWOW64\oleacc.dll>
+    I AM LOADING <OLEAUT32.DLL>
+    I AM LOADING <C:\Windows\system32\ole32.dll>
+    I AM LOADING <C:\Windows\system32\MSCTF.dll>
+    I AM LOADING <C:\Windows\SysWOW64\msxml6.dll>
+    I AM LOADING <C:\Windows\system32\shell32.dll>
+    I AM LOADING <C:\Windows\SYSTEM32\WINMM.dll>
+    I AM LOADING <C:\Windows\system32\ole32.dll>

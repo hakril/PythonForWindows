@@ -27,7 +27,6 @@ exp = windows.current_process.peb.modules[1].pe.exports
 #windows.utils.FixedInteractiveConsole(locals()).interact()
 ldr = exp["LdrLoadDll"]
 d.add_bp(YOLOHXBP(ldr))
-print("By from {0}".format(windows.current_thread.tid))
 
 """
 

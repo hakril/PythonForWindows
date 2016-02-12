@@ -20,6 +20,27 @@ The :class:`Debugger` have some functions called on given event that can be impl
 
 
 
+:class:`LocalDebugger`
+""""""""""""""""""""""
+
+.. note::
+
+    See sample :ref:`sample_local_debugger`
+
+The :class:`Debugger` is the base class to perform the debugging the current process.
+It is based on :func:`VectoredException` (see :ref:`sample_vectoredexception`)
+
+There is not much documentation for now as the code might change soon.
+
+
+
+.. autoclass:: LocalDebugger
+    :members:
+
+
+
+
+
 :class:`Breakpoint`
 """""""""""""""""""
 

@@ -501,6 +501,7 @@ from windows.exception import VectoredException
 import ctypes
 
 class LocalDebugger(object):
+    """A debugger interface around :func:`AddVectoredExceptionHandler`"""
     def __init__(self):
         self.breakpoints = {}
         self._memory_save = {}
@@ -516,12 +517,15 @@ class LocalDebugger(object):
         self.code = windows.native_exec.create_function("\xcc\xc3", [PVOID])
 
     def get_exception_code(self):
+        """Return ExceptionCode of current exception"""
         return self.current_exception[0].ExceptionRecord[0].ExceptionCode
 
     def get_exception_context(self):
+        """Return context of current exception"""
         return self.current_exception[0].ContextRecord[0]
 
     def single_step(self):
+        """Make the current thread to single step"""
         self.get_exception_context().EEFlags.TF = 1
         return windef.EXCEPTION_CONTINUE_EXECUTION
 
@@ -559,11 +563,18 @@ class LocalDebugger(object):
         return EXCEPTION_CONTINUE_EXECUTION
 
     def on_exception(self, exc):
+        """Called on exception"""
         if not self.get_exception_code() in windows.exception.exception_name_by_value:
             return windef.EXCEPTION_CONTINUE_SEARCH
         return windef.EXCEPTION_CONTINUE_EXECUTION
 
     def add_bp(self, bp, targets=None):
+        """Add a breakpoint, bp is a "class:`Breakpoint`
+
+            If the ``bp`` type is ``STANDARD_BP``, target must be None.
+
+            If the ``bp`` type is ``HARDWARE_EXEC_BP``, target can be None (all threads), or some threads of the process
+        """
         if bp.type == HARDWARE_EXEC_BP:
             return self.add_bp_hxbp(bp, targets)
         if bp.type != STANDARD_BP:
