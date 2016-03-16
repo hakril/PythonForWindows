@@ -17,6 +17,10 @@ WINTRUST_ACTION_GENERIC_VERIFY_V2_STR = get_IID_from_raw(WINTRUST_ACTION_GENERIC
 # Otherwise there is a problem with `Data4` of `type c_char_Array_8` containing 0x00 (0x8c, 0xc2, 0x0, 0xc0, 0x4f, 0xc2, 0x95, 0xee)
 WINTRUST_ACTION_GENERIC_VERIFY_V2 = GUID.from_address(ctypes.addressof(WINTRUST_ACTION_GENERIC_VERIFY_V2_STR))
 
+DRIVER_ACTION_VERIFY_RAW = 0xf750e6c3, 0x38ee, 0x11d1, 0x85, 0xe5, 0x0, 0xc0, 0x4f, 0xc2, 0x95, 0xee
+DRIVER_ACTION_VERIFY_STR = get_IID_from_raw(DRIVER_ACTION_VERIFY_RAW)
+DRIVER_ACTION_VERIFY = GUID.from_address(ctypes.addressof(DRIVER_ACTION_VERIFY_STR))
+
 WTD_UI_ALL    = 1
 WTD_UI_NONE   = 2
 WTD_UI_NOBAD  = 3
@@ -61,9 +65,46 @@ def check_signature(filename):
     win_trust_data.hWVTStateData = None
     win_trust_data.pwszURLReference = None
     win_trust_data.dwUIContext = 0
+
+    #win_trust_data.dwProvFlags  = 0x1000 + 0x10 + 0x800
     win_trust_data.tmp_union.pFile = ctypes.pointer(file_data)
 
     x = WinVerifyTrust(None, ctypes.byref(WVTPolicyGUID), ctypes.byref(win_trust_data))
     win_trust_data.dwStateAction = WTD_STATEACTION_CLOSE
     WinVerifyTrust(None, ctypes.byref(WVTPolicyGUID), ctypes.byref(win_trust_data))
     return x & 0xffffffff
+
+
+def get_catalog_for_filename(filename):
+    ctx = HCATADMIN()
+    windows.winproxy.CryptCATAdminAcquireContext(ctypes.byref(ctx), DRIVER_ACTION_VERIFY, 0)
+    hash = get_file_hash(filename)
+    t = windows.winproxy.CryptCATAdminEnumCatalogFromHash(ctx, hash, len(hash), 0, None)
+    if t is None:
+        return None
+    tname = get_catalog_name(t)
+
+    while t is not None:
+        t = windows.winproxy.CryptCATAdminEnumCatalogFromHash(ctx, hash, len(hash), 0, ctypes.byref(HCATINFO(t)))
+    windows.winproxy.CryptCATAdminReleaseCatalogContext(ctx, t, 0)
+    windows.winproxy.CryptCATAdminReleaseContext(ctx, 0)
+    return tname
+
+
+def get_file_hash(filename):
+    f = open(filename)
+    handle = windows.utils.get_handle_from_file(f)
+
+    size = DWORD(0)
+    x = windows.winproxy.CryptCATAdminCalcHashFromFileHandle(handle, ctypes.byref(size), None, 0)
+
+    buffer = (BYTE * size.value)()
+    x = windows.winproxy.CryptCATAdminCalcHashFromFileHandle(handle, ctypes.byref(size), buffer, 0)
+    return buffer
+
+
+def get_catalog_name_from_handle(handle):
+    cat_info = CATALOG_INFO()
+    cat_info.cbStruct = ctypes.sizeof(cat_info)
+    windows.winproxy.CryptCATCatalogInfoFromContext(handle, ctypes.byref(cat_info), 0)
+    return cat_info.wszCatalogFile

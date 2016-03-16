@@ -3,7 +3,7 @@ from ctypes import *
 from ctypes.wintypes import *
 from .winstructs import *
 
-functions = ['ExitProcess', 'TerminateProcess', 'GetLastError', 'GetCurrentProcess', 'CreateFileA', 'CreateFileW', 'LdrLoadDll', 'NtQuerySystemInformation', 'NtQueryInformationProcess', 'NtQueryVirtualMemory', 'NtCreateThreadEx', 'NtQueryInformationThread', 'GetExitCodeThread', 'GetExitCodeProcess', 'VirtualAlloc', 'VirtualAllocEx', 'VirtualFree', 'VirtualFreeEx', 'VirtualProtect', 'VirtualQuery', 'VirtualQueryEx', 'GetModuleFileNameA', 'GetModuleFileNameW', 'CreateThread', 'CreateRemoteThread', 'VirtualProtect', 'CreateProcessA', 'CreateProcessW', 'GetThreadContext', 'NtGetContextThread', 'SetThreadContext', 'NtSetContextThread', 'OpenThread', 'OpenProcess', 'CloseHandle', 'ReadProcessMemory', 'NtWow64ReadVirtualMemory64', 'WriteProcessMemory', 'CreateToolhelp32Snapshot', 'Thread32First', 'Thread32Next', 'Process32First', 'Process32Next', 'Process32FirstW', 'Process32NextW', 'GetProcAddress', 'LoadLibraryA', 'LoadLibraryW', 'OpenProcessToken', 'LookupPrivilegeValueA', 'LookupPrivilegeValueW', 'AdjustTokenPrivileges', 'FindResourceA', 'FindResourceW', 'SizeofResource', 'LoadResource', 'LockResource', 'GetVersionExA', 'GetVersionExW', 'GetVersion', 'GetCurrentThread', 'GetCurrentThreadId', 'GetCurrentProcessorNumber', 'AllocConsole', 'FreeConsole', 'GetStdHandle', 'SetStdHandle', 'SetThreadAffinityMask', 'WriteFile', 'GetExtendedTcpTable', 'GetExtendedUdpTable', 'SetTcpEntry', 'AddVectoredContinueHandler', 'AddVectoredExceptionHandler', 'TerminateThread', 'ExitThread', 'RemoveVectoredExceptionHandler', 'ResumeThread', 'SuspendThread', 'WaitForSingleObject', 'GetThreadId', 'LoadLibraryExA', 'LoadLibraryExW', 'SymInitialize', 'SymFromName', 'SymLoadModuleEx', 'SymSetOptions', 'SymGetTypeInfo', 'DeviceIoControl', 'GetTokenInformation', 'RegOpenKeyExA', 'RegOpenKeyExW', 'RegGetValueA', 'RegGetValueW', 'RegCloseKey', 'Wow64DisableWow64FsRedirection', 'Wow64RevertWow64FsRedirection', 'Wow64EnableWow64FsRedirection', 'Wow64GetThreadContext', 'SetConsoleCtrlHandler', 'WinVerifyTrust', 'GlobalAlloc', 'GlobalFree', 'GlobalUnlock', 'GlobalLock', 'OpenClipboard', 'EmptyClipboard', 'CloseClipboard', 'SetClipboardData', 'GetClipboardData', 'EnumClipboardFormats', 'GetClipboardFormatNameA', 'GetClipboardFormatNameW', 'WinVerifyTrust', 'OpenProcessToken', 'OpenThreadToken', 'GetTokenInformation', 'SetTokenInformation', 'GetSidIdentifierAuthority', 'GetSidSubAuthority', 'GetSidSubAuthorityCount', 'DebugBreak', 'WaitForDebugEvent', 'ContinueDebugEvent', 'DebugActiveProcess', 'DebugActiveProcessStop', 'DebugSetProcessKillOnExit', 'DebugBreakProcess', 'GetProcessId', 'Wow64SetThreadContext', 'GetMappedFileNameW', 'GetMappedFileNameA']
+functions = ['ExitProcess', 'TerminateProcess', 'GetLastError', 'GetCurrentProcess', 'CreateFileA', 'CreateFileW', 'LdrLoadDll', 'NtQuerySystemInformation', 'NtQueryInformationProcess', 'NtQueryVirtualMemory', 'NtCreateThreadEx', 'NtQueryInformationThread', 'GetExitCodeThread', 'GetExitCodeProcess', 'VirtualAlloc', 'VirtualAllocEx', 'VirtualFree', 'VirtualFreeEx', 'VirtualProtect', 'VirtualQuery', 'VirtualQueryEx', 'GetModuleFileNameA', 'GetModuleFileNameW', 'CreateThread', 'CreateRemoteThread', 'VirtualProtect', 'CreateProcessA', 'CreateProcessW', 'GetThreadContext', 'NtGetContextThread', 'SetThreadContext', 'NtSetContextThread', 'OpenThread', 'OpenProcess', 'CloseHandle', 'ReadProcessMemory', 'NtWow64ReadVirtualMemory64', 'WriteProcessMemory', 'CreateToolhelp32Snapshot', 'Thread32First', 'Thread32Next', 'Process32First', 'Process32Next', 'Process32FirstW', 'Process32NextW', 'GetProcAddress', 'LoadLibraryA', 'LoadLibraryW', 'OpenProcessToken', 'LookupPrivilegeValueA', 'LookupPrivilegeValueW', 'AdjustTokenPrivileges', 'FindResourceA', 'FindResourceW', 'SizeofResource', 'LoadResource', 'LockResource', 'GetVersionExA', 'GetVersionExW', 'GetVersion', 'GetCurrentThread', 'GetCurrentThreadId', 'GetCurrentProcessorNumber', 'AllocConsole', 'FreeConsole', 'GetStdHandle', 'SetStdHandle', 'SetThreadAffinityMask', 'WriteFile', 'GetExtendedTcpTable', 'GetExtendedUdpTable', 'SetTcpEntry', 'AddVectoredContinueHandler', 'AddVectoredExceptionHandler', 'TerminateThread', 'ExitThread', 'RemoveVectoredExceptionHandler', 'ResumeThread', 'SuspendThread', 'WaitForSingleObject', 'GetThreadId', 'LoadLibraryExA', 'LoadLibraryExW', 'SymInitialize', 'SymFromName', 'SymLoadModuleEx', 'SymSetOptions', 'SymGetTypeInfo', 'DeviceIoControl', 'GetTokenInformation', 'RegOpenKeyExA', 'RegOpenKeyExW', 'RegGetValueA', 'RegGetValueW', 'RegCloseKey', 'Wow64DisableWow64FsRedirection', 'Wow64RevertWow64FsRedirection', 'Wow64EnableWow64FsRedirection', 'Wow64GetThreadContext', 'SetConsoleCtrlHandler', 'WinVerifyTrust', 'GlobalAlloc', 'GlobalFree', 'GlobalUnlock', 'GlobalLock', 'OpenClipboard', 'EmptyClipboard', 'CloseClipboard', 'SetClipboardData', 'GetClipboardData', 'EnumClipboardFormats', 'GetClipboardFormatNameA', 'GetClipboardFormatNameW', 'WinVerifyTrust', 'OpenProcessToken', 'OpenThreadToken', 'GetTokenInformation', 'SetTokenInformation', 'GetSidIdentifierAuthority', 'GetSidSubAuthority', 'GetSidSubAuthorityCount', 'DebugBreak', 'WaitForDebugEvent', 'ContinueDebugEvent', 'DebugActiveProcess', 'DebugActiveProcessStop', 'DebugSetProcessKillOnExit', 'DebugBreakProcess', 'GetProcessId', 'Wow64SetThreadContext', 'GetMappedFileNameW', 'GetMappedFileNameA', 'RtlInitString', 'RtlInitUnicodeString', 'RtlAnsiStringToUnicodeString', 'OpenEventA', 'OpenEventW', 'NtOpenEvent', 'NtAlpcConnectPort', 'NtAlpcSendWaitReceivePort', 'lstrcmpA', 'lstrcmpW', 'CreateFileMappingA', 'CreateFileMappingW', 'MapViewOfFile', 'OpenSCManagerA', 'OpenSCManagerW', 'EnumServicesStatusExA', 'EnumServicesStatusExW', 'EnumWindows', 'GetWindowTextA', 'GetWindowTextW', 'GetWindowModuleFileNameA', 'GetWindowModuleFileNameW', 'CryptCATAdminCalcHashFromFileHandle', 'CryptCATAdminEnumCatalogFromHash', 'CryptCATAdminAcquireContext', 'CryptCATCatalogInfoFromContext', 'CryptCATAdminReleaseCatalogContext', 'CryptCATAdminReleaseContext']
 
 # ExitProcess(uExitCode):
 ExitProcessPrototype = WINFUNCTYPE(VOID, UINT)
@@ -532,4 +532,116 @@ GetMappedFileNameWParams = ((1, 'hProcess'), (1, 'lpv'), (1, 'lpFilename'), (1, 
 # GetMappedFileNameA(hProcess, lpv, lpFilename, nSize):
 GetMappedFileNameAPrototype = WINFUNCTYPE(DWORD, HANDLE, LPVOID, PVOID, DWORD)
 GetMappedFileNameAParams = ((1, 'hProcess'), (1, 'lpv'), (1, 'lpFilename'), (1, 'nSize'))
+
+# RtlInitString(DestinationString, SourceString):
+RtlInitStringPrototype = WINFUNCTYPE(VOID, PSTRING, LPCSTR)
+RtlInitStringParams = ((1, 'DestinationString'), (1, 'SourceString'))
+
+# RtlInitUnicodeString(DestinationString, SourceString):
+RtlInitUnicodeStringPrototype = WINFUNCTYPE(VOID, PUNICODE_STRING, LPCWSTR)
+RtlInitUnicodeStringParams = ((1, 'DestinationString'), (1, 'SourceString'))
+
+# RtlAnsiStringToUnicodeString(DestinationString, SourceString, AllocateDestinationString):
+RtlAnsiStringToUnicodeStringPrototype = WINFUNCTYPE(NTSTATUS, PUNICODE_STRING, PCANSI_STRING, BOOLEAN)
+RtlAnsiStringToUnicodeStringParams = ((1, 'DestinationString'), (1, 'SourceString'), (1, 'AllocateDestinationString'))
+
+# OpenEventA(dwDesiredAccess, bInheritHandle, lpName):
+OpenEventAPrototype = WINFUNCTYPE(HANDLE, DWORD, BOOL, LPCSTR)
+OpenEventAParams = ((1, 'dwDesiredAccess'), (1, 'bInheritHandle'), (1, 'lpName'))
+
+# OpenEventW(dwDesiredAccess, bInheritHandle, lpName):
+OpenEventWPrototype = WINFUNCTYPE(HANDLE, DWORD, BOOL, LPCWSTR)
+OpenEventWParams = ((1, 'dwDesiredAccess'), (1, 'bInheritHandle'), (1, 'lpName'))
+
+# NtOpenEvent(EventHandle, DesiredAccess, ObjectAttributes):
+NtOpenEventPrototype = WINFUNCTYPE(NTSTATUS, PHANDLE, ACCESS_MASK, POBJECT_ATTRIBUTES)
+NtOpenEventParams = ((1, 'EventHandle'), (1, 'DesiredAccess'), (1, 'ObjectAttributes'))
+
+# NtAlpcConnectPort(PortHandle, PortName, ObjectAttributes, PortAttributes, Flags, RequiredServerSid, ConnectionMessage, BufferLength, OutMessageAttributes, InMessageAttributes, Timeout):
+NtAlpcConnectPortPrototype = WINFUNCTYPE(NTSTATUS, PHANDLE, PUNICODE_STRING, POBJECT_ATTRIBUTES, PALPC_PORT_ATTRIBUTES, ULONG, PSID, PPORT_MESSAGE, PULONG, PALPC_MESSAGE_ATTRIBUTES, PALPC_MESSAGE_ATTRIBUTES, PLARGE_INTEGER)
+NtAlpcConnectPortParams = ((1, 'PortHandle'), (1, 'PortName'), (1, 'ObjectAttributes'), (1, 'PortAttributes'), (1, 'Flags'), (1, 'RequiredServerSid'), (1, 'ConnectionMessage'), (1, 'BufferLength'), (1, 'OutMessageAttributes'), (1, 'InMessageAttributes'), (1, 'Timeout'))
+
+# NtAlpcSendWaitReceivePort(PortHandle, Flags, SendMessage, SendMessageAttributes, ReceiveMessage, BufferLength, ReceiveMessageAttributes, Timeout):
+NtAlpcSendWaitReceivePortPrototype = WINFUNCTYPE(NTSTATUS, HANDLE, ULONG, PPORT_MESSAGE, PALPC_MESSAGE_ATTRIBUTES, PPORT_MESSAGE, PSIZE_T, PALPC_MESSAGE_ATTRIBUTES, PLARGE_INTEGER)
+NtAlpcSendWaitReceivePortParams = ((1, 'PortHandle'), (1, 'Flags'), (1, 'SendMessage'), (1, 'SendMessageAttributes'), (1, 'ReceiveMessage'), (1, 'BufferLength'), (1, 'ReceiveMessageAttributes'), (1, 'Timeout'))
+
+# lstrcmpA(lpString1, lpString2):
+lstrcmpAPrototype = WINFUNCTYPE(INT, LPCSTR, LPCSTR)
+lstrcmpAParams = ((1, 'lpString1'), (1, 'lpString2'))
+
+# lstrcmpW(lpString1, lpString2):
+lstrcmpWPrototype = WINFUNCTYPE(INT, LPCWSTR, LPCWSTR)
+lstrcmpWParams = ((1, 'lpString1'), (1, 'lpString2'))
+
+# CreateFileMappingA(hFile, lpFileMappingAttributes, flProtect, dwMaximumSizeHigh, dwMaximumSizeLow, lpName):
+CreateFileMappingAPrototype = WINFUNCTYPE(HANDLE, HANDLE, LPSECURITY_ATTRIBUTES, DWORD, DWORD, DWORD, LPCSTR)
+CreateFileMappingAParams = ((1, 'hFile'), (1, 'lpFileMappingAttributes'), (1, 'flProtect'), (1, 'dwMaximumSizeHigh'), (1, 'dwMaximumSizeLow'), (1, 'lpName'))
+
+# CreateFileMappingW(hFile, lpFileMappingAttributes, flProtect, dwMaximumSizeHigh, dwMaximumSizeLow, lpName):
+CreateFileMappingWPrototype = WINFUNCTYPE(HANDLE, HANDLE, LPSECURITY_ATTRIBUTES, DWORD, DWORD, DWORD, LPCWSTR)
+CreateFileMappingWParams = ((1, 'hFile'), (1, 'lpFileMappingAttributes'), (1, 'flProtect'), (1, 'dwMaximumSizeHigh'), (1, 'dwMaximumSizeLow'), (1, 'lpName'))
+
+# MapViewOfFile(hFileMappingObject, dwDesiredAccess, dwFileOffsetHigh, dwFileOffsetLow, dwNumberOfBytesToMap):
+MapViewOfFilePrototype = WINFUNCTYPE(LPVOID, HANDLE, DWORD, DWORD, DWORD, SIZE_T)
+MapViewOfFileParams = ((1, 'hFileMappingObject'), (1, 'dwDesiredAccess'), (1, 'dwFileOffsetHigh'), (1, 'dwFileOffsetLow'), (1, 'dwNumberOfBytesToMap'))
+
+# OpenSCManagerA(lpMachineName, lpDatabaseName, dwDesiredAccess):
+OpenSCManagerAPrototype = WINFUNCTYPE(SC_HANDLE, LPCSTR, LPCSTR, DWORD)
+OpenSCManagerAParams = ((1, 'lpMachineName'), (1, 'lpDatabaseName'), (1, 'dwDesiredAccess'))
+
+# OpenSCManagerW(lpMachineName, lpDatabaseName, dwDesiredAccess):
+OpenSCManagerWPrototype = WINFUNCTYPE(SC_HANDLE, LPCWSTR, LPCWSTR, DWORD)
+OpenSCManagerWParams = ((1, 'lpMachineName'), (1, 'lpDatabaseName'), (1, 'dwDesiredAccess'))
+
+# EnumServicesStatusExA(hSCManager, InfoLevel, dwServiceType, dwServiceState, lpServices, cbBufSize, pcbBytesNeeded, lpServicesReturned, lpResumeHandle, pszGroupName):
+EnumServicesStatusExAPrototype = WINFUNCTYPE(BOOL, SC_HANDLE, SC_ENUM_TYPE, DWORD, DWORD, LPBYTE, DWORD, LPDWORD, LPDWORD, LPDWORD, LPCSTR)
+EnumServicesStatusExAParams = ((1, 'hSCManager'), (1, 'InfoLevel'), (1, 'dwServiceType'), (1, 'dwServiceState'), (1, 'lpServices'), (1, 'cbBufSize'), (1, 'pcbBytesNeeded'), (1, 'lpServicesReturned'), (1, 'lpResumeHandle'), (1, 'pszGroupName'))
+
+# EnumServicesStatusExW(hSCManager, InfoLevel, dwServiceType, dwServiceState, lpServices, cbBufSize, pcbBytesNeeded, lpServicesReturned, lpResumeHandle, pszGroupName):
+EnumServicesStatusExWPrototype = WINFUNCTYPE(BOOL, SC_HANDLE, SC_ENUM_TYPE, DWORD, DWORD, LPBYTE, DWORD, LPDWORD, LPDWORD, LPDWORD, LPCWSTR)
+EnumServicesStatusExWParams = ((1, 'hSCManager'), (1, 'InfoLevel'), (1, 'dwServiceType'), (1, 'dwServiceState'), (1, 'lpServices'), (1, 'cbBufSize'), (1, 'pcbBytesNeeded'), (1, 'lpServicesReturned'), (1, 'lpResumeHandle'), (1, 'pszGroupName'))
+
+# EnumWindows(lpEnumFunc, lParam):
+EnumWindowsPrototype = WINFUNCTYPE(BOOL, WNDENUMPROC, LPARAM)
+EnumWindowsParams = ((1, 'lpEnumFunc'), (1, 'lParam'))
+
+# GetWindowTextA(hWnd, lpString, nMaxCount):
+GetWindowTextAPrototype = WINFUNCTYPE(INT, HWND, LPSTR, INT)
+GetWindowTextAParams = ((1, 'hWnd'), (1, 'lpString'), (1, 'nMaxCount'))
+
+# GetWindowTextW(hWnd, lpString, nMaxCount):
+GetWindowTextWPrototype = WINFUNCTYPE(INT, HWND, LPWSTR, INT)
+GetWindowTextWParams = ((1, 'hWnd'), (1, 'lpString'), (1, 'nMaxCount'))
+
+# GetWindowModuleFileNameA(hwnd, pszFileName, cchFileNameMax):
+GetWindowModuleFileNameAPrototype = WINFUNCTYPE(UINT, HWND, LPSTR, UINT)
+GetWindowModuleFileNameAParams = ((1, 'hwnd'), (1, 'pszFileName'), (1, 'cchFileNameMax'))
+
+# GetWindowModuleFileNameW(hwnd, pszFileName, cchFileNameMax):
+GetWindowModuleFileNameWPrototype = WINFUNCTYPE(UINT, HWND, LPWSTR, UINT)
+GetWindowModuleFileNameWParams = ((1, 'hwnd'), (1, 'pszFileName'), (1, 'cchFileNameMax'))
+
+# CryptCATAdminCalcHashFromFileHandle(hFile, pcbHash, pbHash, dwFlags):
+CryptCATAdminCalcHashFromFileHandlePrototype = WINFUNCTYPE(BOOL, HANDLE, POINTER(DWORD), POINTER(BYTE), DWORD)
+CryptCATAdminCalcHashFromFileHandleParams = ((1, 'hFile'), (1, 'pcbHash'), (1, 'pbHash'), (1, 'dwFlags'))
+
+# CryptCATAdminEnumCatalogFromHash(hCatAdmin, pbHash, cbHash, dwFlags, phPrevCatInfo):
+CryptCATAdminEnumCatalogFromHashPrototype = WINFUNCTYPE(HCATINFO, HCATADMIN, POINTER(BYTE), DWORD, DWORD, POINTER(HCATINFO))
+CryptCATAdminEnumCatalogFromHashParams = ((1, 'hCatAdmin'), (1, 'pbHash'), (1, 'cbHash'), (1, 'dwFlags'), (1, 'phPrevCatInfo'))
+
+# CryptCATAdminAcquireContext(phCatAdmin, pgSubsystem, dwFlags):
+CryptCATAdminAcquireContextPrototype = WINFUNCTYPE(BOOL, POINTER(HCATADMIN), POINTER(GUID), DWORD)
+CryptCATAdminAcquireContextParams = ((1, 'phCatAdmin'), (1, 'pgSubsystem'), (1, 'dwFlags'))
+
+# CryptCATCatalogInfoFromContext(hCatInfo, psCatInfo, dwFlags):
+CryptCATCatalogInfoFromContextPrototype = WINFUNCTYPE(BOOL, HCATINFO, POINTER(CATALOG_INFO), DWORD)
+CryptCATCatalogInfoFromContextParams = ((1, 'hCatInfo'), (1, 'psCatInfo'), (1, 'dwFlags'))
+
+# CryptCATAdminReleaseCatalogContext(hCatAdmin, hCatInfo, dwFlags):
+CryptCATAdminReleaseCatalogContextPrototype = WINFUNCTYPE(BOOL, HCATADMIN, HCATINFO, DWORD)
+CryptCATAdminReleaseCatalogContextParams = ((1, 'hCatAdmin'), (1, 'hCatInfo'), (1, 'dwFlags'))
+
+# CryptCATAdminReleaseContext(hCatAdmin, dwFlags):
+CryptCATAdminReleaseContextPrototype = WINFUNCTYPE(BOOL, HCATADMIN, DWORD)
+CryptCATAdminReleaseContextParams = ((1, 'hCatAdmin'), (1, 'dwFlags'))
 

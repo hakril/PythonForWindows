@@ -19,6 +19,10 @@ system = System()
 current_process = CurrentProcess()
 current_thread = CurrentThread()
 
+del System
+del CurrentProcess
+del CurrentThread
+
 # Late import: other imports should go here
 # Do not move it: risk of circular import
 
@@ -26,8 +30,10 @@ import windows.exception
 import windows.wmi
 import windows.utils
 import windows.debug
+import windows.service
+import windows.wintrust
 
-__all__ = ["system", "VirtualProtected", 'current_process', 'current_thread', 'winproxy']
+__all__ = ["system", 'current_process', 'current_thread']
 
 import os
 

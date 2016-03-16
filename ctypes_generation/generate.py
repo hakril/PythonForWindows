@@ -21,12 +21,16 @@ TYPE_EQUIVALENCE = [
     ('PDWORD', 'POINTER(DWORD)'),
     ('LPDWORD', 'POINTER(DWORD)'),
     ('LPTHREAD_START_ROUTINE', 'PVOID'),
+    ('WNDENUMPROC', 'PVOID'),
     ('PHANDLER_ROUTINE', 'PVOID'),
     ('LPBYTE', 'POINTER(BYTE)'),
     ('ULONG_PTR','PULONG'),
     ('CHAR', 'c_char'),
+    ('INT', 'c_int'),
     ('UCHAR', 'c_char'),
+    ('CSHORT', 'c_short'),
     ('PUCHAR', 'POINTER(UCHAR)'),
+    ('double', 'c_double'),
     ('FARPROC', 'PVOID'),
     ('HGLOBAL', 'PVOID'),
     ('PSID', 'PVOID'),
@@ -35,17 +39,24 @@ TYPE_EQUIVALENCE = [
     ('ULONGLONG', 'c_ulonglong'),
     ('LONGLONG', 'c_longlong'),
     ('ULONG64', 'c_ulonglong'),
+    ('LARGE_INTEGER', 'LONGLONG'),
+    ('PLARGE_INTEGER', 'POINTER(LARGE_INTEGER)'),
     ('DWORD64', 'ULONG64'),
     ('PULONG64', 'POINTER(ULONG64)'),
     ('PHANDLE', 'POINTER(HANDLE)'),
     ('HKEY', 'HANDLE'),
+    ('HCATADMIN', 'HANDLE'),
+    ('HCATINFO', 'HANDLE'),
+    ('SC_HANDLE', 'HANDLE'),
     ('PHKEY', 'POINTER(HKEY)'),
     ('ACCESS_MASK', 'DWORD'),
     ('REGSAM', 'ACCESS_MASK'),
+    ('SECURITY_CONTEXT_TRACKING_MODE', 'BOOLEAN'),
     # Will be changed at import time
     ('LPCONTEXT', 'PVOID'),
     ('HCERTSTORE', 'PVOID'),
     ('HCRYPTMSG', 'PVOID'),
+    ('PALPC_PORT_ATTRIBUTES', 'PVOID'),
     ]
 
 # For functions returning void
@@ -86,7 +97,6 @@ def verif_funcs_type(funcs, structs, enums):
     for f in funcs:
         ret_type = f.return_type
         if ret_type not in known_type and ret_type not in all_struct_name:
-            import pdb; pdb.set_trace()
             raise ValueError("UNKNOW RET TYPE {0}".format(ret_type))
 
         for param_type, _ in f.params:
@@ -94,7 +104,6 @@ def verif_funcs_type(funcs, structs, enums):
             if param_type.startswith("POINTER(") and param_type.endswith(")"):
                 param_type = param_type[len("POINTER("): -1]
             if param_type not in known_type and param_type not in all_struct_name:
-                import pdb; pdb.set_trace()
                 raise ValueError("UNKNOW PARAM TYPE {0}".format(param_type))
 
 def check_in_define(name, defs):
@@ -105,7 +114,6 @@ def validate_structs(structs, enums, defs):
     for struct in structs:
         for field_type, field_name, nb_rep in struct.fields:
             if field_type.name not in known_type + all_struct_name:
-                import pdb; pdb.set_trace()
                 raise ValueError("UNKNOW TYPE {0}".format(field_type))
             try:
                 int(nb_rep)

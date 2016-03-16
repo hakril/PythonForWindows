@@ -18,6 +18,9 @@ if bitness() == 32:
 
     winstructs.SYSTEM_MODULE = winstructs.SYSTEM_MODULE32
     winstructs.SYSTEM_MODULE_INFORMATION = winstructs.SYSTEM_MODULE_INFORMATION32
+
+    winstructs.PALPC_PORT_ATTRIBUTES = winstructs.PALPC_PORT_ATTRIBUTES32
+
 else:
     winstructs.CONTEXT = winstructs.CONTEXT64
     winstructs.PCONTEXT = winstructs.PCONTEXT64
@@ -29,8 +32,15 @@ else:
     winstructs.SYSTEM_MODULE = winstructs.SYSTEM_MODULE64
     winstructs.SYSTEM_MODULE_INFORMATION = winstructs.SYSTEM_MODULE_INFORMATION64
 
+    winstructs.PALPC_PORT_ATTRIBUTES = winstructs.PALPC_PORT_ATTRIBUTES64
+
 from . import winfuncs
 from . import windef
+
+# Fuck it
+from winstructs import *
+from winfuncs import *
+from windef import *
 
 
 

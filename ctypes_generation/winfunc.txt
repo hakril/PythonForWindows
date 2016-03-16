@@ -762,3 +762,211 @@ DWORD WINAPI GetMappedFileNameA (
     __out PVOID lpFilename,
     __in DWORD nSize
 );
+
+VOID RtlInitString (
+    PSTRING DestinationString,
+    LPCSTR SourceString
+);
+
+
+VOID RtlInitUnicodeString (
+    PUNICODE_STRING DestinationString,
+    LPCWSTR SourceString
+);
+
+NTSTATUS RtlAnsiStringToUnicodeString (
+    PUNICODE_STRING DestinationString,
+    PCANSI_STRING SourceString,
+    BOOLEAN AllocateDestinationString
+);
+
+
+HANDLE WINAPI OpenEventA(
+    __in DWORD dwDesiredAccess,
+    __in BOOL bInheritHandle,
+    __in LPCSTR lpName
+);
+
+
+HANDLE WINAPI OpenEventW(
+    __in DWORD dwDesiredAccess,
+    __in BOOL bInheritHandle,
+    __in LPCWSTR lpName
+);
+
+NTSTATUS WINAPI NtOpenEvent(
+    __out PHANDLE EventHandle,
+    __in ACCESS_MASK DesiredAccess,
+    __in POBJECT_ATTRIBUTES ObjectAttributes
+);
+
+
+NTSTATUS WINAPI NtAlpcConnectPort(
+    _Out_ PHANDLE PortHandle,
+    _In_ PUNICODE_STRING PortName,
+    _In_opt_ POBJECT_ATTRIBUTES ObjectAttributes,
+    _In_opt_ PALPC_PORT_ATTRIBUTES PortAttributes,
+    _In_ ULONG Flags,
+    _In_opt_ PSID RequiredServerSid,
+    _Inout_opt_ PPORT_MESSAGE ConnectionMessage,
+    _Inout_opt_ PULONG BufferLength,
+    _Inout_opt_ PALPC_MESSAGE_ATTRIBUTES OutMessageAttributes,
+    _Inout_opt_ PALPC_MESSAGE_ATTRIBUTES InMessageAttributes,
+    _In_opt_ PLARGE_INTEGER Timeout);
+
+
+NTSTATUS WINAPI NtAlpcSendWaitReceivePort(
+    _In_ HANDLE PortHandle,
+    _In_ ULONG Flags,
+    _In_opt_ PPORT_MESSAGE SendMessage,
+    _Inout_opt_ PALPC_MESSAGE_ATTRIBUTES SendMessageAttributes,
+    _Out_opt_ PPORT_MESSAGE ReceiveMessage,
+    _Inout_opt_ PSIZE_T BufferLength,
+    _Inout_opt_ PALPC_MESSAGE_ATTRIBUTES ReceiveMessageAttributes,
+    _In_opt_ PLARGE_INTEGER Timeout
+    );
+
+
+INT WINAPI lstrcmpA(
+    __in LPCSTR lpString1,
+    __in LPCSTR lpString2
+);
+
+INT WINAPI lstrcmpW(
+    __in LPCWSTR lpString1,
+    __in LPCWSTR lpString2
+);
+
+
+HANDLE WINAPI CreateFileMappingA(
+    __in     HANDLE hFile,
+    __in_opt LPSECURITY_ATTRIBUTES lpFileMappingAttributes,
+    __in     DWORD flProtect,
+    __in     DWORD dwMaximumSizeHigh,
+    __in     DWORD dwMaximumSizeLow,
+    __in_opt LPCSTR lpName
+);
+
+HANDLE WINAPI  CreateFileMappingW(
+    __in     HANDLE hFile,
+    __in_opt LPSECURITY_ATTRIBUTES lpFileMappingAttributes,
+    __in     DWORD flProtect,
+    __in     DWORD dwMaximumSizeHigh,
+    __in     DWORD dwMaximumSizeLow,
+    __in_opt LPCWSTR lpName
+);
+
+
+LPVOID WINAPI MapViewOfFile(
+    __in HANDLE hFileMappingObject,
+    __in DWORD dwDesiredAccess,
+    __in DWORD dwFileOffsetHigh,
+    __in DWORD dwFileOffsetLow,
+    __in SIZE_T dwNumberOfBytesToMap
+);
+
+
+SC_HANDLE WINAPI OpenSCManagerA(
+    __in_opt        LPCSTR                lpMachineName,
+    __in_opt        LPCSTR                lpDatabaseName,
+    __in            DWORD                   dwDesiredAccess
+);
+
+SC_HANDLE WINAPI OpenSCManagerW(
+    __in_opt        LPCWSTR                lpMachineName,
+    __in_opt        LPCWSTR                lpDatabaseName,
+    __in            DWORD                   dwDesiredAccess
+);
+
+BOOL WINAPI EnumServicesStatusExA(
+    __in            SC_HANDLE               hSCManager,
+    __in            SC_ENUM_TYPE            InfoLevel,
+    __in            DWORD                   dwServiceType,
+    __in            DWORD                   dwServiceState,
+    _Out_opt_       LPBYTE                  lpServices,
+    __in            DWORD                   cbBufSize,
+    __out           LPDWORD                 pcbBytesNeeded,
+    __out           LPDWORD                 lpServicesReturned,
+    __inout_opt     LPDWORD                 lpResumeHandle,
+    __in_opt        LPCSTR                pszGroupName
+);
+
+
+BOOL WINAPI EnumServicesStatusExW(
+    __in            SC_HANDLE               hSCManager,
+    __in            SC_ENUM_TYPE            InfoLevel,
+    __in            DWORD                   dwServiceType,
+    __in            DWORD                   dwServiceState,
+    _Out_opt_       LPBYTE                  lpServices,
+    __in            DWORD                   cbBufSize,
+    __out           LPDWORD                 pcbBytesNeeded,
+    __out           LPDWORD                 lpServicesReturned,
+    __inout_opt     LPDWORD                 lpResumeHandle,
+    __in_opt        LPCWSTR                pszGroupName
+    );
+
+BOOL WINAPI EnumWindows(
+    __in WNDENUMPROC lpEnumFunc,
+    __in LPARAM lParam
+);
+
+
+INT WINAPI GetWindowTextA(
+    __in HWND hWnd,
+    __out LPSTR lpString,
+    __in INT nMaxCount
+);
+
+INT WINAPI GetWindowTextW(
+    __in HWND hWnd,
+    __out LPWSTR lpString,
+    __in INT nMaxCount
+);
+
+UINT WINAPI GetWindowModuleFileNameA(
+    __in HWND hwnd,
+    __out LPSTR pszFileName,
+    __in UINT cchFileNameMax);
+
+UINT WINAPI GetWindowModuleFileNameW(
+    __in HWND hwnd,
+    __out LPWSTR pszFileName,
+    __in UINT cchFileNameMax);
+
+
+BOOL WINAPI CryptCATAdminCalcHashFromFileHandle(
+    __in HANDLE hFile,
+    __inout DWORD *pcbHash,
+    _Out_opt_ BYTE *pbHash,
+    __in DWORD dwFlags);
+
+HCATINFO WINAPI CryptCATAdminEnumCatalogFromHash(
+    __in HCATADMIN hCatAdmin,
+    __in BYTE *pbHash,
+    __in DWORD cbHash,
+    __in DWORD dwFlags,
+    __inout HCATINFO *phPrevCatInfo);
+
+BOOL WINAPI CryptCATAdminAcquireContext(
+  _Out_       HCATADMIN *phCatAdmin,
+  _In_        GUID      *pgSubsystem,
+  _In_        DWORD     dwFlags
+);
+
+BOOL WINAPI CryptCATCatalogInfoFromContext(
+  _In_    HCATINFO     hCatInfo,
+  _Inout_ CATALOG_INFO *psCatInfo,
+  _In_    DWORD        dwFlags
+);
+
+
+BOOL WINAPI CryptCATAdminReleaseCatalogContext(
+  _In_ HCATADMIN hCatAdmin,
+  _In_ HCATINFO  hCatInfo,
+  _In_ DWORD     dwFlags
+);
+
+BOOL WINAPI CryptCATAdminReleaseContext(
+  _In_ HCATADMIN hCatAdmin,
+  _In_ DWORD     dwFlags
+);

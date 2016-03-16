@@ -28,6 +28,10 @@ TODO:
 
 		- Debugger ? Veh ?
 
+    - TransparentApiProxy
+
+        double name (params and args) for same info..
+
 
 FIXME:
     - WMI

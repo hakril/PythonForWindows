@@ -328,6 +328,22 @@ typedef enum _TOKEN_INFORMATION_CLASS {
   MaxTokenInfoClass,
 } TOKEN_INFORMATION_CLASS, *PTOKEN_INFORMATION_CLASS;
 
+
+typedef enum _SECURITY_IMPERSONATION_LEVEL {
+    SecurityAnonymous,
+    SecurityIdentification,
+    SecurityImpersonation,
+    SecurityDelegation
+    } SECURITY_IMPERSONATION_LEVEL, * PSECURITY_IMPERSONATION_LEVEL;
+
+typedef enum _SC_ENUM_TYPE {
+    SC_ENUM_PROCESS_INFO        = 0
+} SC_ENUM_TYPE;
+
+typedef enum _SC_STATUS_TYPE {
+    SC_STATUS_PROCESS_INFO      = 0
+} SC_STATUS_TYPE;
+
 typedef struct _LDR_DATA_TABLE_ENTRY {
     PVOID Reserved1[2];
     LIST_ENTRY InMemoryOrderLinks;
@@ -1561,3 +1577,149 @@ typedef struct _DEBUG_EVENT {
     DWORD dwThreadId;
     _TMP_UNION_DEBUG_INFO u;
 } DEBUG_EVENT, *LPDEBUG_EVENT;
+
+
+typedef struct _STRING {
+    USHORT Length;
+    USHORT MaximumLength;
+    LPCSTR Buffer;
+} STRING, *PSTRING, *PANSI_STRING, *PCANSI_STRING;
+
+typedef struct _OBJECT_ATTRIBUTES {
+    ULONG Length;
+    HANDLE RootDirectory;
+    PUNICODE_STRING ObjectName;
+    ULONG Attributes;
+    PVOID SecurityDescriptor;
+    PVOID SecurityQualityOfService;
+} OBJECT_ATTRIBUTES, *POBJECT_ATTRIBUTES;
+
+
+typedef struct _SECURITY_QUALITY_OF_SERVICE {
+    DWORD Length;
+    SECURITY_IMPERSONATION_LEVEL ImpersonationLevel;
+    SECURITY_CONTEXT_TRACKING_MODE ContextTrackingMode;
+    BOOLEAN EffectiveOnly;
+} SECURITY_QUALITY_OF_SERVICE, * PSECURITY_QUALITY_OF_SERVICE;
+
+typedef struct _ALPC_PORT_ATTRIBUTES32
+{
+    ULONG Flags;
+    SECURITY_QUALITY_OF_SERVICE SecurityQos;
+    SIZE_T MaxMessageLength;
+    SIZE_T MemoryBandwidth;
+    SIZE_T MaxPoolUsage;
+    SIZE_T MaxSectionSize;
+    SIZE_T MaxViewSize;
+    SIZE_T MaxTotalSectionSize;
+    ULONG DupObjectTypes;
+} ALPC_PORT_ATTRIBUTES32, *PALPC_PORT_ATTRIBUTES32;
+
+
+typedef struct _ALPC_PORT_ATTRIBUTES64
+{
+    ULONG Flags;
+    SECURITY_QUALITY_OF_SERVICE SecurityQos;
+    SIZE_T MaxMessageLength;
+    SIZE_T MemoryBandwidth;
+    SIZE_T MaxPoolUsage;
+    SIZE_T MaxSectionSize;
+    SIZE_T MaxViewSize;
+    SIZE_T MaxTotalSectionSize;
+    ULONG DupObjectTypes;
+    ULONG Reserved;
+} ALPC_PORT_ATTRIBUTES64, *PALPC_PORT_ATTRIBUTES64;
+
+typedef struct _ALPC_MESSAGE_ATTRIBUTES
+{
+    ULONG AllocatedAttributes;
+    ULONG ValidAttributes;
+} ALPC_MESSAGE_ATTRIBUTES, *PALPC_MESSAGE_ATTRIBUTES;
+
+
+typedef union _PORT_MESSAGE_TMP_UNION
+{
+        SIZE_T ClientViewSize;
+        ULONG CallbackId;
+} PORT_MESSAGE_TMP_UNION;
+
+
+typedef struct _PORT_MESSAGE_TMP_SUBSTRUCT_S1
+{
+    CSHORT DataLength;
+    CSHORT TotalLength;
+} _PORT_MESSAGE_TMP_SUBSTRUCT_S1;
+
+
+typedef union _PORT_MESSAGE_TMP_UNION_U1
+{
+    ULONG Length;
+    _PORT_MESSAGE_TMP_SUBSTRUCT_S1 s1;
+} _PORT_MESSAGE_TMP_UNION_U1;
+
+
+typedef struct _PORT_MESSAGE_TMP_SUBSTRUCT_S2
+{
+    CSHORT Type;
+    CSHORT DataInfoOffset;
+} _PORT_MESSAGE_TMP_SUBSTRUCT_S2;
+
+
+typedef union _PORT_MESSAGE_TMP_UNION_U2
+{
+        ULONG ZeroInit;
+        _PORT_MESSAGE_TMP_SUBSTRUCT_S2 s2;
+} _PORT_MESSAGE_TMP_UNION_U2;
+
+
+typedef struct _PORT_MESSAGE
+{
+    _PORT_MESSAGE_TMP_UNION_U1 u1;
+    _PORT_MESSAGE_TMP_UNION_U2 u2;
+    double DoNotUseThisField;
+    ULONG MessageId;
+    _PORT_MESSAGE_TMP_UNION tmp_union;
+} PORT_MESSAGE, *PPORT_MESSAGE;
+
+
+typedef struct _SERVICE_STATUS {
+    DWORD   dwServiceType;
+    DWORD   dwCurrentState;
+    DWORD   dwControlsAccepted;
+    DWORD   dwWin32ExitCode;
+    DWORD   dwServiceSpecificExitCode;
+    DWORD   dwCheckPoint;
+    DWORD   dwWaitHint;
+} SERVICE_STATUS, *LPSERVICE_STATUS;
+
+typedef struct _SERVICE_STATUS_PROCESS {
+    DWORD   dwServiceType;
+    DWORD   dwCurrentState;
+    DWORD   dwControlsAccepted;
+    DWORD   dwWin32ExitCode;
+    DWORD   dwServiceSpecificExitCode;
+    DWORD   dwCheckPoint;
+    DWORD   dwWaitHint;
+    DWORD   dwProcessId;
+    DWORD   dwServiceFlags;
+} SERVICE_STATUS_PROCESS, *LPSERVICE_STATUS_PROCESS;
+
+typedef struct _ENUM_SERVICE_STATUS_PROCESSA {
+    LPSTR                     lpServiceName;
+    LPSTR                     lpDisplayName;
+    SERVICE_STATUS_PROCESS    ServiceStatusProcess;
+} ENUM_SERVICE_STATUS_PROCESSA, *LPENUM_SERVICE_STATUS_PROCESSA;
+
+
+typedef struct _ENUM_SERVICE_STATUS_PROCESSW {
+    LPWSTR                    lpServiceName;
+    LPWSTR                    lpDisplayName;
+    SERVICE_STATUS_PROCESS    ServiceStatusProcess;
+} ENUM_SERVICE_STATUS_PROCESSW, *LPENUM_SERVICE_STATUS_PROCESSW;
+
+
+typedef struct CATALOG_INFO_
+{
+    DWORD                       cbStruct;
+    WCHAR                       wszCatalogFile[MAX_PATH];
+} CATALOG_INFO;
