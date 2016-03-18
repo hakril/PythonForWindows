@@ -11,6 +11,7 @@ import windows.native_exec.simple_x64 as x64
 
 from windows.generated_def.winstructs import *
 from .generated_def import windef
+from windows.exception import VectoredException
 
 from collections import defaultdict
 
@@ -464,6 +465,11 @@ class Debugger(object):
         """Called on rip_info event"""
         pass
 
+def debug(path, args=None, dwCreationFlags=0, show_windows=False):
+    dwCreationFlags |= DEBUG_PROCESS
+    c = windows.utils.create_process(path, args=args, dwCreationFlags=dwCreationFlags, show_windows=show_windows)
+    return Debugger(c, already_debuggable=True)
+
 
 class Breakpoint(object):
     """An standard (Int3) breakpoint (type == ``STANDARD_BP``)"""
@@ -495,9 +501,7 @@ class HXBreakpoint(Breakpoint):
         return isinstance(target, WinThread)
 
 
-## Test a fun little thing
 
-from windows.exception import VectoredException
 import ctypes
 
 class LocalDebugger(object):
@@ -510,11 +514,12 @@ class LocalDebugger(object):
 
         self.callback_vectored = VectoredException(self.callback)
         windows.winproxy.AddVectoredExceptionHandler(0, self.callback_vectored)
-
         self.setup_hxbp_callback_vectored =  VectoredException(self.setup_hxbp_callback)
         self.hxbp_info = None
-
         self.code = windows.native_exec.create_function("\xcc\xc3", [PVOID])
+        self.veh_depth = 0
+        self.current_exception = None
+        self.exceptions_stack = [None]
 
     def get_exception_code(self):
         """Return ExceptionCode of current exception"""
@@ -536,7 +541,27 @@ class LocalDebugger(object):
         return self.single_step()
 
     def callback(self, exc):
+        self.exceptions_stack.append(exc)
         self.current_exception = exc
+        self.veh_depth += 1
+        try:
+            #if hasattr(self, "yolo"):
+            #    self.yolo("TST <{0}>".format(self.get_exception_code()))
+            return self.handle_exception(exc)
+        #except Exception as e:
+        #    if hasattr(self, "yolo"):
+        #        self.yolo(repr(e))
+        #    else:
+        #        raise
+        #    return windef.EXCEPTION_CONTINUE_SEARCH
+        finally:
+            #if hasattr(self, "yolo"):
+            #    self.yolo("BYE DBG")
+            self.exceptions_stack.pop()
+            self.current_exception = self.exceptions_stack[-1]
+            self.veh_depth -= 1
+
+    def handle_exception(self, exc):
         exp_code = self.get_exception_code()
         context = self.get_exception_context()
         exp_addr = context.pc
@@ -544,7 +569,9 @@ class LocalDebugger(object):
         if exp_code == EXCEPTION_BREAKPOINT and exp_addr in self.breakpoints:
             res = self.breakpoints[exp_addr].trigger(self, exc)
             single_step = self.get_exception_context().EEFlags.TF # single step activated by breakpoint
-            return self._pass_breakpoint(exp_addr, single_step)
+            if exp_addr in self.breakpoints: # Breakpoint deleted itself ?
+                return self._pass_breakpoint(exp_addr, single_step)
+            return EXCEPTION_CONTINUE_EXECUTION
 
         if exp_code == EXCEPTION_SINGLE_STEP and windows.current_thread.tid in self._reput_breakpoint:
             bp, single_step = self._reput_breakpoint[windows.current_thread.tid]
@@ -559,14 +586,35 @@ class LocalDebugger(object):
             res = self._hxbp_breakpoint[windows.current_thread.tid][exp_addr].trigger(self, exc)
             context.EEFlags.RF = 1
             return EXCEPTION_CONTINUE_EXECUTION
-        res = self.on_exception(exc)
-        return EXCEPTION_CONTINUE_EXECUTION
+        return self.on_exception(exc)
 
     def on_exception(self, exc):
         """Called on exception"""
+        print(self.get_exception_code())
+        windows.current_process.exit()
         if not self.get_exception_code() in windows.exception.exception_name_by_value:
             return windef.EXCEPTION_CONTINUE_SEARCH
         return windef.EXCEPTION_CONTINUE_EXECUTION
+
+    def del_bp(self, bp):
+        if bp.type == STANDARD_BP:
+            with windows.utils.VirtualProtected(bp.addr, 1, PAGE_EXECUTE_READWRITE):
+                windows.current_process.write_memory(bp.addr, self._memory_save[bp.addr])
+            del self._memory_save[bp.addr]
+            del self.breakpoints[bp.addr]
+            return
+        if bp.type == HARDWARE_EXEC_BP:
+            for tid in self._hxbp_breakpoint:
+                if bp.addr in self._hxbp_breakpoint[tid] and self._hxbp_breakpoint[tid][bp.addr] == bp:
+                    if tid == windows.current_thread.tid:
+                        self.remove_hxbp_self_thread(bp.addr)
+                    else:
+                        self.remove_hxbp_other_thread(bp.addr)
+                    del self._hxbp_breakpoint[tid][bp.addr]
+                    #print("Need to remove {0} in {1}".format(self._hxbp_breakpoint[tid][bp.addr], tid))
+            return
+            #raise NotImplementedError("Remove <HARDWARE_EXEC_BP>")
+        raise NotImplementedError("Unknow BP type {0}".format(bp.type))
 
     def add_bp(self, bp, targets=None):
         """Add a breakpoint, bp is a "class:`Breakpoint`
@@ -603,13 +651,10 @@ class LocalDebugger(object):
 
     def setup_hxbp_callback(self, exc):
         self.current_exception = exc
-
         exp_code = self.get_exception_code()
         context = self.get_exception_context()
         exp_addr = context.pc
-
         hxbp_used = self.setup_hxbp_in_context(context, self.data)
-
         windows.current_process.write_memory(exp_addr, "\x90")
         # Raising in the VEH is a bad idea..
         # So better give the information to triggerer..
@@ -619,6 +664,20 @@ class LocalDebugger(object):
             self.get_exception_context().Eax = 0
         return windef.EXCEPTION_CONTINUE_EXECUTION
 
+    def remove_hxbp_callback(self, exc):
+        self.current_exception = exc
+        exp_code = self.get_exception_code()
+        context = self.get_exception_context()
+        exp_addr = context.pc
+        hxbp_used = self.remove_hxbp_in_context(context, self.data)
+        windows.current_process.write_memory(exp_addr, "\x90")
+        # Raising in the VEH is a bad idea..
+        # So better give the information to triggerer..
+        if hxbp_used is not None:
+            self.get_exception_context().Eax = exp_addr
+        else:
+            self.get_exception_context().Eax = 0
+        return windef.EXCEPTION_CONTINUE_EXECUTION
 
     def setup_hxbp_in_context(self, context, addr):
         for i in range(4):
@@ -632,7 +691,26 @@ class LocalDebugger(object):
                 return i
         return None
 
+    def remove_hxbp_in_context(self, context, addr):
+        for i in range(4):
+            target_drx = str(i)
+            is_used = getattr(context.EDr7, "L" + str(i))
+            draddr = getattr(context, "Dr" + target_drx)
+
+            if is_used and draddr == addr:
+                print("RM RD" + target_drx)
+                setattr(context.EDr7, "L" + target_drx, 0)
+                setattr(context, "Dr" + target_drx, 0)
+                return i
+        return None
+
     def setup_hxbp_self_thread(self, addr):
+        if self.current_exception is not None:
+            x = self.setup_hxbp_in_context(self.get_exception_context(), addr)
+            if x is None:
+                raise ValueError("Could not setup HXBP")
+            return
+
         self.data = addr
         with windows.exception.VectoredExceptionHandler(1, self.setup_hxbp_callback):
             x = self.code()
@@ -645,6 +723,30 @@ class LocalDebugger(object):
         thread.suspend()
         ctx = thread.context
         x = self.setup_hxbp_in_context(ctx, addr)
+        if x is None:
+            raise ValueError("Could not setup HXBP in {0}".format(thread))
+        thread.set_context(ctx)
+        thread.resume()
+
+    def remove_hxbp_self_thread(self, addr):
+        if self.current_exception is not None:
+            x = self.remove_hxbp_in_context(self.get_exception_context(), addr)
+            if x is None:
+                raise ValueError("Could not setup HXBP")
+            return
+        self.data = addr
+        with windows.exception.VectoredExceptionHandler(1, self.remove_hxbp_callback):
+            x = self.code()
+            if x is None:
+                raise ValueError("Could not remove HXBP")
+            windows.current_process.write_memory(x, "\xcc")
+        print("BYE")
+        return
+
+    def remove_hxbp_other_thread(self, addr, thread):
+        thread.suspend()
+        ctx = thread.context
+        x = self.remove_hxbp_in_context(ctx, addr)
         if x is None:
             raise ValueError("Could not setup HXBP in {0}".format(thread))
         thread.set_context(ctx)

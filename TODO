@@ -32,6 +32,10 @@ TODO:
 
         double name (params and args) for same info..
 
+    - 32 <-> 64
+
+        * What about ``NtWow64QueryVirtualMemory64`` ?
+
 
 FIXME:
     - WMI
