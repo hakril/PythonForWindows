@@ -154,7 +154,6 @@ class IphlpapiProxy(ApiProxy):
     APIDLL = "iphlpapi"
     default_error_check = staticmethod(iphlpapi_error_check)
 
-
 class NtdllProxy(ApiProxy):
     APIDLL = "ntdll"
     default_error_check = staticmethod(kernel32_zero_check)
@@ -169,6 +168,10 @@ class Ole32Proxy(ApiProxy):
 
 class PsapiProxy(ApiProxy):
     APIDLL = "psapi"
+    default_error_check = staticmethod(kernel32_error_check)
+
+class User32Proxy(ApiProxy):
+    APIDLL = "user32"
     default_error_check = staticmethod(kernel32_error_check)
 
 class OptionalExport(object):
@@ -201,6 +204,8 @@ class TransparentApiProxy(object):
         self._ctypes_function = None
 
         self.prototype = getattr(winfuncs, func_name + "Prototype")
+        # TODO: fix double name..
+        self.params = getattr(winfuncs, func_name + "Params")
         self.args = getattr(winfuncs, func_name + "Params")
 
     def __call__(self, *args, **kwargs):
@@ -212,12 +217,13 @@ class TransparentApiProxy(object):
         try:
             c_prototyped = self.prototype((self.func_name, getattr(ctypes.windll, self.dll_name)), self.args)
         except AttributeError:
-            raise ExportNotFound(func_name, APIDLL)
+            raise ExportNotFound(self.func_name, self.dll_name)
         c_prototyped.errcheck = functools.wraps(self.error_check)(functools.partial(self.error_check, self.func_name))
         self._ctypes_function = c_prototyped
 
 
 TransparentKernel32Proxy = lambda func_name, error_check=kernel32_error_check: TransparentApiProxy("kernel32", func_name, error_check)
+TransparentUser32Proxy = lambda func_name, error_check=kernel32_error_check: TransparentApiProxy("user32", func_name, error_check)
 TransparentAdvapi32Proxy = lambda func_name, error_check=kernel32_error_check: TransparentApiProxy("advapi32", func_name, error_check)
 TransparentIphlpapiProxy = lambda func_name, error_check=iphlpapi_error_check: TransparentApiProxy("iphlpapi", func_name, error_check)
 
@@ -258,6 +264,8 @@ VirtualQueryEx = TransparentKernel32Proxy("VirtualQueryEx")
 GetExitCodeThread = TransparentKernel32Proxy("GetExitCodeThread")
 GetExitCodeProcess = TransparentKernel32Proxy("GetExitCodeProcess")
 GetProcessId = TransparentKernel32Proxy("GetProcessId")
+lstrcmpA = TransparentKernel32Proxy("lstrcmpA")
+lstrcmpW = TransparentKernel32Proxy("lstrcmpW")
 
 
 Wow64DisableWow64FsRedirection = OptionalExport(TransparentKernel32Proxy)("Wow64DisableWow64FsRedirection")
@@ -434,6 +442,13 @@ def Process32Next(hSnapshot, lpte):
         lpte = ctypes.byref(lpte)
     return Process32Next.ctypes_function(hSnapshot, lpte)
 
+@Kernel32Proxy("OpenEventA")
+def OpenEventA(dwDesiredAccess, bInheritHandle, lpName):
+    return OpenEventA.ctypes_function(dwDesiredAccess, bInheritHandle, lpName)
+
+@Kernel32Proxy("OpenEventW")
+def OpenEventW(dwDesiredAccess, bInheritHandle, lpName):
+    return OpenEventA.ctypes_function(dwDesiredAccess, bInheritHandle, lpName)
 
 # File stuff
 @Kernel32Proxy("WriteFile")
@@ -478,6 +493,27 @@ def DeviceIoControl(hDevice, dwIoControlCode, lpInBuffer, nInBufferSize=None, lp
     return DeviceIoControl.ctypes_function(hDevice, dwIoControlCode, lpInBuffer, nInBufferSize, lpOutBuffer, nOutBufferSize, lpBytesReturned, lpOverlapped)
 
 
+
+@Kernel32Proxy("CreateFileMappingA")
+def CreateFileMappingA(hFile, lpFileMappingAttributes=None, flProtect=PAGE_READWRITE, dwMaximumSizeHigh=0, dwMaximumSizeLow=NeededParameter, lpName=NeededParameter):
+    return CreateFileMappingA.ctypes_function(hFile, lpFileMappingAttributes, flProtect, dwMaximumSizeHigh, dwMaximumSizeLow, lpName)
+
+
+@Kernel32Proxy("CreateFileMappingW")
+def CreateFileMappingW(hFile, lpFileMappingAttributes=None, flProtect=PAGE_READWRITE, dwMaximumSizeHigh=0, dwMaximumSizeLow=0, lpName=NeededParameter):
+    return CreateFileMappingW.ctypes_function(hFile, lpFileMappingAttributes, flProtect, dwMaximumSizeHigh, dwMaximumSizeLow, lpName)
+
+
+@Kernel32Proxy("MapViewOfFile")
+def MapViewOfFile(hFileMappingObject, dwDesiredAccess=FILE_MAP_ALL_ACCESS, dwFileOffsetHigh=0, dwFileOffsetLow=0, dwNumberOfBytesToMap=NeededParameter):
+    return MapViewOfFile.ctypes_function(hFileMappingObject, dwDesiredAccess, dwFileOffsetHigh, dwFileOffsetLow, dwNumberOfBytesToMap)
+
+
+@Kernel32Proxy("DuplicateHandle")
+def DuplicateHandle(hSourceProcessHandle, hSourceHandle, hTargetProcessHandle, lpTargetHandle, dwDesiredAccess=0, bInheritHandle=False, dwOptions=0):
+    return DuplicateHandle.ctypes_function(hSourceProcessHandle, hSourceHandle, hTargetProcessHandle, lpTargetHandle, dwDesiredAccess, bInheritHandle, dwOptions)
+
+
 # TODO: might be in another DLL depending of version
 # Should handle this..
 
@@ -519,6 +555,34 @@ DebugBreakProcess = TransparentKernel32Proxy("DebugBreakProcess")
 def WaitForDebugEvent(lpDebugEvent, dwMilliseconds=INFINITE):
     return WaitForDebugEvent.ctypes_function(lpDebugEvent, dwMilliseconds)
 
+
+# Volumes stuff
+
+GetLogicalDriveStringsA = TransparentKernel32Proxy("GetLogicalDriveStringsA")
+GetLogicalDriveStringsW = TransparentKernel32Proxy("GetLogicalDriveStringsW")
+GetDriveTypeA = TransparentKernel32Proxy("GetDriveTypeA")
+GetDriveTypeW = TransparentKernel32Proxy("GetDriveTypeW")
+QueryDosDeviceA = TransparentKernel32Proxy("QueryDosDeviceA")
+QueryDosDeviceW = TransparentKernel32Proxy("QueryDosDeviceW")
+GetVolumeNameForVolumeMountPointA = TransparentKernel32Proxy("GetVolumeNameForVolumeMountPointA")
+GetVolumeNameForVolumeMountPointW = TransparentKernel32Proxy("GetVolumeNameForVolumeMountPointW")
+
+@Kernel32Proxy("GetVolumeInformationA")
+def GetVolumeInformationA(lpRootPathName, lpVolumeNameBuffer, nVolumeNameSize, lpVolumeSerialNumber, lpMaximumComponentLength, lpFileSystemFlags, lpFileSystemNameBuffer, nFileSystemNameSize):
+    if nVolumeNameSize == 0 and lpVolumeNameBuffer is not None:
+        nVolumeNameSize = len(lpVolumeNameBuffer)
+    if nFileSystemNameSize == 0 and lpFileSystemNameBuffer is not None:
+        nFileSystemNameSize = len(lpFileSystemNameBuffer)
+    return GetVolumeInformationA.ctypes_function(lpRootPathName, lpVolumeNameBuffer, nVolumeNameSize, lpVolumeSerialNumber, lpMaximumComponentLength, lpFileSystemFlags, lpFileSystemNameBuffer, nFileSystemNameSize)
+
+
+@Kernel32Proxy("GetVolumeInformationW")
+def GetVolumeInformationW(lpRootPathName, lpVolumeNameBuffer=None, nVolumeNameSize=0, lpVolumeSerialNumber=None, lpMaximumComponentLength=None, lpFileSystemFlags=None, lpFileSystemNameBuffer=None, nFileSystemNameSize=0):
+    if nVolumeNameSize == 0 and lpVolumeNameBuffer is not None:
+        nVolumeNameSize = len(lpVolumeNameBuffer)
+    if nFileSystemNameSize == 0 and lpFileSystemNameBuffer is not None:
+        nFileSystemNameSize = len(lpFileSystemNameBuffer)
+    return GetVolumeInformationW.ctypes_function(lpRootPathName, lpVolumeNameBuffer, nVolumeNameSize, lpVolumeSerialNumber, lpMaximumComponentLength, lpFileSystemFlags, lpFileSystemNameBuffer, nFileSystemNameSize)
 
 
 
@@ -584,6 +648,10 @@ def NtQueryVirtualMemory(ProcessHandle, BaseAddress, MemoryInformationClass, Mem
     return NtQueryVirtualMemory.ctypes_function(ProcessHandle, BaseAddress, MemoryInformationClass, MemoryInformation=NeededParameter, MemoryInformationLength=0, ReturnLength=None)
 
 
+@NtdllProxy('NtQueryObject', error_ntstatus)
+def NtQueryObject(Handle, ObjectInformationClass, ObjectInformation=None, ObjectInformationLength=0, ReturnLength=NeededParameter):
+    return NtQueryObject.ctypes_function(Handle, ObjectInformationClass, ObjectInformation, ObjectInformationLength, ReturnLength)
+
 @OptionalExport(NtdllProxy('NtCreateThreadEx', error_ntstatus))
 def NtCreateThreadEx(ThreadHandle=None, DesiredAccess=0x1fffff, ObjectAttributes=0, ProcessHandle=NeededParameter, lpStartAddress=NeededParameter, lpParameter=NeededParameter, CreateSuspended=0, dwStackSize=0, Unknown1=0, Unknown2=0, Unknown=0):
     if ThreadHandle is None:
@@ -594,6 +662,21 @@ def NtCreateThreadEx(ThreadHandle=None, DesiredAccess=0x1fffff, ObjectAttributes
 @NtdllProxy("NtSetContextThread", error_ntstatus)
 def NtSetContextThread(hThread, lpContext):
     return NtSetContextThread.ctypes_function(hThread, lpContext)
+
+@NtdllProxy("NtOpenEvent", error_ntstatus)
+def NtOpenEvent(EventHandle, DesiredAccess, ObjectAttributes):
+    return NtOpenEvent.ctypes_function(EventHandle, DesiredAccess, ObjectAttributes)
+
+
+@NtdllProxy("NtAlpcConnectPort", error_ntstatus)
+def NtAlpcConnectPort(PortHandle, PortName, ObjectAttributes, PortAttributes, Flags, RequiredServerSid, ConnectionMessage, BufferLength, OutMessageAttributes, InMessageAttributes, Timeout):
+    return NtAlpcConnectPort.ctypes_function(PortHandle, PortName, ObjectAttributes, PortAttributes, Flags, RequiredServerSid, ConnectionMessage, BufferLength, OutMessageAttributes, InMessageAttributes, Timeout)
+
+
+@NtdllProxy("NtAlpcSendWaitReceivePort", error_ntstatus)
+def NtAlpcSendWaitReceivePort(PortHandle, Flags, SendMessage, SendMessageAttributes, ReceiveMessage, BufferLength, ReceiveMessageAttributes, Timeout):
+    return NtAlpcSendWaitReceivePort.ctypes_function(PortHandle, Flags, SendMessage, SendMessageAttributes, ReceiveMessage, BufferLength, ReceiveMessageAttributes, Timeout)
+
 
 # ##### ADVAPI32 ####### #
 
@@ -662,6 +745,28 @@ def RegCloseKey(hKey):
     return RegCloseKey.ctypes_function(hKey)
 
 
+# Services
+@Advapi32Proxy('OpenSCManagerA')
+def OpenSCManagerA(lpMachineName=None, lpDatabaseName=None, dwDesiredAccess=SC_MANAGER_ALL_ACCESS):
+    return OpenSCManagerA.ctypes_function(lpMachineName, lpDatabaseName, dwDesiredAccess)
+
+
+@Advapi32Proxy('OpenSCManagerW')
+def OpenSCManagerW(lpMachineName=None, lpDatabaseName=None, dwDesiredAccess=SC_MANAGER_ALL_ACCESS):
+    return OpenSCManagerW.ctypes_function(lpMachineName, lpDatabaseName, dwDesiredAccess)
+
+
+@Advapi32Proxy('EnumServicesStatusExA')
+def EnumServicesStatusExA(hSCManager, InfoLevel, dwServiceType, dwServiceState, lpServices, cbBufSize, pcbBytesNeeded, lpServicesReturned, lpResumeHandle, pszGroupName):
+    return EnumServicesStatusExA.ctypes_function(hSCManager, InfoLevel, dwServiceType, dwServiceState, lpServices, cbBufSize, pcbBytesNeeded, lpServicesReturned, lpResumeHandle, pszGroupName)
+
+
+@Advapi32Proxy('EnumServicesStatusExW')
+def EnumServicesStatusExW(hSCManager, InfoLevel, dwServiceType, dwServiceState, lpServices, cbBufSize, pcbBytesNeeded, lpServicesReturned, lpResumeHandle, pszGroupName):
+    return EnumServicesStatusExW.ctypes_function(hSCManager, InfoLevel, dwServiceType, dwServiceState, lpServices, cbBufSize, pcbBytesNeeded, lpServicesReturned, lpResumeHandle, pszGroupName)
+
+
+
 # ##### Iphlpapi (network list and stuff) ###### #
 
 def set_tcp_entry_error_check(func_name, result, func, args):
@@ -686,3 +791,47 @@ def GetExtendedTcpTable(pTcpTable, pdwSize=None, bOrder=True, ulAf=NeededParamet
 @WinTrustProxy('WinVerifyTrust')
 def WinVerifyTrust(hwnd, pgActionID, pWVTData):
     return WinVerifyTrust.ctypes_function(hwnd, pgActionID, pWVTData)
+
+
+# ##Wintrust: catalog stuff ###
+
+@WinTrustProxy('CryptCATAdminCalcHashFromFileHandle', error_check=kernel32_error_check)
+def CryptCATAdminCalcHashFromFileHandle(hFile, pcbHash, pbHash, dwFlags):
+    return CryptCATAdminCalcHashFromFileHandle.ctypes_function(hFile, pcbHash, pbHash, dwFlags)
+
+
+@WinTrustProxy('CryptCATAdminEnumCatalogFromHash')
+def CryptCATAdminEnumCatalogFromHash(hCatAdmin, pbHash, cbHash, dwFlags, phPrevCatInfo):
+    return CryptCATAdminEnumCatalogFromHash.ctypes_function(hCatAdmin, pbHash, cbHash, dwFlags, phPrevCatInfo)
+
+
+@WinTrustProxy('CryptCATAdminAcquireContext', error_check=kernel32_error_check)
+def CryptCATAdminAcquireContext(phCatAdmin, pgSubsystem, dwFlags):
+    return CryptCATAdminAcquireContext.ctypes_function(phCatAdmin, pgSubsystem, dwFlags)
+
+
+@WinTrustProxy('CryptCATCatalogInfoFromContext', error_check=kernel32_error_check)
+def CryptCATCatalogInfoFromContext(hCatInfo, psCatInfo, dwFlags):
+    return CryptCATCatalogInfoFromContext.ctypes_function(hCatInfo, psCatInfo, dwFlags)
+
+
+@WinTrustProxy('CryptCATAdminReleaseCatalogContext')
+def CryptCATAdminReleaseCatalogContext(hCatAdmin, hCatInfo, dwFlags):
+    return CryptCATAdminReleaseCatalogContext.ctypes_function(hCatAdmin, hCatInfo, dwFlags)
+
+
+@WinTrustProxy('CryptCATAdminReleaseContext')
+def CryptCATAdminReleaseContext(hCatAdmin, dwFlags):
+    return CryptCATAdminReleaseContext.ctypes_function(hCatAdmin, dwFlags)
+
+
+
+
+
+# ## User32 stuff ## #
+
+EnumWindows = TransparentUser32Proxy('EnumWindows')
+GetWindowTextA = TransparentUser32Proxy('GetWindowTextA', no_error_check)
+GetWindowTextW = TransparentUser32Proxy('GetWindowTextW', no_error_check)
+GetWindowModuleFileNameA = TransparentUser32Proxy('GetWindowModuleFileNameA', no_error_check)
+GetWindowModuleFileNameW = TransparentUser32Proxy('GetWindowModuleFileNameW', no_error_check)

@@ -1,6 +1,7 @@
 import ctypes
 import struct
 import windows
+from  collections import namedtuple
 from windows.generated_def.winstructs import *
 from windows.winproxy import WinVerifyTrust
 
@@ -82,7 +83,7 @@ def get_catalog_for_filename(filename):
     t = windows.winproxy.CryptCATAdminEnumCatalogFromHash(ctx, hash, len(hash), 0, None)
     if t is None:
         return None
-    tname = get_catalog_name(t)
+    tname = get_catalog_name_from_handle(t)
 
     while t is not None:
         t = windows.winproxy.CryptCATAdminEnumCatalogFromHash(ctx, hash, len(hash), 0, ctypes.byref(HCATINFO(t)))
@@ -108,3 +109,11 @@ def get_catalog_name_from_handle(handle):
     cat_info.cbStruct = ctypes.sizeof(cat_info)
     windows.winproxy.CryptCATCatalogInfoFromContext(handle, ctypes.byref(cat_info), 0)
     return cat_info.wszCatalogFile
+
+SignatureData = namedtuple("SignatureData", ["signed", "catalog", "catalogsigned"])
+
+def full_signature_information(filename):
+    signed = not bool(check_signature(filename))
+    catalog = get_catalog_for_filename(filename)
+    catalogsigned = not bool(check_signature(catalog))
+    return SignatureData(signed, catalog, catalogsigned)
