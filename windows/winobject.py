@@ -12,6 +12,9 @@ import windows.network
 import windows.registry
 import windows.syswow64
 import windows.exception
+import windows.service
+import windows.volumes
+import windows.wmi
 import windows.winproxy as winproxy
 import windows.injection as injection
 import windows.native_exec as native_exec
@@ -25,8 +28,6 @@ from windows.generated_def.ntstatus import NtStatusException
 from .generated_def import windef
 
 import windows.pe_parse as pe_parse
-
-
 
 
 class AutoHandle(object):
@@ -83,6 +84,39 @@ class System(object):
 		"""
         return self.enumerate_threads()
 
+    @property
+    def logicaldrives(self):
+        return windows.volumes.enum_logical_drive()
+
+    @property
+    def services(self):
+        """The list of services (TODO: BETTER DOC)"""
+        return windows.service.enumerate_services()
+
+    #@property
+    #def handles(self):
+    #    size_needed = ULONG()
+    #    size = 0x1000
+    #    buffer = ctypes.c_buffer(size)
+    #
+    #    try:
+    #        winproxy.NtQuerySystemInformation(16, buffer, size, ReturnLength=ctypes.byref(size_needed))
+    #    except WindowsError as e:
+    #        pass
+    #
+    #    size = size_needed.value + 0x1000
+    #    buffer = ctypes.c_buffer(size)
+    #    winproxy.NtQuerySystemInformation(16, buffer, size, ReturnLength=ctypes.byref(size_needed))
+    #
+    #    x = SYSTEM_HANDLE_INFORMATION.from_buffer(buffer)
+    #
+    #    class _GENERATED_SYSTEM_HANDLE_INFORMATION(ctypes.Structure):
+    #        _fields_ = [
+    #            ("HandleCount", ULONG),
+    #            ("Handles", SYSTEM_HANDLE * x.HandleCount),
+    #        ]
+    #    return _GENERATED_SYSTEM_HANDLE_INFORMATION.from_buffer_copy(buffer[:size_needed.value]).Handles[:]
+
     @utils.fixedpropety
     def bitness(self):
         """The bitness of the system
@@ -94,6 +128,10 @@ class System(object):
         if "PROCESSOR_ARCHITEW6432" in os.environ:
             return 64
         return 32
+
+    @utils.fixedpropety
+    def wmi(self):
+        return windows.wmi.WmiRequester()
 
     @staticmethod
     def enumerate_processes():
@@ -118,6 +156,10 @@ class System(object):
         while winproxy.Thread32Next(snap, thread_entry):
             threads.append(copy.copy(thread_entry))
         return threads
+
+
+
+
 
 
 class WinThread(THREADENTRY32, AutoHandle):
@@ -342,7 +384,7 @@ class Process(AutoHandle):
         try:
             yield addr
         finally:
-            windows.winproxy.VirtualFreeEx(self.handle, addr)
+            winproxy.VirtualFreeEx(self.handle, addr)
 
     def execute(self, code, parameter=0):
         """Execute some native code in the context of the process
@@ -397,8 +439,8 @@ class Process(AutoHandle):
 		"""
         buffer = ctypes.c_buffer(0x1024)
         try:
-            size = windows.winproxy.GetMappedFileNameA(self.handle, addr, buffer)
-        except windows.winproxy.Kernel32Error:
+            size = winproxy.GetMappedFileNameA(self.handle, addr, buffer)
+        except winproxy.Kernel32Error:
             return None
         return buffer[:size]
 
@@ -406,6 +448,11 @@ class Process(AutoHandle):
         """Read a ``CHAR`` at ``addr``"""
         sizeof_char = sizeof(CHAR)
         return struct.unpack("<B", self.read_memory(addr, sizeof_char))[0]
+
+    def read_short(self, addr):
+        """Read a ``SHORT`` at ``addr``"""
+        sizeof_short = sizeof(ctypes.c_short)
+        return struct.unpack("<H", self.read_memory(addr, sizeof_short))[0]
 
     def read_dword(self, addr):
         """Read a ``DWORD`` at ``addr``"""
@@ -450,7 +497,7 @@ class Process(AutoHandle):
         """write a byte at ``addr``"""
         return self.write_memory(addr, struct.pack("<B", byte))
 
-    def write_word(self, addr, word):
+    def write_short(self, addr, word):
         """write a word at ``addr``"""
         return self.write_memory(addr, struct.pack("<H", word))
 
@@ -522,6 +569,7 @@ class CurrentProcess(Process):
 
     allocator = native_exec.native_function.allocator
 
+    # Use RtlGetCurrentPeb ?
     def get_peb_builtin(self):
         if self.get_peb is not None:
             return self.get_peb
@@ -669,6 +717,11 @@ class WinProcess(PROCESSENTRY32, Process):
         return winproxy.OpenProcess(dwProcessId=self.pid)
 
     def __repr__(self):
+        try:
+            if self.is_exit:
+                return '<{0} "{1}" pid {2} (DEAD) at {3}>'.format(self.__class__.__name__, self.name, self.pid, hex(id(self)))
+        except WindowsError: # Cannot open process
+            pass
         return '<{0} "{1}" pid {2} at {3}>'.format(self.__class__.__name__, self.name, self.pid, hex(id(self)))
 
     def virtual_alloc(self, size):
@@ -780,12 +833,12 @@ class WinProcess(PROCESSENTRY32, Process):
         elif windows.current_process.bitness == 64 and self.bitness == 32:
             information_type = 26
             y = ULONGLONG()
-            windows.winproxy.NtQueryInformationProcess(self.handle, information_type, byref(y), sizeof(y))
+            winproxy.NtQueryInformationProcess(self.handle, information_type, byref(y), sizeof(y))
             peb_addr = y.value
         else:
             information_type = 0
             x = PROCESS_BASIC_INFORMATION()
-            windows.winproxy.NtQueryInformationProcess(self.handle, information_type, x)
+            winproxy.NtQueryInformationProcess(self.handle, information_type, x)
             peb_addr = ctypes.cast(x.PebBaseAddress, PVOID).value
         if peb_addr is None:
             raise ValueError("Could not get peb addr of process {0}".format(self.name))
@@ -814,7 +867,7 @@ class WinProcess(PROCESSENTRY32, Process):
         if windows.current_process.bitness == 64:
             information_type = 0
             x = PROCESS_BASIC_INFORMATION()
-            windows.winproxy.NtQueryInformationProcess(self.handle, information_type, x)
+            winproxy.NtQueryInformationProcess(self.handle, information_type, x)
             peb_addr = ctypes.cast(x.PebBaseAddress, PVOID).value
             return RemotePEB(peb_addr, self)
         else: #current is 32bits

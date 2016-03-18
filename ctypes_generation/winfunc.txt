@@ -970,3 +970,91 @@ BOOL WINAPI CryptCATAdminReleaseContext(
   _In_ HCATADMIN hCatAdmin,
   _In_ DWORD     dwFlags
 );
+
+DWORD WINAPI GetLogicalDriveStringsA(
+  _In_  DWORD  nBufferLength,
+  _Out_ LPCSTR lpBuffer
+);
+
+
+DWORD WINAPI GetLogicalDriveStringsW(
+  _In_  DWORD  nBufferLength,
+  _Out_ LPWSTR lpBuffer
+);
+
+
+
+BOOL WINAPI GetVolumeInformationA(
+  _In_opt_  LPCSTR lpRootPathName,
+  _Out_opt_ LPSTR  lpVolumeNameBuffer,
+  _In_      DWORD   nVolumeNameSize,
+  _Out_opt_ LPDWORD lpVolumeSerialNumber,
+  _Out_opt_ LPDWORD lpMaximumComponentLength,
+  _Out_opt_ LPDWORD lpFileSystemFlags,
+  _Out_opt_ LPSTR  lpFileSystemNameBuffer,
+  _In_      DWORD   nFileSystemNameSize
+);
+
+
+BOOL WINAPI GetVolumeInformationW(
+  _In_opt_  LPWSTR lpRootPathName,
+  _Out_opt_ LPWSTR  lpVolumeNameBuffer,
+  _In_      DWORD   nVolumeNameSize,
+  _Out_opt_ LPDWORD lpVolumeSerialNumber,
+  _Out_opt_ LPDWORD lpMaximumComponentLength,
+  _Out_opt_ LPDWORD lpFileSystemFlags,
+  _Out_opt_ LPWSTR  lpFileSystemNameBuffer,
+  _In_      DWORD   nFileSystemNameSize
+);
+
+
+BOOL WINAPI GetVolumeNameForVolumeMountPointA(
+  _In_  LPCSTR lpszVolumeMountPoint,
+  _Out_ LPCSTR  lpszVolumeName,
+  _In_  DWORD   cchBufferLength
+);
+
+
+BOOL WINAPI GetVolumeNameForVolumeMountPointW(
+  _In_  LPWSTR lpszVolumeMountPoint,
+  _Out_ LPWSTR  lpszVolumeName,
+  _In_  DWORD   cchBufferLength
+);
+
+UINT WINAPI GetDriveTypeA(
+  _In_opt_ LPCSTR lpRootPathName
+);
+
+UINT WINAPI GetDriveTypeW(
+  _In_opt_ LPWSTR lpRootPathName
+);
+
+DWORD WINAPI QueryDosDeviceA(
+  _In_opt_ LPCSTR lpDeviceName,
+  _Out_    LPCSTR  lpTargetPath,
+  _In_     DWORD   ucchMax
+);
+
+DWORD WINAPI QueryDosDeviceW(
+  _In_opt_ LPWSTR lpDeviceName,
+  _Out_    LPWSTR  lpTargetPath,
+  _In_     DWORD   ucchMax
+);
+
+NTSTATUS WINAPI NtQueryObject(
+  _In_opt_  HANDLE                   Handle,
+  _In_      OBJECT_INFORMATION_CLASS ObjectInformationClass,
+  _Out_opt_ PVOID                    ObjectInformation,
+  _In_      ULONG                    ObjectInformationLength,
+  _Out_opt_ PULONG                   ReturnLength
+);
+
+BOOL WINAPI DuplicateHandle(
+  _In_  HANDLE   hSourceProcessHandle,
+  _In_  HANDLE   hSourceHandle,
+  _In_  HANDLE   hTargetProcessHandle,
+  _Out_ LPHANDLE lpTargetHandle,
+  _In_  DWORD    dwDesiredAccess,
+  _In_  BOOL     bInheritHandle,
+  _In_  DWORD    dwOptions
+);

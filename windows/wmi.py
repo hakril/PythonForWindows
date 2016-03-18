@@ -136,7 +136,7 @@ class WmiRequester(object):
         self.initializiated = True
 
 
-    def select(self, frm, attrs):
+    def select(self, frm, attrs="*"):
         """Select `attrs` from ``frm``
 
             :rtype: list of dict

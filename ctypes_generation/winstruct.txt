@@ -344,6 +344,13 @@ typedef enum _SC_STATUS_TYPE {
     SC_STATUS_PROCESS_INFO      = 0
 } SC_STATUS_TYPE;
 
+typedef enum _OBJECT_INFORMATION_CLASS {
+    ObjectBasicInformation = 0,
+    ObjectNameInformation = 1,
+    ObjectTypeInformation = 2
+} OBJECT_INFORMATION_CLASS;
+
+
 typedef struct _LDR_DATA_TABLE_ENTRY {
     PVOID Reserved1[2];
     LIST_ENTRY InMemoryOrderLinks;
@@ -1723,3 +1730,34 @@ typedef struct CATALOG_INFO_
     DWORD                       cbStruct;
     WCHAR                       wszCatalogFile[MAX_PATH];
 } CATALOG_INFO;
+
+typedef struct _SYSTEM_HANDLE
+{
+    DWORD    dwProcessId;
+    BYTE     bObjectType;
+    BYTE     bFlags;
+    WORD     wValue;
+    PVOID    pAddress;
+    DWORD    GrantedAccess;
+}
+SYSTEM_HANDLE;
+
+
+typedef struct _SYSTEM_HANDLE_INFORMATION
+{
+    ULONG HandleCount;
+    SYSTEM_HANDLE Handles[1];
+} SYSTEM_HANDLE_INFORMATION, *PSYSTEM_HANDLE_INFORMATION;
+
+typedef struct __PUBLIC_OBJECT_TYPE_INFORMATION {
+    UNICODE_STRING TypeName;
+    ULONG Reserved [22];
+} PUBLIC_OBJECT_TYPE_INFORMATION, *PPUBLIC_OBJECT_TYPE_INFORMATION;
+
+typedef struct _PUBLIC_OBJECT_BASIC_INFORMATION {
+    ULONG Attributes;
+    ACCESS_MASK GrantedAccess;
+    ULONG HandleCount;
+    ULONG PointerCount;
+    ULONG Reserved[10];
+ } PUBLIC_OBJECT_BASIC_INFORMATION, *PPUBLIC_OBJECT_BASIC_INFORMATION;
