@@ -146,6 +146,18 @@ class System(object):
         return res
 
     @staticmethod
+    def enumerate_processes():
+        process_entry = PROCESSENTRY32()
+        process_entry.dwSize = ctypes.sizeof(process_entry)
+        snap = winproxy.CreateToolhelp32Snapshot(windef.TH32CS_SNAPPROCESS, 0)
+        winproxy.Process32First(snap, process_entry)
+        res = []
+        res.append(WinProcess._from_PROCESSENTRY32(process_entry))
+        while winproxy.Process32Next(snap, process_entry):
+            res.append(WinProcess._from_PROCESSENTRY32(process_entry))
+        return res
+
+    @staticmethod
     def enumerate_threads():
         thread_entry = WinThread()
         thread_entry.dwSize = ctypes.sizeof(thread_entry)
@@ -156,9 +168,6 @@ class System(object):
         while winproxy.Thread32Next(snap, thread_entry):
             threads.append(copy.copy(thread_entry))
         return threads
-
-
-
 
 
 
@@ -675,18 +684,33 @@ class CurrentProcess(Process):
             raise ValueError("Not a syswow process")
         return windows.syswow64.get_current_process_syswow_peb()
 
-class WinProcess(PROCESSENTRY32, Process):
+class WinProcess(Process):
     """A Process on the system"""
-    is_pythondll_injected = 0
-    is_remote_slave_running = False
+    def __init__(self, pid=None, handle=None, name=None, ppid=None):
+        if pid is None and handle is None:
+            raise ValueError("Need at lead <pid> or <handle> to create a {0}".format(type(self).__name))
+
+        if pid is not None:    self._pid = pid
+        if handle is not None: self._handle = handle
+        if name is not None:   self._name = name
+        if ppid is not None:   self._ppid = ppid
+
 
     @staticmethod
     def _from_handle(handle):
-        pid = winproxy.GetProcessId(handle)
-        proc = [p for p in windows.system.processes if p.pid == pid][0]
-        proc._handle = handle
-        dbgprint("Process {0} from handle {1}".format(proc, hex(handle)), "HANDLE")
-        return proc
+        #pid = winproxy.GetProcessId(handle)
+        #proc = [p for p in windows.system.processes if p.pid == pid][0]
+        #proc._handle = handle
+        #dbgprint("Process {0} from handle {1}".format(proc, hex(handle)), "HANDLE")
+        return WinProcess(handle=handle)
+
+    @classmethod
+    def _from_PROCESSENTRY32(cls, entry):
+        #print("_from_PROCESSENTRY32")
+        name = entry.szExeFile.decode()
+        pid = entry.th32ProcessID
+        ppid = entry.th32ParentProcessID
+        return WinProcess(pid=pid, name=name, ppid=ppid)
 
 
     @utils.fixedpropety
@@ -695,7 +719,10 @@ class WinProcess(PROCESSENTRY32, Process):
 
         :type: :class:`str`
 		"""
-        return self.szExeFile[:].decode()
+        buffer = ctypes.c_buffer(0x1024)
+        rsize = winproxy.GetProcessImageFileNameA(self.handle, buffer)
+        # GetProcessImageFileNameA returns the fullpath
+        return buffer[:49].decode().split("\\")[-1]
 
     @utils.fixedpropety
     def pid(self):
@@ -703,7 +730,7 @@ class WinProcess(PROCESSENTRY32, Process):
 
         :type: :class:`int`
 		"""
-        return self.th32ProcessID
+        return winproxy.GetProcessId(self.handle)
 
     @utils.fixedpropety
     def ppid(self):

@@ -1058,3 +1058,29 @@ BOOL WINAPI DuplicateHandle(
   _In_  BOOL     bInheritHandle,
   _In_  DWORD    dwOptions
 );
+
+DWORD WINAPI GetModuleBaseNameA(
+  _In_     HANDLE  hProcess,
+  _In_opt_ HMODULE hModule,
+  _Out_    LPCSTR  lpBaseName,
+  _In_     DWORD   nSize
+);
+
+DWORD WINAPI GetModuleBaseNameW(
+  _In_     HANDLE  hProcess,
+  _In_opt_ HMODULE hModule,
+  _Out_    LPWSTR  lpBaseName,
+  _In_     DWORD   nSize
+);
+
+DWORD WINAPI GetProcessImageFileNameA(
+  _In_  HANDLE hProcess,
+  _Out_ LPCSTR lpImageFileName,
+  _In_  DWORD  nSize
+);
+
+DWORD WINAPI GetProcessImageFileNameW(
+  _In_  HANDLE hProcess,
+  _Out_ LPWSTR lpImageFileName,
+  _In_  DWORD  nSize
+);

@@ -37,6 +37,11 @@ TODO:
         * What about ``NtWow64QueryVirtualMemory64`` ?
 
 
+CHANGELOG:
+
+    * NEW REGISTRY -> change examples and documentation
+    * WinProcess is not a PROCESSENTRY32 anymore (change doc)
+
 FIXME:
     - WMI
         - COM initialisation when injected in another process
@@ -47,3 +52,7 @@ FIXME:
     - winutils.create_process : use WinProcess._from_handle
 
     - Push("[ECX]") in simple_x64 as a "H" rex and i think it should not..
+
+RESSOURCE
+
+    * read http://www.codeproject.com/Articles/18975/Listing-Used-Files

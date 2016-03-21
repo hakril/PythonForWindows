@@ -517,30 +517,58 @@ def DuplicateHandle(hSourceProcessHandle, hSourceHandle, hTargetProcessHandle, l
 # TODO: might be in another DLL depending of version
 # Should handle this..
 
-@OptionalExport(Kernel32Proxy("GetMappedFileNameW"))
-def GetMappedFileNameW(hProcess, lpv, lpFilename, nSize=None):
+
+def GetMappedFileNameWWrapper(hProcess, lpv, lpFilename, nSize=None):
     if nSize is None:
         nSize = ctypes.sizeof(lpFilename)
     return GetMappedFileNameW.ctypes_function(hProcess, lpv, lpFilename, nSize)
+GetMappedFileNameW = OptionalExport(Kernel32Proxy("GetMappedFileNameW"))(GetMappedFileNameWWrapper)
 
-@OptionalExport(Kernel32Proxy("GetMappedFileNameA"))
-def GetMappedFileNameA(hProcess, lpv, lpFilename, nSize=None):
+
+def GetMappedFileNameAWrapper(hProcess, lpv, lpFilename, nSize=None):
     if nSize is None:
         nSize = ctypes.sizeof(lpFilename)
     return GetMappedFileNameA.ctypes_function(hProcess, lpv, lpFilename, nSize)
+GetMappedFileNameA = OptionalExport(Kernel32Proxy("GetMappedFileNameA"))(GetMappedFileNameAWrapper)
 
 if GetMappedFileNameA is None:
-    @PsapiProxy("GetMappedFileNameW")
-    def GetMappedFileNameW(hProcess, lpv, lpFilename, nSize=None):
-        if nSize is None:
-            nSize = ctypes.sizeof(lpFilename)
-        return GetMappedFileNameW.ctypes_function(hProcess, lpv, lpFilename, nSize)
+    GetMappedFileNameW = PsapiProxy("GetMappedFileNameW")(GetMappedFileNameWWrapper)
+    GetMappedFileNameA = PsapiProxy("GetMappedFileNameA")(GetMappedFileNameAWrapper)
 
-    @PsapiProxy("GetMappedFileNameA")
-    def GetMappedFileNameA(hProcess, lpv, lpFilename, nSize=None):
-        if nSize is None:
-            nSize = ctypes.sizeof(lpFilename)
-        return GetMappedFileNameA.ctypes_function(hProcess, lpv, lpFilename, nSize)
+
+def GetModuleBaseNameAWrapper(hProcess, hModule, lpBaseName, nSize=None):
+    if nSize is None:
+        nSize = len(lpBaseName)
+    return GetModuleBaseNameAWrapper.ctypes_function(hProcess, hModule, lpBaseName, nSize)
+GetModuleBaseNameA = OptionalExport(Kernel32Proxy("GetMappedFileNameA"))(GetModuleBaseNameAWrapper)
+
+
+def GetModuleBaseNameWWrapper(hProcess, hModule, lpBaseName, nSize=None):
+    if nSize is None:
+        nSize = len(lpBaseName)
+    return GetModuleBaseNameWWrapper.ctypes_function(hProcess, hModule, lpBaseName, nSize)
+GetModuleBaseNameA = OptionalExport(Kernel32Proxy("GetModuleBaseNameW"))(GetModuleBaseNameWWrapper)
+
+if GetModuleBaseNameA is None:
+    GetModuleBaseNameA = PsapiProxy("GetModuleBaseNameA")(GetModuleBaseNameAWrapper)
+    GetModuleBaseNameW = PsapiProxy("GetModuleBaseNameW")(GetModuleBaseNameWWrapper)
+
+
+def GetProcessImageFileNameAWrapper(hProcess, lpImageFileName, nSize=None):
+    if nSize is None:
+        nSize = len(lpImageFileName)
+    return GetProcessImageFileNameAWrapper.ctypes_function(hProcess, lpImageFileName, nSize)
+GetProcessImageFileNameA = OptionalExport(Kernel32Proxy("GetProcessImageFileNameA"))(GetProcessImageFileNameAWrapper)
+
+def GetProcessImageFileNameWWrapper(hProcess, lpImageFileName, nSize=None):
+    if nSize is None:
+        nSize = len(lpImageFileName)
+    return GetProcessImageFileNameWWrapper.ctypes_function(hProcess, lpImageFileName, nSize)
+GetProcessImageFileNameW = OptionalExport(Kernel32Proxy("GetProcessImageFileNameW"))(GetProcessImageFileNameWWrapper)
+
+if GetProcessImageFileNameA is None:
+    GetProcessImageFileNameA = PsapiProxy("GetProcessImageFileNameA")(GetProcessImageFileNameAWrapper)
+    GetProcessImageFileNameW = PsapiProxy("GetProcessImageFileNameW")(GetProcessImageFileNameWWrapper)
 
 # Debug API
 
