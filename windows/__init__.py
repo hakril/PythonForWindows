@@ -32,6 +32,7 @@ import windows.utils
 import windows.debug
 import windows.service
 import windows.wintrust
+import windows.volumes
 
 __all__ = ["system", 'current_process', 'current_thread']
 

@@ -1,5 +1,5 @@
 import windows
-import windows.winproxy
+from windows import winproxy
 import ctypes
 import socket
 import struct

@@ -7,7 +7,8 @@ import functools
 import windows
 import windows.native_exec.simple_x64 as x64
 from generated_def.winstructs import *
-from windows.winproxy import NeededParameter, OptionalExport, NtdllProxy, error_ntstatus
+from windows import winproxy
+from winproxy import NeededParameter, OptionalExport, NtdllProxy, error_ntstatus
 
 # Special code for syswow64 process
 CS_32bits = 0x23
@@ -181,7 +182,7 @@ def get_current_process_syswow_peb():
         bitness = 64
         def read_memory(self, addr, size):
             buffer_addr = ctypes.create_string_buffer(size)
-            windows.winproxy.NtWow64ReadVirtualMemory64(current_process.handle, addr, buffer_addr, size)
+            winproxy.NtWow64ReadVirtualMemory64(current_process.handle, addr, buffer_addr, size)
             return buffer_addr[:]
     peb_addr = get_current_process_syswow_peb_addr()
     return windows.winobject.RemotePEB64(peb_addr, CurrentProcessReadSyswow())
@@ -194,7 +195,7 @@ class ReadSyswow64Process(object):
 
         def read_memory(self, addr, size):
             buffer_addr = ctypes.create_string_buffer(size)
-            windows.winproxy.NtWow64ReadVirtualMemory64(self.target.handle, addr, buffer_addr, size)
+            winproxy.NtWow64ReadVirtualMemory64(self.target.handle, addr, buffer_addr, size)
             return buffer_addr[:]
 
 
@@ -237,7 +238,7 @@ class Syswow64ApiProxy(object):
         return python_proxy
 
 
-@Syswow64ApiProxy(windows.winproxy.NtCreateThreadEx)
+@Syswow64ApiProxy(winproxy.NtCreateThreadEx)
 def NtCreateThreadEx_32_to_64(ThreadHandle=None, DesiredAccess=0x1fffff, ObjectAttributes=0, ProcessHandle=NeededParameter, lpStartAddress=NeededParameter, lpParameter=NeededParameter, CreateSuspended=0, dwStackSize=0, Unknown1=0, Unknown2=0, Unknown3=0):
     if ThreadHandle is None:
         ThreadHandle = byref(HANDLE())
@@ -245,7 +246,7 @@ def NtCreateThreadEx_32_to_64(ThreadHandle=None, DesiredAccess=0x1fffff, ObjectA
 
 
 ProcessBasicInformation = 0
-@Syswow64ApiProxy(windows.winproxy.NtQueryInformationProcess)
+@Syswow64ApiProxy(winproxy.NtQueryInformationProcess)
 def NtQueryInformationProcess_32_to_64(ProcessHandle, ProcessInformationClass=ProcessBasicInformation, ProcessInformation=NeededParameter, ProcessInformationLength=0, ReturnLength=None):
     if ProcessInformation is not None and ProcessInformationLength == 0:
         ProcessInformationLength = ctypes.sizeof(ProcessInformation)
@@ -256,7 +257,7 @@ def NtQueryInformationProcess_32_to_64(ProcessHandle, ProcessInformationClass=Pr
     return NtQueryInformationProcess_32_to_64.ctypes_function(ProcessHandle, ProcessInformationClass, ProcessInformation, ProcessInformationLength, ReturnLength)
 
 
-@Syswow64ApiProxy(windows.winproxy.NtQueryInformationThread)
+@Syswow64ApiProxy(winproxy.NtQueryInformationThread)
 def NtQueryInformationThread_32_to_64(ThreadHandle, ThreadInformationClass, ThreadInformation, ThreadInformationLength=0, ReturnLength=None):
     if ReturnLength is None:
         ReturnLength = byref(ULONG())
@@ -266,7 +267,7 @@ def NtQueryInformationThread_32_to_64(ThreadHandle, ThreadInformationClass, Thre
 
 
 
-@Syswow64ApiProxy(windows.winproxy.NtQueryVirtualMemory)
+@Syswow64ApiProxy(winproxy.NtQueryVirtualMemory)
 def NtQueryVirtualMemory_32_to_64(ProcessHandle, BaseAddress, MemoryInformationClass=MemoryBasicInformation, MemoryInformation=NeededParameter, MemoryInformationLength=0, ReturnLength=None):
     if ReturnLength is None:
         ReturnLength = byref(ULONG())
@@ -277,16 +278,16 @@ def NtQueryVirtualMemory_32_to_64(ProcessHandle, BaseAddress, MemoryInformationC
     return NtQueryVirtualMemory_32_to_64.ctypes_function(ProcessHandle, BaseAddress, MemoryInformationClass, MemoryInformation, MemoryInformationLength, ReturnLength)
 
 
-@Syswow64ApiProxy(windows.winproxy.NtGetContextThread)
+@Syswow64ApiProxy(winproxy.NtGetContextThread)
 def NtGetContextThread_32_to_64(hThread, lpContext):
     if type(lpContext) == windows.exception.ECONTEXT64:
         lpContext = byref(lpContext)
     return NtGetContextThread_32_to_64.ctypes_function(hThread, lpContext)
 
-@Syswow64ApiProxy(windows.winproxy.LdrLoadDll)
+@Syswow64ApiProxy(winproxy.LdrLoadDll)
 def LdrLoadDll_32_to_64(PathToFile, Flags, ModuleFileName, ModuleHandle):
     return LdrLoadDll_32_to_64.ctypes_function(PathToFile, Flags, ModuleFileName, ModuleHandle)
 
-@Syswow64ApiProxy(windows.winproxy.NtSetContextThread)
+@Syswow64ApiProxy(winproxy.NtSetContextThread)
 def NtSetContextThread_32_to_64(hThread, lpContext):
     return NtSetContextThread_32_to_64.ctypes_function(hThread, lpContext)

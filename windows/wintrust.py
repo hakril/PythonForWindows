@@ -3,7 +3,7 @@ import struct
 import windows
 from  collections import namedtuple
 from windows.generated_def.winstructs import *
-from windows.winproxy import WinVerifyTrust
+from windows import winproxy
 
 IID_PACK = "<I", "<H", "<H", "<B", "<B", "<B", "<B", "<B", "<B", "<B", "<B"
 def get_IID_from_raw(raw):
@@ -70,25 +70,25 @@ def check_signature(filename):
     #win_trust_data.dwProvFlags  = 0x1000 + 0x10 + 0x800
     win_trust_data.tmp_union.pFile = ctypes.pointer(file_data)
 
-    x = WinVerifyTrust(None, ctypes.byref(WVTPolicyGUID), ctypes.byref(win_trust_data))
+    x = winproxy.WinVerifyTrust(None, ctypes.byref(WVTPolicyGUID), ctypes.byref(win_trust_data))
     win_trust_data.dwStateAction = WTD_STATEACTION_CLOSE
-    WinVerifyTrust(None, ctypes.byref(WVTPolicyGUID), ctypes.byref(win_trust_data))
+    winproxy.WinVerifyTrust(None, ctypes.byref(WVTPolicyGUID), ctypes.byref(win_trust_data))
     return x & 0xffffffff
 
 
 def get_catalog_for_filename(filename):
     ctx = HCATADMIN()
-    windows.winproxy.CryptCATAdminAcquireContext(ctypes.byref(ctx), DRIVER_ACTION_VERIFY, 0)
+    winproxy.CryptCATAdminAcquireContext(ctypes.byref(ctx), DRIVER_ACTION_VERIFY, 0)
     hash = get_file_hash(filename)
-    t = windows.winproxy.CryptCATAdminEnumCatalogFromHash(ctx, hash, len(hash), 0, None)
+    t = winproxy.CryptCATAdminEnumCatalogFromHash(ctx, hash, len(hash), 0, None)
     if t is None:
         return None
     tname = get_catalog_name_from_handle(t)
 
     while t is not None:
-        t = windows.winproxy.CryptCATAdminEnumCatalogFromHash(ctx, hash, len(hash), 0, ctypes.byref(HCATINFO(t)))
-    windows.winproxy.CryptCATAdminReleaseCatalogContext(ctx, t, 0)
-    windows.winproxy.CryptCATAdminReleaseContext(ctx, 0)
+        t = winproxy.CryptCATAdminEnumCatalogFromHash(ctx, hash, len(hash), 0, ctypes.byref(HCATINFO(t)))
+    winproxy.CryptCATAdminReleaseCatalogContext(ctx, t, 0)
+    winproxy.CryptCATAdminReleaseContext(ctx, 0)
     return tname
 
 
@@ -97,17 +97,17 @@ def get_file_hash(filename):
     handle = windows.utils.get_handle_from_file(f)
 
     size = DWORD(0)
-    x = windows.winproxy.CryptCATAdminCalcHashFromFileHandle(handle, ctypes.byref(size), None, 0)
+    x = winproxy.CryptCATAdminCalcHashFromFileHandle(handle, ctypes.byref(size), None, 0)
 
     buffer = (BYTE * size.value)()
-    x = windows.winproxy.CryptCATAdminCalcHashFromFileHandle(handle, ctypes.byref(size), buffer, 0)
+    x = winproxy.CryptCATAdminCalcHashFromFileHandle(handle, ctypes.byref(size), buffer, 0)
     return buffer
 
 
 def get_catalog_name_from_handle(handle):
     cat_info = CATALOG_INFO()
     cat_info.cbStruct = ctypes.sizeof(cat_info)
-    windows.winproxy.CryptCATCatalogInfoFromContext(handle, ctypes.byref(cat_info), 0)
+    winproxy.CryptCATCatalogInfoFromContext(handle, ctypes.byref(cat_info), 0)
     return cat_info.wszCatalogFile
 
 SignatureData = namedtuple("SignatureData", ["signed", "catalog", "catalogsigned"])

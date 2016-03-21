@@ -16,7 +16,7 @@ class LogicalDrive(object):
 
     @property
     def type(self):
-        t = windows.winproxy.GetDriveTypeA(self.name)
+        t = winproxy.GetDriveTypeA(self.name)
         return self.DRIVE_TYPE.get(t,t)
 
     @property
@@ -48,5 +48,5 @@ def get_info(drivename):
 def query_dos_device(name):
     size = 0x1000
     buffer = ctypes.c_buffer(size)
-    rsize = windows.winproxy.QueryDosDeviceA(name, buffer, size)
+    rsize = winproxy.QueryDosDeviceA(name, buffer, size)
     return buffer[:rsize].rstrip("\x00").split("\x00")

@@ -15,12 +15,13 @@ import windows.exception
 import windows.service
 import windows.volumes
 import windows.wmi
-import windows.winproxy as winproxy
+
 import windows.injection as injection
 import windows.native_exec as native_exec
 import windows.native_exec.simple_x86 as x86
 import windows.native_exec.simple_x64 as x64
 
+from  windows import winproxy
 from . import utils
 from windows.dbgprint import dbgprint
 from windows.generated_def.winstructs import *
