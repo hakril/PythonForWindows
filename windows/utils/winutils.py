@@ -70,7 +70,7 @@ def create_console():
     sys.stderr = console_stderr
 
 
-def create_process(path, dwCreationFlags=0, show_windows=False):
+def create_process(path, args=None, dwCreationFlags=0, show_windows=False):
     """A convenient wrapper arround :func:`windows.winproxy.CreateProcessA`"""
     proc_info = PROCESS_INFORMATION()
     lpStartupInfo = None
@@ -79,9 +79,11 @@ def create_process(path, dwCreationFlags=0, show_windows=False):
         StartupInfo.cb = ctypes.sizeof(StartupInfo)
         StartupInfo.dwFlags = 0
         lpStartupInfo = ctypes.byref(StartupInfo)
-    windows.winproxy.CreateProcessA(path, dwCreationFlags=dwCreationFlags, lpProcessInformation=ctypes.byref(proc_info), lpStartupInfo=lpStartupInfo)
-    proc = [p for p in windows.system.processes if p.pid == proc_info.dwProcessId][0]
-    return proc
+    lpCommandLine = None
+    if args:
+        lpCommandLine = (" ".join([str(a) for a in args]))
+    windows.winproxy.CreateProcessA(path, lpCommandLine=lpCommandLine, dwCreationFlags=dwCreationFlags, lpProcessInformation=ctypes.byref(proc_info), lpStartupInfo=lpStartupInfo)
+    return windows.winobject.WinProcess(pid=proc_info.dwProcessId, handle=proc_info.hProcess)
 
 
 def enable_privilege(lpszPrivilege, bEnablePrivilege):
@@ -168,6 +170,17 @@ def get_kernel_modules():
     modules = (SYSTEM_MODULE * buffer.ModulesCount).from_address(addressof(buffer) + SYSTEM_MODULE_INFORMATION.Modules.offset)
     return list(modules)
 
+
+# String stuff
+def ntstatus(code):
+    return windows.generated_def.ntstatus.NtStatusException(code)
+
+
+def get_shared_mapping(name, size=0x1000):
+    # TODO: real cod
+    h = windows.winproxy.CreateFileMappingA(INVALID_HANDLE_VALUE, dwMaximumSizeLow=size, lpName=name)
+    addr = windows.winproxy.MapViewOfFile(h, dwNumberOfBytesToMap=size)
+    return addr
 
 class VirtualProtected(object):
     """
