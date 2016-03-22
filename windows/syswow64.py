@@ -218,9 +218,13 @@ class Syswow64ApiProxy(object):
     def __init__(self, winproxy_function):
         self.winproxy_function = winproxy_function
         self.raw_call = None
-        self.params_name = [param[1] for param in winproxy_function.params]
+        if winproxy_function is not None:
+            self.params_name = [param[1] for param in winproxy_function.params]
 
     def __call__(self, python_proxy):
+        # handle winproxy_function is None (OptionalExport)
+        if self.winproxy_function is None:
+            return None
         def perform_call(*args):
             if len(self.params_name) != len(args):
                 print("ERROR:")
@@ -236,6 +240,7 @@ class Syswow64ApiProxy(object):
             return self.raw_call(*args)
         setattr(python_proxy, "ctypes_function", perform_call)
         return python_proxy
+
 
 
 @Syswow64ApiProxy(winproxy.NtCreateThreadEx)
