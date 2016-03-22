@@ -30,6 +30,7 @@ class PyHKey(object):
         self.fullname = self.surkey.fullname + "\\" + self.name if self.name else self.surkey.name
         self.sam = sam
         self._phkey = None
+        #self.phkey
 
     def __repr__(self):
         return '<PyHKey "{0}">'.format(self.fullname)
@@ -43,6 +44,7 @@ class PyHKey(object):
         except WindowsError as e:
             raise WindowsError("Could not open registry key <{0}>".format(self.fullname))
         return self._phkey
+
 
     @property
     def subkeys(self):
@@ -74,17 +76,42 @@ class PyHKey(object):
         data = _winreg.QueryValueEx(self.phkey, value_name)
         return KeyValue(value_name, data[0], data[1])
 
-    def open_subkey(self, name):
+    def _guess_value_type(self, value):
+        if isinstance(value, basestring):
+            return _winreg.REG_SZ
+        elif isinstance(value, [int, long]):
+            return _winreg.REG_DWORD
+        raise ValueError("Cannot guest registry type of value to set <{0}>".format(value))
+
+
+    def set(self, name, value, type=None):
+        if type is None:
+            type = self._guess_value_type(value)
+        return _winreg.SetValueEx(self.phkey, name, 0, type, value)
+
+
+    def open_subkey(self, name, sam=None):
         """Open the subkey ``name``
 
         :rtype: :class:`PyHKey`
         """
-        return PyHKey(self, name, self.sam)
+        if sam is None:
+            sam = self.sam
+        return PyHKey(self, name, sam)
 
     def reopen(self, new_sam):
         return PyHKey(self.surkey, self.name, new_sam)
 
-    __getitem__ = open_subkey
+
+    def __setitem__(self, name, value):
+        rtype = None
+        if not isinstance(value, (int, long, basestring)):
+            value, rtype = value
+        return self.set(name, value, rtype)
+
+    __getitem__ = get
+
+    __call__ = open_subkey
 
 
 class DummyPHKEY(object):
@@ -113,7 +140,7 @@ class Registry(object):
         "HKEY_USERS" : HKEY_USERS
     }
 
-    def __getitem__(self, name):
+    def __call__(self, name, sam=KEY_READ):
         """Get a registry key::
 
             registry[r"HKEY_LOCAL_MACHINE\\Software"]
@@ -129,4 +156,4 @@ class Registry(object):
         base_name, subkey = name.split("\\", 1)
         if base_name not in self.registry_base_keys:
             raise ValueError("Unknow registry base key <{0}>".format(base_name))
-        return self.registry_base_keys[base_name][subkey]
+        return self.registry_base_keys[base_name](subkey,  sam)
