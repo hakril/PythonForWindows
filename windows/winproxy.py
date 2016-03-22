@@ -174,6 +174,10 @@ class User32Proxy(ApiProxy):
     APIDLL = "user32"
     default_error_check = staticmethod(kernel32_error_check)
 
+class VersionProxy(ApiProxy):
+    APIDLL = "version"
+    default_error_check = staticmethod(kernel32_error_check)
+
 class OptionalExport(object):
     """used 'around' a Proxy decorator
        Should be used for export that are not available everywhere (ntdll internals | 32/64 bits stuff)
@@ -266,6 +270,10 @@ GetExitCodeProcess = TransparentKernel32Proxy("GetExitCodeProcess")
 GetProcessId = TransparentKernel32Proxy("GetProcessId")
 lstrcmpA = TransparentKernel32Proxy("lstrcmpA")
 lstrcmpW = TransparentKernel32Proxy("lstrcmpW")
+GetVersionExA = TransparentKernel32Proxy("GetVersionExA")
+GetVersionExW = TransparentKernel32Proxy("GetVersionExW")
+GetComputerNameA = TransparentKernel32Proxy("GetComputerNameA")
+GetComputerNameW = TransparentKernel32Proxy("GetComputerNameW")
 
 
 Wow64DisableWow64FsRedirection = OptionalExport(TransparentKernel32Proxy)("Wow64DisableWow64FsRedirection")
@@ -733,6 +741,15 @@ def AdjustTokenPrivileges(TokenHandle, DisableAllPrivileges=False, NewState=Need
     return AdjustTokenPrivileges.ctypes_function(TokenHandle, DisableAllPrivileges, NewState, BufferLength, PreviousState, ReturnLength)
 
 
+@Advapi32Proxy('LookupAccountSidA')
+def LookupAccountSidA(lpSystemName, lpSid, lpName, cchName, lpReferencedDomainName, cchReferencedDomainName, peUse):
+    return LookupAccountSidA.ctypes_function(lpSystemName, lpSid, lpName, cchName, lpReferencedDomainName, cchReferencedDomainName, peUse)
+
+
+@Advapi32Proxy('LookupAccountSidW')
+def LookupAccountSidW(lpSystemName, lpSid, lpName, cchName, lpReferencedDomainName, cchReferencedDomainName, peUse):
+    return LookupAccountSidW.ctypes_function(lpSystemName, lpSid, lpName, cchName, lpReferencedDomainName, cchReferencedDomainName, peUse)
+
 # Token stuff
 
 GetSidSubAuthorityCount = TransparentAdvapi32Proxy("GetSidSubAuthorityCount")
@@ -853,9 +870,6 @@ def CryptCATAdminReleaseContext(hCatAdmin, dwFlags):
     return CryptCATAdminReleaseContext.ctypes_function(hCatAdmin, dwFlags)
 
 
-
-
-
 # ## User32 stuff ## #
 
 EnumWindows = TransparentUser32Proxy('EnumWindows')
@@ -863,3 +877,43 @@ GetWindowTextA = TransparentUser32Proxy('GetWindowTextA', no_error_check)
 GetWindowTextW = TransparentUser32Proxy('GetWindowTextW', no_error_check)
 GetWindowModuleFileNameA = TransparentUser32Proxy('GetWindowModuleFileNameA', no_error_check)
 GetWindowModuleFileNameW = TransparentUser32Proxy('GetWindowModuleFileNameW', no_error_check)
+GetSystemMetrics = TransparentUser32Proxy('GetSystemMetrics', no_error_check)
+
+# ## Version stuff ## #
+
+@VersionProxy("GetFileVersionInfoA")
+def GetFileVersionInfoA(lptstrFilename, dwHandle=0, dwLen=None, lpData=NeededParameter):
+    if dwLen is None and lpData is not None:
+        dwLen = len(lpData)
+    return GetFileVersionInfoA.ctypes_function(lptstrFilename, dwHandle, dwLen, lpData)
+
+
+@VersionProxy("GetFileVersionInfoW")
+def GetFileVersionInfoW(lptstrFilename, dwHandle=0, dwLen=None, lpData=NeededParameter):
+    if dwLen is None and lpData is not None:
+        dwLen = len(lpData)
+    return GetFileVersionInfoA.ctypes_function(lptstrFilename, dwHandle, dwLen, lpData)
+
+
+@VersionProxy("GetFileVersionInfoSizeA")
+def GetFileVersionInfoSizeA(lptstrFilename, lpdwHandle=None):
+    if lpdwHandle is None:
+        lpdwHandle = ctypes.byref(DWORD())
+    return GetFileVersionInfoSizeA.ctypes_function(lptstrFilename, lpdwHandle)
+
+
+@VersionProxy("GetFileVersionInfoSizeW")
+def GetFileVersionInfoSizeW(lptstrFilename, lpdwHandle=None):
+    if lpdwHandle is None:
+        lpdwHandle = ctypes.byref(DWORD())
+    return GetFileVersionInfoSizeW.ctypes_function(lptstrFilename, lpdwHandle)
+
+
+@VersionProxy("VerQueryValueA")
+def VerQueryValueA(pBlock, lpSubBlock, lplpBuffer, puLen):
+    return VerQueryValueA.ctypes_function(pBlock, lpSubBlock, lplpBuffer, puLen)
+
+
+@VersionProxy("VerQueryValueW")
+def VerQueryValueW(pBlock, lpSubBlock, lplpBuffer, puLen):
+    return VerQueryValueW.ctypes_function(pBlock, lpSubBlock, lplpBuffer, puLen)

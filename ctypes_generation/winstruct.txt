@@ -350,6 +350,18 @@ typedef enum _OBJECT_INFORMATION_CLASS {
     ObjectTypeInformation = 2
 } OBJECT_INFORMATION_CLASS;
 
+typedef enum _SID_NAME_USE {
+  SidTypeUser            = 1,
+  SidTypeGroup           = 2,
+  SidTypeDomain          = 3,
+  SidTypeAlias           = 4,
+  SidTypeWellKnownGroup  = 5,
+  SidTypeDeletedAccount  = 6,
+  SidTypeInvalid         = 7,
+  SidTypeUnknown         = 8,
+  SidTypeComputer        = 9,
+  SidTypeLabel           = 10
+} SID_NAME_USE, *PSID_NAME_USE;
 
 typedef struct _LDR_DATA_TABLE_ENTRY {
     PVOID Reserved1[2];
@@ -829,6 +841,11 @@ typedef struct _SID_AND_ATTRIBUTES {
 typedef struct _TOKEN_MANDATORY_LABEL {
     SID_AND_ATTRIBUTES Label;
 } TOKEN_MANDATORY_LABEL, *PTOKEN_MANDATORY_LABEL;
+
+
+typedef struct _TOKEN_USER {
+    SID_AND_ATTRIBUTES User;
+} TOKEN_USER, *PTOKEN_USER;
 
 
 
