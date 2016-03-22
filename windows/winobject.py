@@ -134,6 +134,13 @@ class System(object):
     def wmi(self):
         return windows.wmi.WmiRequester()
 
+    @utils.fixedpropety
+    def computer_name(self):
+        size = DWORD(0x1000)
+        buf = ctypes.c_buffer(size.value)
+        winproxy.GetComputerNameA(buf, ctypes.byref(size))
+        return buf[:size.value]
+
     @staticmethod
     def enumerate_processes():
         process_entry = WinProcess()
@@ -169,6 +176,77 @@ class System(object):
         while winproxy.Thread32Next(snap, thread_entry):
             threads.append(copy.copy(thread_entry))
         return threads
+
+    @utils.fixedpropety
+    def version(self):
+        data = self.get_version()
+        result = data.dwMajorVersion, data.dwMinorVersion
+        if result == (6,2):
+            result_str = self.get_file_version("kernel32")
+            result_tup = [int(x) for x in result_str.split(".")]
+            result = tuple(result_tup[:2])
+        return result
+
+    @utils.fixedpropety
+    def version_name(self):
+        version = self.version
+        is_workstation = self.product_type == VER_NT_WORKSTATION
+        if version == (10, 0):
+            return ["Windows Server 2016, ""Windows 10"][is_workstation]
+        elif version == (6, 3):
+            return  ["Windows Server 2012 R2", "Windows 8.1"][is_workstation]
+        elif version == (6, 2):
+            return ["Windows Server 2012", "Windows 8"][is_workstation]
+        elif version == (6, 1):
+            return ["Windows Server 2008 R2", "Windows 7"][is_workstation]
+        elif version == (6, 0):
+            return ["Windows Server 2008", "Windows Vista"][is_workstation]
+        elif version == (5, 2):
+            metric = winproxy.GetSystemMetrics(SM_SERVERR2)
+            if is_workstation:
+                if self.bitness == 64:
+                    return "Windows XP Professional x64 Edition"
+                else:
+                    return "TODO: version (5.2) + is_workstation + bitness == 32"
+            elif metric != 0:
+                return "Windows Server 2003 R2"
+            else:
+                return "Windows Server 2003"
+        elif version == (5, 1):
+            return "Windows XP"
+        elif version == (5, 0):
+            return "Windows 2000"
+        else:
+            return "Unknow Windows <version={0} | is_workstation={1}>".format(version, is_workstation)
+
+    @utils.fixedpropety
+    def product_type(self):
+        version_map = {x:x for x in [VER_NT_WORKSTATION, VER_NT_DOMAIN_CONTROLLER, VER_NT_SERVER]}
+        version = self.get_version()
+        return version_map.get(version.wProductType, version.wProductType)
+
+
+    def get_version(self):
+        data = windows.generated_def.OSVERSIONINFOEXA()
+        data.dwOSVersionInfoSize = ctypes.sizeof(data)
+        windows.winproxy.GetVersionExA(ctypes.cast(ctypes.pointer(data), ctypes.POINTER(windows.generated_def.OSVERSIONINFOA)))
+        return data
+
+
+    def get_file_version(self, name):
+        size = winproxy.GetFileVersionInfoSizeA(name)
+        buf = ctypes.c_buffer(size)
+        winproxy.GetFileVersionInfoA(name, 0, size, buf)
+
+        bufptr = PVOID()
+        bufsize = UINT()
+        winproxy.VerQueryValueA(buf, "\\VarFileInfo\\Translation", ctypes.byref(bufptr), ctypes.byref(bufsize))
+        bufstr = ctypes.cast(bufptr, LPCSTR)
+        tup = struct.unpack("<HH", bufstr.value[:4])
+        req = "{0:04x}{1:04x}".format(*tup)
+        winproxy.VerQueryValueA(buf, "\\StringFileInfo\\{0}\\ProductVersion".format(req), ctypes.byref(bufptr), ctypes.byref(bufsize))
+        bufstr = ctypes.cast(bufptr, LPCSTR)
+        return bufstr.value
 
 
 
@@ -526,7 +604,7 @@ class Process(AutoHandle):
             :type: :class:`Token`
 		"""
         token_handle = HANDLE()
-        winproxy.OpenProcessToken(self.handle, TOKEN_ALL_ACCESS, byref(token_handle))
+        winproxy.OpenProcessToken(self.handle, TOKEN_QUERY, byref(token_handle))
         return Token(token_handle.value)
 
 
@@ -939,6 +1017,30 @@ class Token(AutoHandle):
         elevation = TOKEN_ELEVATION()
         self.get_informations(TokenElevation, elevation)
         return bool(elevation.TokenIsElevated)
+
+    @property
+    def token_user(self):
+        buffer_size = self.get_required_information_size(TokenUser)
+        buffer = ctypes.c_buffer(buffer_size)
+        self.get_informations(TokenUser, buffer)
+        return ctypes.cast(ctypes.byref(buffer), POINTER(TOKEN_USER))[0]
+
+    def computername(self):
+        return self._user_and_computer_name()[1]
+
+    def username(self):
+        return self._user_and_computer_name()[0]
+
+    def _user_and_computer_name(self):
+        tok_usr = self.token_user
+        sid = tok_usr.User.Sid
+        usernamesize = DWORD(0x1000)
+        computernamesize = DWORD(0x1000)
+        username = ctypes.c_buffer(usernamesize.value)
+        computername = ctypes.c_buffer(computernamesize.value)
+        peUse = DWORD()
+        winproxy.LookupAccountSidA(None, sid, username, byref(usernamesize), computername, byref(computernamesize), peUse)
+        return username[:usernamesize.value], computername[:computernamesize.value]
 
     def get_informations(self, info_type, data):
         cbsize = DWORD()
