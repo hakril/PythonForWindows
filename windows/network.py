@@ -1,9 +1,9 @@
 import windows
-from windows import winproxy
 import ctypes
 import socket
 import struct
 
+from windows import winproxy
 from windows.generated_def.winstructs import *
 from windows.generated_def.windef import *
 
@@ -76,7 +76,7 @@ class TCP4Connection(MIB_TCPROW_OWNER_PID):
         closing.dwLocalPort = self.dwLocalPort
         closing.dwRemoteAddr = self.dwRemoteAddr
         closing.dwRemotePort = self.dwRemotePort
-        return windows.winproxy.SetTcpEntry(ctypes.byref(closing))
+        return winproxy.SetTcpEntry(ctypes.byref(closing))
 
     def __repr__(self):
         if not self.established:
@@ -175,11 +175,11 @@ class Network(object):
     def _get_tcp_ipv4_sockets():
         size = ctypes.c_uint(0)
         try:
-            windows.winproxy.GetExtendedTcpTable(None, ctypes.byref(size), ulAf=AF_INET)
-        except windows.winproxy.IphlpapiError:
+            winproxy.GetExtendedTcpTable(None, ctypes.byref(size), ulAf=AF_INET)
+        except winproxy.IphlpapiError:
             pass  # Allow us to set size to the needed value
         buffer = (ctypes.c_char * size.value)()
-        windows.winproxy.GetExtendedTcpTable(buffer, ctypes.byref(size), ulAf=AF_INET)
+        winproxy.GetExtendedTcpTable(buffer, ctypes.byref(size), ulAf=AF_INET)
         t = get_MIB_TCPTABLE_OWNER_PID_from_buffer(buffer)
         return list(t.table)
 
@@ -187,11 +187,11 @@ class Network(object):
     def _get_tcp_ipv6_sockets():
         size = ctypes.c_uint(0)
         try:
-            windows.winproxy.GetExtendedTcpTable(None, ctypes.byref(size), ulAf=AF_INET6)
-        except windows.winproxy.IphlpapiError:
+            winproxy.GetExtendedTcpTable(None, ctypes.byref(size), ulAf=AF_INET6)
+        except winproxy.IphlpapiError:
             pass  # Allow us to set size to the needed value
         buffer = (ctypes.c_char * size.value)()
-        windows.winproxy.GetExtendedTcpTable(buffer, ctypes.byref(size), ulAf=AF_INET6)
+        winproxy.GetExtendedTcpTable(buffer, ctypes.byref(size), ulAf=AF_INET6)
         t = get_MIB_TCP6TABLE_OWNER_PID_from_buffer(buffer)
         return list(t.table)
 

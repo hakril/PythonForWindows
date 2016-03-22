@@ -1,19 +1,18 @@
 import os.path
+from collections import defaultdict
 
 import windows
-import windows.winproxy as winproxy
-
-from windows.winobject import WinProcess, WinThread
-from windows.dbgprint import dbgprint
-
 import windows.native_exec.simple_x86 as x86
 import windows.native_exec.simple_x64 as x64
 
+from windows.winobject import WinProcess, WinThread
+from windows.dbgprint import dbgprint
+from windows import winproxy
 from windows.generated_def.winstructs import *
 from .generated_def import windef
 from windows.exception import VectoredException
 
-from collections import defaultdict
+
 
 STANDARD_BP = "BP"
 HARDWARE_EXEC_BP = "HXBP"
@@ -484,6 +483,7 @@ class Breakpoint(object):
         """Called when breakpoint is hit"""
         pass
 
+
 class ProxyBreakpoint(Breakpoint):
     def __init__(self, target, addr, type):
         self.target = target
@@ -493,6 +493,7 @@ class ProxyBreakpoint(Breakpoint):
     def trigger(self, dbg, exception):
         return self.target(dbg, exception)
 
+
 class HXBreakpoint(Breakpoint):
     """An hardware-execution breakpoint (type == ``HARDWARE_EXEC_BP``)"""
     type = HARDWARE_EXEC_BP
@@ -500,9 +501,6 @@ class HXBreakpoint(Breakpoint):
     def apply_to_target(self, target):
         return isinstance(target, WinThread)
 
-
-
-import ctypes
 
 class LocalDebugger(object):
     """A debugger interface around :func:`AddVectoredExceptionHandler`"""
@@ -513,7 +511,7 @@ class LocalDebugger(object):
         self._hxbp_breakpoint = defaultdict(dict)
 
         self.callback_vectored = VectoredException(self.callback)
-        windows.winproxy.AddVectoredExceptionHandler(0, self.callback_vectored)
+        winproxy.AddVectoredExceptionHandler(0, self.callback_vectored)
         self.setup_hxbp_callback_vectored =  VectoredException(self.setup_hxbp_callback)
         self.hxbp_info = None
         self.code = windows.native_exec.create_function("\xcc\xc3", [PVOID])
