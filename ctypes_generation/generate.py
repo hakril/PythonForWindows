@@ -2,11 +2,13 @@ import sys
 import os
 import os.path
 import re
+import glob
 
 import dummy_wintypes
 import struct_parser
 import func_parser
 import def_parser
+import com_parser
 
 
 
@@ -29,6 +31,8 @@ TYPE_EQUIVALENCE = [
     ('INT', 'c_int'),
     ('UCHAR', 'c_char'),
     ('CSHORT', 'c_short'),
+    ('VARTYPE', 'c_ushort'),
+    ('BSTR', 'c_wchar_p'),
     ('PUCHAR', 'POINTER(UCHAR)'),
     ('double', 'c_double'),
     ('FARPROC', 'PVOID'),
@@ -42,6 +46,7 @@ TYPE_EQUIVALENCE = [
     ('LARGE_INTEGER', 'LONGLONG'),
     ('PLARGE_INTEGER', 'POINTER(LARGE_INTEGER)'),
     ('DWORD64', 'ULONG64'),
+    ('SCODE', 'LONG'),
     ('PULONG64', 'POINTER(ULONG64)'),
     ('PUINT', 'POINTER(UINT)'),
     ('PHANDLE', 'POINTER(HANDLE)'),
@@ -54,6 +59,8 @@ TYPE_EQUIVALENCE = [
     ('ACCESS_MASK', 'DWORD'),
     ('REGSAM', 'ACCESS_MASK'),
     ('SECURITY_CONTEXT_TRACKING_MODE', 'BOOLEAN'),
+    ("DISPID", "LONG"),
+    ("MEMBERID", "DISPID"),
     # Will be changed at import time
     ('LPCONTEXT', 'PVOID'),
     ('HCERTSTORE', 'PVOID'),
@@ -63,13 +70,19 @@ TYPE_EQUIVALENCE = [
 
 # For functions returning void
 TYPE_EQUIVALENCE.append(('VOID', 'DWORD'))
+# TRICHE
+TYPE_EQUIVALENCE.append(('ITypeInfo', 'PVOID'))
+
 
 known_type = dummy_wintypes.names + list([x[0] for x in TYPE_EQUIVALENCE])
+known_type += ["void"]
+
 
 FUNC_FILE = "winfunc.txt"
 STRUCT_FILE = "winstruct.txt"
 DEF_FILE = "windef.txt"
 NTSTATUS_FILE = "ntstatus.txt"
+COM_INTERFACE_DIR_GLOB = "com/*.txt"
 
 GENERATED_STRUCT_FILE = "winstructs"
 GENERATED_FUNC_FILE = "winfuncs"
@@ -107,6 +120,32 @@ def verif_funcs_type(funcs, structs, enums):
                 param_type = param_type[len("POINTER("): -1]
             if param_type not in known_type and param_type not in all_struct_name:
                 raise ValueError("UNKNOW PARAM TYPE {0}".format(param_type))
+
+
+def verif_com_interface_type(vtbls, struc, enum):
+    all_struct_name = get_all_struct_name(structs, enums)
+    all_interface_name = []
+
+    #ALSO accept void
+    for vtbl in vtbls:
+        if not vtbl.name.endswith("Vtbl"):
+            raise ValueError("Com interface are expected to finish by <Vtbl> got <{0}".format(vtbl.name))
+        all_interface_name.append(vtbl.name.rstrip("Vtbl"))
+
+    for vtbl in vtbls:
+        #print(vtbl)
+        for method in vtbl.methods:
+            #print("Checking ret type <{0}>".format(method.ret_type))
+            ret_type = method.ret_type
+            if ret_type not in known_type and ret_type not in all_struct_name + all_interface_name:
+                raise ValueError("UNKNOW RET TYPE {0}".format(ret_type))
+            for arg in method.args:
+                #print("Checking arg type <{0}>".format(arg.type))
+                param_type = arg.type
+                if param_type not in known_type and param_type not in all_struct_name + all_interface_name:
+                    #if param_type != "ITypeInfo":
+                    raise ValueError("UNKNOW PARAM TYPE {0}".format(param_type))
+
 
 def check_in_define(name, defs):
     return any(name == d.name for d in defs)
@@ -200,11 +239,50 @@ def generate_struct_ctypes(structs, enums):
 
     return ctypes_str
 
+
+com_interface_header = """
+from windows.simple_com import *
+import ctypes
+"""
+
+com_interface_template = """
+class {0}(COMInterface):
+    _functions_ = {{
+{1}
+    }}
+"""
+
+com_interface_method_template = """ "{0}": ctypes.WINFUNCTYPE({1}),"""
+
+def generate_com_interface_ctype(vtbls):
+    print(vtbls)
+    define = []
+    for vtbl in vtbls:
+        methods_string = []
+        for method in vtbl.methods:
+            args_to_define = method.args[1:] #ctypes doesnt not need the This
+            #import pdb;pdb.set_trace()
+            methods_string.append(com_interface_method_template.format(method.name, ", ".join([method.ret_type] + [arg.type for arg in args_to_define])))
+        #import pdb;pdb.set_trace()
+        define.append((com_interface_template.format(vtbl.name, "\n".join(methods_string))))
+    return "\n".join(define)
+
 def write_to_out_file(name, data):
     for out_dir in OUT_DIRS:
         f = open("{0}/{1}.py".format(out_dir, name), 'w')
         f.write(data)
         f.close()
+
+
+def parse_com_interfaces(filenames):
+    res = []
+    for filename in filenames:
+        print("Parsing COM from <{0}>".format(filename))
+        data = open(filename).read()
+        vtbl = com_parser.WinComParser(data).parse()
+        res.append(vtbl)
+    return res
+
 
 def_code  = open(DEF_FILE, 'r').read()
 funcs_code = open(FUNC_FILE, 'r').read()
@@ -214,9 +292,11 @@ defs = def_parser.WinDefParser(def_code).parse()
 funcs = func_parser.WinFuncParser(funcs_code).parse()
 structs, enums = struct_parser.WinStructParser(structs_code).parse()
 
+vtbls = parse_com_interfaces(glob.glob(COM_INTERFACE_DIR_GLOB))
 
 validate_structs(structs, enums, defs)
 verif_funcs_type(funcs, structs, enums)
+verif_com_interface_type(vtbls, structs, enums)
 
 
 # Create Flags for ntstatus
@@ -229,6 +309,11 @@ defs = nt_status_defs + defs
 defs_ctypes = generate_defs_ctypes(defs)
 funcs_ctypes = generate_funcs_ctypes(funcs)
 structs_ctypes = generate_struct_ctypes(structs, enums)
+com_interface_ctypes = generate_com_interface_ctype(vtbls)
+
+f = open("yolo.py", "w")
+f.write(com_interface_ctypes)
+f.close()
 
 for out_dir in OUT_DIRS:
     if not os.path.exists(out_dir):

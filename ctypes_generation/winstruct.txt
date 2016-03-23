@@ -363,6 +363,31 @@ typedef enum _SID_NAME_USE {
   SidTypeLabel           = 10
 } SID_NAME_USE, *PSID_NAME_USE;
 
+typedef enum NET_FW_PROFILE_TYPE2_ {
+  NET_FW_PROFILE2_DOMAIN	= 0x1,
+  NET_FW_PROFILE2_PRIVATE = 0x2,
+  NET_FW_PROFILE2_PUBLIC	= 0x4,
+  NET_FW_PROFILE2_ALL = 0x7fffffff
+} NET_FW_PROFILE_TYPE2;
+
+typedef enum NET_FW_ACTION_ {
+    NET_FW_ACTION_BLOCK = 0,
+    NET_FW_ACTION_ALLOW = 1,
+    NET_FW_ACTION_MAX   = 2
+}   NET_FW_ACTION;
+
+typedef enum NET_FW_MODIFY_STATE_ {
+    NET_FW_MODIFY_STATE_OK  = 0,
+    NET_FW_MODIFY_STATE_GP_OVERRIDE = 1 ,
+    NET_FW_MODIFY_STATE_INBOUND_BLOCKED = 2
+}   NET_FW_MODIFY_STATE;
+
+typedef enum NET_FW_RULE_DIRECTION_ {
+    NET_FW_RULE_DIR_IN  = 1,
+    NET_FW_RULE_DIR_OUT = 2 ,
+    NET_FW_RULE_DIR_MAX = 3
+}   NET_FW_RULE_DIRECTION;
+
 typedef struct _LDR_DATA_TABLE_ENTRY {
     PVOID Reserved1[2];
     LIST_ENTRY InMemoryOrderLinks;
@@ -1278,7 +1303,126 @@ typedef struct _GUID {
     USHORT Data2;
     USHORT Data3;
     UCHAR  Data4[ 8 ];
-} GUID;
+} GUID, IID, *REFIID;
+
+
+
+struct _TMP_signscale {
+    BYTE scale;
+    BYTE sign;
+};
+
+struct _TMP_lowmid {
+    ULONG Lo32;
+    ULONG Mid32;
+};
+
+union TMP_signscale_union {
+    _TMP_signscale s;
+    USHORT signscale;
+};
+
+union TMP_lowmid_union {
+    _TMP_lowmid s;
+    ULONGLONG Lo64;
+};
+
+typedef struct tagDEC {
+    USHORT wReserved;
+    TMP_signscale_union u1;
+    ULONG  Hi32;
+    TMP_signscale_union u2;
+} DECIMAL;
+
+
+typedef struct __tagBRECORD {
+    PVOID pvRecord;
+    PVOID pRecInfo;
+} _tagBRECORD;
+
+
+union TMP_variant_sub_union{
+    LONGLONG llVal;
+    LONG lVal;
+    BYTE bVal;
+    SHORT iVal;
+    FLOAT fltVal;
+    DOUBLE dblVal;
+    VARIANT_BOOL boolVal;
+    SCODE scode;
+    BSTR bstrVal;
+    PVOID punkVal;
+    PVOID pdispVal;
+    SAFEARRAY *parray;
+    BYTE *pbVal;
+    SHORT *piVal;
+    LONG *plVal;
+    LONGLONG *pllVal;
+    FLOAT *pfltVal;
+    DOUBLE *pdblVal;
+    VARIANT_BOOL *pboolVal;
+    SCODE *pscode;
+    BSTR *pbstrVal;
+    PVOID byref;
+    CHAR cVal;
+    USHORT uiVal;
+    ULONG ulVal;
+    ULONGLONG ullVal;
+    INT intVal;
+    UINT uintVal;
+    CHAR *pcVal;
+    USHORT *puiVal;
+    ULONG *pulVal;
+    ULONGLONG *pullVal;
+    INT *pintVal;
+    UINT *puintVal;
+    _tagBRECORD __VARIANT_NAME_4;
+};
+
+typedef enum tagTYPEKIND {
+    TKIND_ENUM  = 0,
+    TKIND_RECORD    = 1 ,
+    TKIND_MODULE    = 2 ,
+    TKIND_INTERFACE = 3 ,
+    TKIND_DISPATCH  = 4 ,
+    TKIND_COCLASS   = 5 ,
+    TKIND_ALIAS = 6 ,
+    TKIND_UNION = 7 ,
+    TKIND_MAX   = 8
+} TYPEKIND;
+
+
+
+
+
+typedef struct __tagVARIANT {
+    VARTYPE vt;
+    WORD wReserved1;
+    WORD wReserved2;
+    WORD wReserved3;
+    TMP_variant_sub_union __VARIANT_NAME_3;
+} _tagVARIANT, VARIANT, VARIANTARG, *LPVARIANT, *LPVARIANTARG;
+
+
+typedef struct tagDISPPARAMS {
+    VARIANTARG *rgvarg;
+    DISPID *rgdispidNamedArgs;
+    UINT cArgs;
+    UINT cNamedArgs;
+} 	DISPPARAMS;
+
+typedef struct tagEXCEPINFO {
+    WORD wCode;
+    WORD wReserved;
+    BSTR bstrSource;
+    BSTR bstrDescription;
+    BSTR bstrHelpFile;
+    DWORD dwHelpContext;
+    ULONG_PTR pvReserved;
+    ULONG_PTR pfnDeferredFillIn;
+    SCODE scode;
+} EXCEPINFO;
+
 
 typedef struct _CRYPTOAPI_BLOB {
     DWORD   cbData;
@@ -1798,3 +1942,4 @@ typedef struct _PUBLIC_OBJECT_BASIC_INFORMATION {
   DWORD DataLength;
   DWORD DataOffset;
 } EVENTLOGRECORD, *PEVENTLOGRECORD;
+

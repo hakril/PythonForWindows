@@ -14,7 +14,7 @@ class WinStructParser(Parser):
     def parse_def(self):
         if self.peek() == KeywordToken("struct"):
             discard = self.next_token()
-            
+
         def_type_tok  = self.assert_token_type(NameToken)
         def_type = WinStructType(def_type_tok.value)
         if type(self.peek()) == StarToken:
@@ -26,7 +26,7 @@ class WinStructParser(Parser):
         if type(self.peek()) == ColonToken:
             self.next_token()
             return (def_type, def_name, 1)
-        
+
         number_rep = self.parse_array()
         self.assert_token_type(ColonToken)
         return (def_type, def_name, number_rep)
@@ -65,7 +65,7 @@ class WinStructParser(Parser):
             else:
                 if assigned_value:
                     raise ParsingError("Enum {0} mix def with and without equal".format(enum_name))
-                
+
             res_enum.add_enum_entry(i, name.value)
             if not type(self.peek()) == CloseBracketToken:
                 self.assert_token_type(CommaToken)
@@ -75,13 +75,17 @@ class WinStructParser(Parser):
         #other_name = self.assert_token_type(NameToken).value
         #res_enum.add_typedef(other_name)
         #self.assert_token_type(ColonToken)
-        return res_enum    
-        
-        
-        
+        return res_enum
+
+
+
     def parse_winstruct(self):
-        self.assert_keyword("typedef")
-        
+        is_typedef = False
+        peeked = self.peek()
+        if peeked == KeywordToken("typedef"):
+            self.assert_keyword("typedef")
+            is_typedef = True
+
         def_type = self.assert_token_type(KeywordToken)
         if def_type.value == "enum":
             return self.parse_enum()
@@ -93,14 +97,17 @@ class WinStructParser(Parser):
             raise ParsingError("Expecting union or struct got <{0}> instead".format(def_type.value))
         struct_name = self.assert_token_type(NameToken)
         self.assert_token_type(OpenBracketToken)
-    
+
         result = WinDefType(struct_name.value)
 
         while type(self.peek()) != CloseBracketToken:
             tok_type, tok_name, nb_rep = self.parse_def()
             result.add_field((tok_type, tok_name.value, nb_rep))
         self.assert_token_type(CloseBracketToken)
-        self.parse_typedef(result)
+        if is_typedef:
+            self.parse_typedef(result)
+        else:
+            self.assert_token_type(ColonToken)
         return result
 
     def parse(self):
@@ -115,7 +122,7 @@ class WinStructParser(Parser):
             else:
                 raise ValueError("Unknow returned type {0}".format(x))
         return strucs, enums
-            
+
 def dbg_lexer(data):
     for i in Lexer(data).token_generation():
         print i
@@ -125,9 +132,9 @@ def dbg_parser(data):
 
 def dbg_validate(data):
     return validate_structs(Parser(data).parse())
-    
-       
+
+
 if __name__ == "__main__":
     import sys
-    data = open(sys.argv[1], 'r').read()
-    ctypes_code = generate_ctypes(data)
+    #data = open(sys.argv[1], 'r').read()
+    #ctypes_code = generate_ctypes(data)
