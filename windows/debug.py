@@ -2,15 +2,18 @@ import os.path
 from collections import defaultdict
 
 import windows
+import windows.winobject.exception as winexception
 import windows.native_exec.simple_x86 as x86
 import windows.native_exec.simple_x64 as x64
 
-from windows.winobject import WinProcess, WinThread
+from windows.winobject.process import WinProcess, WinThread
 from windows.dbgprint import dbgprint
 from windows import winproxy
 from windows.generated_def.winstructs import *
 from .generated_def import windef
-from windows.exception import VectoredException
+
+
+from windows.winobject.exception import VectoredException
 
 
 
@@ -245,9 +248,9 @@ class Debugger(object):
         self._update_debugger_state(debug_event)
 
         if windows.current_process.bitness == 32:
-            exception.__class__ = windows.exception.EEXCEPTION_DEBUG_INFO32
+            exception.__class__ = winexception.EEXCEPTION_DEBUG_INFO32
         else:
-            exception.__class__ = windows.exception.EEXCEPTION_DEBUG_INFO64
+            exception.__class__ = winexception.EEXCEPTION_DEBUG_INFO64
 
         excp_code = exception.ExceptionRecord.ExceptionCode
         excp_addr = exception.ExceptionRecord.ExceptionAddress
@@ -428,7 +431,7 @@ class Debugger(object):
            The default behaviour is to return ``DBG_CONTINUE`` for the known exception code
            and ``DBG_EXCEPTION_NOT_HANDLED`` else
         """
-        if not exception.ExceptionRecord.ExceptionCode in windows.exception.exception_name_by_value:
+        if not exception.ExceptionRecord.ExceptionCode in winexception.exception_name_by_value:
             return DBG_EXCEPTION_NOT_HANDLED
         return DBG_CONTINUE
 
@@ -510,9 +513,9 @@ class LocalDebugger(object):
         self._reput_breakpoint = {}
         self._hxbp_breakpoint = defaultdict(dict)
 
-        self.callback_vectored = VectoredException(self.callback)
+        self.callback_vectored = winexception.VectoredException(self.callback)
         winproxy.AddVectoredExceptionHandler(0, self.callback_vectored)
-        self.setup_hxbp_callback_vectored =  VectoredException(self.setup_hxbp_callback)
+        self.setup_hxbp_callback_vectored =  winexception.VectoredException(self.setup_hxbp_callback)
         self.hxbp_info = None
         self.code = windows.native_exec.create_function("\xcc\xc3", [PVOID])
         self.veh_depth = 0
@@ -590,7 +593,7 @@ class LocalDebugger(object):
         """Called on exception"""
         print(self.get_exception_code())
         windows.current_process.exit()
-        if not self.get_exception_code() in windows.exception.exception_name_by_value:
+        if not self.get_exception_code() in winexception.exception_name_by_value:
             return windef.EXCEPTION_CONTINUE_SEARCH
         return windef.EXCEPTION_CONTINUE_EXECUTION
 
@@ -710,7 +713,7 @@ class LocalDebugger(object):
             return
 
         self.data = addr
-        with windows.exception.VectoredExceptionHandler(1, self.setup_hxbp_callback):
+        with winexception.VectoredExceptionHandler(1, self.setup_hxbp_callback):
             x = self.code()
             if x is None:
                 raise ValueError("Could not setup HXBP")
@@ -733,7 +736,7 @@ class LocalDebugger(object):
                 raise ValueError("Could not setup HXBP")
             return
         self.data = addr
-        with windows.exception.VectoredExceptionHandler(1, self.remove_hxbp_callback):
+        with winexception.VectoredExceptionHandler(1, self.remove_hxbp_callback):
             x = self.code()
             if x is None:
                 raise ValueError("Could not remove HXBP")

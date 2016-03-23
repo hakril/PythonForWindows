@@ -14,5 +14,5 @@ setup(
     license = 'BSD',
     keywords = 'windows python',
     url = '',
-    packages = ['windows', 'windows.generated_def', 'windows.native_exec', 'windows.utils'],
+    packages = ['windows', 'windows.generated_def', 'windows.native_exec', 'windows.utils', 'windows.winobject'],
 )

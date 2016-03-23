@@ -185,7 +185,7 @@ def get_current_process_syswow_peb():
             winproxy.NtWow64ReadVirtualMemory64(current_process.handle, addr, buffer_addr, size)
             return buffer_addr[:]
     peb_addr = get_current_process_syswow_peb_addr()
-    return windows.winobject.RemotePEB64(peb_addr, CurrentProcessReadSyswow())
+    return windows.winobject.process.RemotePEB64(peb_addr, CurrentProcessReadSyswow())
 
 
 class ReadSyswow64Process(object):
@@ -285,7 +285,7 @@ def NtQueryVirtualMemory_32_to_64(ProcessHandle, BaseAddress, MemoryInformationC
 
 @Syswow64ApiProxy(winproxy.NtGetContextThread)
 def NtGetContextThread_32_to_64(hThread, lpContext):
-    if type(lpContext) == windows.exception.ECONTEXT64:
+    if type(lpContext) == windows.winobject.exception.ECONTEXT64:
         lpContext = byref(lpContext)
     return NtGetContextThread_32_to_64.ctypes_function(hThread, lpContext)
 

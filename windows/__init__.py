@@ -11,9 +11,12 @@ Exported:
     current_thread : :class:`windows.winobject.CurrentThread`
 """
 
-from . import winproxy
-from .utils import VirtualProtected
-from .winobject import System, CurrentProcess, CurrentThread
+from windows import winproxy
+from windows import winobject
+
+from winobject.system import System
+from winobject.process import CurrentProcess, CurrentThread
+
 
 system = System()
 current_process = CurrentProcess()
@@ -26,18 +29,14 @@ del CurrentThread
 # Late import: other imports should go here
 # Do not move it: risk of circular import
 
-import windows.exception
-import windows.wmi
 import windows.utils
 import windows.debug
-import windows.service
 import windows.wintrust
-import windows.volumes
+import windows.syswow64
 
 __all__ = ["system", 'current_process', 'current_thread']
 
 import os
-
 if bool(os.environ.get("SPHINX_BUILD", 0)):
     # I know it's shameful
     # But it's the only way I can think of right now to get a full class

@@ -83,7 +83,7 @@ def create_process(path, args=None, dwCreationFlags=0, show_windows=False):
     if args:
         lpCommandLine = (" ".join([str(a) for a in args]))
     windows.winproxy.CreateProcessA(path, lpCommandLine=lpCommandLine, dwCreationFlags=dwCreationFlags, lpProcessInformation=ctypes.byref(proc_info), lpStartupInfo=lpStartupInfo)
-    return windows.winobject.WinProcess(pid=proc_info.dwProcessId, handle=proc_info.hProcess)
+    return windows.winobject.process.WinProcess(pid=proc_info.dwProcessId, handle=proc_info.hProcess)
 
 
 def enable_privilege(lpszPrivilege, bEnablePrivilege):

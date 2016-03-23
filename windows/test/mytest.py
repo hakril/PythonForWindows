@@ -57,7 +57,8 @@ def Calc64(dwCreationFlags=0, exit_code=0):
         calc = pop_calc_64(dwCreationFlags)
         yield calc
     finally:
-        calc.exit(exit_code)
+        if "calc" in locals():
+            calc.exit(exit_code)
 
 @contextmanager
 def Calc32(dwCreationFlags=0, exit_code=0):
@@ -65,7 +66,33 @@ def Calc32(dwCreationFlags=0, exit_code=0):
         calc = pop_calc_32(dwCreationFlags)
         yield calc
     finally:
-        calc.exit(exit_code)
+        if "calc" in locals():
+            calc.exit(exit_code)
+
+class SystemTestCase(unittest.TestCase):
+    def test_version(self):
+        return windows.system.version
+
+    def test_version_name(self):
+        return windows.system.version_name
+
+    def test_computer_name(self):
+        return windows.system.computer_name
+
+    def test_services(self):
+        return windows.system.services
+
+    def test_logicaldrives(self):
+        return windows.system.logicaldrives
+
+    def test_processes(self):
+        return windows.system.processes
+
+    def test_threads(self):
+        return windows.system.threads
+
+    def test_wmi(self):
+        return windows.system.wmi.select("Win32_Process", "*")
 
 
 class WindowsTestCase(unittest.TestCase):
@@ -732,6 +759,7 @@ class DebuggerTestCase(unittest.TestCase):
 
 if __name__ == '__main__':
     alltests = unittest.TestSuite()
+    alltests.addTest(unittest.makeSuite(SystemTestCase))
     alltests.addTest(unittest.makeSuite(WindowsTestCase))
     alltests.addTest(unittest.makeSuite(WindowsAPITestCase))
     alltests.addTest(unittest.makeSuite(DebuggerTestCase))
