@@ -67,7 +67,7 @@ class EqualToken(NoValueToken):
     pass
 
 class Lexer(object):
-    keywords = ["typedef", "struct", "enum", "union"]
+    keywords = ["typedef", "struct", "enum", "union", "const"]
 
     token_chr = {"*" : StarToken, "[" : OpenSquareBracketToken, "]" : CloseSquareBracketToken,
                     "{" : OpenBracketToken, "}" : CloseBracketToken, ";" : ColonToken,

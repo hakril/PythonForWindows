@@ -47,6 +47,7 @@ TYPE_EQUIVALENCE = [
     ('PLARGE_INTEGER', 'POINTER(LARGE_INTEGER)'),
     ('DWORD64', 'ULONG64'),
     ('SCODE', 'LONG'),
+    ('CIMTYPE', 'LONG'),
     ('PULONG64', 'POINTER(ULONG64)'),
     ('PUINT', 'POINTER(UINT)'),
     ('PHANDLE', 'POINTER(HANDLE)'),
@@ -122,6 +123,8 @@ def verif_funcs_type(funcs, structs, enums):
                 raise ValueError("UNKNOW PARAM TYPE {0}".format(param_type))
 
 
+yolo_struct = [x[:-4] for x in  os.listdir(r"C:\Users\hakril\Documents\Work\COM\dump")]
+
 def verif_com_interface_type(vtbls, struc, enum):
     all_struct_name = get_all_struct_name(structs, enums)
     all_interface_name = []
@@ -130,7 +133,7 @@ def verif_com_interface_type(vtbls, struc, enum):
     for vtbl in vtbls:
         if not vtbl.name.endswith("Vtbl"):
             raise ValueError("Com interface are expected to finish by <Vtbl> got <{0}".format(vtbl.name))
-        all_interface_name.append(vtbl.name.rstrip("Vtbl"))
+        all_interface_name.append(vtbl.name[:-len("Vtbl")])
 
     for vtbl in vtbls:
         #print(vtbl)
@@ -144,6 +147,11 @@ def verif_com_interface_type(vtbls, struc, enum):
                 param_type = arg.type
                 if param_type not in known_type and param_type not in all_struct_name + all_interface_name:
                     #if param_type != "ITypeInfo":
+                    if param_type in yolo_struct:
+                        print("Ned to extract <{0}> from dump".format(param_type))
+                        import shutil
+                        #shutil.copy(r"C:\Users\hakril\Documents\Work\COM\dump\{0}.txt".format(param_type), "com")
+                        continue
                     raise ValueError("UNKNOW PARAM TYPE {0}".format(param_type))
 
 
@@ -252,20 +260,38 @@ class {0}(COMInterface):
     }}
 """
 
+com_interface_comment_template = """ #{0} -> {1}"""
 com_interface_method_template = """ "{0}": ctypes.WINFUNCTYPE({1}),"""
 
 def generate_com_interface_ctype(vtbls):
     print(vtbls)
     define = []
+    all_name = [vtbl.name.strip("Vtbl") for vtbl in vtbls]
     for vtbl in vtbls:
         methods_string = []
         for method in vtbl.methods:
             args_to_define = method.args[1:] #ctypes doesnt not need the This
             #import pdb;pdb.set_trace()
-            methods_string.append(com_interface_method_template.format(method.name, ", ".join([method.ret_type] + [arg.type for arg in args_to_define])))
+            str_args = []
+            methods_string.append(com_interface_comment_template.format(method.name, ", ".join([("*"* arg.byreflevel) + arg.name +":"+arg.type for arg in args_to_define])))
+            for arg in args_to_define:
+                type = arg.type
+                byreflevel = arg.byreflevel
+                if type in all_name:
+                    type = "PVOID"
+                    byreflevel -= 1
+                if type == "void":
+                    type = "PVOID"
+                    if byreflevel == 0:
+                        raise ValueError("{0}.{1} take a parameter <void>".format(vtbl.name, method.name))
+                    byreflevel -= 1
+                for i in range(byreflevel):
+                    type = "POINTER({0})".format(type)
+                str_args.append(type)
+            methods_string.append(com_interface_method_template.format(method.name, ", ".join([method.ret_type] + str_args)))
         #import pdb;pdb.set_trace()
         define.append((com_interface_template.format(vtbl.name, "\n".join(methods_string))))
-    return "\n".join(define)
+    return com_interface_header + "\n".join(define)
 
 def write_to_out_file(name, data):
     for out_dir in OUT_DIRS:

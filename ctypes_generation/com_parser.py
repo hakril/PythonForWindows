@@ -56,8 +56,8 @@ def initial_processing( data):
     return outs.read()
 
 class WinComParser(Parser):
-    PARAM_INFO =  ["__RPC__deref_out", "__RPC__in", "__RPC__deref_out_opt", "__RPC__out"]
-    PARAM_INFO_WITH_VALUE = ["__RPC__in_ecount"]
+    PARAM_INFO =  ["__RPC__deref_out", "__RPC__in", "__RPC__deref_out_opt", "__RPC__out", "__RPC__in_opt", "__RPC__deref_opt_inout_opt"]
+    PARAM_INFO_WITH_VALUE = ["__RPC__in_ecount", "__RPC__out_ecount_part", "__RPC__in_ecount_full"]
 
     def __init__(self, data):
         data = initial_processing(data)
@@ -82,6 +82,8 @@ class WinComParser(Parser):
                 while type(self.peek()) != CloseParenthesisToken:
                     self.next_token()
                 self.next_token()
+        if self.peek() == KeywordToken("const"):
+            self.next_token()
         type_name = self.assert_token_type(NameToken)
 
         while type(self.peek()) == StarToken:
