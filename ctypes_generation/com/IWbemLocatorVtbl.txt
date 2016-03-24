@@ -1,0 +1,29 @@
+typedef struct IWbemLocatorVtbl
+{
+    BEGIN_INTERFACE
+
+    HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+        IWbemLocator * This,
+        /* [in] */ REFIID riid,
+        /* [annotation][iid_is][out] */
+        __RPC__deref_out  void **ppvObject);
+
+    ULONG ( STDMETHODCALLTYPE *AddRef )(
+        IWbemLocator * This);
+
+    ULONG ( STDMETHODCALLTYPE *Release )(
+        IWbemLocator * This);
+
+    HRESULT ( STDMETHODCALLTYPE *ConnectServer )(
+        IWbemLocator * This,
+        /* [in] */ const BSTR strNetworkResource,
+        /* [in] */ const BSTR strUser,
+        /* [in] */ const BSTR strPassword,
+        /* [in] */ const BSTR strLocale,
+        /* [in] */ long lSecurityFlags,
+        /* [in] */ const BSTR strAuthority,
+        /* [in] */ IWbemContext *pCtx,
+        /* [out] */ IWbemServices **ppNamespace);
+
+    END_INTERFACE
+} IWbemLocatorVtbl;

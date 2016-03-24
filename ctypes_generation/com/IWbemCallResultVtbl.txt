@@ -1,0 +1,38 @@
+typedef struct IWbemCallResultVtbl
+{
+    BEGIN_INTERFACE
+
+    HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+        __RPC__in IWbemCallResult * This,
+        /* [in] */ __RPC__in REFIID riid,
+        /* [annotation][iid_is][out] */
+        __RPC__deref_out  void **ppvObject);
+
+    ULONG ( STDMETHODCALLTYPE *AddRef )(
+        __RPC__in IWbemCallResult * This);
+
+    ULONG ( STDMETHODCALLTYPE *Release )(
+        __RPC__in IWbemCallResult * This);
+
+    HRESULT ( STDMETHODCALLTYPE *GetResultObject )(
+        __RPC__in IWbemCallResult * This,
+        /* [in] */ long lTimeout,
+        /* [out] */ __RPC__deref_out_opt IWbemClassObject **ppResultObject);
+
+    HRESULT ( STDMETHODCALLTYPE *GetResultString )(
+        __RPC__in IWbemCallResult * This,
+        /* [in] */ long lTimeout,
+        /* [out] */ __RPC__deref_out_opt BSTR *pstrResultString);
+
+    HRESULT ( STDMETHODCALLTYPE *GetResultServices )(
+        __RPC__in IWbemCallResult * This,
+        /* [in] */ long lTimeout,
+        /* [out] */ __RPC__deref_out_opt IWbemServices **ppServices);
+
+    HRESULT ( STDMETHODCALLTYPE *GetCallStatus )(
+        __RPC__in IWbemCallResult * This,
+        /* [in] */ long lTimeout,
+        /* [out] */ __RPC__out long *plStatus);
+
+    END_INTERFACE
+} IWbemCallResultVtbl;

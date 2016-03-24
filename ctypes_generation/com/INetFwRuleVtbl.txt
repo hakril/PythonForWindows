@@ -1,0 +1,191 @@
+typedef struct INetFwRuleVtbl
+{
+    BEGIN_INTERFACE
+
+    HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+        INetFwRule * This,
+        /* [in] */ REFIID riid,
+        /* [annotation][iid_is][out] */
+        __RPC__deref_out  void **ppvObject);
+
+    ULONG ( STDMETHODCALLTYPE *AddRef )(
+        INetFwRule * This);
+
+    ULONG ( STDMETHODCALLTYPE *Release )(
+        INetFwRule * This);
+
+    HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )(
+        INetFwRule * This,
+        /* [out] */ UINT *pctinfo);
+
+    HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )(
+        INetFwRule * This,
+        /* [in] */ UINT iTInfo,
+        /* [in] */ LCID lcid,
+        /* [out] */ ITypeInfo **ppTInfo);
+
+    HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )(
+        INetFwRule * This,
+        /* [in] */ REFIID riid,
+        /* [size_is][in] */ LPOLESTR *rgszNames,
+        /* [range][in] */ UINT cNames,
+        /* [in] */ LCID lcid,
+        /* [size_is][out] */ DISPID *rgDispId);
+
+    /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )(
+        INetFwRule * This,
+        /* [in] */ DISPID dispIdMember,
+        /* [in] */ REFIID riid,
+        /* [in] */ LCID lcid,
+        /* [in] */ WORD wFlags,
+        /* [out][in] */ DISPPARAMS *pDispParams,
+        /* [out] */ VARIANT *pVarResult,
+        /* [out] */ EXCEPINFO *pExcepInfo,
+        /* [out] */ UINT *puArgErr);
+
+    /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Name )(
+        INetFwRule * This,
+        /* [retval][out] */ BSTR *name);
+
+    /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Name )(
+        INetFwRule * This,
+        /* [in] */ BSTR name);
+
+    /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Description )(
+        INetFwRule * This,
+        /* [retval][out] */ BSTR *desc);
+
+    /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Description )(
+        INetFwRule * This,
+        /* [in] */ BSTR desc);
+
+    /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_ApplicationName )(
+        INetFwRule * This,
+        /* [retval][out] */ BSTR *imageFileName);
+
+    /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_ApplicationName )(
+        INetFwRule * This,
+        /* [in] */ BSTR imageFileName);
+
+    /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_ServiceName )(
+        INetFwRule * This,
+        /* [retval][out] */ BSTR *serviceName);
+
+    /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_ServiceName )(
+        INetFwRule * This,
+        /* [in] */ BSTR serviceName);
+
+    /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Protocol )(
+        INetFwRule * This,
+        /* [retval][out] */ LONG *protocol);
+
+    /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Protocol )(
+        INetFwRule * This,
+        /* [in] */ LONG protocol);
+
+    /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_LocalPorts )(
+        INetFwRule * This,
+        /* [retval][out] */ BSTR *portNumbers);
+
+    /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_LocalPorts )(
+        INetFwRule * This,
+        /* [in] */ BSTR portNumbers);
+
+    /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_RemotePorts )(
+        INetFwRule * This,
+        /* [retval][out] */ BSTR *portNumbers);
+
+    /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_RemotePorts )(
+        INetFwRule * This,
+        /* [in] */ BSTR portNumbers);
+
+    /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_LocalAddresses )(
+        INetFwRule * This,
+        /* [retval][out] */ BSTR *localAddrs);
+
+    /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_LocalAddresses )(
+        INetFwRule * This,
+        /* [in] */ BSTR localAddrs);
+
+    /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_RemoteAddresses )(
+        INetFwRule * This,
+        /* [retval][out] */ BSTR *remoteAddrs);
+
+    /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_RemoteAddresses )(
+        INetFwRule * This,
+        /* [in] */ BSTR remoteAddrs);
+
+    /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_IcmpTypesAndCodes )(
+        INetFwRule * This,
+        /* [retval][out] */ BSTR *icmpTypesAndCodes);
+
+    /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_IcmpTypesAndCodes )(
+        INetFwRule * This,
+        /* [in] */ BSTR icmpTypesAndCodes);
+
+    /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Direction )(
+        INetFwRule * This,
+        /* [retval][out] */ NET_FW_RULE_DIRECTION *dir);
+
+    /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Direction )(
+        INetFwRule * This,
+        /* [in] */ NET_FW_RULE_DIRECTION dir);
+
+    /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Interfaces )(
+        INetFwRule * This,
+        /* [retval][out] */ VARIANT *interfaces);
+
+    /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Interfaces )(
+        INetFwRule * This,
+        /* [in] */ VARIANT interfaces);
+
+    /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_InterfaceTypes )(
+        INetFwRule * This,
+        /* [retval][out] */ BSTR *interfaceTypes);
+
+    /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_InterfaceTypes )(
+        INetFwRule * This,
+        /* [in] */ BSTR interfaceTypes);
+
+    /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Enabled )(
+        INetFwRule * This,
+        /* [retval][out] */ VARIANT_BOOL *enabled);
+
+    /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Enabled )(
+        INetFwRule * This,
+        /* [in] */ VARIANT_BOOL enabled);
+
+    /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Grouping )(
+        INetFwRule * This,
+        /* [retval][out] */ BSTR *context);
+
+    /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Grouping )(
+        INetFwRule * This,
+        /* [in] */ BSTR context);
+
+    /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Profiles )(
+        INetFwRule * This,
+        /* [retval][out] */ long *profileTypesBitmask);
+
+    /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Profiles )(
+        INetFwRule * This,
+        /* [in] */ long profileTypesBitmask);
+
+    /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_EdgeTraversal )(
+        INetFwRule * This,
+        /* [retval][out] */ VARIANT_BOOL *enabled);
+
+    /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_EdgeTraversal )(
+        INetFwRule * This,
+        /* [in] */ VARIANT_BOOL enabled);
+
+    /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Action )(
+        INetFwRule * This,
+        /* [retval][out] */ NET_FW_ACTION *action);
+
+    /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Action )(
+        INetFwRule * This,
+        /* [in] */ NET_FW_ACTION action);
+
+    END_INTERFACE
+} INetFwRuleVtbl;

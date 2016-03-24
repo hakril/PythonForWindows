@@ -1,0 +1,153 @@
+typedef struct INetFwPolicy2Vtbl
+{
+    BEGIN_INTERFACE
+
+    HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+        INetFwPolicy2 * This,
+        /* [in] */ REFIID riid,
+        /* [annotation][iid_is][out] */
+        __RPC__deref_out  void **ppvObject);
+
+    ULONG ( STDMETHODCALLTYPE *AddRef )(
+        INetFwPolicy2 * This);
+
+    ULONG ( STDMETHODCALLTYPE *Release )(
+        INetFwPolicy2 * This);
+
+    HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )(
+        INetFwPolicy2 * This,
+        /* [out] */ UINT *pctinfo);
+
+    HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )(
+        INetFwPolicy2 * This,
+        /* [in] */ UINT iTInfo,
+        /* [in] */ LCID lcid,
+        /* [out] */ ITypeInfo **ppTInfo);
+
+    HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )(
+        INetFwPolicy2 * This,
+        /* [in] */ REFIID riid,
+        /* [size_is][in] */ LPOLESTR *rgszNames,
+        /* [range][in] */ UINT cNames,
+        /* [in] */ LCID lcid,
+        /* [size_is][out] */ DISPID *rgDispId);
+
+    /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )(
+        INetFwPolicy2 * This,
+        /* [in] */ DISPID dispIdMember,
+        /* [in] */ REFIID riid,
+        /* [in] */ LCID lcid,
+        /* [in] */ WORD wFlags,
+        /* [out][in] */ DISPPARAMS *pDispParams,
+        /* [out] */ VARIANT *pVarResult,
+        /* [out] */ EXCEPINFO *pExcepInfo,
+        /* [out] */ UINT *puArgErr);
+
+    /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentProfileTypes )(
+        INetFwPolicy2 * This,
+        /* [retval][out] */ long *profileTypesBitmask);
+
+    /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_FirewallEnabled )(
+        INetFwPolicy2 * This,
+        /* [in] */ NET_FW_PROFILE_TYPE2 profileType,
+        /* [retval][out] */ VARIANT_BOOL *enabled);
+
+    /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_FirewallEnabled )(
+        INetFwPolicy2 * This,
+        /* [in] */ NET_FW_PROFILE_TYPE2 profileType,
+        /* [in] */ VARIANT_BOOL enabled);
+
+    /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_ExcludedInterfaces )(
+        INetFwPolicy2 * This,
+        /* [in] */ NET_FW_PROFILE_TYPE2 profileType,
+        /* [retval][out] */ VARIANT *interfaces);
+
+    /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_ExcludedInterfaces )(
+        INetFwPolicy2 * This,
+        /* [in] */ NET_FW_PROFILE_TYPE2 profileType,
+        /* [in] */ VARIANT interfaces);
+
+    /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_BlockAllInboundTraffic )(
+        INetFwPolicy2 * This,
+        /* [in] */ NET_FW_PROFILE_TYPE2 profileType,
+        /* [retval][out] */ VARIANT_BOOL *Block);
+
+    /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_BlockAllInboundTraffic )(
+        INetFwPolicy2 * This,
+        /* [in] */ NET_FW_PROFILE_TYPE2 profileType,
+        /* [in] */ VARIANT_BOOL Block);
+
+    /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_NotificationsDisabled )(
+        INetFwPolicy2 * This,
+        /* [in] */ NET_FW_PROFILE_TYPE2 profileType,
+        /* [retval][out] */ VARIANT_BOOL *disabled);
+
+    /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_NotificationsDisabled )(
+        INetFwPolicy2 * This,
+        /* [in] */ NET_FW_PROFILE_TYPE2 profileType,
+        /* [in] */ VARIANT_BOOL disabled);
+
+    /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_UnicastResponsesToMulticastBroadcastDisabled )(
+        INetFwPolicy2 * This,
+        /* [in] */ NET_FW_PROFILE_TYPE2 profileType,
+        /* [retval][out] */ VARIANT_BOOL *disabled);
+
+    /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_UnicastResponsesToMulticastBroadcastDisabled )(
+        INetFwPolicy2 * This,
+        /* [in] */ NET_FW_PROFILE_TYPE2 profileType,
+        /* [in] */ VARIANT_BOOL disabled);
+
+    /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Rules )(
+        INetFwPolicy2 * This,
+        /* [retval][out] */ INetFwRules **rules);
+
+    /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_ServiceRestriction )(
+        INetFwPolicy2 * This,
+        /* [retval][out] */ INetFwServiceRestriction **ServiceRestriction);
+
+    /* [id] */ HRESULT ( STDMETHODCALLTYPE *EnableRuleGroup )(
+        INetFwPolicy2 * This,
+        /* [in] */ long profileTypesBitmask,
+        /* [in] */ BSTR group,
+        /* [in] */ VARIANT_BOOL enable);
+
+    /* [id] */ HRESULT ( STDMETHODCALLTYPE *IsRuleGroupEnabled )(
+        INetFwPolicy2 * This,
+        /* [in] */ long profileTypesBitmask,
+        /* [in] */ BSTR group,
+        /* [retval][out] */ VARIANT_BOOL *enabled);
+
+    /* [id] */ HRESULT ( STDMETHODCALLTYPE *RestoreLocalFirewallDefaults )(
+        INetFwPolicy2 * This);
+
+    /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_DefaultInboundAction )(
+        INetFwPolicy2 * This,
+        /* [in] */ NET_FW_PROFILE_TYPE2 profileType,
+        /* [retval][out] */ NET_FW_ACTION *action);
+
+    /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_DefaultInboundAction )(
+        INetFwPolicy2 * This,
+        /* [in] */ NET_FW_PROFILE_TYPE2 profileType,
+        /* [in] */ NET_FW_ACTION action);
+
+    /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_DefaultOutboundAction )(
+        INetFwPolicy2 * This,
+        /* [in] */ NET_FW_PROFILE_TYPE2 profileType,
+        /* [retval][out] */ NET_FW_ACTION *action);
+
+    /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_DefaultOutboundAction )(
+        INetFwPolicy2 * This,
+        /* [in] */ NET_FW_PROFILE_TYPE2 profileType,
+        /* [in] */ NET_FW_ACTION action);
+
+    /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_IsRuleGroupCurrentlyEnabled )(
+        INetFwPolicy2 * This,
+        /* [in] */ BSTR group,
+        /* [retval][out] */ VARIANT_BOOL *enabled);
+
+    /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_LocalPolicyModifyState )(
+        INetFwPolicy2 * This,
+        /* [retval][out] */ NET_FW_MODIFY_STATE *modifyState);
+
+    END_INTERFACE
+} INetFwPolicy2Vtbl;

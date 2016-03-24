@@ -1,0 +1,54 @@
+typedef struct IWbemQualifierSetVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IWbemQualifierSet * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            __RPC__deref_out  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IWbemQualifierSet * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IWbemQualifierSet * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *Get )( 
+            IWbemQualifierSet * This,
+            /* [string][in] */ LPCWSTR wszName,
+            /* [in] */ long lFlags,
+            /* [unique][in][out] */ VARIANT *pVal,
+            /* [unique][in][out] */ long *plFlavor);
+        
+        HRESULT ( STDMETHODCALLTYPE *Put )( 
+            IWbemQualifierSet * This,
+            /* [string][in] */ LPCWSTR wszName,
+            /* [in] */ VARIANT *pVal,
+            /* [in] */ long lFlavor);
+        
+        HRESULT ( STDMETHODCALLTYPE *Delete )( 
+            IWbemQualifierSet * This,
+            /* [string][in] */ LPCWSTR wszName);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetNames )( 
+            IWbemQualifierSet * This,
+            /* [in] */ long lFlags,
+            /* [out] */ SAFEARRAY * *pNames);
+        
+        HRESULT ( STDMETHODCALLTYPE *BeginEnumeration )( 
+            IWbemQualifierSet * This,
+            /* [in] */ long lFlags);
+        
+        HRESULT ( STDMETHODCALLTYPE *Next )( 
+            IWbemQualifierSet * This,
+            /* [in] */ long lFlags,
+            /* [unique][in][out] */ BSTR *pstrName,
+            /* [unique][in][out] */ VARIANT *pVal,
+            /* [unique][in][out] */ long *plFlavor);
+        
+        HRESULT ( STDMETHODCALLTYPE *EndEnumeration )( 
+            IWbemQualifierSet * This);
+        
+        END_INTERFACE
+    } IWbemQualifierSetVtbl;

@@ -1,0 +1,68 @@
+typedef struct INetFwRulesVtbl
+{
+    BEGIN_INTERFACE
+
+    HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+        INetFwRules * This,
+        /* [in] */ REFIID riid,
+        /* [annotation][iid_is][out] */
+        __RPC__deref_out  void **ppvObject);
+
+    ULONG ( STDMETHODCALLTYPE *AddRef )(
+        INetFwRules * This);
+
+    ULONG ( STDMETHODCALLTYPE *Release )(
+        INetFwRules * This);
+
+    HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )(
+        INetFwRules * This,
+        /* [out] */ UINT *pctinfo);
+
+    HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )(
+        INetFwRules * This,
+        /* [in] */ UINT iTInfo,
+        /* [in] */ LCID lcid,
+        /* [out] */ ITypeInfo **ppTInfo);
+
+    HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )(
+        INetFwRules * This,
+        /* [in] */ REFIID riid,
+        /* [size_is][in] */ LPOLESTR *rgszNames,
+        /* [range][in] */ UINT cNames,
+        /* [in] */ LCID lcid,
+        /* [size_is][out] */ DISPID *rgDispId);
+
+    /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )(
+        INetFwRules * This,
+        /* [in] */ DISPID dispIdMember,
+        /* [in] */ REFIID riid,
+        /* [in] */ LCID lcid,
+        /* [in] */ WORD wFlags,
+        /* [out][in] */ DISPPARAMS *pDispParams,
+        /* [out] */ VARIANT *pVarResult,
+        /* [out] */ EXCEPINFO *pExcepInfo,
+        /* [out] */ UINT *puArgErr);
+
+    /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Count )(
+        INetFwRules * This,
+        /* [retval][out] */ long *count);
+
+    /* [id] */ HRESULT ( STDMETHODCALLTYPE *Add )(
+        INetFwRules * This,
+        /* [in] */ INetFwRule *rule);
+
+    /* [id] */ HRESULT ( STDMETHODCALLTYPE *Remove )(
+        INetFwRules * This,
+        /* [in] */ BSTR name);
+
+    /* [id] */ HRESULT ( STDMETHODCALLTYPE *Item )(
+        INetFwRules * This,
+        /* [in] */ BSTR name,
+        /* [retval][out] */ INetFwRule **rule);
+
+    /* [restricted][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )(
+        INetFwRules * This,
+        /* [retval][out] */ IUnknown **newEnum);
+
+    END_INTERFACE
+} INetFwRulesVtbl;

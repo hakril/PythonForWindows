@@ -1,0 +1,42 @@
+typedef struct IEnumWbemClassObjectVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            __RPC__in IEnumWbemClassObject * This,
+            /* [in] */ __RPC__in REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            __RPC__deref_out  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            __RPC__in IEnumWbemClassObject * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            __RPC__in IEnumWbemClassObject * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *Reset )( 
+            __RPC__in IEnumWbemClassObject * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *Next )( 
+            __RPC__in IEnumWbemClassObject * This,
+            /* [in] */ long lTimeout,
+            /* [in] */ ULONG uCount,
+            /* [length_is][size_is][out] */ __RPC__out_ecount_part(uCount, *puReturned) IWbemClassObject **apObjects,
+            /* [out] */ __RPC__out ULONG *puReturned);
+        
+        HRESULT ( STDMETHODCALLTYPE *NextAsync )( 
+            __RPC__in IEnumWbemClassObject * This,
+            /* [in] */ ULONG uCount,
+            /* [in] */ __RPC__in_opt IWbemObjectSink *pSink);
+        
+        HRESULT ( STDMETHODCALLTYPE *Clone )( 
+            __RPC__in IEnumWbemClassObject * This,
+            /* [out] */ __RPC__deref_out_opt IEnumWbemClassObject **ppEnum);
+        
+        HRESULT ( STDMETHODCALLTYPE *Skip )( 
+            __RPC__in IEnumWbemClassObject * This,
+            /* [in] */ long lTimeout,
+            /* [in] */ ULONG nCount);
+        
+        END_INTERFACE
+    } IEnumWbemClassObjectVtbl;

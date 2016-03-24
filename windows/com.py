@@ -2,31 +2,11 @@ import struct
 import ctypes
 import functools
 from ctypes.wintypes import HRESULT
-from windows.generated_def.winstructs import *
 
-# Simple Abstraction to call COM interface in Python (Python -> COM)
-IID_PACK = "<I", "<H", "<H", "<B", "<B", "<B", "<B", "<B", "<B", "<B", "<B"
-
-
-def get_IID_from_raw(raw):
-    return "".join([struct.pack(i, j) for i, j in zip(IID_PACK, raw)])
-
-
-class COMInterface(ctypes.c_void_p):
-    _functions_ = {
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, ctypes.c_void_p, ctypes.c_void_p)(0, "QueryInterface"),
-        "AddRef": ctypes.WINFUNCTYPE(HRESULT)(1, "AddRef"),
-        "Release": ctypes.WINFUNCTYPE(HRESULT)(2, "Release")
-    }
-
-    def __getattr__(self, name):
-        if name in self._functions_:
-            return functools.partial(self._functions_[name], self)
-        return super(COMInterface, self).__getattribute__(name)
-
+from windows.generated_def import interfaces
+from windows.generated_def.interfaces import generate_IID, IID
 
 # Simple Implem to create COM Interface in Python (COM -> Python)
-
 def create_c_callable(func, types, keepalive=[]):
     func_type = ctypes.WINFUNCTYPE(*types)
     c_callable = func_type(func)

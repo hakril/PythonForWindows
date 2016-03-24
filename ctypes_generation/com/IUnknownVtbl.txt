@@ -1,0 +1,18 @@
+typedef struct IUnknownVtbl
+{
+    BEGIN_INTERFACE
+
+    HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+        IUnknown * This,
+        /* [in] */ REFIID riid,
+        /* [annotation][iid_is][out] */
+        __RPC__deref_out  void **ppvObject);
+
+    ULONG ( STDMETHODCALLTYPE *AddRef )(
+        IUnknown * This);
+
+    ULONG ( STDMETHODCALLTYPE *Release )(
+        IUnknown * This);
+
+    END_INTERFACE
+} IUnknownVtbl;

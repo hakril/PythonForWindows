@@ -1,0 +1,30 @@
+typedef struct IWbemObjectSinkVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            __RPC__in IWbemObjectSink * This,
+            /* [in] */ __RPC__in REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            __RPC__deref_out  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            __RPC__in IWbemObjectSink * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            __RPC__in IWbemObjectSink * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *Indicate )( 
+            __RPC__in IWbemObjectSink * This,
+            /* [in] */ long lObjectCount,
+            /* [size_is][in] */ __RPC__in_ecount_full(lObjectCount) IWbemClassObject **apObjArray);
+        
+        HRESULT ( STDMETHODCALLTYPE *SetStatus )( 
+            __RPC__in IWbemObjectSink * This,
+            /* [in] */ long lFlags,
+            /* [in] */ HRESULT hResult,
+            /* [unique][in] */ __RPC__in_opt BSTR strParam,
+            /* [unique][in] */ __RPC__in_opt IWbemClassObject *pObjParam);
+        
+        END_INTERFACE
+    } IWbemObjectSinkVtbl;

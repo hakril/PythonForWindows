@@ -1,0 +1,185 @@
+typedef struct IWbemServicesVtbl
+{
+    BEGIN_INTERFACE
+
+    HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+        __RPC__in IWbemServices * This,
+        /* [in] */ __RPC__in REFIID riid,
+        /* [annotation][iid_is][out] */
+        __RPC__deref_out  void **ppvObject);
+
+    ULONG ( STDMETHODCALLTYPE *AddRef )(
+        __RPC__in IWbemServices * This);
+
+    ULONG ( STDMETHODCALLTYPE *Release )(
+        __RPC__in IWbemServices * This);
+
+    HRESULT ( STDMETHODCALLTYPE *OpenNamespace )(
+        __RPC__in IWbemServices * This,
+        /* [in] */ __RPC__in const BSTR strNamespace,
+        /* [in] */ long lFlags,
+        /* [in] */ __RPC__in_opt IWbemContext *pCtx,
+        /* [unique][in][out] */ __RPC__deref_opt_inout_opt IWbemServices **ppWorkingNamespace,
+        /* [unique][in][out] */ __RPC__deref_opt_inout_opt IWbemCallResult **ppResult);
+
+    HRESULT ( STDMETHODCALLTYPE *CancelAsyncCall )(
+        __RPC__in IWbemServices * This,
+        /* [in] */ __RPC__in_opt IWbemObjectSink *pSink);
+
+    HRESULT ( STDMETHODCALLTYPE *QueryObjectSink )(
+        __RPC__in IWbemServices * This,
+        /* [in] */ long lFlags,
+        /* [out] */ __RPC__deref_out_opt IWbemObjectSink **ppResponseHandler);
+
+    HRESULT ( STDMETHODCALLTYPE *GetObject )(
+        __RPC__in IWbemServices * This,
+        /* [in] */ __RPC__in const BSTR strObjectPath,
+        /* [in] */ long lFlags,
+        /* [in] */ __RPC__in_opt IWbemContext *pCtx,
+        /* [unique][in][out] */ __RPC__deref_opt_inout_opt IWbemClassObject **ppObject,
+        /* [unique][in][out] */ __RPC__deref_opt_inout_opt IWbemCallResult **ppCallResult);
+
+    HRESULT ( STDMETHODCALLTYPE *GetObjectAsync )(
+        __RPC__in IWbemServices * This,
+        /* [in] */ __RPC__in const BSTR strObjectPath,
+        /* [in] */ long lFlags,
+        /* [in] */ __RPC__in_opt IWbemContext *pCtx,
+        /* [in] */ __RPC__in_opt IWbemObjectSink *pResponseHandler);
+
+    HRESULT ( STDMETHODCALLTYPE *PutClass )(
+        __RPC__in IWbemServices * This,
+        /* [in] */ __RPC__in_opt IWbemClassObject *pObject,
+        /* [in] */ long lFlags,
+        /* [in] */ __RPC__in_opt IWbemContext *pCtx,
+        /* [unique][in][out] */ __RPC__deref_opt_inout_opt IWbemCallResult **ppCallResult);
+
+    HRESULT ( STDMETHODCALLTYPE *PutClassAsync )(
+        __RPC__in IWbemServices * This,
+        /* [in] */ __RPC__in_opt IWbemClassObject *pObject,
+        /* [in] */ long lFlags,
+        /* [in] */ __RPC__in_opt IWbemContext *pCtx,
+        /* [in] */ __RPC__in_opt IWbemObjectSink *pResponseHandler);
+
+    HRESULT ( STDMETHODCALLTYPE *DeleteClass )(
+        __RPC__in IWbemServices * This,
+        /* [in] */ __RPC__in const BSTR strClass,
+        /* [in] */ long lFlags,
+        /* [in] */ __RPC__in_opt IWbemContext *pCtx,
+        /* [unique][in][out] */ __RPC__deref_opt_inout_opt IWbemCallResult **ppCallResult);
+
+    HRESULT ( STDMETHODCALLTYPE *DeleteClassAsync )(
+        __RPC__in IWbemServices * This,
+        /* [in] */ __RPC__in const BSTR strClass,
+        /* [in] */ long lFlags,
+        /* [in] */ __RPC__in_opt IWbemContext *pCtx,
+        /* [in] */ __RPC__in_opt IWbemObjectSink *pResponseHandler);
+
+    HRESULT ( STDMETHODCALLTYPE *CreateClassEnum )(
+        __RPC__in IWbemServices * This,
+        /* [in] */ __RPC__in const BSTR strSuperclass,
+        /* [in] */ long lFlags,
+        /* [in] */ __RPC__in_opt IWbemContext *pCtx,
+        /* [out] */ __RPC__deref_out_opt IEnumWbemClassObject **ppEnum);
+
+    HRESULT ( STDMETHODCALLTYPE *CreateClassEnumAsync )(
+        __RPC__in IWbemServices * This,
+        /* [in] */ __RPC__in const BSTR strSuperclass,
+        /* [in] */ long lFlags,
+        /* [in] */ __RPC__in_opt IWbemContext *pCtx,
+        /* [in] */ __RPC__in_opt IWbemObjectSink *pResponseHandler);
+
+    HRESULT ( STDMETHODCALLTYPE *PutInstance )(
+        __RPC__in IWbemServices * This,
+        /* [in] */ __RPC__in_opt IWbemClassObject *pInst,
+        /* [in] */ long lFlags,
+        /* [in] */ __RPC__in_opt IWbemContext *pCtx,
+        /* [unique][in][out] */ __RPC__deref_opt_inout_opt IWbemCallResult **ppCallResult);
+
+    HRESULT ( STDMETHODCALLTYPE *PutInstanceAsync )(
+        __RPC__in IWbemServices * This,
+        /* [in] */ __RPC__in_opt IWbemClassObject *pInst,
+        /* [in] */ long lFlags,
+        /* [in] */ __RPC__in_opt IWbemContext *pCtx,
+        /* [in] */ __RPC__in_opt IWbemObjectSink *pResponseHandler);
+
+    HRESULT ( STDMETHODCALLTYPE *DeleteInstance )(
+        __RPC__in IWbemServices * This,
+        /* [in] */ __RPC__in const BSTR strObjectPath,
+        /* [in] */ long lFlags,
+        /* [in] */ __RPC__in_opt IWbemContext *pCtx,
+        /* [unique][in][out] */ __RPC__deref_opt_inout_opt IWbemCallResult **ppCallResult);
+
+    HRESULT ( STDMETHODCALLTYPE *DeleteInstanceAsync )(
+        __RPC__in IWbemServices * This,
+        /* [in] */ __RPC__in const BSTR strObjectPath,
+        /* [in] */ long lFlags,
+        /* [in] */ __RPC__in_opt IWbemContext *pCtx,
+        /* [in] */ __RPC__in_opt IWbemObjectSink *pResponseHandler);
+
+    HRESULT ( STDMETHODCALLTYPE *CreateInstanceEnum )(
+        __RPC__in IWbemServices * This,
+        /* [in] */ __RPC__in const BSTR strFilter,
+        /* [in] */ long lFlags,
+        /* [in] */ __RPC__in_opt IWbemContext *pCtx,
+        /* [out] */ __RPC__deref_out_opt IEnumWbemClassObject **ppEnum);
+
+    HRESULT ( STDMETHODCALLTYPE *CreateInstanceEnumAsync )(
+        __RPC__in IWbemServices * This,
+        /* [in] */ __RPC__in const BSTR strFilter,
+        /* [in] */ long lFlags,
+        /* [in] */ __RPC__in_opt IWbemContext *pCtx,
+        /* [in] */ __RPC__in_opt IWbemObjectSink *pResponseHandler);
+
+    HRESULT ( STDMETHODCALLTYPE *ExecQuery )(
+        __RPC__in IWbemServices * This,
+        /* [in] */ __RPC__in const BSTR strQueryLanguage,
+        /* [in] */ __RPC__in const BSTR strQuery,
+        /* [in] */ long lFlags,
+        /* [in] */ __RPC__in_opt IWbemContext *pCtx,
+        /* [out] */ __RPC__deref_out_opt IEnumWbemClassObject **ppEnum);
+
+    HRESULT ( STDMETHODCALLTYPE *ExecQueryAsync )(
+        __RPC__in IWbemServices * This,
+        /* [in] */ __RPC__in const BSTR strQueryLanguage,
+        /* [in] */ __RPC__in const BSTR strQuery,
+        /* [in] */ long lFlags,
+        /* [in] */ __RPC__in_opt IWbemContext *pCtx,
+        /* [in] */ __RPC__in_opt IWbemObjectSink *pResponseHandler);
+
+    HRESULT ( STDMETHODCALLTYPE *ExecNotificationQuery )(
+        __RPC__in IWbemServices * This,
+        /* [in] */ __RPC__in const BSTR strQueryLanguage,
+        /* [in] */ __RPC__in const BSTR strQuery,
+        /* [in] */ long lFlags,
+        /* [in] */ __RPC__in_opt IWbemContext *pCtx,
+        /* [out] */ __RPC__deref_out_opt IEnumWbemClassObject **ppEnum);
+
+    HRESULT ( STDMETHODCALLTYPE *ExecNotificationQueryAsync )(
+        __RPC__in IWbemServices * This,
+        /* [in] */ __RPC__in const BSTR strQueryLanguage,
+        /* [in] */ __RPC__in const BSTR strQuery,
+        /* [in] */ long lFlags,
+        /* [in] */ __RPC__in_opt IWbemContext *pCtx,
+        /* [in] */ __RPC__in_opt IWbemObjectSink *pResponseHandler);
+
+    HRESULT ( STDMETHODCALLTYPE *ExecMethod )(
+        __RPC__in IWbemServices * This,
+        /* [in] */ __RPC__in const BSTR strObjectPath,
+        /* [in] */ __RPC__in const BSTR strMethodName,
+        /* [in] */ long lFlags,
+        /* [in] */ __RPC__in_opt IWbemContext *pCtx,
+        /* [in] */ __RPC__in_opt IWbemClassObject *pInParams,
+        /* [unique][in][out] */ __RPC__deref_opt_inout_opt IWbemClassObject **ppOutParams,
+        /* [unique][in][out] */ __RPC__deref_opt_inout_opt IWbemCallResult **ppCallResult);
+
+    HRESULT ( STDMETHODCALLTYPE *ExecMethodAsync )(
+        __RPC__in IWbemServices * This,
+        /* [in] */ __RPC__in const BSTR strObjectPath,
+        /* [in] */ __RPC__in const BSTR strMethodName,
+        /* [in] */ long lFlags,
+        /* [in] */ __RPC__in_opt IWbemContext *pCtx,
+        /* [in] */ __RPC__in_opt IWbemClassObject *pInParams,
+        /* [in] */ __RPC__in_opt IWbemObjectSink *pResponseHandler);
+
+    END_INTERFACE
+} IWbemServicesVtbl;

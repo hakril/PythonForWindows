@@ -1,0 +1,143 @@
+typedef struct IWbemClassObjectVtbl
+{
+    BEGIN_INTERFACE
+
+    HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+        IWbemClassObject * This,
+        /* [in] */ REFIID riid,
+        /* [annotation][iid_is][out] */
+        __RPC__deref_out  void **ppvObject);
+
+    ULONG ( STDMETHODCALLTYPE *AddRef )(
+        IWbemClassObject * This);
+
+    ULONG ( STDMETHODCALLTYPE *Release )(
+        IWbemClassObject * This);
+
+    HRESULT ( STDMETHODCALLTYPE *GetQualifierSet )(
+        IWbemClassObject * This,
+        /* [out] */ IWbemQualifierSet **ppQualSet);
+
+    HRESULT ( STDMETHODCALLTYPE *Get )(
+        IWbemClassObject * This,
+        /* [string][in] */ LPCWSTR wszName,
+        /* [in] */ long lFlags,
+        /* [unique][in][out] */ VARIANT *pVal,
+        /* [unique][in][out] */ CIMTYPE *pType,
+        /* [unique][in][out] */ long *plFlavor);
+
+    HRESULT ( STDMETHODCALLTYPE *Put )(
+        IWbemClassObject * This,
+        /* [string][in] */ LPCWSTR wszName,
+        /* [in] */ long lFlags,
+        /* [in] */ VARIANT *pVal,
+        /* [in] */ CIMTYPE Type);
+
+    HRESULT ( STDMETHODCALLTYPE *Delete )(
+        IWbemClassObject * This,
+        /* [string][in] */ LPCWSTR wszName);
+
+    HRESULT ( STDMETHODCALLTYPE *GetNames )(
+        IWbemClassObject * This,
+        /* [string][in] */ LPCWSTR wszQualifierName,
+        /* [in] */ long lFlags,
+        /* [in] */ VARIANT *pQualifierVal,
+        /* [out] */ SAFEARRAY * *pNames);
+
+    HRESULT ( STDMETHODCALLTYPE *BeginEnumeration )(
+        IWbemClassObject * This,
+        /* [in] */ long lEnumFlags);
+
+    HRESULT ( STDMETHODCALLTYPE *Next )(
+        IWbemClassObject * This,
+        /* [in] */ long lFlags,
+        /* [unique][in][out] */ BSTR *strName,
+        /* [unique][in][out] */ VARIANT *pVal,
+        /* [unique][in][out] */ CIMTYPE *pType,
+        /* [unique][in][out] */ long *plFlavor);
+
+    HRESULT ( STDMETHODCALLTYPE *EndEnumeration )(
+        IWbemClassObject * This);
+
+    HRESULT ( STDMETHODCALLTYPE *GetPropertyQualifierSet )(
+        IWbemClassObject * This,
+        /* [string][in] */ LPCWSTR wszProperty,
+        /* [out] */ IWbemQualifierSet **ppQualSet);
+
+    HRESULT ( STDMETHODCALLTYPE *Clone )(
+        IWbemClassObject * This,
+        /* [out] */ IWbemClassObject **ppCopy);
+
+    HRESULT ( STDMETHODCALLTYPE *GetObjectText )(
+        IWbemClassObject * This,
+        /* [in] */ long lFlags,
+        /* [out] */ BSTR *pstrObjectText);
+
+    HRESULT ( STDMETHODCALLTYPE *SpawnDerivedClass )(
+        IWbemClassObject * This,
+        /* [in] */ long lFlags,
+        /* [out] */ IWbemClassObject **ppNewClass);
+
+    HRESULT ( STDMETHODCALLTYPE *SpawnInstance )(
+        IWbemClassObject * This,
+        /* [in] */ long lFlags,
+        /* [out] */ IWbemClassObject **ppNewInstance);
+
+    HRESULT ( STDMETHODCALLTYPE *CompareTo )(
+        IWbemClassObject * This,
+        /* [in] */ long lFlags,
+        /* [in] */ IWbemClassObject *pCompareTo);
+
+    HRESULT ( STDMETHODCALLTYPE *GetPropertyOrigin )(
+        IWbemClassObject * This,
+        /* [string][in] */ LPCWSTR wszName,
+        /* [out] */ BSTR *pstrClassName);
+
+    HRESULT ( STDMETHODCALLTYPE *InheritsFrom )(
+        IWbemClassObject * This,
+        /* [in] */ LPCWSTR strAncestor);
+
+    HRESULT ( STDMETHODCALLTYPE *GetMethod )(
+        IWbemClassObject * This,
+        /* [string][in] */ LPCWSTR wszName,
+        /* [in] */ long lFlags,
+        /* [out] */ IWbemClassObject **ppInSignature,
+        /* [out] */ IWbemClassObject **ppOutSignature);
+
+    HRESULT ( STDMETHODCALLTYPE *PutMethod )(
+        IWbemClassObject * This,
+        /* [string][in] */ LPCWSTR wszName,
+        /* [in] */ long lFlags,
+        /* [in] */ IWbemClassObject *pInSignature,
+        /* [in] */ IWbemClassObject *pOutSignature);
+
+    HRESULT ( STDMETHODCALLTYPE *DeleteMethod )(
+        IWbemClassObject * This,
+        /* [string][in] */ LPCWSTR wszName);
+
+    HRESULT ( STDMETHODCALLTYPE *BeginMethodEnumeration )(
+        IWbemClassObject * This,
+        /* [in] */ long lEnumFlags);
+
+    HRESULT ( STDMETHODCALLTYPE *NextMethod )(
+        IWbemClassObject * This,
+        /* [in] */ long lFlags,
+        /* [unique][in][out] */ BSTR *pstrName,
+        /* [unique][in][out] */ IWbemClassObject **ppInSignature,
+        /* [unique][in][out] */ IWbemClassObject **ppOutSignature);
+
+    HRESULT ( STDMETHODCALLTYPE *EndMethodEnumeration )(
+        IWbemClassObject * This);
+
+    HRESULT ( STDMETHODCALLTYPE *GetMethodQualifierSet )(
+        IWbemClassObject * This,
+        /* [string][in] */ LPCWSTR wszMethod,
+        /* [out] */ IWbemQualifierSet **ppQualSet);
+
+    HRESULT ( STDMETHODCALLTYPE *GetMethodOrigin )(
+        IWbemClassObject * This,
+        /* [string][in] */ LPCWSTR wszMethodName,
+        /* [out] */ BSTR *pstrClassName);
+
+    END_INTERFACE
+} IWbemClassObjectVtbl;

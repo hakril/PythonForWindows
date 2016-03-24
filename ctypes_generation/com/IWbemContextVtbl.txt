@@ -1,0 +1,60 @@
+typedef struct IWbemContextVtbl
+{
+    BEGIN_INTERFACE
+
+    HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+        IWbemContext * This,
+        /* [in] */ REFIID riid,
+        /* [annotation][iid_is][out] */
+        __RPC__deref_out  void **ppvObject);
+
+    ULONG ( STDMETHODCALLTYPE *AddRef )(
+        IWbemContext * This);
+
+    ULONG ( STDMETHODCALLTYPE *Release )(
+        IWbemContext * This);
+
+    HRESULT ( STDMETHODCALLTYPE *Clone )(
+        IWbemContext * This,
+        /* [out] */ IWbemContext **ppNewCopy);
+
+    HRESULT ( STDMETHODCALLTYPE *GetNames )(
+        IWbemContext * This,
+        /* [in] */ long lFlags,
+        /* [out] */ SAFEARRAY * *pNames);
+
+    HRESULT ( STDMETHODCALLTYPE *BeginEnumeration )(
+        IWbemContext * This,
+        /* [in] */ long lFlags);
+
+    HRESULT ( STDMETHODCALLTYPE *Next )(
+        IWbemContext * This,
+        /* [in] */ long lFlags,
+        /* [out] */ BSTR *pstrName,
+        /* [out] */ VARIANT *pValue);
+
+    HRESULT ( STDMETHODCALLTYPE *EndEnumeration )(
+        IWbemContext * This);
+
+    HRESULT ( STDMETHODCALLTYPE *SetValue )(
+        IWbemContext * This,
+        /* [string][in] */ LPCWSTR wszName,
+        /* [in] */ long lFlags,
+        /* [in] */ VARIANT *pValue);
+
+    HRESULT ( STDMETHODCALLTYPE *GetValue )(
+        IWbemContext * This,
+        /* [string][in] */ LPCWSTR wszName,
+        /* [in] */ long lFlags,
+        /* [out] */ VARIANT *pValue);
+
+    HRESULT ( STDMETHODCALLTYPE *DeleteValue )(
+        IWbemContext * This,
+        /* [string][in] */ LPCWSTR wszName,
+        /* [in] */ long lFlags);
+
+    HRESULT ( STDMETHODCALLTYPE *DeleteAll )(
+        IWbemContext * This);
+
+    END_INTERFACE
+} IWbemContextVtbl;

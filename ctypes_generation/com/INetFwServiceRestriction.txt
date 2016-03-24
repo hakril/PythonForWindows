@@ -1,0 +1,64 @@
+typedef struct INetFwServiceRestrictionVtbl
+{
+    BEGIN_INTERFACE
+
+    HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+        INetFwServiceRestriction * This,
+        /* [in] */ REFIID riid,
+        /* [annotation][iid_is][out] */
+        __RPC__deref_out  void **ppvObject);
+
+    ULONG ( STDMETHODCALLTYPE *AddRef )(
+        INetFwServiceRestriction * This);
+
+    ULONG ( STDMETHODCALLTYPE *Release )(
+        INetFwServiceRestriction * This);
+
+    HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )(
+        INetFwServiceRestriction * This,
+        /* [out] */ UINT *pctinfo);
+
+    HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )(
+        INetFwServiceRestriction * This,
+        /* [in] */ UINT iTInfo,
+        /* [in] */ LCID lcid,
+        /* [out] */ ITypeInfo **ppTInfo);
+
+    HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )(
+        INetFwServiceRestriction * This,
+        /* [in] */ REFIID riid,
+        /* [size_is][in] */ LPOLESTR *rgszNames,
+        /* [range][in] */ UINT cNames,
+        /* [in] */ LCID lcid,
+        /* [size_is][out] */ DISPID *rgDispId);
+
+    /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )(
+        INetFwServiceRestriction * This,
+        /* [in] */ DISPID dispIdMember,
+        /* [in] */ REFIID riid,
+        /* [in] */ LCID lcid,
+        /* [in] */ WORD wFlags,
+        /* [out][in] */ DISPPARAMS *pDispParams,
+        /* [out] */ VARIANT *pVarResult,
+        /* [out] */ EXCEPINFO *pExcepInfo,
+        /* [out] */ UINT *puArgErr);
+
+    /* [id] */ HRESULT ( STDMETHODCALLTYPE *RestrictService )(
+        INetFwServiceRestriction * This,
+        /* [in] */ BSTR serviceName,
+        /* [in] */ BSTR appName,
+        /* [in] */ VARIANT_BOOL restrictService,
+        /* [in] */ VARIANT_BOOL serviceSidRestricted);
+
+    /* [id] */ HRESULT ( STDMETHODCALLTYPE *ServiceRestricted )(
+        INetFwServiceRestriction * This,
+        /* [in] */ BSTR serviceName,
+        /* [in] */ BSTR appName,
+        /* [retval][out] */ VARIANT_BOOL *serviceRestricted);
+
+    /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Rules )(
+        INetFwServiceRestriction * This,
+        /* [retval][out] */ INetFwRules **rules);
+
+    END_INTERFACE
+} INetFwServiceRestrictionVtbl;

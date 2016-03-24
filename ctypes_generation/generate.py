@@ -283,8 +283,21 @@ class IID(IID):
             return '<IID "{0}">'.format(self.strid.upper())
         return '<IID "{0}({1})">'.format(self.strid.upper(), self.name)
 
-def generate_IID(Data1, Data2, Data3, Data41, Data42, Data43, Data44, Data45, Data46, Data47, Data48, **kwargs):
-    return IID(Data1, Data2, Data3,  (BYTE*8)(Data41, Data42, Data43, Data44, Data45, Data46, Data47, Data48), **kwargs)
+    @classmethod
+    def from_string(cls, iid):
+        part_iid = iid.split("-")
+        datas = [int(x, 16) for x in part_iid[:3]]
+        datas.append(int(part_iid[3][:2], 16))
+        datas.append(int(part_iid[3][2:], 16))
+        for i in range(6):
+            datas.append(int(part_iid[4][i * 2:(i + 1) * 2], 16))
+        return cls.from_raw(*datas, strid=iid)
+
+    @classmethod
+    def from_raw(cls, Data1, Data2, Data3, Data41, Data42, Data43, Data44, Data45, Data46, Data47, Data48, **kwargs):
+        return cls(Data1, Data2, Data3,  (BYTE*8)(Data41, Data42, Data43, Data44, Data45, Data46, Data47, Data48), **kwargs)
+
+generate_IID = IID.from_raw
 
 
 class COMInterface(ctypes.c_void_p):
