@@ -1,8 +1,10 @@
 import struct
 import ctypes
 import functools
-from ctypes.wintypes import HRESULT
+from ctypes.wintypes import HRESULT, byref, pointer
 
+from windows import winproxy
+from windows.generated_def import RPC_C_IMP_LEVEL_IMPERSONATE, CLSCTX_INPROC_SERVER
 from windows.generated_def import interfaces
 from windows.generated_def.interfaces import generate_IID, IID
 
@@ -14,6 +16,20 @@ def create_c_callable(func, types, keepalive=[]):
     c_callback_addr = ctypes.c_ulong.from_address(id(c_callable._objects['0']) + 3 * ctypes.sizeof(ctypes.c_void_p)).value
     keepalive.append(c_callable)
     return c_callback_addr
+
+def init():
+    t = winproxy.CoInitializeEx()
+    if t:
+        return t
+    return winproxy.CoInitializeSecurity(0, -1, None, 0, 0, RPC_C_IMP_LEVEL_IMPERSONATE, 0,0,0)
+
+def create_instance(clsiid, targetinterface, custom_iid=None):
+    if custom_iid is None:
+        custom_iid = targetinterface.IID
+    return winproxy.CoCreateInstance(byref(clsiid), None, CLSCTX_INPROC_SERVER, byref(custom_iid), byref(targetinterface))
+
+
+
 
 
 class ComVtable(object):

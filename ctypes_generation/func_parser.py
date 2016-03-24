@@ -18,7 +18,7 @@ class WinFunc(object):
         return self.generate_comment_ctypes() + "\n" + self.generate_prototype_ctypes() + "\n" + self.generate_paramflags_ctypes() + "\n"
 
     def generate_comment_ctypes(self):
-        model = "# {0}({1}):"
+        model = "#def {0}({1}):\n#    return {0}.ctypes_function({1})"
         ctypes_param = [name for type, name in self.params]
         ctypes_param_str = ", ".join(ctypes_param)
         return model.format(self.name, ctypes_param_str)

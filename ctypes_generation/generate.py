@@ -33,6 +33,8 @@ TYPE_EQUIVALENCE = [
     ('CSHORT', 'c_short'),
     ('VARTYPE', 'c_ushort'),
     ('BSTR', 'c_wchar_p'),
+    ('OLECHAR', 'c_wchar'),
+    ('POLECHAR', 'c_wchar_p'),
     ('PUCHAR', 'POINTER(UCHAR)'),
     ('double', 'c_double'),
     ('FARPROC', 'PVOID'),
@@ -62,6 +64,8 @@ TYPE_EQUIVALENCE = [
     ('SECURITY_CONTEXT_TRACKING_MODE', 'BOOLEAN'),
     ("DISPID", "LONG"),
     ("MEMBERID", "DISPID"),
+    ('PSECURITY_DESCRIPTOR', 'PVOID'),
+    ('LPUNKNOWN', 'POINTER(PVOID)'),
     # Will be changed at import time
     ('LPCONTEXT', 'PVOID'),
     ('HCERTSTORE', 'PVOID'),

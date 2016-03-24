@@ -4,50 +4,15 @@ import struct
 import functools
 
 from ctypes.wintypes import *
+
+import windows.com
 from windows.generated_def.winstructs import *
-from windows.simple_com import get_IID_from_raw, COMInterface
+from windows.generated_def.interfaces import IWbemLocator, IWbemServices, IEnumWbemClassObject, IWbemClassObject
 
 
-CLSID_WbemAdministrativeLocator_raw = 0xcb8555cc, 0x9128, 0x11d1, 0xad, 0x9b, 0x00, 0xc0, 0x4f, 0xd8, 0x0fd, 0xff
-CLSID_WbemAdministrativeLocator_IID = get_IID_from_raw(CLSID_WbemAdministrativeLocator_raw)
+CLSID_WbemAdministrativeLocator_IID = windows.com.IID.from_string('CB8555CC-9128-11D1-AD9B-00C04FD8FDFF')
 
-IID_IWbemLocator_raw = 0x0DC12A687, 0x737F, 0x11CF, 0x88, 0x4d, 0x00, 0xaa, 0x00, 0x4b, 0x2e, 0x24
-IID_IWbemLocator= get_IID_from_raw(IID_IWbemLocator_raw)
-
-BSTR = ctypes.c_wchar_p
-
-class IWbemLocator(COMInterface):
-    _functions_ = {
-        "ConnectServer": ctypes.WINFUNCTYPE(HRESULT, ctypes.c_wchar_p, ctypes.c_wchar_p, ctypes.c_wchar_p, ctypes.c_wchar_p,
-                                                ctypes.c_long, ctypes.c_wchar_p, ctypes.c_void_p, POINTER(ctypes.c_void_p))(3, "ConnectServer")
-    }
-
-
-class IWbemServices(COMInterface):
-    _functions_ = {
-        "ExecQuery": ctypes.WINFUNCTYPE(HRESULT, ctypes.c_wchar_p, ctypes.c_wchar_p, ctypes.c_long, ctypes.c_void_p, POINTER(ctypes.c_void_p))(20, "ExecQuery")
-    }
-
-
-class IEnumWbemClassObject(COMInterface):
-    _functions_ = {
-        "Next": ctypes.WINFUNCTYPE(HRESULT, ctypes.c_long, ctypes.c_ulong, POINTER(ctypes.c_void_p), POINTER(ctypes.c_long))(4, "Next")
-    }
-
-
-class IWbemClassObject(COMInterface):
-    _functions_ = {
-        "Get": ctypes.WINFUNCTYPE(HRESULT, ctypes.c_wchar_p, ctypes.c_long, ctypes.c_void_p, ctypes.c_void_p, POINTER(ctypes.c_long))(4, "Get"),
-        "GetNames": ctypes.WINFUNCTYPE(HRESULT, ctypes.c_wchar_p, ctypes.c_long, ctypes.c_void_p, POINTER(ctypes.c_void_p))(7, "GetNames")
-    }
-
-
-class _tagBRECORD(ctypes.Structure):
-    _fields_ = [("pvRecord", PVOID), ("pRecInfo", PVOID)]
-
-
-class SAFEARRAY(windows.generated_def.winstructs.SAFEARRAY):
-
+class ImprovedSAFEARRAY(windows.generated_def.winstructs.SAFEARRAY):
         @classmethod
         def of_type(cls, addr, t):
             self = cls.from_address(addr)
@@ -71,38 +36,19 @@ class SAFEARRAY(windows.generated_def.winstructs.SAFEARRAY):
             return data
 
 
-class SimpleVariantData(ctypes.Union):
-    _fields_ = [("llVal", LONGLONG),
-                ("lVal", LONG),
-                ("bVal", BYTE),
-                ("iVal", SHORT),
-                ("fltVal", FLOAT),
-                ("dblVal", DOUBLE),
-                ("bstrVal", BSTR),
-                ("pbstrVal", POINTER(BSTR)),
-                ("byref", PVOID),
-                ("parray", POINTER(SAFEARRAY)),
-                ("pbyref", PVOID),
-                ("ullVal", ULONGLONG),
-                ("llVal", LONGLONG),
-                ("__VARIANT_NAME_4", _tagBRECORD)]
-
-
-# TODO: put real struct in winstruct (need a real parser for generation)
-class SimpleVariant(ctypes.Structure):
-    _fields_ = [("vt", WORD), ("wReserved1", WORD), ("wReserved2", WORD), ("wReserved3", WORD),  ("_Data", SimpleVariantData)]
-
+class ImprovedVariant(VARIANT):
     @property
     def asbstr(self):
         if self.vt != VT_BSTR:
             raise ValueError("asbstr on non-bstr variant")
-        return self._Data.bstrVal
+        #import pdb;pdb.set_trace()
+        return self._VARIANT_NAME_3.bstrVal
 
     @property
     def aslong(self):
         if not self.vt in [VT_I4, VT_BOOL]:
             raise ValueError("aslong on non-long variant")
-        return self._Data.lVal
+        return self._VARIANT_NAME_3.lVal
 
     @property
     def asbool(self):
@@ -120,21 +66,13 @@ class WmiRequester(object):
         return cls.INSTANCE
 
     def __init__(self):
-        if hasattr(self, "initializiated"):
-            return
-
         locator = IWbemLocator()
         service = IWbemServices()
 
-        # TODO: puts those in winproxy with a real error check and wrapper
-        assert ctypes.windll.ole32.CoInitializeEx(0, 0) == 0, "CoInitializeEx"
-        assert ctypes.windll.ole32.CoInitializeSecurity(0, -1, 0,0, 0, 3, 0,0,0) == 0, "CoInitializeSecurity"
-        assert ctypes.windll.ole32.CoCreateInstance(CLSID_WbemAdministrativeLocator_IID, 0, 1, IID_IWbemLocator, ctypes.byref(locator)) == 0, "CoCreateInstance"
-
+        windows.com.init()
+        windows.com.create_instance(CLSID_WbemAdministrativeLocator_IID, locator)
         locator.ConnectServer("root\\cimv2", None, None , None, 0x80, None, None, ctypes.byref(service))
         self.service = service
-        self.initializiated = True
-
 
     def select(self, frm, attrs="*"):
         """Select `attrs` from ``frm``
@@ -142,19 +80,24 @@ class WmiRequester(object):
             :rtype: list of dict
         """
         enumerator = IEnumWbemClassObject()
-        self.service.ExecQuery("WQL", "select * from {0}".format(frm), 0x20, 0, ctypes.byref(enumerator))
+        try:
+            self.service.ExecQuery("WQL", "select * from {0}".format(frm), 0x20, 0, ctypes.byref(enumerator))
+        except WindowsError as e:
+            if (e.winerror & 0xffffffff) ==  WBEM_E_INVALID_CLASS:
+                raise WindowsError(e.winerror, 'WBEM_E_INVALID_CLASS <Invalid WMI class "{0}">'.format(frm))
+            raise
 
-        count = ctypes.c_long(0)
+        count = ctypes.c_ulong(0)
         processor = IWbemClassObject()
         res = []
         enumerator.Next(0xffffffff, 1, ctypes.byref(processor), ctypes.byref(count))
         while count.value:
             current_res = {}
-            variant_res = SimpleVariant()
+            variant_res = ImprovedVariant()
             if attrs == "*":
                 attrs = [x for x in self.get_names(processor) if not x.startswith("__")]
             for name in attrs:
-                processor.Get(name, 0, ctypes.byref(variant_res), 0, None)
+                processor.Get(name, 0, ctypes.byref(variant_res), None, None)
                 # TODO: something clean and generic
                 if variant_res.vt & VT_ARRAY:
                     if variant_res.vt & VT_TYPEMASK == VT_BSTR:
@@ -176,6 +119,8 @@ class WmiRequester(object):
         return res
 
     def get_names(self, processor):
-        res = PVOID()
-        processor.GetNames(None, 0, None, res)
-        return SAFEARRAY.of_type(res.value, BSTR).to_list()
+        res = POINTER(SAFEARRAY)()
+        processor.GetNames(None, 0, None, byref(res))
+        safe_array = ctypes.cast(res, POINTER(ImprovedSAFEARRAY))[0]
+        safe_array.elt_type = BSTR
+        return safe_array.to_list()

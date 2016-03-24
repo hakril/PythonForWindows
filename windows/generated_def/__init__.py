@@ -36,11 +36,13 @@ else:
 
 from . import winfuncs
 from . import windef
+from . import interfaces
 
 # Fuck it
 from winstructs import *
 from winfuncs import *
 from windef import *
+from interfaces import *
 
 
 

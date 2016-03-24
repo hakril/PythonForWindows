@@ -917,3 +917,20 @@ def VerQueryValueA(pBlock, lpSubBlock, lplpBuffer, puLen):
 @VersionProxy("VerQueryValueW")
 def VerQueryValueW(pBlock, lpSubBlock, lplpBuffer, puLen):
     return VerQueryValueW.ctypes_function(pBlock, lpSubBlock, lplpBuffer, puLen)
+
+
+# ## Ole32Proxy (COM STUFF) ## #
+
+@Ole32Proxy('CoInitializeEx', no_error_check)
+def CoInitializeEx(pvReserved=None, dwCoInit=COINIT_MULTITHREADED):
+    return CoInitializeEx.ctypes_function(pvReserved, dwCoInit)
+
+
+@Ole32Proxy('CoInitializeSecurity')
+def CoInitializeSecurity(pSecDesc, cAuthSvc, asAuthSvc, pReserved1, dwAuthnLevel, dwImpLevel, pAuthList, dwCapabilities, pReserved3):
+    return CoInitializeSecurity.ctypes_function(pSecDesc, cAuthSvc, asAuthSvc, pReserved1, dwAuthnLevel, dwImpLevel, pAuthList, dwCapabilities, pReserved3)
+
+
+@Ole32Proxy('CoCreateInstance')
+def CoCreateInstance(rclsid, pUnkOuter=None, dwClsContext=CLSCTX_INPROC_SERVER, riid=NeededParameter, ppv=NeededParameter):
+    return CoCreateInstance.ctypes_function(rclsid, pUnkOuter, dwClsContext, riid, ppv)
