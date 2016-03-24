@@ -3,10 +3,15 @@ import ctypes
 import functools
 from ctypes.wintypes import HRESULT, byref, pointer
 
+import windows
 from windows import winproxy
+from windows.generated_def.winstructs import *
+
 from windows.generated_def import RPC_C_IMP_LEVEL_IMPERSONATE, CLSCTX_INPROC_SERVER
 from windows.generated_def import interfaces
 from windows.generated_def.interfaces import generate_IID, IID
+
+
 
 # Simple Implem to create COM Interface in Python (COM -> Python)
 def create_c_callable(func, types, keepalive=[]):
@@ -17,19 +22,47 @@ def create_c_callable(func, types, keepalive=[]):
     keepalive.append(c_callable)
     return c_callback_addr
 
+
 def init():
     t = winproxy.CoInitializeEx()
     if t:
         return t
     return winproxy.CoInitializeSecurity(0, -1, None, 0, 0, RPC_C_IMP_LEVEL_IMPERSONATE, 0,0,0)
 
+
+
+class ImprovedVariant(VARIANT):
+    @property
+    def asbstr(self):
+        if self.vt != VT_BSTR:
+            raise ValueError("asbstr on non-bstr variant")
+        #import pdb;pdb.set_trace()
+        return self._VARIANT_NAME_3.bstrVal
+
+    @property
+    def aslong(self):
+        if not self.vt in [VT_I4, VT_BOOL]:
+            raise ValueError("aslong on non-long variant")
+        return self._VARIANT_NAME_3.lVal
+
+    @property
+    def asbool(self):
+        if not self.vt in [VT_BOOL]:
+            raise ValueError("get_bstr on non-bool variant")
+        return bool(self.aslong)
+
+    @property
+    def asdispatch(self):
+        if not self.vt in [VT_DISPATCH]:
+            raise ValueError("asdispatch on non-VT_DISPATCH variant")
+        return interfaces.IDispatch(self._VARIANT_NAME_3.pdispVal)
+
+
+
 def create_instance(clsiid, targetinterface, custom_iid=None):
     if custom_iid is None:
         custom_iid = targetinterface.IID
     return winproxy.CoCreateInstance(byref(clsiid), None, CLSCTX_INPROC_SERVER, byref(custom_iid), byref(targetinterface))
-
-
-
 
 
 class ComVtable(object):

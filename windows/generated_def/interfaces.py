@@ -42,6 +42,48 @@ class COMInterface(ctypes.c_void_p):
             return functools.partial(self._functions_[name], self)
         return super(COMInterface, self).__getattribute__(name)
 
+class IDispatch(COMInterface):
+    IID = generate_IID(0x00020400, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IDispatch", strid="00020400-0000-0000-C000-000000000046")
+
+    _functions_ = {
+ #QueryInterface -> riid:REFIID, ppvObject:**void
+ "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+ #AddRef -> 
+ "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+ #Release -> 
+ "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+ #GetTypeInfoCount -> pctinfo:*UINT
+ "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
+ #GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
+ "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(POINTER(ITypeInfo)))(4, "GetTypeInfo"),
+ #GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
+ "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
+ #Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
+ "Invoke": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT))(6, "Invoke"),
+    }
+
+
+class IEnumVARIANT(COMInterface):
+    IID = generate_IID(0x00020404, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IEnumVARIANT", strid="00020404-0000-0000-C000-000000000046")
+
+    _functions_ = {
+ #QueryInterface -> riid:REFIID, ppvObject:**void
+ "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+ #AddRef -> 
+ "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+ #Release -> 
+ "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+ #Next -> celt:ULONG, rgVar:*VARIANT, pCeltFetched:*ULONG
+ "Next": ctypes.WINFUNCTYPE(HRESULT, ULONG, POINTER(VARIANT), POINTER(ULONG))(3, "Next"),
+ #Skip -> celt:ULONG
+ "Skip": ctypes.WINFUNCTYPE(HRESULT, ULONG)(4, "Skip"),
+ #Reset -> 
+ "Reset": ctypes.WINFUNCTYPE(HRESULT)(5, "Reset"),
+ #Clone -> ppEnum:**IEnumVARIANT
+ "Clone": ctypes.WINFUNCTYPE(HRESULT, POINTER(PVOID))(6, "Clone"),
+    }
+
+
 class IEnumWbemClassObject(COMInterface):
     IID = generate_IID(0x027947E1, 0xD731, 0x11CE, 0xA3, 0x57, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, name="IEnumWbemClassObject", strid="027947E1-D731-11CE-A357-000000000001")
 
