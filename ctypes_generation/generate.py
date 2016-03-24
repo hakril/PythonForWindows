@@ -83,12 +83,15 @@ FUNC_FILE = "winfunc.txt"
 STRUCT_FILE = "winstruct.txt"
 DEF_FILE = "windef.txt"
 NTSTATUS_FILE = "ntstatus.txt"
+NAME_TO_IID_FILE = "interface_to_iid.txt"
 COM_INTERFACE_DIR_GLOB = "com/*.txt"
 
 GENERATED_STRUCT_FILE = "winstructs"
 GENERATED_FUNC_FILE = "winfuncs"
 GENERATED_DEF_FILE = "windef"
 GENERATED_NTSTATUS_FILE = "ntstatus"
+GENERATED_COM_FILE = "interfaces"
+#GENERATED_NAME_TO_IID_FILE = "com_iid"
 
 OUT_DIRS = ["..\windows\generated_def"]
 if len(sys.argv) > 1:
@@ -123,17 +126,14 @@ def verif_funcs_type(funcs, structs, enums):
                 raise ValueError("UNKNOW PARAM TYPE {0}".format(param_type))
 
 
-yolo_struct = [x[:-4] for x in  os.listdir(r"C:\Users\hakril\Documents\Work\COM\dump")]
+try:
+    yolo_struct = [x[:-4] for x in  os.listdir(r"C:\Users\hakril\Documents\Work\COM\dump")]
+except WindowsError:
+    yolo_struct = []
 
 def verif_com_interface_type(vtbls, struc, enum):
     all_struct_name = get_all_struct_name(structs, enums)
-    all_interface_name = []
-
-    #ALSO accept void
-    for vtbl in vtbls:
-        if not vtbl.name.endswith("Vtbl"):
-            raise ValueError("Com interface are expected to finish by <Vtbl> got <{0}".format(vtbl.name))
-        all_interface_name.append(vtbl.name[:-len("Vtbl")])
+    all_interface_name = [vtbl.name for vtbl in vtbls]
 
     for vtbl in vtbls:
         #print(vtbl)
@@ -148,6 +148,7 @@ def verif_com_interface_type(vtbls, struc, enum):
                 if param_type not in known_type and param_type not in all_struct_name + all_interface_name:
                     #if param_type != "ITypeInfo":
                     if param_type in yolo_struct:
+                        import pdb;pdb.set_trace()
                         print("Ned to extract <{0}> from dump".format(param_type))
                         import shutil
                         #shutil.copy(r"C:\Users\hakril\Documents\Work\COM\dump\{0}.txt".format(param_type), "com")
@@ -248,32 +249,76 @@ def generate_struct_ctypes(structs, enums):
     return ctypes_str
 
 
+data = open(NAME_TO_IID_FILE).read()
+iids_def = {}
+for line in data.split("\n"):
+    name, iid = line.split("|")
+    part_iid = iid.split("-")
+    str_iid = []
+    str_iid.append("0x" + part_iid[0])
+    str_iid.append("0x" + part_iid[1])
+    str_iid.append("0x" + part_iid[2])
+    str_iid.append("0x" + part_iid[3][:2])
+    str_iid.append("0x" + part_iid[3][2:])
+    for i in range(6): str_iid.append("0x" + part_iid[4][i * 2:(i + 1) * 2])
+    iids_def[name] = ", ".join(str_iid), iid
+#full_name_to_iid = name_to_iid_header + "\n".join(iids_def)
+
+
 com_interface_header = """
-from windows.simple_com import *
+import functools
 import ctypes
+from winstructs import *
+
+class IID(IID):
+    def __init__(self, Data1, Data2, Data3, Data4, name=None, strid=None):
+        self.name = name
+        self.strid = strid
+        super(IID, self).__init__(Data1, Data2, Data3, Data4)
+
+    def __repr__(self):
+        if self.strid is None:
+            return super(IID, self).__repr__()
+        if self.name is None:
+            return '<IID "{0}">'.format(self.strid.upper())
+        return '<IID "{0}({1})">'.format(self.strid.upper(), self.name)
+
+def generate_IID(Data1, Data2, Data3, Data41, Data42, Data43, Data44, Data45, Data46, Data47, Data48, **kwargs):
+    return IID(Data1, Data2, Data3,  (BYTE*8)(Data41, Data42, Data43, Data44, Data45, Data46, Data47, Data48), **kwargs)
+
+
+class COMInterface(ctypes.c_void_p):
+    _functions_ = {
+    }
+
+    def __getattr__(self, name):
+        if name in self._functions_:
+            return functools.partial(self._functions_[name], self)
+        return super(COMInterface, self).__getattribute__(name)
 """
 
 com_interface_template = """
 class {0}(COMInterface):
+    IID = generate_IID({2}, name="{0}", strid="{3}")
+
     _functions_ = {{
 {1}
     }}
 """
 
 com_interface_comment_template = """ #{0} -> {1}"""
-com_interface_method_template = """ "{0}": ctypes.WINFUNCTYPE({1}),"""
+com_interface_method_template = """ "{0}": ctypes.WINFUNCTYPE({1})({2}, "{0}"),"""
 
 def generate_com_interface_ctype(vtbls):
-    print(vtbls)
     define = []
-    all_name = [vtbl.name.strip("Vtbl") for vtbl in vtbls]
+    all_name = [vtbl.name for vtbl in vtbls]
     for vtbl in vtbls:
         methods_string = []
-        for method in vtbl.methods:
+        for method_nb, method in enumerate(vtbl.methods):
             args_to_define = method.args[1:] #ctypes doesnt not need the This
             #import pdb;pdb.set_trace()
             str_args = []
-            methods_string.append(com_interface_comment_template.format(method.name, ", ".join([("*"* arg.byreflevel) + arg.name +":"+arg.type for arg in args_to_define])))
+            methods_string.append(com_interface_comment_template.format(method.name, ", ".join([arg.name +":"+ ("*"* arg.byreflevel) +arg.type for arg in args_to_define])))
             for arg in args_to_define:
                 type = arg.type
                 byreflevel = arg.byreflevel
@@ -288,9 +333,10 @@ def generate_com_interface_ctype(vtbls):
                 for i in range(byreflevel):
                     type = "POINTER({0})".format(type)
                 str_args.append(type)
-            methods_string.append(com_interface_method_template.format(method.name, ", ".join([method.ret_type] + str_args)))
+            methods_string.append(com_interface_method_template.format(method.name, ", ".join([method.ret_type] + str_args), method_nb))
         #import pdb;pdb.set_trace()
-        define.append((com_interface_template.format(vtbl.name, "\n".join(methods_string))))
+        iid_python, iid_str = iids_def[vtbl.name]
+        define.append((com_interface_template.format(vtbl.name, "\n".join(methods_string), iid_python, iid_str)))
     return com_interface_header + "\n".join(define)
 
 def write_to_out_file(name, data):
@@ -317,7 +363,6 @@ structs_code = open(STRUCT_FILE, 'r').read()
 defs = def_parser.WinDefParser(def_code).parse()
 funcs = func_parser.WinFuncParser(funcs_code).parse()
 structs, enums = struct_parser.WinStructParser(structs_code).parse()
-
 vtbls = parse_com_interfaces(glob.glob(COM_INTERFACE_DIR_GLOB))
 
 validate_structs(structs, enums, defs)
@@ -337,9 +382,17 @@ funcs_ctypes = generate_funcs_ctypes(funcs)
 structs_ctypes = generate_struct_ctypes(structs, enums)
 com_interface_ctypes = generate_com_interface_ctype(vtbls)
 
-f = open("yolo.py", "w")
-f.write(com_interface_ctypes)
-f.close()
+# Create name -> IID file
+
+name_to_iid_header = """
+from winstructs import IID, BYTE
+
+"""
+
+
+#f = open("yolo.py", "w")
+#f.write(com_interface_ctypes)
+#f.close()
 
 for out_dir in OUT_DIRS:
     if not os.path.exists(out_dir):
@@ -348,7 +401,8 @@ for out_dir in OUT_DIRS:
 write_to_out_file(GENERATED_DEF_FILE, defs_ctypes)
 write_to_out_file(GENERATED_FUNC_FILE, funcs_ctypes)
 write_to_out_file(GENERATED_STRUCT_FILE, structs_ctypes)
-
+write_to_out_file(GENERATED_COM_FILE, com_interface_ctypes)
+#write_to_out_file(GENERATED_NAME_TO_IID_FILE, full_name_to_iid)
 
 NTSTATUS_HEAD = """
 class NtStatusException(Exception):

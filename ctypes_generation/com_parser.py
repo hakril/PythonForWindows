@@ -143,8 +143,11 @@ class WinComParser(Parser):
 Method = namedtuple("Method", ["ret_type", "name", "args"])
 MethodArg = namedtuple("MethodArg", ["type", "byreflevel", "name"])
 class WinCOMVTABLE(object):
-    def __init__(self, name):
-        self.name = name
+    def __init__(self, vtbl_name):
+        self.vtbl_name = vtbl_name
+        if not vtbl_name.endswith("Vtbl"):
+            raise ValueError("Com interface are expected to finish by <Vtbl> got <{0}".format(vtbl.name))
+        self.name = vtbl_name[:-len("Vtbl")]
         self.methods = []
 
     def add_method(self, ret_type, method_name, args):
