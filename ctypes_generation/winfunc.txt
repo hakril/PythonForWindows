@@ -1186,3 +1186,15 @@ DWORD WINAPI GetInterfaceInfo(
   _Out_   PIP_INTERFACE_INFO pIfTable,
   _Inout_ PULONG             dwOutBufLen
 );
+
+DWORD WINAPI GetIfTable(
+  _Out_   PMIB_IFTABLE pIfTable,
+  _Inout_ PULONG       pdwSize,
+  _In_    BOOL         bOrder
+);
+
+DWORD WINAPI GetIpAddrTable(
+  _Out_   PMIB_IPADDRTABLE pIpAddrTable,
+  _Inout_ PULONG           pdwSize,
+  _In_    BOOL             bOrder
+);

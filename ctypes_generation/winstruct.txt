@@ -1170,6 +1170,31 @@ typedef struct _OVERLAPPED {
   HANDLE    hEvent;
 } OVERLAPPED, *LPOVERLAPPED;
 
+typedef struct _MIB_IPADDRROW_XP {
+    DWORD dwAddr;
+    IF_INDEX dwIndex;
+    DWORD dwMask;
+    DWORD dwBCastAddr;
+    DWORD dwReasmSize;
+    USHORT unused1;
+    USHORT wType;
+} MIB_IPADDRROW, MIB_IPADDRROW_XP, *PMIB_IPADDRROW_XP;
+
+typedef struct _MIB_IPADDRTABLE {
+    DWORD dwNumEntries;
+    MIB_IPADDRROW table[ANY_SIZE];
+} MIB_IPADDRTABLE, *PMIB_IPADDRTABLE;
+
+
+typedef enum _INTERNAL_IF_OPER_STATUS {
+    IF_OPER_STATUS_NON_OPERATIONAL = 0,
+    IF_OPER_STATUS_UNREACHABLE     = 1,
+    IF_OPER_STATUS_DISCONNECTED    = 2,
+    IF_OPER_STATUS_CONNECTING      = 3,
+    IF_OPER_STATUS_CONNECTED       = 4,
+    IF_OPER_STATUS_OPERATIONAL     = 5,
+} INTERNAL_IF_OPER_STATUS;
+
 typedef struct _MIB_IFROW {
     WCHAR wszName[MAX_INTERFACE_NAME_LEN];
     IF_INDEX dwIndex;
@@ -1177,7 +1202,7 @@ typedef struct _MIB_IFROW {
     DWORD dwMtu;
     DWORD dwSpeed;
     DWORD dwPhysAddrLen;
-    UCHAR bPhysAddr[MAXLEN_PHYSADDR];
+    BYTE bPhysAddr[MAXLEN_PHYSADDR];
     DWORD dwAdminStatus;
     INTERNAL_IF_OPER_STATUS dwOperStatus;
     DWORD dwLastChange;

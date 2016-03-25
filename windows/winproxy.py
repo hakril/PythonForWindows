@@ -828,8 +828,24 @@ SetTcpEntry = TransparentIphlpapiProxy('SetTcpEntry', error_check=set_tcp_entry_
 @OptionalExport(IphlpapiProxy('GetExtendedTcpTable'))
 def GetExtendedTcpTable(pTcpTable, pdwSize=None, bOrder=True, ulAf=NeededParameter, TableClass=TCP_TABLE_OWNER_PID_ALL, Reserved=0):
     if pdwSize is None:
-        ctypes.sizeof(pTcpTable)
+        pdwSize = ULONG(ctypes.sizeof(pTcpTable))
     return GetExtendedTcpTable.ctypes_function(pTcpTable, pdwSize, bOrder, ulAf, TableClass, Reserved)
+
+
+@IphlpapiProxy('GetInterfaceInfo')
+def GetInterfaceInfo(pIfTable, dwOutBufLen=None):
+    if dwOutBufLen is None:
+        dwOutBufLen = ULONG(ctypes.sizeof(pIfTable))
+    return GetInterfaceInfo.ctypes_function(pIfTable, dwOutBufLen)
+
+
+@IphlpapiProxy('GetIfTable')
+def GetIfTable(pIfTable, pdwSize, bOrder=False):
+    return GetIfTable.ctypes_function(pIfTable, pdwSize, bOrder)
+
+@IphlpapiProxy('GetIpAddrTable')
+def GetIpAddrTable(pIpAddrTable, pdwSize, bOrder=False):
+    return GetIpAddrTable.ctypes_function(pIpAddrTable, pdwSize, bOrder)
 
 # ## WinTrustProxy  PE signature##
 
@@ -934,3 +950,5 @@ def CoInitializeSecurity(pSecDesc, cAuthSvc, asAuthSvc, pReserved1, dwAuthnLevel
 @Ole32Proxy('CoCreateInstance')
 def CoCreateInstance(rclsid, pUnkOuter=None, dwClsContext=CLSCTX_INPROC_SERVER, riid=NeededParameter, ppv=NeededParameter):
     return CoCreateInstance.ctypes_function(rclsid, pUnkOuter, dwClsContext, riid, ppv)
+
+
