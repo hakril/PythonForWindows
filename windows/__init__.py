@@ -11,6 +11,7 @@ Exported:
     current_thread : :class:`windows.winobject.CurrentThread`
 """
 
+
 from windows import winproxy
 from windows import winobject
 
@@ -33,6 +34,7 @@ import windows.utils
 import windows.debug
 import windows.wintrust
 import windows.syswow64
+import windows.com
 
 __all__ = ["system", 'current_process', 'current_thread']
 

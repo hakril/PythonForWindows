@@ -36,6 +36,8 @@ TODO:
 
         * What about ``NtWow64QueryVirtualMemory64`` ?
 
+    - Parse .IDL file for more COM NAME->IID
+
 
 CHANGELOG:
 

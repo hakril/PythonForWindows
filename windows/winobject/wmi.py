@@ -10,28 +10,7 @@ from windows.generated_def.winstructs import *
 from windows.generated_def.interfaces import IWbemLocator, IWbemServices, IEnumWbemClassObject, IWbemClassObject
 
 
-class ImprovedSAFEARRAY(windows.generated_def.winstructs.SAFEARRAY):
-        @classmethod
-        def of_type(cls, addr, t):
-            self = cls.from_address(addr)
-            self.elt_type = t
-            return self
 
-        def to_list(self, t=None):
-            if t is None:
-                if hasattr(self, "elt_type"):
-                    t = self.elt_type
-                else:
-                    raise ValueError("Missing type of the array")
-            if self.cDims !=  1:
-                raise NotImplementedError("tagSAFEARRAY if dims != 1")
-
-            nb_element = self.rgsabound[0].cElements
-            llbound = self.rgsabound[0].lLbound
-            if self.cbElements != ctypes.sizeof(t):
-                raise ValueError("Size of elements != sizeof(type)")
-            data = [t.from_address(self.pvData + (i + llbound) * ctypes.sizeof(t)).value for i in range(nb_element)]
-            return data
 
 
 
@@ -84,9 +63,9 @@ class WmiRequester(object):
                 # TODO: something clean and generic
                 if variant_res.vt & VT_ARRAY:
                     if variant_res.vt & VT_TYPEMASK == VT_BSTR:
-                        current_res[name] = variant_res._Data.parray[0].to_list(BSTR)
+                        current_res[name] = variant_res.asarray.to_list(BSTR)
                     if variant_res.vt & VT_TYPEMASK == VT_I4:
-                        current_res[name] = variant_res._Data.parray[0].to_list(LONG)
+                        current_res[name] = variant_res.asarray.to_list(LONG)
                 elif variant_res.vt in [VT_EMPTY, VT_NULL]:
                     current_res[name] = None
                 elif variant_res.vt == VT_BSTR:
@@ -95,8 +74,12 @@ class WmiRequester(object):
                     current_res[name] = variant_res.aslong
                 elif variant_res.vt == VT_BOOL:
                     current_res[name] = variant_res.asbool
+                elif variant_res.vt == VT_I2:
+                    current_res[name] = variant_res.asshort
+                elif variant_res.vt == VT_UI1:
+                    current_res[name] = variant_res.asbyte
                 else:
-                    print("Ignore variant of type {0}".format(hex(variant_res.vt)))
+                    print("[WARN] WMI Ignore variant of type {0}".format(hex(variant_res.vt)))
             res.append(current_res)
             enumerator.Next(0xffffffff, 1, ctypes.byref(processor), ctypes.byref(count))
         return res
@@ -104,6 +87,6 @@ class WmiRequester(object):
     def get_names(self, processor):
         res = POINTER(SAFEARRAY)()
         processor.GetNames(None, 0, None, byref(res))
-        safe_array = ctypes.cast(res, POINTER(ImprovedSAFEARRAY))[0]
+        safe_array = ctypes.cast(res, POINTER(windows.com.ImprovedSAFEARRAY))[0]
         safe_array.elt_type = BSTR
         return safe_array.to_list()
