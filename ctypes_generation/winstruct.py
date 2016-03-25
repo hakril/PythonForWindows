@@ -25,7 +25,7 @@ class Ptr(object):
 
     def __repr__(self):
         return "Ptr({0})".format(repr(self.type))
-        
+
 
 class WinStruct(object):
     ctypes_type = "Structure"
@@ -59,9 +59,9 @@ class WinStruct(object):
         res += "{0}._fields_ = [\n".format(self.name)
 
         for (ftype, name, nb_rep) in self.fields:
-            if  nb_rep == 1: 
+            if  nb_rep == 1:
                 res+= '    ("{0}", {1}),\n'.format(name, ftype.generate_ctypes())
-            else:       
+            else:
                 res+= '    ("{0}", {1} * {2}),\n'.format(name, ftype.generate_ctypes(), nb_rep)
         res += "]\n"
         return res
@@ -73,9 +73,9 @@ class WinStruct(object):
         _fields_ = [\n""".format(self.name, self.ctypes_type)
 
         for (ftype, name, nb_rep) in self.fields:
-            if  nb_rep == 1: 
+            if  nb_rep == 1:
                 res+= '        ("{0}", {1}),\n'.format(name, ftype.generate_ctypes())
-            else:       
+            else:
                 res+= '        ("{0}", {1} * {2}),\n'.format(name, ftype.generate_ctypes(), nb_rep)
         res += "    ]\n"
         return res
@@ -88,10 +88,10 @@ class WinStruct(object):
                 str_value = "POINTER({0})".format(self.name)
             ctypes_class += "{0} = {1}\n".format(typedef_name, str_value)
         return ctypes_class
-        
+
 class WinUnion(WinStruct):
     ctypes_type = "Union"
-                
+
 class WinEnum(object):
     def __init__(self, name):
         self.name = name
@@ -105,7 +105,7 @@ class WinEnum(object):
         if name in self.typedef:
             raise ValueError("nop")
         self.typedef[name] = self
-        
+
     def add_ptr_typedef(self, name):
         if name in self.typedef:
             raise ValueError("nop")
@@ -113,7 +113,15 @@ class WinEnum(object):
 
     # Assert that enum are DWORD
     def generate_ctypes(self):
-        lines = ["{0} = DWORD".format(self.name)]
+        #lines = ["{0} = DWORD".format(self.name)]
+        lines = []
+        for i, name in self.fields:
+            lines.append('{0} = EnumValue("{2}", "{0}", {1})'.format(name, hex(i), self.name))
+
+        lines += ["class {0}(EnumType):".format(self.name)]
+        lines += ["    values = [{0}]".format(", ".join([name for i, name in self.fields]))]
+        lines += ["    mapper = {{x:x for x in values}}".format(self.name)]
+
         for typedef_name, value in self.typedef.items():
             str_value = self.name
             if type(value) == Ptr:
@@ -121,10 +129,5 @@ class WinEnum(object):
             lines += ["{0} = {1}".format(typedef_name, str_value)]
         #lines += ["{0} = {1}".format(t, self.name) for t in self.typedef]
         lines += [""]
-
-        for i, name in self.fields:
-            lines.append("{0} = {1}".format(name, hex(i)))
-        ctypes_class = "\n".join(lines) 
-
+        ctypes_class = "\n".join(lines)
         return ctypes_class + "\n"
-        

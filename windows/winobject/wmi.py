@@ -10,11 +10,6 @@ from windows.generated_def.winstructs import *
 from windows.generated_def.interfaces import IWbemLocator, IWbemServices, IEnumWbemClassObject, IWbemClassObject
 
 
-
-
-
-
-
 class WmiRequester(object):
     """Perform WMI request: NOT STABLE"""
     INSTANCE = None
@@ -47,6 +42,8 @@ class WmiRequester(object):
         except WindowsError as e:
             if (e.winerror & 0xffffffff) ==  WBEM_E_INVALID_CLASS:
                 raise WindowsError(e.winerror, 'WBEM_E_INVALID_CLASS <Invalid WMI class "{0}">'.format(frm))
+            elif (e.winerror & 0xffffffff) in WBEMSTATUS.values:
+                raise WindowsError(e.winerror, WBEMSTATUS(e.winerror & 0xffffffff).value)
             raise
 
         count = ctypes.c_ulong(0)

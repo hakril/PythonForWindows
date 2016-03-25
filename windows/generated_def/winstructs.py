@@ -3,6 +3,34 @@ from ctypes import *
 from ctypes.wintypes import *
 from .windef import *
 
+class EnumValue(Flag):
+    def __new__(cls, enum_name, name, value):
+        return super(EnumValue, cls).__new__(cls, name, value)
+
+    def __init__(self, enum_name, name, value):
+        self.enum_name = enum_name
+        self.name = name
+
+    def __repr__(self):
+        return "{0}.{1}({2})".format(self.enum_name, self.name, hex(self))
+
+
+class EnumType(DWORD):
+    values = ()
+    mapper = {}
+
+    @property
+    def value(self):
+        raw_value = super(EnumType, self).value
+        return self.mapper.get(raw_value, raw_value)
+
+    def __repr__(self):
+        raw_value = super(EnumType, self).value
+        if raw_value in self.values:
+            value = self.value
+            return "<{0} {1}({2})>".format(type(self).__name__, value.name, hex(raw_value))
+        return "<{0}({1})>".format(type(self).__name__, hex(self.value))
+
 PWSTR = LPWSTR
 SIZE_T = c_ulong
 PSIZE_T = POINTER(SIZE_T)
@@ -70,677 +98,731 @@ structs = ['_LIST_ENTRY', '_PEB_LDR_DATA', '_LSA_UNICODE_STRING', '_RTL_USER_PRO
 enums = ['_SYSTEM_INFORMATION_CLASS', '_MEMORY_INFORMATION_CLASS', '_THREAD_INFORMATION_CLASS', '_TCP_TABLE_CLASS', '_VARENUM', '_UDP_TABLE_CLASS', 'NET_FW_RULE_DIRECTION_', 'NET_FW_PROFILE_TYPE2_', '_MIB_TCP_STATE', 'NET_FW_IP_PROTOCOL_', '_TOKEN_INFORMATION_CLASS', '_SECURITY_IMPERSONATION_LEVEL', '_SC_ENUM_TYPE', '_SC_STATUS_TYPE', '_OBJECT_INFORMATION_CLASS', '_SID_NAME_USE', 'NET_FW_PROFILE_TYPE2_', 'NET_FW_ACTION_', 'NET_FW_MODIFY_STATE_', 'NET_FW_RULE_DIRECTION_', 'tag_WBEMSTATUS', 'tagCLSCTX', '_INTERNAL_IF_OPER_STATUS', '_IMAGEHLP_SYMBOL_TYPE_INFO', '_PROCESSINFOCLASS', 'tagCOINIT', 'tagTYPEKIND']
 
 # Enum _SYSTEM_INFORMATION_CLASS definitions
-_SYSTEM_INFORMATION_CLASS = DWORD
+SystemBasicInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemBasicInformation", 0x0)
+SystemProcessorInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemProcessorInformation", 0x1)
+SystemPerformanceInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemPerformanceInformation", 0x2)
+SystemTimeOfDayInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemTimeOfDayInformation", 0x3)
+SystemPathInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemPathInformation", 0x4)
+SystemProcessInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemProcessInformation", 0x5)
+SystemCallCountInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemCallCountInformation", 0x6)
+SystemDeviceInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemDeviceInformation", 0x7)
+SystemProcessorPerformanceInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemProcessorPerformanceInformation", 0x8)
+SystemFlagsInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemFlagsInformation", 0x9)
+SystemCallTimeInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemCallTimeInformation", 0xa)
+SystemModuleInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemModuleInformation", 0xb)
+SystemLocksInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemLocksInformation", 0xc)
+SystemStackTraceInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemStackTraceInformation", 0xd)
+SystemPagedPoolInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemPagedPoolInformation", 0xe)
+SystemNonPagedPoolInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemNonPagedPoolInformation", 0xf)
+SystemHandleInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemHandleInformation", 0x10)
+SystemObjectInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemObjectInformation", 0x11)
+SystemPageFileInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemPageFileInformation", 0x12)
+SystemVdmInstemulInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemVdmInstemulInformation", 0x13)
+SystemVdmBopInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemVdmBopInformation", 0x14)
+SystemFileCacheInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemFileCacheInformation", 0x15)
+SystemPoolTagInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemPoolTagInformation", 0x16)
+SystemInterruptInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemInterruptInformation", 0x17)
+SystemDpcBehaviorInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemDpcBehaviorInformation", 0x18)
+SystemFullMemoryInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemFullMemoryInformation", 0x19)
+SystemLoadGdiDriverInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemLoadGdiDriverInformation", 0x1a)
+SystemUnloadGdiDriverInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemUnloadGdiDriverInformation", 0x1b)
+SystemTimeAdjustmentInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemTimeAdjustmentInformation", 0x1c)
+SystemSummaryMemoryInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemSummaryMemoryInformation", 0x1d)
+SystemMirrorMemoryInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemMirrorMemoryInformation", 0x1e)
+SystemPerformanceTraceInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemPerformanceTraceInformation", 0x1f)
+SystemObsolete0 = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemObsolete0", 0x20)
+SystemExceptionInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemExceptionInformation", 0x21)
+SystemCrashDumpStateInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemCrashDumpStateInformation", 0x22)
+SystemKernelDebuggerInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemKernelDebuggerInformation", 0x23)
+SystemContextSwitchInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemContextSwitchInformation", 0x24)
+SystemRegistryQuotaInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemRegistryQuotaInformation", 0x25)
+SystemExtendServiceTableInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemExtendServiceTableInformation", 0x26)
+SystemPrioritySeperation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemPrioritySeperation", 0x27)
+SystemVerifierAddDriverInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemVerifierAddDriverInformation", 0x28)
+SystemVerifierRemoveDriverInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemVerifierRemoveDriverInformation", 0x29)
+SystemProcessorIdleInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemProcessorIdleInformation", 0x2a)
+SystemLegacyDriverInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemLegacyDriverInformation", 0x2b)
+SystemCurrentTimeZoneInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemCurrentTimeZoneInformation", 0x2c)
+SystemLookasideInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemLookasideInformation", 0x2d)
+SystemTimeSlipNotification = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemTimeSlipNotification", 0x2e)
+SystemSessionCreate = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemSessionCreate", 0x2f)
+SystemSessionDetach = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemSessionDetach", 0x30)
+SystemSessionInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemSessionInformation", 0x31)
+SystemRangeStartInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemRangeStartInformation", 0x32)
+SystemVerifierInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemVerifierInformation", 0x33)
+SystemVerifierThunkExtend = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemVerifierThunkExtend", 0x34)
+SystemSessionProcessInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemSessionProcessInformation", 0x35)
+SystemLoadGdiDriverInSystemSpace = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemLoadGdiDriverInSystemSpace", 0x36)
+SystemNumaProcessorMap = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemNumaProcessorMap", 0x37)
+SystemPrefetcherInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemPrefetcherInformation", 0x38)
+SystemExtendedProcessInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemExtendedProcessInformation", 0x39)
+SystemRecommendedSharedDataAlignment = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemRecommendedSharedDataAlignment", 0x3a)
+SystemComPlusPackage = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemComPlusPackage", 0x3b)
+SystemNumaAvailableMemory = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemNumaAvailableMemory", 0x3c)
+SystemProcessorPowerInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemProcessorPowerInformation", 0x3d)
+SystemEmulationBasicInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemEmulationBasicInformation", 0x3e)
+SystemEmulationProcessorInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemEmulationProcessorInformation", 0x3f)
+SystemExtendedHandleInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemExtendedHandleInformation", 0x40)
+SystemLostDelayedWriteInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemLostDelayedWriteInformation", 0x41)
+SystemBigPoolInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemBigPoolInformation", 0x42)
+SystemSessionPoolTagInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemSessionPoolTagInformation", 0x43)
+SystemSessionMappedViewInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemSessionMappedViewInformation", 0x44)
+SystemHotpatchInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemHotpatchInformation", 0x45)
+SystemObjectSecurityMode = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemObjectSecurityMode", 0x46)
+SystemWatchdogTimerHandler = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemWatchdogTimerHandler", 0x47)
+SystemWatchdogTimerInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemWatchdogTimerInformation", 0x48)
+SystemLogicalProcessorInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemLogicalProcessorInformation", 0x49)
+SystemWow64SharedInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemWow64SharedInformation", 0x4a)
+SystemRegisterFirmwareTableInformationHandler = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemRegisterFirmwareTableInformationHandler", 0x4b)
+SystemFirmwareTableInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemFirmwareTableInformation", 0x4c)
+SystemModuleInformationEx = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemModuleInformationEx", 0x4d)
+SystemVerifierTriageInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemVerifierTriageInformation", 0x4e)
+SystemSuperfetchInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemSuperfetchInformation", 0x4f)
+SystemMemoryListInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemMemoryListInformation", 0x50)
+SystemFileCacheInformationEx = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemFileCacheInformationEx", 0x51)
+MaxSystemInfoClass = EnumValue("_SYSTEM_INFORMATION_CLASS", "MaxSystemInfoClass", 0x52)
+class _SYSTEM_INFORMATION_CLASS(EnumType):
+    values = [SystemBasicInformation, SystemProcessorInformation, SystemPerformanceInformation, SystemTimeOfDayInformation, SystemPathInformation, SystemProcessInformation, SystemCallCountInformation, SystemDeviceInformation, SystemProcessorPerformanceInformation, SystemFlagsInformation, SystemCallTimeInformation, SystemModuleInformation, SystemLocksInformation, SystemStackTraceInformation, SystemPagedPoolInformation, SystemNonPagedPoolInformation, SystemHandleInformation, SystemObjectInformation, SystemPageFileInformation, SystemVdmInstemulInformation, SystemVdmBopInformation, SystemFileCacheInformation, SystemPoolTagInformation, SystemInterruptInformation, SystemDpcBehaviorInformation, SystemFullMemoryInformation, SystemLoadGdiDriverInformation, SystemUnloadGdiDriverInformation, SystemTimeAdjustmentInformation, SystemSummaryMemoryInformation, SystemMirrorMemoryInformation, SystemPerformanceTraceInformation, SystemObsolete0, SystemExceptionInformation, SystemCrashDumpStateInformation, SystemKernelDebuggerInformation, SystemContextSwitchInformation, SystemRegistryQuotaInformation, SystemExtendServiceTableInformation, SystemPrioritySeperation, SystemVerifierAddDriverInformation, SystemVerifierRemoveDriverInformation, SystemProcessorIdleInformation, SystemLegacyDriverInformation, SystemCurrentTimeZoneInformation, SystemLookasideInformation, SystemTimeSlipNotification, SystemSessionCreate, SystemSessionDetach, SystemSessionInformation, SystemRangeStartInformation, SystemVerifierInformation, SystemVerifierThunkExtend, SystemSessionProcessInformation, SystemLoadGdiDriverInSystemSpace, SystemNumaProcessorMap, SystemPrefetcherInformation, SystemExtendedProcessInformation, SystemRecommendedSharedDataAlignment, SystemComPlusPackage, SystemNumaAvailableMemory, SystemProcessorPowerInformation, SystemEmulationBasicInformation, SystemEmulationProcessorInformation, SystemExtendedHandleInformation, SystemLostDelayedWriteInformation, SystemBigPoolInformation, SystemSessionPoolTagInformation, SystemSessionMappedViewInformation, SystemHotpatchInformation, SystemObjectSecurityMode, SystemWatchdogTimerHandler, SystemWatchdogTimerInformation, SystemLogicalProcessorInformation, SystemWow64SharedInformation, SystemRegisterFirmwareTableInformationHandler, SystemFirmwareTableInformation, SystemModuleInformationEx, SystemVerifierTriageInformation, SystemSuperfetchInformation, SystemMemoryListInformation, SystemFileCacheInformationEx, MaxSystemInfoClass]
+    mapper = {x:x for x in values}
 SYSTEM_INFORMATION_CLASS = _SYSTEM_INFORMATION_CLASS
 
-SystemBasicInformation = 0x0
-SystemProcessorInformation = 0x1
-SystemPerformanceInformation = 0x2
-SystemTimeOfDayInformation = 0x3
-SystemPathInformation = 0x4
-SystemProcessInformation = 0x5
-SystemCallCountInformation = 0x6
-SystemDeviceInformation = 0x7
-SystemProcessorPerformanceInformation = 0x8
-SystemFlagsInformation = 0x9
-SystemCallTimeInformation = 0xa
-SystemModuleInformation = 0xb
-SystemLocksInformation = 0xc
-SystemStackTraceInformation = 0xd
-SystemPagedPoolInformation = 0xe
-SystemNonPagedPoolInformation = 0xf
-SystemHandleInformation = 0x10
-SystemObjectInformation = 0x11
-SystemPageFileInformation = 0x12
-SystemVdmInstemulInformation = 0x13
-SystemVdmBopInformation = 0x14
-SystemFileCacheInformation = 0x15
-SystemPoolTagInformation = 0x16
-SystemInterruptInformation = 0x17
-SystemDpcBehaviorInformation = 0x18
-SystemFullMemoryInformation = 0x19
-SystemLoadGdiDriverInformation = 0x1a
-SystemUnloadGdiDriverInformation = 0x1b
-SystemTimeAdjustmentInformation = 0x1c
-SystemSummaryMemoryInformation = 0x1d
-SystemMirrorMemoryInformation = 0x1e
-SystemPerformanceTraceInformation = 0x1f
-SystemObsolete0 = 0x20
-SystemExceptionInformation = 0x21
-SystemCrashDumpStateInformation = 0x22
-SystemKernelDebuggerInformation = 0x23
-SystemContextSwitchInformation = 0x24
-SystemRegistryQuotaInformation = 0x25
-SystemExtendServiceTableInformation = 0x26
-SystemPrioritySeperation = 0x27
-SystemVerifierAddDriverInformation = 0x28
-SystemVerifierRemoveDriverInformation = 0x29
-SystemProcessorIdleInformation = 0x2a
-SystemLegacyDriverInformation = 0x2b
-SystemCurrentTimeZoneInformation = 0x2c
-SystemLookasideInformation = 0x2d
-SystemTimeSlipNotification = 0x2e
-SystemSessionCreate = 0x2f
-SystemSessionDetach = 0x30
-SystemSessionInformation = 0x31
-SystemRangeStartInformation = 0x32
-SystemVerifierInformation = 0x33
-SystemVerifierThunkExtend = 0x34
-SystemSessionProcessInformation = 0x35
-SystemLoadGdiDriverInSystemSpace = 0x36
-SystemNumaProcessorMap = 0x37
-SystemPrefetcherInformation = 0x38
-SystemExtendedProcessInformation = 0x39
-SystemRecommendedSharedDataAlignment = 0x3a
-SystemComPlusPackage = 0x3b
-SystemNumaAvailableMemory = 0x3c
-SystemProcessorPowerInformation = 0x3d
-SystemEmulationBasicInformation = 0x3e
-SystemEmulationProcessorInformation = 0x3f
-SystemExtendedHandleInformation = 0x40
-SystemLostDelayedWriteInformation = 0x41
-SystemBigPoolInformation = 0x42
-SystemSessionPoolTagInformation = 0x43
-SystemSessionMappedViewInformation = 0x44
-SystemHotpatchInformation = 0x45
-SystemObjectSecurityMode = 0x46
-SystemWatchdogTimerHandler = 0x47
-SystemWatchdogTimerInformation = 0x48
-SystemLogicalProcessorInformation = 0x49
-SystemWow64SharedInformation = 0x4a
-SystemRegisterFirmwareTableInformationHandler = 0x4b
-SystemFirmwareTableInformation = 0x4c
-SystemModuleInformationEx = 0x4d
-SystemVerifierTriageInformation = 0x4e
-SystemSuperfetchInformation = 0x4f
-SystemMemoryListInformation = 0x50
-SystemFileCacheInformationEx = 0x51
-MaxSystemInfoClass = 0x52
 
 # Enum _MEMORY_INFORMATION_CLASS definitions
-_MEMORY_INFORMATION_CLASS = DWORD
+MemoryBasicInformation = EnumValue("_MEMORY_INFORMATION_CLASS", "MemoryBasicInformation", 0x0)
+class _MEMORY_INFORMATION_CLASS(EnumType):
+    values = [MemoryBasicInformation]
+    mapper = {x:x for x in values}
 MEMORY_INFORMATION_CLASS = _MEMORY_INFORMATION_CLASS
 
-MemoryBasicInformation = 0x0
 
 # Enum _THREAD_INFORMATION_CLASS definitions
-_THREAD_INFORMATION_CLASS = DWORD
+ThreadBasicInformation = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadBasicInformation", 0x0)
+ThreadTimes = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadTimes", 0x1)
+ThreadPriority = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadPriority", 0x2)
+ThreadBasePriority = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadBasePriority", 0x3)
+ThreadAffinityMask = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadAffinityMask", 0x4)
+ThreadImpersonationToken = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadImpersonationToken", 0x5)
+ThreadDescriptorTableEntry = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadDescriptorTableEntry", 0x6)
+ThreadEnableAlignmentFaultFixup = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadEnableAlignmentFaultFixup", 0x7)
+ThreadEventPair = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadEventPair", 0x8)
+ThreadQuerySetWin32StartAddress = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadQuerySetWin32StartAddress", 0x9)
+ThreadZeroTlsCell = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadZeroTlsCell", 0xa)
+ThreadPerformanceCount = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadPerformanceCount", 0xb)
+ThreadAmILastThread = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadAmILastThread", 0xc)
+ThreadIdealProcessor = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadIdealProcessor", 0xd)
+ThreadPriorityBoost = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadPriorityBoost", 0xe)
+ThreadSetTlsArrayAddress = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadSetTlsArrayAddress", 0xf)
+ThreadIsIoPending = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadIsIoPending", 0x10)
+ThreadHideFromDebugger = EnumValue("_THREAD_INFORMATION_CLASS", "ThreadHideFromDebugger", 0x11)
+class _THREAD_INFORMATION_CLASS(EnumType):
+    values = [ThreadBasicInformation, ThreadTimes, ThreadPriority, ThreadBasePriority, ThreadAffinityMask, ThreadImpersonationToken, ThreadDescriptorTableEntry, ThreadEnableAlignmentFaultFixup, ThreadEventPair, ThreadQuerySetWin32StartAddress, ThreadZeroTlsCell, ThreadPerformanceCount, ThreadAmILastThread, ThreadIdealProcessor, ThreadPriorityBoost, ThreadSetTlsArrayAddress, ThreadIsIoPending, ThreadHideFromDebugger]
+    mapper = {x:x for x in values}
 THREAD_INFORMATION_CLASS = _THREAD_INFORMATION_CLASS
 PTHREAD_INFORMATION_CLASS = POINTER(_THREAD_INFORMATION_CLASS)
 
-ThreadBasicInformation = 0x0
-ThreadTimes = 0x1
-ThreadPriority = 0x2
-ThreadBasePriority = 0x3
-ThreadAffinityMask = 0x4
-ThreadImpersonationToken = 0x5
-ThreadDescriptorTableEntry = 0x6
-ThreadEnableAlignmentFaultFixup = 0x7
-ThreadEventPair = 0x8
-ThreadQuerySetWin32StartAddress = 0x9
-ThreadZeroTlsCell = 0xa
-ThreadPerformanceCount = 0xb
-ThreadAmILastThread = 0xc
-ThreadIdealProcessor = 0xd
-ThreadPriorityBoost = 0xe
-ThreadSetTlsArrayAddress = 0xf
-ThreadIsIoPending = 0x10
-ThreadHideFromDebugger = 0x11
 
 # Enum _TCP_TABLE_CLASS definitions
-_TCP_TABLE_CLASS = DWORD
+TCP_TABLE_BASIC_LISTENER = EnumValue("_TCP_TABLE_CLASS", "TCP_TABLE_BASIC_LISTENER", 0x0)
+TCP_TABLE_BASIC_CONNECTIONS = EnumValue("_TCP_TABLE_CLASS", "TCP_TABLE_BASIC_CONNECTIONS", 0x1)
+TCP_TABLE_BASIC_ALL = EnumValue("_TCP_TABLE_CLASS", "TCP_TABLE_BASIC_ALL", 0x2)
+TCP_TABLE_OWNER_PID_LISTENER = EnumValue("_TCP_TABLE_CLASS", "TCP_TABLE_OWNER_PID_LISTENER", 0x3)
+TCP_TABLE_OWNER_PID_CONNECTIONS = EnumValue("_TCP_TABLE_CLASS", "TCP_TABLE_OWNER_PID_CONNECTIONS", 0x4)
+TCP_TABLE_OWNER_PID_ALL = EnumValue("_TCP_TABLE_CLASS", "TCP_TABLE_OWNER_PID_ALL", 0x5)
+TCP_TABLE_OWNER_MODULE_LISTENER = EnumValue("_TCP_TABLE_CLASS", "TCP_TABLE_OWNER_MODULE_LISTENER", 0x6)
+TCP_TABLE_OWNER_MODULE_CONNECTIONS = EnumValue("_TCP_TABLE_CLASS", "TCP_TABLE_OWNER_MODULE_CONNECTIONS", 0x7)
+TCP_TABLE_OWNER_MODULE_ALL = EnumValue("_TCP_TABLE_CLASS", "TCP_TABLE_OWNER_MODULE_ALL", 0x8)
+class _TCP_TABLE_CLASS(EnumType):
+    values = [TCP_TABLE_BASIC_LISTENER, TCP_TABLE_BASIC_CONNECTIONS, TCP_TABLE_BASIC_ALL, TCP_TABLE_OWNER_PID_LISTENER, TCP_TABLE_OWNER_PID_CONNECTIONS, TCP_TABLE_OWNER_PID_ALL, TCP_TABLE_OWNER_MODULE_LISTENER, TCP_TABLE_OWNER_MODULE_CONNECTIONS, TCP_TABLE_OWNER_MODULE_ALL]
+    mapper = {x:x for x in values}
 TCP_TABLE_CLASS = _TCP_TABLE_CLASS
 
-TCP_TABLE_BASIC_LISTENER = 0x0
-TCP_TABLE_BASIC_CONNECTIONS = 0x1
-TCP_TABLE_BASIC_ALL = 0x2
-TCP_TABLE_OWNER_PID_LISTENER = 0x3
-TCP_TABLE_OWNER_PID_CONNECTIONS = 0x4
-TCP_TABLE_OWNER_PID_ALL = 0x5
-TCP_TABLE_OWNER_MODULE_LISTENER = 0x6
-TCP_TABLE_OWNER_MODULE_CONNECTIONS = 0x7
-TCP_TABLE_OWNER_MODULE_ALL = 0x8
 
 # Enum _VARENUM definitions
-_VARENUM = DWORD
+VT_EMPTY = EnumValue("_VARENUM", "VT_EMPTY", 0x0)
+VT_NULL = EnumValue("_VARENUM", "VT_NULL", 0x1)
+VT_I2 = EnumValue("_VARENUM", "VT_I2", 0x2)
+VT_I4 = EnumValue("_VARENUM", "VT_I4", 0x3)
+VT_R4 = EnumValue("_VARENUM", "VT_R4", 0x4)
+VT_R8 = EnumValue("_VARENUM", "VT_R8", 0x5)
+VT_CY = EnumValue("_VARENUM", "VT_CY", 0x6)
+VT_DATE = EnumValue("_VARENUM", "VT_DATE", 0x7)
+VT_BSTR = EnumValue("_VARENUM", "VT_BSTR", 0x8)
+VT_DISPATCH = EnumValue("_VARENUM", "VT_DISPATCH", 0x9)
+VT_ERROR = EnumValue("_VARENUM", "VT_ERROR", 0xa)
+VT_BOOL = EnumValue("_VARENUM", "VT_BOOL", 0xb)
+VT_VARIANT = EnumValue("_VARENUM", "VT_VARIANT", 0xc)
+VT_UNKNOWN = EnumValue("_VARENUM", "VT_UNKNOWN", 0xd)
+VT_DECIMAL = EnumValue("_VARENUM", "VT_DECIMAL", 0xe)
+VT_I1 = EnumValue("_VARENUM", "VT_I1", 0x10)
+VT_UI1 = EnumValue("_VARENUM", "VT_UI1", 0x11)
+VT_UI2 = EnumValue("_VARENUM", "VT_UI2", 0x12)
+VT_UI4 = EnumValue("_VARENUM", "VT_UI4", 0x13)
+VT_I8 = EnumValue("_VARENUM", "VT_I8", 0x14)
+VT_UI8 = EnumValue("_VARENUM", "VT_UI8", 0x15)
+VT_INT = EnumValue("_VARENUM", "VT_INT", 0x16)
+VT_UINT = EnumValue("_VARENUM", "VT_UINT", 0x17)
+VT_VOID = EnumValue("_VARENUM", "VT_VOID", 0x18)
+VT_HRESULT = EnumValue("_VARENUM", "VT_HRESULT", 0x19)
+VT_PTR = EnumValue("_VARENUM", "VT_PTR", 0x1a)
+VT_SAFEARRAY = EnumValue("_VARENUM", "VT_SAFEARRAY", 0x1b)
+VT_CARRAY = EnumValue("_VARENUM", "VT_CARRAY", 0x1c)
+VT_USERDEFINED = EnumValue("_VARENUM", "VT_USERDEFINED", 0x1d)
+VT_LPSTR = EnumValue("_VARENUM", "VT_LPSTR", 0x1e)
+VT_LPWSTR = EnumValue("_VARENUM", "VT_LPWSTR", 0x1f)
+VT_RECORD = EnumValue("_VARENUM", "VT_RECORD", 0x24)
+VT_INT_PTR = EnumValue("_VARENUM", "VT_INT_PTR", 0x25)
+VT_UINT_PTR = EnumValue("_VARENUM", "VT_UINT_PTR", 0x26)
+VT_FILETIME = EnumValue("_VARENUM", "VT_FILETIME", 0x40)
+VT_BLOB = EnumValue("_VARENUM", "VT_BLOB", 0x41)
+VT_STREAM = EnumValue("_VARENUM", "VT_STREAM", 0x42)
+VT_STORAGE = EnumValue("_VARENUM", "VT_STORAGE", 0x43)
+VT_STREAMED_OBJECT = EnumValue("_VARENUM", "VT_STREAMED_OBJECT", 0x44)
+VT_STORED_OBJECT = EnumValue("_VARENUM", "VT_STORED_OBJECT", 0x45)
+VT_BLOB_OBJECT = EnumValue("_VARENUM", "VT_BLOB_OBJECT", 0x46)
+VT_CF = EnumValue("_VARENUM", "VT_CF", 0x47)
+VT_CLSID = EnumValue("_VARENUM", "VT_CLSID", 0x48)
+VT_VERSIONED_STREAM = EnumValue("_VARENUM", "VT_VERSIONED_STREAM", 0x49)
+VT_BSTR_BLOB = EnumValue("_VARENUM", "VT_BSTR_BLOB", 0xfff)
+VT_VECTOR = EnumValue("_VARENUM", "VT_VECTOR", 0x1000)
+VT_ARRAY = EnumValue("_VARENUM", "VT_ARRAY", 0x2000)
+VT_BYREF = EnumValue("_VARENUM", "VT_BYREF", 0x4000)
+VT_RESERVED = EnumValue("_VARENUM", "VT_RESERVED", 0x8000)
+VT_ILLEGAL = EnumValue("_VARENUM", "VT_ILLEGAL", 0xffff)
+VT_ILLEGALMASKED = EnumValue("_VARENUM", "VT_ILLEGALMASKED", 0xfff)
+VT_TYPEMASK = EnumValue("_VARENUM", "VT_TYPEMASK", 0xfff)
+class _VARENUM(EnumType):
+    values = [VT_EMPTY, VT_NULL, VT_I2, VT_I4, VT_R4, VT_R8, VT_CY, VT_DATE, VT_BSTR, VT_DISPATCH, VT_ERROR, VT_BOOL, VT_VARIANT, VT_UNKNOWN, VT_DECIMAL, VT_I1, VT_UI1, VT_UI2, VT_UI4, VT_I8, VT_UI8, VT_INT, VT_UINT, VT_VOID, VT_HRESULT, VT_PTR, VT_SAFEARRAY, VT_CARRAY, VT_USERDEFINED, VT_LPSTR, VT_LPWSTR, VT_RECORD, VT_INT_PTR, VT_UINT_PTR, VT_FILETIME, VT_BLOB, VT_STREAM, VT_STORAGE, VT_STREAMED_OBJECT, VT_STORED_OBJECT, VT_BLOB_OBJECT, VT_CF, VT_CLSID, VT_VERSIONED_STREAM, VT_BSTR_BLOB, VT_VECTOR, VT_ARRAY, VT_BYREF, VT_RESERVED, VT_ILLEGAL, VT_ILLEGALMASKED, VT_TYPEMASK]
+    mapper = {x:x for x in values}
 VARENUM = _VARENUM
 
-VT_EMPTY = 0x0
-VT_NULL = 0x1
-VT_I2 = 0x2
-VT_I4 = 0x3
-VT_R4 = 0x4
-VT_R8 = 0x5
-VT_CY = 0x6
-VT_DATE = 0x7
-VT_BSTR = 0x8
-VT_DISPATCH = 0x9
-VT_ERROR = 0xa
-VT_BOOL = 0xb
-VT_VARIANT = 0xc
-VT_UNKNOWN = 0xd
-VT_DECIMAL = 0xe
-VT_I1 = 0x10
-VT_UI1 = 0x11
-VT_UI2 = 0x12
-VT_UI4 = 0x13
-VT_I8 = 0x14
-VT_UI8 = 0x15
-VT_INT = 0x16
-VT_UINT = 0x17
-VT_VOID = 0x18
-VT_HRESULT = 0x19
-VT_PTR = 0x1a
-VT_SAFEARRAY = 0x1b
-VT_CARRAY = 0x1c
-VT_USERDEFINED = 0x1d
-VT_LPSTR = 0x1e
-VT_LPWSTR = 0x1f
-VT_RECORD = 0x24
-VT_INT_PTR = 0x25
-VT_UINT_PTR = 0x26
-VT_FILETIME = 0x40
-VT_BLOB = 0x41
-VT_STREAM = 0x42
-VT_STORAGE = 0x43
-VT_STREAMED_OBJECT = 0x44
-VT_STORED_OBJECT = 0x45
-VT_BLOB_OBJECT = 0x46
-VT_CF = 0x47
-VT_CLSID = 0x48
-VT_VERSIONED_STREAM = 0x49
-VT_BSTR_BLOB = 0xfff
-VT_VECTOR = 0x1000
-VT_ARRAY = 0x2000
-VT_BYREF = 0x4000
-VT_RESERVED = 0x8000
-VT_ILLEGAL = 0xffff
-VT_ILLEGALMASKED = 0xfff
-VT_TYPEMASK = 0xfff
 
 # Enum _UDP_TABLE_CLASS definitions
-_UDP_TABLE_CLASS = DWORD
+UDP_TABLE_BASIC = EnumValue("_UDP_TABLE_CLASS", "UDP_TABLE_BASIC", 0x0)
+UDP_TABLE_OWNER_PID = EnumValue("_UDP_TABLE_CLASS", "UDP_TABLE_OWNER_PID", 0x1)
+UDP_TABLE_OWNER_MODULE = EnumValue("_UDP_TABLE_CLASS", "UDP_TABLE_OWNER_MODULE", 0x2)
+class _UDP_TABLE_CLASS(EnumType):
+    values = [UDP_TABLE_BASIC, UDP_TABLE_OWNER_PID, UDP_TABLE_OWNER_MODULE]
+    mapper = {x:x for x in values}
 UDP_TABLE_CLASS = _UDP_TABLE_CLASS
 
-UDP_TABLE_BASIC = 0x0
-UDP_TABLE_OWNER_PID = 0x1
-UDP_TABLE_OWNER_MODULE = 0x2
 
 # Enum NET_FW_RULE_DIRECTION_ definitions
-NET_FW_RULE_DIRECTION_ = DWORD
+NET_FW_RULE_DIR_IN = EnumValue("NET_FW_RULE_DIRECTION_", "NET_FW_RULE_DIR_IN", 0x1)
+NET_FW_RULE_DIR_OUT = EnumValue("NET_FW_RULE_DIRECTION_", "NET_FW_RULE_DIR_OUT", 0x2)
+NET_FW_RULE_DIR_MAX = EnumValue("NET_FW_RULE_DIRECTION_", "NET_FW_RULE_DIR_MAX", 0x3)
+class NET_FW_RULE_DIRECTION_(EnumType):
+    values = [NET_FW_RULE_DIR_IN, NET_FW_RULE_DIR_OUT, NET_FW_RULE_DIR_MAX]
+    mapper = {x:x for x in values}
 NET_FW_RULE_DIRECTION = NET_FW_RULE_DIRECTION_
 
-NET_FW_RULE_DIR_IN = 0x1
-NET_FW_RULE_DIR_OUT = 0x2
-NET_FW_RULE_DIR_MAX = 0x3
 
 # Enum NET_FW_PROFILE_TYPE2_ definitions
-NET_FW_PROFILE_TYPE2_ = DWORD
+NET_FW_PROFILE2_DOMAIN = EnumValue("NET_FW_PROFILE_TYPE2_", "NET_FW_PROFILE2_DOMAIN", 0x1)
+NET_FW_PROFILE2_PRIVATE = EnumValue("NET_FW_PROFILE_TYPE2_", "NET_FW_PROFILE2_PRIVATE", 0x2)
+NET_FW_PROFILE2_PUBLIC = EnumValue("NET_FW_PROFILE_TYPE2_", "NET_FW_PROFILE2_PUBLIC", 0x4)
+NET_FW_PROFILE2_ALL = EnumValue("NET_FW_PROFILE_TYPE2_", "NET_FW_PROFILE2_ALL", 0x7fffffff)
+class NET_FW_PROFILE_TYPE2_(EnumType):
+    values = [NET_FW_PROFILE2_DOMAIN, NET_FW_PROFILE2_PRIVATE, NET_FW_PROFILE2_PUBLIC, NET_FW_PROFILE2_ALL]
+    mapper = {x:x for x in values}
 NET_FW_PROFILE_TYPE2 = NET_FW_PROFILE_TYPE2_
 
-NET_FW_PROFILE2_DOMAIN = 0x1
-NET_FW_PROFILE2_PRIVATE = 0x2
-NET_FW_PROFILE2_PUBLIC = 0x4
-NET_FW_PROFILE2_ALL = 0x7fffffff
 
 # Enum _MIB_TCP_STATE definitions
-_MIB_TCP_STATE = DWORD
+MIB_TCP_STATE_CLOSED = EnumValue("_MIB_TCP_STATE", "MIB_TCP_STATE_CLOSED", 0x1)
+MIB_TCP_STATE_LISTEN = EnumValue("_MIB_TCP_STATE", "MIB_TCP_STATE_LISTEN", 0x2)
+MIB_TCP_STATE_SYN_SENT = EnumValue("_MIB_TCP_STATE", "MIB_TCP_STATE_SYN_SENT", 0x3)
+MIB_TCP_STATE_SYN_RCVD = EnumValue("_MIB_TCP_STATE", "MIB_TCP_STATE_SYN_RCVD", 0x4)
+MIB_TCP_STATE_ESTAB = EnumValue("_MIB_TCP_STATE", "MIB_TCP_STATE_ESTAB", 0x5)
+MIB_TCP_STATE_FIN_WAIT1 = EnumValue("_MIB_TCP_STATE", "MIB_TCP_STATE_FIN_WAIT1", 0x6)
+MIB_TCP_STATE_FIN_WAIT2 = EnumValue("_MIB_TCP_STATE", "MIB_TCP_STATE_FIN_WAIT2", 0x7)
+MIB_TCP_STATE_CLOSE_WAIT = EnumValue("_MIB_TCP_STATE", "MIB_TCP_STATE_CLOSE_WAIT", 0x8)
+MIB_TCP_STATE_CLOSING = EnumValue("_MIB_TCP_STATE", "MIB_TCP_STATE_CLOSING", 0x9)
+MIB_TCP_STATE_LAST_ACK = EnumValue("_MIB_TCP_STATE", "MIB_TCP_STATE_LAST_ACK", 0xa)
+MIB_TCP_STATE_TIME_WAIT = EnumValue("_MIB_TCP_STATE", "MIB_TCP_STATE_TIME_WAIT", 0xb)
+MIB_TCP_STATE_DELETE_TCB = EnumValue("_MIB_TCP_STATE", "MIB_TCP_STATE_DELETE_TCB", 0xc)
+class _MIB_TCP_STATE(EnumType):
+    values = [MIB_TCP_STATE_CLOSED, MIB_TCP_STATE_LISTEN, MIB_TCP_STATE_SYN_SENT, MIB_TCP_STATE_SYN_RCVD, MIB_TCP_STATE_ESTAB, MIB_TCP_STATE_FIN_WAIT1, MIB_TCP_STATE_FIN_WAIT2, MIB_TCP_STATE_CLOSE_WAIT, MIB_TCP_STATE_CLOSING, MIB_TCP_STATE_LAST_ACK, MIB_TCP_STATE_TIME_WAIT, MIB_TCP_STATE_DELETE_TCB]
+    mapper = {x:x for x in values}
 MIB_TCP_STATE = _MIB_TCP_STATE
 
-MIB_TCP_STATE_CLOSED = 0x1
-MIB_TCP_STATE_LISTEN = 0x2
-MIB_TCP_STATE_SYN_SENT = 0x3
-MIB_TCP_STATE_SYN_RCVD = 0x4
-MIB_TCP_STATE_ESTAB = 0x5
-MIB_TCP_STATE_FIN_WAIT1 = 0x6
-MIB_TCP_STATE_FIN_WAIT2 = 0x7
-MIB_TCP_STATE_CLOSE_WAIT = 0x8
-MIB_TCP_STATE_CLOSING = 0x9
-MIB_TCP_STATE_LAST_ACK = 0xa
-MIB_TCP_STATE_TIME_WAIT = 0xb
-MIB_TCP_STATE_DELETE_TCB = 0xc
 
 # Enum NET_FW_IP_PROTOCOL_ definitions
-NET_FW_IP_PROTOCOL_ = DWORD
+NET_FW_IP_PROTOCOL_TCP = EnumValue("NET_FW_IP_PROTOCOL_", "NET_FW_IP_PROTOCOL_TCP", 0x6)
+NET_FW_IP_PROTOCOL_UDP = EnumValue("NET_FW_IP_PROTOCOL_", "NET_FW_IP_PROTOCOL_UDP", 0x11)
+NET_FW_IP_PROTOCOL_ANY = EnumValue("NET_FW_IP_PROTOCOL_", "NET_FW_IP_PROTOCOL_ANY", 0x100)
+class NET_FW_IP_PROTOCOL_(EnumType):
+    values = [NET_FW_IP_PROTOCOL_TCP, NET_FW_IP_PROTOCOL_UDP, NET_FW_IP_PROTOCOL_ANY]
+    mapper = {x:x for x in values}
 NET_FW_IP_PROTOCOL = NET_FW_IP_PROTOCOL_
 
-NET_FW_IP_PROTOCOL_TCP = 0x6
-NET_FW_IP_PROTOCOL_UDP = 0x11
-NET_FW_IP_PROTOCOL_ANY = 0x100
 
 # Enum _TOKEN_INFORMATION_CLASS definitions
-_TOKEN_INFORMATION_CLASS = DWORD
+TokenInvalid = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenInvalid", 0x0)
+TokenUser = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenUser", 0x1)
+TokenGroups = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenGroups", 0x2)
+TokenPrivileges = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenPrivileges", 0x3)
+TokenOwner = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenOwner", 0x4)
+TokenPrimaryGroup = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenPrimaryGroup", 0x5)
+TokenDefaultDacl = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenDefaultDacl", 0x6)
+TokenSource = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenSource", 0x7)
+TokenType = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenType", 0x8)
+TokenImpersonationLevel = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenImpersonationLevel", 0x9)
+TokenStatistics = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenStatistics", 0xa)
+TokenRestrictedSids = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenRestrictedSids", 0xb)
+TokenSessionId = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenSessionId", 0xc)
+TokenGroupsAndPrivileges = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenGroupsAndPrivileges", 0xd)
+TokenSessionReference = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenSessionReference", 0xe)
+TokenSandBoxInert = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenSandBoxInert", 0xf)
+TokenAuditPolicy = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenAuditPolicy", 0x10)
+TokenOrigin = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenOrigin", 0x11)
+TokenElevationType = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenElevationType", 0x12)
+TokenLinkedToken = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenLinkedToken", 0x13)
+TokenElevation = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenElevation", 0x14)
+TokenHasRestrictions = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenHasRestrictions", 0x15)
+TokenAccessInformation = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenAccessInformation", 0x16)
+TokenVirtualizationAllowed = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenVirtualizationAllowed", 0x17)
+TokenVirtualizationEnabled = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenVirtualizationEnabled", 0x18)
+TokenIntegrityLevel = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenIntegrityLevel", 0x19)
+TokenUIAccess = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenUIAccess", 0x1a)
+TokenMandatoryPolicy = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenMandatoryPolicy", 0x1b)
+TokenLogonSid = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenLogonSid", 0x1c)
+TokenIsAppContainer = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenIsAppContainer", 0x1d)
+TokenCapabilities = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenCapabilities", 0x1e)
+TokenAppContainerSid = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenAppContainerSid", 0x1f)
+TokenAppContainerNumber = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenAppContainerNumber", 0x20)
+TokenUserClaimAttributes = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenUserClaimAttributes", 0x21)
+TokenDeviceClaimAttributes = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenDeviceClaimAttributes", 0x22)
+TokenRestrictedUserClaimAttributes = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenRestrictedUserClaimAttributes", 0x23)
+TokenRestrictedDeviceClaimAttributes = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenRestrictedDeviceClaimAttributes", 0x24)
+TokenDeviceGroups = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenDeviceGroups", 0x25)
+TokenRestrictedDeviceGroups = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenRestrictedDeviceGroups", 0x26)
+TokenSecurityAttributes = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenSecurityAttributes", 0x27)
+TokenIsRestricted = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenIsRestricted", 0x28)
+MaxTokenInfoClass = EnumValue("_TOKEN_INFORMATION_CLASS", "MaxTokenInfoClass", 0x29)
+class _TOKEN_INFORMATION_CLASS(EnumType):
+    values = [TokenInvalid, TokenUser, TokenGroups, TokenPrivileges, TokenOwner, TokenPrimaryGroup, TokenDefaultDacl, TokenSource, TokenType, TokenImpersonationLevel, TokenStatistics, TokenRestrictedSids, TokenSessionId, TokenGroupsAndPrivileges, TokenSessionReference, TokenSandBoxInert, TokenAuditPolicy, TokenOrigin, TokenElevationType, TokenLinkedToken, TokenElevation, TokenHasRestrictions, TokenAccessInformation, TokenVirtualizationAllowed, TokenVirtualizationEnabled, TokenIntegrityLevel, TokenUIAccess, TokenMandatoryPolicy, TokenLogonSid, TokenIsAppContainer, TokenCapabilities, TokenAppContainerSid, TokenAppContainerNumber, TokenUserClaimAttributes, TokenDeviceClaimAttributes, TokenRestrictedUserClaimAttributes, TokenRestrictedDeviceClaimAttributes, TokenDeviceGroups, TokenRestrictedDeviceGroups, TokenSecurityAttributes, TokenIsRestricted, MaxTokenInfoClass]
+    mapper = {x:x for x in values}
 TOKEN_INFORMATION_CLASS = _TOKEN_INFORMATION_CLASS
 PTOKEN_INFORMATION_CLASS = POINTER(_TOKEN_INFORMATION_CLASS)
 
-TokenInvalid = 0x0
-TokenUser = 0x1
-TokenGroups = 0x2
-TokenPrivileges = 0x3
-TokenOwner = 0x4
-TokenPrimaryGroup = 0x5
-TokenDefaultDacl = 0x6
-TokenSource = 0x7
-TokenType = 0x8
-TokenImpersonationLevel = 0x9
-TokenStatistics = 0xa
-TokenRestrictedSids = 0xb
-TokenSessionId = 0xc
-TokenGroupsAndPrivileges = 0xd
-TokenSessionReference = 0xe
-TokenSandBoxInert = 0xf
-TokenAuditPolicy = 0x10
-TokenOrigin = 0x11
-TokenElevationType = 0x12
-TokenLinkedToken = 0x13
-TokenElevation = 0x14
-TokenHasRestrictions = 0x15
-TokenAccessInformation = 0x16
-TokenVirtualizationAllowed = 0x17
-TokenVirtualizationEnabled = 0x18
-TokenIntegrityLevel = 0x19
-TokenUIAccess = 0x1a
-TokenMandatoryPolicy = 0x1b
-TokenLogonSid = 0x1c
-TokenIsAppContainer = 0x1d
-TokenCapabilities = 0x1e
-TokenAppContainerSid = 0x1f
-TokenAppContainerNumber = 0x20
-TokenUserClaimAttributes = 0x21
-TokenDeviceClaimAttributes = 0x22
-TokenRestrictedUserClaimAttributes = 0x23
-TokenRestrictedDeviceClaimAttributes = 0x24
-TokenDeviceGroups = 0x25
-TokenRestrictedDeviceGroups = 0x26
-TokenSecurityAttributes = 0x27
-TokenIsRestricted = 0x28
-MaxTokenInfoClass = 0x29
 
 # Enum _SECURITY_IMPERSONATION_LEVEL definitions
-_SECURITY_IMPERSONATION_LEVEL = DWORD
+SecurityAnonymous = EnumValue("_SECURITY_IMPERSONATION_LEVEL", "SecurityAnonymous", 0x0)
+SecurityIdentification = EnumValue("_SECURITY_IMPERSONATION_LEVEL", "SecurityIdentification", 0x1)
+SecurityImpersonation = EnumValue("_SECURITY_IMPERSONATION_LEVEL", "SecurityImpersonation", 0x2)
+SecurityDelegation = EnumValue("_SECURITY_IMPERSONATION_LEVEL", "SecurityDelegation", 0x3)
+class _SECURITY_IMPERSONATION_LEVEL(EnumType):
+    values = [SecurityAnonymous, SecurityIdentification, SecurityImpersonation, SecurityDelegation]
+    mapper = {x:x for x in values}
 SECURITY_IMPERSONATION_LEVEL = _SECURITY_IMPERSONATION_LEVEL
 PSECURITY_IMPERSONATION_LEVEL = POINTER(_SECURITY_IMPERSONATION_LEVEL)
 
-SecurityAnonymous = 0x0
-SecurityIdentification = 0x1
-SecurityImpersonation = 0x2
-SecurityDelegation = 0x3
 
 # Enum _SC_ENUM_TYPE definitions
-_SC_ENUM_TYPE = DWORD
+SC_ENUM_PROCESS_INFO = EnumValue("_SC_ENUM_TYPE", "SC_ENUM_PROCESS_INFO", 0x0)
+class _SC_ENUM_TYPE(EnumType):
+    values = [SC_ENUM_PROCESS_INFO]
+    mapper = {x:x for x in values}
 SC_ENUM_TYPE = _SC_ENUM_TYPE
 
-SC_ENUM_PROCESS_INFO = 0x0
 
 # Enum _SC_STATUS_TYPE definitions
-_SC_STATUS_TYPE = DWORD
+SC_STATUS_PROCESS_INFO = EnumValue("_SC_STATUS_TYPE", "SC_STATUS_PROCESS_INFO", 0x0)
+class _SC_STATUS_TYPE(EnumType):
+    values = [SC_STATUS_PROCESS_INFO]
+    mapper = {x:x for x in values}
 SC_STATUS_TYPE = _SC_STATUS_TYPE
 
-SC_STATUS_PROCESS_INFO = 0x0
 
 # Enum _OBJECT_INFORMATION_CLASS definitions
-_OBJECT_INFORMATION_CLASS = DWORD
+ObjectBasicInformation = EnumValue("_OBJECT_INFORMATION_CLASS", "ObjectBasicInformation", 0x0)
+ObjectNameInformation = EnumValue("_OBJECT_INFORMATION_CLASS", "ObjectNameInformation", 0x1)
+ObjectTypeInformation = EnumValue("_OBJECT_INFORMATION_CLASS", "ObjectTypeInformation", 0x2)
+class _OBJECT_INFORMATION_CLASS(EnumType):
+    values = [ObjectBasicInformation, ObjectNameInformation, ObjectTypeInformation]
+    mapper = {x:x for x in values}
 OBJECT_INFORMATION_CLASS = _OBJECT_INFORMATION_CLASS
 
-ObjectBasicInformation = 0x0
-ObjectNameInformation = 0x1
-ObjectTypeInformation = 0x2
 
 # Enum _SID_NAME_USE definitions
-_SID_NAME_USE = DWORD
+SidTypeUser = EnumValue("_SID_NAME_USE", "SidTypeUser", 0x1)
+SidTypeGroup = EnumValue("_SID_NAME_USE", "SidTypeGroup", 0x2)
+SidTypeDomain = EnumValue("_SID_NAME_USE", "SidTypeDomain", 0x3)
+SidTypeAlias = EnumValue("_SID_NAME_USE", "SidTypeAlias", 0x4)
+SidTypeWellKnownGroup = EnumValue("_SID_NAME_USE", "SidTypeWellKnownGroup", 0x5)
+SidTypeDeletedAccount = EnumValue("_SID_NAME_USE", "SidTypeDeletedAccount", 0x6)
+SidTypeInvalid = EnumValue("_SID_NAME_USE", "SidTypeInvalid", 0x7)
+SidTypeUnknown = EnumValue("_SID_NAME_USE", "SidTypeUnknown", 0x8)
+SidTypeComputer = EnumValue("_SID_NAME_USE", "SidTypeComputer", 0x9)
+SidTypeLabel = EnumValue("_SID_NAME_USE", "SidTypeLabel", 0xa)
+class _SID_NAME_USE(EnumType):
+    values = [SidTypeUser, SidTypeGroup, SidTypeDomain, SidTypeAlias, SidTypeWellKnownGroup, SidTypeDeletedAccount, SidTypeInvalid, SidTypeUnknown, SidTypeComputer, SidTypeLabel]
+    mapper = {x:x for x in values}
 SID_NAME_USE = _SID_NAME_USE
 PSID_NAME_USE = POINTER(_SID_NAME_USE)
 
-SidTypeUser = 0x1
-SidTypeGroup = 0x2
-SidTypeDomain = 0x3
-SidTypeAlias = 0x4
-SidTypeWellKnownGroup = 0x5
-SidTypeDeletedAccount = 0x6
-SidTypeInvalid = 0x7
-SidTypeUnknown = 0x8
-SidTypeComputer = 0x9
-SidTypeLabel = 0xa
 
 # Enum NET_FW_PROFILE_TYPE2_ definitions
-NET_FW_PROFILE_TYPE2_ = DWORD
+NET_FW_PROFILE2_DOMAIN = EnumValue("NET_FW_PROFILE_TYPE2_", "NET_FW_PROFILE2_DOMAIN", 0x1)
+NET_FW_PROFILE2_PRIVATE = EnumValue("NET_FW_PROFILE_TYPE2_", "NET_FW_PROFILE2_PRIVATE", 0x2)
+NET_FW_PROFILE2_PUBLIC = EnumValue("NET_FW_PROFILE_TYPE2_", "NET_FW_PROFILE2_PUBLIC", 0x4)
+NET_FW_PROFILE2_ALL = EnumValue("NET_FW_PROFILE_TYPE2_", "NET_FW_PROFILE2_ALL", 0x7fffffff)
+class NET_FW_PROFILE_TYPE2_(EnumType):
+    values = [NET_FW_PROFILE2_DOMAIN, NET_FW_PROFILE2_PRIVATE, NET_FW_PROFILE2_PUBLIC, NET_FW_PROFILE2_ALL]
+    mapper = {x:x for x in values}
 NET_FW_PROFILE_TYPE2 = NET_FW_PROFILE_TYPE2_
 
-NET_FW_PROFILE2_DOMAIN = 0x1
-NET_FW_PROFILE2_PRIVATE = 0x2
-NET_FW_PROFILE2_PUBLIC = 0x4
-NET_FW_PROFILE2_ALL = 0x7fffffff
 
 # Enum NET_FW_ACTION_ definitions
-NET_FW_ACTION_ = DWORD
+NET_FW_ACTION_BLOCK = EnumValue("NET_FW_ACTION_", "NET_FW_ACTION_BLOCK", 0x0)
+NET_FW_ACTION_ALLOW = EnumValue("NET_FW_ACTION_", "NET_FW_ACTION_ALLOW", 0x1)
+NET_FW_ACTION_MAX = EnumValue("NET_FW_ACTION_", "NET_FW_ACTION_MAX", 0x2)
+class NET_FW_ACTION_(EnumType):
+    values = [NET_FW_ACTION_BLOCK, NET_FW_ACTION_ALLOW, NET_FW_ACTION_MAX]
+    mapper = {x:x for x in values}
 NET_FW_ACTION = NET_FW_ACTION_
 
-NET_FW_ACTION_BLOCK = 0x0
-NET_FW_ACTION_ALLOW = 0x1
-NET_FW_ACTION_MAX = 0x2
 
 # Enum NET_FW_MODIFY_STATE_ definitions
-NET_FW_MODIFY_STATE_ = DWORD
+NET_FW_MODIFY_STATE_OK = EnumValue("NET_FW_MODIFY_STATE_", "NET_FW_MODIFY_STATE_OK", 0x0)
+NET_FW_MODIFY_STATE_GP_OVERRIDE = EnumValue("NET_FW_MODIFY_STATE_", "NET_FW_MODIFY_STATE_GP_OVERRIDE", 0x1)
+NET_FW_MODIFY_STATE_INBOUND_BLOCKED = EnumValue("NET_FW_MODIFY_STATE_", "NET_FW_MODIFY_STATE_INBOUND_BLOCKED", 0x2)
+class NET_FW_MODIFY_STATE_(EnumType):
+    values = [NET_FW_MODIFY_STATE_OK, NET_FW_MODIFY_STATE_GP_OVERRIDE, NET_FW_MODIFY_STATE_INBOUND_BLOCKED]
+    mapper = {x:x for x in values}
 NET_FW_MODIFY_STATE = NET_FW_MODIFY_STATE_
 
-NET_FW_MODIFY_STATE_OK = 0x0
-NET_FW_MODIFY_STATE_GP_OVERRIDE = 0x1
-NET_FW_MODIFY_STATE_INBOUND_BLOCKED = 0x2
 
 # Enum NET_FW_RULE_DIRECTION_ definitions
-NET_FW_RULE_DIRECTION_ = DWORD
+NET_FW_RULE_DIR_IN = EnumValue("NET_FW_RULE_DIRECTION_", "NET_FW_RULE_DIR_IN", 0x1)
+NET_FW_RULE_DIR_OUT = EnumValue("NET_FW_RULE_DIRECTION_", "NET_FW_RULE_DIR_OUT", 0x2)
+NET_FW_RULE_DIR_MAX = EnumValue("NET_FW_RULE_DIRECTION_", "NET_FW_RULE_DIR_MAX", 0x3)
+class NET_FW_RULE_DIRECTION_(EnumType):
+    values = [NET_FW_RULE_DIR_IN, NET_FW_RULE_DIR_OUT, NET_FW_RULE_DIR_MAX]
+    mapper = {x:x for x in values}
 NET_FW_RULE_DIRECTION = NET_FW_RULE_DIRECTION_
 
-NET_FW_RULE_DIR_IN = 0x1
-NET_FW_RULE_DIR_OUT = 0x2
-NET_FW_RULE_DIR_MAX = 0x3
 
 # Enum tag_WBEMSTATUS definitions
-tag_WBEMSTATUS = DWORD
+WBEM_NO_ERROR = EnumValue("tag_WBEMSTATUS", "WBEM_NO_ERROR", 0x0)
+WBEM_S_NO_ERROR = EnumValue("tag_WBEMSTATUS", "WBEM_S_NO_ERROR", 0x0)
+WBEM_S_SAME = EnumValue("tag_WBEMSTATUS", "WBEM_S_SAME", 0x0)
+WBEM_S_FALSE = EnumValue("tag_WBEMSTATUS", "WBEM_S_FALSE", 0x1)
+WBEM_S_ALREADY_EXISTS = EnumValue("tag_WBEMSTATUS", "WBEM_S_ALREADY_EXISTS", 0x40001)
+WBEM_S_RESET_TO_DEFAULT = EnumValue("tag_WBEMSTATUS", "WBEM_S_RESET_TO_DEFAULT", 0x40002)
+WBEM_S_DIFFERENT = EnumValue("tag_WBEMSTATUS", "WBEM_S_DIFFERENT", 0x40003)
+WBEM_S_TIMEDOUT = EnumValue("tag_WBEMSTATUS", "WBEM_S_TIMEDOUT", 0x40004)
+WBEM_S_NO_MORE_DATA = EnumValue("tag_WBEMSTATUS", "WBEM_S_NO_MORE_DATA", 0x40005)
+WBEM_S_OPERATION_CANCELLED = EnumValue("tag_WBEMSTATUS", "WBEM_S_OPERATION_CANCELLED", 0x40006)
+WBEM_S_PENDING = EnumValue("tag_WBEMSTATUS", "WBEM_S_PENDING", 0x40007)
+WBEM_S_DUPLICATE_OBJECTS = EnumValue("tag_WBEMSTATUS", "WBEM_S_DUPLICATE_OBJECTS", 0x40008)
+WBEM_S_ACCESS_DENIED = EnumValue("tag_WBEMSTATUS", "WBEM_S_ACCESS_DENIED", 0x40009)
+WBEM_S_PARTIAL_RESULTS = EnumValue("tag_WBEMSTATUS", "WBEM_S_PARTIAL_RESULTS", 0x40010)
+WBEM_S_SOURCE_NOT_AVAILABLE = EnumValue("tag_WBEMSTATUS", "WBEM_S_SOURCE_NOT_AVAILABLE", 0x40017)
+WBEM_E_FAILED = EnumValue("tag_WBEMSTATUS", "WBEM_E_FAILED", 0x80041001L)
+WBEM_E_NOT_FOUND = EnumValue("tag_WBEMSTATUS", "WBEM_E_NOT_FOUND", 0x80041002L)
+WBEM_E_ACCESS_DENIED = EnumValue("tag_WBEMSTATUS", "WBEM_E_ACCESS_DENIED", 0x80041003L)
+WBEM_E_PROVIDER_FAILURE = EnumValue("tag_WBEMSTATUS", "WBEM_E_PROVIDER_FAILURE", 0x80041004L)
+WBEM_E_TYPE_MISMATCH = EnumValue("tag_WBEMSTATUS", "WBEM_E_TYPE_MISMATCH", 0x80041005L)
+WBEM_E_OUT_OF_MEMORY = EnumValue("tag_WBEMSTATUS", "WBEM_E_OUT_OF_MEMORY", 0x80041006L)
+WBEM_E_INVALID_CONTEXT = EnumValue("tag_WBEMSTATUS", "WBEM_E_INVALID_CONTEXT", 0x80041007L)
+WBEM_E_INVALID_PARAMETER = EnumValue("tag_WBEMSTATUS", "WBEM_E_INVALID_PARAMETER", 0x80041008L)
+WBEM_E_NOT_AVAILABLE = EnumValue("tag_WBEMSTATUS", "WBEM_E_NOT_AVAILABLE", 0x80041009L)
+WBEM_E_CRITICAL_ERROR = EnumValue("tag_WBEMSTATUS", "WBEM_E_CRITICAL_ERROR", 0x8004100aL)
+WBEM_E_INVALID_STREAM = EnumValue("tag_WBEMSTATUS", "WBEM_E_INVALID_STREAM", 0x8004100bL)
+WBEM_E_NOT_SUPPORTED = EnumValue("tag_WBEMSTATUS", "WBEM_E_NOT_SUPPORTED", 0x8004100cL)
+WBEM_E_INVALID_SUPERCLASS = EnumValue("tag_WBEMSTATUS", "WBEM_E_INVALID_SUPERCLASS", 0x8004100dL)
+WBEM_E_INVALID_NAMESPACE = EnumValue("tag_WBEMSTATUS", "WBEM_E_INVALID_NAMESPACE", 0x8004100eL)
+WBEM_E_INVALID_OBJECT = EnumValue("tag_WBEMSTATUS", "WBEM_E_INVALID_OBJECT", 0x8004100fL)
+WBEM_E_INVALID_CLASS = EnumValue("tag_WBEMSTATUS", "WBEM_E_INVALID_CLASS", 0x80041010L)
+WBEM_E_PROVIDER_NOT_FOUND = EnumValue("tag_WBEMSTATUS", "WBEM_E_PROVIDER_NOT_FOUND", 0x80041011L)
+WBEM_E_INVALID_PROVIDER_REGISTRATION = EnumValue("tag_WBEMSTATUS", "WBEM_E_INVALID_PROVIDER_REGISTRATION", 0x80041012L)
+WBEM_E_PROVIDER_LOAD_FAILURE = EnumValue("tag_WBEMSTATUS", "WBEM_E_PROVIDER_LOAD_FAILURE", 0x80041013L)
+WBEM_E_INITIALIZATION_FAILURE = EnumValue("tag_WBEMSTATUS", "WBEM_E_INITIALIZATION_FAILURE", 0x80041014L)
+WBEM_E_TRANSPORT_FAILURE = EnumValue("tag_WBEMSTATUS", "WBEM_E_TRANSPORT_FAILURE", 0x80041015L)
+WBEM_E_INVALID_OPERATION = EnumValue("tag_WBEMSTATUS", "WBEM_E_INVALID_OPERATION", 0x80041016L)
+WBEM_E_INVALID_QUERY = EnumValue("tag_WBEMSTATUS", "WBEM_E_INVALID_QUERY", 0x80041017L)
+WBEM_E_INVALID_QUERY_TYPE = EnumValue("tag_WBEMSTATUS", "WBEM_E_INVALID_QUERY_TYPE", 0x80041018L)
+WBEM_E_ALREADY_EXISTS = EnumValue("tag_WBEMSTATUS", "WBEM_E_ALREADY_EXISTS", 0x80041019L)
+WBEM_E_OVERRIDE_NOT_ALLOWED = EnumValue("tag_WBEMSTATUS", "WBEM_E_OVERRIDE_NOT_ALLOWED", 0x8004101aL)
+WBEM_E_PROPAGATED_QUALIFIER = EnumValue("tag_WBEMSTATUS", "WBEM_E_PROPAGATED_QUALIFIER", 0x8004101bL)
+WBEM_E_PROPAGATED_PROPERTY = EnumValue("tag_WBEMSTATUS", "WBEM_E_PROPAGATED_PROPERTY", 0x8004101cL)
+WBEM_E_UNEXPECTED = EnumValue("tag_WBEMSTATUS", "WBEM_E_UNEXPECTED", 0x8004101dL)
+WBEM_E_ILLEGAL_OPERATION = EnumValue("tag_WBEMSTATUS", "WBEM_E_ILLEGAL_OPERATION", 0x8004101eL)
+WBEM_E_CANNOT_BE_KEY = EnumValue("tag_WBEMSTATUS", "WBEM_E_CANNOT_BE_KEY", 0x8004101fL)
+WBEM_E_INCOMPLETE_CLASS = EnumValue("tag_WBEMSTATUS", "WBEM_E_INCOMPLETE_CLASS", 0x80041020L)
+WBEM_E_INVALID_SYNTAX = EnumValue("tag_WBEMSTATUS", "WBEM_E_INVALID_SYNTAX", 0x80041021L)
+WBEM_E_NONDECORATED_OBJECT = EnumValue("tag_WBEMSTATUS", "WBEM_E_NONDECORATED_OBJECT", 0x80041022L)
+WBEM_E_READ_ONLY = EnumValue("tag_WBEMSTATUS", "WBEM_E_READ_ONLY", 0x80041023L)
+WBEM_E_PROVIDER_NOT_CAPABLE = EnumValue("tag_WBEMSTATUS", "WBEM_E_PROVIDER_NOT_CAPABLE", 0x80041024L)
+WBEM_E_CLASS_HAS_CHILDREN = EnumValue("tag_WBEMSTATUS", "WBEM_E_CLASS_HAS_CHILDREN", 0x80041025L)
+WBEM_E_CLASS_HAS_INSTANCES = EnumValue("tag_WBEMSTATUS", "WBEM_E_CLASS_HAS_INSTANCES", 0x80041026L)
+WBEM_E_QUERY_NOT_IMPLEMENTED = EnumValue("tag_WBEMSTATUS", "WBEM_E_QUERY_NOT_IMPLEMENTED", 0x80041027L)
+WBEM_E_ILLEGAL_NULL = EnumValue("tag_WBEMSTATUS", "WBEM_E_ILLEGAL_NULL", 0x80041028L)
+WBEM_E_INVALID_QUALIFIER_TYPE = EnumValue("tag_WBEMSTATUS", "WBEM_E_INVALID_QUALIFIER_TYPE", 0x80041029L)
+WBEM_E_INVALID_PROPERTY_TYPE = EnumValue("tag_WBEMSTATUS", "WBEM_E_INVALID_PROPERTY_TYPE", 0x8004102aL)
+WBEM_E_VALUE_OUT_OF_RANGE = EnumValue("tag_WBEMSTATUS", "WBEM_E_VALUE_OUT_OF_RANGE", 0x8004102bL)
+WBEM_E_CANNOT_BE_SINGLETON = EnumValue("tag_WBEMSTATUS", "WBEM_E_CANNOT_BE_SINGLETON", 0x8004102cL)
+WBEM_E_INVALID_CIM_TYPE = EnumValue("tag_WBEMSTATUS", "WBEM_E_INVALID_CIM_TYPE", 0x8004102dL)
+WBEM_E_INVALID_METHOD = EnumValue("tag_WBEMSTATUS", "WBEM_E_INVALID_METHOD", 0x8004102eL)
+WBEM_E_INVALID_METHOD_PARAMETERS = EnumValue("tag_WBEMSTATUS", "WBEM_E_INVALID_METHOD_PARAMETERS", 0x8004102fL)
+WBEM_E_SYSTEM_PROPERTY = EnumValue("tag_WBEMSTATUS", "WBEM_E_SYSTEM_PROPERTY", 0x80041030L)
+WBEM_E_INVALID_PROPERTY = EnumValue("tag_WBEMSTATUS", "WBEM_E_INVALID_PROPERTY", 0x80041031L)
+WBEM_E_CALL_CANCELLED = EnumValue("tag_WBEMSTATUS", "WBEM_E_CALL_CANCELLED", 0x80041032L)
+WBEM_E_SHUTTING_DOWN = EnumValue("tag_WBEMSTATUS", "WBEM_E_SHUTTING_DOWN", 0x80041033L)
+WBEM_E_PROPAGATED_METHOD = EnumValue("tag_WBEMSTATUS", "WBEM_E_PROPAGATED_METHOD", 0x80041034L)
+WBEM_E_UNSUPPORTED_PARAMETER = EnumValue("tag_WBEMSTATUS", "WBEM_E_UNSUPPORTED_PARAMETER", 0x80041035L)
+WBEM_E_MISSING_PARAMETER_ID = EnumValue("tag_WBEMSTATUS", "WBEM_E_MISSING_PARAMETER_ID", 0x80041036L)
+WBEM_E_INVALID_PARAMETER_ID = EnumValue("tag_WBEMSTATUS", "WBEM_E_INVALID_PARAMETER_ID", 0x80041037L)
+WBEM_E_NONCONSECUTIVE_PARAMETER_IDS = EnumValue("tag_WBEMSTATUS", "WBEM_E_NONCONSECUTIVE_PARAMETER_IDS", 0x80041038L)
+WBEM_E_PARAMETER_ID_ON_RETVAL = EnumValue("tag_WBEMSTATUS", "WBEM_E_PARAMETER_ID_ON_RETVAL", 0x80041039L)
+WBEM_E_INVALID_OBJECT_PATH = EnumValue("tag_WBEMSTATUS", "WBEM_E_INVALID_OBJECT_PATH", 0x8004103aL)
+WBEM_E_OUT_OF_DISK_SPACE = EnumValue("tag_WBEMSTATUS", "WBEM_E_OUT_OF_DISK_SPACE", 0x8004103bL)
+WBEM_E_BUFFER_TOO_SMALL = EnumValue("tag_WBEMSTATUS", "WBEM_E_BUFFER_TOO_SMALL", 0x8004103cL)
+WBEM_E_UNSUPPORTED_PUT_EXTENSION = EnumValue("tag_WBEMSTATUS", "WBEM_E_UNSUPPORTED_PUT_EXTENSION", 0x8004103dL)
+WBEM_E_UNKNOWN_OBJECT_TYPE = EnumValue("tag_WBEMSTATUS", "WBEM_E_UNKNOWN_OBJECT_TYPE", 0x8004103eL)
+WBEM_E_UNKNOWN_PACKET_TYPE = EnumValue("tag_WBEMSTATUS", "WBEM_E_UNKNOWN_PACKET_TYPE", 0x8004103fL)
+WBEM_E_MARSHAL_VERSION_MISMATCH = EnumValue("tag_WBEMSTATUS", "WBEM_E_MARSHAL_VERSION_MISMATCH", 0x80041040L)
+WBEM_E_MARSHAL_INVALID_SIGNATURE = EnumValue("tag_WBEMSTATUS", "WBEM_E_MARSHAL_INVALID_SIGNATURE", 0x80041041L)
+WBEM_E_INVALID_QUALIFIER = EnumValue("tag_WBEMSTATUS", "WBEM_E_INVALID_QUALIFIER", 0x80041042L)
+WBEM_E_INVALID_DUPLICATE_PARAMETER = EnumValue("tag_WBEMSTATUS", "WBEM_E_INVALID_DUPLICATE_PARAMETER", 0x80041043L)
+WBEM_E_TOO_MUCH_DATA = EnumValue("tag_WBEMSTATUS", "WBEM_E_TOO_MUCH_DATA", 0x80041044L)
+WBEM_E_SERVER_TOO_BUSY = EnumValue("tag_WBEMSTATUS", "WBEM_E_SERVER_TOO_BUSY", 0x80041045L)
+WBEM_E_INVALID_FLAVOR = EnumValue("tag_WBEMSTATUS", "WBEM_E_INVALID_FLAVOR", 0x80041046L)
+WBEM_E_CIRCULAR_REFERENCE = EnumValue("tag_WBEMSTATUS", "WBEM_E_CIRCULAR_REFERENCE", 0x80041047L)
+WBEM_E_UNSUPPORTED_CLASS_UPDATE = EnumValue("tag_WBEMSTATUS", "WBEM_E_UNSUPPORTED_CLASS_UPDATE", 0x80041048L)
+WBEM_E_CANNOT_CHANGE_KEY_INHERITANCE = EnumValue("tag_WBEMSTATUS", "WBEM_E_CANNOT_CHANGE_KEY_INHERITANCE", 0x80041049L)
+WBEM_E_CANNOT_CHANGE_INDEX_INHERITANCE = EnumValue("tag_WBEMSTATUS", "WBEM_E_CANNOT_CHANGE_INDEX_INHERITANCE", 0x80041050L)
+WBEM_E_TOO_MANY_PROPERTIES = EnumValue("tag_WBEMSTATUS", "WBEM_E_TOO_MANY_PROPERTIES", 0x80041051L)
+WBEM_E_UPDATE_TYPE_MISMATCH = EnumValue("tag_WBEMSTATUS", "WBEM_E_UPDATE_TYPE_MISMATCH", 0x80041052L)
+WBEM_E_UPDATE_OVERRIDE_NOT_ALLOWED = EnumValue("tag_WBEMSTATUS", "WBEM_E_UPDATE_OVERRIDE_NOT_ALLOWED", 0x80041053L)
+WBEM_E_UPDATE_PROPAGATED_METHOD = EnumValue("tag_WBEMSTATUS", "WBEM_E_UPDATE_PROPAGATED_METHOD", 0x80041054L)
+WBEM_E_METHOD_NOT_IMPLEMENTED = EnumValue("tag_WBEMSTATUS", "WBEM_E_METHOD_NOT_IMPLEMENTED", 0x80041055L)
+WBEM_E_METHOD_DISABLED = EnumValue("tag_WBEMSTATUS", "WBEM_E_METHOD_DISABLED", 0x80041056L)
+WBEM_E_REFRESHER_BUSY = EnumValue("tag_WBEMSTATUS", "WBEM_E_REFRESHER_BUSY", 0x80041057L)
+WBEM_E_UNPARSABLE_QUERY = EnumValue("tag_WBEMSTATUS", "WBEM_E_UNPARSABLE_QUERY", 0x80041058L)
+WBEM_E_NOT_EVENT_CLASS = EnumValue("tag_WBEMSTATUS", "WBEM_E_NOT_EVENT_CLASS", 0x80041059L)
+WBEM_E_MISSING_GROUP_WITHIN = EnumValue("tag_WBEMSTATUS", "WBEM_E_MISSING_GROUP_WITHIN", 0x8004105aL)
+WBEM_E_MISSING_AGGREGATION_LIST = EnumValue("tag_WBEMSTATUS", "WBEM_E_MISSING_AGGREGATION_LIST", 0x8004105bL)
+WBEM_E_PROPERTY_NOT_AN_OBJECT = EnumValue("tag_WBEMSTATUS", "WBEM_E_PROPERTY_NOT_AN_OBJECT", 0x8004105cL)
+WBEM_E_AGGREGATING_BY_OBJECT = EnumValue("tag_WBEMSTATUS", "WBEM_E_AGGREGATING_BY_OBJECT", 0x8004105dL)
+WBEM_E_UNINTERPRETABLE_PROVIDER_QUERY = EnumValue("tag_WBEMSTATUS", "WBEM_E_UNINTERPRETABLE_PROVIDER_QUERY", 0x8004105fL)
+WBEM_E_BACKUP_RESTORE_WINMGMT_RUNNING = EnumValue("tag_WBEMSTATUS", "WBEM_E_BACKUP_RESTORE_WINMGMT_RUNNING", 0x80041060L)
+WBEM_E_QUEUE_OVERFLOW = EnumValue("tag_WBEMSTATUS", "WBEM_E_QUEUE_OVERFLOW", 0x80041061L)
+WBEM_E_PRIVILEGE_NOT_HELD = EnumValue("tag_WBEMSTATUS", "WBEM_E_PRIVILEGE_NOT_HELD", 0x80041062L)
+WBEM_E_INVALID_OPERATOR = EnumValue("tag_WBEMSTATUS", "WBEM_E_INVALID_OPERATOR", 0x80041063L)
+WBEM_E_LOCAL_CREDENTIALS = EnumValue("tag_WBEMSTATUS", "WBEM_E_LOCAL_CREDENTIALS", 0x80041064L)
+WBEM_E_CANNOT_BE_ABSTRACT = EnumValue("tag_WBEMSTATUS", "WBEM_E_CANNOT_BE_ABSTRACT", 0x80041065L)
+WBEM_E_AMENDED_OBJECT = EnumValue("tag_WBEMSTATUS", "WBEM_E_AMENDED_OBJECT", 0x80041066L)
+WBEM_E_CLIENT_TOO_SLOW = EnumValue("tag_WBEMSTATUS", "WBEM_E_CLIENT_TOO_SLOW", 0x80041067L)
+WBEM_E_NULL_SECURITY_DESCRIPTOR = EnumValue("tag_WBEMSTATUS", "WBEM_E_NULL_SECURITY_DESCRIPTOR", 0x80041068L)
+WBEM_E_TIMED_OUT = EnumValue("tag_WBEMSTATUS", "WBEM_E_TIMED_OUT", 0x80041069L)
+WBEM_E_INVALID_ASSOCIATION = EnumValue("tag_WBEMSTATUS", "WBEM_E_INVALID_ASSOCIATION", 0x8004106aL)
+WBEM_E_AMBIGUOUS_OPERATION = EnumValue("tag_WBEMSTATUS", "WBEM_E_AMBIGUOUS_OPERATION", 0x8004106bL)
+WBEM_E_QUOTA_VIOLATION = EnumValue("tag_WBEMSTATUS", "WBEM_E_QUOTA_VIOLATION", 0x8004106cL)
+WBEM_E_RESERVED_001 = EnumValue("tag_WBEMSTATUS", "WBEM_E_RESERVED_001", 0x8004106dL)
+WBEM_E_RESERVED_002 = EnumValue("tag_WBEMSTATUS", "WBEM_E_RESERVED_002", 0x8004106eL)
+WBEM_E_UNSUPPORTED_LOCALE = EnumValue("tag_WBEMSTATUS", "WBEM_E_UNSUPPORTED_LOCALE", 0x8004106fL)
+WBEM_E_HANDLE_OUT_OF_DATE = EnumValue("tag_WBEMSTATUS", "WBEM_E_HANDLE_OUT_OF_DATE", 0x80041070L)
+WBEM_E_CONNECTION_FAILED = EnumValue("tag_WBEMSTATUS", "WBEM_E_CONNECTION_FAILED", 0x80041071L)
+WBEM_E_INVALID_HANDLE_REQUEST = EnumValue("tag_WBEMSTATUS", "WBEM_E_INVALID_HANDLE_REQUEST", 0x80041072L)
+WBEM_E_PROPERTY_NAME_TOO_WIDE = EnumValue("tag_WBEMSTATUS", "WBEM_E_PROPERTY_NAME_TOO_WIDE", 0x80041073L)
+WBEM_E_CLASS_NAME_TOO_WIDE = EnumValue("tag_WBEMSTATUS", "WBEM_E_CLASS_NAME_TOO_WIDE", 0x80041074L)
+WBEM_E_METHOD_NAME_TOO_WIDE = EnumValue("tag_WBEMSTATUS", "WBEM_E_METHOD_NAME_TOO_WIDE", 0x80041075L)
+WBEM_E_QUALIFIER_NAME_TOO_WIDE = EnumValue("tag_WBEMSTATUS", "WBEM_E_QUALIFIER_NAME_TOO_WIDE", 0x80041076L)
+WBEM_E_RERUN_COMMAND = EnumValue("tag_WBEMSTATUS", "WBEM_E_RERUN_COMMAND", 0x80041077L)
+WBEM_E_DATABASE_VER_MISMATCH = EnumValue("tag_WBEMSTATUS", "WBEM_E_DATABASE_VER_MISMATCH", 0x80041078L)
+WBEM_E_VETO_DELETE = EnumValue("tag_WBEMSTATUS", "WBEM_E_VETO_DELETE", 0x80041079L)
+WBEM_E_VETO_PUT = EnumValue("tag_WBEMSTATUS", "WBEM_E_VETO_PUT", 0x8004107aL)
+WBEM_E_INVALID_LOCALE = EnumValue("tag_WBEMSTATUS", "WBEM_E_INVALID_LOCALE", 0x80041080L)
+WBEM_E_PROVIDER_SUSPENDED = EnumValue("tag_WBEMSTATUS", "WBEM_E_PROVIDER_SUSPENDED", 0x80041081L)
+WBEM_E_SYNCHRONIZATION_REQUIRED = EnumValue("tag_WBEMSTATUS", "WBEM_E_SYNCHRONIZATION_REQUIRED", 0x80041082L)
+WBEM_E_NO_SCHEMA = EnumValue("tag_WBEMSTATUS", "WBEM_E_NO_SCHEMA", 0x80041083L)
+WBEM_E_PROVIDER_ALREADY_REGISTERED = EnumValue("tag_WBEMSTATUS", "WBEM_E_PROVIDER_ALREADY_REGISTERED", 0x80041084L)
+WBEM_E_PROVIDER_NOT_REGISTERED = EnumValue("tag_WBEMSTATUS", "WBEM_E_PROVIDER_NOT_REGISTERED", 0x80041085L)
+WBEM_E_FATAL_TRANSPORT_ERROR = EnumValue("tag_WBEMSTATUS", "WBEM_E_FATAL_TRANSPORT_ERROR", 0x80041086L)
+WBEM_E_ENCRYPTED_CONNECTION_REQUIRED = EnumValue("tag_WBEMSTATUS", "WBEM_E_ENCRYPTED_CONNECTION_REQUIRED", 0x80041087L)
+WBEM_E_PROVIDER_TIMED_OUT = EnumValue("tag_WBEMSTATUS", "WBEM_E_PROVIDER_TIMED_OUT", 0x80041088L)
+WBEM_E_NO_KEY = EnumValue("tag_WBEMSTATUS", "WBEM_E_NO_KEY", 0x80041089L)
+WBEM_E_PROVIDER_DISABLED = EnumValue("tag_WBEMSTATUS", "WBEM_E_PROVIDER_DISABLED", 0x8004108aL)
+WBEMESS_E_REGISTRATION_TOO_BROAD = EnumValue("tag_WBEMSTATUS", "WBEMESS_E_REGISTRATION_TOO_BROAD", 0x80042001L)
+WBEMESS_E_REGISTRATION_TOO_PRECISE = EnumValue("tag_WBEMSTATUS", "WBEMESS_E_REGISTRATION_TOO_PRECISE", 0x80042002L)
+WBEMESS_E_AUTHZ_NOT_PRIVILEGED = EnumValue("tag_WBEMSTATUS", "WBEMESS_E_AUTHZ_NOT_PRIVILEGED", 0x80042003L)
+WBEMMOF_E_EXPECTED_QUALIFIER_NAME = EnumValue("tag_WBEMSTATUS", "WBEMMOF_E_EXPECTED_QUALIFIER_NAME", 0x80044001L)
+WBEMMOF_E_EXPECTED_SEMI = EnumValue("tag_WBEMSTATUS", "WBEMMOF_E_EXPECTED_SEMI", 0x80044002L)
+WBEMMOF_E_EXPECTED_OPEN_BRACE = EnumValue("tag_WBEMSTATUS", "WBEMMOF_E_EXPECTED_OPEN_BRACE", 0x80044003L)
+WBEMMOF_E_EXPECTED_CLOSE_BRACE = EnumValue("tag_WBEMSTATUS", "WBEMMOF_E_EXPECTED_CLOSE_BRACE", 0x80044004L)
+WBEMMOF_E_EXPECTED_CLOSE_BRACKET = EnumValue("tag_WBEMSTATUS", "WBEMMOF_E_EXPECTED_CLOSE_BRACKET", 0x80044005L)
+WBEMMOF_E_EXPECTED_CLOSE_PAREN = EnumValue("tag_WBEMSTATUS", "WBEMMOF_E_EXPECTED_CLOSE_PAREN", 0x80044006L)
+WBEMMOF_E_ILLEGAL_CONSTANT_VALUE = EnumValue("tag_WBEMSTATUS", "WBEMMOF_E_ILLEGAL_CONSTANT_VALUE", 0x80044007L)
+WBEMMOF_E_EXPECTED_TYPE_IDENTIFIER = EnumValue("tag_WBEMSTATUS", "WBEMMOF_E_EXPECTED_TYPE_IDENTIFIER", 0x80044008L)
+WBEMMOF_E_EXPECTED_OPEN_PAREN = EnumValue("tag_WBEMSTATUS", "WBEMMOF_E_EXPECTED_OPEN_PAREN", 0x80044009L)
+WBEMMOF_E_UNRECOGNIZED_TOKEN = EnumValue("tag_WBEMSTATUS", "WBEMMOF_E_UNRECOGNIZED_TOKEN", 0x8004400aL)
+WBEMMOF_E_UNRECOGNIZED_TYPE = EnumValue("tag_WBEMSTATUS", "WBEMMOF_E_UNRECOGNIZED_TYPE", 0x8004400bL)
+WBEMMOF_E_EXPECTED_PROPERTY_NAME = EnumValue("tag_WBEMSTATUS", "WBEMMOF_E_EXPECTED_PROPERTY_NAME", 0x8004400cL)
+WBEMMOF_E_TYPEDEF_NOT_SUPPORTED = EnumValue("tag_WBEMSTATUS", "WBEMMOF_E_TYPEDEF_NOT_SUPPORTED", 0x8004400dL)
+WBEMMOF_E_UNEXPECTED_ALIAS = EnumValue("tag_WBEMSTATUS", "WBEMMOF_E_UNEXPECTED_ALIAS", 0x8004400eL)
+WBEMMOF_E_UNEXPECTED_ARRAY_INIT = EnumValue("tag_WBEMSTATUS", "WBEMMOF_E_UNEXPECTED_ARRAY_INIT", 0x8004400fL)
+WBEMMOF_E_INVALID_AMENDMENT_SYNTAX = EnumValue("tag_WBEMSTATUS", "WBEMMOF_E_INVALID_AMENDMENT_SYNTAX", 0x80044010L)
+WBEMMOF_E_INVALID_DUPLICATE_AMENDMENT = EnumValue("tag_WBEMSTATUS", "WBEMMOF_E_INVALID_DUPLICATE_AMENDMENT", 0x80044011L)
+WBEMMOF_E_INVALID_PRAGMA = EnumValue("tag_WBEMSTATUS", "WBEMMOF_E_INVALID_PRAGMA", 0x80044012L)
+WBEMMOF_E_INVALID_NAMESPACE_SYNTAX = EnumValue("tag_WBEMSTATUS", "WBEMMOF_E_INVALID_NAMESPACE_SYNTAX", 0x80044013L)
+WBEMMOF_E_EXPECTED_CLASS_NAME = EnumValue("tag_WBEMSTATUS", "WBEMMOF_E_EXPECTED_CLASS_NAME", 0x80044014L)
+WBEMMOF_E_TYPE_MISMATCH = EnumValue("tag_WBEMSTATUS", "WBEMMOF_E_TYPE_MISMATCH", 0x80044015L)
+WBEMMOF_E_EXPECTED_ALIAS_NAME = EnumValue("tag_WBEMSTATUS", "WBEMMOF_E_EXPECTED_ALIAS_NAME", 0x80044016L)
+WBEMMOF_E_INVALID_CLASS_DECLARATION = EnumValue("tag_WBEMSTATUS", "WBEMMOF_E_INVALID_CLASS_DECLARATION", 0x80044017L)
+WBEMMOF_E_INVALID_INSTANCE_DECLARATION = EnumValue("tag_WBEMSTATUS", "WBEMMOF_E_INVALID_INSTANCE_DECLARATION", 0x80044018L)
+WBEMMOF_E_EXPECTED_DOLLAR = EnumValue("tag_WBEMSTATUS", "WBEMMOF_E_EXPECTED_DOLLAR", 0x80044019L)
+WBEMMOF_E_CIMTYPE_QUALIFIER = EnumValue("tag_WBEMSTATUS", "WBEMMOF_E_CIMTYPE_QUALIFIER", 0x8004401aL)
+WBEMMOF_E_DUPLICATE_PROPERTY = EnumValue("tag_WBEMSTATUS", "WBEMMOF_E_DUPLICATE_PROPERTY", 0x8004401bL)
+WBEMMOF_E_INVALID_NAMESPACE_SPECIFICATION = EnumValue("tag_WBEMSTATUS", "WBEMMOF_E_INVALID_NAMESPACE_SPECIFICATION", 0x8004401cL)
+WBEMMOF_E_OUT_OF_RANGE = EnumValue("tag_WBEMSTATUS", "WBEMMOF_E_OUT_OF_RANGE", 0x8004401dL)
+WBEMMOF_E_INVALID_FILE = EnumValue("tag_WBEMSTATUS", "WBEMMOF_E_INVALID_FILE", 0x8004401eL)
+WBEMMOF_E_ALIASES_IN_EMBEDDED = EnumValue("tag_WBEMSTATUS", "WBEMMOF_E_ALIASES_IN_EMBEDDED", 0x8004401fL)
+WBEMMOF_E_NULL_ARRAY_ELEM = EnumValue("tag_WBEMSTATUS", "WBEMMOF_E_NULL_ARRAY_ELEM", 0x80044020L)
+WBEMMOF_E_DUPLICATE_QUALIFIER = EnumValue("tag_WBEMSTATUS", "WBEMMOF_E_DUPLICATE_QUALIFIER", 0x80044021L)
+WBEMMOF_E_EXPECTED_FLAVOR_TYPE = EnumValue("tag_WBEMSTATUS", "WBEMMOF_E_EXPECTED_FLAVOR_TYPE", 0x80044022L)
+WBEMMOF_E_INCOMPATIBLE_FLAVOR_TYPES = EnumValue("tag_WBEMSTATUS", "WBEMMOF_E_INCOMPATIBLE_FLAVOR_TYPES", 0x80044023L)
+WBEMMOF_E_MULTIPLE_ALIASES = EnumValue("tag_WBEMSTATUS", "WBEMMOF_E_MULTIPLE_ALIASES", 0x80044024L)
+WBEMMOF_E_INCOMPATIBLE_FLAVOR_TYPES2 = EnumValue("tag_WBEMSTATUS", "WBEMMOF_E_INCOMPATIBLE_FLAVOR_TYPES2", 0x80044025L)
+WBEMMOF_E_NO_ARRAYS_RETURNED = EnumValue("tag_WBEMSTATUS", "WBEMMOF_E_NO_ARRAYS_RETURNED", 0x80044026L)
+WBEMMOF_E_MUST_BE_IN_OR_OUT = EnumValue("tag_WBEMSTATUS", "WBEMMOF_E_MUST_BE_IN_OR_OUT", 0x80044027L)
+WBEMMOF_E_INVALID_FLAGS_SYNTAX = EnumValue("tag_WBEMSTATUS", "WBEMMOF_E_INVALID_FLAGS_SYNTAX", 0x80044028L)
+WBEMMOF_E_EXPECTED_BRACE_OR_BAD_TYPE = EnumValue("tag_WBEMSTATUS", "WBEMMOF_E_EXPECTED_BRACE_OR_BAD_TYPE", 0x80044029L)
+WBEMMOF_E_UNSUPPORTED_CIMV22_QUAL_VALUE = EnumValue("tag_WBEMSTATUS", "WBEMMOF_E_UNSUPPORTED_CIMV22_QUAL_VALUE", 0x8004402aL)
+WBEMMOF_E_UNSUPPORTED_CIMV22_DATA_TYPE = EnumValue("tag_WBEMSTATUS", "WBEMMOF_E_UNSUPPORTED_CIMV22_DATA_TYPE", 0x8004402bL)
+WBEMMOF_E_INVALID_DELETEINSTANCE_SYNTAX = EnumValue("tag_WBEMSTATUS", "WBEMMOF_E_INVALID_DELETEINSTANCE_SYNTAX", 0x8004402cL)
+WBEMMOF_E_INVALID_QUALIFIER_SYNTAX = EnumValue("tag_WBEMSTATUS", "WBEMMOF_E_INVALID_QUALIFIER_SYNTAX", 0x8004402dL)
+WBEMMOF_E_QUALIFIER_USED_OUTSIDE_SCOPE = EnumValue("tag_WBEMSTATUS", "WBEMMOF_E_QUALIFIER_USED_OUTSIDE_SCOPE", 0x8004402eL)
+WBEMMOF_E_ERROR_CREATING_TEMP_FILE = EnumValue("tag_WBEMSTATUS", "WBEMMOF_E_ERROR_CREATING_TEMP_FILE", 0x8004402fL)
+WBEMMOF_E_ERROR_INVALID_INCLUDE_FILE = EnumValue("tag_WBEMSTATUS", "WBEMMOF_E_ERROR_INVALID_INCLUDE_FILE", 0x80044030L)
+WBEMMOF_E_INVALID_DELETECLASS_SYNTAX = EnumValue("tag_WBEMSTATUS", "WBEMMOF_E_INVALID_DELETECLASS_SYNTAX", 0x80044031L)
+class tag_WBEMSTATUS(EnumType):
+    values = [WBEM_NO_ERROR, WBEM_S_NO_ERROR, WBEM_S_SAME, WBEM_S_FALSE, WBEM_S_ALREADY_EXISTS, WBEM_S_RESET_TO_DEFAULT, WBEM_S_DIFFERENT, WBEM_S_TIMEDOUT, WBEM_S_NO_MORE_DATA, WBEM_S_OPERATION_CANCELLED, WBEM_S_PENDING, WBEM_S_DUPLICATE_OBJECTS, WBEM_S_ACCESS_DENIED, WBEM_S_PARTIAL_RESULTS, WBEM_S_SOURCE_NOT_AVAILABLE, WBEM_E_FAILED, WBEM_E_NOT_FOUND, WBEM_E_ACCESS_DENIED, WBEM_E_PROVIDER_FAILURE, WBEM_E_TYPE_MISMATCH, WBEM_E_OUT_OF_MEMORY, WBEM_E_INVALID_CONTEXT, WBEM_E_INVALID_PARAMETER, WBEM_E_NOT_AVAILABLE, WBEM_E_CRITICAL_ERROR, WBEM_E_INVALID_STREAM, WBEM_E_NOT_SUPPORTED, WBEM_E_INVALID_SUPERCLASS, WBEM_E_INVALID_NAMESPACE, WBEM_E_INVALID_OBJECT, WBEM_E_INVALID_CLASS, WBEM_E_PROVIDER_NOT_FOUND, WBEM_E_INVALID_PROVIDER_REGISTRATION, WBEM_E_PROVIDER_LOAD_FAILURE, WBEM_E_INITIALIZATION_FAILURE, WBEM_E_TRANSPORT_FAILURE, WBEM_E_INVALID_OPERATION, WBEM_E_INVALID_QUERY, WBEM_E_INVALID_QUERY_TYPE, WBEM_E_ALREADY_EXISTS, WBEM_E_OVERRIDE_NOT_ALLOWED, WBEM_E_PROPAGATED_QUALIFIER, WBEM_E_PROPAGATED_PROPERTY, WBEM_E_UNEXPECTED, WBEM_E_ILLEGAL_OPERATION, WBEM_E_CANNOT_BE_KEY, WBEM_E_INCOMPLETE_CLASS, WBEM_E_INVALID_SYNTAX, WBEM_E_NONDECORATED_OBJECT, WBEM_E_READ_ONLY, WBEM_E_PROVIDER_NOT_CAPABLE, WBEM_E_CLASS_HAS_CHILDREN, WBEM_E_CLASS_HAS_INSTANCES, WBEM_E_QUERY_NOT_IMPLEMENTED, WBEM_E_ILLEGAL_NULL, WBEM_E_INVALID_QUALIFIER_TYPE, WBEM_E_INVALID_PROPERTY_TYPE, WBEM_E_VALUE_OUT_OF_RANGE, WBEM_E_CANNOT_BE_SINGLETON, WBEM_E_INVALID_CIM_TYPE, WBEM_E_INVALID_METHOD, WBEM_E_INVALID_METHOD_PARAMETERS, WBEM_E_SYSTEM_PROPERTY, WBEM_E_INVALID_PROPERTY, WBEM_E_CALL_CANCELLED, WBEM_E_SHUTTING_DOWN, WBEM_E_PROPAGATED_METHOD, WBEM_E_UNSUPPORTED_PARAMETER, WBEM_E_MISSING_PARAMETER_ID, WBEM_E_INVALID_PARAMETER_ID, WBEM_E_NONCONSECUTIVE_PARAMETER_IDS, WBEM_E_PARAMETER_ID_ON_RETVAL, WBEM_E_INVALID_OBJECT_PATH, WBEM_E_OUT_OF_DISK_SPACE, WBEM_E_BUFFER_TOO_SMALL, WBEM_E_UNSUPPORTED_PUT_EXTENSION, WBEM_E_UNKNOWN_OBJECT_TYPE, WBEM_E_UNKNOWN_PACKET_TYPE, WBEM_E_MARSHAL_VERSION_MISMATCH, WBEM_E_MARSHAL_INVALID_SIGNATURE, WBEM_E_INVALID_QUALIFIER, WBEM_E_INVALID_DUPLICATE_PARAMETER, WBEM_E_TOO_MUCH_DATA, WBEM_E_SERVER_TOO_BUSY, WBEM_E_INVALID_FLAVOR, WBEM_E_CIRCULAR_REFERENCE, WBEM_E_UNSUPPORTED_CLASS_UPDATE, WBEM_E_CANNOT_CHANGE_KEY_INHERITANCE, WBEM_E_CANNOT_CHANGE_INDEX_INHERITANCE, WBEM_E_TOO_MANY_PROPERTIES, WBEM_E_UPDATE_TYPE_MISMATCH, WBEM_E_UPDATE_OVERRIDE_NOT_ALLOWED, WBEM_E_UPDATE_PROPAGATED_METHOD, WBEM_E_METHOD_NOT_IMPLEMENTED, WBEM_E_METHOD_DISABLED, WBEM_E_REFRESHER_BUSY, WBEM_E_UNPARSABLE_QUERY, WBEM_E_NOT_EVENT_CLASS, WBEM_E_MISSING_GROUP_WITHIN, WBEM_E_MISSING_AGGREGATION_LIST, WBEM_E_PROPERTY_NOT_AN_OBJECT, WBEM_E_AGGREGATING_BY_OBJECT, WBEM_E_UNINTERPRETABLE_PROVIDER_QUERY, WBEM_E_BACKUP_RESTORE_WINMGMT_RUNNING, WBEM_E_QUEUE_OVERFLOW, WBEM_E_PRIVILEGE_NOT_HELD, WBEM_E_INVALID_OPERATOR, WBEM_E_LOCAL_CREDENTIALS, WBEM_E_CANNOT_BE_ABSTRACT, WBEM_E_AMENDED_OBJECT, WBEM_E_CLIENT_TOO_SLOW, WBEM_E_NULL_SECURITY_DESCRIPTOR, WBEM_E_TIMED_OUT, WBEM_E_INVALID_ASSOCIATION, WBEM_E_AMBIGUOUS_OPERATION, WBEM_E_QUOTA_VIOLATION, WBEM_E_RESERVED_001, WBEM_E_RESERVED_002, WBEM_E_UNSUPPORTED_LOCALE, WBEM_E_HANDLE_OUT_OF_DATE, WBEM_E_CONNECTION_FAILED, WBEM_E_INVALID_HANDLE_REQUEST, WBEM_E_PROPERTY_NAME_TOO_WIDE, WBEM_E_CLASS_NAME_TOO_WIDE, WBEM_E_METHOD_NAME_TOO_WIDE, WBEM_E_QUALIFIER_NAME_TOO_WIDE, WBEM_E_RERUN_COMMAND, WBEM_E_DATABASE_VER_MISMATCH, WBEM_E_VETO_DELETE, WBEM_E_VETO_PUT, WBEM_E_INVALID_LOCALE, WBEM_E_PROVIDER_SUSPENDED, WBEM_E_SYNCHRONIZATION_REQUIRED, WBEM_E_NO_SCHEMA, WBEM_E_PROVIDER_ALREADY_REGISTERED, WBEM_E_PROVIDER_NOT_REGISTERED, WBEM_E_FATAL_TRANSPORT_ERROR, WBEM_E_ENCRYPTED_CONNECTION_REQUIRED, WBEM_E_PROVIDER_TIMED_OUT, WBEM_E_NO_KEY, WBEM_E_PROVIDER_DISABLED, WBEMESS_E_REGISTRATION_TOO_BROAD, WBEMESS_E_REGISTRATION_TOO_PRECISE, WBEMESS_E_AUTHZ_NOT_PRIVILEGED, WBEMMOF_E_EXPECTED_QUALIFIER_NAME, WBEMMOF_E_EXPECTED_SEMI, WBEMMOF_E_EXPECTED_OPEN_BRACE, WBEMMOF_E_EXPECTED_CLOSE_BRACE, WBEMMOF_E_EXPECTED_CLOSE_BRACKET, WBEMMOF_E_EXPECTED_CLOSE_PAREN, WBEMMOF_E_ILLEGAL_CONSTANT_VALUE, WBEMMOF_E_EXPECTED_TYPE_IDENTIFIER, WBEMMOF_E_EXPECTED_OPEN_PAREN, WBEMMOF_E_UNRECOGNIZED_TOKEN, WBEMMOF_E_UNRECOGNIZED_TYPE, WBEMMOF_E_EXPECTED_PROPERTY_NAME, WBEMMOF_E_TYPEDEF_NOT_SUPPORTED, WBEMMOF_E_UNEXPECTED_ALIAS, WBEMMOF_E_UNEXPECTED_ARRAY_INIT, WBEMMOF_E_INVALID_AMENDMENT_SYNTAX, WBEMMOF_E_INVALID_DUPLICATE_AMENDMENT, WBEMMOF_E_INVALID_PRAGMA, WBEMMOF_E_INVALID_NAMESPACE_SYNTAX, WBEMMOF_E_EXPECTED_CLASS_NAME, WBEMMOF_E_TYPE_MISMATCH, WBEMMOF_E_EXPECTED_ALIAS_NAME, WBEMMOF_E_INVALID_CLASS_DECLARATION, WBEMMOF_E_INVALID_INSTANCE_DECLARATION, WBEMMOF_E_EXPECTED_DOLLAR, WBEMMOF_E_CIMTYPE_QUALIFIER, WBEMMOF_E_DUPLICATE_PROPERTY, WBEMMOF_E_INVALID_NAMESPACE_SPECIFICATION, WBEMMOF_E_OUT_OF_RANGE, WBEMMOF_E_INVALID_FILE, WBEMMOF_E_ALIASES_IN_EMBEDDED, WBEMMOF_E_NULL_ARRAY_ELEM, WBEMMOF_E_DUPLICATE_QUALIFIER, WBEMMOF_E_EXPECTED_FLAVOR_TYPE, WBEMMOF_E_INCOMPATIBLE_FLAVOR_TYPES, WBEMMOF_E_MULTIPLE_ALIASES, WBEMMOF_E_INCOMPATIBLE_FLAVOR_TYPES2, WBEMMOF_E_NO_ARRAYS_RETURNED, WBEMMOF_E_MUST_BE_IN_OR_OUT, WBEMMOF_E_INVALID_FLAGS_SYNTAX, WBEMMOF_E_EXPECTED_BRACE_OR_BAD_TYPE, WBEMMOF_E_UNSUPPORTED_CIMV22_QUAL_VALUE, WBEMMOF_E_UNSUPPORTED_CIMV22_DATA_TYPE, WBEMMOF_E_INVALID_DELETEINSTANCE_SYNTAX, WBEMMOF_E_INVALID_QUALIFIER_SYNTAX, WBEMMOF_E_QUALIFIER_USED_OUTSIDE_SCOPE, WBEMMOF_E_ERROR_CREATING_TEMP_FILE, WBEMMOF_E_ERROR_INVALID_INCLUDE_FILE, WBEMMOF_E_INVALID_DELETECLASS_SYNTAX]
+    mapper = {x:x for x in values}
 WBEMSTATUS = tag_WBEMSTATUS
 
-WBEM_NO_ERROR = 0x0
-WBEM_S_NO_ERROR = 0x0
-WBEM_S_SAME = 0x0
-WBEM_S_FALSE = 0x1
-WBEM_S_ALREADY_EXISTS = 0x40001
-WBEM_S_RESET_TO_DEFAULT = 0x40002
-WBEM_S_DIFFERENT = 0x40003
-WBEM_S_TIMEDOUT = 0x40004
-WBEM_S_NO_MORE_DATA = 0x40005
-WBEM_S_OPERATION_CANCELLED = 0x40006
-WBEM_S_PENDING = 0x40007
-WBEM_S_DUPLICATE_OBJECTS = 0x40008
-WBEM_S_ACCESS_DENIED = 0x40009
-WBEM_S_PARTIAL_RESULTS = 0x40010
-WBEM_S_SOURCE_NOT_AVAILABLE = 0x40017
-WBEM_E_FAILED = 0x80041001L
-WBEM_E_NOT_FOUND = 0x80041002L
-WBEM_E_ACCESS_DENIED = 0x80041003L
-WBEM_E_PROVIDER_FAILURE = 0x80041004L
-WBEM_E_TYPE_MISMATCH = 0x80041005L
-WBEM_E_OUT_OF_MEMORY = 0x80041006L
-WBEM_E_INVALID_CONTEXT = 0x80041007L
-WBEM_E_INVALID_PARAMETER = 0x80041008L
-WBEM_E_NOT_AVAILABLE = 0x80041009L
-WBEM_E_CRITICAL_ERROR = 0x8004100aL
-WBEM_E_INVALID_STREAM = 0x8004100bL
-WBEM_E_NOT_SUPPORTED = 0x8004100cL
-WBEM_E_INVALID_SUPERCLASS = 0x8004100dL
-WBEM_E_INVALID_NAMESPACE = 0x8004100eL
-WBEM_E_INVALID_OBJECT = 0x8004100fL
-WBEM_E_INVALID_CLASS = 0x80041010L
-WBEM_E_PROVIDER_NOT_FOUND = 0x80041011L
-WBEM_E_INVALID_PROVIDER_REGISTRATION = 0x80041012L
-WBEM_E_PROVIDER_LOAD_FAILURE = 0x80041013L
-WBEM_E_INITIALIZATION_FAILURE = 0x80041014L
-WBEM_E_TRANSPORT_FAILURE = 0x80041015L
-WBEM_E_INVALID_OPERATION = 0x80041016L
-WBEM_E_INVALID_QUERY = 0x80041017L
-WBEM_E_INVALID_QUERY_TYPE = 0x80041018L
-WBEM_E_ALREADY_EXISTS = 0x80041019L
-WBEM_E_OVERRIDE_NOT_ALLOWED = 0x8004101aL
-WBEM_E_PROPAGATED_QUALIFIER = 0x8004101bL
-WBEM_E_PROPAGATED_PROPERTY = 0x8004101cL
-WBEM_E_UNEXPECTED = 0x8004101dL
-WBEM_E_ILLEGAL_OPERATION = 0x8004101eL
-WBEM_E_CANNOT_BE_KEY = 0x8004101fL
-WBEM_E_INCOMPLETE_CLASS = 0x80041020L
-WBEM_E_INVALID_SYNTAX = 0x80041021L
-WBEM_E_NONDECORATED_OBJECT = 0x80041022L
-WBEM_E_READ_ONLY = 0x80041023L
-WBEM_E_PROVIDER_NOT_CAPABLE = 0x80041024L
-WBEM_E_CLASS_HAS_CHILDREN = 0x80041025L
-WBEM_E_CLASS_HAS_INSTANCES = 0x80041026L
-WBEM_E_QUERY_NOT_IMPLEMENTED = 0x80041027L
-WBEM_E_ILLEGAL_NULL = 0x80041028L
-WBEM_E_INVALID_QUALIFIER_TYPE = 0x80041029L
-WBEM_E_INVALID_PROPERTY_TYPE = 0x8004102aL
-WBEM_E_VALUE_OUT_OF_RANGE = 0x8004102bL
-WBEM_E_CANNOT_BE_SINGLETON = 0x8004102cL
-WBEM_E_INVALID_CIM_TYPE = 0x8004102dL
-WBEM_E_INVALID_METHOD = 0x8004102eL
-WBEM_E_INVALID_METHOD_PARAMETERS = 0x8004102fL
-WBEM_E_SYSTEM_PROPERTY = 0x80041030L
-WBEM_E_INVALID_PROPERTY = 0x80041031L
-WBEM_E_CALL_CANCELLED = 0x80041032L
-WBEM_E_SHUTTING_DOWN = 0x80041033L
-WBEM_E_PROPAGATED_METHOD = 0x80041034L
-WBEM_E_UNSUPPORTED_PARAMETER = 0x80041035L
-WBEM_E_MISSING_PARAMETER_ID = 0x80041036L
-WBEM_E_INVALID_PARAMETER_ID = 0x80041037L
-WBEM_E_NONCONSECUTIVE_PARAMETER_IDS = 0x80041038L
-WBEM_E_PARAMETER_ID_ON_RETVAL = 0x80041039L
-WBEM_E_INVALID_OBJECT_PATH = 0x8004103aL
-WBEM_E_OUT_OF_DISK_SPACE = 0x8004103bL
-WBEM_E_BUFFER_TOO_SMALL = 0x8004103cL
-WBEM_E_UNSUPPORTED_PUT_EXTENSION = 0x8004103dL
-WBEM_E_UNKNOWN_OBJECT_TYPE = 0x8004103eL
-WBEM_E_UNKNOWN_PACKET_TYPE = 0x8004103fL
-WBEM_E_MARSHAL_VERSION_MISMATCH = 0x80041040L
-WBEM_E_MARSHAL_INVALID_SIGNATURE = 0x80041041L
-WBEM_E_INVALID_QUALIFIER = 0x80041042L
-WBEM_E_INVALID_DUPLICATE_PARAMETER = 0x80041043L
-WBEM_E_TOO_MUCH_DATA = 0x80041044L
-WBEM_E_SERVER_TOO_BUSY = 0x80041045L
-WBEM_E_INVALID_FLAVOR = 0x80041046L
-WBEM_E_CIRCULAR_REFERENCE = 0x80041047L
-WBEM_E_UNSUPPORTED_CLASS_UPDATE = 0x80041048L
-WBEM_E_CANNOT_CHANGE_KEY_INHERITANCE = 0x80041049L
-WBEM_E_CANNOT_CHANGE_INDEX_INHERITANCE = 0x80041050L
-WBEM_E_TOO_MANY_PROPERTIES = 0x80041051L
-WBEM_E_UPDATE_TYPE_MISMATCH = 0x80041052L
-WBEM_E_UPDATE_OVERRIDE_NOT_ALLOWED = 0x80041053L
-WBEM_E_UPDATE_PROPAGATED_METHOD = 0x80041054L
-WBEM_E_METHOD_NOT_IMPLEMENTED = 0x80041055L
-WBEM_E_METHOD_DISABLED = 0x80041056L
-WBEM_E_REFRESHER_BUSY = 0x80041057L
-WBEM_E_UNPARSABLE_QUERY = 0x80041058L
-WBEM_E_NOT_EVENT_CLASS = 0x80041059L
-WBEM_E_MISSING_GROUP_WITHIN = 0x8004105aL
-WBEM_E_MISSING_AGGREGATION_LIST = 0x8004105bL
-WBEM_E_PROPERTY_NOT_AN_OBJECT = 0x8004105cL
-WBEM_E_AGGREGATING_BY_OBJECT = 0x8004105dL
-WBEM_E_UNINTERPRETABLE_PROVIDER_QUERY = 0x8004105fL
-WBEM_E_BACKUP_RESTORE_WINMGMT_RUNNING = 0x80041060L
-WBEM_E_QUEUE_OVERFLOW = 0x80041061L
-WBEM_E_PRIVILEGE_NOT_HELD = 0x80041062L
-WBEM_E_INVALID_OPERATOR = 0x80041063L
-WBEM_E_LOCAL_CREDENTIALS = 0x80041064L
-WBEM_E_CANNOT_BE_ABSTRACT = 0x80041065L
-WBEM_E_AMENDED_OBJECT = 0x80041066L
-WBEM_E_CLIENT_TOO_SLOW = 0x80041067L
-WBEM_E_NULL_SECURITY_DESCRIPTOR = 0x80041068L
-WBEM_E_TIMED_OUT = 0x80041069L
-WBEM_E_INVALID_ASSOCIATION = 0x8004106aL
-WBEM_E_AMBIGUOUS_OPERATION = 0x8004106bL
-WBEM_E_QUOTA_VIOLATION = 0x8004106cL
-WBEM_E_RESERVED_001 = 0x8004106dL
-WBEM_E_RESERVED_002 = 0x8004106eL
-WBEM_E_UNSUPPORTED_LOCALE = 0x8004106fL
-WBEM_E_HANDLE_OUT_OF_DATE = 0x80041070L
-WBEM_E_CONNECTION_FAILED = 0x80041071L
-WBEM_E_INVALID_HANDLE_REQUEST = 0x80041072L
-WBEM_E_PROPERTY_NAME_TOO_WIDE = 0x80041073L
-WBEM_E_CLASS_NAME_TOO_WIDE = 0x80041074L
-WBEM_E_METHOD_NAME_TOO_WIDE = 0x80041075L
-WBEM_E_QUALIFIER_NAME_TOO_WIDE = 0x80041076L
-WBEM_E_RERUN_COMMAND = 0x80041077L
-WBEM_E_DATABASE_VER_MISMATCH = 0x80041078L
-WBEM_E_VETO_DELETE = 0x80041079L
-WBEM_E_VETO_PUT = 0x8004107aL
-WBEM_E_INVALID_LOCALE = 0x80041080L
-WBEM_E_PROVIDER_SUSPENDED = 0x80041081L
-WBEM_E_SYNCHRONIZATION_REQUIRED = 0x80041082L
-WBEM_E_NO_SCHEMA = 0x80041083L
-WBEM_E_PROVIDER_ALREADY_REGISTERED = 0x80041084L
-WBEM_E_PROVIDER_NOT_REGISTERED = 0x80041085L
-WBEM_E_FATAL_TRANSPORT_ERROR = 0x80041086L
-WBEM_E_ENCRYPTED_CONNECTION_REQUIRED = 0x80041087L
-WBEM_E_PROVIDER_TIMED_OUT = 0x80041088L
-WBEM_E_NO_KEY = 0x80041089L
-WBEM_E_PROVIDER_DISABLED = 0x8004108aL
-WBEMESS_E_REGISTRATION_TOO_BROAD = 0x80042001L
-WBEMESS_E_REGISTRATION_TOO_PRECISE = 0x80042002L
-WBEMESS_E_AUTHZ_NOT_PRIVILEGED = 0x80042003L
-WBEMMOF_E_EXPECTED_QUALIFIER_NAME = 0x80044001L
-WBEMMOF_E_EXPECTED_SEMI = 0x80044002L
-WBEMMOF_E_EXPECTED_OPEN_BRACE = 0x80044003L
-WBEMMOF_E_EXPECTED_CLOSE_BRACE = 0x80044004L
-WBEMMOF_E_EXPECTED_CLOSE_BRACKET = 0x80044005L
-WBEMMOF_E_EXPECTED_CLOSE_PAREN = 0x80044006L
-WBEMMOF_E_ILLEGAL_CONSTANT_VALUE = 0x80044007L
-WBEMMOF_E_EXPECTED_TYPE_IDENTIFIER = 0x80044008L
-WBEMMOF_E_EXPECTED_OPEN_PAREN = 0x80044009L
-WBEMMOF_E_UNRECOGNIZED_TOKEN = 0x8004400aL
-WBEMMOF_E_UNRECOGNIZED_TYPE = 0x8004400bL
-WBEMMOF_E_EXPECTED_PROPERTY_NAME = 0x8004400cL
-WBEMMOF_E_TYPEDEF_NOT_SUPPORTED = 0x8004400dL
-WBEMMOF_E_UNEXPECTED_ALIAS = 0x8004400eL
-WBEMMOF_E_UNEXPECTED_ARRAY_INIT = 0x8004400fL
-WBEMMOF_E_INVALID_AMENDMENT_SYNTAX = 0x80044010L
-WBEMMOF_E_INVALID_DUPLICATE_AMENDMENT = 0x80044011L
-WBEMMOF_E_INVALID_PRAGMA = 0x80044012L
-WBEMMOF_E_INVALID_NAMESPACE_SYNTAX = 0x80044013L
-WBEMMOF_E_EXPECTED_CLASS_NAME = 0x80044014L
-WBEMMOF_E_TYPE_MISMATCH = 0x80044015L
-WBEMMOF_E_EXPECTED_ALIAS_NAME = 0x80044016L
-WBEMMOF_E_INVALID_CLASS_DECLARATION = 0x80044017L
-WBEMMOF_E_INVALID_INSTANCE_DECLARATION = 0x80044018L
-WBEMMOF_E_EXPECTED_DOLLAR = 0x80044019L
-WBEMMOF_E_CIMTYPE_QUALIFIER = 0x8004401aL
-WBEMMOF_E_DUPLICATE_PROPERTY = 0x8004401bL
-WBEMMOF_E_INVALID_NAMESPACE_SPECIFICATION = 0x8004401cL
-WBEMMOF_E_OUT_OF_RANGE = 0x8004401dL
-WBEMMOF_E_INVALID_FILE = 0x8004401eL
-WBEMMOF_E_ALIASES_IN_EMBEDDED = 0x8004401fL
-WBEMMOF_E_NULL_ARRAY_ELEM = 0x80044020L
-WBEMMOF_E_DUPLICATE_QUALIFIER = 0x80044021L
-WBEMMOF_E_EXPECTED_FLAVOR_TYPE = 0x80044022L
-WBEMMOF_E_INCOMPATIBLE_FLAVOR_TYPES = 0x80044023L
-WBEMMOF_E_MULTIPLE_ALIASES = 0x80044024L
-WBEMMOF_E_INCOMPATIBLE_FLAVOR_TYPES2 = 0x80044025L
-WBEMMOF_E_NO_ARRAYS_RETURNED = 0x80044026L
-WBEMMOF_E_MUST_BE_IN_OR_OUT = 0x80044027L
-WBEMMOF_E_INVALID_FLAGS_SYNTAX = 0x80044028L
-WBEMMOF_E_EXPECTED_BRACE_OR_BAD_TYPE = 0x80044029L
-WBEMMOF_E_UNSUPPORTED_CIMV22_QUAL_VALUE = 0x8004402aL
-WBEMMOF_E_UNSUPPORTED_CIMV22_DATA_TYPE = 0x8004402bL
-WBEMMOF_E_INVALID_DELETEINSTANCE_SYNTAX = 0x8004402cL
-WBEMMOF_E_INVALID_QUALIFIER_SYNTAX = 0x8004402dL
-WBEMMOF_E_QUALIFIER_USED_OUTSIDE_SCOPE = 0x8004402eL
-WBEMMOF_E_ERROR_CREATING_TEMP_FILE = 0x8004402fL
-WBEMMOF_E_ERROR_INVALID_INCLUDE_FILE = 0x80044030L
-WBEMMOF_E_INVALID_DELETECLASS_SYNTAX = 0x80044031L
 
 # Enum tagCLSCTX definitions
-tagCLSCTX = DWORD
+CLSCTX_INPROC_SERVER = EnumValue("tagCLSCTX", "CLSCTX_INPROC_SERVER", 0x1)
+CLSCTX_INPROC_HANDLER = EnumValue("tagCLSCTX", "CLSCTX_INPROC_HANDLER", 0x2)
+CLSCTX_LOCAL_SERVER = EnumValue("tagCLSCTX", "CLSCTX_LOCAL_SERVER", 0x4)
+CLSCTX_INPROC_SERVER16 = EnumValue("tagCLSCTX", "CLSCTX_INPROC_SERVER16", 0x8)
+CLSCTX_REMOTE_SERVER = EnumValue("tagCLSCTX", "CLSCTX_REMOTE_SERVER", 0x10)
+CLSCTX_INPROC_HANDLER16 = EnumValue("tagCLSCTX", "CLSCTX_INPROC_HANDLER16", 0x20)
+CLSCTX_RESERVED1 = EnumValue("tagCLSCTX", "CLSCTX_RESERVED1", 0x40)
+CLSCTX_RESERVED2 = EnumValue("tagCLSCTX", "CLSCTX_RESERVED2", 0x80)
+CLSCTX_RESERVED3 = EnumValue("tagCLSCTX", "CLSCTX_RESERVED3", 0x100)
+CLSCTX_RESERVED4 = EnumValue("tagCLSCTX", "CLSCTX_RESERVED4", 0x200)
+CLSCTX_NO_CODE_DOWNLOAD = EnumValue("tagCLSCTX", "CLSCTX_NO_CODE_DOWNLOAD", 0x400)
+CLSCTX_RESERVED5 = EnumValue("tagCLSCTX", "CLSCTX_RESERVED5", 0x800)
+CLSCTX_NO_CUSTOM_MARSHAL = EnumValue("tagCLSCTX", "CLSCTX_NO_CUSTOM_MARSHAL", 0x1000)
+CLSCTX_ENABLE_CODE_DOWNLOAD = EnumValue("tagCLSCTX", "CLSCTX_ENABLE_CODE_DOWNLOAD", 0x2000)
+CLSCTX_NO_FAILURE_LOG = EnumValue("tagCLSCTX", "CLSCTX_NO_FAILURE_LOG", 0x4000)
+CLSCTX_DISABLE_AAA = EnumValue("tagCLSCTX", "CLSCTX_DISABLE_AAA", 0x8000)
+CLSCTX_ENABLE_AAA = EnumValue("tagCLSCTX", "CLSCTX_ENABLE_AAA", 0x10000)
+CLSCTX_FROM_DEFAULT_CONTEXT = EnumValue("tagCLSCTX", "CLSCTX_FROM_DEFAULT_CONTEXT", 0x20000)
+CLSCTX_ACTIVATE_32_BIT_SERVER = EnumValue("tagCLSCTX", "CLSCTX_ACTIVATE_32_BIT_SERVER", 0x40000)
+CLSCTX_ACTIVATE_64_BIT_SERVER = EnumValue("tagCLSCTX", "CLSCTX_ACTIVATE_64_BIT_SERVER", 0x80000)
+CLSCTX_ENABLE_CLOAKING = EnumValue("tagCLSCTX", "CLSCTX_ENABLE_CLOAKING", 0x100000)
+CLSCTX_APPCONTAINER = EnumValue("tagCLSCTX", "CLSCTX_APPCONTAINER", 0x400000)
+CLSCTX_ACTIVATE_AAA_AS_IU = EnumValue("tagCLSCTX", "CLSCTX_ACTIVATE_AAA_AS_IU", 0x800000)
+CLSCTX_PS_DLL = EnumValue("tagCLSCTX", "CLSCTX_PS_DLL", 0x80000000L)
+class tagCLSCTX(EnumType):
+    values = [CLSCTX_INPROC_SERVER, CLSCTX_INPROC_HANDLER, CLSCTX_LOCAL_SERVER, CLSCTX_INPROC_SERVER16, CLSCTX_REMOTE_SERVER, CLSCTX_INPROC_HANDLER16, CLSCTX_RESERVED1, CLSCTX_RESERVED2, CLSCTX_RESERVED3, CLSCTX_RESERVED4, CLSCTX_NO_CODE_DOWNLOAD, CLSCTX_RESERVED5, CLSCTX_NO_CUSTOM_MARSHAL, CLSCTX_ENABLE_CODE_DOWNLOAD, CLSCTX_NO_FAILURE_LOG, CLSCTX_DISABLE_AAA, CLSCTX_ENABLE_AAA, CLSCTX_FROM_DEFAULT_CONTEXT, CLSCTX_ACTIVATE_32_BIT_SERVER, CLSCTX_ACTIVATE_64_BIT_SERVER, CLSCTX_ENABLE_CLOAKING, CLSCTX_APPCONTAINER, CLSCTX_ACTIVATE_AAA_AS_IU, CLSCTX_PS_DLL]
+    mapper = {x:x for x in values}
 CLSCTX = tagCLSCTX
 
-CLSCTX_INPROC_SERVER = 0x1
-CLSCTX_INPROC_HANDLER = 0x2
-CLSCTX_LOCAL_SERVER = 0x4
-CLSCTX_INPROC_SERVER16 = 0x8
-CLSCTX_REMOTE_SERVER = 0x10
-CLSCTX_INPROC_HANDLER16 = 0x20
-CLSCTX_RESERVED1 = 0x40
-CLSCTX_RESERVED2 = 0x80
-CLSCTX_RESERVED3 = 0x100
-CLSCTX_RESERVED4 = 0x200
-CLSCTX_NO_CODE_DOWNLOAD = 0x400
-CLSCTX_RESERVED5 = 0x800
-CLSCTX_NO_CUSTOM_MARSHAL = 0x1000
-CLSCTX_ENABLE_CODE_DOWNLOAD = 0x2000
-CLSCTX_NO_FAILURE_LOG = 0x4000
-CLSCTX_DISABLE_AAA = 0x8000
-CLSCTX_ENABLE_AAA = 0x10000
-CLSCTX_FROM_DEFAULT_CONTEXT = 0x20000
-CLSCTX_ACTIVATE_32_BIT_SERVER = 0x40000
-CLSCTX_ACTIVATE_64_BIT_SERVER = 0x80000
-CLSCTX_ENABLE_CLOAKING = 0x100000
-CLSCTX_APPCONTAINER = 0x400000
-CLSCTX_ACTIVATE_AAA_AS_IU = 0x800000
-CLSCTX_PS_DLL = 0x80000000L
 
 # Enum _INTERNAL_IF_OPER_STATUS definitions
-_INTERNAL_IF_OPER_STATUS = DWORD
+IF_OPER_STATUS_NON_OPERATIONAL = EnumValue("_INTERNAL_IF_OPER_STATUS", "IF_OPER_STATUS_NON_OPERATIONAL", 0x0)
+IF_OPER_STATUS_UNREACHABLE = EnumValue("_INTERNAL_IF_OPER_STATUS", "IF_OPER_STATUS_UNREACHABLE", 0x1)
+IF_OPER_STATUS_DISCONNECTED = EnumValue("_INTERNAL_IF_OPER_STATUS", "IF_OPER_STATUS_DISCONNECTED", 0x2)
+IF_OPER_STATUS_CONNECTING = EnumValue("_INTERNAL_IF_OPER_STATUS", "IF_OPER_STATUS_CONNECTING", 0x3)
+IF_OPER_STATUS_CONNECTED = EnumValue("_INTERNAL_IF_OPER_STATUS", "IF_OPER_STATUS_CONNECTED", 0x4)
+IF_OPER_STATUS_OPERATIONAL = EnumValue("_INTERNAL_IF_OPER_STATUS", "IF_OPER_STATUS_OPERATIONAL", 0x5)
+class _INTERNAL_IF_OPER_STATUS(EnumType):
+    values = [IF_OPER_STATUS_NON_OPERATIONAL, IF_OPER_STATUS_UNREACHABLE, IF_OPER_STATUS_DISCONNECTED, IF_OPER_STATUS_CONNECTING, IF_OPER_STATUS_CONNECTED, IF_OPER_STATUS_OPERATIONAL]
+    mapper = {x:x for x in values}
 INTERNAL_IF_OPER_STATUS = _INTERNAL_IF_OPER_STATUS
 
-IF_OPER_STATUS_NON_OPERATIONAL = 0x0
-IF_OPER_STATUS_UNREACHABLE = 0x1
-IF_OPER_STATUS_DISCONNECTED = 0x2
-IF_OPER_STATUS_CONNECTING = 0x3
-IF_OPER_STATUS_CONNECTED = 0x4
-IF_OPER_STATUS_OPERATIONAL = 0x5
 
 # Enum _IMAGEHLP_SYMBOL_TYPE_INFO definitions
-_IMAGEHLP_SYMBOL_TYPE_INFO = DWORD
+TI_GET_SYMTAG = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_SYMTAG", 0x0)
+TI_GET_SYMNAME = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_SYMNAME", 0x1)
+TI_GET_LENGTH = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_LENGTH", 0x2)
+TI_GET_TYPE = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_TYPE", 0x3)
+TI_GET_TYPEID = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_TYPEID", 0x4)
+TI_GET_BASETYPE = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_BASETYPE", 0x5)
+TI_GET_ARRAYINDEXTYPEID = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_ARRAYINDEXTYPEID", 0x6)
+TI_FINDCHILDREN = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_FINDCHILDREN", 0x7)
+TI_GET_DATAKIND = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_DATAKIND", 0x8)
+TI_GET_ADDRESSOFFSET = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_ADDRESSOFFSET", 0x9)
+TI_GET_OFFSET = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_OFFSET", 0xa)
+TI_GET_VALUE = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_VALUE", 0xb)
+TI_GET_COUNT = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_COUNT", 0xc)
+TI_GET_CHILDRENCOUNT = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_CHILDRENCOUNT", 0xd)
+TI_GET_BITPOSITION = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_BITPOSITION", 0xe)
+TI_GET_VIRTUALBASECLASS = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_VIRTUALBASECLASS", 0xf)
+TI_GET_VIRTUALTABLESHAPEID = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_VIRTUALTABLESHAPEID", 0x10)
+TI_GET_VIRTUALBASEPOINTEROFFSET = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_VIRTUALBASEPOINTEROFFSET", 0x11)
+TI_GET_CLASSPARENTID = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_CLASSPARENTID", 0x12)
+TI_GET_NESTED = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_NESTED", 0x13)
+TI_GET_SYMINDEX = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_SYMINDEX", 0x14)
+TI_GET_LEXICALPARENT = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_LEXICALPARENT", 0x15)
+TI_GET_ADDRESS = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_ADDRESS", 0x16)
+TI_GET_THISADJUST = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_THISADJUST", 0x17)
+TI_GET_UDTKIND = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_UDTKIND", 0x18)
+TI_IS_EQUIV_TO = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_IS_EQUIV_TO", 0x19)
+TI_GET_CALLING_CONVENTION = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_CALLING_CONVENTION", 0x1a)
+TI_IS_CLOSE_EQUIV_TO = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_IS_CLOSE_EQUIV_TO", 0x1b)
+TI_GTIEX_REQS_VALID = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GTIEX_REQS_VALID", 0x1c)
+TI_GET_VIRTUALBASEOFFSET = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_VIRTUALBASEOFFSET", 0x1d)
+TI_GET_VIRTUALBASEDISPINDEX = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_VIRTUALBASEDISPINDEX", 0x1e)
+TI_GET_IS_REFERENCE = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_IS_REFERENCE", 0x1f)
+TI_GET_INDIRECTVIRTUALBASECLASS = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_INDIRECTVIRTUALBASECLASS", 0x20)
+IMAGEHLP_SYMBOL_TYPE_INFO_MAX = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "IMAGEHLP_SYMBOL_TYPE_INFO_MAX", 0x21)
+class _IMAGEHLP_SYMBOL_TYPE_INFO(EnumType):
+    values = [TI_GET_SYMTAG, TI_GET_SYMNAME, TI_GET_LENGTH, TI_GET_TYPE, TI_GET_TYPEID, TI_GET_BASETYPE, TI_GET_ARRAYINDEXTYPEID, TI_FINDCHILDREN, TI_GET_DATAKIND, TI_GET_ADDRESSOFFSET, TI_GET_OFFSET, TI_GET_VALUE, TI_GET_COUNT, TI_GET_CHILDRENCOUNT, TI_GET_BITPOSITION, TI_GET_VIRTUALBASECLASS, TI_GET_VIRTUALTABLESHAPEID, TI_GET_VIRTUALBASEPOINTEROFFSET, TI_GET_CLASSPARENTID, TI_GET_NESTED, TI_GET_SYMINDEX, TI_GET_LEXICALPARENT, TI_GET_ADDRESS, TI_GET_THISADJUST, TI_GET_UDTKIND, TI_IS_EQUIV_TO, TI_GET_CALLING_CONVENTION, TI_IS_CLOSE_EQUIV_TO, TI_GTIEX_REQS_VALID, TI_GET_VIRTUALBASEOFFSET, TI_GET_VIRTUALBASEDISPINDEX, TI_GET_IS_REFERENCE, TI_GET_INDIRECTVIRTUALBASECLASS, IMAGEHLP_SYMBOL_TYPE_INFO_MAX]
+    mapper = {x:x for x in values}
 IMAGEHLP_SYMBOL_TYPE_INFO = _IMAGEHLP_SYMBOL_TYPE_INFO
 
-TI_GET_SYMTAG = 0x0
-TI_GET_SYMNAME = 0x1
-TI_GET_LENGTH = 0x2
-TI_GET_TYPE = 0x3
-TI_GET_TYPEID = 0x4
-TI_GET_BASETYPE = 0x5
-TI_GET_ARRAYINDEXTYPEID = 0x6
-TI_FINDCHILDREN = 0x7
-TI_GET_DATAKIND = 0x8
-TI_GET_ADDRESSOFFSET = 0x9
-TI_GET_OFFSET = 0xa
-TI_GET_VALUE = 0xb
-TI_GET_COUNT = 0xc
-TI_GET_CHILDRENCOUNT = 0xd
-TI_GET_BITPOSITION = 0xe
-TI_GET_VIRTUALBASECLASS = 0xf
-TI_GET_VIRTUALTABLESHAPEID = 0x10
-TI_GET_VIRTUALBASEPOINTEROFFSET = 0x11
-TI_GET_CLASSPARENTID = 0x12
-TI_GET_NESTED = 0x13
-TI_GET_SYMINDEX = 0x14
-TI_GET_LEXICALPARENT = 0x15
-TI_GET_ADDRESS = 0x16
-TI_GET_THISADJUST = 0x17
-TI_GET_UDTKIND = 0x18
-TI_IS_EQUIV_TO = 0x19
-TI_GET_CALLING_CONVENTION = 0x1a
-TI_IS_CLOSE_EQUIV_TO = 0x1b
-TI_GTIEX_REQS_VALID = 0x1c
-TI_GET_VIRTUALBASEOFFSET = 0x1d
-TI_GET_VIRTUALBASEDISPINDEX = 0x1e
-TI_GET_IS_REFERENCE = 0x1f
-TI_GET_INDIRECTVIRTUALBASECLASS = 0x20
-IMAGEHLP_SYMBOL_TYPE_INFO_MAX = 0x21
 
 # Enum _PROCESSINFOCLASS definitions
-_PROCESSINFOCLASS = DWORD
+ProcessBasicInformation = EnumValue("_PROCESSINFOCLASS", "ProcessBasicInformation", 0x0)
+ProcessWow64Information = EnumValue("_PROCESSINFOCLASS", "ProcessWow64Information", 0x1a)
+class _PROCESSINFOCLASS(EnumType):
+    values = [ProcessBasicInformation, ProcessWow64Information]
+    mapper = {x:x for x in values}
 PROCESSINFOCLASS = _PROCESSINFOCLASS
 
-ProcessBasicInformation = 0x0
-ProcessWow64Information = 0x1a
 
 # Enum tagCOINIT definitions
-tagCOINIT = DWORD
+COINIT_APARTMENTTHREADED = EnumValue("tagCOINIT", "COINIT_APARTMENTTHREADED", 0x2)
+COINIT_MULTITHREADED = EnumValue("tagCOINIT", "COINIT_MULTITHREADED", 0x0)
+COINIT_DISABLE_OLE1DDE = EnumValue("tagCOINIT", "COINIT_DISABLE_OLE1DDE", 0x4)
+COINIT_SPEED_OVER_MEMORY = EnumValue("tagCOINIT", "COINIT_SPEED_OVER_MEMORY", 0x8)
+class tagCOINIT(EnumType):
+    values = [COINIT_APARTMENTTHREADED, COINIT_MULTITHREADED, COINIT_DISABLE_OLE1DDE, COINIT_SPEED_OVER_MEMORY]
+    mapper = {x:x for x in values}
 COINIT = tagCOINIT
 
-COINIT_APARTMENTTHREADED = 0x2
-COINIT_MULTITHREADED = 0x0
-COINIT_DISABLE_OLE1DDE = 0x4
-COINIT_SPEED_OVER_MEMORY = 0x8
 
 # Enum tagTYPEKIND definitions
-tagTYPEKIND = DWORD
+TKIND_ENUM = EnumValue("tagTYPEKIND", "TKIND_ENUM", 0x0)
+TKIND_RECORD = EnumValue("tagTYPEKIND", "TKIND_RECORD", 0x1)
+TKIND_MODULE = EnumValue("tagTYPEKIND", "TKIND_MODULE", 0x2)
+TKIND_INTERFACE = EnumValue("tagTYPEKIND", "TKIND_INTERFACE", 0x3)
+TKIND_DISPATCH = EnumValue("tagTYPEKIND", "TKIND_DISPATCH", 0x4)
+TKIND_COCLASS = EnumValue("tagTYPEKIND", "TKIND_COCLASS", 0x5)
+TKIND_ALIAS = EnumValue("tagTYPEKIND", "TKIND_ALIAS", 0x6)
+TKIND_UNION = EnumValue("tagTYPEKIND", "TKIND_UNION", 0x7)
+TKIND_MAX = EnumValue("tagTYPEKIND", "TKIND_MAX", 0x8)
+class tagTYPEKIND(EnumType):
+    values = [TKIND_ENUM, TKIND_RECORD, TKIND_MODULE, TKIND_INTERFACE, TKIND_DISPATCH, TKIND_COCLASS, TKIND_ALIAS, TKIND_UNION, TKIND_MAX]
+    mapper = {x:x for x in values}
 TYPEKIND = tagTYPEKIND
 
-TKIND_ENUM = 0x0
-TKIND_RECORD = 0x1
-TKIND_MODULE = 0x2
-TKIND_INTERFACE = 0x3
-TKIND_DISPATCH = 0x4
-TKIND_COCLASS = 0x5
-TKIND_ALIAS = 0x6
-TKIND_UNION = 0x7
-TKIND_MAX = 0x8
 
 # Struct _LIST_ENTRY definitions
 # Self referencing struct tricks
