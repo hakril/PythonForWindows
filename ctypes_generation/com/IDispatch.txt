@@ -1,0 +1,47 @@
+typedef struct IDispatchVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            __RPC__in IDispatch * This,
+            /* [in] */ __RPC__in REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            __RPC__deref_out  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            __RPC__in IDispatch * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            __RPC__in IDispatch * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            __RPC__in IDispatch * This,
+            /* [out] */ __RPC__out UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            __RPC__in IDispatch * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ __RPC__deref_out_opt ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            __RPC__in IDispatch * This,
+            /* [in] */ __RPC__in REFIID riid,
+            /* [size_is][in] */ __RPC__in_ecount_full(cNames) LPOLESTR *rgszNames,
+            /* [range][in] */ __RPC__in_range(0,16384) UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ __RPC__out_ecount_full(cNames) DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IDispatch * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        END_INTERFACE
+    } IDispatchVtbl;

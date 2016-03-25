@@ -1181,3 +1181,8 @@ HRESULT WINAPI CoCreateInstance(
   _In_  REFIID    riid,
   _Out_ LPVOID    *ppv
 );
+
+DWORD WINAPI GetInterfaceInfo(
+  _Out_   PIP_INTERFACE_INFO pIfTable,
+  _Inout_ PULONG             dwOutBufLen
+);

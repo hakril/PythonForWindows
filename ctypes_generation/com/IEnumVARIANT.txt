@@ -1,0 +1,35 @@
+typedef struct IEnumVARIANTVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            __RPC__in IEnumVARIANT * This,
+            /* [in] */ __RPC__in REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            __RPC__deref_out  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            __RPC__in IEnumVARIANT * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            __RPC__in IEnumVARIANT * This);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Next )( 
+            IEnumVARIANT * This,
+            /* [in] */ ULONG celt,
+            /* [length_is][size_is][out] */ VARIANT *rgVar,
+            /* [out] */ ULONG *pCeltFetched);
+        
+        HRESULT ( STDMETHODCALLTYPE *Skip )( 
+            __RPC__in IEnumVARIANT * This,
+            /* [in] */ ULONG celt);
+        
+        HRESULT ( STDMETHODCALLTYPE *Reset )( 
+            __RPC__in IEnumVARIANT * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *Clone )( 
+            __RPC__in IEnumVARIANT * This,
+            /* [out] */ __RPC__deref_out_opt IEnumVARIANT **ppEnum);
+        
+        END_INTERFACE
+    } IEnumVARIANTVtbl;

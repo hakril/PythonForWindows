@@ -4,6 +4,8 @@ import socket
 import struct
 
 from windows import winproxy
+import windows.generated_def as gdef
+from windows.com import interfaces as cominterfaces
 from windows.generated_def.winstructs import *
 from windows.generated_def.windef import *
 
@@ -167,10 +169,156 @@ def get_MIB_TCP6TABLE_OWNER_PID_from_buffer(buffer):
 
     return _GENERATED_MIB_TCP6TABLE_OWNER_PID.from_buffer(buffer)
 
+class Firewall(cominterfaces.INetFwPolicy2):
+    @property
+    def rules(self):
+        ifw_rules = cominterfaces.INetFwRules()
+        self.get_Rules(ifw_rules)
+
+        nb_rules = gdef.LONG()
+        ifw_rules.get_Count(nb_rules)
+
+        unknw = cominterfaces.IUnknown()
+        ifw_rules.get__NewEnum(unknw)
+
+        pVariant = cominterfaces.IEnumVARIANT()
+        unknw.QueryInterface(pVariant.IID, pVariant)
+
+        count = gdef.ULONG()
+        var = windows.com.ImprovedVariant()
+
+        rules = []
+        for i in range(nb_rules.value):
+            pVariant.Next(1, var, count)
+            if not count.value:
+                break
+            rule = FirewallRule()
+            idisp = var.asdispatch
+            idisp.QueryInterface(rule.IID, rule)
+            rules.append(rule)
+        return rules
+
+    @property
+    def current_profile_types(self):
+        cpt = gdef.LONG()
+        self.get_CurrentProfileTypes(cpt)
+        return cpt.value
+
+    def enabled_for_profile_type(self, profile_type):
+        enabled = gdef.VARIANT_BOOL()
+        self.get_FirewallEnabled(profile_type, enabled)
+        return enabled.value
+
+    @property
+    def enabled(self):
+        profiles = [gdef.NET_FW_PROFILE2_DOMAIN, gdef.NET_FW_PROFILE2_PRIVATE, gdef.NET_FW_PROFILE2_PUBLIC]
+        return {prof: self.enabled_for_profile_type(prof) for prof in profiles}
 
 
+class FirewallRule(cominterfaces.INetFwRule):
+    @property
+    def name(self):
+        name = gdef.BSTR()
+        self.get_Name(name)
+        return name.value
+
+    @property
+    def description(self):
+        description = gdef.BSTR()
+        self.get_Description(description)
+        return description.value
+
+    @property
+    def application_name(self):
+        applicationname = gdef.BSTR()
+        self.get_ApplicationName(applicationname)
+        return applicationname.value
+
+    @property
+    def service_name(self):
+        servicename = gdef.BSTR()
+        self.get_ServiceName(servicename)
+        return servicename.value
+
+    @property
+    def protocol(self):
+        protocol = gdef.LONG()
+        self.get_Protocol(protocol)
+        return protocol.value
+
+    @property
+    def local_address(self):
+        local_address = gdef.BSTR()
+        self.get_LocalAddresses(local_address)
+        return local_address.value
+
+    @property
+    def remote_address(self):
+        remote_address = gdef.BSTR()
+        self.get_RemoteAddresses(remote_address)
+        return remote_address.value
+
+    @property
+    def direction(self):
+        direction = gdef.NET_FW_RULE_DIRECTION()
+        self.get_Direction(direction)
+        return direction.value
+
+    @property
+    def interface_types(self):
+        interface_type = gdef.BSTR()
+        self.get_InterfaceTypes(interface_type)
+        return interface_type.value
+
+    @property
+    def local_port(self):
+        local_port = gdef.BSTR()
+        self.get_LocalPorts(local_port)
+        return local_port.value
+
+    @property
+    def remote_port(self):
+        remote_port = gdef.BSTR()
+        self.get_RemotePorts(remote_port)
+        return remote_port.value
+
+    @property
+    def action(self):
+        action = gdef.NET_FW_ACTION()
+        self.get_Action(action)
+        return action.value
+
+    @property
+    def enabled(self):
+        enabled = gdef.VARIANT_BOOL()
+        self.get_Enabled(enabled)
+        return enabled.value
+
+    @property
+    def grouping(self):
+        grouping = gdef.BSTR()
+        self.get_RemotePorts(grouping)
+        return grouping.value
+
+    @property
+    def icmp_type_and_code(self):
+        icmp_type_and_code = gdef.BSTR()
+        self.get_RemotePorts(icmp_type_and_code)
+        return icmp_type_and_code.value
+
+    def __repr__(self):
+        return '<{0} "{1}">'.format(type(self).__name__, self.name)
 
 class Network(object):
+    NetFwPolicy2 = windows.com.IID.from_string("E2B3C97F-6AE1-41AC-817A-F6F92166D7DD")
+
+    @property
+    def firewall(self):
+        windows.com.init()
+        firewall = Firewall()
+        windows.com.create_instance(self.NetFwPolicy2, firewall)
+        return firewall
+
     @staticmethod
     def _get_tcp_ipv4_sockets():
         size = ctypes.c_uint(0)

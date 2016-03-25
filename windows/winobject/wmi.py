@@ -10,8 +10,6 @@ from windows.generated_def.winstructs import *
 from windows.generated_def.interfaces import IWbemLocator, IWbemServices, IEnumWbemClassObject, IWbemClassObject
 
 
-CLSID_WbemAdministrativeLocator_IID = windows.com.IID.from_string('CB8555CC-9128-11D1-AD9B-00C04FD8FDFF')
-
 class ImprovedSAFEARRAY(windows.generated_def.winstructs.SAFEARRAY):
         @classmethod
         def of_type(cls, addr, t):
@@ -36,29 +34,13 @@ class ImprovedSAFEARRAY(windows.generated_def.winstructs.SAFEARRAY):
             return data
 
 
-class ImprovedVariant(VARIANT):
-    @property
-    def asbstr(self):
-        if self.vt != VT_BSTR:
-            raise ValueError("asbstr on non-bstr variant")
-        #import pdb;pdb.set_trace()
-        return self._VARIANT_NAME_3.bstrVal
 
-    @property
-    def aslong(self):
-        if not self.vt in [VT_I4, VT_BOOL]:
-            raise ValueError("aslong on non-long variant")
-        return self._VARIANT_NAME_3.lVal
-
-    @property
-    def asbool(self):
-        if not self.vt in [VT_BOOL]:
-            raise ValueError("get_bstr on non-bool variant")
-        return bool(self.aslong)
 
 class WmiRequester(object):
     """Perform WMI request: NOT STABLE"""
     INSTANCE = None
+
+
     def __new__(cls):
         if cls.INSTANCE is not None:
             return cls.INSTANCE
@@ -68,6 +50,7 @@ class WmiRequester(object):
     def __init__(self):
         locator = IWbemLocator()
         service = IWbemServices()
+        CLSID_WbemAdministrativeLocator_IID = windows.com.IID.from_string('CB8555CC-9128-11D1-AD9B-00C04FD8FDFF')
 
         windows.com.init()
         windows.com.create_instance(CLSID_WbemAdministrativeLocator_IID, locator)
@@ -93,7 +76,7 @@ class WmiRequester(object):
         enumerator.Next(0xffffffff, 1, ctypes.byref(processor), ctypes.byref(count))
         while count.value:
             current_res = {}
-            variant_res = ImprovedVariant()
+            variant_res = windows.com.ImprovedVariant()
             if attrs == "*":
                 attrs = [x for x in self.get_names(processor) if not x.startswith("__")]
             for name in attrs:
