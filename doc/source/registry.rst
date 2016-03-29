@@ -1,7 +1,7 @@
 Registry
 ========
 
-.. module:: windows.registry
+.. module:: windows.winobject.registry
 
 .. note::
 

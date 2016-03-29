@@ -13,4 +13,5 @@ This sections describes them by group of relation.
     exception.rst
     registry.rst
     network.rst
+    service.rst
     com.rst

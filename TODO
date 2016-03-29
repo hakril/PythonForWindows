@@ -1,7 +1,7 @@
 TODO:
     - Documentation
+        - Pass 0.2 when doc is done <3
     - ProcessMemory object ? (metasm like)
-    - Extend Registry feature (write)
 
     - remove pe_parse.transform_ctypes_fields (use utils.transform_ctypes_fields)
     - DBG
@@ -9,7 +9,6 @@ TODO:
         - Verif multiple pending at same place
         - Test !! (bp, BP_HX, bp on only on process, bp_hx on only one thread..)
 		- test breakpoint with specific target
-
 
     - Threading
         - Quid IAT hook stub ? just einit threads and remove this ?
@@ -25,36 +24,41 @@ TODO:
         - rethink OptionalExport ? not useful with lazy resolution (or we need to force resolution..)
 
 	- Readme
-
 		- Debugger ? Veh ?
 
     - TransparentApiProxy
-
         double name (params and args) for same info..
 
     - 32 <-> 64
-
         * What about ``NtWow64QueryVirtualMemory64`` ?
 
     - Parse .IDL file for more COM NAME->IID
 
 
 CHANGELOG:
-
     * NEW REGISTRY -> change examples and documentation
     * WinProcess is not a PROCESSENTRY32 anymore (change doc)
 
-FIXME:
-    - WMI
-        - COM initialisation when injected in another process
-        - The CoInitialize might be already called
-        - Fix that
+Documentation
+    * Debugger
+    * LocalDebugger
+    * volumes
+    * system.version stuff
+    * windows.com
+    * windows.wintrust
+    * New stuff in exception  ?
+    * system.firewall.network
+    * system.services
+    * New stuff in WMI ?(think not just change in internal)
+    * windows.utils
 
+    * verif samples
+
+FIXME:
     - setup.py build seems to raise an error
     - winutils.create_process : use WinProcess._from_handle
 
     - Push("[ECX]") in simple_x64 as a "H" rex and i think it should not..
 
 RESSOURCE
-
     * read http://www.codeproject.com/Articles/18975/Listing-Used-Files

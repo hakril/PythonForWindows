@@ -1,19 +1,27 @@
 Network
 =======
 
-.. module:: windows.network
+.. module:: windows.winobject.network
 
 .. note::
 
     See sample :ref:`sample_network_exploration`
 
 
-.. autoclass:: windows.network.Network
+.. autoclass:: Network
 
 Connections
 """""""""""
 
-.. autoclass:: windows.network.TCP4Connection
+.. autoclass:: TCP4Connection
 
 
-.. autoclass:: windows.network.TCP6Connection
+.. autoclass:: TCP6Connection
+
+Firewall
+""""""""
+
+.. autoclass:: Firewall
+
+
+.. autoclass:: FirewallRule

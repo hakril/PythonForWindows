@@ -13,7 +13,32 @@ SERVICE_CONTROLE_ACCEPTED = {x:x for x in []}
 SERVICE_FLAGS = {x:x for x in [SERVICE_RUNS_IN_SYSTEM_PROCESS]}
 
 
-service_status = namedtuple("ServiceStatus", ["type", "state", "control_accepted", "flags"])
+ServiceStatus = namedtuple("ServiceStatus", ["type", "state", "control_accepted", "flags"])
+"""
+``type`` might be one of:
+
+    * ``SERVICE_KERNEL_DRIVER(0x1L)``
+    * ``SERVICE_FILE_SYSTEM_DRIVER(0x2L)``
+    * ``SERVICE_WIN32_OWN_PROCESS(0x10L)``
+    * ``SERVICE_WIN32_SHARE_PROCESS(0x20L)``
+    * ``SERVICE_INTERACTIVE_PROCESS(0x100L)``
+
+``state`` might be on of:
+
+    * ``SERVICE_STOPPED(0x1L)``
+    * ``SERVICE_START_PENDING(0x2L)``
+    * ``SERVICE_STOP_PENDING(0x3L)``
+    * ``SERVICE_RUNNING(0x4L)``
+    * ``SERVICE_CONTINUE_PENDING(0x5L)``
+    * ``SERVICE_PAUSE_PENDING(0x6L)``
+    * ``SERVICE_PAUSED(0x7L)``
+
+``flags`` might be one of:
+
+    * ``0``
+    * ``SERVICE_RUNS_IN_SYSTEM_PROCESS(0x1L)``
+
+"""
 
 class Service(object):
     def __repr__(self):
@@ -21,23 +46,39 @@ class Service(object):
 
     @utils.fixedpropety
     def name(self):
+        """The name of the service
+
+        :type: :class:`str`
+        """
         return self.lpServiceName
 
     @utils.fixedpropety
     def description(self):
+        """The description of the service
+
+        :type: :class:`str`
+        """
         return self.lpDisplayName
 
     @utils.fixedpropety
     def status(self):
+        """The status of the service
+
+        :type: :class:`ServiceStatus`
+        """
         status = self.ServiceStatusProcess
         stype = SERVICE_TYPE.get(status.dwServiceType, status.dwServiceType)
         sstate = SERVICE_STATE.get(status.dwCurrentState, status.dwCurrentState)
         scontrol = status.dwControlsAccepted
         sflags = SERVICE_FLAGS.get(status.dwServiceFlags, status.dwServiceFlags)
-        return service_status(stype, sstate, scontrol, sflags)
+        return ServiceStatus(stype, sstate, scontrol, sflags)
 
     @utils.fixedpropety
     def process(self):
+        """The process running the service (if any)
+
+        :type: :class:`WinProcess <windows.winobject.process.WinProcess>` or ``None``
+        """
         pid = self.ServiceStatusProcess.dwProcessId
         if not pid:
             return None
@@ -48,6 +89,7 @@ class Service(object):
 
 
 class ServiceA(Service, ENUM_SERVICE_STATUS_PROCESSA):
+    """A Service object with ascii data"""
     pass
 
 def enumerate_services():

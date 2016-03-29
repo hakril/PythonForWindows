@@ -11,7 +11,7 @@ from windows.generated_def.windef import *
 
 
 class TCP4Connection(MIB_TCPROW_OWNER_PID):
-
+    """A TCP4 socket (connected or listening)"""
     @property
     def established(self):
         """``True`` if connection is established else it's a listening socket"""
@@ -87,6 +87,7 @@ class TCP4Connection(MIB_TCPROW_OWNER_PID):
 
 
 class TCP6Connection(MIB_TCP6ROW_OWNER_PID):
+    """A TCP6 socket (connected or listening)"""
     @staticmethod
     def _str_ipv6_addr(addr):
         return ":".join(c.encode('hex') for c in addr)
@@ -170,8 +171,13 @@ def get_MIB_TCP6TABLE_OWNER_PID_from_buffer(buffer):
     return _GENERATED_MIB_TCP6TABLE_OWNER_PID.from_buffer(buffer)
 
 class Firewall(cominterfaces.INetFwPolicy2):
+    """The windows firewall"""
     @property
     def rules(self):
+        """The rules of the firewall
+
+        :type: [:class:`FirewallRule`] -- A list of rule
+        """
         ifw_rules = cominterfaces.INetFwRules()
         self.get_Rules(ifw_rules)
 
@@ -200,102 +206,183 @@ class Firewall(cominterfaces.INetFwPolicy2):
 
     @property
     def current_profile_types(self):
+        """Mask of the profiles currently enabled
+
+        :type: :class:`long`
+        """
         cpt = gdef.LONG()
         self.get_CurrentProfileTypes(cpt)
         return cpt.value
+
+    @property
+    def enabled(self):
+        """A maping of the active firewall profiles
+
+        {
+
+        ``NET_FW_PROFILE_TYPE2_.NET_FW_PROFILE2_DOMAIN(0x1L)``: ``True`` or ``False``,
+
+        ``NET_FW_PROFILE_TYPE2_.NET_FW_PROFILE2_PRIVATE(0x2L)``: ``True`` or ``False``,
+
+        ``NET_FW_PROFILE_TYPE2_.NET_FW_PROFILE2_PUBLIC(0x4L)``: ``True`` or ``False``,
+
+        }
+
+
+        :type: :class:`dict`
+        """
+        profiles = [gdef.NET_FW_PROFILE2_DOMAIN, gdef.NET_FW_PROFILE2_PRIVATE, gdef.NET_FW_PROFILE2_PUBLIC]
+        return {prof: self.enabled_for_profile_type(prof) for prof in profiles}
+
 
     def enabled_for_profile_type(self, profile_type):
         enabled = gdef.VARIANT_BOOL()
         self.get_FirewallEnabled(profile_type, enabled)
         return enabled.value
 
-    @property
-    def enabled(self):
-        profiles = [gdef.NET_FW_PROFILE2_DOMAIN, gdef.NET_FW_PROFILE2_PRIVATE, gdef.NET_FW_PROFILE2_PUBLIC]
-        return {prof: self.enabled_for_profile_type(prof) for prof in profiles}
 
 
 class FirewallRule(cominterfaces.INetFwRule):
+    """A rule of the firewall"""
     @property
     def name(self):
+        """Name of the rule
+
+        :type: :class:`unicode`
+        """
         name = gdef.BSTR()
         self.get_Name(name)
         return name.value
 
     @property
     def description(self):
+        """Description of the rule
+
+        :type: :class:`unicode`
+        """
         description = gdef.BSTR()
         self.get_Description(description)
         return description.value
 
     @property
     def application_name(self):
+        """Name of the application to which apply the rule
+
+        :type: :class:`unicode`
+        """
         applicationname = gdef.BSTR()
         self.get_ApplicationName(applicationname)
         return applicationname.value
 
     @property
     def service_name(self):
+        """Name of the service to which apply the rule
+
+        :type: :class:`unicode`
+        """
         servicename = gdef.BSTR()
         self.get_ServiceName(servicename)
         return servicename.value
 
     @property
     def protocol(self):
+        """Protocol to which apply the rule
+
+        :type: :class:`long`
+        """
         protocol = gdef.LONG()
         self.get_Protocol(protocol)
         return protocol.value
 
     @property
     def local_address(self):
+        """Local address of the rule
+
+        :type: :class:`unicode`
+        """
         local_address = gdef.BSTR()
         self.get_LocalAddresses(local_address)
         return local_address.value
 
     @property
     def remote_address(self):
+        """Remote address of the rule
+
+        :type: :class:`unicode`
+        """
         remote_address = gdef.BSTR()
         self.get_RemoteAddresses(remote_address)
         return remote_address.value
 
     @property
     def direction(self):
+        """Direction of the rule, values might be:
+
+            * ``NET_FW_RULE_DIRECTION_.NET_FW_RULE_DIR_IN(0x1L)``
+            * ``NET_FW_RULE_DIRECTION_.NET_FW_RULE_DIR_OUT(0x2L)``
+
+        subclass of :class:`long`
+        """
         direction = gdef.NET_FW_RULE_DIRECTION()
         self.get_Direction(direction)
         return direction.value
 
     @property
     def interface_types(self):
+        """Types of interface of the rule
+
+        :type: :class:`unicode`
+        """
         interface_type = gdef.BSTR()
         self.get_InterfaceTypes(interface_type)
         return interface_type.value
 
     @property
     def local_port(self):
+        """Local port of the rule
+
+        :type: :class:`unicode`
+        """
         local_port = gdef.BSTR()
         self.get_LocalPorts(local_port)
         return local_port.value
 
     @property
     def remote_port(self):
+        """Remote port of the rule
+
+        :type: :class:`unicode`
+        """
         remote_port = gdef.BSTR()
         self.get_RemotePorts(remote_port)
         return remote_port.value
 
     @property
     def action(self):
+        """Action of the rule, values might be:
+
+            * ``NET_FW_ACTION_.NET_FW_ACTION_BLOCK(0x0L)``
+            * ``NET_FW_ACTION_.NET_FW_ACTION_ALLOW(0x1L)``
+
+        subclass of :class:`long`
+        """
         action = gdef.NET_FW_ACTION()
         self.get_Action(action)
         return action.value
 
     @property
     def enabled(self):
+        """``True`` if rule is enabled"""
         enabled = gdef.VARIANT_BOOL()
         self.get_Enabled(enabled)
         return enabled.value
 
     @property
     def grouping(self):
+        """Grouping of the rule
+
+        :type: :class:`unicode`
+        """
         grouping = gdef.BSTR()
         self.get_RemotePorts(grouping)
         return grouping.value
@@ -314,6 +401,10 @@ class Network(object):
 
     @property
     def firewall(self):
+        """The firewall of the system
+
+        :type: :class:`Firewall`
+        """
         windows.com.init()
         firewall = Firewall()
         windows.com.create_instance(self.NetFwPolicy2, firewall)

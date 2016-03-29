@@ -11,7 +11,7 @@ from windows.generated_def.interfaces import IWbemLocator, IWbemServices, IEnumW
 
 
 class WmiRequester(object):
-    """Perform WMI request: NOT STABLE"""
+    """Perform WMI request"""
     INSTANCE = None
 
 

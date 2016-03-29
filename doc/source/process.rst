@@ -1,7 +1,7 @@
 Processes and Threads
 """""""""""""""""""""
 
-.. module:: windows.winobject
+.. module:: windows.winobject.process
 
 CurrentProcess
 ''''''''''''''

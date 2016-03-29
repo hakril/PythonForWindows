@@ -21,14 +21,16 @@ from windows.generated_def.winstructs import *
 class System(object):
     """Represent the current ``Windows`` system ``Python`` is running on"""
 
-    network = network.Network()  # Object of class :class:`windows.network.Network`
-    registry = registry.Registry()  # Object of class :class:`windows.registry.Registry`
+    network = network.Network()
+    """Object of class :class:`windows.winobject.network.Network`"""
+    registry = registry.Registry()
+    """Object of class :class:`windows.winobject.registry.Registry`"""
 
     @property
     def processes(self):
         """The list of running processes
 
-        :type: [:class:`WinProcess`] -- A list of Process
+        :type: [:class:`process.WinProcess`] -- A list of Process
 		"""
         return self.enumerate_processes()
 
@@ -36,17 +38,23 @@ class System(object):
     def threads(self):
         """The list of running threads
 
-        :type: [:class:`WinThread`] -- A list of Thread
+        :type: [:class:`process.WinThread`] -- A list of Thread
 		"""
         return self.enumerate_threads()
 
     @property
     def logicaldrives(self):
+        """List of logical drives [C:\, ...]
+
+        :type: [:class:`volume.LogicalDrive`] -- A list of LogicalDrive
+        """
         return volume.enum_logical_drive()
 
     @property
     def services(self):
-        """The list of services (TODO: BETTER DOC)"""
+        """The list of services
+
+        :type: [:class:`service.ServiceA`] -- A list of Service"""
         return service.enumerate_services()
 
     #@property
@@ -87,42 +95,29 @@ class System(object):
 
     @utils.fixedpropety
     def wmi(self):
+        r"""An object to perform wmi request to "root\\cimv2"
+
+        :type: :class:`wmi.WmiRequester`"""
         return wmi.WmiRequester()
 
     #TODO: use GetComputerNameExA ? and recover other names ?
     @utils.fixedpropety
     def computer_name(self):
+        """The name of the computer
+
+        :type: :class:`str`
+        """
         size = DWORD(0x1000)
         buf = ctypes.c_buffer(size.value)
         winproxy.GetComputerNameA(buf, ctypes.byref(size))
         return buf[:size.value]
 
-    @staticmethod
-    def enumerate_processes():
-        process_entry = PROCESSENTRY32()
-        process_entry.dwSize = ctypes.sizeof(process_entry)
-        snap = winproxy.CreateToolhelp32Snapshot(windef.TH32CS_SNAPPROCESS, 0)
-        winproxy.Process32First(snap, process_entry)
-        res = []
-        res.append(process.WinProcess._from_PROCESSENTRY32(process_entry))
-        while winproxy.Process32Next(snap, process_entry):
-            res.append(process.WinProcess._from_PROCESSENTRY32(process_entry))
-        return res
-
-    @staticmethod
-    def enumerate_threads():
-        thread_entry = process.WinThread()
-        thread_entry.dwSize = ctypes.sizeof(thread_entry)
-        snap = winproxy.CreateToolhelp32Snapshot(windef.TH32CS_SNAPTHREAD, 0)
-        threads = []
-        winproxy.Thread32First(snap, thread_entry)
-        threads.append(copy.copy(thread_entry))
-        while winproxy.Thread32Next(snap, thread_entry):
-            threads.append(copy.copy(thread_entry))
-        return threads
-
     @utils.fixedpropety
     def version(self):
+        """The version of the system
+
+        :type: (:class:`int`, :class:`int`) -- (Major, Minor)
+        """
         data = self.get_version()
         result = data.dwMajorVersion, data.dwMinorVersion
         if result == (6,2):
@@ -133,6 +128,28 @@ class System(object):
 
     @utils.fixedpropety
     def version_name(self):
+        """The name of the system version,  values are:
+
+            * Windows Server 2016
+            * Windows 10
+            * Windows Server 2012 R2
+            * Windows 8.1
+            * Windows Server 2012
+            * Windows 8
+            * Windows Server 2008
+            * Windows 7
+            * Windows Server 2008
+            * Windows Vista
+            * Windows XP Professional x64 Edition
+            * TODO: version (5.2) + is_workstation + bitness == 32 (don't even know if possible..)
+            * Windows Server 2003 R2
+            * Windows Server 2003
+            * Windows XP
+            * Windows 2000
+            * "Unknow Windows <version={0} | is_workstation={1}>".format(version, is_workstation)
+
+        :type: :class:`str`
+        """
         version = self.version
         is_workstation = self.product_type == VER_NT_WORKSTATION
         if version == (10, 0):
@@ -165,6 +182,14 @@ class System(object):
 
     @utils.fixedpropety
     def product_type(self):
+        """The product type, value might be:
+
+            * VER_NT_WORKSTATION(0x1L)
+            * VER_NT_DOMAIN_CONTROLLER(0x2L)
+            * VER_NT_SERVER(0x3L)
+
+        :type: :class:`long` or :class:`int` (or subclass)
+        """
         version_map = {x:x for x in [VER_NT_WORKSTATION, VER_NT_DOMAIN_CONTROLLER, VER_NT_SERVER]}
         version = self.get_version()
         return version_map.get(version.wProductType, version.wProductType)
@@ -189,3 +214,27 @@ class System(object):
         winproxy.VerQueryValueA(buf, "\\StringFileInfo\\{0}\\ProductVersion".format(req), ctypes.byref(bufptr), ctypes.byref(bufsize))
         bufstr = ctypes.cast(bufptr, LPCSTR)
         return bufstr.value
+
+    @staticmethod
+    def enumerate_processes():
+        process_entry = PROCESSENTRY32()
+        process_entry.dwSize = ctypes.sizeof(process_entry)
+        snap = winproxy.CreateToolhelp32Snapshot(windef.TH32CS_SNAPPROCESS, 0)
+        winproxy.Process32First(snap, process_entry)
+        res = []
+        res.append(process.WinProcess._from_PROCESSENTRY32(process_entry))
+        while winproxy.Process32Next(snap, process_entry):
+            res.append(process.WinProcess._from_PROCESSENTRY32(process_entry))
+        return res
+
+    @staticmethod
+    def enumerate_threads():
+        thread_entry = process.WinThread()
+        thread_entry.dwSize = ctypes.sizeof(thread_entry)
+        snap = winproxy.CreateToolhelp32Snapshot(windef.TH32CS_SNAPTHREAD, 0)
+        threads = []
+        winproxy.Thread32First(snap, thread_entry)
+        threads.append(copy.copy(thread_entry))
+        while winproxy.Thread32Next(snap, thread_entry):
+            threads.append(copy.copy(thread_entry))
+        return threads
