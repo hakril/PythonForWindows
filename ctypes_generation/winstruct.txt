@@ -963,6 +963,73 @@ typedef struct _M128A {
     LONGLONG High;
 } M128A, *PM128A;
 
+typedef struct _XSAVE_FORMAT_64 {
+    WORD   ControlWord;
+    WORD   StatusWord;
+    BYTE  TagWord;
+    BYTE  Reserved1;
+    WORD   ErrorOpcode;
+    DWORD ErrorOffset;
+    WORD   ErrorSelector;
+    WORD   Reserved2;
+    DWORD DataOffset;
+    WORD   DataSelector;
+    WORD   Reserved3;
+    DWORD MxCsr;
+    DWORD MxCsr_Mask;
+    M128A FloatRegisters[8];
+    M128A XmmRegisters[16];
+    BYTE  Reserved4[96];
+} XSAVE_FORMAT_64, *PXSAVE_FORMAT_64;
+
+typedef struct  _XSAVE_FORMAT_32 {
+    WORD   ControlWord;
+    WORD   StatusWord;
+    BYTE  TagWord;
+    BYTE  Reserved1;
+    WORD   ErrorOpcode;
+    DWORD ErrorOffset;
+    WORD   ErrorSelector;
+    WORD   Reserved2;
+    DWORD DataOffset;
+    WORD   DataSelector;
+    WORD   Reserved3;
+    DWORD MxCsr;
+    DWORD MxCsr_Mask;
+    M128A FloatRegisters[8];
+    M128A XmmRegisters[8];
+    BYTE  Reserved4[192];
+    DWORD   StackControl[7];
+    DWORD   Cr0NpxState;
+} XSAVE_FORMAT_32, *PXSAVE_FORMAT_32;
+
+typedef struct _TMP_DUMMYSTRUCTNAME {
+    M128A Header[2];
+    M128A Legacy[8];
+    M128A Xmm0;
+    M128A Xmm1;
+    M128A Xmm2;
+    M128A Xmm3;
+    M128A Xmm4;
+    M128A Xmm5;
+    M128A Xmm6;
+    M128A Xmm7;
+    M128A Xmm8;
+    M128A Xmm9;
+    M128A Xmm10;
+    M128A Xmm11;
+    M128A Xmm12;
+    M128A Xmm13;
+    M128A Xmm14;
+    M128A Xmm15;
+} TMP_DUMMYSTRUCTNAME;
+
+
+typedef union _TMP_CONTEXT64_SUBUNION {
+    XSAVE_FORMAT_64 FltSave;
+    TMP_DUMMYSTRUCTNAME DUMMYSTRUCTNAME;
+} TMP_CONTEXT64_SUBUNION;
+
 typedef struct _CONTEXT64 {
 
     DWORD64 P1Home;
@@ -1010,24 +1077,7 @@ typedef struct _CONTEXT64 {
 
     DWORD64 Rip;
 
-    M128A Header[2];
-    M128A Legacy[8];
-    M128A Xmm0;
-    M128A Xmm1;
-    M128A Xmm2;
-    M128A Xmm3;
-    M128A Xmm4;
-    M128A Xmm5;
-    M128A Xmm6;
-    M128A Xmm7;
-    M128A Xmm8;
-    M128A Xmm9;
-    M128A Xmm10;
-    M128A Xmm11;
-    M128A Xmm12;
-    M128A Xmm13;
-    M128A Xmm14;
-    M128A Xmm15;
+    TMP_CONTEXT64_SUBUNION DUMMYUNIONNAME;
 
     M128A VectorRegister[26];
     DWORD64 VectorControl;
