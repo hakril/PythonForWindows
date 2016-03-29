@@ -714,6 +714,25 @@ def NtAlpcSendWaitReceivePort(PortHandle, Flags, SendMessage, SendMessageAttribu
     return NtAlpcSendWaitReceivePort.ctypes_function(PortHandle, Flags, SendMessage, SendMessageAttributes, ReceiveMessage, BufferLength, ReceiveMessageAttributes, Timeout)
 
 
+@NtdllProxy("NtOpenDirectoryObject", error_ntstatus)
+def NtOpenDirectoryObject(DirectoryHandle, DesiredAccess, ObjectAttributes):
+    return NtOpenDirectoryObject.ctypes_function(DirectoryHandle, DesiredAccess, ObjectAttributes)
+
+
+@NtdllProxy("NtQueryDirectoryObject", error_ntstatus)
+def NtQueryDirectoryObject(DirectoryHandle, Buffer, Length, ReturnSingleEntry, RestartScan, Context, ReturnLength):
+    return NtQueryDirectoryObject.ctypes_function(DirectoryHandle, Buffer, Length, ReturnSingleEntry, RestartScan, Context, ReturnLength)
+
+
+@NtdllProxy("NtQuerySymbolicLinkObject", error_ntstatus)
+def NtQuerySymbolicLinkObject(LinkHandle, LinkTarget, ReturnedLength):
+    return NtQuerySymbolicLinkObject.ctypes_function(LinkHandle, LinkTarget, ReturnedLength)
+
+
+@NtdllProxy("NtOpenSymbolicLinkObject", error_ntstatus)
+def NtOpenSymbolicLinkObject(LinkHandle, DesiredAccess, ObjectAttributes):
+    return NtOpenSymbolicLinkObject.ctypes_function(LinkHandle, DesiredAccess, ObjectAttributes)
+
 # ##### ADVAPI32 ####### #
 
 @Advapi32Proxy('OpenProcessToken')

@@ -2,8 +2,9 @@ import ctypes
 import struct
 import windows
 from  collections import namedtuple
-from windows.generated_def.winstructs import *
 from windows import winproxy
+from windows.generated_def.winstructs import *
+
 
 IID_PACK = "<I", "<H", "<H", "<B", "<B", "<B", "<B", "<B", "<B", "<B", "<B"
 def get_IID_from_raw(raw):
@@ -80,6 +81,8 @@ def get_catalog_for_filename(filename):
     ctx = HCATADMIN()
     winproxy.CryptCATAdminAcquireContext(ctypes.byref(ctx), DRIVER_ACTION_VERIFY, 0)
     hash = get_file_hash(filename)
+    if hash is None:
+        return None
     t = winproxy.CryptCATAdminEnumCatalogFromHash(ctx, hash, len(hash), 0, None)
     if t is None:
         return None
@@ -93,14 +96,20 @@ def get_catalog_for_filename(filename):
 
 
 def get_file_hash(filename):
-    f = open(filename)
+    f = open(filename, "rb")
     handle = windows.utils.get_handle_from_file(f)
 
     size = DWORD(0)
     x = winproxy.CryptCATAdminCalcHashFromFileHandle(handle, ctypes.byref(size), None, 0)
-
     buffer = (BYTE * size.value)()
-    x = winproxy.CryptCATAdminCalcHashFromFileHandle(handle, ctypes.byref(size), buffer, 0)
+    try:
+        x = winproxy.CryptCATAdminCalcHashFromFileHandle(handle, ctypes.byref(size), buffer, 0)
+    except WindowsError as e:
+        if e.winerror == 1006:
+            # CryptCATAdminCalcHashFromFileHandle: [Error 1006]
+            # The volume for a file has been externally altered so that the opened file is no longer valid.
+            # (returned for empty file)
+            return None
     return buffer
 
 
@@ -115,5 +124,7 @@ SignatureData = namedtuple("SignatureData", ["signed", "catalog", "catalogsigned
 def full_signature_information(filename):
     signed = not bool(check_signature(filename))
     catalog = get_catalog_for_filename(filename)
+    if catalog is None:
+        return SignatureData(signed, None, False)
     catalogsigned = not bool(check_signature(catalog))
     return SignatureData(signed, catalog, catalogsigned)

@@ -1198,3 +1198,32 @@ DWORD WINAPI GetIpAddrTable(
   _Inout_ PULONG           pdwSize,
   _In_    BOOL             bOrder
 );
+
+NTSTATUS WINAPI NtOpenDirectoryObject(
+    __out PHANDLE DirectoryHandle,
+    __in ACCESS_MASK DesiredAccess,
+    __in POBJECT_ATTRIBUTES ObjectAttributes
+);
+
+
+NTSTATUS WINAPI NtQueryDirectoryObject(
+    __in HANDLE DirectoryHandle,
+    __out PVOID Buffer,
+    __in ULONG Length,
+    __in BOOLEAN ReturnSingleEntry,
+    __in BOOLEAN RestartScan,
+    __inout PULONG Context,
+    _Out_opt_ PULONG ReturnLength
+    );
+
+NTSTATUS WINAPI NtQuerySymbolicLinkObject(
+  _In_      HANDLE          LinkHandle,
+  _Inout_   PUNICODE_STRING LinkTarget,
+  _Out_opt_ PULONG          ReturnedLength
+);
+
+NTSTATUS WINAPI NtOpenSymbolicLinkObject(
+  _Out_ PHANDLE            LinkHandle,
+  _In_  ACCESS_MASK        DesiredAccess,
+  _In_  POBJECT_ATTRIBUTES ObjectAttributes
+);

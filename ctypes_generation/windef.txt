@@ -897,3 +897,29 @@
 #define MAXLEN_PHYSADDR 8
 #define MAXLEN_IFDESCR 256
 #define MAX_INTERFACE_NAME_LEN 256
+
+#define DIRECTORY_QUERY                 (0x0001)
+#define DIRECTORY_TRAVERSE              (0x0002)
+#define DIRECTORY_CREATE_OBJECT         (0x0004)
+#define DIRECTORY_CREATE_SUBDIRECTORY   (0x0008)
+
+#define DIRECTORY_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED | 0xF)
+
+#define OBJ_INHERIT             0x00000002L
+#define OBJ_PERMANENT           0x00000010L
+#define OBJ_EXCLUSIVE           0x00000020L
+#define OBJ_CASE_INSENSITIVE    0x00000040L
+#define OBJ_OPENIF              0x00000080L
+#define OBJ_OPENLINK            0x00000100L
+#define OBJ_KERNEL_HANDLE       0x00000200L
+#define OBJ_FORCE_ACCESS_CHECK  0x00000400L
+#define OBJ_VALID_ATTRIBUTES    0x000007F2L
+
+
+#define FILE_SUPERSEDE                  0x00000000
+#define FILE_OPEN                       0x00000001
+#define FILE_CREATE                     0x00000002
+#define FILE_OPEN_IF                    0x00000003
+#define FILE_OVERWRITE                  0x00000004
+#define FILE_OVERWRITE_IF               0x00000005
+#define FILE_MAXIMUM_DISPOSITION        0x00000005

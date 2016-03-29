@@ -900,7 +900,6 @@ class LoadedModule(Structure):
 
         :type: :class:`str`
 		"""
-        #import pdb;pdb.set_trace()
         return self.BaseDllName.str.lower()
 
     @property
