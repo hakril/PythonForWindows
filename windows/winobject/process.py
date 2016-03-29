@@ -860,7 +860,31 @@ class Token(AutoHandle):
             pass
         return cbsize.value
 
-class LoadedModule(LDR_DATA_TABLE_ENTRY):
+
+def transform_ctypes_fields(struct, replacement):
+    return [(name, replacement.get(name, type)) for name, type in struct._fields_]
+
+
+class WinUnicodeString(Structure):
+    """LSA_UNICODE_STRING with a nice `__repr__`"""
+    _fields_ = transform_ctypes_fields(LSA_UNICODE_STRING, {"Buffer": ctypes.c_void_p})
+    fields = [f[0] for f in _fields_]
+    """The fields of the structure"""
+
+    @property
+    def str(self):
+        if getattr(self, "_target", None) is not None: #remote ctypes :D -> TRICKS OF THE YEAR
+            raw_data = self._target.read_memory(self.Buffer, self.Length)
+            return raw_data.decode("utf16")
+        size = self.Length / 2
+        return (ctypes.c_wchar * size).from_address(self.Buffer)[:]
+
+    def __repr__(self):
+        return """<{0} "{1}" at {2}>""".format(type(self).__name__, self.str, hex(id(self)))
+
+
+class LoadedModule(Structure):
+    _fields_ = transform_ctypes_fields(LDR_DATA_TABLE_ENTRY, {"BaseDllName": WinUnicodeString, "FullDllName": WinUnicodeString})
     """An entry in the PEB Ldr list"""
     @property
     def baseaddr(self):
@@ -876,7 +900,8 @@ class LoadedModule(LDR_DATA_TABLE_ENTRY):
 
         :type: :class:`str`
 		"""
-        return str(self.BaseDllName.Buffer).lower()
+        #import pdb;pdb.set_trace()
+        return self.BaseDllName.str.lower()
 
     @property
     def fullname(self):
@@ -884,7 +909,7 @@ class LoadedModule(LDR_DATA_TABLE_ENTRY):
 
         :type: :class:`str`
 		"""
-        return self.FullDllName.Buffer.decode()
+        return self.FullDllName.str.lower()
 
     def __repr__(self):
         return '<{0} "{1}" at {2}>'.format(self.__class__.__name__, self.name, hex(id(self)))
@@ -898,22 +923,9 @@ class LoadedModule(LDR_DATA_TABLE_ENTRY):
         return pe_parse.GetPEFile(self.baseaddr)
 
 
-class WinUnicodeString(LSA_UNICODE_STRING):
-    """LSA_UNICODE_STRING with a nice `__repr__`"""
-    fields = [f[0] for f in LSA_UNICODE_STRING._fields_]
-    """The fields of the structure"""
-
-    def __repr__(self):
-        return """<{0} "{1}" at {2}>""".format(type(self).__name__, self.Buffer, hex(id(self)))
-
-
 class LIST_ENTRY_PTR(PVOID):
     def TO_LDR_ENTRY(self):
         return LDR_DATA_TABLE_ENTRY.from_address(self.value - sizeof(PVOID) * 2)
-
-
-def transform_ctypes_fields(struct, replacement):
-    return [(name, replacement.get(name, type)) for name, type in struct._fields_]
 
 
 class RTL_USER_PROCESS_PARAMETERS(Structure):
@@ -961,7 +973,9 @@ class PEB(Structure):
             current_dll = list_entry_ptr.TO_LDR_ENTRY()
         return [LoadedModule.from_address(addressof(LDR)) for LDR in res]
 
+
 import windows.remotectypes as rctypes
+
 
 class RemoteLoadedModule(rctypes.RemoteStructure.from_structure(LoadedModule)):
     @property
@@ -974,7 +988,6 @@ class RemoteLoadedModule(rctypes.RemoteStructure.from_structure(LoadedModule)):
 
 
 class RemotePEB(rctypes.RemoteStructure.from_structure(PEB)):
-
     def ptr_flink_to_remote_module(self, ptr_value):
         return RemoteLoadedModule(ptr_value - ctypes.sizeof(ctypes.c_void_p) * 2, self._target)
 
@@ -1040,7 +1053,6 @@ if CurrentProcess().bitness == 64:
             return pe_parse.GetPEFile(self.baseaddr, target=self._target)
 
     class RemotePEB32(rctypes.transform_type_to_remote32bits(PEB)):
-
         def ptr_flink_to_remote_module(self, ptr_value):
             return RemoteLoadedModule32(ptr_value - ctypes.sizeof(rctypes.c_void_p32) * 2, self._target)
 
