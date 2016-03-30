@@ -1,7 +1,7 @@
 Exception and Context related structures
 ========================================
 
-.. module:: windows.exception
+.. module:: windows.winobject.exception
 
 
 This module regroups all the Exception/Context related structures and functions.

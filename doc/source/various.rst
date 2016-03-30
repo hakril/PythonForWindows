@@ -14,4 +14,6 @@ This sections describes them by group of relation.
     registry.rst
     network.rst
     service.rst
+    volume.rst
     com.rst
+    wmi.rst

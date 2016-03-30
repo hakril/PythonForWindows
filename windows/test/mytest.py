@@ -96,7 +96,6 @@ class SystemTestCase(unittest.TestCase):
 
 
 class WindowsTestCase(unittest.TestCase):
-
     def setUp(self):
         pass
 
@@ -408,6 +407,13 @@ class WindowsTestCase(unittest.TestCase):
         with Calc64() as calc:
             calc.load_library(DLL)
             self.assertIn(DLL, [m.name for m in calc.peb.modules])
+
+    def test_token_info(self):
+        token = windows.current_process.token
+        self.assertIsInstance(token.computername, basestring)
+        self.assertIsInstance(token.username, basestring)
+        self.assertIsInstance(token.integrity, (int, long))
+        self.assertIsInstance(token.is_elevated, (bool))
 
 
 class WindowsAPITestCase(unittest.TestCase):

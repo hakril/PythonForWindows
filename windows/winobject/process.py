@@ -51,7 +51,7 @@ class AutoHandle(object):
 
     def __del__(self):
         if hasattr(self, "_handle") and self._handle:
-            dbgprint("Closing Handle {0} for {1}".format(hex(self._handle), self), "HANDLE")
+            #dbgprint("Closing Handle {0} for {1}".format(hex(self._handle), self), "HANDLE")
             self._close_function(self._handle)
 
 
@@ -82,7 +82,7 @@ class WinThread(THREADENTRY32, AutoHandle):
     def context(self):
         """The context of the thread, type depend of the target process.
 
-            :type: :class:`windows.exception.ECONTEXT32` or  :class:`windows.exception.ECONTEXT64` or :class:`windows.exception.ECONTEXTWOW64`
+        :type: :class:`windows.exception.ECONTEXT32` or  :class:`windows.exception.ECONTEXT64` or :class:`windows.exception.ECONTEXTWOW64`
 		"""
         if self.owner.bitness == 32 and windows.current_process.bitness == 64:
             # Wow64
@@ -148,7 +148,7 @@ class WinThread(THREADENTRY32, AutoHandle):
 
     @property
     def is_exit(self):
-        """Is ``True`` if the thread is terminated
+        """``True`` if the thread is terminated
 
         :type: :class:`bool`
 		"""
@@ -271,7 +271,7 @@ class Process(AutoHandle):
     def allocated_memory(self, size):
         """ContextManager to allocate memory and free it
 
-            :type: :class:`int` -- the address of the allocated memory
+        :type: :class:`int` -- the address of the allocated memory
 		"""
         addr = self.virtual_alloc(size)
         try:
@@ -282,8 +282,8 @@ class Process(AutoHandle):
     def execute(self, code, parameter=0):
         """Execute some native code in the context of the process
 
-           :return: The thread executing the code
-           :rtype: :class:`WinThread` or :class:`DeadThread`
+        :return: The thread executing the code
+        :rtype: :class:`WinThread` or :class:`DeadThread`
 		"""
         x = self.virtual_alloc(len(code)) #Todo: free this ? when ? how ? reuse ?
         self.write_memory(x, code)
@@ -292,7 +292,7 @@ class Process(AutoHandle):
     def query_memory(self, addr):
         """Query the memory informations about page at ``addr``
 
-            :rtype: :class:`MEMORY_BASIC_INFORMATION`
+        :rtype: :class:`MEMORY_BASIC_INFORMATION`
 		"""
         if windows.current_process.bitness == 32 and self.bitness == 64:
             res = MEMORY_BASIC_INFORMATION64()
@@ -313,7 +313,7 @@ class Process(AutoHandle):
     def memory_state(self):
         """Yield the memory information for the whole address space of the process
 
-            :yield: :class:`MEMORY_BASIC_INFORMATION`
+        :yield: :class:`MEMORY_BASIC_INFORMATION`
 		"""
         addr = 0
         res = []
@@ -328,7 +328,7 @@ class Process(AutoHandle):
     def mapped_filename(self, addr):
         """The filename mapped at address ``addr`` or ``None``
 
-            :rtype: :class:`str` or ``None``
+        :rtype: :class:`str` or ``None``
 		"""
         buffer = ctypes.c_buffer(0x1024)
         try:
@@ -406,7 +406,7 @@ class Process(AutoHandle):
     def token(self):
         """The token of the process
 
-            :type: :class:`Token`
+        :type: :class:`Token`
 		"""
         token_handle = HANDLE()
         winproxy.OpenProcessToken(self.handle, TOKEN_QUERY, byref(token_handle))
@@ -622,7 +622,9 @@ class WinProcess(Process):
 
         :type: :class:`int`
 		"""
-        return self.th32ParentProcessID
+        # TODO: is there an API ?
+        pid = self.pid
+        return [p for p in windows.system.processes if p.pid == pid][0].th32ParentProcessID
 
     def _get_handle(self):
         return winproxy.OpenProcess(dwProcessId=self.pid)
@@ -771,7 +773,7 @@ class WinProcess(Process):
     def peb_syswow(self):
         """The 64bits PEB of a SysWow64 process
 
-            :type: :class:`PEB`
+        :type: :class:`PEB`
 		"""
         if not self.is_wow_64:
             raise ValueError("Not a syswow process")
@@ -805,7 +807,7 @@ class Token(AutoHandle):
     def integrity(self):
         """Return the integrity level of a process
 
-            :type: :class:`int`
+        :type: :class:`int`
 		"""
         buffer_size = self.get_required_information_size(TokenIntegrityLevel)
         buffer = ctypes.c_buffer(buffer_size)
@@ -830,10 +832,14 @@ class Token(AutoHandle):
         self.get_informations(TokenUser, buffer)
         return ctypes.cast(ctypes.byref(buffer), POINTER(TOKEN_USER))[0]
 
+    @property
     def computername(self):
+        """The computername of the token"""
         return self._user_and_computer_name()[1]
 
+    @property
     def username(self):
+        """The username of the token"""
         return self._user_and_computer_name()[0]
 
     def _user_and_computer_name(self):
@@ -843,7 +849,7 @@ class Token(AutoHandle):
         computernamesize = DWORD(0x1000)
         username = ctypes.c_buffer(usernamesize.value)
         computername = ctypes.c_buffer(computernamesize.value)
-        peUse = DWORD()
+        peUse = SID_NAME_USE()
         winproxy.LookupAccountSidA(None, sid, username, byref(usernamesize), computername, byref(computernamesize), peUse)
         return username[:usernamesize.value], computername[:computernamesize.value]
 
@@ -873,6 +879,10 @@ class WinUnicodeString(Structure):
 
     @property
     def str(self):
+        """The python string of the LSA_UNICODE_STRING object
+
+        :type: :class:`unicode`
+        """
         if getattr(self, "_target", None) is not None: #remote ctypes :D -> TRICKS OF THE YEAR
             raw_data = self._target.read_memory(self.Buffer, self.Length)
             return raw_data.decode("utf16")

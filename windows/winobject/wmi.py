@@ -11,9 +11,8 @@ from windows.generated_def.interfaces import IWbemLocator, IWbemServices, IEnumW
 
 
 class WmiRequester(object):
-    """Perform WMI request"""
+    r"""An object to perform wmi request to ``root\cimv2``"""
     INSTANCE = None
-
 
     def __new__(cls):
         if cls.INSTANCE is not None:
@@ -32,9 +31,9 @@ class WmiRequester(object):
         self.service = service
 
     def select(self, frm, attrs="*"):
-        """Select `attrs` from ``frm``
+        """Select ``attrs`` from ``frm``
 
-            :rtype: list of dict
+        :rtype: list of dict
         """
         enumerator = IEnumWbemClassObject()
         try:

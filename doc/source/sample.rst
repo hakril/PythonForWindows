@@ -340,3 +340,31 @@ Ouput::
     I AM LOADING <C:\Windows\system32\shell32.dll>
     I AM LOADING <C:\Windows\SYSTEM32\WINMM.dll>
     I AM LOADING <C:\Windows\system32\ole32.dll>
+
+
+.. _wmi_request:
+
+Make WMI requests
+'''''''''''''''''
+
+.. literalinclude:: ..\..\samples\wmi_request.py
+
+
+Ouput::
+
+    (cmd λ) python .\samples\wmi_request.py
+    WMI requester is <windows.winobject.wmi.WmiRequester object at 0x02CAA410>
+    Selecting * from 'Win32_Process'
+    They are <94> processes
+    Looking for ourself via pid
+    Some info about our process:
+        * Name -> python.exe
+        * ProcessId -> 7896
+        * OSName -> Microsoft Windows 8.1 Pro|C:\Windows|\Device\Harddisk0\Partition2
+        * UserModeTime -> 1406250
+        * WindowsVersion -> 6.3.9600
+        * CommandLine -> "C:\Python27\python.exe"  .\wmi_request.py
+    <Select Caption,FileSystem,FreeSpace from Win32_LogicalDisk>:
+        * {'Caption': u'C:', 'FreeSpace': u'14729031680', 'FileSystem': u'NTFS'}
+        * {'Caption': u'D:', 'FreeSpace': u'243872890880', 'FileSystem': u'NTFS'}
+        * {'Caption': u'E:', 'FreeSpace': u'1073852416', 'FileSystem': u'FAT32'}

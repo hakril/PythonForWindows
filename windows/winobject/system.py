@@ -15,6 +15,7 @@ from windows.winobject import exception
 from windows.winobject import service
 from windows.winobject import volume
 from windows.winobject import wmi
+from windows.winobject import kernobj
 
 from windows.generated_def.winstructs import *
 
@@ -97,7 +98,7 @@ class System(object):
     def wmi(self):
         r"""An object to perform wmi request to "root\\cimv2"
 
-        :type: :class:`wmi.WmiRequester`"""
+        :type: :class:`windows.winobject.wmi.WmiRequester`"""
         return wmi.WmiRequester()
 
     #TODO: use GetComputerNameExA ? and recover other names ?

@@ -1,7 +1,7 @@
 The ``windows`` module
 **********************
 
-The ``windows`` module is the module installed by :file:`setup.py` (that does not exists right now).
+The ``windows`` module is the module installed by :file:`setup.py`.
 
 This module exports some objects representing the current state of the system.
 It also offers some submodules aimed to help the interfacing with ``Windows`` and native code execution.
@@ -15,6 +15,7 @@ The submodules that you might use by themself are:
     * :mod:`windows.native_exec`
     * :mod:`windows.winproxy`
     * :mod:`windows.utils`
+    * :mod:`windows.debug`
     * :mod:`windows.com`
 
 .. _object_system:
