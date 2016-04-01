@@ -68,6 +68,14 @@ class PyHKey(object):
                 res.append(_winreg.EnumValue(self.phkey, i))
         return [KeyValue(*r) for r in res]
 
+    @property
+    def info(self):
+        return _winreg.QueryInfoKey(self.phkey)
+
+    @property
+    def last_write(self):
+        return self.info[2]
+
     def get(self, value_name):
         """Retrieves the value ``value_name``
 
@@ -150,7 +158,10 @@ class Registry(object):
         """
 
         if name in self.registry_base_keys:
-            return self.registry_base_keys[name]
+            key = self.registry_base_keys[name]
+            if sam != key.sam:
+                key = key.reopen(sam)
+            return key
         if "\\" not in name:
             raise ValueError("Unknow registry base key <{0}>".format(name))
         base_name, subkey = name.split("\\", 1)
