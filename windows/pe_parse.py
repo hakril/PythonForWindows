@@ -190,7 +190,18 @@ def GetPEFile(baseaddr, target=None, force_bitness=None):
             return self.get_NT_HEADER().OptionalHeader
 
         def get_DataDirectory(self):
-            return self.get_OptionalHeader().DataDirectory
+            # This won't work if we load a PE32 in a 64bit process
+            # PE32 .NET...
+            #return self.get_OptionalHeader().DataDirectory
+            DataDirectory_type = IMAGE_DATA_DIRECTORY * IMAGE_NUMBEROF_DIRECTORY_ENTRIES
+            SizeOfOptionalHeader = self.get_NT_HEADER().FileHeader.SizeOfOptionalHeader
+            if target is None:
+                opt_header_addr = ctypes.addressof(self.get_NT_HEADER().OptionalHeader)
+            else:
+                opt_header_addr = self.get_NT_HEADER().OptionalHeader._base_addr
+            DataDirectory_addr = opt_header_addr + SizeOfOptionalHeader - ctypes.sizeof(DataDirectory_type)
+            return create_structure_at(DataDirectory_type, DataDirectory_addr)
+
 
         def get_IMPORT_DESCRIPTORS(self):
             import_datadir = self.get_DataDirectory()[IMAGE_DIRECTORY_ENTRY_IMPORT]
@@ -237,10 +248,12 @@ def GetPEFile(baseaddr, target=None, force_bitness=None):
         def sections(self):
             nt_header = self.get_NT_HEADER()
             nb_section = nt_header.FileHeader.NumberOfSections
+            SizeOfOptionalHeader = self.get_NT_HEADER().FileHeader.SizeOfOptionalHeader
             if target is None:
-                base_section = ctypes.addressof(nt_header) + ctypes.sizeof(nt_header)
+                opt_header_addr = ctypes.addressof(self.get_NT_HEADER().OptionalHeader)
             else:
-                base_section = nt_header._base_addr + ctypes.sizeof(nt_header)
+                opt_header_addr = self.get_NT_HEADER().OptionalHeader._base_addr
+            base_section = opt_header_addr + SizeOfOptionalHeader
             sections_array = create_structure_at((self.PESection * nb_section), base_section)
             return list(sections_array)
 
