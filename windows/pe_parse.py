@@ -216,11 +216,19 @@ def GetPEFile(baseaddr, target=None, force_bitness=None):
             if target is None:
                 @property
                 def name(self):
-                    return ctypes.c_char_p(self.Name).value.decode()
+                    return ctypes.c_char_p(ctypes.addressof(self.Name)).value[:8]
             else:
                 @property
                 def name(self):
-                    return create_structure_at(ctypes.c_char_p, self._base_addr).value.decode()
+                    return create_structure_at(ctypes.c_char_p, self._base_addr).value[:8]
+
+            @property
+            def start(self):
+                return baseaddr + self.VirtualAddress
+
+            @property
+            def size(self):
+                return self.VirtualSize
 
             def __repr__(self):
                 return "<PESection \"{0}\">".format(self.name)
