@@ -149,9 +149,12 @@ def try_generate_stub_target(shellcode, argument_buffer, target):
             raise ValueError("{0} syswow accept {1} args ({2} given)".format(target.__name__, expected_arguments_number, len(args)))
         # Transform args (ctypes byref possibly) to int
         writable_args = []
-        for value in args:
+        for i, value in enumerate(args):
             if not isinstance(value, (int, long)):
-                value = ctypes.cast(value, ctypes.c_void_p).value
+                try:
+                    value = ctypes.cast(value, ctypes.c_void_p).value
+                except ctypes.ArgumentError as e:
+                    raise ctypes.ArgumentError("Argument {0}: wrong type <{1}>".format(i, type(value).__name__))
             writable_args.append(value)
 
         # Build buffer
@@ -278,7 +281,7 @@ def NtQueryVirtualMemory_32_to_64(ProcessHandle, BaseAddress, MemoryInformationC
         ReturnLength = byref(ULONG())
     if MemoryInformation is not None and MemoryInformationLength == 0:
         MemoryInformationLength = ctypes.sizeof(MemoryInformation)
-    if type(MemoryInformation) == MEMORY_BASIC_INFORMATION64:
+    if isinstance(MemoryInformation, ctypes.Structure):
         MemoryInformation = byref(MemoryInformation)
     return NtQueryVirtualMemory_32_to_64.ctypes_function(ProcessHandle, BaseAddress, MemoryInformationClass, MemoryInformation, MemoryInformationLength, ReturnLength)
 

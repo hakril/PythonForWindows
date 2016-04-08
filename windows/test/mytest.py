@@ -94,6 +94,10 @@ class SystemTestCase(unittest.TestCase):
     def test_wmi(self):
         return windows.system.wmi.select("Win32_Process", "*")
 
+    def test_processes(self):
+        procs = windows.system.processes
+        self.assertIn(windows.current_process.pid, [p.pid for p in procs])
+
 
 class WindowsTestCase(unittest.TestCase):
     def setUp(self):
@@ -129,6 +133,16 @@ class WindowsTestCase(unittest.TestCase):
         get_current_proc_id = k32.pe.exports['GetCurrentProcessId']
         k32_base = windows.winproxy.LoadLibraryA("kernel32.dll")
         self.assertEqual(windows.winproxy.GetProcAddress(k32_base, "GetCurrentProcessId"), get_current_proc_id)
+
+    def test_local_process_pe_sections(self):
+        mods = [m for m in windows.current_process.peb.modules if m.name == "kernel32.dll"]
+        self.assertTrue(mods, 'Could not find "kernel32.dll" in current process modules')
+        k32 = mods[0]
+        sections = k32.pe.sections
+        all_sections_name = [s.name for s in sections]
+        self.assertIn(".text", all_sections_name)
+        sections[0].start
+        sections[0].size
 
     # Native execution
     def test_execute_to_32(self):
@@ -415,6 +429,46 @@ class WindowsTestCase(unittest.TestCase):
         self.assertIsInstance(token.integrity, (int, long))
         self.assertIsInstance(token.is_elevated, (bool))
 
+    def test_get_working_set_32(self):
+        with Calc32() as calc:
+            k32 = [m for m in calc.peb.modules if m.name == "kernel32.dll"][0]
+            api_addr = k32.pe.exports["CreateFileA"]
+            data = calc.read_memory(api_addr, 5)
+            page_target = api_addr >> 12
+            for page_info in calc.query_working_set():
+                if page_info.virtualpage == page_target:
+                    self.assertEqual(page_info.shared, True)
+                    break
+            else:
+                raise ValueError("query_working_set page info for <0x{0:x}> not found".format(page_target))
+            data = calc.write_memory(api_addr, data)
+            for page_info in calc.query_working_set():
+                if page_info.virtualpage == page_target:
+                    self.assertEqual(page_info.shared, False)
+                    break
+            else:
+                raise ValueError("query_working_set page info for <0x{0:x}> not found".format(page_target))
+
+    @windows_64bit_only
+    def test_get_working_set_64(self):
+        with Calc32() as calc:
+            k32 = [m for m in calc.peb.modules if m.name == "kernel32.dll"][0]
+            api_addr = k32.pe.exports["CreateFileA"]
+            data = calc.read_memory(api_addr, 5)
+            page_target = api_addr >> 12
+            for page_info in calc.query_working_set():
+                if page_info.virtualpage == page_target:
+                    self.assertEqual(page_info.shared, True)
+                    break
+            else:
+                raise ValueError("query_working_set page info for <0x{0:x}> not found".format(page_target))
+            data = calc.write_memory(api_addr, data)
+            for page_info in calc.query_working_set():
+                if page_info.virtualpage == page_target:
+                    self.assertEqual(page_info.shared, False)
+                    break
+            else:
+                raise ValueError("query_working_set page info for <0x{0:x}> not found".format(page_target))
 
 class WindowsAPITestCase(unittest.TestCase):
     def test_createfileA_fail(self):

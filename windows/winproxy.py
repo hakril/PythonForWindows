@@ -276,6 +276,7 @@ GetComputerNameA = TransparentKernel32Proxy("GetComputerNameA")
 GetComputerNameW = TransparentKernel32Proxy("GetComputerNameW")
 
 
+
 Wow64DisableWow64FsRedirection = OptionalExport(TransparentKernel32Proxy)("Wow64DisableWow64FsRedirection")
 Wow64RevertWow64FsRedirection = OptionalExport(TransparentKernel32Proxy)("Wow64RevertWow64FsRedirection")
 Wow64EnableWow64FsRedirection = OptionalExport(TransparentKernel32Proxy)("Wow64EnableWow64FsRedirection")
@@ -419,7 +420,7 @@ def CreateToolhelp32Snapshot(dwFlags, th32ProcessID=0):
     return CreateToolhelp32Snapshot.ctypes_function(dwFlags, th32ProcessID)
 
 
-@Kernel32Proxy("Thread32First", no_error_check)
+@Kernel32Proxy("Thread32First")
 def Thread32First(hSnapshot, lpte):
     """Set byref(lpte) if needed"""
     if type(lpte) == THREADENTRY32:
@@ -435,19 +436,13 @@ def Thread32Next(hSnapshot, lpte):
     return Thread32Next.ctypes_function(hSnapshot, lpte)
 
 
-@Kernel32Proxy("Process32First", no_error_check)
+@Kernel32Proxy("Process32First")
 def Process32First(hSnapshot, lpte):
-    """Set byref(lpte) if needed"""
-    if type(lpte) == THREADENTRY32:
-        lpte = ctypes.byref(lpte)
     return Process32First.ctypes_function(hSnapshot, lpte)
 
 
 @Kernel32Proxy("Process32Next", no_error_check)
 def Process32Next(hSnapshot, lpte):
-    """Set byref(lpte) if needed"""
-    if type(lpte) == THREADENTRY32:
-        lpte = ctypes.byref(lpte)
     return Process32Next.ctypes_function(hSnapshot, lpte)
 
 @Kernel32Proxy("OpenEventA")
@@ -539,10 +534,14 @@ def GetMappedFileNameAWrapper(hProcess, lpv, lpFilename, nSize=None):
     return GetMappedFileNameA.ctypes_function(hProcess, lpv, lpFilename, nSize)
 GetMappedFileNameA = OptionalExport(Kernel32Proxy("GetMappedFileNameA"))(GetMappedFileNameAWrapper)
 
+def QueryWorkingSetWrapper(hProcess, pv, cb):
+    return QueryWorkingSet.ctypes_function(hProcess, pv, cb)
+QueryWorkingSet = OptionalExport(Kernel32Proxy("QueryWorkingSet"))(QueryWorkingSetWrapper)
+
 if GetMappedFileNameA is None:
     GetMappedFileNameW = PsapiProxy("GetMappedFileNameW")(GetMappedFileNameWWrapper)
     GetMappedFileNameA = PsapiProxy("GetMappedFileNameA")(GetMappedFileNameAWrapper)
-
+    QueryWorkingSet = PsapiProxy("QueryWorkingSet")(QueryWorkingSetWrapper)
 
 def GetModuleBaseNameAWrapper(hProcess, hModule, lpBaseName, nSize=None):
     if nSize is None:
@@ -704,14 +703,33 @@ def NtOpenEvent(EventHandle, DesiredAccess, ObjectAttributes):
     return NtOpenEvent.ctypes_function(EventHandle, DesiredAccess, ObjectAttributes)
 
 
+@NtdllProxy("NtAlpcCreatePort", error_ntstatus)
+def NtAlpcCreatePort(PortHandle, ObjectAttributes, PortAttributes):
+    return NtAlpcCreatePort.ctypes_function(PortHandle, ObjectAttributes, PortAttributes)
+
+
 @NtdllProxy("NtAlpcConnectPort", error_ntstatus)
 def NtAlpcConnectPort(PortHandle, PortName, ObjectAttributes, PortAttributes, Flags, RequiredServerSid, ConnectionMessage, BufferLength, OutMessageAttributes, InMessageAttributes, Timeout):
     return NtAlpcConnectPort.ctypes_function(PortHandle, PortName, ObjectAttributes, PortAttributes, Flags, RequiredServerSid, ConnectionMessage, BufferLength, OutMessageAttributes, InMessageAttributes, Timeout)
 
 
+@NtdllProxy("NtAlpcAcceptConnectPort", error_ntstatus)
+def NtAlpcAcceptConnectPort(PortHandle, ConnectionPortHandle, Flags, ObjectAttributes, PortAttributes, PortContext, ConnectionRequest, ConnectionMessageAttributes, AcceptConnection):
+    return NtAlpcAcceptConnectPort.ctypes_function(PortHandle, ConnectionPortHandle, Flags, ObjectAttributes, PortAttributes, PortContext, ConnectionRequest, ConnectionMessageAttributes, AcceptConnection)
+
 @NtdllProxy("NtAlpcSendWaitReceivePort", error_ntstatus)
 def NtAlpcSendWaitReceivePort(PortHandle, Flags, SendMessage, SendMessageAttributes, ReceiveMessage, BufferLength, ReceiveMessageAttributes, Timeout):
     return NtAlpcSendWaitReceivePort.ctypes_function(PortHandle, Flags, SendMessage, SendMessageAttributes, ReceiveMessage, BufferLength, ReceiveMessageAttributes, Timeout)
+
+
+@NtdllProxy("AlpcInitializeMessageAttribute", error_ntstatus)
+def AlpcInitializeMessageAttribute(AttributeFlags, Buffer, BufferSize, RequiredBufferSize):
+    return AlpcInitializeMessageAttribute.ctypes_function(AttributeFlags, Buffer, BufferSize, RequiredBufferSize)
+
+
+@NtdllProxy("AlpcGetMessageAttribute", no_error_check)
+def AlpcGetMessageAttribute(Buffer, AttributeFlag):
+    return AlpcGetMessageAttribute.ctypes_function(Buffer, AttributeFlag)
 
 
 @NtdllProxy("NtOpenDirectoryObject", error_ntstatus)

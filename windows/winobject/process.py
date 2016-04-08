@@ -325,6 +325,46 @@ class Process(AutoHandle):
                 return
             addr += x.RegionSize
 
+    def query_working_set(self):
+        if self.bitness == 64 or windows.current_process.bitness == 64:
+            WSET_BLOCK = EPSAPI_WORKING_SET_BLOCK64
+            dummy = PSAPI_WORKING_SET_INFORMATION64()
+        else:
+            WSET_BLOCK = EPSAPI_WORKING_SET_BLOCK32
+            dummy = PSAPI_WORKING_SET_INFORMATION32()
+        try:
+            windows.winproxy.QueryWorkingSet(self.handle, ctypes.byref(dummy), ctypes.sizeof(dummy))
+        except WindowsError as e:
+            if e.winerror != 24:
+                raise
+
+        for i in range(10):
+            # use the same type as WSET_BLOCK.Flags
+            NumberOfEntriesType = [f for f in WSET_BLOCK._fields_ if f[0] == "Flags"][0][1]
+            class GENERATED_PSAPI_WORKING_SET_INFORMATION(ctypes.Structure):
+                _fields_ = [
+                ("NumberOfEntries", NumberOfEntriesType),
+                ("WorkingSetInfo", WSET_BLOCK * dummy.NumberOfEntries),
+            ]
+            res = GENERATED_PSAPI_WORKING_SET_INFORMATION()
+            try:
+                if windows.current_process.bitness == 32 and self.bitness == 64:
+                    windows.syswow64.NtQueryVirtualMemory_32_to_64(self.handle, 0, 1, res)
+                else:
+                    windows.winproxy.QueryWorkingSet(self.handle, ctypes.byref(res), ctypes.sizeof(res))
+            except WindowsError as e:
+                if e.winerror != 24:
+                    raise
+                dummy.NumberOfEntries = res.NumberOfEntries
+                continue
+            except windows.generated_def.ntstatus.NtStatusException as e:
+                if e.code != STATUS_INFO_LENGTH_MISMATCH:
+                    raise
+                dummy.NumberOfEntries = res.NumberOfEntries
+                continue
+            return res.WorkingSetInfo
+        return None
+
     def mapped_filename(self, addr):
         """The filename mapped at address ``addr`` or ``None``
 
@@ -982,6 +1022,35 @@ class PEB(Structure):
             current_dll = list_entry_ptr.TO_LDR_ENTRY()
         return [LoadedModule.from_address(addressof(LDR)) for LDR in res]
 
+
+
+# Memory stuff
+
+class EPSAPI_WORKING_SET_BLOCK_BASE(object):
+    @property
+    def protection(self):
+        return self.Flags & 0b11111
+
+    @property
+    def sharecount(self):
+        return (self.Flags >> 5) & 0b111
+
+    @property
+    def shared(self):
+        return (self.Flags >> 8) & 1
+
+    @property
+    def virtualpage(self):
+        return (self.Flags >> 12)
+
+class EPSAPI_WORKING_SET_BLOCK(EPSAPI_WORKING_SET_BLOCK_BASE, PSAPI_WORKING_SET_BLOCK):
+    pass
+
+class EPSAPI_WORKING_SET_BLOCK32(EPSAPI_WORKING_SET_BLOCK_BASE, PSAPI_WORKING_SET_BLOCK32):
+    pass
+
+class EPSAPI_WORKING_SET_BLOCK64(EPSAPI_WORKING_SET_BLOCK_BASE, PSAPI_WORKING_SET_BLOCK64):
+    pass
 
 import windows.remotectypes as rctypes
 

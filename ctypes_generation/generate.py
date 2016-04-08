@@ -26,7 +26,7 @@ TYPE_EQUIVALENCE = [
     ('WNDENUMPROC', 'PVOID'),
     ('PHANDLER_ROUTINE', 'PVOID'),
     ('LPBYTE', 'POINTER(BYTE)'),
-    ('ULONG_PTR','PULONG'),
+    ('ULONG_PTR','PVOID'),
     ('CHAR', 'c_char'),
     ('INT', 'c_int'),
     ('UCHAR', 'c_char'),

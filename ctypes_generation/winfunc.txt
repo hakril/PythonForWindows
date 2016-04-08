@@ -143,6 +143,12 @@ SIZE_T WINAPI VirtualQueryEx(
     _In_     SIZE_T dwLength
     );
 
+BOOL WINAPI QueryWorkingSet(
+  _In_  HANDLE hProcess,
+  _Out_ PVOID  pv,
+  _In_  DWORD  cb
+);
+
 
 DWORD WINAPI GetModuleFileNameA(
   _In_opt_  HMODULE hModule,
@@ -801,6 +807,14 @@ NTSTATUS WINAPI NtOpenEvent(
 );
 
 
+
+NTSTATUS WINAPI NtAlpcCreatePort(
+    _Out_ PHANDLE PortHandle,
+    _In_opt_ POBJECT_ATTRIBUTES ObjectAttributes,
+    _In_opt_ PALPC_PORT_ATTRIBUTES PortAttributes
+);
+
+
 NTSTATUS WINAPI NtAlpcConnectPort(
     _Out_ PHANDLE PortHandle,
     _In_ PUNICODE_STRING PortName,
@@ -812,8 +826,33 @@ NTSTATUS WINAPI NtAlpcConnectPort(
     _Inout_opt_ PULONG BufferLength,
     _Inout_opt_ PALPC_MESSAGE_ATTRIBUTES OutMessageAttributes,
     _Inout_opt_ PALPC_MESSAGE_ATTRIBUTES InMessageAttributes,
-    _In_opt_ PLARGE_INTEGER Timeout);
+    _In_opt_ PLARGE_INTEGER Timeout
+);
 
+
+NTSTATUS WINAPI NtAlpcAcceptConnectPort(
+    _Out_ PHANDLE PortHandle,
+    _In_ HANDLE ConnectionPortHandle,
+    _In_ ULONG Flags,
+    _In_opt_ POBJECT_ATTRIBUTES ObjectAttributes,
+    _In_opt_ PALPC_PORT_ATTRIBUTES PortAttributes,
+    _In_opt_ PVOID PortContext,
+    _In_ PPORT_MESSAGE ConnectionRequest,
+    _Inout_opt_ PALPC_MESSAGE_ATTRIBUTES ConnectionMessageAttributes,
+    _In_ BOOLEAN AcceptConnection
+);
+
+NTSTATUS WINAPI AlpcInitializeMessageAttribute(
+    _In_ ULONG AttributeFlags,
+    _Out_opt_ PALPC_MESSAGE_ATTRIBUTES Buffer,
+    _In_ ULONG BufferSize,
+    _Out_ PULONG RequiredBufferSize
+);
+
+PVOID WINAPI AlpcGetMessageAttribute(
+    _In_ PALPC_MESSAGE_ATTRIBUTES Buffer,
+    _In_ ULONG AttributeFlag
+);
 
 NTSTATUS WINAPI NtAlpcSendWaitReceivePort(
     _In_ HANDLE PortHandle,
@@ -824,7 +863,7 @@ NTSTATUS WINAPI NtAlpcSendWaitReceivePort(
     _Inout_opt_ PSIZE_T BufferLength,
     _Inout_opt_ PALPC_MESSAGE_ATTRIBUTES ReceiveMessageAttributes,
     _In_opt_ PLARGE_INTEGER Timeout
-    );
+);
 
 
 INT WINAPI lstrcmpA(
