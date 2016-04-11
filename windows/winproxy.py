@@ -520,7 +520,6 @@ def DuplicateHandle(hSourceProcessHandle, hSourceHandle, hTargetProcessHandle, l
 # TODO: might be in another DLL depending of version
 # Should handle this..
 
-
 def GetMappedFileNameWWrapper(hProcess, lpv, lpFilename, nSize=None):
     if nSize is None:
         nSize = ctypes.sizeof(lpFilename)
@@ -538,10 +537,15 @@ def QueryWorkingSetWrapper(hProcess, pv, cb):
     return QueryWorkingSet.ctypes_function(hProcess, pv, cb)
 QueryWorkingSet = OptionalExport(Kernel32Proxy("QueryWorkingSet"))(QueryWorkingSetWrapper)
 
+def QueryWorkingSetExWrapper(hProcess, pv, cb):
+    return QueryWorkingSet.ctypes_function(hProcess, pv, cb)
+QueryWorkingSetEx = OptionalExport(Kernel32Proxy("QueryWorkingSetEx"))(QueryWorkingSetWrapper)
+
 if GetMappedFileNameA is None:
     GetMappedFileNameW = PsapiProxy("GetMappedFileNameW")(GetMappedFileNameWWrapper)
     GetMappedFileNameA = PsapiProxy("GetMappedFileNameA")(GetMappedFileNameAWrapper)
     QueryWorkingSet = PsapiProxy("QueryWorkingSet")(QueryWorkingSetWrapper)
+    QueryWorkingSetEx = PsapiProxy("QueryWorkingSetEx")(QueryWorkingSetWrapper)
 
 def GetModuleBaseNameAWrapper(hProcess, hModule, lpBaseName, nSize=None):
     if nSize is None:

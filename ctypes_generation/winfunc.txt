@@ -149,6 +149,12 @@ BOOL WINAPI QueryWorkingSet(
   _In_  DWORD  cb
 );
 
+BOOL WINAPI QueryWorkingSetEx(
+  _In_    HANDLE hProcess,
+  _Inout_ PVOID  pv,
+  _In_    DWORD  cb
+);
+
 
 DWORD WINAPI GetModuleFileNameA(
   _In_opt_  HMODULE hModule,

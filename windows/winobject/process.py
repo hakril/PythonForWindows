@@ -365,7 +365,19 @@ class Process(AutoHandle):
             return res.WorkingSetInfo
         return None
 
-    def mapped_filename(self, addr):
+    def query_working_set_ex(self, addresses):
+        if self.bitness == 64 or windows.current_process.bitness == 64:
+            info_type = EPSAPI_WORKING_SET_EX_INFORMATION64
+        else:
+            info_type = EPSAPI_WORKING_SET_EX_INFORMATION32
+        info_array = (info_type * len(addresses))()
+        for i, data in enumerate(info_array):
+            info_array[i].VirtualAddress = addresses[i]
+        winproxy.QueryWorkingSetEx(self.handle, ctypes.byref(info_array), ctypes.sizeof(info_array))
+        return info_array
+
+
+    def get_mapped_filename(self, addr):
         """The filename mapped at address ``addr`` or ``None``
 
         :rtype: :class:`str` or ``None``
@@ -1023,7 +1035,6 @@ class PEB(Structure):
         return [LoadedModule.from_address(addressof(LDR)) for LDR in res]
 
 
-
 # Memory stuff
 
 class EPSAPI_WORKING_SET_BLOCK_BASE(object):
@@ -1043,6 +1054,7 @@ class EPSAPI_WORKING_SET_BLOCK_BASE(object):
     def virtualpage(self):
         return (self.Flags >> 12)
 
+
 class EPSAPI_WORKING_SET_BLOCK(EPSAPI_WORKING_SET_BLOCK_BASE, PSAPI_WORKING_SET_BLOCK):
     pass
 
@@ -1051,6 +1063,39 @@ class EPSAPI_WORKING_SET_BLOCK32(EPSAPI_WORKING_SET_BLOCK_BASE, PSAPI_WORKING_SE
 
 class EPSAPI_WORKING_SET_BLOCK64(EPSAPI_WORKING_SET_BLOCK_BASE, PSAPI_WORKING_SET_BLOCK64):
     pass
+
+
+class EPSAPI_WORKING_SET_EX_BLOCK_BASE(object):
+    @property
+    def valid(self):
+        return self.Flags & 0b1
+
+    @property
+    def sharecount(self):
+        return (self.Flags >> 1) & 0b111
+
+    @property
+    def shared(self):
+        return (self.Flags >> 15) & 1
+
+class EPSAPI_WORKING_SET_EX_BLOCK(EPSAPI_WORKING_SET_EX_BLOCK_BASE, PSAPI_WORKING_SET_EX_BLOCK):
+    pass
+
+class EPSAPI_WORKING_SET_EX_BLOCK32(EPSAPI_WORKING_SET_EX_BLOCK_BASE, PSAPI_WORKING_SET_EX_BLOCK32):
+    pass
+
+class EPSAPI_WORKING_SET_EX_BLOCK64(EPSAPI_WORKING_SET_EX_BLOCK_BASE, PSAPI_WORKING_SET_EX_BLOCK64):
+    pass
+
+class EPSAPI_WORKING_SET_EX_INFORMATION(ctypes.Structure):
+    _fields_ = windows.utils.transform_ctypes_fields(PSAPI_WORKING_SET_EX_INFORMATION, {"VirtualAttributes": EPSAPI_WORKING_SET_EX_BLOCK})
+
+class EPSAPI_WORKING_SET_EX_INFORMATION32(ctypes.Structure):
+    _fields_ = windows.utils.transform_ctypes_fields(PSAPI_WORKING_SET_EX_INFORMATION32, {"VirtualAttributes": EPSAPI_WORKING_SET_EX_BLOCK32})
+
+class EPSAPI_WORKING_SET_EX_INFORMATION64(ctypes.Structure):
+    _fields_ = windows.utils.transform_ctypes_fields(PSAPI_WORKING_SET_EX_INFORMATION64, {"VirtualAttributes": EPSAPI_WORKING_SET_EX_BLOCK64})
+
 
 import windows.remotectypes as rctypes
 
