@@ -43,6 +43,41 @@ WTD_STATEACTION_CLOSE            = 0x00000002
 WTD_STATEACTION_AUTO_CACHE       = 0x00000003
 WTD_STATEACTION_AUTO_CACHE_FLUSH = 0x00000004
 
+wintrust_know_return_value = [
+TRUST_E_PROVIDER_UNKNOWN,
+TRUST_E_ACTION_UNKNOWN,
+TRUST_E_SUBJECT_FORM_UNKNOWN,
+DIGSIG_E_ENCODE,
+TRUST_E_SUBJECT_NOT_TRUSTED,
+DIGSIG_E_DECODE,
+DIGSIG_E_EXTENSIBILITY,
+PERSIST_E_SIZEDEFINITE,
+DIGSIG_E_CRYPTO,
+PERSIST_E_SIZEINDEFINITE,
+PERSIST_E_NOTSELFSIZING,
+TRUST_E_NOSIGNATURE,
+CERT_E_EXPIRED,
+CERT_E_VALIDITYPERIODNESTING,
+CERT_E_PURPOSE,
+CERT_E_ISSUERCHAINING,
+CERT_E_MALFORMED,
+CERT_E_UNTRUSTEDROOT,
+CERT_E_CHAINING,
+TRUST_E_FAIL,
+CERT_E_REVOKED,
+CERT_E_UNTRUSTEDTESTROOT,
+CERT_E_REVOCATION_FAILURE,
+CERT_E_CN_NO_MATCH,
+CERT_E_WRONG_USAGE,
+TRUST_E_EXPLICIT_DISTRUST,
+CERT_E_UNTRUSTEDCA,
+CERT_E_INVALID_POLICY,
+CERT_E_INVALID_NAME,
+CRYPT_E_FILE_ERROR,
+]
+wintrust_return_value_mapper = {x:x for x in wintrust_know_return_value}
+
+
 def check_signature(filename):
     """Check if ``filename`` is a valid signed file
 
@@ -74,7 +109,7 @@ def check_signature(filename):
     x = winproxy.WinVerifyTrust(None, ctypes.byref(WVTPolicyGUID), ctypes.byref(win_trust_data))
     win_trust_data.dwStateAction = WTD_STATEACTION_CLOSE
     winproxy.WinVerifyTrust(None, ctypes.byref(WVTPolicyGUID), ctypes.byref(win_trust_data))
-    return x & 0xffffffff
+    return wintrust_return_value_mapper.get(x & 0xffffffff, x & 0xffffffff)
 
 
 def get_catalog_for_filename(filename):
@@ -119,12 +154,13 @@ def get_catalog_name_from_handle(handle):
     winproxy.CryptCATCatalogInfoFromContext(handle, ctypes.byref(cat_info), 0)
     return cat_info.wszCatalogFile
 
-SignatureData = namedtuple("SignatureData", ["signed", "catalog", "catalogsigned"])
+SignatureData = namedtuple("SignatureData", ["signed", "catalog", "catalogsigned", "additionalinfo"])
 
 def full_signature_information(filename):
-    signed = not bool(check_signature(filename))
+    check_sign = check_signature(filename)
+    signed = not bool(check_sign)
     catalog = get_catalog_for_filename(filename)
     if catalog is None:
-        return SignatureData(signed, None, False)
+        return SignatureData(signed, None, False, check_sign)
     catalogsigned = not bool(check_signature(catalog))
-    return SignatureData(signed, catalog, catalogsigned)
+    return SignatureData(signed, catalog, catalogsigned, check_sign)
