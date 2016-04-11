@@ -34,6 +34,8 @@ TODO:
 
     - Parse .IDL file for more COM NAME->IID
 
+    - Add test for debugger with breakpoint that add another breakpoint on trigger
+
 
 CHANGELOG:
     * NEW REGISTRY -> change examples and documentation

@@ -130,9 +130,9 @@ class Debugger(object):
         _setup_method = getattr(self, "_setup_breakpoint_" + bp.type)
         if target is None:
             if bp.type == STANDARD_BP: #TODO: better..
-                targets = self.processes
+                targets = self.processes.values()
             else:
-                targets = self.threads
+                targets = self.threads.values()
         else:
             targets = [target]
         for target in targets:
