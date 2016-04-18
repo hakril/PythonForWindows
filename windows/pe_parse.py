@@ -85,6 +85,13 @@ def GetPEFile(baseaddr, target=None, force_bitness=None):
     else:
         IMAGE_ORDINAL_FLAG = IMAGE_ORDINAL_FLAG64
 
+    def get_string(addr):
+        if target is None:
+            return ctypes.c_char_p(addr).value
+        if target.bitness == 32:
+            return rctypes.transform_type_to_remote32bits(ctypes.c_char_p)(addr, target).value
+        return rctypes.transform_type_to_remote64bits(ctypes.c_char_p)(addr, target).value
+
     class RVA(DWORD):
         @property
         def addr(self):
@@ -97,11 +104,11 @@ def GetPEFile(baseaddr, target=None, force_bitness=None):
         if target is None:
             @property
             def str(self):
-                return ctypes.c_char_p(self.addr).value.decode()
+                return get_string(self.addr).decode()
         else:
             @property
             def str(self):
-                return create_structure_at(ctypes.c_char_p, self.addr).value.decode()
+                return get_string(self.addr).decode()
 
         def __repr__(self):
             return "<DWORD {0} (String RVA to '{1}')>".format(self.value, self.str)
@@ -227,11 +234,11 @@ def GetPEFile(baseaddr, target=None, force_bitness=None):
             if target is None:
                 @property
                 def name(self):
-                    return ctypes.c_char_p(ctypes.addressof(self.Name)).value[:8]
+                    return get_string(ctypes.addressof(self.Name))[:8]
             else:
                 @property
                 def name(self):
-                    return create_structure_at(ctypes.c_char_p, self._base_addr).value[:8]
+                    return get_string(self._base_addr)[:8]
 
             @property
             def start(self):
@@ -316,9 +323,9 @@ def GetPEFile(baseaddr, target=None, force_bitness=None):
                         import_by_name = create_structure_at(IMPORT_BY_NAME, baseaddr + int_entry.AddressOfData)
                         name_address = baseaddr + int_entry.AddressOfData + type(import_by_name).Name.offset
                         if target is None:
-                            name = ctypes.c_char_p(name_address).value
+                            name = get_string(name_address)
                         else:
-                            name = create_structure_at(ctypes.c_char_p, name_address).value.decode()
+                            name = get_string(name_address).decode()
                         res.append((import_by_name.Hint, name))
                     int_addr += ctypes.sizeof(type(int_entry))
                     int_entry = create_structure_at(THUNK_DATA, int_addr)
