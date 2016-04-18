@@ -286,6 +286,15 @@ def NtQueryVirtualMemory_32_to_64(ProcessHandle, BaseAddress, MemoryInformationC
     return NtQueryVirtualMemory_32_to_64.ctypes_function(ProcessHandle, BaseAddress, MemoryInformationClass, MemoryInformation, MemoryInformationLength, ReturnLength)
 
 
+@Syswow64ApiProxy(winproxy.NtProtectVirtualMemory)
+def NtProtectVirtualMemory_32_to_64(ProcessHandle, BaseAddress, NumberOfBytesToProtect, NewAccessProtection, OldAccessProtection=None):
+    if OldAccessProtection is None:
+        XOldAccessProtection = DWORD()
+        OldAccessProtection = ctypes.addressof(XOldAccessProtection)
+    return NtProtectVirtualMemory_32_to_64.ctypes_function(ProcessHandle, BaseAddress, NumberOfBytesToProtect, NewAccessProtection, OldAccessProtection)
+
+
+
 @Syswow64ApiProxy(winproxy.NtGetContextThread)
 def NtGetContextThread_32_to_64(hThread, lpContext):
     if type(lpContext) == windows.winobject.exception.ECONTEXT64:

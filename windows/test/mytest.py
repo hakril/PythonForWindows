@@ -144,6 +144,34 @@ class WindowsTestCase(unittest.TestCase):
         sections[0].start
         sections[0].size
 
+    # Read / write
+
+    def test_read_memory_32(self):
+        with Calc32() as calc:
+            k32 = [m for m in calc.peb.modules if m.name == "kernel32.dll"][0]
+            self.assertEqual(calc.read_memory(k32.baseaddr, 2), "MZ")
+
+    @windows_64bit_only
+    def test_read_memory_64(self):
+        with Calc64() as calc:
+            k32 = [m for m in calc.peb.modules if m.name == "kernel32.dll"][0]
+            self.assertEqual(calc.read_memory(k32.baseaddr, 2), "MZ")
+
+    def test_write_memory_32(self):
+        with Calc32() as calc:
+            k32 = [m for m in calc.peb.modules if m.name == "kernel32.dll"][0]
+            with calc.virtual_protected(k32.baseaddr, 2, PAGE_EXECUTE_READWRITE):
+                calc.write_memory(k32.baseaddr, "XD")
+            self.assertEqual(calc.read_memory(k32.baseaddr, 2), "XD")
+
+    @windows_64bit_only
+    def test_write_memory_64(self):
+        with Calc64() as calc:
+            k32 = [m for m in calc.peb.modules if m.name == "kernel32.dll"][0]
+            with calc.virtual_protected(k32.baseaddr, 2, PAGE_EXECUTE_READWRITE):
+                calc.write_memory(k32.baseaddr, "XD")
+            self.assertEqual(calc.read_memory(k32.baseaddr, 2), "XD")
+
     # Native execution
     def test_execute_to_32(self):
         with Calc32() as calc:
@@ -451,7 +479,7 @@ class WindowsTestCase(unittest.TestCase):
 
     @windows_64bit_only
     def test_get_working_set_64(self):
-        with Calc32() as calc:
+        with Calc64() as calc:
             k32 = [m for m in calc.peb.modules if m.name == "kernel32.dll"][0]
             api_addr = k32.pe.exports["CreateFileA"]
             data = calc.read_memory(api_addr, 5)
@@ -462,13 +490,79 @@ class WindowsTestCase(unittest.TestCase):
                     break
             else:
                 raise ValueError("query_working_set page info for <0x{0:x}> not found".format(page_target))
-            data = calc.write_memory(api_addr, data)
+            with calc.virtual_protected(api_addr, 5, PAGE_EXECUTE_READWRITE):
+                data = calc.write_memory(api_addr, data)
             for page_info in calc.query_working_set():
                 if page_info.virtualpage == page_target:
                     self.assertEqual(page_info.shared, False)
                     break
             else:
                 raise ValueError("query_working_set page info for <0x{0:x}> not found".format(page_target))
+
+    def test_get_working_setex_32(self):
+        with Calc32() as calc:
+            k32 = [m for m in calc.peb.modules if m.name == "kernel32.dll"][0]
+
+            text = [s for s in k32.pe.sections if s.name == ".text"][0]
+            pages = [text.start + off for off in range(0, text.size, 0x1000)]
+
+            api_addr = k32.pe.exports["CreateFileA"]
+            data = calc.read_memory(api_addr, 5)
+            page_target = (api_addr >> 12) << 12
+
+            for page_info in calc.query_working_setex(pages):
+                self.assertIn(page_info.VirtualAddress, pages)
+                if page_info.VirtualAddress == page_target:
+                    self.assertEqual(page_info.VirtualAttributes.shared, True)
+                    break
+            else:
+                raise ValueError("query_working_set page info for <0x{0:x}> not found".format(page_target))
+            with calc.virtual_protected(api_addr, 5, PAGE_EXECUTE_READWRITE):
+                data = calc.write_memory(api_addr, data)
+            for page_info in calc.query_working_setex(pages):
+                self.assertIn(page_info.VirtualAddress, pages)
+                if page_info.VirtualAddress == page_target:
+                    self.assertEqual(page_info.VirtualAttributes.shared, False)
+                    break
+            else:
+                raise ValueError("query_working_set page info for <0x{0:x}> not found".format(page_target))
+
+    @windows_64bit_only
+    def test_get_working_setex_64(self):
+        with Calc64() as calc:
+            k32 = [m for m in calc.peb.modules if m.name == "kernel32.dll"][0]
+
+            text = [s for s in k32.pe.sections if s.name == ".text"][0]
+            pages = [text.start + off for off in range(0, text.size, 0x1000)]
+
+            api_addr = k32.pe.exports["CreateFileA"]
+
+            data = calc.read_memory(api_addr, 5)
+            page_target = (api_addr >> 12) << 12
+
+            for page_info in calc.query_working_setex(pages):
+                self.assertIn(page_info.VirtualAddress, pages)
+                if page_info.VirtualAddress == page_target:
+                    self.assertEqual(page_info.VirtualAttributes.shared, True)
+                    break
+            else:
+                raise ValueError("query_working_set page info for <0x{0:x}> not found".format(page_target))
+
+            with calc.virtual_protected(api_addr, 5, PAGE_EXECUTE_READWRITE):
+                data = calc.write_memory(api_addr, data)
+            for page_info in calc.query_working_setex(pages):
+                self.assertIn(page_info.VirtualAddress, pages)
+                if page_info.VirtualAddress == page_target:
+                    self.assertEqual(page_info.VirtualAttributes.shared, False)
+                    break
+            else:
+                raise ValueError("query_working_set page info for <0x{0:x}> not found".format(page_target))
+
+    def test_mapped_filename(self):
+        with Calc32() as calc:
+            k32 = [m for m in calc.peb.modules if m.name == "kernel32.dll"][0]
+            mapped_filname = calc.get_mapped_filename(k32.baseaddr)
+            self.assertTrue(mapped_filname.endswith("kernel32.dll"))
 
 class WindowsAPITestCase(unittest.TestCase):
     def test_createfileA_fail(self):

@@ -338,6 +338,12 @@ def VirtualProtect(lpAddress, dwSize, flNewProtect, lpflOldProtect=None):
     return VirtualProtect.ctypes_function(lpAddress, dwSize, flNewProtect, lpflOldProtect)
 
 
+@Kernel32Proxy("VirtualProtectEx")
+def VirtualProtectEx(hProcess, lpAddress, dwSize, flNewProtect, lpflOldProtect=None):
+    if lpflOldProtect is None:
+        lpflOldProtect = ctypes.byref(DWORD())
+    return VirtualProtectEx.ctypes_function(hProcess, lpAddress, dwSize, flNewProtect, lpflOldProtect)
+
 @Kernel32Proxy("CreateProcessA")
 def CreateProcessA(lpApplicationName, lpCommandLine=None, lpProcessAttributes=None, lpThreadAttributes=None, bInheritHandles=False,
                    dwCreationFlags=0, lpEnvironment=None, lpCurrentDirectory=None, lpStartupInfo=None, lpProcessInformation=None):
@@ -538,14 +544,14 @@ def QueryWorkingSetWrapper(hProcess, pv, cb):
 QueryWorkingSet = OptionalExport(Kernel32Proxy("QueryWorkingSet"))(QueryWorkingSetWrapper)
 
 def QueryWorkingSetExWrapper(hProcess, pv, cb):
-    return QueryWorkingSet.ctypes_function(hProcess, pv, cb)
-QueryWorkingSetEx = OptionalExport(Kernel32Proxy("QueryWorkingSetEx"))(QueryWorkingSetWrapper)
+    return QueryWorkingSetEx.ctypes_function(hProcess, pv, cb)
+QueryWorkingSetEx = OptionalExport(Kernel32Proxy("QueryWorkingSetEx"))(QueryWorkingSetExWrapper)
 
 if GetMappedFileNameA is None:
     GetMappedFileNameW = PsapiProxy("GetMappedFileNameW")(GetMappedFileNameWWrapper)
     GetMappedFileNameA = PsapiProxy("GetMappedFileNameA")(GetMappedFileNameAWrapper)
     QueryWorkingSet = PsapiProxy("QueryWorkingSet")(QueryWorkingSetWrapper)
-    QueryWorkingSetEx = PsapiProxy("QueryWorkingSetEx")(QueryWorkingSetWrapper)
+    QueryWorkingSetEx = PsapiProxy("QueryWorkingSetEx")(QueryWorkingSetExWrapper)
 
 def GetModuleBaseNameAWrapper(hProcess, hModule, lpBaseName, nSize=None):
     if nSize is None:
@@ -631,6 +637,9 @@ def GetVolumeInformationW(lpRootPathName, lpVolumeNameBuffer=None, nVolumeNameSi
 def NtWow64ReadVirtualMemory64(hProcess, lpBaseAddress, lpBuffer, nSize, lpNumberOfBytesRead=None):
     return NtWow64ReadVirtualMemory64.ctypes_function(hProcess, lpBaseAddress, lpBuffer, nSize, lpNumberOfBytesRead)
 
+@OptionalExport(NtdllProxy('NtWow64WriteVirtualMemory64', error_ntstatus))
+def NtWow64WriteVirtualMemory64(hProcess, lpBaseAddress, lpBuffer, nSize, lpNumberOfBytesWritten=None):
+    return NtWow64WriteVirtualMemory64.ctypes_function(hProcess, lpBaseAddress, lpBuffer, nSize, lpNumberOfBytesWritten)
 
 def ntquerysysteminformation_error_check(func_name, result, func, args):
     if result == 0:
@@ -675,6 +684,12 @@ def NtQueryInformationThread(ThreadHandle, ThreadInformationClass, ThreadInforma
         ThreadInformationLength = ctypes.sizeof(ThreadInformation)
     return NtQueryInformationThread.ctypes_function(ThreadHandle, ThreadInformationClass, ThreadInformation, ThreadInformationLength, ReturnLength)
 
+
+@NtdllProxy('NtProtectVirtualMemory', error_ntstatus)
+def NtProtectVirtualMemory(ProcessHandle, BaseAddress, NumberOfBytesToProtect, NewAccessProtection, OldAccessProtection=None):
+    if OldAccessProtection is None:
+        OldAccessProtection = DWORD()
+    return NtProtectVirtualMemory.ctypes_function(ProcessHandle, BaseAddress, NumberOfBytesToProtect, NewAccessProtection, OldAccessProtection)
 
 @OptionalExport(NtdllProxy('NtQueryVirtualMemory', error_ntstatus))
 def NtQueryVirtualMemory(ProcessHandle, BaseAddress, MemoryInformationClass, MemoryInformation=NeededParameter, MemoryInformationLength=0, ReturnLength=None):

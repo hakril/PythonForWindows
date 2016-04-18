@@ -279,6 +279,32 @@ class Process(AutoHandle):
         finally:
             winproxy.VirtualFreeEx(self.handle, addr)
 
+    @contextmanager
+    def virtual_protected(self, addr, size, protect):
+        old_protect = DWORD()
+        self.low_virtual_protect(addr, size, protect, old_protect)
+        try:
+            yield addr
+        finally:
+             self.low_virtual_protect(addr, size, old_protect.value, old_protect)
+
+    def low_virtual_protect(self, addr, size, protect, old_protect):
+        if windows.current_process.bitness == 32 and self.bitness == 64:
+            #addr = (addr >> 12) << 12
+            #addr = ULONG64(addr)
+            size = ((size >> 12) + 1) << 12
+            #ssize = ULONG(size)
+            #import pdb;pdb.set_trace()
+            old_protect = ctypes.addressof(old_protect)
+            xaddr = ULONG64(addr)
+            addr = ctypes.addressof(xaddr)
+            xsize = ULONG(size)
+            size = ctypes.addressof(xsize)
+            return windows.syswow64.NtProtectVirtualMemory_32_to_64(self.handle, addr, size, protect, old_protect)
+        else:
+            winproxy.VirtualProtectEx(self.handle, addr, size, protect, old_protect)
+
+
     def execute(self, code, parameter=0):
         """Execute some native code in the context of the process
 
@@ -338,9 +364,9 @@ class Process(AutoHandle):
             if e.winerror != 24:
                 raise
 
+        NumberOfEntriesType = [f for f in WSET_BLOCK._fields_ if f[0] == "Flags"][0][1]
         for i in range(10):
             # use the same type as WSET_BLOCK.Flags
-            NumberOfEntriesType = [f for f in WSET_BLOCK._fields_ if f[0] == "Flags"][0][1]
             class GENERATED_PSAPI_WORKING_SET_INFORMATION(ctypes.Structure):
                 _fields_ = [
                 ("NumberOfEntries", NumberOfEntriesType),
@@ -363,9 +389,10 @@ class Process(AutoHandle):
                 dummy.NumberOfEntries = res.NumberOfEntries
                 continue
             return res.WorkingSetInfo
+        # Raise ?
         return None
 
-    def query_working_set_ex(self, addresses):
+    def query_working_setex(self, addresses):
         if self.bitness == 64 or windows.current_process.bitness == 64:
             info_type = EPSAPI_WORKING_SET_EX_INFORMATION64
         else:
@@ -373,7 +400,10 @@ class Process(AutoHandle):
         info_array = (info_type * len(addresses))()
         for i, data in enumerate(info_array):
             info_array[i].VirtualAddress = addresses[i]
-        winproxy.QueryWorkingSetEx(self.handle, ctypes.byref(info_array), ctypes.sizeof(info_array))
+        if windows.current_process.bitness == 32 and self.bitness == 64:
+            windows.syswow64.NtQueryVirtualMemory_32_to_64(self.handle, 0, 4, info_array)
+        else:
+            winproxy.QueryWorkingSetEx(self.handle, ctypes.byref(info_array), ctypes.sizeof(info_array))
         return info_array
 
 
@@ -703,6 +733,10 @@ class WinProcess(Process):
 
     def write_memory(self, addr, data):
         """Write `data` at `addr`"""
+        if windows.current_process.bitness == 32 and self.bitness == 64:
+            if winproxy.NtWow64WriteVirtualMemory64 is None:
+                raise ValueError("NtWow64WriteVirtualMemory64 non available in ntdll: cannot write into 64bits processus")
+            return winproxy.NtWow64WriteVirtualMemory64(self.handle, addr, data, len(data))
         return winproxy.WriteProcessMemory(self.handle, addr, lpBuffer=data)
 
     def low_read_memory(self, addr, buffer_addr, size):
@@ -711,7 +745,6 @@ class WinProcess(Process):
             if winproxy.NtWow64ReadVirtualMemory64 is None:
                 raise ValueError("NtWow64ReadVirtualMemory64 non available in ntdll: cannot read into 64bits processus")
             return winproxy.NtWow64ReadVirtualMemory64(self.handle, addr, buffer_addr, size)
-            NtWow64ReadVirtualMemory64
         #if self.is_wow_64 and addr > 0xffffffff:
         #    return winproxy.NtWow64ReadVirtualMemory64(self.handle, addr, buffer_addr, size)
         return winproxy.ReadProcessMemory(self.handle, addr, lpBuffer=buffer_addr, nSize=size)

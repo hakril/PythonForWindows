@@ -110,6 +110,15 @@ LPVOID WINAPI VirtualAllocEx(
   _In_      DWORD flProtect
 );
 
+NTSTATUS WINAPI NtProtectVirtualMemory(
+  _In_ HANDLE               ProcessHandle,
+  _Inout_ PVOID            *BaseAddress,
+  _Inout_ PULONG           NumberOfBytesToProtect,
+  _In_ ULONG                NewAccessProtection,
+  _Out_ PULONG              OldAccessProtection
+);
+
+
 BOOL WINAPI VirtualFree(
   _In_ LPVOID lpAddress,
   _In_ SIZE_T dwSize,
@@ -129,6 +138,15 @@ BOOL WINAPI VirtualProtect(
   _In_   DWORD flNewProtect,
   _Out_  PDWORD lpflOldProtect
 );
+
+BOOL WINAPI VirtualProtectEx(
+  _In_  HANDLE hProcess,
+  _In_  LPVOID lpAddress,
+  _In_  SIZE_T dwSize,
+  _In_  DWORD  flNewProtect,
+  _Out_ PDWORD lpflOldProtect
+);
+
 
 DWORD VirtualQuery(
   LPCVOID lpAddress,
@@ -279,6 +297,14 @@ BOOL WINAPI WriteProcessMemory(
   _In_   LPCVOID lpBuffer,
   _In_   SIZE_T nSize,
   _Out_  SIZE_T *lpNumberOfBytesWritten
+);
+
+BOOL WINAPI NtWow64WriteVirtualMemory64(
+  _In_   HANDLE hProcess,
+  _In_   ULONG64 lpBaseAddress,
+  _Out_  LPVOID lpBuffer,
+  _In_   ULONG64 nSize,
+  _Out_  PULONG64 *lpNumberOfBytesWritten
 );
 
 HANDLE WINAPI CreateToolhelp32Snapshot(
