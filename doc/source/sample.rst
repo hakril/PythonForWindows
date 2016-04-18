@@ -99,6 +99,49 @@ Output::
     Sections: [<PESection ".text">, <PESection ".rdata">, <PESection ".data">, <PESection ".rsrc">, <PESection ".reloc">]
 
 
+
+.. _sample_system:
+
+
+``windows.system``
+""""""""""""""""""
+
+.. literalinclude:: ..\..\samples\system.py
+
+Output::
+
+    (cmd λ) python system.py
+    Basic system infos:
+        version = (6, 3)
+        bitness = 64
+        computer_name = HAKRIL-PC
+        product_type = VER_NT_WORKSTATION(0x1L)
+        version_name = Windows 8.1
+
+    There is 95 processes
+    There is 1021 threads
+
+    Dumping first logical drive:
+        <LogicalDrive "C:\" (DRIVE_FIXED)>
+            name = C:\
+            type = DRIVE_FIXED(0x3L)
+            path = \Device\HarddiskVolume2
+
+    Dumping first service:
+        <ServiceA "ACPI">
+            name = ACPI
+            description = Microsoft ACPI Driver
+            status = ServiceStatus(type=SERVICE_KERNEL_DRIVER(0x1L), state=SERVICE_RUNNING(0x4L), control_accepted=1L, flags=0L)
+            process = None
+
+    Finding a service in a user process:
+        <ServiceA "Appinfo">
+            name = Appinfo
+            description = Application Information
+            status = ServiceStatus(type=SERVICE_WIN32_SHARE_PROCESS(0x20L), state=SERVICE_RUNNING(0x4L), control_accepted=129L, flags=0L)
+            process = <WinProcess "svchost.exe" pid 944 at 0x29d5290>
+
+
 .. _sample_iat_hook:
 
 IAT hooking
@@ -189,6 +232,31 @@ Output::
     KeyValue(name='PathName', value=u'C:\\Windows', type=1)]
     registered owner = <KeyValue(name='RegisteredOwner', value=u'hakril', type=1)>
 
+
+.. _sample_wintrust:
+
+``windows.wintrust``
+""""""""""""""""""""
+
+.. literalinclude:: ..\..\samples\wintrust.py
+
+Output::
+
+    (cmd λ) python .\wintrust.py
+    Checking signature of <C:\windows\system32\ntdll.dll>
+    is_signed: <True>
+    check_signature: <0>
+    full_signature_information:
+        * signed <True>
+        * catalog <C:\Windows\system32\CatRoot\{F750E6C3-38EE-11D1-85E5-00C04FC295EE}\Package_35_for_KB3128650~31bf3856ad364e35~amd64~~6.3.1.2.cat>
+        * catalogsigned <True>
+        * additionalinfo <0>
+    Checking signature of some loaded DLL
+    <c:\python27\python.exe> : False (TRUST_E_NOSIGNATURE(0x800b0100L))
+    <c:\windows\system32\ntdll.dll> : True
+    <c:\windows\system32\kernel32.dll> : True
+    <c:\windows\system32\kernelbase.dll> : True
+    <c:\windows\system32\python27.dll> : False (TRUST_E_NOSIGNATURE(0x800b0100L))
 
 .. _sample_vectoredexception:
 

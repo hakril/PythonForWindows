@@ -20,7 +20,7 @@ from windows.winobject import kernobj
 from windows.generated_def.winstructs import *
 
 class System(object):
-    """Represent the current ``Windows`` system ``Python`` is running on"""
+    """The state of the current ``Windows`` system ``Python`` is running on"""
 
     network = network.Network()
     """Object of class :class:`windows.winobject.network.Network`"""

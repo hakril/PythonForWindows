@@ -93,6 +93,7 @@ class PyHKey(object):
 
 
     def set(self, name, value, type=None):
+        """Set the value for ``name`` to ``value``. if ``type`` is None try to guess items"""
         if type is None:
             type = self._guess_value_type(value)
         return _winreg.SetValueEx(self.phkey, name, 0, type, value)

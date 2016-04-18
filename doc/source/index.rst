@@ -17,6 +17,7 @@ Contents:
    native_exec.rst
    winproxy.rst
    utils.rst
+   wintrust.rst
    debug.rst
    iat_hook.rst
    wip.rst

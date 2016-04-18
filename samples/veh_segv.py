@@ -1,6 +1,6 @@
 import ctypes
 import windows
-from windows.exception import VectoredException
+from windows.winobject.exception import VectoredException
 import windows.generated_def.windef as windef
 from windows.generated_def.winstructs import *
 

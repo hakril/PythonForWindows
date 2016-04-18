@@ -19,9 +19,17 @@ PyHKey
 
 .. autoclass:: PyHKey
 
-    .. function:: __getitem__(name)
+    .. function:: __call__(name)
 
         Alias for :func:`open_subkey`
+
+    .. function:: __getitem__(name)
+
+        Alias for :func:`get`
+
+    .. function:: __setitem__(name)
+
+        Wrapper for :func:`set`, accept ``value`` or ``(value, type)``
 
 KeyValue
 """"""""

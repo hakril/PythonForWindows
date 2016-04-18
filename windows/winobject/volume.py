@@ -16,12 +16,31 @@ class LogicalDrive(object):
 
     @property
     def type(self):
+        """The type of drive, values are:
+
+            * DRIVE_UNKNOWN(0x0L)
+            * DRIVE_NO_ROOT_DIR(0x1L)
+            * DRIVE_REMOVABLE(0x2L)
+            * DRIVE_FIXED(0x3L)
+            * DRIVE_REMOTE(0x4L)
+            * DRIVE_CDROM(0x5L)
+            * DRIVE_RAMDISK(0x6L)
+
+        :type: :class:`long` or :class:`int` (or subclass)
+        """
         t = winproxy.GetDriveTypeA(self.name)
         return self.DRIVE_TYPE.get(t,t)
 
     @property
     def path(self):
-        return query_dos_device(self.name.strip("\\"))
+        """The target path of the device
+
+        :type: :class:`str`"""
+        res = query_dos_device(self.name.strip("\\"))
+        if len(res) != 1:
+            raise ValueError("[Unexpected result] query_dos_device(logicaldrive) returned multiple path")
+        return res[0]
+
 
     def __repr__(self):
         return """<{0} "{1}" ({2})>""".format(type(self).__name__, self.name, self.type.name)

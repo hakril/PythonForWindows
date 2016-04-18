@@ -20,6 +20,7 @@ class YoloDebugger(windows.debug.LocalDebugger):
         if self.single_step_count:
             self.single_step_count -= 1
             return self.single_step()
+        return EXCEPTION_CONTINUE_EXECUTION
 
 
 class YoloHXBP(windows.debug.HXBreakpoint):

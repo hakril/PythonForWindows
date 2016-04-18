@@ -79,9 +79,9 @@ wintrust_return_value_mapper = {x:x for x in wintrust_know_return_value}
 
 
 def check_signature(filename):
-    """Check if ``filename`` is a valid signed file
+    """Check if ``filename`` embeds a valid signature.
 
-        :return: 0 if file have a valid signature
+        :return: ``0`` if ``filename`` have a valid signature else the error
     """
     file_data = WINTRUST_FILE_INFO()
     file_data.cbStruct = ctypes.sizeof(WINTRUST_FILE_INFO)
@@ -155,8 +155,21 @@ def get_catalog_name_from_handle(handle):
     return cat_info.wszCatalogFile
 
 SignatureData = namedtuple("SignatureData", ["signed", "catalog", "catalogsigned", "additionalinfo"])
+"""Signature information for ``FILENAME``:
+
+    * ``signed``: True if ``FILENAME`` embeds a valide signature
+    * ``catalog``: The filename of the catalog ``FILENAME`` is part of (if any)
+    * ``catalogsigned``: True if ``catalog`` embeds a valide signature
+    * ``additionalinfo``: The return error of ``check_signature(FILENAME)``
+
+``additionalinfo`` is useful to know if ``FILENAME`` signature was rejected for an invalid root / expired cert.
+"""
 
 def full_signature_information(filename):
+    """Returns more information about the signature of ``filename``
+
+    :return: :class:`SignatureData`
+    """
     check_sign = check_signature(filename)
     signed = not bool(check_sign)
     catalog = get_catalog_for_filename(filename)
@@ -164,3 +177,20 @@ def full_signature_information(filename):
         return SignatureData(signed, None, False, check_sign)
     catalogsigned = not bool(check_signature(catalog))
     return SignatureData(signed, catalog, catalogsigned, check_sign)
+
+def is_signed(filename):
+    """Check if ``filename`` is signed:
+
+        * File embeds a valid signature
+        * File is part of a signed catalog file
+
+    :return: :class:`bool`
+    """
+    check_sign = check_signature(filename)
+    if check_sign == 0:
+        return True
+    catalog = get_catalog_for_filename(filename)
+    if catalog is None:
+        return False
+    catalogsigned = not bool(check_signature(catalog))
+    return catalogsigned
