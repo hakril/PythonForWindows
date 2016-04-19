@@ -412,10 +412,24 @@ class Process(AutoHandle):
 
         :rtype: :class:`str` or ``None``
 		"""
-        buffer = ctypes.c_buffer(0x1024)
+        buffer_size = 0x1000
+        buffer = ctypes.c_buffer(buffer_size)
+
+        if  windows.current_process.bitness == 32 and self.bitness == 64:
+             target_size = ctypes.c_buffer(buffer_size)
+             try:
+                windows.syswow64.NtQueryVirtualMemory_32_to_64(self.handle, addr, 2, buffer, buffer_size, target_size)
+             except NtStatusException as e:
+                if e.code not in  [STATUS_FILE_INVALID, STATUS_INVALID_ADDRESS]:
+                    raise
+                return None
+             remote_winstring = rctypes.transform_type_to_remote64bits(WinUnicodeString)
+             mapped_filename = remote_winstring(ctypes.addressof(buffer), windows.current_process)
+             return mapped_filename.str
+
         try:
-            size = winproxy.GetMappedFileNameA(self.handle, addr, buffer)
-        except winproxy.Kernel32Error:
+                size = winproxy.GetMappedFileNameA(self.handle, addr, buffer, buffer_size)
+        except winproxy.Kernel32Error as e:
             return None
         return buffer[:size]
 

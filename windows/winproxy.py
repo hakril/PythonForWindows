@@ -529,14 +529,14 @@ def DuplicateHandle(hSourceProcessHandle, hSourceHandle, hTargetProcessHandle, l
 def GetMappedFileNameWWrapper(hProcess, lpv, lpFilename, nSize=None):
     if nSize is None:
         nSize = ctypes.sizeof(lpFilename)
-    return GetMappedFileNameW.ctypes_function(hProcess, lpv, lpFilename, nSize)
+    return GetMappedFileNameWWrapper.ctypes_function(hProcess, lpv, lpFilename, nSize)
 GetMappedFileNameW = OptionalExport(Kernel32Proxy("GetMappedFileNameW"))(GetMappedFileNameWWrapper)
 
 
 def GetMappedFileNameAWrapper(hProcess, lpv, lpFilename, nSize=None):
     if nSize is None:
         nSize = ctypes.sizeof(lpFilename)
-    return GetMappedFileNameA.ctypes_function(hProcess, lpv, lpFilename, nSize)
+    return GetMappedFileNameAWrapper.ctypes_function(hProcess, lpv, lpFilename, nSize)
 GetMappedFileNameA = OptionalExport(Kernel32Proxy("GetMappedFileNameA"))(GetMappedFileNameAWrapper)
 
 def QueryWorkingSetWrapper(hProcess, pv, cb):
