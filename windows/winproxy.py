@@ -413,6 +413,10 @@ def WriteProcessMemory(hProcess, lpBaseAddress, lpBuffer, nSize=None, lpNumberOf
     return WriteProcessMemory.ctypes_function(hProcess, lpBaseAddress, lpBuffer, nSize, lpNumberOfBytesWritten)
 
 
+@Kernel32Proxy("GetProcessTimes")
+def GetProcessTimes(hProcess, lpCreationTime, lpExitTime, lpKernelTime, lpUserTime):
+    return GetProcessTimes.ctypes_function(hProcess, lpCreationTime, lpExitTime, lpKernelTime, lpUserTime)
+
 @Kernel32Proxy('SetThreadAffinityMask')
 def SetThreadAffinityMask(hThread=None, dwThreadAffinityMask=NeededParameter):
     """If hThread is not given, it will be the current thread"""

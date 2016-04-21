@@ -6,6 +6,7 @@ import struct
 import itertools
 
 from contextlib import contextmanager
+from collections import namedtuple
 
 import windows
 import windows.native_exec.simple_x86 as x86
@@ -130,6 +131,28 @@ class WinThread(THREADENTRY32, AutoHandle):
             res = ULONGLONG()
         winproxy.NtQueryInformationThread(self.handle, ThreadQuerySetWin32StartAddress, byref(res), ctypes.sizeof(res))
         return res.value
+
+    @property
+    def teb_base(self):
+        """The address of the thread's TEB
+
+            :type: :class:`int`
+		"""
+        if windows.current_process.bitness == 32 and self.owner.bitness == 64:
+            restype = rctypes.transform_type_to_remote64bits(THREAD_BASIC_INFORMATION)
+            ressize = (ctypes.sizeof(restype))
+            # Manual aligned allocation :DDDD
+            nb_qword = (ressize + 8) / ctypes.sizeof(ULONGLONG)
+            buffer = (nb_qword * ULONGLONG)()
+            struct_address = ctypes.addressof(buffer)
+            if (struct_address & 0xf) not in [0, 8]:
+                raise ValueError("ULONGLONG array not aligned on 8")
+            windows.syswow64.NtQueryInformationThread_32_to_64(self.handle, ThreadBasicInformation, struct_address, ressize)
+            return restype(struct_address, windows.current_process).TebBaseAddress
+
+        res = THREAD_BASIC_INFORMATION()
+        windows.winproxy.NtQueryInformationThread(self.handle, ThreadBasicInformation, byref(res), ctypes.sizeof(res))
+        return res.TebBaseAddress
 
     def exit(self, code=0):
         """Exit the thread"""
@@ -498,6 +521,23 @@ class Process(AutoHandle):
         """write a qword at ``addr``"""
         return self.write_memory(addr, struct.pack("<Q", qword))
 
+    TimeInfo = namedtuple("TimeInfo", ["creation", "exit", "kernel", "user"])
+
+    @property
+    def time_info(self):
+        CreationTime = FILETIME()
+        ExitTime = FILETIME()
+        KernelTime = FILETIME()
+        UserTime = FILETIME()
+        winproxy.GetProcessTimes(self.handle, CreationTime, ExitTime, KernelTime, UserTime)
+
+        creation = (CreationTime.dwHighDateTime << 32) + CreationTime.dwLowDateTime
+        exit = (ExitTime.dwHighDateTime << 32) + ExitTime.dwLowDateTime
+        kernel = (KernelTime.dwHighDateTime << 32) + KernelTime.dwLowDateTime
+        user = (UserTime.dwHighDateTime << 32) + UserTime.dwLowDateTime
+
+        return self.TimeInfo(creation, exit, kernel, user)
+
     @utils.fixedpropety
     def token(self):
         """The token of the process
@@ -507,7 +547,6 @@ class Process(AutoHandle):
         token_handle = HANDLE()
         winproxy.OpenProcessToken(self.handle, TOKEN_QUERY, byref(token_handle))
         return Token(token_handle.value)
-
 
 class CurrentThread(AutoHandle):
     """The current thread"""

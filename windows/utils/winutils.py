@@ -3,6 +3,7 @@ import msvcrt
 import os
 import sys
 import code
+import datetime
 
 import windows
 from .. import winproxy
@@ -146,6 +147,10 @@ def check_debug():
         # print "[*] Warning noumex not set!"
         # print "> bcdedit /set noumex on"
     return True
+
+
+def datetime_from_filetime(filetime):
+    return datetime.datetime(1601,1,1) + datetime.timedelta(microseconds=filetime / 10)
 
 
 class FixedInteractiveConsole(code.InteractiveConsole):

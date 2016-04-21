@@ -1298,3 +1298,11 @@ NTSTATUS WINAPI NtOpenSymbolicLinkObject(
   _In_  ACCESS_MASK        DesiredAccess,
   _In_  POBJECT_ATTRIBUTES ObjectAttributes
 );
+
+BOOL WINAPI GetProcessTimes(
+  _In_  HANDLE     hProcess,
+  _Out_ LPFILETIME lpCreationTime,
+  _Out_ LPFILETIME lpExitTime,
+  _Out_ LPFILETIME lpKernelTime,
+  _Out_ LPFILETIME lpUserTime
+);
