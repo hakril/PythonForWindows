@@ -264,7 +264,8 @@ class WindowsTestCase(unittest.TestCase):
             mods = [m for m in calc.peb.modules if m.name == "kernel32.dll"]
             self.assertTrue(mods, 'Could not find "kernel32.dll" in calc32')
             k32 = mods[0]
-            mods[0].pe.sections # Just see if it's parse
+            mods[0].pe.sections[0].name # Just see if it's parse
+            self.assertEqual(mods[0].pe.export_name.lower(), "kernel32.dll")
             get_current_proc_id = k32.pe.exports['GetCurrentProcessId']
             # TODO: check get_current_proc_id value (but we cannot do 64->32 injection for now)
             #if is_process_64_bits:
@@ -289,7 +290,8 @@ class WindowsTestCase(unittest.TestCase):
             mods = [m for m in calc.peb.modules if m.name == "kernel32.dll"]
             self.assertTrue(mods, 'Could not find "kernel32.dll" in calc32')
             k32 = mods[0]
-            mods[0].pe.sections
+            mods[0].pe.sections[0].name
+            self.assertEqual(mods[0].pe.export_name.lower(), "kernel32.dll")
             get_current_proc_id = k32.pe.exports['GetCurrentProcessId']
             data = calc.virtual_alloc(0x1000)
             remote_python_code = """
@@ -558,11 +560,29 @@ class WindowsTestCase(unittest.TestCase):
             else:
                 raise ValueError("query_working_set page info for <0x{0:x}> not found".format(page_target))
 
-    def test_mapped_filename(self):
+    def test_mapped_filename_32(self):
         with Calc32() as calc:
             k32 = [m for m in calc.peb.modules if m.name == "kernel32.dll"][0]
             mapped_filname = calc.get_mapped_filename(k32.baseaddr)
             self.assertTrue(mapped_filname.endswith("kernel32.dll"))
+
+    @windows_64bit_only
+    def test_mapped_filename_64(self):
+        with Calc64() as calc:
+            k32 = [m for m in calc.peb.modules if m.name == "kernel32.dll"][0]
+            mapped_filname = calc.get_mapped_filename(k32.baseaddr)
+            self.assertTrue(mapped_filname.endswith("kernel32.dll"))
+
+    def test_thread_teb_base_32(self):
+        with Calc32() as calc:
+            t = calc.threads[0]
+            self.assertNotEqual(t.teb_base, 0)
+
+    @windows_64bit_only
+    def test_thread_teb_base_64(self):
+        with Calc64() as calc:
+            t = calc.threads[0]
+            self.assertNotEqual(t.teb_base, 0)
 
 class WindowsAPITestCase(unittest.TestCase):
     def test_createfileA_fail(self):

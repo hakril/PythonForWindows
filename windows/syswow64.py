@@ -7,6 +7,7 @@ import functools
 import windows
 import windows.native_exec.simple_x64 as x64
 from generated_def.winstructs import *
+from windows.winobject import process
 from windows import winproxy
 from winproxy import NeededParameter, OptionalExport, NtdllProxy, error_ntstatus
 
@@ -181,7 +182,7 @@ def get_current_process_syswow_peb_addr():
 def get_current_process_syswow_peb():
     current_process = windows.current_process
 
-    class CurrentProcessReadSyswow(object):
+    class CurrentProcessReadSyswow(process.Process):
         bitness = 64
         def read_memory(self, addr, size):
             buffer_addr = ctypes.create_string_buffer(size)

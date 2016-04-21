@@ -88,9 +88,7 @@ def GetPEFile(baseaddr, target=None, force_bitness=None):
     def get_string(addr):
         if target is None:
             return ctypes.c_char_p(addr).value
-        if target.bitness == 32:
-            return rctypes.transform_type_to_remote32bits(ctypes.c_char_p)(addr, target).value
-        return rctypes.transform_type_to_remote64bits(ctypes.c_char_p)(addr, target).value
+        return target.read_string(addr)
 
     class RVA(DWORD):
         @property
