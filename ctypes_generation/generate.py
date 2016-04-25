@@ -27,6 +27,8 @@ TYPE_EQUIVALENCE = [
     ('PHANDLER_ROUTINE', 'PVOID'),
     ('LPBYTE', 'POINTER(BYTE)'),
     ('ULONG_PTR','PVOID'),
+    ('KAFFINITY','ULONG_PTR'),
+    ('KPRIORITY','LONG'),
     ('CHAR', 'c_char'),
     ('INT', 'c_int'),
     ('UCHAR', 'c_char'),

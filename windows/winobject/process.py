@@ -443,7 +443,7 @@ class Process(AutoHandle):
              try:
                 windows.syswow64.NtQueryVirtualMemory_32_to_64(self.handle, addr, 2, buffer, buffer_size, target_size)
              except NtStatusException as e:
-                if e.code not in  [STATUS_FILE_INVALID, STATUS_INVALID_ADDRESS]:
+                if e.code not in  [STATUS_FILE_INVALID, STATUS_INVALID_ADDRESS, STATUS_TRANSACTION_NOT_ACTIVE]:
                     raise
                 return None
              remote_winstring = rctypes.transform_type_to_remote64bits(WinUnicodeString)

@@ -2,6 +2,9 @@ TODO:
     - Documentation
         - Pass 0.2 when doc is done <3
         - type pass to dbg callback
+        - Context.regs
+        - explain what is a DeadThread (do I still need it ?)
+        - Eflags (raw stuff)
 
     - ProcessMemory object ? (metasm like)
 
@@ -37,6 +40,10 @@ TODO:
     - Parse .IDL file for more COM NAME->IID
 
     - Add test for debugger with breakpoint that add another breakpoint on trigger
+
+    - NtQueryVirtualMemory_32_to_64 (stop using hardcoded value for request type: add it to enum)
+
+
 
 
 CHANGELOG:

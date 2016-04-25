@@ -152,6 +152,9 @@ def check_debug():
 def datetime_from_filetime(filetime):
     return datetime.datetime(1601,1,1) + datetime.timedelta(microseconds=filetime / 10)
 
+def filetime_from_datetime(dtime):
+    return int((dtime - datetime.datetime(1601,1,1)).total_seconds() * 1000) * 10000
+
 
 class FixedInteractiveConsole(code.InteractiveConsole):
     def raw_input(self, prompt=">>>"):

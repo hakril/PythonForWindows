@@ -630,6 +630,11 @@ typedef enum tagCLSCTX {
   CLSCTX_PS_DLL                  = 0x80000000
 } CLSCTX;
 
+typedef struct _CLIENT_ID{
+   HANDLE UniqueProcess;
+   HANDLE UniqueThread;
+ } CLIENT_ID;
+
 typedef struct _LDR_DATA_TABLE_ENTRY {
     PVOID Reserved1[2];
     LIST_ENTRY InMemoryOrderLinks;
@@ -790,6 +795,17 @@ typedef struct _MEMORY_BASIC_INFORMATION {
   DWORD  Protect;
   DWORD  Type;
 } MEMORY_BASIC_INFORMATION, *PMEMORY_BASIC_INFORMATION;
+
+typedef struct _THREAD_BASIC_INFORMATION {
+
+  NTSTATUS                ExitStatus;
+  PVOID                   TebBaseAddress;
+  CLIENT_ID               ClientId;
+  KAFFINITY               AffinityMask;
+  KPRIORITY               Priority;
+  KPRIORITY               BasePriority;
+
+} THREAD_BASIC_INFORMATION, *PTHREAD_BASIC_INFORMATION;
 
 typedef struct _MEMORY_BASIC_INFORMATION32 {
     DWORD BaseAddress;
@@ -2262,12 +2278,6 @@ typedef union _PORT_MESSAGE_TMP_UNION_U2
         ULONG ZeroInit;
         _PORT_MESSAGE_TMP_SUBSTRUCT_S2 s2;
 } _PORT_MESSAGE_TMP_UNION_U2;
-
-
-typedef struct _CLIENT_ID{
-   HANDLE UniqueProcess;
-   HANDLE UniqueThread;
- } CLIENT_ID;
 
 
 typedef struct _PORT_MESSAGE
