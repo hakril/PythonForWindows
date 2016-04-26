@@ -421,18 +421,19 @@ Make WMI requests
 Ouput::
 
     (cmd λ) python .\samples\wmi_request.py
-    WMI requester is <windows.winobject.wmi.WmiRequester object at 0x02CAA410>
+    WMI requester is <windows.winobject.wmi.WmiRequester object at 0x02B37EF0>
     Selecting * from 'Win32_Process'
-    They are <94> processes
+    They are <92> processes
     Looking for ourself via pid
     Some info about our process:
         * Name -> python.exe
-        * ProcessId -> 7896
+        * ProcessId -> 7968
         * OSName -> Microsoft Windows 8.1 Pro|C:\Windows|\Device\Harddisk0\Partition2
-        * UserModeTime -> 1406250
+        * UserModeTime -> 2812500
         * WindowsVersion -> 6.3.9600
-        * CommandLine -> "C:\Python27\python.exe"  .\wmi_request.py
+        * CommandLine -> python.exe  .\samples\wmi_request.py
     <Select Caption,FileSystem,FreeSpace from Win32_LogicalDisk>:
-        * {'Caption': u'C:', 'FreeSpace': u'14729031680', 'FileSystem': u'NTFS'}
-        * {'Caption': u'D:', 'FreeSpace': u'243872890880', 'FileSystem': u'NTFS'}
-        * {'Caption': u'E:', 'FreeSpace': u'1073852416', 'FileSystem': u'FAT32'}
+        * {'Caption': u'C:', 'FreeSpace': u'43991547904', 'FileSystem': u'NTFS'}
+        * {'Caption': u'E:', 'FreeSpace': u'82776027136', 'FileSystem': u'NTFS'}
+        * {'Caption': u'F:', 'FreeSpace': u'5711265792', 'FileSystem': u'FAT32'}
+        * {'Caption': u'G:', 'FreeSpace': None, 'FileSystem': None}

@@ -24,6 +24,10 @@ from windows.generated_def import windef
 
 from windows.winobject import exception
 
+
+TimeInfo = namedtuple("TimeInfo", ["creation", "exit", "kernel", "user"])
+"""Time information about a process"""
+
 class AutoHandle(object):
     """An abstract class that allow easy handle creation/destruction/wait"""
      # Big bypass to prevent missing reference at programm close..
@@ -210,7 +214,7 @@ class WinThread(THREADENTRY32, AutoHandle):
             return DeadThread(handle, tid)
 
 class DeadThread(AutoHandle):
-    """An already dead thread"""
+    """An already dead thread (returned only by API returning a new thread if thread die before being returned)"""
     def __init__(self, handle, tid=None):
         if tid is None:
             tid = winproxy.GetThreadId(handle)
@@ -304,6 +308,7 @@ class Process(AutoHandle):
 
     @contextmanager
     def virtual_protected(self, addr, size, protect):
+        """A context manager for local virtual_protect (old Protection are restored at exit)"""
         old_protect = DWORD()
         self.low_virtual_protect(addr, size, protect, old_protect)
         try:
@@ -521,10 +526,11 @@ class Process(AutoHandle):
         """write a qword at ``addr``"""
         return self.write_memory(addr, struct.pack("<Q", qword))
 
-    TimeInfo = namedtuple("TimeInfo", ["creation", "exit", "kernel", "user"])
-
     @property
     def time_info(self):
+        """The time information of the process (creation, kernel/user time, exit time
+
+        :type: :class:`TimeInfo"""
         CreationTime = FILETIME()
         ExitTime = FILETIME()
         KernelTime = FILETIME()
@@ -536,7 +542,7 @@ class Process(AutoHandle):
         kernel = (KernelTime.dwHighDateTime << 32) + KernelTime.dwLowDateTime
         user = (UserTime.dwHighDateTime << 32) + UserTime.dwLowDateTime
 
-        return self.TimeInfo(creation, exit, kernel, user)
+        return TimeInfo(creation, exit, kernel, user)
 
     @utils.fixedpropety
     def token(self):

@@ -81,7 +81,7 @@ wintrust_return_value_mapper = {x:x for x in wintrust_know_return_value}
 def check_signature(filename):
     """Check if ``filename`` embeds a valid signature.
 
-        :return: ``0`` if ``filename`` have a valid signature else the error
+        :return: :class:`int`: ``0`` if ``filename`` have a valid signature else the error
     """
     file_data = WINTRUST_FILE_INFO()
     file_data.cbStruct = ctypes.sizeof(WINTRUST_FILE_INFO)

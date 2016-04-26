@@ -23,6 +23,10 @@ The submodules that you might use by themself are:
 The ``system`` object
 """""""""""""""""""""
 
+.. note::
+
+    See sample :ref:`sample_system`
+
 .. currentmodule:: windows.winobject
 
 .. autoclass:: windows.winobject.system.System

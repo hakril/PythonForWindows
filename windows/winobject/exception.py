@@ -145,6 +145,11 @@ class EEflags(ctypes.Structure):
         return "{0}({1}:{2})".format(type(self).__name__, hex(self.raw), self.dump())
 
     raw = property(get_raw, set_raw)
+    """Raw value of the eflags
+
+       :type: :class:`int`
+    """
+
 
 class EDr7(ctypes.Structure):
     "Flag view of the DR7 register"
@@ -180,7 +185,11 @@ class ECONTEXTBase(object):
     pc_reg = ''
     special_reg_type = {}
 
+
     def regs(self, to_dump=None):
+        """Return the name and values of the registers
+
+        :returns: [(reg_name, value)] -- A :class:`list` of :class:`tuple`"""
         res = []
         if to_dump is None:
             to_dump = self.default_dump
@@ -208,7 +217,7 @@ class ECONTEXTBase(object):
 
     @property
     def EEFlags(self):
-        """Enhanced view of the Eflags
+        """Enhanced view of the Eflags (you also have ``EFlags`` for the raw value)
 
             :type: :class:`EEflags`
         """
@@ -219,7 +228,7 @@ class ECONTEXTBase(object):
 
     @property
     def EDr7(self):
-        """Enhanced view of the DR7 register
+        """Enhanced view of the DR7 register (you also have ``Dr7`` for the raw value)
 
             :type: :class:`EDr7`
         """
@@ -286,7 +295,7 @@ class EEXCEPTION_POINTERS(ctypes.Structure):
     ]
 
     def dump(self):
-        """Dump the EEXCEPTION_POINTERS"""
+        """Dump (print) the EEXCEPTION_POINTERS"""
         record = self.ExceptionRecord[0]
         print("Dumping Exception: ")
         print("    ExceptionCode = {0} at {1}".format(record.ExceptionCode, hex(record.ExceptionAddress)))

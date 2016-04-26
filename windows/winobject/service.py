@@ -23,7 +23,7 @@ ServiceStatus = namedtuple("ServiceStatus", ["type", "state", "control_accepted"
     * ``SERVICE_WIN32_SHARE_PROCESS(0x20L)``
     * ``SERVICE_INTERACTIVE_PROCESS(0x100L)``
 
-``state`` might be on of:
+``state`` might be one of:
 
     * ``SERVICE_STOPPED(0x1L)``
     * ``SERVICE_START_PENDING(0x2L)``

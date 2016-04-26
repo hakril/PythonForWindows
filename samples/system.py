@@ -15,6 +15,7 @@ print("")
 print("There is {0} processes".format(len(system.processes)))
 print("There is {0} threads".format(len(system.threads)))
 print("")
+
 print("Dumping first logical drive:")
 drive = system.logicaldrives[0]
 print("    " + str(drive))
