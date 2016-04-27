@@ -1,7 +1,6 @@
 import sys
 import os.path
 import socket
-
 sys.path.append(os.path.abspath(__file__ + "\..\.."))
 
 import windows

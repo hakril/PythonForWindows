@@ -1,21 +1,43 @@
-COM - Component Object Model
-""""""""""""""""""""""""""""
+:mod:`windows.com` - Component Object Model
+""""""""""""""""""""""""""""""""""""""""""""
+
+.. module:: windows.com
 
 A module to call `COM` interfaces from `Python` or
 `COM` vtable in python.
 
-This code is only used in :mod:`windows.wmi`.
+This code is only used in :mod:`windows.winobject.wmi` and :mod:`windows.winobject.network` for the firewall.
 The ability to create `COM` vtable is used in the `LKD project <https://github.com/sogeti-esec-lab/LKD/>`_ .
 
 
-To call a `COM` interface you need to:
+Using a COM interface
+'''''''''''''''''''''
 
-    1. Describe the `COM` interface `CODE1 <https://github.com/sogeti-esec-lab/LKD/blob/ba40727d7d257b00f89fc6ca7296c9833b7b75b2/dbginterface/remote.py#L56>`_
-    2. Use an instance (which is a PVOID) to get the interface `CODE2 <https://github.com/sogeti-esec-lab/LKD/blob/ba40727d7d257b00f89fc6ca7296c9833b7b75b2/dbginterface/remote.py#L313>`_
-    3. Use the object ! `CODE3 <https://github.com/sogeti-esec-lab/LKD/blob/ba40727d7d257b00f89fc6ca7296c9833b7b75b2/dbginterface/remote.py#L366>`_
+It's possible to directly call `COM` interface from python. All you need is the definition of the `COM` interface.
+
+There are three ways to get the definition of the code interface:
+
+    * By using it from :mod:`windows.generated_def.interfaces`
+    * By writing it yourself : <https://github.com/sogeti-esec-lab/LKD/blob/ba40727d7d257b00f89fc6ca7296c9833b7b75b2/dbginterface/remote.py#L56>`_
+    * By generating it.
+
+To generate a `COM` interface you need its definition from the ".c" file.
+Then add thisit to ``PythonForWindows\ctypes_generation\com\MyInterface.txt``.
+Finally re-generate the interface using ``generate.py``.
+
+When you have the `COM` interface defintion you can create an instance of it.
+Then you need to retrieve the interface by using an API returning an object or :func:`window.com.create_instance`.
+You can then use the instance to call whatever method you need.
+
+.. note::
+
+    see sample :ref:`sample_com_firewall`
+
+Implementing a COM interface
+''''''''''''''''''''''''''''
 
 To create `COM` object you need to:
 
-    1. Describe your ComVtable `CODE4 <https://github.com/sogeti-esec-lab/LKD/blob/ba40727d7d257b00f89fc6ca7296c9833b7b75b2/simple_com.py#L89>`_
-    2. Implement the python functions described `CODE5 <https://github.com/sogeti-esec-lab/LKD/blob/ba40727d7d257b00f89fc6ca7296c9833b7b75b2/dbginterface/remote.py#L233>`_
-    3. Create an instance and pass it to whatever native function expects it `CODE6 <https://github.com/sogeti-esec-lab/LKD/blob/ba40727d7d257b00f89fc6ca7296c9833b7b75b2/dbginterface/remote.py#L438>`_
+    1. Describe your ComVtable `CODE1 <https://github.com/sogeti-esec-lab/LKD/blob/ba40727d7d257b00f89fc6ca7296c9833b7b75b2/simple_com.py#L89>`_
+    2. Implement the python functions described `CODE2 <https://github.com/sogeti-esec-lab/LKD/blob/ba40727d7d257b00f89fc6ca7296c9833b7b75b2/dbginterface/remote.py#L233>`_
+    3. Create an instance and pass it to whatever native function expects it `CODE3 <https://github.com/sogeti-esec-lab/LKD/blob/ba40727d7d257b00f89fc6ca7296c9833b7b75b2/dbginterface/remote.py#L438>`_

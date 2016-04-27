@@ -1,3 +1,8 @@
+import sys
+import os.path
+import pprint
+sys.path.append(os.path.abspath(__file__ + "\..\.."))
+
 import ctypes
 import windows
 import windows.debug

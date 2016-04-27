@@ -1,7 +1,6 @@
 TODO:
     - Documentation
         - Pass 0.2 when doc is done <3
-        - type pass to dbg callback
 
     - ProcessMemory object ? (metasm like)
 
@@ -42,17 +41,9 @@ TODO:
 
 
 CHANGELOG:
-    * NEW REGISTRY -> change examples and documentation
-    * WinProcess is not a PROCESSENTRY32 anymore (change doc)
     * re-check every sample
 
 Documentation
-    * Debugger
-    * LocalDebugger
-    * windows.com
-    * New stuff in exception  ?
-    * windows.utils
-
     * verif samples
 
 FIXME:

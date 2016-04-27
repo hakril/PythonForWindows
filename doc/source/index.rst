@@ -19,6 +19,7 @@ Contents:
    utils.rst
    wintrust.rst
    debug.rst
+   com.rst
    iat_hook.rst
    wip.rst
    internals.rst

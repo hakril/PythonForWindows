@@ -437,3 +437,28 @@ Ouput::
         * {'Caption': u'E:', 'FreeSpace': u'82776027136', 'FileSystem': u'NTFS'}
         * {'Caption': u'F:', 'FreeSpace': u'5711265792', 'FileSystem': u'FAT32'}
         * {'Caption': u'G:', 'FreeSpace': None, 'FileSystem': None}
+
+.. _sample_com_firewall:
+
+using COM: ``INetFwPolicy2``
+''''''''''''''''''''''''''''
+
+.. literalinclude:: ..\..\samples\com_inetfwpolicy2.py
+
+Output::
+
+    (cmd λ) python .\samples\com_inetfwpolicy2.py
+    Initialisation of COM
+    Creating INetFwPolicy2 variable
+    <INetFwPolicy2 object at 0x02DC8210> (value = None)
+
+    Generating CLSID
+    <IID "E2B3C97F-6AE1-41AC-817A-F6F92166D7DD">
+
+    Creating COM instance
+    <INetFwPolicy2 object at 0x02DC8210> (value = 0x8984848)
+
+    Checking for enabled profiles
+    * NET_FW_PROFILE2_DOMAIN(0x1L) -> True
+    * NET_FW_PROFILE2_PRIVATE(0x2L) -> True
+    * NET_FW_PROFILE2_PUBLIC(0x4L) -> True

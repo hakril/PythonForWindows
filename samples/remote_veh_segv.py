@@ -1,3 +1,8 @@
+import sys
+import os.path
+import pprint
+sys.path.append(os.path.abspath(__file__ + "\..\.."))
+
 import windows
 import windows.test
 
@@ -7,7 +12,7 @@ python_code = """
 import windows
 import ctypes
 import windows
-from windows.exception import VectoredException
+from windows.winobject.exception import VectoredException
 import windows.generated_def.windef as windef
 from windows.generated_def.winstructs import *
 

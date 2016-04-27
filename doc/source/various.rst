@@ -15,5 +15,4 @@ This sections describes them by group of relation.
     network.rst
     service.rst
     volume.rst
-    com.rst
     wmi.rst

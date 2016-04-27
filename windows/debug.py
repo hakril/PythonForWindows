@@ -439,35 +439,35 @@ class Debugger(object):
         return DBG_CONTINUE
 
     def on_create_process(self, create_process):
-        """Called on create_process event (see https://msdn.microsoft.com/en-us/library/windows/desktop/ms679286(v=vs.85).aspx)"""
+        """Called on create_process event (for param type see https://msdn.microsoft.com/en-us/library/windows/desktop/ms679286(v=vs.85).aspx)"""
         pass
 
     def on_exit_process(self, exit_process):
-        """Called on exit_process event (see https://msdn.microsoft.com/en-us/library/windows/desktop/ms679334(v=vs.85).aspx)"""
+        """Called on exit_process event (for param type see https://msdn.microsoft.com/en-us/library/windows/desktop/ms679334(v=vs.85).aspx)"""
         pass
 
     def on_create_thread(self, create_thread):
-        """Called on create_thread event (see https://msdn.microsoft.com/en-us/library/windows/desktop/ms679287(v=vs.85).aspx)"""
+        """Called on create_thread event (for param type see https://msdn.microsoft.com/en-us/library/windows/desktop/ms679287(v=vs.85).aspx)"""
         pass
 
     def on_exit_thread(self, exit_thread):
-        """Called on exit_thread event (see https://msdn.microsoft.com/en-us/library/windows/desktop/ms679335(v=vs.85).aspx)"""
+        """Called on exit_thread event (for param type see https://msdn.microsoft.com/en-us/library/windows/desktop/ms679335(v=vs.85).aspx)"""
         pass
 
     def on_load_dll(self, load_dll):
-        """Called on load_dll event (see https://msdn.microsoft.com/en-us/library/windows/desktop/ms680351(v=vs.85).aspx)"""
+        """Called on load_dll event (for param type see https://msdn.microsoft.com/en-us/library/windows/desktop/ms680351(v=vs.85).aspx)"""
         pass
 
     def on_unload_dll(self, unload_dll):
-        """Called on unload_dll event (see https://msdn.microsoft.com/en-us/library/windows/desktop/ms681403(v=vs.85).aspx)"""
+        """Called on unload_dll event (for param type see https://msdn.microsoft.com/en-us/library/windows/desktop/ms681403(v=vs.85).aspx)"""
         pass
 
     def on_output_debug_string(self, debug_string):
-        """Called on debug_string event (see https://msdn.microsoft.com/en-us/library/windows/desktop/ms680545(v=vs.85).aspx)"""
+        """Called on debug_string event (for param type see https://msdn.microsoft.com/en-us/library/windows/desktop/ms680545(v=vs.85).aspx)"""
         pass
 
     def on_rip(self, rip_info):
-        """Called on rip_info event (see https://msdn.microsoft.com/en-us/library/windows/desktop/ms680587(v=vs.85).aspx)"""
+        """Called on rip_info event (for param type see https://msdn.microsoft.com/en-us/library/windows/desktop/ms680587(v=vs.85).aspx)"""
         pass
 
 def debug(path, args=None, dwCreationFlags=0, show_windows=False):

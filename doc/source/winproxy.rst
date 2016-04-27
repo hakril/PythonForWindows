@@ -88,24 +88,42 @@ Transparent proxies:
 * DebugBreak()
 * DebugBreakProcess(Process)
 * DebugSetProcessKillOnExit(KillOnExit)
+* EnumWindows(lpEnumFunc, lParam)
 * ExitProcess(uExitCode)
 * ExitThread(dwExitCode)
 * FreeConsole()
+* GetComputerNameA(lpBuffer, lpnSize)
+* GetComputerNameW(lpBuffer, lpnSize)
 * GetCurrentProcess()
 * GetCurrentProcessorNumber()
 * GetCurrentThread()
 * GetCurrentThreadId()
+* GetDriveTypeA(lpRootPathName)
+* GetDriveTypeW(lpRootPathName)
 * GetExitCodeProcess(hProcess, lpExitCode)
 * GetExitCodeThread(hThread, lpExitCode)
 * GetLastError()
+* GetLogicalDriveStringsA(nBufferLength, lpBuffer)
+* GetLogicalDriveStringsW(nBufferLength, lpBuffer)
 * GetProcAddress(hModule, lpProcName)
 * GetProcessId(Process)
 * GetSidSubAuthority(pSid, nSubAuthority)
 * GetSidSubAuthorityCount(pSid)
 * GetStdHandle(nStdHandle)
+* GetSystemMetrics(nIndex)
 * GetThreadId(Thread)
+* GetVersionExA(lpVersionInformation)
+* GetVersionExW(lpVersionInformation)
+* GetVolumeNameForVolumeMountPointA(lpszVolumeMountPoint, lpszVolumeName, cchBufferLength)
+* GetVolumeNameForVolumeMountPointW(lpszVolumeMountPoint, lpszVolumeName, cchBufferLength)
+* GetWindowModuleFileNameA(hwnd, pszFileName, cchFileNameMax)
+* GetWindowModuleFileNameW(hwnd, pszFileName, cchFileNameMax)
+* GetWindowTextA(hWnd, lpString, nMaxCount)
+* GetWindowTextW(hWnd, lpString, nMaxCount)
 * LoadLibraryA(lpFileName)
 * LoadLibraryW(lpFileName)
+* QueryDosDeviceA(lpDeviceName, lpTargetPath, ucchMax)
+* QueryDosDeviceW(lpDeviceName, lpTargetPath, ucchMax)
 * ResumeThread(hThread)
 * SetStdHandle(nStdHandle, hHandle)
 * SetTcpEntry(pTcpRow)
@@ -117,6 +135,8 @@ Transparent proxies:
 * Wow64EnableWow64FsRedirection(Wow64FsEnableRedirection)
 * Wow64GetThreadContext(hThread, lpContext)
 * Wow64RevertWow64FsRedirection(OldValue)
+* lstrcmpA(lpString1, lpString2)
+* lstrcmpW(lpString1, lpString2)
 Functions:
 
 * AddVectoredContinueHandler::
@@ -137,11 +157,51 @@ Functions:
     Errcheck:
        raise Kernel32Error if result is 0
 
+* AlpcGetMessageAttribute::
+
+    AlpcGetMessageAttribute(Buffer, AttributeFlag)
+    Errcheck:
+       Nothing special
+
+* AlpcInitializeMessageAttribute::
+
+    AlpcInitializeMessageAttribute(AttributeFlags, Buffer, BufferSize, RequiredBufferSize)
+
+* CoCreateInstance::
+
+    CoCreateInstance(rclsid, pUnkOuter=None, dwClsContext=tagCLSCTX.CLSCTX_INPROC_SERVER(0x1L), riid=NeededParameter, ppv=NeededParameter)
+    Errcheck:
+       Nothing special
+
+* CoInitializeEx::
+
+    CoInitializeEx(pvReserved=None, dwCoInit=tagCOINIT.COINIT_MULTITHREADED(0x0L))
+    Errcheck:
+       Nothing special
+
+* CoInitializeSecurity::
+
+    CoInitializeSecurity(pSecDesc, cAuthSvc, asAuthSvc, pReserved1, dwAuthnLevel, dwImpLevel, pAuthList, dwCapabilities, pReserved3)
+    Errcheck:
+       Nothing special
+
 * CreateFileA::
 
     CreateFileA(lpFileName, dwDesiredAccess=GENERIC_READ(0x80000000L), dwShareMode=0, lpSecurityAttributes=None, dwCreationDisposition=OPEN_EXISTING(0x3L), dwFlagsAndAttributes=FILE_ATTRIBUTE_NORMAL(0x80L), hTemplateFile=None)
     Errcheck:
        raise Kernel32Error if result is NOT 0
+
+* CreateFileMappingA::
+
+    CreateFileMappingA(hFile, lpFileMappingAttributes=None, flProtect=PAGE_READWRITE(0x4L), dwMaximumSizeHigh=0, dwMaximumSizeLow=NeededParameter, lpName=NeededParameter)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* CreateFileMappingW::
+
+    CreateFileMappingW(hFile, lpFileMappingAttributes=None, flProtect=PAGE_READWRITE(0x4L), dwMaximumSizeHigh=0, dwMaximumSizeLow=0, lpName=NeededParameter)
+    Errcheck:
+       raise Kernel32Error if result is 0
 
 * CreateFileW::
 
@@ -179,27 +239,213 @@ Functions:
     Errcheck:
        raise Kernel32Error if result is 0
 
+* CryptCATAdminAcquireContext::
+
+    CryptCATAdminAcquireContext(phCatAdmin, pgSubsystem, dwFlags)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* CryptCATAdminCalcHashFromFileHandle::
+
+    CryptCATAdminCalcHashFromFileHandle(hFile, pcbHash, pbHash, dwFlags)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* CryptCATAdminEnumCatalogFromHash::
+
+    CryptCATAdminEnumCatalogFromHash(hCatAdmin, pbHash, cbHash, dwFlags, phPrevCatInfo)
+    Errcheck:
+       Nothing special
+
+* CryptCATAdminReleaseCatalogContext::
+
+    CryptCATAdminReleaseCatalogContext(hCatAdmin, hCatInfo, dwFlags)
+    Errcheck:
+       Nothing special
+
+* CryptCATAdminReleaseContext::
+
+    CryptCATAdminReleaseContext(hCatAdmin, dwFlags)
+    Errcheck:
+       Nothing special
+
+* CryptCATCatalogInfoFromContext::
+
+    CryptCATCatalogInfoFromContext(hCatInfo, psCatInfo, dwFlags)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
 * DeviceIoControl::
 
     DeviceIoControl(hDevice, dwIoControlCode, lpInBuffer, nInBufferSize=None, lpOutBuffer=NeededParameter, nOutBufferSize=None, lpBytesReturned=None, lpOverlapped=None)
     Errcheck:
        raise Kernel32Error if result is 0
 
-* GetExtendedTcpTable::
+* DuplicateHandle::
 
-    GetExtendedTcpTable(pTcpTable, pdwSize=None, bOrder=True, ulAf=NeededParameter, TableClass=5, Reserved=0)
-    Errcheck:
-       raise IphlpapiError if result is NOT 0
-
-* GetMappedFileNameA::
-
-    GetMappedFileNameA(hProcess, lpv, lpFilename, nSize=None)
+    DuplicateHandle(hSourceProcessHandle, hSourceHandle, hTargetProcessHandle, lpTargetHandle, dwDesiredAccess=0, bInheritHandle=False, dwOptions=0)
     Errcheck:
        raise Kernel32Error if result is 0
 
-* GetMappedFileNameW::
+* EnumServicesStatusExA::
 
-    GetMappedFileNameW(hProcess, lpv, lpFilename, nSize=None)
+    EnumServicesStatusExA(hSCManager, InfoLevel, dwServiceType, dwServiceState, lpServices, cbBufSize, pcbBytesNeeded, lpServicesReturned, lpResumeHandle, pszGroupName)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* EnumServicesStatusExW::
+
+    EnumServicesStatusExW(hSCManager, InfoLevel, dwServiceType, dwServiceState, lpServices, cbBufSize, pcbBytesNeeded, lpServicesReturned, lpResumeHandle, pszGroupName)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* GetExtendedTcpTable::
+
+    GetExtendedTcpTable(pTcpTable, pdwSize=None, bOrder=True, ulAf=NeededParameter, TableClass=_TCP_TABLE_CLASS.TCP_TABLE_OWNER_PID_ALL(0x5L), Reserved=0)
+    Errcheck:
+       raise IphlpapiError if result is NOT 0
+
+* GetFileVersionInfoA::
+
+    GetFileVersionInfoA(lptstrFilename, dwHandle=0, dwLen=None, lpData=NeededParameter)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* GetFileVersionInfoSizeA::
+
+    GetFileVersionInfoSizeA(lptstrFilename, lpdwHandle=None)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* GetFileVersionInfoSizeW::
+
+    GetFileVersionInfoSizeW(lptstrFilename, lpdwHandle=None)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* GetFileVersionInfoW::
+
+    GetFileVersionInfoW(lptstrFilename, dwHandle=0, dwLen=None, lpData=NeededParameter)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* GetIfTable::
+
+    GetIfTable(pIfTable, pdwSize, bOrder=False)
+    Errcheck:
+       raise IphlpapiError if result is NOT 0
+
+* GetInterfaceInfo::
+
+    GetInterfaceInfo(pIfTable, dwOutBufLen=None)
+    Errcheck:
+       raise IphlpapiError if result is NOT 0
+
+* GetIpAddrTable::
+
+    GetIpAddrTable(pIpAddrTable, pdwSize, bOrder=False)
+    Errcheck:
+       raise IphlpapiError if result is NOT 0
+
+* GetMappedFileNameAWrapper::
+
+    GetMappedFileNameAWrapper(hProcess, lpv, lpFilename, nSize=None)
+    Errcheck:
+       raise Kernel32Error if result is 0
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* GetMappedFileNameAWrapper::
+
+    GetMappedFileNameAWrapper(hProcess, lpv, lpFilename, nSize=None)
+    Errcheck:
+       raise Kernel32Error if result is 0
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* GetMappedFileNameWWrapper::
+
+    GetMappedFileNameWWrapper(hProcess, lpv, lpFilename, nSize=None)
+    Errcheck:
+       raise Kernel32Error if result is 0
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* GetMappedFileNameWWrapper::
+
+    GetMappedFileNameWWrapper(hProcess, lpv, lpFilename, nSize=None)
+    Errcheck:
+       raise Kernel32Error if result is 0
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* GetModuleBaseNameAWrapper::
+
+    GetModuleBaseNameAWrapper(hProcess, hModule, lpBaseName, nSize=None)
+    Errcheck:
+       raise Kernel32Error if result is 0
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* GetModuleBaseNameAWrapper::
+
+    GetModuleBaseNameAWrapper(hProcess, hModule, lpBaseName, nSize=None)
+    Errcheck:
+       raise Kernel32Error if result is 0
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* GetModuleBaseNameWWrapper::
+
+    GetModuleBaseNameWWrapper(hProcess, hModule, lpBaseName, nSize=None)
+    Errcheck:
+       raise Kernel32Error if result is 0
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* GetModuleBaseNameWWrapper::
+
+    GetModuleBaseNameWWrapper(hProcess, hModule, lpBaseName, nSize=None)
+    Errcheck:
+       raise Kernel32Error if result is 0
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* GetProcessImageFileNameAWrapper::
+
+    GetProcessImageFileNameAWrapper(hProcess, lpImageFileName, nSize=None)
+    Errcheck:
+       raise Kernel32Error if result is 0
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* GetProcessImageFileNameAWrapper::
+
+    GetProcessImageFileNameAWrapper(hProcess, lpImageFileName, nSize=None)
+    Errcheck:
+       raise Kernel32Error if result is 0
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* GetProcessImageFileNameWWrapper::
+
+    GetProcessImageFileNameWWrapper(hProcess, lpImageFileName, nSize=None)
+    Errcheck:
+       raise Kernel32Error if result is 0
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* GetProcessImageFileNameWWrapper::
+
+    GetProcessImageFileNameWWrapper(hProcess, lpImageFileName, nSize=None)
+    Errcheck:
+       raise Kernel32Error if result is 0
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* GetProcessTimes::
+
+    GetProcessTimes(hProcess, lpCreationTime, lpExitTime, lpKernelTime, lpUserTime)
     Errcheck:
        raise Kernel32Error if result is 0
 
@@ -215,9 +461,33 @@ Functions:
     Errcheck:
        raise Kernel32Error if result is 0
 
+* GetVolumeInformationA::
+
+    GetVolumeInformationA(lpRootPathName, lpVolumeNameBuffer, nVolumeNameSize, lpVolumeSerialNumber, lpMaximumComponentLength, lpFileSystemFlags, lpFileSystemNameBuffer, nFileSystemNameSize)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* GetVolumeInformationW::
+
+    GetVolumeInformationW(lpRootPathName, lpVolumeNameBuffer=None, nVolumeNameSize=0, lpVolumeSerialNumber=None, lpMaximumComponentLength=None, lpFileSystemFlags=None, lpFileSystemNameBuffer=None, nFileSystemNameSize=0)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
 * LdrLoadDll::
 
     LdrLoadDll(PathToFile, Flags, ModuleFileName, ModuleHandle)
+
+* LookupAccountSidA::
+
+    LookupAccountSidA(lpSystemName, lpSid, lpName, cchName, lpReferencedDomainName, cchReferencedDomainName, peUse)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* LookupAccountSidW::
+
+    LookupAccountSidW(lpSystemName, lpSid, lpName, cchName, lpReferencedDomainName, cchReferencedDomainName, peUse)
+    Errcheck:
+       raise Kernel32Error if result is 0
 
 * LookupPrivilegeValueA::
 
@@ -231,6 +501,28 @@ Functions:
     Errcheck:
        raise Kernel32Error if result is 0
 
+* MapViewOfFile::
+
+    MapViewOfFile(hFileMappingObject, dwDesiredAccess=FILE_MAP_ALL_ACCESS(0xf001fL), dwFileOffsetHigh=0, dwFileOffsetLow=0, dwNumberOfBytesToMap=NeededParameter)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* NtAlpcAcceptConnectPort::
+
+    NtAlpcAcceptConnectPort(PortHandle, ConnectionPortHandle, Flags, ObjectAttributes, PortAttributes, PortContext, ConnectionRequest, ConnectionMessageAttributes, AcceptConnection)
+
+* NtAlpcConnectPort::
+
+    NtAlpcConnectPort(PortHandle, PortName, ObjectAttributes, PortAttributes, Flags, RequiredServerSid, ConnectionMessage, BufferLength, OutMessageAttributes, InMessageAttributes, Timeout)
+
+* NtAlpcCreatePort::
+
+    NtAlpcCreatePort(PortHandle, ObjectAttributes, PortAttributes)
+
+* NtAlpcSendWaitReceivePort::
+
+    NtAlpcSendWaitReceivePort(PortHandle, Flags, SendMessage, SendMessageAttributes, ReceiveMessage, BufferLength, ReceiveMessageAttributes, Timeout)
+
 * NtCreateThreadEx::
 
     NtCreateThreadEx(ThreadHandle=None, DesiredAccess=2097151, ObjectAttributes=0, ProcessHandle=NeededParameter, lpStartAddress=NeededParameter, lpParameter=NeededParameter, CreateSuspended=0, dwStackSize=0, Unknown1=0, Unknown2=0, Unknown=0)
@@ -239,6 +531,26 @@ Functions:
 
     NtGetContextThread(hThread, lpContext)
 
+* NtOpenDirectoryObject::
+
+    NtOpenDirectoryObject(DirectoryHandle, DesiredAccess, ObjectAttributes)
+
+* NtOpenEvent::
+
+    NtOpenEvent(EventHandle, DesiredAccess, ObjectAttributes)
+
+* NtOpenSymbolicLinkObject::
+
+    NtOpenSymbolicLinkObject(LinkHandle, DesiredAccess, ObjectAttributes)
+
+* NtProtectVirtualMemory::
+
+    NtProtectVirtualMemory(ProcessHandle, BaseAddress, NumberOfBytesToProtect, NewAccessProtection, OldAccessProtection=None)
+
+* NtQueryDirectoryObject::
+
+    NtQueryDirectoryObject(DirectoryHandle, Buffer, Length, ReturnSingleEntry, RestartScan, Context, ReturnLength)
+
 * NtQueryInformationProcess::
 
     NtQueryInformationProcess(ProcessHandle, ProcessInformationClass, ProcessInformation, ProcessInformationLength=0, ReturnLength=None)
@@ -246,6 +558,14 @@ Functions:
 * NtQueryInformationThread::
 
     NtQueryInformationThread(ThreadHandle, ThreadInformationClass, ThreadInformation, ThreadInformationLength=0, ReturnLength=None)
+
+* NtQueryObject::
+
+    NtQueryObject(Handle, ObjectInformationClass, ObjectInformation=None, ObjectInformationLength=0, ReturnLength=NeededParameter)
+
+* NtQuerySymbolicLinkObject::
+
+    NtQuerySymbolicLinkObject(LinkHandle, LinkTarget, ReturnedLength)
 
 * NtQuerySystemInformation::
 
@@ -263,6 +583,22 @@ Functions:
 
     NtWow64ReadVirtualMemory64(hProcess, lpBaseAddress, lpBuffer, nSize, lpNumberOfBytesRead=None)
 
+* NtWow64WriteVirtualMemory64::
+
+    NtWow64WriteVirtualMemory64(hProcess, lpBaseAddress, lpBuffer, nSize, lpNumberOfBytesWritten=None)
+
+* OpenEventA::
+
+    OpenEventA(dwDesiredAccess, bInheritHandle, lpName)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* OpenEventW::
+
+    OpenEventW(dwDesiredAccess, bInheritHandle, lpName)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
 * OpenProcess::
 
     OpenProcess(dwDesiredAccess=PROCESS_ALL_ACCESS(0x1f0fffL), bInheritHandle=0, dwProcessId=NeededParameter)
@@ -276,6 +612,18 @@ Functions:
     Errcheck:
        raise Kernel32Error if result is 0
 
+* OpenSCManagerA::
+
+    OpenSCManagerA(lpMachineName=None, lpDatabaseName=None, dwDesiredAccess=SC_MANAGER_ALL_ACCESS(0xf003fL))
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* OpenSCManagerW::
+
+    OpenSCManagerW(lpMachineName=None, lpDatabaseName=None, dwDesiredAccess=SC_MANAGER_ALL_ACCESS(0xf003fL))
+    Errcheck:
+       raise Kernel32Error if result is 0
+
 * OpenThread::
 
     OpenThread(dwDesiredAccess=THREAD_ALL_ACCESS(0x1f03ffL), bInheritHandle=0, dwThreadId=NeededParameter)
@@ -285,16 +633,46 @@ Functions:
 * Process32First::
 
     Process32First(hSnapshot, lpte)
-    Set byref(lpte) if needed
     Errcheck:
-       Nothing special
+       raise Kernel32Error if result is 0
 
 * Process32Next::
 
     Process32Next(hSnapshot, lpte)
-    Set byref(lpte) if needed
     Errcheck:
        Nothing special
+
+* QueryWorkingSetWrapper::
+
+    QueryWorkingSetWrapper(hProcess, pv, cb)
+    Errcheck:
+       raise Kernel32Error if result is 0
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* QueryWorkingSetExWrapper::
+
+    QueryWorkingSetExWrapper(hProcess, pv, cb)
+    Errcheck:
+       raise Kernel32Error if result is 0
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* QueryWorkingSetExWrapper::
+
+    QueryWorkingSetExWrapper(hProcess, pv, cb)
+    Errcheck:
+       raise Kernel32Error if result is 0
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* QueryWorkingSetWrapper::
+
+    QueryWorkingSetWrapper(hProcess, pv, cb)
+    Errcheck:
+       raise Kernel32Error if result is 0
+    Errcheck:
+       raise Kernel32Error if result is 0
 
 * ReadProcessMemory::
 
@@ -356,7 +734,7 @@ Functions:
     Thread32First(hSnapshot, lpte)
     Set byref(lpte) if needed
     Errcheck:
-       Nothing special
+       raise Kernel32Error if result is 0
 
 * Thread32Next::
 
@@ -364,6 +742,18 @@ Functions:
     Set byref(lpte) if needed
     Errcheck:
        Nothing special
+
+* VerQueryValueA::
+
+    VerQueryValueA(pBlock, lpSubBlock, lplpBuffer, puLen)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* VerQueryValueW::
+
+    VerQueryValueW(pBlock, lpSubBlock, lplpBuffer, puLen)
+    Errcheck:
+       raise Kernel32Error if result is 0
 
 * VirtualAlloc::
 
@@ -392,6 +782,12 @@ Functions:
 * VirtualProtect::
 
     VirtualProtect(lpAddress, dwSize, flNewProtect, lpflOldProtect=None)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* VirtualProtectEx::
+
+    VirtualProtectEx(hProcess, lpAddress, dwSize, flNewProtect, lpflOldProtect=None)
     Errcheck:
        raise Kernel32Error if result is 0
 
