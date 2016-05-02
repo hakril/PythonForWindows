@@ -132,6 +132,13 @@ TestInstr(Movsb, expected_result='movsb byte ptr es:[edi], byte ptr [esi]')()
 TestInstr(Movsd, expected_result='movsd dword ptr es:[edi], dword ptr [esi]')()
 TestInstr(Xchg)('EAX', 'ESP')
 
+TestInstr(Rol)('EAX', 7)
+TestInstr(Rol)('ECX', 0)
+
+TestInstr(Ror)('ECX', 0)
+TestInstr(Ror)('EDI', 7)
+TestInstr(Ror)('EDI', -128)
+
 TestInstr(And)('ECX', 'EBX')
 TestInstr(And)('EAX', 0x11223344)
 TestInstr(And)('EAX', mem('[EAX + 1]'))
@@ -141,6 +148,11 @@ TestInstr(Or)('ECX', 'EBX')
 TestInstr(Or)('EAX', 0x11223344)
 TestInstr(Or)('EAX', mem('[EAX + 1]'))
 TestInstr(Or)(mem('[EAX + EAX]'), 'EDX')
+
+TestInstr(Shr)('EAX', 8)
+TestInstr(Shr)('EDX', 0x12)
+TestInstr(Shl)('EAX', 8)
+TestInstr(Shl)('EDX', 0x12)
 
 TestInstr(Not)('EAX')
 TestInstr(Not)(mem('[EAX]'))
@@ -160,8 +172,6 @@ TestInstr(Test, expected_result="test edi, ecx")('ECX', 'EDI')
 TestInstr(Test)(mem('[ECX + 0x100]'), 'ECX')
 
 assert Test(mem('[ECX + 0x100]'), 'ECX').get_code() == Test('ECX', mem('[ECX + 0x100]')).get_code()
-
-
 assert Xchg('EAX', 'ECX').get_code() == Xchg('ECX', 'EAX').get_code()
 
 code = MultipleInstr()

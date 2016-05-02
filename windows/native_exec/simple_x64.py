@@ -329,7 +329,7 @@ class Imm8(object):
         except (ValueError, TypeError):
             return None, None, None
         try:
-            imm8 = accept_as_16immediat(x)
+            imm8 = accept_as_8immediat(x)
         except ImmediatOverflow:
             return None, None, None
         return (1, BitArray.from_string(imm8), None)
@@ -885,6 +885,14 @@ class Xor(Instruction):
     default_32_bits = True
     encoding = [(RawBits.from_int(8, 0x31), ModRM([ModRM_REG__REG, ModRM_REG64__MEM]))]
 
+
+class Shr(Instruction):
+    default_32_bits = True
+    encoding = [(RawBits.from_int(8, 0xC1), Slash(5), Imm8())]
+
+class Shl(Instruction):
+    default_32_bits = True
+    encoding = [(RawBits.from_int(8, 0xC1), Slash(4), Imm8())]
 
 class Nop(Instruction):
     encoding = [(RawBits.from_int(8, 0x90),)]

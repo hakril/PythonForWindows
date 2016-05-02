@@ -705,8 +705,17 @@ class Xchg(Instruction):
     encoding = [(RawBits.from_int(5, 0x90 >> 3), RegisterEax(), X86RegisterSelector()), (RawBits.from_int(5, 0x90 >> 3), X86RegisterSelector(), RegisterEax())]
 
 
+class Rol(Instruction):
+    encoding = [(RawBits.from_int(8, 0xC1), Slash(0), Imm8())]
 
+class Ror(Instruction):
+    encoding = [(RawBits.from_int(8, 0xC1), Slash(1), Imm8())]
 
+class Shr(Instruction):
+    encoding = [(RawBits.from_int(8, 0xC1), Slash(5), Imm8())]
+
+class Shl(Instruction):
+    encoding = [(RawBits.from_int(8, 0xC1), Slash(4), Imm8())]
 
 class Cpuid(Instruction):
     encoding = [(RawBits.from_int(16, 0x0fa2),)]

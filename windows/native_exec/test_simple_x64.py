@@ -47,6 +47,7 @@ class TestInstr(object):
             else:
                 raise AssertionError("Expected result <{0}> got <{1}>".format(self.expected_result, "{0} {1}".format(capres.mnemonic, capres.op_str)))
         if len(res) != len(capres.bytes):
+            print("<{0}> vs <{1}>".format(repr(res), repr(capres.bytes)))
             raise AssertionError("Not all bytes have been used by the disassembler")
         self.compare_mnemo(capres)
         self.compare_args(args, capres)
@@ -149,6 +150,11 @@ TestInstr(Or)('RAX', mem('[RAX + 1]'))
 TestInstr(Or)(mem('[RAX + 1]'), 'R8')
 TestInstr(Or)(mem('[EAX + 1]'), 'R8')
 TestInstr(Or)(mem('[RAX + 1]'), 'EAX')
+
+TestInstr(Shr)('RAX', 8)
+TestInstr(Shr)('R15', 0x12)
+TestInstr(Shl)('RAX', 8)
+TestInstr(Shl)('R15', 0x12)
 
 # I really don't know why it's the inverse
 # But I don't care, it's Test dude..

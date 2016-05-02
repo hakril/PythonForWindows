@@ -18,6 +18,8 @@ CS_64bits = 0x33
 
 def genere_return_32bits_stub(ret_addr):
     ret_32b = x64.MultipleInstr()
+    ret_32b += x64.Mov("RDX", "RAX")
+    ret_32b += x64.Shr("RDX", 32)
     ret_32b += x64.Mov('RCX', (CS_32bits << 32) + ret_addr)
     ret_32b += x64.Push('RCX')
     ret_32b += x64.Retf32()  # 32 bits return addr
@@ -49,7 +51,7 @@ def execute_64bits_code_from_syswow(shellcode):
     current_process.write_memory(jump_addr, jump)
     current_process.write_memory(shell_code_addr, shellcode)
     # Execute
-    exec_stub = ctypes.CFUNCTYPE(HRESULT)(jump_addr)
+    exec_stub = ctypes.CFUNCTYPE(ULONG64)(jump_addr)
     return exec_stub()
 
 
@@ -169,15 +171,8 @@ def try_generate_stub_target(shellcode, argument_buffer, target):
 
 
 def get_current_process_syswow_peb_addr():
-    current_process = windows.current_process
-    dest = current_process.allocator.reserve_size(8)
-    get_peb_64_code = x64.MultipleInstr()
-    get_peb_64_code += x64.Mov('RAX', x64.mem('gs:[0x60]'))
-    get_peb_64_code += x64.Mov(x64.create_displacement(disp=dest), 'RAX')
-    current_process.write_memory(dest, "\x00" * 8)
-    execute_64bits_code_from_syswow(get_peb_64_code.get_code())
-    peb_addr = struct.unpack("<Q", current_process.read_memory(dest, 8))[0]
-    return peb_addr
+    get_peb_64_code = x64.Mov('RAX', x64.mem('gs:[0x60]'))
+    return execute_64bits_code_from_syswow(get_peb_64_code.get_code())
 
 def get_current_process_syswow_peb():
     current_process = windows.current_process
