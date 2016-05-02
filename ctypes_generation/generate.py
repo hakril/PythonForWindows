@@ -14,6 +14,7 @@ import com_parser
 
 TYPE_EQUIVALENCE = [
     ('PWSTR', 'LPWSTR'),
+    ('PCWSTR', 'LPWSTR'),
     ('SIZE_T', 'c_ulong'),
     ('PSIZE_T', 'POINTER(SIZE_T)'),
     ('PVOID', 'c_void_p'),
@@ -34,6 +35,10 @@ TYPE_EQUIVALENCE = [
     ('UCHAR', 'c_char'),
     ('CSHORT', 'c_short'),
     ('VARTYPE', 'c_ushort'),
+    ('PBOOL', 'POINTER(BOOL)'),
+    ('PSTR', 'LPSTR'),
+    ('PCSTR', 'LPSTR'),
+    ('va_list', 'c_char_p'),
     ('BSTR', 'c_wchar_p'),
     ('OLECHAR', 'c_wchar'),
     ('POLECHAR', 'c_wchar_p'),
@@ -47,6 +52,7 @@ TYPE_EQUIVALENCE = [
     ('ULONGLONG', 'c_ulonglong'),
     ('LONGLONG', 'c_longlong'),
     ('ULONG64', 'c_ulonglong'),
+    ('LONG64', 'c_longlong'),
     ('LARGE_INTEGER', 'LONGLONG'),
     ('PLARGE_INTEGER', 'POINTER(LARGE_INTEGER)'),
     ('DWORD64', 'ULONG64'),
@@ -71,6 +77,14 @@ TYPE_EQUIVALENCE = [
     ("MEMBERID", "DISPID"),
     ('PSECURITY_DESCRIPTOR', 'PVOID'),
     ('LPUNKNOWN', 'POINTER(PVOID)'),
+    #STUFF FOR COM (will be replace at runtime
+    # real def in com_interface_header
+    ('GUID', 'PVOID'),
+    ('LPGUID', 'PVOID'),
+    # STUFF FOR DBGENGINE
+    ('PWINDBG_EXTENSION_APIS32', 'PVOID'),
+    ('PWINDBG_EXTENSION_APIS64', 'PVOID'),
+    #('PDEBUG_SYMBOL_PARAMETERS', 'PVOID'),
     # Will be changed at import time
     ('LPCONTEXT', 'PVOID'),
     ('HCERTSTORE', 'PVOID'),
@@ -122,18 +136,22 @@ def generate_type_equiv_code(type_equiv):
 
 def verif_funcs_type(funcs, structs, enums):
     all_struct_name = get_all_struct_name(structs, enums)
+    missing_types = False
     for f in funcs:
         ret_type = f.return_type
         if ret_type not in known_type and ret_type not in all_struct_name:
-            raise ValueError("UNKNOW RET TYPE {0}".format(ret_type))
+            print ValueError("UNKNOW RET TYPE {0}".format(ret_type))
+            missing_types = True
 
         for param_type, _ in f.params:
             # Crappy but fuck it !
             if param_type.startswith("POINTER(") and param_type.endswith(")"):
                 param_type = param_type[len("POINTER("): -1]
             if param_type not in known_type and param_type not in all_struct_name:
-                raise ValueError("UNKNOW PARAM TYPE {0}".format(param_type))
-
+                print ValueError("UNKNOW PARAM TYPE {0}".format(param_type))
+                missing_types = True
+    if missing_types:
+        raise ValueError("Missing types")
 
 try:
     yolo_struct = [x[:-4] for x in  os.listdir(r"C:\Users\hakril\Documents\Work\COM\dump")]
@@ -143,14 +161,16 @@ except WindowsError:
 def verif_com_interface_type(vtbls, struc, enum):
     all_struct_name = get_all_struct_name(structs, enums)
     all_interface_name = [vtbl.name for vtbl in vtbls]
-
+    all_interface_name += [vtbl.typedefptr for  vtbl in vtbls if vtbl.typedefptr is not None]
+    missing_types = False
     for vtbl in vtbls:
         #print(vtbl)
         for method in vtbl.methods:
             #print("Checking ret type <{0}>".format(method.ret_type))
             ret_type = method.ret_type
             if ret_type not in known_type and ret_type not in all_struct_name + all_interface_name:
-                raise ValueError("UNKNOW RET TYPE {0}".format(ret_type))
+                print ValueError("UNKNOW RET TYPE {0}".format(ret_type))
+                missing_types = True
             for arg in method.args:
                 #print("Checking arg type <{0}>".format(arg.type))
                 param_type = arg.type
@@ -162,8 +182,10 @@ def verif_com_interface_type(vtbls, struc, enum):
                         import shutil
                         #shutil.copy(r"C:\Users\hakril\Documents\Work\COM\dump\{0}.txt".format(param_type), "com")
                         continue
-                    raise ValueError("UNKNOW PARAM TYPE {0}".format(param_type))
-
+                    print ValueError("UNKNOW PARAM TYPE {0}".format(param_type))
+                    missing_types = True
+    if missing_types:
+        raise ValueError("Missing types")
 
 def check_in_define(name, defs):
     return any(name == d.name for d in defs)
@@ -285,12 +307,8 @@ def generate_struct_ctypes(structs, enums):
 
     return ctypes_str
 
-
-data = open(NAME_TO_IID_FILE).read()
-iids_def = {}
-for line in data.split("\n"):
-    name, iid = line.split("|")
-    part_iid = iid.split("-")
+def parse_iid(iid_str):
+    part_iid = iid_str.split("-")
     str_iid = []
     str_iid.append("0x" + part_iid[0])
     str_iid.append("0x" + part_iid[1])
@@ -298,7 +316,14 @@ for line in data.split("\n"):
     str_iid.append("0x" + part_iid[3][:2])
     str_iid.append("0x" + part_iid[3][2:])
     for i in range(6): str_iid.append("0x" + part_iid[4][i * 2:(i + 1) * 2])
-    iids_def[name] = ", ".join(str_iid), iid
+    return ", ".join(str_iid)
+
+
+data = open(NAME_TO_IID_FILE).read()
+iids_def = {}
+for line in data.split("\n"):
+    name, iid = line.split("|")
+    iids_def[name] = parse_iid(iid), iid
 #full_name_to_iid = name_to_iid_header + "\n".join(iids_def)
 
 
@@ -336,6 +361,8 @@ class IID(IID):
 
 generate_IID = IID.from_raw
 
+GUID = IID
+LPGUID = POINTER(GUID)
 
 class COMInterface(ctypes.c_void_p):
     _functions_ = {
@@ -361,7 +388,8 @@ com_interface_method_template = """ "{0}": ctypes.WINFUNCTYPE({1})({2}, "{0}"),"
 
 def generate_com_interface_ctype(vtbls):
     define = []
-    all_name = [vtbl.name for vtbl in vtbls]
+    all_name = [vtbl.name for vtbl in vtbls] + [vtbl.typedefptr for  vtbl in vtbls if vtbl.typedefptr is not None]
+
     for vtbl in vtbls:
         methods_string = []
         for method_nb, method in enumerate(vtbl.methods):
@@ -385,7 +413,11 @@ def generate_com_interface_ctype(vtbls):
                 str_args.append(type)
             methods_string.append(com_interface_method_template.format(method.name, ", ".join([method.ret_type] + str_args), method_nb))
         #import pdb;pdb.set_trace()
-        iid_python, iid_str = iids_def[vtbl.name]
+        if vtbl.iid is not None:
+            iid_str = vtbl.iid
+            iid_python = parse_iid(iid_str)
+        else:
+            iid_python, iid_str = iids_def[vtbl.name]
         define.append((com_interface_template.format(vtbl.name, "\n".join(methods_string), iid_python, iid_str)))
     return com_interface_header + "\n".join(define)
 
@@ -455,7 +487,9 @@ write_to_out_file(GENERATED_COM_FILE, com_interface_ctypes)
 #write_to_out_file(GENERATED_NAME_TO_IID_FILE, full_name_to_iid)
 
 NTSTATUS_HEAD = """
-class NtStatusException(Exception):
+import ctypes
+
+class NtStatusException(WindowsError):
     ALL_STATUS = {}
     def __init__(self , code):
         try:
@@ -465,11 +499,14 @@ class NtStatusException(Exception):
         self.code = x[0]
         self.name = x[1]
         self.descr = x[2]
-
+        x =  ctypes.c_long(x[0]).value, x[1], x[2]
         return super(NtStatusException, self).__init__(*x)
 
     def __str__(self):
         return "{e.name}(0x{e.code:x}): {e.descr}".format(e=self)
+
+    def __repr__(self):
+        return "{0}(0x{1:08x}, {2})".format(type(self).__name__, self.code, self.name)
 
     @classmethod
     def register_ntstatus(cls, code, name, descr):
