@@ -526,6 +526,17 @@ def MapViewOfFile(hFileMappingObject, dwDesiredAccess=FILE_MAP_ALL_ACCESS, dwFil
 def DuplicateHandle(hSourceProcessHandle, hSourceHandle, hTargetProcessHandle, lpTargetHandle, dwDesiredAccess=0, bInheritHandle=False, dwOptions=0):
     return DuplicateHandle.ctypes_function(hSourceProcessHandle, hSourceHandle, hTargetProcessHandle, lpTargetHandle, dwDesiredAccess, bInheritHandle, dwOptions)
 
+@Kernel32Proxy("GetLongPathNameA")
+def GetLongPathNameA(lpszShortPath, lpszLongPath, cchBuffer=None):
+    if cchBuffer is None:
+        cchBuffer = len(lpszLongPath)
+    return GetLongPathNameA.ctypes_function(lpszShortPath, lpszLongPath, cchBuffer)
+
+@Kernel32Proxy("GetShortPathNameA")
+def GetShortPathNameA(lpszLongPath, lpszShortPath, cchBuffer=None):
+    if cchBuffer is None:
+        cchBuffer = len(lpszShortPath)
+    return GetShortPathNameA.ctypes_function(lpszLongPath, lpszShortPath, cchBuffer)
 
 # TODO: might be in another DLL depending of version
 # Should handle this..

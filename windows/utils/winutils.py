@@ -186,11 +186,37 @@ def ntstatus(code):
     return windows.generated_def.ntstatus.NtStatusException(code)
 
 
+def get_long_path(path):
+    """Return the long path form for ``path``
+
+        :returns: :class:`str`
+    """
+    size = 0x1000
+    buffer = ctypes.c_buffer(size)
+    rsize = winproxy.GetLongPathNameA(path, buffer, size)
+    return buffer[:rsize]
+
+def get_short_path(path):
+    """Return the short path form for ``path``
+
+        :returns: :class:`str`
+    """
+    size = 0x1000
+    buffer = ctypes.c_buffer(size)
+    rsize = winproxy.GetShortPathNameA(path, buffer, size)
+    return buffer[:rsize]
+
 def get_shared_mapping(name, size=0x1000):
     # TODO: real cod
     h = windows.winproxy.CreateFileMappingA(INVALID_HANDLE_VALUE, dwMaximumSizeLow=size, lpName=name)
     addr = windows.winproxy.MapViewOfFile(h, dwNumberOfBytesToMap=size)
     return addr
+
+#def mapfile(file):
+#    fhandle = get_handle_from_file(file)
+#    h = windows.winproxy.CreateFileMappingA(fhandle, None, PAGE_READONLY, 0, 1, None)
+#    addr = windows.winproxy.MapViewOfFile(h, dwDesiredAccess=FILE_MAP_READ, dwNumberOfBytesToMap=1)
+#    return addr
 
 class VirtualProtected(object):
     """

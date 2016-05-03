@@ -1306,3 +1306,27 @@ BOOL WINAPI GetProcessTimes(
   _Out_ LPFILETIME lpKernelTime,
   _Out_ LPFILETIME lpUserTime
 );
+
+DWORD WINAPI GetShortPathNameA(
+  _In_  LPCSTR lpszLongPath,
+  _Out_ LPCSTR  lpszShortPath,
+  _In_  DWORD   cchBuffer
+);
+
+DWORD WINAPI GetShortPathNameW(
+  _In_  LPWSTR lpszLongPath,
+  _Out_ LPWSTR  lpszShortPath,
+  _In_  DWORD   cchBuffer
+);
+
+DWORD WINAPI GetLongPathNameA(
+  _In_  LPCSTR lpszShortPath,
+  _Out_ LPCSTR  lpszLongPath,
+  _In_  DWORD   cchBuffer
+);
+
+DWORD WINAPI GetLongPathNameW(
+  _In_  LPWSTR lpszShortPath,
+  _Out_ LPWSTR  lpszLongPath,
+  _In_  DWORD   cchBuffer
+);
