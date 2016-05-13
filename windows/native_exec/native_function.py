@@ -122,7 +122,7 @@ def analyse_callback(callback):
 
 # For windows 32 bits with stdcall
 def generate_stub_32(callback):
-    c_callback = get_callback_address_32(callback)
+    c_callback = ctypes.cast(callback, ctypes.c_void_p).value
 
     gstate_save_addr = x86.create_displacement(disp=allocator.reserve_int())
     return_addr_save_addr = x86.create_displacement(disp=allocator.reserve_int())
@@ -179,7 +179,7 @@ def generate_stub_32(callback):
 
 
 def generate_stub_64(callback):
-    c_callback = get_callback_address_64(callback)
+    c_callback = ctypes.cast(callback, ctypes.c_void_p).value
     REG_LEN = ctypes.sizeof(ctypes.c_void_p)
     register_to_save = ("RBX", "RCX", "RDX", "RSI", "RDI", "R8", "R9", "R10", "R11", "R12", "R13", "R14", "R15")
 
@@ -292,18 +292,6 @@ def create_function(code, types):
      """
     func_type = ctypes.CFUNCTYPE(*types)
     addr = allocator.write_code(code)
-    return func_type(addr)
-
-
-# Return First argument for 32 bits code
-raw_code = x86.MultipleInstr()
-raw_code += x86.Mov('EAX', x86.mem('[ESP + 4]'))
-raw_code += x86.Ret()
-get_callback_address_32 = create_function(raw_code.get_code(), [ctypes.c_void_p])
-
-
-# Return First argument for 64 bits code
-raw_code = x64.MultipleInstr()
-raw_code += x64.Mov('RAX', 'RCX')
-raw_code += x64.Ret()
-get_callback_address_64 = create_function(raw_code.get_code(), [ctypes.c_void_p])
+    res = func_type(addr)
+    res.code_addr = addr
+    return res

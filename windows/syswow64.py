@@ -18,6 +18,8 @@ CS_64bits = 0x33
 
 def genere_return_32bits_stub(ret_addr):
     ret_32b = x64.MultipleInstr()
+    # Transform 64b return value to ULONG64 return value
+    # EDX:EAX
     ret_32b += x64.Mov("RDX", "RAX")
     ret_32b += x64.Shr("RDX", 32)
     ret_32b += x64.Mov('RCX', (CS_32bits << 32) + ret_addr)

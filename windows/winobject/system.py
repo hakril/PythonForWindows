@@ -154,7 +154,7 @@ class System(object):
         version = self.version
         is_workstation = self.product_type == VER_NT_WORKSTATION
         if version == (10, 0):
-            return ["Windows Server 2016, ""Windows 10"][is_workstation]
+            return ["Windows Server 2016", "Windows 10"][is_workstation]
         elif version == (6, 3):
             return  ["Windows Server 2012 R2", "Windows 8.1"][is_workstation]
         elif version == (6, 2):

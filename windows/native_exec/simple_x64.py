@@ -2,6 +2,8 @@ import collections
 import struct
 
 
+DEBUG = False
+
 class BitArray(object):
     def __init__(self, size, bits):
         self.size = size
@@ -113,6 +115,8 @@ registers_32_bits = {'R15D': 'R15', 'R14D': 'R14', 'ESP': 'RSP', 'R9D': 'R9',
 'EDI': 'RDI', 'R11D': 'R11', 'R8D': 'R8', 'R10D': 'R10', 'EAX': 'RAX',
 'R13D': 'R13', 'EBP': 'RBP', 'R12D': 'R12', 'EDX': 'RDX', 'EBX': 'RBX',
 'ESI': 'RSI', 'ECX': 'RCX'}
+
+registers_64_to_32_bits = {r64:r32 for r32,r64 in registers_32_bits.items()}
 
 x64_segment_selectors = {'CS': CSPrefix, 'DS': DSPrefix, 'ES': ESPrefix, 'SS': SSPrefix,
                          'FS': FSPrefix, 'GS': GSPrefix}
@@ -289,6 +293,8 @@ class RawBits(BitArray):
 class ImmediatOverflow(ValueError):
     pass
 
+# 8 / 16 /32 only accept signed value because of jmp
+# Should I have signed / unsigned stuff ? (seems so..)
 
 def accept_as_8immediat(x):
     try:
@@ -645,14 +651,18 @@ class Slash(object):
     def __init__(self, reg_num):
         "reg = 7 for /7"
         self.reg = reg_order[reg_num]
+        self.reg_num = reg_num
 
     def accept_arg(self, args, instr_state):
         if len(args) < 1:
             raise ValueError("Missing arg for Slash")
         # Reuse all the MODRm logique with the reg as our self.reg
         # The sens of param is strange I need to fix the `reversed` logique
+        injected_reg = self.reg
+        if X64.is_32b_reg(args[0]):
+            injected_reg = registers_64_to_32_bits[injected_reg]
         try:
-            arg_consum, value, rex = ModRM([ModRM_REG__REG, ModRM_REG64__MEM], has_direction_bit=False).accept_arg(args[:1] + [self.reg] + args[1:], instr_state)
+            arg_consum, value, rex = ModRM([ModRM_REG__REG, ModRM_REG64__MEM], has_direction_bit=False).accept_arg(args[:1] + [injected_reg] + args[1:], instr_state)
         except ValueError as e:
             # Size mismatch
             return None, None, None
