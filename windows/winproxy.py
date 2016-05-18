@@ -9,6 +9,13 @@ from windows.generated_def.ntstatus import NtStatusException
 from windows.dbgprint import dbgprint
 
 
+def is_implemented(winfunc):
+    try:
+        winfunc.force_resolution()
+    except ExportNotFound:
+        return False
+    return True
+
 class Kernel32Error(WindowsError):
     def __new__(cls, func_name):
         win_error = ctypes.WinError()
@@ -83,7 +90,7 @@ def error_ntstatus(func_name, result, func, args):
     return args
 
 
-class ExportNotFound(AttributeError):
+class ExportNotFound(RuntimeError):
         def __init__(self, func_name, api_name):
             self.func_name = func_name
             self.api_name = api_name

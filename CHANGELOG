@@ -1,0 +1,9 @@
+V0.3:
+
+    * NtStatusException is now a WindowsError
+    * Add shr/shl RM32(64)/Imm8
+    * Small fix simple_x64 Imm8 encoding
+    * `execute_64bits_code_from_syswow` able to return ULONG64
+    * utils.get_short_path / utils.get_long_path
+    * Object returned by `windows.native_exec.create_function` has an attribute `code_addr` with the address of the executable code
+    * add `windows.winproxy.is_implemented` Ex: windows.winproxy.is_implemented(windows.winproxy.QueryWorkingSetEx)
