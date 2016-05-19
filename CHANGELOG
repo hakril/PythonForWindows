@@ -1,4 +1,4 @@
-V0.3:
+Since 0.2:
 
     * NtStatusException is now a WindowsError
     * Add shr/shl RM32(64)/Imm8
@@ -7,3 +7,4 @@ V0.3:
     * utils.get_short_path / utils.get_long_path
     * Object returned by `windows.native_exec.create_function` has an attribute `code_addr` with the address of the executable code
     * add `windows.winproxy.is_implemented` Ex: windows.winproxy.is_implemented(windows.winproxy.QueryWorkingSetEx)
+    * registry.py handle REG_QWORD manually (_winreg does not)

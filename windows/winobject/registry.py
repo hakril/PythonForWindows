@@ -1,9 +1,10 @@
 import _winreg
 import itertools
+import struct
 from collections import namedtuple
 
 import windows
-from windows.generated_def.windef import KEY_READ
+from windows.generated_def.windef import KEY_READ, REG_QWORD
 
 
 
@@ -65,7 +66,15 @@ class PyHKey(object):
         res = []
         with ExpectWindowsError(259):
             for i in itertools.count():
-                res.append(_winreg.EnumValue(self.phkey, i))
+                name_value_type = _winreg.EnumValue(self.phkey, i)
+                # _winreg doest not support REG_QWORD
+                # See http://bugs.python.org/issue23026
+                if name_value_type[2] == REG_QWORD:
+                    name = name_value_type[0]
+                    value = struct.unpack("<Q", name_value_type[1])[0]
+                    type = name_value_type[2]
+                    name_value_type = name, value, type
+                res.append(name_value_type)
         return [KeyValue(*r) for r in res]
 
     @property
