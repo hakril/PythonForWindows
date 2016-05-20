@@ -1,6 +1,7 @@
 TODO:
     - Documentation
-        - Pass 0.2 when doc is done <3
+
+    - Better WMI interface
 
     - ProcessMemory object ? (metasm like)
 

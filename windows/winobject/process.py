@@ -201,7 +201,7 @@ class WinThread(THREADENTRY32, AutoHandle):
 
     @staticmethod
     def _from_handle(handle):
-        tid = winproxy.GetThreadId(handle)
+        tid = WinThread._get_thread_id(handle)
         try:
             # Really useful ?
             thread = [t for t in windows.winobject.system.System().threads if t.tid == tid][0]
@@ -213,11 +213,30 @@ class WinThread(THREADENTRY32, AutoHandle):
             dbgprint("DeadThread from handle {0}".format(hex(handle)), "HANDLE")
             return DeadThread(handle, tid)
 
+    @staticmethod
+    def _get_thread_id_by_api(handle):
+        return winproxy.GetThreadId(handle)
+
+    @staticmethod
+    def _get_thread_id_manual(handle):
+        if windows.current_process.bitness == 32 and self.owner.bitness == 64:
+            raise NotImplementedError("[_get_thread_id_manual] 32 -> 64 (XP64 bits + Syswow process ?)")
+        res = THREAD_BASIC_INFORMATION()
+        windows.winproxy.NtQueryInformationThread(hand, ThreadBasicInformation, byref(res), ctypes.sizeof(res))
+        id2 = res.ClientId.UniqueThread
+        return id2
+
+    if winproxy.is_implemented(winproxy.GetThreadId):
+        _get_thread_id = _get_thread_id_by_api
+    else:
+        _get_thread_id = _get_thread_id_manual
+
+
 class DeadThread(AutoHandle):
     """An already dead thread (returned only by API returning a new thread if thread die before being returned)"""
     def __init__(self, handle, tid=None):
         if tid is None:
-            tid = winproxy.GetThreadId(handle)
+            tid = WinThread._get_thread_id(handle)
         self.tid = tid
         # set AutoHandle _handle
         self._handle = handle
