@@ -8,3 +8,4 @@ Since 0.2:
     * Object returned by `windows.native_exec.create_function` has an attribute `code_addr` with the address of the executable code
     * add `windows.winproxy.is_implemented` Ex: windows.winproxy.is_implemented(windows.winproxy.QueryWorkingSetEx)
     * registry.py handle REG_QWORD manually (_winreg does not)
+    * CurrentProcessReadSyswow doest not use ``current_process.handle`` anymore but ``OpenProcess(current_process.pid)`` (Compat windows10 where method 1 doest not work)
