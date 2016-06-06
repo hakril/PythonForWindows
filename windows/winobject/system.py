@@ -58,29 +58,29 @@ class System(object):
         :type: [:class:`service.ServiceA`] -- A list of Service"""
         return service.enumerate_services()
 
-    #@property
-    #def handles(self):
-    #    size_needed = ULONG()
-    #    size = 0x1000
-    #    buffer = ctypes.c_buffer(size)
-    #
-    #    try:
-    #        winproxy.NtQuerySystemInformation(16, buffer, size, ReturnLength=ctypes.byref(size_needed))
-    #    except WindowsError as e:
-    #        pass
-    #
-    #    size = size_needed.value + 0x1000
-    #    buffer = ctypes.c_buffer(size)
-    #    winproxy.NtQuerySystemInformation(16, buffer, size, ReturnLength=ctypes.byref(size_needed))
-    #
-    #    x = SYSTEM_HANDLE_INFORMATION.from_buffer(buffer)
-    #
-    #    class _GENERATED_SYSTEM_HANDLE_INFORMATION(ctypes.Structure):
-    #        _fields_ = [
-    #            ("HandleCount", ULONG),
-    #            ("Handles", SYSTEM_HANDLE * x.HandleCount),
-    #        ]
-    #    return _GENERATED_SYSTEM_HANDLE_INFORMATION.from_buffer_copy(buffer[:size_needed.value]).Handles[:]
+    @property
+    def handles(self):
+        size_needed = ULONG()
+        size = 0x1000
+        buffer = ctypes.c_buffer(size)
+
+        try:
+            winproxy.NtQuerySystemInformation(16, buffer, size, ReturnLength=ctypes.byref(size_needed))
+        except WindowsError as e:
+            pass
+
+        size = size_needed.value + 0x1000
+        buffer = ctypes.c_buffer(size)
+        winproxy.NtQuerySystemInformation(16, buffer, size, ReturnLength=ctypes.byref(size_needed))
+
+        x = SYSTEM_HANDLE_INFORMATION.from_buffer(buffer)
+
+        class _GENERATED_SYSTEM_HANDLE_INFORMATION(ctypes.Structure):
+            _fields_ = [
+                ("HandleCount", ULONG),
+                ("Handles", SYSTEM_HANDLE * x.HandleCount),
+            ]
+        return _GENERATED_SYSTEM_HANDLE_INFORMATION.from_buffer_copy(buffer[:size_needed.value]).Handles[:]
 
     @utils.fixedpropety
     def bitness(self):
