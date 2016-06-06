@@ -25,6 +25,7 @@ class TestInstr(object):
             if self.debug:
                 import pdb;pdb.set_trace()
                 pdb.DONE = True
+            x64.DEBUG = self.debug
             res = bytes(self.instr_to_test(*args).get_code())
             if self.debug:
                 print(repr(res))
@@ -139,6 +140,8 @@ TestInstr(Mov)(mem('[RBX]'), 0x11223344)
 
 TestInstr(And)('RCX', 'RBX')
 TestInstr(And)('RAX', 0x11223344)
+TestInstr(And)('EAX', 0x11223344)
+TestInstr(And)('EAX', 0xffffffff)
 TestInstr(And)('RAX', mem('[RAX + 1]'))
 TestInstr(And)(mem('[RAX + 1]'), 'R8')
 TestInstr(And)(mem('[EAX + 1]'), 'R8')

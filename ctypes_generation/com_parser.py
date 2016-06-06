@@ -56,8 +56,12 @@ def initial_processing( data):
     return outs.read()
 
 class WinComParser(Parser):
-    PARAM_INFO =  ["__RPC__deref_out", "__RPC__in", "__RPC__deref_out_opt", "__RPC__out", "__RPC__in_opt", "__RPC__deref_opt_inout_opt"]
-    PARAM_INFO_WITH_VALUE = ["__RPC__in_ecount", "__RPC__out_ecount_part", "__RPC__in_ecount_full", "__RPC__in_range", "__RPC__out_ecount_full"]
+    PARAM_INFO =  ["__RPC__deref_out", "__RPC__in", "__RPC__deref_out_opt", "__RPC__out", "__RPC__in_opt",
+        "__RPC__deref_opt_inout_opt", "__in", "__out", "__out_opt", "__in_opt", "__inout",
+        "__reserved"]
+    PARAM_INFO_WITH_VALUE = ["__RPC__in_ecount", "__RPC__out_ecount_part", "__RPC__in_ecount_full",
+            "__RPC__in_range", "__RPC__out_ecount_full", "__out_ecount_opt", "__out_ecount", "__in_ecount_opt",
+            "__in_ecount", "__out_bcount_opt", "__out_bcount", "__in_bcount", "__in_bcount_opt"]
 
     def __init__(self, data):
         data = initial_processing(data)
@@ -85,6 +89,8 @@ class WinComParser(Parser):
         if self.peek() == KeywordToken("const"):
             self.next_token()
         type_name = self.assert_token_type(NameToken)
+        if type_name.value.startswith("_"):
+            print("type_name = <{0}> might be a PARAM_INFO".format(type_name.value))
 
         while type(self.peek()) == StarToken:
             byreflevel += 1
@@ -104,11 +110,17 @@ class WinComParser(Parser):
         #if type(self.peek()) == StarToken:
         self.assert_token_type(StarToken)
         method_name = self.assert_token_type(NameToken)
+        #print("Parsing method <{0}>".format(method_name))
         self.assert_token_type(CloseParenthesisToken)
+
 
         args = []
         self.assert_token_type(OpenParenthesisToken)
         while type(self.peek()) != CloseParenthesisToken:
+            # TODO: handle call with VARGS ?
+            if self.peek().value == "...":
+                self.next_token()
+                continue
             args.append(self.parse_argument())
             #print("Pass <{0}>".format(p))
         self.next_token()
@@ -116,6 +128,12 @@ class WinComParser(Parser):
         return ret_type.value, method_name.value, args
 
     def parse(self):
+        tok = self.peek()
+        if type(tok) == NameToken and tok.value == "@IID:":
+            self.next_token()
+            iid = self.assert_token_type(NameToken).value
+        else:
+            iid = None
         self.assert_keyword("typedef")
         self.assert_keyword("struct")
 
@@ -124,6 +142,7 @@ class WinComParser(Parser):
         self.assert_name("BEGIN_INTERFACE")
 
         res = WinCOMVTABLE(vtable_name)
+        res.iid = iid
 
         while self.peek() != NameToken("END_INTERFACE"):
             ret_type, method_name, args = self.parse_method()
@@ -135,7 +154,14 @@ class WinComParser(Parser):
         end_interface = self.assert_name("END_INTERFACE")
         self.assert_token_type(CloseBracketToken)
         typdef = self.assert_token_type(NameToken)
+        # Do a real thing able to see multiple typedef..
+        typedefptr = None
+        if type(self.peek()) == CommaToken:
+            self.next_token()
+            self.assert_token_type(StarToken)
+            typedefptr = self.assert_token_type(NameToken).value
         self.assert_token_type(ColonToken)
+        res.typedefptr = typedefptr
         return res
 
         #print(self.data)

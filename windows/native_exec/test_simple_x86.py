@@ -80,7 +80,7 @@ class TestInstr(object):
             raise AssertionError("Expected mem.index {0} got {1}".format(memaccess.index.lower(), capres.reg_name(cap_mem.index)))
         if memaccess.scale != cap_mem.scale and not (memaccess.scale is None and cap_mem.scale == 1):
             raise AssertionError("Expected mem.scale {0} got {1}".format(memaccess.scale, cap_mem.scale))
-        if memaccess.disp != cap_mem.disp:
+        if memaccess.disp & 0xffffffff != cap_mem.disp & 0xffffffff:
             raise AssertionError("Expected mem.disp {0} got {1}".format(memaccess.disp, cap_mem.disp))
 
 
@@ -110,6 +110,8 @@ TestInstr(Mov)('AX', mem('fs:[EAX + 0x30]'))
 TestInstr(Mov)('AX', mem('fs:[EAX + ECX * 4+0x30]'))
 TestInstr(Add)('EAX', 8)
 TestInstr(Add)('EAX', 0xffffffff)
+TestInstr(Add)("ECX", mem("[EAX + 0xff]"))
+TestInstr(Add)("ECX", mem("[EAX + 0xffffffff]"))
 
 TestInstr(Add)(mem('[EAX]'), 10)
 TestInstr(Mov)('EAX', mem('fs:[0xfffc]'))

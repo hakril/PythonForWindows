@@ -1046,6 +1046,8 @@ class WinUnicodeString(Structure):
 
         :type: :class:`unicode`
         """
+        if not self.Length:
+            return ""
         if getattr(self, "_target", None) is not None: #remote ctypes :D -> TRICKS OF THE YEAR
             raw_data = self._target.read_memory(self.Buffer, self.Length)
             return raw_data.decode("utf16")
