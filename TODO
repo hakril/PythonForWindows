@@ -40,6 +40,8 @@ TODO:
 
     - NtQueryVirtualMemory_32_to_64 (stop using hardcoded value for request type: add it to enum)
 
+    - Some test/doc on windows.system.handles
+
 
 CHANGELOG:
     * re-check every sample
