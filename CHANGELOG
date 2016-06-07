@@ -9,3 +9,5 @@ Since 0.2:
     * add `windows.winproxy.is_implemented` Ex: windows.winproxy.is_implemented(windows.winproxy.QueryWorkingSetEx)
     * registry.py handle REG_QWORD manually (_winreg does not)
     * CurrentProcessReadSyswow doest not use ``current_process.handle`` anymore but ``OpenProcess(current_process.pid)`` (Compat windows10 where method 1 doest not work)
+    * Add: system.handles (winobject\handle.py)
+    * You can have multiple execute_python_unsafe at the same time in the same process (didn't know: consequence of new injection code)

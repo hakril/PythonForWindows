@@ -4,70 +4,10 @@ import time
 import os
 import textwrap
 import random
-from contextlib import contextmanager
 
-sys.path.append(".")
-import unittest
-import windows
-import windows.debug
-import windows.native_exec.simple_x86 as x86
-import windows.native_exec.simple_x64 as x64
-import windows.native_exec.nativeutils as nativeutils
-
+from test_utils import *
 from windows.generated_def.winstructs import *
 
-from windows.native_exec.nativeutils import GetProcAddress64, GetProcAddress32
-
-
-is_process_32_bits = windows.current_process.bitness == 32
-is_process_64_bits = windows.current_process.bitness == 64
-
-is_windows_32_bits = windows.system.bitness == 32
-is_windows_64_bits = windows.system.bitness == 64
-
-windows_32bit_only = unittest.skipIf(not is_windows_32_bits, "Test for 32bits Kernel only")
-windows_64bit_only = unittest.skipIf(not is_windows_64_bits, "Test for 64bits Kernel only")
-
-process_32bit_only = unittest.skipIf(not is_process_32_bits, "Test for 32bits process only")
-process_64bit_only = unittest.skipIf(not is_process_64_bits, "Test for 64bits process only")
-
-
-if is_windows_32_bits:
-    def pop_calc_32(dwCreationFlags=0):
-        return windows.utils.create_process(r"C:\Windows\system32\calc.exe", dwCreationFlags=dwCreationFlags, show_windows=True)
-
-    def pop_calc_64(dwCreationFlags=0):
-        raise WindowsError("Cannot create calc64 in 32bits system")
-else:
-    def pop_calc_32(dwCreationFlags=0):
-        return windows.utils.create_process(r"C:\Windows\syswow64\calc.exe", dwCreationFlags=dwCreationFlags, show_windows=True)
-
-    if is_process_32_bits:
-        def pop_calc_64(dwCreationFlags=0):
-            with windows.utils.DisableWow64FsRedirection():
-                return windows.utils.create_process(r"C:\Windows\system32\calc.exe", dwCreationFlags=dwCreationFlags, show_windows=True)
-    else:
-        def pop_calc_64(dwCreationFlags=0):
-            return windows.utils.create_process(r"C:\Windows\system32\calc.exe", dwCreationFlags=dwCreationFlags, show_windows=True)
-
-
-@contextmanager
-def Calc64(dwCreationFlags=0, exit_code=0):
-    try:
-        calc = pop_calc_64(dwCreationFlags)
-        yield calc
-    finally:
-        if "calc" in locals():
-            calc.exit(exit_code)
-
-@contextmanager
-def Calc32(dwCreationFlags=0, exit_code=0):
-    try:
-        calc = pop_calc_32(dwCreationFlags)
-        yield calc
-    finally:
-        if "calc" in locals():
-            calc.exit(exit_code)
 
 class SystemTestCase(unittest.TestCase):
     def test_version(self):
@@ -306,40 +246,6 @@ class WindowsTestCase(unittest.TestCase):
             #time.sleep(0.5)
             dword = struct.unpack("<Q", calc.read_memory(data, 8))[0]
             self.assertEqual(dword, get_current_proc_id)
-
-    def test_self_iat_hook_sucess(self):
-        pythondll_mod = [m for m in windows.current_process.peb.modules if m.name.startswith("python") and m.name.endswith(".dll")][0]
-        RegOpenKeyExA = [n for n in pythondll_mod.pe.imports['advapi32.dll'] if n.name == "RegOpenKeyExA"][0]
-
-        hook_value = []
-
-        @windows.hooks.RegOpenKeyExACallback
-        def open_reg_hook(hKey, lpSubKey, ulOptions, samDesired, phkResult, real_function):
-            hook_value.append((hKey, lpSubKey.value))
-            phkResult[0] = 12345678
-            return 0
-
-        RegOpenKeyExA.set_hook(open_reg_hook)
-        import _winreg
-        open_args = (0x12345678, "MY_KEY_VALUE")
-        k = _winreg.OpenKey(*open_args)
-        self.assertEqual(k.handle, 12345678)
-        self.assertEqual(hook_value[0], open_args)
-
-    def test_self_iat_hook_fail_return(self):
-        pythondll_mod = [m for m in windows.current_process.peb.modules if m.name.startswith("python") and m.name.endswith(".dll")][0]
-        RegOpenKeyExA = [n for n in pythondll_mod.pe.imports['advapi32.dll'] if n.name == "RegOpenKeyExA"][0]
-
-        @windows.hooks.RegOpenKeyExACallback
-        def open_reg_hook_fail(hKey, lpSubKey, ulOptions, samDesired, phkResult, real_function):
-            return 0x11223344
-
-        RegOpenKeyExA.set_hook(open_reg_hook_fail)
-        import _winreg
-        open_args = (0x12345678, "MY_KEY_VALUE")
-        with self.assertRaises(WindowsError) as ar:
-            _winreg.OpenKey(*open_args)
-        self.assertEqual(ar.exception.winerror, 0x11223344)
 
     def test_thread_exit_value_32(self):
         with Calc32() as calc:
@@ -886,7 +792,7 @@ class DebuggerTestCase(unittest.TestCase):
         code += x86.Pop("ECX")
         code += x86.Pop("ECX")
         code += x86.Ret()
-        RemoteManualLoadLibray += GetProcAddress32
+        RemoteManualLoadLibray += nativeutils.GetProcAddress32
 
         addr = target.virtual_alloc(0x1000)
         addr2 = addr + len(dll)

@@ -271,11 +271,15 @@ def generate_stub_64(callback):
 def generate_callback_stub(callback, types):
     func_type = ctypes.WINFUNCTYPE(*types)
     c_callable = func_type(callback)
-    if windows.current_process.bitness == 32:
-        stub = generate_stub_32(c_callable)
-    else:
-        stub = generate_stub_64(c_callable)
-    stub_addr = allocator.write_code(stub.get_code())
+
+
+    stub = c_callable
+    stub_addr = ctypes.cast(c_callable, ctypes.c_void_p).value
+    #    if windows.current_process.bitness == 32:
+    #        stub = generate_stub_32(c_callable)
+    #    else:
+    #        stub = generate_stub_64(c_callable)
+    #    stub_addr = allocator.write_code(stub.get_code())
     generate_callback_stub.l.append((stub, c_callable))
     return stub_addr
 

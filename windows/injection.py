@@ -115,6 +115,7 @@ def load_dll_in_remote_process(target, dll_name):
     # Hardcore mode
     # We don't have k32 or PEB->Ldr
     # Go inject a GetProcAddress(LoadLib) + LoadLib shellcode :D
+    dbgprint("DLL Via manual getproc / loadlib", "DLLINJECT")
     if target.bitness == 32:
         return perform_manual_getproc_loadlib_32(target, dll_name)
     return perform_manual_getproc_loadlib_64(target, dll_name)
