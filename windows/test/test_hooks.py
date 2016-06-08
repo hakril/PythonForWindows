@@ -117,6 +117,56 @@ class HookTestCase(unittest.TestCase):
             with calc.allocated_memory(0x1000) as addr:
                 calc.write_memory(addr, "DLLNOTFOUND.NOT_A_REAL_DLL" + "\x00")
                 t = calc.create_thread(load_libraryA, addr)
+                t.wait()
             self.assertEqual(remote_ask("windows.current_thread.exit(len(calling_thread))"), 3)
 
+    def test_remote_iat_hook_64(self):
+        with Calc64() as calc:
+            calc.execute_python("import windows")
+            calc.execute_python("windows.utils.create_console()")
 
+            code = """
+            import windows.generated_def as gdef
+
+            cp = windows.current_process
+            kernelbase_mod = [m for m in cp.peb.modules if m.name == "kernelbase.dll"][0]
+            LdrLoadDll = [n for n in kernelbase_mod.pe.imports['ntdll.dll'] if n.name == "LdrLoadDll"][0]
+
+            calling_thread = set([])
+            hooking_thread = windows.current_thread.tid
+            @windows.hooks.Callback(*[gdef.PVOID] * 5)
+            def MyHook(*args, **kwargs):
+                calling_thread.add(windows.current_thread.tid)
+                print(windows.current_thread.tid)
+                return kwargs["real_function"]()
+
+            LdrLoadDll.set_hook(MyHook)
+            print("Hooker = " + str(windows.current_thread.tid))
+            import ctypes
+            try:
+                ctypes.WinDLL("NOT_A_REAL_DLL")
+            except WindowsError as e:
+                pass
+            """
+            calc.execute_python_unsafe(textwrap.dedent(code))
+            # Tricky part: we use an injected thread exit_value to ask stuff about the remote python
+            def remote_ask(request):
+                t = calc.execute_python_unsafe(request)
+                t.wait()
+                return t.exit_code
+
+            self.assertEqual(remote_ask("windows.current_thread.exit(len(calling_thread))"), 1)
+            self.assertEqual(remote_ask("windows.current_thread.exit(calling_thread == set([hooking_thread]))"), 1)
+
+            # Trigger hook from another Python thread
+            calc.execute_python_unsafe("ctypes.WinDLL('ANOTHER_FAKE_DLL')").wait()
+            self.assertEqual(remote_ask("windows.current_thread.exit(len(calling_thread))"), 2)
+
+            # Trigger hook from a NONPython thread
+            k32 = [m for m in calc.peb.modules if m.name == "kernel32.dll"][0]
+            load_libraryA = k32.pe.exports["LoadLibraryA"]
+            with calc.allocated_memory(0x1000) as addr:
+                calc.write_memory(addr, "DLLNOTFOUND.NOT_A_REAL_DLL" + "\x00")
+                t = calc.create_thread(load_libraryA, addr)
+                t.wait()
+            self.assertEqual(remote_ask("windows.current_thread.exit(len(calling_thread))"), 3)

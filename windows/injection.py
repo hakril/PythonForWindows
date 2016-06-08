@@ -122,7 +122,7 @@ def load_dll_in_remote_process(target, dll_name):
 
 python_function_32_bits = {}
 # 32 to 32 injection
-def generate_python_exec_shellcode_32(target, PYCODE_ADDR, PyDll):
+def generate_python_exec_shellcode_32(target, PyDll):
     if not python_function_32_bits:
         pymodule = [mod for mod in target.peb.modules if mod.name == PyDll][0]
         Py_exports = pymodule.pe.exports
@@ -158,7 +158,9 @@ def generate_python_exec_shellcode_32(target, PYCODE_ADDR, PyDll):
     code += x86.Mov('EAX', PyGILState_Ensure)
     code += x86.Call('EAX')
     code += x86.Push('EAX')
-    code += x86.Push(PYCODE_ADDR)
+    # Get the string to execute from parameters
+    code += x86.Mov("EAX", x86.mem("[ESP + 0x8]"))
+    code += x86.Push('EAX')
     code += x86.Mov('EAX', PyRun_SimpleString)
     code += x86.Call('EAX')
     code += x86.Mov("ESI", "EAX")
@@ -180,7 +182,7 @@ def generate_python_exec_shellcode_32(target, PYCODE_ADDR, PyDll):
 
 python_function_64_bits = {}
 # 64 to 64 injection
-def generate_python_exec_shellcode_64(target, PYCODE_ADDR, PyDll):
+def generate_python_exec_shellcode_64(target, PyDll):
     if not python_function_64_bits:
         pymodule = [mod for mod in target.peb.modules if mod.name == PyDll][0]
         Py_exports = pymodule.pe.exports
@@ -219,8 +221,8 @@ def generate_python_exec_shellcode_64(target, PYCODE_ADDR, PyDll):
     code += x64.Mov('RAX', PyGILState_Ensure)
     code += x64.Call('RAX')
     code += x64.Mov('R15', 'RAX')
+    code += x64.Mov("RCX", x64.mem("[RSP + 0x20]"))
     code += x64.Mov('RAX', PyRun_SimpleString)
-    code += x64.Mov('RCX', PYCODE_ADDR)
     code += x64.Call('RAX')
     code += x64.Mov('RCX', 'R15')
     code += x64.Mov('R15', 'RAX')
@@ -245,18 +247,22 @@ def inject_python_command(target, code_injected, PYDLL):
     """Postulate: PYDLL is already loaded in target process"""
     PYCODE = code_injected + "\x00"
     # TODO: free this (how ? when ?)
-    remote_addr = target.virtual_alloc(len(PYCODE) + 0x100)
-    target.write_memory(remote_addr, PYCODE)
-    SHELLCODE_ADDR = remote_addr + len(PYCODE)
+    remote_python_code_addr = target.virtual_alloc(len(PYCODE))
+    target.write_memory(remote_python_code_addr, PYCODE)
+    shellcode_addr = getattr(target, "_execute_python_shellcode", None)
+    if shellcode_addr is not None:
+        return shellcode_addr, remote_python_code_addr
 
     if target.bitness == 32:
         shellcode_generator = generate_python_exec_shellcode_32
     else:
         shellcode_generator = generate_python_exec_shellcode_64
 
-    shellcode = shellcode_generator(target, remote_addr, PYDLL)
-    target.write_memory(SHELLCODE_ADDR, shellcode)
-    return SHELLCODE_ADDR
+    shellcode = shellcode_generator(target, PYDLL)
+    shellcode_addr = target.virtual_alloc(len(shellcode))
+    target.write_memory(shellcode_addr, shellcode)
+    target._execute_python_shellcode = shellcode_addr
+    return shellcode_addr, remote_python_code_addr
 
 
 def validate_python_dll_presence_on_disk(process):
@@ -276,8 +282,8 @@ def validate_python_dll_presence_on_disk(process):
 def execute_python_code(process, code):
     validate_python_dll_presence_on_disk(process)
     load_dll_in_remote_process(process, "python27.dll")
-    addr = inject_python_command(process, code, "python27.dll")
-    t = process.create_thread(addr, 0)
+    shellcode, pythoncode = inject_python_command(process, code, "python27.dll")
+    t = process.create_thread(shellcode, pythoncode)
     return t
 
 

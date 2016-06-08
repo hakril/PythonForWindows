@@ -207,7 +207,7 @@ def get_short_path(path):
     return buffer[:rsize]
 
 def get_shared_mapping(name, size=0x1000):
-    # TODO: real cod
+    # TODO: real code
     h = windows.winproxy.CreateFileMappingA(INVALID_HANDLE_VALUE, dwMaximumSizeLow=size, lpName=name)
     addr = windows.winproxy.MapViewOfFile(h, dwNumberOfBytesToMap=size)
     return addr
