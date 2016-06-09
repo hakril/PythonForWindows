@@ -150,6 +150,7 @@ def GetPEFile(baseaddr, target=None, force_bitness=None):
 
         def set_hook(self, callback, types=None):
             """Setup a hook on the entry and return it.
+            You MUST keep a reference to the hook while the hook is enabled.
 
             :param callback: the hook
 

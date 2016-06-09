@@ -43,6 +43,7 @@ for func in winfuncs.functions:
 
 class IATHook(object):
     """Look at my hook <3"""
+    yolo = []
 
     def __init__(self, IAT_entry, callback, types=None):
         if types is None:
@@ -53,9 +54,11 @@ class IATHook(object):
         self.callback_types = self.transform_arguments(self.original_types)
         self.entry = IAT_entry
         self.callback = callback
-        self.stub = native_exec.generate_callback_stub(self.hook_callback, self.callback_types)
+        self.stub = ctypes.WINFUNCTYPE(*self.callback_types)(self.hook_callback)
+        self.stub_addr = ctypes.cast(self.stub, PVOID).value
         self.realfunction = ctypes.WINFUNCTYPE(*types)(IAT_entry.nonhookvalue)
         self.is_enable = False
+        #IATHook.yolo.append(self)
 
     def transform_arguments(self, types):
         res = []
@@ -67,9 +70,9 @@ class IATHook(object):
         return res
 
     def enable(self):
-        """Enable the IAT hook"""
+        """Enable the IAT hook: you MUST keep a reference to the IATHook while the hook is enabled"""
         with utils.VirtualProtected(self.entry.addr, ctypes.sizeof(PVOID), PAGE_EXECUTE_READWRITE):
-            self.entry.value = self.stub
+            self.entry.value = self.stub_addr
         self.is_enable = True
 
     def disable(self):
@@ -93,3 +96,7 @@ class IATHook(object):
                 args = adapted_args
             return self.realfunction(*args)
         return self.callback(*adapted_args, real_function=real_function)
+
+    # Use this tricks to prevent garbage collection of hook ?
+    #def __del__(self):
+    #    pass

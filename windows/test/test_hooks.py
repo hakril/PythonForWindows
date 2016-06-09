@@ -20,7 +20,7 @@ class HookTestCase(unittest.TestCase):
             phkResult[0] = 12345678
             return 0
 
-        RegOpenKeyExA.set_hook(open_reg_hook)
+        x = RegOpenKeyExA.set_hook(open_reg_hook)
         import _winreg
         open_args = (0x12345678, "MY_KEY_VALUE")
         k = _winreg.OpenKey(*open_args)
