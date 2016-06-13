@@ -26,6 +26,8 @@ class HookTestCase(unittest.TestCase):
         k = _winreg.OpenKey(*open_args)
         self.assertEqual(k.handle, 12345678)
         self.assertEqual(hook_value[0], open_args)
+        # Remove the hook
+        x.disable()
 
     def test_self_iat_hook_fail_return(self):
         """Test hook fail in single(self) thread"""
@@ -36,13 +38,13 @@ class HookTestCase(unittest.TestCase):
         def open_reg_hook_fail(hKey, lpSubKey, ulOptions, samDesired, phkResult, real_function):
             return 0x11223344
 
-        RegOpenKeyExA.set_hook(open_reg_hook_fail)
+        x = RegOpenKeyExA.set_hook(open_reg_hook_fail)
         import _winreg
         open_args = (0x12345678, "MY_KEY_VALUE")
         with self.assertRaises(WindowsError) as ar:
             _winreg.OpenKey(*open_args)
         self.assertEqual(ar.exception.winerror, 0x11223344)
-
+        x.disable()
 
     def test_self_iat_hook_multithread(self):
         """Test IAT hook in current process with multi thread trigger"""
@@ -57,7 +59,7 @@ class HookTestCase(unittest.TestCase):
             calling_thread.add(windows.current_thread.tid)
             return kwargs["real_function"]()
 
-        LdrLoadDll.set_hook(MyHook)
+        x = LdrLoadDll.set_hook(MyHook)
         # Trigger from local thread
         ctypes.WinDLL("kernel32.dll")
         self.assertEqual(calling_thread, set([windows.current_thread.tid]))
@@ -67,7 +69,9 @@ class HookTestCase(unittest.TestCase):
         with cp.allocated_memory(0x1000) as addr:
             cp.write_memory(addr, "DLLNOTFOUND.NOT_A_REAL_DLL" + "\x00")
             t = cp.create_thread(load_libraryA, addr)
+            t.wait()
         self.assertEqual(len(calling_thread), 2)
+        x.disable()
 
     def test_remote_iat_hook_32(self):
         with Calc32() as calc:
@@ -89,7 +93,7 @@ class HookTestCase(unittest.TestCase):
                 print(windows.current_thread.tid)
                 return kwargs["real_function"]()
 
-            LdrLoadDll.set_hook(MyHook)
+            x = LdrLoadDll.set_hook(MyHook)
             print("Hooker = " + str(windows.current_thread.tid))
             import ctypes
             try:
@@ -140,7 +144,7 @@ class HookTestCase(unittest.TestCase):
                 print(windows.current_thread.tid)
                 return kwargs["real_function"]()
 
-            LdrLoadDll.set_hook(MyHook)
+            x = LdrLoadDll.set_hook(MyHook)
             print("Hooker = " + str(windows.current_thread.tid))
             import ctypes
             try:
