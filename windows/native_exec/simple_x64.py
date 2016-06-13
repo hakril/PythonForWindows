@@ -317,6 +317,19 @@ def accept_as_32immediat(x):
         raise ImmediatOverflow("32bits signed Immediat overflow")
 
 
+def accept_as_any_32immediat(x):
+    try:
+        return struct.pack("<i", x)
+    except struct.error:
+        pass
+    try:
+        return struct.pack("<I", x)
+    except struct.error:
+        raise ImmediatOverflow("32bits signed Immediat overflow")
+
+
+
+
 def accept_as_64immediat(x):
     try:
         return struct.pack("<q", x)
@@ -362,6 +375,18 @@ class Imm32(object):
             return (None, None, None)
         try:
             imm32 = accept_as_32immediat(x)
+        except ImmediatOverflow:
+            return None, None, None
+        return (1, BitArray.from_string(imm32), None)
+
+class AnyImm32(object):
+    def accept_arg(self, args, instr_state):
+        try:
+            x = int(args[0])
+        except (ValueError, TypeError):
+            return (None, None, None)
+        try:
+            imm32 = accept_as_any_32immediat(x)
         except ImmediatOverflow:
             return None, None, None
         return (1, BitArray.from_string(imm32), None)
@@ -725,7 +750,7 @@ class JmpType(Instruction):
 
 class Push(Instruction):
     encoding = [(RawBits.from_int(5, 0x50 >> 3), X64RegisterSelector()),
-                (RawBits.from_int(8, 0x68), Imm32()),
+                (RawBits.from_int(8, 0x68), AnyImm32()),
                 (RawBits.from_int(8, 0xff), Slash(6))]
 
 
@@ -760,15 +785,15 @@ class Inc(Instruction):
 
 class And(Instruction):
     default_32_bits = True
-    encoding = [(RawBits.from_int(8, 0x25), RegisterRax(), Imm32()),
-                (RawBits.from_int(8, 0x81), Slash(4), Imm32()),
+    encoding = [(RawBits.from_int(8, 0x25), RegisterRax(), AnyImm32()),
+                (RawBits.from_int(8, 0x81), Slash(4), AnyImm32()),
                 (RawBits.from_int(8, 0x21), ModRM([ModRM_REG__REG, ModRM_REG64__MEM]))]
 
 
 class Or(Instruction):
     default_32_bits = True
-    encoding = [(RawBits.from_int(8, 0x0d), RegisterRax(), Imm32()),
-                (RawBits.from_int(8, 0x81), Slash(1), Imm32()),
+    encoding = [(RawBits.from_int(8, 0x0d), RegisterRax(), AnyImm32()),
+                (RawBits.from_int(8, 0x81), Slash(1), AnyImm32()),
                 (RawBits.from_int(8, 0x09), ModRM([ModRM_REG__REG, ModRM_REG64__MEM]))]
 
 
@@ -872,7 +897,7 @@ class Lea(Instruction):
 class Mov(Instruction):
     default_32_bits = True
     encoding = [(Mov_RAX_OFF64(),), (Mov_OFF64_RAX(),),
-                (RawBits.from_int(8, 0xc7), Slash(0), Imm32()),
+                (RawBits.from_int(8, 0xc7), Slash(0), AnyImm32()),
                 (RawBits.from_int(8, 0x89), ModRM([ModRM_REG__REG, ModRM_REG64__MEM])),
                 (RawBits.from_int(5, 0xb8 >> 3), X64RegisterSelector(), Imm64())]
 
@@ -880,14 +905,14 @@ class Mov(Instruction):
 class Cmp(Instruction):
     default_32_bits = True
 
-    encoding = [(RawBits.from_int(8, 0x3d), RegisterRax(), Imm32()),
-                (RawBits.from_int(8, 0x81), Slash(7), Imm32()),
+    encoding = [(RawBits.from_int(8, 0x3d), RegisterRax(), AnyImm32()),
+                (RawBits.from_int(8, 0x81), Slash(7), AnyImm32()),
                 (RawBits.from_int(8, 0x3b), ModRM([ModRM_REG__REG, ModRM_REG64__MEM]))]
 
 class Test(Instruction):
     default_32_bits = True
     refuse_reverse = True
-    encoding = [(RawBits.from_int(8, 0xf7), Slash(7), Imm32()),
+    encoding = [(RawBits.from_int(8, 0xf7), Slash(7), AnyImm32()),
                 (RawBits.from_int(8, 0x85), ModRM([ModRM_REG__REG, ModRM_REG64__MEM], has_direction_bit=False))]
 
 

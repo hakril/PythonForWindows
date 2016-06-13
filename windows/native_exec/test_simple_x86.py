@@ -10,9 +10,10 @@ def disas(x):
 
 
 class TestInstr(object):
-    def __init__(self, instr_to_test, expected_result=None, debug=False):
+    def __init__(self, instr_to_test, immediat_accepted=None, expected_result=None, debug=False):
         self.instr_to_test = instr_to_test
         self.expected_result = expected_result
+        self.immediat_accepted = immediat_accepted
         self.debug = debug
 
     def __call__(self, *args):
@@ -53,7 +54,7 @@ class TestInstr(object):
                 if op_args.lower() != capres.reg_name(cap_op.reg).lower():
                     raise AssertionError("Expected register <{0}> got {1}".format(op_args.lower(), capres.reg_name(cap_op.reg).lower()))
             elif isinstance(op_args, (int, long)):
-                if op_args != cap_op.imm:
+                if (op_args != cap_op.imm) and not (self.immediat_accepted and self.immediat_accepted == cap_op.imm):
                     raise AssertionError("Expected Immediat <{0}> got {1}".format(op_args, cap_op.imm))
             elif isinstance(op_args, mem_access):
                 self.compare_mem_access(op_args, capres, cap_op)
@@ -140,6 +141,9 @@ TestInstr(Rol)('ECX', 0)
 TestInstr(Ror)('ECX', 0)
 TestInstr(Ror)('EDI', 7)
 TestInstr(Ror)('EDI', -128)
+
+TestInstr(Cmp, immediat_accepted=0xffffffff)('EAX', -1)
+TestInstr(Cmp)('EAX', 0xffffffff)
 
 TestInstr(And)('ECX', 'EBX')
 TestInstr(And)('EAX', 0x11223344)
