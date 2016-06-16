@@ -3,6 +3,8 @@ import functools
 import ctypes
 from winstructs import *
 
+
+
 class IID(IID):
     def __init__(self, Data1, Data2, Data3, Data4, name=None, strid=None):
         self.name = name
@@ -32,6 +34,8 @@ class IID(IID):
 
 generate_IID = IID.from_raw
 
+GUID = IID
+LPGUID = POINTER(GUID)
 
 class COMInterface(ctypes.c_void_p):
     _functions_ = {
@@ -55,7 +59,7 @@ class IDispatch(COMInterface):
  #GetTypeInfoCount -> pctinfo:*UINT
  "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
  #GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
- "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(POINTER(ITypeInfo)))(4, "GetTypeInfo"),
+ "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(PVOID))(4, "GetTypeInfo"),
  #GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
  "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
  #Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
@@ -79,7 +83,7 @@ class IEnumVARIANT(COMInterface):
  "Skip": ctypes.WINFUNCTYPE(HRESULT, ULONG)(4, "Skip"),
  #Reset -> 
  "Reset": ctypes.WINFUNCTYPE(HRESULT)(5, "Reset"),
- #Clone -> ppEnum:**IEnumVARIANT
+ #Clone -> ppEnum:**IEnumWbemClassObject
  "Clone": ctypes.WINFUNCTYPE(HRESULT, POINTER(PVOID))(6, "Clone"),
     }
 
@@ -120,7 +124,7 @@ class INetFwPolicy2(COMInterface):
  #GetTypeInfoCount -> pctinfo:*UINT
  "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
  #GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
- "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(POINTER(ITypeInfo)))(4, "GetTypeInfo"),
+ "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(PVOID))(4, "GetTypeInfo"),
  #GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
  "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
  #Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
@@ -185,7 +189,7 @@ class INetFwRules(COMInterface):
  #GetTypeInfoCount -> pctinfo:*UINT
  "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
  #GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
- "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(POINTER(ITypeInfo)))(4, "GetTypeInfo"),
+ "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(PVOID))(4, "GetTypeInfo"),
  #GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
  "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
  #Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
@@ -216,7 +220,7 @@ class INetFwRule(COMInterface):
  #GetTypeInfoCount -> pctinfo:*UINT
  "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
  #GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
- "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(POINTER(ITypeInfo)))(4, "GetTypeInfo"),
+ "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(PVOID))(4, "GetTypeInfo"),
  #GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
  "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
  #Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
@@ -309,7 +313,7 @@ class INetFwServiceRestriction(COMInterface):
  #GetTypeInfoCount -> pctinfo:*UINT
  "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
  #GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
- "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(POINTER(ITypeInfo)))(4, "GetTypeInfo"),
+ "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(PVOID))(4, "GetTypeInfo"),
  #GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
  "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
  #Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT

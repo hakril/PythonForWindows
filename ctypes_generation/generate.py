@@ -102,12 +102,12 @@ known_type = dummy_wintypes.names + list([x[0] for x in TYPE_EQUIVALENCE])
 known_type += ["void"]
 
 
-FUNC_FILE = "winfunc.txt"
-STRUCT_FILE = "winstruct.txt"
-DEF_FILE = "windef.txt"
-NTSTATUS_FILE = "ntstatus.txt"
-NAME_TO_IID_FILE = "interface_to_iid.txt"
-COM_INTERFACE_DIR_GLOB = "com/*.txt"
+FUNC_FILE = "definitions\\winfunc.txt"
+STRUCT_FILE = "definitions\\winstruct.txt"
+DEF_FILE = "definitions\\windef.txt"
+NTSTATUS_FILE = "definitions\\ntstatus.txt"
+NAME_TO_IID_FILE = "definitions\\interface_to_iid.txt"
+COM_INTERFACE_DIR_GLOB = "definitions\\com/*.txt"
 
 GENERATED_STRUCT_FILE = "winstructs"
 GENERATED_FUNC_FILE = "winfuncs"
@@ -194,6 +194,7 @@ def validate_structs(structs, enums, defs):
     all_struct_name = get_all_struct_name(structs, enums)
     for struct in structs:
         for field_type, field_name, nb_rep in struct.fields:
+            import pdb;pdb.set_trace()
             if field_type.name not in known_type + all_struct_name:
                 raise ValueError("UNKNOW TYPE {0}".format(field_type))
             try:

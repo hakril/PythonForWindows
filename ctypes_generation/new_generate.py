@@ -166,7 +166,10 @@ class DefGenerator(CtypesGenerator):
                 return "{0}({1})".format(self.name, hex(self))
 
             __str__ = __repr__
+
         """)
+
+    IMPORT_HEADER = """{deps}"""
 
     def analyse(self, data):
         self.add_exports("Flag")
@@ -176,7 +179,10 @@ class DefGenerator(CtypesGenerator):
 
 
     def generate(self):
-        ctypes_lines = [self.common_header, self.HEADER] + [d.generate_ctypes() for d in self.parse()]
+        ctypes_lines = [self.common_header, self.HEADER]
+        deps = "\n".join(["from {0} import *".format(os.path.basename(dep.outfilename).rsplit(".")[0]) for dep in self.dependances])
+        ctypes_lines += [self.IMPORT_HEADER.format(deps=deps)]
+        ctypes_lines += [d.generate_ctypes() for d in self.parse()]
         ctypes_code = "\n".join(ctypes_lines)
         with open(self.outfilename, "w") as f:
             f.write(ctypes_code)
@@ -192,7 +198,6 @@ class StructGenerator(CtypesGenerator):
 
         {types_equivalences}
     """)
-
     TYPES_HEADER = dedent("""
         class EnumValue(Flag):
             def __new__(cls, enum_name, name, value):
@@ -278,7 +283,10 @@ class FuncGenerator(CtypesGenerator):
     def generate(self):
         deps = "\n".join(["from {0} import *".format(os.path.basename(dep.outfilename).rsplit(".")[0]) for dep in self.dependances])
         HEADER = self.HEADER.format(deps=deps)
-        ctypes_lines = [self.common_header, HEADER] + [d.generate_ctypes() for d in self.parse()]
+
+        func_list = "functions = {0}\n\n".format(str([f.name for f in self.data]))
+
+        ctypes_lines = [self.common_header, HEADER, func_list] + [d.generate_ctypes() for d in self.parse()]
         ctypes_code = "\n".join(ctypes_lines)
         with open(self.outfilename, "w") as f:
             f.write(ctypes_code)
@@ -289,8 +297,8 @@ class NtStatusGenerator(CtypesGenerator):
     HEADER_IMPORT = dedent("""
     import ctypes
     {deps}
-    """)
 
+    """)
     HEADER = dedent("""
     class NtStatusException(WindowsError):
         ALL_STATUS = {}
@@ -357,17 +365,13 @@ class NtStatusGenerator(CtypesGenerator):
 class COMGenerator(CtypesGenerator):
     PARSER = com_parser.WinComParser
     IGNORE_INTERFACE = ["ITypeInfo"]
-
-
     IMPORT_HEADER = dedent("""
     import functools
     import ctypes
     {deps}
+
     """)
-
     HEADER = dedent("""
-
-
     class IID(IID):
         def __init__(self, Data1, Data2, Data3, Data4, name=None, strid=None):
             self.name = name
@@ -440,23 +444,27 @@ class COMGenerator(CtypesGenerator):
         return data
 
     def analyse(self, data):
+        self.real_type = {}
         for cominterface in data:
             self.add_exports(cominterface.name)
         for cominterface in data:
             for method in cominterface.methods:
                 self.add_imports(method.ret_type)
                 for pos, arg in enumerate(method.args):
+                    initial_arg = arg
                     if arg.type in self.exports or arg.type in self.IGNORE_INTERFACE:
                         # COM Interface ? -> PVOID !
                         atype = "PVOID"
                         byreflevel = arg.byreflevel - 1
                         method.args[pos] = arg = type(arg)(atype, byreflevel, arg.name)
+                        self.real_type[arg] = initial_arg
 
                     elif arg.type == "void" and arg.byreflevel > 0:
                         # **void -> *PVOID
                         atype = "PVOID"
                         byreflevel = arg.byreflevel - 1
                         method.args[pos] = arg = type(arg)(atype, byreflevel, arg.name)
+                        self.real_type[arg] = initial_arg
 
                     self.add_imports(arg.type)
 
@@ -477,9 +485,10 @@ class COMGenerator(CtypesGenerator):
             methods_string = []
             for method_nb, method in enumerate(cominterface.methods):
                 args_to_define = method.args[1:] #ctypes doesnt not need the This
+                args_for_comment = [self.real_type.get(arg, arg) for arg in args_to_define]
                 #import pdb;pdb.set_trace()
                 str_args = []
-                methods_string.append(self.com_interface_comment_template.format(method.name, ", ".join([arg.name +":"+ ("*"* arg.byreflevel) +arg.type for arg in args_to_define])))
+                methods_string.append(self.com_interface_comment_template.format(method.name, ", ".join([arg.name +":"+ ("*"* arg.byreflevel) +arg.type for arg in args_for_comment])))
                 for arg in args_to_define:
                     type = arg.type
                     for i in range(arg.byreflevel):
@@ -503,7 +512,6 @@ class COMGenerator(CtypesGenerator):
         print("<{0}> generated".format(self.outfilename))
         return ctypes_code
 
-
     def parse_iid(self, iid_str):
         part_iid = iid_str.split("-")
         str_iid = []
@@ -517,45 +525,22 @@ class COMGenerator(CtypesGenerator):
 
 
 
-class DefaultConfig(object):
-    DEF_DIR = "definitions"
-    FUNC_FILE = "winfunc.txt"
-    STRUCT_FILE = "winstruct.txt"
-    DEF_FILE = "windef.txt"
-    NTSTATUS_FILE = "ntstatus.txt"
-    NAME_TO_IID_FILE = "interface_to_iid.txt"
-    COM_INTERFACE_DIR_GLOB = "com/*.txt"
+# A partial define without the dependance to ntstatus defintion
+# BOOTSTRAP!!
+non_generated_def = DefGenerator("definitions\\windef.txt", r"..\windows\generated_def\\windef.py")
 
-    GENERATED_STRUCT_FILE = "winstructs"
-    GENERATED_FUNC_FILE = "winfuncs"
-    GENERATED_DEF_FILE = "windef"
-    GENERATED_NTSTATUS_FILE = "ntstatus"
-    GENERATED_COM_FILE = "interfaces"
+ntstatus = NtStatusGenerator("definitions\\ntstatus.txt", r"..\windows\generated_def\\ntstatus.py", dependances=[non_generated_def])
+ntstatus.generate()
 
-    OUT_DIRS = "..\windows\generated_def"
+# Not a real circular def (import not at the begin of file
+defs_with_ntstatus = DefGenerator("definitions\\windef.txt", r"..\windows\generated_def\\windef.py", dependances=[ntstatus])
+defs_with_ntstatus.generate()
 
-    @classmethod
-    def verify(cls):
-        for infile in cls.FUNC_FILE, cls.STRUCT_FILE, cls.DEF_FILE, cls.NTSTATUS_FILE, cls.NAME_TO_IID_FILE:
-            if not os.path.exists(pjoin(cls.DEF_DIR, infile)):
-                raise ValueError("Missing file <{0}>".format(pjoin(DEF_DIR, infile)))
+structs = StructGenerator("definitions\\winstruct.txt", r"..\windows\generated_def\\winstructs.py", dependances=[defs_with_ntstatus])
+structs.generate()
 
+functions = FuncGenerator("definitions\\winfunc.txt", r"..\windows\generated_def\\winfuncs.py", dependances=[structs])
+functions.generate()
 
-
-x = DefGenerator("definitions\\windef.txt", "out\\yolo.py")
-x.generate()
-
-y = StructGenerator("definitions\\winstruct.txt", "out\\truc.py", dependances=[x])
-y.generate()
-
-z = FuncGenerator("definitions\\winfunc.txt", "out\\func.py", dependances=[y])
-z.generate()
-
-nt = NtStatusGenerator("definitions\\ntstatus.txt", "out\\nt.py", dependances=[x])
-nt.generate()
-
-com = COMGenerator("definitions\\com\\*.txt", "definitions\\interface_to_iid.txt" ,"out\\com.py", dependances=[y])
+com = COMGenerator("definitions\\com\\*.txt", "definitions\\interface_to_iid.txt" ,r"..\windows\generated_def\\interfaces.py", dependances=[structs])
 com.generate()
-
-print(os.listdir(DefaultConfig.DEF_DIR))
-DefaultConfig.verify()

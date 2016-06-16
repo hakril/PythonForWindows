@@ -2395,3 +2395,123 @@ typedef struct _OBJECT_DIRECTORY_INFORMATION
     UNICODE_STRING Name;
     UNICODE_STRING TypeName;
 } OBJECT_DIRECTORY_INFORMATION, *POBJECT_DIRECTORY_INFORMATION;
+
+
+
+typedef struct _DEBUG_VALUE_TMP_SUBSTRUCT1
+{
+    ULONG64 I64;
+    BOOL Nat;
+} DEBUG_VALUE_TMP_SUBSTRUCT1;
+
+typedef struct _DEBUG_VALUE_TMP_SUBSTRUCT2
+{
+        ULONG LowPart;
+        ULONG HighPart;
+} DEBUG_VALUE_TMP_SUBSTRUCT2;
+
+typedef struct _DEBUG_VALUE_TMP_SUBSTRUCT3
+{
+        ULONG64 LowPart;
+        LONG64 HighPart;
+} DEBUG_VALUE_TMP_SUBSTRUCT3;
+
+typedef union _DEBUG_VALUE_TMP_UNION
+{
+    UCHAR I8;
+    USHORT I16;
+    ULONG I32;
+    _DEBUG_VALUE_TMP_SUBSTRUCT1 tmp_sub_struct_1;
+    FLOAT F32;
+    DOUBLE F64;
+    UCHAR F80Bytes[10];
+    UCHAR F82Bytes[11];
+    UCHAR F128Bytes[16];
+    UCHAR VI8[16];
+    USHORT VI16[8];
+    ULONG VI32[4];
+    ULONG64 VI64[2];
+    FLOAT VF32[4];
+    DOUBLE VF64[2];
+    DEBUG_VALUE_TMP_SUBSTRUCT2 I64Parts32;
+    DEBUG_VALUE_TMP_SUBSTRUCT3 F128Parts64;
+    UCHAR RawBytes[24];
+} DEBUG_VALUE_TMP_UNION;
+
+
+typedef struct _DEBUG_VALUE
+{
+    _DEBUG_VALUE_TMP_UNION u;
+    ULONG TailOfRawBytes;
+    ULONG Type;
+} DEBUG_VALUE, *PDEBUG_VALUE;
+
+typedef struct _DEBUG_SYMBOL_PARAMETERS
+{
+    ULONG64 Module;
+    ULONG TypeId;
+    ULONG ParentSymbol;
+    ULONG SubElements;
+    ULONG Flags;
+    ULONG64 Reserved;
+} DEBUG_SYMBOL_PARAMETERS, *PDEBUG_SYMBOL_PARAMETERS;
+
+typedef struct _DEBUG_SYMBOL_ENTRY
+{
+    ULONG64 ModuleBase;
+    ULONG64 Offset;
+    ULONG64 Id;
+    ULONG64 Arg64;
+    ULONG Size;
+    ULONG Flags;
+    ULONG TypeId;
+    ULONG NameSize;
+    ULONG Token;
+    ULONG Tag;
+    ULONG Arg32;
+    ULONG Reserved;
+} DEBUG_SYMBOL_ENTRY, *PDEBUG_SYMBOL_ENTRY;
+
+typedef struct _DEBUG_MODULE_PARAMETERS
+{
+    ULONG64 Base;
+    ULONG Size;
+    ULONG TimeDateStamp;
+    ULONG Checksum;
+    ULONG Flags;
+    ULONG SymbolType;
+    ULONG ImageNameSize;
+    ULONG ModuleNameSize;
+    ULONG LoadedImageNameSize;
+    ULONG SymbolFileNameSize;
+    ULONG MappedImageNameSize;
+    ULONG64 Reserved[2];
+} DEBUG_MODULE_PARAMETERS, *PDEBUG_MODULE_PARAMETERS;
+
+typedef struct _DEBUG_MODULE_AND_ID
+{
+    ULONG64 ModuleBase;
+    ULONG64 Id;
+} DEBUG_MODULE_AND_ID, *PDEBUG_MODULE_AND_ID;
+
+typedef struct _DEBUG_OFFSET_REGION
+{
+    ULONG64 Base;
+    ULONG64 Size;
+} DEBUG_OFFSET_REGION, *PDEBUG_OFFSET_REGION;
+
+typedef struct _DEBUG_SYMBOL_SOURCE_ENTRY
+{
+    ULONG64 ModuleBase;
+    ULONG64 Offset;
+    ULONG64 FileNameId;
+    ULONG64 EngineInternal;
+    ULONG Size;
+    ULONG Flags;
+    ULONG FileNameSize;
+    ULONG StartLine;
+    ULONG EndLine;
+    ULONG StartColumn;
+    ULONG EndColumn;
+    ULONG Reserved;
+} DEBUG_SYMBOL_SOURCE_ENTRY, *PDEBUG_SYMBOL_SOURCE_ENTRY;
