@@ -12,3 +12,4 @@ Since 0.2:
     * Add: system.handles (winobject\handle.py)
     * You can have multiple execute_python_unsafe at the same time in the same process (didn't know: consequence of new injection code)
     * WinProcess.execute_python does not regenerate/reinject the python_exec_shellcode for each execution
+    * generate.py cleaned with class and stuff / usable for extern project (cc lkd)

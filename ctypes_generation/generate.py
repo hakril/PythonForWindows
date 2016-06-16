@@ -3,6 +3,7 @@ import os
 import os.path
 import re
 import glob
+import textwrap
 
 import dummy_wintypes
 import struct_parser
@@ -10,6 +11,9 @@ import func_parser
 import def_parser
 import com_parser
 
+pjoin = os.path.join
+pexists = os.path.exists
+dedent = textwrap.dedent
 
 
 TYPE_EQUIVALENCE = [
@@ -92,441 +96,476 @@ TYPE_EQUIVALENCE = [
     ('PALPC_PORT_ATTRIBUTES', 'PVOID'),
     ]
 
-# For functions returning void
 TYPE_EQUIVALENCE.append(('VOID', 'DWORD'))
 # TRICHE
-TYPE_EQUIVALENCE.append(('ITypeInfo', 'PVOID'))
+BASIC_TYPE = dummy_wintypes.names + list([x[0] for x in TYPE_EQUIVALENCE])
+
+class CtypesGenerator(object):
+    common_header = "#Generated file\n"
+
+    PARSER = None
+    IMPORT_HEADER = "{deps}"
+
+    def __init__(self, infilename, outfilename, dependances=()):
+        self.infilename = infilename
+        self.outfilename = outfilename
+        self.infile = open(self.infilename)
+        self.data = None
+        self.dependances = dependances
+
+        self.exports = set([])
+        self.imports = set([])
+
+        self.parse()
+        self.analyse(self.data)
+        self.check_dependances()
+
+    def parse(self):
+        if self.data is None:
+            print("Parsing <{0}>".format(self.infilename))
+            self.data = self.PARSER(self.infile.read()).parse()
+        return self.data
+
+    def analyse(self, data):
+        raise NotImplementedError("<{0}> doest not implement <analyse>".format(type(self).__name__))
+
+    def check_dependances(self):
+        missing = self.imports
+        for dep in self.dependances:
+            missing -= dep.exports
+        if missing:
+            raise ValueError("Missing dependance <{0}> in <{1}>".format(missing, self.infilename))
+
+    def generate_import(self):
+        deps = "\n".join(["from {0} import *".format(os.path.basename(dep.outfilename).rsplit(".")[0]) for dep in self.dependances])
+        return self.IMPORT_HEADER.format(deps = deps)
+
+    def add_imports(self, *names):
+        self.imports.update(names)
+
+    def add_exports(self, *names):
+        self.exports.update(names)
+
+    def generate(self):
+        raise NotImplementedError("<{0}> doest not implement <generate>".format(type(self).__name__))
+
+class DefGenerator(CtypesGenerator):
+    PARSER = def_parser.WinDefParser
+    HEADER = dedent("""
+        import sys
+        import platform
+        if sys.version_info.major == 3:
+            long = int
+
+        bits = platform.architecture()[0]
+        bitness =  int(bits[:2])
+
+        NATIVE_WORD_MAX_VALUE = 0xffffffff if bitness == 32 else 0xffffffffffffffff
+
+        class Flag(long):
+            def __new__(cls, name, value):
+                return super(Flag, cls).__new__(cls, value)
+
+            def __init__(self, name, value):
+                self.name = name
+
+            def __repr__(self):
+                return "{0}({1})".format(self.name, hex(self))
+
+            __str__ = __repr__
+
+        """)
+
+    IMPORT_HEADER = "{deps}"
+
+    def analyse(self, data):
+        self.add_exports("Flag")
+        self.add_exports("NATIVE_WORD_MAX_VALUE")
+        for defin in data:
+            self.add_exports(defin.name)
 
 
-known_type = dummy_wintypes.names + list([x[0] for x in TYPE_EQUIVALENCE])
-known_type += ["void"]
+    def generate(self):
+        ctypes_lines = [self.common_header, self.HEADER]
+        #deps = "\n".join(["from {0} import *".format(os.path.basename(dep.outfilename).rsplit(".")[0]) for dep in self.dependances])
+        ctypes_lines += [self.generate_import()]
+        ctypes_lines += [d.generate_ctypes() for d in self.parse()]
+        ctypes_code = "\n".join(ctypes_lines)
+        with open(self.outfilename, "w") as f:
+            f.write(ctypes_code)
+        print("<{0}> generated".format(self.outfilename))
+        return ctypes_code
+
+class StructGenerator(CtypesGenerator):
+    PARSER = struct_parser.WinStructParser
+    IMPORT_HEADER = dedent ("""
+        from ctypes import *
+        from ctypes.wintypes import *
+        {deps}
+
+        {types_equivalences}
+    """)
+    TYPES_HEADER = dedent("""
+        class EnumValue(Flag):
+            def __new__(cls, enum_name, name, value):
+                return super(EnumValue, cls).__new__(cls, name, value)
+
+            def __init__(self, enum_name, name, value):
+                self.enum_name = enum_name
+                self.name = name
+
+            def __repr__(self):
+                return "{0}.{1}({2})".format(self.enum_name, self.name, hex(self))
 
 
-FUNC_FILE = "definitions\\winfunc.txt"
-STRUCT_FILE = "definitions\\winstruct.txt"
-DEF_FILE = "definitions\\windef.txt"
-NTSTATUS_FILE = "definitions\\ntstatus.txt"
-NAME_TO_IID_FILE = "definitions\\interface_to_iid.txt"
-COM_INTERFACE_DIR_GLOB = "definitions\\com/*.txt"
+        class EnumType(DWORD):
+            values = ()
+            mapper = {}
 
-GENERATED_STRUCT_FILE = "winstructs"
-GENERATED_FUNC_FILE = "winfuncs"
-GENERATED_DEF_FILE = "windef"
-GENERATED_NTSTATUS_FILE = "ntstatus"
-GENERATED_COM_FILE = "interfaces"
-#GENERATED_NAME_TO_IID_FILE = "com_iid"
+            @property
+            def value(self):
+                raw_value = super(EnumType, self).value
+                return self.mapper.get(raw_value, raw_value)
 
-OUT_DIRS = ["..\windows\generated_def"]
-if len(sys.argv) > 1:
-    OUT_DIRS.append(sys.argv[1])
+            def __repr__(self):
+                raw_value = super(EnumType, self).value
+                if raw_value in self.values:
+                    value = self.value
+                    return "<{0} {1}({2})>".format(type(self).__name__, value.name, hex(raw_value))
+                return "<{0}({1})>".format(type(self).__name__, hex(self.value))
 
-def get_all_struct_name(structs, enums):
-    res = []
-    for s in structs + enums:
-        res.append(s.name)
-        res.extend(s.typedef)
-    return res
+        """)
 
-def generate_type_equiv_code(type_equiv):
-    ctypes_str = ""
-    for type_equiv in type_equiv:
-        ctypes_str += "{0} = {1}\n".format(*type_equiv)
-    ctypes_str += "\n"
-    return ctypes_str
+    def analyse(self, data):
+        structs, enums = data
+        for btype in BASIC_TYPE:
+            self.add_exports(btype)
+        for enum in enums:
+            self.add_exports(enum.name)
+            self.add_exports(*enum.typedef)
+        for struct in structs:
+            self.add_exports(struct.name)
+            self.add_exports(*struct.typedef)
+            for field_type, field_name, nb_rep in struct.fields:
+                if field_type.name not in self.exports:
+                    self.add_imports(field_type.name)
+                try:
+                    int(nb_rep)
+                except:
+                    self.add_imports(nb_rep)
 
-def verif_funcs_type(funcs, structs, enums):
-    all_struct_name = get_all_struct_name(structs, enums)
-    missing_types = False
-    for f in funcs:
-        ret_type = f.return_type
-        if ret_type not in known_type and ret_type not in all_struct_name:
-            print ValueError("UNKNOW RET TYPE {0}".format(ret_type))
-            missing_types = True
 
-        for param_type, _ in f.params:
-            # Crappy but fuck it !
-            if param_type.startswith("POINTER(") and param_type.endswith(")"):
-                param_type = param_type[len("POINTER("): -1]
-            if param_type not in known_type and param_type not in all_struct_name:
-                print ValueError("UNKNOW PARAM TYPE {0}".format(param_type))
-                missing_types = True
-    if missing_types:
-        raise ValueError("Missing types")
+    def generate(self):
+        type_equivalences = "\n".join(["{0} = {1}".format(*x) for x in TYPE_EQUIVALENCE])
+        deps = "\n".join(["from {0} import *".format(os.path.basename(dep.outfilename).rsplit(".")[0]) for dep in self.dependances])
 
-try:
-    yolo_struct = [x[:-4] for x in  os.listdir(r"C:\Users\hakril\Documents\Work\COM\dump")]
-except WindowsError:
-    yolo_struct = []
+        HEADER = self.HEADER.format(types_equivalences=type_equivalences, deps=deps)
+        HEADER += self.TYPES_HEADER
 
-def verif_com_interface_type(vtbls, struc, enum):
-    all_struct_name = get_all_struct_name(structs, enums)
-    all_interface_name = [vtbl.name for vtbl in vtbls]
-    all_interface_name += [vtbl.typedefptr for  vtbl in vtbls if vtbl.typedefptr is not None]
-    missing_types = False
-    for vtbl in vtbls:
-        #print(vtbl)
-        for method in vtbl.methods:
-            #print("Checking ret type <{0}>".format(method.ret_type))
-            ret_type = method.ret_type
-            if ret_type not in known_type and ret_type not in all_struct_name + all_interface_name:
-                print ValueError("UNKNOW RET TYPE {0}".format(ret_type))
-                missing_types = True
-            for arg in method.args:
-                #print("Checking arg type <{0}>".format(arg.type))
-                param_type = arg.type
-                if param_type not in known_type and param_type not in all_struct_name + all_interface_name:
-                    #if param_type != "ITypeInfo":
-                    if param_type in yolo_struct:
-                        import pdb;pdb.set_trace()
-                        print("Ned to extract <{0}> from dump".format(param_type))
-                        import shutil
-                        #shutil.copy(r"C:\Users\hakril\Documents\Work\COM\dump\{0}.txt".format(param_type), "com")
-                        continue
-                    print ValueError("UNKNOW PARAM TYPE {0}".format(param_type))
-                    missing_types = True
-    if missing_types:
-        raise ValueError("Missing types")
+        structs, enums = self.data
+        ctypes_lines = [self.common_header, self.generate_import()] + [d.generate_ctypes() for l in (enums, structs) for d in l]
+        ctypes_code = "\n".join(ctypes_lines)
+        with open(self.outfilename, "w") as f:
+            f.write(ctypes_code)
+        print("<{0}> generated".format(self.outfilename))
+        return ctypes_code
 
-def check_in_define(name, defs):
-    return any(name == d.name for d in defs)
+class FuncGenerator(CtypesGenerator):
+    PARSER = func_parser.WinFuncParser
+    IMPORT_HEADER = dedent ("""
+        from ctypes import *
+        from ctypes.wintypes import *
+        {deps}
 
-def validate_structs(structs, enums, defs):
-    all_struct_name = get_all_struct_name(structs, enums)
-    for struct in structs:
-        for field_type, field_name, nb_rep in struct.fields:
-            import pdb;pdb.set_trace()
-            if field_type.name not in known_type + all_struct_name:
-                raise ValueError("UNKNOW TYPE {0}".format(field_type))
+        """)
+
+    def analyse(self, data):
+        for func in data:
+            self.add_imports(func.return_type)
+            for param_type, _ in func.params:
+                if param_type.startswith("POINTER(") and param_type.endswith(")"):
+                    param_type = param_type[len("POINTER("): -1]
+                self.add_imports(param_type)
+
+    def generate(self):
+        deps = "\n".join(["from {0} import *".format(os.path.basename(dep.outfilename).rsplit(".")[0]) for dep in self.dependances])
+        HEADER = self.generate_import()
+
+        func_list = "functions = {0}\n\n".format(str([f.name for f in self.data]))
+
+        ctypes_lines = [self.common_header, HEADER, func_list] + [d.generate_ctypes() for d in self.parse()]
+        ctypes_code = "\n".join(ctypes_lines)
+        with open(self.outfilename, "w") as f:
+            f.write(ctypes_code)
+        print("<{0}> generated".format(self.outfilename))
+        return ctypes_code
+
+class NtStatusGenerator(CtypesGenerator):
+    HEADER_IMPORT = dedent("""
+    import ctypes
+    {deps}
+
+    """)
+    HEADER = dedent("""
+    class NtStatusException(WindowsError):
+        ALL_STATUS = {}
+        def __init__(self , code):
             try:
-                int(nb_rep)
-            except ValueError:
-                if not check_in_define(nb_rep, defs):
-                    raise ValueError("UNKNOW DEFINE {0}".format(nb_rep))
+                x = self.ALL_STATUS[code]
+            except KeyError:
+                x = (code, 'UNKNOW_ERROR', 'Error non documented in ntstatus.py')
+            self.code = x[0]
+            self.name = x[1]
+            self.descr = x[2]
+            x =  ctypes.c_long(x[0]).value, x[1], x[2]
+            return super(NtStatusException, self).__init__(*x)
 
-common_header = "#Generated file\n"
+        def __str__(self):
+            return "{e.name}(0x{e.code:x}): {e.descr}".format(e=self)
 
-defs_header = common_header + """
-import sys
-import platform
-if sys.version_info.major == 3:
-    long = int
+        def __repr__(self):
+            return "{0}(0x{1:08x}, {2})".format(type(self).__name__, self.code, self.name)
 
-bits = platform.architecture()[0]
-bitness =  int(bits[:2])
+        @classmethod
+        def register_ntstatus(cls, code, name, descr):
+            if code in cls.ALL_STATUS:
+                return # Use the first def
+            cls.ALL_STATUS[code] = (code, name, descr)
+            return Flag(name, code)
+    """)
 
-NATIVE_WORD_MAX_VALUE = 0xffffffff if bitness == 32 else 0xffffffffffffffff
+    def parse_ntstatus(self, content):
+        nt_status_defs = []
+        for line in content.split("\n"):
+            if not line:
+                continue
+            code, name, descr = line.split("|", 2)
+            code = int(code, 0)
+            descr = re.sub(" +", " ", descr[:-1]) # remove \n
+            descr = descr.replace('"', "'")
+            nt_status_defs.append((code, name, descr))
+        self.data = nt_status_defs
+        return self
 
-class Flag(long):
-    def __new__(cls, name, value):
-        return super(Flag, cls).__new__(cls, value)
+    # Hack for PARSER
+    def parse(self):
+        if self.data is None:
+            print("Parsing <{0}>".format(self.infilename))
+            self.parse_ntstatus(self.infile.read())
+        return self.data
 
-    def __init__(self, name, value):
-        self.name = name
+    def analyse(self, data):
+        self.add_imports("Flag")
 
-    def __repr__(self):
-        return "{0}({1})".format(self.name, hex(self))
-
-    __str__ = __repr__
-"""
-
-def generate_defs_ctypes(defs):
-    ctypes_lines = [defs_header] + [d.generate_ctypes() for d in defs]
-    ctypes_code = "\n".join(ctypes_lines)
-    return ctypes_code
-
-
-funcs_header = common_header + """
-from ctypes import *
-from ctypes.wintypes import *
-from .{0} import *
-
-"""[1:].format(GENERATED_STRUCT_FILE)
-
-def generate_funcs_ctypes(funcs):
-    ctypes_code = funcs_header
-
-    all_funcs_name = [f.name for f in funcs]
-    ctypes_code += "functions = {0}\n\n".format(str(all_funcs_name))
-    for func in funcs:
-        ctypes_code += func.generate_ctypes() + "\n"
-    return ctypes_code
-
-structs_header = common_header + """
-from ctypes import *
-from ctypes.wintypes import *
-from .windef import *
-
-class EnumValue(Flag):
-    def __new__(cls, enum_name, name, value):
-        return super(EnumValue, cls).__new__(cls, name, value)
-
-    def __init__(self, enum_name, name, value):
-        self.enum_name = enum_name
-        self.name = name
-
-    def __repr__(self):
-        return "{0}.{1}({2})".format(self.enum_name, self.name, hex(self))
+    def generate(self):
+        #deps = "\n".join(["from {0} import *".format(os.path.basename(dep.outfilename).rsplit(".")[0]) for dep in self.dependances])
+        HEADER = self.generate_import() + self.HEADER
+        ctypes_lines = [HEADER]
+        for code, name, descr in self.parse():
+            ctypes_lines.append('{1} = NtStatusException.register_ntstatus({0}, "{1}", "{2}")'.format(hex(code).strip("L"), name, descr))
+        ctypes_code = "\n".join(ctypes_lines)
+        with open(self.outfilename, "w") as f:
+            f.write(ctypes_code)
+        print("<{0}> generated".format(self.outfilename))
+        return ctypes_code
 
 
-class EnumType(DWORD):
-    values = ()
-    mapper = {}
+class InitialCOMGenerator(CtypesGenerator):
+    PARSER = com_parser.WinComParser
+    IGNORE_INTERFACE = ["ITypeInfo"]
+    IMPORT_HEADER = dedent("""
+    import functools
+    import ctypes
+    {deps}
 
-    @property
-    def value(self):
-        raw_value = super(EnumType, self).value
-        return self.mapper.get(raw_value, raw_value)
+    """)
+    HEADER = dedent("""
+    class IID(IID):
+        def __init__(self, Data1, Data2, Data3, Data4, name=None, strid=None):
+            self.name = name
+            self.strid = strid
+            super(IID, self).__init__(Data1, Data2, Data3, Data4)
 
-    def __repr__(self):
-        raw_value = super(EnumType, self).value
-        if raw_value in self.values:
-            value = self.value
-            return "<{0} {1}({2})>".format(type(self).__name__, value.name, hex(raw_value))
-        return "<{0}({1})>".format(type(self).__name__, hex(self.value))
+        def __repr__(self):
+            if self.strid is None:
+                return super(IID, self).__repr__()
+            if self.name is None:
+                return '<IID "{0}">'.format(self.strid.upper())
+            return '<IID "{0}({1})">'.format(self.strid.upper(), self.name)
 
-"""[1:]
+        @classmethod
+        def from_string(cls, iid):
+            part_iid = iid.split("-")
+            datas = [int(x, 16) for x in part_iid[:3]]
+            datas.append(int(part_iid[3][:2], 16))
+            datas.append(int(part_iid[3][2:], 16))
+            for i in range(6):
+                datas.append(int(part_iid[4][i * 2:(i + 1) * 2], 16))
+            return cls.from_raw(*datas, strid=iid)
 
-def generate_struct_ctypes(structs, enums):
-    ctypes_str  = structs_header
-    ctypes_str += generate_type_equiv_code(TYPE_EQUIVALENCE)
+        @classmethod
+        def from_raw(cls, Data1, Data2, Data3, Data41, Data42, Data43, Data44, Data45, Data46, Data47, Data48, **kwargs):
+            return cls(Data1, Data2, Data3,  (BYTE*8)(Data41, Data42, Data43, Data44, Data45, Data46, Data47, Data48), **kwargs)
 
-    all_struct_name = [s.name for s in structs]
-    ctypes_str += "structs = {0}\n\n".format(str(all_struct_name))
+    generate_IID = IID.from_raw
 
-    all_enum_name = [e.name for e in enums]
-    ctypes_str += "enums = {0}\n\n".format(str(all_enum_name))
+    GUID = IID
+    LPGUID = POINTER(GUID)
 
-    # Enums declarations
-    for enum in enums:
-        ctypes_str += "# Enum {0} definitions\n".format(enum.name)
-        ctypes_str += enum.generate_ctypes() + "\n"
+    class COMInterface(ctypes.c_void_p):
+        _functions_ = {
+        }
 
-    # Struct declarations
-    for struct in structs:
-        ctypes_str += "# Struct {0} definitions\n".format(struct.name)
-        ctypes_str += struct.generate_ctypes() + "\n"
+        def __getattr__(self, name):
+            if name in self._functions_:
+                return functools.partial(self._functions_[name], self)
+            return super(COMInterface, self).__getattribute__(name)
+    """)
 
-    return ctypes_str
+    def __init__(self, indirname, iiddef, outfilename, dependances=()):
+        self.indirname = indirname
+        self.infilename = indirname
+        self.outfilename = outfilename
+        self.data = None
+        self.dependances = dependances
 
-def parse_iid(iid_str):
-    part_iid = iid_str.split("-")
-    str_iid = []
-    str_iid.append("0x" + part_iid[0])
-    str_iid.append("0x" + part_iid[1])
-    str_iid.append("0x" + part_iid[2])
-    str_iid.append("0x" + part_iid[3][:2])
-    str_iid.append("0x" + part_iid[3][2:])
-    for i in range(6): str_iid.append("0x" + part_iid[4][i * 2:(i + 1) * 2])
-    return ", ".join(str_iid)
+        data = open(iiddef).read()
+        self.iids_def = {}
+        for line in data.split("\n"):
+            name, iid = line.split("|")
+            self.iids_def[name] = self.parse_iid(iid), iid
 
+        self.exports = set([])
+        self.imports = set([])
 
-data = open(NAME_TO_IID_FILE).read()
-iids_def = {}
-for line in data.split("\n"):
-    name, iid = line.split("|")
-    iids_def[name] = parse_iid(iid), iid
-#full_name_to_iid = name_to_iid_header + "\n".join(iids_def)
+        self.parse()
+        self.analyse(self.data)
+        self.check_dependances()
 
+    def parse(self):
+        if self.data is not None:
+            return self.data
+        data = []
+        for filename in glob.glob(self.indirname):
+            print("Parsing <{0}>".format(filename))
+            data.append(self.PARSER(open(filename).read()).parse())
+        self.data = data
+        return data
 
-com_interface_header = """
-import functools
-import ctypes
-from winstructs import *
-
-class IID(IID):
-    def __init__(self, Data1, Data2, Data3, Data4, name=None, strid=None):
-        self.name = name
-        self.strid = strid
-        super(IID, self).__init__(Data1, Data2, Data3, Data4)
-
-    def __repr__(self):
-        if self.strid is None:
-            return super(IID, self).__repr__()
-        if self.name is None:
-            return '<IID "{0}">'.format(self.strid.upper())
-        return '<IID "{0}({1})">'.format(self.strid.upper(), self.name)
-
-    @classmethod
-    def from_string(cls, iid):
-        part_iid = iid.split("-")
-        datas = [int(x, 16) for x in part_iid[:3]]
-        datas.append(int(part_iid[3][:2], 16))
-        datas.append(int(part_iid[3][2:], 16))
-        for i in range(6):
-            datas.append(int(part_iid[4][i * 2:(i + 1) * 2], 16))
-        return cls.from_raw(*datas, strid=iid)
-
-    @classmethod
-    def from_raw(cls, Data1, Data2, Data3, Data41, Data42, Data43, Data44, Data45, Data46, Data47, Data48, **kwargs):
-        return cls(Data1, Data2, Data3,  (BYTE*8)(Data41, Data42, Data43, Data44, Data45, Data46, Data47, Data48), **kwargs)
-
-generate_IID = IID.from_raw
-
-GUID = IID
-LPGUID = POINTER(GUID)
-
-class COMInterface(ctypes.c_void_p):
-    _functions_ = {
-    }
-
-    def __getattr__(self, name):
-        if name in self._functions_:
-            return functools.partial(self._functions_[name], self)
-        return super(COMInterface, self).__getattribute__(name)
-"""
-
-com_interface_template = """
-class {0}(COMInterface):
-    IID = generate_IID({2}, name="{0}", strid="{3}")
-
-    _functions_ = {{
-{1}
-    }}
-"""
-
-com_interface_comment_template = """ #{0} -> {1}"""
-com_interface_method_template = """ "{0}": ctypes.WINFUNCTYPE({1})({2}, "{0}"),"""
-
-def generate_com_interface_ctype(vtbls):
-    define = []
-    all_name = [vtbl.name for vtbl in vtbls] + [vtbl.typedefptr for  vtbl in vtbls if vtbl.typedefptr is not None]
-
-    for vtbl in vtbls:
-        methods_string = []
-        for method_nb, method in enumerate(vtbl.methods):
-            args_to_define = method.args[1:] #ctypes doesnt not need the This
+    def analyse(self, data):
+        self.real_type = {}
+        #self.add_exports("IID")
+        #self.add_exports("GUID")
+        #self.add_exports("LPGUID")
+        #self.add_exports("COMInterface")
+        for cominterface in data:
             #import pdb;pdb.set_trace()
-            str_args = []
-            methods_string.append(com_interface_comment_template.format(method.name, ", ".join([arg.name +":"+ ("*"* arg.byreflevel) +arg.type for arg in args_to_define])))
-            for arg in args_to_define:
-                type = arg.type
-                byreflevel = arg.byreflevel
-                if type in all_name:
-                    type = "PVOID"
-                    byreflevel -= 1
-                if type == "void":
-                    type = "PVOID"
-                    if byreflevel == 0:
-                        raise ValueError("{0}.{1} take a parameter <void>".format(vtbl.name, method.name))
-                    byreflevel -= 1
-                for i in range(byreflevel):
-                    type = "POINTER({0})".format(type)
-                str_args.append(type)
-            methods_string.append(com_interface_method_template.format(method.name, ", ".join([method.ret_type] + str_args), method_nb))
-        #import pdb;pdb.set_trace()
-        if vtbl.iid is not None:
-            iid_str = vtbl.iid
-            iid_python = parse_iid(iid_str)
-        else:
-            iid_python, iid_str = iids_def[vtbl.name]
-        define.append((com_interface_template.format(vtbl.name, "\n".join(methods_string), iid_python, iid_str)))
-    return com_interface_header + "\n".join(define)
+            self.add_exports(cominterface.name)
+            if cominterface.typedefptr:
+                self.add_exports(cominterface.typedefptr)
+        for cominterface in data:
+            for method in cominterface.methods:
+                self.add_imports(method.ret_type)
+                for pos, arg in enumerate(method.args):
+                    initial_arg = arg
+                    if arg.type in self.exports or arg.type in self.IGNORE_INTERFACE:
+                        # COM Interface ? -> PVOID !
+                        atype = "PVOID"
+                        byreflevel = arg.byreflevel - 1
+                        method.args[pos] = arg = type(arg)(atype, byreflevel, arg.name)
+                        self.real_type[arg] = initial_arg
 
-def write_to_out_file(name, data):
-    for out_dir in OUT_DIRS:
-        f = open("{0}/{1}.py".format(out_dir, name), 'w')
-        f.write(data)
-        f.close()
+                    elif arg.type == "void" and arg.byreflevel > 0:
+                        # **void -> *PVOID
+                        atype = "PVOID"
+                        byreflevel = arg.byreflevel - 1
+                        method.args[pos] = arg = type(arg)(atype, byreflevel, arg.name)
+                        self.real_type[arg] = initial_arg
 
+                    self.add_imports(arg.type)
 
-def parse_com_interfaces(filenames):
-    res = []
-    for filename in filenames:
-        print("Parsing COM from <{0}>".format(filename))
-        data = open(filename).read()
-        vtbl = com_parser.WinComParser(data).parse()
-        res.append(vtbl)
-    return res
+    com_interface_comment_template = """ #{0} -> {1}"""
+    com_interface_method_template = """ "{0}": ctypes.WINFUNCTYPE({1})({2}, "{0}"),"""
+    com_interface_template = dedent("""
+    class {0}(COMInterface):
+        IID = generate_IID({2}, name="{0}", strid="{3}")
 
+        _functions_ = {{
+    {1}
+        }}
+    """)
 
-def_code  = open(DEF_FILE, 'r').read()
-funcs_code = open(FUNC_FILE, 'r').read()
-structs_code = open(STRUCT_FILE, 'r').read()
+    def generate(self):
+        define = []
+        for cominterface in self.data:
+            methods_string = []
+            for method_nb, method in enumerate(cominterface.methods):
+                args_to_define = method.args[1:] #ctypes doesnt not need the This
+                args_for_comment = [self.real_type.get(arg, arg) for arg in args_to_define]
+                #import pdb;pdb.set_trace()
+                str_args = []
+                methods_string.append(self.com_interface_comment_template.format(method.name, ", ".join([arg.name +":"+ ("*"* arg.byreflevel) +arg.type for arg in args_for_comment])))
+                for arg in args_to_define:
+                    type = arg.type
+                    for i in range(arg.byreflevel):
+                        type = "POINTER({0})".format(type)
+                    str_args.append(type)
+                methods_string.append(self.com_interface_method_template.format(method.name, ", ".join([method.ret_type] + str_args), method_nb))
+            #import pdb;pdb.set_trace()
+            if cominterface.iid is not None:
+                iid_str = cominterface.iid
+                iid_python = self.parse_iid(iid_str)
+            else:
+                print("Lookup of IID for <{0}>".format(cominterface.name))
+                iid_python, iid_str = self.iids_def[cominterface.name]
+            define.append((self.com_interface_template.format(cominterface.name, "\n".join(methods_string), iid_python, iid_str)))
 
-defs = def_parser.WinDefParser(def_code).parse()
-funcs = func_parser.WinFuncParser(funcs_code).parse()
-structs, enums = struct_parser.WinStructParser(structs_code).parse()
-vtbls = parse_com_interfaces(glob.glob(COM_INTERFACE_DIR_GLOB))
+        deps = "\n".join(["from {0} import *".format(os.path.basename(dep.outfilename).rsplit(".")[0]) for dep in self.dependances])
 
-validate_structs(structs, enums, defs)
-verif_funcs_type(funcs, structs, enums)
-verif_com_interface_type(vtbls, structs, enums)
+        ctypes_code =  self.generate_import() + "\n" + self.HEADER + "\n".join(define)
+        with open(self.outfilename, "w") as f:
+            f.write(ctypes_code)
+        print("<{0}> generated".format(self.outfilename))
+        return ctypes_code
 
-
-# Create Flags for ntstatus
-nt_status_defs = []
-for line in open(NTSTATUS_FILE):
-    code, name, descr = line.split("|", 2)
-    nt_status_defs.append(def_parser.WinDef(name, code))
-defs = nt_status_defs + defs
-
-defs_ctypes = generate_defs_ctypes(defs)
-funcs_ctypes = generate_funcs_ctypes(funcs)
-structs_ctypes = generate_struct_ctypes(structs, enums)
-com_interface_ctypes = generate_com_interface_ctype(vtbls)
-
-# Create name -> IID file
-
-name_to_iid_header = """
-from winstructs import IID, BYTE
-
-"""
-
-
-#f = open("yolo.py", "w")
-#f.write(com_interface_ctypes)
-#f.close()
-
-for out_dir in OUT_DIRS:
-    if not os.path.exists(out_dir):
-        os.mkdir(out_dir)
-
-write_to_out_file(GENERATED_DEF_FILE, defs_ctypes)
-write_to_out_file(GENERATED_FUNC_FILE, funcs_ctypes)
-write_to_out_file(GENERATED_STRUCT_FILE, structs_ctypes)
-write_to_out_file(GENERATED_COM_FILE, com_interface_ctypes)
-#write_to_out_file(GENERATED_NAME_TO_IID_FILE, full_name_to_iid)
-
-NTSTATUS_HEAD = """
-import ctypes
-
-class NtStatusException(WindowsError):
-    ALL_STATUS = {}
-    def __init__(self , code):
-        try:
-            x = self.ALL_STATUS[code]
-        except KeyError:
-            x = (code, 'UNKNOW_ERROR', 'Error non documented in ntstatus.py')
-        self.code = x[0]
-        self.name = x[1]
-        self.descr = x[2]
-        x =  ctypes.c_long(x[0]).value, x[1], x[2]
-        return super(NtStatusException, self).__init__(*x)
-
-    def __str__(self):
-        return "{e.name}(0x{e.code:x}): {e.descr}".format(e=self)
-
-    def __repr__(self):
-        return "{0}(0x{1:08x}, {2})".format(type(self).__name__, self.code, self.name)
-
-    @classmethod
-    def register_ntstatus(cls, code, name, descr):
-        if code in cls.ALL_STATUS:
-            return # Use the first def
-        cls.ALL_STATUS[code] = (code, name, descr)
-"""
-
-nt_status_exceptions = [NTSTATUS_HEAD]
-for line in open(NTSTATUS_FILE):
-    code, name, descr = line.split("|", 2)
-    code = int(code, 0)
-    b = descr
-    descr = re.sub(" +", " ", descr[:-1]) # remove \n
-    descr = descr.replace('"', "'")
-    nt_status_exceptions.append('NtStatusException.register_ntstatus({0}, "{1}", "{2}")'.format(hex(code), name, descr))
+    def parse_iid(self, iid_str):
+        part_iid = iid_str.split("-")
+        str_iid = []
+        str_iid.append("0x" + part_iid[0])
+        str_iid.append("0x" + part_iid[1])
+        str_iid.append("0x" + part_iid[2])
+        str_iid.append("0x" + part_iid[3][:2])
+        str_iid.append("0x" + part_iid[3][2:])
+        for i in range(6): str_iid.append("0x" + part_iid[4][i * 2:(i + 1) * 2])
+        return ", ".join(str_iid)
 
 
-write_to_out_file(GENERATED_NTSTATUS_FILE, "\n".join(nt_status_exceptions))
+class COMGenerator(InitialCOMGenerator):
+    IMPORT_HEADER = "{deps}"
+    HEADER = ""
 
-for out_dir in OUT_DIRS:
-    print("Files generated in <{0}>".format(os.path.abspath(out_dir)))
+
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+print(SCRIPT_DIR)
+from_here = lambda path: pjoin(SCRIPT_DIR, path)
+
+DEFAULT_INTERFACE_TO_IID = from_here("definitions\\interface_to_iid.txt")
+
+# A partial define without the dependance to ntstatus defintion
+# BOOTSTRAP!!
+non_generated_def = DefGenerator(from_here("definitions\\windef.txt"), from_here(r"..\windows\generated_def\\windef.py"))
+ntstatus = NtStatusGenerator(from_here("definitions\\ntstatus.txt"), from_here(r"..\windows\generated_def\\ntstatus.py"), dependances=[non_generated_def])
+# Not a real circular def (import not at the begin of file
+defs_with_ntstatus = DefGenerator(from_here("definitions\\windef.txt"), from_here(r"..\windows\generated_def\\windef.py"), dependances=[ntstatus])
+structs = StructGenerator(from_here("definitions\\winstruct.txt"), from_here(r"..\windows\generated_def\\winstructs.py"), dependances=[defs_with_ntstatus])
+functions = FuncGenerator(from_here("definitions\\winfunc.txt"), from_here(r"..\windows\generated_def\\winfuncs.py"), dependances=[structs])
+com = InitialCOMGenerator(from_here("definitions\\com\\*.txt"), DEFAULT_INTERFACE_TO_IID, from_here(r"..\windows\generated_def\\interfaces.py"), dependances=[structs])
+
+
+if __name__ == "__main__":
+    ntstatus.generate()
+    defs_with_ntstatus.generate()
+    structs.generate()
+    functions.generate()
+    com.generate()
