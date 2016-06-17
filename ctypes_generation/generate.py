@@ -84,7 +84,7 @@ TYPE_EQUIVALENCE = [
     #STUFF FOR COM (will be replace at runtime
     # real def in com_interface_header
     ('GUID', 'PVOID'),
-    ('LPGUID', 'PVOID'),
+    #('LPGUID', 'PVOID'),
     # STUFF FOR DBGENGINE
     ('PWINDBG_EXTENSION_APIS32', 'PVOID'),
     ('PWINDBG_EXTENSION_APIS64', 'PVOID'),
@@ -202,8 +202,6 @@ class StructGenerator(CtypesGenerator):
         from ctypes import *
         from ctypes.wintypes import *
         {deps}
-
-        {types_equivalences}
     """)
     TYPES_HEADER = dedent("""
         class EnumValue(Flag):
@@ -257,13 +255,12 @@ class StructGenerator(CtypesGenerator):
 
     def generate(self):
         type_equivalences = "\n".join(["{0} = {1}".format(*x) for x in TYPE_EQUIVALENCE])
-        deps = "\n".join(["from {0} import *".format(os.path.basename(dep.outfilename).rsplit(".")[0]) for dep in self.dependances])
-
-        HEADER = self.HEADER.format(types_equivalences=type_equivalences, deps=deps)
+        HEADER = self.generate_import()
+        HEADER += type_equivalences
         HEADER += self.TYPES_HEADER
 
         structs, enums = self.data
-        ctypes_lines = [self.common_header, self.generate_import()] + [d.generate_ctypes() for l in (enums, structs) for d in l]
+        ctypes_lines = [self.common_header, HEADER] + [d.generate_ctypes() for l in (enums, structs) for d in l]
         ctypes_code = "\n".join(ctypes_lines)
         with open(self.outfilename, "w") as f:
             f.write(ctypes_code)
@@ -420,6 +417,61 @@ class InitialCOMGenerator(CtypesGenerator):
             if name in self._functions_:
                 return functools.partial(self._functions_[name], self)
             return super(COMInterface, self).__getattribute__(name)
+
+    class COMImplementation(object):
+        IMPLEMENT = None
+
+        def get_index_of_method(self, method):
+            # This code is horrible but not totally my fault
+            # the PyCFuncPtrObject->index is not exposed to Python..
+            # repr is: '<COM method offset 2: WinFunctionType at 0x035DDBE8>'
+            rpr = repr(method)
+            if not rpr.startswith("<COM method offset ") or ":" not in rpr:
+                raise ValueError("Could not extract offset of {0}".format(rpr))
+            return int(rpr[len("<COM method offset "): rpr.index(":")])
+
+        def extract_methods_order(self, interface):
+            index_and_method = sorted((self.get_index_of_method(m),name, m) for name, m in interface._functions_.items())
+            return index_and_method
+
+        def verify_implem(self, interface):
+            for func_name in interface._functions_:
+                implem = getattr(self, func_name, None)
+                if implem is None:
+                    raise ValueError("<{0}> implementing <{1}> has no method <{2}>".format(type(self).__name__, self.IMPLEMENT.__name__, func_name))
+                if not callable(implem):
+                    raise ValueError("{0} implementing <{1}>: <{2}> is not callable".format(type(self).__name__, self.IMPLEMENT.__name__, func_name))
+            return True
+
+        def _create_vtable(self, interface):
+            implems = []
+            names = []
+            for index, name, method in self.extract_methods_order(interface):
+                func_implem = getattr(self, name)
+                #PVOID is 'this'
+                types = [method.restype, PVOID] + list(method.argtypes)
+                implems.append(ctypes.WINFUNCTYPE(*types)(func_implem))
+                names.append(name)
+            class Vtable(ctypes.Structure):
+                _fields_ = [(name, ctypes.c_void_p) for name in names]
+            return Vtable(*[ctypes.cast(x, ctypes.c_void_p) for x in implems]), implems
+
+        def __init__(self):
+            self.verify_implem(self.IMPLEMENT)
+            vtable, implems = self._create_vtable(self.IMPLEMENT)
+            self.vtable = vtable
+            self.implems = implems
+            self.vtable_pointer = ctypes.pointer(self.vtable)
+            self._as_parameter_ = ctypes.addressof(self.vtable_pointer)
+
+        def QueryInterface(self, *args):
+            return 1
+
+        def AddRef(self, *args):
+            return 1
+
+        def Release(self, *args):
+            return 0
     """)
 
     def __init__(self, indirname, iiddef, outfilename, dependances=()):

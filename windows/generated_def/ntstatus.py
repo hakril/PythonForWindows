@@ -1,8 +1,4 @@
-
-import ctypes
 from windef import *
-
-
 class NtStatusException(WindowsError):
     ALL_STATUS = {}
     def __init__(self , code):

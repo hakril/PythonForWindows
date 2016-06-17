@@ -4,7 +4,6 @@
 from ctypes import *
 from ctypes.wintypes import *
 from windef import *
-
 PWSTR = LPWSTR
 PCWSTR = LPWSTR
 SIZE_T = c_ulong
@@ -69,7 +68,6 @@ MEMBERID = DISPID
 PSECURITY_DESCRIPTOR = PVOID
 LPUNKNOWN = POINTER(PVOID)
 GUID = PVOID
-LPGUID = PVOID
 PWINDBG_EXTENSION_APIS32 = PVOID
 PWINDBG_EXTENSION_APIS64 = PVOID
 LPCONTEXT = PVOID
@@ -77,7 +75,6 @@ HCERTSTORE = PVOID
 HCRYPTMSG = PVOID
 PALPC_PORT_ATTRIBUTES = PVOID
 VOID = DWORD
-
 class EnumValue(Flag):
     def __new__(cls, enum_name, name, value):
         return super(EnumValue, cls).__new__(cls, name, value)
