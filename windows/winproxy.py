@@ -652,6 +652,9 @@ def GetVolumeInformationW(lpRootPathName, lpVolumeNameBuffer=None, nVolumeNameSi
     return GetVolumeInformationW.ctypes_function(lpRootPathName, lpVolumeNameBuffer, nVolumeNameSize, lpVolumeSerialNumber, lpMaximumComponentLength, lpFileSystemFlags, lpFileSystemNameBuffer, nFileSystemNameSize)
 
 
+@Kernel32Proxy("SetConsoleCtrlHandler")
+def SetConsoleCtrlHandler(HandlerRoutine, Add):
+    return SetConsoleCtrlHandler.ctypes_function(HandlerRoutine, Add)
 
 # ### NTDLL #### #
 
