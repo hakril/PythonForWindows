@@ -3,9 +3,6 @@ TODO:
 
     - Better WMI interface
 
-    - ProcessMemory object ? (metasm like)
-
-    - remove pe_parse.transform_ctypes_fields (use utils.transform_ctypes_fields)
     - DBG
         - Verif multiple bp at same place..
         - Verif multiple pending at same place
@@ -35,6 +32,7 @@ TODO:
 
 Documentation
     * verif samples
+    * COMImplementation (example in LKD)
 
 FIXME:
     - setup.py build seems to raise an error

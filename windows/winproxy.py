@@ -100,7 +100,8 @@ class ExportNotFound(RuntimeError):
 class ApiProxy(object):
     APIDLL = None
     """Create a python wrapper around a kernel32 function"""
-    def __init__(self, func_name, error_check=None):
+    def __init__(self, func_name, error_check=None, deffunc_module=None):
+        self.deffunc_module = deffunc_module if deffunc_module is not None else winfuncs
         self.func_name = func_name
         if error_check is None:
             error_check = self.default_error_check
@@ -108,8 +109,8 @@ class ApiProxy(object):
         self._cprototyped = None
 
     def __call__(self, python_proxy, ):
-        prototype = getattr(winfuncs, self.func_name + "Prototype")
-        params = getattr(winfuncs, self.func_name + "Params")
+        prototype = getattr(self.deffunc_module, self.func_name + "Prototype")
+        params = getattr(self.deffunc_module, self.func_name + "Params")
         python_proxy.prototype = prototype
         python_proxy.params = params
         python_proxy.errcheck = self.error_check

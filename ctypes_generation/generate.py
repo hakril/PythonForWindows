@@ -298,10 +298,9 @@ class FuncGenerator(CtypesGenerator):
         return ctypes_code
 
 class NtStatusGenerator(CtypesGenerator):
-    HEADER_IMPORT = dedent("""
+    IMPORT_HEADER = dedent("""
     import ctypes
     {deps}
-
     """)
     HEADER = dedent("""
     class NtStatusException(WindowsError):
