@@ -149,7 +149,7 @@ class CtypesGenerator(object):
     def generate(self):
         raise NotImplementedError("<{0}> doest not implement <generate>".format(type(self).__name__))
 
-class DefGenerator(CtypesGenerator):
+class InitialDefGenerator(CtypesGenerator):
     PARSER = def_parser.WinDefParser
     HEADER = dedent("""
         import sys
@@ -505,10 +505,11 @@ class InitialCOMGenerator(CtypesGenerator):
 
     def analyse(self, data):
         self.real_type = {}
-        #self.add_exports("IID")
-        #self.add_exports("GUID")
-        #self.add_exports("LPGUID")
-        #self.add_exports("COMInterface")
+        self.add_exports("IID")
+        self.add_exports("GUID")
+        self.add_exports("LPGUID")
+        self.add_exports("COMInterface")
+        self.add_exports("COMImplementation")
         for cominterface in data:
             #import pdb;pdb.set_trace()
             self.add_exports(cominterface.name)
@@ -595,6 +596,10 @@ class COMGenerator(InitialCOMGenerator):
     IMPORT_HEADER = "{deps}"
     HEADER = ""
 
+class DefGenerator(InitialDefGenerator):
+    IMPORT_HEADER = "{deps}"
+    HEADER = ""
+
 
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -605,10 +610,10 @@ DEFAULT_INTERFACE_TO_IID = from_here("definitions\\interface_to_iid.txt")
 
 # A partial define without the dependance to ntstatus defintion
 # BOOTSTRAP!!
-non_generated_def = DefGenerator(from_here("definitions\\windef.txt"), from_here(r"..\windows\generated_def\\windef.py"))
+non_generated_def = InitialDefGenerator(from_here("definitions\\windef.txt"), from_here(r"..\windows\generated_def\\windef.py"))
 ntstatus = NtStatusGenerator(from_here("definitions\\ntstatus.txt"), from_here(r"..\windows\generated_def\\ntstatus.py"), dependances=[non_generated_def])
 # Not a real circular def (import not at the begin of file
-defs_with_ntstatus = DefGenerator(from_here("definitions\\windef.txt"), from_here(r"..\windows\generated_def\\windef.py"), dependances=[ntstatus])
+defs_with_ntstatus = InitialDefGenerator(from_here("definitions\\windef.txt"), from_here(r"..\windows\generated_def\\windef.py"), dependances=[ntstatus])
 structs = StructGenerator(from_here("definitions\\winstruct.txt"), from_here(r"..\windows\generated_def\\winstructs.py"), dependances=[defs_with_ntstatus])
 functions = FuncGenerator(from_here("definitions\\winfunc.txt"), from_here(r"..\windows\generated_def\\winfuncs.py"), dependances=[structs])
 com = InitialCOMGenerator(from_here("definitions\\com\\*.txt"), DEFAULT_INTERFACE_TO_IID, from_here(r"..\windows\generated_def\\interfaces.py"), dependances=[structs])
