@@ -140,6 +140,11 @@ TestInstr(Mov)(mem('gs:[0x1122334455667788]'), 'RAX')
 TestInstr(Mov)(mem('[RAX]'), 0x11223344)
 TestInstr(Mov)(mem('[EAX]'), 0x11223344)
 TestInstr(Mov)(mem('[RBX]'), 0x11223344)
+TestInstr(Mov)("R12", mem("[RAX]"))
+TestInstr(Mov)("RAX", mem("[R12]"))
+TestInstr(Mov)("RAX", mem("[RAX + R12]"))
+TestInstr(Mov)("RAX", mem("[R12 + R12]"))
+#TestInstr(Mov)("RSI", mem("[R12]"))
 
 TestInstr(And)('RCX', 'RBX')
 TestInstr(And)('RAX', 0x11223344)
@@ -173,11 +178,17 @@ TestInstr(Test)(mem('[RDI + 0x100]'), 'RCX')
 assert Test(mem('[RDI + 0x100]'), 'RCX').get_code() == Test('RCX', mem('[RDI + 0x100]')).get_code()
 
 
+TestInstr(Push)('RAX')
+assert len(Push("RAX").get_code()) == 1
 TestInstr(Push)('R15')
 TestInstr(Push)(0x42)
 TestInstr(Push)(-1)
 TestInstr(Push)(mem("[ECX]"))
 TestInstr(Push)(mem("[RCX]"))
+
+
+TestInstr(Pop)('RAX')
+assert len(Pop("RAX").get_code()) == 1
 
 
 TestInstr(Call)('RAX')

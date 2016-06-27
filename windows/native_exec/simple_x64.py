@@ -252,7 +252,9 @@ class X64RegisterSelector(object):
     def accept_arg(self, args, instr_state):
         x = args[0]
         try:
-            return (1, self.reg_opcode[x.upper()], BitArray(8, [0, 1, 0, 0 ,1 , 0, 0, 0]))
+            if getattr(instr_state.type, "default_32_bits", False):
+                return (1, self.reg_opcode[x.upper()], BitArray(8, [0, 1, 0, 0 ,1 , 0, 0, 0]))
+            return (1, self.reg_opcode[x.upper()], BitArray(8, [0, 1, 0, 0 ,0 , 0, 0, 0]))
         except (KeyError, AttributeError):
             pass
         try:
@@ -603,6 +605,7 @@ class ModRM_REG64__MEM(SubModRM):
 
         # Those registers cannot be addressed without SIB
         FIRE_UP_SIB = not arg2.base or arg2.base.upper() in ["RSP", "RBP"] or arg2.index
+        FIRE_UP_SIB = FIRE_UP_SIB or X64.is_new_reg(arg2.base)
 
         if not FIRE_UP_SIB:
             self.setup_reg_as_register(arg1)
@@ -695,7 +698,7 @@ class Slash(object):
             return arg_consum, value, rex
         return arg_consum - 1, value, rex
 
-instr_state = collections.namedtuple('instr_state', ['previous', 'prefixes'])
+instr_state = collections.namedtuple('instr_state', ['previous', 'prefixes', 'type'])
 
 
 class Instruction(object):
@@ -711,7 +714,7 @@ class Instruction(object):
             #if hasattr(self, "default_32_bits") and self.default_32_bits:
             #    full_rex = BitArray.from_int(8, 0x48)
             for element in type_encoding:
-                arg_consum, value, rex = element.accept_arg(args, instr_state(res, prefix))
+                arg_consum, value, rex = element.accept_arg(args, instr_state(res, prefix, type(self)))
                 if arg_consum is None:
                     break
                 res.append(value)
