@@ -953,8 +953,12 @@ def assemble(str):
             for arg in args_raw[0].split(","):
                 arg = arg.strip()
                 if (arg[0] == "[" or arg[2:4] == ":[") and arg[-1] == "]":
-                    print("MEM")
                     arg = mem(arg)
+                else:
+                    try:
+                        arg = int(arg, 0)
+                    except ValueError:
+                        pass
                 args.append(arg)
         shellcode += instr_object(*args)
     return shellcode.get_code()
