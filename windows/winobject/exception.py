@@ -183,6 +183,7 @@ class ECONTEXTBase(object):
     """DAT CONTEXT"""
     default_dump = ()
     pc_reg = ''
+    sp_reg = ''
     special_reg_type = {}
 
 
@@ -213,7 +214,14 @@ class ECONTEXTBase(object):
     def set_pc(self, value):
         return setattr(self, self.pc_reg, value)
 
+    def get_sp(self):
+        return getattr(self, self.sp_reg)
+
+    def set_sp(self, value):
+        return setattr(self, self.sp_reg, value)
+
     pc = property(get_pc, set_pc, None, "Program Counter register (EIP or RIP)")
+    sp = property(get_sp, set_sp, None, "Stack Pointer register (ESP or RSP)")
 
     @property
     def EEFlags(self):
@@ -240,12 +248,14 @@ class ECONTEXTBase(object):
 class ECONTEXT32(ECONTEXTBase, CONTEXT32):
     default_dump = ('Eip', 'Esp', 'Eax', 'Ebx', 'Ecx', 'Edx', 'Ebp', 'Edi', 'Esi', 'EFlags')
     pc_reg = 'Eip'
+    sp_reg = 'Esp'
     fields = [f[0] for f in CONTEXT32._fields_]
     """The fields of the structure"""
 
 class ECONTEXTWOW64(ECONTEXTBase, WOW64_CONTEXT):
     default_dump = ('Eip', 'Esp', 'Eax', 'Ebx', 'Ecx', 'Edx', 'Ebp', 'Edi', 'Esi', 'EFlags')
     pc_reg = 'Eip'
+    sp_reg = 'Esp'
     fields = [f[0] for f in WOW64_CONTEXT._fields_]
     """The fields of the structure"""
 
@@ -254,6 +264,7 @@ class ECONTEXT64(ECONTEXTBase, CONTEXT64):
     default_dump = ('Rip', 'Rsp', 'Rax', 'Rbx', 'Rcx', 'Rdx', 'Rbp', 'Rdi', 'Rsi',
                     'R9', 'R10', 'R11', 'R12', 'R13', 'R14', 'R15', 'EFlags')
     pc_reg = 'Rip'
+    sp_reg = 'Rsp'
     fields = [f[0] for f in CONTEXT64._fields_]
     """The fields of the structure"""
 

@@ -1148,6 +1148,41 @@ class MultipleInstr(object):
         return self
 
 
+def split_in_instruction(str):
+    for line in str.split("\n"):
+        if not line:
+            continue
+        for instr in line.split(";"):
+            if not instr:
+                continue
+            yield instr.strip()
+
+def assemble(str):
+    """Play test"""
+    shellcode = MultipleInstr()
+    for instr in split_in_instruction(str):
+        data = instr.split(" ", 1)
+        mnemo, args_raw = data[0], data[1:]
+        try:
+            instr_object = globals()[mnemo.capitalize()]
+        except:
+            raise ValueError("Unknow mnemonic <{0}>".format(mnemo))
+
+        args = []
+        if args_raw:
+            for arg in args_raw[0].split(","):
+                arg = arg.strip()
+                if (arg[0] == "[" or arg[2:4] == ":[") and arg[-1] == "]":
+                    arg = mem(arg)
+                else:
+                    try:
+                        arg = int(arg, 0)
+                    except ValueError:
+                        pass
+                args.append(arg)
+        shellcode += instr_object(*args)
+    return shellcode.get_code()
+
 # import windows.native_exec.simple_x64 as x64
 try:
     import midap

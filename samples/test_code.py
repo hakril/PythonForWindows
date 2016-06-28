@@ -4,6 +4,7 @@ import windows
 import windows.test
 import windows.debug as dbg
 import windows.native_exec.simple_x86 as x86
+import windows.native_exec.simple_x64 as x64
 from windows.generated_def import *
 
 def hexdump(string, start_addr=0):
@@ -84,6 +85,7 @@ class CodeTesteur(dbg.Debugger):
         exc_code = x.ExceptionRecord.ExceptionCode
         exc_addr = x.ExceptionRecord.ExceptionAddress
         if not self.init_breakpoint and exc_code == EXCEPTION_BREAKPOINT:
+            print("Init breakpoint")
             self.init_breakpoint = True
             return
         ctx = self.current_thread.context
@@ -91,7 +93,7 @@ class CodeTesteur(dbg.Debugger):
         ctx.dump()
         print(ctx.EEFlags)
         if exc_code == EXCEPTION_BREAKPOINT and exc_addr == self.context_exec.pc + len(self.initial_code):
-            print("Normal terminaison")
+            print("<Normal terminaison>")
         else:
             print("<{0}> at <{1:#x}>".format(exc_code, exc_addr))
         self.report_ctx_diff(self.context_exec, ctx)
@@ -105,34 +107,64 @@ class CodeTesteur(dbg.Debugger):
             if start_value != now_value:
                 diff = now_value - start_value
                 print("{0}: {1:#x} -> {2:#x} ({3:+#x})".format(name, start_value, now_value, diff))
-        if start.Esp > now.Esp:
+        if start.sp > now.sp:
             print("Negative Stack: dumping:")
-            data = self.current_process.read_memory(now.Esp, start.Esp - now.Esp)
-            print(hexdump(data, start.Esp))
+            data = self.current_process.read_memory(now.sp, start.sp - now.sp)
+            print(hexdump(data, start.sp))
 
 
+def test_code_x86():
+    print("Testing x86 code")
+    process = windows.test.pop_calc_32(dwCreationFlags=DEBUG_PROCESS)
+    code = x86.assemble(sys.argv[1])
+
+    start_register = {}
+    if len(sys.argv) > 2:
+        for name_value in sys.argv[2].split(";"):
+            name, value = name_value.split("=")
+            name = name.strip().capitalize()
+            if name == "Eflags":
+                name = "EFlags"
+            value = int(value.strip(), 0)
+            start_register[name] = value
+
+
+    x = CodeTesteur(process, code, start_register)
+    x.loop()
+
+def test_code_x64():
+    print("Testing x64 code")
+    if windows.current_process.bitness == 32:
+        raise ValueError("Cannot debug a 64b process from 32b python")
+    process = windows.test.pop_calc_64(dwCreationFlags=DEBUG_PROCESS)
+    code = x64.assemble(sys.argv[1])
+
+    start_register = {}
+    if len(sys.argv) > 2:
+        for name_value in sys.argv[2].split(";"):
+            name, value = name_value.split("=")
+            name = name.strip().capitalize()
+            if name == "Eflags":
+                name = "EFlags"
+            value = int(value.strip(), 0)
+            start_register[name] = value
+
+
+    x = CodeTesteur(process, code, start_register)
+    x.loop()
 
 import sys
 if len(sys.argv) < 2:
     print("Need x86 code to exec as first argument")
     exit(1)
 
-process = windows.test.pop_calc_32(dwCreationFlags=DEBUG_PROCESS)
-code = x86.assemble(sys.argv[1])
-
-start_register = {}
-if len(sys.argv) > 2:
-    for name_value in sys.argv[2].split(";"):
-        name, value = name_value.split("=")
-        name = name.strip().capitalize()
-        if name == "Eflags":
-            name = "EFlags"
-        value = int(value.strip(), 0)
-        start_register[name] = value
+if sys.argv[1] == "-x64":
+    sys.argv.remove("-x64")
+    test_code_x64()
+else:
+    test_code_x86()
 
 
-x = CodeTesteur(process, code, start_register)
-x.loop()
 
 
 
