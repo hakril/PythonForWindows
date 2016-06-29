@@ -85,7 +85,6 @@ class CodeTesteur(dbg.Debugger):
         exc_code = x.ExceptionRecord.ExceptionCode
         exc_addr = x.ExceptionRecord.ExceptionAddress
         if not self.init_breakpoint and exc_code == EXCEPTION_BREAKPOINT:
-            print("Init breakpoint")
             self.init_breakpoint = True
             return
         ctx = self.current_thread.context
@@ -161,6 +160,9 @@ if len(sys.argv) < 2:
 if sys.argv[1] == "-x64":
     sys.argv.remove("-x64")
     test_code_x64()
+elif sys.argv[1] == "--raw":
+    sys.argv.remove("--raw")
+    pass
 else:
     test_code_x86()
 

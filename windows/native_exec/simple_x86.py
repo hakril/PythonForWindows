@@ -529,6 +529,20 @@ class Instruction(object):
         prefix_opcode = b"".join(chr(p.PREFIX_VALUE) for p in self.prefix)
         return prefix_opcode + bytes(self.value.dump())
 
+    #def __add__(self, other):
+    #    res = MultipleInstr()
+    #    res += self
+    #    res += other
+    #    return res
+
+    def __mul__(self, value):
+        if not isinstance(value, (int, long)):
+            return NotImplemented
+        res = MultipleInstr()
+        for i in range(value):
+            res += self
+        return res
+
 
 # Jump helpers
 class DelayedJump(object):
