@@ -9,23 +9,15 @@ TODO:
         - Test !! (bp, BP_HX, bp on only on process, bp_hx on only one thread..)
 		- test breakpoint with specific target
 
-    - Winproxy:
-        - rethink OptionalExport ? not useful with lazy resolution (or we need to force resolution..)
-
 	- Readme
 		- Debugger ? Veh ?
 
     - TransparentApiProxy
         double name (params and args) for same info..
 
-    - 32 <-> 64
-        * What about ``NtWow64QueryVirtualMemory64`` ?
-
     - Parse .IDL file for more COM NAME->IID
 
     - Add test for debugger with breakpoint that add another breakpoint on trigger
-
-    - NtQueryVirtualMemory_32_to_64 (stop using hardcoded value for request type: add it to enum)
 
     - Some test/doc on windows.system.handles
 

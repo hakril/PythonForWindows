@@ -370,7 +370,7 @@ class Process(AutoHandle):
         if windows.current_process.bitness == 32 and self.bitness == 64:
             res = MEMORY_BASIC_INFORMATION64()
             try:
-                v = windows.syswow64.NtQueryVirtualMemory_32_to_64(ProcessHandle=self.handle, BaseAddress=addr, MemoryInformation=res)
+                v = windows.syswow64.NtQueryVirtualMemory_32_to_64(ProcessHandle=self.handle, BaseAddress=addr, MemoryInformationClass=MemoryBasicInformation, MemoryInformation=res)
             except NtStatusException as e:
                 if e.code & 0xffffffff == 0XC000000D:
                     raise winproxy.Kernel32Error("NtQueryVirtualMemory_32_to_64")
@@ -422,7 +422,7 @@ class Process(AutoHandle):
             res = GENERATED_PSAPI_WORKING_SET_INFORMATION()
             try:
                 if windows.current_process.bitness == 32 and self.bitness == 64:
-                    windows.syswow64.NtQueryVirtualMemory_32_to_64(self.handle, 0, 1, res)
+                    windows.syswow64.NtQueryVirtualMemory_32_to_64(self.handle, 0, MemoryWorkingSetList, res)
                 else:
                     windows.winproxy.QueryWorkingSet(self.handle, ctypes.byref(res), ctypes.sizeof(res))
             except WindowsError as e:
@@ -448,7 +448,7 @@ class Process(AutoHandle):
         for i, data in enumerate(info_array):
             info_array[i].VirtualAddress = addresses[i]
         if windows.current_process.bitness == 32 and self.bitness == 64:
-            windows.syswow64.NtQueryVirtualMemory_32_to_64(self.handle, 0, 4, info_array)
+            windows.syswow64.NtQueryVirtualMemory_32_to_64(self.handle, 0, MemoryWorkingSetListEx, info_array)
         else:
             winproxy.QueryWorkingSetEx(self.handle, ctypes.byref(info_array), ctypes.sizeof(info_array))
         return info_array
@@ -465,7 +465,7 @@ class Process(AutoHandle):
         if  windows.current_process.bitness == 32 and self.bitness == 64:
              target_size = ctypes.c_buffer(buffer_size)
              try:
-                windows.syswow64.NtQueryVirtualMemory_32_to_64(self.handle, addr, 2, buffer, buffer_size, target_size)
+                windows.syswow64.NtQueryVirtualMemory_32_to_64(self.handle, addr, MemorySectionName, buffer, buffer_size, target_size)
              except NtStatusException as e:
                 if e.code not in  [STATUS_FILE_INVALID, STATUS_INVALID_ADDRESS, STATUS_TRANSACTION_NOT_ACTIVE]:
                     raise
@@ -812,7 +812,7 @@ class WinProcess(Process):
     def write_memory(self, addr, data):
         """Write `data` at `addr`"""
         if windows.current_process.bitness == 32 and self.bitness == 64:
-            if winproxy.NtWow64WriteVirtualMemory64 is None:
+            if not winproxy.is_implemented(winproxy.NtWow64WriteVirtualMemory64):
                 raise ValueError("NtWow64WriteVirtualMemory64 non available in ntdll: cannot write into 64bits processus")
             return winproxy.NtWow64WriteVirtualMemory64(self.handle, addr, data, len(data))
         return winproxy.WriteProcessMemory(self.handle, addr, lpBuffer=data)
@@ -820,7 +820,7 @@ class WinProcess(Process):
     def low_read_memory(self, addr, buffer_addr, size):
         if windows.current_process.bitness == 32 and self.bitness == 64:
             # OptionalExport can be None (see winproxy.py)
-            if winproxy.NtWow64ReadVirtualMemory64 is None:
+            if not winproxy.is_implemented(winproxy.NtWow64ReadVirtualMemory64):
                 raise ValueError("NtWow64ReadVirtualMemory64 non available in ntdll: cannot read into 64bits processus")
             return winproxy.NtWow64ReadVirtualMemory64(self.handle, addr, buffer_addr, size)
         #if self.is_wow_64 and addr > 0xffffffff:

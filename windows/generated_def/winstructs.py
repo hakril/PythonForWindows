@@ -58,6 +58,7 @@ HKEY = HANDLE
 HCATADMIN = HANDLE
 HCATINFO = HANDLE
 SC_HANDLE = HANDLE
+HCERTCHAINENGINE = HANDLE
 LPHANDLE = POINTER(HANDLE)
 PHKEY = POINTER(HKEY)
 ACCESS_MASK = DWORD
@@ -67,6 +68,7 @@ DISPID = LONG
 MEMBERID = DISPID
 PSECURITY_DESCRIPTOR = PVOID
 LPUNKNOWN = POINTER(PVOID)
+SPC_UUID = BYTE * 16
 GUID = PVOID
 PWINDBG_EXTENSION_APIS32 = PVOID
 PWINDBG_EXTENSION_APIS64 = PVOID
@@ -194,8 +196,12 @@ SYSTEM_INFORMATION_CLASS = _SYSTEM_INFORMATION_CLASS
 
 
 MemoryBasicInformation = EnumValue("_MEMORY_INFORMATION_CLASS", "MemoryBasicInformation", 0x0)
+MemoryWorkingSetList = EnumValue("_MEMORY_INFORMATION_CLASS", "MemoryWorkingSetList", 0x1)
+MemorySectionName = EnumValue("_MEMORY_INFORMATION_CLASS", "MemorySectionName", 0x2)
+MemoryBasicVlmInformation = EnumValue("_MEMORY_INFORMATION_CLASS", "MemoryBasicVlmInformation", 0x3)
+MemoryWorkingSetListEx = EnumValue("_MEMORY_INFORMATION_CLASS", "MemoryWorkingSetListEx", 0x4)
 class _MEMORY_INFORMATION_CLASS(EnumType):
-    values = [MemoryBasicInformation]
+    values = [MemoryBasicInformation, MemoryWorkingSetList, MemorySectionName, MemoryBasicVlmInformation, MemoryWorkingSetListEx]
     mapper = {x:x for x in values}
 MEMORY_INFORMATION_CLASS = _MEMORY_INFORMATION_CLASS
 
@@ -806,13 +812,13 @@ TYPEKIND = tagTYPEKIND
 
 # Self referencing struct tricks
 class _LIST_ENTRY(Structure): pass
+PLIST_ENTRY = POINTER(_LIST_ENTRY)
+LIST_ENTRY = _LIST_ENTRY
+PRLIST_ENTRY = POINTER(_LIST_ENTRY)
 _LIST_ENTRY._fields_ = [
     ("Flink", POINTER(_LIST_ENTRY)),
     ("Blink", POINTER(_LIST_ENTRY)),
 ]
-PLIST_ENTRY = POINTER(_LIST_ENTRY)
-LIST_ENTRY = _LIST_ENTRY
-PRLIST_ENTRY = POINTER(_LIST_ENTRY)
 
 class _PEB_LDR_DATA(Structure):
         _fields_ = [
@@ -1864,6 +1870,8 @@ IP_INTERFACE_INFO = _IP_INTERFACE_INFO
 
 # Self referencing struct tricks
 class _EXCEPTION_RECORD(Structure): pass
+PEXCEPTION_RECORD = POINTER(_EXCEPTION_RECORD)
+EXCEPTION_RECORD = _EXCEPTION_RECORD
 _EXCEPTION_RECORD._fields_ = [
     ("ExceptionCode", DWORD),
     ("ExceptionFlags", DWORD),
@@ -1872,8 +1880,6 @@ _EXCEPTION_RECORD._fields_ = [
     ("NumberParameters", DWORD),
     ("ExceptionInformation", ULONG_PTR * EXCEPTION_MAXIMUM_PARAMETERS),
 ]
-PEXCEPTION_RECORD = POINTER(_EXCEPTION_RECORD)
-EXCEPTION_RECORD = _EXCEPTION_RECORD
 
 class _EXCEPTION_RECORD32(Structure):
         _fields_ = [
@@ -2209,11 +2215,13 @@ class _TMP_signscale(Structure):
         ("sign", BYTE),
     ]
 
+
 class _TMP_lowmid(Structure):
         _fields_ = [
         ("Lo32", ULONG),
         ("Mid32", ULONG),
     ]
+
 
 class TMP_signscale_union(Union):
         _fields_ = [
@@ -2221,11 +2229,13 @@ class TMP_signscale_union(Union):
         ("signscale", USHORT),
     ]
 
+
 class TMP_lowmid_union(Union):
         _fields_ = [
         ("s", _TMP_lowmid),
         ("Lo64", ULONGLONG),
     ]
+
 
 class tagDEC(Structure):
         _fields_ = [
@@ -2281,6 +2291,7 @@ class TMP_variant_sub_union(Union):
         ("puintVal", POINTER(UINT)),
         ("_VARIANT_NAME_4", _tagBRECORD),
     ]
+
 
 class __tagVARIANT(Structure):
         _fields_ = [
@@ -3125,3 +3136,223 @@ class _DEBUG_SYMBOL_SOURCE_ENTRY(Structure):
     ]
 DEBUG_SYMBOL_SOURCE_ENTRY = _DEBUG_SYMBOL_SOURCE_ENTRY
 PDEBUG_SYMBOL_SOURCE_ENTRY = POINTER(_DEBUG_SYMBOL_SOURCE_ENTRY)
+
+class _CMSG_SIGNER_INFO(Structure):
+        _fields_ = [
+        ("dwVersion", DWORD),
+        ("Issuer", CERT_NAME_BLOB),
+        ("SerialNumber", CRYPT_INTEGER_BLOB),
+        ("HashAlgorithm", CRYPT_ALGORITHM_IDENTIFIER),
+        ("HashEncryptionAlgorithm", CRYPT_ALGORITHM_IDENTIFIER),
+        ("EncryptedHash", CRYPT_DATA_BLOB),
+        ("AuthAttrs", CRYPT_ATTRIBUTES),
+        ("UnauthAttrs", CRYPT_ATTRIBUTES),
+    ]
+CMSG_SIGNER_INFO = _CMSG_SIGNER_INFO
+PCMSG_SIGNER_INFO = POINTER(_CMSG_SIGNER_INFO)
+
+class _SPC_SERIALIZED_OBJECT(Structure):
+        _fields_ = [
+        ("ClassId", SPC_UUID),
+        ("SerializedData", CRYPT_DATA_BLOB),
+    ]
+SPC_SERIALIZED_OBJECT = _SPC_SERIALIZED_OBJECT
+PSPC_SERIALIZED_OBJECT = POINTER(_SPC_SERIALIZED_OBJECT)
+
+class _TMP_SPC_LINK_UNION(Union):
+        _fields_ = [
+        ("pwszUrl", LPWSTR),
+        ("Moniker", SPC_SERIALIZED_OBJECT),
+        ("pwszFile", LPWSTR),
+    ]
+TMP_SPC_LINK_UNION = _TMP_SPC_LINK_UNION
+
+class SPC_LINK_(Structure):
+        _fields_ = [
+        ("dwLinkChoice", DWORD),
+        ("u", TMP_SPC_LINK_UNION),
+    ]
+PSPC_LINK = POINTER(SPC_LINK_)
+SPC_LINK = SPC_LINK_
+
+class _SPC_SP_OPUS_INFO(Structure):
+        _fields_ = [
+        ("pwszProgramName", LPCWSTR),
+        ("pMoreInfo", POINTER(SPC_LINK_)),
+        ("pPublisherInfo", POINTER(SPC_LINK_)),
+    ]
+PSPC_SP_OPUS_INFO = POINTER(_SPC_SP_OPUS_INFO)
+SPC_SP_OPUS_INFO = _SPC_SP_OPUS_INFO
+
+class _CERT_TRUST_STATUS(Structure):
+        _fields_ = [
+        ("dwErrorStatus", DWORD),
+        ("dwInfoStatus", DWORD),
+    ]
+PCERT_TRUST_STATUS = POINTER(_CERT_TRUST_STATUS)
+CERT_TRUST_STATUS = _CERT_TRUST_STATUS
+
+class _CERT_TRUST_LIST_INFO(Structure):
+        _fields_ = [
+        ("cbSize", DWORD),
+        ("pCtlEntry", PCTL_ENTRY),
+        ("pCtlContext", PCCTL_CONTEXT),
+    ]
+PCERT_TRUST_LIST_INFO = POINTER(_CERT_TRUST_LIST_INFO)
+CERT_TRUST_LIST_INFO = _CERT_TRUST_LIST_INFO
+
+class _CERT_CONTEXT(Structure):
+        _fields_ = [
+        ("dwCertEncodingType", DWORD),
+        ("pbCertEncoded", POINTER(BYTE)),
+        ("cbCertEncoded", DWORD),
+        ("pCertInfo", PCERT_INFO),
+        ("hCertStore", HCERTSTORE),
+    ]
+PCCERT_CONTEXT = POINTER(_CERT_CONTEXT)
+CERT_CONTEXT = _CERT_CONTEXT
+PCERT_CONTEXT = POINTER(_CERT_CONTEXT)
+
+class _CRL_ENTRY(Structure):
+        _fields_ = [
+        ("SerialNumber", CRYPT_INTEGER_BLOB),
+        ("RevocationDate", FILETIME),
+        ("cExtension", DWORD),
+        ("rgExtension", PCERT_EXTENSION),
+    ]
+CRL_ENTRY = _CRL_ENTRY
+PCRL_ENTRY = POINTER(_CRL_ENTRY)
+
+class _CRL_INFO(Structure):
+        _fields_ = [
+        ("dwVersion", DWORD),
+        ("SignatureAlgorithm", CRYPT_ALGORITHM_IDENTIFIER),
+        ("Issuer", CERT_NAME_BLOB),
+        ("ThisUpdate", FILETIME),
+        ("NextUpdate", FILETIME),
+        ("cCRLEntry", DWORD),
+        ("rgCRLEntry", PCRL_ENTRY),
+        ("cExtension", DWORD),
+        ("rgExtension", PCERT_EXTENSION),
+    ]
+CRL_INFO = _CRL_INFO
+PCRL_INFO = POINTER(_CRL_INFO)
+
+class _CRL_CONTEXT(Structure):
+        _fields_ = [
+        ("dwCertEncodingType", DWORD),
+        ("pbCrlEncoded", POINTER(BYTE)),
+        ("cbCrlEncoded", DWORD),
+        ("pCrlInfo", PCRL_INFO),
+        ("hCertStore", HCERTSTORE),
+    ]
+PCCRL_CONTEXT = POINTER(_CRL_CONTEXT)
+CRL_CONTEXT = _CRL_CONTEXT
+PCRL_CONTEXT = POINTER(_CRL_CONTEXT)
+
+class _CERT_REVOCATION_CRL_INFO(Structure):
+        _fields_ = [
+        ("cbSize", DWORD),
+        ("pBaseCrlContext", PCCRL_CONTEXT),
+        ("pDeltaCrlContext", PCCRL_CONTEXT),
+        ("pCrlEntry", PCRL_ENTRY),
+        ("fDeltaCrlEntry", BOOL),
+    ]
+CERT_REVOCATION_CRL_INFO = _CERT_REVOCATION_CRL_INFO
+PCERT_REVOCATION_CRL_INFO = POINTER(_CERT_REVOCATION_CRL_INFO)
+
+class _CERT_REVOCATION_INFO(Structure):
+        _fields_ = [
+        ("cbSize", DWORD),
+        ("dwRevocationResult", DWORD),
+        ("pszRevocationOid", LPCSTR),
+        ("pvOidSpecificInfo", LPVOID),
+        ("fHasFreshnessTime", BOOL),
+        ("dwFreshnessTime", DWORD),
+        ("pCrlInfo", PCERT_REVOCATION_CRL_INFO),
+    ]
+CERT_REVOCATION_INFO = _CERT_REVOCATION_INFO
+PCERT_REVOCATION_INFO = POINTER(_CERT_REVOCATION_INFO)
+
+class _CERT_CHAIN_ELEMENT(Structure):
+        _fields_ = [
+        ("cbSize", DWORD),
+        ("pCertContext", PCCERT_CONTEXT),
+        ("TrustStatus", CERT_TRUST_STATUS),
+        ("pRevocationInfo", PCERT_REVOCATION_INFO),
+        ("pIssuanceUsage", PCERT_ENHKEY_USAGE),
+        ("pApplicationUsage", PCERT_ENHKEY_USAGE),
+        ("pwszExtendedErrorInfo", LPCWSTR),
+    ]
+PCERT_CHAIN_ELEMENT = POINTER(_CERT_CHAIN_ELEMENT)
+CERT_CHAIN_ELEMENT = _CERT_CHAIN_ELEMENT
+PCCERT_CHAIN_ELEMENT = POINTER(_CERT_CHAIN_ELEMENT)
+
+class _CERT_SIMPLE_CHAIN(Structure):
+        _fields_ = [
+        ("cbSize", DWORD),
+        ("TrustStatus", CERT_TRUST_STATUS),
+        ("cElement", DWORD),
+        ("rgpElement", POINTER(PCERT_CHAIN_ELEMENT)),
+        ("pTrustListInfo", PCERT_TRUST_LIST_INFO),
+        ("fHasRevocationFreshnessTime", BOOL),
+        ("dwRevocationFreshnessTime", DWORD),
+    ]
+CERT_SIMPLE_CHAIN = _CERT_SIMPLE_CHAIN
+PCERT_SIMPLE_CHAIN = POINTER(_CERT_SIMPLE_CHAIN)
+PCCERT_SIMPLE_CHAIN = POINTER(_CERT_SIMPLE_CHAIN)
+
+# Self referencing struct tricks
+class _CERT_CHAIN_CONTEXT(Structure): pass
+CERT_CHAIN_CONTEXT = _CERT_CHAIN_CONTEXT
+PCERT_CHAIN_CONTEXT = POINTER(_CERT_CHAIN_CONTEXT)
+PCCERT_CHAIN_CONTEXT = POINTER(_CERT_CHAIN_CONTEXT)
+_CERT_CHAIN_CONTEXT._fields_ = [
+    ("cbSize", DWORD),
+    ("TrustStatus", CERT_TRUST_STATUS),
+    ("cChain", DWORD),
+    ("rgpChain", POINTER(PCERT_SIMPLE_CHAIN)),
+    ("cLowerQualityChainContext", DWORD),
+    ("rgpLowerQualityChainContext", POINTER(PCCERT_CHAIN_CONTEXT)),
+    ("fHasRevocationFreshnessTime", BOOL),
+    ("dwRevocationFreshnessTime", DWORD),
+    ("dwCreateFlags", DWORD),
+    ("ChainId", GUID),
+]
+
+class _CERT_USAGE_MATCH(Structure):
+        _fields_ = [
+        ("dwType", DWORD),
+        ("Usage", CERT_ENHKEY_USAGE),
+    ]
+CERT_USAGE_MATCH = _CERT_USAGE_MATCH
+PCERT_USAGE_MATCH = POINTER(_CERT_USAGE_MATCH)
+
+class _CERT_CHAIN_PARA(Structure):
+        _fields_ = [
+        ("cbSize", DWORD),
+        ("RequestedUsage", CERT_USAGE_MATCH),
+        ("RequestedIssuancePolicy", CERT_USAGE_MATCH),
+        ("dwUrlRetrievalTimeout", DWORD),
+        ("fCheckRevocationFreshnessTime", BOOL),
+        ("dwRevocationFreshnessTime", DWORD),
+        ("pftCacheResync", LPFILETIME),
+    ]
+CERT_CHAIN_PARA = _CERT_CHAIN_PARA
+PCERT_CHAIN_PARA = POINTER(_CERT_CHAIN_PARA)
+
+class _CERT_CHAIN_ENGINE_CONFIG(Structure):
+        _fields_ = [
+        ("cbSize", DWORD),
+        ("hRestrictedRoot", HCERTSTORE),
+        ("hRestrictedTrust", HCERTSTORE),
+        ("hRestrictedOther", HCERTSTORE),
+        ("cAdditionalStore", DWORD),
+        ("rghAdditionalStore", POINTER(HCERTSTORE)),
+        ("dwFlags", DWORD),
+        ("dwUrlRetrievalTimeout", DWORD),
+        ("MaximumCachedCertificates", DWORD),
+        ("CycleDetectionModulus", DWORD),
+    ]
+CERT_CHAIN_ENGINE_CONFIG = _CERT_CHAIN_ENGINE_CONFIG
+PCERT_CHAIN_ENGINE_CONFIG = POINTER(_CERT_CHAIN_ENGINE_CONFIG)

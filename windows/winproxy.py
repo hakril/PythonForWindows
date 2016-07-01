@@ -186,27 +186,27 @@ class VersionProxy(ApiProxy):
     APIDLL = "version"
     default_error_check = staticmethod(kernel32_error_check)
 
-class OptionalExport(object):
-    """used 'around' a Proxy decorator
-       Should be used for export that are not available everywhere (ntdll internals | 32/64 bits stuff)
-       If the export is not found the function will be None
-
-       Example:
-            @OptionalExport(NtdllProxy('NtWow64ReadVirtualMemory64'))
-            def NtWow64ReadVirtualMemory64(...)
-            ...
-    """
-    def __init__(self, subdecorator):
-        self.subdecorator = subdecorator
-
-    def __call__(self, f):
-        try:
-            x = self.subdecorator(f)
-            x.force_resolution()
-            return x
-        except ExportNotFound as e:
-            dbgprint("Export <{e.func_name}> not found in <{e.api_name}>".format(e=e), "EXPORTNOTFOUND")
-            return None
+#class OptionalExport(object):
+#    """used 'around' a Proxy decorator
+#       Should be used for export that are not available everywhere (ntdll internals | 32/64 bits stuff)
+#       If the export is not found the function will be None
+#
+#       Example:
+#            @OptionalExport(NtdllProxy('NtWow64ReadVirtualMemory64'))
+#            def NtWow64ReadVirtualMemory64(...)
+#            ...
+#    """
+#    def __init__(self, subdecorator):
+#        self.subdecorator = subdecorator
+#
+#    def __call__(self, f):
+#        try:
+#            x = self.subdecorator(f)
+#            x.force_resolution()
+#            return x
+#        except ExportNotFound as e:
+#            dbgprint("Export <{e.func_name}> not found in <{e.api_name}>".format(e=e), "EXPORTNOTFOUND")
+#            return None
 
 class TransparentApiProxy(object):
     def __init__(self, DLLNAME, func_name, error_check):
@@ -285,10 +285,10 @@ GetComputerNameW = TransparentKernel32Proxy("GetComputerNameW")
 
 
 
-Wow64DisableWow64FsRedirection = OptionalExport(TransparentKernel32Proxy)("Wow64DisableWow64FsRedirection")
-Wow64RevertWow64FsRedirection = OptionalExport(TransparentKernel32Proxy)("Wow64RevertWow64FsRedirection")
-Wow64EnableWow64FsRedirection = OptionalExport(TransparentKernel32Proxy)("Wow64EnableWow64FsRedirection")
-Wow64GetThreadContext = OptionalExport(TransparentKernel32Proxy)("Wow64GetThreadContext")
+Wow64DisableWow64FsRedirection = TransparentKernel32Proxy("Wow64DisableWow64FsRedirection")
+Wow64RevertWow64FsRedirection = TransparentKernel32Proxy("Wow64RevertWow64FsRedirection")
+Wow64EnableWow64FsRedirection = TransparentKernel32Proxy("Wow64EnableWow64FsRedirection")
+Wow64GetThreadContext = TransparentKernel32Proxy("Wow64GetThreadContext")
 
 
 def CreateFile_error_check(func_name, result, func, args):
@@ -553,24 +553,25 @@ def GetMappedFileNameWWrapper(hProcess, lpv, lpFilename, nSize=None):
     if nSize is None:
         nSize = ctypes.sizeof(lpFilename)
     return GetMappedFileNameWWrapper.ctypes_function(hProcess, lpv, lpFilename, nSize)
-GetMappedFileNameW = OptionalExport(Kernel32Proxy("GetMappedFileNameW"))(GetMappedFileNameWWrapper)
+GetMappedFileNameW = Kernel32Proxy("GetMappedFileNameW")(GetMappedFileNameWWrapper)
 
 
 def GetMappedFileNameAWrapper(hProcess, lpv, lpFilename, nSize=None):
     if nSize is None:
         nSize = ctypes.sizeof(lpFilename)
     return GetMappedFileNameAWrapper.ctypes_function(hProcess, lpv, lpFilename, nSize)
-GetMappedFileNameA = OptionalExport(Kernel32Proxy("GetMappedFileNameA"))(GetMappedFileNameAWrapper)
+GetMappedFileNameA = Kernel32Proxy("GetMappedFileNameA")(GetMappedFileNameAWrapper)
 
 def QueryWorkingSetWrapper(hProcess, pv, cb):
     return QueryWorkingSet.ctypes_function(hProcess, pv, cb)
-QueryWorkingSet = OptionalExport(Kernel32Proxy("QueryWorkingSet"))(QueryWorkingSetWrapper)
+QueryWorkingSet = Kernel32Proxy("QueryWorkingSet")(QueryWorkingSetWrapper)
 
 def QueryWorkingSetExWrapper(hProcess, pv, cb):
     return QueryWorkingSetEx.ctypes_function(hProcess, pv, cb)
-QueryWorkingSetEx = OptionalExport(Kernel32Proxy("QueryWorkingSetEx"))(QueryWorkingSetExWrapper)
+QueryWorkingSetEx = Kernel32Proxy("QueryWorkingSetEx")(QueryWorkingSetExWrapper)
 
-if GetMappedFileNameA is None:
+
+if not is_implemented(GetMappedFileNameA):
     GetMappedFileNameW = PsapiProxy("GetMappedFileNameW")(GetMappedFileNameWWrapper)
     GetMappedFileNameA = PsapiProxy("GetMappedFileNameA")(GetMappedFileNameAWrapper)
     QueryWorkingSet = PsapiProxy("QueryWorkingSet")(QueryWorkingSetWrapper)
@@ -580,16 +581,16 @@ def GetModuleBaseNameAWrapper(hProcess, hModule, lpBaseName, nSize=None):
     if nSize is None:
         nSize = len(lpBaseName)
     return GetModuleBaseNameAWrapper.ctypes_function(hProcess, hModule, lpBaseName, nSize)
-GetModuleBaseNameA = OptionalExport(Kernel32Proxy("GetMappedFileNameA"))(GetModuleBaseNameAWrapper)
+GetModuleBaseNameA = Kernel32Proxy("GetMappedFileNameA")(GetModuleBaseNameAWrapper)
 
 
 def GetModuleBaseNameWWrapper(hProcess, hModule, lpBaseName, nSize=None):
     if nSize is None:
         nSize = len(lpBaseName)
     return GetModuleBaseNameWWrapper.ctypes_function(hProcess, hModule, lpBaseName, nSize)
-GetModuleBaseNameA = OptionalExport(Kernel32Proxy("GetModuleBaseNameW"))(GetModuleBaseNameWWrapper)
+GetModuleBaseNameA = Kernel32Proxy("GetModuleBaseNameW")(GetModuleBaseNameWWrapper)
 
-if GetModuleBaseNameA is None:
+if not is_implemented(GetModuleBaseNameA):
     GetModuleBaseNameA = PsapiProxy("GetModuleBaseNameA")(GetModuleBaseNameAWrapper)
     GetModuleBaseNameW = PsapiProxy("GetModuleBaseNameW")(GetModuleBaseNameWWrapper)
 
@@ -598,15 +599,15 @@ def GetProcessImageFileNameAWrapper(hProcess, lpImageFileName, nSize=None):
     if nSize is None:
         nSize = len(lpImageFileName)
     return GetProcessImageFileNameAWrapper.ctypes_function(hProcess, lpImageFileName, nSize)
-GetProcessImageFileNameA = OptionalExport(Kernel32Proxy("GetProcessImageFileNameA"))(GetProcessImageFileNameAWrapper)
+GetProcessImageFileNameA = Kernel32Proxy("GetProcessImageFileNameA")(GetProcessImageFileNameAWrapper)
 
 def GetProcessImageFileNameWWrapper(hProcess, lpImageFileName, nSize=None):
     if nSize is None:
         nSize = len(lpImageFileName)
     return GetProcessImageFileNameWWrapper.ctypes_function(hProcess, lpImageFileName, nSize)
-GetProcessImageFileNameW = OptionalExport(Kernel32Proxy("GetProcessImageFileNameW"))(GetProcessImageFileNameWWrapper)
+GetProcessImageFileNameW = Kernel32Proxy("GetProcessImageFileNameW")(GetProcessImageFileNameWWrapper)
 
-if GetProcessImageFileNameA is None:
+if not is_implemented(GetProcessImageFileNameA):
     GetProcessImageFileNameA = PsapiProxy("GetProcessImageFileNameA")(GetProcessImageFileNameAWrapper)
     GetProcessImageFileNameW = PsapiProxy("GetProcessImageFileNameW")(GetProcessImageFileNameWWrapper)
 
@@ -659,11 +660,11 @@ def SetConsoleCtrlHandler(HandlerRoutine, Add):
 
 # ### NTDLL #### #
 
-@OptionalExport(NtdllProxy('NtWow64ReadVirtualMemory64', error_ntstatus))
+@NtdllProxy('NtWow64ReadVirtualMemory64', error_ntstatus)
 def NtWow64ReadVirtualMemory64(hProcess, lpBaseAddress, lpBuffer, nSize, lpNumberOfBytesRead=None):
     return NtWow64ReadVirtualMemory64.ctypes_function(hProcess, lpBaseAddress, lpBuffer, nSize, lpNumberOfBytesRead)
 
-@OptionalExport(NtdllProxy('NtWow64WriteVirtualMemory64', error_ntstatus))
+@NtdllProxy('NtWow64WriteVirtualMemory64', error_ntstatus)
 def NtWow64WriteVirtualMemory64(hProcess, lpBaseAddress, lpBuffer, nSize, lpNumberOfBytesWritten=None):
     return NtWow64WriteVirtualMemory64.ctypes_function(hProcess, lpBaseAddress, lpBuffer, nSize, lpNumberOfBytesWritten)
 
@@ -691,7 +692,7 @@ def NtQuerySystemInformation(SystemInformationClass, SystemInformation=None, Sys
     return NtQuerySystemInformation.ctypes_function(SystemInformationClass, SystemInformation, SystemInformationLength, ReturnLength)
 
 
-@OptionalExport(NtdllProxy('NtQueryInformationProcess', error_ntstatus))
+@NtdllProxy('NtQueryInformationProcess', error_ntstatus)
 def NtQueryInformationProcess(ProcessHandle, ProcessInformationClass, ProcessInformation, ProcessInformationLength=0, ReturnLength=None):
     if ProcessInformation is not None and ProcessInformationLength == 0:
         ProcessInformationLength = ctypes.sizeof(ProcessInformation)
@@ -717,7 +718,7 @@ def NtProtectVirtualMemory(ProcessHandle, BaseAddress, NumberOfBytesToProtect, N
         OldAccessProtection = DWORD()
     return NtProtectVirtualMemory.ctypes_function(ProcessHandle, BaseAddress, NumberOfBytesToProtect, NewAccessProtection, OldAccessProtection)
 
-@OptionalExport(NtdllProxy('NtQueryVirtualMemory', error_ntstatus))
+@NtdllProxy('NtQueryVirtualMemory', error_ntstatus)
 def NtQueryVirtualMemory(ProcessHandle, BaseAddress, MemoryInformationClass, MemoryInformation=NeededParameter, MemoryInformationLength=0, ReturnLength=None):
     if ReturnLength is None:
         ReturnLength = byref(ULONG())
@@ -732,7 +733,7 @@ def NtQueryVirtualMemory(ProcessHandle, BaseAddress, MemoryInformationClass, Mem
 def NtQueryObject(Handle, ObjectInformationClass, ObjectInformation=None, ObjectInformationLength=0, ReturnLength=NeededParameter):
     return NtQueryObject.ctypes_function(Handle, ObjectInformationClass, ObjectInformation, ObjectInformationLength, ReturnLength)
 
-@OptionalExport(NtdllProxy('NtCreateThreadEx', error_ntstatus))
+@NtdllProxy('NtCreateThreadEx', error_ntstatus)
 def NtCreateThreadEx(ThreadHandle=None, DesiredAccess=0x1fffff, ObjectAttributes=0, ProcessHandle=NeededParameter, lpStartAddress=NeededParameter, lpParameter=NeededParameter, CreateSuspended=0, dwStackSize=0, Unknown1=0, Unknown2=0, Unknown=0):
     if ThreadHandle is None:
         ThreadHandle = byref(HANDLE())
@@ -907,7 +908,7 @@ def set_tcp_entry_error_check(func_name, result, func, args):
 SetTcpEntry = TransparentIphlpapiProxy('SetTcpEntry', error_check=set_tcp_entry_error_check)
 
 
-@OptionalExport(IphlpapiProxy('GetExtendedTcpTable'))
+@IphlpapiProxy('GetExtendedTcpTable')
 def GetExtendedTcpTable(pTcpTable, pdwSize=None, bOrder=True, ulAf=NeededParameter, TableClass=TCP_TABLE_OWNER_PID_ALL, Reserved=0):
     if pdwSize is None:
         pdwSize = ULONG(ctypes.sizeof(pTcpTable))

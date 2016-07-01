@@ -9,7 +9,7 @@ import windows.native_exec.simple_x64 as x64
 from generated_def.winstructs import *
 from windows.winobject import process
 from windows import winproxy
-from winproxy import NeededParameter, OptionalExport, NtdllProxy, error_ntstatus
+from winproxy import NeededParameter, NtdllProxy, error_ntstatus
 
 # Special code for syswow64 process
 CS_32bits = 0x23
@@ -28,7 +28,7 @@ def genere_return_32bits_stub(ret_addr):
     return ret_32b.get_code()
 
 # The format of a jump to 64bits mode
-dummy_jump = "\xea" + struct.pack("<I", 0) + chr(CS_64bits) + "\x00\x00"
+dummy_jump = "\xea" + struct.pack("<I", 0) + struct.pack("<H",  CS_64bits)
 
 
 def execute_64bits_code_from_syswow(shellcode):
@@ -44,7 +44,7 @@ def execute_64bits_code_from_syswow(shellcode):
     ret_addr = addr
     shell_code_addr = ret_addr + len(ret) + len(dummy_jump)
     # ljmp
-    jump = "\xea" + struct.pack("<I", shell_code_addr) + chr(CS_64bits) + "\x00\x00"
+    jump = "\xea" + struct.pack("<I", shell_code_addr) + struct.pack("<H",  CS_64bits)
     jump_addr = ret_addr + len(ret)
     # Return to 32bits stub
     shellcode += genere_return_32bits_stub(ret_addr)
@@ -225,10 +225,22 @@ class Syswow64ApiProxy(object):
         if winproxy_function is not None:
             self.params_name = [param[1] for param in winproxy_function.params]
 
+
+
+
     def __call__(self, python_proxy):
-        # handle winproxy_function is None (OptionalExport)
-        if self.winproxy_function is None:
+        if not windows.winproxy.is_implemented(self.winproxy_function):
             return None
+
+        def force_resolution():
+            if self.raw_call:
+                return True
+            try:
+                self.raw_call = generate_syswow64_call(self.winproxy_function)
+            except KeyError:
+                raise windows.winproxy.ExportNotFound(self.winproxy_function.__name__, "SysWow[ntdll64]")
+
+
         def perform_call(*args):
             if len(self.params_name) != len(args):
                 print("ERROR:")
@@ -240,9 +252,10 @@ class Syswow64ApiProxy(object):
                     raise TypeError("{0}: Missing Mandatory parameter <{1}>".format(self.winproxy_function.__name__, param_name))
 
             if self.raw_call is None:
-                self.raw_call = generate_syswow64_call(self.winproxy_function)
+                force_resolution()
             return self.raw_call(*args)
         setattr(python_proxy, "ctypes_function", perform_call)
+        setattr(python_proxy, "force_resolution", force_resolution)
         return python_proxy
 
 
@@ -277,7 +290,7 @@ def NtQueryInformationThread_32_to_64(ThreadHandle, ThreadInformationClass, Thre
 
 
 @Syswow64ApiProxy(winproxy.NtQueryVirtualMemory)
-def NtQueryVirtualMemory_32_to_64(ProcessHandle, BaseAddress, MemoryInformationClass=MemoryBasicInformation, MemoryInformation=NeededParameter, MemoryInformationLength=0, ReturnLength=None):
+def NtQueryVirtualMemory_32_to_64(ProcessHandle, BaseAddress, MemoryInformationClass, MemoryInformation=NeededParameter, MemoryInformationLength=0, ReturnLength=None):
     if ReturnLength is None:
         ReturnLength = byref(ULONG())
     if MemoryInformation is not None and MemoryInformationLength == 0:

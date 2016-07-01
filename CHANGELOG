@@ -16,3 +16,4 @@ Since 0.2:
     * Added COMImplementation to com interface
     * fix x86.assemble + add x64.assemble | fix some enconding problem in x64
     * Add test_code.py sample
+    * Remove OptionExport from winproxy
