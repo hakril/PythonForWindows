@@ -262,7 +262,7 @@ class ECONTEXTWOW64(ECONTEXTBase, WOW64_CONTEXT):
 
 class ECONTEXT64(ECONTEXTBase, CONTEXT64):
     default_dump = ('Rip', 'Rsp', 'Rax', 'Rbx', 'Rcx', 'Rdx', 'Rbp', 'Rdi', 'Rsi',
-                    'R9', 'R10', 'R11', 'R12', 'R13', 'R14', 'R15', 'EFlags')
+                    'R8', 'R9', 'R10', 'R11', 'R12', 'R13', 'R14', 'R15', 'EFlags')
     pc_reg = 'Rip'
     sp_reg = 'Rsp'
     fields = [f[0] for f in CONTEXT64._fields_]
