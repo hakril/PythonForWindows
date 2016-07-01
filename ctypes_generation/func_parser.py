@@ -25,7 +25,12 @@ class WinFunc(object):
 
     def generate_prototype_ctypes(self):
         model = "{0} = WINFUNCTYPE({1})"
-        ctypes_param = [self.return_type] + [type for type, name in self.params]
+        ctypes_param = [self.return_type]
+        for type, name in self.params:
+            if type == "POINTER(void)":
+                type = "PVOID"
+            ctypes_param.append(type)
+        #ctypes_param = [self.return_type] + [type for type, name in self.params]
         ctypes_param_str = ", ".join(ctypes_param)
         return model.format(self.name + "Prototype", ctypes_param_str)
 

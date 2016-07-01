@@ -51,24 +51,25 @@ class WinStruct(object):
         for type in [f[0] for f in self.fields]:
             if type.name == self.name:
                 return True
+            if type.name in self.typedef:
+                return True
         return False
 
     def generate_selfref_ctypes_class(self):
-        res = "# Self referencing struct tricks\n"
-        res += """class {0}(Structure): pass\n""".format(self.name)
-        res += "{0}._fields_ = [\n".format(self.name)
+        res = ["# Self referencing struct tricks"]
+        res += ["""class {0}(Structure): pass""".format(self.name)]
+        res += [self.generate_typedef_ctypes()]
 
+        res += ["{0}._fields_ = [".format(self.name)]
         for (ftype, name, nb_rep) in self.fields:
             if  nb_rep == 1:
-                res+= '    ("{0}", {1}),\n'.format(name, ftype.generate_ctypes())
+                res+= ['    ("{0}", {1}),'.format(name, ftype.generate_ctypes())]
             else:
-                res+= '    ("{0}", {1} * {2}),\n'.format(name, ftype.generate_ctypes(), nb_rep)
-        res += "]\n"
-        return res
+                res+= ['    ("{0}", {1} * {2}),'.format(name, ftype.generate_ctypes(), nb_rep)]
+        res += ["]"]
+        return "\n".join(res)
 
     def generate_ctypes_class(self):
-        if self.is_self_referencing():
-            return self.generate_selfref_ctypes_class()
         res = """class {0}({1}):
         _fields_ = [\n""".format(self.name, self.ctypes_type)
 
@@ -77,17 +78,26 @@ class WinStruct(object):
                 res+= '        ("{0}", {1}),\n'.format(name, ftype.generate_ctypes())
             else:
                 res+= '        ("{0}", {1} * {2}),\n'.format(name, ftype.generate_ctypes(), nb_rep)
-        res += "    ]\n"
+        res += "    ]"
         return res
 
-    def generate_ctypes(self):
-        ctypes_class = self.generate_ctypes_class()
+    def generate_typedef_ctypes(self):
+        typedef_ctypes = []
         for typedef_name, value in self.typedef.items():
             str_value = self.name
             if type(value) == Ptr:
                 str_value = "POINTER({0})".format(self.name)
-            ctypes_class += "{0} = {1}\n".format(typedef_name, str_value)
-        return ctypes_class
+            typedef_ctypes += ["{0} = {1}".format(typedef_name, str_value)]
+        return "\n".join(typedef_ctypes)
+
+    def generate_ctypes(self):
+        if self.is_self_referencing():
+            print("{0} is self referencing".format(self.name))
+            return self.generate_selfref_ctypes_class() + "\n"
+
+        ctypes_class = self.generate_ctypes_class()
+        ctypes_typedef = self.generate_typedef_ctypes()
+        return "\n".join([ctypes_class, ctypes_typedef]) + "\n"
 
 class WinUnion(WinStruct):
     ctypes_type = "Union"

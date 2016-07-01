@@ -72,6 +72,7 @@ TYPE_EQUIVALENCE = [
     ('HCATADMIN', 'HANDLE'),
     ('HCATINFO', 'HANDLE'),
     ('SC_HANDLE', 'HANDLE'),
+    ('HCERTCHAINENGINE', 'HANDLE'),
     ('LPHANDLE', 'POINTER(HANDLE)'),
     ('PHKEY', 'POINTER(HKEY)'),
     ('ACCESS_MASK', 'DWORD'),
@@ -81,6 +82,7 @@ TYPE_EQUIVALENCE = [
     ("MEMBERID", "DISPID"),
     ('PSECURITY_DESCRIPTOR', 'PVOID'),
     ('LPUNKNOWN', 'POINTER(PVOID)'),
+    ('SPC_UUID', 'BYTE * 16'),
     #STUFF FOR COM (will be replace at runtime
     # real def in com_interface_header
     ('GUID', 'PVOID'),
@@ -149,6 +151,12 @@ class CtypesGenerator(object):
     def generate(self):
         raise NotImplementedError("<{0}> doest not implement <generate>".format(type(self).__name__))
 
+    def append_input_file(self, filename):
+        print("Adding file <{0}>".format(filename))
+        self.parse()
+        self.data +=  self.PARSER(open(filename).read()).parse()
+        self.analyse(self.data)
+
 class InitialDefGenerator(CtypesGenerator):
     PARSER = def_parser.WinDefParser
     HEADER = dedent("""
@@ -183,7 +191,6 @@ class InitialDefGenerator(CtypesGenerator):
         self.add_exports("NATIVE_WORD_MAX_VALUE")
         for defin in data:
             self.add_exports(defin.name)
-
 
     def generate(self):
         ctypes_lines = [self.common_header, self.HEADER]
@@ -614,8 +621,15 @@ non_generated_def = InitialDefGenerator(from_here("definitions\\windef.txt"), fr
 ntstatus = NtStatusGenerator(from_here("definitions\\ntstatus.txt"), from_here(r"..\windows\generated_def\\ntstatus.py"), dependances=[non_generated_def])
 # Not a real circular def (import not at the begin of file
 defs_with_ntstatus = InitialDefGenerator(from_here("definitions\\windef.txt"), from_here(r"..\windows\generated_def\\windef.py"), dependances=[ntstatus])
+
+# YOLO HACK FOR NOW :DD
+defs_with_ntstatus.append_input_file(from_here("definitions\\wintrust_crypt_def.txt"))
+
+
 structs = StructGenerator(from_here("definitions\\winstruct.txt"), from_here(r"..\windows\generated_def\\winstructs.py"), dependances=[defs_with_ntstatus])
 functions = FuncGenerator(from_here("definitions\\winfunc.txt"), from_here(r"..\windows\generated_def\\winfuncs.py"), dependances=[structs])
+functions.append_input_file(from_here("definitions\\wintrust_crypt_func.txt"))
+
 com = InitialCOMGenerator(from_here("definitions\\com\\*.txt"), DEFAULT_INTERFACE_TO_IID, from_here(r"..\windows\generated_def\\interfaces.py"), dependances=[structs])
 
 

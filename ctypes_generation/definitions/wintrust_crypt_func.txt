@@ -1,0 +1,72 @@
+BOOL WINAPI CryptQueryObject(
+  _In_        DWORD      dwObjectType,
+  _In_        void       *pvObject,
+  _In_        DWORD      dwExpectedContentTypeFlags,
+  _In_        DWORD      dwExpectedFormatTypeFlags,
+  _In_        DWORD      dwFlags,
+  _Out_       DWORD      *pdwMsgAndCertEncodingType,
+  _Out_       DWORD      *pdwContentType,
+  _Out_       DWORD      *pdwFormatType,
+  _Out_       HCERTSTORE *phCertStore,
+  _Out_       HCRYPTMSG  *phMsg,
+  _Out_       PVOID       *ppvContext
+);
+
+BOOL WINAPI CryptMsgGetParam(
+  _In_    HCRYPTMSG hCryptMsg,
+  _In_    DWORD     dwParamType,
+  _In_    DWORD     dwIndex,
+  _Out_   void      *pvData,
+  _Inout_ DWORD     *pcbData
+);
+
+
+BOOL WINAPI CryptDecodeObject(
+  _In_          DWORD  dwCertEncodingType,
+  _In_          LPCSTR lpszStructType,
+  _In_          BYTE   *pbEncoded,
+  _In_          DWORD  cbEncoded,
+  _In_          DWORD  dwFlags,
+  _Out_         void   *pvStructInfo,
+  _Inout_       DWORD  *pcbStructInfo
+);
+
+
+PCCERT_CONTEXT WINAPI CertFindCertificateInStore(
+  _In_       HCERTSTORE     hCertStore,
+  _In_       DWORD          dwCertEncodingType,
+  _In_       DWORD          dwFindFlags,
+  _In_       DWORD          dwFindType,
+  _In_       void           *pvFindPara,
+  _In_       PCCERT_CONTEXT pPrevCertContext
+);
+
+DWORD WINAPI CertGetNameStringA(
+  _In_  PCCERT_CONTEXT pCertContext,
+  _In_  DWORD          dwType,
+  _In_  DWORD          dwFlags,
+  _In_  void           *pvTypePara,
+  _Out_ LPCSTR         pszNameString,
+  _In_  DWORD          cchNameString
+);
+
+DWORD WINAPI CertGetNameStringW(
+  _In_  PCCERT_CONTEXT pCertContext,
+  _In_  DWORD          dwType,
+  _In_  DWORD          dwFlags,
+  _In_  void           *pvTypePara,
+  _Out_ LPWSTR         pszNameString,
+  _In_  DWORD          cchNameString
+);
+
+
+BOOL WINAPI CertGetCertificateChain(
+  _In_opt_ HCERTCHAINENGINE     hChainEngine,
+  _In_     PCCERT_CONTEXT       pCertContext,
+  _In_opt_ LPFILETIME           pTime,
+  _In_     HCERTSTORE           hAdditionalStore,
+  _In_     PCERT_CHAIN_PARA     pChainPara,
+  _In_     DWORD                dwFlags,
+  _In_     LPVOID               pvReserved,
+  _Out_    PCCERT_CHAIN_CONTEXT *ppChainContext
+);
