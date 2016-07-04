@@ -676,6 +676,10 @@ def ntquerysysteminformation_error_check(func_name, result, func, args):
         return args
     raise Kernel32Error("{0} failed with NTStatus {1}".format(func_name, hex(result)))
 
+@NtdllProxy("NtCreateFile", error_ntstatus)
+def NtCreateFile(FileHandle, DesiredAccess, ObjectAttributes, IoStatusBlock, AllocationSize, FileAttributes, ShareAccess, CreateDisposition, CreateOptions, EaBuffer, EaLength):
+    return NtCreateFile.ctypes_function(FileHandle, DesiredAccess, ObjectAttributes, IoStatusBlock, AllocationSize, FileAttributes, ShareAccess, CreateDisposition, CreateOptions, EaBuffer, EaLength)
+
 @NtdllProxy("NtGetContextThread", error_ntstatus)
 def NtGetContextThread(hThread, lpContext):
     return NtGetContextThread.ctypes_function(hThread, lpContext)

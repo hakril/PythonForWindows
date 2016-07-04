@@ -2776,6 +2776,21 @@ class _OBJECT_ATTRIBUTES(Structure):
 POBJECT_ATTRIBUTES = POINTER(_OBJECT_ATTRIBUTES)
 OBJECT_ATTRIBUTES = _OBJECT_ATTRIBUTES
 
+class _TMP_UNION_IO_STATUS_BLOCK(Union):
+        _fields_ = [
+        ("Status", NTSTATUS),
+        ("Pointer", PVOID),
+    ]
+TMP_UNION_IO_STATUS_BLOCK = _TMP_UNION_IO_STATUS_BLOCK
+
+class _IO_STATUS_BLOCK(Structure):
+        _fields_ = [
+        ("DUMMYUNIONNAME", TMP_UNION_IO_STATUS_BLOCK),
+        ("Information", ULONG_PTR),
+    ]
+IO_STATUS_BLOCK = _IO_STATUS_BLOCK
+PIO_STATUS_BLOCK = POINTER(_IO_STATUS_BLOCK)
+
 class _SECURITY_QUALITY_OF_SERVICE(Structure):
         _fields_ = [
         ("Length", DWORD),
