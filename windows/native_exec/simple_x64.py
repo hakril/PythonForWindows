@@ -605,7 +605,7 @@ class ModRM_REG64__MEM(SubModRM):
 
         # Those registers cannot be addressed without SIB
         FIRE_UP_SIB = not arg2.base or arg2.base.upper() in ["RSP", "RBP"] or arg2.index
-        FIRE_UP_SIB = FIRE_UP_SIB or X64.is_new_reg(arg2.base)
+        FIRE_UP_SIB = FIRE_UP_SIB or X64.is_new_reg(arg2.base.upper())
 
         if not FIRE_UP_SIB:
             self.setup_reg_as_register(arg1)
@@ -620,7 +620,7 @@ class ModRM_REG64__MEM(SubModRM):
         # Handle no base and base == EBP special case
         if not arg2.base:
             force_displacement = 4
-        elif arg2.base.upper() == "RBP":
+        elif arg2.base.upper() in ["RBP", "R13"]:
             force_displacement = 1
         else:
             force_displacement = 0

@@ -144,6 +144,15 @@ TestInstr(Mov)("R12", mem("[RAX]"))
 TestInstr(Mov)("RAX", mem("[R12]"))
 TestInstr(Mov)("RAX", mem("[RAX + R12]"))
 TestInstr(Mov)("RAX", mem("[R12 + R12]"))
+TestInstr(Mov)("RAX", mem("[R12 + R15]"))
+
+TestInstr(Mov)("RAX", mem("[R10]"))
+TestInstr(Mov)("RAX", mem("[R11]"))
+TestInstr(Mov)("RAX", mem("[R12]"))
+TestInstr(Mov)("RAX", mem("[R13]"))
+TestInstr(Mov)("RAX", mem("[R14]"))
+TestInstr(Mov)("RAX", mem("[R15]"))
+
 #TestInstr(Mov)("RSI", mem("[R12]"))
 
 TestInstr(And)('RCX', 'RBX')

@@ -959,6 +959,16 @@ class WinProcess(Process):
         """Exit the process"""
         return winproxy.TerminateProcess(self.handle, code)
 
+KNOW_INTEGRITY_LEVEL = [
+SECURITY_MANDATORY_UNTRUSTED_RID,
+SECURITY_MANDATORY_LOW_RID,
+SECURITY_MANDATORY_MEDIUM_RID,
+SECURITY_MANDATORY_MEDIUM_PLUS_RID,
+SECURITY_MANDATORY_HIGH_RID,
+SECURITY_MANDATORY_SYSTEM_RID,
+SECURITY_MANDATORY_PROTECTED_PROCESS_RID]
+
+know_integrity_level_mapper = {x:x for x in KNOW_INTEGRITY_LEVEL}
 
 # Create ProcessToken and Thread Token objects ?
 class Token(AutoHandle):
@@ -979,7 +989,7 @@ class Token(AutoHandle):
         sid = ctypes.cast(buffer, POINTER(TOKEN_MANDATORY_LABEL))[0].Label.Sid
         count = winproxy.GetSidSubAuthorityCount(sid)
         integrity = winproxy.GetSidSubAuthority(sid, ord(count[0]) - 1)[0]
-        return integrity
+        return know_integrity_level_mapper.get(integrity, integrity)
 
     @property
     def is_elevated(self):
