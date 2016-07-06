@@ -33,15 +33,15 @@ class DEBUG_EVENT(DEBUG_EVENT):
 
 class Debugger(object):
     """A debugger based on standard Win32 API. Handle standard (int3) and Hardware-Exec Breakpoints"""
-    def __init__(self, target, already_debuggable=False):
+    def __init__(self, target):
         """``target`` must be a WinProcess.
 
         ``already_debuggable`` must be set to ``True`` if process is already expecting a debugger (created with ``DEBUG_PROCESS``)"""
         self._init_dispatch_handlers()
         self.target = target
         self.is_target_launched = False
-        if not already_debuggable:
-            winproxy.DebugActiveProcess(target.pid)
+        #if not already_debuggable:
+        #    winproxy.DebugActiveProcess(target.pid)
         self.processes = {}
         self.threads = {}
         self.current_process = None
@@ -59,6 +59,14 @@ class Debugger(object):
         self._module_by_process = {}
 
         self._pending_breakpoints_new = defaultdict(list)
+
+        self._explicit_single_step = {}
+
+    @classmethod
+    def attach(cls, target):
+        winproxy.DebugActiveProcess(target.pid)
+        return cls(target)
+
 
 
     def _init_dispatch_handlers(self):
@@ -235,7 +243,7 @@ class Debugger(object):
         process.write_memory(addr, self._memory_save[process.pid][addr])
         regs = thread.context
         regs.EFlags |= (1 << 8)
-        regs.pc -= 1
+        #regs.pc -= 1 # Done at 269 before dispatch
         thread.set_context(regs)
         self._breakpoint_to_reput[thread.tid] = addr #Register pending breakpoint for next single step
 
@@ -256,7 +264,12 @@ class Debugger(object):
         excp_code = exception.ExceptionRecord.ExceptionCode
         excp_addr = exception.ExceptionRecord.ExceptionAddress
         if excp_code in [EXCEPTION_BREAKPOINT, STATUS_WX86_BREAKPOINT] and excp_addr in self.breakpoints[self.current_process.pid]:
+            thread = self.current_thread
+            ctx = thread.context
+            ctx.pc -= 1
+            thread.set_context(ctx)
             continue_flag = self._dispatch_breakpoint(exception, excp_addr)
+            self._explicit_single_step[self.current_thread.tid] = self.current_thread.context.EEFlags.TF
             self._pass_breakpoint(excp_addr)
             return continue_flag
         elif excp_code in [EXCEPTION_SINGLE_STEP, STATUS_WX86_SINGLE_STEP]:
@@ -265,15 +278,21 @@ class Debugger(object):
                 del self._breakpoint_to_reput[self.current_thread.tid]
                 # Re-put the breakpoint
                 self.current_process.write_memory(addr, "\xcc")
+                if self._explicit_single_step[self.current_thread.tid]:
+                    self.on_single_step(exception) # TODO: default implem / dispatcher ?
+                self._explicit_single_step[self.current_thread.tid] = self.current_thread.context.EEFlags.TF
                 return DBG_CONTINUE
             elif excp_addr in self.breakpoints[self.current_process.pid]:
                 # Verif that's not a standard BP ?
                 bp = self.breakpoints[self.current_process.pid][excp_addr]
+                # TODO: What to do if explicit single step ?
                 bp.trigger(self, exception)
                 ctx = self.current_thread.context
                 ctx.EEFlags.RF = 1
                 self.current_thread.set_context(ctx)
                 return DBG_CONTINUE
+            elif self._explicit_single_step[self.current_thread.tid]:
+                return self.on_single_step(exception) # TODO: default implem / dispatcher ?
             else:
                 return self.on_exception(exception)
         else: # Do not trigger self.on_exception if breakpoint was registered
@@ -336,6 +355,7 @@ class Debugger(object):
         create_thread = debug_event.u.CreateThread
         self.current_thread = WinThread._from_handle(create_thread.hThread)
         self.threads[self.current_thread.tid] = self.current_thread
+        self._explicit_single_step[self.current_thread.tid] = False
         self._setup_pending_breakpoints_new_thread(self.current_thread)
         return self.on_create_thread(create_thread)
 
@@ -346,6 +366,7 @@ class Debugger(object):
         exit_thread = debug_event.u.ExitThread
         retvalue = self.on_exit_thread(exit_thread)
         del self.threads[self.current_thread.tid]
+        del self._explicit_single_step[self.current_thread.tid]
         # Hack IT, ContinueDebugEvent will close the HANDLE for us
         # Should we make another handle instead ?
         dbgprint("Removing handle {0} for {1} (will be closed by continueDebugEvent".format(hex(self.current_thread._handle), self.current_thread), "HANDLE")
@@ -423,6 +444,14 @@ class Debugger(object):
                     raise ValueError("Unknown target {0}".format(target))
         return self._setup_breakpoint(bp, target)
 
+    def single_step(self):
+        t = self.current_thread
+        ctx = t.context
+        ctx.EEFlags.TF = 1
+        t.set_context(ctx)
+
+
+
     # Public callback
     def on_exception(self, exception):
         """Called on exception event other that known breakpoint. ``exception`` is one of the following type:
@@ -472,7 +501,7 @@ class Debugger(object):
 def debug(path, args=None, dwCreationFlags=0, show_windows=False):
     dwCreationFlags |= DEBUG_PROCESS
     c = windows.utils.create_process(path, args=args, dwCreationFlags=dwCreationFlags, show_windows=show_windows)
-    return Debugger(c, already_debuggable=True)
+    return Debugger(c)
 
 
 class Breakpoint(object):
@@ -609,7 +638,6 @@ class LocalDebugger(object):
                     del self._hxbp_breakpoint[tid][bp.addr]
                     #print("Need to remove {0} in {1}".format(self._hxbp_breakpoint[tid][bp.addr], tid))
             return
-            #raise NotImplementedError("Remove <HARDWARE_EXEC_BP>")
         raise NotImplementedError("Unknow BP type {0}".format(bp.type))
 
     def add_bp(self, bp, targets=None):
