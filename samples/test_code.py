@@ -52,7 +52,7 @@ def hexdump(string, start_addr=0):
 
 class CodeTesteur(dbg.Debugger):
     def __init__(self, process, code, register_start={}):
-        super(CodeTesteur, self).__init__(process, already_debuggable=True)
+        super(CodeTesteur, self).__init__(process)
 
         self.initial_code = code
         code += "\xcc"

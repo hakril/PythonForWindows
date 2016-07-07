@@ -329,13 +329,13 @@ class Process(AutoHandle):
     def virtual_protected(self, addr, size, protect):
         """A context manager for local virtual_protect (old Protection are restored at exit)"""
         old_protect = DWORD()
-        self.low_virtual_protect(addr, size, protect, old_protect)
+        self.virtual_protect(addr, size, protect, old_protect)
         try:
             yield addr
         finally:
-             self.low_virtual_protect(addr, size, old_protect.value, old_protect)
+             self.virtual_protect(addr, size, old_protect.value, old_protect)
 
-    def low_virtual_protect(self, addr, size, protect, old_protect):
+    def virtual_protect(self, addr, size, protect, old_protect):
         if windows.current_process.bitness == 32 and self.bitness == 64:
             #addr = (addr >> 12) << 12
             #addr = ULONG64(addr)

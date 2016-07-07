@@ -20,6 +20,7 @@ from windows.winobject.exception import VectoredException
 
 STANDARD_BP = "BP"
 HARDWARE_EXEC_BP = "HXBP"
+MEMORY_BREAKPOINT = "MEMBP"
 
 class DEBUG_EVENT(DEBUG_EVENT):
     KNOWN_EVENT_CODE = dict((x,x) for x in [EXCEPTION_DEBUG_EVENT,
@@ -62,12 +63,13 @@ class Debugger(object):
 
         self._explicit_single_step = {}
 
+        self._watched_memory = []
+
+
     @classmethod
     def attach(cls, target):
         winproxy.DebugActiveProcess(target.pid)
         return cls(target)
-
-
 
     def _init_dispatch_handlers(self):
         dbg_evt_dispatch = {}
@@ -138,7 +140,7 @@ class Debugger(object):
     def _setup_breakpoint(self, bp, target):
         _setup_method = getattr(self, "_setup_breakpoint_" + bp.type)
         if target is None:
-            if bp.type == STANDARD_BP: #TODO: better..
+            if bp.type in [STANDARD_BP, MEMORY_BREAKPOINT]: #TODO: better..
                 targets = self.processes.values()
             else:
                 targets = self.threads.values()
@@ -179,6 +181,16 @@ class Debugger(object):
         x[int(empty_drx)] = bp
         target.set_context(ctx)
         self.breakpoints[target.owner.pid][addr] = bp
+        return True
+
+    def _setup_breakpoint_MEMBP(self, bp, target):
+        addr = self._resolve(bp.addr, target)
+        if addr is None:
+            return False
+        old_prot = DWORD()
+        target.virtual_protect(addr, bp.size, bp.protect, old_prot)
+        self._watched_memory.append((bp, addr, addr + bp.size, old_prot.value))
+        # TODO: watch for overlap with other MEM breakpoints
         return True
 
     def _setup_pending_breakpoints_new_process(self, new_process):
@@ -243,14 +255,107 @@ class Debugger(object):
         process.write_memory(addr, self._memory_save[process.pid][addr])
         regs = thread.context
         regs.EFlags |= (1 << 8)
-        #regs.pc -= 1 # Done at 269 before dispatch
+        #regs.pc -= 1 # Done in _handle_exception_breakpoint before dispatch
         thread.set_context(regs)
-        self._breakpoint_to_reput[thread.tid] = addr #Register pending breakpoint for next single step
+        bp = self.breakpoints[self.current_process.pid][addr]
+        self._breakpoint_to_reput[thread.tid].append(bp) #Register pending breakpoint for next single step
+
+    def _pass_memory_breakpoint(self, bp, begin, end, original_prot):
+        cp = self.current_process
+        cp.virtual_protect(begin, bp.size, original_prot, None)
+        thread = self.current_thread
+        ctx = thread.context
+        ctx.EEFlags.TF = 1
+        thread.set_context(ctx)
+        self._breakpoint_to_reput[thread.tid].append(bp)
 
     # debug event handlers
     def _handle_unknown_debug_event(self, debug_event):
         raise NotImplementedError("dwDebugEventCode = {0}".format(debug_event.dwDebugEventCode))
 
+
+    def _handle_exception_breakpoint(self, exception, excp_addr):
+        if excp_addr in self.breakpoints[self.current_process.pid]:
+            thread = self.current_thread
+            ctx = thread.context
+            ctx.pc -= 1
+            thread.set_context(ctx)
+            continue_flag = self._dispatch_breakpoint(exception, excp_addr)
+            self._explicit_single_step[self.current_thread.tid] = self.current_thread.context.EEFlags.TF
+            self._pass_breakpoint(excp_addr)
+            return continue_flag
+        return self.on_exception(exception)
+
+    # TODO: mov me
+    def _restore_breakpoints(self):
+        for bp in self._breakpoint_to_reput[self.current_thread.tid]:
+            #print("TODO: restore {0}".format(bp))
+            if bp.type == HARDWARE_EXEC_BP:
+                raise NotImplementedError("Why is this here ? we use RF flags to pass HXBP")
+            #print("[RST] Restoring <{0}>".format(bp))
+            self._setup_breakpoint(bp, self.current_process)
+        del self._breakpoint_to_reput[self.current_thread.tid][:]
+        return
+
+
+    def _handle_exception_singlestep(self, exception, excp_addr):
+        if self.current_thread.tid in self._breakpoint_to_reput and self._breakpoint_to_reput[self.current_thread.tid]:
+            self._restore_breakpoints()
+            if self._explicit_single_step[self.current_thread.tid]:
+                self.on_single_step(exception) # TODO: default implem / dispatcher ?
+            self._explicit_single_step[self.current_thread.tid] = self.current_thread.context.EEFlags.TF
+            return DBG_CONTINUE
+        elif excp_addr in self.breakpoints[self.current_process.pid]:
+            # Verif that's not a standard BP ?
+            bp = self.breakpoints[self.current_process.pid][excp_addr]
+            bp.trigger(self, exception)
+            ctx = self.current_thread.context
+            self._explicit_single_step[self.current_thread.tid] = ctx.EEFlags.TF
+            ctx.EEFlags.RF = 1
+            self.current_thread.set_context(ctx)
+            return DBG_CONTINUE
+        elif self._explicit_single_step[self.current_thread.tid]:
+            continue_flag = self.on_single_step(exception)
+            return continue_flag # TODO: default implem / dispatcher ?
+        else:
+            continue_flag = self.on_exception(exception)
+            self._explicit_single_step[self.current_thread.tid] = self.current_thread.context.EEFlags.TF
+            return continue_flag
+
+    def _handle_exception_access_violation(self, exception, excp_addr):
+        READ = 0
+        WRITE = 1
+        EXEC = 2
+
+        fault_type = exception.ExceptionRecord.ExceptionInformation[0]
+        fault_addr = exception.ExceptionRecord.ExceptionInformation[1]
+        pc_addr = self.current_thread.context.pc
+        if fault_addr == pc_addr:
+            fault_type = EXEC
+
+        #print("FAULT AT {0:#x} ({1})".format(fault_addr, fault_type))
+        for bp, begin, end, original_prot in self._watched_memory:
+            if begin <= fault_addr < end:
+                ## Reject bad EXCEPTION ?
+                #if fault_type == EXEC and bp.PROTECT not in [PAGE_EXECUTE, PAGE_EXECUTE_READ, PAGE_EXECUTE_READWRITE]:
+                #    break
+                #if fault_type == READ and bp.PROTECT not in [PAGE_EXECUTE, PAGE_EXECUTE_READ, PAGE_EXECUTE_READWRITE]:
+                #    break
+                #if fault_type == EXEC and bp.PROTECT not in [PAGE_EXECUTE, PAGE_EXECUTE_READ, PAGE_EXECUTE_READWRITE]:
+                #    break
+
+
+
+                #print("BP MEM TRIGGER {0}".format(bp))
+                continue_flag = bp.trigger(self, exception)
+                self._explicit_single_step[self.current_thread.tid] = self.current_thread.context.EEFlags.TF
+                self._pass_memory_breakpoint(bp, begin, end, original_prot)
+                return continue_flag
+        else:
+            self.on_exception(exception)
+
+
+    # TODO: self._explicit_single_step setup by single_step() ? check at the end ? finally ?
     def _handle_exception(self, debug_event):
         """Handle EXCEPTION_DEBUG_EVENT"""
         exception = debug_event.u.Exception
@@ -263,40 +368,19 @@ class Debugger(object):
 
         excp_code = exception.ExceptionRecord.ExceptionCode
         excp_addr = exception.ExceptionRecord.ExceptionAddress
+
+        #print("[DBG] Got a <{0}> in <{1}>".format(excp_code, self.current_thread.tid))
+
         if excp_code in [EXCEPTION_BREAKPOINT, STATUS_WX86_BREAKPOINT] and excp_addr in self.breakpoints[self.current_process.pid]:
-            thread = self.current_thread
-            ctx = thread.context
-            ctx.pc -= 1
-            thread.set_context(ctx)
-            continue_flag = self._dispatch_breakpoint(exception, excp_addr)
-            self._explicit_single_step[self.current_thread.tid] = self.current_thread.context.EEFlags.TF
-            self._pass_breakpoint(excp_addr)
-            return continue_flag
+            return self._handle_exception_breakpoint(exception, excp_addr)
         elif excp_code in [EXCEPTION_SINGLE_STEP, STATUS_WX86_SINGLE_STEP]:
-            if self.current_thread.tid in self._breakpoint_to_reput:
-                addr = self._breakpoint_to_reput[self.current_thread.tid]
-                del self._breakpoint_to_reput[self.current_thread.tid]
-                # Re-put the breakpoint
-                self.current_process.write_memory(addr, "\xcc")
-                if self._explicit_single_step[self.current_thread.tid]:
-                    self.on_single_step(exception) # TODO: default implem / dispatcher ?
-                self._explicit_single_step[self.current_thread.tid] = self.current_thread.context.EEFlags.TF
-                return DBG_CONTINUE
-            elif excp_addr in self.breakpoints[self.current_process.pid]:
-                # Verif that's not a standard BP ?
-                bp = self.breakpoints[self.current_process.pid][excp_addr]
-                # TODO: What to do if explicit single step ?
-                bp.trigger(self, exception)
-                ctx = self.current_thread.context
-                ctx.EEFlags.RF = 1
-                self.current_thread.set_context(ctx)
-                return DBG_CONTINUE
-            elif self._explicit_single_step[self.current_thread.tid]:
-                return self.on_single_step(exception) # TODO: default implem / dispatcher ?
-            else:
-                return self.on_exception(exception)
-        else: # Do not trigger self.on_exception if breakpoint was registered
-            return self.on_exception(exception)
+            return self._handle_exception_singlestep(exception, excp_addr)
+        elif excp_code in [EXCEPTION_ACCESS_VIOLATION]:
+            return self._handle_exception_access_violation(exception, excp_addr)
+        else:
+            continue_flag = self.on_exception(exception)
+            self._explicit_single_step[self.current_thread.tid] = self.current_thread.context.EEFlags.TF
+            return continue_flag
 
 
     def _get_loaded_dll(self, load_dll):
@@ -327,6 +411,8 @@ class Debugger(object):
         self.current_process = WinProcess._from_handle(create_process.hProcess)
         self.current_thread = WinThread._from_handle(create_process.hThread)
         self.threads[self.current_thread.tid] = self.current_thread
+        self._explicit_single_step[self.current_thread.tid] = False
+        self._breakpoint_to_reput[self.current_thread.tid] = []
         self.processes[self.current_process.pid] = self.current_process
         self.breakpoints[self.current_process.pid] = {}
         self._module_by_process[self.current_process.pid] = {}
@@ -342,6 +428,8 @@ class Debugger(object):
         exit_process = debug_event.u.ExitProcess
         retvalue = self.on_exit_process(exit_process)
         del self.threads[self.current_thread.tid]
+        del self._explicit_single_step[self.current_thread.tid]
+        del self._breakpoint_to_reput[self.current_thread.tid]
         del self.processes[self.current_process.pid]
         # Hack IT, ContinueDebugEvent will close the HANDLE for us
         # Should we make another handle instead ?
@@ -356,6 +444,7 @@ class Debugger(object):
         self.current_thread = WinThread._from_handle(create_thread.hThread)
         self.threads[self.current_thread.tid] = self.current_thread
         self._explicit_single_step[self.current_thread.tid] = False
+        self._breakpoint_to_reput[self.current_thread.tid] = []
         self._setup_pending_breakpoints_new_thread(self.current_thread)
         return self.on_create_thread(create_thread)
 
@@ -367,6 +456,7 @@ class Debugger(object):
         retvalue = self.on_exit_thread(exit_thread)
         del self.threads[self.current_thread.tid]
         del self._explicit_single_step[self.current_thread.tid]
+        del self._breakpoint_to_reput[self.current_thread.tid]
         # Hack IT, ContinueDebugEvent will close the HANDLE for us
         # Should we make another handle instead ?
         dbgprint("Removing handle {0} for {1} (will be closed by continueDebugEvent".format(hex(self.current_thread._handle), self.current_thread), "HANDLE")
@@ -450,8 +540,6 @@ class Debugger(object):
         ctx.EEFlags.TF = 1
         t.set_context(ctx)
 
-
-
     # Public callback
     def on_exception(self, exception):
         """Called on exception event other that known breakpoint. ``exception`` is one of the following type:
@@ -465,6 +553,9 @@ class Debugger(object):
         if not exception.ExceptionRecord.ExceptionCode in winexception.exception_name_by_value:
             return DBG_EXCEPTION_NOT_HANDLED
         return DBG_CONTINUE
+
+    def on_single_step(self, exception):
+        raise NotImplementedError("Debugger that explicitly single step should implement <on_single_step>")
 
     def on_create_process(self, create_process):
         """Called on create_process event (for param type see https://msdn.microsoft.com/en-us/library/windows/desktop/ms679286(v=vs.85).aspx)"""
@@ -534,6 +625,21 @@ class HXBreakpoint(Breakpoint):
 
     def apply_to_target(self, target):
         return isinstance(target, WinThread)
+
+class MemoryBreakpoint(Breakpoint):
+    type = MEMORY_BREAKPOINT
+
+    DEFAULT_PROTECT = PAGE_READONLY
+    DEFAULT_SIZE = 0x1000
+    def __init__(self, addr, size=None, prot=None):
+        super(MemoryBreakpoint, self).__init__(addr)
+        self.size = size if size is not None else self.DEFAULT_SIZE
+        self.protect = size if prot is not None else self.DEFAULT_PROTECT
+
+
+    def trigger(self, dbg, exception):
+        """Called when breakpoint is hit"""
+        pass
 
 
 class LocalDebugger(object):
