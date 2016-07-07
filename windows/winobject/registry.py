@@ -90,13 +90,15 @@ class PyHKey(object):
 
         :rtype: :class:`KeyValue`
         """
-        data = _winreg.QueryValueEx(self.phkey, value_name)
-        return KeyValue(value_name, data[0], data[1])
+        value, type = _winreg.QueryValueEx(self.phkey, value_name)
+        if type == REG_QWORD:
+            value = struct.unpack("<Q", value)[0]
+        return KeyValue(value_name, value, type)
 
     def _guess_value_type(self, value):
         if isinstance(value, basestring):
             return _winreg.REG_SZ
-        elif isinstance(value, [int, long]):
+        elif isinstance(value, (int, long)):
             return _winreg.REG_DWORD
         raise ValueError("Cannot guest registry type of value to set <{0}>".format(value))
 
@@ -105,6 +107,8 @@ class PyHKey(object):
         """Set the value for ``name`` to ``value``. if ``type`` is None try to guess items"""
         if type is None:
             type = self._guess_value_type(value)
+        if type == REG_QWORD:
+            value = struct.pack("<Q", value)
         return _winreg.SetValueEx(self.phkey, name, 0, type, value)
 
 
