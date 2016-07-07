@@ -5,6 +5,7 @@ import codecs
 import functools
 
 import windows
+import windows.native_exec.simple_x86 as x86
 import windows.native_exec.simple_x64 as x64
 from generated_def.winstructs import *
 from windows.winobject import process
@@ -15,47 +16,42 @@ from winproxy import NeededParameter, NtdllProxy, error_ntstatus
 CS_32bits = 0x23
 CS_64bits = 0x33
 
+#dummy_jump = "\xea" + struct.pack("<I", 0) + struct.pack("<H",  CS_64bits)
+#def genere_return_32bits_stub(ret_addr):
+#    ret_32b = x64.MultipleInstr()
+#    # Transform 64b return value to ULONG64 return value
+#    # EDX:EAX
+#    ret_32b += x64.Mov("RDX", "RAX")
+#    ret_32b += x64.Shr("RDX", 32)
+#    ret_32b += x64.Mov('RCX', (CS_32bits << 32) + ret_addr)
+#    ret_32b += x64.Push('RCX')
+#    ret_32b += x64.Retf32()  # 32 bits return addr
+#    return ret_32b.get_code()
 
-def genere_return_32bits_stub(ret_addr):
-    ret_32b = x64.MultipleInstr()
-    # Transform 64b return value to ULONG64 return value
-    # EDX:EAX
-    ret_32b += x64.Mov("RDX", "RAX")
-    ret_32b += x64.Shr("RDX", 32)
-    ret_32b += x64.Mov('RCX', (CS_32bits << 32) + ret_addr)
-    ret_32b += x64.Push('RCX')
-    ret_32b += x64.Retf32()  # 32 bits return addr
-    return ret_32b.get_code()
-
-# The format of a jump to 64bits mode
-dummy_jump = "\xea" + struct.pack("<I", 0) + struct.pack("<H",  CS_64bits)
-
-
-def execute_64bits_code_from_syswow(shellcode):
+def generate_64bits_execution_stub_from_syswow(x64shellcode):
     """shellcode must NOT end by a ret"""
     current_process = windows.current_process
     if not current_process.is_wow_64:
-        raise ValueError("Calling execute_64bits_code_from_syswow from non-syswow process")
-    # 1 -> ret | 8 -> ljump
-    size_to_alloc = len(shellcode) + len(genere_return_32bits_stub(0xffffffff)) + 1 + 8
-    addr = windows.current_process.allocator.reserve_size(size_to_alloc)
-    # post-exec 32bits stub (xor eax, eax; ret)
-    ret = "\xC3"
-    ret_addr = addr
-    shell_code_addr = ret_addr + len(ret) + len(dummy_jump)
-    # ljmp
-    jump = "\xea" + struct.pack("<I", shell_code_addr) + struct.pack("<H",  CS_64bits)
-    jump_addr = ret_addr + len(ret)
-    # Return to 32bits stub
-    shellcode += genere_return_32bits_stub(ret_addr)
-    # WRITE ALL THE STUBS
-    current_process.write_memory(ret_addr, ret)
-    current_process.write_memory(jump_addr, jump)
-    current_process.write_memory(shell_code_addr, shellcode)
-    # Execute
-    exec_stub = ctypes.CFUNCTYPE(ULONG64)(jump_addr)
-    return exec_stub()
+        raise ValueError("Calling generate_64bits_execution_stub_from_syswow from non-syswow process")
 
+    transition64 = x64.MultipleInstr()
+    transition64 += x64.Call(":TOEXEC")
+    transition64 += x64.Mov("RDX", "RAX")
+    transition64 += x64.Shr("RDX", 32)
+    transition64 += x64.Retf32()  # 32 bits return addr
+    transition64 += x64.Label(":TOEXEC")
+    x64shellcodeaddr = windows.current_process.allocator.write_code(transition64.get_code() + x64shellcode)
+
+    transition =     x86.MultipleInstr()
+    transition +=    x86.Call(CS_64bits, x64shellcodeaddr)
+    transition +=    x86.Ret()
+
+    stubaddr = windows.current_process.allocator.write_code(transition.get_code())
+    exec_stub = ctypes.CFUNCTYPE(ULONG64)(stubaddr)
+    return exec_stub
+
+def execute_64bits_code_from_syswow(x64shellcode):
+    return generate_64bits_execution_stub_from_syswow(x64shellcode)()
 
 def generate_syswow64_call(target):
     nb_args = len(target.prototype._argtypes_)
@@ -121,6 +117,7 @@ def generate_syswow64_call(target):
     code_64b += x64.Pop('RDX')
     code_64b += x64.Pop('RCX')
     code_64b += x64.Pop('RBX')
+    code_64b += x64.Ret()
     return try_generate_stub_target(code_64b.get_code(), argument_buffer, target)
 
 
@@ -128,27 +125,10 @@ def try_generate_stub_target(shellcode, argument_buffer, target):
     """shellcode must NOT end by a ret"""
     if not windows.current_process.is_wow_64:
         raise ValueError("Calling execute_64bits_code_from_syswow from non-syswow process")
-    size_to_alloc = len(shellcode) + len(genere_return_32bits_stub(0xffffffff)) + 1 + 8
-    addr = windows.current_process.allocator.reserve_size(size_to_alloc)
-    # post-exec 32bits stub (ret)
-    ret = "\xC3"
-    ret_addr = addr
-    shell_code_addr = ret_addr + len(ret) + len(dummy_jump)
-    # ljmp
-    jump = "\xea" + struct.pack("<I", shell_code_addr) + chr(CS_64bits) + "\x00\x00"
-    jump_addr = ret_addr + len(ret)
-    # Return to 32bits stub
-    shellcode += genere_return_32bits_stub(ret_addr)
-    # WRITE ALL THE STUBS
-    windows.current_process.write_memory(ret_addr, ret)
-    windows.current_process.write_memory(jump_addr, jump)
-    windows.current_process.write_memory(shell_code_addr, shellcode)
-    # Execute
-    native_caller = ctypes.CFUNCTYPE(c_ulong)(jump_addr)
+    native_caller = generate_64bits_execution_stub_from_syswow(shellcode)
     native_caller.errcheck = target.errcheck
     # Generate the wrapper function that fill the argument_buffer
     expected_arguments_number = len(target.prototype._argtypes_)
-
     def wrapper(*args):
         if len(args) != expected_arguments_number:
             raise ValueError("{0} syswow accept {1} args ({2} given)".format(target.__name__, expected_arguments_number, len(args)))
@@ -161,11 +141,9 @@ def try_generate_stub_target(shellcode, argument_buffer, target):
                 except ctypes.ArgumentError as e:
                     raise ctypes.ArgumentError("Argument {0}: wrong type <{1}>".format(i, type(value).__name__))
             writable_args.append(value)
-
         # Build buffer
         buffer = struct.pack("<" + "Q" * len(writable_args), *writable_args)
         ctypes.memmove(argument_buffer, buffer, len(buffer))
-        # TODO : get 64bits returned value ?
         return native_caller()
     wrapper.__name__ = "{0}<syswow64>".format(target.__name__,)
     wrapper.__doc__ = "This is a wrapper to {0} in 64b mode, it accept <{1}> args".format(target.__name__, expected_arguments_number)
@@ -173,8 +151,8 @@ def try_generate_stub_target(shellcode, argument_buffer, target):
 
 
 def get_current_process_syswow_peb_addr():
-    get_peb_64_code = x64.Mov('RAX', x64.mem('gs:[0x60]'))
-    return execute_64bits_code_from_syswow(get_peb_64_code.get_code())
+    get_peb_64_code = x64.assemble("mov rax, gs:[0x60]; ret")
+    return execute_64bits_code_from_syswow(get_peb_64_code)
 
 def get_current_process_syswow_peb():
     current_process = windows.current_process

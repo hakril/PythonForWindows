@@ -275,6 +275,12 @@ def accept_as_16immediat(x):
         raise ImmediatOverflow("16bits signed Immediat overflow")
 
 
+def accept_as_unsigned_16immediat(x):
+    try:
+        return struct.pack("<H", x)
+    except struct.error:
+        raise ImmediatOverflow("16bits unsigned Immediat overflow")
+
 def accept_as_32immediat(x):
     try:
         return struct.pack("<i", x)
@@ -311,6 +317,18 @@ class Imm16(object):
             return None, None
         return (1, BitArray.from_string(imm16))
 
+class UImm16(object):
+    def accept_arg(self, args, instr_state):
+        try:
+            x = int(args[0])
+        except (ValueError, TypeError):
+            return (None, None)
+        try:
+            imm16 = accept_as_unsigned_16immediat(x)
+        except ImmediatOverflow:
+            return None, None
+        return (1, BitArray.from_string(imm16))
+
 
 class Imm32(object):
     def accept_arg(self, args, instr_state):
@@ -323,6 +341,16 @@ class Imm32(object):
         except ImmediatOverflow:
             return None, None
         return (1, BitArray.from_string(imm32))
+
+class SegmentSelectorAbsoluteAddr(object):
+    def accept_arg(self, args, instr_state):
+        sizess, datass = UImm16().accept_arg(args, instr_state)
+        if sizess is None:
+            return None, None
+        sizeabs, dataabs = Imm32().accept_arg(args[1:], instr_state)
+        if sizeabs is None:
+            return None, None
+        return (sizess + sizeabs, dataabs + datass)
 
 
 class ModRM(object):
@@ -597,11 +625,13 @@ class JmpImm32(JmpImm):
 
 class Call(JmpType):
     encoding = [(RawBits.from_int(8, 0xe8), JmpImm32(5)),
-                (RawBits.from_int(8, 0xff), Slash(2))]
+                (RawBits.from_int(8, 0xff), Slash(2)),
+                (RawBits.from_int(8, 0x9a), SegmentSelectorAbsoluteAddr())]
 
 class Jmp(JmpType):
     encoding = [(RawBits.from_int(8, 0xeb), JmpImm8(2)),
-                (RawBits.from_int(8, 0xe9), JmpImm32(5))]
+                (RawBits.from_int(8, 0xe9), JmpImm32(5)),
+                (RawBits.from_int(8, 0xea), SegmentSelectorAbsoluteAddr())]
 
 
 class Jz(JmpType):
