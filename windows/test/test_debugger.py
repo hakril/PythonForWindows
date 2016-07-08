@@ -372,7 +372,6 @@ class DebuggerTestCase(unittest.TestCase):
 
     def test_memory_breakpoint_write(self):
         """Check MemoryBP WRITE"""
-
         TEST_CASE = self
         store_data = [0]
         class TSTBP(windows.debug.MemoryBreakpoint):

@@ -71,6 +71,12 @@ class Debugger(object):
         winproxy.DebugActiveProcess(target.pid)
         return cls(target)
 
+    @classmethod
+    def debug(cls, path, args=None, dwCreationFlags=0, show_windows=False):
+        dwCreationFlags |= DEBUG_PROCESS
+        c = windows.utils.create_process(path, args=args, dwCreationFlags=dwCreationFlags, show_windows=show_windows)
+        return cls(c)
+
     def _init_dispatch_handlers(self):
         dbg_evt_dispatch = {}
         dbg_evt_dispatch[EXCEPTION_DEBUG_EVENT] = self._handle_exception
@@ -337,16 +343,6 @@ class Debugger(object):
         for bp, begin, end, original_prot in self._watched_memory:
             if begin <= fault_addr < end:
                 ## Reject bad EXCEPTION ?
-                #if fault_type == EXEC and bp.PROTECT not in [PAGE_EXECUTE, PAGE_EXECUTE_READ, PAGE_EXECUTE_READWRITE]:
-                #    break
-                #if fault_type == READ and bp.PROTECT not in [PAGE_EXECUTE, PAGE_EXECUTE_READ, PAGE_EXECUTE_READWRITE]:
-                #    break
-                #if fault_type == EXEC and bp.PROTECT not in [PAGE_EXECUTE, PAGE_EXECUTE_READ, PAGE_EXECUTE_READWRITE]:
-                #    break
-
-
-
-                #print("BP MEM TRIGGER {0}".format(bp))
                 continue_flag = bp.trigger(self, exception)
                 self._explicit_single_step[self.current_thread.tid] = self.current_thread.context.EEFlags.TF
                 self._pass_memory_breakpoint(bp, begin, end, original_prot)
@@ -542,7 +538,7 @@ class Debugger(object):
 
     # Public callback
     def on_exception(self, exception):
-        """Called on exception event other that known breakpoint. ``exception`` is one of the following type:
+        """Called on exception event other that known breakpoint or requested single step. ``exception`` is one of the following type:
 
                 * :class:`windows.winobject.exception.EEXCEPTION_DEBUG_INFO32`
                 * :class:`windows.winobject.exception.EEXCEPTION_DEBUG_INFO64`
@@ -555,6 +551,13 @@ class Debugger(object):
         return DBG_CONTINUE
 
     def on_single_step(self, exception):
+        """Called on requested single step``exception`` is one of the following type:
+
+                * :class:`windows.winobject.exception.EEXCEPTION_DEBUG_INFO32`
+                * :class:`windows.winobject.exception.EEXCEPTION_DEBUG_INFO64`
+
+        There is no default implementation, if you use ``Debugger.single_step()`` you should implement ``on_single_step``
+        """
         raise NotImplementedError("Debugger that explicitly single step should implement <on_single_step>")
 
     def on_create_process(self, create_process):
@@ -589,10 +592,7 @@ class Debugger(object):
         """Called on rip_info event (for param type see https://msdn.microsoft.com/en-us/library/windows/desktop/ms680587(v=vs.85).aspx)"""
         pass
 
-def debug(path, args=None, dwCreationFlags=0, show_windows=False):
-    dwCreationFlags |= DEBUG_PROCESS
-    c = windows.utils.create_process(path, args=args, dwCreationFlags=dwCreationFlags, show_windows=show_windows)
-    return Debugger(c)
+
 
 
 class Breakpoint(object):

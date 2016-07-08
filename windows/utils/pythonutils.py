@@ -1,6 +1,7 @@
 """utils fonctions non windows-related"""
 import ctypes
 import _ctypes
+from windows.generated_def import Flag
 
 
 def fixedpropety(f):
@@ -40,7 +41,7 @@ def print_ctypes_struct(struct, name="", ident=0, hexa=False):
 
         if isinstance(value, basestring):
             value = repr(value)
-        if hexa:
+        if hexa and not isinstance(value, Flag):
             try:
                 print("{0} -> {1}".format(name, hex(value)))
                 return

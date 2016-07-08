@@ -547,7 +547,6 @@ class NativeUtilsTestCase(unittest.TestCase):
             # Put name in test to know which function caused the assert fails
             self.assertEqual((name, hex(addr)), (name, hex(compute_addr)))
 
-
         self.assertEqual(getprocaddr32("YOLO.DLL", "whatever"), 0xfffffffe)
         self.assertEqual(getprocaddr32("KERNEL32.DLL", "YOLOAPI"), 0xffffffff)
 
