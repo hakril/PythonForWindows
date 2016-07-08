@@ -11,7 +11,6 @@ import windows.native_exec.simple_x86 as x86
 from windows.generated_def.winstructs import *
 
 
-
 class MyDebugger(windows.debug.Debugger):
     def __init__(self, *args, **kwargs):
         super(MyDebugger, self).__init__(*args, **kwargs)
@@ -40,6 +39,7 @@ class SingleStepOnWrite(windows.debug.MemoryBreakpoint):
         print("Instruction at <{0:#x}> wrote at <{1:#x}>".format(eip, fault_addr))
         dbg.single_step_counter = 4
         return dbg.single_step()
+
 
 calc = windows.test.pop_calc_32(dwCreationFlags=DEBUG_PROCESS)
 d = MyDebugger(calc)

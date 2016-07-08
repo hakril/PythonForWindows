@@ -20,7 +20,6 @@ TODO:
     - Add test for debugger with breakpoint that add another breakpoint on trigger
 
     - Some test/doc on windows.system.handles
-    - Some test/doc on debugger and MemBP
 
     - registry
         - test !

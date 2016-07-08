@@ -129,9 +129,41 @@ To extract/play with even more information about the system, PythonForWindows is
 (u'"C:\\Python27\\python.exe"', 227)
 ```
 
+### Registry
+
+The project also contains some wrapping classes around `_winreg` for simpler use.
+
+```python
+>>> import windows
+>>> from windows.generated_def import KEY_WRITE, KEY_READ, REG_QWORD
+>>> registry = windows.system.registry
+>>> cuuser_software = registry(r'HKEY_CURRENT_USER\Software')
+>>> cuuser_software
+<PyHKey "HKEY_CURRENT_USER\Software">
+>>> cuuser_software.sam
+KEY_READ(0x20019L)
+# Explore subkeys
+>>> cuuser_software.subkeys[:3]
+[<PyHKey "HKEY_CURRENT_USER\Software\7-Zip">, <PyHKey "HKEY_CURRENT_USER\Software\AppDataLow">, <PyHKey "HKEY_CURRENT_USER\Software\Audacity">]
+>>> tstkey = registry('HKEY_CURRENT_USER\TestKey',  KEY_WRITE | KEY_READ)
+# Get / Set individual value
+>>> tstkey["VALUE"] = 'a_value_for_my_key'
+>>> tstkey["VALUE"]
+KeyValue(name='VALUE', value=u'a_value_for_my_key', type=1)
+>>> tstkey["MYQWORD"] = (123456789987654321, REG_QWORD)  # Default is REG_DWORD for int/long
+>>> tstkey["MYQWORD"]
+KeyValue(name='MYQWORD', value=123456789987654321L, type=11)
+# Explore Values
+>>> tstkey.values
+[KeyValue(name='MYQWORD', value=123456789987654321L, type=11), KeyValue(name='VALUE', value=u'a_value_for_my_key', type=1)]
+
+
+
+```
 ### Other stuff (see doc / samples)
 
-- Registry
+- Debugger
+- LocalDebugger (VEH based)
 - Network
 - Services
 - COM
