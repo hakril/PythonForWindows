@@ -212,17 +212,20 @@ class Debugger(object):
 
     def _setup_breakpoint_MEMBP(self, bp, target):
         addr = self._resolve(bp.addr, target)
+        bp._addr = addr
         if addr is None:
             return False
         old_prot = DWORD()
+
+        real_vprot_addr = (addr >> 12) << 12
 
         if bp.size & 0x0fff:
             real_vprot_size = ((bp.size >> 12) + 1) << 12
         else:
             real_vprot_size = bp.size
 
-        target.virtual_protect(addr, real_vprot_size, bp.protect, old_prot)
-        self._watched_memory.append((bp, addr, addr + real_vprot_size, old_prot.value))
+        target.virtual_protect(real_vprot_addr, real_vprot_size, bp.protect, old_prot)
+        self._watched_memory.append((bp, real_vprot_addr, real_vprot_addr + real_vprot_size, old_prot.value))
         # TODO: watch for overlap with other MEM breakpoints
         # TODO: _watched_memory by process
         return True
@@ -398,10 +401,10 @@ class Debugger(object):
             fault_type = EXEC
 
         #print("FAULT AT {0:#x} ({1})".format(fault_addr, fault_type))
-        for bp, begin, vprot_end, original_prot in self._watched_memory:
-            if begin <= fault_addr < vprot_end:
+        for bp, vprot_begin, vprot_end, original_prot in self._watched_memory:
+            if vprot_begin <= fault_addr < vprot_end:
                 # It's the page for this MEMBP that triggeed the BP
-                if begin <= fault_addr < begin + bp.size:
+                if bp._addr <= fault_addr < bp._addr + bp.size:
                     # In the real range of our memBP
                     continue_flag = bp.trigger(self, exception)
                     self._explicit_single_step[self.current_thread.tid] = self.current_thread.context.EEFlags.TF
@@ -411,7 +414,7 @@ class Debugger(object):
                     continue_flag = DBG_CONTINUE
 
                 if bp in [x[0] for x in self._watched_memory]:
-                    self._pass_memory_breakpoint(bp, begin, vprot_end, original_prot)
+                    self._pass_memory_breakpoint(bp, vprot_begin, vprot_end, original_prot)
                 return continue_flag
         else:
             self.on_exception(exception)
