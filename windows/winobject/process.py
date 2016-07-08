@@ -339,7 +339,8 @@ class Process(AutoHandle):
         if windows.current_process.bitness == 32 and self.bitness == 64:
             #addr = (addr >> 12) << 12
             #addr = ULONG64(addr)
-            size = ((size >> 12) + 1) << 12
+            if size & 0x0fff:
+                size = ((size >> 12) + 1) << 12
             #ssize = ULONG(size)
             #import pdb;pdb.set_trace()
             old_protect = ctypes.addressof(old_protect)

@@ -196,15 +196,55 @@ class Debugger(object):
         self.breakpoints[target.owner.pid][addr] = bp
         return True
 
+    def _remove_breakpoint_HXBP(self, bp, target):
+        addr = self._resolve(bp.addr, target.owner)
+        bp_pos = [pos for pos, hbp in self._hardware_breakpoint[target.tid].items() if hbp == bp]
+        if not bp_pos:
+            raise ValueError("Asked to remove {0} from {1} but not present in hbp_list".format(bp, target))
+        bp_pos_str = str(bp_pos[0])
+        ctx = target.context
+        setattr(ctx.EDr7, "L" + bp_pos_str, 0)
+        setattr(ctx, "Dr" + bp_pos_str, 0)
+        target.set_context(ctx)
+        del self.breakpoints[target.owner.pid][addr]
+        return True
+
+
     def _setup_breakpoint_MEMBP(self, bp, target):
         addr = self._resolve(bp.addr, target)
         if addr is None:
             return False
         old_prot = DWORD()
-        target.virtual_protect(addr, bp.size, bp.protect, old_prot)
-        self._watched_memory.append((bp, addr, addr + bp.size, old_prot.value))
+
+        if bp.size & 0x0fff:
+            real_vprot_size = ((bp.size >> 12) + 1) << 12
+        else:
+            real_vprot_size = bp.size
+
+        target.virtual_protect(addr, real_vprot_size, bp.protect, old_prot)
+        self._watched_memory.append((bp, addr, addr + real_vprot_size, old_prot.value))
         # TODO: watch for overlap with other MEM breakpoints
+        # TODO: _watched_memory by process
         return True
+
+    def _remove_breakpoint_MEMBP(self, bp, target):
+        #addr = self._resolve(bp.addr, target)
+        # TODO: moins crade..
+        #if addr is None:
+        #    return False
+        old_prot = DWORD()
+
+        for i, data in enumerate(self._watched_memory):
+            if data[0] == bp:
+                break
+        else:
+            raise ValueError("BP not found in _watched_memory")
+
+        bp, begin, end, original_prot = data
+        target.virtual_protect(begin, bp.size, original_prot, None)
+        self._watched_memory.pop(i)
+        return True
+
 
     def _setup_pending_breakpoints_new_process(self, new_process):
         for bp in self._pending_breakpoints_new[None]:
@@ -273,13 +313,21 @@ class Debugger(object):
         bp = self.breakpoints[self.current_process.pid][addr]
         self._breakpoint_to_reput[thread.tid].append(bp) #Register pending breakpoint for next single step
 
-    def _pass_memory_breakpoint(self, bp, begin, end, original_prot):
+    def _pass_memory_breakpoint(self, bp, begin, vprot_end, original_prot):
         cp = self.current_process
         cp.virtual_protect(begin, bp.size, original_prot, None)
         thread = self.current_thread
         ctx = thread.context
         ctx.EEFlags.TF = 1
         thread.set_context(ctx)
+        # TODO: remove these horrible lines...
+        for i, data in enumerate(self._watched_memory):
+            if data[0] == bp:
+                self._watched_memory.pop(i)
+                break
+        else:
+            raise ValueError("Fix this horrible code..")
+        # ENDOF to remove
         self._breakpoint_to_reput[thread.tid].append(bp)
 
     # debug event handlers
@@ -326,8 +374,9 @@ class Debugger(object):
             bp.trigger(self, exception)
             ctx = self.current_thread.context
             self._explicit_single_step[self.current_thread.tid] = ctx.EEFlags.TF
-            ctx.EEFlags.RF = 1
-            self.current_thread.set_context(ctx)
+            if excp_addr in self.breakpoints[self.current_process.pid]:
+                ctx.EEFlags.RF = 1
+                self.current_thread.set_context(ctx)
             return DBG_CONTINUE
         elif self._explicit_single_step[self.current_thread.tid]:
             continue_flag = self.on_single_step(exception)
@@ -349,12 +398,20 @@ class Debugger(object):
             fault_type = EXEC
 
         #print("FAULT AT {0:#x} ({1})".format(fault_addr, fault_type))
-        for bp, begin, end, original_prot in self._watched_memory:
-            if begin <= fault_addr < end:
-                ## Reject bad EXCEPTION ?
-                continue_flag = bp.trigger(self, exception)
-                self._explicit_single_step[self.current_thread.tid] = self.current_thread.context.EEFlags.TF
-                self._pass_memory_breakpoint(bp, begin, end, original_prot)
+        for bp, begin, vprot_end, original_prot in self._watched_memory:
+            if begin <= fault_addr < vprot_end:
+                # It's the page for this MEMBP that triggeed the BP
+                if begin <= fault_addr < begin + bp.size:
+                    # In the real range of our memBP
+                    continue_flag = bp.trigger(self, exception)
+                    self._explicit_single_step[self.current_thread.tid] = self.current_thread.context.EEFlags.TF
+                    #if excp_addr in self.breakpoints[self.current_process.pid]:
+                else:
+                    #self._explicit_single_step[self.current_thread.tid] = self.current_thread.context.EEFlags.TF
+                    continue_flag = DBG_CONTINUE
+
+                if bp in [x[0] for x in self._watched_memory]:
+                    self._pass_memory_breakpoint(bp, begin, vprot_end, original_prot)
                 return continue_flag
         else:
             self.on_exception(exception)
@@ -542,8 +599,8 @@ class Debugger(object):
     def del_bp(self, bp, targets=None):
         if targets is not None:
             raise NotImplementedError("TODO: DEL BP with targets ?")
-        if bp.type != STANDARD_BP:
-            raise NotImplementedError("Remove non-STANDARD_BP breakpoint")
+        #if bp.type != STANDARD_BP:
+        #    raise NotImplementedError("Remove non-STANDARD_BP breakpoint")
 
         _remove_method = getattr(self, "_remove_breakpoint_" + bp.type)
         if targets is None:
