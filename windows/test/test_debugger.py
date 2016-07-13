@@ -614,6 +614,55 @@ class DebuggerTestCase(unittest.TestCase):
         d.loop()
         TEST_CASE.assertEqual(data, [data_addr, data_addr + 4])
 
+
+    def test_read_write_bp_same_page(self):
+        TEST_CASE = self
+        data = []
+
+        def generate_read_at(addr):
+            res = x86.MultipleInstr()
+            res += x86.Mov("EAX", x86.deref(addr))
+            res += x86.Ret()
+            return res.get_code()
+
+        def generate_write_at(addr):
+            res = x86.MultipleInstr()
+            res += x86.Mov(x86.deref(addr), "EAX")
+            res += x86.Ret()
+            return res.get_code()
+
+        def do_check():
+            calc.execute(generate_read_at(data_addr)).wait()
+            calc.execute(generate_write_at(data_addr + 4)).wait()
+            calc.execute(generate_read_at(data_addr + 0x500)).wait()
+            calc.execute(generate_write_at(data_addr + 0x504)).wait()
+            calc.exit()
+
+        class MemBP(windows.debug.MemoryBreakpoint):
+            DEFAULT_PROTECT = PAGE_NOACCESS
+            def trigger(self, dbg, exc):
+                addr = exc.ExceptionRecord.ExceptionAddress
+                fault_addr = exc.ExceptionRecord.ExceptionInformation[1]
+                print("Got <{0:#x}> <{1}>".format(fault_addr, exc.ExceptionRecord.ExceptionInformation[0]))
+                data.append((self, fault_addr))
+
+        calc = pop_calc_32(dwCreationFlags=DEBUG_PROCESS)
+        d = windows.debug.Debugger(calc)
+        data_addr = calc.virtual_alloc(0x1000)
+        the_write_bp = MemBP(data_addr + 0x500, prot=PAGE_READONLY, size=0x500)
+        the_read_bp = MemBP(data_addr, prot=PAGE_NOACCESS, size=0x500)
+        d.add_bp(the_write_bp)
+        d.add_bp(the_read_bp)
+        threading.Thread(target=do_check).start()
+        d.loop()
+
+        # generate_read_at (data_addr + 0x500)) (write_bp (PAGE_READONLY)) should not be triggered
+        expected_result = [(the_read_bp, data_addr), (the_read_bp, data_addr + 4),
+                           (the_write_bp, data_addr + 0x504)]
+
+
+        TEST_CASE.assertEqual(data, expected_result)
+
 if __name__ == '__main__':
     alltests = unittest.TestSuite()
     alltests.addTest(unittest.makeSuite(DebuggerTestCase))

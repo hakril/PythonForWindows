@@ -49,7 +49,7 @@ class MemoryBreakpoint(Breakpoint):
     def __init__(self, addr, size=None, prot=None):
         super(MemoryBreakpoint, self).__init__(addr)
         self.size = size if size is not None else self.DEFAULT_SIZE
-        self.protect = size if prot is not None else self.DEFAULT_PROTECT
+        self.protect = prot if prot is not None else self.DEFAULT_PROTECT
 
 
     def trigger(self, dbg, exception):

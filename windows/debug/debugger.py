@@ -1,5 +1,5 @@
 import os.path
-from collections import defaultdict
+from collections import defaultdict, namedtuple
 from contextlib import contextmanager
 
 import windows
@@ -29,6 +29,8 @@ class DEBUG_EVENT(DEBUG_EVENT):
     @property
     def code(self):
         return self.KNOWN_EVENT_CODE.get(self.dwDebugEventCode, self.dwDebugEventCode)
+
+WatchedPage = namedtuple('WatchedPage', ["original_prot", "bps"])
 
 
 class Debugger(object):
@@ -241,12 +243,15 @@ class Debugger(object):
         old_prot = DWORD()
         vprot_begin = affected_pages[0]
         vprot_size = PAGE_SIZE * len(affected_pages)
+        print("[VP] {0:#x} {1:#x} {2}".format(vprot_begin, vprot_size, bp.protect))
         target.virtual_protect(vprot_begin, vprot_size, bp.protect, old_prot)
         bp._old_prot = old_prot.value
         #self._virtual_protected_memory[vprot_begin] = (vprot_size, bp.protect, old_prot)
         cp_watch_page = self._watched_pages[self.current_process.pid]
         for page_addr in affected_pages:
-            cp_watch_page[page_addr].append(bp)
+            if page_addr not in cp_watch_page:
+                cp_watch_page[page_addr] = WatchedPage(old_prot, [])
+            cp_watch_page[page_addr].bps.append(bp)
         # TODO: watch for overlap with other MEM breakpoints
         return True
 
@@ -263,8 +268,8 @@ class Debugger(object):
 
         cp_watch_page = self._watched_pages[self.current_process.pid]
         for page_addr in affected_pages:
-            cp_watch_page[page_addr].remove(bp)
-            if not cp_watch_page[page_addr]:
+            cp_watch_page[page_addr].bps.remove(bp)
+            if not cp_watch_page[page_addr].bps:
                 del cp_watch_page[page_addr]
             else:
                 raise NotImplementedError("Removing MemBP on page with multiple MemBP <need to reajust page prot")
@@ -339,9 +344,9 @@ class Debugger(object):
         bp = self.breakpoints[self.current_process.pid][addr]
         self._breakpoint_to_reput[thread.tid].append(bp) #Register pending breakpoint for next single step
 
-    def _pass_memory_breakpoint(self, bp, fault_page):
+    def _pass_memory_breakpoint(self, bp, page_protect, fault_page):
         cp = self.current_process
-        cp.virtual_protect(fault_page, PAGE_SIZE, bp._old_prot, None)
+        cp.virtual_protect(fault_page, PAGE_SIZE, page_protect, None)
         thread = self.current_thread
         ctx = thread.context
         ctx.EEFlags.TF = 1
@@ -393,54 +398,49 @@ class Debugger(object):
             self._explicit_single_step[self.current_thread.tid] = self.current_thread.context.EEFlags.TF
             return continue_flag
 
+    #  === Testing PAGE_NOACCESS(0x1L) ===
+    #  exception: access violation reading 0x00470000
+    #  exception: access violation writing 0x00470000
+    #  === Testing PAGE_READONLY(0x2L) ===
+    #  exception: access violation writing 0x00470000
+    #  === Testing PAGE_READWRITE(0x4L) ===
+    #  === Testing PAGE_EXECUTE(0x10L) ===
+    #  exception: access violation writing 0x00470000
+    #  === Testing PAGE_EXECUTE_READ(0x20L) ===
+    #  exception: access violation writing 0x00470000
+    #  === Testing PAGE_EXECUTE_READWRITE(0x40L) ===
+
     def _handle_exception_access_violation(self, exception, excp_addr):
         READ = 0
         WRITE = 1
         EXEC = 2
 
-        fault_type = exception.ExceptionRecord.ExceptionInformation[0]
+        #fault_type = exception.ExceptionRecord.ExceptionInformation[0]
         fault_addr = exception.ExceptionRecord.ExceptionInformation[1]
         pc_addr = self.current_thread.context.pc
-        if fault_addr == pc_addr:
-            fault_type = EXEC
+        #if fault_addr == pc_addr:
+        #    fault_type = EXEC
 
         fault_page = (fault_addr >> 12) << 12
+        cp_watch_page = self._watched_pages[self.current_process.pid]
 
         mem_bp = self.get_memory_breakpoint_at(fault_addr, self.current_process)
         if mem_bp is False: # No BP on this page
             return self.on_exception(exception)
+        original_prot = cp_watch_page[fault_page].original_prot
         if mem_bp is None: # Page as MEMBP but None handle this address
             # This hack is bad, find a BP on the page to restore original access..
-            # TODO: stock original page protection elsewhere ?
-            bp = self._watched_pages[self.current_process.pid][fault_page][0]
-            self._pass_memory_breakpoint(bp, fault_page)
+            bp = cp_watch_page[fault_page].bps[-1]
+            self._pass_memory_breakpoint(bp, original_prot, fault_page)
             return DBG_CONTINUE
 
         continue_flag = mem_bp.trigger(self, exception)
         self._explicit_single_step[self.current_thread.tid] = self.current_thread.context.EEFlags.TF
         # If BP has not been removed in trigger, pas it
-        if mem_bp in self._watched_pages[self.current_process.pid][fault_page]:
-            self._pass_memory_breakpoint(mem_bp, fault_page)
+        if fault_page in cp_watch_page and mem_bp in cp_watch_page[fault_page].bps:
+            self._pass_memory_breakpoint(mem_bp, original_prot, fault_page)
         return continue_flag
 
-
-        #for bp, vprot_begin, vprot_end, original_prot in self._watched_memory:
-        #    if vprot_begin <= fault_addr < vprot_end:
-        #        # It's the page for this MEMBP that triggeed the BP
-        #        if bp._addr <= fault_addr < bp._addr + bp.size:
-        #            # In the real range of our memBP
-        #            continue_flag = bp.trigger(self, exception)
-        #            self._explicit_single_step[self.current_thread.tid] = self.current_thread.context.EEFlags.TF
-        #            #if excp_addr in self.breakpoints[self.current_process.pid]:
-        #        else:
-        #            #self._explicit_single_step[self.current_thread.tid] = self.current_thread.context.EEFlags.TF
-        #            continue_flag = DBG_CONTINUE
-        #
-        #        if bp in [x[0] for x in self._watched_memory]:
-        #            self._pass_memory_breakpoint(bp, vprot_begin, vprot_end, original_prot)
-        #        return continue_flag
-        #else:
-        #    self.on_exception(exception)
 
 
     # TODO: self._explicit_single_step setup by single_step() ? check at the end ? finally ?
@@ -505,7 +505,7 @@ class Debugger(object):
         self._explicit_single_step[self.current_thread.tid] = False
         self._breakpoint_to_reput[self.current_thread.tid] = []
         self.processes[self.current_process.pid] = self.current_process
-        self._watched_pages[self.current_process.pid] = defaultdict(list)
+        self._watched_pages[self.current_process.pid] = {} #defaultdict(list)
         self.breakpoints[self.current_process.pid] = {}
         self._module_by_process[self.current_process.pid] = {}
         self._update_debugger_state(debug_event)
@@ -666,7 +666,7 @@ class Debugger(object):
         if fault_page not in self._watched_pages[process.pid]:
             return False
 
-        for bp in self._watched_pages[process.pid][fault_page]:
+        for bp in self._watched_pages[process.pid][fault_page].bps:
             if bp._addr <= addr < bp._addr + bp.size:
                 return bp
         return None

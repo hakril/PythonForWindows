@@ -9,6 +9,7 @@ TODO:
         - Test !! (bp, BP_HX, bp on only on process, bp_hx on only one thread..)
 		- test breakpoint with specific target
         - Add test for debugger with breakpoint that add another breakpoint on trigger
+        - Handle MemBP of multiple types of the same page..
 
     - remotectypes
         - pretty sur I can get rid of PointerToStruct64/PointerToStruct32
