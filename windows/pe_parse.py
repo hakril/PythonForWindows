@@ -272,7 +272,10 @@ def GetPEFile(baseaddr, target=None, force_bitness=None):
         @utils.fixedpropety
         def export_name(self):
             """The Name attribute of the ``EXPORT_DIRECTORY``"""
-            return self.get_EXPORT_DIRECTORY().Name.str
+            try:
+                return self.get_EXPORT_DIRECTORY().Name.str
+            except AttributeError:
+                return None
 
         # TODO: get imports by parsing other modules exports if no INT
         @utils.fixedpropety

@@ -17,9 +17,8 @@ from .breakpoints import *
 from windows.winobject.exception import VectoredException
 
 
-STANDARD_BP = "BP"
-HARDWARE_EXEC_BP = "HXBP"
-MEMORY_BREAKPOINT = "MEMBP"
+PAGE_SIZE = 0x1000
+
 
 class DEBUG_EVENT(DEBUG_EVENT):
     KNOWN_EVENT_CODE = dict((x,x) for x in [EXCEPTION_DEBUG_EVENT,
@@ -30,6 +29,7 @@ class DEBUG_EVENT(DEBUG_EVENT):
     @property
     def code(self):
         return self.KNOWN_EVENT_CODE.get(self.dwDebugEventCode, self.dwDebugEventCode)
+
 
 class Debugger(object):
     """A debugger based on standard Win32 API. Handle standard (int3) and Hardware-Exec Breakpoints"""
@@ -62,7 +62,10 @@ class Debugger(object):
 
         self._explicit_single_step = {}
 
-        self._watched_memory = []
+        self._watched_pages = {}# Dict [page_modif] -> [mem bp on the page]
+
+        # [start] -> (size, current_proctection, original_prot)
+        self._virtual_protected_memory = [] # List of memory-range modified by a MemBP
 
 
     @classmethod
@@ -138,9 +141,11 @@ class Debugger(object):
             raise ValueError("Unknown API <{0}> in DLL {1}".format(api, dll))
         return exports[api]
 
-
     def add_pending_breakpoint(self, bp, target):
         self._pending_breakpoints_new[target].append(bp)
+
+    def remove_pending_breakpoint(self, bp, target):
+        self._pending_breakpoints_new[target].remove(bp)
 
     def _setup_breakpoint(self, bp, target):
         _setup_method = getattr(self, "_setup_breakpoint_" + bp.type)
@@ -154,6 +159,15 @@ class Debugger(object):
         for target in targets:
             return _setup_method(bp, target)
 
+    def _restore_breakpoints(self):
+        for bp in self._breakpoint_to_reput[self.current_thread.tid]:
+            if bp.type == HARDWARE_EXEC_BP:
+                raise NotImplementedError("Why is this here ? we use RF flags to pass HXBP")
+            restore = getattr(self, "_restore_breakpoint_" + bp.type)
+            restore(bp, self.current_process)
+        del self._breakpoint_to_reput[self.current_thread.tid][:]
+        return
+
     def _setup_breakpoint_BP(self, bp, target):
         if not isinstance(target, WinProcess):
             raise ValueError("SETUP STANDARD_BP on {0}".format(target))
@@ -161,10 +175,15 @@ class Debugger(object):
         addr = self._resolve(bp.addr, target)
         if addr is None:
             return False
+        bp._addr = addr
         self._memory_save[target.pid][addr] = target.read_memory(addr, 1)
         self.breakpoints[target.pid][addr] = bp
         target.write_memory(addr, "\xcc")
         return True
+
+    def _restore_breakpoint_BP(self, bp, target):
+        self._memory_save[target.pid][bp._addr] = target.read_memory(bp._addr, 1)
+        return target.write_memory(bp._addr, "\xcc")
 
     def _remove_breakpoint_BP(self, bp, target):
         if not isinstance(target, WinProcess):
@@ -206,46 +225,50 @@ class Debugger(object):
         setattr(ctx.EDr7, "L" + bp_pos_str, 0)
         setattr(ctx, "Dr" + bp_pos_str, 0)
         target.set_context(ctx)
-        del self.breakpoints[target.owner.pid][addr]
+        try: # TODO: vraiment faire les HXBP par thread ? ...
+            del self.breakpoints[target.owner.pid][addr]
+        except:
+            pass
         return True
-
 
     def _setup_breakpoint_MEMBP(self, bp, target):
         addr = self._resolve(bp.addr, target)
         bp._addr = addr
         if addr is None:
             return False
+        # Split in affected pages:
+        affected_pages = range((addr >> 12) << 12, addr + bp.size, PAGE_SIZE)
         old_prot = DWORD()
-
-        real_vprot_addr = (addr >> 12) << 12
-
-        if bp.size & 0x0fff:
-            real_vprot_size = ((bp.size >> 12) + 1) << 12
-        else:
-            real_vprot_size = bp.size
-
-        target.virtual_protect(real_vprot_addr, real_vprot_size, bp.protect, old_prot)
-        self._watched_memory.append((bp, real_vprot_addr, real_vprot_addr + real_vprot_size, old_prot.value))
+        vprot_begin = affected_pages[0]
+        vprot_size = PAGE_SIZE * len(affected_pages)
+        target.virtual_protect(vprot_begin, vprot_size, bp.protect, old_prot)
+        bp._old_prot = old_prot.value
+        #self._virtual_protected_memory[vprot_begin] = (vprot_size, bp.protect, old_prot)
+        cp_watch_page = self._watched_pages[self.current_process.pid]
+        for page_addr in affected_pages:
+            cp_watch_page[page_addr].append(bp)
         # TODO: watch for overlap with other MEM breakpoints
-        # TODO: _watched_memory by process
         return True
 
+    def _restore_breakpoint_MEMBP(self, bp, target):
+        return target.virtual_protect(bp._reput_page, PAGE_SIZE, bp.protect, None)
+
+
     def _remove_breakpoint_MEMBP(self, bp, target):
-        #addr = self._resolve(bp.addr, target)
-        # TODO: moins crade..
-        #if addr is None:
-        #    return False
+        affected_pages = range((bp._addr >> 12) << 12, bp._addr + bp.size, PAGE_SIZE)
         old_prot = DWORD()
+        vprot_begin = affected_pages[0]
+        vprot_size = PAGE_SIZE * len(affected_pages)
+        target.virtual_protect(vprot_begin, vprot_size, bp._old_prot, None)
 
-        for i, data in enumerate(self._watched_memory):
-            if data[0] == bp:
-                break
-        else:
-            raise ValueError("BP not found in _watched_memory")
+        cp_watch_page = self._watched_pages[self.current_process.pid]
+        for page_addr in affected_pages:
+            cp_watch_page[page_addr].remove(bp)
+            if not cp_watch_page[page_addr]:
+                del cp_watch_page[page_addr]
+            else:
+                raise NotImplementedError("Removing MemBP on page with multiple MemBP <need to reajust page prot")
 
-        bp, begin, end, original_prot = data
-        target.virtual_protect(begin, bp.size, original_prot, None)
-        self._watched_memory.pop(i)
         return True
 
 
@@ -316,21 +339,14 @@ class Debugger(object):
         bp = self.breakpoints[self.current_process.pid][addr]
         self._breakpoint_to_reput[thread.tid].append(bp) #Register pending breakpoint for next single step
 
-    def _pass_memory_breakpoint(self, bp, begin, vprot_end, original_prot):
+    def _pass_memory_breakpoint(self, bp, fault_page):
         cp = self.current_process
-        cp.virtual_protect(begin, bp.size, original_prot, None)
+        cp.virtual_protect(fault_page, PAGE_SIZE, bp._old_prot, None)
         thread = self.current_thread
         ctx = thread.context
         ctx.EEFlags.TF = 1
         thread.set_context(ctx)
-        # TODO: remove these horrible lines...
-        for i, data in enumerate(self._watched_memory):
-            if data[0] == bp:
-                self._watched_memory.pop(i)
-                break
-        else:
-            raise ValueError("Fix this horrible code..")
-        # ENDOF to remove
+        bp._reput_page = fault_page
         self._breakpoint_to_reput[thread.tid].append(bp)
 
     # debug event handlers
@@ -352,23 +368,11 @@ class Debugger(object):
             return continue_flag
         return self.on_exception(exception)
 
-    # TODO: mov me
-    def _restore_breakpoints(self):
-        for bp in self._breakpoint_to_reput[self.current_thread.tid]:
-            #print("TODO: restore {0}".format(bp))
-            if bp.type == HARDWARE_EXEC_BP:
-                raise NotImplementedError("Why is this here ? we use RF flags to pass HXBP")
-            #print("[RST] Restoring <{0}>".format(bp))
-            self._setup_breakpoint(bp, self.current_process)
-        del self._breakpoint_to_reput[self.current_thread.tid][:]
-        return
-
-
     def _handle_exception_singlestep(self, exception, excp_addr):
         if self.current_thread.tid in self._breakpoint_to_reput and self._breakpoint_to_reput[self.current_thread.tid]:
             self._restore_breakpoints()
             if self._explicit_single_step[self.current_thread.tid]:
-                self.on_single_step(exception) # TODO: default implem / dispatcher ?
+                self.on_single_step(exception)
             self._explicit_single_step[self.current_thread.tid] = self.current_thread.context.EEFlags.TF
             return DBG_CONTINUE
         elif excp_addr in self.breakpoints[self.current_process.pid]:
@@ -383,7 +387,7 @@ class Debugger(object):
             return DBG_CONTINUE
         elif self._explicit_single_step[self.current_thread.tid]:
             continue_flag = self.on_single_step(exception)
-            return continue_flag # TODO: default implem / dispatcher ?
+            return continue_flag
         else:
             continue_flag = self.on_exception(exception)
             self._explicit_single_step[self.current_thread.tid] = self.current_thread.context.EEFlags.TF
@@ -400,24 +404,43 @@ class Debugger(object):
         if fault_addr == pc_addr:
             fault_type = EXEC
 
-        #print("FAULT AT {0:#x} ({1})".format(fault_addr, fault_type))
-        for bp, vprot_begin, vprot_end, original_prot in self._watched_memory:
-            if vprot_begin <= fault_addr < vprot_end:
-                # It's the page for this MEMBP that triggeed the BP
-                if bp._addr <= fault_addr < bp._addr + bp.size:
-                    # In the real range of our memBP
-                    continue_flag = bp.trigger(self, exception)
-                    self._explicit_single_step[self.current_thread.tid] = self.current_thread.context.EEFlags.TF
-                    #if excp_addr in self.breakpoints[self.current_process.pid]:
-                else:
-                    #self._explicit_single_step[self.current_thread.tid] = self.current_thread.context.EEFlags.TF
-                    continue_flag = DBG_CONTINUE
+        fault_page = (fault_addr >> 12) << 12
 
-                if bp in [x[0] for x in self._watched_memory]:
-                    self._pass_memory_breakpoint(bp, vprot_begin, vprot_end, original_prot)
+        #print("FAULT AT {0:#x} ({1})".format(fault_addr, fault_type))
+        if fault_page not in self._watched_pages[self.current_process.pid]:
+            return self.on_exception(exception)
+
+        for bp in self._watched_pages[self.current_process.pid][fault_page]:
+            if bp._addr <= fault_addr < bp._addr + bp.size:
+                # TODO: restore all page to real state :)
+                continue_flag = bp.trigger(self, exception)
+                self._explicit_single_step[self.current_thread.tid] = self.current_thread.context.EEFlags.TF
+                # If BP has not been removed in trigger, pas it
+                if bp in self._watched_pages[self.current_process.pid][fault_page]:
+                    self._pass_memory_breakpoint(bp, fault_page)
                 return continue_flag
         else:
-            self.on_exception(exception)
+            # If no BP on this page handle the fault address
+            self._pass_memory_breakpoint(bp, fault_page)
+            return DBG_CONTINUE
+
+        #for bp, vprot_begin, vprot_end, original_prot in self._watched_memory:
+        #    if vprot_begin <= fault_addr < vprot_end:
+        #        # It's the page for this MEMBP that triggeed the BP
+        #        if bp._addr <= fault_addr < bp._addr + bp.size:
+        #            # In the real range of our memBP
+        #            continue_flag = bp.trigger(self, exception)
+        #            self._explicit_single_step[self.current_thread.tid] = self.current_thread.context.EEFlags.TF
+        #            #if excp_addr in self.breakpoints[self.current_process.pid]:
+        #        else:
+        #            #self._explicit_single_step[self.current_thread.tid] = self.current_thread.context.EEFlags.TF
+        #            continue_flag = DBG_CONTINUE
+        #
+        #        if bp in [x[0] for x in self._watched_memory]:
+        #            self._pass_memory_breakpoint(bp, vprot_begin, vprot_end, original_prot)
+        #        return continue_flag
+        #else:
+        #    self.on_exception(exception)
 
 
     # TODO: self._explicit_single_step setup by single_step() ? check at the end ? finally ?
@@ -463,7 +486,10 @@ class Debugger(object):
 
         if not addr:
             pe = windows.pe_parse.GetPEFile(load_dll.lpBaseOfDll, self.current_process)
-            return pe.export_name + name_sufix
+            dll_name = pe.export_name
+            if not dll_name:
+                dll_name = os.path.basename(self.current_process.get_mapped_filename(load_dll.lpBaseOfDll))
+            return dll_name + name_sufix
 
         if load_dll.fUnicode:
             return self.current_process.read_wstring(addr) + name_sufix
@@ -479,6 +505,7 @@ class Debugger(object):
         self._explicit_single_step[self.current_thread.tid] = False
         self._breakpoint_to_reput[self.current_thread.tid] = []
         self.processes[self.current_process.pid] = self.current_process
+        self._watched_pages[self.current_process.pid] = defaultdict(list)
         self.breakpoints[self.current_process.pid] = {}
         self._module_by_process[self.current_process.pid] = {}
         self._update_debugger_state(debug_event)
@@ -496,6 +523,7 @@ class Debugger(object):
         del self._explicit_single_step[self.current_thread.tid]
         del self._breakpoint_to_reput[self.current_thread.tid]
         del self.processes[self.current_process.pid]
+        del self._watched_pages[self.current_process.pid]
         # Hack IT, ContinueDebugEvent will close the HANDLE for us
         # Should we make another handle instead ?
         dbgprint("Removing handle {0} for {1} (will be closed by continueDebugEvent".format(hex(self.current_process._handle), self.current_process), "HANDLE")
@@ -600,10 +628,9 @@ class Debugger(object):
         return self._setup_breakpoint(bp, target)
 
     def del_bp(self, bp, targets=None):
-        if targets is not None:
-            raise NotImplementedError("TODO: DEL BP with targets ?")
-        #if bp.type != STANDARD_BP:
-        #    raise NotImplementedError("Remove non-STANDARD_BP breakpoint")
+        #if targets is not None:
+        #    raise NotImplementedError("TODO: DEL BP with targets")
+        original_target = targets
 
         _remove_method = getattr(self, "_remove_breakpoint_" + bp.type)
         if targets is None:
@@ -611,10 +638,12 @@ class Debugger(object):
                 targets = self.processes.values()
             else:
                 targets = self.threads.values()
-        else:
-            targets = [target]
+        #else:
+        #    targets = [target]
         for target in targets:
-            return _remove_method(bp, target)
+            _remove_method(bp, target)
+        if original_target is None:
+            return self.remove_pending_breakpoint(bp, original_target)
 
     def single_step(self):
         t = self.current_thread
@@ -677,7 +706,3 @@ class Debugger(object):
     def on_rip(self, rip_info):
         """Called on rip_info event (for param type see https://msdn.microsoft.com/en-us/library/windows/desktop/ms680587(v=vs.85).aspx)"""
         pass
-
-
-
-
