@@ -216,9 +216,7 @@ class TransparentApiProxy(object):
         self._ctypes_function = None
 
         self.prototype = getattr(winfuncs, func_name + "Prototype")
-        # TODO: fix double name..
         self.params = getattr(winfuncs, func_name + "Params")
-        self.args = getattr(winfuncs, func_name + "Params")
 
     def __call__(self, *args, **kwargs):
         if self._ctypes_function is None:
@@ -227,7 +225,7 @@ class TransparentApiProxy(object):
 
     def force_resolution(self):
         try:
-            c_prototyped = self.prototype((self.func_name, getattr(ctypes.windll, self.dll_name)), self.args)
+            c_prototyped = self.prototype((self.func_name, getattr(ctypes.windll, self.dll_name)), self.params)
         except AttributeError:
             raise ExportNotFound(self.func_name, self.dll_name)
         c_prototyped.errcheck = functools.wraps(self.error_check)(functools.partial(self.error_check, self.func_name))
@@ -472,6 +470,15 @@ def OpenEventW(dwDesiredAccess, bInheritHandle, lpName):
     return OpenEventA.ctypes_function(dwDesiredAccess, bInheritHandle, lpName)
 
 # File stuff
+@Kernel32Proxy("ReadFile")
+def ReadFile(hFile, lpBuffer, nNumberOfBytesToRead=None, lpNumberOfBytesRead=None, lpOverlapped=None):
+    if nNumberOfBytesToRead is None:
+        nNumberOfBytesToRead = len(lpBuffer)
+    if lpOverlapped is None and lpNumberOfBytesRead is None:
+        lpNumberOfBytesRead = ctypes.byref(DWORD())
+    return ReadFile.ctypes_function(hFile, lpBuffer, nNumberOfBytesToRead, lpNumberOfBytesRead, lpOverlapped)
+
+
 @Kernel32Proxy("WriteFile")
 def WriteFile(hFile, lpBuffer, nNumberOfBytesToWrite=None, lpNumberOfBytesWritten=None, lpOverlapped=None):
     if nNumberOfBytesToWrite is None:

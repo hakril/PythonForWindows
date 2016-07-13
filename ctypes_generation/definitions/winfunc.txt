@@ -458,6 +458,14 @@ DWORD WINAPI SetThreadAffinityMask(
   _In_  DWORD dwThreadAffinityMask
 );
 
+BOOL WINAPI ReadFile(
+  _In_        HANDLE       hFile,
+  _Out_       LPVOID       lpBuffer,
+  _In_        DWORD        nNumberOfBytesToRead,
+  _Out_opt_   LPDWORD      lpNumberOfBytesRead,
+  _Inout_opt_ LPOVERLAPPED lpOverlapped
+);
+
 BOOL WINAPI WriteFile(
   _In_         HANDLE hFile,
   _In_         LPCVOID lpBuffer,
