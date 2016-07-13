@@ -3,54 +3,41 @@ import os.path
 import pprint
 sys.path.append(os.path.abspath(__file__ + "\..\.."))
 
-import ctypes
 import windows
-import windows.debug
 from windows.generated_def.winstructs import *
+import windows.native_exec.simple_x86 as x86
 
-ct = windows.current_thread
-t = [t for t in windows.current_process.threads if t.tid == ct.tid][0]
-
-
-
-class YoloDebugger(windows.debug.LocalDebugger):
-    def __init__(self, single_step_count):
-        super(YoloDebugger, self).__init__()
-        self.single_step_count = single_step_count
-
+class SingleSteppingDebugger(windows.debug.LocalDebugger):
+    SINGLE_STEP_COUNT = 4
     def on_exception(self, exc):
         code = self.get_exception_code()
         context = self.get_exception_context()
         print("EXCEPTION !!!! Got a {0} at 0x{1:x}".format(code, context.pc))
-        if self.single_step_count:
-            self.single_step_count -= 1
+        self.SINGLE_STEP_COUNT -= 1
+        if self.SINGLE_STEP_COUNT:
             return self.single_step()
         return EXCEPTION_CONTINUE_EXECUTION
 
-
-class YoloHXBP(windows.debug.HXBreakpoint):
+class RewriteBreakpoint(windows.debug.HXBreakpoint):
     def trigger(self, dbg, exc):
         context = dbg.get_exception_context()
-        print("GOT AN HXBP <3 at 0x{0:x}".format(context.pc))
+        print("GOT AN HXBP at 0x{0:x}".format(context.pc))
+        # Rewrite the infinite loop with 2 nop
         windows.current_process.write_memory(self.addr, "\x90\x90")
+        # Ask for a single stepping
         return dbg.single_step()
 
-print("Your main thread is {0}".format(windows.current_thread.tid))
 
-
-d = YoloDebugger(5)
+d = SingleSteppingDebugger()
 # Infinite loop + nop + ret
-
-addr = windows.native_exec.native_function.allocator.write_code("\xeb\xfe\x90\x90\x90\x90\xc3")
-func_type = ctypes.CFUNCTYPE(PVOID)
-func = func_type(addr)
-
-print("Code addr = 0x{0:x}".format(addr))
-
-t = windows.current_process.create_thread(addr, 0)
-
-d.add_bp(YoloHXBP(addr))
-
+code = x86.assemble("label :begin; jmp :begin; nop; ret")
+func = windows.native_exec.create_function(code, [PVOID])
+print("Code addr = 0x{0:x}".format(func.code_addr))
+# Create a thread that will infinite loop
+t = windows.current_process.create_thread(func.code_addr, 0)
+# Add a breakpoint on the infitine loop
+d.add_bp(RewriteBreakpoint(func.code_addr))
 t.wait()
+print("Done!")
 
 

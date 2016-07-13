@@ -156,14 +156,112 @@ KeyValue(name='MYQWORD', value=123456789987654321L, type=11)
 # Explore Values
 >>> tstkey.values
 [KeyValue(name='MYQWORD', value=123456789987654321L, type=11), KeyValue(name='VALUE', value=u'a_value_for_my_key', type=1)]
+```
+
+### Debugger
+
+PythonForWindows provides a standard debugger to debug other processes.
+
+```python
+import windows
+import windows.debug
+import windows.test
+import windows.native_exec.simple_x86 as x86
+
+from windows.test import pop_calc_32
+from windows.generated_def import EXCEPTION_ACCESS_VIOLATION
+
+class MyDebugger(windows.debug.Debugger):
+    def on_exception(self, exception):
+        code = exception.ExceptionRecord.ExceptionCode
+        addr = exception.ExceptionRecord.ExceptionAddress
+        print("Got exception {0} at 0x{1:x}".format(code, addr))
+        if code == EXCEPTION_ACCESS_VIOLATION:
+            print("Access Violation: kill target process")
+            self.current_process.exit()
+
+calc = windows.test.pop_calc_32(dwCreationFlags=DEBUG_PROCESS)
+d = MyDebugger(calc)
+calc.execute(x86.assemble("int3; mov [0x42424242], EAX; ret"))
+d.loop()
+
+## Ouput ##
+Got exception EXCEPTION_BREAKPOINT(0x80000003L) at 0x77e13c7d
+Got exception EXCEPTION_BREAKPOINT(0x80000003L) at 0x230000
+Got exception EXCEPTION_ACCESS_VIOLATION(0xc0000005L) at 0x230001
+Access Violation: kill target process
+```
+
+The debugger handles
+
+* Standard breakpoint ``int3``
+* Hardware Execution breakpoint ``DrX``
+* Memory breakpoint ``virtual protect``
 
 
+#### LocalDebugger
+
+You can also debug your own process (or debug a process by injection) via the LocalDebugger.
+
+The LocalDebugger is an abstraction around Vectored Exception Handler (VEH)
+
+```python
+import windows
+from windows.generated_def.winstructs import *
+import windows.native_exec.simple_x86 as x86
+
+class SingleSteppingDebugger(windows.debug.LocalDebugger):
+    SINGLE_STEP_COUNT = 4
+    def on_exception(self, exc):
+        code = self.get_exception_code()
+        context = self.get_exception_context()
+        print("EXCEPTION !!!! Got a {0} at 0x{1:x}".format(code, context.pc))
+        self.SINGLE_STEP_COUNT -= 1
+        if self.SINGLE_STEP_COUNT:
+            return self.single_step()
+        return EXCEPTION_CONTINUE_EXECUTION
+
+class RewriteBreakpoint(windows.debug.HXBreakpoint):
+    def trigger(self, dbg, exc):
+        context = dbg.get_exception_context()
+        print("GOT AN HXBP at 0x{0:x}".format(context.pc))
+        # Rewrite the infinite loop with 2 nop
+        windows.current_process.write_memory(self.addr, "\x90\x90")
+        # Ask for a single stepping
+        return dbg.single_step()
+
+
+d = SingleSteppingDebugger()
+# Infinite loop + nop + ret
+code = x86.assemble("label :begin; jmp :begin; nop; ret")
+func = windows.native_exec.create_function(code, [PVOID])
+print("Code addr = 0x{0:x}".format(func.code_addr))
+# Create a thread that will infinite loop
+t = windows.current_process.create_thread(func.code_addr, 0)
+# Add a breakpoint on the infitine loop
+d.add_bp(RewriteBreakpoint(func.code_addr))
+t.wait()
+print("Done!")
+
+## Output ##
+
+Code addr = 0x6a0002
+GOT AN HXBP at 0x6a0002
+EXCEPTION !!!! Got a EXCEPTION_SINGLE_STEP(0x80000004L) at 0x6a0003
+EXCEPTION !!!! Got a EXCEPTION_SINGLE_STEP(0x80000004L) at 0x6a0004
+EXCEPTION !!!! Got a EXCEPTION_SINGLE_STEP(0x80000004L) at 0x6a0005
+EXCEPTION !!!! Got a EXCEPTION_SINGLE_STEP(0x80000004L) at 0x770c7c04
+Done!
 
 ```
+
+The local debugger handles
+
+* Standard breakpoint ``int3``
+* Hardware Execution breakpoint ``DrX``
+
 ### Other stuff (see doc / samples)
 
-- Debugger
-- LocalDebugger (VEH based)
 - Network
 - Services
 - COM

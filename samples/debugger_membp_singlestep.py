@@ -38,6 +38,10 @@ class SingleStepOnWrite(windows.debug.MemoryBreakpoint):
         eip = dbg.current_thread.context.pc
         print("Instruction at <{0:#x}> wrote at <{1:#x}>".format(eip, fault_addr))
         dbg.single_step_counter = 4
+        #import pdb;pdb.set_trace()
+        #if fault_addr == self.addr + 4:
+        #    print("Delete self BP")
+        #    dbg.del_bp(self)
         return dbg.single_step()
 
 
@@ -52,12 +56,14 @@ injected += x86.Mov("EAX", 0)
 injected += x86.Mov(x86.deref(data), "EAX")
 injected += x86.Add("EAX", 4)
 injected += x86.Mov(x86.deref(data + 4), "EAX")
+injected += x86.Add("EAX", 8)
+injected += x86.Mov(x86.deref(data + 8), "EAX")
 injected += x86.Nop()
 injected += x86.Nop()
 injected += x86.Ret()
 
 calc.write_memory(code, injected.get_code())
-d.add_bp(SingleStepOnWrite(data, size=0x1000))
+d.add_bp(SingleStepOnWrite(data + 1, size=5))
 calc.create_thread(code, 0)
 d.loop()
 

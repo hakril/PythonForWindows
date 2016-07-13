@@ -1,6 +1,8 @@
 from test_utils import *
 from windows.generated_def.winstructs import *
 
+import threading
+
 class DebuggerTestCase(unittest.TestCase):
     def debuggable_calc_32(self):
         return windows.utils.create_process(r"C:\python27\python.exe", dwCreationFlags=DEBUG_PROCESS | CREATE_NEW_CONSOLE, show_windows=True)
@@ -380,10 +382,11 @@ class DebuggerTestCase(unittest.TestCase):
             def trigger(self, dbg, exc):
                 fault_addr = exc.ExceptionRecord.ExceptionInformation[1]
                 eax = dbg.current_thread.context.Eax
+                if eax == 42:
+                    dbg.current_process.exit()
+                    return
                 TEST_CASE.assertEqual(fault_addr, data + eax)
                 store_data[0] += 1
-                if store_data[0] == 2:
-                    dbg.current_process.exit()
                 return
 
         calc = pop_calc_32(dwCreationFlags=DEBUG_PROCESS)
@@ -396,17 +399,22 @@ class DebuggerTestCase(unittest.TestCase):
         injected += x86.Mov(x86.deref(data), "EAX")
         injected += x86.Add("EAX", 4)
         injected += x86.Mov(x86.deref(data + 4), "EAX")
+        injected += x86.Add("EAX", 4)
+        # This one should NOT trigger the MemBP of size 8
+        injected += x86.Mov(x86.deref(data + 8), "EAX")
+        injected += x86.Mov("EAX", 42)
+        injected += x86.Mov(x86.deref(data), "EAX")
         injected += x86.Ret()
 
         calc.write_memory(addr, injected.get_code())
-        d.add_bp(TSTBP(data, size=0x1000))
+        d.add_bp(TSTBP(data, size=0x8))
         calc.create_thread(addr, 0)
         d.loop()
-        # Used to verif we actually called the Breakpoints
+        # Used to verif we actually called the Breakpoints for the good addresses
         TEST_CASE.assertEqual(store_data[0], 2)
 
     def test_memory_breakpoint_exec(self):
-        """Check that HXBPBP/dbg can trigger single step"""
+        """Check MemoryBP EXEC"""
         TEST_CASE = self
         NB_NOP_IN_PAGE = 3
         data = []
@@ -431,6 +439,180 @@ class DebuggerTestCase(unittest.TestCase):
         TEST_CASE.assertEqual(len(data), NB_NOP_IN_PAGE + 1)
         for i in range(NB_NOP_IN_PAGE + 1):
             TEST_CASE.assertEqual(data[i], addr + i)
+
+
+    def test_standard_breakpoint_self_remove(self):
+        TEST_CASE = self
+        data = []
+
+        def do_check():
+            calc.execute_python_unsafe("open(u'FILENAME1')").wait()
+            calc.execute_python_unsafe("open(u'FILENAME2')").wait()
+            calc.execute_python_unsafe("open(u'FILENAME3')").wait()
+            calc.exit()
+
+        class TSTBP(windows.debug.Breakpoint):
+            def trigger(self, dbg, exc):
+                addr = exc.ExceptionRecord.ExceptionAddress
+                ctx = dbg.current_thread.context
+                filename = dbg.current_process.read_wstring(dbg.current_process.read_ptr(ctx.sp + 0x4))
+                data.append(filename)
+                if filename == u"FILENAME2":
+                    dbg.del_bp(self)
+
+        calc = pop_calc_32(dwCreationFlags=DEBUG_PROCESS)
+        d = windows.debug.Debugger(calc)
+        d.add_bp(TSTBP("kernel32.dll!CreateFileW"))
+        threading.Thread(target=do_check).start()
+        d.loop()
+        TEST_CASE.assertEqual(data, [u"FILENAME1", u"FILENAME2"])
+
+    def test_standard_breakpoint_remove(self):
+        TEST_CASE = self
+        data = []
+
+        def do_check():
+            calc.execute_python_unsafe("open(u'FILENAME1')").wait()
+            calc.execute_python_unsafe("open(u'FILENAME2')").wait()
+            d.del_bp(the_bp)
+            calc.execute_python_unsafe("open(u'FILENAME3')").wait()
+            calc.exit()
+
+        class TSTBP(windows.debug.Breakpoint):
+            def trigger(self, dbg, exc):
+                addr = exc.ExceptionRecord.ExceptionAddress
+                ctx = dbg.current_thread.context
+                filename = dbg.current_process.read_wstring(dbg.current_process.read_ptr(ctx.sp + 0x4))
+                data.append(filename)
+
+        calc = pop_calc_32(dwCreationFlags=DEBUG_PROCESS)
+        d = windows.debug.Debugger(calc)
+        the_bp = TSTBP("kernel32.dll!CreateFileW")
+        d.add_bp(the_bp)
+        threading.Thread(target=do_check).start()
+        d.loop()
+        TEST_CASE.assertEqual(data, [u"FILENAME1", u"FILENAME2"])
+
+    def test_hxbp_breakpoint_remove(self):
+        TEST_CASE = self
+        data = []
+
+        def do_check():
+            calc.execute_python_unsafe("open(u'FILENAME1')").wait()
+            calc.execute_python_unsafe("open(u'FILENAME2')").wait()
+            d.del_bp(the_bp)
+            calc.execute_python_unsafe("open(u'FILENAME3')").wait()
+            calc.exit()
+
+        class TSTBP(windows.debug.HXBreakpoint):
+            def trigger(self, dbg, exc):
+                addr = exc.ExceptionRecord.ExceptionAddress
+                ctx = dbg.current_thread.context
+                filename = dbg.current_process.read_wstring(dbg.current_process.read_ptr(ctx.sp + 0x4))
+                data.append(filename)
+
+        calc = pop_calc_32(dwCreationFlags=DEBUG_PROCESS)
+        d = windows.debug.Debugger(calc)
+        the_bp = TSTBP("kernel32.dll!CreateFileW")
+        d.add_bp(the_bp)
+        threading.Thread(target=do_check).start()
+        d.loop()
+        TEST_CASE.assertEqual(data, [u"FILENAME1", u"FILENAME2"])
+
+    def test_hxbp_breakpoint_self_remove(self):
+        TEST_CASE = self
+        data = []
+
+        def do_check():
+            calc.execute_python_unsafe("open(u'FILENAME1')").wait()
+            calc.execute_python_unsafe("open(u'FILENAME2')").wait()
+            calc.execute_python_unsafe("open(u'FILENAME3')").wait()
+            calc.exit()
+
+        class TSTBP(windows.debug.HXBreakpoint):
+            def trigger(self, dbg, exc):
+                addr = exc.ExceptionRecord.ExceptionAddress
+                ctx = dbg.current_thread.context
+                filename = dbg.current_process.read_wstring(dbg.current_process.read_ptr(ctx.sp + 0x4))
+                data.append(filename)
+                if filename == u"FILENAME2":
+                    #import pdb;pdb.set_trace()
+                    dbg.del_bp(self)
+
+        calc = pop_calc_32(dwCreationFlags=DEBUG_PROCESS)
+        d = windows.debug.Debugger(calc)
+        d.add_bp(TSTBP("kernel32.dll!CreateFileW"))
+        threading.Thread(target=do_check).start()
+        d.loop()
+        TEST_CASE.assertEqual(data, [u"FILENAME1", u"FILENAME2"])
+
+
+    def test_mem_breakpoint_remove(self):
+        TEST_CASE = self
+        data = []
+
+        def generate_read_at(addr):
+            res = x86.MultipleInstr()
+            res += x86.Mov("EAX", x86.deref(addr))
+            res += x86.Ret()
+            return res.get_code()
+
+        def do_check():
+            calc.execute(generate_read_at(data_addr)).wait()
+            calc.execute(generate_read_at(data_addr + 4)).wait()
+            d.del_bp(the_bp)
+            calc.execute(generate_read_at(data_addr + 8)).wait()
+            calc.exit()
+
+        class TSTBP(windows.debug.MemoryBreakpoint):
+            DEFAULT_PROTECT = PAGE_NOACCESS
+            def trigger(self, dbg, exc):
+                addr = exc.ExceptionRecord.ExceptionAddress
+                fault_addr = exc.ExceptionRecord.ExceptionInformation[1]
+                data.append(fault_addr)
+
+        calc = pop_calc_32(dwCreationFlags=DEBUG_PROCESS)
+        d = windows.debug.Debugger(calc)
+        data_addr = calc.virtual_alloc(0x1000)
+        the_bp = TSTBP(data_addr, size=0x1000)
+        d.add_bp(the_bp)
+        threading.Thread(target=do_check).start()
+        d.loop()
+        TEST_CASE.assertEqual(data, [data_addr, data_addr + 4])
+
+    def test_mem_breakpoint_self_remove(self):
+        TEST_CASE = self
+        data = []
+
+        def generate_read_at(addr):
+            res = x86.MultipleInstr()
+            res += x86.Mov("EAX", x86.deref(addr))
+            res += x86.Ret()
+            return res.get_code()
+
+        def do_check():
+            calc.execute(generate_read_at(data_addr)).wait()
+            calc.execute(generate_read_at(data_addr + 4)).wait()
+            calc.execute(generate_read_at(data_addr + 8)).wait()
+            calc.exit()
+
+        class TSTBP(windows.debug.MemoryBreakpoint):
+            DEFAULT_PROTECT = PAGE_NOACCESS
+            def trigger(self, dbg, exc):
+                addr = exc.ExceptionRecord.ExceptionAddress
+                fault_addr = exc.ExceptionRecord.ExceptionInformation[1]
+                data.append(fault_addr)
+                if fault_addr == data_addr + 4:
+                    dbg.del_bp(self)
+
+        calc = pop_calc_32(dwCreationFlags=DEBUG_PROCESS)
+        d = windows.debug.Debugger(calc)
+        data_addr = calc.virtual_alloc(0x1000)
+        the_bp = TSTBP(data_addr, size=0x1000)
+        d.add_bp(the_bp)
+        threading.Thread(target=do_check).start()
+        d.loop()
+        TEST_CASE.assertEqual(data, [data_addr, data_addr + 4])
 
 if __name__ == '__main__':
     alltests = unittest.TestSuite()
