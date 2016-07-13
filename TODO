@@ -8,16 +8,11 @@ TODO:
         - Verif multiple pending at same place
         - Test !! (bp, BP_HX, bp on only on process, bp_hx on only one thread..)
 		- test breakpoint with specific target
+        - Add test for debugger with breakpoint that add another breakpoint on trigger
 
-	- Readme
-		- Debugger ? Veh ?
+    - remotectypes
+        - pretty sur I can get rid of PointerToStruct64/PointerToStruct32
 
-    - TransparentApiProxy
-        double name (params and args) for same info..
-
-    - Parse .IDL file for more COM NAME->IID
-
-    - Add test for debugger with breakpoint that add another breakpoint on trigger
 
     - Some test/doc on windows.system.handles
 
@@ -28,6 +23,7 @@ TODO:
 Documentation
     * verif samples
     * COMImplementation (example in LKD)
+    * MemoryBP + single_step() in Debugger
 
 FIXME:
     - setup.py build seems to raise an error

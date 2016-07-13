@@ -17,3 +17,6 @@ Since 0.2:
     * fix x86.assemble + add x64.assemble | fix some enconding problem in x64
     * Add test_code.py sample
     * Remove OptionExport from winproxy
+    * MemoryBP + single_step for windows.debug.Debugger
+    * Possibility to delete breakpoints in windows.debug.Debugger
+    * Add Context.func_result as abstract register for EAX/RAX

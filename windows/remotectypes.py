@@ -188,7 +188,7 @@ class Remote_c_char_p64(c_char_p64, RemotePtr64, RemoteCCharP):
 
 class Remote_w_char_p64(c_wchar_p64, RemotePtr64, RemoteWCharP):
     def __repr__(self):
-        return "<Remote_c_char_p64({0})>".format(self.raw_value)
+        return "<Remote_c_wchar_p64({0})>".format(self.raw_value)
 
 
 class RemoteStructurePointer64(Remote_c_void_p64):
@@ -246,7 +246,7 @@ class Remote_c_char_p32(c_char_p32, RemotePtr32, RemoteCCharP):
 
 class Remote_w_char_p32(c_wchar_p32, RemotePtr32, RemoteWCharP):
     def __repr__(self):
-        return "<Remote_c_char_p32({0})>".format(self.raw_value)
+        return "<Remote_c_wchar_p32({0})>".format(self.raw_value)
 
 
 class RemoteStructurePointer32(Remote_c_void_p32):
@@ -375,6 +375,13 @@ remote_struct = RemoteStructure.from_structure
 def MakePtr64(type):
     class PointerToStruct64(Remote_c_void_p64):
         _sub_ctypes_ = (type)
+
+        @property
+        def contents(self):
+            return RemoteStructurePointer64.from_buffer_with_target_and_ptr_type(bytearray(self), target=self.target, ptr_type=self).contents
+
+        def __repr__(self):
+            return "<RemotePtr64 to struct {0}>".format(type.__name__)
     return PointerToStruct64
 
 def transform_structure_to_remote64bits(structcls):
@@ -410,6 +417,16 @@ def transform_type_to_remote64bits(ftype):
 def MakePtr32(type):
     class PointerToStruct32(Remote_c_void_p32):
         _sub_ctypes_ = (type)
+
+        # Not sur about this code..
+        # Logic problem: why do I have PointerToStruct32 and RemoteStructurePointer32... ?
+        @property
+        def contents(self):
+            return RemoteStructurePointer32.from_buffer_with_target_and_ptr_type(bytearray(self), target=self.target, ptr_type=self).contents
+
+        def __repr__(self):
+            return "<RemotePtr32 to struct {0}>".format(type.__name__)
+
     return PointerToStruct32
 
 def transform_structure_to_remote32bits(structcls):
