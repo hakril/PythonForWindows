@@ -675,13 +675,13 @@ class CurrentProcess(Process):
         bits = platform.architecture()[0]
         return int(bits[:2])
 
-    def virtual_alloc(self, size):
+    def virtual_alloc(self, size, prot=PAGE_EXECUTE_READWRITE):
         """Allocate memory in the process
 
         :return: The address of the allocated memory
         :rtype: :class:`int`
 		"""
-        return winproxy.VirtualAlloc(dwSize=size)
+        return winproxy.VirtualAlloc(dwSize=size, flProtect=prot)
 
     def virtual_free(self, addr):
         """Free memory in the process by virtual_alloc"""
@@ -798,13 +798,13 @@ class WinProcess(Process):
             pass
         return '<{0} "{1}" pid {2} at {3}>'.format(self.__class__.__name__, self.name, self.pid, hex(id(self)))
 
-    def virtual_alloc(self, size):
+    def virtual_alloc(self, size, prot=PAGE_EXECUTE_READWRITE):
         """Allocate memory in the process
 
         :return: The address of the allocated memory
         :rtype: :class:`int`
 		"""
-        return winproxy.VirtualAllocEx(self.handle, dwSize=size)
+        return winproxy.VirtualAllocEx(self.handle, dwSize=size, flProtect=prot)
 
     def virtual_free(self, addr):
         """Free memory in the process by virtual_alloc"""
@@ -1004,7 +1004,7 @@ class Token(AutoHandle):
         buffer_size = self.get_required_information_size(TokenUser)
         buffer = ctypes.c_buffer(buffer_size)
         self.get_informations(TokenUser, buffer)
-        return ctypes.cast(ctypes.byref(buffer), POINTER(TOKEN_USER))[0]
+        return ctypes.cast(buffer, POINTER(TOKEN_USER))[0]
 
     @property
     def computername(self):
@@ -1024,7 +1024,7 @@ class Token(AutoHandle):
         username = ctypes.c_buffer(usernamesize.value)
         computername = ctypes.c_buffer(computernamesize.value)
         peUse = SID_NAME_USE()
-        winproxy.LookupAccountSidA(None, sid, username, byref(usernamesize), computername, byref(computernamesize), peUse)
+        winproxy.LookupAccountSidA(None, sid, username, usernamesize, computername, computernamesize, peUse)
         return username[:usernamesize.value], computername[:computernamesize.value]
 
     def get_informations(self, info_type, data):

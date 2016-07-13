@@ -406,23 +406,23 @@ class Debugger(object):
 
         fault_page = (fault_addr >> 12) << 12
 
-        #print("FAULT AT {0:#x} ({1})".format(fault_addr, fault_type))
-        if fault_page not in self._watched_pages[self.current_process.pid]:
+        mem_bp = self.get_memory_breakpoint_at(fault_addr, self.current_process)
+        if mem_bp is False: # No BP on this page
             return self.on_exception(exception)
-
-        for bp in self._watched_pages[self.current_process.pid][fault_page]:
-            if bp._addr <= fault_addr < bp._addr + bp.size:
-                # TODO: restore all page to real state :)
-                continue_flag = bp.trigger(self, exception)
-                self._explicit_single_step[self.current_thread.tid] = self.current_thread.context.EEFlags.TF
-                # If BP has not been removed in trigger, pas it
-                if bp in self._watched_pages[self.current_process.pid][fault_page]:
-                    self._pass_memory_breakpoint(bp, fault_page)
-                return continue_flag
-        else:
-            # If no BP on this page handle the fault address
+        if mem_bp is None: # Page as MEMBP but None handle this address
+            # This hack is bad, find a BP on the page to restore original access..
+            # TODO: stock original page protection elsewhere ?
+            bp = self._watched_pages[self.current_process.pid][fault_page][0]
             self._pass_memory_breakpoint(bp, fault_page)
             return DBG_CONTINUE
+
+        continue_flag = mem_bp.trigger(self, exception)
+        self._explicit_single_step[self.current_thread.tid] = self.current_thread.context.EEFlags.TF
+        # If BP has not been removed in trigger, pas it
+        if mem_bp in self._watched_pages[self.current_process.pid][fault_page]:
+            self._pass_memory_breakpoint(mem_bp, fault_page)
+        return continue_flag
+
 
         #for bp, vprot_begin, vprot_end, original_prot in self._watched_memory:
         #    if vprot_begin <= fault_addr < vprot_end:
@@ -650,6 +650,26 @@ class Debugger(object):
         ctx = t.context
         ctx.EEFlags.TF = 1
         t.set_context(ctx)
+
+    ## Memory Breakpoint helper
+    def get_memory_breakpoint_at(self, addr, process=None):
+        """Get the memory breakpoint the handle `addr`
+        Return values are:
+            * ``False`` if the page as no memory breakpoint (real fault)
+            * ``None`` if the page as memBP but None handle ``addr``
+            * ``bp`` the MemBP that handle ``addr``
+        """
+        if process is None:
+            process = self.current_process
+
+        fault_page = (addr >> 12) << 12
+        if fault_page not in self._watched_pages[process.pid]:
+            return False
+
+        for bp in self._watched_pages[process.pid][fault_page]:
+            if bp._addr <= addr < bp._addr + bp.size:
+                return bp
+        return None
 
     # Public callback
     def on_exception(self, exception):
