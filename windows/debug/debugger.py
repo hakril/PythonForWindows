@@ -295,7 +295,7 @@ class Debugger(object):
                 target.virtual_protect(page_addr, PAGE_SIZE, cp_watch_page[page_addr].original_prot, None)
                 del cp_watch_page[page_addr]
             else:
-                full_page_events = set.union(*[bp.events for bp in cp_watch_page[page_addr].bps])
+                full_page_events = set.union(*[set(bp.events) for bp in cp_watch_page[page_addr].bps])
                 protection_for_page = self._compute_page_access_for_event(target, full_page_events)
                 target.virtual_protect(page_addr, PAGE_SIZE, protection_for_page, None)
         return True
