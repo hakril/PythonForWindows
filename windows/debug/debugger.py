@@ -273,7 +273,7 @@ class Debugger(object):
             else:
                 # Reduce the right of the page to the common need
                 cp_watch_page[page_addr].bps.append(bp)
-                full_page_events = set.union(*[bp.events for bp in cp_watch_page[page_addr].bps])
+                full_page_events = set.union(*[set(bp.events) for bp in cp_watch_page[page_addr].bps])
                 protection_for_page = self._compute_page_access_for_event(target, full_page_events)
                 target.virtual_protect(page_addr, PAGE_SIZE, protection_for_page, None)
                 # TODO: watch for overlap with other MEM breakpoints
@@ -461,7 +461,7 @@ class Debugger(object):
             self._pass_memory_breakpoint(bp, original_prot, fault_page)
             return DBG_CONTINUE
 
-        with self.DisabledMemoryBreakpoint()
+        with self.DisabledMemoryBreakpoint():
             continue_flag = mem_bp.trigger(self, exception)
         self._explicit_single_step[self.current_thread.tid] = self.current_thread.context.EEFlags.TF
         # If BP has not been removed in trigger, pas it
@@ -717,13 +717,23 @@ class Debugger(object):
             target.virtual_protect(page_addr, PAGE_SIZE, protection, None)
         return
 
+    #TODO: better stuff :DD
+    # default implem ? why would I reput the removed BP..
+    def restore_all_memory_breakpoints_verif_remove(self, data, target=None):
+        if target is None:
+            target = self.current_process
+        for page_addr, protection in data.items():
+            if page_addr in self._watched_pages[target.pid]:
+                target.virtual_protect(page_addr, PAGE_SIZE, protection, None)
+        return
+
     @contextmanager
     def DisabledMemoryBreakpoint(self, target=None):
         data = self.disable_all_memory_breakpoints(target)
         try:
             yield
         finally:
-            self.restore_all_memory_breakpoints(data, target)
+            self.restore_all_memory_breakpoints_verif_remove(data, target)
 
     # Public callback
     def on_exception(self, exception):
