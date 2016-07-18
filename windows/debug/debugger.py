@@ -233,47 +233,71 @@ class Debugger(object):
             pass
         return True
 
+    ## MemBP helpers
+    def _compute_page_access_for_event(self, target, events):
+        if "R" in events:
+            return PAGE_NOACCESS
+        if set("WX").issubset(events):
+            return PAGE_READONLY
+        if events == set("W"):
+            return PAGE_EXECUTE_READ
+        if events == set("X"):
+            # Might have problem if DEP is not enabled
+            if windows.winproxy.is_implemented(windows.winproxy.GetProcessDEPPolicy):
+                has_DEP = DWORD()
+                permaned = LONG()
+                windows.winproxy.GetProcessDEPPolicy(target.handle, has_DEP, permaned)
+                has_DEP = has_DEP.value
+            else:
+                has_DEP = 0
+            return PAGE_READWRITE if has_DEP else PAGE_NOACCESS
+        raise ValueError("Unexpected set of event for Membp: {0}".format(events))
+
+
     def _setup_breakpoint_MEMBP(self, bp, target):
         addr = self._resolve(bp.addr, target)
         bp._addr = addr
+        self._events = set(bp.events)
         if addr is None:
             return False
         # Split in affected pages:
+        protection_for_bp = self._compute_page_access_for_event(target, self._events)
         affected_pages = range((addr >> 12) << 12, addr + bp.size, PAGE_SIZE)
         old_prot = DWORD()
-        vprot_begin = affected_pages[0]
-        vprot_size = PAGE_SIZE * len(affected_pages)
-        print("[VP] {0:#x} {1:#x} {2}".format(vprot_begin, vprot_size, bp.protect))
-        target.virtual_protect(vprot_begin, vprot_size, bp.protect, old_prot)
-        bp._old_prot = old_prot.value
-        #self._virtual_protected_memory[vprot_begin] = (vprot_size, bp.protect, old_prot)
         cp_watch_page = self._watched_pages[self.current_process.pid]
         for page_addr in affected_pages:
             if page_addr not in cp_watch_page:
-                cp_watch_page[page_addr] = WatchedPage(old_prot, [])
-            cp_watch_page[page_addr].bps.append(bp)
-        # TODO: watch for overlap with other MEM breakpoints
+                target.virtual_protect(page_addr, PAGE_SIZE, protection_for_bp, old_prot)
+                # Page with no other MemBP
+                cp_watch_page[page_addr] = WatchedPage(old_prot.value, [bp])
+            else:
+                # Reduce the right of the page to the common need
+                cp_watch_page[page_addr].bps.append(bp)
+                full_page_events = set.union(*[bp.events for bp in cp_watch_page[page_addr].bps])
+                protection_for_page = self._compute_page_access_for_event(target, full_page_events)
+                target.virtual_protect(page_addr, PAGE_SIZE, protection_for_page, None)
+                # TODO: watch for overlap with other MEM breakpoints
         return True
 
     def _restore_breakpoint_MEMBP(self, bp, target):
-        return target.virtual_protect(bp._reput_page, PAGE_SIZE, bp.protect, None)
+        (page_addr, page_prot) = bp._reput_page
+        return target.virtual_protect(page_addr, PAGE_SIZE, page_prot, None)
 
 
     def _remove_breakpoint_MEMBP(self, bp, target):
         affected_pages = range((bp._addr >> 12) << 12, bp._addr + bp.size, PAGE_SIZE)
-        old_prot = DWORD()
         vprot_begin = affected_pages[0]
         vprot_size = PAGE_SIZE * len(affected_pages)
-        target.virtual_protect(vprot_begin, vprot_size, bp._old_prot, None)
-
         cp_watch_page = self._watched_pages[self.current_process.pid]
         for page_addr in affected_pages:
             cp_watch_page[page_addr].bps.remove(bp)
             if not cp_watch_page[page_addr].bps:
+                target.virtual_protect(page_addr, PAGE_SIZE, cp_watch_page[page_addr].original_prot, None)
                 del cp_watch_page[page_addr]
             else:
-                raise NotImplementedError("Removing MemBP on page with multiple MemBP <need to reajust page prot")
-
+                full_page_events = set.union(*[bp.events for bp in cp_watch_page[page_addr].bps])
+                protection_for_page = self._compute_page_access_for_event(target, full_page_events)
+                target.virtual_protect(page_addr, PAGE_SIZE, protection_for_page, None)
         return True
 
 
@@ -346,12 +370,13 @@ class Debugger(object):
 
     def _pass_memory_breakpoint(self, bp, page_protect, fault_page):
         cp = self.current_process
-        cp.virtual_protect(fault_page, PAGE_SIZE, page_protect, None)
+        page_prot = DWORD()
+        cp.virtual_protect(fault_page, PAGE_SIZE, page_protect, page_prot)
         thread = self.current_thread
         ctx = thread.context
         ctx.EEFlags.TF = 1
         thread.set_context(ctx)
-        bp._reput_page = fault_page
+        bp._reput_page = (fault_page, page_prot.value)
         self._breakpoint_to_reput[thread.tid].append(bp)
 
     # debug event handlers
@@ -414,12 +439,14 @@ class Debugger(object):
         READ = 0
         WRITE = 1
         EXEC = 2
+        EVENT_STR = "RWX"
 
-        #fault_type = exception.ExceptionRecord.ExceptionInformation[0]
+        fault_type = exception.ExceptionRecord.ExceptionInformation[0]
         fault_addr = exception.ExceptionRecord.ExceptionInformation[1]
         pc_addr = self.current_thread.context.pc
-        #if fault_addr == pc_addr:
-        #    fault_type = EXEC
+        if fault_addr == pc_addr:
+            fault_type = EXEC
+        event = EVENT_STR[fault_type]
 
         fault_page = (fault_addr >> 12) << 12
         cp_watch_page = self._watched_pages[self.current_process.pid]
@@ -428,7 +455,7 @@ class Debugger(object):
         if mem_bp is False: # No BP on this page
             return self.on_exception(exception)
         original_prot = cp_watch_page[fault_page].original_prot
-        if mem_bp is None: # Page as MEMBP but None handle this address
+        if mem_bp is None or event not in mem_bp.events: # Page has MEMBP but None handle this address | event not asked by membp
             # This hack is bad, find a BP on the page to restore original access..
             bp = cp_watch_page[fault_page].bps[-1]
             self._pass_memory_breakpoint(bp, original_prot, fault_page)
@@ -670,6 +697,24 @@ class Debugger(object):
             if bp._addr <= addr < bp._addr + bp.size:
                 return bp
         return None
+
+    def disable_all_memory_breakpoints(self, target=None):
+        if target is None:
+            target = self.current_process
+        res = {}
+        cp_watch_page = self._watched_pages[self.current_process.pid]
+        page_protection = DWORD()
+        for page_addr, watched_page in cp_watch_page.items():
+            target.virtual_protect(page_addr, PAGE_SIZE, watched_page.original_prot, page_protection)
+            res[page_addr] = page_protection.value
+        return res
+
+    def restore_all_memory_breakpoints(self, data, target=None):
+        if target is None:
+            target = self.current_process
+        for page_addr, protection in data.items():
+            target.virtual_protect(page_addr, PAGE_SIZE, protection, None)
+        return
 
     # Public callback
     def on_exception(self, exception):

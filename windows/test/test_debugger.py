@@ -377,7 +377,9 @@ class DebuggerTestCase(unittest.TestCase):
         TEST_CASE = self
         store_data = [0]
         class TSTBP(windows.debug.MemoryBreakpoint):
-            DEFAULT_PROTECT = PAGE_READONLY
+            #DEFAULT_PROTECT = PAGE_READONLY
+            #DEFAULT_PROTECT = PAGE_READONLY
+            DEFAULT_EVENTS = "W"
             """Check that BP/dbg can trigger single step and that instruction follows"""
             def trigger(self, dbg, exc):
                 fault_addr = exc.ExceptionRecord.ExceptionInformation[1]
@@ -421,7 +423,8 @@ class DebuggerTestCase(unittest.TestCase):
 
         class TSTBP(windows.debug.MemoryBreakpoint):
             """Check that BP/dbg can trigger single step and that instruction follows"""
-            DEFAULT_PROTECT = PAGE_NOACCESS
+            #DEFAULT_PROTECT = PAGE_NOACCESS
+            DEFAULT_EVENTS = "X"
             def trigger(self, dbg, exc):
                 fault_addr = exc.ExceptionRecord.ExceptionInformation[1]
                 data.append(fault_addr)
@@ -565,7 +568,8 @@ class DebuggerTestCase(unittest.TestCase):
             calc.exit()
 
         class TSTBP(windows.debug.MemoryBreakpoint):
-            DEFAULT_PROTECT = PAGE_NOACCESS
+            #DEFAULT_PROTECT = PAGE_NOACCESS
+            DEFAULT_EVENTS = "RWX"
             def trigger(self, dbg, exc):
                 addr = exc.ExceptionRecord.ExceptionAddress
                 fault_addr = exc.ExceptionRecord.ExceptionInformation[1]
@@ -597,7 +601,8 @@ class DebuggerTestCase(unittest.TestCase):
             calc.exit()
 
         class TSTBP(windows.debug.MemoryBreakpoint):
-            DEFAULT_PROTECT = PAGE_NOACCESS
+            #DEFAULT_PROTECT = PAGE_NOACCESS
+            DEFAULT_EVENTS = "RWX"
             def trigger(self, dbg, exc):
                 addr = exc.ExceptionRecord.ExceptionAddress
                 fault_addr = exc.ExceptionRecord.ExceptionInformation[1]
@@ -639,18 +644,19 @@ class DebuggerTestCase(unittest.TestCase):
             calc.exit()
 
         class MemBP(windows.debug.MemoryBreakpoint):
-            DEFAULT_PROTECT = PAGE_NOACCESS
+            #DEFAULT_PROTECT = PAGE_NOACCESS
+            DEFAULT_EVENTS = "RWX"
             def trigger(self, dbg, exc):
                 addr = exc.ExceptionRecord.ExceptionAddress
                 fault_addr = exc.ExceptionRecord.ExceptionInformation[1]
-                print("Got <{0:#x}> <{1}>".format(fault_addr, exc.ExceptionRecord.ExceptionInformation[0]))
+                #print("Got <{0:#x}> <{1}>".format(fault_addr, exc.ExceptionRecord.ExceptionInformation[0]))
                 data.append((self, fault_addr))
 
         calc = pop_calc_32(dwCreationFlags=DEBUG_PROCESS)
         d = windows.debug.Debugger(calc)
         data_addr = calc.virtual_alloc(0x1000)
-        the_write_bp = MemBP(data_addr + 0x500, prot=PAGE_READONLY, size=0x500)
-        the_read_bp = MemBP(data_addr, prot=PAGE_NOACCESS, size=0x500)
+        the_write_bp = MemBP(data_addr + 0x500, size=0x500, events="W")
+        the_read_bp = MemBP(data_addr, size=0x500, events="RW")
         d.add_bp(the_write_bp)
         d.add_bp(the_read_bp)
         threading.Thread(target=do_check).start()

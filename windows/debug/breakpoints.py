@@ -43,14 +43,12 @@ class HXBreakpoint(Breakpoint):
 
 class MemoryBreakpoint(Breakpoint):
     type = MEMORY_BREAKPOINT
-
-    DEFAULT_PROTECT = PAGE_READONLY
+    DEFAULT_EVENTS = "RWX"
     DEFAULT_SIZE = 0x1000
-    def __init__(self, addr, size=None, prot=None):
+    def __init__(self, addr, size=None, events=None):
         super(MemoryBreakpoint, self).__init__(addr)
         self.size = size if size is not None else self.DEFAULT_SIZE
-        self.protect = prot if prot is not None else self.DEFAULT_PROTECT
-
+        self.events = events if events is not None else self.DEFAULT_EVENTS
 
     def trigger(self, dbg, exception):
         """Called when breakpoint is hit"""

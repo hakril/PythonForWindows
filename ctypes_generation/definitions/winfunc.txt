@@ -1353,3 +1353,10 @@ DWORD WINAPI GetLongPathNameW(
   _Out_ LPWSTR  lpszLongPath,
   _In_  DWORD   cchBuffer
 );
+
+
+BOOL WINAPI GetProcessDEPPolicy(
+  _In_  HANDLE  hProcess,
+  _Out_ LPDWORD lpFlags,
+  _Out_ PBOOL   lpPermanent
+);

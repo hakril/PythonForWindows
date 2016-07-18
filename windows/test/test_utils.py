@@ -63,3 +63,11 @@ def Calc32(dwCreationFlags=0, exit_code=0):
     finally:
         if "calc" in locals():
             calc.exit(exit_code)
+
+
+def print_call(f):
+    def wrapper(*args, **kwargs):
+        res = f(*args, **kwargs)
+        print("Call to <{0}>({1}) returned <{2}>".format(f.func_name, (args, kwargs), res))
+        return res
+    return wrapper

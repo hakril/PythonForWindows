@@ -665,6 +665,10 @@ def GetVolumeInformationW(lpRootPathName, lpVolumeNameBuffer=None, nVolumeNameSi
 def SetConsoleCtrlHandler(HandlerRoutine, Add):
     return SetConsoleCtrlHandler.ctypes_function(HandlerRoutine, Add)
 
+@Kernel32Proxy("GetProcessDEPPolicy")
+def GetProcessDEPPolicy(hProcess, lpFlags, lpPermanent):
+    return GetProcessDEPPolicy.ctypes_function(hProcess, lpFlags, lpPermanent)
+
 # ### NTDLL #### #
 
 @NtdllProxy('NtWow64ReadVirtualMemory64', error_ntstatus)
