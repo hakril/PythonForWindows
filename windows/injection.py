@@ -8,6 +8,7 @@ import windows.utils as utils
 from .native_exec import simple_x86 as x86
 from .native_exec import simple_x64 as x64
 
+from windows.generated_def import STATUS_THREAD_IS_TERMINATING
 from windows.native_exec.nativeutils import GetProcAddress64, GetProcAddress32
 
 from windows.dbgprint import dbgprint
@@ -315,6 +316,8 @@ def safe_execute_python(process, code):
     t.wait() # Wait terminaison of the thread
     if t.exit_code == 0:
         return True
+    if t.exit_code == STATUS_THREAD_IS_TERMINATING:
+        raise WindowsError("{0} died during execution of python command".format(process))
     if t.exit_code != 0xffffffff:
         raise ValueError("Unknown exit code {0}".format(hex(t.exit_code)))
     data = retrieve_last_exception_data(process)

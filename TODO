@@ -21,6 +21,9 @@ TODO:
         - test !
 
 
+    - Injection
+        - death of process in execute_python raise a WindowsError with explicit message (change sample in readme)
+
 Documentation
     * verif samples
     * COMImplementation (example in LKD)
