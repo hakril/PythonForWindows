@@ -461,7 +461,8 @@ class Debugger(object):
             self._pass_memory_breakpoint(bp, original_prot, fault_page)
             return DBG_CONTINUE
 
-        continue_flag = mem_bp.trigger(self, exception)
+        with self.DisabledMemoryBreakpoint()
+            continue_flag = mem_bp.trigger(self, exception)
         self._explicit_single_step[self.current_thread.tid] = self.current_thread.context.EEFlags.TF
         # If BP has not been removed in trigger, pas it
         if fault_page in cp_watch_page and mem_bp in cp_watch_page[fault_page].bps:
@@ -715,6 +716,14 @@ class Debugger(object):
         for page_addr, protection in data.items():
             target.virtual_protect(page_addr, PAGE_SIZE, protection, None)
         return
+
+    @contextmanager
+    def DisabledMemoryBreakpoint(self, target=None):
+        data = self.disable_all_memory_breakpoints(target)
+        try:
+            yield
+        finally:
+            self.restore_all_memory_breakpoints(data, target)
 
     # Public callback
     def on_exception(self, exception):
