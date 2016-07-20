@@ -711,6 +711,10 @@ class CurrentProcess(Process):
         handle = winproxy.CreateThread(lpStartAddress=lpStartAddress, lpParameter=lpParameter, dwCreationFlags=dwCreationFlags)
         return WinThread._from_handle(handle)
 
+    def execute(self, code, parameter=0):
+        f = windows.native_exec.create_function(code, [PVOID, PVOID])
+        return f(parameter)
+
     def exit(self, code=0):
         """Exit the process"""
         return winproxy.ExitProcess(code)

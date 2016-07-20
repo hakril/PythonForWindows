@@ -48,7 +48,8 @@ class MemoryBreakpoint(Breakpoint):
     def __init__(self, addr, size=None, events=None):
         super(MemoryBreakpoint, self).__init__(addr)
         self.size = size if size is not None else self.DEFAULT_SIZE
-        self.events = events if events is not None else self.DEFAULT_EVENTS
+        events = events if events is not None else self.DEFAULT_EVENTS
+        self.events = set(events)
 
     def trigger(self, dbg, exception):
         """Called when breakpoint is hit"""

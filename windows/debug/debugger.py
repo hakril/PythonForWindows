@@ -116,7 +116,8 @@ class Debugger(object):
 
     def _dispatch_breakpoint(self, exception, addr):
         bp = self.breakpoints[self.current_process.pid][addr]
-        x = bp.trigger(self, exception)
+        with self.DisabledMemoryBreakpoint():
+            x = bp.trigger(self, exception)
         return x
 
     def _resolve(self, addr, target):
@@ -273,7 +274,7 @@ class Debugger(object):
             else:
                 # Reduce the right of the page to the common need
                 cp_watch_page[page_addr].bps.append(bp)
-                full_page_events = set.union(*[set(bp.events) for bp in cp_watch_page[page_addr].bps])
+                full_page_events = set.union(*[bp.events for bp in cp_watch_page[page_addr].bps])
                 protection_for_page = self._compute_page_access_for_event(target, full_page_events)
                 target.virtual_protect(page_addr, PAGE_SIZE, protection_for_page, None)
                 # TODO: watch for overlap with other MEM breakpoints
@@ -295,7 +296,7 @@ class Debugger(object):
                 target.virtual_protect(page_addr, PAGE_SIZE, cp_watch_page[page_addr].original_prot, None)
                 del cp_watch_page[page_addr]
             else:
-                full_page_events = set.union(*[set(bp.events) for bp in cp_watch_page[page_addr].bps])
+                full_page_events = set.union(*[bp.events for bp in cp_watch_page[page_addr].bps])
                 protection_for_page = self._compute_page_access_for_event(target, full_page_events)
                 target.virtual_protect(page_addr, PAGE_SIZE, protection_for_page, None)
         return True
@@ -396,19 +397,22 @@ class Debugger(object):
                 # Setup BP if not suppressed
                 self._pass_breakpoint(excp_addr)
             return continue_flag
-        return self.on_exception(exception)
+        with self.DisabledMemoryBreakpoint():
+            return self.on_exception(exception)
 
     def _handle_exception_singlestep(self, exception, excp_addr):
         if self.current_thread.tid in self._breakpoint_to_reput and self._breakpoint_to_reput[self.current_thread.tid]:
             self._restore_breakpoints()
             if self._explicit_single_step[self.current_thread.tid]:
-                self.on_single_step(exception)
+                with self.DisabledMemoryBreakpoint():
+                    self.on_single_step(exception)
             self._explicit_single_step[self.current_thread.tid] = self.current_thread.context.EEFlags.TF
             return DBG_CONTINUE
         elif excp_addr in self.breakpoints[self.current_process.pid]:
             # Verif that's not a standard BP ?
             bp = self.breakpoints[self.current_process.pid][excp_addr]
-            bp.trigger(self, exception)
+            with self.DisabledMemoryBreakpoint():
+                bp.trigger(self, exception)
             ctx = self.current_thread.context
             self._explicit_single_step[self.current_thread.tid] = ctx.EEFlags.TF
             if excp_addr in self.breakpoints[self.current_process.pid]:
@@ -416,10 +420,12 @@ class Debugger(object):
                 self.current_thread.set_context(ctx)
             return DBG_CONTINUE
         elif self._explicit_single_step[self.current_thread.tid]:
-            continue_flag = self.on_single_step(exception)
+            with self.DisabledMemoryBreakpoint():
+                continue_flag = self.on_single_step(exception)
             return continue_flag
         else:
-            continue_flag = self.on_exception(exception)
+            with self.DisabledMemoryBreakpoint():
+                continue_flag = self.on_exception(exception)
             self._explicit_single_step[self.current_thread.tid] = self.current_thread.context.EEFlags.TF
             return continue_flag
 
@@ -453,7 +459,8 @@ class Debugger(object):
 
         mem_bp = self.get_memory_breakpoint_at(fault_addr, self.current_process)
         if mem_bp is False: # No BP on this page
-            return self.on_exception(exception)
+            with self.DisabledMemoryBreakpoint():
+                return self.on_exception(exception)
         original_prot = cp_watch_page[fault_page].original_prot
         if mem_bp is None or event not in mem_bp.events: # Page has MEMBP but None handle this address | event not asked by membp
             # This hack is bad, find a BP on the page to restore original access..
@@ -470,7 +477,6 @@ class Debugger(object):
         return continue_flag
 
 
-
     # TODO: self._explicit_single_step setup by single_step() ? check at the end ? finally ?
     def _handle_exception(self, debug_event):
         """Handle EXCEPTION_DEBUG_EVENT"""
@@ -484,17 +490,15 @@ class Debugger(object):
 
         excp_code = exception.ExceptionRecord.ExceptionCode
         excp_addr = exception.ExceptionRecord.ExceptionAddress
-
-        #print("[DBG] Got a <{0}> in <{1}>".format(excp_code, self.current_thread.tid))
-
         if excp_code in [EXCEPTION_BREAKPOINT, STATUS_WX86_BREAKPOINT] and excp_addr in self.breakpoints[self.current_process.pid]:
             return self._handle_exception_breakpoint(exception, excp_addr)
         elif excp_code in [EXCEPTION_SINGLE_STEP, STATUS_WX86_SINGLE_STEP]:
             return self._handle_exception_singlestep(exception, excp_addr)
-        elif excp_code in [EXCEPTION_ACCESS_VIOLATION]:
+        elif excp_code == EXCEPTION_ACCESS_VIOLATION:
             return self._handle_exception_access_violation(exception, excp_addr)
         else:
-            continue_flag = self.on_exception(exception)
+            with self.DisabledMemoryBreakpoint():
+                continue_flag = self.on_exception(exception)
             self._explicit_single_step[self.current_thread.tid] = self.current_thread.context.EEFlags.TF
             return continue_flag
 
@@ -539,7 +543,8 @@ class Debugger(object):
         self._update_debugger_state(debug_event)
         self._setup_pending_breakpoints_new_process(self.current_process)
         self._setup_pending_breakpoints_new_thread(self.current_thread)
-        return self.on_create_process(create_process)
+        with self.DisabledMemoryBreakpoint():
+            return self.on_create_process(create_process)
         # TODO: close hFile
 
     def _handle_exit_process(self, debug_event):
@@ -567,14 +572,16 @@ class Debugger(object):
         self._explicit_single_step[self.current_thread.tid] = False
         self._breakpoint_to_reput[self.current_thread.tid] = []
         self._setup_pending_breakpoints_new_thread(self.current_thread)
-        return self.on_create_thread(create_thread)
+        with self.DisabledMemoryBreakpoint():
+            return self.on_create_thread(create_thread)
 
 
     def _handle_exit_thread(self, debug_event):
         """Handle EXIT_THREAD_DEBUG_EVENT"""
         self._update_debugger_state(debug_event)
         exit_thread = debug_event.u.ExitThread
-        retvalue = self.on_exit_thread(exit_thread)
+        with self.DisabledMemoryBreakpoint():
+            retvalue = self.on_exit_thread(exit_thread)
         del self.threads[self.current_thread.tid]
         del self._explicit_single_step[self.current_thread.tid]
         del self._breakpoint_to_reput[self.current_thread.tid]
@@ -592,25 +599,29 @@ class Debugger(object):
         dll_name = os.path.basename(dll).lower()
         self._module_by_process[self.current_process.pid][dll_name] = windows.pe_parse.GetPEFile(load_dll.lpBaseOfDll, self.current_process)
         self._setup_pending_breakpoints_load_dll(dll_name)
-        return self.on_load_dll(load_dll)
+        with self.DisabledMemoryBreakpoint():
+            return self.on_load_dll(load_dll)
 
     def _handle_unload_dll(self, debug_event):
         """Handle UNLOAD_DLL_DEBUG_EVENT"""
         self._update_debugger_state(debug_event)
         unload_dll = debug_event.u.UnloadDll
-        return self.on_unload_dll(unload_dll)
+        with self.DisabledMemoryBreakpoint():
+            return self.on_unload_dll(unload_dll)
 
     def _handle_output_debug_string(self, debug_event):
         """Handle OUTPUT_DEBUG_STRING_EVENT"""
         self._update_debugger_state(debug_event)
         debug_string = debug_event.u.DebugString
-        return self.on_output_debug_string(debug_string)
+        with self.DisabledMemoryBreakpoint():
+            return self.on_output_debug_string(debug_string)
 
     def _handle_rip(self, debug_event):
         """Handle RIP_EVENT"""
         self._update_debugger_state(debug_event)
         rip_info = debug_event.u.RipInfo
-        return self.on_rip(rip_info)
+        with self.DisabledMemoryBreakpoint():
+            return self.on_rip(rip_info)
 
     # Public API
     def loop(self):
