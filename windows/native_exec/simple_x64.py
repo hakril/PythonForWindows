@@ -908,7 +908,7 @@ class Lea(Instruction):
 class Mov(Instruction):
     default_32_bits = True
     encoding = [(Mov_RAX_OFF64(),), (Mov_OFF64_RAX(),),
-                (RawBits.from_int(8, 0xc7), Slash(0), AnyImm32()),
+                (RawBits.from_int(8, 0xc7), Slash(0), Imm32()),
                 (RawBits.from_int(8, 0x89), ModRM([ModRM_REG__REG, ModRM_REG64__MEM])),
                 (RawBits.from_int(5, 0xb8 >> 3), X64RegisterSelector(), Imm64())]
 
