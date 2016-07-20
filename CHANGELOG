@@ -20,3 +20,6 @@ Since 0.2:
     * MemoryBP + single_step for windows.debug.Debugger
     * Possibility to delete breakpoints in windows.debug.Debugger
     * Add Context.func_result as abstract register for EAX/RAX
+    * Can retrieve 64b context of syswow thread via context_syswow/set_syswow_context
+    * Debugger handle breakpoint in 64b part of syswow process
+    * ReadSyswow64Process is now a Process (allows to parse exports of remote PEB64 of syswow process)

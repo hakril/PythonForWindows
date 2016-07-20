@@ -14,6 +14,7 @@ from windows.generated_def.winstructs import *
 from windows.generated_def import windef
 from .breakpoints import *
 
+#from windows.syswow64 import CS_32bits
 from windows.winobject.exception import VectoredException
 
 
@@ -386,11 +387,18 @@ class Debugger(object):
 
 
     def _handle_exception_breakpoint(self, exception, excp_addr):
+        excp_bitness = self.get_exception_bitness(exception)
         if excp_addr in self.breakpoints[self.current_process.pid]:
             thread = self.current_thread
-            ctx = thread.context
+            if self.current_process.bitness == 32 and excp_bitness == 64:
+                ctx = thread.context_syswow
+            else:
+                ctx = thread.context
             ctx.pc -= 1
-            thread.set_context(ctx)
+            if self.current_process.bitness == 32 and excp_bitness == 64:
+                thread.set_syswow_context(ctx)
+            else:
+                thread.set_context(ctx)
             continue_flag = self._dispatch_breakpoint(exception, excp_addr)
             self._explicit_single_step[self.current_thread.tid] = self.current_thread.context.EEFlags.TF
             if excp_addr in self.breakpoints[self.current_process.pid]:
@@ -597,6 +605,11 @@ class Debugger(object):
         load_dll = debug_event.u.LoadDll
         dll = self._get_loaded_dll(load_dll)
         dll_name = os.path.basename(dll).lower()
+        if dll_name.endswith(".dll"):
+            dll_name = dll_name[:-4]
+        if dll_name.endswith(".dll64"):
+            dll_name = dll_name[:-6] +  "64" # Crade..
+        #print("Load {0} -> {1}".format(dll, dll_name))
         self._module_by_process[self.current_process.pid][dll_name] = windows.pe_parse.GetPEFile(load_dll.lpBaseOfDll, self.current_process)
         self._setup_pending_breakpoints_load_dll(dll_name)
         with self.DisabledMemoryBreakpoint():
@@ -745,6 +758,13 @@ class Debugger(object):
             yield
         finally:
             self.restore_all_memory_breakpoints_verif_remove(data, target)
+
+    def get_exception_bitness(self, exc):
+        if windows.current_process.bitness == 32:
+            return 32
+        if exc.ExceptionRecord.ExceptionCode in [STATUS_WX86_BREAKPOINT, STATUS_WX86_SINGLE_STEP]:
+            return 32
+        return 64
 
     # Public callback
     def on_exception(self, exception):

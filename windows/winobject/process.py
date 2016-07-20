@@ -110,6 +110,19 @@ class WinThread(THREADENTRY32, AutoHandle):
         winproxy.GetThreadContext(self.handle, x)
         return x
 
+    @property
+    def context_syswow(self):
+        if not self.owner.is_wow_64:
+            raise ValueError("Not a syswow process")
+        x = exception.ECONTEXT64.new_aligned()
+        x.ContextFlags = CONTEXT_ALL
+        if windows.current_process.bitness == 64:
+            winproxy.GetThreadContext(self.handle, x)
+        else:
+            windows.syswow64.NtGetContextThread_32_to_64(self.handle, x)
+        return x
+
+
     def set_context(self, context):
         """Set the thread context to ``context``"""
         if self.owner.bitness == windows.current_process.bitness:
@@ -117,6 +130,15 @@ class WinThread(THREADENTRY32, AutoHandle):
         if windows.current_process.bitness == 64 and self.owner.bitness == 32:
             return winproxy.Wow64SetThreadContext(self.handle, context)
         return windows.syswow64.NtSetContextThread_32_to_64(self.handle, ctypes.byref(context))
+
+
+    def set_syswow_context(self, context):
+        if not self.owner.is_wow_64:
+            raise ValueError("Not a syswow process")
+        if windows.current_process.bitness == 64:
+            return winproxy.SetThreadContext(self.handle, context)
+        return windows.syswow64.NtSetContextThread_32_to_64(self.handle, ctypes.byref(context))
+
 
     @property
     def start_address(self):

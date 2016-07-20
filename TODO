@@ -20,6 +20,9 @@ TODO:
     - registry
         - test !
 
+    - processes
+        - TEST / DOC of Process.context_syswow
+
 
     - Injection
         - death of process in execute_python raise a WindowsError with explicit message (change sample in readme)
