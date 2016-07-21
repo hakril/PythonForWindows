@@ -214,7 +214,7 @@ class DebuggerTestCase(unittest.TestCase):
         calc = pop_calc_32(dwCreationFlags=DEBUG_PROCESS)
 
         d = windows.debug.Debugger(calc)
-        d.add_bp(TSTBP("ntdll.dll!LdrLoadDll"))
+        d.add_bp(TSTBP("ntdll!LdrLoadDll"))
         d.loop()
         TEST_CASE.assertEqual(data[0], 1)
 
@@ -237,7 +237,7 @@ class DebuggerTestCase(unittest.TestCase):
 
         calc = pop_calc_32(dwCreationFlags=DEBUG_PROCESS)
         d = windows.debug.Debugger(calc)
-        d.add_bp(TSTBP("ntdll.dll!LdrLoadDll"))
+        d.add_bp(TSTBP("ntdll!LdrLoadDll"))
         d.loop()
         TEST_CASE.assertEqual(data[0], 1)
 
@@ -297,7 +297,7 @@ class DebuggerTestCase(unittest.TestCase):
 
         calc = pop_calc_32(dwCreationFlags=DEBUG_PROCESS)
         d = windows.debug.Debugger(calc)
-        d.add_bp(TSTBP("ntdll.dll!LdrLoadDll"))
+        d.add_bp(TSTBP("ntdll!LdrLoadDll"))
         # Code that will load wintrust !
         d.loop()
         #TEST_CASE.assertEqual(data[0], 1)
@@ -465,7 +465,7 @@ class DebuggerTestCase(unittest.TestCase):
 
         calc = pop_calc_32(dwCreationFlags=DEBUG_PROCESS)
         d = windows.debug.Debugger(calc)
-        d.add_bp(TSTBP("kernel32.dll!CreateFileW"))
+        d.add_bp(TSTBP("kernel32!CreateFileW"))
         threading.Thread(target=do_check).start()
         d.loop()
         TEST_CASE.assertEqual(data, [u"FILENAME1", u"FILENAME2"])
@@ -490,7 +490,7 @@ class DebuggerTestCase(unittest.TestCase):
 
         calc = pop_calc_32(dwCreationFlags=DEBUG_PROCESS)
         d = windows.debug.Debugger(calc)
-        the_bp = TSTBP("kernel32.dll!CreateFileW")
+        the_bp = TSTBP("kernel32!CreateFileW")
         d.add_bp(the_bp)
         threading.Thread(target=do_check).start()
         d.loop()
@@ -516,7 +516,7 @@ class DebuggerTestCase(unittest.TestCase):
 
         calc = pop_calc_32(dwCreationFlags=DEBUG_PROCESS)
         d = windows.debug.Debugger(calc)
-        the_bp = TSTBP("kernel32.dll!CreateFileW")
+        the_bp = TSTBP("kernel32!CreateFileW")
         d.add_bp(the_bp)
         threading.Thread(target=do_check).start()
         d.loop()
@@ -544,7 +544,7 @@ class DebuggerTestCase(unittest.TestCase):
 
         calc = pop_calc_32(dwCreationFlags=DEBUG_PROCESS)
         d = windows.debug.Debugger(calc)
-        d.add_bp(TSTBP("kernel32.dll!CreateFileW"))
+        d.add_bp(TSTBP("kernel32!CreateFileW"))
         threading.Thread(target=do_check).start()
         d.loop()
         TEST_CASE.assertEqual(data, [u"FILENAME1", u"FILENAME2"])
