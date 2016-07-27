@@ -14,7 +14,7 @@ Since 0.2:
     * WinProcess.execute_python does not regenerate/reinject the python_exec_shellcode for each execution
     * generate.py cleaned with class and stuff / usable for extern project (cc lkd)
     * Added COMImplementation to com interface
-    * fix x86.assemble + add x64.assemble | fix some enconding problem in x64
+    * fix x86.assemble + add x64.assemble | fix some encoding problem in x64
     * Add test_code.py sample
     * Remove OptionExport from winproxy
     * MemoryBP + single_step for windows.debug.Debugger

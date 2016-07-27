@@ -112,6 +112,10 @@ class WinThread(THREADENTRY32, AutoHandle):
 
     @property
     def context_syswow(self):
+        """The 64 bits context of a syswow thread.
+
+        :type:  :class:`windows.exception.ECONTEXT64`
+		"""
         if not self.owner.is_wow_64:
             raise ValueError("Not a syswow process")
         x = exception.ECONTEXT64.new_aligned()
@@ -124,7 +128,7 @@ class WinThread(THREADENTRY32, AutoHandle):
 
 
     def set_context(self, context):
-        """Set the thread context to ``context``"""
+        """Set the thread's context to ``context``"""
         if self.owner.bitness == windows.current_process.bitness:
             return winproxy.SetThreadContext(self.handle, context)
         if windows.current_process.bitness == 64 and self.owner.bitness == 32:
@@ -133,6 +137,7 @@ class WinThread(THREADENTRY32, AutoHandle):
 
 
     def set_syswow_context(self, context):
+        """Set a syswow thread's 64 context to ``context``"""
         if not self.owner.is_wow_64:
             raise ValueError("Not a syswow process")
         if windows.current_process.bitness == 64:
@@ -358,6 +363,7 @@ class Process(AutoHandle):
              self.virtual_protect(addr, size, old_protect.value, old_protect)
 
     def virtual_protect(self, addr, size, protect, old_protect):
+        """Change the access right of one or more page of the process"""
         if windows.current_process.bitness == 32 and self.bitness == 64:
             #addr = (addr >> 12) << 12
             #addr = ULONG64(addr)
@@ -570,9 +576,9 @@ class Process(AutoHandle):
 
     @property
     def time_info(self):
-        """The time information of the process (creation, kernel/user time, exit time
+        """The time information of the process (creation, kernel/user time, exit time)
 
-        :type: :class:`TimeInfo"""
+        :type: :class:`TimeInfo`"""
         CreationTime = FILETIME()
         ExitTime = FILETIME()
         KernelTime = FILETIME()
@@ -734,6 +740,9 @@ class CurrentProcess(Process):
         return WinThread._from_handle(handle)
 
     def execute(self, code, parameter=0):
+        """Execute native code ``code`` in the current thread.
+
+        :rtype: :class:`int` the return value of the native code"""
         f = windows.native_exec.create_function(code, [PVOID, PVOID])
         return f(parameter)
 
@@ -916,7 +925,7 @@ class WinProcess(Process):
     def execute_python_unsafe(self, pycode):
         """Execute Python code into the remote process.
 
-        Unsafe means that no information are returned about the execution of the thread
+        :rtype: :rtype: :class:`WinThread` or :class:`DeadThread` : The thread executing the python code
         """
         return injection.execute_python_code(self, pycode)
 

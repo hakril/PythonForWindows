@@ -28,20 +28,19 @@ class MyDebugger(windows.debug.Debugger):
         self.single_step_counter -= 1
         if self.single_step_counter > 0:
             return self.single_step()
+        else:
+            print("No more single step: exiting")
+            self.current_process.exit()
 
 
 class SingleStepOnWrite(windows.debug.MemoryBreakpoint):
-    DEFAULT_PROTECT = PAGE_READONLY
     """Check that BP/dbg can trigger single step and that instruction follows"""
     def trigger(self, dbg, exc):
         fault_addr = exc.ExceptionRecord.ExceptionInformation[1]
+        import pdb;pdb.set_trace()
         eip = dbg.current_thread.context.pc
         print("Instruction at <{0:#x}> wrote at <{1:#x}>".format(eip, fault_addr))
         dbg.single_step_counter = 4
-        #import pdb;pdb.set_trace()
-        #if fault_addr == self.addr + 4:
-        #    print("Delete self BP")
-        #    dbg.del_bp(self)
         return dbg.single_step()
 
 
@@ -63,7 +62,7 @@ injected += x86.Nop()
 injected += x86.Ret()
 
 calc.write_memory(code, injected.get_code())
-d.add_bp(SingleStepOnWrite(data + 1, size=5))
+d.add_bp(SingleStepOnWrite(data, size=8, events="W"))
 calc.create_thread(code, 0)
 d.loop()
 

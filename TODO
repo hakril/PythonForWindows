@@ -8,32 +8,20 @@ TODO:
         - Verif multiple pending at same place
         - Test !! (bp, BP_HX, bp on only on process, bp_hx on only one thread..)
 		- test breakpoint with specific target
-        - Add test for debugger with breakpoint that add another breakpoint on trigger
-        - Handle MemBP of multiple types of the same page..
 
     - remotectypes
         - pretty sur I can get rid of PointerToStruct64/PointerToStruct32
-
 
     - Some test/doc on windows.system.handles
 
     - registry
         - test !
 
-    - processes
-        - TEST / DOC of Process.context_syswow
-
-
-    - Injection
-        - death of process in execute_python raise a WindowsError with explicit message (change sample in readme)
-
 Documentation
     * verif samples
     * COMImplementation (example in LKD)
-    * MemoryBP + single_step() in Debugger
 
 FIXME:
-    - setup.py build seems to raise an error
     - Push("[ECX]") in simple_x64 as a "H" rex and i think it should not..
 
 RESSOURCE

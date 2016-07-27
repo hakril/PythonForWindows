@@ -41,6 +41,6 @@ class PrintUnicodeString(windows.debug.Breakpoint):
 
 calc = windows.test.pop_calc_32(dwCreationFlags=DEBUG_PROCESS)
 d = MyDebugger(calc)
-d.add_bp(PrintUnicodeString("ntdll.dll!LdrLoadDll", argument_position=2))
+d.add_bp(PrintUnicodeString("ntdll!LdrLoadDll", argument_position=2))
 d.loop()
 

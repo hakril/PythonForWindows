@@ -11,16 +11,15 @@ Samples of code
 Output::
 
     (cmd λ) python32.exe current_process.py
-    current process is <windows.winobject.CurrentProcess object at 0x026CD190>
+    current process is <windows.winobject.process.CurrentProcess object at 0x030A2590>
     current process is a <32> bits process
     current process is a SysWow64 process ? <True>
-    current process pid <7432>  and ppid <5412>
-    Here are the current process threads: <[<WinThread 5264 owner "python.exe" at 0x28563f0>]>
+    current process pid <8264>  and ppid <4100>
+    Here are the current process threads: <[<WinThread 13540 owner "python.exe" at 0x32d3210>]>
     Let's execute some native code ! (0x41 + 1)
-    Waiting for execution to finish !
-    Native code returned <0x42L>
+    Native code returned <0x42>
     Allocating memory in current process
-    Allocated memory is at <0x3f0000>
+    Allocated memory is at <0xd60000>
     Writing 'SOME STUFF' in allocation memory
     Reading memory : <'SOME STUFF\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'>
 
@@ -118,8 +117,8 @@ Output::
         product_type = VER_NT_WORKSTATION(0x1L)
         version_name = Windows 8.1
 
-    There is 95 processes
-    There is 1021 threads
+    There is 117 processes
+    There is 1246 threads
 
     Dumping first logical drive:
         <LogicalDrive "C:\" (DRIVE_FIXED)>
@@ -139,8 +138,16 @@ Output::
             name = Appinfo
             description = Application Information
             status = ServiceStatus(type=SERVICE_WIN32_SHARE_PROCESS(0x20L), state=SERVICE_RUNNING(0x4L), control_accepted=129L, flags=0L)
-            process = <WinProcess "svchost.exe" pid 944 at 0x29d5290>
+            process = <WinProcess "svchost.exe" pid 988 at 0x2e64750>
 
+    Enumerating handles:
+        There are 40664 handles:
+        First handle is: <Handle value=<0x4> in process pid=4>
+        Enumerating handles of the current process:
+            There are 255 handles for this process
+        Looking for a File handle:
+            Handle is <Handle value=<0x4> in process pid=14340>
+            Name is <\Device\ConDrv>
 
 .. _sample_iat_hook:
 
@@ -332,11 +339,11 @@ Debugging
 :class:`Debugger`
 '''''''''''''''''
 
-.. literalinclude:: ..\..\samples\debugger.py
+.. literalinclude:: ..\..\samples\debugger_print_LdrLoaddll.py
 
 Ouput::
 
-    (cmd λ) python.exe .\samples\debugger.py
+    (cmd λ) python.exe .\samples\debugger_print_LdrLoaddll.py
     Loading <KERNEL32.DLL>
     Got exception EXCEPTION_BREAKPOINT(0x80000003L) at 0x77a73bad
     Loading <C:\Windows\system32\IMM32.DLL>
@@ -355,6 +362,23 @@ Ouput::
     Ask to load <ole32.dll>: exiting process
 
 
+.. literalinclude:: ..\..\samples\debugger_membp_singlestep.py
+
+Ouput::
+
+    (cmd λ) python.exe .\samples\debugger_membp_singlestep.py
+    Got exception EXCEPTION_BREAKPOINT(0x80000003L) at 0x77ae3c7d
+    Instruction at <0x8d0006> wrote at <0x8e0000>
+    Got single_step EXCEPTION_SINGLE_STEP(0x80000004L) at 0x8d000c
+    Got single_step EXCEPTION_SINGLE_STEP(0x80000004L) at 0x8d0011
+    Instruction at <0x8d0011> wrote at <0x8e0004>
+    Got single_step EXCEPTION_SINGLE_STEP(0x80000004L) at 0x8d0017
+    Got single_step EXCEPTION_SINGLE_STEP(0x80000004L) at 0x8d001c
+    Got single_step EXCEPTION_SINGLE_STEP(0x80000004L) at 0x8d0022
+    Got single_step EXCEPTION_SINGLE_STEP(0x80000004L) at 0x8d0023
+    No more single step: exiting
+
+
 .. _sample_local_debugger:
 
 :class:`LocalDebugger`
@@ -368,15 +392,13 @@ In current process
 Ouput::
 
     (cmd λ) python.exe .\samples\local_debugger.py
-    Your main thread is 3864
-    Code addr = 0x46000b
-    GOT AN HXBP <3 at 0x46000b
-    EXCEPTION !!!! Got a EXCEPTION_SINGLE_STEP(0x80000004L) at 0x46000c
-    EXCEPTION !!!! Got a EXCEPTION_SINGLE_STEP(0x80000004L) at 0x46000d
-    EXCEPTION !!!! Got a EXCEPTION_SINGLE_STEP(0x80000004L) at 0x46000e
-    EXCEPTION !!!! Got a EXCEPTION_SINGLE_STEP(0x80000004L) at 0x46000f
-    EXCEPTION !!!! Got a EXCEPTION_SINGLE_STEP(0x80000004L) at 0x460010
-    EXCEPTION !!!! Got a EXCEPTION_SINGLE_STEP(0x80000004L) at 0x460011
+    Code addr = 0xcf0002
+    GOT AN HXBP at 0xcf0002
+    EXCEPTION !!!! Got a EXCEPTION_SINGLE_STEP(0x80000004L) at 0xcf0003
+    EXCEPTION !!!! Got a EXCEPTION_SINGLE_STEP(0x80000004L) at 0xcf0004
+    EXCEPTION !!!! Got a EXCEPTION_SINGLE_STEP(0x80000004L) at 0xcf0005
+    EXCEPTION !!!! Got a EXCEPTION_SINGLE_STEP(0x80000004L) at 0x770d7c04
+    Done!
 
 
 In remote process

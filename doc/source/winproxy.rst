@@ -137,6 +137,7 @@ Transparent proxies:
 * Wow64RevertWow64FsRedirection(OldValue)
 * lstrcmpA(lpString1, lpString2)
 * lstrcmpW(lpString1, lpString2)
+
 Functions:
 
 * AddVectoredContinueHandler::

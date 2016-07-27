@@ -27,13 +27,11 @@ else:
     code += x64.Mov("RAX", 0x41)
     code += x64.Inc("RAX")
     code += x64.Ret()
-    
+
 native_code = code.get_code()
 
 v = windows.current_process.execute(native_code)
-print("Waiting for execution to finish !")
-v.wait()
-print("Native code returned <{0}>".format(hex(v.exit_code)))
+print("Native code returned <{0}>".format(hex(v)))
 
 print("Allocating memory in current process")
 addr = cp.virtual_alloc(0x1000) # Default alloc is RWX (so secure !)

@@ -68,7 +68,7 @@ To be able to perform those operation we must be able to execute code in the ``6
 
 .. note::
 
-    See `Knockin’ on Heaven’s Gate – Dynamic Processor Mode Switching <heaven_gate>`_
+    See `Knockin’ on Heaven’s Gate – Dynamic Processor Mode Switching <http://rce.co/knockin-on-heavens-gate-dynamic-processor-mode-switching/>`_
 
 
 For that we need to jump to the 64bits segment of our process, execute some code then return.
@@ -123,6 +123,3 @@ Existing function are:
 .. function:: NtSetContextThread_32_to_64
 
 .. function:: LdrLoadDll_32_to_64
-
-
-.. _heaven_gate: http://rce.co/knockin-on-heavens-gate-dynamic-processor-mode-switching/

@@ -55,7 +55,7 @@ True
 # execute_python raise if process died
 Traceback (most recent call last):
 ...
-ValueError: Unknown exit code  0xc000004bL
+WindowsError: <WinProcess "calc.exe" pid 6960 (DEAD) at 0x37391f0> died during execution of python command
 >>> calc
 <WinProcess "calc.exe" pid 6960 (DEAD) at 0x37391f0>
 >>> calc.exit_code
@@ -238,7 +238,7 @@ func = windows.native_exec.create_function(code, [PVOID])
 print("Code addr = 0x{0:x}".format(func.code_addr))
 # Create a thread that will infinite loop
 t = windows.current_process.create_thread(func.code_addr, 0)
-# Add a breakpoint on the infitine loop
+# Add a breakpoint on the infinite loop
 d.add_bp(RewriteBreakpoint(func.code_addr))
 t.wait()
 print("Done!")

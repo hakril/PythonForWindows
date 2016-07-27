@@ -11,17 +11,27 @@ class EPUBLIC_OBJECT_TYPE_INFORMATION(ctypes.Structure):
 
 
 class Handle(SYSTEM_HANDLE):
+    """A handle of the system"""
     @windows.utils.fixedpropety
     def process(self):
+        """The process possessing the handle
+
+        :type: :class:`WinProcess <windows.winobject.process.WinProcess>`"""
         "TODO: something smart ? :D"
         return [p for p in windows.system.processes if p.pid == self.dwProcessId][0]
 
     @windows.utils.fixedpropety
     def name(self):
+        """The name of the handle
+
+        :type: :class:`str`"""
         return self._get_object_name()
 
     @windows.utils.fixedpropety
     def type(self):
+        """The type of the handle
+
+        :type: :class:`str`"""
         return self._get_object_type()
 
     def _get_object_name(self):
@@ -47,6 +57,9 @@ class Handle(SYSTEM_HANDLE):
 
     @windows.utils.fixedpropety
     def local_handle(self):
+        """A local copy of the handle, acquired with ``DuplicateHandle``
+
+        :type: :class:`int`"""
         if self.dwProcessId == windows.current_process.pid:
             return self.wValue
         res = HANDLE()
@@ -61,7 +74,6 @@ class Handle(SYSTEM_HANDLE):
             return
         if hasattr(self, "_local_handle"):
             return winproxy.CloseHandle(self._local_handle)
-
 
 
 def enumerate_handles():

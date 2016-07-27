@@ -35,11 +35,14 @@ WatchedPage = namedtuple('WatchedPage', ["original_prot", "bps"])
 
 
 class Debugger(object):
-    """A debugger based on standard Win32 API. Handle standard (int3) and Hardware-Exec Breakpoints"""
-    def __init__(self, target):
-        """``target`` must be a WinProcess.
+    """A debugger based on standard Win32 API. Handle :
 
-        ``already_debuggable`` must be set to ``True`` if process is already expecting a debugger (created with ``DEBUG_PROCESS``)"""
+        * Standard BP (int3)
+        * Hardware-Exec BP (DrX)
+        * Memory BP (virtual_protect)"""
+
+    def __init__(self, target):
+        """``target`` must be a debuggable :class:`WinProcess`."""
         self._init_dispatch_handlers()
         self.target = target
         self.is_target_launched = False
@@ -73,11 +76,17 @@ class Debugger(object):
 
     @classmethod
     def attach(cls, target):
+        """attach to ``target`` (must be a :class:`WinProcess`)
+
+        :rtype: :class:`Debugger`"""
         winproxy.DebugActiveProcess(target.pid)
         return cls(target)
 
     @classmethod
     def debug(cls, path, args=None, dwCreationFlags=0, show_windows=False):
+        """Create a process and debug it.
+
+        :rtype: :class:`Debugger`"""
         dwCreationFlags |= DEBUG_PROCESS
         c = windows.utils.create_process(path, args=args, dwCreationFlags=dwCreationFlags, show_windows=show_windows)
         return cls(c)
@@ -235,7 +244,7 @@ class Debugger(object):
             pass
         return True
 
-    ## MemBP helpers
+    ## MemBP internal helpers
     def _compute_page_access_for_event(self, target, events):
         if "R" in events:
             return PAGE_NOACCESS
@@ -636,7 +645,7 @@ class Debugger(object):
         with self.DisabledMemoryBreakpoint():
             return self.on_rip(rip_info)
 
-    # Public API
+    ## Public API
     def loop(self):
         """Debugging loop: handle event / dispatch to breakpoint. Returns when all targets are dead"""
         for debug_event in self._debug_event_generator():
@@ -650,12 +659,12 @@ class Debugger(object):
     def add_bp(self, bp, addr=None, type=None, target=None):
         """Add a breakpoint, bp can be:
 
-            * a :class:`Breakpoint` (addr and type must be None)
-            * any callable (addr and type must NOT be None) (NON-TESTED)
+            * a :class:`Breakpoint` (addr and type must be ``None``)
+            * any callable (addr and type must NOT be ``None``) (NON-TESTED)
 
-            If the ``bp`` type is ``STANDARD_BP``, target can be None (all targets) or a process.
+            If the ``bp`` type is ``STANDARD_BP`` or ``MEMORY_BREAKPOINT``, target can be ``None`` (all targets) or a process.
 
-            If the ``bp`` type is ``HARDWARE_EXEC_BP``, target can be None (all targets), a process or a thread.
+            If the ``bp`` type is ``HARDWARE_EXEC_BP``, target can be ``None`` (all targets), a process or a thread.
         """
         if getattr(bp, "addr", None) is None:
             if addr is None or type is None:
@@ -680,6 +689,7 @@ class Debugger(object):
         return self._setup_breakpoint(bp, target)
 
     def del_bp(self, bp, targets=None):
+        """Delete a breakpoint, if targets is ``None``: delete it from all targets"""
         #if targets is not None:
         #    raise NotImplementedError("TODO: DEL BP with targets")
         original_target = targets
@@ -698,6 +708,7 @@ class Debugger(object):
             return self.remove_pending_breakpoint(bp, original_target)
 
     def single_step(self):
+        """Make the ``current_thread`` ``single_step``. ``Debugger.on_single_step`` will be called after that"""
         t = self.current_thread
         ctx = t.context
         ctx.EEFlags.TF = 1
@@ -705,9 +716,11 @@ class Debugger(object):
 
     ## Memory Breakpoint helper
     def get_memory_breakpoint_at(self, addr, process=None):
-        """Get the memory breakpoint the handle `addr`
+        """Get the memory breakpoint that handle ``addr``
+
         Return values are:
-            * ``False`` if the page as no memory breakpoint (real fault)
+
+            * ``False`` if the page has no memory breakpoint (real fault)
             * ``None`` if the page as memBP but None handle ``addr``
             * ``bp`` the MemBP that handle ``addr``
         """
@@ -724,6 +737,10 @@ class Debugger(object):
         return None
 
     def disable_all_memory_breakpoints(self, target=None):
+        """Restore all pages to their original access rights.
+           If target is ``None``, use ``current_process``
+
+           :return: a mapping of all disabled breakpoints that must be passed to :func:`restore_all_memory_breakpoints`"""
         if target is None:
             target = self.current_process
         res = {}
@@ -734,32 +751,34 @@ class Debugger(object):
             res[page_addr] = page_protection.value
         return res
 
-    def restore_all_memory_breakpoints(self, data, target=None):
-        if target is None:
-            target = self.current_process
-        for page_addr, protection in data.items():
-            target.virtual_protect(page_addr, PAGE_SIZE, protection, None)
-        return
 
-    #TODO: better stuff :DD
-    # default implem ? why would I reput the removed BP..
-    def restore_all_memory_breakpoints_verif_remove(self, data, target=None):
+    def restore_all_memory_breakpoints(self, data, target=None):
+        """Re-setup all memory breakpoints, affecting pages access rights.
+           If target is ``None``, use ``current_process``
+
+           ``data`` is the result of the corresponding call to :func:`disable_all_memory_breakpoints`"""
         if target is None:
             target = self.current_process
         for page_addr, protection in data.items():
+            # Prevent restoring deleted breakpoints
             if page_addr in self._watched_pages[target.pid]:
                 target.virtual_protect(page_addr, PAGE_SIZE, protection, None)
         return
 
     @contextmanager
     def DisabledMemoryBreakpoint(self, target=None):
+        """A context-manager that disable all memory breakpoints and restore them on exit"""
         data = self.disable_all_memory_breakpoints(target)
         try:
             yield
         finally:
-            self.restore_all_memory_breakpoints_verif_remove(data, target)
+            self.restore_all_memory_breakpoints(data, target)
 
     def get_exception_bitness(self, exc):
+        """Return the bitness in which the exception occured.
+           Useful when debugingg a 32b process from a 64bits one
+
+           :return: :class:`int` -- 32 or 64"""
         if windows.current_process.bitness == 32:
             return 32
         if exc.ExceptionRecord.ExceptionCode in [STATUS_WX86_BREAKPOINT, STATUS_WX86_SINGLE_STEP]:

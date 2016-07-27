@@ -16,3 +16,4 @@ This sections describes them by group of relation.
     service.rst
     volume.rst
     wmi.rst
+    handle.rst

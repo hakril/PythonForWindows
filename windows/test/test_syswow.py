@@ -42,15 +42,17 @@ class SyswowTestCase(unittest.TestCase):
             import windows
             import windows.native_exec.simple_x64 as x64
             windows.utils.create_console()
+            windows.current_process.write_qword({0},  0x8877665544332211)
             x64_code = x64.assemble("mov r11, 0x1122334455667788; label :loop; jmp :loop; nop; nop; ret")
             res = windows.syswow64.execute_64bits_code_from_syswow(x64_code)
             print("res = {{0}}".format(hex(res)))
             windows.current_process.write_qword({0},  res)
-            import time
-            time.sleep(10)
             """.format(addr)
 
             t = calc.execute_python_unsafe(textwrap.dedent(remote_python_code))
+            # Wait for python execution
+            while calc.read_qword(addr) != 0x8877665544332211:
+                pass
             ctx = t.context_syswow
             # Check the get context
             self.assertEqual(ctx.R11, 0x1122334455667788)
@@ -63,6 +65,7 @@ class SyswowTestCase(unittest.TestCase):
             ctx.Rip += 2
             t.set_syswow_context(ctx)
             t.resume()
-            time.sleep(0.1)
+            t.wait()
             self.assertEqual(RETURN_VALUE, calc.read_qword(addr))
+
 

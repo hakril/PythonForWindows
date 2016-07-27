@@ -42,10 +42,14 @@ class HXBreakpoint(Breakpoint):
         return isinstance(target, WinThread)
 
 class MemoryBreakpoint(Breakpoint):
+    """A memory breakpoint (type == ``MEMORY_BREAKPOINT``)"""
     type = MEMORY_BREAKPOINT
     DEFAULT_EVENTS = "RWX"
     DEFAULT_SIZE = 0x1000
     def __init__(self, addr, size=None, events=None):
+        """``size``: the size of the memory breakpoint.
+
+        ``events``: a string representing the events that interest the BP (any of "RWX")"""
         super(MemoryBreakpoint, self).__init__(addr)
         self.size = size if size is not None else self.DEFAULT_SIZE
         events = events if events is not None else self.DEFAULT_EVENTS

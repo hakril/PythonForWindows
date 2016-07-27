@@ -13,8 +13,13 @@
 The :class:`Debugger` is the base class to perform the debugging of a remote process.
 The :class:`Debugger` have some functions called on given event that can be implemented by subclasses.
 
+All Memory-breakpoint are disabled when callind a public callback or a breakpoint ``trigger()`` function.
+
+This means that those methods see the original ``current_process`` memory access rights.
+
 .. autoclass:: Debugger
     :members:
+    :member-order: bysource
 
     .. automethod:: __init__
 
@@ -65,3 +70,15 @@ When a breakpoint is hit, its ``trigger`` function is called with the debugger a
 .. autoclass:: HXBreakpoint
     :members:
     :inherited-members:
+
+.. autoclass:: MemoryBreakpoint
+    :members:
+    :inherited-members:
+    :special-members: __init__
+
+
+.. note::
+
+    MemoryBreakpoint are triggered based on the fault address only (as I don't know a way to get the size of the read/write causing the fault without embeding a disassembler).
+
+    This means that a MEMBP at address ``X`` won't be triggered by a write of size 4 at address ``X - 1`` (it's sad I know :( )

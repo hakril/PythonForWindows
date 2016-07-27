@@ -40,3 +40,17 @@ print((" " * 8) + "name = {0}".format(serv.name))
 print((" " * 8) + "description = {0}".format(serv.description))
 print((" " * 8) + "status = {0}".format(serv.status))
 print((" " * 8) + "process = {0}".format(repr(serv.process)))
+print("")
+
+print("Enumerating handles:")
+handles = system.handles
+print("    There are {0} handles:".format(len(handles)))
+print("    First handle is: " + str(handles[0]))
+
+print("    Enumerating handles of the current process:")
+cp_handles = [h for h in system.handles if h.dwProcessId == windows.current_process.pid]
+print("        There are {0} handles for this process".format(len(cp_handles)))
+print("    Looking for a File handle:")
+file_h = [h for h in cp_handles if h.type == "File"][0]
+print("        Handle is {0}".format(file_h))
+print("        Name is <{0}>".format(file_h.name))

@@ -11,7 +11,13 @@ from .breakpoints import *
 
 
 class LocalDebugger(object):
-    """A debugger interface around :func:`AddVectoredExceptionHandler`"""
+    """A debugger interface around :func:`AddVectoredExceptionHandler`.
+
+    Handle:
+
+        * Standard BP (int3)
+        * Hardware-Exec BP (DrX)"""
+
     def __init__(self):
         self.breakpoints = {}
         self._memory_save = {}
@@ -96,6 +102,7 @@ class LocalDebugger(object):
         return windef.EXCEPTION_CONTINUE_EXECUTION
 
     def del_bp(self, bp):
+        """Delete a breakpoint"""
         if bp.type == STANDARD_BP:
             with windows.utils.VirtualProtected(bp.addr, 1, PAGE_EXECUTE_READWRITE):
                 windows.current_process.write_memory(bp.addr, self._memory_save[bp.addr])
