@@ -802,7 +802,7 @@ class WinProcess(Process):
         buffer = ctypes.c_buffer(0x1024)
         rsize = winproxy.GetProcessImageFileNameA(self.handle, buffer)
         # GetProcessImageFileNameA returns the fullpath
-        return buffer[:49].decode().split("\\")[-1]
+        return buffer[:rsize].decode().split("\\")[-1]
 
     @utils.fixedpropety
     def pid(self):

@@ -71,7 +71,7 @@ def create_console():
     sys.stderr = console_stderr
 
 
-def create_process(path, args=None, dwCreationFlags=0, show_windows=False):
+def create_process(path, args=None, dwCreationFlags=0, show_windows=True):
     """A convenient wrapper arround :func:`windows.winproxy.CreateProcessA`"""
     proc_info = PROCESS_INFORMATION()
     lpStartupInfo = None
