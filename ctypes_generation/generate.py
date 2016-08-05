@@ -71,6 +71,8 @@ TYPE_EQUIVALENCE = [
     ('HKEY', 'HANDLE'),
     ('HCATADMIN', 'HANDLE'),
     ('HCATINFO', 'HANDLE'),
+    ('HDC', 'HANDLE'),
+    ('HBITMAP', 'HANDLE'),
     ('SC_HANDLE', 'HANDLE'),
     ('HCERTCHAINENGINE', 'HANDLE'),
     ('LPHANDLE', 'POINTER(HANDLE)'),
@@ -273,6 +275,14 @@ class StructGenerator(CtypesGenerator):
             f.write(ctypes_code)
         print("<{0}> generated".format(self.outfilename))
         return ctypes_code
+
+    def append_input_file(self, filename):
+        print("Adding file <{0}>".format(filename))
+        self.parse()
+        new_data = self.PARSER(open(filename).read()).parse()
+        self.data[0].extend(new_data[0])
+        self.data[1].extend(new_data[1])
+        self.analyse(self.data)
 
 class FuncGenerator(CtypesGenerator):
     PARSER = func_parser.WinFuncParser
@@ -627,6 +637,8 @@ defs_with_ntstatus.append_input_file(from_here("definitions\\wintrust_crypt_def.
 
 
 structs = StructGenerator(from_here("definitions\\winstruct.txt"), from_here(r"..\windows\generated_def\\winstructs.py"), dependances=[defs_with_ntstatus])
+structs.append_input_file(from_here("definitions\\display_struct.txt"))
+
 functions = FuncGenerator(from_here("definitions\\winfunc.txt"), from_here(r"..\windows\generated_def\\winfuncs.py"), dependances=[structs])
 functions.append_input_file(from_here("definitions\\wintrust_crypt_func.txt"))
 

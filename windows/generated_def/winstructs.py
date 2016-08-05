@@ -57,6 +57,8 @@ PHANDLE = POINTER(HANDLE)
 HKEY = HANDLE
 HCATADMIN = HANDLE
 HCATINFO = HANDLE
+HDC = HANDLE
+HBITMAP = HANDLE
 SC_HANDLE = HANDLE
 HCERTCHAINENGINE = HANDLE
 LPHANDLE = POINTER(HANDLE)
@@ -3371,3 +3373,110 @@ class _CERT_CHAIN_ENGINE_CONFIG(Structure):
     ]
 CERT_CHAIN_ENGINE_CONFIG = _CERT_CHAIN_ENGINE_CONFIG
 PCERT_CHAIN_ENGINE_CONFIG = POINTER(_CERT_CHAIN_ENGINE_CONFIG)
+
+class tagRECT(Structure):
+        _fields_ = [
+        ("left", LONG),
+        ("top", LONG),
+        ("right", LONG),
+        ("bottom", LONG),
+    ]
+LPRECT = POINTER(tagRECT)
+NPRECT = POINTER(tagRECT)
+RECT = tagRECT
+PRECT = POINTER(tagRECT)
+
+class tagRGBTRIPLE(Structure):
+        _fields_ = [
+        ("rgbtBlue", BYTE),
+        ("rgbtGreen", BYTE),
+        ("rgbtRed", BYTE),
+    ]
+NPRGBTRIPLE = POINTER(tagRGBTRIPLE)
+LPRGBTRIPLE = POINTER(tagRGBTRIPLE)
+RGBTRIPLE = tagRGBTRIPLE
+PRGBTRIPLE = POINTER(tagRGBTRIPLE)
+
+class tagBITMAPFILEHEADER(Structure):
+        _fields_ = [
+        ("bfType", WORD),
+        ("bfSize", DWORD),
+        ("bfReserved1", WORD),
+        ("bfReserved2", WORD),
+        ("bfOffBits", DWORD),
+    ]
+BITMAPFILEHEADER = tagBITMAPFILEHEADER
+PBITMAPFILEHEADER = POINTER(tagBITMAPFILEHEADER)
+LPBITMAPFILEHEADER = POINTER(tagBITMAPFILEHEADER)
+
+class tagBITMAPCOREHEADER(Structure):
+        _fields_ = [
+        ("bcSize", DWORD),
+        ("bcWidth", WORD),
+        ("bcHeight", WORD),
+        ("bcPlanes", WORD),
+        ("bcBitCount", WORD),
+    ]
+LPBITMAPCOREHEADER = POINTER(tagBITMAPCOREHEADER)
+PBITMAPCOREHEADER = POINTER(tagBITMAPCOREHEADER)
+BITMAPCOREHEADER = tagBITMAPCOREHEADER
+
+class tagBITMAP(Structure):
+        _fields_ = [
+        ("bmType", LONG),
+        ("bmWidth", LONG),
+        ("bmHeight", LONG),
+        ("bmWidthBytes", LONG),
+        ("bmPlanes", WORD),
+        ("bmBitsPixel", WORD),
+        ("bmBits", LPVOID),
+    ]
+NPBITMAP = POINTER(tagBITMAP)
+LPBITMAP = POINTER(tagBITMAP)
+PBITMAP = POINTER(tagBITMAP)
+BITMAP = tagBITMAP
+
+class tagBITMAPINFOHEADER(Structure):
+        _fields_ = [
+        ("biSize", DWORD),
+        ("biWidth", LONG),
+        ("biHeight", LONG),
+        ("biPlanes", WORD),
+        ("biBitCount", WORD),
+        ("biCompression", DWORD),
+        ("biSizeImage", DWORD),
+        ("biXPelsPerMeter", LONG),
+        ("biYPelsPerMeter", LONG),
+        ("biClrUsed", DWORD),
+        ("biClrImportant", DWORD),
+    ]
+BITMAPINFOHEADER = tagBITMAPINFOHEADER
+PBITMAPINFOHEADER = POINTER(tagBITMAPINFOHEADER)
+LPBITMAPINFOHEADER = POINTER(tagBITMAPINFOHEADER)
+
+class tagRGBQUAD(Structure):
+        _fields_ = [
+        ("rgbBlue", BYTE),
+        ("rgbGreen", BYTE),
+        ("rgbRed", BYTE),
+        ("rgbReserved", BYTE),
+    ]
+RGBQUAD = tagRGBQUAD
+
+class tagBITMAPINFO(Structure):
+        _fields_ = [
+        ("bmiHeader", BITMAPINFOHEADER),
+        ("bmiColors", RGBQUAD * 1),
+    ]
+LPBITMAPINFO = POINTER(tagBITMAPINFO)
+PBITMAPINFO = POINTER(tagBITMAPINFO)
+BITMAPINFO = tagBITMAPINFO
+
+class tagBITMAPCOREINFO(Structure):
+        _fields_ = [
+        ("bmciHeader", BITMAPCOREHEADER),
+        ("bmciColors", RGBTRIPLE * 1),
+    ]
+LPBITMAPCOREINFO = POINTER(tagBITMAPCOREINFO)
+BITMAPCOREINFO = tagBITMAPCOREINFO
+PBITMAPCOREINFO = POINTER(tagBITMAPCOREINFO)
