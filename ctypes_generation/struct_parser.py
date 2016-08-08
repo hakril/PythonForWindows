@@ -5,6 +5,10 @@ from simpleparser import *
 
 class WinStructParser(Parser):
 
+    def __init__(self, *args, **kwargs):
+        super(WinStructParser, self).__init__(*args, **kwargs)
+        self.pack = None
+
     def parse_array(self, ):
         self.assert_token_type(OpenSquareBracketToken)
         number = self.assert_token_type(NameToken).value
@@ -98,7 +102,7 @@ class WinStructParser(Parser):
         struct_name = self.assert_token_type(NameToken)
         self.assert_token_type(OpenBracketToken)
 
-        result = WinDefType(struct_name.value)
+        result = WinDefType(struct_name.value, self.pack)
 
         while type(self.peek()) != CloseBracketToken:
             tok_type, tok_name, nb_rep = self.parse_def()
@@ -114,7 +118,21 @@ class WinStructParser(Parser):
         strucs = []
         enums = []
         while self.peek() is not None:
+            # HANDLE PRAGMA_PACK / PRAGMA_NOPACK
+            if type(self.peek()) == NameToken:
+                pragma = self.next_token().value
+                if pragma == "PRAGMA_NOPACK":
+                    self.pack = None
+                    continue
+                if pragma != "PRAGMA_PACK":
+                    raise ValueError("Expected struct/union def or PRAGMA_[NO]PACK")
+                pack_value = self.promote_to_int(self.next_token())
+                self.pack = pack_value
+
             x = self.parse_winstruct()
+            #x.packing = self.pack
+            #if x.packing != None:
+            #    print("{0} pack = {1}".format(x.name, x.packing))
             if type(x) == WinStruct or type(x) == WinUnion:
                 strucs.append(x)
             elif type(x) == WinEnum:

@@ -29,8 +29,9 @@ class Ptr(object):
 
 class WinStruct(object):
     ctypes_type = "Structure"
-    def __init__(self, name):
+    def __init__(self, name, pack=None):
         self.name = name
+        self.pack = pack
         self.fields = []
         self.typedef = {}
 
@@ -60,6 +61,8 @@ class WinStruct(object):
         res += ["""class {0}(Structure): pass""".format(self.name)]
         res += [self.generate_typedef_ctypes()]
 
+        if self.pack:
+            res += ["{0}._pack_ = ".format(self.pack)]
         res += ["{0}._fields_ = [".format(self.name)]
         for (ftype, name, nb_rep) in self.fields:
             if  nb_rep == 1:
@@ -70,8 +73,11 @@ class WinStruct(object):
         return "\n".join(res)
 
     def generate_ctypes_class(self):
-        res = """class {0}({1}):
-        _fields_ = [\n""".format(self.name, self.ctypes_type)
+        res = "class {0}({1}):\n".format(self.name, self.ctypes_type)
+        if self.pack:
+            res += "    _pack_ = {0}\n".format(self.pack)
+        res += "    _fields_ = [\n"""
+
 
         for (ftype, name, nb_rep) in self.fields:
             if  nb_rep == 1:

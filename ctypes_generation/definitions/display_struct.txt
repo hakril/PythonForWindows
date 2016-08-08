@@ -12,6 +12,7 @@ typedef struct tagRGBTRIPLE {
         BYTE    rgbtRed;
 } RGBTRIPLE, *PRGBTRIPLE, *NPRGBTRIPLE, *LPRGBTRIPLE;
 
+PRAGMA_PACK 2
 typedef struct tagBITMAPFILEHEADER {
         WORD    bfType;
         DWORD   bfSize;
@@ -19,6 +20,7 @@ typedef struct tagBITMAPFILEHEADER {
         WORD    bfReserved2;
         DWORD   bfOffBits;
 } BITMAPFILEHEADER, *LPBITMAPFILEHEADER, *PBITMAPFILEHEADER;
+PRAGMA_NOPACK
 
 typedef struct tagBITMAPCOREHEADER {
         DWORD   bcSize;
