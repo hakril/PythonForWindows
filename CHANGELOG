@@ -23,3 +23,4 @@ Since 0.2:
     * Can retrieve 64b context of syswow thread via context_syswow/set_syswow_context
     * Debugger handle breakpoint in 64b part of syswow process
     * ReadSyswow64Process is now a Process (allows to parse exports of remote PEB64 of syswow process)
+    * Added Debugger.detach

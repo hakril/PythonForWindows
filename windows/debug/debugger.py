@@ -58,7 +58,7 @@ class Debugger(object):
         # Values rewritten by "\xcc"
         self._memory_save = defaultdict(dict)
         # Dict of {tid : {drx taken : BP}}
-        self._hardware_breakpoint = defaultdict(dict)
+        self._hardware_breakpoint = {}
         # Breakpoints to reput..
         self._breakpoint_to_reput = {}
 
@@ -81,6 +81,44 @@ class Debugger(object):
         :rtype: :class:`Debugger`"""
         winproxy.DebugActiveProcess(target.pid)
         return cls(target)
+
+    def detach(self, target=None):
+        if target is None:
+            for proc in self.processes.values():
+                self.detach(proc)
+            return
+        if not isinstance(target, WinProcess):
+            raise ValueError("Detach accept only WinProcess")
+
+        self.disable_all_memory_breakpoints(target)
+        for bp in self.breakpoints[target.pid].values():
+            if not bp.apply_to_target(target):
+                target_threads = [t for t in target.threads if t.tid in self.threads]
+                bp_threads = []
+                # TODO: clean API tu request HXBP on a thread
+                for t in target_threads:
+                    t_bps = [pos for pos, hbp in self._hardware_breakpoint[t.tid].items() if hbp == bp]
+                    if t_bps:
+                       bp_threads.append(t)
+                self.del_bp(bp, bp_threads)
+            else:
+                self.del_bp(bp, [target])
+
+        for thread in [t for t in target.threads if t.tid in self.threads]:
+            del self._explicit_single_step[thread.tid]
+            del self._breakpoint_to_reput[thread.tid]
+            del self.threads[thread.tid]
+        del self.processes[target.pid]
+        del self._watched_pages[target.pid]
+        if target is self.current_process:
+            self._finish_debug_event(self.REMOVE_ME_debug_event, DBG_CONTINUE)
+
+        windows.winproxy.DebugActiveProcessStop(target.pid)
+
+    def _killed_in_action(self):
+        """Return True if current process have been detached by user callback"""
+        return self.current_process.pid not in self.processes
+
 
     @classmethod
     def debug(cls, path, args=None, dwCreationFlags=0, show_windows=False):
@@ -208,6 +246,7 @@ class Debugger(object):
         return True
 
     def _setup_breakpoint_HXBP(self, bp, target):
+        #print("Setup {0} into {1}".format(bp, target))
         if not isinstance(target, WinThread):
             raise ValueError("SETUP HXBP_BP on {0}".format(target))
         # Todo: opti, not reparse exports for all thread of the same process..
@@ -229,6 +268,8 @@ class Debugger(object):
         return True
 
     def _remove_breakpoint_HXBP(self, bp, target):
+        if not isinstance(target, WinThread):
+            raise ValueError("SETUP HXBP_BP on {0}".format(target))
         addr = self._resolve(bp.addr, target.owner)
         bp_pos = [pos for pos, hbp in self._hardware_breakpoint[target.tid].items() if hbp == bp]
         if not bp_pos:
@@ -350,7 +391,7 @@ class Debugger(object):
                     if bp.apply_to_target(self.current_process):
                         _setup_method(bp, self.current_process)
                     else:
-                        for t in self.current_process.threads:
+                        for t in [t for t in self.current_process.threads if t.tid in self.threads]:
                             _setup_method(bp, t)
 
         for bp in self._pending_breakpoints_new[self.current_process.pid]:
@@ -409,6 +450,8 @@ class Debugger(object):
             else:
                 thread.set_context(ctx)
             continue_flag = self._dispatch_breakpoint(exception, excp_addr)
+            if self._killed_in_action():
+                return continue_flag
             self._explicit_single_step[self.current_thread.tid] = self.current_thread.context.EEFlags.TF
             if excp_addr in self.breakpoints[self.current_process.pid]:
                 # Setup BP if not suppressed
@@ -423,13 +466,16 @@ class Debugger(object):
             if self._explicit_single_step[self.current_thread.tid]:
                 with self.DisabledMemoryBreakpoint():
                     self.on_single_step(exception)
-            self._explicit_single_step[self.current_thread.tid] = self.current_thread.context.EEFlags.TF
+            if not self._killed_in_action():
+                self._explicit_single_step[self.current_thread.tid] = self.current_thread.context.EEFlags.TF
             return DBG_CONTINUE
         elif excp_addr in self.breakpoints[self.current_process.pid]:
             # Verif that's not a standard BP ?
             bp = self.breakpoints[self.current_process.pid][excp_addr]
             with self.DisabledMemoryBreakpoint():
                 bp.trigger(self, exception)
+            if self._killed_in_action():
+                return DBG_CONTINUE
             ctx = self.current_thread.context
             self._explicit_single_step[self.current_thread.tid] = ctx.EEFlags.TF
             if excp_addr in self.breakpoints[self.current_process.pid]:
@@ -439,10 +485,15 @@ class Debugger(object):
         elif self._explicit_single_step[self.current_thread.tid]:
             with self.DisabledMemoryBreakpoint():
                 continue_flag = self.on_single_step(exception)
+            if self._killed_in_action():
+                return continue_flag
+            self._explicit_single_step[self.current_thread.tid] = self.current_thread.context.EEFlags.TF
             return continue_flag
         else:
             with self.DisabledMemoryBreakpoint():
                 continue_flag = self.on_exception(exception)
+            if self._killed_in_action():
+                return continue_flag
             self._explicit_single_step[self.current_thread.tid] = self.current_thread.context.EEFlags.TF
             return continue_flag
 
@@ -487,6 +538,8 @@ class Debugger(object):
 
         with self.DisabledMemoryBreakpoint():
             continue_flag = mem_bp.trigger(self, exception)
+        if self._killed_in_action():
+            return continue_flag
         self._explicit_single_step[self.current_thread.tid] = self.current_thread.context.EEFlags.TF
         # If BP has not been removed in trigger, pas it
         if fault_page in cp_watch_page and mem_bp in cp_watch_page[fault_page].bps:
@@ -516,6 +569,8 @@ class Debugger(object):
         else:
             with self.DisabledMemoryBreakpoint():
                 continue_flag = self.on_exception(exception)
+            if self._killed_in_action():
+                return continue_flag
             self._explicit_single_step[self.current_thread.tid] = self.current_thread.context.EEFlags.TF
             return continue_flag
 
@@ -547,11 +602,20 @@ class Debugger(object):
     def _handle_create_process(self, debug_event):
         """Handle CREATE_PROCESS_DEBUG_EVENT"""
         create_process = debug_event.u.CreateProcessInfo
+        # Duplicate handle, so garbage collection of the process/thread does not
+        # break the debug API invariant (those x_event handle are close by the debug API  itself)
+        proc_handle = HANDLE()
+        thread_handle = HANDLE()
+        cp_handle = windows.current_process.handle
+        winproxy.DuplicateHandle(cp_handle, create_process.hProcess, cp_handle, ctypes.byref(proc_handle), dwOptions=DUPLICATE_SAME_ACCESS)
+        winproxy.DuplicateHandle(cp_handle, create_process.hThread, cp_handle, ctypes.byref(thread_handle), dwOptions=DUPLICATE_SAME_ACCESS)
 
-        self.current_process = WinProcess._from_handle(create_process.hProcess)
-        self.current_thread = WinThread._from_handle(create_process.hThread)
+        self.current_process = WinProcess._from_handle(proc_handle.value)
+        self.current_thread = WinThread._from_handle(thread_handle.value)
+
         self.threads[self.current_thread.tid] = self.current_thread
         self._explicit_single_step[self.current_thread.tid] = False
+        self._hardware_breakpoint[self.current_thread.tid] = {}
         self._breakpoint_to_reput[self.current_thread.tid] = []
         self.processes[self.current_process.pid] = self.current_process
         self._watched_pages[self.current_process.pid] = {} #defaultdict(list)
@@ -571,23 +635,25 @@ class Debugger(object):
         retvalue = self.on_exit_process(exit_process)
         del self.threads[self.current_thread.tid]
         del self._explicit_single_step[self.current_thread.tid]
+        del self._hardware_breakpoint[self.current_thread.tid]
         del self._breakpoint_to_reput[self.current_thread.tid]
         del self.processes[self.current_process.pid]
         del self._watched_pages[self.current_process.pid]
-        # Hack IT, ContinueDebugEvent will close the HANDLE for us
-        # Should we make another handle instead ?
-        dbgprint("Removing handle {0} for {1} (will be closed by continueDebugEvent".format(hex(self.current_process._handle), self.current_process), "HANDLE")
-        del self.current_process._handle
-        del self.current_thread._handle
         return retvalue
 
     def _handle_create_thread(self, debug_event):
         """Handle CREATE_THREAD_DEBUG_EVENT"""
         create_thread = debug_event.u.CreateThread
-        self.current_thread = WinThread._from_handle(create_thread.hThread)
+        # Duplicate handle, so garbage collection of the thread does not
+        # break the debug API invariant (those x_event handle are close by the debug API  itself)
+        thread_handle = HANDLE()
+        cp_handle = windows.current_process.handle
+        winproxy.DuplicateHandle(cp_handle, create_thread.hThread, cp_handle, ctypes.byref(thread_handle), dwOptions=DUPLICATE_SAME_ACCESS)
+        self.current_thread = WinThread._from_handle(thread_handle.value)
         self.threads[self.current_thread.tid] = self.current_thread
         self._explicit_single_step[self.current_thread.tid] = False
         self._breakpoint_to_reput[self.current_thread.tid] = []
+        self._hardware_breakpoint[self.current_thread.tid] = {}
         self._setup_pending_breakpoints_new_thread(self.current_thread)
         with self.DisabledMemoryBreakpoint():
             return self.on_create_thread(create_thread)
@@ -600,12 +666,9 @@ class Debugger(object):
         with self.DisabledMemoryBreakpoint():
             retvalue = self.on_exit_thread(exit_thread)
         del self.threads[self.current_thread.tid]
+        del self._hardware_breakpoint[self.current_thread.tid]
         del self._explicit_single_step[self.current_thread.tid]
         del self._breakpoint_to_reput[self.current_thread.tid]
-        # Hack IT, ContinueDebugEvent will close the HANDLE for us
-        # Should we make another handle instead ?
-        dbgprint("Removing handle {0} for {1} (will be closed by continueDebugEvent".format(hex(self.current_thread._handle), self.current_thread), "HANDLE")
-        del self.current_thread._handle
         return retvalue
 
     def _handle_load_dll(self, debug_event):
@@ -649,10 +712,12 @@ class Debugger(object):
     def loop(self):
         """Debugging loop: handle event / dispatch to breakpoint. Returns when all targets are dead"""
         for debug_event in self._debug_event_generator():
+            self.REMOVE_ME_debug_event = debug_event
             dbg_continue_flag = self._dispatch_debug_event(debug_event)
             if dbg_continue_flag is None:
                 dbg_continue_flag = DBG_CONTINUE
-            self._finish_debug_event(debug_event, dbg_continue_flag)
+            if not self._killed_in_action():
+                self._finish_debug_event(debug_event, dbg_continue_flag)
             if not self.processes:
                 break
 
@@ -690,18 +755,13 @@ class Debugger(object):
 
     def del_bp(self, bp, targets=None):
         """Delete a breakpoint, if targets is ``None``: delete it from all targets"""
-        #if targets is not None:
-        #    raise NotImplementedError("TODO: DEL BP with targets")
         original_target = targets
-
         _remove_method = getattr(self, "_remove_breakpoint_" + bp.type)
         if targets is None:
             if bp.type in [STANDARD_BP, MEMORY_BREAKPOINT]: #TODO: better..
                 targets = self.processes.values()
             else:
                 targets = self.threads.values()
-        #else:
-        #    targets = [target]
         for target in targets:
             _remove_method(bp, target)
         if original_target is None:
@@ -772,7 +832,8 @@ class Debugger(object):
         try:
             yield
         finally:
-            self.restore_all_memory_breakpoints(data, target)
+            if not self._killed_in_action():
+                self.restore_all_memory_breakpoints(data, target)
 
     def get_exception_bitness(self, exc):
         """Return the bitness in which the exception occured.
