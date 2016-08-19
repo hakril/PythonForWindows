@@ -211,14 +211,14 @@ class VersionProxy(ApiProxy):
 #            return None
 
 class TransparentApiProxy(object):
-    def __init__(self, DLLNAME, func_name, error_check):
-        self.dll_name = DLLNAME
-        self.func_name = func_name
+    def __init__(self, DLLNAME, target_func, error_check):
+        self.target_dll = DLLNAME
+        self.target_func = target_func
         self.error_check = error_check
         self._ctypes_function = None
 
-        self.prototype = getattr(winfuncs, func_name + "Prototype")
-        self.params = getattr(winfuncs, func_name + "Params")
+        self.prototype = getattr(winfuncs, target_func + "Prototype")
+        self.params = getattr(winfuncs, target_func + "Params")
 
     def __call__(self, *args, **kwargs):
         if self._ctypes_function is None:
@@ -227,10 +227,10 @@ class TransparentApiProxy(object):
 
     def force_resolution(self):
         try:
-            c_prototyped = self.prototype((self.func_name, getattr(ctypes.windll, self.dll_name)), self.params)
+            c_prototyped = self.prototype((self.target_func, getattr(ctypes.windll, self.target_dll)), self.params)
         except AttributeError:
-            raise ExportNotFound(self.func_name, self.dll_name)
-        c_prototyped.errcheck = functools.wraps(self.error_check)(functools.partial(self.error_check, self.func_name))
+            raise ExportNotFound(self.target_func, self.target_dll)
+        c_prototyped.errcheck = functools.wraps(self.error_check)(functools.partial(self.error_check, self.target_func))
         self._ctypes_function = c_prototyped
 
 

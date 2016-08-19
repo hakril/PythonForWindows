@@ -112,10 +112,13 @@ class CodeTesteur(dbg.Debugger):
             print(hexdump(data, start.sp))
 
 
-def test_code_x86():
+def test_code_x86(raw=False):
     print("Testing x86 code")
     process = windows.test.pop_calc_32(dwCreationFlags=DEBUG_PROCESS)
-    code = x86.assemble(sys.argv[1])
+    if raw:
+        code = sys.argv[1].replace(" ", "").decode('hex')
+    else:
+        code = x86.assemble(sys.argv[1])
 
     start_register = {}
     if len(sys.argv) > 2:
@@ -131,12 +134,15 @@ def test_code_x86():
     x = CodeTesteur(process, code, start_register)
     x.loop()
 
-def test_code_x64():
+def test_code_x64(raw=False):
     print("Testing x64 code")
     if windows.current_process.bitness == 32:
         raise ValueError("Cannot debug a 64b process from 32b python")
     process = windows.test.pop_calc_64(dwCreationFlags=DEBUG_PROCESS)
-    code = x64.assemble(sys.argv[1])
+    if raw:
+        code = sys.argv[1].replace(" ", "").decode('hex')
+    else:
+        code = x64.assemble(sys.argv[1])
 
     start_register = {}
     if len(sys.argv) > 2:
@@ -162,7 +168,10 @@ if sys.argv[1] == "-x64":
     test_code_x64()
 elif sys.argv[1] == "--raw":
     sys.argv.remove("--raw")
-    pass
+    test_code_x86(raw=True)
+elif sys.argv[1] == "--raw64":
+    sys.argv.remove("--raw64")
+    test_code_x64(raw=True)
 else:
     test_code_x86()
 
