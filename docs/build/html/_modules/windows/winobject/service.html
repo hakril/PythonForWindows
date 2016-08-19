@@ -1,0 +1,205 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>windows.winobject.service &mdash; PythonForWindows 0.2 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="PythonForWindows 0.2 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.2 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for windows.winobject.service</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">ctypes</span>
+<span class="kn">import</span> <span class="nn">windows</span>
+
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">namedtuple</span>
+
+<span class="kn">from</span> <span class="nn">windows</span> <span class="k">import</span> <span class="n">utils</span>
+<span class="kn">from</span> <span class="nn">windows.generated_def</span> <span class="k">import</span> <span class="o">*</span>
+
+
+<span class="n">SERVICE_TYPE</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">:</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="n">SERVICE_KERNEL_DRIVER</span><span class="p">,</span> <span class="n">SERVICE_FILE_SYSTEM_DRIVER</span><span class="p">,</span> <span class="n">SERVICE_WIN32_OWN_PROCESS</span><span class="p">,</span> <span class="n">SERVICE_WIN32_SHARE_PROCESS</span><span class="p">,</span> <span class="n">SERVICE_INTERACTIVE_PROCESS</span><span class="p">]}</span>
+<span class="n">SERVICE_STATE</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">:</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="n">SERVICE_STOPPED</span><span class="p">,</span> <span class="n">SERVICE_START_PENDING</span><span class="p">,</span> <span class="n">SERVICE_STOP_PENDING</span><span class="p">,</span> <span class="n">SERVICE_RUNNING</span><span class="p">,</span> <span class="n">SERVICE_CONTINUE_PENDING</span><span class="p">,</span> <span class="n">SERVICE_PAUSE_PENDING</span><span class="p">,</span> <span class="n">SERVICE_PAUSED</span><span class="p">]}</span>
+<span class="n">SERVICE_CONTROLE_ACCEPTED</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">:</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[]}</span>
+<span class="n">SERVICE_FLAGS</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">:</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="n">SERVICE_RUNS_IN_SYSTEM_PROCESS</span><span class="p">]}</span>
+
+
+<span class="n">ServiceStatus</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s2">&quot;ServiceStatus&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="s2">&quot;state&quot;</span><span class="p">,</span> <span class="s2">&quot;control_accepted&quot;</span><span class="p">,</span> <span class="s2">&quot;flags&quot;</span><span class="p">])</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">``type`` might be one of:</span>
+
+<span class="sd">    * ``SERVICE_KERNEL_DRIVER(0x1L)``</span>
+<span class="sd">    * ``SERVICE_FILE_SYSTEM_DRIVER(0x2L)``</span>
+<span class="sd">    * ``SERVICE_WIN32_OWN_PROCESS(0x10L)``</span>
+<span class="sd">    * ``SERVICE_WIN32_SHARE_PROCESS(0x20L)``</span>
+<span class="sd">    * ``SERVICE_INTERACTIVE_PROCESS(0x100L)``</span>
+
+<span class="sd">``state`` might be one of:</span>
+
+<span class="sd">    * ``SERVICE_STOPPED(0x1L)``</span>
+<span class="sd">    * ``SERVICE_START_PENDING(0x2L)``</span>
+<span class="sd">    * ``SERVICE_STOP_PENDING(0x3L)``</span>
+<span class="sd">    * ``SERVICE_RUNNING(0x4L)``</span>
+<span class="sd">    * ``SERVICE_CONTINUE_PENDING(0x5L)``</span>
+<span class="sd">    * ``SERVICE_PAUSE_PENDING(0x6L)``</span>
+<span class="sd">    * ``SERVICE_PAUSED(0x7L)``</span>
+
+<span class="sd">``flags`` might be one of:</span>
+
+<span class="sd">    * ``0``</span>
+<span class="sd">    * ``SERVICE_RUNS_IN_SYSTEM_PROCESS(0x1L)``</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="k">class</span> <span class="nc">Service</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;&lt;</span><span class="si">{0}</span><span class="s1"> &quot;</span><span class="si">{1}</span><span class="s1">&quot;&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="nd">@utils</span><span class="o">.</span><span class="n">fixedpropety</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The name of the service</span>
+
+<span class="sd">        :type: :class:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">lpServiceName</span>
+
+    <span class="nd">@utils</span><span class="o">.</span><span class="n">fixedpropety</span>
+    <span class="k">def</span> <span class="nf">description</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The description of the service</span>
+
+<span class="sd">        :type: :class:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">lpDisplayName</span>
+
+    <span class="nd">@utils</span><span class="o">.</span><span class="n">fixedpropety</span>
+    <span class="k">def</span> <span class="nf">status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The status of the service</span>
+
+<span class="sd">        :type: :class:`ServiceStatus`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ServiceStatusProcess</span>
+        <span class="n">stype</span> <span class="o">=</span> <span class="n">SERVICE_TYPE</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">status</span><span class="o">.</span><span class="n">dwServiceType</span><span class="p">,</span> <span class="n">status</span><span class="o">.</span><span class="n">dwServiceType</span><span class="p">)</span>
+        <span class="n">sstate</span> <span class="o">=</span> <span class="n">SERVICE_STATE</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">status</span><span class="o">.</span><span class="n">dwCurrentState</span><span class="p">,</span> <span class="n">status</span><span class="o">.</span><span class="n">dwCurrentState</span><span class="p">)</span>
+        <span class="n">scontrol</span> <span class="o">=</span> <span class="n">status</span><span class="o">.</span><span class="n">dwControlsAccepted</span>
+        <span class="n">sflags</span> <span class="o">=</span> <span class="n">SERVICE_FLAGS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">status</span><span class="o">.</span><span class="n">dwServiceFlags</span><span class="p">,</span> <span class="n">status</span><span class="o">.</span><span class="n">dwServiceFlags</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ServiceStatus</span><span class="p">(</span><span class="n">stype</span><span class="p">,</span> <span class="n">sstate</span><span class="p">,</span> <span class="n">scontrol</span><span class="p">,</span> <span class="n">sflags</span><span class="p">)</span>
+
+    <span class="nd">@utils</span><span class="o">.</span><span class="n">fixedpropety</span>
+    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The process running the service (if any)</span>
+
+<span class="sd">        :type: :class:`WinProcess &lt;windows.winobject.process.WinProcess&gt;` or ``None``</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ServiceStatusProcess</span><span class="o">.</span><span class="n">dwProcessId</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">pid</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="n">l</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">windows</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">processes</span> <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">pid</span> <span class="o">==</span> <span class="n">pid</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">l</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span> <span class="c1"># Other thing ?</span>
+        <span class="k">return</span> <span class="n">l</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="ServiceA"><a class="viewcode-back" href="../../../service.html#windows.winobject.service.ServiceA">[docs]</a><span class="k">class</span> <span class="nc">ServiceA</span><span class="p">(</span><span class="n">Service</span><span class="p">,</span> <span class="n">ENUM_SERVICE_STATUS_PROCESSA</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A Service object with ascii data&quot;&quot;&quot;</span>
+    <span class="k">pass</span></div>
+
+<span class="k">def</span> <span class="nf">enumerate_services</span><span class="p">():</span>
+    <span class="n">scmanager</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">OpenSCManagerA</span><span class="p">(</span><span class="n">dwDesiredAccess</span><span class="o">=</span><span class="n">SC_MANAGER_ENUMERATE_SERVICE</span><span class="p">)</span>
+
+    <span class="n">size_needed</span> <span class="o">=</span> <span class="n">DWORD</span><span class="p">()</span>
+    <span class="n">nb_services</span> <span class="o">=</span> <span class="n">DWORD</span><span class="p">()</span>
+    <span class="n">counter</span> <span class="o">=</span> <span class="n">DWORD</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">EnumServicesStatusExA</span><span class="p">(</span><span class="n">scmanager</span><span class="p">,</span> <span class="n">SC_ENUM_PROCESS_INFO</span><span class="p">,</span> <span class="n">SERVICE_TYPE_ALL</span><span class="p">,</span> <span class="n">SERVICE_ACTIVE</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">size_needed</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">nb_services</span><span class="p">),</span> <span class="n">byref</span><span class="p">(</span><span class="n">counter</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">WindowsError</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="n">size_needed</span><span class="o">.</span><span class="n">value</span>
+        <span class="n">buffer</span> <span class="o">=</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_byte</span> <span class="o">*</span> <span class="n">size</span><span class="p">)()</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">EnumServicesStatusExA</span><span class="p">(</span><span class="n">scmanager</span><span class="p">,</span> <span class="n">SC_ENUM_PROCESS_INFO</span><span class="p">,</span> <span class="n">SERVICE_TYPE_ALL</span><span class="p">,</span> <span class="n">SERVICE_ACTIVE</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">size_needed</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">nb_services</span><span class="p">),</span> <span class="n">byref</span><span class="p">(</span><span class="n">counter</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="n">return_type</span> <span class="o">=</span> <span class="p">(</span><span class="n">ServiceA</span> <span class="o">*</span> <span class="n">nb_services</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">return_type</span><span class="o">.</span><span class="n">from_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">))</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.2 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>

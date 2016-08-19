@@ -1,0 +1,539 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>3. windows.native_exec – Native Code Execution &mdash; PythonForWindows 0.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="PythonForWindows 0.2 documentation" href="index.html" />
+    <link rel="next" title="4. windows.winproxy – Windows API" href="winproxy.html" />
+    <link rel="prev" title="2.10. Handle – Processes handles" href="handle.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="winproxy.html" title="4. windows.winproxy – Windows API"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="handle.html" title="2.10. Handle – Processes handles"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <span class="target" id="module-windows.native_exec"></span><div class="section" id="windows-native-exec-native-code-execution">
+<h1>3. <code class="docutils literal"><span class="pre">windows.native_exec</span></code> &#8211; Native Code Execution<a class="headerlink" href="#windows-native-exec-native-code-execution" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference internal" href="#module-windows.native_exec" title="windows.native_exec"><code class="xref py py-mod docutils literal"><span class="pre">windows.native_exec</span></code></a> allows to create <cite>Python</cite> functions calling native code.
+it also provides a simple assembler for x86 and x64.</p>
+<p><a class="reference internal" href="#module-windows.native_exec" title="windows.native_exec"><code class="xref py py-mod docutils literal"><span class="pre">windows.native_exec</span></code></a> provides those functions:</p>
+<dl class="function">
+<dt id="windows.native_exec.create_function">
+<code class="descclassname">windows.native_exec.</code><code class="descname">create_function</code><span class="sig-paren">(</span><em>code</em>, <em>types</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/native_exec/native_function.html#create_function"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.native_exec.create_function" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a python function that call raw machine code</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>code</strong> (<a class="reference internal" href="process.html#windows.winobject.process.WinUnicodeString.str" title="windows.winobject.process.WinUnicodeString.str"><em>str</em></a>) &#8211; Raw machine code that will be called</li>
+<li><strong>types</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#list" title="(in Python v2.7)"><em>list</em></a>) &#8211; Return type and parameters type (see <a class="reference external" href="https://docs.python.org/2/library/ctypes.html#module-ctypes" title="(in Python v2.7)"><code class="xref py py-mod docutils literal"><span class="pre">ctypes</span></code></a>)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the created function</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">function</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="docutils">
+<dt>The <a class="reference internal" href="#module-windows.native_exec" title="windows.native_exec"><code class="xref py py-mod docutils literal"><span class="pre">windows.native_exec</span></code></a> also contains some submodules:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="#module-windows.native_exec.cpuid" title="windows.native_exec.cpuid"><code class="xref py py-mod docutils literal"><span class="pre">windows.native_exec.cpuid</span></code></a></li>
+<li><a class="reference internal" href="#module-windows.native_exec.simple_x86" title="windows.native_exec.simple_x86"><code class="xref py py-mod docutils literal"><span class="pre">windows.native_exec.simple_x86</span></code></a></li>
+<li><a class="reference internal" href="#module-windows.native_exec.simple_x64" title="windows.native_exec.simple_x64"><code class="xref py py-mod docutils literal"><span class="pre">windows.native_exec.simple_x64</span></code></a></li>
+</ul>
+</dd>
+</dl>
+<div class="section" id="module-windows.native_exec.cpuid">
+<span id="windows-native-exec-cpuid-interface-to-native-cpuid"></span><h2>3.1. <a class="reference internal" href="#module-windows.native_exec.cpuid" title="windows.native_exec.cpuid"><code class="xref py py-mod docutils literal"><span class="pre">windows.native_exec.cpuid</span></code></a> &#8211; Interface to native CPUID<a class="headerlink" href="#module-windows.native_exec.cpuid" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="windows.native_exec.cpuid.X86CpuidResult">
+<em class="property">class </em><code class="descclassname">windows.native_exec.cpuid.</code><code class="descname">X86CpuidResult</code><a class="reference internal" href="_modules/windows/native_exec/cpuid.html#X86CpuidResult"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.native_exec.cpuid.X86CpuidResult" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raw result of the CPUID instruction</p>
+<dl class="attribute">
+<dt id="windows.native_exec.cpuid.X86CpuidResult.fields">
+<code class="descname">fields</code><em class="property"> = ['EAX', 'EBX', 'ECX', 'EDX']</em><a class="headerlink" href="#windows.native_exec.cpuid.X86CpuidResult.fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fields of the Structure</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="windows.native_exec.cpuid.do_cpuid">
+<code class="descclassname">windows.native_exec.cpuid.</code><code class="descname">do_cpuid</code><span class="sig-paren">(</span><em>req</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/native_exec/cpuid.html#do_cpuid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.native_exec.cpuid.do_cpuid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs a CPUID for the current process bitness</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#windows.native_exec.cpuid.X86CpuidResult" title="windows.native_exec.cpuid.X86CpuidResult"><code class="xref py py-class docutils literal"><span class="pre">X86CpuidResult</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="windows.native_exec.cpuid.get_proc_family_model">
+<code class="descclassname">windows.native_exec.cpuid.</code><code class="descname">get_proc_family_model</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/native_exec/cpuid.html#get_proc_family_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.native_exec.cpuid.get_proc_family_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extracts the family and model based on vendorId</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">(ComputedFamily, ComputedModel)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="windows.native_exec.cpuid.get_vendor_id">
+<code class="descclassname">windows.native_exec.cpuid.</code><code class="descname">get_vendor_id</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/native_exec/cpuid.html#get_vendor_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.native_exec.cpuid.get_vendor_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extracts the VendorId string from CPUID</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="windows.native_exec.cpuid.is_amd_proc">
+<code class="descclassname">windows.native_exec.cpuid.</code><code class="descname">is_amd_proc</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/native_exec/cpuid.html#is_amd_proc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.native_exec.cpuid.is_amd_proc" title="Permalink to this definition">¶</a></dt>
+<dd><p>get_vendor_id() == &#8216;AuthenticAMD&#8217;</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="windows.native_exec.cpuid.is_intel_proc">
+<code class="descclassname">windows.native_exec.cpuid.</code><code class="descname">is_intel_proc</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/native_exec/cpuid.html#is_intel_proc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.native_exec.cpuid.is_intel_proc" title="Permalink to this definition">¶</a></dt>
+<dd><p>get_vendor_id() == &#8216;GenuineIntel&#8217;</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="windows.native_exec.cpuid.x64_cpuid">
+<code class="descclassname">windows.native_exec.cpuid.</code><code class="descname">x64_cpuid</code><span class="sig-paren">(</span><em>req</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/native_exec/cpuid.html#x64_cpuid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.native_exec.cpuid.x64_cpuid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs a CPUID in 64bits mode</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#windows.native_exec.cpuid.X86CpuidResult" title="windows.native_exec.cpuid.X86CpuidResult"><code class="xref py py-class docutils literal"><span class="pre">X86CpuidResult</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="windows.native_exec.cpuid.x86_cpuid">
+<code class="descclassname">windows.native_exec.cpuid.</code><code class="descname">x86_cpuid</code><span class="sig-paren">(</span><em>req</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/native_exec/cpuid.html#x86_cpuid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.native_exec.cpuid.x86_cpuid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs a CPUID in 32bits mode</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#windows.native_exec.cpuid.X86CpuidResult" title="windows.native_exec.cpuid.X86CpuidResult"><code class="xref py py-class docutils literal"><span class="pre">X86CpuidResult</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Demo:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">windows.native_exec.cpuid</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">windows</span><span class="o">.</span><span class="n">native_exec</span><span class="o">.</span><span class="n">cpuid</span><span class="o">.</span><span class="n">do_cpuid</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="go">&lt;windows.native_exec.cpuid.X86CpuidResult object at 0x0330D990&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">native_exec</span><span class="o">.</span><span class="n">cpuid</span><span class="o">.</span><span class="n">do_cpuid</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">EAX</span>
+<span class="go">13L</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">EBX</span>
+<span class="go">1970169159L</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">windows</span><span class="o">.</span><span class="n">native_exec</span><span class="o">.</span><span class="n">cpuid</span><span class="o">.</span><span class="n">get_vendor_id</span><span class="p">()</span>
+<span class="go">&#39;GenuineIntel&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">windows</span><span class="o">.</span><span class="n">native_exec</span><span class="o">.</span><span class="n">cpuid</span><span class="o">.</span><span class="n">get_proc_family_model</span><span class="p">()</span>
+<span class="go">(6L, 58L)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="module-windows.native_exec.simple_x86">
+<span id="windows-native-exec-simple-x86-x86-assembler"></span><h2>3.2. <a class="reference internal" href="#module-windows.native_exec.simple_x86" title="windows.native_exec.simple_x86"><code class="xref py py-mod docutils literal"><span class="pre">windows.native_exec.simple_x86</span></code></a> &#8211; X86 Assembler<a class="headerlink" href="#module-windows.native_exec.simple_x86" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="#module-windows.native_exec.simple_x86" title="windows.native_exec.simple_x86"><code class="xref py py-mod docutils literal"><span class="pre">windows.native_exec.simple_x86</span></code></a> module allows to create simple x86 code.</p>
+<dl class="docutils">
+<dt>Its features are:</dt>
+<dd><ul class="first last simple">
+<li>Forward - Backward jump (using labels)</li>
+<li>Non-string interface for conditional/context dependent generation</li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The assembler DOES NOT handle every instruction at all.</p>
+</div>
+<p>The assembler instructions are <cite>Python</cite> object that may accept arguments representing
+the mnemonic operands.</p>
+<dl class="docutils">
+<dt>These parameters can be of type:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a> (register)</li>
+<li><a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a> (int)</li>
+<li><a class="reference internal" href="#windows.native_exec.simple_x86.mem_access" title="windows.native_exec.simple_x86.mem_access"><code class="xref py py-class docutils literal"><span class="pre">mem_access</span></code></a> (memory access)</li>
+</ul>
+</dd>
+</dl>
+<dl class="class">
+<dt id="windows.native_exec.simple_x86.mem_access">
+<em class="property">class </em><code class="descclassname">windows.native_exec.simple_x86.</code><code class="descname">mem_access</code><span class="sig-paren">(</span><em>base</em>, <em>index</em>, <em>scale</em>, <em>disp</em>, <em>prefix</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.native_exec.simple_x86.mem_access" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="attribute">
+<dt id="windows.native_exec.simple_x86.mem_access.base">
+<code class="descname">base</code><a class="headerlink" href="#windows.native_exec.simple_x86.mem_access.base" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.native_exec.simple_x86.mem_access.disp">
+<code class="descname">disp</code><a class="headerlink" href="#windows.native_exec.simple_x86.mem_access.disp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 3</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.native_exec.simple_x86.mem_access.index">
+<code class="descname">index</code><a class="headerlink" href="#windows.native_exec.simple_x86.mem_access.index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.native_exec.simple_x86.mem_access.prefix">
+<code class="descname">prefix</code><a class="headerlink" href="#windows.native_exec.simple_x86.mem_access.prefix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 4</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.native_exec.simple_x86.mem_access.scale">
+<code class="descname">scale</code><a class="headerlink" href="#windows.native_exec.simple_x86.mem_access.scale" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 2</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="docutils">
+<dt>The <a class="reference internal" href="#windows.native_exec.simple_x86.mem_access" title="windows.native_exec.simple_x86.mem_access"><code class="xref py py-class docutils literal"><span class="pre">mem_access</span></code></a> object can be created:</dt>
+<dd><ul class="first last simple">
+<li>By hand</li>
+<li>Using <a class="reference internal" href="#windows.native_exec.simple_x86.create_displacement" title="windows.native_exec.simple_x86.create_displacement"><code class="xref py py-func docutils literal"><span class="pre">create_displacement()</span></code></a></li>
+<li>Using <a class="reference internal" href="#windows.native_exec.simple_x86.mem" title="windows.native_exec.simple_x86.mem"><code class="xref py py-func docutils literal"><span class="pre">mem()</span></code></a></li>
+</ul>
+</dd>
+</dl>
+<dl class="function">
+<dt id="windows.native_exec.simple_x86.create_displacement">
+<code class="descclassname">windows.native_exec.simple_x86.</code><code class="descname">create_displacement</code><span class="sig-paren">(</span><em>base=None</em>, <em>index=None</em>, <em>scale=None</em>, <em>disp=0</em>, <em>prefix=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/native_exec/simple_x86.html#create_displacement"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.native_exec.simple_x86.create_displacement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a X86 memory access description</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="windows.native_exec.simple_x86.deref">
+<code class="descclassname">windows.native_exec.simple_x86.</code><code class="descname">deref</code><span class="sig-paren">(</span><em>disp</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/native_exec/simple_x86.html#deref"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.native_exec.simple_x86.deref" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a memory access for an immediate value <code class="docutils literal"><span class="pre">Ex:</span> <span class="pre">[0x42424242]</span></code></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="windows.native_exec.simple_x86.mem">
+<code class="descclassname">windows.native_exec.simple_x86.</code><code class="descname">mem</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/native_exec/simple_x86.html#mem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.native_exec.simple_x86.mem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse a memory access string of format <code class="docutils literal"><span class="pre">[EXPR]</span></code> or <code class="docutils literal"><span class="pre">seg:[EXPR]</span></code></p>
+<p><code class="docutils literal"><span class="pre">EXPR</span></code> may describe: <code class="docutils literal"><span class="pre">BASE</span> <span class="pre">|</span> <span class="pre">INDEX</span> <span class="pre">*</span> <span class="pre">SCALE</span> <span class="pre">|</span> <span class="pre">DISPLACEMENT</span></code> or any combinaison (in this order)</p>
+</dd></dl>
+
+<p>Instruction assembling:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">windows.native_exec.simple_x86</span> <span class="k">as</span> <span class="nn">x86</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">random</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x86</span><span class="o">.</span><span class="n">Mov</span>
+<span class="go">&lt;class &#39;windows.native_exec.simple_x86.Mov&#39;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">instr</span> <span class="o">=</span> <span class="n">x86</span><span class="o">.</span><span class="n">Mov</span><span class="p">(</span><span class="s2">&quot;EAX&quot;</span><span class="p">,</span> <span class="s2">&quot;EBX&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">instr</span>
+<span class="go">&lt;windows.native_exec.simple_x86.Mov object at 0x03243770&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">instr</span><span class="o">.</span><span class="n">get_code</span><span class="p">()</span>
+<span class="go">&#39;\x89\xd8&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x86</span><span class="o">.</span><span class="n">Mov</span><span class="p">(</span><span class="s2">&quot;EAX&quot;</span><span class="p">,</span> <span class="mh">0x42424242</span><span class="p">)</span><span class="o">.</span><span class="n">get_code</span><span class="p">()</span>
+<span class="go">&#39;\xc7\xc0BBBB&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x86</span><span class="o">.</span><span class="n">Mov</span><span class="p">(</span><span class="s2">&quot;EAX&quot;</span><span class="p">,</span> <span class="n">x86</span><span class="o">.</span><span class="n">create_displacement</span><span class="p">(</span><span class="n">base</span><span class="o">=</span><span class="s2">&quot;EAX&quot;</span><span class="p">,</span> <span class="n">disp</span><span class="o">=</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mh">0xffffffff</span><span class="p">)))</span><span class="o">.</span><span class="n">get_code</span><span class="p">()</span>
+<span class="go">&#39;\x8b\x80\x977\n&amp;&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x86</span><span class="o">.</span><span class="n">Mov</span><span class="p">(</span><span class="n">x86</span><span class="o">.</span><span class="n">mem</span><span class="p">(</span><span class="s2">&quot;[EBX + EDI * 2 + 0x11111111]&quot;</span><span class="p">),</span> <span class="s2">&quot;EAX&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">get_code</span><span class="p">()</span>
+<span class="go">&#39;\x89\x84{\x11\x11\x11\x11&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x86</span><span class="o">.</span><span class="n">Mov</span><span class="p">(</span><span class="n">x86</span><span class="o">.</span><span class="n">mem</span><span class="p">(</span><span class="s2">&quot;gs:[EBX + EDI * 2 + 0x11111111]&quot;</span><span class="p">),</span> <span class="s2">&quot;EAX&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">get_code</span><span class="p">()</span>
+<span class="go">&#39;e\x89\x84{\x11\x11\x11\x11&#39;</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="#module-windows.native_exec.simple_x86" title="windows.native_exec.simple_x86"><code class="xref py py-mod docutils literal"><span class="pre">windows.native_exec.simple_x86</span></code></a> also provides an interface to complex shellcode assembling
+including jump and label via the <code class="xref py py-class docutils literal"><span class="pre">MultipleInstr</span></code> class.</p>
+<p>Shellcode assembling:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">windows.native_exec.simple_x86</span> <span class="k">as</span> <span class="nn">x86</span>
+
+<span class="n">code</span> <span class="o">=</span> <span class="n">x86</span><span class="o">.</span><span class="n">MultipleInstr</span><span class="p">()</span>
+<span class="n">code</span> <span class="o">+=</span> <span class="n">x86</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;:BEGIN&quot;</span><span class="p">)</span>
+<span class="n">code</span> <span class="o">+=</span> <span class="n">x86</span><span class="o">.</span><span class="n">Jmp</span><span class="p">(</span><span class="s2">&quot;:BEGIN&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">code</span><span class="o">.</span><span class="n">get_code</span><span class="p">()))</span>
+<span class="c1"># &#39;\xeb\xfe&#39;</span>
+</pre></div>
+</div>
+<p>Another example from a project:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">IO_STACK_INPUT_BUFFER_LEN</span> <span class="o">=</span> <span class="n">x86</span><span class="o">.</span><span class="n">mem</span><span class="p">(</span><span class="s1">&#39;[ESI + 8]&#39;</span><span class="p">)</span>
+<span class="n">IO_STACK_INPUT_BUFFER</span> <span class="o">=</span>     <span class="n">x86</span><span class="o">.</span><span class="n">mem</span><span class="p">(</span><span class="s1">&#39;[ESI + 0x10]&#39;</span><span class="p">)</span>
+
+<span class="n">INPUT_BUFFER_SIZE</span> <span class="o">=</span>  <span class="n">x86</span><span class="o">.</span><span class="n">mem</span><span class="p">(</span><span class="s1">&#39;[ECX]&#39;</span><span class="p">)</span>
+<span class="n">INPUT_BUFFER_PORT</span> <span class="o">=</span>  <span class="n">x86</span><span class="o">.</span><span class="n">mem</span><span class="p">(</span><span class="s1">&#39;[ECX + 4]&#39;</span><span class="p">)</span>
+<span class="n">INPUT_BUFFER_VALUE</span> <span class="o">=</span> <span class="n">x86</span><span class="o">.</span><span class="n">mem</span><span class="p">(</span><span class="s1">&#39;[ECX + 8]&#39;</span><span class="p">)</span>
+
+<span class="n">out_ioctl</span> <span class="o">=</span> <span class="n">x86</span><span class="o">.</span><span class="n">MultipleInstr</span><span class="p">()</span>
+<span class="n">out_ioctl</span> <span class="o">+=</span> <span class="n">x86</span><span class="o">.</span><span class="n">Cmp</span><span class="p">(</span><span class="n">IO_STACK_INPUT_BUFFER_LEN</span><span class="p">,</span> <span class="mh">0xc</span><span class="p">)</span>  <span class="c1"># size indicator / port / value</span>
+<span class="n">out_ioctl</span> <span class="o">+=</span> <span class="n">x86</span><span class="o">.</span><span class="n">Jnz</span><span class="p">(</span><span class="s2">&quot;:FAIL&quot;</span><span class="p">)</span>
+<span class="n">out_ioctl</span> <span class="o">+=</span>    <span class="n">x86</span><span class="o">.</span><span class="n">Mov</span><span class="p">(</span><span class="s1">&#39;ECX&#39;</span><span class="p">,</span> <span class="n">IO_STACK_INPUT_BUFFER</span><span class="p">)</span>
+<span class="n">out_ioctl</span> <span class="o">+=</span>    <span class="n">x86</span><span class="o">.</span><span class="n">Mov</span><span class="p">(</span><span class="s1">&#39;EDX&#39;</span><span class="p">,</span> <span class="n">INPUT_BUFFER_PORT</span><span class="p">)</span>
+<span class="n">out_ioctl</span> <span class="o">+=</span>    <span class="n">x86</span><span class="o">.</span><span class="n">Mov</span><span class="p">(</span><span class="s1">&#39;EAX&#39;</span><span class="p">,</span> <span class="n">INPUT_BUFFER_VALUE</span><span class="p">)</span>
+<span class="n">out_ioctl</span> <span class="o">+=</span>    <span class="n">x86</span><span class="o">.</span><span class="n">Mov</span><span class="p">(</span><span class="s1">&#39;ECX&#39;</span><span class="p">,</span> <span class="n">INPUT_BUFFER_SIZE</span><span class="p">)</span>
+<span class="n">out_ioctl</span> <span class="o">+=</span>    <span class="n">x86</span><span class="o">.</span><span class="n">Cmp</span><span class="p">(</span><span class="s1">&#39;ECX&#39;</span><span class="p">,</span> <span class="mh">0x1</span><span class="p">)</span>
+<span class="n">out_ioctl</span> <span class="o">+=</span>    <span class="n">x86</span><span class="o">.</span><span class="n">Jnz</span><span class="p">(</span><span class="s2">&quot;:OUT_2_OR_4&quot;</span><span class="p">)</span>
+<span class="n">out_ioctl</span> <span class="o">+=</span>    <span class="n">x86</span><span class="o">.</span><span class="n">Out</span><span class="p">(</span><span class="s1">&#39;DX&#39;</span><span class="p">,</span> <span class="s1">&#39;AL&#39;</span><span class="p">)</span>
+<span class="n">out_ioctl</span> <span class="o">+=</span>    <span class="n">x86</span><span class="o">.</span><span class="n">Jmp</span><span class="p">(</span><span class="s1">&#39;:SUCCESS&#39;</span><span class="p">)</span>
+<span class="n">out_ioctl</span> <span class="o">+=</span>    <span class="n">x86</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;:OUT_2_OR_4&quot;</span><span class="p">)</span>
+<span class="n">out_ioctl</span> <span class="o">+=</span>    <span class="n">x86</span><span class="o">.</span><span class="n">Cmp</span><span class="p">(</span><span class="s1">&#39;ECX&#39;</span><span class="p">,</span> <span class="mh">0x2</span><span class="p">)</span>
+<span class="n">out_ioctl</span> <span class="o">+=</span>    <span class="n">x86</span><span class="o">.</span><span class="n">Jnz</span><span class="p">(</span><span class="s2">&quot;:OUT_4&quot;</span><span class="p">)</span>
+<span class="n">out_ioctl</span> <span class="o">+=</span>    <span class="n">x86</span><span class="o">.</span><span class="n">Out</span><span class="p">(</span><span class="s1">&#39;DX&#39;</span><span class="p">,</span> <span class="s1">&#39;AX&#39;</span><span class="p">)</span>
+<span class="n">out_ioctl</span> <span class="o">+=</span>    <span class="n">x86</span><span class="o">.</span><span class="n">Jmp</span><span class="p">(</span><span class="s1">&#39;:SUCCESS&#39;</span><span class="p">)</span>
+<span class="n">out_ioctl</span> <span class="o">+=</span>    <span class="n">x86</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;:OUT_4&quot;</span><span class="p">)</span>
+<span class="n">out_ioctl</span> <span class="o">+=</span>    <span class="n">x86</span><span class="o">.</span><span class="n">Out</span><span class="p">(</span><span class="s1">&#39;DX&#39;</span><span class="p">,</span> <span class="s1">&#39;EAX&#39;</span><span class="p">)</span>
+<span class="n">out_ioctl</span> <span class="o">+=</span>    <span class="n">x86</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;:SUCCESS&quot;</span><span class="p">)</span>
+<span class="n">out_ioctl</span> <span class="o">+=</span>    <span class="n">x86</span><span class="o">.</span><span class="n">Xor</span><span class="p">(</span><span class="s1">&#39;EAX&#39;</span><span class="p">,</span> <span class="s1">&#39;EAX&#39;</span><span class="p">)</span>
+<span class="n">out_ioctl</span> <span class="o">+=</span>    <span class="n">x86</span><span class="o">.</span><span class="n">Ret</span><span class="p">()</span>
+<span class="n">out_ioctl</span> <span class="o">+=</span> <span class="n">x86</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;:FAIL&quot;</span><span class="p">)</span>
+<span class="n">out_ioctl</span> <span class="o">+=</span> <span class="n">x86</span><span class="o">.</span><span class="n">Mov</span><span class="p">(</span><span class="s1">&#39;EAX&#39;</span><span class="p">,</span> <span class="mh">0x0C000000D</span><span class="p">)</span>
+<span class="n">out_ioctl</span> <span class="o">+=</span> <span class="n">x86</span><span class="o">.</span><span class="n">Ret</span><span class="p">()</span>
+
+<span class="n">out_ioctl</span><span class="o">.</span><span class="n">get_code</span><span class="p">()</span>
+<span class="s1">&#39;</span><span class="se">\x81</span><span class="s1">~</span><span class="se">\x08\x0c\x00\x00\x00</span><span class="s1">u&amp;</span><span class="se">\x8b</span><span class="s1">N</span><span class="se">\x10\x8b</span><span class="s1">Q</span><span class="se">\x04\x8b</span><span class="s1">A</span><span class="se">\x08\x8b\t\x81\xf9\x01\x00\x00\x00</span><span class="s1">u</span><span class="se">\x03\xee\xeb\r\x81\xf9\x02\x00\x00\x00</span><span class="s1">u</span><span class="se">\x04</span><span class="s1">f</span><span class="se">\xef\xeb\x01\xef</span><span class="s1">1</span><span class="se">\xc0\xc3\xc7\xc0\r\x00\x00\xc0\xc3</span><span class="s1">&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="module-windows.native_exec.simple_x64">
+<span id="windows-native-exec-simple-x64-x64-assembler"></span><h2>3.3. <a class="reference internal" href="#module-windows.native_exec.simple_x64" title="windows.native_exec.simple_x64"><code class="xref py py-mod docutils literal"><span class="pre">windows.native_exec.simple_x64</span></code></a> &#8211; X64 Assembler<a class="headerlink" href="#module-windows.native_exec.simple_x64" title="Permalink to this headline">¶</a></h2>
+<p>Same things as <a class="reference internal" href="#module-windows.native_exec.simple_x86" title="windows.native_exec.simple_x86"><code class="xref py py-mod docutils literal"><span class="pre">windows.native_exec.simple_x86</span></code></a></p>
+<dl class="docutils">
+<dt>The only things that change are:</dt>
+<dd><ul class="first last simple">
+<li>The registers name</li>
+</ul>
+</dd>
+</dl>
+<p><a class="reference internal" href="#module-windows.native_exec.simple_x64" title="windows.native_exec.simple_x64"><code class="xref py py-mod docutils literal"><span class="pre">windows.native_exec.simple_x64</span></code></a> handles 32 and 64 bits operations.</p>
+<p>Demo:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">windows.native_exec.simple_x64</span> <span class="k">as</span> <span class="nn">x64</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x64</span><span class="o">.</span><span class="n">Mov</span><span class="p">(</span><span class="s2">&quot;RAX&quot;</span><span class="p">,</span> <span class="s2">&quot;R13&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">get_code</span><span class="p">()</span>
+<span class="go">&#39;L\x89\xe8&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x64</span><span class="o">.</span><span class="n">Mov</span><span class="p">(</span><span class="s2">&quot;EAX&quot;</span><span class="p">,</span> <span class="s2">&quot;EDI&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">get_code</span><span class="p">()</span>
+<span class="go">&#39;\x89\xf8&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x64</span><span class="o">.</span><span class="n">Mov</span><span class="p">(</span><span class="s2">&quot;RAX&quot;</span><span class="p">,</span> <span class="s2">&quot;EDI&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">get_code</span><span class="p">()</span>
+<span class="go">&quot;&quot;&quot;</span>
+<span class="go">ValueError: Size mismatch</span>
+<span class="go">&quot;&quot;&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x64</span><span class="o">.</span><span class="n">Mov</span><span class="p">(</span><span class="s2">&quot;RAX&quot;</span><span class="p">,</span> <span class="n">x64</span><span class="o">.</span><span class="n">mem</span><span class="p">(</span><span class="s2">&quot;[EAX]&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">get_code</span><span class="p">()</span>
+<span class="go">&#39;gH\x8b\x00&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x64</span><span class="o">.</span><span class="n">Mov</span><span class="p">(</span><span class="s2">&quot;RAX&quot;</span><span class="p">,</span> <span class="n">x64</span><span class="o">.</span><span class="n">mem</span><span class="p">(</span><span class="s2">&quot;[RAX]&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">get_code</span><span class="p">()</span>
+<span class="go">&#39;H\x8b\x00&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x64</span><span class="o">.</span><span class="n">Mov</span><span class="p">(</span><span class="s2">&quot;EAX&quot;</span><span class="p">,</span> <span class="n">x64</span><span class="o">.</span><span class="n">mem</span><span class="p">(</span><span class="s2">&quot;[RAX]&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">get_code</span><span class="p">()</span>
+<span class="go">&#39;\x8b\x00&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x64</span><span class="o">.</span><span class="n">Mov</span><span class="p">(</span><span class="s2">&quot;EAX&quot;</span><span class="p">,</span> <span class="n">x64</span><span class="o">.</span><span class="n">mem</span><span class="p">(</span><span class="s2">&quot;[EAX]&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">get_code</span><span class="p">()</span>
+<span class="go">&#39;g\x8b\x00&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="module-windows.native_exec.nativeutils">
+<span id="windows-native-exec-nativeutils-native-utility-functions"></span><h2>3.4. <a class="reference internal" href="#module-windows.native_exec.nativeutils" title="windows.native_exec.nativeutils"><code class="xref py py-mod docutils literal"><span class="pre">windows.native_exec.nativeutils</span></code></a> &#8211; Native utility functions<a class="headerlink" href="#module-windows.native_exec.nativeutils" title="Permalink to this headline">¶</a></h2>
+<p>This module contains some native-code functions that can be used for various purposes.
+Each function export a label that allow another <code class="xref py py-class docutils literal"><span class="pre">MultipleInstr</span></code> to call the code of the function.</p>
+<p>The current functions are:</p>
+<blockquote>
+<div><ul>
+<li><p class="first"><code class="docutils literal"><span class="pre">StrlenW64</span></code> A 64bits wide-string STRLEN (<code class="docutils literal"><span class="pre">Label(&quot;:FUNC_STRLENW64&quot;)</span></code>)</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">StrlenA64</span></code> A 64bits ASCII STRLEN (<code class="docutils literal"><span class="pre">Label(&quot;:FUNC_STRLENA64&quot;)</span></code>)</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">GetProcAddress64</span></code> A 64bits export resolver (<code class="docutils literal"><span class="pre">Label(&quot;:FUNC_GETPROCADDRESS64&quot;)</span></code>)</p>
+<blockquote>
+<div><ul>
+<li><p class="first">Arg1: The DLL (wstring)</p>
+</li>
+<li><p class="first">Arg2: The API (string)</p>
+</li>
+<li><p class="first">Return value:</p>
+<blockquote>
+<div><ul class="simple">
+<li>0xfffffffffffffffe if the DLL is not found</li>
+<li>0xffffffffffffffff if the API is not found</li>
+<li>The address of the function</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">StrlenW32</span></code> A 32bits wide-string STRLEN (<code class="docutils literal"><span class="pre">Label(&quot;:FUNC_STRLENW32&quot;)</span></code>)</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">StrlenA32</span></code> A 32bits ASCII STRLEN (<code class="docutils literal"><span class="pre">Label(&quot;:FUNC_STRLENA32&quot;)</span></code>)</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">GetProcAddress32</span></code> A 32bits export resolver (<code class="docutils literal"><span class="pre">Label(&quot;:FUNC_GETPROCADDRESS32&quot;)</span></code>)</p>
+<blockquote>
+<div><ul>
+<li><p class="first">Arg1: The DLL (wstring)</p>
+</li>
+<li><p class="first">Arg2: The API (string)</p>
+</li>
+<li><p class="first">Return value:</p>
+<blockquote>
+<div><ul class="simple">
+<li>0xfffffffe if the DLL is not found</li>
+<li>0xffffffff if the API is not found</li>
+<li>The address of the function</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+<p>To use those functions in a <code class="xref py py-class docutils literal"><span class="pre">MultipleInstr</span></code> just call the label in your code and append the function at
+the end of your <code class="xref py py-class docutils literal"><span class="pre">MultipleInstr</span></code></p>
+<p>Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">RemoteManualLoadLibray</span> <span class="o">=</span> <span class="n">x86</span><span class="o">.</span><span class="n">MultipleInstr</span><span class="p">()</span>
+
+<span class="n">RemoteManualLoadLibray</span> <span class="o">+=</span> <span class="n">x86</span><span class="o">.</span><span class="n">Mov</span><span class="p">(</span><span class="s2">&quot;ECX&quot;</span><span class="p">,</span> <span class="n">x86</span><span class="o">.</span><span class="n">mem</span><span class="p">(</span><span class="s2">&quot;[ESP + 4]&quot;</span><span class="p">))</span>
+<span class="n">RemoteManualLoadLibray</span> <span class="o">+=</span> <span class="n">x86</span><span class="o">.</span><span class="n">Push</span><span class="p">(</span><span class="n">x86</span><span class="o">.</span><span class="n">mem</span><span class="p">(</span><span class="s2">&quot;[ECX + 4]&quot;</span><span class="p">))</span>
+<span class="n">RemoteManualLoadLibray</span> <span class="o">+=</span> <span class="n">x86</span><span class="o">.</span><span class="n">Push</span><span class="p">(</span><span class="n">x86</span><span class="o">.</span><span class="n">mem</span><span class="p">(</span><span class="s2">&quot;[ECX]&quot;</span><span class="p">))</span>
+<span class="n">RemoteManualLoadLibray</span> <span class="o">+=</span> <span class="n">x86</span><span class="o">.</span><span class="n">Call</span><span class="p">(</span><span class="s2">&quot;:FUNC_GETPROCADDRESS32&quot;</span><span class="p">)</span>
+<span class="n">RemoteManualLoadLibray</span> <span class="o">+=</span> <span class="n">x86</span><span class="o">.</span><span class="n">Push</span><span class="p">(</span><span class="n">x86</span><span class="o">.</span><span class="n">mem</span><span class="p">(</span><span class="s2">&quot;[ECX + 8]&quot;</span><span class="p">))</span>
+<span class="n">RemoteManualLoadLibray</span> <span class="o">+=</span> <span class="n">x86</span><span class="o">.</span><span class="n">Call</span><span class="p">(</span><span class="s2">&quot;EAX&quot;</span><span class="p">)</span> <span class="c1"># LoadLibrary</span>
+<span class="n">RemoteManualLoadLibray</span> <span class="o">+=</span> <span class="n">x86</span><span class="o">.</span><span class="n">Pop</span><span class="p">(</span><span class="s2">&quot;ECX&quot;</span><span class="p">)</span>
+<span class="n">RemoteManualLoadLibray</span> <span class="o">+=</span> <span class="n">x86</span><span class="o">.</span><span class="n">Pop</span><span class="p">(</span><span class="s2">&quot;ECX&quot;</span><span class="p">)</span>
+<span class="n">RemoteManualLoadLibray</span> <span class="o">+=</span> <span class="n">x86</span><span class="o">.</span><span class="n">Ret</span><span class="p">()</span>
+
+<span class="n">RemoteManualLoadLibray</span> <span class="o">+=</span> <span class="n">GetProcAddress32</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">3. <code class="docutils literal"><span class="pre">windows.native_exec</span></code> &#8211; Native Code Execution</a><ul>
+<li><a class="reference internal" href="#module-windows.native_exec.cpuid">3.1. <code class="docutils literal"><span class="pre">windows.native_exec.cpuid</span></code> &#8211; Interface to native CPUID</a></li>
+<li><a class="reference internal" href="#module-windows.native_exec.simple_x86">3.2. <code class="docutils literal"><span class="pre">windows.native_exec.simple_x86</span></code> &#8211; X86 Assembler</a></li>
+<li><a class="reference internal" href="#module-windows.native_exec.simple_x64">3.3. <code class="docutils literal"><span class="pre">windows.native_exec.simple_x64</span></code> &#8211; X64 Assembler</a></li>
+<li><a class="reference internal" href="#module-windows.native_exec.nativeutils">3.4. <code class="docutils literal"><span class="pre">windows.native_exec.nativeutils</span></code> &#8211; Native utility functions</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="handle.html"
+                        title="previous chapter">2.10. Handle &#8211; Processes handles</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="winproxy.html"
+                        title="next chapter">4. <code class="docutils literal"><span class="pre">windows.winproxy</span></code> &#8211; Windows API</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/native_exec.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="winproxy.html" title="4. windows.winproxy – Windows API"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="handle.html" title="2.10. Handle – Processes handles"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>

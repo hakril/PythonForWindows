@@ -1,0 +1,621 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>2.6. Network &mdash; PythonForWindows 0.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="PythonForWindows 0.2 documentation" href="index.html" />
+    <link rel="up" title="2. The windows objects" href="various.html" />
+    <link rel="next" title="2.7. Service" href="service.html" />
+    <link rel="prev" title="2.5. Registry" href="registry.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="service.html" title="2.7. Service"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="registry.html" title="2.5. Registry"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.2 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="various.html" accesskey="U">2. The <code class="docutils literal"><span class="pre">windows</span></code> objects</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-windows.winobject.network">
+<span id="network"></span><h1>2.6. Network<a class="headerlink" href="#module-windows.winobject.network" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">See sample <a class="reference internal" href="sample.html#sample-network-exploration"><span class="std std-ref">Network - socket exploration</span></a></p>
+</div>
+<dl class="class">
+<dt id="windows.winobject.network.Network">
+<em class="property">class </em><code class="descclassname">windows.winobject.network.</code><code class="descname">Network</code><a class="reference internal" href="_modules/windows/winobject/network.html#Network"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.network.Network" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="attribute">
+<dt id="windows.winobject.network.Network.firewall">
+<code class="descname">firewall</code><a class="headerlink" href="#windows.winobject.network.Network.firewall" title="Permalink to this definition">¶</a></dt>
+<dd><p>The firewall of the system</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.network.Firewall" title="windows.winobject.network.Firewall"><code class="xref py py-class docutils literal"><span class="pre">Firewall</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.network.Network.ipv4">
+<code class="descname">ipv4</code><a class="headerlink" href="#windows.winobject.network.Network.ipv4" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of TCP IPv4 socket (connection and listening)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">[<a class="reference internal" href="#windows.winobject.network.TCP4Connection" title="windows.winobject.network.TCP4Connection"><code class="xref py py-class docutils literal"><span class="pre">TCP4Connection</span></code></a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.network.Network.ipv6">
+<code class="descname">ipv6</code><a class="headerlink" href="#windows.winobject.network.Network.ipv6" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of TCP IPv6 socket (connection and listening)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">[<a class="reference internal" href="#windows.winobject.network.TCP6Connection" title="windows.winobject.network.TCP6Connection"><code class="xref py py-class docutils literal"><span class="pre">TCP6Connection</span></code></a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<div class="section" id="connections">
+<h2>2.6.1. Connections<a class="headerlink" href="#connections" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="windows.winobject.network.TCP4Connection">
+<em class="property">class </em><code class="descclassname">windows.winobject.network.</code><code class="descname">TCP4Connection</code><a class="reference internal" href="_modules/windows/winobject/network.html#TCP4Connection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.network.TCP4Connection" title="Permalink to this definition">¶</a></dt>
+<dd><p>A TCP4 socket (connected or listening)</p>
+<dl class="method">
+<dt id="windows.winobject.network.TCP4Connection.close">
+<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/network.html#TCP4Connection.close"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.network.TCP4Connection.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close the connection &lt;require elevated process&gt;</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.network.TCP4Connection.established">
+<code class="descname">established</code><a class="headerlink" href="#windows.winobject.network.TCP4Connection.established" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">True</span></code> if connection is established else it&#8217;s a listening socket</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.network.TCP4Connection.local_addr">
+<code class="descname">local_addr</code><a class="headerlink" href="#windows.winobject.network.TCP4Connection.local_addr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Local address IP (x.x.x.x)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.network.TCP4Connection.local_port">
+<code class="descname">local_port</code><a class="headerlink" href="#windows.winobject.network.TCP4Connection.local_port" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.network.TCP4Connection.remote_addr">
+<code class="descname">remote_addr</code><a class="headerlink" href="#windows.winobject.network.TCP4Connection.remote_addr" title="Permalink to this definition">¶</a></dt>
+<dd><p>remote address IP (x.x.x.x)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.network.TCP4Connection.remote_host">
+<code class="descname">remote_host</code><a class="headerlink" href="#windows.winobject.network.TCP4Connection.remote_host" title="Permalink to this definition">¶</a></dt>
+<dd><p>Identification of the remote hostname.
+Equals <code class="docutils literal"><span class="pre">remote_addr</span></code> if the resolution fails</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a> or <a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.network.TCP4Connection.remote_port">
+<code class="descname">remote_port</code><a class="headerlink" href="#windows.winobject.network.TCP4Connection.remote_port" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.network.TCP4Connection.remote_proto">
+<code class="descname">remote_proto</code><a class="headerlink" href="#windows.winobject.network.TCP4Connection.remote_proto" title="Permalink to this definition">¶</a></dt>
+<dd><p>Identification of the protocol associated with the remote port.
+Equals <code class="docutils literal"><span class="pre">remote_port</span></code> if no protocol is associated with it.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a> or <a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="windows.winobject.network.TCP6Connection">
+<em class="property">class </em><code class="descclassname">windows.winobject.network.</code><code class="descname">TCP6Connection</code><a class="reference internal" href="_modules/windows/winobject/network.html#TCP6Connection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.network.TCP6Connection" title="Permalink to this definition">¶</a></dt>
+<dd><p>A TCP6 socket (connected or listening)</p>
+<dl class="attribute">
+<dt id="windows.winobject.network.TCP6Connection.established">
+<code class="descname">established</code><a class="headerlink" href="#windows.winobject.network.TCP6Connection.established" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">True</span></code> if connection is established else it&#8217;s a listening socket</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.network.TCP6Connection.local_addr">
+<code class="descname">local_addr</code><a class="headerlink" href="#windows.winobject.network.TCP6Connection.local_addr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Local address IP</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.network.TCP6Connection.local_port">
+<code class="descname">local_port</code><a class="headerlink" href="#windows.winobject.network.TCP6Connection.local_port" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.network.TCP6Connection.remote_addr">
+<code class="descname">remote_addr</code><a class="headerlink" href="#windows.winobject.network.TCP6Connection.remote_addr" title="Permalink to this definition">¶</a></dt>
+<dd><p>remote address IP</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.network.TCP6Connection.remote_host">
+<code class="descname">remote_host</code><a class="headerlink" href="#windows.winobject.network.TCP6Connection.remote_host" title="Permalink to this definition">¶</a></dt>
+<dd><p>Equals to <code class="docutils literal"><span class="pre">self.remote_addr</span></code> for Ipv6</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.network.TCP6Connection.remote_port">
+<code class="descname">remote_port</code><a class="headerlink" href="#windows.winobject.network.TCP6Connection.remote_port" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.network.TCP6Connection.remote_proto">
+<code class="descname">remote_proto</code><a class="headerlink" href="#windows.winobject.network.TCP6Connection.remote_proto" title="Permalink to this definition">¶</a></dt>
+<dd><p>Equals to <code class="docutils literal"><span class="pre">self.remote_port</span></code> for Ipv6</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="firewall">
+<h2>2.6.2. Firewall<a class="headerlink" href="#firewall" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="windows.winobject.network.Firewall">
+<em class="property">class </em><code class="descclassname">windows.winobject.network.</code><code class="descname">Firewall</code><a class="reference internal" href="_modules/windows/winobject/network.html#Firewall"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.network.Firewall" title="Permalink to this definition">¶</a></dt>
+<dd><p>The windows firewall</p>
+<dl class="attribute">
+<dt id="windows.winobject.network.Firewall.current_profile_types">
+<code class="descname">current_profile_types</code><a class="headerlink" href="#windows.winobject.network.Firewall.current_profile_types" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mask of the profiles currently enabled</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#long" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">long</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.network.Firewall.enabled">
+<code class="descname">enabled</code><a class="headerlink" href="#windows.winobject.network.Firewall.enabled" title="Permalink to this definition">¶</a></dt>
+<dd><p>A maping of the active firewall profiles</p>
+<p>{</p>
+<p><code class="docutils literal"><span class="pre">NET_FW_PROFILE_TYPE2_.NET_FW_PROFILE2_DOMAIN(0x1L)</span></code>: <code class="docutils literal"><span class="pre">True</span></code> or <code class="docutils literal"><span class="pre">False</span></code>,</p>
+<p><code class="docutils literal"><span class="pre">NET_FW_PROFILE_TYPE2_.NET_FW_PROFILE2_PRIVATE(0x2L)</span></code>: <code class="docutils literal"><span class="pre">True</span></code> or <code class="docutils literal"><span class="pre">False</span></code>,</p>
+<p><code class="docutils literal"><span class="pre">NET_FW_PROFILE_TYPE2_.NET_FW_PROFILE2_PUBLIC(0x4L)</span></code>: <code class="docutils literal"><span class="pre">True</span></code> or <code class="docutils literal"><span class="pre">False</span></code>,</p>
+<p>}</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">dict</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.network.Firewall.rules">
+<code class="descname">rules</code><a class="headerlink" href="#windows.winobject.network.Firewall.rules" title="Permalink to this definition">¶</a></dt>
+<dd><p>The rules of the firewall</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">[<a class="reference internal" href="#windows.winobject.network.FirewallRule" title="windows.winobject.network.FirewallRule"><code class="xref py py-class docutils literal"><span class="pre">FirewallRule</span></code></a>] &#8211; A list of rule</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.network.Firewall.value">
+<code class="descname">value</code><a class="headerlink" href="#windows.winobject.network.Firewall.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>current value</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="windows.winobject.network.FirewallRule">
+<em class="property">class </em><code class="descclassname">windows.winobject.network.</code><code class="descname">FirewallRule</code><a class="reference internal" href="_modules/windows/winobject/network.html#FirewallRule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.network.FirewallRule" title="Permalink to this definition">¶</a></dt>
+<dd><p>A rule of the firewall</p>
+<dl class="attribute">
+<dt id="windows.winobject.network.FirewallRule.action">
+<code class="descname">action</code><a class="headerlink" href="#windows.winobject.network.FirewallRule.action" title="Permalink to this definition">¶</a></dt>
+<dd><p>Action of the rule, values might be:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal"><span class="pre">NET_FW_ACTION_.NET_FW_ACTION_BLOCK(0x0L)</span></code></li>
+<li><code class="docutils literal"><span class="pre">NET_FW_ACTION_.NET_FW_ACTION_ALLOW(0x1L)</span></code></li>
+</ul>
+</div></blockquote>
+<p>subclass of <a class="reference external" href="https://docs.python.org/2/library/functions.html#long" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">long</span></code></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.network.FirewallRule.application_name">
+<code class="descname">application_name</code><a class="headerlink" href="#windows.winobject.network.FirewallRule.application_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name of the application to which apply the rule</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">unicode</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.network.FirewallRule.description">
+<code class="descname">description</code><a class="headerlink" href="#windows.winobject.network.FirewallRule.description" title="Permalink to this definition">¶</a></dt>
+<dd><p>Description of the rule</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">unicode</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.network.FirewallRule.direction">
+<code class="descname">direction</code><a class="headerlink" href="#windows.winobject.network.FirewallRule.direction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Direction of the rule, values might be:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal"><span class="pre">NET_FW_RULE_DIRECTION_.NET_FW_RULE_DIR_IN(0x1L)</span></code></li>
+<li><code class="docutils literal"><span class="pre">NET_FW_RULE_DIRECTION_.NET_FW_RULE_DIR_OUT(0x2L)</span></code></li>
+</ul>
+</div></blockquote>
+<p>subclass of <a class="reference external" href="https://docs.python.org/2/library/functions.html#long" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">long</span></code></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.network.FirewallRule.enabled">
+<code class="descname">enabled</code><a class="headerlink" href="#windows.winobject.network.FirewallRule.enabled" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">True</span></code> if rule is enabled</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.network.FirewallRule.grouping">
+<code class="descname">grouping</code><a class="headerlink" href="#windows.winobject.network.FirewallRule.grouping" title="Permalink to this definition">¶</a></dt>
+<dd><p>Grouping of the rule</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">unicode</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.network.FirewallRule.interface_types">
+<code class="descname">interface_types</code><a class="headerlink" href="#windows.winobject.network.FirewallRule.interface_types" title="Permalink to this definition">¶</a></dt>
+<dd><p>Types of interface of the rule</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">unicode</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.network.FirewallRule.local_address">
+<code class="descname">local_address</code><a class="headerlink" href="#windows.winobject.network.FirewallRule.local_address" title="Permalink to this definition">¶</a></dt>
+<dd><p>Local address of the rule</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">unicode</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.network.FirewallRule.local_port">
+<code class="descname">local_port</code><a class="headerlink" href="#windows.winobject.network.FirewallRule.local_port" title="Permalink to this definition">¶</a></dt>
+<dd><p>Local port of the rule</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">unicode</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.network.FirewallRule.name">
+<code class="descname">name</code><a class="headerlink" href="#windows.winobject.network.FirewallRule.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name of the rule</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">unicode</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.network.FirewallRule.protocol">
+<code class="descname">protocol</code><a class="headerlink" href="#windows.winobject.network.FirewallRule.protocol" title="Permalink to this definition">¶</a></dt>
+<dd><p>Protocol to which apply the rule</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#long" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">long</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.network.FirewallRule.remote_address">
+<code class="descname">remote_address</code><a class="headerlink" href="#windows.winobject.network.FirewallRule.remote_address" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remote address of the rule</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">unicode</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.network.FirewallRule.remote_port">
+<code class="descname">remote_port</code><a class="headerlink" href="#windows.winobject.network.FirewallRule.remote_port" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remote port of the rule</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">unicode</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.network.FirewallRule.service_name">
+<code class="descname">service_name</code><a class="headerlink" href="#windows.winobject.network.FirewallRule.service_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name of the service to which apply the rule</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">unicode</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.network.FirewallRule.value">
+<code class="descname">value</code><a class="headerlink" href="#windows.winobject.network.FirewallRule.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>current value</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">2.6. Network</a><ul>
+<li><a class="reference internal" href="#connections">2.6.1. Connections</a></li>
+<li><a class="reference internal" href="#firewall">2.6.2. Firewall</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="registry.html"
+                        title="previous chapter">2.5. Registry</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="service.html"
+                        title="next chapter">2.7. Service</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/network.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="service.html" title="2.7. Service"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="registry.html" title="2.5. Registry"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.2 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="various.html" >2. The <code class="docutils literal"><span class="pre">windows</span></code> objects</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>

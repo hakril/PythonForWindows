@@ -1,0 +1,464 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>windows.winobject.exception &mdash; PythonForWindows 0.2 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="PythonForWindows 0.2 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.2 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for windows.winobject.exception</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">ctypes</span>
+<span class="kn">import</span> <span class="nn">windows</span>
+<span class="kn">from</span> <span class="nn">windows.generated_def.winstructs</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">windows.generated_def.windef</span> <span class="k">as</span> <span class="nn">windef</span>
+
+<span class="n">EXCEPTION_CONTINUE_SEARCH</span> <span class="o">=</span> <span class="p">(</span><span class="mh">0x0</span><span class="p">)</span>
+<span class="n">EXCEPTION_CONTINUE_EXECUTION</span> <span class="o">=</span> <span class="p">(</span><span class="mh">0xffffffff</span><span class="p">)</span>
+
+<span class="n">exception_type</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;EXCEPTION_ACCESS_VIOLATION&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;EXCEPTION_DATATYPE_MISALIGNMENT&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;EXCEPTION_BREAKPOINT&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;EXCEPTION_SINGLE_STEP&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;EXCEPTION_ARRAY_BOUNDS_EXCEEDED&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;EXCEPTION_FLT_DENORMAL_OPERAND&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;EXCEPTION_FLT_DIVIDE_BY_ZERO&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;EXCEPTION_FLT_INEXACT_RESULT&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;EXCEPTION_FLT_INVALID_OPERATION&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;EXCEPTION_FLT_OVERFLOW&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;EXCEPTION_FLT_STACK_CHECK&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;EXCEPTION_FLT_UNDERFLOW&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;EXCEPTION_INT_DIVIDE_BY_ZERO&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;EXCEPTION_INT_OVERFLOW&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;EXCEPTION_PRIV_INSTRUCTION&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;EXCEPTION_IN_PAGE_ERROR&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;EXCEPTION_ILLEGAL_INSTRUCTION&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;EXCEPTION_NONCONTINUABLE_EXCEPTION&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;EXCEPTION_STACK_OVERFLOW&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;EXCEPTION_INVALID_DISPOSITION&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;EXCEPTION_GUARD_PAGE&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;EXCEPTION_INVALID_HANDLE&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;EXCEPTION_POSSIBLE_DEADLOCK&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="c1"># x -&gt; x dict may seems strange but useful to get the Flags (with name) from the int</span>
+<span class="c1"># exception_name_by_value[0x80000001] -&gt; EXCEPTION_GUARD_PAGE(0x80000001L)</span>
+<span class="n">exception_name_by_value</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">([(</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="nb">getattr</span><span class="p">(</span><span class="n">windows</span><span class="o">.</span><span class="n">generated_def</span><span class="o">.</span><span class="n">windef</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">exception_type</span><span class="p">]])</span>
+
+<span class="k">class</span> <span class="nc">EEXCEPTION_RECORDBase</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+        <span class="nd">@property</span>
+        <span class="k">def</span> <span class="nf">ExceptionCode</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;The Exception code</span>
+
+<span class="sd">               :type: :class:`int`&quot;&quot;&quot;</span>
+            <span class="n">real_code</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">EEXCEPTION_RECORDBase</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">ExceptionCode</span>
+            <span class="k">return</span> <span class="n">exception_name_by_value</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">real_code</span><span class="p">,</span> <span class="n">windows</span><span class="o">.</span><span class="n">generated_def</span><span class="o">.</span><span class="n">windef</span><span class="o">.</span><span class="n">Flag</span><span class="p">(</span><span class="s2">&quot;UNKNOW_EXCEPTION&quot;</span><span class="p">,</span> <span class="n">real_code</span><span class="p">))</span>
+
+        <span class="nd">@property</span>
+        <span class="k">def</span> <span class="nf">ExceptionAddress</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;The Exception Address</span>
+
+<span class="sd">            :type: :class:`int`&quot;&quot;&quot;</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">EEXCEPTION_RECORDBase</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">ExceptionAddress</span>
+            <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="mh">0x0</span>
+            <span class="k">return</span> <span class="n">x</span>
+
+<div class="viewcode-block" id="EEXCEPTION_RECORD"><a class="viewcode-back" href="../../../exception.html#windows.winobject.exception.EEXCEPTION_RECORD">[docs]</a><span class="k">class</span> <span class="nc">EEXCEPTION_RECORD</span><span class="p">(</span><span class="n">EEXCEPTION_RECORDBase</span><span class="p">,</span> <span class="n">EXCEPTION_RECORD</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Enhanced exception record&quot;&quot;&quot;</span>
+
+    <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">EXCEPTION_RECORD</span><span class="o">.</span><span class="n">_fields_</span><span class="p">]</span>
+    <span class="sd">&quot;&quot;&quot;The fields of the structure&quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="EEXCEPTION_RECORD32"><a class="viewcode-back" href="../../../exception.html#windows.winobject.exception.EEXCEPTION_RECORD32">[docs]</a><span class="k">class</span> <span class="nc">EEXCEPTION_RECORD32</span><span class="p">(</span><span class="n">EEXCEPTION_RECORDBase</span><span class="p">,</span> <span class="n">EXCEPTION_RECORD32</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Enhanced exception record (32bits)&quot;&quot;&quot;</span>
+
+    <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">EXCEPTION_RECORD32</span><span class="o">.</span><span class="n">_fields_</span><span class="p">]</span>
+    <span class="sd">&quot;&quot;&quot;The fields of the structure&quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="EEXCEPTION_RECORD64"><a class="viewcode-back" href="../../../exception.html#windows.winobject.exception.EEXCEPTION_RECORD64">[docs]</a><span class="k">class</span> <span class="nc">EEXCEPTION_RECORD64</span><span class="p">(</span><span class="n">EEXCEPTION_RECORDBase</span><span class="p">,</span> <span class="n">EXCEPTION_RECORD64</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Enhanced exception record (64bits)&quot;&quot;&quot;</span>
+
+    <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">EXCEPTION_RECORD64</span><span class="o">.</span><span class="n">_fields_</span><span class="p">]</span>
+    <span class="sd">&quot;&quot;&quot;The fields of the structure&quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="EEXCEPTION_DEBUG_INFO32"><a class="viewcode-back" href="../../../exception.html#windows.winobject.exception.EEXCEPTION_DEBUG_INFO32">[docs]</a><span class="k">class</span> <span class="nc">EEXCEPTION_DEBUG_INFO32</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Enhanced Debug info&quot;&quot;&quot;</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">transform_ctypes_fields</span><span class="p">(</span><span class="n">EXCEPTION_DEBUG_INFO</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;ExceptionRecord&quot;</span><span class="p">:</span> <span class="n">EEXCEPTION_RECORD32</span><span class="p">})</span>
+
+    <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">_fields_</span><span class="p">]</span>
+    <span class="sd">&quot;&quot;&quot;The fields of the structure&quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="EEXCEPTION_DEBUG_INFO64"><a class="viewcode-back" href="../../../exception.html#windows.winobject.exception.EEXCEPTION_DEBUG_INFO64">[docs]</a><span class="k">class</span> <span class="nc">EEXCEPTION_DEBUG_INFO64</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Enhanced Debug info&quot;&quot;&quot;</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">transform_ctypes_fields</span><span class="p">(</span><span class="n">EXCEPTION_DEBUG_INFO</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;ExceptionRecord&quot;</span><span class="p">:</span> <span class="n">EEXCEPTION_RECORD64</span><span class="p">})</span>
+
+    <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">_fields_</span><span class="p">]</span>
+    <span class="sd">&quot;&quot;&quot;The fields of the structure&quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="EEflags"><a class="viewcode-back" href="../../../exception.html#windows.winobject.exception.EEflags">[docs]</a><span class="k">class</span> <span class="nc">EEflags</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="s2">&quot;Flag view of the Eflags register&quot;</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">&quot;CF&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+               <span class="p">(</span><span class="s2">&quot;RES_1&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+               <span class="p">(</span><span class="s2">&quot;PF&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+               <span class="p">(</span><span class="s2">&quot;RES_3&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+               <span class="p">(</span><span class="s2">&quot;AF&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+               <span class="p">(</span><span class="s2">&quot;RES_5&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+               <span class="p">(</span><span class="s2">&quot;ZF&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+               <span class="p">(</span><span class="s2">&quot;SF&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+               <span class="p">(</span><span class="s2">&quot;TF&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+               <span class="p">(</span><span class="s2">&quot;IF&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+               <span class="p">(</span><span class="s2">&quot;DF&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+               <span class="p">(</span><span class="s2">&quot;OF&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+               <span class="p">(</span><span class="s2">&quot;IOPL_1&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+               <span class="p">(</span><span class="s2">&quot;IOPL_2&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+               <span class="p">(</span><span class="s2">&quot;NT&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+               <span class="p">(</span><span class="s2">&quot;RES_15&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+               <span class="p">(</span><span class="s2">&quot;RF&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+               <span class="p">(</span><span class="s2">&quot;VM&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+               <span class="p">(</span><span class="s2">&quot;AC&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+               <span class="p">(</span><span class="s2">&quot;VIF&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+               <span class="p">(</span><span class="s2">&quot;VIP&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+               <span class="p">(</span><span class="s2">&quot;ID&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+               <span class="p">]</span>
+
+    <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">_fields_</span><span class="p">]</span>
+    <span class="sd">&quot;&quot;&quot;The fields of the structure&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">get_raw</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">DWORD</span><span class="o">.</span><span class="n">from_address</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">addressof</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="k">def</span> <span class="nf">set_raw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">DWORD</span><span class="o">.</span><span class="n">from_address</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">addressof</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+        <span class="n">x</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fields_</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;RES_&quot;</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+                <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;|&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">hex</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__hex__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">(</span><span class="si">{1}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span> <span class="nb">hex</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">raw</span><span class="p">))</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">(</span><span class="si">{1}</span><span class="s2">:</span><span class="si">{2}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span> <span class="nb">hex</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">raw</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">dump</span><span class="p">())</span>
+
+    <span class="n">raw</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_raw</span><span class="p">,</span> <span class="n">set_raw</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;Raw value of the eflags</span>
+
+<span class="sd">       :type: :class:`int`</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="EDr7"><a class="viewcode-back" href="../../../exception.html#windows.winobject.exception.EDr7">[docs]</a><span class="k">class</span> <span class="nc">EDr7</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="s2">&quot;Flag view of the DR7 register&quot;</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">&quot;L0&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+               <span class="p">(</span><span class="s2">&quot;G0&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+               <span class="p">(</span><span class="s2">&quot;L1&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+               <span class="p">(</span><span class="s2">&quot;G1&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+               <span class="p">(</span><span class="s2">&quot;L2&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+               <span class="p">(</span><span class="s2">&quot;G2&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+               <span class="p">(</span><span class="s2">&quot;L3&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+               <span class="p">(</span><span class="s2">&quot;G3&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+               <span class="p">(</span><span class="s2">&quot;LE&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+               <span class="p">(</span><span class="s2">&quot;GE&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+               <span class="p">(</span><span class="s2">&quot;RES_1&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+               <span class="p">(</span><span class="s2">&quot;GD&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+               <span class="p">(</span><span class="s2">&quot;RES_1&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+               <span class="p">(</span><span class="s2">&quot;RW0&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+               <span class="p">(</span><span class="s2">&quot;LEN0&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+               <span class="p">(</span><span class="s2">&quot;RW1&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+               <span class="p">(</span><span class="s2">&quot;LEN1&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+               <span class="p">(</span><span class="s2">&quot;RW2&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+               <span class="p">(</span><span class="s2">&quot;LEN2&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+               <span class="p">(</span><span class="s2">&quot;RW3&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+               <span class="p">(</span><span class="s2">&quot;LEN3&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+               <span class="p">]</span>
+
+    <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">_fields_</span><span class="p">]</span>
+    <span class="sd">&quot;&quot;&quot;The fields of the structure&quot;&quot;&quot;</span></div>
+
+<span class="k">class</span> <span class="nc">ECONTEXTBase</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;DAT CONTEXT&quot;&quot;&quot;</span>
+    <span class="n">default_dump</span> <span class="o">=</span> <span class="p">()</span>
+    <span class="n">pc_reg</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="n">sp_reg</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="n">func_result_reg</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="n">special_reg_type</span> <span class="o">=</span> <span class="p">{}</span>
+
+
+    <span class="k">def</span> <span class="nf">regs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">to_dump</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the name and values of the registers</span>
+
+<span class="sd">        :returns: [(reg_name, value)] -- A :class:`list` of :class:`tuple`&quot;&quot;&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">to_dump</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">to_dump</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_dump</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">to_dump</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">special_reg_type</span><span class="p">:</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">special_reg_type</span><span class="p">[</span><span class="n">name</span><span class="p">](</span><span class="n">value</span><span class="p">)</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">res</span>
+
+    <span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">to_dump</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Dump (print) the current context&quot;&quot;&quot;</span>
+        <span class="n">regs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">regs</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">regs</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="s2"> -&gt; </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">hex</span><span class="p">(</span><span class="n">value</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">get_pc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pc_reg</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">set_pc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pc_reg</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_sp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sp_reg</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">set_sp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sp_reg</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_func_result</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">func_result_reg</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">set_func_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">func_result_reg</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+    <span class="n">pc</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_pc</span><span class="p">,</span> <span class="n">set_pc</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;Program Counter register (EIP or RIP)&quot;</span><span class="p">)</span>
+    <span class="n">sp</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_sp</span><span class="p">,</span> <span class="n">set_sp</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;Stack Pointer register (ESP or RSP)&quot;</span><span class="p">)</span>
+    <span class="n">func_result</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_func_result</span><span class="p">,</span> <span class="n">set_func_result</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;Function Resultat register (EAX or RAX)&quot;</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">EEFlags</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Enhanced view of the Eflags (you also have ``EFlags`` for the raw value)</span>
+
+<span class="sd">            :type: :class:`EEflags`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">off</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">EFlags</span><span class="o">.</span><span class="n">offset</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">EEflags</span><span class="o">.</span><span class="n">from_address</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">addressof</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">+</span> <span class="n">off</span><span class="p">)</span>
+        <span class="n">x</span><span class="o">.</span><span class="n">self</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="k">return</span> <span class="n">x</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">EDr7</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Enhanced view of the DR7 register (you also have ``Dr7`` for the raw value)</span>
+
+<span class="sd">            :type: :class:`EDr7`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">off</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">Dr7</span><span class="o">.</span><span class="n">offset</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">EDr7</span><span class="o">.</span><span class="n">from_address</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">addressof</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">+</span> <span class="n">off</span><span class="p">)</span>
+        <span class="n">x</span><span class="o">.</span><span class="n">self</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="k">return</span> <span class="n">x</span>
+
+<div class="viewcode-block" id="ECONTEXT32"><a class="viewcode-back" href="../../../exception.html#windows.winobject.exception.ECONTEXT32">[docs]</a><span class="k">class</span> <span class="nc">ECONTEXT32</span><span class="p">(</span><span class="n">ECONTEXTBase</span><span class="p">,</span> <span class="n">CONTEXT32</span><span class="p">):</span>
+    <span class="n">default_dump</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Eip&#39;</span><span class="p">,</span> <span class="s1">&#39;Esp&#39;</span><span class="p">,</span> <span class="s1">&#39;Eax&#39;</span><span class="p">,</span> <span class="s1">&#39;Ebx&#39;</span><span class="p">,</span> <span class="s1">&#39;Ecx&#39;</span><span class="p">,</span> <span class="s1">&#39;Edx&#39;</span><span class="p">,</span> <span class="s1">&#39;Ebp&#39;</span><span class="p">,</span> <span class="s1">&#39;Edi&#39;</span><span class="p">,</span> <span class="s1">&#39;Esi&#39;</span><span class="p">,</span> <span class="s1">&#39;EFlags&#39;</span><span class="p">)</span>
+    <span class="n">pc_reg</span> <span class="o">=</span> <span class="s1">&#39;Eip&#39;</span>
+    <span class="n">sp_reg</span> <span class="o">=</span> <span class="s1">&#39;Esp&#39;</span>
+    <span class="n">func_result_reg</span> <span class="o">=</span> <span class="s1">&#39;Eax&#39;</span>
+    <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">CONTEXT32</span><span class="o">.</span><span class="n">_fields_</span><span class="p">]</span>
+    <span class="sd">&quot;&quot;&quot;The fields of the structure&quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="ECONTEXTWOW64"><a class="viewcode-back" href="../../../exception.html#windows.winobject.exception.ECONTEXTWOW64">[docs]</a><span class="k">class</span> <span class="nc">ECONTEXTWOW64</span><span class="p">(</span><span class="n">ECONTEXTBase</span><span class="p">,</span> <span class="n">WOW64_CONTEXT</span><span class="p">):</span>
+    <span class="n">default_dump</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Eip&#39;</span><span class="p">,</span> <span class="s1">&#39;Esp&#39;</span><span class="p">,</span> <span class="s1">&#39;Eax&#39;</span><span class="p">,</span> <span class="s1">&#39;Ebx&#39;</span><span class="p">,</span> <span class="s1">&#39;Ecx&#39;</span><span class="p">,</span> <span class="s1">&#39;Edx&#39;</span><span class="p">,</span> <span class="s1">&#39;Ebp&#39;</span><span class="p">,</span> <span class="s1">&#39;Edi&#39;</span><span class="p">,</span> <span class="s1">&#39;Esi&#39;</span><span class="p">,</span> <span class="s1">&#39;EFlags&#39;</span><span class="p">)</span>
+    <span class="n">pc_reg</span> <span class="o">=</span> <span class="s1">&#39;Eip&#39;</span>
+    <span class="n">sp_reg</span> <span class="o">=</span> <span class="s1">&#39;Esp&#39;</span>
+    <span class="n">func_result_reg</span> <span class="o">=</span> <span class="s1">&#39;Eax&#39;</span>
+    <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">WOW64_CONTEXT</span><span class="o">.</span><span class="n">_fields_</span><span class="p">]</span>
+    <span class="sd">&quot;&quot;&quot;The fields of the structure&quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="ECONTEXT64"><a class="viewcode-back" href="../../../exception.html#windows.winobject.exception.ECONTEXT64">[docs]</a><span class="k">class</span> <span class="nc">ECONTEXT64</span><span class="p">(</span><span class="n">ECONTEXTBase</span><span class="p">,</span> <span class="n">CONTEXT64</span><span class="p">):</span>
+    <span class="n">default_dump</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Rip&#39;</span><span class="p">,</span> <span class="s1">&#39;Rsp&#39;</span><span class="p">,</span> <span class="s1">&#39;Rax&#39;</span><span class="p">,</span> <span class="s1">&#39;Rbx&#39;</span><span class="p">,</span> <span class="s1">&#39;Rcx&#39;</span><span class="p">,</span> <span class="s1">&#39;Rdx&#39;</span><span class="p">,</span> <span class="s1">&#39;Rbp&#39;</span><span class="p">,</span> <span class="s1">&#39;Rdi&#39;</span><span class="p">,</span> <span class="s1">&#39;Rsi&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;R8&#39;</span><span class="p">,</span> <span class="s1">&#39;R9&#39;</span><span class="p">,</span> <span class="s1">&#39;R10&#39;</span><span class="p">,</span> <span class="s1">&#39;R11&#39;</span><span class="p">,</span> <span class="s1">&#39;R12&#39;</span><span class="p">,</span> <span class="s1">&#39;R13&#39;</span><span class="p">,</span> <span class="s1">&#39;R14&#39;</span><span class="p">,</span> <span class="s1">&#39;R15&#39;</span><span class="p">,</span> <span class="s1">&#39;EFlags&#39;</span><span class="p">)</span>
+    <span class="n">pc_reg</span> <span class="o">=</span> <span class="s1">&#39;Rip&#39;</span>
+    <span class="n">sp_reg</span> <span class="o">=</span> <span class="s1">&#39;Rsp&#39;</span>
+    <span class="n">func_result_reg</span> <span class="o">=</span> <span class="s1">&#39;Rax&#39;</span>
+    <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">CONTEXT64</span><span class="o">.</span><span class="n">_fields_</span><span class="p">]</span>
+    <span class="sd">&quot;&quot;&quot;The fields of the structure&quot;&quot;&quot;</span>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="ECONTEXT64.new_aligned"><a class="viewcode-back" href="../../../exception.html#windows.winobject.exception.ECONTEXT64.new_aligned">[docs]</a>    <span class="k">def</span> <span class="nf">new_aligned</span><span class="p">(</span><span class="n">cls</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a new :class:`ECONTEXT64` aligned on 16 bits</span>
+
+<span class="sd">           temporary workaround or horrible hack ? choose your side</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">cls</span><span class="p">)</span>
+        <span class="n">nb_qword</span> <span class="o">=</span> <span class="p">(</span><span class="n">size</span> <span class="o">+</span> <span class="mi">8</span><span class="p">)</span> <span class="o">/</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">ULONGLONG</span><span class="p">)</span>
+        <span class="n">buffer</span> <span class="o">=</span> <span class="p">(</span><span class="n">nb_qword</span> <span class="o">*</span> <span class="n">ULONGLONG</span><span class="p">)()</span>
+        <span class="n">struct_address</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">addressof</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">struct_address</span> <span class="o">&amp;</span> <span class="mh">0xf</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;ULONGLONG array not aligned on 8&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">struct_address</span> <span class="o">&amp;</span> <span class="mh">0xf</span><span class="p">)</span> <span class="o">==</span> <span class="mi">8</span><span class="p">:</span>
+            <span class="n">struct_address</span> <span class="o">+=</span> <span class="mi">8</span>
+        <span class="bp">self</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">from_address</span><span class="p">(</span><span class="n">struct_address</span><span class="p">)</span>
+        <span class="c1"># Keep the raw buffer alive</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_buffer</span> <span class="o">=</span> <span class="n">buffer</span>
+        <span class="k">return</span> <span class="bp">self</span></div></div>
+
+<span class="k">def</span> <span class="nf">bitness</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Return 32 or 64&quot;&quot;&quot;</span>
+    <span class="kn">import</span> <span class="nn">platform</span>
+    <span class="n">bits</span> <span class="o">=</span> <span class="n">platform</span><span class="o">.</span><span class="n">architecture</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">bits</span><span class="p">[:</span><span class="mi">2</span><span class="p">])</span>
+
+<span class="k">if</span> <span class="n">bitness</span><span class="p">()</span> <span class="o">==</span> <span class="mi">32</span><span class="p">:</span>
+    <span class="n">ECONTEXT</span> <span class="o">=</span> <span class="n">ECONTEXT32</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">ECONTEXT</span> <span class="o">=</span> <span class="n">ECONTEXT64</span>
+
+
+<div class="viewcode-block" id="EEXCEPTION_POINTERS"><a class="viewcode-back" href="../../../exception.html#windows.winobject.exception.EEXCEPTION_POINTERS">[docs]</a><span class="k">class</span> <span class="nc">EEXCEPTION_POINTERS</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;ExceptionRecord&quot;</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">EEXCEPTION_RECORD</span><span class="p">)),</span>
+        <span class="p">(</span><span class="s2">&quot;ContextRecord&quot;</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ECONTEXT</span><span class="p">)),</span>
+    <span class="p">]</span>
+
+<div class="viewcode-block" id="EEXCEPTION_POINTERS.dump"><a class="viewcode-back" href="../../../exception.html#windows.winobject.exception.EEXCEPTION_POINTERS.dump">[docs]</a>    <span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Dump (print) the EEXCEPTION_POINTERS&quot;&quot;&quot;</span>
+        <span class="n">record</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ExceptionRecord</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Dumping Exception: &quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    ExceptionCode = </span><span class="si">{0}</span><span class="s2"> at </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">ExceptionCode</span><span class="p">,</span> <span class="nb">hex</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">ExceptionAddress</span><span class="p">)))</span>
+        <span class="n">regs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ContextRecord</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">regs</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">regs</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    </span><span class="si">{0}</span><span class="s2"> -&gt; </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">hex</span><span class="p">(</span><span class="n">value</span><span class="p">)))</span></div></div>
+
+
+<div class="viewcode-block" id="VectoredException"><a class="viewcode-back" href="../../../exception.html#windows.winobject.exception.VectoredException">[docs]</a><span class="k">class</span> <span class="nc">VectoredException</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A decorator that create a callable which can be passed to :func:`AddVectoredExceptionHandler`&quot;&quot;&quot;</span>
+    <span class="n">func_type</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">WINFUNCTYPE</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">EEXCEPTION_POINTERS</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
+        <span class="bp">self</span> <span class="o">=</span> <span class="nb">object</span><span class="o">.</span><span class="n">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">func</span> <span class="o">=</span> <span class="n">func</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">func_type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">decorator</span><span class="p">)</span>
+        <span class="n">v</span><span class="o">.</span><span class="n">self</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="k">return</span> <span class="n">v</span>
+
+    <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exception_pointers</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">(</span><span class="n">exception_pointers</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">BaseException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="kn">import</span> <span class="nn">traceback</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Ignored Python Exception in Vectored Exception: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+            <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">windef</span><span class="o">.</span><span class="n">EXCEPTION_CONTINUE_SEARCH</span></div>
+
+
+<span class="k">class</span> <span class="nc">VectoredExceptionHandler</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">handler</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">handler</span> <span class="o">=</span> <span class="n">VectoredException</span><span class="p">(</span><span class="n">handler</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pos</span> <span class="o">=</span> <span class="n">pos</span>
+
+    <span class="k">def</span> <span class="nf">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">AddVectoredExceptionHandler</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
+        <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">RemoveVectoredExceptionHandler</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+<span class="k">class</span> <span class="nc">DumpContextOnException</span><span class="p">(</span><span class="n">VectoredExceptionHandler</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exit</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">exit</span> <span class="o">=</span> <span class="n">exit</span>
+            <span class="nb">super</span><span class="p">(</span><span class="n">DumpContextOnException</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">print_context_result</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">print_context_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exception_pointers</span><span class="p">):</span>
+            <span class="n">except_record</span> <span class="o">=</span> <span class="n">exception_pointers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">ExceptionRecord</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">exception_pointers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">dump</span><span class="p">()</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">exit</span><span class="p">:</span>
+                <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+            <span class="k">return</span> <span class="mi">0</span>
+
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.2 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>

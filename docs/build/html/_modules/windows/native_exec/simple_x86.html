@@ -1,0 +1,1129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>windows.native_exec.simple_x86 &mdash; PythonForWindows 0.2 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="PythonForWindows 0.2 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.2 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for windows.native_exec.simple_x86</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">collections</span>
+<span class="kn">import</span> <span class="nn">struct</span>
+
+
+<span class="k">class</span> <span class="nc">BitArray</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">bits</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">size</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">bits</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">size</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;size &gt; len(bits)&quot;</span><span class="p">)</span>
+
+        <span class="n">bits_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">bit</span> <span class="ow">in</span> <span class="n">bits</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">bit</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">x</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Not expected bits value </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+            <span class="n">bits_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">array</span> <span class="o">=</span> <span class="n">bits_list</span>
+        <span class="k">if</span> <span class="n">size</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">array</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">array</span> <span class="o">=</span> <span class="p">([</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">size</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">array</span><span class="p">)))</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">array</span>
+
+    <span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">//</span> <span class="mi">8</span><span class="p">):</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">8</span><span class="p">:</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">8</span><span class="p">]):</span>
+                <span class="n">c</span> <span class="o">=</span> <span class="p">(</span><span class="n">c</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">x</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">bytearray</span><span class="p">((</span><span class="n">res</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">slice</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">slice</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">slice</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="nb">slice</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">array</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">BitArray</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span>
+        <span class="k">return</span> <span class="n">BitArray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">array</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">array</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">to_int</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">array</span><span class="p">]),</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_string</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">str_base</span><span class="p">):</span>
+        <span class="n">l</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">bytearray</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">str_base</span><span class="p">)):</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">):</span>
+                <span class="n">l</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">c</span> <span class="o">=</span> <span class="n">c</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">cls</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">str_base</span><span class="p">)</span> <span class="o">*</span> <span class="mi">8</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">l</span><span class="p">)))</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_int</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">&amp;</span> <span class="p">((</span><span class="mi">2</span> <span class="o">**</span> <span class="n">size</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cls</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="nb">bin</span><span class="p">(</span><span class="n">x</span><span class="p">)[</span><span class="mi">2</span><span class="p">:])</span>
+
+
+<span class="c1"># Prefix</span>
+<span class="k">class</span> <span class="nc">Prefix</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="n">PREFIX_VALUE</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">next</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="nb">next</span>
+
+    <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)(</span><span class="n">other</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_code</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">chr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">PREFIX_VALUE</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">next</span><span class="o">.</span><span class="n">get_code</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">create_prefix</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="n">prefix_type</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;Type&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">Prefix</span><span class="p">,),</span> <span class="p">{</span><span class="s1">&#39;PREFIX_VALUE&#39;</span><span class="p">:</span> <span class="n">value</span><span class="p">})</span>
+    <span class="k">return</span> <span class="n">prefix_type</span><span class="p">()</span>
+
+<span class="n">LockPrefix</span> <span class="o">=</span> <span class="n">create_prefix</span><span class="p">(</span><span class="s1">&#39;LockPrefix&#39;</span><span class="p">,</span> <span class="mh">0xf0</span><span class="p">)</span>
+<span class="n">Repne</span> <span class="o">=</span> <span class="n">create_prefix</span><span class="p">(</span><span class="s1">&#39;Repne&#39;</span><span class="p">,</span> <span class="mh">0xf2</span><span class="p">)</span>
+<span class="n">Rep</span> <span class="o">=</span> <span class="n">create_prefix</span><span class="p">(</span><span class="s1">&#39;Rep&#39;</span><span class="p">,</span> <span class="mh">0xf3</span><span class="p">)</span>
+<span class="n">SSPrefix</span> <span class="o">=</span> <span class="n">create_prefix</span><span class="p">(</span><span class="s1">&#39;SSPrefix&#39;</span><span class="p">,</span> <span class="mh">0x36</span><span class="p">)</span>
+<span class="n">CSPrefix</span> <span class="o">=</span> <span class="n">create_prefix</span><span class="p">(</span><span class="s1">&#39;CSPrefix&#39;</span><span class="p">,</span> <span class="mh">0x2e</span><span class="p">)</span>
+<span class="n">DSPrefix</span> <span class="o">=</span> <span class="n">create_prefix</span><span class="p">(</span><span class="s1">&#39;DSPrefix&#39;</span><span class="p">,</span> <span class="mh">0x3e</span><span class="p">)</span>
+<span class="n">ESPrefix</span> <span class="o">=</span> <span class="n">create_prefix</span><span class="p">(</span><span class="s1">&#39;ESPrefix&#39;</span><span class="p">,</span> <span class="mh">0x26</span><span class="p">)</span>
+<span class="n">FSPrefix</span> <span class="o">=</span> <span class="n">create_prefix</span><span class="p">(</span><span class="s1">&#39;FSPrefix&#39;</span><span class="p">,</span> <span class="mh">0x64</span><span class="p">)</span>
+<span class="n">GSPrefix</span> <span class="o">=</span> <span class="n">create_prefix</span><span class="p">(</span><span class="s1">&#39;GSPrefix&#39;</span><span class="p">,</span> <span class="mh">0x65</span><span class="p">)</span>
+<span class="n">OperandSizeOverride</span> <span class="o">=</span> <span class="n">create_prefix</span><span class="p">(</span><span class="s1">&#39;OperandSizeOverride&#39;</span><span class="p">,</span> <span class="mh">0x66</span><span class="p">)</span>
+<span class="n">AddressSizeOverride</span> <span class="o">=</span> <span class="n">create_prefix</span><span class="p">(</span><span class="s1">&#39;AddressSizeOverride&#39;</span><span class="p">,</span> <span class="mh">0x67</span><span class="p">)</span>
+
+<span class="c1"># Main informations about X86</span>
+<span class="n">mem_access</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;mem_access&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;base&#39;</span><span class="p">,</span> <span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="s1">&#39;scale&#39;</span><span class="p">,</span> <span class="s1">&#39;disp&#39;</span><span class="p">,</span> <span class="s1">&#39;prefix&#39;</span><span class="p">])</span>
+<span class="n">x86_regs</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;EAX&#39;</span><span class="p">,</span> <span class="s1">&#39;ECX&#39;</span><span class="p">,</span> <span class="s1">&#39;EDX&#39;</span><span class="p">,</span> <span class="s1">&#39;EBX&#39;</span><span class="p">,</span> <span class="s1">&#39;ESP&#39;</span><span class="p">,</span> <span class="s1">&#39;EBP&#39;</span><span class="p">,</span> <span class="s1">&#39;ESI&#39;</span><span class="p">,</span> <span class="s1">&#39;EDI&#39;</span><span class="p">]</span>
+<span class="n">x86_16bits_regs</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;AX&#39;</span><span class="p">,</span> <span class="s1">&#39;CX&#39;</span><span class="p">,</span> <span class="s1">&#39;DX&#39;</span><span class="p">,</span> <span class="s1">&#39;BX&#39;</span><span class="p">,</span> <span class="s1">&#39;SP&#39;</span><span class="p">,</span> <span class="s1">&#39;BP&#39;</span><span class="p">,</span> <span class="s1">&#39;SI&#39;</span><span class="p">,</span> <span class="s1">&#39;DI&#39;</span><span class="p">]</span>
+
+<span class="n">x86_segment_selectors</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;CS&#39;</span><span class="p">:</span> <span class="n">CSPrefix</span><span class="p">,</span> <span class="s1">&#39;DS&#39;</span><span class="p">:</span> <span class="n">DSPrefix</span><span class="p">,</span> <span class="s1">&#39;ES&#39;</span><span class="p">:</span> <span class="n">ESPrefix</span><span class="p">,</span> <span class="s1">&#39;SS&#39;</span><span class="p">:</span> <span class="n">SSPrefix</span><span class="p">,</span>
+                         <span class="s1">&#39;FS&#39;</span><span class="p">:</span> <span class="n">FSPrefix</span><span class="p">,</span> <span class="s1">&#39;GS&#39;</span><span class="p">:</span> <span class="n">GSPrefix</span><span class="p">}</span>
+
+
+<span class="k">class</span> <span class="nc">X86</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">is_reg</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">name</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="ow">in</span> <span class="n">x86_regs</span> <span class="o">+</span> <span class="n">x86_16bits_regs</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>  <span class="c1"># Not a string</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">reg_size</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="ow">in</span> <span class="n">x86_regs</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">32</span>
+        <span class="k">elif</span> <span class="n">name</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="ow">in</span> <span class="n">x86_16bits_regs</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">16</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknow register &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">is_mem_acces</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">mem_access</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">mem_access_has_only</span><span class="p">(</span><span class="n">mem_access</span><span class="p">,</span> <span class="n">names</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">X86</span><span class="o">.</span><span class="n">is_mem_acces</span><span class="p">(</span><span class="n">mem_access</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;mem_access_has_only&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">mem_access</span><span class="o">.</span><span class="n">_fields</span><span class="p">:</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">mem_access</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">v</span> <span class="ow">and</span> <span class="n">f</span> <span class="o">!=</span> <span class="s1">&#39;prefix&#39;</span> <span class="ow">and</span> <span class="n">f</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+            <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+
+<div class="viewcode-block" id="create_displacement"><a class="viewcode-back" href="../../../native_exec.html#windows.native_exec.simple_x86.create_displacement">[docs]</a><span class="k">def</span> <span class="nf">create_displacement</span><span class="p">(</span><span class="n">base</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">disp</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Creates a X86 memory access description&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">index</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">scale</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">scale</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">scale</span> <span class="ow">and</span> <span class="n">index</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot create displacement with scale and no index&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">scale</span> <span class="ow">and</span> <span class="n">index</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;ESP&quot;</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot create displacement with index == ESP&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">mem_access</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">disp</span><span class="p">,</span> <span class="n">prefix</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="deref"><a class="viewcode-back" href="../../../native_exec.html#windows.native_exec.simple_x86.deref">[docs]</a><span class="k">def</span> <span class="nf">deref</span><span class="p">(</span><span class="n">disp</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create a memory access for an immediate value ``Ex: [0x42424242]``&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">create_displacement</span><span class="p">(</span><span class="n">disp</span><span class="o">=</span><span class="n">disp</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="mem"><a class="viewcode-back" href="../../../native_exec.html#windows.native_exec.simple_x86.mem">[docs]</a><span class="k">def</span> <span class="nf">mem</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Parse a memory access string of format ``[EXPR]`` or ``seg:[EXPR]``</span>
+
+<span class="sd">       ``EXPR`` may describe: ``BASE | INDEX * SCALE | DISPLACEMENT`` or any combinaison (in this order)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;mem need a string to parse&quot;</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="n">prefix</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;[&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">data</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;]&quot;</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;:&quot;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;mem acces expect &lt;[EXPR]&gt; or &lt;seg:[EXPR]&quot;</span><span class="p">)</span>
+        <span class="n">prefix_name</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">prefix_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">x86_segment_selectors</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknow segment selector </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">prefix_name</span><span class="p">))</span>
+        <span class="n">prefix</span> <span class="o">=</span> <span class="n">prefix_name</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">3</span><span class="p">:]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;[&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">data</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;]&quot;</span><span class="p">)):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;mem acces expect &lt;[EXPR]&gt; or &lt;seg:[EXPR]&quot;</span><span class="p">)</span>
+    <span class="c1"># A l&#39;arrache.. j&#39;aime pas le parsing de trucs</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">items</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;+&quot;</span><span class="p">)</span>
+    <span class="n">parsed_items</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;prefix&#39;</span><span class="p">:</span> <span class="n">prefix</span><span class="p">}</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="c1"># Index * scale</span>
+        <span class="k">if</span> <span class="s2">&quot;*&quot;</span> <span class="ow">in</span> <span class="n">item</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s1">&#39;index&#39;</span> <span class="ow">in</span> <span class="n">parsed_items</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Multiple index / index*scale in mem expression &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+            <span class="n">sub_items</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sub_items</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid item &lt;</span><span class="si">{0}</span><span class="s2">&gt; in mem access&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">item</span><span class="p">))</span>
+            <span class="n">index</span><span class="p">,</span> <span class="n">scale</span> <span class="o">=</span> <span class="n">sub_items</span>
+            <span class="n">index</span><span class="p">,</span> <span class="n">scale</span> <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span> <span class="n">scale</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">X86</span><span class="o">.</span><span class="n">is_reg</span><span class="p">(</span><span class="n">index</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid index &lt;</span><span class="si">{0}</span><span class="s2">&gt; in mem access&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">index</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">X86</span><span class="o">.</span><span class="n">reg_size</span><span class="p">(</span><span class="n">index</span><span class="p">)</span> <span class="o">==</span> <span class="mi">16</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;16bits modrm&quot;</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">scale</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid scale &lt;</span><span class="si">{0}</span><span class="s2">&gt; in mem access&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">scale</span><span class="p">))</span>
+            <span class="n">parsed_items</span><span class="p">[</span><span class="s1">&#39;scale&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">scale</span>
+            <span class="n">parsed_items</span><span class="p">[</span><span class="s1">&#39;index&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">index</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># displacement / base / index alone</span>
+            <span class="k">if</span> <span class="n">X86</span><span class="o">.</span><span class="n">is_reg</span><span class="p">(</span><span class="n">item</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">X86</span><span class="o">.</span><span class="n">reg_size</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="o">==</span> <span class="mi">16</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;16bits modrm&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="s1">&#39;base&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">parsed_items</span><span class="p">:</span>
+                    <span class="n">parsed_items</span><span class="p">[</span><span class="s1">&#39;base&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">item</span>
+                    <span class="k">continue</span>
+                <span class="c1"># Already have base + index -&gt; cannot avec another register in expression</span>
+                <span class="k">if</span> <span class="s1">&#39;index&#39;</span> <span class="ow">in</span> <span class="n">parsed_items</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Multiple index / index*scale in mem expression &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+                <span class="n">parsed_items</span><span class="p">[</span><span class="s1">&#39;index&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">item</span>
+                <span class="k">continue</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">disp</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid base/index or displacement &lt;</span><span class="si">{0}</span><span class="s2">&gt; in mem access&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">item</span><span class="p">))</span>
+            <span class="k">if</span> <span class="s1">&#39;disp&#39;</span> <span class="ow">in</span> <span class="n">parsed_items</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Multiple displacement in mem expression &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+            <span class="n">parsed_items</span><span class="p">[</span><span class="s1">&#39;disp&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">disp</span>
+    <span class="k">return</span> <span class="n">create_displacement</span><span class="p">(</span><span class="o">**</span><span class="n">parsed_items</span><span class="p">)</span></div>
+
+
+<span class="c1"># Helper to get the BitArray associated to a register</span>
+<span class="k">class</span> <span class="nc">X86RegisterSelector</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="mi">3</span>  <span class="c1"># bits</span>
+    <span class="n">reg_opcode</span> <span class="o">=</span> <span class="p">{</span><span class="n">v</span><span class="p">:</span> <span class="n">BitArray</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">x86_regs</span><span class="p">)}</span>
+    <span class="n">reg_opcode</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">v</span><span class="p">:</span> <span class="n">BitArray</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">x86_16bits_regs</span><span class="p">)})</span>
+
+    <span class="k">def</span> <span class="nf">accept_arg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">instr_state</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">reg_opcode</span><span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">upper</span><span class="p">()])</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">KeyError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_reg_bits</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">cls</span><span class="o">.</span><span class="n">reg_opcode</span><span class="p">[</span><span class="n">name</span><span class="o">.</span><span class="n">upper</span><span class="p">()]</span>
+
+
+<span class="c1"># Instruction Parameters</span>
+<span class="k">class</span> <span class="nc">FixedRegister</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">register</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reg</span> <span class="o">=</span> <span class="n">register</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">accept_arg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">instr_state</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">x</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">reg</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">BitArray</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">[]))</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+<span class="n">RegisterEax</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">FixedRegister</span><span class="p">(</span><span class="s1">&#39;EAX&#39;</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">RawBits</span><span class="p">(</span><span class="n">BitArray</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">accept_arg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">instr_state</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+
+
+<span class="c1"># Immediat value logic</span>
+<span class="c1"># All 8/16 bits stuff are sign extended</span>
+<span class="k">class</span> <span class="nc">ImmediatOverflow</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">def</span> <span class="nf">accept_as_8immediat</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s2">&quot;&lt;b&quot;</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">struct</span><span class="o">.</span><span class="n">error</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">ImmediatOverflow</span><span class="p">(</span><span class="s2">&quot;8bits signed Immediat overflow&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">accept_as_16immediat</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s2">&quot;&lt;h&quot;</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">struct</span><span class="o">.</span><span class="n">error</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">ImmediatOverflow</span><span class="p">(</span><span class="s2">&quot;16bits signed Immediat overflow&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">accept_as_unsigned_16immediat</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s2">&quot;&lt;H&quot;</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">struct</span><span class="o">.</span><span class="n">error</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">ImmediatOverflow</span><span class="p">(</span><span class="s2">&quot;16bits unsigned Immediat overflow&quot;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">accept_as_32immediat</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s2">&quot;&lt;i&quot;</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">struct</span><span class="o">.</span><span class="n">error</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s2">&quot;&lt;I&quot;</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">struct</span><span class="o">.</span><span class="n">error</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">ImmediatOverflow</span><span class="p">(</span><span class="s2">&quot;32bits signed Immediat overflow&quot;</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">Imm8</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">accept_arg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">instr_state</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">imm8</span> <span class="o">=</span> <span class="n">accept_as_8immediat</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">ImmediatOverflow</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">BitArray</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">imm8</span><span class="p">))</span>
+
+
+<span class="k">class</span> <span class="nc">Imm16</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">accept_arg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">instr_state</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">imm16</span> <span class="o">=</span> <span class="n">accept_as_16immediat</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">ImmediatOverflow</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">BitArray</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">imm16</span><span class="p">))</span>
+
+<span class="k">class</span> <span class="nc">UImm16</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">accept_arg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">instr_state</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">imm16</span> <span class="o">=</span> <span class="n">accept_as_unsigned_16immediat</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">ImmediatOverflow</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">BitArray</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">imm16</span><span class="p">))</span>
+
+
+<span class="k">class</span> <span class="nc">Imm32</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">accept_arg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">instr_state</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">imm32</span> <span class="o">=</span> <span class="n">accept_as_32immediat</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">ImmediatOverflow</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">BitArray</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">imm32</span><span class="p">))</span>
+
+<span class="k">class</span> <span class="nc">SegmentSelectorAbsoluteAddr</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">accept_arg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">instr_state</span><span class="p">):</span>
+        <span class="n">sizess</span><span class="p">,</span> <span class="n">datass</span> <span class="o">=</span> <span class="n">UImm16</span><span class="p">()</span><span class="o">.</span><span class="n">accept_arg</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">instr_state</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">sizess</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+        <span class="n">sizeabs</span><span class="p">,</span> <span class="n">dataabs</span> <span class="o">=</span> <span class="n">Imm32</span><span class="p">()</span><span class="o">.</span><span class="n">accept_arg</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">instr_state</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">sizeabs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">sizess</span> <span class="o">+</span> <span class="n">sizeabs</span><span class="p">,</span> <span class="n">dataabs</span> <span class="o">+</span> <span class="n">datass</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">ModRM</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sub_modrm</span><span class="p">,</span> <span class="n">accept_reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">has_direction_bit</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">accept_reverse</span> <span class="o">=</span> <span class="n">accept_reverse</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">has_direction_bit</span> <span class="o">=</span> <span class="n">has_direction_bit</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sub</span> <span class="o">=</span> <span class="n">sub_modrm</span>
+
+    <span class="k">def</span> <span class="nf">accept_arg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">instr_state</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Missing arg for modrm&quot;</span><span class="p">)</span>
+        <span class="n">arg1</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">arg2</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">sub</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sub</span><span class="p">:</span>
+            <span class="c1"># Problem in reverse sens -&gt; need to fix it</span>
+            <span class="k">if</span> <span class="n">sub</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">):</span>
+                <span class="n">d</span> <span class="o">=</span> <span class="n">sub</span><span class="p">(</span><span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">instr_state</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_direction_bit</span><span class="p">:</span>
+                    <span class="n">instr_state</span><span class="o">.</span><span class="n">previous</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">direction</span>
+                <span class="k">return</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">mod</span> <span class="o">+</span> <span class="n">d</span><span class="o">.</span><span class="n">reg</span> <span class="o">+</span> <span class="n">d</span><span class="o">.</span><span class="n">rm</span> <span class="o">+</span> <span class="n">d</span><span class="o">.</span><span class="n">after</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">accept_reverse</span> <span class="ow">and</span> <span class="n">sub</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">arg2</span><span class="p">,</span> <span class="n">arg1</span><span class="p">):</span>
+                <span class="n">d</span> <span class="o">=</span> <span class="n">sub</span><span class="p">(</span><span class="n">arg2</span><span class="p">,</span> <span class="n">arg1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">instr_state</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_direction_bit</span><span class="p">:</span>
+                    <span class="n">instr_state</span><span class="o">.</span><span class="n">previous</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">direction</span>
+                <span class="k">return</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">mod</span> <span class="o">+</span> <span class="n">d</span><span class="o">.</span><span class="n">reg</span> <span class="o">+</span> <span class="n">d</span><span class="o">.</span><span class="n">rm</span> <span class="o">+</span> <span class="n">d</span><span class="o">.</span><span class="n">after</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">ModRM_REG__REG</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">match</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">X86</span><span class="o">.</span><span class="n">is_reg</span><span class="p">(</span><span class="n">arg1</span><span class="p">)</span> <span class="ow">and</span> <span class="n">X86</span><span class="o">.</span><span class="n">is_reg</span><span class="p">(</span><span class="n">arg2</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">,</span> <span class="nb">reversed</span><span class="p">,</span> <span class="n">instr_state</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mod</span> <span class="o">=</span> <span class="n">BitArray</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;11&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">X86</span><span class="o">.</span><span class="n">reg_size</span><span class="p">(</span><span class="n">arg1</span><span class="p">)</span> <span class="o">!=</span> <span class="n">X86</span><span class="o">.</span><span class="n">reg_size</span><span class="p">(</span><span class="n">arg2</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Register size mitmatch between </span><span class="si">{0}</span><span class="s2"> and </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">X86</span><span class="o">.</span><span class="n">reg_size</span><span class="p">(</span><span class="n">arg1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">16</span><span class="p">:</span>
+            <span class="n">instr_state</span><span class="o">.</span><span class="n">prefixes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">OperandSizeOverride</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reg</span> <span class="o">=</span> <span class="n">X86RegisterSelector</span><span class="o">.</span><span class="n">get_reg_bits</span><span class="p">(</span><span class="n">arg2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rm</span> <span class="o">=</span> <span class="n">X86RegisterSelector</span><span class="o">.</span><span class="n">get_reg_bits</span><span class="p">(</span><span class="n">arg1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">after</span> <span class="o">=</span> <span class="n">BitArray</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="mi">0</span>
+
+
+<span class="k">class</span> <span class="nc">ModRM_REG__MEM</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">match</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">X86</span><span class="o">.</span><span class="n">is_reg</span><span class="p">(</span><span class="n">arg1</span><span class="p">)</span> <span class="ow">and</span> <span class="n">X86</span><span class="o">.</span><span class="n">is_mem_acces</span><span class="p">(</span><span class="n">arg2</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">setup_reg_as_register</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">regname</span><span class="p">,</span> <span class="n">instr_state</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reg</span> <span class="o">=</span> <span class="n">X86RegisterSelector</span><span class="o">.</span><span class="n">get_reg_bits</span><span class="p">(</span><span class="n">regname</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">X86</span><span class="o">.</span><span class="n">reg_size</span><span class="p">(</span><span class="n">regname</span><span class="p">)</span> <span class="o">==</span> <span class="mi">16</span><span class="p">:</span>
+            <span class="n">instr_state</span><span class="o">.</span><span class="n">prefixes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">OperandSizeOverride</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">,</span> <span class="nb">reversed</span><span class="p">,</span> <span class="n">instr_state</span><span class="p">):</span>
+        <span class="c1"># ARG1 : REG</span>
+        <span class="c1"># ARG2 : prefix:[MEM]</span>
+        <span class="c1"># Handle prefix:</span>
+        <span class="k">if</span> <span class="n">arg2</span><span class="o">.</span><span class="n">prefix</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">instr_state</span><span class="o">.</span><span class="n">prefixes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x86_segment_selectors</span><span class="p">[</span><span class="n">arg2</span><span class="o">.</span><span class="n">prefix</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">X86</span><span class="o">.</span><span class="n">mem_access_has_only</span><span class="p">(</span><span class="n">arg2</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;disp&quot;</span><span class="p">]):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mod</span> <span class="o">=</span> <span class="n">BitArray</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;00&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setup_reg_as_register</span><span class="p">(</span><span class="n">arg1</span><span class="p">,</span> <span class="n">instr_state</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rm</span> <span class="o">=</span> <span class="n">BitArray</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;101&quot;</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">after</span> <span class="o">=</span> <span class="n">BitArray</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">accept_as_32immediat</span><span class="p">(</span><span class="n">arg2</span><span class="o">.</span><span class="n">disp</span><span class="p">))</span>
+            <span class="k">except</span> <span class="n">ImmediatOverflow</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">ImmediatOverflow</span><span class="p">(</span><span class="s2">&quot;Interger32 overflow for displacement </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="n">arg2</span><span class="o">.</span><span class="n">disp</span><span class="p">)))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="ow">not</span> <span class="nb">reversed</span>
+            <span class="k">return</span>
+        <span class="c1"># Those registers cannot be addressed without SIB</span>
+        <span class="c1"># No index -&gt; no scale -&gt; no SIB</span>
+        <span class="n">FIRE_UP_SIB</span> <span class="o">=</span> <span class="p">(</span><span class="n">arg2</span><span class="o">.</span><span class="n">base</span> <span class="ow">and</span> <span class="n">arg2</span><span class="o">.</span><span class="n">base</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;ESP&quot;</span><span class="p">,</span> <span class="s2">&quot;EBP&quot;</span><span class="p">])</span> <span class="ow">or</span> <span class="n">arg2</span><span class="o">.</span><span class="n">index</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">FIRE_UP_SIB</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setup_reg_as_register</span><span class="p">(</span><span class="n">arg1</span><span class="p">,</span> <span class="n">instr_state</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rm</span> <span class="o">=</span> <span class="n">X86RegisterSelector</span><span class="o">.</span><span class="n">get_reg_bits</span><span class="p">(</span><span class="n">arg2</span><span class="o">.</span><span class="n">base</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">compute_displacement</span><span class="p">(</span><span class="n">arg2</span><span class="o">.</span><span class="n">disp</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="ow">not</span> <span class="nb">reversed</span>
+            <span class="k">return</span>
+        <span class="c1"># FIRE UP THE SIB</span>
+        <span class="c1"># Handle no base and base == EBP special case</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">arg2</span><span class="o">.</span><span class="n">base</span><span class="p">:</span>
+            <span class="n">force_displacement</span> <span class="o">=</span> <span class="mi">4</span>
+        <span class="k">elif</span> <span class="n">arg2</span><span class="o">.</span><span class="n">base</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;EBP&quot;</span><span class="p">:</span>
+            <span class="n">force_displacement</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">force_displacement</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">setup_reg_as_register</span><span class="p">(</span><span class="n">arg1</span><span class="p">,</span> <span class="n">instr_state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rm</span> <span class="o">=</span> <span class="n">BitArray</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;100&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">compute_displacement</span><span class="p">(</span><span class="n">arg2</span><span class="o">.</span><span class="n">disp</span><span class="p">,</span> <span class="n">force_displacement</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">after</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_sib</span><span class="p">(</span><span class="n">arg2</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">after</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">arg2</span><span class="o">.</span><span class="n">base</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mod</span> <span class="o">=</span> <span class="n">BitArray</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;00&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="ow">not</span> <span class="nb">reversed</span>
+
+    <span class="k">def</span> <span class="nf">compute_displacement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">displacement</span><span class="p">,</span> <span class="n">force_displacement</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">displacement</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">force_displacement</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mod</span> <span class="o">=</span> <span class="n">BitArray</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;00&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">after</span> <span class="o">=</span> <span class="n">BitArray</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="c1"># Pack in a byte</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">accept_as_8immediat</span><span class="p">(</span><span class="n">displacement</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">ImmediatOverflow</span><span class="p">:</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">force_displacement</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mod</span> <span class="o">=</span> <span class="n">BitArray</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;01&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">after</span> <span class="o">=</span> <span class="n">BitArray</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="c1"># Pack in a dword</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">accept_as_32immediat</span><span class="p">(</span><span class="n">displacement</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">ImmediatOverflow</span><span class="p">:</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">force_displacement</span> <span class="o">&lt;=</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mod</span> <span class="o">=</span> <span class="n">BitArray</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;10&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">after</span> <span class="o">=</span> <span class="n">BitArray</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Displacement </span><span class="si">{0}</span><span class="s2"> is too big&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="n">displacement</span><span class="p">)))</span>
+
+    <span class="k">def</span> <span class="nf">compute_sib</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mem_access</span><span class="p">):</span>
+        <span class="n">scale</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">8</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">mem_access</span><span class="o">.</span><span class="n">index</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">BitArray</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;00&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">BitArray</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;100&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">X86RegisterSelector</span><span class="o">.</span><span class="n">get_reg_bits</span><span class="p">(</span><span class="n">mem_access</span><span class="o">.</span><span class="n">base</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">mem_access</span><span class="o">.</span><span class="n">scale</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">scale</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid scale for mem access &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mem_access</span><span class="o">.</span><span class="n">scale</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">mem_access</span><span class="o">.</span><span class="n">base</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">BitArray</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">scale</span><span class="p">[</span><span class="n">mem_access</span><span class="o">.</span><span class="n">scale</span><span class="p">])</span> <span class="o">+</span> <span class="n">X86RegisterSelector</span><span class="o">.</span><span class="n">get_reg_bits</span><span class="p">(</span><span class="n">mem_access</span><span class="o">.</span><span class="n">index</span><span class="p">)</span> <span class="o">+</span> <span class="n">BitArray</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;101&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">BitArray</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">scale</span><span class="p">[</span><span class="n">mem_access</span><span class="o">.</span><span class="n">scale</span><span class="p">])</span> <span class="o">+</span> <span class="n">X86RegisterSelector</span><span class="o">.</span><span class="n">get_reg_bits</span><span class="p">(</span><span class="n">mem_access</span><span class="o">.</span><span class="n">index</span><span class="p">)</span> <span class="o">+</span> <span class="n">X86RegisterSelector</span><span class="o">.</span><span class="n">get_reg_bits</span><span class="p">(</span><span class="n">mem_access</span><span class="o">.</span><span class="n">base</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">Slash</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="s2">&quot;No idea for the name: represent the modRM for single args + encoding in reg (/7 in cmp in man intel)&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reg_num</span><span class="p">):</span>
+        <span class="s2">&quot;reg = 7 for /7&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reg</span> <span class="o">=</span> <span class="n">x86_regs</span><span class="p">[</span><span class="n">reg_num</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">accept_arg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">instr_state</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Missing arg for Slash&quot;</span><span class="p">)</span>
+        <span class="c1"># Reuse all the MODRm logique with the reg as our self.reg</span>
+        <span class="c1"># The sens of param is strange I need to fix the `reversed` logique</span>
+        <span class="n">arg_consum</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">ModRM</span><span class="p">([</span><span class="n">ModRM_REG__REG</span><span class="p">,</span> <span class="n">ModRM_REG__MEM</span><span class="p">],</span> <span class="n">has_direction_bit</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">accept_arg</span><span class="p">(</span><span class="n">args</span><span class="p">[:</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">reg</span><span class="p">]</span> <span class="o">+</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">instr_state</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">arg_consum</span><span class="p">,</span> <span class="n">value</span>
+        <span class="k">return</span> <span class="n">arg_consum</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">value</span>
+
+<span class="k">class</span> <span class="nc">ControlRegisterModRM</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">writecr</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">writecr</span> <span class="o">=</span> <span class="n">writecr</span>
+
+    <span class="k">def</span> <span class="nf">accept_arg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">instr_state</span><span class="p">):</span>
+        <span class="n">writecr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">writecr</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+        <span class="n">reg</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="n">writecr</span><span class="p">]</span>
+        <span class="n">cr</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="ow">not</span> <span class="n">writecr</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cr</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">cr</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;cr&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">cr_number</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">cr</span><span class="p">[</span><span class="mi">2</span><span class="p">:],</span> <span class="mi">10</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid ControlRegister </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cr</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">cr_number</span> <span class="o">&gt;</span> <span class="mi">7</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid ControlRegister </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cr</span><span class="p">))</span>
+
+        <span class="n">modrm_params</span> <span class="o">=</span> <span class="p">[</span><span class="n">reg</span><span class="p">,</span> <span class="n">x86_regs</span><span class="p">[</span><span class="n">cr_number</span><span class="p">]]</span> <span class="o">+</span> <span class="n">args</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
+        <span class="k">return</span> <span class="n">ModRM</span><span class="p">([</span><span class="n">ModRM_REG__REG</span><span class="p">],</span> <span class="n">has_direction_bit</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">accept_arg</span><span class="p">(</span><span class="n">modrm_params</span><span class="p">,</span> <span class="n">instr_state</span><span class="p">)</span>
+
+
+<span class="n">instr_state</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;instr_state&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;previous&#39;</span><span class="p">,</span> <span class="s1">&#39;prefixes&#39;</span><span class="p">])</span>
+
+<span class="k">class</span> <span class="nc">Instruction</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Base class of instructions, use `encoding` to find a valid way to assemble the instruction&quot;&quot;&quot;</span>
+    <span class="n">encoding</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">initial_args</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">type_encoding</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">encoding</span><span class="p">:</span>
+            <span class="n">args</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">initial_args</span><span class="p">)</span>
+            <span class="n">prefix</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">type_encoding</span><span class="p">:</span>
+                <span class="n">arg_consum</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">element</span><span class="o">.</span><span class="n">accept_arg</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">instr_state</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">prefix</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">arg_consum</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">break</span>
+                <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                <span class="k">del</span> <span class="n">args</span><span class="p">[:</span><span class="n">arg_consum</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>  <span class="c1"># if no break</span>
+                <span class="k">if</span> <span class="n">args</span><span class="p">:</span>  <span class="c1"># if still args: fail</span>
+                    <span class="k">continue</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">BitArray</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="n">prefix</span>
+                <span class="k">return</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot encode &lt;</span><span class="si">{0}</span><span class="s2"> </span><span class="si">{1}</span><span class="s2">&gt;:(&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span> <span class="n">initial_args</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">get_code</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">prefix_opcode</span> <span class="o">=</span> <span class="n">b</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">chr</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">PREFIX_VALUE</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">prefix_opcode</span> <span class="o">+</span> <span class="nb">bytes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">dump</span><span class="p">())</span>
+
+    <span class="c1">#def __add__(self, other):</span>
+    <span class="c1">#    res = MultipleInstr()</span>
+    <span class="c1">#    res += self</span>
+    <span class="c1">#    res += other</span>
+    <span class="c1">#    return res</span>
+
+    <span class="k">def</span> <span class="nf">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">long</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">MultipleInstr</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+            <span class="n">res</span> <span class="o">+=</span> <span class="bp">self</span>
+        <span class="k">return</span> <span class="n">res</span>
+
+
+<span class="c1"># Jump helpers</span>
+<span class="k">class</span> <span class="nc">DelayedJump</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A jump to a label :NAME&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="nb">type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="n">label</span>
+
+
+<span class="k">class</span> <span class="nc">JmpType</span><span class="p">(</span><span class="n">Instruction</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Dispatcher between a real jump or DelayedJump if parameters is a label&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">initial_args</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">initial_args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">arg</span> <span class="o">=</span> <span class="n">initial_args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">arg</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;:&quot;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">DelayedJump</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">arg</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">JmpType</span><span class="p">,</span> <span class="n">cls</span><span class="p">)</span><span class="o">.</span><span class="n">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">initial_args</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">JmpImm</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Immediat parameters for Jump instruction</span>
+<span class="sd">       Sub a specified size from the size to jump to `emulate` a jump from the begin address of the instruction&quot;&quot;&quot;</span>
+    <span class="n">accept_as_Ximmediat</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sub</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sub</span> <span class="o">=</span> <span class="n">sub</span>
+
+    <span class="k">def</span> <span class="nf">accept_arg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">instr_state</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">jump_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">jump_size</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sub</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">jmp_imm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">accept_as_Ximmediat</span><span class="p">(</span><span class="n">jump_size</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">ImmediatOverflow</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">BitArray</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">jmp_imm</span><span class="p">))</span>
+
+
+<span class="k">class</span> <span class="nc">JmpImm8</span><span class="p">(</span><span class="n">JmpImm</span><span class="p">):</span>
+    <span class="n">accept_as_Ximmediat</span> <span class="o">=</span> <span class="nb">staticmethod</span><span class="p">(</span><span class="n">accept_as_8immediat</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">JmpImm32</span><span class="p">(</span><span class="n">JmpImm</span><span class="p">):</span>
+    <span class="n">accept_as_Ximmediat</span> <span class="o">=</span> <span class="nb">staticmethod</span><span class="p">(</span><span class="n">accept_as_32immediat</span><span class="p">)</span>
+
+
+<span class="c1"># Instructions</span>
+
+<span class="k">class</span> <span class="nc">Call</span><span class="p">(</span><span class="n">JmpType</span><span class="p">):</span>
+    <span class="n">encoding</span> <span class="o">=</span> <span class="p">[(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0xe8</span><span class="p">),</span> <span class="n">JmpImm32</span><span class="p">(</span><span class="mi">5</span><span class="p">)),</span>
+                <span class="p">(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0xff</span><span class="p">),</span> <span class="n">Slash</span><span class="p">(</span><span class="mi">2</span><span class="p">)),</span>
+                <span class="p">(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0x9a</span><span class="p">),</span> <span class="n">SegmentSelectorAbsoluteAddr</span><span class="p">())]</span>
+
+<span class="k">class</span> <span class="nc">Jmp</span><span class="p">(</span><span class="n">JmpType</span><span class="p">):</span>
+    <span class="n">encoding</span> <span class="o">=</span> <span class="p">[(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0xeb</span><span class="p">),</span> <span class="n">JmpImm8</span><span class="p">(</span><span class="mi">2</span><span class="p">)),</span>
+                <span class="p">(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0xe9</span><span class="p">),</span> <span class="n">JmpImm32</span><span class="p">(</span><span class="mi">5</span><span class="p">)),</span>
+                <span class="p">(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0xea</span><span class="p">),</span> <span class="n">SegmentSelectorAbsoluteAddr</span><span class="p">())]</span>
+
+
+<span class="k">class</span> <span class="nc">Jz</span><span class="p">(</span><span class="n">JmpType</span><span class="p">):</span>
+    <span class="n">encoding</span> <span class="o">=</span> <span class="p">[(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0x74</span><span class="p">),</span> <span class="n">JmpImm8</span><span class="p">(</span><span class="mi">2</span><span class="p">)),</span>
+                <span class="p">(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mh">0x0f84</span><span class="p">),</span> <span class="n">JmpImm32</span><span class="p">(</span><span class="mi">6</span><span class="p">))]</span>
+
+
+<span class="k">class</span> <span class="nc">Jnz</span><span class="p">(</span><span class="n">JmpType</span><span class="p">):</span>
+    <span class="n">encoding</span> <span class="o">=</span> <span class="p">[(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0x75</span><span class="p">),</span> <span class="n">JmpImm8</span><span class="p">(</span><span class="mi">2</span><span class="p">)),</span>
+                <span class="p">(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mh">0x0f85</span><span class="p">),</span> <span class="n">JmpImm32</span><span class="p">(</span><span class="mi">6</span><span class="p">))]</span>
+
+
+<span class="k">class</span> <span class="nc">Jbe</span><span class="p">(</span><span class="n">JmpType</span><span class="p">):</span>
+    <span class="n">encoding</span> <span class="o">=</span> <span class="p">[(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0x76</span><span class="p">),</span> <span class="n">JmpImm8</span><span class="p">(</span><span class="mi">2</span><span class="p">)),</span>
+                <span class="p">(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mh">0x0f86</span><span class="p">),</span> <span class="n">JmpImm32</span><span class="p">(</span><span class="mi">6</span><span class="p">))]</span>
+
+
+<span class="k">class</span> <span class="nc">Jnb</span><span class="p">(</span><span class="n">JmpType</span><span class="p">):</span>
+    <span class="n">encoding</span> <span class="o">=</span> <span class="p">[(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0x73</span><span class="p">),</span> <span class="n">JmpImm8</span><span class="p">(</span><span class="mi">2</span><span class="p">)),</span>
+                <span class="p">(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mh">0x0f83</span><span class="p">),</span> <span class="n">JmpImm32</span><span class="p">(</span><span class="mi">6</span><span class="p">))]</span>
+
+
+<span class="k">class</span> <span class="nc">Push</span><span class="p">(</span><span class="n">Instruction</span><span class="p">):</span>
+    <span class="n">encoding</span> <span class="o">=</span> <span class="p">[(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mh">0x50</span> <span class="o">&gt;&gt;</span> <span class="mi">3</span><span class="p">),</span> <span class="n">X86RegisterSelector</span><span class="p">()),</span>
+                <span class="p">(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0x68</span><span class="p">),</span> <span class="n">Imm32</span><span class="p">()),</span>
+                <span class="p">(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0xff</span><span class="p">),</span> <span class="n">Slash</span><span class="p">(</span><span class="mi">6</span><span class="p">))]</span>
+
+
+<span class="k">class</span> <span class="nc">Pop</span><span class="p">(</span><span class="n">Instruction</span><span class="p">):</span>
+    <span class="n">encoding</span> <span class="o">=</span> <span class="p">[(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mh">0x58</span> <span class="o">&gt;&gt;</span> <span class="mi">3</span><span class="p">),</span> <span class="n">X86RegisterSelector</span><span class="p">())]</span>
+
+
+<span class="k">class</span> <span class="nc">Dec</span><span class="p">(</span><span class="n">Instruction</span><span class="p">):</span>
+    <span class="n">encoding</span> <span class="o">=</span> <span class="p">[(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mh">0x48</span> <span class="o">&gt;&gt;</span> <span class="mi">3</span><span class="p">),</span> <span class="n">X86RegisterSelector</span><span class="p">())]</span>
+
+
+<span class="k">class</span> <span class="nc">Inc</span><span class="p">(</span><span class="n">Instruction</span><span class="p">):</span>
+    <span class="n">encoding</span> <span class="o">=</span> <span class="p">[(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mh">0x40</span> <span class="o">&gt;&gt;</span> <span class="mi">3</span><span class="p">),</span> <span class="n">X86RegisterSelector</span><span class="p">()),</span>
+                <span class="p">(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0xff</span><span class="p">),</span> <span class="n">Slash</span><span class="p">(</span><span class="mi">0</span><span class="p">))]</span>
+
+
+<span class="k">class</span> <span class="nc">Add</span><span class="p">(</span><span class="n">Instruction</span><span class="p">):</span>
+    <span class="n">encoding</span> <span class="o">=</span> <span class="p">[(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0x05</span><span class="p">),</span> <span class="n">RegisterEax</span><span class="p">(),</span> <span class="n">Imm32</span><span class="p">()),</span>
+                <span class="p">(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0x81</span><span class="p">),</span> <span class="n">Slash</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">Imm32</span><span class="p">()),</span>
+                <span class="p">(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0x01</span><span class="p">),</span> <span class="n">ModRM</span><span class="p">([</span><span class="n">ModRM_REG__REG</span><span class="p">,</span> <span class="n">ModRM_REG__MEM</span><span class="p">]))]</span>
+
+<span class="k">class</span> <span class="nc">And</span><span class="p">(</span><span class="n">Instruction</span><span class="p">):</span>
+    <span class="n">default_32_bits</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">encoding</span> <span class="o">=</span> <span class="p">[(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0x25</span><span class="p">),</span> <span class="n">RegisterEax</span><span class="p">(),</span> <span class="n">Imm32</span><span class="p">()),</span>
+                <span class="p">(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0x81</span><span class="p">),</span> <span class="n">Slash</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span> <span class="n">Imm32</span><span class="p">()),</span>
+                <span class="p">(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0x21</span><span class="p">),</span> <span class="n">ModRM</span><span class="p">([</span><span class="n">ModRM_REG__REG</span><span class="p">,</span> <span class="n">ModRM_REG__MEM</span><span class="p">]))]</span>
+
+
+<span class="k">class</span> <span class="nc">Or</span><span class="p">(</span><span class="n">Instruction</span><span class="p">):</span>
+    <span class="n">default_32_bits</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">encoding</span> <span class="o">=</span> <span class="p">[(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0x0d</span><span class="p">),</span> <span class="n">RegisterEax</span><span class="p">(),</span> <span class="n">Imm32</span><span class="p">()),</span>
+                <span class="p">(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0x81</span><span class="p">),</span> <span class="n">Slash</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">Imm32</span><span class="p">()),</span>
+                <span class="p">(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0x09</span><span class="p">),</span> <span class="n">ModRM</span><span class="p">([</span><span class="n">ModRM_REG__REG</span><span class="p">,</span> <span class="n">ModRM_REG__MEM</span><span class="p">]))]</span>
+
+
+<span class="k">class</span> <span class="nc">Sub</span><span class="p">(</span><span class="n">Instruction</span><span class="p">):</span>
+    <span class="n">encoding</span> <span class="o">=</span> <span class="p">[(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0x2D</span><span class="p">),</span> <span class="n">RegisterEax</span><span class="p">(),</span> <span class="n">Imm32</span><span class="p">()),</span>
+                <span class="p">(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0x81</span><span class="p">),</span> <span class="n">Slash</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">Imm32</span><span class="p">()),</span>
+                <span class="p">(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0x29</span><span class="p">),</span> <span class="n">ModRM</span><span class="p">([</span><span class="n">ModRM_REG__REG</span><span class="p">,</span> <span class="n">ModRM_REG__MEM</span><span class="p">]))]</span>
+
+
+<span class="k">class</span> <span class="nc">Mov</span><span class="p">(</span><span class="n">Instruction</span><span class="p">):</span>
+    <span class="n">encoding</span> <span class="o">=</span> <span class="p">[(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0x89</span><span class="p">),</span> <span class="n">ModRM</span><span class="p">([</span><span class="n">ModRM_REG__REG</span><span class="p">,</span> <span class="n">ModRM_REG__MEM</span><span class="p">])),</span>
+                <span class="p">(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0xc7</span><span class="p">),</span> <span class="n">Slash</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">Imm32</span><span class="p">()),</span>
+                <span class="p">(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mh">0xb8</span> <span class="o">&gt;&gt;</span> <span class="mi">3</span><span class="p">),</span> <span class="n">X86RegisterSelector</span><span class="p">(),</span> <span class="n">Imm32</span><span class="p">()),</span>
+                <span class="p">(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mh">0x0f20</span><span class="p">),</span> <span class="n">ControlRegisterModRM</span><span class="p">(</span><span class="n">writecr</span><span class="o">=</span><span class="kc">False</span><span class="p">)),</span>
+                <span class="p">(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mh">0x0f22</span><span class="p">),</span> <span class="n">ControlRegisterModRM</span><span class="p">(</span><span class="n">writecr</span><span class="o">=</span><span class="kc">True</span><span class="p">))]</span>
+
+
+<span class="k">class</span> <span class="nc">Movsb</span><span class="p">(</span><span class="n">Instruction</span><span class="p">):</span>
+    <span class="n">encoding</span> <span class="o">=</span> <span class="p">[(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0xa4</span><span class="p">),)]</span>
+
+
+<span class="k">class</span> <span class="nc">Movsd</span><span class="p">(</span><span class="n">Instruction</span><span class="p">):</span>
+    <span class="n">encoding</span> <span class="o">=</span> <span class="p">[(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0xa5</span><span class="p">),)]</span>
+
+
+<span class="k">class</span> <span class="nc">Lea</span><span class="p">(</span><span class="n">Instruction</span><span class="p">):</span>
+    <span class="n">encoding</span> <span class="o">=</span> <span class="p">[(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0x8d</span><span class="p">),</span> <span class="n">ModRM</span><span class="p">([</span><span class="n">ModRM_REG__MEM</span><span class="p">],</span> <span class="n">accept_reverse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">has_direction_bit</span><span class="o">=</span><span class="kc">False</span><span class="p">))]</span>
+
+
+<span class="k">class</span> <span class="nc">Cmp</span><span class="p">(</span><span class="n">Instruction</span><span class="p">):</span>
+    <span class="n">encoding</span> <span class="o">=</span> <span class="p">[(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0x3d</span><span class="p">),</span> <span class="n">RegisterEax</span><span class="p">(),</span> <span class="n">Imm32</span><span class="p">()),</span>
+                <span class="p">(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0x81</span><span class="p">),</span> <span class="n">Slash</span><span class="p">(</span><span class="mi">7</span><span class="p">),</span> <span class="n">Imm32</span><span class="p">()),</span>
+                <span class="p">(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0x3b</span><span class="p">),</span> <span class="n">ModRM</span><span class="p">([</span><span class="n">ModRM_REG__REG</span><span class="p">,</span> <span class="n">ModRM_REG__MEM</span><span class="p">]))]</span>
+
+
+<span class="k">class</span> <span class="nc">Test</span><span class="p">(</span><span class="n">Instruction</span><span class="p">):</span>
+    <span class="n">encoding</span> <span class="o">=</span> <span class="p">[(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0xf7</span><span class="p">),</span> <span class="n">Slash</span><span class="p">(</span><span class="mi">7</span><span class="p">),</span> <span class="n">Imm32</span><span class="p">()),</span>
+                <span class="p">(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0x85</span><span class="p">),</span> <span class="n">ModRM</span><span class="p">([</span><span class="n">ModRM_REG__REG</span><span class="p">,</span> <span class="n">ModRM_REG__MEM</span><span class="p">],</span> <span class="n">has_direction_bit</span><span class="o">=</span><span class="kc">False</span><span class="p">))]</span>
+
+
+<span class="k">class</span> <span class="nc">Out</span><span class="p">(</span><span class="n">Instruction</span><span class="p">):</span>
+    <span class="n">encoding</span> <span class="o">=</span> <span class="p">[(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0xee</span><span class="p">),</span> <span class="n">FixedRegister</span><span class="p">(</span><span class="s1">&#39;DX&#39;</span><span class="p">),</span> <span class="n">FixedRegister</span><span class="p">(</span><span class="s1">&#39;AL&#39;</span><span class="p">)),</span>
+                <span class="p">(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mh">0x66ef</span><span class="p">),</span> <span class="n">FixedRegister</span><span class="p">(</span><span class="s1">&#39;DX&#39;</span><span class="p">),</span> <span class="n">FixedRegister</span><span class="p">(</span><span class="s1">&#39;AX&#39;</span><span class="p">)),</span>  <span class="c1"># Fuck-it hardcoded prefix for now</span>
+                <span class="p">(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0xef</span><span class="p">),</span> <span class="n">FixedRegister</span><span class="p">(</span><span class="s1">&#39;DX&#39;</span><span class="p">),</span> <span class="n">FixedRegister</span><span class="p">(</span><span class="s1">&#39;EAX&#39;</span><span class="p">))]</span>
+
+
+<span class="k">class</span> <span class="nc">In</span><span class="p">(</span><span class="n">Instruction</span><span class="p">):</span>
+    <span class="n">encoding</span> <span class="o">=</span> <span class="p">[(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0xec</span><span class="p">),</span> <span class="n">FixedRegister</span><span class="p">(</span><span class="s1">&#39;AL&#39;</span><span class="p">),</span> <span class="n">FixedRegister</span><span class="p">(</span><span class="s1">&#39;DX&#39;</span><span class="p">)),</span>
+                <span class="p">(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mh">0x66ed</span><span class="p">),</span> <span class="n">FixedRegister</span><span class="p">(</span><span class="s1">&#39;AX&#39;</span><span class="p">),</span> <span class="n">FixedRegister</span><span class="p">(</span><span class="s1">&#39;DX&#39;</span><span class="p">)),</span>  <span class="c1"># Fuck-it hardcoded prefix for now</span>
+                <span class="p">(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0xed</span><span class="p">),</span> <span class="n">FixedRegister</span><span class="p">(</span><span class="s1">&#39;EAX&#39;</span><span class="p">),</span> <span class="n">FixedRegister</span><span class="p">(</span><span class="s1">&#39;DX&#39;</span><span class="p">))]</span>
+
+
+<span class="k">class</span> <span class="nc">Xor</span><span class="p">(</span><span class="n">Instruction</span><span class="p">):</span>
+    <span class="n">encoding</span> <span class="o">=</span> <span class="p">[(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0x31</span><span class="p">),</span> <span class="n">ModRM</span><span class="p">([</span><span class="n">ModRM_REG__REG</span><span class="p">]))]</span>
+
+
+<span class="k">class</span> <span class="nc">Xchg</span><span class="p">(</span><span class="n">Instruction</span><span class="p">):</span>
+    <span class="n">encoding</span> <span class="o">=</span> <span class="p">[(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mh">0x90</span> <span class="o">&gt;&gt;</span> <span class="mi">3</span><span class="p">),</span> <span class="n">RegisterEax</span><span class="p">(),</span> <span class="n">X86RegisterSelector</span><span class="p">()),</span> <span class="p">(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mh">0x90</span> <span class="o">&gt;&gt;</span> <span class="mi">3</span><span class="p">),</span> <span class="n">X86RegisterSelector</span><span class="p">(),</span> <span class="n">RegisterEax</span><span class="p">())]</span>
+
+
+<span class="k">class</span> <span class="nc">Rol</span><span class="p">(</span><span class="n">Instruction</span><span class="p">):</span>
+    <span class="n">encoding</span> <span class="o">=</span> <span class="p">[(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0xC1</span><span class="p">),</span> <span class="n">Slash</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">Imm8</span><span class="p">())]</span>
+
+<span class="k">class</span> <span class="nc">Ror</span><span class="p">(</span><span class="n">Instruction</span><span class="p">):</span>
+    <span class="n">encoding</span> <span class="o">=</span> <span class="p">[(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0xC1</span><span class="p">),</span> <span class="n">Slash</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">Imm8</span><span class="p">())]</span>
+
+<span class="k">class</span> <span class="nc">Shr</span><span class="p">(</span><span class="n">Instruction</span><span class="p">):</span>
+    <span class="n">encoding</span> <span class="o">=</span> <span class="p">[(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0xC1</span><span class="p">),</span> <span class="n">Slash</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">Imm8</span><span class="p">())]</span>
+
+<span class="k">class</span> <span class="nc">Shl</span><span class="p">(</span><span class="n">Instruction</span><span class="p">):</span>
+    <span class="n">encoding</span> <span class="o">=</span> <span class="p">[(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0xC1</span><span class="p">),</span> <span class="n">Slash</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span> <span class="n">Imm8</span><span class="p">())]</span>
+
+<span class="k">class</span> <span class="nc">Cpuid</span><span class="p">(</span><span class="n">Instruction</span><span class="p">):</span>
+    <span class="n">encoding</span> <span class="o">=</span> <span class="p">[(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mh">0x0fa2</span><span class="p">),)]</span>
+
+
+<span class="k">class</span> <span class="nc">Ret</span><span class="p">(</span><span class="n">Instruction</span><span class="p">):</span>
+    <span class="n">encoding</span> <span class="o">=</span> <span class="p">[(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0xc3</span><span class="p">),)]</span>
+
+
+<span class="k">class</span> <span class="nc">ScasB</span><span class="p">(</span><span class="n">Instruction</span><span class="p">):</span>
+    <span class="n">encoding</span> <span class="o">=</span> <span class="p">[(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0xAE</span><span class="p">),)]</span>
+
+<span class="k">class</span> <span class="nc">ScasW</span><span class="p">(</span><span class="n">Instruction</span><span class="p">):</span>
+    <span class="n">encoding</span> <span class="o">=</span> <span class="p">[(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span>  <span class="mh">0x66AF</span><span class="p">),)]</span>
+
+<span class="k">class</span> <span class="nc">ScasD</span><span class="p">(</span><span class="n">Instruction</span><span class="p">):</span>
+    <span class="n">encoding</span> <span class="o">=</span> <span class="p">[(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0xAF</span><span class="p">),)]</span>
+
+
+<span class="k">class</span> <span class="nc">CmpsB</span><span class="p">(</span><span class="n">Instruction</span><span class="p">):</span>
+    <span class="n">default_32_bits</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">encoding</span> <span class="o">=</span> <span class="p">[(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0xa6</span><span class="p">),)]</span>
+
+
+<span class="k">class</span> <span class="nc">CmpsW</span><span class="p">(</span><span class="n">Instruction</span><span class="p">):</span>
+    <span class="n">default_32_bits</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">encoding</span> <span class="o">=</span> <span class="p">[(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mh">0x66A7</span><span class="p">),)]</span>
+
+
+<span class="k">class</span> <span class="nc">CmpsD</span><span class="p">(</span><span class="n">Instruction</span><span class="p">):</span>
+    <span class="n">default_32_bits</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">encoding</span> <span class="o">=</span> <span class="p">[(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0xa7</span><span class="p">),)]</span>
+
+
+<span class="k">class</span> <span class="nc">Nop</span><span class="p">(</span><span class="n">Instruction</span><span class="p">):</span>
+    <span class="n">encoding</span> <span class="o">=</span> <span class="p">[(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0x90</span><span class="p">),)]</span>
+
+<span class="k">class</span> <span class="nc">Not</span><span class="p">(</span><span class="n">Instruction</span><span class="p">):</span>
+    <span class="n">encoding</span> <span class="o">=</span> <span class="p">[(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0xF7</span><span class="p">),</span> <span class="n">Slash</span><span class="p">(</span><span class="mi">2</span><span class="p">))]</span>
+
+<span class="k">class</span> <span class="nc">Retf</span><span class="p">(</span><span class="n">Instruction</span><span class="p">):</span>
+    <span class="n">encoding</span> <span class="o">=</span> <span class="p">[(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0xcb</span><span class="p">),)]</span>
+
+
+<span class="k">class</span> <span class="nc">Int3</span><span class="p">(</span><span class="n">Instruction</span><span class="p">):</span>
+    <span class="n">encoding</span> <span class="o">=</span> <span class="p">[(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0xcc</span><span class="p">),)]</span>
+
+
+<span class="k">class</span> <span class="nc">_NopArtifact</span><span class="p">(</span><span class="n">Nop</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Special NOP used in shellcode reduction&quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">Label</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+
+
+<span class="k">def</span> <span class="nf">JmpAt</span><span class="p">(</span><span class="n">addr</span><span class="p">):</span>
+    <span class="n">code</span> <span class="o">=</span> <span class="n">MultipleInstr</span><span class="p">()</span>
+    <span class="n">code</span> <span class="o">+=</span> <span class="n">Push</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span>
+    <span class="n">code</span> <span class="o">+=</span> <span class="n">Ret</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">code</span>
+
+
+<span class="k">class</span> <span class="nc">MultipleInstr</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="n">JUMP_SIZE</span> <span class="o">=</span> <span class="mi">6</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_instrs</span><span class="o">=</span><span class="p">()):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">instrs</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">labels</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">expected_labels</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="c1"># List of all labeled jump already resolved</span>
+        <span class="c1"># Will be used for &#39;relocation&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">computed_jump</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">init_instrs</span><span class="p">:</span>
+            <span class="bp">self</span> <span class="o">+=</span> <span class="n">i</span>
+
+    <span class="k">def</span> <span class="nf">get_code</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">expected_labels</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unresolved labels: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">expected_labels</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+        <span class="k">return</span> <span class="n">b</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get_code</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">instrs</span><span class="o">.</span><span class="n">items</span><span class="p">())])</span>
+
+    <span class="k">def</span> <span class="nf">add_instruction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instruction</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">instruction</span><span class="p">,</span> <span class="n">Label</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_label</span><span class="p">(</span><span class="n">instruction</span><span class="p">)</span>
+        <span class="c1"># Change DelayedJump to LabeledJump ?</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">instruction</span><span class="p">,</span> <span class="n">DelayedJump</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_delayed_jump</span><span class="p">(</span><span class="n">instruction</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">instruction</span><span class="p">,</span> <span class="p">(</span><span class="n">Instruction</span><span class="p">,</span> <span class="n">Prefix</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">instrs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">]</span> <span class="o">=</span> <span class="n">instruction</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">instruction</span><span class="o">.</span><span class="n">get_code</span><span class="p">())</span>
+            <span class="k">return</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Don&#39;t know what to do with </span><span class="si">{0}</span><span class="s2"> of type </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">instruction</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">instruction</span><span class="p">)))</span>
+
+    <span class="k">def</span> <span class="nf">add_label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">label</span><span class="o">.</span><span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">expected_labels</span><span class="p">:</span>
+            <span class="c1"># Label that have no jump before definition</span>
+            <span class="c1"># Just registed the address of the label</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">[</span><span class="n">label</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span>
+            <span class="k">return</span>
+        <span class="c1"># Label with jmp before definition</span>
+        <span class="c1"># Lot of stuff todo:</span>
+            <span class="c1"># Find all delayed jump that refer to this jump</span>
+            <span class="c1"># Replace them with real jump</span>
+            <span class="c1"># If size of jump &lt; JUMP_SIZE: relocate everything we can</span>
+            <span class="c1"># Update expected_labels</span>
+        <span class="k">for</span> <span class="n">jump_to_label</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">expected_labels</span><span class="p">[</span><span class="n">label</span><span class="o">.</span><span class="n">name</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">jump_to_label</span><span class="o">.</span><span class="n">offset</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">instrs</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;WTF REPLACE EXISTING INSTR...&quot;</span><span class="p">)</span>
+            <span class="n">distance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">-</span> <span class="n">jump_to_label</span><span class="o">.</span><span class="n">offset</span>
+            <span class="n">real_jump</span> <span class="o">=</span> <span class="n">jump_to_label</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="n">distance</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">instrs</span><span class="p">[</span><span class="n">jump_to_label</span><span class="o">.</span><span class="n">offset</span><span class="p">]</span> <span class="o">=</span> <span class="n">real_jump</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">computed_jump</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">jump_to_label</span><span class="o">.</span><span class="n">offset</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">JUMP_SIZE</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">real_jump</span><span class="o">.</span><span class="n">get_code</span><span class="p">())):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">instrs</span><span class="p">[</span><span class="n">jump_to_label</span><span class="o">.</span><span class="n">offset</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">real_jump</span><span class="o">.</span><span class="n">get_code</span><span class="p">())</span> <span class="o">+</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">_NopArtifact</span><span class="p">()</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">expected_labels</span><span class="p">[</span><span class="n">label</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">[</span><span class="n">label</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">expected_labels</span><span class="p">:</span>
+            <span class="c1"># No more un-resolved label (for now): time to reduce the shellcode</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_reduce_shellcode</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">add_delayed_jump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jump</span><span class="p">):</span>
+        <span class="n">dst</span> <span class="o">=</span> <span class="n">jump</span><span class="o">.</span><span class="n">label</span>
+        <span class="k">if</span> <span class="n">dst</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">:</span>
+            <span class="c1"># Jump to already defined labels</span>
+            <span class="c1"># Nothing fancy: get offset of label and jump to it !</span>
+            <span class="n">distance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">[</span><span class="n">dst</span><span class="p">]</span>
+            <span class="n">jump_instruction</span> <span class="o">=</span> <span class="n">jump</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="o">-</span><span class="n">distance</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">computed_jump</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">[</span><span class="n">dst</span><span class="p">]))</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_instruction</span><span class="p">(</span><span class="n">jump_instruction</span><span class="p">)</span>
+        <span class="c1"># Jump to undefined label</span>
+        <span class="c1"># Add label to expected ones</span>
+        <span class="c1"># Add jump info -&gt; offset of jump | type</span>
+        <span class="c1"># Reserve space for call !</span>
+        <span class="n">jump</span><span class="o">.</span><span class="n">offset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">expected_labels</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">dst</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">jump</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">JUMP_SIZE</span>
+        <span class="k">return</span>
+
+    <span class="k">def</span> <span class="nf">_reduce_shellcode</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">to_remove</span> <span class="o">=</span> <span class="p">[</span><span class="n">offset</span> <span class="k">for</span> <span class="n">offset</span><span class="p">,</span> <span class="n">instr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">instrs</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">instr</span><span class="p">)</span> <span class="o">==</span> <span class="n">_NopArtifact</span><span class="p">]</span>
+        <span class="k">while</span> <span class="n">to_remove</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_remove_nop_artifact</span><span class="p">(</span><span class="n">to_remove</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="c1"># _remove_nop_artifact will change the offsets of the nop</span>
+            <span class="c1"># Need to refresh these offset</span>
+            <span class="n">to_remove</span> <span class="o">=</span> <span class="p">[</span><span class="n">offset</span> <span class="k">for</span> <span class="n">offset</span><span class="p">,</span> <span class="n">instr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">instrs</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">instr</span><span class="p">)</span> <span class="o">==</span> <span class="n">_NopArtifact</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_remove_nop_artifact</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">offset</span><span class="p">):</span>
+        <span class="c1"># Remove a NOP from the shellcode</span>
+        <span class="k">for</span> <span class="n">src</span><span class="p">,</span> <span class="n">dst</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">computed_jump</span><span class="p">:</span>
+            <span class="c1"># Reduce size of Jump over the nop (both sens)</span>
+            <span class="k">if</span> <span class="n">src</span> <span class="o">&lt;</span> <span class="n">offset</span> <span class="o">&lt;</span> <span class="n">dst</span> <span class="ow">or</span> <span class="n">dst</span> <span class="o">&lt;</span> <span class="n">offset</span> <span class="o">&lt;</span> <span class="n">src</span><span class="p">:</span>
+                <span class="n">old_jmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">instrs</span><span class="p">[</span><span class="n">src</span><span class="p">]</span>
+                <span class="n">old_jump_size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">old_jmp</span><span class="o">.</span><span class="n">get_code</span><span class="p">())</span>
+                <span class="k">if</span> <span class="n">src</span> <span class="o">&lt;</span> <span class="n">offset</span> <span class="o">&lt;</span> <span class="n">dst</span><span class="p">:</span>
+                    <span class="n">new_jmp</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">old_jmp</span><span class="p">)(</span><span class="n">dst</span> <span class="o">-</span> <span class="n">src</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">new_jmp</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">old_jmp</span><span class="p">)(</span><span class="n">dst</span> <span class="o">-</span> <span class="n">src</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">new_jmp_size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_jmp</span><span class="o">.</span><span class="n">get_code</span><span class="p">())</span>
+                <span class="k">if</span> <span class="n">new_jmp_size</span> <span class="o">&gt;</span> <span class="n">old_jump_size</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Wtf jump of smaller size is bigger.. ABORT&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">instrs</span><span class="p">[</span><span class="n">src</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_jmp</span>
+                <span class="c1"># Add other _NopArtifact if jump instruction size is reduced</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">old_jump_size</span> <span class="o">-</span> <span class="n">new_jmp_size</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">instrs</span><span class="p">[</span><span class="n">src</span> <span class="o">+</span> <span class="n">new_jmp_size</span> <span class="o">+</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">_NopArtifact</span><span class="p">()</span>
+
+        <span class="c1"># dec offset of all Label after the NOP</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">labeloffset</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">labeloffset</span> <span class="o">&gt;</span> <span class="n">offset</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">labeloffset</span> <span class="o">-</span> <span class="mi">1</span>
+
+        <span class="c1"># dec offset of all instr after the NOP</span>
+        <span class="n">new_instr</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">instroffset</span><span class="p">,</span> <span class="n">instr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">instrs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">instroffset</span> <span class="o">==</span> <span class="n">offset</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">instroffset</span> <span class="o">&gt;</span> <span class="n">offset</span><span class="p">:</span>
+                <span class="n">instroffset</span> <span class="o">-=</span> <span class="mi">1</span>
+            <span class="n">new_instr</span><span class="p">[</span><span class="n">instroffset</span><span class="p">]</span> <span class="o">=</span> <span class="n">instr</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">instrs</span> <span class="o">=</span> <span class="n">new_instr</span>
+        <span class="c1"># Update all computed jump</span>
+        <span class="n">new_computed_jump</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">src</span><span class="p">,</span> <span class="n">dst</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">computed_jump</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">src</span> <span class="o">&gt;</span> <span class="n">offset</span><span class="p">:</span>
+                <span class="n">src</span> <span class="o">-=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">dst</span> <span class="o">&gt;</span> <span class="n">offset</span><span class="p">:</span>
+                <span class="n">dst</span> <span class="o">-=</span> <span class="mi">1</span>
+            <span class="n">new_computed_jump</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">computed_jump</span> <span class="o">=</span> <span class="n">new_computed_jump</span>
+        <span class="c1"># dec size of the shellcode</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">-=</span> <span class="mi">1</span>
+
+    <span class="k">def</span> <span class="nf">merge_shellcode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="n">shared_labels</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">)</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">labels</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">shared_labels</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot merge shellcode: shared labels </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">shared_labels</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">offset</span><span class="p">,</span> <span class="n">instr</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">instrs</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+            <span class="k">for</span> <span class="n">label_name</span> <span class="ow">in</span> <span class="p">[</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">label_offset</span> <span class="ow">in</span> <span class="n">other</span><span class="o">.</span><span class="n">labels</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">label_offset</span> <span class="o">==</span> <span class="n">offset</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_instruction</span><span class="p">(</span><span class="n">Label</span><span class="p">(</span><span class="n">label_name</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_instruction</span><span class="p">(</span><span class="n">instr</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__iadd__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">MultipleInstr</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">merge_shellcode</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_instruction</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+
+<span class="k">def</span> <span class="nf">split_in_instruction</span><span class="p">(</span><span class="nb">str</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="k">for</span> <span class="n">instr</span> <span class="ow">in</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">instr</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">yield</span> <span class="n">instr</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">assemble</span><span class="p">(</span><span class="nb">str</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Play test&quot;&quot;&quot;</span>
+    <span class="n">shellcode</span> <span class="o">=</span> <span class="n">MultipleInstr</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">instr</span> <span class="ow">in</span> <span class="n">split_in_instruction</span><span class="p">(</span><span class="nb">str</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">instr</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">mnemo</span><span class="p">,</span> <span class="n">args_raw</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">instr_object</span> <span class="o">=</span> <span class="nb">globals</span><span class="p">()[</span><span class="n">mnemo</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknow mnemonic &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mnemo</span><span class="p">))</span>
+
+        <span class="n">args</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">args_raw</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args_raw</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">):</span>
+                <span class="n">arg</span> <span class="o">=</span> <span class="n">arg</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">arg</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;[&quot;</span> <span class="ow">or</span> <span class="n">arg</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;:[&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">arg</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;]&quot;</span><span class="p">:</span>
+                    <span class="n">arg</span> <span class="o">=</span> <span class="n">mem</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">arg</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+                    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                        <span class="k">pass</span>
+                <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
+        <span class="n">shellcode</span> <span class="o">+=</span> <span class="n">instr_object</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">shellcode</span><span class="o">.</span><span class="n">get_code</span><span class="p">()</span>
+
+<span class="c1"># IDA : import windows.native_exec.simple_x86 as x86</span>
+<span class="c1"># IDA testing</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">midap</span>
+    <span class="kn">import</span> <span class="nn">idc</span>
+    <span class="n">in_IDA</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">in_IDA</span> <span class="o">=</span> <span class="kc">False</span>
+
+
+<span class="k">if</span> <span class="n">in_IDA</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">test_code</span><span class="p">():</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">MultipleInstr</span><span class="p">()</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="n">Mov</span><span class="p">(</span><span class="s2">&quot;Eax&quot;</span><span class="p">,</span> <span class="s2">&quot;ESI&quot;</span><span class="p">)</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="n">Inc</span><span class="p">(</span><span class="s2">&quot;Ecx&quot;</span><span class="p">)</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="n">Dec</span><span class="p">(</span><span class="s2">&quot;edi&quot;</span><span class="p">)</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="n">Ret</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">s</span>
+
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">():</span>
+        <span class="n">idc</span><span class="o">.</span><span class="n">MakeUnknown</span><span class="p">(</span><span class="n">idc</span><span class="o">.</span><span class="n">MinEA</span><span class="p">(),</span> <span class="mh">0x1000</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mh">0x1000</span><span class="p">):</span>
+            <span class="n">idc</span><span class="o">.</span><span class="n">PatchByte</span><span class="p">(</span><span class="n">idc</span><span class="o">.</span><span class="n">MinEA</span><span class="p">()</span> <span class="o">+</span> <span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="n">s</span> <span class="o">=</span> <span class="n">test_code</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">tst</span><span class="p">():</span>
+        <span class="n">reset</span><span class="p">()</span>
+        <span class="n">midap</span><span class="o">.</span><span class="n">here</span><span class="p">(</span><span class="n">idc</span><span class="o">.</span><span class="n">MinEA</span><span class="p">())</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">get_code</span><span class="p">())</span>
+        <span class="n">idc</span><span class="o">.</span><span class="n">MakeFunction</span><span class="p">(</span><span class="n">idc</span><span class="o">.</span><span class="n">MinEA</span><span class="p">())</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.2 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>

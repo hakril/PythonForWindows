@@ -1,0 +1,236 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>6. windows.wintrust – Checking signature &mdash; PythonForWindows 0.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="PythonForWindows 0.2 documentation" href="index.html" />
+    <link rel="next" title="7. windows.debug – Debugging" href="debug.html" />
+    <link rel="prev" title="5. windows.utils – Windows Utilities" href="utils.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="debug.html" title="7. windows.debug – Debugging"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="utils.html" title="5. windows.utils – Windows Utilities"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-windows.wintrust">
+<span id="windows-wintrust-checking-signature"></span><h1>6. <code class="docutils literal"><span class="pre">windows.wintrust</span></code> &#8211; Checking signature<a class="headerlink" href="#module-windows.wintrust" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">See sample <a class="reference internal" href="sample.html#sample-wintrust"><span class="std std-ref">windows.wintrust</span></a></p>
+</div>
+<p>The <code class="xref py py-mod docutils literal"><span class="pre">wintrust</span></code> module offers wrapper around <code class="docutils literal"><span class="pre">wintrust.dll</span></code>.
+It allows to check the signature of a file.</p>
+<p>The signature of a file can be at two differents place:</p>
+<blockquote>
+<div><ul class="simple">
+<li>In the file itself (<a class="reference internal" href="#windows.wintrust.check_signature" title="windows.wintrust.check_signature"><code class="xref py py-func docutils literal"><span class="pre">check_signature()</span></code></a>)</li>
+<li>In a catalog file  (<a class="reference internal" href="#windows.wintrust.full_signature_information" title="windows.wintrust.full_signature_information"><code class="xref py py-func docutils literal"><span class="pre">full_signature_information()</span></code></a>)</li>
+</ul>
+</div></blockquote>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><a class="reference external" href="https://msdn.microsoft.com/en-us/library/windows/hardware/ff537872(v=vs.85).aspx">Explanation about catalog files</a></p>
+</div>
+<div class="section" id="api">
+<h2>6.1. API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="windows.wintrust.is_signed">
+<code class="descclassname">windows.wintrust.</code><code class="descname">is_signed</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/wintrust.html#is_signed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.wintrust.is_signed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if <code class="docutils literal"><span class="pre">filename</span></code> is signed:</p>
+<blockquote>
+<div><ul class="simple">
+<li>File embeds a valid signature</li>
+<li>File is part of a signed catalog file</li>
+</ul>
+</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">bool</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="windows.wintrust.full_signature_information">
+<code class="descclassname">windows.wintrust.</code><code class="descname">full_signature_information</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/wintrust.html#full_signature_information"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.wintrust.full_signature_information" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns more information about the signature of <code class="docutils literal"><span class="pre">filename</span></code></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#windows.wintrust.SignatureData" title="windows.wintrust.SignatureData"><code class="xref py py-class docutils literal"><span class="pre">SignatureData</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="windows.wintrust.check_signature">
+<code class="descclassname">windows.wintrust.</code><code class="descname">check_signature</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/wintrust.html#check_signature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.wintrust.check_signature" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if <code class="docutils literal"><span class="pre">filename</span></code> embeds a valid signature.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a>: <code class="docutils literal"><span class="pre">0</span></code> if <code class="docutils literal"><span class="pre">filename</span></code> have a valid signature else the error</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<div class="section" id="signaturedata">
+<h3>6.1.1. SignatureData<a class="headerlink" href="#signaturedata" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="windows.wintrust.SignatureData">
+<em class="property">class </em><code class="descclassname">windows.wintrust.</code><code class="descname">SignatureData</code><span class="sig-paren">(</span><em>signed</em>, <em>catalog</em>, <em>catalogsigned</em>, <em>additionalinfo</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.wintrust.SignatureData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Signature information for <code class="docutils literal"><span class="pre">FILENAME</span></code>:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal"><span class="pre">signed</span></code>: True if <code class="docutils literal"><span class="pre">FILENAME</span></code> embeds a valide signature</li>
+<li><code class="docutils literal"><span class="pre">catalog</span></code>: The filename of the catalog <code class="docutils literal"><span class="pre">FILENAME</span></code> is part of (if any)</li>
+<li><code class="docutils literal"><span class="pre">catalogsigned</span></code>: True if <code class="docutils literal"><span class="pre">catalog</span></code> embeds a valide signature</li>
+<li><code class="docutils literal"><span class="pre">additionalinfo</span></code>: The return error of <code class="docutils literal"><span class="pre">check_signature(FILENAME)</span></code></li>
+</ul>
+</div></blockquote>
+<p><code class="docutils literal"><span class="pre">additionalinfo</span></code> is useful to know if <code class="docutils literal"><span class="pre">FILENAME</span></code> signature was rejected for an invalid root / expired cert.</p>
+<dl class="attribute">
+<dt id="windows.wintrust.SignatureData.additionalinfo">
+<code class="descname">additionalinfo</code><a class="headerlink" href="#windows.wintrust.SignatureData.additionalinfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 3</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.wintrust.SignatureData.catalog">
+<code class="descname">catalog</code><a class="headerlink" href="#windows.wintrust.SignatureData.catalog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.wintrust.SignatureData.catalogsigned">
+<code class="descname">catalogsigned</code><a class="headerlink" href="#windows.wintrust.SignatureData.catalogsigned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 2</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.wintrust.SignatureData.signed">
+<code class="descname">signed</code><a class="headerlink" href="#windows.wintrust.SignatureData.signed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">6. <code class="docutils literal"><span class="pre">windows.wintrust</span></code> &#8211; Checking signature</a><ul>
+<li><a class="reference internal" href="#api">6.1. API</a><ul>
+<li><a class="reference internal" href="#signaturedata">6.1.1. SignatureData</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="utils.html"
+                        title="previous chapter">5. <code class="docutils literal"><span class="pre">windows.utils</span></code> &#8211; Windows Utilities</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="debug.html"
+                        title="next chapter">7. <code class="docutils literal"><span class="pre">windows.debug</span></code> &#8211; Debugging</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/wintrust.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="debug.html" title="7. windows.debug – Debugging"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="utils.html" title="5. windows.utils – Windows Utilities"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>

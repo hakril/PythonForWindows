@@ -1,0 +1,161 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>8. windows.com - Component Object Model &mdash; PythonForWindows 0.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="PythonForWindows 0.2 documentation" href="index.html" />
+    <link rel="next" title="9. IAT hooking" href="iat_hook.html" />
+    <link rel="prev" title="7. windows.debug – Debugging" href="debug.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="iat_hook.html" title="9. IAT hooking"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="debug.html" title="7. windows.debug – Debugging"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-windows.com">
+<span id="windows-com-component-object-model"></span><h1>8. <a class="reference internal" href="#module-windows.com" title="windows.com"><code class="xref py py-mod docutils literal"><span class="pre">windows.com</span></code></a> - Component Object Model<a class="headerlink" href="#module-windows.com" title="Permalink to this headline">¶</a></h1>
+<p>A module to call <cite>COM</cite> interfaces from <cite>Python</cite> or
+<cite>COM</cite> vtable in python.</p>
+<p>This code is only used in <a class="reference internal" href="wmi.html#module-windows.winobject.wmi" title="windows.winobject.wmi"><code class="xref py py-mod docutils literal"><span class="pre">windows.winobject.wmi</span></code></a> and <a class="reference internal" href="network.html#module-windows.winobject.network" title="windows.winobject.network"><code class="xref py py-mod docutils literal"><span class="pre">windows.winobject.network</span></code></a> for the firewall.
+The ability to create <cite>COM</cite> vtable is used in the <a class="reference external" href="https://github.com/sogeti-esec-lab/LKD/">LKD project</a> .</p>
+<div class="section" id="using-a-com-interface">
+<h2>8.1. Using a COM interface<a class="headerlink" href="#using-a-com-interface" title="Permalink to this headline">¶</a></h2>
+<p>It&#8217;s possible to directly call <cite>COM</cite> interface from python. All you need is the definition of the <cite>COM</cite> interface.</p>
+<p>There are three ways to get the definition of the code interface:</p>
+<blockquote>
+<div><ul class="simple">
+<li>By using it from <code class="xref py py-mod docutils literal"><span class="pre">windows.generated_def.interfaces</span></code></li>
+<li>By writing it yourself : &lt;<a class="reference external" href="https://github.com/sogeti-esec-lab/LKD/blob/ba40727d7d257b00f89fc6ca7296c9833b7b75b2/dbginterface/remote.py#L56">https://github.com/sogeti-esec-lab/LKD/blob/ba40727d7d257b00f89fc6ca7296c9833b7b75b2/dbginterface/remote.py#L56</a>&gt;`_</li>
+<li>By generating it.</li>
+</ul>
+</div></blockquote>
+<p>To generate a <cite>COM</cite> interface you need its definition from the &#8221;.c&#8221; file.
+Then add thisit to <code class="docutils literal"><span class="pre">PythonForWindows\ctypes_generation\com\MyInterface.txt</span></code>.
+Finally re-generate the interface using <code class="docutils literal"><span class="pre">generate.py</span></code>.</p>
+<p>When you have the <cite>COM</cite> interface defintion you can create an instance of it.
+Then you need to retrieve the interface by using an API returning an object or <code class="xref py py-func docutils literal"><span class="pre">window.com.create_instance()</span></code>.
+You can then use the instance to call whatever method you need.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">see sample <a class="reference internal" href="sample.html#sample-com-firewall"><span class="std std-ref">using COM: INetFwPolicy2</span></a></p>
+</div>
+</div>
+<div class="section" id="implementing-a-com-interface">
+<h2>8.2. Implementing a COM interface<a class="headerlink" href="#implementing-a-com-interface" title="Permalink to this headline">¶</a></h2>
+<p>To create <cite>COM</cite> object you need to:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>Describe your ComVtable <a class="reference external" href="https://github.com/sogeti-esec-lab/LKD/blob/ba40727d7d257b00f89fc6ca7296c9833b7b75b2/simple_com.py#L89">CODE1</a></li>
+<li>Implement the python functions described <a class="reference external" href="https://github.com/sogeti-esec-lab/LKD/blob/ba40727d7d257b00f89fc6ca7296c9833b7b75b2/dbginterface/remote.py#L233">CODE2</a></li>
+<li>Create an instance and pass it to whatever native function expects it <a class="reference external" href="https://github.com/sogeti-esec-lab/LKD/blob/ba40727d7d257b00f89fc6ca7296c9833b7b75b2/dbginterface/remote.py#L438">CODE3</a></li>
+</ol>
+</div></blockquote>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">8. <code class="docutils literal"><span class="pre">windows.com</span></code> - Component Object Model</a><ul>
+<li><a class="reference internal" href="#using-a-com-interface">8.1. Using a COM interface</a></li>
+<li><a class="reference internal" href="#implementing-a-com-interface">8.2. Implementing a COM interface</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="debug.html"
+                        title="previous chapter">7. <code class="docutils literal"><span class="pre">windows.debug</span></code> &#8211; Debugging</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="iat_hook.html"
+                        title="next chapter">9. IAT hooking</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/com.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="iat_hook.html" title="9. IAT hooking"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="debug.html" title="7. windows.debug – Debugging"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>

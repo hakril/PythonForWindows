@@ -1,0 +1,243 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>2.7. Service &mdash; PythonForWindows 0.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="PythonForWindows 0.2 documentation" href="index.html" />
+    <link rel="up" title="2. The windows objects" href="various.html" />
+    <link rel="next" title="2.8. Volume – The logical drives" href="volume.html" />
+    <link rel="prev" title="2.6. Network" href="network.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="volume.html" title="2.8. Volume – The logical drives"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="network.html" title="2.6. Network"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.2 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="various.html" accesskey="U">2. The <code class="docutils literal"><span class="pre">windows</span></code> objects</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="service">
+<h1>2.7. Service<a class="headerlink" href="#service" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">See sample <a class="reference internal" href="sample.html#sample-system"><span class="std std-ref">windows.system</span></a></p>
+</div>
+<span class="target" id="module-windows.winobject.service"></span><dl class="class">
+<dt id="windows.winobject.service.ServiceStatus">
+<em class="property">class </em><code class="descclassname">windows.winobject.service.</code><code class="descname">ServiceStatus</code><span class="sig-paren">(</span><em>type</em>, <em>state</em>, <em>control_accepted</em>, <em>flags</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.service.ServiceStatus" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">type</span></code> might be one of:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal"><span class="pre">SERVICE_KERNEL_DRIVER(0x1L)</span></code></li>
+<li><code class="docutils literal"><span class="pre">SERVICE_FILE_SYSTEM_DRIVER(0x2L)</span></code></li>
+<li><code class="docutils literal"><span class="pre">SERVICE_WIN32_OWN_PROCESS(0x10L)</span></code></li>
+<li><code class="docutils literal"><span class="pre">SERVICE_WIN32_SHARE_PROCESS(0x20L)</span></code></li>
+<li><code class="docutils literal"><span class="pre">SERVICE_INTERACTIVE_PROCESS(0x100L)</span></code></li>
+</ul>
+</div></blockquote>
+<p><code class="docutils literal"><span class="pre">state</span></code> might be one of:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal"><span class="pre">SERVICE_STOPPED(0x1L)</span></code></li>
+<li><code class="docutils literal"><span class="pre">SERVICE_START_PENDING(0x2L)</span></code></li>
+<li><code class="docutils literal"><span class="pre">SERVICE_STOP_PENDING(0x3L)</span></code></li>
+<li><code class="docutils literal"><span class="pre">SERVICE_RUNNING(0x4L)</span></code></li>
+<li><code class="docutils literal"><span class="pre">SERVICE_CONTINUE_PENDING(0x5L)</span></code></li>
+<li><code class="docutils literal"><span class="pre">SERVICE_PAUSE_PENDING(0x6L)</span></code></li>
+<li><code class="docutils literal"><span class="pre">SERVICE_PAUSED(0x7L)</span></code></li>
+</ul>
+</div></blockquote>
+<p><code class="docutils literal"><span class="pre">flags</span></code> might be one of:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal"><span class="pre">0</span></code></li>
+<li><code class="docutils literal"><span class="pre">SERVICE_RUNS_IN_SYSTEM_PROCESS(0x1L)</span></code></li>
+</ul>
+</div></blockquote>
+<dl class="attribute">
+<dt id="windows.winobject.service.ServiceStatus.control_accepted">
+<code class="descname">control_accepted</code><a class="headerlink" href="#windows.winobject.service.ServiceStatus.control_accepted" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 2</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.service.ServiceStatus.flags">
+<code class="descname">flags</code><a class="headerlink" href="#windows.winobject.service.ServiceStatus.flags" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 3</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.service.ServiceStatus.state">
+<code class="descname">state</code><a class="headerlink" href="#windows.winobject.service.ServiceStatus.state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.service.ServiceStatus.type">
+<code class="descname">type</code><a class="headerlink" href="#windows.winobject.service.ServiceStatus.type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="windows.winobject.service.ServiceA">
+<em class="property">class </em><code class="descclassname">windows.winobject.service.</code><code class="descname">ServiceA</code><a class="reference internal" href="_modules/windows/winobject/service.html#ServiceA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.service.ServiceA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">windows.winobject.service.Service</span></code>, <code class="xref py py-class docutils literal"><span class="pre">windows.generated_def.winstructs._ENUM_SERVICE_STATUS_PROCESSA</span></code></p>
+<p>A Service object with ascii data</p>
+<dl class="attribute">
+<dt id="windows.winobject.service.ServiceA.description">
+<code class="descname">description</code><a class="headerlink" href="#windows.winobject.service.ServiceA.description" title="Permalink to this definition">¶</a></dt>
+<dd><p>The description of the service</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.service.ServiceA.name">
+<code class="descname">name</code><a class="headerlink" href="#windows.winobject.service.ServiceA.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the service</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.service.ServiceA.process">
+<code class="descname">process</code><a class="headerlink" href="#windows.winobject.service.ServiceA.process" title="Permalink to this definition">¶</a></dt>
+<dd><p>The process running the service (if any)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="process.html#windows.winobject.process.WinProcess" title="windows.winobject.process.WinProcess"><code class="xref py py-class docutils literal"><span class="pre">WinProcess</span></code></a> or <code class="docutils literal"><span class="pre">None</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.service.ServiceA.status">
+<code class="descname">status</code><a class="headerlink" href="#windows.winobject.service.ServiceA.status" title="Permalink to this definition">¶</a></dt>
+<dd><p>The status of the service</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.service.ServiceStatus" title="windows.winobject.service.ServiceStatus"><code class="xref py py-class docutils literal"><span class="pre">ServiceStatus</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="network.html"
+                        title="previous chapter">2.6. Network</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="volume.html"
+                        title="next chapter">2.8. Volume &#8211; The logical drives</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/service.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="volume.html" title="2.8. Volume – The logical drives"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="network.html" title="2.6. Network"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.2 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="various.html" >2. The <code class="docutils literal"><span class="pre">windows</span></code> objects</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>

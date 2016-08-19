@@ -1,0 +1,646 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>2.4. Exception and Context related structures &mdash; PythonForWindows 0.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="PythonForWindows 0.2 documentation" href="index.html" />
+    <link rel="up" title="2. The windows objects" href="various.html" />
+    <link rel="next" title="2.5. Registry" href="registry.html" />
+    <link rel="prev" title="2.1. Processes and Threads" href="process.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="registry.html" title="2.5. Registry"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="process.html" title="2.1. Processes and Threads"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.2 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="various.html" accesskey="U">2. The <code class="docutils literal"><span class="pre">windows</span></code> objects</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-windows.winobject.exception">
+<span id="exception-and-context-related-structures"></span><h1>2.4. Exception and Context related structures<a class="headerlink" href="#module-windows.winobject.exception" title="Permalink to this headline">¶</a></h1>
+<p>This module regroups all the Exception/Context related structures and functions.
+Most of the structures are the Windows structure with a prefix <code class="docutils literal"><span class="pre">E</span></code> (For enhanced)</p>
+<p>Those structure have the same fields that the normal windows ones but their types might vary for a simpler use.</p>
+<p>This module also define the decorator <a class="reference internal" href="#windows.winobject.exception.VectoredException" title="windows.winobject.exception.VectoredException"><code class="xref py py-func docutils literal"><span class="pre">VectoredException()</span></code></a> which allows to play with <code class="docutils literal"><span class="pre">Vectored</span> <span class="pre">Exception</span> <span class="pre">Handler</span></code> in Python</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">See sample <a class="reference internal" href="sample.html#sample-vectoredexception"><span class="std std-ref">VectoredException()</span></a> samples</p>
+</div>
+<div class="section" id="exception-records">
+<h2>2.4.1. Exception Records<a class="headerlink" href="#exception-records" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="windows.winobject.exception.EEXCEPTION_RECORD">
+<em class="property">class </em><code class="descclassname">windows.winobject.exception.</code><code class="descname">EEXCEPTION_RECORD</code><a class="reference internal" href="_modules/windows/winobject/exception.html#EEXCEPTION_RECORD"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.exception.EEXCEPTION_RECORD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enhanced exception record</p>
+<dl class="attribute">
+<dt id="windows.winobject.exception.EEXCEPTION_RECORD.ExceptionAddress">
+<code class="descname">ExceptionAddress</code><a class="headerlink" href="#windows.winobject.exception.EEXCEPTION_RECORD.ExceptionAddress" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Exception Address</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.exception.EEXCEPTION_RECORD.ExceptionCode">
+<code class="descname">ExceptionCode</code><a class="headerlink" href="#windows.winobject.exception.EEXCEPTION_RECORD.ExceptionCode" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Exception code</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.exception.EEXCEPTION_RECORD.fields">
+<code class="descname">fields</code><em class="property"> = ['ExceptionCode', 'ExceptionFlags', 'ExceptionRecord', 'ExceptionAddress', 'NumberParameters', 'ExceptionInformation']</em><a class="headerlink" href="#windows.winobject.exception.EEXCEPTION_RECORD.fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>The fields of the structure</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="windows.winobject.exception.EEXCEPTION_RECORD32">
+<em class="property">class </em><code class="descclassname">windows.winobject.exception.</code><code class="descname">EEXCEPTION_RECORD32</code><a class="reference internal" href="_modules/windows/winobject/exception.html#EEXCEPTION_RECORD32"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.exception.EEXCEPTION_RECORD32" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enhanced exception record (32bits)</p>
+<dl class="attribute">
+<dt id="windows.winobject.exception.EEXCEPTION_RECORD32.ExceptionAddress">
+<code class="descname">ExceptionAddress</code><a class="headerlink" href="#windows.winobject.exception.EEXCEPTION_RECORD32.ExceptionAddress" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Exception Address</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.exception.EEXCEPTION_RECORD32.ExceptionCode">
+<code class="descname">ExceptionCode</code><a class="headerlink" href="#windows.winobject.exception.EEXCEPTION_RECORD32.ExceptionCode" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Exception code</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.exception.EEXCEPTION_RECORD32.fields">
+<code class="descname">fields</code><em class="property"> = ['ExceptionCode', 'ExceptionFlags', 'ExceptionRecord', 'ExceptionAddress', 'NumberParameters', 'ExceptionInformation']</em><a class="headerlink" href="#windows.winobject.exception.EEXCEPTION_RECORD32.fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>The fields of the structure</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="windows.winobject.exception.EEXCEPTION_RECORD64">
+<em class="property">class </em><code class="descclassname">windows.winobject.exception.</code><code class="descname">EEXCEPTION_RECORD64</code><a class="reference internal" href="_modules/windows/winobject/exception.html#EEXCEPTION_RECORD64"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.exception.EEXCEPTION_RECORD64" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enhanced exception record (64bits)</p>
+<dl class="attribute">
+<dt id="windows.winobject.exception.EEXCEPTION_RECORD64.ExceptionAddress">
+<code class="descname">ExceptionAddress</code><a class="headerlink" href="#windows.winobject.exception.EEXCEPTION_RECORD64.ExceptionAddress" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Exception Address</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.exception.EEXCEPTION_RECORD64.ExceptionCode">
+<code class="descname">ExceptionCode</code><a class="headerlink" href="#windows.winobject.exception.EEXCEPTION_RECORD64.ExceptionCode" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Exception code</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.exception.EEXCEPTION_RECORD64.fields">
+<code class="descname">fields</code><em class="property"> = ['ExceptionCode', 'ExceptionFlags', 'ExceptionRecord', 'ExceptionAddress', 'NumberParameters', '__unusedAlignment', 'ExceptionInformation']</em><a class="headerlink" href="#windows.winobject.exception.EEXCEPTION_RECORD64.fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>The fields of the structure</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="exception-debug-info">
+<h2>2.4.2. EXCEPTION DEBUG INFO<a class="headerlink" href="#exception-debug-info" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="windows.winobject.exception.EEXCEPTION_DEBUG_INFO32">
+<em class="property">class </em><code class="descclassname">windows.winobject.exception.</code><code class="descname">EEXCEPTION_DEBUG_INFO32</code><a class="reference internal" href="_modules/windows/winobject/exception.html#EEXCEPTION_DEBUG_INFO32"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.exception.EEXCEPTION_DEBUG_INFO32" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enhanced Debug info</p>
+<dl class="data">
+<dt id="windows.winobject.exception.EEXCEPTION_DEBUG_INFO32.ExceptionRecord">
+<code class="descname">ExceptionRecord</code><a class="headerlink" href="#windows.winobject.exception.EEXCEPTION_DEBUG_INFO32.ExceptionRecord" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.exception.EEXCEPTION_RECORD32" title="windows.winobject.exception.EEXCEPTION_RECORD32"><code class="xref py py-class docutils literal"><span class="pre">EEXCEPTION_RECORD32</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.exception.EEXCEPTION_DEBUG_INFO32.fields">
+<code class="descname">fields</code><em class="property"> = ['ExceptionRecord', 'dwFirstChance']</em><a class="headerlink" href="#windows.winobject.exception.EEXCEPTION_DEBUG_INFO32.fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>The fields of the structure</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="windows.winobject.exception.EEXCEPTION_DEBUG_INFO64">
+<em class="property">class </em><code class="descclassname">windows.winobject.exception.</code><code class="descname">EEXCEPTION_DEBUG_INFO64</code><a class="reference internal" href="_modules/windows/winobject/exception.html#EEXCEPTION_DEBUG_INFO64"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.exception.EEXCEPTION_DEBUG_INFO64" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enhanced Debug info</p>
+<dl class="data">
+<dt id="windows.winobject.exception.EEXCEPTION_DEBUG_INFO64.ExceptionRecord">
+<code class="descname">ExceptionRecord</code><a class="headerlink" href="#windows.winobject.exception.EEXCEPTION_DEBUG_INFO64.ExceptionRecord" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.exception.EEXCEPTION_RECORD64" title="windows.winobject.exception.EEXCEPTION_RECORD64"><code class="xref py py-class docutils literal"><span class="pre">EEXCEPTION_RECORD64</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.exception.EEXCEPTION_DEBUG_INFO64.fields">
+<code class="descname">fields</code><em class="property"> = ['ExceptionRecord', 'dwFirstChance']</em><a class="headerlink" href="#windows.winobject.exception.EEXCEPTION_DEBUG_INFO64.fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>The fields of the structure</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="context">
+<h2>2.4.3. Context<a class="headerlink" href="#context" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="windows.winobject.exception.ECONTEXT32">
+<em class="property">class </em><code class="descclassname">windows.winobject.exception.</code><code class="descname">ECONTEXT32</code><a class="reference internal" href="_modules/windows/winobject/exception.html#ECONTEXT32"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.exception.ECONTEXT32" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="attribute">
+<dt id="windows.winobject.exception.ECONTEXT32.EDr7">
+<code class="descname">EDr7</code><a class="headerlink" href="#windows.winobject.exception.ECONTEXT32.EDr7" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enhanced view of the DR7 register (you also have <code class="docutils literal"><span class="pre">Dr7</span></code> for the raw value)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.exception.EDr7" title="windows.winobject.exception.EDr7"><code class="xref py py-class docutils literal"><span class="pre">EDr7</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.exception.ECONTEXT32.EEFlags">
+<code class="descname">EEFlags</code><a class="headerlink" href="#windows.winobject.exception.ECONTEXT32.EEFlags" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enhanced view of the Eflags (you also have <code class="docutils literal"><span class="pre">EFlags</span></code> for the raw value)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.exception.EEflags" title="windows.winobject.exception.EEflags"><code class="xref py py-class docutils literal"><span class="pre">EEflags</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.exception.ECONTEXT32.dump">
+<code class="descname">dump</code><span class="sig-paren">(</span><em>to_dump=None</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.exception.ECONTEXT32.dump" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dump (print) the current context</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.exception.ECONTEXT32.fields">
+<code class="descname">fields</code><em class="property"> = ['ContextFlags', 'Dr0', 'Dr1', 'Dr2', 'Dr3', 'Dr6', 'Dr7', 'FloatSave', 'SegGs', 'SegFs', 'SegEs', 'SegDs', 'Edi', 'Esi', 'Ebx', 'Edx', 'Ecx', 'Eax', 'Ebp', 'Eip', 'SegCs', 'EFlags', 'Esp', 'SegSs', 'ExtendedRegisters']</em><a class="headerlink" href="#windows.winobject.exception.ECONTEXT32.fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>The fields of the structure</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.exception.ECONTEXT32.func_result">
+<code class="descname">func_result</code><a class="headerlink" href="#windows.winobject.exception.ECONTEXT32.func_result" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function Resultat register (EAX or RAX)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.exception.ECONTEXT32.pc">
+<code class="descname">pc</code><a class="headerlink" href="#windows.winobject.exception.ECONTEXT32.pc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Program Counter register (EIP or RIP)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.exception.ECONTEXT32.regs">
+<code class="descname">regs</code><span class="sig-paren">(</span><em>to_dump=None</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.exception.ECONTEXT32.regs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the name and values of the registers</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">[(reg_name, value)] &#8211; A <a class="reference external" href="https://docs.python.org/2/library/functions.html#list" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">list</span></code></a> of <code class="xref py py-class docutils literal"><span class="pre">tuple</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.exception.ECONTEXT32.sp">
+<code class="descname">sp</code><a class="headerlink" href="#windows.winobject.exception.ECONTEXT32.sp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stack Pointer register (ESP or RSP)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="windows.winobject.exception.ECONTEXTWOW64">
+<em class="property">class </em><code class="descclassname">windows.winobject.exception.</code><code class="descname">ECONTEXTWOW64</code><a class="reference internal" href="_modules/windows/winobject/exception.html#ECONTEXTWOW64"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.exception.ECONTEXTWOW64" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="attribute">
+<dt id="windows.winobject.exception.ECONTEXTWOW64.EDr7">
+<code class="descname">EDr7</code><a class="headerlink" href="#windows.winobject.exception.ECONTEXTWOW64.EDr7" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enhanced view of the DR7 register (you also have <code class="docutils literal"><span class="pre">Dr7</span></code> for the raw value)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.exception.EDr7" title="windows.winobject.exception.EDr7"><code class="xref py py-class docutils literal"><span class="pre">EDr7</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.exception.ECONTEXTWOW64.EEFlags">
+<code class="descname">EEFlags</code><a class="headerlink" href="#windows.winobject.exception.ECONTEXTWOW64.EEFlags" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enhanced view of the Eflags (you also have <code class="docutils literal"><span class="pre">EFlags</span></code> for the raw value)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.exception.EEflags" title="windows.winobject.exception.EEflags"><code class="xref py py-class docutils literal"><span class="pre">EEflags</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.exception.ECONTEXTWOW64.dump">
+<code class="descname">dump</code><span class="sig-paren">(</span><em>to_dump=None</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.exception.ECONTEXTWOW64.dump" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dump (print) the current context</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.exception.ECONTEXTWOW64.fields">
+<code class="descname">fields</code><em class="property"> = ['ContextFlags', 'Dr0', 'Dr1', 'Dr2', 'Dr3', 'Dr6', 'Dr7', 'FloatSave', 'SegGs', 'SegFs', 'SegEs', 'SegDs', 'Edi', 'Esi', 'Ebx', 'Edx', 'Ecx', 'Eax', 'Ebp', 'Eip', 'SegCs', 'EFlags', 'Esp', 'SegSs', 'ExtendedRegisters']</em><a class="headerlink" href="#windows.winobject.exception.ECONTEXTWOW64.fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>The fields of the structure</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.exception.ECONTEXTWOW64.func_result">
+<code class="descname">func_result</code><a class="headerlink" href="#windows.winobject.exception.ECONTEXTWOW64.func_result" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function Resultat register (EAX or RAX)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.exception.ECONTEXTWOW64.pc">
+<code class="descname">pc</code><a class="headerlink" href="#windows.winobject.exception.ECONTEXTWOW64.pc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Program Counter register (EIP or RIP)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.exception.ECONTEXTWOW64.regs">
+<code class="descname">regs</code><span class="sig-paren">(</span><em>to_dump=None</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.exception.ECONTEXTWOW64.regs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the name and values of the registers</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">[(reg_name, value)] &#8211; A <a class="reference external" href="https://docs.python.org/2/library/functions.html#list" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">list</span></code></a> of <code class="xref py py-class docutils literal"><span class="pre">tuple</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.exception.ECONTEXTWOW64.sp">
+<code class="descname">sp</code><a class="headerlink" href="#windows.winobject.exception.ECONTEXTWOW64.sp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stack Pointer register (ESP or RSP)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="windows.winobject.exception.ECONTEXT64">
+<em class="property">class </em><code class="descclassname">windows.winobject.exception.</code><code class="descname">ECONTEXT64</code><a class="reference internal" href="_modules/windows/winobject/exception.html#ECONTEXT64"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.exception.ECONTEXT64" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="attribute">
+<dt id="windows.winobject.exception.ECONTEXT64.EDr7">
+<code class="descname">EDr7</code><a class="headerlink" href="#windows.winobject.exception.ECONTEXT64.EDr7" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enhanced view of the DR7 register (you also have <code class="docutils literal"><span class="pre">Dr7</span></code> for the raw value)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.exception.EDr7" title="windows.winobject.exception.EDr7"><code class="xref py py-class docutils literal"><span class="pre">EDr7</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.exception.ECONTEXT64.EEFlags">
+<code class="descname">EEFlags</code><a class="headerlink" href="#windows.winobject.exception.ECONTEXT64.EEFlags" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enhanced view of the Eflags (you also have <code class="docutils literal"><span class="pre">EFlags</span></code> for the raw value)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.exception.EEflags" title="windows.winobject.exception.EEflags"><code class="xref py py-class docutils literal"><span class="pre">EEflags</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.exception.ECONTEXT64.dump">
+<code class="descname">dump</code><span class="sig-paren">(</span><em>to_dump=None</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.exception.ECONTEXT64.dump" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dump (print) the current context</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.exception.ECONTEXT64.fields">
+<code class="descname">fields</code><em class="property"> = ['P1Home', 'P2Home', 'P3Home', 'P4Home', 'P5Home', 'P6Home', 'ContextFlags', 'MxCsr', 'SegCs', 'SegDs', 'SegEs', 'SegFs', 'SegGs', 'SegSs', 'EFlags', 'Dr0', 'Dr1', 'Dr2', 'Dr3', 'Dr6', 'Dr7', 'Rax', 'Rcx', 'Rdx', 'Rbx', 'Rsp', 'Rbp', 'Rsi', 'Rdi', 'R8', 'R9', 'R10', 'R11', 'R12', 'R13', 'R14', 'R15', 'Rip', 'DUMMYUNIONNAME', 'VectorRegister', 'VectorControl', 'DebugControl', 'LastBranchToRip', 'LastBranchFromRip', 'LastExceptionToRip', 'LastExceptionFromRip']</em><a class="headerlink" href="#windows.winobject.exception.ECONTEXT64.fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>The fields of the structure</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.exception.ECONTEXT64.func_result">
+<code class="descname">func_result</code><a class="headerlink" href="#windows.winobject.exception.ECONTEXT64.func_result" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function Resultat register (EAX or RAX)</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="windows.winobject.exception.ECONTEXT64.new_aligned">
+<em class="property">classmethod </em><code class="descname">new_aligned</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/exception.html#ECONTEXT64.new_aligned"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.exception.ECONTEXT64.new_aligned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a new <a class="reference internal" href="#windows.winobject.exception.ECONTEXT64" title="windows.winobject.exception.ECONTEXT64"><code class="xref py py-class docutils literal"><span class="pre">ECONTEXT64</span></code></a> aligned on 16 bits</p>
+<p>temporary workaround or horrible hack ? choose your side</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.exception.ECONTEXT64.pc">
+<code class="descname">pc</code><a class="headerlink" href="#windows.winobject.exception.ECONTEXT64.pc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Program Counter register (EIP or RIP)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.exception.ECONTEXT64.regs">
+<code class="descname">regs</code><span class="sig-paren">(</span><em>to_dump=None</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.exception.ECONTEXT64.regs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the name and values of the registers</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">[(reg_name, value)] &#8211; A <a class="reference external" href="https://docs.python.org/2/library/functions.html#list" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">list</span></code></a> of <code class="xref py py-class docutils literal"><span class="pre">tuple</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.exception.ECONTEXT64.sp">
+<code class="descname">sp</code><a class="headerlink" href="#windows.winobject.exception.ECONTEXT64.sp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stack Pointer register (ESP or RSP)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="windows.winobject.exception.EEflags">
+<em class="property">class </em><code class="descclassname">windows.winobject.exception.</code><code class="descname">EEflags</code><a class="reference internal" href="_modules/windows/winobject/exception.html#EEflags"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.exception.EEflags" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flag view of the Eflags register</p>
+<dl class="attribute">
+<dt id="windows.winobject.exception.EEflags.fields">
+<code class="descname">fields</code><em class="property"> = ['CF', 'RES_1', 'PF', 'RES_3', 'AF', 'RES_5', 'ZF', 'SF', 'TF', 'IF', 'DF', 'OF', 'IOPL_1', 'IOPL_2', 'NT', 'RES_15', 'RF', 'VM', 'AC', 'VIF', 'VIP', 'ID']</em><a class="headerlink" href="#windows.winobject.exception.EEflags.fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>The fields of the structure</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.exception.EEflags.raw">
+<code class="descname">raw</code><a class="headerlink" href="#windows.winobject.exception.EEflags.raw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raw value of the eflags</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="windows.winobject.exception.EDr7">
+<em class="property">class </em><code class="descclassname">windows.winobject.exception.</code><code class="descname">EDr7</code><a class="reference internal" href="_modules/windows/winobject/exception.html#EDr7"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.exception.EDr7" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flag view of the DR7 register</p>
+<dl class="attribute">
+<dt id="windows.winobject.exception.EDr7.fields">
+<code class="descname">fields</code><em class="property"> = ['L0', 'G0', 'L1', 'G1', 'L2', 'G2', 'L3', 'G3', 'LE', 'GE', 'RES_1', 'GD', 'RES_1', 'RW0', 'LEN0', 'RW1', 'LEN1', 'RW2', 'LEN2', 'RW3', 'LEN3']</em><a class="headerlink" href="#windows.winobject.exception.EDr7.fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>The fields of the structure</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="exception-pointers">
+<h2>2.4.4. EXCEPTION POINTERS<a class="headerlink" href="#exception-pointers" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="windows.winobject.exception.EEXCEPTION_POINTERS">
+<em class="property">class </em><code class="descclassname">windows.winobject.exception.</code><code class="descname">EEXCEPTION_POINTERS</code><a class="reference internal" href="_modules/windows/winobject/exception.html#EEXCEPTION_POINTERS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.exception.EEXCEPTION_POINTERS" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="data">
+<dt id="windows.winobject.exception.EEXCEPTION_POINTERS.ExceptionRecord">
+<code class="descname">ExceptionRecord</code><a class="headerlink" href="#windows.winobject.exception.EEXCEPTION_POINTERS.ExceptionRecord" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">POINTER to <a class="reference internal" href="#windows.winobject.exception.EEXCEPTION_RECORD" title="windows.winobject.exception.EEXCEPTION_RECORD"><code class="xref py py-class docutils literal"><span class="pre">EEXCEPTION_RECORD</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="data">
+<dt id="windows.winobject.exception.EEXCEPTION_POINTERS.ContextRecord">
+<code class="descname">ContextRecord</code><a class="headerlink" href="#windows.winobject.exception.EEXCEPTION_POINTERS.ContextRecord" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">POINTER to <a class="reference internal" href="#windows.winobject.exception.ECONTEXT32" title="windows.winobject.exception.ECONTEXT32"><code class="xref py py-class docutils literal"><span class="pre">ECONTEXT32</span></code></a> or <a class="reference internal" href="#windows.winobject.exception.ECONTEXT64" title="windows.winobject.exception.ECONTEXT64"><code class="xref py py-class docutils literal"><span class="pre">ECONTEXT64</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.exception.EEXCEPTION_POINTERS.dump">
+<code class="descname">dump</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/exception.html#EEXCEPTION_POINTERS.dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.exception.EEXCEPTION_POINTERS.dump" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dump (print) the EEXCEPTION_POINTERS</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="vectored-exception">
+<span id="vectoredexception"></span><h2>2.4.5. Vectored Exception<a class="headerlink" href="#vectored-exception" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">See sample <a class="reference internal" href="sample.html#sample-vectoredexception"><span class="std std-ref">VectoredException()</span></a></p>
+</div>
+<dl class="class">
+<dt id="windows.winobject.exception.VectoredException">
+<em class="property">class </em><code class="descclassname">windows.winobject.exception.</code><code class="descname">VectoredException</code><a class="reference internal" href="_modules/windows/winobject/exception.html#VectoredException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.exception.VectoredException" title="Permalink to this definition">¶</a></dt>
+<dd><p>A decorator that create a callable which can be passed to <code class="xref py py-func docutils literal"><span class="pre">AddVectoredExceptionHandler()</span></code></p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">2.4. Exception and Context related structures</a><ul>
+<li><a class="reference internal" href="#exception-records">2.4.1. Exception Records</a></li>
+<li><a class="reference internal" href="#exception-debug-info">2.4.2. EXCEPTION DEBUG INFO</a></li>
+<li><a class="reference internal" href="#context">2.4.3. Context</a></li>
+<li><a class="reference internal" href="#exception-pointers">2.4.4. EXCEPTION POINTERS</a></li>
+<li><a class="reference internal" href="#vectored-exception">2.4.5. Vectored Exception</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="process.html"
+                        title="previous chapter">2.1. Processes and Threads</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="registry.html"
+                        title="next chapter">2.5. Registry</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/exception.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="registry.html" title="2.5. Registry"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="process.html" title="2.1. Processes and Threads"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.2 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="various.html" >2. The <code class="docutils literal"><span class="pre">windows</span></code> objects</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>

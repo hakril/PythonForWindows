@@ -1,0 +1,285 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>windows.wintrust &mdash; PythonForWindows 0.2 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="PythonForWindows 0.2 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">PythonForWindows 0.2 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for windows.wintrust</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">ctypes</span>
+<span class="kn">import</span> <span class="nn">struct</span>
+<span class="kn">import</span> <span class="nn">windows</span>
+<span class="kn">from</span>  <span class="nn">collections</span> <span class="k">import</span> <span class="n">namedtuple</span>
+<span class="kn">from</span> <span class="nn">windows</span> <span class="k">import</span> <span class="n">winproxy</span>
+<span class="kn">from</span> <span class="nn">windows.generated_def.winstructs</span> <span class="k">import</span> <span class="o">*</span>
+
+
+<span class="n">IID_PACK</span> <span class="o">=</span> <span class="s2">&quot;&lt;I&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;H&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;H&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;B&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;B&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;B&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;B&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;B&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;B&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;B&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;B&quot;</span>
+<span class="k">def</span> <span class="nf">get_IID_from_raw</span><span class="p">(</span><span class="n">raw</span><span class="p">):</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">IID_PACK</span><span class="p">,</span> <span class="n">raw</span><span class="p">)])</span>
+    <span class="k">return</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">create_string_buffer</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+
+
+<span class="n">WINTRUST_ACTION_GENERIC_VERIFY_V2_RAW</span> <span class="o">=</span> <span class="p">(</span><span class="mh">0xaac56b</span><span class="p">,</span> <span class="mh">0xcd44</span><span class="p">,</span>  <span class="mh">0x11d0</span><span class="p">,</span>
+                    <span class="mh">0x8c</span><span class="p">,</span> <span class="mh">0xc2</span><span class="p">,</span> <span class="mh">0x0</span><span class="p">,</span> <span class="mh">0xc0</span><span class="p">,</span> <span class="mh">0x4f</span><span class="p">,</span> <span class="mh">0xc2</span><span class="p">,</span> <span class="mh">0x95</span><span class="p">,</span> <span class="mh">0xee</span><span class="p">)</span>
+
+<span class="n">WINTRUST_ACTION_GENERIC_VERIFY_V2_STR</span> <span class="o">=</span> <span class="n">get_IID_from_raw</span><span class="p">(</span><span class="n">WINTRUST_ACTION_GENERIC_VERIFY_V2_RAW</span><span class="p">)</span>
+<span class="c1"># Otherwise there is a problem with `Data4` of `type c_char_Array_8` containing 0x00 (0x8c, 0xc2, 0x0, 0xc0, 0x4f, 0xc2, 0x95, 0xee)</span>
+<span class="n">WINTRUST_ACTION_GENERIC_VERIFY_V2</span> <span class="o">=</span> <span class="n">GUID</span><span class="o">.</span><span class="n">from_address</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">addressof</span><span class="p">(</span><span class="n">WINTRUST_ACTION_GENERIC_VERIFY_V2_STR</span><span class="p">))</span>
+
+<span class="n">DRIVER_ACTION_VERIFY_RAW</span> <span class="o">=</span> <span class="mh">0xf750e6c3</span><span class="p">,</span> <span class="mh">0x38ee</span><span class="p">,</span> <span class="mh">0x11d1</span><span class="p">,</span> <span class="mh">0x85</span><span class="p">,</span> <span class="mh">0xe5</span><span class="p">,</span> <span class="mh">0x0</span><span class="p">,</span> <span class="mh">0xc0</span><span class="p">,</span> <span class="mh">0x4f</span><span class="p">,</span> <span class="mh">0xc2</span><span class="p">,</span> <span class="mh">0x95</span><span class="p">,</span> <span class="mh">0xee</span>
+<span class="n">DRIVER_ACTION_VERIFY_STR</span> <span class="o">=</span> <span class="n">get_IID_from_raw</span><span class="p">(</span><span class="n">DRIVER_ACTION_VERIFY_RAW</span><span class="p">)</span>
+<span class="n">DRIVER_ACTION_VERIFY</span> <span class="o">=</span> <span class="n">GUID</span><span class="o">.</span><span class="n">from_address</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">addressof</span><span class="p">(</span><span class="n">DRIVER_ACTION_VERIFY_STR</span><span class="p">))</span>
+
+<span class="n">WTD_UI_ALL</span>    <span class="o">=</span> <span class="mi">1</span>
+<span class="n">WTD_UI_NONE</span>   <span class="o">=</span> <span class="mi">2</span>
+<span class="n">WTD_UI_NOBAD</span>  <span class="o">=</span> <span class="mi">3</span>
+<span class="n">WTD_UI_NOGOOD</span> <span class="o">=</span> <span class="mi">4</span>
+
+<span class="n">WTD_REVOKE_NONE</span>         <span class="o">=</span> <span class="mh">0x00000000</span>
+<span class="n">WTD_REVOKE_WHOLECHAIN</span>   <span class="o">=</span> <span class="mh">0x00000001</span>
+
+<span class="n">WTD_CHOICE_FILE</span>    <span class="o">=</span> <span class="mi">1</span>
+<span class="n">WTD_CHOICE_CATALOG</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">WTD_CHOICE_BLOB</span>    <span class="o">=</span> <span class="mi">3</span>
+<span class="n">WTD_CHOICE_SIGNER</span>  <span class="o">=</span> <span class="mi">4</span>
+<span class="n">WTD_CHOICE_CERT</span>    <span class="o">=</span> <span class="mi">5</span>
+
+<span class="n">WTD_STATEACTION_IGNORE</span>           <span class="o">=</span> <span class="mh">0x00000000</span>
+<span class="n">WTD_STATEACTION_VERIFY</span>           <span class="o">=</span> <span class="mh">0x00000001</span>
+<span class="n">WTD_STATEACTION_CLOSE</span>            <span class="o">=</span> <span class="mh">0x00000002</span>
+<span class="n">WTD_STATEACTION_AUTO_CACHE</span>       <span class="o">=</span> <span class="mh">0x00000003</span>
+<span class="n">WTD_STATEACTION_AUTO_CACHE_FLUSH</span> <span class="o">=</span> <span class="mh">0x00000004</span>
+
+<span class="n">wintrust_know_return_value</span> <span class="o">=</span> <span class="p">[</span>
+<span class="n">TRUST_E_PROVIDER_UNKNOWN</span><span class="p">,</span>
+<span class="n">TRUST_E_ACTION_UNKNOWN</span><span class="p">,</span>
+<span class="n">TRUST_E_SUBJECT_FORM_UNKNOWN</span><span class="p">,</span>
+<span class="n">DIGSIG_E_ENCODE</span><span class="p">,</span>
+<span class="n">TRUST_E_SUBJECT_NOT_TRUSTED</span><span class="p">,</span>
+<span class="n">DIGSIG_E_DECODE</span><span class="p">,</span>
+<span class="n">DIGSIG_E_EXTENSIBILITY</span><span class="p">,</span>
+<span class="n">PERSIST_E_SIZEDEFINITE</span><span class="p">,</span>
+<span class="n">DIGSIG_E_CRYPTO</span><span class="p">,</span>
+<span class="n">PERSIST_E_SIZEINDEFINITE</span><span class="p">,</span>
+<span class="n">PERSIST_E_NOTSELFSIZING</span><span class="p">,</span>
+<span class="n">TRUST_E_NOSIGNATURE</span><span class="p">,</span>
+<span class="n">CERT_E_EXPIRED</span><span class="p">,</span>
+<span class="n">CERT_E_VALIDITYPERIODNESTING</span><span class="p">,</span>
+<span class="n">CERT_E_PURPOSE</span><span class="p">,</span>
+<span class="n">CERT_E_ISSUERCHAINING</span><span class="p">,</span>
+<span class="n">CERT_E_MALFORMED</span><span class="p">,</span>
+<span class="n">CERT_E_UNTRUSTEDROOT</span><span class="p">,</span>
+<span class="n">CERT_E_CHAINING</span><span class="p">,</span>
+<span class="n">TRUST_E_FAIL</span><span class="p">,</span>
+<span class="n">CERT_E_REVOKED</span><span class="p">,</span>
+<span class="n">CERT_E_UNTRUSTEDTESTROOT</span><span class="p">,</span>
+<span class="n">CERT_E_REVOCATION_FAILURE</span><span class="p">,</span>
+<span class="n">CERT_E_CN_NO_MATCH</span><span class="p">,</span>
+<span class="n">CERT_E_WRONG_USAGE</span><span class="p">,</span>
+<span class="n">TRUST_E_EXPLICIT_DISTRUST</span><span class="p">,</span>
+<span class="n">CERT_E_UNTRUSTEDCA</span><span class="p">,</span>
+<span class="n">CERT_E_INVALID_POLICY</span><span class="p">,</span>
+<span class="n">CERT_E_INVALID_NAME</span><span class="p">,</span>
+<span class="n">CRYPT_E_FILE_ERROR</span><span class="p">,</span>
+<span class="p">]</span>
+<span class="n">wintrust_return_value_mapper</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">:</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">wintrust_know_return_value</span><span class="p">}</span>
+
+
+<div class="viewcode-block" id="check_signature"><a class="viewcode-back" href="../../wintrust.html#windows.wintrust.check_signature">[docs]</a><span class="k">def</span> <span class="nf">check_signature</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Check if ``filename`` embeds a valid signature.</span>
+
+<span class="sd">        :return: :class:`int`: ``0`` if ``filename`` have a valid signature else the error</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">file_data</span> <span class="o">=</span> <span class="n">WINTRUST_FILE_INFO</span><span class="p">()</span>
+    <span class="n">file_data</span><span class="o">.</span><span class="n">cbStruct</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">WINTRUST_FILE_INFO</span><span class="p">)</span>
+    <span class="n">file_data</span><span class="o">.</span><span class="n">pcwszFilePath</span> <span class="o">=</span> <span class="n">filename</span>
+    <span class="n">file_data</span><span class="o">.</span><span class="n">hFile</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">file_data</span><span class="o">.</span><span class="n">pgKnownSubject</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">WVTPolicyGUID</span> <span class="o">=</span>  <span class="n">WINTRUST_ACTION_GENERIC_VERIFY_V2</span>
+
+    <span class="n">win_trust_data</span> <span class="o">=</span> <span class="n">WINTRUST_DATA</span><span class="p">()</span>
+    <span class="n">win_trust_data</span><span class="o">.</span><span class="n">cbStruct</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">WINTRUST_DATA</span><span class="p">)</span>
+    <span class="n">win_trust_data</span><span class="o">.</span><span class="n">pPolicyCallbackData</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">win_trust_data</span><span class="o">.</span><span class="n">pSIPClientData</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">win_trust_data</span><span class="o">.</span><span class="n">dwUIChoice</span> <span class="o">=</span> <span class="n">WTD_UI_NONE</span>
+    <span class="n">win_trust_data</span><span class="o">.</span><span class="n">fdwRevocationChecks</span> <span class="o">=</span> <span class="n">WTD_REVOKE_NONE</span>
+    <span class="n">win_trust_data</span><span class="o">.</span><span class="n">dwUnionChoice</span> <span class="o">=</span> <span class="n">WTD_CHOICE_FILE</span>
+    <span class="n">win_trust_data</span><span class="o">.</span><span class="n">dwStateAction</span> <span class="o">=</span> <span class="n">WTD_STATEACTION_VERIFY</span>
+    <span class="n">win_trust_data</span><span class="o">.</span><span class="n">hWVTStateData</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">win_trust_data</span><span class="o">.</span><span class="n">pwszURLReference</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">win_trust_data</span><span class="o">.</span><span class="n">dwUIContext</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1">#win_trust_data.dwProvFlags  = 0x1000 + 0x10 + 0x800</span>
+    <span class="n">win_trust_data</span><span class="o">.</span><span class="n">tmp_union</span><span class="o">.</span><span class="n">pFile</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">pointer</span><span class="p">(</span><span class="n">file_data</span><span class="p">)</span>
+
+    <span class="n">x</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">WinVerifyTrust</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">WVTPolicyGUID</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">win_trust_data</span><span class="p">))</span>
+    <span class="n">win_trust_data</span><span class="o">.</span><span class="n">dwStateAction</span> <span class="o">=</span> <span class="n">WTD_STATEACTION_CLOSE</span>
+    <span class="n">winproxy</span><span class="o">.</span><span class="n">WinVerifyTrust</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">WVTPolicyGUID</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">win_trust_data</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">wintrust_return_value_mapper</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">x</span> <span class="o">&amp;</span> <span class="mh">0xffffffff</span><span class="p">,</span> <span class="n">x</span> <span class="o">&amp;</span> <span class="mh">0xffffffff</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">get_catalog_for_filename</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="n">ctx</span> <span class="o">=</span> <span class="n">HCATADMIN</span><span class="p">()</span>
+    <span class="n">winproxy</span><span class="o">.</span><span class="n">CryptCATAdminAcquireContext</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">ctx</span><span class="p">),</span> <span class="n">DRIVER_ACTION_VERIFY</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="nb">hash</span> <span class="o">=</span> <span class="n">get_file_hash</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">hash</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CryptCATAdminEnumCatalogFromHash</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="nb">hash</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="nb">hash</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">t</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="n">tname</span> <span class="o">=</span> <span class="n">get_catalog_name_from_handle</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+
+    <span class="k">while</span> <span class="n">t</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CryptCATAdminEnumCatalogFromHash</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="nb">hash</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="nb">hash</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">HCATINFO</span><span class="p">(</span><span class="n">t</span><span class="p">)))</span>
+    <span class="n">winproxy</span><span class="o">.</span><span class="n">CryptCATAdminReleaseCatalogContext</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">winproxy</span><span class="o">.</span><span class="n">CryptCATAdminReleaseContext</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">tname</span>
+
+
+<span class="k">def</span> <span class="nf">get_file_hash</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span>
+    <span class="n">handle</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">get_handle_from_file</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+    <span class="n">size</span> <span class="o">=</span> <span class="n">DWORD</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CryptCATAdminCalcHashFromFileHandle</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">size</span><span class="p">),</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">buffer</span> <span class="o">=</span> <span class="p">(</span><span class="n">BYTE</span> <span class="o">*</span> <span class="n">size</span><span class="o">.</span><span class="n">value</span><span class="p">)()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CryptCATAdminCalcHashFromFileHandle</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">size</span><span class="p">),</span> <span class="n">buffer</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">winerror</span> <span class="o">==</span> <span class="mi">1006</span><span class="p">:</span>
+            <span class="c1"># CryptCATAdminCalcHashFromFileHandle: [Error 1006]</span>
+            <span class="c1"># The volume for a file has been externally altered so that the opened file is no longer valid.</span>
+            <span class="c1"># (returned for empty file)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="n">buffer</span>
+
+
+<span class="k">def</span> <span class="nf">get_catalog_name_from_handle</span><span class="p">(</span><span class="n">handle</span><span class="p">):</span>
+    <span class="n">cat_info</span> <span class="o">=</span> <span class="n">CATALOG_INFO</span><span class="p">()</span>
+    <span class="n">cat_info</span><span class="o">.</span><span class="n">cbStruct</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">cat_info</span><span class="p">)</span>
+    <span class="n">winproxy</span><span class="o">.</span><span class="n">CryptCATCatalogInfoFromContext</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">cat_info</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">cat_info</span><span class="o">.</span><span class="n">wszCatalogFile</span>
+
+<span class="n">SignatureData</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s2">&quot;SignatureData&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;signed&quot;</span><span class="p">,</span> <span class="s2">&quot;catalog&quot;</span><span class="p">,</span> <span class="s2">&quot;catalogsigned&quot;</span><span class="p">,</span> <span class="s2">&quot;additionalinfo&quot;</span><span class="p">])</span>
+<span class="sd">&quot;&quot;&quot;Signature information for ``FILENAME``:</span>
+
+<span class="sd">    * ``signed``: True if ``FILENAME`` embeds a valide signature</span>
+<span class="sd">    * ``catalog``: The filename of the catalog ``FILENAME`` is part of (if any)</span>
+<span class="sd">    * ``catalogsigned``: True if ``catalog`` embeds a valide signature</span>
+<span class="sd">    * ``additionalinfo``: The return error of ``check_signature(FILENAME)``</span>
+
+<span class="sd">``additionalinfo`` is useful to know if ``FILENAME`` signature was rejected for an invalid root / expired cert.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="full_signature_information"><a class="viewcode-back" href="../../wintrust.html#windows.wintrust.full_signature_information">[docs]</a><span class="k">def</span> <span class="nf">full_signature_information</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Returns more information about the signature of ``filename``</span>
+
+<span class="sd">    :return: :class:`SignatureData`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">check_sign</span> <span class="o">=</span> <span class="n">check_signature</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="n">signed</span> <span class="o">=</span> <span class="ow">not</span> <span class="nb">bool</span><span class="p">(</span><span class="n">check_sign</span><span class="p">)</span>
+    <span class="n">catalog</span> <span class="o">=</span> <span class="n">get_catalog_for_filename</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">catalog</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">SignatureData</span><span class="p">(</span><span class="n">signed</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">check_sign</span><span class="p">)</span>
+    <span class="n">catalogsigned</span> <span class="o">=</span> <span class="ow">not</span> <span class="nb">bool</span><span class="p">(</span><span class="n">check_signature</span><span class="p">(</span><span class="n">catalog</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">SignatureData</span><span class="p">(</span><span class="n">signed</span><span class="p">,</span> <span class="n">catalog</span><span class="p">,</span> <span class="n">catalogsigned</span><span class="p">,</span> <span class="n">check_sign</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="is_signed"><a class="viewcode-back" href="../../wintrust.html#windows.wintrust.is_signed">[docs]</a><span class="k">def</span> <span class="nf">is_signed</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Check if ``filename`` is signed:</span>
+
+<span class="sd">        * File embeds a valid signature</span>
+<span class="sd">        * File is part of a signed catalog file</span>
+
+<span class="sd">    :return: :class:`bool`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">check_sign</span> <span class="o">=</span> <span class="n">check_signature</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">check_sign</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="n">catalog</span> <span class="o">=</span> <span class="n">get_catalog_for_filename</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">catalog</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="n">catalogsigned</span> <span class="o">=</span> <span class="ow">not</span> <span class="nb">bool</span><span class="p">(</span><span class="n">check_signature</span><span class="p">(</span><span class="n">catalog</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">catalogsigned</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">PythonForWindows 0.2 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>

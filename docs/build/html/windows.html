@@ -1,0 +1,351 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>1. The windows module &mdash; PythonForWindows 0.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="PythonForWindows 0.2 documentation" href="index.html" />
+    <link rel="next" title="2. The windows objects" href="various.html" />
+    <link rel="prev" title="Welcome to PythonForWindows’s documentation!" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="various.html" title="2. The windows objects"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to PythonForWindows’s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="the-windows-module">
+<h1>1. The <code class="docutils literal"><span class="pre">windows</span></code> module<a class="headerlink" href="#the-windows-module" title="Permalink to this headline">¶</a></h1>
+<p>The <code class="docutils literal"><span class="pre">windows</span></code> module is the module installed by <code class="file docutils literal"><span class="pre">setup.py</span></code>.</p>
+<p>This module exports some objects representing the current state of the system.
+It also offers some submodules aimed to help the interfacing with <code class="docutils literal"><span class="pre">Windows</span></code> and native code execution.</p>
+<dl class="docutils">
+<dt>The defaults objects accessible in <code class="docutils literal"><span class="pre">windows</span></code> are:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">system</span></code> of type <a class="reference internal" href="#windows.winobject.system.System" title="windows.winobject.system.System"><code class="xref py py-class docutils literal"><span class="pre">windows.winobject.system.System</span></code></a></li>
+<li><code class="docutils literal"><span class="pre">current_process</span></code> of type <a class="reference internal" href="process.html#windows.winobject.process.CurrentProcess" title="windows.winobject.process.CurrentProcess"><code class="xref py py-class docutils literal"><span class="pre">windows.winobject.process.CurrentProcess</span></code></a></li>
+<li><code class="docutils literal"><span class="pre">current_thread</span></code> of type <a class="reference internal" href="process.html#windows.winobject.process.CurrentThread" title="windows.winobject.process.CurrentThread"><code class="xref py py-class docutils literal"><span class="pre">windows.winobject.process.CurrentThread</span></code></a></li>
+</ul>
+</dd>
+<dt>The submodules that you might use by themself are:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="native_exec.html#module-windows.native_exec" title="windows.native_exec"><code class="xref py py-mod docutils literal"><span class="pre">windows.native_exec</span></code></a></li>
+<li><a class="reference internal" href="winproxy.html#module-windows.winproxy" title="windows.winproxy"><code class="xref py py-mod docutils literal"><span class="pre">windows.winproxy</span></code></a></li>
+<li><a class="reference internal" href="utils.html#module-windows.utils" title="windows.utils"><code class="xref py py-mod docutils literal"><span class="pre">windows.utils</span></code></a></li>
+<li><a class="reference internal" href="debug.html#module-windows.debug" title="windows.debug"><code class="xref py py-mod docutils literal"><span class="pre">windows.debug</span></code></a></li>
+<li><a class="reference internal" href="com.html#module-windows.com" title="windows.com"><code class="xref py py-mod docutils literal"><span class="pre">windows.com</span></code></a></li>
+</ul>
+</dd>
+</dl>
+<div class="section" id="the-system-object">
+<span id="object-system"></span><h2>1.1. The <code class="docutils literal"><span class="pre">system</span></code> object<a class="headerlink" href="#the-system-object" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">See sample <a class="reference internal" href="sample.html#sample-system"><span class="std std-ref">windows.system</span></a></p>
+</div>
+<dl class="class">
+<dt id="windows.winobject.system.System">
+<em class="property">class </em><code class="descclassname">windows.winobject.system.</code><code class="descname">System</code><a class="reference internal" href="_modules/windows/winobject/system.html#System"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.system.System" title="Permalink to this definition">¶</a></dt>
+<dd><p>The state of the current <code class="docutils literal"><span class="pre">Windows</span></code> system <code class="docutils literal"><span class="pre">Python</span></code> is running on</p>
+<dl class="attribute">
+<dt id="windows.winobject.system.System.bitness">
+<code class="descname">bitness</code><a class="headerlink" href="#windows.winobject.system.System.bitness" title="Permalink to this definition">¶</a></dt>
+<dd><p>The bitness of the system</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a> &#8211; 32 or 64</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.system.System.computer_name">
+<code class="descname">computer_name</code><a class="headerlink" href="#windows.winobject.system.System.computer_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the computer</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.system.System.handles">
+<code class="descname">handles</code><a class="headerlink" href="#windows.winobject.system.System.handles" title="Permalink to this definition">¶</a></dt>
+<dd><p>The list of system handles</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">[<a class="reference internal" href="handle.html#windows.winobject.handle.Handle" title="windows.winobject.handle.Handle"><code class="xref py py-class docutils literal"><span class="pre">handle.Handle</span></code></a>] &#8211; A list of Hanlde</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.system.System.logicaldrives">
+<code class="descname">logicaldrives</code><a class="headerlink" href="#windows.winobject.system.System.logicaldrives" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of logical drives [C:, ...]</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">[<a class="reference internal" href="volume.html#windows.winobject.volume.LogicalDrive" title="windows.winobject.volume.LogicalDrive"><code class="xref py py-class docutils literal"><span class="pre">volume.LogicalDrive</span></code></a>] &#8211; A list of LogicalDrive</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.system.System.network">
+<code class="descname">network</code><em class="property"> = &lt;windows.winobject.network.Network object at 0x04A61CF0&gt;</em><a class="headerlink" href="#windows.winobject.system.System.network" title="Permalink to this definition">¶</a></dt>
+<dd><p>Object of class <a class="reference internal" href="network.html#windows.winobject.network.Network" title="windows.winobject.network.Network"><code class="xref py py-class docutils literal"><span class="pre">windows.winobject.network.Network</span></code></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.system.System.processes">
+<code class="descname">processes</code><a class="headerlink" href="#windows.winobject.system.System.processes" title="Permalink to this definition">¶</a></dt>
+<dd><p>The list of running processes</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">[<a class="reference internal" href="process.html#windows.winobject.process.WinProcess" title="windows.winobject.process.WinProcess"><code class="xref py py-class docutils literal"><span class="pre">process.WinProcess</span></code></a>] &#8211; A list of Process</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.system.System.product_type">
+<code class="descname">product_type</code><a class="headerlink" href="#windows.winobject.system.System.product_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>The product type, value might be:</p>
+<blockquote>
+<div><ul class="simple">
+<li>VER_NT_WORKSTATION(0x1L)</li>
+<li>VER_NT_DOMAIN_CONTROLLER(0x2L)</li>
+<li>VER_NT_SERVER(0x3L)</li>
+</ul>
+</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#long" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">long</span></code></a> or <a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a> (or subclass)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.system.System.registry">
+<code class="descname">registry</code><em class="property"> = &lt;windows.winobject.registry.Registry object at 0x04A61D10&gt;</em><a class="headerlink" href="#windows.winobject.system.System.registry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Object of class <a class="reference internal" href="registry.html#windows.winobject.registry.Registry" title="windows.winobject.registry.Registry"><code class="xref py py-class docutils literal"><span class="pre">windows.winobject.registry.Registry</span></code></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.system.System.services">
+<code class="descname">services</code><a class="headerlink" href="#windows.winobject.system.System.services" title="Permalink to this definition">¶</a></dt>
+<dd><p>The list of services</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">[<a class="reference internal" href="service.html#windows.winobject.service.ServiceA" title="windows.winobject.service.ServiceA"><code class="xref py py-class docutils literal"><span class="pre">service.ServiceA</span></code></a>] &#8211; A list of Service</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.system.System.threads">
+<code class="descname">threads</code><a class="headerlink" href="#windows.winobject.system.System.threads" title="Permalink to this definition">¶</a></dt>
+<dd><p>The list of running threads</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">[<a class="reference internal" href="process.html#windows.winobject.process.WinThread" title="windows.winobject.process.WinThread"><code class="xref py py-class docutils literal"><span class="pre">process.WinThread</span></code></a>] &#8211; A list of Thread</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.system.System.version">
+<code class="descname">version</code><a class="headerlink" href="#windows.winobject.system.System.version" title="Permalink to this definition">¶</a></dt>
+<dd><p>The version of the system</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">(<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a>, <a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a>) &#8211; (Major, Minor)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.system.System.version_name">
+<code class="descname">version_name</code><a class="headerlink" href="#windows.winobject.system.System.version_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the system version,  values are:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Windows Server 2016</li>
+<li>Windows 10</li>
+<li>Windows Server 2012 R2</li>
+<li>Windows 8.1</li>
+<li>Windows Server 2012</li>
+<li>Windows 8</li>
+<li>Windows Server 2008</li>
+<li>Windows 7</li>
+<li>Windows Server 2008</li>
+<li>Windows Vista</li>
+<li>Windows XP Professional x64 Edition</li>
+<li>TODO: version (5.2) + is_workstation + bitness == 32 (don&#8217;t even know if possible..)</li>
+<li>Windows Server 2003 R2</li>
+<li>Windows Server 2003</li>
+<li>Windows XP</li>
+<li>Windows 2000</li>
+<li>&#8220;Unknow Windows &lt;version={0} | is_workstation={1}&gt;&#8221;.format(version, is_workstation)</li>
+</ul>
+</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.system.System.wmi">
+<code class="descname">wmi</code><a class="headerlink" href="#windows.winobject.system.System.wmi" title="Permalink to this definition">¶</a></dt>
+<dd><p>An object to perform wmi request to &#8220;root\cimv2&#8221;</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="wmi.html#windows.winobject.wmi.WmiRequester" title="windows.winobject.wmi.WmiRequester"><code class="xref py py-class docutils literal"><span class="pre">windows.winobject.wmi.WmiRequester</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">1. The <code class="docutils literal"><span class="pre">windows</span></code> module</a><ul>
+<li><a class="reference internal" href="#the-system-object">1.1. The <code class="docutils literal"><span class="pre">system</span></code> object</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to PythonForWindows&#8217;s documentation!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="various.html"
+                        title="next chapter">2. The <code class="docutils literal"><span class="pre">windows</span></code> objects</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/windows.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="various.html" title="2. The windows objects"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to PythonForWindows’s documentation!"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>

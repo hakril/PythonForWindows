@@ -1,0 +1,178 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>windows.winobject.wmi &mdash; PythonForWindows 0.2 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="PythonForWindows 0.2 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.2 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for windows.winobject.wmi</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">windows</span>
+<span class="kn">import</span> <span class="nn">ctypes</span>
+<span class="kn">import</span> <span class="nn">struct</span>
+<span class="kn">import</span> <span class="nn">functools</span>
+
+<span class="kn">from</span> <span class="nn">ctypes.wintypes</span> <span class="k">import</span> <span class="o">*</span>
+
+<span class="kn">import</span> <span class="nn">windows.com</span>
+<span class="kn">from</span> <span class="nn">windows.generated_def.winstructs</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">windows.generated_def.interfaces</span> <span class="k">import</span> <span class="n">IWbemLocator</span><span class="p">,</span> <span class="n">IWbemServices</span><span class="p">,</span> <span class="n">IEnumWbemClassObject</span><span class="p">,</span> <span class="n">IWbemClassObject</span>
+
+
+<div class="viewcode-block" id="WmiRequester"><a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiRequester">[docs]</a><span class="k">class</span> <span class="nc">WmiRequester</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;An object to perform wmi request to ``root\cimv2``&quot;&quot;&quot;</span>
+    <span class="n">INSTANCE</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">cls</span><span class="o">.</span><span class="n">INSTANCE</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">cls</span><span class="o">.</span><span class="n">INSTANCE</span>
+        <span class="n">cls</span><span class="o">.</span><span class="n">INSTANCE</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">cls</span><span class="p">)</span><span class="o">.</span><span class="n">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cls</span><span class="o">.</span><span class="n">INSTANCE</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s2">&quot;root</span><span class="se">\\</span><span class="s2">cimv2&quot;</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">locator</span> <span class="o">=</span> <span class="n">IWbemLocator</span><span class="p">()</span>
+        <span class="n">service</span> <span class="o">=</span> <span class="n">IWbemServices</span><span class="p">()</span>
+        <span class="c1">#CLSID_WbemAdministrativeLocator_IID = windows.com.IID.from_string(&#39;CB8555CC-9128-11D1-AD9B-00C04FD8FDFF&#39;)</span>
+        <span class="n">WbemLocator_CLSID</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">com</span><span class="o">.</span><span class="n">IID</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s1">&#39;4590F811-1D3A-11D0-891F-00AA004B2E24&#39;</span><span class="p">)</span>
+
+        <span class="n">windows</span><span class="o">.</span><span class="n">com</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+        <span class="n">windows</span><span class="o">.</span><span class="n">com</span><span class="o">.</span><span class="n">create_instance</span><span class="p">(</span><span class="n">WbemLocator_CLSID</span><span class="p">,</span> <span class="n">locator</span><span class="p">)</span>
+        <span class="n">locator</span><span class="o">.</span><span class="n">ConnectServer</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">password</span> <span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mh">0x80</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">service</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">service</span> <span class="o">=</span> <span class="n">service</span>
+
+<div class="viewcode-block" id="WmiRequester.select"><a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiRequester.select">[docs]</a>    <span class="k">def</span> <span class="nf">select</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frm</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="s2">&quot;*&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Select ``attrs`` from ``frm``</span>
+
+<span class="sd">        :rtype: list of dict</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">enumerator</span> <span class="o">=</span> <span class="n">IEnumWbemClassObject</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">ExecQuery</span><span class="p">(</span><span class="s2">&quot;WQL&quot;</span><span class="p">,</span> <span class="s2">&quot;select * from </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">frm</span><span class="p">),</span> <span class="mh">0x20</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">enumerator</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">winerror</span> <span class="o">&amp;</span> <span class="mh">0xffffffff</span><span class="p">)</span> <span class="o">==</span>  <span class="n">WBEM_E_INVALID_CLASS</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">WindowsError</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">winerror</span><span class="p">,</span> <span class="s1">&#39;WBEM_E_INVALID_CLASS &lt;Invalid WMI class &quot;</span><span class="si">{0}</span><span class="s1">&quot;&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">frm</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">winerror</span> <span class="o">&amp;</span> <span class="mh">0xffffffff</span><span class="p">)</span> <span class="ow">in</span> <span class="n">WBEMSTATUS</span><span class="o">.</span><span class="n">values</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">WindowsError</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">winerror</span><span class="p">,</span> <span class="n">WBEMSTATUS</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">winerror</span> <span class="o">&amp;</span> <span class="mh">0xffffffff</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">raise</span>
+
+        <span class="n">count</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_ulong</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">processor</span> <span class="o">=</span> <span class="n">IWbemClassObject</span><span class="p">()</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">enumerator</span><span class="o">.</span><span class="n">Next</span><span class="p">(</span><span class="mh">0xffffffff</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">processor</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">count</span><span class="p">))</span>
+        <span class="k">while</span> <span class="n">count</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+            <span class="n">current_res</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">variant_res</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">com</span><span class="o">.</span><span class="n">ImprovedVariant</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">attrs</span> <span class="o">==</span> <span class="s2">&quot;*&quot;</span><span class="p">:</span>
+                <span class="n">attrs</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_names</span><span class="p">(</span><span class="n">processor</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">x</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;__&quot;</span><span class="p">)]</span>
+            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">attrs</span><span class="p">:</span>
+                <span class="n">processor</span><span class="o">.</span><span class="n">Get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">variant_res</span><span class="p">),</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="c1"># TODO: something clean and generic</span>
+                <span class="k">if</span> <span class="n">variant_res</span><span class="o">.</span><span class="n">vt</span> <span class="o">&amp;</span> <span class="n">VT_ARRAY</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">variant_res</span><span class="o">.</span><span class="n">vt</span> <span class="o">&amp;</span> <span class="n">VT_TYPEMASK</span> <span class="o">==</span> <span class="n">VT_BSTR</span><span class="p">:</span>
+                        <span class="n">current_res</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">variant_res</span><span class="o">.</span><span class="n">asarray</span><span class="o">.</span><span class="n">to_list</span><span class="p">(</span><span class="n">BSTR</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">variant_res</span><span class="o">.</span><span class="n">vt</span> <span class="o">&amp;</span> <span class="n">VT_TYPEMASK</span> <span class="o">==</span> <span class="n">VT_I4</span><span class="p">:</span>
+                        <span class="n">current_res</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">variant_res</span><span class="o">.</span><span class="n">asarray</span><span class="o">.</span><span class="n">to_list</span><span class="p">(</span><span class="n">LONG</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">variant_res</span><span class="o">.</span><span class="n">vt</span> <span class="ow">in</span> <span class="p">[</span><span class="n">VT_EMPTY</span><span class="p">,</span> <span class="n">VT_NULL</span><span class="p">]:</span>
+                    <span class="n">current_res</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="k">elif</span> <span class="n">variant_res</span><span class="o">.</span><span class="n">vt</span> <span class="o">==</span> <span class="n">VT_BSTR</span><span class="p">:</span>
+                    <span class="n">current_res</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">variant_res</span><span class="o">.</span><span class="n">asbstr</span>
+                <span class="k">elif</span> <span class="n">variant_res</span><span class="o">.</span><span class="n">vt</span> <span class="o">==</span> <span class="n">VT_I4</span><span class="p">:</span>
+                    <span class="n">current_res</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">variant_res</span><span class="o">.</span><span class="n">aslong</span>
+                <span class="k">elif</span> <span class="n">variant_res</span><span class="o">.</span><span class="n">vt</span> <span class="o">==</span> <span class="n">VT_BOOL</span><span class="p">:</span>
+                    <span class="n">current_res</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">variant_res</span><span class="o">.</span><span class="n">asbool</span>
+                <span class="k">elif</span> <span class="n">variant_res</span><span class="o">.</span><span class="n">vt</span> <span class="o">==</span> <span class="n">VT_I2</span><span class="p">:</span>
+                    <span class="n">current_res</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">variant_res</span><span class="o">.</span><span class="n">asshort</span>
+                <span class="k">elif</span> <span class="n">variant_res</span><span class="o">.</span><span class="n">vt</span> <span class="o">==</span> <span class="n">VT_UI1</span><span class="p">:</span>
+                    <span class="n">current_res</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">variant_res</span><span class="o">.</span><span class="n">asbyte</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[WARN] WMI Ignore variant of type </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="n">variant_res</span><span class="o">.</span><span class="n">vt</span><span class="p">)))</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current_res</span><span class="p">)</span>
+            <span class="n">enumerator</span><span class="o">.</span><span class="n">Next</span><span class="p">(</span><span class="mh">0xffffffff</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">processor</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">count</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">res</span></div>
+
+    <span class="k">def</span> <span class="nf">get_names</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">processor</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">SAFEARRAY</span><span class="p">)()</span>
+        <span class="n">processor</span><span class="o">.</span><span class="n">GetNames</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">byref</span><span class="p">(</span><span class="n">res</span><span class="p">))</span>
+        <span class="n">safe_array</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">windows</span><span class="o">.</span><span class="n">com</span><span class="o">.</span><span class="n">ImprovedSAFEARRAY</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">safe_array</span><span class="o">.</span><span class="n">elt_type</span> <span class="o">=</span> <span class="n">BSTR</span>
+        <span class="k">return</span> <span class="n">safe_array</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.2 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>

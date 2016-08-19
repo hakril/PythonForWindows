@@ -1,0 +1,272 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>11. Internals &mdash; PythonForWindows 0.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="PythonForWindows 0.2 documentation" href="index.html" />
+    <link rel="next" title="12. Samples of code" href="sample.html" />
+    <link rel="prev" title="10. Early Work In Progress" href="wip.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="sample.html" title="12. Samples of code"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="wip.html" title="10. Early Work In Progress"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="internals">
+<h1>11. Internals<a class="headerlink" href="#internals" title="Permalink to this headline">¶</a></h1>
+<p>Because some horrible hacks of <code class="docutils literal"><span class="pre">PythonForWindows</span></code> are hidden and I wanted to talk about it.</p>
+<div class="section" id="module-windows.remotectypes">
+<span id="remotectypes-py"></span><h2>11.1. remotectypes.py<a class="headerlink" href="#module-windows.remotectypes" title="Permalink to this headline">¶</a></h2>
+<p>Performing parsing of PEB / PE in remote process may be painful and i didn&#8217;t want
+to have two versions of all my parsing code.</p>
+<p>So I made a wrapper around <a class="reference external" href="https://docs.python.org/2/library/ctypes.html#module-ctypes" title="(in Python v2.7)"><code class="xref py py-mod docutils literal"><span class="pre">ctypes</span></code></a> that is able to do two things:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Transform a 32bits ctypes structure into a 64bits one and reverse</li>
+</ul>
+<p>This is done by replacing the <code class="docutils literal"><span class="pre">c_void_p</span></code>/<code class="docutils literal"><span class="pre">c_char_p</span></code> by <code class="docutils literal"><span class="pre">DWORD</span></code> or
+<code class="docutils literal"><span class="pre">QWORD</span></code> and rewriting a wrapper around the <a class="reference external" href="https://docs.python.org/2/library/ctypes.html#module-ctypes" title="(in Python v2.7)"><code class="xref py py-mod docutils literal"><span class="pre">ctypes</span></code></a> <code class="docutils literal"><span class="pre">POINTER</span></code> and other stuff.
+It might not works for every structure by i didn&#8217;t have any problem for now.</p>
+<ul class="simple">
+<li>Read the memory in another process</li>
+</ul>
+<p>For this one I rewrote a class that use the standard <a class="reference external" href="https://docs.python.org/2/library/ctypes.html#module-ctypes" title="(in Python v2.7)"><code class="xref py py-mod docutils literal"><span class="pre">ctypes</span></code></a> structure
+offset-size calculation, extracts those information when asked for a field and read it from the target process.
+We just need to take care of special cases:  <code class="docutils literal"><span class="pre">POINTER</span></code> / <code class="docutils literal"><span class="pre">ARRAY</span></code> / <code class="docutils literal"><span class="pre">STRING</span></code> / ..</p>
+</div></blockquote>
+<p>We also need to be carreful about the inheritance, we need to inherit from &#8220;hidden&#8221;
+<code class="xref py py-class docutils literal"><span class="pre">ctypes</span></code> classes to keep the magic working.</p>
+<p>This module exports the following API:</p>
+<dl class="function">
+<dt id="windows.remotectypes.transform_type_to_remote32bits">
+<code class="descclassname">windows.remotectypes.</code><code class="descname">transform_type_to_remote32bits</code><span class="sig-paren">(</span><em>ftype</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/remotectypes.html#transform_type_to_remote32bits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.remotectypes.transform_type_to_remote32bits" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="windows.remotectypes.transform_type_to_remote64bits">
+<code class="descclassname">windows.remotectypes.</code><code class="descname">transform_type_to_remote64bits</code><span class="sig-paren">(</span><em>ftype</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/remotectypes.html#transform_type_to_remote64bits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.remotectypes.transform_type_to_remote64bits" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Both functions return a class that represent the structure in a remote process.
+The class.__init__ accept two arguments:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal"><span class="pre">base_addr</span></code>: the address of the object in the remote process</li>
+<li><code class="docutils literal"><span class="pre">target</span></code>: an object with a method <code class="docutils literal"><span class="pre">read_memory</span></code> (so a <code class="xref py py-class docutils literal"><span class="pre">windows.winobject.WinProcess</span></code> in our case)</li>
+</ul>
+</div></blockquote>
+<p>Example <code class="docutils literal"><span class="pre">WinProcess.peb</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">peb</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">32</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">64</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">RemotePEB64</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">peb_addr</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">64</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">32</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">RemotePEB32</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">peb_addr</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">RemotePEB</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">peb_addr</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>I am pretty sure that this code does NOT handle all the cases, so it might break some day.</p>
+</div>
+<div class="section" id="module-windows.syswow64">
+<span id="syswow64-py-crossing-the-heaven-gate"></span><h2>11.2. syswow64.py &#8211; Crossing the heaven gate<a class="headerlink" href="#module-windows.syswow64" title="Permalink to this headline">¶</a></h2>
+<p>One of my goal with <code class="docutils literal"><span class="pre">PythonForWindows</span></code> is to have some abstraction of the bitness of the processes.
+It means being able to work on a <code class="docutils literal"><span class="pre">32bits</span> <span class="pre">Python</span></code> or a <code class="docutils literal"><span class="pre">64bits</span> <span class="pre">Python</span></code>.</p>
+<p>In the case of a 32bits python on a <code class="docutils literal"><span class="pre">64bits</span></code> system (<code class="docutils literal"><span class="pre">SysWow64</span></code>) it&#8217;s not trivial to perform operation on
+other <code class="docutils literal"><span class="pre">64bits</span></code> processes. For example directly calling <code class="xref py py-func docutils literal"><span class="pre">CreateRemoteThread()</span></code> will not work.</p>
+<p>To be able to perform those operation we must be able to execute code in the <code class="docutils literal"><span class="pre">64bits</span></code> part of our
+<code class="docutils literal"><span class="pre">SysWow64</span></code> process.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">See <a class="reference external" href="http://rce.co/knockin-on-heavens-gate-dynamic-processor-mode-switching/">Knockin’ on Heaven’s Gate – Dynamic Processor Mode Switching</a></p>
+</div>
+<p>For that we need to jump to the 64bits segment of our process, execute some code then return.
+To do so, we need to use some <code class="docutils literal"><span class="pre">far</span> <span class="pre">jump</span></code> / <code class="docutils literal"><span class="pre">far</span> <span class="pre">ret</span></code> with the segments selector <code class="docutils literal"><span class="pre">0x23</span></code> (CS_32bits) and <code class="docutils literal"><span class="pre">0x33</span></code> (CS_64bits).</p>
+<p>The generation of this is quite ugly in my case.
+This code is in:</p>
+<dl class="function">
+<dt id="windows.syswow64.execute_64bits_code_from_syswow">
+<code class="descclassname">windows.syswow64.</code><code class="descname">execute_64bits_code_from_syswow</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/syswow64.html#execute_64bits_code_from_syswow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.syswow64.execute_64bits_code_from_syswow" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Once we are able to execute some code in the <code class="docutils literal"><span class="pre">64bits</span></code> part we need to create the code that will call our API (in NTDLL).
+To do that, I rely on the type information already present in the function of <a class="reference internal" href="winproxy.html#module-windows.winproxy" title="windows.winproxy"><code class="xref py py-mod docutils literal"><span class="pre">windows.winproxy</span></code></a>.
+With these information we are able to know</p>
+<blockquote>
+<div><ul class="simple">
+<li>The name of the API</li>
+<li>The number of arguments</li>
+</ul>
+</div></blockquote>
+<p>Then I generate the correct x64 stub (using <a class="reference internal" href="native_exec.html#module-windows.native_exec.simple_x64" title="windows.native_exec.simple_x64"><code class="xref py py-mod docutils literal"><span class="pre">windows.native_exec.simple_x64</span></code></a>) with the function:</p>
+<dl class="function">
+<dt id="windows.syswow64.generate_syswow64_call">
+<code class="descclassname">windows.syswow64.</code><code class="descname">generate_syswow64_call</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/syswow64.html#generate_syswow64_call"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.syswow64.generate_syswow64_call" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>One problem I encountered is that our function must be able to pass values of 64bits, so passing arguments by register is not possible.</p>
+<p>For now I allocate a buffer where a python wrapper copy the parameters and the x64 stub retrieves them from here.</p>
+<p>(It might be possible to do something by creating a WINCFUNC with only ULONG64 parameters).</p>
+<dl class="function">
+<dt id="windows.syswow64.try_generate_stub_target">
+<code class="descclassname">windows.syswow64.</code><code class="descname">try_generate_stub_target</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/syswow64.html#try_generate_stub_target"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.syswow64.try_generate_stub_target" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The final result is a <code class="docutils literal"><span class="pre">Python</span></code> function like the one in <a class="reference internal" href="winproxy.html#module-windows.winproxy" title="windows.winproxy"><code class="xref py py-mod docutils literal"><span class="pre">windows.winproxy</span></code></a></p>
+<blockquote>
+<div><ul class="simple">
+<li>It copies the arguments in the buffer</li>
+<li>Jumps on the 32-&gt;64 stub</li>
+<li>X64 bits code retrieves the arguments in the buffer and setup the registers and the stack for the call</li>
+<li>Calls the API</li>
+<li>Returns to 32bits mode.</li>
+</ul>
+</div></blockquote>
+<dl class="class">
+<dt id="windows.syswow64.Syswow64ApiProxy">
+<em class="property">class </em><code class="descclassname">windows.syswow64.</code><code class="descname">Syswow64ApiProxy</code><a class="reference internal" href="_modules/windows/syswow64.html#Syswow64ApiProxy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.syswow64.Syswow64ApiProxy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Existing function are:</p>
+<dl class="function">
+<dt id="windows.syswow64.NtCreateThreadEx_32_to_64">
+<code class="descclassname">windows.syswow64.</code><code class="descname">NtCreateThreadEx_32_to_64</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/syswow64.html#NtCreateThreadEx_32_to_64"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.syswow64.NtCreateThreadEx_32_to_64" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="windows.syswow64.NtQueryInformationProcess_32_to_64">
+<code class="descclassname">windows.syswow64.</code><code class="descname">NtQueryInformationProcess_32_to_64</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/syswow64.html#NtQueryInformationProcess_32_to_64"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.syswow64.NtQueryInformationProcess_32_to_64" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="windows.syswow64.NtQueryInformationThread_32_to_64">
+<code class="descclassname">windows.syswow64.</code><code class="descname">NtQueryInformationThread_32_to_64</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/syswow64.html#NtQueryInformationThread_32_to_64"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.syswow64.NtQueryInformationThread_32_to_64" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="windows.syswow64.NtQueryVirtualMemory_32_to_64">
+<code class="descclassname">windows.syswow64.</code><code class="descname">NtQueryVirtualMemory_32_to_64</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/syswow64.html#NtQueryVirtualMemory_32_to_64"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.syswow64.NtQueryVirtualMemory_32_to_64" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="windows.syswow64.NtGetContextThread_32_to_64">
+<code class="descclassname">windows.syswow64.</code><code class="descname">NtGetContextThread_32_to_64</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/syswow64.html#NtGetContextThread_32_to_64"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.syswow64.NtGetContextThread_32_to_64" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="windows.syswow64.NtSetContextThread_32_to_64">
+<code class="descclassname">windows.syswow64.</code><code class="descname">NtSetContextThread_32_to_64</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/syswow64.html#NtSetContextThread_32_to_64"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.syswow64.NtSetContextThread_32_to_64" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="windows.syswow64.LdrLoadDll_32_to_64">
+<code class="descclassname">windows.syswow64.</code><code class="descname">LdrLoadDll_32_to_64</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/syswow64.html#LdrLoadDll_32_to_64"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.syswow64.LdrLoadDll_32_to_64" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">11. Internals</a><ul>
+<li><a class="reference internal" href="#module-windows.remotectypes">11.1. remotectypes.py</a></li>
+<li><a class="reference internal" href="#module-windows.syswow64">11.2. syswow64.py &#8211; Crossing the heaven gate</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="wip.html"
+                        title="previous chapter">10. Early Work In Progress</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="sample.html"
+                        title="next chapter">12. Samples of code</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/internals.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="sample.html" title="12. Samples of code"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="wip.html" title="10. Early Work In Progress"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>

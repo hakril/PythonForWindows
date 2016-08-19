@@ -1,0 +1,314 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>windows.winobject.system &mdash; PythonForWindows 0.2 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="PythonForWindows 0.2 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.2 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for windows.winobject.system</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">ctypes</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">struct</span>
+
+<span class="kn">import</span> <span class="nn">windows</span>
+<span class="kn">from</span> <span class="nn">windows</span> <span class="k">import</span> <span class="n">winproxy</span>
+<span class="kn">from</span> <span class="nn">windows</span> <span class="k">import</span> <span class="n">utils</span>
+<span class="kn">from</span> <span class="nn">windows.generated_def</span> <span class="k">import</span> <span class="n">windef</span>
+
+<span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="k">import</span> <span class="n">process</span>
+<span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="k">import</span> <span class="n">network</span>
+<span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="k">import</span> <span class="n">registry</span>
+<span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="k">import</span> <span class="n">exception</span>
+<span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="k">import</span> <span class="n">service</span>
+<span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="k">import</span> <span class="n">volume</span>
+<span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="k">import</span> <span class="n">wmi</span>
+<span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="k">import</span> <span class="n">kernobj</span>
+<span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="k">import</span> <span class="n">handle</span>
+
+<span class="kn">from</span> <span class="nn">windows.generated_def.winstructs</span> <span class="k">import</span> <span class="o">*</span>
+
+<div class="viewcode-block" id="System"><a class="viewcode-back" href="../../../windows.html#windows.winobject.system.System">[docs]</a><span class="k">class</span> <span class="nc">System</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The state of the current ``Windows`` system ``Python`` is running on&quot;&quot;&quot;</span>
+
+    <span class="n">network</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">Network</span><span class="p">()</span>
+    <span class="sd">&quot;&quot;&quot;Object of class :class:`windows.winobject.network.Network`&quot;&quot;&quot;</span>
+    <span class="n">registry</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">Registry</span><span class="p">()</span>
+    <span class="sd">&quot;&quot;&quot;Object of class :class:`windows.winobject.registry.Registry`&quot;&quot;&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">processes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The list of running processes</span>
+
+<span class="sd">        :type: [:class:`process.WinProcess`] -- A list of Process</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">enumerate_processes</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">threads</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The list of running threads</span>
+
+<span class="sd">        :type: [:class:`process.WinThread`] -- A list of Thread</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">enumerate_threads</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">logicaldrives</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;List of logical drives [C:\, ...]</span>
+
+<span class="sd">        :type: [:class:`volume.LogicalDrive`] -- A list of LogicalDrive</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">volume</span><span class="o">.</span><span class="n">enum_logical_drive</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">services</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The list of services</span>
+
+<span class="sd">        :type: [:class:`service.ServiceA`] -- A list of Service&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">service</span><span class="o">.</span><span class="n">enumerate_services</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">handles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The list of system handles</span>
+
+<span class="sd">        :type: [:class:`handle.Handle`] -- A list of Hanlde&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">handle</span><span class="o">.</span><span class="n">enumerate_handles</span><span class="p">()</span>
+
+    <span class="nd">@utils</span><span class="o">.</span><span class="n">fixedpropety</span>
+    <span class="k">def</span> <span class="nf">bitness</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The bitness of the system</span>
+
+<span class="sd">        :type: :class:`int` -- 32 or 64</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;PROCESSOR_ARCHITECTURE&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;x86&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">64</span>
+        <span class="k">if</span> <span class="s2">&quot;PROCESSOR_ARCHITEW6432&quot;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">64</span>
+        <span class="k">return</span> <span class="mi">32</span>
+
+    <span class="nd">@utils</span><span class="o">.</span><span class="n">fixedpropety</span>
+    <span class="k">def</span> <span class="nf">wmi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;An object to perform wmi request to &quot;root\\cimv2&quot;</span>
+
+<span class="sd">        :type: :class:`windows.winobject.wmi.WmiRequester`&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">wmi</span><span class="o">.</span><span class="n">WmiRequester</span><span class="p">()</span>
+
+    <span class="c1">#TODO: use GetComputerNameExA ? and recover other names ?</span>
+    <span class="nd">@utils</span><span class="o">.</span><span class="n">fixedpropety</span>
+    <span class="k">def</span> <span class="nf">computer_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The name of the computer</span>
+
+<span class="sd">        :type: :class:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="n">DWORD</span><span class="p">(</span><span class="mh">0x1000</span><span class="p">)</span>
+        <span class="n">buf</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_buffer</span><span class="p">(</span><span class="n">size</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">GetComputerNameA</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">size</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">buf</span><span class="p">[:</span><span class="n">size</span><span class="o">.</span><span class="n">value</span><span class="p">]</span>
+
+    <span class="nd">@utils</span><span class="o">.</span><span class="n">fixedpropety</span>
+    <span class="k">def</span> <span class="nf">version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The version of the system</span>
+
+<span class="sd">        :type: (:class:`int`, :class:`int`) -- (Major, Minor)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_version</span><span class="p">()</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">dwMajorVersion</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">dwMinorVersion</span>
+        <span class="k">if</span> <span class="n">result</span> <span class="o">==</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">2</span><span class="p">):</span>
+            <span class="n">result_str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_file_version</span><span class="p">(</span><span class="s2">&quot;kernel32&quot;</span><span class="p">)</span>
+            <span class="n">result_tup</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">result_str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)]</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">result_tup</span><span class="p">[:</span><span class="mi">2</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="nd">@utils</span><span class="o">.</span><span class="n">fixedpropety</span>
+    <span class="k">def</span> <span class="nf">version_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The name of the system version,  values are:</span>
+
+<span class="sd">            * Windows Server 2016</span>
+<span class="sd">            * Windows 10</span>
+<span class="sd">            * Windows Server 2012 R2</span>
+<span class="sd">            * Windows 8.1</span>
+<span class="sd">            * Windows Server 2012</span>
+<span class="sd">            * Windows 8</span>
+<span class="sd">            * Windows Server 2008</span>
+<span class="sd">            * Windows 7</span>
+<span class="sd">            * Windows Server 2008</span>
+<span class="sd">            * Windows Vista</span>
+<span class="sd">            * Windows XP Professional x64 Edition</span>
+<span class="sd">            * TODO: version (5.2) + is_workstation + bitness == 32 (don&#39;t even know if possible..)</span>
+<span class="sd">            * Windows Server 2003 R2</span>
+<span class="sd">            * Windows Server 2003</span>
+<span class="sd">            * Windows XP</span>
+<span class="sd">            * Windows 2000</span>
+<span class="sd">            * &quot;Unknow Windows &lt;version={0} | is_workstation={1}&gt;&quot;.format(version, is_workstation)</span>
+
+<span class="sd">        :type: :class:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">version</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">version</span>
+        <span class="n">is_workstation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">product_type</span> <span class="o">==</span> <span class="n">VER_NT_WORKSTATION</span>
+        <span class="k">if</span> <span class="n">version</span> <span class="o">==</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">[</span><span class="s2">&quot;Windows Server 2016&quot;</span><span class="p">,</span> <span class="s2">&quot;Windows 10&quot;</span><span class="p">][</span><span class="n">is_workstation</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">version</span> <span class="o">==</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">3</span><span class="p">):</span>
+            <span class="k">return</span>  <span class="p">[</span><span class="s2">&quot;Windows Server 2012 R2&quot;</span><span class="p">,</span> <span class="s2">&quot;Windows 8.1&quot;</span><span class="p">][</span><span class="n">is_workstation</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">version</span> <span class="o">==</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">[</span><span class="s2">&quot;Windows Server 2012&quot;</span><span class="p">,</span> <span class="s2">&quot;Windows 8&quot;</span><span class="p">][</span><span class="n">is_workstation</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">version</span> <span class="o">==</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">[</span><span class="s2">&quot;Windows Server 2008 R2&quot;</span><span class="p">,</span> <span class="s2">&quot;Windows 7&quot;</span><span class="p">][</span><span class="n">is_workstation</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">version</span> <span class="o">==</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">[</span><span class="s2">&quot;Windows Server 2008&quot;</span><span class="p">,</span> <span class="s2">&quot;Windows Vista&quot;</span><span class="p">][</span><span class="n">is_workstation</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">version</span> <span class="o">==</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+            <span class="n">metric</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">GetSystemMetrics</span><span class="p">(</span><span class="n">SM_SERVERR2</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">is_workstation</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">64</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="s2">&quot;Windows XP Professional x64 Edition&quot;</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="s2">&quot;TODO: version (5.2) + is_workstation + bitness == 32&quot;</span>
+            <span class="k">elif</span> <span class="n">metric</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="s2">&quot;Windows Server 2003 R2&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="s2">&quot;Windows Server 2003&quot;</span>
+        <span class="k">elif</span> <span class="n">version</span> <span class="o">==</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">return</span> <span class="s2">&quot;Windows XP&quot;</span>
+        <span class="k">elif</span> <span class="n">version</span> <span class="o">==</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="k">return</span> <span class="s2">&quot;Windows 2000&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;Unknow Windows &lt;version=</span><span class="si">{0}</span><span class="s2"> | is_workstation=</span><span class="si">{1}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">version</span><span class="p">,</span> <span class="n">is_workstation</span><span class="p">)</span>
+
+    <span class="nd">@utils</span><span class="o">.</span><span class="n">fixedpropety</span>
+    <span class="k">def</span> <span class="nf">product_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The product type, value might be:</span>
+
+<span class="sd">            * VER_NT_WORKSTATION(0x1L)</span>
+<span class="sd">            * VER_NT_DOMAIN_CONTROLLER(0x2L)</span>
+<span class="sd">            * VER_NT_SERVER(0x3L)</span>
+
+<span class="sd">        :type: :class:`long` or :class:`int` (or subclass)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">version_map</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">:</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="n">VER_NT_WORKSTATION</span><span class="p">,</span> <span class="n">VER_NT_DOMAIN_CONTROLLER</span><span class="p">,</span> <span class="n">VER_NT_SERVER</span><span class="p">]}</span>
+        <span class="n">version</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_version</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">version_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">version</span><span class="o">.</span><span class="n">wProductType</span><span class="p">,</span> <span class="n">version</span><span class="o">.</span><span class="n">wProductType</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">generated_def</span><span class="o">.</span><span class="n">OSVERSIONINFOEXA</span><span class="p">()</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">dwOSVersionInfoSize</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">GetVersionExA</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">pointer</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">windows</span><span class="o">.</span><span class="n">generated_def</span><span class="o">.</span><span class="n">OSVERSIONINFOA</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="n">data</span>
+
+    <span class="k">def</span> <span class="nf">get_file_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">GetFileVersionInfoSizeA</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">buf</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_buffer</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">GetFileVersionInfoA</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">buf</span><span class="p">)</span>
+
+        <span class="n">bufptr</span> <span class="o">=</span> <span class="n">PVOID</span><span class="p">()</span>
+        <span class="n">bufsize</span> <span class="o">=</span> <span class="n">UINT</span><span class="p">()</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">VerQueryValueA</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">VarFileInfo</span><span class="se">\\</span><span class="s2">Translation&quot;</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">bufptr</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">bufsize</span><span class="p">))</span>
+        <span class="n">bufstr</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">bufptr</span><span class="p">,</span> <span class="n">LPCSTR</span><span class="p">)</span>
+        <span class="n">tup</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&lt;HH&quot;</span><span class="p">,</span> <span class="n">bufstr</span><span class="o">.</span><span class="n">value</span><span class="p">[:</span><span class="mi">4</span><span class="p">])</span>
+        <span class="n">req</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{0:04x}{1:04x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="n">tup</span><span class="p">)</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">VerQueryValueA</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">StringFileInfo</span><span class="se">\\</span><span class="si">{0}</span><span class="se">\\</span><span class="s2">ProductVersion&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">req</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">bufptr</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">bufsize</span><span class="p">))</span>
+        <span class="n">bufstr</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">bufptr</span><span class="p">,</span> <span class="n">LPCSTR</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">bufstr</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">enumerate_processes</span><span class="p">():</span>
+        <span class="n">process_entry</span> <span class="o">=</span> <span class="n">PROCESSENTRY32</span><span class="p">()</span>
+        <span class="n">process_entry</span><span class="o">.</span><span class="n">dwSize</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">process_entry</span><span class="p">)</span>
+        <span class="n">snap</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CreateToolhelp32Snapshot</span><span class="p">(</span><span class="n">windef</span><span class="o">.</span><span class="n">TH32CS_SNAPPROCESS</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">Process32First</span><span class="p">(</span><span class="n">snap</span><span class="p">,</span> <span class="n">process_entry</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">process</span><span class="o">.</span><span class="n">WinProcess</span><span class="o">.</span><span class="n">_from_PROCESSENTRY32</span><span class="p">(</span><span class="n">process_entry</span><span class="p">))</span>
+        <span class="k">while</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">Process32Next</span><span class="p">(</span><span class="n">snap</span><span class="p">,</span> <span class="n">process_entry</span><span class="p">):</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">process</span><span class="o">.</span><span class="n">WinProcess</span><span class="o">.</span><span class="n">_from_PROCESSENTRY32</span><span class="p">(</span><span class="n">process_entry</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">res</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">enumerate_threads</span><span class="p">():</span>
+        <span class="n">thread_entry</span> <span class="o">=</span> <span class="n">process</span><span class="o">.</span><span class="n">WinThread</span><span class="p">()</span>
+        <span class="n">thread_entry</span><span class="o">.</span><span class="n">dwSize</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">thread_entry</span><span class="p">)</span>
+        <span class="n">snap</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CreateToolhelp32Snapshot</span><span class="p">(</span><span class="n">windef</span><span class="o">.</span><span class="n">TH32CS_SNAPTHREAD</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">threads</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">Thread32First</span><span class="p">(</span><span class="n">snap</span><span class="p">,</span> <span class="n">thread_entry</span><span class="p">)</span>
+        <span class="n">threads</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">thread_entry</span><span class="p">))</span>
+        <span class="k">while</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">Thread32Next</span><span class="p">(</span><span class="n">snap</span><span class="p">,</span> <span class="n">thread_entry</span><span class="p">):</span>
+            <span class="n">threads</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">thread_entry</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">threads</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.2 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>

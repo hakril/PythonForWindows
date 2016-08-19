@@ -1,0 +1,536 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>windows.winobject.network &mdash; PythonForWindows 0.2 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="PythonForWindows 0.2 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.2 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for windows.winobject.network</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">windows</span>
+<span class="kn">import</span> <span class="nn">ctypes</span>
+<span class="kn">import</span> <span class="nn">socket</span>
+<span class="kn">import</span> <span class="nn">struct</span>
+
+<span class="kn">from</span> <span class="nn">windows</span> <span class="k">import</span> <span class="n">winproxy</span>
+<span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
+<span class="kn">from</span> <span class="nn">windows.com</span> <span class="k">import</span> <span class="n">interfaces</span> <span class="k">as</span> <span class="n">cominterfaces</span>
+<span class="kn">from</span> <span class="nn">windows.generated_def.winstructs</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">windows.generated_def.windef</span> <span class="k">import</span> <span class="o">*</span>
+
+
+<div class="viewcode-block" id="TCP4Connection"><a class="viewcode-back" href="../../../network.html#windows.winobject.network.TCP4Connection">[docs]</a><span class="k">class</span> <span class="nc">TCP4Connection</span><span class="p">(</span><span class="n">MIB_TCPROW_OWNER_PID</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A TCP4 socket (connected or listening)&quot;&quot;&quot;</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">established</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;``True`` if connection is established else it&#39;s a listening socket&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dwState</span> <span class="o">==</span> <span class="n">MIB_TCP_STATE_ESTAB</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">remote_port</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;:type: :class:`int`&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">established</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">socket</span><span class="o">.</span><span class="n">ntohs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dwRemotePort</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">local_port</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;:type: :class:`int`&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">socket</span><span class="o">.</span><span class="n">ntohs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dwLocalPort</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">local_addr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Local address IP (x.x.x.x)</span>
+
+<span class="sd">        :type: :class:`str`&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">socket</span><span class="o">.</span><span class="n">inet_ntoa</span><span class="p">(</span><span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s2">&quot;&lt;I&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dwLocalAddr</span><span class="p">))</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">remote_addr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;remote address IP (x.x.x.x)</span>
+
+<span class="sd">        :type: :class:`str`&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">established</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">socket</span><span class="o">.</span><span class="n">inet_ntoa</span><span class="p">(</span><span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s2">&quot;&lt;I&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dwRemoteAddr</span><span class="p">))</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">remote_proto</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Identification of the protocol associated with the remote port.</span>
+<span class="sd">           Equals ``remote_port`` if no protocol is associated with it.</span>
+
+<span class="sd">           :type: :class:`str` or :class:`int`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">socket</span><span class="o">.</span><span class="n">getservbyport</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">remote_port</span><span class="p">,</span> <span class="s1">&#39;tcp&#39;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">error</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">remote_port</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">remote_host</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Identification of the remote hostname.</span>
+<span class="sd">           Equals ``remote_addr`` if the resolution fails</span>
+
+<span class="sd">           :type: :class:`str` or :class:`int`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">socket</span><span class="o">.</span><span class="n">gethostbyaddr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">remote_addr</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">error</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">remote_addr</span>
+
+<div class="viewcode-block" id="TCP4Connection.close"><a class="viewcode-back" href="../../../network.html#windows.winobject.network.TCP4Connection.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Close the connection &lt;require elevated process&gt;&quot;&quot;&quot;</span>
+        <span class="n">closing</span> <span class="o">=</span> <span class="n">MIB_TCPROW</span><span class="p">()</span>
+        <span class="n">closing</span><span class="o">.</span><span class="n">dwState</span> <span class="o">=</span> <span class="n">MIB_TCP_STATE_DELETE_TCB</span>
+        <span class="n">closing</span><span class="o">.</span><span class="n">dwLocalAddr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dwLocalAddr</span>
+        <span class="n">closing</span><span class="o">.</span><span class="n">dwLocalPort</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dwLocalPort</span>
+        <span class="n">closing</span><span class="o">.</span><span class="n">dwRemoteAddr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dwRemoteAddr</span>
+        <span class="n">closing</span><span class="o">.</span><span class="n">dwRemotePort</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dwRemotePort</span>
+        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">SetTcpEntry</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">closing</span><span class="p">))</span></div>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">established</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;&lt;TCP IPV4 Listening socket on </span><span class="si">{0}</span><span class="s2">:</span><span class="si">{1}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">local_addr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">local_port</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;&lt;TCP IPV4 Connection </span><span class="si">{s.local_addr}</span><span class="s2">:</span><span class="si">{s.local_port}</span><span class="s2"> -&gt; </span><span class="si">{s.remote_addr}</span><span class="s2">:</span><span class="si">{s.remote_port}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TCP6Connection"><a class="viewcode-back" href="../../../network.html#windows.winobject.network.TCP6Connection">[docs]</a><span class="k">class</span> <span class="nc">TCP6Connection</span><span class="p">(</span><span class="n">MIB_TCP6ROW_OWNER_PID</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A TCP6 socket (connected or listening)&quot;&quot;&quot;</span>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_str_ipv6_addr</span><span class="p">(</span><span class="n">addr</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;:&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;hex&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">addr</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">established</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;``True`` if connection is established else it&#39;s a listening socket&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dwState</span> <span class="o">==</span> <span class="n">MIB_TCP_STATE_ESTAB</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">remote_port</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;:type: :class:`int`&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">established</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">socket</span><span class="o">.</span><span class="n">ntohs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dwRemotePort</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">local_port</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;:type: :class:`int`&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">socket</span><span class="o">.</span><span class="n">ntohs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dwLocalPort</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">local_addr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Local address IP</span>
+
+<span class="sd">        :type: :class:`str`&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_str_ipv6_addr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ucLocalAddr</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">remote_addr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;remote address IP</span>
+
+<span class="sd">        :type: :class:`str`&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">established</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_str_ipv6_addr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ucRemoteAddr</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">remote_proto</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Equals to ``self.remote_port`` for Ipv6&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">remote_port</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">remote_host</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Equals to ``self.remote_addr`` for Ipv6&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">remote_addr</span>
+
+    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Closing IPV6 connection non implemented&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">established</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;&lt;TCP IPV6 Listening socket on </span><span class="si">{0}</span><span class="s2">:</span><span class="si">{1}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">local_addr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">local_port</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;&lt;TCP IPV6 Connection </span><span class="si">{0}</span><span class="s2">:</span><span class="si">{1}</span><span class="s2"> -&gt; </span><span class="si">{2}</span><span class="s2">:</span><span class="si">{3}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">local_addr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">local_port</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">remote_addr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">remote_port</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">get_MIB_TCPTABLE_OWNER_PID_from_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">generated_def</span><span class="o">.</span><span class="n">winstructs</span><span class="o">.</span><span class="n">MIB_TCPTABLE_OWNER_PID</span><span class="o">.</span><span class="n">from_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
+    <span class="n">nb_entry</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">dwNumEntries</span>
+
+    <span class="k">class</span> <span class="nc">_GENERATED_MIB_TCPTABLE_OWNER_PID</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
+            <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">(</span><span class="s2">&quot;dwNumEntries&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">),</span>
+                <span class="p">(</span><span class="s2">&quot;table&quot;</span><span class="p">,</span> <span class="n">TCP4Connection</span> <span class="o">*</span> <span class="n">nb_entry</span><span class="p">),</span>
+            <span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">_GENERATED_MIB_TCPTABLE_OWNER_PID</span><span class="o">.</span><span class="n">from_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">get_MIB_TCP6TABLE_OWNER_PID_from_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">generated_def</span><span class="o">.</span><span class="n">winstructs</span><span class="o">.</span><span class="n">MIB_TCP6TABLE_OWNER_PID</span><span class="o">.</span><span class="n">from_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
+    <span class="n">nb_entry</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">dwNumEntries</span>
+
+    <span class="c1"># Struct _MIB_TCP6TABLE_OWNER_PID definitions</span>
+    <span class="k">class</span> <span class="nc">_GENERATED_MIB_TCP6TABLE_OWNER_PID</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+            <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">(</span><span class="s2">&quot;dwNumEntries&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">),</span>
+                <span class="p">(</span><span class="s2">&quot;table&quot;</span><span class="p">,</span> <span class="n">TCP6Connection</span> <span class="o">*</span> <span class="n">nb_entry</span><span class="p">),</span>
+            <span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">_GENERATED_MIB_TCP6TABLE_OWNER_PID</span><span class="o">.</span><span class="n">from_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Firewall"><a class="viewcode-back" href="../../../network.html#windows.winobject.network.Firewall">[docs]</a><span class="k">class</span> <span class="nc">Firewall</span><span class="p">(</span><span class="n">cominterfaces</span><span class="o">.</span><span class="n">INetFwPolicy2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The windows firewall&quot;&quot;&quot;</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">rules</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The rules of the firewall</span>
+
+<span class="sd">        :type: [:class:`FirewallRule`] -- A list of rule</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ifw_rules</span> <span class="o">=</span> <span class="n">cominterfaces</span><span class="o">.</span><span class="n">INetFwRules</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_Rules</span><span class="p">(</span><span class="n">ifw_rules</span><span class="p">)</span>
+
+        <span class="n">nb_rules</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">LONG</span><span class="p">()</span>
+        <span class="n">ifw_rules</span><span class="o">.</span><span class="n">get_Count</span><span class="p">(</span><span class="n">nb_rules</span><span class="p">)</span>
+
+        <span class="n">unknw</span> <span class="o">=</span> <span class="n">cominterfaces</span><span class="o">.</span><span class="n">IUnknown</span><span class="p">()</span>
+        <span class="n">ifw_rules</span><span class="o">.</span><span class="n">get__NewEnum</span><span class="p">(</span><span class="n">unknw</span><span class="p">)</span>
+
+        <span class="n">pVariant</span> <span class="o">=</span> <span class="n">cominterfaces</span><span class="o">.</span><span class="n">IEnumVARIANT</span><span class="p">()</span>
+        <span class="n">unknw</span><span class="o">.</span><span class="n">QueryInterface</span><span class="p">(</span><span class="n">pVariant</span><span class="o">.</span><span class="n">IID</span><span class="p">,</span> <span class="n">pVariant</span><span class="p">)</span>
+
+        <span class="n">count</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ULONG</span><span class="p">()</span>
+        <span class="n">var</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">com</span><span class="o">.</span><span class="n">ImprovedVariant</span><span class="p">()</span>
+
+        <span class="n">rules</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nb_rules</span><span class="o">.</span><span class="n">value</span><span class="p">):</span>
+            <span class="n">pVariant</span><span class="o">.</span><span class="n">Next</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">count</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">count</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="n">rule</span> <span class="o">=</span> <span class="n">FirewallRule</span><span class="p">()</span>
+            <span class="n">idisp</span> <span class="o">=</span> <span class="n">var</span><span class="o">.</span><span class="n">asdispatch</span>
+            <span class="n">idisp</span><span class="o">.</span><span class="n">QueryInterface</span><span class="p">(</span><span class="n">rule</span><span class="o">.</span><span class="n">IID</span><span class="p">,</span> <span class="n">rule</span><span class="p">)</span>
+            <span class="n">rules</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rule</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">rules</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">current_profile_types</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Mask of the profiles currently enabled</span>
+
+<span class="sd">        :type: :class:`long`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cpt</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">LONG</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_CurrentProfileTypes</span><span class="p">(</span><span class="n">cpt</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cpt</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">enabled</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;A maping of the active firewall profiles</span>
+
+<span class="sd">        {</span>
+
+<span class="sd">        ``NET_FW_PROFILE_TYPE2_.NET_FW_PROFILE2_DOMAIN(0x1L)``: ``True`` or ``False``,</span>
+
+<span class="sd">        ``NET_FW_PROFILE_TYPE2_.NET_FW_PROFILE2_PRIVATE(0x2L)``: ``True`` or ``False``,</span>
+
+<span class="sd">        ``NET_FW_PROFILE_TYPE2_.NET_FW_PROFILE2_PUBLIC(0x4L)``: ``True`` or ``False``,</span>
+
+<span class="sd">        }</span>
+
+
+<span class="sd">        :type: :class:`dict`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">profiles</span> <span class="o">=</span> <span class="p">[</span><span class="n">gdef</span><span class="o">.</span><span class="n">NET_FW_PROFILE2_DOMAIN</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">NET_FW_PROFILE2_PRIVATE</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">NET_FW_PROFILE2_PUBLIC</span><span class="p">]</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">prof</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">enabled_for_profile_type</span><span class="p">(</span><span class="n">prof</span><span class="p">)</span> <span class="k">for</span> <span class="n">prof</span> <span class="ow">in</span> <span class="n">profiles</span><span class="p">}</span>
+
+
+    <span class="k">def</span> <span class="nf">enabled_for_profile_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">profile_type</span><span class="p">):</span>
+        <span class="n">enabled</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">VARIANT_BOOL</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_FirewallEnabled</span><span class="p">(</span><span class="n">profile_type</span><span class="p">,</span> <span class="n">enabled</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">enabled</span><span class="o">.</span><span class="n">value</span></div>
+
+
+
+<div class="viewcode-block" id="FirewallRule"><a class="viewcode-back" href="../../../network.html#windows.winobject.network.FirewallRule">[docs]</a><span class="k">class</span> <span class="nc">FirewallRule</span><span class="p">(</span><span class="n">cominterfaces</span><span class="o">.</span><span class="n">INetFwRule</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A rule of the firewall&quot;&quot;&quot;</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Name of the rule</span>
+
+<span class="sd">        :type: :class:`unicode`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_Name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">name</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">description</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Description of the rule</span>
+
+<span class="sd">        :type: :class:`unicode`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">description</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_Description</span><span class="p">(</span><span class="n">description</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">description</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">application_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Name of the application to which apply the rule</span>
+
+<span class="sd">        :type: :class:`unicode`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">applicationname</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_ApplicationName</span><span class="p">(</span><span class="n">applicationname</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">applicationname</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">service_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Name of the service to which apply the rule</span>
+
+<span class="sd">        :type: :class:`unicode`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">servicename</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_ServiceName</span><span class="p">(</span><span class="n">servicename</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">servicename</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">protocol</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Protocol to which apply the rule</span>
+
+<span class="sd">        :type: :class:`long`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">protocol</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">LONG</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_Protocol</span><span class="p">(</span><span class="n">protocol</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">protocol</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">local_address</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Local address of the rule</span>
+
+<span class="sd">        :type: :class:`unicode`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">local_address</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_LocalAddresses</span><span class="p">(</span><span class="n">local_address</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">local_address</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">remote_address</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Remote address of the rule</span>
+
+<span class="sd">        :type: :class:`unicode`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">remote_address</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_RemoteAddresses</span><span class="p">(</span><span class="n">remote_address</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">remote_address</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">direction</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Direction of the rule, values might be:</span>
+
+<span class="sd">            * ``NET_FW_RULE_DIRECTION_.NET_FW_RULE_DIR_IN(0x1L)``</span>
+<span class="sd">            * ``NET_FW_RULE_DIRECTION_.NET_FW_RULE_DIR_OUT(0x2L)``</span>
+
+<span class="sd">        subclass of :class:`long`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">direction</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">NET_FW_RULE_DIRECTION</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_Direction</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">direction</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">interface_types</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Types of interface of the rule</span>
+
+<span class="sd">        :type: :class:`unicode`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">interface_type</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_InterfaceTypes</span><span class="p">(</span><span class="n">interface_type</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">interface_type</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">local_port</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Local port of the rule</span>
+
+<span class="sd">        :type: :class:`unicode`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">local_port</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_LocalPorts</span><span class="p">(</span><span class="n">local_port</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">local_port</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">remote_port</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Remote port of the rule</span>
+
+<span class="sd">        :type: :class:`unicode`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">remote_port</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_RemotePorts</span><span class="p">(</span><span class="n">remote_port</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">remote_port</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">action</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Action of the rule, values might be:</span>
+
+<span class="sd">            * ``NET_FW_ACTION_.NET_FW_ACTION_BLOCK(0x0L)``</span>
+<span class="sd">            * ``NET_FW_ACTION_.NET_FW_ACTION_ALLOW(0x1L)``</span>
+
+<span class="sd">        subclass of :class:`long`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">action</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">NET_FW_ACTION</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_Action</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">action</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">enabled</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;``True`` if rule is enabled&quot;&quot;&quot;</span>
+        <span class="n">enabled</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">VARIANT_BOOL</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_Enabled</span><span class="p">(</span><span class="n">enabled</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">enabled</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">grouping</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Grouping of the rule</span>
+
+<span class="sd">        :type: :class:`unicode`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">grouping</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_RemotePorts</span><span class="p">(</span><span class="n">grouping</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">grouping</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">icmp_type_and_code</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">icmp_type_and_code</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_RemotePorts</span><span class="p">(</span><span class="n">icmp_type_and_code</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">icmp_type_and_code</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;&lt;</span><span class="si">{0}</span><span class="s1"> &quot;</span><span class="si">{1}</span><span class="s1">&quot;&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Network"><a class="viewcode-back" href="../../../network.html#windows.winobject.network.Network">[docs]</a><span class="k">class</span> <span class="nc">Network</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="n">NetFwPolicy2</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">com</span><span class="o">.</span><span class="n">IID</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s2">&quot;E2B3C97F-6AE1-41AC-817A-F6F92166D7DD&quot;</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">firewall</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The firewall of the system</span>
+
+<span class="sd">        :type: :class:`Firewall`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">windows</span><span class="o">.</span><span class="n">com</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+        <span class="n">firewall</span> <span class="o">=</span> <span class="n">Firewall</span><span class="p">()</span>
+        <span class="n">windows</span><span class="o">.</span><span class="n">com</span><span class="o">.</span><span class="n">create_instance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">NetFwPolicy2</span><span class="p">,</span> <span class="n">firewall</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">firewall</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_get_tcp_ipv4_sockets</span><span class="p">():</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">winproxy</span><span class="o">.</span><span class="n">GetExtendedTcpTable</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">size</span><span class="p">),</span> <span class="n">ulAf</span><span class="o">=</span><span class="n">AF_INET</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">IphlpapiError</span><span class="p">:</span>
+            <span class="k">pass</span>  <span class="c1"># Allow us to set size to the needed value</span>
+        <span class="n">buffer</span> <span class="o">=</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_char</span> <span class="o">*</span> <span class="n">size</span><span class="o">.</span><span class="n">value</span><span class="p">)()</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">GetExtendedTcpTable</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">size</span><span class="p">),</span> <span class="n">ulAf</span><span class="o">=</span><span class="n">AF_INET</span><span class="p">)</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">get_MIB_TCPTABLE_OWNER_PID_from_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">table</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_get_tcp_ipv6_sockets</span><span class="p">():</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">winproxy</span><span class="o">.</span><span class="n">GetExtendedTcpTable</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">size</span><span class="p">),</span> <span class="n">ulAf</span><span class="o">=</span><span class="n">AF_INET6</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">IphlpapiError</span><span class="p">:</span>
+            <span class="k">pass</span>  <span class="c1"># Allow us to set size to the needed value</span>
+        <span class="n">buffer</span> <span class="o">=</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_char</span> <span class="o">*</span> <span class="n">size</span><span class="o">.</span><span class="n">value</span><span class="p">)()</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">GetExtendedTcpTable</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">size</span><span class="p">),</span> <span class="n">ulAf</span><span class="o">=</span><span class="n">AF_INET6</span><span class="p">)</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">get_MIB_TCP6TABLE_OWNER_PID_from_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">table</span><span class="p">)</span>
+
+
+    <span class="n">ipv4</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_tcp_ipv4_sockets</span><span class="p">())</span>
+    <span class="sd">&quot;&quot;&quot;List of TCP IPv4 socket (connection and listening)</span>
+
+<span class="sd">        :type: [:class:`TCP4Connection`]&quot;&quot;&quot;</span>
+
+    <span class="n">ipv6</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_tcp_ipv6_sockets</span><span class="p">())</span>
+    <span class="sd">&quot;&quot;&quot;List of TCP IPv6 socket (connection and listening)</span>
+
+<span class="sd">      :type: [:class:`TCP6Connection`]</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.2 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>

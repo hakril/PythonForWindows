@@ -1,0 +1,248 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>windows.debug.breakpoints &mdash; PythonForWindows 0.2 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="PythonForWindows 0.2 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.2 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for windows.debug.breakpoints</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">OrderedDict</span>
+
+<span class="kn">import</span> <span class="nn">windows</span>
+<span class="kn">from</span> <span class="nn">windows.generated_def.winstructs</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">windows.generated_def</span> <span class="k">import</span> <span class="n">windef</span>
+<span class="kn">from</span> <span class="nn">windows.winobject.process</span> <span class="k">import</span> <span class="n">WinProcess</span><span class="p">,</span> <span class="n">WinThread</span>
+
+
+<span class="n">STANDARD_BP</span> <span class="o">=</span> <span class="s2">&quot;BP&quot;</span>
+<span class="n">HARDWARE_EXEC_BP</span> <span class="o">=</span> <span class="s2">&quot;HXBP&quot;</span>
+<span class="n">MEMORY_BREAKPOINT</span> <span class="o">=</span> <span class="s2">&quot;MEMBP&quot;</span>
+
+<div class="viewcode-block" id="Breakpoint"><a class="viewcode-back" href="../../../debug.html#windows.debug.Breakpoint">[docs]</a><span class="k">class</span> <span class="nc">Breakpoint</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An standard (Int3) breakpoint (type == ``STANDARD_BP``)&quot;&quot;&quot;</span>
+    <span class="nb">type</span> <span class="o">=</span> <span class="n">STANDARD_BP</span> <span class="c1"># REAL BP</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addr</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">addr</span> <span class="o">=</span> <span class="n">addr</span>
+
+    <span class="k">def</span> <span class="nf">apply_to_target</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">WinProcess</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Breakpoint.trigger"><a class="viewcode-back" href="../../../debug.html#windows.debug.Breakpoint.trigger">[docs]</a>    <span class="k">def</span> <span class="nf">trigger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbg</span><span class="p">,</span> <span class="n">exception</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Called when breakpoint is hit&quot;&quot;&quot;</span>
+        <span class="k">pass</span></div></div>
+
+
+<span class="k">class</span> <span class="nc">ProxyBreakpoint</span><span class="p">(</span><span class="n">Breakpoint</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="nb">type</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="n">target</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">addr</span> <span class="o">=</span> <span class="n">addr</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="nb">type</span>
+
+    <span class="k">def</span> <span class="nf">trigger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbg</span><span class="p">,</span> <span class="n">exception</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">(</span><span class="n">dbg</span><span class="p">,</span> <span class="n">exception</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="HXBreakpoint"><a class="viewcode-back" href="../../../debug.html#windows.debug.HXBreakpoint">[docs]</a><span class="k">class</span> <span class="nc">HXBreakpoint</span><span class="p">(</span><span class="n">Breakpoint</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An hardware-execution breakpoint (type == ``HARDWARE_EXEC_BP``)&quot;&quot;&quot;</span>
+    <span class="nb">type</span> <span class="o">=</span> <span class="n">HARDWARE_EXEC_BP</span>
+
+    <span class="k">def</span> <span class="nf">apply_to_target</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">WinThread</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MemoryBreakpoint"><a class="viewcode-back" href="../../../debug.html#windows.debug.MemoryBreakpoint">[docs]</a><span class="k">class</span> <span class="nc">MemoryBreakpoint</span><span class="p">(</span><span class="n">Breakpoint</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A memory breakpoint (type == ``MEMORY_BREAKPOINT``)&quot;&quot;&quot;</span>
+    <span class="nb">type</span> <span class="o">=</span> <span class="n">MEMORY_BREAKPOINT</span>
+    <span class="n">DEFAULT_EVENTS</span> <span class="o">=</span> <span class="s2">&quot;RWX&quot;</span>
+    <span class="n">DEFAULT_SIZE</span> <span class="o">=</span> <span class="mh">0x1000</span>
+<div class="viewcode-block" id="MemoryBreakpoint.__init__"><a class="viewcode-back" href="../../../debug.html#windows.debug.MemoryBreakpoint.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">events</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;``size``: the size of the memory breakpoint.</span>
+
+<span class="sd">        ``events``: a string representing the events that interest the BP (any of &quot;RWX&quot;)&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">MemoryBreakpoint</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">size</span> <span class="k">if</span> <span class="n">size</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">DEFAULT_SIZE</span>
+        <span class="n">events</span> <span class="o">=</span> <span class="n">events</span> <span class="k">if</span> <span class="n">events</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">DEFAULT_EVENTS</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">events</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">events</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MemoryBreakpoint.trigger"><a class="viewcode-back" href="../../../debug.html#windows.debug.MemoryBreakpoint.trigger">[docs]</a>    <span class="k">def</span> <span class="nf">trigger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbg</span><span class="p">,</span> <span class="n">exception</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Called when breakpoint is hit&quot;&quot;&quot;</span>
+        <span class="k">pass</span></div></div>
+
+
+<span class="c1">## Arguments Helper (need to move this elsewhere)</span>
+<span class="k">class</span> <span class="nc">X86ArgumentRetriever</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_arg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nb</span><span class="p">,</span> <span class="n">proc</span><span class="p">,</span> <span class="n">thread</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">proc</span><span class="o">.</span><span class="n">read_dword</span><span class="p">(</span><span class="n">thread</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">sp</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">+</span> <span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">nb</span><span class="p">))</span>
+
+<span class="k">class</span> <span class="nc">X64ArgumentRetriever</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="n">REG_ARGS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Rcx&quot;</span><span class="p">,</span> <span class="s2">&quot;Rdx&quot;</span><span class="p">,</span> <span class="s2">&quot;R8&quot;</span><span class="p">,</span> <span class="s2">&quot;R9&quot;</span><span class="p">]</span>
+    <span class="k">def</span> <span class="nf">get_arg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nb</span><span class="p">,</span> <span class="n">proc</span><span class="p">,</span> <span class="n">thread</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">nb</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">REG_ARGS</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">thread</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">REG_ARGS</span><span class="p">[</span><span class="n">nb</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">proc</span><span class="o">.</span><span class="n">read_dword</span><span class="p">(</span><span class="n">thread</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">sp</span> <span class="o">+</span> <span class="mi">8</span> <span class="o">+</span> <span class="p">(</span><span class="mi">8</span> <span class="o">*</span> <span class="n">nb</span><span class="p">))</span>
+
+<span class="c1">## Behaviour breakpoint !</span>
+<span class="k">class</span> <span class="nc">FunctionParamDumpBP</span><span class="p">(</span><span class="n">Breakpoint</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">addr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">addr</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">addr</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">!</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">target_dll</span><span class="p">,</span> <span class="n">target</span><span class="o">.</span><span class="n">target_func</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">FunctionParamDumpBP</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="n">target</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target_args</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">prototype</span><span class="o">.</span><span class="n">_argtypes_</span>
+
+    <span class="k">def</span> <span class="nf">extract_arguments_32bits</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cproc</span><span class="p">,</span> <span class="n">cthread</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">debug</span><span class="o">.</span><span class="n">X86ArgumentRetriever</span><span class="p">()</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_args</span><span class="p">)):</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">get_arg</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">cproc</span><span class="p">,</span> <span class="n">cthread</span><span class="p">)</span>
+            <span class="n">rt</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">remotectypes</span><span class="o">.</span><span class="n">transform_type_to_remote32bits</span><span class="p">(</span><span class="nb">type</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">rt</span><span class="p">,</span> <span class="n">windows</span><span class="o">.</span><span class="n">remotectypes</span><span class="o">.</span><span class="n">RemoteValue</span><span class="p">):</span>
+                <span class="n">t</span> <span class="o">=</span> <span class="n">rt</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">cproc</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">t</span> <span class="o">=</span> <span class="n">rt</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="s2">&quot;contents&quot;</span><span class="p">):</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">t</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">value</span>
+                <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+                    <span class="k">pass</span>
+            <span class="n">res</span><span class="p">[</span><span class="n">name</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">t</span>
+        <span class="k">return</span> <span class="n">res</span>
+
+    <span class="k">def</span> <span class="nf">extract_arguments_64bits</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cproc</span><span class="p">,</span> <span class="n">cthread</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">debug</span><span class="o">.</span><span class="n">X64ArgumentRetriever</span><span class="p">()</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_args</span><span class="p">)):</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">get_arg</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">cproc</span><span class="p">,</span> <span class="n">cthread</span><span class="p">)</span>
+            <span class="n">rt</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">remotectypes</span><span class="o">.</span><span class="n">transform_type_to_remote64bits</span><span class="p">(</span><span class="nb">type</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">rt</span><span class="p">,</span> <span class="n">windows</span><span class="o">.</span><span class="n">remotectypes</span><span class="o">.</span><span class="n">RemoteValue</span><span class="p">):</span>
+                <span class="n">t</span> <span class="o">=</span> <span class="n">rt</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">cproc</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">t</span> <span class="o">=</span> <span class="n">rt</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="s2">&quot;contents&quot;</span><span class="p">):</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">t</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">value</span>
+                <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+                    <span class="k">pass</span>
+            <span class="n">res</span><span class="p">[</span><span class="n">name</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">t</span>
+        <span class="k">return</span> <span class="n">res</span>
+
+    <span class="k">def</span> <span class="nf">extract_arguments</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cproc</span><span class="p">,</span> <span class="n">cthread</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Extracts the functions parameters in an :class:`OrderedDict`&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">32</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_arguments_32bits</span><span class="p">(</span><span class="n">cproc</span><span class="p">,</span> <span class="n">cthread</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">cproc</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">64</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_arguments_64bits</span><span class="p">(</span><span class="n">cproc</span><span class="p">,</span> <span class="n">cthread</span><span class="p">)</span>
+        <span class="c1"># SysWow process from a 64bits debugger, handle bitness with CS</span>
+        <span class="k">if</span> <span class="n">cthread</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">SegCs</span> <span class="o">==</span> <span class="n">windows</span><span class="o">.</span><span class="n">syswow64</span><span class="o">.</span><span class="n">CS_32bits</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_arguments_32bits</span><span class="p">(</span><span class="n">cproc</span><span class="p">,</span> <span class="n">cthread</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_arguments_64bits</span><span class="p">(</span><span class="n">cproc</span><span class="p">,</span> <span class="n">cthread</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">FunctionRetBP</span><span class="p">(</span><span class="n">Breakpoint</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">initial_breakpoint</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">FunctionRetBP</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initial_breakpoint</span> <span class="o">=</span> <span class="n">initial_breakpoint</span>
+
+    <span class="k">def</span> <span class="nf">trigger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbg</span><span class="p">,</span> <span class="n">exc</span><span class="p">):</span>
+        <span class="n">dbg</span><span class="o">.</span><span class="n">del_bp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="n">dbg</span><span class="o">.</span><span class="n">current_process</span><span class="p">])</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_breakpoint</span><span class="o">.</span><span class="n">ret_trigger</span><span class="p">(</span><span class="n">dbg</span><span class="p">,</span> <span class="n">exc</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">FunctionCallBP</span><span class="p">(</span><span class="n">Breakpoint</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">break_on_ret</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbg</span><span class="p">,</span> <span class="n">exception</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Setup a breakpoint at the return address of the function, this breakpoint will call :func:`ret_trigger`&quot;&quot;&quot;</span>
+        <span class="n">cproc</span> <span class="o">=</span> <span class="n">dbg</span><span class="o">.</span><span class="n">current_process</span>
+        <span class="n">return_addr</span> <span class="o">=</span> <span class="n">dbg</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">read_ptr</span><span class="p">(</span><span class="n">dbg</span><span class="o">.</span><span class="n">current_thread</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">sp</span><span class="p">)</span>
+        <span class="n">dbg</span><span class="o">.</span><span class="n">add_bp</span><span class="p">(</span><span class="n">FunctionRetBP</span><span class="p">(</span><span class="n">return_addr</span><span class="p">,</span> <span class="bp">self</span><span class="p">),</span> <span class="n">target</span><span class="o">=</span><span class="n">dbg</span><span class="o">.</span><span class="n">current_process</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">ret_trigger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbg</span><span class="p">,</span> <span class="n">exception</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Called at the return of the function if :func:`break_on_ret` was called&quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;ret_trigger&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="FunctionBP"><a class="viewcode-back" href="../../../debug.html#windows.debug.FunctionBP">[docs]</a><span class="k">class</span> <span class="nc">FunctionBP</span><span class="p">(</span><span class="n">FunctionCallBP</span><span class="p">,</span> <span class="n">FunctionParamDumpBP</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A breakpoint that accept a function from :mod:`windows.winproxy` and able to:</span>
+
+<span class="sd">        - Extract the arguments of the functions</span>
+<span class="sd">        - Break at the return of the function</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.2 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>

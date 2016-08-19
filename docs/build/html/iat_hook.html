@@ -1,0 +1,251 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>9. IAT hooking &mdash; PythonForWindows 0.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="PythonForWindows 0.2 documentation" href="index.html" />
+    <link rel="next" title="10. Early Work In Progress" href="wip.html" />
+    <link rel="prev" title="8. windows.com - Component Object Model" href="com.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="wip.html" title="10. Early Work In Progress"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="com.html" title="8. windows.com - Component Object Model"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="iat-hooking">
+<h1>9. IAT hooking<a class="headerlink" href="#iat-hooking" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">See sample <a class="reference internal" href="sample.html#sample-iat-hook"><span class="std std-ref">IAT hooking</span></a></p>
+</div>
+<div class="section" id="putting-an-iat-hook">
+<h2>9.1. Putting an IAT hook<a class="headerlink" href="#putting-an-iat-hook" title="Permalink to this headline">¶</a></h2>
+<p>To setup your IAT hook you just need:</p>
+<blockquote>
+<div><ul class="simple">
+<li>A callback that respect the <a class="reference internal" href="#hook-protocol"><span class="std std-ref">Hook protocol</span></a></li>
+<li>The <a class="reference internal" href="process.html#windows.pe_parse.IATEntry" title="windows.pe_parse.IATEntry"><code class="xref py py-class docutils literal"><span class="pre">windows.pe_parse.IATEntry</span></code></a> to hook</li>
+</ul>
+</div></blockquote>
+<p>You just need to use the function <a class="reference internal" href="process.html#windows.pe_parse.IATEntry.set_hook" title="windows.pe_parse.IATEntry.set_hook"><code class="xref py py-func docutils literal"><span class="pre">windows.pe_parse.IATEntry.set_hook()</span></code></a></p>
+<p>Putting a hook:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">windows</span>
+<span class="kn">from</span> <span class="nn">windows.hooks</span> <span class="k">import</span> <span class="o">*</span>
+
+<span class="nd">@CreateFileACallback</span>
+<span class="k">def</span> <span class="nf">createfile_callback</span><span class="p">(</span><span class="n">lpFileName</span><span class="p">,</span> <span class="n">dwDesiredAccess</span><span class="p">,</span> <span class="n">dwShareMode</span><span class="p">,</span> <span class="n">lpSecurityAttributes</span><span class="p">,</span> <span class="n">dwCreationDisposition</span><span class="p">,</span> <span class="n">dwFlagsAndAttributes</span><span class="p">,</span> <span class="n">hTemplateFile</span><span class="p">,</span> <span class="n">real_function</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Trying to open </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lpFileName</span><span class="p">))</span>
+    <span class="k">if</span> <span class="s2">&quot;secret&quot;</span> <span class="ow">in</span> <span class="n">lpFileName</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mh">0xffffffff</span>
+    <span class="k">return</span> <span class="n">real_function</span><span class="p">()</span>
+
+<span class="n">my_exe</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">peb</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">imp</span> <span class="o">=</span> <span class="n">my_exe</span><span class="o">.</span><span class="n">pe</span><span class="o">.</span><span class="n">imports</span>
+
+<span class="n">iat_create_file</span> <span class="o">=</span> <span class="p">[</span><span class="n">entry</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">imp</span><span class="p">[</span><span class="s1">&#39;kernel32.dll&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;CreateFileA&quot;</span><span class="p">]</span>
+<span class="n">iat_create_file</span><span class="o">.</span><span class="n">set_hook</span><span class="p">(</span><span class="n">createfile_callback</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="hook-protocol">
+<span id="id1"></span><h2>9.2. Hook protocol<a class="headerlink" href="#hook-protocol" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="callback-arguments">
+<h3>9.2.1. Callback arguments<a class="headerlink" href="#callback-arguments" title="Permalink to this headline">¶</a></h3>
+<p>A hook callback must have the same number of argument as the hooked API, PLUS a last argument <code class="docutils literal"><span class="pre">real_function</span></code>.</p>
+<p>The <code class="docutils literal"><span class="pre">real_function</span></code> argument is a callable that represent the hooked API, it can be called in two ways:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Without argument, the call will be done with the argument originaly passed to your callback. This allows simple redirection to the real API.</li>
+<li>With arguments it will simply call the API with these.</li>
+</ul>
+</div></blockquote>
+<p>Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">createfile_callback</span><span class="p">(</span><span class="n">lpFileName</span><span class="p">,</span> <span class="n">dwDesiredAccess</span><span class="p">,</span> <span class="n">dwShareMode</span><span class="p">,</span> <span class="n">lpSecurityAttributes</span><span class="p">,</span> <span class="n">dwCreationDisposition</span><span class="p">,</span> <span class="n">dwFlagsAndAttributes</span><span class="p">,</span> <span class="n">hTemplateFile</span><span class="p">,</span> <span class="n">real_function</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Trying to open </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lpFileName</span><span class="p">))</span>
+    <span class="k">if</span> <span class="s2">&quot;secret&quot;</span> <span class="ow">in</span> <span class="n">lpFileName</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mh">0xffffffff</span>
+    <span class="c1"># Perform the real call</span>
+    <span class="k">return</span> <span class="n">real_function</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>A hook callback must also embed some <a class="reference internal" href="#type-information"><span class="std std-ref">Type Information</span></a></p>
+</div>
+<div class="section" id="callback-type-information">
+<span id="type-information"></span><h3>9.2.2. Callback type information<a class="headerlink" href="#callback-type-information" title="Permalink to this headline">¶</a></h3>
+<p>In order make the magic behind hook callback, <a class="reference external" href="https://docs.python.org/2/library/ctypes.html#module-ctypes" title="(in Python v2.7)"><code class="xref py py-mod docutils literal"><span class="pre">ctypes</span></code></a> needs to have type information about the API parameters.</p>
+<p>There is (again) two ways to give those informations to your hook callback. Both techniques use a decorator to setup type information to the callback.</p>
+<blockquote>
+<div><ul>
+<li><p class="first">Giving the type manualy using the decorator <a class="reference internal" href="#windows.hooks.Callback" title="windows.hooks.Callback"><code class="xref py py-class docutils literal"><span class="pre">windows.hooks.Callback</span></code></a>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">windows.hooks</span> <span class="k">import</span> <span class="o">*</span>
+<span class="c1"># First type is return type, others are parameters types</span>
+<span class="nd">@Callback</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_ulong</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">exit_callback</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">real_function</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Try to quit with </span><span class="si">{0}</span><span class="s2"> | </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
+    <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;TRYING TO REAL EXIT&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">real_function</span><span class="p">(</span><span class="mi">1234</span><span class="p">)</span>
+    <span class="k">return</span> <span class="mh">0x4242424243444546</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Using the <cite>Callback</cite> decorator generated from known functions:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">windows.hooks</span> <span class="k">import</span> <span class="o">*</span>
+<span class="c1"># Decorator name is always API_NAME + &quot;CallBack&quot;</span>
+<span class="nd">@CreateFileACallback</span>
+<span class="k">def</span> <span class="nf">createfile_callback</span><span class="p">(</span><span class="n">lpFileName</span><span class="p">,</span> <span class="n">dwDesiredAccess</span><span class="p">,</span> <span class="n">dwShareMode</span><span class="p">,</span> <span class="n">lpSecurityAttributes</span><span class="p">,</span> <span class="n">dwCreationDisposition</span><span class="p">,</span> <span class="n">dwFlagsAndAttributes</span><span class="p">,</span> <span class="n">hTemplateFile</span><span class="p">,</span> <span class="n">real_function</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Trying to open </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lpFileName</span><span class="p">))</span>
+    <span class="k">if</span> <span class="s2">&quot;secret&quot;</span> <span class="ow">in</span> <span class="n">lpFileName</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mh">0xffffffff</span>
+    <span class="k">return</span> <span class="n">real_function</span><span class="p">()</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">See the list of known functions</p>
+</div>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="module-windows.hooks">
+<span id="windows-hooks"></span><h2>9.3. <a class="reference internal" href="#module-windows.hooks" title="windows.hooks"><code class="xref py py-mod docutils literal"><span class="pre">windows.hooks</span></code></a><a class="headerlink" href="#module-windows.hooks" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="windows.hooks.Callback">
+<em class="property">class </em><code class="descclassname">windows.hooks.</code><code class="descname">Callback</code><span class="sig-paren">(</span><em>*types</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/hooks.html#Callback"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.hooks.Callback" title="Permalink to this definition">¶</a></dt>
+<dd><p>Give type information to hook callback</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="windows.hooks.IATHook">
+<em class="property">class </em><code class="descclassname">windows.hooks.</code><code class="descname">IATHook</code><span class="sig-paren">(</span><em>IAT_entry</em>, <em>callback</em>, <em>types=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/hooks.html#IATHook"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.hooks.IATHook" title="Permalink to this definition">¶</a></dt>
+<dd><p>Look at my hook &lt;3</p>
+<dl class="method">
+<dt id="windows.hooks.IATHook.disable">
+<code class="descname">disable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/hooks.html#IATHook.disable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.hooks.IATHook.disable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disable the IAT hook</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.hooks.IATHook.enable">
+<code class="descname">enable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/hooks.html#IATHook.enable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.hooks.IATHook.enable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enable the IAT hook: you MUST keep a reference to the IATHook while the hook is enabled</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">9. IAT hooking</a><ul>
+<li><a class="reference internal" href="#putting-an-iat-hook">9.1. Putting an IAT hook</a></li>
+<li><a class="reference internal" href="#hook-protocol">9.2. Hook protocol</a><ul>
+<li><a class="reference internal" href="#callback-arguments">9.2.1. Callback arguments</a></li>
+<li><a class="reference internal" href="#callback-type-information">9.2.2. Callback type information</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-windows.hooks">9.3. <code class="docutils literal"><span class="pre">windows.hooks</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="com.html"
+                        title="previous chapter">8. <code class="docutils literal"><span class="pre">windows.com</span></code> - Component Object Model</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="wip.html"
+                        title="next chapter">10. Early Work In Progress</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/iat_hook.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="wip.html" title="10. Early Work In Progress"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="com.html" title="8. windows.com - Component Object Model"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>

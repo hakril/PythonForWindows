@@ -1,2 +1,4 @@
 *.pyc
-doc/build
+doctrees
+*.inv
+*.pickle

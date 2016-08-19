@@ -1,0 +1,257 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>2.5. Registry &mdash; PythonForWindows 0.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="PythonForWindows 0.2 documentation" href="index.html" />
+    <link rel="up" title="2. The windows objects" href="various.html" />
+    <link rel="next" title="2.6. Network" href="network.html" />
+    <link rel="prev" title="2.4. Exception and Context related structures" href="exception.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="network.html" title="2.6. Network"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="exception.html" title="2.4. Exception and Context related structures"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.2 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="various.html" accesskey="U">2. The <code class="docutils literal"><span class="pre">windows</span></code> objects</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-windows.winobject.registry">
+<span id="registry"></span><h1>2.5. Registry<a class="headerlink" href="#module-windows.winobject.registry" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">See sample <a class="reference internal" href="sample.html#sample-registry"><span class="std std-ref">Registry</span></a></p>
+</div>
+<div class="section" id="id1">
+<h2>2.5.1. Registry<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="windows.winobject.registry.Registry">
+<em class="property">class </em><code class="descclassname">windows.winobject.registry.</code><code class="descname">Registry</code><a class="reference internal" href="_modules/windows/winobject/registry.html#Registry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.registry.Registry" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <code class="docutils literal"><span class="pre">Windows</span></code> registry: a read only (for now) mapping</p>
+</dd></dl>
+
+</div>
+<div class="section" id="pyhkey">
+<h2>2.5.2. PyHKey<a class="headerlink" href="#pyhkey" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="windows.winobject.registry.PyHKey">
+<em class="property">class </em><code class="descclassname">windows.winobject.registry.</code><code class="descname">PyHKey</code><span class="sig-paren">(</span><em>surkey</em>, <em>name</em>, <em>sam=KEY_READ(0x20019L)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/registry.html#PyHKey"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.registry.PyHKey" title="Permalink to this definition">¶</a></dt>
+<dd><p>A windows registry key</p>
+<dl class="function">
+<dt id="windows.winobject.registry.PyHKey.__call__">
+<code class="descname">__call__</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.registry.PyHKey.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for <a class="reference internal" href="#windows.winobject.registry.PyHKey.open_subkey" title="windows.winobject.registry.PyHKey.open_subkey"><code class="xref py py-func docutils literal"><span class="pre">open_subkey()</span></code></a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="windows.winobject.registry.PyHKey.__getitem__">
+<code class="descname">__getitem__</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.registry.PyHKey.__getitem__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for <a class="reference internal" href="#windows.winobject.registry.PyHKey.get" title="windows.winobject.registry.PyHKey.get"><code class="xref py py-func docutils literal"><span class="pre">get()</span></code></a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="windows.winobject.registry.PyHKey.__setitem__">
+<code class="descname">__setitem__</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/registry.html#PyHKey.__setitem__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.registry.PyHKey.__setitem__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper for <a class="reference internal" href="#windows.winobject.registry.PyHKey.set" title="windows.winobject.registry.PyHKey.set"><code class="xref py py-func docutils literal"><span class="pre">set()</span></code></a>, accept <code class="docutils literal"><span class="pre">value</span></code> or <code class="docutils literal"><span class="pre">(value,</span> <span class="pre">type)</span></code></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.registry.PyHKey.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>value_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/registry.html#PyHKey.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.registry.PyHKey.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the value <code class="docutils literal"><span class="pre">value_name</span></code></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.registry.KeyValue" title="windows.winobject.registry.KeyValue"><code class="xref py py-class docutils literal"><span class="pre">KeyValue</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.registry.PyHKey.open_subkey">
+<code class="descname">open_subkey</code><span class="sig-paren">(</span><em>name</em>, <em>sam=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/registry.html#PyHKey.open_subkey"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.registry.PyHKey.open_subkey" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open the subkey <code class="docutils literal"><span class="pre">name</span></code></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.registry.PyHKey" title="windows.winobject.registry.PyHKey"><code class="xref py py-class docutils literal"><span class="pre">PyHKey</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.registry.PyHKey.set">
+<code class="descname">set</code><span class="sig-paren">(</span><em>name</em>, <em>value</em>, <em>type=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/registry.html#PyHKey.set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.registry.PyHKey.set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the value for <code class="docutils literal"><span class="pre">name</span></code> to <code class="docutils literal"><span class="pre">value</span></code>. if <code class="docutils literal"><span class="pre">type</span></code> is None try to guess items</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.registry.PyHKey.subkeys">
+<code class="descname">subkeys</code><a class="headerlink" href="#windows.winobject.registry.PyHKey.subkeys" title="Permalink to this definition">¶</a></dt>
+<dd><p>The subkeys of the registry key</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">[<a class="reference internal" href="#windows.winobject.registry.PyHKey" title="windows.winobject.registry.PyHKey"><code class="xref py py-class docutils literal"><span class="pre">PyHKey</span></code></a>] - A list of keys</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.registry.PyHKey.values">
+<code class="descname">values</code><a class="headerlink" href="#windows.winobject.registry.PyHKey.values" title="Permalink to this definition">¶</a></dt>
+<dd><p>The values of the registry key</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">[<a class="reference internal" href="#windows.winobject.registry.KeyValue" title="windows.winobject.registry.KeyValue"><code class="xref py py-class docutils literal"><span class="pre">KeyValue</span></code></a>] - A list of values</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="keyvalue">
+<h2>2.5.3. KeyValue<a class="headerlink" href="#keyvalue" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="windows.winobject.registry.KeyValue">
+<em class="property">class </em><code class="descclassname">windows.winobject.registry.</code><code class="descname">KeyValue</code><span class="sig-paren">(</span><em>name</em>, <em>value</em>, <em>type</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.registry.KeyValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>A registry value (name, value, type)</p>
+<dl class="attribute">
+<dt id="windows.winobject.registry.KeyValue.name">
+<code class="descname">name</code><a class="headerlink" href="#windows.winobject.registry.KeyValue.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.registry.KeyValue.type">
+<code class="descname">type</code><a class="headerlink" href="#windows.winobject.registry.KeyValue.type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 2</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.registry.KeyValue.value">
+<code class="descname">value</code><a class="headerlink" href="#windows.winobject.registry.KeyValue.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">2.5. Registry</a><ul>
+<li><a class="reference internal" href="#id1">2.5.1. Registry</a></li>
+<li><a class="reference internal" href="#pyhkey">2.5.2. PyHKey</a></li>
+<li><a class="reference internal" href="#keyvalue">2.5.3. KeyValue</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="exception.html"
+                        title="previous chapter">2.4. Exception and Context related structures</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="network.html"
+                        title="next chapter">2.6. Network</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/registry.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="network.html" title="2.6. Network"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="exception.html" title="2.4. Exception and Context related structures"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.2 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="various.html" >2. The <code class="docutils literal"><span class="pre">windows</span></code> objects</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>

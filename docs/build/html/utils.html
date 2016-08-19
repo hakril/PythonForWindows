@@ -1,0 +1,217 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>5. windows.utils – Windows Utilities &mdash; PythonForWindows 0.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="PythonForWindows 0.2 documentation" href="index.html" />
+    <link rel="next" title="6. windows.wintrust – Checking signature" href="wintrust.html" />
+    <link rel="prev" title="4. windows.winproxy – Windows API" href="winproxy.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="wintrust.html" title="6. windows.wintrust – Checking signature"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="winproxy.html" title="4. windows.winproxy – Windows API"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-windows.utils">
+<span id="windows-utils-windows-utilities"></span><h1>5. <code class="docutils literal"><span class="pre">windows.utils</span></code> &#8211; Windows Utilities<a class="headerlink" href="#module-windows.utils" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="context-managers">
+<h2>5.1. Context Managers<a class="headerlink" href="#context-managers" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="#module-windows.utils" title="windows.utils"><code class="xref py py-mod docutils literal"><span class="pre">windows.utils</span></code></a> provides some context managers wrapping <cite>standard</cite> contextual operations
+like <code class="docutils literal"><span class="pre">VirtualProtect</span></code> or <code class="docutils literal"><span class="pre">SysWow</span> <span class="pre">Redirection</span></code></p>
+<div class="section" id="virtualprotected">
+<h3>5.1.1. VirtualProtected<a class="headerlink" href="#virtualprotected" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="windows.utils.VirtualProtected">
+<em class="property">class </em><code class="descclassname">windows.utils.</code><code class="descname">VirtualProtected</code><span class="sig-paren">(</span><em>addr</em>, <em>size</em>, <em>new_protect</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/utils/winutils.html#VirtualProtected"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.utils.VirtualProtected" title="Permalink to this definition">¶</a></dt>
+<dd><p>A context manager usable like <cite>VirtualProtect</cite> that will restore the old protection at exit</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">utils</span><span class="o">.</span><span class="n">VirtualProtected</span><span class="p">(</span><span class="n">IATentry</span><span class="o">.</span><span class="n">addr</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">PVOID</span><span class="p">),</span> <span class="n">windef</span><span class="o">.</span><span class="n">PAGE_EXECUTE_READWRITE</span><span class="p">):</span>
+    <span class="n">IATentry</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="mh">0x42424242</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="disablewow64fsredirection">
+<h3>5.1.2. DisableWow64FsRedirection<a class="headerlink" href="#disablewow64fsredirection" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="windows.utils.DisableWow64FsRedirection">
+<em class="property">class </em><code class="descclassname">windows.utils.</code><code class="descname">DisableWow64FsRedirection</code><a class="reference internal" href="_modules/windows/utils/winutils.html#DisableWow64FsRedirection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.utils.DisableWow64FsRedirection" title="Permalink to this definition">¶</a></dt>
+<dd><p>A context manager that disable the SysWow64 Filesystem Redirection</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">is_process_32_bits</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">pop_calc_64</span><span class="p">():</span>
+        <span class="k">with</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">DisableWow64FsRedirection</span><span class="p">():</span>
+            <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">create_process</span><span class="p">(</span><span class="s2">r&quot;C:\Windows\system32\calc.exe&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="helper-functions">
+<h2>5.2. Helper functions<a class="headerlink" href="#helper-functions" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="windows.utils.enable_privilege">
+<code class="descclassname">windows.utils.</code><code class="descname">enable_privilege</code><span class="sig-paren">(</span><em>lpszPrivilege</em>, <em>bEnablePrivilege</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/utils/winutils.html#enable_privilege"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.utils.enable_privilege" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enable or disable a privilege:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">enable_privilege</span><span class="p">(</span><span class="n">SE_DEBUG_NAME</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="windows.utils.check_is_elevated">
+<code class="descclassname">windows.utils.</code><code class="descname">check_is_elevated</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/utils/winutils.html#check_is_elevated"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.utils.check_is_elevated" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <code class="docutils literal"><span class="pre">True</span></code> if process is Admin</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="windows.utils.check_debug">
+<code class="descclassname">windows.utils.</code><code class="descname">check_debug</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/utils/winutils.html#check_debug"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.utils.check_debug" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check that kernel is in debug mode (beware of NOUMEX):</p>
+<p><a class="reference external" href="https://msdn.microsoft.com/en-us/library/windows/hardware/ff556253(v=vs.85).aspx#_______noumex______">https://msdn.microsoft.com/en-us/library/windows/hardware/ff556253(v=vs.85).aspx#_______noumex______</a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="windows.utils.create_process">
+<code class="descclassname">windows.utils.</code><code class="descname">create_process</code><span class="sig-paren">(</span><em>path</em>, <em>args=None</em>, <em>dwCreationFlags=0</em>, <em>show_windows=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/utils/winutils.html#create_process"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.utils.create_process" title="Permalink to this definition">¶</a></dt>
+<dd><p>A convenient wrapper arround <code class="xref py py-func docutils literal"><span class="pre">windows.winproxy.CreateProcessA()</span></code></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="windows.utils.create_console">
+<code class="descclassname">windows.utils.</code><code class="descname">create_console</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/utils/winutils.html#create_console"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.utils.create_console" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new console displaying STDOUT.
+Useful in injection of GUI process</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="windows.utils.pop_shell">
+<code class="descclassname">windows.utils.</code><code class="descname">pop_shell</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/utils/winutils.html#pop_shell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.utils.pop_shell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pop a console with an InterativeConsole</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="windows.utils.create_file_from_handle">
+<code class="descclassname">windows.utils.</code><code class="descname">create_file_from_handle</code><span class="sig-paren">(</span><em>handle</em>, <em>mode='r'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/utils/winutils.html#create_file_from_handle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.utils.create_file_from_handle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a Python <code class="xref py py-class docutils literal"><span class="pre">file</span></code> around a <code class="docutils literal"><span class="pre">Windows</span></code> HANDLE</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="windows.utils.get_handle_from_file">
+<code class="descclassname">windows.utils.</code><code class="descname">get_handle_from_file</code><span class="sig-paren">(</span><em>f</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/utils/winutils.html#get_handle_from_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.utils.get_handle_from_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the <code class="docutils literal"><span class="pre">Windows</span></code> HANDLE of a python <code class="xref py py-class docutils literal"><span class="pre">file</span></code></p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">5. <code class="docutils literal"><span class="pre">windows.utils</span></code> &#8211; Windows Utilities</a><ul>
+<li><a class="reference internal" href="#context-managers">5.1. Context Managers</a><ul>
+<li><a class="reference internal" href="#virtualprotected">5.1.1. VirtualProtected</a></li>
+<li><a class="reference internal" href="#disablewow64fsredirection">5.1.2. DisableWow64FsRedirection</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#helper-functions">5.2. Helper functions</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="winproxy.html"
+                        title="previous chapter">4. <code class="docutils literal"><span class="pre">windows.winproxy</span></code> &#8211; Windows API</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="wintrust.html"
+                        title="next chapter">6. <code class="docutils literal"><span class="pre">windows.wintrust</span></code> &#8211; Checking signature</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/utils.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="wintrust.html" title="6. windows.wintrust – Checking signature"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="winproxy.html" title="4. windows.winproxy – Windows API"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>
