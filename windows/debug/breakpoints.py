@@ -73,9 +73,11 @@ class X64ArgumentRetriever(object):
         return proc.read_dword(thread.context.sp + 8 + (8 * nb))
 
 ## Behaviour breakpoint !
-class ParamDumpBP(Breakpoint):
-    def __init__(self, addr, target):
-        super(ParamDumpBP, self).__init__(addr)
+class FunctionParamDumpBP(Breakpoint):
+    def __init__(self, target, addr=None):
+        if addr is None:
+            addr = "{0}!{1}".format(target.target_dll, target.target_func)
+        super(FunctionParamDumpBP, self).__init__(addr)
         self.target = target
         self.target_args = target.prototype._argtypes_
 
@@ -116,6 +118,7 @@ class ParamDumpBP(Breakpoint):
         return res
 
     def extract_arguments(self, cproc, cthread):
+        """Extracts the functions parameters in an :class:`OrderedDict`"""
         if windows.current_process.bitness == 32:
             return self.extract_arguments_32bits(cproc, cthread)
         if cproc.bitness == 64:
@@ -137,10 +140,20 @@ class FunctionRetBP(Breakpoint):
 
 
 class FunctionCallBP(Breakpoint):
-    def trigger(self, dbg, exception):
+    def break_on_ret(self, dbg, exception):
+        """Setup a breakpoint at the return address of the function, this breakpoint will call :func:`ret_trigger`"""
         cproc = dbg.current_process
         return_addr = dbg.current_process.read_ptr(dbg.current_thread.context.sp)
         dbg.add_bp(FunctionRetBP(return_addr, self), target=dbg.current_process)
 
     def ret_trigger(self, dbg, exception):
-        pass
+        """Called at the return of the function if :func:`break_on_ret` was called"""
+        raise NotImplementedError("ret_trigger")
+
+
+class FunctionBP(FunctionCallBP, FunctionParamDumpBP):
+    """A breakpoint that accepts a function from :mod:`windows.winproxy` and able to:
+
+        - Extract the arguments of the functions
+        - Break at the return of the function
+    """

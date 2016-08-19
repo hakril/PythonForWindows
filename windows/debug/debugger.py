@@ -83,6 +83,7 @@ class Debugger(object):
         return cls(target)
 
     def detach(self, target=None):
+        """Detach from all debugged processes or process ``target``"""
         if target is None:
             for proc in self.processes.values():
                 self.detach(proc)
@@ -116,7 +117,7 @@ class Debugger(object):
         windows.winproxy.DebugActiveProcessStop(target.pid)
 
     def _killed_in_action(self):
-        """Return True if current process have been detached by user callback"""
+        """Return ``True`` if current process have been detached by user callback"""
         return self.current_process.pid not in self.processes
 
 
@@ -385,7 +386,7 @@ class Debugger(object):
     def _setup_pending_breakpoints_load_dll(self, dll_name):
         for bp in self._pending_breakpoints_new[None]:
             if isinstance(bp.addr, basestring):
-                target_dll = bp.addr.split("!")[0]
+                target_dll = bp.addr.lower().split("!")[0]
                 if target_dll == dll_name:
                     _setup_method = getattr(self, "_setup_breakpoint_" + bp.type)
                     if bp.apply_to_target(self.current_process):
@@ -710,7 +711,7 @@ class Debugger(object):
 
     ## Public API
     def loop(self):
-        """Debugging loop: handle event / dispatch to breakpoint. Returns when all targets are dead"""
+        """Debugging loop: handle event / dispatch to breakpoint. Returns when all targets are dead/detached"""
         for debug_event in self._debug_event_generator():
             self.REMOVE_ME_debug_event = debug_event
             dbg_continue_flag = self._dispatch_debug_event(debug_event)
@@ -861,7 +862,7 @@ class Debugger(object):
         return DBG_CONTINUE
 
     def on_single_step(self, exception):
-        """Called on requested single step``exception`` is one of the following type:
+        """Called on requested single step ``exception`` is one of the following type:
 
                 * :class:`windows.winobject.exception.EEXCEPTION_DEBUG_INFO32`
                 * :class:`windows.winobject.exception.EEXCEPTION_DEBUG_INFO64`

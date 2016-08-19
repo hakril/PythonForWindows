@@ -44,8 +44,6 @@ There is not much documentation for now as the code might change soon.
 
 
 
-
-
 :class:`Breakpoint`
 """""""""""""""""""
 
@@ -77,8 +75,14 @@ When a breakpoint is hit, its ``trigger`` function is called with the debugger a
     :special-members: __init__
 
 
+
 .. note::
 
-    MemoryBreakpoint are triggered based on the fault address only (as I don't know a way to get the size of the read/write causing the fault without embeding a disassembler).
+    MemoryBreakpoint are triggered based on the fault address only (as I don't know a way to get the size of the read/write causing the fault without embedding a disassembler).
 
-    This means that a MEMBP at address ``X`` won't be triggered by a write of size 4 at address ``X - 1`` (it's sad I know :( )
+    This means that a MEMBP at address ``X`` won't be triggered by a write of size 4 at address ``X - 1``. it's sad I know.
+
+.. autoclass:: FunctionBP
+    :members:
+    :inherited-members:
+    :special-members: __init__

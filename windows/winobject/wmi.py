@@ -14,20 +14,21 @@ class WmiRequester(object):
     r"""An object to perform wmi request to ``root\cimv2``"""
     INSTANCE = None
 
-    def __new__(cls):
+    def __new__(cls, *args, **kwargs):
         if cls.INSTANCE is not None:
             return cls.INSTANCE
-        cls.INSTANCE = super(cls, cls).__new__(cls)
+        cls.INSTANCE = super(cls, cls).__new__(cls, *args, **kwargs)
         return cls.INSTANCE
 
-    def __init__(self):
+    def __init__(self, target="root\\cimv2", user=None, password=None):
         locator = IWbemLocator()
         service = IWbemServices()
-        CLSID_WbemAdministrativeLocator_IID = windows.com.IID.from_string('CB8555CC-9128-11D1-AD9B-00C04FD8FDFF')
+        #CLSID_WbemAdministrativeLocator_IID = windows.com.IID.from_string('CB8555CC-9128-11D1-AD9B-00C04FD8FDFF')
+        WbemLocator_CLSID = windows.com.IID.from_string('4590F811-1D3A-11D0-891F-00AA004B2E24')
 
         windows.com.init()
-        windows.com.create_instance(CLSID_WbemAdministrativeLocator_IID, locator)
-        locator.ConnectServer("root\\cimv2", None, None , None, 0x80, None, None, ctypes.byref(service))
+        windows.com.create_instance(WbemLocator_CLSID, locator)
+        locator.ConnectServer(target, user, password , None, 0x80, None, None, ctypes.byref(service))
         self.service = service
 
     def select(self, frm, attrs="*"):

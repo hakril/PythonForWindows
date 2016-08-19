@@ -37,7 +37,6 @@ class SingleStepOnWrite(windows.debug.MemoryBreakpoint):
     """Check that BP/dbg can trigger single step and that instruction follows"""
     def trigger(self, dbg, exc):
         fault_addr = exc.ExceptionRecord.ExceptionInformation[1]
-        import pdb;pdb.set_trace()
         eip = dbg.current_thread.context.pc
         print("Instruction at <{0:#x}> wrote at <{1:#x}>".format(eip, fault_addr))
         dbg.single_step_counter = 4

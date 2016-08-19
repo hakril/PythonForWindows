@@ -114,6 +114,8 @@ class ApiProxy(object):
         python_proxy.prototype = prototype
         python_proxy.params = params
         python_proxy.errcheck = self.error_check
+        python_proxy.target_dll = self.APIDLL
+        python_proxy.target_func = self.func_name
         params_name = [param[1] for param in params]
         if (self.error_check.__doc__):
             doc = python_proxy.__doc__

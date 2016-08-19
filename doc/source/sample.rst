@@ -362,6 +362,9 @@ Ouput::
     Ask to load <ole32.dll>: exiting process
 
 
+Single stepping
+~~~~~~~~~~~~~~~
+
 .. literalinclude:: ..\..\samples\debugger_membp_singlestep.py
 
 Ouput::
@@ -379,7 +382,26 @@ Ouput::
     No more single step: exiting
 
 
+:class:`windows.debug.FunctionBP`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. literalinclude:: ..\..\samples\debug_functionbp.py
+
+Ouput::
+
+    NtCreateFile of <\??\C:\Windows\syswow64\en-US\calc.exe.mui>: handle = 0xac
+    Handle manually found! typename=<File>, name=<\Device\HarddiskVolume2\Windows\SysWOW64\en-US\calc.exe.mui>
+
+    NtCreateFile of <\Device\DeviceApi\CMApi>: handle = 0x108
+    Handle manually found! typename=<File>, name=<\Device\DeviceApi>
+
+    NtCreateFile of <\??\C:\Windows\Fonts\staticcache.dat>: handle = 0x154
+    Handle manually found! typename=<File>, name=<\Device\HarddiskVolume2\Windows\Fonts\StaticCache.dat>
+
+    Exiting process
+
 .. _sample_local_debugger:
+
 
 :class:`LocalDebugger`
 ''''''''''''''''''''''

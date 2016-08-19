@@ -110,14 +110,14 @@ class LocalDebugger(object):
             del self.breakpoints[bp.addr]
             return
         if bp.type == HARDWARE_EXEC_BP:
+            threads_by_tid = {t.tid: t for t in windows.current_process.threads}
             for tid in self._hxbp_breakpoint:
                 if bp.addr in self._hxbp_breakpoint[tid] and self._hxbp_breakpoint[tid][bp.addr] == bp:
                     if tid == windows.current_thread.tid:
                         self.remove_hxbp_self_thread(bp.addr)
                     else:
-                        self.remove_hxbp_other_thread(bp.addr)
+                        self.remove_hxbp_other_thread(bp.addr, threads_by_tid[tid])
                     del self._hxbp_breakpoint[tid][bp.addr]
-                    #print("Need to remove {0} in {1}".format(self._hxbp_breakpoint[tid][bp.addr], tid))
             return
         raise NotImplementedError("Unknow BP type {0}".format(bp.type))
 

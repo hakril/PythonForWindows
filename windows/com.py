@@ -12,6 +12,8 @@ from windows.generated_def import interfaces
 from windows.generated_def.interfaces import generate_IID, IID
 
 
+# Simple raw -> UUID
+# "-".join("{:02X}".format(c) for c in struct.unpack("<IHHHBBBBBB", x))
 
 # Simple Implem to create COM Interface in Python (COM -> Python)
 def create_c_callable(func, types, keepalive=[]):
