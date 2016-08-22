@@ -270,5 +270,5 @@ The local debugger handles
 [LKD_GITHUB]: https://github.com/sogeti-esec-lab/LKD/
 [SAMPLE_DIR]: https://github.com/hakril/PythonForWindows/tree/master/samples
 [ONLINE_DOC]: http://hakril.github.io/PythonForWindows/
-[ONLINE_SAMPLE]: http://hakril.github.io/PythonForWindows/sample.html
-[ONLINE_IATHOOK]: http://hakril.github.io/PythonForWindows/iat_hook.html
+[ONLINE_SAMPLE]: http://hakril.github.io/PythonForWindows/build/html/sample.html
+[ONLINE_IATHOOK]: http://hakril.github.io/PythonForWindows/build/html/iat_hook.html
