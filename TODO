@@ -19,7 +19,6 @@ TODO:
 
 Documentation
     * verif samples
-    * COMImplementation (example in LKD)
 
 FIXME:
     - Push("[ECX]") in simple_x64 as a "H" rex and i think it should not..

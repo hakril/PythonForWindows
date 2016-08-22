@@ -38,6 +38,7 @@ Implementing a COM interface
 
 To create `COM` object you need to:
 
-    1. Describe your ComVtable `CODE1 <https://github.com/sogeti-esec-lab/LKD/blob/ba40727d7d257b00f89fc6ca7296c9833b7b75b2/simple_com.py#L89>`_
-    2. Implement the python functions described `CODE2 <https://github.com/sogeti-esec-lab/LKD/blob/ba40727d7d257b00f89fc6ca7296c9833b7b75b2/dbginterface/remote.py#L233>`_
-    3. Create an instance and pass it to whatever native function expects it `CODE3 <https://github.com/sogeti-esec-lab/LKD/blob/ba40727d7d257b00f89fc6ca7296c9833b7b75b2/dbginterface/remote.py#L438>`_
+    1. Create your ``COMImplementation`` with an ``IMPLEMENT`` attribute  that should be a cominterface `CODE 1 <https://github.com/sogeti-esec-lab/LKD/blob/efabf3cc38b94d4180ebe8d2c554da5d76b2fea1/lkd/dbginterface/base.py#L48>`_
+    2. Implements the methods of the interface `CODE 2 <https://github.com/sogeti-esec-lab/LKD/blob/efabf3cc38b94d4180ebe8d2c554da5d76b2fea1/lkd/dbginterface/base.py#L55>`_
+    3. Create an instance `CODE3 <https://github.com/sogeti-esec-lab/LKD/blob/efabf3cc38b94d4180ebe8d2c554da5d76b2fea1/lkd/dbginterface/base.py#L59>`_
+    4. Pass it to whatever native function expects it `CODE4 <https://github.com/sogeti-esec-lab/LKD/blob/efabf3cc38b94d4180ebe8d2c554da5d76b2fea1/lkd/dbginterface/base.py#L272>`_
