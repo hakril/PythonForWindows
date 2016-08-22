@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 PKG_NAME = "PythonForWindows"
-VERSION  = "0.1"
+VERSION  = "0.3"
 
 
 setup(
@@ -19,5 +19,6 @@ setup(
                 'windows.native_exec',
                 'windows.utils',
                 'windows.winobject',
+                'windows.debug',
                 'windows.test'],
 )
