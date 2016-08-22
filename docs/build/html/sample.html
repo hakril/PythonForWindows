@@ -965,7 +965,6 @@ No more tracing !
     <span class="sd">&quot;&quot;&quot;Check that BP/dbg can trigger single step and that instruction follows&quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">trigger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbg</span><span class="p">,</span> <span class="n">exc</span><span class="p">):</span>
         <span class="n">fault_addr</span> <span class="o">=</span> <span class="n">exc</span><span class="o">.</span><span class="n">ExceptionRecord</span><span class="o">.</span><span class="n">ExceptionInformation</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="kn">import</span> <span class="nn">pdb</span><span class="p">;</span><span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
         <span class="n">eip</span> <span class="o">=</span> <span class="n">dbg</span><span class="o">.</span><span class="n">current_thread</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">pc</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Instruction at &lt;</span><span class="si">{0:#x}</span><span class="s2">&gt; wrote at &lt;</span><span class="si">{1:#x}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">eip</span><span class="p">,</span> <span class="n">fault_addr</span><span class="p">))</span>
         <span class="n">dbg</span><span class="o">.</span><span class="n">single_step_counter</span> <span class="o">=</span> <span class="mi">4</span>
@@ -1065,7 +1064,8 @@ No more tracing !
 </pre></div>
 </div>
 <p>Ouput:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>NtCreateFile of &lt;\??\C:\Windows\syswow64\en-US\calc.exe.mui&gt;: handle = 0xac
+<div class="highlight-default"><div class="highlight"><pre><span></span>(cmd λ) python.exe .\samples\debug_functionbp.py
+NtCreateFile of &lt;\??\C:\Windows\syswow64\en-US\calc.exe.mui&gt;: handle = 0xac
 Handle manually found! typename=&lt;File&gt;, name=&lt;\Device\HarddiskVolume2\Windows\SysWOW64\en-US\calc.exe.mui&gt;
 
 NtCreateFile of &lt;\Device\DeviceApi\CMApi&gt;: handle = 0x108
@@ -1081,6 +1081,8 @@ Exiting process
 </div>
 <div class="section" id="localdebugger">
 <span id="sample-local-debugger"></span><h3>12.10.2. <code class="xref py py-class docutils literal"><span class="pre">LocalDebugger</span></code><a class="headerlink" href="#localdebugger" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="in-current-process">
+<h4>12.10.2.1. In current process<a class="headerlink" href="#in-current-process" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
@@ -1137,6 +1139,9 @@ EXCEPTION !!!! Got a EXCEPTION_SINGLE_STEP(0x80000004L) at 0x770d7c04
 Done!
 </pre></div>
 </div>
+</div>
+<div class="section" id="id1">
+<h4>12.10.2.2. In remote process<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
@@ -1207,6 +1212,7 @@ Done!
 <span class="n">I</span> <span class="n">AM</span> <span class="n">LOADING</span> <span class="o">&lt;</span><span class="n">C</span><span class="p">:</span>\<span class="n">Windows</span>\<span class="n">SYSTEM32</span>\<span class="n">WINMM</span><span class="o">.</span><span class="n">dll</span><span class="o">&gt;</span>
 <span class="n">I</span> <span class="n">AM</span> <span class="n">LOADING</span> <span class="o">&lt;</span><span class="n">C</span><span class="p">:</span>\<span class="n">Windows</span>\<span class="n">system32</span>\<span class="n">ole32</span><span class="o">.</span><span class="n">dll</span><span class="o">&gt;</span>
 </pre></div>
+</div>
 </div>
 </div>
 <div class="section" id="make-wmi-requests">
@@ -1351,7 +1357,11 @@ Done!
 <li><a class="reference internal" href="#windows-debug-functionbp">12.10.1.2. <code class="docutils literal"><span class="pre">windows.debug.FunctionBP</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#localdebugger">12.10.2. <code class="docutils literal"><span class="pre">LocalDebugger</span></code></a></li>
+<li><a class="reference internal" href="#localdebugger">12.10.2. <code class="docutils literal"><span class="pre">LocalDebugger</span></code></a><ul>
+<li><a class="reference internal" href="#in-current-process">12.10.2.1. In current process</a></li>
+<li><a class="reference internal" href="#id1">12.10.2.2. In remote process</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#make-wmi-requests">12.10.3. Make WMI requests</a></li>
 <li><a class="reference internal" href="#using-com-inetfwpolicy2">12.10.4. using COM: <code class="docutils literal"><span class="pre">INetFwPolicy2</span></code></a></li>
 </ul>

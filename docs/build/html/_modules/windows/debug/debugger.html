@@ -131,7 +131,8 @@
         <span class="n">winproxy</span><span class="o">.</span><span class="n">DebugActiveProcess</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">pid</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">cls</span><span class="p">(</span><span class="n">target</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">detach</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Debugger.detach"><a class="viewcode-back" href="../../../debug.html#windows.debug.Debugger.detach">[docs]</a>    <span class="k">def</span> <span class="nf">detach</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Detach from all debugged processes or process ``target``&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">proc</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">processes</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">detach</span><span class="p">(</span><span class="n">proc</span><span class="p">)</span>
@@ -162,10 +163,10 @@
         <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_process</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_finish_debug_event</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">REMOVE_ME_debug_event</span><span class="p">,</span> <span class="n">DBG_CONTINUE</span><span class="p">)</span>
 
-        <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">DebugActiveProcessStop</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">pid</span><span class="p">)</span>
+        <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">DebugActiveProcessStop</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">pid</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_killed_in_action</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return True if current process have been detached by user callback&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Return ``True`` if current process have been detached by user callback&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">pid</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">processes</span>
 
 
@@ -759,7 +760,7 @@
 
     <span class="c1">## Public API</span>
 <div class="viewcode-block" id="Debugger.loop"><a class="viewcode-back" href="../../../debug.html#windows.debug.Debugger.loop">[docs]</a>    <span class="k">def</span> <span class="nf">loop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Debugging loop: handle event / dispatch to breakpoint. Returns when all targets are dead&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Debugging loop: handle event / dispatch to breakpoint. Returns when all targets are dead/detached&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">debug_event</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_debug_event_generator</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">REMOVE_ME_debug_event</span> <span class="o">=</span> <span class="n">debug_event</span>
             <span class="n">dbg_continue_flag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dispatch_debug_event</span><span class="p">(</span><span class="n">debug_event</span><span class="p">)</span>
@@ -910,7 +911,7 @@
         <span class="k">return</span> <span class="n">DBG_CONTINUE</span></div>
 
 <div class="viewcode-block" id="Debugger.on_single_step"><a class="viewcode-back" href="../../../debug.html#windows.debug.Debugger.on_single_step">[docs]</a>    <span class="k">def</span> <span class="nf">on_single_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exception</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Called on requested single step``exception`` is one of the following type:</span>
+        <span class="sd">&quot;&quot;&quot;Called on requested single step ``exception`` is one of the following type:</span>
 
 <span class="sd">                * :class:`windows.winobject.exception.EEXCEPTION_DEBUG_INFO32`</span>
 <span class="sd">                * :class:`windows.winobject.exception.EEXCEPTION_DEBUG_INFO64`</span>

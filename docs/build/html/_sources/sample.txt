@@ -389,6 +389,7 @@ Ouput::
 
 Ouput::
 
+    (cmd λ) python.exe .\samples\debug_functionbp.py
     NtCreateFile of <\??\C:\Windows\syswow64\en-US\calc.exe.mui>: handle = 0xac
     Handle manually found! typename=<File>, name=<\Device\HarddiskVolume2\Windows\SysWOW64\en-US\calc.exe.mui>
 
@@ -407,7 +408,7 @@ Ouput::
 ''''''''''''''''''''''
 
 In current process
-^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~
 
 .. literalinclude:: ..\..\samples\local_debugger.py
 
@@ -424,7 +425,7 @@ Ouput::
 
 
 In remote process
-^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~
 
 .. literalinclude:: ..\..\samples\local_debugger_remote_process.py
 

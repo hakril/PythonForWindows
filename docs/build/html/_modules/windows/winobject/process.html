@@ -105,7 +105,7 @@
 
     <span class="k">def</span> <span class="nf">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_handle&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="p">:</span>
-            <span class="n">dbgprint</span><span class="p">(</span><span class="s2">&quot;Closing Handle </span><span class="si">{0:#x}</span><span class="s2"> for </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="p">,</span> <span class="bp">self</span><span class="p">),</span> <span class="s2">&quot;HANDLE&quot;</span><span class="p">)</span>
+            <span class="c1">#dbgprint(&quot;Closing Handle {0} for {1}&quot;.format(hex(self._handle), self), &quot;HANDLE&quot;)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_close_function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="p">)</span>
 
 

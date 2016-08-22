@@ -93,6 +93,12 @@ The <a class="reference internal" href="#windows.debug.Debugger" title="windows.
 </table>
 </dd></dl>
 
+<dl class="method">
+<dt id="windows.debug.Debugger.detach">
+<code class="descname">detach</code><span class="sig-paren">(</span><em>target=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/debugger.html#Debugger.detach"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.Debugger.detach" title="Permalink to this definition">¶</a></dt>
+<dd><p>Detach from all debugged processes or process <code class="docutils literal"><span class="pre">target</span></code></p>
+</dd></dl>
+
 <dl class="classmethod">
 <dt id="windows.debug.Debugger.debug">
 <em class="property">classmethod </em><code class="descname">debug</code><span class="sig-paren">(</span><em>path</em>, <em>args=None</em>, <em>dwCreationFlags=0</em>, <em>show_windows=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/debugger.html#Debugger.debug"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.Debugger.debug" title="Permalink to this definition">¶</a></dt>
@@ -110,7 +116,7 @@ The <a class="reference internal" href="#windows.debug.Debugger" title="windows.
 <dl class="method">
 <dt id="windows.debug.Debugger.loop">
 <code class="descname">loop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/debugger.html#Debugger.loop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.Debugger.loop" title="Permalink to this definition">¶</a></dt>
-<dd><p>Debugging loop: handle event / dispatch to breakpoint. Returns when all targets are dead</p>
+<dd><p>Debugging loop: handle event / dispatch to breakpoint. Returns when all targets are dead/detached</p>
 </dd></dl>
 
 <dl class="method">
@@ -212,7 +218,7 @@ and <code class="docutils literal"><span class="pre">DBG_EXCEPTION_NOT_HANDLED</
 <dl class="method">
 <dt id="windows.debug.Debugger.on_single_step">
 <code class="descname">on_single_step</code><span class="sig-paren">(</span><em>exception</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/debugger.html#Debugger.on_single_step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.Debugger.on_single_step" title="Permalink to this definition">¶</a></dt>
-<dd><p>Called on requested single step``exception`` is one of the following type:</p>
+<dd><p>Called on requested single step <code class="docutils literal"><span class="pre">exception</span></code> is one of the following type:</p>
 <blockquote>
 <div><ul class="simple">
 <li><a class="reference internal" href="exception.html#windows.winobject.exception.EEXCEPTION_DEBUG_INFO32" title="windows.winobject.exception.EEXCEPTION_DEBUG_INFO32"><code class="xref py py-class docutils literal"><span class="pre">windows.winobject.exception.EEXCEPTION_DEBUG_INFO32</span></code></a></li>
@@ -405,7 +411,7 @@ It is based on <code class="xref py py-func docutils literal"><span class="pre">
 <dl class="class">
 <dt id="windows.debug.FunctionBP">
 <em class="property">class </em><code class="descclassname">windows.debug.</code><code class="descname">FunctionBP</code><span class="sig-paren">(</span><em>target</em>, <em>addr=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/breakpoints.html#FunctionBP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.FunctionBP" title="Permalink to this definition">¶</a></dt>
-<dd><p>A breakpoint that accept a function from <a class="reference internal" href="winproxy.html#module-windows.winproxy" title="windows.winproxy"><code class="xref py py-mod docutils literal"><span class="pre">windows.winproxy</span></code></a> and able to:</p>
+<dd><p>A breakpoint that accepts a function from <a class="reference internal" href="winproxy.html#module-windows.winproxy" title="windows.winproxy"><code class="xref py py-mod docutils literal"><span class="pre">windows.winproxy</span></code></a> and able to:</p>
 <ul class="simple">
 <li>Extract the arguments of the functions</li>
 <li>Break at the return of the function</li>
