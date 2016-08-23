@@ -109,6 +109,10 @@ class Debugger(object):
             del self._explicit_single_step[thread.tid]
             del self._breakpoint_to_reput[thread.tid]
             del self.threads[thread.tid]
+            ctx = thread.context
+            if ctx.EEFlags.TF:  # Remove TRAPFlag before detaching (or it will lead to a crash)
+                ctx.EEFlags.TF = 0
+                thread.set_context(ctx)
         del self.processes[target.pid]
         del self._watched_pages[target.pid]
         if target is self.current_process:
