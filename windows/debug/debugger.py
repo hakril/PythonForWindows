@@ -85,7 +85,17 @@ class Debugger(object):
     def detach(self, target=None):
         """Detach from all debugged processes or process ``target``"""
         if target is None:
-            for proc in self.processes.values():
+            targets = self.processes.values()
+            if not targets:
+                # We are not following any process
+                # maybe a attach/detach with Debugger.loop
+                # Just detach from the initial target
+                if self.target:
+                    tpid = self.target.pid
+                    self.target = None  # Remove ref to process -> GC -> CloseHandle -> process is destroyed
+                    windows.winproxy.DebugActiveProcessStop(tpid)
+                return
+            for proc in targets:
                 self.detach(proc)
             return
         if not isinstance(target, WinProcess):
@@ -118,6 +128,10 @@ class Debugger(object):
         if target is self.current_process:
             self._finish_debug_event(self.REMOVE_ME_debug_event, DBG_CONTINUE)
 
+        if target is self.target:
+            self.target = None
+
+        print("Detach from {0}".format(target.pid))
         windows.winproxy.DebugActiveProcessStop(target.pid)
 
     def _killed_in_action(self):
@@ -612,8 +626,17 @@ class Debugger(object):
         proc_handle = HANDLE()
         thread_handle = HANDLE()
         cp_handle = windows.current_process.handle
+
+
+
         winproxy.DuplicateHandle(cp_handle, create_process.hProcess, cp_handle, ctypes.byref(proc_handle), dwOptions=DUPLICATE_SAME_ACCESS)
         winproxy.DuplicateHandle(cp_handle, create_process.hThread, cp_handle, ctypes.byref(thread_handle), dwOptions=DUPLICATE_SAME_ACCESS)
+
+        dbgprint(" Got PROC handle {0:#x}".format(create_process.hProcess, self), "HANDLE")
+        dbgprint(" PROC handle duplicated: {0:#x}".format(proc_handle.value), "HANDLE")
+
+        dbgprint(" Got THREAD handle {0:#x}".format(create_process.hThread, self), "HANDLE")
+        dbgprint(" THREAD handle duplicated: {0:#x}".format(thread_handle.value), "HANDLE")
 
         self.current_process = WinProcess._from_handle(proc_handle.value)
         self.current_thread = WinThread._from_handle(thread_handle.value)
@@ -809,7 +832,7 @@ class Debugger(object):
         if target is None:
             target = self.current_process
         res = {}
-        cp_watch_page = self._watched_pages[self.current_process.pid]
+        cp_watch_page = self._watched_pages[target.pid]
         page_protection = DWORD()
         for page_addr, watched_page in cp_watch_page.items():
             target.virtual_protect(page_addr, PAGE_SIZE, watched_page.original_prot, page_protection)

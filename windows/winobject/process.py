@@ -56,7 +56,7 @@ class AutoHandle(object):
 
     def __del__(self):
         if hasattr(self, "_handle") and self._handle:
-            #dbgprint("Closing Handle {0} for {1}".format(hex(self._handle), self), "HANDLE")
+            dbgprint("Closing Handle {0} for {1}".format(hex(self._handle), self), "HANDLE")
             self._close_function(self._handle)
 
 

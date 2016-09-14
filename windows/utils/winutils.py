@@ -6,6 +6,7 @@ import code
 import datetime
 
 import windows
+from windows.dbgprint import dbgprint
 from .. import winproxy
 from ..generated_def import windef
 from ..generated_def.winstructs import *
@@ -84,6 +85,10 @@ def create_process(path, args=None, dwCreationFlags=0, show_windows=True):
     if args:
         lpCommandLine = (" ".join([str(a) for a in args]))
     windows.winproxy.CreateProcessA(path, lpCommandLine=lpCommandLine, dwCreationFlags=dwCreationFlags, lpProcessInformation=ctypes.byref(proc_info), lpStartupInfo=lpStartupInfo)
+    dbgprint("CreateProcessA new process handle {:#x}".format(proc_info.hProcess), "HANDLE")
+    dbgprint("CreateProcessA new thread handle {:#x}".format(proc_info.hThread), "HANDLE")
+    dbgprint("Automatic close of thread handle {:#x}".format(proc_info.hThread), "HANDLE")
+    windows.winproxy.CloseHandle(proc_info.hThread)  # Give access to a WinThread in addition of the WinProcess ?
     return windows.winobject.process.WinProcess(pid=proc_info.dwProcessId, handle=proc_info.hProcess)
 
 
