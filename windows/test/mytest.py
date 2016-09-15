@@ -112,20 +112,39 @@ class WindowsTestCase(unittest.TestCase):
                 calc.write_memory(k32.baseaddr, "XD")
             self.assertEqual(calc.read_memory(k32.baseaddr, 2), "XD")
 
-    def test_read_wstring(self):
+
+    def test_read_string(self):
         test_string = "TEST_STRING"
+        string_to_write = test_string + "\x00"
         with Calc32() as calc:
             addr = calc.virtual_alloc(0x1000)
-            calc.write_memory(addr, "\x00".join(test_string + "\x00"))
+            calc.write_memory(addr, string_to_write)
+            self.assertEqual(calc.read_string(addr), test_string)
+
+    def test_read_string_end_page(self):
+        test_string = "TEST_STRING"
+        string_to_write = test_string + "\x00"
+        with Calc32() as calc:
+            addr = calc.virtual_alloc(0x1000) + 0x1000 - len(string_to_write)
+            calc.write_memory(addr, string_to_write)
+            self.assertEqual(calc.read_string(addr), test_string)
+
+    def test_read_wstring(self):
+        test_string = "TEST_STRING"
+        string_to_write = test_string + "\x00"
+        with Calc32() as calc:
+            addr = calc.virtual_alloc(0x1000)
+            calc.write_memory(addr, "\x00".join(string_to_write))
             self.assertEqual(calc.read_wstring(addr), test_string)
 
 
     def test_read_wstring_end_page(self):
         test_string = "TEST_STRING"
+        string_to_write = test_string + "\x00"
         with Calc32() as calc:
             # Setup string addr at end of page
             addr = calc.virtual_alloc(0x1000) + 0x1000 - 26
-            calc.write_memory(addr, "\x00".join(test_string + "\x00"))
+            calc.write_memory(addr, "\x00".join(string_to_write))
             self.assertEqual(calc.read_wstring(addr), test_string)
 
     # Native execution

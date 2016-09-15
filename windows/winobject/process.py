@@ -538,8 +538,20 @@ class Process(AutoHandle):
     def read_string(self, addr):
         """Read an ascii string at ``addr``"""
         res = []
+        read_size = 0x100
+        readden = 0
         for i in itertools.count():
-            x = self.read_memory(addr + (i * 0x100), 0x100)
+            try:
+                x = self.read_memory(addr + readden, read_size)
+            except winproxy.Kernel32Error as e:
+                if read_size == 2:
+                    raise
+                # handle read_wstring at end of page
+                # Of read failed: read only the half of size
+                # read_size must remain a multiple of 2
+                read_size = read_size / 2
+                continue
+            readden += read_size
             if "\x00" in x:
                 res.append(x.split("\x00", 1)[0])
                 break
