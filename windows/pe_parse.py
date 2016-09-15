@@ -171,6 +171,11 @@ def GetPEFile(baseaddr, target=None, force_bitness=None):
 
     class PEFile(object):
         """Represent a PE loaded in a process (current or remote)"""
+        #def __del__(self):
+        #    print("YOLODEL")
+        #    import pprint
+        #    pprint.pprint(vars(self))
+
         def __init__(self):
             self.baseaddr = baseaddr
             self.bitness = targetedbitness

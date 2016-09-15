@@ -48,7 +48,10 @@ class Handle(SYSTEM_HANDLE):
         size_needed = DWORD()
         try:
             winproxy.NtQueryObject(lh, ObjectTypeInformation, ctypes.byref(xxx), ctypes.sizeof(xxx), ctypes.byref(size_needed))
-        except Exception as e:
+        except WindowsError as e:
+            if e.code != STATUS_INFO_LENGTH_MISMATCH:
+                print("ERROR WITH {0:x}".format(lh))
+                raise
             size = size_needed.value
             buffer = ctypes.c_buffer(size)
             winproxy.NtQueryObject(lh, ObjectTypeInformation, buffer, size, ctypes.byref(size_needed))

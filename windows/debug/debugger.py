@@ -136,6 +136,7 @@ class Debugger(object):
 
     def _killed_in_action(self):
         """Return ``True`` if current process have been detached by user callback"""
+        # Fix ? _handle_exit_process remove from processes but need a FinishDebugEvent
         return self.current_process.pid not in self.processes
 
 
@@ -627,8 +628,6 @@ class Debugger(object):
         thread_handle = HANDLE()
         cp_handle = windows.current_process.handle
 
-
-
         winproxy.DuplicateHandle(cp_handle, create_process.hProcess, cp_handle, ctypes.byref(proc_handle), dwOptions=DUPLICATE_SAME_ACCESS)
         winproxy.DuplicateHandle(cp_handle, create_process.hThread, cp_handle, ctypes.byref(thread_handle), dwOptions=DUPLICATE_SAME_ACCESS)
 
@@ -659,6 +658,8 @@ class Debugger(object):
     def _handle_exit_process(self, debug_event):
         """Handle EXIT_PROCESS_DEBUG_EVENT"""
         self._update_debugger_state(debug_event)
+        print("Exit process !!!")
+        #import pdb;pdb.set_trace()
         exit_process = debug_event.u.ExitProcess
         retvalue = self.on_exit_process(exit_process)
         del self.threads[self.current_thread.tid]
@@ -667,6 +668,36 @@ class Debugger(object):
         del self._breakpoint_to_reput[self.current_thread.tid]
         del self.processes[self.current_process.pid]
         del self._watched_pages[self.current_process.pid]
+
+        del self._module_by_process[self.current_process.pid]
+
+        # GC EXPLORATION CODE
+        import gc
+        over = gc.get_referrers
+        under = gc.get_referents
+        ####
+
+        cpid = self.current_process.pid
+        del self.current_thread
+        ## This should trigger DEL of the self.current_process
+        #print("self.current_process WILL BE DELETED")
+        del self.current_process
+        #print("self.current_process DELETED")
+
+        if cpid == self.target.pid:
+            #del self.target
+            print("DEL TARGET")
+            del self.target
+            #import pdb;pdb.set_trace()
+
+        # This is like.. the WORST PATCH EVER
+        # I'am going to sleep so here the problem for when it will time to fix this:
+        # The PEFile class is a mess: too much cell arround target
+        # This means that destroying them is not enought to __del__ the target (dbg.current_process)
+        # So the dbg.current_process is still alive, so handle is also still alive..
+        # For now we need to force gc.collect
+        # This will need a rewrite of GetPEFile...
+        import gc; gc.collect()
         return retvalue
 
     def _handle_create_thread(self, debug_event):
@@ -744,7 +775,11 @@ class Debugger(object):
             dbg_continue_flag = self._dispatch_debug_event(debug_event)
             if dbg_continue_flag is None:
                 dbg_continue_flag = DBG_CONTINUE
-            if not self._killed_in_action():
+            if debug_event.dwDebugEventCode == EXIT_PROCESS_DEBUG_EVENT or not self._killed_in_action():
+            #if not self._killed_in_action():
+                # should we always _finish_debug_event even if process was killed ?
+                # rhaaa _killed_in_action is a REALLY bad name, it's not killed, it's detached
+                # TODO: FIXME
                 self._finish_debug_event(debug_event, dbg_continue_flag)
             if not self.processes:
                 break

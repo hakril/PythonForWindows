@@ -48,6 +48,9 @@ class AutoHandle(object):
             return self._handle
         self._handle = self._get_handle()
         dbgprint("Open handle {0} for {1}".format(hex(self._handle), self), "HANDLE")
+        #if "DEAD" in str(self):
+        #    print("OPEN FOR THE DEADS")
+        #    import pdb;pdb.set_trace()
         return self._handle
 
     def wait(self, timeout=INFINITE):
