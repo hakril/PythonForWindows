@@ -112,6 +112,22 @@ class WindowsTestCase(unittest.TestCase):
                 calc.write_memory(k32.baseaddr, "XD")
             self.assertEqual(calc.read_memory(k32.baseaddr, 2), "XD")
 
+    def test_read_wstring(self):
+        test_string = "TEST_STRING"
+        with Calc32() as calc:
+            addr = calc.virtual_alloc(0x1000)
+            calc.write_memory(addr, "\x00".join(test_string + "\x00"))
+            self.assertEqual(calc.read_wstring(addr), test_string)
+
+
+    def test_read_wstring_end_page(self):
+        test_string = "TEST_STRING"
+        with Calc32() as calc:
+            # Setup string addr at end of page
+            addr = calc.virtual_alloc(0x1000) + 0x1000 - 26
+            calc.write_memory(addr, "\x00".join(test_string + "\x00"))
+            self.assertEqual(calc.read_wstring(addr), test_string)
+
     # Native execution
     def test_execute_to_32(self):
         with Calc32() as calc:
@@ -489,6 +505,7 @@ class WindowsTestCase(unittest.TestCase):
         with Calc64() as calc:
             t = calc.threads[0]
             self.assertNotEqual(t.teb_base, 0)
+
 
 class WindowsAPITestCase(unittest.TestCase):
     def test_createfileA_fail(self):
