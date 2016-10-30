@@ -13,6 +13,8 @@ from windows.native_exec.nativeutils import GetProcAddress64, GetProcAddress32
 
 from windows.dbgprint import dbgprint
 
+class InjectionFailedError(WindowsError):
+    pass
 
 def perform_manual_getproc_loadlib_32(target, dll_name):
     dll = "KERNEL32.DLL\x00".encode("utf-16-le")
@@ -47,6 +49,8 @@ def perform_manual_getproc_loadlib_32(target, dll_name):
 
         t = target.execute(RemoteManualLoadLibray.get_code(), addr4)
         t.wait()
+        if not t.exit_code:
+            raise InjectionFailedError("Injection of <{0}> failed".format(dll_name))
     return True
 
 def perform_manual_getproc_loadlib_64(target, dll_name):
@@ -86,6 +90,8 @@ def perform_manual_getproc_loadlib_64(target, dll_name):
 
         t = target.execute(RemoteManualLoadLibray.get_code(), addr4)
         t.wait()
+        if not t.exit_code:
+            raise InjectionFailedError("Injection of <{0}> failed".format(dll_name))
     return True
 
 
@@ -97,7 +103,7 @@ def load_dll_in_remote_process(target, dll_name):
         if any(mod.name == dll_name for mod in modules):
             # DLL already loaded
             dbgprint("DLL already present in target", "DLLINJECT")
-            return True
+            return False
         k32 = [mod for mod in modules if mod.name.lower() == "kernel32.dll"]
         if k32:
             # We have kernel32 \o/
@@ -111,8 +117,10 @@ def load_dll_in_remote_process(target, dll_name):
                 target.write_memory(addr, dll_name + "\x00")
                 t = target.create_thread(load_libraryA, addr)
                 t.wait()
+                if not t.exit_code:
+                    raise InjectionFailedError("Injection of <{0}> failed".format(dll_name))
             dbgprint("DLL Injected via LoadLibray", "DLLINJECT")
-            return True
+            return t.exit_code
     # Hardcore mode
     # We don't have k32 or PEB->Ldr
     # Go inject a GetProcAddress(LoadLib) + LoadLib shellcode :D
