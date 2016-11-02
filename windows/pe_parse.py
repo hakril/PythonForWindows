@@ -430,29 +430,14 @@ class IMPORT_BY_NAME(ctypes.Structure):
         ("Name", BYTE)
     ]
 
-#class RVA(DWORD):
-#    @property
-#    def addr(self):
-#        return baseaddr + self.value
-#
-#    def __repr__(self):
-#        return "<DWORD {0} (RVA to '{1}')>".format(self.value, hex(self.addr))
-
 
 def get_string(target, addr):
     if target is None:
         return ctypes.c_char_p(addr).value
     return target.read_string(addr)
 
-#class StringRVa(RVA):
-#    def str(self):
-#        return get_string(self.addr).decode()
 
-
-class PESection((IMAGE_SECTION_HEADER)):
-    def __init__(self, baseaddr, target):
-        self.target = target
-        self.baseaddr = baseaddr
+class PESection(IMAGE_SECTION_HEADER):
 
     @property
     def name(self):
@@ -470,6 +455,14 @@ class PESection((IMAGE_SECTION_HEADER)):
 
     def __repr__(self):
         return "<PESection \"{0}\">".format(self.name)
+
+
+    @classmethod
+    def create(cls, pefile, addr):
+        self = pefile.transformers.create_structure_at(cls, addr)
+        self.baseaddr = pefile.baseaddr
+        self.target = pefile.target
+        return self
 
 
 class IATEntry(ctypes.Structure):
@@ -527,9 +520,7 @@ class IATEntry(ctypes.Structure):
         return True
 
 
-class IMAGE_IMPORT_DESCRIPTOR(ctypes.Structure):
-    _fields_ = transform_ctypes_fields(IMAGE_IMPORT_DESCRIPTOR, {})
-
+class IMAGE_IMPORT_DESCRIPTOR(IMAGE_IMPORT_DESCRIPTOR): # TODO: use explicite name winstructs.IMAGE_IMPORT_DESCRIPTOR
     def get_INT(self):
         if not self.OriginalFirstThunk:
             return None
@@ -561,6 +552,40 @@ class IMAGE_IMPORT_DESCRIPTOR(ctypes.Structure):
             iat_entry = self.transformers.create_structure_at(THUNK_DATA, iat_addr)
         return res
 
+    @classmethod
+    def create(cls, pefile, addr):
+        self = pefile.transformers.create_structure_at(cls, addr)
+        self.baseaddr = pefile.baseaddr
+        self.transformers = pefile.transformers
+        self.IMAGE_ORDINAL_FLAG = pefile.IMAGE_ORDINAL_FLAG
+        self.target = pefile.target
+        return self
+
+class IMAGE_EXPORT_DIRECTORY(IMAGE_EXPORT_DIRECTORY): # TODO: use explicite name winstructs._IMAGE_EXPORT_DIRECTORY
+    def get_exports(self):
+        NameOrdinals = self.transformers.create_structure_at((WORD * self.NumberOfNames), self.AddressOfNameOrdinals + self.baseaddr)
+        NameOrdinals = list(NameOrdinals)
+        Functions = self.transformers.create_structure_at((DWORD * self.NumberOfFunctions), self.AddressOfFunctions + self.baseaddr)
+        Names = self.transformers.create_structure_at((DWORD * self.NumberOfNames), self.AddressOfNames + self.baseaddr)
+        res = []
+        for nb, func in enumerate(Functions):
+            func += self.baseaddr
+            if nb in NameOrdinals:
+                name = get_string(self.target, Names[NameOrdinals.index(nb)] + self.baseaddr)
+            else:
+                name = None
+            res.append((nb, func, name))
+        return res
+
+    @classmethod
+    def create(cls, pefile, addr):
+        self = pefile.transformers.create_structure_at(cls, addr)
+        self.transformers = pefile.transformers
+        self.target = pefile.target
+        self.baseaddr = pefile.baseaddr
+        return self
+
+
 class IMAGE_DOS_HEADER(ctypes.Structure):
     _fields_ = [
         ("e_magic", CHAR * 2),
@@ -586,10 +611,6 @@ class IMAGE_DOS_HEADER(ctypes.Structure):
 
 class PEFile(object):
     """Represent a PE loaded in a process (current or remote)"""
-     #def __del__(self):
-     #    print("YOLODEL")
-     #    import pprint
-     #    pprint.pprint(vars(self))
 
     def __init__(self, target, baseaddr, targetedbitness, transformers):
         self.target = target
@@ -638,23 +659,12 @@ class PEFile(object):
         if import_datadir.VirtualAddress == 0:
             return []
         import_descriptor_addr = self.baseaddr + import_datadir.VirtualAddress
-        current_import_descriptor = self.transformers.create_structure_at(IMAGE_IMPORT_DESCRIPTOR, import_descriptor_addr)
-        # YOLO FIX: todo better
-        current_import_descriptor.baseaddr = self.baseaddr
-        current_import_descriptor.transformers = self.transformers
-        current_import_descriptor.IMAGE_ORDINAL_FLAG = self.IMAGE_ORDINAL_FLAG
-        current_import_descriptor.target = self.target
-
+        current_import_descriptor =  IMAGE_IMPORT_DESCRIPTOR.create(self, import_descriptor_addr)
         res = []
         while current_import_descriptor.FirstThunk:
             res.append(current_import_descriptor)
             import_descriptor_addr += ctypes.sizeof(IMAGE_IMPORT_DESCRIPTOR)
-            current_import_descriptor = self.transformers.create_structure_at(IMAGE_IMPORT_DESCRIPTOR, import_descriptor_addr)
-            # YOLO FIX: todo better
-            current_import_descriptor.baseaddr = self.baseaddr
-            current_import_descriptor.transformers = self.transformers
-            current_import_descriptor.IMAGE_ORDINAL_FLAG = self.IMAGE_ORDINAL_FLAG
-            current_import_descriptor.target = self.target
+            current_import_descriptor =  IMAGE_IMPORT_DESCRIPTOR.create(self, import_descriptor_addr)
         return res
 
     def get_EXPORT_DIRECTORY(self):
@@ -662,11 +672,7 @@ class PEFile(object):
         if export_directory_rva == 0:
             return None
         export_directory_addr = self.baseaddr + export_directory_rva
-        exp_dir = self.transformers.create_structure_at(self._IMAGE_EXPORT_DIRECTORY, export_directory_addr)
-        # YOLO AGAIN.. FIXME
-        exp_dir.transformers = self.transformers
-        exp_dir.target = self.target
-        exp_dir.baseaddr = self.baseaddr
+        exp_dir = IMAGE_EXPORT_DIRECTORY.create(self, export_directory_addr)
         return exp_dir
 
     @utils.fixedpropety
@@ -679,8 +685,10 @@ class PEFile(object):
         else:
             opt_header_addr = self.get_NT_HEADER().OptionalHeader._base_addr
         base_section = opt_header_addr + SizeOfOptionalHeader
-        sections_array = self.transformers.create_structure_at((self.PESection * nb_section), base_section)
-        return list(sections_array)
+        #pe_section_type = IMAGE_SECTION_HEADER
+        return [PESection.create(self, base_section + (sizeof(IMAGE_SECTION_HEADER) * i)) for i in range(nb_section)]
+        #sections_array = self.transformers.create_structure_at((self.PESection * nb_section), base_section)
+        #return list(sections_array)
 
     @utils.fixedpropety
     def exports(self):
@@ -702,10 +710,12 @@ class PEFile(object):
     @utils.fixedpropety
     def export_name(self):
         """The Name attribute of the ``EXPORT_DIRECTORY``"""
-        try:
-            return self.get_EXPORT_DIRECTORY().Name.str
-        except AttributeError:
+        exp_dir = self.get_EXPORT_DIRECTORY()
+        if exp_dir is None:
             return None
+        if not exp_dir.Name:
+            return None
+        return get_string(self.target, self.baseaddr + exp_dir.Name)
 
     # TODO: get imports by parsing other modules exports if no INT
     @utils.fixedpropety
@@ -727,25 +737,3 @@ class PEFile(object):
             name = get_string(self.target, self.baseaddr + import_descriptor.Name)
             res.setdefault(name.lower(), []).extend(IAT)
         return res
-
-    # Will be usable as `self.IMAGE_IMPORT_DESCRIPTOR`
-
-
-    # Will be usable as `self._IMAGE_EXPORT_DIRECTORY`
-    class _IMAGE_EXPORT_DIRECTORY(ctypes.Structure):
-        _fields_ = transform_ctypes_fields(IMAGE_EXPORT_DIRECTORY, {})
-
-        def get_exports(self):
-            NameOrdinals = self.transformers.create_structure_at((WORD * self.NumberOfNames), self.AddressOfNameOrdinals + self.baseaddr)
-            NameOrdinals = list(NameOrdinals)
-            Functions = self.transformers.create_structure_at((DWORD * self.NumberOfFunctions), self.AddressOfFunctions + self.baseaddr)
-            Names = self.transformers.create_structure_at((DWORD * self.NumberOfNames), self.AddressOfNames + self.baseaddr)
-            res = []
-            for nb, func in enumerate(Functions):
-                func += self.baseaddr
-                if nb in NameOrdinals:
-                    name = get_string(self.target, Names[NameOrdinals.index(nb)] + self.baseaddr)
-                else:
-                    name = None
-                res.append((nb, func, name))
-            return res

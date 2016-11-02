@@ -198,10 +198,11 @@ class WindowsTestCase(unittest.TestCase):
             dword = struct.unpack("<I", calc.read_memory(data, 4))[0]
             self.assertEqual(dword, 0x42424242)
             # Check calc32 is still suspended:
-                # 1 thread
-                # suspend count == 1
-            self.assertEqual(len(calc.threads), 1)
+                # 1 thread | except windows 10 that pop threads
+                # main thread suspend count == 1
             self.assertEqual(calc.threads[0].suspend(), 1)
+            if not is_windows_10:
+                self.assertEqual(len(calc.threads), 1)
 
     @windows_64bit_only
     def test_execute_python_to_64_suspended(self):
@@ -211,10 +212,11 @@ class WindowsTestCase(unittest.TestCase):
             dword = struct.unpack("<I", calc.read_memory(data, 4))[0]
             self.assertEqual(dword, 0x42424242)
             # Check calc32 is still suspended:
-                # 1 thread
-                # suspend count == 1
-            self.assertEqual(len(calc.threads), 1)
+                # 1 thread | except windows 10 that pop threads
+                # main thread suspend count == 1
             self.assertEqual(calc.threads[0].suspend(), 1)
+            if not is_windows_10:
+                self.assertEqual(len(calc.threads), 1)
 
 
     def test_parse_remote_32_peb(self):
@@ -223,12 +225,12 @@ class WindowsTestCase(unittest.TestCase):
             # Yeah a don't know but on 32bits system the parsing might begin before
             # InMemoryOrderModuleList is setup..
             import time; time.sleep(0.1)
-            self.assertEqual(calc.peb.modules[0].name, "calc.exe")
+            self.assertEqual(calc.peb.modules[0].name, test_binary_name)
 
     @windows_64bit_only
     def test_parse_remote_64_peb(self):
         with Calc64() as calc:
-            self.assertEqual(calc.peb.modules[0].name, "calc.exe")
+            self.assertEqual(calc.peb.modules[0].name, test_binary_name)
 
     def test_parse_remote_32_pe(self):
         with Calc32() as calc:
