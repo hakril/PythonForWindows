@@ -475,13 +475,14 @@ class IATEntry(ctypes.Structure):
 
 
     @classmethod
-    def create(cls, addr, ord, name, transformers):
+    def create(cls, addr, ord, name, target, transformers):
         self = transformers.create_structure_at(cls, addr)
         self.addr = addr
         self.ord = ord
         self.name = name
         self.hook = None
         self.nonhookvalue = self.value
+        self.target = target
         return self
 
     def __repr__(self):
@@ -503,7 +504,7 @@ class IATEntry(ctypes.Structure):
 
             This works only for PEFile with the current process as target.
         """
-        if target is not None:
+        if self.target is not None:
             raise NotImplementedError("Setting hook in remote process (use python code injection)")
 
         hook = hooks.IATHook(self, callback, types)
@@ -547,7 +548,7 @@ class IMAGE_IMPORT_DESCRIPTOR(IMAGE_IMPORT_DESCRIPTOR): # TODO: use explicite na
         iat_entry = self.transformers.create_structure_at(THUNK_DATA, iat_addr)
         res = []
         while iat_entry.Ordinal:
-            res.append(IATEntry.create(iat_addr, -1, "??", self.transformers))
+            res.append(IATEntry.create(iat_addr, -1, "??", self.target, self.transformers))
             iat_addr += ctypes.sizeof(type(iat_entry))
             iat_entry = self.transformers.create_structure_at(THUNK_DATA, iat_addr)
         return res

@@ -27,9 +27,9 @@ if windows.system.version[0] < 10:
     test_binary_name = "calc.exe"
 else:
     test_binary_name = "cmd.exe"
+    test_binary_name = "notepad.exe"
 
 DEFAULT_CREATION_FLAGS = CREATE_NEW_CONSOLE
-#DEFAULT_CREATION_FLAGS = 0
 
 if is_windows_32_bits:
     def pop_calc_32(dwCreationFlags=DEFAULT_CREATION_FLAGS):
@@ -51,7 +51,7 @@ else:
 
 
 @contextmanager
-def Calc64(dwCreationFlags=0, exit_code=0):
+def Calc64(dwCreationFlags=DEFAULT_CREATION_FLAGS, exit_code=0):
     try:
         calc = pop_calc_64(dwCreationFlags)
         yield calc
@@ -63,7 +63,7 @@ def Calc64(dwCreationFlags=0, exit_code=0):
             calc.exit(exit_code)
 
 @contextmanager
-def Calc32(dwCreationFlags=0, exit_code=0):
+def Calc32(dwCreationFlags=DEFAULT_CREATION_FLAGS, exit_code=0):
     try:
         calc = pop_calc_32(dwCreationFlags)
         yield calc

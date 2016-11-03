@@ -56,7 +56,7 @@ class Debugger(object):
         self.breakpoints = {}
         self._pending_breakpoints = {} #Breakpoints to put in new process / threads
         # Values rewritten by "\xcc"
-        self._memory_save = defaultdict(dict)
+        self._memory_save = dict()
         # Dict of {tid : {drx taken : BP}}
         self._hardware_breakpoint = {}
         # Breakpoints to reput..
@@ -97,6 +97,7 @@ class Debugger(object):
                 return
             for proc in targets:
                 self.detach(proc)
+            del targets
             return
         if not isinstance(target, WinProcess):
             raise ValueError("Detach accept only WinProcess")
@@ -125,20 +126,22 @@ class Debugger(object):
                 thread.set_context(ctx)
         del self.processes[target.pid]
         del self._watched_pages[target.pid]
+        del self._module_by_process[target.pid]
+
         if target is self.current_process:
             self._finish_debug_event(self.REMOVE_ME_debug_event, DBG_CONTINUE)
+            self.current_process = None
+            self.current_thread = None
 
-        if target is self.target:
+        if target.pid == self.target.pid:
             self.target = None
 
-        print("Detach from {0}".format(target.pid))
         windows.winproxy.DebugActiveProcessStop(target.pid)
 
     def _killed_in_action(self):
         """Return ``True`` if current process have been detached by user callback"""
         # Fix ? _handle_exit_process remove from processes but need a FinishDebugEvent
-        return self.current_process.pid not in self.processes
-
+        return self.current_process is None or self.current_process.pid not in self.processes
 
     @classmethod
     def debug(cls, path, args=None, dwCreationFlags=0, show_windows=False):
@@ -469,6 +472,7 @@ class Debugger(object):
                 thread.set_syswow_context(ctx)
             else:
                 thread.set_context(ctx)
+            del thread
             continue_flag = self._dispatch_breakpoint(exception, excp_addr)
             if self._killed_in_action():
                 return continue_flag
@@ -647,6 +651,7 @@ class Debugger(object):
         self.processes[self.current_process.pid] = self.current_process
         self._watched_pages[self.current_process.pid] = {} #defaultdict(list)
         self.breakpoints[self.current_process.pid] = {}
+        self._memory_save[self.current_process.pid] = {}
         self._module_by_process[self.current_process.pid] = {}
         self._update_debugger_state(debug_event)
         self._setup_pending_breakpoints_new_process(self.current_process)
@@ -658,8 +663,6 @@ class Debugger(object):
     def _handle_exit_process(self, debug_event):
         """Handle EXIT_PROCESS_DEBUG_EVENT"""
         self._update_debugger_state(debug_event)
-        print("Exit process !!!")
-        #import pdb;pdb.set_trace()
         exit_process = debug_event.u.ExitProcess
         retvalue = self.on_exit_process(exit_process)
         del self.threads[self.current_thread.tid]
@@ -668,36 +671,16 @@ class Debugger(object):
         del self._breakpoint_to_reput[self.current_thread.tid]
         del self.processes[self.current_process.pid]
         del self._watched_pages[self.current_process.pid]
-
+        del self._memory_save[self.current_process.pid]
         del self._module_by_process[self.current_process.pid]
 
-        # GC EXPLORATION CODE
-        import gc
-        over = gc.get_referrers
-        under = gc.get_referents
-        ####
-
         cpid = self.current_process.pid
-        del self.current_thread
-        ## This should trigger DEL of the self.current_process
-        #print("self.current_process WILL BE DELETED")
-        del self.current_process
-        #print("self.current_process DELETED")
+        self.current_thread = None
+        self.current_process = None
 
         if cpid == self.target.pid:
-            #del self.target
-            print("DEL TARGET")
-            del self.target
-            #import pdb;pdb.set_trace()
+            self.target = None
 
-        # This is like.. the WORST PATCH EVER
-        # I'am going to sleep so here the problem for when it will time to fix this:
-        # The PEFile class is a mess: too much cell arround target
-        # This means that destroying them is not enought to __del__ the target (dbg.current_process)
-        # So the dbg.current_process is still alive, so handle is also still alive..
-        # For now we need to force gc.collect
-        # This will need a rewrite of GetPEFile...
-        import gc; gc.collect()
         return retvalue
 
     def _handle_create_thread(self, debug_event):
