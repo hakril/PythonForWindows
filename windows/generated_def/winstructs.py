@@ -4,6 +4,7 @@
 from ctypes import *
 from ctypes.wintypes import *
 from windef import *
+BYTE = c_ubyte
 PWSTR = LPWSTR
 PCWSTR = LPWSTR
 SIZE_T = c_ulong
@@ -66,6 +67,12 @@ PHKEY = POINTER(HKEY)
 ACCESS_MASK = DWORD
 REGSAM = ACCESS_MASK
 SECURITY_CONTEXT_TRACKING_MODE = BOOLEAN
+HCRYPTPROV_OR_NCRYPT_KEY_HANDLE = PULONG
+HCRYPTPROV_LEGACY = PULONG
+HCRYPTKEY = PULONG
+HCRYPTPROV = PULONG
+HCRYPTHASH = PULONG
+ALG_ID = UINT
 DISPID = LONG
 MEMBERID = DISPID
 PSECURITY_DESCRIPTOR = PVOID
@@ -3373,6 +3380,51 @@ class _CERT_CHAIN_ENGINE_CONFIG(Structure):
     ]
 CERT_CHAIN_ENGINE_CONFIG = _CERT_CHAIN_ENGINE_CONFIG
 PCERT_CHAIN_ENGINE_CONFIG = POINTER(_CERT_CHAIN_ENGINE_CONFIG)
+
+class _SYSTEMTIME(Structure):
+    _fields_ = [
+        ("wYear", WORD),
+        ("wMonth", WORD),
+        ("wDayOfWeek", WORD),
+        ("wDay", WORD),
+        ("wHour", WORD),
+        ("wMinute", WORD),
+        ("wSecond", WORD),
+        ("wMilliseconds", WORD),
+    ]
+SYSTEMTIME = _SYSTEMTIME
+PSYSTEMTIME = POINTER(_SYSTEMTIME)
+
+class _CERT_EXTENSIONS(Structure):
+    _fields_ = [
+        ("cExtension", DWORD),
+        ("rgExtension", PCERT_EXTENSION),
+    ]
+PCERT_EXTENSIONS = POINTER(_CERT_EXTENSIONS)
+CERT_EXTENSIONS = _CERT_EXTENSIONS
+
+class _CRYPT_KEY_PROV_PARAM(Structure):
+    _fields_ = [
+        ("dwParam", DWORD),
+        ("pbData", POINTER(BYTE)),
+        ("cbData", DWORD),
+        ("dwFlags", DWORD),
+    ]
+CRYPT_KEY_PROV_PARAM = _CRYPT_KEY_PROV_PARAM
+PCRYPT_KEY_PROV_PARAM = POINTER(_CRYPT_KEY_PROV_PARAM)
+
+class _CRYPT_KEY_PROV_INFO(Structure):
+    _fields_ = [
+        ("pwszContainerName", LPWSTR),
+        ("pwszProvName", LPWSTR),
+        ("dwProvType", DWORD),
+        ("dwFlags", DWORD),
+        ("cProvParam", DWORD),
+        ("rgProvParam", PCRYPT_KEY_PROV_PARAM),
+        ("dwKeySpec", DWORD),
+    ]
+CRYPT_KEY_PROV_INFO = _CRYPT_KEY_PROV_INFO
+PCRYPT_KEY_PROV_INFO = POINTER(_CRYPT_KEY_PROV_INFO)
 
 class tagRECT(Structure):
     _fields_ = [

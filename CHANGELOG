@@ -24,3 +24,9 @@ Since 0.2:
     * Debugger handle breakpoint in 64b part of syswow process
     * ReadSyswow64Process is now a Process (allows to parse exports of remote PEB64 of syswow process)
     * Added Debugger.detach
+
+
+Since 0.3:
+
+    * Rewrote pe_parse to minimize closure (allowing the refcount to dell all ref to WinProcess when the debugger detach it)
+    * Fix debugger.detach / handling on exit_process

@@ -17,6 +17,9 @@ dedent = textwrap.dedent
 
 
 TYPE_EQUIVALENCE = [
+    # BYTE is defined in ctypes.wintypes as c_byte but who wants
+    # BYTE to be signed ? (from MSDN: <typedef unsigned char BYTE;>)
+    ('BYTE', 'c_ubyte'),
     ('PWSTR', 'LPWSTR'),
     ('PCWSTR', 'LPWSTR'),
     ('SIZE_T', 'c_ulong'),
@@ -80,6 +83,12 @@ TYPE_EQUIVALENCE = [
     ('ACCESS_MASK', 'DWORD'),
     ('REGSAM', 'ACCESS_MASK'),
     ('SECURITY_CONTEXT_TRACKING_MODE', 'BOOLEAN'),
+    ('HCRYPTPROV_OR_NCRYPT_KEY_HANDLE', 'PULONG'),
+    ('HCRYPTPROV_LEGACY', 'PULONG'),
+    ('HCRYPTKEY', 'PULONG'),
+    ('HCRYPTPROV', 'PULONG'),
+    ('HCRYPTHASH', 'PULONG'),
+    ('ALG_ID', 'UINT'),
     ("DISPID", "LONG"),
     ("MEMBERID", "DISPID"),
     ('PSECURITY_DESCRIPTOR', 'PVOID'),
@@ -158,6 +167,7 @@ class CtypesGenerator(object):
         self.parse()
         self.data +=  self.PARSER(open(filename).read()).parse()
         self.analyse(self.data)
+        self.check_dependances()
 
 class InitialDefGenerator(CtypesGenerator):
     PARSER = def_parser.WinDefParser
@@ -283,6 +293,7 @@ class StructGenerator(CtypesGenerator):
         self.data[0].extend(new_data[0])
         self.data[1].extend(new_data[1])
         self.analyse(self.data)
+        self.check_dependances()
 
 class FuncGenerator(CtypesGenerator):
     PARSER = func_parser.WinFuncParser

@@ -18,6 +18,8 @@ TODO:
     - registry
         - test !
 
+    - Clean pe_parse.py
+
 Documentation
     * verif samples
 

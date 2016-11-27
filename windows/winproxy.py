@@ -69,6 +69,8 @@ def kernel32_error_check(func_name, result, func, args):
         raise Kernel32Error(func_name)
     return args
 
+null_is_fail_error_check = kernel32_error_check
+
 
 def kernel32_zero_check(func_name, result, func, args):
     """raise Kernel32Error if result is NOT 0"""
@@ -187,6 +189,10 @@ class User32Proxy(ApiProxy):
 class VersionProxy(ApiProxy):
     APIDLL = "version"
     default_error_check = staticmethod(kernel32_error_check)
+
+class Crypt32Proxy(ApiProxy):
+    APIDLL = "crypt32"
+    default_error_check = staticmethod(null_is_fail_error_check)
 
 #class OptionalExport(object):
 #    """used 'around' a Proxy decorator
@@ -989,6 +995,22 @@ def CryptCATAdminReleaseCatalogContext(hCatAdmin, hCatInfo, dwFlags):
 @WinTrustProxy('CryptCATAdminReleaseContext')
 def CryptCATAdminReleaseContext(hCatAdmin, dwFlags):
     return CryptCATAdminReleaseContext.ctypes_function(hCatAdmin, dwFlags)
+
+
+## Crypto API ##
+@Crypt32Proxy('CertStrToNameA')
+def CertStrToNameA(dwCertEncodingType, pszX500, dwStrType, pvReserved, pbEncoded, pcbEncoded, ppszError):
+    return CertStrToNameA.ctypes_function(dwCertEncodingType, pszX500, dwStrType, pvReserved, pbEncoded, pcbEncoded, ppszError)
+
+
+@Crypt32Proxy('CertStrToNameW')
+def CertStrToNameW(dwCertEncodingType, pszX500, dwStrType, pvReserved, pbEncoded, pcbEncoded, ppszError):
+    return CertStrToNameW.ctypes_function(dwCertEncodingType, pszX500, dwStrType, pvReserved, pbEncoded, pcbEncoded, ppszError)
+
+
+@Crypt32Proxy('CertCreateSelfSignCertificate')
+def CertCreateSelfSignCertificate(hCryptProvOrNCryptKey, pSubjectIssuerBlob, dwFlags, pKeyProvInfo, pSignatureAlgorithm, pStartTime, pEndTime, pExtensions):
+    return CertCreateSelfSignCertificate.ctypes_function(hCryptProvOrNCryptKey, pSubjectIssuerBlob, dwFlags, pKeyProvInfo, pSignatureAlgorithm, pStartTime, pEndTime, pExtensions)
 
 
 # ## User32 stuff ## #

@@ -2724,3 +2724,39 @@ typedef struct _CERT_CHAIN_ENGINE_CONFIG {
     DWORD       MaximumCachedCertificates;
     DWORD       CycleDetectionModulus;
 } CERT_CHAIN_ENGINE_CONFIG, *PCERT_CHAIN_ENGINE_CONFIG;
+
+
+typedef struct _SYSTEMTIME {
+  WORD wYear;
+  WORD wMonth;
+  WORD wDayOfWeek;
+  WORD wDay;
+  WORD wHour;
+  WORD wMinute;
+  WORD wSecond;
+  WORD wMilliseconds;
+} SYSTEMTIME, *PSYSTEMTIME;
+
+
+typedef struct _CERT_EXTENSIONS {
+  DWORD           cExtension;
+  PCERT_EXTENSION rgExtension;
+} CERT_EXTENSIONS, *PCERT_EXTENSIONS;
+
+typedef struct _CRYPT_KEY_PROV_PARAM {
+  DWORD dwParam;
+  BYTE  *pbData;
+  DWORD cbData;
+  DWORD dwFlags;
+} CRYPT_KEY_PROV_PARAM, *PCRYPT_KEY_PROV_PARAM;
+
+
+typedef struct _CRYPT_KEY_PROV_INFO {
+  LPWSTR                pwszContainerName;
+  LPWSTR                pwszProvName;
+  DWORD                 dwProvType;
+  DWORD                 dwFlags;
+  DWORD                 cProvParam;
+  PCRYPT_KEY_PROV_PARAM rgProvParam;
+  DWORD                 dwKeySpec;
+} CRYPT_KEY_PROV_INFO, *PCRYPT_KEY_PROV_INFO;

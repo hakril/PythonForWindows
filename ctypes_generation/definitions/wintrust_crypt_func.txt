@@ -1,6 +1,6 @@
 BOOL WINAPI CryptQueryObject(
   _In_        DWORD      dwObjectType,
-  _In_        void       *pvObject,
+  _In_        VOID       *pvObject,
   _In_        DWORD      dwExpectedContentTypeFlags,
   _In_        DWORD      dwExpectedFormatTypeFlags,
   _In_        DWORD      dwFlags,
@@ -16,7 +16,7 @@ BOOL WINAPI CryptMsgGetParam(
   _In_    HCRYPTMSG hCryptMsg,
   _In_    DWORD     dwParamType,
   _In_    DWORD     dwIndex,
-  _Out_   void      *pvData,
+  _Out_   VOID      *pvData,
   _Inout_ DWORD     *pcbData
 );
 
@@ -27,7 +27,7 @@ BOOL WINAPI CryptDecodeObject(
   _In_          BYTE   *pbEncoded,
   _In_          DWORD  cbEncoded,
   _In_          DWORD  dwFlags,
-  _Out_         void   *pvStructInfo,
+  _Out_         VOID   *pvStructInfo,
   _Inout_       DWORD  *pcbStructInfo
 );
 
@@ -37,7 +37,7 @@ PCCERT_CONTEXT WINAPI CertFindCertificateInStore(
   _In_       DWORD          dwCertEncodingType,
   _In_       DWORD          dwFindFlags,
   _In_       DWORD          dwFindType,
-  _In_       void           *pvFindPara,
+  _In_       VOID           *pvFindPara,
   _In_       PCCERT_CONTEXT pPrevCertContext
 );
 
@@ -45,7 +45,7 @@ DWORD WINAPI CertGetNameStringA(
   _In_  PCCERT_CONTEXT pCertContext,
   _In_  DWORD          dwType,
   _In_  DWORD          dwFlags,
-  _In_  void           *pvTypePara,
+  _In_  VOID           *pvTypePara,
   _Out_ LPCSTR         pszNameString,
   _In_  DWORD          cchNameString
 );
@@ -54,7 +54,7 @@ DWORD WINAPI CertGetNameStringW(
   _In_  PCCERT_CONTEXT pCertContext,
   _In_  DWORD          dwType,
   _In_  DWORD          dwFlags,
-  _In_  void           *pvTypePara,
+  _In_  VOID           *pvTypePara,
   _Out_ LPWSTR         pszNameString,
   _In_  DWORD          cchNameString
 );
@@ -69,4 +69,113 @@ BOOL WINAPI CertGetCertificateChain(
   _In_     DWORD                dwFlags,
   _In_     LPVOID               pvReserved,
   _Out_    PCCERT_CHAIN_CONTEXT *ppChainContext
+);
+
+PCCERT_CONTEXT WINAPI CertCreateSelfSignCertificate(
+  _In_opt_ HCRYPTPROV_OR_NCRYPT_KEY_HANDLE hCryptProvOrNCryptKey,
+  _In_     PCERT_NAME_BLOB                 pSubjectIssuerBlob,
+  _In_     DWORD                           dwFlags,
+  _In_opt_ PCRYPT_KEY_PROV_INFO            pKeyProvInfo,
+  _In_opt_ PCRYPT_ALGORITHM_IDENTIFIER     pSignatureAlgorithm,
+  _In_opt_ PSYSTEMTIME                     pStartTime,
+  _In_opt_ PSYSTEMTIME                     pEndTime,
+  _In_opt_ PCERT_EXTENSIONS                pExtensions
+);
+
+
+BOOL WINAPI CertStrToNameA(
+  _In_      DWORD   dwCertEncodingType,
+  _In_      LPCSTR  pszX500,
+  _In_      DWORD   dwStrType,
+  _In_opt_  VOID    *pvReserved,
+  _Out_     BYTE    *pbEncoded,
+  _Inout_   DWORD   *pcbEncoded,
+  _Out_opt_ LPCSTR *ppszError
+);
+
+BOOL WINAPI CertStrToNameW(
+  _In_      DWORD   dwCertEncodingType,
+  _In_      LPWSTR  pszX500,
+  _In_      DWORD   dwStrType,
+  _In_opt_  VOID    *pvReserved,
+  _Out_     BYTE    *pbEncoded,
+  _Inout_   DWORD   *pcbEncoded,
+  _Out_opt_ LPWSTR *ppszError
+);
+
+HCERTSTORE WINAPI CertOpenStore(
+  _In_       LPCSTR            lpszStoreProvider,
+  _In_       DWORD             dwMsgAndCertEncodingType,
+  _In_       HCRYPTPROV_LEGACY hCryptProv,
+  _In_       DWORD             dwFlags,
+  _In_       VOID              *pvPara
+);
+
+BOOL WINAPI CertAddCertificateContextToStore(
+  _In_      HCERTSTORE     hCertStore,
+  _In_      PCCERT_CONTEXT pCertContext,
+  _In_      DWORD          dwAddDisposition,
+  _Out_opt_ PCCERT_CONTEXT *ppStoreContext
+);
+
+
+BOOL WINAPI PFXExportCertStoreEx(
+  _In_    HCERTSTORE      hStore,
+  _Inout_ CRYPT_DATA_BLOB *pPFX,
+  _In_    LPCWSTR         szPassword,
+  _In_    VOID            *pvPara,
+  _In_    DWORD           dwFlags
+);
+
+HCERTSTORE WINAPI PFXImportCertStore(
+  _In_ CRYPT_DATA_BLOB *pPFX,
+  _In_ LPCWSTR         szPassword,
+  _In_ DWORD           dwFlags
+);
+
+
+BOOL WINAPI CryptGenKey(
+  _In_  HCRYPTPROV hProv,
+  _In_  ALG_ID     Algid,
+  _In_  DWORD      dwFlags,
+  _Out_ HCRYPTKEY  *phKey
+);
+
+BOOL WINAPI CryptAcquireContextA(
+  _Out_ HCRYPTPROV *phProv,
+  _In_  LPCSTR    pszContainer,
+  _In_  LPCSTR    pszProvider,
+  _In_  DWORD      dwProvType,
+  _In_  DWORD      dwFlags
+);
+
+BOOL WINAPI CryptAcquireContextW(
+  _Out_ HCRYPTPROV *phProv,
+  _In_  LPWSTR    pszContainer,
+  _In_  LPWSTR    pszProvider,
+  _In_  DWORD      dwProvType,
+  _In_  DWORD      dwFlags
+);
+
+
+BOOL WINAPI CryptExportKey(
+  _In_    HCRYPTKEY hKey,
+  _In_    HCRYPTKEY hExpKey,
+  _In_    DWORD     dwBlobType,
+  _In_    DWORD     dwFlags,
+  _Out_   BYTE      *pbData,
+  _Inout_ DWORD     *pdwDataLen
+);
+
+
+BOOL WINAPI CertGetCertificateContextProperty(
+  _In_    PCCERT_CONTEXT pCertContext,
+  _In_    DWORD          dwPropId,
+  _Out_   VOID           *pvData,
+  _Inout_ DWORD          *pcbData
+);
+
+DWORD WINAPI CertEnumCertificateContextProperties(
+  _In_ PCCERT_CONTEXT pCertContext,
+  _In_ DWORD          dwPropId
 );
