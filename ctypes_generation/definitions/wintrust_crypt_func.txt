@@ -179,3 +179,42 @@ DWORD WINAPI CertEnumCertificateContextProperties(
   _In_ PCCERT_CONTEXT pCertContext,
   _In_ DWORD          dwPropId
 );
+
+BOOL WINAPI CryptEncryptMessage(
+  _In_          PCRYPT_ENCRYPT_MESSAGE_PARA pEncryptPara,
+  _In_          DWORD                       cRecipientCert,
+  _In_          PCCERT_CONTEXT              *rgpRecipientCert,
+  _In_          BYTE                        *pbToBeEncrypted,
+  _In_          DWORD                       cbToBeEncrypted,
+  _Out_         BYTE                        *pbEncryptedBlob,
+  _Inout_       DWORD                       *pcbEncryptedBlob
+);
+
+BOOL WINAPI CryptDecryptMessage(
+  _In_              PCRYPT_DECRYPT_MESSAGE_PARA pDecryptPara,
+  _In_              BYTE                        *pbEncryptedBlob,
+  _In_              DWORD                       cbEncryptedBlob,
+  _Out_opt_         BYTE                        *pbDecrypted,
+  _Inout_opt_       DWORD                       *pcbDecrypted,
+  _Out_opt_         PCCERT_CONTEXT              *ppXchgCert
+);
+
+BOOL WINAPI CryptAcquireCertificatePrivateKey(
+  _In_     PCCERT_CONTEXT                  pCert,
+  _In_     DWORD                           dwFlags,
+  _In_opt_ VOID                            *pvParameters,
+  _Out_    HCRYPTPROV_OR_NCRYPT_KEY_HANDLE *phCryptProvOrNCryptKey,
+  _Out_    DWORD                           *pdwKeySpec,
+  _Out_    BOOL                            *pfCallerFreeProvOrNCryptKey
+);
+
+
+PCCERT_CONTEXT WINAPI CertDuplicateCertificateContext(
+  _In_ PCCERT_CONTEXT pCertContext
+);
+
+    
+PCCERT_CONTEXT WINAPI CertEnumCertificatesInStore(
+  _In_ HCERTSTORE     hCertStore,
+  _In_ PCCERT_CONTEXT pPrevCertContext
+);

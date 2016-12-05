@@ -2760,3 +2760,29 @@ typedef struct _CRYPT_KEY_PROV_INFO {
   PCRYPT_KEY_PROV_PARAM rgProvParam;
   DWORD                 dwKeySpec;
 } CRYPT_KEY_PROV_INFO, *PCRYPT_KEY_PROV_INFO;
+
+typedef struct _CRYPT_ENCRYPT_MESSAGE_PARA {
+  DWORD                      cbSize;
+  DWORD                      dwMsgEncodingType;
+  HCRYPTPROV_LEGACY          hCryptProv;
+  CRYPT_ALGORITHM_IDENTIFIER ContentEncryptionAlgorithm;
+  VOID                       *pvEncryptionAuxInfo;
+  DWORD                      dwFlags;
+  DWORD                      dwInnerContentType;
+} CRYPT_ENCRYPT_MESSAGE_PARA, *PCRYPT_ENCRYPT_MESSAGE_PARA;
+
+
+typedef struct _CRYPT_DECRYPT_MESSAGE_PARA {
+  DWORD      cbSize;
+  DWORD      dwMsgAndCertEncodingType;
+  DWORD      cCertStore;
+  HCERTSTORE *rghCertStore;
+  DWORD      dwFlags;
+} CRYPT_DECRYPT_MESSAGE_PARA, *PCRYPT_DECRYPT_MESSAGE_PARA;
+
+
+typedef struct _CERT_KEY_CONTEXT {
+  DWORD cbSize;
+  HCRYPTPROV        hCryptProv;
+  DWORD dwKeySpec;
+} CERT_KEY_CONTEXT, *PCERT_KEY_CONTEXT;

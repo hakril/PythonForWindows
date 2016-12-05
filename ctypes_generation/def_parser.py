@@ -9,7 +9,7 @@ class WinDef(object):
         self.code = code
         
     def generate_ctypes(self):
-        return """{0} = Flag("{0}", {1})""".format(self.name, self.code)
+        return """{0} = make_flag("{0}", {1})""".format(self.name, self.code)
 
 class WinDefParser(Parser):
 

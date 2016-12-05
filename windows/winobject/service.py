@@ -105,7 +105,7 @@ def enumerate_services():
 
     while True:
         size = size_needed.value
-        buffer = (ctypes.c_byte * size)()
+        buffer = (BYTE * size)()
 
         try:
             windows.winproxy.EnumServicesStatusExA(scmanager, SC_ENUM_PROCESS_INFO, SERVICE_TYPE_ALL, SERVICE_ACTIVE, buffer, size, ctypes.byref(size_needed), ctypes.byref(nb_services), byref(counter), None)

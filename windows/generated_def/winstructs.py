@@ -3426,6 +3426,39 @@ class _CRYPT_KEY_PROV_INFO(Structure):
 CRYPT_KEY_PROV_INFO = _CRYPT_KEY_PROV_INFO
 PCRYPT_KEY_PROV_INFO = POINTER(_CRYPT_KEY_PROV_INFO)
 
+class _CRYPT_ENCRYPT_MESSAGE_PARA(Structure):
+    _fields_ = [
+        ("cbSize", DWORD),
+        ("dwMsgEncodingType", DWORD),
+        ("hCryptProv", HCRYPTPROV_LEGACY),
+        ("ContentEncryptionAlgorithm", CRYPT_ALGORITHM_IDENTIFIER),
+        ("pvEncryptionAuxInfo", POINTER(VOID)),
+        ("dwFlags", DWORD),
+        ("dwInnerContentType", DWORD),
+    ]
+PCRYPT_ENCRYPT_MESSAGE_PARA = POINTER(_CRYPT_ENCRYPT_MESSAGE_PARA)
+CRYPT_ENCRYPT_MESSAGE_PARA = _CRYPT_ENCRYPT_MESSAGE_PARA
+
+class _CRYPT_DECRYPT_MESSAGE_PARA(Structure):
+    _fields_ = [
+        ("cbSize", DWORD),
+        ("dwMsgAndCertEncodingType", DWORD),
+        ("cCertStore", DWORD),
+        ("rghCertStore", POINTER(HCERTSTORE)),
+        ("dwFlags", DWORD),
+    ]
+PCRYPT_DECRYPT_MESSAGE_PARA = POINTER(_CRYPT_DECRYPT_MESSAGE_PARA)
+CRYPT_DECRYPT_MESSAGE_PARA = _CRYPT_DECRYPT_MESSAGE_PARA
+
+class _CERT_KEY_CONTEXT(Structure):
+    _fields_ = [
+        ("cbSize", DWORD),
+        ("hCryptProv", HCRYPTPROV),
+        ("dwKeySpec", DWORD),
+    ]
+CERT_KEY_CONTEXT = _CERT_KEY_CONTEXT
+PCERT_KEY_CONTEXT = POINTER(_CERT_KEY_CONTEXT)
+
 class tagRECT(Structure):
     _fields_ = [
         ("left", LONG),
