@@ -88,7 +88,7 @@ class ImprovedVariant(VARIANT):
 
     @property
     def aslong(self):
-        if not self.vt in [VT_I4, VT_BOOL]:
+        if not self.vt in [VT_I4]:
             raise ValueError("aslong on non-long variant")
         return self._VARIANT_NAME_3.lVal
 
@@ -96,7 +96,7 @@ class ImprovedVariant(VARIANT):
     def asbool(self):
         if not self.vt in [VT_BOOL]:
             raise ValueError("get_bstr on non-bool variant")
-        return bool(self.aslong)
+        return bool(self._VARIANT_NAME_3.boolVal)
 
     @property
     def asdispatch(self):

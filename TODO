@@ -2,6 +2,7 @@ TODO:
     - Documentation
 
     - Better WMI interface
+        - Bug in VARIANT_TYPE == BOOL (see Win32_OperatingSystem->Debug)
 
     - DBG
         - Verif multiple bp at same place..
