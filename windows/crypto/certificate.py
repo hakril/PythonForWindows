@@ -1,8 +1,14 @@
 import itertools
+import ctypes
 
 import windows
 from windows import winproxy
 from windows.generated_def import *
+
+from windows.crypto import DEFAULT_ENCODING
+from windows.crypto.helper import ECRYPT_DATA_BLOB
+
+
 
 
 class EHCERTSTORE(HCERTSTORE):
@@ -25,6 +31,27 @@ class EHCERTSTORE(HCERTSTORE):
             res.append(ecert.duplicate())
             last = ecert
         raise RuntimeError("Out of infinit loop")
+
+    def add_certificate(self, certificate):
+        winproxy.CertAddCertificateContextToStore(self, certificate, CERT_STORE_ADD_NEW, None)
+
+    @classmethod
+    def from_file(cls, filename):
+        res = winproxy.CertOpenStore(CERT_STORE_PROV_FILENAME_A, DEFAULT_ENCODING, None, CERT_STORE_OPEN_EXISTING_FLAG, filename)
+        return ctypes.cast(res, cls)
+
+    @classmethod
+    def new_in_memory(cls):
+        res = winproxy.CertOpenStore(CERT_STORE_PROV_MEMORY, DEFAULT_ENCODING, None, 0, None)
+        return ctypes.cast(res, cls)
+
+
+def import_pfx(pfx, password=None, flags=CRYPT_USER_KEYSET):
+    if isinstance(pfx, basestring):
+        pfx = ECRYPT_DATA_BLOB.from_string(pfx)
+    cert_store = winproxy.PFXImportCertStore(pfx, password, flags)
+    return EHCERTSTORE(cert_store)
+
 
 # Why PCCERT_CONTEXT (pointer type) and not _CERT_CONTEXT ?
 class CertificatContext(PCCERT_CONTEXT):
@@ -55,14 +82,14 @@ class CertificatContext(PCCERT_CONTEXT):
     name = property(get_name)
 
     @property
-    def issuer_name(self):
+    def issuer(self):
         return self.get_name(flags=CERT_NAME_ISSUER_FLAG)
 
     @property
     def store(self):
         return EHCERTSTORE(self[0].hCertStore)
 
-    def get_raw_chain(self):
+    def get_certificate_chain(self):
         chain_context = PCCERT_CHAIN_CONTEXT()
 
         enhkey_usage = CERT_ENHKEY_USAGE()
@@ -99,6 +126,16 @@ class CertificatContext(PCCERT_CONTEXT):
                 return res
             res.append(prop)
         raise RuntimeError("Unreachable code")
+
+    properties = property(enum_properties)
+
+    @classmethod
+    def from_file(cls, filename):
+        with open(filename, "rb") as f:
+            data = f.read()
+            buf = (ctypes.c_ubyte * len(data))(*bytearray(data))
+            res = windows.winproxy.CertCreateCertificateContext(windows.crypto.DEFAULT_ENCODING, buf, len(data))
+            return ctypes.cast(res, cls)
 
 
 

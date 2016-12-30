@@ -263,9 +263,9 @@
 #define CERT_ENHKEY_USAGE_PROP_ID           9
 #define CERT_CTL_USAGE_PROP_ID              CERT_ENHKEY_USAGE_PROP_ID
 #define CERT_NEXT_UPDATE_LOCATION_PROP_ID   10
-#define CERT_FRIENDLY_NAME_PROP_ID          11  
+#define CERT_FRIENDLY_NAME_PROP_ID          11
 #define CERT_PVK_FILE_PROP_ID               12
-#define CERT_DESCRIPTION_PROP_ID            13  
+#define CERT_DESCRIPTION_PROP_ID            13
 #define CERT_ACCESS_STATE_PROP_ID           14
 #define CERT_SIGNATURE_HASH_PROP_ID         15
 #define CERT_SMART_CARD_DATA_PROP_ID        16
@@ -273,25 +273,25 @@
 #define CERT_FORTEZZA_DATA_PROP_ID          18
 #define CERT_ARCHIVED_PROP_ID               19
 #define CERT_KEY_IDENTIFIER_PROP_ID         20
-#define CERT_AUTO_ENROLL_PROP_ID            21  
+#define CERT_AUTO_ENROLL_PROP_ID            21
 #define CERT_PUBKEY_ALG_PARA_PROP_ID        22
 #define CERT_CROSS_CERT_DIST_POINTS_PROP_ID 23
 #define CERT_ISSUER_PUBLIC_KEY_MD5_HASH_PROP_ID     24
 #define CERT_SUBJECT_PUBLIC_KEY_MD5_HASH_PROP_ID    25
-#define CERT_ENROLLMENT_PROP_ID             26  
+#define CERT_ENROLLMENT_PROP_ID             26
 #define CERT_DATE_STAMP_PROP_ID             27
 #define CERT_ISSUER_SERIAL_NUMBER_MD5_HASH_PROP_ID  28
 #define CERT_SUBJECT_NAME_MD5_HASH_PROP_ID  29
-#define CERT_EXTENDED_ERROR_INFO_PROP_ID    30  
+#define CERT_EXTENDED_ERROR_INFO_PROP_ID    30
 #define CERT_RENEWAL_PROP_ID                64
-#define CERT_ARCHIVED_KEY_HASH_PROP_ID      65  
-#define CERT_AUTO_ENROLL_RETRY_PROP_ID      66  
+#define CERT_ARCHIVED_KEY_HASH_PROP_ID      65
+#define CERT_AUTO_ENROLL_RETRY_PROP_ID      66
 #define CERT_AIA_URL_RETRIEVED_PROP_ID      67
 #define CERT_AUTHORITY_INFO_ACCESS_PROP_ID  68
-#define CERT_BACKED_UP_PROP_ID              69  
+#define CERT_BACKED_UP_PROP_ID              69
 #define CERT_OCSP_RESPONSE_PROP_ID          70
-#define CERT_REQUEST_ORIGINATOR_PROP_ID     71  
-#define CERT_SOURCE_LOCATION_PROP_ID        72  
+#define CERT_REQUEST_ORIGINATOR_PROP_ID     71
+#define CERT_SOURCE_LOCATION_PROP_ID        72
 
 
 
@@ -305,6 +305,35 @@
 #define CRYPT_ACQUIRE_PREFER_NCRYPT_KEY_FLAG    0x00020000
 #define CRYPT_ACQUIRE_ONLY_NCRYPT_KEY_FLAG      0x00040000
 
+
+
+#define CERT_STORE_PROV_MSG                 (1)
+#define CERT_STORE_PROV_MEMORY              (2)
+#define CERT_STORE_PROV_FILE                (3)
+#define CERT_STORE_PROV_REG                 (4)
+
+#define CERT_STORE_PROV_PKCS7               (5)
+#define CERT_STORE_PROV_SERIALIZED          (6)
+#define CERT_STORE_PROV_FILENAME_A          (7)
+#define CERT_STORE_PROV_FILENAME_W          (8)
+#define CERT_STORE_PROV_FILENAME            CERT_STORE_PROV_FILENAME_W
+#define CERT_STORE_PROV_SYSTEM_A            (9)
+#define CERT_STORE_PROV_SYSTEM_W            (10)
+#define CERT_STORE_PROV_SYSTEM              CERT_STORE_PROV_SYSTEM_W
+
+#define CERT_STORE_PROV_COLLECTION          (11)
+#define CERT_STORE_PROV_SYSTEM_REGISTRY_A   (12)
+#define CERT_STORE_PROV_SYSTEM_REGISTRY_W   (13)
+#define CERT_STORE_PROV_SYSTEM_REGISTRY     CERT_STORE_PROV_SYSTEM_REGISTRY_W
+#define CERT_STORE_PROV_PHYSICAL_W          (14)
+#define CERT_STORE_PROV_PHYSICAL            CERT_STORE_PROV_PHYSICAL_W
+
+#define CERT_STORE_PROV_SMART_CARD_W        (15)
+#define CERT_STORE_PROV_SMART_CARD          CERT_STORE_PROV_SMART_CARD_W
+
+#define CERT_STORE_PROV_LDAP_W              (16)
+#define CERT_STORE_PROV_LDAP                CERT_STORE_PROV_LDAP_W
+#define CERT_STORE_PROV_PKCS12              (17)
 
 
 #define szOID_RSA               "1.2.840.113549"
@@ -461,3 +490,162 @@
 
 
 #define CRYPT_E_NOT_FOUND                (0x80092004L)
+
+
+#define CERT_STORE_NO_CRYPT_RELEASE_FLAG                0x00000001
+#define CERT_STORE_SET_LOCALIZED_NAME_FLAG              0x00000002
+#define CERT_STORE_DEFER_CLOSE_UNTIL_LAST_FREE_FLAG     0x00000004
+#define CERT_STORE_DELETE_FLAG                          0x00000010
+#define CERT_STORE_UNSAFE_PHYSICAL_FLAG                 0x00000020
+#define CERT_STORE_SHARE_STORE_FLAG                     0x00000040
+#define CERT_STORE_SHARE_CONTEXT_FLAG                   0x00000080
+#define CERT_STORE_MANIFOLD_FLAG                        0x00000100
+#define CERT_STORE_ENUM_ARCHIVED_FLAG                   0x00000200
+#define CERT_STORE_UPDATE_KEYID_FLAG                    0x00000400
+#define CERT_STORE_BACKUP_RESTORE_FLAG                  0x00000800
+#define CERT_STORE_READONLY_FLAG                        0x00008000
+#define CERT_STORE_OPEN_EXISTING_FLAG                   0x00004000
+#define CERT_STORE_CREATE_NEW_FLAG                      0x00002000
+#define CERT_STORE_MAXIMUM_ALLOWED_FLAG                 0x00001000
+
+
+
+#define CRYPT_USER_KEYSET           0x00001000
+#define PKCS12_PREFER_CNG_KSP       0x00000100
+#define PKCS12_ALWAYS_CNG_KSP       0x00000200
+#define PKCS12_ALLOW_OVERWRITE_KEY  0x00004000
+#define PKCS12_NO_PERSIST_KEY       0x00008000
+
+
+#define CRYPT_VERIFYCONTEXT     0xF0000000
+#define CRYPT_NEWKEYSET         0x00000008
+#define CRYPT_DELETEKEYSET      0x00000010
+#define CRYPT_MACHINE_KEYSET    0x00000020
+#define CRYPT_SILENT            0x00000040
+#define CRYPT_DEFAULT_CONTAINER_OPTIONAL 0x00000080
+
+
+#define CRYPT_EXPORTABLE        0x00000001
+#define CRYPT_USER_PROTECTED    0x00000002
+#define CRYPT_CREATE_SALT       0x00000004
+#define CRYPT_UPDATE_KEY        0x00000008
+#define CRYPT_NO_SALT           0x00000010
+#define CRYPT_PREGEN            0x00000040
+#define CRYPT_RECIPIENT         0x00000010
+#define CRYPT_INITIATOR         0x00000040
+#define CRYPT_ONLINE            0x00000080
+#define CRYPT_SF                0x00000100
+#define CRYPT_CREATE_IV         0x00000200
+#define CRYPT_KEK               0x00000400
+#define CRYPT_DATA_KEY          0x00000800
+#define CRYPT_VOLATILE          0x00001000
+#define CRYPT_SGCKEY            0x00002000
+#define CRYPT_ARCHIVABLE        0x00004000
+#define CRYPT_FORCE_KEY_PROTECTION_HIGH 0x00008000
+
+
+#define CRYPT_ENCODE_DECODE_NONE            0
+#define X509_CERT                           (1)
+#define X509_CERT_TO_BE_SIGNED              (2)
+#define X509_CERT_CRL_TO_BE_SIGNED          (3)
+#define X509_CERT_REQUEST_TO_BE_SIGNED      (4)
+#define X509_EXTENSIONS                     (5)
+#define X509_NAME_VALUE                     (6)
+#define X509_NAME                           (7)
+#define X509_PUBLIC_KEY_INFO                (8)
+
+
+#define X509_AUTHORITY_KEY_ID               (9)
+#define X509_KEY_ATTRIBUTES                 (10)
+#define X509_KEY_USAGE_RESTRICTION          (11)
+#define X509_ALTERNATE_NAME                 (12)
+#define X509_BASIC_CONSTRAINTS              (13)
+#define X509_KEY_USAGE                      (14)
+#define X509_BASIC_CONSTRAINTS2             (15)
+#define X509_CERT_POLICIES                  (16)
+
+
+#define PKCS_UTC_TIME                       (17)
+#define PKCS_TIME_REQUEST                   (18)
+#define RSA_CSP_PUBLICKEYBLOB               (19)
+#define X509_UNICODE_NAME                   (20)
+
+#define X509_KEYGEN_REQUEST_TO_BE_SIGNED    (21)
+#define PKCS_ATTRIBUTE                      (22)
+#define PKCS_CONTENT_INFO_SEQUENCE_OF_ANY   (23)
+
+
+
+#define X509_UNICODE_NAME_VALUE             (24)
+#define X509_ANY_STRING                     X509_NAME_VALUE
+#define X509_UNICODE_ANY_STRING             X509_UNICODE_NAME_VALUE
+#define X509_OCTET_STRING                   (25)
+#define X509_BITS                           (26)
+#define X509_INTEGER                        (27)
+#define X509_MULTI_BYTE_INTEGER             (28)
+#define X509_ENUMERATED                     (29)
+#define X509_CHOICE_OF_TIME                 (30)
+
+#define CERT_SIMPLE_NAME_STR        1
+#define CERT_OID_NAME_STR           2
+#define CERT_X500_NAME_STR          3
+#define CERT_XML_NAME_STR           4
+
+#define AT_KEYEXCHANGE          1
+#define AT_SIGNATURE            2
+
+
+
+#define MS_DEF_PROV_A           "Microsoft Base Cryptographic Provider v1.0"
+#define MS_DEF_PROV_W           u"Microsoft Base Cryptographic Provider v1.0"
+#define MS_DEF_PROV             MS_DEF_PROV_A
+
+#define MS_ENHANCED_PROV_A      "Microsoft Enhanced Cryptographic Provider v1.0"
+#define MS_ENHANCED_PROV_W      u"Microsoft Enhanced Cryptographic Provider v1.0"
+#define MS_ENHANCED_PROV        MS_ENHANCED_PROV_A
+
+
+#define MS_STRONG_PROV_A        "Microsoft Strong Cryptographic Provider"
+#define MS_STRONG_PROV_W        u"Microsoft Strong Cryptographic Provider"
+#define MS_STRONG_PROV        MS_STRONG_PROV_A
+
+#define MS_DEF_RSA_SIG_PROV_A   "Microsoft RSA Signature Cryptographic Provider"
+#define MS_DEF_RSA_SIG_PROV_W   u"Microsoft RSA Signature Cryptographic Provider"
+#define MS_DEF_RSA_SIG_PROV   MS_DEF_RSA_SIG_PROV_W
+
+
+#define CERT_STORE_ADD_NEW                                  1
+#define CERT_STORE_ADD_USE_EXISTING                         2
+#define CERT_STORE_ADD_REPLACE_EXISTING                     3
+#define CERT_STORE_ADD_ALWAYS                               4
+#define CERT_STORE_ADD_REPLACE_EXISTING_INHERIT_PROPERTIES  5
+#define CERT_STORE_ADD_NEWER                                6
+#define CERT_STORE_ADD_NEWER_INHERIT_PROPERTIES             7
+
+
+#define PROV_RSA_FULL           1
+#define PROV_RSA_SIG            2
+#define PROV_DSS                3
+#define PROV_FORTEZZA           4
+#define PROV_MS_EXCHANGE        5
+#define PROV_SSL                6
+#define PROV_RSA_SCHANNEL       12
+#define PROV_DSS_DH             13
+#define PROV_EC_ECDSA_SIG       14
+#define PROV_EC_ECNRA_SIG       15
+#define PROV_EC_ECDSA_FULL      16
+#define PROV_EC_ECNRA_FULL      17
+#define PROV_DH_SCHANNEL        18
+#define PROV_SPYRUS_LYNKS       20
+#define PROV_RNG                21
+#define PROV_INTEL_SEC          22
+#define PROV_REPLACE_OWF        23
+#define PROV_RSA_AES            24
+
+
+
+#define REPORT_NO_PRIVATE_KEY                   0x0001
+#define REPORT_NOT_ABLE_TO_EXPORT_PRIVATE_KEY   0x0002
+#define EXPORT_PRIVATE_KEYS                     0x0004
+#define PKCS12_INCLUDE_EXTENDED_PROPERTIES      0x0010
+#define PKCS12_EXPORT_RESERVED_MASK             0xffff0000

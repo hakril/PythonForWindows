@@ -533,6 +533,10 @@ class WindowsAPITestCase(unittest.TestCase):
         with self.assertRaises(WindowsError) as ar:
             windows.winproxy.CreateFileA("NONEXISTFILE.FILE")
 
+class GeneratedCodeTestCase(unittest.TestCase):
+    def test_str_flags_value(self):
+        self.assertEqual(windows.generated_def.MS_ENHANCED_PROV, windows.generated_def.MS_ENHANCED_PROV_A)
+
 class NativeUtilsTestCase(unittest.TestCase):
     @process_64bit_only
     def test_strlenw64(self):
@@ -595,6 +599,7 @@ if __name__ == '__main__':
     alltests.addTest(unittest.makeSuite(WindowsTestCase))
     alltests.addTest(unittest.makeSuite(WindowsAPITestCase))
     alltests.addTest(unittest.makeSuite(NativeUtilsTestCase))
+    alltests.addTest(unittest.makeSuite(GeneratedCodeTestCase))
     alltests.debug()
     tester = unittest.TextTestRunner(verbosity=2)
     tester.run(alltests)

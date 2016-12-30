@@ -1015,6 +1015,8 @@ def CertCreateSelfSignCertificate(hCryptProvOrNCryptKey, pSubjectIssuerBlob, dwF
 
 @Crypt32Proxy('CertOpenStore')
 def CertOpenStore(lpszStoreProvider, dwMsgAndCertEncodingType, hCryptProv, dwFlags, pvPara):
+    if isinstance(lpszStoreProvider, (long, int)):
+        lpszStoreProvider = LPCSTR(lpszStoreProvider)
     return CertOpenStore.ctypes_function(lpszStoreProvider, dwMsgAndCertEncodingType, hCryptProv, dwFlags, pvPara)
 
 
@@ -1113,7 +1115,12 @@ def CertEnumCertificatesInStore(hCertStore, pPrevCertContext):
 
 @Crypt32Proxy('CryptEncodeObjectEx')
 def CryptEncodeObjectEx(dwCertEncodingType, lpszStructType, pvStructInfo, dwFlags, pEncodePara, pvEncoded, pcbEncoded):
+    lpszStructType = LPCSTR(lpszStructType) if isinstance(lpszStructType, (int, long)) else lpszStructType
     return CryptEncodeObjectEx.ctypes_function(dwCertEncodingType, lpszStructType, pvStructInfo, dwFlags, pEncodePara, pvEncoded, pcbEncoded)
+
+@Crypt32Proxy('CertCreateCertificateContext')
+def CertCreateCertificateContext(dwCertEncodingType, pbCertEncoded, cbCertEncoded):
+    return CertCreateCertificateContext.ctypes_function(dwCertEncodingType, pbCertEncoded, cbCertEncoded)
 
 # ## User32 stuff ## #
 

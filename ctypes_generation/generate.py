@@ -196,6 +196,8 @@ class InitialDefGenerator(CtypesGenerator):
 
         class StrFlags(str):
             def __new__(cls, name, value):
+                if isinstance(value, cls):
+                    return value
                 return super(StrFlags, cls).__new__(cls, value)
 
             def __init__(self, name, value):

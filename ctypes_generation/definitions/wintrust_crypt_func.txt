@@ -228,3 +228,9 @@ BOOL WINAPI CryptEncodeObjectEx(
   _Out_         VOID               *pvEncoded,
   _Inout_       DWORD              *pcbEncoded
 );
+
+PCCERT_CONTEXT WINAPI CertCreateCertificateContext(
+  _In_       DWORD dwCertEncodingType,
+  _In_       BYTE  *pbCertEncoded,
+  _In_       DWORD cbCertEncoded
+);
