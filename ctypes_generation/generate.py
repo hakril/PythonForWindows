@@ -193,11 +193,11 @@ class InitialDefGenerator(CtypesGenerator):
                 return "{0}({1})".format(self.name, hex(self))
 
             __str__ = __repr__
-            
+
         class StrFlags(str):
             def __new__(cls, name, value):
                 return super(StrFlags, cls).__new__(cls, value)
-                
+
             def __init__(self, name, value):
                 self.name = name
 
@@ -205,12 +205,12 @@ class InitialDefGenerator(CtypesGenerator):
                 return "{0}({1})".format(self.name, str.__repr__(self))
 
             __str__ = __repr__
-            
+
         def make_flag(name, value):
             if isinstance(value, (int, long)):
                 return Flag(name, value)
             return StrFlags(name, value)
-            
+
 
         """)
 

@@ -3459,6 +3459,15 @@ class _CERT_KEY_CONTEXT(Structure):
 CERT_KEY_CONTEXT = _CERT_KEY_CONTEXT
 PCERT_KEY_CONTEXT = POINTER(_CERT_KEY_CONTEXT)
 
+class _CRYPT_ENCODE_PARA(Structure):
+    _fields_ = [
+        ("cbSize", DWORD),
+        ("pfnAlloc", PVOID),
+        ("pfnFree", PVOID),
+    ]
+PCRYPT_ENCODE_PARA = POINTER(_CRYPT_ENCODE_PARA)
+CRYPT_ENCODE_PARA = _CRYPT_ENCODE_PARA
+
 class tagRECT(Structure):
     _fields_ = [
         ("left", LONG),

@@ -2786,3 +2786,10 @@ typedef struct _CERT_KEY_CONTEXT {
   HCRYPTPROV        hCryptProv;
   DWORD dwKeySpec;
 } CERT_KEY_CONTEXT, *PCERT_KEY_CONTEXT;
+
+
+typedef struct _CRYPT_ENCODE_PARA {
+  DWORD           cbSize;
+  PVOID pfnAlloc;
+  PVOID  pfnFree;
+} CRYPT_ENCODE_PARA, *PCRYPT_ENCODE_PARA;

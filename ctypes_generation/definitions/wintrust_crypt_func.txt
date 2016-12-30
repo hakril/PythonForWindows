@@ -213,8 +213,18 @@ PCCERT_CONTEXT WINAPI CertDuplicateCertificateContext(
   _In_ PCCERT_CONTEXT pCertContext
 );
 
-    
+
 PCCERT_CONTEXT WINAPI CertEnumCertificatesInStore(
   _In_ HCERTSTORE     hCertStore,
   _In_ PCCERT_CONTEXT pPrevCertContext
+);
+
+BOOL WINAPI CryptEncodeObjectEx(
+  _In_          DWORD              dwCertEncodingType,
+  _In_          LPCSTR             lpszStructType,
+  _In_          VOID               *pvStructInfo,
+  _In_          DWORD              dwFlags,
+  _In_          PCRYPT_ENCODE_PARA pEncodePara,
+  _Out_         VOID               *pvEncoded,
+  _Inout_       DWORD              *pcbEncoded
 );

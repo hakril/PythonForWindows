@@ -1012,7 +1012,7 @@ def CertStrToNameW(dwCertEncodingType, pszX500, dwStrType, pvReserved, pbEncoded
 def CertCreateSelfSignCertificate(hCryptProvOrNCryptKey, pSubjectIssuerBlob, dwFlags, pKeyProvInfo, pSignatureAlgorithm, pStartTime, pEndTime, pExtensions):
     return CertCreateSelfSignCertificate.ctypes_function(hCryptProvOrNCryptKey, pSubjectIssuerBlob, dwFlags, pKeyProvInfo, pSignatureAlgorithm, pStartTime, pEndTime, pExtensions)
 
-    
+
 @Crypt32Proxy('CertOpenStore')
 def CertOpenStore(lpszStoreProvider, dwMsgAndCertEncodingType, hCryptProv, dwFlags, pvPara):
     return CertOpenStore.ctypes_function(lpszStoreProvider, dwMsgAndCertEncodingType, hCryptProv, dwFlags, pvPara)
@@ -1022,7 +1022,7 @@ def CertOpenStore(lpszStoreProvider, dwMsgAndCertEncodingType, hCryptProv, dwFla
 def CertAddCertificateContextToStore(hCertStore, pCertContext, dwAddDisposition, ppStoreContext):
     return CertAddCertificateContextToStore.ctypes_function(hCertStore, pCertContext, dwAddDisposition, ppStoreContext)
 
-    
+
 @Crypt32Proxy('PFXExportCertStoreEx')
 def PFXExportCertStoreEx(hStore, pPFX, szPassword, pvPara, dwFlags):
     return PFXExportCertStoreEx.ctypes_function(hStore, pPFX, szPassword, pvPara, dwFlags)
@@ -1032,7 +1032,7 @@ def PFXExportCertStoreEx(hStore, pPFX, szPassword, pvPara, dwFlags):
 def CryptGenKey(hProv, Algid, dwFlags, phKey):
     return CryptGenKey.ctypes_function(hProv, Algid, dwFlags, phKey)
 
-    
+
 @Advapi32Proxy('CryptAcquireContextA')
 def CryptAcquireContextA(phProv, pszContainer, pszProvider, dwProvType, dwFlags):
     return CryptAcquireContextA.ctypes_function(phProv, pszContainer, pszProvider, dwProvType, dwFlags)
@@ -1042,11 +1042,11 @@ def CryptAcquireContextA(phProv, pszContainer, pszProvider, dwProvType, dwFlags)
 def CryptAcquireContextW(phProv, pszContainer, pszProvider, dwProvType, dwFlags):
     return CryptAcquireContextW.ctypes_function(phProv, pszContainer, pszProvider, dwProvType, dwFlags)
 
-    
+
 @Advapi32Proxy('CryptExportKey')
 def CryptExportKey(hKey, hExpKey, dwBlobType, dwFlags, pbData, pdwDataLen):
     return CryptExportKey.ctypes_function(hKey, hExpKey, dwBlobType, dwFlags, pbData, pdwDataLen)
-    
+
 
 @Crypt32Proxy('PFXImportCertStore')
 def PFXImportCertStore(pPFX, szPassword, dwFlags):
@@ -1067,7 +1067,7 @@ def CertEnumCertificateContextProperties(pCertContext, dwPropId):
     return CertEnumCertificateContextProperties.ctypes_function(pCertContext, dwPropId)
 
 
-@Crypt32Proxy('CryptEncryptMessage')    
+@Crypt32Proxy('CryptEncryptMessage')
 def CryptEncryptMessage(pEncryptPara, cRecipientCert, rgpRecipientCert, pbToBeEncrypted, cbToBeEncrypted, pbEncryptedBlob, pcbEncryptedBlob):
     if isinstance(pbToBeEncrypted, basestring):
         # Transform string to array of byte
@@ -1075,41 +1075,46 @@ def CryptEncryptMessage(pEncryptPara, cRecipientCert, rgpRecipientCert, pbToBeEn
     if cbToBeEncrypted is None and pbToBeEncrypted is not None:
         cbToBeEncrypted = len(pbToBeEncrypted)
     return CryptEncryptMessage.ctypes_function(pEncryptPara, cRecipientCert, rgpRecipientCert, pbToBeEncrypted, cbToBeEncrypted, pbEncryptedBlob, pcbEncryptedBlob)
-    
-    
-@Crypt32Proxy('CryptDecryptMessage')       
+
+
+@Crypt32Proxy('CryptDecryptMessage')
 def CryptDecryptMessage(pDecryptPara, pbEncryptedBlob, cbEncryptedBlob, pbDecrypted, pcbDecrypted, ppXchgCert):
     return CryptDecryptMessage.ctypes_function(pDecryptPara, pbEncryptedBlob, cbEncryptedBlob, pbDecrypted, pcbDecrypted, ppXchgCert)
 
-    
-@Crypt32Proxy('CryptAcquireCertificatePrivateKey')  
+
+@Crypt32Proxy('CryptAcquireCertificatePrivateKey')
 def CryptAcquireCertificatePrivateKey(pCert, dwFlags, pvParameters, phCryptProvOrNCryptKey, pdwKeySpec, pfCallerFreeProvOrNCryptKey):
     return CryptAcquireCertificatePrivateKey.ctypes_function(pCert, dwFlags, pvParameters, phCryptProvOrNCryptKey, pdwKeySpec, pfCallerFreeProvOrNCryptKey)
 
-    
+
 @Crypt32Proxy('CertGetNameStringA')
 def CertGetNameStringA(pCertContext, dwType, dwFlags, pvTypePara, pszNameString, cchNameString):
     return CertGetNameStringA.ctypes_function(pCertContext, dwType, dwFlags, pvTypePara, pszNameString, cchNameString)
 
-    
+
 @Crypt32Proxy('CertGetNameStringW')
 def CertGetNameStringW(pCertContext, dwType, dwFlags, pvTypePara, pszNameString, cchNameString):
     return CertGetNameStringW.ctypes_function(pCertContext, dwType, dwFlags, pvTypePara, pszNameString, cchNameString)
 
-    
+
 @Crypt32Proxy('CertGetCertificateChain')
 def CertGetCertificateChain(hChainEngine, pCertContext, pTime, hAdditionalStore, pChainPara, dwFlags, pvReserved, ppChainContext):
     return CertGetCertificateChain.ctypes_function(hChainEngine, pCertContext, pTime, hAdditionalStore, pChainPara, dwFlags, pvReserved, ppChainContext)
 
-@Crypt32Proxy('CertDuplicateCertificateContext')    
+@Crypt32Proxy('CertDuplicateCertificateContext')
 def CertDuplicateCertificateContext(pCertContext):
-    return CertDuplicateCertificateContext.ctypes_function(pCertContext)    
-    
-    
-@Crypt32Proxy('CertEnumCertificatesInStore')     
+    return CertDuplicateCertificateContext.ctypes_function(pCertContext)
+
+
+@Crypt32Proxy('CertEnumCertificatesInStore')
 def CertEnumCertificatesInStore(hCertStore, pPrevCertContext):
     return CertEnumCertificatesInStore.ctypes_function(hCertStore, pPrevCertContext)
-    
+
+
+@Crypt32Proxy('CryptEncodeObjectEx')
+def CryptEncodeObjectEx(dwCertEncodingType, lpszStructType, pvStructInfo, dwFlags, pEncodePara, pvEncoded, pcbEncoded):
+    return CryptEncodeObjectEx.ctypes_function(dwCertEncodingType, lpszStructType, pvStructInfo, dwFlags, pEncodePara, pvEncoded, pcbEncoded)
+
 # ## User32 stuff ## #
 
 EnumWindows = TransparentUser32Proxy('EnumWindows')

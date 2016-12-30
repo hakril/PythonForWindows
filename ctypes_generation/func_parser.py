@@ -27,7 +27,7 @@ class WinFunc(object):
         model = "{0} = WINFUNCTYPE({1})"
         ctypes_param = [self.return_type]
         for type, name in self.params:
-            if type == "POINTER(void)":
+            if type.upper() == "POINTER(VOID)":
                 type = "PVOID"
             ctypes_param.append(type)
         #ctypes_param = [self.return_type] + [type for type, name in self.params]
