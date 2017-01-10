@@ -1374,3 +1374,17 @@ BOOL WINAPI GetProcessDEPPolicy(
   _Out_ LPDWORD lpFlags,
   _Out_ PBOOL   lpPermanent
 );
+
+BOOL WINAPI GetCursorPos(
+  _Out_ LPPOINT lpPoint
+);
+
+HWND WINAPI WindowFromPoint(
+  _In_ POINT Point
+);
+
+
+BOOL WINAPI GetWindowRect(
+  _In_  HWND   hWnd,
+  _Out_ LPRECT lpRect
+);

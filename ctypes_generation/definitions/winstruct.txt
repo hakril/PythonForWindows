@@ -2793,3 +2793,8 @@ typedef struct _CRYPT_ENCODE_PARA {
   PVOID pfnAlloc;
   PVOID  pfnFree;
 } CRYPT_ENCODE_PARA, *PCRYPT_ENCODE_PARA;
+
+typedef struct tagPOINT {
+  LONG x;
+  LONG y;
+} POINT, *PPOINT, *LPPOINT;

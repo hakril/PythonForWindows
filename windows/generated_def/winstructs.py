@@ -3468,6 +3468,15 @@ class _CRYPT_ENCODE_PARA(Structure):
 PCRYPT_ENCODE_PARA = POINTER(_CRYPT_ENCODE_PARA)
 CRYPT_ENCODE_PARA = _CRYPT_ENCODE_PARA
 
+class tagPOINT(Structure):
+    _fields_ = [
+        ("x", LONG),
+        ("y", LONG),
+    ]
+LPPOINT = POINTER(tagPOINT)
+PPOINT = POINTER(tagPOINT)
+POINT = tagPOINT
+
 class tagRECT(Structure):
     _fields_ = [
         ("left", LONG),

@@ -1131,6 +1131,19 @@ GetWindowModuleFileNameA = TransparentUser32Proxy('GetWindowModuleFileNameA', no
 GetWindowModuleFileNameW = TransparentUser32Proxy('GetWindowModuleFileNameW', no_error_check)
 GetSystemMetrics = TransparentUser32Proxy('GetSystemMetrics', no_error_check)
 
+@User32Proxy("GetCursorPos")
+def GetCursorPos(lpPoint):
+    return GetCursorPos.ctypes_function(lpPoint)
+
+
+@User32Proxy("WindowFromPoint")
+def WindowFromPoint(Point):
+    return WindowFromPoint.ctypes_function(Point)
+
+@User32Proxy("GetWindowRect")
+def GetWindowRect(hWnd, lpRect):
+    return GetWindowRect.ctypes_function(hWnd, lpRect)
+
 # ## Version stuff ## #
 
 @VersionProxy("GetFileVersionInfoA")

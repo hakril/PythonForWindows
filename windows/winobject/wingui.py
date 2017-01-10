@@ -1,11 +1,29 @@
 import ctypes
 
 import windows
+from windows import winproxy
 from windows.generated_def import *
 
 
 
 callback_type = ctypes.WINFUNCTYPE(UINT, HWND, LPARAM)
+
+
+class Point(POINT):
+    def __repr__(self):
+        return "<{0} x={1} y={2}>".format(type(self).__name__, self.x, self.y)
+        #return "<{0} x={1:#x} y={2:#x}>".format(type(self).__name__, self.x, self.y)
+
+class Rect(RECT):
+    def __repr__(self):
+        return "<{0} left={1} top={2} right={3} bottom={4}>".format(type(self).__name__, self.left, self.top, self.right, self.bottom)
+        #return "<{0} x={1:#x} y={2:#x}>".format(type(self).__name__, self.x, self.y)
+
+
+def get_cursor_pos():
+    res = Point()
+    winproxy.GetCursorPos(res)
+    return res
 
 class Window(object):
     def __init__(self, handle):
@@ -17,6 +35,23 @@ class Window(object):
 
         res = windows.winproxy.GetWindowTextA(self.handle, buffer, size)
         return buffer[:res]
+
+    def rect(self):
+        res =  Rect()
+        winproxy.GetWindowRect(self.handle, res)
+        return res
+
+    def size(self):
+        rect = self.rect()
+        width = rect.right - rect.left
+        heigth = rect.bottom - rect.top
+        return width, heigth
+
+    @classmethod
+    def at_point(cls, point):
+        handle = winproxy.WindowFromPoint(point)
+        return cls(handle)
+
 
     # I don't understand the interest:
     # Either return "" or C:\Python27\python.exe
@@ -39,13 +74,3 @@ def enumwindows():
         if not result:
             raise
     return result
-
-
-v = enumwindows()
-
-for i in v:
-    w = Window(i)
-    if w.name():
-        print("{0} -> {1} ".format(i, w.name()))
-
-raise "YOLO"
