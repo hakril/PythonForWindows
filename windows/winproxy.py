@@ -1122,6 +1122,20 @@ def CryptEncodeObjectEx(dwCertEncodingType, lpszStructType, pvStructInfo, dwFlag
 def CertCreateCertificateContext(dwCertEncodingType, pbCertEncoded, cbCertEncoded):
     return CertCreateCertificateContext.ctypes_function(dwCertEncodingType, pbCertEncoded, cbCertEncoded)
 
+
+@Crypt32Proxy('CryptQueryObject')
+def CryptQueryObject(dwObjectType, pvObject, dwExpectedContentTypeFlags, dwExpectedFormatTypeFlags, dwFlags, pdwMsgAndCertEncodingType, pdwContentType, pdwFormatType, phCertStore, phMsg, ppvContext):
+    return CryptQueryObject.ctypes_function(dwObjectType, pvObject, dwExpectedContentTypeFlags, dwExpectedFormatTypeFlags, dwFlags, pdwMsgAndCertEncodingType, pdwContentType, pdwFormatType, phCertStore, phMsg, ppvContext)
+
+@Crypt32Proxy('CryptMsgGetParam')
+def CryptMsgGetParam(hCryptMsg, dwParamType, dwIndex, pvData, pcbData):
+    return CryptMsgGetParam.ctypes_function(hCryptMsg, dwParamType, dwIndex, pvData, pcbData)
+
+@Crypt32Proxy('CryptDecodeObject')
+def CryptDecodeObject(dwCertEncodingType, lpszStructType, pbEncoded, cbEncoded, dwFlags, pvStructInfo, pcbStructInfo):
+    return CryptDecodeObject.ctypes_function(dwCertEncodingType, lpszStructType, pbEncoded, cbEncoded, dwFlags, pvStructInfo, pcbStructInfo)
+
+
 # ## User32 stuff ## #
 
 EnumWindows = TransparentUser32Proxy('EnumWindows')

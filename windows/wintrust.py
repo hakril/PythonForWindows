@@ -125,6 +125,7 @@ def get_catalog_for_filename(filename):
 
     while t is not None:
         t = winproxy.CryptCATAdminEnumCatalogFromHash(ctx, hash, len(hash), 0, ctypes.byref(HCATINFO(t)))
+        # Todo: how to handle multiple catalog ?
     winproxy.CryptCATAdminReleaseCatalogContext(ctx, t, 0)
     winproxy.CryptCATAdminReleaseContext(ctx, 0)
     return tname
@@ -145,6 +146,7 @@ def get_file_hash(filename):
             # The volume for a file has been externally altered so that the opened file is no longer valid.
             # (returned for empty file)
             return None
+        raise
     return buffer
 
 

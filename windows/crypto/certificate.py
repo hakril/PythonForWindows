@@ -10,6 +10,88 @@ from windows.crypto.helper import ECRYPT_DATA_BLOB
 
 
 
+CRYPT_OBJECT_FORMAT_TYPE = [
+    CERT_QUERY_OBJECT_FILE,
+    CERT_QUERY_OBJECT_BLOB,
+    CERT_QUERY_CONTENT_CERT,
+    CERT_QUERY_CONTENT_CTL,
+    CERT_QUERY_CONTENT_CRL,
+    CERT_QUERY_CONTENT_SERIALIZED_STORE,
+    CERT_QUERY_CONTENT_SERIALIZED_CERT,
+    CERT_QUERY_CONTENT_SERIALIZED_CTL,
+    CERT_QUERY_CONTENT_SERIALIZED_CRL,
+    CERT_QUERY_CONTENT_PKCS7_SIGNED,
+    CERT_QUERY_CONTENT_PKCS7_UNSIGNED,
+    CERT_QUERY_CONTENT_PKCS7_SIGNED_EMBED,
+    CERT_QUERY_CONTENT_PKCS10,
+    CERT_QUERY_CONTENT_PFX,
+    CERT_QUERY_CONTENT_CERT_PAIR,
+    CERT_QUERY_CONTENT_PFX_AND_LOAD
+    ]
+
+CRYPT_OBJECT_FORMAT_TYPE_DICT = {x:x for x in CRYPT_OBJECT_FORMAT_TYPE}
+
+## Move CryptObject to new .py ?
+
+class CryptObject(object):
+    MSG_PARAM_KNOW_TYPES = {CMSG_SIGNER_INFO_PARAM: CMSG_SIGNER_INFO,
+                            CMSG_SIGNER_COUNT_PARAM: DWORD}
+
+    def __init__(self, filename, content_type=CERT_QUERY_CONTENT_FLAG_ALL):
+        # No other API than filename for now..
+        self.filename = filename
+
+        dwEncoding    = DWORD()
+        dwContentType = DWORD()
+        dwFormatType  = DWORD()
+        hStore        = PVOID()
+        hMsg          = PVOID()
+
+        winproxy.CryptQueryObject(CERT_QUERY_OBJECT_FILE,
+            LPWSTR(filename),
+            content_type,
+            CERT_QUERY_FORMAT_FLAG_BINARY,
+            0,
+            dwEncoding,
+            dwContentType,
+            dwFormatType,
+            hStore,
+            hMsg,
+            None)
+
+        self.hstore = hStore
+        self.hmsg = hMsg
+        self.encoding = dwEncoding
+        self.content_type = CRYPT_OBJECT_FORMAT_TYPE_DICT.get(dwContentType.value, dwContentType)
+
+    def msg_get_param(self, param_type):
+        signer_info = DWORD()
+        winproxy.CryptMsgGetParam(self.hmsg, param_type, 0, None, signer_info)
+        buffer = ctypes.c_buffer(signer_info.value)
+        winproxy.CryptMsgGetParam(self.hmsg, param_type, 0, buffer, signer_info)
+
+        if param_type in self.MSG_PARAM_KNOW_TYPES:
+            buffer = self.MSG_PARAM_KNOW_TYPES[param_type].from_buffer_copy(buffer)
+        return buffer
+
+    def get_nb_signer(self):
+        return self.msg_get_param(CMSG_SIGNER_COUNT_PARAM).value
+
+    def get_signer_data(self):
+        return self.msg_get_param(CMSG_SIGNER_INFO_PARAM)
+
+    def get_signer_certificate(self):
+        data = self.get_signer_data()
+        cert_info = CERT_INFO()
+        cert_info.Issuer = data.Issuer
+        cert_info.SerialNumber = data.SerialNumber
+        rawcertcontext = winproxy.CertFindCertificateInStore(self.hstore, self.encoding, 0, CERT_FIND_SUBJECT_CERT, byref(cert_info), None)
+        #return rawcertcontext
+        return CertificatContext(rawcertcontext[0])
+
+    def __repr__(self):
+        return '<{0} "{1}" content_type={2}>'.format(type(self).__name__, self.filename, self.content_type)
+
 
 class EHCERTSTORE(HCERTSTORE):
     # def __str__(self):
@@ -146,5 +228,5 @@ class CertficateChain(object):
     def to_list(self):
         res = []
         for i in range(self.chain.rgpChain[0][0].cElement):
-            res.append(CertificatContext(self.chain.rgpChain[0][0].rgpElement[i][0].pCertContext))
+            res.append(CertificatContext(self.chain.rgpChain[0][0].rgpElement[i][0].pCertContext[0]))
         return res
