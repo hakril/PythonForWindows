@@ -1035,6 +1035,11 @@ def CryptGenKey(hProv, Algid, dwFlags, phKey):
     return CryptGenKey.ctypes_function(hProv, Algid, dwFlags, phKey)
 
 
+@Advapi32Proxy('CryptDestroyKey')
+def CryptDestroyKey(hKey):
+    return CryptDestroyKey.ctypes_function(hKey)
+
+
 @Advapi32Proxy('CryptAcquireContextA')
 def CryptAcquireContextA(phProv, pszContainer, pszProvider, dwProvType, dwFlags):
     return CryptAcquireContextA.ctypes_function(phProv, pszContainer, pszProvider, dwProvType, dwFlags)
@@ -1043,6 +1048,11 @@ def CryptAcquireContextA(phProv, pszContainer, pszProvider, dwProvType, dwFlags)
 @Advapi32Proxy('CryptAcquireContextW')
 def CryptAcquireContextW(phProv, pszContainer, pszProvider, dwProvType, dwFlags):
     return CryptAcquireContextW.ctypes_function(phProv, pszContainer, pszProvider, dwProvType, dwFlags)
+
+
+@Advapi32Proxy('CryptReleaseContext')
+def CryptReleaseContext(hProv, dwFlags):
+    return CryptReleaseContext.ctypes_function(hProv, dwFlags)
 
 
 @Advapi32Proxy('CryptExportKey')

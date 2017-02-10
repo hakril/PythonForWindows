@@ -28,16 +28,22 @@ class GenerateInitVector(object):
 geninitvector = GenerateInitVector()
 
 
-def encrypt(cert, msg, algo=szOID_RSA_DES_EDE3_CBC, initvector=geninitvector):
+def encrypt(cert_or_certlist, msg, algo=szOID_RSA_DES_EDE3_CBC, initvector=geninitvector):
     alg_ident = CRYPT_ALGORITHM_IDENTIFIER()
     alg_ident.pszObjId = algo
+    # Is 'certs' an iterable ?
+    try:
+        certlist = tuple(cert_or_certlist)
+    except TypeError as e:
+        certlist = (cert_or_certlist,)
+
     # Set (compute if needed) the IV
     if initvector is None:
         alg_ident.Parameters.cbData = 0
     elif initvector is geninitvector:
         initvector = initvector.generate_init_vector(algo)
         if initvector is None:
-            raise ValueError("I Don't know how to generate an <initvector> for <{0}> please provide one (or None)".format(algo))
+            raise ValueError("I don't know how to generate an <initvector> for <{0}> please provide one (or None)".format(algo))
         initvector_encoded = encode_init_vector(initvector)
         alg_ident.Parameters = ECRYPT_DATA_BLOB.from_string(initvector_encoded)
     else:
@@ -54,7 +60,7 @@ def encrypt(cert, msg, algo=szOID_RSA_DES_EDE3_CBC, initvector=geninitvector):
     param.dwFlags = 0
     param.dwInnerContentType = 0
 
-    certs = (PCERT_CONTEXT * 1)(cert)
+    certs = (PCERT_CONTEXT * len(certlist))(*certlist)
     #Ask the output buffer size
     size = DWORD()
     winproxy.CryptEncryptMessage(param, len(certs), certs, msg, len(msg), None, size)

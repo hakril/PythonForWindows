@@ -35,7 +35,8 @@ CRYPT_OBJECT_FORMAT_TYPE_DICT = {x:x for x in CRYPT_OBJECT_FORMAT_TYPE}
 
 class CryptObject(object):
     MSG_PARAM_KNOW_TYPES = {CMSG_SIGNER_INFO_PARAM: CMSG_SIGNER_INFO,
-                            CMSG_SIGNER_COUNT_PARAM: DWORD}
+                            CMSG_SIGNER_COUNT_PARAM: DWORD,
+                            CMSG_CERT_COUNT_PARAM: DWORD}
 
     def __init__(self, filename, content_type=CERT_QUERY_CONTENT_FLAG_ALL):
         # No other API than filename for now..
@@ -64,11 +65,11 @@ class CryptObject(object):
         self.encoding = dwEncoding
         self.content_type = CRYPT_OBJECT_FORMAT_TYPE_DICT.get(dwContentType.value, dwContentType)
 
-    def msg_get_param(self, param_type):
+    def msg_get_param(self, param_type, index=0):
         signer_info = DWORD()
-        winproxy.CryptMsgGetParam(self.hmsg, param_type, 0, None, signer_info)
+        winproxy.CryptMsgGetParam(self.hmsg, param_type, index, None, signer_info)
         buffer = ctypes.c_buffer(signer_info.value)
-        winproxy.CryptMsgGetParam(self.hmsg, param_type, 0, buffer, signer_info)
+        winproxy.CryptMsgGetParam(self.hmsg, param_type, index, buffer, signer_info)
 
         if param_type in self.MSG_PARAM_KNOW_TYPES:
             buffer = self.MSG_PARAM_KNOW_TYPES[param_type].from_buffer_copy(buffer)
@@ -77,8 +78,8 @@ class CryptObject(object):
     def get_nb_signer(self):
         return self.msg_get_param(CMSG_SIGNER_COUNT_PARAM).value
 
-    def get_signer_data(self):
-        return self.msg_get_param(CMSG_SIGNER_INFO_PARAM)
+    def get_signer_data(self, index=0):
+        return self.msg_get_param(CMSG_SIGNER_INFO_PARAM, index)
 
     def get_signer_certificate(self):
         data = self.get_signer_data()
@@ -88,6 +89,18 @@ class CryptObject(object):
         rawcertcontext = winproxy.CertFindCertificateInStore(self.hstore, self.encoding, 0, CERT_FIND_SUBJECT_CERT, byref(cert_info), None)
         #return rawcertcontext
         return CertificatContext(rawcertcontext[0])
+
+    def get_cert(self, index=0):
+        return self.msg_get_param(CMSG_CERT_PARAM, index)
+
+    def get_nb_cert(self):
+        "TEST"
+        return self.msg_get_param(CMSG_CERT_COUNT_PARAM).value
+
+    def test_all_certs(self):
+        nb_cert = self.get_nb_cert()
+        return [CertificatContext.from_buffer(self.get_cert(i)) for i in range(nb_cert)]
+
 
     def __repr__(self):
         return '<{0} "{1}" content_type={2}>'.format(type(self).__name__, self.filename, self.content_type)
@@ -123,12 +136,18 @@ class EHCERTSTORE(HCERTSTORE):
         return ctypes.cast(res, cls)
 
     @classmethod
+    def from_system_store(cls, store_name):
+        res = winproxy.CertOpenStore(CERT_STORE_PROV_SYSTEM_A, DEFAULT_ENCODING, None, CERT_SYSTEM_STORE_LOCAL_MACHINE | CERT_STORE_READONLY_FLAG, store_name)
+        return ctypes.cast(res, cls)
+
+    @classmethod
     def new_in_memory(cls):
         res = winproxy.CertOpenStore(CERT_STORE_PROV_MEMORY, DEFAULT_ENCODING, None, 0, None)
         return ctypes.cast(res, cls)
 
-
-def import_pfx(pfx, password=None, flags=CRYPT_USER_KEYSET):
+# PKCS12_NO_PERSIST_KEY -> do not save it in a key container on disk
+# Without it a key container is created at 'C:\Users\USERNAME\AppData\Roaming\Microsoft\Crypto\RSA\S-1-5-21-3241049326-165485355-1070449050-1001'
+def import_pfx(pfx, password=None, flags=CRYPT_USER_KEYSET | PKCS12_NO_PERSIST_KEY):
     if isinstance(pfx, basestring):
         pfx = ECRYPT_DATA_BLOB.from_string(pfx)
     cert_store = winproxy.PFXImportCertStore(pfx, password, flags)
@@ -211,6 +230,10 @@ class CertificatContext(PCCERT_CONTEXT):
 
     properties = property(enum_properties)
 
+
+    def encoded(self):
+        return bytearray(self[0].pbCertEncoded[:self[0].cbCertEncoded])
+
     @classmethod
     def from_file(cls, filename):
         with open(filename, "rb") as f:
@@ -218,6 +241,13 @@ class CertificatContext(PCCERT_CONTEXT):
             buf = (ctypes.c_ubyte * len(data))(*bytearray(data))
             res = windows.winproxy.CertCreateCertificateContext(windows.crypto.DEFAULT_ENCODING, buf, len(data))
             return ctypes.cast(res, cls)
+
+    @classmethod
+    def from_buffer(cls, data):
+        buf = (ctypes.c_ubyte * len(data))(*bytearray(data))
+        res = windows.winproxy.CertCreateCertificateContext(windows.crypto.DEFAULT_ENCODING, buf, len(data))
+        return ctypes.cast(res, cls)
+
 
 
 
@@ -230,3 +260,35 @@ class CertficateChain(object):
         for i in range(self.chain.rgpChain[0][0].cElement):
             res.append(CertificatContext(self.chain.rgpChain[0][0].rgpElement[i][0].pCertContext[0]))
         return res
+
+# Move this in another .py ?
+
+class CryptContext(HCRYPTPROV):
+    _type_ = HCRYPTPROV._type_
+
+    def __init__(self, pszContainer=None, pszProvider=None, dwProvType=0, dwFlags=0, retrycreate=False):
+        self.pszContainer = pszContainer
+        self.pszProvider = pszProvider
+        self.dwProvType = dwProvType
+        self.dwFlags = dwFlags
+        self.retrycreate = True
+        #self.value = HCRYPTPROV()
+        pass
+
+    def __enter__(self):
+        self.acquire()
+        return self
+
+    def __exit__(self, *args):
+        self.release()
+
+    def acquire(self):
+        try:
+            return winproxy.CryptAcquireContextW(self, self.pszContainer, self.pszProvider, self.dwProvType, self.dwFlags)
+        except WindowsError as e:
+            if not self.retrycreate:
+                raise
+        return winproxy.CryptAcquireContextW(self, self.pszContainer, self.pszProvider, self.dwProvType, self.dwFlags | CRYPT_NEWKEYSET)
+
+    def release(self):
+        return winproxy.CryptReleaseContext(self, False)
