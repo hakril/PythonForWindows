@@ -63,16 +63,14 @@ def minus_one_error_check(func_name, result, func, args):
     return args
 
 
-def kernel32_error_check(func_name, result, func, args):
+def zero_is_fail_error_check(func_name, result, func, args):
     """raise Kernel32Error if result is 0"""
     if not result:
         raise Kernel32Error(func_name)
     return args
 
-null_is_fail_error_check = kernel32_error_check
 
-
-def kernel32_zero_check(func_name, result, func, args):
+def should_return_zero_check(func_name, result, func, args):
     """raise Kernel32Error if result is NOT 0"""
     if result:
         raise Kernel32Error(func_name)
@@ -154,12 +152,12 @@ class ApiProxy(object):
 
 class Kernel32Proxy(ApiProxy):
     APIDLL = "kernel32"
-    default_error_check = staticmethod(kernel32_error_check)
+    default_error_check = staticmethod(zero_is_fail_error_check)
 
 
 class Advapi32Proxy(ApiProxy):
     APIDLL = "advapi32"
-    default_error_check = staticmethod(kernel32_error_check)
+    default_error_check = staticmethod(zero_is_fail_error_check)
 
 
 class IphlpapiProxy(ApiProxy):
@@ -168,7 +166,7 @@ class IphlpapiProxy(ApiProxy):
 
 class NtdllProxy(ApiProxy):
     APIDLL = "ntdll"
-    default_error_check = staticmethod(kernel32_zero_check)
+    default_error_check = staticmethod(should_return_zero_check)
 
 class WinTrustProxy(ApiProxy):
     APIDLL = "wintrust"
@@ -180,19 +178,19 @@ class Ole32Proxy(ApiProxy):
 
 class PsapiProxy(ApiProxy):
     APIDLL = "psapi"
-    default_error_check = staticmethod(kernel32_error_check)
+    default_error_check = staticmethod(zero_is_fail_error_check)
 
 class User32Proxy(ApiProxy):
     APIDLL = "user32"
-    default_error_check = staticmethod(kernel32_error_check)
+    default_error_check = staticmethod(zero_is_fail_error_check)
 
 class VersionProxy(ApiProxy):
     APIDLL = "version"
-    default_error_check = staticmethod(kernel32_error_check)
+    default_error_check = staticmethod(zero_is_fail_error_check)
 
 class Crypt32Proxy(ApiProxy):
     APIDLL = "crypt32"
-    default_error_check = staticmethod(null_is_fail_error_check)
+    default_error_check = staticmethod(zero_is_fail_error_check)
 
 #class OptionalExport(object):
 #    """used 'around' a Proxy decorator
@@ -240,9 +238,9 @@ class TransparentApiProxy(object):
         self._ctypes_function = c_prototyped
 
 
-TransparentKernel32Proxy = lambda func_name, error_check=kernel32_error_check: TransparentApiProxy("kernel32", func_name, error_check)
-TransparentUser32Proxy = lambda func_name, error_check=kernel32_error_check: TransparentApiProxy("user32", func_name, error_check)
-TransparentAdvapi32Proxy = lambda func_name, error_check=kernel32_error_check: TransparentApiProxy("advapi32", func_name, error_check)
+TransparentKernel32Proxy = lambda func_name, error_check=zero_is_fail_error_check: TransparentApiProxy("kernel32", func_name, error_check)
+TransparentUser32Proxy = lambda func_name, error_check=zero_is_fail_error_check: TransparentApiProxy("user32", func_name, error_check)
+TransparentAdvapi32Proxy = lambda func_name, error_check=zero_is_fail_error_check: TransparentApiProxy("advapi32", func_name, error_check)
 TransparentIphlpapiProxy = lambda func_name, error_check=iphlpapi_error_check: TransparentApiProxy("iphlpapi", func_name, error_check)
 
 
@@ -512,7 +510,7 @@ def RemoveVectoredExceptionHandler(Handler):
     return RemoveVectoredExceptionHandler.ctypes_function(Handler)
 
 
-@Kernel32Proxy("WaitForSingleObject", kernel32_zero_check)
+@Kernel32Proxy("WaitForSingleObject", should_return_zero_check)
 def WaitForSingleObject(hHandle, dwMilliseconds=INFINITE):
     return WaitForSingleObject.ctypes_function(hHandle, dwMilliseconds)
 
@@ -873,30 +871,47 @@ def GetTokenInformation(TokenHandle=NeededParameter, TokenInformationClass=Neede
     return GetTokenInformation.ctypes_function(TokenHandle, TokenInformationClass, TokenInformation, TokenInformationLength, ReturnLength)
 
 
-@Advapi32Proxy('RegOpenKeyExA', kernel32_zero_check)
+@Advapi32Proxy('RegOpenKeyExA', should_return_zero_check)
 def RegOpenKeyExA(hKey, lpSubKey, ulOptions, samDesired, phkResult):
     return RegOpenKeyExA.ctypes_function(hKey, lpSubKey, ulOptions, samDesired, phkResult)
+
+# Security stuff
+
+@Advapi32Proxy('GetNamedSecurityInfoA', should_return_zero_check)
+def GetNamedSecurityInfoA(pObjectName, ObjectType, SecurityInfo, ppsidOwner=None, ppsidGroup=None, ppDacl=None, ppSacl=None, ppSecurityDescriptor=None):
+    return GetNamedSecurityInfoA.ctypes_function(pObjectName, ObjectType, SecurityInfo, ppsidOwner, ppsidGroup, ppDacl, ppSacl, ppSecurityDescriptor)
+
+
+@Advapi32Proxy('GetNamedSecurityInfoW', should_return_zero_check)
+def GetNamedSecurityInfoW(pObjectName, ObjectType, SecurityInfo, ppsidOwner=None, ppsidGroup=None, ppDacl=None, ppSacl=None, ppSecurityDescriptor=None):
+    return GetNamedSecurityInfoW.ctypes_function(pObjectName, ObjectType, SecurityInfo, ppsidOwner, ppsidGroup, ppDacl, ppSacl, ppSecurityDescriptor)
+
+
+@Advapi32Proxy('GetSecurityInfo', should_return_zero_check)
+def GetSecurityInfo(handle, ObjectType, SecurityInfo, ppsidOwner=None, ppsidGroup=None, ppDacl=None, ppSacl=None, ppSecurityDescriptor=None):
+    return GetSecurityInfo.ctypes_function(handle, ObjectType, SecurityInfo, ppsidOwner, ppsidGroup, ppDacl, ppSacl, ppSecurityDescriptor)
+
 
     # Registry stuff
 
 # TODO: default values? which ones ?
 
-@Advapi32Proxy('RegOpenKeyExW', kernel32_zero_check)
+@Advapi32Proxy('RegOpenKeyExW', should_return_zero_check)
 def RegOpenKeyExW(hKey, lpSubKey, ulOptions, samDesired, phkResult):
     return RegOpenKeyExW.ctypes_function(hKey, lpSubKey, ulOptions, samDesired, phkResult)
 
 
-@Advapi32Proxy('RegGetValueA', kernel32_zero_check)
+@Advapi32Proxy('RegGetValueA', should_return_zero_check)
 def RegGetValueA(hkey, lpSubKey, lpValue, dwFlags, pdwType, pvData, pcbData):
     return RegGetValueA.ctypes_function(hkey, lpSubKey, lpValue, dwFlags, pdwType, pvData, pcbData)
 
 
-@Advapi32Proxy('RegGetValueW', kernel32_zero_check)
+@Advapi32Proxy('RegGetValueW', should_return_zero_check)
 def RegGetValueW(hkey, lpSubKey=None, lpValue=NeededParameter, dwFlags=0, pdwType=None, pvData=None, pcbData=None):
     return RegGetValueW.ctypes_function(hkey, lpSubKey, lpValue, dwFlags, pdwType, pvData, pcbData)
 
 
-@Advapi32Proxy('RegCloseKey', kernel32_zero_check)
+@Advapi32Proxy('RegCloseKey', should_return_zero_check)
 def RegCloseKey(hKey):
     return RegCloseKey.ctypes_function(hKey)
 
@@ -967,7 +982,7 @@ def WinVerifyTrust(hwnd, pgActionID, pWVTData):
 
 # ##Wintrust: catalog stuff ###
 
-@WinTrustProxy('CryptCATAdminCalcHashFromFileHandle', error_check=kernel32_error_check)
+@WinTrustProxy('CryptCATAdminCalcHashFromFileHandle', error_check=zero_is_fail_error_check)
 def CryptCATAdminCalcHashFromFileHandle(hFile, pcbHash, pbHash, dwFlags):
     return CryptCATAdminCalcHashFromFileHandle.ctypes_function(hFile, pcbHash, pbHash, dwFlags)
 
@@ -977,12 +992,12 @@ def CryptCATAdminEnumCatalogFromHash(hCatAdmin, pbHash, cbHash, dwFlags, phPrevC
     return CryptCATAdminEnumCatalogFromHash.ctypes_function(hCatAdmin, pbHash, cbHash, dwFlags, phPrevCatInfo)
 
 
-@WinTrustProxy('CryptCATAdminAcquireContext', error_check=kernel32_error_check)
+@WinTrustProxy('CryptCATAdminAcquireContext', error_check=zero_is_fail_error_check)
 def CryptCATAdminAcquireContext(phCatAdmin, pgSubsystem, dwFlags):
     return CryptCATAdminAcquireContext.ctypes_function(phCatAdmin, pgSubsystem, dwFlags)
 
 
-@WinTrustProxy('CryptCATCatalogInfoFromContext', error_check=kernel32_error_check)
+@WinTrustProxy('CryptCATCatalogInfoFromContext', error_check=zero_is_fail_error_check)
 def CryptCATCatalogInfoFromContext(hCatInfo, psCatInfo, dwFlags):
     return CryptCATCatalogInfoFromContext.ctypes_function(hCatInfo, psCatInfo, dwFlags)
 
