@@ -141,6 +141,10 @@ BOOL WINAPI CryptGenKey(
   _Out_ HCRYPTKEY  *phKey
 );
 
+BOOL WINAPI CryptDestroyKey(
+  _In_ HCRYPTKEY hKey
+);
+
 BOOL WINAPI CryptAcquireContextA(
   _Out_ HCRYPTPROV *phProv,
   _In_  LPCSTR    pszContainer,
@@ -157,6 +161,11 @@ BOOL WINAPI CryptAcquireContextW(
   _In_  DWORD      dwFlags
 );
 
+
+BOOL WINAPI CryptReleaseContext(
+  _In_ HCRYPTPROV hProv,
+  _In_ DWORD      dwFlags
+);
 
 BOOL WINAPI CryptExportKey(
   _In_    HCRYPTKEY hKey,

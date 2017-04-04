@@ -377,6 +377,13 @@ BOOL WINAPI OpenProcessToken(
   _Out_  PHANDLE TokenHandle
 );
 
+BOOL WINAPI OpenThreadToken(
+  _In_  HANDLE  ThreadHandle,
+  _In_  DWORD   DesiredAccess,
+  _In_  BOOL    OpenAsSelf,
+  _Out_ PHANDLE TokenHandle
+);
+
 BOOL WINAPI LookupPrivilegeValueA(
     __in_opt LPCSTR lpSystemName,
     __in     LPCSTR lpName,
@@ -767,7 +774,7 @@ PDWORD WINAPI GetSidSubAuthority (
     __in DWORD nSubAuthority
     );
 
-PUCHAR WINAPI GetSidSubAuthorityCount (
+LPBYTE WINAPI GetSidSubAuthorityCount (
     __in PSID pSid
     );
 
@@ -841,6 +848,14 @@ NTSTATUS RtlAnsiStringToUnicodeString (
     BOOLEAN AllocateDestinationString
 );
 
+NTSTATUS RtlDecompressBuffer(
+    USHORT CompressionFormat,
+    PUCHAR UncompressedBuffer,
+    ULONG  UncompressedBufferSize,
+    PUCHAR CompressedBuffer,
+    ULONG  CompressedBufferSize,
+    PULONG FinalUncompressedSize
+);
 
 HANDLE WINAPI OpenEventA(
     __in DWORD dwDesiredAccess,
@@ -1387,4 +1402,106 @@ HWND WINAPI WindowFromPoint(
 BOOL WINAPI GetWindowRect(
   _In_  HWND   hWnd,
   _Out_ LPRECT lpRect
+);
+
+DWORD WINAPI GetNamedSecurityInfoA(
+  _In_      LPCSTR               pObjectName,
+  _In_      SE_OBJECT_TYPE       ObjectType,
+  _In_      SECURITY_INFORMATION SecurityInfo,
+  _Out_opt_ PSID                 *ppsidOwner,
+  _Out_opt_ PSID                 *ppsidGroup,
+  _Out_opt_ PACL                 *ppDacl,
+  _Out_opt_ PACL                 *ppSacl,
+  _Out_opt_ PSECURITY_DESCRIPTOR *ppSecurityDescriptor
+);
+
+
+DWORD WINAPI GetNamedSecurityInfoW(
+  _In_      LPWSTR               pObjectName,
+  _In_      SE_OBJECT_TYPE       ObjectType,
+  _In_      SECURITY_INFORMATION SecurityInfo,
+  _Out_opt_ PSID                 *ppsidOwner,
+  _Out_opt_ PSID                 *ppsidGroup,
+  _Out_opt_ PACL                 *ppDacl,
+  _Out_opt_ PACL                 *ppSacl,
+  _Out_opt_ PSECURITY_DESCRIPTOR *ppSecurityDescriptor
+);
+
+
+DWORD WINAPI GetSecurityInfo(
+  _In_      HANDLE               handle,
+  _In_      SE_OBJECT_TYPE       ObjectType,
+  _In_      SECURITY_INFORMATION SecurityInfo,
+  _Out_opt_ PSID                 *ppsidOwner,
+  _Out_opt_ PSID                 *ppsidGroup,
+  _Out_opt_ PACL                 *ppDacl,
+  _Out_opt_ PACL                 *ppSacl,
+  _Out_opt_ PSECURITY_DESCRIPTOR *ppSecurityDescriptor
+);
+
+
+BOOL WINAPI ConvertStringSidToSidA(
+  _In_  LPCSTR StringSid,
+  _Out_ PSID    *Sid
+);
+
+
+BOOL WINAPI ConvertStringSidToSidW(
+  _In_  LPWSTR StringSid,
+  _Out_ PSID    *Sid
+);
+
+
+BOOL WINAPI ConvertSidToStringSidA(
+  _In_  PSID   Sid,
+  _Out_ LPCSTR *StringSid
+);
+
+BOOL WINAPI ConvertSidToStringSidW(
+  _In_  PSID   Sid,
+  _Out_ LPWSTR *StringSid
+);
+
+HLOCAL WINAPI LocalFree(
+  _In_ HLOCAL hMem
+);
+
+LONG WINAPI RegQueryValueExA(
+  _In_        HKEY    hKey,
+  _In_opt_    LPCSTR lpValueName,
+  _Reserved_  LPDWORD lpReserved,
+  _Out_opt_   LPDWORD lpType,
+  _Out_opt_   LPBYTE  lpData,
+  _Inout_opt_ LPDWORD lpcbData
+);
+
+
+LONG WINAPI RegQueryValueExW(
+  _In_        HKEY    hKey,
+  _In_opt_    LPWSTR lpValueName,
+  _Reserved_  LPDWORD lpReserved,
+  _Out_opt_   LPDWORD lpType,
+  _Out_opt_   LPBYTE  lpData,
+  _Inout_opt_ LPDWORD lpcbData
+);
+
+
+
+HINSTANCE WINAPI ShellExecuteA(
+  _In_opt_ HWND    hwnd,
+  _In_opt_ LPCSTR lpOperation,
+  _In_     LPCSTR lpFile,
+  _In_opt_ LPCSTR lpParameters,
+  _In_opt_ LPCSTR lpDirectory,
+  _In_     INT     nShowCmd
+);
+
+
+HINSTANCE WINAPI ShellExecuteW(
+  _In_opt_ HWND    hwnd,
+  _In_opt_ LPWSTR lpOperation,
+  _In_     LPWSTR lpFile,
+  _In_opt_ LPWSTR lpParameters,
+  _In_opt_ LPWSTR lpDirectory,
+  _In_     INT     nShowCmd
 );
