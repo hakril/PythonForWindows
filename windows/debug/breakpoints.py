@@ -80,11 +80,12 @@ class FunctionParamDumpBP(Breakpoint):
         super(FunctionParamDumpBP, self).__init__(addr)
         self.target = target
         self.target_args = target.prototype._argtypes_
+        self.target_params = target.params
 
     def extract_arguments_32bits(self, cproc, cthread):
         x = windows.debug.X86ArgumentRetriever()
         res = OrderedDict()
-        for i, (name, type) in enumerate(zip(self.target.params, self.target_args)):
+        for i, (name, type) in enumerate(zip(self.target_params, self.target_args)):
             value = x.get_arg(i, cproc, cthread)
             rt = windows.remotectypes.transform_type_to_remote32bits(type)
             if issubclass(rt, windows.remotectypes.RemoteValue):
@@ -102,7 +103,7 @@ class FunctionParamDumpBP(Breakpoint):
     def extract_arguments_64bits(self, cproc, cthread):
         x = windows.debug.X64ArgumentRetriever()
         res = OrderedDict()
-        for i, (name, type) in enumerate(zip(self.target.params, self.target_args)):
+        for i, (name, type) in enumerate(zip(self.target_params, self.target_args)):
             value = x.get_arg(i, cproc, cthread)
             rt = windows.remotectypes.transform_type_to_remote64bits(type)
             if issubclass(rt, windows.remotectypes.RemoteValue):

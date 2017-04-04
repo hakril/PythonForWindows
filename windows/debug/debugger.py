@@ -135,7 +135,6 @@ class Debugger(object):
 
         if target.pid == self.target.pid:
             self.target = None
-
         windows.winproxy.DebugActiveProcessStop(target.pid)
 
     def _killed_in_action(self):
@@ -192,6 +191,7 @@ class Debugger(object):
         return x
 
     def _resolve(self, addr, target):
+        dbgprint("Resolving <{0}> in <{1}>".format(addr, target), "DBG")
         if not isinstance(addr, basestring):
             return addr
         dll, api = addr.split("!")
@@ -212,6 +212,7 @@ class Debugger(object):
             pass
         exports = mod[0].exports
         if api not in exports:
+            dbgprint("Error resolving <{0}> in <{1}>".format(addr, target), "DBG")
             raise ValueError("Unknown API <{0}> in DLL {1}".format(api, dll))
         return exports[api]
 
@@ -409,6 +410,8 @@ class Debugger(object):
         for bp in self._pending_breakpoints_new[None]:
             if isinstance(bp.addr, basestring):
                 target_dll = bp.addr.lower().split("!")[0]
+                # Cannot work AS-IS yet. Implement it ?
+                # if target_dll == "*" or target_dll == dll_name:
                 if target_dll == dll_name:
                     _setup_method = getattr(self, "_setup_breakpoint_" + bp.type)
                     if bp.apply_to_target(self.current_process):
@@ -511,6 +514,8 @@ class Debugger(object):
                 continue_flag = self.on_single_step(exception)
             if self._killed_in_action():
                 return continue_flag
+            # Does not handle case where EEFlags.TF was by the debugge before trigering the exception
+            # Should set the flag explicitly in single_step ? and not just use EEFlags.TF ?
             self._explicit_single_step[self.current_thread.tid] = self.current_thread.context.EEFlags.TF
             return continue_flag
         else:
@@ -518,6 +523,8 @@ class Debugger(object):
                 continue_flag = self.on_exception(exception)
             if self._killed_in_action():
                 return continue_flag
+            # Does not handle case where EEFlags.TF was by the debugge before trigering the exception
+            # Should set the flag explicitly in single_step ? and not just use EEFlags.TF ?
             self._explicit_single_step[self.current_thread.tid] = self.current_thread.context.EEFlags.TF
             return continue_flag
 
