@@ -192,6 +192,10 @@ class Crypt32Proxy(ApiProxy):
     APIDLL = "crypt32"
     default_error_check = staticmethod(zero_is_fail_error_check)
 
+class Shell32Proxy(ApiProxy):
+    APIDLL = "shell32"
+    default_error_check = staticmethod(zero_is_fail_error_check)
+
 #class OptionalExport(object):
 #    """used 'around' a Proxy decorator
 #       Should be used for export that are not available everywhere (ntdll internals | 32/64 bits stuff)
@@ -286,6 +290,7 @@ GetVersionExA = TransparentKernel32Proxy("GetVersionExA")
 GetVersionExW = TransparentKernel32Proxy("GetVersionExW")
 GetComputerNameA = TransparentKernel32Proxy("GetComputerNameA")
 GetComputerNameW = TransparentKernel32Proxy("GetComputerNameW")
+LocalFree = TransparentKernel32Proxy("LocalFree", should_return_zero_check)
 
 
 
@@ -823,6 +828,13 @@ def NtQuerySymbolicLinkObject(LinkHandle, LinkTarget, ReturnedLength):
 def NtOpenSymbolicLinkObject(LinkHandle, DesiredAccess, ObjectAttributes):
     return NtOpenSymbolicLinkObject.ctypes_function(LinkHandle, DesiredAccess, ObjectAttributes)
 
+
+@NtdllProxy("RtlDecompressBuffer", error_ntstatus)
+def RtlDecompressBuffer(CompressionFormat, UncompressedBuffer, UncompressedBufferSize, CompressedBuffer, CompressedBufferSize, FinalUncompressedSize):
+    return RtlDecompressBuffer.ctypes_function(CompressionFormat, UncompressedBuffer, UncompressedBufferSize, CompressedBuffer, CompressedBufferSize, FinalUncompressedSize)
+
+
+
 # ##### ADVAPI32 ####### #
 
 @Advapi32Proxy('OpenProcessToken')
@@ -832,6 +844,10 @@ def OpenProcessToken(ProcessHandle=None, DesiredAccess=NeededParameter, TokenHan
         ProcessHandle = GetCurrentProcess()
     return OpenProcessToken.ctypes_function(ProcessHandle, DesiredAccess, TokenHandle)
 
+
+@Advapi32Proxy('OpenThreadToken')
+def OpenThreadToken(ThreadHandle, DesiredAccess, OpenAsSelf, TokenHandle):
+    return OpenThreadToken.ctypes_function(ThreadHandle, DesiredAccess, OpenAsSelf, TokenHandle)
 
 @Advapi32Proxy('LookupPrivilegeValueA')
 def LookupPrivilegeValueA(lpSystemName=None, lpName=NeededParameter, lpLuid=NeededParameter):
@@ -871,6 +887,10 @@ def GetTokenInformation(TokenHandle=NeededParameter, TokenInformationClass=Neede
     return GetTokenInformation.ctypes_function(TokenHandle, TokenInformationClass, TokenInformation, TokenInformationLength, ReturnLength)
 
 
+@Advapi32Proxy('SetTokenInformation')
+def SetTokenInformation(TokenHandle, TokenInformationClass, TokenInformation, TokenInformationLength):
+    return SetTokenInformation.ctypes_function(TokenHandle, TokenInformationClass, TokenInformation, TokenInformationLength)
+
 @Advapi32Proxy('RegOpenKeyExA', should_return_zero_check)
 def RegOpenKeyExA(hKey, lpSubKey, ulOptions, samDesired, phkResult):
     return RegOpenKeyExA.ctypes_function(hKey, lpSubKey, ulOptions, samDesired, phkResult)
@@ -892,6 +912,24 @@ def GetSecurityInfo(handle, ObjectType, SecurityInfo, ppsidOwner=None, ppsidGrou
     return GetSecurityInfo.ctypes_function(handle, ObjectType, SecurityInfo, ppsidOwner, ppsidGroup, ppDacl, ppSacl, ppSecurityDescriptor)
 
 
+# Sid stuff
+@Advapi32Proxy('ConvertStringSidToSidA')
+def ConvertStringSidToSidA(StringSid, Sid):
+    return ConvertStringSidToSidA.ctypes_function(StringSid, Sid)
+
+@Advapi32Proxy('ConvertStringSidToSidW')
+def ConvertStringSidToSidW(StringSid, Sid):
+    return ConvertStringSidToSidW.ctypes_function(StringSid, Sid)
+
+@Advapi32Proxy('ConvertSidToStringSidA')
+def ConvertSidToStringSidA(Sid, StringSid):
+    return ConvertSidToStringSidA.ctypes_function(Sid, StringSid)
+
+@Advapi32Proxy('ConvertSidToStringSidW')
+def ConvertSidToStringSidW(Sid, StringSid):
+    return ConvertSidToStringSidW.ctypes_function(Sid, StringSid)
+
+
     # Registry stuff
 
 # TODO: default values? which ones ?
@@ -910,6 +948,13 @@ def RegGetValueA(hkey, lpSubKey, lpValue, dwFlags, pdwType, pvData, pcbData):
 def RegGetValueW(hkey, lpSubKey=None, lpValue=NeededParameter, dwFlags=0, pdwType=None, pvData=None, pcbData=None):
     return RegGetValueW.ctypes_function(hkey, lpSubKey, lpValue, dwFlags, pdwType, pvData, pcbData)
 
+@Advapi32Proxy('RegQueryValueExA', should_return_zero_check)
+def RegQueryValueExA(hKey, lpValueName, lpReserved, lpType, lpData, lpcbData):
+    return RegQueryValueExA.ctypes_function(hKey, lpValueName, lpReserved, lpType, lpData, lpcbData)
+
+@Advapi32Proxy('RegQueryValueExW', should_return_zero_check)
+def RegQueryValueExW(hKey, lpValueName, lpReserved, lpType, lpData, lpcbData):
+    return RegQueryValueExA.ctypes_function(hKey, lpValueName, lpReserved, lpType, lpData, lpcbData)
 
 @Advapi32Proxy('RegCloseKey', should_return_zero_check)
 def RegCloseKey(hKey):
@@ -1239,4 +1284,12 @@ def CoInitializeSecurity(pSecDesc, cAuthSvc, asAuthSvc, pReserved1, dwAuthnLevel
 def CoCreateInstance(rclsid, pUnkOuter=None, dwClsContext=CLSCTX_INPROC_SERVER, riid=NeededParameter, ppv=NeededParameter):
     return CoCreateInstance.ctypes_function(rclsid, pUnkOuter, dwClsContext, riid, ppv)
 
+# ## Shell32 ## #
 
+@Shell32Proxy('ShellExecuteA')
+def ShellExecuteA(hwnd, lpOperation, lpFile, lpParameters, lpDirectory, nShowCmd):
+    return ShellExecuteA.ctypes_function(hwnd, lpOperation, lpFile, lpParameters, lpDirectory, nShowCmd)
+
+@Shell32Proxy('ShellExecuteW')
+def ShellExecuteW(hwnd, lpOperation, lpFile, lpParameters, lpDirectory, nShowCmd):
+    return ShellExecuteW.ctypes_function(hwnd, lpOperation, lpFile, lpParameters, lpDirectory, nShowCmd)

@@ -126,10 +126,10 @@ class ImprovedVariant(VARIANT):
 
 
 
-def create_instance(clsiid, targetinterface, custom_iid=None):
+def create_instance(clsiid, targetinterface, custom_iid=None, context=CLSCTX_INPROC_SERVER | CLSCTX_LOCAL_SERVER):
     if custom_iid is None:
         custom_iid = targetinterface.IID
-    return winproxy.CoCreateInstance(byref(clsiid), None, CLSCTX_INPROC_SERVER, byref(custom_iid), byref(targetinterface))
+    return winproxy.CoCreateInstance(byref(clsiid), None, context, byref(custom_iid), byref(targetinterface))
 
 
 class ComVtable(object):

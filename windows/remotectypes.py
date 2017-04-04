@@ -106,9 +106,27 @@ class RemoteWCharP(RemotePtr, ctypes.c_char_p):
     @property
     def value(self):
         base = self.raw_value
-        res = []
-        for i in itertools.count():
-            x = self.target.read_memory(base + (i * 0x100), 0x100)
+        # Simple case where target in a WinProcess
+        try:
+            return self.target.read_wstring(base)
+        except AttributeError as e:
+            pass
+        # Copy of Winprocess.read_wstring if target is a custom object
+        read_size = 0x100
+        readden = 0
+        # I am trying to do something smart here..
+        while True:
+            try:
+                x = self.read_memory(addr + readden, read_size)
+            except winproxy.Kernel32Error as e:
+                if read_size == 2:
+                    raise
+                # handle read_wstring at end of page
+                # Of read failed: read only the half of size
+                # read_size must remain a multiple of 2
+                read_size = read_size / 2
+                continue
+            readden += read_size
             utf16_chars = ["".join(c) for c in zip(*[iter(x)] * 2)]
             if "\x00\x00" in utf16_chars:
                 res.extend(utf16_chars[:utf16_chars.index("\x00\x00")])

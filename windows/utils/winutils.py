@@ -223,6 +223,14 @@ def get_shared_mapping(name, size=0x1000):
 #    addr = windows.winproxy.MapViewOfFile(h, dwDesiredAccess=FILE_MAP_READ, dwNumberOfBytesToMap=1)
 #    return addr
 
+def decompress_buffer(comptype, buffer, uncompress_size=None):
+    if uncompress_size is None:
+        uncompress_size = len(buffer) * 10
+    result_size = DWORD()
+    uncompressed = ctypes.c_buffer(uncompress_size)
+    windows.winproxy.RtlDecompressBuffer(comptype, uncompressed, uncompress_size, buffer, len(buffer), result_size)
+    return uncompressed[:result_size.value]
+
 class VirtualProtected(object):
     """
     A context manager usable like `VirtualProtect` that will restore the old protection at exit ::
