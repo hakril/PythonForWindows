@@ -43,7 +43,7 @@ class PyHKey(object):
         try:
             self._phkey = _winreg.OpenKeyEx(self.surkey.phkey, self.name, 0, self.sam)
         except WindowsError as e:
-            raise WindowsError("Could not open registry key <{0}>".format(self.fullname))
+            raise WindowsError("Could not open registry key <{0}> ({1})".format(self.fullname, e))
         return self._phkey
 
 

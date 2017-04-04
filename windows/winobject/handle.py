@@ -34,11 +34,15 @@ class Handle(SYSTEM_HANDLE):
         :type: :class:`str`"""
         return self._get_object_type()
 
+    @property
+    def infos(self):
+        """TODO: DOC"""
+        return self._get_object_basic_infos()
+
     def _get_object_name(self):
         lh = self.local_handle
         size_needed = DWORD()
         yyy = ctypes.c_buffer(0x1000)
-        size_needed = DWORD()
         winproxy.NtQueryObject(lh, ObjectNameInformation, ctypes.byref(yyy), ctypes.sizeof(yyy), ctypes.byref(size_needed))
         return WinUnicodeString.from_buffer_copy(yyy[:size_needed.value]).str
 
@@ -57,6 +61,15 @@ class Handle(SYSTEM_HANDLE):
             winproxy.NtQueryObject(lh, ObjectTypeInformation, buffer, size, ctypes.byref(size_needed))
             xxx = EPUBLIC_OBJECT_TYPE_INFORMATION.from_buffer_copy(buffer)
         return xxx.TypeName.str
+
+    def _get_object_basic_infos(self):
+        pass
+        lh = self.local_handle
+        size_needed = DWORD()
+        basic_infos = PUBLIC_OBJECT_BASIC_INFORMATION()
+        winproxy.NtQueryObject(lh, ObjectBasicInformation, ctypes.byref(basic_infos), ctypes.sizeof(basic_infos), ctypes.byref(size_needed))
+        return basic_infos
+        #PUBLIC_OBJECT_BASIC_INFORMATION
 
     @windows.utils.fixedpropety
     def local_handle(self):

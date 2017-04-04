@@ -59,7 +59,8 @@ class AutoHandle(object):
 
     def __del__(self):
         if hasattr(self, "_handle") and self._handle:
-            dbgprint("Closing Handle {0} for {1}".format(hex(self._handle), self), "HANDLE")
+            # Prevent some bug where dbgprint might be None when __del__ is called in a closing process
+            dbgprint("Closing Handle {0} for {1}".format(hex(self._handle), self), "HANDLE") if dbgprint is not None else None
             self._close_function(self._handle)
 
 
@@ -260,6 +261,17 @@ class WinThread(THREADENTRY32, AutoHandle):
         _get_thread_id = _get_thread_id_by_api
     else:
         _get_thread_id = _get_thread_id_manual
+
+
+
+    # def token(self):
+    #     """The token of the process
+    #
+    #     :type: :class:`Token`
+	# 	"""
+    #     token_handle = HANDLE()
+    #     winproxy.OpenThreadToken(self.handle, TOKEN_QUERY, False, byref(token_handle))
+    #     return Token(token_handle.value)
 
 
 class DeadThread(AutoHandle):
@@ -620,15 +632,24 @@ class Process(AutoHandle):
 
         return TimeInfo(creation, exit, kernel, user)
 
-    @utils.fixedpropety
-    def token(self):
-        """The token of the process
 
-        :type: :class:`Token`
-		"""
+    def open_token(self, flags=TOKEN_QUERY):
         token_handle = HANDLE()
-        winproxy.OpenProcessToken(self.handle, TOKEN_QUERY, byref(token_handle))
+        winproxy.OpenProcessToken(self.handle, flags, byref(token_handle))
         return Token(token_handle.value)
+
+
+    token =  property(open_token)
+
+    # @utils.fixedpropety
+    # def token(self):
+    #     """The token of the process
+    #
+    #     :type: :class:`Token`
+	# 	"""
+    #     token_handle = HANDLE()
+    #     winproxy.OpenProcessToken(self.handle, TOKEN_QUERY, byref(token_handle))
+    #     return Token(token_handle.value)
 
 class CurrentThread(AutoHandle):
     """The current thread"""
@@ -661,6 +682,10 @@ class CurrentThread(AutoHandle):
     def wait(self, timeout=INFINITE):
         """Raise :class:`ValueError` to prevent deadlock :D"""
         raise ValueError("wait() on current thread")
+
+    #def token(self):
+
+       # GetCurrentThreadToken()
 
 
 class CurrentProcess(Process):
@@ -1042,17 +1067,16 @@ class Token(AutoHandle):
 
     @property
     def integrity(self):
-        """Return the integrity level of a process
+        """Return the integrity level of a token
 
         :type: :class:`int`
 		"""
         buffer_size = self.get_required_information_size(TokenIntegrityLevel)
         buffer = ctypes.c_buffer(buffer_size)
         self.get_informations(TokenIntegrityLevel, buffer)
-
         sid = ctypes.cast(buffer, POINTER(TOKEN_MANDATORY_LABEL))[0].Label.Sid
         count = winproxy.GetSidSubAuthorityCount(sid)
-        integrity = winproxy.GetSidSubAuthority(sid, ord(count[0]) - 1)[0]
+        integrity = winproxy.GetSidSubAuthority(sid, count[0] - 1)[0]
         return know_integrity_level_mapper.get(integrity, integrity)
 
     @property
@@ -1099,9 +1123,14 @@ class Token(AutoHandle):
         cbsize = DWORD()
         try:
             winproxy.GetTokenInformation(self.handle, info_type, None, 0, ctypes.byref(cbsize))
-        except WindowsError:
-            pass
+        except WindowsError as e:
+            if not e.winerror == ERROR_INSUFFICIENT_BUFFER:
+                raise
         return cbsize.value
+
+    #TODO: TEST + DOC
+    def set_informations(self, info_type, infos):
+        return winproxy.SetTokenInformation(self.handle, info_type, ctypes.byref(infos), ctypes.sizeof(infos))
 
 
 def transform_ctypes_fields(struct, replacement):
