@@ -458,7 +458,8 @@ Ouput::
 .. _wmi_request:
 
 Make WMI requests
-'''''''''''''''''
+"""""""""""""""""
+
 
 .. literalinclude:: ..\..\samples\wmi_request.py
 
@@ -486,7 +487,7 @@ Ouput::
 .. _sample_com_firewall:
 
 using COM: ``INetFwPolicy2``
-''''''''''''''''''''''''''''
+""""""""""""""""""""""""""""
 
 .. literalinclude:: ..\..\samples\com_inetfwpolicy2.py
 
@@ -507,3 +508,56 @@ Output::
     * NET_FW_PROFILE2_DOMAIN(0x1L) -> True
     * NET_FW_PROFILE2_PRIVATE(0x2L) -> True
     * NET_FW_PROFILE2_PUBLIC(0x4L) -> True
+
+
+``windows.crypto``
+""""""""""""""""""
+
+
+.. _sample_crypto_encryption:
+
+Encryption demo
+'''''''''''''''
+
+This sample is a working POC able to generate key-pair, encrypt and decrypt file.
+
+.. literalinclude:: ..\..\samples\encryption_demo.py
+
+Ouput::
+
+    (cmd λ) python ..\samples\encryption_demo.py genkey YOLOCERTIF mykey --pfxpassword MYPASSWORD
+    <CertificatContext "YOLOCERTIF" serial="1b a4 3e 17 f7 ed ec ab 4f f8 11 46 48 e9 29 25">
+
+    (cmd λ) ls
+    mykey.cer  mykey.pfx
+
+    (cmd λ) echo|set /p="my secret message" > message.txt
+
+    (cmd λ) python ..\samples\encryption_demo.py crypt message.txt message.crypt mykey.cer
+    Encryption done. Result:
+    bytearray(b'0\x82\x01\x19\x06\t*\x86H\x86\xf7\r\x01\x07\x03\xa0\x82\x01\n0\x82\x01\x06\x02\x01\x001\x81\xc30\x81
+    \xc0\x02\x01\x000)0\x151\x130\x11\x06\x03U\x04\x03\x13\nYOLOCERTIF\x02\x10\x1b\xa4>\x17\xf7\xed\xec\xabO\xf8\x11
+    FH\xe9)%0\r\x06\t*\x86H\x86\xf7\r\x01\x01\x01\x05\x00\x04\x81\x80V\x89)\xf5\xaaM\x99cEA\x17^\xa2D~\x94\xe3\xf2\x1f
+    \x05Y\xc2\xbb\xb2\xbbYBpU6\x870\xce\xe7\xd2M{\xbb\xb9K\xa0\xf5\xe5\x93\xca\xedF\x80.x\xdc\xf2\x0c\xa6UO\x01\r\xaf
+    \xd0Z\xd9\xabnzR\xd4j=\xca\xc2RG\xcd\x11u\x82\x7f\x8c\xd8t\xb9\xf9\xe8%\xfal\xaaHPj;\xecKk]\t%\xfd\x91\xcc\xe0lWf
+    \xc6\x12x\x1am\xc8\x01t\xac\xa6\xf3#\x02\xd4J \x8eZ\xbb\x10W\xe1 0;\x06\t*\x86H\x86\xf7\r\x01\x07\x010\x14\x06\x08*
+    \x86H\x86\xf7\r\x03\x07\x04\x08\x14F\x04\xad\xed9\xed<\x80\x18\x80]6\xccTV\xbc\xb8*\x84QY!~\xb3\n\x1aV\xd4\rf\xd1n:')
+
+    (cmd λ) python ..\samples\encryption_demo.py decrypt message.crypt mykey.pfx BADPASS
+    Traceback (most recent call last):
+    File "..\samples\encryption_demo.py", line 103, in <module>
+        res.func(**res.__dict__)
+    File "..\samples\encryption_demo.py", line 26, in decrypt
+        pfx = crypto.import_pfx(pfxfile.read(), password)
+    File "c:\users\hakril\documents\work\pythonforwindows\windows\crypto\certificate.py", line 153, in import_pfx
+        cert_store = winproxy.PFXImportCertStore(pfx, password, flags)
+    File "c:\users\hakril\documents\work\pythonforwindows\windows\winproxy.py", line 1065, in PFXImportCertStore
+        return PFXImportCertStore.ctypes_function(pPFX, szPassword, dwFlags)
+    File "c:\users\hakril\documents\work\pythonforwindows\windows\winproxy.py", line 148, in perform_call
+        return self._cprototyped(*args)
+    File "c:\users\hakril\documents\work\pythonforwindows\windows\winproxy.py", line 69, in kernel32_error_check
+        raise Kernel32Error(func_name)
+    windows.winproxy.Kernel32Error: PFXImportCertStore: [Error 86] The specified network password is not correct.
+
+    (cmd λ) python ..\samples\encryption_demo.py decrypt message.crypt mykey.pfx MYPASSWORD
+    Result = <my secret message>
