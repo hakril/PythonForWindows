@@ -4,6 +4,7 @@ import time
 import os
 import textwrap
 import random
+import pickle
 
 from test_utils import *
 from windows.generated_def.winstructs import *
@@ -536,6 +537,29 @@ class WindowsAPITestCase(unittest.TestCase):
 class GeneratedCodeTestCase(unittest.TestCase):
     def test_str_flags_value(self):
         self.assertEqual(windows.generated_def.MS_ENHANCED_PROV, windows.generated_def.MS_ENHANCED_PROV_A)
+
+    def _test_pickle_unpickle(self, obj, protocol=0):
+        pickled = pickle.dumps(obj, protocol)
+        unpickled = pickle.loads(pickled)
+        self.assertEqual(unpickled, obj)
+
+    def test_long_flag_picke_v0(self):
+        self._test_pickle_unpickle(windows.generated_def.PAGE_EXECUTE_READWRITE, 0)
+
+    def test_long_flag_picke_v1(self):
+        self._test_pickle_unpickle(windows.generated_def.PAGE_EXECUTE_READWRITE, 1)
+
+    def test_long_flag_picke_v2(self):
+        self._test_pickle_unpickle(windows.generated_def.PAGE_EXECUTE_READWRITE, 2)
+
+    def test_str_flag_picke_v0(self):
+        self._test_pickle_unpickle(windows.generated_def.szOID_RSA, 0)
+
+    def test_str_flag_picke_v1(self):
+        self._test_pickle_unpickle(windows.generated_def.szOID_RSA, 1)
+
+    def test_str_flag_picke_v2(self):
+        self._test_pickle_unpickle(windows.generated_def.szOID_RSA, 2)
 
 class NativeUtilsTestCase(unittest.TestCase):
     @process_64bit_only

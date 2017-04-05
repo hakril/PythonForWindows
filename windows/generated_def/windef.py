@@ -23,6 +23,10 @@ class Flag(long):
 
     __str__ = __repr__
 
+   # Fix pickling with protocol 2
+    def __getnewargs__(self, *args):
+        return self.name, long(self)
+
 class StrFlags(str):
     def __new__(cls, name, value):
         if isinstance(value, cls):
@@ -35,7 +39,11 @@ class StrFlags(str):
     def __repr__(self):
         return "{0}({1})".format(self.name, str.__repr__(self))
 
-    __str__ = __repr__
+    # __str__ = __repr__
+
+    # Fix pickling with protocol 2
+    def __getnewargs__(self, *args):
+        return self.name, str.__str__(self)
 
 def make_flag(name, value):
     if isinstance(value, (int, long)):
