@@ -9,7 +9,6 @@ from windows.crypto import DEFAULT_ENCODING
 from windows.crypto.helper import ECRYPT_DATA_BLOB
 
 
-
 CRYPT_OBJECT_FORMAT_TYPE = [
     CERT_QUERY_OBJECT_FILE,
     CERT_QUERY_OBJECT_BLOB,
@@ -32,7 +31,6 @@ CRYPT_OBJECT_FORMAT_TYPE = [
 CRYPT_OBJECT_FORMAT_TYPE_DICT = {x:x for x in CRYPT_OBJECT_FORMAT_TYPE}
 
 ## Move CryptObject to new .py ?
-
 class CryptObject(object):
     MSG_PARAM_KNOW_TYPES = {CMSG_SIGNER_INFO_PARAM: CMSG_SIGNER_INFO,
                             CMSG_SIGNER_COUNT_PARAM: DWORD,
@@ -67,6 +65,7 @@ class CryptObject(object):
 
     def msg_get_param(self, param_type, index=0):
         signer_info = DWORD()
+        # https://msdn.microsoft.com/en-us/library/windows/desktop/aa380227(v=vs.85).aspx
         winproxy.CryptMsgGetParam(self.hmsg, param_type, index, None, signer_info)
         buffer = ctypes.c_buffer(signer_info.value)
         winproxy.CryptMsgGetParam(self.hmsg, param_type, index, buffer, signer_info)
@@ -88,18 +87,24 @@ class CryptObject(object):
         cert_info.SerialNumber = data.SerialNumber
         rawcertcontext = winproxy.CertFindCertificateInStore(self.hstore, self.encoding, 0, CERT_FIND_SUBJECT_CERT, byref(cert_info), None)
         #return rawcertcontext
-        return CertificatContext(rawcertcontext[0])
+        return CertificateContext(rawcertcontext[0])
 
-    def get_cert(self, index=0):
+    def get_raw_cert(self, index=0):
         return self.msg_get_param(CMSG_CERT_PARAM, index)
 
-    def get_nb_cert(self):
+    def get_cert(self, index=0):
+        return CertificateContext.from_buffer(self.get_raw_cert(index))
+
+    cert = property(get_cert)
+
+    #@property
+    def nb_cert(self):
         "TEST"
         return self.msg_get_param(CMSG_CERT_COUNT_PARAM).value
 
-    def test_all_certs(self):
-        nb_cert = self.get_nb_cert()
-        return [CertificatContext.from_buffer(self.get_cert(i)) for i in range(nb_cert)]
+    #@property
+    def all_certs(self):
+        return [self.get_cert(i) for i in range(self.nb_cert())]
 
 
     def __repr__(self):
@@ -107,11 +112,9 @@ class CryptObject(object):
 
 
 class EHCERTSTORE(HCERTSTORE):
-    # def __str__(self):
-    #     return "CertStore()"
-
     @property
     def certs(self):
+        "Based on CertEnumCertificatesInStore"
         res = []
         last = None
         while True:
@@ -122,7 +125,7 @@ class EHCERTSTORE(HCERTSTORE):
                     return tuple(res)
                 raise
             # Need to duplicate as CertEnumCertificatesInStore will free the context 'last'
-            ecert = windows.crypto.CertificatContext(cert[0])
+            ecert = windows.crypto.CertificateContext(cert[0])
             res.append(ecert.duplicate())
             last = ecert
         raise RuntimeError("Out of infinit loop")
@@ -135,6 +138,8 @@ class EHCERTSTORE(HCERTSTORE):
         res = winproxy.CertOpenStore(CERT_STORE_PROV_FILENAME_A, DEFAULT_ENCODING, None, CERT_STORE_OPEN_EXISTING_FLAG, filename)
         return ctypes.cast(res, cls)
 
+
+    # See https://msdn.microsoft.com/en-us/library/windows/desktop/aa388136(v=vs.85).aspx
     @classmethod
     def from_system_store(cls, store_name):
         res = winproxy.CertOpenStore(CERT_STORE_PROV_SYSTEM_A, DEFAULT_ENCODING, None, CERT_SYSTEM_STORE_LOCAL_MACHINE | CERT_STORE_READONLY_FLAG, store_name)
@@ -145,8 +150,10 @@ class EHCERTSTORE(HCERTSTORE):
         res = winproxy.CertOpenStore(CERT_STORE_PROV_MEMORY, DEFAULT_ENCODING, None, 0, None)
         return ctypes.cast(res, cls)
 
+    # Add API arround 'CertFindCertificateInStore' ?
+
 # PKCS12_NO_PERSIST_KEY -> do not save it in a key container on disk
-# Without it a key container is created at 'C:\Users\USERNAME\AppData\Roaming\Microsoft\Crypto\RSA\S-1-5-21-3241049326-165485355-1070449050-1001'
+# Without it, a key container is created at 'C:\Users\USERNAME\AppData\Roaming\Microsoft\Crypto\RSA\S-1-5-21-3241049326-165485355-1070449050-1001'
 def import_pfx(pfx, password=None, flags=CRYPT_USER_KEYSET | PKCS12_NO_PERSIST_KEY):
     if isinstance(pfx, basestring):
         pfx = ECRYPT_DATA_BLOB.from_string(pfx)
@@ -155,7 +162,11 @@ def import_pfx(pfx, password=None, flags=CRYPT_USER_KEYSET | PKCS12_NO_PERSIST_K
 
 
 # Why PCCERT_CONTEXT (pointer type) and not _CERT_CONTEXT ?
-class CertificatContext(PCCERT_CONTEXT):
+class CertificateContext(PCCERT_CONTEXT):
+    """Represent a Certificate.
+
+       note: It is a pointer ctypes structure (``PCCERT_CONTEXT``)
+    """
     _type_ = PCCERT_CONTEXT._type_ # Not herited from PCCERT_CONTEXT
 
 
@@ -164,34 +175,55 @@ class CertificatContext(PCCERT_CONTEXT):
 
     @property
     def raw_serial(self):
+        """The raw serial number of the certificate.
+
+        :type: [:class:`int`]: A list of int ``0 <= x <= 255``"""
         serial_number = self[0].pCertInfo[0].SerialNumber
         return [(c & 0xff) for c in serial_number.pbData[:serial_number.cbData][::-1]]
 
     @property
     def serial(self):
+        """The string representation of the certificate's serial.
+
+        :type: :class:``str``
+        """
         serial_number = self[0].pCertInfo[0].SerialNumber
         serial_bytes = self.raw_serial
         return " ".join("{:02x}".format(x) for x in serial_bytes)
 
 
-    def get_name(self, flags=0):
-        size = winproxy.CertGetNameStringA(self, CERT_NAME_SIMPLE_DISPLAY_TYPE, flags, None, None, 0)
+    def get_name(self, nametype=CERT_NAME_SIMPLE_DISPLAY_TYPE, flags=0):
+        """Retrieve the subject or issuer name of the certificate. See CertGetNameStringA
+
+        :returns: :class:`str`
+        """
+        size = winproxy.CertGetNameStringA(self, nametype, flags, None, None, 0)
         namebuff = ctypes.c_buffer(size)
-        size = winproxy.CertGetNameStringA(self, CERT_NAME_SIMPLE_DISPLAY_TYPE, flags, None, namebuff, size)
+        size = winproxy.CertGetNameStringA(self, nametype, flags, None, namebuff, size)
         return namebuff[:-1]
 
     name = property(get_name)
+    """The name of the certificate.
+
+    :type: :class:`str`"""
 
     @property
     def issuer(self):
+        """The name of the certificate's issuer.
+
+        :type: :class:`str`"""
         return self.get_name(flags=CERT_NAME_ISSUER_FLAG)
 
     @property
     def store(self):
+        """The certificate store that contains the certificate
+
+        :type: :class:``EHCERTSTORE``
+        """
         return EHCERTSTORE(self[0].hCertStore)
 
-    def get_certificate_chain(self):
-        chain_context = PCCERT_CHAIN_CONTEXT()
+    def get_raw_certificate_chains(self): # Rename to all_chains ?
+        chain_context = EPCCERT_CHAIN_CONTEXT()
 
         enhkey_usage = CERT_ENHKEY_USAGE()
         enhkey_usage.cUsageIdentifier = 0
@@ -206,9 +238,33 @@ class CertificatContext(PCCERT_CONTEXT):
         chain_para.RequestedUsage = cert_usage
 
         winproxy.CertGetCertificateChain(None, self, None, self[0].hCertStore, byref(chain_para), 0, None, byref(chain_context))
-        return CertficateChain(chain_context)
+        #return CertficateChain(chain_context)
+        return chain_context
+
+    @property # fixedproperty ?
+    def chains(self):
+        """The list of chain context available for this certificate. Each elements of this list is a list of ``CertificateContext`` that should
+        go from the ``self`` certificate to a trusted certificate.
+
+        :type: [[:class:`CertificateContext`]] -- A list of chain (list) of :class:`CertificateContext`
+        """
+        chain_context = self.get_raw_certificate_chains()
+        res = []
+        for chain in chain_context.chains:
+            chain_res = [elt.cert for elt in chain.elements]
+            res.append(chain_res)
+        return res
+
+    # API Arround CertSelectCertificateChains ?
+    # https://msdn.microsoft.com/en-us/library/windows/desktop/dd433797(v=vs.85).aspx
 
     def duplicate(self):
+        """Duplicate the certificate by incrementing the internal refcount. (see ``CertDuplicateCertificateContext``)
+
+        note: The object returned is ``self``
+
+        :return: :class:`CertificateContext`
+        """
         res = winproxy.CertDuplicateCertificateContext(self)
         # Check what the doc says: the pointer returned is actually the PCERT in parameter
         # Only the refcount is incremented
@@ -230,12 +286,25 @@ class CertificatContext(PCCERT_CONTEXT):
 
     properties = property(enum_properties)
 
+    #def get_property(self):
+        # https://msdn.microsoft.com/en-us/library/windows/desktop/aa376079(v=vs.85).aspx
+        # - Usefull:
+            # CERT_SHA1_HASH_PROP_ID
 
+
+    @property
     def encoded(self):
+        """The encoded certificate.
+
+        :type: :class:`bytearray`"""
         return bytearray(self[0].pbCertEncoded[:self[0].cbCertEncoded])
 
     @classmethod
     def from_file(cls, filename):
+        """Create a :class:``CertificateContext`` for the file ``filename``
+
+        :return: :class:`CertificateContext`
+        """
         with open(filename, "rb") as f:
             data = f.read()
             buf = (ctypes.c_ubyte * len(data))(*bytearray(data))
@@ -244,26 +313,79 @@ class CertificatContext(PCCERT_CONTEXT):
 
     @classmethod
     def from_buffer(cls, data):
+        """Create a :class:``CertificateContext`` from the buffer ``data``
+
+        :return: :class:`CertificateContext`
+        """
         buf = (ctypes.c_ubyte * len(data))(*bytearray(data))
         res = windows.winproxy.CertCreateCertificateContext(windows.crypto.DEFAULT_ENCODING, buf, len(data))
         return ctypes.cast(res, cls)
 
+    def __eq__(self, other):
+        if not isinstance(other, CertificateContext):
+            return NotImplemented
+        return windows.winproxy.CertCompareCertificate(DEFAULT_ENCODING, self[0].pCertInfo, other[0].pCertInfo)
+
+    # CertCompareCertificate  ?
+    # https://msdn.microsoft.com/en-us/library/windows/desktop/aa376027(v=vs.85).aspx
 
 
+# class CertficateChain(object):
+#     def __init__(self, pc_chain_context):
+#         self.chain = pc_chain_context[0]
+#
+#     def to_list(self):
+#         res = []
+#         for i in range(self.chain.rgpChain[0][0].cElement):
+#             res.append(CertificateContext(self.chain.rgpChain[0][0].rgpElement[i][0].pCertContext[0]))
+#         return res
 
-class CertficateChain(object):
-    def __init__(self, pc_chain_context):
-        self.chain = pc_chain_context[0]
 
-    def to_list(self):
+# Those classes are more of a POC than anything else
+
+class EPCCERT_CHAIN_CONTEXT(PCCERT_CHAIN_CONTEXT):
+    _type_ = PCCERT_CHAIN_CONTEXT._type_
+
+    @property
+    def chains(self):
         res = []
-        for i in range(self.chain.rgpChain[0][0].cElement):
-            res.append(CertificatContext(self.chain.rgpChain[0][0].rgpElement[i][0].pCertContext[0]))
+        for i in range(self[0].cChain):
+            simple_chain = ctypes.cast(self[0].rgpChain[i], EPCCERT_SIMPLE_CHAIN)
+            res.append(simple_chain)
         return res
 
-# Move this in another .py ?
+    @property
+    def all_cert(self):
+        res = []
+        for chain in self.chains:
+            ch = []
+            res.append(ch)
+            for element in chain.elements:
+                ch.append(element.cert)
+        return res
 
+class EPCCERT_SIMPLE_CHAIN(PCCERT_SIMPLE_CHAIN):
+    _type_ = PCCERT_SIMPLE_CHAIN._type_
+
+    @property
+    def elements(self):
+        res = []
+        for i in range(self[0].cElement):
+            element = ctypes.cast(self[0].rgpElement[i], EPCERT_CHAIN_ELEMENT)
+            res.append(element)
+        return res
+
+class EPCERT_CHAIN_ELEMENT(PCERT_CHAIN_ELEMENT):
+    _type_ = PCERT_CHAIN_ELEMENT._type_
+
+    @property
+    def cert(self):
+        return ctypes.cast(self[0].pCertContext, CertificateContext)
+
+
+# Move this in another .py ?
 class CryptContext(HCRYPTPROV):
+    """ A context manager arround ``CryptAcquireContextW`` & ``CryptReleaseContext``"""
     _type_ = HCRYPTPROV._type_
 
     def __init__(self, pszContainer=None, pszProvider=None, dwProvType=0, dwFlags=0, retrycreate=False):

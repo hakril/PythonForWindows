@@ -29,6 +29,21 @@ geninitvector = GenerateInitVector()
 
 
 def encrypt(cert_or_certlist, msg, algo=szOID_RSA_DES_EDE3_CBC, initvector=geninitvector):
+    """Encrypt ``msg`` with the certificate(s) in ``cert_or_certlist`` using ``algo`` with the initial
+       vector ``initvector``.
+
+       If ``geninitvector`` is left as it is, it will generate a random one.
+
+       Algorithms supported by ``GenerateInitVector`` are:
+
+        * ``szOID_OIWSEC_desCBC``
+        * ``szOID_RSA_DES_EDE3_CBC``
+        * ``szOID_NIST_AES128_CBC``
+        * ``szOID_NIST_AES192_CBC``
+        * ``szOID_NIST_AES256_CBC``
+
+       :return: :class:`bytearray`: The encrypted message
+    """
     alg_ident = CRYPT_ALGORITHM_IDENTIFIER()
     alg_ident.pszObjId = algo
     # Is 'certs' an iterable ?
@@ -71,6 +86,12 @@ def encrypt(cert_or_certlist, msg, algo=szOID_RSA_DES_EDE3_CBC, initvector=genin
 
 
 def decrypt(cert_store, encrypted):
+    """Try to decrypt the ``encrypted`` msg with any certificate in ``cert_store``.
+
+        If there is no certificate able to decrypt the message ``Kernel32Error(winerror=0x8009200c)`` is raised.
+
+        :return: :class:`str`: The decrypted message
+    """
     # Setup decryption parameters
     dparam = CRYPT_DECRYPT_MESSAGE_PARA()
     dparam.cbSize = ctypes.sizeof(dparam)

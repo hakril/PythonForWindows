@@ -20,6 +20,7 @@ Contents:
    wintrust.rst
    debug.rst
    com.rst
+   crypto.rst
    iat_hook.rst
    wip.rst
    internals.rst

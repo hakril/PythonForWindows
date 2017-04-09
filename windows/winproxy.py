@@ -1182,6 +1182,13 @@ def CertDuplicateCertificateContext(pCertContext):
 def CertEnumCertificatesInStore(hCertStore, pPrevCertContext):
     return CertEnumCertificatesInStore.ctypes_function(hCertStore, pPrevCertContext)
 
+@Crypt32Proxy('CertCompareCertificate', error_check=no_error_check)
+def CertCompareCertificate(dwCertEncodingType, pCertId1, pCertId2):
+    """This function does not raise is compare has failed:
+        return 0 if cert are NOT equals
+    """
+    return CertCompareCertificate.ctypes_function(dwCertEncodingType, pCertId1, pCertId2)
+
 
 @Crypt32Proxy('CryptEncodeObjectEx')
 def CryptEncodeObjectEx(dwCertEncodingType, lpszStructType, pvStructInfo, dwFlags, pEncodePara, pvEncoded, pcbEncoded):

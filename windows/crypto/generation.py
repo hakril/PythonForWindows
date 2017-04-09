@@ -11,7 +11,7 @@ def generate_selfsigned_certificate(name="CN=DEFAULT", prov=None, key_info=None,
     winproxy.CertStrToNameA(X509_ASN_ENCODING, name,  CERT_OID_NAME_STR, None, buffer, size, None)
     blobname = ECRYPT_DATA_BLOB(size.value, buffer)
     cert = winproxy.CertCreateSelfSignCertificate(prov, blobname, flags, key_info, signature_algo, None, None, None)
-    return windows.crypto.CertificatContext(cert[0])
+    return windows.crypto.CertificateContext(cert[0])
 
 
 def generate_key(prov, keytype=AT_KEYEXCHANGE, flags=CRYPT_EXPORTABLE):

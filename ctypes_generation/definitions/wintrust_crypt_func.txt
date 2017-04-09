@@ -243,3 +243,9 @@ PCCERT_CONTEXT WINAPI CertCreateCertificateContext(
   _In_       BYTE  *pbCertEncoded,
   _In_       DWORD cbCertEncoded
 );
+
+BOOL WINAPI CertCompareCertificate(
+  _In_ DWORD      dwCertEncodingType,
+  _In_ PCERT_INFO pCertId1,
+  _In_ PCERT_INFO pCertId2
+);
