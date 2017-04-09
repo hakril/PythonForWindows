@@ -8,9 +8,9 @@ import windows.crypto.generation as gencrypt
 # http://stackoverflow.com/questions/1461272/basic-questions-on-microsoft-cryptoapi
 
 def crypt(src, dst, certs, **kwargs):
-    """Encrypt the content of 'src' file with the certifacte in 'certs' into 'dst'"""
-    # Open every certificate in the certs list
-    certlist = [crypto.CertificatContext.from_file(x) for x in certs]
+    """Encrypt the content of 'src' file with the certifacts in 'certs' into 'dst'"""
+    # Open every certificates in the certs list
+    certlist = [crypto.CertificateContext.from_file(x) for x in certs]
     # Encrypt the content of 'src' with all the public keys(certs)
     res = crypto.encrypt(certlist, src.read())
     print("Encryption done. Result:")
@@ -31,7 +31,7 @@ def decrypt(src, pfxfile, password, **kwargs):
 PFW_TMP_KEY_CONTAINER = "PythonForWindowsTMPContainer"
 
 def genkeys(common_name, pfxpassword, outname, **kwargs):
-    """Generate a SHA256/RSA key pair. A self-signed certificate with 'common_name' if store at 'outname'.cer.
+    """Generate a SHA256/RSA key pair. A self-signed certificate with 'common_name' is store as 'outname'.cer.
     The private key is stored in 'outname'.pfx protected with 'pfxpassword'"""
     cert_store = crypto.EHCERTSTORE.new_in_memory()
     # Create a TMP context that will hold our newly generated key-pair
