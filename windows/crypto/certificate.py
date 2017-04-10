@@ -112,9 +112,13 @@ class CryptObject(object):
 
 
 class EHCERTSTORE(HCERTSTORE):
+    """A certificate store"""
     @property
     def certs(self):
-        "Based on CertEnumCertificatesInStore"
+        """The certificates in the store
+
+        :type: [:class:`CertificateContext`] -- A list of Certificate
+        """
         res = []
         last = None
         while True:
@@ -131,10 +135,12 @@ class EHCERTSTORE(HCERTSTORE):
         raise RuntimeError("Out of infinit loop")
 
     def add_certificate(self, certificate):
+        """Add a certificate to the store"""
         winproxy.CertAddCertificateContextToStore(self, certificate, CERT_STORE_ADD_NEW, None)
 
     @classmethod
     def from_file(cls, filename):
+        """Create a new :class:`EHCERTSTORE` from ``filename``"""
         res = winproxy.CertOpenStore(CERT_STORE_PROV_FILENAME_A, DEFAULT_ENCODING, None, CERT_STORE_OPEN_EXISTING_FLAG, filename)
         return ctypes.cast(res, cls)
 
@@ -142,11 +148,15 @@ class EHCERTSTORE(HCERTSTORE):
     # See https://msdn.microsoft.com/en-us/library/windows/desktop/aa388136(v=vs.85).aspx
     @classmethod
     def from_system_store(cls, store_name):
+        """Create a new :class:`EHCERTSTORE` from system store``store_name``
+        (see https://msdn.microsoft.com/en-us/library/windows/desktop/aa388136(v=vs.85).aspx)
+        """
         res = winproxy.CertOpenStore(CERT_STORE_PROV_SYSTEM_A, DEFAULT_ENCODING, None, CERT_SYSTEM_STORE_LOCAL_MACHINE | CERT_STORE_READONLY_FLAG, store_name)
         return ctypes.cast(res, cls)
 
     @classmethod
     def new_in_memory(cls):
+        """Create a new temporary :class:`EHCERTSTORE` in memory"""
         res = winproxy.CertOpenStore(CERT_STORE_PROV_MEMORY, DEFAULT_ENCODING, None, 0, None)
         return ctypes.cast(res, cls)
 
@@ -155,6 +165,14 @@ class EHCERTSTORE(HCERTSTORE):
 # PKCS12_NO_PERSIST_KEY -> do not save it in a key container on disk
 # Without it, a key container is created at 'C:\Users\USERNAME\AppData\Roaming\Microsoft\Crypto\RSA\S-1-5-21-3241049326-165485355-1070449050-1001'
 def import_pfx(pfx, password=None, flags=CRYPT_USER_KEYSET | PKCS12_NO_PERSIST_KEY):
+    """Import the file ``pfx`` with the ``password``.
+
+    ``default flags = PKCS12_NO_PERSIST_KEY | CRYPT_USER_KEYSET``.
+
+    ``PKCS12_NO_PERSIST_KEY`` tells ``CryptoAPI`` to NOT save the keys in a on-disk container.
+
+    :return: :class:`EHCERTSTORE`
+    """
     if isinstance(pfx, basestring):
         pfx = ECRYPT_DATA_BLOB.from_string(pfx)
     cert_store = winproxy.PFXImportCertStore(pfx, password, flags)
@@ -164,7 +182,7 @@ def import_pfx(pfx, password=None, flags=CRYPT_USER_KEYSET | PKCS12_NO_PERSIST_K
 # Why PCCERT_CONTEXT (pointer type) and not _CERT_CONTEXT ?
 class CertificateContext(PCCERT_CONTEXT):
     """Represent a Certificate.
-
+
        note: It is a pointer ctypes structure (``PCCERT_CONTEXT``)
     """
     _type_ = PCCERT_CONTEXT._type_ # Not herited from PCCERT_CONTEXT
@@ -185,7 +203,7 @@ class CertificateContext(PCCERT_CONTEXT):
     def serial(self):
         """The string representation of the certificate's serial.
 
-        :type: :class:``str``
+        :type: :class:`str`
         """
         serial_number = self[0].pCertInfo[0].SerialNumber
         serial_bytes = self.raw_serial
@@ -218,7 +236,7 @@ class CertificateContext(PCCERT_CONTEXT):
     def store(self):
         """The certificate store that contains the certificate
 
-        :type: :class:``EHCERTSTORE``
+        :type: :class:`EHCERTSTORE`
         """
         return EHCERTSTORE(self[0].hCertStore)
 
@@ -301,7 +319,7 @@ class CertificateContext(PCCERT_CONTEXT):
 
     @classmethod
     def from_file(cls, filename):
-        """Create a :class:``CertificateContext`` for the file ``filename``
+        """Create a :class:`CertificateContext` for the file ``filename``
 
         :return: :class:`CertificateContext`
         """
@@ -313,7 +331,7 @@ class CertificateContext(PCCERT_CONTEXT):
 
     @classmethod
     def from_buffer(cls, data):
-        """Create a :class:``CertificateContext`` from the buffer ``data``
+        """Create a :class:`CertificateContext` from the buffer ``data``
 
         :return: :class:`CertificateContext`
         """

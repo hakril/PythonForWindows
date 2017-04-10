@@ -26,12 +26,13 @@ def decrypt(src, pfxfile, password, **kwargs):
     pfx = crypto.import_pfx(pfxfile.read(), password)
     # Decrypt the content of the file
     decrypted = crypto.decrypt(pfx, src.read())
-    print(u"Result = <{0}>".format(decrypted.decode("utf8")))
+    print(u"Result = <{0}>".format(decrypted))
+    return decrypted
 
 PFW_TMP_KEY_CONTAINER = "PythonForWindowsTMPContainer"
 
 def genkeys(common_name, pfxpassword, outname, **kwargs):
-    """Generate a SHA256/RSA key pair. A self-signed certificate with 'common_name' is store as 'outname'.cer.
+    """Generate a SHA256/RSA key pair. A self-signed certificate with 'common_name' is stored as 'outname'.cer.
     The private key is stored in 'outname'.pfx protected with 'pfxpassword'"""
     cert_store = crypto.EHCERTSTORE.new_in_memory()
     # Create a TMP context that will hold our newly generated key-pair
@@ -39,6 +40,9 @@ def genkeys(common_name, pfxpassword, outname, **kwargs):
         key = HCRYPTKEY()
         # Generate a key-pair that is exportable
         winproxy.CryptGenKey(ctx, AT_KEYEXCHANGE, CRYPT_EXPORTABLE, key)
+        # It does NOT destroy the key-pair from the container,
+        # It only release the key handle
+        # https://msdn.microsoft.com/en-us/library/windows/desktop/aa379918(v=vs.85).aspx
         winproxy.CryptDestroyKey(key)
 
     # Descrption of the key-container that will be used to generate the certificate
@@ -68,7 +72,7 @@ def genkeys(common_name, pfxpassword, outname, **kwargs):
     # Dump the certif (public key) and pfx (public + private keys)
     with open(outname + ".cer", "wb") as f:
         # The encoded certif only contains the public key
-        f.write(certif.encoded())
+        f.write(certif.encoded)
     with open(outname + ".pfx", "wb") as f:
         f.write(pfx)
     print(certif)

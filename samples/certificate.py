@@ -64,7 +64,3 @@ if matchs:
     print("Found it !")
 else:
     print("Not found :(")
-
-
-
-# TODO: add store enumeration
