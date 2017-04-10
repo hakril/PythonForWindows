@@ -1,0 +1,39 @@
+typedef struct IEnumBackgroundCopyJobsVtbl
+    {
+        BEGIN_INTERFACE
+
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+            __RPC__in IEnumBackgroundCopyJobs * This,
+            /* [in] */ __RPC__in REFIID riid,
+            /* [annotation][iid_is][out] */
+            __RPC__deref_out  void **ppvObject);
+
+        ULONG ( STDMETHODCALLTYPE *AddRef )(
+            __RPC__in IEnumBackgroundCopyJobs * This);
+
+        ULONG ( STDMETHODCALLTYPE *Release )(
+            __RPC__in IEnumBackgroundCopyJobs * This);
+
+        HRESULT ( STDMETHODCALLTYPE *Next )(
+            __RPC__in IEnumBackgroundCopyJobs * This,
+            /* [in] */ ULONG celt,
+            /* [length_is][size_is][out] */ __RPC__out_ecount_part(celt, pceltFetched ? *pceltFetched : celt) IBackgroundCopyJob **rgelt,
+            /* [unique][out][in] */ __RPC__inout_opt ULONG *pceltFetched);
+
+        HRESULT ( STDMETHODCALLTYPE *Skip )(
+            __RPC__in IEnumBackgroundCopyJobs * This,
+            /* [in] */ ULONG celt);
+
+        HRESULT ( STDMETHODCALLTYPE *Reset )(
+            __RPC__in IEnumBackgroundCopyJobs * This);
+
+        HRESULT ( STDMETHODCALLTYPE *Clone )(
+            __RPC__in IEnumBackgroundCopyJobs * This,
+            /* [out] */ __RPC__deref_out_opt IEnumBackgroundCopyJobs **ppenum);
+
+        HRESULT ( STDMETHODCALLTYPE *GetCount )(
+            __RPC__in IEnumBackgroundCopyJobs * This,
+            /* [out] */ __RPC__out ULONG *puCount);
+
+        END_INTERFACE
+    } IEnumBackgroundCopyJobsVtbl;

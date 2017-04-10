@@ -1,0 +1,41 @@
+typedef struct IBackgroundCopyErrorVtbl
+    {
+        BEGIN_INTERFACE
+
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+            __RPC__in IBackgroundCopyError * This,
+            /* [in] */ __RPC__in REFIID riid,
+            /* [annotation][iid_is][out] */
+            __RPC__deref_out  void **ppvObject);
+
+        ULONG ( STDMETHODCALLTYPE *AddRef )(
+            __RPC__in IBackgroundCopyError * This);
+
+        ULONG ( STDMETHODCALLTYPE *Release )(
+            __RPC__in IBackgroundCopyError * This);
+
+        HRESULT ( STDMETHODCALLTYPE *GetError )(
+            __RPC__in IBackgroundCopyError * This,
+            /* [ref][out] */ __RPC__out BG_ERROR_CONTEXT *pContext,
+            /* [ref][out] */ __RPC__out HRESULT *pCode);
+
+        HRESULT ( STDMETHODCALLTYPE *GetFile )(
+            __RPC__in IBackgroundCopyError * This,
+            /* [out] */ __RPC__deref_out_opt IBackgroundCopyFile **pVal);
+
+        HRESULT ( STDMETHODCALLTYPE *GetErrorDescription )(
+            __RPC__in IBackgroundCopyError * This,
+            /* [in] */ DWORD LanguageId,
+            /* [ref][out] */ __RPC__deref_out_opt LPWSTR *pErrorDescription);
+
+        HRESULT ( STDMETHODCALLTYPE *GetErrorContextDescription )(
+            __RPC__in IBackgroundCopyError * This,
+            /* [in] */ DWORD LanguageId,
+            /* [ref][out] */ __RPC__deref_out_opt LPWSTR *pContextDescription);
+
+        HRESULT ( STDMETHODCALLTYPE *GetProtocol )(
+            __RPC__in IBackgroundCopyError * This,
+            /* [ref][out] */ __RPC__deref_out_opt LPWSTR *pProtocol);
+
+        END_INTERFACE
+    } IBackgroundCopyErrorVtbl;

@@ -1,0 +1,39 @@
+typedef struct IEnumBackgroundCopyFilesVtbl
+    {
+        BEGIN_INTERFACE
+
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+            __RPC__in IEnumBackgroundCopyFiles * This,
+            /* [in] */ __RPC__in REFIID riid,
+            /* [annotation][iid_is][out] */
+            __RPC__deref_out  void **ppvObject);
+
+        ULONG ( STDMETHODCALLTYPE *AddRef )(
+            __RPC__in IEnumBackgroundCopyFiles * This);
+
+        ULONG ( STDMETHODCALLTYPE *Release )(
+            __RPC__in IEnumBackgroundCopyFiles * This);
+
+        HRESULT ( STDMETHODCALLTYPE *Next )(
+            __RPC__in IEnumBackgroundCopyFiles * This,
+            /* [in] */ ULONG celt,
+            /* [length_is][size_is][out] */ __RPC__out_ecount_part(celt, pceltFetched ? *pceltFetched : celt) IBackgroundCopyFile **rgelt,
+            /* [unique][out][in] */ __RPC__inout_opt ULONG *pceltFetched);
+
+        HRESULT ( STDMETHODCALLTYPE *Skip )(
+            __RPC__in IEnumBackgroundCopyFiles * This,
+            /* [in] */ ULONG celt);
+
+        HRESULT ( STDMETHODCALLTYPE *Reset )(
+            __RPC__in IEnumBackgroundCopyFiles * This);
+
+        HRESULT ( STDMETHODCALLTYPE *Clone )(
+            __RPC__in IEnumBackgroundCopyFiles * This,
+            /* [out] */ __RPC__deref_out_opt IEnumBackgroundCopyFiles **ppenum);
+
+        HRESULT ( STDMETHODCALLTYPE *GetCount )(
+            __RPC__in IEnumBackgroundCopyFiles * This,
+            /* [out] */ __RPC__out ULONG *puCount);
+
+        END_INTERFACE
+    } IEnumBackgroundCopyFilesVtbl;

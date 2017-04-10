@@ -61,6 +61,7 @@ TYPE_EQUIVALENCE = [
     ('ULONGLONG', 'c_ulonglong'),
     ('LONGLONG', 'c_longlong'),
     ('ULONG64', 'c_ulonglong'),
+    ('UINT64', 'ULONG64'),
     ('LONG64', 'c_longlong'),
     ('LARGE_INTEGER', 'LONGLONG'),
     ('PLARGE_INTEGER', 'POINTER(LARGE_INTEGER)'),
@@ -98,7 +99,8 @@ TYPE_EQUIVALENCE = [
     ('SPC_UUID', 'BYTE * 16'),
     #STUFF FOR COM (will be replace at runtime
     # real def in com_interface_header
-    ('GUID', 'PVOID'),
+    # ('GUID', 'PVOID'),
+    #('REFGUID', 'PVOID'),
     #('LPGUID', 'PVOID'),
     # STUFF FOR DBGENGINE
     ('PWINDBG_EXTENSION_APIS32', 'PVOID'),
@@ -196,6 +198,10 @@ class InitialDefGenerator(CtypesGenerator):
 
             __str__ = __repr__
 
+           # Fix pickling with protocol 2
+            def __getnewargs__(self, *args):
+                return self.name, long(self)
+
         class StrFlags(str):
             def __new__(cls, name, value):
                 if isinstance(value, cls):
@@ -208,7 +214,11 @@ class InitialDefGenerator(CtypesGenerator):
             def __repr__(self):
                 return "{0}({1})".format(self.name, str.__repr__(self))
 
-            __str__ = __repr__
+            # __str__ = __repr__
+
+            # Fix pickling with protocol 2
+            def __getnewargs__(self, *args):
+                return self.name, str.__str__(self)
 
         def make_flag(name, value):
             if isinstance(value, (int, long)):
@@ -427,9 +437,14 @@ class InitialCOMGenerator(CtypesGenerator):
     """)
     HEADER = dedent("""
     class IID(IID):
-        def __init__(self, Data1, Data2, Data3, Data4, name=None, strid=None):
+        def __init__(self, Data1=None, Data2=None, Data3=None, Data4=None, name=None, strid=None):
+            data_tuple = (Data1, Data2, Data3, Data4)
             self.name = name
             self.strid = strid
+            if all(data is None for data in data_tuple):
+                return super(IID, self).__init__()
+            if any(data is None for data in data_tuple):
+                raise ValueError("All or none of (Data1, Data2, Data3, Data4) should be None")
             super(IID, self).__init__(Data1, Data2, Data3, Data4)
 
         def __repr__(self):
@@ -438,6 +453,15 @@ class InitialCOMGenerator(CtypesGenerator):
             if self.name is None:
                 return '<IID "{0}">'.format(self.strid.upper())
             return '<IID "{0}({1})">'.format(self.strid.upper(), self.name)
+
+        def to_string(self):
+            data4_format = "{0:02X}{1:02X}-" + "".join("{{{i}:02X}}".format(i=i + 2) for i in range(6))
+            data4_str = data4_format.format(*self.Data4)
+            return "{0:08X}-{1:04X}-{2:04X}-".format(self.Data1, self.Data2, self.Data3) + data4_str
+
+        def update_strid(self):
+           new_strid = self.to_string()
+           self.strid = new_strid
 
         @classmethod
         def from_string(cls, iid):
@@ -457,6 +481,7 @@ class InitialCOMGenerator(CtypesGenerator):
 
     GUID = IID
     LPGUID = POINTER(GUID)
+    REFGUID = POINTER(GUID)
 
     class COMInterface(ctypes.c_void_p):
         _functions_ = {
@@ -557,7 +582,8 @@ class InitialCOMGenerator(CtypesGenerator):
         self.real_type = {}
         self.add_exports("IID")
         self.add_exports("GUID")
-        self.add_exports("LPGUID")
+        self.add_exports("LPGUID")  # setup in InitialCOMGenerator.HEADER
+        self.add_exports("REFGUID") # setup in InitialCOMGenerator.HEADER
         self.add_exports("COMInterface")
         self.add_exports("COMImplementation")
         for cominterface in data:
@@ -571,6 +597,9 @@ class InitialCOMGenerator(CtypesGenerator):
                 for pos, arg in enumerate(method.args):
                     initial_arg = arg
                     if arg.type in self.exports or arg.type in self.IGNORE_INTERFACE:
+                        # GUID type ?
+                        if arg.type in ["GUID", "REFGUID", "LPGUID", "IID"]:
+                            continue
                         # COM Interface ? -> PVOID !
                         atype = "PVOID"
                         byreflevel = arg.byreflevel - 1
@@ -612,6 +641,7 @@ class InitialCOMGenerator(CtypesGenerator):
                     for i in range(arg.byreflevel):
                         type = "POINTER({0})".format(type)
                     str_args.append(type)
+
                 methods_string.append(self.com_interface_method_template.format(method.name, ", ".join([method.ret_type] + str_args), method_nb))
             #import pdb;pdb.set_trace()
             if cominterface.iid is not None:
@@ -672,6 +702,7 @@ defs_with_ntstatus.append_input_file(from_here("definitions\\windef_error.txt"))
 
 structs = StructGenerator(from_here("definitions\\winstruct.txt"), from_here(r"..\windows\generated_def\\winstructs.py"), dependances=[defs_with_ntstatus])
 structs.append_input_file(from_here("definitions\\display_struct.txt"))
+structs.append_input_file(from_here("definitions\\winstruct_bits.txt"))
 
 functions = FuncGenerator(from_here("definitions\\winfunc.txt"), from_here(r"..\windows\generated_def\\winfuncs.py"), dependances=[structs])
 functions.append_input_file(from_here("definitions\\wintrust_crypt_func.txt"))

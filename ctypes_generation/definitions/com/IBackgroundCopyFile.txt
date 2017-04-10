@@ -1,0 +1,30 @@
+typedef struct IBackgroundCopyFileVtbl
+    {
+        BEGIN_INTERFACE
+
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+            __RPC__in IBackgroundCopyFile * This,
+            /* [in] */ __RPC__in REFIID riid,
+            /* [annotation][iid_is][out] */
+            __RPC__deref_out  void **ppvObject);
+
+        ULONG ( STDMETHODCALLTYPE *AddRef )(
+            __RPC__in IBackgroundCopyFile * This);
+
+        ULONG ( STDMETHODCALLTYPE *Release )(
+            __RPC__in IBackgroundCopyFile * This);
+
+        HRESULT ( STDMETHODCALLTYPE *GetRemoteName )(
+            __RPC__in IBackgroundCopyFile * This,
+            /* [out] */ __RPC__deref_out_opt LPWSTR *pVal);
+
+        HRESULT ( STDMETHODCALLTYPE *GetLocalName )(
+            __RPC__in IBackgroundCopyFile * This,
+            /* [out] */ __RPC__deref_out_opt LPWSTR *pVal);
+
+        HRESULT ( STDMETHODCALLTYPE *GetProgress )(
+            __RPC__in IBackgroundCopyFile * This,
+            /* [out] */ __RPC__out BG_FILE_PROGRESS *pVal);
+
+        END_INTERFACE
+    } IBackgroundCopyFileVtbl;

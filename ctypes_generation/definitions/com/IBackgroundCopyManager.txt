@@ -1,0 +1,41 @@
+typedef struct IBackgroundCopyManagerVtbl
+    {
+        BEGIN_INTERFACE
+
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+            __RPC__in IBackgroundCopyManager * This,
+            /* [in] */ __RPC__in REFIID riid,
+            /* [annotation][iid_is][out] */
+            __RPC__deref_out  void **ppvObject);
+
+        ULONG ( STDMETHODCALLTYPE *AddRef )(
+            __RPC__in IBackgroundCopyManager * This);
+
+        ULONG ( STDMETHODCALLTYPE *Release )(
+            __RPC__in IBackgroundCopyManager * This);
+
+        HRESULT ( STDMETHODCALLTYPE *CreateJob )(
+            __RPC__in IBackgroundCopyManager * This,
+            /* [in] */ __RPC__in LPCWSTR DisplayName,
+            /* [in] */ BG_JOB_TYPE Type,
+            /* [out] */ __RPC__out GUID *pJobId,
+            /* [out] */ __RPC__deref_out_opt IBackgroundCopyJob **ppJob);
+
+        HRESULT ( STDMETHODCALLTYPE *GetJob )(
+            __RPC__in IBackgroundCopyManager * This,
+            /* [in] */ __RPC__in REFGUID jobID,
+            /* [out] */ __RPC__deref_out_opt IBackgroundCopyJob **ppJob);
+
+        HRESULT ( STDMETHODCALLTYPE *EnumJobs )(
+            __RPC__in IBackgroundCopyManager * This,
+            /* [in] */ DWORD dwFlags,
+            /* [out] */ __RPC__deref_out_opt IEnumBackgroundCopyJobs **ppEnum);
+
+        HRESULT ( STDMETHODCALLTYPE *GetErrorDescription )(
+            __RPC__in IBackgroundCopyManager * This,
+            /* [in] */ HRESULT hResult,
+            /* [in] */ DWORD LanguageId,
+            /* [out] */ __RPC__deref_out_opt LPWSTR *pErrorDescription);
+
+        END_INTERFACE
+    } IBackgroundCopyManagerVtbl;
