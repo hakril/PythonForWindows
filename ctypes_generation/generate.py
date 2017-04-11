@@ -432,10 +432,13 @@ class InitialCOMGenerator(CtypesGenerator):
     IMPORT_HEADER = dedent("""
     import functools
     import ctypes
+
+
     {deps}
 
     """)
     HEADER = dedent("""
+    _GUID = IID
     class IID(IID):
         def __init__(self, Data1=None, Data2=None, Data3=None, Data4=None, name=None, strid=None):
             data_tuple = (Data1, Data2, Data3, Data4)
@@ -448,8 +451,15 @@ class InitialCOMGenerator(CtypesGenerator):
             super(IID, self).__init__(Data1, Data2, Data3, Data4)
 
         def __repr__(self):
+            notpresent = object()
+            # Handle IID created without '__init__' (like ctypes-ptr deref)
+            if getattr(self, "strid", notpresent) is notpresent:
+                self.strid = self.to_string()
             if self.strid is None:
                 return super(IID, self).__repr__()
+
+            if getattr(self, "name", notpresent) is notpresent:
+                self.name = None
             if self.name is None:
                 return '<IID "{0}">'.format(self.strid.upper())
             return '<IID "{0}({1})">'.format(self.strid.upper(), self.name)
@@ -477,11 +487,18 @@ class InitialCOMGenerator(CtypesGenerator):
         def from_raw(cls, Data1, Data2, Data3, Data41, Data42, Data43, Data44, Data45, Data46, Data47, Data48, **kwargs):
             return cls(Data1, Data2, Data3,  (BYTE*8)(Data41, Data42, Data43, Data44, Data45, Data46, Data47, Data48), **kwargs)
 
+        def __eq__(self, other):
+            if not isinstance(other, (IID, _GUID)):
+                return NotImplemented
+            return (self.Data1, self.Data2, self.Data3, self.Data4[:]) == (other.Data1, other.Data2, other.Data3, other.Data4[:])
+
     generate_IID = IID.from_raw
 
     GUID = IID
     LPGUID = POINTER(GUID)
     REFGUID = POINTER(GUID)
+    REFCLSID = POINTER(GUID)
+    REFIID = POINTER(GUID)
 
     class COMInterface(ctypes.c_void_p):
         _functions_ = {
@@ -538,8 +555,11 @@ class InitialCOMGenerator(CtypesGenerator):
             self.vtable_pointer = ctypes.pointer(self.vtable)
             self._as_parameter_ = ctypes.addressof(self.vtable_pointer)
 
-        def QueryInterface(self, *args):
-            return 1
+        def QueryInterface(self, this, piid, result):
+            if piid[0] in (IUnknown.IID, self.IMPLEMENT.IID):
+                result[0] = this
+                return 1
+            return E_NOINTERFACE
 
         def AddRef(self, *args):
             return 1
@@ -707,7 +727,7 @@ structs.append_input_file(from_here("definitions\\winstruct_bits.txt"))
 functions = FuncGenerator(from_here("definitions\\winfunc.txt"), from_here(r"..\windows\generated_def\\winfuncs.py"), dependances=[structs])
 functions.append_input_file(from_here("definitions\\wintrust_crypt_func.txt"))
 
-com = InitialCOMGenerator(from_here("definitions\\com\\*.txt"), DEFAULT_INTERFACE_TO_IID, from_here(r"..\windows\generated_def\\interfaces.py"), dependances=[structs])
+com = InitialCOMGenerator(from_here("definitions\\com\\*.txt"), DEFAULT_INTERFACE_TO_IID, from_here(r"..\windows\generated_def\\interfaces.py"), dependances=[structs, defs_with_ntstatus])
 
 
 if __name__ == "__main__":

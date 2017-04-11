@@ -1,0 +1,32 @@
+typedef struct IBackgroundCopyCallbackVtbl
+    {
+        BEGIN_INTERFACE
+
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+            __RPC__in IBackgroundCopyCallback * This,
+            /* [in] */ __RPC__in REFIID riid,
+            /* [annotation][iid_is][out] */
+            __RPC__deref_out  void **ppvObject);
+
+        ULONG ( STDMETHODCALLTYPE *AddRef )(
+            __RPC__in IBackgroundCopyCallback * This);
+
+        ULONG ( STDMETHODCALLTYPE *Release )(
+            __RPC__in IBackgroundCopyCallback * This);
+
+        HRESULT ( STDMETHODCALLTYPE *JobTransferred )(
+            __RPC__in IBackgroundCopyCallback * This,
+            /* [in] */ __RPC__in_opt IBackgroundCopyJob *pJob);
+
+        HRESULT ( STDMETHODCALLTYPE *JobError )(
+            __RPC__in IBackgroundCopyCallback * This,
+            /* [in] */ __RPC__in_opt IBackgroundCopyJob *pJob,
+            /* [in] */ __RPC__in_opt IBackgroundCopyError *pError);
+
+        HRESULT ( STDMETHODCALLTYPE *JobModification )(
+            __RPC__in IBackgroundCopyCallback * This,
+            /* [in] */ __RPC__in_opt IBackgroundCopyJob *pJob,
+            /* [in] */ DWORD dwReserved);
+
+        END_INTERFACE
+    } IBackgroundCopyCallbackVtbl;
