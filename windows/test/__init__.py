@@ -5,7 +5,9 @@ from mytest import WindowsTestCase, WindowsAPITestCase, NativeUtilsTestCase, Sys
 from test_hooks import HookTestCase
 from test_debugger import DebuggerTestCase
 from test_syswow import SyswowTestCase
+from test_crypto import CryptoTestCase
 
 
 __all__ = ["SystemTestCase", "WindowsTestCase", "WindowsAPITestCase",
-        "DebuggerTestCase", "NativeUtilsTestCase", "HookTestCase", "SyswowTestCase"]
+        "DebuggerTestCase", "NativeUtilsTestCase", "HookTestCase", "SyswowTestCase",
+        "CryptoTestCase"]

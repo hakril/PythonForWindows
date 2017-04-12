@@ -42,8 +42,7 @@ class SyswowTestCase(unittest.TestCase):
             import windows
             import windows.native_exec.simple_x64 as x64
             windows.utils.create_console()
-            windows.current_process.write_qword({0},  0x8877665544332211)
-            x64_code = x64.assemble("mov r11, 0x1122334455667788; label :loop; jmp :loop; nop; nop; ret")
+            x64_code = x64.assemble("mov r11, 0x1122334455667788; mov rax, 0x8877665544332211; mov [{0}], rax ;label :loop; jmp :loop; nop; nop; ret")
             res = windows.syswow64.execute_64bits_code_from_syswow(x64_code)
             print("res = {{0}}".format(hex(res)))
             windows.current_process.write_qword({0},  res)
