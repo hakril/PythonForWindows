@@ -46,11 +46,10 @@ def encrypt(cert_or_certlist, msg, algo=szOID_RSA_DES_EDE3_CBC, initvector=genin
     """
     alg_ident = CRYPT_ALGORITHM_IDENTIFIER()
     alg_ident.pszObjId = algo
-    # Is 'certs' an iterable ?
-    try:
-        certlist = tuple(cert_or_certlist)
-    except TypeError as e:
+    if isinstance(cert_or_certlist, PCERT_CONTEXT):
         certlist = (cert_or_certlist,)
+    else:
+        certlist = tuple(cert_or_certlist)
 
     # Set (compute if needed) the IV
     if initvector is None:

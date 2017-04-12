@@ -32,6 +32,10 @@ CRYPT_OBJECT_FORMAT_TYPE_DICT = {x:x for x in CRYPT_OBJECT_FORMAT_TYPE}
 
 ## Move CryptObject to new .py ?
 class CryptObject(object):
+    """Extract information from an CryptoAPI object.
+
+       Current main use is extracting the signers certificates from a PE file.
+    """
     MSG_PARAM_KNOW_TYPES = {CMSG_SIGNER_INFO_PARAM: CMSG_SIGNER_INFO,
                             CMSG_SIGNER_COUNT_PARAM: DWORD,
                             CMSG_CERT_COUNT_PARAM: DWORD}
@@ -71,17 +75,30 @@ class CryptObject(object):
         winproxy.CryptMsgGetParam(self.hmsg, param_type, index, buffer, signer_info)
 
         if param_type in self.MSG_PARAM_KNOW_TYPES:
-            buffer = self.MSG_PARAM_KNOW_TYPES[param_type].from_buffer_copy(buffer)
+            buffer = self.MSG_PARAM_KNOW_TYPES[param_type].from_buffer(buffer)
         return buffer
 
-    def get_nb_signer(self):
+    @property
+    def nb_signer(self):
+        """The number of signers for the CryptObject
+
+        :type: :class:`int`
+        """
         return self.msg_get_param(CMSG_SIGNER_COUNT_PARAM).value
 
     def get_signer_data(self, index=0):
+        """Returns the signer informations for signer nb ``index``
+
+        :return: :class:`CMSG_SIGNER_INFO`
+        """
         return self.msg_get_param(CMSG_SIGNER_INFO_PARAM, index)
 
-    def get_signer_certificate(self):
-        data = self.get_signer_data()
+    def get_signer_certificate(self, index=0):
+        """Return the certificate used for signer nb ``index``
+
+        :return: :class:`CertificateContext`
+        """
+        data = self.get_signer_data(index)
         cert_info = CERT_INFO()
         cert_info.Issuer = data.Issuer
         cert_info.SerialNumber = data.SerialNumber
@@ -93,19 +110,23 @@ class CryptObject(object):
         return self.msg_get_param(CMSG_CERT_PARAM, index)
 
     def get_cert(self, index=0):
+        """Return embded certificate number ``index``.
+
+        note: not all embded certificate are directly used to sign the :class:`CryptObject`.
+
+        :return: :class:`CertificateContext`
+        """
         return CertificateContext.from_buffer(self.get_raw_cert(index))
 
     cert = property(get_cert)
 
-    #@property
+    @property
     def nb_cert(self):
-        "TEST"
+        """The number of certificate embded in the :class:`CryptObject`
+
+        :type: :class:`int`
+        """
         return self.msg_get_param(CMSG_CERT_COUNT_PARAM).value
-
-    #@property
-    def all_certs(self):
-        return [self.get_cert(i) for i in range(self.nb_cert())]
-
 
     def __repr__(self):
         return '<{0} "{1}" content_type={2}>'.format(type(self).__name__, self.filename, self.content_type)

@@ -42,10 +42,22 @@ CertificateContext
 
 .. autoclass:: CertificateContext
 
+
 EHCERTSTORE
 '''''''''''
 
 .. autoclass:: EHCERTSTORE
+
+
+CryptObject
+'''''''''''
+
+.. autoclass:: CryptObject
+
+    .. warning::
+
+        The methods and property of this class will problably change as I haven't yet had the time
+        to try it out in real cases.
 
 
 CryptContext

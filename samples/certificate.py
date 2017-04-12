@@ -1,3 +1,4 @@
+import hashlib
 import windows.crypto
 
 windowscert = """-----BEGIN CERTIFICATE-----
@@ -35,15 +36,15 @@ raw_cert = ("".join(windowscert.split("\n")[1:-1])).decode('base64')
 cert = windows.crypto.CertificateContext.from_buffer(raw_cert)
 
 print("Analysing certificate: {0}".format(cert))
-print("* name: <{0}>".format(cert.name))
-print("* issuer: <{0}>".format(cert.issuer))
-print("* raw_serial: <{0}>".format(cert.raw_serial))
-print("* serial: <{0}>".format(cert.serial))
-print("* encoded start: <{0!r}>".format(cert.encoded[:20]))
+print("    * name: <{0}>".format(cert.name))
+print("    * issuer: <{0}>".format(cert.issuer))
+print("    * raw_serial: <{0}>".format(cert.raw_serial))
+print("    * serial: <{0}>".format(cert.serial))
+print("    * encoded start: <{0!r}>".format(cert.encoded[:20]))
 
 print ""
 chains = cert.chains
-print("This certificate has {0} certificate chain".format(len(chains)))
+print("This certificate has {0} certificate chain(s)".format(len(chains)))
 for i, chain in enumerate(chains):
     print("Chain {0}:".format(i))
     for ccert in chain:
@@ -64,3 +65,24 @@ if matchs:
     print("Found it !")
 else:
     print("Not found :(")
+
+## Extract certificates of a PE file
+
+print ("")
+print ("== PE Analysis ==")
+TARGET_FILE = r"C:\windows\system32\ntdll.dll"
+print("Target sha1 = <{0}>".format(hashlib.sha1(open(TARGET_FILE, "rb").read()).hexdigest()))
+cryptobj = windows.crypto.CryptObject(TARGET_FILE)
+print("Analysing {0}".format(cryptobj))
+print("File has {0} signer(s):".format(cryptobj.nb_signer))
+for i, signer in ((i, cryptobj.get_signer_data(i)) for i in range(cryptobj.nb_signer)):
+    print("Signer {0}:".format(i))
+    print("   * Issuer: {0!r}".format(windows.crypto.ECRYPT_DATA_BLOB(signer.Issuer.cbData, signer.Issuer.pbData).data))
+    print("   * HashAlgorithme: {0}".format(signer.HashAlgorithm.pszObjId))
+    cert = cryptobj.get_signer_certificate(i)
+    print("   * Certificate: {0}".format(cert))
+
+print("")
+print("File embdeds {0} certificate(s):".format(cryptobj.nb_cert))
+for i, certificate in ((i, cryptobj.get_cert(i)) for i in range(cryptobj.nb_cert)):
+    print("   * {0}) {1}".format(i, certificate))

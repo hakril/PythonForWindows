@@ -525,7 +525,7 @@ This sample is a working POC able to generate key-pair, encrypt and decrypt file
 
 Ouput::
 
-    (cmd λ) python samples\encryption_demo.py genkey YOLOCERTIF mykey --pfxpassword MYPASSWORD
+    (cmd λ) python ..\samples\encryption_demo.py genkey YOLOCERTIF mykey --pfxpassword MYPASSWORD
     <CertificatContext "YOLOCERTIF" serial="1b a4 3e 17 f7 ed ec ab 4f f8 11 46 48 e9 29 25">
 
     (cmd λ) ls
@@ -533,7 +533,7 @@ Ouput::
 
     (cmd λ) echo|set /p="my secret message" > message.txt
 
-    (cmd λ) python samples\encryption_demo.py crypt message.txt message.crypt mykey.cer
+    (cmd λ) python ..\samples\encryption_demo.py crypt message.txt message.crypt mykey.cer
     Encryption done. Result:
     bytearray(b'0\x82\x01\x19\x06\t*\x86H\x86\xf7\r\x01\x07\x03\xa0\x82\x01\n0\x82\x01\x06\x02\x01\x001\x81\xc30\x81
     \xc0\x02\x01\x000)0\x151\x130\x11\x06\x03U\x04\x03\x13\nYOLOCERTIF\x02\x10\x1b\xa4>\x17\xf7\xed\xec\xabO\xf8\x11
@@ -543,7 +543,7 @@ Ouput::
     \xc6\x12x\x1am\xc8\x01t\xac\xa6\xf3#\x02\xd4J \x8eZ\xbb\x10W\xe1 0;\x06\t*\x86H\x86\xf7\r\x01\x07\x010\x14\x06\x08*
     \x86H\x86\xf7\r\x03\x07\x04\x08\x14F\x04\xad\xed9\xed<\x80\x18\x80]6\xccTV\xbc\xb8*\x84QY!~\xb3\n\x1aV\xd4\rf\xd1n:')
 
-    (cmd λ) python samples\encryption_demo.py decrypt message.crypt mykey.pfx BADPASS
+    (cmd λ) python ..\samples\encryption_demo.py decrypt message.crypt mykey.pfx BADPASS
     Traceback (most recent call last):
     File "..\samples\encryption_demo.py", line 103, in <module>
         res.func(**res.__dict__)
@@ -576,13 +576,13 @@ Ouput::
 
     (cmd λ) python .\samples\certificate.py
     Analysing certificate: <CertificateContext "Microsoft Windows" serial="33 00 00 01 06 6e c3 25 c4 31 c9 18 0e 00 00 00 00 01 06">
-    * name: <Microsoft Windows>
-    * issuer: <Microsoft Windows Production PCA 2011>
-    * raw_serial: <[51, 0, 0, 1, 6, 110, 195, 37, 196, 49, 201, 24, 14, 0, 0, 0, 0, 1, 6]>
-    * serial: <33 00 00 01 06 6e c3 25 c4 31 c9 18 0e 00 00 00 00 01 06>
-    * encoded start: <bytearray(b'0\x82\x05\x040\x82\x03\xec\xa0\x03\x02\x01\x02\x02\x133\x00\x00\x01\x06')>
+        * name: <Microsoft Windows>
+        * issuer: <Microsoft Windows Production PCA 2011>
+        * raw_serial: <[51, 0, 0, 1, 6, 110, 195, 37, 196, 49, 201, 24, 14, 0, 0, 0, 0, 1, 6]>
+        * serial: <33 00 00 01 06 6e c3 25 c4 31 c9 18 0e 00 00 00 00 01 06>
+        * encoded start: <bytearray(b'0\x82\x05\x040\x82\x03\xec\xa0\x03\x02\x01\x02\x02\x133\x00\x00\x01\x06')>
 
-    This certificate has 1 certificate chain
+    This certificate has 1 certificate chain(s)
     Chain 0:
     <CertificateContext "Microsoft Windows" serial="33 00 00 01 06 6e c3 25 c4 31 c9 18 0e 00 00 00 00 01 06">:
         * issuer: <Microsoft Windows Production PCA 2011>
@@ -594,3 +594,16 @@ Ouput::
     Looking for <Microsoft Root Certificate Authority 2010> in trusted certificates
     matches = [<CertificateContext "Microsoft Root Certificate Authority 2010" serial="28 cc 3a 25 bf ba 44 ac 44 9a 9b 58 6b 43 39 aa">]
     Found it !
+
+    == PE Analysis ==
+    Target sha1 = <059cb1ba1a41433a18dd8f87422c2ac3bf35b7b8>
+    Analysing <CryptObject "C:\windows\system32\ntdll.dll" content_type=CERT_QUERY_CONTENT_PKCS7_SIGNED_EMBED(0xaL)>
+    File has 1 signer(s):
+    Signer 0:
+    * Issuer: bytearray(b'0\x81\x841\x0b0\t\x06\x03U\x04\x06\x13\x02US1\x130\x11\x06\x03U\x04\x08\x13\nWashington1\x100\x0e\x06\x03U\x04\x07\x13\x07Redmond1\x1e0\x1c\x06\x03U\x04\n\x13\x15Microsoft Corporation1.0,\x06\x03U\x04\x03\x13%Microsoft Windows Production PCA 2011')
+    * HashAlgorithme: 2.16.840.1.101.3.4.2.1
+    * Certificate: <CertificateContext "Microsoft Windows" serial="33 00 00 01 06 6e c3 25 c4 31 c9 18 0e 00 00 00 00 01 06">
+
+    File embdeds 2 certificate(s):
+    * 0) <CertificateContext "Microsoft Windows" serial="33 00 00 01 06 6e c3 25 c4 31 c9 18 0e 00 00 00 00 01 06">
+    * 1) <CertificateContext "Microsoft Windows Production PCA 2011" serial="61 07 76 56 00 00 00 00 00 08">
