@@ -43,7 +43,7 @@ class PyHKey(object):
         try:
             self._phkey = _winreg.OpenKeyEx(self.surkey.phkey, self.name, 0, self.sam)
         except WindowsError as e:
-            raise WindowsError("Could not open registry key <{0}> ({1})".format(self.fullname, e))
+            raise WindowsError(e.winerror, "Could not open registry key <{0}> ({1})".format(self.fullname, e.strerror))
         return self._phkey
 
 
@@ -165,8 +165,8 @@ class Registry(object):
     def __call__(self, name, sam=KEY_READ):
         """Get a registry key::
 
-            registry[r"HKEY_LOCAL_MACHINE\\Software"]
-            registry["HKEY_LOCAL_MACHINE"]["Software"]
+            registry(r"HKEY_LOCAL_MACHINE\\Software")
+            registry("HKEY_LOCAL_MACHINE")("Software")
 
         :rtype: :class:`PyHKey`
         """
