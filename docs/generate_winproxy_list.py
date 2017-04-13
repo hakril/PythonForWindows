@@ -16,7 +16,7 @@ functions = [f for f in all_in_module if hasattr(f, "prototype") and f not in tr
 print ("Transparent proxies:")
 print("")
 for f in transp:
-    print("* {0}({1})".format(f.func_name, ", ".join([x[1] for x in f.args])))
+    print("* {0}({1})".format(f.target_func, ", ".join([x[1] for x in f.params])))
 
 print ("Functions:")
 print("")

@@ -122,6 +122,7 @@ Transparent proxies:
 * GetWindowTextW(hWnd, lpString, nMaxCount)
 * LoadLibraryA(lpFileName)
 * LoadLibraryW(lpFileName)
+* LocalFree(hMem)
 * QueryDosDeviceA(lpDeviceName, lpTargetPath, ucchMax)
 * QueryDosDeviceW(lpDeviceName, lpTargetPath, ucchMax)
 * ResumeThread(hThread)
@@ -137,7 +138,6 @@ Transparent proxies:
 * Wow64RevertWow64FsRedirection(OldValue)
 * lstrcmpA(lpString1, lpString2)
 * lstrcmpW(lpString1, lpString2)
-
 Functions:
 
 * AddVectoredContinueHandler::
@@ -168,6 +168,99 @@ Functions:
 
     AlpcInitializeMessageAttribute(AttributeFlags, Buffer, BufferSize, RequiredBufferSize)
 
+* CertAddCertificateContextToStore::
+
+    CertAddCertificateContextToStore(hCertStore, pCertContext, dwAddDisposition, ppStoreContext)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* CertCompareCertificate::
+
+    CertCompareCertificate(dwCertEncodingType, pCertId1, pCertId2)
+    This function does not raise is compare has failed:
+            return 0 if cert are NOT equals
+
+    Errcheck:
+       Nothing special
+
+* CertCreateCertificateContext::
+
+    CertCreateCertificateContext(dwCertEncodingType, pbCertEncoded, cbCertEncoded)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* CertCreateSelfSignCertificate::
+
+    CertCreateSelfSignCertificate(hCryptProvOrNCryptKey, pSubjectIssuerBlob, dwFlags, pKeyProvInfo, pSignatureAlgorithm, pStartTime, pEndTime, pExtensions)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* CertDuplicateCertificateContext::
+
+    CertDuplicateCertificateContext(pCertContext)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* CertEnumCertificateContextProperties::
+
+    CertEnumCertificateContextProperties(pCertContext, dwPropId)
+    Errcheck:
+       Nothing special
+
+* CertEnumCertificatesInStore::
+
+    CertEnumCertificatesInStore(hCertStore, pPrevCertContext)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* CertFindCertificateInStore::
+
+    CertFindCertificateInStore(hCertStore, dwCertEncodingType, dwFindFlags, dwFindType, pvFindPara, pPrevCertContext)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* CertGetCertificateChain::
+
+    CertGetCertificateChain(hChainEngine, pCertContext, pTime, hAdditionalStore, pChainPara, dwFlags, pvReserved, ppChainContext)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* CertGetCertificateContextProperty::
+
+    CertGetCertificateContextProperty(pCertContext, dwPropId, pvData, pcbData)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* CertGetNameStringA::
+
+    CertGetNameStringA(pCertContext, dwType, dwFlags, pvTypePara, pszNameString, cchNameString)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* CertGetNameStringW::
+
+    CertGetNameStringW(pCertContext, dwType, dwFlags, pvTypePara, pszNameString, cchNameString)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* CertOpenStore::
+
+    CertOpenStore(lpszStoreProvider, dwMsgAndCertEncodingType, hCryptProv, dwFlags, pvPara)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* CertStrToNameA::
+
+    CertStrToNameA(dwCertEncodingType, pszX500, dwStrType, pvReserved, pbEncoded, pcbEncoded, ppszError)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* CertStrToNameW::
+
+    CertStrToNameW(dwCertEncodingType, pszX500, dwStrType, pvReserved, pbEncoded, pcbEncoded, ppszError)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
 * CoCreateInstance::
 
     CoCreateInstance(rclsid, pUnkOuter=None, dwClsContext=tagCLSCTX.CLSCTX_INPROC_SERVER(0x1L), riid=NeededParameter, ppv=NeededParameter)
@@ -185,6 +278,30 @@ Functions:
     CoInitializeSecurity(pSecDesc, cAuthSvc, asAuthSvc, pReserved1, dwAuthnLevel, dwImpLevel, pAuthList, dwCapabilities, pReserved3)
     Errcheck:
        Nothing special
+
+* ConvertSidToStringSidA::
+
+    ConvertSidToStringSidA(Sid, StringSid)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* ConvertSidToStringSidW::
+
+    ConvertSidToStringSidW(Sid, StringSid)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* ConvertStringSidToSidA::
+
+    ConvertStringSidToSidA(StringSid, Sid)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* ConvertStringSidToSidW::
+
+    ConvertStringSidToSidW(StringSid, Sid)
+    Errcheck:
+       raise Kernel32Error if result is 0
 
 * CreateFileA::
 
@@ -240,6 +357,24 @@ Functions:
     Errcheck:
        raise Kernel32Error if result is 0
 
+* CryptAcquireCertificatePrivateKey::
+
+    CryptAcquireCertificatePrivateKey(pCert, dwFlags, pvParameters, phCryptProvOrNCryptKey, pdwKeySpec, pfCallerFreeProvOrNCryptKey)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* CryptAcquireContextA::
+
+    CryptAcquireContextA(phProv, pszContainer, pszProvider, dwProvType, dwFlags)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* CryptAcquireContextW::
+
+    CryptAcquireContextW(phProv, pszContainer, pszProvider, dwProvType, dwFlags)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
 * CryptCATAdminAcquireContext::
 
     CryptCATAdminAcquireContext(phCatAdmin, pgSubsystem, dwFlags)
@@ -276,6 +411,66 @@ Functions:
     Errcheck:
        raise Kernel32Error if result is 0
 
+* CryptDecodeObject::
+
+    CryptDecodeObject(dwCertEncodingType, lpszStructType, pbEncoded, cbEncoded, dwFlags, pvStructInfo, pcbStructInfo)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* CryptDecryptMessage::
+
+    CryptDecryptMessage(pDecryptPara, pbEncryptedBlob, cbEncryptedBlob, pbDecrypted, pcbDecrypted, ppXchgCert)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* CryptDestroyKey::
+
+    CryptDestroyKey(hKey)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* CryptEncodeObjectEx::
+
+    CryptEncodeObjectEx(dwCertEncodingType, lpszStructType, pvStructInfo, dwFlags, pEncodePara, pvEncoded, pcbEncoded)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* CryptEncryptMessage::
+
+    CryptEncryptMessage(pEncryptPara, cRecipientCert, rgpRecipientCert, pbToBeEncrypted, cbToBeEncrypted, pbEncryptedBlob, pcbEncryptedBlob)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* CryptExportKey::
+
+    CryptExportKey(hKey, hExpKey, dwBlobType, dwFlags, pbData, pdwDataLen)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* CryptGenKey::
+
+    CryptGenKey(hProv, Algid, dwFlags, phKey)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* CryptMsgGetParam::
+
+    CryptMsgGetParam(hCryptMsg, dwParamType, dwIndex, pvData, pcbData)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* CryptQueryObject::
+
+    CryptQueryObject(dwObjectType, pvObject, dwExpectedContentTypeFlags, dwExpectedFormatTypeFlags, dwFlags, pdwMsgAndCertEncodingType, pdwContentType, pdwFormatType, phCertStore, phMsg, ppvContext)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* CryptReleaseContext::
+
+    CryptReleaseContext(hProv, dwFlags)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
 * DeviceIoControl::
 
     DeviceIoControl(hDevice, dwIoControlCode, lpInBuffer, nInBufferSize=None, lpOutBuffer=NeededParameter, nOutBufferSize=None, lpBytesReturned=None, lpOverlapped=None)
@@ -297,6 +492,12 @@ Functions:
 * EnumServicesStatusExW::
 
     EnumServicesStatusExW(hSCManager, InfoLevel, dwServiceType, dwServiceState, lpServices, cbBufSize, pcbBytesNeeded, lpServicesReturned, lpResumeHandle, pszGroupName)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* GetCursorPos::
+
+    GetCursorPos(lpPoint)
     Errcheck:
        raise Kernel32Error if result is 0
 
@@ -348,6 +549,12 @@ Functions:
     Errcheck:
        raise IphlpapiError if result is NOT 0
 
+* GetLongPathNameA::
+
+    GetLongPathNameA(lpszShortPath, lpszLongPath, cchBuffer=None)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
 * GetMappedFileNameAWrapper::
 
     GetMappedFileNameAWrapper(hProcess, lpv, lpFilename, nSize=None)
@@ -409,6 +616,24 @@ Functions:
     GetModuleBaseNameWWrapper(hProcess, hModule, lpBaseName, nSize=None)
     Errcheck:
        raise Kernel32Error if result is 0
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* GetNamedSecurityInfoA::
+
+    GetNamedSecurityInfoA(pObjectName, ObjectType, SecurityInfo, ppsidOwner=None, ppsidGroup=None, ppDacl=None, ppSacl=None, ppSecurityDescriptor=None)
+    Errcheck:
+       raise Kernel32Error if result is NOT 0
+
+* GetNamedSecurityInfoW::
+
+    GetNamedSecurityInfoW(pObjectName, ObjectType, SecurityInfo, ppsidOwner=None, ppsidGroup=None, ppDacl=None, ppSacl=None, ppSecurityDescriptor=None)
+    Errcheck:
+       raise Kernel32Error if result is NOT 0
+
+* GetProcessDEPPolicy::
+
+    GetProcessDEPPolicy(hProcess, lpFlags, lpPermanent)
     Errcheck:
        raise Kernel32Error if result is 0
 
@@ -450,6 +675,18 @@ Functions:
     Errcheck:
        raise Kernel32Error if result is 0
 
+* GetSecurityInfo::
+
+    GetSecurityInfo(handle, ObjectType, SecurityInfo, ppsidOwner=None, ppsidGroup=None, ppDacl=None, ppSacl=None, ppSecurityDescriptor=None)
+    Errcheck:
+       raise Kernel32Error if result is NOT 0
+
+* GetShortPathNameA::
+
+    GetShortPathNameA(lpszLongPath, lpszShortPath, cchBuffer=None)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
 * GetThreadContext::
 
     GetThreadContext(hThread, lpContext=None)
@@ -471,6 +708,12 @@ Functions:
 * GetVolumeInformationW::
 
     GetVolumeInformationW(lpRootPathName, lpVolumeNameBuffer=None, nVolumeNameSize=0, lpVolumeSerialNumber=None, lpMaximumComponentLength=None, lpFileSystemFlags=None, lpFileSystemNameBuffer=None, nFileSystemNameSize=0)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* GetWindowRect::
+
+    GetWindowRect(hWnd, lpRect)
     Errcheck:
        raise Kernel32Error if result is 0
 
@@ -516,6 +759,10 @@ Functions:
 
     NtAlpcConnectPort(PortHandle, PortName, ObjectAttributes, PortAttributes, Flags, RequiredServerSid, ConnectionMessage, BufferLength, OutMessageAttributes, InMessageAttributes, Timeout)
 
+* NtAlpcConnectPortEx::
+
+    NtAlpcConnectPortEx(PortHandle, ConnectionPortObjectAttributes, ClientPortObjectAttributes, PortAttributes, Flags, ServerSecurityRequirements, ConnectionMessage, BufferLength, OutMessageAttributes, InMessageAttributes, Timeout)
+
 * NtAlpcCreatePort::
 
     NtAlpcCreatePort(PortHandle, ObjectAttributes, PortAttributes)
@@ -523,6 +770,10 @@ Functions:
 * NtAlpcSendWaitReceivePort::
 
     NtAlpcSendWaitReceivePort(PortHandle, Flags, SendMessage, SendMessageAttributes, ReceiveMessage, BufferLength, ReceiveMessageAttributes, Timeout)
+
+* NtCreateFile::
+
+    NtCreateFile(FileHandle, DesiredAccess, ObjectAttributes, IoStatusBlock, AllocationSize, FileAttributes, ShareAccess, CreateDisposition, CreateOptions, EaBuffer, EaLength)
 
 * NtCreateThreadEx::
 
@@ -631,6 +882,24 @@ Functions:
     Errcheck:
        raise Kernel32Error if result is 0
 
+* OpenThreadToken::
+
+    OpenThreadToken(ThreadHandle, DesiredAccess, OpenAsSelf, TokenHandle)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* PFXExportCertStoreEx::
+
+    PFXExportCertStoreEx(hStore, pPFX, szPassword, pvPara, dwFlags)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* PFXImportCertStore::
+
+    PFXImportCertStore(pPFX, szPassword, dwFlags)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
 * Process32First::
 
     Process32First(hSnapshot, lpte)
@@ -675,6 +944,12 @@ Functions:
     Errcheck:
        raise Kernel32Error if result is 0
 
+* ReadFile::
+
+    ReadFile(hFile, lpBuffer, nNumberOfBytesToRead=None, lpNumberOfBytesRead=None, lpOverlapped=None)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
 * ReadProcessMemory::
 
     ReadProcessMemory(hProcess, lpBaseAddress, lpBuffer, nSize, lpNumberOfBytesRead=None)
@@ -711,9 +986,31 @@ Functions:
     Errcheck:
        raise Kernel32Error if result is NOT 0
 
+* RegQueryValueExA::
+
+    RegQueryValueExA(hKey, lpValueName, lpReserved, lpType, lpData, lpcbData)
+    Errcheck:
+       raise Kernel32Error if result is NOT 0
+
+* RegQueryValueExW::
+
+    RegQueryValueExW(hKey, lpValueName, lpReserved, lpType, lpData, lpcbData)
+    Errcheck:
+       raise Kernel32Error if result is NOT 0
+
 * RemoveVectoredExceptionHandler::
 
     RemoveVectoredExceptionHandler(Handler)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* RtlDecompressBuffer::
+
+    RtlDecompressBuffer(CompressionFormat, UncompressedBuffer, UncompressedBufferSize, CompressedBuffer, CompressedBufferSize, FinalUncompressedSize)
+
+* SetConsoleCtrlHandler::
+
+    SetConsoleCtrlHandler(HandlerRoutine, Add)
     Errcheck:
        raise Kernel32Error if result is 0
 
@@ -727,6 +1024,24 @@ Functions:
 * SetThreadContext::
 
     SetThreadContext(hThread, lpContext)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* SetTokenInformation::
+
+    SetTokenInformation(TokenHandle, TokenInformationClass, TokenInformation, TokenInformationLength)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* ShellExecuteA::
+
+    ShellExecuteA(hwnd, lpOperation, lpFile, lpParameters, lpDirectory, nShowCmd)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* ShellExecuteW::
+
+    ShellExecuteW(hwnd, lpOperation, lpFile, lpParameters, lpDirectory, nShowCmd)
     Errcheck:
        raise Kernel32Error if result is 0
 
@@ -809,6 +1124,12 @@ Functions:
     WinVerifyTrust(hwnd, pgActionID, pWVTData)
     Errcheck:
        Nothing special
+
+* WindowFromPoint::
+
+    WindowFromPoint(Point)
+    Errcheck:
+       raise Kernel32Error if result is 0
 
 * Wow64SetThreadContext::
 

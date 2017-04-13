@@ -232,7 +232,7 @@ class CertificateContext(PCCERT_CONTEXT):
 
 
     def get_name(self, nametype=CERT_NAME_SIMPLE_DISPLAY_TYPE, flags=0):
-        """Retrieve the subject or issuer name of the certificate. See CertGetNameStringA
+        """Retrieve the subject or issuer name of the certificate. See ``CertGetNameStringA``
 
         :returns: :class:`str`
         """
@@ -340,7 +340,7 @@ class CertificateContext(PCCERT_CONTEXT):
 
     @classmethod
     def from_file(cls, filename):
-        """Create a :class:`CertificateContext` for the file ``filename``
+        """Create a :class:`CertificateContext` from the file ``filename``
 
         :return: :class:`CertificateContext`
         """
