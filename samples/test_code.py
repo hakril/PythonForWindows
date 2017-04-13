@@ -1,4 +1,5 @@
 import sys
+import argparse
 
 import windows
 import windows.test
@@ -6,6 +7,7 @@ import windows.debug as dbg
 import windows.native_exec.simple_x86 as x86
 import windows.native_exec.simple_x64 as x64
 from windows.generated_def import *
+
 
 def hexdump(string, start_addr=0):
     result = ""
@@ -112,17 +114,17 @@ class CodeTesteur(dbg.Debugger):
             print(hexdump(data, start.sp))
 
 
-def test_code_x86(raw=False):
+def test_code_x86(code, regs=None, raw=False, **kwargs):
     print("Testing x86 code")
     process = windows.test.pop_calc_32(dwCreationFlags=DEBUG_PROCESS)
     if raw:
-        code = sys.argv[1].replace(" ", "").decode('hex')
+        code = code.replace(" ", "").decode('hex')
     else:
-        code = x86.assemble(sys.argv[1])
+        code = x86.assemble(code)
 
     start_register = {}
-    if len(sys.argv) > 2:
-        for name_value in sys.argv[2].split(";"):
+    if regs:
+        for name_value in regs.split(";"):
             name, value = name_value.split("=")
             name = name.strip().capitalize()
             if name == "Eflags":
@@ -134,19 +136,19 @@ def test_code_x86(raw=False):
     x = CodeTesteur(process, code, start_register)
     x.loop()
 
-def test_code_x64(raw=False):
+def test_code_x64(code, regs=None, raw=False, **kwargs):
     print("Testing x64 code")
     if windows.current_process.bitness == 32:
         raise ValueError("Cannot debug a 64b process from 32b python")
     process = windows.test.pop_calc_64(dwCreationFlags=DEBUG_PROCESS)
     if raw:
-        code = sys.argv[1].replace(" ", "").decode('hex')
+        code = code.replace(" ", "").decode('hex')
     else:
-        code = x64.assemble(sys.argv[1])
+        code = x64.assemble(code)
 
     start_register = {}
-    if len(sys.argv) > 2:
-        for name_value in sys.argv[2].split(";"):
+    if regs:
+        for name_value in regs.split(";"):
             name, value = name_value.split("=")
             name = name.strip().capitalize()
             if name == "Eflags":
@@ -158,27 +160,14 @@ def test_code_x64(raw=False):
     x = CodeTesteur(process, code, start_register)
     x.loop()
 
-import sys
-if len(sys.argv) < 2:
-    print("Need x86 code to exec as first argument")
-    exit(1)
 
-if sys.argv[1] == "-x64":
-    sys.argv.remove("-x64")
-    test_code_x64()
-elif sys.argv[1] == "--raw":
-    sys.argv.remove("--raw")
-    test_code_x86(raw=True)
-elif sys.argv[1] == "--raw64":
-    sys.argv.remove("--raw64")
-    test_code_x64(raw=True)
-else:
-    test_code_x86()
+parser = argparse.ArgumentParser(prog=__file__)
 
+parser.add_argument('--x64', action='store_const', dest="func", const=test_code_x64, default=test_code_x86, help='Code is x64')
+parser.add_argument('--raw', action='store_true', help='argument is raw assembled code (in hex)')
+parser.add_argument('code', help='The code to execute')
+parser.add_argument('regs', nargs="?", help='The default values of the registers')
 
+res = parser.parse_args()
 
-
-
-
-
-#test_code(c, "\xcc")
+res.func(**res.__dict__)

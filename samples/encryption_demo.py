@@ -80,7 +80,7 @@ def genkeys(common_name, pfxpassword, outname, **kwargs):
     prov = HCRYPTPROV()
     winproxy.CryptAcquireContextW(prov, PFW_TMP_KEY_CONTAINER, None, PROV_RSA_FULL, CRYPT_DELETEKEYSET)
 
-parser = argparse.ArgumentParser(prog='PROG')
+parser = argparse.ArgumentParser(prog=__file__)
 subparsers = parser.add_subparsers(description='valid subcommands',)
 
 cryptparse = subparsers.add_parser('crypt')

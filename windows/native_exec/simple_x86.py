@@ -779,6 +779,16 @@ class ScasD(Instruction):
     encoding = [(RawBits.from_int(8, 0xAF),)]
 
 
+class StosB(Instruction):
+    encoding = [(RawBits.from_int(8, 0xAA),)]
+
+class StosW(Instruction):
+    encoding = [(RawBits.from_int(16,  0x66AB),)]
+
+class StosD(Instruction):
+    encoding = [(RawBits.from_int(8, 0xAB),)]
+
+
 class CmpsB(Instruction):
     default_32_bits = True
     encoding = [(RawBits.from_int(8, 0xa6),)]

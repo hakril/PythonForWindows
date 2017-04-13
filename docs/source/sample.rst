@@ -1,10 +1,13 @@
 Samples of code
 ===============
 
+Processes
+"""""""""
+
 .. _sample_current_process:
 
 ``windows.current_process``
-"""""""""""""""""""""""""""
+'''''''''''''''''''''''''''
 
 .. literalinclude:: ..\..\samples\current_process.py
 
@@ -26,34 +29,34 @@ Output::
 .. _sample_remote_process:
 
 Remote process : :class:`WinProcess`
-""""""""""""""""""""""""""""""""""""
+''''''''''''''''''''''''''''''''''''
 
-.. literalinclude:: ..\..\samples\remote_calc.py
+.. literalinclude:: ..\..\samples\remote_process.py
 
 Output::
 
-    (cmd λ) python.exe remote_calc.py
-    Creating a calc
-    Looking for calcs in the processes
-    They are currently <1> calcs running on the system
-    Let's play with our calc: <<WinProcess "calc.exe" pid 8052 at 0x27bd5d0>>
-    Our calc pid is 8052
-    Our calc is a <32> bits process
-    Our calc is a SysWow64 process ? <True>
-    Our calc have threads ! <[<WinThread 8552 owner "calc.exe" at 0x27f7f30>, <WinThread 3464 owner "calc.exe" at 0x27f7f80>, <WinThread 3840 owner "calc.exe" at 0x27fa030>]>
-    Exploring our calc PEB ! <windows.winobject.RemotePEB object at 0x026DDD00>
-    Command line is <RemoteWinUnicodeString ""C:\windows\system32\calc.exe"" at 0x26ddee0>
-    Here are 3 loaded modules: [<RemoteLoadedModule "calc.exe" at 0x26dde40>, <RemoteLoadedModule "ntdll.dll" at 0x26ddf30>, <RemoteLoadedModule "kernel32.dll" at 0x26ddc60>]
-    Allocating memory in our calc
-    Allocated memory is at <0x5c90000>
+    (cmd λ) python.exe remote_process.py
+    Creating a notepad
+    Looking for notepads in the processes
+    They are currently <1> notepads running on the system
+    Let's play with our notepad: <<WinProcess "notepad.exe" pid 2044 at 0x40ce850>>
+    Our notepad pid is 2044
+    Our notepad is a <32> bits process
+    Our notepad is a SysWow64 process ? <True>
+    Our notepad have threads ! <[<WinThread 7700 owner "notepad.exe" at 0x41faee0>, <WinThread 7264 owner "notepad.exe" at 0x41faf30>, ...]>
+    Exploring our notepad PEB ! <windows.winobject.process.RemotePEB object at 0x03F6CDA0>
+    Command line is <RemoteWinUnicodeString ""C:\windows\system32\notepad.exe"" at 0x3f6cf80>
+    Here are 3 loaded modules: [<RemoteLoadedModule "notepad.exe" at 0x3f6cf30>, <RemoteLoadedModule "ntdll.dll" at 0x3f6ce40>, <RemoteLoadedModule "kernel32.dll" at 0x3f6cee0>]
+    Allocating memory in our notepad
+    Allocated memory is at <0x6f80000>
     Writing 'SOME STUFF' in allocated memory
     Reading allocated memory : <'SOME STUFF\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'>
-    Execution some native code in our calc (write 0x424242 at allocated address + return 0x1337
+    Execution some native code in our notepad (write 0x424242 at allocated address + return 0x1337)
     Executing native code !
     Return code = 0x1337L
     Reading allocated memory : <'BBBB STUFF\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'>
     Executing python code !
-    Reading allocated memory : <'HELLO FROM CALC\x00\x00\x00\x00\x00'>
+    Reading allocated memory : <'HELLO FROM notepad\x00\x00'>
     Trying to import in remote module 'FAKE_MODULE'
     Remote ERROR !
     Traceback (most recent call last):
@@ -61,13 +64,13 @@ Output::
     File "<string>", line 2, in func
     ImportError: No module named FAKE_MODULE
 
-    That's all ! killing the calc
+    That's all ! killing the notepad
 
 
 .. _sample_peb_exploration:
 
 :class:`PEB` exploration
-""""""""""""""""""""""""
+''''''''''''''''''''''''
 
 .. literalinclude:: ..\..\samples\peb.py
 
@@ -97,7 +100,30 @@ Output::
     IAT Entry for ntdll!NtCreateFile = <IATEntry "NtCreateFile" ordinal 253> | addr = 0x77541128L
     Sections: [<PESection ".text">, <PESection ".rdata">, <PESection ".data">, <PESection ".rsrc">, <PESection ".reloc">]
 
+.. _sample_iat_hook:
 
+IAT hooking
+'''''''''''
+
+.. literalinclude:: ..\..\samples\iat_hook.py
+
+Output::
+
+    (cmd λ) python iat_hook.py
+    Asking for <MY_SECRET_KEY>
+    <in hook> Hook called | hKey = 0x12d687 | lpSubKey = <MY_SECRET_KEY>
+    <in hook> Secret key asked, returning magic handle 0x12345678
+    Result = 0x12345678
+
+    Asking for <MY_FAIL_KEY>
+    <in hook> Hook called | hKey = 0x12d687 | lpSubKey = <MY_FAIL_KEY>
+    <in hook> Asked for a failing key: returning 0x2a
+    WindowsError(42, 'Windows Error 0x2A')
+
+    Asking for <HKEY_CURRENT_USER/Software>
+    <in hook> Hook called | hKey = 0x80000001L | lpSubKey = <Software>
+    <in hook> Non-secret key : calling normal function
+    Result = 0x108
 
 .. _sample_system:
 
@@ -149,30 +175,7 @@ Output::
             Handle is <Handle value=<0x4> in process pid=14340>
             Name is <\Device\ConDrv>
 
-.. _sample_iat_hook:
 
-IAT hooking
-"""""""""""
-
-.. literalinclude:: ..\..\samples\iat_hook.py
-
-Output::
-
-    (cmd λ) python iat_hook.py
-    Asking for <MY_SECRET_KEY>
-    <in hook> Hook called | hKey = 0x12d687 | lpSubKey = <MY_SECRET_KEY>
-    <in hook> Secret key asked, returning magic handle 0x12345678
-    Result = 0x12345678
-
-    Asking for <MY_FAIL_KEY>
-    <in hook> Hook called | hKey = 0x12d687 | lpSubKey = <MY_FAIL_KEY>
-    <in hook> Asked for a failing key: returning 0x2a
-    WindowsError(42, 'Windows Error 0x2A')
-
-    Asking for <HKEY_CURRENT_USER/Software>
-    <in hook> Hook called | hKey = 0x80000001L | lpSubKey = <Software>
-    <in hook> Non-secret key : calling normal function
-    Result = 0x108
 
 .. _sample_network_exploration:
 
@@ -400,6 +403,99 @@ Ouput::
     Handle manually found! typename=<File>, name=<\Device\HarddiskVolume2\Windows\Fonts\StaticCache.dat>
 
     Exiting process
+
+
+Native code tester
+~~~~~~~~~~~~~~~~~~
+
+.. literalinclude:: ..\..\samples\test_code.py
+
+
+Ouput::
+
+    (cmd λ) python.exe .\samples\test_code.py "mov eax, 0x42424242" "eax=0x11223344"
+    Testing x86 code
+    Startup context is:
+    Eip -> 0x3f0000L
+    Esp -> 0x3bfae4L
+    Eax -> 0x11223344L
+    Ebx -> 0x5a6000L
+    Ecx -> 0x0L
+    Edx -> 0x0L
+    Ebp -> 0x0L
+    Edi -> 0x0L
+    Esi -> 0x0L
+    EFlags -> 0x202L
+    EEflags(0x202L:IF)
+    ==Post-exec context==
+    Eip -> 0x3f0007L
+    Esp -> 0x3bfae4L
+    Eax -> 0x42424242L
+    Ebx -> 0x5a6000L
+    Ecx -> 0x0L
+    Edx -> 0x0L
+    Ebp -> 0x0L
+    Edi -> 0x0L
+    Esi -> 0x0L
+    EFlags -> 0x202L
+    EEflags(0x202L:IF)
+    <Normal terminaison>
+    ==DIFF==
+    Eip: 0x3f0000 -> 0x3f0007 (+0x7)
+    Eax: 0x11223344 -> 0x42424242 (+0x31200efe)
+
+
+    (cmd λ) python64 .\samples\test_code.py --x64 "mov r15, 0x11223344; push r14; call r15" "rcx=1; r14=0x4242424243434343"
+    Testing x64 code
+    Startup context is:
+    Rip -> 0x205a1d60000L
+    Rsp -> 0xe24a88fa88L
+    Rax -> 0x0L
+    Rbx -> 0x0L
+    Rcx -> 0x1L
+    Rdx -> 0xe24aaf9000L
+    Rbp -> 0x0L
+    Rdi -> 0x0L
+    Rsi -> 0x0L
+    R8 -> 0x0L
+    R9 -> 0x0L
+    R10 -> 0x0L
+    R11 -> 0x0L
+    R12 -> 0x0L
+    R13 -> 0x0L
+    R14 -> 0x4242424243434343L
+    R15 -> 0x0L
+    EFlags -> 0x200L
+    EEflags(0x200L:IF)
+    ==Post-exec context==
+    Rip -> 0x11223344L
+    Rsp -> 0xe24a88fa78L
+    Rax -> 0x0L
+    Rbx -> 0x0L
+    Rcx -> 0x1L
+    Rdx -> 0xe24aaf9000L
+    Rbp -> 0x0L
+    Rdi -> 0x0L
+    Rsi -> 0x0L
+    R8 -> 0x0L
+    R9 -> 0x0L
+    R10 -> 0x0L
+    R11 -> 0x0L
+    R12 -> 0x0L
+    R13 -> 0x0L
+    R14 -> 0x4242424243434343L
+    R15 -> 0x11223344L
+    EFlags -> 0x10202L
+    EEflags(0x10202L:IF|RF)
+    <EXCEPTION_ACCESS_VIOLATION(0xc0000005L)> at <0x11223344>
+    ==DIFF==
+    Rip: 0x205a1d60000 -> 0x11223344 (-0x20590b3ccbc)
+    Rsp: 0xe24a88fa88 -> 0xe24a88fa78 (-0x10)
+    R15: 0x0 -> 0x11223344 (+0x11223344)
+    EFlags: 0x200 -> 0x10202 (+0x10002)
+    Negative Stack: dumping:
+    E24A88FA88 0C 00 D6 A1 05 02 00 00  43 43 43 43 42 42 42 42 ........CCCCBBBB
+
 
 .. _sample_local_debugger:
 

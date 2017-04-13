@@ -54,9 +54,10 @@ DgMCGgQU70h/rEXLQOberGvgJenggoWU5poEFCfdE1wNK1M38Yp3+qfjEqNIJGCPAgIH0A==
 
 
 class CryptoTestCase(unittest.TestCase):
-    def setUp(self):
-        self.raw_cert = TEST_CERT.decode("base64")
-        self.raw_pfx = TEST_PFX.decode("base64")
+    @classmethod
+    def setUpClass(cls):
+        cls.raw_cert = TEST_CERT.decode("base64")
+        cls.raw_pfx = TEST_PFX.decode("base64")
 
     def test_certificate(self):
         cert = windows.crypto.CertificateContext.from_buffer(self.raw_cert)
