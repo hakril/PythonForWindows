@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>windows.remotectypes &mdash; PythonForWindows 0.2 documentation</title>
+    <title>windows.remotectypes &#8212; PythonForWindows 0.2 documentation</title>
     
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -17,14 +17,15 @@
         VERSION:     '0.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PythonForWindows 0.2 documentation" href="../../index.html" />
-    <link rel="up" title="Module code" href="../index.html" /> 
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -36,8 +37,8 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">PythonForWindows 0.2 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">PythonForWindows 0.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -125,8 +126,8 @@
 
 <span class="k">class</span> <span class="nc">RemoteValue</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">from_buffer_with_target</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">from_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">from_buffer_with_target</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
         <span class="n">x</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="n">target</span>
         <span class="k">return</span> <span class="n">x</span>
 
@@ -155,9 +156,27 @@
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">base</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_value</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">count</span><span class="p">():</span>
-            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">read_memory</span><span class="p">(</span><span class="n">base</span> <span class="o">+</span> <span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="mh">0x100</span><span class="p">),</span> <span class="mh">0x100</span><span class="p">)</span>
+        <span class="c1"># Simple case where target in a WinProcess</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">read_wstring</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="c1"># Copy of Winprocess.read_wstring if target is a custom object</span>
+        <span class="n">read_size</span> <span class="o">=</span> <span class="mh">0x100</span>
+        <span class="n">readden</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c1"># I am trying to do something smart here..</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_memory</span><span class="p">(</span><span class="n">addr</span> <span class="o">+</span> <span class="n">readden</span><span class="p">,</span> <span class="n">read_size</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">Kernel32Error</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">read_size</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="k">raise</span>
+                <span class="c1"># handle read_wstring at end of page</span>
+                <span class="c1"># Of read failed: read only the half of size</span>
+                <span class="c1"># read_size must remain a multiple of 2</span>
+                <span class="n">read_size</span> <span class="o">=</span> <span class="n">read_size</span> <span class="o">/</span> <span class="mi">2</span>
+                <span class="k">continue</span>
+            <span class="n">readden</span> <span class="o">+=</span> <span class="n">read_size</span>
             <span class="n">utf16_chars</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="nb">iter</span><span class="p">(</span><span class="n">x</span><span class="p">)]</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)]</span>
             <span class="k">if</span> <span class="s2">&quot;</span><span class="se">\x00\x00</span><span class="s2">&quot;</span> <span class="ow">in</span> <span class="n">utf16_chars</span><span class="p">:</span>
                 <span class="n">res</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">utf16_chars</span><span class="p">[:</span><span class="n">utf16_chars</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\x00\x00</span><span class="s2">&quot;</span><span class="p">)])</span>
@@ -168,8 +187,8 @@
 
 <span class="k">class</span> <span class="nc">RemoteStructurePointer</span><span class="p">(</span><span class="n">RemotePtr</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">):</span>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">from_buffer_with_target_and_ptr_type</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ptr_type</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">from_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">from_buffer_with_target_and_ptr_type</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ptr_type</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
         <span class="n">x</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="n">target</span>
         <span class="n">x</span><span class="o">.</span><span class="n">real_pointer_type</span> <span class="o">=</span> <span class="n">ptr_type</span>
         <span class="k">return</span> <span class="n">x</span>
@@ -180,7 +199,7 @@
         <span class="k">return</span> <span class="n">remote_pointed_type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">raw_value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s2">&quot;&lt;RemoteStructurePointer to </span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">real_pointer_type</span><span class="o">.</span><span class="n">_type_</span><span class="o">.</span><span class="n">__name__</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;&lt;RemoteStructurePointer to </span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">real_pointer_type</span><span class="o">.</span><span class="n">_type_</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">create_remote_array</span><span class="p">(</span><span class="n">subtype</span><span class="p">,</span> <span class="nb">len</span><span class="p">):</span>
@@ -212,7 +231,7 @@
 <span class="k">class</span> <span class="nc">RemotePtr64</span><span class="p">(</span><span class="n">RemoteValue</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="n">target</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">RemotePtr64</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">RemotePtr64</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">raw_value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -246,8 +265,8 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span>
 
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">from_buffer_with_target_and_ptr_type</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ptr_type</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">from_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">from_buffer_with_target_and_ptr_type</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ptr_type</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
         <span class="n">x</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="n">target</span>
         <span class="n">x</span><span class="o">.</span><span class="n">real_pointer_type</span> <span class="o">=</span> <span class="n">ptr_type</span>
         <span class="k">return</span> <span class="n">x</span>
@@ -270,7 +289,7 @@
 <span class="k">class</span> <span class="nc">RemotePtr32</span><span class="p">(</span><span class="n">RemoteValue</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="n">target</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">RemotePtr32</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">RemotePtr32</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">raw_value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -304,8 +323,8 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span>
 
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">from_buffer_with_target_and_ptr_type</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ptr_type</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">from_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">from_buffer_with_target_and_ptr_type</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ptr_type</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
         <span class="n">x</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="n">target</span>
         <span class="n">x</span><span class="o">.</span><span class="n">real_pointer_type</span> <span class="o">=</span> <span class="n">ptr_type</span>
         <span class="k">return</span> <span class="n">x</span>
@@ -376,37 +395,37 @@
         <span class="c1"># Follow the ctypes usage: if it&#39;s not directly inherited from _SimpleCData</span>
         <span class="c1"># We do not apply the .value</span>
         <span class="c1"># Seems weird but it&#39;s mandatory AND useful :D (in pe_parse)</span>
-        <span class="k">if</span> <span class="n">_SimpleCData</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ftype</span><span class="o">.</span><span class="n">__bases__</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">_SimpleCData</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ftype</span><span class="o">.</span><span class="vm">__bases__</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">ftype</span><span class="o">.</span><span class="n">from_buffer</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">ftype</span><span class="o">.</span><span class="n">from_buffer</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">(</span><span class="n">s</span><span class="p">))</span><span class="o">.</span><span class="n">value</span>
 
     <span class="k">def</span> <span class="nf">__getattribute__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fieldname</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">fieldname</span> <span class="ow">in</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">_reserved_name</span><span class="p">:</span>  <span class="c1"># Prevent recursion !</span>
-            <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">RemoteStructureUnion</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__getattribute__</span><span class="p">(</span><span class="n">fieldname</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">RemoteStructureUnion</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__getattribute__</span><span class="p">(</span><span class="n">fieldname</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_field_by_name</span><span class="p">(</span><span class="n">fieldname</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>  <span class="c1"># Not a real attribute</span>
-            <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">RemoteStructureUnion</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__getattribute__</span><span class="p">(</span><span class="n">fieldname</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">RemoteStructureUnion</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__getattribute__</span><span class="p">(</span><span class="n">fieldname</span><span class="p">)</span>
         <span class="n">descr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_field_descrptor_by_name</span><span class="p">(</span><span class="n">fieldname</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle_field_getattr</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">descr</span><span class="o">.</span><span class="n">offset</span><span class="p">,</span> <span class="n">descr</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
 
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">from_structure</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">structcls</span><span class="p">):</span>
-        <span class="k">class</span> <span class="nc">MyStruct</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">structcls</span><span class="p">):</span>  <span class="c1"># inherit of structcls to keep property (see winobject.LoadedModule)</span>
+    <span class="k">def</span> <span class="nf">from_structure</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">structcls</span><span class="p">):</span>
+        <span class="k">class</span> <span class="nc">MyStruct</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">structcls</span><span class="p">):</span>  <span class="c1"># inherit of structcls to keep property (see winobject.LoadedModule)</span>
             <span class="n">_fields_</span> <span class="o">=</span> <span class="n">structcls</span><span class="o">.</span><span class="n">_fields_</span>
 
-        <span class="n">MyStruct</span><span class="o">.</span><span class="n">__name__</span> <span class="o">=</span> <span class="s2">&quot;Remote&quot;</span> <span class="o">+</span> <span class="n">structcls</span><span class="o">.</span><span class="n">__name__</span>
+        <span class="n">MyStruct</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">=</span> <span class="s2">&quot;Remote&quot;</span> <span class="o">+</span> <span class="n">structcls</span><span class="o">.</span><span class="vm">__name__</span>
         <span class="k">return</span> <span class="n">MyStruct</span>
 
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">from_fields</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">base_cls</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="n">bases</span> <span class="o">=</span> <span class="p">[</span><span class="n">cls</span><span class="p">]</span>
+    <span class="k">def</span> <span class="nf">from_fields</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">base_cls</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">bases</span> <span class="o">=</span> <span class="p">[</span><span class="bp">cls</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">base_cls</span><span class="p">:</span>
             <span class="n">bases</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">base_cls</span><span class="p">)</span>
         <span class="c1"># inherit of structcls to keep property (see winobject.LoadedModule)</span>
         <span class="n">RemoteStruct</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="s2">&quot;RemoteStruct&quot;</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">bases</span><span class="p">),</span> <span class="p">{</span><span class="s2">&quot;_fields_&quot;</span><span class="p">:</span> <span class="n">fields</span><span class="p">})</span>
         <span class="k">if</span> <span class="n">base_cls</span><span class="p">:</span>
-            <span class="n">RemoteStruct</span><span class="o">.</span><span class="n">__name__</span> <span class="o">=</span> <span class="s2">&quot;Remote&quot;</span> <span class="o">+</span> <span class="n">base_cls</span><span class="o">.</span><span class="n">__name__</span>
+            <span class="n">RemoteStruct</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">=</span> <span class="s2">&quot;Remote&quot;</span> <span class="o">+</span> <span class="n">base_cls</span><span class="o">.</span><span class="vm">__name__</span>
         <span class="k">return</span> <span class="n">RemoteStruct</span>
 
 
@@ -430,7 +449,7 @@
             <span class="k">return</span> <span class="n">RemoteStructurePointer64</span><span class="o">.</span><span class="n">from_buffer_with_target_and_ptr_type</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span> <span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">ptr_type</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">contents</span>
 
         <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-            <span class="k">return</span> <span class="s2">&quot;&lt;RemotePtr64 to struct </span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="o">.</span><span class="n">__name__</span><span class="p">)</span>
+            <span class="k">return</span> <span class="s2">&quot;&lt;RemotePtr64 to struct </span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">PointerToStruct64</span>
 
 <span class="k">def</span> <span class="nf">transform_structure_to_remote64bits</span><span class="p">(</span><span class="n">structcls</span><span class="p">):</span>
@@ -474,7 +493,7 @@
             <span class="k">return</span> <span class="n">RemoteStructurePointer32</span><span class="o">.</span><span class="n">from_buffer_with_target_and_ptr_type</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span> <span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">ptr_type</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">contents</span>
 
         <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-            <span class="k">return</span> <span class="s2">&quot;&lt;RemotePtr32 to struct </span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="o">.</span><span class="n">__name__</span><span class="p">)</span>
+            <span class="k">return</span> <span class="s2">&quot;&lt;RemotePtr32 to struct </span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">PointerToStruct32</span>
 
@@ -542,13 +561,13 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">PythonForWindows 0.2 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">PythonForWindows 0.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+        &#169; Copyright 2015, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
     </div>
   </body>
 </html>

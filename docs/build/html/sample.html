@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>12. Samples of code &mdash; PythonForWindows 0.2 documentation</title>
+    <title>13. Samples of code &#8212; PythonForWindows 0.2 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -17,14 +17,16 @@
         VERSION:     '0.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="PythonForWindows 0.2 documentation" href="index.html" />
-    <link rel="prev" title="11. Internals" href="internals.html" /> 
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="12. Internals" href="internals.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -37,9 +39,9 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="internals.html" title="11. Internals"
+          <a href="internals.html" title="12. Internals"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.2 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.2 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -49,12 +51,14 @@
           <div class="body" role="main">
             
   <div class="section" id="samples-of-code">
-<h1>12. Samples of code<a class="headerlink" href="#samples-of-code" title="Permalink to this headline">¶</a></h1>
+<h1>13. Samples of code<a class="headerlink" href="#samples-of-code" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="processes">
+<h2>13.1. Processes<a class="headerlink" href="#processes" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="windows-current-process">
-<span id="sample-current-process"></span><h2>12.1. <code class="docutils literal"><span class="pre">windows.current_process</span></code><a class="headerlink" href="#windows-current-process" title="Permalink to this headline">¶</a></h2>
+<span id="sample-current-process"></span><h3>13.1.1. <code class="docutils literal"><span class="pre">windows.current_process</span></code><a class="headerlink" href="#windows-current-process" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">__file__</span> <span class="o">+</span> <span class="s2">&quot;\..\..&quot;</span><span class="p">))</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span> <span class="o">+</span> <span class="s2">&quot;\..\..&quot;</span><span class="p">))</span>
 
 <span class="kn">import</span> <span class="nn">windows</span>
 <span class="kn">import</span> <span class="nn">windows.native_exec.simple_x86</span> <span class="k">as</span> <span class="nn">x86</span>
@@ -115,31 +119,31 @@ Reading memory : &lt;&#39;SOME STUFF\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00&#39
 </div>
 </div>
 <div class="section" id="remote-process-winprocess">
-<span id="sample-remote-process"></span><h2>12.2. Remote process : <code class="xref py py-class docutils literal"><span class="pre">WinProcess</span></code><a class="headerlink" href="#remote-process-winprocess" title="Permalink to this headline">¶</a></h2>
+<span id="sample-remote-process"></span><h3>13.1.2. Remote process : <code class="xref py py-class docutils literal"><span class="pre">WinProcess</span></code><a class="headerlink" href="#remote-process-winprocess" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">__file__</span> <span class="o">+</span> <span class="s2">&quot;\..\..&quot;</span><span class="p">))</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span> <span class="o">+</span> <span class="s2">&quot;\..\..&quot;</span><span class="p">))</span>
 
 <span class="kn">import</span> <span class="nn">windows</span>
 <span class="kn">import</span> <span class="nn">windows.native_exec.simple_x86</span> <span class="k">as</span> <span class="nn">x86</span>
 <span class="kn">import</span> <span class="nn">windows.native_exec.simple_x64</span> <span class="k">as</span> <span class="nn">x64</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Creating a calc&quot;</span><span class="p">)</span>
-<span class="n">calc</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">create_process</span><span class="p">(</span><span class="s2">r&quot;C:\windows\system32\calc.exe&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Creating a notepad&quot;</span><span class="p">)</span> <span class="c1">## Replaced calc.exe by notepad.exe cause of windows 10.</span>
+<span class="n">notepad</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">create_process</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;C:\windows\system32\notepad.exe&quot;</span><span class="p">)</span>
 <span class="c1"># You don&#39;t need to do that in our case, but it&#39;s useful to now</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Looking for calcs in the processes&quot;</span><span class="p">)</span>
-<span class="n">all_calcs</span> <span class="o">=</span> <span class="p">[</span><span class="n">proc</span> <span class="k">for</span> <span class="n">proc</span> <span class="ow">in</span> <span class="n">windows</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">processes</span> <span class="k">if</span> <span class="n">proc</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;calc.exe&quot;</span><span class="p">]</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;They are currently &lt;</span><span class="si">{0}</span><span class="s2">&gt; calcs running on the system&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">all_calcs</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Looking for notepads in the processes&quot;</span><span class="p">)</span>
+<span class="n">all_notepads</span> <span class="o">=</span> <span class="p">[</span><span class="n">proc</span> <span class="k">for</span> <span class="n">proc</span> <span class="ow">in</span> <span class="n">windows</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">processes</span> <span class="k">if</span> <span class="n">proc</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;notepad.exe&quot;</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;They are currently &lt;</span><span class="si">{0}</span><span class="s2">&gt; notepads running on the system&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">all_notepads</span><span class="p">)))</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Let&#39;s play with our calc: &lt;</span><span class="si">{calc}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">calc</span><span class="o">=</span><span class="n">calc</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Our calc pid is </span><span class="si">{calc.pid}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">calc</span><span class="o">=</span><span class="n">calc</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Our calc is a &lt;</span><span class="si">{calc.bitness}</span><span class="s2">&gt; bits process&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">calc</span><span class="o">=</span><span class="n">calc</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Our calc is a SysWow64 process ? &lt;</span><span class="si">{calc.is_wow_64}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">calc</span><span class="o">=</span><span class="n">calc</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Our calc have threads ! &lt;</span><span class="si">{calc.threads}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">calc</span><span class="o">=</span><span class="n">calc</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Let&#39;s play with our notepad: &lt;</span><span class="si">{notepad}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">notepad</span><span class="o">=</span><span class="n">notepad</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Our notepad pid is </span><span class="si">{notepad.pid}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">notepad</span><span class="o">=</span><span class="n">notepad</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Our notepad is a &lt;</span><span class="si">{notepad.bitness}</span><span class="s2">&gt; bits process&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">notepad</span><span class="o">=</span><span class="n">notepad</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Our notepad is a SysWow64 process ? &lt;</span><span class="si">{notepad.is_wow_64}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">notepad</span><span class="o">=</span><span class="n">notepad</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Our notepad have threads ! &lt;</span><span class="si">{notepad.threads}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">notepad</span><span class="o">=</span><span class="n">notepad</span><span class="p">))</span>
 
 <span class="c1"># PEB STUFF</span>
-<span class="n">peb</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">peb</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Exploring our calc PEB ! </span><span class="si">{peb}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">peb</span><span class="o">=</span><span class="n">peb</span><span class="p">))</span>
+<span class="n">peb</span> <span class="o">=</span> <span class="n">notepad</span><span class="o">.</span><span class="n">peb</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Exploring our notepad PEB ! </span><span class="si">{peb}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">peb</span><span class="o">=</span><span class="n">peb</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Command line is </span><span class="si">{peb.commandline}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">peb</span><span class="o">=</span><span class="n">peb</span><span class="p">))</span>
 <span class="n">modules</span> <span class="o">=</span> <span class="n">peb</span><span class="o">.</span><span class="n">modules</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Here are 3 loaded modules: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">modules</span><span class="p">[:</span><span class="mi">3</span><span class="p">]))</span>
@@ -148,19 +152,19 @@ Reading memory : &lt;&#39;SOME STUFF\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00&#39
 
 <span class="c1"># Remote alloc / read / write</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Allocating memory in our calc&quot;</span><span class="p">)</span>
-<span class="n">addr</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">virtual_alloc</span><span class="p">(</span><span class="mh">0x1000</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Allocating memory in our notepad&quot;</span><span class="p">)</span>
+<span class="n">addr</span> <span class="o">=</span> <span class="n">notepad</span><span class="o">.</span><span class="n">virtual_alloc</span><span class="p">(</span><span class="mh">0x1000</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Allocated memory is at &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="n">addr</span><span class="p">)))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Writing &#39;SOME STUFF&#39; in allocated memory&quot;</span><span class="p">)</span>
-<span class="n">calc</span><span class="o">.</span><span class="n">write_memory</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="s2">&quot;SOME STUFF&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Reading allocated memory : &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">calc</span><span class="o">.</span><span class="n">read_memory</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="mi">20</span><span class="p">))))</span>
+<span class="n">notepad</span><span class="o">.</span><span class="n">write_memory</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="s2">&quot;SOME STUFF&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Reading allocated memory : &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">notepad</span><span class="o">.</span><span class="n">read_memory</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="mi">20</span><span class="p">))))</span>
 
 
 <span class="c1"># Remote Execution</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Execution some native code in our calc (write 0x424242 at allocated address + return 0x1337)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Execution some native code in our notepad (write 0x424242 at allocated address + return 0x1337)&quot;</span><span class="p">)</span>
 
-<span class="k">if</span> <span class="n">calc</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">32</span><span class="p">:</span>
+<span class="k">if</span> <span class="n">notepad</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">32</span><span class="p">:</span>
     <span class="c1"># Let&#39;s generate some native code</span>
     <span class="n">code</span> <span class="o">=</span>  <span class="n">x86</span><span class="o">.</span><span class="n">MultipleInstr</span><span class="p">()</span>
     <span class="n">code</span> <span class="o">+=</span> <span class="n">x86</span><span class="o">.</span><span class="n">Mov</span><span class="p">(</span><span class="n">x86</span><span class="o">.</span><span class="n">deref</span><span class="p">(</span><span class="n">addr</span><span class="p">),</span> <span class="mh">0x42424242</span><span class="p">)</span>
@@ -174,19 +178,19 @@ Reading memory : &lt;&#39;SOME STUFF\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00&#39
     <span class="n">code</span> <span class="o">+=</span> <span class="n">x64</span><span class="o">.</span><span class="n">Ret</span><span class="p">()</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Executing native code !&quot;</span><span class="p">)</span>
-<span class="n">t</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">code</span><span class="o">.</span><span class="n">get_code</span><span class="p">())</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">notepad</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">code</span><span class="o">.</span><span class="n">get_code</span><span class="p">())</span>
 <span class="n">t</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Return code = </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">exit_code</span><span class="p">)))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Reading allocated memory : &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">calc</span><span class="o">.</span><span class="n">read_memory</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="mi">20</span><span class="p">))))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Reading allocated memory : &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">notepad</span><span class="o">.</span><span class="n">read_memory</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="mi">20</span><span class="p">))))</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Executing python code !&quot;</span><span class="p">)</span>
 <span class="c1"># Make &#39;windows&#39; importable in remote python</span>
-<span class="n">calc</span><span class="o">.</span><span class="n">execute_python</span><span class="p">(</span><span class="s2">&quot;import sys; sys.path.append(r&#39;</span><span class="si">{0}</span><span class="s2">&#39;)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+<span class="n">notepad</span><span class="o">.</span><span class="n">execute_python</span><span class="p">(</span><span class="s2">&quot;import sys; sys.path.append(r&#39;</span><span class="si">{0}</span><span class="s2">&#39;)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
 
-<span class="n">calc</span><span class="o">.</span><span class="n">execute_python</span><span class="p">(</span><span class="s2">&quot;import windows&quot;</span><span class="p">)</span>
-<span class="c1"># Let&#39;s write in the calc &#39;current_process&#39; memory :)</span>
-<span class="n">calc</span><span class="o">.</span><span class="n">execute_python</span><span class="p">(</span><span class="s2">&quot;addr = </span><span class="si">{addr}</span><span class="s2">; windows.current_process.write_memory(addr, &#39;HELLO FROM CALC&#39;)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">addr</span><span class="o">=</span><span class="n">addr</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Reading allocated memory : &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">calc</span><span class="o">.</span><span class="n">read_memory</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="mi">20</span><span class="p">))))</span>
+<span class="n">notepad</span><span class="o">.</span><span class="n">execute_python</span><span class="p">(</span><span class="s2">&quot;import windows&quot;</span><span class="p">)</span>
+<span class="c1"># Let&#39;s write in the notepad &#39;current_process&#39; memory :)</span>
+<span class="n">notepad</span><span class="o">.</span><span class="n">execute_python</span><span class="p">(</span><span class="s2">&quot;addr = </span><span class="si">{addr}</span><span class="s2">; windows.current_process.write_memory(addr, &#39;HELLO FROM notepad&#39;)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">addr</span><span class="o">=</span><span class="n">addr</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Reading allocated memory : &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">notepad</span><span class="o">.</span><span class="n">read_memory</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="mi">20</span><span class="p">))))</span>
 
 <span class="c1"># python_execute is &#39;safe&#39;:</span>
 <span class="c1"># - it waits for the thread completion</span>
@@ -194,13 +198,13 @@ Reading memory : &lt;&#39;SOME STUFF\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00&#39
 
 <span class="k">try</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Trying to import in remote module &#39;FAKE_MODULE&#39;&quot;</span><span class="p">)</span>
-    <span class="n">calc</span><span class="o">.</span><span class="n">execute_python</span><span class="p">(</span><span class="s2">&quot;def func():</span><span class="se">\n</span><span class="s2">   import FAKE_MODULE</span><span class="se">\n</span><span class="s2">func()&quot;</span><span class="p">)</span>
+    <span class="n">notepad</span><span class="o">.</span><span class="n">execute_python</span><span class="p">(</span><span class="s2">&quot;def func():</span><span class="se">\n</span><span class="s2">   import FAKE_MODULE</span><span class="se">\n</span><span class="s2">func()&quot;</span><span class="p">)</span>
 <span class="k">except</span> <span class="n">windows</span><span class="o">.</span><span class="n">injection</span><span class="o">.</span><span class="n">RemotePythonError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Remote ERROR !&quot;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;That&#39;s all ! killing the calc&quot;</span><span class="p">)</span>
-<span class="n">calc</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;That&#39;s all ! killing the notepad&quot;</span><span class="p">)</span>
+<span class="n">notepad</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
 
 
 
@@ -211,28 +215,28 @@ Reading memory : &lt;&#39;SOME STUFF\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00&#39
 </pre></div>
 </div>
 <p>Output:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>(cmd λ) python.exe remote_calc.py
-Creating a calc
-Looking for calcs in the processes
-They are currently &lt;1&gt; calcs running on the system
-Let&#39;s play with our calc: &lt;&lt;WinProcess &quot;calc.exe&quot; pid 8052 at 0x27bd5d0&gt;&gt;
-Our calc pid is 8052
-Our calc is a &lt;32&gt; bits process
-Our calc is a SysWow64 process ? &lt;True&gt;
-Our calc have threads ! &lt;[&lt;WinThread 8552 owner &quot;calc.exe&quot; at 0x27f7f30&gt;, &lt;WinThread 3464 owner &quot;calc.exe&quot; at 0x27f7f80&gt;, &lt;WinThread 3840 owner &quot;calc.exe&quot; at 0x27fa030&gt;]&gt;
-Exploring our calc PEB ! &lt;windows.winobject.RemotePEB object at 0x026DDD00&gt;
-Command line is &lt;RemoteWinUnicodeString &quot;&quot;C:\windows\system32\calc.exe&quot;&quot; at 0x26ddee0&gt;
-Here are 3 loaded modules: [&lt;RemoteLoadedModule &quot;calc.exe&quot; at 0x26dde40&gt;, &lt;RemoteLoadedModule &quot;ntdll.dll&quot; at 0x26ddf30&gt;, &lt;RemoteLoadedModule &quot;kernel32.dll&quot; at 0x26ddc60&gt;]
-Allocating memory in our calc
-Allocated memory is at &lt;0x5c90000&gt;
+<div class="highlight-default"><div class="highlight"><pre><span></span>(cmd λ) python.exe remote_process.py
+Creating a notepad
+Looking for notepads in the processes
+They are currently &lt;1&gt; notepads running on the system
+Let&#39;s play with our notepad: &lt;&lt;WinProcess &quot;notepad.exe&quot; pid 2044 at 0x40ce850&gt;&gt;
+Our notepad pid is 2044
+Our notepad is a &lt;32&gt; bits process
+Our notepad is a SysWow64 process ? &lt;True&gt;
+Our notepad have threads ! &lt;[&lt;WinThread 7700 owner &quot;notepad.exe&quot; at 0x41faee0&gt;, &lt;WinThread 7264 owner &quot;notepad.exe&quot; at 0x41faf30&gt;, ...]&gt;
+Exploring our notepad PEB ! &lt;windows.winobject.process.RemotePEB object at 0x03F6CDA0&gt;
+Command line is &lt;RemoteWinUnicodeString &quot;&quot;C:\windows\system32\notepad.exe&quot;&quot; at 0x3f6cf80&gt;
+Here are 3 loaded modules: [&lt;RemoteLoadedModule &quot;notepad.exe&quot; at 0x3f6cf30&gt;, &lt;RemoteLoadedModule &quot;ntdll.dll&quot; at 0x3f6ce40&gt;, &lt;RemoteLoadedModule &quot;kernel32.dll&quot; at 0x3f6cee0&gt;]
+Allocating memory in our notepad
+Allocated memory is at &lt;0x6f80000&gt;
 Writing &#39;SOME STUFF&#39; in allocated memory
 Reading allocated memory : &lt;&#39;SOME STUFF\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00&#39;&gt;
-Execution some native code in our calc (write 0x424242 at allocated address + return 0x1337
+Execution some native code in our notepad (write 0x424242 at allocated address + return 0x1337)
 Executing native code !
 Return code = 0x1337L
 Reading allocated memory : &lt;&#39;BBBB STUFF\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00&#39;&gt;
 Executing python code !
-Reading allocated memory : &lt;&#39;HELLO FROM CALC\x00\x00\x00\x00\x00&#39;&gt;
+Reading allocated memory : &lt;&#39;HELLO FROM notepad\x00\x00&#39;&gt;
 Trying to import in remote module &#39;FAKE_MODULE&#39;
 Remote ERROR !
 Traceback (most recent call last):
@@ -240,15 +244,15 @@ File &quot;&lt;string&gt;&quot;, line 3, in &lt;module&gt;
 File &quot;&lt;string&gt;&quot;, line 2, in func
 ImportError: No module named FAKE_MODULE
 
-That&#39;s all ! killing the calc
+That&#39;s all ! killing the notepad
 </pre></div>
 </div>
 </div>
 <div class="section" id="peb-exploration">
-<span id="sample-peb-exploration"></span><h2>12.3. <code class="xref py py-class docutils literal"><span class="pre">PEB</span></code> exploration<a class="headerlink" href="#peb-exploration" title="Permalink to this headline">¶</a></h2>
+<span id="sample-peb-exploration"></span><h3>13.1.3. <code class="xref py py-class docutils literal"><span class="pre">PEB</span></code> exploration<a class="headerlink" href="#peb-exploration" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">__file__</span> <span class="o">+</span> <span class="s2">&quot;\..\..&quot;</span><span class="p">))</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span> <span class="o">+</span> <span class="s2">&quot;\..\..&quot;</span><span class="p">))</span>
 
 <span class="kn">import</span> <span class="nn">windows</span>
 
@@ -315,11 +319,98 @@ Sections: [&lt;PESection &quot;.text&quot;&gt;, &lt;PESection &quot;.rdata&quot;
 </pre></div>
 </div>
 </div>
-<div class="section" id="windows-system">
-<span id="sample-system"></span><h2>12.4. <code class="docutils literal"><span class="pre">windows.system</span></code><a class="headerlink" href="#windows-system" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="iat-hooking">
+<span id="sample-iat-hook"></span><h3>13.1.4. IAT hooking<a class="headerlink" href="#iat-hooking" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">__file__</span> <span class="o">+</span> <span class="s2">&quot;\..\..&quot;</span><span class="p">))</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span> <span class="o">+</span> <span class="s2">&quot;\..\..&quot;</span><span class="p">))</span>
+
+<span class="kn">import</span> <span class="nn">_winreg</span>
+<span class="kn">import</span> <span class="nn">windows</span>
+
+<span class="c1"># Here is a demo of IAT hooking in python</span>
+<span class="c1"># We will hook the &#39;RegOpenKeyExA&#39; entry of Python27.dll because it is easy to trigger !</span>
+
+<span class="c1"># First: let&#39;s create our hook</span>
+<span class="c1"># windows.hooks.RegOpenKeyExACallback is generated based on windows.generated_def.winfuncs</span>
+<span class="nd">@windows</span><span class="o">.</span><span class="n">hooks</span><span class="o">.</span><span class="n">RegOpenKeyExACallback</span>
+<span class="k">def</span> <span class="nf">open_reg_hook</span><span class="p">(</span><span class="n">hKey</span><span class="p">,</span> <span class="n">lpSubKey</span><span class="p">,</span> <span class="n">ulOptions</span><span class="p">,</span> <span class="n">samDesired</span><span class="p">,</span> <span class="n">phkResult</span><span class="p">,</span> <span class="n">real_function</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&lt;in hook&gt; Hook called | hKey = </span><span class="si">{0}</span><span class="s2"> | lpSubKey = &lt;</span><span class="si">{1}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="n">hKey</span><span class="p">),</span> <span class="n">lpSubKey</span><span class="o">.</span><span class="n">value</span><span class="p">))</span>
+    <span class="c1"># Our hook can choose to call the real_function or not</span>
+    <span class="k">if</span> <span class="s2">&quot;SECRET&quot;</span> <span class="ow">in</span> <span class="n">lpSubKey</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&lt;in hook&gt; Secret key asked, returning magic handle 0x12345678&quot;</span><span class="p">)</span>
+        <span class="c1"># We must respect the hooked method return-value interface</span>
+        <span class="n">phkResult</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x12345678</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="k">if</span> <span class="s2">&quot;FAIL&quot;</span> <span class="ow">in</span> <span class="n">lpSubKey</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&lt;in hook&gt; Asked for a failing key: returning 0x2a&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">42</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&lt;in hook&gt; Non-secret key : calling normal function&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">real_function</span><span class="p">()</span>
+
+
+<span class="c1"># Get the peb of our process</span>
+<span class="n">peb</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">peb</span>
+
+<span class="c1"># Get the pythonxx.dll module</span>
+<span class="n">pythondll_module</span> <span class="o">=</span> <span class="p">[</span><span class="n">m</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">peb</span><span class="o">.</span><span class="n">modules</span> <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;python&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">m</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.dll&quot;</span><span class="p">)][</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># Get the iat entries for DLL advapi32.dll</span>
+<span class="n">adv_imports</span> <span class="o">=</span> <span class="n">pythondll_module</span><span class="o">.</span><span class="n">pe</span><span class="o">.</span><span class="n">imports</span><span class="p">[</span><span class="s1">&#39;advapi32.dll&#39;</span><span class="p">]</span>
+
+<span class="c1"># Get RegOpenKeyExA iat entry</span>
+<span class="n">RegOpenKeyExA_iat</span> <span class="o">=</span> <span class="p">[</span><span class="n">n</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">adv_imports</span> <span class="k">if</span> <span class="n">n</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;RegOpenKeyExA&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># Setup our hook</span>
+<span class="n">RegOpenKeyExA_iat</span><span class="o">.</span><span class="n">set_hook</span><span class="p">(</span><span class="n">open_reg_hook</span><span class="p">)</span>
+
+<span class="c1"># Use python native module _winreg that call &#39;RegOpenKeyExA&#39;</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Asking for &lt;MY_SECRET_KEY&gt;&quot;</span><span class="p">)</span>
+<span class="n">v</span> <span class="o">=</span> <span class="n">_winreg</span><span class="o">.</span><span class="n">OpenKey</span><span class="p">(</span><span class="mi">1234567</span><span class="p">,</span> <span class="s2">&quot;MY_SECRET_KEY&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Result = &quot;</span> <span class="o">+</span> <span class="nb">hex</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">handle</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Asking for &lt;MY_FAIL_KEY&gt;&quot;</span><span class="p">)</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">_winreg</span><span class="o">.</span><span class="n">OpenKey</span><span class="p">(</span><span class="mi">1234567</span><span class="p">,</span> <span class="s2">&quot;MY_FAIL_KEY&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Result = &quot;</span> <span class="o">+</span> <span class="nb">hex</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">handle</span><span class="p">))</span>
+<span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Asking for &lt;HKEY_CURRENT_USER/Software&gt;&quot;</span><span class="p">)</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">_winreg</span><span class="o">.</span><span class="n">OpenKey</span><span class="p">(</span><span class="n">_winreg</span><span class="o">.</span><span class="n">HKEY_CURRENT_USER</span><span class="p">,</span> <span class="s2">&quot;Software&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Result = &quot;</span> <span class="o">+</span> <span class="nb">hex</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">handle</span><span class="p">))</span>
+<span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">cmd</span> <span class="n">λ</span><span class="p">)</span> <span class="n">python</span> <span class="n">iat_hook</span><span class="o">.</span><span class="n">py</span>
+<span class="n">Asking</span> <span class="k">for</span> <span class="o">&lt;</span><span class="n">MY_SECRET_KEY</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="ow">in</span> <span class="n">hook</span><span class="o">&gt;</span> <span class="n">Hook</span> <span class="n">called</span> <span class="o">|</span> <span class="n">hKey</span> <span class="o">=</span> <span class="mh">0x12d687</span> <span class="o">|</span> <span class="n">lpSubKey</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">MY_SECRET_KEY</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="ow">in</span> <span class="n">hook</span><span class="o">&gt;</span> <span class="n">Secret</span> <span class="n">key</span> <span class="n">asked</span><span class="p">,</span> <span class="n">returning</span> <span class="n">magic</span> <span class="n">handle</span> <span class="mh">0x12345678</span>
+<span class="n">Result</span> <span class="o">=</span> <span class="mh">0x12345678</span>
+
+<span class="n">Asking</span> <span class="k">for</span> <span class="o">&lt;</span><span class="n">MY_FAIL_KEY</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="ow">in</span> <span class="n">hook</span><span class="o">&gt;</span> <span class="n">Hook</span> <span class="n">called</span> <span class="o">|</span> <span class="n">hKey</span> <span class="o">=</span> <span class="mh">0x12d687</span> <span class="o">|</span> <span class="n">lpSubKey</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">MY_FAIL_KEY</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="ow">in</span> <span class="n">hook</span><span class="o">&gt;</span> <span class="n">Asked</span> <span class="k">for</span> <span class="n">a</span> <span class="n">failing</span> <span class="n">key</span><span class="p">:</span> <span class="n">returning</span> <span class="mh">0x2a</span>
+<span class="ne">WindowsError</span><span class="p">(</span><span class="mi">42</span><span class="p">,</span> <span class="s1">&#39;Windows Error 0x2A&#39;</span><span class="p">)</span>
+
+<span class="n">Asking</span> <span class="k">for</span> <span class="o">&lt;</span><span class="n">HKEY_CURRENT_USER</span><span class="o">/</span><span class="n">Software</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="ow">in</span> <span class="n">hook</span><span class="o">&gt;</span> <span class="n">Hook</span> <span class="n">called</span> <span class="o">|</span> <span class="n">hKey</span> <span class="o">=</span> <span class="mh">0x80000001</span><span class="n">L</span> <span class="o">|</span> <span class="n">lpSubKey</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">Software</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="ow">in</span> <span class="n">hook</span><span class="o">&gt;</span> <span class="n">Non</span><span class="o">-</span><span class="n">secret</span> <span class="n">key</span> <span class="p">:</span> <span class="n">calling</span> <span class="n">normal</span> <span class="n">function</span>
+<span class="n">Result</span> <span class="o">=</span> <span class="mh">0x108</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="windows-system">
+<span id="sample-system"></span><h2>13.2. <code class="docutils literal"><span class="pre">windows.system</span></code><a class="headerlink" href="#windows-system" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os.path</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span> <span class="o">+</span> <span class="s2">&quot;\..\..&quot;</span><span class="p">))</span>
 
 <span class="kn">import</span> <span class="nn">windows</span>
 <span class="n">system</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">system</span>
@@ -418,98 +509,12 @@ Sections: [&lt;PESection &quot;.text&quot;&gt;, &lt;PESection &quot;.rdata&quot;
 </pre></div>
 </div>
 </div>
-<div class="section" id="iat-hooking">
-<span id="sample-iat-hook"></span><h2>12.5. IAT hooking<a class="headerlink" href="#iat-hooking" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">import</span> <span class="nn">os.path</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">__file__</span> <span class="o">+</span> <span class="s2">&quot;\..\..&quot;</span><span class="p">))</span>
-
-<span class="kn">import</span> <span class="nn">_winreg</span>
-<span class="kn">import</span> <span class="nn">windows</span>
-
-<span class="c1"># Here is a demo of IAT hooking in python</span>
-<span class="c1"># We will hook the &#39;RegOpenKeyExA&#39; entry of Python27.dll because it is easy to trigger !</span>
-
-<span class="c1"># First: let&#39;s create our hook</span>
-<span class="c1"># windows.hooks.RegOpenKeyExACallback is generated based on windows.generated_def.winfuncs</span>
-<span class="nd">@windows</span><span class="o">.</span><span class="n">hooks</span><span class="o">.</span><span class="n">RegOpenKeyExACallback</span>
-<span class="k">def</span> <span class="nf">open_reg_hook</span><span class="p">(</span><span class="n">hKey</span><span class="p">,</span> <span class="n">lpSubKey</span><span class="p">,</span> <span class="n">ulOptions</span><span class="p">,</span> <span class="n">samDesired</span><span class="p">,</span> <span class="n">phkResult</span><span class="p">,</span> <span class="n">real_function</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&lt;in hook&gt; Hook called | hKey = </span><span class="si">{0}</span><span class="s2"> | lpSubKey = &lt;</span><span class="si">{1}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="n">hKey</span><span class="p">),</span> <span class="n">lpSubKey</span><span class="o">.</span><span class="n">value</span><span class="p">))</span>
-    <span class="c1"># Our hook can choose to call the real_function or not</span>
-    <span class="k">if</span> <span class="s2">&quot;SECRET&quot;</span> <span class="ow">in</span> <span class="n">lpSubKey</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&lt;in hook&gt; Secret key asked, returning magic handle 0x12345678&quot;</span><span class="p">)</span>
-        <span class="c1"># We must respect the hooked method return-value interface</span>
-        <span class="n">phkResult</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x12345678</span>
-        <span class="k">return</span> <span class="mi">0</span>
-    <span class="k">if</span> <span class="s2">&quot;FAIL&quot;</span> <span class="ow">in</span> <span class="n">lpSubKey</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&lt;in hook&gt; Asked for a failing key: returning 0x2a&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="mi">42</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&lt;in hook&gt; Non-secret key : calling normal function&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">real_function</span><span class="p">()</span>
-
-
-<span class="c1"># Get the peb of our process</span>
-<span class="n">peb</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">peb</span>
-
-<span class="c1"># Get the pythonxx.dll module</span>
-<span class="n">pythondll_module</span> <span class="o">=</span> <span class="p">[</span><span class="n">m</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">peb</span><span class="o">.</span><span class="n">modules</span> <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;python&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">m</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.dll&quot;</span><span class="p">)][</span><span class="mi">0</span><span class="p">]</span>
-
-<span class="c1"># Get the iat entries for DLL advapi32.dll</span>
-<span class="n">adv_imports</span> <span class="o">=</span> <span class="n">pythondll_module</span><span class="o">.</span><span class="n">pe</span><span class="o">.</span><span class="n">imports</span><span class="p">[</span><span class="s1">&#39;advapi32.dll&#39;</span><span class="p">]</span>
-
-<span class="c1"># Get RegOpenKeyExA iat entry</span>
-<span class="n">RegOpenKeyExA_iat</span> <span class="o">=</span> <span class="p">[</span><span class="n">n</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">adv_imports</span> <span class="k">if</span> <span class="n">n</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;RegOpenKeyExA&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-
-<span class="c1"># Setup our hook</span>
-<span class="n">RegOpenKeyExA_iat</span><span class="o">.</span><span class="n">set_hook</span><span class="p">(</span><span class="n">open_reg_hook</span><span class="p">)</span>
-
-<span class="c1"># Use python native module _winreg that call &#39;RegOpenKeyExA&#39;</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Asking for &lt;MY_SECRET_KEY&gt;&quot;</span><span class="p">)</span>
-<span class="n">v</span> <span class="o">=</span> <span class="n">_winreg</span><span class="o">.</span><span class="n">OpenKey</span><span class="p">(</span><span class="mi">1234567</span><span class="p">,</span> <span class="s2">&quot;MY_SECRET_KEY&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Result = &quot;</span> <span class="o">+</span> <span class="nb">hex</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">handle</span><span class="p">))</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Asking for &lt;MY_FAIL_KEY&gt;&quot;</span><span class="p">)</span>
-<span class="k">try</span><span class="p">:</span>
-    <span class="n">v</span> <span class="o">=</span> <span class="n">_winreg</span><span class="o">.</span><span class="n">OpenKey</span><span class="p">(</span><span class="mi">1234567</span><span class="p">,</span> <span class="s2">&quot;MY_FAIL_KEY&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Result = &quot;</span> <span class="o">+</span> <span class="nb">hex</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">handle</span><span class="p">))</span>
-<span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Asking for &lt;HKEY_CURRENT_USER/Software&gt;&quot;</span><span class="p">)</span>
-<span class="k">try</span><span class="p">:</span>
-    <span class="n">v</span> <span class="o">=</span> <span class="n">_winreg</span><span class="o">.</span><span class="n">OpenKey</span><span class="p">(</span><span class="n">_winreg</span><span class="o">.</span><span class="n">HKEY_CURRENT_USER</span><span class="p">,</span> <span class="s2">&quot;Software&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Result = &quot;</span> <span class="o">+</span> <span class="nb">hex</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">handle</span><span class="p">))</span>
-<span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
-</pre></div>
-</div>
-<p>Output:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">cmd</span> <span class="n">λ</span><span class="p">)</span> <span class="n">python</span> <span class="n">iat_hook</span><span class="o">.</span><span class="n">py</span>
-<span class="n">Asking</span> <span class="k">for</span> <span class="o">&lt;</span><span class="n">MY_SECRET_KEY</span><span class="o">&gt;</span>
-<span class="o">&lt;</span><span class="ow">in</span> <span class="n">hook</span><span class="o">&gt;</span> <span class="n">Hook</span> <span class="n">called</span> <span class="o">|</span> <span class="n">hKey</span> <span class="o">=</span> <span class="mh">0x12d687</span> <span class="o">|</span> <span class="n">lpSubKey</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">MY_SECRET_KEY</span><span class="o">&gt;</span>
-<span class="o">&lt;</span><span class="ow">in</span> <span class="n">hook</span><span class="o">&gt;</span> <span class="n">Secret</span> <span class="n">key</span> <span class="n">asked</span><span class="p">,</span> <span class="n">returning</span> <span class="n">magic</span> <span class="n">handle</span> <span class="mh">0x12345678</span>
-<span class="n">Result</span> <span class="o">=</span> <span class="mh">0x12345678</span>
-
-<span class="n">Asking</span> <span class="k">for</span> <span class="o">&lt;</span><span class="n">MY_FAIL_KEY</span><span class="o">&gt;</span>
-<span class="o">&lt;</span><span class="ow">in</span> <span class="n">hook</span><span class="o">&gt;</span> <span class="n">Hook</span> <span class="n">called</span> <span class="o">|</span> <span class="n">hKey</span> <span class="o">=</span> <span class="mh">0x12d687</span> <span class="o">|</span> <span class="n">lpSubKey</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">MY_FAIL_KEY</span><span class="o">&gt;</span>
-<span class="o">&lt;</span><span class="ow">in</span> <span class="n">hook</span><span class="o">&gt;</span> <span class="n">Asked</span> <span class="k">for</span> <span class="n">a</span> <span class="n">failing</span> <span class="n">key</span><span class="p">:</span> <span class="n">returning</span> <span class="mh">0x2a</span>
-<span class="ne">WindowsError</span><span class="p">(</span><span class="mi">42</span><span class="p">,</span> <span class="s1">&#39;Windows Error 0x2A&#39;</span><span class="p">)</span>
-
-<span class="n">Asking</span> <span class="k">for</span> <span class="o">&lt;</span><span class="n">HKEY_CURRENT_USER</span><span class="o">/</span><span class="n">Software</span><span class="o">&gt;</span>
-<span class="o">&lt;</span><span class="ow">in</span> <span class="n">hook</span><span class="o">&gt;</span> <span class="n">Hook</span> <span class="n">called</span> <span class="o">|</span> <span class="n">hKey</span> <span class="o">=</span> <span class="mh">0x80000001</span><span class="n">L</span> <span class="o">|</span> <span class="n">lpSubKey</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">Software</span><span class="o">&gt;</span>
-<span class="o">&lt;</span><span class="ow">in</span> <span class="n">hook</span><span class="o">&gt;</span> <span class="n">Non</span><span class="o">-</span><span class="n">secret</span> <span class="n">key</span> <span class="p">:</span> <span class="n">calling</span> <span class="n">normal</span> <span class="n">function</span>
-<span class="n">Result</span> <span class="o">=</span> <span class="mh">0x108</span>
-</pre></div>
-</div>
-</div>
 <div class="section" id="network-socket-exploration">
-<span id="sample-network-exploration"></span><h2>12.6. <code class="xref py py-class docutils literal"><span class="pre">Network</span></code> - socket exploration<a class="headerlink" href="#network-socket-exploration" title="Permalink to this headline">¶</a></h2>
+<span id="sample-network-exploration"></span><h2>13.3. <code class="xref py py-class docutils literal"><span class="pre">Network</span></code> - socket exploration<a class="headerlink" href="#network-socket-exploration" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">socket</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">__file__</span> <span class="o">+</span> <span class="s2">&quot;\..\..&quot;</span><span class="p">))</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span> <span class="o">+</span> <span class="s2">&quot;\..\..&quot;</span><span class="p">))</span>
 
 <span class="kn">import</span> <span class="nn">windows</span>
 
@@ -563,11 +568,11 @@ Sections: [&lt;PESection &quot;.text&quot;&gt;, &lt;PESection &quot;.rdata&quot;
 </div>
 </div>
 <div class="section" id="registry">
-<span id="sample-registry"></span><h2>12.7. <code class="xref py py-class docutils literal"><span class="pre">Registry</span></code><a class="headerlink" href="#registry" title="Permalink to this headline">¶</a></h2>
+<span id="sample-registry"></span><h2>13.4. <code class="xref py py-class docutils literal"><span class="pre">Registry</span></code><a class="headerlink" href="#registry" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">__file__</span> <span class="o">+</span> <span class="s2">&quot;\..\..&quot;</span><span class="p">))</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span> <span class="o">+</span> <span class="s2">&quot;\..\..&quot;</span><span class="p">))</span>
 
 <span class="kn">import</span> <span class="nn">windows</span>
 
@@ -581,7 +586,7 @@ Sections: [&lt;PESection &quot;.text&quot;&gt;, &lt;PESection &quot;.rdata&quot;
 <span class="n">pprint</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">subkeys_name</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Opening &#39;Software&#39; in HKEY_CURRENT_USER: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">current_user</span><span class="p">(</span><span class="s2">&quot;Software&quot;</span><span class="p">)))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;We can also open it in one access: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">registry</span><span class="p">(</span><span class="s2">r&quot;HKEY_CURRENT_USER\Sofware&quot;</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;We can also open it in one access: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">registry</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;HKEY_CURRENT_USER\Sofware&quot;</span><span class="p">)))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Looking at CurrentVersion&quot;</span><span class="p">)</span>
 
 <span class="n">windows_info</span> <span class="o">=</span> <span class="n">registry</span><span class="p">(</span><span class="s2">&quot;HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion&quot;</span><span class="p">)</span>
@@ -617,24 +622,24 @@ Sections: [&lt;PESection &quot;.text&quot;&gt;, &lt;PESection &quot;.rdata&quot;
 <span class="n">Looking</span> <span class="n">at</span> <span class="n">CurrentVersion</span>
 <span class="n">Key</span> <span class="ow">is</span> <span class="o">&lt;</span><span class="n">PyHKey</span> <span class="s2">&quot;HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion&quot;</span><span class="o">&gt;</span>
 <span class="n">values</span> <span class="n">are</span><span class="p">:</span>
-<span class="p">[</span><span class="n">KeyValue</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;SoftwareType&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s1">u&#39;System&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
-<span class="n">KeyValue</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;RegisteredOwner&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s1">u&#39;hakril&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+<span class="p">[</span><span class="n">KeyValue</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;SoftwareType&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="sa">u</span><span class="s1">&#39;System&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+<span class="n">KeyValue</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;RegisteredOwner&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="sa">u</span><span class="s1">&#39;hakril&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
 <span class="n">KeyValue</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;InstallDate&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="mi">4</span><span class="p">),</span>
 <span class="o">...</span>
-<span class="n">KeyValue</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;PathName&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s1">u&#39;C:</span><span class="se">\\</span><span class="s1">Windows&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="mi">1</span><span class="p">)]</span>
-<span class="n">registered</span> <span class="n">owner</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">KeyValue</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;RegisteredOwner&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s1">u&#39;hakril&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">&gt;</span>
+<span class="n">KeyValue</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;PathName&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="sa">u</span><span class="s1">&#39;C:</span><span class="se">\\</span><span class="s1">Windows&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="mi">1</span><span class="p">)]</span>
+<span class="n">registered</span> <span class="n">owner</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">KeyValue</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;RegisteredOwner&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="sa">u</span><span class="s1">&#39;hakril&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="windows-wintrust">
-<span id="sample-wintrust"></span><h2>12.8. <code class="docutils literal"><span class="pre">windows.wintrust</span></code><a class="headerlink" href="#windows-wintrust" title="Permalink to this headline">¶</a></h2>
+<span id="sample-wintrust"></span><h2>13.5. <code class="docutils literal"><span class="pre">windows.wintrust</span></code><a class="headerlink" href="#windows-wintrust" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">__file__</span> <span class="o">+</span> <span class="s2">&quot;\..\..&quot;</span><span class="p">))</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span> <span class="o">+</span> <span class="s2">&quot;\..\..&quot;</span><span class="p">))</span>
 
 <span class="kn">import</span> <span class="nn">windows.wintrust</span>
 
-<span class="n">TARGET_FILE</span> <span class="o">=</span> <span class="s2">r&quot;C:\windows\system32\ntdll.dll&quot;</span>
+<span class="n">TARGET_FILE</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;C:\windows\system32\ntdll.dll&quot;</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Checking signature of &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">TARGET_FILE</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; is_signed: &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">windows</span><span class="o">.</span><span class="n">wintrust</span><span class="o">.</span><span class="n">is_signed</span><span class="p">(</span><span class="n">TARGET_FILE</span><span class="p">)))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; check_signature: &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">windows</span><span class="o">.</span><span class="n">wintrust</span><span class="o">.</span><span class="n">check_signature</span><span class="p">(</span><span class="n">TARGET_FILE</span><span class="p">)))</span>
@@ -666,7 +671,7 @@ Sections: [&lt;PESection &quot;.text&quot;&gt;, &lt;PESection &quot;.rdata&quot;
 <span class="n">check_signature</span><span class="p">:</span> <span class="o">&lt;</span><span class="mi">0</span><span class="o">&gt;</span>
 <span class="n">full_signature_information</span><span class="p">:</span>
     <span class="o">*</span> <span class="n">signed</span> <span class="o">&lt;</span><span class="kc">True</span><span class="o">&gt;</span>
-    <span class="o">*</span> <span class="n">catalog</span> <span class="o">&lt;</span><span class="n">C</span><span class="p">:</span>\<span class="n">Windows</span>\<span class="n">system32</span>\<span class="n">CatRoot</span>\<span class="p">{</span><span class="n">F750E6C3</span><span class="o">-</span><span class="mi">38</span><span class="n">EE</span><span class="o">-</span><span class="mi">11</span><span class="n">D1</span><span class="o">-</span><span class="mi">85</span><span class="n">E5</span><span class="o">-</span><span class="mi">00</span><span class="n">C04FC295EE</span><span class="p">}</span>\<span class="n">Package_35_for_KB3128650</span><span class="o">~</span><span class="mi">31</span><span class="n">bf3856ad364e35</span><span class="o">~</span><span class="n">amd64</span><span class="o">~~</span><span class="mf">6.3</span><span class="o">.</span><span class="mf">1.2</span><span class="o">.</span><span class="n">cat</span><span class="o">&gt;</span>
+    <span class="o">*</span> <span class="n">catalog</span> <span class="o">&lt;</span><span class="n">C</span><span class="p">:</span>\<span class="n">Windows</span>\<span class="n">system32</span>\<span class="n">CatRoot</span>\<span class="p">{</span><span class="n">F750E6C3</span><span class="o">-</span><span class="mi">38</span><span class="n">EE</span><span class="o">-</span><span class="mi">11</span><span class="n">D1</span><span class="o">-</span><span class="mf">85E5</span><span class="o">-</span><span class="mi">00</span><span class="n">C04FC295EE</span><span class="p">}</span>\<span class="n">Package_35_for_KB3128650</span><span class="o">~</span><span class="mi">31</span><span class="n">bf3856ad364e35</span><span class="o">~</span><span class="n">amd64</span><span class="o">~~</span><span class="mf">6.3</span><span class="o">.</span><span class="mf">1.2</span><span class="o">.</span><span class="n">cat</span><span class="o">&gt;</span>
     <span class="o">*</span> <span class="n">catalogsigned</span> <span class="o">&lt;</span><span class="kc">True</span><span class="o">&gt;</span>
     <span class="o">*</span> <span class="n">additionalinfo</span> <span class="o">&lt;</span><span class="mi">0</span><span class="o">&gt;</span>
 <span class="n">Checking</span> <span class="n">signature</span> <span class="n">of</span> <span class="n">some</span> <span class="n">loaded</span> <span class="n">DLL</span>
@@ -679,13 +684,13 @@ Sections: [&lt;PESection &quot;.text&quot;&gt;, &lt;PESection &quot;.rdata&quot;
 </div>
 </div>
 <div class="section" id="vectoredexception">
-<span id="sample-vectoredexception"></span><h2>12.9. <code class="xref py py-func docutils literal"><span class="pre">VectoredException()</span></code><a class="headerlink" href="#vectoredexception" title="Permalink to this headline">¶</a></h2>
+<span id="sample-vectoredexception"></span><h2>13.6. <code class="xref py py-func docutils literal"><span class="pre">VectoredException()</span></code><a class="headerlink" href="#vectoredexception" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="in-local-process">
-<h3>12.9.1. In local process<a class="headerlink" href="#in-local-process" title="Permalink to this headline">¶</a></h3>
+<h3>13.6.1. In local process<a class="headerlink" href="#in-local-process" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">__file__</span> <span class="o">+</span> <span class="s2">&quot;\..\..&quot;</span><span class="p">))</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span> <span class="o">+</span> <span class="s2">&quot;\..\..&quot;</span><span class="p">))</span>
 
 <span class="kn">import</span> <span class="nn">ctypes</span>
 <span class="kn">import</span> <span class="nn">windows</span>
@@ -751,11 +756,11 @@ Sections: [&lt;PESection &quot;.text&quot;&gt;, &lt;PESection &quot;.rdata&quot;
 </div>
 </div>
 <div class="section" id="in-remote-process">
-<h3>12.9.2. In remote process<a class="headerlink" href="#in-remote-process" title="Permalink to this headline">¶</a></h3>
+<h3>13.6.2. In remote process<a class="headerlink" href="#in-remote-process" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">__file__</span> <span class="o">+</span> <span class="s2">&quot;\..\..&quot;</span><span class="p">))</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span> <span class="o">+</span> <span class="s2">&quot;\..\..&quot;</span><span class="p">))</span>
 
 <span class="kn">import</span> <span class="nn">windows</span>
 <span class="kn">import</span> <span class="nn">windows.test</span>
@@ -853,13 +858,13 @@ No more tracing !
 </div>
 </div>
 <div class="section" id="debugging">
-<span id="sample-debugger"></span><h2>12.10. Debugging<a class="headerlink" href="#debugging" title="Permalink to this headline">¶</a></h2>
+<span id="sample-debugger"></span><h2>13.7. Debugging<a class="headerlink" href="#debugging" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="debugger">
-<h3>12.10.1. <code class="xref py py-class docutils literal"><span class="pre">Debugger</span></code><a class="headerlink" href="#debugger" title="Permalink to this headline">¶</a></h3>
+<h3>13.7.1. <code class="xref py py-class docutils literal"><span class="pre">Debugger</span></code><a class="headerlink" href="#debugger" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">__file__</span> <span class="o">+</span> <span class="s2">&quot;\..\..&quot;</span><span class="p">))</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span> <span class="o">+</span> <span class="s2">&quot;\..\..&quot;</span><span class="p">))</span>
 
 <span class="kn">import</span> <span class="nn">windows</span>
 <span class="kn">import</span> <span class="nn">windows.test</span>
@@ -878,7 +883,7 @@ No more tracing !
 
 <span class="k">class</span> <span class="nc">PrintUnicodeString</span><span class="p">(</span><span class="n">windows</span><span class="o">.</span><span class="n">debug</span><span class="o">.</span><span class="n">Breakpoint</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">argument_position</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">PrintUnicodeString</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">PrintUnicodeString</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">arg_pos</span> <span class="o">=</span> <span class="n">argument_position</span>
 
 
@@ -925,11 +930,11 @@ No more tracing !
 </pre></div>
 </div>
 <div class="section" id="single-stepping">
-<h4>12.10.1.1. Single stepping<a class="headerlink" href="#single-stepping" title="Permalink to this headline">¶</a></h4>
+<h4>13.7.1.1. Single stepping<a class="headerlink" href="#single-stepping" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">__file__</span> <span class="o">+</span> <span class="s2">&quot;\..\..&quot;</span><span class="p">))</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span> <span class="o">+</span> <span class="s2">&quot;\..\..&quot;</span><span class="p">))</span>
 
 <span class="kn">import</span> <span class="nn">windows</span>
 <span class="kn">import</span> <span class="nn">windows.test</span>
@@ -941,7 +946,7 @@ No more tracing !
 
 <span class="k">class</span> <span class="nc">MyDebugger</span><span class="p">(</span><span class="n">windows</span><span class="o">.</span><span class="n">debug</span><span class="o">.</span><span class="n">Debugger</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">MyDebugger</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">MyDebugger</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">single_step_counter</span> <span class="o">=</span> <span class="mi">0</span>
 
     <span class="k">def</span> <span class="nf">on_exception</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exception</span><span class="p">):</span>
@@ -1011,11 +1016,11 @@ No more tracing !
 </div>
 </div>
 <div class="section" id="windows-debug-functionbp">
-<h4>12.10.1.2. <a class="reference internal" href="debug.html#windows.debug.FunctionBP" title="windows.debug.FunctionBP"><code class="xref py py-class docutils literal"><span class="pre">windows.debug.FunctionBP</span></code></a><a class="headerlink" href="#windows-debug-functionbp" title="Permalink to this headline">¶</a></h4>
+<h4>13.7.1.2. <a class="reference internal" href="debug.html#windows.debug.FunctionBP" title="windows.debug.FunctionBP"><code class="xref py py-class docutils literal"><span class="pre">windows.debug.FunctionBP</span></code></a><a class="headerlink" href="#windows-debug-functionbp" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">__file__</span> <span class="o">+</span> <span class="s2">&quot;\..\..&quot;</span><span class="p">))</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span> <span class="o">+</span> <span class="s2">&quot;\..\..&quot;</span><span class="p">))</span>
 
 <span class="kn">import</span> <span class="nn">windows</span>
 <span class="kn">import</span> <span class="nn">windows.test</span>
@@ -1025,7 +1030,7 @@ No more tracing !
 
 <span class="k">class</span> <span class="nc">MyFunctionBP</span><span class="p">(</span><span class="n">windows</span><span class="o">.</span><span class="n">debug</span><span class="o">.</span><span class="n">FunctionBP</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">addr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">MyFunctionBP</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">addr</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">MyFunctionBP</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">addr</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">target_name</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">target_func</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">=</span> <span class="mi">3</span>
 
@@ -1078,15 +1083,278 @@ Exiting process
 </pre></div>
 </div>
 </div>
+<div class="section" id="native-code-tester">
+<h4>13.7.1.3. Native code tester<a class="headerlink" href="#native-code-tester" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">argparse</span>
+
+<span class="kn">import</span> <span class="nn">windows</span>
+<span class="kn">import</span> <span class="nn">windows.test</span>
+<span class="kn">import</span> <span class="nn">windows.debug</span> <span class="k">as</span> <span class="nn">dbg</span>
+<span class="kn">import</span> <span class="nn">windows.native_exec.simple_x86</span> <span class="k">as</span> <span class="nn">x86</span>
+<span class="kn">import</span> <span class="nn">windows.native_exec.simple_x64</span> <span class="k">as</span> <span class="nn">x64</span>
+<span class="kn">from</span> <span class="nn">windows.generated_def</span> <span class="k">import</span> <span class="o">*</span>
+
+
+<span class="k">def</span> <span class="nf">hexdump</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="n">start_addr</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">string</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="n">ascii</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="o">*</span><span class="mi">256</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mh">0x7f</span><span class="p">):</span>
+        <span class="n">ascii</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="n">ascii</span><span class="p">[</span><span class="mh">0x0</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span>
+    <span class="n">ascii</span><span class="p">[</span><span class="mh">0x7</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span>
+    <span class="n">ascii</span><span class="p">[</span><span class="mh">0x8</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span>
+    <span class="n">ascii</span><span class="p">[</span><span class="mh">0x9</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span>
+    <span class="n">ascii</span><span class="p">[</span><span class="mh">0xa</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span>
+    <span class="n">ascii</span><span class="p">[</span><span class="mh">0x1b</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span>
+    <span class="n">ascii</span><span class="p">[</span><span class="mh">0xd</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span>
+    <span class="n">ascii</span><span class="p">[</span><span class="mh">0xff</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\x13</span><span class="s2">&quot;</span>
+    <span class="n">ascii</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ascii</span><span class="p">)</span>
+    <span class="n">offset</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">offset</span><span class="o">+</span><span class="mh">0x10</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">string</span><span class="p">[</span><span class="n">offset</span><span class="p">:(</span><span class="n">offset</span><span class="o">+</span><span class="mh">0x10</span><span class="p">)]</span>
+        <span class="n">linebuf</span> <span class="o">=</span> <span class="s2">&quot; </span><span class="si">%08X</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">offset</span> <span class="o">+</span> <span class="n">start_addr</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">16</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">8</span><span class="p">:</span>
+                <span class="n">linebuf</span> <span class="o">+=</span> <span class="s2">&quot; &quot;</span>
+            <span class="n">linebuf</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%02X</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="nb">ord</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">linebuf</span> <span class="o">+=</span> <span class="s2">&quot; &quot;</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">16</span><span class="p">):</span>
+            <span class="n">linebuf</span> <span class="o">+=</span> <span class="n">ascii</span><span class="p">[</span><span class="nb">ord</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="n">i</span><span class="p">])]</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="n">linebuf</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">offset</span> <span class="o">+=</span> <span class="mh">0x10</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">string</span><span class="p">)</span> <span class="o">%</span> <span class="mh">0x10</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">linebuf</span> <span class="o">=</span> <span class="s2">&quot; </span><span class="si">%08X</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">offset</span> <span class="o">+</span> <span class="n">start_addr</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">string</span><span class="p">)</span><span class="o">-</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">string</span><span class="p">)</span> <span class="o">%</span> <span class="mh">0x10</span><span class="p">)),(</span><span class="nb">len</span><span class="p">(</span><span class="n">string</span><span class="p">))):</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">8</span><span class="p">:</span>
+                <span class="n">linebuf</span> <span class="o">+=</span> <span class="s2">&quot; &quot;</span>
+            <span class="n">linebuf</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">%02X</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="nb">ord</span><span class="p">(</span><span class="n">string</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">linebuf</span> <span class="o">+=</span> <span class="s2">&quot;   &quot;</span><span class="o">*</span><span class="p">(</span><span class="mh">0x10</span><span class="o">-</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">string</span><span class="p">)</span> <span class="o">%</span> <span class="mh">0x10</span><span class="p">))</span>
+        <span class="n">linebuf</span> <span class="o">+=</span> <span class="s2">&quot; &quot;</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">string</span><span class="p">)</span><span class="o">-</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">string</span><span class="p">)</span> <span class="o">%</span> <span class="mh">0x10</span><span class="p">)),(</span><span class="nb">len</span><span class="p">(</span><span class="n">string</span><span class="p">))):</span>
+            <span class="n">linebuf</span> <span class="o">+=</span> <span class="n">ascii</span><span class="p">[</span><span class="nb">ord</span><span class="p">(</span><span class="n">string</span><span class="p">[</span><span class="n">i</span><span class="p">])]</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="n">linebuf</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="k">return</span> <span class="n">result</span>
+
+
+<span class="k">class</span> <span class="nc">CodeTesteur</span><span class="p">(</span><span class="n">dbg</span><span class="o">.</span><span class="n">Debugger</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">process</span><span class="p">,</span> <span class="n">code</span><span class="p">,</span> <span class="n">register_start</span><span class="o">=</span><span class="p">{}):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">CodeTesteur</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">process</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">initial_code</span> <span class="o">=</span> <span class="n">code</span>
+        <span class="n">code</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\xcc</span><span class="s2">&quot;</span>
+
+        <span class="n">code_addr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_code_in_target</span><span class="p">(</span><span class="n">process</span><span class="p">,</span> <span class="n">code</span><span class="p">)</span>
+        <span class="n">register_start</span><span class="p">[</span><span class="s2">&quot;pc&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">code_addr</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">thread_exec</span> <span class="o">=</span> <span class="n">process</span><span class="o">.</span><span class="n">threads</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">context_exec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">thread_exec</span><span class="o">.</span><span class="n">context</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setup_target_context</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context_exec</span><span class="p">,</span> <span class="n">register_start</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Startup context is:&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">context_exec</span><span class="o">.</span><span class="n">dump</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context_exec</span><span class="o">.</span><span class="n">EEFlags</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">thread_exec</span><span class="o">.</span><span class="n">suspend</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">thread_exec</span><span class="o">.</span><span class="n">set_context</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context_exec</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">thread_exec</span><span class="o">.</span><span class="n">resume</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_breakpoint</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">write_code_in_target</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">process</span><span class="p">,</span> <span class="n">code</span><span class="p">):</span>
+        <span class="n">addr</span> <span class="o">=</span> <span class="n">process</span><span class="o">.</span><span class="n">virtual_alloc</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">code</span><span class="p">))</span>
+        <span class="n">process</span><span class="o">.</span><span class="n">write_memory</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="n">code</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">addr</span>
+
+    <span class="k">def</span> <span class="nf">setup_target_context</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">,</span> <span class="n">register_start</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">register_start</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown register to setup &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">on_exception</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">exc_code</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">ExceptionRecord</span><span class="o">.</span><span class="n">ExceptionCode</span>
+        <span class="n">exc_addr</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">ExceptionRecord</span><span class="o">.</span><span class="n">ExceptionAddress</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">init_breakpoint</span> <span class="ow">and</span> <span class="n">exc_code</span> <span class="o">==</span> <span class="n">EXCEPTION_BREAKPOINT</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">init_breakpoint</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">return</span>
+        <span class="n">ctx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_thread</span><span class="o">.</span><span class="n">context</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;==Post-exec context==&quot;</span><span class="p">)</span>
+        <span class="n">ctx</span><span class="o">.</span><span class="n">dump</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">ctx</span><span class="o">.</span><span class="n">EEFlags</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">exc_code</span> <span class="o">==</span> <span class="n">EXCEPTION_BREAKPOINT</span> <span class="ow">and</span> <span class="n">exc_addr</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">context_exec</span><span class="o">.</span><span class="n">pc</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_code</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&lt;Normal terminaison&gt;&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&lt;</span><span class="si">{0}</span><span class="s2">&gt; at &lt;</span><span class="si">{1:#x}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">exc_code</span><span class="p">,</span> <span class="n">exc_addr</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report_ctx_diff</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context_exec</span><span class="p">,</span> <span class="n">ctx</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+        <span class="k">return</span>
+
+    <span class="k">def</span> <span class="nf">report_ctx_diff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">now</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;==DIFF==&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">start_value</span> <span class="ow">in</span> <span class="n">start</span><span class="o">.</span><span class="n">regs</span><span class="p">():</span>
+            <span class="n">now_value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">now</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">start_value</span> <span class="o">!=</span> <span class="n">now_value</span><span class="p">:</span>
+                <span class="n">diff</span> <span class="o">=</span> <span class="n">now_value</span> <span class="o">-</span> <span class="n">start_value</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">: </span><span class="si">{1:#x}</span><span class="s2"> -&gt; </span><span class="si">{2:#x}</span><span class="s2"> (</span><span class="si">{3:+#x}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">start_value</span><span class="p">,</span> <span class="n">now_value</span><span class="p">,</span> <span class="n">diff</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">start</span><span class="o">.</span><span class="n">sp</span> <span class="o">&gt;</span> <span class="n">now</span><span class="o">.</span><span class="n">sp</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Negative Stack: dumping:&quot;</span><span class="p">)</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">read_memory</span><span class="p">(</span><span class="n">now</span><span class="o">.</span><span class="n">sp</span><span class="p">,</span> <span class="n">start</span><span class="o">.</span><span class="n">sp</span> <span class="o">-</span> <span class="n">now</span><span class="o">.</span><span class="n">sp</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">hexdump</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">start</span><span class="o">.</span><span class="n">sp</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">test_code_x86</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">regs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">raw</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Testing x86 code&quot;</span><span class="p">)</span>
+    <span class="n">process</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">pop_calc_32</span><span class="p">(</span><span class="n">dwCreationFlags</span><span class="o">=</span><span class="n">DEBUG_PROCESS</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">raw</span><span class="p">:</span>
+        <span class="n">code</span> <span class="o">=</span> <span class="n">code</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;hex&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">code</span> <span class="o">=</span> <span class="n">x86</span><span class="o">.</span><span class="n">assemble</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
+
+    <span class="n">start_register</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="n">regs</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">name_value</span> <span class="ow">in</span> <span class="n">regs</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">):</span>
+            <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">name_value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">)</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;Eflags&quot;</span><span class="p">:</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;EFlags&quot;</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">start_register</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+
+    <span class="n">x</span> <span class="o">=</span> <span class="n">CodeTesteur</span><span class="p">(</span><span class="n">process</span><span class="p">,</span> <span class="n">code</span><span class="p">,</span> <span class="n">start_register</span><span class="p">)</span>
+    <span class="n">x</span><span class="o">.</span><span class="n">loop</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">test_code_x64</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">regs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">raw</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Testing x64 code&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">32</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot debug a 64b process from 32b python&quot;</span><span class="p">)</span>
+    <span class="n">process</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">pop_calc_64</span><span class="p">(</span><span class="n">dwCreationFlags</span><span class="o">=</span><span class="n">DEBUG_PROCESS</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">raw</span><span class="p">:</span>
+        <span class="n">code</span> <span class="o">=</span> <span class="n">code</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;hex&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">code</span> <span class="o">=</span> <span class="n">x64</span><span class="o">.</span><span class="n">assemble</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
+
+    <span class="n">start_register</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="n">regs</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">name_value</span> <span class="ow">in</span> <span class="n">regs</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">):</span>
+            <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">name_value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">)</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;Eflags&quot;</span><span class="p">:</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;EFlags&quot;</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">start_register</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+
+    <span class="n">x</span> <span class="o">=</span> <span class="n">CodeTesteur</span><span class="p">(</span><span class="n">process</span><span class="p">,</span> <span class="n">code</span><span class="p">,</span> <span class="n">start_register</span><span class="p">)</span>
+    <span class="n">x</span><span class="o">.</span><span class="n">loop</span><span class="p">()</span>
+
+
+<span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="vm">__file__</span><span class="p">)</span>
+
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--x64&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_const&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;func&quot;</span><span class="p">,</span> <span class="n">const</span><span class="o">=</span><span class="n">test_code_x64</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">test_code_x86</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Code is x64&#39;</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--raw&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;argument is raw assembled code (in hex)&#39;</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;code&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;The code to execute&#39;</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;regs&#39;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s2">&quot;?&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;The default values of the registers&#39;</span><span class="p">)</span>
+
+<span class="n">res</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+<span class="n">res</span><span class="o">.</span><span class="n">func</span><span class="p">(</span><span class="o">**</span><span class="n">res</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Ouput:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">cmd</span> <span class="n">λ</span><span class="p">)</span> <span class="n">python</span><span class="o">.</span><span class="n">exe</span> <span class="o">.</span>\<span class="n">samples</span>\<span class="n">test_code</span><span class="o">.</span><span class="n">py</span> <span class="s2">&quot;mov eax, 0x42424242&quot;</span> <span class="s2">&quot;eax=0x11223344&quot;</span>
+<span class="n">Testing</span> <span class="n">x86</span> <span class="n">code</span>
+<span class="n">Startup</span> <span class="n">context</span> <span class="ow">is</span><span class="p">:</span>
+<span class="n">Eip</span> <span class="o">-&gt;</span> <span class="mh">0x3f0000</span><span class="n">L</span>
+<span class="n">Esp</span> <span class="o">-&gt;</span> <span class="mh">0x3bfae4</span><span class="n">L</span>
+<span class="n">Eax</span> <span class="o">-&gt;</span> <span class="mh">0x11223344</span><span class="n">L</span>
+<span class="n">Ebx</span> <span class="o">-&gt;</span> <span class="mh">0x5a6000</span><span class="n">L</span>
+<span class="n">Ecx</span> <span class="o">-&gt;</span> <span class="mh">0x0</span><span class="n">L</span>
+<span class="n">Edx</span> <span class="o">-&gt;</span> <span class="mh">0x0</span><span class="n">L</span>
+<span class="n">Ebp</span> <span class="o">-&gt;</span> <span class="mh">0x0</span><span class="n">L</span>
+<span class="n">Edi</span> <span class="o">-&gt;</span> <span class="mh">0x0</span><span class="n">L</span>
+<span class="n">Esi</span> <span class="o">-&gt;</span> <span class="mh">0x0</span><span class="n">L</span>
+<span class="n">EFlags</span> <span class="o">-&gt;</span> <span class="mh">0x202</span><span class="n">L</span>
+<span class="n">EEflags</span><span class="p">(</span><span class="mh">0x202</span><span class="n">L</span><span class="p">:</span><span class="n">IF</span><span class="p">)</span>
+<span class="o">==</span><span class="n">Post</span><span class="o">-</span><span class="n">exec</span> <span class="n">context</span><span class="o">==</span>
+<span class="n">Eip</span> <span class="o">-&gt;</span> <span class="mh">0x3f0007</span><span class="n">L</span>
+<span class="n">Esp</span> <span class="o">-&gt;</span> <span class="mh">0x3bfae4</span><span class="n">L</span>
+<span class="n">Eax</span> <span class="o">-&gt;</span> <span class="mh">0x42424242</span><span class="n">L</span>
+<span class="n">Ebx</span> <span class="o">-&gt;</span> <span class="mh">0x5a6000</span><span class="n">L</span>
+<span class="n">Ecx</span> <span class="o">-&gt;</span> <span class="mh">0x0</span><span class="n">L</span>
+<span class="n">Edx</span> <span class="o">-&gt;</span> <span class="mh">0x0</span><span class="n">L</span>
+<span class="n">Ebp</span> <span class="o">-&gt;</span> <span class="mh">0x0</span><span class="n">L</span>
+<span class="n">Edi</span> <span class="o">-&gt;</span> <span class="mh">0x0</span><span class="n">L</span>
+<span class="n">Esi</span> <span class="o">-&gt;</span> <span class="mh">0x0</span><span class="n">L</span>
+<span class="n">EFlags</span> <span class="o">-&gt;</span> <span class="mh">0x202</span><span class="n">L</span>
+<span class="n">EEflags</span><span class="p">(</span><span class="mh">0x202</span><span class="n">L</span><span class="p">:</span><span class="n">IF</span><span class="p">)</span>
+<span class="o">&lt;</span><span class="n">Normal</span> <span class="n">terminaison</span><span class="o">&gt;</span>
+<span class="o">==</span><span class="n">DIFF</span><span class="o">==</span>
+<span class="n">Eip</span><span class="p">:</span> <span class="mh">0x3f0000</span> <span class="o">-&gt;</span> <span class="mh">0x3f0007</span> <span class="p">(</span><span class="o">+</span><span class="mh">0x7</span><span class="p">)</span>
+<span class="n">Eax</span><span class="p">:</span> <span class="mh">0x11223344</span> <span class="o">-&gt;</span> <span class="mh">0x42424242</span> <span class="p">(</span><span class="o">+</span><span class="mh">0x31200efe</span><span class="p">)</span>
+
+
+<span class="p">(</span><span class="n">cmd</span> <span class="n">λ</span><span class="p">)</span> <span class="n">python64</span> <span class="o">.</span>\<span class="n">samples</span>\<span class="n">test_code</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">x64</span> <span class="s2">&quot;mov r15, 0x11223344; push r14; call r15&quot;</span> <span class="s2">&quot;rcx=1; r14=0x4242424243434343&quot;</span>
+<span class="n">Testing</span> <span class="n">x64</span> <span class="n">code</span>
+<span class="n">Startup</span> <span class="n">context</span> <span class="ow">is</span><span class="p">:</span>
+<span class="n">Rip</span> <span class="o">-&gt;</span> <span class="mh">0x205a1d60000</span><span class="n">L</span>
+<span class="n">Rsp</span> <span class="o">-&gt;</span> <span class="mh">0xe24a88fa88</span><span class="n">L</span>
+<span class="n">Rax</span> <span class="o">-&gt;</span> <span class="mh">0x0</span><span class="n">L</span>
+<span class="n">Rbx</span> <span class="o">-&gt;</span> <span class="mh">0x0</span><span class="n">L</span>
+<span class="n">Rcx</span> <span class="o">-&gt;</span> <span class="mh">0x1</span><span class="n">L</span>
+<span class="n">Rdx</span> <span class="o">-&gt;</span> <span class="mh">0xe24aaf9000</span><span class="n">L</span>
+<span class="n">Rbp</span> <span class="o">-&gt;</span> <span class="mh">0x0</span><span class="n">L</span>
+<span class="n">Rdi</span> <span class="o">-&gt;</span> <span class="mh">0x0</span><span class="n">L</span>
+<span class="n">Rsi</span> <span class="o">-&gt;</span> <span class="mh">0x0</span><span class="n">L</span>
+<span class="n">R8</span> <span class="o">-&gt;</span> <span class="mh">0x0</span><span class="n">L</span>
+<span class="n">R9</span> <span class="o">-&gt;</span> <span class="mh">0x0</span><span class="n">L</span>
+<span class="n">R10</span> <span class="o">-&gt;</span> <span class="mh">0x0</span><span class="n">L</span>
+<span class="n">R11</span> <span class="o">-&gt;</span> <span class="mh">0x0</span><span class="n">L</span>
+<span class="n">R12</span> <span class="o">-&gt;</span> <span class="mh">0x0</span><span class="n">L</span>
+<span class="n">R13</span> <span class="o">-&gt;</span> <span class="mh">0x0</span><span class="n">L</span>
+<span class="n">R14</span> <span class="o">-&gt;</span> <span class="mh">0x4242424243434343</span><span class="n">L</span>
+<span class="n">R15</span> <span class="o">-&gt;</span> <span class="mh">0x0</span><span class="n">L</span>
+<span class="n">EFlags</span> <span class="o">-&gt;</span> <span class="mh">0x200</span><span class="n">L</span>
+<span class="n">EEflags</span><span class="p">(</span><span class="mh">0x200</span><span class="n">L</span><span class="p">:</span><span class="n">IF</span><span class="p">)</span>
+<span class="o">==</span><span class="n">Post</span><span class="o">-</span><span class="n">exec</span> <span class="n">context</span><span class="o">==</span>
+<span class="n">Rip</span> <span class="o">-&gt;</span> <span class="mh">0x11223344</span><span class="n">L</span>
+<span class="n">Rsp</span> <span class="o">-&gt;</span> <span class="mh">0xe24a88fa78</span><span class="n">L</span>
+<span class="n">Rax</span> <span class="o">-&gt;</span> <span class="mh">0x0</span><span class="n">L</span>
+<span class="n">Rbx</span> <span class="o">-&gt;</span> <span class="mh">0x0</span><span class="n">L</span>
+<span class="n">Rcx</span> <span class="o">-&gt;</span> <span class="mh">0x1</span><span class="n">L</span>
+<span class="n">Rdx</span> <span class="o">-&gt;</span> <span class="mh">0xe24aaf9000</span><span class="n">L</span>
+<span class="n">Rbp</span> <span class="o">-&gt;</span> <span class="mh">0x0</span><span class="n">L</span>
+<span class="n">Rdi</span> <span class="o">-&gt;</span> <span class="mh">0x0</span><span class="n">L</span>
+<span class="n">Rsi</span> <span class="o">-&gt;</span> <span class="mh">0x0</span><span class="n">L</span>
+<span class="n">R8</span> <span class="o">-&gt;</span> <span class="mh">0x0</span><span class="n">L</span>
+<span class="n">R9</span> <span class="o">-&gt;</span> <span class="mh">0x0</span><span class="n">L</span>
+<span class="n">R10</span> <span class="o">-&gt;</span> <span class="mh">0x0</span><span class="n">L</span>
+<span class="n">R11</span> <span class="o">-&gt;</span> <span class="mh">0x0</span><span class="n">L</span>
+<span class="n">R12</span> <span class="o">-&gt;</span> <span class="mh">0x0</span><span class="n">L</span>
+<span class="n">R13</span> <span class="o">-&gt;</span> <span class="mh">0x0</span><span class="n">L</span>
+<span class="n">R14</span> <span class="o">-&gt;</span> <span class="mh">0x4242424243434343</span><span class="n">L</span>
+<span class="n">R15</span> <span class="o">-&gt;</span> <span class="mh">0x11223344</span><span class="n">L</span>
+<span class="n">EFlags</span> <span class="o">-&gt;</span> <span class="mh">0x10202</span><span class="n">L</span>
+<span class="n">EEflags</span><span class="p">(</span><span class="mh">0x10202</span><span class="n">L</span><span class="p">:</span><span class="n">IF</span><span class="o">|</span><span class="n">RF</span><span class="p">)</span>
+<span class="o">&lt;</span><span class="n">EXCEPTION_ACCESS_VIOLATION</span><span class="p">(</span><span class="mh">0xc0000005</span><span class="n">L</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">at</span> <span class="o">&lt;</span><span class="mh">0x11223344</span><span class="o">&gt;</span>
+<span class="o">==</span><span class="n">DIFF</span><span class="o">==</span>
+<span class="n">Rip</span><span class="p">:</span> <span class="mh">0x205a1d60000</span> <span class="o">-&gt;</span> <span class="mh">0x11223344</span> <span class="p">(</span><span class="o">-</span><span class="mh">0x20590b3ccbc</span><span class="p">)</span>
+<span class="n">Rsp</span><span class="p">:</span> <span class="mh">0xe24a88fa88</span> <span class="o">-&gt;</span> <span class="mh">0xe24a88fa78</span> <span class="p">(</span><span class="o">-</span><span class="mh">0x10</span><span class="p">)</span>
+<span class="n">R15</span><span class="p">:</span> <span class="mh">0x0</span> <span class="o">-&gt;</span> <span class="mh">0x11223344</span> <span class="p">(</span><span class="o">+</span><span class="mh">0x11223344</span><span class="p">)</span>
+<span class="n">EFlags</span><span class="p">:</span> <span class="mh">0x200</span> <span class="o">-&gt;</span> <span class="mh">0x10202</span> <span class="p">(</span><span class="o">+</span><span class="mh">0x10002</span><span class="p">)</span>
+<span class="n">Negative</span> <span class="n">Stack</span><span class="p">:</span> <span class="n">dumping</span><span class="p">:</span>
+<span class="n">E24A88FA88</span> <span class="mi">0</span><span class="n">C</span> <span class="mi">00</span> <span class="n">D6</span> <span class="n">A1</span> <span class="mi">05</span> <span class="mi">02</span> <span class="mi">00</span> <span class="mi">00</span>  <span class="mi">43</span> <span class="mi">43</span> <span class="mi">43</span> <span class="mi">43</span> <span class="mi">42</span> <span class="mi">42</span> <span class="mi">42</span> <span class="mi">42</span> <span class="o">........</span><span class="n">CCCCBBBB</span>
+</pre></div>
+</div>
+</div>
 </div>
 <div class="section" id="localdebugger">
-<span id="sample-local-debugger"></span><h3>12.10.2. <code class="xref py py-class docutils literal"><span class="pre">LocalDebugger</span></code><a class="headerlink" href="#localdebugger" title="Permalink to this headline">¶</a></h3>
+<span id="sample-local-debugger"></span><h3>13.7.2. <code class="xref py py-class docutils literal"><span class="pre">LocalDebugger</span></code><a class="headerlink" href="#localdebugger" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="in-current-process">
-<h4>12.10.2.1. In current process<a class="headerlink" href="#in-current-process" title="Permalink to this headline">¶</a></h4>
+<h4>13.7.2.1. In current process<a class="headerlink" href="#in-current-process" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">__file__</span> <span class="o">+</span> <span class="s2">&quot;\..\..&quot;</span><span class="p">))</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span> <span class="o">+</span> <span class="s2">&quot;\..\..&quot;</span><span class="p">))</span>
 
 <span class="kn">import</span> <span class="nn">windows</span>
 <span class="kn">from</span> <span class="nn">windows.generated_def.winstructs</span> <span class="k">import</span> <span class="o">*</span>
@@ -1141,11 +1409,11 @@ Done!
 </div>
 </div>
 <div class="section" id="id1">
-<h4>12.10.2.2. In remote process<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
+<h4>13.7.2.2. In remote process<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">__file__</span> <span class="o">+</span> <span class="s2">&quot;\..\..&quot;</span><span class="p">))</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span> <span class="o">+</span> <span class="s2">&quot;\..\..&quot;</span><span class="p">))</span>
 
 <span class="kn">import</span> <span class="nn">ctypes</span>
 <span class="kn">import</span> <span class="nn">windows</span>
@@ -1215,12 +1483,13 @@ Done!
 </div>
 </div>
 </div>
+</div>
 <div class="section" id="make-wmi-requests">
-<span id="wmi-request"></span><h3>12.10.3. Make WMI requests<a class="headerlink" href="#make-wmi-requests" title="Permalink to this headline">¶</a></h3>
+<span id="wmi-request"></span><h2>13.8. Make WMI requests<a class="headerlink" href="#make-wmi-requests" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">__file__</span> <span class="o">+</span> <span class="s2">&quot;\..\..&quot;</span><span class="p">))</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span> <span class="o">+</span> <span class="s2">&quot;\..\..&quot;</span><span class="p">))</span>
 
 <span class="kn">import</span> <span class="nn">windows</span>
 
@@ -1264,19 +1533,19 @@ Done!
     <span class="o">*</span> <span class="n">WindowsVersion</span> <span class="o">-&gt;</span> <span class="mf">6.3</span><span class="o">.</span><span class="mi">9600</span>
     <span class="o">*</span> <span class="n">CommandLine</span> <span class="o">-&gt;</span> <span class="n">python</span><span class="o">.</span><span class="n">exe</span>  <span class="o">.</span>\<span class="n">samples</span>\<span class="n">wmi_request</span><span class="o">.</span><span class="n">py</span>
 <span class="o">&lt;</span><span class="n">Select</span> <span class="n">Caption</span><span class="p">,</span><span class="n">FileSystem</span><span class="p">,</span><span class="n">FreeSpace</span> <span class="kn">from</span> <span class="nn">Win32_LogicalDisk</span><span class="o">&gt;</span><span class="p">:</span>
-    <span class="o">*</span> <span class="p">{</span><span class="s1">&#39;Caption&#39;</span><span class="p">:</span> <span class="s1">u&#39;C:&#39;</span><span class="p">,</span> <span class="s1">&#39;FreeSpace&#39;</span><span class="p">:</span> <span class="s1">u&#39;43991547904&#39;</span><span class="p">,</span> <span class="s1">&#39;FileSystem&#39;</span><span class="p">:</span> <span class="s1">u&#39;NTFS&#39;</span><span class="p">}</span>
-    <span class="o">*</span> <span class="p">{</span><span class="s1">&#39;Caption&#39;</span><span class="p">:</span> <span class="s1">u&#39;E:&#39;</span><span class="p">,</span> <span class="s1">&#39;FreeSpace&#39;</span><span class="p">:</span> <span class="s1">u&#39;82776027136&#39;</span><span class="p">,</span> <span class="s1">&#39;FileSystem&#39;</span><span class="p">:</span> <span class="s1">u&#39;NTFS&#39;</span><span class="p">}</span>
-    <span class="o">*</span> <span class="p">{</span><span class="s1">&#39;Caption&#39;</span><span class="p">:</span> <span class="s1">u&#39;F:&#39;</span><span class="p">,</span> <span class="s1">&#39;FreeSpace&#39;</span><span class="p">:</span> <span class="s1">u&#39;5711265792&#39;</span><span class="p">,</span> <span class="s1">&#39;FileSystem&#39;</span><span class="p">:</span> <span class="s1">u&#39;FAT32&#39;</span><span class="p">}</span>
-    <span class="o">*</span> <span class="p">{</span><span class="s1">&#39;Caption&#39;</span><span class="p">:</span> <span class="s1">u&#39;G:&#39;</span><span class="p">,</span> <span class="s1">&#39;FreeSpace&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;FileSystem&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
+    <span class="o">*</span> <span class="p">{</span><span class="s1">&#39;Caption&#39;</span><span class="p">:</span> <span class="sa">u</span><span class="s1">&#39;C:&#39;</span><span class="p">,</span> <span class="s1">&#39;FreeSpace&#39;</span><span class="p">:</span> <span class="sa">u</span><span class="s1">&#39;43991547904&#39;</span><span class="p">,</span> <span class="s1">&#39;FileSystem&#39;</span><span class="p">:</span> <span class="sa">u</span><span class="s1">&#39;NTFS&#39;</span><span class="p">}</span>
+    <span class="o">*</span> <span class="p">{</span><span class="s1">&#39;Caption&#39;</span><span class="p">:</span> <span class="sa">u</span><span class="s1">&#39;E:&#39;</span><span class="p">,</span> <span class="s1">&#39;FreeSpace&#39;</span><span class="p">:</span> <span class="sa">u</span><span class="s1">&#39;82776027136&#39;</span><span class="p">,</span> <span class="s1">&#39;FileSystem&#39;</span><span class="p">:</span> <span class="sa">u</span><span class="s1">&#39;NTFS&#39;</span><span class="p">}</span>
+    <span class="o">*</span> <span class="p">{</span><span class="s1">&#39;Caption&#39;</span><span class="p">:</span> <span class="sa">u</span><span class="s1">&#39;F:&#39;</span><span class="p">,</span> <span class="s1">&#39;FreeSpace&#39;</span><span class="p">:</span> <span class="sa">u</span><span class="s1">&#39;5711265792&#39;</span><span class="p">,</span> <span class="s1">&#39;FileSystem&#39;</span><span class="p">:</span> <span class="sa">u</span><span class="s1">&#39;FAT32&#39;</span><span class="p">}</span>
+    <span class="o">*</span> <span class="p">{</span><span class="s1">&#39;Caption&#39;</span><span class="p">:</span> <span class="sa">u</span><span class="s1">&#39;G:&#39;</span><span class="p">,</span> <span class="s1">&#39;FreeSpace&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;FileSystem&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="using-com-inetfwpolicy2">
-<span id="sample-com-firewall"></span><h3>12.10.4. using COM: <code class="docutils literal"><span class="pre">INetFwPolicy2</span></code><a class="headerlink" href="#using-com-inetfwpolicy2" title="Permalink to this headline">¶</a></h3>
+<span id="sample-com-firewall"></span><h2>13.9. using COM: <code class="docutils literal"><span class="pre">INetFwPolicy2</span></code><a class="headerlink" href="#using-com-inetfwpolicy2" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">__file__</span> <span class="o">+</span> <span class="s2">&quot;\..\..&quot;</span><span class="p">))</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span> <span class="o">+</span> <span class="s2">&quot;\..\..&quot;</span><span class="p">))</span>
 
 <span class="kn">import</span> <span class="nn">windows</span>
 <span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
@@ -1326,6 +1595,289 @@ Done!
 </pre></div>
 </div>
 </div>
+<div class="section" id="windows-crypto">
+<h2>13.10. <code class="docutils literal"><span class="pre">windows.crypto</span></code><a class="headerlink" href="#windows-crypto" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="encryption-demo">
+<span id="sample-crypto-encryption"></span><h3>13.10.1. Encryption demo<a class="headerlink" href="#encryption-demo" title="Permalink to this headline">¶</a></h3>
+<p>This sample is a working POC able to generate key-pair, encrypt and decrypt file.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">import</span> <span class="nn">windows.crypto</span> <span class="k">as</span> <span class="nn">crypto</span>
+<span class="kn">from</span> <span class="nn">windows</span> <span class="k">import</span> <span class="n">winproxy</span>
+<span class="kn">from</span> <span class="nn">windows.generated_def</span> <span class="k">import</span> <span class="o">*</span>
+
+<span class="kn">import</span> <span class="nn">windows.crypto.generation</span> <span class="k">as</span> <span class="nn">gencrypt</span>
+
+<span class="c1"># http://stackoverflow.com/questions/1461272/basic-questions-on-microsoft-cryptoapi</span>
+
+<span class="k">def</span> <span class="nf">crypt</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">,</span> <span class="n">certs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Encrypt the content of &#39;src&#39; file with the certifacts in &#39;certs&#39; into &#39;dst&#39;&quot;&quot;&quot;</span>
+    <span class="c1"># Open every certificates in the certs list</span>
+    <span class="n">certlist</span> <span class="o">=</span> <span class="p">[</span><span class="n">crypto</span><span class="o">.</span><span class="n">CertificateContext</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">certs</span><span class="p">]</span>
+    <span class="c1"># Encrypt the content of &#39;src&#39; with all the public keys(certs)</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">crypto</span><span class="o">.</span><span class="n">encrypt</span><span class="p">(</span><span class="n">certlist</span><span class="p">,</span> <span class="n">src</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Encryption done. Result:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">res</span><span class="p">))</span>
+    <span class="c1"># Write the result in &#39;dst&#39;</span>
+    <span class="n">dst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+    <span class="n">dst</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">src</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">decrypt</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">pfxfile</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Decrypt the content of &#39;src&#39; with the private key in &#39;pfxfile&#39;. the &#39;pfxfile&#39; is open using the &#39;password&#39;&quot;&quot;&quot;</span>
+    <span class="c1"># Open the &#39;pfx&#39; with the given password</span>
+    <span class="n">pfx</span> <span class="o">=</span> <span class="n">crypto</span><span class="o">.</span><span class="n">import_pfx</span><span class="p">(</span><span class="n">pfxfile</span><span class="o">.</span><span class="n">read</span><span class="p">(),</span> <span class="n">password</span><span class="p">)</span>
+    <span class="c1"># Decrypt the content of the file</span>
+    <span class="n">decrypted</span> <span class="o">=</span> <span class="n">crypto</span><span class="o">.</span><span class="n">decrypt</span><span class="p">(</span><span class="n">pfx</span><span class="p">,</span> <span class="n">src</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">u</span><span class="s2">&quot;Result = &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">decrypted</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">decrypted</span>
+
+<span class="n">PFW_TMP_KEY_CONTAINER</span> <span class="o">=</span> <span class="s2">&quot;PythonForWindowsTMPContainer&quot;</span>
+
+<span class="k">def</span> <span class="nf">genkeys</span><span class="p">(</span><span class="n">common_name</span><span class="p">,</span> <span class="n">pfxpassword</span><span class="p">,</span> <span class="n">outname</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Generate a SHA256/RSA key pair. A self-signed certificate with &#39;common_name&#39; is stored as &#39;outname&#39;.cer.</span>
+<span class="sd">    The private key is stored in &#39;outname&#39;.pfx protected with &#39;pfxpassword&#39;&quot;&quot;&quot;</span>
+    <span class="n">cert_store</span> <span class="o">=</span> <span class="n">crypto</span><span class="o">.</span><span class="n">EHCERTSTORE</span><span class="o">.</span><span class="n">new_in_memory</span><span class="p">()</span>
+    <span class="c1"># Create a TMP context that will hold our newly generated key-pair</span>
+    <span class="k">with</span> <span class="n">crypto</span><span class="o">.</span><span class="n">CryptContext</span><span class="p">(</span><span class="n">PFW_TMP_KEY_CONTAINER</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">PROV_RSA_FULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">retrycreate</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">as</span> <span class="n">ctx</span><span class="p">:</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="n">HCRYPTKEY</span><span class="p">()</span>
+        <span class="c1"># Generate a key-pair that is exportable</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">CryptGenKey</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">AT_KEYEXCHANGE</span><span class="p">,</span> <span class="n">CRYPT_EXPORTABLE</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+        <span class="c1"># It does NOT destroy the key-pair from the container,</span>
+        <span class="c1"># It only release the key handle</span>
+        <span class="c1"># https://msdn.microsoft.com/en-us/library/windows/desktop/aa379918(v=vs.85).aspx</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">CryptDestroyKey</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+    <span class="c1"># Descrption of the key-container that will be used to generate the certificate</span>
+    <span class="n">KeyProvInfo</span> <span class="o">=</span> <span class="n">CRYPT_KEY_PROV_INFO</span><span class="p">()</span>
+    <span class="n">KeyProvInfo</span><span class="o">.</span><span class="n">pwszContainerName</span> <span class="o">=</span> <span class="n">PFW_TMP_KEY_CONTAINER</span>
+    <span class="n">KeyProvInfo</span><span class="o">.</span><span class="n">pwszProvName</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">KeyProvInfo</span><span class="o">.</span><span class="n">dwProvType</span> <span class="o">=</span> <span class="n">PROV_RSA_FULL</span>
+    <span class="n">KeyProvInfo</span><span class="o">.</span><span class="n">dwFlags</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">KeyProvInfo</span><span class="o">.</span><span class="n">cProvParam</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">KeyProvInfo</span><span class="o">.</span><span class="n">rgProvParam</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="c1">#KeyProvInfo.dwKeySpec = AT_SIGNATURE</span>
+    <span class="n">KeyProvInfo</span><span class="o">.</span><span class="n">dwKeySpec</span> <span class="o">=</span> <span class="n">AT_KEYEXCHANGE</span>
+
+    <span class="n">crypt_algo</span> <span class="o">=</span> <span class="n">CRYPT_ALGORITHM_IDENTIFIER</span><span class="p">()</span>
+    <span class="n">crypt_algo</span><span class="o">.</span><span class="n">pszObjId</span> <span class="o">=</span> <span class="n">szOID_RSA_SHA256RSA</span>
+
+    <span class="n">certif_name</span> <span class="o">=</span> <span class="s2">&quot;CN=</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">common_name</span><span class="p">)</span>
+    <span class="c1"># Generate a self-signed certificate based on the given key-container and signature algorithme</span>
+    <span class="n">certif</span> <span class="o">=</span> <span class="n">gencrypt</span><span class="o">.</span><span class="n">generate_selfsigned_certificate</span><span class="p">(</span><span class="n">certif_name</span><span class="p">,</span> <span class="n">key_info</span><span class="o">=</span><span class="n">KeyProvInfo</span><span class="p">,</span> <span class="n">signature_algo</span><span class="o">=</span><span class="n">crypt_algo</span><span class="p">)</span>
+    <span class="c1"># Add the newly created certificate to our TMP cert-store</span>
+    <span class="n">cert_store</span><span class="o">.</span><span class="n">add_certificate</span><span class="p">(</span><span class="n">certif</span><span class="p">)</span>
+    <span class="c1"># Generate a pfx from the TMP cert-store</span>
+    <span class="n">pfx</span> <span class="o">=</span> <span class="n">gencrypt</span><span class="o">.</span><span class="n">generate_pfx</span><span class="p">(</span><span class="n">cert_store</span><span class="p">,</span> <span class="n">pfxpassword</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">outname</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">outname</span> <span class="o">=</span> <span class="n">common_name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+    <span class="c1"># Dump the certif (public key) and pfx (public + private keys)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">outname</span> <span class="o">+</span> <span class="s2">&quot;.cer&quot;</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="c1"># The encoded certif only contains the public key</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">certif</span><span class="o">.</span><span class="n">encoded</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">outname</span> <span class="o">+</span> <span class="s2">&quot;.pfx&quot;</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">pfx</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">certif</span><span class="p">)</span>
+    <span class="c1"># Destroy the TMP key container</span>
+    <span class="n">prov</span> <span class="o">=</span> <span class="n">HCRYPTPROV</span><span class="p">()</span>
+    <span class="n">winproxy</span><span class="o">.</span><span class="n">CryptAcquireContextW</span><span class="p">(</span><span class="n">prov</span><span class="p">,</span> <span class="n">PFW_TMP_KEY_CONTAINER</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">PROV_RSA_FULL</span><span class="p">,</span> <span class="n">CRYPT_DELETEKEYSET</span><span class="p">)</span>
+
+<span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="vm">__file__</span><span class="p">)</span>
+<span class="n">subparsers</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">add_subparsers</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s1">&#39;valid subcommands&#39;</span><span class="p">,)</span>
+
+<span class="n">cryptparse</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s1">&#39;crypt&#39;</span><span class="p">)</span>
+<span class="n">cryptparse</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">crypt</span><span class="p">)</span>
+
+<span class="n">cryptparse</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;src&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">argparse</span><span class="o">.</span><span class="n">FileType</span><span class="p">(</span><span class="s1">&#39;rb&#39;</span><span class="p">),</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;File to encrypt&#39;</span><span class="p">)</span>
+<span class="n">cryptparse</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;dst&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">argparse</span><span class="o">.</span><span class="n">FileType</span><span class="p">(</span><span class="s1">&#39;wb&#39;</span><span class="p">),</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;The encrypted file&#39;</span><span class="p">)</span>
+<span class="n">cryptparse</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;certs&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">,</span>
+                    <span class="n">help</span><span class="o">=</span><span class="s1">&#39;List of certfile used to encrypt the src&#39;</span><span class="p">)</span>
+
+<span class="n">decryptparse</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s1">&#39;decrypt&#39;</span><span class="p">)</span>
+<span class="n">decryptparse</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">decrypt</span><span class="p">)</span>
+<span class="n">decryptparse</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;src&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">argparse</span><span class="o">.</span><span class="n">FileType</span><span class="p">(</span><span class="s1">&#39;rb&#39;</span><span class="p">),</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;File to decrypt&#39;</span><span class="p">)</span>
+<span class="n">decryptparse</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;pfxfile&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">argparse</span><span class="o">.</span><span class="n">FileType</span><span class="p">(</span><span class="s1">&#39;rb&#39;</span><span class="p">),</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;PFX file to use&#39;</span><span class="p">)</span>
+<span class="n">decryptparse</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;password&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Password of the PFX&#39;</span><span class="p">)</span>
+
+<span class="n">genkeysparse</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s1">&#39;genkey&#39;</span><span class="p">)</span>
+<span class="n">genkeysparse</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">genkeys</span><span class="p">)</span>
+<span class="n">genkeysparse</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;common_name&#39;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;?&#39;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;CommonName&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;DEFAULT&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;the common name of the certificate&#39;</span><span class="p">)</span>
+<span class="n">genkeysparse</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;outname&#39;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;?&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;The filename base for the generated files&#39;</span><span class="p">)</span>
+<span class="n">genkeysparse</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--pfxpassword&#39;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;?&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Password to protect the PFX&#39;</span><span class="p">)</span>
+
+<span class="n">res</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+<span class="n">res</span><span class="o">.</span><span class="n">func</span><span class="p">(</span><span class="o">**</span><span class="n">res</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Ouput:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>(cmd λ) python ..\samples\encryption_demo.py genkey YOLOCERTIF mykey --pfxpassword MYPASSWORD
+&lt;CertificatContext &quot;YOLOCERTIF&quot; serial=&quot;1b a4 3e 17 f7 ed ec ab 4f f8 11 46 48 e9 29 25&quot;&gt;
+
+(cmd λ) ls
+mykey.cer  mykey.pfx
+
+(cmd λ) echo|set /p=&quot;my secret message&quot; &gt; message.txt
+
+(cmd λ) python ..\samples\encryption_demo.py crypt message.txt message.crypt mykey.cer
+Encryption done. Result:
+bytearray(b&#39;0\x82\x01\x19\x06\t*\x86H\x86\xf7\r\x01\x07\x03\xa0\x82\x01\n0\x82\x01\x06\x02\x01\x001\x81\xc30\x81
+\xc0\x02\x01\x000)0\x151\x130\x11\x06\x03U\x04\x03\x13\nYOLOCERTIF\x02\x10\x1b\xa4&gt;\x17\xf7\xed\xec\xabO\xf8\x11
+FH\xe9)%0\r\x06\t*\x86H\x86\xf7\r\x01\x01\x01\x05\x00\x04\x81\x80V\x89)\xf5\xaaM\x99cEA\x17^\xa2D~\x94\xe3\xf2\x1f
+\x05Y\xc2\xbb\xb2\xbbYBpU6\x870\xce\xe7\xd2M{\xbb\xb9K\xa0\xf5\xe5\x93\xca\xedF\x80.x\xdc\xf2\x0c\xa6UO\x01\r\xaf
+\xd0Z\xd9\xabnzR\xd4j=\xca\xc2RG\xcd\x11u\x82\x7f\x8c\xd8t\xb9\xf9\xe8%\xfal\xaaHPj;\xecKk]\t%\xfd\x91\xcc\xe0lWf
+\xc6\x12x\x1am\xc8\x01t\xac\xa6\xf3#\x02\xd4J \x8eZ\xbb\x10W\xe1 0;\x06\t*\x86H\x86\xf7\r\x01\x07\x010\x14\x06\x08*
+\x86H\x86\xf7\r\x03\x07\x04\x08\x14F\x04\xad\xed9\xed&lt;\x80\x18\x80]6\xccTV\xbc\xb8*\x84QY!~\xb3\n\x1aV\xd4\rf\xd1n:&#39;)
+
+(cmd λ) python ..\samples\encryption_demo.py decrypt message.crypt mykey.pfx BADPASS
+Traceback (most recent call last):
+File &quot;..\samples\encryption_demo.py&quot;, line 103, in &lt;module&gt;
+    res.func(**res.__dict__)
+File &quot;..\samples\encryption_demo.py&quot;, line 26, in decrypt
+    pfx = crypto.import_pfx(pfxfile.read(), password)
+File &quot;c:\users\hakril\documents\work\pythonforwindows\windows\crypto\certificate.py&quot;, line 153, in import_pfx
+    cert_store = winproxy.PFXImportCertStore(pfx, password, flags)
+File &quot;c:\users\hakril\documents\work\pythonforwindows\windows\winproxy.py&quot;, line 1065, in PFXImportCertStore
+    return PFXImportCertStore.ctypes_function(pPFX, szPassword, dwFlags)
+File &quot;c:\users\hakril\documents\work\pythonforwindows\windows\winproxy.py&quot;, line 148, in perform_call
+    return self._cprototyped(*args)
+File &quot;c:\users\hakril\documents\work\pythonforwindows\windows\winproxy.py&quot;, line 69, in kernel32_error_check
+    raise Kernel32Error(func_name)
+windows.winproxy.Kernel32Error: PFXImportCertStore: [Error 86] The specified network password is not correct.
+
+(cmd λ) python samples\encryption_demo.py decrypt message.crypt mykey.pfx MYPASSWORD
+Result = &lt;my secret message&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="certificate-demo">
+<span id="sample-crypto-certificate"></span><h3>13.10.2. Certificate demo<a class="headerlink" href="#certificate-demo" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">hashlib</span>
+<span class="kn">import</span> <span class="nn">windows.crypto</span>
+
+<span class="n">windowscert</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;-----BEGIN CERTIFICATE-----</span>
+<span class="s2">MIIFBDCCA+ygAwIBAgITMwAAAQZuwyXEMckYDgAAAAABBjANBgkqhkiG9w0BAQsF</span>
+<span class="s2">ADCBhDELMAkGA1UEBhMCVVMxEzARBgNVBAgTCldhc2hpbmd0b24xEDAOBgNVBAcT</span>
+<span class="s2">B1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3JhdGlvbjEuMCwGA1UE</span>
+<span class="s2">AxMlTWljcm9zb2Z0IFdpbmRvd3MgUHJvZHVjdGlvbiBQQ0EgMjAxMTAeFw0xNjEw</span>
+<span class="s2">MTEyMDM5MzFaFw0xODAxMTEyMDM5MzFaMHAxCzAJBgNVBAYTAlVTMRMwEQYDVQQI</span>
+<span class="s2">EwpXYXNoaW5ndG9uMRAwDgYDVQQHEwdSZWRtb25kMR4wHAYDVQQKExVNaWNyb3Nv</span>
+<span class="s2">ZnQgQ29ycG9yYXRpb24xGjAYBgNVBAMTEU1pY3Jvc29mdCBXaW5kb3dzMIIBIjAN</span>
+<span class="s2">BgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyWcaCYghNInk3ecpyu2uZ7LCV9QS</span>
+<span class="s2">7GWYr41ufTkcL66ewHxlAoWjmkKG6W2Bp9BYYQok10iDeDGACE9Vjr6m4Jdh+YuN</span>
+<span class="s2">RLxMnHC8JTGzk96CzmdBPAuUWdAcHNmTkIWQF6AXzsbBWsekQejvDBygAOCuIYh4</span>
+<span class="s2">sBgNa5cjTxQc7Iyp9c7RxBmThV5BNFTOnSN6D9N8zU+ENgIZuyHxGvqzRdrhU4G4</span>
+<span class="s2">Cg/h1CkI4TgeZQZCeUNPnWV6DMuvPCiqGEia5phOJZyENKND0Sx6eQZrYnuz1gMn</span>
+<span class="s2">YaEnO+ggegtt4pWpqg8Ch0jNrkL1fb3Kzz7E34/K9dcTgaOymfF6qUKabQIDAQAB</span>
+<span class="s2">o4IBgDCCAXwwHwYDVR0lBBgwFgYKKwYBBAGCNwoDBgYIKwYBBQUHAwMwHQYDVR0O</span>
+<span class="s2">BBYEFBEciVg/vsVmKtr/hmHt7KM6g8lSMFIGA1UdEQRLMEmkRzBFMQ0wCwYDVQQL</span>
+<span class="s2">EwRNT1BSMTQwMgYDVQQFEysyMjk4NzkrMTQ3NDQ5YmUtMTVhOC00ZWJhLTkzZjMt</span>
+<span class="s2">ZDExMGE1YzQ1NTUyMB8GA1UdIwQYMBaAFKkpAjmOFsSXeM2Q+Z5PmuF8Va9TMFQG</span>
+<span class="s2">A1UdHwRNMEswSaBHoEWGQ2h0dHA6Ly93d3cubWljcm9zb2Z0LmNvbS9wa2lvcHMv</span>
+<span class="s2">Y3JsL01pY1dpblByb1BDQTIwMTFfMjAxMS0xMC0xOS5jcmwwYQYIKwYBBQUHAQEE</span>
+<span class="s2">VTBTMFEGCCsGAQUFBzAChkVodHRwOi8vd3d3Lm1pY3Jvc29mdC5jb20vcGtpb3Bz</span>
+<span class="s2">L2NlcnRzL01pY1dpblByb1BDQTIwMTFfMjAxMS0xMC0xOS5jcnQwDAYDVR0TAQH/</span>
+<span class="s2">BAIwADANBgkqhkiG9w0BAQsFAAOCAQEAvYC1iawgKoxXAotQXaN0lj1J5VX01/un</span>
+<span class="s2">7JybZF4sPMG4acoFT85Ao5U6TK5ATPB7yPUulAivp8908DwTGqN+Ju6iH+UkvAb+</span>
+<span class="s2">a/WcHVEMxQXK5eOFNE6yekUArBGbMNWlTFrpwklmVTnL9R+4aApTEe6ITT1KLDio</span>
+<span class="s2">5uFw98n5Sqgh+In073czyiTG7MVhBexbOfhgnciXoufeyhwy1pYgjouSqSQZs4bj</span>
+<span class="s2">cUwQTwGlS2Gd5a+3nblhjn+QhSszIo1K5n1udLPFWtn29BuGlSrtTXPv5OCfNtLO</span>
+<span class="s2">l2ec6CyjDQc6HcQBNCsbJVq6qGtQbYNE+ih+KhIU4tO5jf25xthf2g==</span>
+<span class="s2">-----END CERTIFICATE-----&quot;&quot;&quot;</span>
+
+
+<span class="n">raw_cert</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">windowscert</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;base64&#39;</span><span class="p">)</span>
+<span class="n">cert</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">crypto</span><span class="o">.</span><span class="n">CertificateContext</span><span class="o">.</span><span class="n">from_buffer</span><span class="p">(</span><span class="n">raw_cert</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Analysing certificate: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cert</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    * name: &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cert</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    * issuer: &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cert</span><span class="o">.</span><span class="n">issuer</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    * raw_serial: &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cert</span><span class="o">.</span><span class="n">raw_serial</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    * serial: &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cert</span><span class="o">.</span><span class="n">serial</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    * encoded start: &lt;</span><span class="si">{0!r}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cert</span><span class="o">.</span><span class="n">encoded</span><span class="p">[:</span><span class="mi">20</span><span class="p">]))</span>
+
+<span class="nb">print</span> <span class="s2">&quot;&quot;</span>
+<span class="n">chains</span> <span class="o">=</span> <span class="n">cert</span><span class="o">.</span><span class="n">chains</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;This certificate has </span><span class="si">{0}</span><span class="s2"> certificate chain(s)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">chains</span><span class="p">)))</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">chain</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">chains</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Chain </span><span class="si">{0}</span><span class="s2">:&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">ccert</span> <span class="ow">in</span> <span class="n">chain</span><span class="p">:</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  </span><span class="si">{0}</span><span class="s2">:&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ccert</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    * issuer: &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ccert</span><span class="o">.</span><span class="n">issuer</span><span class="p">))</span>
+
+<span class="nb">print</span> <span class="s2">&quot;&quot;</span>
+<span class="n">cert_to_verif</span> <span class="o">=</span> <span class="n">ccert</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Looking for &lt;</span><span class="si">{0}</span><span class="s2">&gt; in trusted certificates&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cert_to_verif</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+<span class="n">root_store</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">crypto</span><span class="o">.</span><span class="n">EHCERTSTORE</span><span class="o">.</span><span class="n">from_system_store</span><span class="p">(</span><span class="s2">&quot;Root&quot;</span><span class="p">)</span>
+<span class="c1"># This is not the correct way verify the validity of a certificate chain.</span>
+<span class="c1"># I would say that if the goal is to verify the signature of the certificate: use wintrust.</span>
+<span class="c1"># (or maybe CertVerifyCertificateChainPolicy : https://msdn.microsoft.com/en-us/library/windows/desktop/aa377163(v=vs.85).aspx)</span>
+<span class="n">matchs</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">root_store</span><span class="o">.</span><span class="n">certs</span> <span class="k">if</span> <span class="n">c</span> <span class="o">==</span> <span class="n">cert_to_verif</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;matches = </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">matchs</span><span class="p">))</span>
+<span class="k">if</span> <span class="n">matchs</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Found it !&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Not found :(&quot;</span><span class="p">)</span>
+
+<span class="c1">## Extract certificates of a PE file</span>
+
+<span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;== PE Analysis ==&quot;</span><span class="p">)</span>
+<span class="n">TARGET_FILE</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;C:\windows\system32\ntdll.dll&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Target sha1 = &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">hashlib</span><span class="o">.</span><span class="n">sha1</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">TARGET_FILE</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()))</span>
+<span class="n">cryptobj</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">crypto</span><span class="o">.</span><span class="n">CryptObject</span><span class="p">(</span><span class="n">TARGET_FILE</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Analysing </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cryptobj</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;File has </span><span class="si">{0}</span><span class="s2"> signer(s):&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cryptobj</span><span class="o">.</span><span class="n">nb_signer</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">signer</span> <span class="ow">in</span> <span class="p">((</span><span class="n">i</span><span class="p">,</span> <span class="n">cryptobj</span><span class="o">.</span><span class="n">get_signer_data</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cryptobj</span><span class="o">.</span><span class="n">nb_signer</span><span class="p">)):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Signer </span><span class="si">{0}</span><span class="s2">:&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   * Issuer: </span><span class="si">{0!r}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">windows</span><span class="o">.</span><span class="n">crypto</span><span class="o">.</span><span class="n">ECRYPT_DATA_BLOB</span><span class="p">(</span><span class="n">signer</span><span class="o">.</span><span class="n">Issuer</span><span class="o">.</span><span class="n">cbData</span><span class="p">,</span> <span class="n">signer</span><span class="o">.</span><span class="n">Issuer</span><span class="o">.</span><span class="n">pbData</span><span class="p">)</span><span class="o">.</span><span class="n">data</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   * HashAlgorithme: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">signer</span><span class="o">.</span><span class="n">HashAlgorithm</span><span class="o">.</span><span class="n">pszObjId</span><span class="p">))</span>
+    <span class="n">cert</span> <span class="o">=</span> <span class="n">cryptobj</span><span class="o">.</span><span class="n">get_signer_certificate</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   * Certificate: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cert</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;File embdeds </span><span class="si">{0}</span><span class="s2"> certificate(s):&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cryptobj</span><span class="o">.</span><span class="n">nb_cert</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">certificate</span> <span class="ow">in</span> <span class="p">((</span><span class="n">i</span><span class="p">,</span> <span class="n">cryptobj</span><span class="o">.</span><span class="n">get_cert</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cryptobj</span><span class="o">.</span><span class="n">nb_cert</span><span class="p">)):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   * </span><span class="si">{0}</span><span class="s2">) </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">certificate</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Ouput:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>(cmd λ) python .\samples\certificate.py
+Analysing certificate: &lt;CertificateContext &quot;Microsoft Windows&quot; serial=&quot;33 00 00 01 06 6e c3 25 c4 31 c9 18 0e 00 00 00 00 01 06&quot;&gt;
+    * name: &lt;Microsoft Windows&gt;
+    * issuer: &lt;Microsoft Windows Production PCA 2011&gt;
+    * raw_serial: &lt;[51, 0, 0, 1, 6, 110, 195, 37, 196, 49, 201, 24, 14, 0, 0, 0, 0, 1, 6]&gt;
+    * serial: &lt;33 00 00 01 06 6e c3 25 c4 31 c9 18 0e 00 00 00 00 01 06&gt;
+    * encoded start: &lt;bytearray(b&#39;0\x82\x05\x040\x82\x03\xec\xa0\x03\x02\x01\x02\x02\x133\x00\x00\x01\x06&#39;)&gt;
+
+This certificate has 1 certificate chain(s)
+Chain 0:
+&lt;CertificateContext &quot;Microsoft Windows&quot; serial=&quot;33 00 00 01 06 6e c3 25 c4 31 c9 18 0e 00 00 00 00 01 06&quot;&gt;:
+    * issuer: &lt;Microsoft Windows Production PCA 2011&gt;
+&lt;CertificateContext &quot;Microsoft Windows Production PCA 2011&quot; serial=&quot;61 07 76 56 00 00 00 00 00 08&quot;&gt;:
+    * issuer: &lt;Microsoft Root Certificate Authority 2010&gt;
+&lt;CertificateContext &quot;Microsoft Root Certificate Authority 2010&quot; serial=&quot;28 cc 3a 25 bf ba 44 ac 44 9a 9b 58 6b 43 39 aa&quot;&gt;:
+    * issuer: &lt;Microsoft Root Certificate Authority 2010&gt;
+
+Looking for &lt;Microsoft Root Certificate Authority 2010&gt; in trusted certificates
+matches = [&lt;CertificateContext &quot;Microsoft Root Certificate Authority 2010&quot; serial=&quot;28 cc 3a 25 bf ba 44 ac 44 9a 9b 58 6b 43 39 aa&quot;&gt;]
+Found it !
+
+== PE Analysis ==
+Target sha1 = &lt;059cb1ba1a41433a18dd8f87422c2ac3bf35b7b8&gt;
+Analysing &lt;CryptObject &quot;C:\windows\system32\ntdll.dll&quot; content_type=CERT_QUERY_CONTENT_PKCS7_SIGNED_EMBED(0xaL)&gt;
+File has 1 signer(s):
+Signer 0:
+* Issuer: bytearray(b&#39;0\x81\x841\x0b0\t\x06\x03U\x04\x06\x13\x02US1\x130\x11\x06\x03U\x04\x08\x13\nWashington1\x100\x0e\x06\x03U\x04\x07\x13\x07Redmond1\x1e0\x1c\x06\x03U\x04\n\x13\x15Microsoft Corporation1.0,\x06\x03U\x04\x03\x13%Microsoft Windows Production PCA 2011&#39;)
+* HashAlgorithme: 2.16.840.1.101.3.4.2.1
+* Certificate: &lt;CertificateContext &quot;Microsoft Windows&quot; serial=&quot;33 00 00 01 06 6e c3 25 c4 31 c9 18 0e 00 00 00 00 01 06&quot;&gt;
+
+File embdeds 2 certificate(s):
+* 0) &lt;CertificateContext &quot;Microsoft Windows&quot; serial=&quot;33 00 00 01 06 6e c3 25 c4 31 c9 18 0e 00 00 00 00 01 06&quot;&gt;
+* 1) &lt;CertificateContext &quot;Microsoft Windows Production PCA 2011&quot; serial=&quot;61 07 76 56 00 00 00 00 00 08&quot;&gt;
+</pre></div>
+</div>
+</div>
 </div>
 </div>
 
@@ -1337,33 +1889,42 @@ Done!
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">12. Samples of code</a><ul>
-<li><a class="reference internal" href="#windows-current-process">12.1. <code class="docutils literal"><span class="pre">windows.current_process</span></code></a></li>
-<li><a class="reference internal" href="#remote-process-winprocess">12.2. Remote process : <code class="docutils literal"><span class="pre">WinProcess</span></code></a></li>
-<li><a class="reference internal" href="#peb-exploration">12.3. <code class="docutils literal"><span class="pre">PEB</span></code> exploration</a></li>
-<li><a class="reference internal" href="#windows-system">12.4. <code class="docutils literal"><span class="pre">windows.system</span></code></a></li>
-<li><a class="reference internal" href="#iat-hooking">12.5. IAT hooking</a></li>
-<li><a class="reference internal" href="#network-socket-exploration">12.6. <code class="docutils literal"><span class="pre">Network</span></code> - socket exploration</a></li>
-<li><a class="reference internal" href="#registry">12.7. <code class="docutils literal"><span class="pre">Registry</span></code></a></li>
-<li><a class="reference internal" href="#windows-wintrust">12.8. <code class="docutils literal"><span class="pre">windows.wintrust</span></code></a></li>
-<li><a class="reference internal" href="#vectoredexception">12.9. <code class="docutils literal"><span class="pre">VectoredException()</span></code></a><ul>
-<li><a class="reference internal" href="#in-local-process">12.9.1. In local process</a></li>
-<li><a class="reference internal" href="#in-remote-process">12.9.2. In remote process</a></li>
+<li><a class="reference internal" href="#">13. Samples of code</a><ul>
+<li><a class="reference internal" href="#processes">13.1. Processes</a><ul>
+<li><a class="reference internal" href="#windows-current-process">13.1.1. <code class="docutils literal"><span class="pre">windows.current_process</span></code></a></li>
+<li><a class="reference internal" href="#remote-process-winprocess">13.1.2. Remote process : <code class="docutils literal"><span class="pre">WinProcess</span></code></a></li>
+<li><a class="reference internal" href="#peb-exploration">13.1.3. <code class="docutils literal"><span class="pre">PEB</span></code> exploration</a></li>
+<li><a class="reference internal" href="#iat-hooking">13.1.4. IAT hooking</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#debugging">12.10. Debugging</a><ul>
-<li><a class="reference internal" href="#debugger">12.10.1. <code class="docutils literal"><span class="pre">Debugger</span></code></a><ul>
-<li><a class="reference internal" href="#single-stepping">12.10.1.1. Single stepping</a></li>
-<li><a class="reference internal" href="#windows-debug-functionbp">12.10.1.2. <code class="docutils literal"><span class="pre">windows.debug.FunctionBP</span></code></a></li>
+<li><a class="reference internal" href="#windows-system">13.2. <code class="docutils literal"><span class="pre">windows.system</span></code></a></li>
+<li><a class="reference internal" href="#network-socket-exploration">13.3. <code class="docutils literal"><span class="pre">Network</span></code> - socket exploration</a></li>
+<li><a class="reference internal" href="#registry">13.4. <code class="docutils literal"><span class="pre">Registry</span></code></a></li>
+<li><a class="reference internal" href="#windows-wintrust">13.5. <code class="docutils literal"><span class="pre">windows.wintrust</span></code></a></li>
+<li><a class="reference internal" href="#vectoredexception">13.6. <code class="docutils literal"><span class="pre">VectoredException()</span></code></a><ul>
+<li><a class="reference internal" href="#in-local-process">13.6.1. In local process</a></li>
+<li><a class="reference internal" href="#in-remote-process">13.6.2. In remote process</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#localdebugger">12.10.2. <code class="docutils literal"><span class="pre">LocalDebugger</span></code></a><ul>
-<li><a class="reference internal" href="#in-current-process">12.10.2.1. In current process</a></li>
-<li><a class="reference internal" href="#id1">12.10.2.2. In remote process</a></li>
+<li><a class="reference internal" href="#debugging">13.7. Debugging</a><ul>
+<li><a class="reference internal" href="#debugger">13.7.1. <code class="docutils literal"><span class="pre">Debugger</span></code></a><ul>
+<li><a class="reference internal" href="#single-stepping">13.7.1.1. Single stepping</a></li>
+<li><a class="reference internal" href="#windows-debug-functionbp">13.7.1.2. <code class="docutils literal"><span class="pre">windows.debug.FunctionBP</span></code></a></li>
+<li><a class="reference internal" href="#native-code-tester">13.7.1.3. Native code tester</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#make-wmi-requests">12.10.3. Make WMI requests</a></li>
-<li><a class="reference internal" href="#using-com-inetfwpolicy2">12.10.4. using COM: <code class="docutils literal"><span class="pre">INetFwPolicy2</span></code></a></li>
+<li><a class="reference internal" href="#localdebugger">13.7.2. <code class="docutils literal"><span class="pre">LocalDebugger</span></code></a><ul>
+<li><a class="reference internal" href="#in-current-process">13.7.2.1. In current process</a></li>
+<li><a class="reference internal" href="#id1">13.7.2.2. In remote process</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#make-wmi-requests">13.8. Make WMI requests</a></li>
+<li><a class="reference internal" href="#using-com-inetfwpolicy2">13.9. using COM: <code class="docutils literal"><span class="pre">INetFwPolicy2</span></code></a></li>
+<li><a class="reference internal" href="#windows-crypto">13.10. <code class="docutils literal"><span class="pre">windows.crypto</span></code></a><ul>
+<li><a class="reference internal" href="#encryption-demo">13.10.1. Encryption demo</a></li>
+<li><a class="reference internal" href="#certificate-demo">13.10.2. Certificate demo</a></li>
 </ul>
 </li>
 </ul>
@@ -1372,11 +1933,11 @@ Done!
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="internals.html"
-                        title="previous chapter">11. Internals</a></p>
+                        title="previous chapter">12. Internals</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/sample.txt"
+      <li><a href="_sources/sample.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -1404,14 +1965,14 @@ Done!
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="internals.html" title="11. Internals"
+          <a href="internals.html" title="12. Internals"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.2 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.2 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+        &#169; Copyright 2015, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
     </div>
   </body>
 </html>

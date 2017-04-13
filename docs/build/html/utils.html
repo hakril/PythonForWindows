@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>5. windows.utils – Windows Utilities &mdash; PythonForWindows 0.2 documentation</title>
+    <title>5. windows.utils – Windows Utilities &#8212; PythonForWindows 0.2 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -17,13 +17,15 @@
         VERSION:     '0.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="PythonForWindows 0.2 documentation" href="index.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="6. windows.wintrust – Checking signature" href="wintrust.html" />
     <link rel="prev" title="4. windows.winproxy – Windows API" href="winproxy.html" /> 
   </head>
@@ -43,7 +45,7 @@
         <li class="right" >
           <a href="winproxy.html" title="4. windows.winproxy – Windows API"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.2 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.2 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -80,7 +82,7 @@ like <code class="docutils literal"><span class="pre">VirtualProtect</span></cod
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">is_process_32_bits</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">pop_calc_64</span><span class="p">():</span>
         <span class="k">with</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">DisableWow64FsRedirection</span><span class="p">():</span>
-            <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">create_process</span><span class="p">(</span><span class="s2">r&quot;C:\Windows\system32\calc.exe&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">create_process</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;C:\Windows\system32\calc.exe&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -173,7 +175,7 @@ Useful in injection of GUI process</p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/utils.txt"
+      <li><a href="_sources/utils.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -206,12 +208,12 @@ Useful in injection of GUI process</p>
         <li class="right" >
           <a href="winproxy.html" title="4. windows.winproxy – Windows API"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.2 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.2 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+        &#169; Copyright 2015, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
     </div>
   </body>
 </html>

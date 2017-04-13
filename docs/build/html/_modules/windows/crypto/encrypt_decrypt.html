@@ -1,0 +1,199 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>windows.crypto.encrypt_decrypt &#8212; PythonForWindows 0.2 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for windows.crypto.encrypt_decrypt</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">os</span> <span class="k">import</span> <span class="n">urandom</span>
+
+<span class="kn">from</span> <span class="nn">windows</span> <span class="k">import</span> <span class="n">winproxy</span>
+<span class="kn">from</span> <span class="nn">windows.crypto</span> <span class="k">import</span> <span class="n">DEFAULT_ENCODING</span>
+<span class="kn">from</span> <span class="nn">windows.crypto.helper</span> <span class="k">import</span> <span class="n">ECRYPT_DATA_BLOB</span>
+<span class="kn">from</span> <span class="nn">windows.generated_def</span> <span class="k">import</span> <span class="o">*</span>
+
+<span class="k">def</span> <span class="nf">encode_init_vector</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="n">blob</span> <span class="o">=</span> <span class="n">ECRYPT_DATA_BLOB</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="n">DWORD</span><span class="p">()</span>
+    <span class="n">buf</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">winproxy</span><span class="o">.</span><span class="n">CryptEncodeObjectEx</span><span class="p">(</span><span class="n">DEFAULT_ENCODING</span><span class="p">,</span> <span class="n">X509_OCTET_STRING</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">blob</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">buf</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+    <span class="n">buf</span> <span class="o">=</span> <span class="p">(</span><span class="n">BYTE</span> <span class="o">*</span> <span class="n">size</span><span class="o">.</span><span class="n">value</span><span class="p">)()</span>
+    <span class="n">winproxy</span><span class="o">.</span><span class="n">CryptEncodeObjectEx</span><span class="p">(</span><span class="n">DEFAULT_ENCODING</span><span class="p">,</span> <span class="n">X509_OCTET_STRING</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">blob</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">buf</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">buf</span><span class="p">[:]</span>
+
+
+<span class="k">class</span> <span class="nc">GenerateInitVector</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;GenerateInitVector()&quot;</span>
+
+    <span class="k">def</span> <span class="nf">generate_init_vector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">algo</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">algo</span> <span class="ow">in</span> <span class="p">[</span><span class="n">szOID_OIWSEC_desCBC</span><span class="p">,</span> <span class="n">szOID_RSA_DES_EDE3_CBC</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="n">urandom</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">algo</span> <span class="ow">in</span> <span class="p">[</span><span class="n">szOID_NIST_AES128_CBC</span><span class="p">,</span> <span class="n">szOID_NIST_AES192_CBC</span><span class="p">,</span> <span class="n">szOID_NIST_AES256_CBC</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="n">urandom</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
+<span class="n">geninitvector</span> <span class="o">=</span> <span class="n">GenerateInitVector</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="encrypt"><a class="viewcode-back" href="../../../crypto.html#windows.crypto.encrypt">[docs]</a><span class="k">def</span> <span class="nf">encrypt</span><span class="p">(</span><span class="n">cert_or_certlist</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">algo</span><span class="o">=</span><span class="n">szOID_RSA_DES_EDE3_CBC</span><span class="p">,</span> <span class="n">initvector</span><span class="o">=</span><span class="n">geninitvector</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Encrypt ``msg`` with the certificate(s) in ``cert_or_certlist`` using ``algo`` with the initial</span>
+<span class="sd">       vector ``initvector``.</span>
+
+<span class="sd">       If ``geninitvector`` is left as it is, it will generate a random one.</span>
+
+<span class="sd">       Algorithms supported by ``GenerateInitVector`` are:</span>
+
+<span class="sd">        * ``szOID_OIWSEC_desCBC``</span>
+<span class="sd">        * ``szOID_RSA_DES_EDE3_CBC``</span>
+<span class="sd">        * ``szOID_NIST_AES128_CBC``</span>
+<span class="sd">        * ``szOID_NIST_AES192_CBC``</span>
+<span class="sd">        * ``szOID_NIST_AES256_CBC``</span>
+
+<span class="sd">       :return: :class:`bytearray`: The encrypted message</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">alg_ident</span> <span class="o">=</span> <span class="n">CRYPT_ALGORITHM_IDENTIFIER</span><span class="p">()</span>
+    <span class="n">alg_ident</span><span class="o">.</span><span class="n">pszObjId</span> <span class="o">=</span> <span class="n">algo</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cert_or_certlist</span><span class="p">,</span> <span class="n">PCERT_CONTEXT</span><span class="p">):</span>
+        <span class="n">certlist</span> <span class="o">=</span> <span class="p">(</span><span class="n">cert_or_certlist</span><span class="p">,)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">certlist</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">cert_or_certlist</span><span class="p">)</span>
+
+    <span class="c1"># Set (compute if needed) the IV</span>
+    <span class="k">if</span> <span class="n">initvector</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">alg_ident</span><span class="o">.</span><span class="n">Parameters</span><span class="o">.</span><span class="n">cbData</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">elif</span> <span class="n">initvector</span> <span class="ow">is</span> <span class="n">geninitvector</span><span class="p">:</span>
+        <span class="n">initvector</span> <span class="o">=</span> <span class="n">initvector</span><span class="o">.</span><span class="n">generate_init_vector</span><span class="p">(</span><span class="n">algo</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">initvector</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;I don&#39;t know how to generate an &lt;initvector&gt; for &lt;</span><span class="si">{0}</span><span class="s2">&gt; please provide one (or None)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">algo</span><span class="p">))</span>
+        <span class="n">initvector_encoded</span> <span class="o">=</span> <span class="n">encode_init_vector</span><span class="p">(</span><span class="n">initvector</span><span class="p">)</span>
+        <span class="n">alg_ident</span><span class="o">.</span><span class="n">Parameters</span> <span class="o">=</span> <span class="n">ECRYPT_DATA_BLOB</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">initvector_encoded</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">initvector_encoded</span> <span class="o">=</span> <span class="n">encode_init_vector</span><span class="p">(</span><span class="n">initvector</span><span class="p">)</span>
+        <span class="n">alg_ident</span><span class="o">.</span><span class="n">Parameters</span> <span class="o">=</span> <span class="n">ECRYPT_DATA_BLOB</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">initvector_encoded</span><span class="p">)</span>
+
+    <span class="c1"># Setup encryption parameters</span>
+    <span class="n">param</span> <span class="o">=</span> <span class="n">CRYPT_ENCRYPT_MESSAGE_PARA</span><span class="p">()</span>
+    <span class="n">param</span><span class="o">.</span><span class="n">cbSize</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">param</span><span class="p">)</span>
+    <span class="n">param</span><span class="o">.</span><span class="n">dwMsgEncodingType</span> <span class="o">=</span> <span class="n">DEFAULT_ENCODING</span>
+    <span class="n">param</span><span class="o">.</span><span class="n">hCryptProv</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">param</span><span class="o">.</span><span class="n">ContentEncryptionAlgorithm</span> <span class="o">=</span> <span class="n">alg_ident</span>
+    <span class="n">param</span><span class="o">.</span><span class="n">pvEncryptionAuxInfo</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">param</span><span class="o">.</span><span class="n">dwFlags</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">param</span><span class="o">.</span><span class="n">dwInnerContentType</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">certs</span> <span class="o">=</span> <span class="p">(</span><span class="n">PCERT_CONTEXT</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">certlist</span><span class="p">))(</span><span class="o">*</span><span class="n">certlist</span><span class="p">)</span>
+    <span class="c1">#Ask the output buffer size</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="n">DWORD</span><span class="p">()</span>
+    <span class="n">winproxy</span><span class="o">.</span><span class="n">CryptEncryptMessage</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">certs</span><span class="p">),</span> <span class="n">certs</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">msg</span><span class="p">),</span> <span class="kc">None</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+    <span class="c1">#Encrypt the msg</span>
+    <span class="n">buf</span> <span class="o">=</span>  <span class="p">(</span><span class="n">BYTE</span> <span class="o">*</span> <span class="n">size</span><span class="o">.</span><span class="n">value</span><span class="p">)()</span>
+    <span class="n">winproxy</span><span class="o">.</span><span class="n">CryptEncryptMessage</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">certs</span><span class="p">),</span> <span class="n">certs</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">msg</span><span class="p">),</span> <span class="n">buf</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">bytearray</span><span class="p">(</span><span class="n">buf</span><span class="p">[:</span><span class="n">size</span><span class="o">.</span><span class="n">value</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="decrypt"><a class="viewcode-back" href="../../../crypto.html#windows.crypto.decrypt">[docs]</a><span class="k">def</span> <span class="nf">decrypt</span><span class="p">(</span><span class="n">cert_store</span><span class="p">,</span> <span class="n">encrypted</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Try to decrypt the ``encrypted`` msg with any certificate in ``cert_store``.</span>
+
+<span class="sd">        If there is no certificate able to decrypt the message ``Kernel32Error(winerror=0x8009200c)`` is raised.</span>
+
+<span class="sd">        :return: :class:`str`: The decrypted message</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Setup decryption parameters</span>
+    <span class="n">dparam</span> <span class="o">=</span> <span class="n">CRYPT_DECRYPT_MESSAGE_PARA</span><span class="p">()</span>
+    <span class="n">dparam</span><span class="o">.</span><span class="n">cbSize</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">dparam</span><span class="p">)</span>
+    <span class="n">dparam</span><span class="o">.</span><span class="n">dwMsgAndCertEncodingType</span> <span class="o">=</span> <span class="n">DEFAULT_ENCODING</span>
+    <span class="n">dparam</span><span class="o">.</span><span class="n">cCertStore</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">dparam</span><span class="o">.</span><span class="n">rghCertStore</span> <span class="o">=</span> <span class="p">(</span><span class="n">cert_store</span><span class="p">,)</span>
+    <span class="n">dparam</span><span class="o">.</span><span class="n">dwFlags</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1">#Ask the output buffer size</span>
+    <span class="n">buf</span> <span class="o">=</span> <span class="p">(</span><span class="n">BYTE</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">encrypted</span><span class="p">))</span><span class="o">.</span><span class="n">from_buffer_copy</span><span class="p">(</span><span class="n">encrypted</span><span class="p">)</span>
+    <span class="n">dcryptsize</span> <span class="o">=</span> <span class="n">DWORD</span><span class="p">()</span>
+    <span class="n">winproxy</span><span class="o">.</span><span class="n">CryptDecryptMessage</span><span class="p">(</span><span class="n">dparam</span><span class="p">,</span> <span class="n">buf</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">buf</span><span class="p">),</span> <span class="kc">None</span><span class="p">,</span> <span class="n">dcryptsize</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="c1">#Decrypt the msg</span>
+    <span class="n">dcryptbuff</span> <span class="o">=</span> <span class="p">(</span><span class="n">BYTE</span> <span class="o">*</span> <span class="n">dcryptsize</span><span class="o">.</span><span class="n">value</span><span class="p">)()</span>
+    <span class="n">winproxy</span><span class="o">.</span><span class="n">CryptDecryptMessage</span><span class="p">(</span><span class="n">dparam</span><span class="p">,</span> <span class="n">buf</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">buf</span><span class="p">),</span> <span class="n">dcryptbuff</span><span class="p">,</span> <span class="n">dcryptsize</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">(</span><span class="n">dcryptbuff</span><span class="p">[:</span><span class="n">dcryptsize</span><span class="o">.</span><span class="n">value</span><span class="p">]))</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2015, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+    </div>
+  </body>
+</html>

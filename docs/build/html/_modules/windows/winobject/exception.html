@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>windows.winobject.exception &mdash; PythonForWindows 0.2 documentation</title>
+    <title>windows.winobject.exception &#8212; PythonForWindows 0.2 documentation</title>
     
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -17,14 +17,15 @@
         VERSION:     '0.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <link rel="top" title="PythonForWindows 0.2 documentation" href="../../../index.html" />
-    <link rel="up" title="Module code" href="../../index.html" /> 
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -36,8 +37,8 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.2 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -190,8 +191,8 @@
 
     <span class="k">def</span> <span class="nf">__hex__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">(</span><span class="si">{1}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span> <span class="nb">hex</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">raw</span><span class="p">))</span>
-        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">(</span><span class="si">{1}</span><span class="s2">:</span><span class="si">{2}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span> <span class="nb">hex</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">raw</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">dump</span><span class="p">())</span>
+                <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">(</span><span class="si">{1}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="nb">hex</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">raw</span><span class="p">))</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">(</span><span class="si">{1}</span><span class="s2">:</span><span class="si">{2}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="nb">hex</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">raw</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">dump</span><span class="p">())</span>
 
     <span class="n">raw</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_raw</span><span class="p">,</span> <span class="n">set_raw</span><span class="p">)</span>
     <span class="sd">&quot;&quot;&quot;Raw value of the eflags</span>
@@ -329,12 +330,12 @@
     <span class="sd">&quot;&quot;&quot;The fields of the structure&quot;&quot;&quot;</span>
 
     <span class="nd">@classmethod</span>
-<div class="viewcode-block" id="ECONTEXT64.new_aligned"><a class="viewcode-back" href="../../../exception.html#windows.winobject.exception.ECONTEXT64.new_aligned">[docs]</a>    <span class="k">def</span> <span class="nf">new_aligned</span><span class="p">(</span><span class="n">cls</span><span class="p">):</span>
+<div class="viewcode-block" id="ECONTEXT64.new_aligned"><a class="viewcode-back" href="../../../exception.html#windows.winobject.exception.ECONTEXT64.new_aligned">[docs]</a>    <span class="k">def</span> <span class="nf">new_aligned</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return a new :class:`ECONTEXT64` aligned on 16 bits</span>
 
 <span class="sd">           temporary workaround or horrible hack ? choose your side</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">size</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">cls</span><span class="p">)</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
         <span class="n">nb_qword</span> <span class="o">=</span> <span class="p">(</span><span class="n">size</span> <span class="o">+</span> <span class="mi">8</span><span class="p">)</span> <span class="o">/</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">ULONGLONG</span><span class="p">)</span>
         <span class="n">buffer</span> <span class="o">=</span> <span class="p">(</span><span class="n">nb_qword</span> <span class="o">*</span> <span class="n">ULONGLONG</span><span class="p">)()</span>
         <span class="n">struct_address</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">addressof</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
@@ -342,7 +343,7 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;ULONGLONG array not aligned on 8&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">struct_address</span> <span class="o">&amp;</span> <span class="mh">0xf</span><span class="p">)</span> <span class="o">==</span> <span class="mi">8</span><span class="p">:</span>
             <span class="n">struct_address</span> <span class="o">+=</span> <span class="mi">8</span>
-        <span class="bp">self</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">from_address</span><span class="p">(</span><span class="n">struct_address</span><span class="p">)</span>
+        <span class="bp">self</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_address</span><span class="p">(</span><span class="n">struct_address</span><span class="p">)</span>
         <span class="c1"># Keep the raw buffer alive</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_buffer</span> <span class="o">=</span> <span class="n">buffer</span>
         <span class="k">return</span> <span class="bp">self</span></div></div>
@@ -379,8 +380,8 @@
     <span class="sd">&quot;&quot;&quot;A decorator that create a callable which can be passed to :func:`AddVectoredExceptionHandler`&quot;&quot;&quot;</span>
     <span class="n">func_type</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">WINFUNCTYPE</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">EEXCEPTION_POINTERS</span><span class="p">))</span>
 
-    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
-        <span class="bp">self</span> <span class="o">=</span> <span class="nb">object</span><span class="o">.</span><span class="n">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
+        <span class="bp">self</span> <span class="o">=</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">func</span> <span class="o">=</span> <span class="n">func</span>
         <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">func_type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">decorator</span><span class="p">)</span>
         <span class="n">v</span><span class="o">.</span><span class="n">self</span> <span class="o">=</span> <span class="bp">self</span>
@@ -412,7 +413,7 @@
 <span class="k">class</span> <span class="nc">DumpContextOnException</span><span class="p">(</span><span class="n">VectoredExceptionHandler</span><span class="p">):</span>
         <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exit</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">exit</span> <span class="o">=</span> <span class="n">exit</span>
-            <span class="nb">super</span><span class="p">(</span><span class="n">DumpContextOnException</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">print_context_result</span><span class="p">)</span>
+            <span class="nb">super</span><span class="p">(</span><span class="n">DumpContextOnException</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">print_context_result</span><span class="p">)</span>
 
         <span class="k">def</span> <span class="nf">print_context_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exception_pointers</span><span class="p">):</span>
             <span class="n">except_record</span> <span class="o">=</span> <span class="n">exception_pointers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">ExceptionRecord</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -452,13 +453,13 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.2 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+        &#169; Copyright 2015, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
     </div>
   </body>
 </html>

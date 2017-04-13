@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>windows.utils.winutils &mdash; PythonForWindows 0.2 documentation</title>
+    <title>windows.utils.winutils &#8212; PythonForWindows 0.2 documentation</title>
     
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -17,14 +17,15 @@
         VERSION:     '0.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <link rel="top" title="PythonForWindows 0.2 documentation" href="../../../index.html" />
-    <link rel="up" title="Module code" href="../../index.html" /> 
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -36,8 +37,8 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.2 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -55,6 +56,7 @@
 <span class="kn">import</span> <span class="nn">datetime</span>
 
 <span class="kn">import</span> <span class="nn">windows</span>
+<span class="kn">from</span> <span class="nn">windows.dbgprint</span> <span class="k">import</span> <span class="n">dbgprint</span>
 <span class="kn">from</span> <span class="nn">..</span> <span class="k">import</span> <span class="n">winproxy</span>
 <span class="kn">from</span> <span class="nn">..generated_def</span> <span class="k">import</span> <span class="n">windef</span>
 <span class="kn">from</span> <span class="nn">..generated_def.winstructs</span> <span class="k">import</span> <span class="o">*</span>
@@ -133,6 +135,10 @@
     <span class="k">if</span> <span class="n">args</span><span class="p">:</span>
         <span class="n">lpCommandLine</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">args</span><span class="p">]))</span>
     <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">CreateProcessA</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">lpCommandLine</span><span class="o">=</span><span class="n">lpCommandLine</span><span class="p">,</span> <span class="n">dwCreationFlags</span><span class="o">=</span><span class="n">dwCreationFlags</span><span class="p">,</span> <span class="n">lpProcessInformation</span><span class="o">=</span><span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">proc_info</span><span class="p">),</span> <span class="n">lpStartupInfo</span><span class="o">=</span><span class="n">lpStartupInfo</span><span class="p">)</span>
+    <span class="n">dbgprint</span><span class="p">(</span><span class="s2">&quot;CreateProcessA new process handle </span><span class="si">{:#x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">proc_info</span><span class="o">.</span><span class="n">hProcess</span><span class="p">),</span> <span class="s2">&quot;HANDLE&quot;</span><span class="p">)</span>
+    <span class="n">dbgprint</span><span class="p">(</span><span class="s2">&quot;CreateProcessA new thread handle </span><span class="si">{:#x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">proc_info</span><span class="o">.</span><span class="n">hThread</span><span class="p">),</span> <span class="s2">&quot;HANDLE&quot;</span><span class="p">)</span>
+    <span class="n">dbgprint</span><span class="p">(</span><span class="s2">&quot;Automatic close of thread handle </span><span class="si">{:#x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">proc_info</span><span class="o">.</span><span class="n">hThread</span><span class="p">),</span> <span class="s2">&quot;HANDLE&quot;</span><span class="p">)</span>
+    <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">CloseHandle</span><span class="p">(</span><span class="n">proc_info</span><span class="o">.</span><span class="n">hThread</span><span class="p">)</span>  <span class="c1"># Give access to a WinThread in addition of the WinProcess ?</span>
     <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">winobject</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">WinProcess</span><span class="p">(</span><span class="n">pid</span><span class="o">=</span><span class="n">proc_info</span><span class="o">.</span><span class="n">dwProcessId</span><span class="p">,</span> <span class="n">handle</span><span class="o">=</span><span class="n">proc_info</span><span class="o">.</span><span class="n">hProcess</span><span class="p">)</span></div>
 
 
@@ -267,6 +273,14 @@
 <span class="c1">#    addr = windows.winproxy.MapViewOfFile(h, dwDesiredAccess=FILE_MAP_READ, dwNumberOfBytesToMap=1)</span>
 <span class="c1">#    return addr</span>
 
+<span class="k">def</span> <span class="nf">decompress_buffer</span><span class="p">(</span><span class="n">comptype</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">uncompress_size</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">uncompress_size</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">uncompress_size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span> <span class="o">*</span> <span class="mi">10</span>
+    <span class="n">result_size</span> <span class="o">=</span> <span class="n">DWORD</span><span class="p">()</span>
+    <span class="n">uncompressed</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_buffer</span><span class="p">(</span><span class="n">uncompress_size</span><span class="p">)</span>
+    <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">RtlDecompressBuffer</span><span class="p">(</span><span class="n">comptype</span><span class="p">,</span> <span class="n">uncompressed</span><span class="p">,</span> <span class="n">uncompress_size</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">buffer</span><span class="p">),</span> <span class="n">result_size</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">uncompressed</span><span class="p">[:</span><span class="n">result_size</span><span class="o">.</span><span class="n">value</span><span class="p">]</span>
+
 <div class="viewcode-block" id="VirtualProtected"><a class="viewcode-back" href="../../../utils.html#windows.utils.VirtualProtected">[docs]</a><span class="k">class</span> <span class="nc">VirtualProtected</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A context manager usable like `VirtualProtect` that will restore the old protection at exit ::</span>
@@ -342,13 +356,13 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.2 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+        &#169; Copyright 2015, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
     </div>
   </body>
 </html>

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>windows.debug.debugger &mdash; PythonForWindows 0.2 documentation</title>
+    <title>windows.debug.debugger &#8212; PythonForWindows 0.2 documentation</title>
     
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -17,14 +17,15 @@
         VERSION:     '0.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <link rel="top" title="PythonForWindows 0.2 documentation" href="../../../index.html" />
-    <link rel="up" title="Module code" href="../../index.html" /> 
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -36,8 +37,8 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.2 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -105,7 +106,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">breakpoints</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_pending_breakpoints</span> <span class="o">=</span> <span class="p">{}</span> <span class="c1">#Breakpoints to put in new process / threads</span>
         <span class="c1"># Values rewritten by &quot;\xcc&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_memory_save</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">dict</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_memory_save</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
         <span class="c1"># Dict of {tid : {drx taken : BP}}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_hardware_breakpoint</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="c1"># Breakpoints to reput..</span>
@@ -124,18 +125,29 @@
 
 
     <span class="nd">@classmethod</span>
-<div class="viewcode-block" id="Debugger.attach"><a class="viewcode-back" href="../../../debug.html#windows.debug.Debugger.attach">[docs]</a>    <span class="k">def</span> <span class="nf">attach</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+<div class="viewcode-block" id="Debugger.attach"><a class="viewcode-back" href="../../../debug.html#windows.debug.Debugger.attach">[docs]</a>    <span class="k">def</span> <span class="nf">attach</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;attach to ``target`` (must be a :class:`WinProcess`)</span>
 
 <span class="sd">        :rtype: :class:`Debugger`&quot;&quot;&quot;</span>
         <span class="n">winproxy</span><span class="o">.</span><span class="n">DebugActiveProcess</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">pid</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">cls</span><span class="p">(</span><span class="n">target</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">target</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Debugger.detach"><a class="viewcode-back" href="../../../debug.html#windows.debug.Debugger.detach">[docs]</a>    <span class="k">def</span> <span class="nf">detach</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Detach from all debugged processes or process ``target``&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">proc</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">processes</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">targets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">processes</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">targets</span><span class="p">:</span>
+                <span class="c1"># We are not following any process</span>
+                <span class="c1"># maybe a attach/detach with Debugger.loop</span>
+                <span class="c1"># Just detach from the initial target</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">:</span>
+                    <span class="n">tpid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">pid</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Remove ref to process -&gt; GC -&gt; CloseHandle -&gt; process is destroyed</span>
+                    <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">DebugActiveProcessStop</span><span class="p">(</span><span class="n">tpid</span><span class="p">)</span>
+                <span class="k">return</span>
+            <span class="k">for</span> <span class="n">proc</span> <span class="ow">in</span> <span class="n">targets</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">detach</span><span class="p">(</span><span class="n">proc</span><span class="p">)</span>
+            <span class="k">del</span> <span class="n">targets</span>
             <span class="k">return</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">WinProcess</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Detach accept only WinProcess&quot;</span><span class="p">)</span>
@@ -158,26 +170,36 @@
             <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_explicit_single_step</span><span class="p">[</span><span class="n">thread</span><span class="o">.</span><span class="n">tid</span><span class="p">]</span>
             <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_breakpoint_to_reput</span><span class="p">[</span><span class="n">thread</span><span class="o">.</span><span class="n">tid</span><span class="p">]</span>
             <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">threads</span><span class="p">[</span><span class="n">thread</span><span class="o">.</span><span class="n">tid</span><span class="p">]</span>
+            <span class="n">ctx</span> <span class="o">=</span> <span class="n">thread</span><span class="o">.</span><span class="n">context</span>
+            <span class="k">if</span> <span class="n">ctx</span><span class="o">.</span><span class="n">EEFlags</span><span class="o">.</span><span class="n">TF</span><span class="p">:</span>  <span class="c1"># Remove TRAPFlag before detaching (or it will lead to a crash)</span>
+                <span class="n">ctx</span><span class="o">.</span><span class="n">EEFlags</span><span class="o">.</span><span class="n">TF</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">thread</span><span class="o">.</span><span class="n">set_context</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
         <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">processes</span><span class="p">[</span><span class="n">target</span><span class="o">.</span><span class="n">pid</span><span class="p">]</span>
         <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_watched_pages</span><span class="p">[</span><span class="n">target</span><span class="o">.</span><span class="n">pid</span><span class="p">]</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_module_by_process</span><span class="p">[</span><span class="n">target</span><span class="o">.</span><span class="n">pid</span><span class="p">]</span>
+
         <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_process</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_finish_debug_event</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">REMOVE_ME_debug_event</span><span class="p">,</span> <span class="n">DBG_CONTINUE</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">current_process</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">current_thread</span> <span class="o">=</span> <span class="kc">None</span>
 
+        <span class="k">if</span> <span class="n">target</span><span class="o">.</span><span class="n">pid</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">pid</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">DebugActiveProcessStop</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">pid</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_killed_in_action</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return ``True`` if current process have been detached by user callback&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">pid</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">processes</span>
-
+        <span class="c1"># Fix ? _handle_exit_process remove from processes but need a FinishDebugEvent</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_process</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">pid</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">processes</span>
 
     <span class="nd">@classmethod</span>
-<div class="viewcode-block" id="Debugger.debug"><a class="viewcode-back" href="../../../debug.html#windows.debug.Debugger.debug">[docs]</a>    <span class="k">def</span> <span class="nf">debug</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dwCreationFlags</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">show_windows</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Debugger.debug"><a class="viewcode-back" href="../../../debug.html#windows.debug.Debugger.debug">[docs]</a>    <span class="k">def</span> <span class="nf">debug</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dwCreationFlags</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">show_windows</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Create a process and debug it.</span>
 
 <span class="sd">        :rtype: :class:`Debugger`&quot;&quot;&quot;</span>
         <span class="n">dwCreationFlags</span> <span class="o">|=</span> <span class="n">DEBUG_PROCESS</span>
         <span class="n">c</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">create_process</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">dwCreationFlags</span><span class="o">=</span><span class="n">dwCreationFlags</span><span class="p">,</span> <span class="n">show_windows</span><span class="o">=</span><span class="n">show_windows</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">cls</span><span class="p">(</span><span class="n">c</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">c</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_init_dispatch_handlers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">dbg_evt_dispatch</span> <span class="o">=</span> <span class="p">{}</span>
@@ -219,6 +241,7 @@
         <span class="k">return</span> <span class="n">x</span>
 
     <span class="k">def</span> <span class="nf">_resolve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+        <span class="n">dbgprint</span><span class="p">(</span><span class="s2">&quot;Resolving &lt;</span><span class="si">{0}</span><span class="s2">&gt; in &lt;</span><span class="si">{1}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="n">target</span><span class="p">),</span> <span class="s2">&quot;DBG&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">addr</span>
         <span class="n">dll</span><span class="p">,</span> <span class="n">api</span> <span class="o">=</span> <span class="n">addr</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;!&quot;</span><span class="p">)</span>
@@ -239,6 +262,7 @@
             <span class="k">pass</span>
         <span class="n">exports</span> <span class="o">=</span> <span class="n">mod</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">exports</span>
         <span class="k">if</span> <span class="n">api</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exports</span><span class="p">:</span>
+            <span class="n">dbgprint</span><span class="p">(</span><span class="s2">&quot;Error resolving &lt;</span><span class="si">{0}</span><span class="s2">&gt; in &lt;</span><span class="si">{1}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="n">target</span><span class="p">),</span> <span class="s2">&quot;DBG&quot;</span><span class="p">)</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown API &lt;</span><span class="si">{0}</span><span class="s2">&gt; in DLL </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="n">dll</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">exports</span><span class="p">[</span><span class="n">api</span><span class="p">]</span>
 
@@ -436,6 +460,8 @@
         <span class="k">for</span> <span class="n">bp</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pending_breakpoints_new</span><span class="p">[</span><span class="kc">None</span><span class="p">]:</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bp</span><span class="o">.</span><span class="n">addr</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
                 <span class="n">target_dll</span> <span class="o">=</span> <span class="n">bp</span><span class="o">.</span><span class="n">addr</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;!&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="c1"># Cannot work AS-IS yet. Implement it ?</span>
+                <span class="c1"># if target_dll == &quot;*&quot; or target_dll == dll_name:</span>
                 <span class="k">if</span> <span class="n">target_dll</span> <span class="o">==</span> <span class="n">dll_name</span><span class="p">:</span>
                     <span class="n">_setup_method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_setup_breakpoint_&quot;</span> <span class="o">+</span> <span class="n">bp</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
                     <span class="k">if</span> <span class="n">bp</span><span class="o">.</span><span class="n">apply_to_target</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_process</span><span class="p">):</span>
@@ -499,6 +525,7 @@
                 <span class="n">thread</span><span class="o">.</span><span class="n">set_syswow_context</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">thread</span><span class="o">.</span><span class="n">set_context</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
+            <span class="k">del</span> <span class="n">thread</span>
             <span class="n">continue_flag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dispatch_breakpoint</span><span class="p">(</span><span class="n">exception</span><span class="p">,</span> <span class="n">excp_addr</span><span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_killed_in_action</span><span class="p">():</span>
                 <span class="k">return</span> <span class="n">continue_flag</span>
@@ -537,6 +564,8 @@
                 <span class="n">continue_flag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_single_step</span><span class="p">(</span><span class="n">exception</span><span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_killed_in_action</span><span class="p">():</span>
                 <span class="k">return</span> <span class="n">continue_flag</span>
+            <span class="c1"># Does not handle case where EEFlags.TF was by the debugge before trigering the exception</span>
+            <span class="c1"># Should set the flag explicitly in single_step ? and not just use EEFlags.TF ?</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_explicit_single_step</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_thread</span><span class="o">.</span><span class="n">tid</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_thread</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">EEFlags</span><span class="o">.</span><span class="n">TF</span>
             <span class="k">return</span> <span class="n">continue_flag</span>
         <span class="k">else</span><span class="p">:</span>
@@ -544,6 +573,8 @@
                 <span class="n">continue_flag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_exception</span><span class="p">(</span><span class="n">exception</span><span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_killed_in_action</span><span class="p">():</span>
                 <span class="k">return</span> <span class="n">continue_flag</span>
+            <span class="c1"># Does not handle case where EEFlags.TF was by the debugge before trigering the exception</span>
+            <span class="c1"># Should set the flag explicitly in single_step ? and not just use EEFlags.TF ?</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_explicit_single_step</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_thread</span><span class="o">.</span><span class="n">tid</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_thread</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">EEFlags</span><span class="o">.</span><span class="n">TF</span>
             <span class="k">return</span> <span class="n">continue_flag</span>
 
@@ -604,9 +635,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_update_debugger_state</span><span class="p">(</span><span class="n">debug_event</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">32</span><span class="p">:</span>
-            <span class="n">exception</span><span class="o">.</span><span class="n">__class__</span> <span class="o">=</span> <span class="n">winexception</span><span class="o">.</span><span class="n">EEXCEPTION_DEBUG_INFO32</span>
+            <span class="n">exception</span><span class="o">.</span><span class="vm">__class__</span> <span class="o">=</span> <span class="n">winexception</span><span class="o">.</span><span class="n">EEXCEPTION_DEBUG_INFO32</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">exception</span><span class="o">.</span><span class="n">__class__</span> <span class="o">=</span> <span class="n">winexception</span><span class="o">.</span><span class="n">EEXCEPTION_DEBUG_INFO64</span>
+            <span class="n">exception</span><span class="o">.</span><span class="vm">__class__</span> <span class="o">=</span> <span class="n">winexception</span><span class="o">.</span><span class="n">EEXCEPTION_DEBUG_INFO64</span>
 
         <span class="n">excp_code</span> <span class="o">=</span> <span class="n">exception</span><span class="o">.</span><span class="n">ExceptionRecord</span><span class="o">.</span><span class="n">ExceptionCode</span>
         <span class="n">excp_addr</span> <span class="o">=</span> <span class="n">exception</span><span class="o">.</span><span class="n">ExceptionRecord</span><span class="o">.</span><span class="n">ExceptionAddress</span>
@@ -657,8 +688,15 @@
         <span class="n">proc_handle</span> <span class="o">=</span> <span class="n">HANDLE</span><span class="p">()</span>
         <span class="n">thread_handle</span> <span class="o">=</span> <span class="n">HANDLE</span><span class="p">()</span>
         <span class="n">cp_handle</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">handle</span>
+
         <span class="n">winproxy</span><span class="o">.</span><span class="n">DuplicateHandle</span><span class="p">(</span><span class="n">cp_handle</span><span class="p">,</span> <span class="n">create_process</span><span class="o">.</span><span class="n">hProcess</span><span class="p">,</span> <span class="n">cp_handle</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">proc_handle</span><span class="p">),</span> <span class="n">dwOptions</span><span class="o">=</span><span class="n">DUPLICATE_SAME_ACCESS</span><span class="p">)</span>
         <span class="n">winproxy</span><span class="o">.</span><span class="n">DuplicateHandle</span><span class="p">(</span><span class="n">cp_handle</span><span class="p">,</span> <span class="n">create_process</span><span class="o">.</span><span class="n">hThread</span><span class="p">,</span> <span class="n">cp_handle</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">thread_handle</span><span class="p">),</span> <span class="n">dwOptions</span><span class="o">=</span><span class="n">DUPLICATE_SAME_ACCESS</span><span class="p">)</span>
+
+        <span class="n">dbgprint</span><span class="p">(</span><span class="s2">&quot; Got PROC handle </span><span class="si">{0:#x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">create_process</span><span class="o">.</span><span class="n">hProcess</span><span class="p">,</span> <span class="bp">self</span><span class="p">),</span> <span class="s2">&quot;HANDLE&quot;</span><span class="p">)</span>
+        <span class="n">dbgprint</span><span class="p">(</span><span class="s2">&quot; PROC handle duplicated: </span><span class="si">{0:#x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">proc_handle</span><span class="o">.</span><span class="n">value</span><span class="p">),</span> <span class="s2">&quot;HANDLE&quot;</span><span class="p">)</span>
+
+        <span class="n">dbgprint</span><span class="p">(</span><span class="s2">&quot; Got THREAD handle </span><span class="si">{0:#x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">create_process</span><span class="o">.</span><span class="n">hThread</span><span class="p">,</span> <span class="bp">self</span><span class="p">),</span> <span class="s2">&quot;HANDLE&quot;</span><span class="p">)</span>
+        <span class="n">dbgprint</span><span class="p">(</span><span class="s2">&quot; THREAD handle duplicated: </span><span class="si">{0:#x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">thread_handle</span><span class="o">.</span><span class="n">value</span><span class="p">),</span> <span class="s2">&quot;HANDLE&quot;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">current_process</span> <span class="o">=</span> <span class="n">WinProcess</span><span class="o">.</span><span class="n">_from_handle</span><span class="p">(</span><span class="n">proc_handle</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">current_thread</span> <span class="o">=</span> <span class="n">WinThread</span><span class="o">.</span><span class="n">_from_handle</span><span class="p">(</span><span class="n">thread_handle</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
@@ -670,6 +708,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">processes</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">pid</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_process</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_watched_pages</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">pid</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span> <span class="c1">#defaultdict(list)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">breakpoints</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">pid</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_memory_save</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">pid</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_module_by_process</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">pid</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_update_debugger_state</span><span class="p">(</span><span class="n">debug_event</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_setup_pending_breakpoints_new_process</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_process</span><span class="p">)</span>
@@ -689,6 +728,16 @@
         <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_breakpoint_to_reput</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_thread</span><span class="o">.</span><span class="n">tid</span><span class="p">]</span>
         <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">processes</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">pid</span><span class="p">]</span>
         <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_watched_pages</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">pid</span><span class="p">]</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_memory_save</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">pid</span><span class="p">]</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_module_by_process</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">pid</span><span class="p">]</span>
+
+        <span class="n">cpid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">pid</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_thread</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_process</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">cpid</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">pid</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="kc">None</span>
+
         <span class="k">return</span> <span class="n">retvalue</span>
 
     <span class="k">def</span> <span class="nf">_handle_create_thread</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">debug_event</span><span class="p">):</span>
@@ -766,7 +815,11 @@
             <span class="n">dbg_continue_flag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dispatch_debug_event</span><span class="p">(</span><span class="n">debug_event</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">dbg_continue_flag</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">dbg_continue_flag</span> <span class="o">=</span> <span class="n">DBG_CONTINUE</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_killed_in_action</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">debug_event</span><span class="o">.</span><span class="n">dwDebugEventCode</span> <span class="o">==</span> <span class="n">EXIT_PROCESS_DEBUG_EVENT</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_killed_in_action</span><span class="p">():</span>
+            <span class="c1">#if not self._killed_in_action():</span>
+                <span class="c1"># should we always _finish_debug_event even if process was killed ?</span>
+                <span class="c1"># rhaaa _killed_in_action is a REALLY bad name, it&#39;s not killed, it&#39;s detached</span>
+                <span class="c1"># TODO: FIXME</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_finish_debug_event</span><span class="p">(</span><span class="n">debug_event</span><span class="p">,</span> <span class="n">dbg_continue_flag</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">processes</span><span class="p">:</span>
                 <span class="k">break</span></div>
@@ -854,7 +907,7 @@
         <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_process</span>
         <span class="n">res</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="n">cp_watch_page</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_watched_pages</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">pid</span><span class="p">]</span>
+        <span class="n">cp_watch_page</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_watched_pages</span><span class="p">[</span><span class="n">target</span><span class="o">.</span><span class="n">pid</span><span class="p">]</span>
         <span class="n">page_protection</span> <span class="o">=</span> <span class="n">DWORD</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">page_addr</span><span class="p">,</span> <span class="n">watched_page</span> <span class="ow">in</span> <span class="n">cp_watch_page</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">target</span><span class="o">.</span><span class="n">virtual_protect</span><span class="p">(</span><span class="n">page_addr</span><span class="p">,</span> <span class="n">PAGE_SIZE</span><span class="p">,</span> <span class="n">watched_page</span><span class="o">.</span><span class="n">original_prot</span><span class="p">,</span> <span class="n">page_protection</span><span class="p">)</span>
@@ -981,13 +1034,13 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.2 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+        &#169; Copyright 2015, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
     </div>
   </body>
 </html>

@@ -22,6 +22,12 @@ TODO:
     - registry
         - test !
 
+    - Clean pe_parse.py
+
+
+    - wintrust doc:
+        add : https://blogs.msdn.microsoft.com/winsdk/2016/01/05/why-cryptcatadmincalchashfromfilehandle-fails-with-a-seemingly-unexpected-error-code/
+
 Documentation
     * verif samples
 

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>4. windows.winproxy – Windows API &mdash; PythonForWindows 0.2 documentation</title>
+    <title>4. windows.winproxy – Windows API &#8212; PythonForWindows 0.2 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -17,13 +17,15 @@
         VERSION:     '0.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="PythonForWindows 0.2 documentation" href="index.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="5. windows.utils – Windows Utilities" href="utils.html" />
     <link rel="prev" title="3. windows.native_exec – Native Code Execution" href="native_exec.html" /> 
   </head>
@@ -43,7 +45,7 @@
         <li class="right" >
           <a href="native_exec.html" title="3. windows.native_exec – Native Code Execution"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.2 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.2 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -168,6 +170,7 @@ It also heavily relies on <a class="reference external" href="https://docs.pytho
 <li>GetWindowTextW(hWnd, lpString, nMaxCount)</li>
 <li>LoadLibraryA(lpFileName)</li>
 <li>LoadLibraryW(lpFileName)</li>
+<li>LocalFree(hMem)</li>
 <li>QueryDosDeviceA(lpDeviceName, lpTargetPath, ucchMax)</li>
 <li>QueryDosDeviceW(lpDeviceName, lpTargetPath, ucchMax)</li>
 <li>ResumeThread(hThread)</li>
@@ -219,6 +222,114 @@ It also heavily relies on <a class="reference external" href="https://docs.pytho
 </pre></div>
 </div>
 </li>
+<li><p class="first">CertAddCertificateContextToStore:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CertAddCertificateContextToStore</span><span class="p">(</span><span class="n">hCertStore</span><span class="p">,</span> <span class="n">pCertContext</span><span class="p">,</span> <span class="n">dwAddDisposition</span><span class="p">,</span> <span class="n">ppStoreContext</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">CertCompareCertificate:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CertCompareCertificate</span><span class="p">(</span><span class="n">dwCertEncodingType</span><span class="p">,</span> <span class="n">pCertId1</span><span class="p">,</span> <span class="n">pCertId2</span><span class="p">)</span>
+<span class="n">This</span> <span class="n">function</span> <span class="n">does</span> <span class="ow">not</span> <span class="k">raise</span> <span class="ow">is</span> <span class="n">compare</span> <span class="n">has</span> <span class="n">failed</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">cert</span> <span class="n">are</span> <span class="n">NOT</span> <span class="n">equals</span>
+
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="n">Nothing</span> <span class="n">special</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">CertCreateCertificateContext:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CertCreateCertificateContext</span><span class="p">(</span><span class="n">dwCertEncodingType</span><span class="p">,</span> <span class="n">pbCertEncoded</span><span class="p">,</span> <span class="n">cbCertEncoded</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">CertCreateSelfSignCertificate:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CertCreateSelfSignCertificate</span><span class="p">(</span><span class="n">hCryptProvOrNCryptKey</span><span class="p">,</span> <span class="n">pSubjectIssuerBlob</span><span class="p">,</span> <span class="n">dwFlags</span><span class="p">,</span> <span class="n">pKeyProvInfo</span><span class="p">,</span> <span class="n">pSignatureAlgorithm</span><span class="p">,</span> <span class="n">pStartTime</span><span class="p">,</span> <span class="n">pEndTime</span><span class="p">,</span> <span class="n">pExtensions</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">CertDuplicateCertificateContext:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CertDuplicateCertificateContext</span><span class="p">(</span><span class="n">pCertContext</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">CertEnumCertificateContextProperties:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CertEnumCertificateContextProperties</span><span class="p">(</span><span class="n">pCertContext</span><span class="p">,</span> <span class="n">dwPropId</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="n">Nothing</span> <span class="n">special</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">CertEnumCertificatesInStore:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CertEnumCertificatesInStore</span><span class="p">(</span><span class="n">hCertStore</span><span class="p">,</span> <span class="n">pPrevCertContext</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">CertFindCertificateInStore:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CertFindCertificateInStore</span><span class="p">(</span><span class="n">hCertStore</span><span class="p">,</span> <span class="n">dwCertEncodingType</span><span class="p">,</span> <span class="n">dwFindFlags</span><span class="p">,</span> <span class="n">dwFindType</span><span class="p">,</span> <span class="n">pvFindPara</span><span class="p">,</span> <span class="n">pPrevCertContext</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">CertGetCertificateChain:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CertGetCertificateChain</span><span class="p">(</span><span class="n">hChainEngine</span><span class="p">,</span> <span class="n">pCertContext</span><span class="p">,</span> <span class="n">pTime</span><span class="p">,</span> <span class="n">hAdditionalStore</span><span class="p">,</span> <span class="n">pChainPara</span><span class="p">,</span> <span class="n">dwFlags</span><span class="p">,</span> <span class="n">pvReserved</span><span class="p">,</span> <span class="n">ppChainContext</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">CertGetCertificateContextProperty:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CertGetCertificateContextProperty</span><span class="p">(</span><span class="n">pCertContext</span><span class="p">,</span> <span class="n">dwPropId</span><span class="p">,</span> <span class="n">pvData</span><span class="p">,</span> <span class="n">pcbData</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">CertGetNameStringA:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CertGetNameStringA</span><span class="p">(</span><span class="n">pCertContext</span><span class="p">,</span> <span class="n">dwType</span><span class="p">,</span> <span class="n">dwFlags</span><span class="p">,</span> <span class="n">pvTypePara</span><span class="p">,</span> <span class="n">pszNameString</span><span class="p">,</span> <span class="n">cchNameString</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">CertGetNameStringW:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CertGetNameStringW</span><span class="p">(</span><span class="n">pCertContext</span><span class="p">,</span> <span class="n">dwType</span><span class="p">,</span> <span class="n">dwFlags</span><span class="p">,</span> <span class="n">pvTypePara</span><span class="p">,</span> <span class="n">pszNameString</span><span class="p">,</span> <span class="n">cchNameString</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">CertOpenStore:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CertOpenStore</span><span class="p">(</span><span class="n">lpszStoreProvider</span><span class="p">,</span> <span class="n">dwMsgAndCertEncodingType</span><span class="p">,</span> <span class="n">hCryptProv</span><span class="p">,</span> <span class="n">dwFlags</span><span class="p">,</span> <span class="n">pvPara</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">CertStrToNameA:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CertStrToNameA</span><span class="p">(</span><span class="n">dwCertEncodingType</span><span class="p">,</span> <span class="n">pszX500</span><span class="p">,</span> <span class="n">dwStrType</span><span class="p">,</span> <span class="n">pvReserved</span><span class="p">,</span> <span class="n">pbEncoded</span><span class="p">,</span> <span class="n">pcbEncoded</span><span class="p">,</span> <span class="n">ppszError</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">CertStrToNameW:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CertStrToNameW</span><span class="p">(</span><span class="n">dwCertEncodingType</span><span class="p">,</span> <span class="n">pszX500</span><span class="p">,</span> <span class="n">dwStrType</span><span class="p">,</span> <span class="n">pvReserved</span><span class="p">,</span> <span class="n">pbEncoded</span><span class="p">,</span> <span class="n">pcbEncoded</span><span class="p">,</span> <span class="n">ppszError</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
 <li><p class="first">CoCreateInstance:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CoCreateInstance</span><span class="p">(</span><span class="n">rclsid</span><span class="p">,</span> <span class="n">pUnkOuter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dwClsContext</span><span class="o">=</span><span class="n">tagCLSCTX</span><span class="o">.</span><span class="n">CLSCTX_INPROC_SERVER</span><span class="p">(</span><span class="mh">0x1</span><span class="n">L</span><span class="p">),</span> <span class="n">riid</span><span class="o">=</span><span class="n">NeededParameter</span><span class="p">,</span> <span class="n">ppv</span><span class="o">=</span><span class="n">NeededParameter</span><span class="p">)</span>
 <span class="n">Errcheck</span><span class="p">:</span>
@@ -237,6 +348,34 @@ It also heavily relies on <a class="reference external" href="https://docs.pytho
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CoInitializeSecurity</span><span class="p">(</span><span class="n">pSecDesc</span><span class="p">,</span> <span class="n">cAuthSvc</span><span class="p">,</span> <span class="n">asAuthSvc</span><span class="p">,</span> <span class="n">pReserved1</span><span class="p">,</span> <span class="n">dwAuthnLevel</span><span class="p">,</span> <span class="n">dwImpLevel</span><span class="p">,</span> <span class="n">pAuthList</span><span class="p">,</span> <span class="n">dwCapabilities</span><span class="p">,</span> <span class="n">pReserved3</span><span class="p">)</span>
 <span class="n">Errcheck</span><span class="p">:</span>
    <span class="n">Nothing</span> <span class="n">special</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">ConvertSidToStringSidA:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ConvertSidToStringSidA</span><span class="p">(</span><span class="n">Sid</span><span class="p">,</span> <span class="n">StringSid</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">ConvertSidToStringSidW:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ConvertSidToStringSidW</span><span class="p">(</span><span class="n">Sid</span><span class="p">,</span> <span class="n">StringSid</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">ConvertStringSidToSidA:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ConvertStringSidToSidA</span><span class="p">(</span><span class="n">StringSid</span><span class="p">,</span> <span class="n">Sid</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">ConvertStringSidToSidW:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ConvertStringSidToSidW</span><span class="p">(</span><span class="n">StringSid</span><span class="p">,</span> <span class="n">Sid</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
 </pre></div>
 </div>
 </li>
@@ -303,6 +442,27 @@ It also heavily relies on <a class="reference external" href="https://docs.pytho
 </pre></div>
 </div>
 </li>
+<li><p class="first">CryptAcquireCertificatePrivateKey:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CryptAcquireCertificatePrivateKey</span><span class="p">(</span><span class="n">pCert</span><span class="p">,</span> <span class="n">dwFlags</span><span class="p">,</span> <span class="n">pvParameters</span><span class="p">,</span> <span class="n">phCryptProvOrNCryptKey</span><span class="p">,</span> <span class="n">pdwKeySpec</span><span class="p">,</span> <span class="n">pfCallerFreeProvOrNCryptKey</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">CryptAcquireContextA:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CryptAcquireContextA</span><span class="p">(</span><span class="n">phProv</span><span class="p">,</span> <span class="n">pszContainer</span><span class="p">,</span> <span class="n">pszProvider</span><span class="p">,</span> <span class="n">dwProvType</span><span class="p">,</span> <span class="n">dwFlags</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">CryptAcquireContextW:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CryptAcquireContextW</span><span class="p">(</span><span class="n">phProv</span><span class="p">,</span> <span class="n">pszContainer</span><span class="p">,</span> <span class="n">pszProvider</span><span class="p">,</span> <span class="n">dwProvType</span><span class="p">,</span> <span class="n">dwFlags</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
 <li><p class="first">CryptCATAdminAcquireContext:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CryptCATAdminAcquireContext</span><span class="p">(</span><span class="n">phCatAdmin</span><span class="p">,</span> <span class="n">pgSubsystem</span><span class="p">,</span> <span class="n">dwFlags</span><span class="p">)</span>
 <span class="n">Errcheck</span><span class="p">:</span>
@@ -345,6 +505,76 @@ It also heavily relies on <a class="reference external" href="https://docs.pytho
 </pre></div>
 </div>
 </li>
+<li><p class="first">CryptDecodeObject:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CryptDecodeObject</span><span class="p">(</span><span class="n">dwCertEncodingType</span><span class="p">,</span> <span class="n">lpszStructType</span><span class="p">,</span> <span class="n">pbEncoded</span><span class="p">,</span> <span class="n">cbEncoded</span><span class="p">,</span> <span class="n">dwFlags</span><span class="p">,</span> <span class="n">pvStructInfo</span><span class="p">,</span> <span class="n">pcbStructInfo</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">CryptDecryptMessage:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CryptDecryptMessage</span><span class="p">(</span><span class="n">pDecryptPara</span><span class="p">,</span> <span class="n">pbEncryptedBlob</span><span class="p">,</span> <span class="n">cbEncryptedBlob</span><span class="p">,</span> <span class="n">pbDecrypted</span><span class="p">,</span> <span class="n">pcbDecrypted</span><span class="p">,</span> <span class="n">ppXchgCert</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">CryptDestroyKey:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CryptDestroyKey</span><span class="p">(</span><span class="n">hKey</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">CryptEncodeObjectEx:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CryptEncodeObjectEx</span><span class="p">(</span><span class="n">dwCertEncodingType</span><span class="p">,</span> <span class="n">lpszStructType</span><span class="p">,</span> <span class="n">pvStructInfo</span><span class="p">,</span> <span class="n">dwFlags</span><span class="p">,</span> <span class="n">pEncodePara</span><span class="p">,</span> <span class="n">pvEncoded</span><span class="p">,</span> <span class="n">pcbEncoded</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">CryptEncryptMessage:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CryptEncryptMessage</span><span class="p">(</span><span class="n">pEncryptPara</span><span class="p">,</span> <span class="n">cRecipientCert</span><span class="p">,</span> <span class="n">rgpRecipientCert</span><span class="p">,</span> <span class="n">pbToBeEncrypted</span><span class="p">,</span> <span class="n">cbToBeEncrypted</span><span class="p">,</span> <span class="n">pbEncryptedBlob</span><span class="p">,</span> <span class="n">pcbEncryptedBlob</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">CryptExportKey:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CryptExportKey</span><span class="p">(</span><span class="n">hKey</span><span class="p">,</span> <span class="n">hExpKey</span><span class="p">,</span> <span class="n">dwBlobType</span><span class="p">,</span> <span class="n">dwFlags</span><span class="p">,</span> <span class="n">pbData</span><span class="p">,</span> <span class="n">pdwDataLen</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">CryptGenKey:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CryptGenKey</span><span class="p">(</span><span class="n">hProv</span><span class="p">,</span> <span class="n">Algid</span><span class="p">,</span> <span class="n">dwFlags</span><span class="p">,</span> <span class="n">phKey</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">CryptMsgGetParam:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CryptMsgGetParam</span><span class="p">(</span><span class="n">hCryptMsg</span><span class="p">,</span> <span class="n">dwParamType</span><span class="p">,</span> <span class="n">dwIndex</span><span class="p">,</span> <span class="n">pvData</span><span class="p">,</span> <span class="n">pcbData</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">CryptQueryObject:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CryptQueryObject</span><span class="p">(</span><span class="n">dwObjectType</span><span class="p">,</span> <span class="n">pvObject</span><span class="p">,</span> <span class="n">dwExpectedContentTypeFlags</span><span class="p">,</span> <span class="n">dwExpectedFormatTypeFlags</span><span class="p">,</span> <span class="n">dwFlags</span><span class="p">,</span> <span class="n">pdwMsgAndCertEncodingType</span><span class="p">,</span> <span class="n">pdwContentType</span><span class="p">,</span> <span class="n">pdwFormatType</span><span class="p">,</span> <span class="n">phCertStore</span><span class="p">,</span> <span class="n">phMsg</span><span class="p">,</span> <span class="n">ppvContext</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">CryptReleaseContext:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CryptReleaseContext</span><span class="p">(</span><span class="n">hProv</span><span class="p">,</span> <span class="n">dwFlags</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
 <li><p class="first">DeviceIoControl:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">DeviceIoControl</span><span class="p">(</span><span class="n">hDevice</span><span class="p">,</span> <span class="n">dwIoControlCode</span><span class="p">,</span> <span class="n">lpInBuffer</span><span class="p">,</span> <span class="n">nInBufferSize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lpOutBuffer</span><span class="o">=</span><span class="n">NeededParameter</span><span class="p">,</span> <span class="n">nOutBufferSize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lpBytesReturned</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lpOverlapped</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 <span class="n">Errcheck</span><span class="p">:</span>
@@ -368,6 +598,13 @@ It also heavily relies on <a class="reference external" href="https://docs.pytho
 </li>
 <li><p class="first">EnumServicesStatusExW:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">EnumServicesStatusExW</span><span class="p">(</span><span class="n">hSCManager</span><span class="p">,</span> <span class="n">InfoLevel</span><span class="p">,</span> <span class="n">dwServiceType</span><span class="p">,</span> <span class="n">dwServiceState</span><span class="p">,</span> <span class="n">lpServices</span><span class="p">,</span> <span class="n">cbBufSize</span><span class="p">,</span> <span class="n">pcbBytesNeeded</span><span class="p">,</span> <span class="n">lpServicesReturned</span><span class="p">,</span> <span class="n">lpResumeHandle</span><span class="p">,</span> <span class="n">pszGroupName</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">GetCursorPos:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">GetCursorPos</span><span class="p">(</span><span class="n">lpPoint</span><span class="p">)</span>
 <span class="n">Errcheck</span><span class="p">:</span>
    <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
 </pre></div>
@@ -429,6 +666,13 @@ It also heavily relies on <a class="reference external" href="https://docs.pytho
 </pre></div>
 </div>
 </li>
+<li><p class="first">GetLongPathNameA:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">GetLongPathNameA</span><span class="p">(</span><span class="n">lpszShortPath</span><span class="p">,</span> <span class="n">lpszLongPath</span><span class="p">,</span> <span class="n">cchBuffer</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
 <li><p class="first">GetMappedFileNameAWrapper:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">GetMappedFileNameAWrapper</span><span class="p">(</span><span class="n">hProcess</span><span class="p">,</span> <span class="n">lpv</span><span class="p">,</span> <span class="n">lpFilename</span><span class="p">,</span> <span class="n">nSize</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 <span class="n">Errcheck</span><span class="p">:</span>
@@ -496,6 +740,27 @@ It also heavily relies on <a class="reference external" href="https://docs.pytho
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">GetModuleBaseNameWWrapper</span><span class="p">(</span><span class="n">hProcess</span><span class="p">,</span> <span class="n">hModule</span><span class="p">,</span> <span class="n">lpBaseName</span><span class="p">,</span> <span class="n">nSize</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 <span class="n">Errcheck</span><span class="p">:</span>
    <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">GetNamedSecurityInfoA:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">GetNamedSecurityInfoA</span><span class="p">(</span><span class="n">pObjectName</span><span class="p">,</span> <span class="n">ObjectType</span><span class="p">,</span> <span class="n">SecurityInfo</span><span class="p">,</span> <span class="n">ppsidOwner</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ppsidGroup</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ppDacl</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ppSacl</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ppSecurityDescriptor</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="n">NOT</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">GetNamedSecurityInfoW:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">GetNamedSecurityInfoW</span><span class="p">(</span><span class="n">pObjectName</span><span class="p">,</span> <span class="n">ObjectType</span><span class="p">,</span> <span class="n">SecurityInfo</span><span class="p">,</span> <span class="n">ppsidOwner</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ppsidGroup</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ppDacl</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ppSacl</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ppSecurityDescriptor</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="n">NOT</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">GetProcessDEPPolicy:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">GetProcessDEPPolicy</span><span class="p">(</span><span class="n">hProcess</span><span class="p">,</span> <span class="n">lpFlags</span><span class="p">,</span> <span class="n">lpPermanent</span><span class="p">)</span>
 <span class="n">Errcheck</span><span class="p">:</span>
    <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
 </pre></div>
@@ -544,6 +809,20 @@ It also heavily relies on <a class="reference external" href="https://docs.pytho
 </pre></div>
 </div>
 </li>
+<li><p class="first">GetSecurityInfo:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">GetSecurityInfo</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">ObjectType</span><span class="p">,</span> <span class="n">SecurityInfo</span><span class="p">,</span> <span class="n">ppsidOwner</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ppsidGroup</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ppDacl</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ppSacl</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ppSecurityDescriptor</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="n">NOT</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">GetShortPathNameA:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">GetShortPathNameA</span><span class="p">(</span><span class="n">lpszLongPath</span><span class="p">,</span> <span class="n">lpszShortPath</span><span class="p">,</span> <span class="n">cchBuffer</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
 <li><p class="first">GetThreadContext:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">GetThreadContext</span><span class="p">(</span><span class="n">hThread</span><span class="p">,</span> <span class="n">lpContext</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 <span class="n">Errcheck</span><span class="p">:</span>
@@ -567,6 +846,13 @@ It also heavily relies on <a class="reference external" href="https://docs.pytho
 </li>
 <li><p class="first">GetVolumeInformationW:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">GetVolumeInformationW</span><span class="p">(</span><span class="n">lpRootPathName</span><span class="p">,</span> <span class="n">lpVolumeNameBuffer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nVolumeNameSize</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">lpVolumeSerialNumber</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lpMaximumComponentLength</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lpFileSystemFlags</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lpFileSystemNameBuffer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nFileSystemNameSize</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">GetWindowRect:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">GetWindowRect</span><span class="p">(</span><span class="n">hWnd</span><span class="p">,</span> <span class="n">lpRect</span><span class="p">)</span>
 <span class="n">Errcheck</span><span class="p">:</span>
    <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
 </pre></div>
@@ -622,6 +908,11 @@ It also heavily relies on <a class="reference external" href="https://docs.pytho
 </pre></div>
 </div>
 </li>
+<li><p class="first">NtAlpcConnectPortEx:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">NtAlpcConnectPortEx</span><span class="p">(</span><span class="n">PortHandle</span><span class="p">,</span> <span class="n">ConnectionPortObjectAttributes</span><span class="p">,</span> <span class="n">ClientPortObjectAttributes</span><span class="p">,</span> <span class="n">PortAttributes</span><span class="p">,</span> <span class="n">Flags</span><span class="p">,</span> <span class="n">ServerSecurityRequirements</span><span class="p">,</span> <span class="n">ConnectionMessage</span><span class="p">,</span> <span class="n">BufferLength</span><span class="p">,</span> <span class="n">OutMessageAttributes</span><span class="p">,</span> <span class="n">InMessageAttributes</span><span class="p">,</span> <span class="n">Timeout</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
 <li><p class="first">NtAlpcCreatePort:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">NtAlpcCreatePort</span><span class="p">(</span><span class="n">PortHandle</span><span class="p">,</span> <span class="n">ObjectAttributes</span><span class="p">,</span> <span class="n">PortAttributes</span><span class="p">)</span>
 </pre></div>
@@ -629,6 +920,11 @@ It also heavily relies on <a class="reference external" href="https://docs.pytho
 </li>
 <li><p class="first">NtAlpcSendWaitReceivePort:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">NtAlpcSendWaitReceivePort</span><span class="p">(</span><span class="n">PortHandle</span><span class="p">,</span> <span class="n">Flags</span><span class="p">,</span> <span class="n">SendMessage</span><span class="p">,</span> <span class="n">SendMessageAttributes</span><span class="p">,</span> <span class="n">ReceiveMessage</span><span class="p">,</span> <span class="n">BufferLength</span><span class="p">,</span> <span class="n">ReceiveMessageAttributes</span><span class="p">,</span> <span class="n">Timeout</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">NtCreateFile:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">NtCreateFile</span><span class="p">(</span><span class="n">FileHandle</span><span class="p">,</span> <span class="n">DesiredAccess</span><span class="p">,</span> <span class="n">ObjectAttributes</span><span class="p">,</span> <span class="n">IoStatusBlock</span><span class="p">,</span> <span class="n">AllocationSize</span><span class="p">,</span> <span class="n">FileAttributes</span><span class="p">,</span> <span class="n">ShareAccess</span><span class="p">,</span> <span class="n">CreateDisposition</span><span class="p">,</span> <span class="n">CreateOptions</span><span class="p">,</span> <span class="n">EaBuffer</span><span class="p">,</span> <span class="n">EaLength</span><span class="p">)</span>
 </pre></div>
 </div>
 </li>
@@ -762,6 +1058,27 @@ It also heavily relies on <a class="reference external" href="https://docs.pytho
 </pre></div>
 </div>
 </li>
+<li><p class="first">OpenThreadToken:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">OpenThreadToken</span><span class="p">(</span><span class="n">ThreadHandle</span><span class="p">,</span> <span class="n">DesiredAccess</span><span class="p">,</span> <span class="n">OpenAsSelf</span><span class="p">,</span> <span class="n">TokenHandle</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">PFXExportCertStoreEx:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">PFXExportCertStoreEx</span><span class="p">(</span><span class="n">hStore</span><span class="p">,</span> <span class="n">pPFX</span><span class="p">,</span> <span class="n">szPassword</span><span class="p">,</span> <span class="n">pvPara</span><span class="p">,</span> <span class="n">dwFlags</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">PFXImportCertStore:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">PFXImportCertStore</span><span class="p">(</span><span class="n">pPFX</span><span class="p">,</span> <span class="n">szPassword</span><span class="p">,</span> <span class="n">dwFlags</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
 <li><p class="first">Process32First:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Process32First</span><span class="p">(</span><span class="n">hSnapshot</span><span class="p">,</span> <span class="n">lpte</span><span class="p">)</span>
 <span class="n">Errcheck</span><span class="p">:</span>
@@ -812,6 +1129,13 @@ It also heavily relies on <a class="reference external" href="https://docs.pytho
 </pre></div>
 </div>
 </li>
+<li><p class="first">ReadFile:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ReadFile</span><span class="p">(</span><span class="n">hFile</span><span class="p">,</span> <span class="n">lpBuffer</span><span class="p">,</span> <span class="n">nNumberOfBytesToRead</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lpNumberOfBytesRead</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lpOverlapped</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
 <li><p class="first">ReadProcessMemory:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ReadProcessMemory</span><span class="p">(</span><span class="n">hProcess</span><span class="p">,</span> <span class="n">lpBaseAddress</span><span class="p">,</span> <span class="n">lpBuffer</span><span class="p">,</span> <span class="n">nSize</span><span class="p">,</span> <span class="n">lpNumberOfBytesRead</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 <span class="n">Errcheck</span><span class="p">:</span>
@@ -854,8 +1178,34 @@ It also heavily relies on <a class="reference external" href="https://docs.pytho
 </pre></div>
 </div>
 </li>
+<li><p class="first">RegQueryValueExA:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">RegQueryValueExA</span><span class="p">(</span><span class="n">hKey</span><span class="p">,</span> <span class="n">lpValueName</span><span class="p">,</span> <span class="n">lpReserved</span><span class="p">,</span> <span class="n">lpType</span><span class="p">,</span> <span class="n">lpData</span><span class="p">,</span> <span class="n">lpcbData</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="n">NOT</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">RegQueryValueExW:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">RegQueryValueExW</span><span class="p">(</span><span class="n">hKey</span><span class="p">,</span> <span class="n">lpValueName</span><span class="p">,</span> <span class="n">lpReserved</span><span class="p">,</span> <span class="n">lpType</span><span class="p">,</span> <span class="n">lpData</span><span class="p">,</span> <span class="n">lpcbData</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="n">NOT</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
 <li><p class="first">RemoveVectoredExceptionHandler:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">RemoveVectoredExceptionHandler</span><span class="p">(</span><span class="n">Handler</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">RtlDecompressBuffer:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">RtlDecompressBuffer</span><span class="p">(</span><span class="n">CompressionFormat</span><span class="p">,</span> <span class="n">UncompressedBuffer</span><span class="p">,</span> <span class="n">UncompressedBufferSize</span><span class="p">,</span> <span class="n">CompressedBuffer</span><span class="p">,</span> <span class="n">CompressedBufferSize</span><span class="p">,</span> <span class="n">FinalUncompressedSize</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">SetConsoleCtrlHandler:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">SetConsoleCtrlHandler</span><span class="p">(</span><span class="n">HandlerRoutine</span><span class="p">,</span> <span class="n">Add</span><span class="p">)</span>
 <span class="n">Errcheck</span><span class="p">:</span>
    <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
 </pre></div>
@@ -871,6 +1221,27 @@ It also heavily relies on <a class="reference external" href="https://docs.pytho
 </li>
 <li><p class="first">SetThreadContext:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">SetThreadContext</span><span class="p">(</span><span class="n">hThread</span><span class="p">,</span> <span class="n">lpContext</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">SetTokenInformation:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">SetTokenInformation</span><span class="p">(</span><span class="n">TokenHandle</span><span class="p">,</span> <span class="n">TokenInformationClass</span><span class="p">,</span> <span class="n">TokenInformation</span><span class="p">,</span> <span class="n">TokenInformationLength</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">ShellExecuteA:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ShellExecuteA</span><span class="p">(</span><span class="n">hwnd</span><span class="p">,</span> <span class="n">lpOperation</span><span class="p">,</span> <span class="n">lpFile</span><span class="p">,</span> <span class="n">lpParameters</span><span class="p">,</span> <span class="n">lpDirectory</span><span class="p">,</span> <span class="n">nShowCmd</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">ShellExecuteW:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ShellExecuteW</span><span class="p">(</span><span class="n">hwnd</span><span class="p">,</span> <span class="n">lpOperation</span><span class="p">,</span> <span class="n">lpFile</span><span class="p">,</span> <span class="n">lpParameters</span><span class="p">,</span> <span class="n">lpDirectory</span><span class="p">,</span> <span class="n">nShowCmd</span><span class="p">)</span>
 <span class="n">Errcheck</span><span class="p">:</span>
    <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
 </pre></div>
@@ -969,6 +1340,13 @@ It also heavily relies on <a class="reference external" href="https://docs.pytho
 </pre></div>
 </div>
 </li>
+<li><p class="first">WindowFromPoint:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">WindowFromPoint</span><span class="p">(</span><span class="n">Point</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
 <li><p class="first">Wow64SetThreadContext:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Wow64SetThreadContext</span><span class="p">(</span><span class="n">hThread</span><span class="p">,</span> <span class="n">lpContext</span><span class="p">)</span>
 <span class="n">Errcheck</span><span class="p">:</span>
@@ -1019,7 +1397,7 @@ It also heavily relies on <a class="reference external" href="https://docs.pytho
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/winproxy.txt"
+      <li><a href="_sources/winproxy.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -1052,12 +1430,12 @@ It also heavily relies on <a class="reference external" href="https://docs.pytho
         <li class="right" >
           <a href="native_exec.html" title="3. windows.native_exec – Native Code Execution"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.2 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.2 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+        &#169; Copyright 2015, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
     </div>
   </body>
 </html>

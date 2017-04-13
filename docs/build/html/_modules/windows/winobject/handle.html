@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>windows.winobject.handle &mdash; PythonForWindows 0.2 documentation</title>
+    <title>windows.winobject.handle &#8212; PythonForWindows 0.2 documentation</title>
     
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -17,14 +17,15 @@
         VERSION:     '0.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <link rel="top" title="PythonForWindows 0.2 documentation" href="../../../index.html" />
-    <link rel="up" title="Module code" href="../../index.html" /> 
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -36,8 +37,8 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.2 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -83,11 +84,15 @@
 <span class="sd">        :type: :class:`str`&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_object_type</span><span class="p">()</span>
 
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">infos</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;TODO: DOC&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_object_basic_infos</span><span class="p">()</span>
+
     <span class="k">def</span> <span class="nf">_get_object_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">lh</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">local_handle</span>
         <span class="n">size_needed</span> <span class="o">=</span> <span class="n">DWORD</span><span class="p">()</span>
         <span class="n">yyy</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_buffer</span><span class="p">(</span><span class="mh">0x1000</span><span class="p">)</span>
-        <span class="n">size_needed</span> <span class="o">=</span> <span class="n">DWORD</span><span class="p">()</span>
         <span class="n">winproxy</span><span class="o">.</span><span class="n">NtQueryObject</span><span class="p">(</span><span class="n">lh</span><span class="p">,</span> <span class="n">ObjectNameInformation</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">yyy</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">yyy</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">size_needed</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">WinUnicodeString</span><span class="o">.</span><span class="n">from_buffer_copy</span><span class="p">(</span><span class="n">yyy</span><span class="p">[:</span><span class="n">size_needed</span><span class="o">.</span><span class="n">value</span><span class="p">])</span><span class="o">.</span><span class="n">str</span>
 
@@ -97,12 +102,24 @@
         <span class="n">size_needed</span> <span class="o">=</span> <span class="n">DWORD</span><span class="p">()</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">winproxy</span><span class="o">.</span><span class="n">NtQueryObject</span><span class="p">(</span><span class="n">lh</span><span class="p">,</span> <span class="n">ObjectTypeInformation</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">xxx</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">xxx</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">size_needed</span><span class="p">))</span>
-        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">code</span> <span class="o">!=</span> <span class="n">STATUS_INFO_LENGTH_MISMATCH</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ERROR WITH </span><span class="si">{0:x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lh</span><span class="p">))</span>
+                <span class="k">raise</span>
             <span class="n">size</span> <span class="o">=</span> <span class="n">size_needed</span><span class="o">.</span><span class="n">value</span>
             <span class="n">buffer</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_buffer</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
             <span class="n">winproxy</span><span class="o">.</span><span class="n">NtQueryObject</span><span class="p">(</span><span class="n">lh</span><span class="p">,</span> <span class="n">ObjectTypeInformation</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">size_needed</span><span class="p">))</span>
             <span class="n">xxx</span> <span class="o">=</span> <span class="n">EPUBLIC_OBJECT_TYPE_INFORMATION</span><span class="o">.</span><span class="n">from_buffer_copy</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">xxx</span><span class="o">.</span><span class="n">TypeName</span><span class="o">.</span><span class="n">str</span>
+
+    <span class="k">def</span> <span class="nf">_get_object_basic_infos</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+        <span class="n">lh</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">local_handle</span>
+        <span class="n">size_needed</span> <span class="o">=</span> <span class="n">DWORD</span><span class="p">()</span>
+        <span class="n">basic_infos</span> <span class="o">=</span> <span class="n">PUBLIC_OBJECT_BASIC_INFORMATION</span><span class="p">()</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">NtQueryObject</span><span class="p">(</span><span class="n">lh</span><span class="p">,</span> <span class="n">ObjectBasicInformation</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">basic_infos</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">basic_infos</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">size_needed</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">basic_infos</span>
+        <span class="c1">#PUBLIC_OBJECT_BASIC_INFORMATION</span>
 
     <span class="nd">@windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">fixedpropety</span>
     <span class="k">def</span> <span class="nf">local_handle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -116,7 +133,7 @@
         <span class="k">return</span> <span class="n">res</span><span class="o">.</span><span class="n">value</span>
 
     <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s2">&quot;&lt;</span><span class="si">{0}</span><span class="s2"> value=&lt;0x</span><span class="si">{1:x}</span><span class="s2">&gt; in process pid=</span><span class="si">{2}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">wValue</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dwProcessId</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;&lt;</span><span class="si">{0}</span><span class="s2"> value=&lt;0x</span><span class="si">{1:x}</span><span class="s2">&gt; in process pid=</span><span class="si">{2}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">wValue</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dwProcessId</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dwProcessId</span> <span class="o">==</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">pid</span><span class="p">:</span>
@@ -176,13 +193,13 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.2 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+        &#169; Copyright 2015, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
     </div>
   </body>
 </html>

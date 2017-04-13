@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>2.1. Processes and Threads &mdash; PythonForWindows 0.2 documentation</title>
+    <title>2.1. Processes and Threads &#8212; PythonForWindows 0.2 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -17,14 +17,15 @@
         VERSION:     '0.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="PythonForWindows 0.2 documentation" href="index.html" />
-    <link rel="up" title="2. The windows objects" href="various.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="2.4. Exception and Context related structures" href="exception.html" />
     <link rel="prev" title="2. The windows objects" href="various.html" /> 
   </head>
@@ -44,8 +45,8 @@
         <li class="right" >
           <a href="various.html" title="2. The windows objects"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.2 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="various.html" accesskey="U">2. The <code class="docutils literal"><span class="pre">windows</span></code> objects</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="various.html" accesskey="U">2. The <code class="docutils literal"><span class="pre">windows</span></code> objects</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -369,20 +370,6 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">TimeInfo</span></code></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="windows.winobject.process.CurrentProcess.token">
-<code class="descname">token</code><a class="headerlink" href="#windows.winobject.process.CurrentProcess.token" title="Permalink to this definition">¶</a></dt>
-<dd><p>The token of the process</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.process.Token" title="windows.winobject.process.Token"><code class="xref py py-class docutils literal"><span class="pre">Token</span></code></a></td>
 </tr>
 </tbody>
 </table>
@@ -928,20 +915,6 @@ raises an exception if the remote thread raised one</p>
 </table>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="windows.winobject.process.WinProcess.token">
-<code class="descname">token</code><a class="headerlink" href="#windows.winobject.process.WinProcess.token" title="Permalink to this definition">¶</a></dt>
-<dd><p>The token of the process</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.process.Token" title="windows.winobject.process.Token"><code class="xref py py-class docutils literal"><span class="pre">Token</span></code></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
 <dl class="method">
 <dt id="windows.winobject.process.WinProcess.virtual_alloc">
 <code class="descname">virtual_alloc</code><span class="sig-paren">(</span><em>size</em>, <em>prot=PAGE_EXECUTE_READWRITE(0x40L)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/process.html#WinProcess.virtual_alloc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.process.WinProcess.virtual_alloc" title="Permalink to this definition">¶</a></dt>
@@ -1286,7 +1259,7 @@ raises an exception if the remote thread raised one</p>
 <dl class="attribute">
 <dt id="windows.winobject.process.Token.integrity">
 <code class="descname">integrity</code><a class="headerlink" href="#windows.winobject.process.Token.integrity" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the integrity level of a process</p>
+<dd><p>Return the integrity level of a token</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1495,7 +1468,7 @@ The <a class="reference internal" href="#windows.winobject.process.PEB" title="w
 <h3>2.3.1.1. PEFile<a class="headerlink" href="#pefile" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="windows.pe_parse.PEFile">
-<em class="property">class </em><code class="descclassname">windows.pe_parse.</code><code class="descname">PEFile</code><a class="headerlink" href="#windows.pe_parse.PEFile" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">windows.pe_parse.</code><code class="descname">PEFile</code><span class="sig-paren">(</span><em>target</em>, <em>baseaddr</em>, <em>targetedbitness</em>, <em>transformers</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/pe_parse.html#PEFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.pe_parse.PEFile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Represent a PE loaded in a process (current or remote)</p>
 <dl class="attribute">
 <dt id="windows.pe_parse.PEFile.export_name">
@@ -1545,7 +1518,7 @@ of <a class="reference internal" href="#windows.pe_parse.IATEntry" title="window
 <h3>2.3.1.2. IATEntry<a class="headerlink" href="#iatentry" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="windows.pe_parse.IATEntry">
-<em class="property">class </em><code class="descclassname">windows.pe_parse.</code><code class="descname">IATEntry</code><a class="headerlink" href="#windows.pe_parse.IATEntry" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">windows.pe_parse.</code><code class="descname">IATEntry</code><a class="reference internal" href="_modules/windows/pe_parse.html#IATEntry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.pe_parse.IATEntry" title="Permalink to this definition">¶</a></dt>
 <dd><p>Represent an entry in the IAT of a module
 Can be used to get resolved value and setup hook</p>
 <dl class="data">
@@ -1582,13 +1555,13 @@ Can be used to get resolved value and setup hook</p>
 
 <dl class="method">
 <dt id="windows.pe_parse.IATEntry.remove_hook">
-<code class="descname">remove_hook</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#windows.pe_parse.IATEntry.remove_hook" title="Permalink to this definition">¶</a></dt>
+<code class="descname">remove_hook</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/pe_parse.html#IATEntry.remove_hook"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.pe_parse.IATEntry.remove_hook" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove the hook on the entry</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="windows.pe_parse.IATEntry.set_hook">
-<code class="descname">set_hook</code><span class="sig-paren">(</span><em>callback</em>, <em>types=None</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.pe_parse.IATEntry.set_hook" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_hook</code><span class="sig-paren">(</span><em>callback</em>, <em>types=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/pe_parse.html#IATEntry.set_hook"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.pe_parse.IATEntry.set_hook" title="Permalink to this definition">¶</a></dt>
 <dd><p>Setup a hook on the entry and return it.
 You MUST keep a reference to the hook while the hook is enabled.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1658,7 +1631,7 @@ You MUST keep a reference to the hook while the hook is enabled.</p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/process.txt"
+      <li><a href="_sources/process.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -1691,13 +1664,13 @@ You MUST keep a reference to the hook while the hook is enabled.</p>
         <li class="right" >
           <a href="various.html" title="2. The windows objects"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.2 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="various.html" >2. The <code class="docutils literal"><span class="pre">windows</span></code> objects</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="various.html" >2. The <code class="docutils literal"><span class="pre">windows</span></code> objects</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+        &#169; Copyright 2015, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
     </div>
   </body>
 </html>
