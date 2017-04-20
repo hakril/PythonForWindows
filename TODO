@@ -1,5 +1,6 @@
 TODO:
     - Documentation
+        - thread.set_context in a sample
 
     - Better WMI interface
         - Bug in VARIANT_TYPE == BOOL (see Win32_OperatingSystem->Debug)
@@ -23,7 +24,6 @@ TODO:
         - test !
 
     - Clean pe_parse.py
-
 
     - wintrust doc:
         add : https://blogs.msdn.microsoft.com/winsdk/2016/01/05/why-cryptcatadmincalchashfromfilehandle-fails-with-a-seemingly-unexpected-error-code/

@@ -1,7 +1,10 @@
+import threading
+
 import windows
 import windows.com
-from  windows.generated_def.interfaces import IBackgroundCopyManager, IEnumBackgroundCopyJobs, IBackgroundCopyJob, IBackgroundCopyCallback, COMImplementation, IUnknown
-from windows.generated_def import DWORD, BG_JOB_TYPE_UPLOAD, BG_JOB_STATE_SUSPENDED
+from  windows.generated_def.interfaces import (IBackgroundCopyManager, IEnumBackgroundCopyJobs, IBackgroundCopyJob,
+                                                IBackgroundCopyCallback, COMImplementation, IUnknown, IBackgroundCopyError)
+from windows.generated_def import DWORD, BG_JOB_TYPE_UPLOAD, BG_JOB_STATE_SUSPENDED, BG_ERROR_CONTEXT, HRESULT
 
 BackgroundCopyManager = windows.com.IID.from_string("4991d34b-80a1-4291-83b6-3328366b9097")
 BackgroundCopyManager1_5 = windows.com.IID.from_string("f087771f-d74f-4c1a-bb8a-e16aca9124ea")
@@ -10,16 +13,10 @@ BackgroundCopyManager2_5 = windows.com.IID.from_string("03ca98d6-ff5d-49b8-abc6-
 BackgroundCopyManager3_0 = windows.com.IID.from_string("659cdea7-489e-11d9-a9cd-000d56965251")
 
 
-
-
-import threading
-
-
-
 class BitsCopyCallback(COMImplementation):
     IMPLEMENT = IBackgroundCopyCallback
 
-    def JobError(self, job, error):
+    def JobError(self, this, job, error):
         return True
 
     def JobTransferred(self, this, job):
@@ -34,7 +31,16 @@ class BitsCopyCallbackSetEvent(BitsCopyCallback):
         super(BitsCopyCallbackSetEvent, self).__init__()
         self.event = event
 
-    def JobError(self, job, error):
+    # With the current generated_def.interface design, the current
+    # prototype is:
+    #     ctypes.WINFUNCTYPE(HRESULT, PVOID, PVOID)(4, "JobError")
+    # How should I address that ?
+    def JobError(self, this, job, error):
+        job = BitsCopyJob(job)
+        error = BitsCopyError(error)
+        errcode, errctx = error.error
+        print("Copy failed with error code <{0:#x}> (ctx={1})".format(errcode, errctx))
+        print("see <https://msdn.microsoft.com/en-us/library/windows/desktop/aa362823(v=vs.85).aspx>")
         self.event.set()
         return True
 
@@ -90,3 +96,12 @@ class BitsCopyJob(IBackgroundCopyJob):
 
     def __repr__(self):
         return '<{0} iid="{1}" at {2:#08x}>'.format(type(self).__name__, self.iid.to_string(), id(self))
+
+
+class BitsCopyError(IBackgroundCopyError):
+    @property
+    def error(self):
+        err_ctx = BG_ERROR_CONTEXT()
+        err = HRESULT()
+        self.GetError(err_ctx, err)
+        return (err.value & 0xffffffff, err_ctx)
