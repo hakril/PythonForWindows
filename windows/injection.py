@@ -130,26 +130,27 @@ def load_dll_in_remote_process(target, dll_name):
     return perform_manual_getproc_loadlib_64(target, dll_name)
 
 python_function_32_bits = {}
-# 32 to 32 injection
+
 def generate_python_exec_shellcode_32(target, PyDll):
+    pymodule = [mod for mod in target.peb.modules if mod.name == PyDll][0]
+    base = pymodule.baseaddr
     if not python_function_32_bits:
-        pymodule = [mod for mod in target.peb.modules if mod.name == PyDll][0]
         Py_exports = pymodule.pe.exports
-        python_function_32_bits["PyEval_InitThreads"] = Py_exports["PyEval_InitThreads"]
-        python_function_32_bits["Py_IsInitialized"] = Py_exports["Py_IsInitialized"]
-        python_function_32_bits["PyGILState_Release"] = Py_exports["PyGILState_Release"]
-        python_function_32_bits["PyGILState_Ensure"] = Py_exports["PyGILState_Ensure"]
-        python_function_32_bits["PyEval_SaveThread"] = Py_exports["PyEval_SaveThread"]
-        python_function_32_bits["Py_Initialize"] = Py_exports["Py_Initialize"]
-        python_function_32_bits["PyRun_SimpleString"] = Py_exports["PyRun_SimpleString"]
+        python_function_32_bits["PyEval_InitThreads"] = Py_exports["PyEval_InitThreads"] - base
+        python_function_32_bits["Py_IsInitialized"] = Py_exports["Py_IsInitialized"] - base
+        python_function_32_bits["PyGILState_Release"] = Py_exports["PyGILState_Release"] - base
+        python_function_32_bits["PyGILState_Ensure"] = Py_exports["PyGILState_Ensure"] - base
+        python_function_32_bits["PyEval_SaveThread"] = Py_exports["PyEval_SaveThread"] - base
+        python_function_32_bits["Py_Initialize"] = Py_exports["Py_Initialize"] - base
+        python_function_32_bits["PyRun_SimpleString"] = Py_exports["PyRun_SimpleString"] - base
     Py_exports = python_function_32_bits
-    PyEval_InitThreads = Py_exports["PyEval_InitThreads"]
-    Py_IsInitialized = Py_exports["Py_IsInitialized"]
-    PyGILState_Release = Py_exports["PyGILState_Release"]
-    PyGILState_Ensure = Py_exports["PyGILState_Ensure"]
-    PyEval_SaveThread = Py_exports["PyEval_SaveThread"]
-    Py_Initialize = Py_exports["Py_Initialize"]
-    PyRun_SimpleString = Py_exports["PyRun_SimpleString"]
+    PyEval_InitThreads = Py_exports["PyEval_InitThreads"] + base
+    Py_IsInitialized = Py_exports["Py_IsInitialized"] + base
+    PyGILState_Release = Py_exports["PyGILState_Release"] + base
+    PyGILState_Ensure = Py_exports["PyGILState_Ensure"] + base
+    PyEval_SaveThread = Py_exports["PyEval_SaveThread"] + base
+    Py_Initialize = Py_exports["Py_Initialize"] + base
+    PyRun_SimpleString = Py_exports["PyRun_SimpleString"] + base
 
     code = x86.MultipleInstr()
     code += x86.Mov('EAX', Py_IsInitialized)
@@ -190,26 +191,27 @@ def generate_python_exec_shellcode_32(target, PyDll):
 
 
 python_function_64_bits = {}
-# 64 to 64 injection
+
 def generate_python_exec_shellcode_64(target, PyDll):
+    pymodule = [mod for mod in target.peb.modules if mod.name == PyDll][0]
+    base = pymodule.baseaddr
     if not python_function_64_bits:
-        pymodule = [mod for mod in target.peb.modules if mod.name == PyDll][0]
         Py_exports = pymodule.pe.exports
-        python_function_64_bits["PyEval_InitThreads"] = Py_exports["PyEval_InitThreads"]
-        python_function_64_bits["Py_IsInitialized"] = Py_exports["Py_IsInitialized"]
-        python_function_64_bits["PyGILState_Release"] = Py_exports["PyGILState_Release"]
-        python_function_64_bits["PyGILState_Ensure"] = Py_exports["PyGILState_Ensure"]
-        python_function_64_bits["PyEval_SaveThread"] = Py_exports["PyEval_SaveThread"]
-        python_function_64_bits["Py_Initialize"] = Py_exports["Py_Initialize"]
-        python_function_64_bits["PyRun_SimpleString"] = Py_exports["PyRun_SimpleString"]
+        python_function_64_bits["PyEval_InitThreads"] = Py_exports["PyEval_InitThreads"] - base
+        python_function_64_bits["Py_IsInitialized"] = Py_exports["Py_IsInitialized"] - base
+        python_function_64_bits["PyGILState_Release"] = Py_exports["PyGILState_Release"] - base
+        python_function_64_bits["PyGILState_Ensure"] = Py_exports["PyGILState_Ensure"] - base
+        python_function_64_bits["PyEval_SaveThread"] = Py_exports["PyEval_SaveThread"] - base
+        python_function_64_bits["Py_Initialize"] = Py_exports["Py_Initialize"] - base
+        python_function_64_bits["PyRun_SimpleString"] = Py_exports["PyRun_SimpleString"] - base
     Py_exports = python_function_64_bits
-    PyEval_InitThreads = Py_exports["PyEval_InitThreads"]
-    Py_IsInitialized = Py_exports["Py_IsInitialized"]
-    PyGILState_Release = Py_exports["PyGILState_Release"]
-    PyGILState_Ensure = Py_exports["PyGILState_Ensure"]
-    PyEval_SaveThread = Py_exports["PyEval_SaveThread"]
-    Py_Initialize = Py_exports["Py_Initialize"]
-    PyRun_SimpleString = Py_exports["PyRun_SimpleString"]
+    PyEval_InitThreads = Py_exports["PyEval_InitThreads"] + base
+    Py_IsInitialized = Py_exports["Py_IsInitialized"] + base
+    PyGILState_Release = Py_exports["PyGILState_Release"] + base
+    PyGILState_Ensure = Py_exports["PyGILState_Ensure"] + base
+    PyEval_SaveThread = Py_exports["PyEval_SaveThread"] + base
+    Py_Initialize = Py_exports["Py_Initialize"] + base
+    PyRun_SimpleString = Py_exports["PyRun_SimpleString"] + base
 
     Reserve_space_for_call = x64.MultipleInstr([x64.Push('RDI')] * 4)
     Clean_space_for_call = x64.MultipleInstr([x64.Pop('RDI')] * 4)
@@ -261,7 +263,6 @@ def inject_python_command(target, code_injected, PYDLL):
     shellcode_addr = getattr(target, "_execute_python_shellcode", None)
     if shellcode_addr is not None:
         return shellcode_addr, remote_python_code_addr
-
     if target.bitness == 32:
         shellcode_generator = generate_python_exec_shellcode_32
     else:
