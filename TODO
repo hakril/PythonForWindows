@@ -11,9 +11,15 @@ TODO:
         - Test !! (bp, BP_HX, bp on only on process, bp_hx on only one thread..)
 		- test breakpoint with specific target
 
-    - Rethink/adapt Debugger._explicit_single_step
-        Does not handle case where EEFlags.TF was by the debugge before trigering the exception
-        Should set the flag explicitly in single_step ? and not just use EEFlags.TF ?
+    -Debugger
+        - Rethink/adapt Debugger._explicit_single_step
+            Does not handle case where EEFlags.TF was by the debugge before trigering the exception
+            Should set the flag explicitly in single_step ? and not just use EEFlags.TF ?
+        - _handle_load_dll
+            - error in keys of 'self._module_by_process[self.current_process.pid]'
+            - if I have a ntdll32 and ntdll64: both would have the same name in the list..
+
+
 
     - remotectypes
         - pretty sur I can get rid of PointerToStruct64/PointerToStruct32

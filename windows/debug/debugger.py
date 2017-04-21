@@ -181,7 +181,7 @@ class Debugger(object):
         exe_name = os.path.basename(exe_path)
         #print("Exe name is {0}".format(exe_name))
         self._module_by_process[self.current_process.pid][exe_name] = windows.pe_parse.GetPEFile(create_process_event.lpBaseOfImage, self.current_process)
-        self._setup_pending_breakpoints_load_dll(exe_name)
+        #self._setup_pending_breakpoints_load_dll(exe_name) # Already setup in _setup_pending_breakpoints_new_process
 
 
     def _update_debugger_state(self, debug_event):

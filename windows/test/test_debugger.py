@@ -2,6 +2,7 @@ from test_utils import *
 from windows.generated_def.winstructs import *
 
 import threading
+import os
 
 class DebuggerTestCase(unittest.TestCase):
     def debuggable_calc_32(self):
@@ -682,6 +683,42 @@ class DebuggerTestCase(unittest.TestCase):
         d = MyDbg(calc)
         d.loop()
 
+
+    def test_exe_in_module_list(self):
+        class MyDbg(windows.debug.Debugger):
+            def on_exception(self, exception):
+                exe_name = self.current_process.peb.modules[0].name
+                this_process_modules = self._module_by_process[self.current_process.pid]
+                TEST_CASE.assertIn(exe_name, this_process_modules.keys())
+                self.current_process.exit()
+
+        TEST_CASE = self
+        calc = pop_calc_32(dwCreationFlags=DEBUG_PROCESS)
+        d = MyDbg(calc)
+        d.loop()
+
+    def test_bp_exe_by_name(self):
+        NBCALL = [0]
+        TEST_CASE = self
+        CALC_ALIVE = True
+        class TSTBP(windows.debug.Breakpoint):
+            def trigger(self, dbg, exc):
+                NBCALL[0] += 1
+                TEST_CASE.assertEqual(NBCALL[0], 1)
+                # Kill the target in 0.5s
+                # It's not too long
+                # It's long enought to get trigger being recalled if implem is broken
+                threading.Timer(0.5, calc.exit).start()
+
+        calc = pop_calc_32(dwCreationFlags=DEBUG_PROCESS)
+        exepe = windows.pe_parse.GetPEFile(calc.peb.ImageBaseAddress, calc)
+        entrypoint = exepe.get_OptionalHeader().AddressOfEntryPoint
+        exename = os.path.basename(calc.peb.imagepath.str)
+        d = windows.debug.Debugger(calc)
+        # The goal is to test bp of format 'exename!offset' so we craft a string based on the entrypoint
+        d.add_bp(TSTBP("{name}!{offset}".format(name=exename, offset=entrypoint)))
+        d.loop()
+        self.assertEqual(NBCALL[0], 1)
 
 if __name__ == '__main__':
     alltests = unittest.TestSuite()
