@@ -175,6 +175,15 @@ class Debugger(object):
             raise ValueError('Unknow action : <0>'.format(action))
         winproxy.ContinueDebugEvent(event.dwProcessId, event.dwThreadId, action)
 
+    def _add_exe_to_module_list(self, create_process_event):
+        """Add the intial exe file described by create_process_event to the list of module in the process"""
+        exe_path = self.current_process.get_mapped_filename(create_process_event.lpBaseOfImage)
+        exe_name = os.path.basename(exe_path)
+        #print("Exe name is {0}".format(exe_name))
+        self._module_by_process[self.current_process.pid][exe_name] = windows.pe_parse.GetPEFile(create_process_event.lpBaseOfImage, self.current_process)
+        self._setup_pending_breakpoints_load_dll(exe_name)
+
+
     def _update_debugger_state(self, debug_event):
         self.current_process = self.processes[debug_event.dwProcessId]
         self.current_thread = self.threads[debug_event.dwThreadId]
@@ -661,6 +670,7 @@ class Debugger(object):
         self._memory_save[self.current_process.pid] = {}
         self._module_by_process[self.current_process.pid] = {}
         self._update_debugger_state(debug_event)
+        self._add_exe_to_module_list(create_process)
         self._setup_pending_breakpoints_new_process(self.current_process)
         self._setup_pending_breakpoints_new_thread(self.current_thread)
         with self.DisabledMemoryBreakpoint():
@@ -728,6 +738,8 @@ class Debugger(object):
         dll_name = os.path.basename(dll).lower()
         if dll_name.endswith(".dll"):
             dll_name = dll_name[:-4]
+        # Mais c'est debile..
+        # Si j'ai ntdll et ntdll64: les deux vont avoir le meme nom..
         if dll_name.endswith(".dll64"):
             dll_name = dll_name[:-6] +  "64" # Crade..
         #print("Load {0} -> {1}".format(dll, dll_name))
