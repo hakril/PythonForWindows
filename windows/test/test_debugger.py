@@ -687,9 +687,9 @@ class DebuggerTestCase(unittest.TestCase):
     def test_exe_in_module_list(self):
         class MyDbg(windows.debug.Debugger):
             def on_exception(self, exception):
-                exe_name = self.current_process.peb.modules[0].name
+                exename = os.path.basename(calc.peb.imagepath.str)
                 this_process_modules = self._module_by_process[self.current_process.pid]
-                TEST_CASE.assertIn(exe_name, this_process_modules.keys())
+                TEST_CASE.assertIn(exename, this_process_modules.keys())
                 self.current_process.exit()
 
         TEST_CASE = self
