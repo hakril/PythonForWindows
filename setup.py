@@ -20,5 +20,6 @@ setup(
                 'windows.utils',
                 'windows.winobject',
                 'windows.debug',
+                'windows.crypto',
                 'windows.test'],
 )

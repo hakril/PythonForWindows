@@ -661,7 +661,7 @@ class CurrentThread(AutoHandle):
 		"""
         return winproxy.GetCurrentThreadId()
 
-    @utils.fixedpropety
+    @property
     def owner(self):
         """The current process
 
@@ -738,7 +738,7 @@ class CurrentProcess(Process):
 		"""
         return [p for p in windows.system.processes if p.pid == self.pid][0].ppid
 
-    @utils.fixedpropety
+    @utils.fixedpropety # leave it has fixed property as we don't care if CurrentProcess is never collected
     def peb(self):
         """The Process Environment Block of the current process
 
@@ -821,7 +821,7 @@ class WinProcess(Process):
     """A Process on the system"""
     def __init__(self, pid=None, handle=None, name=None, ppid=None):
         if pid is None and handle is None:
-            raise ValueError("Need at lead <pid> or <handle> to create a {0}".format(type(self).__name))
+            raise ValueError("Need at least <pid> or <handle> to create a {0}".format(type(self).__name))
 
         if pid is not None:    self._pid = pid
         if handle is not None: self._handle = handle
@@ -1009,7 +1009,9 @@ class WinProcess(Process):
             raise ValueError("Could not get peb addr of process {0}".format(self.name))
         return peb_addr
 
-    @utils.fixedpropety
+    # Not a fixedpropety to prevent ref-cycle and uncollectable WinProcess
+    # Try with a weakref ?
+    @property
     def peb(self):
         """The PEB of the process (see :mod:`remotectypes`)
 
@@ -1022,6 +1024,27 @@ class WinProcess(Process):
         return RemotePEB(self.peb_addr, self)
 
     @utils.fixedpropety
+    def peb_syswow_addr(self):
+        if not self.is_wow_64:
+            raise ValueError("Not a syswow process")
+        if windows.current_process.bitness == 64:
+            information_type = 0
+            x = PROCESS_BASIC_INFORMATION()
+            winproxy.NtQueryInformationProcess(self.handle, information_type, x)
+            peb_addr = ctypes.cast(x.PebBaseAddress, PVOID).value
+            return peb_addr
+        else: #current is 32bits
+            x = windows.remotectypes.transform_type_to_remote64bits(PROCESS_BASIC_INFORMATION)
+            # Fuck-it <3
+            data = (ctypes.c_char * ctypes.sizeof(x))()
+            windows.syswow64.NtQueryInformationProcess_32_to_64(self.handle, ProcessInformation=data, ProcessInformationLength=ctypes.sizeof(x))
+            peb_offset = x.PebBaseAddress.offset
+            peb_addr = struct.unpack("<Q", data[x.PebBaseAddress.offset: x.PebBaseAddress.offset+8])[0]
+            return peb_addr
+
+    # Not a fixedpropety to prevent ref-cycle and uncollectable WinProcess
+    # Try with a weakref ?
+    @property
     def peb_syswow(self):
         """The 64bits PEB of a SysWow64 process
 
@@ -1030,19 +1053,9 @@ class WinProcess(Process):
         if not self.is_wow_64:
             raise ValueError("Not a syswow process")
         if windows.current_process.bitness == 64:
-            information_type = 0
-            x = PROCESS_BASIC_INFORMATION()
-            winproxy.NtQueryInformationProcess(self.handle, information_type, x)
-            peb_addr = ctypes.cast(x.PebBaseAddress, PVOID).value
-            return RemotePEB(peb_addr, self)
+            return RemotePEB(self.peb_syswow_addr, self)
         else: #current is 32bits
-            x = windows.remotectypes.transform_type_to_remote64bits(PROCESS_BASIC_INFORMATION)
-            # Fuck-it <3
-            data = (ctypes.c_char * ctypes.sizeof(x))()
-            windows.syswow64.NtQueryInformationProcess_32_to_64(self.handle, ProcessInformation=data, ProcessInformationLength=ctypes.sizeof(x))
-            peb_offset = x.PebBaseAddress.offset
-            peb_addr = struct.unpack("<Q", data[x.PebBaseAddress.offset: x.PebBaseAddress.offset+8])[0]
-            return RemotePEB64(peb_addr, windows.syswow64.ReadSyswow64Process(self))
+            return RemotePEB64(self.peb_syswow_addr, windows.syswow64.ReadSyswow64Process(self))
 
     def exit(self, code=0):
         """Exit the process"""
