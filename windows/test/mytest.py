@@ -11,39 +11,49 @@ from windows.generated_def.winstructs import *
 
 
 class SystemTestCase(unittest.TestCase):
+    @check_for_gc_garbage
     def test_version(self):
         return windows.system.version
 
+    @check_for_gc_garbage
     def test_version_name(self):
-        return windows.system.version_name
 
+        return windows.system.version_name
+    @check_for_gc_garbage
     def test_computer_name(self):
         return windows.system.computer_name
 
+    @check_for_gc_garbage
     def test_services(self):
         return windows.system.services
 
+    @check_for_gc_garbage
     def test_logicaldrives(self):
         return windows.system.logicaldrives
 
+    @check_for_gc_garbage
     def test_processes(self):
         return windows.system.processes
 
+    @check_for_gc_garbage
     def test_threads(self):
         return windows.system.threads
 
+    @check_for_gc_garbage
     def test_wmi(self):
         return windows.system.wmi.select("Win32_Process", "*")
 
+    @check_for_gc_garbage
     def test_processes(self):
         procs = windows.system.processes
         self.assertIn(windows.current_process.pid, [p.pid for p in procs])
 
 
 class WindowsTestCase(unittest.TestCase):
-    def setUp(self):
-        pass
+    # def setUp(self):
+    #     pass
 
+    @check_for_gc_garbage
     def test_pop_calc_32(self):
         with Calc32() as calc:
             self.assertEqual(calc.bitness, 32)
@@ -53,12 +63,15 @@ class WindowsTestCase(unittest.TestCase):
         with Calc64() as calc:
             self.assertEqual(calc.bitness, 64)
 
+    @check_for_gc_garbage
     def test_get_current_process_peb(self):
         return windows.current_process.peb
 
+    @check_for_gc_garbage
     def test_get_current_process_modules(self):
         self.assertIn("python", windows.current_process.peb.modules[0].name)
 
+    @check_for_gc_garbage
     def test_local_process_pe_imports(self):
         python_module = windows.current_process.peb.modules[0]
         imp = python_module.pe.imports
@@ -67,6 +80,7 @@ class WindowsTestCase(unittest.TestCase):
         k32_base = windows.winproxy.LoadLibraryA("kernel32.dll")
         self.assertEqual(windows.winproxy.GetProcAddress(k32_base, "GetCurrentProcessId"), current_proc_id_iat.value)
 
+    @check_for_gc_garbage
     def test_local_process_pe_exports(self):
         mods = [m for m in windows.current_process.peb.modules if m.name == "kernel32.dll"]
         self.assertTrue(mods, 'Could not find "kernel32.dll" in current process modules')
@@ -75,6 +89,7 @@ class WindowsTestCase(unittest.TestCase):
         k32_base = windows.winproxy.LoadLibraryA("kernel32.dll")
         self.assertEqual(windows.winproxy.GetProcAddress(k32_base, "GetCurrentProcessId"), get_current_proc_id)
 
+    @check_for_gc_garbage
     def test_local_process_pe_sections(self):
         mods = [m for m in windows.current_process.peb.modules if m.name == "kernel32.dll"]
         self.assertTrue(mods, 'Could not find "kernel32.dll" in current process modules')
@@ -86,18 +101,20 @@ class WindowsTestCase(unittest.TestCase):
         sections[0].size
 
     # Read / write
-
+    @check_for_gc_garbage
     def test_read_memory_32(self):
         with Calc32() as calc:
             k32 = [m for m in calc.peb.modules if m.name == "kernel32.dll"][0]
             self.assertEqual(calc.read_memory(k32.baseaddr, 2), "MZ")
 
     @windows_64bit_only
+    @check_for_gc_garbage
     def test_read_memory_64(self):
         with Calc64() as calc:
             k32 = [m for m in calc.peb.modules if m.name == "kernel32.dll"][0]
             self.assertEqual(calc.read_memory(k32.baseaddr, 2), "MZ")
 
+    @check_for_gc_garbage
     def test_write_memory_32(self):
         with Calc32() as calc:
             k32 = [m for m in calc.peb.modules if m.name == "kernel32.dll"][0]
@@ -106,6 +123,7 @@ class WindowsTestCase(unittest.TestCase):
             self.assertEqual(calc.read_memory(k32.baseaddr, 2), "XD")
 
     @windows_64bit_only
+    @check_for_gc_garbage
     def test_write_memory_64(self):
         with Calc64() as calc:
             k32 = [m for m in calc.peb.modules if m.name == "kernel32.dll"][0]
@@ -113,7 +131,7 @@ class WindowsTestCase(unittest.TestCase):
                 calc.write_memory(k32.baseaddr, "XD")
             self.assertEqual(calc.read_memory(k32.baseaddr, 2), "XD")
 
-
+    @check_for_gc_garbage
     def test_read_string(self):
         test_string = "TEST_STRING"
         string_to_write = test_string + "\x00"
@@ -122,6 +140,7 @@ class WindowsTestCase(unittest.TestCase):
             calc.write_memory(addr, string_to_write)
             self.assertEqual(calc.read_string(addr), test_string)
 
+    @check_for_gc_garbage
     def test_read_string_end_page(self):
         test_string = "TEST_STRING"
         string_to_write = test_string + "\x00"
@@ -130,6 +149,7 @@ class WindowsTestCase(unittest.TestCase):
             calc.write_memory(addr, string_to_write)
             self.assertEqual(calc.read_string(addr), test_string)
 
+    @check_for_gc_garbage
     def test_read_wstring(self):
         test_string = "TEST_STRING"
         string_to_write = test_string + "\x00"
@@ -138,7 +158,7 @@ class WindowsTestCase(unittest.TestCase):
             calc.write_memory(addr, "\x00".join(string_to_write))
             self.assertEqual(calc.read_wstring(addr), test_string)
 
-
+    @check_for_gc_garbage
     def test_read_wstring_end_page(self):
         test_string = "TEST_STRING"
         string_to_write = test_string + "\x00"
@@ -149,6 +169,7 @@ class WindowsTestCase(unittest.TestCase):
             self.assertEqual(calc.read_wstring(addr), test_string)
 
     # Native execution
+    @check_for_gc_garbage
     def test_execute_to_32(self):
         with Calc32() as calc:
             data = calc.virtual_alloc(0x1000)
@@ -162,6 +183,7 @@ class WindowsTestCase(unittest.TestCase):
             self.assertEqual(dword, 0x42424242)
 
     @windows_64bit_only
+    @check_for_gc_garbage
     def test_execute_to_64(self):
         with Calc64() as calc:
             data = calc.virtual_alloc(0x1000)
@@ -176,6 +198,7 @@ class WindowsTestCase(unittest.TestCase):
 
     # Python execution
     @windows_64bit_only
+    @check_for_gc_garbage
     def test_execute_python_to_64(self):
         with Calc64() as calc:
             data = calc.virtual_alloc(0x1000)
@@ -184,6 +207,7 @@ class WindowsTestCase(unittest.TestCase):
             dword = struct.unpack("<I", calc.read_memory(data, 4))[0]
             self.assertEqual(dword, 0x42424242)
 
+    @check_for_gc_garbage
     def test_execute_python_to_32(self):
         with Calc32() as calc:
             data = calc.virtual_alloc(0x1000)
@@ -192,6 +216,7 @@ class WindowsTestCase(unittest.TestCase):
             dword = struct.unpack("<I", calc.read_memory(data, 4))[0]
             self.assertEqual(dword, 0x42424242)
 
+    @check_for_gc_garbage
     def test_execute_python_to_32_suspended(self):
         with Calc32(dwCreationFlags=CREATE_SUSPENDED) as calc:
             data = calc.virtual_alloc(0x1000)
@@ -206,6 +231,7 @@ class WindowsTestCase(unittest.TestCase):
                 self.assertEqual(len(calc.threads), 1)
 
     @windows_64bit_only
+    @check_for_gc_garbage
     def test_execute_python_to_64_suspended(self):
         with Calc64(dwCreationFlags=CREATE_SUSPENDED) as calc:
             data = calc.virtual_alloc(0x1000)
@@ -219,7 +245,7 @@ class WindowsTestCase(unittest.TestCase):
             if not is_windows_10:
                 self.assertEqual(len(calc.threads), 1)
 
-
+    @check_for_gc_garbage
     def test_parse_remote_32_peb(self):
         with Calc32() as calc:
             # Wait for PEB initialization
@@ -229,10 +255,12 @@ class WindowsTestCase(unittest.TestCase):
             self.assertEqual(calc.peb.modules[0].name, test_binary_name)
 
     @windows_64bit_only
+    @check_for_gc_garbage
     def test_parse_remote_64_peb(self):
         with Calc64() as calc:
             self.assertEqual(calc.peb.modules[0].name, test_binary_name)
 
+    @check_for_gc_garbage
     def test_parse_remote_32_pe(self):
         with Calc32() as calc:
             # Wait for PEB initialization
@@ -263,6 +291,7 @@ class WindowsTestCase(unittest.TestCase):
             self.assertEqual(dword, get_current_proc_id)
 
     @windows_64bit_only
+    @check_for_gc_garbage
     def test_parse_remote_64_pe(self):
         with Calc64() as calc:
             mods = [m for m in calc.peb.modules if m.name == "kernel32.dll"]
@@ -285,6 +314,7 @@ class WindowsTestCase(unittest.TestCase):
             dword = struct.unpack("<Q", calc.read_memory(data, 8))[0]
             self.assertEqual(dword, get_current_proc_id)
 
+    @check_for_gc_garbage
     def test_thread_exit_value_32(self):
         with Calc32() as calc:
             res = calc.execute_python("import time;time.sleep(0.1); 2")
@@ -293,6 +323,7 @@ class WindowsTestCase(unittest.TestCase):
                 t = calc.execute_python("import time;time.sleep(0.1); raise ValueError('BYE')")
 
     @windows_64bit_only
+    @check_for_gc_garbage
     def test_thread_exit_value_64(self):
         with Calc64() as calc:
             res = calc.execute_python("import time;time.sleep(0.1); 2")
@@ -300,17 +331,20 @@ class WindowsTestCase(unittest.TestCase):
             with self.assertRaises(windows.injection.RemotePythonError) as ar:
                 t = calc.execute_python("import time;time.sleep(0.1); raise ValueError('BYE')")
 
+    @check_for_gc_garbage
     def test_thread_start_address_32(self):
         with Calc32() as calc:
             t = calc.threads[0]
             t.start_address  # No better idea right now that checking for crash/exception
 
     @windows_64bit_only
+    @check_for_gc_garbage
     def test_thread_start_address_64(self):
         with Calc64() as calc:
             t = calc.threads[0]
             t.start_address  # No better idea right now that checking for crash/exception
 
+    @check_for_gc_garbage
     def test_get_context_address_32(self):
         with Calc32() as calc:
             code = x86.MultipleInstr()
@@ -323,6 +357,7 @@ class WindowsTestCase(unittest.TestCase):
             self.assertEqual(cont.Eax, 0x42424242)
 
     @windows_64bit_only
+    @check_for_gc_garbage
     def test_get_context_address_64(self):
         with Calc64() as calc:
             code = x64.MultipleInstr()
@@ -334,6 +369,7 @@ class WindowsTestCase(unittest.TestCase):
             cont = t.context
             self.assertEqual(cont.Rax, 0x4242424243434343)
 
+    @check_for_gc_garbage
     def test_process_is_exit(self):
         with Calc32(exit_code=42) as calc:
             self.assertEqual(calc.is_exit, False)
@@ -341,6 +377,7 @@ class WindowsTestCase(unittest.TestCase):
         self.assertEqual(calc.exit_code, 42)
         self.assertEqual(calc.is_exit, True)
 
+    @check_for_gc_garbage
     def test_set_thread_context_32(self):
         code =  x86.MultipleInstr()
         code += x86.Label(":LOOP")
@@ -363,6 +400,7 @@ class WindowsTestCase(unittest.TestCase):
 
 
     @windows_64bit_only
+    @check_for_gc_garbage
     def test_set_thread_context_64(self):
         code =  x64.MultipleInstr()
         code += x64.Label(":LOOP")
@@ -383,6 +421,7 @@ class WindowsTestCase(unittest.TestCase):
             time.sleep(0.1)
         self.assertEqual(t.exit_code, 0x11223344)
 
+    @check_for_gc_garbage
     def test_load_library_32(self):
         DLL = "wintrust.dll"
         with Calc32() as calc:
@@ -390,12 +429,14 @@ class WindowsTestCase(unittest.TestCase):
             self.assertIn(DLL, [m.name for m in calc.peb.modules])
 
     @windows_64bit_only
+    @check_for_gc_garbage
     def test_load_library_64(self):
         DLL = "wintrust.dll"
         with Calc64() as calc:
             calc.load_library(DLL)
             self.assertIn(DLL, [m.name for m in calc.peb.modules])
 
+    @check_for_gc_garbage
     def test_token_info(self):
         token = windows.current_process.token
         self.assertIsInstance(token.computername, basestring)
@@ -403,6 +444,7 @@ class WindowsTestCase(unittest.TestCase):
         self.assertIsInstance(token.integrity, (int, long))
         self.assertIsInstance(token.is_elevated, (bool))
 
+    @check_for_gc_garbage
     def test_get_working_set_32(self):
         with Calc32() as calc:
             k32 = [m for m in calc.peb.modules if m.name == "kernel32.dll"][0]
@@ -424,6 +466,7 @@ class WindowsTestCase(unittest.TestCase):
                 raise ValueError("query_working_set page info for <0x{0:x}> not found".format(page_target))
 
     @windows_64bit_only
+    @check_for_gc_garbage
     def test_get_working_set_64(self):
         with Calc64() as calc:
             k32 = [m for m in calc.peb.modules if m.name == "kernel32.dll"][0]
@@ -445,6 +488,7 @@ class WindowsTestCase(unittest.TestCase):
             else:
                 raise ValueError("query_working_set page info for <0x{0:x}> not found".format(page_target))
 
+    @check_for_gc_garbage
     def test_get_working_setex_32(self):
         with Calc32() as calc:
             k32 = [m for m in calc.peb.modules if m.name == "kernel32.dll"][0]
@@ -474,6 +518,7 @@ class WindowsTestCase(unittest.TestCase):
                 raise ValueError("query_working_set page info for <0x{0:x}> not found".format(page_target))
 
     @windows_64bit_only
+    @check_for_gc_garbage
     def test_get_working_setex_64(self):
         with Calc64() as calc:
             k32 = [m for m in calc.peb.modules if m.name == "kernel32.dll"][0]
@@ -504,6 +549,7 @@ class WindowsTestCase(unittest.TestCase):
             else:
                 raise ValueError("query_working_set page info for <0x{0:x}> not found".format(page_target))
 
+    @check_for_gc_garbage
     def test_mapped_filename_32(self):
         with Calc32() as calc:
             k32 = [m for m in calc.peb.modules if m.name == "kernel32.dll"][0]
@@ -511,18 +557,21 @@ class WindowsTestCase(unittest.TestCase):
             self.assertTrue(mapped_filname.endswith("kernel32.dll"))
 
     @windows_64bit_only
+    @check_for_gc_garbage
     def test_mapped_filename_64(self):
         with Calc64() as calc:
             k32 = [m for m in calc.peb.modules if m.name == "kernel32.dll"][0]
             mapped_filname = calc.get_mapped_filename(k32.baseaddr)
             self.assertTrue(mapped_filname.endswith("kernel32.dll"))
 
+    @check_for_gc_garbage
     def test_thread_teb_base_32(self):
         with Calc32() as calc:
             t = calc.threads[0]
             self.assertNotEqual(t.teb_base, 0)
 
     @windows_64bit_only
+    @check_for_gc_garbage
     def test_thread_teb_base_64(self):
         with Calc64() as calc:
             t = calc.threads[0]

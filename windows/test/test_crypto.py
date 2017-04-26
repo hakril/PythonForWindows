@@ -59,11 +59,13 @@ class CryptoTestCase(unittest.TestCase):
         cls.raw_cert = TEST_CERT.decode("base64")
         cls.raw_pfx = TEST_PFX.decode("base64")
 
+    @check_for_gc_garbage
     def test_certificate(self):
         cert = windows.crypto.CertificateContext.from_buffer(self.raw_cert)
         self.assertEqual(cert.serial, '1b 8e 94 cb 0b 3e eb b6 41 39 f3 c9 09 b1 6b 46')
         self.assertEqual(cert.name, 'PythonForWindowsTest')
 
+    @check_for_gc_garbage
     def test_pfx(self):
         pfx = windows.crypto.import_pfx(self.raw_pfx, TEST_PFX_PASSWORD)
         orig_cert = windows.crypto.CertificateContext.from_buffer(self.raw_cert)
@@ -72,10 +74,12 @@ class CryptoTestCase(unittest.TestCase):
         # Test cert comparaison
         self.assertEqual(certs[0], orig_cert)
 
+    @check_for_gc_garbage
     def test_open_pfx_bad_password(self):
         with self.assertRaises(WindowsError) as ar:
             pfx = windows.crypto.import_pfx(self.raw_pfx, "BadPassword")
 
+    @check_for_gc_garbage
     def test_encrypt_decrypt(self):
         message_to_encrypt = "Testing message \xff\x01"
         cert = windows.crypto.CertificateContext.from_buffer(self.raw_cert)

@@ -8,6 +8,7 @@ from windows.generated_def.winstructs import *
 class SyswowTestCase(unittest.TestCase):
     @windows_64bit_only
     @process_32bit_only
+    @check_for_gc_garbage
     def test_exec_syswow(self):
         x64_code = x64.assemble("mov rax, 0x4040404040404040; mov r11, 0x0202020202020202; add rax, r11; ret")
         res = windows.syswow64.execute_64bits_code_from_syswow(x64_code)
@@ -15,6 +16,7 @@ class SyswowTestCase(unittest.TestCase):
 
     @windows_64bit_only
     @process_32bit_only
+    @check_for_gc_garbage
     def test_self_pebsyswow(self):
         peb64 = windows.current_process.peb_syswow
         modules_names = [m.name for m in peb64.modules]
@@ -24,6 +26,7 @@ class SyswowTestCase(unittest.TestCase):
         self.assertIn("Wow64LdrpInitialize", wow64.pe.exports)
 
     @windows_64bit_only
+    @check_for_gc_garbage
     def test_remote_pebsyswow(self):
         with Calc32() as calc:
             peb64 = calc.peb_syswow
@@ -34,6 +37,7 @@ class SyswowTestCase(unittest.TestCase):
             self.assertIn("Wow64LdrpInitialize", wow64.pe.exports)
 
     @windows_64bit_only
+    @check_for_gc_garbage
     def test_getset_syswow_context(self):
         with Calc32() as calc:
             addr = calc.virtual_alloc(0x1000)

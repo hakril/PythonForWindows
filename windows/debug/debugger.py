@@ -695,9 +695,8 @@ class Debugger(object):
         self.current_thread = None
         self.current_process = None
 
-        if cpid == self.target.pid:
+        if self.target and cpid == self.target.pid:
             self.target = None
-
         return retvalue
 
     def _handle_create_thread(self, debug_event):

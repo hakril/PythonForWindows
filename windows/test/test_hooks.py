@@ -6,7 +6,7 @@ from windows.generated_def.winstructs import *
 
 
 class HookTestCase(unittest.TestCase):
-
+    @check_for_gc_garbage
     def test_self_iat_hook_success(self):
         """Test hook success in single(self) thread"""
         pythondll_mod = [m for m in windows.current_process.peb.modules if m.name.startswith("python") and m.name.endswith(".dll")][0]
@@ -29,6 +29,7 @@ class HookTestCase(unittest.TestCase):
         # Remove the hook
         x.disable()
 
+    @check_for_gc_garbage
     def test_self_iat_hook_fail_return(self):
         """Test hook fail in single(self) thread"""
         pythondll_mod = [m for m in windows.current_process.peb.modules if m.name.startswith("python") and m.name.endswith(".dll")][0]
@@ -46,6 +47,7 @@ class HookTestCase(unittest.TestCase):
         self.assertEqual(ar.exception.winerror, 0x11223344)
         x.disable()
 
+    @check_for_gc_garbage
     def test_self_iat_hook_multithread(self):
         """Test IAT hook in current process with multi thread trigger"""
         cp = windows.current_process
@@ -73,6 +75,7 @@ class HookTestCase(unittest.TestCase):
         self.assertEqual(len(calling_thread), 2)
         x.disable()
 
+    @check_for_gc_garbage
     def test_remote_iat_hook_32(self):
         with Calc32() as calc:
             calc.execute_python("import windows")
@@ -124,6 +127,7 @@ class HookTestCase(unittest.TestCase):
                 t.wait()
             self.assertEqual(remote_ask("windows.current_thread.exit(len(calling_thread))"), 3)
 
+    @check_for_gc_garbage
     def test_remote_iat_hook_64(self):
         with Calc64() as calc:
             calc.execute_python("import windows")

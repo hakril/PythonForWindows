@@ -5,9 +5,11 @@ import threading
 import os
 
 class DebuggerTestCase(unittest.TestCase):
+    @check_for_gc_garbage
     def debuggable_calc_32(self):
         return windows.utils.create_process(r"C:\python27\python.exe", dwCreationFlags=DEBUG_PROCESS | CREATE_NEW_CONSOLE, show_windows=True)
 
+    @check_for_gc_garbage
     def test_init_breakpoint_callback(self):
         """Checking that the initial breakpoint call `on_exception`"""
         TEST_CASE = self
@@ -20,6 +22,7 @@ class DebuggerTestCase(unittest.TestCase):
         d = MyDbg(calc)
         d.loop()
 
+    @check_for_gc_garbage
     def test_simple_standard_breakpoint(self):
         """Check that a standard Breakpoint method `trigger` is called with the correct informations"""
         TEST_CASE = self
@@ -74,6 +77,7 @@ class DebuggerTestCase(unittest.TestCase):
     #    d.add_bp(TSTBP(LdrLoadDll32))
     #    d.loop()
 
+    @check_for_gc_garbage
     def test_simple_hwx_breakpoint(self):
         """Test that simple HXBP are trigger"""
         TEST_CASE = self
@@ -98,6 +102,7 @@ class DebuggerTestCase(unittest.TestCase):
         d.add_bp(TSTBP(LdrLoadDll32))
         d.loop()
 
+    @check_for_gc_garbage
     def test_multiple_hwx_breakpoint(self):
         """Checking that multiple succesives HXBP are properly triggered"""
         TEST_CASE = self
@@ -130,6 +135,7 @@ class DebuggerTestCase(unittest.TestCase):
         # Used to verif we actually called the Breakpoints
         TEST_CASE.assertEqual(data[0], 4)
 
+    @check_for_gc_garbage
     def test_four_hwx_breakpoint_fail(self):
         """Check that setting 4HXBP in the same thread fails"""
         TEST_CASE = self
@@ -160,6 +166,7 @@ class DebuggerTestCase(unittest.TestCase):
         # Used to verif we actually NOT called the Breakpoints
         TEST_CASE.assertEqual(data[0], 0)
 
+    @check_for_gc_garbage
     def test_hwx_breakpoint_are_on_all_thread(self):
         """Checking that HXBP without target are set on all threads"""
         TEST_CASE = self
@@ -196,6 +203,7 @@ class DebuggerTestCase(unittest.TestCase):
         # Used to verif we actually called the Breakpoints
         TEST_CASE.assertEqual(data[0], 2)
 
+    @check_for_gc_garbage
     def test_simple_breakpoint_name_addr(self):
         """Check breakpoint address resolution for format dll!api"""
         TEST_CASE = self
@@ -219,6 +227,7 @@ class DebuggerTestCase(unittest.TestCase):
         d.loop()
         TEST_CASE.assertEqual(data[0], 1)
 
+    @check_for_gc_garbage
     def test_simple_hardware_breakpoint_name_addr(self):
         """Check HXBP address resolution for format dll!api"""
         TEST_CASE = self
@@ -242,6 +251,7 @@ class DebuggerTestCase(unittest.TestCase):
         d.loop()
         TEST_CASE.assertEqual(data[0], 1)
 
+    @check_for_gc_garbage
     def perform_manual_getproc_loadlib_32(self, target, dll_name):
         dll = "KERNEL32.DLL\x00".encode("utf-16-le")
         api = "LoadLibraryA\x00"
@@ -273,7 +283,7 @@ class DebuggerTestCase(unittest.TestCase):
         t = target.execute(RemoteManualLoadLibray.get_code(), addr4)
         return t
 
-
+    @check_for_gc_garbage
     def test_hardware_breakpoint_name_addr(self):
         """Check that name addr in HXBP are trigger in all threads"""
         TEST_CASE = self
@@ -288,7 +298,7 @@ class DebuggerTestCase(unittest.TestCase):
                 data[0] += 1
                 if data[0] == 1:
                     # Perform a loaddll in a new thread :)
-                    # See if it's trigger a bp
+                    # See if it triggers a bp
                     t = TEST_CASE.perform_manual_getproc_loadlib_32(dbg.current_process, "wintrust.dll")
                     self.new_thread = t
                 if hasattr(self, "new_thread") and dbg.current_thread.tid == self.new_thread.tid:
@@ -303,6 +313,7 @@ class DebuggerTestCase(unittest.TestCase):
         d.loop()
         #TEST_CASE.assertEqual(data[0], 1)
 
+    @check_for_gc_garbage
     def test_single_step(self):
         """Check that BP/dbg can trigger single step and that instruction follows"""
         TEST_CASE = self
@@ -337,7 +348,7 @@ class DebuggerTestCase(unittest.TestCase):
         for i in range(NB_SINGLE_STEP):
             TEST_CASE.assertEqual(data[i], addr + 1 + i)
 
-
+    @check_for_gc_garbage
     def test_single_step_hxbp(self):
         """Check that HXBPBP/dbg can trigger single step"""
         TEST_CASE = self
@@ -372,7 +383,7 @@ class DebuggerTestCase(unittest.TestCase):
         for i in range(NB_SINGLE_STEP):
             TEST_CASE.assertEqual(data[i], addr + 1 + i)
 
-
+    @check_for_gc_garbage
     def test_memory_breakpoint_write(self):
         """Check MemoryBP WRITE"""
         TEST_CASE = self
@@ -416,6 +427,7 @@ class DebuggerTestCase(unittest.TestCase):
         # Used to verif we actually called the Breakpoints for the good addresses
         TEST_CASE.assertEqual(store_data[0], 2)
 
+    @check_for_gc_garbage
     def test_memory_breakpoint_exec(self):
         """Check MemoryBP EXEC"""
         TEST_CASE = self
@@ -444,7 +456,7 @@ class DebuggerTestCase(unittest.TestCase):
         for i in range(NB_NOP_IN_PAGE + 1):
             TEST_CASE.assertEqual(data[i], addr + i)
 
-
+    @check_for_gc_garbage
     def test_standard_breakpoint_self_remove(self):
         TEST_CASE = self
         data = []
@@ -471,6 +483,7 @@ class DebuggerTestCase(unittest.TestCase):
         d.loop()
         TEST_CASE.assertEqual(data, [u"FILENAME1", u"FILENAME2"])
 
+    @check_for_gc_garbage
     def test_standard_breakpoint_remove(self):
         TEST_CASE = self
         data = []
@@ -497,6 +510,7 @@ class DebuggerTestCase(unittest.TestCase):
         d.loop()
         TEST_CASE.assertEqual(data, [u"FILENAME1", u"FILENAME2"])
 
+    @check_for_gc_garbage
     def test_hxbp_breakpoint_remove(self):
         TEST_CASE = self
         data = []
@@ -523,6 +537,7 @@ class DebuggerTestCase(unittest.TestCase):
         d.loop()
         TEST_CASE.assertEqual(data, [u"FILENAME1", u"FILENAME2"])
 
+    @check_for_gc_garbage
     def test_hxbp_breakpoint_self_remove(self):
         TEST_CASE = self
         data = []
@@ -550,7 +565,7 @@ class DebuggerTestCase(unittest.TestCase):
         d.loop()
         TEST_CASE.assertEqual(data, [u"FILENAME1", u"FILENAME2"])
 
-
+    @check_for_gc_garbage
     def test_mem_breakpoint_remove(self):
         TEST_CASE = self
         data = []
@@ -585,6 +600,7 @@ class DebuggerTestCase(unittest.TestCase):
         d.loop()
         TEST_CASE.assertEqual(data, [data_addr, data_addr + 4])
 
+    @check_for_gc_garbage
     def test_mem_breakpoint_self_remove(self):
         TEST_CASE = self
         data = []
@@ -620,7 +636,7 @@ class DebuggerTestCase(unittest.TestCase):
         d.loop()
         TEST_CASE.assertEqual(data, [data_addr, data_addr + 4])
 
-
+    @check_for_gc_garbage
     def test_read_write_bp_same_page(self):
         TEST_CASE = self
         data = []
@@ -670,6 +686,7 @@ class DebuggerTestCase(unittest.TestCase):
 
         TEST_CASE.assertEqual(data, expected_result)
 
+    @check_for_gc_garbage
     def test_exe_in_module_list(self):
         class MyDbg(windows.debug.Debugger):
             def on_exception(self, exception):
@@ -683,7 +700,7 @@ class DebuggerTestCase(unittest.TestCase):
         d = MyDbg(calc)
         d.loop()
 
-
+    @check_for_gc_garbage
     def test_exe_in_module_list(self):
         class MyDbg(windows.debug.Debugger):
             def on_exception(self, exception):
@@ -697,6 +714,7 @@ class DebuggerTestCase(unittest.TestCase):
         d = MyDbg(calc)
         d.loop()
 
+    @check_for_gc_garbage
     def test_bp_exe_by_name(self):
         NBCALL = [0]
         TEST_CASE = self

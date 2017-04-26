@@ -8,6 +8,8 @@ import windows.native_exec.simple_x64 as x64
 import windows.native_exec.nativeutils as nativeutils
 from windows.generated_def import CREATE_NEW_CONSOLE
 
+import gc
+
 
 is_process_32_bits = windows.current_process.bitness == 32
 is_process_64_bits = windows.current_process.bitness == 64
@@ -73,6 +75,19 @@ def Calc32(dwCreationFlags=DEFAULT_CREATION_FLAGS, exit_code=0):
     finally:
         if "calc" in locals():
             calc.exit(exit_code)
+
+
+def check_for_gc_garbage(f):
+    def wrapper(testcase, *args, **kwargs):
+        garbage_before = set(gc.garbage)
+        res = f(testcase, *args, **kwargs)
+        gc.collect()
+        new_garbage = set(gc.garbage) - garbage_before
+        testcase.assertFalse(new_garbage, "Test generated uncollectable object ({0})".format(new_garbage))
+        return res
+    return wrapper
+
+
 
 
 def print_call(f):
