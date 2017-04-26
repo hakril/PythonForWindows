@@ -17,8 +17,8 @@ class SystemTestCase(unittest.TestCase):
 
     @check_for_gc_garbage
     def test_version_name(self):
-
         return windows.system.version_name
+
     @check_for_gc_garbage
     def test_computer_name(self):
         return windows.system.computer_name
@@ -32,10 +32,7 @@ class SystemTestCase(unittest.TestCase):
         return windows.system.logicaldrives
 
     @check_for_gc_garbage
-    def test_processes(self):
-        return windows.system.processes
-
-    @check_for_gc_garbage
+    @check_for_handle_leak
     def test_threads(self):
         return windows.system.threads
 
@@ -44,6 +41,7 @@ class SystemTestCase(unittest.TestCase):
         return windows.system.wmi.select("Win32_Process", "*")
 
     @check_for_gc_garbage
+    @check_for_handle_leak
     def test_processes(self):
         procs = windows.system.processes
         self.assertIn(windows.current_process.pid, [p.pid for p in procs])

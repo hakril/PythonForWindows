@@ -210,6 +210,7 @@ class System(object):
         res.append(process.WinProcess._from_PROCESSENTRY32(process_entry))
         while winproxy.Process32Next(snap, process_entry):
             res.append(process.WinProcess._from_PROCESSENTRY32(process_entry))
+        winproxy.CloseHandle(snap)
         return res
 
     @staticmethod
@@ -222,4 +223,5 @@ class System(object):
         threads.append(copy.copy(thread_entry))
         while winproxy.Thread32Next(snap, thread_entry):
             threads.append(copy.copy(thread_entry))
+        winproxy.CloseHandle(snap)
         return threads

@@ -674,8 +674,10 @@ class Debugger(object):
         self._setup_pending_breakpoints_new_process(self.current_process)
         self._setup_pending_breakpoints_new_thread(self.current_thread)
         with self.DisabledMemoryBreakpoint():
-            return self.on_create_process(create_process)
-        # TODO: close hFile
+            try:
+                return self.on_create_process(create_process)
+            finally:
+                winproxy.CloseHandle(create_process.hFile)
 
     def _handle_exit_process(self, debug_event):
         """Handle EXIT_PROCESS_DEBUG_EVENT"""
@@ -745,7 +747,10 @@ class Debugger(object):
         self._module_by_process[self.current_process.pid][dll_name] = windows.pe_parse.GetPEFile(load_dll.lpBaseOfDll, self.current_process)
         self._setup_pending_breakpoints_load_dll(dll_name)
         with self.DisabledMemoryBreakpoint():
-            return self.on_load_dll(load_dll)
+            try:
+                return self.on_load_dll(load_dll)
+            finally:
+                winproxy.CloseHandle(load_dll.hFile)
 
     def _handle_unload_dll(self, debug_event):
         """Handle UNLOAD_DLL_DEBUG_EVENT"""

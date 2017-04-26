@@ -1,3 +1,4 @@
+import os
 import ctypes
 
 import windows
@@ -9,6 +10,7 @@ from windows.generated_def.winstructs import *
 class EPUBLIC_OBJECT_TYPE_INFORMATION(ctypes.Structure):
     _fields_ = windows.utils.transform_ctypes_fields(PUBLIC_OBJECT_TYPE_INFORMATION, {"TypeName": windows.winobject.process.WinUnicodeString})
 
+current_process_pid = os.getpid()
 
 class Handle(SYSTEM_HANDLE):
     """A handle of the system"""
@@ -86,7 +88,7 @@ class Handle(SYSTEM_HANDLE):
         return "<{0} value=<0x{1:x}> in process pid={2}>".format(type(self).__name__, self.wValue, self.dwProcessId)
 
     def __del__(self):
-        if self.dwProcessId == windows.current_process.pid:
+        if self.dwProcessId == current_process_pid:
             return
         if hasattr(self, "_local_handle"):
             return winproxy.CloseHandle(self._local_handle)

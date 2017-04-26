@@ -88,7 +88,14 @@ def check_for_gc_garbage(f):
     return wrapper
 
 
-
+def check_for_handle_leak(f):
+    def wrapper(testcase, *args, **kwargs):
+        current_process_hdebugger.refresh_handles()
+        res = f(testcase, *args, **kwargs)
+        leaked_handles = current_process_hdebugger.get_new_handle()
+        testcase.assertFalse(leaked_handles, "Test Leaked <{0}> handles of types ({1})".format(len(leaked_handles), set(h.type for h in leaked_handles)))
+        return res
+    return wrapper
 
 def print_call(f):
     def wrapper(*args, **kwargs):
@@ -96,3 +103,30 @@ def print_call(f):
         print("Call to <{0}>({1}) returned <{2}>".format(f.func_name, (args, kwargs), res))
         return res
     return wrapper
+
+
+class HandleDebugger(object):
+    def __init__(self, pid):
+        self.pid = pid
+        self.handles = 0
+
+    def refresh_handles(self):
+        self.handles = self.get_handles()
+
+    def get_handles(self):
+        tpid = self.pid
+        return [h for h in windows.system.handles if h.dwProcessId == tpid]
+
+    def get_new_handle(self):
+        nh = self.get_handles()
+        handle_diff = set(h.wValue for h in nh) - set(h.wValue for h in self.handles)
+        return [h for h in nh if h.wValue in handle_diff]
+
+    def handles_types(self, hlist):
+        return set(h.type for h in hlist)
+
+    def print_new_handle_type(self):
+        print(self.handles_types(self.get_new_handle()))
+
+
+current_process_hdebugger = HandleDebugger(windows.current_process.pid)
