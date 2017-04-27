@@ -677,7 +677,8 @@ class Debugger(object):
             try:
                 return self.on_create_process(create_process)
             finally:
-                winproxy.CloseHandle(create_process.hFile)
+                if create_process.hFile:
+                    winproxy.CloseHandle(create_process.hFile)
 
     def _handle_exit_process(self, debug_event):
         """Handle EXIT_PROCESS_DEBUG_EVENT"""
@@ -750,7 +751,8 @@ class Debugger(object):
             try:
                 return self.on_load_dll(load_dll)
             finally:
-                winproxy.CloseHandle(load_dll.hFile)
+                if load_dll.hFile:
+                    winproxy.CloseHandle(load_dll.hFile)
 
     def _handle_unload_dll(self, debug_event):
         """Handle UNLOAD_DLL_DEBUG_EVENT"""
