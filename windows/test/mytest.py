@@ -70,6 +70,14 @@ class WindowsTestCase(unittest.TestCase):
         self.assertIn("python", windows.current_process.peb.modules[0].name)
 
     @check_for_gc_garbage
+    def test_get_current_process_exe(self):
+        exe = windows.current_process.peb.exe
+        exe_by_module = windows.current_process.peb.modules[0].pe
+        self.assertEqual(exe.baseaddr, exe_by_module.baseaddr)
+        self.assertEqual(exe.bitness, exe_by_module.bitness)
+
+
+    @check_for_gc_garbage
     def test_local_process_pe_imports(self):
         python_module = windows.current_process.peb.modules[0]
         imp = python_module.pe.imports
@@ -311,6 +319,23 @@ class WindowsTestCase(unittest.TestCase):
             #time.sleep(0.5)
             dword = struct.unpack("<Q", calc.read_memory(data, 8))[0]
             self.assertEqual(dword, get_current_proc_id)
+
+    @check_for_gc_garbage
+    def test_remote_peb_exe_32(self):
+        with Calc32() as calc:
+            exe = calc.peb.exe
+            exe_by_module = calc.peb.modules[0].pe
+            self.assertEqual(exe.baseaddr, exe_by_module.baseaddr)
+            self.assertEqual(exe.bitness, exe_by_module.bitness)
+
+    @windows_64bit_only
+    @check_for_gc_garbage
+    def test_remote_peb_exe_64(self):
+        with Calc64() as calc:
+            exe = calc.peb.exe
+            exe_by_module = calc.peb.modules[0].pe
+            self.assertEqual(exe.baseaddr, exe_by_module.baseaddr)
+            self.assertEqual(exe.bitness, exe_by_module.bitness)
 
     @check_for_gc_garbage
     def test_thread_exit_value_32(self):
@@ -574,6 +599,23 @@ class WindowsTestCase(unittest.TestCase):
         with Calc64() as calc:
             t = calc.threads[0]
             self.assertNotEqual(t.teb_base, 0)
+
+    @check_for_gc_garbage
+    def test_thread_owner_from_tid_32(self):
+        with Calc32() as calc:
+            thread = calc.threads[0]
+            tst_thread = windows.winobject.process.WinThread(tid=thread.tid)
+            self.assertEqual(thread.owner_pid, tst_thread.owner_pid)
+            self.assertEqual(thread.owner.name, tst_thread.owner.name)
+
+    @windows_64bit_only
+    @check_for_gc_garbage
+    def test_thread_owner_from_tid_64(self):
+        with Calc64() as calc:
+            thread = calc.threads[0]
+            tst_thread = windows.winobject.process.WinThread(tid=thread.tid)
+            self.assertEqual(thread.owner_pid, tst_thread.owner_pid)
+            self.assertEqual(thread.owner.name, tst_thread.owner.name)
 
 
 class WindowsAPITestCase(unittest.TestCase):

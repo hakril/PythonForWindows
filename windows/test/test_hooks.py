@@ -104,12 +104,15 @@ class HookTestCase(unittest.TestCase):
             except WindowsError as e:
                 pass
             """
-            calc.execute_python_unsafe(textwrap.dedent(code))
+            calc.execute_python(textwrap.dedent(code))
             # Tricky part: we use an injected thread exit_value to ask stuff about the remote python
             def remote_ask(request):
                 t = calc.execute_python_unsafe(request)
                 t.wait()
-                return t.exit_code
+                result = t.exit_code
+                if result > 100:
+                    import pdb;pdb.set_trace()
+                return result
 
             self.assertEqual(remote_ask("windows.current_thread.exit(len(calling_thread))"), 1)
             self.assertEqual(remote_ask("windows.current_thread.exit(calling_thread == set([hooking_thread]))"), 1)
@@ -156,7 +159,7 @@ class HookTestCase(unittest.TestCase):
             except WindowsError as e:
                 pass
             """
-            calc.execute_python_unsafe(textwrap.dedent(code))
+            calc.execute_python(textwrap.dedent(code))
             # Tricky part: we use an injected thread exit_value to ask stuff about the remote python
             def remote_ask(request):
                 t = calc.execute_python_unsafe(request)

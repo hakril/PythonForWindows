@@ -64,14 +64,41 @@ class AutoHandle(object):
             self._close_function(self._handle)
 
 
-class WinThread(THREADENTRY32, AutoHandle):
+class WinThread(AutoHandle):
     """Represent a thread """
+
+    def __init__(self, tid=None, handle=None, owner_pid=None, owner=None):
+        if tid is None and handle is None:
+            raise ValueError("Need at least <pid> or <handle> to create a {0}".format(type(self).__name__))
+
+        if tid is not None:    self._tid = tid
+        if handle is not None: self._handle = handle
+        if owner is not None:   self._owner = owner
+        if owner_pid is not None:   self._owner_pid = owner_pid
+        if owner_pid is None and owner:
+            self._owner_pid = owner.pid
+
+    @classmethod
+    def _from_THREADENTRY32(cls, entry, owner=None):
+        tid = entry.th32ThreadID
+        owner_pid = entry.th32OwnerProcessID
+        return cls(tid=tid, owner_pid=owner_pid, owner=owner)
+
+    @classmethod
+    def _from_handle(cls, handle):
+        # Create a DeadThread if thread is already dead ?
+        return WinThread(handle=handle)
+
     @utils.fixedpropety
     def tid(self):
         """Thread ID
 
         :type: :class:`int`"""
-        return self.th32ThreadID
+        return self._get_thread_id(self.handle)
+
+    @utils.fixedpropety
+    def owner_pid(self):
+        return self._get_thread_owner_pid(self.handle)
 
     @utils.fixedpropety
     def owner(self):
@@ -79,13 +106,7 @@ class WinThread(THREADENTRY32, AutoHandle):
 
         :type: :class:`WinProcess`
 		"""
-        if hasattr(self, "_owner"):
-            return self._owner
-        try:
-            self._owner = [process for process in windows.system.processes if process.pid == self.th32OwnerProcessID][0]
-        except IndexError:
-            return None
-        return self._owner
+        return WinProcess(pid=self.owner_pid)
 
     @property
     def context(self):
@@ -227,22 +248,11 @@ class WinThread(THREADENTRY32, AutoHandle):
         if owner is None:
             owner_name = "<Dead process with pid {0}>".format(hex(self.th32OwnerProcessID))
         else:
-            owner_name = owner.name
+            try:
+                owner_name = owner.name
+            except EnvironmentError:
+                owner_name = "!cannot-retrieve-owner-name"
         return '<{0} {1} owner "{2}" at {3}>'.format(self.__class__.__name__, self.tid, owner_name, hex(id(self)))
-
-    @staticmethod
-    def _from_handle(handle):
-        tid = WinThread._get_thread_id(handle)
-        try:
-            # Really useful ?
-            thread = [t for t in windows.winobject.system.System().threads if t.tid == tid][0]
-            # set AutoHandle _handle
-            thread._handle = handle
-            dbgprint("Thread {0} from handle {1}".format(thread, hex(handle)), "HANDLE")
-            return thread
-        except IndexError:
-            dbgprint("DeadThread from handle {0}".format(hex(handle)), "HANDLE")
-            return DeadThread(handle, tid)
 
     @staticmethod
     def _get_thread_id_by_api(handle):
@@ -253,9 +263,16 @@ class WinThread(THREADENTRY32, AutoHandle):
         if windows.current_process.bitness == 32 and self.owner.bitness == 64:
             raise NotImplementedError("[_get_thread_id_manual] 32 -> 64 (XP64 bits + Syswow process ?)")
         res = THREAD_BASIC_INFORMATION()
-        windows.winproxy.NtQueryInformationThread(hand, ThreadBasicInformation, byref(res), ctypes.sizeof(res))
+        windows.winproxy.NtQueryInformationThread(handle, ThreadBasicInformation, byref(res), ctypes.sizeof(res))
         id2 = res.ClientId.UniqueThread
         return id2
+
+    def _get_thread_owner_pid(self, handle):
+        res = THREAD_BASIC_INFORMATION()
+        windows.winproxy.NtQueryInformationThread(handle, ThreadBasicInformation, byref(res), ctypes.sizeof(res))
+        id2 = res.ClientId.UniqueProcess
+        return id2
+
 
     if winproxy.is_implemented(winproxy.GetThreadId):
         _get_thread_id = _get_thread_id_by_api
@@ -329,7 +346,8 @@ class Process(AutoHandle):
 
         :type: [:class:`WinThread`] -- A list of Thread
 		"""
-        return [thread for thread in windows.system.threads if thread.th32OwnerProcessID == self.pid]
+        owner_pid = self.pid
+        return [WinThread._from_THREADENTRY32(th, owner=self) for th in windows.system.enumerate_threads_generator() if th.th32OwnerProcessID == owner_pid]
 
     def virtual_alloc(self, size):
         raise NotImplementedError("virtual_alloc")
@@ -821,7 +839,7 @@ class WinProcess(Process):
     """A Process on the system"""
     def __init__(self, pid=None, handle=None, name=None, ppid=None):
         if pid is None and handle is None:
-            raise ValueError("Need at least <pid> or <handle> to create a {0}".format(type(self).__name))
+            raise ValueError("Need at least <pid> or <handle> to create a {0}".format(type(self).__name__))
 
         if pid is not None:    self._pid = pid
         if handle is not None: self._handle = handle
@@ -843,7 +861,7 @@ class WinProcess(Process):
         name = entry.szExeFile.decode()
         pid = entry.th32ProcessID
         ppid = entry.th32ParentProcessID
-        return WinProcess(pid=pid, name=name, ppid=ppid)
+        return cls(pid=pid, name=name, ppid=ppid)
 
 
     @utils.fixedpropety
@@ -880,11 +898,15 @@ class WinProcess(Process):
 
     def __repr__(self):
         try:
+            exe_name = self.name
+        except WindowsError as e:
+            exe_name = "!cannot-retrieve-name"
+        try:
             if self.is_exit:
-                return '<{0} "{1}" pid {2} (DEAD) at {3}>'.format(self.__class__.__name__, self.name, self.pid, hex(id(self)))
+                return '<{0} "{1}" pid {2} (DEAD) at {3}>'.format(self.__class__.__name__, exe_name, self.pid, hex(id(self)))
         except WindowsError: # Cannot open process
             pass
-        return '<{0} "{1}" pid {2} at {3}>'.format(self.__class__.__name__, self.name, self.pid, hex(id(self)))
+        return '<{0} "{1}" pid {2} at {3}>'.format(self.__class__.__name__, exe_name, self.pid, hex(id(self)))
 
     def virtual_alloc(self, size, prot=PAGE_EXECUTE_READWRITE):
         """Allocate memory in the process
@@ -1232,6 +1254,14 @@ class PEB(Structure):
                                        )
 
     @property
+    def exe(self):
+        """The executable of the process, as pointed by PEB.ImageBaseAddress
+
+        :type: :class:`windows.pe_parse.PEFile`
+        """
+        return windows.pe_parse.GetPEFile(self.ImageBaseAddress)
+
+    @property
     def imagepath(self):
         """The ImagePathName of the PEB
 
@@ -1344,6 +1374,14 @@ class RemotePEB(rctypes.RemoteStructure.from_structure(PEB)):
         return RemoteLoadedModule(ptr_value - ctypes.sizeof(ctypes.c_void_p) * 2, self._target)
 
     @property
+    def exe(self):
+        """The executable of the process, as pointed by PEB.ImageBaseAddress
+
+        :type: :class:`windows.pe_parse.PEFile`
+        """
+        return pe_parse.GetPEFile(self.ImageBaseAddress, target=self._target)
+
+    @property
     def modules(self):
         """The loaded modules present in the PEB
 
@@ -1376,6 +1414,15 @@ if CurrentProcess().bitness == 32:
         def ptr_flink_to_remote_module(self, ptr_value):
             return RemoteLoadedModule64(ptr_value - ctypes.sizeof(rctypes.c_void_p64) * 2, self._target)
 
+
+        @property
+        def exe(self):
+            """The executable of the process, as pointed by PEB.ImageBaseAddress
+
+            :type: :class:`windows.pe_parse.PEFile`
+            """
+            return pe_parse.GetPEFile(self.ImageBaseAddress, target=self._target)
+
         @property
         def modules(self):
             """The loaded modules present in the PEB
@@ -1407,6 +1454,15 @@ if CurrentProcess().bitness == 64:
     class RemotePEB32(rctypes.transform_type_to_remote32bits(PEB)):
         def ptr_flink_to_remote_module(self, ptr_value):
             return RemoteLoadedModule32(ptr_value - ctypes.sizeof(rctypes.c_void_p32) * 2, self._target)
+
+        @property
+        def exe(self):
+            """The executable of the process, as pointed by PEB.ImageBaseAddress
+
+            :type: :class:`windows.pe_parse.PEFile`
+            """
+            return pe_parse.GetPEFile(self.ImageBaseAddress, target=self._target)
+
 
         @property
         def modules(self):

@@ -19,6 +19,7 @@ from windows.winobject import kernobj
 from windows.winobject import handle
 
 from windows.generated_def.winstructs import *
+from windows.dbgprint import dbgprint
 
 class System(object):
     """The state of the current ``Windows`` system ``Python`` is running on"""
@@ -42,7 +43,7 @@ class System(object):
 
         :type: [:class:`process.WinThread`] -- A list of Thread
 		"""
-        return self.enumerate_threads()
+        return self.enumerate_threads_setup_owners()
 
     @property
     def logicaldrives(self):
@@ -202,6 +203,7 @@ class System(object):
 
     @staticmethod
     def enumerate_processes():
+        dbgprint("Enumerating processes with CreateToolhelp32Snapshot", "SLOW")
         process_entry = PROCESSENTRY32()
         process_entry.dwSize = ctypes.sizeof(process_entry)
         snap = winproxy.CreateToolhelp32Snapshot(windef.TH32CS_SNAPPROCESS, 0)
@@ -214,14 +216,57 @@ class System(object):
         return res
 
     @staticmethod
-    def enumerate_threads():
-        thread_entry = process.WinThread()
+    def enumerate_threads_generator():
+        # Ptet dangereux, parce que on yield la meme THREADENTRY32 a chaque fois
+        dbgprint("Enumerating threads with CreateToolhelp32Snapshot <generator>", "SLOW")
+        thread_entry = THREADENTRY32()
         thread_entry.dwSize = ctypes.sizeof(thread_entry)
         snap = winproxy.CreateToolhelp32Snapshot(windef.TH32CS_SNAPTHREAD, 0)
+        dbgprint("New handle CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD) <generator> | {0:#x}".format(snap), "HANDLE")
+        try:
+            winproxy.Thread32First(snap, thread_entry)
+            yield thread_entry
+            while winproxy.Thread32Next(snap, thread_entry):
+                yield thread_entry
+        finally:
+            winproxy.CloseHandle(snap)
+        dbgprint("CLOSE CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD) <generator> | {0:#x}".format(snap), "HANDLE")
+
+
+    @staticmethod
+    def enumerate_threads():
+        return [WinThread._from_THREADENTRY32(th) for th in System.enumerate_threads_generator()]
+
+
+    def enumerate_threads_setup_owners(self):
+        # Enumerating threads is a special operation concerning the owner process.
+        # We may not be able to retrieve the name of the owning process by normal way
+        # (as we need to get a handle on the process)
+        # So, this implementation of enumerate_thread also setup the owner with the result of enumerate_processes
+        dbgprint("Enumerating threads with CreateToolhelp32Snapshot and setup owner", "SLOW")
+
+        # One snap for both enum to be prevent race
+        snap = winproxy.CreateToolhelp32Snapshot(windef.TH32CS_SNAPTHREAD | windef.TH32CS_SNAPPROCESS, 0)
+
+        process_entry = PROCESSENTRY32()
+        process_entry.dwSize = ctypes.sizeof(process_entry)
+        winproxy.Process32First(snap, process_entry)
+        processes = []
+        processes.append(process.WinProcess._from_PROCESSENTRY32(process_entry))
+        while winproxy.Process32Next(snap, process_entry):
+            processes.append(process.WinProcess._from_PROCESSENTRY32(process_entry))
+
+        # Forge a dict pid -> process
+        proc_dict = {proc.pid: proc for proc in processes}
+
+        thread_entry = THREADENTRY32()
+        thread_entry.dwSize = ctypes.sizeof(thread_entry)
         threads = []
         winproxy.Thread32First(snap, thread_entry)
-        threads.append(copy.copy(thread_entry))
+        parent = proc_dict[thread_entry.th32OwnerProcessID]
+        threads.append(process.WinThread._from_THREADENTRY32(thread_entry, owner=parent))
         while winproxy.Thread32Next(snap, thread_entry):
-            threads.append(copy.copy(thread_entry))
+            parent = proc_dict[thread_entry.th32OwnerProcessID]
+            threads.append(process.WinThread._from_THREADENTRY32(thread_entry, owner=parent))
         winproxy.CloseHandle(snap)
         return threads
