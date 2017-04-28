@@ -37,6 +37,7 @@ TYPE_EQUIVALENCE = [
     ('PHANDLER_ROUTINE', 'PVOID'),
     ('LPBYTE', 'POINTER(BYTE)'),
     ('ULONG_PTR','PVOID'),
+    ('DWORD_PTR','ULONG_PTR'),
     ('KAFFINITY','ULONG_PTR'),
     ('KPRIORITY','LONG'),
     ('CHAR', 'c_char'),
@@ -95,6 +96,7 @@ TYPE_EQUIVALENCE = [
     ("DISPID", "LONG"),
     ("MEMBERID", "DISPID"),
     ('PSECURITY_DESCRIPTOR', 'PVOID'),
+    ('LPPROC_THREAD_ATTRIBUTE_LIST', 'PVOID'),
     ('LPUNKNOWN', 'POINTER(PVOID)'),
     ('SPC_UUID', 'BYTE * 16'),
     #STUFF FOR COM (will be replace at runtime

@@ -62,6 +62,22 @@ class WindowsTestCase(unittest.TestCase):
             self.assertEqual(calc.bitness, 64)
 
     @check_for_gc_garbage
+    def test_current_process_ppid(self):
+        myself = [p for p in windows.system.processes if p.pid == windows.current_process.pid][0]
+        self.assertEqual(myself.ppid, windows.current_process.ppid)
+
+    @check_for_gc_garbage
+    def test_process_ppid_32(self):
+        with Calc32() as calc:
+            self.assertEqual(calc.ppid, windows.current_process.pid)
+
+    @windows_64bit_only
+    @check_for_gc_garbage
+    def test_process_ppid_64(self):
+        with Calc64() as calc:
+            self.assertEqual(calc.ppid, windows.current_process.pid)
+
+    @check_for_gc_garbage
     def test_get_current_process_peb(self):
         return windows.current_process.peb
 

@@ -2110,12 +2110,14 @@ typedef struct _WINTRUST_DATA
 } WINTRUST_DATA, *PWINTRUST_DATA;
 
 
-typedef struct _PROCESS_BASIC_INFORMATION {
-    PVOID Reserved1;
+typedef struct _PROCESS_BASIC_INFORMATION
+{
+    NTSTATUS ExitStatus;
     PPEB PebBaseAddress;
-    PVOID Reserved2[2];
-    ULONG_PTR UniqueProcessId;
-    PVOID Reserved3;
+    ULONG_PTR AffinityMask;
+    KPRIORITY BasePriority;
+    HANDLE UniqueProcessId;
+    HANDLE InheritedFromUniqueProcessId;
 } PROCESS_BASIC_INFORMATION, *PPROCESS_BASIC_INFORMATION;
 
 typedef struct _JIT_DEBUG_INFO {

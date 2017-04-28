@@ -340,6 +340,26 @@ class Process(AutoHandle):
             return 32
         return 64
 
+
+    @utils.fixedpropety
+    def ppid(self):
+        """Parent Process ID
+
+        :type: :class:`int`
+		"""
+        if windows.current_process.bitness == 32 and self.bitness == 64:
+            xtype = windows.remotectypes.transform_type_to_remote64bits(PROCESS_BASIC_INFORMATION)
+            # Fuck-it <3
+            data = (ctypes.c_char * ctypes.sizeof(xtype))()
+            windows.syswow64.NtQueryInformationProcess_32_to_64(self.handle, ProcessInformation=data, ProcessInformationLength=ctypes.sizeof(xtype))
+            # Map a remote64bits(PROCESS_BASIC_INFORMATION) at the address of 'data'
+            x = xtype(ctypes.addressof(data), windows.current_process)
+        else:
+            information_type = 0
+            x = PROCESS_BASIC_INFORMATION()
+            winproxy.NtQueryInformationProcess(self.handle, information_type, x)
+        return x.InheritedFromUniqueProcessId
+
     @property
     def threads(self):
         """The threads of the process
@@ -747,15 +767,6 @@ class CurrentProcess(Process):
 		"""
         return os.getpid()
 
-    # Is there a better way ?
-    @utils.fixedpropety
-    def ppid(self):
-        """Parent Process ID
-
-        :type: :class:`int`
-		"""
-        return [p for p in windows.system.processes if p.pid == self.pid][0].ppid
-
     @utils.fixedpropety # leave it has fixed property as we don't care if CurrentProcess is never collected
     def peb(self):
         """The Process Environment Block of the current process
@@ -882,16 +893,6 @@ class WinProcess(Process):
         :type: :class:`int`
 		"""
         return winproxy.GetProcessId(self.handle)
-
-    @utils.fixedpropety
-    def ppid(self):
-        """Parent Process ID
-
-        :type: :class:`int`
-		"""
-        # TODO: is there an API ?
-        pid = self.pid
-        return [p for p in windows.system.processes if p.pid == pid][0].th32ParentProcessID
 
     def _get_handle(self):
         return winproxy.OpenProcess(dwProcessId=self.pid)
