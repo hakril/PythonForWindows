@@ -1,0 +1,172 @@
+import struct
+from collections import namedtuple
+
+import windows
+import windows.generated_def as gdef
+from windows.rpc import ndr
+from windows.dbgprint import dbgprint
+
+
+
+class NdrTower(ndr.NdrStructure):
+    MEMBERS = [ndr.NdrLong, ndr.NdrByteConformantArray]
+
+    @classmethod
+    def post_unpack(cls, data):
+        size = data[0]
+        tower = data[1]
+        return bytearray(struct.pack("<I", size)) + bytearray(tower)
+
+
+class NdrContext(ndr.NdrStructure):
+    MEMBERS = [ndr.NdrLong, ndr.NdrLong, ndr.NdrLong, ndr.NdrLong, ndr.NdrLong]
+
+
+class NDRIID(ndr.NdrStructure):
+    MEMBERS = [ndr.NdrByte] * 16
+
+
+class EPMapperFunc8Parameters(ndr.NdrParameters):
+    MEMBERS = [NDRIID,
+                NdrTower,
+                ndr.NdrUniquePTR(ndr.NdrSID),
+                NdrContext,
+                ndr.NdrLong]
+
+
+class Towers(ndr.NdrConformantVaryingArrays):
+    MEMBER_TYPE = ndr.NdrUniquePTR(NdrTower)
+
+
+class EPMapperFunc8Results(ndr.NdrParameters):
+    MEMBERS = [NdrContext,
+                ndr.NdrLong,
+                Towers]
+
+UnpackTower = namedtuple("UnpackTower", ["protseq", "endpoint", "address", "object", "syntax"])
+
+def parse_floor(stream):
+    lhs_size = stream.partial_unpack("<H")[0]
+    lhs = stream.read(lhs_size)
+    rhs_size = stream.partial_unpack("<H")[0]
+    rhs = stream.read(rhs_size)
+    return lhs, rhs
+
+def craft_floor(lhs, rhs):
+    return struct.pack("<H", len(lhs)) + lhs + struct.pack("<H", len(rhs))  + rhs
+
+def explode_alpc_tower(tower):
+    stream = ndr.NdrStream(bytearray(tower))
+    size = stream.partial_unpack("<I")[0]
+    if size != len(stream.data):
+        raise ValueError("Invalid tower size: indicate {0}, tower size {1}".format(size, len(stream.data)))
+    floor_count = stream.partial_unpack("<H")[0]
+    if floor_count != 4:
+        raise ValueError("ALPC Tower are expected to have 4 floors ({0} instead)".format(floor_count))
+
+    # Floor 0
+    lhs, rhs = parse_floor(stream)
+    if not (lhs[0] == 0xd):
+        raise ValueError("Floor 0: IID expected")
+    iid =  windows.com.IID.from_buffer_copy(lhs[1:17])
+    object = windows.rpc.RPC_SYNTAX_IDENTIFIER(iid, lhs[17], lhs[18])
+
+    # Floor 1
+    lhs, rhs = parse_floor(stream)
+    if not (lhs[0] == 0xd):
+        raise ValueError("Floor 0: IID expected")
+    iid =  windows.com.IID.from_buffer_copy(lhs[1:17])
+    syntax = windows.rpc.RPC_SYNTAX_IDENTIFIER(iid, lhs[17], lhs[18])
+
+    # Floor 2
+    lhs, rhs = parse_floor(stream)
+    if (len(lhs) != 1 or lhs[0] != 0x0c):
+        raise ValueError("Alpc Tower expects 0xc as Floor2 LHS (got {0:#x})".format(lhs[0]))
+
+    lhs, rhs = parse_floor(stream)
+    if not (rhs[-1] == 0):
+        raise ValueError("ALPC Port name doest not end by \\x00")
+    return UnpackTower("ncalrpc", rhs[:-1], None, object, syntax)
+
+# http://pubs.opengroup.org/onlinepubs/9629399/apdxi.htm#tagcjh_28
+# Octet 0 contains the hexadecimal value 0d. This is a reserved protocol identifier prefix that indicates that the protocol ID is UUID derived
+TOWER_PROTOCOL_IS_UUID = "\x0d"
+TOWER_EMPTY_RHS = "\x00\x00"
+TOWER_PROTOCOL_ID_ALPC = "\x0c" # From RE
+
+def construct_alpc_tower(object, syntax, protseq, endpoint, address):
+    if address is not None:
+        raise NotImplementedError("Construct ALPC Tower with address != None")
+    if protseq != "ncalrpc":
+        raise NotImplementedError("Construct ALPC Tower with protseq != 'ncalrpc'")
+    # Floor 0
+    floor_0_lsh = TOWER_PROTOCOL_IS_UUID + bytearray(object.SyntaxGUID) + struct.pack("<BB", object.MajorVersion, object.MinorVersion)
+    floor_0_rsh = TOWER_EMPTY_RHS
+    floor_0 = craft_floor(floor_0_lsh, floor_0_rsh)
+    # Floor 1
+    floor_1_lsh = TOWER_PROTOCOL_IS_UUID + bytearray(object.SyntaxGUID) + struct.pack("<BB", object.MajorVersion, object.MinorVersion)
+    floor_1_rsh = TOWER_EMPTY_RHS
+    floor_1 = craft_floor(floor_1_lsh, floor_1_rsh)
+    # Floor 2
+    floor_2_lsh = TOWER_PROTOCOL_ID_ALPC
+    floor_2_rsh = TOWER_EMPTY_RHS
+    floor_2 = craft_floor(floor_2_lsh, floor_2_rsh)
+    # Floor 3
+    floor_3_lsh = "\xff"
+    floor_3_rsh = TOWER_EMPTY_RHS
+    floor_3 = craft_floor(floor_3_lsh, floor_3_rsh)
+    towerarray = struct.pack("<H", 4) +  floor_0 + floor_1 + floor_2 + floor_3
+    return len(towerarray), bytearray(towerarray)
+
+def endpoint_map_alpc(targetiid, version=(1,0), nb_response=1):
+    if isinstance(targetiid, basestring):
+        targetiid = windows.com.IID.from_string(targetiid)
+    # Connect to epmapper
+    client = windows.rpc.RPCClient(r"\RPC Control\epmapper")
+    epmapperiid = client.bind("e1af8308-5d1f-11c9-91a4-08002b14a0fa", version=(3,0))
+
+    # Compute request tower
+    ## object
+    rpc_object = windows.rpc.RPC_SYNTAX_IDENTIFIER(targetiid, *version)
+    ## Syntax
+    syntax_iid = windows.com.IID.from_string("8a885d04-1ceb-11c9-9fe8-08002b104860")
+    rpc_syntax = windows.rpc.RPC_SYNTAX_IDENTIFIER(syntax_iid, 2, 0)
+    ## Forge tower
+    tower_array_size, towerarray = construct_alpc_tower(rpc_object, rpc_syntax, "ncalrpc", "", None)
+
+    # parameters
+    local_system_psid = windows.utils.get_known_sid(gdef.WinLocalSystemSid)
+    context = (0, 0, 0, 0, 0)
+
+    # Pack request
+    fullreq = EPMapperFunc8Parameters.pack([bytearray(targetiid),
+                                            (tower_array_size, towerarray),
+                                            local_system_psid,
+                                            context,
+                                            nb_response])
+    # RPC Call
+    response = client.call(epmapperiid, 8, fullreq)
+    # Unpack response
+    stream = ndr.NdrStream(response)
+    unpacked = EPMapperFunc8Results.unpack(stream)
+    # Looks like there is a memory leak here (in stream.data) if nb_response > len(unpacked[2])
+    # Parse towers
+    return [explode_alpc_tower(obj) for obj in unpacked[2]]
+
+
+def find_alpc_endpoint_and_connect(targetiid, version=(1,0)):
+    alpctowers = endpoint_map_alpc(targetiid, version, nb_response=50)
+    for tower in alpctowers:
+        dbgprint("Trying to connect to endpoint <{0}>".format(tower.endpoint), "RPC")
+        alpc_port = r"\RPC Control\{0}".format(tower.endpoint)
+        try:
+            client = windows.rpc.RPCClient(alpc_port)
+        except Exception as e:
+            dbgprint("Could not connect to endpoint <{0}>: {1}".format(tower.endpoint, e), "RPC")
+            continue
+        break
+    else:
+        raise ValueError("Could not find a valid endpoint for target <{0}> version <{1}>".format(targetiid, version))
+    dbgprint('Connected to ALPC port "{0}"'.format(alpc_port), "RPC")
+    return client
+
