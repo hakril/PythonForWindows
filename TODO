@@ -20,6 +20,14 @@ TODO:
             - if I have a ntdll32 and ntdll64: both would have the same name in the list..
 
 
+        - Il y a un truc fucked-up avec le add_bp(target=XXX)
+            - j'attends a avoir un thread/process mais je fait des check sur TID/PID..
+                - Ecrire un test et fix..
+
+    - windows.alpc | windows.rpc
+        - Clean + doc + samples
+
+
 
     - remotectypes
         - pretty sur I can get rid of PointerToStruct64/PointerToStruct32

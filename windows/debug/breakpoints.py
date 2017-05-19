@@ -70,7 +70,7 @@ class X64ArgumentRetriever(object):
     def get_arg(self, nb, proc, thread):
         if nb < len(self.REG_ARGS):
             return getattr(thread.context, self.REG_ARGS[nb])
-        return proc.read_dword(thread.context.sp + 8 + (8 * nb))
+        return proc.read_qword(thread.context.sp + 8 + (8 * nb))
 
 ## Behaviour breakpoint !
 class FunctionParamDumpBP(Breakpoint):
@@ -158,3 +158,11 @@ class FunctionBP(FunctionCallBP, FunctionParamDumpBP):
         - Extract the arguments of the functions
         - Break at the return of the function
     """
+
+class PrintBP(Breakpoint):
+    def __init__(self, addr, format):
+        super(PrintBP, self).__init__(addr)
+        self.format = format
+
+    def trigger(self, dbg, exc):
+        print(self.format.format(dbg=dbg, exc=exc, ctx=dbg.current_thread.context))

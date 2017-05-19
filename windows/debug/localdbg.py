@@ -32,6 +32,7 @@ class LocalDebugger(object):
         self.veh_depth = 0
         self.current_exception = None
         self.exceptions_stack = [None]
+        self.current_process =  windows.current_process
 
     @contextmanager
     def NewCurrentException(self, exc):
@@ -63,6 +64,31 @@ class LocalDebugger(object):
             windows.current_process.write_memory(addr, self._memory_save[addr])
         self._reput_breakpoint[windows.current_thread.tid] = self.breakpoints[addr], single_step
         return self.single_step()
+
+    def _local_resolve(self, addr):
+        if not isinstance(addr, basestring):
+            return addr
+        dll, api = addr.split("!")
+        dll = dll.lower()
+        modules = {m.name[:-len(".dll")] if m.name.endswith(".dll") else m.name : m for m in windows.current_process.peb.modules}
+        mod = None
+        if dll in modules:
+            mod = [modules[dll]]
+        if not mod:
+            return None
+        # TODO: optim exports are the same for whole system (32 vs 64 bits)
+        # I don't have to reparse the exports each time..
+        # Try to interpret api as an int
+        try:
+            api_int = int(api, 0)
+            return mod[0].baseaddr + api_int
+        except ValueError:
+            pass
+        exports = mod[0].pe.exports
+        if api not in exports:
+            dbgprint("Error resolving <{0}> in local process".format(addr, target), "DBG")
+            raise ValueError("Unknown API <{0}> in DLL {1}".format(api, dll))
+        return exports[api]
 
     def callback(self, exc):
         with self.NewCurrentException(exc):
@@ -134,10 +160,11 @@ class LocalDebugger(object):
             raise NotImplementedError("Unknow BP type {0}".format(bp.type))
         if targets is not None:
             raise ValueError("LocalDebugger: STANDARD_BP doest not support targets {0}".format(targets))
-        self.breakpoints[bp.addr] = bp
-        self._memory_save[bp.addr] = windows.current_process.read_memory(bp.addr, 1)
-        with windows.utils.VirtualProtected(bp.addr, 1, PAGE_EXECUTE_READWRITE):
-            windows.current_process.write_memory(bp.addr, "\xcc")
+        addr = self._local_resolve(bp.addr)
+        self.breakpoints[addr] = bp
+        self._memory_save[addr] = windows.current_process.read_memory(addr, 1)
+        with windows.utils.VirtualProtected(addr, 1, PAGE_EXECUTE_READWRITE):
+            windows.current_process.write_memory(addr, "\xcc")
         return
 
     def add_bp_hxbp(self, bp, targets=None):

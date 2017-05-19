@@ -133,7 +133,7 @@ class Debugger(object):
             self.current_process = None
             self.current_thread = None
 
-        if target.pid == self.target.pid:
+        if self.target and target.pid == self.target.pid:
             self.target = None
         windows.winproxy.DebugActiveProcessStop(target.pid)
 
@@ -254,7 +254,7 @@ class Debugger(object):
 
     def _setup_breakpoint_BP(self, bp, target):
         if not isinstance(target, WinProcess):
-            raise ValueError("SETUP STANDARD_BP on {0}".format(target))
+            raise ValueError("Cannot setup STANDARD_BP on {0}".format(target))
 
         addr = self._resolve(bp.addr, target)
         if addr is None:
@@ -621,12 +621,12 @@ class Debugger(object):
         if self.current_process.bitness == 32 and pe.bitness == 64:
             name_sufix = "64"
 
-        if not load_dll.lpImageName:
-            return pe.export_name + name_sufix
-        try:
-            addr = self.current_process.read_ptr(load_dll.lpImageName)
-        except:
-            addr = None
+        addr = None
+        if load_dll.lpImageName:
+            try:
+                addr = self.current_process.read_ptr(load_dll.lpImageName)
+            except:
+                pass
 
         if not addr:
             pe = windows.pe_parse.GetPEFile(load_dll.lpBaseOfDll, self.current_process)
@@ -659,6 +659,7 @@ class Debugger(object):
 
         self.current_process = WinProcess._from_handle(proc_handle.value)
         self.current_thread = WinThread._from_handle(thread_handle.value)
+        dbgprint("New process: {0}".format(self.current_process), "DBG")
 
         self.threads[self.current_thread.tid] = self.current_thread
         self._explicit_single_step[self.current_thread.tid] = False
@@ -710,8 +711,10 @@ class Debugger(object):
         thread_handle = HANDLE()
         cp_handle = windows.current_process.handle
         winproxy.DuplicateHandle(cp_handle, create_thread.hThread, cp_handle, ctypes.byref(thread_handle), dwOptions=DUPLICATE_SAME_ACCESS)
-        self.current_thread = WinThread._from_handle(thread_handle.value)
-        self.threads[self.current_thread.tid] = self.current_thread
+        new_thread = WinThread._from_handle(thread_handle.value)
+        self.threads[new_thread.tid] = new_thread
+        # The new thread is on the thread pool: we can now update the debugger state
+        self._update_debugger_state(debug_event)
         self._explicit_single_step[self.current_thread.tid] = False
         self._breakpoint_to_reput[self.current_thread.tid] = []
         self._hardware_breakpoint[self.current_thread.tid] = {}
@@ -818,10 +821,10 @@ class Debugger(object):
         elif target is not None:
             # Check that targets are accepted
             if target not in self.processes.values() + self.threads.values():
-                if target == self.target: # Original target (that have not been lauched yet)
+            #    if target == self.target: # Original target (that have not been lauched yet)
                     return self.add_pending_breakpoint(bp, target)
-                else:
-                    raise ValueError("Unknown target {0}".format(target))
+            #    else:
+            #        raise ValueError("Unknown target {0}".format(target))
         return self._setup_breakpoint(bp, target)
 
     def del_bp(self, bp, targets=None):
