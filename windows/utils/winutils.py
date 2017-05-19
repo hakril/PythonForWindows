@@ -92,6 +92,20 @@ def create_process(path, args=None, dwCreationFlags=0, show_windows=True):
     return windows.winobject.process.WinProcess(pid=proc_info.dwProcessId, handle=proc_info.hProcess)
 
 
+def lookup_privilege_value(privilege_name):
+    luid = LUID()
+    winproxy.LookupPrivilegeValueA(None, privilege_name, byref(luid))
+    return luid
+
+def lookup_privilege_name(privilege_value):
+    if isinstance(privilege_value, tuple):
+        luid = LUID(privilege_value[1], privilege_value[0])
+        privilege_value = luid
+    size = DWORD(0x100)
+    buff = ctypes.c_buffer(size.value)
+    winproxy.LookupPrivilegeNameA(None, privilege_value, buff, size)
+    return buff[:size.value]
+
 def enable_privilege(lpszPrivilege, bEnablePrivilege):
     """
     Enable or disable a privilege::
@@ -169,10 +183,12 @@ class FixedInteractiveConsole(code.InteractiveConsole):
         return raw_input("")
 
 
-def pop_shell():
+def pop_shell(locs=None):
     """Pop a console with an InterativeConsole"""
+    if locs is None:
+        locs = globals()
     create_console()
-    FixedInteractiveConsole(locals()).interact()
+    FixedInteractiveConsole(locs).interact()
 
 
 def get_kernel_modules():
@@ -230,6 +246,19 @@ def decompress_buffer(comptype, buffer, uncompress_size=None):
     uncompressed = ctypes.c_buffer(uncompress_size)
     windows.winproxy.RtlDecompressBuffer(comptype, uncompressed, uncompress_size, buffer, len(buffer), result_size)
     return uncompressed[:result_size.value]
+
+
+# sid.py + real SID type ?
+
+def get_known_sid(sid_type):
+    size = DWORD()
+    try:
+        windows.winproxy.CreateWellKnownSid(sid_type, None, None, size)
+    except WindowsError:
+        pass
+    buffer = ctypes.c_buffer(size.value)
+    windows.winproxy.CreateWellKnownSid(sid_type, None, buffer, size)
+    return ctypes.cast(buffer, PSID)
 
 class VirtualProtected(object):
     """

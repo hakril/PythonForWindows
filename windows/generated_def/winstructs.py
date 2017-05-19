@@ -208,6 +208,107 @@ class _SYSTEM_INFORMATION_CLASS(EnumType):
 SYSTEM_INFORMATION_CLASS = _SYSTEM_INFORMATION_CLASS
 
 
+WinNullSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinNullSid", 0x0)
+WinWorldSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinWorldSid", 0x1)
+WinLocalSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinLocalSid", 0x2)
+WinCreatorOwnerSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinCreatorOwnerSid", 0x3)
+WinCreatorGroupSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinCreatorGroupSid", 0x4)
+WinCreatorOwnerServerSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinCreatorOwnerServerSid", 0x5)
+WinCreatorGroupServerSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinCreatorGroupServerSid", 0x6)
+WinNtAuthoritySid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinNtAuthoritySid", 0x7)
+WinDialupSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinDialupSid", 0x8)
+WinNetworkSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinNetworkSid", 0x9)
+WinBatchSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinBatchSid", 0xa)
+WinInteractiveSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinInteractiveSid", 0xb)
+WinServiceSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinServiceSid", 0xc)
+WinAnonymousSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinAnonymousSid", 0xd)
+WinProxySid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinProxySid", 0xe)
+WinEnterpriseControllersSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinEnterpriseControllersSid", 0xf)
+WinSelfSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinSelfSid", 0x10)
+WinAuthenticatedUserSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinAuthenticatedUserSid", 0x11)
+WinRestrictedCodeSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinRestrictedCodeSid", 0x12)
+WinTerminalServerSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinTerminalServerSid", 0x13)
+WinRemoteLogonIdSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinRemoteLogonIdSid", 0x14)
+WinLogonIdsSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinLogonIdsSid", 0x15)
+WinLocalSystemSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinLocalSystemSid", 0x16)
+WinLocalServiceSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinLocalServiceSid", 0x17)
+WinNetworkServiceSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinNetworkServiceSid", 0x18)
+WinBuiltinDomainSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinBuiltinDomainSid", 0x19)
+WinBuiltinAdministratorsSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinBuiltinAdministratorsSid", 0x1a)
+WinBuiltinUsersSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinBuiltinUsersSid", 0x1b)
+WinBuiltinGuestsSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinBuiltinGuestsSid", 0x1c)
+WinBuiltinPowerUsersSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinBuiltinPowerUsersSid", 0x1d)
+WinBuiltinAccountOperatorsSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinBuiltinAccountOperatorsSid", 0x1e)
+WinBuiltinSystemOperatorsSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinBuiltinSystemOperatorsSid", 0x1f)
+WinBuiltinPrintOperatorsSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinBuiltinPrintOperatorsSid", 0x20)
+WinBuiltinBackupOperatorsSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinBuiltinBackupOperatorsSid", 0x21)
+WinBuiltinReplicatorSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinBuiltinReplicatorSid", 0x22)
+WinBuiltinPreWindows2000CompatibleAccessSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinBuiltinPreWindows2000CompatibleAccessSid", 0x23)
+WinBuiltinRemoteDesktopUsersSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinBuiltinRemoteDesktopUsersSid", 0x24)
+WinBuiltinNetworkConfigurationOperatorsSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinBuiltinNetworkConfigurationOperatorsSid", 0x25)
+WinAccountAdministratorSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinAccountAdministratorSid", 0x26)
+WinAccountGuestSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinAccountGuestSid", 0x27)
+WinAccountKrbtgtSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinAccountKrbtgtSid", 0x28)
+WinAccountDomainAdminsSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinAccountDomainAdminsSid", 0x29)
+WinAccountDomainUsersSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinAccountDomainUsersSid", 0x2a)
+WinAccountDomainGuestsSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinAccountDomainGuestsSid", 0x2b)
+WinAccountComputersSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinAccountComputersSid", 0x2c)
+WinAccountControllersSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinAccountControllersSid", 0x2d)
+WinAccountCertAdminsSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinAccountCertAdminsSid", 0x2e)
+WinAccountSchemaAdminsSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinAccountSchemaAdminsSid", 0x2f)
+WinAccountEnterpriseAdminsSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinAccountEnterpriseAdminsSid", 0x30)
+WinAccountPolicyAdminsSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinAccountPolicyAdminsSid", 0x31)
+WinAccountRasAndIasServersSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinAccountRasAndIasServersSid", 0x32)
+WinNTLMAuthenticationSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinNTLMAuthenticationSid", 0x33)
+WinDigestAuthenticationSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinDigestAuthenticationSid", 0x34)
+WinSChannelAuthenticationSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinSChannelAuthenticationSid", 0x35)
+WinThisOrganizationSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinThisOrganizationSid", 0x36)
+WinOtherOrganizationSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinOtherOrganizationSid", 0x37)
+WinBuiltinIncomingForestTrustBuildersSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinBuiltinIncomingForestTrustBuildersSid", 0x38)
+WinBuiltinPerfMonitoringUsersSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinBuiltinPerfMonitoringUsersSid", 0x39)
+WinBuiltinPerfLoggingUsersSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinBuiltinPerfLoggingUsersSid", 0x3a)
+WinBuiltinAuthorizationAccessSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinBuiltinAuthorizationAccessSid", 0x3b)
+WinBuiltinTerminalServerLicenseServersSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinBuiltinTerminalServerLicenseServersSid", 0x3c)
+WinBuiltinDCOMUsersSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinBuiltinDCOMUsersSid", 0x3d)
+WinBuiltinIUsersSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinBuiltinIUsersSid", 0x3e)
+WinIUserSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinIUserSid", 0x3f)
+WinBuiltinCryptoOperatorsSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinBuiltinCryptoOperatorsSid", 0x40)
+WinUntrustedLabelSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinUntrustedLabelSid", 0x41)
+WinLowLabelSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinLowLabelSid", 0x42)
+WinMediumLabelSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinMediumLabelSid", 0x43)
+WinHighLabelSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinHighLabelSid", 0x44)
+WinSystemLabelSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinSystemLabelSid", 0x45)
+WinWriteRestrictedCodeSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinWriteRestrictedCodeSid", 0x46)
+WinCreatorOwnerRightsSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinCreatorOwnerRightsSid", 0x47)
+WinCacheablePrincipalsGroupSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinCacheablePrincipalsGroupSid", 0x48)
+WinNonCacheablePrincipalsGroupSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinNonCacheablePrincipalsGroupSid", 0x49)
+WinEnterpriseReadonlyControllersSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinEnterpriseReadonlyControllersSid", 0x4a)
+WinAccountReadonlyControllersSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinAccountReadonlyControllersSid", 0x4b)
+WinBuiltinEventLogReadersGroup = EnumValue("_WELL_KNOWN_SID_TYPE", "WinBuiltinEventLogReadersGroup", 0x4c)
+WinNewEnterpriseReadonlyControllersSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinNewEnterpriseReadonlyControllersSid", 0x4d)
+WinBuiltinCertSvcDComAccessGroup = EnumValue("_WELL_KNOWN_SID_TYPE", "WinBuiltinCertSvcDComAccessGroup", 0x4e)
+WinMediumPlusLabelSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinMediumPlusLabelSid", 0x4f)
+WinLocalLogonSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinLocalLogonSid", 0x50)
+WinConsoleLogonSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinConsoleLogonSid", 0x51)
+WinThisOrganizationCertificateSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinThisOrganizationCertificateSid", 0x52)
+WinApplicationPackageAuthoritySid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinApplicationPackageAuthoritySid", 0x53)
+WinBuiltinAnyPackageSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinBuiltinAnyPackageSid", 0x54)
+WinCapabilityInternetClientSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinCapabilityInternetClientSid", 0x55)
+WinCapabilityInternetClientServerSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinCapabilityInternetClientServerSid", 0x56)
+WinCapabilityPrivateNetworkClientServerSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinCapabilityPrivateNetworkClientServerSid", 0x57)
+WinCapabilityPicturesLibrarySid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinCapabilityPicturesLibrarySid", 0x58)
+WinCapabilityVideosLibrarySid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinCapabilityVideosLibrarySid", 0x59)
+WinCapabilityMusicLibrarySid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinCapabilityMusicLibrarySid", 0x5a)
+WinCapabilityDocumentsLibrarySid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinCapabilityDocumentsLibrarySid", 0x5b)
+WinCapabilitySharedUserCertificatesSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinCapabilitySharedUserCertificatesSid", 0x5c)
+WinCapabilityEnterpriseAuthenticationSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinCapabilityEnterpriseAuthenticationSid", 0x5d)
+WinCapabilityRemovableStorageSid = EnumValue("_WELL_KNOWN_SID_TYPE", "WinCapabilityRemovableStorageSid", 0x5e)
+class _WELL_KNOWN_SID_TYPE(EnumType):
+    values = [WinNullSid, WinWorldSid, WinLocalSid, WinCreatorOwnerSid, WinCreatorGroupSid, WinCreatorOwnerServerSid, WinCreatorGroupServerSid, WinNtAuthoritySid, WinDialupSid, WinNetworkSid, WinBatchSid, WinInteractiveSid, WinServiceSid, WinAnonymousSid, WinProxySid, WinEnterpriseControllersSid, WinSelfSid, WinAuthenticatedUserSid, WinRestrictedCodeSid, WinTerminalServerSid, WinRemoteLogonIdSid, WinLogonIdsSid, WinLocalSystemSid, WinLocalServiceSid, WinNetworkServiceSid, WinBuiltinDomainSid, WinBuiltinAdministratorsSid, WinBuiltinUsersSid, WinBuiltinGuestsSid, WinBuiltinPowerUsersSid, WinBuiltinAccountOperatorsSid, WinBuiltinSystemOperatorsSid, WinBuiltinPrintOperatorsSid, WinBuiltinBackupOperatorsSid, WinBuiltinReplicatorSid, WinBuiltinPreWindows2000CompatibleAccessSid, WinBuiltinRemoteDesktopUsersSid, WinBuiltinNetworkConfigurationOperatorsSid, WinAccountAdministratorSid, WinAccountGuestSid, WinAccountKrbtgtSid, WinAccountDomainAdminsSid, WinAccountDomainUsersSid, WinAccountDomainGuestsSid, WinAccountComputersSid, WinAccountControllersSid, WinAccountCertAdminsSid, WinAccountSchemaAdminsSid, WinAccountEnterpriseAdminsSid, WinAccountPolicyAdminsSid, WinAccountRasAndIasServersSid, WinNTLMAuthenticationSid, WinDigestAuthenticationSid, WinSChannelAuthenticationSid, WinThisOrganizationSid, WinOtherOrganizationSid, WinBuiltinIncomingForestTrustBuildersSid, WinBuiltinPerfMonitoringUsersSid, WinBuiltinPerfLoggingUsersSid, WinBuiltinAuthorizationAccessSid, WinBuiltinTerminalServerLicenseServersSid, WinBuiltinDCOMUsersSid, WinBuiltinIUsersSid, WinIUserSid, WinBuiltinCryptoOperatorsSid, WinUntrustedLabelSid, WinLowLabelSid, WinMediumLabelSid, WinHighLabelSid, WinSystemLabelSid, WinWriteRestrictedCodeSid, WinCreatorOwnerRightsSid, WinCacheablePrincipalsGroupSid, WinNonCacheablePrincipalsGroupSid, WinEnterpriseReadonlyControllersSid, WinAccountReadonlyControllersSid, WinBuiltinEventLogReadersGroup, WinNewEnterpriseReadonlyControllersSid, WinBuiltinCertSvcDComAccessGroup, WinMediumPlusLabelSid, WinLocalLogonSid, WinConsoleLogonSid, WinThisOrganizationCertificateSid, WinApplicationPackageAuthoritySid, WinBuiltinAnyPackageSid, WinCapabilityInternetClientSid, WinCapabilityInternetClientServerSid, WinCapabilityPrivateNetworkClientServerSid, WinCapabilityPicturesLibrarySid, WinCapabilityVideosLibrarySid, WinCapabilityMusicLibrarySid, WinCapabilityDocumentsLibrarySid, WinCapabilitySharedUserCertificatesSid, WinCapabilityEnterpriseAuthenticationSid, WinCapabilityRemovableStorageSid]
+    mapper = {x:x for x in values}
+WELL_KNOWN_SID_TYPE = _WELL_KNOWN_SID_TYPE
+
+
 MemoryBasicInformation = EnumValue("_MEMORY_INFORMATION_CLASS", "MemoryBasicInformation", 0x0)
 MemoryWorkingSetList = EnumValue("_MEMORY_INFORMATION_CLASS", "MemoryWorkingSetList", 0x1)
 MemorySectionName = EnumValue("_MEMORY_INFORMATION_CLASS", "MemorySectionName", 0x2)
@@ -1378,6 +1479,22 @@ class _STARTUPINFOW(Structure):
     ]
 STARTUPINFOW = _STARTUPINFOW
 LPSTARTUPINFOW = POINTER(_STARTUPINFOW)
+
+class _STARTUPINFOEXA(Structure):
+    _fields_ = [
+        ("StartupInfo", STARTUPINFOA),
+        ("lpAttributeList", LPPROC_THREAD_ATTRIBUTE_LIST),
+    ]
+LPSTARTUPINFOEXA = POINTER(_STARTUPINFOEXA)
+STARTUPINFOEXA = _STARTUPINFOEXA
+
+class _STARTUPINFOEXW(Structure):
+    _fields_ = [
+        ("StartupInfo", STARTUPINFOW),
+        ("lpAttributeList", LPPROC_THREAD_ATTRIBUTE_LIST),
+    ]
+STARTUPINFOEXW = _STARTUPINFOEXW
+LPSTARTUPINFOEXW = POINTER(_STARTUPINFOEXW)
 
 class _PROCESS_INFORMATION(Structure):
     _fields_ = [
@@ -2705,17 +2822,6 @@ class _WINTRUST_DATA(Structure):
     ]
 PWINTRUST_DATA = POINTER(_WINTRUST_DATA)
 WINTRUST_DATA = _WINTRUST_DATA
-
-class _PROCESS_BASIC_INFORMATION(Structure):
-    _fields_ = [
-        ("Reserved1", PVOID),
-        ("PebBaseAddress", PPEB),
-        ("Reserved2", PVOID * 2),
-        ("UniqueProcessId", ULONG_PTR),
-        ("Reserved3", PVOID),
-    ]
-PPROCESS_BASIC_INFORMATION = POINTER(_PROCESS_BASIC_INFORMATION)
-PROCESS_BASIC_INFORMATION = _PROCESS_BASIC_INFORMATION
 
 class _PROCESS_BASIC_INFORMATION(Structure):
     _fields_ = [

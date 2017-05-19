@@ -92,6 +92,8 @@ class RemoteCCharP(RemotePtr, ctypes.c_char_p):
     @property
     def value(self):
         base = self.raw_value
+        if not base:
+            return None
         res = []
         for i in itertools.count():
             x = self.target.read_memory(base + (i * 0x100), 0x100)
@@ -106,6 +108,8 @@ class RemoteWCharP(RemotePtr, ctypes.c_char_p):
     @property
     def value(self):
         base = self.raw_value
+        if not base:
+            return None
         # Simple case where target in a WinProcess
         try:
             return self.target.read_wstring(base)

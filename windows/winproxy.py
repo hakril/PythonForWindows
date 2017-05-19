@@ -389,6 +389,7 @@ def CreateProcessW(lpApplicationName, lpCommandLine=None, lpProcessAttributes=No
     return CreateProcessW.ctypes_function(lpApplicationName, lpCommandLine, lpProcessAttributes, lpThreadAttributes, bInheritHandles, dwCreationFlags, lpEnvironment, lpCurrentDirectory, lpStartupInfo, lpProcessInformation)
 
 
+
 @Kernel32Proxy("GetThreadContext")
 def GetThreadContext(hThread, lpContext=None):
     if lpContext is None:
@@ -680,7 +681,35 @@ def SetConsoleCtrlHandler(HandlerRoutine, Add):
 def GetProcessDEPPolicy(hProcess, lpFlags, lpPermanent):
     return GetProcessDEPPolicy.ctypes_function(hProcess, lpFlags, lpPermanent)
 
+
+# ProcThreadAttributeList
+def initializeprocthreadattributelist_error_check(func_name, result, func, args):
+    if result:
+        return args
+    error = GetLastError()
+    if error == ERROR_INSUFFICIENT_BUFFER and args[0] is None:
+        return args
+    raise Kernel32Error(func_name)
+
+@Kernel32Proxy("InitializeProcThreadAttributeList", initializeprocthreadattributelist_error_check)
+def InitializeProcThreadAttributeList(lpAttributeList=None, dwAttributeCount=NeededParameter, dwFlags=0, lpSize=NeededParameter):
+    return InitializeProcThreadAttributeList.ctypes_function(lpAttributeList, dwAttributeCount, dwFlags, lpSize)
+
+
+@Kernel32Proxy("UpdateProcThreadAttribute")
+def UpdateProcThreadAttribute(lpAttributeList, dwFlags=0, Attribute=NeededParameter, lpValue=NeededParameter, cbSize=NeededParameter, lpPreviousValue=None, lpReturnSize=None):
+    return UpdateProcThreadAttribute.ctypes_function(lpAttributeList, dwFlags, Attribute, lpValue, cbSize, lpPreviousValue, lpReturnSize)
+
+
+@Kernel32Proxy("DeleteProcThreadAttributeList")
+def DeleteProcThreadAttributeList(lpAttributeList):
+    return DeleteProcThreadAttributeList.ctypes_function(lpAttributeList)
+
 # ### NTDLL #### #
+
+@NtdllProxy('NtReadVirtualMemory', error_ntstatus)
+def NtReadVirtualMemory(hProcess, lpBaseAddress, lpBuffer, nSize, lpNumberOfBytesRead):
+    return NtReadVirtualMemory.ctypes_function(hProcess, lpBaseAddress, lpBuffer, nSize, lpNumberOfBytesRead)
 
 @NtdllProxy('NtWow64ReadVirtualMemory64', error_ntstatus)
 def NtWow64ReadVirtualMemory64(hProcess, lpBaseAddress, lpBuffer, nSize, lpNumberOfBytesRead=None):
@@ -858,6 +887,14 @@ def LookupPrivilegeValueA(lpSystemName=None, lpName=NeededParameter, lpLuid=Need
 def LookupPrivilegeValueW(lpSystemName=None, lpName=NeededParameter, lpLuid=NeededParameter):
     return LookupPrivilegeValueW.ctypes_function(lpSystemName, lpName, lpLuid)
 
+@Advapi32Proxy('LookupPrivilegeNameA')
+def LookupPrivilegeNameA(lpSystemName, lpLuid, lpName, cchName):
+    return LookupPrivilegeNameA.ctypes_function(lpSystemName, lpLuid, lpName, cchName)
+
+@Advapi32Proxy('LookupPrivilegeNameW')
+def LookupPrivilegeNameW(lpSystemName, lpLuid, lpName, cchName):
+    return LookupPrivilegeNameW.ctypes_function(lpSystemName, lpLuid, lpName, cchName)
+
 
 @Advapi32Proxy('AdjustTokenPrivileges')
 def AdjustTokenPrivileges(TokenHandle, DisableAllPrivileges=False, NewState=NeededParameter, BufferLength=None, PreviousState=None, ReturnLength=None):
@@ -875,10 +912,15 @@ def LookupAccountSidA(lpSystemName, lpSid, lpName, cchName, lpReferencedDomainNa
 def LookupAccountSidW(lpSystemName, lpSid, lpName, cchName, lpReferencedDomainName, cchReferencedDomainName, peUse):
     return LookupAccountSidW.ctypes_function(lpSystemName, lpSid, lpName, cchName, lpReferencedDomainName, cchReferencedDomainName, peUse)
 
+@Advapi32Proxy('CreateWellKnownSid')
+def CreateWellKnownSid(WellKnownSidType, DomainSid=None, pSid=None, cbSid=NeededParameter):
+    return CreateWellKnownSid.ctypes_function(WellKnownSidType, DomainSid, pSid, cbSid)
+
 # Token stuff
 
 GetSidSubAuthorityCount = TransparentAdvapi32Proxy("GetSidSubAuthorityCount")
 GetSidSubAuthority = TransparentAdvapi32Proxy("GetSidSubAuthority")
+GetLengthSid = TransparentAdvapi32Proxy("GetLengthSid")
 
 @Advapi32Proxy('GetTokenInformation')
 def GetTokenInformation(TokenHandle=NeededParameter, TokenInformationClass=NeededParameter, TokenInformation=None, TokenInformationLength=0, ReturnLength=None):
@@ -981,6 +1023,15 @@ def EnumServicesStatusExA(hSCManager, InfoLevel, dwServiceType, dwServiceState, 
 def EnumServicesStatusExW(hSCManager, InfoLevel, dwServiceType, dwServiceState, lpServices, cbBufSize, pcbBytesNeeded, lpServicesReturned, lpResumeHandle, pszGroupName):
     return EnumServicesStatusExW.ctypes_function(hSCManager, InfoLevel, dwServiceType, dwServiceState, lpServices, cbBufSize, pcbBytesNeeded, lpServicesReturned, lpResumeHandle, pszGroupName)
 
+# Create process stuff
+
+@Advapi32Proxy('CreateProcessAsUserA')
+def CreateProcessAsUserA(hToken, lpApplicationName, lpCommandLine, lpProcessAttributes, lpThreadAttributes, bInheritHandles, dwCreationFlags, lpEnvironment, lpCurrentDirectory, lpStartupInfo, lpProcessInformation):
+    return CreateProcessAsUserA.ctypes_function(hToken, lpApplicationName, lpCommandLine, lpProcessAttributes, lpThreadAttributes, bInheritHandles, dwCreationFlags, lpEnvironment, lpCurrentDirectory, lpStartupInfo, lpProcessInformation)
+
+@Advapi32Proxy('CreateProcessAsUserW')
+def CreateProcessAsUserW(hToken, lpApplicationName, lpCommandLine, lpProcessAttributes, lpThreadAttributes, bInheritHandles, dwCreationFlags, lpEnvironment, lpCurrentDirectory, lpStartupInfo, lpProcessInformation):
+    return CreateProcessAsUserW.ctypes_function(hToken, lpApplicationName, lpCommandLine, lpProcessAttributes, lpThreadAttributes, bInheritHandles, dwCreationFlags, lpEnvironment, lpCurrentDirectory, lpStartupInfo, lpProcessInformation)
 
 
 # ##### Iphlpapi (network list and stuff) ###### #

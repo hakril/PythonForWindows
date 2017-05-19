@@ -253,6 +253,35 @@ BOOL WINAPI CreateProcessW(
     __out       LPPROCESS_INFORMATION lpProcessInformation
 );
 
+BOOL WINAPI CreateProcessAsUserA(
+  _In_opt_    HANDLE                hToken,
+  _In_opt_    LPSTR               lpApplicationName,
+  _Inout_opt_ LPSTR                lpCommandLine,
+  _In_opt_    LPSECURITY_ATTRIBUTES lpProcessAttributes,
+  _In_opt_    LPSECURITY_ATTRIBUTES lpThreadAttributes,
+  _In_        BOOL                  bInheritHandles,
+  _In_        DWORD                 dwCreationFlags,
+  _In_opt_    LPVOID                lpEnvironment,
+  _In_opt_    LPSTR               lpCurrentDirectory,
+  _In_        LPSTARTUPINFOA         lpStartupInfo,
+  _Out_       LPPROCESS_INFORMATION lpProcessInformation
+);
+
+
+BOOL WINAPI CreateProcessAsUserW(
+  _In_opt_    HANDLE                hToken,
+  _In_opt_    LPWSTR               lpApplicationName,
+  _Inout_opt_ LPWSTR                lpCommandLine,
+  _In_opt_    LPSECURITY_ATTRIBUTES lpProcessAttributes,
+  _In_opt_    LPSECURITY_ATTRIBUTES lpThreadAttributes,
+  _In_        BOOL                  bInheritHandles,
+  _In_        DWORD                 dwCreationFlags,
+  _In_opt_    LPVOID                lpEnvironment,
+  _In_opt_    LPWSTR               lpCurrentDirectory,
+  _In_        LPSTARTUPINFOW         lpStartupInfo,
+  _Out_       LPPROCESS_INFORMATION lpProcessInformation
+);
+
 BOOL WINAPI GetThreadContext(
     __in    HANDLE hThread,
     __inout LPCONTEXT lpContext
@@ -305,6 +334,16 @@ BOOL WINAPI NtWow64ReadVirtualMemory64(
   _In_   ULONG64 nSize,
   _Out_  PULONG64 *lpNumberOfBytesRead
 );
+
+
+BOOL WINAPI NtReadVirtualMemory(
+  _In_   HANDLE hProcess,
+  _In_   PVOID lpBaseAddress,
+  _Out_  LPVOID lpBuffer,
+  _In_   ULONG nSize,
+  _Out_  PULONG *lpNumberOfBytesRead
+);
+
 
 BOOL WINAPI WriteProcessMemory(
   _In_   HANDLE hProcess,
@@ -394,6 +433,20 @@ BOOL WINAPI LookupPrivilegeValueW(
     __in_opt LPCWSTR lpSystemName,
     __in     LPCWSTR lpName,
     __out    PLUID   lpLuid
+);
+
+BOOL WINAPI LookupPrivilegeNameA(
+  _In_opt_  LPCSTR lpSystemName,
+  _In_      PLUID   lpLuid,
+  _Out_opt_ LPCSTR  lpName,
+  _Inout_   LPDWORD cchName
+);
+
+BOOL WINAPI LookupPrivilegeNameW(
+  _In_opt_  LPCWSTR lpSystemName,
+  _In_      PLUID   lpLuid,
+  _Out_opt_ LPCWSTR  lpName,
+  _Inout_   LPDWORD cchName
 );
 
 BOOL WINAPI AdjustTokenPrivileges(
@@ -777,6 +830,17 @@ PDWORD WINAPI GetSidSubAuthority (
 LPBYTE WINAPI GetSidSubAuthorityCount (
     __in PSID pSid
     );
+
+DWORD WINAPI GetLengthSid(
+  _In_ PSID pSid
+);
+
+BOOL WINAPI CreateWellKnownSid(
+  _In_      WELL_KNOWN_SID_TYPE WellKnownSidType,
+  _In_opt_  PSID                DomainSid,
+  _Out_opt_ PSID                pSid,
+  _Inout_   DWORD               *cbSid
+);
 
 
 VOID DebugBreak();
@@ -1182,6 +1246,17 @@ BOOL WINAPI DuplicateHandle(
   _In_  DWORD    dwOptions
 );
 
+NTSTATUS WINAPI ZwDuplicateObject(
+  _In_      HANDLE      SourceProcessHandle,
+  _In_      HANDLE      SourceHandle,
+  _In_opt_  HANDLE      TargetProcessHandle,
+  _Out_opt_ PHANDLE     TargetHandle,
+  _In_      ACCESS_MASK DesiredAccess,
+  _In_      ULONG       HandleAttributes,
+  _In_      ULONG       Options
+);
+
+
 DWORD WINAPI GetModuleBaseNameA(
   _In_     HANDLE  hProcess,
   _In_opt_ HMODULE hModule,
@@ -1504,4 +1579,26 @@ HINSTANCE WINAPI ShellExecuteW(
   _In_opt_ LPWSTR lpParameters,
   _In_opt_ LPWSTR lpDirectory,
   _In_     INT     nShowCmd
+);
+
+BOOL WINAPI InitializeProcThreadAttributeList(
+  _Out_opt_  LPPROC_THREAD_ATTRIBUTE_LIST lpAttributeList,
+  _In_       DWORD                        dwAttributeCount,
+  _Reserved_ DWORD                        dwFlags,
+  _Inout_    PSIZE_T                      lpSize
+);
+
+
+BOOL WINAPI UpdateProcThreadAttribute(
+  _Inout_   LPPROC_THREAD_ATTRIBUTE_LIST lpAttributeList,
+  _In_      DWORD                        dwFlags,
+  _In_      DWORD_PTR                    Attribute,
+  _In_      PVOID                        lpValue,
+  _In_      SIZE_T                       cbSize,
+  _Out_opt_ PVOID                        lpPreviousValue,
+  _In_opt_  PSIZE_T                      lpReturnSize
+);
+
+VOID WINAPI DeleteProcThreadAttributeList(
+  _Inout_ LPPROC_THREAD_ATTRIBUTE_LIST lpAttributeList
 );

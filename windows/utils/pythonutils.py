@@ -51,5 +51,9 @@ def print_ctypes_struct(struct, name="", ident=0, hexa=False):
         return
 
     for fname, ftype in struct._fields_:
-        value = getattr(struct, fname)
+        try:
+            value = getattr(struct, fname)
+        except Exception as e:
+            print("Error while printing <{0}> : {1}".format(fname, e))
+            continue
         print_ctypes_struct(value, "{0}.{1}".format(name, fname), hexa=hexa)
