@@ -1115,7 +1115,7 @@ class _LDR_DATA_TABLE_ENTRY(Structure):
         ("Reserved2", PVOID * 2),
         ("DllBase", PVOID),
         ("EntryPoint", PVOID),
-        ("Reserved3", PVOID),
+        ("SizeOfImage", PVOID),
         ("FullDllName", UNICODE_STRING),
         ("BaseDllName", UNICODE_STRING),
         ("Reserved5", PVOID * 3),

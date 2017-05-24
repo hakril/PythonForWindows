@@ -2,6 +2,7 @@ import ctypes
 import windows
 
 from collections import namedtuple
+from contextlib import contextmanager
 
 from windows import utils
 from windows.generated_def import *
@@ -41,8 +42,10 @@ ServiceStatus = namedtuple("ServiceStatus", ["type", "state", "control_accepted"
 """
 
 class Service(object):
+    handle = None
+
     def __repr__(self):
-        return '<{0} "{1}">'.format(type(self).__name__, self.name)
+        return '<{0} "{1}" {2}>'.format(type(self).__name__, self.name, self.status.state)
 
     @utils.fixedpropety
     def name(self):
@@ -90,16 +93,34 @@ class Service(object):
 
 class ServiceA(Service, ENUM_SERVICE_STATUS_PROCESSA):
     """A Service object with ascii data"""
-    pass
+    def start(self, args=None):
+        if args is not None:
+            raise NotImplementedError("Start service with args != None")
+        with scmanagera(SC_MANAGER_CONNECT) as scm:
+            # windows.winproxy.StartServiceA()
+            servh = windows.winproxy.OpenServiceA(scm, self.name, SERVICE_START)
+            windows.winproxy.StartServiceA(servh, 0, None)
+            windows.winproxy.CloseServiceHandle(servh)
+
+
+@contextmanager
+def scmanagera(access):
+    # scmanager = windows.winproxy.OpenSCManagerA(dwDesiredAccess=SC_MANAGER_ENUMERATE_SERVICE)
+    scmanager = windows.winproxy.OpenSCManagerA(dwDesiredAccess=access)
+    try:
+        yield scmanager
+    finally:
+        windows.winproxy.CloseServiceHandle(scmanager)
 
 def enumerate_services():
+    # TODO: fix this so we don't have a scmanager leak..
     scmanager = windows.winproxy.OpenSCManagerA(dwDesiredAccess=SC_MANAGER_ENUMERATE_SERVICE)
 
     size_needed = DWORD()
     nb_services = DWORD()
     counter = DWORD()
     try:
-        windows.winproxy.EnumServicesStatusExA(scmanager, SC_ENUM_PROCESS_INFO, SERVICE_TYPE_ALL, SERVICE_ACTIVE, None, 0, ctypes.byref(size_needed), ctypes.byref(nb_services), byref(counter), None)
+        windows.winproxy.EnumServicesStatusExA(scmanager, SC_ENUM_PROCESS_INFO, SERVICE_TYPE_ALL, SERVICE_STATE_ALL, None, 0, ctypes.byref(size_needed), ctypes.byref(nb_services), byref(counter), None)
     except WindowsError:
         pass
 
@@ -108,7 +129,7 @@ def enumerate_services():
         buffer = (BYTE * size)()
 
         try:
-            windows.winproxy.EnumServicesStatusExA(scmanager, SC_ENUM_PROCESS_INFO, SERVICE_TYPE_ALL, SERVICE_ACTIVE, buffer, size, ctypes.byref(size_needed), ctypes.byref(nb_services), byref(counter), None)
+            windows.winproxy.EnumServicesStatusExA(scmanager, SC_ENUM_PROCESS_INFO, SERVICE_TYPE_ALL, SERVICE_STATE_ALL, buffer, size, ctypes.byref(size_needed), ctypes.byref(nb_services), byref(counter), None)
         except WindowsError as e:
             continue
 

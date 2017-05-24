@@ -1023,6 +1023,31 @@ def EnumServicesStatusExA(hSCManager, InfoLevel, dwServiceType, dwServiceState, 
 def EnumServicesStatusExW(hSCManager, InfoLevel, dwServiceType, dwServiceState, lpServices, cbBufSize, pcbBytesNeeded, lpServicesReturned, lpResumeHandle, pszGroupName):
     return EnumServicesStatusExW.ctypes_function(hSCManager, InfoLevel, dwServiceType, dwServiceState, lpServices, cbBufSize, pcbBytesNeeded, lpServicesReturned, lpResumeHandle, pszGroupName)
 
+
+@Advapi32Proxy('StartServiceA')
+def StartServiceA(hService, dwNumServiceArgs, lpServiceArgVectors):
+    return StartServiceA.ctypes_function(hService, dwNumServiceArgs, lpServiceArgVectors)
+
+
+@Advapi32Proxy('StartServiceW')
+def StartServiceW(hService, dwNumServiceArgs, lpServiceArgVectors):
+    return StartServiceW.ctypes_function(hService, dwNumServiceArgs, lpServiceArgVectors)
+
+
+@Advapi32Proxy('OpenServiceA')
+def OpenServiceA(hSCManager, lpServiceName, dwDesiredAccess):
+    return OpenServiceA.ctypes_function(hSCManager, lpServiceName, dwDesiredAccess)
+
+
+@Advapi32Proxy('OpenServiceW')
+def OpenServiceW(hSCManager, lpServiceName, dwDesiredAccess):
+    return OpenServiceW.ctypes_function(hSCManager, lpServiceName, dwDesiredAccess)
+
+
+@Advapi32Proxy('CloseServiceHandle')
+def CloseServiceHandle(hSCObject):
+    return CloseServiceHandle.ctypes_function(hSCObject)
+
 # Create process stuff
 
 @Advapi32Proxy('CreateProcessAsUserA')

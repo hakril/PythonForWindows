@@ -37,16 +37,11 @@ TODO:
     - registry
         - test !
 
-    - Clean pe_parse.py
-
     - wintrust doc:
         add : https://blogs.msdn.microsoft.com/winsdk/2016/01/05/why-cryptcatadmincalchashfromfilehandle-fails-with-a-seemingly-unexpected-error-code/
 
 Documentation
     * verif samples
-
-FIXME:
-    - Push("[ECX]") in simple_x64 as a "H" rex and i think it should not..
 
 RESSOURCE
     * read http://www.codeproject.com/Articles/18975/Listing-Used-Files

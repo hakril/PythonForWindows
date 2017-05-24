@@ -1065,6 +1065,10 @@ SC_HANDLE WINAPI OpenSCManagerW(
     __in            DWORD                   dwDesiredAccess
 );
 
+BOOL WINAPI CloseServiceHandle(
+  _In_ SC_HANDLE hSCObject
+);
+
 BOOL WINAPI EnumServicesStatusExA(
     __in            SC_HANDLE               hSCManager,
     __in            SC_ENUM_TYPE            InfoLevel,
@@ -1091,6 +1095,33 @@ BOOL WINAPI EnumServicesStatusExW(
     __inout_opt     LPDWORD                 lpResumeHandle,
     __in_opt        LPCWSTR                pszGroupName
     );
+
+
+BOOL WINAPI StartServiceA(
+  _In_     SC_HANDLE hService,
+  _In_     DWORD     dwNumServiceArgs,
+  _In_opt_ LPCSTR   *lpServiceArgVectors
+);
+
+BOOL WINAPI StartServiceW(
+  _In_     SC_HANDLE hService,
+  _In_     DWORD     dwNumServiceArgs,
+  _In_opt_ LPCWSTR   *lpServiceArgVectors
+);
+
+SC_HANDLE WINAPI OpenServiceA(
+  _In_ SC_HANDLE hSCManager,
+  _In_ LPCSTR   lpServiceName,
+  _In_ DWORD     dwDesiredAccess
+);
+
+
+SC_HANDLE WINAPI OpenServiceW(
+  _In_ SC_HANDLE hSCManager,
+  _In_ LPCWSTR   lpServiceName,
+  _In_ DWORD     dwDesiredAccess
+);
+
 
 BOOL WINAPI EnumWindows(
     __in WNDENUMPROC lpEnumFunc,

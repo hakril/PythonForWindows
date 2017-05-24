@@ -761,7 +761,7 @@ typedef struct _LDR_DATA_TABLE_ENTRY {
     PVOID Reserved2[2];
     PVOID DllBase;
     PVOID EntryPoint;
-    PVOID Reserved3;
+    PVOID SizeOfImage;
     UNICODE_STRING FullDllName;
     UNICODE_STRING BaseDllName;
     PVOID Reserved5[3];
