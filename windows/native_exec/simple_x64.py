@@ -1,6 +1,6 @@
 import collections
 import struct
-
+from windows.dbgprint import dbgprint
 
 DEBUG = False
 
@@ -573,7 +573,6 @@ class ModRM_REG__REG(SubModRM):
 
         self.mod = BitArray(2, "11")
         self.is_rex_needed = True
-        #self.rex[4] = 1 # Setup by setup_reg_as_register or setup_rm_as_register
         self.setup_reg_as_register(arg2)
         self.setup_rm_as_register(arg1)
         self.direction = 0
@@ -673,6 +672,23 @@ class ModRM_REG64__MEM(SubModRM):
         return BitArray.from_int(2, scale[mem_access.scale]) + self.setup_sib_index_rex(mem_access.index) + self.setup_sib_base_rex(mem_access.base)
 
 
+class REG64__MEM_Slash(ModRM_REG64__MEM):
+    # A ModRM_REG64__MEM where the setup_reg_as_register() does
+    # not set the REX (as the register is hardcoded in the Slash
+    def setup_reg_as_register(self, name):
+        if name in registers_32_bits:
+            name = registers_32_bits[name]
+            self.setup_as_32bit_operation()
+        else:
+            # self.is_rex_needed = True
+            # self.rex[4] = 1
+            self.setup_as_64bit_operation()
+
+        self.reg = X64RegisterSelector.get_reg_bits(name)
+        if X64.is_new_reg(name):
+            self.is_rex_needed = True
+            self.rex[5] = 1
+
 class Slash(object):
     "No idea for the name: represent the modRM for single args + encoding in reg (/7 in cmp in man intel)"
 
@@ -690,7 +706,7 @@ class Slash(object):
         if X64.is_32b_reg(args[0]):
             injected_reg = registers_64_to_32_bits[injected_reg]
         try:
-            arg_consum, value, rex = ModRM([ModRM_REG__REG, ModRM_REG64__MEM], has_direction_bit=False).accept_arg(args[:1] + [injected_reg] + args[1:], instr_state)
+            arg_consum, value, rex = ModRM([ModRM_REG__REG, REG64__MEM_Slash], has_direction_bit=False).accept_arg(args[:1] + [injected_reg] + args[1:], instr_state)
         except ValueError as e:
             # Size mismatch
             return None, None, None
@@ -706,6 +722,7 @@ class Instruction(object):
     default_rex = BitArray.from_int(8, 0x40)
 
     def __init__(self, *initial_args):
+        dbgprint("Assembling {0}{1}".format(type(self).__name__, initial_args), "X64")
         for type_encoding in self.encoding:
             args = list(initial_args)
             res = []
@@ -724,6 +741,7 @@ class Instruction(object):
             else:  # if no break
                 if args:  # if still args: fail
                     continue
+                dbgprint("Valid encoding found: REX={0:#x}".format(ord(full_rex.dump())), "X64")
                 self.prefix = prefix
                 self.value = sum(res, BitArray(0, ""))
                 if str(full_rex.dump()) != "\x40":
