@@ -34,7 +34,7 @@ class NdrUniquePTR(object):
     def pack(self, data):
         subpack = self.subcls.pack(data)
         if subpack is None:
-            return dword_pad(0)
+            return pack_dword(0)
         return pack_dword(0x02020202) + subpack
 
     def pack_in_struct(self, data, id):
@@ -74,6 +74,11 @@ class NdrWString(object):
         result = struct.pack("<3I", l, 0, l)
         result += data
         return dword_pad(result)
+
+    # @classmethod
+    # def unpack(self, stream):
+    #     maxcount, offset, count = stream.partial_unpack("<3I")
+    #     return maxcount, offset, count
 
 class NdrLong(object):
     @classmethod

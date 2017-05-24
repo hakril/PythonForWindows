@@ -1,3 +1,3 @@
-from client import RPC_SYNTAX_IDENTIFIER, RPCClient
 import ndr
-from epmapper import find_alpc_endpoint_and_connect, construct_alpc_tower
+from client import RPC_SYNTAX_IDENTIFIER, RPCClient
+from epmapper import find_alpc_endpoint_and_connect, endpoint_map_alpc, construct_alpc_tower
