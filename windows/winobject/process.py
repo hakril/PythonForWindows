@@ -23,6 +23,7 @@ from windows.generated_def.ntstatus import NtStatusException
 from windows.generated_def import windef
 
 from windows.winobject import exception
+from windows.winobject import sid
 
 
 TimeInfo = namedtuple("TimeInfo", ["creation", "exit", "kernel", "user"])
@@ -677,7 +678,7 @@ class Process(AutoHandle):
         return Token(token_handle.value)
 
 
-    token =  property(open_token)
+    token = property(open_token)
 
     # @utils.fixedpropety
     # def token(self):
@@ -845,6 +846,15 @@ class CurrentProcess(Process):
         if not self.is_wow_64:
             raise ValueError("Not a syswow process")
         return windows.syswow64.get_current_process_syswow_peb()
+
+
+    def open_token(self, flags=TOKEN_ALL_ACCESS):
+        token_handle = HANDLE()
+        winproxy.OpenProcessToken(self.handle, flags, byref(token_handle))
+        return Token(token_handle.value)
+
+
+    token = property(open_token)
 
 class WinProcess(Process):
     """A Process on the system"""
@@ -1101,8 +1111,7 @@ class Token(AutoHandle):
     def __init__(self, handle):
         self._handle = handle
 
-    @property
-    def integrity(self):
+    def get_integrity(self):
         """Return the integrity level of a token
 
         :type: :class:`int`
@@ -1114,6 +1123,18 @@ class Token(AutoHandle):
         count = winproxy.GetSidSubAuthorityCount(sid)
         integrity = winproxy.GetSidSubAuthority(sid, count[0] - 1)[0]
         return know_integrity_level_mapper.get(integrity, integrity)
+
+    def set_integrity(self, integrity):
+        """Set the integrity level of a token
+
+        :param type: :class:`int`
+		"""
+        mandatory_label = TOKEN_MANDATORY_LABEL()
+        mandatory_label.Label.Attributes = 0x60
+        mandatory_label.Label.Sid = sid.EPSID.from_string("S-1-16-{0}".format(integrity))
+        self.set_informations(TokenIntegrityLevel, mandatory_label)
+
+    integrity = property(get_integrity, set_integrity)
 
     @property
     def is_elevated(self):
