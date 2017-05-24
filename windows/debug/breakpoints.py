@@ -160,9 +160,14 @@ class FunctionBP(FunctionCallBP, FunctionParamDumpBP):
     """
 
 class PrintBP(Breakpoint):
-    def __init__(self, addr, format):
+    def __init__(self, addr, format, func=None):
         super(PrintBP, self).__init__(addr)
         self.format = format
+        self.func = func
 
     def trigger(self, dbg, exc):
-        print(self.format.format(dbg=dbg, exc=exc, ctx=dbg.current_thread.context))
+        thread = dbg.current_thread
+        format_dict = {"dbg": dbg, "exc": exc, "proc": dbg.current_process, "thread": thread, "ctx": thread.context}
+        if self.func:
+            format_dict.update(self.func(**format_dict))
+        print(self.format.format(**format_dict))

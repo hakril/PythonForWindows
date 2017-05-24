@@ -930,6 +930,7 @@ class Debugger(object):
            The default behaviour is to return ``DBG_CONTINUE`` for the known exception code
            and ``DBG_EXCEPTION_NOT_HANDLED`` else
         """
+        dbgprint("Exception: {0} at ".format(exception.ExceptionRecord.ExceptionCode, exception.ExceptionRecord.ExceptionAddress), "DBG")
         if not exception.ExceptionRecord.ExceptionCode in winexception.exception_name_by_value:
             return DBG_EXCEPTION_NOT_HANDLED
         return DBG_CONTINUE
