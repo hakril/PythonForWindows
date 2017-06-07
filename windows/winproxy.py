@@ -1311,6 +1311,14 @@ def WindowFromPoint(Point):
 def GetWindowRect(hWnd, lpRect):
     return GetWindowRect.ctypes_function(hWnd, lpRect)
 
+@User32Proxy("MessageBoxA")
+def MessageBoxA(hWnd=0, lpText=NeededParameter, lpCaption=None, uType=0):
+    return MessageBoxA.ctypes_function(hWnd, lpText, lpCaption, uType)
+
+@User32Proxy("MessageBoxW")
+def MessageBoxW(hWnd=0, lpText=NeededParameter, lpCaption=None, uType=0):
+    return MessageBoxW.ctypes_function(hWnd, lpText, lpCaption, uType)
+
 # ## Version stuff ## #
 
 @VersionProxy("GetFileVersionInfoA")

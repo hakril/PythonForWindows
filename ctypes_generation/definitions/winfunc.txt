@@ -1633,3 +1633,19 @@ BOOL WINAPI UpdateProcThreadAttribute(
 VOID WINAPI DeleteProcThreadAttributeList(
   _Inout_ LPPROC_THREAD_ATTRIBUTE_LIST lpAttributeList
 );
+
+
+INT WINAPI MessageBoxA(
+  _In_opt_ HWND    hWnd,
+  _In_opt_ LPCSTR lpText,
+  _In_opt_ LPCSTR lpCaption,
+  _In_     UINT    uType
+);
+
+
+INT WINAPI MessageBoxW(
+  _In_opt_ HWND    hWnd,
+  _In_opt_ LPWSTR lpText,
+  _In_opt_ LPWSTR lpCaption,
+  _In_     UINT    uType
+);
