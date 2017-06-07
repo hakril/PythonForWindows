@@ -75,6 +75,16 @@ class NdrWString(object):
         result += data
         return dword_pad(result)
 
+class NdrCString(object):
+    @classmethod
+    def pack(cls, data):
+        if data is None:
+            return None
+        l = len(data)
+        result = struct.pack("<3I", l, 0, l)
+        result += data
+        return dword_pad(result)
+
     # @classmethod
     # def unpack(self, stream):
     #     maxcount, offset, count = stream.partial_unpack("<3I")

@@ -48,8 +48,6 @@ KNOWN_RPC_ERROR_CODE = {
 
 NOT_USED = 0xBAADF00D
 
-# def dword_pack(*args):
-#     return "".join(struct.pack("<I", x) for x in args)
 
 class RPCClient(object):
     REQUEST_IDENTIFIER = 0x11223344
@@ -93,13 +91,13 @@ class RPCClient(object):
 
     def _forge_bind_request(self, rawuuid, syntaxversion, requested_if_nb):
         version_major, version_minor = syntaxversion
-        # TODO: flags
-        data = struct.pack("III16sHHIIIIIIIIII", REQUEST_TYPE_BIND, NOT_USED, NOT_USED, rawuuid, version_major, version_minor, NOT_USED, requested_if_nb, NOT_USED, NOT_USED ,NOT_USED, NOT_USED, NOT_USED, NOT_USED, NOT_USED, NOT_USED) # Fonctionne pour le BIND :D
+        data = struct.pack("III16sHHII8I", REQUEST_TYPE_BIND, NOT_USED, NOT_USED, rawuuid, version_major, version_minor, NOT_USED, requested_if_nb, *[NOT_USED] * 8)
         return data
 
     def _forge_call_request(self, interface_nb, method_offset, params):
         # TODO: differents REQUEST_IDENTIFIER for each req ?
-        request = struct.pack("<16I", REQUEST_TYPE_CALL, NOT_USED, 0, self.REQUEST_IDENTIFIER, interface_nb, method_offset, NOT_USED, NOT_USED, NOT_USED, NOT_USED, NOT_USED, NOT_USED, NOT_USED, NOT_USED, NOT_USED, NOT_USED)
+        # TODO: what is this '0' ? (1 is also accepted) (flags ?)
+        request = struct.pack("<16I", REQUEST_TYPE_CALL, NOT_USED, 0, self.REQUEST_IDENTIFIER, interface_nb, method_offset, *[NOT_USED] * 10)
         request += params
         return request
 

@@ -143,13 +143,15 @@ class AlpcClient(object):
 
         port_name = gn.UNICODE_STRING(utf16_len, utf16_len, raw_name)
 
-        obj_attr = gn.OBJECT_ATTRIBUTES()
-        obj_attr.Length = ctypes.sizeof(obj_attr)
-        obj_attr.RootDirectory = None
-        obj_attr.ObjectName = None
-        obj_attr.Attributes = 0
-        obj_attr.SecurityDescriptor = None
-        obj_attr.SecurityQualityOfService = None
+        # obj_attr = gn.OBJECT_ATTRIBUTES()
+        # obj_attr.Length = ctypes.sizeof(obj_attr)
+        # obj_attr.RootDirectory = None
+        # obj_attr.ObjectName = None
+        # obj_attr.Attributes = 0
+        # obj_attr.SecurityDescriptor = None
+        # obj_attr.SecurityQualityOfService = None
+
+        obj_attr = None
 
 
         port_attr = gn.ALPC_PORT_ATTRIBUTES()
