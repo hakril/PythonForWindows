@@ -327,7 +327,8 @@ class Process(AutoHandle):
 
         :type: :class:`bool`
 		"""
-        return utils.is_wow_64(self.handle)
+        # return utils.is_wow_64(self.handle)
+        return utils.is_wow_64(self.limited_handle)
 
     @utils.fixedpropety
     def bitness(self):
@@ -340,6 +341,13 @@ class Process(AutoHandle):
         if self.is_wow_64:
             return 32
         return 64
+
+    @utils.fixedpropety
+    def limited_handle(self):
+        if windows.system.version[0] <= 5:
+            # Windows XP | Serveur 2003
+            return winproxy.OpenProcess(PROCESS_QUERY_INFORMATION, dwProcessId=self.pid)
+        return winproxy.OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, dwProcessId=self.pid)
 
 
     @utils.fixedpropety
@@ -662,23 +670,32 @@ class Process(AutoHandle):
         ExitTime = FILETIME()
         KernelTime = FILETIME()
         UserTime = FILETIME()
-        winproxy.GetProcessTimes(self.handle, CreationTime, ExitTime, KernelTime, UserTime)
+        winproxy.GetProcessTimes(self.limited_handle, CreationTime, ExitTime, KernelTime, UserTime)
 
         creation = (CreationTime.dwHighDateTime << 32) + CreationTime.dwLowDateTime
         exit = (ExitTime.dwHighDateTime << 32) + ExitTime.dwLowDateTime
         kernel = (KernelTime.dwHighDateTime << 32) + KernelTime.dwLowDateTime
         user = (UserTime.dwHighDateTime << 32) + UserTime.dwLowDateTime
-
         return TimeInfo(creation, exit, kernel, user)
 
 
     def open_token(self, flags=TOKEN_QUERY):
         token_handle = HANDLE()
-        winproxy.OpenProcessToken(self.handle, flags, byref(token_handle))
+        winproxy.OpenProcessToken(self.limited_handle, flags, byref(token_handle))
         return Token(token_handle.value)
 
 
     token = property(open_token)
+
+    def __del__(self):
+        super(Process, self).__del__()
+        # Same logic that AutoHandle.__del__ for Process.limited_handle
+        # Assert that Process inherit AutoHandle
+        if hasattr(self, "_limited_handle") and self._limited_handle:
+            # Prevent some bug where dbgprint might be None when __del__ is called in a closing process
+            dbgprint("Closing limited handle {0} for {1}".format(hex(self._limited_handle), self), "HANDLE") if dbgprint is not None else None
+            self._close_function(self._limited_handle)
+
 
     # @utils.fixedpropety
     # def token(self):

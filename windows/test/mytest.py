@@ -52,6 +52,31 @@ class WindowsTestCase(unittest.TestCase):
     #     pass
 
     @check_for_gc_garbage
+    def test_limited_handle_query(self):
+        #if len(smss_list) != 1:
+        #    raise ValueError("Not just one smss.exe: {0}".format(smss_list))
+
+        class CustomTestRaise(ValueError):
+            pass
+
+        def custom_get_handle():
+            raise CustomTestRaise("_get_handle() should not be called during this test")
+
+        with Calc32() as calc:
+            save_handle =  calc._handle
+            del calc._handle
+            calc._get_handle = custom_get_handle
+            # Check that trying to get a handle raise 'CustomTestRaise'
+            with self.assertRaises(CustomTestRaise):
+                calc.handle
+            # List of attributes that only require PROCESS_QUERY_INFOR
+            calc.bitness
+            calc.time_info
+            # Re-set the handle to be able to kill it
+            calc._handle = save_handle
+
+
+    @check_for_gc_garbage
     def test_pop_calc_32(self):
         with Calc32() as calc:
             self.assertEqual(calc.bitness, 32)
