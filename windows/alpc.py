@@ -57,8 +57,10 @@ class MessageAttribute(gn.ALPC_MESSAGE_ATTRIBUTES):
         res = gn.DWORD()
         try:
             windows.winproxy.AlpcInitializeMessageAttribute(flags, None, 0, res)
-        except windows.generated_def.ntstatus.NtStatusException:
+        except windows.generated_def.ntstatus.NtStatusException as e:
+            # Buffer too small: osef
             return res.value
+        return res.value
 
 
 class AlpcPORT(object):

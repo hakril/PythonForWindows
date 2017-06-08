@@ -22,7 +22,7 @@ TYPE_EQUIVALENCE = [
     ('BYTE', 'c_ubyte'),
     ('PWSTR', 'LPWSTR'),
     ('PCWSTR', 'LPWSTR'),
-    ('SIZE_T', 'c_ulong'),
+    ('SIZE_T', 'c_size_t'),
     ('PSIZE_T', 'POINTER(SIZE_T)'),
     ('PVOID', 'c_void_p'),
     ('PPS_POST_PROCESS_INIT_ROUTINE', 'PVOID'),
