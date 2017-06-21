@@ -74,7 +74,12 @@ class X64ArgumentRetriever(object):
 
 ## Behaviour breakpoint !
 class FunctionParamDumpBP(Breakpoint):
-    def __init__(self, target, addr=None):
+    def __init__(self, target=None, addr=None):
+        if target is None:
+            try:
+                target = self.TARGET
+            except AttributeError as e:
+                raise ValueError("{0} bp without a <target> must have a <TARGET> class attribute")
         if addr is None:
             addr = "{0}!{1}".format(target.target_dll, target.target_func)
         super(FunctionParamDumpBP, self).__init__(addr)

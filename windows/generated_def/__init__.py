@@ -22,6 +22,9 @@ if bitness() == 32:
     winstructs.PALPC_PORT_ATTRIBUTES = winstructs.PALPC_PORT_ATTRIBUTES32
     winstructs.ALPC_PORT_ATTRIBUTES = winstructs.ALPC_PORT_ATTRIBUTES32
 
+    winstructs.PORT_MESSAGE = winstructs.PORT_MESSAGE32
+    winstructs.PPORT_MESSAGE = winstructs.PPORT_MESSAGE32
+
 else:
     winstructs.CONTEXT = winstructs.CONTEXT64
     winstructs.PCONTEXT = winstructs.PCONTEXT64
@@ -35,6 +38,9 @@ else:
 
     winstructs.PALPC_PORT_ATTRIBUTES = winstructs.PALPC_PORT_ATTRIBUTES64
     winstructs.ALPC_PORT_ATTRIBUTES = winstructs.ALPC_PORT_ATTRIBUTES64
+
+    winstructs.PORT_MESSAGE64 = winstructs.PORT_MESSAGE64
+    winstructs.PPORT_MESSAGE64 = winstructs.PPORT_MESSAGE64
 
 
 from . import winfuncs

@@ -753,7 +753,17 @@ typedef enum _SE_OBJECT_TYPE {
 typedef struct _CLIENT_ID{
    HANDLE UniqueProcess;
    HANDLE UniqueThread;
- } CLIENT_ID;
+} CLIENT_ID;
+
+typedef struct _CLIENT_ID64{
+   ULONG64 UniqueProcess;
+   ULONG64 UniqueThread;
+} CLIENT_ID64;
+
+typedef struct _CLIENT_ID32{
+   ULONG UniqueProcess;
+   ULONG UniqueThread;
+} CLIENT_ID32;
 
 typedef struct _LDR_DATA_TABLE_ENTRY {
     PVOID Reserved1[2];
@@ -2392,9 +2402,15 @@ typedef struct _ALPC_MESSAGE_ATTRIBUTES
 } ALPC_MESSAGE_ATTRIBUTES, *PALPC_MESSAGE_ATTRIBUTES;
 
 
-typedef union _PORT_MESSAGE_TMP_UNION
+typedef union _PORT_MESSAGE32_TMP_UNION
 {
-        SIZE_T ClientViewSize;
+        ULONG ClientViewSize;
+        ULONG CallbackId;
+} PORT_MESSAGE_TMP_UNION;
+
+typedef union _PORT_MESSAGE64_TMP_UNION
+{
+        ULONGLONG ClientViewSize;
         ULONG CallbackId;
 } PORT_MESSAGE_TMP_UNION;
 
@@ -2427,14 +2443,23 @@ typedef union _PORT_MESSAGE_TMP_UNION_U2
 } _PORT_MESSAGE_TMP_UNION_U2;
 
 
-typedef struct _PORT_MESSAGE
+typedef struct _PORT_MESSAGE32
 {
     _PORT_MESSAGE_TMP_UNION_U1 u1;
     _PORT_MESSAGE_TMP_UNION_U2 u2;
-    CLIENT_ID ClientId;
+    CLIENT_ID32 ClientId;
     ULONG MessageId;
-    _PORT_MESSAGE_TMP_UNION tmp_union;
-} PORT_MESSAGE, *PPORT_MESSAGE;
+    _PORT_MESSAGE32_TMP_UNION tmp_union;
+} PORT_MESSAGE32, *PPORT_MESSAGE32;
+
+typedef struct _PORT_MESSAGE64
+{
+    _PORT_MESSAGE_TMP_UNION_U1 u1;
+    _PORT_MESSAGE_TMP_UNION_U2 u2;
+    CLIENT_ID64 ClientId;
+    ULONG MessageId;
+    _PORT_MESSAGE64_TMP_UNION tmp_union;
+} PORT_MESSAGE64, *PPORT_MESSAGE64;
 
 
 typedef struct _SERVICE_STATUS {

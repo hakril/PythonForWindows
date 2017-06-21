@@ -1108,6 +1108,20 @@ class _CLIENT_ID(Structure):
     ]
 CLIENT_ID = _CLIENT_ID
 
+class _CLIENT_ID64(Structure):
+    _fields_ = [
+        ("UniqueProcess", ULONG64),
+        ("UniqueThread", ULONG64),
+    ]
+CLIENT_ID64 = _CLIENT_ID64
+
+class _CLIENT_ID32(Structure):
+    _fields_ = [
+        ("UniqueProcess", ULONG),
+        ("UniqueThread", ULONG),
+    ]
+CLIENT_ID32 = _CLIENT_ID32
+
 class _LDR_DATA_TABLE_ENTRY(Structure):
     _fields_ = [
         ("Reserved1", PVOID * 2),
@@ -3049,12 +3063,19 @@ class _ALPC_MESSAGE_ATTRIBUTES(Structure):
 ALPC_MESSAGE_ATTRIBUTES = _ALPC_MESSAGE_ATTRIBUTES
 PALPC_MESSAGE_ATTRIBUTES = POINTER(_ALPC_MESSAGE_ATTRIBUTES)
 
-class _PORT_MESSAGE_TMP_UNION(Union):
+class _PORT_MESSAGE32_TMP_UNION(Union):
     _fields_ = [
-        ("ClientViewSize", SIZE_T),
+        ("ClientViewSize", ULONG),
         ("CallbackId", ULONG),
     ]
-PORT_MESSAGE_TMP_UNION = _PORT_MESSAGE_TMP_UNION
+PORT_MESSAGE_TMP_UNION = _PORT_MESSAGE32_TMP_UNION
+
+class _PORT_MESSAGE64_TMP_UNION(Union):
+    _fields_ = [
+        ("ClientViewSize", ULONGLONG),
+        ("CallbackId", ULONG),
+    ]
+PORT_MESSAGE_TMP_UNION = _PORT_MESSAGE64_TMP_UNION
 
 class _PORT_MESSAGE_TMP_SUBSTRUCT_S1(Structure):
     _fields_ = [
@@ -3084,16 +3105,27 @@ class _PORT_MESSAGE_TMP_UNION_U2(Union):
     ]
 _PORT_MESSAGE_TMP_UNION_U2 = _PORT_MESSAGE_TMP_UNION_U2
 
-class _PORT_MESSAGE(Structure):
+class _PORT_MESSAGE32(Structure):
     _fields_ = [
         ("u1", _PORT_MESSAGE_TMP_UNION_U1),
         ("u2", _PORT_MESSAGE_TMP_UNION_U2),
-        ("ClientId", CLIENT_ID),
+        ("ClientId", CLIENT_ID32),
         ("MessageId", ULONG),
-        ("tmp_union", _PORT_MESSAGE_TMP_UNION),
+        ("tmp_union", _PORT_MESSAGE32_TMP_UNION),
     ]
-PPORT_MESSAGE = POINTER(_PORT_MESSAGE)
-PORT_MESSAGE = _PORT_MESSAGE
+PORT_MESSAGE32 = _PORT_MESSAGE32
+PPORT_MESSAGE32 = POINTER(_PORT_MESSAGE32)
+
+class _PORT_MESSAGE64(Structure):
+    _fields_ = [
+        ("u1", _PORT_MESSAGE_TMP_UNION_U1),
+        ("u2", _PORT_MESSAGE_TMP_UNION_U2),
+        ("ClientId", CLIENT_ID64),
+        ("MessageId", ULONG),
+        ("tmp_union", _PORT_MESSAGE64_TMP_UNION),
+    ]
+PPORT_MESSAGE64 = POINTER(_PORT_MESSAGE64)
+PORT_MESSAGE64 = _PORT_MESSAGE64
 
 class _SERVICE_STATUS(Structure):
     _fields_ = [

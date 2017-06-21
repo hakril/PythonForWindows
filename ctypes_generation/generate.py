@@ -305,6 +305,9 @@ class StructGenerator(CtypesGenerator):
                 except:
                     self.add_imports(nb_rep)
 
+        # We have PPORT_MESSAGE32 and PPORT_MESSAGE64 and PPORT_MESSAGE is choosed at runtime
+        self.add_exports("PPORT_MESSAGE")
+
 
     def generate(self):
         type_equivalences = "\n".join(["{0} = {1}".format(*x) for x in TYPE_EQUIVALENCE])

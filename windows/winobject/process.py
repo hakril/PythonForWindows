@@ -11,6 +11,7 @@ from collections import namedtuple
 import windows
 import windows.native_exec.simple_x86 as x86
 import windows.native_exec.simple_x64 as x64
+import windows.remotectypes as rctypes
 
 from windows import injection
 from windows import native_exec
@@ -1393,9 +1394,6 @@ class EPSAPI_WORKING_SET_EX_INFORMATION32(ctypes.Structure):
 
 class EPSAPI_WORKING_SET_EX_INFORMATION64(ctypes.Structure):
     _fields_ = windows.utils.transform_ctypes_fields(PSAPI_WORKING_SET_EX_INFORMATION64, {"VirtualAttributes": EPSAPI_WORKING_SET_EX_BLOCK64})
-
-
-import windows.remotectypes as rctypes
 
 
 class RemoteLoadedModule(rctypes.RemoteStructure.from_structure(LoadedModule)):

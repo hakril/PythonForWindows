@@ -125,7 +125,8 @@ def send_receive_data(port_handle, data):
     size = gn.SIZE_T(0x1000)
     receive = AlpcMessage(size.value)
     receive_attr = MessageAttribute(0)
-
+    # Its strange that this line does not always have the same effect has the one bellow
+    # winproxy.NtAlpcSendWaitReceivePort(port_handle, ALPC_MSGFLG_SYNC_REQUEST, sendmsg, sendmsg_attr, receive, ctypes.byref(size), receive_attr, None)
     winproxy.NtAlpcSendWaitReceivePort(port_handle, ALPC_MSGFLG_SYNC_REQUEST, sendmsg, sendmsg_attr, receive, size, receive_attr, None)
     return receive_attr, receive
 
