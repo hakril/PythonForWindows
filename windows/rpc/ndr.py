@@ -37,7 +37,15 @@ class NdrUniquePTR(object):
             return pack_dword(0)
         return pack_dword(0x02020202) + subpack
 
+    def unpack(self, stream):
+        ptr = NdrLong.unpack(stream)
+        if not ptr:
+            return None
+        return self.subcls.unpack(stream)
+
     def pack_in_struct(self, data, id):
+        if data is None:
+            return pack_dword(0), None
         subpack = self.subcls.pack(data)
         if subpack is None:
             return pack_dword(0), None
@@ -55,6 +63,16 @@ class NdrUniquePTR(object):
             return None
         return self.subcls.parse(stream)
 
+class NdrFixedArray(object):
+    def __init__(self, subcls, size):
+        self.subcls = subcls
+        self.size = size
+
+    def pack(self, data):
+        data = list(data)
+        assert len(data) == self.size
+        return dword_pad("".join([self.subcls.pack(elt) for elt in data]))
+
 
 class NdrSID(object):
     @classmethod
@@ -63,6 +81,11 @@ class NdrSID(object):
         size = windows.winproxy.GetLengthSid(psid)
         sid_data = windows.current_process.read_memory(psid.value, size)
         return pack_dword(subcount[0]) + dword_pad(sid_data)
+
+    @classmethod
+    def unpack(cls, stream):
+        subcount = NdrLong.unpack(stream)
+        return stream.read(8 + (subcount * 4))
 
 class NdrWString(object):
     @classmethod
@@ -74,6 +97,15 @@ class NdrWString(object):
         result = struct.pack("<3I", l, 0, l)
         result += data
         return dword_pad(result)
+
+    @classmethod
+    def unpack(cls, stream):
+        stream.align(4)
+        size1, zero, size2 = stream.partial_unpack("<3I")
+        assert size1 == size2
+        assert zero == 0
+        s = stream.read(size1 * 2)
+        return s.decode("utf-16-le")
 
 class NdrCString(object):
     @classmethod
@@ -97,7 +129,27 @@ class NdrLong(object):
 
     @classmethod
     def unpack(self, stream):
+        stream.align(4)
         return stream.partial_unpack("<I")[0]
+
+class NdrHyper(object):
+    @classmethod
+    def pack(cls, data):
+        return struct.pack("<Q", data)
+
+    @classmethod
+    def unpack(self, stream):
+        stream.align(4)
+        return stream.partial_unpack("<Q")[0]
+
+class NdrShort(object):
+    @classmethod
+    def pack(cls, data):
+        return struct.pack("<H", data)
+
+    @classmethod
+    def unpack(self, stream):
+        return stream.partial_unpack("<H")[0]
 
 
 class NdrByte(object):
@@ -174,7 +226,7 @@ class NdrParameters(object):
         for (member, memberdata) in zip(cls.MEMBERS, data):
             packed_member = member.pack(memberdata)
             res.append(packed_member)
-        return dword_pad("".join(res))
+        return "".join(dword_pad(elt) for elt in res)
 
     @classmethod
     def unpack(cls, stream):

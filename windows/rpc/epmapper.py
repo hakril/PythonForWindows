@@ -118,7 +118,7 @@ def construct_alpc_tower(object, syntax, protseq, endpoint, address):
     towerarray = struct.pack("<H", 4) +  floor_0 + floor_1 + floor_2 + floor_3
     return len(towerarray), bytearray(towerarray)
 
-def endpoint_map_alpc(targetiid, version=(1,0), nb_response=1):
+def endpoint_map_alpc(targetiid, version=(1,0), nb_response=1, sid=gdef.WinLocalSystemSid):
     if isinstance(targetiid, basestring):
         targetiid = windows.com.IID.from_string(targetiid)
     # Connect to epmapper
@@ -135,7 +135,7 @@ def endpoint_map_alpc(targetiid, version=(1,0), nb_response=1):
     tower_array_size, towerarray = construct_alpc_tower(rpc_object, rpc_syntax, "ncalrpc", "", None)
 
     # parameters
-    local_system_psid = windows.utils.get_known_sid(gdef.WinLocalSystemSid)
+    local_system_psid = windows.utils.get_known_sid(sid)
     context = (0, 0, 0, 0, 0)
 
     # Pack request
@@ -154,8 +154,10 @@ def endpoint_map_alpc(targetiid, version=(1,0), nb_response=1):
     return [explode_alpc_tower(obj) for obj in unpacked[2]]
 
 
-def find_alpc_endpoint_and_connect(targetiid, version=(1,0)):
-    alpctowers = endpoint_map_alpc(targetiid, version, nb_response=50)
+def find_alpc_endpoint_and_connect(targetiid, version=(1,0), sid=gdef.WinLocalSystemSid):
+    dbgprint("Finding ALPC endpoints for  <{0}>".format(targetiid), "RPC")
+    alpctowers = endpoint_map_alpc(targetiid, version, nb_response=50, sid=sid)
+    dbgprint("ALPC endpoints list: <{0}>".format(alpctowers), "RPC")
     for tower in alpctowers:
         dbgprint("Trying to connect to endpoint <{0}>".format(tower.endpoint), "RPC")
         alpc_port = r"\RPC Control\{0}".format(tower.endpoint)
