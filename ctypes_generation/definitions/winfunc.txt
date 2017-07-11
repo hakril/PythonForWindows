@@ -948,6 +948,13 @@ NTSTATUS WINAPI NtAlpcCreatePort(
     _In_opt_ PALPC_PORT_ATTRIBUTES PortAttributes
 );
 
+NTSTATUS WINAPI NtAlpcQueryInformation(
+    _In_opt_ HANDLE PortHandle,
+    _In_ ALPC_PORT_INFORMATION_CLASS PortInformationClass,
+    _Inout_opt_ PVOID PortInformation,
+    _In_ ULONG Length,
+    _Out_opt_ PULONG ReturnLength
+);
 
 NTSTATUS WINAPI NtAlpcConnectPort(
     _Out_ PHANDLE PortHandle,
@@ -1012,6 +1019,72 @@ NTSTATUS WINAPI NtAlpcSendWaitReceivePort(
     _Inout_opt_ PALPC_MESSAGE_ATTRIBUTES ReceiveMessageAttributes,
     _In_opt_ PLARGE_INTEGER Timeout
 );
+
+NTSTATUS WINAPI NtAlpcCreatePortSection(
+    _In_ HANDLE PortHandle,
+    _In_ ULONG Flags,
+    _In_opt_ HANDLE SectionHandle,
+    _In_ SIZE_T SectionSize,
+    _Out_ PALPC_HANDLE AlpcSectionHandle,
+    _Out_ PSIZE_T ActualSectionSize
+    );
+
+NTSTATUS WINAPI NtAlpcDeletePortSection(
+    _In_ HANDLE PortHandle,
+    _Reserved_ ULONG Flags,
+    _In_ ALPC_HANDLE SectionHandle
+    );
+
+
+
+NTSTATUS WINAPI NtAlpcCreateResourceReserve(
+    _In_ HANDLE PortHandle,
+    _Reserved_ ULONG Flags,
+    _In_ SIZE_T MessageSize,
+    _Out_ PALPC_HANDLE ResourceId
+    );
+
+
+NTSTATUS WINAPI NtAlpcDeleteResourceReserve(
+    _In_ HANDLE PortHandle,
+    _Reserved_ ULONG Flags,
+    _In_ ALPC_HANDLE ResourceId
+    );
+
+
+NTSTATUS WINAPI NtAlpcCreateSectionView(
+    _In_ HANDLE PortHandle,
+    _Reserved_ ULONG Flags,
+    _Inout_ PALPC_DATA_VIEW_ATTR ViewAttributes
+    );
+
+
+NTSTATUS WINAPI NtAlpcDeleteSectionView(
+    _In_ HANDLE PortHandle,
+    _Reserved_ ULONG Flags,
+    _In_ PVOID ViewBase
+    );
+
+
+NTSTATUS WINAPI NtAlpcCreateSecurityContext(
+    _In_ HANDLE PortHandle,
+    _Reserved_ ULONG Flags,
+    _Inout_ PALPC_SECURITY_ATTR SecurityAttribute
+    );
+
+
+NTSTATUS WINAPI NtAlpcDeleteSecurityContext(
+    _In_ HANDLE PortHandle,
+    _Reserved_ ULONG Flags,
+    _In_ ALPC_HANDLE ContextHandle
+    );
+
+
+NTSTATUS WINAPI NtAlpcRevokeSecurityContext(
+    _In_ HANDLE PortHandle,
+    _Reserved_ ULONG Flags,
+    _In_ ALPC_HANDLE ContextHandle
+    );
 
 
 INT WINAPI lstrcmpA(

@@ -67,6 +67,8 @@ HBITMAP = HANDLE
 SC_HANDLE = HANDLE
 HCERTCHAINENGINE = HANDLE
 LPHANDLE = POINTER(HANDLE)
+ALPC_HANDLE = HANDLE
+PALPC_HANDLE = POINTER(ALPC_HANDLE)
 PHKEY = POINTER(HKEY)
 ACCESS_MASK = DWORD
 REGSAM = ACCESS_MASK
@@ -999,6 +1001,25 @@ class _BG_JOB_TYPE(EnumType):
     values = [BG_JOB_TYPE_DOWNLOAD, BG_JOB_TYPE_UPLOAD, BG_JOB_TYPE_UPLOAD_REPLY]
     mapper = {x:x for x in values}
 BG_JOB_TYPE = _BG_JOB_TYPE
+
+
+AlpcBasicInformation = EnumValue("_ALPC_PORT_INFORMATION_CLASS", "AlpcBasicInformation", 0x0)
+AlpcPortInformation = EnumValue("_ALPC_PORT_INFORMATION_CLASS", "AlpcPortInformation", 0x1)
+AlpcAssociateCompletionPortInformation = EnumValue("_ALPC_PORT_INFORMATION_CLASS", "AlpcAssociateCompletionPortInformation", 0x2)
+AlpcConnectedSIDInformation = EnumValue("_ALPC_PORT_INFORMATION_CLASS", "AlpcConnectedSIDInformation", 0x3)
+AlpcServerInformation = EnumValue("_ALPC_PORT_INFORMATION_CLASS", "AlpcServerInformation", 0x4)
+AlpcMessageZoneInformation = EnumValue("_ALPC_PORT_INFORMATION_CLASS", "AlpcMessageZoneInformation", 0x5)
+AlpcRegisterCompletionListInformation = EnumValue("_ALPC_PORT_INFORMATION_CLASS", "AlpcRegisterCompletionListInformation", 0x6)
+AlpcUnregisterCompletionListInformation = EnumValue("_ALPC_PORT_INFORMATION_CLASS", "AlpcUnregisterCompletionListInformation", 0x7)
+AlpcAdjustCompletionListConcurrencyCountInformation = EnumValue("_ALPC_PORT_INFORMATION_CLASS", "AlpcAdjustCompletionListConcurrencyCountInformation", 0x8)
+AlpcRegisterCallbackInformation = EnumValue("_ALPC_PORT_INFORMATION_CLASS", "AlpcRegisterCallbackInformation", 0x9)
+AlpcCompletionListRundownInformation = EnumValue("_ALPC_PORT_INFORMATION_CLASS", "AlpcCompletionListRundownInformation", 0xa)
+AlpcWaitForPortReferences = EnumValue("_ALPC_PORT_INFORMATION_CLASS", "AlpcWaitForPortReferences", 0xb)
+MaxAlpcPortInfoClass = EnumValue("_ALPC_PORT_INFORMATION_CLASS", "MaxAlpcPortInfoClass", 0xc)
+class _ALPC_PORT_INFORMATION_CLASS(EnumType):
+    values = [AlpcBasicInformation, AlpcPortInformation, AlpcAssociateCompletionPortInformation, AlpcConnectedSIDInformation, AlpcServerInformation, AlpcMessageZoneInformation, AlpcRegisterCompletionListInformation, AlpcUnregisterCompletionListInformation, AlpcAdjustCompletionListConcurrencyCountInformation, AlpcRegisterCallbackInformation, AlpcCompletionListRundownInformation, AlpcWaitForPortReferences, MaxAlpcPortInfoClass]
+    mapper = {x:x for x in values}
+ALPC_PORT_INFORMATION_CLASS = _ALPC_PORT_INFORMATION_CLASS
 
 
 # Self referencing struct tricks
@@ -3024,109 +3045,6 @@ class _SECURITY_QUALITY_OF_SERVICE(Structure):
 PSECURITY_QUALITY_OF_SERVICE = POINTER(_SECURITY_QUALITY_OF_SERVICE)
 SECURITY_QUALITY_OF_SERVICE = _SECURITY_QUALITY_OF_SERVICE
 
-class _ALPC_PORT_ATTRIBUTES32(Structure):
-    _fields_ = [
-        ("Flags", ULONG),
-        ("SecurityQos", SECURITY_QUALITY_OF_SERVICE),
-        ("MaxMessageLength", SIZE_T),
-        ("MemoryBandwidth", SIZE_T),
-        ("MaxPoolUsage", SIZE_T),
-        ("MaxSectionSize", SIZE_T),
-        ("MaxViewSize", SIZE_T),
-        ("MaxTotalSectionSize", SIZE_T),
-        ("DupObjectTypes", ULONG),
-    ]
-PALPC_PORT_ATTRIBUTES32 = POINTER(_ALPC_PORT_ATTRIBUTES32)
-ALPC_PORT_ATTRIBUTES32 = _ALPC_PORT_ATTRIBUTES32
-
-class _ALPC_PORT_ATTRIBUTES64(Structure):
-    _fields_ = [
-        ("Flags", ULONG),
-        ("SecurityQos", SECURITY_QUALITY_OF_SERVICE),
-        ("MaxMessageLength", SIZE_T),
-        ("MemoryBandwidth", SIZE_T),
-        ("MaxPoolUsage", SIZE_T),
-        ("MaxSectionSize", SIZE_T),
-        ("MaxViewSize", SIZE_T),
-        ("MaxTotalSectionSize", SIZE_T),
-        ("DupObjectTypes", ULONG),
-        ("Reserved", ULONG),
-    ]
-ALPC_PORT_ATTRIBUTES64 = _ALPC_PORT_ATTRIBUTES64
-PALPC_PORT_ATTRIBUTES64 = POINTER(_ALPC_PORT_ATTRIBUTES64)
-
-class _ALPC_MESSAGE_ATTRIBUTES(Structure):
-    _fields_ = [
-        ("AllocatedAttributes", ULONG),
-        ("ValidAttributes", ULONG),
-    ]
-ALPC_MESSAGE_ATTRIBUTES = _ALPC_MESSAGE_ATTRIBUTES
-PALPC_MESSAGE_ATTRIBUTES = POINTER(_ALPC_MESSAGE_ATTRIBUTES)
-
-class _PORT_MESSAGE32_TMP_UNION(Union):
-    _fields_ = [
-        ("ClientViewSize", ULONG),
-        ("CallbackId", ULONG),
-    ]
-PORT_MESSAGE_TMP_UNION = _PORT_MESSAGE32_TMP_UNION
-
-class _PORT_MESSAGE64_TMP_UNION(Union):
-    _fields_ = [
-        ("ClientViewSize", ULONGLONG),
-        ("CallbackId", ULONG),
-    ]
-PORT_MESSAGE_TMP_UNION = _PORT_MESSAGE64_TMP_UNION
-
-class _PORT_MESSAGE_TMP_SUBSTRUCT_S1(Structure):
-    _fields_ = [
-        ("DataLength", CSHORT),
-        ("TotalLength", CSHORT),
-    ]
-_PORT_MESSAGE_TMP_SUBSTRUCT_S1 = _PORT_MESSAGE_TMP_SUBSTRUCT_S1
-
-class _PORT_MESSAGE_TMP_UNION_U1(Union):
-    _fields_ = [
-        ("Length", ULONG),
-        ("s1", _PORT_MESSAGE_TMP_SUBSTRUCT_S1),
-    ]
-_PORT_MESSAGE_TMP_UNION_U1 = _PORT_MESSAGE_TMP_UNION_U1
-
-class _PORT_MESSAGE_TMP_SUBSTRUCT_S2(Structure):
-    _fields_ = [
-        ("Type", CSHORT),
-        ("DataInfoOffset", CSHORT),
-    ]
-_PORT_MESSAGE_TMP_SUBSTRUCT_S2 = _PORT_MESSAGE_TMP_SUBSTRUCT_S2
-
-class _PORT_MESSAGE_TMP_UNION_U2(Union):
-    _fields_ = [
-        ("ZeroInit", ULONG),
-        ("s2", _PORT_MESSAGE_TMP_SUBSTRUCT_S2),
-    ]
-_PORT_MESSAGE_TMP_UNION_U2 = _PORT_MESSAGE_TMP_UNION_U2
-
-class _PORT_MESSAGE32(Structure):
-    _fields_ = [
-        ("u1", _PORT_MESSAGE_TMP_UNION_U1),
-        ("u2", _PORT_MESSAGE_TMP_UNION_U2),
-        ("ClientId", CLIENT_ID32),
-        ("MessageId", ULONG),
-        ("tmp_union", _PORT_MESSAGE32_TMP_UNION),
-    ]
-PORT_MESSAGE32 = _PORT_MESSAGE32
-PPORT_MESSAGE32 = POINTER(_PORT_MESSAGE32)
-
-class _PORT_MESSAGE64(Structure):
-    _fields_ = [
-        ("u1", _PORT_MESSAGE_TMP_UNION_U1),
-        ("u2", _PORT_MESSAGE_TMP_UNION_U2),
-        ("ClientId", CLIENT_ID64),
-        ("MessageId", ULONG),
-        ("tmp_union", _PORT_MESSAGE64_TMP_UNION),
-    ]
-PPORT_MESSAGE64 = POINTER(_PORT_MESSAGE64)
-PORT_MESSAGE64 = _PORT_MESSAGE64
-
 class _SERVICE_STATUS(Structure):
     _fields_ = [
         ("dwServiceType", DWORD),
@@ -3949,3 +3867,247 @@ class _BG_JOB_TIMES(Structure):
         ("TransferCompletionTime", FILETIME),
     ]
 BG_JOB_TIMES = _BG_JOB_TIMES
+
+class _ALPC_PORT_ATTRIBUTES32(Structure):
+    _fields_ = [
+        ("Flags", ULONG),
+        ("SecurityQos", SECURITY_QUALITY_OF_SERVICE),
+        ("MaxMessageLength", SIZE_T),
+        ("MemoryBandwidth", SIZE_T),
+        ("MaxPoolUsage", SIZE_T),
+        ("MaxSectionSize", SIZE_T),
+        ("MaxViewSize", SIZE_T),
+        ("MaxTotalSectionSize", SIZE_T),
+        ("DupObjectTypes", ULONG),
+    ]
+PALPC_PORT_ATTRIBUTES32 = POINTER(_ALPC_PORT_ATTRIBUTES32)
+ALPC_PORT_ATTRIBUTES32 = _ALPC_PORT_ATTRIBUTES32
+
+class _ALPC_PORT_ATTRIBUTES64(Structure):
+    _fields_ = [
+        ("Flags", ULONG),
+        ("SecurityQos", SECURITY_QUALITY_OF_SERVICE),
+        ("MaxMessageLength", SIZE_T),
+        ("MemoryBandwidth", SIZE_T),
+        ("MaxPoolUsage", SIZE_T),
+        ("MaxSectionSize", SIZE_T),
+        ("MaxViewSize", SIZE_T),
+        ("MaxTotalSectionSize", SIZE_T),
+        ("DupObjectTypes", ULONG),
+        ("Reserved", ULONG),
+    ]
+ALPC_PORT_ATTRIBUTES64 = _ALPC_PORT_ATTRIBUTES64
+PALPC_PORT_ATTRIBUTES64 = POINTER(_ALPC_PORT_ATTRIBUTES64)
+
+class _ALPC_MESSAGE_ATTRIBUTES(Structure):
+    _fields_ = [
+        ("AllocatedAttributes", ULONG),
+        ("ValidAttributes", ULONG),
+    ]
+ALPC_MESSAGE_ATTRIBUTES = _ALPC_MESSAGE_ATTRIBUTES
+PALPC_MESSAGE_ATTRIBUTES = POINTER(_ALPC_MESSAGE_ATTRIBUTES)
+
+class _PORT_MESSAGE32_TMP_UNION(Union):
+    _fields_ = [
+        ("ClientViewSize", ULONG),
+        ("CallbackId", ULONG),
+    ]
+PORT_MESSAGE_TMP_UNION = _PORT_MESSAGE32_TMP_UNION
+
+class _PORT_MESSAGE64_TMP_UNION(Union):
+    _fields_ = [
+        ("ClientViewSize", ULONGLONG),
+        ("CallbackId", ULONG),
+    ]
+PORT_MESSAGE_TMP_UNION = _PORT_MESSAGE64_TMP_UNION
+
+class _PORT_MESSAGE_TMP_SUBSTRUCT_S1(Structure):
+    _fields_ = [
+        ("DataLength", CSHORT),
+        ("TotalLength", CSHORT),
+    ]
+_PORT_MESSAGE_TMP_SUBSTRUCT_S1 = _PORT_MESSAGE_TMP_SUBSTRUCT_S1
+
+class _PORT_MESSAGE_TMP_UNION_U1(Union):
+    _fields_ = [
+        ("Length", ULONG),
+        ("s1", _PORT_MESSAGE_TMP_SUBSTRUCT_S1),
+    ]
+_PORT_MESSAGE_TMP_UNION_U1 = _PORT_MESSAGE_TMP_UNION_U1
+
+class _PORT_MESSAGE_TMP_SUBSTRUCT_S2(Structure):
+    _fields_ = [
+        ("Type", CSHORT),
+        ("DataInfoOffset", CSHORT),
+    ]
+_PORT_MESSAGE_TMP_SUBSTRUCT_S2 = _PORT_MESSAGE_TMP_SUBSTRUCT_S2
+
+class _PORT_MESSAGE_TMP_UNION_U2(Union):
+    _fields_ = [
+        ("ZeroInit", ULONG),
+        ("s2", _PORT_MESSAGE_TMP_SUBSTRUCT_S2),
+    ]
+_PORT_MESSAGE_TMP_UNION_U2 = _PORT_MESSAGE_TMP_UNION_U2
+
+class _PORT_MESSAGE32(Structure):
+    _fields_ = [
+        ("u1", _PORT_MESSAGE_TMP_UNION_U1),
+        ("u2", _PORT_MESSAGE_TMP_UNION_U2),
+        ("ClientId", CLIENT_ID32),
+        ("MessageId", ULONG),
+        ("tmp_union", _PORT_MESSAGE32_TMP_UNION),
+    ]
+PORT_MESSAGE32 = _PORT_MESSAGE32
+PPORT_MESSAGE32 = POINTER(_PORT_MESSAGE32)
+
+class _PORT_MESSAGE64(Structure):
+    _fields_ = [
+        ("u1", _PORT_MESSAGE_TMP_UNION_U1),
+        ("u2", _PORT_MESSAGE_TMP_UNION_U2),
+        ("ClientId", CLIENT_ID64),
+        ("MessageId", ULONG),
+        ("tmp_union", _PORT_MESSAGE64_TMP_UNION),
+    ]
+PPORT_MESSAGE64 = POINTER(_PORT_MESSAGE64)
+PORT_MESSAGE64 = _PORT_MESSAGE64
+
+class _ALPC_SERVER_INFORMATION_TMP_IN(Structure):
+    _fields_ = [
+        ("ThreadHandle", HANDLE),
+    ]
+ALPC_SERVER_INFORMATION_TMP_IN = _ALPC_SERVER_INFORMATION_TMP_IN
+
+class _ALPC_SERVER_INFORMATION_TMP_OUT(Structure):
+    _fields_ = [
+        ("ThreadBlocked", BOOLEAN),
+        ("ConnectedProcessId", HANDLE),
+        ("ConnectionPortName", UNICODE_STRING),
+    ]
+ALPC_SERVER_INFORMATION_TMP_OUT = _ALPC_SERVER_INFORMATION_TMP_OUT
+
+class ALPC_SERVER_INFORMATION(Union):
+    _fields_ = [
+        ("In", ALPC_SERVER_INFORMATION_TMP_IN),
+        ("Out", ALPC_SERVER_INFORMATION_TMP_OUT),
+    ]
+ALPC_SERVER_INFORMATION = ALPC_SERVER_INFORMATION
+
+class _ALPC_CONTEXT_ATTR(Structure):
+    _fields_ = [
+        ("PortContext", PVOID),
+        ("MessageContext", PVOID),
+        ("Sequence", ULONG),
+        ("MessageId", ULONG),
+        ("CallbackId", ULONG),
+    ]
+PALPC_CONTEXT_ATTR = POINTER(_ALPC_CONTEXT_ATTR)
+ALPC_CONTEXT_ATTR = _ALPC_CONTEXT_ATTR
+
+class _ALPC_CONTEXT_ATTR32(Structure):
+    _fields_ = [
+        ("PortContext", ULONG),
+        ("MessageContext", ULONG),
+        ("Sequence", ULONG),
+        ("MessageId", ULONG),
+        ("CallbackId", ULONG),
+    ]
+ALPC_CONTEXT_ATTR32 = _ALPC_CONTEXT_ATTR32
+PALPC_CONTEXT_ATTR32 = POINTER(_ALPC_CONTEXT_ATTR32)
+
+class _ALPC_CONTEXT_ATTR64(Structure):
+    _fields_ = [
+        ("PortContext", ULONGLONG),
+        ("MessageContext", ULONGLONG),
+        ("Sequence", ULONG),
+        ("MessageId", ULONG),
+        ("CallbackId", ULONG),
+    ]
+ALPC_CONTEXT_ATTR64 = _ALPC_CONTEXT_ATTR64
+PALPC_CONTEXT_ATTR64 = POINTER(_ALPC_CONTEXT_ATTR64)
+
+class _ALPC_HANDLE_ATTR(Structure):
+    _fields_ = [
+        ("Flags", ULONG),
+        ("Handle", HANDLE),
+        ("ObjectType", ULONG),
+        ("DesiredAccess", ACCESS_MASK),
+    ]
+PALPC_HANDLE_ATTR = POINTER(_ALPC_HANDLE_ATTR)
+ALPC_HANDLE_ATTR = _ALPC_HANDLE_ATTR
+
+class _ALPC_HANDLE_ATTR32(Structure):
+    _fields_ = [
+        ("Flags", ULONG),
+        ("Handle", ULONG),
+        ("ObjectType", ULONG),
+        ("DesiredAccess", ACCESS_MASK),
+    ]
+ALPC_HANDLE_ATTR32 = _ALPC_HANDLE_ATTR32
+PALPC_HANDLE_ATTR32 = POINTER(_ALPC_HANDLE_ATTR32)
+
+class _ALPC_HANDLE_ATTR64(Structure):
+    _fields_ = [
+        ("Flags", ULONG),
+        ("Handle", ULONGLONG),
+        ("ObjectType", ULONG),
+        ("DesiredAccess", ACCESS_MASK),
+    ]
+PALPC_HANDLE_ATTR64 = POINTER(_ALPC_HANDLE_ATTR64)
+ALPC_HANDLE_ATTR64 = _ALPC_HANDLE_ATTR64
+
+class _ALPC_SECURITY_ATTR(Structure):
+    _fields_ = [
+        ("Flags", ULONG),
+        ("QoS", PSECURITY_QUALITY_OF_SERVICE),
+        ("ContextHandle", ALPC_HANDLE),
+    ]
+PALPC_SECURITY_ATTR = POINTER(_ALPC_SECURITY_ATTR)
+ALPC_SECURITY_ATTR = _ALPC_SECURITY_ATTR
+
+class _ALPC_SECURITY_ATTR32(Structure):
+    _fields_ = [
+        ("Flags", ULONG),
+        ("QoS", ULONG),
+        ("ContextHandle", ULONG),
+    ]
+ALPC_SECURITY_ATTR32 = _ALPC_SECURITY_ATTR32
+PALPC_SECURITY_ATTR32 = POINTER(_ALPC_SECURITY_ATTR32)
+
+class _ALPC_SECURITY_ATTR64(Structure):
+    _fields_ = [
+        ("Flags", ULONGLONG),
+        ("QoS", ULONGLONG),
+        ("ContextHandle", ULONGLONG),
+    ]
+PALPC_SECURITY_ATTR64 = POINTER(_ALPC_SECURITY_ATTR64)
+ALPC_SECURITY_ATTR64 = _ALPC_SECURITY_ATTR64
+
+class _ALPC_DATA_VIEW_ATTR(Structure):
+    _fields_ = [
+        ("Flags", ULONG),
+        ("SectionHandle", ALPC_HANDLE),
+        ("ViewBase", PVOID),
+        ("ViewSize", PVOID),
+    ]
+PALPC_DATA_VIEW_ATTR = POINTER(_ALPC_DATA_VIEW_ATTR)
+ALPC_DATA_VIEW_ATTR = _ALPC_DATA_VIEW_ATTR
+
+class _ALPC_DATA_VIEW_ATTR32(Structure):
+    _fields_ = [
+        ("Flags", ULONG),
+        ("SectionHandle", ULONG),
+        ("ViewBase", ULONG),
+        ("ViewSize", ULONG),
+    ]
+PALPC_DATA_VIEW_ATTR32 = POINTER(_ALPC_DATA_VIEW_ATTR32)
+ALPC_DATA_VIEW_ATTR32 = _ALPC_DATA_VIEW_ATTR32
+
+class _ALPC_DATA_VIEW_ATTR64(Structure):
+    _fields_ = [
+        ("Flags", ULONG),
+        ("SectionHandle", ULONGLONG),
+        ("ViewBase", ULONGLONG),
+        ("ViewSize", ULONGLONG),
+    ]
+PALPC_DATA_VIEW_ATTR64 = POINTER(_ALPC_DATA_VIEW_ATTR64)
+ALPC_DATA_VIEW_ATTR64 = _ALPC_DATA_VIEW_ATTR64

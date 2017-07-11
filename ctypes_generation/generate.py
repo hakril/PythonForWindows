@@ -83,6 +83,8 @@ TYPE_EQUIVALENCE = [
     ('SC_HANDLE', 'HANDLE'),
     ('HCERTCHAINENGINE', 'HANDLE'),
     ('LPHANDLE', 'POINTER(HANDLE)'),
+    ('ALPC_HANDLE', 'HANDLE'),
+    ('PALPC_HANDLE', 'POINTER(ALPC_HANDLE)'),
     ('PHKEY', 'POINTER(HKEY)'),
     ('ACCESS_MASK', 'DWORD'),
     ('REGSAM', 'ACCESS_MASK'),
@@ -728,6 +730,7 @@ defs_with_ntstatus.append_input_file(from_here("definitions\\windef_error.txt"))
 structs = StructGenerator(from_here("definitions\\winstruct.txt"), from_here(r"..\windows\generated_def\\winstructs.py"), dependances=[defs_with_ntstatus])
 structs.append_input_file(from_here("definitions\\display_struct.txt"))
 structs.append_input_file(from_here("definitions\\winstruct_bits.txt"))
+structs.append_input_file(from_here("definitions\\winstruct_alpc.txt"))
 
 functions = FuncGenerator(from_here("definitions\\winfunc.txt"), from_here(r"..\windows\generated_def\\winfuncs.py"), dependances=[structs])
 functions.append_input_file(from_here("definitions\\wintrust_crypt_func.txt"))

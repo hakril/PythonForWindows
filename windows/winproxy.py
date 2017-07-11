@@ -823,6 +823,12 @@ def NtAlpcConnectPortEx(PortHandle, ConnectionPortObjectAttributes, ClientPortOb
 def NtAlpcAcceptConnectPort(PortHandle, ConnectionPortHandle, Flags, ObjectAttributes, PortAttributes, PortContext, ConnectionRequest, ConnectionMessageAttributes, AcceptConnection):
     return NtAlpcAcceptConnectPort.ctypes_function(PortHandle, ConnectionPortHandle, Flags, ObjectAttributes, PortAttributes, PortContext, ConnectionRequest, ConnectionMessageAttributes, AcceptConnection)
 
+
+@NtdllProxy("NtAlpcQueryInformation", error_ntstatus)
+def NtAlpcQueryInformation(PortHandle, PortInformationClass, PortInformation, Length, ReturnLength):
+    return NtAlpcQueryInformation.ctypes_function(PortHandle, PortInformationClass, PortInformation, Length, ReturnLength)
+
+
 @NtdllProxy("NtAlpcSendWaitReceivePort", error_ntstatus)
 def NtAlpcSendWaitReceivePort(PortHandle, Flags, SendMessage, SendMessageAttributes, ReceiveMessage, BufferLength, ReceiveMessageAttributes, Timeout):
     return NtAlpcSendWaitReceivePort.ctypes_function(PortHandle, Flags, SendMessage, SendMessageAttributes, ReceiveMessage, BufferLength, ReceiveMessageAttributes, Timeout)
@@ -836,6 +842,26 @@ def AlpcInitializeMessageAttribute(AttributeFlags, Buffer, BufferSize, RequiredB
 @NtdllProxy("AlpcGetMessageAttribute", no_error_check)
 def AlpcGetMessageAttribute(Buffer, AttributeFlag):
     return AlpcGetMessageAttribute.ctypes_function(Buffer, AttributeFlag)
+
+
+@NtdllProxy("NtAlpcCreatePortSection", error_ntstatus)
+def NtAlpcCreatePortSection(PortHandle, Flags, SectionHandle, SectionSize, AlpcSectionHandle, ActualSectionSize):
+    return NtAlpcCreatePortSection.ctypes_function(PortHandle, Flags, SectionHandle, SectionSize, AlpcSectionHandle, ActualSectionSize)
+
+
+@NtdllProxy("NtAlpcDeletePortSection", error_ntstatus)
+def NtAlpcDeletePortSection(PortHandle, Flags, SectionHandle):
+    return NtAlpcDeletePortSection.ctypes_function(PortHandle, Flags, SectionHandle)
+
+
+@NtdllProxy("NtAlpcCreateSectionView", error_ntstatus)
+def NtAlpcCreateSectionView(PortHandle, Flags, ViewAttributes):
+    return NtAlpcCreateSectionView.ctypes_function(PortHandle, Flags, ViewAttributes)
+
+
+@NtdllProxy("NtAlpcDeleteSectionView", error_ntstatus)
+def NtAlpcDeleteSectionView(PortHandle, Flags, ViewBase):
+    return NtAlpcDeleteSectionView.ctypes_function(PortHandle, Flags, ViewBase)
 
 
 @NtdllProxy("NtOpenDirectoryObject", error_ntstatus)
