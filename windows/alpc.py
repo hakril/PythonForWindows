@@ -41,16 +41,36 @@ class AlpcMessage(gn.PORT_MESSAGE):
     data = property(read_data, write_data)
 
 class MessageAttribute(gn.ALPC_MESSAGE_ATTRIBUTES):
-    def __new__(cls, flags):
-        size = cls._get_required_buffer_size(flags)
-        buffer = ctypes.c_buffer(size)
-        self = cls.from_buffer(buffer)
-        self.raw_buffer = buffer
-        return self
+    # def __new__(cls, flags):
+    #     size = cls._get_required_buffer_size(flags)
+    #     buffer = ctypes.c_buffer(size)
+    #     self = cls.from_buffer(buffer)
+    #     self.raw_buffer = buffer
+    #     return self
+    ATTRIBUTE_BY_FLAG = [(gn.ALPC_MESSAGE_SECURITY_ATTRIBUTE, gn.ALPC_SECURITY_ATTR),
+                            (gn.ALPC_MESSAGE_VIEW_ATTRIBUTE, gn.ALPC_DATA_VIEW_ATTR),
+                            (gn.ALPC_MESSAGE_CONTEXT_ATTRIBUTE, gn.ALPC_CONTEXT_ATTR),
+                            (gn.ALPC_MESSAGE_HANDLE_ATTRIBUTE, gn.ALPC_HANDLE_ATTR)]
+
+
+#define ALPC_MESSAGE_SECURITY_ATTRIBUTE 0x80000000
+#define ALPC_MESSAGE_VIEW_ATTRIBUTE 0x40000000
+#define ALPC_MESSAGE_CONTEXT_ATTRIBUTE 0x20000000
+#define ALPC_MESSAGE_HANDLE_ATTRIBUTE 0x10000000
 
     def __init__(self, flags):
         res = gn.DWORD()
         winproxy.AlpcInitializeMessageAttribute(flags, self, len(self.raw_buffer), res)
+
+    @classmethod
+    def with_attributes(cls, flags):
+        size = cls._get_required_buffer_size(flags)
+        buffer = ctypes.c_buffer(size)
+        self = cls.from_buffer(buffer)
+        self.raw_buffer = buffer
+        res = gn.DWORD()
+        winproxy.AlpcInitializeMessageAttribute(flags, self, len(self.raw_buffer), res)
+        return self
 
     @staticmethod
     def _get_required_buffer_size(flags):
@@ -61,6 +81,24 @@ class MessageAttribute(gn.ALPC_MESSAGE_ATTRIBUTES):
             # Buffer too small: osef
             return res.value
         return res.value
+
+    def is_allocated(self, value):
+        return self.AllocatedAttributes & value
+
+    def is_valid(self, value):
+        return self.ValidAttributes & value
+
+    def get_attribute(self, flag):
+        offset = ctypes.sizeof(self)
+        for sflag, struct in self.ATTRIBUTE_BY_FLAG:
+            if sflag == flag:
+                return struct.from_address(ctypes.addressof(self) + offset)
+            elif self.is_allocated(sflag):
+                offset += ctypes.sizeof(struct)
+        raise ValueError("ALPC Attribute Flag not found :(")
+
+
+
 
 
 class AlpcPORT(object):
@@ -86,6 +124,7 @@ class AlpcPORT(object):
 
         port_attr = gn.ALPC_PORT_ATTRIBUTES()
         port_attr.Flags = 0
+        # port_attr.Flags = 0x2080000 # Test
         port_attr.MaxMessageLength = msglen
         port_attr.MemoryBandwidth = 0
         port_attr.MaxPoolUsage = 0
@@ -117,18 +156,76 @@ class AlpcPORT(object):
 
 
 def send_receive_data(port_handle, data):
-    #sendmsg_attr = MessageAttribute(ALPC_MESSAGE_CONTEXT_ATTRIBUTE + ALPC_MESSAGE_HANDLE_ATTRIBUTE + 1)
-    sendmsg_attr = MessageAttribute(0)
+    # sendmsg_attr = MessageAttribute.with_attributes(ALPC_MESSAGE_VIEW_ATTRIBUTE)
+    # sendmsg_attr.ValidAttributes = ALPC_MESSAGE_VIEW_ATTRIBUTE
+    sendmsg_attr = MessageAttribute.with_attributes(0)
     sendmsg = AlpcMessage(len(data))
     sendmsg.data = data
 
+    # import pdb;pdb.set_trace()
+
     size = gn.SIZE_T(0x1000)
     receive = AlpcMessage(size.value)
-    receive_attr = MessageAttribute(0)
+    receive_attr = MessageAttribute.with_attributes(ALPC_MESSAGE_VIEW_ATTRIBUTE)
     # Its strange that this line does not always have the same effect has the one bellow
     # winproxy.NtAlpcSendWaitReceivePort(port_handle, ALPC_MSGFLG_SYNC_REQUEST, sendmsg, sendmsg_attr, receive, ctypes.byref(size), receive_attr, None)
     winproxy.NtAlpcSendWaitReceivePort(port_handle, ALPC_MSGFLG_SYNC_REQUEST, sendmsg, sendmsg_attr, receive, size, receive_attr, None)
+    # winproxy.NtAlpcSendWaitReceivePort(port_handle, 0x40020000, sendmsg, sendmsg_attr, receive, size, receive_attr, None)
     return receive_attr, receive
+
+
+class ALPC_DATA_VIEW_ATTR(ctypes.Structure): # _ALPC_DATA_VIEW_ATTR
+    _fields_ = [
+        ("Flags", gn.ULONG),
+        ("SectionHandle", gn.HANDLE),
+        ("ViewBase",  gn.ULONG), # must be zero on input
+        ("ViewSize",  gn.ULONG)
+    ]
+
+class ALPC_DATA_VIEW_ATTR64(ctypes.Structure): # _ALPC_DATA_VIEW_ATTR
+    _fields_ = [
+        ("Flags", gn.ULONG),
+        ("SectionHandle", gn.HANDLE),
+        ("ViewBase",  gn.ULONGLONG), # must be zero on input
+        ("ViewSize",  gn.ULONGLONG)
+    ]
+
+def send_receive_data_view(port_handle, data, view):
+    sendmsg_attr = MessageAttribute.with_attributes(ALPC_MESSAGE_VIEW_ATTRIBUTE)
+    sendmsg_attr.ValidAttributes = ALPC_MESSAGE_VIEW_ATTRIBUTE
+
+    view_attr = ALPC_DATA_VIEW_ATTR64.from_address(ctypes.addressof(sendmsg_attr) + 8)
+    # view_attr.Flags = 0x60000 # 0x20000 -> Unmap la section dans le sender
+    view_attr.Flags = 0x40000
+    # view_attr.Flags = 0x10000
+    view_attr.SectionHandle = view.SectionHandle
+    view_attr.ViewBase = view.ViewBase
+    view_attr.ViewSize = view.ViewSize
+
+    xx = windows.winproxy.AlpcGetMessageAttribute(sendmsg_attr, ALPC_MESSAGE_VIEW_ATTRIBUTE)
+
+
+    sendmsg = AlpcMessage(len(data))
+    sendmsg.data = data
+
+
+    print(sendmsg_attr.ValidAttributes)
+
+    size = gn.SIZE_T(0x1000)
+    receive = AlpcMessage(size.value)
+    receive_attr = MessageAttribute.with_attributes(ALPC_MESSAGE_VIEW_ATTRIBUTE)
+    receive_attr.ValidAttributes = ALPC_MESSAGE_VIEW_ATTRIBUTE
+    # Its strange that this line does not always have the same effect has the one bellow
+    # winproxy.NtAlpcSendWaitReceivePort(port_handle, ALPC_MSGFLG_SYNC_REQUEST, sendmsg, sendmsg_attr, receive, ctypes.byref(size), receive_attr, None)
+    # winproxy.NtAlpcSendWaitReceivePort(port_handle, 0, sendmsg, sendmsg_attr, None, size, None, None)
+    winproxy.NtAlpcSendWaitReceivePort(port_handle, ALPC_MSGFLG_SYNC_REQUEST , sendmsg, sendmsg_attr, receive, size, receive_attr, None)
+    # winproxy.NtAlpcSendWaitReceivePort(port_handle, 0x000000000410000, sendmsg, sendmsg_attr, None, None, None, None)
+    # 0000000000410000 # Flags ?
+    print(hex(windows.current_process.query_memory(view.ViewBase).State))
+    print(hex(windows.current_process.query_memory(view.ViewBase).Protect))
+    return receive_attr, receive
+
+
 
 class AlpcClient(object):
     def __init__(self):
@@ -176,10 +273,12 @@ class AlpcClient(object):
 
             #port_attr.MaxPoolUsage = 0
             port_attr.Flags = 0x10000 # Flag qui fonctionne pour l'UAC
+            port_attr.Flags = 0x2090000 # Test
+            port_attr.Flags = 0x2080000 # Test # Tes2
             #  0x0010000 est le flag qui permet l'impersonation (en tout cas le pop UAC)
             #port_attr.MaxPoolUsage = 4294967295
             #port_attr.MaxSectionSize = 4294967295
-            ##port_attr.MaxViewSize = 4294967295
+            port_attr.MaxViewSize = 4294967295
             #port_attr.MaxTotalSectionSize = 4294967295
             #port_attr.DupObjectTypes = 4093
 
@@ -196,13 +295,12 @@ class AlpcClient(object):
         # tst.MaxTotalSectionSize -> 4294967295
         # tst.DupObjectTypes -> 4093
 
-
         if connect_msg is not None:
             size = len(connect_msg)
             send_msg = AlpcMessage(size)
             send_msg.data = connect_msg
-            sendmsg_attr = MessageAttribute(0)
-            receive_attr = MessageAttribute(0)
+            sendmsg_attr = MessageAttribute.with_attributes(0)
+            receive_attr = MessageAttribute.with_attributes(0)
             receive_attr = None
             sendmsg_attr = None
             buffersize = gn.DWORD(len(send_msg.raw_buffer))
@@ -217,6 +315,7 @@ class AlpcClient(object):
         #import pdb;pdb.set_trace()
         x = winproxy.NtAlpcConnectPort(handle, port_name,obj_attr, port_attr, ALPC_MSGFLG_SYNC_REQUEST, None, send_msg, buffersize, sendmsg_attr, receive_attr, None)
 
+        # If send_msg is not None, it contains the ClientId.UniqueProcess : PID of the server :)
         self.handle = handle.value
         self.portname = port_name
         if connect_msg is not None:
@@ -225,6 +324,10 @@ class AlpcClient(object):
     def send_receive(self, data):
         return send_receive_data(self.handle, data)
 
+    def send_receive_view(self, data, view):
+        return send_receive_data_view(self.handle, data, view)
+
+
 class AlpcServer(object):
     def __init__(self, port_name):
         self.port = AlpcPORT(port_name)
@@ -232,7 +335,8 @@ class AlpcServer(object):
     def wait_data(self):
         size = gn.SIZE_T(0x1000)
         receive = AlpcMessage(size.value)
-        receive_attr = MessageAttribute(0)
+        # receive_attr = MessageAttribute(0)
+        receive_attr = MessageAttribute.with_attributes(ALPC_MESSAGE_VIEW_ATTRIBUTE)
         winproxy.NtAlpcSendWaitReceivePort(self.port.handle, 0, None, None, receive, size, receive_attr, None)
         return receive_attr, receive
 
@@ -243,6 +347,8 @@ class AlpcServer(object):
         ALPC_HANDLEFLG_DUPLICATE_INHERIT = 0x80000
         port_attr = gn.ALPC_PORT_ATTRIBUTES()
         port_attr.Flags = ALPC_HANDLEFLG_DUPLICATE_INHERIT
+        # port_attr.Flags = ALPC_HANDLEFLG_DUPLICATE_INHERIT + 0x30000 # Testing
+        # port_attr.Flags = 0x2080000 # Testing
         port_attr.DupObjectTypes = 4
         port_attr.MaxMessageLength = 0x578
         port_attr.MemoryBandwidth = 0
@@ -258,8 +364,33 @@ class AlpcServer(object):
         port_handle = self.port.handle
         sendmsg = AlpcMessage(len(reply_msg))
         sendmsg.data = reply_msg
-        sendmsg_attr = MessageAttribute(0)
+        sendmsg_attr = MessageAttribute.with_attributes(0)
         sendmsg.MessageId = reply_to_msg.MessageId
         winproxy.NtAlpcSendWaitReceivePort(port_handle, ALPC_MSGFLG_RELEASE_MESSAGE, sendmsg, None, None, None, None, None)
+        return None, None
+
+
+    def reply_with_view(self, reply_to_msg, reply_msg, view):
+
+        sendmsg_attr = MessageAttribute.with_attributes(ALPC_MESSAGE_VIEW_ATTRIBUTE)
+        sendmsg_attr.ValidAttributes = ALPC_MESSAGE_VIEW_ATTRIBUTE
+
+        view_attr = ALPC_DATA_VIEW_ATTR.from_address(ctypes.addressof(sendmsg_attr) + 8)
+        view_attr.Flags = 0x60000 # 0x20000 -> Unmap la section dans le sender
+        # view_attr.Flags = 0x40000
+        # view_attr.Flags = 0x40000
+        view_attr.SectionHandle = view.SectionHandle
+        view_attr.ViewBase = view.ViewBase
+        view_attr.ViewSize = view.ViewSize
+        print("Section jandle = {0}".format(view.SectionHandle))
+
+        windows.current_process.write_memory(view.ViewBase, "SERRRRVVVVVV")
+
+        port_handle = self.port.handle
+        sendmsg = AlpcMessage(len(reply_msg))
+        sendmsg.data = reply_msg
+        # sendmsg_attr = MessageAttribute.with_attributes(0)
+        sendmsg.MessageId = reply_to_msg.MessageId
+        winproxy.NtAlpcSendWaitReceivePort(port_handle, 0x410000, sendmsg, sendmsg_attr, None, None, None, None)
         return None, None
 
