@@ -311,6 +311,14 @@ class _WELL_KNOWN_SID_TYPE(EnumType):
 WELL_KNOWN_SID_TYPE = _WELL_KNOWN_SID_TYPE
 
 
+ViewShare = EnumValue("_SECTION_INHERIT", "ViewShare", 0x1)
+ViewUnmap = EnumValue("_SECTION_INHERIT", "ViewUnmap", 0x2)
+class _SECTION_INHERIT(EnumType):
+    values = [ViewShare, ViewUnmap]
+    mapper = {x:x for x in values}
+SECTION_INHERIT = _SECTION_INHERIT
+
+
 MemoryBasicInformation = EnumValue("_MEMORY_INFORMATION_CLASS", "MemoryBasicInformation", 0x0)
 MemoryWorkingSetList = EnumValue("_MEMORY_INFORMATION_CLASS", "MemoryWorkingSetList", 0x1)
 MemorySectionName = EnumValue("_MEMORY_INFORMATION_CLASS", "MemorySectionName", 0x2)

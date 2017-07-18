@@ -377,12 +377,28 @@ class Debugger(object):
         for page_addr in affected_pages:
             cp_watch_page[page_addr].bps.remove(bp)
             if not cp_watch_page[page_addr].bps:
-                target.virtual_protect(page_addr, PAGE_SIZE, cp_watch_page[page_addr].original_prot, None)
+                try:
+                    target.virtual_protect(page_addr, PAGE_SIZE, cp_watch_page[page_addr].original_prot, None)
+                except WindowsError as e:
+                     # TODO
+                     # What should we do if the virtual protect fail on a Non-Free page ?
+                     # It may be because the page was dealloc + map as a view..
+                     # For now: keep the page as-is
+                     if not target.query_memory(page_addr).State == MEM_FREE:
+                        pass
+                     # If page is MEM_FREE ignore the error
                 del cp_watch_page[page_addr]
             else:
                 full_page_events = set.union(*[bp.events for bp in cp_watch_page[page_addr].bps])
                 protection_for_page = self._compute_page_access_for_event(target, full_page_events)
-                target.virtual_protect(page_addr, PAGE_SIZE, protection_for_page, None)
+                try:
+                    target.virtual_protect(page_addr, PAGE_SIZE, protection_for_page, None)
+                except Exception as e:
+                    # if not target.query_memory(page_addr).State == MEM_FREE:
+                    #     raise
+                    for bp in cp_watch_page[page_addr].bps:
+                        bp.on_error(self, page_addr)
+                # TODO: handle case were it is mem-free ?
         return True
 
 
@@ -881,7 +897,18 @@ class Debugger(object):
         cp_watch_page = self._watched_pages[target.pid]
         page_protection = DWORD()
         for page_addr, watched_page in cp_watch_page.items():
-            target.virtual_protect(page_addr, PAGE_SIZE, watched_page.original_prot, page_protection)
+            try:
+                target.virtual_protect(page_addr, PAGE_SIZE, watched_page.original_prot, page_protection)
+            except WindowsError as e:
+                # Check if page have been unmapped
+                # print("disable_all_memory_breakpoints failed on page {0:#x} in state {1:#x}".format(page_addr, target.query_memory(page_addr).State))
+                # if not target.query_memory(page_addr).State == MEM_FREE:
+                #     import pdb;pdb.set_trace()
+                #     raise
+                # If page have been unmap, warn the concerned Breakpoints.
+                for bp in watched_page.bps:
+                    # TODO: Document
+                    bp.on_error(self, page_addr)
             res[page_addr] = page_protection.value
         return res
 
