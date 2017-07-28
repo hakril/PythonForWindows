@@ -888,6 +888,27 @@ def NtOpenSymbolicLinkObject(LinkHandle, DesiredAccess, ObjectAttributes):
 def RtlDecompressBuffer(CompressionFormat, UncompressedBuffer, UncompressedBufferSize, CompressedBuffer, CompressedBufferSize, FinalUncompressedSize):
     return RtlDecompressBuffer.ctypes_function(CompressionFormat, UncompressedBuffer, UncompressedBufferSize, CompressedBuffer, CompressedBufferSize, FinalUncompressedSize)
 
+# Section stuff
+
+@NtdllProxy("NtCreateSection", error_ntstatus)
+def NtCreateSection(SectionHandle, DesiredAccess, ObjectAttributes, MaximumSize, SectionPageProtection, AllocationAttributes, FileHandle):
+    return NtCreateSection.ctypes_function(SectionHandle, DesiredAccess, ObjectAttributes, MaximumSize, SectionPageProtection, AllocationAttributes, FileHandle)
+
+
+@NtdllProxy("NtOpenSection", error_ntstatus)
+def NtOpenSection(SectionHandle, DesiredAccess, ObjectAttributes):
+    return NtOpenSection.ctypes_function(SectionHandle, DesiredAccess, ObjectAttributes)
+
+
+@NtdllProxy("NtMapViewOfSection", error_ntstatus)
+def NtMapViewOfSection(SectionHandle, ProcessHandle, BaseAddress, ZeroBits, CommitSize, SectionOffset, ViewSize, InheritDisposition, AllocationType, Win32Protect):
+    return NtMapViewOfSection.ctypes_function(SectionHandle, ProcessHandle, BaseAddress, ZeroBits, CommitSize, SectionOffset, ViewSize, InheritDisposition, AllocationType, Win32Protect)
+
+
+@NtdllProxy("NtUnmapViewOfSection", error_ntstatus)
+def NtUnmapViewOfSection(ProcessHandle, BaseAddress):
+    return NtUnmapViewOfSection.ctypes_function(ProcessHandle, BaseAddress)
+
 
 
 # ##### ADVAPI32 ####### #

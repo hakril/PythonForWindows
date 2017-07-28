@@ -6,9 +6,19 @@ from windows import winproxy
 from windows import generated_def as gdef
 
 
+## For 64b python
+# 0x1f: 0x80000000: ALPC_MESSAGE_SECURITY_ATTRIBUTE(0x80000000) : size=0x18?
+# 0x1e: 0x40000000: ALPC_MESSAGE_VIEW_ATTRIBUTE(0x40000000): size=0x20
+# 0x1d: 0x20000000: ALPC_MESSAGE_CONTEXT_ATTRIBUTE(0x20000000): size=0x20
+# 0x1c: 0x10000000: ALPC_MESSAGE_HANDLE_ATTRIBUTE(0x10000000): size=0x18
+# 0x1b: 0x8000000: ALPC_MESSAGE_TOKEN_ATTRIBUTE(0x8000000): size=0x18
+# 0x1a: 0x4000000: ALPC_MESSAGE_DIRECT_ATTRIBUTE(0x4000000) size=0x8
+# 0x19: 0x2000000: ALPC_MESSAGE_WORK_ON_BEHALF_ATTRIBUTE(0x2000000) size=0x8
+
+
 class AlpcMessage(object):
     # PORT_MESSAGE + MessageAttribute
-    def __init__(self, msg_or_size=None, attributes=None):
+    def __init__(self, msg_or_size=0x1000, attributes=None):
         # Init the PORT_MESSAGE
         if isinstance(msg_or_size, (long, int)):
             self.port_message_buffer_size = msg_or_size
@@ -19,10 +29,13 @@ class AlpcMessage(object):
             self.port_message = msg_or_size
             self.port_message_raw_buffer = self.port_message.raw_buffer
             self.port_message_buffer_size = len(self.port_message_raw_buffer)
+        else:
+            raise NotImplementedError("Uneexpected type for <msg_or_size>: {0}".format(msg_or_size))
 
         # Init the MessageAttributes
         if attributes is None:
-            self.attributes = MessageAttribute.with_all_attributes()
+            # self.attributes = MessageAttribute.with_all_attributes()
+            self.attributes = MessageAttribute.with_all_attributes() ## Testing
         else:
             self.attributes = attributes
 
@@ -63,6 +76,25 @@ class AlpcMessage(object):
     def view_is_valid(self): # Change the name ?
         return self.attributes.is_valid(gdef.ALPC_MESSAGE_VIEW_ATTRIBUTE)
 
+    @property
+    def security_is_valid(self): # Change the name ?
+        return self.attributes.is_valid(gdef.ALPC_MESSAGE_SECURITY_ATTRIBUTE)
+
+    @property
+    def handle_is_valid(self): # Change the name ?
+        return self.attributes.is_valid(gdef.ALPC_MESSAGE_HANDLE_ATTRIBUTE)
+
+    @property
+    def context_is_valid(self): # Change the name ?
+        return self.attributes.is_valid(gdef.ALPC_MESSAGE_CONTEXT_ATTRIBUTE)
+
+    @property
+    def valid_attributes(self):
+        return self.attributes.valid_list
+
+    @property
+    def allocated_attributes(self):
+        return self.attributes.allocated_list
 
     ## High level setup (Test)
     def setup_view(self, size, section_handle=0, flags=None):
@@ -109,13 +141,30 @@ class AlpcMessagePort(gdef.PORT_MESSAGE):
 
     datalen = property(get_datalen, set_datalen)
 
+KNOWN_ALPC_ATTRIBUTES = (gdef.ALPC_MESSAGE_SECURITY_ATTRIBUTE,
+                            gdef.ALPC_MESSAGE_VIEW_ATTRIBUTE,
+                            gdef.ALPC_MESSAGE_CONTEXT_ATTRIBUTE,
+                            gdef.ALPC_MESSAGE_HANDLE_ATTRIBUTE,
+                            gdef.ALPC_MESSAGE_TOKEN_ATTRIBUTE,
+                            gdef.ALPC_MESSAGE_DIRECT_ATTRIBUTE,
+                            gdef.ALPC_MESSAGE_WORK_ON_BEHALF_ATTRIBUTE)
+
+KNOWN_ALPC_ATTRIBUTES_MAPPING = {x:x for x in KNOWN_ALPC_ATTRIBUTES}
 
 
 class MessageAttribute(gdef.ALPC_MESSAGE_ATTRIBUTES):
     ATTRIBUTE_BY_FLAG = [(gdef.ALPC_MESSAGE_SECURITY_ATTRIBUTE, gdef.ALPC_SECURITY_ATTR),
                             (gdef.ALPC_MESSAGE_VIEW_ATTRIBUTE, gdef.ALPC_DATA_VIEW_ATTR),
                             (gdef.ALPC_MESSAGE_CONTEXT_ATTRIBUTE, gdef.ALPC_CONTEXT_ATTR),
-                            (gdef.ALPC_MESSAGE_HANDLE_ATTRIBUTE, gdef.ALPC_HANDLE_ATTR)]
+                            (gdef.ALPC_MESSAGE_HANDLE_ATTRIBUTE, gdef.ALPC_HANDLE_ATTR),
+                            (gdef.ALPC_MESSAGE_TOKEN_ATTRIBUTE, gdef.ALPC_TOKEN_ATTR),
+                            (gdef.ALPC_MESSAGE_DIRECT_ATTRIBUTE, gdef.ALPC_DIRECT_ATTR),
+                            (gdef.ALPC_MESSAGE_WORK_ON_BEHALF_ATTRIBUTE, gdef.ALPC_WORK_ON_BEHALF_ATTR),
+                            ]
+
+        # 0x1b: 0x8000000: ALPC_MESSAGE_TOKEN_ATTRIBUTE(0x8000000): size=0x18
+# 0x1a: 0x4000000: ALPC_MESSAGE_DIRECT_ATTRIBUTE(0x4000000) size=0x8
+# 0x19: 0x2000000: ALPC_MESSAGE_WORK_ON_BEHALF_ATTRIBUTE(0x2000000) size=0x8
 
     @classmethod
     def with_attributes(cls, flags):
@@ -130,9 +179,13 @@ class MessageAttribute(gdef.ALPC_MESSAGE_ATTRIBUTES):
     @classmethod
     def with_all_attributes(cls):
         return cls.with_attributes(gdef.ALPC_MESSAGE_SECURITY_ATTRIBUTE |
-                                                            gdef.ALPC_MESSAGE_VIEW_ATTRIBUTE |
-                                                            gdef.ALPC_MESSAGE_CONTEXT_ATTRIBUTE |
-                                                            gdef.ALPC_MESSAGE_HANDLE_ATTRIBUTE)
+                                    gdef.ALPC_MESSAGE_VIEW_ATTRIBUTE    |
+                                    gdef.ALPC_MESSAGE_CONTEXT_ATTRIBUTE |
+                                    gdef.ALPC_MESSAGE_HANDLE_ATTRIBUTE  |
+                                    gdef.ALPC_MESSAGE_TOKEN_ATTRIBUTE   |
+                                    gdef.ALPC_MESSAGE_DIRECT_ATTRIBUTE  |
+                                    gdef.ALPC_MESSAGE_WORK_ON_BEHALF_ATTRIBUTE)
+
 
     @staticmethod
     def _get_required_buffer_size(flags):
@@ -156,10 +209,27 @@ class MessageAttribute(gdef.ALPC_MESSAGE_ATTRIBUTES):
         offset = ctypes.sizeof(self)
         for sflag, struct in self.ATTRIBUTE_BY_FLAG:
             if sflag == attribute:
+                # print("Attr {0:#x} was at offet {1:#x}".format(attribute, offset))
                 return struct.from_address(ctypes.addressof(self) + offset)
             elif self.is_allocated(sflag):
                 offset += ctypes.sizeof(struct)
         raise ValueError("ALPC Attribute <{0}> not found :(".format(attribute))
+
+    def _extract_alpc_attributes_values(self, value):
+        attrs = []
+        for mask in (1 << i for i in range(64)):
+            if value & mask:
+                attrs.append(mask)
+        return [KNOWN_ALPC_ATTRIBUTES_MAPPING.get(x, x) for x in attrs]
+
+    @property
+    def valid_list(self):
+        return self._extract_alpc_attributes_values(self.ValidAttributes)
+
+    @property
+    def allocated_list(self):
+        return self._extract_alpc_attributes_values(self.AllocatedAttributes)
+
 
 AlpcSection = namedtuple("AlpcSection", ["handle", "size"])
 
@@ -221,7 +291,7 @@ class AlpcClient(AlpcTransportBase):
             port_attr.MaxSectionSize = 0xffffffff
             port_attr.MaxViewSize = 0xffffffff
             port_attr.MaxTotalSectionSize = 0xffffffff
-            port_attr.DupObjectTypes = 0
+            port_attr.DupObjectTypes = 0xffffffff
 
             port_attr.SecurityQos.Length = ctypes.sizeof(port_attr.SecurityQos)
             port_attr.SecurityQos.ImpersonationLevel = gdef.SecurityImpersonation
@@ -237,8 +307,12 @@ class AlpcClient(AlpcTransportBase):
             send_msg = AlpcMessagePort.from_buffer_size(buffersize.value)
             send_msg.data = connect_message
             send_msg_attr = MessageAttribute.with_all_attributes()
+        elif isinstance(connect_message, AlpcMessage):
+            send_msg = connect_message.port_message
+            send_msg_attr = connect_message.attributes
+            buffersize = gdef.DWORD(connect_message.port_message_buffer_size)
         else:
-            raise NotImplementedError("TODO: connect_to_port with type(connect_message) == AlpcMessage")
+            raise ValueError("Don't know how to send <{0!r}> as connect message".format(connect_message))
 
         receive_attr = MessageAttribute.with_all_attributes()
         winproxy.NtAlpcConnectPort(handle, port_name_unicode, obj_attr, port_attr, flags, None, send_msg, buffersize, send_msg_attr, receive_attr, timeout)
@@ -296,30 +370,37 @@ class AlpcServer(AlpcTransportBase):
             obj_attr.SecurityQualityOfService = None
         if port_attr is None:
             port_attr = gdef.ALPC_PORT_ATTRIBUTES()
-            port_attr.Flags = 0
+            # port_attr.Flags = port_attr_flags
+            # port_attr.Flags = 0x2080000
+            port_attr.Flags = 0x90000
             port_attr.MaxMessageLength = msglen
             port_attr.MemoryBandwidth = 0
             port_attr.MaxPoolUsage = 0xffffffff
             port_attr.MaxSectionSize = 0xffffffff
             port_attr.MaxViewSize = 0xffffffff
             port_attr.MaxTotalSectionSize = 0xffffffff
-            port_attr.DupObjectTypes = 0
+            port_attr.DupObjectTypes = 0xffffffff
+            # windows.utils.print_ctypes_struct(port_attr, "   - PORT_ATTR", hexa=True)
 
         winproxy.NtAlpcCreatePort(handle, obj_attr, port_attr)
         self.port_name = raw_name
         self.handle = handle.value
 
-    def accept_connection(self, msg, port_attr=None):
+    def accept_connection(self, msg, port_attr=None, port_context=None):
         rhandle = gdef.HANDLE()
 
         if port_attr is None:
             port_attr = gdef.ALPC_PORT_ATTRIBUTES()
-            port_attr.Flags = gdef.ALPC_HANDLEFLG_DUPLICATE_INHERIT
-            port_attr.Flags = 0 # Testing
-            port_attr.DupObjectTypes = 4
-            port_attr.MaxMessageLength = 0x1000
+            port_attr.Flags = 0x80000
+            # port_attr.Flags = 0x80000 + 0x2000000
+            # port_attr.Flags =  0x2000000
+            port_attr.MaxMessageLength = self.DEFAULT_MAX_MESSAGE_LENGTH
             port_attr.MemoryBandwidth = 0
             port_attr.MaxPoolUsage = 0xffffffff
-
-        winproxy.NtAlpcAcceptConnectPort(rhandle, self.handle, 0, None, port_attr, None, msg.port_message, None, True)
+            port_attr.MaxSectionSize = 0xffffffff
+            port_attr.MaxViewSize = 0xffffffff
+            port_attr.MaxTotalSectionSize = 0xffffffff
+            port_attr.DupObjectTypes = 0xffffffff
+        # windows.utils.print_ctypes_struct(port_attr, "   - CONN_PORT_ATTR", hexa=True)
+        winproxy.NtAlpcAcceptConnectPort(rhandle, self.handle, 0, None, port_attr, port_context, msg.port_message, None, True)
         return rhandle.value, msg

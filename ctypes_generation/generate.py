@@ -725,6 +725,7 @@ defs_with_ntstatus = InitialDefGenerator(from_here("definitions\\windef.txt"), f
 # YOLO HACK FOR NOW :DD
 defs_with_ntstatus.append_input_file(from_here("definitions\\wintrust_crypt_def.txt"))
 defs_with_ntstatus.append_input_file(from_here("definitions\\windef_error.txt"))
+defs_with_ntstatus.append_input_file(from_here("definitions\\custom_rpc_windef.txt"))
 
 
 structs = StructGenerator(from_here("definitions\\winstruct.txt"), from_here(r"..\windows\generated_def\\winstructs.py"), dependances=[defs_with_ntstatus])
