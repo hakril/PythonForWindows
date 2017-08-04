@@ -13,6 +13,7 @@ from ..generated_def.winstructs import *
 
 
 # Function resolution !
+# should be in winproxy ?
 def get_func_addr(dll_name, func_name):
         # Load the DLL
         ctypes.WinDLL(dll_name)

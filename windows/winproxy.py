@@ -1,6 +1,8 @@
 import ctypes
 import functools
 
+import windows
+
 from ctypes.wintypes import *
 from windows.generated_def.winstructs import *
 from windows.generated_def.windef import *
@@ -8,6 +10,7 @@ import windows.generated_def.winfuncs as winfuncs
 from windows.generated_def.ntstatus import NtStatusException
 from windows.dbgprint import dbgprint
 
+## winfuncs helpers
 
 def is_implemented(winfunc):
     try:
@@ -15,6 +18,28 @@ def is_implemented(winfunc):
     except ExportNotFound:
         return False
     return True
+
+
+def get_target(winfunc):
+    """POC for new hook"""
+    return winfunc.target_dll, winfunc.target_func
+
+
+# Rip-of windows.utils: should be removed from the other place ?
+def _get_func_addr(dll_name, func_name):
+        # Load the DLL
+        ctypes.WinDLL(dll_name)
+        modules = windows.current_process.peb.modules
+        if not dll_name.lower().endswith(".dll"):
+            dll_name += ".dll"
+        mod = [x for x in modules if x.name == dll_name][0]
+        return mod.pe.exports[func_name]
+
+
+def resolve(winfunc):
+    winfunc.force_resolution()
+    return _get_func_addr(*get_target(winfunc))
+
 
 class Kernel32Error(WindowsError):
     def __new__(cls, func_name):

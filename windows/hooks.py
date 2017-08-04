@@ -1,6 +1,7 @@
 import sys
 import ctypes
 
+import windows
 import windows.utils as utils
 from . import native_exec
 from .generated_def import winfuncs
@@ -100,3 +101,26 @@ class IATHook(object):
     # Use this tricks to prevent garbage collection of hook ?
     #def __del__(self):
     #    pass
+
+
+## New simple hook API based on winproxy
+
+def setup_hook(target, hook, dll_to_hook):
+    "TODO: Test and doc :D"
+    dll_to_hook = "python27.dll"
+    dll_name, api_name = windows.winproxy.get_target(target)
+    prototype = target.prototype
+    hook._types_info = (prototype._restype_,) + prototype._argtypes_
+
+    if not dll_name.endswith(".dll"):
+        dll_name += ".dll"
+    # Get the peb of our process
+    peb = windows.current_process.peb
+    # Get the dll_to_hook
+    module_to_hook = [m for m in peb.modules if m.name.lower() == dll_to_hook.lower()][0]
+    # Get the iat entries for DLL dll_name
+    adv_imports = module_to_hook.pe.imports[dll_name]
+    # Get RegOpenKeyExA iat entry
+    iat = [n for n in adv_imports if n.name == api_name][0]
+    iat.set_hook(hook)
+    return iat
