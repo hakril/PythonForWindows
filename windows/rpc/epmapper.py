@@ -69,14 +69,14 @@ def explode_alpc_tower(tower):
     if not (lhs[0] == 0xd):
         raise ValueError("Floor 0: IID expected")
     iid =  windows.com.IID.from_buffer_copy(lhs[1:17])
-    object = windows.rpc.RPC_SYNTAX_IDENTIFIER(iid, lhs[17], lhs[18])
+    object = windows.rpc.RPC_IF_ID(iid, lhs[17], lhs[18])
 
     # Floor 1
     lhs, rhs = parse_floor(stream)
     if not (lhs[0] == 0xd):
         raise ValueError("Floor 0: IID expected")
     iid =  windows.com.IID.from_buffer_copy(lhs[1:17])
-    syntax = windows.rpc.RPC_SYNTAX_IDENTIFIER(iid, lhs[17], lhs[18])
+    syntax = windows.rpc.RPC_IF_ID(iid, lhs[17], lhs[18])
 
     # Floor 2
     lhs, rhs = parse_floor(stream)
@@ -100,11 +100,11 @@ def construct_alpc_tower(object, syntax, protseq, endpoint, address):
     if protseq != "ncalrpc":
         raise NotImplementedError("Construct ALPC Tower with protseq != 'ncalrpc'")
     # Floor 0
-    floor_0_lsh = TOWER_PROTOCOL_IS_UUID + bytearray(object.SyntaxGUID) + struct.pack("<BB", object.MajorVersion, object.MinorVersion)
+    floor_0_lsh = TOWER_PROTOCOL_IS_UUID + bytearray(object.Uuid) + struct.pack("<BB", object.MajorVersion, object.MinorVersion)
     floor_0_rsh = TOWER_EMPTY_RHS
     floor_0 = craft_floor(floor_0_lsh, floor_0_rsh)
     # Floor 1
-    floor_1_lsh = TOWER_PROTOCOL_IS_UUID + bytearray(object.SyntaxGUID) + struct.pack("<BB", object.MajorVersion, object.MinorVersion)
+    floor_1_lsh = TOWER_PROTOCOL_IS_UUID + bytearray(object.Uuid) + struct.pack("<BB", object.MajorVersion, object.MinorVersion)
     floor_1_rsh = TOWER_EMPTY_RHS
     floor_1 = craft_floor(floor_1_lsh, floor_1_rsh)
     # Floor 2
@@ -127,10 +127,10 @@ def endpoint_map_alpc(targetiid, version=(1,0), nb_response=1, sid=gdef.WinLocal
 
     # Compute request tower
     ## object
-    rpc_object = windows.rpc.RPC_SYNTAX_IDENTIFIER(targetiid, *version)
+    rpc_object = windows.rpc.RPC_IF_ID(targetiid, *version)
     ## Syntax
     syntax_iid = windows.com.IID.from_string("8a885d04-1ceb-11c9-9fe8-08002b104860")
-    rpc_syntax = windows.rpc.RPC_SYNTAX_IDENTIFIER(syntax_iid, 2, 0)
+    rpc_syntax = windows.rpc.RPC_IF_ID(syntax_iid, 2, 0)
     ## Forge tower
     tower_array_size, towerarray = construct_alpc_tower(rpc_object, rpc_syntax, "ncalrpc", "", None)
 

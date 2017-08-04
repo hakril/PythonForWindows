@@ -104,10 +104,8 @@ class IATHook(object):
 
 
 ## New simple hook API based on winproxy
-
 def setup_hook(target, hook, dll_to_hook):
     "TODO: Test and doc :D"
-    dll_to_hook = "python27.dll"
     dll_name, api_name = windows.winproxy.get_target(target)
     prototype = target.prototype
     hook._types_info = (prototype._restype_,) + prototype._argtypes_

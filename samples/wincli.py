@@ -1,5 +1,7 @@
 import argparse
 import os.path
+import code
+
 import windows
 import windows.generated_def as gdef
 
@@ -27,7 +29,7 @@ def find_one_process_from_kwargs(pid=None, name=None, **kwargs):
     print("Multiple process with name {0}, please choose:".format(name))
     for i, proc in enumerate(targets):
         print("  {0}) {1}".format(i, proc))
-    choice = raw_input("Number > ")
+    choice = int(raw_input("Number > "), 0)
     try:
         return targets[choice]
     except IndexError:
@@ -135,6 +137,18 @@ def proc_command_addr(**kwargs):
         if res[1] != "NOTFOUND":
             print("   * {0}!{1}+{2:#x}".format(mod.name, res[1], dist))
 
+def proc_find_modules(**kwargs):
+    targets = find_processes_from_kwargs(**kwargs)
+    for target in targets:
+        mod_name = kwargs["modname"]
+        try:
+            mods = [m.name for m in target.peb.modules if mod_name.lower() in m.name.lower()]
+            if mods:
+                print(target)
+                print(mods)
+        except Exception as e:
+            print(e)
+
 # Services
 
 def find_services_from_kwargs(name=None, **kwargs):
@@ -164,11 +178,19 @@ def serv_command_list(**kwargs):
     for serv in find_services_from_kwargs(**kwargs):
         print (serv)
 
+def serv_command_get(**kwargs):
+    print("Listing services")
+    servs = find_services_from_kwargs(**kwargs)
+    code.InteractiveConsole(locals()).interact()
+
 def serv_command_start(**kwargs):
     serv = find_one_service_from_kwargs(**kwargs)
     serv.start()
     serv = find_one_service_from_kwargs(**kwargs)
     print(serv)
+
+
+
 
 parser = argparse.ArgumentParser(prog=__file__)
 subparsers = parser.add_subparsers(description='valid subcommands',)
@@ -187,7 +209,7 @@ proc_list_parser_ = proc_subparsers.add_parser('list')
 proc_list_parser_.set_defaults(func=proc_command_list)
 
 proc_inject_parser = proc_subparsers.add_parser('shell')
-proc_inject_parser.set_defaults(func=proc_command_shell)
+
 
 proc_inject_parser = proc_subparsers.add_parser('kill')
 proc_inject_parser.set_defaults(func=proc_command_kill)
@@ -198,6 +220,10 @@ proc_inject_parser.set_defaults(func=proc_command_killall)
 proc_addr_parser = proc_subparsers.add_parser('addr')
 proc_addr_parser.set_defaults(func=proc_command_addr)
 proc_addr_parser.add_argument('addresses', type=lambda x: int(x, 0), nargs="+", help='The addresses to explore')
+
+proc_findmod_parser = proc_subparsers.add_parser('findmod')
+proc_findmod_parser.set_defaults(func=proc_find_modules)
+proc_findmod_parser.add_argument('modname', help='The name of the module to find')
 
 # Services commandes
 serv_parser = subparsers.add_parser('serv')
@@ -213,6 +239,10 @@ serv_list_parser_.set_defaults(func=serv_command_list)
 
 serv_list_parser_ = serv_subparsers.add_parser('start')
 serv_list_parser_.set_defaults(func=serv_command_start)
+
+serv_list_parser_ = serv_subparsers.add_parser('get')
+serv_list_parser_.set_defaults(func=serv_command_get)
+
 
 if __name__ == "__main__":
     res = parser.parse_args()
