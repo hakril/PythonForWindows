@@ -394,7 +394,7 @@ class FirewallRule(cominterfaces.INetFwRule):
         return icmp_type_and_code.value
 
     def __repr__(self):
-        return '<{0} "{1}">'.format(type(self).__name__, self.name)
+        return u'<{0} "{1}">'.format(type(self).__name__, self.name)
 
 class Network(object):
     NetFwPolicy2 = windows.com.IID.from_string("E2B3C97F-6AE1-41AC-817A-F6F92166D7DD")

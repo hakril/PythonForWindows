@@ -761,6 +761,8 @@ class CurrentProcess(Process):
 
     allocator = native_exec.native_function.allocator
 
+    name = "CurrentProcess" # Used by Winthread for __repr__
+
     # Use RtlGetCurrentPeb ?
     def get_peb_builtin(self):
         if self.get_peb is not None:

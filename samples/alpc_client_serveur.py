@@ -8,20 +8,23 @@ PORT_NAME = r"\RPC Control\YOLOPORT"
 def alpc_server():
     server = windows.alpc.AlpcServer(PORT_NAME) # NtAlpcCreatePort
     print("[SERV] PORT CREATED")
-    attrs, msg = server.wait_data() # NtAlpcSendWaitReceivePort (send_msg = None)
+    msg = server.recv() # NtAlpcSendWaitReceivePort (send_msg = None)
     print("[SERV] Message type = {0:#x}".format(msg.u2.s2.Type))
     print("[SERV] Received data: <{0}>".format(msg.data))
-    if msg.u2.s2.Type & LPC_CONNECTION_REQUEST:
+    if msg.type & 0xfff & LPC_CONNECTION_REQUEST:
         print("[SERV] Connection request")
         msg.data = "WOKAY"
         server.accept_connection(msg) # NtAlpcAcceptConnectPort
-    attrs, msg = server.wait_data() # NtAlpcSendWaitReceivePort (send_msg = None)
+    msg = server.recv() # NtAlpcSendWaitReceivePort (send_msg = None)
     print("[SERV] Received message")
     print("[SERV] Message type = {0:#x}".format(msg.u2.s2.Type))
-    if msg.u2.s2.Type & LPC_REQUEST:
+    if msg.type & 0xfff & LPC_REQUEST:
         print("[SERV] ALPC request: <{0}>".format(msg.data))
-        # Copy MessageId + NtAlpcSendWaitReceivePort
-        server.reply(msg, "REQUEST '{0}' DONE".format(msg.data)) 
+        # We can reply by to way:
+        #    - Send the same message with modified data
+        #    - Recreate a Message and copy the MessageId
+        msg.data = "REQUEST '{0}' DONE".format(msg.data)
+        server.send(msg)
 
 
 def alpc_client():
@@ -29,7 +32,7 @@ def alpc_client():
     connect_response = client.connect_to_port(PORT_NAME, "COUCOU") # NtAlpcConnectPort
     print("[CLIENT] Connected: {0}".format(connect_response.data))
     print("[CLIENT] Send Message <POUET>")
-    attr, response = client.send_receive("POUET") # NtAlpcSendWaitReceivePort
+    response = client.send_receive("POUET") # NtAlpcSendWaitReceivePort
     print("[CLIENT] Server response: <{0}>".format(response.data))
 
 

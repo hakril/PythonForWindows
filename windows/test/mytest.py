@@ -75,6 +75,10 @@ class WindowsTestCase(unittest.TestCase):
             # Re-set the handle to be able to kill it
             calc._handle = save_handle
 
+    @check_for_gc_garbage
+    def test_current_process_threads(self):
+        # Had a bug with WinThread and CurrentProcess.name (which was non-existant)
+        self.assertTrue([repr(t) for t in windows.current_process.threads])
 
     @check_for_gc_garbage
     def test_pop_calc_32(self):
