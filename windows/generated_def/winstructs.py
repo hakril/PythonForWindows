@@ -103,6 +103,10 @@ class EnumValue(Flag):
     def __repr__(self):
         return "{0}.{1}({2})".format(self.enum_name, self.name, hex(self))
 
+    # Fix pickling with protocol 2
+    def __getnewargs__(self, *args):
+        return self.enum_name, self.name, int(self)
+
 
 class EnumType(DWORD):
     values = ()
