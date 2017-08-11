@@ -251,6 +251,14 @@ class InitialDefGenerator(CtypesGenerator):
         print("<{0}> generated".format(self.outfilename))
         return ctypes_code
 
+    def generate_doc(self, target_file):
+        all_lines = [".. currentmodule:: windows.generated_def\n"
+                     "Windef\n"
+                     "------\n"]
+        all_lines += [".. autodata:: {windef.name}\n".format(windef=windef) for windef in self.parse()]
+        with open(target_file, "w") as f:
+            f.writelines(all_lines)
+
 class StructGenerator(CtypesGenerator):
     PARSER = struct_parser.WinStructParser
     IMPORT_HEADER = dedent ("""
@@ -337,6 +345,41 @@ class StructGenerator(CtypesGenerator):
         self.data[1].extend(new_data[1])
         self.analyse(self.data)
         self.check_dependances()
+
+    def generate_doc(self, target_file):
+        all_lines = [".. currentmodule:: windows.generated_def\n"
+                     "Winstructs\n"
+                     "----------\n"]
+        structs, enums = self.parse()
+        for struct in structs:
+            all_lines.append("{0}\n{1}\n".format(struct.name, "-" * len(struct.name)))
+            for name, type in  struct.typedef.items():
+                all_lines.append(".. class:: {0}\n\n".format(name))
+                if hasattr(type, "type"):
+                    all_lines.append("    Pointer to :class:`{0}`\n\n".format(type.type.name))
+                else:
+                    all_lines.append("    Alias for :class:`{0}`\n\n".format(type.name))
+
+            all_lines.append(".. class:: {0}\n".format(struct.name))
+            for ftype, fname, nb in struct.fields:
+                array_str = " ``[{nb}]``".format(nb=nb) if nb > 1 else ""
+                all_lines.append("\n    .. attribute:: {0}\n\n        :class:`{1}`{2}\n\n".format(fname, ftype.name, array_str))
+
+        for enum in enums:
+            all_lines.append("{0}\n{1}\n".format(enum.name, "-" * len(enum.name)))
+            for name, type in  enum.typedef.items():
+                all_lines.append(".. class:: {0}\n\n".format(name))
+                if hasattr(type, "type"):
+                    all_lines.append("    Pointer to :class:`{0}`\n\n".format(type.type.name))
+                else:
+                    all_lines.append("    Alias for :class:`{0}`\n\n".format(type.name))
+            all_lines.append(".. class:: {0}\n\n".format(enum.name))
+            for enum_value, enum_name in enum.fields:
+                all_lines.append("\n    .. attribute:: {0}({1})\n\n".format(enum_name, enum_value))
+
+        with open(target_file, "w") as f:
+            f.writelines(all_lines)
+
 
 class FuncGenerator(CtypesGenerator):
     PARSER = func_parser.WinFuncParser
@@ -435,6 +478,14 @@ class NtStatusGenerator(CtypesGenerator):
             f.write(ctypes_code)
         print("<{0}> generated".format(self.outfilename))
         return ctypes_code
+
+    def generate_doc(self, target_file):
+        all_lines = [".. currentmodule:: windows.generated_def\n"
+                     "Ntstatus\n"
+                     "--------\n"]
+        all_lines += [".. autodata:: {nstatus_name}\n".format(nstatus_name=nstatus[1]) for nstatus in self.parse()]
+        with open(target_file, "w") as f:
+            f.writelines(all_lines)
 
 
 class InitialCOMGenerator(CtypesGenerator):
@@ -742,6 +793,31 @@ functions.append_input_file(from_here("definitions\\wintrust_crypt_func.txt"))
 
 com = InitialCOMGenerator(from_here("definitions\\com\\*.txt"), DEFAULT_INTERFACE_TO_IID, from_here(r"..\windows\generated_def\\interfaces.py"), dependances=[structs, defs_with_ntstatus])
 
+# check for collision between ntstatus and defs_with_ntstatus
+
+# Check for multiple define in defs_with_ntstatus
+import collections
+
+all_defs_names = [x.name for x in defs_with_ntstatus.parse()]
+
+for name, nb in collections.Counter(all_defs_names).most_common():
+    if nb > 1:
+        print("Duplicated windef define: {0} ({1} defines)".format(name, nb))
+    if nb == 1:
+        break
+
+all_ntstatus_names = [x[1] for x in ntstatus.parse()]
+
+# Check for multiple define in ntstatus
+for name, nb in collections.Counter(all_ntstatus_names).most_common():
+    if nb > 1:
+        print("Duplicated ntstatus define: {0} ({1} defines)".format(name, nb))
+    if nb == 1:
+        break
+
+for collision_name in set(all_defs_names) & set(all_ntstatus_names):
+    print("Duplicated ntstatus + windef define: {0}".format(collision_name))
+
 
 if __name__ == "__main__":
     ntstatus.generate()
@@ -749,3 +825,7 @@ if __name__ == "__main__":
     structs.generate()
     functions.generate()
     com.generate()
+    print("Generating documentation")
+    ntstatus.generate_doc(from_here(r"..\docs\source\ntstatus_generated.rst"))
+    defs_with_ntstatus.generate_doc(from_here(r"..\docs\source\windef_generated.rst"))
+    structs.generate_doc(from_here(r"..\docs\source\winstructs_generated.rst"))

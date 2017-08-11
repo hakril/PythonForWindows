@@ -21,10 +21,13 @@ Contents:
    debug.rst
    com.rst
    crypto.rst
+   alpc.rst
    iat_hook.rst
    wip.rst
    internals.rst
    sample.rst
+   windef.rst
+   testing.rst
 
 
 Indices and tables
