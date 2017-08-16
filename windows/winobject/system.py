@@ -180,6 +180,13 @@ class System(object):
         version = self.get_version()
         return version_map.get(version.wProductType, version.wProductType)
 
+
+    @utils.fixedpropety
+    def windir(self):
+        buffer = ctypes.c_buffer(0x100)
+        reslen = winproxy.GetWindowsDirectoryA(buffer)
+        return buffer[:reslen]
+
     def get_version(self):
         data = windows.generated_def.OSVERSIONINFOEXA()
         data.dwOSVersionInfoSize = ctypes.sizeof(data)

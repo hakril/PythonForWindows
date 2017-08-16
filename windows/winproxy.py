@@ -730,6 +730,22 @@ def UpdateProcThreadAttribute(lpAttributeList, dwFlags=0, Attribute=NeededParame
 def DeleteProcThreadAttributeList(lpAttributeList):
     return DeleteProcThreadAttributeList.ctypes_function(lpAttributeList)
 
+
+@Kernel32Proxy("GetWindowsDirectoryA")
+def GetWindowsDirectoryA(lpBuffer, uSize=None):
+    if uSize is None:
+        uSize = DWORD(len(lpBuffer))
+    return GetWindowsDirectoryA.ctypes_function(lpBuffer, uSize)
+
+
+@Kernel32Proxy("GetWindowsDirectoryW")
+def GetWindowsDirectoryW(lpBuffer, uSize=None):
+    if uSize is None:
+        uSize = DWORD(len(lpBuffer))
+    return GetWindowsDirectoryW.ctypes_function(lpBuffer, uSize)
+
+
+
 # ### NTDLL #### #
 
 @NtdllProxy('NtReadVirtualMemory', error_ntstatus)

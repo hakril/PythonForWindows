@@ -132,7 +132,7 @@ class WinEnum(object):
         #lines = ["{0} = DWORD".format(self.name)]
         lines = []
         for i, name in self.fields:
-            lines.append('{0} = EnumValue("{2}", "{0}", {1})'.format(name, hex(i), self.name))
+            lines.append('{0} = EnumValue("{2}", "{0}", {1})'.format(name, "{0:#x}".format(i), self.name))
 
         lines += ["class {0}(EnumType):".format(self.name)]
         lines += ["    values = [{0}]".format(", ".join([name for i, name in self.fields]))]
