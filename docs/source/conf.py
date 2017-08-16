@@ -365,3 +365,13 @@ epub_exclude_files = ['search.html']
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {'http://docs.python.org/': None}
+
+
+def get_rst(app, what, name, obj, options, lines):
+    pass
+
+def get_rst2(app, what, name, obj, options, signature, return_annotation):
+    pass
+
+def setup(app):
+    pass

@@ -206,11 +206,11 @@ class InitialDefGenerator(CtypesGenerator):
             def __getnewargs__(self, *args):
                 return self.name, long(self)
 
-        class StrFlags(str):
+        class StrFlag(str):
             def __new__(cls, name, value):
                 if isinstance(value, cls):
                     return value
-                return super(StrFlags, cls).__new__(cls, value)
+                return super(StrFlag, cls).__new__(cls, value)
 
             def __init__(self, name, value):
                 self.name = name
@@ -227,8 +227,7 @@ class InitialDefGenerator(CtypesGenerator):
         def make_flag(name, value):
             if isinstance(value, (int, long)):
                 return Flag(name, value)
-            return StrFlags(name, value)
-
+            return StrFlag(name, value)
 
         """)
 
@@ -350,9 +349,10 @@ class StructGenerator(CtypesGenerator):
         all_lines = [".. currentmodule:: windows.generated_def\n"
                      "Winstructs\n"
                      "----------\n"]
+        struct_separator = "'"
         structs, enums = self.parse()
         for struct in structs:
-            all_lines.append("{0}\n{1}\n".format(struct.name, "-" * len(struct.name)))
+            all_lines.append("{0}\n{1}\n".format(struct.name, struct_separator * len(struct.name)))
             for name, type in  struct.typedef.items():
                 all_lines.append(".. class:: {0}\n\n".format(name))
                 if hasattr(type, "type"):
@@ -365,8 +365,9 @@ class StructGenerator(CtypesGenerator):
                 array_str = " ``[{nb}]``".format(nb=nb) if nb > 1 else ""
                 all_lines.append("\n    .. attribute:: {0}\n\n        :class:`{1}`{2}\n\n".format(fname, ftype.name, array_str))
 
+        all_lines += ["WinEnums\n--------\n"]
         for enum in enums:
-            all_lines.append("{0}\n{1}\n".format(enum.name, "-" * len(enum.name)))
+            all_lines.append("{0}\n{1}\n".format(enum.name, struct_separator * len(enum.name)))
             for name, type in  enum.typedef.items():
                 all_lines.append(".. class:: {0}\n\n".format(name))
                 if hasattr(type, "type"):

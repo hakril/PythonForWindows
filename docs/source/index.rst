@@ -22,12 +22,11 @@ Contents:
    com.rst
    crypto.rst
    alpc.rst
+   generated.rst
    iat_hook.rst
    wip.rst
    internals.rst
    sample.rst
-   windef.rst
-   testing.rst
 
 
 Indices and tables

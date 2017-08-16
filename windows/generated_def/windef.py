@@ -27,11 +27,11 @@ class Flag(long):
     def __getnewargs__(self, *args):
         return self.name, long(self)
 
-class StrFlags(str):
+class StrFlag(str):
     def __new__(cls, name, value):
         if isinstance(value, cls):
             return value
-        return super(StrFlags, cls).__new__(cls, value)
+        return super(StrFlag, cls).__new__(cls, value)
 
     def __init__(self, name, value):
         self.name = name
@@ -48,8 +48,7 @@ class StrFlags(str):
 def make_flag(name, value):
     if isinstance(value, (int, long)):
         return Flag(name, value)
-    return StrFlags(name, value)
-
+    return StrFlag(name, value)
 
 
 from ntstatus import *

@@ -2,7 +2,7 @@
 Winstructs
 ----------
 _LIST_ENTRY
------------
+'''''''''''
 .. class:: PLIST_ENTRY
 
     Pointer to :class:`_LIST_ENTRY`
@@ -27,7 +27,7 @@ _LIST_ENTRY
         :class:`_LIST_ENTRY`
 
 _PEB_LDR_DATA
--------------
+'''''''''''''
 .. class:: PPEB_LDR_DATA
 
     Pointer to :class:`_PEB_LDR_DATA`
@@ -53,7 +53,7 @@ _PEB_LDR_DATA
         :class:`LIST_ENTRY`
 
 _LSA_UNICODE_STRING
--------------------
+'''''''''''''''''''
 .. class:: PUNICODE_STRING
 
     Pointer to :class:`_LSA_UNICODE_STRING`
@@ -87,7 +87,7 @@ _LSA_UNICODE_STRING
         :class:`PWSTR`
 
 _RTL_USER_PROCESS_PARAMETERS
-----------------------------
+''''''''''''''''''''''''''''
 .. class:: PRTL_USER_PROCESS_PARAMETERS
 
     Pointer to :class:`_RTL_USER_PROCESS_PARAMETERS`
@@ -118,7 +118,7 @@ _RTL_USER_PROCESS_PARAMETERS
         :class:`UNICODE_STRING`
 
 _PEB
-----
+''''
 .. class:: PPEB
 
     Pointer to :class:`_PEB`
@@ -194,7 +194,7 @@ _PEB
         :class:`ULONG`
 
 _SECURITY_ATTRIBUTES
---------------------
+''''''''''''''''''''
 .. class:: SECURITY_ATTRIBUTES
 
     Alias for :class:`_SECURITY_ATTRIBUTES`
@@ -224,7 +224,7 @@ _SECURITY_ATTRIBUTES
         :class:`BOOL`
 
 _SYSTEM_VERIFIER_INFORMATION
-----------------------------
+''''''''''''''''''''''''''''
 .. class:: PSYSTEM_VERIFIER_INFORMATION
 
     Pointer to :class:`_SYSTEM_VERIFIER_INFORMATION`
@@ -360,7 +360,7 @@ _SYSTEM_VERIFIER_INFORMATION
         :class:`SIZE_T`
 
 _CLIENT_ID
-----------
+''''''''''
 .. class:: CLIENT_ID
 
     Alias for :class:`_CLIENT_ID`
@@ -377,7 +377,7 @@ _CLIENT_ID
         :class:`HANDLE`
 
 _CLIENT_ID64
-------------
+''''''''''''
 .. class:: CLIENT_ID64
 
     Alias for :class:`_CLIENT_ID64`
@@ -394,7 +394,7 @@ _CLIENT_ID64
         :class:`ULONG64`
 
 _CLIENT_ID32
-------------
+''''''''''''
 .. class:: CLIENT_ID32
 
     Alias for :class:`_CLIENT_ID32`
@@ -411,7 +411,7 @@ _CLIENT_ID32
         :class:`ULONG`
 
 _LDR_DATA_TABLE_ENTRY
----------------------
+'''''''''''''''''''''
 .. class:: PLDR_DATA_TABLE_ENTRY
 
     Pointer to :class:`_LDR_DATA_TABLE_ENTRY`
@@ -477,7 +477,7 @@ _LDR_DATA_TABLE_ENTRY
         :class:`ULONG`
 
 _IMAGE_FILE_HEADER
-------------------
+''''''''''''''''''
 .. class:: IMAGE_FILE_HEADER
 
     Alias for :class:`_IMAGE_FILE_HEADER`
@@ -523,7 +523,7 @@ _IMAGE_FILE_HEADER
         :class:`WORD`
 
 _IMAGE_DATA_DIRECTORY
----------------------
+'''''''''''''''''''''
 .. class:: IMAGE_DATA_DIRECTORY
 
     Alias for :class:`_IMAGE_DATA_DIRECTORY`
@@ -544,7 +544,7 @@ _IMAGE_DATA_DIRECTORY
         :class:`DWORD`
 
 _IMAGE_SECTION_HEADER
----------------------
+'''''''''''''''''''''
 .. class:: PIMAGE_SECTION_HEADER
 
     Pointer to :class:`_IMAGE_SECTION_HEADER`
@@ -605,7 +605,7 @@ _IMAGE_SECTION_HEADER
         :class:`DWORD`
 
 _IMAGE_OPTIONAL_HEADER64
-------------------------
+''''''''''''''''''''''''
 .. class:: PIMAGE_OPTIONAL_HEADER64
 
     Pointer to :class:`_IMAGE_OPTIONAL_HEADER64`
@@ -766,7 +766,7 @@ _IMAGE_OPTIONAL_HEADER64
         :class:`IMAGE_DATA_DIRECTORY` ``[IMAGE_NUMBEROF_DIRECTORY_ENTRIES]``
 
 _IMAGE_OPTIONAL_HEADER
-----------------------
+''''''''''''''''''''''
 .. class:: PIMAGE_OPTIONAL_HEADER32
 
     Pointer to :class:`_IMAGE_OPTIONAL_HEADER`
@@ -932,7 +932,7 @@ _IMAGE_OPTIONAL_HEADER
         :class:`IMAGE_DATA_DIRECTORY` ``[IMAGE_NUMBEROF_DIRECTORY_ENTRIES]``
 
 _IMAGE_NT_HEADERS64
--------------------
+'''''''''''''''''''
 .. class:: PIMAGE_NT_HEADERS64
 
     Pointer to :class:`_IMAGE_NT_HEADERS64`
@@ -958,7 +958,7 @@ _IMAGE_NT_HEADERS64
         :class:`IMAGE_OPTIONAL_HEADER64`
 
 _IMAGE_NT_HEADERS
------------------
+'''''''''''''''''
 .. class:: IMAGE_NT_HEADERS32
 
     Alias for :class:`_IMAGE_NT_HEADERS`
@@ -984,7 +984,7 @@ _IMAGE_NT_HEADERS
         :class:`IMAGE_OPTIONAL_HEADER32`
 
 _IMAGE_IMPORT_DESCRIPTOR
-------------------------
+''''''''''''''''''''''''
 .. class:: IMAGE_IMPORT_DESCRIPTOR
 
     Alias for :class:`_IMAGE_IMPORT_DESCRIPTOR`
@@ -1020,7 +1020,7 @@ _IMAGE_IMPORT_DESCRIPTOR
         :class:`DWORD`
 
 _IMAGE_IMPORT_BY_NAME
----------------------
+'''''''''''''''''''''
 .. class:: PIMAGE_IMPORT_BY_NAME
 
     Pointer to :class:`_IMAGE_IMPORT_BY_NAME`
@@ -1041,7 +1041,7 @@ _IMAGE_IMPORT_BY_NAME
         :class:`BYTE` ``[1]``
 
 _IMAGE_EXPORT_DIRECTORY
------------------------
+'''''''''''''''''''''''
 .. class:: IMAGE_EXPORT_DIRECTORY
 
     Alias for :class:`_IMAGE_EXPORT_DIRECTORY`
@@ -1107,7 +1107,7 @@ _IMAGE_EXPORT_DIRECTORY
         :class:`DWORD`
 
 _MEMORY_BASIC_INFORMATION
--------------------------
+'''''''''''''''''''''''''
 .. class:: PMEMORY_BASIC_INFORMATION
 
     Pointer to :class:`_MEMORY_BASIC_INFORMATION`
@@ -1153,7 +1153,7 @@ _MEMORY_BASIC_INFORMATION
         :class:`DWORD`
 
 _THREAD_BASIC_INFORMATION
--------------------------
+'''''''''''''''''''''''''
 .. class:: THREAD_BASIC_INFORMATION
 
     Alias for :class:`_THREAD_BASIC_INFORMATION`
@@ -1194,7 +1194,7 @@ _THREAD_BASIC_INFORMATION
         :class:`KPRIORITY`
 
 _MEMORY_BASIC_INFORMATION32
----------------------------
+'''''''''''''''''''''''''''
 .. class:: MEMORY_BASIC_INFORMATION32
 
     Alias for :class:`_MEMORY_BASIC_INFORMATION32`
@@ -1240,7 +1240,7 @@ _MEMORY_BASIC_INFORMATION32
         :class:`DWORD`
 
 _MEMORY_BASIC_INFORMATION64
----------------------------
+'''''''''''''''''''''''''''
 .. class:: PMEMORY_BASIC_INFORMATION64
 
     Pointer to :class:`_MEMORY_BASIC_INFORMATION64`
@@ -1296,7 +1296,7 @@ _MEMORY_BASIC_INFORMATION64
         :class:`DWORD`
 
 _PSAPI_WORKING_SET_BLOCK
-------------------------
+''''''''''''''''''''''''
 .. class:: PSAPI_WORKING_SET_BLOCK
 
     Alias for :class:`_PSAPI_WORKING_SET_BLOCK`
@@ -1312,7 +1312,7 @@ _PSAPI_WORKING_SET_BLOCK
         :class:`PVOID`
 
 _PSAPI_WORKING_SET_BLOCK32
---------------------------
+''''''''''''''''''''''''''
 .. class:: PSAPI_WORKING_SET_BLOCK32
 
     Alias for :class:`_PSAPI_WORKING_SET_BLOCK32`
@@ -1328,7 +1328,7 @@ _PSAPI_WORKING_SET_BLOCK32
         :class:`DWORD`
 
 _PSAPI_WORKING_SET_BLOCK64
---------------------------
+''''''''''''''''''''''''''
 .. class:: PSAPI_WORKING_SET_BLOCK64
 
     Alias for :class:`_PSAPI_WORKING_SET_BLOCK64`
@@ -1344,7 +1344,7 @@ _PSAPI_WORKING_SET_BLOCK64
         :class:`ULONG64`
 
 _PSAPI_WORKING_SET_INFORMATION
-------------------------------
+''''''''''''''''''''''''''''''
 .. class:: PPSAPI_WORKING_SET_INFORMATION
 
     Pointer to :class:`_PSAPI_WORKING_SET_INFORMATION`
@@ -1365,7 +1365,7 @@ _PSAPI_WORKING_SET_INFORMATION
         :class:`PSAPI_WORKING_SET_BLOCK` ``[1]``
 
 _PSAPI_WORKING_SET_INFORMATION32
---------------------------------
+''''''''''''''''''''''''''''''''
 .. class:: PPSAPI_WORKING_SET_INFORMATION32
 
     Pointer to :class:`_PSAPI_WORKING_SET_INFORMATION32`
@@ -1386,7 +1386,7 @@ _PSAPI_WORKING_SET_INFORMATION32
         :class:`PSAPI_WORKING_SET_BLOCK32` ``[1]``
 
 _PSAPI_WORKING_SET_INFORMATION64
---------------------------------
+''''''''''''''''''''''''''''''''
 .. class:: PSAPI_WORKING_SET_INFORMATION64
 
     Alias for :class:`_PSAPI_WORKING_SET_INFORMATION64`
@@ -1407,7 +1407,7 @@ _PSAPI_WORKING_SET_INFORMATION64
         :class:`PSAPI_WORKING_SET_BLOCK64` ``[1]``
 
 _PSAPI_WORKING_SET_EX_BLOCK
----------------------------
+'''''''''''''''''''''''''''
 .. class:: PSAPI_WORKING_SET_EX_BLOCK
 
     Alias for :class:`_PSAPI_WORKING_SET_EX_BLOCK`
@@ -1423,7 +1423,7 @@ _PSAPI_WORKING_SET_EX_BLOCK
         :class:`PVOID`
 
 _PSAPI_WORKING_SET_EX_BLOCK32
------------------------------
+'''''''''''''''''''''''''''''
 .. class:: PPSAPI_WORKING_SET_EX_BLOCK32
 
     Pointer to :class:`_PSAPI_WORKING_SET_EX_BLOCK32`
@@ -1439,7 +1439,7 @@ _PSAPI_WORKING_SET_EX_BLOCK32
         :class:`DWORD`
 
 _PSAPI_WORKING_SET_EX_BLOCK64
------------------------------
+'''''''''''''''''''''''''''''
 .. class:: PSAPI_WORKING_SET_EX_BLOCK64
 
     Alias for :class:`_PSAPI_WORKING_SET_EX_BLOCK64`
@@ -1455,7 +1455,7 @@ _PSAPI_WORKING_SET_EX_BLOCK64
         :class:`ULONG64`
 
 _PSAPI_WORKING_SET_EX_INFORMATION
----------------------------------
+'''''''''''''''''''''''''''''''''
 .. class:: PPSAPI_WORKING_SET_EX_INFORMATION
 
     Pointer to :class:`_PSAPI_WORKING_SET_EX_INFORMATION`
@@ -1476,7 +1476,7 @@ _PSAPI_WORKING_SET_EX_INFORMATION
         :class:`PSAPI_WORKING_SET_EX_BLOCK`
 
 _PSAPI_WORKING_SET_EX_INFORMATION32
------------------------------------
+'''''''''''''''''''''''''''''''''''
 .. class:: PSAPI_WORKING_SET_EX_INFORMATION32
 
     Alias for :class:`_PSAPI_WORKING_SET_EX_INFORMATION32`
@@ -1497,7 +1497,7 @@ _PSAPI_WORKING_SET_EX_INFORMATION32
         :class:`PSAPI_WORKING_SET_EX_BLOCK32`
 
 _PSAPI_WORKING_SET_EX_INFORMATION64
------------------------------------
+'''''''''''''''''''''''''''''''''''
 .. class:: PPSAPI_WORKING_SET_EX_INFORMATION64
 
     Pointer to :class:`_PSAPI_WORKING_SET_EX_INFORMATION64`
@@ -1518,7 +1518,7 @@ _PSAPI_WORKING_SET_EX_INFORMATION64
         :class:`PSAPI_WORKING_SET_EX_BLOCK64`
 
 _STARTUPINFOA
--------------
+'''''''''''''
 .. class:: LPSTARTUPINFOA
 
     Pointer to :class:`_STARTUPINFOA`
@@ -1619,7 +1619,7 @@ _STARTUPINFOA
         :class:`HANDLE`
 
 _STARTUPINFOW
--------------
+'''''''''''''
 .. class:: STARTUPINFOW
 
     Alias for :class:`_STARTUPINFOW`
@@ -1720,7 +1720,7 @@ _STARTUPINFOW
         :class:`HANDLE`
 
 _STARTUPINFOEXA
----------------
+'''''''''''''''
 .. class:: LPSTARTUPINFOEXA
 
     Pointer to :class:`_STARTUPINFOEXA`
@@ -1741,7 +1741,7 @@ _STARTUPINFOEXA
         :class:`LPPROC_THREAD_ATTRIBUTE_LIST`
 
 _STARTUPINFOEXW
----------------
+'''''''''''''''
 .. class:: STARTUPINFOEXW
 
     Alias for :class:`_STARTUPINFOEXW`
@@ -1762,7 +1762,7 @@ _STARTUPINFOEXW
         :class:`LPPROC_THREAD_ATTRIBUTE_LIST`
 
 _PROCESS_INFORMATION
---------------------
+''''''''''''''''''''
 .. class:: LPPROCESS_INFORMATION
 
     Pointer to :class:`_PROCESS_INFORMATION`
@@ -1797,7 +1797,7 @@ _PROCESS_INFORMATION
         :class:`DWORD`
 
 _FLOATING_SAVE_AREA
--------------------
+'''''''''''''''''''
 .. class:: FLOATING_SAVE_AREA
 
     Alias for :class:`_FLOATING_SAVE_AREA`
@@ -1849,7 +1849,7 @@ _FLOATING_SAVE_AREA
         :class:`DWORD`
 
 _CONTEXT32
-----------
+''''''''''
 .. class:: PCONTEXT32
 
     Pointer to :class:`_CONTEXT32`
@@ -1989,7 +1989,7 @@ _CONTEXT32
         :class:`BYTE` ``[512]``
 
 _WOW64_FLOATING_SAVE_AREA
--------------------------
+'''''''''''''''''''''''''
 .. class:: WOW64_FLOATING_SAVE_AREA
 
     Alias for :class:`_WOW64_FLOATING_SAVE_AREA`
@@ -2041,7 +2041,7 @@ _WOW64_FLOATING_SAVE_AREA
         :class:`DWORD`
 
 _WOW64_CONTEXT
---------------
+''''''''''''''
 .. class:: PWOW64_CONTEXT
 
     Pointer to :class:`_WOW64_CONTEXT`
@@ -2177,7 +2177,7 @@ _WOW64_CONTEXT
         :class:`BYTE` ``[WOW64_MAXIMUM_SUPPORTED_EXTENSION]``
 
 _M128A
-------
+''''''
 .. class:: M128A
 
     Alias for :class:`_M128A`
@@ -2198,7 +2198,7 @@ _M128A
         :class:`LONGLONG`
 
 _XSAVE_FORMAT_64
-----------------
+''''''''''''''''
 .. class:: XSAVE_FORMAT_64
 
     Alias for :class:`_XSAVE_FORMAT_64`
@@ -2289,7 +2289,7 @@ _XSAVE_FORMAT_64
         :class:`BYTE` ``[96]``
 
 _XSAVE_FORMAT_32
-----------------
+''''''''''''''''
 .. class:: XSAVE_FORMAT_32
 
     Alias for :class:`_XSAVE_FORMAT_32`
@@ -2390,7 +2390,7 @@ _XSAVE_FORMAT_32
         :class:`DWORD`
 
 _TMP_DUMMYSTRUCTNAME
---------------------
+''''''''''''''''''''
 .. class:: TMP_DUMMYSTRUCTNAME
 
     Alias for :class:`_TMP_DUMMYSTRUCTNAME`
@@ -2487,7 +2487,7 @@ _TMP_DUMMYSTRUCTNAME
         :class:`M128A`
 
 _TMP_CONTEXT64_SUBUNION
------------------------
+'''''''''''''''''''''''
 .. class:: TMP_CONTEXT64_SUBUNION
 
     Alias for :class:`_TMP_CONTEXT64_SUBUNION`
@@ -2504,7 +2504,7 @@ _TMP_CONTEXT64_SUBUNION
         :class:`TMP_DUMMYSTRUCTNAME`
 
 _CONTEXT64
-----------
+''''''''''
 .. class:: PCONTEXT64
 
     Pointer to :class:`_CONTEXT64`
@@ -2749,7 +2749,7 @@ _CONTEXT64
         :class:`DWORD64`
 
 tagPROCESSENTRY32W
-------------------
+''''''''''''''''''
 .. class:: PPROCESSENTRY32W
 
     Pointer to :class:`tagPROCESSENTRY32W`
@@ -2814,7 +2814,7 @@ tagPROCESSENTRY32W
         :class:`WCHAR` ``[MAX_PATH]``
 
 tagPROCESSENTRY32
------------------
+'''''''''''''''''
 .. class:: PROCESSENTRY32
 
     Alias for :class:`tagPROCESSENTRY32`
@@ -2879,7 +2879,7 @@ tagPROCESSENTRY32
         :class:`CHAR` ``[MAX_PATH]``
 
 tagTHREADENTRY32
-----------------
+''''''''''''''''
 .. class:: PTHREADENTRY32
 
     Pointer to :class:`tagTHREADENTRY32`
@@ -2929,7 +2929,7 @@ tagTHREADENTRY32
         :class:`DWORD`
 
 _LUID
------
+'''''
 .. class:: LUID
 
     Alias for :class:`_LUID`
@@ -2950,7 +2950,7 @@ _LUID
         :class:`LONG`
 
 _LUID_AND_ATTRIBUTES
---------------------
+''''''''''''''''''''
 .. class:: LUID_AND_ATTRIBUTES
 
     Alias for :class:`_LUID_AND_ATTRIBUTES`
@@ -2971,7 +2971,7 @@ _LUID_AND_ATTRIBUTES
         :class:`DWORD`
 
 _TOKEN_PRIVILEGES
------------------
+'''''''''''''''''
 .. class:: TOKEN_PRIVILEGES
 
     Alias for :class:`_TOKEN_PRIVILEGES`
@@ -2992,7 +2992,7 @@ _TOKEN_PRIVILEGES
         :class:`LUID_AND_ATTRIBUTES` ``[ANYSIZE_ARRAY]``
 
 _TOKEN_ELEVATION
-----------------
+''''''''''''''''
 .. class:: TOKEN_ELEVATION
 
     Alias for :class:`_TOKEN_ELEVATION`
@@ -3008,7 +3008,7 @@ _TOKEN_ELEVATION
         :class:`DWORD`
 
 _SID_AND_ATTRIBUTES
--------------------
+'''''''''''''''''''
 .. class:: SID_AND_ATTRIBUTES
 
     Alias for :class:`_SID_AND_ATTRIBUTES`
@@ -3029,7 +3029,7 @@ _SID_AND_ATTRIBUTES
         :class:`DWORD`
 
 _TOKEN_MANDATORY_LABEL
-----------------------
+''''''''''''''''''''''
 .. class:: TOKEN_MANDATORY_LABEL
 
     Alias for :class:`_TOKEN_MANDATORY_LABEL`
@@ -3045,7 +3045,7 @@ _TOKEN_MANDATORY_LABEL
         :class:`SID_AND_ATTRIBUTES`
 
 _TOKEN_USER
------------
+'''''''''''
 .. class:: PTOKEN_USER
 
     Pointer to :class:`_TOKEN_USER`
@@ -3061,7 +3061,7 @@ _TOKEN_USER
         :class:`SID_AND_ATTRIBUTES`
 
 _OSVERSIONINFOA
----------------
+'''''''''''''''
 .. class:: POSVERSIONINFOA
 
     Pointer to :class:`_OSVERSIONINFOA`
@@ -3106,7 +3106,7 @@ _OSVERSIONINFOA
         :class:`CHAR` ``[128]``
 
 _OSVERSIONINFOW
----------------
+'''''''''''''''
 .. class:: RTL_OSVERSIONINFOW
 
     Alias for :class:`_OSVERSIONINFOW`
@@ -3159,7 +3159,7 @@ _OSVERSIONINFOW
         :class:`WCHAR` ``[128]``
 
 _OSVERSIONINFOEXA
------------------
+'''''''''''''''''
 .. class:: OSVERSIONINFOEXA
 
     Alias for :class:`_OSVERSIONINFOEXA`
@@ -3229,7 +3229,7 @@ _OSVERSIONINFOEXA
         :class:`BYTE`
 
 _OSVERSIONINFOEXW
------------------
+'''''''''''''''''
 .. class:: PRTL_OSVERSIONINFOEXW
 
     Pointer to :class:`_OSVERSIONINFOEXW`
@@ -3307,7 +3307,7 @@ _OSVERSIONINFOEXW
         :class:`BYTE`
 
 _OVERLAPPED
------------
+'''''''''''
 .. class:: LPOVERLAPPED
 
     Pointer to :class:`_OVERLAPPED`
@@ -3338,7 +3338,7 @@ _OVERLAPPED
         :class:`HANDLE`
 
 _MIB_IPADDRROW_XP
------------------
+'''''''''''''''''
 .. class:: MIB_IPADDRROW
 
     Alias for :class:`_MIB_IPADDRROW_XP`
@@ -3388,7 +3388,7 @@ _MIB_IPADDRROW_XP
         :class:`USHORT`
 
 _MIB_IPADDRTABLE
-----------------
+''''''''''''''''
 .. class:: PMIB_IPADDRTABLE
 
     Pointer to :class:`_MIB_IPADDRTABLE`
@@ -3409,7 +3409,7 @@ _MIB_IPADDRTABLE
         :class:`MIB_IPADDRROW` ``[ANY_SIZE]``
 
 _MIB_IFROW
-----------
+''''''''''
 .. class:: PMIB_IFROW
 
     Pointer to :class:`_MIB_IFROW`
@@ -3540,7 +3540,7 @@ _MIB_IFROW
         :class:`UCHAR` ``[MAXLEN_IFDESCR]``
 
 _MIB_IFTABLE
-------------
+''''''''''''
 .. class:: PMIB_IFTABLE
 
     Pointer to :class:`_MIB_IFTABLE`
@@ -3561,7 +3561,7 @@ _MIB_IFTABLE
         :class:`MIB_IFROW` ``[ANY_SIZE]``
 
 _MIB_TCPROW_OWNER_PID
----------------------
+'''''''''''''''''''''
 .. class:: MIB_TCPROW_OWNER_PID
 
     Alias for :class:`_MIB_TCPROW_OWNER_PID`
@@ -3602,7 +3602,7 @@ _MIB_TCPROW_OWNER_PID
         :class:`DWORD`
 
 _MIB_TCPTABLE_OWNER_PID
------------------------
+'''''''''''''''''''''''
 .. class:: MIB_TCPTABLE_OWNER_PID
 
     Alias for :class:`_MIB_TCPTABLE_OWNER_PID`
@@ -3623,7 +3623,7 @@ _MIB_TCPTABLE_OWNER_PID
         :class:`MIB_TCPROW_OWNER_PID` ``[ANY_SIZE]``
 
 _MIB_UDPROW_OWNER_PID
----------------------
+'''''''''''''''''''''
 .. class:: MIB_UDPROW_OWNER_PID
 
     Alias for :class:`_MIB_UDPROW_OWNER_PID`
@@ -3649,7 +3649,7 @@ _MIB_UDPROW_OWNER_PID
         :class:`DWORD`
 
 _MIB_UDPTABLE_OWNER_PID
------------------------
+'''''''''''''''''''''''
 .. class:: MIB_UDPTABLE_OWNER_PID
 
     Alias for :class:`_MIB_UDPTABLE_OWNER_PID`
@@ -3670,7 +3670,7 @@ _MIB_UDPTABLE_OWNER_PID
         :class:`MIB_UDPROW_OWNER_PID` ``[ANY_SIZE]``
 
 _MIB_UDP6ROW_OWNER_PID
-----------------------
+''''''''''''''''''''''
 .. class:: MIB_UDP6ROW_OWNER_PID
 
     Alias for :class:`_MIB_UDP6ROW_OWNER_PID`
@@ -3701,7 +3701,7 @@ _MIB_UDP6ROW_OWNER_PID
         :class:`DWORD`
 
 _MIB_UDP6TABLE_OWNER_PID
-------------------------
+''''''''''''''''''''''''
 .. class:: PMIB_UDP6TABLE_OWNER_PID
 
     Pointer to :class:`_MIB_UDP6TABLE_OWNER_PID`
@@ -3722,7 +3722,7 @@ _MIB_UDP6TABLE_OWNER_PID
         :class:`MIB_UDP6ROW_OWNER_PID` ``[ANY_SIZE]``
 
 _MIB_TCP6ROW_OWNER_PID
-----------------------
+''''''''''''''''''''''
 .. class:: MIB_TCP6ROW_OWNER_PID
 
     Alias for :class:`_MIB_TCP6ROW_OWNER_PID`
@@ -3773,7 +3773,7 @@ _MIB_TCP6ROW_OWNER_PID
         :class:`DWORD`
 
 _MIB_TCP6TABLE_OWNER_PID
-------------------------
+''''''''''''''''''''''''
 .. class:: MIB_TCP6TABLE_OWNER_PID
 
     Alias for :class:`_MIB_TCP6TABLE_OWNER_PID`
@@ -3794,7 +3794,7 @@ _MIB_TCP6TABLE_OWNER_PID
         :class:`MIB_TCP6ROW_OWNER_PID` ``[ANY_SIZE]``
 
 _MIB_TCPROW
------------
+'''''''''''
 .. class:: MIB_TCPROW
 
     Alias for :class:`_MIB_TCPROW`
@@ -3830,7 +3830,7 @@ _MIB_TCPROW
         :class:`DWORD`
 
 _IP_ADAPTER_INDEX_MAP
----------------------
+'''''''''''''''''''''
 .. class:: PIP_ADAPTER_INDEX_MAP
 
     Pointer to :class:`_IP_ADAPTER_INDEX_MAP`
@@ -3851,7 +3851,7 @@ _IP_ADAPTER_INDEX_MAP
         :class:`WCHAR` ``[MAX_ADAPTER_NAME]``
 
 _IP_INTERFACE_INFO
-------------------
+''''''''''''''''''
 .. class:: PIP_INTERFACE_INFO
 
     Pointer to :class:`_IP_INTERFACE_INFO`
@@ -3872,7 +3872,7 @@ _IP_INTERFACE_INFO
         :class:`IP_ADAPTER_INDEX_MAP` ``[1]``
 
 _EXCEPTION_RECORD
------------------
+'''''''''''''''''
 .. class:: PEXCEPTION_RECORD
 
     Pointer to :class:`_EXCEPTION_RECORD`
@@ -3913,7 +3913,7 @@ _EXCEPTION_RECORD
         :class:`ULONG_PTR` ``[EXCEPTION_MAXIMUM_PARAMETERS]``
 
 _EXCEPTION_RECORD32
--------------------
+'''''''''''''''''''
 .. class:: EXCEPTION_RECORD32
 
     Alias for :class:`_EXCEPTION_RECORD32`
@@ -3954,7 +3954,7 @@ _EXCEPTION_RECORD32
         :class:`DWORD` ``[EXCEPTION_MAXIMUM_PARAMETERS]``
 
 _EXCEPTION_RECORD64
--------------------
+'''''''''''''''''''
 .. class:: PEXCEPTION_RECORD64
 
     Pointer to :class:`_EXCEPTION_RECORD64`
@@ -4000,7 +4000,7 @@ _EXCEPTION_RECORD64
         :class:`DWORD64` ``[EXCEPTION_MAXIMUM_PARAMETERS]``
 
 _EXCEPTION_POINTERS64
----------------------
+'''''''''''''''''''''
 .. class:: EXCEPTION_POINTERS64
 
     Alias for :class:`_EXCEPTION_POINTERS64`
@@ -4021,7 +4021,7 @@ _EXCEPTION_POINTERS64
         :class:`PCONTEXT64`
 
 _EXCEPTION_POINTERS32
----------------------
+'''''''''''''''''''''
 .. class:: PEXCEPTION_POINTERS32
 
     Pointer to :class:`_EXCEPTION_POINTERS32`
@@ -4042,7 +4042,7 @@ _EXCEPTION_POINTERS32
         :class:`PCONTEXT32`
 
 _DEBUG_PROCESSOR_IDENTIFICATION_ALPHA
--------------------------------------
+'''''''''''''''''''''''''''''''''''''
 .. class:: DEBUG_PROCESSOR_IDENTIFICATION_ALPHA
 
     Alias for :class:`_DEBUG_PROCESSOR_IDENTIFICATION_ALPHA`
@@ -4063,7 +4063,7 @@ _DEBUG_PROCESSOR_IDENTIFICATION_ALPHA
         :class:`ULONG`
 
 _DEBUG_PROCESSOR_IDENTIFICATION_AMD64
--------------------------------------
+'''''''''''''''''''''''''''''''''''''
 .. class:: DEBUG_PROCESSOR_IDENTIFICATION_AMD64
 
     Alias for :class:`_DEBUG_PROCESSOR_IDENTIFICATION_AMD64`
@@ -4094,7 +4094,7 @@ _DEBUG_PROCESSOR_IDENTIFICATION_AMD64
         :class:`CHAR` ``[16]``
 
 _DEBUG_PROCESSOR_IDENTIFICATION_IA64
-------------------------------------
+''''''''''''''''''''''''''''''''''''
 .. class:: PDEBUG_PROCESSOR_IDENTIFICATION_IA64
 
     Pointer to :class:`_DEBUG_PROCESSOR_IDENTIFICATION_IA64`
@@ -4130,7 +4130,7 @@ _DEBUG_PROCESSOR_IDENTIFICATION_IA64
         :class:`CHAR` ``[16]``
 
 _DEBUG_PROCESSOR_IDENTIFICATION_X86
------------------------------------
+'''''''''''''''''''''''''''''''''''
 .. class:: DEBUG_PROCESSOR_IDENTIFICATION_X86
 
     Alias for :class:`_DEBUG_PROCESSOR_IDENTIFICATION_X86`
@@ -4161,7 +4161,7 @@ _DEBUG_PROCESSOR_IDENTIFICATION_X86
         :class:`CHAR` ``[16]``
 
 _DEBUG_PROCESSOR_IDENTIFICATION_ARM
------------------------------------
+'''''''''''''''''''''''''''''''''''
 .. class:: DEBUG_PROCESSOR_IDENTIFICATION_ARM
 
     Alias for :class:`_DEBUG_PROCESSOR_IDENTIFICATION_ARM`
@@ -4182,7 +4182,7 @@ _DEBUG_PROCESSOR_IDENTIFICATION_ARM
         :class:`ULONG`
 
 _DEBUG_PROCESSOR_IDENTIFICATION_ALL
------------------------------------
+'''''''''''''''''''''''''''''''''''
 .. class:: PDEBUG_PROCESSOR_IDENTIFICATION_ALL
 
     Pointer to :class:`_DEBUG_PROCESSOR_IDENTIFICATION_ALL`
@@ -4218,7 +4218,7 @@ _DEBUG_PROCESSOR_IDENTIFICATION_ALL
         :class:`DEBUG_PROCESSOR_IDENTIFICATION_ARM`
 
 _SYMBOL_INFO
-------------
+''''''''''''
 .. class:: SYMBOL_INFO
 
     Alias for :class:`_SYMBOL_INFO`
@@ -4304,7 +4304,7 @@ _SYMBOL_INFO
         :class:`CHAR` ``[1]``
 
 _MODLOAD_DATA
--------------
+'''''''''''''
 .. class:: PMODLOAD_DATA
 
     Pointer to :class:`_MODLOAD_DATA`
@@ -4340,7 +4340,7 @@ _MODLOAD_DATA
         :class:`DWORD`
 
 _SYSTEM_MODULE32
-----------------
+''''''''''''''''
 .. class:: SYSTEM_MODULE32
 
     Alias for :class:`_SYSTEM_MODULE32`
@@ -4396,7 +4396,7 @@ _SYSTEM_MODULE32
         :class:`CHAR` ``[256]``
 
 _SYSTEM_MODULE64
-----------------
+''''''''''''''''
 .. class:: SYSTEM_MODULE64
 
     Alias for :class:`_SYSTEM_MODULE64`
@@ -4452,7 +4452,7 @@ _SYSTEM_MODULE64
         :class:`CHAR` ``[256]``
 
 _SYSTEM_MODULE_INFORMATION32
-----------------------------
+''''''''''''''''''''''''''''
 .. class:: PSYSTEM_MODULE_INFORMATION32
 
     Pointer to :class:`_SYSTEM_MODULE_INFORMATION32`
@@ -4473,7 +4473,7 @@ _SYSTEM_MODULE_INFORMATION32
         :class:`SYSTEM_MODULE32` ``[0]``
 
 _SYSTEM_MODULE_INFORMATION64
-----------------------------
+''''''''''''''''''''''''''''
 .. class:: PSYSTEM_MODULE_INFORMATION64
 
     Pointer to :class:`_SYSTEM_MODULE_INFORMATION64`
@@ -4494,7 +4494,7 @@ _SYSTEM_MODULE_INFORMATION64
         :class:`SYSTEM_MODULE64` ``[0]``
 
 tagSAFEARRAYBOUND
------------------
+'''''''''''''''''
 .. class:: SAFEARRAYBOUND
 
     Alias for :class:`tagSAFEARRAYBOUND`
@@ -4515,7 +4515,7 @@ tagSAFEARRAYBOUND
         :class:`LONG`
 
 tagSAFEARRAY
-------------
+''''''''''''
 .. class:: SAFEARRAY
 
     Alias for :class:`tagSAFEARRAY`
@@ -4552,7 +4552,7 @@ tagSAFEARRAY
         :class:`SAFEARRAYBOUND` ``[1]``
 
 _DEBUG_BREAKPOINT_PARAMETERS
-----------------------------
+''''''''''''''''''''''''''''
 .. class:: PDEBUG_BREAKPOINT_PARAMETERS
 
     Pointer to :class:`_DEBUG_BREAKPOINT_PARAMETERS`
@@ -4623,7 +4623,7 @@ _DEBUG_BREAKPOINT_PARAMETERS
         :class:`ULONG`
 
 _DEBUG_REGISTER_DESCRIPTION
----------------------------
+'''''''''''''''''''''''''''
 .. class:: DEBUG_REGISTER_DESCRIPTION
 
     Alias for :class:`_DEBUG_REGISTER_DESCRIPTION`
@@ -4669,7 +4669,7 @@ _DEBUG_REGISTER_DESCRIPTION
         :class:`ULONG`
 
 _DEBUG_STACK_FRAME
-------------------
+''''''''''''''''''
 .. class:: PDEBUG_STACK_FRAME
 
     Pointer to :class:`_DEBUG_STACK_FRAME`
@@ -4725,7 +4725,7 @@ _DEBUG_STACK_FRAME
         :class:`ULONG`
 
 _DEBUG_LAST_EVENT_INFO_BREAKPOINT
----------------------------------
+'''''''''''''''''''''''''''''''''
 .. class:: DEBUG_LAST_EVENT_INFO_BREAKPOINT
 
     Alias for :class:`_DEBUG_LAST_EVENT_INFO_BREAKPOINT`
@@ -4741,7 +4741,7 @@ _DEBUG_LAST_EVENT_INFO_BREAKPOINT
         :class:`ULONG`
 
 _DEBUG_LAST_EVENT_INFO_EXCEPTION
---------------------------------
+''''''''''''''''''''''''''''''''
 .. class:: DEBUG_LAST_EVENT_INFO_EXCEPTION
 
     Alias for :class:`_DEBUG_LAST_EVENT_INFO_EXCEPTION`
@@ -4762,7 +4762,7 @@ _DEBUG_LAST_EVENT_INFO_EXCEPTION
         :class:`ULONG`
 
 _DEBUG_LAST_EVENT_INFO_EXIT_THREAD
-----------------------------------
+''''''''''''''''''''''''''''''''''
 .. class:: PDEBUG_LAST_EVENT_INFO_EXIT_THREAD
 
     Pointer to :class:`_DEBUG_LAST_EVENT_INFO_EXIT_THREAD`
@@ -4778,7 +4778,7 @@ _DEBUG_LAST_EVENT_INFO_EXIT_THREAD
         :class:`ULONG`
 
 _DEBUG_LAST_EVENT_INFO_EXIT_PROCESS
------------------------------------
+'''''''''''''''''''''''''''''''''''
 .. class:: PDEBUG_LAST_EVENT_INFO_EXIT_PROCESS
 
     Pointer to :class:`_DEBUG_LAST_EVENT_INFO_EXIT_PROCESS`
@@ -4794,7 +4794,7 @@ _DEBUG_LAST_EVENT_INFO_EXIT_PROCESS
         :class:`ULONG`
 
 _DEBUG_LAST_EVENT_INFO_LOAD_MODULE
-----------------------------------
+''''''''''''''''''''''''''''''''''
 .. class:: PDEBUG_LAST_EVENT_INFO_LOAD_MODULE
 
     Pointer to :class:`_DEBUG_LAST_EVENT_INFO_LOAD_MODULE`
@@ -4810,7 +4810,7 @@ _DEBUG_LAST_EVENT_INFO_LOAD_MODULE
         :class:`ULONG64`
 
 _DEBUG_LAST_EVENT_INFO_UNLOAD_MODULE
-------------------------------------
+''''''''''''''''''''''''''''''''''''
 .. class:: PDEBUG_LAST_EVENT_INFO_UNLOAD_MODULE
 
     Pointer to :class:`_DEBUG_LAST_EVENT_INFO_UNLOAD_MODULE`
@@ -4826,7 +4826,7 @@ _DEBUG_LAST_EVENT_INFO_UNLOAD_MODULE
         :class:`ULONG64`
 
 _DEBUG_LAST_EVENT_INFO_SYSTEM_ERROR
------------------------------------
+'''''''''''''''''''''''''''''''''''
 .. class:: PDEBUG_LAST_EVENT_INFO_SYSTEM_ERROR
 
     Pointer to :class:`_DEBUG_LAST_EVENT_INFO_SYSTEM_ERROR`
@@ -4847,7 +4847,7 @@ _DEBUG_LAST_EVENT_INFO_SYSTEM_ERROR
         :class:`ULONG`
 
 _DEBUG_SPECIFIC_FILTER_PARAMETERS
----------------------------------
+'''''''''''''''''''''''''''''''''
 .. class:: DEBUG_SPECIFIC_FILTER_PARAMETERS
 
     Alias for :class:`_DEBUG_SPECIFIC_FILTER_PARAMETERS`
@@ -4883,7 +4883,7 @@ _DEBUG_SPECIFIC_FILTER_PARAMETERS
         :class:`ULONG`
 
 _DEBUG_EXCEPTION_FILTER_PARAMETERS
-----------------------------------
+''''''''''''''''''''''''''''''''''
 .. class:: PDEBUG_EXCEPTION_FILTER_PARAMETERS
 
     Pointer to :class:`_DEBUG_EXCEPTION_FILTER_PARAMETERS`
@@ -4924,7 +4924,7 @@ _DEBUG_EXCEPTION_FILTER_PARAMETERS
         :class:`ULONG`
 
 _GUID
------
+'''''
 .. class:: IID
 
     Alias for :class:`_GUID`
@@ -4963,7 +4963,7 @@ _GUID
         :class:`BYTE` ``[8]``
 
 _TMP_signscale
---------------
+''''''''''''''
 .. class:: _TMP_signscale
 
     .. attribute:: scale
@@ -4976,7 +4976,7 @@ _TMP_signscale
         :class:`BYTE`
 
 _TMP_lowmid
------------
+'''''''''''
 .. class:: _TMP_lowmid
 
     .. attribute:: Lo32
@@ -4989,7 +4989,7 @@ _TMP_lowmid
         :class:`ULONG`
 
 TMP_signscale_union
--------------------
+'''''''''''''''''''
 .. class:: TMP_signscale_union
 
     .. attribute:: s
@@ -5002,7 +5002,7 @@ TMP_signscale_union
         :class:`USHORT`
 
 TMP_lowmid_union
-----------------
+''''''''''''''''
 .. class:: TMP_lowmid_union
 
     .. attribute:: s
@@ -5015,7 +5015,7 @@ TMP_lowmid_union
         :class:`ULONGLONG`
 
 tagDEC
-------
+''''''
 .. class:: DECIMAL
 
     Alias for :class:`tagDEC`
@@ -5042,7 +5042,7 @@ tagDEC
         :class:`TMP_signscale_union`
 
 __tagBRECORD
-------------
+''''''''''''
 .. class:: _tagBRECORD
 
     Alias for :class:`__tagBRECORD`
@@ -5059,7 +5059,7 @@ __tagBRECORD
         :class:`PVOID`
 
 TMP_variant_sub_union
----------------------
+'''''''''''''''''''''
 .. class:: TMP_variant_sub_union
 
     .. attribute:: llVal
@@ -5237,7 +5237,7 @@ TMP_variant_sub_union
         :class:`_tagBRECORD`
 
 __tagVARIANT
-------------
+''''''''''''
 .. class:: LPVARIANTARG
 
     Pointer to :class:`__tagVARIANT`
@@ -5285,7 +5285,7 @@ __tagVARIANT
         :class:`TMP_variant_sub_union`
 
 tagDISPPARAMS
--------------
+'''''''''''''
 .. class:: DISPPARAMS
 
     Alias for :class:`tagDISPPARAMS`
@@ -5312,7 +5312,7 @@ tagDISPPARAMS
         :class:`UINT`
 
 tagEXCEPINFO
-------------
+''''''''''''
 .. class:: EXCEPINFO
 
     Alias for :class:`tagEXCEPINFO`
@@ -5364,7 +5364,7 @@ tagEXCEPINFO
         :class:`SCODE`
 
 _CRYPTOAPI_BLOB
----------------
+'''''''''''''''
 .. class:: CRYPT_INTEGER_BLOB
 
     Alias for :class:`_CRYPTOAPI_BLOB`
@@ -5481,7 +5481,7 @@ _CRYPTOAPI_BLOB
         :class:`BYTE`
 
 WINTRUST_FILE_INFO_
--------------------
+'''''''''''''''''''
 .. class:: WINTRUST_FILE_INFO
 
     Alias for :class:`WINTRUST_FILE_INFO_`
@@ -5512,7 +5512,7 @@ WINTRUST_FILE_INFO_
         :class:`GUID`
 
 _CRYPT_ATTRIBUTE
-----------------
+''''''''''''''''
 .. class:: PCRYPT_ATTRIBUTE
 
     Pointer to :class:`_CRYPT_ATTRIBUTE`
@@ -5538,7 +5538,7 @@ _CRYPT_ATTRIBUTE
         :class:`PCRYPT_ATTR_BLOB`
 
 _CTL_ENTRY
-----------
+''''''''''
 .. class:: PCTL_ENTRY
 
     Pointer to :class:`_CTL_ENTRY`
@@ -5564,7 +5564,7 @@ _CTL_ENTRY
         :class:`PCRYPT_ATTRIBUTE`
 
 _CRYPT_ATTRIBUTE
-----------------
+''''''''''''''''
 .. class:: PCRYPT_ATTRIBUTE
 
     Pointer to :class:`_CRYPT_ATTRIBUTE`
@@ -5590,7 +5590,7 @@ _CRYPT_ATTRIBUTE
         :class:`PCRYPT_ATTR_BLOB`
 
 _CRYPT_ATTRIBUTES
------------------
+'''''''''''''''''
 .. class:: CRYPT_ATTRIBUTES
 
     Alias for :class:`_CRYPT_ATTRIBUTES`
@@ -5611,7 +5611,7 @@ _CRYPT_ATTRIBUTES
         :class:`PCRYPT_ATTRIBUTE`
 
 _CRYPT_ALGORITHM_IDENTIFIER
----------------------------
+'''''''''''''''''''''''''''
 .. class:: CRYPT_ALGORITHM_IDENTIFIER
 
     Alias for :class:`_CRYPT_ALGORITHM_IDENTIFIER`
@@ -5632,7 +5632,7 @@ _CRYPT_ALGORITHM_IDENTIFIER
         :class:`CRYPT_OBJID_BLOB`
 
 _CMSG_SIGNER_INFO
------------------
+'''''''''''''''''
 .. class:: CMSG_SIGNER_INFO
 
     Alias for :class:`_CMSG_SIGNER_INFO`
@@ -5683,7 +5683,7 @@ _CMSG_SIGNER_INFO
         :class:`CRYPT_ATTRIBUTES`
 
 _CERT_EXTENSION
----------------
+'''''''''''''''
 .. class:: CERT_EXTENSION
 
     Alias for :class:`_CERT_EXTENSION`
@@ -5709,7 +5709,7 @@ _CERT_EXTENSION
         :class:`CRYPT_OBJID_BLOB`
 
 _CTL_USAGE
-----------
+''''''''''
 .. class:: CERT_ENHKEY_USAGE
 
     Alias for :class:`_CTL_USAGE`
@@ -5738,7 +5738,7 @@ _CTL_USAGE
         :class:`LPSTR`
 
 _CTL_INFO
----------
+'''''''''
 .. class:: CTL_INFO
 
     Alias for :class:`_CTL_INFO`
@@ -5804,7 +5804,7 @@ _CTL_INFO
         :class:`PCERT_EXTENSION`
 
 _CTL_CONTEXT
-------------
+''''''''''''
 .. class:: PCTL_CONTEXT
 
     Pointer to :class:`_CTL_CONTEXT`
@@ -5859,7 +5859,7 @@ _CTL_CONTEXT
         :class:`DWORD`
 
 WINTRUST_CATALOG_INFO_
-----------------------
+''''''''''''''''''''''
 .. class:: PWINTRUST_CATALOG_INFO
 
     Pointer to :class:`WINTRUST_CATALOG_INFO_`
@@ -5915,7 +5915,7 @@ WINTRUST_CATALOG_INFO_
         :class:`PCCTL_CONTEXT`
 
 WINTRUST_BLOB_INFO_
--------------------
+'''''''''''''''''''
 .. class:: PWINTRUST_BLOB_INFO
 
     Pointer to :class:`WINTRUST_BLOB_INFO_`
@@ -5961,7 +5961,7 @@ WINTRUST_BLOB_INFO_
         :class:`BYTE`
 
 _CRYPT_BIT_BLOB
----------------
+'''''''''''''''
 .. class:: CRYPT_BIT_BLOB
 
     Alias for :class:`_CRYPT_BIT_BLOB`
@@ -5987,7 +5987,7 @@ _CRYPT_BIT_BLOB
         :class:`DWORD`
 
 _CERT_PUBLIC_KEY_INFO
----------------------
+'''''''''''''''''''''
 .. class:: PCERT_PUBLIC_KEY_INFO
 
     Pointer to :class:`_CERT_PUBLIC_KEY_INFO`
@@ -6008,7 +6008,7 @@ _CERT_PUBLIC_KEY_INFO
         :class:`CRYPT_BIT_BLOB`
 
 _CERT_INFO
-----------
+''''''''''
 .. class:: CERT_INFO
 
     Alias for :class:`_CERT_INFO`
@@ -6079,7 +6079,7 @@ _CERT_INFO
         :class:`PCERT_EXTENSION`
 
 _CERT_CONTEXT
--------------
+'''''''''''''
 .. class:: CERT_CONTEXT
 
     Alias for :class:`_CERT_CONTEXT`
@@ -6115,7 +6115,7 @@ _CERT_CONTEXT
         :class:`HCERTSTORE`
 
 WINTRUST_SGNR_INFO_
--------------------
+'''''''''''''''''''
 .. class:: WINTRUST_SGNR_INFO
 
     Alias for :class:`WINTRUST_SGNR_INFO_`
@@ -6151,7 +6151,7 @@ WINTRUST_SGNR_INFO_
         :class:`HCERTSTORE`
 
 _FILETIME
----------
+'''''''''
 .. class:: LPFILETIME
 
     Pointer to :class:`_FILETIME`
@@ -6176,7 +6176,7 @@ _FILETIME
         :class:`DWORD`
 
 WINTRUST_CERT_INFO_
--------------------
+'''''''''''''''''''
 .. class:: WINTRUST_CERT_INFO
 
     Alias for :class:`WINTRUST_CERT_INFO_`
@@ -6222,7 +6222,7 @@ WINTRUST_CERT_INFO_
         :class:`FILETIME`
 
 _TMP_WINTRUST_UNION_TYPE
-------------------------
+''''''''''''''''''''''''
 .. class:: TMP_WINTRUST_UNION_TYPE
 
     Alias for :class:`_TMP_WINTRUST_UNION_TYPE`
@@ -6254,7 +6254,7 @@ _TMP_WINTRUST_UNION_TYPE
         :class:`WINTRUST_CERT_INFO_`
 
 _WINTRUST_DATA
---------------
+''''''''''''''
 .. class:: PWINTRUST_DATA
 
     Pointer to :class:`_WINTRUST_DATA`
@@ -6325,7 +6325,7 @@ _WINTRUST_DATA
         :class:`DWORD`
 
 _PROCESS_BASIC_INFORMATION
---------------------------
+''''''''''''''''''''''''''
 .. class:: PPROCESS_BASIC_INFORMATION
 
     Pointer to :class:`_PROCESS_BASIC_INFORMATION`
@@ -6366,7 +6366,7 @@ _PROCESS_BASIC_INFORMATION
         :class:`HANDLE`
 
 _JIT_DEBUG_INFO
----------------
+'''''''''''''''
 .. class:: LPJIT_DEBUG_INFO
 
     Pointer to :class:`_JIT_DEBUG_INFO`
@@ -6412,7 +6412,7 @@ _JIT_DEBUG_INFO
         :class:`ULONG64`
 
 _SID_IDENTIFIER_AUTHORITY
--------------------------
+'''''''''''''''''''''''''
 .. class:: SID_IDENTIFIER_AUTHORITY
 
     Alias for :class:`_SID_IDENTIFIER_AUTHORITY`
@@ -6428,7 +6428,7 @@ _SID_IDENTIFIER_AUTHORITY
         :class:`BYTE` ``[6]``
 
 _EXCEPTION_DEBUG_INFO
----------------------
+'''''''''''''''''''''
 .. class:: LPEXCEPTION_DEBUG_INFO
 
     Pointer to :class:`_EXCEPTION_DEBUG_INFO`
@@ -6449,7 +6449,7 @@ _EXCEPTION_DEBUG_INFO
         :class:`DWORD`
 
 _CREATE_THREAD_DEBUG_INFO
--------------------------
+'''''''''''''''''''''''''
 .. class:: LPCREATE_THREAD_DEBUG_INFO
 
     Pointer to :class:`_CREATE_THREAD_DEBUG_INFO`
@@ -6475,7 +6475,7 @@ _CREATE_THREAD_DEBUG_INFO
         :class:`LPTHREAD_START_ROUTINE`
 
 _CREATE_PROCESS_DEBUG_INFO
---------------------------
+''''''''''''''''''''''''''
 .. class:: CREATE_PROCESS_DEBUG_INFO
 
     Alias for :class:`_CREATE_PROCESS_DEBUG_INFO`
@@ -6536,7 +6536,7 @@ _CREATE_PROCESS_DEBUG_INFO
         :class:`WORD`
 
 _EXIT_THREAD_DEBUG_INFO
------------------------
+'''''''''''''''''''''''
 .. class:: EXIT_THREAD_DEBUG_INFO
 
     Alias for :class:`_EXIT_THREAD_DEBUG_INFO`
@@ -6552,7 +6552,7 @@ _EXIT_THREAD_DEBUG_INFO
         :class:`DWORD`
 
 _EXIT_PROCESS_DEBUG_INFO
-------------------------
+''''''''''''''''''''''''
 .. class:: LPEXIT_PROCESS_DEBUG_INFO
 
     Pointer to :class:`_EXIT_PROCESS_DEBUG_INFO`
@@ -6568,7 +6568,7 @@ _EXIT_PROCESS_DEBUG_INFO
         :class:`DWORD`
 
 _LOAD_DLL_DEBUG_INFO
---------------------
+''''''''''''''''''''
 .. class:: LPLOAD_DLL_DEBUG_INFO
 
     Pointer to :class:`_LOAD_DLL_DEBUG_INFO`
@@ -6609,7 +6609,7 @@ _LOAD_DLL_DEBUG_INFO
         :class:`WORD`
 
 _UNLOAD_DLL_DEBUG_INFO
-----------------------
+''''''''''''''''''''''
 .. class:: UNLOAD_DLL_DEBUG_INFO
 
     Alias for :class:`_UNLOAD_DLL_DEBUG_INFO`
@@ -6625,7 +6625,7 @@ _UNLOAD_DLL_DEBUG_INFO
         :class:`LPVOID`
 
 _OUTPUT_DEBUG_STRING_INFO
--------------------------
+'''''''''''''''''''''''''
 .. class:: OUTPUT_DEBUG_STRING_INFO
 
     Alias for :class:`_OUTPUT_DEBUG_STRING_INFO`
@@ -6651,7 +6651,7 @@ _OUTPUT_DEBUG_STRING_INFO
         :class:`WORD`
 
 _RIP_INFO
----------
+'''''''''
 .. class:: LPRIP_INFO
 
     Pointer to :class:`_RIP_INFO`
@@ -6672,7 +6672,7 @@ _RIP_INFO
         :class:`DWORD`
 
 _TMP_UNION_DEBUG_INFO
----------------------
+'''''''''''''''''''''
 .. class:: TMP_UNION_DEBUG_INFO
 
     Alias for :class:`_TMP_UNION_DEBUG_INFO`
@@ -6724,7 +6724,7 @@ _TMP_UNION_DEBUG_INFO
         :class:`RIP_INFO`
 
 _DEBUG_EVENT
-------------
+''''''''''''
 .. class:: LPDEBUG_EVENT
 
     Pointer to :class:`_DEBUG_EVENT`
@@ -6755,7 +6755,7 @@ _DEBUG_EVENT
         :class:`_TMP_UNION_DEBUG_INFO`
 
 _STRING
--------
+'''''''
 .. class:: PCANSI_STRING
 
     Pointer to :class:`_STRING`
@@ -6789,7 +6789,7 @@ _STRING
         :class:`LPCSTR`
 
 _OBJECT_ATTRIBUTES
-------------------
+''''''''''''''''''
 .. class:: POBJECT_ATTRIBUTES
 
     Pointer to :class:`_OBJECT_ATTRIBUTES`
@@ -6830,7 +6830,7 @@ _OBJECT_ATTRIBUTES
         :class:`PVOID`
 
 _TMP_UNION_IO_STATUS_BLOCK
---------------------------
+''''''''''''''''''''''''''
 .. class:: TMP_UNION_IO_STATUS_BLOCK
 
     Alias for :class:`_TMP_UNION_IO_STATUS_BLOCK`
@@ -6847,7 +6847,7 @@ _TMP_UNION_IO_STATUS_BLOCK
         :class:`PVOID`
 
 _IO_STATUS_BLOCK
-----------------
+''''''''''''''''
 .. class:: IO_STATUS_BLOCK
 
     Alias for :class:`_IO_STATUS_BLOCK`
@@ -6868,7 +6868,7 @@ _IO_STATUS_BLOCK
         :class:`ULONG_PTR`
 
 _SECURITY_QUALITY_OF_SERVICE
-----------------------------
+''''''''''''''''''''''''''''
 .. class:: PSECURITY_QUALITY_OF_SERVICE
 
     Pointer to :class:`_SECURITY_QUALITY_OF_SERVICE`
@@ -6899,7 +6899,7 @@ _SECURITY_QUALITY_OF_SERVICE
         :class:`BOOLEAN`
 
 _SERVICE_STATUS
----------------
+'''''''''''''''
 .. class:: SERVICE_STATUS
 
     Alias for :class:`_SERVICE_STATUS`
@@ -6945,7 +6945,7 @@ _SERVICE_STATUS
         :class:`DWORD`
 
 _SERVICE_STATUS_PROCESS
------------------------
+'''''''''''''''''''''''
 .. class:: LPSERVICE_STATUS_PROCESS
 
     Pointer to :class:`_SERVICE_STATUS_PROCESS`
@@ -7001,7 +7001,7 @@ _SERVICE_STATUS_PROCESS
         :class:`DWORD`
 
 _ENUM_SERVICE_STATUS_PROCESSA
------------------------------
+'''''''''''''''''''''''''''''
 .. class:: LPENUM_SERVICE_STATUS_PROCESSA
 
     Pointer to :class:`_ENUM_SERVICE_STATUS_PROCESSA`
@@ -7027,7 +7027,7 @@ _ENUM_SERVICE_STATUS_PROCESSA
         :class:`SERVICE_STATUS_PROCESS`
 
 _ENUM_SERVICE_STATUS_PROCESSW
------------------------------
+'''''''''''''''''''''''''''''
 .. class:: ENUM_SERVICE_STATUS_PROCESSW
 
     Alias for :class:`_ENUM_SERVICE_STATUS_PROCESSW`
@@ -7053,7 +7053,7 @@ _ENUM_SERVICE_STATUS_PROCESSW
         :class:`SERVICE_STATUS_PROCESS`
 
 CATALOG_INFO_
--------------
+'''''''''''''
 .. class:: CATALOG_INFO
 
     Alias for :class:`CATALOG_INFO_`
@@ -7070,7 +7070,7 @@ CATALOG_INFO_
         :class:`WCHAR` ``[MAX_PATH]``
 
 _SYSTEM_HANDLE
---------------
+''''''''''''''
 .. class:: SYSTEM_HANDLE
 
     Alias for :class:`_SYSTEM_HANDLE`
@@ -7107,7 +7107,7 @@ _SYSTEM_HANDLE
         :class:`DWORD`
 
 _SYSTEM_HANDLE_INFORMATION
---------------------------
+''''''''''''''''''''''''''
 .. class:: PSYSTEM_HANDLE_INFORMATION
 
     Pointer to :class:`_SYSTEM_HANDLE_INFORMATION`
@@ -7128,7 +7128,7 @@ _SYSTEM_HANDLE_INFORMATION
         :class:`SYSTEM_HANDLE` ``[1]``
 
 __PUBLIC_OBJECT_TYPE_INFORMATION
---------------------------------
+''''''''''''''''''''''''''''''''
 .. class:: PPUBLIC_OBJECT_TYPE_INFORMATION
 
     Pointer to :class:`__PUBLIC_OBJECT_TYPE_INFORMATION`
@@ -7149,7 +7149,7 @@ __PUBLIC_OBJECT_TYPE_INFORMATION
         :class:`ULONG` ``[22]``
 
 _PUBLIC_OBJECT_BASIC_INFORMATION
---------------------------------
+''''''''''''''''''''''''''''''''
 .. class:: PUBLIC_OBJECT_BASIC_INFORMATION
 
     Alias for :class:`_PUBLIC_OBJECT_BASIC_INFORMATION`
@@ -7185,7 +7185,7 @@ _PUBLIC_OBJECT_BASIC_INFORMATION
         :class:`ULONG` ``[10]``
 
 _EVENTLOGRECORD
----------------
+'''''''''''''''
 .. class:: PEVENTLOGRECORD
 
     Pointer to :class:`_EVENTLOGRECORD`
@@ -7276,7 +7276,7 @@ _EVENTLOGRECORD
         :class:`DWORD`
 
 tagSOLE_AUTHENTICATION_SERVICE
-------------------------------
+''''''''''''''''''''''''''''''
 .. class:: PSOLE_AUTHENTICATION_SERVICE
 
     Pointer to :class:`tagSOLE_AUTHENTICATION_SERVICE`
@@ -7307,7 +7307,7 @@ tagSOLE_AUTHENTICATION_SERVICE
         :class:`HRESULT`
 
 _OBJECT_DIRECTORY_INFORMATION
------------------------------
+'''''''''''''''''''''''''''''
 .. class:: OBJECT_DIRECTORY_INFORMATION
 
     Alias for :class:`_OBJECT_DIRECTORY_INFORMATION`
@@ -7328,7 +7328,7 @@ _OBJECT_DIRECTORY_INFORMATION
         :class:`UNICODE_STRING`
 
 _DEBUG_VALUE_TMP_SUBSTRUCT1
----------------------------
+'''''''''''''''''''''''''''
 .. class:: DEBUG_VALUE_TMP_SUBSTRUCT1
 
     Alias for :class:`_DEBUG_VALUE_TMP_SUBSTRUCT1`
@@ -7345,7 +7345,7 @@ _DEBUG_VALUE_TMP_SUBSTRUCT1
         :class:`BOOL`
 
 _DEBUG_VALUE_TMP_SUBSTRUCT2
----------------------------
+'''''''''''''''''''''''''''
 .. class:: DEBUG_VALUE_TMP_SUBSTRUCT2
 
     Alias for :class:`_DEBUG_VALUE_TMP_SUBSTRUCT2`
@@ -7362,7 +7362,7 @@ _DEBUG_VALUE_TMP_SUBSTRUCT2
         :class:`ULONG`
 
 _DEBUG_VALUE_TMP_SUBSTRUCT3
----------------------------
+'''''''''''''''''''''''''''
 .. class:: DEBUG_VALUE_TMP_SUBSTRUCT3
 
     Alias for :class:`_DEBUG_VALUE_TMP_SUBSTRUCT3`
@@ -7379,7 +7379,7 @@ _DEBUG_VALUE_TMP_SUBSTRUCT3
         :class:`LONG64`
 
 _DEBUG_VALUE_TMP_UNION
-----------------------
+''''''''''''''''''''''
 .. class:: DEBUG_VALUE_TMP_UNION
 
     Alias for :class:`_DEBUG_VALUE_TMP_UNION`
@@ -7476,7 +7476,7 @@ _DEBUG_VALUE_TMP_UNION
         :class:`UCHAR` ``[24]``
 
 _DEBUG_VALUE
-------------
+''''''''''''
 .. class:: DEBUG_VALUE
 
     Alias for :class:`_DEBUG_VALUE`
@@ -7502,7 +7502,7 @@ _DEBUG_VALUE
         :class:`ULONG`
 
 _DEBUG_SYMBOL_PARAMETERS
-------------------------
+''''''''''''''''''''''''
 .. class:: DEBUG_SYMBOL_PARAMETERS
 
     Alias for :class:`_DEBUG_SYMBOL_PARAMETERS`
@@ -7543,7 +7543,7 @@ _DEBUG_SYMBOL_PARAMETERS
         :class:`ULONG64`
 
 _DEBUG_SYMBOL_ENTRY
--------------------
+'''''''''''''''''''
 .. class:: PDEBUG_SYMBOL_ENTRY
 
     Pointer to :class:`_DEBUG_SYMBOL_ENTRY`
@@ -7614,7 +7614,7 @@ _DEBUG_SYMBOL_ENTRY
         :class:`ULONG`
 
 _DEBUG_MODULE_PARAMETERS
-------------------------
+''''''''''''''''''''''''
 .. class:: PDEBUG_MODULE_PARAMETERS
 
     Pointer to :class:`_DEBUG_MODULE_PARAMETERS`
@@ -7685,7 +7685,7 @@ _DEBUG_MODULE_PARAMETERS
         :class:`ULONG64` ``[2]``
 
 _DEBUG_MODULE_AND_ID
---------------------
+''''''''''''''''''''
 .. class:: DEBUG_MODULE_AND_ID
 
     Alias for :class:`_DEBUG_MODULE_AND_ID`
@@ -7706,7 +7706,7 @@ _DEBUG_MODULE_AND_ID
         :class:`ULONG64`
 
 _DEBUG_OFFSET_REGION
---------------------
+''''''''''''''''''''
 .. class:: DEBUG_OFFSET_REGION
 
     Alias for :class:`_DEBUG_OFFSET_REGION`
@@ -7727,7 +7727,7 @@ _DEBUG_OFFSET_REGION
         :class:`ULONG64`
 
 _DEBUG_SYMBOL_SOURCE_ENTRY
---------------------------
+''''''''''''''''''''''''''
 .. class:: DEBUG_SYMBOL_SOURCE_ENTRY
 
     Alias for :class:`_DEBUG_SYMBOL_SOURCE_ENTRY`
@@ -7798,7 +7798,7 @@ _DEBUG_SYMBOL_SOURCE_ENTRY
         :class:`ULONG`
 
 _CMSG_SIGNER_INFO
------------------
+'''''''''''''''''
 .. class:: CMSG_SIGNER_INFO
 
     Alias for :class:`_CMSG_SIGNER_INFO`
@@ -7849,7 +7849,7 @@ _CMSG_SIGNER_INFO
         :class:`CRYPT_ATTRIBUTES`
 
 _SPC_SERIALIZED_OBJECT
-----------------------
+''''''''''''''''''''''
 .. class:: SPC_SERIALIZED_OBJECT
 
     Alias for :class:`_SPC_SERIALIZED_OBJECT`
@@ -7870,7 +7870,7 @@ _SPC_SERIALIZED_OBJECT
         :class:`CRYPT_DATA_BLOB`
 
 _TMP_SPC_LINK_UNION
--------------------
+'''''''''''''''''''
 .. class:: TMP_SPC_LINK_UNION
 
     Alias for :class:`_TMP_SPC_LINK_UNION`
@@ -7892,7 +7892,7 @@ _TMP_SPC_LINK_UNION
         :class:`LPWSTR`
 
 SPC_LINK_
----------
+'''''''''
 .. class:: PSPC_LINK
 
     Pointer to :class:`SPC_LINK_`
@@ -7913,7 +7913,7 @@ SPC_LINK_
         :class:`TMP_SPC_LINK_UNION`
 
 _SPC_SP_OPUS_INFO
------------------
+'''''''''''''''''
 .. class:: PSPC_SP_OPUS_INFO
 
     Pointer to :class:`_SPC_SP_OPUS_INFO`
@@ -7939,7 +7939,7 @@ _SPC_SP_OPUS_INFO
         :class:`SPC_LINK_`
 
 _CERT_TRUST_STATUS
-------------------
+''''''''''''''''''
 .. class:: PCERT_TRUST_STATUS
 
     Pointer to :class:`_CERT_TRUST_STATUS`
@@ -7960,7 +7960,7 @@ _CERT_TRUST_STATUS
         :class:`DWORD`
 
 _CERT_TRUST_LIST_INFO
----------------------
+'''''''''''''''''''''
 .. class:: PCERT_TRUST_LIST_INFO
 
     Pointer to :class:`_CERT_TRUST_LIST_INFO`
@@ -7986,7 +7986,7 @@ _CERT_TRUST_LIST_INFO
         :class:`PCCTL_CONTEXT`
 
 _CERT_CONTEXT
--------------
+'''''''''''''
 .. class:: PCCERT_CONTEXT
 
     Pointer to :class:`_CERT_CONTEXT`
@@ -8026,7 +8026,7 @@ _CERT_CONTEXT
         :class:`HCERTSTORE`
 
 _CRL_ENTRY
-----------
+''''''''''
 .. class:: CRL_ENTRY
 
     Alias for :class:`_CRL_ENTRY`
@@ -8057,7 +8057,7 @@ _CRL_ENTRY
         :class:`PCERT_EXTENSION`
 
 _CRL_INFO
----------
+'''''''''
 .. class:: CRL_INFO
 
     Alias for :class:`_CRL_INFO`
@@ -8113,7 +8113,7 @@ _CRL_INFO
         :class:`PCERT_EXTENSION`
 
 _CRL_CONTEXT
-------------
+''''''''''''
 .. class:: PCCRL_CONTEXT
 
     Pointer to :class:`_CRL_CONTEXT`
@@ -8153,7 +8153,7 @@ _CRL_CONTEXT
         :class:`HCERTSTORE`
 
 _CERT_REVOCATION_CRL_INFO
--------------------------
+'''''''''''''''''''''''''
 .. class:: CERT_REVOCATION_CRL_INFO
 
     Alias for :class:`_CERT_REVOCATION_CRL_INFO`
@@ -8189,7 +8189,7 @@ _CERT_REVOCATION_CRL_INFO
         :class:`BOOL`
 
 _CERT_REVOCATION_INFO
----------------------
+'''''''''''''''''''''
 .. class:: CERT_REVOCATION_INFO
 
     Alias for :class:`_CERT_REVOCATION_INFO`
@@ -8235,7 +8235,7 @@ _CERT_REVOCATION_INFO
         :class:`PCERT_REVOCATION_CRL_INFO`
 
 _CERT_CHAIN_ELEMENT
--------------------
+'''''''''''''''''''
 .. class:: PCERT_CHAIN_ELEMENT
 
     Pointer to :class:`_CERT_CHAIN_ELEMENT`
@@ -8285,7 +8285,7 @@ _CERT_CHAIN_ELEMENT
         :class:`LPCWSTR`
 
 _CERT_SIMPLE_CHAIN
-------------------
+''''''''''''''''''
 .. class:: CERT_SIMPLE_CHAIN
 
     Alias for :class:`_CERT_SIMPLE_CHAIN`
@@ -8335,7 +8335,7 @@ _CERT_SIMPLE_CHAIN
         :class:`DWORD`
 
 _CERT_CHAIN_CONTEXT
--------------------
+'''''''''''''''''''
 .. class:: CERT_CHAIN_CONTEXT
 
     Alias for :class:`_CERT_CHAIN_CONTEXT`
@@ -8400,7 +8400,7 @@ _CERT_CHAIN_CONTEXT
         :class:`GUID`
 
 _CERT_USAGE_MATCH
------------------
+'''''''''''''''''
 .. class:: CERT_USAGE_MATCH
 
     Alias for :class:`_CERT_USAGE_MATCH`
@@ -8421,7 +8421,7 @@ _CERT_USAGE_MATCH
         :class:`CERT_ENHKEY_USAGE`
 
 _CERT_CHAIN_PARA
-----------------
+''''''''''''''''
 .. class:: CERT_CHAIN_PARA
 
     Alias for :class:`_CERT_CHAIN_PARA`
@@ -8467,7 +8467,7 @@ _CERT_CHAIN_PARA
         :class:`LPFILETIME`
 
 _CERT_CHAIN_ENGINE_CONFIG
--------------------------
+'''''''''''''''''''''''''
 .. class:: CERT_CHAIN_ENGINE_CONFIG
 
     Alias for :class:`_CERT_CHAIN_ENGINE_CONFIG`
@@ -8528,7 +8528,7 @@ _CERT_CHAIN_ENGINE_CONFIG
         :class:`DWORD`
 
 _SYSTEMTIME
------------
+'''''''''''
 .. class:: SYSTEMTIME
 
     Alias for :class:`_SYSTEMTIME`
@@ -8579,7 +8579,7 @@ _SYSTEMTIME
         :class:`WORD`
 
 _CERT_EXTENSIONS
-----------------
+''''''''''''''''
 .. class:: PCERT_EXTENSIONS
 
     Pointer to :class:`_CERT_EXTENSIONS`
@@ -8600,7 +8600,7 @@ _CERT_EXTENSIONS
         :class:`PCERT_EXTENSION`
 
 _CRYPT_KEY_PROV_PARAM
----------------------
+'''''''''''''''''''''
 .. class:: CRYPT_KEY_PROV_PARAM
 
     Alias for :class:`_CRYPT_KEY_PROV_PARAM`
@@ -8631,7 +8631,7 @@ _CRYPT_KEY_PROV_PARAM
         :class:`DWORD`
 
 _CRYPT_KEY_PROV_INFO
---------------------
+''''''''''''''''''''
 .. class:: CRYPT_KEY_PROV_INFO
 
     Alias for :class:`_CRYPT_KEY_PROV_INFO`
@@ -8677,7 +8677,7 @@ _CRYPT_KEY_PROV_INFO
         :class:`DWORD`
 
 _CRYPT_ENCRYPT_MESSAGE_PARA
----------------------------
+'''''''''''''''''''''''''''
 .. class:: PCRYPT_ENCRYPT_MESSAGE_PARA
 
     Pointer to :class:`_CRYPT_ENCRYPT_MESSAGE_PARA`
@@ -8723,7 +8723,7 @@ _CRYPT_ENCRYPT_MESSAGE_PARA
         :class:`DWORD`
 
 _CRYPT_DECRYPT_MESSAGE_PARA
----------------------------
+'''''''''''''''''''''''''''
 .. class:: PCRYPT_DECRYPT_MESSAGE_PARA
 
     Pointer to :class:`_CRYPT_DECRYPT_MESSAGE_PARA`
@@ -8759,7 +8759,7 @@ _CRYPT_DECRYPT_MESSAGE_PARA
         :class:`DWORD`
 
 _CERT_KEY_CONTEXT
------------------
+'''''''''''''''''
 .. class:: CERT_KEY_CONTEXT
 
     Alias for :class:`_CERT_KEY_CONTEXT`
@@ -8785,7 +8785,7 @@ _CERT_KEY_CONTEXT
         :class:`DWORD`
 
 _CRYPT_ENCODE_PARA
-------------------
+''''''''''''''''''
 .. class:: PCRYPT_ENCODE_PARA
 
     Pointer to :class:`_CRYPT_ENCODE_PARA`
@@ -8811,7 +8811,7 @@ _CRYPT_ENCODE_PARA
         :class:`PVOID`
 
 tagPOINT
---------
+''''''''
 .. class:: LPPOINT
 
     Pointer to :class:`tagPOINT`
@@ -8836,7 +8836,7 @@ tagPOINT
         :class:`LONG`
 
 _ACL
-----
+''''
 .. class:: PACL
 
     Pointer to :class:`_ACL`
@@ -8872,7 +8872,7 @@ _ACL
         :class:`WORD`
 
 _ACE_HEADER
------------
+'''''''''''
 .. class:: PACE_HEADER
 
     Pointer to :class:`_ACE_HEADER`
@@ -8898,7 +8898,7 @@ _ACE_HEADER
         :class:`WORD`
 
 _ACCESS_ALLOWED_ACE
--------------------
+'''''''''''''''''''
 .. class:: PACCESS_ALLOWED_ACE
 
     Pointer to :class:`_ACCESS_ALLOWED_ACE`
@@ -8924,7 +8924,7 @@ _ACCESS_ALLOWED_ACE
         :class:`DWORD`
 
 _ACCESS_ALLOWED_CALLBACK_ACE
-----------------------------
+''''''''''''''''''''''''''''
 .. class:: PACCESS_ALLOWED_CALLBACK_ACE
 
     Pointer to :class:`_ACCESS_ALLOWED_CALLBACK_ACE`
@@ -8950,7 +8950,7 @@ _ACCESS_ALLOWED_CALLBACK_ACE
         :class:`DWORD`
 
 _ACCESS_ALLOWED_CALLBACK_OBJECT_ACE
------------------------------------
+'''''''''''''''''''''''''''''''''''
 .. class:: PACCESS_ALLOWED_CALLBACK_OBJECT_ACE
 
     Pointer to :class:`_ACCESS_ALLOWED_CALLBACK_OBJECT_ACE`
@@ -8991,7 +8991,7 @@ _ACCESS_ALLOWED_CALLBACK_OBJECT_ACE
         :class:`DWORD`
 
 _ACCESS_ALLOWED_OBJECT_ACE
---------------------------
+''''''''''''''''''''''''''
 .. class:: PACCESS_ALLOWED_OBJECT_ACE
 
     Pointer to :class:`_ACCESS_ALLOWED_OBJECT_ACE`
@@ -9032,7 +9032,7 @@ _ACCESS_ALLOWED_OBJECT_ACE
         :class:`DWORD`
 
 _ACCESS_DENIED_ACE
-------------------
+''''''''''''''''''
 .. class:: ACCESS_DENIED_ACE
 
     Alias for :class:`_ACCESS_DENIED_ACE`
@@ -9058,7 +9058,7 @@ _ACCESS_DENIED_ACE
         :class:`DWORD`
 
 _ACCESS_DENIED_CALLBACK_ACE
----------------------------
+'''''''''''''''''''''''''''
 .. class:: ACCESS_DENIED_CALLBACK_ACE
 
     Alias for :class:`_ACCESS_DENIED_CALLBACK_ACE`
@@ -9084,7 +9084,7 @@ _ACCESS_DENIED_CALLBACK_ACE
         :class:`DWORD`
 
 _ACCESS_DENIED_OBJECT_ACE
--------------------------
+'''''''''''''''''''''''''
 .. class:: ACCESS_DENIED_OBJECT_ACE
 
     Alias for :class:`_ACCESS_DENIED_OBJECT_ACE`
@@ -9125,7 +9125,7 @@ _ACCESS_DENIED_OBJECT_ACE
         :class:`DWORD`
 
 _SYSTEM_MANDATORY_LABEL_ACE
----------------------------
+'''''''''''''''''''''''''''
 .. class:: SYSTEM_MANDATORY_LABEL_ACE
 
     Alias for :class:`_SYSTEM_MANDATORY_LABEL_ACE`
@@ -9151,7 +9151,7 @@ _SYSTEM_MANDATORY_LABEL_ACE
         :class:`DWORD`
 
 tagRECT
--------
+'''''''
 .. class:: LPRECT
 
     Pointer to :class:`tagRECT`
@@ -9190,7 +9190,7 @@ tagRECT
         :class:`LONG`
 
 tagRGBTRIPLE
-------------
+''''''''''''
 .. class:: NPRGBTRIPLE
 
     Pointer to :class:`tagRGBTRIPLE`
@@ -9224,7 +9224,7 @@ tagRGBTRIPLE
         :class:`BYTE`
 
 tagBITMAPFILEHEADER
--------------------
+'''''''''''''''''''
 .. class:: BITMAPFILEHEADER
 
     Alias for :class:`tagBITMAPFILEHEADER`
@@ -9264,7 +9264,7 @@ tagBITMAPFILEHEADER
         :class:`DWORD`
 
 tagBITMAPCOREHEADER
--------------------
+'''''''''''''''''''
 .. class:: LPBITMAPCOREHEADER
 
     Pointer to :class:`tagBITMAPCOREHEADER`
@@ -9304,7 +9304,7 @@ tagBITMAPCOREHEADER
         :class:`WORD`
 
 tagBITMAP
----------
+'''''''''
 .. class:: NPBITMAP
 
     Pointer to :class:`tagBITMAP`
@@ -9358,7 +9358,7 @@ tagBITMAP
         :class:`LPVOID`
 
 tagBITMAPINFOHEADER
--------------------
+'''''''''''''''''''
 .. class:: BITMAPINFOHEADER
 
     Alias for :class:`tagBITMAPINFOHEADER`
@@ -9428,7 +9428,7 @@ tagBITMAPINFOHEADER
         :class:`DWORD`
 
 tagRGBQUAD
-----------
+''''''''''
 .. class:: RGBQUAD
 
     Alias for :class:`tagRGBQUAD`
@@ -9455,7 +9455,7 @@ tagRGBQUAD
         :class:`BYTE`
 
 tagBITMAPINFO
--------------
+'''''''''''''
 .. class:: LPBITMAPINFO
 
     Pointer to :class:`tagBITMAPINFO`
@@ -9480,7 +9480,7 @@ tagBITMAPINFO
         :class:`RGBQUAD` ``[1]``
 
 tagBITMAPCOREINFO
------------------
+'''''''''''''''''
 .. class:: LPBITMAPCOREINFO
 
     Pointer to :class:`tagBITMAPCOREINFO`
@@ -9505,7 +9505,7 @@ tagBITMAPCOREINFO
         :class:`RGBTRIPLE` ``[1]``
 
 _BG_FILE_PROGRESS
------------------
+'''''''''''''''''
 .. class:: BG_FILE_PROGRESS
 
     Alias for :class:`_BG_FILE_PROGRESS`
@@ -9527,7 +9527,7 @@ _BG_FILE_PROGRESS
         :class:`BOOL`
 
 _BG_JOB_PROGRESS
-----------------
+''''''''''''''''
 .. class:: BG_JOB_PROGRESS
 
     Alias for :class:`_BG_JOB_PROGRESS`
@@ -9554,7 +9554,7 @@ _BG_JOB_PROGRESS
         :class:`ULONG`
 
 _BG_FILE_INFO
--------------
+'''''''''''''
 .. class:: BG_FILE_INFO
 
     Alias for :class:`_BG_FILE_INFO`
@@ -9571,7 +9571,7 @@ _BG_FILE_INFO
         :class:`LPWSTR`
 
 _BG_JOB_TIMES
--------------
+'''''''''''''
 .. class:: BG_JOB_TIMES
 
     Alias for :class:`_BG_JOB_TIMES`
@@ -9593,7 +9593,7 @@ _BG_JOB_TIMES
         :class:`FILETIME`
 
 _ALPC_PORT_ATTRIBUTES32
------------------------
+'''''''''''''''''''''''
 .. class:: PALPC_PORT_ATTRIBUTES32
 
     Pointer to :class:`_ALPC_PORT_ATTRIBUTES32`
@@ -9649,7 +9649,7 @@ _ALPC_PORT_ATTRIBUTES32
         :class:`ULONG`
 
 _ALPC_PORT_ATTRIBUTES64
------------------------
+'''''''''''''''''''''''
 .. class:: ALPC_PORT_ATTRIBUTES64
 
     Alias for :class:`_ALPC_PORT_ATTRIBUTES64`
@@ -9710,7 +9710,7 @@ _ALPC_PORT_ATTRIBUTES64
         :class:`ULONG`
 
 _ALPC_MESSAGE_ATTRIBUTES
-------------------------
+''''''''''''''''''''''''
 .. class:: ALPC_MESSAGE_ATTRIBUTES
 
     Alias for :class:`_ALPC_MESSAGE_ATTRIBUTES`
@@ -9731,7 +9731,7 @@ _ALPC_MESSAGE_ATTRIBUTES
         :class:`ULONG`
 
 _PORT_MESSAGE32_TMP_UNION
--------------------------
+'''''''''''''''''''''''''
 .. class:: PORT_MESSAGE_TMP_UNION
 
     Alias for :class:`_PORT_MESSAGE32_TMP_UNION`
@@ -9748,7 +9748,7 @@ _PORT_MESSAGE32_TMP_UNION
         :class:`ULONG`
 
 _PORT_MESSAGE64_TMP_UNION
--------------------------
+'''''''''''''''''''''''''
 .. class:: PORT_MESSAGE_TMP_UNION
 
     Alias for :class:`_PORT_MESSAGE64_TMP_UNION`
@@ -9765,7 +9765,7 @@ _PORT_MESSAGE64_TMP_UNION
         :class:`ULONG`
 
 _PORT_MESSAGE_TMP_SUBSTRUCT_S1
-------------------------------
+''''''''''''''''''''''''''''''
 .. class:: _PORT_MESSAGE_TMP_SUBSTRUCT_S1
 
     Alias for :class:`_PORT_MESSAGE_TMP_SUBSTRUCT_S1`
@@ -9782,7 +9782,7 @@ _PORT_MESSAGE_TMP_SUBSTRUCT_S1
         :class:`CSHORT`
 
 _PORT_MESSAGE_TMP_UNION_U1
---------------------------
+''''''''''''''''''''''''''
 .. class:: _PORT_MESSAGE_TMP_UNION_U1
 
     Alias for :class:`_PORT_MESSAGE_TMP_UNION_U1`
@@ -9799,7 +9799,7 @@ _PORT_MESSAGE_TMP_UNION_U1
         :class:`_PORT_MESSAGE_TMP_SUBSTRUCT_S1`
 
 _PORT_MESSAGE_TMP_SUBSTRUCT_S2
-------------------------------
+''''''''''''''''''''''''''''''
 .. class:: _PORT_MESSAGE_TMP_SUBSTRUCT_S2
 
     Alias for :class:`_PORT_MESSAGE_TMP_SUBSTRUCT_S2`
@@ -9816,7 +9816,7 @@ _PORT_MESSAGE_TMP_SUBSTRUCT_S2
         :class:`CSHORT`
 
 _PORT_MESSAGE_TMP_UNION_U2
---------------------------
+''''''''''''''''''''''''''
 .. class:: _PORT_MESSAGE_TMP_UNION_U2
 
     Alias for :class:`_PORT_MESSAGE_TMP_UNION_U2`
@@ -9833,7 +9833,7 @@ _PORT_MESSAGE_TMP_UNION_U2
         :class:`_PORT_MESSAGE_TMP_SUBSTRUCT_S2`
 
 _PORT_MESSAGE32
----------------
+'''''''''''''''
 .. class:: PORT_MESSAGE32
 
     Alias for :class:`_PORT_MESSAGE32`
@@ -9869,7 +9869,7 @@ _PORT_MESSAGE32
         :class:`_PORT_MESSAGE32_TMP_UNION`
 
 _PORT_MESSAGE64
----------------
+'''''''''''''''
 .. class:: PPORT_MESSAGE64
 
     Pointer to :class:`_PORT_MESSAGE64`
@@ -9905,7 +9905,7 @@ _PORT_MESSAGE64
         :class:`_PORT_MESSAGE64_TMP_UNION`
 
 _ALPC_SERVER_INFORMATION_TMP_IN
--------------------------------
+'''''''''''''''''''''''''''''''
 .. class:: ALPC_SERVER_INFORMATION_TMP_IN
 
     Alias for :class:`_ALPC_SERVER_INFORMATION_TMP_IN`
@@ -9917,7 +9917,7 @@ _ALPC_SERVER_INFORMATION_TMP_IN
         :class:`HANDLE`
 
 _ALPC_SERVER_INFORMATION_TMP_OUT
---------------------------------
+''''''''''''''''''''''''''''''''
 .. class:: ALPC_SERVER_INFORMATION_TMP_OUT
 
     Alias for :class:`_ALPC_SERVER_INFORMATION_TMP_OUT`
@@ -9939,7 +9939,7 @@ _ALPC_SERVER_INFORMATION_TMP_OUT
         :class:`UNICODE_STRING`
 
 ALPC_SERVER_INFORMATION
------------------------
+'''''''''''''''''''''''
 .. class:: ALPC_SERVER_INFORMATION
 
     Alias for :class:`ALPC_SERVER_INFORMATION`
@@ -9956,7 +9956,7 @@ ALPC_SERVER_INFORMATION
         :class:`ALPC_SERVER_INFORMATION_TMP_OUT`
 
 _ALPC_CONTEXT_ATTR
-------------------
+''''''''''''''''''
 .. class:: PALPC_CONTEXT_ATTR
 
     Pointer to :class:`_ALPC_CONTEXT_ATTR`
@@ -9992,7 +9992,7 @@ _ALPC_CONTEXT_ATTR
         :class:`ULONG`
 
 _ALPC_CONTEXT_ATTR32
---------------------
+''''''''''''''''''''
 .. class:: ALPC_CONTEXT_ATTR32
 
     Alias for :class:`_ALPC_CONTEXT_ATTR32`
@@ -10028,7 +10028,7 @@ _ALPC_CONTEXT_ATTR32
         :class:`ULONG`
 
 _ALPC_CONTEXT_ATTR64
---------------------
+''''''''''''''''''''
 .. class:: ALPC_CONTEXT_ATTR64
 
     Alias for :class:`_ALPC_CONTEXT_ATTR64`
@@ -10064,7 +10064,7 @@ _ALPC_CONTEXT_ATTR64
         :class:`ULONG`
 
 _ALPC_HANDLE_ATTR
------------------
+'''''''''''''''''
 .. class:: PALPC_HANDLE_ATTR
 
     Pointer to :class:`_ALPC_HANDLE_ATTR`
@@ -10095,7 +10095,7 @@ _ALPC_HANDLE_ATTR
         :class:`ACCESS_MASK`
 
 _ALPC_HANDLE_ATTR32
--------------------
+'''''''''''''''''''
 .. class:: ALPC_HANDLE_ATTR32
 
     Alias for :class:`_ALPC_HANDLE_ATTR32`
@@ -10126,7 +10126,7 @@ _ALPC_HANDLE_ATTR32
         :class:`ACCESS_MASK`
 
 _ALPC_HANDLE_ATTR64
--------------------
+'''''''''''''''''''
 .. class:: PALPC_HANDLE_ATTR64
 
     Pointer to :class:`_ALPC_HANDLE_ATTR64`
@@ -10157,7 +10157,7 @@ _ALPC_HANDLE_ATTR64
         :class:`ACCESS_MASK`
 
 _ALPC_SECURITY_ATTR
--------------------
+'''''''''''''''''''
 .. class:: PALPC_SECURITY_ATTR
 
     Pointer to :class:`_ALPC_SECURITY_ATTR`
@@ -10183,7 +10183,7 @@ _ALPC_SECURITY_ATTR
         :class:`ALPC_HANDLE`
 
 _ALPC_SECURITY_ATTR32
----------------------
+'''''''''''''''''''''
 .. class:: ALPC_SECURITY_ATTR32
 
     Alias for :class:`_ALPC_SECURITY_ATTR32`
@@ -10209,7 +10209,7 @@ _ALPC_SECURITY_ATTR32
         :class:`ULONG`
 
 _ALPC_SECURITY_ATTR64
----------------------
+'''''''''''''''''''''
 .. class:: PALPC_SECURITY_ATTR64
 
     Pointer to :class:`_ALPC_SECURITY_ATTR64`
@@ -10235,7 +10235,7 @@ _ALPC_SECURITY_ATTR64
         :class:`ULONGLONG`
 
 _ALPC_DATA_VIEW_ATTR
---------------------
+''''''''''''''''''''
 .. class:: PALPC_DATA_VIEW_ATTR
 
     Pointer to :class:`_ALPC_DATA_VIEW_ATTR`
@@ -10266,7 +10266,7 @@ _ALPC_DATA_VIEW_ATTR
         :class:`PVOID`
 
 _ALPC_DATA_VIEW_ATTR32
-----------------------
+''''''''''''''''''''''
 .. class:: PALPC_DATA_VIEW_ATTR32
 
     Pointer to :class:`_ALPC_DATA_VIEW_ATTR32`
@@ -10297,7 +10297,7 @@ _ALPC_DATA_VIEW_ATTR32
         :class:`ULONG`
 
 _ALPC_DATA_VIEW_ATTR64
-----------------------
+''''''''''''''''''''''
 .. class:: PALPC_DATA_VIEW_ATTR64
 
     Pointer to :class:`_ALPC_DATA_VIEW_ATTR64`
@@ -10328,7 +10328,7 @@ _ALPC_DATA_VIEW_ATTR64
         :class:`ULONGLONG`
 
 _ALPC_TOKEN_ATTR
-----------------
+''''''''''''''''
 .. class:: ALPC_TOKEN_ATTR
 
     Alias for :class:`_ALPC_TOKEN_ATTR`
@@ -10354,7 +10354,7 @@ _ALPC_TOKEN_ATTR
         :class:`ULONGLONG`
 
 _ALPC_DIRECT_ATTR
------------------
+'''''''''''''''''
 .. class:: ALPC_DIRECT_ATTR
 
     Alias for :class:`_ALPC_DIRECT_ATTR`
@@ -10370,7 +10370,7 @@ _ALPC_DIRECT_ATTR
         :class:`HANDLE`
 
 _ALPC_DIRECT_ATTR32
--------------------
+'''''''''''''''''''
 .. class:: PALPC_DIRECT_ATTR32
 
     Pointer to :class:`_ALPC_DIRECT_ATTR32`
@@ -10386,7 +10386,7 @@ _ALPC_DIRECT_ATTR32
         :class:`ULONG`
 
 _ALPC_DIRECT_ATTR64
--------------------
+'''''''''''''''''''
 .. class:: ALPC_DIRECT_ATTR64
 
     Alias for :class:`_ALPC_DIRECT_ATTR64`
@@ -10402,7 +10402,7 @@ _ALPC_DIRECT_ATTR64
         :class:`ULONGLONG`
 
 _ALPC_WORK_ON_BEHALF_ATTR
--------------------------
+'''''''''''''''''''''''''
 .. class:: PALPC_WORK_ON_BEHALF_ATTR
 
     Pointer to :class:`_ALPC_WORK_ON_BEHALF_ATTR`
@@ -10417,8 +10417,10 @@ _ALPC_WORK_ON_BEHALF_ATTR
 
         :class:`ULONGLONG`
 
+WinEnums
+--------
 _SYSTEM_INFORMATION_CLASS
--------------------------
+'''''''''''''''''''''''''
 .. class:: SYSTEM_INFORMATION_CLASS
 
     Alias for :class:`_SYSTEM_INFORMATION_CLASS`
@@ -10675,7 +10677,7 @@ _SYSTEM_INFORMATION_CLASS
     .. attribute:: MaxSystemInfoClass(82)
 
 _WELL_KNOWN_SID_TYPE
---------------------
+''''''''''''''''''''
 .. class:: WELL_KNOWN_SID_TYPE
 
     Alias for :class:`_WELL_KNOWN_SID_TYPE`
@@ -10968,7 +10970,7 @@ _WELL_KNOWN_SID_TYPE
     .. attribute:: WinCapabilityRemovableStorageSid(94)
 
 _SECTION_INHERIT
-----------------
+''''''''''''''''
 .. class:: SECTION_INHERIT
 
     Alias for :class:`_SECTION_INHERIT`
@@ -10982,7 +10984,7 @@ _SECTION_INHERIT
     .. attribute:: ViewUnmap(2)
 
 _MEMORY_INFORMATION_CLASS
--------------------------
+'''''''''''''''''''''''''
 .. class:: MEMORY_INFORMATION_CLASS
 
     Alias for :class:`_MEMORY_INFORMATION_CLASS`
@@ -11005,7 +11007,7 @@ _MEMORY_INFORMATION_CLASS
     .. attribute:: MemoryWorkingSetListEx(4)
 
 _THREAD_INFORMATION_CLASS
--------------------------
+'''''''''''''''''''''''''
 .. class:: THREAD_INFORMATION_CLASS
 
     Alias for :class:`_THREAD_INFORMATION_CLASS`
@@ -11071,7 +11073,7 @@ _THREAD_INFORMATION_CLASS
     .. attribute:: ThreadHideFromDebugger(17)
 
 _TCP_TABLE_CLASS
-----------------
+''''''''''''''''
 .. class:: TCP_TABLE_CLASS
 
     Alias for :class:`_TCP_TABLE_CLASS`
@@ -11106,7 +11108,7 @@ _TCP_TABLE_CLASS
     .. attribute:: TCP_TABLE_OWNER_MODULE_ALL(8)
 
 _VARENUM
---------
+''''''''
 .. class:: VARENUM
 
     Alias for :class:`_VARENUM`
@@ -11270,7 +11272,7 @@ _VARENUM
     .. attribute:: VT_TYPEMASK(4095)
 
 _UDP_TABLE_CLASS
-----------------
+''''''''''''''''
 .. class:: UDP_TABLE_CLASS
 
     Alias for :class:`_UDP_TABLE_CLASS`
@@ -11287,7 +11289,7 @@ _UDP_TABLE_CLASS
     .. attribute:: UDP_TABLE_OWNER_MODULE(2)
 
 NET_FW_RULE_DIRECTION_
-----------------------
+''''''''''''''''''''''
 .. class:: NET_FW_RULE_DIRECTION
 
     Alias for :class:`NET_FW_RULE_DIRECTION_`
@@ -11304,7 +11306,7 @@ NET_FW_RULE_DIRECTION_
     .. attribute:: NET_FW_RULE_DIR_MAX(3)
 
 NET_FW_PROFILE_TYPE2_
----------------------
+'''''''''''''''''''''
 .. class:: NET_FW_PROFILE_TYPE2
 
     Alias for :class:`NET_FW_PROFILE_TYPE2_`
@@ -11324,7 +11326,7 @@ NET_FW_PROFILE_TYPE2_
     .. attribute:: NET_FW_PROFILE2_ALL(2147483647)
 
 _MIB_TCP_STATE
---------------
+''''''''''''''
 .. class:: MIB_TCP_STATE
 
     Alias for :class:`_MIB_TCP_STATE`
@@ -11368,7 +11370,7 @@ _MIB_TCP_STATE
     .. attribute:: MIB_TCP_STATE_DELETE_TCB(12)
 
 NET_FW_IP_PROTOCOL_
--------------------
+'''''''''''''''''''
 .. class:: NET_FW_IP_PROTOCOL
 
     Alias for :class:`NET_FW_IP_PROTOCOL_`
@@ -11385,7 +11387,7 @@ NET_FW_IP_PROTOCOL_
     .. attribute:: NET_FW_IP_PROTOCOL_ANY(256)
 
 _TOKEN_INFORMATION_CLASS
-------------------------
+''''''''''''''''''''''''
 .. class:: TOKEN_INFORMATION_CLASS
 
     Alias for :class:`_TOKEN_INFORMATION_CLASS`
@@ -11523,7 +11525,7 @@ _TOKEN_INFORMATION_CLASS
     .. attribute:: MaxTokenInfoClass(41)
 
 _SECURITY_IMPERSONATION_LEVEL
------------------------------
+'''''''''''''''''''''''''''''
 .. class:: SECURITY_IMPERSONATION_LEVEL
 
     Alias for :class:`_SECURITY_IMPERSONATION_LEVEL`
@@ -11547,7 +11549,7 @@ _SECURITY_IMPERSONATION_LEVEL
     .. attribute:: SecurityDelegation(3)
 
 _SC_ENUM_TYPE
--------------
+'''''''''''''
 .. class:: SC_ENUM_TYPE
 
     Alias for :class:`_SC_ENUM_TYPE`
@@ -11558,7 +11560,7 @@ _SC_ENUM_TYPE
     .. attribute:: SC_ENUM_PROCESS_INFO(0)
 
 _SC_STATUS_TYPE
----------------
+'''''''''''''''
 .. class:: SC_STATUS_TYPE
 
     Alias for :class:`_SC_STATUS_TYPE`
@@ -11569,7 +11571,7 @@ _SC_STATUS_TYPE
     .. attribute:: SC_STATUS_PROCESS_INFO(0)
 
 _OBJECT_INFORMATION_CLASS
--------------------------
+'''''''''''''''''''''''''
 .. class:: OBJECT_INFORMATION_CLASS
 
     Alias for :class:`_OBJECT_INFORMATION_CLASS`
@@ -11586,7 +11588,7 @@ _OBJECT_INFORMATION_CLASS
     .. attribute:: ObjectTypeInformation(2)
 
 _SID_NAME_USE
--------------
+'''''''''''''
 .. class:: SID_NAME_USE
 
     Alias for :class:`_SID_NAME_USE`
@@ -11628,7 +11630,7 @@ _SID_NAME_USE
     .. attribute:: SidTypeLabel(10)
 
 NET_FW_PROFILE_TYPE2_
----------------------
+'''''''''''''''''''''
 .. class:: NET_FW_PROFILE_TYPE2
 
     Alias for :class:`NET_FW_PROFILE_TYPE2_`
@@ -11648,7 +11650,7 @@ NET_FW_PROFILE_TYPE2_
     .. attribute:: NET_FW_PROFILE2_ALL(2147483647)
 
 NET_FW_ACTION_
---------------
+''''''''''''''
 .. class:: NET_FW_ACTION
 
     Alias for :class:`NET_FW_ACTION_`
@@ -11665,7 +11667,7 @@ NET_FW_ACTION_
     .. attribute:: NET_FW_ACTION_MAX(2)
 
 NET_FW_MODIFY_STATE_
---------------------
+''''''''''''''''''''
 .. class:: NET_FW_MODIFY_STATE
 
     Alias for :class:`NET_FW_MODIFY_STATE_`
@@ -11682,7 +11684,7 @@ NET_FW_MODIFY_STATE_
     .. attribute:: NET_FW_MODIFY_STATE_INBOUND_BLOCKED(2)
 
 NET_FW_RULE_DIRECTION_
-----------------------
+''''''''''''''''''''''
 .. class:: NET_FW_RULE_DIRECTION
 
     Alias for :class:`NET_FW_RULE_DIRECTION_`
@@ -11699,7 +11701,7 @@ NET_FW_RULE_DIRECTION_
     .. attribute:: NET_FW_RULE_DIR_MAX(3)
 
 tag_WBEMSTATUS
---------------
+''''''''''''''
 .. class:: WBEMSTATUS
 
     Alias for :class:`tag_WBEMSTATUS`
@@ -12286,7 +12288,7 @@ tag_WBEMSTATUS
     .. attribute:: WBEMMOF_E_INVALID_DELETECLASS_SYNTAX(2147762225)
 
 tagCLSCTX
----------
+'''''''''
 .. class:: CLSCTX
 
     Alias for :class:`tagCLSCTX`
@@ -12366,7 +12368,7 @@ tagCLSCTX
     .. attribute:: CLSCTX_PS_DLL(2147483648)
 
 _SE_OBJECT_TYPE
----------------
+'''''''''''''''
 .. class:: SE_OBJECT_TYPE
 
     Alias for :class:`_SE_OBJECT_TYPE`
@@ -12413,7 +12415,7 @@ _SE_OBJECT_TYPE
     .. attribute:: SE_REGISTRY_WOW64_32KEY(12)
 
 _INTERNAL_IF_OPER_STATUS
-------------------------
+''''''''''''''''''''''''
 .. class:: INTERNAL_IF_OPER_STATUS
 
     Alias for :class:`_INTERNAL_IF_OPER_STATUS`
@@ -12439,7 +12441,7 @@ _INTERNAL_IF_OPER_STATUS
     .. attribute:: IF_OPER_STATUS_OPERATIONAL(5)
 
 _IMAGEHLP_SYMBOL_TYPE_INFO
---------------------------
+''''''''''''''''''''''''''
 .. class:: IMAGEHLP_SYMBOL_TYPE_INFO
 
     Alias for :class:`_IMAGEHLP_SYMBOL_TYPE_INFO`
@@ -12549,7 +12551,7 @@ _IMAGEHLP_SYMBOL_TYPE_INFO
     .. attribute:: IMAGEHLP_SYMBOL_TYPE_INFO_MAX(33)
 
 _PROCESSINFOCLASS
------------------
+'''''''''''''''''
 .. class:: PROCESSINFOCLASS
 
     Alias for :class:`_PROCESSINFOCLASS`
@@ -12563,7 +12565,7 @@ _PROCESSINFOCLASS
     .. attribute:: ProcessWow64Information(26)
 
 tagCOINIT
----------
+'''''''''
 .. class:: COINIT
 
     Alias for :class:`tagCOINIT`
@@ -12583,7 +12585,7 @@ tagCOINIT
     .. attribute:: COINIT_SPEED_OVER_MEMORY(8)
 
 tagTYPEKIND
------------
+'''''''''''
 .. class:: TYPEKIND
 
     Alias for :class:`tagTYPEKIND`
@@ -12618,7 +12620,7 @@ tagTYPEKIND
     .. attribute:: TKIND_MAX(8)
 
 _BG_JOB_STATE
--------------
+'''''''''''''
 .. class:: BG_JOB_STATE
 
     Alias for :class:`_BG_JOB_STATE`
@@ -12653,7 +12655,7 @@ _BG_JOB_STATE
     .. attribute:: BG_JOB_STATE_CANCELLED(8)
 
 _BG_JOB_PROXY_USAGE
--------------------
+'''''''''''''''''''
 .. class:: BG_JOB_PROXY_USAGE
 
     Alias for :class:`_BG_JOB_PROXY_USAGE`
@@ -12673,7 +12675,7 @@ _BG_JOB_PROXY_USAGE
     .. attribute:: BG_JOB_PROXY_USAGE_AUTODETECT(3)
 
 _BG_JOB_PRIORITY
-----------------
+''''''''''''''''
 .. class:: BG_JOB_PRIORITY
 
     Alias for :class:`_BG_JOB_PRIORITY`
@@ -12693,7 +12695,7 @@ _BG_JOB_PRIORITY
     .. attribute:: BG_JOB_PRIORITY_LOW(3)
 
 _BG_ERROR_CONTEXT
------------------
+'''''''''''''''''
 .. class:: BG_ERROR_CONTEXT
 
     Alias for :class:`_BG_ERROR_CONTEXT`
@@ -12725,7 +12727,7 @@ _BG_ERROR_CONTEXT
     .. attribute:: BG_ERROR_CONTEXT_REMOTE_APPLICATION(7)
 
 _BG_JOB_TYPE
-------------
+''''''''''''
 .. class:: BG_JOB_TYPE
 
     Alias for :class:`_BG_JOB_TYPE`
@@ -12742,7 +12744,7 @@ _BG_JOB_TYPE
     .. attribute:: BG_JOB_TYPE_UPLOAD_REPLY(2)
 
 _ALPC_PORT_INFORMATION_CLASS
-----------------------------
+''''''''''''''''''''''''''''
 .. class:: ALPC_PORT_INFORMATION_CLASS
 
     Alias for :class:`_ALPC_PORT_INFORMATION_CLASS`
