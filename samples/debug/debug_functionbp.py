@@ -9,14 +9,12 @@ import windows.debug
 
 from windows.generated_def.winstructs import *
 
-class MyFunctionBP(windows.debug.FunctionBP):
-    def __init__(self, target, addr=None):
-        super(MyFunctionBP, self).__init__(target, addr)
-        self.target_name = target.target_func
-        self.counter = 3
+class FollowNtCreateFile(windows.debug.FunctionBP):
+    TARGET = windows.winproxy.NtCreateFile
+    COUNTER = 3
 
     def trigger(self, dbg, exc):
-        if not self.counter:
+        if not self.COUNTER:
             print("Exiting process")
             dbg.current_process.exit()
             return
@@ -41,9 +39,10 @@ class MyFunctionBP(windows.debug.FunctionBP):
         fhandle = fhandle[0]
         print("Handle manually found! typename=<{0}>, name=<{1}>".format(fhandle.type, fhandle.name))
         print("")
-        self.counter -= 1
+        self.COUNTER -= 1
 
-calc = windows.test.pop_calc_32(dwCreationFlags=DEBUG_PROCESS)
-d = windows.debug.Debugger(calc)
-d.add_bp(MyFunctionBP(windows.winproxy.NtCreateFile))
-d.loop()
+if __name__ == "__main__":
+    calc = windows.test.pop_calc_32(dwCreationFlags=DEBUG_PROCESS)
+    d = windows.debug.Debugger(calc)
+    d.add_bp(FollowNtCreateFile())
+    d.loop()

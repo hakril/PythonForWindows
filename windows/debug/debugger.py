@@ -78,7 +78,11 @@ class Debugger(object):
     def attach(cls, target):
         """attach to ``target`` (must be a :class:`WinProcess`)
 
-        :rtype: :class:`Debugger`"""
+        :rtype: :class:`Debugger`
+
+        .. note::
+
+            see :ref:`Debugger.attach sample <sample_debugger_attach>`"""
         winproxy.DebugActiveProcess(target.pid)
         return cls(target)
 

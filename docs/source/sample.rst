@@ -404,6 +404,34 @@ Ouput::
 
     Exiting process
 
+.. _sample_debugger_attach:
+
+:func:`Debugger.attach <windows.debug.Debugger.attach>`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. literalinclude:: ..\..\samples\debug\attach.py
+
+Ouput::
+
+    (cmd λ) python.exe debug\debug\attach.py
+    Finding process with pid <11392>
+    Target is <WinProcess "notepad.exe" pid 11392 at 0x471a750>
+    Debugger attached: <windows.debug.debugger.Debugger object at 0x04707EF0>
+
+    NtCreateFile of <\??\C:\Windows\Fonts\staticcache.dat>: handle = 0x288
+    Handle manually found! typename=<File>, name=<\Device\HarddiskVolume4\Windows\Fonts\StaticCache.dat>
+
+    NtCreateFile of <\??\C:\WINDOWS\Registration\R000000000015.clb>: handle = 0x320
+    Handle manually found! typename=<File>, name=<\Device\HarddiskVolume4\Windows\Registration\R000000000015.clb>
+
+    NtCreateFile of <\??\C:\WINDOWS\Globalization\Sorting\sortdefault.nls>: handle = 0x334
+    Handle manually found! typename=<File>, name=<\Device\HarddiskVolume4\Windows\Globalization\Sorting\SortDefault.nls>
+
+    Exiting process
+
+
+
+
 
 Native code tester
 ~~~~~~~~~~~~~~~~~~
