@@ -9,11 +9,11 @@ Processes
 ``windows.current_process``
 '''''''''''''''''''''''''''
 
-.. literalinclude:: ..\..\samples\current_process.py
+.. literalinclude:: ..\..\samples\process\current_process.py
 
 Output::
 
-    (cmd λ) python32.exe current_process.py
+    (cmd λ) python32.exe process\current_process.py
     current process is <windows.winobject.process.CurrentProcess object at 0x030A2590>
     current process is a <32> bits process
     current process is a SysWow64 process ? <True>
@@ -31,11 +31,11 @@ Output::
 Remote process : :class:`WinProcess`
 ''''''''''''''''''''''''''''''''''''
 
-.. literalinclude:: ..\..\samples\remote_process.py
+.. literalinclude:: ..\..\samples\process\remote_process.py
 
 Output::
 
-    (cmd λ) python.exe remote_process.py
+    (cmd λ) python.exe process\remote_process.py
     Creating a notepad
     Looking for notepads in the processes
     They are currently <1> notepads running on the system
@@ -72,11 +72,11 @@ Output::
 :class:`PEB` exploration
 ''''''''''''''''''''''''
 
-.. literalinclude:: ..\..\samples\peb.py
+.. literalinclude:: ..\..\samples\process\peb.py
 
 Output::
 
-    (cmd λ) python.exe  peb.py
+    (cmd λ) python.exe  process\peb.py
     Exploring the current process PEB
     PEB is <<windows.winobject.PEB object at 0x02649B70>>
     Commandline object is <WinUnicodeString "python.exe   peb.py " at 0x2649c60>
@@ -105,11 +105,11 @@ Output::
 IAT hooking
 '''''''''''
 
-.. literalinclude:: ..\..\samples\iat_hook.py
+.. literalinclude:: ..\..\samples\process\iat_hook.py
 
 Output::
 
-    (cmd λ) python iat_hook.py
+    (cmd λ) python process\iat_hook.py
     Asking for <MY_SECRET_KEY>
     <in hook> Hook called | hKey = 0x12d687 | lpSubKey = <MY_SECRET_KEY>
     <in hook> Secret key asked, returning magic handle 0x12345678
@@ -182,7 +182,7 @@ Output::
 :class:`Network` - socket exploration
 """""""""""""""""""""""""""""""""""""
 
-.. literalinclude:: ..\..\samples\network.py
+.. literalinclude:: ..\..\samples\network\network.py
 
 Output::
 
@@ -209,11 +209,11 @@ Output::
 :class:`Registry`
 """""""""""""""""
 
-.. literalinclude:: ..\..\samples\registry.py
+.. literalinclude:: ..\..\samples\registry\registry.py
 
 Output::
 
-    (cmd λ) python.exe registry.py
+    (cmd λ) python.exe registry\registry.py
     Registry is <<windows.registry.Registry object at 0x02941290>>
     HKEY_CURRENT_USER is <<PyHKey "HKEY_CURRENT_USER">>
     HKEY_CURRENT_USER subkeys names are:
@@ -248,11 +248,11 @@ Output::
 ``windows.wintrust``
 """"""""""""""""""""
 
-.. literalinclude:: ..\..\samples\wintrust.py
+.. literalinclude:: ..\..\samples\crypto\wintrust.py
 
 Output::
 
-    (cmd λ) python .\wintrust.py
+    (cmd λ) python crypto\wintrust.py
     Checking signature of <C:\windows\system32\ntdll.dll>
     is_signed: <True>
     check_signature: <0>
@@ -276,11 +276,11 @@ Output::
 In local process
 ''''''''''''''''
 
-.. literalinclude:: ..\..\samples\veh_segv.py
+.. literalinclude:: ..\..\samples\process\veh_segv.py
 
 Output::
 
-    (cmd λ) python.exe veh_segv.py
+    (cmd λ) python.exe process\veh_segv.py
     Protected page is at <0x1db0000>
     Setting page protection to <PAGE_NOACCESS>
 
@@ -304,11 +304,11 @@ Output::
 In remote process
 '''''''''''''''''
 
-.. literalinclude:: ..\..\samples\remote_veh_segv.py
+.. literalinclude:: ..\..\samples\process\remote_veh_segv.py
 
 Output::
 
-    (cmd λ) python .exe.\samples\remote_veh_segv.py
+    (cmd λ) python.exe process\remote_veh_segv.py
     (In another console)
 
     Tracing execution in module: <gdi32.dll>
@@ -342,11 +342,11 @@ Debugging
 :class:`Debugger`
 '''''''''''''''''
 
-.. literalinclude:: ..\..\samples\debugger_print_LdrLoaddll.py
+.. literalinclude:: ..\..\samples\debug\debugger_print_LdrLoaddll.py
 
 Ouput::
 
-    (cmd λ) python.exe .\samples\debugger_print_LdrLoaddll.py
+    (cmd λ) python.exe debug\debugger_print_LdrLoaddll.py
     Loading <KERNEL32.DLL>
     Got exception EXCEPTION_BREAKPOINT(0x80000003L) at 0x77a73bad
     Loading <C:\Windows\system32\IMM32.DLL>
@@ -368,11 +368,11 @@ Ouput::
 Single stepping
 ~~~~~~~~~~~~~~~
 
-.. literalinclude:: ..\..\samples\debugger_membp_singlestep.py
+.. literalinclude:: ..\..\samples\debug\debugger_membp_singlestep.py
 
 Ouput::
 
-    (cmd λ) python.exe .\samples\debugger_membp_singlestep.py
+    (cmd λ) python.exe debug\debugger_membp_singlestep.py
     Got exception EXCEPTION_BREAKPOINT(0x80000003L) at 0x77ae3c7d
     Instruction at <0x8d0006> wrote at <0x8e0000>
     Got single_step EXCEPTION_SINGLE_STEP(0x80000004L) at 0x8d000c
@@ -388,11 +388,11 @@ Ouput::
 :class:`windows.debug.FunctionBP`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. literalinclude:: ..\..\samples\debug_functionbp.py
+.. literalinclude:: ..\..\samples\debug\debug_functionbp.py
 
 Ouput::
 
-    (cmd λ) python.exe .\samples\debug_functionbp.py
+    (cmd λ) python.exe debug\debug_functionbp.py
     NtCreateFile of <\??\C:\Windows\syswow64\en-US\calc.exe.mui>: handle = 0xac
     Handle manually found! typename=<File>, name=<\Device\HarddiskVolume2\Windows\SysWOW64\en-US\calc.exe.mui>
 
@@ -506,11 +506,11 @@ Ouput::
 In current process
 ~~~~~~~~~~~~~~~~~~
 
-.. literalinclude:: ..\..\samples\local_debugger.py
+.. literalinclude:: ..\..\samples\debug\local_debugger.py
 
 Ouput::
 
-    (cmd λ) python.exe .\samples\local_debugger.py
+    (cmd λ) python.exe debug\local_debugger.py
     Code addr = 0xcf0002
     GOT AN HXBP at 0xcf0002
     EXCEPTION !!!! Got a EXCEPTION_SINGLE_STEP(0x80000004L) at 0xcf0003
@@ -523,11 +523,11 @@ Ouput::
 In remote process
 ~~~~~~~~~~~~~~~~~
 
-.. literalinclude:: ..\..\samples\local_debugger_remote_process.py
+.. literalinclude:: ..\..\samples\debug\local_debugger_remote_process.py
 
 Ouput::
 
-    (cmd λ) python.exe .\samples\local_debugger_remote_process.py
+    (cmd λ) python.exe debug\local_debugger_remote_process.py
     (In another console)
     I AM LOADING <C:\Windows\system32\uxtheme.dll>
     I AM LOADING <C:\Windows\system32\uxtheme.dll>
@@ -557,12 +557,12 @@ Make WMI requests
 """""""""""""""""
 
 
-.. literalinclude:: ..\..\samples\wmi_request.py
+.. literalinclude:: ..\..\samples\wmi\wmi_request.py
 
 
 Ouput::
 
-    (cmd λ) python .\samples\wmi_request.py
+    (cmd λ) python wmi\wmi_request.py
     WMI requester is <windows.winobject.wmi.WmiRequester object at 0x02B37EF0>
     Selecting * from 'Win32_Process'
     They are <92> processes
@@ -585,11 +585,11 @@ Ouput::
 using COM: ``INetFwPolicy2``
 """"""""""""""""""""""""""""
 
-.. literalinclude:: ..\..\samples\com_inetfwpolicy2.py
+.. literalinclude:: ..\..\samples\com\com_inetfwpolicy2.py
 
 Output::
 
-    (cmd λ) python .\samples\com_inetfwpolicy2.py
+    (cmd λ) python com\com_inetfwpolicy2.py
     Initialisation of COM
     Creating INetFwPolicy2 variable
     <INetFwPolicy2 object at 0x02DC8210> (value = None)
@@ -617,11 +617,11 @@ Encryption demo
 
 This sample is a working POC able to generate key-pair, encrypt and decrypt file.
 
-.. literalinclude:: ..\..\samples\encryption_demo.py
+.. literalinclude:: ..\..\samples\crypto\encryption_demo.py
 
 Ouput::
 
-    (cmd λ) python ..\samples\encryption_demo.py genkey YOLOCERTIF mykey --pfxpassword MYPASSWORD
+    (cmd λ) python crypto\encryption_demo.py genkey YOLOCERTIF mykey --pfxpassword MYPASSWORD
     <CertificatContext "YOLOCERTIF" serial="1b a4 3e 17 f7 ed ec ab 4f f8 11 46 48 e9 29 25">
 
     (cmd λ) ls
@@ -629,7 +629,7 @@ Ouput::
 
     (cmd λ) echo|set /p="my secret message" > message.txt
 
-    (cmd λ) python ..\samples\encryption_demo.py crypt message.txt message.crypt mykey.cer
+    (cmd λ) python crypto\encryption_demo.py crypt message.txt message.crypt mykey.cer
     Encryption done. Result:
     bytearray(b'0\x82\x01\x19\x06\t*\x86H\x86\xf7\r\x01\x07\x03\xa0\x82\x01\n0\x82\x01\x06\x02\x01\x001\x81\xc30\x81
     \xc0\x02\x01\x000)0\x151\x130\x11\x06\x03U\x04\x03\x13\nYOLOCERTIF\x02\x10\x1b\xa4>\x17\xf7\xed\xec\xabO\xf8\x11
@@ -639,7 +639,7 @@ Ouput::
     \xc6\x12x\x1am\xc8\x01t\xac\xa6\xf3#\x02\xd4J \x8eZ\xbb\x10W\xe1 0;\x06\t*\x86H\x86\xf7\r\x01\x07\x010\x14\x06\x08*
     \x86H\x86\xf7\r\x03\x07\x04\x08\x14F\x04\xad\xed9\xed<\x80\x18\x80]6\xccTV\xbc\xb8*\x84QY!~\xb3\n\x1aV\xd4\rf\xd1n:')
 
-    (cmd λ) python ..\samples\encryption_demo.py decrypt message.crypt mykey.pfx BADPASS
+    (cmd λ) python crypto\encryption_demo.py decrypt message.crypt mykey.pfx BADPASS
     Traceback (most recent call last):
     File "..\samples\encryption_demo.py", line 103, in <module>
         res.func(**res.__dict__)
@@ -655,7 +655,7 @@ Ouput::
         raise Kernel32Error(func_name)
     windows.winproxy.Kernel32Error: PFXImportCertStore: [Error 86] The specified network password is not correct.
 
-    (cmd λ) python samples\encryption_demo.py decrypt message.crypt mykey.pfx MYPASSWORD
+    (cmd λ) python crypto\encryption_demo.py decrypt message.crypt mykey.pfx MYPASSWORD
     Result = <my secret message>
 
 
@@ -664,13 +664,13 @@ Ouput::
 Certificate demo
 ''''''''''''''''
 
-.. literalinclude:: ..\..\samples\certificate.py
+.. literalinclude:: ..\..\samples\crypto\certificate.py
 
 
 Ouput::
 
 
-    (cmd λ) python .\samples\certificate.py
+    (cmd λ) python crypto\certificate.py
     Analysing certificate: <CertificateContext "Microsoft Windows" serial="33 00 00 01 06 6e c3 25 c4 31 c9 18 0e 00 00 00 00 01 06">
         * name: <Microsoft Windows>
         * issuer: <Microsoft Windows Production PCA 2011>
