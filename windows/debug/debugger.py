@@ -973,33 +973,49 @@ class Debugger(object):
         raise NotImplementedError("Debugger that explicitly single step should implement <on_single_step>")
 
     def on_create_process(self, create_process):
-        """Called on create_process event (for param type see https://msdn.microsoft.com/en-us/library/windows/desktop/ms679286(v=vs.85).aspx)"""
+        """Called on create_process event
+
+            :param CREATE_PROCESS_DEBUG_INFO create_process:"""
         pass
 
     def on_exit_process(self, exit_process):
-        """Called on exit_process event (for param type see https://msdn.microsoft.com/en-us/library/windows/desktop/ms679334(v=vs.85).aspx)"""
+        """Called on exit_process event
+
+            :param EXIT_PROCESS_DEBUG_INFO exit_process:"""
         pass
 
     def on_create_thread(self, create_thread):
-        """Called on create_thread event (for param type see https://msdn.microsoft.com/en-us/library/windows/desktop/ms679287(v=vs.85).aspx)"""
+        """Called on create_thread event
+
+            :param CREATE_THREAD_DEBUG_INFO create_thread:"""
         pass
 
     def on_exit_thread(self, exit_thread):
-        """Called on exit_thread event (for param type see https://msdn.microsoft.com/en-us/library/windows/desktop/ms679335(v=vs.85).aspx)"""
+        """Called on exit_thread event
+
+            :param EXIT_THREAD_DEBUG_INFO exit_thread:"""
         pass
 
     def on_load_dll(self, load_dll):
-        """Called on load_dll event (for param type see https://msdn.microsoft.com/en-us/library/windows/desktop/ms680351(v=vs.85).aspx)"""
+        """Called on load_dll event
+
+            :param LOAD_DLL_DEBUG_INFO load_dll:"""
         pass
 
     def on_unload_dll(self, unload_dll):
-        """Called on unload_dll event (for param type see https://msdn.microsoft.com/en-us/library/windows/desktop/ms681403(v=vs.85).aspx)"""
+        """Called on unload_dll event
+
+            :param UNLOAD_DLL_DEBUG_INFO unload_dll:"""
         pass
 
     def on_output_debug_string(self, debug_string):
-        """Called on debug_string event (for param type see https://msdn.microsoft.com/en-us/library/windows/desktop/ms680545(v=vs.85).aspx)"""
+        """Called on debug_string event
+
+            :param OUTPUT_DEBUG_STRING_INFO debug_string:"""
         pass
 
     def on_rip(self, rip_info):
-        """Called on rip_info event (for param type see https://msdn.microsoft.com/en-us/library/windows/desktop/ms680587(v=vs.85).aspx)"""
+        """Called on rip_info event
+
+            :param RIP_INFO rip_info:"""
         pass

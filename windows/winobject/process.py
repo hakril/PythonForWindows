@@ -457,7 +457,7 @@ class Process(AutoHandle):
     def query_memory(self, addr):
         """Query the memory informations about page at ``addr``
 
-        :rtype: :class:`MEMORY_BASIC_INFORMATION`
+        :rtype: :class:`~windows.generated_def.MEMORY_BASIC_INFORMATION`
 		"""
         if windows.current_process.bitness == 32 and self.bitness == 64:
             res = MEMORY_BASIC_INFORMATION64()
@@ -478,7 +478,7 @@ class Process(AutoHandle):
     def memory_state(self):
         """Yield the memory information for the whole address space of the process
 
-        :yield: :class:`MEMORY_BASIC_INFORMATION`
+        :yield: :class:`~windows.generated_def.MEMORY_BASIC_INFORMATION`
 		"""
         addr = 0
         res = []
