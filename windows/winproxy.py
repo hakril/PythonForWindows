@@ -950,6 +950,10 @@ def NtMapViewOfSection(SectionHandle, ProcessHandle, BaseAddress, ZeroBits, Comm
 def NtUnmapViewOfSection(ProcessHandle, BaseAddress):
     return NtUnmapViewOfSection.ctypes_function(ProcessHandle, BaseAddress)
 
+@NtdllProxy("RtlGetUnloadEventTraceEx", no_error_check)
+def RtlGetUnloadEventTraceEx(ElementSize, ElementCount, EventTrace):
+    return RtlGetUnloadEventTraceEx.ctypes_function(ElementSize, ElementCount, EventTrace)
+
 
 
 # ##### ADVAPI32 ####### #

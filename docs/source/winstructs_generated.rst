@@ -9150,6 +9150,144 @@ _SYSTEM_MANDATORY_LABEL_ACE
 
         :class:`DWORD`
 
+_RTL_UNLOAD_EVENT_TRACE
+'''''''''''''''''''''''
+.. class:: PRTL_UNLOAD_EVENT_TRACE
+
+    Pointer to :class:`_RTL_UNLOAD_EVENT_TRACE`
+
+.. class:: RTL_UNLOAD_EVENT_TRACE
+
+    Alias for :class:`_RTL_UNLOAD_EVENT_TRACE`
+
+.. class:: _RTL_UNLOAD_EVENT_TRACE
+
+    .. attribute:: BaseAddress
+
+        :class:`PVOID`
+
+
+    .. attribute:: SizeOfImage
+
+        :class:`SIZE_T`
+
+
+    .. attribute:: Sequence
+
+        :class:`ULONG`
+
+
+    .. attribute:: TimeDateStamp
+
+        :class:`ULONG`
+
+
+    .. attribute:: CheckSum
+
+        :class:`ULONG`
+
+
+    .. attribute:: ImageName
+
+        :class:`WCHAR` ``[32]``
+
+
+    .. attribute:: Version
+
+        :class:`ULONG` ``[2]``
+
+_RTL_UNLOAD_EVENT_TRACE32
+'''''''''''''''''''''''''
+.. class:: RTL_UNLOAD_EVENT_TRACE32
+
+    Alias for :class:`_RTL_UNLOAD_EVENT_TRACE32`
+
+.. class:: PRTL_UNLOAD_EVENT_TRACE32
+
+    Pointer to :class:`_RTL_UNLOAD_EVENT_TRACE32`
+
+.. class:: _RTL_UNLOAD_EVENT_TRACE32
+
+    .. attribute:: BaseAddress
+
+        :class:`DWORD`
+
+
+    .. attribute:: SizeOfImage
+
+        :class:`DWORD`
+
+
+    .. attribute:: Sequence
+
+        :class:`ULONG`
+
+
+    .. attribute:: TimeDateStamp
+
+        :class:`ULONG`
+
+
+    .. attribute:: CheckSum
+
+        :class:`ULONG`
+
+
+    .. attribute:: ImageName
+
+        :class:`WCHAR` ``[32]``
+
+
+    .. attribute:: Version
+
+        :class:`ULONG` ``[2]``
+
+_RTL_UNLOAD_EVENT_TRACE64
+'''''''''''''''''''''''''
+.. class:: PRTL_UNLOAD_EVENT_TRACE64
+
+    Pointer to :class:`_RTL_UNLOAD_EVENT_TRACE64`
+
+.. class:: RTL_UNLOAD_EVENT_TRACE64
+
+    Alias for :class:`_RTL_UNLOAD_EVENT_TRACE64`
+
+.. class:: _RTL_UNLOAD_EVENT_TRACE64
+
+    .. attribute:: BaseAddress
+
+        :class:`ULONGLONG`
+
+
+    .. attribute:: SizeOfImage
+
+        :class:`ULONGLONG`
+
+
+    .. attribute:: Sequence
+
+        :class:`ULONG`
+
+
+    .. attribute:: TimeDateStamp
+
+        :class:`ULONG`
+
+
+    .. attribute:: CheckSum
+
+        :class:`ULONG`
+
+
+    .. attribute:: ImageName
+
+        :class:`WCHAR` ``[32]``
+
+
+    .. attribute:: Version
+
+        :class:`ULONG` ``[2]``
+
 tagRECT
 '''''''
 .. class:: LPRECT

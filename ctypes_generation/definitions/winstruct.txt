@@ -2946,3 +2946,35 @@ typedef struct _SYSTEM_MANDATORY_LABEL_ACE {
     ACCESS_MASK Mask;
     DWORD SidStart;
 } SYSTEM_MANDATORY_LABEL_ACE, *PSYSTEM_MANDATORY_LABEL_ACE;
+
+
+typedef struct _RTL_UNLOAD_EVENT_TRACE {
+    PVOID BaseAddress;
+    SIZE_T SizeOfImage;
+    ULONG Sequence;
+    ULONG TimeDateStamp;
+    ULONG CheckSum;
+    WCHAR ImageName[32];
+    ULONG Version[2];
+} RTL_UNLOAD_EVENT_TRACE, *PRTL_UNLOAD_EVENT_TRACE;
+
+typedef struct _RTL_UNLOAD_EVENT_TRACE32 {
+    DWORD BaseAddress;
+    DWORD SizeOfImage;
+    ULONG Sequence;
+    ULONG TimeDateStamp;
+    ULONG CheckSum;
+    WCHAR ImageName[32];
+    ULONG Version[2];
+} RTL_UNLOAD_EVENT_TRACE32, *PRTL_UNLOAD_EVENT_TRACE32;
+
+
+typedef struct _RTL_UNLOAD_EVENT_TRACE64 {
+    ULONGLONG BaseAddress;
+    ULONGLONG SizeOfImage;
+    ULONG Sequence;
+    ULONG TimeDateStamp;
+    ULONG CheckSum;
+    WCHAR ImageName[32];
+    ULONG Version[2];
+} RTL_UNLOAD_EVENT_TRACE64, *PRTL_UNLOAD_EVENT_TRACE64;

@@ -3740,6 +3740,45 @@ class _SYSTEM_MANDATORY_LABEL_ACE(Structure):
 SYSTEM_MANDATORY_LABEL_ACE = _SYSTEM_MANDATORY_LABEL_ACE
 PSYSTEM_MANDATORY_LABEL_ACE = POINTER(_SYSTEM_MANDATORY_LABEL_ACE)
 
+class _RTL_UNLOAD_EVENT_TRACE(Structure):
+    _fields_ = [
+        ("BaseAddress", PVOID),
+        ("SizeOfImage", SIZE_T),
+        ("Sequence", ULONG),
+        ("TimeDateStamp", ULONG),
+        ("CheckSum", ULONG),
+        ("ImageName", WCHAR * 32),
+        ("Version", ULONG * 2),
+    ]
+PRTL_UNLOAD_EVENT_TRACE = POINTER(_RTL_UNLOAD_EVENT_TRACE)
+RTL_UNLOAD_EVENT_TRACE = _RTL_UNLOAD_EVENT_TRACE
+
+class _RTL_UNLOAD_EVENT_TRACE32(Structure):
+    _fields_ = [
+        ("BaseAddress", DWORD),
+        ("SizeOfImage", DWORD),
+        ("Sequence", ULONG),
+        ("TimeDateStamp", ULONG),
+        ("CheckSum", ULONG),
+        ("ImageName", WCHAR * 32),
+        ("Version", ULONG * 2),
+    ]
+RTL_UNLOAD_EVENT_TRACE32 = _RTL_UNLOAD_EVENT_TRACE32
+PRTL_UNLOAD_EVENT_TRACE32 = POINTER(_RTL_UNLOAD_EVENT_TRACE32)
+
+class _RTL_UNLOAD_EVENT_TRACE64(Structure):
+    _fields_ = [
+        ("BaseAddress", ULONGLONG),
+        ("SizeOfImage", ULONGLONG),
+        ("Sequence", ULONG),
+        ("TimeDateStamp", ULONG),
+        ("CheckSum", ULONG),
+        ("ImageName", WCHAR * 32),
+        ("Version", ULONG * 2),
+    ]
+PRTL_UNLOAD_EVENT_TRACE64 = POINTER(_RTL_UNLOAD_EVENT_TRACE64)
+RTL_UNLOAD_EVENT_TRACE64 = _RTL_UNLOAD_EVENT_TRACE64
+
 class tagRECT(Structure):
     _fields_ = [
         ("left", LONG),

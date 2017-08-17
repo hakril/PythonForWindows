@@ -4,6 +4,7 @@ import os
 import sys
 import code
 import datetime
+from collections import namedtuple
 
 import windows
 from windows.dbgprint import dbgprint
@@ -270,6 +271,15 @@ def get_known_sid(sid_type):
     buffer = ctypes.c_buffer(size.value)
     windows.winproxy.CreateWellKnownSid(sid_type, None, buffer, size)
     return ctypes.cast(buffer, PSID)
+
+UnloadEventTraceInfo = namedtuple("UnloadEventTraceInfo", ["size", "nb_elt", "array_ptr"])
+
+def get_unload_event_trace():
+    x = PULONG()
+    y = PULONG()
+    z = PVOID()
+    windows.winproxy.RtlGetUnloadEventTraceEx(x, y, z)
+    return UnloadEventTraceInfo(x[0], y[0], z.value)
 
 class VirtualProtected(object):
     """

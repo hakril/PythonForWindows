@@ -167,6 +167,7 @@ def create_remote_array(subtype, len):
             self.target = target
 
         def __getitem__(self, slice):
+            # import pdb;pdb.set_trace()
             if not isinstance(slice, (int, long)):
                 raise NotImplementedError("RemoteArray slice __getitem__")
             if slice >= len:
@@ -177,6 +178,13 @@ def create_remote_array(subtype, len):
             class TST(ctypes.Structure):
                 _fields_ = [("TST", subtype)]
             return RemoteStructure.from_structure(TST)(item_addr, target=self.target).TST
+
+        def __getslice__(self, start, stop): # Still used even for python 2.7 wtf :F
+            stop = min(stop, len)
+            start = max(start, 0)
+            # dummy implementation
+            return [self[i] for i in range(start, stop)]
+
     return RemoteArray
 
 
@@ -344,6 +352,13 @@ class RemoteStructureUnion(object):
         if issubclass(ftype, ctypes.Union):  # Union that must be transfomed
             return RemoteUnion.from_structure(ftype)(self._base_addr + fosset, self._target)
         if issubclass(ftype, _ctypes.Array):  # Arrays
+            # if this is a string: just cast the read value to string
+            if ftype._type_ == ctypes.c_char: # Use issubclass instead ?
+                return s.split("\x00", 1)[0]
+            elif ftype._type_ == ctypes.c_wchar: # Use issubclass instead ?
+                # Decode from utf16 -> size /=2 | put it in a wchar array | split at the first "\x00"
+                return (ftype._type_ * (fsize / 2)).from_buffer_copy(s.decode('utf16'))[:].split("\x00", 1)[0] # Sorry..
+            # I am pretty sur something smarter is possible..
             return create_remote_array(ftype._type_, ftype._length_)(self._base_addr + fosset, self._target)
         # Normal types
         # Follow the ctypes usage: if it's not directly inherited from _SimpleCData
