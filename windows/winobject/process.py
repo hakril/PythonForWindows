@@ -30,6 +30,7 @@ from windows.winobject import sid
 TimeInfo = namedtuple("TimeInfo", ["creation", "exit", "kernel", "user"])
 """Time information about a process"""
 
+
 class AutoHandle(object):
     """An abstract class that allow easy handle creation/destruction/wait"""
      # Big bypass to prevent missing reference at programm close..
@@ -60,8 +61,10 @@ class AutoHandle(object):
         return winproxy.WaitForSingleObject(self.handle, timeout)
 
     def __del__(self):
-        if hasattr(self, "_handle") and self._handle:
+        # sys.path is not None -> check if python shutdown
+        if sys.path is not None and hasattr(self, "_handle") and self._handle:
             # Prevent some bug where dbgprint might be None when __del__ is called in a closing process
+            # for i in vars(sys).items(): print(i)
             dbgprint("Closing Handle {0} for {1}".format(hex(self._handle), self), "HANDLE") if dbgprint is not None else None
             self._close_function(self._handle)
 
@@ -692,7 +695,8 @@ class Process(AutoHandle):
         super(Process, self).__del__()
         # Same logic that AutoHandle.__del__ for Process.limited_handle
         # Assert that Process inherit AutoHandle
-        if hasattr(self, "_limited_handle") and self._limited_handle:
+        # sys.path is not None -> check if python shutdown
+        if sys.path is not None and hasattr(self, "_limited_handle") and self._limited_handle:
             # Prevent some bug where dbgprint might be None when __del__ is called in a closing process
             dbgprint("Closing limited handle {0} for {1}".format(hex(self._limited_handle), self), "HANDLE") if dbgprint is not None else None
             self._close_function(self._limited_handle)

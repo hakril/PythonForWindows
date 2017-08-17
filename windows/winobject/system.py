@@ -208,6 +208,10 @@ class System(object):
         bufstr = ctypes.cast(bufptr, LPCSTR)
         return bufstr.value
 
+    @utils.fixedpropety
+    def build_number(self):
+        return self.get_file_version("ntdll")
+
     @staticmethod
     def enumerate_processes():
         dbgprint("Enumerating processes with CreateToolhelp32Snapshot", "SLOW")
