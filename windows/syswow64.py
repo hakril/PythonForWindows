@@ -42,7 +42,7 @@ def generate_64bits_execution_stub_from_syswow(x64shellcode):
 def execute_64bits_code_from_syswow(x64shellcode):
     return generate_64bits_execution_stub_from_syswow(x64shellcode)()
 
-def generate_syswow64_call(target):
+def generate_syswow64_call(target, errcheck=None):
     nb_args = len(target.prototype._argtypes_)
     target_addr = get_syswow_ntdll_exports()[target.__name__]
     argument_buffer_len = (nb_args * 8)
@@ -107,15 +107,14 @@ def generate_syswow64_call(target):
     code_64b += x64.Pop('RCX')
     code_64b += x64.Pop('RBX')
     code_64b += x64.Ret()
-    return try_generate_stub_target(code_64b.get_code(), argument_buffer, target)
+    return try_generate_stub_target(code_64b.get_code(), argument_buffer, target, errcheck=errcheck)
 
 
-def try_generate_stub_target(shellcode, argument_buffer, target):
-    """shellcode must NOT end by a ret"""
+def try_generate_stub_target(shellcode, argument_buffer, target, errcheck=None):
     if not windows.current_process.is_wow_64:
         raise ValueError("Calling execute_64bits_code_from_syswow from non-syswow process")
     native_caller = generate_64bits_execution_stub_from_syswow(shellcode)
-    native_caller.errcheck = target.errcheck
+    native_caller.errcheck = errcheck if errcheck is not None else target.errcheck
     # Generate the wrapper function that fill the argument_buffer
     expected_arguments_number = len(target.prototype._argtypes_)
     def wrapper(*args):
@@ -133,6 +132,8 @@ def try_generate_stub_target(shellcode, argument_buffer, target):
         # Build buffer
         buffer = struct.pack("<" + "Q" * len(writable_args), *writable_args)
         ctypes.memmove(argument_buffer, buffer, len(buffer))
+        # Copy origincal args in function, for errcheck if needed
+        native_caller.current_original_args = args # TODO: THIS IS NOT THREAD SAFE
         return native_caller()
     wrapper.__name__ = "{0}<syswow64>".format(target.__name__,)
     wrapper.__doc__ = "This is a wrapper to {0} in 64b mode, it accept <{1}> args".format(target.__name__, expected_arguments_number)
@@ -191,9 +192,10 @@ get_syswow_ntdll_exports.value = None
 
 class Syswow64ApiProxy(object):
     """Create a python wrapper around a function"""
-    def __init__(self, winproxy_function):
+    def __init__(self, winproxy_function, errcheck=None):
         self.winproxy_function = winproxy_function
         self.raw_call = None
+        self.errcheck = errcheck
         if winproxy_function is not None:
             self.params_name = [param[1] for param in winproxy_function.params]
 
@@ -208,7 +210,7 @@ class Syswow64ApiProxy(object):
             if self.raw_call:
                 return True
             try:
-                self.raw_call = generate_syswow64_call(self.winproxy_function)
+                self.raw_call = generate_syswow64_call(self.winproxy_function, errcheck=self.errcheck)
             except KeyError:
                 raise windows.winproxy.ExportNotFound(self.winproxy_function.__name__, "SysWow[ntdll64]")
 
@@ -230,6 +232,23 @@ class Syswow64ApiProxy(object):
         setattr(python_proxy, "force_resolution", force_resolution)
         return python_proxy
 
+def ntquerysysteminformation_syswow64_error_check(result, func, args):
+    args = func.current_original_args
+    if result == 0:
+        return args
+    # Ignore STATUS_INFO_LENGTH_MISMATCH if SystemInformation is None
+    if result == STATUS_INFO_LENGTH_MISMATCH and not args[1]:
+        return args
+    raise Kernel32Error("{0} failed with NTStatus {1}".format(func_name, hex(result)))
+
+@Syswow64ApiProxy(winproxy.NtQuerySystemInformation, errcheck=ntquerysysteminformation_syswow64_error_check)
+# @Syswow64ApiProxy(winproxy.NtQuerySystemInformation)
+def NtQuerySystemInformation_32_to_64(SystemInformationClass, SystemInformation=None, SystemInformationLength=0, ReturnLength=NeededParameter):
+    if SystemInformation is not None and SystemInformationLength == 0:
+        SystemInformationLength = ctypes.sizeof(SystemInformation)
+    if SystemInformation is None:
+        SystemInformation = 0
+    return NtQuerySystemInformation_32_to_64.ctypes_function(SystemInformationClass, SystemInformation, SystemInformationLength, ReturnLength)
 
 
 @Syswow64ApiProxy(winproxy.NtCreateThreadEx)
@@ -278,7 +297,6 @@ def NtProtectVirtualMemory_32_to_64(ProcessHandle, BaseAddress, NumberOfBytesToP
         XOldAccessProtection = DWORD()
         OldAccessProtection = ctypes.addressof(XOldAccessProtection)
     return NtProtectVirtualMemory_32_to_64.ctypes_function(ProcessHandle, BaseAddress, NumberOfBytesToProtect, NewAccessProtection, OldAccessProtection)
-
 
 
 @Syswow64ApiProxy(winproxy.NtGetContextThread)
