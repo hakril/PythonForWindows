@@ -404,7 +404,7 @@ class AlpcClient(AlpcTransportBase):
         else:
             raise ValueError("Don't know how to send <{0!r}> as connect message".format(connect_message))
 
-        windows.utils.print_ctypes_struct(port_attr, "port_attr_connect", hexa=True)
+        # windows.utils.print_ctypes_struct(port_attr, "port_attr_connect", hexa=True)
         receive_attr = MessageAttribute.with_all_attributes()
         winproxy.NtAlpcConnectPort(handle, port_name_unicode, obj_attr, port_attr, flags, None, send_msg, buffersize, send_msg_attr, receive_attr, timeout)
         # If send_msg is not None, it contains the ClientId.UniqueProcess : PID of the server :)

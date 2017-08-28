@@ -7,6 +7,13 @@ The :mod:`windows.alpc` module regroups the classes that permits to send and rec
 ALPC messages over an ALPC port and the classes representing these messages.
 
 
+.. note::
+
+    See samples:
+
+        * :ref:`sample_alpc`
+        * :ref:`sample_advanced_alpc`
+
 ALPC Message
 ------------
 

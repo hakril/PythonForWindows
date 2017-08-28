@@ -731,3 +731,121 @@ Ouput::
     File embdeds 2 certificate(s):
     * 0) <CertificateContext "Microsoft Windows" serial="33 00 00 01 06 6e c3 25 c4 31 c9 18 0e 00 00 00 00 01 06">
     * 1) <CertificateContext "Microsoft Windows Production PCA 2011" serial="61 07 76 56 00 00 00 00 00 08">
+
+
+
+``windows.alpc``
+""""""""""""""""
+
+.. _sample_alpc:
+
+simple alpc communication
+'''''''''''''''''''''''''
+
+.. literalinclude:: ..\..\samples\alpc\simple_alpc.py
+
+Ouput::
+
+    (cmd λ) python alpc\simple_alpc.py
+    [SERV] PORT <\RPC Control\PythonForWindowsPORT> CREATED
+    Client pid = 15044
+    [SERV] Message type = 0x300a
+    [SERV] Received data: <>
+    [SERV] Connection request
+    [CLIENT] Connected: <windows.alpc.AlpcClient object at 0x0377FDB0>
+
+    [SERV] Received message: <Hello world !>
+    [SERV] Message type = 0x3001
+    [CLIENT] Response: <REQUEST 'Hello world !' DONE>
+    BYE
+
+.. _sample_advanced_alpc:
+
+
+advanced alpc communication
+'''''''''''''''''''''''''''
+
+.. literalinclude:: ..\..\samples\alpc\advanced_alpc.py
+
+
+Output::
+
+    (cmd λ) python alpc\advanced_alpc.py
+    server pid = 13000
+    [SERV] PORT <\RPC Control\PythonForWindowsPORT_2> CREATED
+    Client pid = 2100
+    [CLIENT] == Connecting to port ==
+    [SERV] == Message received ==
+    * ALPC connection request: <Connection request client message>
+    [CLIENT] Connected with response: <Connection message response>
+
+    [CLIENT] == Sending a message ==
+    * Sending Message <Complex Message 1>
+    [SERV] == Message received ==
+    * ALPC request: <Complex Message 1>
+    * view_is_valid <False>
+    * security_is_valid <False>
+    * handle_is_valid <False>
+    * context_is_valid <True>
+    * message context attribute:
+        - CTX.PortContext -> 0x11223344
+        - CTX.MessageContext -> None
+        - CTX.Sequence -> 0x1L
+        - CTX.MessageId -> 0x0L
+        - CTX.CallbackId -> 0x0L
+    * message token attribute:
+    - TOKEN.TokenId -> 0x1e4ecaccL
+    - TOKEN.AuthenticationId -> 0x48989L
+    - TOKEN.ModifiedId -> 0x48995L
+    [CLIENT] Server response: <REQUEST 'Complex Message 1' DONE>
+    [CLIENT] RESP Message Valid ATTRS = [ALPC_MESSAGE_CONTEXT_ATTRIBUTE(0x20000000L)]
+
+    [Client] == Sending a message with a handle ==
+    [SERV] == Message received ==
+    * ALPC request: <some message with a file>
+    * view_is_valid <False>
+    * security_is_valid <False>
+    * handle_is_valid <True>
+    * message handle attribute:
+        - HANDLE.Flags -> 0x0L
+        - HANDLE.Handle -> 0x260
+        - HANDLE.ObjectType -> 0x1L
+        - HANDLE.DesiredAccess -> 0x13019fL
+    - File: <open file '<fdopen>', mode 'r' at 0x02D529C0>
+    - content: <Tempfile data <3>
+    * context_is_valid <True>
+    * message context attribute:
+        - CTX.PortContext -> 0x11223344
+        - CTX.MessageContext -> None
+        - CTX.Sequence -> 0x2L
+        - CTX.MessageId -> 0x0L
+        - CTX.CallbackId -> 0x0L
+    * message token attribute:
+    - TOKEN.TokenId -> 0x1e4ecaccL
+    - TOKEN.AuthenticationId -> 0x48989L
+    - TOKEN.ModifiedId -> 0x48995L
+
+    [Client] == Sending a message with a view ==
+    [SERV] == Message received ==
+    * ALPC request: <some message with a view>
+    * view_is_valid <True>
+    * message view attribute:
+        - VIEW.Flags -> 0x0L
+        - VIEW.SectionHandle -> None
+        - VIEW.ViewBase -> 0x2770000
+        - VIEW.ViewSize -> 0x4000
+    * Reading view content: <The content of the view :)>
+    * security_is_valid <False>
+    * handle_is_valid <False>
+    * context_is_valid <True>
+    * message context attribute:
+        - CTX.PortContext -> 0x11223344
+        - CTX.MessageContext -> None
+        - CTX.Sequence -> 0x3L
+        - CTX.MessageId -> 0x0L
+        - CTX.CallbackId -> 0x0L
+    * message token attribute:
+    - TOKEN.TokenId -> 0x1e4ecaccL
+    - TOKEN.AuthenticationId -> 0x48989L
+    - TOKEN.ModifiedId -> 0x48995L
+    BYE
