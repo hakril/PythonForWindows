@@ -68,15 +68,15 @@ def explode_alpc_tower(tower):
     lhs, rhs = parse_floor(stream)
     if not (lhs[0] == 0xd):
         raise ValueError("Floor 0: IID expected")
-    iid =  windows.com.IID.from_buffer_copy(lhs[1:17])
-    object = windows.rpc.RPC_IF_ID(iid, lhs[17], lhs[18])
+    iid =  gdef.IID.from_buffer_copy(lhs[1:17])
+    object = gdef.RPC_IF_ID(iid, lhs[17], lhs[18])
 
     # Floor 1
     lhs, rhs = parse_floor(stream)
     if not (lhs[0] == 0xd):
         raise ValueError("Floor 0: IID expected")
-    iid =  windows.com.IID.from_buffer_copy(lhs[1:17])
-    syntax = windows.rpc.RPC_IF_ID(iid, lhs[17], lhs[18])
+    iid =  gdef.IID.from_buffer_copy(lhs[1:17])
+    syntax = gdef.RPC_IF_ID(iid, lhs[17], lhs[18])
 
     # Floor 2
     lhs, rhs = parse_floor(stream)
@@ -100,11 +100,11 @@ def construct_alpc_tower(object, syntax, protseq, endpoint, address):
     if protseq != "ncalrpc":
         raise NotImplementedError("Construct ALPC Tower with protseq != 'ncalrpc'")
     # Floor 0
-    floor_0_lsh = TOWER_PROTOCOL_IS_UUID + bytearray(object.Uuid) + struct.pack("<BB", object.MajorVersion, object.MinorVersion)
+    floor_0_lsh = TOWER_PROTOCOL_IS_UUID + bytearray(object.Uuid) + struct.pack("<BB", object.VersMajor, object.VersMinor)
     floor_0_rsh = TOWER_EMPTY_RHS
     floor_0 = craft_floor(floor_0_lsh, floor_0_rsh)
     # Floor 1
-    floor_1_lsh = TOWER_PROTOCOL_IS_UUID + bytearray(object.Uuid) + struct.pack("<BB", object.MajorVersion, object.MinorVersion)
+    floor_1_lsh = TOWER_PROTOCOL_IS_UUID + bytearray(object.Uuid) + struct.pack("<BB", object.VersMajor, object.VersMinor)
     floor_1_rsh = TOWER_EMPTY_RHS
     floor_1 = craft_floor(floor_1_lsh, floor_1_rsh)
     # Floor 2
@@ -119,18 +119,28 @@ def construct_alpc_tower(object, syntax, protseq, endpoint, address):
     return len(towerarray), bytearray(towerarray)
 
 def endpoint_map_alpc(targetiid, version=(1,0), nb_response=1, sid=gdef.WinLocalSystemSid):
+    """Ask the EPMapper for ALPC endpoints of ``targetiid:version`` (maximum of ``nb_response``)
+
+        :param str targetiid: The IID of the requested interface
+        :param (int,int) version: The version requested interface
+        :param int nb_response: The maximum number of response
+        :param WELL_KNOWN_SID_TYPE sid: The SID used to request the EPMapper
+
+        :returns: [:class:`~windows.rpc.epmapper.UnpackTower`] -- A list of :class:`~windows.rpc.epmapper.UnpackTower`
+    """
+
     if isinstance(targetiid, basestring):
-        targetiid = windows.com.IID.from_string(targetiid)
+        targetiid = gdef.IID.from_string(targetiid)
     # Connect to epmapper
     client = windows.rpc.RPCClient(r"\RPC Control\epmapper")
     epmapperiid = client.bind("e1af8308-5d1f-11c9-91a4-08002b14a0fa", version=(3,0))
 
     # Compute request tower
     ## object
-    rpc_object = windows.rpc.RPC_IF_ID(targetiid, *version)
+    rpc_object = gdef.RPC_IF_ID(targetiid, *version)
     ## Syntax
-    syntax_iid = windows.com.IID.from_string("8a885d04-1ceb-11c9-9fe8-08002b104860")
-    rpc_syntax = windows.rpc.RPC_IF_ID(syntax_iid, 2, 0)
+    syntax_iid = gdef.IID.from_string("8a885d04-1ceb-11c9-9fe8-08002b104860")
+    rpc_syntax = gdef.RPC_IF_ID(syntax_iid, 2, 0)
     ## Forge tower
     tower_array_size, towerarray = construct_alpc_tower(rpc_object, rpc_syntax, "ncalrpc", "", None)
 
@@ -155,6 +165,14 @@ def endpoint_map_alpc(targetiid, version=(1,0), nb_response=1, sid=gdef.WinLocal
 
 
 def find_alpc_endpoint_and_connect(targetiid, version=(1,0), sid=gdef.WinLocalSystemSid):
+    """Ask the EPMapper for ALPC endpoints of ``targetiid:version`` and connect to one of them.
+
+        :param str targetiid: The IID of the requested interface
+        :param (int,int) version: The version requested interface
+        :param WELL_KNOWN_SID_TYPE sid: The SID used to request the EPMapper
+
+        :returns: A connected :class:`~windows.rpc.RPCClient`
+    """
     dbgprint("Finding ALPC endpoints for  <{0}>".format(targetiid), "RPC")
     alpctowers = endpoint_map_alpc(targetiid, version, nb_response=50, sid=sid)
     dbgprint("ALPC endpoints list: <{0}>".format(alpctowers), "RPC")

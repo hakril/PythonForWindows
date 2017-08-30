@@ -6,23 +6,10 @@ import windows.com
 import windows.generated_def as gdef
 
 
-class _RPC_IF_ID(ctypes.Structure):
-    _fields_ = [
-        ("Uuid", gdef.IID),
-        ("MajorVersion", gdef.USHORT),
-        ("MinorVersion", gdef.USHORT),
-    ]
-
-    def __repr__(self):
-        return '<RPC_IF_ID "{0}" ({1}, {2})>'.format(self.Uuid.to_string(), self.MajorVersion, self.MinorVersion)
-
-RPC_IF_ID = _RPC_IF_ID
-
-
 KNOW_REQUEST_TYPE = {x:x for x in [gdef.RPC_REQUEST_TYPE_CALL, gdef.RPC_REQUEST_TYPE_BIND]}
 
 
-KNOW_RESPONSE_TYPE = {x:x for x in [gdef.RPC_RESPONSE_TYPE_FAIL, gdef.RPC_RESPONSE_TYPE_SUCESS, gdef.RPC_RESPONSE_TYPE_SUCESS]}
+KNOW_RESPONSE_TYPE = {x:x for x in [gdef.RPC_RESPONSE_TYPE_FAIL, gdef.RPC_RESPONSE_TYPE_SUCESS, gdef.RPC_RESPONSE_TYPE_BIND_OK]}
 
 
 KNOWN_RPC_ERROR_CODE = {x:x for x in [
@@ -34,9 +21,7 @@ KNOWN_RPC_ERROR_CODE = {x:x for x in [
         gdef.RPC_S_PROCNUM_OUT_OF_RANGE,
         ]}
 
-
 NOT_USED = 0xBAADF00D
-
 
 class ALPC_RPC_BIND(ctypes.Structure):
     _pack_ = 1
@@ -44,7 +29,7 @@ class ALPC_RPC_BIND(ctypes.Structure):
         ("request_type", gdef.DWORD),
         ("UNK1", gdef.DWORD),
         ("UNK2", gdef.DWORD),
-        ("target", RPC_IF_ID),
+        ("target", gdef.RPC_IF_ID),
         ("flags", gdef.DWORD),
         ("if_nb_ndr32", gdef.USHORT),
         ("if_nb_ndr64", gdef.USHORT),
@@ -61,6 +46,7 @@ class ALPC_RPC_BIND(ctypes.Structure):
 
 
 class RPCClient(object):
+    """A client for RPC-over-ALPC able to bind to interface and perform calls using NDR32 marshalling"""
     REQUEST_IDENTIFIER = 0x11223344
     def __init__(self, port):
         self.alpc_client = alpc.AlpcClient(port)
@@ -68,6 +54,10 @@ class RPCClient(object):
         self.if_bind_number = {}
 
     def bind(self, IID_str, version=(1,0)):
+        """Bind to the ``IID_str`` with the given ``version``
+
+            :returns: :class:`windows.generated_def.IID`
+        """
         IID = windows.com.IID.from_string(IID_str)
         request = self._forge_bind_request(IID, version, self.number_of_bind_if)
         response = self._send_request(request)
@@ -82,6 +72,13 @@ class RPCClient(object):
         return IID
 
     def call(self, IID, method_offset, params):
+        """Call method number ``method_offset`` of interface ``IID`` with mashalled ``params``
+
+            :param IID IID: An IID previously returned by :func:`bind`
+            :param int method_offset:
+            :param str params: The mashalled parameters (NDR32)
+            :returns: :class:`str`
+        """
         iid_hash = hash(buffer(IID)[:])
         interface_nb = self.if_bind_number[iid_hash] # TODO: add __hash__ to IID
         request = self._forge_call_request(interface_nb, method_offset, params)
@@ -110,7 +107,7 @@ class RPCClient(object):
         version_major, version_minor = syntaxversion
         req = ALPC_RPC_BIND()
         req.request_type = gdef.RPC_REQUEST_TYPE_BIND
-        req.target = RPC_IF_ID(uuid, *syntaxversion)
+        req.target = gdef.RPC_IF_ID(uuid, *syntaxversion)
         req.flags = gdef.BIND_IF_SYNTAX_NDR32
         req.if_nb_ndr32 = requested_if_nb
         req.if_nb_ndr64 = 0

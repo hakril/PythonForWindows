@@ -261,3 +261,9 @@ typedef struct _ALPC_WORK_ON_BEHALF_ATTR
 {
     ULONGLONG Ticket;
 } ALPC_WORK_ON_BEHALF_ATTR, *PALPC_WORK_ON_BEHALF_ATTR;
+
+typedef struct _RPC_IF_ID {
+  IID           Uuid;
+  USHORT VersMajor;
+  USHORT VersMinor;
+} RPC_IF_ID;

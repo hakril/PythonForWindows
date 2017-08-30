@@ -22,6 +22,7 @@ Contents:
    com.rst
    crypto.rst
    alpc.rst
+   rpc.rst
    generated.rst
    iat_hook.rst
    wip.rst

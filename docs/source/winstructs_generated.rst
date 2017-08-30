@@ -10555,6 +10555,28 @@ _ALPC_WORK_ON_BEHALF_ATTR
 
         :class:`ULONGLONG`
 
+_RPC_IF_ID
+''''''''''
+.. class:: RPC_IF_ID
+
+    Alias for :class:`_RPC_IF_ID`
+
+.. class:: _RPC_IF_ID
+
+    .. attribute:: Uuid
+
+        :class:`IID`
+
+
+    .. attribute:: VersMajor
+
+        :class:`USHORT`
+
+
+    .. attribute:: VersMinor
+
+        :class:`USHORT`
+
 WinEnums
 --------
 _SYSTEM_INFORMATION_CLASS

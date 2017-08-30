@@ -28,6 +28,7 @@ def dword_pad(s):
 
 
 class NdrUniquePTR(object):
+    """Create a UNIQUE PTR around a given Ndr type"""
     def __init__(self, subcls):
         self.subcls = subcls
 
@@ -77,6 +78,10 @@ class NdrFixedArray(object):
 class NdrSID(object):
     @classmethod
     def pack(cls, psid):
+        """Pack a PSID
+
+        :param PSID psid:
+        """
         subcount = windows.winproxy.GetSidSubAuthorityCount(psid)
         size = windows.winproxy.GetLengthSid(psid)
         sid_data = windows.current_process.read_memory(psid.value, size)
@@ -84,6 +89,7 @@ class NdrSID(object):
 
     @classmethod
     def unpack(cls, stream):
+        """Unpack a PSID, partial implementation that returns a :class:`str` and not a PSID"""
         subcount = NdrLong.unpack(stream)
         return stream.read(8 + (subcount * 4))
 
@@ -163,8 +169,12 @@ class NdrByte(object):
 
 
 class NdrStructure(object):
+    """a NDR structure that tries to respect the rules of pointer packing, this class should be subclassed with
+    an attribute ``MEMBERS`` describing the members of the class
+    """
     @classmethod
     def pack(cls, data):
+        """Pack data into the struct, ``data`` size must equals the number of members in the structure"""
         if not (len(data) == len(cls.MEMBERS)):
             print("Size mistach:")
             print("   * data size = {0}".format(len(data)))
@@ -192,6 +202,7 @@ class NdrStructure(object):
 
     @classmethod
     def unpack(cls, stream):
+        """Unpack the structure from the stream"""
         conformant_members = [hasattr(m, "pack_conformant") for m in cls.MEMBERS]
         is_conformant = any(conformant_members)
         assert(conformant_members.count(True) <= 1), "Unpack conformant struct with more that one conformant MEMBER not implem"
@@ -213,6 +224,9 @@ class NdrStructure(object):
 
 
 class NdrParameters(object):
+    """a class to pack NDR parameters together to performs RPC call, this class should be subclassed with
+    an attribute ``MEMBERS`` describing the members of the class
+    """
     @classmethod
     def pack(cls, data):
         if not (len(data) == len(cls.MEMBERS)):
@@ -291,9 +305,19 @@ class NdrConformantVaryingArrays(object):
         for i, entry in post_subcls:
             data = entry.unpack(stream)
             result[i] = data
+
+        return cls._post_unpack(result)
+
+    @classmethod
+    def _post_unpack(cls, result):
         return result
 
+class NdrWcharConformantVaryingArrays(NdrConformantVaryingArrays):
+    MEMBER_TYPE = NdrShort
 
+    @classmethod
+    def _post_unpack(self, result):
+        return u"".join(unichr(c) for c in result)
 
 class NdrLongConformantArray(NdrConformantArray):
     MEMBER_TYPE = NdrLong
@@ -303,6 +327,7 @@ class NdrByteConformantArray(NdrConformantArray):
 
 
 class NdrStream(object):
+    """A stream of bytes used for NDR unpacking"""
     def __init__(self, data):
         self.fulldata = data
         self.data = data
@@ -329,6 +354,7 @@ class NdrStream(object):
         return data
 
     def align(self, size):
+        """Discard some bytes to align the remaining stream on ``size``"""
         already_read = len(self.fulldata) - len(self.data)
         if already_read % size:
             # Realign

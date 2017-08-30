@@ -258,7 +258,7 @@ class InitialDefGenerator(CtypesGenerator):
         with open(target_file, "w") as f:
             f.writelines(all_lines)
 
-EXTENDED_STRUCT = ["_GUID"] # TODO: check auto the dir
+EXTENDED_STRUCT = ["_GUID", "_RPC_IF_ID"] # TODO: check auto the dir
 
 class StructGenerator(CtypesGenerator):
     PARSER = struct_parser.WinStructParser

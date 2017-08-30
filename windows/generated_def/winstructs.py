@@ -4262,3 +4262,18 @@ class _ALPC_WORK_ON_BEHALF_ATTR(Structure):
     ]
 PALPC_WORK_ON_BEHALF_ATTR = POINTER(_ALPC_WORK_ON_BEHALF_ATTR)
 ALPC_WORK_ON_BEHALF_ATTR = _ALPC_WORK_ON_BEHALF_ATTR
+
+class _RPC_IF_ID(Structure):
+    _fields_ = [
+        ("Uuid", IID),
+        ("VersMajor", USHORT),
+        ("VersMinor", USHORT),
+    ]
+RPC_IF_ID = _RPC_IF_ID
+
+INITIAL_RPC_IF_ID = RPC_IF_ID
+
+class _RPC_IF_ID(INITIAL_RPC_IF_ID):
+    def __repr__(self):
+        return '<RPC_IF_ID "{0}" ({1}, {2})>'.format(self.Uuid.to_string(), self.VersMajor, self.VersMinor)
+RPC_IF_ID = _RPC_IF_ID
