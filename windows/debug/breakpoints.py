@@ -73,8 +73,9 @@ class X64ArgumentRetriever(object):
         return proc.read_qword(thread.context.sp + 8 + (8 * nb))
 
 ## Behaviour breakpoint !
-class FunctionParamDumpBP(Breakpoint):
-    def __init__(self, target=None, addr=None):
+# class FunctionParamDumpBP(Breakpoint):
+class FunctionParamDumpBPAbstract(object):
+    def __init__(self, addr=None, target=None):
         if target is None:
             try:
                 target = self.TARGET
@@ -82,7 +83,7 @@ class FunctionParamDumpBP(Breakpoint):
                 raise ValueError("{0} bp without a <target> must have a <TARGET> class attribute")
         if addr is None:
             addr = "{0}!{1}".format(target.target_dll, target.target_func)
-        super(FunctionParamDumpBP, self).__init__(addr)
+        super(FunctionParamDumpBPAbstract, self).__init__(addr)
         self.target = target
         self.target_args = target.prototype._argtypes_
         self.target_params = target.params
@@ -134,6 +135,11 @@ class FunctionParamDumpBP(Breakpoint):
             return self.extract_arguments_32bits(cproc, cthread)
         return self.extract_arguments_64bits(cproc, cthread)
 
+class FunctionParamDumpBP(FunctionParamDumpBPAbstract, Breakpoint):
+    pass
+
+class FunctionParamDumpHXBP(FunctionParamDumpBPAbstract, HXBreakpoint):
+    pass
 
 class FunctionRetBP(Breakpoint):
     def __init__(self, addr, initial_breakpoint):

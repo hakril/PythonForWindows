@@ -94,6 +94,11 @@ def perform_manual_getproc_loadlib_64(target, dll_name):
             raise InjectionFailedError("Injection of <{0}> failed".format(dll_name))
     return True
 
+def perform_manual_getproc_loadlib(target, *args, **kwargs):
+    if target.bitness == 32:
+        return perform_manual_getproc_loadlib_32(target, *args, **kwargs)
+    return perform_manual_getproc_loadlib_64(target, *args, **kwargs)
+
 
 def load_dll_in_remote_process(target, dll_name):
     rpeb = target.peb

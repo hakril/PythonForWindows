@@ -295,8 +295,10 @@ class Debugger(object):
             raise ValueError("Cannot put {0} in {1} (DRx full)".format(bp, target))
         empty_drx = str([pos for pos in range(4) if pos not in x][0])
         ctx = target.context
-        ctx.EDr7.GE = 1
-        ctx.EDr7.LE = 1
+        # Windows DebugCtl aliasing in DR7
+        # See https://www.codeproject.com/Articles/517466/Last-branch-records-and-branch-tracing
+        ctx.EDr7.LE = 0 # bit 8 of DR7 represents bit 0 of DebugCtl. This is the LBR bit. (last branch record, will explain)
+        ctx.EDr7.GE = 0 # bit 9 of DR7 represents bit 1 of DebugCtl. This is the BTF bit. (single-step on branches)
         setattr(ctx.EDr7, "L" + empty_drx, 1)
         setattr(ctx, "Dr" + empty_drx, addr)
         x[int(empty_drx)] = bp
@@ -332,13 +334,15 @@ class Debugger(object):
             return PAGE_EXECUTE_READ
         if events == set("X"):
             # Might have problem if DEP is not enabled
-            if windows.winproxy.is_implemented(windows.winproxy.GetProcessDEPPolicy):
+            if target.bitness == 64:
+                has_DEP = True
+            elif windows.winproxy.is_implemented(windows.winproxy.GetProcessDEPPolicy):
                 has_DEP = DWORD()
                 permaned = LONG()
                 windows.winproxy.GetProcessDEPPolicy(target.handle, has_DEP, permaned)
                 has_DEP = has_DEP.value
             else:
-                has_DEP = 0
+                has_DEP = False
             return PAGE_READWRITE if has_DEP else PAGE_NOACCESS
         raise ValueError("Unexpected set of event for Membp: {0}".format(events))
 

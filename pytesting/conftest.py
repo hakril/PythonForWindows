@@ -27,23 +27,19 @@ else:
 
 
 import sys
+import weakref
 
 def generate_pop_and_exit_fixtures(proc_popers, ids=[], dwCreationFlags=DEFAULT_CREATION_FLAGS):
     @pytest.fixture(params=proc_popers, ids=ids)
     def pop_and_exit_process(request):
         proc_poper = request.param
         proc = proc_poper(dwCreationFlags=dwCreationFlags)
-        yield proc  # provide the fixture value
+        yield weakref.proxy(proc)  # provide the fixture value
         try:
-            print("EXIT PROC <{0}>".format(sys.getrefcount(proc)))
-            # if sys.getrefcount(proc) > 5:
-                # import pdb;pdb.set_trace()
             proc.exit(0)
         except WindowsError as e:
             if not proc.is_exit:
                 raise
-        # import pdb;pdb.set_trace()
-        # proc.__del__()
         del proc
     return pop_and_exit_process
 
@@ -59,13 +55,7 @@ else:
                                                             dwCreationFlags=gdef.CREATE_SUSPENDED)
 
 
-@pytest.fixture()
-def check_for_gc_garbage(request):
-        garbage_before = set(gc.garbage)
-        yield
-        gc.collect()
-        new_garbage = set(gc.garbage) - garbage_before
-        assert not new_garbage, "Test generated uncollectable object ({0})".format(new_garbage)
+
 
 class HandleDebugger(object):
     def __init__(self, pid):
@@ -96,38 +86,29 @@ class HandleDebugger(object):
 current_process_hdebugger = HandleDebugger(windows.current_process.pid)
 current_process_hdebugger.refresh_handles()
 
-# TST = current_process_hdebugger.refresh_handles()
 
-RESULT = {}
 
 @pytest.fixture()
 def check_for_handle_leak(request):
-    # current_process_hdebugger.refresh_handles()
-    yield
-    # leaked_handles = current_process_hdebugger.get_new_handle()
-    # for lh in leaked_handles:
-        # RESULT[lh.wValue] = request.function.__name__
-    print("HANDLE LEAK SAVE")
-    # assert not leaked_handles, "Test Leaked <{0}> handles of types ({1})".format(len(leaked_handles), set(h.type for h in leaked_handles))
+    x = current_process_hdebugger.refresh_handles()
+    yield None
+    leaked_handles = current_process_hdebugger.get_new_handle(x)
+    try:
+        leaked_handles_types = set(h.type for h in leaked_handles)
+    except Exception as e:
+        leaked_handles = current_process_hdebugger.get_new_handle(x)
+        leaked_handles_types = set(h.type for h in leaked_handles)
+        # print("ERROR FOR TYPE, newleaked = {0}".format(current_process_hdebugger.get_new_handle(x)))
+    leaked_handles_types -= set(['EtwRegistration', 'Key', 'DebugObject', 'Event'])
+    assert not leaked_handles_types, "Test Leaked <{0}> handles of types ({1})".format(len(leaked_handles), leaked_handles_types)
 
 
-@pytest.fixture(scope='session')
-def check_for_handle_leak_final(request):
-    # x = current_process_hdebugger.get_handles()
-    print("CHECK HANDLE FINAL :D")
-    # current_process_hdebugger.refresh_handles()
-    yield
-    # leaked_handles = current_process_hdebugger.get_new_handle(x)
-    # import pdb;pdb.set_trace()
-    # print(leaked_handles)
-
-    # leaked_handles = current_process_hdebugger.get_new_handle()
-    # import pdb;pdb.set_trace()
-    # assert not leaked_handles, "Test Leaked <{0}> handles of types ({1})".format(len(leaked_handles), set(h.type for h in leaked_handles))
-
-
-def pytest_unconfigure(*args, **kwargs):
-    import pdb;pdb.set_trace()
-    print(TST)
-
-# pytestmark = pytest.mark.usefixtures('check_for_handle_leak_final')
+@pytest.fixture()
+def check_for_gc_garbage(request):
+        # print("GC CHECK")
+        garbage_before = set(gc.garbage)
+        yield None
+        gc.collect()
+        new_garbage = set(gc.garbage) - garbage_before
+        assert not new_garbage, "Test generated uncollectable object ({0})".format(new_garbage)
+        # print("GC CHECK END")
