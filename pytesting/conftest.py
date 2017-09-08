@@ -1,5 +1,6 @@
 import gc
 import pytest
+import collections
 
 import windows
 import windows.generated_def as gdef
@@ -40,6 +41,7 @@ def generate_pop_and_exit_fixtures(proc_popers, ids=[], dwCreationFlags=DEFAULT_
         except WindowsError as e:
             if not proc.is_exit:
                 raise
+        # print("DEL PROC")
         del proc
     return pop_and_exit_process
 
@@ -86,6 +88,9 @@ class HandleDebugger(object):
 current_process_hdebugger = HandleDebugger(windows.current_process.pid)
 current_process_hdebugger.refresh_handles()
 
+class NoLeakAssert(AssertionError):
+    pass
+
 
 
 @pytest.fixture()
@@ -98,9 +103,18 @@ def check_for_handle_leak(request):
     except Exception as e:
         leaked_handles = current_process_hdebugger.get_new_handle(x)
         leaked_handles_types = set(h.type for h in leaked_handles)
-        # print("ERROR FOR TYPE, newleaked = {0}".format(current_process_hdebugger.get_new_handle(x)))
-    leaked_handles_types -= set(['EtwRegistration', 'Key', 'DebugObject', 'Event'])
-    assert not leaked_handles_types, "Test Leaked <{0}> handles of types ({1})".format(len(leaked_handles), leaked_handles_types)
+
+    res = collections.defaultdict(list)
+    for lh in leaked_handles:
+        res[lh.type].append(lh)
+    # import pdb;pdb.set_trace()
+    for rmt in ['EtwRegistration', 'Key', 'DebugObject', 'Event']:
+        if rmt in res:
+            del res[rmt]
+    # leaked_handles_types -= set(['EtwRegistration', 'Key', 'DebugObject', 'Event'])
+    if res:
+        raise NoLeakAssert(res)
+    # assert not leaked_handles_types, "Test Leaked <{0}> handles of types ({1})".format(len(leaked_handles), leaked_handles_types)
 
 
 @pytest.fixture()
@@ -111,4 +125,57 @@ def check_for_gc_garbage(request):
         gc.collect()
         new_garbage = set(gc.garbage) - garbage_before
         assert not new_garbage, "Test generated uncollectable object ({0})".format(new_garbage)
-        # print("GC CHECK END")
+
+
+## Handle leak 'plugin'
+
+def pytest_addoption(parser):
+    parser.addoption("--leaks", action="store_true",
+                     default=False, help="Check windows handle leaks")
+
+
+def pytest_configure(config):
+    if not config.getoption("--leaks"):
+        return # no leaks check
+    config.addinivalue_line("usefixtures", "check_for_handle_leak")
+
+
+@pytest.hookimpl(hookwrapper=True, trylast=True)
+def pytest_runtest_makereport(item, call):
+    outcome = yield
+    # print("Make report {0} | {1}".format(item, call))
+    if call.when == "teardown" and call.excinfo and type(call.excinfo.value) == NoLeakAssert:
+        x = outcome.get_result()
+        x.outcome = "failed"
+        # import pdb;pdb.set_trace()
+        x.LEAK = call.excinfo.value.args[0]
+
+
+@pytest.hookimpl(hookwrapper=True, trylast=True)
+def pytest_report_teststatus(report):
+    outcome = yield
+    if getattr(report, "LEAK", None):
+        report.outcome = "failed"
+        outcome.force_result(('leaked', '0', 'LEAKED'))
+
+
+@pytest.hookimpl(hookwrapper=True, trylast=True)
+def pytest_terminal_summary(terminalreporter, exitstatus):
+    outcome = yield
+    if terminalreporter.config.option.tbstyle != "no":
+        # import pdb;pdb.set_trace()
+        reports = terminalreporter.getreports('leaked')
+        if not reports:
+            return
+        terminalreporter.write_sep("=", "Handle leaks")
+        for leak_report in reports:
+            file, _, test = leak_report.location
+            terminalreporter.write_sep("_", "{0}::{1}".format(file, test))
+            for type, items in leak_report.LEAK.items():
+                terminalreporter.write_line("Leaked handles of type <{0}>".format(type) , Purple=True, bold=True)
+                for item in items:
+                    descr = item.description()
+                    if descr is None:
+                        descr = item.name
+                    terminalreporter.write_line(" * <{0}>".format(descr) , Purple=True, bold=True)
+            terminalreporter.write_line("")

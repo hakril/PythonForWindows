@@ -43,7 +43,7 @@ def get_debug_process_ndll(proc):
     ntdll_addr = proc.query_memory(proc_pc).AllocationBase
     return windows.pe_parse.GetPEFile(ntdll_addr, target=proc)
 
-@check_for_handle_leak
+# @check_for_handle_leak
 def test_simple_standard_breakpoint(proc32_64_debug):
     """Check that a standard Breakpoint method `trigger` is called with the correct informations"""
     class TSTBP(windows.debug.Breakpoint):
@@ -58,7 +58,7 @@ def test_simple_standard_breakpoint(proc32_64_debug):
     d.add_bp(TSTBP(LdrLoadDll))
     d.loop()
 
-@check_for_handle_leak
+# @check_for_handle_leak
 def test_simple_hwx_breakpoint(proc32_64_debug):
     """Test that simple HXBP are trigger"""
 
@@ -107,7 +107,7 @@ def test_multiple_hwx_breakpoint(proc32_64_debug):
     assert TSTBP.COUNTER == 4
 
 # @check_for_gc_garbage
-@check_for_handle_leak
+# @check_for_handle_leak
 def test_four_hwx_breakpoint_fail(proc32_64_debug):
     """Check that setting 4HXBP in the same thread fails"""
     # print("test_four_hwx_breakpoint_fail {0}".format(proc32_64_debug))

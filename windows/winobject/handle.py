@@ -84,6 +84,27 @@ class Handle(SYSTEM_HANDLE):
         winproxy.DuplicateHandle(self.process.handle, self.wValue, windows.current_process.handle, ctypes.byref(res), dwOptions=DUPLICATE_SAME_ACCESS)
         return res.value
 
+    def description(self):
+        stype = self.type
+        descr_func = getattr(self, "description_" + stype, None)
+        if descr_func is None:
+            return None
+        return descr_func()
+
+    def description_Process(self):
+        proc = windows.WinProcess(handle=self.wValue)
+        res = str(proc)
+        del proc._handle
+        return res
+
+    def description_Thread(self):
+        thread = windows.WinThread(handle=self.wValue)
+        res = str(thread)
+        del thread._handle
+        return res
+
+
+
     def __repr__(self):
         return "<{0} value=<0x{1:x}> in process pid={2}>".format(type(self).__name__, self.wValue, self.dwProcessId)
 
