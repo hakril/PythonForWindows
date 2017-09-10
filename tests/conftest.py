@@ -176,6 +176,9 @@ def pytest_terminal_summary(terminalreporter, exitstatus):
                 for item in items:
                     descr = item.description()
                     if descr is None:
-                        descr = item.name
+                        try:
+                            descr = item.name
+                        except Exception as e:
+                            descr = repr(e)
                     terminalreporter.write_line(" * <{0}>".format(descr) , Purple=True, bold=True)
             terminalreporter.write_line("")

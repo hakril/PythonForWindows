@@ -1,15 +1,25 @@
-import capstone
-from simple_x86 import *
+try:
+    import capstone
+except ImportError as e:
+    capstone = None
 
-disassembleur = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_32)
-disassembleur.detail = True
+import pytest
+
+import windows.native_exec.simple_x86 as x86
+from windows.native_exec.simple_x86 import *
+del Test # Prevent pytest warning
+
+if capstone:
+    disassembleur = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_32)
+    disassembleur.detail = True
 
 
 def disas(x):
     return list(disassembleur.disasm(x, 0))
 
 
-class TestInstr(object):
+
+class CheckInstr(object):
     def __init__(self, instr_to_test, immediat_accepted=None, expected_result=None, debug=False):
         self.instr_to_test = instr_to_test
         self.expected_result = expected_result
@@ -85,104 +95,111 @@ class TestInstr(object):
             raise AssertionError("Expected mem.disp {0} got {1}".format(memaccess.disp, cap_mem.disp))
 
 
-TestInstr(Mov)('EAX', 'CR3')
-TestInstr(Mov)('EDX', 'CR0')
-TestInstr(Mov)('EDI', 'CR7')
+def test_assembler():
+    CheckInstr(Mov)('EAX', 'CR3')
+    CheckInstr(Mov)('EDX', 'CR0')
+    CheckInstr(Mov)('EDI', 'CR7')
 
-TestInstr(Mov)('CR3', 'EAX')
-TestInstr(Mov)('CR0', 'EDX')
-TestInstr(Mov)('CR7', 'EDI')
+    CheckInstr(Mov)('CR3', 'EAX')
+    CheckInstr(Mov)('CR0', 'EDX')
+    CheckInstr(Mov)('CR7', 'EDI')
 
-TestInstr(Mov)('EAX', 'ESP')
-TestInstr(Mov)('ECX', mem('[EAX]'))
-TestInstr(Mov)('EDX', mem('[ECX + 0x10]'))
-TestInstr(Mov)('EDX', mem('[EDI * 8 + 0xffff]'))
-TestInstr(Mov)('EDX', mem('[0x11223344]'))
-TestInstr(Mov)('EDX', mem('[ESP + EBP * 2 + 0x223344]'))
-TestInstr(Mov)(mem('[EBP + EBP * 2 + 0x223344]'), 'ESP')
-TestInstr(Mov)('ESI', mem('[ESI + EDI * 1]'))
-TestInstr(Mov)('EAX', mem('fs:[0x30]'))
-TestInstr(Mov)('EDI', mem('gs:[EAX + ECX * 4]'))
-TestInstr(Mov)('AX', 'AX')
-TestInstr(Mov)('SI', 'DI')
-TestInstr(Mov)('AX', 'AX')
-TestInstr(Mov)('AX', mem('fs:[0x30]'))
-TestInstr(Mov)('AX', mem('fs:[EAX + 0x30]'))
-TestInstr(Mov)('AX', mem('fs:[EAX + ECX * 4+0x30]'))
-TestInstr(Add)('EAX', 8)
-TestInstr(Add)('EAX', 0xffffffff)
-TestInstr(Add)("ECX", mem("[EAX + 0xff]"))
-TestInstr(Add)("ECX", mem("[EAX + 0xffffffff]"))
+    CheckInstr(Mov)('EAX', 'ESP')
+    CheckInstr(Mov)('ECX', mem('[EAX]'))
+    CheckInstr(Mov)('EDX', mem('[ECX + 0x10]'))
+    CheckInstr(Mov)('EDX', mem('[EDI * 8 + 0xffff]'))
+    CheckInstr(Mov)('EDX', mem('[0x11223344]'))
+    CheckInstr(Mov)('EDX', mem('[ESP + EBP * 2 + 0x223344]'))
+    CheckInstr(Mov)(mem('[EBP + EBP * 2 + 0x223344]'), 'ESP')
+    CheckInstr(Mov)('ESI', mem('[ESI + EDI * 1]'))
+    CheckInstr(Mov)('EAX', mem('fs:[0x30]'))
+    CheckInstr(Mov)('EDI', mem('gs:[EAX + ECX * 4]'))
+    CheckInstr(Mov)('AX', 'AX')
+    CheckInstr(Mov)('SI', 'DI')
+    CheckInstr(Mov)('AX', 'AX')
+    CheckInstr(Mov)('AX', mem('fs:[0x30]'))
+    CheckInstr(Mov)('AX', mem('fs:[EAX + 0x30]'))
+    CheckInstr(Mov)('AX', mem('fs:[EAX + ECX * 4+0x30]'))
+    CheckInstr(Add)('EAX', 8)
+    CheckInstr(Add)('EAX', 0xffffffff)
+    CheckInstr(Add)("ECX", mem("[EAX + 0xff]"))
+    CheckInstr(Add)("ECX", mem("[EAX + 0xffffffff]"))
 
-TestInstr(Add)(mem('[EAX]'), 10)
-TestInstr(Mov)('EAX', mem('fs:[0xfffc]'))
-TestInstr(Mov)(mem('fs:[0xfffc]'), 0)
+    CheckInstr(Add)(mem('[EAX]'), 10)
+    CheckInstr(Mov)('EAX', mem('fs:[0xfffc]'))
+    CheckInstr(Mov)(mem('fs:[0xfffc]'), 0)
 
-TestInstr(Push)('ECX')
-TestInstr(Push)(mem('[ECX + 8]'))
+    CheckInstr(Push)('ECX')
+    CheckInstr(Push)(mem('[ECX + 8]'))
 
-TestInstr(Sub)('ECX', 'ESP')
-TestInstr(Sub)('ECX', mem('[ESP]'))
+    CheckInstr(Sub)('ECX', 'ESP')
+    CheckInstr(Sub)('ECX', mem('[ESP]'))
 
-TestInstr(Inc)('EAX')
-TestInstr(Inc)(mem('[0x42424242]'))
-TestInstr(Lea)('EAX', mem('[EAX + 1]'))
-TestInstr(Lea)('ECX', mem('[EDI + -0xff]'))
-TestInstr(Call)('EAX')
-TestInstr(Call)(mem('[EAX + ECX * 8]'))
-TestInstr(Cpuid)()
-TestInstr(Movsb, expected_result='movsb byte ptr es:[edi], byte ptr [esi]')()
-TestInstr(Movsd, expected_result='movsd dword ptr es:[edi], dword ptr [esi]')()
-TestInstr(Xchg)('EAX', 'ESP')
+    CheckInstr(Inc)('EAX')
+    CheckInstr(Inc)(mem('[0x42424242]'))
+    CheckInstr(Lea)('EAX', mem('[EAX + 1]'))
+    CheckInstr(Lea)('ECX', mem('[EDI + -0xff]'))
+    CheckInstr(Call)('EAX')
+    CheckInstr(Call)(mem('[EAX + ECX * 8]'))
+    CheckInstr(Cpuid)()
+    CheckInstr(Movsb, expected_result='movsb byte ptr es:[edi], byte ptr [esi]')()
+    CheckInstr(Movsd, expected_result='movsd dword ptr es:[edi], dword ptr [esi]')()
+    CheckInstr(Xchg)('EAX', 'ESP')
 
-TestInstr(Rol)('EAX', 7)
-TestInstr(Rol)('ECX', 0)
+    CheckInstr(Rol)('EAX', 7)
+    CheckInstr(Rol)('ECX', 0)
 
-TestInstr(Ror)('ECX', 0)
-TestInstr(Ror)('EDI', 7)
-TestInstr(Ror)('EDI', -128)
+    CheckInstr(Ror)('ECX', 0)
+    CheckInstr(Ror)('EDI', 7)
+    CheckInstr(Ror)('EDI', -128)
 
-TestInstr(Cmp, immediat_accepted=0xffffffff)('EAX', -1)
-TestInstr(Cmp)('EAX', 0xffffffff)
+    CheckInstr(Cmp, immediat_accepted=0xffffffff)('EAX', -1)
+    CheckInstr(Cmp)('EAX', 0xffffffff)
 
-TestInstr(And)('ECX', 'EBX')
-TestInstr(And)('EAX', 0x11223344)
-TestInstr(And)('EAX', mem('[EAX + 1]'))
-TestInstr(And)(mem('[EAX + EAX]'), 'EDX')
+    CheckInstr(And)('ECX', 'EBX')
+    CheckInstr(And)('EAX', 0x11223344)
+    CheckInstr(And)('EAX', mem('[EAX + 1]'))
+    CheckInstr(And)(mem('[EAX + EAX]'), 'EDX')
 
-TestInstr(Or)('ECX', 'EBX')
-TestInstr(Or)('EAX', 0x11223344)
-TestInstr(Or)('EAX', mem('[EAX + 1]'))
-TestInstr(Or)(mem('[EAX + EAX]'), 'EDX')
+    CheckInstr(Or)('ECX', 'EBX')
+    CheckInstr(Or)('EAX', 0x11223344)
+    CheckInstr(Or)('EAX', mem('[EAX + 1]'))
+    CheckInstr(Or)(mem('[EAX + EAX]'), 'EDX')
 
-TestInstr(Shr)('EAX', 8)
-TestInstr(Shr)('EDX', 0x12)
-TestInstr(Shl)('EAX', 8)
-TestInstr(Shl)('EDX', 0x12)
+    CheckInstr(Shr)('EAX', 8)
+    CheckInstr(Shr)('EDX', 0x12)
+    CheckInstr(Shl)('EAX', 8)
+    CheckInstr(Shl)('EDX', 0x12)
 
-TestInstr(Not)('EAX')
-TestInstr(Not)(mem('[EAX]'))
+    CheckInstr(Not)('EAX')
+    CheckInstr(Not)(mem('[EAX]'))
 
-TestInstr(ScasB, expected_result="scasb al, byte ptr es:[edi]")()
-TestInstr(ScasW, expected_result="scasw ax, word ptr es:[edi]")()
-TestInstr(ScasD, expected_result="scasd eax, dword ptr es:[edi]")()
+    CheckInstr(ScasB, expected_result="scasb al, byte ptr es:[edi]")()
+    CheckInstr(ScasW, expected_result="scasw ax, word ptr es:[edi]")()
+    CheckInstr(ScasD, expected_result="scasd eax, dword ptr es:[edi]")()
 
-TestInstr(CmpsB, expected_result="cmpsb byte ptr [esi], byte ptr es:[edi]")()
-TestInstr(CmpsW, expected_result="cmpsw word ptr [esi], word ptr es:[edi]")()
-TestInstr(CmpsD, expected_result="cmpsd dword ptr [esi], dword ptr es:[edi]")()
+    CheckInstr(CmpsB, expected_result="cmpsb byte ptr [esi], byte ptr es:[edi]")()
+    CheckInstr(CmpsW, expected_result="cmpsw word ptr [esi], word ptr es:[edi]")()
+    CheckInstr(CmpsD, expected_result="cmpsd dword ptr [esi], dword ptr es:[edi]")()
 
 
-TestInstr(Test)('EAX', 'EAX')
-TestInstr(Test, expected_result="test edi, ecx")('ECX', 'EDI')
+    CheckInstr(x86.Test)('EAX', 'EAX')
+    CheckInstr(x86.Test, expected_result="test edi, ecx")('ECX', 'EDI')
 
-TestInstr(Test)(mem('[ECX + 0x100]'), 'ECX')
+    CheckInstr(x86.Test)(mem('[ECX + 0x100]'), 'ECX')
 
-assert Test(mem('[ECX + 0x100]'), 'ECX').get_code() == Test('ECX', mem('[ECX + 0x100]')).get_code()
-assert Xchg('EAX', 'ECX').get_code() == Xchg('ECX', 'EAX').get_code()
+    assert x86.Test(mem('[ECX + 0x100]'), 'ECX').get_code() == x86.Test('ECX', mem('[ECX + 0x100]')).get_code()
+    assert Xchg('EAX', 'ECX').get_code() == Xchg('ECX', 'EAX').get_code()
 
-code = MultipleInstr()
-code += Nop()
-code += Rep + Nop()
-code += Ret()
-print(repr(code.get_code()))
-assert code.get_code() == "\x90\xf3\x90\xc3"
+    code = MultipleInstr()
+    code += Nop()
+    code += Rep + Nop()
+    code += Ret()
+    print(repr(code.get_code()))
+    assert code.get_code() == "\x90\xf3\x90\xc3"
+
+if capstone is None:
+    test_assembler = pytest.mark.skip("Capstone not installed")(test_assembler)
+
+if __name__ == "__main__":
+    test_assembler()

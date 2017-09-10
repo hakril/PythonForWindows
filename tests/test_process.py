@@ -63,13 +63,7 @@ class TestCurrentProcessWithCheckGarbage(object):
         assert isinstance(token.integrity, (int, long))
         assert isinstance(token.is_elevated, (bool))
 
-@check_for_handle_leak
-def test_yolo(proc32_64):
-    print(proc32_64)
-    print(proc32_64.handle)
 
-
-@check_for_handle_leak
 @check_for_gc_garbage
 class TestProcessWithCheckGarbage(object):
     def test_pop_proc_32(self, proc32):

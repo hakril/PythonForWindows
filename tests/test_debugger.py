@@ -11,8 +11,6 @@ import windows.native_exec.simple_x64 as x64
 from conftest import generate_pop_and_exit_fixtures, pop_proc_32, pop_proc_64
 from pfwtest import *
 
-# pytestmark = pytest.mark.usefixtures('check_for_gc_garbage', "check_for_handle_leak")
-
 proc32_debug = generate_pop_and_exit_fixtures([pop_proc_32], ids=["proc32dbg"], dwCreationFlags=gdef.DEBUG_PROCESS)
 proc64_debug = generate_pop_and_exit_fixtures([pop_proc_64], ids=["proc64dbg"], dwCreationFlags=gdef.DEBUG_PROCESS)
 
@@ -43,7 +41,6 @@ def get_debug_process_ndll(proc):
     ntdll_addr = proc.query_memory(proc_pc).AllocationBase
     return windows.pe_parse.GetPEFile(ntdll_addr, target=proc)
 
-# @check_for_handle_leak
 def test_simple_standard_breakpoint(proc32_64_debug):
     """Check that a standard Breakpoint method `trigger` is called with the correct informations"""
     class TSTBP(windows.debug.Breakpoint):
@@ -58,7 +55,6 @@ def test_simple_standard_breakpoint(proc32_64_debug):
     d.add_bp(TSTBP(LdrLoadDll))
     d.loop()
 
-# @check_for_handle_leak
 def test_simple_hwx_breakpoint(proc32_64_debug):
     """Test that simple HXBP are trigger"""
 
@@ -106,8 +102,7 @@ def test_multiple_hwx_breakpoint(proc32_64_debug):
     # Used to verif we actually called the Breakpoints
     assert TSTBP.COUNTER == 4
 
-# @check_for_gc_garbage
-# @check_for_handle_leak
+
 def test_four_hwx_breakpoint_fail(proc32_64_debug):
     """Check that setting 4HXBP in the same thread fails"""
     # print("test_four_hwx_breakpoint_fail {0}".format(proc32_64_debug))
@@ -167,8 +162,7 @@ def test_hwx_breakpoint_are_on_all_thread(proc32_64_debug):
     # Used to verif we actually called the Breakpoints
     assert TSTBP.COUNTER == 2
 
-# @check_for_handle_leak
-# @check_for_gc_garbage
+
 @pytest.mark.parametrize("bptype", [windows.debug.Breakpoint, windows.debug.HXBreakpoint])
 def test_simple_breakpoint_name_addr(proc32_64_debug, bptype):
     """Check breakpoint address resolution for format dll!api"""

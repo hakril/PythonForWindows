@@ -25,7 +25,6 @@ class TestSystemWithCheckGarbage(object):
 
 
 @check_for_gc_garbage
-@check_for_handle_leak
 class TestSystemWithCheckGarbageAndHandleLeak(object):
     def test_threads(self):
         return windows.system.threads
