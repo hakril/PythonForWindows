@@ -37,15 +37,3 @@ import windows.syswow64
 import windows.com
 
 __all__ = ["system", 'current_process', 'current_thread']
-
-import os
-if bool(os.environ.get("SPHINX_BUILD", 0)):
-    # I know it's shameful
-    # But it's the only way I can think of right now to get a full class
-    # of PEFile for documentation purpose u_u
-
-    ppe = windows.current_process.peb.modules[0].pe
-    windows.pe_parse.PEFile = type(ppe)
-    iat_entry = ppe.imports.values()[0][0]
-    windows.pe_parse.IATEntry = type(iat_entry)
-

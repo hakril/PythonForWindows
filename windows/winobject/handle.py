@@ -19,8 +19,9 @@ class Handle(SYSTEM_HANDLE):
         """The process possessing the handle
 
         :type: :class:`WinProcess <windows.winobject.process.WinProcess>`"""
-        "TODO: something smart ? :D"
-        return [p for p in windows.system.processes if p.pid == self.dwProcessId][0]
+        # "TODO: something smart ? :D"
+        # return [p for p in windows.system.processes if p.pid == self.dwProcessId][0]
+        return windows.WinProcess(pid=self.dwProcessId)
 
     @windows.utils.fixedpropety
     def name(self):

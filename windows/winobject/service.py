@@ -85,10 +85,8 @@ class Service(object):
         pid = self.ServiceStatusProcess.dwProcessId
         if not pid:
             return None
-        l = [p for p in windows.system.processes if p.pid == pid]
-        if not l:
-            return None # Other thing ?
-        return l[0]
+        l = windows.WinProcess(pid=pid)
+        return l
 
 
 class ServiceA(Service, ENUM_SERVICE_STATUS_PROCESSA):
