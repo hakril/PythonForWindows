@@ -75,6 +75,10 @@ class NdrFixedArray(object):
         return dword_pad("".join([self.subcls.pack(elt) for elt in data]))
 
 
+    def unpack(self, stream):
+        return [self.subcls.unpack(stream) for i in range(self.size)]
+
+
 class NdrSID(object):
     @classmethod
     def pack(cls, psid):
@@ -128,6 +132,9 @@ class NdrCString(object):
     #     maxcount, offset, count = stream.partial_unpack("<3I")
     #     return maxcount, offset, count
 
+NdrUniqueCString = NdrUniquePTR(NdrCString)
+NdrUniqueWString = NdrUniquePTR(NdrWString)
+
 class NdrLong(object):
     @classmethod
     def pack(cls, data):
@@ -166,6 +173,19 @@ class NdrByte(object):
     @classmethod
     def unpack(self, stream):
         return stream.partial_unpack("<B")[0]
+
+
+class NdrContextHandle(object):
+    @classmethod
+    def pack(cls, data):
+        if not isinstance(data, gdef.IID):
+            data = gdef.IID.from_string(data)
+        return struct.pack("<I", 0) + str(bytearray(data))
+
+    @classmethod
+    def unpack(self, stream):
+        attributes, rawguid = stream.partial_unpack("<I16s")
+        return gdef.IID.from_buffer_copy(rawguid)
 
 
 class NdrStructure(object):
@@ -210,11 +230,23 @@ class NdrStructure(object):
         data = []
         if is_conformant:
             conformant_size = NdrLong.unpack(stream)
+        post_subcls = []
         for i, member in enumerate(cls.MEMBERS):
             if conformant_members[i]:
                 data.append(member.unpack_conformant(stream, conformant_size))
             else:
-                data.append(member.unpack(stream))
+                if hasattr(member, "unpack_in_struct"):
+                    ptr, subcls = member.unpack_in_struct(stream)
+                    if not ptr:
+                        data.append(None)
+                    else:
+                        data.append(ptr)
+                    post_subcls.append((i, subcls))
+                    print(post_subcls)
+                else:
+                    data.append(member.unpack(stream))
+        for i, entry in post_subcls:
+            data[i] = entry.unpack(stream)
         return cls.post_unpack(data)
 
     @classmethod
@@ -312,6 +344,7 @@ class NdrConformantVaryingArrays(object):
     def _post_unpack(cls, result):
         return result
 
+
 class NdrWcharConformantVaryingArrays(NdrConformantVaryingArrays):
     MEMBER_TYPE = NdrShort
 
@@ -319,11 +352,14 @@ class NdrWcharConformantVaryingArrays(NdrConformantVaryingArrays):
     def _post_unpack(self, result):
         return u"".join(unichr(c) for c in result)
 
+
 class NdrLongConformantArray(NdrConformantArray):
     MEMBER_TYPE = NdrLong
 
+
 class NdrByteConformantArray(NdrConformantArray):
     MEMBER_TYPE = NdrByte
+
 
 
 class NdrStream(object):
@@ -360,3 +396,14 @@ class NdrStream(object):
             # Realign
             size_to_align = (size - (already_read % size))
             self.data = self.data[size_to_align:]
+
+
+def make_parameters(types, name=None):
+    class NdrCustomParameters(NdrParameters):
+        MEMBERS = types
+    return NdrCustomParameters
+
+def make_structure(types, name=None):
+    class NdrCustomStructure(NdrStructure):
+        MEMBERS = types
+    return NdrCustomStructure

@@ -26,7 +26,7 @@ class NDRIID(ndr.NdrStructure):
     MEMBERS = [ndr.NdrByte] * 16
 
 
-class EPMapperFunc8Parameters(ndr.NdrParameters):
+class EptMapAuthParameters(ndr.NdrParameters):
     MEMBERS = [NDRIID,
                 NdrTower,
                 ndr.NdrUniquePTR(ndr.NdrSID),
@@ -38,7 +38,7 @@ class Towers(ndr.NdrConformantVaryingArrays):
     MEMBER_TYPE = ndr.NdrUniquePTR(NdrTower)
 
 
-class EPMapperFunc8Results(ndr.NdrParameters):
+class EptMapAuthResults(ndr.NdrParameters):
     MEMBERS = [NdrContext,
                 ndr.NdrLong,
                 Towers]
@@ -112,13 +112,18 @@ def construct_alpc_tower(object, syntax, protseq, endpoint, address):
     floor_2_rsh = TOWER_EMPTY_RHS
     floor_2 = craft_floor(floor_2_lsh, floor_2_rsh)
     # Floor 3
-    floor_3_lsh = "\xff"
-    floor_3_rsh = TOWER_EMPTY_RHS
-    floor_3 = craft_floor(floor_3_lsh, floor_3_rsh)
+    if endpoint is None:
+        floor_3_lsh = "\xff"
+        floor_3_rsh = TOWER_EMPTY_RHS
+        floor_3 = craft_floor(floor_3_lsh, floor_3_rsh)
+    else:
+        floor_3_lsh = "\x10"
+        floor_3_rsh = endpoint
+        floor_3 = craft_floor(floor_3_lsh, floor_3_rsh)
     towerarray = struct.pack("<H", 4) +  floor_0 + floor_1 + floor_2 + floor_3
     return len(towerarray), bytearray(towerarray)
 
-def endpoint_map_alpc(targetiid, version=(1,0), nb_response=1, sid=gdef.WinLocalSystemSid):
+def find_alpc_endpoints(targetiid, version=(1,0), nb_response=1, sid=gdef.WinLocalSystemSid):
     """Ask the EPMapper for ALPC endpoints of ``targetiid:version`` (maximum of ``nb_response``)
 
         :param str targetiid: The IID of the requested interface
@@ -149,16 +154,16 @@ def endpoint_map_alpc(targetiid, version=(1,0), nb_response=1, sid=gdef.WinLocal
     context = (0, 0, 0, 0, 0)
 
     # Pack request
-    fullreq = EPMapperFunc8Parameters.pack([bytearray(targetiid),
+    fullreq = EptMapAuthParameters.pack([bytearray(targetiid),
                                             (tower_array_size, towerarray),
                                             local_system_psid,
                                             context,
                                             nb_response])
     # RPC Call
-    response = client.call(epmapperiid, 8, fullreq)
+    response = client.call(epmapperiid, 7, fullreq)
     # Unpack response
     stream = ndr.NdrStream(response)
-    unpacked = EPMapperFunc8Results.unpack(stream)
+    unpacked = EptMapAuthResults.unpack(stream)
     # Looks like there is a memory leak here (in stream.data) if nb_response > len(unpacked[2])
     # Parse towers
     return [explode_alpc_tower(obj) for obj in unpacked[2]]
@@ -174,7 +179,7 @@ def find_alpc_endpoint_and_connect(targetiid, version=(1,0), sid=gdef.WinLocalSy
         :returns: A connected :class:`~windows.rpc.RPCClient`
     """
     dbgprint("Finding ALPC endpoints for  <{0}>".format(targetiid), "RPC")
-    alpctowers = endpoint_map_alpc(targetiid, version, nb_response=50, sid=sid)
+    alpctowers = find_alpc_endpoints(targetiid, version, nb_response=50, sid=sid)
     dbgprint("ALPC endpoints list: <{0}>".format(alpctowers), "RPC")
     for tower in alpctowers:
         dbgprint("Trying to connect to endpoint <{0}>".format(tower.endpoint), "RPC")

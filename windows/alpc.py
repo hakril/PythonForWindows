@@ -346,7 +346,7 @@ class AlpcClient(AlpcTransportBase):
     def __init__(self, port_name=None):
         """Init the :class:`AlpcClient` automatically connect to ``port_name`` using default values if given"""
         self.handle = None
-        self.portname = None
+        self.port_name = None
         if port_name is not None:
             x = self.connect_to_port(port_name, "")
 
@@ -409,7 +409,7 @@ class AlpcClient(AlpcTransportBase):
         winproxy.NtAlpcConnectPort(handle, port_name_unicode, obj_attr, port_attr, flags, None, send_msg, buffersize, send_msg_attr, receive_attr, timeout)
         # If send_msg is not None, it contains the ClientId.UniqueProcess : PID of the server :)
         self.handle = handle.value
-        self.portname = port_name
+        self.port_name = port_name
         return AlpcMessage(send_msg, receive_attr) if send_msg is not None else None
 
     def create_port_section(self, Flags, SectionHandle, SectionSize):
