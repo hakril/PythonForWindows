@@ -174,7 +174,10 @@ def pytest_terminal_summary(terminalreporter, exitstatus):
             for type, items in leak_report.LEAK.items():
                 terminalreporter.write_line("Leaked handles of type <{0}>".format(type) , Purple=True, bold=True)
                 for item in items:
-                    descr = item.description()
+                    try:
+                        descr = item.description()
+                    except WindowsError as e:
+                        descr = None
                     if descr is None:
                         try:
                             descr = item.name

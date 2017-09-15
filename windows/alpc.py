@@ -1,3 +1,4 @@
+import sys
 import ctypes
 from collections import namedtuple
 
@@ -337,6 +338,10 @@ class AlpcTransportBase(object):
         winproxy.NtAlpcSendWaitReceivePort(self.handle, flags, None, None, receive_msg.port_message, receive_size, receive_msg.attributes, None)
         return receive_msg
 
+    def _close_port(self, port_handle):
+        windows.winproxy.NtAlpcDisconnectPort(port_handle, 0)
+        windows.winproxy.CloseHandle(port_handle)
+
 
 
 class AlpcClient(AlpcTransportBase):
@@ -428,6 +433,13 @@ class AlpcClient(AlpcTransportBase):
         r = winproxy.NtAlpcCreateSectionView(self.handle, flags, view_attributes)
         return view_attributes
 
+    def disconnect(self):
+        self._close_port(self.handle)
+
+    def __del__(self):
+        if sys.path is not None:
+            self.disconnect()
+
 
 class AlpcServer(AlpcTransportBase):
     """An ALPC server able to create a port, accept connections and send/receive messages"""
@@ -435,6 +447,7 @@ class AlpcServer(AlpcTransportBase):
 
     def __init__(self, port_name=None):
         self.port_name = None
+        self.communication_port_list = []
         if port_name is not None:
             self.create_port(port_name)
 
@@ -511,4 +524,16 @@ class AlpcServer(AlpcTransportBase):
             port_attr.DupObjectTypes = 0xffffffff
         # windows.utils.print_ctypes_struct(port_attr, "   - CONN_PORT_ATTR", hexa=True)
         winproxy.NtAlpcAcceptConnectPort(rhandle, self.handle, 0, None, port_attr, port_context, msg.port_message, None, True)
-        return rhandle.value, msg
+        self.communication_port_list.append(rhandle.value)
+        return msg
+
+    def disconnect(self):
+        self._close_port(self.handle)
+        for com_port_handle in self.communication_port_list:
+            self._close_port(com_port_handle)
+
+    # TODO: add an API to close a communication port ?
+
+    def __del__(self):
+        if sys.path is not None:
+            self.disconnect()

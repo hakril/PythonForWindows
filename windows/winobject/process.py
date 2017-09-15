@@ -436,7 +436,6 @@ class Process(AutoHandle):
             if size & 0x0fff:
                 size = ((size >> 12) + 1) << 12
             #ssize = ULONG(size)
-            #import pdb;pdb.set_trace()
             old_protect = ctypes.addressof(old_protect)
             xaddr = ULONG64(addr)
             addr = ctypes.addressof(xaddr)

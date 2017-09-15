@@ -869,6 +869,9 @@ def NtAlpcAcceptConnectPort(PortHandle, ConnectionPortHandle, Flags, ObjectAttri
 def NtAlpcQueryInformation(PortHandle, PortInformationClass, PortInformation, Length, ReturnLength):
     return NtAlpcQueryInformation.ctypes_function(PortHandle, PortInformationClass, PortInformation, Length, ReturnLength)
 
+@NtdllProxy("NtAlpcDisconnectPort", error_ntstatus)
+def NtAlpcDisconnectPort(PortHandle, Flags):
+    return NtAlpcDisconnectPort.ctypes_function(PortHandle, Flags)
 
 @NtdllProxy("NtAlpcSendWaitReceivePort", error_ntstatus)
 def NtAlpcSendWaitReceivePort(PortHandle, Flags, SendMessage, SendMessageAttributes, ReceiveMessage, BufferLength, ReceiveMessageAttributes, Timeout):
