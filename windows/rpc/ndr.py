@@ -97,6 +97,16 @@ class NdrSID(object):
         subcount = NdrLong.unpack(stream)
         return stream.read(8 + (subcount * 4))
 
+class NdrVaryingCString(object):
+    @classmethod
+    def pack(cls, data):
+        if data is None:
+            return None
+        l = len(data)
+        result = struct.pack("<2I", 0, l)
+        result += data
+        return dword_pad(result)
+
 class NdrWString(object):
     @classmethod
     def pack(cls, data):

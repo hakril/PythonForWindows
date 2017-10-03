@@ -4,6 +4,7 @@ import logging
 import inspect
 
 options = {'active': False, 'cats': None}
+# options = {'active': True, 'cats': ["HANDLE"]}
 
 
 def get_stack_func_name(lvl):
@@ -40,6 +41,10 @@ try:
         dbgprint = do_dbgprint
         option_str = [opt for opt in sys.argv if opt.startswith("--DBGPRINT")][0]
         parse_option(option_str[len('--DBGPRINT'):])
+    elif options["active"]:
+        formt = 'DBG|%(name)s|%(message)s'
+        logging.basicConfig(format=formt, level=logging.DEBUG)
+        dbgprint = do_dbgprint
     else:
         dbgprint = do_nothing
 except Exception as e:

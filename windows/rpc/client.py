@@ -44,6 +44,26 @@ class ALPC_RPC_BIND(ctypes.Structure):
         ("UNK9", gdef.DWORD),
     ]
 
+class ALPC_RPC_CALL(ctypes.Structure):
+    _pack_ = 1
+    _fields_ = [
+        ("request_type", gdef.DWORD),
+        ("UNK1", gdef.DWORD),
+        ("flags",gdef.DWORD),
+        ("request_id", gdef.DWORD),
+        ("if_nb", gdef.DWORD),
+        ("method_offset", gdef.DWORD),
+        ("UNK2", gdef.DWORD),
+        ("UNK3", gdef.DWORD),
+        ("UNK4", gdef.DWORD),
+        ("UNK5", gdef.DWORD),
+        ("UNK6", gdef.DWORD),
+        ("UNK7", gdef.DWORD),
+        ("UNK8", gdef.DWORD),
+        ("UNK9", gdef.DWORD),
+        ("UNK10", gdef.DWORD),
+        ("UNK11", gdef.DWORD),
+    ]
 
 class RPCClient(object):
     """A client for RPC-over-ALPC able to bind to interface and perform calls using NDR32 marshalling"""
@@ -99,9 +119,15 @@ class RPCClient(object):
     def _forge_call_request(self, interface_nb, method_offset, params):
         # TODO: differents REQUEST_IDENTIFIER for each req ?
         # TODO: what is this '0' ? (1 is also accepted) (flags ?)
-        request = struct.pack("<16I", gdef.RPC_REQUEST_TYPE_CALL, NOT_USED, 1, self.REQUEST_IDENTIFIER, interface_nb, method_offset, *[NOT_USED] * 10)
-        request += params
-        return request
+        # request = struct.pack("<16I", gdef.RPC_REQUEST_TYPE_CALL, NOT_USED, 1, self.REQUEST_IDENTIFIER, interface_nb, method_offset, *[NOT_USED] * 10)
+        req = ALPC_RPC_CALL()
+        req.request_type = gdef.RPC_REQUEST_TYPE_CALL
+        req.flags = 0
+        req.request_id = self.REQUEST_IDENTIFIER
+        req.if_nb = interface_nb
+        req.method_offset = method_offset
+
+        return buffer(req)[:] + params
 
     def _forge_bind_request(self, uuid, syntaxversion, requested_if_nb):
         version_major, version_minor = syntaxversion
@@ -109,8 +135,10 @@ class RPCClient(object):
         req.request_type = gdef.RPC_REQUEST_TYPE_BIND
         req.target = gdef.RPC_IF_ID(uuid, *syntaxversion)
         req.flags = gdef.BIND_IF_SYNTAX_NDR32
+        # req.flags = gdef.BIND_IF_SYNTAX_NDR64
         req.if_nb_ndr32 = requested_if_nb
         req.if_nb_ndr64 = 0
+        req.if_nb_ndr64 = requested_if_nb
         req.if_nb_unkn = 0
         req.register_multiple_syntax = False
         req.some_context_id = 0xB00B00B

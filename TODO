@@ -1,16 +1,13 @@
 TODO:
-    - Documentation
-        - thread.set_context in a sample
 
     - Better WMI interface
-        - Bug in VARIANT_TYPE == BOOL (see Win32_OperatingSystem->Debug)
+
 
     - DBG
         - Verif multiple bp at same place..
         - Verif multiple pending at same place
         - Test !! (bp, BP_HX, bp on only on process, bp_hx on only one thread..)
 		- test breakpoint with specific target
-
 
         - Rethink/adapt Debugger._explicit_single_step
             - Does not handle case where EEFlags.TF was by the debugge before trigering the exception
@@ -24,9 +21,9 @@ TODO:
             - j'attends a avoir un thread/process mais je fait des check sur TID/PID..
                 - Ecrire un test et fix..
 
+
     - windows.alpc | windows.rpc
         - Clean + doc + samples
-
 
 
     - remotectypes

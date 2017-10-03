@@ -21,5 +21,6 @@ setup(
                 'windows.winobject',
                 'windows.debug',
                 'windows.crypto',
+                'windows.rpc',
                 'windows.test'],
 )

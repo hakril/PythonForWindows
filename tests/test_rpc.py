@@ -1,3 +1,4 @@
+import sys
 import pytest
 import os.path
 
@@ -58,7 +59,7 @@ def test_rpc_uac_call():
     client = windows.rpc.find_alpc_endpoint_and_connect(UAC_UIID)
     iid = client.bind(UAC_UIID)
 
-    python_path = 'C:\\Python27\\python.exe'
+    python_path = sys.executable
     python_name = os.path.basename(python_path)
 
     # Marshalling parameters.
@@ -98,5 +99,6 @@ def test_rpc_uac_call():
     windows.winproxy.CloseHandle(th) # NoLeak
     proc = windows.WinProcess(handle=ph)
     assert proc.name == python_name
+    assert proc.pid == pid
     proc.exit(0)
 
