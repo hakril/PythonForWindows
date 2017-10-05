@@ -581,8 +581,8 @@ Ouput::
 
 .. _wmi_request:
 
-Make WMI requests
-"""""""""""""""""
+WMI requests
+""""""""""""
 
 
 .. literalinclude:: ..\..\samples\wmi\wmi_request.py
@@ -634,8 +634,8 @@ Output::
     * NET_FW_PROFILE2_PUBLIC(0x4L) -> True
 
 
-``windows.crypto``
-""""""""""""""""""
+:mod:`windows.crypto`
+"""""""""""""""""""""
 
 
 .. _sample_crypto_encryption:
@@ -734,8 +734,8 @@ Ouput::
 
 
 
-``windows.alpc``
-""""""""""""""""
+:mod:`windows.alpc`
+"""""""""""""""""""
 
 .. _sample_alpc:
 
@@ -849,3 +849,81 @@ Output::
     - TOKEN.AuthenticationId -> 0x48989L
     - TOKEN.ModifiedId -> 0x48995L
     BYE
+
+
+
+
+:mod:`windows.rpc`
+""""""""""""""""""
+
+.. _sample_rpc_uac:
+
+Manual UAC
+''''''''''
+
+.. literalinclude:: ..\..\samples\rpc\uac.py
+
+
+Output::
+
+    (cmd λ) python samples\rpc\uac.py
+    Namespace(cmdline='', creationflags=CREATE_UNICODE_ENVIRONMENT(0x400L), target='C:\\Python27\\python.exe', uacflags=17)
+    # UAC pop - asking to execute python.exe | Clicking Yes
+    Return value = 0x6
+    Created process is <WinProcess "python.exe" pid 19304 at 0x455f7d0>
+    * bitness is 32
+    * integrity: SECURITY_MANDATORY_HIGH_RID(0x3000L)
+    * elevated: True
+
+    # The new python.exe in another window
+    >>> windows.current_process.token.integrity
+    SECURITY_MANDATORY_HIGH_RID(0x3000L)
+    >>> windows.current_process.token.is_elevated
+    True
+
+.. _sample_rpc_lsass:
+
+Manual ``LsarEnumeratePrivileges``
+''''''''''''''''''''''''''''''''''
+
+.. literalinclude:: ..\..\samples\rpc\lsass.py
+
+Output::
+
+    (cmd λ) python samples\rpc\lsass.py
+    (2, u'SeCreateTokenPrivilege')
+    (3, u'SeAssignPrimaryTokenPrivilege')
+    (4, u'SeLockMemoryPrivilege')
+    (5, u'SeIncreaseQuotaPrivilege')
+    (6, u'SeMachineAccountPrivilege')
+    (7, u'SeTcbPrivilege')
+    (8, u'SeSecurityPrivilege')
+    (9, u'SeTakeOwnershipPrivilege')
+    (10, u'SeLoadDriverPrivilege')
+    (11, u'SeSystemProfilePrivilege')
+    (12, u'SeSystemtimePrivilege')
+    (13, u'SeProfileSingleProcessPrivilege')
+    (14, u'SeIncreaseBasePriorityPrivilege')
+    (15, u'SeCreatePagefilePrivilege')
+    (16, u'SeCreatePermanentPrivilege')
+    (17, u'SeBackupPrivilege')
+    (18, u'SeRestorePrivilege')
+    (19, u'SeShutdownPrivilege')
+    (20, u'SeDebugPrivilege')
+    (21, u'SeAuditPrivilege')
+    (22, u'SeSystemEnvironmentPrivilege')
+    (23, u'SeChangeNotifyPrivilege')
+    (24, u'SeRemoteShutdownPrivilege')
+    (25, u'SeUndockPrivilege')
+    (26, u'SeSyncAgentPrivilege')
+    (27, u'SeEnableDelegationPrivilege')
+    (28, u'SeManageVolumePrivilege')
+    (29, u'SeImpersonatePrivilege')
+    (30, u'SeCreateGlobalPrivilege')
+    (31, u'SeTrustedCredManAccessPrivilege')
+    (32, u'SeRelabelPrivilege')
+    (33, u'SeIncreaseWorkingSetPrivilege')
+    (34, u'SeTimeZonePrivilege')
+    (35, u'SeCreateSymbolicLinkPrivilege')
+    (36, u'SeDelegateSessionUserImpersonatePrivilege')
+

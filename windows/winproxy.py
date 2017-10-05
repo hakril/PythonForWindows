@@ -953,9 +953,15 @@ def NtMapViewOfSection(SectionHandle, ProcessHandle, BaseAddress, ZeroBits, Comm
 def NtUnmapViewOfSection(ProcessHandle, BaseAddress):
     return NtUnmapViewOfSection.ctypes_function(ProcessHandle, BaseAddress)
 
+
 @NtdllProxy("RtlGetUnloadEventTraceEx", no_error_check)
 def RtlGetUnloadEventTraceEx(ElementSize, ElementCount, EventTrace):
     return RtlGetUnloadEventTraceEx.ctypes_function(ElementSize, ElementCount, EventTrace)
+
+
+@NtdllProxy("TpCallbackSendAlpcMessageOnCompletion")
+def TpCallbackSendAlpcMessageOnCompletion(TpHandle, PortHandle, Flags, SendMessage):
+    return TpCallbackSendAlpcMessageOnCompletion.ctypes_function(TpHandle, PortHandle, Flags, SendMessage)
 
 
 

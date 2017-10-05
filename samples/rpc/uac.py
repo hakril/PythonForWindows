@@ -22,7 +22,7 @@ class NdrUACStartupInfo(ndr.NdrStructure):
                 ndr.NdrLong,
                 NDRPoint]
 
-class UACParameters(ndr.NdrParameters):
+class RAiLaunchAdminProcessParameters(ndr.NdrParameters):
     MEMBERS = [ndr.NdrUniquePTR(ndr.NdrWString),
                 ndr.NdrUniquePTR(ndr.NdrWString),
                 ndr.NdrLong,
@@ -51,7 +51,7 @@ client = windows.rpc.find_alpc_endpoint_and_connect(UAC_UIID)
 iid = client.bind(UAC_UIID)
 
 # Marshalling parameters.
-parameters = UACParameters.pack([
+parameters = RAiLaunchAdminProcessParameters.pack([
     params.target + "\x00", # Application Path
     params.cmdline + "\x00", # Commandline
     params.uacflags, # UAC-Request Flag

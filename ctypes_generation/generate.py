@@ -742,6 +742,7 @@ structs.append_input_file(from_here("definitions\\winstruct_alpc.txt"))
 
 functions = FuncGenerator(from_here("definitions\\winfunc.txt"), from_here(r"..\windows\generated_def\\winfuncs.py"), dependances=[structs])
 functions.append_input_file(from_here("definitions\\wintrust_crypt_func.txt"))
+functions.append_input_file(from_here("definitions\\winfunc_notdoc.txt"))
 
 com = InitialCOMGenerator(from_here("definitions\\com\\*.txt"), DEFAULT_INTERFACE_TO_IID, from_here(r"..\windows\generated_def\\interfaces.py"), dependances=[structs, defs_with_ntstatus])
 

@@ -14,7 +14,7 @@ GetProcAddress64 = windows.native_exec.nativeutils.GetProcAddress64
 
 dll = "KERNEL32.DLL\x00".encode("utf-16-le")
 api = "LoadLibraryA\x00"
-dll_to_load = "SUCE"
+dll_to_load = "MyDLLToLoad"
 
 
 RemoteManualLoadLibray = x64.MultipleInstr()

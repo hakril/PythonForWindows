@@ -13,7 +13,10 @@ The :mod:`windows.rpc` allows to perform the basic for MS-RPC:
 
 .. note::
 
-    See UAC POC
+    See samples:
+
+        * :ref:`sample_rpc_uac`
+        * :ref:`sample_rpc_lsass`
 
 
 RPCClient
