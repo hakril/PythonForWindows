@@ -404,7 +404,10 @@ class FuncGenerator(CtypesGenerator):
 
     def analyse(self, data):
         for func in data:
-            self.add_imports(func.return_type)
+            if isinstance(func.return_type, tuple) and func.return_type[0] == "PTR":
+                self.add_imports(func.return_type[1])
+            else:
+                self.add_imports(func.return_type)
             for param_type, _ in func.params:
                 if param_type.startswith("POINTER(") and param_type.endswith(")"):
                     param_type = param_type[len("POINTER("): -1]
@@ -741,7 +744,7 @@ structs.append_input_file(from_here("definitions\\winstruct_bits.txt"))
 structs.append_input_file(from_here("definitions\\winstruct_alpc.txt"))
 
 functions = FuncGenerator(from_here("definitions\\winfunc.txt"), from_here(r"..\windows\generated_def\\winfuncs.py"), dependances=[structs])
-functions.append_input_file(from_here("definitions\\wintrust_crypt_func.txt"))
+functions.append_input_file(from_here("definitions\\winfunc_crypto_wintrust.txt"))
 functions.append_input_file(from_here("definitions\\winfunc_notdoc.txt"))
 
 com = InitialCOMGenerator(from_here("definitions\\com\\*.txt"), DEFAULT_INTERFACE_TO_IID, from_here(r"..\windows\generated_def\\interfaces.py"), dependances=[structs, defs_with_ntstatus])

@@ -6,7 +6,7 @@ from ctypes.wintypes import *
 from winstructs import *
 
 
-functions = ['ExitProcess', 'TerminateProcess', 'GetLastError', 'GetCurrentProcess', 'CreateFileA', 'CreateFileW', 'NtCreateFile', 'LdrLoadDll', 'NtQuerySystemInformation', 'NtQueryInformationProcess', 'NtQueryVirtualMemory', 'NtCreateThreadEx', 'NtQueryInformationThread', 'GetExitCodeThread', 'GetExitCodeProcess', 'VirtualAlloc', 'VirtualAllocEx', 'NtProtectVirtualMemory', 'VirtualFree', 'VirtualFreeEx', 'VirtualProtect', 'VirtualProtectEx', 'VirtualQuery', 'VirtualQueryEx', 'QueryWorkingSet', 'QueryWorkingSetEx', 'GetModuleFileNameA', 'GetModuleFileNameW', 'CreateThread', 'CreateRemoteThread', 'VirtualProtect', 'CreateProcessA', 'CreateProcessW', 'CreateProcessAsUserA', 'CreateProcessAsUserW', 'GetThreadContext', 'NtGetContextThread', 'SetThreadContext', 'NtSetContextThread', 'OpenThread', 'OpenProcess', 'CloseHandle', 'ReadProcessMemory', 'NtWow64ReadVirtualMemory64', 'NtReadVirtualMemory', 'WriteProcessMemory', 'NtWow64WriteVirtualMemory64', 'CreateToolhelp32Snapshot', 'Thread32First', 'Thread32Next', 'Process32First', 'Process32Next', 'Process32FirstW', 'Process32NextW', 'GetProcAddress', 'LoadLibraryA', 'LoadLibraryW', 'OpenProcessToken', 'OpenThreadToken', 'LookupPrivilegeValueA', 'LookupPrivilegeValueW', 'LookupPrivilegeNameA', 'LookupPrivilegeNameW', 'AdjustTokenPrivileges', 'FindResourceA', 'FindResourceW', 'SizeofResource', 'LoadResource', 'LockResource', 'GetVersionExA', 'GetVersionExW', 'GetVersion', 'GetCurrentThread', 'GetCurrentThreadId', 'GetCurrentProcessorNumber', 'AllocConsole', 'FreeConsole', 'GetStdHandle', 'SetStdHandle', 'SetThreadAffinityMask', 'ReadFile', 'WriteFile', 'GetExtendedTcpTable', 'GetExtendedUdpTable', 'SetTcpEntry', 'AddVectoredContinueHandler', 'AddVectoredExceptionHandler', 'TerminateThread', 'ExitThread', 'RemoveVectoredExceptionHandler', 'ResumeThread', 'SuspendThread', 'WaitForSingleObject', 'GetThreadId', 'LoadLibraryExA', 'LoadLibraryExW', 'SymInitialize', 'SymFromName', 'SymLoadModuleEx', 'SymSetOptions', 'SymGetTypeInfo', 'DeviceIoControl', 'GetTokenInformation', 'RegOpenKeyExA', 'RegOpenKeyExW', 'RegGetValueA', 'RegGetValueW', 'RegCloseKey', 'Wow64DisableWow64FsRedirection', 'Wow64RevertWow64FsRedirection', 'Wow64EnableWow64FsRedirection', 'Wow64GetThreadContext', 'SetConsoleCtrlHandler', 'WinVerifyTrust', 'GlobalAlloc', 'GlobalFree', 'GlobalUnlock', 'GlobalLock', 'OpenClipboard', 'EmptyClipboard', 'CloseClipboard', 'SetClipboardData', 'GetClipboardData', 'EnumClipboardFormats', 'GetClipboardFormatNameA', 'GetClipboardFormatNameW', 'WinVerifyTrust', 'OpenProcessToken', 'OpenThreadToken', 'GetTokenInformation', 'SetTokenInformation', 'GetSidIdentifierAuthority', 'GetSidSubAuthority', 'GetSidSubAuthorityCount', 'GetLengthSid', 'CreateWellKnownSid', 'DebugBreak', 'WaitForDebugEvent', 'ContinueDebugEvent', 'DebugActiveProcess', 'DebugActiveProcessStop', 'DebugSetProcessKillOnExit', 'DebugBreakProcess', 'GetProcessId', 'Wow64SetThreadContext', 'GetMappedFileNameW', 'GetMappedFileNameA', 'RtlInitString', 'RtlInitUnicodeString', 'RtlAnsiStringToUnicodeString', 'RtlDecompressBuffer', 'NtCreateSection', 'NtOpenSection', 'NtMapViewOfSection', 'NtUnmapViewOfSection', 'OpenEventA', 'OpenEventW', 'NtOpenEvent', 'NtAlpcCreatePort', 'NtAlpcQueryInformation', 'NtAlpcConnectPort', 'NtAlpcConnectPortEx', 'NtAlpcAcceptConnectPort', 'AlpcInitializeMessageAttribute', 'AlpcGetMessageAttribute', 'NtAlpcSendWaitReceivePort', 'NtAlpcDisconnectPort', 'NtAlpcCreatePortSection', 'NtAlpcDeletePortSection', 'NtAlpcCreateResourceReserve', 'NtAlpcDeleteResourceReserve', 'NtAlpcCreateSectionView', 'NtAlpcDeleteSectionView', 'NtAlpcCreateSecurityContext', 'NtAlpcDeleteSecurityContext', 'NtAlpcRevokeSecurityContext', 'lstrcmpA', 'lstrcmpW', 'CreateFileMappingA', 'CreateFileMappingW', 'MapViewOfFile', 'OpenSCManagerA', 'OpenSCManagerW', 'CloseServiceHandle', 'EnumServicesStatusExA', 'EnumServicesStatusExW', 'StartServiceA', 'StartServiceW', 'OpenServiceA', 'OpenServiceW', 'EnumWindows', 'GetWindowTextA', 'GetWindowTextW', 'GetWindowModuleFileNameA', 'GetWindowModuleFileNameW', 'CryptCATAdminCalcHashFromFileHandle', 'CryptCATAdminEnumCatalogFromHash', 'CryptCATAdminAcquireContext', 'CryptCATCatalogInfoFromContext', 'CryptCATAdminReleaseCatalogContext', 'CryptCATAdminReleaseContext', 'GetLogicalDriveStringsA', 'GetLogicalDriveStringsW', 'GetVolumeInformationA', 'GetVolumeInformationW', 'GetVolumeNameForVolumeMountPointA', 'GetVolumeNameForVolumeMountPointW', 'GetDriveTypeA', 'GetDriveTypeW', 'QueryDosDeviceA', 'QueryDosDeviceW', 'NtQueryObject', 'DuplicateHandle', 'ZwDuplicateObject', 'GetModuleBaseNameA', 'GetModuleBaseNameW', 'GetProcessImageFileNameA', 'GetProcessImageFileNameW', 'GetFileVersionInfoA', 'GetFileVersionInfoW', 'GetFileVersionInfoSizeA', 'GetFileVersionInfoSizeW', 'VerQueryValueA', 'VerQueryValueW', 'GetSystemMetrics', 'GetComputerNameA', 'GetComputerNameW', 'LookupAccountSidA', 'LookupAccountSidW', 'CoInitializeEx', 'CoInitializeSecurity', 'CoCreateInstance', 'GetInterfaceInfo', 'GetIfTable', 'GetIpAddrTable', 'NtOpenDirectoryObject', 'NtQueryDirectoryObject', 'NtQuerySymbolicLinkObject', 'NtOpenSymbolicLinkObject', 'GetProcessTimes', 'GetShortPathNameA', 'GetShortPathNameW', 'GetLongPathNameA', 'GetLongPathNameW', 'GetProcessDEPPolicy', 'GetCursorPos', 'WindowFromPoint', 'GetWindowRect', 'GetNamedSecurityInfoA', 'GetNamedSecurityInfoW', 'GetSecurityInfo', 'ConvertStringSidToSidA', 'ConvertStringSidToSidW', 'ConvertSidToStringSidA', 'ConvertSidToStringSidW', 'LocalFree', 'RegQueryValueExA', 'RegQueryValueExW', 'ShellExecuteA', 'ShellExecuteW', 'InitializeProcThreadAttributeList', 'UpdateProcThreadAttribute', 'DeleteProcThreadAttributeList', 'MessageBoxA', 'MessageBoxW', 'GetWindowsDirectoryA', 'GetWindowsDirectoryW', 'RtlGetUnloadEventTraceEx', 'CryptQueryObject', 'CryptMsgGetParam', 'CryptDecodeObject', 'CertFindCertificateInStore', 'CertGetNameStringA', 'CertGetNameStringW', 'CertGetCertificateChain', 'CertCreateSelfSignCertificate', 'CertStrToNameA', 'CertStrToNameW', 'CertOpenStore', 'CertAddCertificateContextToStore', 'PFXExportCertStoreEx', 'PFXImportCertStore', 'CryptGenKey', 'CryptDestroyKey', 'CryptAcquireContextA', 'CryptAcquireContextW', 'CryptReleaseContext', 'CryptExportKey', 'CertGetCertificateContextProperty', 'CertEnumCertificateContextProperties', 'CryptEncryptMessage', 'CryptDecryptMessage', 'CryptAcquireCertificatePrivateKey', 'CertDuplicateCertificateContext', 'CertEnumCertificatesInStore', 'CryptEncodeObjectEx', 'CertCreateCertificateContext', 'CertCompareCertificate', 'TpCallbackSendAlpcMessageOnCompletion']
+functions = ['ExitProcess', 'TerminateProcess', 'GetLastError', 'GetCurrentProcess', 'CreateFileA', 'CreateFileW', 'NtCreateFile', 'LdrLoadDll', 'NtQuerySystemInformation', 'NtQueryInformationProcess', 'NtQueryVirtualMemory', 'NtCreateThreadEx', 'NtQueryInformationThread', 'GetExitCodeThread', 'GetExitCodeProcess', 'VirtualAlloc', 'VirtualAllocEx', 'NtProtectVirtualMemory', 'VirtualFree', 'VirtualFreeEx', 'VirtualProtect', 'VirtualProtectEx', 'VirtualQuery', 'VirtualQueryEx', 'QueryWorkingSet', 'QueryWorkingSetEx', 'GetModuleFileNameA', 'GetModuleFileNameW', 'CreateThread', 'CreateRemoteThread', 'VirtualProtect', 'CreateProcessA', 'CreateProcessW', 'CreateProcessAsUserA', 'CreateProcessAsUserW', 'GetThreadContext', 'NtGetContextThread', 'SetThreadContext', 'NtSetContextThread', 'OpenThread', 'OpenProcess', 'CloseHandle', 'ReadProcessMemory', 'NtWow64ReadVirtualMemory64', 'NtReadVirtualMemory', 'WriteProcessMemory', 'NtWow64WriteVirtualMemory64', 'CreateToolhelp32Snapshot', 'Thread32First', 'Thread32Next', 'Process32First', 'Process32Next', 'Process32FirstW', 'Process32NextW', 'GetProcAddress', 'LoadLibraryA', 'LoadLibraryW', 'OpenProcessToken', 'OpenThreadToken', 'LookupPrivilegeValueA', 'LookupPrivilegeValueW', 'LookupPrivilegeNameA', 'LookupPrivilegeNameW', 'AdjustTokenPrivileges', 'FindResourceA', 'FindResourceW', 'SizeofResource', 'LoadResource', 'LockResource', 'GetVersionExA', 'GetVersionExW', 'GetVersion', 'GetCurrentThread', 'GetCurrentThreadId', 'GetCurrentProcessorNumber', 'AllocConsole', 'FreeConsole', 'GetStdHandle', 'SetStdHandle', 'SetThreadAffinityMask', 'ReadFile', 'WriteFile', 'GetExtendedTcpTable', 'GetExtendedUdpTable', 'SetTcpEntry', 'AddVectoredContinueHandler', 'AddVectoredExceptionHandler', 'TerminateThread', 'ExitThread', 'RemoveVectoredExceptionHandler', 'ResumeThread', 'SuspendThread', 'WaitForSingleObject', 'GetThreadId', 'LoadLibraryExA', 'LoadLibraryExW', 'SymInitialize', 'SymFromName', 'SymLoadModuleEx', 'SymSetOptions', 'SymGetTypeInfo', 'DeviceIoControl', 'GetTokenInformation', 'RegOpenKeyExA', 'RegOpenKeyExW', 'RegGetValueA', 'RegGetValueW', 'RegCloseKey', 'Wow64DisableWow64FsRedirection', 'Wow64RevertWow64FsRedirection', 'Wow64EnableWow64FsRedirection', 'Wow64GetThreadContext', 'SetConsoleCtrlHandler', 'WinVerifyTrust', 'GlobalAlloc', 'GlobalFree', 'GlobalUnlock', 'GlobalLock', 'OpenClipboard', 'EmptyClipboard', 'CloseClipboard', 'SetClipboardData', 'GetClipboardData', 'EnumClipboardFormats', 'GetClipboardFormatNameA', 'GetClipboardFormatNameW', 'WinVerifyTrust', 'OpenProcessToken', 'OpenThreadToken', 'GetTokenInformation', 'SetTokenInformation', 'GetSidIdentifierAuthority', 'GetSidSubAuthority', 'GetSidSubAuthorityCount', 'GetLengthSid', 'CreateWellKnownSid', 'DebugBreak', 'WaitForDebugEvent', 'ContinueDebugEvent', 'DebugActiveProcess', 'DebugActiveProcessStop', 'DebugSetProcessKillOnExit', 'DebugBreakProcess', 'GetProcessId', 'Wow64SetThreadContext', 'GetMappedFileNameW', 'GetMappedFileNameA', 'RtlInitString', 'RtlInitUnicodeString', 'RtlAnsiStringToUnicodeString', 'RtlDecompressBuffer', 'NtCreateSection', 'NtOpenSection', 'NtMapViewOfSection', 'NtUnmapViewOfSection', 'OpenEventA', 'OpenEventW', 'NtOpenEvent', 'NtAlpcCreatePort', 'NtAlpcQueryInformation', 'NtAlpcConnectPort', 'NtAlpcConnectPortEx', 'NtAlpcAcceptConnectPort', 'AlpcInitializeMessageAttribute', 'AlpcGetMessageAttribute', 'NtAlpcSendWaitReceivePort', 'NtAlpcDisconnectPort', 'NtAlpcCreatePortSection', 'NtAlpcDeletePortSection', 'NtAlpcCreateResourceReserve', 'NtAlpcDeleteResourceReserve', 'NtAlpcCreateSectionView', 'NtAlpcDeleteSectionView', 'NtAlpcCreateSecurityContext', 'NtAlpcDeleteSecurityContext', 'NtAlpcRevokeSecurityContext', 'lstrcmpA', 'lstrcmpW', 'CreateFileMappingA', 'CreateFileMappingW', 'MapViewOfFile', 'OpenSCManagerA', 'OpenSCManagerW', 'CloseServiceHandle', 'EnumServicesStatusExA', 'EnumServicesStatusExW', 'StartServiceA', 'StartServiceW', 'OpenServiceA', 'OpenServiceW', 'EnumWindows', 'GetWindowTextA', 'GetWindowTextW', 'GetWindowModuleFileNameA', 'GetWindowModuleFileNameW', 'GetLogicalDriveStringsA', 'GetLogicalDriveStringsW', 'GetVolumeInformationA', 'GetVolumeInformationW', 'GetVolumeNameForVolumeMountPointA', 'GetVolumeNameForVolumeMountPointW', 'GetDriveTypeA', 'GetDriveTypeW', 'QueryDosDeviceA', 'QueryDosDeviceW', 'NtQueryObject', 'DuplicateHandle', 'ZwDuplicateObject', 'GetModuleBaseNameA', 'GetModuleBaseNameW', 'GetProcessImageFileNameA', 'GetProcessImageFileNameW', 'GetFileVersionInfoA', 'GetFileVersionInfoW', 'GetFileVersionInfoSizeA', 'GetFileVersionInfoSizeW', 'VerQueryValueA', 'VerQueryValueW', 'GetSystemMetrics', 'GetComputerNameA', 'GetComputerNameW', 'LookupAccountSidA', 'LookupAccountSidW', 'CoInitializeEx', 'CoInitializeSecurity', 'CoCreateInstance', 'GetInterfaceInfo', 'GetIfTable', 'GetIpAddrTable', 'NtOpenDirectoryObject', 'NtQueryDirectoryObject', 'NtQuerySymbolicLinkObject', 'NtOpenSymbolicLinkObject', 'GetProcessTimes', 'GetShortPathNameA', 'GetShortPathNameW', 'GetLongPathNameA', 'GetLongPathNameW', 'GetProcessDEPPolicy', 'GetCursorPos', 'WindowFromPoint', 'GetWindowRect', 'GetNamedSecurityInfoA', 'GetNamedSecurityInfoW', 'GetSecurityInfo', 'ConvertStringSidToSidA', 'ConvertStringSidToSidW', 'ConvertSidToStringSidA', 'ConvertSidToStringSidW', 'LocalFree', 'RegQueryValueExA', 'RegQueryValueExW', 'ShellExecuteA', 'ShellExecuteW', 'InitializeProcThreadAttributeList', 'UpdateProcThreadAttribute', 'DeleteProcThreadAttributeList', 'MessageBoxA', 'MessageBoxW', 'GetWindowsDirectoryA', 'GetWindowsDirectoryW', 'RtlGetUnloadEventTraceEx', 'CryptCATAdminCalcHashFromFileHandle', 'CryptCATAdminEnumCatalogFromHash', 'CryptCATAdminAcquireContext', 'CryptCATCatalogInfoFromContext', 'CryptCATAdminReleaseCatalogContext', 'CryptCATAdminReleaseContext', 'CryptCATGetAttrInfo', 'CryptCATGetMemberInfo', 'CryptCATGetAttrInfo', 'CryptCATEnumerateCatAttr', 'CryptCATEnumerateAttr', 'CryptCATEnumerateMember', 'CryptQueryObject', 'CryptMsgGetParam', 'CryptDecodeObject', 'CertFindCertificateInStore', 'CertGetNameStringA', 'CertGetNameStringW', 'CertGetCertificateChain', 'CertCreateSelfSignCertificate', 'CertStrToNameA', 'CertStrToNameW', 'CertOpenStore', 'CertAddCertificateContextToStore', 'PFXExportCertStoreEx', 'PFXImportCertStore', 'CryptGenKey', 'CryptDestroyKey', 'CryptAcquireContextA', 'CryptAcquireContextW', 'CryptReleaseContext', 'CryptExportKey', 'CertGetCertificateContextProperty', 'CertEnumCertificateContextProperties', 'CryptEncryptMessage', 'CryptDecryptMessage', 'CryptAcquireCertificatePrivateKey', 'CertDuplicateCertificateContext', 'CertEnumCertificatesInStore', 'CryptEncodeObjectEx', 'CertCreateCertificateContext', 'CertCompareCertificate', 'TpCallbackSendAlpcMessageOnCompletion']
 
 
 #def ExitProcess(uExitCode):
@@ -984,36 +984,6 @@ GetWindowModuleFileNameAParams = ((1, 'hwnd'), (1, 'pszFileName'), (1, 'cchFileN
 GetWindowModuleFileNameWPrototype = WINFUNCTYPE(UINT, HWND, LPWSTR, UINT)
 GetWindowModuleFileNameWParams = ((1, 'hwnd'), (1, 'pszFileName'), (1, 'cchFileNameMax'))
 
-#def CryptCATAdminCalcHashFromFileHandle(hFile, pcbHash, pbHash, dwFlags):
-#    return CryptCATAdminCalcHashFromFileHandle.ctypes_function(hFile, pcbHash, pbHash, dwFlags)
-CryptCATAdminCalcHashFromFileHandlePrototype = WINFUNCTYPE(BOOL, HANDLE, POINTER(DWORD), POINTER(BYTE), DWORD)
-CryptCATAdminCalcHashFromFileHandleParams = ((1, 'hFile'), (1, 'pcbHash'), (1, 'pbHash'), (1, 'dwFlags'))
-
-#def CryptCATAdminEnumCatalogFromHash(hCatAdmin, pbHash, cbHash, dwFlags, phPrevCatInfo):
-#    return CryptCATAdminEnumCatalogFromHash.ctypes_function(hCatAdmin, pbHash, cbHash, dwFlags, phPrevCatInfo)
-CryptCATAdminEnumCatalogFromHashPrototype = WINFUNCTYPE(HCATINFO, HCATADMIN, POINTER(BYTE), DWORD, DWORD, POINTER(HCATINFO))
-CryptCATAdminEnumCatalogFromHashParams = ((1, 'hCatAdmin'), (1, 'pbHash'), (1, 'cbHash'), (1, 'dwFlags'), (1, 'phPrevCatInfo'))
-
-#def CryptCATAdminAcquireContext(phCatAdmin, pgSubsystem, dwFlags):
-#    return CryptCATAdminAcquireContext.ctypes_function(phCatAdmin, pgSubsystem, dwFlags)
-CryptCATAdminAcquireContextPrototype = WINFUNCTYPE(BOOL, POINTER(HCATADMIN), POINTER(GUID), DWORD)
-CryptCATAdminAcquireContextParams = ((1, 'phCatAdmin'), (1, 'pgSubsystem'), (1, 'dwFlags'))
-
-#def CryptCATCatalogInfoFromContext(hCatInfo, psCatInfo, dwFlags):
-#    return CryptCATCatalogInfoFromContext.ctypes_function(hCatInfo, psCatInfo, dwFlags)
-CryptCATCatalogInfoFromContextPrototype = WINFUNCTYPE(BOOL, HCATINFO, POINTER(CATALOG_INFO), DWORD)
-CryptCATCatalogInfoFromContextParams = ((1, 'hCatInfo'), (1, 'psCatInfo'), (1, 'dwFlags'))
-
-#def CryptCATAdminReleaseCatalogContext(hCatAdmin, hCatInfo, dwFlags):
-#    return CryptCATAdminReleaseCatalogContext.ctypes_function(hCatAdmin, hCatInfo, dwFlags)
-CryptCATAdminReleaseCatalogContextPrototype = WINFUNCTYPE(BOOL, HCATADMIN, HCATINFO, DWORD)
-CryptCATAdminReleaseCatalogContextParams = ((1, 'hCatAdmin'), (1, 'hCatInfo'), (1, 'dwFlags'))
-
-#def CryptCATAdminReleaseContext(hCatAdmin, dwFlags):
-#    return CryptCATAdminReleaseContext.ctypes_function(hCatAdmin, dwFlags)
-CryptCATAdminReleaseContextPrototype = WINFUNCTYPE(BOOL, HCATADMIN, DWORD)
-CryptCATAdminReleaseContextParams = ((1, 'hCatAdmin'), (1, 'dwFlags'))
-
 #def GetLogicalDriveStringsA(nBufferLength, lpBuffer):
 #    return GetLogicalDriveStringsA.ctypes_function(nBufferLength, lpBuffer)
 GetLogicalDriveStringsAPrototype = WINFUNCTYPE(DWORD, DWORD, LPCSTR)
@@ -1348,6 +1318,66 @@ GetWindowsDirectoryWParams = ((1, 'lpBuffer'), (1, 'uSize'))
 #    return RtlGetUnloadEventTraceEx.ctypes_function(ElementSize, ElementCount, EventTrace)
 RtlGetUnloadEventTraceExPrototype = WINFUNCTYPE(VOID, POINTER(PULONG), POINTER(PULONG), POINTER(PVOID))
 RtlGetUnloadEventTraceExParams = ((1, 'ElementSize'), (1, 'ElementCount'), (1, 'EventTrace'))
+
+#def CryptCATAdminCalcHashFromFileHandle(hFile, pcbHash, pbHash, dwFlags):
+#    return CryptCATAdminCalcHashFromFileHandle.ctypes_function(hFile, pcbHash, pbHash, dwFlags)
+CryptCATAdminCalcHashFromFileHandlePrototype = WINFUNCTYPE(BOOL, HANDLE, POINTER(DWORD), POINTER(BYTE), DWORD)
+CryptCATAdminCalcHashFromFileHandleParams = ((1, 'hFile'), (1, 'pcbHash'), (1, 'pbHash'), (1, 'dwFlags'))
+
+#def CryptCATAdminEnumCatalogFromHash(hCatAdmin, pbHash, cbHash, dwFlags, phPrevCatInfo):
+#    return CryptCATAdminEnumCatalogFromHash.ctypes_function(hCatAdmin, pbHash, cbHash, dwFlags, phPrevCatInfo)
+CryptCATAdminEnumCatalogFromHashPrototype = WINFUNCTYPE(HCATINFO, HCATADMIN, POINTER(BYTE), DWORD, DWORD, POINTER(HCATINFO))
+CryptCATAdminEnumCatalogFromHashParams = ((1, 'hCatAdmin'), (1, 'pbHash'), (1, 'cbHash'), (1, 'dwFlags'), (1, 'phPrevCatInfo'))
+
+#def CryptCATAdminAcquireContext(phCatAdmin, pgSubsystem, dwFlags):
+#    return CryptCATAdminAcquireContext.ctypes_function(phCatAdmin, pgSubsystem, dwFlags)
+CryptCATAdminAcquireContextPrototype = WINFUNCTYPE(BOOL, POINTER(HCATADMIN), POINTER(GUID), DWORD)
+CryptCATAdminAcquireContextParams = ((1, 'phCatAdmin'), (1, 'pgSubsystem'), (1, 'dwFlags'))
+
+#def CryptCATCatalogInfoFromContext(hCatInfo, psCatInfo, dwFlags):
+#    return CryptCATCatalogInfoFromContext.ctypes_function(hCatInfo, psCatInfo, dwFlags)
+CryptCATCatalogInfoFromContextPrototype = WINFUNCTYPE(BOOL, HCATINFO, POINTER(CATALOG_INFO), DWORD)
+CryptCATCatalogInfoFromContextParams = ((1, 'hCatInfo'), (1, 'psCatInfo'), (1, 'dwFlags'))
+
+#def CryptCATAdminReleaseCatalogContext(hCatAdmin, hCatInfo, dwFlags):
+#    return CryptCATAdminReleaseCatalogContext.ctypes_function(hCatAdmin, hCatInfo, dwFlags)
+CryptCATAdminReleaseCatalogContextPrototype = WINFUNCTYPE(BOOL, HCATADMIN, HCATINFO, DWORD)
+CryptCATAdminReleaseCatalogContextParams = ((1, 'hCatAdmin'), (1, 'hCatInfo'), (1, 'dwFlags'))
+
+#def CryptCATAdminReleaseContext(hCatAdmin, dwFlags):
+#    return CryptCATAdminReleaseContext.ctypes_function(hCatAdmin, dwFlags)
+CryptCATAdminReleaseContextPrototype = WINFUNCTYPE(BOOL, HCATADMIN, DWORD)
+CryptCATAdminReleaseContextParams = ((1, 'hCatAdmin'), (1, 'dwFlags'))
+
+#def CryptCATGetAttrInfo(hCatalog, pCatMember, pwszReferenceTag):
+#    return CryptCATGetAttrInfo.ctypes_function(hCatalog, pCatMember, pwszReferenceTag)
+CryptCATGetAttrInfoPrototype = WINFUNCTYPE(POINTER(CRYPTCATATTRIBUTE), HANDLE, POINTER(CRYPTCATMEMBER), LPWSTR)
+CryptCATGetAttrInfoParams = ((1, 'hCatalog'), (1, 'pCatMember'), (1, 'pwszReferenceTag'))
+
+#def CryptCATGetMemberInfo(hCatalog, pwszReferenceTag):
+#    return CryptCATGetMemberInfo.ctypes_function(hCatalog, pwszReferenceTag)
+CryptCATGetMemberInfoPrototype = WINFUNCTYPE(POINTER(CRYPTCATMEMBER), HANDLE, LPWSTR)
+CryptCATGetMemberInfoParams = ((1, 'hCatalog'), (1, 'pwszReferenceTag'))
+
+#def CryptCATGetAttrInfo(hCatalog, pCatMember, pwszReferenceTag):
+#    return CryptCATGetAttrInfo.ctypes_function(hCatalog, pCatMember, pwszReferenceTag)
+CryptCATGetAttrInfoPrototype = WINFUNCTYPE(POINTER(CRYPTCATATTRIBUTE), HANDLE, POINTER(CRYPTCATMEMBER), LPWSTR)
+CryptCATGetAttrInfoParams = ((1, 'hCatalog'), (1, 'pCatMember'), (1, 'pwszReferenceTag'))
+
+#def CryptCATEnumerateCatAttr(hCatalog, pPrevAttr):
+#    return CryptCATEnumerateCatAttr.ctypes_function(hCatalog, pPrevAttr)
+CryptCATEnumerateCatAttrPrototype = WINFUNCTYPE(POINTER(CRYPTCATATTRIBUTE), HANDLE, POINTER(CRYPTCATATTRIBUTE))
+CryptCATEnumerateCatAttrParams = ((1, 'hCatalog'), (1, 'pPrevAttr'))
+
+#def CryptCATEnumerateAttr(hCatalog, pCatMember, pPrevAttr):
+#    return CryptCATEnumerateAttr.ctypes_function(hCatalog, pCatMember, pPrevAttr)
+CryptCATEnumerateAttrPrototype = WINFUNCTYPE(POINTER(CRYPTCATATTRIBUTE), HANDLE, POINTER(CRYPTCATMEMBER), POINTER(CRYPTCATATTRIBUTE))
+CryptCATEnumerateAttrParams = ((1, 'hCatalog'), (1, 'pCatMember'), (1, 'pPrevAttr'))
+
+#def CryptCATEnumerateMember(hCatalog, pPrevMember):
+#    return CryptCATEnumerateMember.ctypes_function(hCatalog, pPrevMember)
+CryptCATEnumerateMemberPrototype = WINFUNCTYPE(POINTER(CRYPTCATMEMBER), HANDLE, POINTER(CRYPTCATMEMBER))
+CryptCATEnumerateMemberParams = ((1, 'hCatalog'), (1, 'pPrevMember'))
 
 #def CryptQueryObject(dwObjectType, pvObject, dwExpectedContentTypeFlags, dwExpectedFormatTypeFlags, dwFlags, pdwMsgAndCertEncodingType, pdwContentType, pdwFormatType, phCertStore, phMsg, ppvContext):
 #    return CryptQueryObject.ctypes_function(dwObjectType, pvObject, dwExpectedContentTypeFlags, dwExpectedFormatTypeFlags, dwFlags, pdwMsgAndCertEncodingType, pdwContentType, pdwFormatType, phCertStore, phMsg, ppvContext)

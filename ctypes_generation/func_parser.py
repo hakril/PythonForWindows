@@ -25,7 +25,10 @@ class WinFunc(object):
 
     def generate_prototype_ctypes(self):
         model = "{0} = WINFUNCTYPE({1})"
-        ctypes_param = [self.return_type]
+        if isinstance(self.return_type, tuple) and self.return_type[0] == "PTR":
+            ctypes_param = ["POINTER({0})".format(self.return_type[1])]
+        else:
+            ctypes_param = [self.return_type]
         for type, name in self.params:
             if type.upper() == "POINTER(VOID)":
                 type = "PVOID"
@@ -80,6 +83,10 @@ class WinFuncParser(Parser):
             return_type = self.assert_token_type(NameToken).value
         except StopIteration:
             raise NormalParsingTerminaison()
+
+        if type(self.peek()) == StarToken:
+            self.assert_token_type(StarToken)
+            return_type = ("PTR", return_type)
 
         func_name = self.assert_token_type(NameToken).value
         if func_name.upper() == "WINAPI":

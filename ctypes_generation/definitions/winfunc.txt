@@ -1263,44 +1263,6 @@ UINT WINAPI GetWindowModuleFileNameW(
     __out LPWSTR pszFileName,
     __in UINT cchFileNameMax);
 
-
-BOOL WINAPI CryptCATAdminCalcHashFromFileHandle(
-    __in HANDLE hFile,
-    __inout DWORD *pcbHash,
-    _Out_opt_ BYTE *pbHash,
-    __in DWORD dwFlags);
-
-HCATINFO WINAPI CryptCATAdminEnumCatalogFromHash(
-    __in HCATADMIN hCatAdmin,
-    __in BYTE *pbHash,
-    __in DWORD cbHash,
-    __in DWORD dwFlags,
-    __inout HCATINFO *phPrevCatInfo);
-
-BOOL WINAPI CryptCATAdminAcquireContext(
-  _Out_       HCATADMIN *phCatAdmin,
-  _In_        GUID      *pgSubsystem,
-  _In_        DWORD     dwFlags
-);
-
-BOOL WINAPI CryptCATCatalogInfoFromContext(
-  _In_    HCATINFO     hCatInfo,
-  _Inout_ CATALOG_INFO *psCatInfo,
-  _In_    DWORD        dwFlags
-);
-
-
-BOOL WINAPI CryptCATAdminReleaseCatalogContext(
-  _In_ HCATADMIN hCatAdmin,
-  _In_ HCATINFO  hCatInfo,
-  _In_ DWORD     dwFlags
-);
-
-BOOL WINAPI CryptCATAdminReleaseContext(
-  _In_ HCATADMIN hCatAdmin,
-  _In_ DWORD     dwFlags
-);
-
 DWORD WINAPI GetLogicalDriveStringsA(
   _In_  DWORD  nBufferLength,
   _Out_ LPCSTR lpBuffer

@@ -2680,6 +2680,60 @@ PDATA_BLOB = POINTER(_CRYPTOAPI_BLOB)
 PCRYPT_ATTR_BLOB = POINTER(_CRYPTOAPI_BLOB)
 CRYPT_ATTR_BLOB = _CRYPTOAPI_BLOB
 
+class CRYPTCATATTRIBUTE_(Structure):
+    _fields_ = [
+        ("cbStruct", DWORD),
+        ("pwszReferenceTag", LPWSTR),
+        ("dwAttrTypeAndAction", DWORD),
+        ("cbValue", DWORD),
+        ("pbValue", POINTER(BYTE)),
+        ("dwReserved", DWORD),
+    ]
+CRYPTCATATTRIBUTE = CRYPTCATATTRIBUTE_
+PCRYPTCATATTRIBUTE = POINTER(CRYPTCATATTRIBUTE_)
+
+class _CRYPT_ATTRIBUTE_TYPE_VALUE(Structure):
+    _fields_ = [
+        ("pszObjId", LPSTR),
+        ("Value", CRYPT_OBJID_BLOB),
+    ]
+CRYPT_ATTRIBUTE_TYPE_VALUE = _CRYPT_ATTRIBUTE_TYPE_VALUE
+PCRYPT_ATTRIBUTE_TYPE_VALUE = POINTER(_CRYPT_ATTRIBUTE_TYPE_VALUE)
+
+class _CRYPT_ALGORITHM_IDENTIFIER(Structure):
+    _fields_ = [
+        ("pszObjId", LPSTR),
+        ("Parameters", CRYPT_OBJID_BLOB),
+    ]
+CRYPT_ALGORITHM_IDENTIFIER = _CRYPT_ALGORITHM_IDENTIFIER
+PCRYPT_ALGORITHM_IDENTIFIER = POINTER(_CRYPT_ALGORITHM_IDENTIFIER)
+
+class SIP_INDIRECT_DATA_(Structure):
+    _fields_ = [
+        ("Data", CRYPT_ATTRIBUTE_TYPE_VALUE),
+        ("DigestAlgorithm", CRYPT_ALGORITHM_IDENTIFIER),
+        ("Digest", CRYPT_HASH_BLOB),
+    ]
+SIP_INDIRECT_DATA = SIP_INDIRECT_DATA_
+PSIP_INDIRECT_DATA = POINTER(SIP_INDIRECT_DATA_)
+
+class CRYPTCATMEMBER_(Structure):
+    _fields_ = [
+        ("cbStruct", DWORD),
+        ("pwszReferenceTag", LPWSTR),
+        ("pwszFileName", LPWSTR),
+        ("gSubjectType", GUID),
+        ("fdwMemberFlags", DWORD),
+        ("pIndirectData", POINTER(SIP_INDIRECT_DATA)),
+        ("dwCertVersion", DWORD),
+        ("dwReserved", DWORD),
+        ("hReserved", HANDLE),
+        ("sEncodedIndirectData", CRYPT_ATTR_BLOB),
+        ("sEncodedMemberInfo", CRYPT_ATTR_BLOB),
+    ]
+CRYPTCATMEMBER = CRYPTCATMEMBER_
+PCRYPTCATMEMBER = POINTER(CRYPTCATMEMBER_)
+
 class WINTRUST_FILE_INFO_(Structure):
     _fields_ = [
         ("cbStruct", DWORD),
@@ -2724,14 +2778,6 @@ class _CRYPT_ATTRIBUTES(Structure):
     ]
 CRYPT_ATTRIBUTES = _CRYPT_ATTRIBUTES
 PCRYPT_ATTRIBUTES = POINTER(_CRYPT_ATTRIBUTES)
-
-class _CRYPT_ALGORITHM_IDENTIFIER(Structure):
-    _fields_ = [
-        ("pszObjId", LPSTR),
-        ("Parameters", CRYPT_OBJID_BLOB),
-    ]
-CRYPT_ALGORITHM_IDENTIFIER = _CRYPT_ALGORITHM_IDENTIFIER
-PCRYPT_ALGORITHM_IDENTIFIER = POINTER(_CRYPT_ALGORITHM_IDENTIFIER)
 
 class _CMSG_SIGNER_INFO(Structure):
     _fields_ = [

@@ -1234,6 +1234,20 @@ def CryptCATAdminReleaseContext(hCatAdmin, dwFlags):
     return CryptCATAdminReleaseContext.ctypes_function(hCatAdmin, dwFlags)
 
 
+@WinTrustProxy('CryptCATEnumerateAttr')
+def CryptCATEnumerateAttr(hCatalog, pCatMember, pPrevAttr):
+    return CryptCATEnumerateAttr.ctypes_function(hCatalog, pCatMember, pPrevAttr)
+
+
+@WinTrustProxy('CryptCATEnumerateCatAttr')
+def CryptCATEnumerateCatAttr(hCatalog, pPrevAttr):
+    return CryptCATEnumerateCatAttr.ctypes_function(hCatalog, pPrevAttr)
+
+
+@WinTrustProxy('CryptCATEnumerateMember')
+def CryptCATEnumerateMember(hCatalog, pPrevMember):
+    return CryptCATEnumerateMember.ctypes_function(hCatalog, pPrevMember)
+
 ## Crypto API ##
 @Crypt32Proxy('CertStrToNameA')
 def CertStrToNameA(dwCertEncodingType, pszX500, dwStrType, pvReserved, pbEncoded, pcbEncoded, ppszError):

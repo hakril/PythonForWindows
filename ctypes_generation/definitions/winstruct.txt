@@ -2030,6 +2030,46 @@ CRYPT_DIGEST_BLOB, *PCRYPT_DIGEST_BLOB,
 CRYPT_DER_BLOB, *PCRYPT_DER_BLOB,
 CRYPT_ATTR_BLOB, *PCRYPT_ATTR_BLOB;
 
+typedef struct CRYPTCATATTRIBUTE_ {
+  DWORD  cbStruct;
+  LPWSTR pwszReferenceTag;
+  DWORD  dwAttrTypeAndAction;
+  DWORD  cbValue;
+  BYTE   *pbValue;
+  DWORD  dwReserved;
+} CRYPTCATATTRIBUTE, *PCRYPTCATATTRIBUTE;
+
+typedef struct _CRYPT_ATTRIBUTE_TYPE_VALUE {
+    LPSTR               pszObjId;
+    CRYPT_OBJID_BLOB    Value;
+} CRYPT_ATTRIBUTE_TYPE_VALUE, *PCRYPT_ATTRIBUTE_TYPE_VALUE;
+
+typedef struct _CRYPT_ALGORITHM_IDENTIFIER {
+    LPSTR               pszObjId;
+    CRYPT_OBJID_BLOB    Parameters;
+} CRYPT_ALGORITHM_IDENTIFIER, *PCRYPT_ALGORITHM_IDENTIFIER;
+
+typedef struct SIP_INDIRECT_DATA_
+{
+    CRYPT_ATTRIBUTE_TYPE_VALUE    Data;
+    CRYPT_ALGORITHM_IDENTIFIER    DigestAlgorithm;
+    CRYPT_HASH_BLOB               Digest;
+} SIP_INDIRECT_DATA, *PSIP_INDIRECT_DATA;
+
+typedef struct CRYPTCATMEMBER_ {
+  DWORD                     cbStruct;
+  LPWSTR                    pwszReferenceTag;
+  LPWSTR                    pwszFileName;
+  GUID                      gSubjectType;
+  DWORD                     fdwMemberFlags;
+  struct SIP_INDIRECT_DATA  *pIndirectData;
+  DWORD                     dwCertVersion;
+  DWORD                     dwReserved;
+  HANDLE                    hReserved;
+  CRYPT_ATTR_BLOB           sEncodedIndirectData;
+  CRYPT_ATTR_BLOB           sEncodedMemberInfo;
+} CRYPTCATMEMBER, *PCRYPTCATMEMBER;
+
 typedef struct WINTRUST_FILE_INFO_
 {
     DWORD           cbStruct;
@@ -2065,10 +2105,7 @@ typedef struct _CRYPT_ATTRIBUTES {
 } CRYPT_ATTRIBUTES, *PCRYPT_ATTRIBUTES;
 
 
-typedef struct _CRYPT_ALGORITHM_IDENTIFIER {
-    LPSTR               pszObjId;
-    CRYPT_OBJID_BLOB    Parameters;
-} CRYPT_ALGORITHM_IDENTIFIER, *PCRYPT_ALGORITHM_IDENTIFIER;
+
 
 typedef struct _CMSG_SIGNER_INFO {
     DWORD                       dwVersion;
