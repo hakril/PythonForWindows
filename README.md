@@ -35,6 +35,8 @@ You can also make some operation on threads (suspend/resume/wait/get(or set) con
 >>> import windows
 >>> windows.current_process.bitness
 32
+>>> windows.current_process.token.integrity
+SECURITY_MANDATORY_MEDIUM_RID(0x2000L)
 >>> calc = [p for p in windows.system.processes if p.name == "calc.exe"][0]
 >>> calc
 <WinProcess "calc.exe" pid 6960 at 0x37391f0>
@@ -62,6 +64,34 @@ WindowsError: <WinProcess "calc.exe" pid 6960 (DEAD) at 0x37391f0> died during e
 6961L
 ```
 
+### System information
+
+Information about the Windows computer running the script are available through the `windows.system` object.
+
+```python
+>>> windows.system
+<windows.winobject.system.System object at 0x03FEED10>
+>>> windows.system.bitness
+64
+>>> windows.system.computer_name
+'DESKTOP-VKUGISR'
+>>> windows.system.product_type
+VER_NT_WORKSTATION(0x1L)
+>>> windows.system.version
+(10, 0)
+>>> windows.system.version_name
+'Windows 10'
+>>> windows.system.build_number
+'10.0.15063.608'
+
+# windows.system also contains dynamic lists about processes / threads / handles / ...
+>>> windows.system.handles[-2:]
+[<Handle value=<0x5cc> in process pid=14360>, <Handle value=<0x28e4> in process pid=14360>]
+>>> windows.system.processes[:2]
+[<WinProcess "[System Process]" pid 0 at 0x433f7d0>, <WinProcess "System" pid 4 at 0x433fd30>]
+>>> windows.system.logicaldrives[0]
+<LogicalDrive "C:\" (DRIVE_FIXED)>
+```
 
 ### IAT Hook
 
@@ -73,6 +103,49 @@ So the features is present (See [online documentation][ONLINE_IATHOOK] about IAT
 
 A wrapper around some Windows functions. Arguments name and order are the same,
 but some have default values and the functions raise exception on call error (I don't like 'if' around all my call).
+
+```python
+>>> import windows
+>>> help(windows.winproxy.VirtualAlloc)
+# Help on function VirtualAlloc in module windows.winproxy:
+# VirtualAlloc(lpAddress=0, dwSize=NeededParameter, flAllocationType=MEM_COMMIT(0x1000L), flProtect=PAGE_EXECUTE_READWRITE(0x40L))
+#     Errcheck:
+#     raise Kernel32Error if result is 0
+
+# Positional arguments
+>>> windows.winproxy.VirtualAlloc(0, 0x1000)
+34537472
+
+# Keyword arguments
+>>> windows.winproxy.VirtualAlloc(dwSize=0x1000)
+34603008
+
+# NeededParameter must be provided
+>>> windows.winproxy.VirtualAlloc()
+"""
+Traceback (most recent call last):
+File "<stdin>", line 1, in <module>
+File "windows\winproxy.py", line 264, in VirtualAlloc
+    return VirtualAlloc.ctypes_function(lpAddress, dwSize, flAllocationType, flProtect)
+File "windows\winproxy.py", line 130, in perform_call
+    raise TypeError("{0}: Missing Mandatory parameter <{1}>".format(self.func_name, param_name))
+TypeError: VirtualAlloc: Missing Mandatory parameter <dwSize>
+"""
+
+# Error raises exception
+>>> windows.winproxy.VirtualAlloc(dwSize=0xffffffff)
+"""
+Traceback (most recent call last):
+File "<stdin>", line 1, in <module>
+File "windows\winproxy.py", line 264, in VirtualAlloc
+    return VirtualAlloc.ctypes_function(lpAddress, dwSize, flAllocationType, flProtect)
+File "windows\winproxy.py", line 133, in perform_call
+    return self._cprototyped(*args)
+File "windows\winproxy.py", line 59, in kernel32_error_check
+    raise Kernel32Error(func_name)
+windows.winproxy.Kernel32Error: VirtualAlloc: [Error 8] Not enough storage is available to process this command.
+"""
+```
 
 
 ### Native execution
@@ -157,6 +230,55 @@ KeyValue(name='MYQWORD', value=123456789987654321L, type=11)
 >>> tstkey.values
 [KeyValue(name='MYQWORD', value=123456789987654321L, type=11), KeyValue(name='VALUE', value=u'a_value_for_my_key', type=1)]
 ```
+
+### ALPC-RPC
+
+#### ALPC
+
+Classes around **A**dvanced **L**ocal **P**rocedure **C**all (**ALPC**) syscalls allows to simply
+write client and server able to send **ALPC** messages.
+
+```python
+>>> import windows.alpc
+# Test server juste reply to each message with "REQUEST '{msg_data}' RECEIVED"
+>>> client = windows.alpc.AlpcClient(r"\RPC Control\PythonForWindowsTESTPORT")
+>>> response = client.send_receive("Hello world !")
+>>> response
+<windows.alpc.AlpcMessage object at 0x04C0D5D0>
+>>> response.data
+"REQUEST 'Hello world !' RECEIVED"
+```
+
+Full client/server code for this example is available is the [ALPC samples][ONLINE_SAMPLE_ALPC] along with a more complex example.
+
+
+#### RPC
+
+An RPC-Client based using **ALPC** communication is also integred
+
+```python
+# Server (port ALPC '\RPC Control\HelloRpc') offers:
+# Interface '41414141-4242-4343-4444-45464748494a' version 1.0
+#   Method 1 -> int Add(int a, int b) -> return a + b
+# This Test server is a real RPC Server using rpcrt4.dll and compiled with VS2015.
+
+>>> import windows.rpc
+>>> from windows.rpc import ndr
+>>> client = windows.rpc.RPCClient(r"\RPC Control\HelloRpc")
+>>> client
+<windows.rpc.client.RPCClient object at 0x0411E130>
+>>> iid = client.bind("41414141-4242-4343-4444-45464748494a")
+>>> ndr_params = ndr.make_parameters([ndr.NdrLong] * 2)
+# NDR pack + Make RPC call to method 1.
+>>> resp = client.call(iid, 1, ndr_params.pack([41414141, 1010101]))
+# Unpack the NDR response
+>>> result = ndr.NdrLong.unpack(ndr.NdrStream(resp))
+>>> result
+42424242
+```
+
+A sample with the **U**ser **A**ccount **C**ontrol (**UAC**) and one with `lsasrv.dll` are available in the [RPC samples][ONLINE_SAMPLE_RPC].
+
 
 ### Debugger
 
@@ -271,4 +393,6 @@ The local debugger handles
 [SAMPLE_DIR]: https://github.com/hakril/PythonForWindows/tree/master/samples
 [ONLINE_DOC]: http://hakril.github.io/PythonForWindows/
 [ONLINE_SAMPLE]: http://hakril.github.io/PythonForWindows/build/html/sample.html
+[ONLINE_SAMPLE_ALPC]: http://hakril.github.io/PythonForWindows/build/html/sample.html#windows-alpc
+[ONLINE_SAMPLE_RPC]: http://hakril.github.io/PythonForWindows/build/html/sample.html#windows-rpc
 [ONLINE_IATHOOK]: http://hakril.github.io/PythonForWindows/build/html/iat_hook.html

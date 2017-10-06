@@ -31,8 +31,6 @@ TODO:
 
     - Some test/doc on windows.system.handles
 
-    - registry
-        - test !
 
     - wintrust doc:
         add : https://blogs.msdn.microsoft.com/winsdk/2016/01/05/why-cryptcatadmincalchashfromfilehandle-fails-with-a-seemingly-unexpected-error-code/
