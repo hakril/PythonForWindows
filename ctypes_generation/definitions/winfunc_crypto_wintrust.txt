@@ -319,3 +319,8 @@ BOOL WINAPI CertCompareCertificate(
   _In_ PCERT_INFO pCertId1,
   _In_ PCERT_INFO pCertId2
 );
+
+PCCTL_CONTEXT WINAPI CertEnumCTLsInStore(
+  _In_ HCERTSTORE    hCertStore,
+  _In_ PCCTL_CONTEXT pPrevCtlContext
+);

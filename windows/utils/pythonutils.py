@@ -57,3 +57,6 @@ def print_ctypes_struct(struct, name="", ident=0, hexa=False):
             print("Error while printing <{0}> : {1}".format(fname, e))
             continue
         print_ctypes_struct(value, "{0}.{1}".format(name, fname), hexa=hexa)
+
+def sprint(struct, name="struct", hexa=True):
+    return print_ctypes_struct(struct, name=name, hexa=hexa)

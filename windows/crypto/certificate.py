@@ -3,29 +3,30 @@ import ctypes
 
 import windows
 from windows import winproxy
-from windows.generated_def import *
+# from windows.generated_def import *
+import windows.generated_def as gdef
 
 from windows.crypto import DEFAULT_ENCODING
-from windows.crypto.helper import ECRYPT_DATA_BLOB
+# from windows.crypto.helper import ECRYPT_DATA_BLOB
 
 
 CRYPT_OBJECT_FORMAT_TYPE = [
-    CERT_QUERY_OBJECT_FILE,
-    CERT_QUERY_OBJECT_BLOB,
-    CERT_QUERY_CONTENT_CERT,
-    CERT_QUERY_CONTENT_CTL,
-    CERT_QUERY_CONTENT_CRL,
-    CERT_QUERY_CONTENT_SERIALIZED_STORE,
-    CERT_QUERY_CONTENT_SERIALIZED_CERT,
-    CERT_QUERY_CONTENT_SERIALIZED_CTL,
-    CERT_QUERY_CONTENT_SERIALIZED_CRL,
-    CERT_QUERY_CONTENT_PKCS7_SIGNED,
-    CERT_QUERY_CONTENT_PKCS7_UNSIGNED,
-    CERT_QUERY_CONTENT_PKCS7_SIGNED_EMBED,
-    CERT_QUERY_CONTENT_PKCS10,
-    CERT_QUERY_CONTENT_PFX,
-    CERT_QUERY_CONTENT_CERT_PAIR,
-    CERT_QUERY_CONTENT_PFX_AND_LOAD
+    gdef.CERT_QUERY_OBJECT_FILE,
+    gdef.CERT_QUERY_OBJECT_BLOB,
+    gdef.CERT_QUERY_CONTENT_CERT,
+    gdef.CERT_QUERY_CONTENT_CTL,
+    gdef.CERT_QUERY_CONTENT_CRL,
+    gdef.CERT_QUERY_CONTENT_SERIALIZED_STORE,
+    gdef.CERT_QUERY_CONTENT_SERIALIZED_CERT,
+    gdef.CERT_QUERY_CONTENT_SERIALIZED_CTL,
+    gdef.CERT_QUERY_CONTENT_SERIALIZED_CRL,
+    gdef.CERT_QUERY_CONTENT_PKCS7_SIGNED,
+    gdef.CERT_QUERY_CONTENT_PKCS7_UNSIGNED,
+    gdef.CERT_QUERY_CONTENT_PKCS7_SIGNED_EMBED,
+    gdef.CERT_QUERY_CONTENT_PKCS10,
+    gdef.CERT_QUERY_CONTENT_PFX,
+    gdef.CERT_QUERY_CONTENT_CERT_PAIR,
+    gdef.CERT_QUERY_CONTENT_PFX_AND_LOAD
     ]
 
 CRYPT_OBJECT_FORMAT_TYPE_DICT = {x:x for x in CRYPT_OBJECT_FORMAT_TYPE}
@@ -36,13 +37,15 @@ class CryptObject(object):
 
        Current main use is extracting the signers certificates from a PE file.
     """
-    MSG_PARAM_KNOW_TYPES = {CMSG_SIGNER_INFO_PARAM: CMSG_SIGNER_INFO,
-                            CMSG_SIGNER_COUNT_PARAM: DWORD,
-                            CMSG_CERT_COUNT_PARAM: DWORD}
+    MSG_PARAM_KNOW_TYPES = {gdef.CMSG_SIGNER_INFO_PARAM: gdef.CMSG_SIGNER_INFO,
+                            gdef.CMSG_SIGNER_COUNT_PARAM: gdef.DWORD,
+                            gdef.CMSG_CERT_COUNT_PARAM: gdef.DWORD}
 
-    def __init__(self, filename, content_type=CERT_QUERY_CONTENT_FLAG_ALL):
+    def __init__(self, filename, content_type=gdef.CERT_QUERY_CONTENT_FLAG_ALL):
         # No other API than filename for now..
         self.filename = filename
+        if filename is None:
+            return # TMP !
 
         dwEncoding    = DWORD()
         dwContentType = DWORD()
@@ -50,10 +53,10 @@ class CryptObject(object):
         hStore        = PVOID()
         hMsg          = PVOID()
 
-        winproxy.CryptQueryObject(CERT_QUERY_OBJECT_FILE,
+        winproxy.CryptQueryObject(gdef.CERT_QUERY_OBJECT_FILE,
             LPWSTR(filename),
             content_type,
-            CERT_QUERY_FORMAT_FLAG_BINARY,
+            gdef.CERT_QUERY_FORMAT_FLAG_BINARY,
             0,
             dwEncoding,
             dwContentType,
@@ -128,11 +131,19 @@ class CryptObject(object):
         """
         return self.msg_get_param(CMSG_CERT_COUNT_PARAM).value
 
+    @property
+    def signers(self):
+        return [self.get_signer_data(i) for i in range(self.nb_signer)]
+
+    @property
+    def certs(self):
+        return [self.get_cert(i) for i in range(self.nb_cert)]
+
     def __repr__(self):
         return '<{0} "{1}" content_type={2}>'.format(type(self).__name__, self.filename, self.content_type)
 
 
-class EHCERTSTORE(HCERTSTORE):
+class EHCERTSTORE(gdef.HCERTSTORE):
     """A certificate store"""
     @property
     def certs(self):
@@ -146,7 +157,7 @@ class EHCERTSTORE(HCERTSTORE):
             try:
                 cert = winproxy.CertEnumCertificatesInStore(self, last)
             except winproxy.Kernel32Error as e:
-                if (e.winerror & 0xffffffff) in (CRYPT_E_NOT_FOUND,):
+                if (e.winerror & 0xffffffff) in (gdef.CRYPT_E_NOT_FOUND,):
                     return tuple(res)
                 raise
             # Need to duplicate as CertEnumCertificatesInStore will free the context 'last'
@@ -157,12 +168,12 @@ class EHCERTSTORE(HCERTSTORE):
 
     def add_certificate(self, certificate):
         """Add a certificate to the store"""
-        winproxy.CertAddCertificateContextToStore(self, certificate, CERT_STORE_ADD_NEW, None)
+        winproxy.CertAddCertificateContextToStore(self, certificate, gdef.CERT_STORE_ADD_NEW, None)
 
     @classmethod
     def from_file(cls, filename):
         """Create a new :class:`EHCERTSTORE` from ``filename``"""
-        res = winproxy.CertOpenStore(CERT_STORE_PROV_FILENAME_A, DEFAULT_ENCODING, None, CERT_STORE_OPEN_EXISTING_FLAG, filename)
+        res = winproxy.CertOpenStore(gdef.CERT_STORE_PROV_FILENAME_A, DEFAULT_ENCODING, None, gdef.CERT_STORE_OPEN_EXISTING_FLAG, filename)
         return ctypes.cast(res, cls)
 
 
@@ -185,7 +196,7 @@ class EHCERTSTORE(HCERTSTORE):
 
 # PKCS12_NO_PERSIST_KEY -> do not save it in a key container on disk
 # Without it, a key container is created at 'C:\Users\USERNAME\AppData\Roaming\Microsoft\Crypto\RSA\S-1-5-21-3241049326-165485355-1070449050-1001'
-def import_pfx(pfx, password=None, flags=CRYPT_USER_KEYSET | PKCS12_NO_PERSIST_KEY):
+def import_pfx(pfx, password=None, flags=gdef.CRYPT_USER_KEYSET | gdef.PKCS12_NO_PERSIST_KEY):
     """Import the file ``pfx`` with the ``password``.
 
     ``default flags = PKCS12_NO_PERSIST_KEY | CRYPT_USER_KEYSET``.
@@ -195,18 +206,18 @@ def import_pfx(pfx, password=None, flags=CRYPT_USER_KEYSET | PKCS12_NO_PERSIST_K
     :return: :class:`EHCERTSTORE`
     """
     if isinstance(pfx, basestring):
-        pfx = ECRYPT_DATA_BLOB.from_string(pfx)
+        pfx = gdef.CRYPT_DATA_BLOB.from_string(pfx)
     cert_store = winproxy.PFXImportCertStore(pfx, password, flags)
     return EHCERTSTORE(cert_store)
 
 
 # Why PCCERT_CONTEXT (pointer type) and not _CERT_CONTEXT ?
-class CertificateContext(PCCERT_CONTEXT):
+class CertificateContext(gdef.PCCERT_CONTEXT):
     """Represent a Certificate.
 
        note: It is a pointer ctypes structure (``PCCERT_CONTEXT``)
     """
-    _type_ = PCCERT_CONTEXT._type_ # Not herited from PCCERT_CONTEXT
+    _type_ = gdef.PCCERT_CONTEXT._type_ # Not herited from PCCERT_CONTEXT
 
 
     def __repr__(self):
@@ -231,7 +242,7 @@ class CertificateContext(PCCERT_CONTEXT):
         return " ".join("{:02x}".format(x) for x in serial_bytes)
 
 
-    def get_name(self, nametype=CERT_NAME_SIMPLE_DISPLAY_TYPE, flags=0):
+    def get_name(self, nametype=gdef.CERT_NAME_SIMPLE_DISPLAY_TYPE, flags=0):
         """Retrieve the subject or issuer name of the certificate. See ``CertGetNameStringA``
 
         :returns: :class:`str`
@@ -251,7 +262,7 @@ class CertificateContext(PCCERT_CONTEXT):
         """The name of the certificate's issuer.
 
         :type: :class:`str`"""
-        return self.get_name(flags=CERT_NAME_ISSUER_FLAG)
+        return self.get_name(flags=gdef.CERT_NAME_ISSUER_FLAG)
 
     @property
     def store(self):
@@ -309,7 +320,7 @@ class CertificateContext(PCCERT_CONTEXT):
         # Only the refcount is incremented
         # This postulate allow us to return 'self' directly
         # https://msdn.microsoft.com/en-us/library/windows/desktop/aa376045(v=vs.85).aspx
-        if not ctypes.cast(res, PVOID).value == ctypes.cast(self, PVOID).value:
+        if not ctypes.cast(res, gdef.PVOID).value == ctypes.cast(self, gdef.PVOID).value:
             raise ValueError("CertDuplicateCertificateContext did not returned the argument (check doc)")
         return self
 
@@ -382,14 +393,14 @@ class CertificateContext(PCCERT_CONTEXT):
 
 # Those classes are more of a POC than anything else
 
-class EPCCERT_CHAIN_CONTEXT(PCCERT_CHAIN_CONTEXT):
-    _type_ = PCCERT_CHAIN_CONTEXT._type_
+class EPCCERT_CHAIN_CONTEXT(gdef.PCCERT_CHAIN_CONTEXT):
+    _type_ = gdef.PCCERT_CHAIN_CONTEXT._type_
 
     @property
     def chains(self):
         res = []
         for i in range(self[0].cChain):
-            simple_chain = ctypes.cast(self[0].rgpChain[i], EPCCERT_SIMPLE_CHAIN)
+            simple_chain = ctypes.cast(self[0].rgpChain[i], gdef.EPCCERT_SIMPLE_CHAIN)
             res.append(simple_chain)
         return res
 
@@ -403,8 +414,8 @@ class EPCCERT_CHAIN_CONTEXT(PCCERT_CHAIN_CONTEXT):
                 ch.append(element.cert)
         return res
 
-class EPCCERT_SIMPLE_CHAIN(PCCERT_SIMPLE_CHAIN):
-    _type_ = PCCERT_SIMPLE_CHAIN._type_
+class EPCCERT_SIMPLE_CHAIN(gdef.PCCERT_SIMPLE_CHAIN):
+    _type_ = gdef.PCCERT_SIMPLE_CHAIN._type_
 
     @property
     def elements(self):
@@ -414,8 +425,8 @@ class EPCCERT_SIMPLE_CHAIN(PCCERT_SIMPLE_CHAIN):
             res.append(element)
         return res
 
-class EPCERT_CHAIN_ELEMENT(PCERT_CHAIN_ELEMENT):
-    _type_ = PCERT_CHAIN_ELEMENT._type_
+class EPCERT_CHAIN_ELEMENT(gdef.PCERT_CHAIN_ELEMENT):
+    _type_ = gdef.PCERT_CHAIN_ELEMENT._type_
 
     @property
     def cert(self):
@@ -423,9 +434,9 @@ class EPCERT_CHAIN_ELEMENT(PCERT_CHAIN_ELEMENT):
 
 
 # Move this in another .py ?
-class CryptContext(HCRYPTPROV):
+class CryptContext(gdef.HCRYPTPROV):
     """ A context manager arround ``CryptAcquireContextW`` & ``CryptReleaseContext``"""
-    _type_ = HCRYPTPROV._type_
+    _type_ = gdef.HCRYPTPROV._type_
 
     def __init__(self, pszContainer=None, pszProvider=None, dwProvType=0, dwFlags=0, retrycreate=False):
         self.pszContainer = pszContainer

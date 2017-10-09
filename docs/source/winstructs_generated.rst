@@ -5480,6 +5480,181 @@ _CRYPTOAPI_BLOB
 
         :class:`BYTE`
 
+CRYPTCATATTRIBUTE_
+''''''''''''''''''
+.. class:: CRYPTCATATTRIBUTE
+
+    Alias for :class:`CRYPTCATATTRIBUTE_`
+
+.. class:: PCRYPTCATATTRIBUTE
+
+    Pointer to :class:`CRYPTCATATTRIBUTE_`
+
+.. class:: CRYPTCATATTRIBUTE_
+
+    .. attribute:: cbStruct
+
+        :class:`DWORD`
+
+
+    .. attribute:: pwszReferenceTag
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: dwAttrTypeAndAction
+
+        :class:`DWORD`
+
+
+    .. attribute:: cbValue
+
+        :class:`DWORD`
+
+
+    .. attribute:: pbValue
+
+        :class:`BYTE`
+
+
+    .. attribute:: dwReserved
+
+        :class:`DWORD`
+
+_CRYPT_ATTRIBUTE_TYPE_VALUE
+'''''''''''''''''''''''''''
+.. class:: CRYPT_ATTRIBUTE_TYPE_VALUE
+
+    Alias for :class:`_CRYPT_ATTRIBUTE_TYPE_VALUE`
+
+.. class:: PCRYPT_ATTRIBUTE_TYPE_VALUE
+
+    Pointer to :class:`_CRYPT_ATTRIBUTE_TYPE_VALUE`
+
+.. class:: _CRYPT_ATTRIBUTE_TYPE_VALUE
+
+    .. attribute:: pszObjId
+
+        :class:`LPSTR`
+
+
+    .. attribute:: Value
+
+        :class:`CRYPT_OBJID_BLOB`
+
+_CRYPT_ALGORITHM_IDENTIFIER
+'''''''''''''''''''''''''''
+.. class:: CRYPT_ALGORITHM_IDENTIFIER
+
+    Alias for :class:`_CRYPT_ALGORITHM_IDENTIFIER`
+
+.. class:: PCRYPT_ALGORITHM_IDENTIFIER
+
+    Pointer to :class:`_CRYPT_ALGORITHM_IDENTIFIER`
+
+.. class:: _CRYPT_ALGORITHM_IDENTIFIER
+
+    .. attribute:: pszObjId
+
+        :class:`LPSTR`
+
+
+    .. attribute:: Parameters
+
+        :class:`CRYPT_OBJID_BLOB`
+
+SIP_INDIRECT_DATA_
+''''''''''''''''''
+.. class:: SIP_INDIRECT_DATA
+
+    Alias for :class:`SIP_INDIRECT_DATA_`
+
+.. class:: PSIP_INDIRECT_DATA
+
+    Pointer to :class:`SIP_INDIRECT_DATA_`
+
+.. class:: SIP_INDIRECT_DATA_
+
+    .. attribute:: Data
+
+        :class:`CRYPT_ATTRIBUTE_TYPE_VALUE`
+
+
+    .. attribute:: DigestAlgorithm
+
+        :class:`CRYPT_ALGORITHM_IDENTIFIER`
+
+
+    .. attribute:: Digest
+
+        :class:`CRYPT_HASH_BLOB`
+
+CRYPTCATMEMBER_
+'''''''''''''''
+.. class:: CRYPTCATMEMBER
+
+    Alias for :class:`CRYPTCATMEMBER_`
+
+.. class:: PCRYPTCATMEMBER
+
+    Pointer to :class:`CRYPTCATMEMBER_`
+
+.. class:: CRYPTCATMEMBER_
+
+    .. attribute:: cbStruct
+
+        :class:`DWORD`
+
+
+    .. attribute:: pwszReferenceTag
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: pwszFileName
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: gSubjectType
+
+        :class:`GUID`
+
+
+    .. attribute:: fdwMemberFlags
+
+        :class:`DWORD`
+
+
+    .. attribute:: pIndirectData
+
+        :class:`SIP_INDIRECT_DATA`
+
+
+    .. attribute:: dwCertVersion
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwReserved
+
+        :class:`DWORD`
+
+
+    .. attribute:: hReserved
+
+        :class:`HANDLE`
+
+
+    .. attribute:: sEncodedIndirectData
+
+        :class:`CRYPT_ATTR_BLOB`
+
+
+    .. attribute:: sEncodedMemberInfo
+
+        :class:`CRYPT_ATTR_BLOB`
+
 WINTRUST_FILE_INFO_
 '''''''''''''''''''
 .. class:: WINTRUST_FILE_INFO
@@ -5609,27 +5784,6 @@ _CRYPT_ATTRIBUTES
     .. attribute:: rgAttr
 
         :class:`PCRYPT_ATTRIBUTE`
-
-_CRYPT_ALGORITHM_IDENTIFIER
-'''''''''''''''''''''''''''
-.. class:: CRYPT_ALGORITHM_IDENTIFIER
-
-    Alias for :class:`_CRYPT_ALGORITHM_IDENTIFIER`
-
-.. class:: PCRYPT_ALGORITHM_IDENTIFIER
-
-    Pointer to :class:`_CRYPT_ALGORITHM_IDENTIFIER`
-
-.. class:: _CRYPT_ALGORITHM_IDENTIFIER
-
-    .. attribute:: pszObjId
-
-        :class:`LPSTR`
-
-
-    .. attribute:: Parameters
-
-        :class:`CRYPT_OBJID_BLOB`
 
 _CMSG_SIGNER_INFO
 '''''''''''''''''

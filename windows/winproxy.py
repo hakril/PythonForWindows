@@ -1380,6 +1380,10 @@ def CertCompareCertificate(dwCertEncodingType, pCertId1, pCertId2):
     """
     return CertCompareCertificate.ctypes_function(dwCertEncodingType, pCertId1, pCertId2)
 
+@Crypt32Proxy('CertEnumCTLsInStore')
+def CertEnumCTLsInStore(hCertStore, pPrevCtlContext):
+    return CertEnumCTLsInStore.ctypes_function(hCertStore, pPrevCtlContext)
+
 
 @Crypt32Proxy('CryptEncodeObjectEx')
 def CryptEncodeObjectEx(dwCertEncodingType, lpszStructType, pvStructInfo, dwFlags, pEncodePara, pvEncoded, pcbEncoded):

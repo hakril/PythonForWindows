@@ -16,6 +16,7 @@ pexists = os.path.exists
 dedent = textwrap.dedent
 
 
+
 TYPE_EQUIVALENCE = [
     # BYTE is defined in ctypes.wintypes as c_byte but who wants
     # BYTE to be signed ? (from MSDN: <typedef unsigned char BYTE;>)
@@ -257,8 +258,6 @@ class InitialDefGenerator(CtypesGenerator):
         all_lines += [".. autodata:: {windef.name}\n".format(windef=windef) for windef in self.parse()]
         with open(target_file, "w") as f:
             f.writelines(all_lines)
-
-EXTENDED_STRUCT = ["_GUID", "_RPC_IF_ID"] # TODO: check auto the dir
 
 class StructGenerator(CtypesGenerator):
     PARSER = struct_parser.WinStructParser
@@ -722,6 +721,10 @@ class DefGenerator(InitialDefGenerator):
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 print(SCRIPT_DIR)
 from_here = lambda path: pjoin(SCRIPT_DIR, path)
+
+
+EXTENDED_STRUCT_FILE = glob.glob(pjoin(SCRIPT_DIR, "extended_structs", "*.py"))
+EXTENDED_STRUCT = [os.path.basename(filename)[:-len(".py")] for filename in EXTENDED_STRUCT_FILE]
 
 DEFAULT_INTERFACE_TO_IID = from_here("definitions\\interface_to_iid.txt")
 
