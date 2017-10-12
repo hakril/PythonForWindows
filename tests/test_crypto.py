@@ -68,6 +68,7 @@ def test_certificate(rawcert):
     cert = windows.crypto.CertificateContext.from_buffer(rawcert)
     assert cert.serial == '1b 8e 94 cb 0b 3e eb b6 41 39 f3 c9 09 b1 6b 46'
     assert cert.name == 'PythonForWindowsTest'
+    cert.chains # TODO: craft a certificate with a chain for test purpose
 
 
 def test_pfx(rawcert, rawpfx):
@@ -100,5 +101,13 @@ def test_encrypt_decrypt(rawcert, rawpfx):
 
     assert message_to_encrypt == decrypt
     assert decrypt == decrypt2
+
+def test_crypt_obj():
+    path = r"C:\windows\system32\kernel32.dll"
+    x = windows.crypto.CryptObject(path)
+    x.crypt_msg.certs
+    x.crypt_msg.signers
+    x.signers_and_certs
+    # TODO: Need some better ideas
 
 

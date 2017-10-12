@@ -3,11 +3,11 @@ import ctypes
 
 import windows
 from windows import winproxy
-# from windows.generated_def import *
 import windows.generated_def as gdef
 
 from windows.crypto import DEFAULT_ENCODING
-# from windows.crypto.helper import ECRYPT_DATA_BLOB
+
+import windows.crypto.cryptmsg
 
 
 CRYPT_OBJECT_FORMAT_TYPE = [
@@ -44,17 +44,16 @@ class CryptObject(object):
     def __init__(self, filename, content_type=gdef.CERT_QUERY_CONTENT_FLAG_ALL):
         # No other API than filename for now..
         self.filename = filename
-        if filename is None:
-            return # TMP !
 
-        dwEncoding    = DWORD()
-        dwContentType = DWORD()
-        dwFormatType  = DWORD()
-        hStore        = PVOID()
-        hMsg          = PVOID()
+        dwEncoding    = gdef.DWORD()
+        dwContentType = gdef.DWORD()
+        dwFormatType  = gdef.DWORD()
+        hStore        = EHCERTSTORE()
+        hMsg          = windows.crypto.cryptmsg.CryptMessage()
 
         winproxy.CryptQueryObject(gdef.CERT_QUERY_OBJECT_FILE,
-            LPWSTR(filename),
+            gdef.LPWSTR(filename),
+            # filename,
             content_type,
             gdef.CERT_QUERY_FORMAT_FLAG_BINARY,
             0,
@@ -65,84 +64,24 @@ class CryptObject(object):
             hMsg,
             None)
 
-        self.hstore = hStore
-        self.hmsg = hMsg
+        self.cert_store = hStore
+        self.crypt_msg = hMsg
         self.encoding = dwEncoding
         self.content_type = CRYPT_OBJECT_FORMAT_TYPE_DICT.get(dwContentType.value, dwContentType)
 
-    def msg_get_param(self, param_type, index=0):
-        signer_info = DWORD()
-        # https://msdn.microsoft.com/en-us/library/windows/desktop/aa380227(v=vs.85).aspx
-        winproxy.CryptMsgGetParam(self.hmsg, param_type, index, None, signer_info)
-        buffer = ctypes.c_buffer(signer_info.value)
-        winproxy.CryptMsgGetParam(self.hmsg, param_type, index, buffer, signer_info)
-
-        if param_type in self.MSG_PARAM_KNOW_TYPES:
-            buffer = self.MSG_PARAM_KNOW_TYPES[param_type].from_buffer(buffer)
-        return buffer
+    def _signers_and_certs_generator(self):
+        for signer in self.crypt_msg.signers:
+            cert = self.cert_store.find(signer.Issuer, signer.SerialNumber)
+            yield signer, cert
 
     @property
-    def nb_signer(self):
-        """The number of signers for the CryptObject
-
-        :type: :class:`int`
-        """
-        return self.msg_get_param(CMSG_SIGNER_COUNT_PARAM).value
-
-    def get_signer_data(self, index=0):
-        """Returns the signer informations for signer nb ``index``
-
-        :return: :class:`CMSG_SIGNER_INFO`
-        """
-        return self.msg_get_param(CMSG_SIGNER_INFO_PARAM, index)
-
-    def get_signer_certificate(self, index=0):
-        """Return the certificate used for signer nb ``index``
-
-        :return: :class:`CertificateContext`
-        """
-        data = self.get_signer_data(index)
-        cert_info = CERT_INFO()
-        cert_info.Issuer = data.Issuer
-        cert_info.SerialNumber = data.SerialNumber
-        rawcertcontext = winproxy.CertFindCertificateInStore(self.hstore, self.encoding, 0, CERT_FIND_SUBJECT_CERT, byref(cert_info), None)
-        #return rawcertcontext
-        return CertificateContext(rawcertcontext[0])
-
-    def get_raw_cert(self, index=0):
-        return self.msg_get_param(CMSG_CERT_PARAM, index)
-
-    def get_cert(self, index=0):
-        """Return embded certificate number ``index``.
-
-        note: not all embded certificate are directly used to sign the :class:`CryptObject`.
-
-        :return: :class:`CertificateContext`
-        """
-        return CertificateContext.from_buffer(self.get_raw_cert(index))
-
-    cert = property(get_cert)
-
-    @property
-    def nb_cert(self):
-        """The number of certificate embded in the :class:`CryptObject`
-
-        :type: :class:`int`
-        """
-        return self.msg_get_param(CMSG_CERT_COUNT_PARAM).value
-
-    @property
-    def signers(self):
-        return [self.get_signer_data(i) for i in range(self.nb_signer)]
-
-    @property
-    def certs(self):
-        return [self.get_cert(i) for i in range(self.nb_cert)]
+    def signers_and_certs(self):
+        return list(self._signers_and_certs_generator())
 
     def __repr__(self):
         return '<{0} "{1}" content_type={2}>'.format(type(self).__name__, self.filename, self.content_type)
 
-
+# TODO: rename to CertificateStore ?
 class EHCERTSTORE(gdef.HCERTSTORE):
     """A certificate store"""
     @property
@@ -192,7 +131,21 @@ class EHCERTSTORE(gdef.HCERTSTORE):
         res = winproxy.CertOpenStore(CERT_STORE_PROV_MEMORY, DEFAULT_ENCODING, None, 0, None)
         return ctypes.cast(res, cls)
 
-    # Add API arround 'CertFindCertificateInStore' ?
+
+    # TODO: a more complete search API ?
+    def find(self, issuer, serialnumber):
+        """Return the certificate that match `issuer` and `serialnumber`
+
+        :return: :class:`CertificateContext`
+        """
+        # data = self.get_signer_data(index)
+        cert_info = gdef.CERT_INFO()
+        cert_info.Issuer = issuer
+        cert_info.SerialNumber = serialnumber
+        rawcertcontext = winproxy.CertFindCertificateInStore(self, DEFAULT_ENCODING, 0, gdef.CERT_FIND_SUBJECT_CERT, ctypes.byref(cert_info), None)
+        # return rawcertcontext
+        return CertificateContext(rawcertcontext[0])
+
 
 # PKCS12_NO_PERSIST_KEY -> do not save it in a key container on disk
 # Without it, a key container is created at 'C:\Users\USERNAME\AppData\Roaming\Microsoft\Crypto\RSA\S-1-5-21-3241049326-165485355-1070449050-1001'
@@ -275,19 +228,19 @@ class CertificateContext(gdef.PCCERT_CONTEXT):
     def get_raw_certificate_chains(self): # Rename to all_chains ?
         chain_context = EPCCERT_CHAIN_CONTEXT()
 
-        enhkey_usage = CERT_ENHKEY_USAGE()
+        enhkey_usage = gdef.CERT_ENHKEY_USAGE()
         enhkey_usage.cUsageIdentifier = 0
         enhkey_usage.rgpszUsageIdentifier = None
 
-        cert_usage = CERT_USAGE_MATCH()
-        cert_usage.dwType = USAGE_MATCH_TYPE_AND
+        cert_usage = gdef.CERT_USAGE_MATCH()
+        cert_usage.dwType = gdef.USAGE_MATCH_TYPE_AND
         cert_usage.Usage   = enhkey_usage
 
-        chain_para = CERT_CHAIN_PARA()
-        chain_para.cbSize = sizeof(chain_para)
+        chain_para = gdef.CERT_CHAIN_PARA()
+        chain_para.cbSize = ctypes.sizeof(chain_para)
         chain_para.RequestedUsage = cert_usage
 
-        winproxy.CertGetCertificateChain(None, self, None, self[0].hCertStore, byref(chain_para), 0, None, byref(chain_context))
+        winproxy.CertGetCertificateChain(None, self, None, self[0].hCertStore, ctypes.byref(chain_para), 0, None, ctypes.byref(chain_context))
         #return CertficateChain(chain_context)
         return chain_context
 
@@ -349,6 +302,12 @@ class CertificateContext(gdef.PCCERT_CONTEXT):
         :type: :class:`bytearray`"""
         return bytearray(self[0].pbCertEncoded[:self[0].cbCertEncoded])
 
+    @property
+    def version(self):
+        "TODO: doc"
+        return self[0].pbCertInfo.dwVersion
+
+
     @classmethod
     def from_file(cls, filename):
         """Create a :class:`CertificateContext` from the file ``filename``
@@ -392,7 +351,6 @@ class CertificateContext(gdef.PCCERT_CONTEXT):
 
 
 # Those classes are more of a POC than anything else
-
 class EPCCERT_CHAIN_CONTEXT(gdef.PCCERT_CHAIN_CONTEXT):
     _type_ = gdef.PCCERT_CHAIN_CONTEXT._type_
 
@@ -400,7 +358,7 @@ class EPCCERT_CHAIN_CONTEXT(gdef.PCCERT_CHAIN_CONTEXT):
     def chains(self):
         res = []
         for i in range(self[0].cChain):
-            simple_chain = ctypes.cast(self[0].rgpChain[i], gdef.EPCCERT_SIMPLE_CHAIN)
+            simple_chain = ctypes.cast(self[0].rgpChain[i], EPCCERT_SIMPLE_CHAIN)
             res.append(simple_chain)
         return res
 
