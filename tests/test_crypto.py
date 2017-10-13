@@ -110,4 +110,7 @@ def test_crypt_obj():
     x.signers_and_certs
     # TODO: Need some better ideas
 
+def test_certificate_from_store():
+    return windows.crypto.EHCERTSTORE.from_system_store("Root")
+
 

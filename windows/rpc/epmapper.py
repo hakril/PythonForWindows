@@ -104,7 +104,7 @@ def construct_alpc_tower(object, syntax, protseq, endpoint, address):
     floor_0_rsh = TOWER_EMPTY_RHS
     floor_0 = craft_floor(floor_0_lsh, floor_0_rsh)
     # Floor 1
-    floor_1_lsh = TOWER_PROTOCOL_IS_UUID + bytearray(object.Uuid) + struct.pack("<BB", object.VersMajor, object.VersMinor)
+    floor_1_lsh = TOWER_PROTOCOL_IS_UUID + bytearray(syntax.Uuid) + struct.pack("<BB", syntax.VersMajor, syntax.VersMinor)
     floor_1_rsh = TOWER_EMPTY_RHS
     floor_1 = craft_floor(floor_1_lsh, floor_1_rsh)
     # Floor 2

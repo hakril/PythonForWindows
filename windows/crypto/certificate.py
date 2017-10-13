@@ -32,6 +32,7 @@ CRYPT_OBJECT_FORMAT_TYPE = [
 CRYPT_OBJECT_FORMAT_TYPE_DICT = {x:x for x in CRYPT_OBJECT_FORMAT_TYPE}
 
 ## Move CryptObject to new .py ?
+
 class CryptObject(object):
     """Extract information from an CryptoAPI object.
 
@@ -64,8 +65,8 @@ class CryptObject(object):
             hMsg,
             None)
 
-        self.cert_store = hStore
-        self.crypt_msg = hMsg
+        self.cert_store = hStore if hStore else None
+        self.crypt_msg = hMsg if hMsg else None
         self.encoding = dwEncoding
         self.content_type = CRYPT_OBJECT_FORMAT_TYPE_DICT.get(dwContentType.value, dwContentType)
 
@@ -82,6 +83,7 @@ class CryptObject(object):
         return '<{0} "{1}" content_type={2}>'.format(type(self).__name__, self.filename, self.content_type)
 
 # TODO: rename to CertificateStore ?
+# https://msdn.microsoft.com/en-us/library/windows/desktop/aa382037(v=vs.85).aspx
 class EHCERTSTORE(gdef.HCERTSTORE):
     """A certificate store"""
     @property
@@ -115,6 +117,13 @@ class EHCERTSTORE(gdef.HCERTSTORE):
         res = winproxy.CertOpenStore(gdef.CERT_STORE_PROV_FILENAME_A, DEFAULT_ENCODING, None, gdef.CERT_STORE_OPEN_EXISTING_FLAG, filename)
         return ctypes.cast(res, cls)
 
+    def yolo(self):
+        x = winproxy.CertEnumCTLsInStore(self, None)
+        title = None
+        windows.winproxy.CryptUIDlgViewContext(gdef.CERT_STORE_CTL_CONTEXT, x, None, title, 0, None)
+
+        return x
+
 
     # See https://msdn.microsoft.com/en-us/library/windows/desktop/aa388136(v=vs.85).aspx
     @classmethod
@@ -122,13 +131,13 @@ class EHCERTSTORE(gdef.HCERTSTORE):
         """Create a new :class:`EHCERTSTORE` from system store``store_name``
         (see https://msdn.microsoft.com/en-us/library/windows/desktop/aa388136(v=vs.85).aspx)
         """
-        res = winproxy.CertOpenStore(CERT_STORE_PROV_SYSTEM_A, DEFAULT_ENCODING, None, CERT_SYSTEM_STORE_LOCAL_MACHINE | CERT_STORE_READONLY_FLAG, store_name)
+        res = winproxy.CertOpenStore(gdef.CERT_STORE_PROV_SYSTEM_A, DEFAULT_ENCODING, None, gdef.CERT_SYSTEM_STORE_LOCAL_MACHINE | gdef.CERT_STORE_READONLY_FLAG, store_name)
         return ctypes.cast(res, cls)
 
     @classmethod
     def new_in_memory(cls):
         """Create a new temporary :class:`EHCERTSTORE` in memory"""
-        res = winproxy.CertOpenStore(CERT_STORE_PROV_MEMORY, DEFAULT_ENCODING, None, 0, None)
+        res = winproxy.CertOpenStore(gdef.CERT_STORE_PROV_MEMORY, DEFAULT_ENCODING, None, 0, None)
         return ctypes.cast(res, cls)
 
 
@@ -276,6 +285,9 @@ class CertificateContext(gdef.PCCERT_CONTEXT):
         if not ctypes.cast(res, gdef.PVOID).value == ctypes.cast(self, gdef.PVOID).value:
             raise ValueError("CertDuplicateCertificateContext did not returned the argument (check doc)")
         return self
+
+    def view(self, title=None):
+        return windows.winproxy.CryptUIDlgViewContext(gdef.CERT_STORE_CERTIFICATE_CONTEXT, self, None, title, 0, None)
 
     def enum_properties(self):
         prop = 0

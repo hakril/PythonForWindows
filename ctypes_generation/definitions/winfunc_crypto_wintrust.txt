@@ -324,3 +324,21 @@ PCCTL_CONTEXT WINAPI CertEnumCTLsInStore(
   _In_ HCERTSTORE    hCertStore,
   _In_ PCCTL_CONTEXT pPrevCtlContext
 );
+
+PCCTL_CONTEXT WINAPI CertDuplicateCTLContext(
+  _In_ PCCTL_CONTEXT pCtlContext
+);
+
+BOOL WINAPI CertFreeCTLContext(
+  _In_ PCCTL_CONTEXT pCtlContext
+);
+
+
+BOOL WINAPI CryptUIDlgViewContext(
+  _In_       DWORD   dwContextType,
+  _In_       PVOID   pvContext,
+  _In_       HWND    hwnd,
+  _In_       LPCWSTR pwszTitle,
+  _In_       DWORD   dwFlags,
+  _In_       PVOID   pvReserved
+);

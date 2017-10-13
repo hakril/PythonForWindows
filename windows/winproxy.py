@@ -217,6 +217,11 @@ class Crypt32Proxy(ApiProxy):
     APIDLL = "crypt32"
     default_error_check = staticmethod(zero_is_fail_error_check)
 
+
+class CryptUIProxy(ApiProxy):
+    APIDLL = "cryptui"
+    default_error_check = staticmethod(zero_is_fail_error_check)
+
 class Shell32Proxy(ApiProxy):
     APIDLL = "shell32"
     default_error_check = staticmethod(zero_is_fail_error_check)
@@ -1407,6 +1412,12 @@ def CryptMsgGetParam(hCryptMsg, dwParamType, dwIndex, pvData, pcbData):
 def CryptDecodeObject(dwCertEncodingType, lpszStructType, pbEncoded, cbEncoded, dwFlags, pvStructInfo, pcbStructInfo):
     return CryptDecodeObject.ctypes_function(dwCertEncodingType, lpszStructType, pbEncoded, cbEncoded, dwFlags, pvStructInfo, pcbStructInfo)
 
+
+# ## CryptUI ## #
+
+@CryptUIProxy('CryptUIDlgViewContext')
+def CryptUIDlgViewContext(dwContextType, pvContext, hwnd, pwszTitle, dwFlags, pvReserved):
+    return CryptUIDlgViewContext.ctypes_function(dwContextType, pvContext, hwnd, pwszTitle, dwFlags, pvReserved)
 
 # ## User32 stuff ## #
 
