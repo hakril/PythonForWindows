@@ -32,7 +32,7 @@ Epmapper
     :exclude-members: count, index
 
 :func:`find_alpc_endpoints`
-'''''''''''''''''''''''''
+'''''''''''''''''''''''''''
 
 .. autofunction:: find_alpc_endpoints
 
@@ -210,7 +210,7 @@ Each NDR class has a function :func:`pack`.
 
 
 NDR STREAM
-^^^^^^^^^^
+''''''''''
 
 .. autoclass:: NdrStream
 

@@ -30,8 +30,16 @@ import_pfx
 .. autofunction:: import_pfx
 
 
+
 Certificate
 """""""""""
+
+.. warning::
+
+    The classes described here are under heavy test and try.
+
+    The classes, methods and properties described here will problably change as I haven't yet had the time
+    to try it out in real cases and figure out the final look of the API I want to do.
 
 .. note::
 
@@ -54,10 +62,6 @@ CryptObject
 
 .. autoclass:: CryptObject
 
-    .. warning::
-
-        The methods and property of this class will problably change as I haven't yet had the time
-        to try it out in real cases.
 
 
 CryptContext

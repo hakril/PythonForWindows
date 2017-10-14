@@ -18,7 +18,6 @@ Here is every generated definition by type:
 
 .. toctree::
    :maxdepth: 1
-   :numbered:
 
    windef_generated.rst
    ntstatus_generated.rst

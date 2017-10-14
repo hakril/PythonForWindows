@@ -1,4 +1,5 @@
 .. currentmodule:: windows.generated_def
+
 Windef
 ------
 .. autodata:: INVALID_HANDLE_VALUE

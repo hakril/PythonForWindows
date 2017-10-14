@@ -1,4 +1,5 @@
 .. currentmodule:: windows.generated_def
+
 Ntstatus
 --------
 .. autodata:: STATUS_SUCCESS

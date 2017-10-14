@@ -186,7 +186,7 @@ Output::
 
 Output::
 
-    (cmd λ) python.exe  network.py
+    (cmd λ) python.exe  network\network.py
     Working on ipv4
     == Listening ==
     Some listening connections: [<TCP IPV4 Listening socket on 0.0.0.0:80>, <TCP IPV4 Listening socket on 0.0.0.0:135>, <TCP IPV4 Listening socket on 0.0.0.0:443>]
@@ -413,7 +413,7 @@ Ouput::
 
 Ouput::
 
-    (cmd λ) python.exe debug\debug\attach.py
+    (cmd λ) python.exe debug\attach.py
     Finding process with pid <11392>
     Target is <WinProcess "notepad.exe" pid 11392 at 0x471a750>
     Debugger attached: <windows.debug.debugger.Debugger object at 0x04707EF0>
@@ -441,7 +441,7 @@ Native code tester
 
 Ouput::
 
-    (cmd λ) python.exe .\samples\test_code.py "mov eax, 0x42424242" "eax=0x11223344"
+    (cmd λ) python.exe test_code.py "mov eax, 0x42424242" "eax=0x11223344"
     Testing x86 code
     Startup context is:
     Eip -> 0x3f0000L
@@ -473,7 +473,7 @@ Ouput::
     Eax: 0x11223344 -> 0x42424242 (+0x31200efe)
 
 
-    (cmd λ) python64 .\samples\test_code.py --x64 "mov r15, 0x11223344; push r14; call r15" "rcx=1; r14=0x4242424243434343"
+    (cmd λ) python64 test_code.py --x64 "mov r15, 0x11223344; push r14; call r15" "rcx=1; r14=0x4242424243434343"
     Testing x64 code
     Startup context is:
     Rip -> 0x205a1d60000L
@@ -720,7 +720,7 @@ Ouput::
     Found it !
 
     == PE Analysis ==
-    Target sha1 = <059cb1ba1a41433a18dd8f87422c2ac3bf35b7b8>
+    Target sha1 = <eb90bc0e33f3e62b0eac4afa8bfcf42a5d4e7bbb>
     Analysing <CryptObject "C:\windows\system32\ntdll.dll" content_type=CERT_QUERY_CONTENT_PKCS7_SIGNED_EMBED(0xaL)>
     File has 1 signer(s):
     Signer 0:
@@ -866,7 +866,7 @@ Manual UAC
 
 Output::
 
-    (cmd λ) python samples\rpc\uac.py
+    (cmd λ) python rpc\uac.py
     Namespace(cmdline='', creationflags=CREATE_UNICODE_ENVIRONMENT(0x400L), target='C:\\Python27\\python.exe', uacflags=17)
     # UAC pop - asking to execute python.exe | Clicking Yes
     Return value = 0x6
@@ -890,7 +890,7 @@ Manual ``LsarEnumeratePrivileges``
 
 Output::
 
-    (cmd λ) python samples\rpc\lsass.py
+    (cmd λ) python rpc\lsass.py
     (2, u'SeCreateTokenPrivilege')
     (3, u'SeAssignPrimaryTokenPrivilege')
     (4, u'SeLockMemoryPrivilege')

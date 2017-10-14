@@ -103,6 +103,7 @@ Transparent proxies:
 * GetExitCodeProcess(hProcess, lpExitCode)
 * GetExitCodeThread(hThread, lpExitCode)
 * GetLastError()
+* GetLengthSid(pSid)
 * GetLogicalDriveStringsA(nBufferLength, lpBuffer)
 * GetLogicalDriveStringsW(nBufferLength, lpBuffer)
 * GetProcAddress(hModule, lpProcName)
@@ -138,6 +139,7 @@ Transparent proxies:
 * Wow64RevertWow64FsRedirection(OldValue)
 * lstrcmpA(lpString1, lpString2)
 * lstrcmpW(lpString1, lpString2)
+
 Functions:
 
 * AddVectoredContinueHandler::
@@ -201,6 +203,12 @@ Functions:
     Errcheck:
        raise Kernel32Error if result is 0
 
+* CertEnumCTLsInStore::
+
+    CertEnumCTLsInStore(hCertStore, pPrevCtlContext)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
 * CertEnumCertificateContextProperties::
 
     CertEnumCertificateContextProperties(pCertContext, dwPropId)
@@ -258,6 +266,12 @@ Functions:
 * CertStrToNameW::
 
     CertStrToNameW(dwCertEncodingType, pszX500, dwStrType, pvReserved, pbEncoded, pcbEncoded, ppszError)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* CloseServiceHandle::
+
+    CloseServiceHandle(hSCObject)
     Errcheck:
        raise Kernel32Error if result is 0
 
@@ -333,6 +347,18 @@ Functions:
     Errcheck:
        raise Kernel32Error if result is 0
 
+* CreateProcessAsUserA::
+
+    CreateProcessAsUserA(hToken, lpApplicationName, lpCommandLine, lpProcessAttributes, lpThreadAttributes, bInheritHandles, dwCreationFlags, lpEnvironment, lpCurrentDirectory, lpStartupInfo, lpProcessInformation)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* CreateProcessAsUserW::
+
+    CreateProcessAsUserW(hToken, lpApplicationName, lpCommandLine, lpProcessAttributes, lpThreadAttributes, bInheritHandles, dwCreationFlags, lpEnvironment, lpCurrentDirectory, lpStartupInfo, lpProcessInformation)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
 * CreateProcessW::
 
     CreateProcessW(lpApplicationName, lpCommandLine=None, lpProcessAttributes=None, lpThreadAttributes=None, bInheritHandles=False, dwCreationFlags=0, lpEnvironment=None, lpCurrentDirectory=None, lpStartupInfo=None, lpProcessInformation=None)
@@ -354,6 +380,12 @@ Functions:
 * CreateToolhelp32Snapshot::
 
     CreateToolhelp32Snapshot(dwFlags, th32ProcessID=0)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* CreateWellKnownSid::
+
+    CreateWellKnownSid(WellKnownSidType, DomainSid=None, pSid=None, cbSid=NeededParameter)
     Errcheck:
        raise Kernel32Error if result is 0
 
@@ -410,6 +442,24 @@ Functions:
     CryptCATCatalogInfoFromContext(hCatInfo, psCatInfo, dwFlags)
     Errcheck:
        raise Kernel32Error if result is 0
+
+* CryptCATEnumerateAttr::
+
+    CryptCATEnumerateAttr(hCatalog, pCatMember, pPrevAttr)
+    Errcheck:
+       Nothing special
+
+* CryptCATEnumerateCatAttr::
+
+    CryptCATEnumerateCatAttr(hCatalog, pPrevAttr)
+    Errcheck:
+       Nothing special
+
+* CryptCATEnumerateMember::
+
+    CryptCATEnumerateMember(hCatalog, pPrevMember)
+    Errcheck:
+       Nothing special
 
 * CryptDecodeObject::
 
@@ -468,6 +518,18 @@ Functions:
 * CryptReleaseContext::
 
     CryptReleaseContext(hProv, dwFlags)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* CryptUIDlgViewContext::
+
+    CryptUIDlgViewContext(dwContextType, pvContext, hwnd, pwszTitle, dwFlags, pvReserved)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* DeleteProcThreadAttributeList::
+
+    DeleteProcThreadAttributeList(lpAttributeList)
     Errcheck:
        raise Kernel32Error if result is 0
 
@@ -717,6 +779,22 @@ Functions:
     Errcheck:
        raise Kernel32Error if result is 0
 
+* GetWindowsDirectoryA::
+
+    GetWindowsDirectoryA(lpBuffer, uSize=None)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* GetWindowsDirectoryW::
+
+    GetWindowsDirectoryW(lpBuffer, uSize=None)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* InitializeProcThreadAttributeList::
+
+    InitializeProcThreadAttributeList(lpAttributeList=None, dwAttributeCount=NeededParameter, dwFlags=0, lpSize=NeededParameter)
+
 * LdrLoadDll::
 
     LdrLoadDll(PathToFile, Flags, ModuleFileName, ModuleHandle)
@@ -730,6 +808,18 @@ Functions:
 * LookupAccountSidW::
 
     LookupAccountSidW(lpSystemName, lpSid, lpName, cchName, lpReferencedDomainName, cchReferencedDomainName, peUse)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* LookupPrivilegeNameA::
+
+    LookupPrivilegeNameA(lpSystemName, lpLuid, lpName, cchName)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* LookupPrivilegeNameW::
+
+    LookupPrivilegeNameW(lpSystemName, lpLuid, lpName, cchName)
     Errcheck:
        raise Kernel32Error if result is 0
 
@@ -751,6 +841,18 @@ Functions:
     Errcheck:
        raise Kernel32Error if result is 0
 
+* MessageBoxA::
+
+    MessageBoxA(hWnd=0, lpText=NeededParameter, lpCaption=None, uType=0)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* MessageBoxW::
+
+    MessageBoxW(hWnd=0, lpText=NeededParameter, lpCaption=None, uType=0)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
 * NtAlpcAcceptConnectPort::
 
     NtAlpcAcceptConnectPort(PortHandle, ConnectionPortHandle, Flags, ObjectAttributes, PortAttributes, PortContext, ConnectionRequest, ConnectionMessageAttributes, AcceptConnection)
@@ -767,6 +869,30 @@ Functions:
 
     NtAlpcCreatePort(PortHandle, ObjectAttributes, PortAttributes)
 
+* NtAlpcCreatePortSection::
+
+    NtAlpcCreatePortSection(PortHandle, Flags, SectionHandle, SectionSize, AlpcSectionHandle, ActualSectionSize)
+
+* NtAlpcCreateSectionView::
+
+    NtAlpcCreateSectionView(PortHandle, Flags, ViewAttributes)
+
+* NtAlpcDeletePortSection::
+
+    NtAlpcDeletePortSection(PortHandle, Flags, SectionHandle)
+
+* NtAlpcDeleteSectionView::
+
+    NtAlpcDeleteSectionView(PortHandle, Flags, ViewBase)
+
+* NtAlpcDisconnectPort::
+
+    NtAlpcDisconnectPort(PortHandle, Flags)
+
+* NtAlpcQueryInformation::
+
+    NtAlpcQueryInformation(PortHandle, PortInformationClass, PortInformation, Length, ReturnLength)
+
 * NtAlpcSendWaitReceivePort::
 
     NtAlpcSendWaitReceivePort(PortHandle, Flags, SendMessage, SendMessageAttributes, ReceiveMessage, BufferLength, ReceiveMessageAttributes, Timeout)
@@ -774,6 +900,10 @@ Functions:
 * NtCreateFile::
 
     NtCreateFile(FileHandle, DesiredAccess, ObjectAttributes, IoStatusBlock, AllocationSize, FileAttributes, ShareAccess, CreateDisposition, CreateOptions, EaBuffer, EaLength)
+
+* NtCreateSection::
+
+    NtCreateSection(SectionHandle, DesiredAccess, ObjectAttributes, MaximumSize, SectionPageProtection, AllocationAttributes, FileHandle)
 
 * NtCreateThreadEx::
 
@@ -783,6 +913,10 @@ Functions:
 
     NtGetContextThread(hThread, lpContext)
 
+* NtMapViewOfSection::
+
+    NtMapViewOfSection(SectionHandle, ProcessHandle, BaseAddress, ZeroBits, CommitSize, SectionOffset, ViewSize, InheritDisposition, AllocationType, Win32Protect)
+
 * NtOpenDirectoryObject::
 
     NtOpenDirectoryObject(DirectoryHandle, DesiredAccess, ObjectAttributes)
@@ -790,6 +924,10 @@ Functions:
 * NtOpenEvent::
 
     NtOpenEvent(EventHandle, DesiredAccess, ObjectAttributes)
+
+* NtOpenSection::
+
+    NtOpenSection(SectionHandle, DesiredAccess, ObjectAttributes)
 
 * NtOpenSymbolicLinkObject::
 
@@ -827,9 +965,17 @@ Functions:
 
     NtQueryVirtualMemory(ProcessHandle, BaseAddress, MemoryInformationClass, MemoryInformation=NeededParameter, MemoryInformationLength=0, ReturnLength=None)
 
+* NtReadVirtualMemory::
+
+    NtReadVirtualMemory(hProcess, lpBaseAddress, lpBuffer, nSize, lpNumberOfBytesRead)
+
 * NtSetContextThread::
 
     NtSetContextThread(hThread, lpContext)
+
+* NtUnmapViewOfSection::
+
+    NtUnmapViewOfSection(ProcessHandle, BaseAddress)
 
 * NtWow64ReadVirtualMemory64::
 
@@ -873,6 +1019,18 @@ Functions:
 * OpenSCManagerW::
 
     OpenSCManagerW(lpMachineName=None, lpDatabaseName=None, dwDesiredAccess=SC_MANAGER_ALL_ACCESS(0xf003fL))
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* OpenServiceA::
+
+    OpenServiceA(hSCManager, lpServiceName, dwDesiredAccess)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* OpenServiceW::
+
+    OpenServiceW(hSCManager, lpServiceName, dwDesiredAccess)
     Errcheck:
        raise Kernel32Error if result is 0
 
@@ -1008,6 +1166,12 @@ Functions:
 
     RtlDecompressBuffer(CompressionFormat, UncompressedBuffer, UncompressedBufferSize, CompressedBuffer, CompressedBufferSize, FinalUncompressedSize)
 
+* RtlGetUnloadEventTraceEx::
+
+    RtlGetUnloadEventTraceEx(ElementSize, ElementCount, EventTrace)
+    Errcheck:
+       Nothing special
+
 * SetConsoleCtrlHandler::
 
     SetConsoleCtrlHandler(HandlerRoutine, Add)
@@ -1045,6 +1209,18 @@ Functions:
     Errcheck:
        raise Kernel32Error if result is 0
 
+* StartServiceA::
+
+    StartServiceA(hService, dwNumServiceArgs, lpServiceArgVectors)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
+* StartServiceW::
+
+    StartServiceW(hService, dwNumServiceArgs, lpServiceArgVectors)
+    Errcheck:
+       raise Kernel32Error if result is 0
+
 * Thread32First::
 
     Thread32First(hSnapshot, lpte)
@@ -1058,6 +1234,18 @@ Functions:
     Set byref(lpte) if needed
     Errcheck:
        Nothing special
+
+* TpCallbackSendAlpcMessageOnCompletion::
+
+    TpCallbackSendAlpcMessageOnCompletion(TpHandle, PortHandle, Flags, SendMessage)
+    Errcheck:
+       raise Kernel32Error if result is NOT 0
+
+* UpdateProcThreadAttribute::
+
+    UpdateProcThreadAttribute(lpAttributeList, dwFlags=0, Attribute=NeededParameter, lpValue=NeededParameter, cbSize=NeededParameter, lpPreviousValue=None, lpReturnSize=None)
+    Errcheck:
+       raise Kernel32Error if result is 0
 
 * VerQueryValueA::
 

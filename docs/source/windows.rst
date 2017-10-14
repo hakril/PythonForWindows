@@ -14,8 +14,12 @@ The defaults objects accessible in ``windows`` are:
 The submodules that you might use by themself are:
     * :mod:`windows.native_exec`
     * :mod:`windows.winproxy`
+    * :mod:`windows.wintrust`
+    * :mod:`windows.crypto`
     * :mod:`windows.utils`
     * :mod:`windows.debug`
+    * :mod:`windows.alpc`
+    * :mod:`windows.rpc`
     * :mod:`windows.com`
 
 .. _object_system:

@@ -1,4 +1,5 @@
 .. currentmodule:: windows.generated_def
+
 Winstructs
 ----------
 _LIST_ENTRY
@@ -11943,26 +11944,6 @@ _SID_NAME_USE
 
     .. attribute:: SidTypeLabel(10)
 
-NET_FW_PROFILE_TYPE2_
-'''''''''''''''''''''
-.. class:: NET_FW_PROFILE_TYPE2
-
-    Alias for :class:`NET_FW_PROFILE_TYPE2_`
-
-.. class:: NET_FW_PROFILE_TYPE2_
-
-
-    .. attribute:: NET_FW_PROFILE2_DOMAIN(1)
-
-
-    .. attribute:: NET_FW_PROFILE2_PRIVATE(2)
-
-
-    .. attribute:: NET_FW_PROFILE2_PUBLIC(4)
-
-
-    .. attribute:: NET_FW_PROFILE2_ALL(2147483647)
-
 NET_FW_ACTION_
 ''''''''''''''
 .. class:: NET_FW_ACTION
@@ -11996,23 +11977,6 @@ NET_FW_MODIFY_STATE_
 
 
     .. attribute:: NET_FW_MODIFY_STATE_INBOUND_BLOCKED(2)
-
-NET_FW_RULE_DIRECTION_
-''''''''''''''''''''''
-.. class:: NET_FW_RULE_DIRECTION
-
-    Alias for :class:`NET_FW_RULE_DIRECTION_`
-
-.. class:: NET_FW_RULE_DIRECTION_
-
-
-    .. attribute:: NET_FW_RULE_DIR_IN(1)
-
-
-    .. attribute:: NET_FW_RULE_DIR_OUT(2)
-
-
-    .. attribute:: NET_FW_RULE_DIR_MAX(3)
 
 tag_WBEMSTATUS
 ''''''''''''''
