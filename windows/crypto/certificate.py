@@ -430,7 +430,7 @@ class CryptContext(gdef.HCRYPTPROV):
         except WindowsError as e:
             if not self.retrycreate:
                 raise
-        return winproxy.CryptAcquireContextW(self, self.pszContainer, self.pszProvider, self.dwProvType, self.dwFlags | CRYPT_NEWKEYSET)
+        return winproxy.CryptAcquireContextW(self, self.pszContainer, self.pszProvider, self.dwProvType, self.dwFlags | gdef.CRYPT_NEWKEYSET)
 
     def release(self):
         return winproxy.CryptReleaseContext(self, False)

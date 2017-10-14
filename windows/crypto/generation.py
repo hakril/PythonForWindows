@@ -1,3 +1,4 @@
+import windows
 from windows import winproxy
 from windows.generated_def import *
 

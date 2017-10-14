@@ -71,6 +71,6 @@ class MyDebugger(windows.debug.Debugger):
         pass
 
 
-calc = windows.test.pop_calc_32(dwCreationFlags=DEBUG_PROCESS)
+calc = windows.test.pop_proc_32(dwCreationFlags=DEBUG_PROCESS)
 d = MyDebugger(calc)
 d.loop()

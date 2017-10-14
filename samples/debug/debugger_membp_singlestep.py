@@ -43,7 +43,7 @@ class SingleStepOnWrite(windows.debug.MemoryBreakpoint):
         return dbg.single_step()
 
 
-calc = windows.test.pop_calc_32(dwCreationFlags=DEBUG_PROCESS)
+calc = windows.test.pop_proc_32(dwCreationFlags=DEBUG_PROCESS)
 d = MyDebugger(calc)
 
 code = calc.virtual_alloc(0x1000)

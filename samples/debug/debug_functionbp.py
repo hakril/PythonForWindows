@@ -42,7 +42,7 @@ class FollowNtCreateFile(windows.debug.FunctionBP):
         self.COUNTER -= 1
 
 if __name__ == "__main__":
-    calc = windows.test.pop_calc_32(dwCreationFlags=DEBUG_PROCESS)
+    calc = windows.test.pop_proc_32(dwCreationFlags=DEBUG_PROCESS)
     d = windows.debug.Debugger(calc)
     d.add_bp(FollowNtCreateFile())
     d.loop()

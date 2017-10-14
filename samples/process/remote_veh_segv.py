@@ -53,7 +53,7 @@ print("Protected page is at {0}".format(hex(target_page)))
 windows.winproxy.VirtualProtect(target_page, code_size, windef.PAGE_READWRITE)
 """
 
-c = windows.test.pop_calc_64(dwCreationFlags=CREATE_SUSPENDED)
+c = windows.test.pop_proc_64(dwCreationFlags=CREATE_SUSPENDED)
 x = c.execute_python(python_code)
 
 c.threads[0].resume()

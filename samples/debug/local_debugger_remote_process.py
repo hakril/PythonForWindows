@@ -35,7 +35,7 @@ d.add_bp(YOLOHXBP(ldr))
 
 """
 
-c = windows.test.pop_calc_32(dwCreationFlags=CREATE_SUSPENDED)
+c = windows.test.pop_proc_32(dwCreationFlags=CREATE_SUSPENDED)
 c.execute_python(remote_code)
 c.threads[0].resume()
 

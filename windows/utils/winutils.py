@@ -192,7 +192,6 @@ def pop_shell(locs=None):
     create_console()
     FixedInteractiveConsole(locs).interact()
 
-
 def get_kernel_modules():
     if windows.current_process.is_wow_64:
         return get_kernel_modules_syswow64()

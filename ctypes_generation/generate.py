@@ -252,7 +252,7 @@ class InitialDefGenerator(CtypesGenerator):
         return ctypes_code
 
     def generate_doc(self, target_file):
-        all_lines = [".. currentmodule:: windows.generated_def\n"
+        all_lines = [".. currentmodule:: windows.generated_def\n\n"
                      "Windef\n"
                      "------\n"]
         all_lines += [".. autodata:: {windef.name}\n".format(windef=windef) for windef in self.parse()]
@@ -356,7 +356,7 @@ class StructGenerator(CtypesGenerator):
         self.check_dependances()
 
     def generate_doc(self, target_file):
-        all_lines = [".. currentmodule:: windows.generated_def\n"
+        all_lines = [".. currentmodule:: windows.generated_def\n\n"
                      "Winstructs\n"
                      "----------\n"]
         struct_separator = "'"
@@ -494,7 +494,7 @@ class NtStatusGenerator(CtypesGenerator):
         return ctypes_code
 
     def generate_doc(self, target_file):
-        all_lines = [".. currentmodule:: windows.generated_def\n"
+        all_lines = [".. currentmodule:: windows.generated_def\n\n"
                      "Ntstatus\n"
                      "--------\n"]
         all_lines += [".. autodata:: {nstatus_name}\n".format(nstatus_name=nstatus[1]) for nstatus in self.parse()]

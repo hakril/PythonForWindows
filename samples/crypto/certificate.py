@@ -67,6 +67,7 @@ else:
     print("Not found :(")
 
 ## Extract certificates of a PE file
+## This code is not a fixed API and the current state of my tests
 
 print ("")
 print ("== PE Analysis ==")
@@ -74,15 +75,15 @@ TARGET_FILE = r"C:\windows\system32\ntdll.dll"
 print("Target sha1 = <{0}>".format(hashlib.sha1(open(TARGET_FILE, "rb").read()).hexdigest()))
 cryptobj = windows.crypto.CryptObject(TARGET_FILE)
 print("Analysing {0}".format(cryptobj))
-print("File has {0} signer(s):".format(cryptobj.nb_signer))
-for i, signer in ((i, cryptobj.get_signer_data(i)) for i in range(cryptobj.nb_signer)):
+print("File has {0} signer(s):".format(cryptobj.crypt_msg.nb_signer))
+for i, signer in enumerate(cryptobj.crypt_msg.signers):
     print("Signer {0}:".format(i))
     print("   * Issuer: {0!r}".format(windows.crypto.ECRYPT_DATA_BLOB(signer.Issuer.cbData, signer.Issuer.pbData).data))
     print("   * HashAlgorithme: {0}".format(signer.HashAlgorithm.pszObjId))
-    cert = cryptobj.get_signer_certificate(i)
+    cert = cryptobj.cert_store.find(signer.Issuer, signer.SerialNumber)
     print("   * Certificate: {0}".format(cert))
 
 print("")
-print("File embdeds {0} certificate(s):".format(cryptobj.nb_cert))
-for i, certificate in ((i, cryptobj.get_cert(i)) for i in range(cryptobj.nb_cert)):
+print("File embdeds {0} certificate(s):".format(cryptobj.crypt_msg.nb_cert))
+for i, certificate in enumerate(cryptobj.crypt_msg.certs):
     print("   * {0}) {1}".format(i, certificate))

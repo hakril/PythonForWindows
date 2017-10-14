@@ -116,7 +116,7 @@ class CodeTesteur(dbg.Debugger):
 
 def test_code_x86(code, regs=None, raw=False, **kwargs):
     print("Testing x86 code")
-    process = windows.test.pop_calc_32(dwCreationFlags=DEBUG_PROCESS)
+    process = windows.test.pop_proc_32(dwCreationFlags=DEBUG_PROCESS)
     if raw:
         code = code.replace(" ", "").decode('hex')
     else:
@@ -140,7 +140,7 @@ def test_code_x64(code, regs=None, raw=False, **kwargs):
     print("Testing x64 code")
     if windows.current_process.bitness == 32:
         raise ValueError("Cannot debug a 64b process from 32b python")
-    process = windows.test.pop_calc_64(dwCreationFlags=DEBUG_PROCESS)
+    process = windows.test.pop_proc_64(dwCreationFlags=DEBUG_PROCESS)
     if raw:
         code = code.replace(" ", "").decode('hex')
     else:

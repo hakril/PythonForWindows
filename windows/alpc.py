@@ -61,7 +61,7 @@ class AlpcMessage(object):
     @property
     def security_attribute(self):
         """The :data:`~windows.generated_def.ALPC_MESSAGE_SECURITY_ATTRIBUTE` of the message
-        :
+
             :type: :class:`ALPC_SECURITY_ATTR`
         """
         return self.attributes.get_attribute(gdef.ALPC_MESSAGE_SECURITY_ATTRIBUTE)

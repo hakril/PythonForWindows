@@ -25,6 +25,6 @@ def follow_create_file(pid):
 
 if __name__ == "__main__":
     # Create a non-debugged process safe to debug
-    calc = windows.test.pop_calc_32(dwCreationFlags=0)
+    calc = windows.test.pop_proc_32(dwCreationFlags=0)
     # Give ovnly the PID to follow_create_file
     follow_create_file(calc.pid)

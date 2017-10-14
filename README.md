@@ -14,6 +14,9 @@ You can find some examples of code in the [samples directory][SAMPLE_DIR] or [on
 
 Parts of PythonForWindows are used in the [LKD project][LKD_GITHUB].
 
+If you have any issue, question, suggestion do not hesitate to contact me.
+I am always glad to have feedbacks from people using this project.
+
 ## Overview
 
 ### Processes / Threads
@@ -102,7 +105,7 @@ So the features is present (See [online documentation][ONLINE_IATHOOK] about IAT
 ### Winproxy
 
 A wrapper around some Windows functions. Arguments name and order are the same,
-but some have default values and the functions raise exception on call error (I don't like 'if' around all my call).
+but some have default values and the functions raise exception on call error (I don't like `if` around all my call).
 
 ```python
 >>> import windows
@@ -150,8 +153,8 @@ windows.winproxy.Kernel32Error: VirtualAlloc: [Error 8] Not enough storage is av
 
 ### Native execution
 
-To make the barrier between `native` and `Python` code,
-PythonForWindows allows you to create native function callable from Python (thanks `ctypes`) and also embed
+To make the barrier between `native` and `Python` code thinner,
+PythonForWindows allows you to create native function callable from Python (thanks to `ctypes`) and also embed
 a simple x86/x64 assembler.
 
 ```python
