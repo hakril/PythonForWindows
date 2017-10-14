@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>windows.winobject.system &#8212; PythonForWindows 0.2 documentation</title>
+    <title>windows.winobject.system &#8212; PythonForWindows 0.3 documentation</title>
     
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '0.2',
+        VERSION:     '0.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -69,6 +69,7 @@
 <span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="k">import</span> <span class="n">handle</span>
 
 <span class="kn">from</span> <span class="nn">windows.generated_def.winstructs</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">windows.dbgprint</span> <span class="k">import</span> <span class="n">dbgprint</span>
 
 <div class="viewcode-block" id="System"><a class="viewcode-back" href="../../../windows.html#windows.winobject.system.System">[docs]</a><span class="k">class</span> <span class="nc">System</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;The state of the current ``Windows`` system ``Python`` is running on&quot;&quot;&quot;</span>
@@ -92,7 +93,7 @@
 
 <span class="sd">        :type: [:class:`process.WinThread`] -- A list of Thread</span>
 <span class="sd">		&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">enumerate_threads</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">enumerate_threads_setup_owners</span><span class="p">()</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">logicaldrives</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -229,6 +230,13 @@
         <span class="n">version</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_version</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">version_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">version</span><span class="o">.</span><span class="n">wProductType</span><span class="p">,</span> <span class="n">version</span><span class="o">.</span><span class="n">wProductType</span><span class="p">)</span>
 
+
+    <span class="nd">@utils</span><span class="o">.</span><span class="n">fixedpropety</span>
+    <span class="k">def</span> <span class="nf">windir</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">buffer</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_buffer</span><span class="p">(</span><span class="mh">0x100</span><span class="p">)</span>
+        <span class="n">reslen</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">GetWindowsDirectoryA</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">buffer</span><span class="p">[:</span><span class="n">reslen</span><span class="p">]</span>
+
     <span class="k">def</span> <span class="nf">get_version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">generated_def</span><span class="o">.</span><span class="n">OSVERSIONINFOEXA</span><span class="p">()</span>
         <span class="n">data</span><span class="o">.</span><span class="n">dwOSVersionInfoSize</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
@@ -250,8 +258,13 @@
         <span class="n">bufstr</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">bufptr</span><span class="p">,</span> <span class="n">LPCSTR</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">bufstr</span><span class="o">.</span><span class="n">value</span>
 
+    <span class="nd">@utils</span><span class="o">.</span><span class="n">fixedpropety</span>
+    <span class="k">def</span> <span class="nf">build_number</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_file_version</span><span class="p">(</span><span class="s2">&quot;ntdll&quot;</span><span class="p">)</span>
+
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">enumerate_processes</span><span class="p">():</span>
+        <span class="n">dbgprint</span><span class="p">(</span><span class="s2">&quot;Enumerating processes with CreateToolhelp32Snapshot&quot;</span><span class="p">,</span> <span class="s2">&quot;SLOW&quot;</span><span class="p">)</span>
         <span class="n">process_entry</span> <span class="o">=</span> <span class="n">PROCESSENTRY32</span><span class="p">()</span>
         <span class="n">process_entry</span><span class="o">.</span><span class="n">dwSize</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">process_entry</span><span class="p">)</span>
         <span class="n">snap</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CreateToolhelp32Snapshot</span><span class="p">(</span><span class="n">windef</span><span class="o">.</span><span class="n">TH32CS_SNAPPROCESS</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
@@ -260,18 +273,63 @@
         <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">process</span><span class="o">.</span><span class="n">WinProcess</span><span class="o">.</span><span class="n">_from_PROCESSENTRY32</span><span class="p">(</span><span class="n">process_entry</span><span class="p">))</span>
         <span class="k">while</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">Process32Next</span><span class="p">(</span><span class="n">snap</span><span class="p">,</span> <span class="n">process_entry</span><span class="p">):</span>
             <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">process</span><span class="o">.</span><span class="n">WinProcess</span><span class="o">.</span><span class="n">_from_PROCESSENTRY32</span><span class="p">(</span><span class="n">process_entry</span><span class="p">))</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">CloseHandle</span><span class="p">(</span><span class="n">snap</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">res</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">enumerate_threads</span><span class="p">():</span>
-        <span class="n">thread_entry</span> <span class="o">=</span> <span class="n">process</span><span class="o">.</span><span class="n">WinThread</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">enumerate_threads_generator</span><span class="p">():</span>
+        <span class="c1"># Ptet dangereux, parce que on yield la meme THREADENTRY32 a chaque fois</span>
+        <span class="n">dbgprint</span><span class="p">(</span><span class="s2">&quot;Enumerating threads with CreateToolhelp32Snapshot &lt;generator&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;SLOW&quot;</span><span class="p">)</span>
+        <span class="n">thread_entry</span> <span class="o">=</span> <span class="n">THREADENTRY32</span><span class="p">()</span>
         <span class="n">thread_entry</span><span class="o">.</span><span class="n">dwSize</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">thread_entry</span><span class="p">)</span>
         <span class="n">snap</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CreateToolhelp32Snapshot</span><span class="p">(</span><span class="n">windef</span><span class="o">.</span><span class="n">TH32CS_SNAPTHREAD</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">dbgprint</span><span class="p">(</span><span class="s2">&quot;New handle CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD) &lt;generator&gt; | </span><span class="si">{0:#x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">snap</span><span class="p">),</span> <span class="s2">&quot;HANDLE&quot;</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">winproxy</span><span class="o">.</span><span class="n">Thread32First</span><span class="p">(</span><span class="n">snap</span><span class="p">,</span> <span class="n">thread_entry</span><span class="p">)</span>
+            <span class="k">yield</span> <span class="n">thread_entry</span>
+            <span class="k">while</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">Thread32Next</span><span class="p">(</span><span class="n">snap</span><span class="p">,</span> <span class="n">thread_entry</span><span class="p">):</span>
+                <span class="k">yield</span> <span class="n">thread_entry</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">winproxy</span><span class="o">.</span><span class="n">CloseHandle</span><span class="p">(</span><span class="n">snap</span><span class="p">)</span>
+        <span class="n">dbgprint</span><span class="p">(</span><span class="s2">&quot;CLOSE CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD) &lt;generator&gt; | </span><span class="si">{0:#x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">snap</span><span class="p">),</span> <span class="s2">&quot;HANDLE&quot;</span><span class="p">)</span>
+
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">enumerate_threads</span><span class="p">():</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">WinThread</span><span class="o">.</span><span class="n">_from_THREADENTRY32</span><span class="p">(</span><span class="n">th</span><span class="p">)</span> <span class="k">for</span> <span class="n">th</span> <span class="ow">in</span> <span class="n">System</span><span class="o">.</span><span class="n">enumerate_threads_generator</span><span class="p">()]</span>
+
+
+    <span class="k">def</span> <span class="nf">enumerate_threads_setup_owners</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Enumerating threads is a special operation concerning the owner process.</span>
+        <span class="c1"># We may not be able to retrieve the name of the owning process by normal way</span>
+        <span class="c1"># (as we need to get a handle on the process)</span>
+        <span class="c1"># So, this implementation of enumerate_thread also setup the owner with the result of enumerate_processes</span>
+        <span class="n">dbgprint</span><span class="p">(</span><span class="s2">&quot;Enumerating threads with CreateToolhelp32Snapshot and setup owner&quot;</span><span class="p">,</span> <span class="s2">&quot;SLOW&quot;</span><span class="p">)</span>
+
+        <span class="c1"># One snap for both enum to be prevent race</span>
+        <span class="n">snap</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CreateToolhelp32Snapshot</span><span class="p">(</span><span class="n">windef</span><span class="o">.</span><span class="n">TH32CS_SNAPTHREAD</span> <span class="o">|</span> <span class="n">windef</span><span class="o">.</span><span class="n">TH32CS_SNAPPROCESS</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">process_entry</span> <span class="o">=</span> <span class="n">PROCESSENTRY32</span><span class="p">()</span>
+        <span class="n">process_entry</span><span class="o">.</span><span class="n">dwSize</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">process_entry</span><span class="p">)</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">Process32First</span><span class="p">(</span><span class="n">snap</span><span class="p">,</span> <span class="n">process_entry</span><span class="p">)</span>
+        <span class="n">processes</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">processes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">process</span><span class="o">.</span><span class="n">WinProcess</span><span class="o">.</span><span class="n">_from_PROCESSENTRY32</span><span class="p">(</span><span class="n">process_entry</span><span class="p">))</span>
+        <span class="k">while</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">Process32Next</span><span class="p">(</span><span class="n">snap</span><span class="p">,</span> <span class="n">process_entry</span><span class="p">):</span>
+            <span class="n">processes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">process</span><span class="o">.</span><span class="n">WinProcess</span><span class="o">.</span><span class="n">_from_PROCESSENTRY32</span><span class="p">(</span><span class="n">process_entry</span><span class="p">))</span>
+
+        <span class="c1"># Forge a dict pid -&gt; process</span>
+        <span class="n">proc_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">proc</span><span class="o">.</span><span class="n">pid</span><span class="p">:</span> <span class="n">proc</span> <span class="k">for</span> <span class="n">proc</span> <span class="ow">in</span> <span class="n">processes</span><span class="p">}</span>
+
+        <span class="n">thread_entry</span> <span class="o">=</span> <span class="n">THREADENTRY32</span><span class="p">()</span>
+        <span class="n">thread_entry</span><span class="o">.</span><span class="n">dwSize</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">thread_entry</span><span class="p">)</span>
         <span class="n">threads</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">winproxy</span><span class="o">.</span><span class="n">Thread32First</span><span class="p">(</span><span class="n">snap</span><span class="p">,</span> <span class="n">thread_entry</span><span class="p">)</span>
-        <span class="n">threads</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">thread_entry</span><span class="p">))</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="n">proc_dict</span><span class="p">[</span><span class="n">thread_entry</span><span class="o">.</span><span class="n">th32OwnerProcessID</span><span class="p">]</span>
+        <span class="n">threads</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">process</span><span class="o">.</span><span class="n">WinThread</span><span class="o">.</span><span class="n">_from_THREADENTRY32</span><span class="p">(</span><span class="n">thread_entry</span><span class="p">,</span> <span class="n">owner</span><span class="o">=</span><span class="n">parent</span><span class="p">))</span>
         <span class="k">while</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">Thread32Next</span><span class="p">(</span><span class="n">snap</span><span class="p">,</span> <span class="n">thread_entry</span><span class="p">):</span>
-            <span class="n">threads</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">thread_entry</span><span class="p">))</span>
+            <span class="n">parent</span> <span class="o">=</span> <span class="n">proc_dict</span><span class="p">[</span><span class="n">thread_entry</span><span class="o">.</span><span class="n">th32OwnerProcessID</span><span class="p">]</span>
+            <span class="n">threads</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">process</span><span class="o">.</span><span class="n">WinThread</span><span class="o">.</span><span class="n">_from_THREADENTRY32</span><span class="p">(</span><span class="n">thread_entry</span><span class="p">,</span> <span class="n">owner</span><span class="o">=</span><span class="n">parent</span><span class="p">))</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">CloseHandle</span><span class="p">(</span><span class="n">snap</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">threads</span></div>
 </pre></div>
 
@@ -303,7 +361,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>

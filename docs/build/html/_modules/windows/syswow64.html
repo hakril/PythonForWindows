@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>windows.syswow64 &#8212; PythonForWindows 0.2 documentation</title>
+    <title>windows.syswow64 &#8212; PythonForWindows 0.3 documentation</title>
     
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.2',
+        VERSION:     '0.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">PythonForWindows 0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">PythonForWindows 0.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -92,7 +92,7 @@
 <div class="viewcode-block" id="execute_64bits_code_from_syswow"><a class="viewcode-back" href="../../internals.html#windows.syswow64.execute_64bits_code_from_syswow">[docs]</a><span class="k">def</span> <span class="nf">execute_64bits_code_from_syswow</span><span class="p">(</span><span class="n">x64shellcode</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">generate_64bits_execution_stub_from_syswow</span><span class="p">(</span><span class="n">x64shellcode</span><span class="p">)()</span></div>
 
-<div class="viewcode-block" id="generate_syswow64_call"><a class="viewcode-back" href="../../internals.html#windows.syswow64.generate_syswow64_call">[docs]</a><span class="k">def</span> <span class="nf">generate_syswow64_call</span><span class="p">(</span><span class="n">target</span><span class="p">):</span>
+<div class="viewcode-block" id="generate_syswow64_call"><a class="viewcode-back" href="../../internals.html#windows.syswow64.generate_syswow64_call">[docs]</a><span class="k">def</span> <span class="nf">generate_syswow64_call</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">errcheck</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="n">nb_args</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">prototype</span><span class="o">.</span><span class="n">_argtypes_</span><span class="p">)</span>
     <span class="n">target_addr</span> <span class="o">=</span> <span class="n">get_syswow_ntdll_exports</span><span class="p">()[</span><span class="n">target</span><span class="o">.</span><span class="vm">__name__</span><span class="p">]</span>
     <span class="n">argument_buffer_len</span> <span class="o">=</span> <span class="p">(</span><span class="n">nb_args</span> <span class="o">*</span> <span class="mi">8</span><span class="p">)</span>
@@ -157,15 +157,14 @@
     <span class="n">code_64b</span> <span class="o">+=</span> <span class="n">x64</span><span class="o">.</span><span class="n">Pop</span><span class="p">(</span><span class="s1">&#39;RCX&#39;</span><span class="p">)</span>
     <span class="n">code_64b</span> <span class="o">+=</span> <span class="n">x64</span><span class="o">.</span><span class="n">Pop</span><span class="p">(</span><span class="s1">&#39;RBX&#39;</span><span class="p">)</span>
     <span class="n">code_64b</span> <span class="o">+=</span> <span class="n">x64</span><span class="o">.</span><span class="n">Ret</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">try_generate_stub_target</span><span class="p">(</span><span class="n">code_64b</span><span class="o">.</span><span class="n">get_code</span><span class="p">(),</span> <span class="n">argument_buffer</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">try_generate_stub_target</span><span class="p">(</span><span class="n">code_64b</span><span class="o">.</span><span class="n">get_code</span><span class="p">(),</span> <span class="n">argument_buffer</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">errcheck</span><span class="o">=</span><span class="n">errcheck</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="try_generate_stub_target"><a class="viewcode-back" href="../../internals.html#windows.syswow64.try_generate_stub_target">[docs]</a><span class="k">def</span> <span class="nf">try_generate_stub_target</span><span class="p">(</span><span class="n">shellcode</span><span class="p">,</span> <span class="n">argument_buffer</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;shellcode must NOT end by a ret&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="try_generate_stub_target"><a class="viewcode-back" href="../../internals.html#windows.syswow64.try_generate_stub_target">[docs]</a><span class="k">def</span> <span class="nf">try_generate_stub_target</span><span class="p">(</span><span class="n">shellcode</span><span class="p">,</span> <span class="n">argument_buffer</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">errcheck</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">is_wow_64</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Calling execute_64bits_code_from_syswow from non-syswow process&quot;</span><span class="p">)</span>
     <span class="n">native_caller</span> <span class="o">=</span> <span class="n">generate_64bits_execution_stub_from_syswow</span><span class="p">(</span><span class="n">shellcode</span><span class="p">)</span>
-    <span class="n">native_caller</span><span class="o">.</span><span class="n">errcheck</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">errcheck</span>
+    <span class="n">native_caller</span><span class="o">.</span><span class="n">errcheck</span> <span class="o">=</span> <span class="n">errcheck</span> <span class="k">if</span> <span class="n">errcheck</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">target</span><span class="o">.</span><span class="n">errcheck</span>
     <span class="c1"># Generate the wrapper function that fill the argument_buffer</span>
     <span class="n">expected_arguments_number</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">prototype</span><span class="o">.</span><span class="n">_argtypes_</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
@@ -183,6 +182,8 @@
         <span class="c1"># Build buffer</span>
         <span class="n">buffer</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s2">&quot;&lt;&quot;</span> <span class="o">+</span> <span class="s2">&quot;Q&quot;</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">writable_args</span><span class="p">),</span> <span class="o">*</span><span class="n">writable_args</span><span class="p">)</span>
         <span class="n">ctypes</span><span class="o">.</span><span class="n">memmove</span><span class="p">(</span><span class="n">argument_buffer</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">buffer</span><span class="p">))</span>
+        <span class="c1"># Copy origincal args in function, for errcheck if needed</span>
+        <span class="n">native_caller</span><span class="o">.</span><span class="n">current_original_args</span> <span class="o">=</span> <span class="n">args</span> <span class="c1"># TODO: THIS IS NOT THREAD SAFE</span>
         <span class="k">return</span> <span class="n">native_caller</span><span class="p">()</span>
     <span class="n">wrapper</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">&lt;syswow64&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,)</span>
     <span class="n">wrapper</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="s2">&quot;This is a wrapper to </span><span class="si">{0}</span><span class="s2"> in 64b mode, it accept &lt;</span><span class="si">{1}</span><span class="s2">&gt; args&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">expected_arguments_number</span><span class="p">)</span>
@@ -241,9 +242,10 @@
 
 <div class="viewcode-block" id="Syswow64ApiProxy"><a class="viewcode-back" href="../../internals.html#windows.syswow64.Syswow64ApiProxy">[docs]</a><span class="k">class</span> <span class="nc">Syswow64ApiProxy</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Create a python wrapper around a function&quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">winproxy_function</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">winproxy_function</span><span class="p">,</span> <span class="n">errcheck</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">winproxy_function</span> <span class="o">=</span> <span class="n">winproxy_function</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">raw_call</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">errcheck</span> <span class="o">=</span> <span class="n">errcheck</span>
         <span class="k">if</span> <span class="n">winproxy_function</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">params_name</span> <span class="o">=</span> <span class="p">[</span><span class="n">param</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">winproxy_function</span><span class="o">.</span><span class="n">params</span><span class="p">]</span>
 
@@ -258,7 +260,7 @@
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_call</span><span class="p">:</span>
                 <span class="k">return</span> <span class="kc">True</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">raw_call</span> <span class="o">=</span> <span class="n">generate_syswow64_call</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">winproxy_function</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">raw_call</span> <span class="o">=</span> <span class="n">generate_syswow64_call</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">winproxy_function</span><span class="p">,</span> <span class="n">errcheck</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">errcheck</span><span class="p">)</span>
             <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">ExportNotFound</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">winproxy_function</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="s2">&quot;SysWow[ntdll64]&quot;</span><span class="p">)</span>
 
@@ -280,6 +282,23 @@
         <span class="nb">setattr</span><span class="p">(</span><span class="n">python_proxy</span><span class="p">,</span> <span class="s2">&quot;force_resolution&quot;</span><span class="p">,</span> <span class="n">force_resolution</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">python_proxy</span></div>
 
+<span class="k">def</span> <span class="nf">ntquerysysteminformation_syswow64_error_check</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="n">current_original_args</span>
+    <span class="k">if</span> <span class="n">result</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">args</span>
+    <span class="c1"># Ignore STATUS_INFO_LENGTH_MISMATCH if SystemInformation is None</span>
+    <span class="k">if</span> <span class="n">result</span> <span class="o">==</span> <span class="n">STATUS_INFO_LENGTH_MISMATCH</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">args</span>
+    <span class="k">raise</span> <span class="n">Kernel32Error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="s2"> failed with NTStatus </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">func_name</span><span class="p">,</span> <span class="nb">hex</span><span class="p">(</span><span class="n">result</span><span class="p">)))</span>
+
+<span class="nd">@Syswow64ApiProxy</span><span class="p">(</span><span class="n">winproxy</span><span class="o">.</span><span class="n">NtQuerySystemInformation</span><span class="p">,</span> <span class="n">errcheck</span><span class="o">=</span><span class="n">ntquerysysteminformation_syswow64_error_check</span><span class="p">)</span>
+<span class="c1"># @Syswow64ApiProxy(winproxy.NtQuerySystemInformation)</span>
+<span class="k">def</span> <span class="nf">NtQuerySystemInformation_32_to_64</span><span class="p">(</span><span class="n">SystemInformationClass</span><span class="p">,</span> <span class="n">SystemInformation</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">SystemInformationLength</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ReturnLength</span><span class="o">=</span><span class="n">NeededParameter</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">SystemInformation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">SystemInformationLength</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">SystemInformationLength</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">SystemInformation</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">SystemInformation</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">SystemInformation</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">return</span> <span class="n">NtQuerySystemInformation_32_to_64</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">SystemInformationClass</span><span class="p">,</span> <span class="n">SystemInformation</span><span class="p">,</span> <span class="n">SystemInformationLength</span><span class="p">,</span> <span class="n">ReturnLength</span><span class="p">)</span>
 
 
 <span class="nd">@Syswow64ApiProxy</span><span class="p">(</span><span class="n">winproxy</span><span class="o">.</span><span class="n">NtCreateThreadEx</span><span class="p">)</span>
@@ -330,7 +349,6 @@
     <span class="k">return</span> <span class="n">NtProtectVirtualMemory_32_to_64</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">ProcessHandle</span><span class="p">,</span> <span class="n">BaseAddress</span><span class="p">,</span> <span class="n">NumberOfBytesToProtect</span><span class="p">,</span> <span class="n">NewAccessProtection</span><span class="p">,</span> <span class="n">OldAccessProtection</span><span class="p">)</span>
 
 
-
 <span class="nd">@Syswow64ApiProxy</span><span class="p">(</span><span class="n">winproxy</span><span class="o">.</span><span class="n">NtGetContextThread</span><span class="p">)</span>
 <div class="viewcode-block" id="NtGetContextThread_32_to_64"><a class="viewcode-back" href="../../internals.html#windows.syswow64.NtGetContextThread_32_to_64">[docs]</a><span class="k">def</span> <span class="nf">NtGetContextThread_32_to_64</span><span class="p">(</span><span class="n">hThread</span><span class="p">,</span> <span class="n">lpContext</span><span class="p">):</span>
     <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">lpContext</span><span class="p">)</span> <span class="o">==</span> <span class="n">windows</span><span class="o">.</span><span class="n">winobject</span><span class="o">.</span><span class="n">exception</span><span class="o">.</span><span class="n">ECONTEXT64</span><span class="p">:</span>
@@ -374,7 +392,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">PythonForWindows 0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">PythonForWindows 0.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>

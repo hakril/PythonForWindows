@@ -1,0 +1,287 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>windows.rpc.epmapper &#8212; PythonForWindows 0.3 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.3 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for windows.rpc.epmapper</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">struct</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">namedtuple</span>
+
+<span class="kn">import</span> <span class="nn">windows</span>
+<span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
+<span class="kn">from</span> <span class="nn">windows.rpc</span> <span class="k">import</span> <span class="n">ndr</span>
+<span class="kn">from</span> <span class="nn">windows.dbgprint</span> <span class="k">import</span> <span class="n">dbgprint</span>
+
+
+
+<span class="k">class</span> <span class="nc">NdrTower</span><span class="p">(</span><span class="n">ndr</span><span class="o">.</span><span class="n">NdrStructure</span><span class="p">):</span>
+    <span class="n">MEMBERS</span> <span class="o">=</span> <span class="p">[</span><span class="n">ndr</span><span class="o">.</span><span class="n">NdrLong</span><span class="p">,</span> <span class="n">ndr</span><span class="o">.</span><span class="n">NdrByteConformantArray</span><span class="p">]</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">post_unpack</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">tower</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="nb">bytearray</span><span class="p">(</span><span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s2">&quot;&lt;I&quot;</span><span class="p">,</span> <span class="n">size</span><span class="p">))</span> <span class="o">+</span> <span class="nb">bytearray</span><span class="p">(</span><span class="n">tower</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">NdrContext</span><span class="p">(</span><span class="n">ndr</span><span class="o">.</span><span class="n">NdrStructure</span><span class="p">):</span>
+    <span class="n">MEMBERS</span> <span class="o">=</span> <span class="p">[</span><span class="n">ndr</span><span class="o">.</span><span class="n">NdrLong</span><span class="p">,</span> <span class="n">ndr</span><span class="o">.</span><span class="n">NdrLong</span><span class="p">,</span> <span class="n">ndr</span><span class="o">.</span><span class="n">NdrLong</span><span class="p">,</span> <span class="n">ndr</span><span class="o">.</span><span class="n">NdrLong</span><span class="p">,</span> <span class="n">ndr</span><span class="o">.</span><span class="n">NdrLong</span><span class="p">]</span>
+
+
+<span class="k">class</span> <span class="nc">NDRIID</span><span class="p">(</span><span class="n">ndr</span><span class="o">.</span><span class="n">NdrStructure</span><span class="p">):</span>
+    <span class="n">MEMBERS</span> <span class="o">=</span> <span class="p">[</span><span class="n">ndr</span><span class="o">.</span><span class="n">NdrByte</span><span class="p">]</span> <span class="o">*</span> <span class="mi">16</span>
+
+
+<span class="k">class</span> <span class="nc">EptMapAuthParameters</span><span class="p">(</span><span class="n">ndr</span><span class="o">.</span><span class="n">NdrParameters</span><span class="p">):</span>
+    <span class="n">MEMBERS</span> <span class="o">=</span> <span class="p">[</span><span class="n">NDRIID</span><span class="p">,</span>
+                <span class="n">NdrTower</span><span class="p">,</span>
+                <span class="n">ndr</span><span class="o">.</span><span class="n">NdrUniquePTR</span><span class="p">(</span><span class="n">ndr</span><span class="o">.</span><span class="n">NdrSID</span><span class="p">),</span>
+                <span class="n">NdrContext</span><span class="p">,</span>
+                <span class="n">ndr</span><span class="o">.</span><span class="n">NdrLong</span><span class="p">]</span>
+
+
+<span class="k">class</span> <span class="nc">Towers</span><span class="p">(</span><span class="n">ndr</span><span class="o">.</span><span class="n">NdrConformantVaryingArrays</span><span class="p">):</span>
+    <span class="n">MEMBER_TYPE</span> <span class="o">=</span> <span class="n">ndr</span><span class="o">.</span><span class="n">NdrUniquePTR</span><span class="p">(</span><span class="n">NdrTower</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">EptMapAuthResults</span><span class="p">(</span><span class="n">ndr</span><span class="o">.</span><span class="n">NdrParameters</span><span class="p">):</span>
+    <span class="n">MEMBERS</span> <span class="o">=</span> <span class="p">[</span><span class="n">NdrContext</span><span class="p">,</span>
+                <span class="n">ndr</span><span class="o">.</span><span class="n">NdrLong</span><span class="p">,</span>
+                <span class="n">Towers</span><span class="p">]</span>
+
+<span class="n">UnpackTower</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s2">&quot;UnpackTower&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;protseq&quot;</span><span class="p">,</span> <span class="s2">&quot;endpoint&quot;</span><span class="p">,</span> <span class="s2">&quot;address&quot;</span><span class="p">,</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span> <span class="s2">&quot;syntax&quot;</span><span class="p">])</span>
+
+<span class="k">def</span> <span class="nf">parse_floor</span><span class="p">(</span><span class="n">stream</span><span class="p">):</span>
+    <span class="n">lhs_size</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">partial_unpack</span><span class="p">(</span><span class="s2">&quot;&lt;H&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">lhs</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">lhs_size</span><span class="p">)</span>
+    <span class="n">rhs_size</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">partial_unpack</span><span class="p">(</span><span class="s2">&quot;&lt;H&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">rhs</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">rhs_size</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span>
+
+<span class="k">def</span> <span class="nf">craft_floor</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s2">&quot;&lt;H&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">lhs</span><span class="p">))</span> <span class="o">+</span> <span class="n">lhs</span> <span class="o">+</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s2">&quot;&lt;H&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">rhs</span><span class="p">))</span>  <span class="o">+</span> <span class="n">rhs</span>
+
+<span class="k">def</span> <span class="nf">explode_alpc_tower</span><span class="p">(</span><span class="n">tower</span><span class="p">):</span>
+    <span class="n">stream</span> <span class="o">=</span> <span class="n">ndr</span><span class="o">.</span><span class="n">NdrStream</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">(</span><span class="n">tower</span><span class="p">))</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">partial_unpack</span><span class="p">(</span><span class="s2">&quot;&lt;I&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">size</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">stream</span><span class="o">.</span><span class="n">data</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid tower size: indicate </span><span class="si">{0}</span><span class="s2">, tower size </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">stream</span><span class="o">.</span><span class="n">data</span><span class="p">)))</span>
+    <span class="n">floor_count</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">partial_unpack</span><span class="p">(</span><span class="s2">&quot;&lt;H&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">floor_count</span> <span class="o">!=</span> <span class="mi">4</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;ALPC Tower are expected to have 4 floors (</span><span class="si">{0}</span><span class="s2"> instead)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">floor_count</span><span class="p">))</span>
+
+    <span class="c1"># Floor 0</span>
+    <span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span> <span class="o">=</span> <span class="n">parse_floor</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">lhs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0xd</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Floor 0: IID expected&quot;</span><span class="p">)</span>
+    <span class="n">iid</span> <span class="o">=</span>  <span class="n">gdef</span><span class="o">.</span><span class="n">IID</span><span class="o">.</span><span class="n">from_buffer_copy</span><span class="p">(</span><span class="n">lhs</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">17</span><span class="p">])</span>
+    <span class="nb">object</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">RPC_IF_ID</span><span class="p">(</span><span class="n">iid</span><span class="p">,</span> <span class="n">lhs</span><span class="p">[</span><span class="mi">17</span><span class="p">],</span> <span class="n">lhs</span><span class="p">[</span><span class="mi">18</span><span class="p">])</span>
+
+    <span class="c1"># Floor 1</span>
+    <span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span> <span class="o">=</span> <span class="n">parse_floor</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">lhs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0xd</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Floor 0: IID expected&quot;</span><span class="p">)</span>
+    <span class="n">iid</span> <span class="o">=</span>  <span class="n">gdef</span><span class="o">.</span><span class="n">IID</span><span class="o">.</span><span class="n">from_buffer_copy</span><span class="p">(</span><span class="n">lhs</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">17</span><span class="p">])</span>
+    <span class="n">syntax</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">RPC_IF_ID</span><span class="p">(</span><span class="n">iid</span><span class="p">,</span> <span class="n">lhs</span><span class="p">[</span><span class="mi">17</span><span class="p">],</span> <span class="n">lhs</span><span class="p">[</span><span class="mi">18</span><span class="p">])</span>
+
+    <span class="c1"># Floor 2</span>
+    <span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span> <span class="o">=</span> <span class="n">parse_floor</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">lhs</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">lhs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="mh">0x0c</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Alpc Tower expects 0xc as Floor2 LHS (got </span><span class="si">{0:#x}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lhs</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+
+    <span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span> <span class="o">=</span> <span class="n">parse_floor</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">rhs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;ALPC Port name doest not end by </span><span class="se">\\</span><span class="s2">x00&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">UnpackTower</span><span class="p">(</span><span class="s2">&quot;ncalrpc&quot;</span><span class="p">,</span> <span class="n">rhs</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="kc">None</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">syntax</span><span class="p">)</span>
+
+<span class="c1"># http://pubs.opengroup.org/onlinepubs/9629399/apdxi.htm#tagcjh_28</span>
+<span class="c1"># Octet 0 contains the hexadecimal value 0d. This is a reserved protocol identifier prefix that indicates that the protocol ID is UUID derived</span>
+<span class="n">TOWER_PROTOCOL_IS_UUID</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\x0d</span><span class="s2">&quot;</span>
+<span class="n">TOWER_EMPTY_RHS</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\x00\x00</span><span class="s2">&quot;</span>
+<span class="n">TOWER_PROTOCOL_ID_ALPC</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\x0c</span><span class="s2">&quot;</span> <span class="c1"># From RE</span>
+
+<span class="k">def</span> <span class="nf">construct_alpc_tower</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">syntax</span><span class="p">,</span> <span class="n">protseq</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">,</span> <span class="n">address</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">address</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Construct ALPC Tower with address != None&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">protseq</span> <span class="o">!=</span> <span class="s2">&quot;ncalrpc&quot;</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Construct ALPC Tower with protseq != &#39;ncalrpc&#39;&quot;</span><span class="p">)</span>
+    <span class="c1"># Floor 0</span>
+    <span class="n">floor_0_lsh</span> <span class="o">=</span> <span class="n">TOWER_PROTOCOL_IS_UUID</span> <span class="o">+</span> <span class="nb">bytearray</span><span class="p">(</span><span class="nb">object</span><span class="o">.</span><span class="n">Uuid</span><span class="p">)</span> <span class="o">+</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s2">&quot;&lt;BB&quot;</span><span class="p">,</span> <span class="nb">object</span><span class="o">.</span><span class="n">VersMajor</span><span class="p">,</span> <span class="nb">object</span><span class="o">.</span><span class="n">VersMinor</span><span class="p">)</span>
+    <span class="n">floor_0_rsh</span> <span class="o">=</span> <span class="n">TOWER_EMPTY_RHS</span>
+    <span class="n">floor_0</span> <span class="o">=</span> <span class="n">craft_floor</span><span class="p">(</span><span class="n">floor_0_lsh</span><span class="p">,</span> <span class="n">floor_0_rsh</span><span class="p">)</span>
+    <span class="c1"># Floor 1</span>
+    <span class="n">floor_1_lsh</span> <span class="o">=</span> <span class="n">TOWER_PROTOCOL_IS_UUID</span> <span class="o">+</span> <span class="nb">bytearray</span><span class="p">(</span><span class="n">syntax</span><span class="o">.</span><span class="n">Uuid</span><span class="p">)</span> <span class="o">+</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s2">&quot;&lt;BB&quot;</span><span class="p">,</span> <span class="n">syntax</span><span class="o">.</span><span class="n">VersMajor</span><span class="p">,</span> <span class="n">syntax</span><span class="o">.</span><span class="n">VersMinor</span><span class="p">)</span>
+    <span class="n">floor_1_rsh</span> <span class="o">=</span> <span class="n">TOWER_EMPTY_RHS</span>
+    <span class="n">floor_1</span> <span class="o">=</span> <span class="n">craft_floor</span><span class="p">(</span><span class="n">floor_1_lsh</span><span class="p">,</span> <span class="n">floor_1_rsh</span><span class="p">)</span>
+    <span class="c1"># Floor 2</span>
+    <span class="n">floor_2_lsh</span> <span class="o">=</span> <span class="n">TOWER_PROTOCOL_ID_ALPC</span>
+    <span class="n">floor_2_rsh</span> <span class="o">=</span> <span class="n">TOWER_EMPTY_RHS</span>
+    <span class="n">floor_2</span> <span class="o">=</span> <span class="n">craft_floor</span><span class="p">(</span><span class="n">floor_2_lsh</span><span class="p">,</span> <span class="n">floor_2_rsh</span><span class="p">)</span>
+    <span class="c1"># Floor 3</span>
+    <span class="k">if</span> <span class="n">endpoint</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">floor_3_lsh</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\xff</span><span class="s2">&quot;</span>
+        <span class="n">floor_3_rsh</span> <span class="o">=</span> <span class="n">TOWER_EMPTY_RHS</span>
+        <span class="n">floor_3</span> <span class="o">=</span> <span class="n">craft_floor</span><span class="p">(</span><span class="n">floor_3_lsh</span><span class="p">,</span> <span class="n">floor_3_rsh</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">floor_3_lsh</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\x10</span><span class="s2">&quot;</span>
+        <span class="n">floor_3_rsh</span> <span class="o">=</span> <span class="n">endpoint</span>
+        <span class="n">floor_3</span> <span class="o">=</span> <span class="n">craft_floor</span><span class="p">(</span><span class="n">floor_3_lsh</span><span class="p">,</span> <span class="n">floor_3_rsh</span><span class="p">)</span>
+    <span class="n">towerarray</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s2">&quot;&lt;H&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="o">+</span>  <span class="n">floor_0</span> <span class="o">+</span> <span class="n">floor_1</span> <span class="o">+</span> <span class="n">floor_2</span> <span class="o">+</span> <span class="n">floor_3</span>
+    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">towerarray</span><span class="p">),</span> <span class="nb">bytearray</span><span class="p">(</span><span class="n">towerarray</span><span class="p">)</span>
+
+<div class="viewcode-block" id="find_alpc_endpoints"><a class="viewcode-back" href="../../../rpc.html#windows.rpc.epmapper.find_alpc_endpoints">[docs]</a><span class="k">def</span> <span class="nf">find_alpc_endpoints</span><span class="p">(</span><span class="n">targetiid</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="n">nb_response</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sid</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">WinLocalSystemSid</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Ask the EPMapper for ALPC endpoints of ``targetiid:version`` (maximum of ``nb_response``)</span>
+
+<span class="sd">        :param str targetiid: The IID of the requested interface</span>
+<span class="sd">        :param (int,int) version: The version requested interface</span>
+<span class="sd">        :param int nb_response: The maximum number of response</span>
+<span class="sd">        :param WELL_KNOWN_SID_TYPE sid: The SID used to request the EPMapper</span>
+
+<span class="sd">        :returns: [:class:`~windows.rpc.epmapper.UnpackTower`] -- A list of :class:`~windows.rpc.epmapper.UnpackTower`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">targetiid</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
+        <span class="n">targetiid</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">IID</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">targetiid</span><span class="p">)</span>
+    <span class="c1"># Connect to epmapper</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">rpc</span><span class="o">.</span><span class="n">RPCClient</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\RPC Control\epmapper&quot;</span><span class="p">)</span>
+    <span class="n">epmapperiid</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s2">&quot;e1af8308-5d1f-11c9-91a4-08002b14a0fa&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
+
+    <span class="c1"># Compute request tower</span>
+    <span class="c1">## object</span>
+    <span class="n">rpc_object</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">RPC_IF_ID</span><span class="p">(</span><span class="n">targetiid</span><span class="p">,</span> <span class="o">*</span><span class="n">version</span><span class="p">)</span>
+    <span class="c1">## Syntax</span>
+    <span class="n">syntax_iid</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">IID</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s2">&quot;8a885d04-1ceb-11c9-9fe8-08002b104860&quot;</span><span class="p">)</span>
+    <span class="n">rpc_syntax</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">RPC_IF_ID</span><span class="p">(</span><span class="n">syntax_iid</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="c1">## Forge tower</span>
+    <span class="n">tower_array_size</span><span class="p">,</span> <span class="n">towerarray</span> <span class="o">=</span> <span class="n">construct_alpc_tower</span><span class="p">(</span><span class="n">rpc_object</span><span class="p">,</span> <span class="n">rpc_syntax</span><span class="p">,</span> <span class="s2">&quot;ncalrpc&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="c1"># parameters</span>
+    <span class="n">local_system_psid</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">get_known_sid</span><span class="p">(</span><span class="n">sid</span><span class="p">)</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="c1"># Pack request</span>
+    <span class="n">fullreq</span> <span class="o">=</span> <span class="n">EptMapAuthParameters</span><span class="o">.</span><span class="n">pack</span><span class="p">([</span><span class="nb">bytearray</span><span class="p">(</span><span class="n">targetiid</span><span class="p">),</span>
+                                            <span class="p">(</span><span class="n">tower_array_size</span><span class="p">,</span> <span class="n">towerarray</span><span class="p">),</span>
+                                            <span class="n">local_system_psid</span><span class="p">,</span>
+                                            <span class="n">context</span><span class="p">,</span>
+                                            <span class="n">nb_response</span><span class="p">])</span>
+    <span class="c1"># RPC Call</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">epmapperiid</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="n">fullreq</span><span class="p">)</span>
+    <span class="c1"># Unpack response</span>
+    <span class="n">stream</span> <span class="o">=</span> <span class="n">ndr</span><span class="o">.</span><span class="n">NdrStream</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+    <span class="n">unpacked</span> <span class="o">=</span> <span class="n">EptMapAuthResults</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
+    <span class="c1"># Looks like there is a memory leak here (in stream.data) if nb_response &gt; len(unpacked[2])</span>
+    <span class="c1"># Parse towers</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">explode_alpc_tower</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">unpacked</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span></div>
+
+
+<div class="viewcode-block" id="find_alpc_endpoint_and_connect"><a class="viewcode-back" href="../../../rpc.html#windows.rpc.epmapper.find_alpc_endpoint_and_connect">[docs]</a><span class="k">def</span> <span class="nf">find_alpc_endpoint_and_connect</span><span class="p">(</span><span class="n">targetiid</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="n">sid</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">WinLocalSystemSid</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Ask the EPMapper for ALPC endpoints of ``targetiid:version`` and connect to one of them.</span>
+
+<span class="sd">        :param str targetiid: The IID of the requested interface</span>
+<span class="sd">        :param (int,int) version: The version requested interface</span>
+<span class="sd">        :param WELL_KNOWN_SID_TYPE sid: The SID used to request the EPMapper</span>
+
+<span class="sd">        :returns: A connected :class:`~windows.rpc.RPCClient`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dbgprint</span><span class="p">(</span><span class="s2">&quot;Finding ALPC endpoints for  &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">targetiid</span><span class="p">),</span> <span class="s2">&quot;RPC&quot;</span><span class="p">)</span>
+    <span class="n">alpctowers</span> <span class="o">=</span> <span class="n">find_alpc_endpoints</span><span class="p">(</span><span class="n">targetiid</span><span class="p">,</span> <span class="n">version</span><span class="p">,</span> <span class="n">nb_response</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">sid</span><span class="o">=</span><span class="n">sid</span><span class="p">)</span>
+    <span class="n">dbgprint</span><span class="p">(</span><span class="s2">&quot;ALPC endpoints list: &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">alpctowers</span><span class="p">),</span> <span class="s2">&quot;RPC&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">tower</span> <span class="ow">in</span> <span class="n">alpctowers</span><span class="p">:</span>
+        <span class="n">dbgprint</span><span class="p">(</span><span class="s2">&quot;Trying to connect to endpoint &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tower</span><span class="o">.</span><span class="n">endpoint</span><span class="p">),</span> <span class="s2">&quot;RPC&quot;</span><span class="p">)</span>
+        <span class="n">alpc_port</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;\RPC Control\</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tower</span><span class="o">.</span><span class="n">endpoint</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">client</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">rpc</span><span class="o">.</span><span class="n">RPCClient</span><span class="p">(</span><span class="n">alpc_port</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">dbgprint</span><span class="p">(</span><span class="s2">&quot;Could not connect to endpoint &lt;</span><span class="si">{0}</span><span class="s2">&gt;: </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tower</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span> <span class="n">e</span><span class="p">),</span> <span class="s2">&quot;RPC&quot;</span><span class="p">)</span>
+            <span class="k">continue</span>
+        <span class="k">break</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Could not find a valid endpoint for target &lt;</span><span class="si">{0}</span><span class="s2">&gt; version &lt;</span><span class="si">{1}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">targetiid</span><span class="p">,</span> <span class="n">version</span><span class="p">))</span>
+    <span class="n">dbgprint</span><span class="p">(</span><span class="s1">&#39;Connected to ALPC port &quot;</span><span class="si">{0}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">alpc_port</span><span class="p">),</span> <span class="s2">&quot;RPC&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">client</span></div>
+
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.3 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2015, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.5.
+    </div>
+  </body>
+</html>

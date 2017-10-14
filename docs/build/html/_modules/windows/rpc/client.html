@@ -1,0 +1,243 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>windows.rpc.client &#8212; PythonForWindows 0.3 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.3 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for windows.rpc.client</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">ctypes</span>
+<span class="kn">import</span> <span class="nn">struct</span>
+
+<span class="kn">import</span> <span class="nn">windows.alpc</span> <span class="k">as</span> <span class="nn">alpc</span>
+<span class="kn">import</span> <span class="nn">windows.com</span>
+<span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
+
+
+<span class="n">KNOW_REQUEST_TYPE</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">:</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="n">gdef</span><span class="o">.</span><span class="n">RPC_REQUEST_TYPE_CALL</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">RPC_REQUEST_TYPE_BIND</span><span class="p">]}</span>
+
+
+<span class="n">KNOW_RESPONSE_TYPE</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">:</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="n">gdef</span><span class="o">.</span><span class="n">RPC_RESPONSE_TYPE_FAIL</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">RPC_RESPONSE_TYPE_SUCESS</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">RPC_RESPONSE_TYPE_BIND_OK</span><span class="p">]}</span>
+
+
+<span class="n">KNOWN_RPC_ERROR_CODE</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">:</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">ERROR_INVALID_HANDLE</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">RPC_X_BAD_STUB_DATA</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">RPC_S_UNKNOWN_IF</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">RPC_S_PROTOCOL_ERROR</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">RPC_S_UNSUPPORTED_TRANS_SYN</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">RPC_S_PROCNUM_OUT_OF_RANGE</span><span class="p">,</span>
+        <span class="p">]}</span>
+
+<span class="n">NOT_USED</span> <span class="o">=</span> <span class="mh">0xBAADF00D</span>
+
+<span class="k">class</span> <span class="nc">ALPC_RPC_BIND</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_pack_</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;request_type&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;UNK1&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;UNK2&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;target&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">RPC_IF_ID</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;flags&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;if_nb_ndr32&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">USHORT</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;if_nb_ndr64&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">USHORT</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;if_nb_unkn&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">USHORT</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;PAD&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">USHORT</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;register_multiple_syntax&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;use_flow&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;UNK5&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;maybe_flow_id&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;UNK7&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;some_context_id&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;UNK9&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">),</span>
+    <span class="p">]</span>
+
+<span class="k">class</span> <span class="nc">ALPC_RPC_CALL</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_pack_</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;request_type&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;UNK1&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;flags&quot;</span><span class="p">,</span><span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;request_id&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;if_nb&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;method_offset&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;UNK2&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;UNK3&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;UNK4&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;UNK5&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;UNK6&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;UNK7&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;UNK8&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;UNK9&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;UNK10&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;UNK11&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">),</span>
+    <span class="p">]</span>
+
+<div class="viewcode-block" id="RPCClient"><a class="viewcode-back" href="../../../rpc.html#windows.rpc.RPCClient">[docs]</a><span class="k">class</span> <span class="nc">RPCClient</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A client for RPC-over-ALPC able to bind to interface and perform calls using NDR32 marshalling&quot;&quot;&quot;</span>
+    <span class="n">REQUEST_IDENTIFIER</span> <span class="o">=</span> <span class="mh">0x11223344</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">port</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alpc_client</span> <span class="o">=</span> <span class="n">alpc</span><span class="o">.</span><span class="n">AlpcClient</span><span class="p">(</span><span class="n">port</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">number_of_bind_if</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># if -&gt; interface</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">if_bind_number</span> <span class="o">=</span> <span class="p">{}</span>
+
+<div class="viewcode-block" id="RPCClient.bind"><a class="viewcode-back" href="../../../rpc.html#windows.rpc.RPCClient.bind">[docs]</a>    <span class="k">def</span> <span class="nf">bind</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">IID_str</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)):</span>
+        <span class="sd">&quot;&quot;&quot;Bind to the ``IID_str`` with the given ``version``</span>
+
+<span class="sd">            :returns: :class:`windows.generated_def.IID`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">IID</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">com</span><span class="o">.</span><span class="n">IID</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">IID_str</span><span class="p">)</span>
+        <span class="n">request</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forge_bind_request</span><span class="p">(</span><span class="n">IID</span><span class="p">,</span> <span class="n">version</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_bind_if</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_send_request</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+        <span class="c1"># Parse reponse</span>
+        <span class="n">request_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_request_type</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">request_type</span> <span class="o">!=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">RPC_RESPONSE_TYPE_BIND_OK</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unexpected reponse type. Expected RESPONSE_TYPE_BIND_OK got </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">KNOW_RESPONSE_TYPE</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">request_type</span><span class="p">,</span> <span class="n">request_type</span><span class="p">)))</span>
+        <span class="n">iid_hash</span> <span class="o">=</span> <span class="nb">hash</span><span class="p">(</span><span class="n">buffer</span><span class="p">(</span><span class="n">IID</span><span class="p">)[:])</span> <span class="c1"># TODO: add __hash__ to IID</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">if_bind_number</span><span class="p">[</span><span class="n">iid_hash</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_bind_if</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">number_of_bind_if</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="c1">#TODO: attach version information to IID</span>
+        <span class="k">return</span> <span class="n">IID</span></div>
+
+<div class="viewcode-block" id="RPCClient.call"><a class="viewcode-back" href="../../../rpc.html#windows.rpc.RPCClient.call">[docs]</a>    <span class="k">def</span> <span class="nf">call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">IID</span><span class="p">,</span> <span class="n">method_offset</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Call method number ``method_offset`` of interface ``IID`` with mashalled ``params``</span>
+
+<span class="sd">            :param IID IID: An IID previously returned by :func:`bind`</span>
+<span class="sd">            :param int method_offset:</span>
+<span class="sd">            :param str params: The mashalled parameters (NDR32)</span>
+<span class="sd">            :returns: :class:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">iid_hash</span> <span class="o">=</span> <span class="nb">hash</span><span class="p">(</span><span class="n">buffer</span><span class="p">(</span><span class="n">IID</span><span class="p">)[:])</span>
+        <span class="n">interface_nb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">if_bind_number</span><span class="p">[</span><span class="n">iid_hash</span><span class="p">]</span> <span class="c1"># TODO: add __hash__ to IID</span>
+        <span class="n">request</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forge_call_request</span><span class="p">(</span><span class="n">interface_nb</span><span class="p">,</span> <span class="n">method_offset</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_send_request</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+        <span class="c1"># Parse reponse</span>
+        <span class="n">request_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_request_type</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">request_type</span> <span class="o">!=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">RPC_RESPONSE_TYPE_SUCESS</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unexpected reponse type. Expected RESPONSE_SUCESS got </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">KNOW_RESPONSE_TYPE</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">request_type</span><span class="p">,</span> <span class="n">request_type</span><span class="p">)))</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&lt;6I&quot;</span><span class="p">,</span> <span class="n">response</span><span class="p">[:</span><span class="mi">6</span> <span class="o">*</span> <span class="mi">4</span><span class="p">])</span>
+        <span class="k">assert</span> <span class="n">data</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">REQUEST_IDENTIFIER</span>
+        <span class="k">return</span> <span class="n">response</span><span class="p">[</span><span class="mi">4</span> <span class="o">*</span> <span class="mi">6</span><span class="p">:]</span> <span class="c1"># Should be the return value (not completly verified)</span></div>
+
+    <span class="k">def</span> <span class="nf">_send_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpc_client</span><span class="o">.</span><span class="n">send_receive</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span>
+
+    <span class="k">def</span> <span class="nf">_forge_call_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interface_nb</span><span class="p">,</span> <span class="n">method_offset</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+        <span class="c1"># TODO: differents REQUEST_IDENTIFIER for each req ?</span>
+        <span class="c1"># TODO: what is this &#39;0&#39; ? (1 is also accepted) (flags ?)</span>
+        <span class="c1"># request = struct.pack(&quot;&lt;16I&quot;, gdef.RPC_REQUEST_TYPE_CALL, NOT_USED, 1, self.REQUEST_IDENTIFIER, interface_nb, method_offset, *[NOT_USED] * 10)</span>
+        <span class="n">req</span> <span class="o">=</span> <span class="n">ALPC_RPC_CALL</span><span class="p">()</span>
+        <span class="n">req</span><span class="o">.</span><span class="n">request_type</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">RPC_REQUEST_TYPE_CALL</span>
+        <span class="n">req</span><span class="o">.</span><span class="n">flags</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">req</span><span class="o">.</span><span class="n">request_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">REQUEST_IDENTIFIER</span>
+        <span class="n">req</span><span class="o">.</span><span class="n">if_nb</span> <span class="o">=</span> <span class="n">interface_nb</span>
+        <span class="n">req</span><span class="o">.</span><span class="n">method_offset</span> <span class="o">=</span> <span class="n">method_offset</span>
+
+        <span class="k">return</span> <span class="n">buffer</span><span class="p">(</span><span class="n">req</span><span class="p">)[:]</span> <span class="o">+</span> <span class="n">params</span>
+
+    <span class="k">def</span> <span class="nf">_forge_bind_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">uuid</span><span class="p">,</span> <span class="n">syntaxversion</span><span class="p">,</span> <span class="n">requested_if_nb</span><span class="p">):</span>
+        <span class="n">version_major</span><span class="p">,</span> <span class="n">version_minor</span> <span class="o">=</span> <span class="n">syntaxversion</span>
+        <span class="n">req</span> <span class="o">=</span> <span class="n">ALPC_RPC_BIND</span><span class="p">()</span>
+        <span class="n">req</span><span class="o">.</span><span class="n">request_type</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">RPC_REQUEST_TYPE_BIND</span>
+        <span class="n">req</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">RPC_IF_ID</span><span class="p">(</span><span class="n">uuid</span><span class="p">,</span> <span class="o">*</span><span class="n">syntaxversion</span><span class="p">)</span>
+        <span class="n">req</span><span class="o">.</span><span class="n">flags</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BIND_IF_SYNTAX_NDR32</span>
+        <span class="c1"># req.flags = gdef.BIND_IF_SYNTAX_NDR64</span>
+        <span class="n">req</span><span class="o">.</span><span class="n">if_nb_ndr32</span> <span class="o">=</span> <span class="n">requested_if_nb</span>
+        <span class="n">req</span><span class="o">.</span><span class="n">if_nb_ndr64</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">req</span><span class="o">.</span><span class="n">if_nb_ndr64</span> <span class="o">=</span> <span class="n">requested_if_nb</span>
+        <span class="n">req</span><span class="o">.</span><span class="n">if_nb_unkn</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">req</span><span class="o">.</span><span class="n">register_multiple_syntax</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">req</span><span class="o">.</span><span class="n">some_context_id</span> <span class="o">=</span> <span class="mh">0xB00B00B</span>
+        <span class="k">return</span> <span class="n">buffer</span><span class="p">(</span><span class="n">req</span><span class="p">)[:]</span>
+
+    <span class="k">def</span> <span class="nf">_get_request_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+        <span class="s2">&quot;raise if request_type == RESPONSE_TYPE_FAIL&quot;</span>
+        <span class="n">request_type</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&lt;I&quot;</span><span class="p">,</span> <span class="n">response</span><span class="p">[:</span><span class="mi">4</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">request_type</span> <span class="o">==</span> <span class="n">gdef</span><span class="o">.</span><span class="n">RPC_RESPONSE_TYPE_FAIL</span><span class="p">:</span>
+            <span class="n">error_code</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&lt;5I&quot;</span><span class="p">,</span> <span class="n">response</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;RPC Response error </span><span class="si">{0}</span><span class="s2"> (</span><span class="si">{1}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">error_code</span><span class="p">,</span> <span class="n">KNOWN_RPC_ERROR_CODE</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">error_code</span><span class="p">,</span> <span class="n">error_code</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="n">request_type</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.3 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2015, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.5.
+    </div>
+  </body>
+</html>

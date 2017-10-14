@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>13. Samples of code &#8212; PythonForWindows 0.2 documentation</title>
+    <title>16. Samples of code &#8212; PythonForWindows 0.3 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.2',
+        VERSION:     '0.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="12. Internals" href="internals.html" /> 
+    <link rel="prev" title="15. Internals" href="internals.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -39,9 +39,9 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="internals.html" title="12. Internals"
+          <a href="internals.html" title="15. Internals"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.2 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.3 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -51,11 +51,11 @@
           <div class="body" role="main">
             
   <div class="section" id="samples-of-code">
-<h1>13. Samples of code<a class="headerlink" href="#samples-of-code" title="Permalink to this headline">¶</a></h1>
+<h1>16. Samples of code<a class="headerlink" href="#samples-of-code" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="processes">
-<h2>13.1. Processes<a class="headerlink" href="#processes" title="Permalink to this headline">¶</a></h2>
+<h2>16.1. Processes<a class="headerlink" href="#processes" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="windows-current-process">
-<span id="sample-current-process"></span><h3>13.1.1. <code class="docutils literal"><span class="pre">windows.current_process</span></code><a class="headerlink" href="#windows-current-process" title="Permalink to this headline">¶</a></h3>
+<span id="sample-current-process"></span><h3>16.1.1. <code class="docutils literal"><span class="pre">windows.current_process</span></code><a class="headerlink" href="#windows-current-process" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span> <span class="o">+</span> <span class="s2">&quot;\..\..&quot;</span><span class="p">))</span>
@@ -103,7 +103,7 @@
 </pre></div>
 </div>
 <p>Output:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>(cmd λ) python32.exe current_process.py
+<div class="highlight-default"><div class="highlight"><pre><span></span>(cmd λ) python32.exe process\current_process.py
 current process is &lt;windows.winobject.process.CurrentProcess object at 0x030A2590&gt;
 current process is a &lt;32&gt; bits process
 current process is a SysWow64 process ? &lt;True&gt;
@@ -119,7 +119,7 @@ Reading memory : &lt;&#39;SOME STUFF\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00&#39
 </div>
 </div>
 <div class="section" id="remote-process-winprocess">
-<span id="sample-remote-process"></span><h3>13.1.2. Remote process : <code class="xref py py-class docutils literal"><span class="pre">WinProcess</span></code><a class="headerlink" href="#remote-process-winprocess" title="Permalink to this headline">¶</a></h3>
+<span id="sample-remote-process"></span><h3>16.1.2. Remote process : <code class="xref py py-class docutils literal"><span class="pre">WinProcess</span></code><a class="headerlink" href="#remote-process-winprocess" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span> <span class="o">+</span> <span class="s2">&quot;\..\..&quot;</span><span class="p">))</span>
@@ -215,7 +215,7 @@ Reading memory : &lt;&#39;SOME STUFF\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00&#39
 </pre></div>
 </div>
 <p>Output:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>(cmd λ) python.exe remote_process.py
+<div class="highlight-default"><div class="highlight"><pre><span></span>(cmd λ) python.exe process\remote_process.py
 Creating a notepad
 Looking for notepads in the processes
 They are currently &lt;1&gt; notepads running on the system
@@ -249,7 +249,7 @@ That&#39;s all ! killing the notepad
 </div>
 </div>
 <div class="section" id="peb-exploration">
-<span id="sample-peb-exploration"></span><h3>13.1.3. <code class="xref py py-class docutils literal"><span class="pre">PEB</span></code> exploration<a class="headerlink" href="#peb-exploration" title="Permalink to this headline">¶</a></h3>
+<span id="sample-peb-exploration"></span><h3>16.1.3. <code class="xref py py-class docutils literal"><span class="pre">PEB</span></code> exploration<a class="headerlink" href="#peb-exploration" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span> <span class="o">+</span> <span class="s2">&quot;\..\..&quot;</span><span class="p">))</span>
@@ -293,7 +293,7 @@ That&#39;s all ! killing the notepad
 </pre></div>
 </div>
 <p>Output:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>(cmd λ) python.exe  peb.py
+<div class="highlight-default"><div class="highlight"><pre><span></span>(cmd λ) python.exe  process\peb.py
 Exploring the current process PEB
 PEB is &lt;&lt;windows.winobject.PEB object at 0x02649B70&gt;&gt;
 Commandline object is &lt;WinUnicodeString &quot;python.exe   peb.py &quot; at 0x2649c60&gt;
@@ -320,7 +320,7 @@ Sections: [&lt;PESection &quot;.text&quot;&gt;, &lt;PESection &quot;.rdata&quot;
 </div>
 </div>
 <div class="section" id="iat-hooking">
-<span id="sample-iat-hook"></span><h3>13.1.4. IAT hooking<a class="headerlink" href="#iat-hooking" title="Permalink to this headline">¶</a></h3>
+<span id="sample-iat-hook"></span><h3>16.1.4. IAT hooking<a class="headerlink" href="#iat-hooking" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span> <span class="o">+</span> <span class="s2">&quot;\..\..&quot;</span><span class="p">))</span>
@@ -387,7 +387,7 @@ Sections: [&lt;PESection &quot;.text&quot;&gt;, &lt;PESection &quot;.rdata&quot;
 </pre></div>
 </div>
 <p>Output:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">cmd</span> <span class="n">λ</span><span class="p">)</span> <span class="n">python</span> <span class="n">iat_hook</span><span class="o">.</span><span class="n">py</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">cmd</span> <span class="n">λ</span><span class="p">)</span> <span class="n">python</span> <span class="n">process</span>\<span class="n">iat_hook</span><span class="o">.</span><span class="n">py</span>
 <span class="n">Asking</span> <span class="k">for</span> <span class="o">&lt;</span><span class="n">MY_SECRET_KEY</span><span class="o">&gt;</span>
 <span class="o">&lt;</span><span class="ow">in</span> <span class="n">hook</span><span class="o">&gt;</span> <span class="n">Hook</span> <span class="n">called</span> <span class="o">|</span> <span class="n">hKey</span> <span class="o">=</span> <span class="mh">0x12d687</span> <span class="o">|</span> <span class="n">lpSubKey</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">MY_SECRET_KEY</span><span class="o">&gt;</span>
 <span class="o">&lt;</span><span class="ow">in</span> <span class="n">hook</span><span class="o">&gt;</span> <span class="n">Secret</span> <span class="n">key</span> <span class="n">asked</span><span class="p">,</span> <span class="n">returning</span> <span class="n">magic</span> <span class="n">handle</span> <span class="mh">0x12345678</span>
@@ -407,7 +407,7 @@ Sections: [&lt;PESection &quot;.text&quot;&gt;, &lt;PESection &quot;.rdata&quot;
 </div>
 </div>
 <div class="section" id="windows-system">
-<span id="sample-system"></span><h2>13.2. <code class="docutils literal"><span class="pre">windows.system</span></code><a class="headerlink" href="#windows-system" title="Permalink to this headline">¶</a></h2>
+<span id="sample-system"></span><h2>16.2. <code class="docutils literal"><span class="pre">windows.system</span></code><a class="headerlink" href="#windows-system" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span> <span class="o">+</span> <span class="s2">&quot;\..\..&quot;</span><span class="p">))</span>
@@ -510,7 +510,7 @@ Sections: [&lt;PESection &quot;.text&quot;&gt;, &lt;PESection &quot;.rdata&quot;
 </div>
 </div>
 <div class="section" id="network-socket-exploration">
-<span id="sample-network-exploration"></span><h2>13.3. <code class="xref py py-class docutils literal"><span class="pre">Network</span></code> - socket exploration<a class="headerlink" href="#network-socket-exploration" title="Permalink to this headline">¶</a></h2>
+<span id="sample-network-exploration"></span><h2>16.3. <code class="xref py py-class docutils literal"><span class="pre">Network</span></code> - socket exploration<a class="headerlink" href="#network-socket-exploration" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">socket</span>
@@ -548,7 +548,7 @@ Sections: [&lt;PESection &quot;.text&quot;&gt;, &lt;PESection &quot;.rdata&quot;
 </pre></div>
 </div>
 <p>Output:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">cmd</span> <span class="n">λ</span><span class="p">)</span> <span class="n">python</span><span class="o">.</span><span class="n">exe</span>  <span class="n">network</span><span class="o">.</span><span class="n">py</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">cmd</span> <span class="n">λ</span><span class="p">)</span> <span class="n">python</span><span class="o">.</span><span class="n">exe</span>  <span class="n">network</span>\<span class="n">network</span><span class="o">.</span><span class="n">py</span>
 <span class="n">Working</span> <span class="n">on</span> <span class="n">ipv4</span>
 <span class="o">==</span> <span class="n">Listening</span> <span class="o">==</span>
 <span class="n">Some</span> <span class="n">listening</span> <span class="n">connections</span><span class="p">:</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">TCP</span> <span class="n">IPV4</span> <span class="n">Listening</span> <span class="n">socket</span> <span class="n">on</span> <span class="mf">0.0</span><span class="o">.</span><span class="mf">0.0</span><span class="p">:</span><span class="mi">80</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">TCP</span> <span class="n">IPV4</span> <span class="n">Listening</span> <span class="n">socket</span> <span class="n">on</span> <span class="mf">0.0</span><span class="o">.</span><span class="mf">0.0</span><span class="p">:</span><span class="mi">135</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">TCP</span> <span class="n">IPV4</span> <span class="n">Listening</span> <span class="n">socket</span> <span class="n">on</span> <span class="mf">0.0</span><span class="o">.</span><span class="mf">0.0</span><span class="p">:</span><span class="mi">443</span><span class="o">&gt;</span><span class="p">]</span>
@@ -568,7 +568,7 @@ Sections: [&lt;PESection &quot;.text&quot;&gt;, &lt;PESection &quot;.rdata&quot;
 </div>
 </div>
 <div class="section" id="registry">
-<span id="sample-registry"></span><h2>13.4. <code class="xref py py-class docutils literal"><span class="pre">Registry</span></code><a class="headerlink" href="#registry" title="Permalink to this headline">¶</a></h2>
+<span id="sample-registry"></span><h2>16.4. <code class="xref py py-class docutils literal"><span class="pre">Registry</span></code><a class="headerlink" href="#registry" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
@@ -600,7 +600,7 @@ Sections: [&lt;PESection &quot;.text&quot;&gt;, &lt;PESection &quot;.rdata&quot;
 </pre></div>
 </div>
 <p>Output:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">cmd</span> <span class="n">λ</span><span class="p">)</span> <span class="n">python</span><span class="o">.</span><span class="n">exe</span> <span class="n">registry</span><span class="o">.</span><span class="n">py</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">cmd</span> <span class="n">λ</span><span class="p">)</span> <span class="n">python</span><span class="o">.</span><span class="n">exe</span> <span class="n">registry</span>\<span class="n">registry</span><span class="o">.</span><span class="n">py</span>
 <span class="n">Registry</span> <span class="ow">is</span> <span class="o">&lt;&lt;</span><span class="n">windows</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">Registry</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x02941290</span><span class="o">&gt;&gt;</span>
 <span class="n">HKEY_CURRENT_USER</span> <span class="ow">is</span> <span class="o">&lt;&lt;</span><span class="n">PyHKey</span> <span class="s2">&quot;HKEY_CURRENT_USER&quot;</span><span class="o">&gt;&gt;</span>
 <span class="n">HKEY_CURRENT_USER</span> <span class="n">subkeys</span> <span class="n">names</span> <span class="n">are</span><span class="p">:</span>
@@ -632,7 +632,7 @@ Sections: [&lt;PESection &quot;.text&quot;&gt;, &lt;PESection &quot;.rdata&quot;
 </div>
 </div>
 <div class="section" id="windows-wintrust">
-<span id="sample-wintrust"></span><h2>13.5. <code class="docutils literal"><span class="pre">windows.wintrust</span></code><a class="headerlink" href="#windows-wintrust" title="Permalink to this headline">¶</a></h2>
+<span id="sample-wintrust"></span><h2>16.5. <code class="docutils literal"><span class="pre">windows.wintrust</span></code><a class="headerlink" href="#windows-wintrust" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span> <span class="o">+</span> <span class="s2">&quot;\..\..&quot;</span><span class="p">))</span>
@@ -665,7 +665,7 @@ Sections: [&lt;PESection &quot;.text&quot;&gt;, &lt;PESection &quot;.rdata&quot;
 </pre></div>
 </div>
 <p>Output:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">cmd</span> <span class="n">λ</span><span class="p">)</span> <span class="n">python</span> <span class="o">.</span>\<span class="n">wintrust</span><span class="o">.</span><span class="n">py</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">cmd</span> <span class="n">λ</span><span class="p">)</span> <span class="n">python</span> <span class="n">crypto</span>\<span class="n">wintrust</span><span class="o">.</span><span class="n">py</span>
 <span class="n">Checking</span> <span class="n">signature</span> <span class="n">of</span> <span class="o">&lt;</span><span class="n">C</span><span class="p">:</span>\<span class="n">windows</span>\<span class="n">system32</span>\<span class="n">ntdll</span><span class="o">.</span><span class="n">dll</span><span class="o">&gt;</span>
 <span class="n">is_signed</span><span class="p">:</span> <span class="o">&lt;</span><span class="kc">True</span><span class="o">&gt;</span>
 <span class="n">check_signature</span><span class="p">:</span> <span class="o">&lt;</span><span class="mi">0</span><span class="o">&gt;</span>
@@ -684,9 +684,9 @@ Sections: [&lt;PESection &quot;.text&quot;&gt;, &lt;PESection &quot;.rdata&quot;
 </div>
 </div>
 <div class="section" id="vectoredexception">
-<span id="sample-vectoredexception"></span><h2>13.6. <code class="xref py py-func docutils literal"><span class="pre">VectoredException()</span></code><a class="headerlink" href="#vectoredexception" title="Permalink to this headline">¶</a></h2>
+<span id="sample-vectoredexception"></span><h2>16.6. <code class="xref py py-func docutils literal"><span class="pre">VectoredException()</span></code><a class="headerlink" href="#vectoredexception" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="in-local-process">
-<h3>13.6.1. In local process<a class="headerlink" href="#in-local-process" title="Permalink to this headline">¶</a></h3>
+<h3>16.6.1. In local process<a class="headerlink" href="#in-local-process" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
@@ -733,7 +733,7 @@ Sections: [&lt;PESection &quot;.text&quot;&gt;, &lt;PESection &quot;.rdata&quot;
 </pre></div>
 </div>
 <p>Output:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">cmd</span> <span class="n">λ</span><span class="p">)</span> <span class="n">python</span><span class="o">.</span><span class="n">exe</span> <span class="n">veh_segv</span><span class="o">.</span><span class="n">py</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">cmd</span> <span class="n">λ</span><span class="p">)</span> <span class="n">python</span><span class="o">.</span><span class="n">exe</span> <span class="n">process</span>\<span class="n">veh_segv</span><span class="o">.</span><span class="n">py</span>
 <span class="n">Protected</span> <span class="n">page</span> <span class="ow">is</span> <span class="n">at</span> <span class="o">&lt;</span><span class="mh">0x1db0000</span><span class="o">&gt;</span>
 <span class="n">Setting</span> <span class="n">page</span> <span class="n">protection</span> <span class="n">to</span> <span class="o">&lt;</span><span class="n">PAGE_NOACCESS</span><span class="o">&gt;</span>
 
@@ -756,7 +756,7 @@ Sections: [&lt;PESection &quot;.text&quot;&gt;, &lt;PESection &quot;.rdata&quot;
 </div>
 </div>
 <div class="section" id="in-remote-process">
-<h3>13.6.2. In remote process<a class="headerlink" href="#in-remote-process" title="Permalink to this headline">¶</a></h3>
+<h3>16.6.2. In remote process<a class="headerlink" href="#in-remote-process" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
@@ -812,7 +812,7 @@ Sections: [&lt;PESection &quot;.text&quot;&gt;, &lt;PESection &quot;.rdata&quot;
 <span class="s2">windows.winproxy.VirtualProtect(target_page, code_size, windef.PAGE_READWRITE)</span>
 <span class="s2">&quot;&quot;&quot;</span>
 
-<span class="n">c</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">pop_calc_64</span><span class="p">(</span><span class="n">dwCreationFlags</span><span class="o">=</span><span class="n">CREATE_SUSPENDED</span><span class="p">)</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">pop_proc_64</span><span class="p">(</span><span class="n">dwCreationFlags</span><span class="o">=</span><span class="n">CREATE_SUSPENDED</span><span class="p">)</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">execute_python</span><span class="p">(</span><span class="n">python_code</span><span class="p">)</span>
 
 <span class="n">c</span><span class="o">.</span><span class="n">threads</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">resume</span><span class="p">()</span>
@@ -829,7 +829,7 @@ Sections: [&lt;PESection &quot;.text&quot;&gt;, &lt;PESection &quot;.rdata&quot;
 </pre></div>
 </div>
 <p>Output:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>(cmd λ) python .exe.\samples\remote_veh_segv.py
+<div class="highlight-default"><div class="highlight"><pre><span></span>(cmd λ) python.exe process\remote_veh_segv.py
 (In another console)
 
 Tracing execution in module: &lt;gdi32.dll&gt;
@@ -858,9 +858,9 @@ No more tracing !
 </div>
 </div>
 <div class="section" id="debugging">
-<span id="sample-debugger"></span><h2>13.7. Debugging<a class="headerlink" href="#debugging" title="Permalink to this headline">¶</a></h2>
+<span id="sample-debugger"></span><h2>16.7. Debugging<a class="headerlink" href="#debugging" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="debugger">
-<h3>13.7.1. <code class="xref py py-class docutils literal"><span class="pre">Debugger</span></code><a class="headerlink" href="#debugger" title="Permalink to this headline">¶</a></h3>
+<h3>16.7.1. <code class="xref py py-class docutils literal"><span class="pre">Debugger</span></code><a class="headerlink" href="#debugger" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
@@ -902,7 +902,7 @@ No more tracing !
             <span class="n">dbg</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
 
 
-<span class="n">calc</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">pop_calc_32</span><span class="p">(</span><span class="n">dwCreationFlags</span><span class="o">=</span><span class="n">DEBUG_PROCESS</span><span class="p">)</span>
+<span class="n">calc</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">pop_proc_32</span><span class="p">(</span><span class="n">dwCreationFlags</span><span class="o">=</span><span class="n">DEBUG_PROCESS</span><span class="p">)</span>
 <span class="n">d</span> <span class="o">=</span> <span class="n">MyDebugger</span><span class="p">(</span><span class="n">calc</span><span class="p">)</span>
 <span class="n">d</span><span class="o">.</span><span class="n">add_bp</span><span class="p">(</span><span class="n">PrintUnicodeString</span><span class="p">(</span><span class="s2">&quot;ntdll!LdrLoadDll&quot;</span><span class="p">,</span> <span class="n">argument_position</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
 <span class="n">d</span><span class="o">.</span><span class="n">loop</span><span class="p">()</span>
@@ -910,7 +910,7 @@ No more tracing !
 </pre></div>
 </div>
 <p>Ouput:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">cmd</span> <span class="n">λ</span><span class="p">)</span> <span class="n">python</span><span class="o">.</span><span class="n">exe</span> <span class="o">.</span>\<span class="n">samples</span>\<span class="n">debugger_print_LdrLoaddll</span><span class="o">.</span><span class="n">py</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">cmd</span> <span class="n">λ</span><span class="p">)</span> <span class="n">python</span><span class="o">.</span><span class="n">exe</span> <span class="n">debug</span>\<span class="n">debugger_print_LdrLoaddll</span><span class="o">.</span><span class="n">py</span>
 <span class="n">Loading</span> <span class="o">&lt;</span><span class="n">KERNEL32</span><span class="o">.</span><span class="n">DLL</span><span class="o">&gt;</span>
 <span class="n">Got</span> <span class="n">exception</span> <span class="n">EXCEPTION_BREAKPOINT</span><span class="p">(</span><span class="mh">0x80000003</span><span class="n">L</span><span class="p">)</span> <span class="n">at</span> <span class="mh">0x77a73bad</span>
 <span class="n">Loading</span> <span class="o">&lt;</span><span class="n">C</span><span class="p">:</span>\<span class="n">Windows</span>\<span class="n">system32</span>\<span class="n">IMM32</span><span class="o">.</span><span class="n">DLL</span><span class="o">&gt;</span>
@@ -930,7 +930,7 @@ No more tracing !
 </pre></div>
 </div>
 <div class="section" id="single-stepping">
-<h4>13.7.1.1. Single stepping<a class="headerlink" href="#single-stepping" title="Permalink to this headline">¶</a></h4>
+<h4>16.7.1.1. Single stepping<a class="headerlink" href="#single-stepping" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
@@ -976,7 +976,7 @@ No more tracing !
         <span class="k">return</span> <span class="n">dbg</span><span class="o">.</span><span class="n">single_step</span><span class="p">()</span>
 
 
-<span class="n">calc</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">pop_calc_32</span><span class="p">(</span><span class="n">dwCreationFlags</span><span class="o">=</span><span class="n">DEBUG_PROCESS</span><span class="p">)</span>
+<span class="n">calc</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">pop_proc_32</span><span class="p">(</span><span class="n">dwCreationFlags</span><span class="o">=</span><span class="n">DEBUG_PROCESS</span><span class="p">)</span>
 <span class="n">d</span> <span class="o">=</span> <span class="n">MyDebugger</span><span class="p">(</span><span class="n">calc</span><span class="p">)</span>
 
 <span class="n">code</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">virtual_alloc</span><span class="p">(</span><span class="mh">0x1000</span><span class="p">)</span>
@@ -1001,7 +1001,7 @@ No more tracing !
 </pre></div>
 </div>
 <p>Ouput:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">cmd</span> <span class="n">λ</span><span class="p">)</span> <span class="n">python</span><span class="o">.</span><span class="n">exe</span> <span class="o">.</span>\<span class="n">samples</span>\<span class="n">debugger_membp_singlestep</span><span class="o">.</span><span class="n">py</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">cmd</span> <span class="n">λ</span><span class="p">)</span> <span class="n">python</span><span class="o">.</span><span class="n">exe</span> <span class="n">debug</span>\<span class="n">debugger_membp_singlestep</span><span class="o">.</span><span class="n">py</span>
 <span class="n">Got</span> <span class="n">exception</span> <span class="n">EXCEPTION_BREAKPOINT</span><span class="p">(</span><span class="mh">0x80000003</span><span class="n">L</span><span class="p">)</span> <span class="n">at</span> <span class="mh">0x77ae3c7d</span>
 <span class="n">Instruction</span> <span class="n">at</span> <span class="o">&lt;</span><span class="mh">0x8d0006</span><span class="o">&gt;</span> <span class="n">wrote</span> <span class="n">at</span> <span class="o">&lt;</span><span class="mh">0x8e0000</span><span class="o">&gt;</span>
 <span class="n">Got</span> <span class="n">single_step</span> <span class="n">EXCEPTION_SINGLE_STEP</span><span class="p">(</span><span class="mh">0x80000004</span><span class="n">L</span><span class="p">)</span> <span class="n">at</span> <span class="mh">0x8d000c</span>
@@ -1016,7 +1016,7 @@ No more tracing !
 </div>
 </div>
 <div class="section" id="windows-debug-functionbp">
-<h4>13.7.1.2. <a class="reference internal" href="debug.html#windows.debug.FunctionBP" title="windows.debug.FunctionBP"><code class="xref py py-class docutils literal"><span class="pre">windows.debug.FunctionBP</span></code></a><a class="headerlink" href="#windows-debug-functionbp" title="Permalink to this headline">¶</a></h4>
+<h4>16.7.1.2. <a class="reference internal" href="debug.html#windows.debug.FunctionBP" title="windows.debug.FunctionBP"><code class="xref py py-class docutils literal"><span class="pre">windows.debug.FunctionBP</span></code></a><a class="headerlink" href="#windows-debug-functionbp" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
@@ -1028,14 +1028,12 @@ No more tracing !
 
 <span class="kn">from</span> <span class="nn">windows.generated_def.winstructs</span> <span class="k">import</span> <span class="o">*</span>
 
-<span class="k">class</span> <span class="nc">MyFunctionBP</span><span class="p">(</span><span class="n">windows</span><span class="o">.</span><span class="n">debug</span><span class="o">.</span><span class="n">FunctionBP</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">addr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">MyFunctionBP</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">addr</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">target_name</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">target_func</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="k">class</span> <span class="nc">FollowNtCreateFile</span><span class="p">(</span><span class="n">windows</span><span class="o">.</span><span class="n">debug</span><span class="o">.</span><span class="n">FunctionBP</span><span class="p">):</span>
+    <span class="n">TARGET</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">NtCreateFile</span>
+    <span class="n">COUNTER</span> <span class="o">=</span> <span class="mi">3</span>
 
     <span class="k">def</span> <span class="nf">trigger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbg</span><span class="p">,</span> <span class="n">exc</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">counter</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">COUNTER</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Exiting process&quot;</span><span class="p">)</span>
             <span class="n">dbg</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
             <span class="k">return</span>
@@ -1060,16 +1058,17 @@ No more tracing !
         <span class="n">fhandle</span> <span class="o">=</span> <span class="n">fhandle</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Handle manually found! typename=&lt;</span><span class="si">{0}</span><span class="s2">&gt;, name=&lt;</span><span class="si">{1}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fhandle</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">fhandle</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">COUNTER</span> <span class="o">-=</span> <span class="mi">1</span>
 
-<span class="n">calc</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">pop_calc_32</span><span class="p">(</span><span class="n">dwCreationFlags</span><span class="o">=</span><span class="n">DEBUG_PROCESS</span><span class="p">)</span>
-<span class="n">d</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">debug</span><span class="o">.</span><span class="n">Debugger</span><span class="p">(</span><span class="n">calc</span><span class="p">)</span>
-<span class="n">d</span><span class="o">.</span><span class="n">add_bp</span><span class="p">(</span><span class="n">MyFunctionBP</span><span class="p">(</span><span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">NtCreateFile</span><span class="p">))</span>
-<span class="n">d</span><span class="o">.</span><span class="n">loop</span><span class="p">()</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">calc</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">pop_proc_32</span><span class="p">(</span><span class="n">dwCreationFlags</span><span class="o">=</span><span class="n">DEBUG_PROCESS</span><span class="p">)</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">debug</span><span class="o">.</span><span class="n">Debugger</span><span class="p">(</span><span class="n">calc</span><span class="p">)</span>
+    <span class="n">d</span><span class="o">.</span><span class="n">add_bp</span><span class="p">(</span><span class="n">FollowNtCreateFile</span><span class="p">())</span>
+    <span class="n">d</span><span class="o">.</span><span class="n">loop</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>Ouput:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>(cmd λ) python.exe .\samples\debug_functionbp.py
+<div class="highlight-default"><div class="highlight"><pre><span></span>(cmd λ) python.exe debug\debug_functionbp.py
 NtCreateFile of &lt;\??\C:\Windows\syswow64\en-US\calc.exe.mui&gt;: handle = 0xac
 Handle manually found! typename=&lt;File&gt;, name=&lt;\Device\HarddiskVolume2\Windows\SysWOW64\en-US\calc.exe.mui&gt;
 
@@ -1083,8 +1082,61 @@ Exiting process
 </pre></div>
 </div>
 </div>
+<div class="section" id="debugger-attach">
+<span id="sample-debugger-attach"></span><h4>16.7.1.3. <a class="reference internal" href="debug.html#windows.debug.Debugger.attach" title="windows.debug.Debugger.attach"><code class="xref py py-func docutils literal"><span class="pre">Debugger.attach</span></code></a><a class="headerlink" href="#debugger-attach" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os.path</span>
+<span class="kn">import</span> <span class="nn">pprint</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span> <span class="o">+</span> <span class="s2">&quot;\..\..&quot;</span><span class="p">))</span>
+
+<span class="kn">import</span> <span class="nn">windows</span>
+<span class="kn">import</span> <span class="nn">windows.test</span>
+<span class="kn">import</span> <span class="nn">windows.debug</span>
+
+<span class="kn">from</span> <span class="nn">windows.generated_def.winstructs</span> <span class="k">import</span> <span class="o">*</span>
+
+<span class="c1"># Just a debugger that follow NtCreateFile and print filename &amp; handler</span>
+<span class="kn">from</span> <span class="nn">debug_functionbp</span> <span class="k">import</span> <span class="n">FollowNtCreateFile</span>
+
+
+<span class="k">def</span> <span class="nf">follow_create_file</span><span class="p">(</span><span class="n">pid</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Finding process with pid &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pid</span><span class="p">))</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">windows</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">processes</span> <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">pid</span> <span class="o">==</span> <span class="n">pid</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Target is </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">target</span><span class="p">))</span>
+    <span class="n">dbg</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">debug</span><span class="o">.</span><span class="n">Debugger</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Debugger attached: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dbg</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">dbg</span><span class="o">.</span><span class="n">add_bp</span><span class="p">(</span><span class="n">FollowNtCreateFile</span><span class="p">())</span>
+    <span class="n">dbg</span><span class="o">.</span><span class="n">loop</span><span class="p">()</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="c1"># Create a non-debugged process safe to debug</span>
+    <span class="n">calc</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">pop_proc_32</span><span class="p">(</span><span class="n">dwCreationFlags</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="c1"># Give ovnly the PID to follow_create_file</span>
+    <span class="n">follow_create_file</span><span class="p">(</span><span class="n">calc</span><span class="o">.</span><span class="n">pid</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Ouput:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>(cmd λ) python.exe debug\attach.py
+Finding process with pid &lt;11392&gt;
+Target is &lt;WinProcess &quot;notepad.exe&quot; pid 11392 at 0x471a750&gt;
+Debugger attached: &lt;windows.debug.debugger.Debugger object at 0x04707EF0&gt;
+
+NtCreateFile of &lt;\??\C:\Windows\Fonts\staticcache.dat&gt;: handle = 0x288
+Handle manually found! typename=&lt;File&gt;, name=&lt;\Device\HarddiskVolume4\Windows\Fonts\StaticCache.dat&gt;
+
+NtCreateFile of &lt;\??\C:\WINDOWS\Registration\R000000000015.clb&gt;: handle = 0x320
+Handle manually found! typename=&lt;File&gt;, name=&lt;\Device\HarddiskVolume4\Windows\Registration\R000000000015.clb&gt;
+
+NtCreateFile of &lt;\??\C:\WINDOWS\Globalization\Sorting\sortdefault.nls&gt;: handle = 0x334
+Handle manually found! typename=&lt;File&gt;, name=&lt;\Device\HarddiskVolume4\Windows\Globalization\Sorting\SortDefault.nls&gt;
+
+Exiting process
+</pre></div>
+</div>
+</div>
 <div class="section" id="native-code-tester">
-<h4>13.7.1.3. Native code tester<a class="headerlink" href="#native-code-tester" title="Permalink to this headline">¶</a></h4>
+<h4>16.7.1.4. Native code tester<a class="headerlink" href="#native-code-tester" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">argparse</span>
 
@@ -1203,7 +1255,7 @@ Exiting process
 
 <span class="k">def</span> <span class="nf">test_code_x86</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">regs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">raw</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Testing x86 code&quot;</span><span class="p">)</span>
-    <span class="n">process</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">pop_calc_32</span><span class="p">(</span><span class="n">dwCreationFlags</span><span class="o">=</span><span class="n">DEBUG_PROCESS</span><span class="p">)</span>
+    <span class="n">process</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">pop_proc_32</span><span class="p">(</span><span class="n">dwCreationFlags</span><span class="o">=</span><span class="n">DEBUG_PROCESS</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">raw</span><span class="p">:</span>
         <span class="n">code</span> <span class="o">=</span> <span class="n">code</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;hex&#39;</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
@@ -1227,7 +1279,7 @@ Exiting process
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Testing x64 code&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">32</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot debug a 64b process from 32b python&quot;</span><span class="p">)</span>
-    <span class="n">process</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">pop_calc_64</span><span class="p">(</span><span class="n">dwCreationFlags</span><span class="o">=</span><span class="n">DEBUG_PROCESS</span><span class="p">)</span>
+    <span class="n">process</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">pop_proc_64</span><span class="p">(</span><span class="n">dwCreationFlags</span><span class="o">=</span><span class="n">DEBUG_PROCESS</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">raw</span><span class="p">:</span>
         <span class="n">code</span> <span class="o">=</span> <span class="n">code</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;hex&#39;</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
@@ -1261,7 +1313,7 @@ Exiting process
 </pre></div>
 </div>
 <p>Ouput:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">cmd</span> <span class="n">λ</span><span class="p">)</span> <span class="n">python</span><span class="o">.</span><span class="n">exe</span> <span class="o">.</span>\<span class="n">samples</span>\<span class="n">test_code</span><span class="o">.</span><span class="n">py</span> <span class="s2">&quot;mov eax, 0x42424242&quot;</span> <span class="s2">&quot;eax=0x11223344&quot;</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">cmd</span> <span class="n">λ</span><span class="p">)</span> <span class="n">python</span><span class="o">.</span><span class="n">exe</span> <span class="n">test_code</span><span class="o">.</span><span class="n">py</span> <span class="s2">&quot;mov eax, 0x42424242&quot;</span> <span class="s2">&quot;eax=0x11223344&quot;</span>
 <span class="n">Testing</span> <span class="n">x86</span> <span class="n">code</span>
 <span class="n">Startup</span> <span class="n">context</span> <span class="ow">is</span><span class="p">:</span>
 <span class="n">Eip</span> <span class="o">-&gt;</span> <span class="mh">0x3f0000</span><span class="n">L</span>
@@ -1293,7 +1345,7 @@ Exiting process
 <span class="n">Eax</span><span class="p">:</span> <span class="mh">0x11223344</span> <span class="o">-&gt;</span> <span class="mh">0x42424242</span> <span class="p">(</span><span class="o">+</span><span class="mh">0x31200efe</span><span class="p">)</span>
 
 
-<span class="p">(</span><span class="n">cmd</span> <span class="n">λ</span><span class="p">)</span> <span class="n">python64</span> <span class="o">.</span>\<span class="n">samples</span>\<span class="n">test_code</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">x64</span> <span class="s2">&quot;mov r15, 0x11223344; push r14; call r15&quot;</span> <span class="s2">&quot;rcx=1; r14=0x4242424243434343&quot;</span>
+<span class="p">(</span><span class="n">cmd</span> <span class="n">λ</span><span class="p">)</span> <span class="n">python64</span> <span class="n">test_code</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">x64</span> <span class="s2">&quot;mov r15, 0x11223344; push r14; call r15&quot;</span> <span class="s2">&quot;rcx=1; r14=0x4242424243434343&quot;</span>
 <span class="n">Testing</span> <span class="n">x64</span> <span class="n">code</span>
 <span class="n">Startup</span> <span class="n">context</span> <span class="ow">is</span><span class="p">:</span>
 <span class="n">Rip</span> <span class="o">-&gt;</span> <span class="mh">0x205a1d60000</span><span class="n">L</span>
@@ -1348,9 +1400,9 @@ Exiting process
 </div>
 </div>
 <div class="section" id="localdebugger">
-<span id="sample-local-debugger"></span><h3>13.7.2. <code class="xref py py-class docutils literal"><span class="pre">LocalDebugger</span></code><a class="headerlink" href="#localdebugger" title="Permalink to this headline">¶</a></h3>
+<span id="sample-local-debugger"></span><h3>16.7.2. <code class="xref py py-class docutils literal"><span class="pre">LocalDebugger</span></code><a class="headerlink" href="#localdebugger" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="in-current-process">
-<h4>13.7.2.1. In current process<a class="headerlink" href="#in-current-process" title="Permalink to this headline">¶</a></h4>
+<h4>16.7.2.1. In current process<a class="headerlink" href="#in-current-process" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
@@ -1397,7 +1449,7 @@ Exiting process
 </pre></div>
 </div>
 <p>Ouput:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>(cmd λ) python.exe .\samples\local_debugger.py
+<div class="highlight-default"><div class="highlight"><pre><span></span>(cmd λ) python.exe debug\local_debugger.py
 Code addr = 0xcf0002
 GOT AN HXBP at 0xcf0002
 EXCEPTION !!!! Got a EXCEPTION_SINGLE_STEP(0x80000004L) at 0xcf0003
@@ -1409,7 +1461,7 @@ Done!
 </div>
 </div>
 <div class="section" id="id1">
-<h4>13.7.2.2. In remote process<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
+<h4>16.7.2.2. In remote process<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
@@ -1447,7 +1499,7 @@ Done!
 
 <span class="s2">&quot;&quot;&quot;</span>
 
-<span class="n">c</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">pop_calc_32</span><span class="p">(</span><span class="n">dwCreationFlags</span><span class="o">=</span><span class="n">CREATE_SUSPENDED</span><span class="p">)</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">pop_proc_32</span><span class="p">(</span><span class="n">dwCreationFlags</span><span class="o">=</span><span class="n">CREATE_SUSPENDED</span><span class="p">)</span>
 <span class="n">c</span><span class="o">.</span><span class="n">execute_python</span><span class="p">(</span><span class="n">remote_code</span><span class="p">)</span>
 <span class="n">c</span><span class="o">.</span><span class="n">threads</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">resume</span><span class="p">()</span>
 
@@ -1457,7 +1509,7 @@ Done!
 </pre></div>
 </div>
 <p>Ouput:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">cmd</span> <span class="n">λ</span><span class="p">)</span> <span class="n">python</span><span class="o">.</span><span class="n">exe</span> <span class="o">.</span>\<span class="n">samples</span>\<span class="n">local_debugger_remote_process</span><span class="o">.</span><span class="n">py</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">cmd</span> <span class="n">λ</span><span class="p">)</span> <span class="n">python</span><span class="o">.</span><span class="n">exe</span> <span class="n">debug</span>\<span class="n">local_debugger_remote_process</span><span class="o">.</span><span class="n">py</span>
 <span class="p">(</span><span class="n">In</span> <span class="n">another</span> <span class="n">console</span><span class="p">)</span>
 <span class="n">I</span> <span class="n">AM</span> <span class="n">LOADING</span> <span class="o">&lt;</span><span class="n">C</span><span class="p">:</span>\<span class="n">Windows</span>\<span class="n">system32</span>\<span class="n">uxtheme</span><span class="o">.</span><span class="n">dll</span><span class="o">&gt;</span>
 <span class="n">I</span> <span class="n">AM</span> <span class="n">LOADING</span> <span class="o">&lt;</span><span class="n">C</span><span class="p">:</span>\<span class="n">Windows</span>\<span class="n">system32</span>\<span class="n">uxtheme</span><span class="o">.</span><span class="n">dll</span><span class="o">&gt;</span>
@@ -1484,8 +1536,8 @@ Done!
 </div>
 </div>
 </div>
-<div class="section" id="make-wmi-requests">
-<span id="wmi-request"></span><h2>13.8. Make WMI requests<a class="headerlink" href="#make-wmi-requests" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="wmi-requests">
+<span id="wmi-request"></span><h2>16.8. WMI requests<a class="headerlink" href="#wmi-requests" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
@@ -1520,7 +1572,7 @@ Done!
 </pre></div>
 </div>
 <p>Ouput:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">cmd</span> <span class="n">λ</span><span class="p">)</span> <span class="n">python</span> <span class="o">.</span>\<span class="n">samples</span>\<span class="n">wmi_request</span><span class="o">.</span><span class="n">py</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">cmd</span> <span class="n">λ</span><span class="p">)</span> <span class="n">python</span> <span class="n">wmi</span>\<span class="n">wmi_request</span><span class="o">.</span><span class="n">py</span>
 <span class="n">WMI</span> <span class="n">requester</span> <span class="ow">is</span> <span class="o">&lt;</span><span class="n">windows</span><span class="o">.</span><span class="n">winobject</span><span class="o">.</span><span class="n">wmi</span><span class="o">.</span><span class="n">WmiRequester</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x02B37EF0</span><span class="o">&gt;</span>
 <span class="n">Selecting</span> <span class="o">*</span> <span class="kn">from</span> <span class="s1">&#39;Win32_Process&#39;</span>
 <span class="n">They</span> <span class="n">are</span> <span class="o">&lt;</span><span class="mi">92</span><span class="o">&gt;</span> <span class="n">processes</span>
@@ -1541,7 +1593,7 @@ Done!
 </div>
 </div>
 <div class="section" id="using-com-inetfwpolicy2">
-<span id="sample-com-firewall"></span><h2>13.9. using COM: <code class="docutils literal"><span class="pre">INetFwPolicy2</span></code><a class="headerlink" href="#using-com-inetfwpolicy2" title="Permalink to this headline">¶</a></h2>
+<span id="sample-com-firewall"></span><h2>16.9. using COM: <code class="docutils literal"><span class="pre">INetFwPolicy2</span></code><a class="headerlink" href="#using-com-inetfwpolicy2" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
@@ -1577,7 +1629,7 @@ Done!
 </pre></div>
 </div>
 <p>Output:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">cmd</span> <span class="n">λ</span><span class="p">)</span> <span class="n">python</span> <span class="o">.</span>\<span class="n">samples</span>\<span class="n">com_inetfwpolicy2</span><span class="o">.</span><span class="n">py</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">cmd</span> <span class="n">λ</span><span class="p">)</span> <span class="n">python</span> <span class="n">com</span>\<span class="n">com_inetfwpolicy2</span><span class="o">.</span><span class="n">py</span>
 <span class="n">Initialisation</span> <span class="n">of</span> <span class="n">COM</span>
 <span class="n">Creating</span> <span class="n">INetFwPolicy2</span> <span class="n">variable</span>
 <span class="o">&lt;</span><span class="n">INetFwPolicy2</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x02DC8210</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">value</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span>
@@ -1596,9 +1648,9 @@ Done!
 </div>
 </div>
 <div class="section" id="windows-crypto">
-<h2>13.10. <code class="docutils literal"><span class="pre">windows.crypto</span></code><a class="headerlink" href="#windows-crypto" title="Permalink to this headline">¶</a></h2>
+<h2>16.10. <a class="reference internal" href="crypto.html#module-windows.crypto" title="windows.crypto"><code class="xref py py-mod docutils literal"><span class="pre">windows.crypto</span></code></a><a class="headerlink" href="#windows-crypto" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="encryption-demo">
-<span id="sample-crypto-encryption"></span><h3>13.10.1. Encryption demo<a class="headerlink" href="#encryption-demo" title="Permalink to this headline">¶</a></h3>
+<span id="sample-crypto-encryption"></span><h3>16.10.1. Encryption demo<a class="headerlink" href="#encryption-demo" title="Permalink to this headline">¶</a></h3>
 <p>This sample is a working POC able to generate key-pair, encrypt and decrypt file.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">argparse</span>
 <span class="kn">import</span> <span class="nn">windows.crypto</span> <span class="k">as</span> <span class="nn">crypto</span>
@@ -1710,7 +1762,7 @@ Done!
 </pre></div>
 </div>
 <p>Ouput:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>(cmd λ) python ..\samples\encryption_demo.py genkey YOLOCERTIF mykey --pfxpassword MYPASSWORD
+<div class="highlight-default"><div class="highlight"><pre><span></span>(cmd λ) python crypto\encryption_demo.py genkey YOLOCERTIF mykey --pfxpassword MYPASSWORD
 &lt;CertificatContext &quot;YOLOCERTIF&quot; serial=&quot;1b a4 3e 17 f7 ed ec ab 4f f8 11 46 48 e9 29 25&quot;&gt;
 
 (cmd λ) ls
@@ -1718,7 +1770,7 @@ mykey.cer  mykey.pfx
 
 (cmd λ) echo|set /p=&quot;my secret message&quot; &gt; message.txt
 
-(cmd λ) python ..\samples\encryption_demo.py crypt message.txt message.crypt mykey.cer
+(cmd λ) python crypto\encryption_demo.py crypt message.txt message.crypt mykey.cer
 Encryption done. Result:
 bytearray(b&#39;0\x82\x01\x19\x06\t*\x86H\x86\xf7\r\x01\x07\x03\xa0\x82\x01\n0\x82\x01\x06\x02\x01\x001\x81\xc30\x81
 \xc0\x02\x01\x000)0\x151\x130\x11\x06\x03U\x04\x03\x13\nYOLOCERTIF\x02\x10\x1b\xa4&gt;\x17\xf7\xed\xec\xabO\xf8\x11
@@ -1728,7 +1780,7 @@ FH\xe9)%0\r\x06\t*\x86H\x86\xf7\r\x01\x01\x01\x05\x00\x04\x81\x80V\x89)\xf5\xaaM
 \xc6\x12x\x1am\xc8\x01t\xac\xa6\xf3#\x02\xd4J \x8eZ\xbb\x10W\xe1 0;\x06\t*\x86H\x86\xf7\r\x01\x07\x010\x14\x06\x08*
 \x86H\x86\xf7\r\x03\x07\x04\x08\x14F\x04\xad\xed9\xed&lt;\x80\x18\x80]6\xccTV\xbc\xb8*\x84QY!~\xb3\n\x1aV\xd4\rf\xd1n:&#39;)
 
-(cmd λ) python ..\samples\encryption_demo.py decrypt message.crypt mykey.pfx BADPASS
+(cmd λ) python crypto\encryption_demo.py decrypt message.crypt mykey.pfx BADPASS
 Traceback (most recent call last):
 File &quot;..\samples\encryption_demo.py&quot;, line 103, in &lt;module&gt;
     res.func(**res.__dict__)
@@ -1744,13 +1796,13 @@ File &quot;c:\users\hakril\documents\work\pythonforwindows\windows\winproxy.py&q
     raise Kernel32Error(func_name)
 windows.winproxy.Kernel32Error: PFXImportCertStore: [Error 86] The specified network password is not correct.
 
-(cmd λ) python samples\encryption_demo.py decrypt message.crypt mykey.pfx MYPASSWORD
+(cmd λ) python crypto\encryption_demo.py decrypt message.crypt mykey.pfx MYPASSWORD
 Result = &lt;my secret message&gt;
 </pre></div>
 </div>
 </div>
 <div class="section" id="certificate-demo">
-<span id="sample-crypto-certificate"></span><h3>13.10.2. Certificate demo<a class="headerlink" href="#certificate-demo" title="Permalink to this headline">¶</a></h3>
+<span id="sample-crypto-certificate"></span><h3>16.10.2. Certificate demo<a class="headerlink" href="#certificate-demo" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">hashlib</span>
 <span class="kn">import</span> <span class="nn">windows.crypto</span>
 
@@ -1820,6 +1872,7 @@ Result = &lt;my secret message&gt;
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Not found :(&quot;</span><span class="p">)</span>
 
 <span class="c1">## Extract certificates of a PE file</span>
+<span class="c1">## This code is not a fixed API and the current state of my tests</span>
 
 <span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
 <span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;== PE Analysis ==&quot;</span><span class="p">)</span>
@@ -1827,22 +1880,22 @@ Result = &lt;my secret message&gt;
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Target sha1 = &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">hashlib</span><span class="o">.</span><span class="n">sha1</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">TARGET_FILE</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()))</span>
 <span class="n">cryptobj</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">crypto</span><span class="o">.</span><span class="n">CryptObject</span><span class="p">(</span><span class="n">TARGET_FILE</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Analysing </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cryptobj</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;File has </span><span class="si">{0}</span><span class="s2"> signer(s):&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cryptobj</span><span class="o">.</span><span class="n">nb_signer</span><span class="p">))</span>
-<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">signer</span> <span class="ow">in</span> <span class="p">((</span><span class="n">i</span><span class="p">,</span> <span class="n">cryptobj</span><span class="o">.</span><span class="n">get_signer_data</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cryptobj</span><span class="o">.</span><span class="n">nb_signer</span><span class="p">)):</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;File has </span><span class="si">{0}</span><span class="s2"> signer(s):&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cryptobj</span><span class="o">.</span><span class="n">crypt_msg</span><span class="o">.</span><span class="n">nb_signer</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">signer</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cryptobj</span><span class="o">.</span><span class="n">crypt_msg</span><span class="o">.</span><span class="n">signers</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Signer </span><span class="si">{0}</span><span class="s2">:&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   * Issuer: </span><span class="si">{0!r}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">windows</span><span class="o">.</span><span class="n">crypto</span><span class="o">.</span><span class="n">ECRYPT_DATA_BLOB</span><span class="p">(</span><span class="n">signer</span><span class="o">.</span><span class="n">Issuer</span><span class="o">.</span><span class="n">cbData</span><span class="p">,</span> <span class="n">signer</span><span class="o">.</span><span class="n">Issuer</span><span class="o">.</span><span class="n">pbData</span><span class="p">)</span><span class="o">.</span><span class="n">data</span><span class="p">))</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   * HashAlgorithme: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">signer</span><span class="o">.</span><span class="n">HashAlgorithm</span><span class="o">.</span><span class="n">pszObjId</span><span class="p">))</span>
-    <span class="n">cert</span> <span class="o">=</span> <span class="n">cryptobj</span><span class="o">.</span><span class="n">get_signer_certificate</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="n">cert</span> <span class="o">=</span> <span class="n">cryptobj</span><span class="o">.</span><span class="n">cert_store</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">signer</span><span class="o">.</span><span class="n">Issuer</span><span class="p">,</span> <span class="n">signer</span><span class="o">.</span><span class="n">SerialNumber</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   * Certificate: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cert</span><span class="p">))</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;File embdeds </span><span class="si">{0}</span><span class="s2"> certificate(s):&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cryptobj</span><span class="o">.</span><span class="n">nb_cert</span><span class="p">))</span>
-<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">certificate</span> <span class="ow">in</span> <span class="p">((</span><span class="n">i</span><span class="p">,</span> <span class="n">cryptobj</span><span class="o">.</span><span class="n">get_cert</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cryptobj</span><span class="o">.</span><span class="n">nb_cert</span><span class="p">)):</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;File embdeds </span><span class="si">{0}</span><span class="s2"> certificate(s):&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cryptobj</span><span class="o">.</span><span class="n">crypt_msg</span><span class="o">.</span><span class="n">nb_cert</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">certificate</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cryptobj</span><span class="o">.</span><span class="n">crypt_msg</span><span class="o">.</span><span class="n">certs</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   * </span><span class="si">{0}</span><span class="s2">) </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">certificate</span><span class="p">))</span>
 </pre></div>
 </div>
 <p>Ouput:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>(cmd λ) python .\samples\certificate.py
+<div class="highlight-default"><div class="highlight"><pre><span></span>(cmd λ) python crypto\certificate.py
 Analysing certificate: &lt;CertificateContext &quot;Microsoft Windows&quot; serial=&quot;33 00 00 01 06 6e c3 25 c4 31 c9 18 0e 00 00 00 00 01 06&quot;&gt;
     * name: &lt;Microsoft Windows&gt;
     * issuer: &lt;Microsoft Windows Production PCA 2011&gt;
@@ -1864,7 +1917,7 @@ matches = [&lt;CertificateContext &quot;Microsoft Root Certificate Authority 201
 Found it !
 
 == PE Analysis ==
-Target sha1 = &lt;059cb1ba1a41433a18dd8f87422c2ac3bf35b7b8&gt;
+Target sha1 = &lt;eb90bc0e33f3e62b0eac4afa8bfcf42a5d4e7bbb&gt;
 Analysing &lt;CryptObject &quot;C:\windows\system32\ntdll.dll&quot; content_type=CERT_QUERY_CONTENT_PKCS7_SIGNED_EMBED(0xaL)&gt;
 File has 1 signer(s):
 Signer 0:
@@ -1879,6 +1932,552 @@ File embdeds 2 certificate(s):
 </div>
 </div>
 </div>
+<div class="section" id="windows-alpc">
+<h2>16.11. <a class="reference internal" href="alpc.html#module-windows.alpc" title="windows.alpc"><code class="xref py py-mod docutils literal"><span class="pre">windows.alpc</span></code></a><a class="headerlink" href="#windows-alpc" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="simple-alpc-communication">
+<span id="sample-alpc"></span><h3>16.11.1. simple alpc communication<a class="headerlink" href="#simple-alpc-communication" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">multiprocessing</span>
+
+<span class="kn">import</span> <span class="nn">windows.alpc</span>
+<span class="kn">from</span> <span class="nn">windows.generated_def</span> <span class="k">import</span> <span class="n">LPC_CONNECTION_REQUEST</span><span class="p">,</span> <span class="n">LPC_REQUEST</span>
+
+<span class="n">PORT_NAME</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;\RPC Control\PythonForWindowsPORT&quot;</span>
+
+
+<span class="k">def</span> <span class="nf">alpc_server</span><span class="p">():</span>
+    <span class="n">server</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">alpc</span><span class="o">.</span><span class="n">AlpcServer</span><span class="p">(</span><span class="n">PORT_NAME</span><span class="p">)</span> <span class="c1"># Create the ALPC Port</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[SERV] PORT &lt;</span><span class="si">{0}</span><span class="s2">&gt; CREATED&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">PORT_NAME</span><span class="p">))</span>
+
+    <span class="n">msg</span> <span class="o">=</span> <span class="n">server</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span> <span class="c1"># Wait for a message</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[SERV] Message type = </span><span class="si">{0:#x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">type</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[SERV] Received data: &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">data</span><span class="p">))</span>
+    <span class="k">assert</span> <span class="n">msg</span><span class="o">.</span><span class="n">type</span> <span class="o">&amp;</span> <span class="mh">0xfff</span>  <span class="o">==</span> <span class="n">LPC_CONNECTION_REQUEST</span> <span class="c1"># Check that message is a connection request</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[SERV] Connection request&quot;</span><span class="p">)</span>
+    <span class="n">server</span><span class="o">.</span><span class="n">accept_connection</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="n">msg</span> <span class="o">=</span> <span class="n">server</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span> <span class="c1"># Wait for a real message</span>
+    <span class="nb">print</span> <span class="s2">&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[SERV] Received message: &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">data</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[SERV] Message type = </span><span class="si">{0:#x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">type</span><span class="p">))</span>
+    <span class="k">assert</span> <span class="n">msg</span><span class="o">.</span><span class="n">type</span> <span class="o">&amp;</span> <span class="mh">0xfff</span>  <span class="o">==</span> <span class="n">LPC_REQUEST</span>
+    <span class="c1"># We can reply by two ways:</span>
+    <span class="c1">#    - Send the same message with modified data</span>
+    <span class="c1">#    - Recreate a Message and copy the MessageId</span>
+    <span class="n">msg</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;REQUEST &#39;</span><span class="si">{0}</span><span class="s2">&#39; DONE&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">server</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+
+
+<span class="k">def</span> <span class="nf">alpc_client</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Client pid = </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">pid</span><span class="p">))</span>
+    <span class="c1"># Creation an &#39;AlpcClient&#39; with a port name will connect to the port with an empty message</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">alpc</span><span class="o">.</span><span class="n">AlpcClient</span><span class="p">(</span><span class="n">PORT_NAME</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[CLIENT] Connected: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">client</span><span class="p">))</span>
+    <span class="c1"># Send a message / wait for the response</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">send_receive</span><span class="p">(</span><span class="s2">&quot;Hello world !&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[CLIENT] Response: &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="p">))</span>
+    <span class="c1"># You can also send message without waiting for a response with &#39;client.send&#39;</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">proc</span> <span class="o">=</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">Process</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">alpc_server</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">())</span>
+    <span class="n">proc</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+    <span class="kn">import</span> <span class="nn">time</span><span class="p">;</span> <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">alpc_client</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;BYE&quot;</span><span class="p">)</span>
+    <span class="n">proc</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Ouput:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>(cmd λ) python alpc\simple_alpc.py
+[SERV] PORT &lt;\RPC Control\PythonForWindowsPORT&gt; CREATED
+Client pid = 15044
+[SERV] Message type = 0x300a
+[SERV] Received data: &lt;&gt;
+[SERV] Connection request
+[CLIENT] Connected: &lt;windows.alpc.AlpcClient object at 0x0377FDB0&gt;
+
+[SERV] Received message: &lt;Hello world !&gt;
+[SERV] Message type = 0x3001
+[CLIENT] Response: &lt;REQUEST &#39;Hello world !&#39; DONE&gt;
+BYE
+</pre></div>
+</div>
+</div>
+<div class="section" id="advanced-alpc-communication">
+<span id="sample-advanced-alpc"></span><h3>16.11.2. advanced alpc communication<a class="headerlink" href="#advanced-alpc-communication" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">multiprocessing</span>
+
+<span class="kn">import</span> <span class="nn">windows.alpc</span>
+<span class="kn">from</span> <span class="nn">windows.generated_def</span> <span class="k">import</span> <span class="n">LPC_CONNECTION_REQUEST</span><span class="p">,</span> <span class="n">LPC_REQUEST</span>
+<span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
+
+<span class="kn">import</span> <span class="nn">ctypes</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
+
+<span class="n">PORT_NAME</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;\RPC Control\PythonForWindowsPORT_2&quot;</span>
+<span class="n">PORT_CONTEXT</span> <span class="o">=</span> <span class="mh">0x11223344</span>
+
+
+<span class="k">def</span> <span class="nf">full_alpc_server</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;server pid = </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">pid</span><span class="p">))</span>
+    <span class="n">server</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">alpc</span><span class="o">.</span><span class="n">AlpcServer</span><span class="p">(</span><span class="n">PORT_NAME</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[SERV] PORT &lt;</span><span class="si">{0}</span><span class="s2">&gt; CREATED&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">PORT_NAME</span><span class="p">))</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="n">server</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[SERV] == Message received ==&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">msg</span><span class="o">.</span><span class="n">type</span> <span class="o">&amp;</span> <span class="mh">0xfff</span> <span class="o">==</span> <span class="n">LPC_CONNECTION_REQUEST</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; * ALPC connection request: &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">data</span><span class="p">))</span>
+        <span class="n">msg</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;Connection message response&quot;</span>
+        <span class="n">server</span><span class="o">.</span><span class="n">accept_connection</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">port_context</span><span class="o">=</span><span class="n">PORT_CONTEXT</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Expected connection&quot;</span><span class="p">)</span>
+
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="n">server</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[SERV] == Message received ==&quot;</span><span class="p">)</span>
+        <span class="c1"># print(&quot;       * Data: {0}&quot;.format(msg.data))</span>
+        <span class="c1"># print(&quot;[SERV] RECV Message type = {0:#x}&quot;.format(msg.type))</span>
+        <span class="c1"># print(&quot;[SERV] RECV Message Valid ATTRS = {0:#x}&quot;.format(msg.attributes.ValidAttributes))</span>
+        <span class="c1"># print(&quot;[SERV] RECV Message ATTRS = {0:#x}&quot;.format(msg.attributes.AllocatedAttributes))</span>
+        <span class="k">if</span> <span class="n">msg</span><span class="o">.</span><span class="n">type</span> <span class="o">&amp;</span> <span class="mh">0xfff</span> <span class="o">==</span> <span class="n">LPC_REQUEST</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; * ALPC request: &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">data</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; * view_is_valid &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">view_is_valid</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">msg</span><span class="o">.</span><span class="n">view_is_valid</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   * message view attribute:&quot;</span><span class="p">)</span>
+                <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">print_ctypes_struct</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">view_attribute</span><span class="p">,</span> <span class="s2">&quot;       - VIEW&quot;</span><span class="p">,</span> <span class="n">hexa</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">view_data</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">read_string</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">view_attribute</span><span class="o">.</span><span class="n">ViewBase</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   * Reading view content: &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">view_data</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; * security_is_valid &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">security_is_valid</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; * handle_is_valid &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">handle_is_valid</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">msg</span><span class="o">.</span><span class="n">handle_is_valid</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">msg</span><span class="o">.</span><span class="n">handle_attribute</span><span class="o">.</span><span class="n">Handle</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   * message handle attribute:&quot;</span><span class="p">)</span>
+                    <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">print_ctypes_struct</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">handle_attribute</span><span class="p">,</span> <span class="s2">&quot;       - HANDLE&quot;</span><span class="p">,</span> <span class="n">hexa</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">msg</span><span class="o">.</span><span class="n">handle_attribute</span><span class="o">.</span><span class="n">ObjectType</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="n">f</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">create_file_from_handle</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">handle_attribute</span><span class="o">.</span><span class="n">Handle</span><span class="p">)</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   - File: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">f</span><span class="p">))</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   - content: &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()))</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  - unknow object type == </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">handle_attribute</span><span class="o">.</span><span class="n">ObjectType</span><span class="p">))</span>
+                <span class="n">msg</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">ValidAttributes</span> <span class="o">-=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_MESSAGE_HANDLE_ATTRIBUTE</span>
+
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; * context_is_valid &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">context_is_valid</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">msg</span><span class="o">.</span><span class="n">context_is_valid</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   * message context attribute:&quot;</span><span class="p">)</span>
+                <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">print_ctypes_struct</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">context_attribute</span><span class="p">,</span> <span class="s2">&quot;     - CTX&quot;</span><span class="p">,</span> <span class="n">hexa</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">msg</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">ValidAttributes</span> <span class="o">&amp;</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_MESSAGE_TOKEN_ATTRIBUTE</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; * message token attribute:&quot;</span><span class="p">)</span>
+                <span class="n">token_struct</span> <span class="o">=</span> <span class="n">msg</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">get_attribute</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_MESSAGE_TOKEN_ATTRIBUTE</span><span class="p">)</span>
+                <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">print_ctypes_struct</span><span class="p">(</span><span class="n">token_struct</span><span class="p">,</span> <span class="s2">&quot;   - TOKEN&quot;</span><span class="p">,</span> <span class="n">hexa</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="c1"># We can reply by to way:</span>
+            <span class="c1">#    - Send the same message with modified data</span>
+            <span class="c1">#    - Recreate a Message and copy the MessageId</span>
+            <span class="n">msg</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;REQUEST &#39;</span><span class="si">{0}</span><span class="s2">&#39; DONE&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+            <span class="n">server</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unexpected message type&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">send_message_with_handle</span><span class="p">(</span><span class="n">client</span><span class="p">):</span>
+    <span class="nb">print</span> <span class="s2">&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[Client] == Sending a message with a handle ==&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Craft a file with some data</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">()</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;Tempfile data &lt;3&quot;</span><span class="p">)</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="c1"># New message with a Handle</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">alpc</span><span class="o">.</span><span class="n">AlpcMessage</span><span class="p">()</span>
+    <span class="n">msg</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">ValidAttributes</span> <span class="o">|=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_MESSAGE_HANDLE_ATTRIBUTE</span>
+    <span class="n">msg</span><span class="o">.</span><span class="n">handle_attribute</span><span class="o">.</span><span class="n">Flags</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_HANDLEFLG_DUPLICATE_SAME_ACCESS</span>
+    <span class="n">msg</span><span class="o">.</span><span class="n">handle_attribute</span><span class="o">.</span><span class="n">Handle</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">get_handle_from_file</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="n">msg</span><span class="o">.</span><span class="n">handle_attribute</span><span class="o">.</span><span class="n">ObjectType</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">msg</span><span class="o">.</span><span class="n">handle_attribute</span><span class="o">.</span><span class="n">DesiredAccess</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">msg</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;some message with a file&quot;</span>
+    <span class="n">client</span><span class="o">.</span><span class="n">send_receive</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">send_message_with_view</span><span class="p">(</span><span class="n">client</span><span class="p">):</span>
+    <span class="nb">print</span> <span class="s2">&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[Client] == Sending a message with a view ==&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Create View</span>
+    <span class="n">section</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">create_port_section</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mh">0x4000</span><span class="p">)</span>
+    <span class="n">view</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">map_section</span><span class="p">(</span><span class="n">section</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mh">0x4000</span><span class="p">)</span>
+
+    <span class="c1"># New message with a View</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">alpc</span><span class="o">.</span><span class="n">AlpcMessage</span><span class="p">(</span><span class="mh">0x2000</span><span class="p">)</span>
+    <span class="n">msg</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">ValidAttributes</span> <span class="o">|=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_MESSAGE_VIEW_ATTRIBUTE</span>
+    <span class="n">msg</span><span class="o">.</span><span class="n">view_attribute</span><span class="o">.</span><span class="n">Flags</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">msg</span><span class="o">.</span><span class="n">view_attribute</span><span class="o">.</span><span class="n">ViewBase</span> <span class="o">=</span> <span class="n">view</span><span class="o">.</span><span class="n">ViewBase</span>
+    <span class="n">msg</span><span class="o">.</span><span class="n">view_attribute</span><span class="o">.</span><span class="n">SectionHandle</span> <span class="o">=</span> <span class="n">view</span><span class="o">.</span><span class="n">SectionHandle</span>
+    <span class="n">msg</span><span class="o">.</span><span class="n">view_attribute</span><span class="o">.</span><span class="n">ViewSize</span> <span class="o">=</span> <span class="mh">0x4000</span>
+    <span class="n">msg</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;some message with a view&quot;</span>
+    <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">write_memory</span><span class="p">(</span><span class="n">view</span><span class="o">.</span><span class="n">ViewBase</span><span class="p">,</span> <span class="s2">&quot;The content of the view :)</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">client</span><span class="o">.</span><span class="n">send_receive</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">alpc_client</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Client pid = </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">pid</span><span class="p">))</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">alpc</span><span class="o">.</span><span class="n">AlpcClient</span><span class="p">()</span>
+
+    <span class="c1"># You can create a non-connected AlpcClient and send a custom</span>
+    <span class="c1"># &#39;AlpcMessage&#39; for complexe alpc port connection.</span>
+    <span class="n">connect_message</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">alpc</span><span class="o">.</span><span class="n">AlpcMessage</span><span class="p">()</span>
+    <span class="n">connect_message</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;Connection request client message&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[CLIENT] == Connecting to port ==&quot;</span><span class="p">)</span>
+    <span class="n">connect_response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">connect_to_port</span><span class="p">(</span><span class="n">PORT_NAME</span><span class="p">,</span> <span class="n">connect_message</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[CLIENT] Connected with response: &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">connect_response</span><span class="o">.</span><span class="n">data</span><span class="p">))</span>
+
+    <span class="c1"># AlpcClient send/recv/send_receive methods accept both string or</span>
+    <span class="c1"># AlpcMessage for complexe message.</span>
+    <span class="nb">print</span><span class="s2">&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[CLIENT] == Sending a message ==&quot;</span><span class="p">)</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">alpc</span><span class="o">.</span><span class="n">AlpcMessage</span><span class="p">()</span>
+    <span class="n">msg</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;Complex Message 1&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; * Sending Message &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">data</span><span class="p">))</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">send_receive</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[CLIENT] Server response: &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[CLIENT] RESP Message Valid ATTRS = </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">valid_attributes</span><span class="p">))</span>
+
+    <span class="n">send_message_with_handle</span><span class="p">(</span><span class="n">client</span><span class="p">)</span>
+    <span class="n">send_message_with_view</span><span class="p">(</span><span class="n">client</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">proc</span> <span class="o">=</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">Process</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">full_alpc_server</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">())</span>
+    <span class="n">proc</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+    <span class="kn">import</span> <span class="nn">time</span><span class="p">;</span> <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">alpc_client</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;BYE&quot;</span><span class="p">)</span>
+    <span class="n">proc</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">cmd</span> <span class="n">λ</span><span class="p">)</span> <span class="n">python</span> <span class="n">alpc</span>\<span class="n">advanced_alpc</span><span class="o">.</span><span class="n">py</span>
+<span class="n">server</span> <span class="n">pid</span> <span class="o">=</span> <span class="mi">13000</span>
+<span class="p">[</span><span class="n">SERV</span><span class="p">]</span> <span class="n">PORT</span> <span class="o">&lt;</span>\<span class="n">RPC</span> <span class="n">Control</span>\<span class="n">PythonForWindowsPORT_2</span><span class="o">&gt;</span> <span class="n">CREATED</span>
+<span class="n">Client</span> <span class="n">pid</span> <span class="o">=</span> <span class="mi">2100</span>
+<span class="p">[</span><span class="n">CLIENT</span><span class="p">]</span> <span class="o">==</span> <span class="n">Connecting</span> <span class="n">to</span> <span class="n">port</span> <span class="o">==</span>
+<span class="p">[</span><span class="n">SERV</span><span class="p">]</span> <span class="o">==</span> <span class="n">Message</span> <span class="n">received</span> <span class="o">==</span>
+<span class="o">*</span> <span class="n">ALPC</span> <span class="n">connection</span> <span class="n">request</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">Connection</span> <span class="n">request</span> <span class="n">client</span> <span class="n">message</span><span class="o">&gt;</span>
+<span class="p">[</span><span class="n">CLIENT</span><span class="p">]</span> <span class="n">Connected</span> <span class="k">with</span> <span class="n">response</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">Connection</span> <span class="n">message</span> <span class="n">response</span><span class="o">&gt;</span>
+
+<span class="p">[</span><span class="n">CLIENT</span><span class="p">]</span> <span class="o">==</span> <span class="n">Sending</span> <span class="n">a</span> <span class="n">message</span> <span class="o">==</span>
+<span class="o">*</span> <span class="n">Sending</span> <span class="n">Message</span> <span class="o">&lt;</span><span class="n">Complex</span> <span class="n">Message</span> <span class="mi">1</span><span class="o">&gt;</span>
+<span class="p">[</span><span class="n">SERV</span><span class="p">]</span> <span class="o">==</span> <span class="n">Message</span> <span class="n">received</span> <span class="o">==</span>
+<span class="o">*</span> <span class="n">ALPC</span> <span class="n">request</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">Complex</span> <span class="n">Message</span> <span class="mi">1</span><span class="o">&gt;</span>
+<span class="o">*</span> <span class="n">view_is_valid</span> <span class="o">&lt;</span><span class="kc">False</span><span class="o">&gt;</span>
+<span class="o">*</span> <span class="n">security_is_valid</span> <span class="o">&lt;</span><span class="kc">False</span><span class="o">&gt;</span>
+<span class="o">*</span> <span class="n">handle_is_valid</span> <span class="o">&lt;</span><span class="kc">False</span><span class="o">&gt;</span>
+<span class="o">*</span> <span class="n">context_is_valid</span> <span class="o">&lt;</span><span class="kc">True</span><span class="o">&gt;</span>
+<span class="o">*</span> <span class="n">message</span> <span class="n">context</span> <span class="n">attribute</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">CTX</span><span class="o">.</span><span class="n">PortContext</span> <span class="o">-&gt;</span> <span class="mh">0x11223344</span>
+    <span class="o">-</span> <span class="n">CTX</span><span class="o">.</span><span class="n">MessageContext</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+    <span class="o">-</span> <span class="n">CTX</span><span class="o">.</span><span class="n">Sequence</span> <span class="o">-&gt;</span> <span class="mh">0x1</span><span class="n">L</span>
+    <span class="o">-</span> <span class="n">CTX</span><span class="o">.</span><span class="n">MessageId</span> <span class="o">-&gt;</span> <span class="mh">0x0</span><span class="n">L</span>
+    <span class="o">-</span> <span class="n">CTX</span><span class="o">.</span><span class="n">CallbackId</span> <span class="o">-&gt;</span> <span class="mh">0x0</span><span class="n">L</span>
+<span class="o">*</span> <span class="n">message</span> <span class="n">token</span> <span class="n">attribute</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">TOKEN</span><span class="o">.</span><span class="n">TokenId</span> <span class="o">-&gt;</span> <span class="mh">0x1e4ecacc</span><span class="n">L</span>
+<span class="o">-</span> <span class="n">TOKEN</span><span class="o">.</span><span class="n">AuthenticationId</span> <span class="o">-&gt;</span> <span class="mh">0x48989</span><span class="n">L</span>
+<span class="o">-</span> <span class="n">TOKEN</span><span class="o">.</span><span class="n">ModifiedId</span> <span class="o">-&gt;</span> <span class="mh">0x48995</span><span class="n">L</span>
+<span class="p">[</span><span class="n">CLIENT</span><span class="p">]</span> <span class="n">Server</span> <span class="n">response</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">REQUEST</span> <span class="s1">&#39;Complex Message 1&#39;</span> <span class="n">DONE</span><span class="o">&gt;</span>
+<span class="p">[</span><span class="n">CLIENT</span><span class="p">]</span> <span class="n">RESP</span> <span class="n">Message</span> <span class="n">Valid</span> <span class="n">ATTRS</span> <span class="o">=</span> <span class="p">[</span><span class="n">ALPC_MESSAGE_CONTEXT_ATTRIBUTE</span><span class="p">(</span><span class="mh">0x20000000</span><span class="n">L</span><span class="p">)]</span>
+
+<span class="p">[</span><span class="n">Client</span><span class="p">]</span> <span class="o">==</span> <span class="n">Sending</span> <span class="n">a</span> <span class="n">message</span> <span class="k">with</span> <span class="n">a</span> <span class="n">handle</span> <span class="o">==</span>
+<span class="p">[</span><span class="n">SERV</span><span class="p">]</span> <span class="o">==</span> <span class="n">Message</span> <span class="n">received</span> <span class="o">==</span>
+<span class="o">*</span> <span class="n">ALPC</span> <span class="n">request</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">some</span> <span class="n">message</span> <span class="k">with</span> <span class="n">a</span> <span class="n">file</span><span class="o">&gt;</span>
+<span class="o">*</span> <span class="n">view_is_valid</span> <span class="o">&lt;</span><span class="kc">False</span><span class="o">&gt;</span>
+<span class="o">*</span> <span class="n">security_is_valid</span> <span class="o">&lt;</span><span class="kc">False</span><span class="o">&gt;</span>
+<span class="o">*</span> <span class="n">handle_is_valid</span> <span class="o">&lt;</span><span class="kc">True</span><span class="o">&gt;</span>
+<span class="o">*</span> <span class="n">message</span> <span class="n">handle</span> <span class="n">attribute</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">HANDLE</span><span class="o">.</span><span class="n">Flags</span> <span class="o">-&gt;</span> <span class="mh">0x0</span><span class="n">L</span>
+    <span class="o">-</span> <span class="n">HANDLE</span><span class="o">.</span><span class="n">Handle</span> <span class="o">-&gt;</span> <span class="mh">0x260</span>
+    <span class="o">-</span> <span class="n">HANDLE</span><span class="o">.</span><span class="n">ObjectType</span> <span class="o">-&gt;</span> <span class="mh">0x1</span><span class="n">L</span>
+    <span class="o">-</span> <span class="n">HANDLE</span><span class="o">.</span><span class="n">DesiredAccess</span> <span class="o">-&gt;</span> <span class="mh">0x13019f</span><span class="n">L</span>
+<span class="o">-</span> <span class="n">File</span><span class="p">:</span> <span class="o">&lt;</span><span class="nb">open</span> <span class="n">file</span> <span class="s1">&#39;&lt;fdopen&gt;&#39;</span><span class="p">,</span> <span class="n">mode</span> <span class="s1">&#39;r&#39;</span> <span class="n">at</span> <span class="mh">0x02D529C0</span><span class="o">&gt;</span>
+<span class="o">-</span> <span class="n">content</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">Tempfile</span> <span class="n">data</span> <span class="o">&lt;</span><span class="mi">3</span><span class="o">&gt;</span>
+<span class="o">*</span> <span class="n">context_is_valid</span> <span class="o">&lt;</span><span class="kc">True</span><span class="o">&gt;</span>
+<span class="o">*</span> <span class="n">message</span> <span class="n">context</span> <span class="n">attribute</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">CTX</span><span class="o">.</span><span class="n">PortContext</span> <span class="o">-&gt;</span> <span class="mh">0x11223344</span>
+    <span class="o">-</span> <span class="n">CTX</span><span class="o">.</span><span class="n">MessageContext</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+    <span class="o">-</span> <span class="n">CTX</span><span class="o">.</span><span class="n">Sequence</span> <span class="o">-&gt;</span> <span class="mh">0x2</span><span class="n">L</span>
+    <span class="o">-</span> <span class="n">CTX</span><span class="o">.</span><span class="n">MessageId</span> <span class="o">-&gt;</span> <span class="mh">0x0</span><span class="n">L</span>
+    <span class="o">-</span> <span class="n">CTX</span><span class="o">.</span><span class="n">CallbackId</span> <span class="o">-&gt;</span> <span class="mh">0x0</span><span class="n">L</span>
+<span class="o">*</span> <span class="n">message</span> <span class="n">token</span> <span class="n">attribute</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">TOKEN</span><span class="o">.</span><span class="n">TokenId</span> <span class="o">-&gt;</span> <span class="mh">0x1e4ecacc</span><span class="n">L</span>
+<span class="o">-</span> <span class="n">TOKEN</span><span class="o">.</span><span class="n">AuthenticationId</span> <span class="o">-&gt;</span> <span class="mh">0x48989</span><span class="n">L</span>
+<span class="o">-</span> <span class="n">TOKEN</span><span class="o">.</span><span class="n">ModifiedId</span> <span class="o">-&gt;</span> <span class="mh">0x48995</span><span class="n">L</span>
+
+<span class="p">[</span><span class="n">Client</span><span class="p">]</span> <span class="o">==</span> <span class="n">Sending</span> <span class="n">a</span> <span class="n">message</span> <span class="k">with</span> <span class="n">a</span> <span class="n">view</span> <span class="o">==</span>
+<span class="p">[</span><span class="n">SERV</span><span class="p">]</span> <span class="o">==</span> <span class="n">Message</span> <span class="n">received</span> <span class="o">==</span>
+<span class="o">*</span> <span class="n">ALPC</span> <span class="n">request</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">some</span> <span class="n">message</span> <span class="k">with</span> <span class="n">a</span> <span class="n">view</span><span class="o">&gt;</span>
+<span class="o">*</span> <span class="n">view_is_valid</span> <span class="o">&lt;</span><span class="kc">True</span><span class="o">&gt;</span>
+<span class="o">*</span> <span class="n">message</span> <span class="n">view</span> <span class="n">attribute</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">VIEW</span><span class="o">.</span><span class="n">Flags</span> <span class="o">-&gt;</span> <span class="mh">0x0</span><span class="n">L</span>
+    <span class="o">-</span> <span class="n">VIEW</span><span class="o">.</span><span class="n">SectionHandle</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+    <span class="o">-</span> <span class="n">VIEW</span><span class="o">.</span><span class="n">ViewBase</span> <span class="o">-&gt;</span> <span class="mh">0x2770000</span>
+    <span class="o">-</span> <span class="n">VIEW</span><span class="o">.</span><span class="n">ViewSize</span> <span class="o">-&gt;</span> <span class="mh">0x4000</span>
+<span class="o">*</span> <span class="n">Reading</span> <span class="n">view</span> <span class="n">content</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">The</span> <span class="n">content</span> <span class="n">of</span> <span class="n">the</span> <span class="n">view</span> <span class="p">:)</span><span class="o">&gt;</span>
+<span class="o">*</span> <span class="n">security_is_valid</span> <span class="o">&lt;</span><span class="kc">False</span><span class="o">&gt;</span>
+<span class="o">*</span> <span class="n">handle_is_valid</span> <span class="o">&lt;</span><span class="kc">False</span><span class="o">&gt;</span>
+<span class="o">*</span> <span class="n">context_is_valid</span> <span class="o">&lt;</span><span class="kc">True</span><span class="o">&gt;</span>
+<span class="o">*</span> <span class="n">message</span> <span class="n">context</span> <span class="n">attribute</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">CTX</span><span class="o">.</span><span class="n">PortContext</span> <span class="o">-&gt;</span> <span class="mh">0x11223344</span>
+    <span class="o">-</span> <span class="n">CTX</span><span class="o">.</span><span class="n">MessageContext</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+    <span class="o">-</span> <span class="n">CTX</span><span class="o">.</span><span class="n">Sequence</span> <span class="o">-&gt;</span> <span class="mh">0x3</span><span class="n">L</span>
+    <span class="o">-</span> <span class="n">CTX</span><span class="o">.</span><span class="n">MessageId</span> <span class="o">-&gt;</span> <span class="mh">0x0</span><span class="n">L</span>
+    <span class="o">-</span> <span class="n">CTX</span><span class="o">.</span><span class="n">CallbackId</span> <span class="o">-&gt;</span> <span class="mh">0x0</span><span class="n">L</span>
+<span class="o">*</span> <span class="n">message</span> <span class="n">token</span> <span class="n">attribute</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">TOKEN</span><span class="o">.</span><span class="n">TokenId</span> <span class="o">-&gt;</span> <span class="mh">0x1e4ecacc</span><span class="n">L</span>
+<span class="o">-</span> <span class="n">TOKEN</span><span class="o">.</span><span class="n">AuthenticationId</span> <span class="o">-&gt;</span> <span class="mh">0x48989</span><span class="n">L</span>
+<span class="o">-</span> <span class="n">TOKEN</span><span class="o">.</span><span class="n">ModifiedId</span> <span class="o">-&gt;</span> <span class="mh">0x48995</span><span class="n">L</span>
+<span class="n">BYE</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="windows-rpc">
+<h2>16.12. <a class="reference internal" href="rpc.html#module-windows.rpc" title="windows.rpc"><code class="xref py py-mod docutils literal"><span class="pre">windows.rpc</span></code></a><a class="headerlink" href="#windows-rpc" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="manual-uac">
+<span id="sample-rpc-uac"></span><h3>16.12.1. Manual UAC<a class="headerlink" href="#manual-uac" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">import</span> <span class="nn">windows.rpc</span>
+<span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
+<span class="kn">from</span> <span class="nn">windows.rpc</span> <span class="k">import</span> <span class="n">ndr</span>
+
+<span class="c1"># NDR Descriptions</span>
+<span class="k">class</span> <span class="nc">NDRPoint</span><span class="p">(</span><span class="n">ndr</span><span class="o">.</span><span class="n">NdrStructure</span><span class="p">):</span>
+    <span class="n">MEMBERS</span> <span class="o">=</span> <span class="p">[</span><span class="n">ndr</span><span class="o">.</span><span class="n">NdrLong</span><span class="p">,</span> <span class="n">ndr</span><span class="o">.</span><span class="n">NdrLong</span><span class="p">]</span>
+
+<span class="k">class</span> <span class="nc">NdrUACStartupInfo</span><span class="p">(</span><span class="n">ndr</span><span class="o">.</span><span class="n">NdrStructure</span><span class="p">):</span>
+    <span class="n">MEMBERS</span> <span class="o">=</span> <span class="p">[</span><span class="n">ndr</span><span class="o">.</span><span class="n">NdrUniquePTR</span><span class="p">(</span><span class="n">ndr</span><span class="o">.</span><span class="n">NdrWString</span><span class="p">),</span>
+                <span class="n">ndr</span><span class="o">.</span><span class="n">NdrLong</span><span class="p">,</span>
+                <span class="n">ndr</span><span class="o">.</span><span class="n">NdrLong</span><span class="p">,</span>
+                <span class="n">ndr</span><span class="o">.</span><span class="n">NdrLong</span><span class="p">,</span>
+                <span class="n">ndr</span><span class="o">.</span><span class="n">NdrLong</span><span class="p">,</span>
+                <span class="n">ndr</span><span class="o">.</span><span class="n">NdrLong</span><span class="p">,</span>
+                <span class="n">ndr</span><span class="o">.</span><span class="n">NdrLong</span><span class="p">,</span>
+                <span class="n">ndr</span><span class="o">.</span><span class="n">NdrLong</span><span class="p">,</span>
+                <span class="n">ndr</span><span class="o">.</span><span class="n">NdrLong</span><span class="p">,</span>
+                <span class="n">ndr</span><span class="o">.</span><span class="n">NdrLong</span><span class="p">,</span>
+                <span class="n">NDRPoint</span><span class="p">]</span>
+
+<span class="k">class</span> <span class="nc">RAiLaunchAdminProcessParameters</span><span class="p">(</span><span class="n">ndr</span><span class="o">.</span><span class="n">NdrParameters</span><span class="p">):</span>
+    <span class="n">MEMBERS</span> <span class="o">=</span> <span class="p">[</span><span class="n">ndr</span><span class="o">.</span><span class="n">NdrUniquePTR</span><span class="p">(</span><span class="n">ndr</span><span class="o">.</span><span class="n">NdrWString</span><span class="p">),</span>
+                <span class="n">ndr</span><span class="o">.</span><span class="n">NdrUniquePTR</span><span class="p">(</span><span class="n">ndr</span><span class="o">.</span><span class="n">NdrWString</span><span class="p">),</span>
+                <span class="n">ndr</span><span class="o">.</span><span class="n">NdrLong</span><span class="p">,</span>
+                <span class="n">ndr</span><span class="o">.</span><span class="n">NdrLong</span><span class="p">,</span>
+                <span class="n">ndr</span><span class="o">.</span><span class="n">NdrWString</span><span class="p">,</span>
+                <span class="n">ndr</span><span class="o">.</span><span class="n">NdrWString</span><span class="p">,</span>
+                <span class="n">NdrUACStartupInfo</span><span class="p">,</span>
+                <span class="n">ndr</span><span class="o">.</span><span class="n">NdrLong</span><span class="p">,</span>
+                <span class="n">ndr</span><span class="o">.</span><span class="n">NdrLong</span><span class="p">]</span>
+
+<span class="k">class</span> <span class="nc">NdrProcessInformation</span><span class="p">(</span><span class="n">ndr</span><span class="o">.</span><span class="n">NdrParameters</span><span class="p">):</span>
+    <span class="n">MEMBERS</span> <span class="o">=</span> <span class="p">[</span><span class="n">ndr</span><span class="o">.</span><span class="n">NdrLong</span><span class="p">]</span> <span class="o">*</span> <span class="mi">4</span>
+
+<span class="c1"># Parsing args</span>
+<span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="vm">__file__</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--target&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">executable</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Executable to launch&#39;</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--cmdline&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;The commandline for the process&#39;</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--uacflags&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">default</span><span class="o">=</span><span class="mh">0x11</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--creationflags&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">default</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">CREATE_UNICODE_ENVIRONMENT</span><span class="p">)</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+
+<span class="c1"># Connecting to RPC Interface.</span>
+<span class="n">UAC_UIID</span> <span class="o">=</span> <span class="s2">&quot;201ef99a-7fa0-444c-9399-19ba84f12a1a&quot;</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">rpc</span><span class="o">.</span><span class="n">find_alpc_endpoint_and_connect</span><span class="p">(</span><span class="n">UAC_UIID</span><span class="p">)</span>
+<span class="n">iid</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="n">UAC_UIID</span><span class="p">)</span>
+
+<span class="c1"># Marshalling parameters.</span>
+<span class="n">parameters</span> <span class="o">=</span> <span class="n">RAiLaunchAdminProcessParameters</span><span class="o">.</span><span class="n">pack</span><span class="p">([</span>
+    <span class="n">params</span><span class="o">.</span><span class="n">target</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">,</span> <span class="c1"># Application Path</span>
+    <span class="n">params</span><span class="o">.</span><span class="n">cmdline</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">,</span> <span class="c1"># Commandline</span>
+    <span class="n">params</span><span class="o">.</span><span class="n">uacflags</span><span class="p">,</span> <span class="c1"># UAC-Request Flag</span>
+    <span class="n">params</span><span class="o">.</span><span class="n">creationflags</span><span class="p">,</span> <span class="c1"># dwCreationFlags</span>
+    <span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">,</span> <span class="c1"># StartDirectory</span>
+    <span class="s2">&quot;WinSta0</span><span class="se">\\</span><span class="s2">Default</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">,</span> <span class="c1"># Station</span>
+        <span class="c1"># Startup Info</span>
+        <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="c1"># Title</span>
+        <span class="mi">0</span><span class="p">,</span> <span class="c1"># dwX</span>
+        <span class="mi">0</span><span class="p">,</span> <span class="c1"># dwY</span>
+        <span class="mi">0</span><span class="p">,</span> <span class="c1"># dwXSize</span>
+        <span class="mi">0</span><span class="p">,</span> <span class="c1"># dwYSize</span>
+        <span class="mi">0</span><span class="p">,</span> <span class="c1"># dwXCountChars</span>
+        <span class="mi">0</span><span class="p">,</span> <span class="c1"># dwYCountChars</span>
+        <span class="mi">0</span><span class="p">,</span> <span class="c1"># dwFillAttribute</span>
+        <span class="mi">0</span><span class="p">,</span> <span class="c1"># dwFlags</span>
+        <span class="mi">5</span><span class="p">,</span> <span class="c1"># wShowWindow</span>
+        <span class="c1"># Point structure: Use MonitorFromPoint to setup StartupInfo.hStdOutput</span>
+        <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)),</span>
+    <span class="mi">0</span><span class="p">,</span> <span class="c1"># Window-Handle to know if UAC can steal focus</span>
+    <span class="mh">0xffffffff</span><span class="p">])</span> <span class="c1"># UAC Timeout</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">iid</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+<span class="n">stream</span> <span class="o">=</span> <span class="n">ndr</span><span class="o">.</span><span class="n">NdrStream</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+<span class="n">ph</span><span class="p">,</span> <span class="n">th</span><span class="p">,</span> <span class="n">pid</span><span class="p">,</span> <span class="n">tid</span> <span class="o">=</span> <span class="n">NdrProcessInformation</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
+<span class="n">return_value</span> <span class="o">=</span> <span class="n">ndr</span><span class="o">.</span><span class="n">NdrLong</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Return value = </span><span class="si">{0:#x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">return_value</span><span class="p">))</span>
+<span class="n">target</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">winobject</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">WinProcess</span><span class="p">(</span><span class="n">handle</span><span class="o">=</span><span class="n">ph</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Created process is </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">target</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot; * bitness is </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">bitness</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot; * integrity: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">token</span><span class="o">.</span><span class="n">integrity</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot; * elevated: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">token</span><span class="o">.</span><span class="n">is_elevated</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">cmd</span> <span class="n">λ</span><span class="p">)</span> <span class="n">python</span> <span class="n">rpc</span>\<span class="n">uac</span><span class="o">.</span><span class="n">py</span>
+<span class="n">Namespace</span><span class="p">(</span><span class="n">cmdline</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">creationflags</span><span class="o">=</span><span class="n">CREATE_UNICODE_ENVIRONMENT</span><span class="p">(</span><span class="mh">0x400</span><span class="n">L</span><span class="p">),</span> <span class="n">target</span><span class="o">=</span><span class="s1">&#39;C:</span><span class="se">\\</span><span class="s1">Python27</span><span class="se">\\</span><span class="s1">python.exe&#39;</span><span class="p">,</span> <span class="n">uacflags</span><span class="o">=</span><span class="mi">17</span><span class="p">)</span>
+<span class="c1"># UAC pop - asking to execute python.exe | Clicking Yes</span>
+<span class="n">Return</span> <span class="n">value</span> <span class="o">=</span> <span class="mh">0x6</span>
+<span class="n">Created</span> <span class="n">process</span> <span class="ow">is</span> <span class="o">&lt;</span><span class="n">WinProcess</span> <span class="s2">&quot;python.exe&quot;</span> <span class="n">pid</span> <span class="mi">19304</span> <span class="n">at</span> <span class="mh">0x455f7d0</span><span class="o">&gt;</span>
+<span class="o">*</span> <span class="n">bitness</span> <span class="ow">is</span> <span class="mi">32</span>
+<span class="o">*</span> <span class="n">integrity</span><span class="p">:</span> <span class="n">SECURITY_MANDATORY_HIGH_RID</span><span class="p">(</span><span class="mh">0x3000</span><span class="n">L</span><span class="p">)</span>
+<span class="o">*</span> <span class="n">elevated</span><span class="p">:</span> <span class="kc">True</span>
+
+<span class="c1"># The new python.exe in another window</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">token</span><span class="o">.</span><span class="n">integrity</span>
+<span class="n">SECURITY_MANDATORY_HIGH_RID</span><span class="p">(</span><span class="mh">0x3000</span><span class="n">L</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">token</span><span class="o">.</span><span class="n">is_elevated</span>
+<span class="kc">True</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="manual-lsarenumerateprivileges">
+<span id="sample-rpc-lsass"></span><h3>16.12.2. Manual <code class="docutils literal"><span class="pre">LsarEnumeratePrivileges</span></code><a class="headerlink" href="#manual-lsarenumerateprivileges" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">windows.rpc</span>
+<span class="kn">from</span> <span class="nn">windows.rpc</span> <span class="k">import</span> <span class="n">ndr</span>
+
+
+<span class="c1"># Ndr stuff</span>
+<span class="k">class</span> <span class="nc">NdrContext</span><span class="p">(</span><span class="n">ndr</span><span class="o">.</span><span class="n">NdrStructure</span><span class="p">):</span>
+    <span class="n">MEMBERS</span> <span class="o">=</span> <span class="p">[</span><span class="n">ndr</span><span class="o">.</span><span class="n">NdrLong</span><span class="p">,</span> <span class="n">ndr</span><span class="o">.</span><span class="n">NdrLong</span><span class="p">,</span> <span class="n">ndr</span><span class="o">.</span><span class="n">NdrLong</span><span class="p">,</span> <span class="n">ndr</span><span class="o">.</span><span class="n">NdrLong</span><span class="p">,</span> <span class="n">ndr</span><span class="o">.</span><span class="n">NdrLong</span><span class="p">]</span>
+
+
+<span class="k">class</span> <span class="nc">PLSAPR_OBJECT_ATTRIBUTES</span><span class="p">(</span><span class="n">ndr</span><span class="o">.</span><span class="n">NdrStructure</span><span class="p">):</span>
+    <span class="n">MEMBERS</span> <span class="o">=</span> <span class="p">[</span><span class="n">ndr</span><span class="o">.</span><span class="n">NdrLong</span><span class="p">,</span>
+                <span class="n">ndr</span><span class="o">.</span><span class="n">NdrUniquePTR</span><span class="p">(</span><span class="n">ndr</span><span class="o">.</span><span class="n">NdrWString</span><span class="p">),</span>
+                <span class="n">ndr</span><span class="o">.</span><span class="n">NdrUniquePTR</span><span class="p">(</span><span class="n">ndr</span><span class="o">.</span><span class="n">NdrLong</span><span class="p">),</span> <span class="c1"># We dont care if the subtype as we will pass None</span>
+                <span class="n">ndr</span><span class="o">.</span><span class="n">NdrLong</span><span class="p">,</span>
+                <span class="n">ndr</span><span class="o">.</span><span class="n">NdrUniquePTR</span><span class="p">(</span><span class="n">ndr</span><span class="o">.</span><span class="n">NdrLong</span><span class="p">),</span> <span class="c1"># We dont care if the subtype as we will pass None</span>
+                <span class="n">ndr</span><span class="o">.</span><span class="n">NdrUniquePTR</span><span class="p">(</span><span class="n">ndr</span><span class="o">.</span><span class="n">NdrLong</span><span class="p">)]</span> <span class="c1"># We dont care if the subtype as we will pass None</span>
+
+
+<span class="k">class</span> <span class="nc">LsarOpenPolicy2Parameter</span><span class="p">(</span><span class="n">ndr</span><span class="o">.</span><span class="n">NdrParameters</span><span class="p">):</span>
+    <span class="n">MEMBERS</span> <span class="o">=</span> <span class="p">[</span><span class="n">ndr</span><span class="o">.</span><span class="n">NdrUniquePTR</span><span class="p">(</span><span class="n">ndr</span><span class="o">.</span><span class="n">NdrWString</span><span class="p">),</span>
+                <span class="n">PLSAPR_OBJECT_ATTRIBUTES</span><span class="p">,</span>
+                <span class="n">ndr</span><span class="o">.</span><span class="n">NdrLong</span><span class="p">]</span>
+
+
+<span class="k">class</span> <span class="nc">LsarEnumeratePrivilegesParameter</span><span class="p">(</span><span class="n">ndr</span><span class="o">.</span><span class="n">NdrParameters</span><span class="p">):</span>
+    <span class="n">MEMBERS</span> <span class="o">=</span> <span class="p">[</span><span class="n">NdrContext</span><span class="p">,</span>
+                <span class="n">ndr</span><span class="o">.</span><span class="n">NdrLong</span><span class="p">,</span>
+                <span class="n">ndr</span><span class="o">.</span><span class="n">NdrLong</span><span class="p">]</span>
+
+
+<span class="k">class</span> <span class="nc">LSAPR_POLICY_PRIVILEGE_DEF</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">unpack</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">stream</span><span class="p">):</span>
+        <span class="n">size1</span> <span class="o">=</span> <span class="n">ndr</span><span class="o">.</span><span class="n">NdrShort</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
+        <span class="n">ptr</span> <span class="o">=</span> <span class="n">ndr</span><span class="o">.</span><span class="n">NdrShort</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
+        <span class="n">size2</span> <span class="o">=</span> <span class="n">ndr</span><span class="o">.</span><span class="n">NdrLong</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
+        <span class="n">luid</span> <span class="o">=</span> <span class="n">ndr</span><span class="o">.</span><span class="n">NdrHyper</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ptr</span><span class="p">,</span> <span class="n">luid</span>
+
+
+<span class="k">class</span> <span class="nc">LSAPR_PRIVILEGE_ENUM_BUFFER</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">unpack</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">stream</span><span class="p">):</span>
+        <span class="n">entries</span> <span class="o">=</span> <span class="n">ndr</span><span class="o">.</span><span class="n">NdrLong</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
+        <span class="n">array_size</span> <span class="o">=</span> <span class="n">ndr</span><span class="o">.</span><span class="n">NdrLong</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
+        <span class="n">array_ptr</span> <span class="o">=</span> <span class="n">ndr</span><span class="o">.</span><span class="n">NdrLong</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
+        <span class="c1"># Unpack pointed array</span>
+        <span class="n">array_size2</span> <span class="o">=</span> <span class="n">ndr</span><span class="o">.</span><span class="n">NdrLong</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">array_size</span> <span class="o">==</span> <span class="n">array_size2</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># unpack each elements LSAPR_POLICY_PRIVILEGE_DEF</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">array_size2</span><span class="p">):</span>
+            <span class="n">ptr</span><span class="p">,</span> <span class="n">luid</span> <span class="o">=</span> <span class="n">LSAPR_POLICY_PRIVILEGE_DEF</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">ptr</span><span class="p">:</span>
+                <span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">luid</span><span class="p">)</span>
+        <span class="c1"># unpack pointed strings</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">luid</span> <span class="ow">in</span> <span class="n">x</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">ndr</span><span class="o">.</span><span class="n">NdrWcharConformantVaryingArrays</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">luid</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+
+<span class="c1"># Actual code</span>
+
+<span class="c1">## LSASS alpc endpoints is fixed, no need for the epmapper</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">rpc</span><span class="o">.</span><span class="n">RPCClient</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\RPC Control\lsasspirpc&quot;</span><span class="p">)</span>
+<span class="c1">## Bind to the desired interface</span>
+<span class="n">iid</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s1">&#39;12345778-1234-abcd-ef00-0123456789ab&#39;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
+
+<span class="c1">## Craft parameters and call &#39;LsarOpenPolicy2&#39;</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">LsarOpenPolicy2Parameter</span><span class="o">.</span><span class="n">pack</span><span class="p">([</span><span class="kc">None</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="mh">0x20000000</span><span class="p">])</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">iid</span><span class="p">,</span> <span class="mi">44</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+<span class="c1">## Unpack the resulting handle</span>
+<span class="n">handle</span> <span class="o">=</span> <span class="n">NdrContext</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">ndr</span><span class="o">.</span><span class="n">NdrStream</span><span class="p">(</span><span class="n">res</span><span class="p">))</span>
+
+<span class="c1">## Craft parameters and call &#39;LsarEnumeratePrivileges&#39;</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">LsarEnumeratePrivilegesParameter</span><span class="o">.</span><span class="n">pack</span><span class="p">([</span><span class="n">handle</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">10000</span><span class="p">]);</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">iid</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+
+<span class="c1">## Unpack the resulting &#39;LSAPR_PRIVILEGE_ENUM_BUFFER&#39;</span>
+<span class="n">priviledges</span> <span class="o">=</span> <span class="n">LSAPR_PRIVILEGE_ENUM_BUFFER</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">ndr</span><span class="o">.</span><span class="n">NdrStream</span><span class="p">(</span><span class="n">res</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">priv</span> <span class="ow">in</span> <span class="n">priviledges</span><span class="p">:</span>
+    <span class="nb">print</span> <span class="n">priv</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">cmd</span> <span class="n">λ</span><span class="p">)</span> <span class="n">python</span> <span class="n">rpc</span>\<span class="n">lsass</span><span class="o">.</span><span class="n">py</span>
+<span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;SeCreateTokenPrivilege&#39;</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;SeAssignPrimaryTokenPrivilege&#39;</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;SeLockMemoryPrivilege&#39;</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;SeIncreaseQuotaPrivilege&#39;</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;SeMachineAccountPrivilege&#39;</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;SeTcbPrivilege&#39;</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;SeSecurityPrivilege&#39;</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;SeTakeOwnershipPrivilege&#39;</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;SeLoadDriverPrivilege&#39;</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;SeSystemProfilePrivilege&#39;</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;SeSystemtimePrivilege&#39;</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">13</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;SeProfileSingleProcessPrivilege&#39;</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;SeIncreaseBasePriorityPrivilege&#39;</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;SeCreatePagefilePrivilege&#39;</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;SeCreatePermanentPrivilege&#39;</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">17</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;SeBackupPrivilege&#39;</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;SeRestorePrivilege&#39;</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">19</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;SeShutdownPrivilege&#39;</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;SeDebugPrivilege&#39;</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">21</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;SeAuditPrivilege&#39;</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">22</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;SeSystemEnvironmentPrivilege&#39;</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">23</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;SeChangeNotifyPrivilege&#39;</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">24</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;SeRemoteShutdownPrivilege&#39;</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;SeUndockPrivilege&#39;</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">26</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;SeSyncAgentPrivilege&#39;</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">27</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;SeEnableDelegationPrivilege&#39;</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">28</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;SeManageVolumePrivilege&#39;</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">29</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;SeImpersonatePrivilege&#39;</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;SeCreateGlobalPrivilege&#39;</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">31</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;SeTrustedCredManAccessPrivilege&#39;</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;SeRelabelPrivilege&#39;</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">33</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;SeIncreaseWorkingSetPrivilege&#39;</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">34</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;SeTimeZonePrivilege&#39;</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">35</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;SeCreateSymbolicLinkPrivilege&#39;</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">36</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;SeDelegateSessionUserImpersonatePrivilege&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
 </div>
 
 
@@ -1889,42 +2488,53 @@ File embdeds 2 certificate(s):
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">13. Samples of code</a><ul>
-<li><a class="reference internal" href="#processes">13.1. Processes</a><ul>
-<li><a class="reference internal" href="#windows-current-process">13.1.1. <code class="docutils literal"><span class="pre">windows.current_process</span></code></a></li>
-<li><a class="reference internal" href="#remote-process-winprocess">13.1.2. Remote process : <code class="docutils literal"><span class="pre">WinProcess</span></code></a></li>
-<li><a class="reference internal" href="#peb-exploration">13.1.3. <code class="docutils literal"><span class="pre">PEB</span></code> exploration</a></li>
-<li><a class="reference internal" href="#iat-hooking">13.1.4. IAT hooking</a></li>
+<li><a class="reference internal" href="#">16. Samples of code</a><ul>
+<li><a class="reference internal" href="#processes">16.1. Processes</a><ul>
+<li><a class="reference internal" href="#windows-current-process">16.1.1. <code class="docutils literal"><span class="pre">windows.current_process</span></code></a></li>
+<li><a class="reference internal" href="#remote-process-winprocess">16.1.2. Remote process : <code class="docutils literal"><span class="pre">WinProcess</span></code></a></li>
+<li><a class="reference internal" href="#peb-exploration">16.1.3. <code class="docutils literal"><span class="pre">PEB</span></code> exploration</a></li>
+<li><a class="reference internal" href="#iat-hooking">16.1.4. IAT hooking</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#windows-system">13.2. <code class="docutils literal"><span class="pre">windows.system</span></code></a></li>
-<li><a class="reference internal" href="#network-socket-exploration">13.3. <code class="docutils literal"><span class="pre">Network</span></code> - socket exploration</a></li>
-<li><a class="reference internal" href="#registry">13.4. <code class="docutils literal"><span class="pre">Registry</span></code></a></li>
-<li><a class="reference internal" href="#windows-wintrust">13.5. <code class="docutils literal"><span class="pre">windows.wintrust</span></code></a></li>
-<li><a class="reference internal" href="#vectoredexception">13.6. <code class="docutils literal"><span class="pre">VectoredException()</span></code></a><ul>
-<li><a class="reference internal" href="#in-local-process">13.6.1. In local process</a></li>
-<li><a class="reference internal" href="#in-remote-process">13.6.2. In remote process</a></li>
+<li><a class="reference internal" href="#windows-system">16.2. <code class="docutils literal"><span class="pre">windows.system</span></code></a></li>
+<li><a class="reference internal" href="#network-socket-exploration">16.3. <code class="docutils literal"><span class="pre">Network</span></code> - socket exploration</a></li>
+<li><a class="reference internal" href="#registry">16.4. <code class="docutils literal"><span class="pre">Registry</span></code></a></li>
+<li><a class="reference internal" href="#windows-wintrust">16.5. <code class="docutils literal"><span class="pre">windows.wintrust</span></code></a></li>
+<li><a class="reference internal" href="#vectoredexception">16.6. <code class="docutils literal"><span class="pre">VectoredException()</span></code></a><ul>
+<li><a class="reference internal" href="#in-local-process">16.6.1. In local process</a></li>
+<li><a class="reference internal" href="#in-remote-process">16.6.2. In remote process</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#debugging">13.7. Debugging</a><ul>
-<li><a class="reference internal" href="#debugger">13.7.1. <code class="docutils literal"><span class="pre">Debugger</span></code></a><ul>
-<li><a class="reference internal" href="#single-stepping">13.7.1.1. Single stepping</a></li>
-<li><a class="reference internal" href="#windows-debug-functionbp">13.7.1.2. <code class="docutils literal"><span class="pre">windows.debug.FunctionBP</span></code></a></li>
-<li><a class="reference internal" href="#native-code-tester">13.7.1.3. Native code tester</a></li>
+<li><a class="reference internal" href="#debugging">16.7. Debugging</a><ul>
+<li><a class="reference internal" href="#debugger">16.7.1. <code class="docutils literal"><span class="pre">Debugger</span></code></a><ul>
+<li><a class="reference internal" href="#single-stepping">16.7.1.1. Single stepping</a></li>
+<li><a class="reference internal" href="#windows-debug-functionbp">16.7.1.2. <code class="docutils literal"><span class="pre">windows.debug.FunctionBP</span></code></a></li>
+<li><a class="reference internal" href="#debugger-attach">16.7.1.3. <code class="docutils literal"><span class="pre">Debugger.attach</span></code></a></li>
+<li><a class="reference internal" href="#native-code-tester">16.7.1.4. Native code tester</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#localdebugger">13.7.2. <code class="docutils literal"><span class="pre">LocalDebugger</span></code></a><ul>
-<li><a class="reference internal" href="#in-current-process">13.7.2.1. In current process</a></li>
-<li><a class="reference internal" href="#id1">13.7.2.2. In remote process</a></li>
+<li><a class="reference internal" href="#localdebugger">16.7.2. <code class="docutils literal"><span class="pre">LocalDebugger</span></code></a><ul>
+<li><a class="reference internal" href="#in-current-process">16.7.2.1. In current process</a></li>
+<li><a class="reference internal" href="#id1">16.7.2.2. In remote process</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#make-wmi-requests">13.8. Make WMI requests</a></li>
-<li><a class="reference internal" href="#using-com-inetfwpolicy2">13.9. using COM: <code class="docutils literal"><span class="pre">INetFwPolicy2</span></code></a></li>
-<li><a class="reference internal" href="#windows-crypto">13.10. <code class="docutils literal"><span class="pre">windows.crypto</span></code></a><ul>
-<li><a class="reference internal" href="#encryption-demo">13.10.1. Encryption demo</a></li>
-<li><a class="reference internal" href="#certificate-demo">13.10.2. Certificate demo</a></li>
+<li><a class="reference internal" href="#wmi-requests">16.8. WMI requests</a></li>
+<li><a class="reference internal" href="#using-com-inetfwpolicy2">16.9. using COM: <code class="docutils literal"><span class="pre">INetFwPolicy2</span></code></a></li>
+<li><a class="reference internal" href="#windows-crypto">16.10. <code class="docutils literal"><span class="pre">windows.crypto</span></code></a><ul>
+<li><a class="reference internal" href="#encryption-demo">16.10.1. Encryption demo</a></li>
+<li><a class="reference internal" href="#certificate-demo">16.10.2. Certificate demo</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#windows-alpc">16.11. <code class="docutils literal"><span class="pre">windows.alpc</span></code></a><ul>
+<li><a class="reference internal" href="#simple-alpc-communication">16.11.1. simple alpc communication</a></li>
+<li><a class="reference internal" href="#advanced-alpc-communication">16.11.2. advanced alpc communication</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#windows-rpc">16.12. <code class="docutils literal"><span class="pre">windows.rpc</span></code></a><ul>
+<li><a class="reference internal" href="#manual-uac">16.12.1. Manual UAC</a></li>
+<li><a class="reference internal" href="#manual-lsarenumerateprivileges">16.12.2. Manual <code class="docutils literal"><span class="pre">LsarEnumeratePrivileges</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -1933,7 +2543,7 @@ File embdeds 2 certificate(s):
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="internals.html"
-                        title="previous chapter">12. Internals</a></p>
+                        title="previous chapter">15. Internals</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -1965,9 +2575,9 @@ File embdeds 2 certificate(s):
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="internals.html" title="12. Internals"
+          <a href="internals.html" title="15. Internals"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.2 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.3 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

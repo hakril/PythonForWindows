@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Welcome to PythonForWindows’s documentation! &#8212; PythonForWindows 0.2 documentation</title>
+    <title>Welcome to PythonForWindows’s documentation! &#8212; PythonForWindows 0.3 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.2',
+        VERSION:     '0.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -41,7 +41,7 @@
         <li class="right" >
           <a href="windows.html" title="1. The windows module"
              accesskey="N">next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">PythonForWindows 0.2 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="#">PythonForWindows 0.3 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -110,29 +110,51 @@
 <li class="toctree-l2"><a class="reference internal" href="crypto.html#module-windows.crypto.generation">9.3. Generating componants</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="iat_hook.html">10. IAT hooking</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="iat_hook.html#putting-an-iat-hook">10.1. Putting an IAT hook</a></li>
-<li class="toctree-l2"><a class="reference internal" href="iat_hook.html#hook-protocol">10.2. Hook protocol</a></li>
-<li class="toctree-l2"><a class="reference internal" href="iat_hook.html#module-windows.hooks">10.3. <code class="docutils literal"><span class="pre">windows.hooks</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="alpc.html">10. <code class="docutils literal"><span class="pre">windows.alpc</span></code> &#8211; Advanced Local Procedure Call</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="alpc.html#alpc-message">10.1. ALPC Message</a></li>
+<li class="toctree-l2"><a class="reference internal" href="alpc.html#alpc-client">10.2. ALPC client</a></li>
+<li class="toctree-l2"><a class="reference internal" href="alpc.html#alpc-server">10.3. ALPC Server</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="wip.html">11. Early Work In Progress</a></li>
-<li class="toctree-l1"><a class="reference internal" href="internals.html">12. Internals</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="internals.html#module-windows.remotectypes">12.1. remotectypes.py</a></li>
-<li class="toctree-l2"><a class="reference internal" href="internals.html#module-windows.syswow64">12.2. syswow64.py &#8211; Crossing the heaven gate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rpc.html">11. <code class="docutils literal"><span class="pre">windows.rpc</span></code> &#8211; ALPC-based Windows RPC</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rpc.html#rpcclient">11.1. RPCClient</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rpc.html#epmapper">11.2. Epmapper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rpc.html#module-windows.rpc.ndr">11.3. Ndr</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="sample.html">13. Samples of code</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="sample.html#processes">13.1. Processes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sample.html#windows-system">13.2. <code class="docutils literal"><span class="pre">windows.system</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="sample.html#network-socket-exploration">13.3. <code class="docutils literal"><span class="pre">Network</span></code> - socket exploration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sample.html#registry">13.4. <code class="docutils literal"><span class="pre">Registry</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="sample.html#windows-wintrust">13.5. <code class="docutils literal"><span class="pre">windows.wintrust</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="sample.html#vectoredexception">13.6. <code class="docutils literal"><span class="pre">VectoredException()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="sample.html#debugging">13.7. Debugging</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sample.html#make-wmi-requests">13.8. Make WMI requests</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sample.html#using-com-inetfwpolicy2">13.9. using COM: <code class="docutils literal"><span class="pre">INetFwPolicy2</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="sample.html#windows-crypto">13.10. <code class="docutils literal"><span class="pre">windows.crypto</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated.html">12. <code class="docutils literal"><span class="pre">windows.generated_def</span></code> &#8211; generated Windows defines and structures</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="windef_generated.html">12.1. Windef</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ntstatus_generated.html">12.2. Ntstatus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="winstructs_generated.html">12.3. Winstructs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="winstructs_generated.html#winenums">12.4. WinEnums</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated.html#example">12.5. Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="iat_hook.html">13. IAT hooking</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="iat_hook.html#putting-an-iat-hook">13.1. Putting an IAT hook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="iat_hook.html#hook-protocol">13.2. Hook protocol</a></li>
+<li class="toctree-l2"><a class="reference internal" href="iat_hook.html#module-windows.hooks">13.3. <code class="docutils literal"><span class="pre">windows.hooks</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="wip.html">14. Early Work In Progress</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals.html">15. Internals</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="internals.html#module-windows.remotectypes">15.1. remotectypes.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="internals.html#module-windows.syswow64">15.2. syswow64.py &#8211; Crossing the heaven gate</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sample.html">16. Samples of code</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sample.html#processes">16.1. Processes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sample.html#windows-system">16.2. <code class="docutils literal"><span class="pre">windows.system</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sample.html#network-socket-exploration">16.3. <code class="docutils literal"><span class="pre">Network</span></code> - socket exploration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sample.html#registry">16.4. <code class="docutils literal"><span class="pre">Registry</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sample.html#windows-wintrust">16.5. <code class="docutils literal"><span class="pre">windows.wintrust</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sample.html#vectoredexception">16.6. <code class="docutils literal"><span class="pre">VectoredException()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sample.html#debugging">16.7. Debugging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sample.html#wmi-requests">16.8. WMI requests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sample.html#using-com-inetfwpolicy2">16.9. using COM: <code class="docutils literal"><span class="pre">INetFwPolicy2</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sample.html#windows-crypto">16.10. <code class="docutils literal"><span class="pre">windows.crypto</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sample.html#windows-alpc">16.11. <code class="docutils literal"><span class="pre">windows.alpc</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sample.html#windows-rpc">16.12. <code class="docutils literal"><span class="pre">windows.rpc</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -195,7 +217,7 @@
         <li class="right" >
           <a href="windows.html" title="1. The windows module"
              >next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">PythonForWindows 0.2 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="#">PythonForWindows 0.3 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

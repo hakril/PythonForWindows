@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>windows.winobject.handle &#8212; PythonForWindows 0.2 documentation</title>
+    <title>windows.winobject.handle &#8212; PythonForWindows 0.3 documentation</title>
     
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '0.2',
+        VERSION:     '0.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -48,7 +48,8 @@
           <div class="body" role="main">
             
   <h1>Source code for windows.winobject.handle</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">ctypes</span>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">ctypes</span>
 
 <span class="kn">import</span> <span class="nn">windows</span>
 <span class="kn">from</span> <span class="nn">windows</span> <span class="k">import</span> <span class="n">winproxy</span>
@@ -59,6 +60,7 @@
 <span class="k">class</span> <span class="nc">EPUBLIC_OBJECT_TYPE_INFORMATION</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
     <span class="n">_fields_</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">transform_ctypes_fields</span><span class="p">(</span><span class="n">PUBLIC_OBJECT_TYPE_INFORMATION</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;TypeName&quot;</span><span class="p">:</span> <span class="n">windows</span><span class="o">.</span><span class="n">winobject</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">WinUnicodeString</span><span class="p">})</span>
 
+<span class="n">current_process_pid</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">()</span>
 
 <div class="viewcode-block" id="Handle"><a class="viewcode-back" href="../../../handle.html#windows.winobject.handle.Handle">[docs]</a><span class="k">class</span> <span class="nc">Handle</span><span class="p">(</span><span class="n">SYSTEM_HANDLE</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A handle of the system&quot;&quot;&quot;</span>
@@ -67,8 +69,9 @@
         <span class="sd">&quot;&quot;&quot;The process possessing the handle</span>
 
 <span class="sd">        :type: :class:`WinProcess &lt;windows.winobject.process.WinProcess&gt;`&quot;&quot;&quot;</span>
-        <span class="s2">&quot;TODO: something smart ? :D&quot;</span>
-        <span class="k">return</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">windows</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">processes</span> <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">pid</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">dwProcessId</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1"># &quot;TODO: something smart ? :D&quot;</span>
+        <span class="c1"># return [p for p in windows.system.processes if p.pid == self.dwProcessId][0]</span>
+        <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">WinProcess</span><span class="p">(</span><span class="n">pid</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dwProcessId</span><span class="p">)</span>
 
     <span class="nd">@windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">fixedpropety</span>
     <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -104,7 +107,7 @@
             <span class="n">winproxy</span><span class="o">.</span><span class="n">NtQueryObject</span><span class="p">(</span><span class="n">lh</span><span class="p">,</span> <span class="n">ObjectTypeInformation</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">xxx</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">xxx</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">size_needed</span><span class="p">))</span>
         <span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">code</span> <span class="o">!=</span> <span class="n">STATUS_INFO_LENGTH_MISMATCH</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ERROR WITH </span><span class="si">{0:x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lh</span><span class="p">))</span>
+                <span class="c1"># print(&quot;ERROR WITH {0:x}&quot;.format(lh))</span>
                 <span class="k">raise</span>
             <span class="n">size</span> <span class="o">=</span> <span class="n">size_needed</span><span class="o">.</span><span class="n">value</span>
             <span class="n">buffer</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_buffer</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
@@ -132,11 +135,32 @@
         <span class="n">winproxy</span><span class="o">.</span><span class="n">DuplicateHandle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">wValue</span><span class="p">,</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">res</span><span class="p">),</span> <span class="n">dwOptions</span><span class="o">=</span><span class="n">DUPLICATE_SAME_ACCESS</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">res</span><span class="o">.</span><span class="n">value</span>
 
+    <span class="k">def</span> <span class="nf">description</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">stype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span>
+        <span class="n">descr_func</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;description_&quot;</span> <span class="o">+</span> <span class="n">stype</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">descr_func</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">descr_func</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">description_Process</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">proc</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">WinProcess</span><span class="p">(</span><span class="n">handle</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">wValue</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">proc</span><span class="p">)</span>
+        <span class="k">del</span> <span class="n">proc</span><span class="o">.</span><span class="n">_handle</span>
+        <span class="k">return</span> <span class="n">res</span>
+
+    <span class="k">def</span> <span class="nf">description_Thread</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">thread</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">WinThread</span><span class="p">(</span><span class="n">handle</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">wValue</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">thread</span><span class="p">)</span>
+        <span class="k">del</span> <span class="n">thread</span><span class="o">.</span><span class="n">_handle</span>
+        <span class="k">return</span> <span class="n">res</span>
+
+
+
     <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;&lt;</span><span class="si">{0}</span><span class="s2"> value=&lt;0x</span><span class="si">{1:x}</span><span class="s2">&gt; in process pid=</span><span class="si">{2}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">wValue</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dwProcessId</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dwProcessId</span> <span class="o">==</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">pid</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dwProcessId</span> <span class="o">==</span> <span class="n">current_process_pid</span><span class="p">:</span>
             <span class="k">return</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_local_handle&quot;</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CloseHandle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_local_handle</span><span class="p">)</span></div>
@@ -193,7 +217,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>windows.hooks &#8212; PythonForWindows 0.2 documentation</title>
+    <title>windows.hooks &#8212; PythonForWindows 0.3 documentation</title>
     
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.2',
+        VERSION:     '0.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">PythonForWindows 0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">PythonForWindows 0.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -51,6 +51,7 @@
 <span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">ctypes</span>
 
+<span class="kn">import</span> <span class="nn">windows</span>
 <span class="kn">import</span> <span class="nn">windows.utils</span> <span class="k">as</span> <span class="nn">utils</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">native_exec</span>
 <span class="kn">from</span> <span class="nn">.generated_def</span> <span class="k">import</span> <span class="n">winfuncs</span>
@@ -150,6 +151,27 @@
     <span class="c1"># Use this tricks to prevent garbage collection of hook ?</span>
     <span class="c1">#def __del__(self):</span>
     <span class="c1">#    pass</span>
+
+
+<span class="c1">## New simple hook API based on winproxy</span>
+<span class="k">def</span> <span class="nf">setup_hook</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">hook</span><span class="p">,</span> <span class="n">dll_to_hook</span><span class="p">):</span>
+    <span class="s2">&quot;TODO: Test and doc :D&quot;</span>
+    <span class="n">dll_name</span><span class="p">,</span> <span class="n">api_name</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">get_target</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+    <span class="n">prototype</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">prototype</span>
+    <span class="n">hook</span><span class="o">.</span><span class="n">_types_info</span> <span class="o">=</span> <span class="p">(</span><span class="n">prototype</span><span class="o">.</span><span class="n">_restype_</span><span class="p">,)</span> <span class="o">+</span> <span class="n">prototype</span><span class="o">.</span><span class="n">_argtypes_</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">dll_name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.dll&quot;</span><span class="p">):</span>
+        <span class="n">dll_name</span> <span class="o">+=</span> <span class="s2">&quot;.dll&quot;</span>
+    <span class="c1"># Get the peb of our process</span>
+    <span class="n">peb</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">peb</span>
+    <span class="c1"># Get the dll_to_hook</span>
+    <span class="n">module_to_hook</span> <span class="o">=</span> <span class="p">[</span><span class="n">m</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">peb</span><span class="o">.</span><span class="n">modules</span> <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="n">dll_to_hook</span><span class="o">.</span><span class="n">lower</span><span class="p">()][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="c1"># Get the iat entries for DLL dll_name</span>
+    <span class="n">adv_imports</span> <span class="o">=</span> <span class="n">module_to_hook</span><span class="o">.</span><span class="n">pe</span><span class="o">.</span><span class="n">imports</span><span class="p">[</span><span class="n">dll_name</span><span class="p">]</span>
+    <span class="c1"># Get RegOpenKeyExA iat entry</span>
+    <span class="n">iat</span> <span class="o">=</span> <span class="p">[</span><span class="n">n</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">adv_imports</span> <span class="k">if</span> <span class="n">n</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">api_name</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">iat</span><span class="o">.</span><span class="n">set_hook</span><span class="p">(</span><span class="n">hook</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">iat</span>
 </pre></div>
 
           </div>
@@ -180,7 +202,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">PythonForWindows 0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">PythonForWindows 0.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>

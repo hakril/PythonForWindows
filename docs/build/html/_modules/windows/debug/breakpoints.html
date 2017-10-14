@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>windows.debug.breakpoints &#8212; PythonForWindows 0.2 documentation</title>
+    <title>windows.debug.breakpoints &#8212; PythonForWindows 0.3 documentation</title>
     
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '0.2',
+        VERSION:     '0.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -120,14 +120,20 @@
     <span class="k">def</span> <span class="nf">get_arg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nb</span><span class="p">,</span> <span class="n">proc</span><span class="p">,</span> <span class="n">thread</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">nb</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">REG_ARGS</span><span class="p">):</span>
             <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">thread</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">REG_ARGS</span><span class="p">[</span><span class="n">nb</span><span class="p">])</span>
-        <span class="k">return</span> <span class="n">proc</span><span class="o">.</span><span class="n">read_dword</span><span class="p">(</span><span class="n">thread</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">sp</span> <span class="o">+</span> <span class="mi">8</span> <span class="o">+</span> <span class="p">(</span><span class="mi">8</span> <span class="o">*</span> <span class="n">nb</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">proc</span><span class="o">.</span><span class="n">read_qword</span><span class="p">(</span><span class="n">thread</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">sp</span> <span class="o">+</span> <span class="mi">8</span> <span class="o">+</span> <span class="p">(</span><span class="mi">8</span> <span class="o">*</span> <span class="n">nb</span><span class="p">))</span>
 
 <span class="c1">## Behaviour breakpoint !</span>
-<span class="k">class</span> <span class="nc">FunctionParamDumpBP</span><span class="p">(</span><span class="n">Breakpoint</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">addr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="c1"># class FunctionParamDumpBP(Breakpoint):</span>
+<span class="k">class</span> <span class="nc">FunctionParamDumpBPAbstract</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">TARGET</span>
+            <span class="k">except</span> <span class="ne">AttributeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="s2"> bp without a &lt;target&gt; must have a &lt;TARGET&gt; class attribute&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">addr</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">addr</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">!</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">target_dll</span><span class="p">,</span> <span class="n">target</span><span class="o">.</span><span class="n">target_func</span><span class="p">)</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">FunctionParamDumpBP</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">FunctionParamDumpBPAbstract</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="n">target</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">target_args</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">prototype</span><span class="o">.</span><span class="n">_argtypes_</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">target_params</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">params</span>
@@ -179,6 +185,11 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_arguments_32bits</span><span class="p">(</span><span class="n">cproc</span><span class="p">,</span> <span class="n">cthread</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_arguments_64bits</span><span class="p">(</span><span class="n">cproc</span><span class="p">,</span> <span class="n">cthread</span><span class="p">)</span>
 
+<span class="k">class</span> <span class="nc">FunctionParamDumpBP</span><span class="p">(</span><span class="n">FunctionParamDumpBPAbstract</span><span class="p">,</span> <span class="n">Breakpoint</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="k">class</span> <span class="nc">FunctionParamDumpHXBP</span><span class="p">(</span><span class="n">FunctionParamDumpBPAbstract</span><span class="p">,</span> <span class="n">HXBreakpoint</span><span class="p">):</span>
+    <span class="k">pass</span>
 
 <span class="k">class</span> <span class="nc">FunctionRetBP</span><span class="p">(</span><span class="n">Breakpoint</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">initial_breakpoint</span><span class="p">):</span>
@@ -208,6 +219,19 @@
 <span class="sd">        - Extract the arguments of the functions</span>
 <span class="sd">        - Break at the return of the function</span>
 <span class="sd">    &quot;&quot;&quot;</span></div>
+
+<span class="k">class</span> <span class="nc">PrintBP</span><span class="p">(</span><span class="n">Breakpoint</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="nb">format</span><span class="p">,</span> <span class="n">func</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">PrintBP</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">format</span> <span class="o">=</span> <span class="nb">format</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">func</span> <span class="o">=</span> <span class="n">func</span>
+
+    <span class="k">def</span> <span class="nf">trigger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbg</span><span class="p">,</span> <span class="n">exc</span><span class="p">):</span>
+        <span class="n">thread</span> <span class="o">=</span> <span class="n">dbg</span><span class="o">.</span><span class="n">current_thread</span>
+        <span class="n">format_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;dbg&quot;</span><span class="p">:</span> <span class="n">dbg</span><span class="p">,</span> <span class="s2">&quot;exc&quot;</span><span class="p">:</span> <span class="n">exc</span><span class="p">,</span> <span class="s2">&quot;proc&quot;</span><span class="p">:</span> <span class="n">dbg</span><span class="o">.</span><span class="n">current_process</span><span class="p">,</span> <span class="s2">&quot;thread&quot;</span><span class="p">:</span> <span class="n">thread</span><span class="p">,</span> <span class="s2">&quot;ctx&quot;</span><span class="p">:</span> <span class="n">thread</span><span class="o">.</span><span class="n">context</span><span class="p">}</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">:</span>
+            <span class="n">format_dict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">(</span><span class="o">**</span><span class="n">format_dict</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">format</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">format_dict</span><span class="p">))</span>
 </pre></div>
 
           </div>
@@ -238,7 +262,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>

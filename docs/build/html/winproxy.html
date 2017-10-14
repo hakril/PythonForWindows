@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>4. windows.winproxy – Windows API &#8212; PythonForWindows 0.2 documentation</title>
+    <title>4. windows.winproxy – Windows API &#8212; PythonForWindows 0.3 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.2',
+        VERSION:     '0.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -45,7 +45,7 @@
         <li class="right" >
           <a href="native_exec.html" title="3. windows.native_exec – Native Code Execution"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.2 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.3 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -151,6 +151,7 @@ It also heavily relies on <a class="reference external" href="https://docs.pytho
 <li>GetExitCodeProcess(hProcess, lpExitCode)</li>
 <li>GetExitCodeThread(hThread, lpExitCode)</li>
 <li>GetLastError()</li>
+<li>GetLengthSid(pSid)</li>
 <li>GetLogicalDriveStringsA(nBufferLength, lpBuffer)</li>
 <li>GetLogicalDriveStringsW(nBufferLength, lpBuffer)</li>
 <li>GetProcAddress(hModule, lpProcName)</li>
@@ -260,6 +261,13 @@ It also heavily relies on <a class="reference external" href="https://docs.pytho
 </pre></div>
 </div>
 </li>
+<li><p class="first">CertEnumCTLsInStore:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CertEnumCTLsInStore</span><span class="p">(</span><span class="n">hCertStore</span><span class="p">,</span> <span class="n">pPrevCtlContext</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
 <li><p class="first">CertEnumCertificateContextProperties:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CertEnumCertificateContextProperties</span><span class="p">(</span><span class="n">pCertContext</span><span class="p">,</span> <span class="n">dwPropId</span><span class="p">)</span>
 <span class="n">Errcheck</span><span class="p">:</span>
@@ -325,6 +333,13 @@ It also heavily relies on <a class="reference external" href="https://docs.pytho
 </li>
 <li><p class="first">CertStrToNameW:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CertStrToNameW</span><span class="p">(</span><span class="n">dwCertEncodingType</span><span class="p">,</span> <span class="n">pszX500</span><span class="p">,</span> <span class="n">dwStrType</span><span class="p">,</span> <span class="n">pvReserved</span><span class="p">,</span> <span class="n">pbEncoded</span><span class="p">,</span> <span class="n">pcbEncoded</span><span class="p">,</span> <span class="n">ppszError</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">CloseServiceHandle:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CloseServiceHandle</span><span class="p">(</span><span class="n">hSCObject</span><span class="p">)</span>
 <span class="n">Errcheck</span><span class="p">:</span>
    <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
 </pre></div>
@@ -414,6 +429,20 @@ It also heavily relies on <a class="reference external" href="https://docs.pytho
 </pre></div>
 </div>
 </li>
+<li><p class="first">CreateProcessAsUserA:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CreateProcessAsUserA</span><span class="p">(</span><span class="n">hToken</span><span class="p">,</span> <span class="n">lpApplicationName</span><span class="p">,</span> <span class="n">lpCommandLine</span><span class="p">,</span> <span class="n">lpProcessAttributes</span><span class="p">,</span> <span class="n">lpThreadAttributes</span><span class="p">,</span> <span class="n">bInheritHandles</span><span class="p">,</span> <span class="n">dwCreationFlags</span><span class="p">,</span> <span class="n">lpEnvironment</span><span class="p">,</span> <span class="n">lpCurrentDirectory</span><span class="p">,</span> <span class="n">lpStartupInfo</span><span class="p">,</span> <span class="n">lpProcessInformation</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">CreateProcessAsUserW:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CreateProcessAsUserW</span><span class="p">(</span><span class="n">hToken</span><span class="p">,</span> <span class="n">lpApplicationName</span><span class="p">,</span> <span class="n">lpCommandLine</span><span class="p">,</span> <span class="n">lpProcessAttributes</span><span class="p">,</span> <span class="n">lpThreadAttributes</span><span class="p">,</span> <span class="n">bInheritHandles</span><span class="p">,</span> <span class="n">dwCreationFlags</span><span class="p">,</span> <span class="n">lpEnvironment</span><span class="p">,</span> <span class="n">lpCurrentDirectory</span><span class="p">,</span> <span class="n">lpStartupInfo</span><span class="p">,</span> <span class="n">lpProcessInformation</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
 <li><p class="first">CreateProcessW:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CreateProcessW</span><span class="p">(</span><span class="n">lpApplicationName</span><span class="p">,</span> <span class="n">lpCommandLine</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lpProcessAttributes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lpThreadAttributes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bInheritHandles</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">dwCreationFlags</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">lpEnvironment</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lpCurrentDirectory</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lpStartupInfo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lpProcessInformation</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 <span class="n">Errcheck</span><span class="p">:</span>
@@ -437,6 +466,13 @@ It also heavily relies on <a class="reference external" href="https://docs.pytho
 </li>
 <li><p class="first">CreateToolhelp32Snapshot:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CreateToolhelp32Snapshot</span><span class="p">(</span><span class="n">dwFlags</span><span class="p">,</span> <span class="n">th32ProcessID</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">CreateWellKnownSid:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CreateWellKnownSid</span><span class="p">(</span><span class="n">WellKnownSidType</span><span class="p">,</span> <span class="n">DomainSid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">pSid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cbSid</span><span class="o">=</span><span class="n">NeededParameter</span><span class="p">)</span>
 <span class="n">Errcheck</span><span class="p">:</span>
    <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
 </pre></div>
@@ -505,6 +541,27 @@ It also heavily relies on <a class="reference external" href="https://docs.pytho
 </pre></div>
 </div>
 </li>
+<li><p class="first">CryptCATEnumerateAttr:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CryptCATEnumerateAttr</span><span class="p">(</span><span class="n">hCatalog</span><span class="p">,</span> <span class="n">pCatMember</span><span class="p">,</span> <span class="n">pPrevAttr</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="n">Nothing</span> <span class="n">special</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">CryptCATEnumerateCatAttr:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CryptCATEnumerateCatAttr</span><span class="p">(</span><span class="n">hCatalog</span><span class="p">,</span> <span class="n">pPrevAttr</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="n">Nothing</span> <span class="n">special</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">CryptCATEnumerateMember:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CryptCATEnumerateMember</span><span class="p">(</span><span class="n">hCatalog</span><span class="p">,</span> <span class="n">pPrevMember</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="n">Nothing</span> <span class="n">special</span>
+</pre></div>
+</div>
+</li>
 <li><p class="first">CryptDecodeObject:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CryptDecodeObject</span><span class="p">(</span><span class="n">dwCertEncodingType</span><span class="p">,</span> <span class="n">lpszStructType</span><span class="p">,</span> <span class="n">pbEncoded</span><span class="p">,</span> <span class="n">cbEncoded</span><span class="p">,</span> <span class="n">dwFlags</span><span class="p">,</span> <span class="n">pvStructInfo</span><span class="p">,</span> <span class="n">pcbStructInfo</span><span class="p">)</span>
 <span class="n">Errcheck</span><span class="p">:</span>
@@ -570,6 +627,20 @@ It also heavily relies on <a class="reference external" href="https://docs.pytho
 </li>
 <li><p class="first">CryptReleaseContext:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CryptReleaseContext</span><span class="p">(</span><span class="n">hProv</span><span class="p">,</span> <span class="n">dwFlags</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">CryptUIDlgViewContext:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CryptUIDlgViewContext</span><span class="p">(</span><span class="n">dwContextType</span><span class="p">,</span> <span class="n">pvContext</span><span class="p">,</span> <span class="n">hwnd</span><span class="p">,</span> <span class="n">pwszTitle</span><span class="p">,</span> <span class="n">dwFlags</span><span class="p">,</span> <span class="n">pvReserved</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">DeleteProcThreadAttributeList:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">DeleteProcThreadAttributeList</span><span class="p">(</span><span class="n">lpAttributeList</span><span class="p">)</span>
 <span class="n">Errcheck</span><span class="p">:</span>
    <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
 </pre></div>
@@ -858,6 +929,25 @@ It also heavily relies on <a class="reference external" href="https://docs.pytho
 </pre></div>
 </div>
 </li>
+<li><p class="first">GetWindowsDirectoryA:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">GetWindowsDirectoryA</span><span class="p">(</span><span class="n">lpBuffer</span><span class="p">,</span> <span class="n">uSize</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">GetWindowsDirectoryW:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">GetWindowsDirectoryW</span><span class="p">(</span><span class="n">lpBuffer</span><span class="p">,</span> <span class="n">uSize</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">InitializeProcThreadAttributeList:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">InitializeProcThreadAttributeList</span><span class="p">(</span><span class="n">lpAttributeList</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dwAttributeCount</span><span class="o">=</span><span class="n">NeededParameter</span><span class="p">,</span> <span class="n">dwFlags</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">lpSize</span><span class="o">=</span><span class="n">NeededParameter</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
 <li><p class="first">LdrLoadDll:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">LdrLoadDll</span><span class="p">(</span><span class="n">PathToFile</span><span class="p">,</span> <span class="n">Flags</span><span class="p">,</span> <span class="n">ModuleFileName</span><span class="p">,</span> <span class="n">ModuleHandle</span><span class="p">)</span>
 </pre></div>
@@ -872,6 +962,20 @@ It also heavily relies on <a class="reference external" href="https://docs.pytho
 </li>
 <li><p class="first">LookupAccountSidW:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">LookupAccountSidW</span><span class="p">(</span><span class="n">lpSystemName</span><span class="p">,</span> <span class="n">lpSid</span><span class="p">,</span> <span class="n">lpName</span><span class="p">,</span> <span class="n">cchName</span><span class="p">,</span> <span class="n">lpReferencedDomainName</span><span class="p">,</span> <span class="n">cchReferencedDomainName</span><span class="p">,</span> <span class="n">peUse</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">LookupPrivilegeNameA:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">LookupPrivilegeNameA</span><span class="p">(</span><span class="n">lpSystemName</span><span class="p">,</span> <span class="n">lpLuid</span><span class="p">,</span> <span class="n">lpName</span><span class="p">,</span> <span class="n">cchName</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">LookupPrivilegeNameW:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">LookupPrivilegeNameW</span><span class="p">(</span><span class="n">lpSystemName</span><span class="p">,</span> <span class="n">lpLuid</span><span class="p">,</span> <span class="n">lpName</span><span class="p">,</span> <span class="n">cchName</span><span class="p">)</span>
 <span class="n">Errcheck</span><span class="p">:</span>
    <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
 </pre></div>
@@ -898,6 +1002,20 @@ It also heavily relies on <a class="reference external" href="https://docs.pytho
 </pre></div>
 </div>
 </li>
+<li><p class="first">MessageBoxA:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">MessageBoxA</span><span class="p">(</span><span class="n">hWnd</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">lpText</span><span class="o">=</span><span class="n">NeededParameter</span><span class="p">,</span> <span class="n">lpCaption</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">uType</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">MessageBoxW:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">MessageBoxW</span><span class="p">(</span><span class="n">hWnd</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">lpText</span><span class="o">=</span><span class="n">NeededParameter</span><span class="p">,</span> <span class="n">lpCaption</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">uType</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
 <li><p class="first">NtAlpcAcceptConnectPort:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">NtAlpcAcceptConnectPort</span><span class="p">(</span><span class="n">PortHandle</span><span class="p">,</span> <span class="n">ConnectionPortHandle</span><span class="p">,</span> <span class="n">Flags</span><span class="p">,</span> <span class="n">ObjectAttributes</span><span class="p">,</span> <span class="n">PortAttributes</span><span class="p">,</span> <span class="n">PortContext</span><span class="p">,</span> <span class="n">ConnectionRequest</span><span class="p">,</span> <span class="n">ConnectionMessageAttributes</span><span class="p">,</span> <span class="n">AcceptConnection</span><span class="p">)</span>
 </pre></div>
@@ -918,6 +1036,36 @@ It also heavily relies on <a class="reference external" href="https://docs.pytho
 </pre></div>
 </div>
 </li>
+<li><p class="first">NtAlpcCreatePortSection:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">NtAlpcCreatePortSection</span><span class="p">(</span><span class="n">PortHandle</span><span class="p">,</span> <span class="n">Flags</span><span class="p">,</span> <span class="n">SectionHandle</span><span class="p">,</span> <span class="n">SectionSize</span><span class="p">,</span> <span class="n">AlpcSectionHandle</span><span class="p">,</span> <span class="n">ActualSectionSize</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">NtAlpcCreateSectionView:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">NtAlpcCreateSectionView</span><span class="p">(</span><span class="n">PortHandle</span><span class="p">,</span> <span class="n">Flags</span><span class="p">,</span> <span class="n">ViewAttributes</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">NtAlpcDeletePortSection:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">NtAlpcDeletePortSection</span><span class="p">(</span><span class="n">PortHandle</span><span class="p">,</span> <span class="n">Flags</span><span class="p">,</span> <span class="n">SectionHandle</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">NtAlpcDeleteSectionView:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">NtAlpcDeleteSectionView</span><span class="p">(</span><span class="n">PortHandle</span><span class="p">,</span> <span class="n">Flags</span><span class="p">,</span> <span class="n">ViewBase</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">NtAlpcDisconnectPort:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">NtAlpcDisconnectPort</span><span class="p">(</span><span class="n">PortHandle</span><span class="p">,</span> <span class="n">Flags</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">NtAlpcQueryInformation:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">NtAlpcQueryInformation</span><span class="p">(</span><span class="n">PortHandle</span><span class="p">,</span> <span class="n">PortInformationClass</span><span class="p">,</span> <span class="n">PortInformation</span><span class="p">,</span> <span class="n">Length</span><span class="p">,</span> <span class="n">ReturnLength</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
 <li><p class="first">NtAlpcSendWaitReceivePort:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">NtAlpcSendWaitReceivePort</span><span class="p">(</span><span class="n">PortHandle</span><span class="p">,</span> <span class="n">Flags</span><span class="p">,</span> <span class="n">SendMessage</span><span class="p">,</span> <span class="n">SendMessageAttributes</span><span class="p">,</span> <span class="n">ReceiveMessage</span><span class="p">,</span> <span class="n">BufferLength</span><span class="p">,</span> <span class="n">ReceiveMessageAttributes</span><span class="p">,</span> <span class="n">Timeout</span><span class="p">)</span>
 </pre></div>
@@ -925,6 +1073,11 @@ It also heavily relies on <a class="reference external" href="https://docs.pytho
 </li>
 <li><p class="first">NtCreateFile:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">NtCreateFile</span><span class="p">(</span><span class="n">FileHandle</span><span class="p">,</span> <span class="n">DesiredAccess</span><span class="p">,</span> <span class="n">ObjectAttributes</span><span class="p">,</span> <span class="n">IoStatusBlock</span><span class="p">,</span> <span class="n">AllocationSize</span><span class="p">,</span> <span class="n">FileAttributes</span><span class="p">,</span> <span class="n">ShareAccess</span><span class="p">,</span> <span class="n">CreateDisposition</span><span class="p">,</span> <span class="n">CreateOptions</span><span class="p">,</span> <span class="n">EaBuffer</span><span class="p">,</span> <span class="n">EaLength</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">NtCreateSection:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">NtCreateSection</span><span class="p">(</span><span class="n">SectionHandle</span><span class="p">,</span> <span class="n">DesiredAccess</span><span class="p">,</span> <span class="n">ObjectAttributes</span><span class="p">,</span> <span class="n">MaximumSize</span><span class="p">,</span> <span class="n">SectionPageProtection</span><span class="p">,</span> <span class="n">AllocationAttributes</span><span class="p">,</span> <span class="n">FileHandle</span><span class="p">)</span>
 </pre></div>
 </div>
 </li>
@@ -938,6 +1091,11 @@ It also heavily relies on <a class="reference external" href="https://docs.pytho
 </pre></div>
 </div>
 </li>
+<li><p class="first">NtMapViewOfSection:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">NtMapViewOfSection</span><span class="p">(</span><span class="n">SectionHandle</span><span class="p">,</span> <span class="n">ProcessHandle</span><span class="p">,</span> <span class="n">BaseAddress</span><span class="p">,</span> <span class="n">ZeroBits</span><span class="p">,</span> <span class="n">CommitSize</span><span class="p">,</span> <span class="n">SectionOffset</span><span class="p">,</span> <span class="n">ViewSize</span><span class="p">,</span> <span class="n">InheritDisposition</span><span class="p">,</span> <span class="n">AllocationType</span><span class="p">,</span> <span class="n">Win32Protect</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
 <li><p class="first">NtOpenDirectoryObject:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">NtOpenDirectoryObject</span><span class="p">(</span><span class="n">DirectoryHandle</span><span class="p">,</span> <span class="n">DesiredAccess</span><span class="p">,</span> <span class="n">ObjectAttributes</span><span class="p">)</span>
 </pre></div>
@@ -945,6 +1103,11 @@ It also heavily relies on <a class="reference external" href="https://docs.pytho
 </li>
 <li><p class="first">NtOpenEvent:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">NtOpenEvent</span><span class="p">(</span><span class="n">EventHandle</span><span class="p">,</span> <span class="n">DesiredAccess</span><span class="p">,</span> <span class="n">ObjectAttributes</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">NtOpenSection:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">NtOpenSection</span><span class="p">(</span><span class="n">SectionHandle</span><span class="p">,</span> <span class="n">DesiredAccess</span><span class="p">,</span> <span class="n">ObjectAttributes</span><span class="p">)</span>
 </pre></div>
 </div>
 </li>
@@ -993,8 +1156,18 @@ It also heavily relies on <a class="reference external" href="https://docs.pytho
 </pre></div>
 </div>
 </li>
+<li><p class="first">NtReadVirtualMemory:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">NtReadVirtualMemory</span><span class="p">(</span><span class="n">hProcess</span><span class="p">,</span> <span class="n">lpBaseAddress</span><span class="p">,</span> <span class="n">lpBuffer</span><span class="p">,</span> <span class="n">nSize</span><span class="p">,</span> <span class="n">lpNumberOfBytesRead</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
 <li><p class="first">NtSetContextThread:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">NtSetContextThread</span><span class="p">(</span><span class="n">hThread</span><span class="p">,</span> <span class="n">lpContext</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">NtUnmapViewOfSection:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">NtUnmapViewOfSection</span><span class="p">(</span><span class="n">ProcessHandle</span><span class="p">,</span> <span class="n">BaseAddress</span><span class="p">)</span>
 </pre></div>
 </div>
 </li>
@@ -1046,6 +1219,20 @@ It also heavily relies on <a class="reference external" href="https://docs.pytho
 </li>
 <li><p class="first">OpenSCManagerW:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">OpenSCManagerW</span><span class="p">(</span><span class="n">lpMachineName</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lpDatabaseName</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dwDesiredAccess</span><span class="o">=</span><span class="n">SC_MANAGER_ALL_ACCESS</span><span class="p">(</span><span class="mh">0xf003f</span><span class="n">L</span><span class="p">))</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">OpenServiceA:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">OpenServiceA</span><span class="p">(</span><span class="n">hSCManager</span><span class="p">,</span> <span class="n">lpServiceName</span><span class="p">,</span> <span class="n">dwDesiredAccess</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">OpenServiceW:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">OpenServiceW</span><span class="p">(</span><span class="n">hSCManager</span><span class="p">,</span> <span class="n">lpServiceName</span><span class="p">,</span> <span class="n">dwDesiredAccess</span><span class="p">)</span>
 <span class="n">Errcheck</span><span class="p">:</span>
    <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
 </pre></div>
@@ -1204,6 +1391,13 @@ It also heavily relies on <a class="reference external" href="https://docs.pytho
 </pre></div>
 </div>
 </li>
+<li><p class="first">RtlGetUnloadEventTraceEx:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">RtlGetUnloadEventTraceEx</span><span class="p">(</span><span class="n">ElementSize</span><span class="p">,</span> <span class="n">ElementCount</span><span class="p">,</span> <span class="n">EventTrace</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="n">Nothing</span> <span class="n">special</span>
+</pre></div>
+</div>
+</li>
 <li><p class="first">SetConsoleCtrlHandler:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">SetConsoleCtrlHandler</span><span class="p">(</span><span class="n">HandlerRoutine</span><span class="p">,</span> <span class="n">Add</span><span class="p">)</span>
 <span class="n">Errcheck</span><span class="p">:</span>
@@ -1247,6 +1441,20 @@ It also heavily relies on <a class="reference external" href="https://docs.pytho
 </pre></div>
 </div>
 </li>
+<li><p class="first">StartServiceA:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">StartServiceA</span><span class="p">(</span><span class="n">hService</span><span class="p">,</span> <span class="n">dwNumServiceArgs</span><span class="p">,</span> <span class="n">lpServiceArgVectors</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">StartServiceW:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">StartServiceW</span><span class="p">(</span><span class="n">hService</span><span class="p">,</span> <span class="n">dwNumServiceArgs</span><span class="p">,</span> <span class="n">lpServiceArgVectors</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
 <li><p class="first">Thread32First:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Thread32First</span><span class="p">(</span><span class="n">hSnapshot</span><span class="p">,</span> <span class="n">lpte</span><span class="p">)</span>
 <span class="n">Set</span> <span class="n">byref</span><span class="p">(</span><span class="n">lpte</span><span class="p">)</span> <span class="k">if</span> <span class="n">needed</span>
@@ -1260,6 +1468,20 @@ It also heavily relies on <a class="reference external" href="https://docs.pytho
 <span class="n">Set</span> <span class="n">byref</span><span class="p">(</span><span class="n">lpte</span><span class="p">)</span> <span class="k">if</span> <span class="n">needed</span>
 <span class="n">Errcheck</span><span class="p">:</span>
    <span class="n">Nothing</span> <span class="n">special</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">TpCallbackSendAlpcMessageOnCompletion:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">TpCallbackSendAlpcMessageOnCompletion</span><span class="p">(</span><span class="n">TpHandle</span><span class="p">,</span> <span class="n">PortHandle</span><span class="p">,</span> <span class="n">Flags</span><span class="p">,</span> <span class="n">SendMessage</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="n">NOT</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">UpdateProcThreadAttribute:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">UpdateProcThreadAttribute</span><span class="p">(</span><span class="n">lpAttributeList</span><span class="p">,</span> <span class="n">dwFlags</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">Attribute</span><span class="o">=</span><span class="n">NeededParameter</span><span class="p">,</span> <span class="n">lpValue</span><span class="o">=</span><span class="n">NeededParameter</span><span class="p">,</span> <span class="n">cbSize</span><span class="o">=</span><span class="n">NeededParameter</span><span class="p">,</span> <span class="n">lpPreviousValue</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lpReturnSize</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">Errcheck</span><span class="p">:</span>
+   <span class="k">raise</span> <span class="n">Kernel32Error</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="mi">0</span>
 </pre></div>
 </div>
 </li>
@@ -1430,7 +1652,7 @@ It also heavily relies on <a class="reference external" href="https://docs.pytho
         <li class="right" >
           <a href="native_exec.html" title="3. windows.native_exec – Native Code Execution"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.2 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.3 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>7. windows.debug – Debugging &#8212; PythonForWindows 0.2 documentation</title>
+    <title>7. windows.debug – Debugging &#8212; PythonForWindows 0.3 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.2',
+        VERSION:     '0.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -45,7 +45,7 @@
         <li class="right" >
           <a href="wintrust.html" title="6. windows.wintrust – Checking signature"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.2 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.3 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -93,6 +93,10 @@ The <a class="reference internal" href="#windows.debug.Debugger" title="windows.
 </tr>
 </tbody>
 </table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">see <a class="reference internal" href="sample.html#sample-debugger-attach"><span class="std std-ref">Debugger.attach sample</span></a></p>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -233,49 +237,113 @@ and <code class="docutils literal"><span class="pre">DBG_EXCEPTION_NOT_HANDLED</
 <dl class="method">
 <dt id="windows.debug.Debugger.on_create_process">
 <code class="descname">on_create_process</code><span class="sig-paren">(</span><em>create_process</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/debugger.html#Debugger.on_create_process"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.Debugger.on_create_process" title="Permalink to this definition">¶</a></dt>
-<dd><p>Called on create_process event (for param type see <a class="reference external" href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms679286(v=vs.85).aspx">https://msdn.microsoft.com/en-us/library/windows/desktop/ms679286(v=vs.85).aspx</a>)</p>
+<dd><p>Called on create_process event</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>create_process</strong> (<a class="reference internal" href="winstructs_generated.html#windows.generated_def.CREATE_PROCESS_DEBUG_INFO" title="windows.generated_def.CREATE_PROCESS_DEBUG_INFO"><em>CREATE_PROCESS_DEBUG_INFO</em></a>) &#8211; </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="windows.debug.Debugger.on_exit_process">
 <code class="descname">on_exit_process</code><span class="sig-paren">(</span><em>exit_process</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/debugger.html#Debugger.on_exit_process"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.Debugger.on_exit_process" title="Permalink to this definition">¶</a></dt>
-<dd><p>Called on exit_process event (for param type see <a class="reference external" href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms679334(v=vs.85).aspx">https://msdn.microsoft.com/en-us/library/windows/desktop/ms679334(v=vs.85).aspx</a>)</p>
+<dd><p>Called on exit_process event</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>exit_process</strong> (<a class="reference internal" href="winstructs_generated.html#windows.generated_def.EXIT_PROCESS_DEBUG_INFO" title="windows.generated_def.EXIT_PROCESS_DEBUG_INFO"><em>EXIT_PROCESS_DEBUG_INFO</em></a>) &#8211; </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="windows.debug.Debugger.on_create_thread">
 <code class="descname">on_create_thread</code><span class="sig-paren">(</span><em>create_thread</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/debugger.html#Debugger.on_create_thread"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.Debugger.on_create_thread" title="Permalink to this definition">¶</a></dt>
-<dd><p>Called on create_thread event (for param type see <a class="reference external" href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms679287(v=vs.85).aspx">https://msdn.microsoft.com/en-us/library/windows/desktop/ms679287(v=vs.85).aspx</a>)</p>
+<dd><p>Called on create_thread event</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>create_thread</strong> (<a class="reference internal" href="winstructs_generated.html#windows.generated_def.CREATE_THREAD_DEBUG_INFO" title="windows.generated_def.CREATE_THREAD_DEBUG_INFO"><em>CREATE_THREAD_DEBUG_INFO</em></a>) &#8211; </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="windows.debug.Debugger.on_exit_thread">
 <code class="descname">on_exit_thread</code><span class="sig-paren">(</span><em>exit_thread</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/debugger.html#Debugger.on_exit_thread"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.Debugger.on_exit_thread" title="Permalink to this definition">¶</a></dt>
-<dd><p>Called on exit_thread event (for param type see <a class="reference external" href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms679335(v=vs.85).aspx">https://msdn.microsoft.com/en-us/library/windows/desktop/ms679335(v=vs.85).aspx</a>)</p>
+<dd><p>Called on exit_thread event</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>exit_thread</strong> (<a class="reference internal" href="winstructs_generated.html#windows.generated_def.EXIT_THREAD_DEBUG_INFO" title="windows.generated_def.EXIT_THREAD_DEBUG_INFO"><em>EXIT_THREAD_DEBUG_INFO</em></a>) &#8211; </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="windows.debug.Debugger.on_load_dll">
 <code class="descname">on_load_dll</code><span class="sig-paren">(</span><em>load_dll</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/debugger.html#Debugger.on_load_dll"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.Debugger.on_load_dll" title="Permalink to this definition">¶</a></dt>
-<dd><p>Called on load_dll event (for param type see <a class="reference external" href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms680351(v=vs.85).aspx">https://msdn.microsoft.com/en-us/library/windows/desktop/ms680351(v=vs.85).aspx</a>)</p>
+<dd><p>Called on load_dll event</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>load_dll</strong> (<a class="reference internal" href="winstructs_generated.html#windows.generated_def.LOAD_DLL_DEBUG_INFO" title="windows.generated_def.LOAD_DLL_DEBUG_INFO"><em>LOAD_DLL_DEBUG_INFO</em></a>) &#8211; </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="windows.debug.Debugger.on_unload_dll">
 <code class="descname">on_unload_dll</code><span class="sig-paren">(</span><em>unload_dll</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/debugger.html#Debugger.on_unload_dll"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.Debugger.on_unload_dll" title="Permalink to this definition">¶</a></dt>
-<dd><p>Called on unload_dll event (for param type see <a class="reference external" href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms681403(v=vs.85).aspx">https://msdn.microsoft.com/en-us/library/windows/desktop/ms681403(v=vs.85).aspx</a>)</p>
+<dd><p>Called on unload_dll event</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>unload_dll</strong> (<a class="reference internal" href="winstructs_generated.html#windows.generated_def.UNLOAD_DLL_DEBUG_INFO" title="windows.generated_def.UNLOAD_DLL_DEBUG_INFO"><em>UNLOAD_DLL_DEBUG_INFO</em></a>) &#8211; </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="windows.debug.Debugger.on_output_debug_string">
 <code class="descname">on_output_debug_string</code><span class="sig-paren">(</span><em>debug_string</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/debugger.html#Debugger.on_output_debug_string"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.Debugger.on_output_debug_string" title="Permalink to this definition">¶</a></dt>
-<dd><p>Called on debug_string event (for param type see <a class="reference external" href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms680545(v=vs.85).aspx">https://msdn.microsoft.com/en-us/library/windows/desktop/ms680545(v=vs.85).aspx</a>)</p>
+<dd><p>Called on debug_string event</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>debug_string</strong> (<a class="reference internal" href="winstructs_generated.html#windows.generated_def.OUTPUT_DEBUG_STRING_INFO" title="windows.generated_def.OUTPUT_DEBUG_STRING_INFO"><em>OUTPUT_DEBUG_STRING_INFO</em></a>) &#8211; </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="windows.debug.Debugger.on_rip">
 <code class="descname">on_rip</code><span class="sig-paren">(</span><em>rip_info</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/debugger.html#Debugger.on_rip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.Debugger.on_rip" title="Permalink to this definition">¶</a></dt>
-<dd><p>Called on rip_info event (for param type see <a class="reference external" href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms680587(v=vs.85).aspx">https://msdn.microsoft.com/en-us/library/windows/desktop/ms680587(v=vs.85).aspx</a>)</p>
+<dd><p>Called on rip_info event</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>rip_info</strong> (<a class="reference internal" href="winstructs_generated.html#windows.generated_def.RIP_INFO" title="windows.generated_def.RIP_INFO"><em>RIP_INFO</em></a>) &#8211; </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -412,7 +480,7 @@ It is based on <code class="xref py py-func docutils literal"><span class="pre">
 </div>
 <dl class="class">
 <dt id="windows.debug.FunctionBP">
-<em class="property">class </em><code class="descclassname">windows.debug.</code><code class="descname">FunctionBP</code><span class="sig-paren">(</span><em>target</em>, <em>addr=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/breakpoints.html#FunctionBP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.FunctionBP" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">windows.debug.</code><code class="descname">FunctionBP</code><span class="sig-paren">(</span><em>addr=None</em>, <em>target=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/breakpoints.html#FunctionBP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.FunctionBP" title="Permalink to this definition">¶</a></dt>
 <dd><p>A breakpoint that accepts a function from <a class="reference internal" href="winproxy.html#module-windows.winproxy" title="windows.winproxy"><code class="xref py py-mod docutils literal"><span class="pre">windows.winproxy</span></code></a> and able to:</p>
 <ul class="simple">
 <li>Extract the arguments of the functions</li>
@@ -505,7 +573,7 @@ It is based on <code class="xref py py-func docutils literal"><span class="pre">
         <li class="right" >
           <a href="wintrust.html" title="6. windows.wintrust – Checking signature"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.2 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.3 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

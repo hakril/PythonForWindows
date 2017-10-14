@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>12. Internals &#8212; PythonForWindows 0.2 documentation</title>
+    <title>15. Internals &#8212; PythonForWindows 0.3 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.2',
+        VERSION:     '0.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -26,8 +26,8 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="13. Samples of code" href="sample.html" />
-    <link rel="prev" title="11. Early Work In Progress" href="wip.html" /> 
+    <link rel="next" title="16. Samples of code" href="sample.html" />
+    <link rel="prev" title="14. Early Work In Progress" href="wip.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -40,12 +40,12 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="sample.html" title="13. Samples of code"
+          <a href="sample.html" title="16. Samples of code"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="wip.html" title="11. Early Work In Progress"
+          <a href="wip.html" title="14. Early Work In Progress"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.2 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.3 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -55,10 +55,10 @@
           <div class="body" role="main">
             
   <div class="section" id="internals">
-<h1>12. Internals<a class="headerlink" href="#internals" title="Permalink to this headline">¶</a></h1>
+<h1>15. Internals<a class="headerlink" href="#internals" title="Permalink to this headline">¶</a></h1>
 <p>Because some horrible hacks of <code class="docutils literal"><span class="pre">PythonForWindows</span></code> are hidden and I wanted to talk about it.</p>
 <div class="section" id="module-windows.remotectypes">
-<span id="remotectypes-py"></span><h2>12.1. remotectypes.py<a class="headerlink" href="#module-windows.remotectypes" title="Permalink to this headline">¶</a></h2>
+<span id="remotectypes-py"></span><h2>15.1. remotectypes.py<a class="headerlink" href="#module-windows.remotectypes" title="Permalink to this headline">¶</a></h2>
 <p>Performing parsing of PEB / PE in remote process may be painful and i didn&#8217;t want
 to have two versions of all my parsing code.</p>
 <p>So I made a wrapper around <a class="reference external" href="https://docs.python.org/2/library/ctypes.html#module-ctypes" title="(in Python v2.7)"><code class="xref py py-mod docutils literal"><span class="pre">ctypes</span></code></a> that is able to do two things:</p>
@@ -109,7 +109,7 @@ The class.__init__ accept two arguments:</p>
 <p>I am pretty sure that this code does NOT handle all the cases, so it might break some day.</p>
 </div>
 <div class="section" id="module-windows.syswow64">
-<span id="syswow64-py-crossing-the-heaven-gate"></span><h2>12.2. syswow64.py &#8211; Crossing the heaven gate<a class="headerlink" href="#module-windows.syswow64" title="Permalink to this headline">¶</a></h2>
+<span id="syswow64-py-crossing-the-heaven-gate"></span><h2>15.2. syswow64.py &#8211; Crossing the heaven gate<a class="headerlink" href="#module-windows.syswow64" title="Permalink to this headline">¶</a></h2>
 <p>One of my goal with <code class="docutils literal"><span class="pre">PythonForWindows</span></code> is to have some abstraction of the bitness of the processes.
 It means being able to work on a <code class="docutils literal"><span class="pre">32bits</span> <span class="pre">Python</span></code> or a <code class="docutils literal"><span class="pre">64bits</span> <span class="pre">Python</span></code>.</p>
 <p>In the case of a 32bits python on a <code class="docutils literal"><span class="pre">64bits</span></code> system (<code class="docutils literal"><span class="pre">SysWow64</span></code>) it&#8217;s not trivial to perform operation on
@@ -214,19 +214,19 @@ With these information we are able to know</p>
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">12. Internals</a><ul>
-<li><a class="reference internal" href="#module-windows.remotectypes">12.1. remotectypes.py</a></li>
-<li><a class="reference internal" href="#module-windows.syswow64">12.2. syswow64.py &#8211; Crossing the heaven gate</a></li>
+<li><a class="reference internal" href="#">15. Internals</a><ul>
+<li><a class="reference internal" href="#module-windows.remotectypes">15.1. remotectypes.py</a></li>
+<li><a class="reference internal" href="#module-windows.syswow64">15.2. syswow64.py &#8211; Crossing the heaven gate</a></li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="wip.html"
-                        title="previous chapter">11. Early Work In Progress</a></p>
+                        title="previous chapter">14. Early Work In Progress</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="sample.html"
-                        title="next chapter">13. Samples of code</a></p>
+                        title="next chapter">16. Samples of code</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -258,12 +258,12 @@ With these information we are able to know</p>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="sample.html" title="13. Samples of code"
+          <a href="sample.html" title="16. Samples of code"
              >next</a> |</li>
         <li class="right" >
-          <a href="wip.html" title="11. Early Work In Progress"
+          <a href="wip.html" title="14. Early Work In Progress"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.2 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.3 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>windows.debug.debugger &#8212; PythonForWindows 0.2 documentation</title>
+    <title>windows.debug.debugger &#8212; PythonForWindows 0.3 documentation</title>
     
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '0.2',
+        VERSION:     '0.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -128,7 +128,11 @@
 <div class="viewcode-block" id="Debugger.attach"><a class="viewcode-back" href="../../../debug.html#windows.debug.Debugger.attach">[docs]</a>    <span class="k">def</span> <span class="nf">attach</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;attach to ``target`` (must be a :class:`WinProcess`)</span>
 
-<span class="sd">        :rtype: :class:`Debugger`&quot;&quot;&quot;</span>
+<span class="sd">        :rtype: :class:`Debugger`</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            see :ref:`Debugger.attach sample &lt;sample_debugger_attach&gt;`&quot;&quot;&quot;</span>
         <span class="n">winproxy</span><span class="o">.</span><span class="n">DebugActiveProcess</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">pid</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">target</span><span class="p">)</span></div>
 
@@ -183,7 +187,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">current_process</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">current_thread</span> <span class="o">=</span> <span class="kc">None</span>
 
-        <span class="k">if</span> <span class="n">target</span><span class="o">.</span><span class="n">pid</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">pid</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="ow">and</span> <span class="n">target</span><span class="o">.</span><span class="n">pid</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">pid</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">DebugActiveProcessStop</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">pid</span><span class="p">)</span></div>
 
@@ -224,6 +228,15 @@
         <span class="k">if</span> <span class="n">action</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="n">windef</span><span class="o">.</span><span class="n">DBG_CONTINUE</span><span class="p">,</span> <span class="n">windef</span><span class="o">.</span><span class="n">DBG_EXCEPTION_NOT_HANDLED</span><span class="p">]:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Unknow action : &lt;0&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">action</span><span class="p">))</span>
         <span class="n">winproxy</span><span class="o">.</span><span class="n">ContinueDebugEvent</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">dwProcessId</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">dwThreadId</span><span class="p">,</span> <span class="n">action</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_add_exe_to_module_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">create_process_event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Add the intial exe file described by create_process_event to the list of module in the process&quot;&quot;&quot;</span>
+        <span class="n">exe_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">get_mapped_filename</span><span class="p">(</span><span class="n">create_process_event</span><span class="o">.</span><span class="n">lpBaseOfImage</span><span class="p">)</span>
+        <span class="n">exe_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">exe_path</span><span class="p">)</span>
+        <span class="c1">#print(&quot;Exe name is {0}&quot;.format(exe_name))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_module_by_process</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">pid</span><span class="p">][</span><span class="n">exe_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">pe_parse</span><span class="o">.</span><span class="n">GetPEFile</span><span class="p">(</span><span class="n">create_process_event</span><span class="o">.</span><span class="n">lpBaseOfImage</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_process</span><span class="p">)</span>
+        <span class="c1">#self._setup_pending_breakpoints_load_dll(exe_name) # Already setup in _setup_pending_breakpoints_new_process</span>
+
 
     <span class="k">def</span> <span class="nf">_update_debugger_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">debug_event</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">current_process</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">processes</span><span class="p">[</span><span class="n">debug_event</span><span class="o">.</span><span class="n">dwProcessId</span><span class="p">]</span>
@@ -295,7 +308,7 @@
 
     <span class="k">def</span> <span class="nf">_setup_breakpoint_BP</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bp</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">WinProcess</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;SETUP STANDARD_BP on </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">target</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot setup STANDARD_BP on </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">target</span><span class="p">))</span>
 
         <span class="n">addr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resolve</span><span class="p">(</span><span class="n">bp</span><span class="o">.</span><span class="n">addr</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">addr</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -332,8 +345,10 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot put </span><span class="si">{0}</span><span class="s2"> in </span><span class="si">{1}</span><span class="s2"> (DRx full)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bp</span><span class="p">,</span> <span class="n">target</span><span class="p">))</span>
         <span class="n">empty_drx</span> <span class="o">=</span> <span class="nb">str</span><span class="p">([</span><span class="n">pos</span> <span class="k">for</span> <span class="n">pos</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="k">if</span> <span class="n">pos</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">x</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
         <span class="n">ctx</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">context</span>
-        <span class="n">ctx</span><span class="o">.</span><span class="n">EDr7</span><span class="o">.</span><span class="n">GE</span> <span class="o">=</span> <span class="mi">1</span>
-        <span class="n">ctx</span><span class="o">.</span><span class="n">EDr7</span><span class="o">.</span><span class="n">LE</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="c1"># Windows DebugCtl aliasing in DR7</span>
+        <span class="c1"># See https://www.codeproject.com/Articles/517466/Last-branch-records-and-branch-tracing</span>
+        <span class="n">ctx</span><span class="o">.</span><span class="n">EDr7</span><span class="o">.</span><span class="n">LE</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># bit 8 of DR7 represents bit 0 of DebugCtl. This is the LBR bit. (last branch record, will explain)</span>
+        <span class="n">ctx</span><span class="o">.</span><span class="n">EDr7</span><span class="o">.</span><span class="n">GE</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># bit 9 of DR7 represents bit 1 of DebugCtl. This is the BTF bit. (single-step on branches)</span>
         <span class="nb">setattr</span><span class="p">(</span><span class="n">ctx</span><span class="o">.</span><span class="n">EDr7</span><span class="p">,</span> <span class="s2">&quot;L&quot;</span> <span class="o">+</span> <span class="n">empty_drx</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="nb">setattr</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="s2">&quot;Dr&quot;</span> <span class="o">+</span> <span class="n">empty_drx</span><span class="p">,</span> <span class="n">addr</span><span class="p">)</span>
         <span class="n">x</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">empty_drx</span><span class="p">)]</span> <span class="o">=</span> <span class="n">bp</span>
@@ -369,13 +384,15 @@
             <span class="k">return</span> <span class="n">PAGE_EXECUTE_READ</span>
         <span class="k">if</span> <span class="n">events</span> <span class="o">==</span> <span class="nb">set</span><span class="p">(</span><span class="s2">&quot;X&quot;</span><span class="p">):</span>
             <span class="c1"># Might have problem if DEP is not enabled</span>
-            <span class="k">if</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">is_implemented</span><span class="p">(</span><span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">GetProcessDEPPolicy</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">target</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">64</span><span class="p">:</span>
+                <span class="n">has_DEP</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">elif</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">is_implemented</span><span class="p">(</span><span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">GetProcessDEPPolicy</span><span class="p">):</span>
                 <span class="n">has_DEP</span> <span class="o">=</span> <span class="n">DWORD</span><span class="p">()</span>
                 <span class="n">permaned</span> <span class="o">=</span> <span class="n">LONG</span><span class="p">()</span>
                 <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">GetProcessDEPPolicy</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">has_DEP</span><span class="p">,</span> <span class="n">permaned</span><span class="p">)</span>
                 <span class="n">has_DEP</span> <span class="o">=</span> <span class="n">has_DEP</span><span class="o">.</span><span class="n">value</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">has_DEP</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">has_DEP</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="k">return</span> <span class="n">PAGE_READWRITE</span> <span class="k">if</span> <span class="n">has_DEP</span> <span class="k">else</span> <span class="n">PAGE_NOACCESS</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unexpected set of event for Membp: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">events</span><span class="p">))</span>
 
@@ -418,12 +435,28 @@
         <span class="k">for</span> <span class="n">page_addr</span> <span class="ow">in</span> <span class="n">affected_pages</span><span class="p">:</span>
             <span class="n">cp_watch_page</span><span class="p">[</span><span class="n">page_addr</span><span class="p">]</span><span class="o">.</span><span class="n">bps</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">bp</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">cp_watch_page</span><span class="p">[</span><span class="n">page_addr</span><span class="p">]</span><span class="o">.</span><span class="n">bps</span><span class="p">:</span>
-                <span class="n">target</span><span class="o">.</span><span class="n">virtual_protect</span><span class="p">(</span><span class="n">page_addr</span><span class="p">,</span> <span class="n">PAGE_SIZE</span><span class="p">,</span> <span class="n">cp_watch_page</span><span class="p">[</span><span class="n">page_addr</span><span class="p">]</span><span class="o">.</span><span class="n">original_prot</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">target</span><span class="o">.</span><span class="n">virtual_protect</span><span class="p">(</span><span class="n">page_addr</span><span class="p">,</span> <span class="n">PAGE_SIZE</span><span class="p">,</span> <span class="n">cp_watch_page</span><span class="p">[</span><span class="n">page_addr</span><span class="p">]</span><span class="o">.</span><span class="n">original_prot</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                     <span class="c1"># TODO</span>
+                     <span class="c1"># What should we do if the virtual protect fail on a Non-Free page ?</span>
+                     <span class="c1"># It may be because the page was dealloc + map as a view..</span>
+                     <span class="c1"># For now: keep the page as-is</span>
+                     <span class="k">if</span> <span class="ow">not</span> <span class="n">target</span><span class="o">.</span><span class="n">query_memory</span><span class="p">(</span><span class="n">page_addr</span><span class="p">)</span><span class="o">.</span><span class="n">State</span> <span class="o">==</span> <span class="n">MEM_FREE</span><span class="p">:</span>
+                        <span class="k">pass</span>
+                     <span class="c1"># If page is MEM_FREE ignore the error</span>
                 <span class="k">del</span> <span class="n">cp_watch_page</span><span class="p">[</span><span class="n">page_addr</span><span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">full_page_events</span> <span class="o">=</span> <span class="nb">set</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">bp</span><span class="o">.</span><span class="n">events</span> <span class="k">for</span> <span class="n">bp</span> <span class="ow">in</span> <span class="n">cp_watch_page</span><span class="p">[</span><span class="n">page_addr</span><span class="p">]</span><span class="o">.</span><span class="n">bps</span><span class="p">])</span>
                 <span class="n">protection_for_page</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_page_access_for_event</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">full_page_events</span><span class="p">)</span>
-                <span class="n">target</span><span class="o">.</span><span class="n">virtual_protect</span><span class="p">(</span><span class="n">page_addr</span><span class="p">,</span> <span class="n">PAGE_SIZE</span><span class="p">,</span> <span class="n">protection_for_page</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">target</span><span class="o">.</span><span class="n">virtual_protect</span><span class="p">(</span><span class="n">page_addr</span><span class="p">,</span> <span class="n">PAGE_SIZE</span><span class="p">,</span> <span class="n">protection_for_page</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="c1"># if not target.query_memory(page_addr).State == MEM_FREE:</span>
+                    <span class="c1">#     raise</span>
+                    <span class="k">for</span> <span class="n">bp</span> <span class="ow">in</span> <span class="n">cp_watch_page</span><span class="p">[</span><span class="n">page_addr</span><span class="p">]</span><span class="o">.</span><span class="n">bps</span><span class="p">:</span>
+                        <span class="n">bp</span><span class="o">.</span><span class="n">on_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">page_addr</span><span class="p">)</span>
+                <span class="c1"># TODO: handle case were it is mem-free ?</span>
         <span class="k">return</span> <span class="kc">True</span>
 
 
@@ -662,12 +695,12 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">32</span> <span class="ow">and</span> <span class="n">pe</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">64</span><span class="p">:</span>
             <span class="n">name_sufix</span> <span class="o">=</span> <span class="s2">&quot;64&quot;</span>
 
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">load_dll</span><span class="o">.</span><span class="n">lpImageName</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">pe</span><span class="o">.</span><span class="n">export_name</span> <span class="o">+</span> <span class="n">name_sufix</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">addr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">read_ptr</span><span class="p">(</span><span class="n">load_dll</span><span class="o">.</span><span class="n">lpImageName</span><span class="p">)</span>
-        <span class="k">except</span><span class="p">:</span>
-            <span class="n">addr</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">addr</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">load_dll</span><span class="o">.</span><span class="n">lpImageName</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">addr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">read_ptr</span><span class="p">(</span><span class="n">load_dll</span><span class="o">.</span><span class="n">lpImageName</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">pass</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">addr</span><span class="p">:</span>
             <span class="n">pe</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">pe_parse</span><span class="o">.</span><span class="n">GetPEFile</span><span class="p">(</span><span class="n">load_dll</span><span class="o">.</span><span class="n">lpBaseOfDll</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_process</span><span class="p">)</span>
@@ -700,6 +733,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">current_process</span> <span class="o">=</span> <span class="n">WinProcess</span><span class="o">.</span><span class="n">_from_handle</span><span class="p">(</span><span class="n">proc_handle</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">current_thread</span> <span class="o">=</span> <span class="n">WinThread</span><span class="o">.</span><span class="n">_from_handle</span><span class="p">(</span><span class="n">thread_handle</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">dbgprint</span><span class="p">(</span><span class="s2">&quot;New process: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_process</span><span class="p">),</span> <span class="s2">&quot;DBG&quot;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">threads</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_thread</span><span class="o">.</span><span class="n">tid</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_thread</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_explicit_single_step</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_thread</span><span class="o">.</span><span class="n">tid</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
@@ -711,11 +745,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_memory_save</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">pid</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_module_by_process</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">pid</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_update_debugger_state</span><span class="p">(</span><span class="n">debug_event</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_exe_to_module_list</span><span class="p">(</span><span class="n">create_process</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_setup_pending_breakpoints_new_process</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_process</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_setup_pending_breakpoints_new_thread</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_thread</span><span class="p">)</span>
         <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">DisabledMemoryBreakpoint</span><span class="p">():</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_create_process</span><span class="p">(</span><span class="n">create_process</span><span class="p">)</span>
-        <span class="c1"># TODO: close hFile</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_create_process</span><span class="p">(</span><span class="n">create_process</span><span class="p">)</span>
+            <span class="k">finally</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">create_process</span><span class="o">.</span><span class="n">hFile</span><span class="p">:</span>
+                    <span class="n">winproxy</span><span class="o">.</span><span class="n">CloseHandle</span><span class="p">(</span><span class="n">create_process</span><span class="o">.</span><span class="n">hFile</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_handle_exit_process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">debug_event</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Handle EXIT_PROCESS_DEBUG_EVENT&quot;&quot;&quot;</span>
@@ -735,9 +773,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">current_thread</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">current_process</span> <span class="o">=</span> <span class="kc">None</span>
 
-        <span class="k">if</span> <span class="n">cpid</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">pid</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="ow">and</span> <span class="n">cpid</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">pid</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="kc">None</span>
-
         <span class="k">return</span> <span class="n">retvalue</span>
 
     <span class="k">def</span> <span class="nf">_handle_create_thread</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">debug_event</span><span class="p">):</span>
@@ -748,8 +785,10 @@
         <span class="n">thread_handle</span> <span class="o">=</span> <span class="n">HANDLE</span><span class="p">()</span>
         <span class="n">cp_handle</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">handle</span>
         <span class="n">winproxy</span><span class="o">.</span><span class="n">DuplicateHandle</span><span class="p">(</span><span class="n">cp_handle</span><span class="p">,</span> <span class="n">create_thread</span><span class="o">.</span><span class="n">hThread</span><span class="p">,</span> <span class="n">cp_handle</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">thread_handle</span><span class="p">),</span> <span class="n">dwOptions</span><span class="o">=</span><span class="n">DUPLICATE_SAME_ACCESS</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">current_thread</span> <span class="o">=</span> <span class="n">WinThread</span><span class="o">.</span><span class="n">_from_handle</span><span class="p">(</span><span class="n">thread_handle</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">threads</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_thread</span><span class="o">.</span><span class="n">tid</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_thread</span>
+        <span class="n">new_thread</span> <span class="o">=</span> <span class="n">WinThread</span><span class="o">.</span><span class="n">_from_handle</span><span class="p">(</span><span class="n">thread_handle</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">threads</span><span class="p">[</span><span class="n">new_thread</span><span class="o">.</span><span class="n">tid</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_thread</span>
+        <span class="c1"># The new thread is on the thread pool: we can now update the debugger state</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_debugger_state</span><span class="p">(</span><span class="n">debug_event</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_explicit_single_step</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_thread</span><span class="o">.</span><span class="n">tid</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_breakpoint_to_reput</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_thread</span><span class="o">.</span><span class="n">tid</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_hardware_breakpoint</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_thread</span><span class="o">.</span><span class="n">tid</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
@@ -778,13 +817,19 @@
         <span class="n">dll_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">dll</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">dll_name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.dll&quot;</span><span class="p">):</span>
             <span class="n">dll_name</span> <span class="o">=</span> <span class="n">dll_name</span><span class="p">[:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span>
+        <span class="c1"># Mais c&#39;est debile..</span>
+        <span class="c1"># Si j&#39;ai ntdll et ntdll64: les deux vont avoir le meme nom..</span>
         <span class="k">if</span> <span class="n">dll_name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.dll64&quot;</span><span class="p">):</span>
             <span class="n">dll_name</span> <span class="o">=</span> <span class="n">dll_name</span><span class="p">[:</span><span class="o">-</span><span class="mi">6</span><span class="p">]</span> <span class="o">+</span>  <span class="s2">&quot;64&quot;</span> <span class="c1"># Crade..</span>
         <span class="c1">#print(&quot;Load {0} -&gt; {1}&quot;.format(dll, dll_name))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_module_by_process</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">pid</span><span class="p">][</span><span class="n">dll_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">pe_parse</span><span class="o">.</span><span class="n">GetPEFile</span><span class="p">(</span><span class="n">load_dll</span><span class="o">.</span><span class="n">lpBaseOfDll</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_process</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_setup_pending_breakpoints_load_dll</span><span class="p">(</span><span class="n">dll_name</span><span class="p">)</span>
         <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">DisabledMemoryBreakpoint</span><span class="p">():</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_load_dll</span><span class="p">(</span><span class="n">load_dll</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_load_dll</span><span class="p">(</span><span class="n">load_dll</span><span class="p">)</span>
+            <span class="k">finally</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">load_dll</span><span class="o">.</span><span class="n">hFile</span><span class="p">:</span>
+                    <span class="n">winproxy</span><span class="o">.</span><span class="n">CloseHandle</span><span class="p">(</span><span class="n">load_dll</span><span class="o">.</span><span class="n">hFile</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_handle_unload_dll</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">debug_event</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Handle UNLOAD_DLL_DEBUG_EVENT&quot;&quot;&quot;</span>
@@ -850,10 +895,10 @@
         <span class="k">elif</span> <span class="n">target</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># Check that targets are accepted</span>
             <span class="k">if</span> <span class="n">target</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">processes</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">threads</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
-                <span class="k">if</span> <span class="n">target</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">:</span> <span class="c1"># Original target (that have not been lauched yet)</span>
+            <span class="c1">#    if target == self.target: # Original target (that have not been lauched yet)</span>
                     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_pending_breakpoint</span><span class="p">(</span><span class="n">bp</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown target </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">target</span><span class="p">))</span>
+            <span class="c1">#    else:</span>
+            <span class="c1">#        raise ValueError(&quot;Unknown target {0}&quot;.format(target))</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_setup_breakpoint</span><span class="p">(</span><span class="n">bp</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Debugger.del_bp"><a class="viewcode-back" href="../../../debug.html#windows.debug.Debugger.del_bp">[docs]</a>    <span class="k">def</span> <span class="nf">del_bp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bp</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -910,7 +955,18 @@
         <span class="n">cp_watch_page</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_watched_pages</span><span class="p">[</span><span class="n">target</span><span class="o">.</span><span class="n">pid</span><span class="p">]</span>
         <span class="n">page_protection</span> <span class="o">=</span> <span class="n">DWORD</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">page_addr</span><span class="p">,</span> <span class="n">watched_page</span> <span class="ow">in</span> <span class="n">cp_watch_page</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">target</span><span class="o">.</span><span class="n">virtual_protect</span><span class="p">(</span><span class="n">page_addr</span><span class="p">,</span> <span class="n">PAGE_SIZE</span><span class="p">,</span> <span class="n">watched_page</span><span class="o">.</span><span class="n">original_prot</span><span class="p">,</span> <span class="n">page_protection</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">target</span><span class="o">.</span><span class="n">virtual_protect</span><span class="p">(</span><span class="n">page_addr</span><span class="p">,</span> <span class="n">PAGE_SIZE</span><span class="p">,</span> <span class="n">watched_page</span><span class="o">.</span><span class="n">original_prot</span><span class="p">,</span> <span class="n">page_protection</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="c1"># Check if page have been unmapped</span>
+                <span class="c1"># print(&quot;disable_all_memory_breakpoints failed on page {0:#x} in state {1:#x}&quot;.format(page_addr, target.query_memory(page_addr).State))</span>
+                <span class="c1"># if not target.query_memory(page_addr).State == MEM_FREE:</span>
+                <span class="c1">#     import pdb;pdb.set_trace()</span>
+                <span class="c1">#     raise</span>
+                <span class="c1"># If page have been unmap, warn the concerned Breakpoints.</span>
+                <span class="k">for</span> <span class="n">bp</span> <span class="ow">in</span> <span class="n">watched_page</span><span class="o">.</span><span class="n">bps</span><span class="p">:</span>
+                    <span class="c1"># TODO: Document</span>
+                    <span class="n">bp</span><span class="o">.</span><span class="n">on_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">page_addr</span><span class="p">)</span>
             <span class="n">res</span><span class="p">[</span><span class="n">page_addr</span><span class="p">]</span> <span class="o">=</span> <span class="n">page_protection</span><span class="o">.</span><span class="n">value</span>
         <span class="k">return</span> <span class="n">res</span></div>
 
@@ -959,6 +1015,7 @@
 <span class="sd">           The default behaviour is to return ``DBG_CONTINUE`` for the known exception code</span>
 <span class="sd">           and ``DBG_EXCEPTION_NOT_HANDLED`` else</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dbgprint</span><span class="p">(</span><span class="s2">&quot;Exception: </span><span class="si">{0}</span><span class="s2"> at &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">exception</span><span class="o">.</span><span class="n">ExceptionRecord</span><span class="o">.</span><span class="n">ExceptionCode</span><span class="p">,</span> <span class="n">exception</span><span class="o">.</span><span class="n">ExceptionRecord</span><span class="o">.</span><span class="n">ExceptionAddress</span><span class="p">),</span> <span class="s2">&quot;DBG&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">exception</span><span class="o">.</span><span class="n">ExceptionRecord</span><span class="o">.</span><span class="n">ExceptionCode</span> <span class="ow">in</span> <span class="n">winexception</span><span class="o">.</span><span class="n">exception_name_by_value</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">DBG_EXCEPTION_NOT_HANDLED</span>
         <span class="k">return</span> <span class="n">DBG_CONTINUE</span></div>
@@ -974,35 +1031,51 @@
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Debugger that explicitly single step should implement &lt;on_single_step&gt;&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Debugger.on_create_process"><a class="viewcode-back" href="../../../debug.html#windows.debug.Debugger.on_create_process">[docs]</a>    <span class="k">def</span> <span class="nf">on_create_process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">create_process</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Called on create_process event (for param type see https://msdn.microsoft.com/en-us/library/windows/desktop/ms679286(v=vs.85).aspx)&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Called on create_process event</span>
+
+<span class="sd">            :param CREATE_PROCESS_DEBUG_INFO create_process:&quot;&quot;&quot;</span>
         <span class="k">pass</span></div>
 
 <div class="viewcode-block" id="Debugger.on_exit_process"><a class="viewcode-back" href="../../../debug.html#windows.debug.Debugger.on_exit_process">[docs]</a>    <span class="k">def</span> <span class="nf">on_exit_process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exit_process</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Called on exit_process event (for param type see https://msdn.microsoft.com/en-us/library/windows/desktop/ms679334(v=vs.85).aspx)&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Called on exit_process event</span>
+
+<span class="sd">            :param EXIT_PROCESS_DEBUG_INFO exit_process:&quot;&quot;&quot;</span>
         <span class="k">pass</span></div>
 
 <div class="viewcode-block" id="Debugger.on_create_thread"><a class="viewcode-back" href="../../../debug.html#windows.debug.Debugger.on_create_thread">[docs]</a>    <span class="k">def</span> <span class="nf">on_create_thread</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">create_thread</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Called on create_thread event (for param type see https://msdn.microsoft.com/en-us/library/windows/desktop/ms679287(v=vs.85).aspx)&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Called on create_thread event</span>
+
+<span class="sd">            :param CREATE_THREAD_DEBUG_INFO create_thread:&quot;&quot;&quot;</span>
         <span class="k">pass</span></div>
 
 <div class="viewcode-block" id="Debugger.on_exit_thread"><a class="viewcode-back" href="../../../debug.html#windows.debug.Debugger.on_exit_thread">[docs]</a>    <span class="k">def</span> <span class="nf">on_exit_thread</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exit_thread</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Called on exit_thread event (for param type see https://msdn.microsoft.com/en-us/library/windows/desktop/ms679335(v=vs.85).aspx)&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Called on exit_thread event</span>
+
+<span class="sd">            :param EXIT_THREAD_DEBUG_INFO exit_thread:&quot;&quot;&quot;</span>
         <span class="k">pass</span></div>
 
 <div class="viewcode-block" id="Debugger.on_load_dll"><a class="viewcode-back" href="../../../debug.html#windows.debug.Debugger.on_load_dll">[docs]</a>    <span class="k">def</span> <span class="nf">on_load_dll</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">load_dll</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Called on load_dll event (for param type see https://msdn.microsoft.com/en-us/library/windows/desktop/ms680351(v=vs.85).aspx)&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Called on load_dll event</span>
+
+<span class="sd">            :param LOAD_DLL_DEBUG_INFO load_dll:&quot;&quot;&quot;</span>
         <span class="k">pass</span></div>
 
 <div class="viewcode-block" id="Debugger.on_unload_dll"><a class="viewcode-back" href="../../../debug.html#windows.debug.Debugger.on_unload_dll">[docs]</a>    <span class="k">def</span> <span class="nf">on_unload_dll</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unload_dll</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Called on unload_dll event (for param type see https://msdn.microsoft.com/en-us/library/windows/desktop/ms681403(v=vs.85).aspx)&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Called on unload_dll event</span>
+
+<span class="sd">            :param UNLOAD_DLL_DEBUG_INFO unload_dll:&quot;&quot;&quot;</span>
         <span class="k">pass</span></div>
 
 <div class="viewcode-block" id="Debugger.on_output_debug_string"><a class="viewcode-back" href="../../../debug.html#windows.debug.Debugger.on_output_debug_string">[docs]</a>    <span class="k">def</span> <span class="nf">on_output_debug_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">debug_string</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Called on debug_string event (for param type see https://msdn.microsoft.com/en-us/library/windows/desktop/ms680545(v=vs.85).aspx)&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Called on debug_string event</span>
+
+<span class="sd">            :param OUTPUT_DEBUG_STRING_INFO debug_string:&quot;&quot;&quot;</span>
         <span class="k">pass</span></div>
 
 <div class="viewcode-block" id="Debugger.on_rip"><a class="viewcode-back" href="../../../debug.html#windows.debug.Debugger.on_rip">[docs]</a>    <span class="k">def</span> <span class="nf">on_rip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rip_info</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Called on rip_info event (for param type see https://msdn.microsoft.com/en-us/library/windows/desktop/ms680587(v=vs.85).aspx)&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Called on rip_info event</span>
+
+<span class="sd">            :param RIP_INFO rip_info:&quot;&quot;&quot;</span>
         <span class="k">pass</span></div></div>
 </pre></div>
 
@@ -1034,7 +1107,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>

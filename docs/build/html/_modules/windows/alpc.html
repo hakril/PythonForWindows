@@ -1,0 +1,629 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>windows.alpc &#8212; PythonForWindows 0.3 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">PythonForWindows 0.3 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for windows.alpc</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">ctypes</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">namedtuple</span>
+
+<span class="kn">import</span> <span class="nn">windows</span>
+<span class="kn">from</span> <span class="nn">windows</span> <span class="k">import</span> <span class="n">winproxy</span>
+<span class="kn">from</span> <span class="nn">windows</span> <span class="k">import</span> <span class="n">generated_def</span> <span class="k">as</span> <span class="n">gdef</span>
+
+
+<span class="c1">## For 64b python</span>
+<span class="c1"># 0x1f: 0x80000000: ALPC_MESSAGE_SECURITY_ATTRIBUTE(0x80000000) : size=0x18?</span>
+<span class="c1"># 0x1e: 0x40000000: ALPC_MESSAGE_VIEW_ATTRIBUTE(0x40000000): size=0x20</span>
+<span class="c1"># 0x1d: 0x20000000: ALPC_MESSAGE_CONTEXT_ATTRIBUTE(0x20000000): size=0x20</span>
+<span class="c1"># 0x1c: 0x10000000: ALPC_MESSAGE_HANDLE_ATTRIBUTE(0x10000000): size=0x18</span>
+<span class="c1"># 0x1b: 0x8000000: ALPC_MESSAGE_TOKEN_ATTRIBUTE(0x8000000): size=0x18</span>
+<span class="c1"># 0x1a: 0x4000000: ALPC_MESSAGE_DIRECT_ATTRIBUTE(0x4000000) size=0x8</span>
+<span class="c1"># 0x19: 0x2000000: ALPC_MESSAGE_WORK_ON_BEHALF_ATTRIBUTE(0x2000000) size=0x8</span>
+
+<div class="viewcode-block" id="AlpcMessage"><a class="viewcode-back" href="../../alpc.html#windows.alpc.AlpcMessage">[docs]</a><span class="k">class</span> <span class="nc">AlpcMessage</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Represent a full ALPC Message: a :class:`AlpcMessagePort` and a :class:`MessageAttribute`&quot;&quot;&quot;</span>
+    <span class="c1"># PORT_MESSAGE + MessageAttribute</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg_or_size</span><span class="o">=</span><span class="mh">0x1000</span><span class="p">,</span> <span class="n">attributes</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="c1"># Init the PORT_MESSAGE</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">msg_or_size</span><span class="p">,</span> <span class="p">(</span><span class="n">long</span><span class="p">,</span> <span class="nb">int</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">port_message_buffer_size</span> <span class="o">=</span> <span class="n">msg_or_size</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">port_message_raw_buffer</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_buffer</span><span class="p">(</span><span class="n">msg_or_size</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">port_message</span> <span class="o">=</span> <span class="n">AlpcMessagePort</span><span class="o">.</span><span class="n">from_buffer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">port_message_raw_buffer</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">port_message</span><span class="o">.</span><span class="n">set_datalen</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">msg_or_size</span><span class="p">,</span> <span class="n">AlpcMessagePort</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">port_message</span> <span class="o">=</span> <span class="n">msg_or_size</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">port_message_raw_buffer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">port_message</span><span class="o">.</span><span class="n">raw_buffer</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">port_message_buffer_size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">port_message_raw_buffer</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Uneexpected type for &lt;msg_or_size&gt;: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">msg_or_size</span><span class="p">))</span>
+
+        <span class="c1"># Init the MessageAttributes</span>
+        <span class="k">if</span> <span class="n">attributes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># self.attributes = MessageAttribute.with_all_attributes()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span> <span class="o">=</span> <span class="n">MessageAttribute</span><span class="o">.</span><span class="n">with_all_attributes</span><span class="p">()</span> <span class="c1">## Testing</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span> <span class="o">=</span> <span class="n">attributes</span>
+
+    <span class="c1"># PORT_MESSAGE wrappers</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The type of the message (``PORT_MESSAGE.u2.s2.Type``)&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">port_message</span><span class="o">.</span><span class="n">u2</span><span class="o">.</span><span class="n">s2</span><span class="o">.</span><span class="n">Type</span>
+
+    <span class="k">def</span> <span class="nf">get_port_message_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">port_message</span><span class="o">.</span><span class="n">data</span>
+
+    <span class="k">def</span> <span class="nf">set_port_message_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">port_message</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_port_message_data</span><span class="p">,</span> <span class="n">set_port_message_data</span><span class="p">)</span>
+    <span class="s2">&quot;The data of the message (located after the PORT_MESSAGE header)&quot;</span>
+
+    <span class="c1"># MessageAttributes wrappers</span>
+
+    <span class="c1">## Low level attributes access</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">security_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The :data:`~windows.generated_def.ALPC_MESSAGE_SECURITY_ATTRIBUTE` of the message</span>
+
+<span class="sd">            :type: :class:`ALPC_SECURITY_ATTR`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">get_attribute</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_MESSAGE_SECURITY_ATTRIBUTE</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">view_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The :data:`~windows.generated_def.ALPC_MESSAGE_VIEW_ATTRIBUTE` of the message:</span>
+
+<span class="sd">            :type: :class:`ALPC_DATA_VIEW_ATTR`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">get_attribute</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_MESSAGE_VIEW_ATTRIBUTE</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">context_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The :data:`~windows.generated_def.ALPC_MESSAGE_CONTEXT_ATTRIBUTE` of the message:</span>
+
+<span class="sd">            :type: :class:`ALPC_CONTEXT_ATTR`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">get_attribute</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_MESSAGE_CONTEXT_ATTRIBUTE</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">handle_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The :data:`~windows.generated_def.ALPC_MESSAGE_HANDLE_ATTRIBUTE` of the message:</span>
+
+<span class="sd">            :type: :class:`ALPC_HANDLE_ATTR`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">get_attribute</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_MESSAGE_HANDLE_ATTRIBUTE</span><span class="p">)</span>
+
+    <span class="c1">## Low level validity check (Test)</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">view_is_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="c1"># Change the name ?</span>
+        <span class="sd">&quot;&quot;&quot;True if :data:`~windows.generated_def.ALPC_MESSAGE_VIEW_ATTRIBUTE` is a ValidAttributes&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">is_valid</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_MESSAGE_VIEW_ATTRIBUTE</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">security_is_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="c1"># Change the name ?</span>
+        <span class="sd">&quot;&quot;&quot;True if :data:`~windows.generated_def.ALPC_MESSAGE_SECURITY_ATTRIBUTE` is a ValidAttributes&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">is_valid</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_MESSAGE_SECURITY_ATTRIBUTE</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">handle_is_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="c1"># Change the name ?</span>
+        <span class="sd">&quot;&quot;&quot;True if :data:`~windows.generated_def.ALPC_MESSAGE_HANDLE_ATTRIBUTE` is a ValidAttributes&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">is_valid</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_MESSAGE_HANDLE_ATTRIBUTE</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">context_is_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="c1"># Change the name ?</span>
+        <span class="sd">&quot;&quot;&quot;True if :data:`~windows.generated_def.ALPC_MESSAGE_CONTEXT_ATTRIBUTE` is a ValidAttributes&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">is_valid</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_MESSAGE_CONTEXT_ATTRIBUTE</span><span class="p">)</span>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">valid_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The list of valid attributes</span>
+
+<span class="sd">            :type: [:class:`~windows.generated_def.Flag`]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">valid_list</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">allocated_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The list of allocated attributes</span>
+
+<span class="sd">            :type: [:class:`~windows.generated_def.Flag`]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">allocated_list</span>
+
+    <span class="c1">## High level setup (Test)</span>
+    <span class="k">def</span> <span class="nf">setup_view</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">section_handle</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">setup_view</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="AlpcMessagePort"><a class="viewcode-back" href="../../alpc.html#windows.alpc.AlpcMessagePort">[docs]</a><span class="k">class</span> <span class="nc">AlpcMessagePort</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">PORT_MESSAGE</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The effective ALPC Message composed of a ``PORT_MESSAGE`` structure followed by the data&quot;&quot;&quot;</span>
+    <span class="c1"># Constructeur</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_buffer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buffer</span><span class="p">):</span>
+        <span class="c1"># A sort of super(AlpcMessagePort).from_buffer</span>
+        <span class="c1"># But from_buffer is from the Metaclass of AlpcMessagePort so we use &#39;type(AlpcMessagePort)&#39;</span>
+        <span class="c1"># To access the standard version of from_buffer.</span>
+        <span class="bp">self</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">AlpcMessagePort</span><span class="p">)</span><span class="o">.</span><span class="n">from_buffer</span><span class="p">(</span><span class="n">AlpcMessagePort</span><span class="p">,</span> <span class="n">buffer</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">buffer_size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">raw_buffer</span> <span class="o">=</span> <span class="n">buffer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">header_size</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_datasize</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">buffer_size</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">header_size</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_buffer_size</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">buffer_size</span><span class="p">):</span>
+        <span class="n">buffer</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_buffer</span><span class="p">(</span><span class="n">buffer_size</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">read_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_buffer</span><span class="p">[</span><span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span><span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">u1</span><span class="o">.</span><span class="n">s1</span><span class="o">.</span><span class="n">DataLength</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">write_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_datasize</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot write data of len &lt;</span><span class="si">{0}</span><span class="s2">&gt; (raw_buffer size == &lt;</span><span class="si">{1}</span><span class="s2">&gt;)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">buffer_size</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">raw_buffer</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">header_size</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">header_size</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)]</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_datalen</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">read_data</span><span class="p">,</span> <span class="n">write_data</span><span class="p">)</span>
+    <span class="s2">&quot;The data of the message (located after the header)&quot;</span>
+
+    <span class="k">def</span> <span class="nf">set_datalen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datalen</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">u1</span><span class="o">.</span><span class="n">s1</span><span class="o">.</span><span class="n">TotalLength</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">header_size</span> <span class="o">+</span> <span class="n">datalen</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">u1</span><span class="o">.</span><span class="n">s1</span><span class="o">.</span><span class="n">DataLength</span> <span class="o">=</span> <span class="n">datalen</span>
+
+    <span class="k">def</span> <span class="nf">get_datalen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">u1</span><span class="o">.</span><span class="n">s1</span><span class="o">.</span><span class="n">DataLength</span>
+
+    <span class="n">datalen</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_datalen</span><span class="p">,</span> <span class="n">set_datalen</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;The length of the data&quot;&quot;&quot;</span></div>
+
+<span class="n">KNOWN_ALPC_ATTRIBUTES</span> <span class="o">=</span> <span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_MESSAGE_SECURITY_ATTRIBUTE</span><span class="p">,</span>
+                            <span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_MESSAGE_VIEW_ATTRIBUTE</span><span class="p">,</span>
+                            <span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_MESSAGE_CONTEXT_ATTRIBUTE</span><span class="p">,</span>
+                            <span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_MESSAGE_HANDLE_ATTRIBUTE</span><span class="p">,</span>
+                            <span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_MESSAGE_TOKEN_ATTRIBUTE</span><span class="p">,</span>
+                            <span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_MESSAGE_DIRECT_ATTRIBUTE</span><span class="p">,</span>
+                            <span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_MESSAGE_WORK_ON_BEHALF_ATTRIBUTE</span><span class="p">)</span>
+
+<span class="n">KNOWN_ALPC_ATTRIBUTES_MAPPING</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">:</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">KNOWN_ALPC_ATTRIBUTES</span><span class="p">}</span>
+
+
+<div class="viewcode-block" id="MessageAttribute"><a class="viewcode-back" href="../../alpc.html#windows.alpc.MessageAttribute">[docs]</a><span class="k">class</span> <span class="nc">MessageAttribute</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_MESSAGE_ATTRIBUTES</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The attributes of an ALPC message&quot;&quot;&quot;</span>
+    <span class="n">ATTRIBUTE_BY_FLAG</span> <span class="o">=</span> <span class="p">[(</span><span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_MESSAGE_SECURITY_ATTRIBUTE</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_SECURITY_ATTR</span><span class="p">),</span>
+                            <span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_MESSAGE_VIEW_ATTRIBUTE</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_DATA_VIEW_ATTR</span><span class="p">),</span>
+                            <span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_MESSAGE_CONTEXT_ATTRIBUTE</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_CONTEXT_ATTR</span><span class="p">),</span>
+                            <span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_MESSAGE_HANDLE_ATTRIBUTE</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_HANDLE_ATTR</span><span class="p">),</span>
+                            <span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_MESSAGE_TOKEN_ATTRIBUTE</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_TOKEN_ATTR</span><span class="p">),</span>
+                            <span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_MESSAGE_DIRECT_ATTRIBUTE</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_DIRECT_ATTR</span><span class="p">),</span>
+                            <span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_MESSAGE_WORK_ON_BEHALF_ATTRIBUTE</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_WORK_ON_BEHALF_ATTR</span><span class="p">),</span>
+                            <span class="p">]</span>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="MessageAttribute.with_attributes"><a class="viewcode-back" href="../../alpc.html#windows.alpc.MessageAttribute.with_attributes">[docs]</a>    <span class="k">def</span> <span class="nf">with_attributes</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">attributes</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create a new :class:`MessageAttribute` with ``attributes`` allocated</span>
+
+<span class="sd">            :returns: :class:`MessageAttribute`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_get_required_buffer_size</span><span class="p">(</span><span class="n">attributes</span><span class="p">)</span>
+        <span class="n">buffer</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_buffer</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
+        <span class="bp">self</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">raw_buffer</span> <span class="o">=</span> <span class="n">buffer</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">()</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">AlpcInitializeMessageAttribute</span><span class="p">(</span><span class="n">attributes</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">raw_buffer</span><span class="p">),</span> <span class="n">res</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="MessageAttribute.with_all_attributes"><a class="viewcode-back" href="../../alpc.html#windows.alpc.MessageAttribute.with_all_attributes">[docs]</a>    <span class="k">def</span> <span class="nf">with_all_attributes</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create a new :class:`MessageAttribute` with the following attributes allocated:</span>
+
+<span class="sd">            - :class:`ALPC_MESSAGE_SECURITY_ATTRIBUTE`</span>
+<span class="sd">            - :class:`ALPC_MESSAGE_VIEW_ATTRIBUTE`</span>
+<span class="sd">            - :class:`ALPC_MESSAGE_CONTEXT_ATTRIBUTE`</span>
+<span class="sd">            - :class:`ALPC_MESSAGE_HANDLE_ATTRIBUTE`</span>
+<span class="sd">            - :class:`ALPC_MESSAGE_TOKEN_ATTRIBUTE`</span>
+<span class="sd">            - :class:`ALPC_MESSAGE_DIRECT_ATTRIBUTE`</span>
+<span class="sd">            - :class:`ALPC_MESSAGE_WORK_ON_BEHALF_ATTRIBUTE`</span>
+
+<span class="sd">            :returns: :class:`MessageAttribute`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">with_attributes</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_MESSAGE_SECURITY_ATTRIBUTE</span> <span class="o">|</span>
+                                    <span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_MESSAGE_VIEW_ATTRIBUTE</span>    <span class="o">|</span>
+                                    <span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_MESSAGE_CONTEXT_ATTRIBUTE</span> <span class="o">|</span>
+                                    <span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_MESSAGE_HANDLE_ATTRIBUTE</span>  <span class="o">|</span>
+                                    <span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_MESSAGE_TOKEN_ATTRIBUTE</span>   <span class="o">|</span>
+                                    <span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_MESSAGE_DIRECT_ATTRIBUTE</span>  <span class="o">|</span>
+                                    <span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_MESSAGE_WORK_ON_BEHALF_ATTRIBUTE</span><span class="p">)</span></div>
+
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_get_required_buffer_size</span><span class="p">(</span><span class="n">flags</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">AlpcInitializeMessageAttribute</span><span class="p">(</span><span class="n">flags</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">windows</span><span class="o">.</span><span class="n">generated_def</span><span class="o">.</span><span class="n">ntstatus</span><span class="o">.</span><span class="n">NtStatusException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="c1"># Buffer too small: osef</span>
+            <span class="k">return</span> <span class="n">res</span><span class="o">.</span><span class="n">value</span>
+        <span class="k">return</span> <span class="n">res</span><span class="o">.</span><span class="n">value</span>
+
+<div class="viewcode-block" id="MessageAttribute.is_allocated"><a class="viewcode-back" href="../../alpc.html#windows.alpc.MessageAttribute.is_allocated">[docs]</a>    <span class="k">def</span> <span class="nf">is_allocated</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attribute</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return ``True`` if ``attribute`` is allocated&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">AllocatedAttributes</span> <span class="o">&amp;</span> <span class="n">attribute</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MessageAttribute.is_valid"><a class="viewcode-back" href="../../alpc.html#windows.alpc.MessageAttribute.is_valid">[docs]</a>    <span class="k">def</span> <span class="nf">is_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attribute</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return ``True`` if ``attribute`` is valid&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ValidAttributes</span> <span class="o">&amp;</span> <span class="n">attribute</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">get_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attribute</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_allocated</span><span class="p">(</span><span class="n">attribute</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot get non-allocated attribute &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">attribute</span><span class="p">))</span>
+        <span class="n">offset</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">sflag</span><span class="p">,</span> <span class="n">struct</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ATTRIBUTE_BY_FLAG</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">sflag</span> <span class="o">==</span> <span class="n">attribute</span><span class="p">:</span>
+                <span class="c1"># print(&quot;Attr {0:#x} was at offet {1:#x}&quot;.format(attribute, offset))</span>
+                <span class="k">return</span> <span class="n">struct</span><span class="o">.</span><span class="n">from_address</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">addressof</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">+</span> <span class="n">offset</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_allocated</span><span class="p">(</span><span class="n">sflag</span><span class="p">):</span>
+                <span class="n">offset</span> <span class="o">+=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">struct</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;ALPC Attribute &lt;</span><span class="si">{0}</span><span class="s2">&gt; not found :(&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">attribute</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_extract_alpc_attributes_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="n">attrs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">mask</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">64</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">value</span> <span class="o">&amp;</span> <span class="n">mask</span><span class="p">:</span>
+                <span class="n">attrs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">KNOWN_ALPC_ATTRIBUTES_MAPPING</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">attrs</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">valid_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The list of valid attributes</span>
+
+<span class="sd">            :type: [:class:`~windows.generated_def.Flag`]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_alpc_attributes_values</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ValidAttributes</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">allocated_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The list of allocated attributes</span>
+
+<span class="sd">            :type: [:class:`~windows.generated_def.Flag`]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_alpc_attributes_values</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">AllocatedAttributes</span><span class="p">)</span></div>
+
+
+<span class="n">AlpcSection</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s2">&quot;AlpcSection&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;handle&quot;</span><span class="p">,</span> <span class="s2">&quot;size&quot;</span><span class="p">])</span>
+
+<span class="k">class</span> <span class="nc">AlpcTransportBase</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">send_receive</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpc_message</span><span class="p">,</span> <span class="n">receive_msg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_MSGFLG_SYNC_REQUEST</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Send and receive a message with ``flags``.</span>
+
+<span class="sd">            :param alpc_message: The message to send. If ``alpc_message`` is a :class:`str` it build an AlpcMessage with the message as data.</span>
+<span class="sd">            :type alpc_message: AlpcMessage or str</span>
+<span class="sd">            :param receive_msg: The message to send. If ``receive_msg`` is a ``None`` it create and return a simple :class:`AlpcMessage`</span>
+<span class="sd">            :type receive_msg: AlpcMessage or None</span>
+<span class="sd">            :param int flags: The flags for :func:`NtAlpcSendWaitReceivePort`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">alpc_message</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
+            <span class="n">raw_alpc_message</span> <span class="o">=</span> <span class="n">alpc_message</span>
+            <span class="n">alpc_message</span> <span class="o">=</span> <span class="n">AlpcMessage</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mh">0x1000</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">alpc_message</span><span class="p">)))</span>
+            <span class="n">alpc_message</span><span class="o">.</span><span class="n">port_message</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">raw_alpc_message</span>
+
+        <span class="k">if</span> <span class="n">receive_msg</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">receive_msg</span> <span class="o">=</span> <span class="n">AlpcMessage</span><span class="p">(</span><span class="mh">0x1000</span><span class="p">)</span>
+        <span class="n">receive_size</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SIZE_T</span><span class="p">(</span><span class="n">receive_msg</span><span class="o">.</span><span class="n">port_message_buffer_size</span><span class="p">)</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">NtAlpcSendWaitReceivePort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="n">alpc_message</span><span class="o">.</span><span class="n">port_message</span><span class="p">,</span> <span class="n">alpc_message</span><span class="o">.</span><span class="n">attributes</span><span class="p">,</span> <span class="n">receive_msg</span><span class="o">.</span><span class="n">port_message</span><span class="p">,</span> <span class="n">receive_size</span><span class="p">,</span> <span class="n">receive_msg</span><span class="o">.</span><span class="n">attributes</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">receive_msg</span>
+
+    <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpc_message</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Send the ``alpc_message`` with ``flags``</span>
+
+<span class="sd">            :param alpc_message: The message to send. If ``alpc_message`` is a :class:`str` it build an AlpcMessage with the message as data.</span>
+<span class="sd">            :type alpc_message: AlpcMessage or str</span>
+<span class="sd">            :param int flags: The flags for :func:`NtAlpcSendWaitReceivePort`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">alpc_message</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
+            <span class="n">raw_alpc_message</span> <span class="o">=</span> <span class="n">alpc_message</span>
+            <span class="n">alpc_message</span> <span class="o">=</span> <span class="n">AlpcMessage</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mh">0x1000</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">alpc_message</span><span class="p">)))</span>
+            <span class="n">alpc_message</span><span class="o">.</span><span class="n">port_message</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">raw_alpc_message</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">NtAlpcSendWaitReceivePort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="n">alpc_message</span><span class="o">.</span><span class="n">port_message</span><span class="p">,</span> <span class="n">alpc_message</span><span class="o">.</span><span class="n">attributes</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">recv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">receive_msg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Receive a message into ``alpc_message`` with ``flags``.</span>
+
+<span class="sd">            :param receive_msg: The message to send. If ``receive_msg`` is a ``None`` it create and return a simple :class:`AlpcMessage`</span>
+<span class="sd">            :type receive_msg: AlpcMessage or None</span>
+<span class="sd">            :param int flags: The flags for :func:`NtAlpcSendWaitReceivePort`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">receive_msg</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">receive_msg</span> <span class="o">=</span> <span class="n">AlpcMessage</span><span class="p">(</span><span class="mh">0x1000</span><span class="p">)</span>
+        <span class="n">receive_size</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SIZE_T</span><span class="p">(</span><span class="n">receive_msg</span><span class="o">.</span><span class="n">port_message_buffer_size</span><span class="p">)</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">NtAlpcSendWaitReceivePort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">receive_msg</span><span class="o">.</span><span class="n">port_message</span><span class="p">,</span> <span class="n">receive_size</span><span class="p">,</span> <span class="n">receive_msg</span><span class="o">.</span><span class="n">attributes</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">receive_msg</span>
+
+    <span class="k">def</span> <span class="nf">_close_port</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">port_handle</span><span class="p">):</span>
+        <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">NtAlpcDisconnectPort</span><span class="p">(</span><span class="n">port_handle</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">CloseHandle</span><span class="p">(</span><span class="n">port_handle</span><span class="p">)</span>
+
+
+
+<div class="viewcode-block" id="AlpcClient"><a class="viewcode-back" href="../../alpc.html#windows.alpc.AlpcClient">[docs]</a><span class="k">class</span> <span class="nc">AlpcClient</span><span class="p">(</span><span class="n">AlpcTransportBase</span><span class="p">):</span>
+    <span class="s2">&quot;An ALPC client able to connect to a port and send/receive messages&quot;</span>
+    <span class="n">DEFAULT_MAX_MESSAGE_LENGTH</span> <span class="o">=</span> <span class="mh">0x1000</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">port_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Init the :class:`AlpcClient` automatically connect to ``port_name`` using default values if given&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">handle</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">port_name</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">port_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connect_to_port</span><span class="p">(</span><span class="n">port_name</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_alpc_port_to_unicode_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="n">utf16_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span>
+        <span class="k">return</span> <span class="n">gdef</span><span class="o">.</span><span class="n">UNICODE_STRING</span><span class="p">(</span><span class="n">utf16_len</span><span class="p">,</span> <span class="n">utf16_len</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+
+<div class="viewcode-block" id="AlpcClient.connect_to_port"><a class="viewcode-back" href="../../alpc.html#windows.alpc.AlpcClient.connect_to_port">[docs]</a>    <span class="k">def</span> <span class="nf">connect_to_port</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">port_name</span><span class="p">,</span> <span class="n">connect_message</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                <span class="n">port_attr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">port_attr_flags</span><span class="o">=</span><span class="mh">0x10000</span><span class="p">,</span> <span class="n">obj_attr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                <span class="n">flags</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_MSGFLG_SYNC_REQUEST</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Connect to the ALPC port ``port_name``. Most of the parameters have defauls value is ``None`` is passed.</span>
+
+<span class="sd">            :param AlpcMessage connect_message: The message send with the connection request, if not ``None`` the function will return an :class:`AlpcMessage`</span>
+<span class="sd">            :param ALPC_PORT_ATTRIBUTES port_attr: The port attributes, one with default value will be used if this parameter is ``None``</span>
+<span class="sd">            :param int port_attr_flags: ``ALPC_PORT_ATTRIBUTES.Flags`` used if ``port_attr`` is ``None`` (MUTUALY EXCLUSINVE WITH ``port_attr``)</span>
+<span class="sd">            :param OBJECT_ATTRIBUTES obj_attr: The attributes of the port (can be None)</span>
+<span class="sd">            :param int flags: The flags for :func:`NtAlpcConnectPort`</span>
+<span class="sd">            :param int timeout: The timeout of the request</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO raise on mutual exclusive parameter</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Client already connected&quot;</span><span class="p">)</span>
+        <span class="n">handle</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">HANDLE</span><span class="p">()</span>
+        <span class="n">port_name_unicode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_alpc_port_to_unicode_string</span><span class="p">(</span><span class="n">port_name</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">port_attr</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">port_attr</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_PORT_ATTRIBUTES</span><span class="p">()</span>
+            <span class="n">port_attr</span><span class="o">.</span><span class="n">Flags</span> <span class="o">=</span> <span class="n">port_attr_flags</span> <span class="c1"># Flag qui fonctionne pour l&#39;UAC</span>
+            <span class="n">port_attr</span><span class="o">.</span><span class="n">MaxMessageLength</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DEFAULT_MAX_MESSAGE_LENGTH</span>
+            <span class="n">port_attr</span><span class="o">.</span><span class="n">MemoryBandwidth</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">port_attr</span><span class="o">.</span><span class="n">MaxPoolUsage</span> <span class="o">=</span> <span class="mh">0xffffffff</span>
+            <span class="n">port_attr</span><span class="o">.</span><span class="n">MaxSectionSize</span> <span class="o">=</span> <span class="mh">0xffffffff</span>
+            <span class="n">port_attr</span><span class="o">.</span><span class="n">MaxViewSize</span> <span class="o">=</span> <span class="mh">0xffffffff</span>
+            <span class="n">port_attr</span><span class="o">.</span><span class="n">MaxTotalSectionSize</span> <span class="o">=</span> <span class="mh">0xffffffff</span>
+            <span class="n">port_attr</span><span class="o">.</span><span class="n">DupObjectTypes</span> <span class="o">=</span> <span class="mh">0xffffffff</span>
+
+            <span class="n">port_attr</span><span class="o">.</span><span class="n">SecurityQos</span><span class="o">.</span><span class="n">Length</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">port_attr</span><span class="o">.</span><span class="n">SecurityQos</span><span class="p">)</span>
+            <span class="n">port_attr</span><span class="o">.</span><span class="n">SecurityQos</span><span class="o">.</span><span class="n">ImpersonationLevel</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SecurityImpersonation</span>
+            <span class="n">port_attr</span><span class="o">.</span><span class="n">SecurityQos</span><span class="o">.</span><span class="n">ContextTrackingMode</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">port_attr</span><span class="o">.</span><span class="n">SecurityQos</span><span class="o">.</span><span class="n">EffectiveOnly</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">if</span> <span class="n">connect_message</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">send_msg</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">send_msg_attr</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">buffersize</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">connect_message</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
+            <span class="n">buffersize</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">connect_message</span><span class="p">)</span> <span class="o">+</span> <span class="mh">0x1000</span><span class="p">)</span>
+            <span class="n">send_msg</span> <span class="o">=</span> <span class="n">AlpcMessagePort</span><span class="o">.</span><span class="n">from_buffer_size</span><span class="p">(</span><span class="n">buffersize</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+            <span class="n">send_msg</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">connect_message</span>
+            <span class="n">send_msg_attr</span> <span class="o">=</span> <span class="n">MessageAttribute</span><span class="o">.</span><span class="n">with_all_attributes</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">connect_message</span><span class="p">,</span> <span class="n">AlpcMessage</span><span class="p">):</span>
+            <span class="n">send_msg</span> <span class="o">=</span> <span class="n">connect_message</span><span class="o">.</span><span class="n">port_message</span>
+            <span class="n">send_msg_attr</span> <span class="o">=</span> <span class="n">connect_message</span><span class="o">.</span><span class="n">attributes</span>
+            <span class="n">buffersize</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">(</span><span class="n">connect_message</span><span class="o">.</span><span class="n">port_message_buffer_size</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Don&#39;t know how to send &lt;</span><span class="si">{0!r}</span><span class="s2">&gt; as connect message&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">connect_message</span><span class="p">))</span>
+
+        <span class="c1"># windows.utils.print_ctypes_struct(port_attr, &quot;port_attr_connect&quot;, hexa=True)</span>
+        <span class="n">receive_attr</span> <span class="o">=</span> <span class="n">MessageAttribute</span><span class="o">.</span><span class="n">with_all_attributes</span><span class="p">()</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">NtAlpcConnectPort</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">port_name_unicode</span><span class="p">,</span> <span class="n">obj_attr</span><span class="p">,</span> <span class="n">port_attr</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">send_msg</span><span class="p">,</span> <span class="n">buffersize</span><span class="p">,</span> <span class="n">send_msg_attr</span><span class="p">,</span> <span class="n">receive_attr</span><span class="p">,</span> <span class="n">timeout</span><span class="p">)</span>
+        <span class="c1"># If send_msg is not None, it contains the ClientId.UniqueProcess : PID of the server :)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">handle</span> <span class="o">=</span> <span class="n">handle</span><span class="o">.</span><span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">port_name</span> <span class="o">=</span> <span class="n">port_name</span>
+        <span class="k">return</span> <span class="n">AlpcMessage</span><span class="p">(</span><span class="n">send_msg</span><span class="p">,</span> <span class="n">receive_attr</span><span class="p">)</span> <span class="k">if</span> <span class="n">send_msg</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span></div>
+
+    <span class="k">def</span> <span class="nf">create_port_section</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Flags</span><span class="p">,</span> <span class="n">SectionHandle</span><span class="p">,</span> <span class="n">SectionSize</span><span class="p">):</span>
+        <span class="n">AlpcSectionHandle</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">HANDLE</span><span class="p">()</span>
+        <span class="n">ActualSectionSize</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SIZE_T</span><span class="p">()</span>
+        <span class="c1"># RPCRT4 USE FLAGS 0x40000 ALPC_VIEWFLG_NOT_SECURE ?</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">NtAlpcCreatePortSection</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">Flags</span><span class="p">,</span> <span class="n">SectionHandle</span><span class="p">,</span> <span class="n">SectionSize</span><span class="p">,</span> <span class="n">AlpcSectionHandle</span><span class="p">,</span> <span class="n">ActualSectionSize</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">AlpcSection</span><span class="p">(</span><span class="n">AlpcSectionHandle</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">ActualSectionSize</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">map_section</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_handle</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="n">view_attributes</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_DATA_VIEW_ATTR</span><span class="p">()</span>
+        <span class="n">view_attributes</span><span class="o">.</span><span class="n">Flags</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">view_attributes</span><span class="o">.</span><span class="n">SectionHandle</span> <span class="o">=</span> <span class="n">section_handle</span>
+        <span class="n">view_attributes</span><span class="o">.</span><span class="n">ViewBase</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">view_attributes</span><span class="o">.</span><span class="n">ViewSize</span> <span class="o">=</span> <span class="n">size</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">NtAlpcCreateSectionView</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="n">view_attributes</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">view_attributes</span>
+
+    <span class="k">def</span> <span class="nf">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_close_port</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="AlpcServer"><a class="viewcode-back" href="../../alpc.html#windows.alpc.AlpcServer">[docs]</a><span class="k">class</span> <span class="nc">AlpcServer</span><span class="p">(</span><span class="n">AlpcTransportBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An ALPC server able to create a port, accept connections and send/receive messages&quot;&quot;&quot;</span>
+    <span class="n">DEFAULT_MAX_MESSAGE_LENGTH</span> <span class="o">=</span> <span class="mh">0x1000</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">port_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">port_name</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">communication_port_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">port_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">create_port</span><span class="p">(</span><span class="n">port_name</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_alpc_port_to_unicode_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="n">utf16_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span>
+        <span class="k">return</span> <span class="n">gdef</span><span class="o">.</span><span class="n">UNICODE_STRING</span><span class="p">(</span><span class="n">utf16_len</span><span class="p">,</span> <span class="n">utf16_len</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+
+<div class="viewcode-block" id="AlpcServer.create_port"><a class="viewcode-back" href="../../alpc.html#windows.alpc.AlpcServer.create_port">[docs]</a>    <span class="k">def</span> <span class="nf">create_port</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">port_name</span><span class="p">,</span> <span class="n">msglen</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">port_attr_flags</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">obj_attr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">port_attr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create the ALPC port ``port_name``. Most of the parameters have defauls value is ``None`` is passed.</span>
+
+<span class="sd">            :param str port_name: The port&#39;s name to create.</span>
+<span class="sd">            :param int msglen: ``ALPC_PORT_ATTRIBUTES.MaxMessageLength`` used if ``port_attr`` is ``None`` (MUTUALY EXCLUSINVE WITH ``port_attr``)</span>
+<span class="sd">            :param int port_attr_flags: ``ALPC_PORT_ATTRIBUTES.Flags`` used if ``port_attr`` is ``None`` (MUTUALY EXCLUSINVE WITH ``port_attr``)</span>
+<span class="sd">            :param OBJECT_ATTRIBUTES obj_attr: The attributes of the port, one with default value will be used if this parameter is ``None``</span>
+<span class="sd">            :param ALPC_PORT_ATTRIBUTES port_attr: The port attributes, one with default value will be used if this parameter is ``None``</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO raise on mutual exclusive parameter (port_attr + port_attr_flags | obj_attr + msglen)</span>
+        <span class="n">handle</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">HANDLE</span><span class="p">()</span>
+        <span class="n">raw_name</span> <span class="o">=</span>  <span class="n">port_name</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">raw_name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">):</span>
+            <span class="n">raw_name</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">port_name</span>
+        <span class="n">port_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_alpc_port_to_unicode_string</span><span class="p">(</span><span class="n">raw_name</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">msglen</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">msglen</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DEFAULT_MAX_MESSAGE_LENGTH</span>
+        <span class="k">if</span> <span class="n">obj_attr</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">obj_attr</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">OBJECT_ATTRIBUTES</span><span class="p">()</span>
+            <span class="n">obj_attr</span><span class="o">.</span><span class="n">Length</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">obj_attr</span><span class="p">)</span>
+            <span class="n">obj_attr</span><span class="o">.</span><span class="n">RootDirectory</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">obj_attr</span><span class="o">.</span><span class="n">ObjectName</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">pointer</span><span class="p">(</span><span class="n">port_name</span><span class="p">)</span>
+            <span class="n">obj_attr</span><span class="o">.</span><span class="n">Attributes</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">obj_attr</span><span class="o">.</span><span class="n">SecurityDescriptor</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">obj_attr</span><span class="o">.</span><span class="n">SecurityQualityOfService</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">port_attr</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">port_attr</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_PORT_ATTRIBUTES</span><span class="p">()</span>
+            <span class="n">port_attr</span><span class="o">.</span><span class="n">Flags</span> <span class="o">=</span> <span class="n">port_attr_flags</span>
+            <span class="c1"># port_attr.Flags = 0x2080000</span>
+            <span class="c1"># port_attr.Flags = 0x90000</span>
+            <span class="n">port_attr</span><span class="o">.</span><span class="n">MaxMessageLength</span> <span class="o">=</span> <span class="n">msglen</span>
+            <span class="n">port_attr</span><span class="o">.</span><span class="n">MemoryBandwidth</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">port_attr</span><span class="o">.</span><span class="n">MaxPoolUsage</span> <span class="o">=</span> <span class="mh">0xffffffff</span>
+            <span class="n">port_attr</span><span class="o">.</span><span class="n">MaxSectionSize</span> <span class="o">=</span> <span class="mh">0xffffffff</span>
+            <span class="n">port_attr</span><span class="o">.</span><span class="n">MaxViewSize</span> <span class="o">=</span> <span class="mh">0xffffffff</span>
+            <span class="n">port_attr</span><span class="o">.</span><span class="n">MaxTotalSectionSize</span> <span class="o">=</span> <span class="mh">0xffffffff</span>
+            <span class="n">port_attr</span><span class="o">.</span><span class="n">DupObjectTypes</span> <span class="o">=</span> <span class="mh">0xffffffff</span>
+            <span class="c1"># windows.utils.print_ctypes_struct(port_attr, &quot;   - PORT_ATTR&quot;, hexa=True)</span>
+
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">NtAlpcCreatePort</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">obj_attr</span><span class="p">,</span> <span class="n">port_attr</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">port_name</span> <span class="o">=</span> <span class="n">raw_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">handle</span> <span class="o">=</span> <span class="n">handle</span><span class="o">.</span><span class="n">value</span></div>
+
+<div class="viewcode-block" id="AlpcServer.accept_connection"><a class="viewcode-back" href="../../alpc.html#windows.alpc.AlpcServer.accept_connection">[docs]</a>    <span class="k">def</span> <span class="nf">accept_connection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">port_attr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">port_context</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Accept the connection for a ``LPC_CONNECTION_REQUEST`` message.</span>
+<span class="sd">            ``msg.MessageId`` must be the same as the connection requesting message.</span>
+
+<span class="sd">            :param AlpcMessage msg: The response message.</span>
+<span class="sd">            :param ALPC_PORT_ATTRIBUTES port_attr: The attributes of the port, one with default value will be used if this parameter is ``None``</span>
+<span class="sd">            :param PVOID port_context: A value that will be copied in ``ALPC_CONTEXT_ATTR.PortContext`` of every message on this connection.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">rhandle</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">HANDLE</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">port_attr</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">port_attr</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_PORT_ATTRIBUTES</span><span class="p">()</span>
+            <span class="n">port_attr</span><span class="o">.</span><span class="n">Flags</span> <span class="o">=</span> <span class="mh">0x80000</span>
+            <span class="c1"># port_attr.Flags = 0x80000 + 0x2000000</span>
+            <span class="c1"># port_attr.Flags =  0x2000000</span>
+            <span class="n">port_attr</span><span class="o">.</span><span class="n">MaxMessageLength</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DEFAULT_MAX_MESSAGE_LENGTH</span>
+            <span class="n">port_attr</span><span class="o">.</span><span class="n">MemoryBandwidth</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">port_attr</span><span class="o">.</span><span class="n">MaxPoolUsage</span> <span class="o">=</span> <span class="mh">0xffffffff</span>
+            <span class="n">port_attr</span><span class="o">.</span><span class="n">MaxSectionSize</span> <span class="o">=</span> <span class="mh">0xffffffff</span>
+            <span class="n">port_attr</span><span class="o">.</span><span class="n">MaxViewSize</span> <span class="o">=</span> <span class="mh">0xffffffff</span>
+            <span class="n">port_attr</span><span class="o">.</span><span class="n">MaxTotalSectionSize</span> <span class="o">=</span> <span class="mh">0xffffffff</span>
+            <span class="n">port_attr</span><span class="o">.</span><span class="n">DupObjectTypes</span> <span class="o">=</span> <span class="mh">0xffffffff</span>
+        <span class="c1"># windows.utils.print_ctypes_struct(port_attr, &quot;   - CONN_PORT_ATTR&quot;, hexa=True)</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">NtAlpcAcceptConnectPort</span><span class="p">(</span><span class="n">rhandle</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">port_attr</span><span class="p">,</span> <span class="n">port_context</span><span class="p">,</span> <span class="n">msg</span><span class="o">.</span><span class="n">port_message</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">communication_port_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rhandle</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">msg</span></div>
+
+    <span class="k">def</span> <span class="nf">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_close_port</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">com_port_handle</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">communication_port_list</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_close_port</span><span class="p">(</span><span class="n">com_port_handle</span><span class="p">)</span>
+
+    <span class="c1"># TODO: add an API to close a communication port ?</span>
+
+    <span class="k">def</span> <span class="nf">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">PythonForWindows 0.3 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2015, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.5.
+    </div>
+  </body>
+</html>

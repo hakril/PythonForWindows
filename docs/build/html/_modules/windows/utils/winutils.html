@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>windows.utils.winutils &#8212; PythonForWindows 0.2 documentation</title>
+    <title>windows.utils.winutils &#8212; PythonForWindows 0.3 documentation</title>
     
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '0.2',
+        VERSION:     '0.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -54,6 +54,7 @@
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">code</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">namedtuple</span>
 
 <span class="kn">import</span> <span class="nn">windows</span>
 <span class="kn">from</span> <span class="nn">windows.dbgprint</span> <span class="k">import</span> <span class="n">dbgprint</span>
@@ -63,6 +64,7 @@
 
 
 <span class="c1"># Function resolution !</span>
+<span class="c1"># should be in winproxy ?</span>
 <span class="k">def</span> <span class="nf">get_func_addr</span><span class="p">(</span><span class="n">dll_name</span><span class="p">,</span> <span class="n">func_name</span><span class="p">):</span>
         <span class="c1"># Load the DLL</span>
         <span class="n">ctypes</span><span class="o">.</span><span class="n">WinDLL</span><span class="p">(</span><span class="n">dll_name</span><span class="p">)</span>
@@ -142,6 +144,20 @@
     <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">winobject</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">WinProcess</span><span class="p">(</span><span class="n">pid</span><span class="o">=</span><span class="n">proc_info</span><span class="o">.</span><span class="n">dwProcessId</span><span class="p">,</span> <span class="n">handle</span><span class="o">=</span><span class="n">proc_info</span><span class="o">.</span><span class="n">hProcess</span><span class="p">)</span></div>
 
 
+<span class="k">def</span> <span class="nf">lookup_privilege_value</span><span class="p">(</span><span class="n">privilege_name</span><span class="p">):</span>
+    <span class="n">luid</span> <span class="o">=</span> <span class="n">LUID</span><span class="p">()</span>
+    <span class="n">winproxy</span><span class="o">.</span><span class="n">LookupPrivilegeValueA</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">privilege_name</span><span class="p">,</span> <span class="n">byref</span><span class="p">(</span><span class="n">luid</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">luid</span>
+
+<span class="k">def</span> <span class="nf">lookup_privilege_name</span><span class="p">(</span><span class="n">privilege_value</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">privilege_value</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+        <span class="n">luid</span> <span class="o">=</span> <span class="n">LUID</span><span class="p">(</span><span class="n">privilege_value</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">privilege_value</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">privilege_value</span> <span class="o">=</span> <span class="n">luid</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="n">DWORD</span><span class="p">(</span><span class="mh">0x100</span><span class="p">)</span>
+    <span class="n">buff</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_buffer</span><span class="p">(</span><span class="n">size</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+    <span class="n">winproxy</span><span class="o">.</span><span class="n">LookupPrivilegeNameA</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">privilege_value</span><span class="p">,</span> <span class="n">buff</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">buff</span><span class="p">[:</span><span class="n">size</span><span class="o">.</span><span class="n">value</span><span class="p">]</span>
+
 <div class="viewcode-block" id="enable_privilege"><a class="viewcode-back" href="../../../utils.html#windows.utils.enable_privilege">[docs]</a><span class="k">def</span> <span class="nf">enable_privilege</span><span class="p">(</span><span class="n">lpszPrivilege</span><span class="p">,</span> <span class="n">bEnablePrivilege</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Enable or disable a privilege::</span>
@@ -219,20 +235,31 @@
         <span class="k">return</span> <span class="n">raw_input</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="pop_shell"><a class="viewcode-back" href="../../../utils.html#windows.utils.pop_shell">[docs]</a><span class="k">def</span> <span class="nf">pop_shell</span><span class="p">():</span>
+<div class="viewcode-block" id="pop_shell"><a class="viewcode-back" href="../../../utils.html#windows.utils.pop_shell">[docs]</a><span class="k">def</span> <span class="nf">pop_shell</span><span class="p">(</span><span class="n">locs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Pop a console with an InterativeConsole&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">locs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">locs</span> <span class="o">=</span> <span class="nb">globals</span><span class="p">()</span>
     <span class="n">create_console</span><span class="p">()</span>
-    <span class="n">FixedInteractiveConsole</span><span class="p">(</span><span class="nb">locals</span><span class="p">())</span><span class="o">.</span><span class="n">interact</span><span class="p">()</span></div>
-
+    <span class="n">FixedInteractiveConsole</span><span class="p">(</span><span class="n">locs</span><span class="p">)</span><span class="o">.</span><span class="n">interact</span><span class="p">()</span></div>
 
 <span class="k">def</span> <span class="nf">get_kernel_modules</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">is_wow_64</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">get_kernel_modules_syswow64</span><span class="p">()</span>
     <span class="n">cbsize</span> <span class="o">=</span> <span class="n">DWORD</span><span class="p">()</span>
-
     <span class="n">winproxy</span><span class="o">.</span><span class="n">NtQuerySystemInformation</span><span class="p">(</span><span class="n">SystemModuleInformation</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">byref</span><span class="p">(</span><span class="n">cbsize</span><span class="p">))</span>
     <span class="n">raw_buffer</span> <span class="o">=</span> <span class="p">(</span><span class="n">cbsize</span><span class="o">.</span><span class="n">value</span> <span class="o">*</span> <span class="n">c_char</span><span class="p">)()</span>
     <span class="n">buffer</span> <span class="o">=</span> <span class="n">SYSTEM_MODULE_INFORMATION</span><span class="o">.</span><span class="n">from_address</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">addressof</span><span class="p">(</span><span class="n">raw_buffer</span><span class="p">))</span>
     <span class="n">winproxy</span><span class="o">.</span><span class="n">NtQuerySystemInformation</span><span class="p">(</span><span class="n">SystemModuleInformation</span><span class="p">,</span> <span class="n">byref</span><span class="p">(</span><span class="n">raw_buffer</span><span class="p">),</span> <span class="n">sizeof</span><span class="p">(</span><span class="n">raw_buffer</span><span class="p">),</span> <span class="n">byref</span><span class="p">(</span><span class="n">cbsize</span><span class="p">))</span>
     <span class="n">modules</span> <span class="o">=</span> <span class="p">(</span><span class="n">SYSTEM_MODULE</span> <span class="o">*</span> <span class="n">buffer</span><span class="o">.</span><span class="n">ModulesCount</span><span class="p">)</span><span class="o">.</span><span class="n">from_address</span><span class="p">(</span><span class="n">addressof</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span> <span class="o">+</span> <span class="n">SYSTEM_MODULE_INFORMATION</span><span class="o">.</span><span class="n">Modules</span><span class="o">.</span><span class="n">offset</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">modules</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">get_kernel_modules_syswow64</span><span class="p">():</span>
+    <span class="n">cbsize</span> <span class="o">=</span> <span class="n">DWORD</span><span class="p">()</span>
+    <span class="n">windows</span><span class="o">.</span><span class="n">syswow64</span><span class="o">.</span><span class="n">NtQuerySystemInformation_32_to_64</span><span class="p">(</span><span class="n">SystemModuleInformation</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">addressof</span><span class="p">(</span><span class="n">cbsize</span><span class="p">))</span>
+    <span class="n">raw_buffer</span> <span class="o">=</span> <span class="p">(</span><span class="n">cbsize</span><span class="o">.</span><span class="n">value</span> <span class="o">*</span> <span class="n">c_char</span><span class="p">)()</span>
+    <span class="n">buffer</span> <span class="o">=</span> <span class="n">SYSTEM_MODULE_INFORMATION64</span><span class="o">.</span><span class="n">from_address</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">addressof</span><span class="p">(</span><span class="n">raw_buffer</span><span class="p">))</span>
+    <span class="n">windows</span><span class="o">.</span><span class="n">syswow64</span><span class="o">.</span><span class="n">NtQuerySystemInformation_32_to_64</span><span class="p">(</span><span class="n">SystemModuleInformation</span><span class="p">,</span> <span class="n">byref</span><span class="p">(</span><span class="n">raw_buffer</span><span class="p">),</span> <span class="n">sizeof</span><span class="p">(</span><span class="n">raw_buffer</span><span class="p">),</span> <span class="n">byref</span><span class="p">(</span><span class="n">cbsize</span><span class="p">))</span>
+    <span class="n">modules</span> <span class="o">=</span> <span class="p">(</span><span class="n">SYSTEM_MODULE64</span> <span class="o">*</span> <span class="n">buffer</span><span class="o">.</span><span class="n">ModulesCount</span><span class="p">)</span><span class="o">.</span><span class="n">from_address</span><span class="p">(</span><span class="n">addressof</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span> <span class="o">+</span> <span class="n">SYSTEM_MODULE_INFORMATION64</span><span class="o">.</span><span class="n">Modules</span><span class="o">.</span><span class="n">offset</span><span class="p">)</span>
     <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">modules</span><span class="p">)</span>
 
 
@@ -280,6 +307,28 @@
     <span class="n">uncompressed</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_buffer</span><span class="p">(</span><span class="n">uncompress_size</span><span class="p">)</span>
     <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">RtlDecompressBuffer</span><span class="p">(</span><span class="n">comptype</span><span class="p">,</span> <span class="n">uncompressed</span><span class="p">,</span> <span class="n">uncompress_size</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">buffer</span><span class="p">),</span> <span class="n">result_size</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">uncompressed</span><span class="p">[:</span><span class="n">result_size</span><span class="o">.</span><span class="n">value</span><span class="p">]</span>
+
+
+<span class="c1"># sid.py + real SID type ?</span>
+
+<span class="k">def</span> <span class="nf">get_known_sid</span><span class="p">(</span><span class="n">sid_type</span><span class="p">):</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="n">DWORD</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">CreateWellKnownSid</span><span class="p">(</span><span class="n">sid_type</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">WindowsError</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="n">buffer</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_buffer</span><span class="p">(</span><span class="n">size</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+    <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">CreateWellKnownSid</span><span class="p">(</span><span class="n">sid_type</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">PSID</span><span class="p">)</span>
+
+<span class="n">UnloadEventTraceInfo</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s2">&quot;UnloadEventTraceInfo&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;size&quot;</span><span class="p">,</span> <span class="s2">&quot;nb_elt&quot;</span><span class="p">,</span> <span class="s2">&quot;array_ptr&quot;</span><span class="p">])</span>
+
+<span class="k">def</span> <span class="nf">get_unload_event_trace</span><span class="p">():</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">PULONG</span><span class="p">()</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">PULONG</span><span class="p">()</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">PVOID</span><span class="p">()</span>
+    <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">RtlGetUnloadEventTraceEx</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">UnloadEventTraceInfo</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">z</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 
 <div class="viewcode-block" id="VirtualProtected"><a class="viewcode-back" href="../../../utils.html#windows.utils.VirtualProtected">[docs]</a><span class="k">class</span> <span class="nc">VirtualProtected</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -356,7 +405,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>

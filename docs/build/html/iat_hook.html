@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>10. IAT hooking &#8212; PythonForWindows 0.2 documentation</title>
+    <title>13. IAT hooking &#8212; PythonForWindows 0.3 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.2',
+        VERSION:     '0.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -26,8 +26,8 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="11. Early Work In Progress" href="wip.html" />
-    <link rel="prev" title="9. windows.crypto – CryptoAPI" href="crypto.html" /> 
+    <link rel="next" title="14. Early Work In Progress" href="wip.html" />
+    <link rel="prev" title="12.3. Winstructs" href="winstructs_generated.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -40,12 +40,12 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="wip.html" title="11. Early Work In Progress"
+          <a href="wip.html" title="14. Early Work In Progress"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="crypto.html" title="9. windows.crypto – CryptoAPI"
+          <a href="winstructs_generated.html" title="12.3. Winstructs"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.2 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.3 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -55,13 +55,13 @@
           <div class="body" role="main">
             
   <div class="section" id="iat-hooking">
-<h1>10. IAT hooking<a class="headerlink" href="#iat-hooking" title="Permalink to this headline">¶</a></h1>
+<h1>13. IAT hooking<a class="headerlink" href="#iat-hooking" title="Permalink to this headline">¶</a></h1>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">See sample <a class="reference internal" href="sample.html#sample-iat-hook"><span class="std std-ref">IAT hooking</span></a></p>
 </div>
 <div class="section" id="putting-an-iat-hook">
-<h2>10.1. Putting an IAT hook<a class="headerlink" href="#putting-an-iat-hook" title="Permalink to this headline">¶</a></h2>
+<h2>13.1. Putting an IAT hook<a class="headerlink" href="#putting-an-iat-hook" title="Permalink to this headline">¶</a></h2>
 <p>To setup your IAT hook you just need:</p>
 <blockquote>
 <div><ul class="simple">
@@ -90,9 +90,9 @@
 </div>
 </div>
 <div class="section" id="hook-protocol">
-<span id="id1"></span><h2>10.2. Hook protocol<a class="headerlink" href="#hook-protocol" title="Permalink to this headline">¶</a></h2>
+<span id="id1"></span><h2>13.2. Hook protocol<a class="headerlink" href="#hook-protocol" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="callback-arguments">
-<h3>10.2.1. Callback arguments<a class="headerlink" href="#callback-arguments" title="Permalink to this headline">¶</a></h3>
+<h3>13.2.1. Callback arguments<a class="headerlink" href="#callback-arguments" title="Permalink to this headline">¶</a></h3>
 <p>A hook callback must have the same number of argument as the hooked API, PLUS a last argument <code class="docutils literal"><span class="pre">real_function</span></code>.</p>
 <p>The <code class="docutils literal"><span class="pre">real_function</span></code> argument is a callable that represent the hooked API, it can be called in two ways:</p>
 <blockquote>
@@ -113,7 +113,7 @@
 <p>A hook callback must also embed some <a class="reference internal" href="#type-information"><span class="std std-ref">Type Information</span></a></p>
 </div>
 <div class="section" id="callback-type-information">
-<span id="type-information"></span><h3>10.2.2. Callback type information<a class="headerlink" href="#callback-type-information" title="Permalink to this headline">¶</a></h3>
+<span id="type-information"></span><h3>13.2.2. Callback type information<a class="headerlink" href="#callback-type-information" title="Permalink to this headline">¶</a></h3>
 <p>In order make the magic behind hook callback, <a class="reference external" href="https://docs.python.org/2/library/ctypes.html#module-ctypes" title="(in Python v2.7)"><code class="xref py py-mod docutils literal"><span class="pre">ctypes</span></code></a> needs to have type information about the API parameters.</p>
 <p>There is (again) two ways to give those informations to your hook callback. Both techniques use a decorator to setup type information to the callback.</p>
 <blockquote>
@@ -152,7 +152,7 @@
 </div>
 </div>
 <div class="section" id="module-windows.hooks">
-<span id="windows-hooks"></span><h2>10.3. <a class="reference internal" href="#module-windows.hooks" title="windows.hooks"><code class="xref py py-mod docutils literal"><span class="pre">windows.hooks</span></code></a><a class="headerlink" href="#module-windows.hooks" title="Permalink to this headline">¶</a></h2>
+<span id="windows-hooks"></span><h2>13.3. <a class="reference internal" href="#module-windows.hooks" title="windows.hooks"><code class="xref py py-mod docutils literal"><span class="pre">windows.hooks</span></code></a><a class="headerlink" href="#module-windows.hooks" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="windows.hooks.Callback">
 <em class="property">class </em><code class="descclassname">windows.hooks.</code><code class="descname">Callback</code><span class="sig-paren">(</span><em>*types</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/hooks.html#Callback"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.hooks.Callback" title="Permalink to this definition">¶</a></dt>
@@ -188,24 +188,24 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">10. IAT hooking</a><ul>
-<li><a class="reference internal" href="#putting-an-iat-hook">10.1. Putting an IAT hook</a></li>
-<li><a class="reference internal" href="#hook-protocol">10.2. Hook protocol</a><ul>
-<li><a class="reference internal" href="#callback-arguments">10.2.1. Callback arguments</a></li>
-<li><a class="reference internal" href="#callback-type-information">10.2.2. Callback type information</a></li>
+<li><a class="reference internal" href="#">13. IAT hooking</a><ul>
+<li><a class="reference internal" href="#putting-an-iat-hook">13.1. Putting an IAT hook</a></li>
+<li><a class="reference internal" href="#hook-protocol">13.2. Hook protocol</a><ul>
+<li><a class="reference internal" href="#callback-arguments">13.2.1. Callback arguments</a></li>
+<li><a class="reference internal" href="#callback-type-information">13.2.2. Callback type information</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#module-windows.hooks">10.3. <code class="docutils literal"><span class="pre">windows.hooks</span></code></a></li>
+<li><a class="reference internal" href="#module-windows.hooks">13.3. <code class="docutils literal"><span class="pre">windows.hooks</span></code></a></li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="crypto.html"
-                        title="previous chapter">9. <code class="docutils literal"><span class="pre">windows.crypto</span></code> &#8211; CryptoAPI</a></p>
+  <p class="topless"><a href="winstructs_generated.html"
+                        title="previous chapter">12.3. Winstructs</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="wip.html"
-                        title="next chapter">11. Early Work In Progress</a></p>
+                        title="next chapter">14. Early Work In Progress</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -237,12 +237,12 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="wip.html" title="11. Early Work In Progress"
+          <a href="wip.html" title="14. Early Work In Progress"
              >next</a> |</li>
         <li class="right" >
-          <a href="crypto.html" title="9. windows.crypto – CryptoAPI"
+          <a href="winstructs_generated.html" title="12.3. Winstructs"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.2 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.3 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

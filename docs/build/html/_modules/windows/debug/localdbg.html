@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>windows.debug.localdbg &#8212; PythonForWindows 0.2 documentation</title>
+    <title>windows.debug.localdbg &#8212; PythonForWindows 0.3 documentation</title>
     
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '0.2',
+        VERSION:     '0.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -82,6 +82,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">veh_depth</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">current_exception</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">exceptions_stack</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_process</span> <span class="o">=</span>  <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span>
 
     <span class="nd">@contextmanager</span>
     <span class="k">def</span> <span class="nf">NewCurrentException</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc</span><span class="p">):</span>
@@ -113,6 +114,31 @@
             <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">write_memory</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_memory_save</span><span class="p">[</span><span class="n">addr</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_reput_breakpoint</span><span class="p">[</span><span class="n">windows</span><span class="o">.</span><span class="n">current_thread</span><span class="o">.</span><span class="n">tid</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">breakpoints</span><span class="p">[</span><span class="n">addr</span><span class="p">],</span> <span class="n">single_step</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">single_step</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_local_resolve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addr</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">addr</span>
+        <span class="n">dll</span><span class="p">,</span> <span class="n">api</span> <span class="o">=</span> <span class="n">addr</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;!&quot;</span><span class="p">)</span>
+        <span class="n">dll</span> <span class="o">=</span> <span class="n">dll</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="n">modules</span> <span class="o">=</span> <span class="p">{</span><span class="n">m</span><span class="o">.</span><span class="n">name</span><span class="p">[:</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="s2">&quot;.dll&quot;</span><span class="p">)]</span> <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.dll&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="n">m</span><span class="o">.</span><span class="n">name</span> <span class="p">:</span> <span class="n">m</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">peb</span><span class="o">.</span><span class="n">modules</span><span class="p">}</span>
+        <span class="n">mod</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">dll</span> <span class="ow">in</span> <span class="n">modules</span><span class="p">:</span>
+            <span class="n">mod</span> <span class="o">=</span> <span class="p">[</span><span class="n">modules</span><span class="p">[</span><span class="n">dll</span><span class="p">]]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">mod</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="c1"># TODO: optim exports are the same for whole system (32 vs 64 bits)</span>
+        <span class="c1"># I don&#39;t have to reparse the exports each time..</span>
+        <span class="c1"># Try to interpret api as an int</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">api_int</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">mod</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">baseaddr</span> <span class="o">+</span> <span class="n">api_int</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="n">exports</span> <span class="o">=</span> <span class="n">mod</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">pe</span><span class="o">.</span><span class="n">exports</span>
+        <span class="k">if</span> <span class="n">api</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exports</span><span class="p">:</span>
+            <span class="n">dbgprint</span><span class="p">(</span><span class="s2">&quot;Error resolving &lt;</span><span class="si">{0}</span><span class="s2">&gt; in local process&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="n">target</span><span class="p">),</span> <span class="s2">&quot;DBG&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown API &lt;</span><span class="si">{0}</span><span class="s2">&gt; in DLL </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="n">dll</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">exports</span><span class="p">[</span><span class="n">api</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc</span><span class="p">):</span>
         <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">NewCurrentException</span><span class="p">(</span><span class="n">exc</span><span class="p">):</span>
@@ -184,10 +210,11 @@
             <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Unknow BP type </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bp</span><span class="o">.</span><span class="n">type</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">targets</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;LocalDebugger: STANDARD_BP doest not support targets </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">targets</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">breakpoints</span><span class="p">[</span><span class="n">bp</span><span class="o">.</span><span class="n">addr</span><span class="p">]</span> <span class="o">=</span> <span class="n">bp</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_memory_save</span><span class="p">[</span><span class="n">bp</span><span class="o">.</span><span class="n">addr</span><span class="p">]</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">read_memory</span><span class="p">(</span><span class="n">bp</span><span class="o">.</span><span class="n">addr</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="k">with</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">VirtualProtected</span><span class="p">(</span><span class="n">bp</span><span class="o">.</span><span class="n">addr</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">PAGE_EXECUTE_READWRITE</span><span class="p">):</span>
-            <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">write_memory</span><span class="p">(</span><span class="n">bp</span><span class="o">.</span><span class="n">addr</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\xcc</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">addr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_local_resolve</span><span class="p">(</span><span class="n">bp</span><span class="o">.</span><span class="n">addr</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">breakpoints</span><span class="p">[</span><span class="n">addr</span><span class="p">]</span> <span class="o">=</span> <span class="n">bp</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_memory_save</span><span class="p">[</span><span class="n">addr</span><span class="p">]</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">read_memory</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">VirtualProtected</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">PAGE_EXECUTE_READWRITE</span><span class="p">):</span>
+            <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">write_memory</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\xcc</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">return</span></div>
 
     <span class="k">def</span> <span class="nf">add_bp_hxbp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bp</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -334,7 +361,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
