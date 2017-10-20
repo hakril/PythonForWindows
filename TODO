@@ -2,6 +2,8 @@ TODO:
 
     - Better WMI interface
 
+    - Process:
+        - set/get WinProcess.priority
 
     - DBG
         - Verif multiple bp at same place..

@@ -64,11 +64,11 @@
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;An object to perform wmi request to ``root\cimv2``&quot;&quot;&quot;</span>
     <span class="n">INSTANCE</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">INSTANCE</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">INSTANCE</span>
-        <span class="bp">cls</span><span class="o">.</span><span class="n">INSTANCE</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">INSTANCE</span>
+    <span class="c1"># def __new__(cls, *args, **kwargs):</span>
+    <span class="c1">#     if cls.INSTANCE is not None:</span>
+    <span class="c1">#         return cls.INSTANCE</span>
+    <span class="c1">#     cls.INSTANCE = super(cls, cls).__new__(cls, *args, **kwargs)</span>
+    <span class="c1">#     return cls.INSTANCE</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s2">&quot;root</span><span class="se">\\</span><span class="s2">cimv2&quot;</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="n">locator</span> <span class="o">=</span> <span class="n">IWbemLocator</span><span class="p">()</span>
@@ -173,7 +173,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
     </div>
   </body>
 </html>

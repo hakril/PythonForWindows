@@ -1,3 +1,6 @@
+
+.. _sample_of_code:
+
 Samples of code
 ===============
 

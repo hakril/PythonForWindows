@@ -6,7 +6,25 @@
 Welcome to PythonForWindows's documentation!
 ============================================
 
-Contents:
+Description
+"""""""""""
+
+PythonForWindows is a base of code aimed to make interaction with ``Windows`` (on X86/X64) easier (for both 32 and 64 bits Python).
+Its goal is to offer abstractions around some of the OS features in a (I hope) pythonic way.
+It also tries to make the barrier between python and native execution thinner in both ways.
+There is no external dependencies but it relies heavily on the ``ctypes`` module.
+
+
+Some of this code is clean (IMHO) and some parts are just a wreck that works for now.
+Let's say that the codebase evolves with my needs and my curiosity.
+
+If you have any issue, question, suggestion do not hesitate to contact me.
+I am always glad to have feedbacks from people using this project.
+
+Examples are available on the `github page <https://github.com/hakril/pythonforwindows#pythonforwindows>`_  and in the :ref:`sample_of_code`.
+
+Documentation
+"""""""""""""
 
 .. toctree::
    :maxdepth: 2
