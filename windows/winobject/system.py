@@ -81,10 +81,10 @@ class System(object):
 
     @utils.fixedpropety
     def wmi(self):
-        r"""An object to perform wmi request to "root\\cimv2"
+        r"""An object to perform wmi requests to various namespaces
 
-        :type: :class:`windows.winobject.wmi.WmiRequester`"""
-        return wmi.WmiRequester()
+        :type: :class:`windows.winobject.wmi.WmiManager`"""
+        return wmi.WmiManager()
 
     #TODO: use GetComputerNameExA ? and recover other names ?
     @utils.fixedpropety

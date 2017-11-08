@@ -8,3 +8,7 @@ WMI -- Make request to WMI
     See sample :ref:`wmi_request`
 
 .. autoclass:: WmiRequester
+
+.. autoclass:: WmiManager
+    :no-inherited-members:
+    :members: select, query, namespaces

@@ -895,6 +895,10 @@
         <span class="n">handle</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CreateThread</span><span class="p">(</span><span class="n">lpStartAddress</span><span class="o">=</span><span class="n">lpStartAddress</span><span class="p">,</span> <span class="n">lpParameter</span><span class="o">=</span><span class="n">lpParameter</span><span class="p">,</span> <span class="n">dwCreationFlags</span><span class="o">=</span><span class="n">dwCreationFlags</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">WinThread</span><span class="o">.</span><span class="n">_from_handle</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span></div>
 
+<div class="viewcode-block" id="CurrentProcess.load_library"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.CurrentProcess.load_library">[docs]</a>    <span class="k">def</span> <span class="nf">load_library</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dll_path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Load the library in current process&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">LoadLibraryA</span><span class="p">(</span><span class="n">dll_path</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="CurrentProcess.execute"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.CurrentProcess.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">code</span><span class="p">,</span> <span class="n">parameter</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Execute native code ``code`` in the current thread.</span>
 

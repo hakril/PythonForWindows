@@ -845,6 +845,10 @@ class CurrentProcess(Process):
         handle = winproxy.CreateThread(lpStartAddress=lpStartAddress, lpParameter=lpParameter, dwCreationFlags=dwCreationFlags)
         return WinThread._from_handle(handle)
 
+    def load_library(self, dll_path):
+        """Load the library in current process"""
+        return winproxy.LoadLibraryA(dll_path)
+
     def execute(self, code, parameter=0):
         """Execute native code ``code`` in the current thread.
 

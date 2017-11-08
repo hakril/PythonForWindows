@@ -65,6 +65,34 @@
 <dt id="windows.winobject.wmi.WmiRequester">
 <em class="property">class </em><code class="descclassname">windows.winobject.wmi.</code><code class="descname">WmiRequester</code><span class="sig-paren">(</span><em>target='root\cimv2'</em>, <em>user=None</em>, <em>password=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/wmi.html#WmiRequester"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.wmi.WmiRequester" title="Permalink to this definition">¶</a></dt>
 <dd><p>An object to perform wmi request to <code class="docutils literal"><span class="pre">root\cimv2</span></code></p>
+<dl class="attribute">
+<dt id="windows.winobject.wmi.WmiRequester.classes">
+<code class="descname">classes</code><a class="headerlink" href="#windows.winobject.wmi.WmiRequester.classes" title="Permalink to this definition">¶</a></dt>
+<dd><p>The list of class available</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list of str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.wmi.WmiRequester.query">
+<code class="descname">query</code><span class="sig-paren">(</span><em>query</em>, <em>attrs='*'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/wmi.html#WmiRequester.query"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.wmi.WmiRequester.query" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute WMI <code class="docutils literal"><span class="pre">query</span></code> and return the attributes <code class="docutils literal"><span class="pre">attrs</span></code></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list of dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="method">
 <dt id="windows.winobject.wmi.WmiRequester.select">
 <code class="descname">select</code><span class="sig-paren">(</span><em>frm</em>, <em>attrs='*'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/wmi.html#WmiRequester.select"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.wmi.WmiRequester.select" title="Permalink to this definition">¶</a></dt>
@@ -77,6 +105,31 @@
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="windows.winobject.wmi.WmiManager">
+<em class="property">class </em><code class="descclassname">windows.winobject.wmi.</code><code class="descname">WmiManager</code><a class="reference internal" href="_modules/windows/winobject/wmi.html#WmiManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.wmi.WmiManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>The main WMI class exposed, used to list and access differents WMI namespace, can be used as a dict to access
+<a href="#id1"><span class="problematic" id="id2">:cls:`WmiRequester`</span></a> by namespace</p>
+<dl class="attribute">
+<dt id="windows.winobject.wmi.WmiManager.namespaces">
+<code class="descname">namespaces</code><a class="headerlink" href="#windows.winobject.wmi.WmiManager.namespaces" title="Permalink to this definition">¶</a></dt>
+<dd><p>The list of available WMI namespaces</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.wmi.WmiManager.query">
+<code class="descname">query</code><a class="headerlink" href="#windows.winobject.wmi.WmiManager.query" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="#windows.winobject.wmi.WmiRequester.query" title="windows.winobject.wmi.WmiRequester.query"><code class="xref py py-func docutils literal"><span class="pre">WmiRequester.query()</span></code></a> for default WMI namespace &#8216;root\cimv2&#8217;</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.wmi.WmiManager.select">
+<code class="descname">select</code><a class="headerlink" href="#windows.winobject.wmi.WmiManager.select" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="#windows.winobject.wmi.WmiRequester.select" title="windows.winobject.wmi.WmiRequester.select"><code class="xref py py-func docutils literal"><span class="pre">WmiRequester.select()</span></code></a> for default WMI namespace &#8216;root\cimv2&#8217;</p>
 </dd></dl>
 
 </dd></dl>
