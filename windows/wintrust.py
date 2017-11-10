@@ -7,42 +7,10 @@ import windows.generated_def as gdef
 from windows.generated_def.winstructs import *
 
 
-IID_PACK = "<I", "<H", "<H", "<B", "<B", "<B", "<B", "<B", "<B", "<B", "<B"
-def get_IID_from_raw(raw):
-    s = "".join([struct.pack(i, j) for i, j in zip(IID_PACK, raw)])
-    return ctypes.create_string_buffer(s)
 
-
-WINTRUST_ACTION_GENERIC_VERIFY_V2_RAW = (0xaac56b, 0xcd44,  0x11d0,
-                    0x8c, 0xc2, 0x0, 0xc0, 0x4f, 0xc2, 0x95, 0xee)
-
-WINTRUST_ACTION_GENERIC_VERIFY_V2_STR = get_IID_from_raw(WINTRUST_ACTION_GENERIC_VERIFY_V2_RAW)
-# Otherwise there is a problem with `Data4` of `type c_char_Array_8` containing 0x00 (0x8c, 0xc2, 0x0, 0xc0, 0x4f, 0xc2, 0x95, 0xee)
-WINTRUST_ACTION_GENERIC_VERIFY_V2 = GUID.from_address(ctypes.addressof(WINTRUST_ACTION_GENERIC_VERIFY_V2_STR))
-
-DRIVER_ACTION_VERIFY_RAW = 0xf750e6c3, 0x38ee, 0x11d1, 0x85, 0xe5, 0x0, 0xc0, 0x4f, 0xc2, 0x95, 0xee
-DRIVER_ACTION_VERIFY_STR = get_IID_from_raw(DRIVER_ACTION_VERIFY_RAW)
-DRIVER_ACTION_VERIFY = GUID.from_address(ctypes.addressof(DRIVER_ACTION_VERIFY_STR))
-
-WTD_UI_ALL    = 1
-WTD_UI_NONE   = 2
-WTD_UI_NOBAD  = 3
-WTD_UI_NOGOOD = 4
-
-WTD_REVOKE_NONE         = 0x00000000
-WTD_REVOKE_WHOLECHAIN   = 0x00000001
-
-WTD_CHOICE_FILE    = 1
-WTD_CHOICE_CATALOG = 2
-WTD_CHOICE_BLOB    = 3
-WTD_CHOICE_SIGNER  = 4
-WTD_CHOICE_CERT    = 5
-
-WTD_STATEACTION_IGNORE           = 0x00000000
-WTD_STATEACTION_VERIFY           = 0x00000001
-WTD_STATEACTION_CLOSE            = 0x00000002
-WTD_STATEACTION_AUTO_CACHE       = 0x00000003
-WTD_STATEACTION_AUTO_CACHE_FLUSH = 0x00000004
+# From: um/SoftPub.h
+WINTRUST_ACTION_GENERIC_VERIFY_V2 = gdef.IID.from_string("00AAC56B-CD44-11d0-8CC2-00C04FC295EE")
+DRIVER_ACTION_VERIFY = gdef.IID.from_string("F750E6C3-38EE-11d1-85E5-00C04FC295EE")
 
 wintrust_know_return_value = [
 TRUST_E_PROVIDER_UNKNOWN,
