@@ -307,6 +307,12 @@ class StructGenerator(CtypesGenerator):
 
         """)
 
+    def __init__(self, *args, **kwargs):
+        self.export_enums = set([])
+        self.export_structs = set([])
+        super(StructGenerator, self).__init__(*args, **kwargs)
+
+
     def analyse(self, data):
         structs, enums = data
         for btype in BASIC_TYPE:
@@ -314,9 +320,11 @@ class StructGenerator(CtypesGenerator):
         for enum in enums:
             self.add_exports(enum.name)
             self.add_exports(*enum.typedef)
+            self.export_enums.update([enum.name] + enum.typedef.keys())
         for struct in structs:
             self.add_exports(struct.name)
             self.add_exports(*struct.typedef)
+            self.export_structs.update([struct.name] + struct.typedef.keys())
             for field_type, field_name, nb_rep in struct.fields:
                 if field_type.name not in self.exports:
                     self.add_imports(field_type.name)
@@ -417,6 +425,8 @@ class FuncGenerator(CtypesGenerator):
                 if param_type.startswith("POINTER(") and param_type.endswith(")"):
                     param_type = param_type[len("POINTER("): -1]
                 self.add_imports(param_type)
+            self.add_exports(func.name)
+
 
     def generate(self):
         deps = "\n".join(["from {0} import *".format(os.path.basename(dep.outfilename).rsplit(".")[0]) for dep in self.dependances])
@@ -722,6 +732,33 @@ class DefGenerator(InitialDefGenerator):
     IMPORT_HEADER = "{deps}"
     HEADER = ""
 
+class MetafileGenerator(object):
+    walker_generator = dedent("""
+    def generate_walker(namelist, target_module):
+        def my_walker():
+            for name in namelist:
+                yield getattr(target_module, name)
+        return my_walker
+    """)
+    def __init__(self, filename):
+        self.lol = {}
+        self.filename = filename
+
+    def add_exports(self, name, module, exports):
+        self.lol[(name, module)] = exports
+
+    def generate(self):
+        with open(self.filename, "w") as f:
+            # Generate lists
+            for (name, module), exports in self.lol.items():
+                f.write("{0} = {1}".format(name, exports))
+                # f.write(str(y))
+                f.write("\n")
+            f.write(self.walker_generator)
+            # Generate walkers
+            for (name, module) in self.lol:
+                f.write("import {0} as {0}_module\n".format(module))
+                f.write("{0}_walker = generate_walker({0}, {1}_module)\n".format(name, module))
 
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -783,6 +820,13 @@ for name, nb in collections.Counter(all_ntstatus_names).most_common():
 for collision_name in set(all_defs_names) & set(all_ntstatus_names):
     print("Duplicated ntstatus + windef define: {0}".format(collision_name))
 
+meta = MetafileGenerator(from_here(r"..\windows\generated_def\\meta.py"))
+meta.add_exports("windef", module="windef", exports=defs_with_ntstatus.exports - set(["Flag", "NATIVE_WORD_MAX_VALUE"]))
+meta.add_exports("structs", module="winstructs", exports=structs.export_structs)
+meta.add_exports("enums", module="winstructs", exports=structs.export_enums)
+meta.add_exports("functions", module="winfuncs", exports=functions.exports)
+meta.add_exports("interfaces", module="interfaces", exports=com.exports)
+
 
 if __name__ == "__main__":
     ntstatus.generate()
@@ -790,6 +834,8 @@ if __name__ == "__main__":
     structs.generate()
     functions.generate()
     com.generate()
+    print("Generating meta file")
+    meta.generate()
     print("Generating documentation")
     ntstatus.generate_doc(from_here(r"..\docs\source\ntstatus_generated.rst"))
     defs_with_ntstatus.generate_doc(from_here(r"..\docs\source\windef_generated.rst"))
