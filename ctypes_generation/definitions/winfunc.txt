@@ -110,6 +110,16 @@ BOOL WINAPI GetExitCodeProcess(
     __out LPDWORD lpExitCode
 );
 
+
+BOOL WINAPI SetPriorityClass(
+  _In_ HANDLE hProcess,
+  _In_ DWORD  dwPriorityClass
+);
+
+DWORD WINAPI GetPriorityClass(
+  _In_ HANDLE hProcess
+);
+
 LPVOID WINAPI VirtualAlloc(
   _In_opt_  LPVOID lpAddress,
   _In_      SIZE_T dwSize,

@@ -498,10 +498,17 @@ def Thread32Next(hSnapshot, lpte):
 def Process32First(hSnapshot, lpte):
     return Process32First.ctypes_function(hSnapshot, lpte)
 
-
 @Kernel32Proxy("Process32Next", no_error_check)
 def Process32Next(hSnapshot, lpte):
     return Process32Next.ctypes_function(hSnapshot, lpte)
+
+@Kernel32Proxy("GetPriorityClass")
+def GetPriorityClass(hProcess):
+    return GetPriorityClass.ctypes_function(hProcess)
+
+@Kernel32Proxy("SetPriorityClass")
+def SetPriorityClass(hProcess, dwPriorityClass):
+    return SetPriorityClass.ctypes_function(hProcess, dwPriorityClass)
 
 @Kernel32Proxy("OpenEventA")
 def OpenEventA(dwDesiredAccess, bInheritHandle, lpName):
@@ -748,7 +755,6 @@ def GetWindowsDirectoryW(lpBuffer, uSize=None):
     if uSize is None:
         uSize = DWORD(len(lpBuffer))
     return GetWindowsDirectoryW.ctypes_function(lpBuffer, uSize)
-
 
 
 # ### NTDLL #### #

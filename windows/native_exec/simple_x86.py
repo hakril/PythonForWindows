@@ -817,6 +817,9 @@ class Retf(Instruction):
 class Int3(Instruction):
     encoding = [(RawBits.from_int(8, 0xcc),)]
 
+class Iret(Instruction):
+    encoding = [(RawBits.from_int(8, 0xcf),)]
+
 
 class _NopArtifact(Nop):
     """Special NOP used in shellcode reduction"""

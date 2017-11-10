@@ -681,6 +681,15 @@ class Process(AutoHandle):
         user = (UserTime.dwHighDateTime << 32) + UserTime.dwLowDateTime
         return TimeInfo(creation, exit, kernel, user)
 
+    def get_priority(self):
+        return winproxy.GetPriorityClass(self.handle)
+
+    def set_priority(self, priority):
+        return winproxy.SetPriorityClass(self.handle, priority)
+
+    priority = property(get_priority, set_priority)
+    """The priority of the process"""
+
 
     def open_token(self, flags=TOKEN_QUERY):
         token_handle = HANDLE()

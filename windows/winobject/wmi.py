@@ -51,7 +51,7 @@ class WmiRequester(object):
             self.service.ExecQuery("WQL", query, 0x20, 0, ctypes.byref(enumerator))
         except WindowsError as e:
             if (e.winerror & 0xffffffff) ==  WBEM_E_INVALID_CLASS:
-                raise WindowsError(e.winerror, 'WBEM_E_INVALID_CLASS <Invalid WMI class "{0}">'.format(frm))
+                raise WindowsError(e.winerror, 'WBEM_E_INVALID_CLASS <Invalid WMI class "{0}">'.format(query))
             elif (e.winerror & 0xffffffff) in WBEMSTATUS.values:
                 raise WindowsError(e.winerror, WBEMSTATUS(e.winerror & 0xffffffff).value)
             raise
