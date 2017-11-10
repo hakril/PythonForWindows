@@ -6,7 +6,8 @@ import struct
 import windows
 from windows import winproxy
 from windows import utils
-from windows.generated_def import windef
+
+import windows.generated_def as gdef
 
 from windows.winobject import process
 from windows.winobject import network
@@ -166,6 +167,7 @@ class System(object):
         else:
             return "Unknow Windows <version={0} | is_workstation={1}>".format(version, is_workstation)
 
+    VERSION_MAPPER = gdef.FlagMapper(VER_NT_WORKSTATION, VER_NT_DOMAIN_CONTROLLER, VER_NT_SERVER)
     @utils.fixedpropety
     def product_type(self):
         """The product type, value might be:
@@ -176,9 +178,8 @@ class System(object):
 
         :type: :class:`long` or :class:`int` (or subclass)
         """
-        version_map = {x:x for x in [VER_NT_WORKSTATION, VER_NT_DOMAIN_CONTROLLER, VER_NT_SERVER]}
         version = self.get_version()
-        return version_map.get(version.wProductType, version.wProductType)
+        return self.VERSION_MAPPER[version.wProductType]
 
 
     @utils.fixedpropety
@@ -217,7 +218,7 @@ class System(object):
         dbgprint("Enumerating processes with CreateToolhelp32Snapshot", "SLOW")
         process_entry = PROCESSENTRY32()
         process_entry.dwSize = ctypes.sizeof(process_entry)
-        snap = winproxy.CreateToolhelp32Snapshot(windef.TH32CS_SNAPPROCESS, 0)
+        snap = winproxy.CreateToolhelp32Snapshot(gdef.TH32CS_SNAPPROCESS, 0)
         winproxy.Process32First(snap, process_entry)
         res = []
         res.append(process.WinProcess._from_PROCESSENTRY32(process_entry))
@@ -232,7 +233,7 @@ class System(object):
         dbgprint("Enumerating threads with CreateToolhelp32Snapshot <generator>", "SLOW")
         thread_entry = THREADENTRY32()
         thread_entry.dwSize = ctypes.sizeof(thread_entry)
-        snap = winproxy.CreateToolhelp32Snapshot(windef.TH32CS_SNAPTHREAD, 0)
+        snap = winproxy.CreateToolhelp32Snapshot(gdef.TH32CS_SNAPTHREAD, 0)
         dbgprint("New handle CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD) <generator> | {0:#x}".format(snap), "HANDLE")
         try:
             winproxy.Thread32First(snap, thread_entry)
@@ -257,7 +258,7 @@ class System(object):
         dbgprint("Enumerating threads with CreateToolhelp32Snapshot and setup owner", "SLOW")
 
         # One snap for both enum to be prevent race
-        snap = winproxy.CreateToolhelp32Snapshot(windef.TH32CS_SNAPTHREAD | windef.TH32CS_SNAPPROCESS, 0)
+        snap = winproxy.CreateToolhelp32Snapshot(gdef.TH32CS_SNAPTHREAD | gdef.TH32CS_SNAPPROCESS, 0)
 
         process_entry = PROCESSENTRY32()
         process_entry.dwSize = ctypes.sizeof(process_entry)

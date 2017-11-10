@@ -50,6 +50,12 @@ def make_flag(name, value):
         return Flag(name, value)
     return StrFlag(name, value)
 
+class FlagMapper(dict):
+    def __init__(self, *values):
+        self.update({x:x for x in values})
+
+    def __missing__(self, key):
+        return key
 
 from ntstatus import *
 INVALID_HANDLE_VALUE = make_flag("INVALID_HANDLE_VALUE", ( ( -1 ) & NATIVE_WORD_MAX_VALUE ))

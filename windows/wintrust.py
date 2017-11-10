@@ -3,6 +3,7 @@ import struct
 import windows
 from  collections import namedtuple
 from windows import winproxy
+import windows.generated_def as gdef
 from windows.generated_def.winstructs import *
 
 
@@ -75,7 +76,7 @@ CERT_E_INVALID_POLICY,
 CERT_E_INVALID_NAME,
 CRYPT_E_FILE_ERROR,
 ]
-wintrust_return_value_mapper = {x:x for x in wintrust_know_return_value}
+wintrust_return_value_mapper = gdef.FlagMapper(*wintrust_know_return_value)
 
 
 def check_signature(filename):
@@ -109,7 +110,7 @@ def check_signature(filename):
     x = winproxy.WinVerifyTrust(None, ctypes.byref(WVTPolicyGUID), ctypes.byref(win_trust_data))
     win_trust_data.dwStateAction = WTD_STATEACTION_CLOSE
     winproxy.WinVerifyTrust(None, ctypes.byref(WVTPolicyGUID), ctypes.byref(win_trust_data))
-    return wintrust_return_value_mapper.get(x & 0xffffffff, x & 0xffffffff)
+    return wintrust_return_value_mapper[x & 0xffffffff]
 
 
 def get_catalog_for_filename(filename):

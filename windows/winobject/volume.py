@@ -2,14 +2,15 @@ import ctypes
 
 import windows
 from windows import winproxy
+import windows.generated_def as gdef
 from windows.generated_def.winstructs import *
 
 
 
 
 class LogicalDrive(object):
-    DRIVE_TYPE = {x:x for x in [DRIVE_UNKNOWN, DRIVE_NO_ROOT_DIR, DRIVE_REMOVABLE,
-                    DRIVE_FIXED, DRIVE_REMOTE, DRIVE_CDROM, DRIVE_RAMDISK]}
+    DRIVE_TYPE = gdef.FlagMapper(DRIVE_UNKNOWN, DRIVE_NO_ROOT_DIR, DRIVE_REMOVABLE,
+                    DRIVE_FIXED, DRIVE_REMOTE, DRIVE_CDROM, DRIVE_RAMDISK)
 
     def __init__(self, name):
         self.name = name

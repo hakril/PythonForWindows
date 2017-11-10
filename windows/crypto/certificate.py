@@ -29,7 +29,7 @@ CRYPT_OBJECT_FORMAT_TYPE = [
     gdef.CERT_QUERY_CONTENT_PFX_AND_LOAD
     ]
 
-CRYPT_OBJECT_FORMAT_TYPE_DICT = {x:x for x in CRYPT_OBJECT_FORMAT_TYPE}
+CRYPT_OBJECT_FORMAT_TYPE_DICT = gdef.FlagMapper(*CRYPT_OBJECT_FORMAT_TYPE)
 
 ## Move CryptObject to new .py ?
 
@@ -68,7 +68,7 @@ class CryptObject(object):
         self.cert_store = hStore if hStore else None
         self.crypt_msg = hMsg if hMsg else None
         self.encoding = dwEncoding
-        self.content_type = CRYPT_OBJECT_FORMAT_TYPE_DICT.get(dwContentType.value, dwContentType)
+        self.content_type = CRYPT_OBJECT_FORMAT_TYPE_DICT[dwContentType.value]
 
     def _signers_and_certs_generator(self):
         for signer in self.crypt_msg.signers:

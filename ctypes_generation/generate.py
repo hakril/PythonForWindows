@@ -230,6 +230,12 @@ class InitialDefGenerator(CtypesGenerator):
                 return Flag(name, value)
             return StrFlag(name, value)
 
+        class FlagMapper(dict):
+            def __init__(self, *values):
+                self.update({x:x for x in values})
+
+            def __missing__(self, key):
+                return key
         """)
 
     IMPORT_HEADER = "{deps}"

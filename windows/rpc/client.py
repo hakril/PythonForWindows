@@ -6,20 +6,19 @@ import windows.com
 import windows.generated_def as gdef
 
 
-KNOW_REQUEST_TYPE = {x:x for x in [gdef.RPC_REQUEST_TYPE_CALL, gdef.RPC_REQUEST_TYPE_BIND]}
+KNOW_REQUEST_TYPE = gdef.FlagMapper(gdef.RPC_REQUEST_TYPE_CALL, gdef.RPC_REQUEST_TYPE_BIND)
 
 
-KNOW_RESPONSE_TYPE = {x:x for x in [gdef.RPC_RESPONSE_TYPE_FAIL, gdef.RPC_RESPONSE_TYPE_SUCESS, gdef.RPC_RESPONSE_TYPE_BIND_OK]}
+KNOW_RESPONSE_TYPE = gdef.FlagMapper(gdef.RPC_RESPONSE_TYPE_FAIL, gdef.RPC_RESPONSE_TYPE_SUCESS, gdef.RPC_RESPONSE_TYPE_BIND_OK)
 
 
-KNOWN_RPC_ERROR_CODE = {x:x for x in [
+KNOWN_RPC_ERROR_CODE = gdef.FlagMapper(
         gdef.ERROR_INVALID_HANDLE,
         gdef.RPC_X_BAD_STUB_DATA,
         gdef.RPC_S_UNKNOWN_IF,
         gdef.RPC_S_PROTOCOL_ERROR,
         gdef.RPC_S_UNSUPPORTED_TRANS_SYN,
-        gdef.RPC_S_PROCNUM_OUT_OF_RANGE,
-        ]}
+        gdef.RPC_S_PROCNUM_OUT_OF_RANGE)
 
 NOT_USED = 0xBAADF00D
 

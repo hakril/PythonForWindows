@@ -5,13 +5,14 @@ from collections import namedtuple
 from contextlib import contextmanager
 
 from windows import utils
+import windows.generated_def as gdef
 from windows.generated_def import *
 
 
-SERVICE_TYPE = {x:x for x in [SERVICE_KERNEL_DRIVER, SERVICE_FILE_SYSTEM_DRIVER, SERVICE_WIN32_OWN_PROCESS, SERVICE_WIN32_SHARE_PROCESS, SERVICE_INTERACTIVE_PROCESS]}
-SERVICE_STATE = {x:x for x in [SERVICE_STOPPED, SERVICE_START_PENDING, SERVICE_STOP_PENDING, SERVICE_RUNNING, SERVICE_CONTINUE_PENDING, SERVICE_PAUSE_PENDING, SERVICE_PAUSED]}
-SERVICE_CONTROLE_ACCEPTED = {x:x for x in []}
-SERVICE_FLAGS = {x:x for x in [SERVICE_RUNS_IN_SYSTEM_PROCESS]}
+SERVICE_TYPE = gdef.FlagMapper(SERVICE_KERNEL_DRIVER, SERVICE_FILE_SYSTEM_DRIVER, SERVICE_WIN32_OWN_PROCESS, SERVICE_WIN32_SHARE_PROCESS, SERVICE_INTERACTIVE_PROCESS)
+SERVICE_STATE = gdef.FlagMapper(SERVICE_STOPPED, SERVICE_START_PENDING, SERVICE_STOP_PENDING, SERVICE_RUNNING, SERVICE_CONTINUE_PENDING, SERVICE_PAUSE_PENDING, SERVICE_PAUSED)
+SERVICE_CONTROLE_ACCEPTED = gdef.FlagMapper()
+SERVICE_FLAGS = gdef.FlagMapper(SERVICE_RUNS_IN_SYSTEM_PROCESS)
 
 
 ServiceStatus = namedtuple("ServiceStatus", ["type", "state", "control_accepted", "flags"])
@@ -70,10 +71,10 @@ class Service(object):
         :type: :class:`ServiceStatus`
         """
         status = self.ServiceStatusProcess
-        stype = SERVICE_TYPE.get(status.dwServiceType, status.dwServiceType)
-        sstate = SERVICE_STATE.get(status.dwCurrentState, status.dwCurrentState)
+        stype = SERVICE_TYPE[status.dwServiceType]
+        sstate = SERVICE_STATE[status.dwCurrentState]
         scontrol = status.dwControlsAccepted
-        sflags = SERVICE_FLAGS.get(status.dwServiceFlags, status.dwServiceFlags)
+        sflags = SERVICE_FLAGS[status.dwServiceFlags]
         return ServiceStatus(stype, sstate, scontrol, sflags)
 
     @utils.fixedpropety

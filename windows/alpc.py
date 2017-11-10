@@ -184,7 +184,7 @@ KNOWN_ALPC_ATTRIBUTES = (gdef.ALPC_MESSAGE_SECURITY_ATTRIBUTE,
                             gdef.ALPC_MESSAGE_DIRECT_ATTRIBUTE,
                             gdef.ALPC_MESSAGE_WORK_ON_BEHALF_ATTRIBUTE)
 
-KNOWN_ALPC_ATTRIBUTES_MAPPING = {x:x for x in KNOWN_ALPC_ATTRIBUTES}
+KNOWN_ALPC_ATTRIBUTES_MAPPING = gdef.FlagMapper(*KNOWN_ALPC_ATTRIBUTES)
 
 
 class MessageAttribute(gdef.ALPC_MESSAGE_ATTRIBUTES):
@@ -270,7 +270,7 @@ class MessageAttribute(gdef.ALPC_MESSAGE_ATTRIBUTES):
         for mask in (1 << i for i in range(64)):
             if value & mask:
                 attrs.append(mask)
-        return [KNOWN_ALPC_ATTRIBUTES_MAPPING.get(x, x) for x in attrs]
+        return [KNOWN_ALPC_ATTRIBUTES_MAPPING[x] for x in attrs]
 
     @property
     def valid_list(self):

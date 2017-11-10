@@ -12,6 +12,7 @@ import windows
 import windows.native_exec.simple_x86 as x86
 import windows.native_exec.simple_x64 as x64
 import windows.remotectypes as rctypes
+import windows.generated_def as gdef
 
 from windows import injection
 from windows import native_exec
@@ -21,7 +22,6 @@ from windows import utils
 from windows.dbgprint import dbgprint
 from windows.generated_def.winstructs import *
 from windows.generated_def.ntstatus import NtStatusException
-from windows.generated_def import windef
 
 from windows.winobject import exception
 from windows.winobject import sid
@@ -1139,7 +1139,7 @@ SECURITY_MANDATORY_HIGH_RID,
 SECURITY_MANDATORY_SYSTEM_RID,
 SECURITY_MANDATORY_PROTECTED_PROCESS_RID]
 
-know_integrity_level_mapper = {x:x for x in KNOW_INTEGRITY_LEVEL}
+know_integrity_level_mapper = gdef.FlagMapper(*KNOW_INTEGRITY_LEVEL)
 
 # Create ProcessToken and Thread Token objects ?
 class Token(AutoHandle):
@@ -1158,7 +1158,7 @@ class Token(AutoHandle):
         sid = ctypes.cast(buffer, POINTER(TOKEN_MANDATORY_LABEL))[0].Label.Sid
         count = winproxy.GetSidSubAuthorityCount(sid)
         integrity = winproxy.GetSidSubAuthority(sid, count[0] - 1)[0]
-        return know_integrity_level_mapper.get(integrity, integrity)
+        return know_integrity_level_mapper[integrity]
 
     def set_integrity(self, integrity):
         """Set the integrity level of a token
