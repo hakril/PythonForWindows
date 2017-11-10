@@ -1355,6 +1355,40 @@ class _MEMORY_BASIC_INFORMATION32(Structure):
 MEMORY_BASIC_INFORMATION32 = _MEMORY_BASIC_INFORMATION32
 PMEMORY_BASIC_INFORMATION32 = POINTER(_MEMORY_BASIC_INFORMATION32)
 
+INITIAL_MEMORY_BASIC_INFORMATION32 = _MEMORY_BASIC_INFORMATION32
+
+class _MEMORY_BASIC_INFORMATION32(INITIAL_MEMORY_BASIC_INFORMATION32):
+    STATE_MAPPER = {MEM_COMMIT: MEM_COMMIT, MEM_FREE: MEM_FREE, MEM_RESERVE:MEM_RESERVE}
+    TYPE_MAPPER = {MEM_IMAGE: MEM_IMAGE, MEM_MAPPED: MEM_MAPPED, MEM_PRIVATE:MEM_PRIVATE}
+    PROTECT_MAPPER = {x:x for x in [PAGE_NOACCESS, PAGE_READONLY, PAGE_READWRITE,
+                                    PAGE_WRITECOPY, PAGE_EXECUTE, PAGE_EXECUTE_READ, PAGE_EXECUTE_READWRITE,
+                                    PAGE_EXECUTE_WRITECOPY]}
+
+
+    @property
+    def State(self):
+        raw_state = super(_MEMORY_BASIC_INFORMATION32, self).State
+        # Finally make a chooser somewhere ?
+        return self.STATE_MAPPER.get(raw_state, raw_state)
+
+    @property
+    def Type(self):
+        raw_type = super(_MEMORY_BASIC_INFORMATION32, self).Type
+        # Finally make a chooser somewhere ?
+        return self.TYPE_MAPPER.get(raw_type, raw_type)
+
+    @property
+    def Protect(self):
+        raw_protect = super(_MEMORY_BASIC_INFORMATION32, self).Protect
+        # Finally make a chooser somewhere ?
+        return self.PROTECT_MAPPER.get(raw_protect, raw_protect)
+
+    def __repr__(self):
+        return "<MEMORY_BASIC_INFORMATION32 BaseAddress={0:#08x} RegionSize={1:#08x} State={2} Type={3} Protect={4}>".format(
+            self.BaseAddress, self.RegionSize, self.State, self.Type, self.Protect)
+MEMORY_BASIC_INFORMATION32 = _MEMORY_BASIC_INFORMATION32
+PMEMORY_BASIC_INFORMATION32 = POINTER(_MEMORY_BASIC_INFORMATION32)
+
 class _MEMORY_BASIC_INFORMATION64(Structure):
     _fields_ = [
         ("BaseAddress", ULONGLONG),
@@ -1367,6 +1401,40 @@ class _MEMORY_BASIC_INFORMATION64(Structure):
         ("Type", DWORD),
         ("__alignment2", DWORD),
     ]
+PMEMORY_BASIC_INFORMATION64 = POINTER(_MEMORY_BASIC_INFORMATION64)
+MEMORY_BASIC_INFORMATION64 = _MEMORY_BASIC_INFORMATION64
+
+INITIAL_MEMORY_BASIC_INFORMATION64 = _MEMORY_BASIC_INFORMATION64
+
+class _MEMORY_BASIC_INFORMATION64(INITIAL_MEMORY_BASIC_INFORMATION64):
+    STATE_MAPPER = {MEM_COMMIT: MEM_COMMIT, MEM_FREE: MEM_FREE, MEM_RESERVE:MEM_RESERVE}
+    TYPE_MAPPER = {MEM_IMAGE: MEM_IMAGE, MEM_MAPPED: MEM_MAPPED, MEM_PRIVATE:MEM_PRIVATE}
+    PROTECT_MAPPER = {x:x for x in [PAGE_NOACCESS, PAGE_READONLY, PAGE_READWRITE,
+                                    PAGE_WRITECOPY, PAGE_EXECUTE, PAGE_EXECUTE_READ, PAGE_EXECUTE_READWRITE,
+                                    PAGE_EXECUTE_WRITECOPY]}
+
+
+    @property
+    def State(self):
+        raw_state = super(_MEMORY_BASIC_INFORMATION64, self).State
+        # Finally make a chooser somewhere ?
+        return self.STATE_MAPPER.get(raw_state, raw_state)
+
+    @property
+    def Type(self):
+        raw_type = super(_MEMORY_BASIC_INFORMATION64, self).Type
+        # Finally make a chooser somewhere ?
+        return self.TYPE_MAPPER.get(raw_type, raw_type)
+
+    @property
+    def Protect(self):
+        raw_protect = super(_MEMORY_BASIC_INFORMATION64, self).Protect
+        # Finally make a chooser somewhere ?
+        return self.PROTECT_MAPPER.get(raw_protect, raw_protect)
+
+    def __repr__(self):
+        return "<MEMORY_BASIC_INFORMATION64 BaseAddress={0:#08x} RegionSize={1:#08x} State={2} Type={3} Protect={4}>".format(
+            self.BaseAddress, self.RegionSize, self.State, self.Type, self.Protect)
 PMEMORY_BASIC_INFORMATION64 = POINTER(_MEMORY_BASIC_INFORMATION64)
 MEMORY_BASIC_INFORMATION64 = _MEMORY_BASIC_INFORMATION64
 
@@ -4342,3 +4410,32 @@ class _RPC_IF_ID(INITIAL_RPC_IF_ID):
     def __repr__(self):
         return '<RPC_IF_ID "{0}" ({1}, {2})>'.format(self.Uuid.to_string(), self.VersMajor, self.VersMinor)
 RPC_IF_ID = _RPC_IF_ID
+
+class _EVENTLOGRECORD(Structure):
+    _fields_ = [
+        ("Length", DWORD),
+        ("Reserved", DWORD),
+        ("RecordNumber", DWORD),
+        ("TimeGenerated", DWORD),
+        ("TimeWritten", DWORD),
+        ("EventID", DWORD),
+        ("EventType", WORD),
+        ("NumStrings", WORD),
+        ("EventCategory", WORD),
+        ("ReservedFlags", WORD),
+        ("ClosingRecordNumber", DWORD),
+        ("StringOffset", DWORD),
+        ("UserSidLength", DWORD),
+        ("UserSidOffset", DWORD),
+        ("DataLength", DWORD),
+        ("DataOffset", DWORD),
+    ]
+PEVENTLOGRECORD = POINTER(_EVENTLOGRECORD)
+EVENTLOGRECORD = _EVENTLOGRECORD
+
+class _EVENTLOG_FULL_INFORMATION(Structure):
+    _fields_ = [
+        ("dwFull", DWORD),
+    ]
+EVENTLOG_FULL_INFORMATION = _EVENTLOG_FULL_INFORMATION
+LPEVENTLOG_FULL_INFORMATION = POINTER(_EVENTLOG_FULL_INFORMATION)
