@@ -681,8 +681,18 @@ class Process(AutoHandle):
         user = (UserTime.dwHighDateTime << 32) + UserTime.dwLowDateTime
         return TimeInfo(creation, exit, kernel, user)
 
+    PRIORITY_CLASS_MAPPER = gdef.FlagMapper(
+        ABOVE_NORMAL_PRIORITY_CLASS,
+        BELOW_NORMAL_PRIORITY_CLASS,
+        HIGH_PRIORITY_CLASS,
+        IDLE_PRIORITY_CLASS,
+        NORMAL_PRIORITY_CLASS,
+        PROCESS_MODE_BACKGROUND_BEGIN,
+        PROCESS_MODE_BACKGROUND_END,
+        REALTIME_PRIORITY_CLASS)
+
     def get_priority(self):
-        return winproxy.GetPriorityClass(self.handle)
+        return self.PRIORITY_CLASS_MAPPER[winproxy.GetPriorityClass(self.handle)]
 
     def set_priority(self, priority):
         return winproxy.SetPriorityClass(self.handle, priority)
