@@ -7,11 +7,7 @@ import windows.generated_def as gdef
 
 
 KNOW_REQUEST_TYPE = gdef.FlagMapper(gdef.RPC_REQUEST_TYPE_CALL, gdef.RPC_REQUEST_TYPE_BIND)
-
-
-KNOW_RESPONSE_TYPE = gdef.FlagMapper(gdef.RPC_RESPONSE_TYPE_FAIL, gdef.RPC_RESPONSE_TYPE_SUCESS, gdef.RPC_RESPONSE_TYPE_BIND_OK)
-
-
+KNOW_RESPONSE_TYPE = gdef.FlagMapper(gdef.RPC_RESPONSE_TYPE_FAIL, gdef.RPC_RESPONSE_TYPE_SUCCESS, gdef.RPC_RESPONSE_TYPE_BIND_OK)
 KNOWN_RPC_ERROR_CODE = gdef.FlagMapper(
         gdef.ERROR_INVALID_HANDLE,
         gdef.RPC_X_BAD_STUB_DATA,
@@ -83,7 +79,7 @@ class RPCClient(object):
         # Parse reponse
         request_type = self._get_request_type(response)
         if request_type != gdef.RPC_RESPONSE_TYPE_BIND_OK:
-            raise ValueError("Unexpected reponse type. Expected RESPONSE_TYPE_BIND_OK got {0}".format(KNOW_RESPONSE_TYPE.get(request_type, request_type)))
+            raise ValueError("Unexpected reponse type. Expected RESPONSE_TYPE_BIND_OK got {0}".format(KNOW_RESPONSE_TYPE[request_type]))
         iid_hash = hash(buffer(IID)[:]) # TODO: add __hash__ to IID
         self.if_bind_number[iid_hash] = self.number_of_bind_if
         self.number_of_bind_if += 1
@@ -104,8 +100,8 @@ class RPCClient(object):
         response = self._send_request(request)
         # Parse reponse
         request_type = self._get_request_type(response)
-        if request_type != gdef.RPC_RESPONSE_TYPE_SUCESS:
-            raise ValueError("Unexpected reponse type. Expected RESPONSE_SUCESS got {0}".format(KNOW_RESPONSE_TYPE.get(request_type, request_type)))
+        if request_type != gdef.RPC_RESPONSE_TYPE_SUCCESS:
+            raise ValueError("Unexpected reponse type. Expected RESPONSE_SUCCESS got {0}".format(KNOW_RESPONSE_TYPE[request_type]))
 
         data = struct.unpack("<6I", response[:6 * 4])
         assert data[3] == self.REQUEST_IDENTIFIER

@@ -211,7 +211,7 @@ class NdrStructure(object):
             print("   * members size = {0}".format(len(cls.MEMBERS)))
             print("   * data {0}".format(data))
             print("   * members = {0}".format(cls.MEMBERS))
-            raise ValueError("SUCE")
+            raise ValueError("NdrStructure packing number elements mismatch: structure has <{0}> members got <{1}>".format(len(cls.MEMBERS), len(data)))
         conformant_size = []
         res = []
         pointed = []
@@ -277,7 +277,7 @@ class NdrParameters(object):
             print("   * members size = {0}".format(len(cls.MEMBERS)))
             print("   * data {0}".format(data))
             print("   * members = {0}".format(cls.MEMBERS))
-            raise ValueError("SUCE")
+            raise ValueError("NdrParameters packing number elements mismatch: structure has <{0}> members got <{1}>".format(len(cls.MEMBERS), len(data)))
         res = []
         for (member, memberdata) in zip(cls.MEMBERS, data):
             packed_member = member.pack(memberdata)

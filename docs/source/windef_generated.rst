@@ -1903,7 +1903,7 @@ Windef
 .. autodata:: RPC_REQUEST_TYPE_BIND
 .. autodata:: RPC_RESPONSE_TYPE_BIND_OK
 .. autodata:: RPC_RESPONSE_TYPE_FAIL
-.. autodata:: RPC_RESPONSE_TYPE_SUCESS
+.. autodata:: RPC_RESPONSE_TYPE_SUCCESS
 .. autodata:: BIND_IF_SYNTAX_NDR32
 .. autodata:: BIND_IF_SYNTAX_NDR64
 .. autodata:: BIND_IF_SYNTAX_UNKNOWN
