@@ -4926,13 +4926,21 @@ _DEBUG_EXCEPTION_FILTER_PARAMETERS
 
 _GUID
 '''''
-.. class:: IID
-
-    Alias for :class:`_GUID`
-
 .. class:: REFCLSID
 
     Pointer to :class:`_GUID`
+
+.. class:: REFGUID
+
+    Pointer to :class:`_GUID`
+
+.. class:: LPGUID
+
+    Pointer to :class:`_GUID`
+
+.. class:: IID
+
+    Alias for :class:`_GUID`
 
 .. class:: GUID
 

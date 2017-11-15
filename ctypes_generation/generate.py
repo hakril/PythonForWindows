@@ -632,10 +632,10 @@ class InitialCOMGenerator(CtypesGenerator):
 
     def analyse(self, data):
         self.real_type = {}
-        self.add_exports("IID")
-        self.add_exports("GUID")
-        self.add_exports("LPGUID")  # setup in InitialCOMGenerator.HEADER
-        self.add_exports("REFGUID") # setup in InitialCOMGenerator.HEADER
+        # self.add_exports("IID")
+        # self.add_exports("GUID")
+        # self.add_exports("LPGUID")  # setup in InitialCOMGenerator.HEADER
+        # self.add_exports("REFGUID") # setup in InitialCOMGenerator.HEADER
         self.add_exports("COMInterface")
         self.add_exports("COMImplementation")
         for cominterface in data:
@@ -737,7 +737,7 @@ class MetafileGenerator(object):
     def generate_walker(namelist, target_module):
         def my_walker():
             for name in namelist:
-                yield getattr(target_module, name)
+                yield name, getattr(target_module, name)
         return my_walker
     """)
     def __init__(self, filename):

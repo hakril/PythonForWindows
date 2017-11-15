@@ -2508,8 +2508,10 @@ class _GUID(Structure):
         ("Data3", USHORT),
         ("Data4", BYTE * 8),
     ]
-IID = _GUID
 REFCLSID = POINTER(_GUID)
+REFGUID = POINTER(_GUID)
+LPGUID = POINTER(_GUID)
+IID = _GUID
 GUID = _GUID
 REFIID = POINTER(_GUID)
 
@@ -2567,12 +2569,10 @@ class _GUID(INITIAL_GUID):
             return NotImplemented
         return (self.Data1, self.Data2, self.Data3, self.Data4[:]) == (other.Data1, other.Data2, other.Data3, other.Data4[:])
 
-LPGUID = POINTER(_GUID)
+REFCLSID = POINTER(_GUID)
 REFGUID = POINTER(_GUID)
-REFCLSID = POINTER(_GUID)
-REFIID = POINTER(_GUID)
+LPGUID = POINTER(_GUID)
 IID = _GUID
-REFCLSID = POINTER(_GUID)
 GUID = _GUID
 REFIID = POINTER(_GUID)
 

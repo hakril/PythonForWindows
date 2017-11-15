@@ -1878,8 +1878,7 @@ typedef struct _GUID {
     USHORT Data2;
     USHORT Data3;
     BYTE  Data4[ 8 ];
-} GUID, IID, *REFIID, *REFCLSID;
-
+} GUID, IID, *REFIID, *REFCLSID, *LPGUID, *REFGUID;
 
 
 struct _TMP_signscale {

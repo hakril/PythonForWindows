@@ -51,8 +51,3 @@ class _GUID(INITIAL_GUID):
         if not isinstance(other, (_GUID, INITIAL_GUID)):
             return NotImplemented
         return (self.Data1, self.Data2, self.Data3, self.Data4[:]) == (other.Data1, other.Data2, other.Data3, other.Data4[:])
-
-LPGUID = POINTER(_GUID)
-REFGUID = POINTER(_GUID)
-REFCLSID = POINTER(_GUID)
-REFIID = POINTER(_GUID)
