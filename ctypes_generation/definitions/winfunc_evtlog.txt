@@ -1,0 +1,46 @@
+HANDLE WINAPI OpenEventLogA(
+  _In_ LPCSTR lpUNCServerName,
+  _In_ LPCSTR lpSourceName
+);
+
+HANDLE WINAPI OpenEventLogW(
+  _In_ LPWSTR lpUNCServerName,
+  _In_ LPWSTR lpSourceName
+);
+
+BOOL WINAPI ReadEventLogA(
+  _In_  HANDLE hEventLog,
+  _In_  DWORD  dwReadFlags,
+  _In_  DWORD  dwRecordOffset,
+  _Out_ LPVOID lpBuffer,
+  _In_  DWORD  nNumberOfBytesToRead,
+  _Out_ DWORD  *pnBytesRead,
+  _Out_ DWORD  *pnMinNumberOfBytesNeeded
+);
+
+BOOL WINAPI ReadEventLogW(
+  _In_  HANDLE hEventLog,
+  _In_  DWORD  dwReadFlags,
+  _In_  DWORD  dwRecordOffset,
+  _Out_ LPVOID lpBuffer,
+  _In_  DWORD  nNumberOfBytesToRead,
+  _Out_ DWORD  *pnBytesRead,
+  _Out_ DWORD  *pnMinNumberOfBytesNeeded
+);
+
+BOOL WINAPI GetEventLogInformation(
+  _In_  HANDLE  hEventLog,
+  _In_  DWORD   dwInfoLevel,
+  _Out_ LPVOID  lpBuffer,
+  _In_  DWORD   cbBufSize,
+  _Out_ LPDWORD pcbBytesNeeded
+);
+
+BOOL WINAPI GetNumberOfEventLogRecords(
+  _In_  HANDLE hEventLog,
+  _Out_ PDWORD NumberOfRecords
+);
+
+BOOL WINAPI CloseEventLog(
+  _Inout_ HANDLE hEventLog
+);

@@ -1067,23 +1067,6 @@ class _LSA_UNICODE_STRING(INITIAL_LSA_UNICODE_STRING):
         """
         if not self.Length:
             return ""
-        if getattr(self, "_target", None) is not None: # remote ctypes :D -> TRICKS OF THE YEAR
-            # raw_data = self._target.read_memory(self.Buffer, self.Length)
-            buffer_ptr = self._target.read_ptr(self._base_addr + type(self).Buffer.offset)
-            raw_data = self._target.read_memory(buffer_ptr, self.Length)
-            return raw_data.decode("utf16")
-        size = self.Length / 2
-        buffer_ptr = PVOID.from_address(ctypes.addressof(self) + type(self).Buffer.offset).value
-        return (ctypes.c_wchar * size).from_address(buffer_ptr)[:]
-
-    @property
-    def str(self):
-        """The python string of the LSA_UNICODE_STRING object
-
-        :type: :class:`unicode`
-        """
-        if not self.Length:
-            return ""
         if getattr(self, "_target", None) is not None: #remote ctypes :D -> TRICKS OF THE YEAR
             raw_data = self._target.read_memory(self.Buffer, self.Length)
             return raw_data.decode("utf16")
@@ -4504,3 +4487,32 @@ class _RPC_IF_ID(INITIAL_RPC_IF_ID):
     def __repr__(self):
         return '<RPC_IF_ID "{0}" ({1}, {2})>'.format(self.Uuid.to_string(), self.VersMajor, self.VersMinor)
 RPC_IF_ID = _RPC_IF_ID
+
+class _EVENTLOGRECORD(Structure):
+    _fields_ = [
+        ("Length", DWORD),
+        ("Reserved", DWORD),
+        ("RecordNumber", DWORD),
+        ("TimeGenerated", DWORD),
+        ("TimeWritten", DWORD),
+        ("EventID", DWORD),
+        ("EventType", WORD),
+        ("NumStrings", WORD),
+        ("EventCategory", WORD),
+        ("ReservedFlags", WORD),
+        ("ClosingRecordNumber", DWORD),
+        ("StringOffset", DWORD),
+        ("UserSidLength", DWORD),
+        ("UserSidOffset", DWORD),
+        ("DataLength", DWORD),
+        ("DataOffset", DWORD),
+    ]
+PEVENTLOGRECORD = POINTER(_EVENTLOGRECORD)
+EVENTLOGRECORD = _EVENTLOGRECORD
+
+class _EVENTLOG_FULL_INFORMATION(Structure):
+    _fields_ = [
+        ("dwFull", DWORD),
+    ]
+EVENTLOG_FULL_INFORMATION = _EVENTLOG_FULL_INFORMATION
+LPEVENTLOG_FULL_INFORMATION = POINTER(_EVENTLOG_FULL_INFORMATION)

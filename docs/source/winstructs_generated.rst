@@ -10912,6 +10912,113 @@ _RPC_IF_ID
 
         :class:`USHORT`
 
+_EVENTLOGRECORD
+'''''''''''''''
+.. class:: PEVENTLOGRECORD
+
+    Pointer to :class:`_EVENTLOGRECORD`
+
+.. class:: EVENTLOGRECORD
+
+    Alias for :class:`_EVENTLOGRECORD`
+
+.. class:: _EVENTLOGRECORD
+
+    .. attribute:: Length
+
+        :class:`DWORD`
+
+
+    .. attribute:: Reserved
+
+        :class:`DWORD`
+
+
+    .. attribute:: RecordNumber
+
+        :class:`DWORD`
+
+
+    .. attribute:: TimeGenerated
+
+        :class:`DWORD`
+
+
+    .. attribute:: TimeWritten
+
+        :class:`DWORD`
+
+
+    .. attribute:: EventID
+
+        :class:`DWORD`
+
+
+    .. attribute:: EventType
+
+        :class:`WORD`
+
+
+    .. attribute:: NumStrings
+
+        :class:`WORD`
+
+
+    .. attribute:: EventCategory
+
+        :class:`WORD`
+
+
+    .. attribute:: ReservedFlags
+
+        :class:`WORD`
+
+
+    .. attribute:: ClosingRecordNumber
+
+        :class:`DWORD`
+
+
+    .. attribute:: StringOffset
+
+        :class:`DWORD`
+
+
+    .. attribute:: UserSidLength
+
+        :class:`DWORD`
+
+
+    .. attribute:: UserSidOffset
+
+        :class:`DWORD`
+
+
+    .. attribute:: DataLength
+
+        :class:`DWORD`
+
+
+    .. attribute:: DataOffset
+
+        :class:`DWORD`
+
+_EVENTLOG_FULL_INFORMATION
+''''''''''''''''''''''''''
+.. class:: EVENTLOG_FULL_INFORMATION
+
+    Alias for :class:`_EVENTLOG_FULL_INFORMATION`
+
+.. class:: LPEVENTLOG_FULL_INFORMATION
+
+    Pointer to :class:`_EVENTLOG_FULL_INFORMATION`
+
+.. class:: _EVENTLOG_FULL_INFORMATION
+
+    .. attribute:: dwFull
+
+        :class:`DWORD`
+
 WinEnums
 --------
 _SYSTEM_INFORMATION_CLASS

@@ -1176,6 +1176,36 @@ def CreateProcessAsUserW(hToken, lpApplicationName, lpCommandLine, lpProcessAttr
     return CreateProcessAsUserW.ctypes_function(hToken, lpApplicationName, lpCommandLine, lpProcessAttributes, lpThreadAttributes, bInheritHandles, dwCreationFlags, lpEnvironment, lpCurrentDirectory, lpStartupInfo, lpProcessInformation)
 
 
+# Event log stuff
+
+@Advapi32Proxy('OpenEventLogA')
+def OpenEventLogA(lpUNCServerName=None, lpSourceName=NeededParameter):
+    return OpenEventLogA.ctypes_function(lpUNCServerName, lpSourceName)
+
+@Advapi32Proxy('OpenEventLogW')
+def OpenEventLogW(lpUNCServerName=None, lpSourceName=NeededParameter):
+    return OpenEventLogW.ctypes_function(lpUNCServerName, lpSourceName)
+
+@Advapi32Proxy('ReadEventLogA')
+def ReadEventLogA(hEventLog, dwReadFlags, dwRecordOffset, lpBuffer, nNumberOfBytesToRead, pnBytesRead, pnMinNumberOfBytesNeeded):
+    return ReadEventLogA.ctypes_function(hEventLog, dwReadFlags, dwRecordOffset, lpBuffer, nNumberOfBytesToRead, pnBytesRead, pnMinNumberOfBytesNeeded)
+
+@Advapi32Proxy('ReadEventLogW')
+def ReadEventLogW(hEventLog, dwReadFlags, dwRecordOffset, lpBuffer, nNumberOfBytesToRead, pnBytesRead, pnMinNumberOfBytesNeeded):
+    return ReadEventLogW.ctypes_function(hEventLog, dwReadFlags, dwRecordOffset, lpBuffer, nNumberOfBytesToRead, pnBytesRead, pnMinNumberOfBytesNeeded)
+
+@Advapi32Proxy('GetEventLogInformation')
+def GetEventLogInformation(hEventLog, dwInfoLevel, lpBuffer, cbBufSize, pcbBytesNeeded):
+    return GetEventLogInformation.ctypes_function(hEventLog, dwInfoLevel, lpBuffer, cbBufSize, pcbBytesNeeded)
+
+@Advapi32Proxy('GetNumberOfEventLogRecords')
+def GetNumberOfEventLogRecords(hEventLog, NumberOfRecords):
+    return GetNumberOfEventLogRecords.ctypes_function(hEventLog, NumberOfRecords)
+
+@Advapi32Proxy('CloseEventLog')
+def CloseEventLog(hEventLog):
+    return CloseEventLog.ctypes_function(hEventLog)
+
 # ##### Iphlpapi (network list and stuff) ###### #
 
 def set_tcp_entry_error_check(func_name, result, func, args):

@@ -782,16 +782,19 @@ defs_with_ntstatus = InitialDefGenerator(from_here("definitions\\windef.txt"), f
 defs_with_ntstatus.append_input_file(from_here("definitions\\wintrust_crypt_def.txt"))
 defs_with_ntstatus.append_input_file(from_here("definitions\\windef_error.txt"))
 defs_with_ntstatus.append_input_file(from_here("definitions\\custom_rpc_windef.txt"))
+defs_with_ntstatus.append_input_file(from_here("definitions\\windef_evtlog.txt"))
 
 
 structs = StructGenerator(from_here("definitions\\winstruct.txt"), from_here(r"..\windows\generated_def\\winstructs.py"), dependances=[defs_with_ntstatus])
 structs.append_input_file(from_here("definitions\\display_struct.txt"))
 structs.append_input_file(from_here("definitions\\winstruct_bits.txt"))
 structs.append_input_file(from_here("definitions\\winstruct_alpc.txt"))
+structs.append_input_file(from_here("definitions\\winstruct_evtlog.txt"))
 
 functions = FuncGenerator(from_here("definitions\\winfunc.txt"), from_here(r"..\windows\generated_def\\winfuncs.py"), dependances=[structs])
 functions.append_input_file(from_here("definitions\\winfunc_crypto_wintrust.txt"))
 functions.append_input_file(from_here("definitions\\winfunc_notdoc.txt"))
+functions.append_input_file(from_here("definitions\\winfunc_evtlog.txt"))
 
 com = InitialCOMGenerator(from_here("definitions\\com\\*.txt"), DEFAULT_INTERFACE_TO_IID, from_here(r"..\windows\generated_def\\interfaces.py"), dependances=[structs, defs_with_ntstatus])
 
