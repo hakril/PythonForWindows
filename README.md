@@ -169,6 +169,9 @@ a simple x86/x64 assembler.
 >>> f = windows.native_exec.create_function(code.get_code(), [ctypes.c_uint])
 >>> f()
 42L
+# Assemblers can also be used in a more standard way
+>>> x86.assemble("cmp edi, 0; jnz :end; mov eax, 1; label :end; ret")
+'\x81\xff\x00\x00\x00\x00u\x06\xc7\xc0\x01\x00\x00\x00\xc3'
 ```
 
 ### Wintrust
