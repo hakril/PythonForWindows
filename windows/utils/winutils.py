@@ -48,7 +48,8 @@ def is_wow_64(hProcess):
 
 def create_file_from_handle(handle, mode="r"):
     """Return a Python :class:`file` around a ``Windows`` HANDLE"""
-    fd = msvcrt.open_osfhandle(handle, os.O_TEXT)
+    flags = os.O_BINARY if "b" in mode else os.O_TEXT
+    fd = msvcrt.open_osfhandle(handle, flags)
     return os.fdopen(fd, mode, 0)
 
 
