@@ -357,7 +357,7 @@ class AlpcClient(AlpcTransportBase):
 
     def _alpc_port_to_unicode_string(self, name):
         utf16_len = len(name) * 2
-        return gdef.UNICODE_STRING(utf16_len, utf16_len, name)
+        return gdef.UNICODE_STRING(utf16_len, utf16_len, ctypes.cast(gdef.PWSTR(name), gdef.PVOID))
 
     def connect_to_port(self, port_name, connect_message=None,
                                 port_attr=None, port_attr_flags=0x10000, obj_attr=None,
@@ -453,7 +453,7 @@ class AlpcServer(AlpcTransportBase):
 
     def _alpc_port_to_unicode_string(self, name):
         utf16_len = len(name) * 2
-        return gdef.UNICODE_STRING(utf16_len, utf16_len, name)
+        return gdef.UNICODE_STRING(utf16_len, utf16_len, ctypes.cast(gdef.PWSTR(name), gdef.PVOID))
 
     def create_port(self, port_name, msglen=None, port_attr_flags=0, obj_attr=None, port_attr=None):
         """Create the ALPC port ``port_name``. Most of the parameters have defauls value is ``None`` is passed.

@@ -919,6 +919,11 @@ def NtAlpcDeleteSectionView(PortHandle, Flags, ViewBase):
     return NtAlpcDeleteSectionView.ctypes_function(PortHandle, Flags, ViewBase)
 
 
+@NtdllProxy("NtAlpcQueryInformationMessage", error_ntstatus)
+def NtAlpcQueryInformationMessage(PortHandle, PortMessage, MessageInformationClass, MessageInformation, Length, ReturnLength):
+    return NtAlpcQueryInformationMessage.ctypes_function(PortHandle, PortMessage, MessageInformationClass, MessageInformation, Length, ReturnLength)
+
+
 @NtdllProxy("NtOpenDirectoryObject", error_ntstatus)
 def NtOpenDirectoryObject(DirectoryHandle, DesiredAccess, ObjectAttributes):
     return NtOpenDirectoryObject.ctypes_function(DirectoryHandle, DesiredAccess, ObjectAttributes)

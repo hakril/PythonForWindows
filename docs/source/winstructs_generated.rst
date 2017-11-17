@@ -85,7 +85,59 @@ _LSA_UNICODE_STRING
 
     .. attribute:: Buffer
 
-        :class:`PWSTR`
+        :class:`PVOID`
+
+_CURDIR
+'''''''
+.. class:: PCURDIR
+
+    Pointer to :class:`_CURDIR`
+
+.. class:: CURDIR
+
+    Alias for :class:`_CURDIR`
+
+.. class:: _CURDIR
+
+    .. attribute:: DosPath
+
+        :class:`UNICODE_STRING`
+
+
+    .. attribute:: Handle
+
+        :class:`PVOID`
+
+_RTL_DRIVE_LETTER_CURDIR
+''''''''''''''''''''''''
+.. class:: PRTL_DRIVE_LETTER_CURDIR
+
+    Pointer to :class:`_RTL_DRIVE_LETTER_CURDIR`
+
+.. class:: RTL_DRIVE_LETTER_CURDIR
+
+    Alias for :class:`_RTL_DRIVE_LETTER_CURDIR`
+
+.. class:: _RTL_DRIVE_LETTER_CURDIR
+
+    .. attribute:: Flags
+
+        :class:`WORD`
+
+
+    .. attribute:: Length
+
+        :class:`WORD`
+
+
+    .. attribute:: TimeStamp
+
+        :class:`ULONG`
+
+
+    .. attribute:: DosPath
+
+        :class:`UNICODE_STRING`
 
 _RTL_USER_PROCESS_PARAMETERS
 ''''''''''''''''''''''''''''
@@ -99,14 +151,59 @@ _RTL_USER_PROCESS_PARAMETERS
 
 .. class:: _RTL_USER_PROCESS_PARAMETERS
 
-    .. attribute:: Reserved1
+    .. attribute:: MaximumLength
 
-        :class:`BYTE` ``[16]``
+        :class:`ULONG`
 
 
-    .. attribute:: Reserved2
+    .. attribute:: Length
 
-        :class:`PVOID` ``[10]``
+        :class:`ULONG`
+
+
+    .. attribute:: Flags
+
+        :class:`ULONG`
+
+
+    .. attribute:: DebugFlags
+
+        :class:`ULONG`
+
+
+    .. attribute:: ConsoleHandle
+
+        :class:`PVOID`
+
+
+    .. attribute:: ConsoleFlags
+
+        :class:`ULONG`
+
+
+    .. attribute:: StandardInput
+
+        :class:`PVOID`
+
+
+    .. attribute:: StandardOutput
+
+        :class:`PVOID`
+
+
+    .. attribute:: StandardError
+
+        :class:`PVOID`
+
+
+    .. attribute:: CurrentDirectory
+
+        :class:`CURDIR`
+
+
+    .. attribute:: DllPath
+
+        :class:`UNICODE_STRING`
 
 
     .. attribute:: ImagePathName
@@ -117,6 +214,81 @@ _RTL_USER_PROCESS_PARAMETERS
     .. attribute:: CommandLine
 
         :class:`UNICODE_STRING`
+
+
+    .. attribute:: Environment
+
+        :class:`PVOID`
+
+
+    .. attribute:: StartingX
+
+        :class:`ULONG`
+
+
+    .. attribute:: StartingY
+
+        :class:`ULONG`
+
+
+    .. attribute:: CountX
+
+        :class:`ULONG`
+
+
+    .. attribute:: CountY
+
+        :class:`ULONG`
+
+
+    .. attribute:: CountCharsX
+
+        :class:`ULONG`
+
+
+    .. attribute:: CountCharsY
+
+        :class:`ULONG`
+
+
+    .. attribute:: FillAttribute
+
+        :class:`ULONG`
+
+
+    .. attribute:: WindowFlags
+
+        :class:`ULONG`
+
+
+    .. attribute:: ShowWindowFlags
+
+        :class:`ULONG`
+
+
+    .. attribute:: WindowTitle
+
+        :class:`UNICODE_STRING`
+
+
+    .. attribute:: DesktopInfo
+
+        :class:`UNICODE_STRING`
+
+
+    .. attribute:: ShellInfo
+
+        :class:`UNICODE_STRING`
+
+
+    .. attribute:: RuntimeData
+
+        :class:`UNICODE_STRING`
+
+
+    .. attribute:: CurrentDirectores
+
+        :class:`RTL_DRIVE_LETTER_CURDIR` ``[32]``
 
 _PEB
 ''''
@@ -13075,4 +13247,28 @@ _ALPC_PORT_INFORMATION_CLASS
 
 
     .. attribute:: MaxAlpcPortInfoClass(12)
+
+_ALPC_MESSAGE_INFORMATION_CLASS
+'''''''''''''''''''''''''''''''
+.. class:: ALPC_MESSAGE_INFORMATION_CLASS
+
+    Alias for :class:`_ALPC_MESSAGE_INFORMATION_CLASS`
+
+.. class:: PALPC_MESSAGE_INFORMATION_CLASS
+
+    Pointer to :class:`_ALPC_MESSAGE_INFORMATION_CLASS`
+
+.. class:: _ALPC_MESSAGE_INFORMATION_CLASS
+
+
+    .. attribute:: AlpcMessageSidInformation(0)
+
+
+    .. attribute:: AlpcMessageTokenModifiedIdInformation(1)
+
+
+    .. attribute:: MaxAlpcMessageInfoClass(2)
+
+
+    .. attribute:: AlpcMessageHandleInformation(3)
 

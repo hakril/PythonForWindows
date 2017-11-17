@@ -14,15 +14,58 @@ typedef struct _PEB_LDR_DATA {
 typedef struct _LSA_UNICODE_STRING {
   USHORT Length;
   USHORT MaximumLength;
-  PWSTR  Buffer;
+  PVOID  Buffer; // PVOID to prevent ctypes to automatically read the content of the buffer till a \0
 } LSA_UNICODE_STRING, *PLSA_UNICODE_STRING, UNICODE_STRING, *PUNICODE_STRING;
 
-typedef struct _RTL_USER_PROCESS_PARAMETERS {
-  BYTE           Reserved1[16];
-  PVOID          Reserved2[10];
-  UNICODE_STRING ImagePathName;
-  UNICODE_STRING CommandLine;
+typedef struct _CURDIR
+{
+     UNICODE_STRING DosPath;
+     PVOID Handle;
+} CURDIR, *PCURDIR;
+
+typedef struct _RTL_DRIVE_LETTER_CURDIR
+{
+     WORD Flags;
+     WORD Length;
+     ULONG TimeStamp;
+     UNICODE_STRING DosPath;
+} RTL_DRIVE_LETTER_CURDIR, *PRTL_DRIVE_LETTER_CURDIR;
+
+/*  This is the part of RTL_USER_PROCESS_PARAMETERS that works from XP to Windows 10
+    http://terminus.rewolf.pl/terminus/structures/ntdll/_RTL_USER_PROCESS_PARAMETERS_x86.html
+*/
+typedef struct _RTL_USER_PROCESS_PARAMETERS
+{
+     ULONG MaximumLength;
+     ULONG Length;
+     ULONG Flags;
+     ULONG DebugFlags;
+     PVOID ConsoleHandle;
+     ULONG ConsoleFlags;
+     PVOID StandardInput;
+     PVOID StandardOutput;
+     PVOID StandardError;
+     CURDIR CurrentDirectory;
+     UNICODE_STRING DllPath;
+     UNICODE_STRING ImagePathName;
+     UNICODE_STRING CommandLine;
+     PVOID Environment;
+     ULONG StartingX;
+     ULONG StartingY;
+     ULONG CountX;
+     ULONG CountY;
+     ULONG CountCharsX;
+     ULONG CountCharsY;
+     ULONG FillAttribute;
+     ULONG WindowFlags;
+     ULONG ShowWindowFlags;
+     UNICODE_STRING WindowTitle;
+     UNICODE_STRING DesktopInfo;
+     UNICODE_STRING ShellInfo;
+     UNICODE_STRING RuntimeData;
+     RTL_DRIVE_LETTER_CURDIR CurrentDirectores[32];
 } RTL_USER_PROCESS_PARAMETERS, *PRTL_USER_PROCESS_PARAMETERS;
+
 
 
 typedef struct _PEB {

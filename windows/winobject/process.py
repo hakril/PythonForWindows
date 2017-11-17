@@ -564,7 +564,7 @@ class Process(AutoHandle):
                 if e.code not in  [STATUS_FILE_INVALID, STATUS_INVALID_ADDRESS, STATUS_TRANSACTION_NOT_ACTIVE]:
                     raise
                 return None
-             remote_winstring = rctypes.transform_type_to_remote64bits(WinUnicodeString)
+             remote_winstring = rctypes.transform_type_to_remote64bits(gdef.LSA_UNICODE_STRING)
              mapped_filename = remote_winstring(ctypes.addressof(buffer), windows.current_process)
              return mapped_filename.str
 
@@ -1240,32 +1240,7 @@ def transform_ctypes_fields(struct, replacement):
     return [(name, replacement.get(name, type)) for name, type in struct._fields_]
 
 
-class WinUnicodeString(Structure):
-    """LSA_UNICODE_STRING with a nice `__repr__`"""
-    _fields_ = transform_ctypes_fields(LSA_UNICODE_STRING, {"Buffer": ctypes.c_void_p})
-    fields = [f[0] for f in _fields_]
-    """The fields of the structure"""
-
-    @property
-    def str(self):
-        """The python string of the LSA_UNICODE_STRING object
-
-        :type: :class:`unicode`
-        """
-        if not self.Length:
-            return ""
-        if getattr(self, "_target", None) is not None: #remote ctypes :D -> TRICKS OF THE YEAR
-            raw_data = self._target.read_memory(self.Buffer, self.Length)
-            return raw_data.decode("utf16")
-        size = self.Length / 2
-        return (ctypes.c_wchar * size).from_address(self.Buffer)[:]
-
-    def __repr__(self):
-        return """<{0} "{1}" at {2}>""".format(type(self).__name__, self.str, hex(id(self)))
-
-
-class LoadedModule(Structure):
-    _fields_ = transform_ctypes_fields(LDR_DATA_TABLE_ENTRY, {"BaseDllName": WinUnicodeString, "FullDllName": WinUnicodeString})
+class LoadedModule(LDR_DATA_TABLE_ENTRY):
     """An entry in the PEB Ldr list"""
     @property
     def baseaddr(self):
@@ -1308,18 +1283,8 @@ class LIST_ENTRY_PTR(PVOID):
         return LDR_DATA_TABLE_ENTRY.from_address(self.value - sizeof(PVOID) * 2)
 
 
-class RTL_USER_PROCESS_PARAMETERS(Structure):
-    _fields_ = transform_ctypes_fields(RTL_USER_PROCESS_PARAMETERS,  # The one in generated_def
-                                       {"ImagePathName": WinUnicodeString,
-                                        "CommandLine": WinUnicodeString}
-                                       )
-
-
-class PEB(Structure):
+class PEB(gdef.PEB):
     """The PEB (Process Environment Block) of the current process"""
-    _fields_ = transform_ctypes_fields(PEB,  # The one in generated_def
-                                       {"ProcessParameters": POINTER(RTL_USER_PROCESS_PARAMETERS)}
-                                       )
 
     @property
     def exe(self):
@@ -1333,7 +1298,7 @@ class PEB(Structure):
     def imagepath(self):
         """The ImagePathName of the PEB
 
-        :type: :class:`WinUnicodeString`
+        :type: :class:`~windows.generated_def.LSA_UNICODE_STRING`
 		"""
         return self.ProcessParameters.contents.ImagePathName
 
@@ -1341,9 +1306,8 @@ class PEB(Structure):
     def commandline(self):
         """The CommandLine of the PEB
 
-        :type: :class:`WinUnicodeString`
+        :type: :class:`~windows.generated_def.LSA_UNICODE_STRING`
 		"""
-        # This or changing the __repr__ of LSA_UNICODE_STRING
         return self.ProcessParameters.contents.CommandLine
 
     @property

@@ -1000,6 +1000,16 @@ NTSTATUS WINAPI NtAlpcQueryInformation(
     _Out_opt_ PULONG ReturnLength
 );
 
+
+NTSTATUS WINAPI NtAlpcQueryInformationMessage(
+    _In_ HANDLE PortHandle,
+    _In_ PPORT_MESSAGE PortMessage,
+    _In_ ALPC_MESSAGE_INFORMATION_CLASS MessageInformationClass,
+    _Out_opt_ PVOID MessageInformation,
+    _In_ ULONG Length,
+    _Out_opt_ PULONG ReturnLength
+);
+
 NTSTATUS WINAPI NtAlpcConnectPort(
     _Out_ PHANDLE PortHandle,
     _In_ PUNICODE_STRING PortName,

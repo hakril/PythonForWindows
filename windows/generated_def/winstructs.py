@@ -1015,6 +1015,17 @@ class _ALPC_PORT_INFORMATION_CLASS(EnumType):
 ALPC_PORT_INFORMATION_CLASS = _ALPC_PORT_INFORMATION_CLASS
 
 
+AlpcMessageSidInformation = EnumValue("_ALPC_MESSAGE_INFORMATION_CLASS", "AlpcMessageSidInformation", 0x0)
+AlpcMessageTokenModifiedIdInformation = EnumValue("_ALPC_MESSAGE_INFORMATION_CLASS", "AlpcMessageTokenModifiedIdInformation", 0x1)
+MaxAlpcMessageInfoClass = EnumValue("_ALPC_MESSAGE_INFORMATION_CLASS", "MaxAlpcMessageInfoClass", 0x2)
+AlpcMessageHandleInformation = EnumValue("_ALPC_MESSAGE_INFORMATION_CLASS", "AlpcMessageHandleInformation", 0x3)
+class _ALPC_MESSAGE_INFORMATION_CLASS(EnumType):
+    values = [AlpcMessageSidInformation, AlpcMessageTokenModifiedIdInformation, MaxAlpcMessageInfoClass, AlpcMessageHandleInformation]
+    mapper = {x:x for x in values}
+ALPC_MESSAGE_INFORMATION_CLASS = _ALPC_MESSAGE_INFORMATION_CLASS
+PALPC_MESSAGE_INFORMATION_CLASS = POINTER(_ALPC_MESSAGE_INFORMATION_CLASS)
+
+
 # Self referencing struct tricks
 class _LIST_ENTRY(Structure): pass
 PLIST_ENTRY = POINTER(_LIST_ENTRY)
@@ -1038,19 +1049,102 @@ class _LSA_UNICODE_STRING(Structure):
     _fields_ = [
         ("Length", USHORT),
         ("MaximumLength", USHORT),
-        ("Buffer", PWSTR),
+        ("Buffer", PVOID),
     ]
 PUNICODE_STRING = POINTER(_LSA_UNICODE_STRING)
 UNICODE_STRING = _LSA_UNICODE_STRING
 LSA_UNICODE_STRING = _LSA_UNICODE_STRING
 PLSA_UNICODE_STRING = POINTER(_LSA_UNICODE_STRING)
 
+INITIAL_LSA_UNICODE_STRING = _LSA_UNICODE_STRING
+
+class _LSA_UNICODE_STRING(INITIAL_LSA_UNICODE_STRING):
+    @property
+    def str(self):
+        """The python string of the LSA_UNICODE_STRING object
+
+        :type: :class:`unicode`
+        """
+        if not self.Length:
+            return ""
+        if getattr(self, "_target", None) is not None: # remote ctypes :D -> TRICKS OF THE YEAR
+            # raw_data = self._target.read_memory(self.Buffer, self.Length)
+            buffer_ptr = self._target.read_ptr(self._base_addr + type(self).Buffer.offset)
+            raw_data = self._target.read_memory(buffer_ptr, self.Length)
+            return raw_data.decode("utf16")
+        size = self.Length / 2
+        buffer_ptr = PVOID.from_address(ctypes.addressof(self) + type(self).Buffer.offset).value
+        return (ctypes.c_wchar * size).from_address(buffer_ptr)[:]
+
+    @property
+    def str(self):
+        """The python string of the LSA_UNICODE_STRING object
+
+        :type: :class:`unicode`
+        """
+        if not self.Length:
+            return ""
+        if getattr(self, "_target", None) is not None: #remote ctypes :D -> TRICKS OF THE YEAR
+            raw_data = self._target.read_memory(self.Buffer, self.Length)
+            return raw_data.decode("utf16")
+        size = self.Length / 2
+        return (ctypes.c_wchar * size).from_address(self.Buffer)[:]
+
+    def __repr__(self):
+        return """<{0} "{1}" at {2}>""".format(type(self).__name__, self.str, hex(id(self)))
+PUNICODE_STRING = POINTER(_LSA_UNICODE_STRING)
+UNICODE_STRING = _LSA_UNICODE_STRING
+LSA_UNICODE_STRING = _LSA_UNICODE_STRING
+PLSA_UNICODE_STRING = POINTER(_LSA_UNICODE_STRING)
+
+class _CURDIR(Structure):
+    _fields_ = [
+        ("DosPath", UNICODE_STRING),
+        ("Handle", PVOID),
+    ]
+PCURDIR = POINTER(_CURDIR)
+CURDIR = _CURDIR
+
+class _RTL_DRIVE_LETTER_CURDIR(Structure):
+    _fields_ = [
+        ("Flags", WORD),
+        ("Length", WORD),
+        ("TimeStamp", ULONG),
+        ("DosPath", UNICODE_STRING),
+    ]
+PRTL_DRIVE_LETTER_CURDIR = POINTER(_RTL_DRIVE_LETTER_CURDIR)
+RTL_DRIVE_LETTER_CURDIR = _RTL_DRIVE_LETTER_CURDIR
+
 class _RTL_USER_PROCESS_PARAMETERS(Structure):
     _fields_ = [
-        ("Reserved1", BYTE * 16),
-        ("Reserved2", PVOID * 10),
+        ("MaximumLength", ULONG),
+        ("Length", ULONG),
+        ("Flags", ULONG),
+        ("DebugFlags", ULONG),
+        ("ConsoleHandle", PVOID),
+        ("ConsoleFlags", ULONG),
+        ("StandardInput", PVOID),
+        ("StandardOutput", PVOID),
+        ("StandardError", PVOID),
+        ("CurrentDirectory", CURDIR),
+        ("DllPath", UNICODE_STRING),
         ("ImagePathName", UNICODE_STRING),
         ("CommandLine", UNICODE_STRING),
+        ("Environment", PVOID),
+        ("StartingX", ULONG),
+        ("StartingY", ULONG),
+        ("CountX", ULONG),
+        ("CountY", ULONG),
+        ("CountCharsX", ULONG),
+        ("CountCharsY", ULONG),
+        ("FillAttribute", ULONG),
+        ("WindowFlags", ULONG),
+        ("ShowWindowFlags", ULONG),
+        ("WindowTitle", UNICODE_STRING),
+        ("DesktopInfo", UNICODE_STRING),
+        ("ShellInfo", UNICODE_STRING),
+        ("RuntimeData", UNICODE_STRING),
+        ("CurrentDirectores", RTL_DRIVE_LETTER_CURDIR * 32),
     ]
 PRTL_USER_PROCESS_PARAMETERS = POINTER(_RTL_USER_PROCESS_PARAMETERS)
 RTL_USER_PROCESS_PARAMETERS = _RTL_USER_PROCESS_PARAMETERS

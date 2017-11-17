@@ -4,11 +4,11 @@ import ctypes
 import windows
 from windows import winproxy
 from windows.generated_def import windef
-from windows.winobject.process import WinUnicodeString
 from windows.generated_def.winstructs import *
 
-class EPUBLIC_OBJECT_TYPE_INFORMATION(ctypes.Structure):
-    _fields_ = windows.utils.transform_ctypes_fields(PUBLIC_OBJECT_TYPE_INFORMATION, {"TypeName": windows.winobject.process.WinUnicodeString})
+# Remove this ?
+class EPUBLIC_OBJECT_TYPE_INFORMATION(PUBLIC_OBJECT_TYPE_INFORMATION):
+    pass
 
 current_process_pid = os.getpid()
 
@@ -47,7 +47,7 @@ class Handle(SYSTEM_HANDLE):
         size_needed = DWORD()
         yyy = ctypes.c_buffer(0x1000)
         winproxy.NtQueryObject(lh, ObjectNameInformation, ctypes.byref(yyy), ctypes.sizeof(yyy), ctypes.byref(size_needed))
-        return WinUnicodeString.from_buffer_copy(yyy[:size_needed.value]).str
+        return LSA_UNICODE_STRING.from_buffer_copy(yyy[:size_needed.value]).str
 
     def _get_object_type(self):
         lh = self.local_handle
