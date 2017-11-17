@@ -4,7 +4,6 @@ from winstruct import WinStruct, WinUnion, WinStructType, Ptr, WinEnum
 from simpleparser import *
 
 class WinStructParser(Parser):
-
     def __init__(self, *args, **kwargs):
         super(WinStructParser, self).__init__(*args, **kwargs)
         self.pack = None

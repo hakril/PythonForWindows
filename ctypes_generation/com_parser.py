@@ -1,4 +1,3 @@
-import StringIO
 from collections import namedtuple
 
 import dummy_wintypes
@@ -6,54 +5,6 @@ import struct_parser
 from winstruct import WinStruct, WinUnion, WinStructType, Ptr, WinEnum
 from simpleparser import *
 
-
-def initial_processing( data):
-    #  https://gcc.gnu.org/onlinedocs/cpp/Initial-processing.html#Initial-processing
-    # Step 1 -> use correct end of line + add last \n if not existing
-    data = data.replace("\r\n", "\n")
-    if not data.endswith("\n"):
-        data = data + "\n"
-    # Step 2: Trigraph : fuck it
-    pass
-    # Step 3: Line merge !
-    data = data.replace("\\\n", "")
-    # Step 4 Remove comments:
-
-    ins = StringIO.StringIO(data)
-    outs = StringIO.StringIO()
-
-    in_str = False
-    res = []
-    while ins.tell() != len(data):
-        c = ins.read(1)
-        if ins.tell() == len(data):
-            outs.write(c)
-            break
-        if not in_str and c == "/":
-            nc = ins.read(1)
-            if nc  == "/":
-                while c != "\n":
-                    c = ins.read(1)
-                outs.write(c)
-                continue
-            elif nc == "*":
-                while c != "*" or nc != "/":
-                    c = nc
-                    nc = ins.read(1)
-                    if not nc:
-                        raise ValueError("Unmatched */")
-                outs.write(" ")
-                continue
-            else:
-                outs.write(c)
-                ins.seek(ins.tell() - 1)
-                continue
-        # TODO: escape in str
-        elif c == '"':
-            in_str = not in_str
-        outs.write(c)
-    outs.seek(0)
-    return outs.read()
 
 class WinComParser(Parser):
     PARAM_INFO =  ["__RPC__deref_out", "__RPC__in", "__RPC__deref_out_opt", "__RPC__out", "__RPC__in_opt",
@@ -64,7 +15,7 @@ class WinComParser(Parser):
             "__in_ecount", "__out_bcount_opt", "__out_bcount", "__in_bcount", "__in_bcount_opt"]
 
     def __init__(self, data):
-        data = initial_processing(data)
+        # data = self.initial_processing(data)
         #print(data)
         super(WinComParser, self).__init__(data)
 

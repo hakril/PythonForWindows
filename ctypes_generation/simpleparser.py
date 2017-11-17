@@ -1,4 +1,5 @@
 import collections
+import StringIO
 
 TupleToken = collections.namedtuple('Token', ['value'])
 
@@ -114,7 +115,7 @@ class ParsingError(Exception):
 class Parser(object):
 
     def __init__(self, data):
-        self.lexer = iter(Lexer(data))
+        self.lexer = iter(Lexer(self.initial_processing(data)))
         self.peek_token = None
 
     def assert_keyword(self, expected_keyword, n=None):
@@ -162,6 +163,54 @@ class Parser(object):
 
     def parse(self):
         raise NotImplementedError("Parser.parse()")
+
+    def initial_processing(self, data):
+        #  https://gcc.gnu.org/onlinedocs/cpp/Initial-processing.html#Initial-processing
+        # Step 1 -> use correct end of line + add last \n if not existing
+        data = data.replace("\r\n", "\n")
+        if not data.endswith("\n"):
+            data = data + "\n"
+        # Step 2: Trigraph : fuck it
+        pass
+        # Step 3: Line merge !
+        data = data.replace("\\\n", "")
+        # Step 4 Remove comments:
+
+        ins = StringIO.StringIO(data)
+        outs = StringIO.StringIO()
+
+        in_str = False
+        res = []
+        while ins.tell() != len(data):
+            c = ins.read(1)
+            if ins.tell() == len(data):
+                outs.write(c)
+                break
+            if not in_str and c == "/":
+                nc = ins.read(1)
+                if nc  == "/":
+                    while c != "\n":
+                        c = ins.read(1)
+                    outs.write(c)
+                    continue
+                elif nc == "*":
+                    while c != "*" or nc != "/":
+                        c = nc
+                        nc = ins.read(1)
+                        if not nc:
+                            raise ValueError("Unmatched */")
+                    outs.write(" ")
+                    continue
+                else:
+                    outs.write(c)
+                    ins.seek(ins.tell() - 1)
+                    continue
+            # TODO: escape in str
+            elif c == '"':
+                in_str = not in_str
+            outs.write(c)
+        outs.seek(0)
+        return outs.read()
 
 
 #KNOWN_TYPE = ["BYTE", "USHORT", "DWORD", "PVOID", "ULONG", "HANDLE", "PWSTR"]
