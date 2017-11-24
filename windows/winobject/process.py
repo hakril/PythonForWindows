@@ -428,20 +428,19 @@ class Process(AutoHandle):
         finally:
              self.virtual_protect(addr, size, old_protect.value, old_protect)
 
-    def virtual_protect(self, addr, size, protect, old_protect):
+    def virtual_protect(self, addr, size, protect, old_protect=None):
         """Change the access right of one or more page of the process"""
         if windows.current_process.bitness == 32 and self.bitness == 64:
-            #addr = (addr >> 12) << 12
-            #addr = ULONG64(addr)
             if size & 0x0fff:
                 size = ((size >> 12) + 1) << 12
-            #ssize = ULONG(size)
-            old_protect = ctypes.addressof(old_protect)
+            if old_protect is None:
+                old_protect = gdef.DWORD()
+            xold_protect = ctypes.addressof(old_protect)
             xaddr = ULONG64(addr)
             addr = ctypes.addressof(xaddr)
             xsize = ULONG(size)
             size = ctypes.addressof(xsize)
-            return windows.syswow64.NtProtectVirtualMemory_32_to_64(self.handle, addr, size, protect, old_protect)
+            return windows.syswow64.NtProtectVirtualMemory_32_to_64(self.handle, addr, size, protect, xold_protect)
         else:
             winproxy.VirtualProtectEx(self.handle, addr, size, protect, old_protect)
 

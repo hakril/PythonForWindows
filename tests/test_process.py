@@ -63,6 +63,10 @@ class TestCurrentProcessWithCheckGarbage(object):
         assert isinstance(token.integrity, (int, long))
         assert isinstance(token.is_elevated, (bool))
 
+    def test_local_ProcessParameters_LSA_UNICODE_STRING(self):
+        image_path_from_process_params = windows.current_process.peb.ProcessParameters.contents.ImagePathName.str.lower()
+        image_path_from_module = windows.current_process.peb.modules[0].fullname.lower()
+        assert image_path_from_process_params == image_path_from_module
 
 @check_for_gc_garbage
 class TestProcessWithCheckGarbage(object):
@@ -363,3 +367,8 @@ class TestProcessWithCheckGarbage(object):
         tst_thread = windows.winobject.process.WinThread(tid=thread.tid)
         assert thread.owner_pid == tst_thread.owner_pid
         assert thread.owner.name == tst_thread.owner.name
+
+    def test_ProcessParameters_LSA_UNICODE_STRING(self, proc32_64):
+        image_path_from_process_params = proc32_64.peb.ProcessParameters.contents.ImagePathName.str.lower()
+        image_path_from_module = proc32_64.peb.modules[0].fullname.lower()
+        assert image_path_from_process_params == image_path_from_module

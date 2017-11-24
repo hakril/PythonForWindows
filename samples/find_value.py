@@ -44,6 +44,7 @@ def search_name_in_interface(target):
             if match(target, mname):
                 print("Method <{0}> of <{1}>: {2}".format(mname, name, mvalue))
 
+
 def search_name(target):
     print("== Functions ==")
     search_name_in_function(target)
@@ -60,6 +61,10 @@ def search_value(target):
     for name, windef in meta.windef_walker():
         if target == windef:
             print(windef)
+
+    for status in gdef.ntstatus.NtStatusException.ALL_STATUS.values():
+        if target == status[0]:
+            print(status)
 
 parser = argparse.ArgumentParser(prog=__file__)
 parser.add_argument('target', help='The name or value to research in PythonForWindows generated definition')
