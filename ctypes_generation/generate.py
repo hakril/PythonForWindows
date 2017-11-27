@@ -102,6 +102,7 @@ TYPE_EQUIVALENCE = [
     ('LPPROC_THREAD_ATTRIBUTE_LIST', 'PVOID'),
     ('LPUNKNOWN', 'POINTER(PVOID)'),
     ('SPC_UUID', 'BYTE * 16'),
+    ('PIO_APC_ROUTINE', 'PVOID'),
     #STUFF FOR COM (will be replace at runtime
     # real def in com_interface_header
     # ('GUID', 'PVOID'),
@@ -790,6 +791,7 @@ structs.append_input_file(from_here("definitions\\display_struct.txt"))
 structs.append_input_file(from_here("definitions\\winstruct_bits.txt"))
 structs.append_input_file(from_here("definitions\\winstruct_alpc.txt"))
 structs.append_input_file(from_here("definitions\\winstruct_evtlog.txt"))
+structs.append_input_file(from_here("definitions\\winstruct_file_info.txt"))
 
 functions = FuncGenerator(from_here("definitions\\winfunc.txt"), from_here(r"..\windows\generated_def\\winfuncs.py"), dependances=[structs])
 functions.append_input_file(from_here("definitions\\winfunc_crypto_wintrust.txt"))

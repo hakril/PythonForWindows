@@ -8,8 +8,9 @@ from collections import namedtuple
 
 import windows
 from windows.dbgprint import dbgprint
+import windows.generated_def as gdef
+
 from .. import winproxy
-from ..generated_def import windef
 from ..generated_def.winstructs import *
 
 
@@ -62,15 +63,15 @@ def create_console():
     """Create a new console displaying STDOUT.
        Useful in injection of GUI process"""
     winproxy.AllocConsole()
-    stdout_handle = winproxy.GetStdHandle(windef.STD_OUTPUT_HANDLE)
+    stdout_handle = winproxy.GetStdHandle(gdef.STD_OUTPUT_HANDLE)
     console_stdout = create_file_from_handle(stdout_handle, "w")
     sys.stdout = console_stdout
 
-    stdin_handle = winproxy.GetStdHandle(windef.STD_INPUT_HANDLE)
+    stdin_handle = winproxy.GetStdHandle(gdef.STD_INPUT_HANDLE)
     console_stdin = create_file_from_handle(stdin_handle, "r+")
     sys.stdin = console_stdin
 
-    stderr_handle = winproxy.GetStdHandle(windef.STD_ERROR_HANDLE)
+    stderr_handle = winproxy.GetStdHandle(gdef.STD_ERROR_HANDLE)
     console_stderr = create_file_from_handle(stderr_handle, "w")
     sys.stderr = console_stderr
 
@@ -129,7 +130,7 @@ def enable_privilege(lpszPrivilege, bEnablePrivilege):
         tp.Privileges[0].Attributes = 0
     winproxy.AdjustTokenPrivileges(hToken, False, byref(tp), sizeof(TOKEN_PRIVILEGES))
     winproxy.CloseHandle(hToken)
-    if winproxy.GetLastError() == windef.ERROR_NOT_ALL_ASSIGNED:
+    if winproxy.GetLastError() == gdef.ERROR_NOT_ALL_ASSIGNED:
         raise ValueError("Failed to get privilege {0}".format(lpszPrivilege))
     return True
 
@@ -214,6 +215,50 @@ def get_kernel_modules_syswow64():
     return list(modules)
 
 
+# Split winutils.py ?
+
+ntqueryinformationfile_info_structs = {
+    gdef.FileAccessInformation: gdef.FILE_ACCESS_INFORMATION,
+    gdef.FileAlignmentInformation: gdef.FILE_ALIGNMENT_INFORMATION,
+    gdef.FileAllInformation: gdef.FILE_ALL_INFORMATION,
+    gdef.FileAttributeTagInformation: gdef.FILE_ATTRIBUTE_TAG_INFORMATION,
+    gdef.FileBasicInformation: gdef.FILE_BASIC_INFORMATION,
+    gdef.FileEaInformation: gdef.FILE_EA_INFORMATION ,
+    gdef.FileInternalInformation: gdef.FILE_INTERNAL_INFORMATION,
+    gdef.FileIoPriorityHintInformation: gdef.FILE_IO_PRIORITY_HINT_INFORMATION,
+    gdef.FileModeInformation: gdef.FILE_MODE_INFORMATION,
+    gdef.FileNetworkOpenInformation: gdef.FILE_NETWORK_OPEN_INFORMATION,
+    gdef.FileNameInformation: gdef.FILE_NAME_INFORMATION,
+    gdef.FilePositionInformation: gdef.FILE_POSITION_INFORMATION,
+    gdef.FileStandardInformation: gdef.FILE_STANDARD_INFORMATION,
+    gdef.FileIsRemoteDeviceInformation: gdef.FILE_IS_REMOTE_DEVICE_INFORMATION,
+}
+
+def query_file_informations(handle, file_info_class):
+    io_status = gdef.IO_STATUS_BLOCK()
+    info = ntqueryinformationfile_info_structs[file_info_class]()
+    # Do helper for 'is_pointer' / get pointed_size & co ? (useful for winproxy)
+    pinfo = ctypes.pointer(info)
+    try:
+        windows.winproxy.NtQueryInformationFile(handle, io_status, pinfo, ctypes.sizeof(info), FileInformationClass=file_info_class)
+    except Exception as e:
+        if not (e.winerror & 0xffffffff) == gdef.STATUS_BUFFER_OVERFLOW:
+            raise
+        # STATUS_BUFFER_OVERFLOW -> Guess we have a FILE_NAME_INFORMATION somewhere that need a bigger buffer
+        if file_info_class == gdef.FileNameInformation:
+            file_name_length = pinfo[0].FileNameLength
+        elif file_info_class == gdef.FileAllInformation:
+            file_name_length = pinfo[0].NameInformation.FileNameLength
+        else:
+            raise
+        full_size = ctypes.sizeof(info) + file_name_length # We add a little too much size for the sake of simplicity
+        buffer = ctypes.c_buffer(full_size)
+        windows.winproxy.NtQueryInformationFile(handle, io_status, buffer, full_size, FileInformationClass=file_info_class)
+        pinfo = ctypes.cast(buffer,  ctypes.POINTER(ntqueryinformationfile_info_structs[file_info_class]))
+        info = pinfo[0]
+    return info
+
+
 # String stuff
 def ntstatus(code):
     return windows.generated_def.ntstatus.NtStatusException(code)
@@ -229,6 +274,7 @@ def get_long_path(path):
     rsize = winproxy.GetLongPathNameA(path, buffer, size)
     return buffer[:rsize]
 
+
 def get_short_path(path):
     """Return the short path form for ``path``
 
@@ -238,6 +284,7 @@ def get_short_path(path):
     buffer = ctypes.c_buffer(size)
     rsize = winproxy.GetShortPathNameA(path, buffer, size)
     return buffer[:rsize]
+
 
 def get_shared_mapping(name, size=0x1000):
     # TODO: real code
@@ -285,7 +332,7 @@ class VirtualProtected(object):
     """
     A context manager usable like `VirtualProtect` that will restore the old protection at exit ::
 
-        with utils.VirtualProtected(IATentry.addr, ctypes.sizeof(PVOID), windef.PAGE_EXECUTE_READWRITE):
+        with utils.VirtualProtected(IATentry.addr, ctypes.sizeof(PVOID), gdef.PAGE_EXECUTE_READWRITE):
             IATentry.value = 0x42424242
     """
     def __init__(self, addr, size, new_protect):

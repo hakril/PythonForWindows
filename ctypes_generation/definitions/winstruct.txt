@@ -785,6 +785,7 @@ typedef enum _SE_OBJECT_TYPE {
   SE_REGISTRY_WOW64_32KEY = 12,
 } SE_OBJECT_TYPE;
 
+
 typedef struct _CLIENT_ID{
    HANDLE UniqueProcess;
    HANDLE UniqueThread;

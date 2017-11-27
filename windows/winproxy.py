@@ -944,9 +944,25 @@ def NtOpenSymbolicLinkObject(LinkHandle, DesiredAccess, ObjectAttributes):
     return NtOpenSymbolicLinkObject.ctypes_function(LinkHandle, DesiredAccess, ObjectAttributes)
 
 
+@NtdllProxy("NtQueryInformationFile", error_ntstatus)
+def NtQueryInformationFile(FileHandle, IoStatusBlock, FileInformation, Length=None, FileInformationClass=NeededParameter):
+    if Length is None:
+        Length = ctypes.sizeof(FileInformation)
+    return NtQueryInformationFile.ctypes_function(FileHandle, IoStatusBlock, FileInformation, Length, FileInformationClass)
+
+
+@NtdllProxy("NtQueryDirectoryFile", error_ntstatus)
+def NtQueryDirectoryFile(FileHandle, Event=None, ApcRoutine=None, ApcContext=None, IoStatusBlock=NeededParameter, FileInformation=NeededParameter, Length=None, FileInformationClass=NeededParameter, ReturnSingleEntry=NeededParameter, FileName=None, RestartScan=NeededParameter):
+    if Length is None:
+        Length = ctypes.sizeof(FileInformation)
+    return NtQueryDirectoryFile.ctypes_function(FileHandle, Event, ApcRoutine, ApcContext, IoStatusBlock, FileInformation, Length, FileInformationClass, ReturnSingleEntry, FileName, RestartScan)
+
+
+
 @NtdllProxy("RtlDecompressBuffer", error_ntstatus)
 def RtlDecompressBuffer(CompressionFormat, UncompressedBuffer, UncompressedBufferSize, CompressedBuffer, CompressedBufferSize, FinalUncompressedSize):
     return RtlDecompressBuffer.ctypes_function(CompressionFormat, UncompressedBuffer, UncompressedBufferSize, CompressedBuffer, CompressedBufferSize, FinalUncompressedSize)
+
 
 # Section stuff
 

@@ -11019,6 +11019,350 @@ _EVENTLOG_FULL_INFORMATION
 
         :class:`DWORD`
 
+_FILE_INTERNAL_INFORMATION
+''''''''''''''''''''''''''
+.. class:: FILE_INTERNAL_INFORMATION
+
+    Alias for :class:`_FILE_INTERNAL_INFORMATION`
+
+.. class:: PFILE_INTERNAL_INFORMATION
+
+    Pointer to :class:`_FILE_INTERNAL_INFORMATION`
+
+.. class:: _FILE_INTERNAL_INFORMATION
+
+    .. attribute:: IndexNumber
+
+        :class:`LARGE_INTEGER`
+
+_FILE_ALIGNMENT_INFORMATION
+'''''''''''''''''''''''''''
+.. class:: PFILE_ALIGNMENT_INFORMATION
+
+    Pointer to :class:`_FILE_ALIGNMENT_INFORMATION`
+
+.. class:: FILE_ALIGNMENT_INFORMATION
+
+    Alias for :class:`_FILE_ALIGNMENT_INFORMATION`
+
+.. class:: _FILE_ALIGNMENT_INFORMATION
+
+    .. attribute:: AlignmentRequirement
+
+        :class:`ULONG`
+
+_FILE_ATTRIBUTE_TAG_INFORMATION
+'''''''''''''''''''''''''''''''
+.. class:: PFILE_ATTRIBUTE_TAG_INFORMATION
+
+    Pointer to :class:`_FILE_ATTRIBUTE_TAG_INFORMATION`
+
+.. class:: FILE_ATTRIBUTE_TAG_INFORMATION
+
+    Alias for :class:`_FILE_ATTRIBUTE_TAG_INFORMATION`
+
+.. class:: _FILE_ATTRIBUTE_TAG_INFORMATION
+
+    .. attribute:: FileAttributes
+
+        :class:`ULONG`
+
+
+    .. attribute:: ReparseTag
+
+        :class:`ULONG`
+
+_FILE_BASIC_INFORMATION
+'''''''''''''''''''''''
+.. class:: FILE_BASIC_INFORMATION
+
+    Alias for :class:`_FILE_BASIC_INFORMATION`
+
+.. class:: PFILE_BASIC_INFORMATION
+
+    Pointer to :class:`_FILE_BASIC_INFORMATION`
+
+.. class:: _FILE_BASIC_INFORMATION
+
+    .. attribute:: CreationTime
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: LastAccessTime
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: LastWriteTime
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: ChangeTime
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: FileAttributes
+
+        :class:`ULONG`
+
+_FILE_EA_INFORMATION
+''''''''''''''''''''
+.. class:: PFILE_EA_INFORMATION
+
+    Pointer to :class:`_FILE_EA_INFORMATION`
+
+.. class:: FILE_EA_INFORMATION
+
+    Alias for :class:`_FILE_EA_INFORMATION`
+
+.. class:: _FILE_EA_INFORMATION
+
+    .. attribute:: EaSize
+
+        :class:`ULONG`
+
+_FILE_IO_PRIORITY_HINT_INFORMATION
+''''''''''''''''''''''''''''''''''
+.. class:: PFILE_IO_PRIORITY_HINT_INFORMATION
+
+    Pointer to :class:`_FILE_IO_PRIORITY_HINT_INFORMATION`
+
+.. class:: FILE_IO_PRIORITY_HINT_INFORMATION
+
+    Alias for :class:`_FILE_IO_PRIORITY_HINT_INFORMATION`
+
+.. class:: _FILE_IO_PRIORITY_HINT_INFORMATION
+
+    .. attribute:: PriorityHint
+
+        :class:`IO_PRIORITY_HINT`
+
+_FILE_MODE_INFORMATION
+''''''''''''''''''''''
+.. class:: PFILE_MODE_INFORMATION
+
+    Pointer to :class:`_FILE_MODE_INFORMATION`
+
+.. class:: FILE_MODE_INFORMATION
+
+    Alias for :class:`_FILE_MODE_INFORMATION`
+
+.. class:: _FILE_MODE_INFORMATION
+
+    .. attribute:: Mode
+
+        :class:`ULONG`
+
+_FILE_NAME_INFORMATION
+''''''''''''''''''''''
+.. class:: PFILE_NAME_INFORMATION
+
+    Pointer to :class:`_FILE_NAME_INFORMATION`
+
+.. class:: FILE_NAME_INFORMATION
+
+    Alias for :class:`_FILE_NAME_INFORMATION`
+
+.. class:: _FILE_NAME_INFORMATION
+
+    .. attribute:: FileNameLength
+
+        :class:`ULONG`
+
+
+    .. attribute:: FileName
+
+        :class:`WCHAR` ``[1]``
+
+_FILE_NETWORK_OPEN_INFORMATION
+''''''''''''''''''''''''''''''
+.. class:: PFILE_NETWORK_OPEN_INFORMATION
+
+    Pointer to :class:`_FILE_NETWORK_OPEN_INFORMATION`
+
+.. class:: FILE_NETWORK_OPEN_INFORMATION
+
+    Alias for :class:`_FILE_NETWORK_OPEN_INFORMATION`
+
+.. class:: _FILE_NETWORK_OPEN_INFORMATION
+
+    .. attribute:: CreationTime
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: LastAccessTime
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: LastWriteTime
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: ChangeTime
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: AllocationSize
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: EndOfFile
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: FileAttributes
+
+        :class:`ULONG`
+
+_FILE_STANDARD_INFORMATION
+''''''''''''''''''''''''''
+.. class:: FILE_STANDARD_INFORMATION
+
+    Alias for :class:`_FILE_STANDARD_INFORMATION`
+
+.. class:: PFILE_STANDARD_INFORMATION
+
+    Pointer to :class:`_FILE_STANDARD_INFORMATION`
+
+.. class:: _FILE_STANDARD_INFORMATION
+
+    .. attribute:: AllocationSize
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: EndOfFile
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: NumberOfLinks
+
+        :class:`ULONG`
+
+
+    .. attribute:: DeletePending
+
+        :class:`BOOLEAN`
+
+
+    .. attribute:: Directory
+
+        :class:`BOOLEAN`
+
+_FILE_ACCESS_INFORMATION
+''''''''''''''''''''''''
+.. class:: FILE_ACCESS_INFORMATION
+
+    Alias for :class:`_FILE_ACCESS_INFORMATION`
+
+.. class:: PFILE_ACCESS_INFORMATION
+
+    Pointer to :class:`_FILE_ACCESS_INFORMATION`
+
+.. class:: _FILE_ACCESS_INFORMATION
+
+    .. attribute:: AccessFlags
+
+        :class:`ACCESS_MASK`
+
+_FILE_POSITION_INFORMATION
+''''''''''''''''''''''''''
+.. class:: PFILE_POSITION_INFORMATION
+
+    Pointer to :class:`_FILE_POSITION_INFORMATION`
+
+.. class:: FILE_POSITION_INFORMATION
+
+    Alias for :class:`_FILE_POSITION_INFORMATION`
+
+.. class:: _FILE_POSITION_INFORMATION
+
+    .. attribute:: CurrentByteOffset
+
+        :class:`LARGE_INTEGER`
+
+_FILE_IS_REMOTE_DEVICE_INFORMATION
+''''''''''''''''''''''''''''''''''
+.. class:: FILE_IS_REMOTE_DEVICE_INFORMATION
+
+    Alias for :class:`_FILE_IS_REMOTE_DEVICE_INFORMATION`
+
+.. class:: PFILE_IS_REMOTE_DEVICE_INFORMATION
+
+    Pointer to :class:`_FILE_IS_REMOTE_DEVICE_INFORMATION`
+
+.. class:: _FILE_IS_REMOTE_DEVICE_INFORMATION
+
+    .. attribute:: IsRemote
+
+        :class:`BOOLEAN`
+
+_FILE_ALL_INFORMATION
+'''''''''''''''''''''
+.. class:: PFILE_ALL_INFORMATION
+
+    Pointer to :class:`_FILE_ALL_INFORMATION`
+
+.. class:: FILE_ALL_INFORMATION
+
+    Alias for :class:`_FILE_ALL_INFORMATION`
+
+.. class:: _FILE_ALL_INFORMATION
+
+    .. attribute:: BasicInformation
+
+        :class:`FILE_BASIC_INFORMATION`
+
+
+    .. attribute:: StandardInformation
+
+        :class:`FILE_STANDARD_INFORMATION`
+
+
+    .. attribute:: InternalInformation
+
+        :class:`FILE_INTERNAL_INFORMATION`
+
+
+    .. attribute:: EaInformation
+
+        :class:`FILE_EA_INFORMATION`
+
+
+    .. attribute:: AccessInformation
+
+        :class:`FILE_ACCESS_INFORMATION`
+
+
+    .. attribute:: PositionInformation
+
+        :class:`FILE_POSITION_INFORMATION`
+
+
+    .. attribute:: ModeInformation
+
+        :class:`FILE_MODE_INFORMATION`
+
+
+    .. attribute:: AlignmentInformation
+
+        :class:`FILE_ALIGNMENT_INFORMATION`
+
+
+    .. attribute:: NameInformation
+
+        :class:`FILE_NAME_INFORMATION`
+
 WinEnums
 --------
 _SYSTEM_INFORMATION_CLASS
@@ -13378,4 +13722,246 @@ _ALPC_MESSAGE_INFORMATION_CLASS
 
 
     .. attribute:: AlpcMessageHandleInformation(3)
+
+_FILE_INFORMATION_CLASS
+'''''''''''''''''''''''
+.. class:: FILE_INFORMATION_CLASS
+
+    Alias for :class:`_FILE_INFORMATION_CLASS`
+
+.. class:: PFILE_INFORMATION_CLASS
+
+    Pointer to :class:`_FILE_INFORMATION_CLASS`
+
+.. class:: _FILE_INFORMATION_CLASS
+
+
+    .. attribute:: FakeFileInformationZero(0)
+
+
+    .. attribute:: FileDirectoryInformation(1)
+
+
+    .. attribute:: FileFullDirectoryInformation(2)
+
+
+    .. attribute:: FileBothDirectoryInformation(3)
+
+
+    .. attribute:: FileBasicInformation(4)
+
+
+    .. attribute:: FileStandardInformation(5)
+
+
+    .. attribute:: FileInternalInformation(6)
+
+
+    .. attribute:: FileEaInformation(7)
+
+
+    .. attribute:: FileAccessInformation(8)
+
+
+    .. attribute:: FileNameInformation(9)
+
+
+    .. attribute:: FileRenameInformation(10)
+
+
+    .. attribute:: FileLinkInformation(11)
+
+
+    .. attribute:: FileNamesInformation(12)
+
+
+    .. attribute:: FileDispositionInformation(13)
+
+
+    .. attribute:: FilePositionInformation(14)
+
+
+    .. attribute:: FileFullEaInformation(15)
+
+
+    .. attribute:: FileModeInformation(16)
+
+
+    .. attribute:: FileAlignmentInformation(17)
+
+
+    .. attribute:: FileAllInformation(18)
+
+
+    .. attribute:: FileAllocationInformation(19)
+
+
+    .. attribute:: FileEndOfFileInformation(20)
+
+
+    .. attribute:: FileAlternateNameInformation(21)
+
+
+    .. attribute:: FileStreamInformation(22)
+
+
+    .. attribute:: FilePipeInformation(23)
+
+
+    .. attribute:: FilePipeLocalInformation(24)
+
+
+    .. attribute:: FilePipeRemoteInformation(25)
+
+
+    .. attribute:: FileMailslotQueryInformation(26)
+
+
+    .. attribute:: FileMailslotSetInformation(27)
+
+
+    .. attribute:: FileCompressionInformation(28)
+
+
+    .. attribute:: FileObjectIdInformation(29)
+
+
+    .. attribute:: FileCompletionInformation(30)
+
+
+    .. attribute:: FileMoveClusterInformation(31)
+
+
+    .. attribute:: FileQuotaInformation(32)
+
+
+    .. attribute:: FileReparsePointInformation(33)
+
+
+    .. attribute:: FileNetworkOpenInformation(34)
+
+
+    .. attribute:: FileAttributeTagInformation(35)
+
+
+    .. attribute:: FileTrackingInformation(36)
+
+
+    .. attribute:: FileIdBothDirectoryInformation(37)
+
+
+    .. attribute:: FileIdFullDirectoryInformation(38)
+
+
+    .. attribute:: FileValidDataLengthInformation(39)
+
+
+    .. attribute:: FileShortNameInformation(40)
+
+
+    .. attribute:: FileIoCompletionNotificationInformation(41)
+
+
+    .. attribute:: FileIoStatusBlockRangeInformation(42)
+
+
+    .. attribute:: FileIoPriorityHintInformation(43)
+
+
+    .. attribute:: FileSfioReserveInformation(44)
+
+
+    .. attribute:: FileSfioVolumeInformation(45)
+
+
+    .. attribute:: FileHardLinkInformation(46)
+
+
+    .. attribute:: FileProcessIdsUsingFileInformation(47)
+
+
+    .. attribute:: FileNormalizedNameInformation(48)
+
+
+    .. attribute:: FileNetworkPhysicalNameInformation(49)
+
+
+    .. attribute:: FileIdGlobalTxDirectoryInformation(50)
+
+
+    .. attribute:: FileIsRemoteDeviceInformation(51)
+
+
+    .. attribute:: FileUnusedInformation(52)
+
+
+    .. attribute:: FileNumaNodeInformation(53)
+
+
+    .. attribute:: FileStandardLinkInformation(54)
+
+
+    .. attribute:: FileRemoteProtocolInformation(55)
+
+
+    .. attribute:: FileRenameInformationBypassAccessCheck(56)
+
+
+    .. attribute:: FileLinkInformationBypassAccessCheck(57)
+
+
+    .. attribute:: FileVolumeNameInformation(58)
+
+
+    .. attribute:: FileIdInformation(59)
+
+
+    .. attribute:: FileIdExtdDirectoryInformation(60)
+
+
+    .. attribute:: FileReplaceCompletionInformation(61)
+
+
+    .. attribute:: FileHardLinkFullIdInformation(62)
+
+
+    .. attribute:: FileIdExtdBothDirectoryInformation(63)
+
+
+    .. attribute:: FileDispositionInformationEx(64)
+
+
+    .. attribute:: FileRenameInformationEx(65)
+
+
+    .. attribute:: FileRenameInformationExBypassAccessCheck(66)
+
+
+    .. attribute:: FileMaximumInformation(67)
+
+_IO_PRIORITY_HINT
+'''''''''''''''''
+.. class:: IO_PRIORITY_HINT
+
+    Alias for :class:`_IO_PRIORITY_HINT`
+
+.. class:: _IO_PRIORITY_HINT
+
+
+    .. attribute:: IoPriorityVeryLow(0)
+
+
+    .. attribute:: IoPriorityLow(1)
+
+
+    .. attribute:: IoPriorityNormal(2)
+
+
+    .. attribute:: IoPriorityHigh(3)
+
+
+    .. attribute:: IoPriorityCritical(4)
+
+
+    .. attribute:: MaxIoPriorityTypes(5)
 
