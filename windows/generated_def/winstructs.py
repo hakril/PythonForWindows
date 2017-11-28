@@ -86,6 +86,7 @@ LPPROC_THREAD_ATTRIBUTE_LIST = PVOID
 LPUNKNOWN = POINTER(PVOID)
 SPC_UUID = BYTE * 16
 PIO_APC_ROUTINE = PVOID
+DEVICE_TYPE = DWORD
 PWINDBG_EXTENSION_APIS32 = PVOID
 PWINDBG_EXTENSION_APIS64 = PVOID
 LPCONTEXT = PVOID
@@ -535,6 +536,23 @@ class _TOKEN_INFORMATION_CLASS(EnumType):
     mapper = {x:x for x in values}
 TOKEN_INFORMATION_CLASS = _TOKEN_INFORMATION_CLASS
 PTOKEN_INFORMATION_CLASS = POINTER(_TOKEN_INFORMATION_CLASS)
+
+
+FileFsVolumeInformation = EnumValue("_FS_INFORMATION_CLASS", "FileFsVolumeInformation", 0x1)
+FileFsLabelInformation = EnumValue("_FS_INFORMATION_CLASS", "FileFsLabelInformation", 0x2)
+FileFsSizeInformation = EnumValue("_FS_INFORMATION_CLASS", "FileFsSizeInformation", 0x3)
+FileFsDeviceInformation = EnumValue("_FS_INFORMATION_CLASS", "FileFsDeviceInformation", 0x4)
+FileFsAttributeInformation = EnumValue("_FS_INFORMATION_CLASS", "FileFsAttributeInformation", 0x5)
+FileFsControlInformation = EnumValue("_FS_INFORMATION_CLASS", "FileFsControlInformation", 0x6)
+FileFsFullSizeInformation = EnumValue("_FS_INFORMATION_CLASS", "FileFsFullSizeInformation", 0x7)
+FileFsObjectIdInformation = EnumValue("_FS_INFORMATION_CLASS", "FileFsObjectIdInformation", 0x8)
+FileFsDriverPathInformation = EnumValue("_FS_INFORMATION_CLASS", "FileFsDriverPathInformation", 0x9)
+FileFsVolumeFlagsInformation = EnumValue("_FS_INFORMATION_CLASS", "FileFsVolumeFlagsInformation", 0xa)
+FileFsSectorSizeInformation = EnumValue("_FS_INFORMATION_CLASS", "FileFsSectorSizeInformation", 0xb)
+class _FS_INFORMATION_CLASS(EnumType):
+    values = [FileFsVolumeInformation, FileFsLabelInformation, FileFsSizeInformation, FileFsDeviceInformation, FileFsAttributeInformation, FileFsControlInformation, FileFsFullSizeInformation, FileFsObjectIdInformation, FileFsDriverPathInformation, FileFsVolumeFlagsInformation, FileFsSectorSizeInformation]
+    mapper = {x:x for x in values}
+FS_INFORMATION_CLASS = _FS_INFORMATION_CLASS
 
 
 SecurityAnonymous = EnumValue("_SECURITY_IMPERSONATION_LEVEL", "SecurityAnonymous", 0x0)
@@ -4139,6 +4157,115 @@ class _RTL_UNLOAD_EVENT_TRACE64(Structure):
     ]
 PRTL_UNLOAD_EVENT_TRACE64 = POINTER(_RTL_UNLOAD_EVENT_TRACE64)
 RTL_UNLOAD_EVENT_TRACE64 = _RTL_UNLOAD_EVENT_TRACE64
+
+class _FILE_FS_ATTRIBUTE_INFORMATION(Structure):
+    _fields_ = [
+        ("FileSystemAttributes", ULONG),
+        ("MaximumComponentNameLength", LONG),
+        ("FileSystemNameLength", ULONG),
+        ("FileSystemName", WCHAR * 1),
+    ]
+PFILE_FS_ATTRIBUTE_INFORMATION = POINTER(_FILE_FS_ATTRIBUTE_INFORMATION)
+FILE_FS_ATTRIBUTE_INFORMATION = _FILE_FS_ATTRIBUTE_INFORMATION
+
+class _FILE_FS_LABEL_INFORMATION(Structure):
+    _fields_ = [
+        ("VolumeLabelLength", ULONG),
+        ("VolumeLabel", WCHAR * 1),
+    ]
+FILE_FS_LABEL_INFORMATION = _FILE_FS_LABEL_INFORMATION
+PFILE_FS_LABEL_INFORMATION = POINTER(_FILE_FS_LABEL_INFORMATION)
+
+class _FILE_FS_SIZE_INFORMATION(Structure):
+    _fields_ = [
+        ("TotalAllocationUnits", LARGE_INTEGER),
+        ("AvailableAllocationUnits", LARGE_INTEGER),
+        ("SectorsPerAllocationUnit", ULONG),
+        ("BytesPerSector", ULONG),
+    ]
+PFILE_FS_SIZE_INFORMATION = POINTER(_FILE_FS_SIZE_INFORMATION)
+FILE_FS_SIZE_INFORMATION = _FILE_FS_SIZE_INFORMATION
+
+class _FILE_FS_DEVICE_INFORMATION(Structure):
+    _fields_ = [
+        ("DeviceType", DEVICE_TYPE),
+        ("Characteristics", ULONG),
+    ]
+FILE_FS_DEVICE_INFORMATION = _FILE_FS_DEVICE_INFORMATION
+PFILE_FS_DEVICE_INFORMATION = POINTER(_FILE_FS_DEVICE_INFORMATION)
+
+class _FILE_FS_CONTROL_INFORMATION(Structure):
+    _fields_ = [
+        ("FreeSpaceStartFiltering", LARGE_INTEGER),
+        ("FreeSpaceThreshold", LARGE_INTEGER),
+        ("FreeSpaceStopFiltering", LARGE_INTEGER),
+        ("DefaultQuotaThreshold", LARGE_INTEGER),
+        ("DefaultQuotaLimit", LARGE_INTEGER),
+        ("FileSystemControlFlags", ULONG),
+    ]
+FILE_FS_CONTROL_INFORMATION = _FILE_FS_CONTROL_INFORMATION
+PFILE_FS_CONTROL_INFORMATION = POINTER(_FILE_FS_CONTROL_INFORMATION)
+
+class _FILE_FS_FULL_SIZE_INFORMATION(Structure):
+    _fields_ = [
+        ("TotalAllocationUnits", LARGE_INTEGER),
+        ("CallerAvailableAllocationUnits", LARGE_INTEGER),
+        ("ActualAvailableAllocationUnits", LARGE_INTEGER),
+        ("SectorsPerAllocationUnit", ULONG),
+        ("BytesPerSector", ULONG),
+    ]
+PFILE_FS_FULL_SIZE_INFORMATION = POINTER(_FILE_FS_FULL_SIZE_INFORMATION)
+FILE_FS_FULL_SIZE_INFORMATION = _FILE_FS_FULL_SIZE_INFORMATION
+
+class _FILE_FS_OBJECTID_INFORMATION(Structure):
+    _fields_ = [
+        ("ObjectId", UCHAR * 16),
+        ("ExtendedInfo", UCHAR * 48),
+    ]
+FILE_FS_OBJECTID_INFORMATION = _FILE_FS_OBJECTID_INFORMATION
+PFILE_FS_OBJECTID_INFORMATION = POINTER(_FILE_FS_OBJECTID_INFORMATION)
+
+class _FILE_FS_DRIVER_PATH_INFORMATION(Structure):
+    _fields_ = [
+        ("DriverInPath", BOOLEAN),
+        ("DriverNameLength", ULONG),
+        ("DriverName", WCHAR * 1),
+    ]
+FILE_FS_DRIVER_PATH_INFORMATION = _FILE_FS_DRIVER_PATH_INFORMATION
+PFILE_FS_DRIVER_PATH_INFORMATION = POINTER(_FILE_FS_DRIVER_PATH_INFORMATION)
+
+class _FILE_FS_DRIVER_PATH_INFORMATION(Structure):
+    _fields_ = [
+        ("DriverInPath", BOOLEAN),
+        ("DriverNameLength", ULONG),
+        ("DriverName", WCHAR * 1),
+    ]
+FILE_FS_DRIVER_PATH_INFORMATION = _FILE_FS_DRIVER_PATH_INFORMATION
+PFILE_FS_DRIVER_PATH_INFORMATION = POINTER(_FILE_FS_DRIVER_PATH_INFORMATION)
+
+class _FILE_FS_VOLUME_INFORMATION(Structure):
+    _fields_ = [
+        ("VolumeCreationTime", LARGE_INTEGER),
+        ("VolumeSerialNumber", ULONG),
+        ("VolumeLabelLength", ULONG),
+        ("SupportsObjects", BOOLEAN),
+        ("VolumeLabel", WCHAR * 1),
+    ]
+FILE_FS_VOLUME_INFORMATION = _FILE_FS_VOLUME_INFORMATION
+PFILE_FS_VOLUME_INFORMATION = POINTER(_FILE_FS_VOLUME_INFORMATION)
+
+class _FILE_FS_SECTOR_SIZE_INFORMATION(Structure):
+    _fields_ = [
+        ("LogicalBytesPerSector", ULONG),
+        ("PhysicalBytesPerSectorForAtomicity", ULONG),
+        ("PhysicalBytesPerSectorForPerformance", ULONG),
+        ("FileSystemEffectivePhysicalBytesPerSectorForAtomicity", ULONG),
+        ("Flags", ULONG),
+        ("ByteOffsetForSectorAlignment", ULONG),
+        ("ByteOffsetForPartitionAlignment", ULONG),
+    ]
+PFILE_FS_SECTOR_SIZE_INFORMATION = POINTER(_FILE_FS_SECTOR_SIZE_INFORMATION)
+FILE_FS_SECTOR_SIZE_INFORMATION = _FILE_FS_SECTOR_SIZE_INFORMATION
 
 class tagRECT(Structure):
     _fields_ = [

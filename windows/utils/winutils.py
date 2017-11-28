@@ -171,14 +171,30 @@ def check_debug():
         # print "> bcdedit /set noumex on"
     return True
 
+UNIX_EPOCH = datetime.datetime(1970, 1, 1, 0, 0)
+WINDOWS_EPOCH = datetime.datetime(1601, 1, 1, 0, 0)
+
+WIN_TO_UNIX_EPOCH_SECOND = int((UNIX_EPOCH - WINDOWS_EPOCH).total_seconds())
+WIN_TICK_PER_SECOND_INT = 10**7
+WIN_TICK_PER_SECOND_FLOAT = 10.0**7
+WIN_TO_UNIX_EPOCH_WIN_TICKS = WIN_TO_UNIX_EPOCH_SECOND * WIN_TICK_PER_SECOND_INT
+
+# TODO: look in python stblib how filetime -> unix timestamp translation is down (os.stat code ?)
+
+def unix_timestamp_from_filetime(filetime):
+    # Round the filetime
+    round_win_ticks = ((filetime / 10) + int(round((filetime % 10) / 10.0))) * 10
+    return round((round_win_ticks - WIN_TO_UNIX_EPOCH_WIN_TICKS) / WIN_TICK_PER_SECOND_FLOAT, 7)
 
 def datetime_from_filetime(filetime):
     """return a :class:`datetime.datetime` from a ``windows`` FILETIME int"""
-    return datetime.datetime(1601,1,1) + datetime.timedelta(microseconds=filetime / 10)
+    # Manual non-approx rounding as filetime will not have a perfect representation as Python float
+    round_microsecond = (filetime / 10) + int(round((filetime % 10) / 10.0))
+    return WINDOWS_EPOCH + datetime.timedelta(microseconds=round_microsecond)
 
 def filetime_from_datetime(dtime):
     """Return the FILETIME value from a :class:`datetime.datetime` in a python :class:`int`"""
-    return int((dtime - datetime.datetime(1601,1,1)).total_seconds() * 1000) * 10000
+    return int((dtime - WINDOWS_EPOCH).total_seconds()) * WIN_TICK_PER_SECOND_INT
 
 
 class FixedInteractiveConsole(code.InteractiveConsole):
@@ -216,7 +232,6 @@ def get_kernel_modules_syswow64():
 
 
 # Split winutils.py ?
-
 ntqueryinformationfile_info_structs = {
     gdef.FileAccessInformation: gdef.FILE_ACCESS_INFORMATION,
     gdef.FileAlignmentInformation: gdef.FILE_ALIGNMENT_INFORMATION,
@@ -234,7 +249,10 @@ ntqueryinformationfile_info_structs = {
     gdef.FileIsRemoteDeviceInformation: gdef.FILE_IS_REMOTE_DEVICE_INFORMATION,
 }
 
-def query_file_informations(handle, file_info_class):
+def query_file_information(file_or_handle, file_info_class):
+    if isinstance(file_or_handle, file):
+        file_or_handle = get_handle_from_file(file_or_handle)
+    handle = file_or_handle
     io_status = gdef.IO_STATUS_BLOCK()
     info = ntqueryinformationfile_info_structs[file_info_class]()
     # Do helper for 'is_pointer' / get pointed_size & co ? (useful for winproxy)
@@ -258,6 +276,49 @@ def query_file_informations(handle, file_info_class):
         info = pinfo[0]
     return info
 
+
+ntqueryvolumeinformationfile_info_structs = {
+    gdef.FileFsAttributeInformation: gdef.FILE_FS_ATTRIBUTE_INFORMATION,
+    gdef.FileFsControlInformation: gdef.FILE_FS_CONTROL_INFORMATION,
+    gdef.FileFsDeviceInformation: gdef.FILE_FS_DEVICE_INFORMATION,
+    gdef.FileFsDriverPathInformation: gdef.FILE_FS_DRIVER_PATH_INFORMATION,
+    gdef.FileFsFullSizeInformation: gdef.FILE_FS_FULL_SIZE_INFORMATION,
+    gdef.FileFsObjectIdInformation: gdef.FILE_FS_OBJECTID_INFORMATION,
+    gdef.FileFsSizeInformation: gdef.FILE_FS_SIZE_INFORMATION,
+    gdef.FileFsVolumeInformation: gdef.FILE_FS_VOLUME_INFORMATION,
+    gdef.FileFsSectorSizeInformation: gdef.FILE_FS_SECTOR_SIZE_INFORMATION,
+}
+
+
+# TODO: FileFsDriverPathInformation
+# TODO: Extended FILE_FS_VOLUME_INFORMATION that can read the real value of 'VolumeLabel'
+def query_volume_information(file_or_handle,volume_info_class):
+    if isinstance(file_or_handle, file):
+        file_or_handle = get_handle_from_file(file_or_handle)
+    handle = file_or_handle
+    io_status = gdef.IO_STATUS_BLOCK()
+    info = ntqueryvolumeinformationfile_info_structs[volume_info_class]()
+    # Do helper for 'is_pointer' / get pointed_size & co ? (useful for winproxy)
+    pinfo = ctypes.pointer(info)
+    try:
+        windows.winproxy.NtQueryVolumeInformationFile(handle, io_status, pinfo, ctypes.sizeof(info), FsInformationClass=volume_info_class)
+    except WindowsError as e:
+        # import pdb;pdb.set_trace()
+        if not (e.winerror & 0xffffffff) == gdef.STATUS_BUFFER_OVERFLOW:
+            raise
+        if volume_info_class == gdef.FileFsAttributeInformation:
+            file_name_length = pinfo[0].FileSystemNameLength
+        elif volume_info_class == gdef.FileFsVolumeInformation:
+            file_name_length = pinfo[0].VolumeLabelLength
+        else:
+            raise
+        full_size = ctypes.sizeof(info) + file_name_length # We add a little too much size for the sake of simplicity
+        buffer = ctypes.c_buffer(full_size)
+        windows.winproxy.NtQueryVolumeInformationFile(handle, io_status, buffer, full_size, FsInformationClass=volume_info_class)
+        pinfo = ctypes.cast(buffer,  ctypes.POINTER(ntqueryvolumeinformationfile_info_structs[volume_info_class]))
+        info = pinfo[0]
+    return info
+    return info
 
 # String stuff
 def ntstatus(code):

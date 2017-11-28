@@ -9623,6 +9623,342 @@ _RTL_UNLOAD_EVENT_TRACE64
 
         :class:`ULONG` ``[2]``
 
+_FILE_FS_ATTRIBUTE_INFORMATION
+''''''''''''''''''''''''''''''
+.. class:: PFILE_FS_ATTRIBUTE_INFORMATION
+
+    Pointer to :class:`_FILE_FS_ATTRIBUTE_INFORMATION`
+
+.. class:: FILE_FS_ATTRIBUTE_INFORMATION
+
+    Alias for :class:`_FILE_FS_ATTRIBUTE_INFORMATION`
+
+.. class:: _FILE_FS_ATTRIBUTE_INFORMATION
+
+    .. attribute:: FileSystemAttributes
+
+        :class:`ULONG`
+
+
+    .. attribute:: MaximumComponentNameLength
+
+        :class:`LONG`
+
+
+    .. attribute:: FileSystemNameLength
+
+        :class:`ULONG`
+
+
+    .. attribute:: FileSystemName
+
+        :class:`WCHAR` ``[1]``
+
+_FILE_FS_LABEL_INFORMATION
+''''''''''''''''''''''''''
+.. class:: FILE_FS_LABEL_INFORMATION
+
+    Alias for :class:`_FILE_FS_LABEL_INFORMATION`
+
+.. class:: PFILE_FS_LABEL_INFORMATION
+
+    Pointer to :class:`_FILE_FS_LABEL_INFORMATION`
+
+.. class:: _FILE_FS_LABEL_INFORMATION
+
+    .. attribute:: VolumeLabelLength
+
+        :class:`ULONG`
+
+
+    .. attribute:: VolumeLabel
+
+        :class:`WCHAR` ``[1]``
+
+_FILE_FS_SIZE_INFORMATION
+'''''''''''''''''''''''''
+.. class:: PFILE_FS_SIZE_INFORMATION
+
+    Pointer to :class:`_FILE_FS_SIZE_INFORMATION`
+
+.. class:: FILE_FS_SIZE_INFORMATION
+
+    Alias for :class:`_FILE_FS_SIZE_INFORMATION`
+
+.. class:: _FILE_FS_SIZE_INFORMATION
+
+    .. attribute:: TotalAllocationUnits
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: AvailableAllocationUnits
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: SectorsPerAllocationUnit
+
+        :class:`ULONG`
+
+
+    .. attribute:: BytesPerSector
+
+        :class:`ULONG`
+
+_FILE_FS_DEVICE_INFORMATION
+'''''''''''''''''''''''''''
+.. class:: FILE_FS_DEVICE_INFORMATION
+
+    Alias for :class:`_FILE_FS_DEVICE_INFORMATION`
+
+.. class:: PFILE_FS_DEVICE_INFORMATION
+
+    Pointer to :class:`_FILE_FS_DEVICE_INFORMATION`
+
+.. class:: _FILE_FS_DEVICE_INFORMATION
+
+    .. attribute:: DeviceType
+
+        :class:`DEVICE_TYPE`
+
+
+    .. attribute:: Characteristics
+
+        :class:`ULONG`
+
+_FILE_FS_CONTROL_INFORMATION
+''''''''''''''''''''''''''''
+.. class:: FILE_FS_CONTROL_INFORMATION
+
+    Alias for :class:`_FILE_FS_CONTROL_INFORMATION`
+
+.. class:: PFILE_FS_CONTROL_INFORMATION
+
+    Pointer to :class:`_FILE_FS_CONTROL_INFORMATION`
+
+.. class:: _FILE_FS_CONTROL_INFORMATION
+
+    .. attribute:: FreeSpaceStartFiltering
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: FreeSpaceThreshold
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: FreeSpaceStopFiltering
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: DefaultQuotaThreshold
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: DefaultQuotaLimit
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: FileSystemControlFlags
+
+        :class:`ULONG`
+
+_FILE_FS_FULL_SIZE_INFORMATION
+''''''''''''''''''''''''''''''
+.. class:: PFILE_FS_FULL_SIZE_INFORMATION
+
+    Pointer to :class:`_FILE_FS_FULL_SIZE_INFORMATION`
+
+.. class:: FILE_FS_FULL_SIZE_INFORMATION
+
+    Alias for :class:`_FILE_FS_FULL_SIZE_INFORMATION`
+
+.. class:: _FILE_FS_FULL_SIZE_INFORMATION
+
+    .. attribute:: TotalAllocationUnits
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: CallerAvailableAllocationUnits
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: ActualAvailableAllocationUnits
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: SectorsPerAllocationUnit
+
+        :class:`ULONG`
+
+
+    .. attribute:: BytesPerSector
+
+        :class:`ULONG`
+
+_FILE_FS_OBJECTID_INFORMATION
+'''''''''''''''''''''''''''''
+.. class:: FILE_FS_OBJECTID_INFORMATION
+
+    Alias for :class:`_FILE_FS_OBJECTID_INFORMATION`
+
+.. class:: PFILE_FS_OBJECTID_INFORMATION
+
+    Pointer to :class:`_FILE_FS_OBJECTID_INFORMATION`
+
+.. class:: _FILE_FS_OBJECTID_INFORMATION
+
+    .. attribute:: ObjectId
+
+        :class:`UCHAR` ``[16]``
+
+
+    .. attribute:: ExtendedInfo
+
+        :class:`UCHAR` ``[48]``
+
+_FILE_FS_DRIVER_PATH_INFORMATION
+''''''''''''''''''''''''''''''''
+.. class:: FILE_FS_DRIVER_PATH_INFORMATION
+
+    Alias for :class:`_FILE_FS_DRIVER_PATH_INFORMATION`
+
+.. class:: PFILE_FS_DRIVER_PATH_INFORMATION
+
+    Pointer to :class:`_FILE_FS_DRIVER_PATH_INFORMATION`
+
+.. class:: _FILE_FS_DRIVER_PATH_INFORMATION
+
+    .. attribute:: DriverInPath
+
+        :class:`BOOLEAN`
+
+
+    .. attribute:: DriverNameLength
+
+        :class:`ULONG`
+
+
+    .. attribute:: DriverName
+
+        :class:`WCHAR` ``[1]``
+
+_FILE_FS_DRIVER_PATH_INFORMATION
+''''''''''''''''''''''''''''''''
+.. class:: FILE_FS_DRIVER_PATH_INFORMATION
+
+    Alias for :class:`_FILE_FS_DRIVER_PATH_INFORMATION`
+
+.. class:: PFILE_FS_DRIVER_PATH_INFORMATION
+
+    Pointer to :class:`_FILE_FS_DRIVER_PATH_INFORMATION`
+
+.. class:: _FILE_FS_DRIVER_PATH_INFORMATION
+
+    .. attribute:: DriverInPath
+
+        :class:`BOOLEAN`
+
+
+    .. attribute:: DriverNameLength
+
+        :class:`ULONG`
+
+
+    .. attribute:: DriverName
+
+        :class:`WCHAR` ``[1]``
+
+_FILE_FS_VOLUME_INFORMATION
+'''''''''''''''''''''''''''
+.. class:: FILE_FS_VOLUME_INFORMATION
+
+    Alias for :class:`_FILE_FS_VOLUME_INFORMATION`
+
+.. class:: PFILE_FS_VOLUME_INFORMATION
+
+    Pointer to :class:`_FILE_FS_VOLUME_INFORMATION`
+
+.. class:: _FILE_FS_VOLUME_INFORMATION
+
+    .. attribute:: VolumeCreationTime
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: VolumeSerialNumber
+
+        :class:`ULONG`
+
+
+    .. attribute:: VolumeLabelLength
+
+        :class:`ULONG`
+
+
+    .. attribute:: SupportsObjects
+
+        :class:`BOOLEAN`
+
+
+    .. attribute:: VolumeLabel
+
+        :class:`WCHAR` ``[1]``
+
+_FILE_FS_SECTOR_SIZE_INFORMATION
+''''''''''''''''''''''''''''''''
+.. class:: PFILE_FS_SECTOR_SIZE_INFORMATION
+
+    Pointer to :class:`_FILE_FS_SECTOR_SIZE_INFORMATION`
+
+.. class:: FILE_FS_SECTOR_SIZE_INFORMATION
+
+    Alias for :class:`_FILE_FS_SECTOR_SIZE_INFORMATION`
+
+.. class:: _FILE_FS_SECTOR_SIZE_INFORMATION
+
+    .. attribute:: LogicalBytesPerSector
+
+        :class:`ULONG`
+
+
+    .. attribute:: PhysicalBytesPerSectorForAtomicity
+
+        :class:`ULONG`
+
+
+    .. attribute:: PhysicalBytesPerSectorForPerformance
+
+        :class:`ULONG`
+
+
+    .. attribute:: FileSystemEffectivePhysicalBytesPerSectorForAtomicity
+
+        :class:`ULONG`
+
+
+    .. attribute:: Flags
+
+        :class:`ULONG`
+
+
+    .. attribute:: ByteOffsetForSectorAlignment
+
+        :class:`ULONG`
+
+
+    .. attribute:: ByteOffsetForPartitionAlignment
+
+        :class:`ULONG`
+
 tagRECT
 '''''''
 .. class:: LPRECT
@@ -12469,6 +12805,47 @@ _TOKEN_INFORMATION_CLASS
 
 
     .. attribute:: MaxTokenInfoClass(41)
+
+_FS_INFORMATION_CLASS
+'''''''''''''''''''''
+.. class:: FS_INFORMATION_CLASS
+
+    Alias for :class:`_FS_INFORMATION_CLASS`
+
+.. class:: _FS_INFORMATION_CLASS
+
+
+    .. attribute:: FileFsVolumeInformation(1)
+
+
+    .. attribute:: FileFsLabelInformation(2)
+
+
+    .. attribute:: FileFsSizeInformation(3)
+
+
+    .. attribute:: FileFsDeviceInformation(4)
+
+
+    .. attribute:: FileFsAttributeInformation(5)
+
+
+    .. attribute:: FileFsControlInformation(6)
+
+
+    .. attribute:: FileFsFullSizeInformation(7)
+
+
+    .. attribute:: FileFsObjectIdInformation(8)
+
+
+    .. attribute:: FileFsDriverPathInformation(9)
+
+
+    .. attribute:: FileFsVolumeFlagsInformation(10)
+
+
+    .. attribute:: FileFsSectorSizeInformation(11)
 
 _SECURITY_IMPERSONATION_LEVEL
 '''''''''''''''''''''''''''''

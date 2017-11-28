@@ -103,6 +103,7 @@ TYPE_EQUIVALENCE = [
     ('LPUNKNOWN', 'POINTER(PVOID)'),
     ('SPC_UUID', 'BYTE * 16'),
     ('PIO_APC_ROUTINE', 'PVOID'),
+    ('DEVICE_TYPE', 'DWORD'),
     #STUFF FOR COM (will be replace at runtime
     # real def in com_interface_header
     # ('GUID', 'PVOID'),

@@ -78,6 +78,14 @@ NTSTATUS WINAPI NtQueryVirtualMemory(
   _Out_opt_ PSIZE_T                  ReturnLength
 );
 
+NTSTATUS WINAPI NtQueryVolumeInformationFile(
+  _In_  HANDLE               FileHandle,
+  _Out_ PIO_STATUS_BLOCK     IoStatusBlock,
+  _Out_ PVOID                FsInformation,
+  _In_  ULONG                Length,
+  _In_  FS_INFORMATION_CLASS FsInformationClass
+);
+
 NTSTATUS NtCreateThreadEx(
         PHANDLE                 ThreadHandle,
         ACCESS_MASK             DesiredAccess,
@@ -931,6 +939,22 @@ NTSTATUS RtlDecompressBuffer(
     PULONG FinalUncompressedSize
 );
 
+NTSTATUS RtlDecompressBufferEx(
+   USHORT CompressionFormat,
+   PUCHAR UncompressedBuffer,
+   ULONG  UncompressedBufferSize,
+   PUCHAR CompressedBuffer,
+   ULONG  CompressedBufferSize,
+   PULONG FinalUncompressedSize,
+   PVOID  WorkSpace
+);
+
+NTSTATUS RtlGetCompressionWorkSpaceSize(
+   USHORT CompressionFormatAndEngine,
+   PULONG CompressBufferWorkSpaceSize,
+   PULONG CompressFragmentWorkSpaceSize
+);
+
 NTSTATUS NtCreateSection(
     PHANDLE            SectionHandle,
     ACCESS_MASK        DesiredAccess,
@@ -1351,6 +1375,29 @@ DWORD WINAPI QueryDosDeviceW(
   _In_opt_ LPWSTR lpDeviceName,
   _Out_    LPWSTR  lpTargetPath,
   _In_     DWORD   ucchMax
+);
+
+
+HANDLE WINAPI FindFirstVolumeA(
+  _Out_ LPCSTR lpszVolumeName,
+  _In_  DWORD  cchBufferLength
+);
+
+HANDLE WINAPI FindFirstVolumeW(
+  _Out_ LPWSTR lpszVolumeName,
+  _In_  DWORD  cchBufferLength
+);
+
+BOOL WINAPI FindNextVolumeA(
+  _In_  HANDLE hFindVolume,
+  _Out_ LPCSTR lpszVolumeName,
+  _In_  DWORD  cchBufferLength
+);
+
+BOOL WINAPI FindNextVolumeW(
+  _In_  HANDLE hFindVolume,
+  _Out_ LPWSTR lpszVolumeName,
+  _In_  DWORD  cchBufferLength
 );
 
 NTSTATUS WINAPI NtQueryObject(

@@ -692,6 +692,8 @@ QueryDosDeviceW = TransparentKernel32Proxy("QueryDosDeviceW")
 GetVolumeNameForVolumeMountPointA = TransparentKernel32Proxy("GetVolumeNameForVolumeMountPointA")
 GetVolumeNameForVolumeMountPointW = TransparentKernel32Proxy("GetVolumeNameForVolumeMountPointW")
 
+
+
 @Kernel32Proxy("GetVolumeInformationA")
 def GetVolumeInformationA(lpRootPathName, lpVolumeNameBuffer, nVolumeNameSize, lpVolumeSerialNumber, lpMaximumComponentLength, lpFileSystemFlags, lpFileSystemNameBuffer, nFileSystemNameSize):
     if nVolumeNameSize == 0 and lpVolumeNameBuffer is not None:
@@ -708,6 +710,35 @@ def GetVolumeInformationW(lpRootPathName, lpVolumeNameBuffer=None, nVolumeNameSi
     if nFileSystemNameSize == 0 and lpFileSystemNameBuffer is not None:
         nFileSystemNameSize = len(lpFileSystemNameBuffer)
     return GetVolumeInformationW.ctypes_function(lpRootPathName, lpVolumeNameBuffer, nVolumeNameSize, lpVolumeSerialNumber, lpMaximumComponentLength, lpFileSystemFlags, lpFileSystemNameBuffer, nFileSystemNameSize)
+
+
+@Kernel32Proxy("FindFirstVolumeA")
+def FindFirstVolumeA(lpszVolumeName, cchBufferLength):
+    if cchBufferLength is None:
+        cchBufferLength = len(lpszVolumeName)
+    return FindFirstVolumeA.ctypes_function(lpszVolumeName, cchBufferLength)
+
+
+@Kernel32Proxy("FindFirstVolumeW")
+def FindFirstVolumeW(lpszVolumeName, cchBufferLength):
+    if cchBufferLength is None:
+        cchBufferLength = len(lpszVolumeName)
+    return FindFirstVolumeW.ctypes_function(lpszVolumeName, cchBufferLength)
+
+
+
+@Kernel32Proxy("FindNextVolumeA")
+def FindNextVolumeA(hFindVolume, lpszVolumeName, cchBufferLength):
+    if cchBufferLength is None:
+        cchBufferLength = len(lpszVolumeName)
+    return FindNextVolumeA.ctypes_function(hFindVolume, lpszVolumeName, cchBufferLength)
+
+
+@Kernel32Proxy("FindNextVolumeW")
+def FindNextVolumeW(hFindVolume, lpszVolumeName, cchBufferLength):
+    if cchBufferLength is None:
+        cchBufferLength = len(lpszVolumeName)
+    return FindNextVolumeW.ctypes_function(hFindVolume, lpszVolumeName, cchBufferLength)
 
 
 @Kernel32Proxy("SetConsoleCtrlHandler")
@@ -957,11 +988,30 @@ def NtQueryDirectoryFile(FileHandle, Event=None, ApcRoutine=None, ApcContext=Non
         Length = ctypes.sizeof(FileInformation)
     return NtQueryDirectoryFile.ctypes_function(FileHandle, Event, ApcRoutine, ApcContext, IoStatusBlock, FileInformation, Length, FileInformationClass, ReturnSingleEntry, FileName, RestartScan)
 
+@NtdllProxy("NtQueryVolumeInformationFile", error_ntstatus)
+def NtQueryVolumeInformationFile(FileHandle, IoStatusBlock, FsInformation, Length=None, FsInformationClass=NeededParameter):
+    if Length is None:
+        Length = ctypes.sizeof(FsInformation)
+    return NtQueryVolumeInformationFile.ctypes_function(FileHandle, IoStatusBlock, FsInformation, Length, FsInformationClass)
 
 
 @NtdllProxy("RtlDecompressBuffer", error_ntstatus)
-def RtlDecompressBuffer(CompressionFormat, UncompressedBuffer, UncompressedBufferSize, CompressedBuffer, CompressedBufferSize, FinalUncompressedSize):
+def RtlDecompressBuffer(CompressionFormat, UncompressedBuffer, UncompressedBufferSize, CompressedBuffer, CompressedBufferSize=None, FinalUncompressedSize=NeededParameter):
+    if CompressedBufferSize is None:
+        CompressedBufferSize = len(CompressedBuffer)
     return RtlDecompressBuffer.ctypes_function(CompressionFormat, UncompressedBuffer, UncompressedBufferSize, CompressedBuffer, CompressedBufferSize, FinalUncompressedSize)
+
+@NtdllProxy("RtlDecompressBufferEx", error_ntstatus)
+def RtlDecompressBufferEx(CompressionFormat, UncompressedBuffer, UncompressedBufferSize, CompressedBuffer, CompressedBufferSize=None, FinalUncompressedSize=NeededParameter, WorkSpace=NeededParameter):
+    if CompressedBufferSize is None:
+        CompressedBufferSize = len(CompressedBuffer)
+    # TODO: automatic 'WorkSpace' size calc + allocation ?
+    return RtlDecompressBufferEx.ctypes_function(CompressionFormat, UncompressedBuffer, UncompressedBufferSize, CompressedBuffer, CompressedBufferSize, FinalUncompressedSize, WorkSpace)
+
+@NtdllProxy("RtlGetCompressionWorkSpaceSize", error_ntstatus)
+def RtlGetCompressionWorkSpaceSize(CompressionFormatAndEngine, CompressBufferWorkSpaceSize, CompressFragmentWorkSpaceSize):
+    return RtlGetCompressionWorkSpaceSize.ctypes_function(CompressionFormatAndEngine, CompressBufferWorkSpaceSize, CompressFragmentWorkSpaceSize)
+
 
 
 # Section stuff
