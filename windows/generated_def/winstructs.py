@@ -72,6 +72,7 @@ PALPC_HANDLE = POINTER(ALPC_HANDLE)
 PHKEY = POINTER(HKEY)
 ACCESS_MASK = DWORD
 REGSAM = ACCESS_MASK
+PBOOLEAN = POINTER(BOOLEAN)
 SECURITY_CONTEXT_TRACKING_MODE = BOOLEAN
 HCRYPTPROV_OR_NCRYPT_KEY_HANDLE = PULONG
 HCRYPTPROV_LEGACY = PULONG
@@ -323,6 +324,55 @@ class _SECTION_INHERIT(EnumType):
     values = [ViewShare, ViewUnmap]
     mapper = {x:x for x in values}
 SECTION_INHERIT = _SECTION_INHERIT
+
+
+ProcessBasicInformation = EnumValue("_PROCESSINFOCLASS", "ProcessBasicInformation", 0x0)
+ProcessQuotaLimits = EnumValue("_PROCESSINFOCLASS", "ProcessQuotaLimits", 0x1)
+ProcessIoCounters = EnumValue("_PROCESSINFOCLASS", "ProcessIoCounters", 0x2)
+ProcessVmCounters = EnumValue("_PROCESSINFOCLASS", "ProcessVmCounters", 0x3)
+ProcessTimes = EnumValue("_PROCESSINFOCLASS", "ProcessTimes", 0x4)
+ProcessBasePriority = EnumValue("_PROCESSINFOCLASS", "ProcessBasePriority", 0x5)
+ProcessRaisePriority = EnumValue("_PROCESSINFOCLASS", "ProcessRaisePriority", 0x6)
+ProcessDebugPort = EnumValue("_PROCESSINFOCLASS", "ProcessDebugPort", 0x7)
+ProcessExceptionPort = EnumValue("_PROCESSINFOCLASS", "ProcessExceptionPort", 0x8)
+ProcessAccessToken = EnumValue("_PROCESSINFOCLASS", "ProcessAccessToken", 0x9)
+ProcessLdtInformation = EnumValue("_PROCESSINFOCLASS", "ProcessLdtInformation", 0xa)
+ProcessLdtSize = EnumValue("_PROCESSINFOCLASS", "ProcessLdtSize", 0xb)
+ProcessDefaultHardErrorMode = EnumValue("_PROCESSINFOCLASS", "ProcessDefaultHardErrorMode", 0xc)
+ProcessIoPortHandlers = EnumValue("_PROCESSINFOCLASS", "ProcessIoPortHandlers", 0xd)
+ProcessPooledUsageAndLimits = EnumValue("_PROCESSINFOCLASS", "ProcessPooledUsageAndLimits", 0xe)
+ProcessWorkingSetWatch = EnumValue("_PROCESSINFOCLASS", "ProcessWorkingSetWatch", 0xf)
+ProcessUserModeIOPL = EnumValue("_PROCESSINFOCLASS", "ProcessUserModeIOPL", 0x10)
+ProcessEnableAlignmentFaultFixup = EnumValue("_PROCESSINFOCLASS", "ProcessEnableAlignmentFaultFixup", 0x11)
+ProcessPriorityClass = EnumValue("_PROCESSINFOCLASS", "ProcessPriorityClass", 0x12)
+ProcessWx86Information = EnumValue("_PROCESSINFOCLASS", "ProcessWx86Information", 0x13)
+ProcessHandleCount = EnumValue("_PROCESSINFOCLASS", "ProcessHandleCount", 0x14)
+ProcessAffinityMask = EnumValue("_PROCESSINFOCLASS", "ProcessAffinityMask", 0x15)
+ProcessPriorityBoost = EnumValue("_PROCESSINFOCLASS", "ProcessPriorityBoost", 0x16)
+ProcessDeviceMap = EnumValue("_PROCESSINFOCLASS", "ProcessDeviceMap", 0x17)
+ProcessSessionInformation = EnumValue("_PROCESSINFOCLASS", "ProcessSessionInformation", 0x18)
+ProcessForegroundInformation = EnumValue("_PROCESSINFOCLASS", "ProcessForegroundInformation", 0x19)
+ProcessWow64Information = EnumValue("_PROCESSINFOCLASS", "ProcessWow64Information", 0x1a)
+ProcessImageFileName = EnumValue("_PROCESSINFOCLASS", "ProcessImageFileName", 0x1b)
+ProcessLUIDDeviceMapsEnabled = EnumValue("_PROCESSINFOCLASS", "ProcessLUIDDeviceMapsEnabled", 0x1c)
+ProcessBreakOnTermination = EnumValue("_PROCESSINFOCLASS", "ProcessBreakOnTermination", 0x1d)
+ProcessDebugObjectHandle = EnumValue("_PROCESSINFOCLASS", "ProcessDebugObjectHandle", 0x1e)
+ProcessDebugFlags = EnumValue("_PROCESSINFOCLASS", "ProcessDebugFlags", 0x1f)
+ProcessHandleTracing = EnumValue("_PROCESSINFOCLASS", "ProcessHandleTracing", 0x20)
+ProcessIoPriority = EnumValue("_PROCESSINFOCLASS", "ProcessIoPriority", 0x21)
+ProcessExecuteFlags = EnumValue("_PROCESSINFOCLASS", "ProcessExecuteFlags", 0x22)
+ProcessResourceManagement = EnumValue("_PROCESSINFOCLASS", "ProcessResourceManagement", 0x23)
+ProcessCookie = EnumValue("_PROCESSINFOCLASS", "ProcessCookie", 0x24)
+ProcessImageInformation = EnumValue("_PROCESSINFOCLASS", "ProcessImageInformation", 0x25)
+ProcessInformation38 = EnumValue("_PROCESSINFOCLASS", "ProcessInformation38", 0x26)
+ProcessInformation39 = EnumValue("_PROCESSINFOCLASS", "ProcessInformation39", 0x27)
+ProcessInstrumentationCallback = EnumValue("_PROCESSINFOCLASS", "ProcessInstrumentationCallback", 0x28)
+MaxProcessInfoClass = EnumValue("_PROCESSINFOCLASS", "MaxProcessInfoClass", 0x29)
+class _PROCESSINFOCLASS(EnumType):
+    values = [ProcessBasicInformation, ProcessQuotaLimits, ProcessIoCounters, ProcessVmCounters, ProcessTimes, ProcessBasePriority, ProcessRaisePriority, ProcessDebugPort, ProcessExceptionPort, ProcessAccessToken, ProcessLdtInformation, ProcessLdtSize, ProcessDefaultHardErrorMode, ProcessIoPortHandlers, ProcessPooledUsageAndLimits, ProcessWorkingSetWatch, ProcessUserModeIOPL, ProcessEnableAlignmentFaultFixup, ProcessPriorityClass, ProcessWx86Information, ProcessHandleCount, ProcessAffinityMask, ProcessPriorityBoost, ProcessDeviceMap, ProcessSessionInformation, ProcessForegroundInformation, ProcessWow64Information, ProcessImageFileName, ProcessLUIDDeviceMapsEnabled, ProcessBreakOnTermination, ProcessDebugObjectHandle, ProcessDebugFlags, ProcessHandleTracing, ProcessIoPriority, ProcessExecuteFlags, ProcessResourceManagement, ProcessCookie, ProcessImageInformation, ProcessInformation38, ProcessInformation39, ProcessInstrumentationCallback, MaxProcessInfoClass]
+    mapper = {x:x for x in values}
+PROCESS_INFORMATION_CLASS = _PROCESSINFOCLASS
+PROCESSINFOCLASS = _PROCESSINFOCLASS
 
 
 MemoryBasicInformation = EnumValue("_MEMORY_INFORMATION_CLASS", "MemoryBasicInformation", 0x0)
@@ -957,6 +1007,20 @@ class tagTYPEKIND(EnumType):
 TYPEKIND = tagTYPEKIND
 
 
+RtlPathTypeUnknown = EnumValue("_RTL_PATH_TYPE", "RtlPathTypeUnknown", 0x0)
+RtlPathTypeUncAbsolute = EnumValue("_RTL_PATH_TYPE", "RtlPathTypeUncAbsolute", 0x1)
+RtlPathTypeDriveAbsolute = EnumValue("_RTL_PATH_TYPE", "RtlPathTypeDriveAbsolute", 0x2)
+RtlPathTypeDriveRelative = EnumValue("_RTL_PATH_TYPE", "RtlPathTypeDriveRelative", 0x3)
+RtlPathTypeRooted = EnumValue("_RTL_PATH_TYPE", "RtlPathTypeRooted", 0x4)
+RtlPathTypeRelative = EnumValue("_RTL_PATH_TYPE", "RtlPathTypeRelative", 0x5)
+RtlPathTypeLocalDevice = EnumValue("_RTL_PATH_TYPE", "RtlPathTypeLocalDevice", 0x6)
+RtlPathTypeRootLocalDevice = EnumValue("_RTL_PATH_TYPE", "RtlPathTypeRootLocalDevice", 0x7)
+class _RTL_PATH_TYPE(EnumType):
+    values = [RtlPathTypeUnknown, RtlPathTypeUncAbsolute, RtlPathTypeDriveAbsolute, RtlPathTypeDriveRelative, RtlPathTypeRooted, RtlPathTypeRelative, RtlPathTypeLocalDevice, RtlPathTypeRootLocalDevice]
+    mapper = {x:x for x in values}
+RTL_PATH_TYPE = _RTL_PATH_TYPE
+
+
 BG_JOB_STATE_QUEUED = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_QUEUED", 0x0)
 BG_JOB_STATE_CONNECTING = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_CONNECTING", 0x1)
 BG_JOB_STATE_TRANSFERRING = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_TRANSFERRING", 0x2)
@@ -1179,6 +1243,11 @@ class _LSA_UNICODE_STRING(INITIAL_LSA_UNICODE_STRING):
         size = self.Length / 2
         return (ctypes.c_wchar * size).from_address(self.Buffer)[:]
 
+    @classmethod
+    def from_string(cls, s):
+        utf16_len = len(s) * 2
+        return cls(utf16_len, utf16_len, ctypes.cast(PWSTR(s), PVOID))
+
     def __repr__(self):
         return """<{0} "{1}" at {2}>""".format(type(self).__name__, self.str, hex(id(self)))
 PUNICODE_STRING = POINTER(_LSA_UNICODE_STRING)
@@ -1238,7 +1307,54 @@ class _RTL_USER_PROCESS_PARAMETERS(Structure):
 PRTL_USER_PROCESS_PARAMETERS = POINTER(_RTL_USER_PROCESS_PARAMETERS)
 RTL_USER_PROCESS_PARAMETERS = _RTL_USER_PROCESS_PARAMETERS
 
+class _ANON_PEB_SYSTEM_DEPENDENT_02(Union):
+    _fields_ = [
+        ("FastPebLockRoutine", PVOID),
+        ("SparePtr1", PVOID),
+        ("AtlThunkSListPtr", PVOID),
+    ]
+
+
+class _ANON_PEB_SYSTEM_DEPENDENT_03(Union):
+    _fields_ = [
+        ("FastPebUnlockRoutine", PVOID),
+        ("SparePtr2", PVOID),
+        ("IFEOKey", PVOID),
+    ]
+
+
+class _ANON_PEB_SYSTEM_DEPENDENT_06(Union):
+    _fields_ = [
+        ("FreeList", PVOID),
+        ("SparePebPtr0", PVOID),
+        ("ApiSetMap", PVOID),
+    ]
+
+
+class _ANON_PEB_SYSTEM_DEPENDENT_07(Union):
+    _fields_ = [
+        ("ReadOnlySharedMemoryHeap", PVOID),
+        ("HotpatchInformation", PVOID),
+        ("SparePvoid0", PVOID),
+    ]
+
+
+class _ANON_PEB_UNION_1(Union):
+    _fields_ = [
+        ("KernelCallbackTable", PVOID),
+        ("UserSharedInfoPtr", PVOID),
+    ]
+
+
+class _ANON_PEB_UNION_2(Union):
+    _fields_ = [
+        ("ImageProcessAffinityMask", PVOID),
+        ("ActiveProcessAffinityMask", PVOID),
+    ]
+
+
 class _PEB(Structure):
+    _anonymous_ = ("_SYSTEM_DEPENDENT_02","_SYSTEM_DEPENDENT_03","anon_union_1","_SYSTEM_DEPENDENT_06","_SYSTEM_DEPENDENT_07","anon_union_2")
     _fields_ = [
         ("Reserved1", BYTE * 2),
         ("BeingDebugged", BYTE),
@@ -1247,12 +1363,64 @@ class _PEB(Structure):
         ("ImageBaseAddress", PVOID),
         ("Ldr", PPEB_LDR_DATA),
         ("ProcessParameters", PRTL_USER_PROCESS_PARAMETERS),
-        ("Reserved4", BYTE * 104),
-        ("Reserved5", PVOID * 52),
-        ("PostProcessInitRoutine", PPS_POST_PROCESS_INIT_ROUTINE),
-        ("Reserved6", BYTE * 128),
-        ("Reserved7", PVOID * 1),
-        ("SessionId", ULONG),
+        ("SubSystemData", PVOID),
+        ("ProcessHeap", PVOID),
+        ("FastPebLock", PVOID),
+        ("_SYSTEM_DEPENDENT_02", _ANON_PEB_SYSTEM_DEPENDENT_02),
+        ("_SYSTEM_DEPENDENT_03", _ANON_PEB_SYSTEM_DEPENDENT_03),
+        ("_SYSTEM_DEPENDENT_04", PVOID),
+        ("anon_union_1", _ANON_PEB_UNION_1),
+        ("SystemReserved", DWORD),
+        ("_SYSTEM_DEPENDENT_05", DWORD),
+        ("_SYSTEM_DEPENDENT_06", _ANON_PEB_SYSTEM_DEPENDENT_06),
+        ("TlsExpansionCounter", PVOID),
+        ("TlsBitmap", PVOID),
+        ("TlsBitmapBits", DWORD * 2),
+        ("ReadOnlySharedMemoryBase", PVOID),
+        ("_SYSTEM_DEPENDENT_07", _ANON_PEB_SYSTEM_DEPENDENT_07),
+        ("ReadOnlyStaticServerData", PVOID),
+        ("AnsiCodePageData", PVOID),
+        ("OemCodePageData", PVOID),
+        ("UnicodeCaseTableData", PVOID),
+        ("NumberOfProcessors", DWORD),
+        ("NtGlobalFlag", DWORD),
+        ("CriticalSectionTimeout", LARGE_INTEGER),
+        ("HeapSegmentReserve", PVOID),
+        ("HeapSegmentCommit", PVOID),
+        ("HeapDeCommitTotalFreeThreshold", PVOID),
+        ("HeapDeCommitFreeBlockThreshold", PVOID),
+        ("NumberOfHeaps", DWORD),
+        ("MaximumNumberOfHeaps", DWORD),
+        ("ProcessHeaps", PVOID),
+        ("GdiSharedHandleTable", PVOID),
+        ("ProcessStarterHelper", PVOID),
+        ("GdiDCAttributeList", PVOID),
+        ("LoaderLock", PVOID),
+        ("OSMajorVersion", DWORD),
+        ("OSMinorVersion", DWORD),
+        ("OSBuildNumber", WORD),
+        ("OSCSDVersion", WORD),
+        ("OSPlatformId", DWORD),
+        ("ImageSubsystem", DWORD),
+        ("ImageSubsystemMajorVersion", DWORD),
+        ("ImageSubsystemMinorVersion", PVOID),
+        ("anon_union_2", _ANON_PEB_UNION_2),
+        ("GdiHandleBuffer", PVOID * 26),
+        ("GdiHandleBuffer2", BYTE * 32),
+        ("PostProcessInitRoutine", PVOID),
+        ("TlsExpansionBitmap", PVOID),
+        ("TlsExpansionBitmapBits", DWORD * 32),
+        ("SessionId", PVOID),
+        ("AppCompatFlags", ULARGE_INTEGER),
+        ("AppCompatFlagsUser", ULARGE_INTEGER),
+        ("pShimData", PVOID),
+        ("AppCompatInfo", PVOID),
+        ("CSDVersion", UNICODE_STRING),
+        ("ActivationContextData", PVOID),
+        ("ProcessAssemblyStorageMap", PVOID),
+        ("SystemDefaultActivationContextData", PVOID),
+        ("SystemAssemblyStorageMap", PVOID),
+        ("MinimumStackCommit", PVOID),
     ]
 PPEB = POINTER(_PEB)
 PEB = _PEB
@@ -4266,6 +4434,157 @@ class _FILE_FS_SECTOR_SIZE_INFORMATION(Structure):
     ]
 PFILE_FS_SECTOR_SIZE_INFORMATION = POINTER(_FILE_FS_SECTOR_SIZE_INFORMATION)
 FILE_FS_SECTOR_SIZE_INFORMATION = _FILE_FS_SECTOR_SIZE_INFORMATION
+
+class _RTLP_CURDIR_REF(Structure):
+    _fields_ = [
+        ("RefCount", LONG),
+        ("Handle", HANDLE),
+    ]
+PRTLP_CURDIR_REF = POINTER(_RTLP_CURDIR_REF)
+RTLP_CURDIR_REF = _RTLP_CURDIR_REF
+
+class _RTL_RELATIVE_NAME_U(Structure):
+    _fields_ = [
+        ("RelativeName", UNICODE_STRING),
+        ("ContainingDirectory", HANDLE),
+        ("CurDirRef", PRTLP_CURDIR_REF),
+    ]
+PRTL_RELATIVE_NAME_U = POINTER(_RTL_RELATIVE_NAME_U)
+RTL_RELATIVE_NAME_U = _RTL_RELATIVE_NAME_U
+
+class _PROCESS_INSTRUMENTATION_CALLBACK_INFORMATION(Structure):
+    _fields_ = [
+        ("Version", ULONG),
+        ("Reserved", ULONG),
+        ("Callback", PVOID),
+    ]
+PPROCESS_INSTRUMENTATION_CALLBACK_INFORMATION = POINTER(_PROCESS_INSTRUMENTATION_CALLBACK_INFORMATION)
+PROCESS_INSTRUMENTATION_CALLBACK_INFORMATION = _PROCESS_INSTRUMENTATION_CALLBACK_INFORMATION
+
+class _API_SET_VALUE_ENTRY(Structure):
+    _fields_ = [
+        ("Flags", ULONG),
+        ("NameOffset", ULONG),
+        ("NameLength", ULONG),
+        ("ValueOffset", ULONG),
+        ("ValueLength", ULONG),
+    ]
+API_SET_VALUE_ENTRY = _API_SET_VALUE_ENTRY
+PAPI_SET_VALUE_ENTRY = POINTER(_API_SET_VALUE_ENTRY)
+
+class _API_SET_NAMESPACE_ENTRY(Structure):
+    _fields_ = [
+        ("Flags", ULONG),
+        ("NameOffset", ULONG),
+        ("NameLength", ULONG),
+        ("AliasOffset", ULONG),
+        ("AliasLength", ULONG),
+        ("DataOffset", ULONG),
+    ]
+PAPI_SET_NAMESPACE_ENTRY = POINTER(_API_SET_NAMESPACE_ENTRY)
+API_SET_NAMESPACE_ENTRY = _API_SET_NAMESPACE_ENTRY
+
+class _API_SET_NAMESPACE_ARRAY(Structure):
+    _fields_ = [
+        ("Version", ULONG),
+        ("Size", ULONG),
+        ("Flags", ULONG),
+        ("Count", ULONG),
+        ("Array", API_SET_NAMESPACE_ENTRY * ANYSIZE_ARRAY),
+    ]
+PAPI_SET_NAMESPACE_ARRAY = POINTER(_API_SET_NAMESPACE_ARRAY)
+API_SET_NAMESPACE_ARRAY = _API_SET_NAMESPACE_ARRAY
+
+class _API_SET_VALUE_ENTRY_V2(Structure):
+    _fields_ = [
+        ("NameOffset", ULONG),
+        ("NameLength", ULONG),
+        ("ValueOffset", ULONG),
+        ("ValueLength", ULONG),
+    ]
+PAPI_SET_VALUE_ENTRY_V2 = POINTER(_API_SET_VALUE_ENTRY_V2)
+API_SET_VALUE_ENTRY_V2 = _API_SET_VALUE_ENTRY_V2
+
+class _API_SET_VALUE_ARRAY_V2(Structure):
+    _fields_ = [
+        ("Count", ULONG),
+        ("Array", API_SET_VALUE_ENTRY_V2 * ANYSIZE_ARRAY),
+    ]
+API_SET_VALUE_ARRAY_V2 = _API_SET_VALUE_ARRAY_V2
+PAPI_SET_VALUE_ARRAY_V2 = POINTER(_API_SET_VALUE_ARRAY_V2)
+
+class _API_SET_NAMESPACE_ENTRY_V2(Structure):
+    _fields_ = [
+        ("NameOffset", ULONG),
+        ("NameLength", ULONG),
+        ("DataOffset", ULONG),
+    ]
+PAPI_SET_NAMESPACE_ENTRY_V2 = POINTER(_API_SET_NAMESPACE_ENTRY_V2)
+API_SET_NAMESPACE_ENTRY_V2 = _API_SET_NAMESPACE_ENTRY_V2
+
+class _API_SET_NAMESPACE_ARRAY_V2(Structure):
+    _fields_ = [
+        ("Version", ULONG),
+        ("Count", ULONG),
+        ("Array", API_SET_NAMESPACE_ENTRY_V2 * ANYSIZE_ARRAY),
+    ]
+API_SET_NAMESPACE_ARRAY_V2 = _API_SET_NAMESPACE_ARRAY_V2
+PAPI_SET_NAMESPACE_ARRAY_V2 = POINTER(_API_SET_NAMESPACE_ARRAY_V2)
+
+class _API_SET_VALUE_ARRAY_V4(Structure):
+    _fields_ = [
+        ("GuessFlags", ULONG),
+        ("Count", ULONG),
+        ("Array", API_SET_VALUE_ENTRY_V2 * ANYSIZE_ARRAY),
+    ]
+API_SET_VALUE_ARRAY_V4 = _API_SET_VALUE_ARRAY_V4
+PAPI_SET_VALUE_ARRAY_V2 = POINTER(_API_SET_VALUE_ARRAY_V4)
+
+class _API_SET_NAMESPACE_ARRAY_V4(Structure):
+    _fields_ = [
+        ("Version", ULONG),
+        ("Size", ULONG),
+        ("Flags", ULONG),
+        ("Count", ULONG),
+        ("Array", API_SET_NAMESPACE_ENTRY * ANYSIZE_ARRAY),
+    ]
+API_SET_NAMESPACE_ARRAY_V4 = _API_SET_NAMESPACE_ARRAY_V4
+PAPI_SET_NAMESPACE_ARRAY_V4 = POINTER(_API_SET_NAMESPACE_ARRAY_V4)
+
+class _API_SET_NAMESPACE_ENTRY_V4(Structure):
+    _fields_ = [
+        ("Flags", ULONG),
+        ("NameOffset", ULONG),
+        ("NameLength", ULONG),
+        ("AliasOffset", ULONG),
+        ("AliasLength", ULONG),
+        ("DataOffset", ULONG),
+    ]
+PAPI_SET_NAMESPACE_ENTRY_V4 = POINTER(_API_SET_NAMESPACE_ENTRY_V4)
+API_SET_NAMESPACE_ENTRY_V4 = _API_SET_NAMESPACE_ENTRY_V4
+
+class _API_SET_NAMESPACE_ENTRY_V6(Structure):
+    _fields_ = [
+        ("Flags", ULONG),
+        ("NameOffset", ULONG),
+        ("NameLength", ULONG),
+        ("HashedLength", ULONG),
+        ("ValueOffset", ULONG),
+        ("ValueCount", ULONG),
+    ]
+API_SET_NAMESPACE_ENTRY_V6 = _API_SET_NAMESPACE_ENTRY_V6
+
+class _API_SET_NAMESPACE_V6(Structure):
+    _fields_ = [
+        ("Version", ULONG),
+        ("Size", ULONG),
+        ("Flags", ULONG),
+        ("Count", ULONG),
+        ("EntryOffset", ULONG),
+        ("HashOffset", ULONG),
+        ("HashFactor", ULONG),
+    ]
+API_SET_NAMESPACE_V6 = _API_SET_NAMESPACE_V6
 
 class tagRECT(Structure):
     _fields_ = [

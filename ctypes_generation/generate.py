@@ -89,6 +89,7 @@ TYPE_EQUIVALENCE = [
     ('PHKEY', 'POINTER(HKEY)'),
     ('ACCESS_MASK', 'DWORD'),
     ('REGSAM', 'ACCESS_MASK'),
+    ('PBOOLEAN', 'POINTER(BOOLEAN)'),
     ('SECURITY_CONTEXT_TRACKING_MODE', 'BOOLEAN'),
     ('HCRYPTPROV_OR_NCRYPT_KEY_HANDLE', 'PULONG'),
     ('HCRYPTPROV_LEGACY', 'PULONG'),
@@ -788,6 +789,7 @@ defs_with_ntstatus.append_input_file(from_here("definitions\\windef_evtlog.txt")
 
 
 structs = StructGenerator(from_here("definitions\\winstruct.txt"), from_here(r"..\windows\generated_def\\winstructs.py"), dependances=[defs_with_ntstatus])
+structs.append_input_file(from_here("definitions\\winstruct_apisetmap.txt"))
 structs.append_input_file(from_here("definitions\\display_struct.txt"))
 structs.append_input_file(from_here("definitions\\winstruct_bits.txt"))
 structs.append_input_file(from_here("definitions\\winstruct_alpc.txt"))

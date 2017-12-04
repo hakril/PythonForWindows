@@ -290,6 +290,104 @@ _RTL_USER_PROCESS_PARAMETERS
 
         :class:`RTL_DRIVE_LETTER_CURDIR` ``[32]``
 
+_ANON_PEB_SYSTEM_DEPENDENT_02
+'''''''''''''''''''''''''''''
+.. class:: _ANON_PEB_SYSTEM_DEPENDENT_02
+
+    .. attribute:: FastPebLockRoutine
+
+        :class:`PVOID`
+
+
+    .. attribute:: SparePtr1
+
+        :class:`PVOID`
+
+
+    .. attribute:: AtlThunkSListPtr
+
+        :class:`PVOID`
+
+_ANON_PEB_SYSTEM_DEPENDENT_03
+'''''''''''''''''''''''''''''
+.. class:: _ANON_PEB_SYSTEM_DEPENDENT_03
+
+    .. attribute:: FastPebUnlockRoutine
+
+        :class:`PVOID`
+
+
+    .. attribute:: SparePtr2
+
+        :class:`PVOID`
+
+
+    .. attribute:: IFEOKey
+
+        :class:`PVOID`
+
+_ANON_PEB_SYSTEM_DEPENDENT_06
+'''''''''''''''''''''''''''''
+.. class:: _ANON_PEB_SYSTEM_DEPENDENT_06
+
+    .. attribute:: FreeList
+
+        :class:`PVOID`
+
+
+    .. attribute:: SparePebPtr0
+
+        :class:`PVOID`
+
+
+    .. attribute:: ApiSetMap
+
+        :class:`PVOID`
+
+_ANON_PEB_SYSTEM_DEPENDENT_07
+'''''''''''''''''''''''''''''
+.. class:: _ANON_PEB_SYSTEM_DEPENDENT_07
+
+    .. attribute:: ReadOnlySharedMemoryHeap
+
+        :class:`PVOID`
+
+
+    .. attribute:: HotpatchInformation
+
+        :class:`PVOID`
+
+
+    .. attribute:: SparePvoid0
+
+        :class:`PVOID`
+
+_ANON_PEB_UNION_1
+'''''''''''''''''
+.. class:: _ANON_PEB_UNION_1
+
+    .. attribute:: KernelCallbackTable
+
+        :class:`PVOID`
+
+
+    .. attribute:: UserSharedInfoPtr
+
+        :class:`PVOID`
+
+_ANON_PEB_UNION_2
+'''''''''''''''''
+.. class:: _ANON_PEB_UNION_2
+
+    .. attribute:: ImageProcessAffinityMask
+
+        :class:`PVOID`
+
+
+    .. attribute:: ActiveProcessAffinityMask
+
+        :class:`PVOID`
+
 _PEB
 ''''
 .. class:: PPEB
@@ -337,34 +435,294 @@ _PEB
         :class:`PRTL_USER_PROCESS_PARAMETERS`
 
 
-    .. attribute:: Reserved4
+    .. attribute:: SubSystemData
 
-        :class:`BYTE` ``[104]``
+        :class:`PVOID`
 
 
-    .. attribute:: Reserved5
+    .. attribute:: ProcessHeap
 
-        :class:`PVOID` ``[52]``
+        :class:`PVOID`
+
+
+    .. attribute:: FastPebLock
+
+        :class:`PVOID`
+
+
+    .. attribute:: _SYSTEM_DEPENDENT_02
+
+        :class:`_ANON_PEB_SYSTEM_DEPENDENT_02`
+
+
+    .. attribute:: _SYSTEM_DEPENDENT_03
+
+        :class:`_ANON_PEB_SYSTEM_DEPENDENT_03`
+
+
+    .. attribute:: _SYSTEM_DEPENDENT_04
+
+        :class:`PVOID`
+
+
+    .. attribute:: anon_union_1
+
+        :class:`_ANON_PEB_UNION_1`
+
+
+    .. attribute:: SystemReserved
+
+        :class:`DWORD`
+
+
+    .. attribute:: _SYSTEM_DEPENDENT_05
+
+        :class:`DWORD`
+
+
+    .. attribute:: _SYSTEM_DEPENDENT_06
+
+        :class:`_ANON_PEB_SYSTEM_DEPENDENT_06`
+
+
+    .. attribute:: TlsExpansionCounter
+
+        :class:`PVOID`
+
+
+    .. attribute:: TlsBitmap
+
+        :class:`PVOID`
+
+
+    .. attribute:: TlsBitmapBits
+
+        :class:`DWORD` ``[2]``
+
+
+    .. attribute:: ReadOnlySharedMemoryBase
+
+        :class:`PVOID`
+
+
+    .. attribute:: _SYSTEM_DEPENDENT_07
+
+        :class:`_ANON_PEB_SYSTEM_DEPENDENT_07`
+
+
+    .. attribute:: ReadOnlyStaticServerData
+
+        :class:`PVOID`
+
+
+    .. attribute:: AnsiCodePageData
+
+        :class:`PVOID`
+
+
+    .. attribute:: OemCodePageData
+
+        :class:`PVOID`
+
+
+    .. attribute:: UnicodeCaseTableData
+
+        :class:`PVOID`
+
+
+    .. attribute:: NumberOfProcessors
+
+        :class:`DWORD`
+
+
+    .. attribute:: NtGlobalFlag
+
+        :class:`DWORD`
+
+
+    .. attribute:: CriticalSectionTimeout
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: HeapSegmentReserve
+
+        :class:`PVOID`
+
+
+    .. attribute:: HeapSegmentCommit
+
+        :class:`PVOID`
+
+
+    .. attribute:: HeapDeCommitTotalFreeThreshold
+
+        :class:`PVOID`
+
+
+    .. attribute:: HeapDeCommitFreeBlockThreshold
+
+        :class:`PVOID`
+
+
+    .. attribute:: NumberOfHeaps
+
+        :class:`DWORD`
+
+
+    .. attribute:: MaximumNumberOfHeaps
+
+        :class:`DWORD`
+
+
+    .. attribute:: ProcessHeaps
+
+        :class:`PVOID`
+
+
+    .. attribute:: GdiSharedHandleTable
+
+        :class:`PVOID`
+
+
+    .. attribute:: ProcessStarterHelper
+
+        :class:`PVOID`
+
+
+    .. attribute:: GdiDCAttributeList
+
+        :class:`PVOID`
+
+
+    .. attribute:: LoaderLock
+
+        :class:`PVOID`
+
+
+    .. attribute:: OSMajorVersion
+
+        :class:`DWORD`
+
+
+    .. attribute:: OSMinorVersion
+
+        :class:`DWORD`
+
+
+    .. attribute:: OSBuildNumber
+
+        :class:`WORD`
+
+
+    .. attribute:: OSCSDVersion
+
+        :class:`WORD`
+
+
+    .. attribute:: OSPlatformId
+
+        :class:`DWORD`
+
+
+    .. attribute:: ImageSubsystem
+
+        :class:`DWORD`
+
+
+    .. attribute:: ImageSubsystemMajorVersion
+
+        :class:`DWORD`
+
+
+    .. attribute:: ImageSubsystemMinorVersion
+
+        :class:`PVOID`
+
+
+    .. attribute:: anon_union_2
+
+        :class:`_ANON_PEB_UNION_2`
+
+
+    .. attribute:: GdiHandleBuffer
+
+        :class:`PVOID` ``[26]``
+
+
+    .. attribute:: GdiHandleBuffer2
+
+        :class:`BYTE` ``[32]``
 
 
     .. attribute:: PostProcessInitRoutine
 
-        :class:`PPS_POST_PROCESS_INIT_ROUTINE`
+        :class:`PVOID`
 
 
-    .. attribute:: Reserved6
+    .. attribute:: TlsExpansionBitmap
 
-        :class:`BYTE` ``[128]``
+        :class:`PVOID`
 
 
-    .. attribute:: Reserved7
+    .. attribute:: TlsExpansionBitmapBits
 
-        :class:`PVOID` ``[1]``
+        :class:`DWORD` ``[32]``
 
 
     .. attribute:: SessionId
 
-        :class:`ULONG`
+        :class:`PVOID`
+
+
+    .. attribute:: AppCompatFlags
+
+        :class:`ULARGE_INTEGER`
+
+
+    .. attribute:: AppCompatFlagsUser
+
+        :class:`ULARGE_INTEGER`
+
+
+    .. attribute:: pShimData
+
+        :class:`PVOID`
+
+
+    .. attribute:: AppCompatInfo
+
+        :class:`PVOID`
+
+
+    .. attribute:: CSDVersion
+
+        :class:`UNICODE_STRING`
+
+
+    .. attribute:: ActivationContextData
+
+        :class:`PVOID`
+
+
+    .. attribute:: ProcessAssemblyStorageMap
+
+        :class:`PVOID`
+
+
+    .. attribute:: SystemDefaultActivationContextData
+
+        :class:`PVOID`
+
+
+    .. attribute:: SystemAssemblyStorageMap
+
+        :class:`PVOID`
+
+
+    .. attribute:: MinimumStackCommit
+
+        :class:`PVOID`
 
 _SECURITY_ATTRIBUTES
 ''''''''''''''''''''
@@ -9959,6 +10317,478 @@ _FILE_FS_SECTOR_SIZE_INFORMATION
 
         :class:`ULONG`
 
+_RTLP_CURDIR_REF
+''''''''''''''''
+.. class:: PRTLP_CURDIR_REF
+
+    Pointer to :class:`_RTLP_CURDIR_REF`
+
+.. class:: RTLP_CURDIR_REF
+
+    Alias for :class:`_RTLP_CURDIR_REF`
+
+.. class:: _RTLP_CURDIR_REF
+
+    .. attribute:: RefCount
+
+        :class:`LONG`
+
+
+    .. attribute:: Handle
+
+        :class:`HANDLE`
+
+_RTL_RELATIVE_NAME_U
+''''''''''''''''''''
+.. class:: PRTL_RELATIVE_NAME_U
+
+    Pointer to :class:`_RTL_RELATIVE_NAME_U`
+
+.. class:: RTL_RELATIVE_NAME_U
+
+    Alias for :class:`_RTL_RELATIVE_NAME_U`
+
+.. class:: _RTL_RELATIVE_NAME_U
+
+    .. attribute:: RelativeName
+
+        :class:`UNICODE_STRING`
+
+
+    .. attribute:: ContainingDirectory
+
+        :class:`HANDLE`
+
+
+    .. attribute:: CurDirRef
+
+        :class:`PRTLP_CURDIR_REF`
+
+_PROCESS_INSTRUMENTATION_CALLBACK_INFORMATION
+'''''''''''''''''''''''''''''''''''''''''''''
+.. class:: PPROCESS_INSTRUMENTATION_CALLBACK_INFORMATION
+
+    Pointer to :class:`_PROCESS_INSTRUMENTATION_CALLBACK_INFORMATION`
+
+.. class:: PROCESS_INSTRUMENTATION_CALLBACK_INFORMATION
+
+    Alias for :class:`_PROCESS_INSTRUMENTATION_CALLBACK_INFORMATION`
+
+.. class:: _PROCESS_INSTRUMENTATION_CALLBACK_INFORMATION
+
+    .. attribute:: Version
+
+        :class:`ULONG`
+
+
+    .. attribute:: Reserved
+
+        :class:`ULONG`
+
+
+    .. attribute:: Callback
+
+        :class:`PVOID`
+
+_API_SET_VALUE_ENTRY
+''''''''''''''''''''
+.. class:: API_SET_VALUE_ENTRY
+
+    Alias for :class:`_API_SET_VALUE_ENTRY`
+
+.. class:: PAPI_SET_VALUE_ENTRY
+
+    Pointer to :class:`_API_SET_VALUE_ENTRY`
+
+.. class:: _API_SET_VALUE_ENTRY
+
+    .. attribute:: Flags
+
+        :class:`ULONG`
+
+
+    .. attribute:: NameOffset
+
+        :class:`ULONG`
+
+
+    .. attribute:: NameLength
+
+        :class:`ULONG`
+
+
+    .. attribute:: ValueOffset
+
+        :class:`ULONG`
+
+
+    .. attribute:: ValueLength
+
+        :class:`ULONG`
+
+_API_SET_NAMESPACE_ENTRY
+''''''''''''''''''''''''
+.. class:: PAPI_SET_NAMESPACE_ENTRY
+
+    Pointer to :class:`_API_SET_NAMESPACE_ENTRY`
+
+.. class:: API_SET_NAMESPACE_ENTRY
+
+    Alias for :class:`_API_SET_NAMESPACE_ENTRY`
+
+.. class:: _API_SET_NAMESPACE_ENTRY
+
+    .. attribute:: Flags
+
+        :class:`ULONG`
+
+
+    .. attribute:: NameOffset
+
+        :class:`ULONG`
+
+
+    .. attribute:: NameLength
+
+        :class:`ULONG`
+
+
+    .. attribute:: AliasOffset
+
+        :class:`ULONG`
+
+
+    .. attribute:: AliasLength
+
+        :class:`ULONG`
+
+
+    .. attribute:: DataOffset
+
+        :class:`ULONG`
+
+_API_SET_NAMESPACE_ARRAY
+''''''''''''''''''''''''
+.. class:: PAPI_SET_NAMESPACE_ARRAY
+
+    Pointer to :class:`_API_SET_NAMESPACE_ARRAY`
+
+.. class:: API_SET_NAMESPACE_ARRAY
+
+    Alias for :class:`_API_SET_NAMESPACE_ARRAY`
+
+.. class:: _API_SET_NAMESPACE_ARRAY
+
+    .. attribute:: Version
+
+        :class:`ULONG`
+
+
+    .. attribute:: Size
+
+        :class:`ULONG`
+
+
+    .. attribute:: Flags
+
+        :class:`ULONG`
+
+
+    .. attribute:: Count
+
+        :class:`ULONG`
+
+
+    .. attribute:: Array
+
+        :class:`API_SET_NAMESPACE_ENTRY` ``[ANYSIZE_ARRAY]``
+
+_API_SET_VALUE_ENTRY_V2
+'''''''''''''''''''''''
+.. class:: PAPI_SET_VALUE_ENTRY_V2
+
+    Pointer to :class:`_API_SET_VALUE_ENTRY_V2`
+
+.. class:: API_SET_VALUE_ENTRY_V2
+
+    Alias for :class:`_API_SET_VALUE_ENTRY_V2`
+
+.. class:: _API_SET_VALUE_ENTRY_V2
+
+    .. attribute:: NameOffset
+
+        :class:`ULONG`
+
+
+    .. attribute:: NameLength
+
+        :class:`ULONG`
+
+
+    .. attribute:: ValueOffset
+
+        :class:`ULONG`
+
+
+    .. attribute:: ValueLength
+
+        :class:`ULONG`
+
+_API_SET_VALUE_ARRAY_V2
+'''''''''''''''''''''''
+.. class:: API_SET_VALUE_ARRAY_V2
+
+    Alias for :class:`_API_SET_VALUE_ARRAY_V2`
+
+.. class:: PAPI_SET_VALUE_ARRAY_V2
+
+    Pointer to :class:`_API_SET_VALUE_ARRAY_V2`
+
+.. class:: _API_SET_VALUE_ARRAY_V2
+
+    .. attribute:: Count
+
+        :class:`ULONG`
+
+
+    .. attribute:: Array
+
+        :class:`API_SET_VALUE_ENTRY_V2` ``[ANYSIZE_ARRAY]``
+
+_API_SET_NAMESPACE_ENTRY_V2
+'''''''''''''''''''''''''''
+.. class:: PAPI_SET_NAMESPACE_ENTRY_V2
+
+    Pointer to :class:`_API_SET_NAMESPACE_ENTRY_V2`
+
+.. class:: API_SET_NAMESPACE_ENTRY_V2
+
+    Alias for :class:`_API_SET_NAMESPACE_ENTRY_V2`
+
+.. class:: _API_SET_NAMESPACE_ENTRY_V2
+
+    .. attribute:: NameOffset
+
+        :class:`ULONG`
+
+
+    .. attribute:: NameLength
+
+        :class:`ULONG`
+
+
+    .. attribute:: DataOffset
+
+        :class:`ULONG`
+
+_API_SET_NAMESPACE_ARRAY_V2
+'''''''''''''''''''''''''''
+.. class:: API_SET_NAMESPACE_ARRAY_V2
+
+    Alias for :class:`_API_SET_NAMESPACE_ARRAY_V2`
+
+.. class:: PAPI_SET_NAMESPACE_ARRAY_V2
+
+    Pointer to :class:`_API_SET_NAMESPACE_ARRAY_V2`
+
+.. class:: _API_SET_NAMESPACE_ARRAY_V2
+
+    .. attribute:: Version
+
+        :class:`ULONG`
+
+
+    .. attribute:: Count
+
+        :class:`ULONG`
+
+
+    .. attribute:: Array
+
+        :class:`API_SET_NAMESPACE_ENTRY_V2` ``[ANYSIZE_ARRAY]``
+
+_API_SET_VALUE_ARRAY_V4
+'''''''''''''''''''''''
+.. class:: API_SET_VALUE_ARRAY_V4
+
+    Alias for :class:`_API_SET_VALUE_ARRAY_V4`
+
+.. class:: PAPI_SET_VALUE_ARRAY_V2
+
+    Pointer to :class:`_API_SET_VALUE_ARRAY_V4`
+
+.. class:: _API_SET_VALUE_ARRAY_V4
+
+    .. attribute:: GuessFlags
+
+        :class:`ULONG`
+
+
+    .. attribute:: Count
+
+        :class:`ULONG`
+
+
+    .. attribute:: Array
+
+        :class:`API_SET_VALUE_ENTRY_V2` ``[ANYSIZE_ARRAY]``
+
+_API_SET_NAMESPACE_ARRAY_V4
+'''''''''''''''''''''''''''
+.. class:: API_SET_NAMESPACE_ARRAY_V4
+
+    Alias for :class:`_API_SET_NAMESPACE_ARRAY_V4`
+
+.. class:: PAPI_SET_NAMESPACE_ARRAY_V4
+
+    Pointer to :class:`_API_SET_NAMESPACE_ARRAY_V4`
+
+.. class:: _API_SET_NAMESPACE_ARRAY_V4
+
+    .. attribute:: Version
+
+        :class:`ULONG`
+
+
+    .. attribute:: Size
+
+        :class:`ULONG`
+
+
+    .. attribute:: Flags
+
+        :class:`ULONG`
+
+
+    .. attribute:: Count
+
+        :class:`ULONG`
+
+
+    .. attribute:: Array
+
+        :class:`API_SET_NAMESPACE_ENTRY` ``[ANYSIZE_ARRAY]``
+
+_API_SET_NAMESPACE_ENTRY_V4
+'''''''''''''''''''''''''''
+.. class:: PAPI_SET_NAMESPACE_ENTRY_V4
+
+    Pointer to :class:`_API_SET_NAMESPACE_ENTRY_V4`
+
+.. class:: API_SET_NAMESPACE_ENTRY_V4
+
+    Alias for :class:`_API_SET_NAMESPACE_ENTRY_V4`
+
+.. class:: _API_SET_NAMESPACE_ENTRY_V4
+
+    .. attribute:: Flags
+
+        :class:`ULONG`
+
+
+    .. attribute:: NameOffset
+
+        :class:`ULONG`
+
+
+    .. attribute:: NameLength
+
+        :class:`ULONG`
+
+
+    .. attribute:: AliasOffset
+
+        :class:`ULONG`
+
+
+    .. attribute:: AliasLength
+
+        :class:`ULONG`
+
+
+    .. attribute:: DataOffset
+
+        :class:`ULONG`
+
+_API_SET_NAMESPACE_ENTRY_V6
+'''''''''''''''''''''''''''
+.. class:: API_SET_NAMESPACE_ENTRY_V6
+
+    Alias for :class:`_API_SET_NAMESPACE_ENTRY_V6`
+
+.. class:: _API_SET_NAMESPACE_ENTRY_V6
+
+    .. attribute:: Flags
+
+        :class:`ULONG`
+
+
+    .. attribute:: NameOffset
+
+        :class:`ULONG`
+
+
+    .. attribute:: NameLength
+
+        :class:`ULONG`
+
+
+    .. attribute:: HashedLength
+
+        :class:`ULONG`
+
+
+    .. attribute:: ValueOffset
+
+        :class:`ULONG`
+
+
+    .. attribute:: ValueCount
+
+        :class:`ULONG`
+
+_API_SET_NAMESPACE_V6
+'''''''''''''''''''''
+.. class:: API_SET_NAMESPACE_V6
+
+    Alias for :class:`_API_SET_NAMESPACE_V6`
+
+.. class:: _API_SET_NAMESPACE_V6
+
+    .. attribute:: Version
+
+        :class:`ULONG`
+
+
+    .. attribute:: Size
+
+        :class:`ULONG`
+
+
+    .. attribute:: Flags
+
+        :class:`ULONG`
+
+
+    .. attribute:: Count
+
+        :class:`ULONG`
+
+
+    .. attribute:: EntryOffset
+
+        :class:`ULONG`
+
+
+    .. attribute:: HashOffset
+
+        :class:`ULONG`
+
+
+    .. attribute:: HashFactor
+
+        :class:`ULONG`
+
 tagRECT
 '''''''
 .. class:: LPRECT
@@ -12265,6 +13095,144 @@ _SECTION_INHERIT
 
     .. attribute:: ViewUnmap(2)
 
+_PROCESSINFOCLASS
+'''''''''''''''''
+.. class:: PROCESS_INFORMATION_CLASS
+
+    Alias for :class:`_PROCESSINFOCLASS`
+
+.. class:: PROCESSINFOCLASS
+
+    Alias for :class:`_PROCESSINFOCLASS`
+
+.. class:: _PROCESSINFOCLASS
+
+
+    .. attribute:: ProcessBasicInformation(0)
+
+
+    .. attribute:: ProcessQuotaLimits(1)
+
+
+    .. attribute:: ProcessIoCounters(2)
+
+
+    .. attribute:: ProcessVmCounters(3)
+
+
+    .. attribute:: ProcessTimes(4)
+
+
+    .. attribute:: ProcessBasePriority(5)
+
+
+    .. attribute:: ProcessRaisePriority(6)
+
+
+    .. attribute:: ProcessDebugPort(7)
+
+
+    .. attribute:: ProcessExceptionPort(8)
+
+
+    .. attribute:: ProcessAccessToken(9)
+
+
+    .. attribute:: ProcessLdtInformation(10)
+
+
+    .. attribute:: ProcessLdtSize(11)
+
+
+    .. attribute:: ProcessDefaultHardErrorMode(12)
+
+
+    .. attribute:: ProcessIoPortHandlers(13)
+
+
+    .. attribute:: ProcessPooledUsageAndLimits(14)
+
+
+    .. attribute:: ProcessWorkingSetWatch(15)
+
+
+    .. attribute:: ProcessUserModeIOPL(16)
+
+
+    .. attribute:: ProcessEnableAlignmentFaultFixup(17)
+
+
+    .. attribute:: ProcessPriorityClass(18)
+
+
+    .. attribute:: ProcessWx86Information(19)
+
+
+    .. attribute:: ProcessHandleCount(20)
+
+
+    .. attribute:: ProcessAffinityMask(21)
+
+
+    .. attribute:: ProcessPriorityBoost(22)
+
+
+    .. attribute:: ProcessDeviceMap(23)
+
+
+    .. attribute:: ProcessSessionInformation(24)
+
+
+    .. attribute:: ProcessForegroundInformation(25)
+
+
+    .. attribute:: ProcessWow64Information(26)
+
+
+    .. attribute:: ProcessImageFileName(27)
+
+
+    .. attribute:: ProcessLUIDDeviceMapsEnabled(28)
+
+
+    .. attribute:: ProcessBreakOnTermination(29)
+
+
+    .. attribute:: ProcessDebugObjectHandle(30)
+
+
+    .. attribute:: ProcessDebugFlags(31)
+
+
+    .. attribute:: ProcessHandleTracing(32)
+
+
+    .. attribute:: ProcessIoPriority(33)
+
+
+    .. attribute:: ProcessExecuteFlags(34)
+
+
+    .. attribute:: ProcessResourceManagement(35)
+
+
+    .. attribute:: ProcessCookie(36)
+
+
+    .. attribute:: ProcessImageInformation(37)
+
+
+    .. attribute:: ProcessInformation38(38)
+
+
+    .. attribute:: ProcessInformation39(39)
+
+
+    .. attribute:: ProcessInstrumentationCallback(40)
+
+
+    .. attribute:: MaxProcessInfoClass(41)
+
 _MEMORY_INFORMATION_CLASS
 '''''''''''''''''''''''''
 .. class:: MEMORY_INFORMATION_CLASS
@@ -13904,6 +14872,38 @@ tagTYPEKIND
 
 
     .. attribute:: TKIND_MAX(8)
+
+_RTL_PATH_TYPE
+''''''''''''''
+.. class:: RTL_PATH_TYPE
+
+    Alias for :class:`_RTL_PATH_TYPE`
+
+.. class:: _RTL_PATH_TYPE
+
+
+    .. attribute:: RtlPathTypeUnknown(0)
+
+
+    .. attribute:: RtlPathTypeUncAbsolute(1)
+
+
+    .. attribute:: RtlPathTypeDriveAbsolute(2)
+
+
+    .. attribute:: RtlPathTypeDriveRelative(3)
+
+
+    .. attribute:: RtlPathTypeRooted(4)
+
+
+    .. attribute:: RtlPathTypeRelative(5)
+
+
+    .. attribute:: RtlPathTypeLocalDevice(6)
+
+
+    .. attribute:: RtlPathTypeRootLocalDevice(7)
 
 _BG_JOB_STATE
 '''''''''''''

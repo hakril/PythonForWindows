@@ -59,6 +59,7 @@ class WinStruct(object):
     def generate_selfref_ctypes_class(self):
         res = ["# Self referencing struct tricks"]
         res += ["""class {0}(Structure): pass""".format(self.name)]
+        # res += [self.generate_anonymous_union()]
         res += [self.generate_typedef_ctypes()]
 
         if self.pack:
@@ -72,10 +73,21 @@ class WinStruct(object):
         res += ["]"]
         return "\n".join(res)
 
+    def generate_anonymous_union(self):
+        annon_fields = [name for (ftype, name, nb_rep) in self.fields if ftype.name.startswith("_ANON_")]
+        if not annon_fields:
+            return ""
+        if len(annon_fields) == 1:
+            annon_fields_str = '"{0}",'.format(annon_fields[0])
+        else:
+            annon_fields_str = ",".join(['"{0}"'.format(name) for name in annon_fields])
+        return "    _anonymous_ = ({0})\n".format(annon_fields_str)
+
     def generate_ctypes_class(self):
         res = "class {0}({1}):\n".format(self.name, self.ctypes_type)
         if self.pack:
             res += "    _pack_ = {0}\n".format(self.pack)
+        res += self.generate_anonymous_union()
         res += "    _fields_ = [\n"""
 
 

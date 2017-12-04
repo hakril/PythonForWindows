@@ -69,6 +69,13 @@ NTSTATUS WINAPI NtQueryInformationProcess(
   _Out_opt_ PULONG           ReturnLength
 );
 
+NTSTATUS WINAPI NtSetInformationProcess(
+  _In_ HANDLE               ProcessHandle,
+  _In_ PROCESS_INFORMATION_CLASS ProcessInformationClass,
+  _In_ PVOID                ProcessInformation,
+  _In_ ULONG                ProcessInformationLength
+);
+
 NTSTATUS WINAPI NtQueryVirtualMemory(
   _In_      HANDLE                   ProcessHandle,
   _In_opt_  PVOID                    BaseAddress,
@@ -1830,3 +1837,19 @@ NTSTATUS WINAPI NtQueryDirectoryFile(
   _In_     BOOLEAN                RestartScan
 );
 
+
+BOOLEAN WINAPI RtlDosPathNameToNtPathName_U(
+    _In_ PCWSTR DosName,
+    _Out_ PUNICODE_STRING NtName,
+    _Out_ PCWSTR *PartName,
+    _Out_ PRTL_RELATIVE_NAME_U RelativeName
+);
+
+// NOT EXPORTED !!
+NTSTATUS WINAPI ApiSetResolveToHost (
+    _In_ PVOID Schema,
+    _In_ PUNICODE_STRING FileNameIn,
+    _In_opt_ PUNICODE_STRING ParentName,
+    _Out_ PBOOLEAN Resolved,
+    _Out_ PUNICODE_STRING HostBinary
+    );

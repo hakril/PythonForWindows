@@ -67,6 +67,46 @@ typedef struct _RTL_USER_PROCESS_PARAMETERS
 } RTL_USER_PROCESS_PARAMETERS, *PRTL_USER_PROCESS_PARAMETERS;
 
 
+// Thank to:
+// https://msdn.microsoft.com/en-us/library/windows/desktop/aa813706(v=vs.85).aspx
+// http://blog.rewolf.pl/blog/?p=573
+// http://terminus.rewolf.pl/terminus/structures/ntdll/_PEB_combined.html
+
+typedef union _ANON_PEB_SYSTEM_DEPENDENT_02 {
+    PVOID FastPebLockRoutine;
+    PVOID SparePtr1;
+    PVOID AtlThunkSListPtr;
+};
+
+typedef union _ANON_PEB_SYSTEM_DEPENDENT_03 {
+    PVOID FastPebUnlockRoutine;
+    PVOID SparePtr2;
+    PVOID IFEOKey;
+};
+
+
+typedef union _ANON_PEB_SYSTEM_DEPENDENT_06 {
+    PVOID FreeList;
+    PVOID SparePebPtr0;
+    PVOID ApiSetMap;
+};
+
+typedef union _ANON_PEB_SYSTEM_DEPENDENT_07 {
+    PVOID ReadOnlySharedMemoryHeap;
+    PVOID HotpatchInformation;
+    PVOID SparePvoid0;
+};
+
+
+typedef union _ANON_PEB_UNION_1 {
+    PVOID KernelCallbackTable;
+    PVOID UserSharedInfoPtr;
+};
+
+typedef union _ANON_PEB_UNION_2 {
+    PVOID ImageProcessAffinityMask;
+    PVOID ActiveProcessAffinityMask;
+};
 
 typedef struct _PEB {
   BYTE                          Reserved1[2];
@@ -76,12 +116,65 @@ typedef struct _PEB {
   PVOID                         ImageBaseAddress;
   PPEB_LDR_DATA                 Ldr;
   PRTL_USER_PROCESS_PARAMETERS  ProcessParameters;
-  BYTE                          Reserved4[104];
-  PVOID                         Reserved5[52];
-  PPS_POST_PROCESS_INIT_ROUTINE PostProcessInitRoutine;
-  BYTE                          Reserved6[128];
-  PVOID                         Reserved7[1];
-  ULONG                         SessionId;
+  PVOID                         SubSystemData;
+  PVOID                         ProcessHeap;
+  PVOID                         FastPebLock;
+  _ANON_PEB_SYSTEM_DEPENDENT_02 _SYSTEM_DEPENDENT_02;
+  _ANON_PEB_SYSTEM_DEPENDENT_03 _SYSTEM_DEPENDENT_03;
+  PVOID                         _SYSTEM_DEPENDENT_04;
+  _ANON_PEB_UNION_1             anon_union_1;
+  DWORD                         SystemReserved;
+  DWORD                         _SYSTEM_DEPENDENT_05;
+  _ANON_PEB_SYSTEM_DEPENDENT_06 _SYSTEM_DEPENDENT_06;
+  PVOID                         TlsExpansionCounter;
+  PVOID                         TlsBitmap;
+  DWORD                         TlsBitmapBits[2];
+  PVOID                         ReadOnlySharedMemoryBase;
+  _ANON_PEB_SYSTEM_DEPENDENT_07 _SYSTEM_DEPENDENT_07;
+  PVOID                         ReadOnlyStaticServerData;
+  PVOID                         AnsiCodePageData;
+  PVOID                         OemCodePageData;
+  PVOID                         UnicodeCaseTableData;
+  DWORD                         NumberOfProcessors;
+  DWORD                         NtGlobalFlag;
+  LARGE_INTEGER                 CriticalSectionTimeout;
+  PVOID                         HeapSegmentReserve;
+  PVOID                         HeapSegmentCommit;
+  PVOID                         HeapDeCommitTotalFreeThreshold;
+  PVOID                         HeapDeCommitFreeBlockThreshold;
+  DWORD                         NumberOfHeaps;
+  DWORD                         MaximumNumberOfHeaps;
+  PVOID                         ProcessHeaps;
+  PVOID                         GdiSharedHandleTable;
+  PVOID                         ProcessStarterHelper;
+  PVOID                         GdiDCAttributeList;
+  PVOID                         LoaderLock;
+  DWORD                         OSMajorVersion;
+  DWORD                         OSMinorVersion;
+  WORD                          OSBuildNumber;
+  WORD                          OSCSDVersion;
+  DWORD                         OSPlatformId;
+  DWORD                         ImageSubsystem;
+  DWORD                         ImageSubsystemMajorVersion;
+  PVOID                         ImageSubsystemMinorVersion;
+
+  _ANON_PEB_UNION_2             anon_union_2;
+  PVOID                         GdiHandleBuffer[26];
+  BYTE                          GdiHandleBuffer2[32];
+  PVOID                         PostProcessInitRoutine;
+  PVOID                         TlsExpansionBitmap;
+  DWORD                         TlsExpansionBitmapBits[32];
+  PVOID                         SessionId;
+  ULARGE_INTEGER                AppCompatFlags;
+  ULARGE_INTEGER                AppCompatFlagsUser;
+  PVOID                         pShimData;
+  PVOID                         AppCompatInfo;
+  UNICODE_STRING                CSDVersion;
+  PVOID                         ActivationContextData;
+  PVOID                         ProcessAssemblyStorageMap;
+  PVOID                         SystemDefaultActivationContextData;
+  PVOID                         SystemAssemblyStorageMap;
+  PVOID                         MinimumStackCommit;
 } PEB, *PPEB;
 
 
@@ -315,6 +408,51 @@ typedef enum _SECTION_INHERIT {
   ViewShare = 1,
   ViewUnmap = 2
 } SECTION_INHERIT;
+
+typedef enum _PROCESSINFOCLASS {
+    ProcessBasicInformation,
+    ProcessQuotaLimits,
+    ProcessIoCounters,
+    ProcessVmCounters,
+    ProcessTimes,
+    ProcessBasePriority,
+    ProcessRaisePriority,
+    ProcessDebugPort,
+    ProcessExceptionPort,
+    ProcessAccessToken,
+    ProcessLdtInformation,
+    ProcessLdtSize,
+    ProcessDefaultHardErrorMode,
+    ProcessIoPortHandlers,
+    ProcessPooledUsageAndLimits,
+    ProcessWorkingSetWatch,
+    ProcessUserModeIOPL,
+    ProcessEnableAlignmentFaultFixup,
+    ProcessPriorityClass,
+    ProcessWx86Information,
+    ProcessHandleCount,
+    ProcessAffinityMask,
+    ProcessPriorityBoost,
+    ProcessDeviceMap,
+    ProcessSessionInformation,
+    ProcessForegroundInformation,
+    ProcessWow64Information,
+    ProcessImageFileName,
+    ProcessLUIDDeviceMapsEnabled,
+    ProcessBreakOnTermination,
+    ProcessDebugObjectHandle,
+    ProcessDebugFlags,
+    ProcessHandleTracing,
+    ProcessIoPriority,
+    ProcessExecuteFlags,
+    ProcessResourceManagement,
+    ProcessCookie,
+    ProcessImageInformation,
+    ProcessInformation38,
+    ProcessInformation39,
+    ProcessInstrumentationCallback,
+    MaxProcessInfoClass
+} PROCESSINFOCLASS, PROCESS_INFORMATION_CLASS;
 
 typedef enum _MEMORY_INFORMATION_CLASS {
     MemoryBasicInformation,
@@ -3136,3 +3274,42 @@ typedef struct _FILE_FS_SECTOR_SIZE_INFORMATION {
   ULONG ByteOffsetForSectorAlignment;
   ULONG ByteOffsetForPartitionAlignment;
 } FILE_FS_SECTOR_SIZE_INFORMATION, *PFILE_FS_SECTOR_SIZE_INFORMATION;
+
+// THX ReactOS
+
+typedef struct _RTLP_CURDIR_REF
+{
+     LONG RefCount;
+     HANDLE Handle;
+} RTLP_CURDIR_REF, *PRTLP_CURDIR_REF;
+
+
+typedef struct _RTL_RELATIVE_NAME_U
+{
+    UNICODE_STRING RelativeName;
+    HANDLE ContainingDirectory;
+    PRTLP_CURDIR_REF CurDirRef;
+} RTL_RELATIVE_NAME_U, *PRTL_RELATIVE_NAME_U;
+
+typedef enum _RTL_PATH_TYPE
+{
+    RtlPathTypeUnknown,
+    RtlPathTypeUncAbsolute,
+    RtlPathTypeDriveAbsolute,
+    RtlPathTypeDriveRelative,
+    RtlPathTypeRooted,
+    RtlPathTypeRelative,
+    RtlPathTypeLocalDevice,
+    RtlPathTypeRootLocalDevice
+} RTL_PATH_TYPE;
+
+
+// Based on Alex Ionescu works on HookingNirvana
+// https://github.com/ionescu007/HookingNirvana/blob/master/instrument/main.c
+
+typedef struct _PROCESS_INSTRUMENTATION_CALLBACK_INFORMATION
+{
+    ULONG Version;
+    ULONG Reserved;
+    PVOID Callback;
+} PROCESS_INSTRUMENTATION_CALLBACK_INFORMATION, *PPROCESS_INSTRUMENTATION_CALLBACK_INFORMATION;

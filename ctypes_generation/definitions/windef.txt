@@ -981,3 +981,73 @@
 #define COMPRESSION_ENGINE_STANDARD      (0x0000)
 #define COMPRESSION_ENGINE_MAXIMUM       (0x0100)
 #define COMPRESSION_ENGINE_HIBER         (0x0200)
+
+
+#define FILE_DIRECTORY_FILE                     0x00000001
+#define FILE_WRITE_THROUGH                      0x00000002
+#define FILE_SEQUENTIAL_ONLY                    0x00000004
+#define FILE_NO_INTERMEDIATE_BUFFERING          0x00000008
+#define FILE_SYNCHRONOUS_IO_ALERT               0x00000010
+#define FILE_SYNCHRONOUS_IO_NONALERT            0x00000020
+#define FILE_NON_DIRECTORY_FILE                 0x00000040
+#define FILE_CREATE_TREE_CONNECTION             0x00000080
+#define FILE_COMPLETE_IF_OPLOCKED               0x00000100
+#define FILE_NO_EA_KNOWLEDGE                    0x00000200
+#define FILE_OPEN_REMOTE_INSTANCE               0x00000400
+#define FILE_RANDOM_ACCESS                      0x00000800
+#define FILE_DELETE_ON_CLOSE                    0x00001000
+#define FILE_OPEN_BY_FILE_ID                    0x00002000
+#define FILE_OPEN_FOR_BACKUP_INTENT             0x00004000
+#define FILE_NO_COMPRESSION                     0x00008000
+#define FILE_OPEN_REQUIRING_OPLOCK              0x00010000
+#define FILE_RESERVE_OPFILTER                   0x00100000
+#define FILE_OPEN_REPARSE_POINT                 0x00200000
+#define FILE_OPEN_NO_RECALL                     0x00400000
+#define FILE_OPEN_FOR_FREE_SPACE_QUERY          0x00800000
+
+#define FILE_VALID_OPTION_FLAGS                 0x00ffffff
+#define FILE_VALID_PIPE_OPTION_FLAGS            0x00000032
+#define FILE_VALID_MAILSLOT_OPTION_FLAGS        0x00000032
+#define FILE_VALID_SET_FLAGS                    0x00000036
+
+#define FILE_SUPERSEDED                 0x00000000
+#define FILE_OPENED                     0x00000001
+#define FILE_CREATED                    0x00000002
+#define FILE_OVERWRITTEN                0x00000003
+#define FILE_EXISTS                     0x00000004
+#define FILE_DOES_NOT_EXIST             0x00000005
+
+#define FILE_READ_DATA            ( 0x0001 )    // file & pipe
+#define FILE_LIST_DIRECTORY       ( 0x0001 )    // directory
+#define FILE_WRITE_DATA           ( 0x0002 )    // file & pipe
+#define FILE_ADD_FILE             ( 0x0002 )    // directory
+#define FILE_APPEND_DATA          ( 0x0004 )    // file
+#define FILE_ADD_SUBDIRECTORY     ( 0x0004 )    // directory
+#define FILE_CREATE_PIPE_INSTANCE ( 0x0004 )    // named pipe
+#define FILE_READ_EA              ( 0x0008 )    // file & directory
+#define FILE_WRITE_EA             ( 0x0010 )    // file & directory
+#define FILE_EXECUTE              ( 0x0020 )    // file
+#define FILE_TRAVERSE             ( 0x0020 )    // directory
+#define FILE_DELETE_CHILD         ( 0x0040 )    // directory
+#define FILE_READ_ATTRIBUTES      ( 0x0080 )    // all
+#define FILE_WRITE_ATTRIBUTES     ( 0x0100 )    // all
+
+#define FILE_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED | SYNCHRONIZE | 0x1FF)
+#define FILE_GENERIC_READ         (STANDARD_RIGHTS_READ | FILE_READ_DATA | FILE_READ_ATTRIBUTES | FILE_READ_EA | SYNCHRONIZE)
+#define FILE_GENERIC_WRITE        (STANDARD_RIGHTS_WRITE | FILE_WRITE_DATA | FILE_WRITE_ATTRIBUTES| FILE_WRITE_EA | FILE_APPEND_DATA | SYNCHRONIZE)
+#define FILE_GENERIC_EXECUTE      (STANDARD_RIGHTS_EXECUTE | FILE_READ_ATTRIBUTES | FILE_EXECUTE | SYNCHRONIZE)
+
+
+#define API_SET_SCHEMA_VERSION_V2       0x00000002L
+#define API_SET_SCHEMA_VERSION_V3       0x00000003L // No offline support.
+#define API_SET_SCHEMA_VERSION_V4       0x00000004L
+
+#define API_SET_LOAD_SCHEMA_ORDINAL     1
+#define API_SET_LOOKUP_ORDINAL          2
+#define API_SET_RELEASE_SCHEMA_ORDINAL  3
+
+#define API_SET_SCHEMA_FLAGS_SEALED              0x00000001L
+#define API_SET_SCHEMA_FLAGS_HOST_EXTENSION      0x00000002L
+
+#define API_SET_SCHEMA_ENTRY_FLAGS_SEALED        0x00000001L
+#define API_SET_SCHEMA_ENTRY_FLAGS_EXTENSION     0x00000002L

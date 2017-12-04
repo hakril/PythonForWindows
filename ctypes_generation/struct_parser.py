@@ -35,6 +35,9 @@ class WinStructParser(Parser):
         return (def_type, def_name, number_rep)
 
     def parse_typedef(self, struct):
+        if type(self.peek()) == ColonToken: # Just a ; no typedef
+            self.next_token()
+            return
         sep = CommaToken()
         while type(sep) == CommaToken:
             add_to_typedef = struct.add_typedef
