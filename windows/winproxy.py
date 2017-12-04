@@ -841,6 +841,12 @@ def NtQueryInformationProcess(ProcessHandle, ProcessInformationClass, ProcessInf
     return NtQueryInformationProcess.ctypes_function(ProcessHandle, ProcessInformationClass, ProcessInformation, ProcessInformationLength, ReturnLength)
 
 
+@NtdllProxy('NtSetInformationProcess', error_ntstatus)
+def NtSetInformationProcess(ProcessHandle, ProcessInformationClass, ProcessInformation, ProcessInformationLength=0):
+    if not ProcessInformationLength:
+        ProcessInformationLength = ctypes.sizeof(ProcessInformation)
+    return NtSetInformationProcess.ctypes_function(ProcessHandle, ProcessInformationClass, ProcessInformation, ProcessInformationLength)
+
 @NtdllProxy('NtQueryInformationThread', error_ntstatus)
 def NtQueryInformationThread(ThreadHandle, ThreadInformationClass, ThreadInformation, ThreadInformationLength=0, ReturnLength=None):
     if ReturnLength is None:
@@ -1013,6 +1019,10 @@ def RtlGetCompressionWorkSpaceSize(CompressionFormatAndEngine, CompressBufferWor
     return RtlGetCompressionWorkSpaceSize.ctypes_function(CompressionFormatAndEngine, CompressBufferWorkSpaceSize, CompressFragmentWorkSpaceSize)
 
 
+@NtdllProxy("RtlDosPathNameToNtPathName_U", zero_is_fail_error_check)
+def RtlDosPathNameToNtPathName_U(DosName, NtName=None, PartName=None, RelativeName=None):
+    return RtlDosPathNameToNtPathName_U.ctypes_function(DosName, NtName, PartName, RelativeName)
+
 
 # Section stuff
 
@@ -1045,6 +1055,11 @@ def RtlGetUnloadEventTraceEx(ElementSize, ElementCount, EventTrace):
 def TpCallbackSendAlpcMessageOnCompletion(TpHandle, PortHandle, Flags, SendMessage):
     return TpCallbackSendAlpcMessageOnCompletion.ctypes_function(TpHandle, PortHandle, Flags, SendMessage)
 
+# Not exported
+
+# @NtdllProxy("ApiSetResolveToHost")
+# def ApiSetResolveToHost(Schema, FileNameIn, ParentName, Resolved, HostBinary):
+    # return ApiSetResolveToHost.ctypes_function(Schema, FileNameIn, ParentName, Resolved, HostBinary)
 
 
 # ##### ADVAPI32 ####### #

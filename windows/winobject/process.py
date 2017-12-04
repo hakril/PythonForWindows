@@ -25,6 +25,7 @@ from windows.generated_def.ntstatus import NtStatusException
 
 from windows.winobject import exception
 from windows.winobject import sid
+from windows.winobject import apisetmap
 
 
 TimeInfo = namedtuple("TimeInfo", ["creation", "exit", "kernel", "user"])
@@ -62,9 +63,8 @@ class AutoHandle(object):
 
     def __del__(self):
         # sys.path is not None -> check if python shutdown
-        if sys.path is not None and hasattr(self, "_handle") and self._handle:
+        if hasattr(sys, "path") and sys.path is not None and hasattr(self, "_handle") and self._handle:
             # Prevent some bug where dbgprint might be None when __del__ is called in a closing process
-            # for i in vars(sys).items(): print(i)
             dbgprint("Closing Handle {0} for {1}".format(hex(self._handle), self), "HANDLE") if dbgprint is not None else None
             self._close_function(self._handle)
 
@@ -689,6 +689,13 @@ class Process(AutoHandle):
         PROCESS_MODE_BACKGROUND_BEGIN,
         PROCESS_MODE_BACKGROUND_END,
         REALTIME_PRIORITY_CLASS)
+
+    def query_info(self, information_class, data=None):
+        winproxy.NtQueryInformationProcess(self.handle, information_class, byref(data), sizeof(data))
+        return data
+
+    def set_info(self, information_class, data):
+        winproxy.NtSetInformationProcess(self.handle, information_class, byref(data), sizeof(data))
 
     def get_priority(self):
         return self.PRIORITY_CLASS_MAPPER[winproxy.GetPriorityClass(self.handle)]
@@ -1324,6 +1331,28 @@ class PEB(gdef.PEB):
             current_dll = list_entry_ptr.TO_LDR_ENTRY()
         return [LoadedModule.from_address(addressof(LDR)) for LDR in res]
 
+    @staticmethod
+    def _extract_environment(env_block_addr, target):
+        result = []
+        while True:
+            venv = target.read_wstring(env_block_addr)
+            if not venv:
+                return result
+            result.append(venv)
+            env_block_addr += ((len(venv) + 1) * 2)
+        # raise RuntimeError("Out of infinite loop")
+
+    @property
+    def environment(self):
+        # TODO: Tests
+        return self._extract_environment(self.ProcessParameters.contents.Environment, windows.current_process)
+
+    @property
+    def apisetmap(self):
+        if windows.system.version < (6,2):
+            raise NotImplementedError("ApiSetMap does not exist prior to Windows 7")
+        return apisetmap.get_api_set_map_for_current_process(self.ApiSetMap)
+
 
 # Memory stuff
 
@@ -1426,6 +1455,17 @@ class RemotePEB(rctypes.RemoteStructure.from_structure(PEB)):
             current_dll = self.ptr_flink_to_remote_module(list_entry_ptr)
         return res
 
+    @property
+    def environment(self):
+        # TODO: Tests
+        return self._extract_environment(self.ProcessParameters.contents.Environment, self._target)
+
+    @property
+    def apisetmap(self):
+        raise NotImplementedError("ApiSetMap for remote process not implemented yet")
+
+
+
 
 if CurrentProcess().bitness == 32:
     class RemoteLoadedModule64(rctypes.transform_type_to_remote64bits(LoadedModule)):
@@ -1468,6 +1508,13 @@ if CurrentProcess().bitness == 32:
                 current_dll = self.ptr_flink_to_remote_module(list_entry_ptr)
             return res
 
+        @property
+        def environment(self):
+            # TODO: Tests
+            return self._extract_environment(self.ProcessParameters.contents.Environment, self._target)
+
+        apisetmap = RemotePEB.apisetmap
+
 if CurrentProcess().bitness == 64:
 
     class RemoteLoadedModule32(rctypes.transform_type_to_remote32bits(LoadedModule)):
@@ -1508,3 +1555,10 @@ if CurrentProcess().bitness == 64:
                 list_entry_ptr = current_dll.InMemoryOrderLinks.Flink.raw_value
                 current_dll = self.ptr_flink_to_remote_module(list_entry_ptr)
             return res
+
+        @property
+        def environment(self):
+            # TODO: Tests
+            return self._extract_environment(self.ProcessParameters.contents.Environment, self._target)
+
+        apisetmap = RemotePEB.apisetmap

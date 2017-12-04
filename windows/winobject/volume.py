@@ -5,10 +5,12 @@ from windows import winproxy
 import windows.generated_def as gdef
 from windows.generated_def.winstructs import *
 
+from .process import AutoHandle
+
+import sys
 
 
-
-class LogicalDrive(object):
+class LogicalDrive(AutoHandle):
     DRIVE_TYPE = gdef.FlagMapper(DRIVE_UNKNOWN, DRIVE_NO_ROOT_DIR, DRIVE_REMOVABLE,
                     DRIVE_FIXED, DRIVE_REMOTE, DRIVE_CDROM, DRIVE_RAMDISK)
 
@@ -42,11 +44,25 @@ class LogicalDrive(object):
             raise ValueError("[Unexpected result] query_dos_device(logicaldrive) returned multiple path")
         return res[0]
 
+    def query_info(self, info):
+        return windows.utils.query_volume_information(self.handle, info)
+
+    @property
+    def volume_info(self):
+        return self.query_info(gdef.FileFsVolumeInformation)
+
+    @property
+    def serial(self):
+        return self.volume_info.VolumeSerialNumber
+
+    def _get_handle(self):
+        nt_name = windows.utils.dospath_to_ntpath(self.name)
+        handle = windows.winproxy.CreateFileA(nt_name, gdef.GENERIC_READ,
+                                                gdef.FILE_SHARE_READ, None, gdef.OPEN_EXISTING, gdef.FILE_FLAG_BACKUP_SEMANTICS , None)
+        return handle
 
     def __repr__(self):
         return """<{0} "{1}" ({2})>""".format(type(self).__name__, self.name, self.type.name)
-
-
 
 def enum_logical_drive():
     return [LogicalDrive(name) for name in get_logical_drive_names()]
@@ -63,7 +79,7 @@ def get_info(drivename):
     fs_name = ctypes.c_buffer(size)
     flags = DWORD()
     winproxy.GetVolumeInformationA(drivename, volume_name, size, None, None, ctypes.byref(flags), fs_name, size)
-    raise NotImplementedError("get_info")
+    return volume_name[:10], fs_name[:10]
 
 def query_dos_device(name):
     size = 0x1000

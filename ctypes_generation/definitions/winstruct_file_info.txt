@@ -1,0 +1,166 @@
+typedef enum _FILE_INFORMATION_CLASS {
+  FakeFileInformationZero,
+  FileDirectoryInformation,
+  FileFullDirectoryInformation,
+  FileBothDirectoryInformation,
+  FileBasicInformation,
+  FileStandardInformation,
+  FileInternalInformation,
+  FileEaInformation,
+  FileAccessInformation,
+  FileNameInformation,
+  FileRenameInformation,
+  FileLinkInformation,
+  FileNamesInformation,
+  FileDispositionInformation,
+  FilePositionInformation,
+  FileFullEaInformation,
+  FileModeInformation,
+  FileAlignmentInformation,
+  FileAllInformation,
+  FileAllocationInformation,
+  FileEndOfFileInformation,
+  FileAlternateNameInformation,
+  FileStreamInformation,
+  FilePipeInformation,
+  FilePipeLocalInformation,
+  FilePipeRemoteInformation,
+  FileMailslotQueryInformation,
+  FileMailslotSetInformation,
+  FileCompressionInformation,
+  FileObjectIdInformation,
+  FileCompletionInformation,
+  FileMoveClusterInformation,
+  FileQuotaInformation,
+  FileReparsePointInformation,
+  FileNetworkOpenInformation,
+  FileAttributeTagInformation,
+  FileTrackingInformation,
+  FileIdBothDirectoryInformation,
+  FileIdFullDirectoryInformation,
+  FileValidDataLengthInformation,
+  FileShortNameInformation,
+  FileIoCompletionNotificationInformation,
+  FileIoStatusBlockRangeInformation,
+  FileIoPriorityHintInformation,
+  FileSfioReserveInformation,
+  FileSfioVolumeInformation,
+  FileHardLinkInformation,
+  FileProcessIdsUsingFileInformation,
+  FileNormalizedNameInformation,
+  FileNetworkPhysicalNameInformation,
+  FileIdGlobalTxDirectoryInformation,
+  FileIsRemoteDeviceInformation,
+  FileUnusedInformation,
+  FileNumaNodeInformation,
+  FileStandardLinkInformation,
+  FileRemoteProtocolInformation,
+  FileRenameInformationBypassAccessCheck,
+  FileLinkInformationBypassAccessCheck,
+  FileVolumeNameInformation,
+  FileIdInformation,
+  FileIdExtdDirectoryInformation,
+  FileReplaceCompletionInformation,
+  FileHardLinkFullIdInformation,
+  FileIdExtdBothDirectoryInformation,
+  FileDispositionInformationEx,
+  FileRenameInformationEx,
+  FileRenameInformationExBypassAccessCheck,
+  FileMaximumInformation
+} FILE_INFORMATION_CLASS, *PFILE_INFORMATION_CLASS;
+
+typedef enum _IO_PRIORITY_HINT {
+  IoPriorityVeryLow   = 0,
+  IoPriorityLow       = 1,
+  IoPriorityNormal    = 2,
+  IoPriorityHigh      = 3,
+  IoPriorityCritical  = 4,
+  MaxIoPriorityTypes  = 5
+} IO_PRIORITY_HINT;
+
+
+typedef struct _FILE_INTERNAL_INFORMATION {
+  LARGE_INTEGER IndexNumber;
+} FILE_INTERNAL_INFORMATION, *PFILE_INTERNAL_INFORMATION;
+
+
+typedef struct _FILE_ALIGNMENT_INFORMATION {
+  ULONG AlignmentRequirement;
+} FILE_ALIGNMENT_INFORMATION, *PFILE_ALIGNMENT_INFORMATION;
+
+
+typedef struct _FILE_ATTRIBUTE_TAG_INFORMATION {
+  ULONG FileAttributes;
+  ULONG ReparseTag;
+} FILE_ATTRIBUTE_TAG_INFORMATION, *PFILE_ATTRIBUTE_TAG_INFORMATION;
+
+typedef struct _FILE_BASIC_INFORMATION {
+  LARGE_INTEGER CreationTime;
+  LARGE_INTEGER LastAccessTime;
+  LARGE_INTEGER LastWriteTime;
+  LARGE_INTEGER ChangeTime;
+  ULONG         FileAttributes;
+} FILE_BASIC_INFORMATION, *PFILE_BASIC_INFORMATION;
+
+typedef struct _FILE_EA_INFORMATION {
+  ULONG EaSize;
+} FILE_EA_INFORMATION, *PFILE_EA_INFORMATION;
+
+typedef struct _FILE_IO_PRIORITY_HINT_INFORMATION {
+  IO_PRIORITY_HINT PriorityHint;
+} FILE_IO_PRIORITY_HINT_INFORMATION, *PFILE_IO_PRIORITY_HINT_INFORMATION;
+
+
+typedef struct _FILE_MODE_INFORMATION {
+  ULONG Mode;
+} FILE_MODE_INFORMATION, *PFILE_MODE_INFORMATION;
+
+typedef struct _FILE_NAME_INFORMATION {
+  ULONG FileNameLength;
+  WCHAR FileName[1];
+} FILE_NAME_INFORMATION, *PFILE_NAME_INFORMATION;
+
+
+typedef struct _FILE_NETWORK_OPEN_INFORMATION {
+  LARGE_INTEGER CreationTime;
+  LARGE_INTEGER LastAccessTime;
+  LARGE_INTEGER LastWriteTime;
+  LARGE_INTEGER ChangeTime;
+  LARGE_INTEGER AllocationSize;
+  LARGE_INTEGER EndOfFile;
+  ULONG         FileAttributes;
+} FILE_NETWORK_OPEN_INFORMATION, *PFILE_NETWORK_OPEN_INFORMATION;
+
+typedef struct _FILE_STANDARD_INFORMATION {
+  LARGE_INTEGER AllocationSize;
+  LARGE_INTEGER EndOfFile;
+  ULONG         NumberOfLinks;
+  BOOLEAN       DeletePending;
+  BOOLEAN       Directory;
+} FILE_STANDARD_INFORMATION, *PFILE_STANDARD_INFORMATION;
+
+typedef struct _FILE_ACCESS_INFORMATION {
+  ACCESS_MASK AccessFlags;
+} FILE_ACCESS_INFORMATION, *PFILE_ACCESS_INFORMATION;
+
+typedef struct _FILE_POSITION_INFORMATION {
+  LARGE_INTEGER CurrentByteOffset;
+} FILE_POSITION_INFORMATION, *PFILE_POSITION_INFORMATION;
+
+typedef struct _FILE_IS_REMOTE_DEVICE_INFORMATION {
+  BOOLEAN IsRemote;
+} FILE_IS_REMOTE_DEVICE_INFORMATION, *PFILE_IS_REMOTE_DEVICE_INFORMATION;
+
+
+
+typedef struct _FILE_ALL_INFORMATION {
+  FILE_BASIC_INFORMATION     BasicInformation;
+  FILE_STANDARD_INFORMATION  StandardInformation;
+  FILE_INTERNAL_INFORMATION  InternalInformation;
+  FILE_EA_INFORMATION        EaInformation;
+  FILE_ACCESS_INFORMATION    AccessInformation;
+  FILE_POSITION_INFORMATION  PositionInformation;
+  FILE_MODE_INFORMATION      ModeInformation;
+  FILE_ALIGNMENT_INFORMATION AlignmentInformation;
+  FILE_NAME_INFORMATION      NameInformation;
+} FILE_ALL_INFORMATION, *PFILE_ALL_INFORMATION;

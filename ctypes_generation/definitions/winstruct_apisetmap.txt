@@ -1,0 +1,108 @@
+// API SET MAP Stuff
+// From apiset.h
+
+
+// Used in V6
+typedef struct _API_SET_VALUE_ENTRY {
+    ULONG Flags;
+    ULONG NameOffset;
+    ULONG NameLength;
+    ULONG ValueOffset;
+    ULONG ValueLength;
+} API_SET_VALUE_ENTRY, *PAPI_SET_VALUE_ENTRY;
+
+typedef struct _API_SET_NAMESPACE_ENTRY {
+    ULONG Flags;
+    ULONG NameOffset;
+    ULONG NameLength;
+    ULONG AliasOffset;
+    ULONG AliasLength;
+    ULONG DataOffset;   // API_SET_VALUE_ARRAY
+} API_SET_NAMESPACE_ENTRY, *PAPI_SET_NAMESPACE_ENTRY;
+
+
+typedef struct _API_SET_NAMESPACE_ARRAY {
+    ULONG Version;
+    ULONG Size;
+    ULONG Flags;
+    ULONG Count;
+    API_SET_NAMESPACE_ENTRY Array[ANYSIZE_ARRAY];
+} API_SET_NAMESPACE_ARRAY, *PAPI_SET_NAMESPACE_ARRAY;
+
+
+// Version 2
+
+typedef struct _API_SET_VALUE_ENTRY_V2 {
+    ULONG NameOffset;
+    ULONG NameLength;
+    ULONG ValueOffset;
+    ULONG ValueLength;
+} API_SET_VALUE_ENTRY_V2, *PAPI_SET_VALUE_ENTRY_V2;
+
+typedef struct _API_SET_VALUE_ARRAY_V2 {
+    ULONG Count;
+    API_SET_VALUE_ENTRY_V2 Array[ANYSIZE_ARRAY];
+} API_SET_VALUE_ARRAY_V2,*PAPI_SET_VALUE_ARRAY_V2;
+
+typedef struct _API_SET_NAMESPACE_ENTRY_V2 {
+    ULONG NameOffset;
+    ULONG NameLength;
+    ULONG DataOffset;   // _API_SET_VALUE_ARRAY_V2
+} API_SET_NAMESPACE_ENTRY_V2, *PAPI_SET_NAMESPACE_ENTRY_V2;
+
+typedef struct _API_SET_NAMESPACE_ARRAY_V2 {
+    ULONG Version;
+    ULONG Count;
+    API_SET_NAMESPACE_ENTRY_V2 Array[ANYSIZE_ARRAY];
+} API_SET_NAMESPACE_ARRAY_V2, *PAPI_SET_NAMESPACE_ARRAY_V2;
+
+// Version 4
+
+typedef struct _API_SET_VALUE_ARRAY_V4 {
+    ULONG GuessFlags;
+    ULONG Count;
+    API_SET_VALUE_ENTRY_V2 Array[ANYSIZE_ARRAY];
+} API_SET_VALUE_ARRAY_V4,*PAPI_SET_VALUE_ARRAY_V2;
+
+typedef struct _API_SET_NAMESPACE_ARRAY_V4 {
+    ULONG Version;
+    ULONG Size;
+    ULONG Flags;
+    ULONG Count;
+    API_SET_NAMESPACE_ENTRY Array[ANYSIZE_ARRAY];
+} API_SET_NAMESPACE_ARRAY_V4, *PAPI_SET_NAMESPACE_ARRAY_V4;
+
+typedef struct _API_SET_NAMESPACE_ENTRY_V4 {
+    ULONG Flags;
+    ULONG NameOffset;
+    ULONG NameLength;
+    ULONG AliasOffset;
+    ULONG AliasLength;
+    ULONG DataOffset;
+} API_SET_NAMESPACE_ENTRY_V4, *PAPI_SET_NAMESPACE_ENTRY_V4;
+
+
+
+// Version 6
+
+typedef struct _API_SET_NAMESPACE_ENTRY_V6 {
+	ULONG Flags;
+	ULONG NameOffset;
+	ULONG NameLength;
+	ULONG HashedLength;
+	ULONG ValueOffset;
+	ULONG ValueCount;
+} API_SET_NAMESPACE_ENTRY_V6;
+
+
+typedef struct _API_SET_NAMESPACE_V6 {
+	ULONG Version;
+	ULONG Size;
+	ULONG Flags;
+	ULONG Count;
+	ULONG EntryOffset;
+	ULONG HashOffset;
+	ULONG HashFactor;
+} API_SET_NAMESPACE_V6;
+
+// STOP API-SET-MAP

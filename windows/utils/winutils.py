@@ -346,6 +346,11 @@ def get_short_path(path):
     rsize = winproxy.GetShortPathNameA(path, buffer, size)
     return buffer[:rsize]
 
+def dospath_to_ntpath(dospath):
+    ustring = gdef.UNICODE_STRING()
+    windows.winproxy.RtlDosPathNameToNtPathName_U(dospath, ustring, None, None)
+    return ustring.str
+
 
 def get_shared_mapping(name, size=0x1000):
     # TODO: real code
