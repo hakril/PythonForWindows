@@ -35,7 +35,7 @@ class ApiSetMap(object):
         raise NotImplementedError("Should be implemented by subclasses")
 
     @utils.fixedpropety
-    def resolution_dict(self):
+    def apisetmap_dict(self):
         res = {}
         for entry in self.entries_array():
             values = self.values_for_entry(entry)
@@ -46,8 +46,27 @@ class ApiSetMap(object):
             res[self.get_entry_name(entry)] = final_value
         return res
 
+    @utils.fixedpropety
+    def resolution_dict(self):
+        res = {}
+        for name, resolved_name in self.apisetmap_dict.items():
+            # ApiSetResolveToHost does not care about last version + extension
+            # It remove everything after the last '-'
+
+            # Possible to have no '-' ?
+            try:
+                cutname = name[:name.rindex("-") + 1]
+            except ValueError as e:
+                cutname = name
+            res[cutname] = resolved_name
+        return res
+
     def resolve(self, dllname):
-        return self.resolution_dict[dllname]
+        try:
+            cutname = dllname[:dllname.rindex("-") + 1]
+        except ValueError as e:
+            return None
+        return self.resolution_dict[cutname]
 
 
 

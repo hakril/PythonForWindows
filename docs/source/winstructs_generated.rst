@@ -14541,6 +14541,108 @@ tag_WBEMSTATUS
 
     .. attribute:: WBEMMOF_E_INVALID_DELETECLASS_SYNTAX(2147762225)
 
+tag_WBEM_CHANGE_FLAG_TYPE
+'''''''''''''''''''''''''
+.. class:: WBEM_CHANGE_FLAG_TYPE
+
+    Alias for :class:`tag_WBEM_CHANGE_FLAG_TYPE`
+
+.. class:: tag_WBEM_CHANGE_FLAG_TYPE
+
+
+    .. attribute:: WBEM_FLAG_CREATE_OR_UPDATE(0)
+
+
+    .. attribute:: WBEM_FLAG_UPDATE_ONLY(1)
+
+
+    .. attribute:: WBEM_FLAG_CREATE_ONLY(2)
+
+
+    .. attribute:: WBEM_FLAG_UPDATE_COMPATIBLE(0)
+
+
+    .. attribute:: WBEM_FLAG_UPDATE_SAFE_MODE(32)
+
+
+    .. attribute:: WBEM_FLAG_UPDATE_FORCE_MODE(64)
+
+
+    .. attribute:: WBEM_MASK_UPDATE_MODE(96)
+
+
+    .. attribute:: WBEM_FLAG_ADVISORY(65536)
+
+tag_WBEM_TIMEOUT_TYPE
+'''''''''''''''''''''
+.. class:: WBEM_TIMEOUT_TYPE
+
+    Alias for :class:`tag_WBEM_TIMEOUT_TYPE`
+
+.. class:: tag_WBEM_TIMEOUT_TYPE
+
+
+    .. attribute:: WBEM_NO_WAIT(0)
+
+
+    .. attribute:: WBEM_INFINITE(4294967295)
+
+tag_WBEM_GENERIC_FLAG_TYPE
+''''''''''''''''''''''''''
+.. class:: WBEM_GENERIC_FLAG_TYPE
+
+    Alias for :class:`tag_WBEM_GENERIC_FLAG_TYPE`
+
+.. class:: tag_WBEM_GENERIC_FLAG_TYPE
+
+
+    .. attribute:: WBEM_FLAG_RETURN_IMMEDIATELY(16)
+
+
+    .. attribute:: WBEM_FLAG_RETURN_WBEM_COMPLETE(0)
+
+
+    .. attribute:: WBEM_FLAG_BIDIRECTIONAL(0)
+
+
+    .. attribute:: WBEM_FLAG_FORWARD_ONLY(32)
+
+
+    .. attribute:: WBEM_FLAG_NO_ERROR_OBJECT(64)
+
+
+    .. attribute:: WBEM_FLAG_RETURN_ERROR_OBJECT(0)
+
+
+    .. attribute:: WBEM_FLAG_SEND_STATUS(128)
+
+
+    .. attribute:: WBEM_FLAG_DONT_SEND_STATUS(0)
+
+
+    .. attribute:: WBEM_FLAG_ENSURE_LOCATABLE(256)
+
+
+    .. attribute:: WBEM_FLAG_DIRECT_READ(512)
+
+
+    .. attribute:: WBEM_FLAG_SEND_ONLY_SELECTED(0)
+
+
+    .. attribute:: WBEM_RETURN_WHEN_COMPLETE(0)
+
+
+    .. attribute:: WBEM_RETURN_IMMEDIATELY(16)
+
+
+    .. attribute:: WBEM_MASK_RESERVED_FLAGS(126976)
+
+
+    .. attribute:: WBEM_FLAG_USE_AMENDED_QUALIFIERS(131072)
+
+
+    .. attribute:: WBEM_FLAG_STRONG_VALIDATION(1048576)
+
 tagCLSCTX
 '''''''''
 .. class:: CLSCTX

@@ -15,7 +15,7 @@ def read_apisetmap():
 
 
 parser = argparse.ArgumentParser(prog=__file__)
-parser.add_argument('filename', default="apisetmap.dmp", help='The filename in which the ApiSetMap is dumped')
+parser.add_argument('--filename', default="apisetmap.dmp", help='The filename in which the ApiSetMap is dumped')
 res = parser.parse_args()
 
 with open(res.filename, "wb") as f:

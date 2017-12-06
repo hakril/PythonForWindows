@@ -20,26 +20,31 @@ def crypt(src, dst, certs, **kwargs):
     dst.close()
     src.close()
 
-def decrypt(src, pfxfile, password, **kwargs):
+def decrypt(src, pfxfile, password, outfile=None, **kwargs):
     """Decrypt the content of 'src' with the private key in 'pfxfile'. the 'pfxfile' is open using the 'password'"""
     # Open the 'pfx' with the given password
     pfx = crypto.import_pfx(pfxfile.read(), password)
     # Decrypt the content of the file
     decrypted = crypto.decrypt(pfx, src.read())
-    print(u"Result = <{0}>".format(decrypted))
+    if outfile is None:
+        print(u"Result = <{0}>".format(decrypted))
+    else:
+        with open(outfile, "wb") as f:
+            f.write(decrypted)
     return decrypted
 
 PFW_TMP_KEY_CONTAINER = "PythonForWindowsTMPContainer"
 
-def genkeys(common_name, pfxpassword, outname, **kwargs):
+def genkeys(common_name, pfxpassword, outname, keysize=2048, **kwargs):
     """Generate a SHA256/RSA key pair. A self-signed certificate with 'common_name' is stored as 'outname'.cer.
     The private key is stored in 'outname'.pfx protected with 'pfxpassword'"""
     cert_store = crypto.EHCERTSTORE.new_in_memory()
     # Create a TMP context that will hold our newly generated key-pair
     with crypto.CryptContext(PFW_TMP_KEY_CONTAINER, None, PROV_RSA_FULL, 0, retrycreate=True) as ctx:
         key = HCRYPTKEY()
+        keysize_flags = keysize << 16
         # Generate a key-pair that is exportable
-        winproxy.CryptGenKey(ctx, AT_KEYEXCHANGE, CRYPT_EXPORTABLE, key)
+        winproxy.CryptGenKey(ctx, AT_KEYEXCHANGE, CRYPT_EXPORTABLE | keysize_flags, key)
         # It does NOT destroy the key-pair from the container,
         # It only release the key handle
         # https://msdn.microsoft.com/en-us/library/windows/desktop/aa379918(v=vs.85).aspx
@@ -80,6 +85,18 @@ def genkeys(common_name, pfxpassword, outname, **kwargs):
     prov = HCRYPTPROV()
     winproxy.CryptAcquireContextW(prov, PFW_TMP_KEY_CONTAINER, None, PROV_RSA_FULL, CRYPT_DELETEKEYSET)
 
+# Openssl commands to check ce certif/pfx
+
+## Read certificate info (.cer)
+### openssl x509 -inform der -in {certif} -text -noout
+
+## Read pfx info (ask to another password to encrypt Private key before print/export)
+### openssl pkcs12 -info -in {pfx} -nokeys
+## Read pfx info !!!! PRINT PRIVATE KEY !!!!
+### openssl pkcs12 -info -in {pfx} -nodes
+
+
+
 parser = argparse.ArgumentParser(prog=__file__)
 subparsers = parser.add_subparsers(description='valid subcommands',)
 
@@ -96,12 +113,14 @@ decryptparse.set_defaults(func=decrypt)
 decryptparse.add_argument('src', type=argparse.FileType('rb'), help='File to decrypt')
 decryptparse.add_argument('pfxfile', type=argparse.FileType('rb'), help='PFX file to use')
 decryptparse.add_argument('password', help='Password of the PFX')
+decryptparse.add_argument('--outfile', default=None, help='The outputfile default is print')
 
 genkeysparse = subparsers.add_parser('genkey')
 genkeysparse.set_defaults(func=genkeys)
 genkeysparse.add_argument('common_name', nargs='?', metavar='CommonName', default='DEFAULT', help='the common name of the certificate')
 genkeysparse.add_argument('outname', nargs='?',help='The filename base for the generated files')
 genkeysparse.add_argument('--pfxpassword', nargs='?', help='Password to protect the PFX')
+genkeysparse.add_argument('--keysize', nargs='?', type=lambda x: int(x, 0), default=2048, help='The size of the RSA key')
 
 res = parser.parse_args()
 res.func(**res.__dict__)
