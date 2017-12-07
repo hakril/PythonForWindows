@@ -28,7 +28,7 @@ class GenerateInitVector(object):
 geninitvector = GenerateInitVector()
 
 
-def encrypt(cert_or_certlist, msg, algo=szOID_RSA_DES_EDE3_CBC, initvector=geninitvector):
+def encrypt(cert_or_certlist, msg, algo=szOID_NIST_AES256_CBC, initvector=geninitvector):
     """Encrypt ``msg`` with the certificate(s) in ``cert_or_certlist`` using ``algo`` with the initial
        vector ``initvector``.
 

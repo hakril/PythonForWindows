@@ -32,7 +32,7 @@ def search_name_in_struct(target):
 def search_name_in_windef(target):
     for name, windef in meta.windef_walker():
         if match(target, name):
-            print(windef)
+            print(repr(windef))
 
 def search_name_in_interface(target):
     for name, interface in meta.interfaces_walker():

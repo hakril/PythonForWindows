@@ -1,4 +1,6 @@
 import argparse
+import getpass
+
 import windows.crypto as crypto
 from windows import winproxy
 from windows.generated_def import *
@@ -23,6 +25,8 @@ def crypt(src, dst, certs, **kwargs):
 def decrypt(src, pfxfile, password, outfile=None, **kwargs):
     """Decrypt the content of 'src' with the private key in 'pfxfile'. the 'pfxfile' is open using the 'password'"""
     # Open the 'pfx' with the given password
+    if password is None:
+        password = getpass.getpass()
     pfx = crypto.import_pfx(pfxfile.read(), password)
     # Decrypt the content of the file
     decrypted = crypto.decrypt(pfx, src.read())
@@ -95,6 +99,8 @@ def genkeys(common_name, pfxpassword, outname, keysize=2048, **kwargs):
 ## Read pfx info !!!! PRINT PRIVATE KEY !!!!
 ### openssl pkcs12 -info -in {pfx} -nodes
 
+## Read ASN1 data
+### openssl asn1parse -inform DER -in {file}
 
 
 parser = argparse.ArgumentParser(prog=__file__)
@@ -112,7 +118,7 @@ decryptparse = subparsers.add_parser('decrypt')
 decryptparse.set_defaults(func=decrypt)
 decryptparse.add_argument('src', type=argparse.FileType('rb'), help='File to decrypt')
 decryptparse.add_argument('pfxfile', type=argparse.FileType('rb'), help='PFX file to use')
-decryptparse.add_argument('password', help='Password of the PFX')
+decryptparse.add_argument('--password', help='Password of the PFX')
 decryptparse.add_argument('--outfile', default=None, help='The outputfile default is print')
 
 genkeysparse = subparsers.add_parser('genkey')

@@ -158,7 +158,18 @@ class EHCERTSTORE(gdef.HCERTSTORE):
 
 # PKCS12_NO_PERSIST_KEY -> do not save it in a key container on disk
 # Without it, a key container is created at 'C:\Users\USERNAME\AppData\Roaming\Microsoft\Crypto\RSA\S-1-5-21-3241049326-165485355-1070449050-1001'
-def import_pfx(pfx, password=None, flags=gdef.CRYPT_USER_KEYSET | gdef.PKCS12_NO_PERSIST_KEY):
+# More about this:
+# If you use 'PKCS12_NO_PERSIST_KEY' the key are indeed NOT STORED but there is a problem
+# If you use an algo like 'szOID_NIST_AES256_CBC' the function 'CryptDecryptMessage' won't be able to decrypt the message
+# Unless you also specify the 'PKCS12_ALWAYS_CNG_KSP' flags.
+
+# My guess: somewhere 'CryptDecryptMessage' ask for each (CNG_KSP | CSP ?) to try to decrypt with the keys
+# BUT: as we DID NOT EXPORT the keys, they are not able to get the key from memory and expect them on disk.
+# By forcing PKCS12_ALWAYS_CNG_KSP we remove this as the key are directly linked to the correct CNG_KSP in the CertStore
+# Look like it's based on this part of the PFX:
+# Microsoft CSP Name: Microsoft Enhanced Cryptographic Provider v1.0
+
+def import_pfx(pfx, password=None, flags=gdef.CRYPT_USER_KEYSET | gdef.PKCS12_NO_PERSIST_KEY | gdef.PKCS12_ALWAYS_CNG_KSP):
     """Import the file ``pfx`` with the ``password``.
 
     ``default flags = PKCS12_NO_PERSIST_KEY | CRYPT_USER_KEYSET``.
