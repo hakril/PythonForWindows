@@ -703,6 +703,17 @@ Windef
 .. autodata:: CERT_E_INVALID_POLICY
 .. autodata:: CERT_E_INVALID_NAME
 .. autodata:: CRYPT_E_FILE_ERROR
+.. autodata:: CRYPT_E_MSG_ERROR
+.. autodata:: CRYPT_E_UNKNOWN_ALGO
+.. autodata:: CRYPT_E_OID_FORMAT
+.. autodata:: CRYPT_E_INVALID_MSG_TYPE
+.. autodata:: CRYPT_E_UNEXPECTED_ENCODING
+.. autodata:: CRYPT_E_AUTH_ATTR_MISSING
+.. autodata:: CRYPT_E_HASH_VALUE
+.. autodata:: E_INVALIDARG
+.. autodata:: CRYPT_E_NOT_DECRYPTED
+.. autodata:: CRYPT_E_INVALID_INDEX
+.. autodata:: CRYPT_E_ATTRIBUTES_MISSING
 .. autodata:: IMAGE_SCN_TYPE_REG
 .. autodata:: IMAGE_SCN_TYPE_DSECT
 .. autodata:: IMAGE_SCN_TYPE_NOLOAD

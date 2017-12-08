@@ -32,7 +32,14 @@ class WmiRequester(object):
 
         :rtype: list of dict
         """
-        return self.query("select * from {0}".format(frm), attrs, **kwargs)
+        return list(self.gen_select(frm, attrs, **kwargs))
+
+    def gen_select(self, frm, attrs="*", **kwargs):
+        """Select ``attrs`` from ``frm`` in a generator (like :func:`gen_query`)
+
+        :rtype: generator
+        """
+        return self.gen_query("select * from {0}".format(frm), attrs, **kwargs)
 
     @property
     def classes(self):
@@ -94,7 +101,6 @@ class WmiRequester(object):
             if result != WBEM_S_FALSE:
                 yield procres, result
 
-
     def _iwbemclassobject_to_dict(self, wbemclassobj, attrs):
         if attrs == "*":
             attrs = [x for x in self.get_names(wbemclassobj) if not x.startswith("__")]
@@ -115,14 +121,12 @@ class WmiRequester(object):
                 print("[WMI-ERROR] Field <{0}> ignored: {1}".format(name, e))
         return obj_as_dict
 
-
     def get_names(self, processor):
         res = POINTER(SAFEARRAY)()
         processor.GetNames(None, 0, None, byref(res))
         safe_array = ctypes.cast(res, POINTER(windows.com.ImprovedSAFEARRAY))[0]
         safe_array.elt_type = BSTR
         return safe_array.to_list()
-
 
     def __repr__(self):
         return """<{0} namespace="{1}">""".format(type(self).__name__, self.namespace)

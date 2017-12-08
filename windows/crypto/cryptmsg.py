@@ -59,7 +59,12 @@ class CryptMessage(gdef.HCRYPTMSG):
 
         :type: :class:`int`
         """
-        return self.get_param(gdef.CMSG_SIGNER_COUNT_PARAM)
+        try:
+            return self.get_param(gdef.CMSG_SIGNER_COUNT_PARAM)
+        except WindowsError as e:
+            if (e.winerror & 0xffffffff) == gdef.CRYPT_E_INVALID_MSG_TYPE:
+                return 0
+            raise
 
 
     def get_signer_data(self, index=0):

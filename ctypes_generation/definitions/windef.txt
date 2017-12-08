@@ -815,6 +815,17 @@
 #define CERT_E_INVALID_NAME              (0x800B0114L)
 #define CRYPT_E_FILE_ERROR               (0x80092003L)
 
+#define CRYPT_E_MSG_ERROR                (0x80091001L)
+#define CRYPT_E_UNKNOWN_ALGO             (0x80091002L)
+#define CRYPT_E_OID_FORMAT               (0x80091003L)
+#define CRYPT_E_INVALID_MSG_TYPE         (0x80091004L)
+#define CRYPT_E_UNEXPECTED_ENCODING      (0x80091005L)
+#define CRYPT_E_AUTH_ATTR_MISSING        (0x80091006L)
+#define CRYPT_E_HASH_VALUE               (0x80091007L)
+#define E_INVALIDARG                     (0x80070057L)
+#define CRYPT_E_NOT_DECRYPTED            (0x8009100AL)
+#define CRYPT_E_INVALID_INDEX            (0x80091008L)
+#define CRYPT_E_ATTRIBUTES_MISSING       (0x8009100FL)
 
 
 #define IMAGE_SCN_TYPE_REG                   0x00000000
