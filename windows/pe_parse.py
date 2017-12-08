@@ -39,7 +39,7 @@ def get_structure_transformer_for_target(target, targetbitness=None):
     return ctypes_structure_transformer, create_structure_at
 
 def get_pe_bitness(baseaddr, target):
-    # We can force bitness as the filed we access are bitness-independant
+    # We can force bitness as the field we access are bitness-independant
     pe = GetPEFile(baseaddr, target, force_bitness=32)
     machine = pe.get_NT_HEADER().FileHeader.Machine
     if machine == 0x14c:

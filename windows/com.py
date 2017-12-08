@@ -107,6 +107,12 @@ class ImprovedVariant(VARIANT):
         return self._VARIANT_NAME_3.bVal
 
     @property
+    def asunknown(self):
+        if not self.vt in [VT_UNKNOWN]:
+            raise ValueError("asunknown on non-VT_UNKNOWN variant")
+        return self._VARIANT_NAME_3.punkVal
+
+    @property
     def asarray(self):
         if not self.vt & VT_ARRAY:
             raise ValueError("asarray on non-VT_ARRAY variant")
@@ -114,6 +120,59 @@ class ImprovedVariant(VARIANT):
         #type = VT_VALUE_TO_TYPE[self.vt & VT_TYPEMASK]
         return ImprovedSAFEARRAY.from_PSAFEARRAY(self._VARIANT_NAME_3.parray)
 
+
+    @property
+    def aslong_array(self):
+        if not self.vt & VT_I4:
+            raise ValueError("as_bstr_array on non-VT_BSTR variant")
+        return self.asarray.to_list(LONG)
+
+    def generate_asarray_property(vttype):
+        @property
+        def as_array_generated(self):
+            # TODO: vt check like the others ?
+            return self.asarray.to_list(vttype)
+        return as_array_generated
+
+    asbstr_array = generate_asarray_property(BSTR)
+    aslong_array = generate_asarray_property(LONG)
+    asbyte_array = generate_asarray_property(BYTE)
+    asbool_array = generate_asarray_property(VARIANT_BOOL)
+
+    def to_pyobject(self):
+        # if self.vt & VT_ARRAY:
+            # # Something better TODO i guess
+            # if self.vt & VT_TYPEMASK == VT_BSTR:
+                # import pdb;pdb.set_trace()
+                # print("VT_TYPEMASK ARRAY")
+                # return self.asarray.to_list(BSTR)
+            # if self.vt & VT_TYPEMASK == VT_I4:
+                # import pdb;pdb.set_trace()
+                # print("VT_TYPEMASK ARRAY")
+                # return self.asarray.to_list(LONG)
+            # raise NotImplementedError("Variant of type {0:#x}".format(self.vt))
+        # use the ImprovedVariant.MAPPER that dispatch by self.vt
+        try:
+            return self.MAPPER[self.vt](self)
+        except KeyError:
+            raise NotImplementedError("Variant of type {0:#x}".format(self.vt))
+
+
+ImprovedVariant.MAPPER = {
+    VT_UI1: ImprovedVariant.asbyte.fget,
+    VT_I2: ImprovedVariant.asshort.fget,
+    VT_DISPATCH: ImprovedVariant.asdispatch.fget,
+    VT_BOOL: ImprovedVariant.asbool.fget,
+    VT_I4: ImprovedVariant.aslong.fget,
+    VT_BSTR: ImprovedVariant.asbstr.fget,
+    VT_EMPTY: (lambda x: None),
+    VT_NULL: (lambda x: None),
+    VT_UNKNOWN: ImprovedVariant.asunknown.fget,
+    (VT_ARRAY | VT_BSTR): ImprovedVariant.asbstr_array.fget,
+    (VT_ARRAY | VT_I4): ImprovedVariant.aslong_array.fget,
+    (VT_ARRAY | VT_UI1): ImprovedVariant.asbyte_array.fget,
+    (VT_ARRAY | VT_BOOL): ImprovedVariant.asbool_array.fget
+}
 
 
 def create_instance(clsiid, targetinterface, custom_iid=None, context=CLSCTX_INPROC_SERVER | CLSCTX_LOCAL_SERVER):

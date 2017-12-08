@@ -8,6 +8,7 @@ from ctypes.wintypes import *
 import windows.com
 from windows.generated_def.winstructs import *
 from windows.generated_def.interfaces import IWbemLocator, IWbemServices, IEnumWbemClassObject, IWbemClassObject
+# import windows.generated_def as gdef
 
 
 class WmiRequester(object):
@@ -26,12 +27,12 @@ class WmiRequester(object):
         locator.ConnectServer(target, user, password , None, 0x80, None, None, ctypes.byref(service))
         self.service = service
 
-    def select(self, frm, attrs="*"):
+    def select(self, frm, attrs="*", **kwargs):
         """Select ``attrs`` from ``frm``
 
         :rtype: list of dict
         """
-        return self.query("select * from {0}".format(frm), attrs)
+        return self.query("select * from {0}".format(frm), attrs, **kwargs)
 
     @property
     def classes(self):
@@ -41,62 +42,78 @@ class WmiRequester(object):
         """
         return [x["__CLASS"] for x in self.query('SELECT * FROM meta_class', attrs=["__CLASS"])]
 
-    def query(self, query, attrs="*"):
+    def query(self, query, attrs="*", timeout=WBEM_INFINITE):
         """Execute WMI ``query`` and return the attributes ``attrs``
+        Timeout is not applied for the full query time but the time to retrieve one object each time.
 
         :rtype: list of dict
         """
+        return list(self.gen_query(query, attrs, timeout))
+
+    def gen_query(self, query, attrs="*", timeout=WBEM_INFINITE):
+        """Execute WMI ``query`` and return a generator that will yield the ``attrs`` for one object each time.
+        Each iteration is susceptible to raise.
+
+        :rtype: generator
+        """
+        enumerator = self._exec_query(query, WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY)
+        try:
+            for obj, retval in self._enumerator_values_generator(enumerator, timeout=timeout):
+                if obj is None:
+                    raise WindowsError(retval, WBEMSTATUS(retval & 0xffffffff).value)
+                yield self._iwbemclassobject_to_dict(obj, attrs)
+        finally:
+            enumerator.Release()
+
+    def _exec_query(self, query, flags, ctx=None):
         enumerator = IEnumWbemClassObject()
         try:
-            self.service.ExecQuery("WQL", query, 0x20, 0, ctypes.byref(enumerator))
+            self.service.ExecQuery("WQL", query, flags, ctx, ctypes.byref(enumerator))
         except WindowsError as e:
             if (e.winerror & 0xffffffff) ==  WBEM_E_INVALID_CLASS:
                 raise WindowsError(e.winerror, 'WBEM_E_INVALID_CLASS <Invalid WMI class "{0}">'.format(query))
             elif (e.winerror & 0xffffffff) in WBEMSTATUS.values:
                 raise WindowsError(e.winerror, WBEMSTATUS(e.winerror & 0xffffffff).value)
             raise
+        return enumerator
 
-        count = ctypes.c_ulong(0)
+    def _enumerator_values_generator(self, enumerator, timeout=WBEM_INFINITE):
+        count = ULONG(0)
         processor = IWbemClassObject()
-        res = []
-        enumerator.Next(0xffffffff, 1, ctypes.byref(processor), ctypes.byref(count))
-        while count.value:
-            current_res = {}
-            variant_res = windows.com.ImprovedVariant()
-            if attrs == "*":
-                attrs = [x for x in self.get_names(processor) if not x.startswith("__")]
-            for name in attrs:
-                try:
-                    processor.Get(name, 0, ctypes.byref(variant_res), None, None)
-                except WindowsError as e:
-                    if (e.winerror & 0xffffffff) ==  WBEM_E_NOT_FOUND:
-                        raise WindowsError(e.winerror, 'WBEM_E_NOT_FOUND <Invalid Attribute "{0}">'.format(name))
-                    if (e.winerror & 0xffffffff) in WBEMSTATUS.values:
-                        raise WindowsError(e.winerror, WBEMSTATUS(e.winerror & 0xffffffff).value)
-                    raise
-                # TODO: something clean and generic
-                if variant_res.vt & VT_ARRAY:
-                    if variant_res.vt & VT_TYPEMASK == VT_BSTR:
-                        current_res[name] = variant_res.asarray.to_list(BSTR)
-                    if variant_res.vt & VT_TYPEMASK == VT_I4:
-                        current_res[name] = variant_res.asarray.to_list(LONG)
-                elif variant_res.vt in [VT_EMPTY, VT_NULL]:
-                    current_res[name] = None
-                elif variant_res.vt == VT_BSTR:
-                    current_res[name] = variant_res.asbstr
-                elif variant_res.vt == VT_I4:
-                    current_res[name] = variant_res.aslong
-                elif variant_res.vt == VT_BOOL:
-                    current_res[name] = variant_res.asbool
-                elif variant_res.vt == VT_I2:
-                    current_res[name] = variant_res.asshort
-                elif variant_res.vt == VT_UI1:
-                    current_res[name] = variant_res.asbyte
-                else:
-                    print("[WARN] WMI Ignore variant of type {0}".format(hex(variant_res.vt)))
-            res.append(current_res)
-            enumerator.Next(0xffffffff, 1, ctypes.byref(processor), ctypes.byref(count))
-        return res
+        result = 0
+        while result != WBEM_S_FALSE:
+            try:
+                result = enumerator.Next(timeout, 1, ctypes.byref(processor), ctypes.byref(count))
+            except WindowsError as e:
+                if (e.winerror & 0xffffffff) ==  WBEM_E_INVALID_CLASS:
+                    raise WindowsError(e.winerror, 'WBEM_E_INVALID_CLASS <Invalid WMI class "{0}">'.format(query))
+                if (e.winerror & 0xffffffff) in WBEMSTATUS.values:
+                    raise WindowsError(e.winerror, WBEMSTATUS(e.winerror & 0xffffffff).value)
+                raise
+            procres = processor if count else None
+            if result != WBEM_S_FALSE:
+                yield procres, result
+
+
+    def _iwbemclassobject_to_dict(self, wbemclassobj, attrs):
+        if attrs == "*":
+            attrs = [x for x in self.get_names(wbemclassobj) if not x.startswith("__")]
+        obj_as_dict = {}
+        variant_res = windows.com.ImprovedVariant()
+        for name in attrs:
+            try:
+                wbemclassobj.Get(name, 0, ctypes.byref(variant_res), None, None)
+            except WindowsError as e:
+                if (e.winerror & 0xffffffff) ==  WBEM_E_NOT_FOUND:
+                    raise WindowsError(e.winerror, 'WBEM_E_NOT_FOUND <Invalid Attribute "{0}">'.format(name))
+                if (e.winerror & 0xffffffff) in WBEMSTATUS.values:
+                    raise WindowsError(e.winerror, WBEMSTATUS(e.winerror & 0xffffffff).value)
+                raise
+            try:
+                obj_as_dict[name] = variant_res.to_pyobject()
+            except NotImplementedError as e:
+                print("[WMI-ERROR] Field <{0}> ignored: {1}".format(name, e))
+        return obj_as_dict
 
 
     def get_names(self, processor):
