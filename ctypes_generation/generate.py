@@ -74,6 +74,7 @@ TYPE_EQUIVALENCE = [
     ('IF_INDEX', 'NET_IFINDEX'),
     ('IFTYPE', 'ULONG'),
     ('PULONG64', 'POINTER(ULONG64)'),
+    ('PBYTE', 'POINTER(BYTE)'),
     ('PUINT', 'POINTER(UINT)'),
     ('PHANDLE', 'POINTER(HANDLE)'),
     ('HKEY', 'HANDLE'),

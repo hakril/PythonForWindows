@@ -342,3 +342,26 @@ BOOL WINAPI CryptUIDlgViewContext(
   _In_       DWORD   dwFlags,
   _In_       PVOID   pvReserved
 );
+
+BOOL WINAPI CryptMsgVerifyCountersignatureEncoded(
+  _In_ HCRYPTPROV_LEGACY hCryptProv,
+  _In_ DWORD             dwEncodingType,
+  _In_ PBYTE             pbSignerInfo,
+  _In_ DWORD             cbSignerInfo,
+  _In_ PBYTE             pbSignerInfoCountersignature,
+  _In_ DWORD             cbSignerInfoCountersignature,
+  _In_ PCERT_INFO        pciCountersigner
+);
+
+BOOL WINAPI CryptMsgVerifyCountersignatureEncodedEx(
+  _In_opt_   HCRYPTPROV_LEGACY hCryptProv,
+  _In_       DWORD             dwEncodingType,
+  _In_       PBYTE             pbSignerInfo,
+  _In_       DWORD             cbSignerInfo,
+  _In_       PBYTE             pbSignerInfoCountersignature,
+  _In_       DWORD             cbSignerInfoCountersignature,
+  _In_       DWORD             dwSignerType,
+  _In_       PVOID             pvSigner,
+  _Reserved_ DWORD             dwFlags,
+  _Reserved_ PVOID             pvExtra
+);

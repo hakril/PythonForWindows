@@ -1062,3 +1062,8 @@
 
 #define API_SET_SCHEMA_ENTRY_FLAGS_SEALED        0x00000001L
 #define API_SET_SCHEMA_ENTRY_FLAGS_EXTENSION     0x00000002L
+
+#define CMSG_VERIFY_SIGNER_PUBKEY                   1
+#define CMSG_VERIFY_SIGNER_CERT                     2
+#define CMSG_VERIFY_SIGNER_CHAIN                    3
+#define CMSG_VERIFY_SIGNER_NULL                     4
