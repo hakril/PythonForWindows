@@ -190,6 +190,11 @@ def test_assembler():
     CheckInstr(Shl)('RAX', 8)
     CheckInstr(Shl)('R15', 0x12)
 
+    CheckInstr(Int3)()
+    CheckInstr(Int)(0)
+    CheckInstr(Int)(3)
+    CheckInstr(Int)(0xff)
+
     # I really don't know why it's the inverse
     # But I don't care, it's Test dude..
     CheckInstr(x64.Test, expected_result="test r11, rax")('RAX', 'R11')
@@ -219,6 +224,7 @@ def test_assembler():
     CheckInstr(Cpuid)()
     CheckInstr(Xchg)('RAX', 'RSP')
     assert Xchg('RAX', 'RCX').get_code() == Xchg('RCX', 'RAX').get_code()
+
 
     # 32 / 64 bits register mixing
     CheckInstr(Mov)('ECX', 'EBX')

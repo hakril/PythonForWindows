@@ -174,6 +174,11 @@ def test_assembler():
     CheckInstr(Not)('EAX')
     CheckInstr(Not)(mem('[EAX]'))
 
+    CheckInstr(Int3)()
+    CheckInstr(Int)(0)
+    CheckInstr(Int)(3)
+    CheckInstr(Int)(0xff)
+
     CheckInstr(ScasB, expected_result="scasb al, byte ptr es:[edi]")()
     CheckInstr(ScasW, expected_result="scasw ax, word ptr es:[edi]")()
     CheckInstr(ScasD, expected_result="scasd eax, dword ptr es:[edi]")()

@@ -211,7 +211,10 @@ class System(object):
 
     @utils.fixedpropety
     def build_number(self):
-        return self.get_file_version("ntdll")
+        # This returns the last version where ntdll was updated
+        # Should look at HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion
+        # values:  CurrentBuild + UBR
+        return self.get_file_version("comctl32")
 
     @staticmethod
     def enumerate_processes():

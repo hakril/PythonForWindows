@@ -268,6 +268,13 @@ def accept_as_8immediat(x):
         raise ImmediatOverflow("8bits signed Immediat overflow")
 
 
+def accept_as_unsigned_8immediat(x):
+    try:
+        return struct.pack("<B", x)
+    except struct.error:
+        raise ImmediatOverflow("8bits signed Immediat overflow")
+
+
 def accept_as_16immediat(x):
     try:
         return struct.pack("<h", x)
@@ -300,6 +307,18 @@ class Imm8(object):
             return (None, None)
         try:
             imm8 = accept_as_8immediat(x)
+        except ImmediatOverflow:
+            return None, None
+        return (1, BitArray.from_string(imm8))
+
+class UImm8(object):
+    def accept_arg(self, args, instr_state):
+        try:
+            x = int(args[0])
+        except (ValueError, TypeError):
+            return (None, None)
+        try:
+            imm8 = accept_as_unsigned_8immediat(x)
         except ImmediatOverflow:
             return None, None
         return (1, BitArray.from_string(imm8))
@@ -813,6 +832,8 @@ class Not(Instruction):
 class Retf(Instruction):
     encoding = [(RawBits.from_int(8, 0xcb),)]
 
+class Int(Instruction):
+    encoding = [(RawBits.from_int(8, 0xcd), UImm8())]
 
 class Int3(Instruction):
     encoding = [(RawBits.from_int(8, 0xcc),)]
