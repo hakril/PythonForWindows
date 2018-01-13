@@ -46,6 +46,18 @@ class PyHKey(object):
             raise WindowsError(e.winerror, "Could not open registry key <{0}> ({1})".format(self.fullname, e.strerror))
         return self._phkey
 
+    @property
+    def exists(self):
+        # Best way todo ?
+        # TODO: document
+        if self._phkey is not None:
+            return True
+        try:
+            tmpphkey = _winreg.OpenKeyEx(self.surkey.phkey, self.name)
+        except WindowsError as e:
+            return False
+        _winreg.CloseKey(tmpphkey)
+        return True
 
     @property
     def subkeys(self):
@@ -67,7 +79,7 @@ class PyHKey(object):
         with ExpectWindowsError(259):
             for i in itertools.count():
                 name_value_type = _winreg.EnumValue(self.phkey, i)
-                # _winreg doest not support REG_QWORD
+                # _winreg doest not support REG_QWORD in python2
                 # See http://bugs.python.org/issue23026
                 if name_value_type[2] == REG_QWORD:
                     name = name_value_type[0]
@@ -100,6 +112,9 @@ class PyHKey(object):
             return _winreg.REG_SZ
         elif isinstance(value, (int, long)):
             return _winreg.REG_DWORD
+        # elif isinstance(value, (list, tuple)):
+            # if all(isinstance(v, basestring) in value):
+                # return _winreg.REG_MULTI_SZ
         raise ValueError("Cannot guest registry type of value to set <{0}>".format(value))
 
 
@@ -123,6 +138,14 @@ class PyHKey(object):
 
     def reopen(self, new_sam):
         return PyHKey(self.surkey, self.name, new_sam)
+
+    def create(self):
+        # TODO: document
+        try:
+            self._phkey = _winreg.CreateKeyEx(self.surkey.phkey, self.name, 0, self.sam)
+        except WindowsError as e:
+            raise WindowsError(e.winerror, "Could not create registry key <{0}> ({1})".format(self.fullname, e.strerror))
+        return self._phkey
 
 
     def __setitem__(self, name, value):
