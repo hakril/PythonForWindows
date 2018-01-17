@@ -1,11 +1,3 @@
-typedef struct tagRECT
-{
-    LONG    left;
-    LONG    top;
-    LONG    right;
-    LONG    bottom;
-} RECT, *PRECT, *NPRECT, *LPRECT;
-
 typedef struct tagRGBTRIPLE {
         BYTE    rgbtBlue;
         BYTE    rgbtGreen;
@@ -72,3 +64,9 @@ typedef struct tagBITMAPCOREINFO {
     BITMAPCOREHEADER    bmciHeader;
     RGBTRIPLE           bmciColors[1];
 } BITMAPCOREINFO, *LPBITMAPCOREINFO, *PBITMAPCOREINFO;
+
+/*
+typedef struct _FAKEYOLOSTRUCT {
+        ACL    Reserved;
+} _FAKEYOLOSTRUCT;
+*/

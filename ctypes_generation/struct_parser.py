@@ -143,6 +143,32 @@ class WinStructParser(Parser):
                 raise ValueError("Unknow returned type {0}".format(x))
         return strucs, enums
 
+class SimpleTypeDefine(object):
+    def __init__(self, lvalue,  rvalue):
+        self.lvalue = lvalue
+        self.rvalue = rvalue
+
+    def generate_ctypes(self):
+        return "{self.lvalue} = {self.rvalue}".format(self=self)
+
+class SimpleTypesParser(Parser):
+    def __init__(self, data):
+        self.lexer = iter(Lexer(self.initial_processing(data), newlinetoken=True))
+        self.peek_token = None
+
+    def parse(self):
+        results = []
+        while self.peek() is not None:
+            lvalue = self.assert_token_type(NameToken).value
+            self.assert_token_type(EqualToken)
+            rvalue = ""
+            while type(self.peek()) is not NewLineToken:
+                rvalue += self.next_token().value
+            results.append(SimpleTypeDefine(lvalue, rvalue))
+            while type(self.peek()) is NewLineToken: # discard the NewLineToken(s)
+                self.next_token()
+        return results
+
 def dbg_lexer(data):
     for i in Lexer(data).token_generation():
         print i

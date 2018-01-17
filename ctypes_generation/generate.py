@@ -16,7 +16,6 @@ pexists = os.path.exists
 dedent = textwrap.dedent
 
 
-
 TYPE_EQUIVALENCE = [
     # BYTE is defined in ctypes.wintypes as c_byte but who wants
     # BYTE to be signed ? (from MSDN: <typedef unsigned char BYTE;>)
@@ -74,6 +73,9 @@ TYPE_EQUIVALENCE = [
     ('IF_INDEX', 'NET_IFINDEX'),
     ('IFTYPE', 'ULONG'),
     ('PULONG64', 'POINTER(ULONG64)'),
+    ('LPFILETIME', 'POINTER(FILETIME)'),
+    ('LPPOINT', 'POINTER(POINT)'),
+    ('LPRECT', 'POINTER(RECT)'),
     ('PBYTE', 'POINTER(BYTE)'),
     ('PUINT', 'POINTER(UINT)'),
     ('PHANDLE', 'POINTER(HANDLE)'),
@@ -132,10 +134,10 @@ class CtypesGenerator(object):
     PARSER = None
     IMPORT_HEADER = "{deps}"
 
-    def __init__(self, infilename, outfilename, dependances=()):
-        self.infilename = infilename
+    def __init__(self, indirname, outfilename, dependances=()):
+        self.indirname = indirname
         self.outfilename = outfilename
-        self.infile = open(self.infilename)
+        # self.infile = open(self.infilename)
         self.data = None
         self.dependances = dependances
 
@@ -146,11 +148,22 @@ class CtypesGenerator(object):
         self.analyse(self.data)
         self.check_dependances()
 
+    # def parse(self):
+        # if self.data is None:
+            # print("Parsing <{0}>".format(self.infilename))
+            # self.data = self.PARSER(self.infile.read()).parse()
+        # return self.data
+
     def parse(self):
-        if self.data is None:
-            print("Parsing <{0}>".format(self.infilename))
-            self.data = self.PARSER(self.infile.read()).parse()
-        return self.data
+        if self.data is not None:
+            return self.data
+        data = []
+        for filename in glob.glob(self.indirname):
+            print("Parsing <{0}>".format(filename))
+            # data.append(self.PARSER(open(filename).read()).parse())
+            data += self.PARSER(open(filename).read()).parse()
+        self.data = data
+        return data
 
     def analyse(self, data):
         raise NotImplementedError("<{0}> doest not implement <analyse>".format(type(self).__name__))
@@ -160,7 +173,8 @@ class CtypesGenerator(object):
         for dep in self.dependances:
             missing -= dep.exports
         if missing:
-            raise ValueError("Missing dependance <{0}> in <{1}>".format(missing, self.infilename))
+            # raise ValueError("Missing dependance <{0}> in <{1}>".format(missing, self.infilename))
+            print ValueError("Missing dependance <{0}>".format(missing))
 
     def generate_import(self):
         deps = "\n".join(["from {0} import *".format(os.path.basename(dep.outfilename).rsplit(".")[0]) for dep in self.dependances])
@@ -356,6 +370,7 @@ class StructGenerator(CtypesGenerator):
                 extended_struct_filename = from_here(os.path.join("extended_structs", "{0}.py".format(definition.name)))
                 with open(extended_struct_filename) as f:
                     ctypes_lines.append(f.read())
+                    # import pdb;pdb.set_trace()
                     ctypes_lines.append(definition.generate_typedef_ctypes() + "\n")
 
         ctypes_code = "\n".join(ctypes_lines)
@@ -363,6 +378,19 @@ class StructGenerator(CtypesGenerator):
             f.write(ctypes_code)
         print("<{0}> generated".format(self.outfilename))
         return ctypes_code
+
+    def parse(self):
+        if self.data is not None:
+            return self.data
+        data = [[], []]
+        for filename in glob.glob(self.indirname):
+            print("Parsing <{0}>".format(filename))
+            # data.append(self.PARSER(open(filename).read()).parse())
+            new_data = self.PARSER(open(filename).read()).parse()
+            data[0].extend(new_data[0])
+            data[1].extend(new_data[1])
+        self.data = data
+        return data
 
     def append_input_file(self, filename):
         print("Adding file <{0}>".format(filename))
@@ -478,6 +506,20 @@ class NtStatusGenerator(CtypesGenerator):
             return Flag(name, code)
     """)
 
+    def __init__(self, infilename, outfilename, dependances=()):
+        self.infilename = infilename
+        self.outfilename = outfilename
+        self.infile = open(self.infilename)
+        self.data = None
+        self.dependances = dependances
+
+        self.exports = set([])
+        self.imports = set([])
+
+        self.parse()
+        self.analyse(self.data)
+        self.check_dependances()
+
     def parse_ntstatus(self, content):
         nt_status_defs = []
         for line in content.split("\n"):
@@ -497,6 +539,7 @@ class NtStatusGenerator(CtypesGenerator):
             print("Parsing <{0}>".format(self.infilename))
             self.parse_ntstatus(self.infile.read())
         return self.data
+
 
     def analyse(self, data):
         self.add_imports("Flag")
@@ -668,7 +711,6 @@ class InitialCOMGenerator(CtypesGenerator):
                         byreflevel = arg.byreflevel - 1
                         method.args[pos] = arg = type(arg)(atype, byreflevel, arg.name)
                         self.real_type[arg] = initial_arg
-
                     self.add_imports(arg.type)
 
     com_interface_comment_template = """ #{0} -> {1}"""
@@ -728,6 +770,17 @@ class InitialCOMGenerator(CtypesGenerator):
         return ", ".join(str_iid)
 
 
+
+        com_interface_template = dedent("""
+    class {0}(COMInterface):
+        IID = generate_IID({2}, name="{0}", strid="{3}")
+
+        _functions_ = {{
+    {1}
+        }}
+    """)
+
+
 class COMGenerator(InitialCOMGenerator):
     IMPORT_HEADER = "{deps}"
     HEADER = ""
@@ -777,30 +830,43 @@ DEFAULT_INTERFACE_TO_IID = from_here("definitions\\interface_to_iid.txt")
 
 # A partial define without the dependance to ntstatus defintion
 # BOOTSTRAP!!
-non_generated_def = InitialDefGenerator(from_here("definitions\\windef.txt"), from_here(r"..\windows\generated_def\\windef.py"))
+non_generated_def = InitialDefGenerator(from_here("definitions\\defines\\windef.txt"), from_here(r"..\windows\generated_def\\windef.py"))
 ntstatus = NtStatusGenerator(from_here("definitions\\ntstatus.txt"), from_here(r"..\windows\generated_def\\ntstatus.py"), dependances=[non_generated_def])
 # Not a real circular def (import not at the begin of file
-defs_with_ntstatus = InitialDefGenerator(from_here("definitions\\windef.txt"), from_here(r"..\windows\generated_def\\windef.py"), dependances=[ntstatus])
+defs_with_ntstatus = InitialDefGenerator(from_here("definitions\\defines\\*.txt"), from_here(r"..\windows\generated_def\\windef.py"), dependances=[ntstatus])
 
 # YOLO HACK FOR NOW :DD
-defs_with_ntstatus.append_input_file(from_here("definitions\\wintrust_crypt_def.txt"))
-defs_with_ntstatus.append_input_file(from_here("definitions\\windef_error.txt"))
-defs_with_ntstatus.append_input_file(from_here("definitions\\custom_rpc_windef.txt"))
-defs_with_ntstatus.append_input_file(from_here("definitions\\windef_evtlog.txt"))
+# import pdb;pdb.set_trace()
 
 
-structs = StructGenerator(from_here("definitions\\winstruct.txt"), from_here(r"..\windows\generated_def\\winstructs.py"), dependances=[defs_with_ntstatus])
-structs.append_input_file(from_here("definitions\\winstruct_apisetmap.txt"))
-structs.append_input_file(from_here("definitions\\display_struct.txt"))
-structs.append_input_file(from_here("definitions\\winstruct_bits.txt"))
-structs.append_input_file(from_here("definitions\\winstruct_alpc.txt"))
-structs.append_input_file(from_here("definitions\\winstruct_evtlog.txt"))
-structs.append_input_file(from_here("definitions\\winstruct_file_info.txt"))
+# for filename in [f for f in glob.glob(from_here("definitions\\defines\\*.txt")) if not f.endswith("\\windef.txt")]:
+    # defs_with_ntstatus.append_input_file(from_here("definitions\\wintrust_crypt_def.txt"))
+    # defs_with_ntstatus.append_input_file(from_here("definitions\\windef_error.txt"))
+    # defs_with_ntstatus.append_input_file(from_here("definitions\\custom_rpc_windef.txt"))
+    # defs_with_ntstatus.append_input_file(from_here("definitions\\windef_evtlog.txt"))
+    # defs_with_ntstatus.append_input_file(filename)
 
-functions = FuncGenerator(from_here("definitions\\winfunc.txt"), from_here(r"..\windows\generated_def\\winfuncs.py"), dependances=[structs])
-functions.append_input_file(from_here("definitions\\winfunc_crypto_wintrust.txt"))
-functions.append_input_file(from_here("definitions\\winfunc_notdoc.txt"))
-functions.append_input_file(from_here("definitions\\winfunc_evtlog.txt"))
+
+structs = StructGenerator(from_here("definitions\\structures\\*.txt"), from_here(r"..\windows\generated_def\\winstructs.py"), dependances=[defs_with_ntstatus])
+
+# for filename in [f for f in glob.glob(from_here("definitions\\structures\\*.txt")) if not f.endswith("\\winstruct.txt")]:
+    # structs.append_input_file(filename)
+
+# structs.append_input_file(from_here("definitions\\winstruct_apisetmap.txt"))
+# structs.append_input_file(from_here("definitions\\display_struct.txt"))
+# structs.append_input_file(from_here("definitions\\winstruct_bits.txt"))
+# structs.append_input_file(from_here("definitions\\winstruct_alpc.txt"))
+# structs.append_input_file(from_here("definitions\\winstruct_evtlog.txt"))
+# structs.append_input_file(from_here("definitions\\winstruct_file_info.txt"))
+
+functions = FuncGenerator(from_here("definitions\\functions\\*.txt"), from_here(r"..\windows\generated_def\\winfuncs.py"), dependances=[structs])
+
+# for filename in [f for f in glob.glob(from_here("definitions\\functions\\*.txt")) if not f.endswith("\\winfunc.txt")]:
+    # functions.append_input_file(filename)
+
+# functions.append_input_file(from_here("definitions\\winfunc_crypto_wintrust.txt"))
+# functions.append_input_file(from_here("definitions\\winfunc_notdoc.txt"))
+# functions.append_input_file(from_here("definitions\\winfunc_evtlog.txt"))
 
 com = InitialCOMGenerator(from_here("definitions\\com\\*.txt"), DEFAULT_INTERFACE_TO_IID, from_here(r"..\windows\generated_def\\interfaces.py"), dependances=[structs, defs_with_ntstatus])
 
@@ -849,3 +915,4 @@ if __name__ == "__main__":
     ntstatus.generate_doc(from_here(r"..\docs\source\ntstatus_generated.rst"))
     defs_with_ntstatus.generate_doc(from_here(r"..\docs\source\windef_generated.rst"))
     structs.generate_doc(from_here(r"..\docs\source\winstructs_generated.rst"))
+

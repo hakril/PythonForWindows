@@ -2447,12 +2447,6 @@ typedef struct WINTRUST_SGNR_INFO_
     HCERTSTORE      *pahStores;
 } WINTRUST_SGNR_INFO, *PWINTRUST_SGNR_INFO;
 
-
-typedef struct _FILETIME {
-    DWORD dwLowDateTime;
-    DWORD dwHighDateTime;
-} FILETIME, *PFILETIME, *LPFILETIME;
-
 typedef struct WINTRUST_CERT_INFO_
 {
     DWORD           cbStruct;
@@ -2705,24 +2699,6 @@ typedef struct _PUBLIC_OBJECT_BASIC_INFORMATION {
  } PUBLIC_OBJECT_BASIC_INFORMATION, *PPUBLIC_OBJECT_BASIC_INFORMATION;
 
 
- typedef struct _EVENTLOGRECORD {
-  DWORD Length;
-  DWORD Reserved;
-  DWORD RecordNumber;
-  DWORD TimeGenerated;
-  DWORD TimeWritten;
-  DWORD EventID;
-  WORD  EventType;
-  WORD  NumStrings;
-  WORD  EventCategory;
-  WORD  ReservedFlags;
-  DWORD ClosingRecordNumber;
-  DWORD StringOffset;
-  DWORD UserSidLength;
-  DWORD UserSidOffset;
-  DWORD DataLength;
-  DWORD DataOffset;
-} EVENTLOGRECORD, *PEVENTLOGRECORD;
 
 typedef struct tagSOLE_AUTHENTICATION_SERVICE {
     DWORD dwAuthnSvc;
@@ -3119,10 +3095,6 @@ typedef struct _CRYPT_ENCODE_PARA {
   PVOID  pfnFree;
 } CRYPT_ENCODE_PARA, *PCRYPT_ENCODE_PARA;
 
-typedef struct tagPOINT {
-  LONG x;
-  LONG y;
-} POINT, *PPOINT, *LPPOINT;
 
 
 typedef struct _ACL {

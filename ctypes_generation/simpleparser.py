@@ -65,7 +65,9 @@ class SharpToken(NoValueToken):
 
 class EqualToken(NoValueToken):
     value = "="
-    pass
+
+class NewLineToken(NoValueToken):
+    value = "\n"
 
 class Lexer(object):
     keywords = ["typedef", "struct", "enum", "union", "const"]
@@ -74,8 +76,9 @@ class Lexer(object):
                     "{" : OpenBracketToken, "}" : CloseBracketToken, ";" : ColonToken,
                     "," : CommaToken, "(" : OpenParenthesisToken, ")" :  CloseParenthesisToken, "#" : SharpToken, "=" : EqualToken}
 
-    def __init__(self, code):
+    def __init__(self, code, newlinetoken=False):
         self.code = code
+        self.newlinetoken = newlinetoken
 
     def split_line(self, line):
         return line.strip().split()
@@ -106,6 +109,8 @@ class Lexer(object):
                     continue
                 for tok in self.split_word(word):
                     yield tok
+            if self.newlinetoken:
+                yield NewLineToken()
 
 
 
@@ -113,7 +118,6 @@ class ParsingError(Exception):
     pass
 
 class Parser(object):
-
     def __init__(self, data):
         self.lexer = iter(Lexer(self.initial_processing(data)))
         self.peek_token = None
