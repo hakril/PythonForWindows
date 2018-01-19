@@ -2,6 +2,321 @@
 
 Winstructs
 ----------
+tagRGBTRIPLE
+''''''''''''
+.. class:: NPRGBTRIPLE
+
+    Pointer to :class:`tagRGBTRIPLE`
+
+.. class:: LPRGBTRIPLE
+
+    Pointer to :class:`tagRGBTRIPLE`
+
+.. class:: RGBTRIPLE
+
+    Alias for :class:`tagRGBTRIPLE`
+
+.. class:: PRGBTRIPLE
+
+    Pointer to :class:`tagRGBTRIPLE`
+
+.. class:: tagRGBTRIPLE
+
+    .. attribute:: rgbtBlue
+
+        :class:`BYTE`
+
+
+    .. attribute:: rgbtGreen
+
+        :class:`BYTE`
+
+
+    .. attribute:: rgbtRed
+
+        :class:`BYTE`
+
+tagBITMAPFILEHEADER
+'''''''''''''''''''
+.. class:: BITMAPFILEHEADER
+
+    Alias for :class:`tagBITMAPFILEHEADER`
+
+.. class:: PBITMAPFILEHEADER
+
+    Pointer to :class:`tagBITMAPFILEHEADER`
+
+.. class:: LPBITMAPFILEHEADER
+
+    Pointer to :class:`tagBITMAPFILEHEADER`
+
+.. class:: tagBITMAPFILEHEADER
+
+    .. attribute:: bfType
+
+        :class:`WORD`
+
+
+    .. attribute:: bfSize
+
+        :class:`DWORD`
+
+
+    .. attribute:: bfReserved1
+
+        :class:`WORD`
+
+
+    .. attribute:: bfReserved2
+
+        :class:`WORD`
+
+
+    .. attribute:: bfOffBits
+
+        :class:`DWORD`
+
+tagBITMAPCOREHEADER
+'''''''''''''''''''
+.. class:: LPBITMAPCOREHEADER
+
+    Pointer to :class:`tagBITMAPCOREHEADER`
+
+.. class:: PBITMAPCOREHEADER
+
+    Pointer to :class:`tagBITMAPCOREHEADER`
+
+.. class:: BITMAPCOREHEADER
+
+    Alias for :class:`tagBITMAPCOREHEADER`
+
+.. class:: tagBITMAPCOREHEADER
+
+    .. attribute:: bcSize
+
+        :class:`DWORD`
+
+
+    .. attribute:: bcWidth
+
+        :class:`WORD`
+
+
+    .. attribute:: bcHeight
+
+        :class:`WORD`
+
+
+    .. attribute:: bcPlanes
+
+        :class:`WORD`
+
+
+    .. attribute:: bcBitCount
+
+        :class:`WORD`
+
+tagBITMAP
+'''''''''
+.. class:: NPBITMAP
+
+    Pointer to :class:`tagBITMAP`
+
+.. class:: LPBITMAP
+
+    Pointer to :class:`tagBITMAP`
+
+.. class:: PBITMAP
+
+    Pointer to :class:`tagBITMAP`
+
+.. class:: BITMAP
+
+    Alias for :class:`tagBITMAP`
+
+.. class:: tagBITMAP
+
+    .. attribute:: bmType
+
+        :class:`LONG`
+
+
+    .. attribute:: bmWidth
+
+        :class:`LONG`
+
+
+    .. attribute:: bmHeight
+
+        :class:`LONG`
+
+
+    .. attribute:: bmWidthBytes
+
+        :class:`LONG`
+
+
+    .. attribute:: bmPlanes
+
+        :class:`WORD`
+
+
+    .. attribute:: bmBitsPixel
+
+        :class:`WORD`
+
+
+    .. attribute:: bmBits
+
+        :class:`LPVOID`
+
+tagBITMAPINFOHEADER
+'''''''''''''''''''
+.. class:: BITMAPINFOHEADER
+
+    Alias for :class:`tagBITMAPINFOHEADER`
+
+.. class:: PBITMAPINFOHEADER
+
+    Pointer to :class:`tagBITMAPINFOHEADER`
+
+.. class:: LPBITMAPINFOHEADER
+
+    Pointer to :class:`tagBITMAPINFOHEADER`
+
+.. class:: tagBITMAPINFOHEADER
+
+    .. attribute:: biSize
+
+        :class:`DWORD`
+
+
+    .. attribute:: biWidth
+
+        :class:`LONG`
+
+
+    .. attribute:: biHeight
+
+        :class:`LONG`
+
+
+    .. attribute:: biPlanes
+
+        :class:`WORD`
+
+
+    .. attribute:: biBitCount
+
+        :class:`WORD`
+
+
+    .. attribute:: biCompression
+
+        :class:`DWORD`
+
+
+    .. attribute:: biSizeImage
+
+        :class:`DWORD`
+
+
+    .. attribute:: biXPelsPerMeter
+
+        :class:`LONG`
+
+
+    .. attribute:: biYPelsPerMeter
+
+        :class:`LONG`
+
+
+    .. attribute:: biClrUsed
+
+        :class:`DWORD`
+
+
+    .. attribute:: biClrImportant
+
+        :class:`DWORD`
+
+tagRGBQUAD
+''''''''''
+.. class:: RGBQUAD
+
+    Alias for :class:`tagRGBQUAD`
+
+.. class:: tagRGBQUAD
+
+    .. attribute:: rgbBlue
+
+        :class:`BYTE`
+
+
+    .. attribute:: rgbGreen
+
+        :class:`BYTE`
+
+
+    .. attribute:: rgbRed
+
+        :class:`BYTE`
+
+
+    .. attribute:: rgbReserved
+
+        :class:`BYTE`
+
+tagBITMAPINFO
+'''''''''''''
+.. class:: LPBITMAPINFO
+
+    Pointer to :class:`tagBITMAPINFO`
+
+.. class:: PBITMAPINFO
+
+    Pointer to :class:`tagBITMAPINFO`
+
+.. class:: BITMAPINFO
+
+    Alias for :class:`tagBITMAPINFO`
+
+.. class:: tagBITMAPINFO
+
+    .. attribute:: bmiHeader
+
+        :class:`BITMAPINFOHEADER`
+
+
+    .. attribute:: bmiColors
+
+        :class:`RGBQUAD` ``[1]``
+
+tagBITMAPCOREINFO
+'''''''''''''''''
+.. class:: LPBITMAPCOREINFO
+
+    Pointer to :class:`tagBITMAPCOREINFO`
+
+.. class:: BITMAPCOREINFO
+
+    Alias for :class:`tagBITMAPCOREINFO`
+
+.. class:: PBITMAPCOREINFO
+
+    Pointer to :class:`tagBITMAPCOREINFO`
+
+.. class:: tagBITMAPCOREINFO
+
+    .. attribute:: bmciHeader
+
+        :class:`BITMAPCOREHEADER`
+
+
+    .. attribute:: bmciColors
+
+        :class:`RGBTRIPLE` ``[1]``
+
 _LIST_ENTRY
 '''''''''''
 .. class:: PLIST_ENTRY
@@ -6843,31 +7158,6 @@ WINTRUST_SGNR_INFO_
 
         :class:`HCERTSTORE`
 
-_FILETIME
-'''''''''
-.. class:: LPFILETIME
-
-    Pointer to :class:`_FILETIME`
-
-.. class:: PFILETIME
-
-    Pointer to :class:`_FILETIME`
-
-.. class:: FILETIME
-
-    Alias for :class:`_FILETIME`
-
-.. class:: _FILETIME
-
-    .. attribute:: dwLowDateTime
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwHighDateTime
-
-        :class:`DWORD`
-
 WINTRUST_CERT_INFO_
 '''''''''''''''''''
 .. class:: WINTRUST_CERT_INFO
@@ -7876,97 +8166,6 @@ _PUBLIC_OBJECT_BASIC_INFORMATION
     .. attribute:: Reserved
 
         :class:`ULONG` ``[10]``
-
-_EVENTLOGRECORD
-'''''''''''''''
-.. class:: PEVENTLOGRECORD
-
-    Pointer to :class:`_EVENTLOGRECORD`
-
-.. class:: EVENTLOGRECORD
-
-    Alias for :class:`_EVENTLOGRECORD`
-
-.. class:: _EVENTLOGRECORD
-
-    .. attribute:: Length
-
-        :class:`DWORD`
-
-
-    .. attribute:: Reserved
-
-        :class:`DWORD`
-
-
-    .. attribute:: RecordNumber
-
-        :class:`DWORD`
-
-
-    .. attribute:: TimeGenerated
-
-        :class:`DWORD`
-
-
-    .. attribute:: TimeWritten
-
-        :class:`DWORD`
-
-
-    .. attribute:: EventID
-
-        :class:`DWORD`
-
-
-    .. attribute:: EventType
-
-        :class:`WORD`
-
-
-    .. attribute:: NumStrings
-
-        :class:`WORD`
-
-
-    .. attribute:: EventCategory
-
-        :class:`WORD`
-
-
-    .. attribute:: ReservedFlags
-
-        :class:`WORD`
-
-
-    .. attribute:: ClosingRecordNumber
-
-        :class:`DWORD`
-
-
-    .. attribute:: StringOffset
-
-        :class:`DWORD`
-
-
-    .. attribute:: UserSidLength
-
-        :class:`DWORD`
-
-
-    .. attribute:: UserSidOffset
-
-        :class:`DWORD`
-
-
-    .. attribute:: DataLength
-
-        :class:`DWORD`
-
-
-    .. attribute:: DataOffset
-
-        :class:`DWORD`
 
 tagSOLE_AUTHENTICATION_SERVICE
 ''''''''''''''''''''''''''''''
@@ -9503,31 +9702,6 @@ _CRYPT_ENCODE_PARA
 
         :class:`PVOID`
 
-tagPOINT
-''''''''
-.. class:: LPPOINT
-
-    Pointer to :class:`tagPOINT`
-
-.. class:: PPOINT
-
-    Pointer to :class:`tagPOINT`
-
-.. class:: POINT
-
-    Alias for :class:`tagPOINT`
-
-.. class:: tagPOINT
-
-    .. attribute:: x
-
-        :class:`LONG`
-
-
-    .. attribute:: y
-
-        :class:`LONG`
-
 _ACL
 ''''
 .. class:: PACL
@@ -10390,847 +10564,6 @@ _PROCESS_INSTRUMENTATION_CALLBACK_INFORMATION
 
         :class:`PVOID`
 
-_API_SET_VALUE_ENTRY
-''''''''''''''''''''
-.. class:: API_SET_VALUE_ENTRY
-
-    Alias for :class:`_API_SET_VALUE_ENTRY`
-
-.. class:: PAPI_SET_VALUE_ENTRY
-
-    Pointer to :class:`_API_SET_VALUE_ENTRY`
-
-.. class:: _API_SET_VALUE_ENTRY
-
-    .. attribute:: Flags
-
-        :class:`ULONG`
-
-
-    .. attribute:: NameOffset
-
-        :class:`ULONG`
-
-
-    .. attribute:: NameLength
-
-        :class:`ULONG`
-
-
-    .. attribute:: ValueOffset
-
-        :class:`ULONG`
-
-
-    .. attribute:: ValueLength
-
-        :class:`ULONG`
-
-_API_SET_NAMESPACE_ENTRY
-''''''''''''''''''''''''
-.. class:: PAPI_SET_NAMESPACE_ENTRY
-
-    Pointer to :class:`_API_SET_NAMESPACE_ENTRY`
-
-.. class:: API_SET_NAMESPACE_ENTRY
-
-    Alias for :class:`_API_SET_NAMESPACE_ENTRY`
-
-.. class:: _API_SET_NAMESPACE_ENTRY
-
-    .. attribute:: Flags
-
-        :class:`ULONG`
-
-
-    .. attribute:: NameOffset
-
-        :class:`ULONG`
-
-
-    .. attribute:: NameLength
-
-        :class:`ULONG`
-
-
-    .. attribute:: AliasOffset
-
-        :class:`ULONG`
-
-
-    .. attribute:: AliasLength
-
-        :class:`ULONG`
-
-
-    .. attribute:: DataOffset
-
-        :class:`ULONG`
-
-_API_SET_NAMESPACE_ARRAY
-''''''''''''''''''''''''
-.. class:: PAPI_SET_NAMESPACE_ARRAY
-
-    Pointer to :class:`_API_SET_NAMESPACE_ARRAY`
-
-.. class:: API_SET_NAMESPACE_ARRAY
-
-    Alias for :class:`_API_SET_NAMESPACE_ARRAY`
-
-.. class:: _API_SET_NAMESPACE_ARRAY
-
-    .. attribute:: Version
-
-        :class:`ULONG`
-
-
-    .. attribute:: Size
-
-        :class:`ULONG`
-
-
-    .. attribute:: Flags
-
-        :class:`ULONG`
-
-
-    .. attribute:: Count
-
-        :class:`ULONG`
-
-
-    .. attribute:: Array
-
-        :class:`API_SET_NAMESPACE_ENTRY` ``[ANYSIZE_ARRAY]``
-
-_API_SET_VALUE_ENTRY_V2
-'''''''''''''''''''''''
-.. class:: PAPI_SET_VALUE_ENTRY_V2
-
-    Pointer to :class:`_API_SET_VALUE_ENTRY_V2`
-
-.. class:: API_SET_VALUE_ENTRY_V2
-
-    Alias for :class:`_API_SET_VALUE_ENTRY_V2`
-
-.. class:: _API_SET_VALUE_ENTRY_V2
-
-    .. attribute:: NameOffset
-
-        :class:`ULONG`
-
-
-    .. attribute:: NameLength
-
-        :class:`ULONG`
-
-
-    .. attribute:: ValueOffset
-
-        :class:`ULONG`
-
-
-    .. attribute:: ValueLength
-
-        :class:`ULONG`
-
-_API_SET_VALUE_ARRAY_V2
-'''''''''''''''''''''''
-.. class:: API_SET_VALUE_ARRAY_V2
-
-    Alias for :class:`_API_SET_VALUE_ARRAY_V2`
-
-.. class:: PAPI_SET_VALUE_ARRAY_V2
-
-    Pointer to :class:`_API_SET_VALUE_ARRAY_V2`
-
-.. class:: _API_SET_VALUE_ARRAY_V2
-
-    .. attribute:: Count
-
-        :class:`ULONG`
-
-
-    .. attribute:: Array
-
-        :class:`API_SET_VALUE_ENTRY_V2` ``[ANYSIZE_ARRAY]``
-
-_API_SET_NAMESPACE_ENTRY_V2
-'''''''''''''''''''''''''''
-.. class:: PAPI_SET_NAMESPACE_ENTRY_V2
-
-    Pointer to :class:`_API_SET_NAMESPACE_ENTRY_V2`
-
-.. class:: API_SET_NAMESPACE_ENTRY_V2
-
-    Alias for :class:`_API_SET_NAMESPACE_ENTRY_V2`
-
-.. class:: _API_SET_NAMESPACE_ENTRY_V2
-
-    .. attribute:: NameOffset
-
-        :class:`ULONG`
-
-
-    .. attribute:: NameLength
-
-        :class:`ULONG`
-
-
-    .. attribute:: DataOffset
-
-        :class:`ULONG`
-
-_API_SET_NAMESPACE_ARRAY_V2
-'''''''''''''''''''''''''''
-.. class:: API_SET_NAMESPACE_ARRAY_V2
-
-    Alias for :class:`_API_SET_NAMESPACE_ARRAY_V2`
-
-.. class:: PAPI_SET_NAMESPACE_ARRAY_V2
-
-    Pointer to :class:`_API_SET_NAMESPACE_ARRAY_V2`
-
-.. class:: _API_SET_NAMESPACE_ARRAY_V2
-
-    .. attribute:: Version
-
-        :class:`ULONG`
-
-
-    .. attribute:: Count
-
-        :class:`ULONG`
-
-
-    .. attribute:: Array
-
-        :class:`API_SET_NAMESPACE_ENTRY_V2` ``[ANYSIZE_ARRAY]``
-
-_API_SET_VALUE_ARRAY_V4
-'''''''''''''''''''''''
-.. class:: API_SET_VALUE_ARRAY_V4
-
-    Alias for :class:`_API_SET_VALUE_ARRAY_V4`
-
-.. class:: PAPI_SET_VALUE_ARRAY_V2
-
-    Pointer to :class:`_API_SET_VALUE_ARRAY_V4`
-
-.. class:: _API_SET_VALUE_ARRAY_V4
-
-    .. attribute:: GuessFlags
-
-        :class:`ULONG`
-
-
-    .. attribute:: Count
-
-        :class:`ULONG`
-
-
-    .. attribute:: Array
-
-        :class:`API_SET_VALUE_ENTRY_V2` ``[ANYSIZE_ARRAY]``
-
-_API_SET_NAMESPACE_ARRAY_V4
-'''''''''''''''''''''''''''
-.. class:: API_SET_NAMESPACE_ARRAY_V4
-
-    Alias for :class:`_API_SET_NAMESPACE_ARRAY_V4`
-
-.. class:: PAPI_SET_NAMESPACE_ARRAY_V4
-
-    Pointer to :class:`_API_SET_NAMESPACE_ARRAY_V4`
-
-.. class:: _API_SET_NAMESPACE_ARRAY_V4
-
-    .. attribute:: Version
-
-        :class:`ULONG`
-
-
-    .. attribute:: Size
-
-        :class:`ULONG`
-
-
-    .. attribute:: Flags
-
-        :class:`ULONG`
-
-
-    .. attribute:: Count
-
-        :class:`ULONG`
-
-
-    .. attribute:: Array
-
-        :class:`API_SET_NAMESPACE_ENTRY` ``[ANYSIZE_ARRAY]``
-
-_API_SET_NAMESPACE_ENTRY_V4
-'''''''''''''''''''''''''''
-.. class:: PAPI_SET_NAMESPACE_ENTRY_V4
-
-    Pointer to :class:`_API_SET_NAMESPACE_ENTRY_V4`
-
-.. class:: API_SET_NAMESPACE_ENTRY_V4
-
-    Alias for :class:`_API_SET_NAMESPACE_ENTRY_V4`
-
-.. class:: _API_SET_NAMESPACE_ENTRY_V4
-
-    .. attribute:: Flags
-
-        :class:`ULONG`
-
-
-    .. attribute:: NameOffset
-
-        :class:`ULONG`
-
-
-    .. attribute:: NameLength
-
-        :class:`ULONG`
-
-
-    .. attribute:: AliasOffset
-
-        :class:`ULONG`
-
-
-    .. attribute:: AliasLength
-
-        :class:`ULONG`
-
-
-    .. attribute:: DataOffset
-
-        :class:`ULONG`
-
-_API_SET_NAMESPACE_ENTRY_V6
-'''''''''''''''''''''''''''
-.. class:: API_SET_NAMESPACE_ENTRY_V6
-
-    Alias for :class:`_API_SET_NAMESPACE_ENTRY_V6`
-
-.. class:: _API_SET_NAMESPACE_ENTRY_V6
-
-    .. attribute:: Flags
-
-        :class:`ULONG`
-
-
-    .. attribute:: NameOffset
-
-        :class:`ULONG`
-
-
-    .. attribute:: NameLength
-
-        :class:`ULONG`
-
-
-    .. attribute:: HashedLength
-
-        :class:`ULONG`
-
-
-    .. attribute:: ValueOffset
-
-        :class:`ULONG`
-
-
-    .. attribute:: ValueCount
-
-        :class:`ULONG`
-
-_API_SET_NAMESPACE_V6
-'''''''''''''''''''''
-.. class:: API_SET_NAMESPACE_V6
-
-    Alias for :class:`_API_SET_NAMESPACE_V6`
-
-.. class:: _API_SET_NAMESPACE_V6
-
-    .. attribute:: Version
-
-        :class:`ULONG`
-
-
-    .. attribute:: Size
-
-        :class:`ULONG`
-
-
-    .. attribute:: Flags
-
-        :class:`ULONG`
-
-
-    .. attribute:: Count
-
-        :class:`ULONG`
-
-
-    .. attribute:: EntryOffset
-
-        :class:`ULONG`
-
-
-    .. attribute:: HashOffset
-
-        :class:`ULONG`
-
-
-    .. attribute:: HashFactor
-
-        :class:`ULONG`
-
-tagRECT
-'''''''
-.. class:: LPRECT
-
-    Pointer to :class:`tagRECT`
-
-.. class:: NPRECT
-
-    Pointer to :class:`tagRECT`
-
-.. class:: RECT
-
-    Alias for :class:`tagRECT`
-
-.. class:: PRECT
-
-    Pointer to :class:`tagRECT`
-
-.. class:: tagRECT
-
-    .. attribute:: left
-
-        :class:`LONG`
-
-
-    .. attribute:: top
-
-        :class:`LONG`
-
-
-    .. attribute:: right
-
-        :class:`LONG`
-
-
-    .. attribute:: bottom
-
-        :class:`LONG`
-
-tagRGBTRIPLE
-''''''''''''
-.. class:: NPRGBTRIPLE
-
-    Pointer to :class:`tagRGBTRIPLE`
-
-.. class:: LPRGBTRIPLE
-
-    Pointer to :class:`tagRGBTRIPLE`
-
-.. class:: RGBTRIPLE
-
-    Alias for :class:`tagRGBTRIPLE`
-
-.. class:: PRGBTRIPLE
-
-    Pointer to :class:`tagRGBTRIPLE`
-
-.. class:: tagRGBTRIPLE
-
-    .. attribute:: rgbtBlue
-
-        :class:`BYTE`
-
-
-    .. attribute:: rgbtGreen
-
-        :class:`BYTE`
-
-
-    .. attribute:: rgbtRed
-
-        :class:`BYTE`
-
-tagBITMAPFILEHEADER
-'''''''''''''''''''
-.. class:: BITMAPFILEHEADER
-
-    Alias for :class:`tagBITMAPFILEHEADER`
-
-.. class:: PBITMAPFILEHEADER
-
-    Pointer to :class:`tagBITMAPFILEHEADER`
-
-.. class:: LPBITMAPFILEHEADER
-
-    Pointer to :class:`tagBITMAPFILEHEADER`
-
-.. class:: tagBITMAPFILEHEADER
-
-    .. attribute:: bfType
-
-        :class:`WORD`
-
-
-    .. attribute:: bfSize
-
-        :class:`DWORD`
-
-
-    .. attribute:: bfReserved1
-
-        :class:`WORD`
-
-
-    .. attribute:: bfReserved2
-
-        :class:`WORD`
-
-
-    .. attribute:: bfOffBits
-
-        :class:`DWORD`
-
-tagBITMAPCOREHEADER
-'''''''''''''''''''
-.. class:: LPBITMAPCOREHEADER
-
-    Pointer to :class:`tagBITMAPCOREHEADER`
-
-.. class:: PBITMAPCOREHEADER
-
-    Pointer to :class:`tagBITMAPCOREHEADER`
-
-.. class:: BITMAPCOREHEADER
-
-    Alias for :class:`tagBITMAPCOREHEADER`
-
-.. class:: tagBITMAPCOREHEADER
-
-    .. attribute:: bcSize
-
-        :class:`DWORD`
-
-
-    .. attribute:: bcWidth
-
-        :class:`WORD`
-
-
-    .. attribute:: bcHeight
-
-        :class:`WORD`
-
-
-    .. attribute:: bcPlanes
-
-        :class:`WORD`
-
-
-    .. attribute:: bcBitCount
-
-        :class:`WORD`
-
-tagBITMAP
-'''''''''
-.. class:: NPBITMAP
-
-    Pointer to :class:`tagBITMAP`
-
-.. class:: LPBITMAP
-
-    Pointer to :class:`tagBITMAP`
-
-.. class:: PBITMAP
-
-    Pointer to :class:`tagBITMAP`
-
-.. class:: BITMAP
-
-    Alias for :class:`tagBITMAP`
-
-.. class:: tagBITMAP
-
-    .. attribute:: bmType
-
-        :class:`LONG`
-
-
-    .. attribute:: bmWidth
-
-        :class:`LONG`
-
-
-    .. attribute:: bmHeight
-
-        :class:`LONG`
-
-
-    .. attribute:: bmWidthBytes
-
-        :class:`LONG`
-
-
-    .. attribute:: bmPlanes
-
-        :class:`WORD`
-
-
-    .. attribute:: bmBitsPixel
-
-        :class:`WORD`
-
-
-    .. attribute:: bmBits
-
-        :class:`LPVOID`
-
-tagBITMAPINFOHEADER
-'''''''''''''''''''
-.. class:: BITMAPINFOHEADER
-
-    Alias for :class:`tagBITMAPINFOHEADER`
-
-.. class:: PBITMAPINFOHEADER
-
-    Pointer to :class:`tagBITMAPINFOHEADER`
-
-.. class:: LPBITMAPINFOHEADER
-
-    Pointer to :class:`tagBITMAPINFOHEADER`
-
-.. class:: tagBITMAPINFOHEADER
-
-    .. attribute:: biSize
-
-        :class:`DWORD`
-
-
-    .. attribute:: biWidth
-
-        :class:`LONG`
-
-
-    .. attribute:: biHeight
-
-        :class:`LONG`
-
-
-    .. attribute:: biPlanes
-
-        :class:`WORD`
-
-
-    .. attribute:: biBitCount
-
-        :class:`WORD`
-
-
-    .. attribute:: biCompression
-
-        :class:`DWORD`
-
-
-    .. attribute:: biSizeImage
-
-        :class:`DWORD`
-
-
-    .. attribute:: biXPelsPerMeter
-
-        :class:`LONG`
-
-
-    .. attribute:: biYPelsPerMeter
-
-        :class:`LONG`
-
-
-    .. attribute:: biClrUsed
-
-        :class:`DWORD`
-
-
-    .. attribute:: biClrImportant
-
-        :class:`DWORD`
-
-tagRGBQUAD
-''''''''''
-.. class:: RGBQUAD
-
-    Alias for :class:`tagRGBQUAD`
-
-.. class:: tagRGBQUAD
-
-    .. attribute:: rgbBlue
-
-        :class:`BYTE`
-
-
-    .. attribute:: rgbGreen
-
-        :class:`BYTE`
-
-
-    .. attribute:: rgbRed
-
-        :class:`BYTE`
-
-
-    .. attribute:: rgbReserved
-
-        :class:`BYTE`
-
-tagBITMAPINFO
-'''''''''''''
-.. class:: LPBITMAPINFO
-
-    Pointer to :class:`tagBITMAPINFO`
-
-.. class:: PBITMAPINFO
-
-    Pointer to :class:`tagBITMAPINFO`
-
-.. class:: BITMAPINFO
-
-    Alias for :class:`tagBITMAPINFO`
-
-.. class:: tagBITMAPINFO
-
-    .. attribute:: bmiHeader
-
-        :class:`BITMAPINFOHEADER`
-
-
-    .. attribute:: bmiColors
-
-        :class:`RGBQUAD` ``[1]``
-
-tagBITMAPCOREINFO
-'''''''''''''''''
-.. class:: LPBITMAPCOREINFO
-
-    Pointer to :class:`tagBITMAPCOREINFO`
-
-.. class:: BITMAPCOREINFO
-
-    Alias for :class:`tagBITMAPCOREINFO`
-
-.. class:: PBITMAPCOREINFO
-
-    Pointer to :class:`tagBITMAPCOREINFO`
-
-.. class:: tagBITMAPCOREINFO
-
-    .. attribute:: bmciHeader
-
-        :class:`BITMAPCOREHEADER`
-
-
-    .. attribute:: bmciColors
-
-        :class:`RGBTRIPLE` ``[1]``
-
-_BG_FILE_PROGRESS
-'''''''''''''''''
-.. class:: BG_FILE_PROGRESS
-
-    Alias for :class:`_BG_FILE_PROGRESS`
-
-.. class:: _BG_FILE_PROGRESS
-
-    .. attribute:: BytesTotal
-
-        :class:`UINT64`
-
-
-    .. attribute:: BytesTransferred
-
-        :class:`UINT64`
-
-
-    .. attribute:: Completed
-
-        :class:`BOOL`
-
-_BG_JOB_PROGRESS
-''''''''''''''''
-.. class:: BG_JOB_PROGRESS
-
-    Alias for :class:`_BG_JOB_PROGRESS`
-
-.. class:: _BG_JOB_PROGRESS
-
-    .. attribute:: BytesTotal
-
-        :class:`UINT64`
-
-
-    .. attribute:: BytesTransferred
-
-        :class:`UINT64`
-
-
-    .. attribute:: FilesTotal
-
-        :class:`ULONG`
-
-
-    .. attribute:: FilesTransferred
-
-        :class:`ULONG`
-
-_BG_FILE_INFO
-'''''''''''''
-.. class:: BG_FILE_INFO
-
-    Alias for :class:`_BG_FILE_INFO`
-
-.. class:: _BG_FILE_INFO
-
-    .. attribute:: RemoteName
-
-        :class:`LPWSTR`
-
-
-    .. attribute:: LocalName
-
-        :class:`LPWSTR`
-
-_BG_JOB_TIMES
-'''''''''''''
-.. class:: BG_JOB_TIMES
-
-    Alias for :class:`_BG_JOB_TIMES`
-
-.. class:: _BG_JOB_TIMES
-
-    .. attribute:: CreationTime
-
-        :class:`FILETIME`
-
-
-    .. attribute:: ModificationTime
-
-        :class:`FILETIME`
-
-
-    .. attribute:: TransferCompletionTime
-
-        :class:`FILETIME`
-
 _ALPC_PORT_ATTRIBUTES32
 '''''''''''''''''''''''
 .. class:: PALPC_PORT_ATTRIBUTES32
@@ -12077,6 +11410,493 @@ _RPC_IF_ID
     .. attribute:: VersMinor
 
         :class:`USHORT`
+
+_API_SET_VALUE_ENTRY
+''''''''''''''''''''
+.. class:: API_SET_VALUE_ENTRY
+
+    Alias for :class:`_API_SET_VALUE_ENTRY`
+
+.. class:: PAPI_SET_VALUE_ENTRY
+
+    Pointer to :class:`_API_SET_VALUE_ENTRY`
+
+.. class:: _API_SET_VALUE_ENTRY
+
+    .. attribute:: Flags
+
+        :class:`ULONG`
+
+
+    .. attribute:: NameOffset
+
+        :class:`ULONG`
+
+
+    .. attribute:: NameLength
+
+        :class:`ULONG`
+
+
+    .. attribute:: ValueOffset
+
+        :class:`ULONG`
+
+
+    .. attribute:: ValueLength
+
+        :class:`ULONG`
+
+_API_SET_NAMESPACE_ENTRY
+''''''''''''''''''''''''
+.. class:: PAPI_SET_NAMESPACE_ENTRY
+
+    Pointer to :class:`_API_SET_NAMESPACE_ENTRY`
+
+.. class:: API_SET_NAMESPACE_ENTRY
+
+    Alias for :class:`_API_SET_NAMESPACE_ENTRY`
+
+.. class:: _API_SET_NAMESPACE_ENTRY
+
+    .. attribute:: Flags
+
+        :class:`ULONG`
+
+
+    .. attribute:: NameOffset
+
+        :class:`ULONG`
+
+
+    .. attribute:: NameLength
+
+        :class:`ULONG`
+
+
+    .. attribute:: AliasOffset
+
+        :class:`ULONG`
+
+
+    .. attribute:: AliasLength
+
+        :class:`ULONG`
+
+
+    .. attribute:: DataOffset
+
+        :class:`ULONG`
+
+_API_SET_NAMESPACE_ARRAY
+''''''''''''''''''''''''
+.. class:: PAPI_SET_NAMESPACE_ARRAY
+
+    Pointer to :class:`_API_SET_NAMESPACE_ARRAY`
+
+.. class:: API_SET_NAMESPACE_ARRAY
+
+    Alias for :class:`_API_SET_NAMESPACE_ARRAY`
+
+.. class:: _API_SET_NAMESPACE_ARRAY
+
+    .. attribute:: Version
+
+        :class:`ULONG`
+
+
+    .. attribute:: Size
+
+        :class:`ULONG`
+
+
+    .. attribute:: Flags
+
+        :class:`ULONG`
+
+
+    .. attribute:: Count
+
+        :class:`ULONG`
+
+
+    .. attribute:: Array
+
+        :class:`API_SET_NAMESPACE_ENTRY` ``[ANYSIZE_ARRAY]``
+
+_API_SET_VALUE_ENTRY_V2
+'''''''''''''''''''''''
+.. class:: PAPI_SET_VALUE_ENTRY_V2
+
+    Pointer to :class:`_API_SET_VALUE_ENTRY_V2`
+
+.. class:: API_SET_VALUE_ENTRY_V2
+
+    Alias for :class:`_API_SET_VALUE_ENTRY_V2`
+
+.. class:: _API_SET_VALUE_ENTRY_V2
+
+    .. attribute:: NameOffset
+
+        :class:`ULONG`
+
+
+    .. attribute:: NameLength
+
+        :class:`ULONG`
+
+
+    .. attribute:: ValueOffset
+
+        :class:`ULONG`
+
+
+    .. attribute:: ValueLength
+
+        :class:`ULONG`
+
+_API_SET_VALUE_ARRAY_V2
+'''''''''''''''''''''''
+.. class:: API_SET_VALUE_ARRAY_V2
+
+    Alias for :class:`_API_SET_VALUE_ARRAY_V2`
+
+.. class:: PAPI_SET_VALUE_ARRAY_V2
+
+    Pointer to :class:`_API_SET_VALUE_ARRAY_V2`
+
+.. class:: _API_SET_VALUE_ARRAY_V2
+
+    .. attribute:: Count
+
+        :class:`ULONG`
+
+
+    .. attribute:: Array
+
+        :class:`API_SET_VALUE_ENTRY_V2` ``[ANYSIZE_ARRAY]``
+
+_API_SET_NAMESPACE_ENTRY_V2
+'''''''''''''''''''''''''''
+.. class:: PAPI_SET_NAMESPACE_ENTRY_V2
+
+    Pointer to :class:`_API_SET_NAMESPACE_ENTRY_V2`
+
+.. class:: API_SET_NAMESPACE_ENTRY_V2
+
+    Alias for :class:`_API_SET_NAMESPACE_ENTRY_V2`
+
+.. class:: _API_SET_NAMESPACE_ENTRY_V2
+
+    .. attribute:: NameOffset
+
+        :class:`ULONG`
+
+
+    .. attribute:: NameLength
+
+        :class:`ULONG`
+
+
+    .. attribute:: DataOffset
+
+        :class:`ULONG`
+
+_API_SET_NAMESPACE_ARRAY_V2
+'''''''''''''''''''''''''''
+.. class:: API_SET_NAMESPACE_ARRAY_V2
+
+    Alias for :class:`_API_SET_NAMESPACE_ARRAY_V2`
+
+.. class:: PAPI_SET_NAMESPACE_ARRAY_V2
+
+    Pointer to :class:`_API_SET_NAMESPACE_ARRAY_V2`
+
+.. class:: _API_SET_NAMESPACE_ARRAY_V2
+
+    .. attribute:: Version
+
+        :class:`ULONG`
+
+
+    .. attribute:: Count
+
+        :class:`ULONG`
+
+
+    .. attribute:: Array
+
+        :class:`API_SET_NAMESPACE_ENTRY_V2` ``[ANYSIZE_ARRAY]``
+
+_API_SET_VALUE_ARRAY_V4
+'''''''''''''''''''''''
+.. class:: API_SET_VALUE_ARRAY_V4
+
+    Alias for :class:`_API_SET_VALUE_ARRAY_V4`
+
+.. class:: PAPI_SET_VALUE_ARRAY_V2
+
+    Pointer to :class:`_API_SET_VALUE_ARRAY_V4`
+
+.. class:: _API_SET_VALUE_ARRAY_V4
+
+    .. attribute:: GuessFlags
+
+        :class:`ULONG`
+
+
+    .. attribute:: Count
+
+        :class:`ULONG`
+
+
+    .. attribute:: Array
+
+        :class:`API_SET_VALUE_ENTRY_V2` ``[ANYSIZE_ARRAY]``
+
+_API_SET_NAMESPACE_ARRAY_V4
+'''''''''''''''''''''''''''
+.. class:: API_SET_NAMESPACE_ARRAY_V4
+
+    Alias for :class:`_API_SET_NAMESPACE_ARRAY_V4`
+
+.. class:: PAPI_SET_NAMESPACE_ARRAY_V4
+
+    Pointer to :class:`_API_SET_NAMESPACE_ARRAY_V4`
+
+.. class:: _API_SET_NAMESPACE_ARRAY_V4
+
+    .. attribute:: Version
+
+        :class:`ULONG`
+
+
+    .. attribute:: Size
+
+        :class:`ULONG`
+
+
+    .. attribute:: Flags
+
+        :class:`ULONG`
+
+
+    .. attribute:: Count
+
+        :class:`ULONG`
+
+
+    .. attribute:: Array
+
+        :class:`API_SET_NAMESPACE_ENTRY` ``[ANYSIZE_ARRAY]``
+
+_API_SET_NAMESPACE_ENTRY_V4
+'''''''''''''''''''''''''''
+.. class:: PAPI_SET_NAMESPACE_ENTRY_V4
+
+    Pointer to :class:`_API_SET_NAMESPACE_ENTRY_V4`
+
+.. class:: API_SET_NAMESPACE_ENTRY_V4
+
+    Alias for :class:`_API_SET_NAMESPACE_ENTRY_V4`
+
+.. class:: _API_SET_NAMESPACE_ENTRY_V4
+
+    .. attribute:: Flags
+
+        :class:`ULONG`
+
+
+    .. attribute:: NameOffset
+
+        :class:`ULONG`
+
+
+    .. attribute:: NameLength
+
+        :class:`ULONG`
+
+
+    .. attribute:: AliasOffset
+
+        :class:`ULONG`
+
+
+    .. attribute:: AliasLength
+
+        :class:`ULONG`
+
+
+    .. attribute:: DataOffset
+
+        :class:`ULONG`
+
+_API_SET_NAMESPACE_ENTRY_V6
+'''''''''''''''''''''''''''
+.. class:: API_SET_NAMESPACE_ENTRY_V6
+
+    Alias for :class:`_API_SET_NAMESPACE_ENTRY_V6`
+
+.. class:: _API_SET_NAMESPACE_ENTRY_V6
+
+    .. attribute:: Flags
+
+        :class:`ULONG`
+
+
+    .. attribute:: NameOffset
+
+        :class:`ULONG`
+
+
+    .. attribute:: NameLength
+
+        :class:`ULONG`
+
+
+    .. attribute:: HashedLength
+
+        :class:`ULONG`
+
+
+    .. attribute:: ValueOffset
+
+        :class:`ULONG`
+
+
+    .. attribute:: ValueCount
+
+        :class:`ULONG`
+
+_API_SET_NAMESPACE_V6
+'''''''''''''''''''''
+.. class:: API_SET_NAMESPACE_V6
+
+    Alias for :class:`_API_SET_NAMESPACE_V6`
+
+.. class:: _API_SET_NAMESPACE_V6
+
+    .. attribute:: Version
+
+        :class:`ULONG`
+
+
+    .. attribute:: Size
+
+        :class:`ULONG`
+
+
+    .. attribute:: Flags
+
+        :class:`ULONG`
+
+
+    .. attribute:: Count
+
+        :class:`ULONG`
+
+
+    .. attribute:: EntryOffset
+
+        :class:`ULONG`
+
+
+    .. attribute:: HashOffset
+
+        :class:`ULONG`
+
+
+    .. attribute:: HashFactor
+
+        :class:`ULONG`
+
+_BG_FILE_PROGRESS
+'''''''''''''''''
+.. class:: BG_FILE_PROGRESS
+
+    Alias for :class:`_BG_FILE_PROGRESS`
+
+.. class:: _BG_FILE_PROGRESS
+
+    .. attribute:: BytesTotal
+
+        :class:`UINT64`
+
+
+    .. attribute:: BytesTransferred
+
+        :class:`UINT64`
+
+
+    .. attribute:: Completed
+
+        :class:`BOOL`
+
+_BG_JOB_PROGRESS
+''''''''''''''''
+.. class:: BG_JOB_PROGRESS
+
+    Alias for :class:`_BG_JOB_PROGRESS`
+
+.. class:: _BG_JOB_PROGRESS
+
+    .. attribute:: BytesTotal
+
+        :class:`UINT64`
+
+
+    .. attribute:: BytesTransferred
+
+        :class:`UINT64`
+
+
+    .. attribute:: FilesTotal
+
+        :class:`ULONG`
+
+
+    .. attribute:: FilesTransferred
+
+        :class:`ULONG`
+
+_BG_FILE_INFO
+'''''''''''''
+.. class:: BG_FILE_INFO
+
+    Alias for :class:`_BG_FILE_INFO`
+
+.. class:: _BG_FILE_INFO
+
+    .. attribute:: RemoteName
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: LocalName
+
+        :class:`LPWSTR`
+
+_BG_JOB_TIMES
+'''''''''''''
+.. class:: BG_JOB_TIMES
+
+    Alias for :class:`_BG_JOB_TIMES`
+
+.. class:: _BG_JOB_TIMES
+
+    .. attribute:: CreationTime
+
+        :class:`FILETIME`
+
+
+    .. attribute:: ModificationTime
+
+        :class:`FILETIME`
+
+
+    .. attribute:: TransferCompletionTime
+
+        :class:`FILETIME`
 
 _EVENTLOGRECORD
 '''''''''''''''
@@ -15007,6 +14827,77 @@ _RTL_PATH_TYPE
 
     .. attribute:: RtlPathTypeRootLocalDevice(7)
 
+_ALPC_PORT_INFORMATION_CLASS
+''''''''''''''''''''''''''''
+.. class:: ALPC_PORT_INFORMATION_CLASS
+
+    Alias for :class:`_ALPC_PORT_INFORMATION_CLASS`
+
+.. class:: _ALPC_PORT_INFORMATION_CLASS
+
+
+    .. attribute:: AlpcBasicInformation(0)
+
+
+    .. attribute:: AlpcPortInformation(1)
+
+
+    .. attribute:: AlpcAssociateCompletionPortInformation(2)
+
+
+    .. attribute:: AlpcConnectedSIDInformation(3)
+
+
+    .. attribute:: AlpcServerInformation(4)
+
+
+    .. attribute:: AlpcMessageZoneInformation(5)
+
+
+    .. attribute:: AlpcRegisterCompletionListInformation(6)
+
+
+    .. attribute:: AlpcUnregisterCompletionListInformation(7)
+
+
+    .. attribute:: AlpcAdjustCompletionListConcurrencyCountInformation(8)
+
+
+    .. attribute:: AlpcRegisterCallbackInformation(9)
+
+
+    .. attribute:: AlpcCompletionListRundownInformation(10)
+
+
+    .. attribute:: AlpcWaitForPortReferences(11)
+
+
+    .. attribute:: MaxAlpcPortInfoClass(12)
+
+_ALPC_MESSAGE_INFORMATION_CLASS
+'''''''''''''''''''''''''''''''
+.. class:: ALPC_MESSAGE_INFORMATION_CLASS
+
+    Alias for :class:`_ALPC_MESSAGE_INFORMATION_CLASS`
+
+.. class:: PALPC_MESSAGE_INFORMATION_CLASS
+
+    Pointer to :class:`_ALPC_MESSAGE_INFORMATION_CLASS`
+
+.. class:: _ALPC_MESSAGE_INFORMATION_CLASS
+
+
+    .. attribute:: AlpcMessageSidInformation(0)
+
+
+    .. attribute:: AlpcMessageTokenModifiedIdInformation(1)
+
+
+    .. attribute:: MaxAlpcMessageInfoClass(2)
+
+
+    .. attribute:: AlpcMessageHandleInformation(3)
+
 _BG_JOB_STATE
 '''''''''''''
 .. class:: BG_JOB_STATE
@@ -15130,77 +15021,6 @@ _BG_JOB_TYPE
 
 
     .. attribute:: BG_JOB_TYPE_UPLOAD_REPLY(2)
-
-_ALPC_PORT_INFORMATION_CLASS
-''''''''''''''''''''''''''''
-.. class:: ALPC_PORT_INFORMATION_CLASS
-
-    Alias for :class:`_ALPC_PORT_INFORMATION_CLASS`
-
-.. class:: _ALPC_PORT_INFORMATION_CLASS
-
-
-    .. attribute:: AlpcBasicInformation(0)
-
-
-    .. attribute:: AlpcPortInformation(1)
-
-
-    .. attribute:: AlpcAssociateCompletionPortInformation(2)
-
-
-    .. attribute:: AlpcConnectedSIDInformation(3)
-
-
-    .. attribute:: AlpcServerInformation(4)
-
-
-    .. attribute:: AlpcMessageZoneInformation(5)
-
-
-    .. attribute:: AlpcRegisterCompletionListInformation(6)
-
-
-    .. attribute:: AlpcUnregisterCompletionListInformation(7)
-
-
-    .. attribute:: AlpcAdjustCompletionListConcurrencyCountInformation(8)
-
-
-    .. attribute:: AlpcRegisterCallbackInformation(9)
-
-
-    .. attribute:: AlpcCompletionListRundownInformation(10)
-
-
-    .. attribute:: AlpcWaitForPortReferences(11)
-
-
-    .. attribute:: MaxAlpcPortInfoClass(12)
-
-_ALPC_MESSAGE_INFORMATION_CLASS
-'''''''''''''''''''''''''''''''
-.. class:: ALPC_MESSAGE_INFORMATION_CLASS
-
-    Alias for :class:`_ALPC_MESSAGE_INFORMATION_CLASS`
-
-.. class:: PALPC_MESSAGE_INFORMATION_CLASS
-
-    Pointer to :class:`_ALPC_MESSAGE_INFORMATION_CLASS`
-
-.. class:: _ALPC_MESSAGE_INFORMATION_CLASS
-
-
-    .. attribute:: AlpcMessageSidInformation(0)
-
-
-    .. attribute:: AlpcMessageTokenModifiedIdInformation(1)
-
-
-    .. attribute:: MaxAlpcMessageInfoClass(2)
-
-
-    .. attribute:: AlpcMessageHandleInformation(3)
 
 _FILE_INFORMATION_CLASS
 '''''''''''''''''''''''
