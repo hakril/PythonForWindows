@@ -12357,6 +12357,7 @@ _SYSTEM_INFORMATION_CLASS
 
     Alias for :class:`_SYSTEM_INFORMATION_CLASS`
 
+
 .. class:: _SYSTEM_INFORMATION_CLASS
 
 
@@ -12613,6 +12614,7 @@ _WELL_KNOWN_SID_TYPE
 .. class:: WELL_KNOWN_SID_TYPE
 
     Alias for :class:`_WELL_KNOWN_SID_TYPE`
+
 
 .. class:: _WELL_KNOWN_SID_TYPE
 
@@ -12907,6 +12909,7 @@ _SECTION_INHERIT
 
     Alias for :class:`_SECTION_INHERIT`
 
+
 .. class:: _SECTION_INHERIT
 
 
@@ -12921,9 +12924,11 @@ _PROCESSINFOCLASS
 
     Alias for :class:`_PROCESSINFOCLASS`
 
+
 .. class:: PROCESSINFOCLASS
 
     Alias for :class:`_PROCESSINFOCLASS`
+
 
 .. class:: _PROCESSINFOCLASS
 
@@ -13059,6 +13064,7 @@ _MEMORY_INFORMATION_CLASS
 
     Alias for :class:`_MEMORY_INFORMATION_CLASS`
 
+
 .. class:: _MEMORY_INFORMATION_CLASS
 
 
@@ -13082,9 +13088,11 @@ _THREAD_INFORMATION_CLASS
 
     Alias for :class:`_THREAD_INFORMATION_CLASS`
 
+
 .. class:: PTHREAD_INFORMATION_CLASS
 
     Pointer to :class:`_THREAD_INFORMATION_CLASS`
+
 
 .. class:: _THREAD_INFORMATION_CLASS
 
@@ -13148,6 +13156,7 @@ _TCP_TABLE_CLASS
 
     Alias for :class:`_TCP_TABLE_CLASS`
 
+
 .. class:: _TCP_TABLE_CLASS
 
 
@@ -13182,6 +13191,7 @@ _VARENUM
 .. class:: VARENUM
 
     Alias for :class:`_VARENUM`
+
 
 .. class:: _VARENUM
 
@@ -13347,6 +13357,7 @@ _UDP_TABLE_CLASS
 
     Alias for :class:`_UDP_TABLE_CLASS`
 
+
 .. class:: _UDP_TABLE_CLASS
 
 
@@ -13364,6 +13375,7 @@ NET_FW_RULE_DIRECTION_
 
     Alias for :class:`NET_FW_RULE_DIRECTION_`
 
+
 .. class:: NET_FW_RULE_DIRECTION_
 
 
@@ -13380,6 +13392,7 @@ NET_FW_PROFILE_TYPE2_
 .. class:: NET_FW_PROFILE_TYPE2
 
     Alias for :class:`NET_FW_PROFILE_TYPE2_`
+
 
 .. class:: NET_FW_PROFILE_TYPE2_
 
@@ -13400,6 +13413,7 @@ _MIB_TCP_STATE
 .. class:: MIB_TCP_STATE
 
     Alias for :class:`_MIB_TCP_STATE`
+
 
 .. class:: _MIB_TCP_STATE
 
@@ -13445,6 +13459,7 @@ NET_FW_IP_PROTOCOL_
 
     Alias for :class:`NET_FW_IP_PROTOCOL_`
 
+
 .. class:: NET_FW_IP_PROTOCOL_
 
 
@@ -13462,9 +13477,11 @@ _TOKEN_INFORMATION_CLASS
 
     Alias for :class:`_TOKEN_INFORMATION_CLASS`
 
+
 .. class:: PTOKEN_INFORMATION_CLASS
 
     Pointer to :class:`_TOKEN_INFORMATION_CLASS`
+
 
 .. class:: _TOKEN_INFORMATION_CLASS
 
@@ -13600,6 +13617,7 @@ _FS_INFORMATION_CLASS
 
     Alias for :class:`_FS_INFORMATION_CLASS`
 
+
 .. class:: _FS_INFORMATION_CLASS
 
 
@@ -13641,9 +13659,11 @@ _SECURITY_IMPERSONATION_LEVEL
 
     Alias for :class:`_SECURITY_IMPERSONATION_LEVEL`
 
+
 .. class:: PSECURITY_IMPERSONATION_LEVEL
 
     Pointer to :class:`_SECURITY_IMPERSONATION_LEVEL`
+
 
 .. class:: _SECURITY_IMPERSONATION_LEVEL
 
@@ -13665,6 +13685,7 @@ _SC_ENUM_TYPE
 
     Alias for :class:`_SC_ENUM_TYPE`
 
+
 .. class:: _SC_ENUM_TYPE
 
 
@@ -13676,6 +13697,7 @@ _SC_STATUS_TYPE
 
     Alias for :class:`_SC_STATUS_TYPE`
 
+
 .. class:: _SC_STATUS_TYPE
 
 
@@ -13686,6 +13708,7 @@ _OBJECT_INFORMATION_CLASS
 .. class:: OBJECT_INFORMATION_CLASS
 
     Alias for :class:`_OBJECT_INFORMATION_CLASS`
+
 
 .. class:: _OBJECT_INFORMATION_CLASS
 
@@ -13704,9 +13727,11 @@ _SID_NAME_USE
 
     Alias for :class:`_SID_NAME_USE`
 
+
 .. class:: PSID_NAME_USE
 
     Pointer to :class:`_SID_NAME_USE`
+
 
 .. class:: _SID_NAME_USE
 
@@ -13746,6 +13771,7 @@ NET_FW_ACTION_
 
     Alias for :class:`NET_FW_ACTION_`
 
+
 .. class:: NET_FW_ACTION_
 
 
@@ -13763,6 +13789,7 @@ NET_FW_MODIFY_STATE_
 
     Alias for :class:`NET_FW_MODIFY_STATE_`
 
+
 .. class:: NET_FW_MODIFY_STATE_
 
 
@@ -13779,6 +13806,7 @@ tag_WBEMSTATUS
 .. class:: WBEMSTATUS
 
     Alias for :class:`tag_WBEMSTATUS`
+
 
 .. class:: tag_WBEMSTATUS
 
@@ -14367,6 +14395,7 @@ tag_WBEM_CHANGE_FLAG_TYPE
 
     Alias for :class:`tag_WBEM_CHANGE_FLAG_TYPE`
 
+
 .. class:: tag_WBEM_CHANGE_FLAG_TYPE
 
 
@@ -14399,6 +14428,7 @@ tag_WBEM_TIMEOUT_TYPE
 
     Alias for :class:`tag_WBEM_TIMEOUT_TYPE`
 
+
 .. class:: tag_WBEM_TIMEOUT_TYPE
 
 
@@ -14412,6 +14442,7 @@ tag_WBEM_GENERIC_FLAG_TYPE
 .. class:: WBEM_GENERIC_FLAG_TYPE
 
     Alias for :class:`tag_WBEM_GENERIC_FLAG_TYPE`
+
 
 .. class:: tag_WBEM_GENERIC_FLAG_TYPE
 
@@ -14468,6 +14499,7 @@ tagCLSCTX
 .. class:: CLSCTX
 
     Alias for :class:`tagCLSCTX`
+
 
 .. class:: tagCLSCTX
 
@@ -14549,6 +14581,7 @@ _SE_OBJECT_TYPE
 
     Alias for :class:`_SE_OBJECT_TYPE`
 
+
 .. class:: _SE_OBJECT_TYPE
 
 
@@ -14596,6 +14629,7 @@ _INTERNAL_IF_OPER_STATUS
 
     Alias for :class:`_INTERNAL_IF_OPER_STATUS`
 
+
 .. class:: _INTERNAL_IF_OPER_STATUS
 
 
@@ -14621,6 +14655,7 @@ _IMAGEHLP_SYMBOL_TYPE_INFO
 .. class:: IMAGEHLP_SYMBOL_TYPE_INFO
 
     Alias for :class:`_IMAGEHLP_SYMBOL_TYPE_INFO`
+
 
 .. class:: _IMAGEHLP_SYMBOL_TYPE_INFO
 
@@ -14732,6 +14767,7 @@ _PROCESSINFOCLASS
 
     Alias for :class:`_PROCESSINFOCLASS`
 
+
 .. class:: _PROCESSINFOCLASS
 
 
@@ -14745,6 +14781,7 @@ tagCOINIT
 .. class:: COINIT
 
     Alias for :class:`tagCOINIT`
+
 
 .. class:: tagCOINIT
 
@@ -14765,6 +14802,7 @@ tagTYPEKIND
 .. class:: TYPEKIND
 
     Alias for :class:`tagTYPEKIND`
+
 
 .. class:: tagTYPEKIND
 
@@ -14801,6 +14839,7 @@ _RTL_PATH_TYPE
 
     Alias for :class:`_RTL_PATH_TYPE`
 
+
 .. class:: _RTL_PATH_TYPE
 
 
@@ -14832,6 +14871,7 @@ _ALPC_PORT_INFORMATION_CLASS
 .. class:: ALPC_PORT_INFORMATION_CLASS
 
     Alias for :class:`_ALPC_PORT_INFORMATION_CLASS`
+
 
 .. class:: _ALPC_PORT_INFORMATION_CLASS
 
@@ -14880,9 +14920,11 @@ _ALPC_MESSAGE_INFORMATION_CLASS
 
     Alias for :class:`_ALPC_MESSAGE_INFORMATION_CLASS`
 
+
 .. class:: PALPC_MESSAGE_INFORMATION_CLASS
 
     Pointer to :class:`_ALPC_MESSAGE_INFORMATION_CLASS`
+
 
 .. class:: _ALPC_MESSAGE_INFORMATION_CLASS
 
@@ -14903,6 +14945,7 @@ _BG_JOB_STATE
 .. class:: BG_JOB_STATE
 
     Alias for :class:`_BG_JOB_STATE`
+
 
 .. class:: _BG_JOB_STATE
 
@@ -14939,6 +14982,7 @@ _BG_JOB_PROXY_USAGE
 
     Alias for :class:`_BG_JOB_PROXY_USAGE`
 
+
 .. class:: _BG_JOB_PROXY_USAGE
 
 
@@ -14959,6 +15003,7 @@ _BG_JOB_PRIORITY
 
     Alias for :class:`_BG_JOB_PRIORITY`
 
+
 .. class:: _BG_JOB_PRIORITY
 
 
@@ -14978,6 +15023,7 @@ _BG_ERROR_CONTEXT
 .. class:: BG_ERROR_CONTEXT
 
     Alias for :class:`_BG_ERROR_CONTEXT`
+
 
 .. class:: _BG_ERROR_CONTEXT
 
@@ -15011,6 +15057,7 @@ _BG_JOB_TYPE
 
     Alias for :class:`_BG_JOB_TYPE`
 
+
 .. class:: _BG_JOB_TYPE
 
 
@@ -15028,9 +15075,11 @@ _FILE_INFORMATION_CLASS
 
     Alias for :class:`_FILE_INFORMATION_CLASS`
 
+
 .. class:: PFILE_INFORMATION_CLASS
 
     Pointer to :class:`_FILE_INFORMATION_CLASS`
+
 
 .. class:: _FILE_INFORMATION_CLASS
 
@@ -15243,6 +15292,7 @@ _IO_PRIORITY_HINT
 .. class:: IO_PRIORITY_HINT
 
     Alias for :class:`_IO_PRIORITY_HINT`
+
 
 .. class:: _IO_PRIORITY_HINT
 

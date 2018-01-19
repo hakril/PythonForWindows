@@ -8,6 +8,10 @@ from .generated_def import winfuncs
 from .generated_def.windef import PAGE_EXECUTE_READWRITE
 from .generated_def.winstructs import *
 
+# TODO Not a big fan of importing 'meta' every load
+# Should do an Hook API that take the winproxy function (not generate every hook possible)
+import windows.generated_def.meta
+
 
 class Callback(object):
     """Give type information to hook callback"""
@@ -31,7 +35,10 @@ def add_callback_to_module(callback):
     setattr(sys.modules[__name__], type(callback).__name__, callback)
 
 # Generate IATCallback decorator for all known functions
-for func in winfuncs.functions:
+
+
+
+for func in windows.generated_def.meta.functions:
     prototype = getattr(winfuncs, func + "Prototype")
     callback_name = func + "Callback"
 

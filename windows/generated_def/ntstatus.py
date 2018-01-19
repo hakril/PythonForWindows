@@ -1,6 +1,5 @@
-
 import ctypes
-from windef import *
+from flag import Flag
 
 class NtStatusException(WindowsError):
     ALL_STATUS = {}

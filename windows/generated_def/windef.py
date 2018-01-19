@@ -1,62 +1,10 @@
-#Generated file
-
-
-import sys
 import platform
-if sys.version_info.major == 3:
-    long = int
+from flag import make_flag
 
 bits = platform.architecture()[0]
 bitness =  int(bits[:2])
 
 NATIVE_WORD_MAX_VALUE = 0xffffffff if bitness == 32 else 0xffffffffffffffff
-
-class Flag(long):
-    def __new__(cls, name, value):
-        return super(Flag, cls).__new__(cls, value)
-
-    def __init__(self, name, value):
-        self.name = name
-
-    def __repr__(self):
-        return "{0}({1})".format(self.name, hex(self))
-
-    __str__ = __repr__
-
-   # Fix pickling with protocol 2
-    def __getnewargs__(self, *args):
-        return self.name, long(self)
-
-class StrFlag(str):
-    def __new__(cls, name, value):
-        if isinstance(value, cls):
-            return value
-        return super(StrFlag, cls).__new__(cls, value)
-
-    def __init__(self, name, value):
-        self.name = name
-
-    def __repr__(self):
-        return "{0}({1})".format(self.name, str.__repr__(self))
-
-    # __str__ = __repr__
-
-    # Fix pickling with protocol 2
-    def __getnewargs__(self, *args):
-        return self.name, str.__str__(self)
-
-def make_flag(name, value):
-    if isinstance(value, (int, long)):
-        return Flag(name, value)
-    return StrFlag(name, value)
-
-class FlagMapper(dict):
-    def __init__(self, *values):
-        self.update({x:x for x in values})
-
-    def __missing__(self, key):
-        return key
-
 from ntstatus import *
 RPC_REQUEST_TYPE_CALL = make_flag("RPC_REQUEST_TYPE_CALL", 0)
 RPC_REQUEST_TYPE_BIND = make_flag("RPC_REQUEST_TYPE_BIND", 1)
@@ -1482,16 +1430,6 @@ RPC_S_UNKNOWN_IF = make_flag("RPC_S_UNKNOWN_IF", 1717)
 RPC_S_PROTOCOL_ERROR = make_flag("RPC_S_PROTOCOL_ERROR", 1728)
 RPC_S_UNSUPPORTED_TRANS_SYN = make_flag("RPC_S_UNSUPPORTED_TRANS_SYN", 1730)
 RPC_S_PROCNUM_OUT_OF_RANGE = make_flag("RPC_S_PROCNUM_OUT_OF_RANGE", 1745)
-EVENTLOG_SUCCESS = make_flag("EVENTLOG_SUCCESS", 0x0000)
-EVENTLOG_ERROR_TYPE = make_flag("EVENTLOG_ERROR_TYPE", 0x0001)
-EVENTLOG_WARNING_TYPE = make_flag("EVENTLOG_WARNING_TYPE", 0x0002)
-EVENTLOG_INFORMATION_TYPE = make_flag("EVENTLOG_INFORMATION_TYPE", 0x0004)
-EVENTLOG_AUDIT_SUCCESS = make_flag("EVENTLOG_AUDIT_SUCCESS", 0x0008)
-EVENTLOG_AUDIT_FAILURE = make_flag("EVENTLOG_AUDIT_FAILURE", 0x0010)
-EVENTLOG_SEQUENTIAL_READ = make_flag("EVENTLOG_SEQUENTIAL_READ", 0x0001)
-EVENTLOG_SEEK_READ = make_flag("EVENTLOG_SEEK_READ", 0x0002)
-EVENTLOG_FORWARDS_READ = make_flag("EVENTLOG_FORWARDS_READ", 0x0004)
-EVENTLOG_BACKWARDS_READ = make_flag("EVENTLOG_BACKWARDS_READ", 0x0008)
 CERT_QUERY_OBJECT_FILE = make_flag("CERT_QUERY_OBJECT_FILE", 0x00000001)
 CERT_QUERY_OBJECT_BLOB = make_flag("CERT_QUERY_OBJECT_BLOB", 0x00000002)
 CERT_QUERY_CONTENT_CERT = make_flag("CERT_QUERY_CONTENT_CERT", 1)
@@ -2055,3 +1993,13 @@ CERT_SYSTEM_STORE_USERS = make_flag("CERT_SYSTEM_STORE_USERS", ( CERT_SYSTEM_STO
 CERT_SYSTEM_STORE_CURRENT_USER_GROUP_POLICY = make_flag("CERT_SYSTEM_STORE_CURRENT_USER_GROUP_POLICY", ( CERT_SYSTEM_STORE_CURRENT_USER_GROUP_POLICY_ID << CERT_SYSTEM_STORE_LOCATION_SHIFT ))
 CERT_SYSTEM_STORE_LOCAL_MACHINE_GROUP_POLICY = make_flag("CERT_SYSTEM_STORE_LOCAL_MACHINE_GROUP_POLICY", ( CERT_SYSTEM_STORE_LOCAL_MACHINE_GROUP_POLICY_ID << CERT_SYSTEM_STORE_LOCATION_SHIFT ))
 CERT_SYSTEM_STORE_LOCAL_MACHINE_ENTERPRISE = make_flag("CERT_SYSTEM_STORE_LOCAL_MACHINE_ENTERPRISE", ( CERT_SYSTEM_STORE_LOCAL_MACHINE_ENTERPRISE_ID << CERT_SYSTEM_STORE_LOCATION_SHIFT ))
+EVENTLOG_SUCCESS = make_flag("EVENTLOG_SUCCESS", 0x0000)
+EVENTLOG_ERROR_TYPE = make_flag("EVENTLOG_ERROR_TYPE", 0x0001)
+EVENTLOG_WARNING_TYPE = make_flag("EVENTLOG_WARNING_TYPE", 0x0002)
+EVENTLOG_INFORMATION_TYPE = make_flag("EVENTLOG_INFORMATION_TYPE", 0x0004)
+EVENTLOG_AUDIT_SUCCESS = make_flag("EVENTLOG_AUDIT_SUCCESS", 0x0008)
+EVENTLOG_AUDIT_FAILURE = make_flag("EVENTLOG_AUDIT_FAILURE", 0x0010)
+EVENTLOG_SEQUENTIAL_READ = make_flag("EVENTLOG_SEQUENTIAL_READ", 0x0001)
+EVENTLOG_SEEK_READ = make_flag("EVENTLOG_SEEK_READ", 0x0002)
+EVENTLOG_FORWARDS_READ = make_flag("EVENTLOG_FORWARDS_READ", 0x0004)
+EVENTLOG_BACKWARDS_READ = make_flag("EVENTLOG_BACKWARDS_READ", 0x0008)
