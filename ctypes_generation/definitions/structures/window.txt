@@ -65,8 +65,32 @@ typedef struct tagBITMAPCOREINFO {
     RGBTRIPLE           bmciColors[1];
 } BITMAPCOREINFO, *LPBITMAPCOREINFO, *PBITMAPCOREINFO;
 
-/*
-typedef struct _FAKEYOLOSTRUCT {
-        ACL    Reserved;
-} _FAKEYOLOSTRUCT;
-*/
+typedef struct tagWNDCLASSEXA {
+  UINT      cbSize;
+  UINT      style;
+  WNDPROC   lpfnWndProc;
+  INT       cbClsExtra;
+  INT       cbWndExtra;
+  HINSTANCE hInstance;
+  HICON     hIcon;
+  HCURSOR   hCursor;
+  HBRUSH    hbrBackground;
+  LPCSTR   lpszMenuName;
+  LPCSTR   lpszClassName;
+  HICON     hIconSm;
+} WNDCLASSEXA, *PWNDCLASSEXA, *LPWNDCLASSEXA;
+
+typedef struct tagWNDCLASSEXW {
+  UINT      cbSize;
+  UINT      style;
+  WNDPROC   lpfnWndProc;
+  INT       cbClsExtra;
+  INT       cbWndExtra;
+  HINSTANCE hInstance;
+  HICON     hIcon;
+  HCURSOR   hCursor;
+  HBRUSH    hbrBackground;
+  LPWSTR   lpszMenuName;
+  LPWSTR   lpszClassName;
+  HICON     hIconSm;
+} WNDCLASSEXW, *PWNDCLASSEXW, *LPWNDCLASSEXW;

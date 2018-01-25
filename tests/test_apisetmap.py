@@ -33,7 +33,8 @@ def verify_apisetmap_parsing(apisetmap_base, version=None):
     # This key was found in all current tested version by hand
     # Might need to change that if I add another APISET dump
     # But as it was in Windows7 to Windows10 there are big chance it will be in others APISET.
-    assert 'api-ms-win-core-com-l2-1-1' in apisetmap_dict
+    # We do as MS code and ignore everything after the last '-'
+    assert 'api-ms-win-core-com-l2-1-' in apisetmap_dict
 
 def test_apisetmap_parsing_current_process():
     return verify_apisetmap_parsing(windows.current_process.peb.ApiSetMap)

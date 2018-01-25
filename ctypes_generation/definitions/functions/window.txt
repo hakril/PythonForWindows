@@ -1,0 +1,136 @@
+BOOL WINAPI GetCursorPos(
+  _Out_ LPPOINT lpPoint
+);
+
+HWND WINAPI WindowFromPoint(
+  _In_ POINT Point
+);
+
+BOOL WINAPI GetWindowRect(
+  _In_  HWND   hWnd,
+  _Out_ LPRECT lpRect
+);
+
+BOOL WINAPI EnumWindows(
+    __in WNDENUMPROC lpEnumFunc,
+    __in LPARAM lParam
+);
+
+
+INT WINAPI GetWindowTextA(
+    __in HWND hWnd,
+    __out LPSTR lpString,
+    __in INT nMaxCount
+);
+
+HWND WINAPI GetParent(
+  _In_ HWND hWnd
+);
+
+INT WINAPI GetWindowTextW(
+    __in HWND hWnd,
+    __out LPWSTR lpString,
+    __in INT nMaxCount
+);
+
+UINT WINAPI GetWindowModuleFileNameA(
+    __in HWND hwnd,
+    __out LPSTR pszFileName,
+    __in UINT cchFileNameMax);
+
+UINT WINAPI GetWindowModuleFileNameW(
+    __in HWND hwnd,
+    __out LPWSTR pszFileName,
+    __in UINT cchFileNameMax);
+
+
+BOOL WINAPI EnumChildWindows(
+  _In_opt_ HWND        hWndParent,
+  _In_     WNDENUMPROC lpEnumFunc,
+  _In_     LPARAM      lParam
+);
+
+BOOL WINAPI CloseWindow(
+  _In_ HWND hWnd
+);
+
+HWND WINAPI GetDesktopWindow();
+
+HWND WINAPI GetForegroundWindow();
+
+
+BOOL WINAPI BringWindowToTop(
+  _In_ HWND hWnd
+);
+
+BOOL WINAPI MoveWindow(
+  _In_ HWND hWnd,
+  _In_ INT  X,
+  _In_ INT  Y,
+  _In_ INT  nWidth,
+  _In_ INT  nHeight,
+  _In_ BOOL bRepaint
+);
+
+
+BOOL WINAPI SetWindowPos(
+  _In_     HWND hWnd,
+  _In_opt_ HWND hWndInsertAfter,
+  _In_     INT  X,
+  _In_     INT  Y,
+  _In_     INT  cx,
+  _In_     INT  cy,
+  _In_     UINT uFlags
+);
+
+BOOL WINAPI SetWindowTextA(
+  _In_     HWND    hWnd,
+  _In_opt_ LPCSTR lpString
+);
+
+BOOL WINAPI SetWindowTextW(
+  _In_     HWND    hWnd,
+  _In_opt_ LPWSTR lpString
+);
+
+UINT WINAPI RealGetWindowClassA(
+  _In_  HWND   hwnd,
+  _Out_ LPCSTR pszType,
+  _In_  UINT   cchType
+);
+
+UINT WINAPI RealGetWindowClassW(
+  _In_  HWND   hwnd,
+  _Out_ LPWSTR pszType,
+  _In_  UINT   cchType
+);
+
+BOOL WINAPI GetClassInfoExA(
+  _In_opt_ HINSTANCE    hinst,
+  _In_     LPCSTR      lpszClass,
+  _Out_    LPWNDCLASSEXA lpwcx
+);
+
+BOOL WINAPI GetClassInfoExW(
+  _In_opt_ HINSTANCE    hinst,
+  _In_     LPCWSTR      lpszClass,
+  _Out_    LPWNDCLASSEXW lpwcx
+);
+
+INT WINAPI GetClassNameA(
+  _In_  HWND   hWnd,
+  _Out_ LPCSTR lpClassName,
+  _In_  INT    nMaxCount
+);
+
+INT WINAPI GetClassNameW(
+  _In_  HWND   hWnd,
+  _Out_ LPWSTR lpClassName,
+  _In_  INT    nMaxCount
+);
+
+DWORD WINAPI GetWindowThreadProcessId(
+  _In_      HWND    hWnd,
+  _Out_opt_ LPDWORD lpdwProcessId
+);
+

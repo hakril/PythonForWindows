@@ -1286,34 +1286,6 @@ SC_HANDLE WINAPI OpenServiceW(
 );
 
 
-BOOL WINAPI EnumWindows(
-    __in WNDENUMPROC lpEnumFunc,
-    __in LPARAM lParam
-);
-
-
-INT WINAPI GetWindowTextA(
-    __in HWND hWnd,
-    __out LPSTR lpString,
-    __in INT nMaxCount
-);
-
-INT WINAPI GetWindowTextW(
-    __in HWND hWnd,
-    __out LPWSTR lpString,
-    __in INT nMaxCount
-);
-
-UINT WINAPI GetWindowModuleFileNameA(
-    __in HWND hwnd,
-    __out LPSTR pszFileName,
-    __in UINT cchFileNameMax);
-
-UINT WINAPI GetWindowModuleFileNameW(
-    __in HWND hwnd,
-    __out LPWSTR pszFileName,
-    __in UINT cchFileNameMax);
-
 DWORD WINAPI GetLogicalDriveStringsA(
   _In_  DWORD  nBufferLength,
   _Out_ LPCSTR lpBuffer
@@ -1644,19 +1616,6 @@ BOOL WINAPI GetProcessDEPPolicy(
   _Out_ PBOOL   lpPermanent
 );
 
-BOOL WINAPI GetCursorPos(
-  _Out_ LPPOINT lpPoint
-);
-
-HWND WINAPI WindowFromPoint(
-  _In_ POINT Point
-);
-
-
-BOOL WINAPI GetWindowRect(
-  _In_  HWND   hWnd,
-  _Out_ LPRECT lpRect
-);
 
 DWORD WINAPI GetNamedSecurityInfoA(
   _In_      LPCSTR               pObjectName,

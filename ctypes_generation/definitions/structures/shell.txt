@@ -1,0 +1,11 @@
+typedef struct _SHITEMID {
+  USHORT cb;
+  BYTE   abID[1];
+} SHITEMID;
+
+
+/* MANUAL TYPEDEF see: https://msdn.microsoft.com/en-us/library/windows/desktop/bb773321(v=vs.85).aspx*/
+
+typedef struct _ITEMIDLIST {
+  SHITEMID mkid;
+} ITEMIDLIST, *PCIDLIST_ABSOLUTE, *PIDLIST_ABSOLUTE;

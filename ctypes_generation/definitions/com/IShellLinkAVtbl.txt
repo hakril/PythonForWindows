@@ -1,0 +1,101 @@
+typedef struct IShellLinkAVtbl
+{
+    BEGIN_INTERFACE
+
+    HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+        __RPC__in IShellLinkA * This,
+        /* [in] */ __RPC__in REFIID riid,
+        /* [annotation][iid_is][out] */
+        __RPC__deref_out  void **ppvObject);
+
+    ULONG ( STDMETHODCALLTYPE *AddRef )(
+        __RPC__in IShellLinkA * This);
+
+    ULONG ( STDMETHODCALLTYPE *Release )(
+        __RPC__in IShellLinkA * This);
+
+    HRESULT ( STDMETHODCALLTYPE *GetPath )(
+        __RPC__in IShellLinkA * This,
+        /* [size_is][string][out] */ __RPC__out_ecount_full_string(cch) LPSTR pszFile,
+        /* [in] */ int cch,
+        /* [unique][out][in] */ __RPC__inout_opt WIN32_FIND_DATAA *pfd,
+        /* [in] */ DWORD fFlags);
+
+    HRESULT ( STDMETHODCALLTYPE *GetIDList )(
+        __RPC__in IShellLinkA * This,
+        /* [out] */ __RPC__deref_out_opt PIDLIST_ABSOLUTE *ppidl);
+
+    HRESULT ( STDMETHODCALLTYPE *SetIDList )(
+        __RPC__in IShellLinkA * This,
+        /* [in] */ __RPC__in PCIDLIST_ABSOLUTE pidl);
+
+    HRESULT ( STDMETHODCALLTYPE *GetDescription )(
+        __RPC__in IShellLinkA * This,
+        /* [size_is][string][out] */ __RPC__out_ecount_full_string(cch) LPSTR pszName,
+        /* [in] */ int cch);
+
+    HRESULT ( STDMETHODCALLTYPE *SetDescription )(
+        __RPC__in IShellLinkA * This,
+        /* [string][in] */ __RPC__in_string LPCSTR pszName);
+
+    HRESULT ( STDMETHODCALLTYPE *GetWorkingDirectory )(
+        __RPC__in IShellLinkA * This,
+        /* [size_is][string][out] */ __RPC__out_ecount_full_string(cch) LPSTR pszDir,
+        /* [in] */ int cch);
+
+    HRESULT ( STDMETHODCALLTYPE *SetWorkingDirectory )(
+        __RPC__in IShellLinkA * This,
+        /* [string][in] */ __RPC__in_string LPCSTR pszDir);
+
+    HRESULT ( STDMETHODCALLTYPE *GetArguments )(
+        __RPC__in IShellLinkA * This,
+        /* [size_is][string][out] */ __RPC__out_ecount_full_string(cch) LPSTR pszArgs,
+        /* [in] */ int cch);
+
+    HRESULT ( STDMETHODCALLTYPE *SetArguments )(
+        __RPC__in IShellLinkA * This,
+        /* [string][in] */ __RPC__in_string LPCSTR pszArgs);
+
+    HRESULT ( STDMETHODCALLTYPE *GetHotkey )(
+        __RPC__in IShellLinkA * This,
+        /* [out] */ __RPC__out WORD *pwHotkey);
+
+    HRESULT ( STDMETHODCALLTYPE *SetHotkey )(
+        __RPC__in IShellLinkA * This,
+        /* [in] */ WORD wHotkey);
+
+    HRESULT ( STDMETHODCALLTYPE *GetShowCmd )(
+        __RPC__in IShellLinkA * This,
+        /* [out] */ __RPC__out int *piShowCmd);
+
+    HRESULT ( STDMETHODCALLTYPE *SetShowCmd )(
+        __RPC__in IShellLinkA * This,
+        /* [in] */ int iShowCmd);
+
+    HRESULT ( STDMETHODCALLTYPE *GetIconLocation )(
+        __RPC__in IShellLinkA * This,
+        /* [size_is][string][out] */ __RPC__out_ecount_full_string(cch) LPSTR pszIconPath,
+        /* [in] */ int cch,
+        /* [out] */ __RPC__out int *piIcon);
+
+    HRESULT ( STDMETHODCALLTYPE *SetIconLocation )(
+        __RPC__in IShellLinkA * This,
+        /* [string][in] */ __RPC__in_string LPCSTR pszIconPath,
+        /* [in] */ int iIcon);
+
+    HRESULT ( STDMETHODCALLTYPE *SetRelativePath )(
+        __RPC__in IShellLinkA * This,
+        /* [string][in] */ __RPC__in_string LPCSTR pszPathRel,
+        /* [in] */ DWORD dwReserved);
+
+    HRESULT ( STDMETHODCALLTYPE *Resolve )(
+        __RPC__in IShellLinkA * This,
+        /* [unique][in] */ __RPC__in_opt HWND hwnd,
+        /* [in] */ DWORD fFlags);
+
+    HRESULT ( STDMETHODCALLTYPE *SetPath )(
+        __RPC__in IShellLinkA * This,
+        /* [string][in] */ __RPC__in_string LPCSTR pszFile);
+
+    END_INTERFACE
+} IShellLinkAVtbl;

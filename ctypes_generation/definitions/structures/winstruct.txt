@@ -2108,13 +2108,6 @@ typedef enum tagCOINIT {
   COINIT_SPEED_OVER_MEMORY  = 0x8
 } COINIT;
 
-typedef struct _GUID {
-    ULONG  Data1;
-    USHORT Data2;
-    USHORT Data3;
-    BYTE  Data4[ 8 ];
-} GUID, IID, *REFIID, *REFCLSID, *LPGUID, *REFGUID;
-
 
 struct _TMP_signscale {
     BYTE scale;

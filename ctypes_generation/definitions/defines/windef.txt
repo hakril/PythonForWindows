@@ -1067,3 +1067,8 @@
 #define CMSG_VERIFY_SIGNER_CERT                     2
 #define CMSG_VERIFY_SIGNER_CHAIN                    3
 #define CMSG_VERIFY_SIGNER_NULL                     4
+
+
+#define TXFS_MINIVERSION_COMMITTED_VIEW                  (0x0000)
+#define TXFS_MINIVERSION_DIRTY_VIEW                      (0xFFFF)
+#define TXFS_MINIVERSION_DEFAULT_VIEW                    (0xFFFE)

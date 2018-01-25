@@ -1,0 +1,43 @@
+typedef struct IPersistFileVtbl
+ {
+     BEGIN_INTERFACE
+
+     HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+         __RPC__in IPersistFile * This,
+         /* [in] */ __RPC__in REFIID riid,
+         /* [annotation][iid_is][out] */
+         __RPC__deref_out  void **ppvObject);
+
+     ULONG ( STDMETHODCALLTYPE *AddRef )(
+         __RPC__in IPersistFile * This);
+
+     ULONG ( STDMETHODCALLTYPE *Release )(
+         __RPC__in IPersistFile * This);
+
+     HRESULT ( STDMETHODCALLTYPE *GetClassID )(
+         __RPC__in IPersistFile * This,
+         /* [out] */ __RPC__out CLSID *pClassID);
+
+     HRESULT ( STDMETHODCALLTYPE *IsDirty )(
+         __RPC__in IPersistFile * This);
+
+     HRESULT ( STDMETHODCALLTYPE *Load )(
+         __RPC__in IPersistFile * This,
+         /* [in] */ __RPC__in LPCOLESTR pszFileName,
+         /* [in] */ DWORD dwMode);
+
+     HRESULT ( STDMETHODCALLTYPE *Save )(
+         __RPC__in IPersistFile * This,
+         /* [unique][in] */ __RPC__in_opt LPCOLESTR pszFileName,
+         /* [in] */ BOOL fRemember);
+
+     HRESULT ( STDMETHODCALLTYPE *SaveCompleted )(
+         __RPC__in IPersistFile * This,
+         /* [unique][in] */ __RPC__in_opt LPCOLESTR pszFileName);
+
+     HRESULT ( STDMETHODCALLTYPE *GetCurFile )(
+         __RPC__in IPersistFile * This,
+         /* [out] */ __RPC__deref_out_opt LPOLESTR *ppszFileName);
+
+     END_INTERFACE
+} IPersistFileVtbl;

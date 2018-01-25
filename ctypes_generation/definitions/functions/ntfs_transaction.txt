@@ -1,0 +1,50 @@
+HANDLE WINAPI CreateFileTransactedA(
+  _In_       LPCSTR               lpFileName,
+  _In_       DWORD                 dwDesiredAccess,
+  _In_       DWORD                 dwShareMode,
+  _In_opt_   LPSECURITY_ATTRIBUTES lpSecurityAttributes,
+  _In_       DWORD                 dwCreationDisposition,
+  _In_       DWORD                 dwFlagsAndAttributes,
+  _In_opt_   HANDLE                hTemplateFile,
+  _In_       HANDLE                hTransaction,
+  _In_opt_   PUSHORT               pusMiniVersion,
+  _Reserved_ PVOID                 pExtendedParameter
+);
+
+
+HANDLE WINAPI CreateFileTransactedW(
+  _In_       LPWSTR               lpFileName,
+  _In_       DWORD                 dwDesiredAccess,
+  _In_       DWORD                 dwShareMode,
+  _In_opt_   LPSECURITY_ATTRIBUTES lpSecurityAttributes,
+  _In_       DWORD                 dwCreationDisposition,
+  _In_       DWORD                 dwFlagsAndAttributes,
+  _In_opt_   HANDLE                hTemplateFile,
+  _In_       HANDLE                hTransaction,
+  _In_opt_   PUSHORT               pusMiniVersion,
+  _Reserved_ PVOID                 pExtendedParameter
+);
+
+
+BOOL WINAPI CommitTransaction(
+  _In_ HANDLE TransactionHandle
+);
+
+HANDLE WINAPI CreateTransaction(
+  _In_opt_ LPSECURITY_ATTRIBUTES lpTransactionAttributes,
+  _In_opt_ LPGUID                UOW,
+  _In_opt_ DWORD                 CreateOptions,
+  _In_opt_ DWORD                 IsolationLevel,
+  _In_opt_ DWORD                 IsolationFlags,
+  _In_opt_ DWORD                 Timeout,
+  _In_opt_ LPWSTR                Description
+);
+
+BOOL WINAPI RollbackTransaction(
+  _In_ HANDLE TransactionHandle
+);
+
+HANDLE WINAPI OpenTransaction(
+  _In_ DWORD  dwDesiredAccess,
+  _In_ LPGUID TransactionId
+);

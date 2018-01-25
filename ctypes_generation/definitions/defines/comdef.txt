@@ -1,0 +1,46 @@
+#define CWCSTORAGENAME 32
+
+/* Storage instantiation modes */
+#define STGM_DIRECT             0x00000000L
+#define STGM_TRANSACTED         0x00010000L
+#define STGM_SIMPLE             0x08000000L
+
+#define STGM_READ               0x00000000L
+#define STGM_WRITE              0x00000001L
+#define STGM_READWRITE          0x00000002L
+
+#define STGM_SHARE_DENY_NONE    0x00000040L
+#define STGM_SHARE_DENY_READ    0x00000030L
+#define STGM_SHARE_DENY_WRITE   0x00000020L
+#define STGM_SHARE_EXCLUSIVE    0x00000010L
+
+#define STGM_PRIORITY           0x00040000L
+#define STGM_DELETEONRELEASE    0x04000000L
+#define STGM_NOSCRATCH          0x00100000L
+
+#define STGM_CREATE             0x00001000L
+#define STGM_CONVERT            0x00020000L
+#define STGM_FAILIFTHERE        0x00000000L
+
+#define STGM_NOSNAPSHOT         0x00200000L
+#define STGM_DIRECT_SWMR        0x00400000L
+
+/*  flags for internet asyncronous and layout docfile */
+#define ASYNC_MODE_COMPATIBILITY    0x00000001L
+#define ASYNC_MODE_DEFAULT          0x00000000L
+
+#define STGTY_REPEAT                0x00000100L
+#define STG_TOEND                   0xFFFFFFFFL
+
+#define STG_LAYOUT_SEQUENTIAL       0x00000000L
+#define STG_LAYOUT_INTERLEAVED      0x00000001L
+
+
+#define STGFMT_STORAGE          0
+#define STGFMT_NATIVE           1
+#define STGFMT_FILE             3
+#define STGFMT_ANY              4
+#define STGFMT_DOCFILE          5
+
+// This is a legacy define to allow old component to builds
+#define STGFMT_DOCUMENT         0

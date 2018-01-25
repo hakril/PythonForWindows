@@ -104,11 +104,30 @@ class FunctionParsedFile(ParsedFile):
 
 class COMParsedFile(ParsedFile):
     PARSER = com_parser.WinComParser
+    IGNORED_INTERFACE = set(["ITypeInfo"])
 
     def compute_imports_exports(self, cominterface):
         self.add_exports(cominterface.name)
         if cominterface.typedefptr:
             self.add_exports(cominterface.typedefptr)
+
+        for  method in cominterface.methods:
+            self.compute_method_imports_exports(cominterface, method)
+
+
+    def compute_method_imports_exports(self, interface, method):
+        self.add_imports(method.ret_type)
+        for arg in method.args[1:]: # First one is 'this'
+            if arg.byreflevel > 0:
+                if arg.type == "void":
+                    continue # PVOID DEP: don't care
+            if arg.type in self.IGNORED_INTERFACE:
+                continue # Will be replaced by "PVOID" at generation: ignore dep
+            if arg.type == interface.name:
+                continue # Do not add dependence to our own COM interface
+
+            self.add_imports(arg.type)
+
 
 
 class ParsedFileGraph(object):
@@ -132,7 +151,7 @@ class ParsedFileGraph(object):
                 if self.depandances_database[node].issubset(depdone):
                     break
             else:
-                raise ValueError("POUET")
+                raise ValueError("Could not find a next node for dep flattening")
 
             flatten.append(node)
             depdone.add(node)
@@ -282,7 +301,7 @@ class NtStatusDocGenerator(NoTemplatedGenerator):
             self.emitline(".. autodata:: {name}".format(name=name))
 
 class COMCtypesGenerator(CtypesGenerator):
-    IGNORED_INTERFACE = set(["ITypeInfo"])
+    IGNORED_INTERFACE = set(COMParsedFile.IGNORED_INTERFACE)
     def __init__(self, *args, **kwargs):
         super(COMCtypesGenerator, self).__init__(*args, **kwargs)
         self.iids_def = {}
@@ -527,6 +546,10 @@ class ModuleGenerator(object):
         g = ParsedFileGraph(self.nodes, depnodes=depnodes)
         return g.build_dependancy_graph()
 
+    def check_dependancies_without_flattening(self, depnodes):
+        g = ParsedFileGraph(self.nodes, depnodes=depnodes) # init check for missing dependance
+        return g.nodes
+
     def generate(self):
         self.parse_source_directory()
         # Flatten the graph
@@ -615,8 +638,10 @@ print("== Generating COM interfaces ==")
 com_module_generator = ModuleGenerator("interfaces", COMParsedFile, COMCtypesGenerator, None, from_here(r"definitions\com"))
 # Load the interface_to_iid file needed by the 'COMCtypesGenerator'
 com_module_generator.after_ctypes_generator_init = lambda cgen: cgen.parse_iid_file(from_here("definitions\\interface_to_iid.txt"))
+com_module_generator.parse_source_directory()
 com_module_generator.add_module_dependancy(structure_module_generator)
-com_module_generator.generate()
+com_module_generator.resolve_dependancies = com_module_generator.check_dependancies_without_flattening # No real flattening as we have circular dep in Interfaces VTBL
+com_module_generator.resolve_dep_and_generate([BasicTypeNodes()])
 
 print("== Generating META file ==")
 # Meta-file generator

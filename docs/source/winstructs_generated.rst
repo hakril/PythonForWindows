@@ -2,6 +2,94 @@
 
 Winstructs
 ----------
+_GUID
+'''''
+.. class:: REFCLSID
+
+    Pointer to :class:`_GUID`
+
+.. class:: REFGUID
+
+    Pointer to :class:`_GUID`
+
+.. class:: LPGUID
+
+    Pointer to :class:`_GUID`
+
+.. class:: IID
+
+    Alias for :class:`_GUID`
+
+.. class:: CLSID
+
+    Alias for :class:`_GUID`
+
+.. class:: GUID
+
+    Alias for :class:`_GUID`
+
+.. class:: REFIID
+
+    Pointer to :class:`_GUID`
+
+.. class:: _GUID
+
+    .. attribute:: Data1
+
+        :class:`ULONG`
+
+
+    .. attribute:: Data2
+
+        :class:`USHORT`
+
+
+    .. attribute:: Data3
+
+        :class:`USHORT`
+
+
+    .. attribute:: Data4
+
+        :class:`BYTE` ``[8]``
+
+_SHITEMID
+'''''''''
+.. class:: SHITEMID
+
+    Alias for :class:`_SHITEMID`
+
+.. class:: _SHITEMID
+
+    .. attribute:: cb
+
+        :class:`USHORT`
+
+
+    .. attribute:: abID
+
+        :class:`BYTE` ``[1]``
+
+_ITEMIDLIST
+'''''''''''
+.. class:: ITEMIDLIST
+
+    Alias for :class:`_ITEMIDLIST`
+
+.. class:: PCIDLIST_ABSOLUTE
+
+    Pointer to :class:`_ITEMIDLIST`
+
+.. class:: PIDLIST_ABSOLUTE
+
+    Pointer to :class:`_ITEMIDLIST`
+
+.. class:: _ITEMIDLIST
+
+    .. attribute:: mkid
+
+        :class:`SHITEMID`
+
 tagRGBTRIPLE
 ''''''''''''
 .. class:: NPRGBTRIPLE
@@ -316,6 +404,156 @@ tagBITMAPCOREINFO
     .. attribute:: bmciColors
 
         :class:`RGBTRIPLE` ``[1]``
+
+tagWNDCLASSEXA
+''''''''''''''
+.. class:: PWNDCLASSEXA
+
+    Pointer to :class:`tagWNDCLASSEXA`
+
+.. class:: LPWNDCLASSEXA
+
+    Pointer to :class:`tagWNDCLASSEXA`
+
+.. class:: WNDCLASSEXA
+
+    Alias for :class:`tagWNDCLASSEXA`
+
+.. class:: tagWNDCLASSEXA
+
+    .. attribute:: cbSize
+
+        :class:`UINT`
+
+
+    .. attribute:: style
+
+        :class:`UINT`
+
+
+    .. attribute:: lpfnWndProc
+
+        :class:`WNDPROC`
+
+
+    .. attribute:: cbClsExtra
+
+        :class:`INT`
+
+
+    .. attribute:: cbWndExtra
+
+        :class:`INT`
+
+
+    .. attribute:: hInstance
+
+        :class:`HINSTANCE`
+
+
+    .. attribute:: hIcon
+
+        :class:`HICON`
+
+
+    .. attribute:: hCursor
+
+        :class:`HCURSOR`
+
+
+    .. attribute:: hbrBackground
+
+        :class:`HBRUSH`
+
+
+    .. attribute:: lpszMenuName
+
+        :class:`LPCSTR`
+
+
+    .. attribute:: lpszClassName
+
+        :class:`LPCSTR`
+
+
+    .. attribute:: hIconSm
+
+        :class:`HICON`
+
+tagWNDCLASSEXW
+''''''''''''''
+.. class:: WNDCLASSEXW
+
+    Alias for :class:`tagWNDCLASSEXW`
+
+.. class:: LPWNDCLASSEXW
+
+    Pointer to :class:`tagWNDCLASSEXW`
+
+.. class:: PWNDCLASSEXW
+
+    Pointer to :class:`tagWNDCLASSEXW`
+
+.. class:: tagWNDCLASSEXW
+
+    .. attribute:: cbSize
+
+        :class:`UINT`
+
+
+    .. attribute:: style
+
+        :class:`UINT`
+
+
+    .. attribute:: lpfnWndProc
+
+        :class:`WNDPROC`
+
+
+    .. attribute:: cbClsExtra
+
+        :class:`INT`
+
+
+    .. attribute:: cbWndExtra
+
+        :class:`INT`
+
+
+    .. attribute:: hInstance
+
+        :class:`HINSTANCE`
+
+
+    .. attribute:: hIcon
+
+        :class:`HICON`
+
+
+    .. attribute:: hCursor
+
+        :class:`HCURSOR`
+
+
+    .. attribute:: hbrBackground
+
+        :class:`HBRUSH`
+
+
+    .. attribute:: lpszMenuName
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: lpszClassName
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: hIconSm
+
+        :class:`HICON`
 
 _LIST_ENTRY
 '''''''''''
@@ -5768,53 +6006,6 @@ _DEBUG_EXCEPTION_FILTER_PARAMETERS
     .. attribute:: ExceptionCode
 
         :class:`ULONG`
-
-_GUID
-'''''
-.. class:: REFCLSID
-
-    Pointer to :class:`_GUID`
-
-.. class:: REFGUID
-
-    Pointer to :class:`_GUID`
-
-.. class:: LPGUID
-
-    Pointer to :class:`_GUID`
-
-.. class:: IID
-
-    Alias for :class:`_GUID`
-
-.. class:: GUID
-
-    Alias for :class:`_GUID`
-
-.. class:: REFIID
-
-    Pointer to :class:`_GUID`
-
-.. class:: _GUID
-
-    .. attribute:: Data1
-
-        :class:`ULONG`
-
-
-    .. attribute:: Data2
-
-        :class:`USHORT`
-
-
-    .. attribute:: Data3
-
-        :class:`USHORT`
-
-
-    .. attribute:: Data4
-
-        :class:`BYTE` ``[8]``
 
 _TMP_signscale
 ''''''''''''''

@@ -1,8 +1,29 @@
 """utils fonctions non windows-related"""
 import ctypes
 import _ctypes
-from windows.generated_def import Flag
+from windows.generated_def import Flag, LPCSTR, LPWSTR
 
+
+
+
+def buffer(size): # Test
+    buf = ctypes.create_string_buffer(size)
+    buf.size = size
+    buf.address = ctypes.addressof(buf)
+
+    class ImprovedCtypesBufferImpl(ctypes.Array):
+        _length_ = size
+        _type_ = ctypes.c_char
+        def lol(self):
+            return "lol"
+
+        def as_string(self):
+            return ctypes.cast(self, LPCSTR).value
+
+        def as_wstring(self):
+            return ctypes.cast(self, LPWSTR).value
+
+    return ImprovedCtypesBufferImpl()
 
 def fixedpropety(f):
     cache_name = "_" + f.__name__
@@ -14,12 +35,6 @@ def fixedpropety(f):
             setattr(self, cache_name, f(self))
             return getattr(self, cache_name)
     return property(prop, doc=f.__doc__)
-
-
-def swallow_ctypes_copy(ctypes_object):
-    new_copy = type(ctypes_object)()
-    ctypes.memmove(ctypes.byref(new_copy), ctypes.byref(ctypes_object), ctypes.sizeof(new_copy))
-    return new_copy
 
 
 # type replacement based on name

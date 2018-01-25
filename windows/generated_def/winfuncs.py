@@ -1,4 +1,439 @@
 from winstructs import *
+#def CreateFileTransactedA(lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile, hTransaction, pusMiniVersion, pExtendedParameter):
+#    return CreateFileTransactedA.ctypes_function(lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile, hTransaction, pusMiniVersion, pExtendedParameter)
+CreateFileTransactedAPrototype = WINFUNCTYPE(HANDLE, LPCSTR, DWORD, DWORD, LPSECURITY_ATTRIBUTES, DWORD, DWORD, HANDLE, HANDLE, PUSHORT, PVOID)
+CreateFileTransactedAParams = ((1, 'lpFileName'), (1, 'dwDesiredAccess'), (1, 'dwShareMode'), (1, 'lpSecurityAttributes'), (1, 'dwCreationDisposition'), (1, 'dwFlagsAndAttributes'), (1, 'hTemplateFile'), (1, 'hTransaction'), (1, 'pusMiniVersion'), (1, 'pExtendedParameter'))
+
+#def CreateFileTransactedW(lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile, hTransaction, pusMiniVersion, pExtendedParameter):
+#    return CreateFileTransactedW.ctypes_function(lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile, hTransaction, pusMiniVersion, pExtendedParameter)
+CreateFileTransactedWPrototype = WINFUNCTYPE(HANDLE, LPWSTR, DWORD, DWORD, LPSECURITY_ATTRIBUTES, DWORD, DWORD, HANDLE, HANDLE, PUSHORT, PVOID)
+CreateFileTransactedWParams = ((1, 'lpFileName'), (1, 'dwDesiredAccess'), (1, 'dwShareMode'), (1, 'lpSecurityAttributes'), (1, 'dwCreationDisposition'), (1, 'dwFlagsAndAttributes'), (1, 'hTemplateFile'), (1, 'hTransaction'), (1, 'pusMiniVersion'), (1, 'pExtendedParameter'))
+
+#def CommitTransaction(TransactionHandle):
+#    return CommitTransaction.ctypes_function(TransactionHandle)
+CommitTransactionPrototype = WINFUNCTYPE(BOOL, HANDLE)
+CommitTransactionParams = ((1, 'TransactionHandle'),)
+
+#def CreateTransaction(lpTransactionAttributes, UOW, CreateOptions, IsolationLevel, IsolationFlags, Timeout, Description):
+#    return CreateTransaction.ctypes_function(lpTransactionAttributes, UOW, CreateOptions, IsolationLevel, IsolationFlags, Timeout, Description)
+CreateTransactionPrototype = WINFUNCTYPE(HANDLE, LPSECURITY_ATTRIBUTES, LPGUID, DWORD, DWORD, DWORD, DWORD, LPWSTR)
+CreateTransactionParams = ((1, 'lpTransactionAttributes'), (1, 'UOW'), (1, 'CreateOptions'), (1, 'IsolationLevel'), (1, 'IsolationFlags'), (1, 'Timeout'), (1, 'Description'))
+
+#def RollbackTransaction(TransactionHandle):
+#    return RollbackTransaction.ctypes_function(TransactionHandle)
+RollbackTransactionPrototype = WINFUNCTYPE(BOOL, HANDLE)
+RollbackTransactionParams = ((1, 'TransactionHandle'),)
+
+#def OpenTransaction(dwDesiredAccess, TransactionId):
+#    return OpenTransaction.ctypes_function(dwDesiredAccess, TransactionId)
+OpenTransactionPrototype = WINFUNCTYPE(HANDLE, DWORD, LPGUID)
+OpenTransactionParams = ((1, 'dwDesiredAccess'), (1, 'TransactionId'))
+
+#def TpCallbackSendAlpcMessageOnCompletion(TpHandle, PortHandle, Flags, SendMessage):
+#    return TpCallbackSendAlpcMessageOnCompletion.ctypes_function(TpHandle, PortHandle, Flags, SendMessage)
+TpCallbackSendAlpcMessageOnCompletionPrototype = WINFUNCTYPE(NTSTATUS, HANDLE, HANDLE, ULONG, PPORT_MESSAGE)
+TpCallbackSendAlpcMessageOnCompletionParams = ((1, 'TpHandle'), (1, 'PortHandle'), (1, 'Flags'), (1, 'SendMessage'))
+
+#def CryptCATAdminCalcHashFromFileHandle(hFile, pcbHash, pbHash, dwFlags):
+#    return CryptCATAdminCalcHashFromFileHandle.ctypes_function(hFile, pcbHash, pbHash, dwFlags)
+CryptCATAdminCalcHashFromFileHandlePrototype = WINFUNCTYPE(BOOL, HANDLE, POINTER(DWORD), POINTER(BYTE), DWORD)
+CryptCATAdminCalcHashFromFileHandleParams = ((1, 'hFile'), (1, 'pcbHash'), (1, 'pbHash'), (1, 'dwFlags'))
+
+#def CryptCATAdminEnumCatalogFromHash(hCatAdmin, pbHash, cbHash, dwFlags, phPrevCatInfo):
+#    return CryptCATAdminEnumCatalogFromHash.ctypes_function(hCatAdmin, pbHash, cbHash, dwFlags, phPrevCatInfo)
+CryptCATAdminEnumCatalogFromHashPrototype = WINFUNCTYPE(HCATINFO, HCATADMIN, POINTER(BYTE), DWORD, DWORD, POINTER(HCATINFO))
+CryptCATAdminEnumCatalogFromHashParams = ((1, 'hCatAdmin'), (1, 'pbHash'), (1, 'cbHash'), (1, 'dwFlags'), (1, 'phPrevCatInfo'))
+
+#def CryptCATAdminAcquireContext(phCatAdmin, pgSubsystem, dwFlags):
+#    return CryptCATAdminAcquireContext.ctypes_function(phCatAdmin, pgSubsystem, dwFlags)
+CryptCATAdminAcquireContextPrototype = WINFUNCTYPE(BOOL, POINTER(HCATADMIN), POINTER(GUID), DWORD)
+CryptCATAdminAcquireContextParams = ((1, 'phCatAdmin'), (1, 'pgSubsystem'), (1, 'dwFlags'))
+
+#def CryptCATCatalogInfoFromContext(hCatInfo, psCatInfo, dwFlags):
+#    return CryptCATCatalogInfoFromContext.ctypes_function(hCatInfo, psCatInfo, dwFlags)
+CryptCATCatalogInfoFromContextPrototype = WINFUNCTYPE(BOOL, HCATINFO, POINTER(CATALOG_INFO), DWORD)
+CryptCATCatalogInfoFromContextParams = ((1, 'hCatInfo'), (1, 'psCatInfo'), (1, 'dwFlags'))
+
+#def CryptCATAdminReleaseCatalogContext(hCatAdmin, hCatInfo, dwFlags):
+#    return CryptCATAdminReleaseCatalogContext.ctypes_function(hCatAdmin, hCatInfo, dwFlags)
+CryptCATAdminReleaseCatalogContextPrototype = WINFUNCTYPE(BOOL, HCATADMIN, HCATINFO, DWORD)
+CryptCATAdminReleaseCatalogContextParams = ((1, 'hCatAdmin'), (1, 'hCatInfo'), (1, 'dwFlags'))
+
+#def CryptCATAdminReleaseContext(hCatAdmin, dwFlags):
+#    return CryptCATAdminReleaseContext.ctypes_function(hCatAdmin, dwFlags)
+CryptCATAdminReleaseContextPrototype = WINFUNCTYPE(BOOL, HCATADMIN, DWORD)
+CryptCATAdminReleaseContextParams = ((1, 'hCatAdmin'), (1, 'dwFlags'))
+
+#def CryptCATGetAttrInfo(hCatalog, pCatMember, pwszReferenceTag):
+#    return CryptCATGetAttrInfo.ctypes_function(hCatalog, pCatMember, pwszReferenceTag)
+CryptCATGetAttrInfoPrototype = WINFUNCTYPE(POINTER(CRYPTCATATTRIBUTE), HANDLE, POINTER(CRYPTCATMEMBER), LPWSTR)
+CryptCATGetAttrInfoParams = ((1, 'hCatalog'), (1, 'pCatMember'), (1, 'pwszReferenceTag'))
+
+#def CryptCATGetMemberInfo(hCatalog, pwszReferenceTag):
+#    return CryptCATGetMemberInfo.ctypes_function(hCatalog, pwszReferenceTag)
+CryptCATGetMemberInfoPrototype = WINFUNCTYPE(POINTER(CRYPTCATMEMBER), HANDLE, LPWSTR)
+CryptCATGetMemberInfoParams = ((1, 'hCatalog'), (1, 'pwszReferenceTag'))
+
+#def CryptCATGetAttrInfo(hCatalog, pCatMember, pwszReferenceTag):
+#    return CryptCATGetAttrInfo.ctypes_function(hCatalog, pCatMember, pwszReferenceTag)
+CryptCATGetAttrInfoPrototype = WINFUNCTYPE(POINTER(CRYPTCATATTRIBUTE), HANDLE, POINTER(CRYPTCATMEMBER), LPWSTR)
+CryptCATGetAttrInfoParams = ((1, 'hCatalog'), (1, 'pCatMember'), (1, 'pwszReferenceTag'))
+
+#def CryptCATEnumerateCatAttr(hCatalog, pPrevAttr):
+#    return CryptCATEnumerateCatAttr.ctypes_function(hCatalog, pPrevAttr)
+CryptCATEnumerateCatAttrPrototype = WINFUNCTYPE(POINTER(CRYPTCATATTRIBUTE), HANDLE, POINTER(CRYPTCATATTRIBUTE))
+CryptCATEnumerateCatAttrParams = ((1, 'hCatalog'), (1, 'pPrevAttr'))
+
+#def CryptCATEnumerateAttr(hCatalog, pCatMember, pPrevAttr):
+#    return CryptCATEnumerateAttr.ctypes_function(hCatalog, pCatMember, pPrevAttr)
+CryptCATEnumerateAttrPrototype = WINFUNCTYPE(POINTER(CRYPTCATATTRIBUTE), HANDLE, POINTER(CRYPTCATMEMBER), POINTER(CRYPTCATATTRIBUTE))
+CryptCATEnumerateAttrParams = ((1, 'hCatalog'), (1, 'pCatMember'), (1, 'pPrevAttr'))
+
+#def CryptCATEnumerateMember(hCatalog, pPrevMember):
+#    return CryptCATEnumerateMember.ctypes_function(hCatalog, pPrevMember)
+CryptCATEnumerateMemberPrototype = WINFUNCTYPE(POINTER(CRYPTCATMEMBER), HANDLE, POINTER(CRYPTCATMEMBER))
+CryptCATEnumerateMemberParams = ((1, 'hCatalog'), (1, 'pPrevMember'))
+
+#def CryptQueryObject(dwObjectType, pvObject, dwExpectedContentTypeFlags, dwExpectedFormatTypeFlags, dwFlags, pdwMsgAndCertEncodingType, pdwContentType, pdwFormatType, phCertStore, phMsg, ppvContext):
+#    return CryptQueryObject.ctypes_function(dwObjectType, pvObject, dwExpectedContentTypeFlags, dwExpectedFormatTypeFlags, dwFlags, pdwMsgAndCertEncodingType, pdwContentType, pdwFormatType, phCertStore, phMsg, ppvContext)
+CryptQueryObjectPrototype = WINFUNCTYPE(BOOL, DWORD, PVOID, DWORD, DWORD, DWORD, POINTER(DWORD), POINTER(DWORD), POINTER(DWORD), POINTER(HCERTSTORE), POINTER(HCRYPTMSG), POINTER(PVOID))
+CryptQueryObjectParams = ((1, 'dwObjectType'), (1, 'pvObject'), (1, 'dwExpectedContentTypeFlags'), (1, 'dwExpectedFormatTypeFlags'), (1, 'dwFlags'), (1, 'pdwMsgAndCertEncodingType'), (1, 'pdwContentType'), (1, 'pdwFormatType'), (1, 'phCertStore'), (1, 'phMsg'), (1, 'ppvContext'))
+
+#def CryptMsgGetParam(hCryptMsg, dwParamType, dwIndex, pvData, pcbData):
+#    return CryptMsgGetParam.ctypes_function(hCryptMsg, dwParamType, dwIndex, pvData, pcbData)
+CryptMsgGetParamPrototype = WINFUNCTYPE(BOOL, HCRYPTMSG, DWORD, DWORD, PVOID, POINTER(DWORD))
+CryptMsgGetParamParams = ((1, 'hCryptMsg'), (1, 'dwParamType'), (1, 'dwIndex'), (1, 'pvData'), (1, 'pcbData'))
+
+#def CryptDecodeObject(dwCertEncodingType, lpszStructType, pbEncoded, cbEncoded, dwFlags, pvStructInfo, pcbStructInfo):
+#    return CryptDecodeObject.ctypes_function(dwCertEncodingType, lpszStructType, pbEncoded, cbEncoded, dwFlags, pvStructInfo, pcbStructInfo)
+CryptDecodeObjectPrototype = WINFUNCTYPE(BOOL, DWORD, LPCSTR, POINTER(BYTE), DWORD, DWORD, PVOID, POINTER(DWORD))
+CryptDecodeObjectParams = ((1, 'dwCertEncodingType'), (1, 'lpszStructType'), (1, 'pbEncoded'), (1, 'cbEncoded'), (1, 'dwFlags'), (1, 'pvStructInfo'), (1, 'pcbStructInfo'))
+
+#def CertFindCertificateInStore(hCertStore, dwCertEncodingType, dwFindFlags, dwFindType, pvFindPara, pPrevCertContext):
+#    return CertFindCertificateInStore.ctypes_function(hCertStore, dwCertEncodingType, dwFindFlags, dwFindType, pvFindPara, pPrevCertContext)
+CertFindCertificateInStorePrototype = WINFUNCTYPE(PCCERT_CONTEXT, HCERTSTORE, DWORD, DWORD, DWORD, PVOID, PCCERT_CONTEXT)
+CertFindCertificateInStoreParams = ((1, 'hCertStore'), (1, 'dwCertEncodingType'), (1, 'dwFindFlags'), (1, 'dwFindType'), (1, 'pvFindPara'), (1, 'pPrevCertContext'))
+
+#def CertGetNameStringA(pCertContext, dwType, dwFlags, pvTypePara, pszNameString, cchNameString):
+#    return CertGetNameStringA.ctypes_function(pCertContext, dwType, dwFlags, pvTypePara, pszNameString, cchNameString)
+CertGetNameStringAPrototype = WINFUNCTYPE(DWORD, PCCERT_CONTEXT, DWORD, DWORD, PVOID, LPCSTR, DWORD)
+CertGetNameStringAParams = ((1, 'pCertContext'), (1, 'dwType'), (1, 'dwFlags'), (1, 'pvTypePara'), (1, 'pszNameString'), (1, 'cchNameString'))
+
+#def CertGetNameStringW(pCertContext, dwType, dwFlags, pvTypePara, pszNameString, cchNameString):
+#    return CertGetNameStringW.ctypes_function(pCertContext, dwType, dwFlags, pvTypePara, pszNameString, cchNameString)
+CertGetNameStringWPrototype = WINFUNCTYPE(DWORD, PCCERT_CONTEXT, DWORD, DWORD, PVOID, LPWSTR, DWORD)
+CertGetNameStringWParams = ((1, 'pCertContext'), (1, 'dwType'), (1, 'dwFlags'), (1, 'pvTypePara'), (1, 'pszNameString'), (1, 'cchNameString'))
+
+#def CertGetCertificateChain(hChainEngine, pCertContext, pTime, hAdditionalStore, pChainPara, dwFlags, pvReserved, ppChainContext):
+#    return CertGetCertificateChain.ctypes_function(hChainEngine, pCertContext, pTime, hAdditionalStore, pChainPara, dwFlags, pvReserved, ppChainContext)
+CertGetCertificateChainPrototype = WINFUNCTYPE(BOOL, HCERTCHAINENGINE, PCCERT_CONTEXT, LPFILETIME, HCERTSTORE, PCERT_CHAIN_PARA, DWORD, LPVOID, POINTER(PCCERT_CHAIN_CONTEXT))
+CertGetCertificateChainParams = ((1, 'hChainEngine'), (1, 'pCertContext'), (1, 'pTime'), (1, 'hAdditionalStore'), (1, 'pChainPara'), (1, 'dwFlags'), (1, 'pvReserved'), (1, 'ppChainContext'))
+
+#def CertCreateSelfSignCertificate(hCryptProvOrNCryptKey, pSubjectIssuerBlob, dwFlags, pKeyProvInfo, pSignatureAlgorithm, pStartTime, pEndTime, pExtensions):
+#    return CertCreateSelfSignCertificate.ctypes_function(hCryptProvOrNCryptKey, pSubjectIssuerBlob, dwFlags, pKeyProvInfo, pSignatureAlgorithm, pStartTime, pEndTime, pExtensions)
+CertCreateSelfSignCertificatePrototype = WINFUNCTYPE(PCCERT_CONTEXT, HCRYPTPROV_OR_NCRYPT_KEY_HANDLE, PCERT_NAME_BLOB, DWORD, PCRYPT_KEY_PROV_INFO, PCRYPT_ALGORITHM_IDENTIFIER, PSYSTEMTIME, PSYSTEMTIME, PCERT_EXTENSIONS)
+CertCreateSelfSignCertificateParams = ((1, 'hCryptProvOrNCryptKey'), (1, 'pSubjectIssuerBlob'), (1, 'dwFlags'), (1, 'pKeyProvInfo'), (1, 'pSignatureAlgorithm'), (1, 'pStartTime'), (1, 'pEndTime'), (1, 'pExtensions'))
+
+#def CertStrToNameA(dwCertEncodingType, pszX500, dwStrType, pvReserved, pbEncoded, pcbEncoded, ppszError):
+#    return CertStrToNameA.ctypes_function(dwCertEncodingType, pszX500, dwStrType, pvReserved, pbEncoded, pcbEncoded, ppszError)
+CertStrToNameAPrototype = WINFUNCTYPE(BOOL, DWORD, LPCSTR, DWORD, PVOID, POINTER(BYTE), POINTER(DWORD), POINTER(LPCSTR))
+CertStrToNameAParams = ((1, 'dwCertEncodingType'), (1, 'pszX500'), (1, 'dwStrType'), (1, 'pvReserved'), (1, 'pbEncoded'), (1, 'pcbEncoded'), (1, 'ppszError'))
+
+#def CertStrToNameW(dwCertEncodingType, pszX500, dwStrType, pvReserved, pbEncoded, pcbEncoded, ppszError):
+#    return CertStrToNameW.ctypes_function(dwCertEncodingType, pszX500, dwStrType, pvReserved, pbEncoded, pcbEncoded, ppszError)
+CertStrToNameWPrototype = WINFUNCTYPE(BOOL, DWORD, LPWSTR, DWORD, PVOID, POINTER(BYTE), POINTER(DWORD), POINTER(LPWSTR))
+CertStrToNameWParams = ((1, 'dwCertEncodingType'), (1, 'pszX500'), (1, 'dwStrType'), (1, 'pvReserved'), (1, 'pbEncoded'), (1, 'pcbEncoded'), (1, 'ppszError'))
+
+#def CertOpenStore(lpszStoreProvider, dwMsgAndCertEncodingType, hCryptProv, dwFlags, pvPara):
+#    return CertOpenStore.ctypes_function(lpszStoreProvider, dwMsgAndCertEncodingType, hCryptProv, dwFlags, pvPara)
+CertOpenStorePrototype = WINFUNCTYPE(HCERTSTORE, LPCSTR, DWORD, HCRYPTPROV_LEGACY, DWORD, PVOID)
+CertOpenStoreParams = ((1, 'lpszStoreProvider'), (1, 'dwMsgAndCertEncodingType'), (1, 'hCryptProv'), (1, 'dwFlags'), (1, 'pvPara'))
+
+#def CertAddCertificateContextToStore(hCertStore, pCertContext, dwAddDisposition, ppStoreContext):
+#    return CertAddCertificateContextToStore.ctypes_function(hCertStore, pCertContext, dwAddDisposition, ppStoreContext)
+CertAddCertificateContextToStorePrototype = WINFUNCTYPE(BOOL, HCERTSTORE, PCCERT_CONTEXT, DWORD, POINTER(PCCERT_CONTEXT))
+CertAddCertificateContextToStoreParams = ((1, 'hCertStore'), (1, 'pCertContext'), (1, 'dwAddDisposition'), (1, 'ppStoreContext'))
+
+#def PFXExportCertStoreEx(hStore, pPFX, szPassword, pvPara, dwFlags):
+#    return PFXExportCertStoreEx.ctypes_function(hStore, pPFX, szPassword, pvPara, dwFlags)
+PFXExportCertStoreExPrototype = WINFUNCTYPE(BOOL, HCERTSTORE, POINTER(CRYPT_DATA_BLOB), LPCWSTR, PVOID, DWORD)
+PFXExportCertStoreExParams = ((1, 'hStore'), (1, 'pPFX'), (1, 'szPassword'), (1, 'pvPara'), (1, 'dwFlags'))
+
+#def PFXImportCertStore(pPFX, szPassword, dwFlags):
+#    return PFXImportCertStore.ctypes_function(pPFX, szPassword, dwFlags)
+PFXImportCertStorePrototype = WINFUNCTYPE(HCERTSTORE, POINTER(CRYPT_DATA_BLOB), LPCWSTR, DWORD)
+PFXImportCertStoreParams = ((1, 'pPFX'), (1, 'szPassword'), (1, 'dwFlags'))
+
+#def CryptGenKey(hProv, Algid, dwFlags, phKey):
+#    return CryptGenKey.ctypes_function(hProv, Algid, dwFlags, phKey)
+CryptGenKeyPrototype = WINFUNCTYPE(BOOL, HCRYPTPROV, ALG_ID, DWORD, POINTER(HCRYPTKEY))
+CryptGenKeyParams = ((1, 'hProv'), (1, 'Algid'), (1, 'dwFlags'), (1, 'phKey'))
+
+#def CryptDestroyKey(hKey):
+#    return CryptDestroyKey.ctypes_function(hKey)
+CryptDestroyKeyPrototype = WINFUNCTYPE(BOOL, HCRYPTKEY)
+CryptDestroyKeyParams = ((1, 'hKey'),)
+
+#def CryptAcquireContextA(phProv, pszContainer, pszProvider, dwProvType, dwFlags):
+#    return CryptAcquireContextA.ctypes_function(phProv, pszContainer, pszProvider, dwProvType, dwFlags)
+CryptAcquireContextAPrototype = WINFUNCTYPE(BOOL, POINTER(HCRYPTPROV), LPCSTR, LPCSTR, DWORD, DWORD)
+CryptAcquireContextAParams = ((1, 'phProv'), (1, 'pszContainer'), (1, 'pszProvider'), (1, 'dwProvType'), (1, 'dwFlags'))
+
+#def CryptAcquireContextW(phProv, pszContainer, pszProvider, dwProvType, dwFlags):
+#    return CryptAcquireContextW.ctypes_function(phProv, pszContainer, pszProvider, dwProvType, dwFlags)
+CryptAcquireContextWPrototype = WINFUNCTYPE(BOOL, POINTER(HCRYPTPROV), LPWSTR, LPWSTR, DWORD, DWORD)
+CryptAcquireContextWParams = ((1, 'phProv'), (1, 'pszContainer'), (1, 'pszProvider'), (1, 'dwProvType'), (1, 'dwFlags'))
+
+#def CryptReleaseContext(hProv, dwFlags):
+#    return CryptReleaseContext.ctypes_function(hProv, dwFlags)
+CryptReleaseContextPrototype = WINFUNCTYPE(BOOL, HCRYPTPROV, DWORD)
+CryptReleaseContextParams = ((1, 'hProv'), (1, 'dwFlags'))
+
+#def CryptExportKey(hKey, hExpKey, dwBlobType, dwFlags, pbData, pdwDataLen):
+#    return CryptExportKey.ctypes_function(hKey, hExpKey, dwBlobType, dwFlags, pbData, pdwDataLen)
+CryptExportKeyPrototype = WINFUNCTYPE(BOOL, HCRYPTKEY, HCRYPTKEY, DWORD, DWORD, POINTER(BYTE), POINTER(DWORD))
+CryptExportKeyParams = ((1, 'hKey'), (1, 'hExpKey'), (1, 'dwBlobType'), (1, 'dwFlags'), (1, 'pbData'), (1, 'pdwDataLen'))
+
+#def CertGetCertificateContextProperty(pCertContext, dwPropId, pvData, pcbData):
+#    return CertGetCertificateContextProperty.ctypes_function(pCertContext, dwPropId, pvData, pcbData)
+CertGetCertificateContextPropertyPrototype = WINFUNCTYPE(BOOL, PCCERT_CONTEXT, DWORD, PVOID, POINTER(DWORD))
+CertGetCertificateContextPropertyParams = ((1, 'pCertContext'), (1, 'dwPropId'), (1, 'pvData'), (1, 'pcbData'))
+
+#def CertEnumCertificateContextProperties(pCertContext, dwPropId):
+#    return CertEnumCertificateContextProperties.ctypes_function(pCertContext, dwPropId)
+CertEnumCertificateContextPropertiesPrototype = WINFUNCTYPE(DWORD, PCCERT_CONTEXT, DWORD)
+CertEnumCertificateContextPropertiesParams = ((1, 'pCertContext'), (1, 'dwPropId'))
+
+#def CryptEncryptMessage(pEncryptPara, cRecipientCert, rgpRecipientCert, pbToBeEncrypted, cbToBeEncrypted, pbEncryptedBlob, pcbEncryptedBlob):
+#    return CryptEncryptMessage.ctypes_function(pEncryptPara, cRecipientCert, rgpRecipientCert, pbToBeEncrypted, cbToBeEncrypted, pbEncryptedBlob, pcbEncryptedBlob)
+CryptEncryptMessagePrototype = WINFUNCTYPE(BOOL, PCRYPT_ENCRYPT_MESSAGE_PARA, DWORD, POINTER(PCCERT_CONTEXT), POINTER(BYTE), DWORD, POINTER(BYTE), POINTER(DWORD))
+CryptEncryptMessageParams = ((1, 'pEncryptPara'), (1, 'cRecipientCert'), (1, 'rgpRecipientCert'), (1, 'pbToBeEncrypted'), (1, 'cbToBeEncrypted'), (1, 'pbEncryptedBlob'), (1, 'pcbEncryptedBlob'))
+
+#def CryptDecryptMessage(pDecryptPara, pbEncryptedBlob, cbEncryptedBlob, pbDecrypted, pcbDecrypted, ppXchgCert):
+#    return CryptDecryptMessage.ctypes_function(pDecryptPara, pbEncryptedBlob, cbEncryptedBlob, pbDecrypted, pcbDecrypted, ppXchgCert)
+CryptDecryptMessagePrototype = WINFUNCTYPE(BOOL, PCRYPT_DECRYPT_MESSAGE_PARA, POINTER(BYTE), DWORD, POINTER(BYTE), POINTER(DWORD), POINTER(PCCERT_CONTEXT))
+CryptDecryptMessageParams = ((1, 'pDecryptPara'), (1, 'pbEncryptedBlob'), (1, 'cbEncryptedBlob'), (1, 'pbDecrypted'), (1, 'pcbDecrypted'), (1, 'ppXchgCert'))
+
+#def CryptAcquireCertificatePrivateKey(pCert, dwFlags, pvParameters, phCryptProvOrNCryptKey, pdwKeySpec, pfCallerFreeProvOrNCryptKey):
+#    return CryptAcquireCertificatePrivateKey.ctypes_function(pCert, dwFlags, pvParameters, phCryptProvOrNCryptKey, pdwKeySpec, pfCallerFreeProvOrNCryptKey)
+CryptAcquireCertificatePrivateKeyPrototype = WINFUNCTYPE(BOOL, PCCERT_CONTEXT, DWORD, PVOID, POINTER(HCRYPTPROV_OR_NCRYPT_KEY_HANDLE), POINTER(DWORD), POINTER(BOOL))
+CryptAcquireCertificatePrivateKeyParams = ((1, 'pCert'), (1, 'dwFlags'), (1, 'pvParameters'), (1, 'phCryptProvOrNCryptKey'), (1, 'pdwKeySpec'), (1, 'pfCallerFreeProvOrNCryptKey'))
+
+#def CertDuplicateCertificateContext(pCertContext):
+#    return CertDuplicateCertificateContext.ctypes_function(pCertContext)
+CertDuplicateCertificateContextPrototype = WINFUNCTYPE(PCCERT_CONTEXT, PCCERT_CONTEXT)
+CertDuplicateCertificateContextParams = ((1, 'pCertContext'),)
+
+#def CertEnumCertificatesInStore(hCertStore, pPrevCertContext):
+#    return CertEnumCertificatesInStore.ctypes_function(hCertStore, pPrevCertContext)
+CertEnumCertificatesInStorePrototype = WINFUNCTYPE(PCCERT_CONTEXT, HCERTSTORE, PCCERT_CONTEXT)
+CertEnumCertificatesInStoreParams = ((1, 'hCertStore'), (1, 'pPrevCertContext'))
+
+#def CryptEncodeObjectEx(dwCertEncodingType, lpszStructType, pvStructInfo, dwFlags, pEncodePara, pvEncoded, pcbEncoded):
+#    return CryptEncodeObjectEx.ctypes_function(dwCertEncodingType, lpszStructType, pvStructInfo, dwFlags, pEncodePara, pvEncoded, pcbEncoded)
+CryptEncodeObjectExPrototype = WINFUNCTYPE(BOOL, DWORD, LPCSTR, PVOID, DWORD, PCRYPT_ENCODE_PARA, PVOID, POINTER(DWORD))
+CryptEncodeObjectExParams = ((1, 'dwCertEncodingType'), (1, 'lpszStructType'), (1, 'pvStructInfo'), (1, 'dwFlags'), (1, 'pEncodePara'), (1, 'pvEncoded'), (1, 'pcbEncoded'))
+
+#def CertCreateCertificateContext(dwCertEncodingType, pbCertEncoded, cbCertEncoded):
+#    return CertCreateCertificateContext.ctypes_function(dwCertEncodingType, pbCertEncoded, cbCertEncoded)
+CertCreateCertificateContextPrototype = WINFUNCTYPE(PCCERT_CONTEXT, DWORD, POINTER(BYTE), DWORD)
+CertCreateCertificateContextParams = ((1, 'dwCertEncodingType'), (1, 'pbCertEncoded'), (1, 'cbCertEncoded'))
+
+#def CertCompareCertificate(dwCertEncodingType, pCertId1, pCertId2):
+#    return CertCompareCertificate.ctypes_function(dwCertEncodingType, pCertId1, pCertId2)
+CertCompareCertificatePrototype = WINFUNCTYPE(BOOL, DWORD, PCERT_INFO, PCERT_INFO)
+CertCompareCertificateParams = ((1, 'dwCertEncodingType'), (1, 'pCertId1'), (1, 'pCertId2'))
+
+#def CertEnumCTLsInStore(hCertStore, pPrevCtlContext):
+#    return CertEnumCTLsInStore.ctypes_function(hCertStore, pPrevCtlContext)
+CertEnumCTLsInStorePrototype = WINFUNCTYPE(PCCTL_CONTEXT, HCERTSTORE, PCCTL_CONTEXT)
+CertEnumCTLsInStoreParams = ((1, 'hCertStore'), (1, 'pPrevCtlContext'))
+
+#def CertDuplicateCTLContext(pCtlContext):
+#    return CertDuplicateCTLContext.ctypes_function(pCtlContext)
+CertDuplicateCTLContextPrototype = WINFUNCTYPE(PCCTL_CONTEXT, PCCTL_CONTEXT)
+CertDuplicateCTLContextParams = ((1, 'pCtlContext'),)
+
+#def CertFreeCTLContext(pCtlContext):
+#    return CertFreeCTLContext.ctypes_function(pCtlContext)
+CertFreeCTLContextPrototype = WINFUNCTYPE(BOOL, PCCTL_CONTEXT)
+CertFreeCTLContextParams = ((1, 'pCtlContext'),)
+
+#def CryptUIDlgViewContext(dwContextType, pvContext, hwnd, pwszTitle, dwFlags, pvReserved):
+#    return CryptUIDlgViewContext.ctypes_function(dwContextType, pvContext, hwnd, pwszTitle, dwFlags, pvReserved)
+CryptUIDlgViewContextPrototype = WINFUNCTYPE(BOOL, DWORD, PVOID, HWND, LPCWSTR, DWORD, PVOID)
+CryptUIDlgViewContextParams = ((1, 'dwContextType'), (1, 'pvContext'), (1, 'hwnd'), (1, 'pwszTitle'), (1, 'dwFlags'), (1, 'pvReserved'))
+
+#def CryptMsgVerifyCountersignatureEncoded(hCryptProv, dwEncodingType, pbSignerInfo, cbSignerInfo, pbSignerInfoCountersignature, cbSignerInfoCountersignature, pciCountersigner):
+#    return CryptMsgVerifyCountersignatureEncoded.ctypes_function(hCryptProv, dwEncodingType, pbSignerInfo, cbSignerInfo, pbSignerInfoCountersignature, cbSignerInfoCountersignature, pciCountersigner)
+CryptMsgVerifyCountersignatureEncodedPrototype = WINFUNCTYPE(BOOL, HCRYPTPROV_LEGACY, DWORD, PBYTE, DWORD, PBYTE, DWORD, PCERT_INFO)
+CryptMsgVerifyCountersignatureEncodedParams = ((1, 'hCryptProv'), (1, 'dwEncodingType'), (1, 'pbSignerInfo'), (1, 'cbSignerInfo'), (1, 'pbSignerInfoCountersignature'), (1, 'cbSignerInfoCountersignature'), (1, 'pciCountersigner'))
+
+#def CryptMsgVerifyCountersignatureEncodedEx(hCryptProv, dwEncodingType, pbSignerInfo, cbSignerInfo, pbSignerInfoCountersignature, cbSignerInfoCountersignature, dwSignerType, pvSigner, dwFlags, pvExtra):
+#    return CryptMsgVerifyCountersignatureEncodedEx.ctypes_function(hCryptProv, dwEncodingType, pbSignerInfo, cbSignerInfo, pbSignerInfoCountersignature, cbSignerInfoCountersignature, dwSignerType, pvSigner, dwFlags, pvExtra)
+CryptMsgVerifyCountersignatureEncodedExPrototype = WINFUNCTYPE(BOOL, HCRYPTPROV_LEGACY, DWORD, PBYTE, DWORD, PBYTE, DWORD, DWORD, PVOID, DWORD, PVOID)
+CryptMsgVerifyCountersignatureEncodedExParams = ((1, 'hCryptProv'), (1, 'dwEncodingType'), (1, 'pbSignerInfo'), (1, 'cbSignerInfo'), (1, 'pbSignerInfoCountersignature'), (1, 'cbSignerInfoCountersignature'), (1, 'dwSignerType'), (1, 'pvSigner'), (1, 'dwFlags'), (1, 'pvExtra'))
+
+#def GetCursorPos(lpPoint):
+#    return GetCursorPos.ctypes_function(lpPoint)
+GetCursorPosPrototype = WINFUNCTYPE(BOOL, LPPOINT)
+GetCursorPosParams = ((1, 'lpPoint'),)
+
+#def WindowFromPoint(Point):
+#    return WindowFromPoint.ctypes_function(Point)
+WindowFromPointPrototype = WINFUNCTYPE(HWND, POINT)
+WindowFromPointParams = ((1, 'Point'),)
+
+#def GetWindowRect(hWnd, lpRect):
+#    return GetWindowRect.ctypes_function(hWnd, lpRect)
+GetWindowRectPrototype = WINFUNCTYPE(BOOL, HWND, LPRECT)
+GetWindowRectParams = ((1, 'hWnd'), (1, 'lpRect'))
+
+#def EnumWindows(lpEnumFunc, lParam):
+#    return EnumWindows.ctypes_function(lpEnumFunc, lParam)
+EnumWindowsPrototype = WINFUNCTYPE(BOOL, WNDENUMPROC, LPARAM)
+EnumWindowsParams = ((1, 'lpEnumFunc'), (1, 'lParam'))
+
+#def GetWindowTextA(hWnd, lpString, nMaxCount):
+#    return GetWindowTextA.ctypes_function(hWnd, lpString, nMaxCount)
+GetWindowTextAPrototype = WINFUNCTYPE(INT, HWND, LPSTR, INT)
+GetWindowTextAParams = ((1, 'hWnd'), (1, 'lpString'), (1, 'nMaxCount'))
+
+#def GetParent(hWnd):
+#    return GetParent.ctypes_function(hWnd)
+GetParentPrototype = WINFUNCTYPE(HWND, HWND)
+GetParentParams = ((1, 'hWnd'),)
+
+#def GetWindowTextW(hWnd, lpString, nMaxCount):
+#    return GetWindowTextW.ctypes_function(hWnd, lpString, nMaxCount)
+GetWindowTextWPrototype = WINFUNCTYPE(INT, HWND, LPWSTR, INT)
+GetWindowTextWParams = ((1, 'hWnd'), (1, 'lpString'), (1, 'nMaxCount'))
+
+#def GetWindowModuleFileNameA(hwnd, pszFileName, cchFileNameMax):
+#    return GetWindowModuleFileNameA.ctypes_function(hwnd, pszFileName, cchFileNameMax)
+GetWindowModuleFileNameAPrototype = WINFUNCTYPE(UINT, HWND, LPSTR, UINT)
+GetWindowModuleFileNameAParams = ((1, 'hwnd'), (1, 'pszFileName'), (1, 'cchFileNameMax'))
+
+#def GetWindowModuleFileNameW(hwnd, pszFileName, cchFileNameMax):
+#    return GetWindowModuleFileNameW.ctypes_function(hwnd, pszFileName, cchFileNameMax)
+GetWindowModuleFileNameWPrototype = WINFUNCTYPE(UINT, HWND, LPWSTR, UINT)
+GetWindowModuleFileNameWParams = ((1, 'hwnd'), (1, 'pszFileName'), (1, 'cchFileNameMax'))
+
+#def EnumChildWindows(hWndParent, lpEnumFunc, lParam):
+#    return EnumChildWindows.ctypes_function(hWndParent, lpEnumFunc, lParam)
+EnumChildWindowsPrototype = WINFUNCTYPE(BOOL, HWND, WNDENUMPROC, LPARAM)
+EnumChildWindowsParams = ((1, 'hWndParent'), (1, 'lpEnumFunc'), (1, 'lParam'))
+
+#def CloseWindow(hWnd):
+#    return CloseWindow.ctypes_function(hWnd)
+CloseWindowPrototype = WINFUNCTYPE(BOOL, HWND)
+CloseWindowParams = ((1, 'hWnd'),)
+
+#def GetDesktopWindow():
+#    return GetDesktopWindow.ctypes_function()
+GetDesktopWindowPrototype = WINFUNCTYPE(HWND)
+GetDesktopWindowParams = ()
+
+#def GetForegroundWindow():
+#    return GetForegroundWindow.ctypes_function()
+GetForegroundWindowPrototype = WINFUNCTYPE(HWND)
+GetForegroundWindowParams = ()
+
+#def BringWindowToTop(hWnd):
+#    return BringWindowToTop.ctypes_function(hWnd)
+BringWindowToTopPrototype = WINFUNCTYPE(BOOL, HWND)
+BringWindowToTopParams = ((1, 'hWnd'),)
+
+#def MoveWindow(hWnd, X, Y, nWidth, nHeight, bRepaint):
+#    return MoveWindow.ctypes_function(hWnd, X, Y, nWidth, nHeight, bRepaint)
+MoveWindowPrototype = WINFUNCTYPE(BOOL, HWND, INT, INT, INT, INT, BOOL)
+MoveWindowParams = ((1, 'hWnd'), (1, 'X'), (1, 'Y'), (1, 'nWidth'), (1, 'nHeight'), (1, 'bRepaint'))
+
+#def SetWindowPos(hWnd, hWndInsertAfter, X, Y, cx, cy, uFlags):
+#    return SetWindowPos.ctypes_function(hWnd, hWndInsertAfter, X, Y, cx, cy, uFlags)
+SetWindowPosPrototype = WINFUNCTYPE(BOOL, HWND, HWND, INT, INT, INT, INT, UINT)
+SetWindowPosParams = ((1, 'hWnd'), (1, 'hWndInsertAfter'), (1, 'X'), (1, 'Y'), (1, 'cx'), (1, 'cy'), (1, 'uFlags'))
+
+#def SetWindowTextA(hWnd, lpString):
+#    return SetWindowTextA.ctypes_function(hWnd, lpString)
+SetWindowTextAPrototype = WINFUNCTYPE(BOOL, HWND, LPCSTR)
+SetWindowTextAParams = ((1, 'hWnd'), (1, 'lpString'))
+
+#def SetWindowTextW(hWnd, lpString):
+#    return SetWindowTextW.ctypes_function(hWnd, lpString)
+SetWindowTextWPrototype = WINFUNCTYPE(BOOL, HWND, LPWSTR)
+SetWindowTextWParams = ((1, 'hWnd'), (1, 'lpString'))
+
+#def RealGetWindowClassA(hwnd, pszType, cchType):
+#    return RealGetWindowClassA.ctypes_function(hwnd, pszType, cchType)
+RealGetWindowClassAPrototype = WINFUNCTYPE(UINT, HWND, LPCSTR, UINT)
+RealGetWindowClassAParams = ((1, 'hwnd'), (1, 'pszType'), (1, 'cchType'))
+
+#def RealGetWindowClassW(hwnd, pszType, cchType):
+#    return RealGetWindowClassW.ctypes_function(hwnd, pszType, cchType)
+RealGetWindowClassWPrototype = WINFUNCTYPE(UINT, HWND, LPWSTR, UINT)
+RealGetWindowClassWParams = ((1, 'hwnd'), (1, 'pszType'), (1, 'cchType'))
+
+#def GetClassInfoExA(hinst, lpszClass, lpwcx):
+#    return GetClassInfoExA.ctypes_function(hinst, lpszClass, lpwcx)
+GetClassInfoExAPrototype = WINFUNCTYPE(BOOL, HINSTANCE, LPCSTR, LPWNDCLASSEXA)
+GetClassInfoExAParams = ((1, 'hinst'), (1, 'lpszClass'), (1, 'lpwcx'))
+
+#def GetClassInfoExW(hinst, lpszClass, lpwcx):
+#    return GetClassInfoExW.ctypes_function(hinst, lpszClass, lpwcx)
+GetClassInfoExWPrototype = WINFUNCTYPE(BOOL, HINSTANCE, LPCWSTR, LPWNDCLASSEXW)
+GetClassInfoExWParams = ((1, 'hinst'), (1, 'lpszClass'), (1, 'lpwcx'))
+
+#def GetClassNameA(hWnd, lpClassName, nMaxCount):
+#    return GetClassNameA.ctypes_function(hWnd, lpClassName, nMaxCount)
+GetClassNameAPrototype = WINFUNCTYPE(INT, HWND, LPCSTR, INT)
+GetClassNameAParams = ((1, 'hWnd'), (1, 'lpClassName'), (1, 'nMaxCount'))
+
+#def GetClassNameW(hWnd, lpClassName, nMaxCount):
+#    return GetClassNameW.ctypes_function(hWnd, lpClassName, nMaxCount)
+GetClassNameWPrototype = WINFUNCTYPE(INT, HWND, LPWSTR, INT)
+GetClassNameWParams = ((1, 'hWnd'), (1, 'lpClassName'), (1, 'nMaxCount'))
+
+#def GetWindowThreadProcessId(hWnd, lpdwProcessId):
+#    return GetWindowThreadProcessId.ctypes_function(hWnd, lpdwProcessId)
+GetWindowThreadProcessIdPrototype = WINFUNCTYPE(DWORD, HWND, LPDWORD)
+GetWindowThreadProcessIdParams = ((1, 'hWnd'), (1, 'lpdwProcessId'))
+
+#def OpenEventLogA(lpUNCServerName, lpSourceName):
+#    return OpenEventLogA.ctypes_function(lpUNCServerName, lpSourceName)
+OpenEventLogAPrototype = WINFUNCTYPE(HANDLE, LPCSTR, LPCSTR)
+OpenEventLogAParams = ((1, 'lpUNCServerName'), (1, 'lpSourceName'))
+
+#def OpenEventLogW(lpUNCServerName, lpSourceName):
+#    return OpenEventLogW.ctypes_function(lpUNCServerName, lpSourceName)
+OpenEventLogWPrototype = WINFUNCTYPE(HANDLE, LPWSTR, LPWSTR)
+OpenEventLogWParams = ((1, 'lpUNCServerName'), (1, 'lpSourceName'))
+
+#def ReadEventLogA(hEventLog, dwReadFlags, dwRecordOffset, lpBuffer, nNumberOfBytesToRead, pnBytesRead, pnMinNumberOfBytesNeeded):
+#    return ReadEventLogA.ctypes_function(hEventLog, dwReadFlags, dwRecordOffset, lpBuffer, nNumberOfBytesToRead, pnBytesRead, pnMinNumberOfBytesNeeded)
+ReadEventLogAPrototype = WINFUNCTYPE(BOOL, HANDLE, DWORD, DWORD, LPVOID, DWORD, POINTER(DWORD), POINTER(DWORD))
+ReadEventLogAParams = ((1, 'hEventLog'), (1, 'dwReadFlags'), (1, 'dwRecordOffset'), (1, 'lpBuffer'), (1, 'nNumberOfBytesToRead'), (1, 'pnBytesRead'), (1, 'pnMinNumberOfBytesNeeded'))
+
+#def ReadEventLogW(hEventLog, dwReadFlags, dwRecordOffset, lpBuffer, nNumberOfBytesToRead, pnBytesRead, pnMinNumberOfBytesNeeded):
+#    return ReadEventLogW.ctypes_function(hEventLog, dwReadFlags, dwRecordOffset, lpBuffer, nNumberOfBytesToRead, pnBytesRead, pnMinNumberOfBytesNeeded)
+ReadEventLogWPrototype = WINFUNCTYPE(BOOL, HANDLE, DWORD, DWORD, LPVOID, DWORD, POINTER(DWORD), POINTER(DWORD))
+ReadEventLogWParams = ((1, 'hEventLog'), (1, 'dwReadFlags'), (1, 'dwRecordOffset'), (1, 'lpBuffer'), (1, 'nNumberOfBytesToRead'), (1, 'pnBytesRead'), (1, 'pnMinNumberOfBytesNeeded'))
+
+#def GetEventLogInformation(hEventLog, dwInfoLevel, lpBuffer, cbBufSize, pcbBytesNeeded):
+#    return GetEventLogInformation.ctypes_function(hEventLog, dwInfoLevel, lpBuffer, cbBufSize, pcbBytesNeeded)
+GetEventLogInformationPrototype = WINFUNCTYPE(BOOL, HANDLE, DWORD, LPVOID, DWORD, LPDWORD)
+GetEventLogInformationParams = ((1, 'hEventLog'), (1, 'dwInfoLevel'), (1, 'lpBuffer'), (1, 'cbBufSize'), (1, 'pcbBytesNeeded'))
+
+#def GetNumberOfEventLogRecords(hEventLog, NumberOfRecords):
+#    return GetNumberOfEventLogRecords.ctypes_function(hEventLog, NumberOfRecords)
+GetNumberOfEventLogRecordsPrototype = WINFUNCTYPE(BOOL, HANDLE, PDWORD)
+GetNumberOfEventLogRecordsParams = ((1, 'hEventLog'), (1, 'NumberOfRecords'))
+
+#def CloseEventLog(hEventLog):
+#    return CloseEventLog.ctypes_function(hEventLog)
+CloseEventLogPrototype = WINFUNCTYPE(BOOL, HANDLE)
+CloseEventLogParams = ((1, 'hEventLog'),)
+
 #def ExitProcess(uExitCode):
 #    return ExitProcess.ctypes_function(uExitCode)
 ExitProcessPrototype = WINFUNCTYPE(VOID, UINT)
@@ -984,31 +1419,6 @@ OpenServiceAParams = ((1, 'hSCManager'), (1, 'lpServiceName'), (1, 'dwDesiredAcc
 OpenServiceWPrototype = WINFUNCTYPE(SC_HANDLE, SC_HANDLE, LPCWSTR, DWORD)
 OpenServiceWParams = ((1, 'hSCManager'), (1, 'lpServiceName'), (1, 'dwDesiredAccess'))
 
-#def EnumWindows(lpEnumFunc, lParam):
-#    return EnumWindows.ctypes_function(lpEnumFunc, lParam)
-EnumWindowsPrototype = WINFUNCTYPE(BOOL, WNDENUMPROC, LPARAM)
-EnumWindowsParams = ((1, 'lpEnumFunc'), (1, 'lParam'))
-
-#def GetWindowTextA(hWnd, lpString, nMaxCount):
-#    return GetWindowTextA.ctypes_function(hWnd, lpString, nMaxCount)
-GetWindowTextAPrototype = WINFUNCTYPE(INT, HWND, LPSTR, INT)
-GetWindowTextAParams = ((1, 'hWnd'), (1, 'lpString'), (1, 'nMaxCount'))
-
-#def GetWindowTextW(hWnd, lpString, nMaxCount):
-#    return GetWindowTextW.ctypes_function(hWnd, lpString, nMaxCount)
-GetWindowTextWPrototype = WINFUNCTYPE(INT, HWND, LPWSTR, INT)
-GetWindowTextWParams = ((1, 'hWnd'), (1, 'lpString'), (1, 'nMaxCount'))
-
-#def GetWindowModuleFileNameA(hwnd, pszFileName, cchFileNameMax):
-#    return GetWindowModuleFileNameA.ctypes_function(hwnd, pszFileName, cchFileNameMax)
-GetWindowModuleFileNameAPrototype = WINFUNCTYPE(UINT, HWND, LPSTR, UINT)
-GetWindowModuleFileNameAParams = ((1, 'hwnd'), (1, 'pszFileName'), (1, 'cchFileNameMax'))
-
-#def GetWindowModuleFileNameW(hwnd, pszFileName, cchFileNameMax):
-#    return GetWindowModuleFileNameW.ctypes_function(hwnd, pszFileName, cchFileNameMax)
-GetWindowModuleFileNameWPrototype = WINFUNCTYPE(UINT, HWND, LPWSTR, UINT)
-GetWindowModuleFileNameWParams = ((1, 'hwnd'), (1, 'pszFileName'), (1, 'cchFileNameMax'))
-
 #def GetLogicalDriveStringsA(nBufferLength, lpBuffer):
 #    return GetLogicalDriveStringsA.ctypes_function(nBufferLength, lpBuffer)
 GetLogicalDriveStringsAPrototype = WINFUNCTYPE(DWORD, DWORD, LPCSTR)
@@ -1249,21 +1659,6 @@ GetLongPathNameWParams = ((1, 'lpszShortPath'), (1, 'lpszLongPath'), (1, 'cchBuf
 GetProcessDEPPolicyPrototype = WINFUNCTYPE(BOOL, HANDLE, LPDWORD, PBOOL)
 GetProcessDEPPolicyParams = ((1, 'hProcess'), (1, 'lpFlags'), (1, 'lpPermanent'))
 
-#def GetCursorPos(lpPoint):
-#    return GetCursorPos.ctypes_function(lpPoint)
-GetCursorPosPrototype = WINFUNCTYPE(BOOL, LPPOINT)
-GetCursorPosParams = ((1, 'lpPoint'),)
-
-#def WindowFromPoint(Point):
-#    return WindowFromPoint.ctypes_function(Point)
-WindowFromPointPrototype = WINFUNCTYPE(HWND, POINT)
-WindowFromPointParams = ((1, 'Point'),)
-
-#def GetWindowRect(hWnd, lpRect):
-#    return GetWindowRect.ctypes_function(hWnd, lpRect)
-GetWindowRectPrototype = WINFUNCTYPE(BOOL, HWND, LPRECT)
-GetWindowRectParams = ((1, 'hWnd'), (1, 'lpRect'))
-
 #def GetNamedSecurityInfoA(pObjectName, ObjectType, SecurityInfo, ppsidOwner, ppsidGroup, ppDacl, ppSacl, ppSecurityDescriptor):
 #    return GetNamedSecurityInfoA.ctypes_function(pObjectName, ObjectType, SecurityInfo, ppsidOwner, ppsidGroup, ppDacl, ppSacl, ppSecurityDescriptor)
 GetNamedSecurityInfoAPrototype = WINFUNCTYPE(DWORD, LPCSTR, SE_OBJECT_TYPE, SECURITY_INFORMATION, POINTER(PSID), POINTER(PSID), POINTER(PACL), POINTER(PACL), POINTER(PSECURITY_DESCRIPTOR))
@@ -1383,284 +1778,4 @@ RtlDosPathNameToNtPathName_UParams = ((1, 'DosName'), (1, 'NtName'), (1, 'PartNa
 #    return ApiSetResolveToHost.ctypes_function(Schema, FileNameIn, ParentName, Resolved, HostBinary)
 ApiSetResolveToHostPrototype = WINFUNCTYPE(NTSTATUS, PVOID, PUNICODE_STRING, PUNICODE_STRING, PBOOLEAN, PUNICODE_STRING)
 ApiSetResolveToHostParams = ((1, 'Schema'), (1, 'FileNameIn'), (1, 'ParentName'), (1, 'Resolved'), (1, 'HostBinary'))
-
-#def TpCallbackSendAlpcMessageOnCompletion(TpHandle, PortHandle, Flags, SendMessage):
-#    return TpCallbackSendAlpcMessageOnCompletion.ctypes_function(TpHandle, PortHandle, Flags, SendMessage)
-TpCallbackSendAlpcMessageOnCompletionPrototype = WINFUNCTYPE(NTSTATUS, HANDLE, HANDLE, ULONG, PPORT_MESSAGE)
-TpCallbackSendAlpcMessageOnCompletionParams = ((1, 'TpHandle'), (1, 'PortHandle'), (1, 'Flags'), (1, 'SendMessage'))
-
-#def CryptCATAdminCalcHashFromFileHandle(hFile, pcbHash, pbHash, dwFlags):
-#    return CryptCATAdminCalcHashFromFileHandle.ctypes_function(hFile, pcbHash, pbHash, dwFlags)
-CryptCATAdminCalcHashFromFileHandlePrototype = WINFUNCTYPE(BOOL, HANDLE, POINTER(DWORD), POINTER(BYTE), DWORD)
-CryptCATAdminCalcHashFromFileHandleParams = ((1, 'hFile'), (1, 'pcbHash'), (1, 'pbHash'), (1, 'dwFlags'))
-
-#def CryptCATAdminEnumCatalogFromHash(hCatAdmin, pbHash, cbHash, dwFlags, phPrevCatInfo):
-#    return CryptCATAdminEnumCatalogFromHash.ctypes_function(hCatAdmin, pbHash, cbHash, dwFlags, phPrevCatInfo)
-CryptCATAdminEnumCatalogFromHashPrototype = WINFUNCTYPE(HCATINFO, HCATADMIN, POINTER(BYTE), DWORD, DWORD, POINTER(HCATINFO))
-CryptCATAdminEnumCatalogFromHashParams = ((1, 'hCatAdmin'), (1, 'pbHash'), (1, 'cbHash'), (1, 'dwFlags'), (1, 'phPrevCatInfo'))
-
-#def CryptCATAdminAcquireContext(phCatAdmin, pgSubsystem, dwFlags):
-#    return CryptCATAdminAcquireContext.ctypes_function(phCatAdmin, pgSubsystem, dwFlags)
-CryptCATAdminAcquireContextPrototype = WINFUNCTYPE(BOOL, POINTER(HCATADMIN), POINTER(GUID), DWORD)
-CryptCATAdminAcquireContextParams = ((1, 'phCatAdmin'), (1, 'pgSubsystem'), (1, 'dwFlags'))
-
-#def CryptCATCatalogInfoFromContext(hCatInfo, psCatInfo, dwFlags):
-#    return CryptCATCatalogInfoFromContext.ctypes_function(hCatInfo, psCatInfo, dwFlags)
-CryptCATCatalogInfoFromContextPrototype = WINFUNCTYPE(BOOL, HCATINFO, POINTER(CATALOG_INFO), DWORD)
-CryptCATCatalogInfoFromContextParams = ((1, 'hCatInfo'), (1, 'psCatInfo'), (1, 'dwFlags'))
-
-#def CryptCATAdminReleaseCatalogContext(hCatAdmin, hCatInfo, dwFlags):
-#    return CryptCATAdminReleaseCatalogContext.ctypes_function(hCatAdmin, hCatInfo, dwFlags)
-CryptCATAdminReleaseCatalogContextPrototype = WINFUNCTYPE(BOOL, HCATADMIN, HCATINFO, DWORD)
-CryptCATAdminReleaseCatalogContextParams = ((1, 'hCatAdmin'), (1, 'hCatInfo'), (1, 'dwFlags'))
-
-#def CryptCATAdminReleaseContext(hCatAdmin, dwFlags):
-#    return CryptCATAdminReleaseContext.ctypes_function(hCatAdmin, dwFlags)
-CryptCATAdminReleaseContextPrototype = WINFUNCTYPE(BOOL, HCATADMIN, DWORD)
-CryptCATAdminReleaseContextParams = ((1, 'hCatAdmin'), (1, 'dwFlags'))
-
-#def CryptCATGetAttrInfo(hCatalog, pCatMember, pwszReferenceTag):
-#    return CryptCATGetAttrInfo.ctypes_function(hCatalog, pCatMember, pwszReferenceTag)
-CryptCATGetAttrInfoPrototype = WINFUNCTYPE(POINTER(CRYPTCATATTRIBUTE), HANDLE, POINTER(CRYPTCATMEMBER), LPWSTR)
-CryptCATGetAttrInfoParams = ((1, 'hCatalog'), (1, 'pCatMember'), (1, 'pwszReferenceTag'))
-
-#def CryptCATGetMemberInfo(hCatalog, pwszReferenceTag):
-#    return CryptCATGetMemberInfo.ctypes_function(hCatalog, pwszReferenceTag)
-CryptCATGetMemberInfoPrototype = WINFUNCTYPE(POINTER(CRYPTCATMEMBER), HANDLE, LPWSTR)
-CryptCATGetMemberInfoParams = ((1, 'hCatalog'), (1, 'pwszReferenceTag'))
-
-#def CryptCATGetAttrInfo(hCatalog, pCatMember, pwszReferenceTag):
-#    return CryptCATGetAttrInfo.ctypes_function(hCatalog, pCatMember, pwszReferenceTag)
-CryptCATGetAttrInfoPrototype = WINFUNCTYPE(POINTER(CRYPTCATATTRIBUTE), HANDLE, POINTER(CRYPTCATMEMBER), LPWSTR)
-CryptCATGetAttrInfoParams = ((1, 'hCatalog'), (1, 'pCatMember'), (1, 'pwszReferenceTag'))
-
-#def CryptCATEnumerateCatAttr(hCatalog, pPrevAttr):
-#    return CryptCATEnumerateCatAttr.ctypes_function(hCatalog, pPrevAttr)
-CryptCATEnumerateCatAttrPrototype = WINFUNCTYPE(POINTER(CRYPTCATATTRIBUTE), HANDLE, POINTER(CRYPTCATATTRIBUTE))
-CryptCATEnumerateCatAttrParams = ((1, 'hCatalog'), (1, 'pPrevAttr'))
-
-#def CryptCATEnumerateAttr(hCatalog, pCatMember, pPrevAttr):
-#    return CryptCATEnumerateAttr.ctypes_function(hCatalog, pCatMember, pPrevAttr)
-CryptCATEnumerateAttrPrototype = WINFUNCTYPE(POINTER(CRYPTCATATTRIBUTE), HANDLE, POINTER(CRYPTCATMEMBER), POINTER(CRYPTCATATTRIBUTE))
-CryptCATEnumerateAttrParams = ((1, 'hCatalog'), (1, 'pCatMember'), (1, 'pPrevAttr'))
-
-#def CryptCATEnumerateMember(hCatalog, pPrevMember):
-#    return CryptCATEnumerateMember.ctypes_function(hCatalog, pPrevMember)
-CryptCATEnumerateMemberPrototype = WINFUNCTYPE(POINTER(CRYPTCATMEMBER), HANDLE, POINTER(CRYPTCATMEMBER))
-CryptCATEnumerateMemberParams = ((1, 'hCatalog'), (1, 'pPrevMember'))
-
-#def CryptQueryObject(dwObjectType, pvObject, dwExpectedContentTypeFlags, dwExpectedFormatTypeFlags, dwFlags, pdwMsgAndCertEncodingType, pdwContentType, pdwFormatType, phCertStore, phMsg, ppvContext):
-#    return CryptQueryObject.ctypes_function(dwObjectType, pvObject, dwExpectedContentTypeFlags, dwExpectedFormatTypeFlags, dwFlags, pdwMsgAndCertEncodingType, pdwContentType, pdwFormatType, phCertStore, phMsg, ppvContext)
-CryptQueryObjectPrototype = WINFUNCTYPE(BOOL, DWORD, PVOID, DWORD, DWORD, DWORD, POINTER(DWORD), POINTER(DWORD), POINTER(DWORD), POINTER(HCERTSTORE), POINTER(HCRYPTMSG), POINTER(PVOID))
-CryptQueryObjectParams = ((1, 'dwObjectType'), (1, 'pvObject'), (1, 'dwExpectedContentTypeFlags'), (1, 'dwExpectedFormatTypeFlags'), (1, 'dwFlags'), (1, 'pdwMsgAndCertEncodingType'), (1, 'pdwContentType'), (1, 'pdwFormatType'), (1, 'phCertStore'), (1, 'phMsg'), (1, 'ppvContext'))
-
-#def CryptMsgGetParam(hCryptMsg, dwParamType, dwIndex, pvData, pcbData):
-#    return CryptMsgGetParam.ctypes_function(hCryptMsg, dwParamType, dwIndex, pvData, pcbData)
-CryptMsgGetParamPrototype = WINFUNCTYPE(BOOL, HCRYPTMSG, DWORD, DWORD, PVOID, POINTER(DWORD))
-CryptMsgGetParamParams = ((1, 'hCryptMsg'), (1, 'dwParamType'), (1, 'dwIndex'), (1, 'pvData'), (1, 'pcbData'))
-
-#def CryptDecodeObject(dwCertEncodingType, lpszStructType, pbEncoded, cbEncoded, dwFlags, pvStructInfo, pcbStructInfo):
-#    return CryptDecodeObject.ctypes_function(dwCertEncodingType, lpszStructType, pbEncoded, cbEncoded, dwFlags, pvStructInfo, pcbStructInfo)
-CryptDecodeObjectPrototype = WINFUNCTYPE(BOOL, DWORD, LPCSTR, POINTER(BYTE), DWORD, DWORD, PVOID, POINTER(DWORD))
-CryptDecodeObjectParams = ((1, 'dwCertEncodingType'), (1, 'lpszStructType'), (1, 'pbEncoded'), (1, 'cbEncoded'), (1, 'dwFlags'), (1, 'pvStructInfo'), (1, 'pcbStructInfo'))
-
-#def CertFindCertificateInStore(hCertStore, dwCertEncodingType, dwFindFlags, dwFindType, pvFindPara, pPrevCertContext):
-#    return CertFindCertificateInStore.ctypes_function(hCertStore, dwCertEncodingType, dwFindFlags, dwFindType, pvFindPara, pPrevCertContext)
-CertFindCertificateInStorePrototype = WINFUNCTYPE(PCCERT_CONTEXT, HCERTSTORE, DWORD, DWORD, DWORD, PVOID, PCCERT_CONTEXT)
-CertFindCertificateInStoreParams = ((1, 'hCertStore'), (1, 'dwCertEncodingType'), (1, 'dwFindFlags'), (1, 'dwFindType'), (1, 'pvFindPara'), (1, 'pPrevCertContext'))
-
-#def CertGetNameStringA(pCertContext, dwType, dwFlags, pvTypePara, pszNameString, cchNameString):
-#    return CertGetNameStringA.ctypes_function(pCertContext, dwType, dwFlags, pvTypePara, pszNameString, cchNameString)
-CertGetNameStringAPrototype = WINFUNCTYPE(DWORD, PCCERT_CONTEXT, DWORD, DWORD, PVOID, LPCSTR, DWORD)
-CertGetNameStringAParams = ((1, 'pCertContext'), (1, 'dwType'), (1, 'dwFlags'), (1, 'pvTypePara'), (1, 'pszNameString'), (1, 'cchNameString'))
-
-#def CertGetNameStringW(pCertContext, dwType, dwFlags, pvTypePara, pszNameString, cchNameString):
-#    return CertGetNameStringW.ctypes_function(pCertContext, dwType, dwFlags, pvTypePara, pszNameString, cchNameString)
-CertGetNameStringWPrototype = WINFUNCTYPE(DWORD, PCCERT_CONTEXT, DWORD, DWORD, PVOID, LPWSTR, DWORD)
-CertGetNameStringWParams = ((1, 'pCertContext'), (1, 'dwType'), (1, 'dwFlags'), (1, 'pvTypePara'), (1, 'pszNameString'), (1, 'cchNameString'))
-
-#def CertGetCertificateChain(hChainEngine, pCertContext, pTime, hAdditionalStore, pChainPara, dwFlags, pvReserved, ppChainContext):
-#    return CertGetCertificateChain.ctypes_function(hChainEngine, pCertContext, pTime, hAdditionalStore, pChainPara, dwFlags, pvReserved, ppChainContext)
-CertGetCertificateChainPrototype = WINFUNCTYPE(BOOL, HCERTCHAINENGINE, PCCERT_CONTEXT, LPFILETIME, HCERTSTORE, PCERT_CHAIN_PARA, DWORD, LPVOID, POINTER(PCCERT_CHAIN_CONTEXT))
-CertGetCertificateChainParams = ((1, 'hChainEngine'), (1, 'pCertContext'), (1, 'pTime'), (1, 'hAdditionalStore'), (1, 'pChainPara'), (1, 'dwFlags'), (1, 'pvReserved'), (1, 'ppChainContext'))
-
-#def CertCreateSelfSignCertificate(hCryptProvOrNCryptKey, pSubjectIssuerBlob, dwFlags, pKeyProvInfo, pSignatureAlgorithm, pStartTime, pEndTime, pExtensions):
-#    return CertCreateSelfSignCertificate.ctypes_function(hCryptProvOrNCryptKey, pSubjectIssuerBlob, dwFlags, pKeyProvInfo, pSignatureAlgorithm, pStartTime, pEndTime, pExtensions)
-CertCreateSelfSignCertificatePrototype = WINFUNCTYPE(PCCERT_CONTEXT, HCRYPTPROV_OR_NCRYPT_KEY_HANDLE, PCERT_NAME_BLOB, DWORD, PCRYPT_KEY_PROV_INFO, PCRYPT_ALGORITHM_IDENTIFIER, PSYSTEMTIME, PSYSTEMTIME, PCERT_EXTENSIONS)
-CertCreateSelfSignCertificateParams = ((1, 'hCryptProvOrNCryptKey'), (1, 'pSubjectIssuerBlob'), (1, 'dwFlags'), (1, 'pKeyProvInfo'), (1, 'pSignatureAlgorithm'), (1, 'pStartTime'), (1, 'pEndTime'), (1, 'pExtensions'))
-
-#def CertStrToNameA(dwCertEncodingType, pszX500, dwStrType, pvReserved, pbEncoded, pcbEncoded, ppszError):
-#    return CertStrToNameA.ctypes_function(dwCertEncodingType, pszX500, dwStrType, pvReserved, pbEncoded, pcbEncoded, ppszError)
-CertStrToNameAPrototype = WINFUNCTYPE(BOOL, DWORD, LPCSTR, DWORD, PVOID, POINTER(BYTE), POINTER(DWORD), POINTER(LPCSTR))
-CertStrToNameAParams = ((1, 'dwCertEncodingType'), (1, 'pszX500'), (1, 'dwStrType'), (1, 'pvReserved'), (1, 'pbEncoded'), (1, 'pcbEncoded'), (1, 'ppszError'))
-
-#def CertStrToNameW(dwCertEncodingType, pszX500, dwStrType, pvReserved, pbEncoded, pcbEncoded, ppszError):
-#    return CertStrToNameW.ctypes_function(dwCertEncodingType, pszX500, dwStrType, pvReserved, pbEncoded, pcbEncoded, ppszError)
-CertStrToNameWPrototype = WINFUNCTYPE(BOOL, DWORD, LPWSTR, DWORD, PVOID, POINTER(BYTE), POINTER(DWORD), POINTER(LPWSTR))
-CertStrToNameWParams = ((1, 'dwCertEncodingType'), (1, 'pszX500'), (1, 'dwStrType'), (1, 'pvReserved'), (1, 'pbEncoded'), (1, 'pcbEncoded'), (1, 'ppszError'))
-
-#def CertOpenStore(lpszStoreProvider, dwMsgAndCertEncodingType, hCryptProv, dwFlags, pvPara):
-#    return CertOpenStore.ctypes_function(lpszStoreProvider, dwMsgAndCertEncodingType, hCryptProv, dwFlags, pvPara)
-CertOpenStorePrototype = WINFUNCTYPE(HCERTSTORE, LPCSTR, DWORD, HCRYPTPROV_LEGACY, DWORD, PVOID)
-CertOpenStoreParams = ((1, 'lpszStoreProvider'), (1, 'dwMsgAndCertEncodingType'), (1, 'hCryptProv'), (1, 'dwFlags'), (1, 'pvPara'))
-
-#def CertAddCertificateContextToStore(hCertStore, pCertContext, dwAddDisposition, ppStoreContext):
-#    return CertAddCertificateContextToStore.ctypes_function(hCertStore, pCertContext, dwAddDisposition, ppStoreContext)
-CertAddCertificateContextToStorePrototype = WINFUNCTYPE(BOOL, HCERTSTORE, PCCERT_CONTEXT, DWORD, POINTER(PCCERT_CONTEXT))
-CertAddCertificateContextToStoreParams = ((1, 'hCertStore'), (1, 'pCertContext'), (1, 'dwAddDisposition'), (1, 'ppStoreContext'))
-
-#def PFXExportCertStoreEx(hStore, pPFX, szPassword, pvPara, dwFlags):
-#    return PFXExportCertStoreEx.ctypes_function(hStore, pPFX, szPassword, pvPara, dwFlags)
-PFXExportCertStoreExPrototype = WINFUNCTYPE(BOOL, HCERTSTORE, POINTER(CRYPT_DATA_BLOB), LPCWSTR, PVOID, DWORD)
-PFXExportCertStoreExParams = ((1, 'hStore'), (1, 'pPFX'), (1, 'szPassword'), (1, 'pvPara'), (1, 'dwFlags'))
-
-#def PFXImportCertStore(pPFX, szPassword, dwFlags):
-#    return PFXImportCertStore.ctypes_function(pPFX, szPassword, dwFlags)
-PFXImportCertStorePrototype = WINFUNCTYPE(HCERTSTORE, POINTER(CRYPT_DATA_BLOB), LPCWSTR, DWORD)
-PFXImportCertStoreParams = ((1, 'pPFX'), (1, 'szPassword'), (1, 'dwFlags'))
-
-#def CryptGenKey(hProv, Algid, dwFlags, phKey):
-#    return CryptGenKey.ctypes_function(hProv, Algid, dwFlags, phKey)
-CryptGenKeyPrototype = WINFUNCTYPE(BOOL, HCRYPTPROV, ALG_ID, DWORD, POINTER(HCRYPTKEY))
-CryptGenKeyParams = ((1, 'hProv'), (1, 'Algid'), (1, 'dwFlags'), (1, 'phKey'))
-
-#def CryptDestroyKey(hKey):
-#    return CryptDestroyKey.ctypes_function(hKey)
-CryptDestroyKeyPrototype = WINFUNCTYPE(BOOL, HCRYPTKEY)
-CryptDestroyKeyParams = ((1, 'hKey'),)
-
-#def CryptAcquireContextA(phProv, pszContainer, pszProvider, dwProvType, dwFlags):
-#    return CryptAcquireContextA.ctypes_function(phProv, pszContainer, pszProvider, dwProvType, dwFlags)
-CryptAcquireContextAPrototype = WINFUNCTYPE(BOOL, POINTER(HCRYPTPROV), LPCSTR, LPCSTR, DWORD, DWORD)
-CryptAcquireContextAParams = ((1, 'phProv'), (1, 'pszContainer'), (1, 'pszProvider'), (1, 'dwProvType'), (1, 'dwFlags'))
-
-#def CryptAcquireContextW(phProv, pszContainer, pszProvider, dwProvType, dwFlags):
-#    return CryptAcquireContextW.ctypes_function(phProv, pszContainer, pszProvider, dwProvType, dwFlags)
-CryptAcquireContextWPrototype = WINFUNCTYPE(BOOL, POINTER(HCRYPTPROV), LPWSTR, LPWSTR, DWORD, DWORD)
-CryptAcquireContextWParams = ((1, 'phProv'), (1, 'pszContainer'), (1, 'pszProvider'), (1, 'dwProvType'), (1, 'dwFlags'))
-
-#def CryptReleaseContext(hProv, dwFlags):
-#    return CryptReleaseContext.ctypes_function(hProv, dwFlags)
-CryptReleaseContextPrototype = WINFUNCTYPE(BOOL, HCRYPTPROV, DWORD)
-CryptReleaseContextParams = ((1, 'hProv'), (1, 'dwFlags'))
-
-#def CryptExportKey(hKey, hExpKey, dwBlobType, dwFlags, pbData, pdwDataLen):
-#    return CryptExportKey.ctypes_function(hKey, hExpKey, dwBlobType, dwFlags, pbData, pdwDataLen)
-CryptExportKeyPrototype = WINFUNCTYPE(BOOL, HCRYPTKEY, HCRYPTKEY, DWORD, DWORD, POINTER(BYTE), POINTER(DWORD))
-CryptExportKeyParams = ((1, 'hKey'), (1, 'hExpKey'), (1, 'dwBlobType'), (1, 'dwFlags'), (1, 'pbData'), (1, 'pdwDataLen'))
-
-#def CertGetCertificateContextProperty(pCertContext, dwPropId, pvData, pcbData):
-#    return CertGetCertificateContextProperty.ctypes_function(pCertContext, dwPropId, pvData, pcbData)
-CertGetCertificateContextPropertyPrototype = WINFUNCTYPE(BOOL, PCCERT_CONTEXT, DWORD, PVOID, POINTER(DWORD))
-CertGetCertificateContextPropertyParams = ((1, 'pCertContext'), (1, 'dwPropId'), (1, 'pvData'), (1, 'pcbData'))
-
-#def CertEnumCertificateContextProperties(pCertContext, dwPropId):
-#    return CertEnumCertificateContextProperties.ctypes_function(pCertContext, dwPropId)
-CertEnumCertificateContextPropertiesPrototype = WINFUNCTYPE(DWORD, PCCERT_CONTEXT, DWORD)
-CertEnumCertificateContextPropertiesParams = ((1, 'pCertContext'), (1, 'dwPropId'))
-
-#def CryptEncryptMessage(pEncryptPara, cRecipientCert, rgpRecipientCert, pbToBeEncrypted, cbToBeEncrypted, pbEncryptedBlob, pcbEncryptedBlob):
-#    return CryptEncryptMessage.ctypes_function(pEncryptPara, cRecipientCert, rgpRecipientCert, pbToBeEncrypted, cbToBeEncrypted, pbEncryptedBlob, pcbEncryptedBlob)
-CryptEncryptMessagePrototype = WINFUNCTYPE(BOOL, PCRYPT_ENCRYPT_MESSAGE_PARA, DWORD, POINTER(PCCERT_CONTEXT), POINTER(BYTE), DWORD, POINTER(BYTE), POINTER(DWORD))
-CryptEncryptMessageParams = ((1, 'pEncryptPara'), (1, 'cRecipientCert'), (1, 'rgpRecipientCert'), (1, 'pbToBeEncrypted'), (1, 'cbToBeEncrypted'), (1, 'pbEncryptedBlob'), (1, 'pcbEncryptedBlob'))
-
-#def CryptDecryptMessage(pDecryptPara, pbEncryptedBlob, cbEncryptedBlob, pbDecrypted, pcbDecrypted, ppXchgCert):
-#    return CryptDecryptMessage.ctypes_function(pDecryptPara, pbEncryptedBlob, cbEncryptedBlob, pbDecrypted, pcbDecrypted, ppXchgCert)
-CryptDecryptMessagePrototype = WINFUNCTYPE(BOOL, PCRYPT_DECRYPT_MESSAGE_PARA, POINTER(BYTE), DWORD, POINTER(BYTE), POINTER(DWORD), POINTER(PCCERT_CONTEXT))
-CryptDecryptMessageParams = ((1, 'pDecryptPara'), (1, 'pbEncryptedBlob'), (1, 'cbEncryptedBlob'), (1, 'pbDecrypted'), (1, 'pcbDecrypted'), (1, 'ppXchgCert'))
-
-#def CryptAcquireCertificatePrivateKey(pCert, dwFlags, pvParameters, phCryptProvOrNCryptKey, pdwKeySpec, pfCallerFreeProvOrNCryptKey):
-#    return CryptAcquireCertificatePrivateKey.ctypes_function(pCert, dwFlags, pvParameters, phCryptProvOrNCryptKey, pdwKeySpec, pfCallerFreeProvOrNCryptKey)
-CryptAcquireCertificatePrivateKeyPrototype = WINFUNCTYPE(BOOL, PCCERT_CONTEXT, DWORD, PVOID, POINTER(HCRYPTPROV_OR_NCRYPT_KEY_HANDLE), POINTER(DWORD), POINTER(BOOL))
-CryptAcquireCertificatePrivateKeyParams = ((1, 'pCert'), (1, 'dwFlags'), (1, 'pvParameters'), (1, 'phCryptProvOrNCryptKey'), (1, 'pdwKeySpec'), (1, 'pfCallerFreeProvOrNCryptKey'))
-
-#def CertDuplicateCertificateContext(pCertContext):
-#    return CertDuplicateCertificateContext.ctypes_function(pCertContext)
-CertDuplicateCertificateContextPrototype = WINFUNCTYPE(PCCERT_CONTEXT, PCCERT_CONTEXT)
-CertDuplicateCertificateContextParams = ((1, 'pCertContext'),)
-
-#def CertEnumCertificatesInStore(hCertStore, pPrevCertContext):
-#    return CertEnumCertificatesInStore.ctypes_function(hCertStore, pPrevCertContext)
-CertEnumCertificatesInStorePrototype = WINFUNCTYPE(PCCERT_CONTEXT, HCERTSTORE, PCCERT_CONTEXT)
-CertEnumCertificatesInStoreParams = ((1, 'hCertStore'), (1, 'pPrevCertContext'))
-
-#def CryptEncodeObjectEx(dwCertEncodingType, lpszStructType, pvStructInfo, dwFlags, pEncodePara, pvEncoded, pcbEncoded):
-#    return CryptEncodeObjectEx.ctypes_function(dwCertEncodingType, lpszStructType, pvStructInfo, dwFlags, pEncodePara, pvEncoded, pcbEncoded)
-CryptEncodeObjectExPrototype = WINFUNCTYPE(BOOL, DWORD, LPCSTR, PVOID, DWORD, PCRYPT_ENCODE_PARA, PVOID, POINTER(DWORD))
-CryptEncodeObjectExParams = ((1, 'dwCertEncodingType'), (1, 'lpszStructType'), (1, 'pvStructInfo'), (1, 'dwFlags'), (1, 'pEncodePara'), (1, 'pvEncoded'), (1, 'pcbEncoded'))
-
-#def CertCreateCertificateContext(dwCertEncodingType, pbCertEncoded, cbCertEncoded):
-#    return CertCreateCertificateContext.ctypes_function(dwCertEncodingType, pbCertEncoded, cbCertEncoded)
-CertCreateCertificateContextPrototype = WINFUNCTYPE(PCCERT_CONTEXT, DWORD, POINTER(BYTE), DWORD)
-CertCreateCertificateContextParams = ((1, 'dwCertEncodingType'), (1, 'pbCertEncoded'), (1, 'cbCertEncoded'))
-
-#def CertCompareCertificate(dwCertEncodingType, pCertId1, pCertId2):
-#    return CertCompareCertificate.ctypes_function(dwCertEncodingType, pCertId1, pCertId2)
-CertCompareCertificatePrototype = WINFUNCTYPE(BOOL, DWORD, PCERT_INFO, PCERT_INFO)
-CertCompareCertificateParams = ((1, 'dwCertEncodingType'), (1, 'pCertId1'), (1, 'pCertId2'))
-
-#def CertEnumCTLsInStore(hCertStore, pPrevCtlContext):
-#    return CertEnumCTLsInStore.ctypes_function(hCertStore, pPrevCtlContext)
-CertEnumCTLsInStorePrototype = WINFUNCTYPE(PCCTL_CONTEXT, HCERTSTORE, PCCTL_CONTEXT)
-CertEnumCTLsInStoreParams = ((1, 'hCertStore'), (1, 'pPrevCtlContext'))
-
-#def CertDuplicateCTLContext(pCtlContext):
-#    return CertDuplicateCTLContext.ctypes_function(pCtlContext)
-CertDuplicateCTLContextPrototype = WINFUNCTYPE(PCCTL_CONTEXT, PCCTL_CONTEXT)
-CertDuplicateCTLContextParams = ((1, 'pCtlContext'),)
-
-#def CertFreeCTLContext(pCtlContext):
-#    return CertFreeCTLContext.ctypes_function(pCtlContext)
-CertFreeCTLContextPrototype = WINFUNCTYPE(BOOL, PCCTL_CONTEXT)
-CertFreeCTLContextParams = ((1, 'pCtlContext'),)
-
-#def CryptUIDlgViewContext(dwContextType, pvContext, hwnd, pwszTitle, dwFlags, pvReserved):
-#    return CryptUIDlgViewContext.ctypes_function(dwContextType, pvContext, hwnd, pwszTitle, dwFlags, pvReserved)
-CryptUIDlgViewContextPrototype = WINFUNCTYPE(BOOL, DWORD, PVOID, HWND, LPCWSTR, DWORD, PVOID)
-CryptUIDlgViewContextParams = ((1, 'dwContextType'), (1, 'pvContext'), (1, 'hwnd'), (1, 'pwszTitle'), (1, 'dwFlags'), (1, 'pvReserved'))
-
-#def CryptMsgVerifyCountersignatureEncoded(hCryptProv, dwEncodingType, pbSignerInfo, cbSignerInfo, pbSignerInfoCountersignature, cbSignerInfoCountersignature, pciCountersigner):
-#    return CryptMsgVerifyCountersignatureEncoded.ctypes_function(hCryptProv, dwEncodingType, pbSignerInfo, cbSignerInfo, pbSignerInfoCountersignature, cbSignerInfoCountersignature, pciCountersigner)
-CryptMsgVerifyCountersignatureEncodedPrototype = WINFUNCTYPE(BOOL, HCRYPTPROV_LEGACY, DWORD, PBYTE, DWORD, PBYTE, DWORD, PCERT_INFO)
-CryptMsgVerifyCountersignatureEncodedParams = ((1, 'hCryptProv'), (1, 'dwEncodingType'), (1, 'pbSignerInfo'), (1, 'cbSignerInfo'), (1, 'pbSignerInfoCountersignature'), (1, 'cbSignerInfoCountersignature'), (1, 'pciCountersigner'))
-
-#def CryptMsgVerifyCountersignatureEncodedEx(hCryptProv, dwEncodingType, pbSignerInfo, cbSignerInfo, pbSignerInfoCountersignature, cbSignerInfoCountersignature, dwSignerType, pvSigner, dwFlags, pvExtra):
-#    return CryptMsgVerifyCountersignatureEncodedEx.ctypes_function(hCryptProv, dwEncodingType, pbSignerInfo, cbSignerInfo, pbSignerInfoCountersignature, cbSignerInfoCountersignature, dwSignerType, pvSigner, dwFlags, pvExtra)
-CryptMsgVerifyCountersignatureEncodedExPrototype = WINFUNCTYPE(BOOL, HCRYPTPROV_LEGACY, DWORD, PBYTE, DWORD, PBYTE, DWORD, DWORD, PVOID, DWORD, PVOID)
-CryptMsgVerifyCountersignatureEncodedExParams = ((1, 'hCryptProv'), (1, 'dwEncodingType'), (1, 'pbSignerInfo'), (1, 'cbSignerInfo'), (1, 'pbSignerInfoCountersignature'), (1, 'cbSignerInfoCountersignature'), (1, 'dwSignerType'), (1, 'pvSigner'), (1, 'dwFlags'), (1, 'pvExtra'))
-
-#def OpenEventLogA(lpUNCServerName, lpSourceName):
-#    return OpenEventLogA.ctypes_function(lpUNCServerName, lpSourceName)
-OpenEventLogAPrototype = WINFUNCTYPE(HANDLE, LPCSTR, LPCSTR)
-OpenEventLogAParams = ((1, 'lpUNCServerName'), (1, 'lpSourceName'))
-
-#def OpenEventLogW(lpUNCServerName, lpSourceName):
-#    return OpenEventLogW.ctypes_function(lpUNCServerName, lpSourceName)
-OpenEventLogWPrototype = WINFUNCTYPE(HANDLE, LPWSTR, LPWSTR)
-OpenEventLogWParams = ((1, 'lpUNCServerName'), (1, 'lpSourceName'))
-
-#def ReadEventLogA(hEventLog, dwReadFlags, dwRecordOffset, lpBuffer, nNumberOfBytesToRead, pnBytesRead, pnMinNumberOfBytesNeeded):
-#    return ReadEventLogA.ctypes_function(hEventLog, dwReadFlags, dwRecordOffset, lpBuffer, nNumberOfBytesToRead, pnBytesRead, pnMinNumberOfBytesNeeded)
-ReadEventLogAPrototype = WINFUNCTYPE(BOOL, HANDLE, DWORD, DWORD, LPVOID, DWORD, POINTER(DWORD), POINTER(DWORD))
-ReadEventLogAParams = ((1, 'hEventLog'), (1, 'dwReadFlags'), (1, 'dwRecordOffset'), (1, 'lpBuffer'), (1, 'nNumberOfBytesToRead'), (1, 'pnBytesRead'), (1, 'pnMinNumberOfBytesNeeded'))
-
-#def ReadEventLogW(hEventLog, dwReadFlags, dwRecordOffset, lpBuffer, nNumberOfBytesToRead, pnBytesRead, pnMinNumberOfBytesNeeded):
-#    return ReadEventLogW.ctypes_function(hEventLog, dwReadFlags, dwRecordOffset, lpBuffer, nNumberOfBytesToRead, pnBytesRead, pnMinNumberOfBytesNeeded)
-ReadEventLogWPrototype = WINFUNCTYPE(BOOL, HANDLE, DWORD, DWORD, LPVOID, DWORD, POINTER(DWORD), POINTER(DWORD))
-ReadEventLogWParams = ((1, 'hEventLog'), (1, 'dwReadFlags'), (1, 'dwRecordOffset'), (1, 'lpBuffer'), (1, 'nNumberOfBytesToRead'), (1, 'pnBytesRead'), (1, 'pnMinNumberOfBytesNeeded'))
-
-#def GetEventLogInformation(hEventLog, dwInfoLevel, lpBuffer, cbBufSize, pcbBytesNeeded):
-#    return GetEventLogInformation.ctypes_function(hEventLog, dwInfoLevel, lpBuffer, cbBufSize, pcbBytesNeeded)
-GetEventLogInformationPrototype = WINFUNCTYPE(BOOL, HANDLE, DWORD, LPVOID, DWORD, LPDWORD)
-GetEventLogInformationParams = ((1, 'hEventLog'), (1, 'dwInfoLevel'), (1, 'lpBuffer'), (1, 'cbBufSize'), (1, 'pcbBytesNeeded'))
-
-#def GetNumberOfEventLogRecords(hEventLog, NumberOfRecords):
-#    return GetNumberOfEventLogRecords.ctypes_function(hEventLog, NumberOfRecords)
-GetNumberOfEventLogRecordsPrototype = WINFUNCTYPE(BOOL, HANDLE, PDWORD)
-GetNumberOfEventLogRecordsParams = ((1, 'hEventLog'), (1, 'NumberOfRecords'))
-
-#def CloseEventLog(hEventLog):
-#    return CloseEventLog.ctypes_function(hEventLog)
-CloseEventLogPrototype = WINFUNCTYPE(BOOL, HANDLE)
-CloseEventLogParams = ((1, 'hEventLog'),)
 
