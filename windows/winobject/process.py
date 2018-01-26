@@ -571,6 +571,8 @@ class Process(AutoHandle):
         try:
                 size = winproxy.GetMappedFileNameA(self.handle, addr, buffer, buffer_size)
         except winproxy.Kernel32Error as e:
+            if e.winerror != gdef.ERROR_UNEXP_NET_ERR:
+                raise # Raise if error type is not expected: detect mapped aborted transaction
             return None
         return buffer[:size]
 

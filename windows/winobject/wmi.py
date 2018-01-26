@@ -93,7 +93,7 @@ class WmiRequester(object):
                 result = enumerator.Next(timeout, 1, ctypes.byref(processor), ctypes.byref(count))
             except WindowsError as e:
                 if (e.winerror & 0xffffffff) ==  WBEM_E_INVALID_CLASS:
-                    raise WindowsError(e.winerror, 'WBEM_E_INVALID_CLASS <Invalid WMI class "{0}">'.format(query))
+                    raise WindowsError(e.winerror, 'WBEM_E_INVALID_CLASS <Invalid WMI class>')
                 if (e.winerror & 0xffffffff) in WBEMSTATUS.values:
                     raise WindowsError(e.winerror, WBEMSTATUS(e.winerror & 0xffffffff).value)
                 raise

@@ -114,6 +114,11 @@ def error_ntstatus(func_name, result, func, args):
         raise NtStatusException(result & 0xffffffff)
     return args
 
+def valid_handle_check(func_name, result, func, args):
+    if result == INVALID_HANDLE_VALUE:
+        raise Kernel32Error(func_name)
+    return args
+
 
 class ExportNotFound(RuntimeError):
         def __init__(self, func_name, api_name):
@@ -224,6 +229,10 @@ class CryptUIProxy(ApiProxy):
 
 class Shell32Proxy(ApiProxy):
     APIDLL = "shell32"
+    default_error_check = staticmethod(zero_is_fail_error_check)
+
+class Ktmw32Proxy(ApiProxy):
+    APIDLL = "Ktmw32"
     default_error_check = staticmethod(zero_is_fail_error_check)
 
 #class OptionalExport(object):
@@ -625,6 +634,7 @@ QueryWorkingSet = Kernel32Proxy("QueryWorkingSet")(QueryWorkingSetWrapper)
 def QueryWorkingSetExWrapper(hProcess, pv, cb):
     return QueryWorkingSetEx.ctypes_function(hProcess, pv, cb)
 QueryWorkingSetEx = Kernel32Proxy("QueryWorkingSetEx")(QueryWorkingSetExWrapper)
+
 
 
 if not is_implemented(GetMappedFileNameA):
@@ -1556,11 +1566,16 @@ def CryptUIDlgViewContext(dwContextType, pvContext, hwnd, pwszTitle, dwFlags, pv
 # ## User32 stuff ## #
 
 EnumWindows = TransparentUser32Proxy('EnumWindows')
+EnumChildWindows = TransparentUser32Proxy('EnumChildWindows')
+GetParent = TransparentUser32Proxy('GetParent')
+GetClassInfoExA = TransparentUser32Proxy('GetClassInfoExA')
+GetClassInfoExW = TransparentUser32Proxy('GetClassInfoExW')
 GetWindowTextA = TransparentUser32Proxy('GetWindowTextA', no_error_check)
 GetWindowTextW = TransparentUser32Proxy('GetWindowTextW', no_error_check)
 GetWindowModuleFileNameA = TransparentUser32Proxy('GetWindowModuleFileNameA', no_error_check)
 GetWindowModuleFileNameW = TransparentUser32Proxy('GetWindowModuleFileNameW', no_error_check)
 GetSystemMetrics = TransparentUser32Proxy('GetSystemMetrics', no_error_check)
+GetWindowThreadProcessId = TransparentUser32Proxy('GetWindowThreadProcessId')
 
 @User32Proxy("GetCursorPos")
 def GetCursorPos(lpPoint):
@@ -1582,6 +1597,30 @@ def MessageBoxA(hWnd=0, lpText=NeededParameter, lpCaption=None, uType=0):
 @User32Proxy("MessageBoxW")
 def MessageBoxW(hWnd=0, lpText=NeededParameter, lpCaption=None, uType=0):
     return MessageBoxW.ctypes_function(hWnd, lpText, lpCaption, uType)
+
+@User32Proxy("RealGetWindowClassA")
+def RealGetWindowClassA(hwnd, pszType, cchType=None):
+    if cchType is None:
+        cchType = len(pszType)
+    return RealGetWindowClassA.ctypes_function(hwnd, pszType, cchType)
+
+@User32Proxy("RealGetWindowClassW")
+def RealGetWindowClassW(hwnd, pszType, cchType=None):
+    if cchType is None:
+        cchType = len(pszType)
+    return RealGetWindowClassW.ctypes_function(hwnd, pszType, cchType)
+
+@User32Proxy("GetClassNameA")
+def GetClassNameA (hwnd, pszType, cchType=None):
+    if cchType is None:
+        cchType = len(pszType)
+    return GetClassNameA .ctypes_function(hwnd, pszType, cchType)
+
+@User32Proxy("GetClassNameW")
+def GetClassNameW (hwnd, pszType, cchType=None):
+    if cchType is None:
+        cchType = len(pszType)
+    return GetClassNameW .ctypes_function(hwnd, pszType, cchType)
 
 # ## Version stuff ## #
 
@@ -1648,3 +1687,35 @@ def ShellExecuteA(hwnd, lpOperation, lpFile, lpParameters, lpDirectory, nShowCmd
 @Shell32Proxy('ShellExecuteW')
 def ShellExecuteW(hwnd, lpOperation, lpFile, lpParameters, lpDirectory, nShowCmd):
     return ShellExecuteW.ctypes_function(hwnd, lpOperation, lpFile, lpParameters, lpDirectory, nShowCmd)
+
+
+# Transactions #
+
+@Kernel32Proxy("CreateFileTransactedA", error_check=valid_handle_check)
+def CreateFileTransactedA(lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile, hTransaction, pusMiniVersion, pExtendedParameter):
+    return CreateFileTransactedA.ctypes_function(lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile, hTransaction, pusMiniVersion, pExtendedParameter)
+
+@Kernel32Proxy("CreateFileTransactedW", error_check=valid_handle_check)
+def CreateFileTransactedW(lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile, hTransaction, pusMiniVersion, pExtendedParameter):
+    return CreateFileTransactedW.ctypes_function(lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile, hTransaction, pusMiniVersion, pExtendedParameter)
+
+
+@Ktmw32Proxy("CommitTransaction")
+def CommitTransaction(TransactionHandle):
+    return CommitTransaction.ctypes_function(TransactionHandle)
+
+
+@Ktmw32Proxy("CreateTransaction")
+def CreateTransaction(lpTransactionAttributes, UOW, CreateOptions, IsolationLevel, IsolationFlags, Timeout, Description):
+    return CreateTransaction.ctypes_function(lpTransactionAttributes, UOW, CreateOptions, IsolationLevel, IsolationFlags, Timeout, Description)
+
+
+@Ktmw32Proxy("RollbackTransaction")
+def RollbackTransaction(TransactionHandle):
+    return RollbackTransaction.ctypes_function(TransactionHandle)
+
+
+@Ktmw32Proxy("OpenTransaction")
+def OpenTransaction(dwDesiredAccess, TransactionId):
+    return OpenTransaction.ctypes_function(dwDesiredAccess, TransactionId)
+
