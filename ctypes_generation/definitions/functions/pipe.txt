@@ -1,0 +1,35 @@
+HANDLE WINAPI CreateNamedPipeA(
+  _In_     LPCSTR                lpName,
+  _In_     DWORD                 dwOpenMode,
+  _In_     DWORD                 dwPipeMode,
+  _In_     DWORD                 nMaxInstances,
+  _In_     DWORD                 nOutBufferSize,
+  _In_     DWORD                 nInBufferSize,
+  _In_     DWORD                 nDefaultTimeOut,
+  _In_opt_ LPSECURITY_ATTRIBUTES lpSecurityAttributes
+);
+
+HANDLE WINAPI CreateNamedPipeW(
+  _In_     LPWSTR                lpName,
+  _In_     DWORD                 dwOpenMode,
+  _In_     DWORD                 dwPipeMode,
+  _In_     DWORD                 nMaxInstances,
+  _In_     DWORD                 nOutBufferSize,
+  _In_     DWORD                 nInBufferSize,
+  _In_     DWORD                 nDefaultTimeOut,
+  _In_opt_ LPSECURITY_ATTRIBUTES lpSecurityAttributes
+);
+
+
+BOOL WINAPI ConnectNamedPipe(
+  _In_        HANDLE       hNamedPipe,
+  _Inout_opt_ LPOVERLAPPED lpOverlapped
+);
+
+
+BOOL WINAPI SetNamedPipeHandleState(
+  _In_     HANDLE  hNamedPipe,
+  _In_opt_ LPDWORD lpMode,
+  _In_opt_ LPDWORD lpMaxCollectionCount,
+  _In_opt_ LPDWORD lpCollectDataTimeout
+);

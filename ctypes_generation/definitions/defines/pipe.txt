@@ -1,0 +1,34 @@
+#define PIPE_ACCESS_INBOUND         0x00000001
+#define PIPE_ACCESS_OUTBOUND        0x00000002
+#define PIPE_ACCESS_DUPLEX          0x00000003
+
+//
+// Define the Named Pipe End flags for GetNamedPipeInfo
+//
+
+#define PIPE_CLIENT_END             0x00000000
+#define PIPE_SERVER_END             0x00000001
+
+//
+// Define the dwPipeMode values for CreateNamedPipe
+//
+
+#define PIPE_WAIT                   0x00000000
+#define PIPE_NOWAIT                 0x00000001
+#define PIPE_READMODE_BYTE          0x00000000
+#define PIPE_READMODE_MESSAGE       0x00000002
+#define PIPE_TYPE_BYTE              0x00000000
+#define PIPE_TYPE_MESSAGE           0x00000004
+#define PIPE_ACCEPT_REMOTE_CLIENTS  0x00000000
+#define PIPE_REJECT_REMOTE_CLIENTS  0x00000008
+
+//
+// Define the well known values for CreateNamedPipe nMaxInstances
+//
+
+#define PIPE_UNLIMITED_INSTANCES    255
+
+
+#define NMPWAIT_WAIT_FOREVER            0xffffffff
+#define NMPWAIT_NOWAIT                  0x00000001
+#define NMPWAIT_USE_DEFAULT_WAIT        0x00000000

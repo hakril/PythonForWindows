@@ -35,5 +35,6 @@ import windows.debug
 import windows.wintrust
 import windows.syswow64
 import windows.com
+import windows.pipe
 
 __all__ = ["system", 'current_process', 'current_thread']

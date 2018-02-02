@@ -1719,3 +1719,22 @@ def RollbackTransaction(TransactionHandle):
 def OpenTransaction(dwDesiredAccess, TransactionId):
     return OpenTransaction.ctypes_function(dwDesiredAccess, TransactionId)
 
+
+# Pipe
+
+@Kernel32Proxy("CreateNamedPipeA")
+def CreateNamedPipeA(lpName, dwOpenMode, dwPipeMode, nMaxInstances, nOutBufferSize, nInBufferSize, nDefaultTimeOut, lpSecurityAttributes):
+    return CreateNamedPipeA.ctypes_function(lpName, dwOpenMode, dwPipeMode, nMaxInstances, nOutBufferSize, nInBufferSize, nDefaultTimeOut, lpSecurityAttributes)
+
+@Kernel32Proxy("CreateNamedPipeW")
+def CreateNamedPipeW(lpName, dwOpenMode, dwPipeMode, nMaxInstances, nOutBufferSize, nInBufferSize, nDefaultTimeOut, lpSecurityAttributes):
+    return CreateNamedPipeW.ctypes_function(lpName, dwOpenMode, dwPipeMode, nMaxInstances, nOutBufferSize, nInBufferSize, nDefaultTimeOut, lpSecurityAttributes)
+
+@Kernel32Proxy("ConnectNamedPipe")
+def ConnectNamedPipe(hNamedPipe, lpOverlapped):
+    return ConnectNamedPipe.ctypes_function(hNamedPipe, lpOverlapped)
+
+@Kernel32Proxy("SetNamedPipeHandleState")
+def SetNamedPipeHandleState(hNamedPipe, lpMode, lpMaxCollectionCount, lpCollectDataTimeout):
+    return SetNamedPipeHandleState.ctypes_function(hNamedPipe, lpMode, lpMaxCollectionCount, lpCollectDataTimeout)
+
