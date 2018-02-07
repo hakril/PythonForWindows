@@ -114,16 +114,17 @@ def load_dll_in_remote_process(target, dll_name):
             # We have kernel32 \o/
             k32 = k32[0]
             try:
-                load_libraryA = k32.pe.exports["LoadLibraryA"]
+                load_libraryW = k32.pe.exports["LoadLibraryW"]
             except KeyError:
                 raise ValueError("Kernel32 have no export <LoadLibraryA> (wtf)")
 
             with target.allocated_memory(0x1000) as addr:
-                target.write_memory(addr, dll_name + "\x00")
-                t = target.create_thread(load_libraryA, addr)
+                # target.write_memory(addr, dll_name + "\x00")
+                target.write_memory(addr, (dll_name + "\x00").encode('utf-16le'))
+                t = target.create_thread(load_libraryW, addr)
                 t.wait()
                 if not t.exit_code:
-                    raise InjectionFailedError("Injection of <{0}> failed".format(dll_name))
+                    raise InjectionFailedError(u"Injection of <{0}> failed".format(dll_name))
             dbgprint("DLL Injected via LoadLibray", "DLLINJECT")
             return t.exit_code
     # Hardcore mode

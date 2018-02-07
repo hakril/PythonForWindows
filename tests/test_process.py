@@ -4,6 +4,7 @@ import os
 import time
 import struct
 import textwrap
+import shutil
 
 import windows
 import windows.generated_def as gdef
@@ -300,6 +301,41 @@ class TestProcessWithCheckGarbage(object):
         proc32_64.load_library(DLL)
         assert DLL in [m.name for m in proc32_64.peb.modules]
 
+    def test_load_library_unicode_name(self, proc32_64, tmpdir):
+        mybitness = windows.current_process.bitness
+        UNICODE_FILENAME = u'\u4e2d\u56fd\u94f6\u884c\u7f51\u94f6\u52a9\u624b.dll'
+
+        if proc32_64.bitness == mybitness:
+            DLLPATH = r"c:\windows\system32\wintrust.dll"
+        elif mybitness == 64: # target is 32
+            DLLPATH = r"c:\windows\syswow64\wintrust.dll"
+        elif mybitness == 32: # target is 64
+            DLLPATH = r"c:\windows\sysnative\wintrust.dll"
+        else:
+            raise Value("WTF ARE THE BITNESS ?")
+        targetname = os.path.join(str(tmpdir), UNICODE_FILENAME)
+        shutil.copy(DLLPATH, targetname)
+        proc32_64.load_library(targetname)
+        dlls = [m for m in proc32_64.peb.modules if m.name == UNICODE_FILENAME]
+        assert len(dlls) == 1
+        injecteddll = dlls[0]
+        # Check that the DLL is the one we asked to load
+        assert injecteddll.fullname == targetname
+
+# UNICODE_PATH_NAME = u'\u4e2d\u56fd\u94f6\u884c\u7f51\u94f6\u52a9\u624b'
+
+# def test_unicode_path_module(tmpdir, proc32_64):
+    # assert windows.current_process.bitness == 32
+    # if proc32_64.bitness == 64:
+        # wintrust_native_path = r'c:\windows\sysnative\wintrust.dll'
+    # else:
+        # wintrust_native_path = r'c:\windows\system32\wintrust.dll'
+
+    # full_dirpath = os.path.join(tmpdir, UNICODE_PATH_NAME)
+    # full_dllpath = os.path.join(full_dirpath, "wintrust.dll")
+    # os.mkdir(full_dirpath)
+    # shutil.copy(wintrust_native_path, full_dllpath)
+    # wintrust_sha256 = hashlib.sha256(open(wintrust_native_path, "rb").read()).hexdigest()
 
 
     def test_get_working_set(self, proc32_64):
@@ -355,6 +391,9 @@ class TestProcessWithCheckGarbage(object):
         k32 = [m for m in proc32_64.peb.modules if m.name == "kernel32.dll"][0]
         mapped_filname = proc32_64.get_mapped_filename(k32.baseaddr)
         assert mapped_filname.endswith("kernel32.dll")
+        # Test on non-commit & non file-mapped addresses
+        assert proc32_64.get_mapped_filename(0) == None
+        assert proc32_64.get_mapped_filename(id(object())) == None
 
 
     def test_thread_teb_base(self, proc32_64):

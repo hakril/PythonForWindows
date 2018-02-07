@@ -551,7 +551,7 @@ class Process(AutoHandle):
     def get_mapped_filename(self, addr):
         """The filename mapped at address ``addr`` or ``None``
 
-        :rtype: :class:`str` or ``None``
+        :rtype: :class:`unicode` or ``None``
 		"""
         buffer_size = 0x1000
         buffer = ctypes.c_buffer(buffer_size)
@@ -561,7 +561,7 @@ class Process(AutoHandle):
              try:
                 windows.syswow64.NtQueryVirtualMemory_32_to_64(self.handle, addr, MemorySectionName, buffer, buffer_size, target_size)
              except NtStatusException as e:
-                if e.code not in  [STATUS_FILE_INVALID, STATUS_INVALID_ADDRESS, STATUS_TRANSACTION_NOT_ACTIVE]:
+                if e.code not in  (STATUS_FILE_INVALID, STATUS_INVALID_ADDRESS):
                     raise
                 return None
              remote_winstring = rctypes.transform_type_to_remote64bits(gdef.LSA_UNICODE_STRING)
@@ -569,12 +569,12 @@ class Process(AutoHandle):
              return mapped_filename.str
 
         try:
-                size = winproxy.GetMappedFileNameA(self.handle, addr, buffer, buffer_size)
+                size = winproxy.GetMappedFileNameW(self.handle, addr, buffer, buffer_size)
         except winproxy.Kernel32Error as e:
-            if e.winerror != gdef.ERROR_UNEXP_NET_ERR:
+            if e.winerror not in (gdef.ERROR_UNEXP_NET_ERR, gdef.ERROR_FILE_INVALID):
                 raise # Raise if error type is not expected: detect mapped aborted transaction
             return None
-        return buffer[:size]
+        return buffer[: size * 2].decode("utf16")
 
     def read_byte(self, addr):
         """Read a ``CHAR`` at ``addr``"""
