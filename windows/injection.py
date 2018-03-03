@@ -119,13 +119,13 @@ def load_dll_in_remote_process(target, dll_name):
                 raise ValueError("Kernel32 have no export <LoadLibraryA> (wtf)")
 
             with target.allocated_memory(0x1000) as addr:
-                # target.write_memory(addr, dll_name + "\x00")
                 target.write_memory(addr, (dll_name + "\x00").encode('utf-16le'))
                 t = target.create_thread(load_libraryW, addr)
                 t.wait()
                 if not t.exit_code:
                     raise InjectionFailedError(u"Injection of <{0}> failed".format(dll_name))
             dbgprint("DLL Injected via LoadLibray", "DLLINJECT")
+            # Cannot return the full return value of load_libraryW in 64b target.. (exit_code is a DWORD)
             return t.exit_code
     # Hardcore mode
     # We don't have k32 or PEB->Ldr

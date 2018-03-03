@@ -7,10 +7,6 @@ from windows.generated_def.winstructs import *
 from windows.utils import transform_ctypes_fields
 import windows.remotectypes as rctypes
 
-# This must go to windefs
-IMAGE_DIRECTORY_ENTRY_EXPORT = 0
-IMAGE_DIRECTORY_ENTRY_IMPORT = 1
-
 IMAGE_ORDINAL_FLAG32 = 0x80000000
 IMAGE_ORDINAL_FLAG64 = 0x8000000000000000
 

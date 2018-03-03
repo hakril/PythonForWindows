@@ -133,7 +133,7 @@ class WmiRequester(object):
 
 class WmiManager(dict):
     """The main WMI class exposed, used to list and access differents WMI namespace, can be used as a dict to access
-    :cls:`WmiRequester` by namespace"""
+    :class:`WmiRequester` by namespace"""
     DEFAULT_NAMESPACE = "root\\cimv2"
     def __init__(self):
         self.wmi_requester_by_namespace = {}

@@ -16,9 +16,10 @@ from windows.generated_def.interfaces import generate_IID, IID
 # "-".join("{:02X}".format(c) for c in struct.unpack("<IHHHBBBBBB", x))
 
 def init():
-    t = winproxy.CoInitializeEx()
-    if t:
-        return t
+    try:
+        winproxy.CoInitializeEx()
+    except WindowsError as e:
+        return e.winerror
     return winproxy.CoInitializeSecurity(0, -1, None, 0, 0, RPC_C_IMP_LEVEL_IMPERSONATE, 0,0,0)
 
 
