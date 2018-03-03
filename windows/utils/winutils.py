@@ -326,24 +326,38 @@ def ntstatus(code):
 
 
 def get_long_path(path):
-    """Return the long path form for ``path``
+    """Return the long path form for ``path``.
 
-        :returns: :class:`str`
+        :raise: :class:`~windows.winproxy.Kernel32Error` if ``path`` does not exists
+        :param path: a valid Windows path
+        :type path: :class:`str` | :obj:`unicode`
+        :returns: :class:`str` | :obj:`unicode` -- same type as ``path`` parameter
     """
     size = 0x1000
-    buffer = ctypes.c_buffer(size)
-    rsize = winproxy.GetLongPathNameA(path, buffer, size)
+    if isinstance(path, unicode):
+        buffer = ctypes.create_unicode_buffer(size)
+        rsize = winproxy.GetLongPathNameW(path, buffer, size)
+    else:
+        buffer = ctypes.c_buffer(size)
+        rsize = winproxy.GetLongPathNameA(path, buffer, size)
     return buffer[:rsize]
 
 
 def get_short_path(path):
     """Return the short path form for ``path``
 
-        :returns: :class:`str`
+        :raise: :class:`~windows.winproxy.Kernel32Error` if ``path`` does not exists
+        :param path: a valid Windows path
+        :type path: :class:`str` | :obj:`unicode`
+        :returns: :class:`str` | :obj:`unicode` -- same type as ``path`` parameter
     """
     size = 0x1000
-    buffer = ctypes.c_buffer(size)
-    rsize = winproxy.GetShortPathNameA(path, buffer, size)
+    if isinstance(path, unicode):
+        buffer = ctypes.create_unicode_buffer(size)
+        rsize = winproxy.GetShortPathNameW(path, buffer, size)
+    else:
+        buffer = ctypes.c_buffer(size)
+        rsize = winproxy.GetShortPathNameA(path, buffer, size)
     return buffer[:rsize]
 
 def dospath_to_ntpath(dospath):

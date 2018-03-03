@@ -1,9 +1,10 @@
 import pytest
 import os
+import tempfile
+
 from datetime import datetime, timedelta
 import windows.utils
 import windows.generated_def as gdef
-
 from pfwtest import *
 
 pytestmark = pytest.mark.usefixtures('check_for_gc_garbage')
@@ -107,7 +108,6 @@ def test_datetime_from_filetime():
 
 
 
-
 def test_unix_timestamp_from_filetime():
     # Check date vs timestamps to be sure
     assert datetime.utcfromtimestamp(1504765968.072730) == datetime(2017, 9, 7, 6, 32, 48, 72730)
@@ -117,3 +117,20 @@ def test_unix_timestamp_from_filetime():
     assert datetime.utcfromtimestamp(1504765968.072731) == datetime(2017, 9, 7, 6, 32, 48, 72731)
     assert windows.utils.unix_timestamp_from_filetime(131492395680727309) == 1504765968.072731
     assert windows.utils.unix_timestamp_from_filetime(131492395680727305) == 1504765968.072731
+
+@pytest.mark.parametrize("prefix,prefixtype", [
+    ("long_ascii_prefix", str),
+    (u'\u4e2d\u56fd\u94f6\u884c\u7f51\u94f6\u52a9\u624b', unicode),
+    ])
+def test_long_short_path_str_unicode(prefix, prefixtype):
+    """Test that get_short_path/get_long_path works with str/unicode path and preserve path type"""
+    assert isinstance(prefix, prefixtype)
+    with tempfile.NamedTemporaryFile(prefix=prefix) as f:
+        basename = f.name.lower()
+        assert isinstance(basename, prefixtype)
+        short_name = windows.utils.get_short_path(basename).lower()
+        assert isinstance(short_name, prefixtype)
+        assert short_name != basename
+        full_name = windows.utils.get_long_path(short_name).lower()
+        assert isinstance(full_name, prefixtype)
+        assert full_name == basename
