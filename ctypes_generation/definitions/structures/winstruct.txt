@@ -1143,6 +1143,11 @@ typedef struct _IMAGE_EXPORT_DIRECTORY {
     DWORD   AddressOfNameOrdinals;
 } IMAGE_EXPORT_DIRECTORY, *PIMAGE_EXPORT_DIRECTORY;
 
+typedef struct _IMAGE_BASE_RELOCATION {
+    DWORD   VirtualAddress;
+    DWORD   SizeOfBlock;
+} IMAGE_BASE_RELOCATION, *PIMAGE_BASE_RELOCATION;
+
 typedef struct _MEMORY_BASIC_INFORMATION {
   PVOID  BaseAddress;
   PVOID  AllocationBase;

@@ -365,3 +365,13 @@ BOOL WINAPI CryptMsgVerifyCountersignatureEncodedEx(
   _Reserved_ DWORD             dwFlags,
   _Reserved_ PVOID             pvExtra
 );
+
+BOOL WINAPI CryptHashCertificate(
+  _In_          HCRYPTPROV_LEGACY hCryptProv,
+  _In_          ALG_ID            Algid,
+  _In_          DWORD             dwFlags,
+  _In_          BYTE              *pbEncoded,
+  _In_          DWORD             cbEncoded,
+  _Out_         BYTE              *pbComputedHash,
+  _Inout_       DWORD             *pcbComputedHash
+);

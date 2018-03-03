@@ -605,11 +605,23 @@ def GetLongPathNameA(lpszShortPath, lpszLongPath, cchBuffer=None):
         cchBuffer = len(lpszLongPath)
     return GetLongPathNameA.ctypes_function(lpszShortPath, lpszLongPath, cchBuffer)
 
+@Kernel32Proxy("GetLongPathNameW")
+def GetLongPathNameW(lpszShortPath, lpszLongPath, cchBuffer=None):
+    if cchBuffer is None:
+        cchBuffer = len(lpszLongPath)
+    return GetLongPathNameW.ctypes_function(lpszShortPath, lpszLongPath, cchBuffer)
+
 @Kernel32Proxy("GetShortPathNameA")
 def GetShortPathNameA(lpszLongPath, lpszShortPath, cchBuffer=None):
     if cchBuffer is None:
         cchBuffer = len(lpszShortPath)
     return GetShortPathNameA.ctypes_function(lpszLongPath, lpszShortPath, cchBuffer)
+
+@Kernel32Proxy("GetShortPathNameW")
+def GetShortPathNameW(lpszLongPath, lpszShortPath, cchBuffer=None):
+    if cchBuffer is None:
+        cchBuffer = len(lpszShortPath)
+    return GetShortPathNameW.ctypes_function(lpszLongPath, lpszShortPath, cchBuffer)
 
 # TODO: might be in another DLL depending of version
 # Should handle this..
@@ -1556,6 +1568,10 @@ def CryptMsgVerifyCountersignatureEncoded(hCryptProv, dwEncodingType, pbSignerIn
 def CryptMsgVerifyCountersignatureEncodedEx(hCryptProv, dwEncodingType, pbSignerInfo, cbSignerInfo, pbSignerInfoCountersignature, cbSignerInfoCountersignature, dwSignerType, pvSigner, dwFlags, pvExtra):
     return CryptMsgVerifyCountersignatureEncodedEx.ctypes_function(hCryptProv, dwEncodingType, pbSignerInfo, cbSignerInfo, pbSignerInfoCountersignature, cbSignerInfoCountersignature, dwSignerType, pvSigner, dwFlags, pvExtra)
 
+
+@Crypt32Proxy('CryptHashCertificate')
+def CryptHashCertificate(hCryptProv, Algid, dwFlags, pbEncoded, cbEncoded, pbComputedHash, pcbComputedHash):
+   return CryptHashCertificate.ctypes_function(hCryptProv, Algid, dwFlags, pbEncoded, cbEncoded, pbComputedHash, pcbComputedHash)
 
 # ## CryptUI ## #
 
