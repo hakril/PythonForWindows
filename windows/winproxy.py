@@ -1517,6 +1517,10 @@ def CertGetCertificateChain(hChainEngine, pCertContext, pTime, hAdditionalStore,
 def CertDuplicateCertificateContext(pCertContext):
     return CertDuplicateCertificateContext.ctypes_function(pCertContext)
 
+@Crypt32Proxy('CertFreeCertificateContext')
+def CertFreeCertificateContext(pCertContext):
+   return CertFreeCertificateContext.ctypes_function(pCertContext)
+
 
 @Crypt32Proxy('CertEnumCertificatesInStore')
 def CertEnumCertificatesInStore(hCertStore, pPrevCertContext):
@@ -1680,6 +1684,9 @@ def VerQueryValueW(pBlock, lpSubBlock, lplpBuffer, puLen):
 
 # ## Ole32Proxy (COM STUFF) ## #
 
+# IMPORTANT:
+# Functions that returns HRESULT (like CoInitializeEx) will raise if HRESULT is an error
+# even if there is no error check on the return value
 @Ole32Proxy('CoInitializeEx', no_error_check)
 def CoInitializeEx(pvReserved=None, dwCoInit=COINIT_MULTITHREADED):
     return CoInitializeEx.ctypes_function(pvReserved, dwCoInit)

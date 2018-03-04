@@ -74,6 +74,17 @@ Calling it
     windows.winproxy.Kernel32Error: VirtualAlloc: [Error 8] Not enough storage is available to process this command.
     """
 
+Kernel32Error
+"""""""""""""
+
+All errors raised by winproxy functions are instance of :class:`Kernel32Error` (or subclasses)
+
+.. autoclass:: Kernel32Error
+    :show-inheritance:
+
+    .. attribute:: api_name
+
+        The name of the API that raised the exception
 
 Functions in :mod:`windows.winproxy`
 """"""""""""""""""""""""""""""""""""

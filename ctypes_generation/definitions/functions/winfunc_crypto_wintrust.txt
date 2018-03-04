@@ -188,6 +188,10 @@ BOOL WINAPI CertAddCertificateContextToStore(
   _Out_opt_ PCCERT_CONTEXT *ppStoreContext
 );
 
+BOOL WINAPI CertFreeCertificateContext(
+  _In_ PCCERT_CONTEXT pCertContext
+);
+
 
 BOOL WINAPI PFXExportCertStoreEx(
   _In_    HCERTSTORE      hStore,

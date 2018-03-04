@@ -2190,6 +2190,27 @@ _IMAGE_EXPORT_DIRECTORY
 
         :class:`DWORD`
 
+_IMAGE_BASE_RELOCATION
+''''''''''''''''''''''
+.. class:: PIMAGE_BASE_RELOCATION
+
+    Pointer to :class:`_IMAGE_BASE_RELOCATION`
+
+.. class:: IMAGE_BASE_RELOCATION
+
+    Alias for :class:`_IMAGE_BASE_RELOCATION`
+
+.. class:: _IMAGE_BASE_RELOCATION
+
+    .. attribute:: VirtualAddress
+
+        :class:`DWORD`
+
+
+    .. attribute:: SizeOfBlock
+
+        :class:`DWORD`
+
 _MEMORY_BASIC_INFORMATION
 '''''''''''''''''''''''''
 .. class:: PMEMORY_BASIC_INFORMATION
