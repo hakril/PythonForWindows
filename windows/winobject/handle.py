@@ -104,8 +104,6 @@ class Handle(SYSTEM_HANDLE):
         del thread._handle
         return res
 
-
-
     def __repr__(self):
         return "<{0} value=<0x{1:x}> in process pid={2}>".format(type(self).__name__, self.wValue, self.dwProcessId)
 

@@ -49,7 +49,7 @@ class CryptObject(object):
         dwEncoding    = gdef.DWORD()
         dwContentType = gdef.DWORD()
         dwFormatType  = gdef.DWORD()
-        hStore        = EHCERTSTORE()
+        hStore        = CertificateStore()
         hMsg          = windows.crypto.cryptmsg.CryptMessage()
 
         winproxy.CryptQueryObject(gdef.CERT_QUERY_OBJECT_FILE,
@@ -71,6 +71,8 @@ class CryptObject(object):
         self.content_type = CRYPT_OBJECT_FORMAT_TYPE_DICT[dwContentType.value]
 
     def _signers_and_certs_generator(self):
+        if self.crypt_msg is None:
+            return
         for signer in self.crypt_msg.signers:
             cert = self.cert_store.find(signer.Issuer, signer.SerialNumber)
             yield signer, cert
@@ -84,13 +86,13 @@ class CryptObject(object):
 
 # TODO: rename to CertificateStore ?
 # https://msdn.microsoft.com/en-us/library/windows/desktop/aa382037(v=vs.85).aspx
-class EHCERTSTORE(gdef.HCERTSTORE):
+class CertificateStore(gdef.HCERTSTORE):
     """A certificate store"""
     @property
     def certs(self):
         """The certificates in the store
 
-        :type: [:class:`CertificateContext`] -- A list of Certificate
+        :type: [:class:`Certificate`] -- A list of Certificate
         """
         res = []
         last = None
@@ -102,7 +104,7 @@ class EHCERTSTORE(gdef.HCERTSTORE):
                     return tuple(res)
                 raise
             # Need to duplicate as CertEnumCertificatesInStore will free the context 'last'
-            ecert = windows.crypto.CertificateContext(cert[0])
+            ecert = windows.crypto.Certificate.from_pointer(cert)
             res.append(ecert.duplicate())
             last = ecert
         raise RuntimeError("Out of infinit loop")
@@ -113,7 +115,7 @@ class EHCERTSTORE(gdef.HCERTSTORE):
 
     @classmethod
     def from_file(cls, filename):
-        """Create a new :class:`EHCERTSTORE` from ``filename``"""
+        """Create a new :class:`CertificateStore` from ``filename``"""
         res = winproxy.CertOpenStore(gdef.CERT_STORE_PROV_FILENAME_A, DEFAULT_ENCODING, None, gdef.CERT_STORE_OPEN_EXISTING_FLAG, filename)
         return ctypes.cast(res, cls)
 
@@ -128,7 +130,7 @@ class EHCERTSTORE(gdef.HCERTSTORE):
     # See https://msdn.microsoft.com/en-us/library/windows/desktop/aa388136(v=vs.85).aspx
     @classmethod
     def from_system_store(cls, store_name):
-        """Create a new :class:`EHCERTSTORE` from system store``store_name``
+        """Create a new :class:`CertificateStore` from system store``store_name``
         (see https://msdn.microsoft.com/en-us/library/windows/desktop/aa388136(v=vs.85).aspx)
         """
         res = winproxy.CertOpenStore(gdef.CERT_STORE_PROV_SYSTEM_A, DEFAULT_ENCODING, None, gdef.CERT_SYSTEM_STORE_LOCAL_MACHINE | gdef.CERT_STORE_READONLY_FLAG, store_name)
@@ -136,7 +138,7 @@ class EHCERTSTORE(gdef.HCERTSTORE):
 
     @classmethod
     def new_in_memory(cls):
-        """Create a new temporary :class:`EHCERTSTORE` in memory"""
+        """Create a new temporary :class:`CertificateStore` in memory"""
         res = winproxy.CertOpenStore(gdef.CERT_STORE_PROV_MEMORY, DEFAULT_ENCODING, None, 0, None)
         return ctypes.cast(res, cls)
 
@@ -145,15 +147,14 @@ class EHCERTSTORE(gdef.HCERTSTORE):
     def find(self, issuer, serialnumber):
         """Return the certificate that match `issuer` and `serialnumber`
 
-        :return: :class:`CertificateContext`
+        :return: :class:`Certificate`
         """
         # data = self.get_signer_data(index)
         cert_info = gdef.CERT_INFO()
         cert_info.Issuer = issuer
         cert_info.SerialNumber = serialnumber
         rawcertcontext = winproxy.CertFindCertificateInStore(self, DEFAULT_ENCODING, 0, gdef.CERT_FIND_SUBJECT_CERT, ctypes.byref(cert_info), None)
-        # return rawcertcontext
-        return CertificateContext(rawcertcontext[0])
+        return Certificate.from_pointer(rawcertcontext)
 
 
 # PKCS12_NO_PERSIST_KEY -> do not save it in a key container on disk
@@ -176,32 +177,23 @@ def import_pfx(pfx, password=None, flags=gdef.CRYPT_USER_KEYSET | gdef.PKCS12_NO
 
     ``PKCS12_NO_PERSIST_KEY`` tells ``CryptoAPI`` to NOT save the keys in a on-disk container.
 
-    :return: :class:`EHCERTSTORE`
+    :return: :class:`CertificateStore`
     """
-    if isinstance(pfx, basestring):
+    if isinstance(pfx, (basestring, bytearray)):
         pfx = gdef.CRYPT_DATA_BLOB.from_string(pfx)
     cert_store = winproxy.PFXImportCertStore(pfx, password, flags)
-    return EHCERTSTORE(cert_store)
+    return CertificateStore(cert_store)
 
 
-# Why PCCERT_CONTEXT (pointer type) and not _CERT_CONTEXT ?
-class CertificateContext(gdef.PCCERT_CONTEXT):
-    """Represent a Certificate.
-
-       note: It is a pointer ctypes structure (``PCCERT_CONTEXT``)
-    """
-    _type_ = gdef.PCCERT_CONTEXT._type_ # Not herited from PCCERT_CONTEXT
-
-
-    def __repr__(self):
-        return '<{0} "{1}" serial="{2}">'.format(type(self).__name__, self.name, self.serial)
+class Certificate(gdef.CERT_CONTEXT):
+    """Represent a Certificate """
 
     @property
     def raw_serial(self):
         """The raw serial number of the certificate.
 
         :type: [:class:`int`]: A list of int ``0 <= x <= 255``"""
-        serial_number = self[0].pCertInfo[0].SerialNumber
+        serial_number = self.pCertInfo[0].SerialNumber
         return [(c & 0xff) for c in serial_number.pbData[:serial_number.cbData][::-1]]
 
     @property
@@ -210,7 +202,6 @@ class CertificateContext(gdef.PCCERT_CONTEXT):
 
         :type: :class:`str`
         """
-        serial_number = self[0].pCertInfo[0].SerialNumber
         serial_bytes = self.raw_serial
         return " ".join("{:02x}".format(x) for x in serial_bytes)
 
@@ -230,6 +221,21 @@ class CertificateContext(gdef.PCCERT_CONTEXT):
 
     :type: :class:`str`"""
 
+    def raw_hash(self):
+        size = gdef.DWORD(100)
+        buffer = ctypes.c_buffer(size.value)
+        winproxy.CryptHashCertificate(None, 0, 0, self.pbCertEncoded, self.cbCertEncoded, ctypes.cast(buffer, gdef.LPBYTE), size)
+        return buffer[:size.value]
+
+    @property
+    def thumprint(self):
+        """The thumprint of the certificate (which is the sha1 of the encoded cert) with the format:
+            'XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX'
+
+        :type: :class:`str`
+        """
+        return " ".join("{:02X}".format(x) for x in bytearray(self.raw_hash()))
+
     @property
     def issuer(self):
         """The name of the certificate's issuer.
@@ -241,9 +247,9 @@ class CertificateContext(gdef.PCCERT_CONTEXT):
     def store(self):
         """The certificate store that contains the certificate
 
-        :type: :class:`EHCERTSTORE`
+        :type: :class:`CertificateStore`
         """
-        return EHCERTSTORE(self[0].hCertStore)
+        return CertificateStore(self.hCertStore)
 
     def get_raw_certificate_chains(self): # Rename to all_chains ?
         chain_context = EPCCERT_CHAIN_CONTEXT()
@@ -260,16 +266,18 @@ class CertificateContext(gdef.PCCERT_CONTEXT):
         chain_para.cbSize = ctypes.sizeof(chain_para)
         chain_para.RequestedUsage = cert_usage
 
-        winproxy.CertGetCertificateChain(None, self, None, self[0].hCertStore, ctypes.byref(chain_para), 0, None, ctypes.byref(chain_context))
+        winproxy.CertGetCertificateChain(None, self, None, self.hCertStore, ctypes.byref(chain_para), 0, None, ctypes.byref(chain_context))
+        # Lower chains ?
+        # winproxy.CertGetCertificateChain(None, self, None, self[0].hCertStore, ctypes.byref(chain_para), 0x80, None, ctypes.byref(chain_context))
         #return CertficateChain(chain_context)
         return chain_context
 
     @property # fixedproperty ?
     def chains(self):
-        """The list of chain context available for this certificate. Each elements of this list is a list of ``CertificateContext`` that should
+        """The list of chain context available for this certificate. Each elements of this list is a list of ``Certificate`` that should
         go from the ``self`` certificate to a trusted certificate.
 
-        :type: [[:class:`CertificateContext`]] -- A list of chain (list) of :class:`CertificateContext`
+        :type: [[:class:`Certificate`]] -- A list of chain (list) of :class:`Certificate`
         """
         chain_context = self.get_raw_certificate_chains()
         res = []
@@ -286,19 +294,62 @@ class CertificateContext(gdef.PCCERT_CONTEXT):
 
         note: The object returned is ``self``
 
-        :return: :class:`CertificateContext`
+        :return: :class:`Certificate`
         """
         res = winproxy.CertDuplicateCertificateContext(self)
         # Check what the doc says: the pointer returned is actually the PCERT in parameter
         # Only the refcount is incremented
         # This postulate allow us to return 'self' directly
         # https://msdn.microsoft.com/en-us/library/windows/desktop/aa376045(v=vs.85).aspx
-        if not ctypes.cast(res, gdef.PVOID).value == ctypes.cast(self, gdef.PVOID).value:
+        if not ctypes.addressof(res[0]) == ctypes.addressof(self):
             raise ValueError("CertDuplicateCertificateContext did not returned the argument (check doc)")
         return self
 
     def view(self, title=None):
-        return windows.winproxy.CryptUIDlgViewContext(gdef.CERT_STORE_CERTIFICATE_CONTEXT, self, None, title, 0, None)
+        return windows.winproxy.CryptUIDlgViewContext(gdef.CERT_STORE_CERTIFICATE_CONTEXT, ctypes.byref(self), None, title, 0, None)
+
+    KNOWN_PROPERTIES_VALUES = gdef.FlagMapper(
+        gdef.CERT_KEY_PROV_HANDLE_PROP_ID,
+        gdef.CERT_KEY_PROV_INFO_PROP_ID,
+        gdef.CERT_SHA1_HASH_PROP_ID,
+        gdef.CERT_MD5_HASH_PROP_ID,
+        gdef.CERT_HASH_PROP_ID,
+        gdef.CERT_KEY_CONTEXT_PROP_ID,
+        gdef.CERT_KEY_SPEC_PROP_ID,
+        gdef.CERT_IE30_RESERVED_PROP_ID,
+        gdef.CERT_PUBKEY_HASH_RESERVED_PROP_ID,
+        gdef.CERT_ENHKEY_USAGE_PROP_ID,
+        gdef.CERT_CTL_USAGE_PROP_ID,
+        gdef.CERT_NEXT_UPDATE_LOCATION_PROP_ID,
+        gdef.CERT_FRIENDLY_NAME_PROP_ID,
+        gdef.CERT_PVK_FILE_PROP_ID,
+        gdef.CERT_DESCRIPTION_PROP_ID,
+        gdef.CERT_ACCESS_STATE_PROP_ID,
+        gdef.CERT_SIGNATURE_HASH_PROP_ID,
+        gdef.CERT_SMART_CARD_DATA_PROP_ID,
+        gdef.CERT_EFS_PROP_ID,
+        gdef.CERT_FORTEZZA_DATA_PROP_ID,
+        gdef.CERT_ARCHIVED_PROP_ID,
+        gdef.CERT_KEY_IDENTIFIER_PROP_ID,
+        gdef.CERT_AUTO_ENROLL_PROP_ID,
+        gdef.CERT_PUBKEY_ALG_PARA_PROP_ID,
+        gdef.CERT_CROSS_CERT_DIST_POINTS_PROP_ID,
+        gdef.CERT_ISSUER_PUBLIC_KEY_MD5_HASH_PROP_ID,
+        gdef.CERT_SUBJECT_PUBLIC_KEY_MD5_HASH_PROP_ID,
+        gdef.CERT_ENROLLMENT_PROP_ID,
+        gdef.CERT_DATE_STAMP_PROP_ID,
+        gdef.CERT_ISSUER_SERIAL_NUMBER_MD5_HASH_PROP_ID,
+        gdef.CERT_SUBJECT_NAME_MD5_HASH_PROP_ID,
+        gdef.CERT_EXTENDED_ERROR_INFO_PROP_ID,
+        gdef.CERT_RENEWAL_PROP_ID,
+        gdef.CERT_ARCHIVED_KEY_HASH_PROP_ID,
+        gdef.CERT_AUTO_ENROLL_RETRY_PROP_ID,
+        gdef.CERT_AIA_URL_RETRIEVED_PROP_ID,
+        gdef.CERT_AUTHORITY_INFO_ACCESS_PROP_ID,
+        gdef.CERT_BACKED_UP_PROP_ID,
+        gdef.CERT_OCSP_RESPONSE_PROP_ID,
+        gdef.CERT_REQUEST_ORIGINATOR_PROP_ID,
+        gdef.CERT_SOURCE_LOCATION_PROP_ID)
 
     def enum_properties(self):
         prop = 0
@@ -307,7 +358,7 @@ class CertificateContext(gdef.PCCERT_CONTEXT):
             prop = winproxy.CertEnumCertificateContextProperties(self, prop)
             if not prop:
                 return res
-            res.append(prop)
+            res.append(self.KNOWN_PROPERTIES_VALUES[prop])
         raise RuntimeError("Unreachable code")
 
     properties = property(enum_properties)
@@ -323,43 +374,49 @@ class CertificateContext(gdef.PCCERT_CONTEXT):
         """The encoded certificate.
 
         :type: :class:`bytearray`"""
-        return bytearray(self[0].pbCertEncoded[:self[0].cbCertEncoded])
+        return bytearray(self.pbCertEncoded[:self.cbCertEncoded])
 
     @property
     def version(self):
         "TODO: doc"
-        return self[0].pbCertInfo.dwVersion
+        return self.pCertInfo[0].dwVersion
 
 
     @classmethod
     def from_file(cls, filename):
-        """Create a :class:`CertificateContext` from the file ``filename``
+        """Create a :class:`Certificate` from the file ``filename``
 
-        :return: :class:`CertificateContext`
+        :return: :class:`Certificate`
         """
         with open(filename, "rb") as f:
             data = f.read()
             buf = (ctypes.c_ubyte * len(data))(*bytearray(data))
-            res = windows.winproxy.CertCreateCertificateContext(windows.crypto.DEFAULT_ENCODING, buf, len(data))
-            return ctypes.cast(res, cls)
+            pcert = windows.winproxy.CertCreateCertificateContext(windows.crypto.DEFAULT_ENCODING, buf, len(data))
+            return cls.from_pointer(pcert)
 
     @classmethod
     def from_buffer(cls, data):
-        """Create a :class:`CertificateContext` from the buffer ``data``
+        """Create a :class:`Certificate` from the buffer ``data``
 
-        :return: :class:`CertificateContext`
+        :return: :class:`Certificate`
         """
         buf = (ctypes.c_ubyte * len(data))(*bytearray(data))
-        res = windows.winproxy.CertCreateCertificateContext(windows.crypto.DEFAULT_ENCODING, buf, len(data))
-        return ctypes.cast(res, cls)
+        pcert = windows.winproxy.CertCreateCertificateContext(windows.crypto.DEFAULT_ENCODING, buf, len(data))
+        return cls.from_pointer(pcert)
+
+    @classmethod
+    def from_pointer(self, ptr):
+        return ctypes.cast(ptr, ctypes.POINTER(Certificate))[0]
+
 
     def __eq__(self, other):
-        if not isinstance(other, CertificateContext):
+        if not isinstance(other, Certificate):
             return NotImplemented
-        return windows.winproxy.CertCompareCertificate(DEFAULT_ENCODING, self[0].pCertInfo, other[0].pCertInfo)
+        return windows.winproxy.CertCompareCertificate(DEFAULT_ENCODING, self.pCertInfo, other.pCertInfo)
 
-    # CertCompareCertificate  ?
-    # https://msdn.microsoft.com/en-us/library/windows/desktop/aa376027(v=vs.85).aspx
+    def __repr__(self):
+        return '<{0} "{1}" serial="{2}">'.format(type(self).__name__, self.name, self.serial)
+
 
 
 # class CertficateChain(object):
@@ -374,12 +431,19 @@ class CertificateContext(gdef.PCCERT_CONTEXT):
 
 
 # Those classes are more of a POC than anything else
+# Should be the struct itself (like Certificate ?)
 class EPCCERT_CHAIN_CONTEXT(gdef.PCCERT_CHAIN_CONTEXT):
     _type_ = gdef.PCCERT_CHAIN_CONTEXT._type_
 
     @property
     def chains(self):
         res = []
+        # if (self[0].cLowerQualityChainContext):
+            # print("LOL")
+            # import pdb;pdb.set_trace()
+        # if self[0].cChain > 1:
+            # print("HAAAAA")
+            # import pdb;pdb.set_trace()
         for i in range(self[0].cChain):
             simple_chain = ctypes.cast(self[0].rgpChain[i], EPCCERT_SIMPLE_CHAIN)
             res.append(simple_chain)
@@ -411,7 +475,7 @@ class EPCERT_CHAIN_ELEMENT(gdef.PCERT_CHAIN_ELEMENT):
 
     @property
     def cert(self):
-        return ctypes.cast(self[0].pCertContext, CertificateContext)
+        return  Certificate.from_pointer(self[0].pCertContext)
 
 
 # Move this in another .py ?

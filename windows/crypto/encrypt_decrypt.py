@@ -4,6 +4,7 @@ from windows import winproxy
 from windows.crypto import DEFAULT_ENCODING
 from windows.crypto.helper import ECRYPT_DATA_BLOB
 from windows.generated_def import *
+from windows.crypto import Certificate
 
 def encode_init_vector(data):
     blob = ECRYPT_DATA_BLOB.from_string(data)
@@ -46,10 +47,14 @@ def encrypt(cert_or_certlist, msg, algo=szOID_NIST_AES256_CBC, initvector=genini
     """
     alg_ident = CRYPT_ALGORITHM_IDENTIFIER()
     alg_ident.pszObjId = algo
-    if isinstance(cert_or_certlist, PCERT_CONTEXT):
-        certlist = (cert_or_certlist,)
+    # We want to have automatique translation of Certificate -> PCERT_CONTEXT
+    # In order to simple create the  'PCERT_CONTEXT[] certs'
+    # For that we need a tuple of X * 1-item-tuple
+    # as a (cert,) will be automaticly translatable to a PCERT_CONTEXT
+    if isinstance(cert_or_certlist, CERT_CONTEXT):
+        certlist = ((cert_or_certlist,),)
     else:
-        certlist = tuple(cert_or_certlist)
+        certlist = tuple((c,) for c in cert_or_certlist)
 
     # Set (compute if needed) the IV
     if initvector is None:
@@ -73,6 +78,7 @@ def encrypt(cert_or_certlist, msg, algo=szOID_NIST_AES256_CBC, initvector=genini
     param.pvEncryptionAuxInfo = None
     param.dwFlags = 0
     param.dwInnerContentType = 0
+
 
     certs = (PCERT_CONTEXT * len(certlist))(*certlist)
     #Ask the output buffer size

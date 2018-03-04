@@ -10,19 +10,20 @@ class CryptMessage(gdef.HCRYPTMSG):
                             gdef.CMSG_CERT_COUNT_PARAM: gdef.DWORD}
 
 
-    def get_param(self, param_type, index=0):
+    def get_param(self, param_type, index=0, raw=False):
         data_size = gdef.DWORD()
         # https://msdn.microsoft.com/en-us/library/windows/desktop/aa380227(v=vs.85).aspx
         winproxy.CryptMsgGetParam(self, param_type, index, None, data_size)
         buffer = ctypes.c_buffer(data_size.value)
         winproxy.CryptMsgGetParam(self, param_type, index, buffer, data_size)
+        if raw:
+            return (buffer, data_size)
 
         if param_type in self.MSG_PARAM_KNOW_TYPES:
             buffer = self.MSG_PARAM_KNOW_TYPES[param_type].from_buffer(buffer)
         if isinstance(buffer, gdef.DWORD): # DWORD -> return the Python int
             return buffer.value
         return buffer
-
 
     # Certificate accessors
 
@@ -42,9 +43,9 @@ class CryptMessage(gdef.HCRYPTMSG):
 
         note: not all embded certificate are directly used to sign the :class:`CryptObject`.
 
-        :return: :class:`CertificateContext`
+        :return: :class:`Certificate`
         """
-        return windows.crypto.CertificateContext.from_buffer(self.get_raw_cert(index))
+        return windows.crypto.Certificate.from_buffer(self.get_raw_cert(index))
 
     @property
     def certs(self):

@@ -2,6 +2,7 @@ import pytest
 
 import windows.crypto
 import windows.generated_def as gdef
+import windows.crypto.generation
 
 from pfwtest import *
 
@@ -63,17 +64,71 @@ def rawcert():
 def rawpfx():
     return TEST_PFX.decode("base64")
 
+PFW_TEST_TMP_KEY_CONTAINER = "PythonForWindowsTMPContainerTest"
+RANDOM_CERTIF_NAME = "PythonForWindowsGeneratedRandomCertifTest"
+RANDOM_PFX_PASSWORD = "PythonForWindowsGeneratedRandomPFXPassword"
+
+@pytest.fixture()
+def randomkeypair(keysize=1024):
+    """Generate a cert / pfx. Based on samples\crypto\encryption_demo.py"""
+    cert_store = windows.crypto.CertificateStore.new_in_memory()
+    # Create a TMP context that will hold our newly generated key-pair
+    with windows.crypto.CryptContext(PFW_TEST_TMP_KEY_CONTAINER, None, gdef.PROV_RSA_FULL, 0, retrycreate=True) as ctx:
+        key = gdef.HCRYPTKEY()
+        keysize_flags = keysize << 16
+        # Generate a key-pair that is exportable
+        windows.winproxy.CryptGenKey(ctx, gdef.AT_KEYEXCHANGE, gdef.CRYPT_EXPORTABLE | keysize_flags, key)
+        # It does NOT destroy the key-pair from the container,
+        # It only release the key handle
+        # https://msdn.microsoft.com/en-us/library/windows/desktop/aa379918(v=vs.85).aspx
+        windows.winproxy.CryptDestroyKey(key)
+
+    # Descrption of the key-container that will be used to generate the certificate
+    KeyProvInfo = gdef.CRYPT_KEY_PROV_INFO()
+    KeyProvInfo.pwszContainerName = PFW_TEST_TMP_KEY_CONTAINER
+    KeyProvInfo.pwszProvName = None
+    KeyProvInfo.dwProvType = gdef.PROV_RSA_FULL
+    KeyProvInfo.dwFlags = 0
+    KeyProvInfo.cProvParam = 0
+    KeyProvInfo.rgProvParam = None
+    #KeyProvInfo.dwKeySpec = AT_SIGNATURE
+    KeyProvInfo.dwKeySpec = gdef.AT_KEYEXCHANGE
+
+    crypt_algo = gdef.CRYPT_ALGORITHM_IDENTIFIER()
+    crypt_algo.pszObjId = gdef.szOID_RSA_SHA256RSA
+
+    certif_name = "CN={0}".format(RANDOM_CERTIF_NAME)
+    # Generate a self-signed certificate based on the given key-container and signature algorithme
+    certif = windows.crypto.generation.generate_selfsigned_certificate(certif_name, key_info=KeyProvInfo, signature_algo=crypt_algo)
+    # Add the newly created certificate to our TMP cert-store
+    cert_store.add_certificate(certif)
+    # Generate a pfx from the TMP cert-store
+    pfx = windows.crypto.generation.generate_pfx(cert_store, RANDOM_PFX_PASSWORD)
+    yield certif, pfx
+    # Destroy the TMP key container
+    prov = gdef.HCRYPTPROV()
+    windows.winproxy.CryptAcquireContextW(prov, PFW_TEST_TMP_KEY_CONTAINER, None, gdef.PROV_RSA_FULL, gdef.CRYPT_DELETEKEYSET)
+
+
 
 def test_certificate(rawcert):
-    cert = windows.crypto.CertificateContext.from_buffer(rawcert)
+    cert = windows.crypto.Certificate.from_buffer(rawcert)
     assert cert.serial == '1b 8e 94 cb 0b 3e eb b6 41 39 f3 c9 09 b1 6b 46'
     assert cert.name == 'PythonForWindowsTest'
+    assert cert.issuer == 'PythonForWindowsTest'
+    assert cert.thumprint == 'EF 0C A8 C9 F9 E0 96 AF 74 18 56 8B C1 C9 57 27 A0 89 29 6A'
+    assert cert.encoded == rawcert
+    assert cert.version == 2
+    assert cert == cert
+    assert cert is cert.duplicate()
     cert.chains # TODO: craft a certificate with a chain for test purpose
+    cert.store.certs
+    cert.properties
 
 
 def test_pfx(rawcert, rawpfx):
     pfx = windows.crypto.import_pfx(rawpfx, TEST_PFX_PASSWORD)
-    orig_cert = windows.crypto.CertificateContext.from_buffer(rawcert)
+    orig_cert = windows.crypto.Certificate.from_buffer(rawcert)
     certs = pfx.certs
     assert len(certs) == 1
     # Test cert comparaison
@@ -87,10 +142,10 @@ def test_open_pfx_bad_password(rawpfx):
 
 def test_encrypt_decrypt(rawcert, rawpfx):
     message_to_encrypt = "Testing message \xff\x01"
-    cert = windows.crypto.CertificateContext.from_buffer(rawcert)
+    cert = windows.crypto.Certificate.from_buffer(rawcert)
     # encrypt should accept a cert or iterable of cert
     res = windows.crypto.encrypt(cert, message_to_encrypt)
-    res2 = windows.crypto.encrypt([cert], message_to_encrypt)
+    res2 = windows.crypto.encrypt([cert, cert], message_to_encrypt)
     del cert
     assert message_to_encrypt not in res
 
@@ -102,6 +157,33 @@ def test_encrypt_decrypt(rawcert, rawpfx):
     assert message_to_encrypt == decrypt
     assert decrypt == decrypt2
 
+
+
+def test_randomkeypair(randomkeypair):
+    randcert, randrawpfx = randomkeypair
+    assert randcert.name == RANDOM_CERTIF_NAME
+    randpfx = windows.crypto.import_pfx(randrawpfx, RANDOM_PFX_PASSWORD) # Check password is good too
+
+
+def test_encrypt_decrypt_multiple_receivers(rawcert, rawpfx, randomkeypair):
+    message_to_encrypt = "\xff\x00 Testing message \xff\x01"
+    # Receiver 1: random key pair
+    randcert, randrawpfx = randomkeypair
+    randpfx = windows.crypto.import_pfx(randrawpfx, RANDOM_PFX_PASSWORD)
+    # Receiver 1: PFW-test-keypair
+    pfx = windows.crypto.import_pfx(rawpfx, TEST_PFX_PASSWORD)
+    cert = windows.crypto.Certificate.from_buffer(rawcert)
+    assert cert.name != randcert.name
+    assert cert.encoded != randcert.encoded
+    # Encrypt the message with 2 differents certificates
+    encrypted = windows.crypto.encrypt([cert, randcert], message_to_encrypt)
+    # Decrypt with each PFX and check the result is valid/the same
+    decrypted = windows.crypto.decrypt(pfx, encrypted)
+    decrypted2 = windows.crypto.decrypt(randpfx, encrypted)
+    assert decrypted == decrypted2 == message_to_encrypt
+
+
+
 def test_crypt_obj():
     path = r"C:\windows\system32\kernel32.dll"
     x = windows.crypto.CryptObject(path)
@@ -111,6 +193,6 @@ def test_crypt_obj():
     # TODO: Need some better ideas
 
 def test_certificate_from_store():
-    return windows.crypto.EHCERTSTORE.from_system_store("Root")
+    return windows.crypto.CertificateStore.from_system_store("Root")
 
 

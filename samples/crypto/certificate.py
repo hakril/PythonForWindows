@@ -33,7 +33,7 @@ l2ec6CyjDQc6HcQBNCsbJVq6qGtQbYNE+ih+KhIU4tO5jf25xthf2g==
 
 
 raw_cert = ("".join(windowscert.split("\n")[1:-1])).decode('base64')
-cert = windows.crypto.CertificateContext.from_buffer(raw_cert)
+cert = windows.crypto.Certificate.from_buffer(raw_cert)
 
 print("Analysing certificate: {0}".format(cert))
 print("    * name: <{0}>".format(cert.name))
@@ -55,7 +55,7 @@ for i, chain in enumerate(chains):
 print ""
 cert_to_verif = ccert
 print("Looking for <{0}> in trusted certificates".format(cert_to_verif.name))
-root_store = windows.crypto.EHCERTSTORE.from_system_store("Root")
+root_store = windows.crypto.CertificateStore.from_system_store("Root")
 # This is not the correct way verify the validity of a certificate chain.
 # I would say that if the goal is to verify the signature of the certificate: use wintrust.
 # (or maybe CertVerifyCertificateChainPolicy : https://msdn.microsoft.com/en-us/library/windows/desktop/aa377163(v=vs.85).aspx)

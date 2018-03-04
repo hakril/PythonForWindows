@@ -4,8 +4,6 @@ import _ctypes
 from windows.generated_def import Flag, LPCSTR, LPWSTR
 
 
-
-
 def buffer(size): # Test
     buf = ctypes.create_string_buffer(size)
     buf.size = size
@@ -24,6 +22,7 @@ def buffer(size): # Test
             return ctypes.cast(self, LPWSTR).value
 
     return ImprovedCtypesBufferImpl()
+
 
 def fixedpropety(f):
     cache_name = "_" + f.__name__
@@ -72,6 +71,7 @@ def print_ctypes_struct(struct, name="", ident=0, hexa=False):
             print("Error while printing <{0}> : {1}".format(fname, e))
             continue
         print_ctypes_struct(value, "{0}.{1}".format(name, fname), hexa=hexa)
+
 
 def sprint(struct, name="struct", hexa=True):
     return print_ctypes_struct(struct, name=name, hexa=hexa)

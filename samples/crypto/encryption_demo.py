@@ -42,7 +42,7 @@ PFW_TMP_KEY_CONTAINER = "PythonForWindowsTMPContainer"
 def genkeys(common_name, pfxpassword, outname, keysize=2048, **kwargs):
     """Generate a SHA256/RSA key pair. A self-signed certificate with 'common_name' is stored as 'outname'.cer.
     The private key is stored in 'outname'.pfx protected with 'pfxpassword'"""
-    cert_store = crypto.EHCERTSTORE.new_in_memory()
+    cert_store = crypto.CertificateStore.new_in_memory()
     # Create a TMP context that will hold our newly generated key-pair
     with crypto.CryptContext(PFW_TMP_KEY_CONTAINER, None, PROV_RSA_FULL, 0, retrycreate=True) as ctx:
         key = HCRYPTKEY()
