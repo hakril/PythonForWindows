@@ -27,6 +27,18 @@ class TestSystemWithCheckGarbage(object):
         return windows.system.logicaldrives
 
     def test_wmi(self):
+        # Well, pytest initialize COM with its own parameters
+        # It might make our own com.init() in WMI fail and therefore not call
+        # CoInitializeSecurity. But looks like pytest/default COM-security parameters
+        # does not allow to perform the request we want..
+        # So we try & do it ourself here.
+
+        # Do co-reinit in conftest.py ?
+        try:
+            if windows.com.init(): # if init fail. Call CoInitializeSecurity ourself
+                windows.com.initsecurity()
+        except Exception as e:
+            pass
         return windows.system.wmi.select("Win32_Process", "*")
 
     def test_handles(self):

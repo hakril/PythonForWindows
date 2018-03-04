@@ -17,9 +17,14 @@ from windows.generated_def.interfaces import generate_IID, IID
 
 def init():
     try:
-        winproxy.CoInitializeEx()
+        t = winproxy.CoInitializeEx()
     except WindowsError as e:
-        return e.winerror
+        t = e.winerror
+    if t:
+        return t
+    return initsecurity()
+
+def initsecurity(): # Should take some parameters..
     return winproxy.CoInitializeSecurity(0, -1, None, 0, 0, RPC_C_IMP_LEVEL_IMPERSONATE, 0,0,0)
 
 

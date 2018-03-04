@@ -24,6 +24,7 @@ class WmiRequester(object):
 
         windows.com.init()
         windows.com.create_instance(WbemLocator_CLSID, locator)
+        # WBEM_FLAG_CONNECT_USE_MAX_WAIT
         locator.ConnectServer(target, user, password , None, 0x80, None, None, ctypes.byref(service))
         self.service = service
 
