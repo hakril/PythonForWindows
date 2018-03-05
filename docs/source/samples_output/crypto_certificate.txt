@@ -1,0 +1,33 @@
+(cmd) python crypto\certificate.py
+Analysing certificate: <Certificate "Microsoft Windows" serial="33 00 00 01 06 6e c3 25 c4 31 c9 18 0e 00 00 00 00 01 06">
+    * name: <Microsoft Windows>
+    * issuer: <Microsoft Windows Production PCA 2011>
+    * raw_serial: <[51, 0, 0, 1, 6, 110, 195, 37, 196, 49, 201, 24, 14, 0, 0, 0, 0, 1, 6]>
+    * serial: <33 00 00 01 06 6e c3 25 c4 31 c9 18 0e 00 00 00 00 01 06>
+    * encoded start: <bytearray(b'0\x82\x05\x040\x82\x03\xec\xa0\x03\x02\x01\x02\x02\x133\x00\x00\x01\x06')>
+
+This certificate has 1 certificate chain(s)
+Chain 0:
+  <Certificate "Microsoft Windows" serial="33 00 00 01 06 6e c3 25 c4 31 c9 18 0e 00 00 00 00 01 06">:
+    * issuer: <Microsoft Windows Production PCA 2011>
+  <Certificate "Microsoft Windows Production PCA 2011" serial="61 07 76 56 00 00 00 00 00 08">:
+    * issuer: <Microsoft Root Certificate Authority 2010>
+  <Certificate "Microsoft Root Certificate Authority 2010" serial="28 cc 3a 25 bf ba 44 ac 44 9a 9b 58 6b 43 39 aa">:
+    * issuer: <Microsoft Root Certificate Authority 2010>
+
+Looking for <Microsoft Root Certificate Authority 2010> in trusted certificates
+matches = [<Certificate "Microsoft Root Certificate Authority 2010" serial="28 cc 3a 25 bf ba 44 ac 44 9a 9b 58 6b 43 39 aa">]
+Found it !
+
+== PE Analysis ==
+Target sha1 = <339e4c236e716d4b6f6b10359c425eb3d1478df7>
+Analysing <CryptObject "C:\windows\system32\ntdll.dll" content_type=CERT_QUERY_CONTENT_PKCS7_SIGNED_EMBED(0xaL)>
+File has 1 signer(s):
+Signer 0:
+   * Issuer: bytearray(b'0\x81\x841\x0b0\t\x06\x03U\x04\x06\x13\x02US1\x130\x11\x06\x03U\x04\x08\x13\nWashington1\x100\x0e\x06\x03U\x04\x07\x13\x07Redmond1\x1e0\x1c\x06\x03U\x04\n\x13\x15Microsoft Corporation1.0,\x06\x03U\x04\x03\x13%Microsoft Windows Production PCA 2011')
+   * HashAlgorithme: 2.16.840.1.101.3.4.2.1
+   * Certificate: <Certificate "Microsoft Windows" serial="33 00 00 01 73 30 31 07 26 65 b8 b9 b3 00 00 00 00 01 73">
+
+File embdeds 2 certificate(s):
+   * 0) <Certificate "Microsoft Windows" serial="33 00 00 01 73 30 31 07 26 65 b8 b9 b3 00 00 00 00 01 73">
+   * 1) <Certificate "Microsoft Windows Production PCA 2011" serial="61 07 76 56 00 00 00 00 00 08">

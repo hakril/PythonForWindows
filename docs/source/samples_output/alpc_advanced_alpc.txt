@@ -1,0 +1,87 @@
+(cmd) python alpc\advanced_alpc.py
+server pid = 2300
+[SERV] PORT <\RPC Control\PythonForWindowsPORT_2> CREATED
+Client pid = 14848
+[CLIENT] == Connecting to port ==
+[SERV] == Message received ==
+ * ALPC connection request: <Connection request client message>
+[CLIENT] Connected with response: <Connection message response>
+
+[CLIENT] == Sending a message ==
+ * Sending Message <Complex Message 1>
+[SERV] == Message received ==
+ * ALPC request: <Complex Message 1>
+ * view_is_valid <False>
+ * security_is_valid <False>
+ * handle_is_valid <False>
+ * context_is_valid <True>
+   * message context attribute:
+     - CTX.PortContext -> 0x11223344
+     - CTX.MessageContext -> None
+     - CTX.Sequence -> 0x1L
+     - CTX.MessageId -> 0x0L
+     - CTX.CallbackId -> 0x0L
+ * message token attribute:
+   - TOKEN.TokenId -> 0x4101ef8eL
+   - TOKEN.AuthenticationId -> 0x54177L
+   - TOKEN.ModifiedId -> 0x4077ab89L
+[CLIENT] Server response: <REQUEST 'Complex Message 1' DONE>
+[CLIENT] RESP Message Valid ATTRS = [ALPC_MESSAGE_CONTEXT_ATTRIBUTE(0x20000000L)]
+
+[Client] == Sending a message with a handle ==
+[SERV] == Message received ==
+ * ALPC request: <some message with a file>
+ * view_is_valid <False>
+ * security_is_valid <False>
+ * handle_is_valid <True>
+   * message handle attribute:
+       - HANDLE.Flags -> 0x0L
+       - HANDLE.Handle -> 0x2cc
+       - HANDLE.ObjectType -> 0x1L
+       - HANDLE.DesiredAccess -> 0x13019fL
+   - File: <open file '<fdopen>', mode 'r' at 0x049ECA18>
+   - content: <Tempfile data <3>
+ * context_is_valid <True>
+   * message context attribute:
+     - CTX.PortContext -> 0x11223344
+     - CTX.MessageContext -> None
+     - CTX.Sequence -> 0x2L
+     - CTX.MessageId -> 0x0L
+     - CTX.CallbackId -> 0x0L
+ * message token attribute:
+   - TOKEN.TokenId -> 0x4101ef8eL
+   - TOKEN.AuthenticationId -> 0x54177L
+   - TOKEN.ModifiedId -> 0x4077ab89L
+
+[Client] == Sending a message with a view ==
+[SERV] == Message received ==
+ * ALPC request: <some message with a view>
+ * view_is_valid <True>
+   * message view attribute:
+       - VIEW.Flags -> 0x0L
+       - VIEW.SectionHandle -> None
+       - VIEW.ViewBase -> 0x4780000
+       - VIEW.ViewSize -> 0x4000
+   * Reading view content: <The content of the view :)>
+ * security_is_valid <False>
+ * handle_is_valid <False>
+ * context_is_valid <True>
+   * message context attribute:
+     - CTX.PortContext -> 0x11223344
+     - CTX.MessageContext -> None
+     - CTX.Sequence -> 0x3L
+     - CTX.MessageId -> 0x0L
+     - CTX.CallbackId -> 0x0L
+ * message token attribute:
+   - TOKEN.TokenId -> 0x4101ef8eL
+   - TOKEN.AuthenticationId -> 0x54177L
+   - TOKEN.ModifiedId -> 0x4077ab89L
+[SERV] == Message received ==
+Unexpected message type <12>
+[SERV] == Message received ==
+Unexpected message type <5>
+[SERV] == Message received ==
+Unexpected message type <12>
+[SERV] == Message received ==
+Unexpected message type <12>
+BYE

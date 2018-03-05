@@ -1,0 +1,39 @@
+(cmd) python system.py
+Basic system infos:
+    version = (10, 0)
+    bitness = 64
+    computer_name = WILLIE
+    product_type = VER_NT_WORKSTATION(0x1L)
+    version_name = Windows 10
+
+There is 222 processes
+There is 2716 threads
+
+Dumping first logical drive:
+    <LogicalDrive "C:\" (DRIVE_FIXED)>
+        name = C:\
+        type = DRIVE_FIXED(0x3L)
+        path = \Device\HarddiskVolume2
+
+Dumping first service:
+    <ServiceA "1394ohci" SERVICE_STOPPED(0x1L)>
+        name = 1394ohci
+        description = 1394 OHCI Compliant Host Controller
+        status = ServiceStatus(type=SERVICE_KERNEL_DRIVER(0x1L), state=SERVICE_STOPPED(0x1L), control_accepted=0L, flags=0L)
+        process = None
+
+Finding a service in a user process:
+    <ServiceA "Appinfo" SERVICE_RUNNING(0x4L)>
+        name = Appinfo
+        description = Application Information
+        status = ServiceStatus(type=48L, state=SERVICE_RUNNING(0x4L), control_accepted=129L, flags=0L)
+        process = <WinProcess "svchost.exe" pid 13288 at 0x63ffc10>
+
+Enumerating handles:
+    There are 106325 handles:
+    First handle is: <Handle value=<0x4> in process pid=4>
+    Enumerating handles of the current process:
+        There are 261 handles for this process
+    Looking for a File handle:
+        Handle is <Handle value=<0x4> in process pid=16752>
+        Name is <\Device\ConDrv>

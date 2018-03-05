@@ -41,9 +41,11 @@ extensions = [
     'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
     'sphinx.ext.autodoc',
+    'sphinx.ext.todo',
 ]
 
 autodoc_default_flags = ['inherited-members']
+todo_include_todos = True
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -364,7 +366,7 @@ epub_exclude_files = ['search.html']
 
 
 # Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {'http://docs.python.org/': None}
+intersphinx_mapping = {'https://docs.python.org/2.7': None}
 
 
 def get_rst(app, what, name, obj, options, lines):
@@ -374,4 +376,4 @@ def get_rst2(app, what, name, obj, options, signature, return_annotation):
     pass
 
 def setup(app):
-    pass
+    app.add_stylesheet('css/mbasic.css')  # may also be an URL

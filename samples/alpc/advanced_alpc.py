@@ -1,3 +1,4 @@
+import sys
 import multiprocessing
 
 import windows.alpc
@@ -67,9 +68,10 @@ def full_alpc_server():
             #    - Send the same message with modified data
             #    - Recreate a Message and copy the MessageId
             msg.data = "REQUEST '{0}' DONE".format(msg.data)
+            sys.stdout.flush()
             server.send(msg)
         else:
-            raise ValueError("Unexpected message type")
+            print ValueError("Unexpected message type <{0}>".format(msg.type & 0xfff))
 
 
 def send_message_with_handle(client):
@@ -135,6 +137,7 @@ def alpc_client():
 
     send_message_with_handle(client)
     send_message_with_view(client)
+    sys.stdout.flush()
 
 
 if __name__ == "__main__":
@@ -142,5 +145,6 @@ if __name__ == "__main__":
     proc.start()
     import time; time.sleep(0.5)
     alpc_client()
+    import time; time.sleep(0.5)
     print("BYE")
     proc.terminate()

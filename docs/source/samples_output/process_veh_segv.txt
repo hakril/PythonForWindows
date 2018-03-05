@@ -1,0 +1,19 @@
+(cmd) python process\veh_segv.py
+Protected page is at <0x7270000>
+Setting page protection to <PAGE_NOACCESS>
+
+==Entry of VEH handler==
+Instr at 0x6a54c166 accessed to addr 0x7270000
+Resetting page protection to <PAGE_READWRITE>
+==Entry of VEH handler==
+Exception of type EXCEPTION_SINGLE_STEP(0x80000004L)
+Resetting page protection to <PAGE_NOACCESS>
+Value 1 read
+
+==Entry of VEH handler==
+Instr at 0x6a54c166 accessed to addr 0x7270010
+Resetting page protection to <PAGE_READWRITE>
+==Entry of VEH handler==
+Exception of type EXCEPTION_SINGLE_STEP(0x80000004L)
+Resetting page protection to <PAGE_NOACCESS>
+Value 2 read

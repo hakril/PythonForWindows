@@ -1,0 +1,12 @@
+(cmd) python process\current_process.py
+current process is <windows.winobject.process.CurrentProcess object at 0x06407430>
+current process is a <32> bits process
+current process is a SysWow64 process ? <True>
+current process pid <11344>  and ppid <14984>
+Here are the current process threads: <[<WinThread 17288 owner "CurrentProcess" at 0x6a68870>, <WinThread 15176 owner "CurrentProcess" at 0x6a687b0>, <WinThread 8972 owner "CurrentProcess" at 0x6a68bf0>, <WinThread 5568 owner "CurrentProcess" at 0x6a68dd0>]>
+Let's execute some native code ! (0x41 + 1)
+Native code returned <0x42>
+Allocating memory in current process
+Allocated memory is at <0x5510000>
+Writing 'SOME STUFF' in allocation memory
+Reading memory : <'SOME STUFF\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'>

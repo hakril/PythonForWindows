@@ -1,0 +1,23 @@
+(cmd) python process\peb.py
+Exploring the current process PEB
+PEB is <<windows.winobject.process.PEB object at 0x05A6F710>>
+Commandline object is <_LSA_UNICODE_STRING "C:\Python27\python.exe  process\peb.py" at 0x5a6f8a0>
+Commandline string is 47063282
+Imagepath  <_LSA_UNICODE_STRING "C:\Python27\python.exe" at 0x5a6f990>
+Printing some modules: <LoadedModule "python.exe" at 0x60d2080>
+<LoadedModule "ntdll.dll" at 0x60d2030>
+<LoadedModule "kernel32.dll" at 0x60d2b20>
+<LoadedModule "kernelbase.dll" at 0x60d2b70>
+<LoadedModule "python27.dll" at 0x60d2bc0>
+<LoadedModule "msvcr90.dll" at 0x60d2c10>
+=== K32  ===
+Looking for kernel32.dll
+Kernel32 module: <LoadedModule "kernel32.dll" at 0x60d2b20>
+Module name = <kernel32.dll> | Fullname = <c:\windows\system32\kernel32.dll>
+Kernel32 is loaded at address 0x76930000
+=== K32 PE ===
+PE Representation of k32: <windows.pe_parse.PEFile object at 0x060CCA10>
+Here are some exports {0: 1989445168L, 'CreateFileA': 1989795280L, 42: 1989636592L, 'VirtualAlloc': 1989437552L}
+Import DLL dependancies are (without api-*): ['kernelbase.dll', 'ntdll.dll']
+IAT Entry for ntdll!NtCreateFile = <IATEntry "NtCreateFile" ordinal 272> | addr = 0x769a1a28L
+Sections: [<PESection ".text">, <PESection ".rdata">, <PESection ".data">, <PESection ".rsrc">, <PESection ".reloc">]

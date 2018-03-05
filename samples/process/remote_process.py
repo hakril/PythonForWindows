@@ -78,7 +78,7 @@ try:
     print("Trying to import in remote module 'FAKE_MODULE'")
     notepad.execute_python("def func():\n   import FAKE_MODULE\nfunc()")
 except windows.injection.RemotePythonError as e:
-    print("Remote ERROR !")
+    print("Exception in remote process!")
     print(e)
 
 print("That's all ! killing the notepad")

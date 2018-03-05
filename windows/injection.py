@@ -318,7 +318,7 @@ buff[:] = txt
 
 def retrieve_last_exception_data(process):
     with process.allocated_memory(0x1000) as mem:
-        execute_python_code(process, retrieve_exc.format(mem))
+        execute_python_code(process, retrieve_exc.format(mem)).wait()
         size = struct.unpack("<I", process.read_memory(mem, ctypes.sizeof(ctypes.c_uint)))[0]
         data = process.read_memory(mem + ctypes.sizeof(ctypes.c_uint), size)
     return data

@@ -31,11 +31,11 @@ class PrintUnicodeString(windows.debug.Breakpoint):
 
         unicode_string_addr = p.read_ptr(esp + (self.arg_pos + 1) * 4)
         wstring_addr = p.read_ptr(unicode_string_addr + 4)
-        dll_loaded = p.read_wstring(wstring_addr)
+        dll_loaded = p.read_wstring(wstring_addr).lower()
         print("Loading <{0}>".format(dll_loaded))
 
-        if dll_loaded.endswith("ole32.dll"):
-            print("Ask to load <ole32.dll>: exiting process")
+        if dll_loaded.endswith("comctl32.dll"):
+            print("Ask to load <comctl32.dll>: exiting process")
             dbg.current_process.exit()
 
 

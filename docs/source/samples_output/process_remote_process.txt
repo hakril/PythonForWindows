@@ -1,0 +1,30 @@
+(cmd) python process\remote_process.py
+Creating a notepad
+Looking for notepads in the processes
+They are currently <1> notepads running on the system
+Let's play with our notepad: <<WinProcess "notepad.exe" pid 8400 at 0x6238510>>
+Our notepad pid is 8400
+Our notepad is a <32> bits process
+Our notepad is a SysWow64 process ? <True>
+Our notepad have threads ! <[<WinThread 16028 owner "notepad.exe" at 0x6238f10>, <WinThread 5924 owner "notepad.exe" at 0x6238a10>, <WinThread 11620 owner "notepad.exe" at 0x6238fb0>, <WinThread 3480 owner "notepad.exe" at 0x6238ff0>, <WinThread 200 owner "notepad.exe" at 0x62389b0>, <WinThread 16804 owner "notepad.exe" at 0x62389f0>, <WinThread 13340 owner "notepad.exe" at 0x6238930>]>
+Exploring our notepad PEB ! <windows.winobject.process.RemotePEB object at 0x061BDA80>
+Command line is <Remote_LSA_UNICODE_STRING ""C:\windows\system32\notepad.exe"" at 0x61bdb20>
+Here are 3 loaded modules: [<RemoteLoadedModule "notepad.exe" at 0x61bdad0>, <RemoteLoadedModule "ntdll.dll" at 0x61bd940>, <RemoteLoadedModule "kernel32.dll" at 0x61bd8f0>]
+Allocating memory in our notepad
+Allocated memory is at <0x6f00000>
+Writing 'SOME STUFF' in allocated memory
+Reading allocated memory : <'SOME STUFF\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'>
+Execution some native code in our notepad (write 0x424242 at allocated address + return 0x1337)
+Executing native code !
+Return code = 0x1337L
+Reading allocated memory : <'BBBB STUFF\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'>
+Executing python code !
+Reading allocated memory : <'HELLO FROM notepad\x00\x00'>
+Trying to import in remote module 'FAKE_MODULE'
+Exception in remote process!
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+  File "<string>", line 2, in func
+ImportError: No module named FAKE_MODULE
+
+That's all ! killing the notepad

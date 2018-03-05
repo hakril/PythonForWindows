@@ -1,0 +1,16 @@
+(cmd) python network\network.py
+Working on ipv4
+== Listening ==
+Some listening connections: [<TCP IPV4 Listening socket on 0.0.0.0:80>, <TCP IPV4 Listening socket on 0.0.0.0:135>, <TCP IPV4 Listening socket on 0.0.0.0:445>]
+Listening ports are : [80, 135, 445, 902, 912, 27036, 49664, 49665, 49666, 49667, 49671, 49673, 1120, 1120, 1120, 1120, 1120, 1120, 1120, 1120, 1120, 1120, 1120, 1120, 1120, 1120, 1120, 1120, 1120, 1120, 1120, 1120, 1120, 1120, 1120, 1120, 1120, 1120, 1120, 1120, 1120, 1120, 1120, 1120, 1120, 1120, 1120, 1120, 1120, 1120, 1120, 1120, 1120, 1120, 1120, 1120, 1120, 1120, 1120, 5556, 6463, 22885, 22886, 27060, 49330, 49331, 49794, 49795, 49867, 52541, 57125, 57138, 65000, 65001, 139, 5556, 57046, 57109, 57110, 57143, 57144, 139, 5556, 139, 5556]
+== Established ==
+Some established connections: [<TCP IPV4 Connection 127.0.0.1:912 -> 127.0.0.1:49488>, <TCP IPV4 Connection 127.0.0.1:912 -> 127.0.0.1:52332>, <TCP IPV4 Connection 127.0.0.1:49488 -> 127.0.0.1:912>]
+== connection to localhost:80 ==
+Our connection is [<TCP IPV4 Connection 127.0.0.1:57167 -> 127.0.0.1:80>]
+Sending YOP
+Closing socket
+Sending LAIT
+Traceback (most recent call last):
+  File "network\network.py", line 34, in <module>
+    s.send("LAIT")
+socket.error: [Errno 10054] An existing connection was forcibly closed by the remote host

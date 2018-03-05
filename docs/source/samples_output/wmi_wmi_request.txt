@@ -1,0 +1,15 @@
+(cmd) python wmi\wmi_request.py
+WMI requester is <windows.winobject.wmi.WmiManager object at 0x052D7CA8>
+Selecting * from 'Win32_Process'
+They are <224> processes
+Looking for ourself via pid
+Some info about our process:
+    * Name -> python.exe
+    * ProcessId -> 10136
+    * OSName -> Microsoft Windows 10 Home|C:\WINDOWS|\Device\Harddisk0\Partition2
+    * UserModeTime -> 1718750
+    * WindowsVersion -> 10.0.16299
+    * CommandLine -> C:\Python27\python.exe  wmi\wmi_request.py
+<Select Caption,FileSystem,FreeSpace from Win32_LogicalDisk>:
+    * {'Caption': u'C:', 'FreeSpace': u'15900839936', 'FileSystem': u'NTFS'}
+    * {'Caption': u'D:', 'FreeSpace': u'301635821568', 'FileSystem': u'NTFS'}

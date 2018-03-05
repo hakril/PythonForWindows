@@ -1,0 +1,12 @@
+(cmd) python alpc\simple_alpc.py
+[SERV] PORT <\RPC Control\PythonForWindowsPORT> CREATED
+Client pid = 15840
+[SERV] Message type = 0x300a
+[SERV] Received data: <>
+[SERV] Connection request
+[CLIENT] Connected: <windows.alpc.AlpcClient object at 0x06919290>
+
+[SERV] Received message: <Hello world !>
+[SERV] Message type = 0x3001
+[CLIENT] Response: <REQUEST 'Hello world !' DONE>
+BYE

@@ -1,0 +1,15 @@
+(cmd) python debug\attach.py
+Finding process with pid <12252>
+Target is <WinProcess "notepad.exe" pid 12252 at 0x66971b0>
+Debugger attached: <windows.debug.debugger.Debugger object at 0x0667CFD0>
+
+NtCreateFile of <10573272>: handle = 0x144
+Handle manually found! typename=<File>, name=<\Device\HarddiskVolume2\Windows\SysWOW64\en-US\notepad.exe.mui>
+
+NtCreateFile of <1996168876>: handle = 0x170
+Handle manually found! typename=<File>, name=<\Device\DeviceApi>
+
+NtCreateFile of <10504328>: handle = 0x2a8
+Handle manually found! typename=<File>, name=<\Device\HarddiskVolume2\Windows\Fonts\StaticCache.dat>
+
+Exiting process

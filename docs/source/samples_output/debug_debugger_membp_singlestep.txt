@@ -1,0 +1,11 @@
+(cmd) python debug\debugger_membp_singlestep.py
+Got exception EXCEPTION_BREAKPOINT(0x80000003L) at 0x77e0dadf
+Instruction at <0x520006> wrote at <0x530000>
+Got single_step EXCEPTION_SINGLE_STEP(0x80000004L) at 0x52000c
+Got single_step EXCEPTION_SINGLE_STEP(0x80000004L) at 0x520011
+Instruction at <0x520011> wrote at <0x530004>
+Got single_step EXCEPTION_SINGLE_STEP(0x80000004L) at 0x520017
+Got single_step EXCEPTION_SINGLE_STEP(0x80000004L) at 0x52001c
+Got single_step EXCEPTION_SINGLE_STEP(0x80000004L) at 0x520022
+Got single_step EXCEPTION_SINGLE_STEP(0x80000004L) at 0x520023
+No more single step: exiting

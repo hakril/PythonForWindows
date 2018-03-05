@@ -1,0 +1,24 @@
+(cmd) python debug\debugger_print_LdrLoaddll.py
+Loading <kernel32.dll>
+Got exception EXCEPTION_BREAKPOINT(0x80000003L) at 0x77e0dadf
+Loading <api-ms-win-core-synch-l1-2-0>
+Loading <api-ms-win-core-fibers-l1-1-1>
+Loading <api-ms-win-core-fibers-l1-1-1>
+Loading <api-ms-win-core-synch-l1-2-0>
+Loading <api-ms-win-core-localization-l1-2-1>
+Loading <kernel32>
+Loading <api-ms-win-core-string-l1-1-0>
+Loading <api-ms-win-core-datetime-l1-1-1>
+Loading <api-ms-win-core-localization-obsolete-l1-2-0>
+Loading <c:\windows\system32\imm32.dll>
+Loading <api-ms-win-core-processthreads-l1-1-2.dll>
+Loading <c:\windows\system32\uxtheme.dll>
+Loading <c:\windows\system32\mrmcorer.dll>
+Loading <c:\windows\system32\windows.storage.dll>
+Loading <c:\windows\system32\efswrt.dll>
+Loading <c:\windows\system32\twinapi.appcore.dll>
+Loading <rpcrt4.dll>
+Loading <c:\windows\system32\wintypes.dll>
+Loading <c:\windows\syswow64\wintypes.dll>
+Loading <comctl32.dll>
+Ask to load <comctl32.dll>: exiting process

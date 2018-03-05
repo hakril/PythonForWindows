@@ -1,0 +1,27 @@
+(cmd) python registry\registry.py
+Registry is <<windows.winobject.registry.Registry object at 0x061F89F0>>
+HKEY_CURRENT_USER is <<PyHKey "HKEY_CURRENT_USER">>
+HKEY_CURRENT_USER subkeys names are:
+['AppEvents',
+ 'AppXBackupContentType',
+ 'Console',
+ 'Control Panel',
+ 'Environment',
+ 'EUDC',
+ 'Keyboard Layout',
+ 'Network',
+ 'Printers',
+ 'Software',
+ 'System',
+ 'Uninstall',
+ 'Volatile Environment']
+Opening 'Software' in HKEY_CURRENT_USER: <PyHKey "HKEY_CURRENT_USER\Software">
+We can also open it in one access: <PyHKey "HKEY_CURRENT_USER\Sofware">
+Looking at CurrentVersion
+Key is <PyHKey "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion">
+values are:
+[KeyValue(name='SoftwareType', value=u'System', type=1),
+ KeyValue(name='RegisteredOwner', value=u'hakril', type=1),
+ ...
+ KeyValue(name='PathName', value=u'C:\\WINDOWS', type=1)]
+registered owner = <KeyValue(name='RegisteredOwner', value=u'hakril', type=1)>

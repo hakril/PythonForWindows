@@ -1,0 +1,82 @@
+(cmd) python.exe test_code.py "mov eax, 0x42424242" "eax=0x11223344"
+Testing x86 code
+Startup context is:
+Eip -> 0x3f0000L
+Esp -> 0x3bfae4L
+Eax -> 0x11223344L
+Ebx -> 0x5a6000L
+Ecx -> 0x0L
+Edx -> 0x0L
+Ebp -> 0x0L
+Edi -> 0x0L
+Esi -> 0x0L
+EFlags -> 0x202L
+EEflags(0x202L:IF)
+==Post-exec context==
+Eip -> 0x3f0007L
+Esp -> 0x3bfae4L
+Eax -> 0x42424242L
+Ebx -> 0x5a6000L
+Ecx -> 0x0L
+Edx -> 0x0L
+Ebp -> 0x0L
+Edi -> 0x0L
+Esi -> 0x0L
+EFlags -> 0x202L
+EEflags(0x202L:IF)
+<Normal terminaison>
+==DIFF==
+Eip: 0x3f0000 -> 0x3f0007 (+0x7)
+Eax: 0x11223344 -> 0x42424242 (+0x31200efe)
+
+
+(cmd) python64 test_code.py --x64 "mov r15, 0x11223344; push r14; call r15" "rcx=1; r14=0x4242424243434343"
+Testing x64 code
+Startup context is:
+Rip -> 0x205a1d60000L
+Rsp -> 0xe24a88fa88L
+Rax -> 0x0L
+Rbx -> 0x0L
+Rcx -> 0x1L
+Rdx -> 0xe24aaf9000L
+Rbp -> 0x0L
+Rdi -> 0x0L
+Rsi -> 0x0L
+R8 -> 0x0L
+R9 -> 0x0L
+R10 -> 0x0L
+R11 -> 0x0L
+R12 -> 0x0L
+R13 -> 0x0L
+R14 -> 0x4242424243434343L
+R15 -> 0x0L
+EFlags -> 0x200L
+EEflags(0x200L:IF)
+==Post-exec context==
+Rip -> 0x11223344L
+Rsp -> 0xe24a88fa78L
+Rax -> 0x0L
+Rbx -> 0x0L
+Rcx -> 0x1L
+Rdx -> 0xe24aaf9000L
+Rbp -> 0x0L
+Rdi -> 0x0L
+Rsi -> 0x0L
+R8 -> 0x0L
+R9 -> 0x0L
+R10 -> 0x0L
+R11 -> 0x0L
+R12 -> 0x0L
+R13 -> 0x0L
+R14 -> 0x4242424243434343L
+R15 -> 0x11223344L
+EFlags -> 0x10202L
+EEflags(0x10202L:IF|RF)
+<EXCEPTION_ACCESS_VIOLATION(0xc0000005L)> at <0x11223344>
+==DIFF==
+Rip: 0x205a1d60000 -> 0x11223344 (-0x20590b3ccbc)
+Rsp: 0xe24a88fa88 -> 0xe24a88fa78 (-0x10)
+R15: 0x0 -> 0x11223344 (+0x11223344)
+EFlags: 0x200 -> 0x10202 (+0x10002)
+Negative Stack: dumping:
+E24A88FA88 0C 00 D6 A1 05 02 00 00  43 43 43 43 42 42 42 42 ........CCCCBBBB

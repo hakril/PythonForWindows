@@ -12,7 +12,7 @@ import windows.crypto.generation as gencrypt
 def crypt(src, dst, certs, **kwargs):
     """Encrypt the content of 'src' file with the certifacts in 'certs' into 'dst'"""
     # Open every certificates in the certs list
-    certlist = [crypto.CertificateContext.from_file(x) for x in certs]
+    certlist = [crypto.Certificate.from_file(x) for x in certs]
     # Encrypt the content of 'src' with all the public keys(certs)
     res = crypto.encrypt(certlist, src.read())
     print("Encryption done. Result:")
