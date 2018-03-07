@@ -1,5 +1,5 @@
 """
-Windows for Python
+Python for Windows
 A lot of python object to help navigate windows stuff
 
 Exported:
@@ -11,6 +11,10 @@ Exported:
     current_thread : :class:`windows.winobject.CurrentThread`
 """
 
+# check we are on windows
+import sys
+if sys.platform != "win32":
+    raise NotImplementedError("It's called PythonForWindows not PythonFor{0}".format(sys.platform.capitalize()))
 
 from windows import winproxy
 from windows import winobject
