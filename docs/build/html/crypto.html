@@ -1,35 +1,24 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>9. windows.crypto – CryptoAPI &#8212; PythonForWindows 0.3 documentation</title>
-    
+    <title>10. windows.crypto – CryptoAPI &#8212; PythonForWindows 0.3 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '0.3',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" href="_static/css/mbasic.css" type="text/css" />
+    <script type="text/javascript" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="10. windows.alpc – Advanced Local Procedure Call" href="alpc.html" />
-    <link rel="prev" title="8. windows.com - Component Object Model" href="com.html" /> 
-  </head>
-  <body role="document">
+    <link rel="next" title="11. windows.alpc – Advanced Local Procedure Call" href="alpc.html" />
+    <link rel="prev" title="9. windows.com - Component Object Model" href="com.html" /> 
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -40,10 +29,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="alpc.html" title="10. windows.alpc – Advanced Local Procedure Call"
+          <a href="alpc.html" title="11. windows.alpc – Advanced Local Procedure Call"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="com.html" title="8. windows.com - Component Object Model"
+          <a href="com.html" title="9. windows.com - Component Object Model"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.3 documentation</a> &#187;</li> 
       </ul>
@@ -55,38 +44,40 @@
           <div class="body" role="main">
             
   <div class="section" id="module-windows.crypto">
-<span id="windows-crypto-cryptoapi"></span><h1>9. <code class="docutils literal"><span class="pre">windows.crypto</span></code> &#8211; CryptoAPI<a class="headerlink" href="#module-windows.crypto" title="Permalink to this headline">¶</a></h1>
-<p>The <a class="reference internal" href="#module-windows.crypto" title="windows.crypto"><code class="xref py py-mod docutils literal"><span class="pre">windows.crypto</span></code></a> module offers some wrappers arround the <a class="reference external" href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa380252(v=vs.85).aspx">CryptoAPI</a>.</p>
+<span id="windows-crypto-cryptoapi"></span><h1>10. <code class="docutils literal notranslate"><span class="pre">windows.crypto</span></code> – CryptoAPI<a class="headerlink" href="#module-windows.crypto" title="Permalink to this headline">¶</a></h1>
+<p>The <a class="reference internal" href="#module-windows.crypto" title="windows.crypto"><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.crypto</span></code></a> module offers some wrappers arround the <a class="reference external" href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa380252(v=vs.85).aspx">CryptoAPI</a>.</p>
 <p>The main goal of this module (for now) is providing simple encryption/decryption methods.</p>
 <div class="section" id="encryption">
-<h2>9.1. Encryption<a class="headerlink" href="#encryption" title="Permalink to this headline">¶</a></h2>
+<h2>10.1. Encryption<a class="headerlink" href="#encryption" title="Permalink to this headline">¶</a></h2>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">See sample <a class="reference internal" href="sample.html#sample-crypto-encryption"><span class="std std-ref">Encryption demo</span></a></p>
 </div>
 <div class="section" id="encrypt">
-<h3>9.1.1. encrypt<a class="headerlink" href="#encrypt" title="Permalink to this headline">¶</a></h3>
+<h3>10.1.1. encrypt<a class="headerlink" href="#encrypt" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
 <dt id="windows.crypto.encrypt">
-<code class="descclassname">windows.crypto.</code><code class="descname">encrypt</code><span class="sig-paren">(</span><em>cert_or_certlist</em>, <em>msg</em>, <em>algo=szOID_RSA_DES_EDE3_CBC('1.2.840.113549.3.7')</em>, <em>initvector=GenerateInitVector()</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/crypto/encrypt_decrypt.html#encrypt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.crypto.encrypt" title="Permalink to this definition">¶</a></dt>
-<dd><p>Encrypt <code class="docutils literal"><span class="pre">msg</span></code> with the certificate(s) in <code class="docutils literal"><span class="pre">cert_or_certlist</span></code> using <code class="docutils literal"><span class="pre">algo</span></code> with the initial
-vector <code class="docutils literal"><span class="pre">initvector</span></code>.</p>
-<p>If <code class="docutils literal"><span class="pre">geninitvector</span></code> is left as it is, it will generate a random one.</p>
-<p>Algorithms supported by <code class="docutils literal"><span class="pre">GenerateInitVector</span></code> are:</p>
+<code class="descclassname">windows.crypto.</code><code class="descname">encrypt</code><span class="sig-paren">(</span><em>cert_or_certlist</em>, <em>msg</em>, <em>algo=szOID_NIST_AES256_CBC('2.16.840.1.101.3.4.1.42')</em>, <em>initvector=GenerateInitVector()</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/crypto/encrypt_decrypt.html#encrypt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.crypto.encrypt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encrypt <code class="docutils literal notranslate"><span class="pre">msg</span></code> one or many <a class="reference internal" href="#windows.crypto.Certificate" title="windows.crypto.Certificate"><code class="xref py py-class docutils literal notranslate"><span class="pre">Certificate</span></code></a> using <code class="docutils literal notranslate"><span class="pre">algo</span></code> with the initial
+vector <code class="docutils literal notranslate"><span class="pre">initvector</span></code>.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">geninitvector</span></code> is left as it is, it will generate a random one.</p>
+<p>Algorithms supported by <code class="docutils literal notranslate"><span class="pre">GenerateInitVector</span></code> are:</p>
 <blockquote>
 <div><ul class="simple">
-<li><code class="docutils literal"><span class="pre">szOID_OIWSEC_desCBC</span></code></li>
-<li><code class="docutils literal"><span class="pre">szOID_RSA_DES_EDE3_CBC</span></code></li>
-<li><code class="docutils literal"><span class="pre">szOID_NIST_AES128_CBC</span></code></li>
-<li><code class="docutils literal"><span class="pre">szOID_NIST_AES192_CBC</span></code></li>
-<li><code class="docutils literal"><span class="pre">szOID_NIST_AES256_CBC</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">szOID_OIWSEC_desCBC</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">szOID_RSA_DES_EDE3_CBC</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">szOID_NIST_AES128_CBC</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">szOID_NIST_AES192_CBC</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">szOID_NIST_AES256_CBC</span></code></li>
 </ul>
 </div></blockquote>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#bytearray" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">bytearray</span></code></a>: The encrypted message</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cert_or_certlist</strong> (<a class="reference internal" href="#windows.crypto.Certificate" title="windows.crypto.Certificate"><code class="xref py py-class docutils literal notranslate"><span class="pre">Certificate</span></code></a> | [<a class="reference internal" href="#windows.crypto.Certificate" title="windows.crypto.Certificate"><code class="xref py py-class docutils literal notranslate"><span class="pre">Certificate</span></code></a>]) – One or many <a class="reference internal" href="#windows.crypto.Certificate" title="windows.crypto.Certificate"><code class="xref py py-class docutils literal notranslate"><span class="pre">Certificate</span></code></a> used to encrypt the msg</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bytearray" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytearray</span></code></a>: The encrypted message</td>
 </tr>
 </tbody>
 </table>
@@ -94,17 +85,19 @@ vector <code class="docutils literal"><span class="pre">initvector</span></code>
 
 </div>
 <div class="section" id="decrypt">
-<h3>9.1.2. decrypt<a class="headerlink" href="#decrypt" title="Permalink to this headline">¶</a></h3>
+<h3>10.1.2. decrypt<a class="headerlink" href="#decrypt" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
 <dt id="windows.crypto.decrypt">
 <code class="descclassname">windows.crypto.</code><code class="descname">decrypt</code><span class="sig-paren">(</span><em>cert_store</em>, <em>encrypted</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/crypto/encrypt_decrypt.html#decrypt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.crypto.decrypt" title="Permalink to this definition">¶</a></dt>
-<dd><p>Try to decrypt the <code class="docutils literal"><span class="pre">encrypted</span></code> msg with any certificate in <code class="docutils literal"><span class="pre">cert_store</span></code>.</p>
-<p>If there is no certificate able to decrypt the message <code class="docutils literal"><span class="pre">Kernel32Error(winerror=0x8009200c)</span></code> is raised.</p>
+<dd><p>Try to decrypt the <code class="docutils literal notranslate"><span class="pre">encrypted</span></code> msg with any certificate in <code class="docutils literal notranslate"><span class="pre">cert_store</span></code>.</p>
+<p>If there is no certificate able to decrypt the message <code class="docutils literal notranslate"><span class="pre">Kernel32Error(winerror=0x8009200c)</span></code> is raised.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>: The decrypted message</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cert_store</strong> (<a class="reference internal" href="#windows.crypto.CertificateStore" title="windows.crypto.CertificateStore"><code class="xref py py-class docutils literal notranslate"><span class="pre">CertificateStore</span></code></a>) – </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>: The decrypted message</td>
 </tr>
 </tbody>
 </table>
@@ -112,18 +105,18 @@ vector <code class="docutils literal"><span class="pre">initvector</span></code>
 
 </div>
 <div class="section" id="import-pfx">
-<h3>9.1.3. import_pfx<a class="headerlink" href="#import-pfx" title="Permalink to this headline">¶</a></h3>
+<h3>10.1.3. import_pfx<a class="headerlink" href="#import-pfx" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
 <dt id="windows.crypto.import_pfx">
-<code class="descclassname">windows.crypto.</code><code class="descname">import_pfx</code><span class="sig-paren">(</span><em>pfx</em>, <em>password=None</em>, <em>flags=36864L</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/crypto/certificate.html#import_pfx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.crypto.import_pfx" title="Permalink to this definition">¶</a></dt>
-<dd><p>Import the file <code class="docutils literal"><span class="pre">pfx</span></code> with the <code class="docutils literal"><span class="pre">password</span></code>.</p>
-<p><code class="docutils literal"><span class="pre">default</span> <span class="pre">flags</span> <span class="pre">=</span> <span class="pre">PKCS12_NO_PERSIST_KEY</span> <span class="pre">|</span> <span class="pre">CRYPT_USER_KEYSET</span></code>.</p>
-<p><code class="docutils literal"><span class="pre">PKCS12_NO_PERSIST_KEY</span></code> tells <code class="docutils literal"><span class="pre">CryptoAPI</span></code> to NOT save the keys in a on-disk container.</p>
+<code class="descclassname">windows.crypto.</code><code class="descname">import_pfx</code><span class="sig-paren">(</span><em>pfx</em>, <em>password=None</em>, <em>flags=37376L</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/crypto/certificate.html#import_pfx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.crypto.import_pfx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Import the file <code class="docutils literal notranslate"><span class="pre">pfx</span></code> with the <code class="docutils literal notranslate"><span class="pre">password</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">default</span> <span class="pre">flags</span> <span class="pre">=</span> <span class="pre">PKCS12_NO_PERSIST_KEY</span> <span class="pre">|</span> <span class="pre">CRYPT_USER_KEYSET</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">PKCS12_NO_PERSIST_KEY</span></code> tells <code class="docutils literal notranslate"><span class="pre">CryptoAPI</span></code> to NOT save the keys in a on-disk container.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#windows.crypto.EHCERTSTORE" title="windows.crypto.EHCERTSTORE"><code class="xref py py-class docutils literal"><span class="pre">EHCERTSTORE</span></code></a></td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#windows.crypto.CertificateStore" title="windows.crypto.CertificateStore"><code class="xref py py-class docutils literal notranslate"><span class="pre">CertificateStore</span></code></a></td>
 </tr>
 </tbody>
 </table>
@@ -132,257 +125,295 @@ vector <code class="docutils literal"><span class="pre">initvector</span></code>
 </div>
 </div>
 <div class="section" id="certificate">
-<h2>9.2. Certificate<a class="headerlink" href="#certificate" title="Permalink to this headline">¶</a></h2>
+<h2>10.2. Certificate<a class="headerlink" href="#certificate" title="Permalink to this headline">¶</a></h2>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p>The classes described here are under heavy test and try.</p>
-<p class="last">The classes, methods and properties described here will problably change as I haven&#8217;t yet had the time
+<p>The classes described here are still under test and possible rewrite/refactor.</p>
+<p class="last">The classes, methods and properties described here will problably change as I haven’t yet had the time
 to try it out in real cases and figure out the final look of the API I want to do.</p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">See sample <a class="reference internal" href="sample.html#sample-crypto-certificate"><span class="std std-ref">Certificate demo</span></a></p>
 </div>
-<div class="section" id="certificatecontext">
-<h3>9.2.1. CertificateContext<a class="headerlink" href="#certificatecontext" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id1">
+<h3>10.2.1. Certificate<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
-<dt id="windows.crypto.CertificateContext">
-<em class="property">class </em><code class="descclassname">windows.crypto.</code><code class="descname">CertificateContext</code><a class="reference internal" href="_modules/windows/crypto/certificate.html#CertificateContext"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.crypto.CertificateContext" title="Permalink to this definition">¶</a></dt>
-<dd><p>Represent a Certificate.</p>
-<p>note: It is a pointer ctypes structure (<code class="docutils literal"><span class="pre">PCCERT_CONTEXT</span></code>)</p>
+<dt id="windows.crypto.Certificate">
+<em class="property">class </em><code class="descclassname">windows.crypto.</code><code class="descname">Certificate</code><a class="reference internal" href="_modules/windows/crypto/certificate.html#Certificate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.crypto.Certificate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs._CERT_CONTEXT" title="windows.generated_def.winstructs._CERT_CONTEXT"><code class="xref py py-class docutils literal notranslate"><span class="pre">windows.generated_def.winstructs._CERT_CONTEXT</span></code></a></p>
+<p>Represent a Certificate</p>
 <dl class="attribute">
-<dt id="windows.crypto.CertificateContext.chains">
-<code class="descname">chains</code><a class="headerlink" href="#windows.crypto.CertificateContext.chains" title="Permalink to this definition">¶</a></dt>
-<dd><p>The list of chain context available for this certificate. Each elements of this list is a list of <code class="docutils literal"><span class="pre">CertificateContext</span></code> that should
-go from the <code class="docutils literal"><span class="pre">self</span></code> certificate to a trusted certificate.</p>
+<dt id="windows.crypto.Certificate.chains">
+<code class="descname">chains</code><a class="headerlink" href="#windows.crypto.Certificate.chains" title="Permalink to this definition">¶</a></dt>
+<dd><p>The list of chain context available for this certificate. Each elements of this list is a list of <code class="docutils literal notranslate"><span class="pre">Certificate</span></code> that should
+go from the <code class="docutils literal notranslate"><span class="pre">self</span></code> certificate to a trusted certificate.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">[[<a class="reference internal" href="#windows.crypto.CertificateContext" title="windows.crypto.CertificateContext"><code class="xref py py-class docutils literal"><span class="pre">CertificateContext</span></code></a>]] &#8211; A list of chain (list) of <a class="reference internal" href="#windows.crypto.CertificateContext" title="windows.crypto.CertificateContext"><code class="xref py py-class docutils literal"><span class="pre">CertificateContext</span></code></a></td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">[[<a class="reference internal" href="#windows.crypto.Certificate" title="windows.crypto.Certificate"><code class="xref py py-class docutils literal notranslate"><span class="pre">Certificate</span></code></a>]] – A list of chain (list) of <a class="reference internal" href="#windows.crypto.Certificate" title="windows.crypto.Certificate"><code class="xref py py-class docutils literal notranslate"><span class="pre">Certificate</span></code></a></td>
 </tr>
 </tbody>
 </table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="windows.crypto.CertificateContext.contents">
-<code class="descname">contents</code><a class="headerlink" href="#windows.crypto.CertificateContext.contents" title="Permalink to this definition">¶</a></dt>
-<dd><p>the object this pointer points to (read-write)</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="windows.crypto.CertificateContext.duplicate">
-<code class="descname">duplicate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/crypto/certificate.html#CertificateContext.duplicate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.crypto.CertificateContext.duplicate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Duplicate the certificate by incrementing the internal refcount. (see <code class="docutils literal"><span class="pre">CertDuplicateCertificateContext</span></code>)</p>
-<p>note: The object returned is <code class="docutils literal"><span class="pre">self</span></code></p>
+<dt id="windows.crypto.Certificate.duplicate">
+<code class="descname">duplicate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/crypto/certificate.html#Certificate.duplicate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.crypto.Certificate.duplicate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Duplicate the certificate by incrementing the internal refcount. (see <a class="reference external" href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa376045(v=vs.85).aspx">CertDuplicateCertificateContext</a>)</p>
+<p>note: The object returned is <code class="docutils literal notranslate"><span class="pre">self</span></code></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#windows.crypto.CertificateContext" title="windows.crypto.CertificateContext"><code class="xref py py-class docutils literal"><span class="pre">CertificateContext</span></code></a></td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#windows.crypto.Certificate" title="windows.crypto.Certificate"><code class="xref py py-class docutils literal notranslate"><span class="pre">Certificate</span></code></a></td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="windows.crypto.CertificateContext.encoded">
-<code class="descname">encoded</code><a class="headerlink" href="#windows.crypto.CertificateContext.encoded" title="Permalink to this definition">¶</a></dt>
+<dt id="windows.crypto.Certificate.encoded">
+<code class="descname">encoded</code><a class="headerlink" href="#windows.crypto.Certificate.encoded" title="Permalink to this definition">¶</a></dt>
 <dd><p>The encoded certificate.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#bytearray" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">bytearray</span></code></a></td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bytearray" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytearray</span></code></a></td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="classmethod">
-<dt id="windows.crypto.CertificateContext.from_buffer">
-<em class="property">classmethod </em><code class="descname">from_buffer</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/crypto/certificate.html#CertificateContext.from_buffer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.crypto.CertificateContext.from_buffer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a <a class="reference internal" href="#windows.crypto.CertificateContext" title="windows.crypto.CertificateContext"><code class="xref py py-class docutils literal"><span class="pre">CertificateContext</span></code></a> from the buffer <code class="docutils literal"><span class="pre">data</span></code></p>
+<dt id="windows.crypto.Certificate.from_buffer">
+<em class="property">classmethod </em><code class="descname">from_buffer</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/crypto/certificate.html#Certificate.from_buffer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.crypto.Certificate.from_buffer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a <a class="reference internal" href="#windows.crypto.Certificate" title="windows.crypto.Certificate"><code class="xref py py-class docutils literal notranslate"><span class="pre">Certificate</span></code></a> from the buffer <code class="docutils literal notranslate"><span class="pre">data</span></code></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#windows.crypto.CertificateContext" title="windows.crypto.CertificateContext"><code class="xref py py-class docutils literal"><span class="pre">CertificateContext</span></code></a></td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#windows.crypto.Certificate" title="windows.crypto.Certificate"><code class="xref py py-class docutils literal notranslate"><span class="pre">Certificate</span></code></a></td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="classmethod">
-<dt id="windows.crypto.CertificateContext.from_file">
-<em class="property">classmethod </em><code class="descname">from_file</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/crypto/certificate.html#CertificateContext.from_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.crypto.CertificateContext.from_file" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a <a class="reference internal" href="#windows.crypto.CertificateContext" title="windows.crypto.CertificateContext"><code class="xref py py-class docutils literal"><span class="pre">CertificateContext</span></code></a> from the file <code class="docutils literal"><span class="pre">filename</span></code></p>
+<dt id="windows.crypto.Certificate.from_file">
+<em class="property">classmethod </em><code class="descname">from_file</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/crypto/certificate.html#Certificate.from_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.crypto.Certificate.from_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a <a class="reference internal" href="#windows.crypto.Certificate" title="windows.crypto.Certificate"><code class="xref py py-class docutils literal notranslate"><span class="pre">Certificate</span></code></a> from the file <code class="docutils literal notranslate"><span class="pre">filename</span></code></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#windows.crypto.CertificateContext" title="windows.crypto.CertificateContext"><code class="xref py py-class docutils literal"><span class="pre">CertificateContext</span></code></a></td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#windows.crypto.Certificate" title="windows.crypto.Certificate"><code class="xref py py-class docutils literal notranslate"><span class="pre">Certificate</span></code></a></td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="method">
-<dt id="windows.crypto.CertificateContext.get_name">
-<code class="descname">get_name</code><span class="sig-paren">(</span><em>nametype=CERT_NAME_SIMPLE_DISPLAY_TYPE(0x4L)</em>, <em>flags=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/crypto/certificate.html#CertificateContext.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.crypto.CertificateContext.get_name" title="Permalink to this definition">¶</a></dt>
-<dd><p>Retrieve the subject or issuer name of the certificate. See <code class="docutils literal"><span class="pre">CertGetNameStringA</span></code></p>
+<dt id="windows.crypto.Certificate.get_name">
+<code class="descname">get_name</code><span class="sig-paren">(</span><em>nametype=CERT_NAME_SIMPLE_DISPLAY_TYPE(0x4L)</em>, <em>flags=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/crypto/certificate.html#Certificate.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.crypto.Certificate.get_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the subject or issuer name of the certificate.
+See <a class="reference external" href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa376086(v=vs.85).aspx">CertGetNameStringA</a></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a></td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="windows.crypto.CertificateContext.issuer">
-<code class="descname">issuer</code><a class="headerlink" href="#windows.crypto.CertificateContext.issuer" title="Permalink to this definition">¶</a></dt>
-<dd><p>The name of the certificate&#8217;s issuer.</p>
+<dt id="windows.crypto.Certificate.issuer">
+<code class="descname">issuer</code><a class="headerlink" href="#windows.crypto.Certificate.issuer" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the certificate’s issuer.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a></td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="windows.crypto.CertificateContext.name">
-<code class="descname">name</code><a class="headerlink" href="#windows.crypto.CertificateContext.name" title="Permalink to this definition">¶</a></dt>
+<dt id="windows.crypto.Certificate.name">
+<code class="descname">name</code><a class="headerlink" href="#windows.crypto.Certificate.name" title="Permalink to this definition">¶</a></dt>
 <dd><p>The name of the certificate.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a></td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="windows.crypto.CertificateContext.raw_serial">
-<code class="descname">raw_serial</code><a class="headerlink" href="#windows.crypto.CertificateContext.raw_serial" title="Permalink to this definition">¶</a></dt>
+<dt id="windows.crypto.Certificate.properties">
+<code class="descname">properties</code><a class="headerlink" href="#windows.crypto.Certificate.properties" title="Permalink to this definition">¶</a></dt>
+<dd><p>The properties of the certificate</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">[<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> or <a class="reference internal" href="generated.html#windows.generated_def.Flag" title="windows.generated_def.Flag"><code class="xref py py-class docutils literal notranslate"><span class="pre">Flag</span></code></a>] – A list of property ID</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.crypto.Certificate.raw_serial">
+<code class="descname">raw_serial</code><a class="headerlink" href="#windows.crypto.Certificate.raw_serial" title="Permalink to this definition">¶</a></dt>
 <dd><p>The raw serial number of the certificate.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">[<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a>]: A list of int <code class="docutils literal"><span class="pre">0</span> <span class="pre">&lt;=</span> <span class="pre">x</span> <span class="pre">&lt;=</span> <span class="pre">255</span></code></td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">[<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]: A list of int <code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;=</span> <span class="pre">x</span> <span class="pre">&lt;=</span> <span class="pre">255</span></code></td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="windows.crypto.CertificateContext.serial">
-<code class="descname">serial</code><a class="headerlink" href="#windows.crypto.CertificateContext.serial" title="Permalink to this definition">¶</a></dt>
-<dd><p>The string representation of the certificate&#8217;s serial.</p>
+<dt id="windows.crypto.Certificate.serial">
+<code class="descname">serial</code><a class="headerlink" href="#windows.crypto.Certificate.serial" title="Permalink to this definition">¶</a></dt>
+<dd><p>The string representation of the certificate’s serial.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a></td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="windows.crypto.CertificateContext.store">
-<code class="descname">store</code><a class="headerlink" href="#windows.crypto.CertificateContext.store" title="Permalink to this definition">¶</a></dt>
+<dt id="windows.crypto.Certificate.store">
+<code class="descname">store</code><a class="headerlink" href="#windows.crypto.Certificate.store" title="Permalink to this definition">¶</a></dt>
 <dd><p>The certificate store that contains the certificate</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="#windows.crypto.EHCERTSTORE" title="windows.crypto.EHCERTSTORE"><code class="xref py py-class docutils literal"><span class="pre">EHCERTSTORE</span></code></a></td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="#windows.crypto.CertificateStore" title="windows.crypto.CertificateStore"><code class="xref py py-class docutils literal notranslate"><span class="pre">CertificateStore</span></code></a></td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="windows.crypto.CertificateContext.version">
-<code class="descname">version</code><a class="headerlink" href="#windows.crypto.CertificateContext.version" title="Permalink to this definition">¶</a></dt>
-<dd><p>TODO: doc</p>
+<dt id="windows.crypto.Certificate.thumprint">
+<code class="descname">thumprint</code><a class="headerlink" href="#windows.crypto.Certificate.thumprint" title="Permalink to this definition">¶</a></dt>
+<dd><p>The thumprint of the certificate (which is the sha1 of the encoded cert).</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span>
+<span class="go">&lt;Certificate &quot;YOLO2&quot; serial=&quot;6f 1d 3e 7d d9 77 59 a9 4c 1c 53 dc 80 db 0c fe&quot;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">thumprint</span>
+<span class="go">&#39;E2 A2 DB 76 A1 DD 8E 70 0D C6 9F CB 71 CF 29 12 C6 D9 78 97&#39;</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.crypto.Certificate.version">
+<code class="descname">version</code><a class="headerlink" href="#windows.crypto.Certificate.version" title="Permalink to this definition">¶</a></dt>
+<dd><p>The version number of the certificate</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
 
 </div>
-<div class="section" id="ehcertstore">
-<h3>9.2.2. EHCERTSTORE<a class="headerlink" href="#ehcertstore" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="certificatestore">
+<h3>10.2.2. CertificateStore<a class="headerlink" href="#certificatestore" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
-<dt id="windows.crypto.EHCERTSTORE">
-<em class="property">class </em><code class="descclassname">windows.crypto.</code><code class="descname">EHCERTSTORE</code><a class="reference internal" href="_modules/windows/crypto/certificate.html#EHCERTSTORE"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.crypto.EHCERTSTORE" title="Permalink to this definition">¶</a></dt>
+<dt id="windows.crypto.CertificateStore">
+<em class="property">class </em><code class="descclassname">windows.crypto.</code><code class="descname">CertificateStore</code><a class="reference internal" href="_modules/windows/crypto/certificate.html#CertificateStore"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.crypto.CertificateStore" title="Permalink to this definition">¶</a></dt>
 <dd><p>A certificate store</p>
 <dl class="method">
-<dt id="windows.crypto.EHCERTSTORE.add_certificate">
-<code class="descname">add_certificate</code><span class="sig-paren">(</span><em>certificate</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/crypto/certificate.html#EHCERTSTORE.add_certificate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.crypto.EHCERTSTORE.add_certificate" title="Permalink to this definition">¶</a></dt>
+<dt id="windows.crypto.CertificateStore.add_certificate">
+<code class="descname">add_certificate</code><span class="sig-paren">(</span><em>certificate</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/crypto/certificate.html#CertificateStore.add_certificate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.crypto.CertificateStore.add_certificate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a certificate to the store</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="windows.crypto.EHCERTSTORE.certs">
-<code class="descname">certs</code><a class="headerlink" href="#windows.crypto.EHCERTSTORE.certs" title="Permalink to this definition">¶</a></dt>
-<dd><p>The certificates in the store</p>
+<dt id="windows.crypto.CertificateStore.certs">
+<code class="descname">certs</code><a class="headerlink" href="#windows.crypto.CertificateStore.certs" title="Permalink to this definition">¶</a></dt>
+<dd><p>The list of certificates in the store</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">[<a class="reference internal" href="#windows.crypto.CertificateContext" title="windows.crypto.CertificateContext"><code class="xref py py-class docutils literal"><span class="pre">CertificateContext</span></code></a>] &#8211; A list of Certificate</td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">[<a class="reference internal" href="#windows.crypto.Certificate" title="windows.crypto.Certificate"><code class="xref py py-class docutils literal notranslate"><span class="pre">Certificate</span></code></a>] – A list of certificate</td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="method">
-<dt id="windows.crypto.EHCERTSTORE.find">
-<code class="descname">find</code><span class="sig-paren">(</span><em>issuer</em>, <em>serialnumber</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/crypto/certificate.html#EHCERTSTORE.find"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.crypto.EHCERTSTORE.find" title="Permalink to this definition">¶</a></dt>
+<dt id="windows.crypto.CertificateStore.find">
+<code class="descname">find</code><span class="sig-paren">(</span><em>issuer</em>, <em>serialnumber</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/crypto/certificate.html#CertificateStore.find"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.crypto.CertificateStore.find" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the certificate that match <cite>issuer</cite> and <cite>serialnumber</cite></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#windows.crypto.CertificateContext" title="windows.crypto.CertificateContext"><code class="xref py py-class docutils literal"><span class="pre">CertificateContext</span></code></a></td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#windows.crypto.Certificate" title="windows.crypto.Certificate"><code class="xref py py-class docutils literal notranslate"><span class="pre">Certificate</span></code></a></td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="classmethod">
-<dt id="windows.crypto.EHCERTSTORE.from_file">
-<em class="property">classmethod </em><code class="descname">from_file</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/crypto/certificate.html#EHCERTSTORE.from_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.crypto.EHCERTSTORE.from_file" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a new <a class="reference internal" href="#windows.crypto.EHCERTSTORE" title="windows.crypto.EHCERTSTORE"><code class="xref py py-class docutils literal"><span class="pre">EHCERTSTORE</span></code></a> from <code class="docutils literal"><span class="pre">filename</span></code></p>
+<dt id="windows.crypto.CertificateStore.from_file">
+<em class="property">classmethod </em><code class="descname">from_file</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/crypto/certificate.html#CertificateStore.from_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.crypto.CertificateStore.from_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new <a class="reference internal" href="#windows.crypto.CertificateStore" title="windows.crypto.CertificateStore"><code class="xref py py-class docutils literal notranslate"><span class="pre">CertificateStore</span></code></a> from <code class="docutils literal notranslate"><span class="pre">filename</span></code></p>
 </dd></dl>
 
 <dl class="classmethod">
-<dt id="windows.crypto.EHCERTSTORE.from_system_store">
-<em class="property">classmethod </em><code class="descname">from_system_store</code><span class="sig-paren">(</span><em>store_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/crypto/certificate.html#EHCERTSTORE.from_system_store"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.crypto.EHCERTSTORE.from_system_store" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a new <a class="reference internal" href="#windows.crypto.EHCERTSTORE" title="windows.crypto.EHCERTSTORE"><code class="xref py py-class docutils literal"><span class="pre">EHCERTSTORE</span></code></a> from system store``store_name``
-(see <a class="reference external" href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa388136(v=vs.85).aspx">https://msdn.microsoft.com/en-us/library/windows/desktop/aa388136(v=vs.85).aspx</a>)</p>
+<dt id="windows.crypto.CertificateStore.from_system_store">
+<em class="property">classmethod </em><code class="descname">from_system_store</code><span class="sig-paren">(</span><em>store_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/crypto/certificate.html#CertificateStore.from_system_store"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.crypto.CertificateStore.from_system_store" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new <a class="reference internal" href="#windows.crypto.CertificateStore" title="windows.crypto.CertificateStore"><code class="xref py py-class docutils literal notranslate"><span class="pre">CertificateStore</span></code></a> from system store <code class="docutils literal notranslate"><span class="pre">store_name</span></code>
+(see <a class="reference external" href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa388136(v=vs.85).aspx">System Store Locations</a>)</p>
 </dd></dl>
 
 <dl class="classmethod">
-<dt id="windows.crypto.EHCERTSTORE.new_in_memory">
-<em class="property">classmethod </em><code class="descname">new_in_memory</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/crypto/certificate.html#EHCERTSTORE.new_in_memory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.crypto.EHCERTSTORE.new_in_memory" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a new temporary <a class="reference internal" href="#windows.crypto.EHCERTSTORE" title="windows.crypto.EHCERTSTORE"><code class="xref py py-class docutils literal"><span class="pre">EHCERTSTORE</span></code></a> in memory</p>
+<dt id="windows.crypto.CertificateStore.new_in_memory">
+<em class="property">classmethod </em><code class="descname">new_in_memory</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/crypto/certificate.html#CertificateStore.new_in_memory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.crypto.CertificateStore.new_in_memory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new temporary <a class="reference internal" href="#windows.crypto.CertificateStore" title="windows.crypto.CertificateStore"><code class="xref py py-class docutils literal notranslate"><span class="pre">CertificateStore</span></code></a> in memory</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="windows.crypto.EHCERTSTORE.value">
-<code class="descname">value</code><a class="headerlink" href="#windows.crypto.EHCERTSTORE.value" title="Permalink to this definition">¶</a></dt>
+<dt id="windows.crypto.CertificateStore.value">
+<code class="descname">value</code><a class="headerlink" href="#windows.crypto.CertificateStore.value" title="Permalink to this definition">¶</a></dt>
 <dd><p>current value</p>
 </dd></dl>
 
@@ -390,21 +421,142 @@ go from the <code class="docutils literal"><span class="pre">self</span></code> 
 
 </div>
 <div class="section" id="cryptobject">
-<h3>9.2.3. CryptObject<a class="headerlink" href="#cryptobject" title="Permalink to this headline">¶</a></h3>
+<h3>10.2.3. CryptObject<a class="headerlink" href="#cryptobject" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="windows.crypto.CryptObject">
 <em class="property">class </em><code class="descclassname">windows.crypto.</code><code class="descname">CryptObject</code><span class="sig-paren">(</span><em>filename</em>, <em>content_type=CERT_QUERY_CONTENT_FLAG_ALL(0x3ffeL)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/crypto/certificate.html#CryptObject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.crypto.CryptObject" title="Permalink to this definition">¶</a></dt>
-<dd><p>Extract information from an CryptoAPI object.</p>
+<dd><p>Extract information from an CryptoAPI object.
+(see <a class="reference external" href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa380264(v=vs.85).aspx">CryptQueryObject</a>)</p>
 <p>Current main use is extracting the signers certificates from a PE file.</p>
+<dl class="attribute">
+<dt id="windows.crypto.CryptObject.cert_store">
+<code class="descname">cert_store</code><em class="property"> = None</em><a class="headerlink" href="#windows.crypto.CryptObject.cert_store" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <a class="reference internal" href="#windows.crypto.CertificateStore" title="windows.crypto.CertificateStore"><code class="xref py py-class docutils literal notranslate"><span class="pre">CertificateStore</span></code></a> that includes all of the certificates, CRLs, and CTLs in the object</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.crypto.CryptObject.content_type">
+<code class="descname">content_type</code><em class="property"> = None</em><a class="headerlink" href="#windows.crypto.CryptObject.content_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>The type of the opened message</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.crypto.CryptObject.crypt_msg">
+<code class="descname">crypt_msg</code><em class="property"> = None</em><a class="headerlink" href="#windows.crypto.CryptObject.crypt_msg" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <a class="reference internal" href="#windows.crypto.CryptMessage" title="windows.crypto.CryptMessage"><code class="xref py py-class docutils literal notranslate"><span class="pre">CryptMessage</span></code></a> for any <code class="docutils literal notranslate"><span class="pre">PKCS7</span></code> content in the object</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.crypto.CryptObject.signers_and_certs">
+<code class="descname">signers_and_certs</code><a class="headerlink" href="#windows.crypto.CryptObject.signers_and_certs" title="Permalink to this definition">¶</a></dt>
+<dd><p>The list of signer info and certificates signing the object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">[(<a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.CMSG_SIGNER_INFO" title="windows.generated_def.winstructs.CMSG_SIGNER_INFO"><code class="xref py py-class docutils literal notranslate"><span class="pre">CMSG_SIGNER_INFO</span></code></a>, <a class="reference internal" href="#windows.crypto.Certificate" title="windows.crypto.Certificate"><code class="xref py py-class docutils literal notranslate"><span class="pre">Certificate</span></code></a>)]</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.CMSG_SIGNER_INFO" title="windows.generated_def.winstructs.CMSG_SIGNER_INFO"><code class="xref py py-class docutils literal notranslate"><span class="pre">CMSG_SIGNER_INFO</span></code></a> might be changed to a wrapping-subclass.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="cryptmessage">
+<h3>10.2.4. CryptMessage<a class="headerlink" href="#cryptmessage" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="windows.crypto.CryptMessage">
+<em class="property">class </em><code class="descclassname">windows.crypto.</code><code class="descname">CryptMessage</code><a class="reference internal" href="_modules/windows/crypto/cryptmsg.html#CryptMessage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.crypto.CryptMessage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represent a PKCS #7 message
+(see <a class="reference external" href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa380252(v=vs.85).aspx#low_level_message_functions">Low-level Message Functions</a>)</p>
+<dl class="attribute">
+<dt id="windows.crypto.CryptMessage.certs">
+<code class="descname">certs</code><a class="headerlink" href="#windows.crypto.CryptMessage.certs" title="Permalink to this definition">¶</a></dt>
+<dd><p>The list of <a class="reference internal" href="#windows.crypto.Certificate" title="windows.crypto.Certificate"><code class="xref py py-class docutils literal notranslate"><span class="pre">Certificate</span></code></a> embded in the message</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.crypto.CryptMessage.get_cert">
+<code class="descname">get_cert</code><span class="sig-paren">(</span><em>index=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/crypto/cryptmsg.html#CryptMessage.get_cert"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.crypto.CryptMessage.get_cert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return embded <a class="reference internal" href="#windows.crypto.Certificate" title="windows.crypto.Certificate"><code class="xref py py-class docutils literal notranslate"><span class="pre">Certificate</span></code></a> number <code class="docutils literal notranslate"><span class="pre">index</span></code>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Not all embded certificate are directly used to sign the <a class="reference internal" href="#windows.crypto.CryptObject" title="windows.crypto.CryptObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">CryptObject</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.crypto.CryptMessage.get_signer_data">
+<code class="descname">get_signer_data</code><span class="sig-paren">(</span><em>index=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/crypto/cryptmsg.html#CryptMessage.get_signer_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.crypto.CryptMessage.get_signer_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the signer informations for signer nb <code class="docutils literal notranslate"><span class="pre">index</span></code></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.CMSG_SIGNER_INFO" title="windows.generated_def.winstructs.CMSG_SIGNER_INFO"><code class="xref py py-class docutils literal notranslate"><span class="pre">CMSG_SIGNER_INFO</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.crypto.CryptMessage.nb_cert">
+<code class="descname">nb_cert</code><a class="headerlink" href="#windows.crypto.CryptMessage.nb_cert" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of certificate embded in the <a class="reference internal" href="#windows.crypto.CryptObject" title="windows.crypto.CryptObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">CryptObject</span></code></a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.crypto.CryptMessage.nb_signer">
+<code class="descname">nb_signer</code><a class="headerlink" href="#windows.crypto.CryptMessage.nb_signer" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of signers for the CryptObject</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.crypto.CryptMessage.signers">
+<code class="descname">signers</code><a class="headerlink" href="#windows.crypto.CryptMessage.signers" title="Permalink to this definition">¶</a></dt>
+<dd><p>The list of <a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.CMSG_SIGNER_INFO" title="windows.generated_def.winstructs.CMSG_SIGNER_INFO"><code class="xref py py-class docutils literal notranslate"><span class="pre">CMSG_SIGNER_INFO</span></code></a> embed in the message</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.crypto.CryptMessage.value">
+<code class="descname">value</code><a class="headerlink" href="#windows.crypto.CryptMessage.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>current value</p>
+</dd></dl>
+
 </dd></dl>
 
 </div>
 <div class="section" id="cryptcontext">
-<h3>9.2.4. CryptContext<a class="headerlink" href="#cryptcontext" title="Permalink to this headline">¶</a></h3>
+<h3>10.2.5. CryptContext<a class="headerlink" href="#cryptcontext" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="windows.crypto.CryptContext">
 <em class="property">class </em><code class="descclassname">windows.crypto.</code><code class="descname">CryptContext</code><span class="sig-paren">(</span><em>pszContainer=None</em>, <em>pszProvider=None</em>, <em>dwProvType=0</em>, <em>dwFlags=0</em>, <em>retrycreate=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/crypto/certificate.html#CryptContext"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.crypto.CryptContext" title="Permalink to this definition">¶</a></dt>
-<dd><p>A context manager arround <code class="docutils literal"><span class="pre">CryptAcquireContextW</span></code> &amp; <code class="docutils literal"><span class="pre">CryptReleaseContext</span></code></p>
+<dd><p>A context manager arround <code class="docutils literal notranslate"><span class="pre">CryptAcquireContextW</span></code> &amp; <code class="docutils literal notranslate"><span class="pre">CryptReleaseContext</span></code></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">see usage in sample <a class="reference internal" href="sample.html#sample-crypto-encryption"><span class="std std-ref">Encryption demo</span></a> (function <code class="docutils literal notranslate"><span class="pre">genkeys</span></code>)</p>
+</div>
 <dl class="attribute">
 <dt id="windows.crypto.CryptContext.contents">
 <code class="descname">contents</code><a class="headerlink" href="#windows.crypto.CryptContext.contents" title="Permalink to this definition">¶</a></dt>
@@ -416,24 +568,24 @@ go from the <code class="docutils literal"><span class="pre">self</span></code> 
 </div>
 </div>
 <div class="section" id="module-windows.crypto.generation">
-<span id="generating-componants"></span><h2>9.3. Generating componants<a class="headerlink" href="#module-windows.crypto.generation" title="Permalink to this headline">¶</a></h2>
+<span id="generating-componants"></span><h2>10.3. Generating componants<a class="headerlink" href="#module-windows.crypto.generation" title="Permalink to this headline">¶</a></h2>
 <p>This module is used to generate selfsigned-certificates / keypair and pfx file.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">See <code class="docutils literal"><span class="pre">genkeys()</span></code> in the sample <a class="reference internal" href="sample.html#sample-crypto-encryption"><span class="std std-ref">Encryption demo</span></a></p>
+<p class="last">See <code class="docutils literal notranslate"><span class="pre">genkeys()</span></code> in the sample <a class="reference internal" href="sample.html#sample-crypto-encryption"><span class="std std-ref">Encryption demo</span></a></p>
 </div>
 <div class="section" id="generate-selfsigned-certificate">
-<h3>9.3.1. generate_selfsigned_certificate<a class="headerlink" href="#generate-selfsigned-certificate" title="Permalink to this headline">¶</a></h3>
+<h3>10.3.1. generate_selfsigned_certificate<a class="headerlink" href="#generate-selfsigned-certificate" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
 <dt id="windows.crypto.generation.generate_selfsigned_certificate">
 <code class="descclassname">windows.crypto.generation.</code><code class="descname">generate_selfsigned_certificate</code><span class="sig-paren">(</span><em>name='CN=DEFAULT'</em>, <em>prov=None</em>, <em>key_info=None</em>, <em>flags=0</em>, <em>signature_algo=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/crypto/generation.html#generate_selfsigned_certificate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.crypto.generation.generate_selfsigned_certificate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a selfsigned certificate.</p>
-<p>See <a class="reference external" href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa376039(v=vs.85).aspx">https://msdn.microsoft.com/en-us/library/windows/desktop/aa376039(v=vs.85).aspx</a></p>
+<p>See <a class="reference external" href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa376039(v=vs.85).aspx">CertCreateSelfSignCertificate</a></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#windows.crypto.CertificateContext" title="windows.crypto.CertificateContext"><code class="xref py py-class docutils literal"><span class="pre">windows.crypto.CertificateContext</span></code></a></td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#windows.crypto.Certificate" title="windows.crypto.Certificate"><code class="xref py py-class docutils literal notranslate"><span class="pre">windows.crypto.Certificate</span></code></a></td>
 </tr>
 </tbody>
 </table>
@@ -441,16 +593,16 @@ go from the <code class="docutils literal"><span class="pre">self</span></code> 
 
 </div>
 <div class="section" id="generate-key">
-<h3>9.3.2. generate_key<a class="headerlink" href="#generate-key" title="Permalink to this headline">¶</a></h3>
+<h3>10.3.2. generate_key<a class="headerlink" href="#generate-key" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
 <dt id="windows.crypto.generation.generate_key">
 <code class="descclassname">windows.crypto.generation.</code><code class="descname">generate_key</code><span class="sig-paren">(</span><em>prov</em>, <em>keytype=AT_KEYEXCHANGE(0x1L)</em>, <em>flags=CRYPT_EXPORTABLE(0x1L)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/crypto/generation.html#generate_key"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.crypto.generation.generate_key" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate a keypair if type <code class="docutils literal"><span class="pre">keytype</span></code>.</p>
+<dd><p>Generate a keypair if type <code class="docutils literal notranslate"><span class="pre">keytype</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">HCRYPTKEY</span></code></td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">HCRYPTKEY</span></code></td>
 </tr>
 </tbody>
 </table>
@@ -458,16 +610,16 @@ go from the <code class="docutils literal"><span class="pre">self</span></code> 
 
 </div>
 <div class="section" id="generate-pfx">
-<h3>9.3.3. generate_pfx<a class="headerlink" href="#generate-pfx" title="Permalink to this headline">¶</a></h3>
+<h3>10.3.3. generate_pfx<a class="headerlink" href="#generate-pfx" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
 <dt id="windows.crypto.generation.generate_pfx">
 <code class="descclassname">windows.crypto.generation.</code><code class="descname">generate_pfx</code><span class="sig-paren">(</span><em>hstore</em>, <em>password=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/crypto/generation.html#generate_pfx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.crypto.generation.generate_pfx" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate a pfx protected by <code class="docutils literal"><span class="pre">password</span></code> contaning the certificates in <code class="docutils literal"><span class="pre">hstore</span></code></p>
+<dd><p>Generate a pfx protected by <code class="docutils literal notranslate"><span class="pre">password</span></code> contaning the certificates in <code class="docutils literal notranslate"><span class="pre">hstore</span></code></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#bytearray" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">bytearray</span></code></a> &#8211; The raw PFX</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#bytearray" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytearray</span></code></a> – The raw PFX</td>
 </tr>
 </tbody>
 </table>
@@ -485,24 +637,25 @@ go from the <code class="docutils literal"><span class="pre">self</span></code> 
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">9. <code class="docutils literal"><span class="pre">windows.crypto</span></code> &#8211; CryptoAPI</a><ul>
-<li><a class="reference internal" href="#encryption">9.1. Encryption</a><ul>
-<li><a class="reference internal" href="#encrypt">9.1.1. encrypt</a></li>
-<li><a class="reference internal" href="#decrypt">9.1.2. decrypt</a></li>
-<li><a class="reference internal" href="#import-pfx">9.1.3. import_pfx</a></li>
+<li><a class="reference internal" href="#">10. <code class="docutils literal notranslate"><span class="pre">windows.crypto</span></code> – CryptoAPI</a><ul>
+<li><a class="reference internal" href="#encryption">10.1. Encryption</a><ul>
+<li><a class="reference internal" href="#encrypt">10.1.1. encrypt</a></li>
+<li><a class="reference internal" href="#decrypt">10.1.2. decrypt</a></li>
+<li><a class="reference internal" href="#import-pfx">10.1.3. import_pfx</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#certificate">9.2. Certificate</a><ul>
-<li><a class="reference internal" href="#certificatecontext">9.2.1. CertificateContext</a></li>
-<li><a class="reference internal" href="#ehcertstore">9.2.2. EHCERTSTORE</a></li>
-<li><a class="reference internal" href="#cryptobject">9.2.3. CryptObject</a></li>
-<li><a class="reference internal" href="#cryptcontext">9.2.4. CryptContext</a></li>
+<li><a class="reference internal" href="#certificate">10.2. Certificate</a><ul>
+<li><a class="reference internal" href="#id1">10.2.1. Certificate</a></li>
+<li><a class="reference internal" href="#certificatestore">10.2.2. CertificateStore</a></li>
+<li><a class="reference internal" href="#cryptobject">10.2.3. CryptObject</a></li>
+<li><a class="reference internal" href="#cryptmessage">10.2.4. CryptMessage</a></li>
+<li><a class="reference internal" href="#cryptcontext">10.2.5. CryptContext</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#module-windows.crypto.generation">9.3. Generating componants</a><ul>
-<li><a class="reference internal" href="#generate-selfsigned-certificate">9.3.1. generate_selfsigned_certificate</a></li>
-<li><a class="reference internal" href="#generate-key">9.3.2. generate_key</a></li>
-<li><a class="reference internal" href="#generate-pfx">9.3.3. generate_pfx</a></li>
+<li><a class="reference internal" href="#module-windows.crypto.generation">10.3. Generating componants</a><ul>
+<li><a class="reference internal" href="#generate-selfsigned-certificate">10.3.1. generate_selfsigned_certificate</a></li>
+<li><a class="reference internal" href="#generate-key">10.3.2. generate_key</a></li>
+<li><a class="reference internal" href="#generate-pfx">10.3.3. generate_pfx</a></li>
 </ul>
 </li>
 </ul>
@@ -511,10 +664,10 @@ go from the <code class="docutils literal"><span class="pre">self</span></code> 
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="com.html"
-                        title="previous chapter">8. <code class="docutils literal"><span class="pre">windows.com</span></code> - Component Object Model</a></p>
+                        title="previous chapter">9. <code class="docutils literal notranslate"><span class="pre">windows.com</span></code> - Component Object Model</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="alpc.html"
-                        title="next chapter">10. <code class="docutils literal"><span class="pre">windows.alpc</span></code> &#8211; Advanced Local Procedure Call</a></p>
+                        title="next chapter">11. <code class="docutils literal notranslate"><span class="pre">windows.alpc</span></code> – Advanced Local Procedure Call</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -524,12 +677,14 @@ go from the <code class="docutils literal"><span class="pre">self</span></code> 
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -546,17 +701,17 @@ go from the <code class="docutils literal"><span class="pre">self</span></code> 
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="alpc.html" title="10. windows.alpc – Advanced Local Procedure Call"
+          <a href="alpc.html" title="11. windows.alpc – Advanced Local Procedure Call"
              >next</a> |</li>
         <li class="right" >
-          <a href="com.html" title="8. windows.com - Component Object Model"
+          <a href="com.html" title="9. windows.com - Component Object Model"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.3 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
     </div>
   </body>
 </html>

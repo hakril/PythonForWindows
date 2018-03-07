@@ -1,5 +1,9 @@
 TODO:
 
+=== CRITICAL BEFORE 0.4 ===
+
+======
+
     - DBG
         - Verif multiple bp at same place..
         - Verif multiple pending at same place
@@ -22,14 +26,28 @@ TODO:
     - remotectypes
         - pretty sur I can get rid of PointerToStruct64/PointerToStruct32
 
-    - Some test/doc on windows.system.handles
+
+    - winutils
+        - some stuff in winutils.py are not documented.
+            - Fix/test/refactor API + doc
+
+    - winobject\exception.py
+        - large part could be rewritten with ctypes-generation extended-def
+
+    - add wonobject/window.py + wonobject/kernobj.py to System()
+        - Some test/doc on both
 
 
     - wintrust doc:
         add : https://blogs.msdn.microsoft.com/winsdk/2016/01/05/why-cryptcatadmincalchashfromfilehandle-fails-with-a-seemingly-unexpected-error-code/
 
+    - COM:
+        - test https://msdn.microsoft.com/en-us/library/vs/alm/hh846255(v=vs.85).aspx
+
+
 Documentation
     * verif samples
+    * windows.bits
 
 RESSOURCE
     * read http://www.codeproject.com/Articles/18975/Listing-Used-Files

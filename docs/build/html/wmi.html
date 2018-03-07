@@ -1,26 +1,16 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>2.9. WMI – Make request to WMI &#8212; PythonForWindows 0.3 documentation</title>
-    
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '0.3',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" href="_static/css/mbasic.css" type="text/css" />
+    <script type="text/javascript" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
@@ -28,8 +18,7 @@
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="2.10. Handle – Processes handles" href="handle.html" />
     <link rel="prev" title="2.8. Volume – The logical drives" href="volume.html" /> 
-  </head>
-  <body role="document">
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -46,7 +35,7 @@
           <a href="volume.html" title="2.8. Volume – The logical drives"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.3 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="various.html" accesskey="U">2. The <code class="docutils literal"><span class="pre">windows</span></code> objects</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="various.html" accesskey="U">2. The <code class="docutils literal notranslate"><span class="pre">windows</span></code> objects</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -56,15 +45,59 @@
           <div class="body" role="main">
             
   <div class="section" id="module-windows.winobject.wmi">
-<span id="wmi-make-request-to-wmi"></span><h1>2.9. WMI &#8211; Make request to WMI<a class="headerlink" href="#module-windows.winobject.wmi" title="Permalink to this headline">¶</a></h1>
+<span id="wmi-make-request-to-wmi"></span><h1>2.9. WMI – Make request to WMI<a class="headerlink" href="#module-windows.winobject.wmi" title="Permalink to this headline">¶</a></h1>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">See sample <a class="reference internal" href="sample.html#wmi-request"><span class="std std-ref">WMI requests</span></a></p>
 </div>
+<div class="section" id="wmimanager">
+<h2>2.9.1. WmiManager<a class="headerlink" href="#wmimanager" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="windows.winobject.wmi.WmiManager">
+<em class="property">class </em><code class="descclassname">windows.winobject.wmi.</code><code class="descname">WmiManager</code><a class="reference internal" href="_modules/windows/winobject/wmi.html#WmiManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.wmi.WmiManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>The main WMI class exposed, used to list and access differents WMI namespace, can be used as a dict to access
+<a class="reference internal" href="#windows.winobject.wmi.WmiRequester" title="windows.winobject.wmi.WmiRequester"><code class="xref py py-class docutils literal notranslate"><span class="pre">WmiRequester</span></code></a> by namespace</p>
+<dl class="docutils">
+<dt>Example:</dt>
+<dd><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">windows</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">wmi</span><span class="p">[</span><span class="s2">&quot;root\SecurityCenter2&quot;</span><span class="p">]</span>
+<span class="go">&lt;WmiRequester namespace=&quot;root\SecurityCenter2&quot;&gt;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="windows.winobject.wmi.WmiManager.DEFAULT_NAMESPACE">
+<code class="descname">DEFAULT_NAMESPACE</code><em class="property"> = 'root\\cimv2'</em><a class="headerlink" href="#windows.winobject.wmi.WmiManager.DEFAULT_NAMESPACE" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default namespace for <a class="reference internal" href="#windows.winobject.wmi.WmiManager.select" title="windows.winobject.wmi.WmiManager.select"><code class="xref py py-func docutils literal notranslate"><span class="pre">select()</span></code></a> &amp; <a class="reference internal" href="#windows.winobject.wmi.WmiManager.query" title="windows.winobject.wmi.WmiManager.query"><code class="xref py py-func docutils literal notranslate"><span class="pre">query()</span></code></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.wmi.WmiManager.namespaces">
+<code class="descname">namespaces</code><a class="headerlink" href="#windows.winobject.wmi.WmiManager.namespaces" title="Permalink to this definition">¶</a></dt>
+<dd><p>The list of available WMI namespaces</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.wmi.WmiManager.query">
+<code class="descname">query</code><a class="headerlink" href="#windows.winobject.wmi.WmiManager.query" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="#windows.winobject.wmi.WmiRequester.query" title="windows.winobject.wmi.WmiRequester.query"><code class="xref py py-func docutils literal notranslate"><span class="pre">WmiRequester.query()</span></code></a> for default WMI namespace ‘root\cimv2’</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.wmi.WmiManager.select">
+<code class="descname">select</code><a class="headerlink" href="#windows.winobject.wmi.WmiManager.select" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="#windows.winobject.wmi.WmiRequester.select" title="windows.winobject.wmi.WmiRequester.select"><code class="xref py py-func docutils literal notranslate"><span class="pre">WmiRequester.select()</span></code></a> for default WMI namespace ‘root\cimv2’</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="wmirequester">
+<h2>2.9.2. WmiRequester<a class="headerlink" href="#wmirequester" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="windows.winobject.wmi.WmiRequester">
 <em class="property">class </em><code class="descclassname">windows.winobject.wmi.</code><code class="descname">WmiRequester</code><span class="sig-paren">(</span><em>target='root\cimv2'</em>, <em>user=None</em>, <em>password=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/wmi.html#WmiRequester"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.wmi.WmiRequester" title="Permalink to this definition">¶</a></dt>
-<dd><p>An object to perform wmi request to <code class="docutils literal"><span class="pre">root\cimv2</span></code></p>
+<dd><p>An object to perform wmi request to <code class="docutils literal notranslate"><span class="pre">root\cimv2</span></code></p>
 <dl class="attribute">
 <dt id="windows.winobject.wmi.WmiRequester.classes">
 <code class="descname">classes</code><a class="headerlink" href="#windows.winobject.wmi.WmiRequester.classes" title="Permalink to this definition">¶</a></dt>
@@ -80,9 +113,39 @@
 </dd></dl>
 
 <dl class="method">
+<dt id="windows.winobject.wmi.WmiRequester.gen_query">
+<code class="descname">gen_query</code><span class="sig-paren">(</span><em>query</em>, <em>attrs='*'</em>, <em>timeout=tag_WBEM_TIMEOUT_TYPE.WBEM_INFINITE(0xffffffffL)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/wmi.html#WmiRequester.gen_query"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.wmi.WmiRequester.gen_query" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute WMI <code class="docutils literal notranslate"><span class="pre">query</span></code> and return a generator that will yield the <code class="docutils literal notranslate"><span class="pre">attrs</span></code> for one object each time.
+Each iteration is susceptible to raise.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">generator</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.wmi.WmiRequester.gen_select">
+<code class="descname">gen_select</code><span class="sig-paren">(</span><em>frm</em>, <em>attrs='*'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/wmi.html#WmiRequester.gen_select"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.wmi.WmiRequester.gen_select" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select <code class="docutils literal notranslate"><span class="pre">attrs</span></code> from <code class="docutils literal notranslate"><span class="pre">frm</span></code> in a generator (like <a class="reference internal" href="#windows.winobject.wmi.WmiRequester.gen_query" title="windows.winobject.wmi.WmiRequester.gen_query"><code class="xref py py-func docutils literal notranslate"><span class="pre">gen_query()</span></code></a>)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">generator</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="windows.winobject.wmi.WmiRequester.query">
-<code class="descname">query</code><span class="sig-paren">(</span><em>query</em>, <em>attrs='*'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/wmi.html#WmiRequester.query"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.wmi.WmiRequester.query" title="Permalink to this definition">¶</a></dt>
-<dd><p>Execute WMI <code class="docutils literal"><span class="pre">query</span></code> and return the attributes <code class="docutils literal"><span class="pre">attrs</span></code></p>
+<code class="descname">query</code><span class="sig-paren">(</span><em>query</em>, <em>attrs='*'</em>, <em>timeout=tag_WBEM_TIMEOUT_TYPE.WBEM_INFINITE(0xffffffffL)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/wmi.html#WmiRequester.query"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.wmi.WmiRequester.query" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute WMI <code class="docutils literal notranslate"><span class="pre">query</span></code> and return the attributes <code class="docutils literal notranslate"><span class="pre">attrs</span></code>
+Timeout is not applied for the full query time but the time to retrieve one object each time.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -95,8 +158,8 @@
 
 <dl class="method">
 <dt id="windows.winobject.wmi.WmiRequester.select">
-<code class="descname">select</code><span class="sig-paren">(</span><em>frm</em>, <em>attrs='*'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/wmi.html#WmiRequester.select"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.wmi.WmiRequester.select" title="Permalink to this definition">¶</a></dt>
-<dd><p>Select <code class="docutils literal"><span class="pre">attrs</span></code> from <code class="docutils literal"><span class="pre">frm</span></code></p>
+<code class="descname">select</code><span class="sig-paren">(</span><em>frm</em>, <em>attrs='*'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/wmi.html#WmiRequester.select"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.wmi.WmiRequester.select" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select <code class="docutils literal notranslate"><span class="pre">attrs</span></code> from <code class="docutils literal notranslate"><span class="pre">frm</span></code></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -109,31 +172,7 @@
 
 </dd></dl>
 
-<dl class="class">
-<dt id="windows.winobject.wmi.WmiManager">
-<em class="property">class </em><code class="descclassname">windows.winobject.wmi.</code><code class="descname">WmiManager</code><a class="reference internal" href="_modules/windows/winobject/wmi.html#WmiManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.wmi.WmiManager" title="Permalink to this definition">¶</a></dt>
-<dd><p>The main WMI class exposed, used to list and access differents WMI namespace, can be used as a dict to access
-<a href="#id1"><span class="problematic" id="id2">:cls:`WmiRequester`</span></a> by namespace</p>
-<dl class="attribute">
-<dt id="windows.winobject.wmi.WmiManager.namespaces">
-<code class="descname">namespaces</code><a class="headerlink" href="#windows.winobject.wmi.WmiManager.namespaces" title="Permalink to this definition">¶</a></dt>
-<dd><p>The list of available WMI namespaces</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="windows.winobject.wmi.WmiManager.query">
-<code class="descname">query</code><a class="headerlink" href="#windows.winobject.wmi.WmiManager.query" title="Permalink to this definition">¶</a></dt>
-<dd><p><a class="reference internal" href="#windows.winobject.wmi.WmiRequester.query" title="windows.winobject.wmi.WmiRequester.query"><code class="xref py py-func docutils literal"><span class="pre">WmiRequester.query()</span></code></a> for default WMI namespace &#8216;root\cimv2&#8217;</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="windows.winobject.wmi.WmiManager.select">
-<code class="descname">select</code><a class="headerlink" href="#windows.winobject.wmi.WmiManager.select" title="Permalink to this definition">¶</a></dt>
-<dd><p><a class="reference internal" href="#windows.winobject.wmi.WmiRequester.select" title="windows.winobject.wmi.WmiRequester.select"><code class="xref py py-func docutils literal"><span class="pre">WmiRequester.select()</span></code></a> for default WMI namespace &#8216;root\cimv2&#8217;</p>
-</dd></dl>
-
-</dd></dl>
-
+</div>
 </div>
 
 
@@ -142,12 +181,21 @@
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">2.9. WMI – Make request to WMI</a><ul>
+<li><a class="reference internal" href="#wmimanager">2.9.1. WmiManager</a></li>
+<li><a class="reference internal" href="#wmirequester">2.9.2. WmiRequester</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
   <p class="topless"><a href="volume.html"
-                        title="previous chapter">2.8. Volume &#8211; The logical drives</a></p>
+                        title="previous chapter">2.8. Volume – The logical drives</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="handle.html"
-                        title="next chapter">2.10. Handle &#8211; Processes handles</a></p>
+                        title="next chapter">2.10. Handle – Processes handles</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -157,12 +205,14 @@
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -185,12 +235,12 @@
           <a href="volume.html" title="2.8. Volume – The logical drives"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.3 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="various.html" >2. The <code class="docutils literal"><span class="pre">windows</span></code> objects</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="various.html" >2. The <code class="docutils literal notranslate"><span class="pre">windows</span></code> objects</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
     </div>
   </body>
 </html>

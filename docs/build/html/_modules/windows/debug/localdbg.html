@@ -1,33 +1,22 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>windows.debug.localdbg &#8212; PythonForWindows 0.3 documentation</title>
-    
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '0.3',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" href="../../../_static/css/mbasic.css" type="text/css" />
+    <script type="text/javascript" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
-  </head>
-  <body role="document">
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -97,17 +86,17 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">veh_depth</span> <span class="o">-=</span> <span class="mi">1</span>
 
 <div class="viewcode-block" id="LocalDebugger.get_exception_code"><a class="viewcode-back" href="../../../debug.html#windows.debug.LocalDebugger.get_exception_code">[docs]</a>    <span class="k">def</span> <span class="nf">get_exception_code</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return ExceptionCode of current exception&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_exception</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">ExceptionRecord</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">ExceptionCode</span></div>
+        <span class="sd">&quot;&quot;&quot;Return ExceptionCode of current exception&quot;&quot;&quot;</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_exception</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">ExceptionRecord</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">ExceptionCode</span>
 
 <div class="viewcode-block" id="LocalDebugger.get_exception_context"><a class="viewcode-back" href="../../../debug.html#windows.debug.LocalDebugger.get_exception_context">[docs]</a>    <span class="k">def</span> <span class="nf">get_exception_context</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return context of current exception&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_exception</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">ContextRecord</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
+        <span class="sd">&quot;&quot;&quot;Return context of current exception&quot;&quot;&quot;</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_exception</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">ContextRecord</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
 <div class="viewcode-block" id="LocalDebugger.single_step"><a class="viewcode-back" href="../../../debug.html#windows.debug.LocalDebugger.single_step">[docs]</a>    <span class="k">def</span> <span class="nf">single_step</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Make the current thread to single step&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">get_exception_context</span><span class="p">()</span><span class="o">.</span><span class="n">EEFlags</span><span class="o">.</span><span class="n">TF</span> <span class="o">=</span> <span class="mi">1</span>
-        <span class="k">return</span> <span class="n">windef</span><span class="o">.</span><span class="n">EXCEPTION_CONTINUE_EXECUTION</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_exception_context</span><span class="p">()</span><span class="o">.</span><span class="n">EEFlags</span><span class="o">.</span><span class="n">TF</span> <span class="o">=</span> <span class="mi">1</span></div>
+        <span class="k">return</span> <span class="n">windef</span><span class="o">.</span><span class="n">EXCEPTION_CONTINUE_EXECUTION</span>
 
     <span class="k">def</span> <span class="nf">_pass_breakpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">single_step</span><span class="p">):</span>
         <span class="k">with</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">VirtualProtected</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">PAGE_EXECUTE_READWRITE</span><span class="p">):</span>
@@ -174,8 +163,8 @@
 <div class="viewcode-block" id="LocalDebugger.on_exception"><a class="viewcode-back" href="../../../debug.html#windows.debug.LocalDebugger.on_exception">[docs]</a>    <span class="k">def</span> <span class="nf">on_exception</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Called on exception&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_exception_code</span><span class="p">()</span> <span class="ow">in</span> <span class="n">winexception</span><span class="o">.</span><span class="n">exception_name_by_value</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">windef</span><span class="o">.</span><span class="n">EXCEPTION_CONTINUE_SEARCH</span>
-        <span class="k">return</span> <span class="n">windef</span><span class="o">.</span><span class="n">EXCEPTION_CONTINUE_EXECUTION</span></div>
+            <span class="k">return</span> <span class="n">windef</span><span class="o">.</span><span class="n">EXCEPTION_CONTINUE_SEARCH</span></div>
+        <span class="k">return</span> <span class="n">windef</span><span class="o">.</span><span class="n">EXCEPTION_CONTINUE_EXECUTION</span>
 
 <div class="viewcode-block" id="LocalDebugger.del_bp"><a class="viewcode-back" href="../../../debug.html#windows.debug.LocalDebugger.del_bp">[docs]</a>    <span class="k">def</span> <span class="nf">del_bp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bp</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Delete a breakpoint&quot;&quot;&quot;</span>
@@ -194,8 +183,8 @@
                     <span class="k">else</span><span class="p">:</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">remove_hxbp_other_thread</span><span class="p">(</span><span class="n">bp</span><span class="o">.</span><span class="n">addr</span><span class="p">,</span> <span class="n">threads_by_tid</span><span class="p">[</span><span class="n">tid</span><span class="p">])</span>
                     <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hxbp_breakpoint</span><span class="p">[</span><span class="n">tid</span><span class="p">][</span><span class="n">bp</span><span class="o">.</span><span class="n">addr</span><span class="p">]</span>
-            <span class="k">return</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Unknow BP type </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bp</span><span class="o">.</span><span class="n">type</span><span class="p">))</span></div>
+            <span class="k">return</span></div>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Unknow BP type </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bp</span><span class="o">.</span><span class="n">type</span><span class="p">))</span>
 
 <div class="viewcode-block" id="LocalDebugger.add_bp"><a class="viewcode-back" href="../../../debug.html#windows.debug.LocalDebugger.add_bp">[docs]</a>    <span class="k">def</span> <span class="nf">add_bp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bp</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Add a breakpoint, bp is a &quot;class:`Breakpoint`</span>
@@ -214,8 +203,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">breakpoints</span><span class="p">[</span><span class="n">addr</span><span class="p">]</span> <span class="o">=</span> <span class="n">bp</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_memory_save</span><span class="p">[</span><span class="n">addr</span><span class="p">]</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">read_memory</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="k">with</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">VirtualProtected</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">PAGE_EXECUTE_READWRITE</span><span class="p">):</span>
-            <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">write_memory</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\xcc</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="k">return</span></div>
+            <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">write_memory</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\xcc</span><span class="s2">&quot;</span><span class="p">)</span></div>
+        <span class="k">return</span>
 
     <span class="k">def</span> <span class="nf">add_bp_hxbp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bp</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">bp</span><span class="o">.</span><span class="n">type</span> <span class="o">!=</span> <span class="n">HARDWARE_EXEC_BP</span><span class="p">:</span>
@@ -329,8 +318,8 @@
         <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">remove_hxbp_in_context</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">addr</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Could not setup HXBP in </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">thread</span><span class="p">))</span>
-        <span class="n">thread</span><span class="o">.</span><span class="n">set_context</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
-        <span class="n">thread</span><span class="o">.</span><span class="n">resume</span><span class="p">()</span></div>
+        <span class="n">thread</span><span class="o">.</span><span class="n">set_context</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span></div>
+        <span class="n">thread</span><span class="o">.</span><span class="n">resume</span><span class="p">()</span>
 </pre></div>
 
           </div>
@@ -340,12 +329,14 @@
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -367,7 +358,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
     </div>
   </body>
 </html>

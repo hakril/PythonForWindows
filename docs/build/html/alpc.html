@@ -1,35 +1,24 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>10. windows.alpc – Advanced Local Procedure Call &#8212; PythonForWindows 0.3 documentation</title>
-    
+    <title>11. windows.alpc – Advanced Local Procedure Call &#8212; PythonForWindows 0.3 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '0.3',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" href="_static/css/mbasic.css" type="text/css" />
+    <script type="text/javascript" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="11. windows.rpc – ALPC-based Windows RPC" href="rpc.html" />
-    <link rel="prev" title="9. windows.crypto – CryptoAPI" href="crypto.html" /> 
-  </head>
-  <body role="document">
+    <link rel="next" title="12. windows.rpc – ALPC-based Windows RPC" href="rpc.html" />
+    <link rel="prev" title="10. windows.crypto – CryptoAPI" href="crypto.html" /> 
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -40,10 +29,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="rpc.html" title="11. windows.rpc – ALPC-based Windows RPC"
+          <a href="rpc.html" title="12. windows.rpc – ALPC-based Windows RPC"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="crypto.html" title="9. windows.crypto – CryptoAPI"
+          <a href="crypto.html" title="10. windows.crypto – CryptoAPI"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.3 documentation</a> &#187;</li> 
       </ul>
@@ -55,8 +44,8 @@
           <div class="body" role="main">
             
   <div class="section" id="module-windows.alpc">
-<span id="windows-alpc-advanced-local-procedure-call"></span><h1>10. <code class="docutils literal"><span class="pre">windows.alpc</span></code> &#8211; Advanced Local Procedure Call<a class="headerlink" href="#module-windows.alpc" title="Permalink to this headline">¶</a></h1>
-<p>The <a class="reference internal" href="#module-windows.alpc" title="windows.alpc"><code class="xref py py-mod docutils literal"><span class="pre">windows.alpc</span></code></a> module regroups the classes that permits to send and receive
+<span id="windows-alpc-advanced-local-procedure-call"></span><h1>11. <code class="docutils literal notranslate"><span class="pre">windows.alpc</span></code> – Advanced Local Procedure Call<a class="headerlink" href="#module-windows.alpc" title="Permalink to this headline">¶</a></h1>
+<p>The <a class="reference internal" href="#module-windows.alpc" title="windows.alpc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.alpc</span></code></a> module regroups the classes that permits to send and receive
 ALPC messages over an ALPC port and the classes representing these messages.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -69,11 +58,11 @@ ALPC messages over an ALPC port and the classes representing these messages.</p>
 </div></blockquote>
 </div>
 <div class="section" id="alpc-message">
-<h2>10.1. ALPC Message<a class="headerlink" href="#alpc-message" title="Permalink to this headline">¶</a></h2>
+<h2>11.1. ALPC Message<a class="headerlink" href="#alpc-message" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="windows.alpc.AlpcMessage">
 <em class="property">class </em><code class="descclassname">windows.alpc.</code><code class="descname">AlpcMessage</code><span class="sig-paren">(</span><em>msg_or_size=4096</em>, <em>attributes=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/alpc.html#AlpcMessage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.alpc.AlpcMessage" title="Permalink to this definition">¶</a></dt>
-<dd><p>Represent a full ALPC Message: a <a class="reference internal" href="#windows.alpc.AlpcMessagePort" title="windows.alpc.AlpcMessagePort"><code class="xref py py-class docutils literal"><span class="pre">AlpcMessagePort</span></code></a> and a <a class="reference internal" href="#windows.alpc.MessageAttribute" title="windows.alpc.MessageAttribute"><code class="xref py py-class docutils literal"><span class="pre">MessageAttribute</span></code></a></p>
+<dd><p>Represent a full ALPC Message: a <a class="reference internal" href="#windows.alpc.AlpcMessagePort" title="windows.alpc.AlpcMessagePort"><code class="xref py py-class docutils literal notranslate"><span class="pre">AlpcMessagePort</span></code></a> and a <a class="reference internal" href="#windows.alpc.MessageAttribute" title="windows.alpc.MessageAttribute"><code class="xref py py-class docutils literal notranslate"><span class="pre">MessageAttribute</span></code></a></p>
 <dl class="attribute">
 <dt id="windows.alpc.AlpcMessage.allocated_attributes">
 <code class="descname">allocated_attributes</code><a class="headerlink" href="#windows.alpc.AlpcMessage.allocated_attributes" title="Permalink to this definition">¶</a></dt>
@@ -82,7 +71,7 @@ ALPC messages over an ALPC port and the classes representing these messages.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">[<a class="reference internal" href="generated.html#windows.generated_def.Flag" title="windows.generated_def.Flag"><code class="xref py py-class docutils literal"><span class="pre">Flag</span></code></a>]</td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">[<a class="reference internal" href="generated.html#windows.generated_def.Flag" title="windows.generated_def.Flag"><code class="xref py py-class docutils literal notranslate"><span class="pre">Flag</span></code></a>]</td>
 </tr>
 </tbody>
 </table>
@@ -91,12 +80,12 @@ ALPC messages over an ALPC port and the classes representing these messages.</p>
 <dl class="attribute">
 <dt id="windows.alpc.AlpcMessage.context_attribute">
 <code class="descname">context_attribute</code><a class="headerlink" href="#windows.alpc.AlpcMessage.context_attribute" title="Permalink to this definition">¶</a></dt>
-<dd><p>The <a class="reference internal" href="windef_generated.html#windows.generated_def.ALPC_MESSAGE_CONTEXT_ATTRIBUTE" title="windows.generated_def.ALPC_MESSAGE_CONTEXT_ATTRIBUTE"><code class="xref py py-data docutils literal"><span class="pre">ALPC_MESSAGE_CONTEXT_ATTRIBUTE</span></code></a> of the message:</p>
+<dd><p>The <a class="reference internal" href="windef_generated.html#windows.generated_def.ALPC_MESSAGE_CONTEXT_ATTRIBUTE" title="windows.generated_def.ALPC_MESSAGE_CONTEXT_ATTRIBUTE"><code class="xref py py-data docutils literal notranslate"><span class="pre">ALPC_MESSAGE_CONTEXT_ATTRIBUTE</span></code></a> of the message:</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">ALPC_CONTEXT_ATTR</span></code></td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">ALPC_CONTEXT_ATTR</span></code></td>
 </tr>
 </tbody>
 </table>
@@ -105,7 +94,7 @@ ALPC messages over an ALPC port and the classes representing these messages.</p>
 <dl class="attribute">
 <dt id="windows.alpc.AlpcMessage.context_is_valid">
 <code class="descname">context_is_valid</code><a class="headerlink" href="#windows.alpc.AlpcMessage.context_is_valid" title="Permalink to this definition">¶</a></dt>
-<dd><p>True if <a class="reference internal" href="windef_generated.html#windows.generated_def.ALPC_MESSAGE_CONTEXT_ATTRIBUTE" title="windows.generated_def.ALPC_MESSAGE_CONTEXT_ATTRIBUTE"><code class="xref py py-data docutils literal"><span class="pre">ALPC_MESSAGE_CONTEXT_ATTRIBUTE</span></code></a> is a ValidAttributes</p>
+<dd><p>True if <a class="reference internal" href="windef_generated.html#windows.generated_def.ALPC_MESSAGE_CONTEXT_ATTRIBUTE" title="windows.generated_def.ALPC_MESSAGE_CONTEXT_ATTRIBUTE"><code class="xref py py-data docutils literal notranslate"><span class="pre">ALPC_MESSAGE_CONTEXT_ATTRIBUTE</span></code></a> is a ValidAttributes</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -117,12 +106,12 @@ ALPC messages over an ALPC port and the classes representing these messages.</p>
 <dl class="attribute">
 <dt id="windows.alpc.AlpcMessage.handle_attribute">
 <code class="descname">handle_attribute</code><a class="headerlink" href="#windows.alpc.AlpcMessage.handle_attribute" title="Permalink to this definition">¶</a></dt>
-<dd><p>The <a class="reference internal" href="windef_generated.html#windows.generated_def.ALPC_MESSAGE_HANDLE_ATTRIBUTE" title="windows.generated_def.ALPC_MESSAGE_HANDLE_ATTRIBUTE"><code class="xref py py-data docutils literal"><span class="pre">ALPC_MESSAGE_HANDLE_ATTRIBUTE</span></code></a> of the message:</p>
+<dd><p>The <a class="reference internal" href="windef_generated.html#windows.generated_def.ALPC_MESSAGE_HANDLE_ATTRIBUTE" title="windows.generated_def.ALPC_MESSAGE_HANDLE_ATTRIBUTE"><code class="xref py py-data docutils literal notranslate"><span class="pre">ALPC_MESSAGE_HANDLE_ATTRIBUTE</span></code></a> of the message:</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">ALPC_HANDLE_ATTR</span></code></td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">ALPC_HANDLE_ATTR</span></code></td>
 </tr>
 </tbody>
 </table>
@@ -131,18 +120,18 @@ ALPC messages over an ALPC port and the classes representing these messages.</p>
 <dl class="attribute">
 <dt id="windows.alpc.AlpcMessage.handle_is_valid">
 <code class="descname">handle_is_valid</code><a class="headerlink" href="#windows.alpc.AlpcMessage.handle_is_valid" title="Permalink to this definition">¶</a></dt>
-<dd><p>True if <a class="reference internal" href="windef_generated.html#windows.generated_def.ALPC_MESSAGE_HANDLE_ATTRIBUTE" title="windows.generated_def.ALPC_MESSAGE_HANDLE_ATTRIBUTE"><code class="xref py py-data docutils literal"><span class="pre">ALPC_MESSAGE_HANDLE_ATTRIBUTE</span></code></a> is a ValidAttributes</p>
+<dd><p>True if <a class="reference internal" href="windef_generated.html#windows.generated_def.ALPC_MESSAGE_HANDLE_ATTRIBUTE" title="windows.generated_def.ALPC_MESSAGE_HANDLE_ATTRIBUTE"><code class="xref py py-data docutils literal notranslate"><span class="pre">ALPC_MESSAGE_HANDLE_ATTRIBUTE</span></code></a> is a ValidAttributes</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="windows.alpc.AlpcMessage.security_attribute">
 <code class="descname">security_attribute</code><a class="headerlink" href="#windows.alpc.AlpcMessage.security_attribute" title="Permalink to this definition">¶</a></dt>
-<dd><p>The <a class="reference internal" href="windef_generated.html#windows.generated_def.ALPC_MESSAGE_SECURITY_ATTRIBUTE" title="windows.generated_def.ALPC_MESSAGE_SECURITY_ATTRIBUTE"><code class="xref py py-data docutils literal"><span class="pre">ALPC_MESSAGE_SECURITY_ATTRIBUTE</span></code></a> of the message</p>
+<dd><p>The <a class="reference internal" href="windef_generated.html#windows.generated_def.ALPC_MESSAGE_SECURITY_ATTRIBUTE" title="windows.generated_def.ALPC_MESSAGE_SECURITY_ATTRIBUTE"><code class="xref py py-data docutils literal notranslate"><span class="pre">ALPC_MESSAGE_SECURITY_ATTRIBUTE</span></code></a> of the message</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">ALPC_SECURITY_ATTR</span></code></td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">ALPC_SECURITY_ATTR</span></code></td>
 </tr>
 </tbody>
 </table>
@@ -151,13 +140,13 @@ ALPC messages over an ALPC port and the classes representing these messages.</p>
 <dl class="attribute">
 <dt id="windows.alpc.AlpcMessage.security_is_valid">
 <code class="descname">security_is_valid</code><a class="headerlink" href="#windows.alpc.AlpcMessage.security_is_valid" title="Permalink to this definition">¶</a></dt>
-<dd><p>True if <a class="reference internal" href="windef_generated.html#windows.generated_def.ALPC_MESSAGE_SECURITY_ATTRIBUTE" title="windows.generated_def.ALPC_MESSAGE_SECURITY_ATTRIBUTE"><code class="xref py py-data docutils literal"><span class="pre">ALPC_MESSAGE_SECURITY_ATTRIBUTE</span></code></a> is a ValidAttributes</p>
+<dd><p>True if <a class="reference internal" href="windef_generated.html#windows.generated_def.ALPC_MESSAGE_SECURITY_ATTRIBUTE" title="windows.generated_def.ALPC_MESSAGE_SECURITY_ATTRIBUTE"><code class="xref py py-data docutils literal notranslate"><span class="pre">ALPC_MESSAGE_SECURITY_ATTRIBUTE</span></code></a> is a ValidAttributes</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="windows.alpc.AlpcMessage.type">
 <code class="descname">type</code><a class="headerlink" href="#windows.alpc.AlpcMessage.type" title="Permalink to this definition">¶</a></dt>
-<dd><p>The type of the message (<code class="docutils literal"><span class="pre">PORT_MESSAGE.u2.s2.Type</span></code>)</p>
+<dd><p>The type of the message (<code class="docutils literal notranslate"><span class="pre">PORT_MESSAGE.u2.s2.Type</span></code>)</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -168,7 +157,7 @@ ALPC messages over an ALPC port and the classes representing these messages.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">[<a class="reference internal" href="generated.html#windows.generated_def.Flag" title="windows.generated_def.Flag"><code class="xref py py-class docutils literal"><span class="pre">Flag</span></code></a>]</td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">[<a class="reference internal" href="generated.html#windows.generated_def.Flag" title="windows.generated_def.Flag"><code class="xref py py-class docutils literal notranslate"><span class="pre">Flag</span></code></a>]</td>
 </tr>
 </tbody>
 </table>
@@ -177,12 +166,12 @@ ALPC messages over an ALPC port and the classes representing these messages.</p>
 <dl class="attribute">
 <dt id="windows.alpc.AlpcMessage.view_attribute">
 <code class="descname">view_attribute</code><a class="headerlink" href="#windows.alpc.AlpcMessage.view_attribute" title="Permalink to this definition">¶</a></dt>
-<dd><p>The <a class="reference internal" href="windef_generated.html#windows.generated_def.ALPC_MESSAGE_VIEW_ATTRIBUTE" title="windows.generated_def.ALPC_MESSAGE_VIEW_ATTRIBUTE"><code class="xref py py-data docutils literal"><span class="pre">ALPC_MESSAGE_VIEW_ATTRIBUTE</span></code></a> of the message:</p>
+<dd><p>The <a class="reference internal" href="windef_generated.html#windows.generated_def.ALPC_MESSAGE_VIEW_ATTRIBUTE" title="windows.generated_def.ALPC_MESSAGE_VIEW_ATTRIBUTE"><code class="xref py py-data docutils literal notranslate"><span class="pre">ALPC_MESSAGE_VIEW_ATTRIBUTE</span></code></a> of the message:</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">ALPC_DATA_VIEW_ATTR</span></code></td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">ALPC_DATA_VIEW_ATTR</span></code></td>
 </tr>
 </tbody>
 </table>
@@ -191,7 +180,7 @@ ALPC messages over an ALPC port and the classes representing these messages.</p>
 <dl class="attribute">
 <dt id="windows.alpc.AlpcMessage.view_is_valid">
 <code class="descname">view_is_valid</code><a class="headerlink" href="#windows.alpc.AlpcMessage.view_is_valid" title="Permalink to this definition">¶</a></dt>
-<dd><p>True if <a class="reference internal" href="windef_generated.html#windows.generated_def.ALPC_MESSAGE_VIEW_ATTRIBUTE" title="windows.generated_def.ALPC_MESSAGE_VIEW_ATTRIBUTE"><code class="xref py py-data docutils literal"><span class="pre">ALPC_MESSAGE_VIEW_ATTRIBUTE</span></code></a> is a ValidAttributes</p>
+<dd><p>True if <a class="reference internal" href="windef_generated.html#windows.generated_def.ALPC_MESSAGE_VIEW_ATTRIBUTE" title="windows.generated_def.ALPC_MESSAGE_VIEW_ATTRIBUTE"><code class="xref py py-data docutils literal notranslate"><span class="pre">ALPC_MESSAGE_VIEW_ATTRIBUTE</span></code></a> is a ValidAttributes</p>
 </dd></dl>
 
 </dd></dl>
@@ -199,7 +188,7 @@ ALPC messages over an ALPC port and the classes representing these messages.</p>
 <dl class="class">
 <dt id="windows.alpc.AlpcMessagePort">
 <em class="property">class </em><code class="descclassname">windows.alpc.</code><code class="descname">AlpcMessagePort</code><a class="reference internal" href="_modules/windows/alpc.html#AlpcMessagePort"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.alpc.AlpcMessagePort" title="Permalink to this definition">¶</a></dt>
-<dd><p>The effective ALPC Message composed of a <code class="docutils literal"><span class="pre">PORT_MESSAGE</span></code> structure followed by the data</p>
+<dd><p>The effective ALPC Message composed of a <code class="docutils literal notranslate"><span class="pre">PORT_MESSAGE</span></code> structure followed by the data</p>
 <dl class="attribute">
 <dt id="windows.alpc.AlpcMessagePort.data">
 <code class="descname">data</code><a class="headerlink" href="#windows.alpc.AlpcMessagePort.data" title="Permalink to this definition">¶</a></dt>
@@ -210,6 +199,12 @@ ALPC messages over an ALPC port and the classes representing these messages.</p>
 <dt id="windows.alpc.AlpcMessagePort.datalen">
 <code class="descname">datalen</code><a class="headerlink" href="#windows.alpc.AlpcMessagePort.datalen" title="Permalink to this definition">¶</a></dt>
 <dd><p>The length of the data</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="windows.alpc.AlpcMessagePort.from_buffer">
+<em class="property">classmethod </em><code class="descname">from_buffer</code><span class="sig-paren">(</span><em>object</em>, <em>offset=0</em><span class="sig-paren">)</span> &#x2192; C instance<a class="reference internal" href="_modules/windows/alpc.html#AlpcMessagePort.from_buffer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.alpc.AlpcMessagePort.from_buffer" title="Permalink to this definition">¶</a></dt>
+<dd><p>create a C instance from a writeable buffer</p>
 </dd></dl>
 
 </dd></dl>
@@ -226,7 +221,7 @@ ALPC messages over an ALPC port and the classes representing these messages.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">[<a class="reference internal" href="generated.html#windows.generated_def.Flag" title="windows.generated_def.Flag"><code class="xref py py-class docutils literal"><span class="pre">Flag</span></code></a>]</td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">[<a class="reference internal" href="generated.html#windows.generated_def.Flag" title="windows.generated_def.Flag"><code class="xref py py-class docutils literal notranslate"><span class="pre">Flag</span></code></a>]</td>
 </tr>
 </tbody>
 </table>
@@ -235,13 +230,13 @@ ALPC messages over an ALPC port and the classes representing these messages.</p>
 <dl class="method">
 <dt id="windows.alpc.MessageAttribute.is_allocated">
 <code class="descname">is_allocated</code><span class="sig-paren">(</span><em>attribute</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/alpc.html#MessageAttribute.is_allocated"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.alpc.MessageAttribute.is_allocated" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return <code class="docutils literal"><span class="pre">True</span></code> if <code class="docutils literal"><span class="pre">attribute</span></code> is allocated</p>
+<dd><p>Return <code class="docutils literal notranslate"><span class="pre">True</span></code> if <code class="docutils literal notranslate"><span class="pre">attribute</span></code> is allocated</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="windows.alpc.MessageAttribute.is_valid">
 <code class="descname">is_valid</code><span class="sig-paren">(</span><em>attribute</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/alpc.html#MessageAttribute.is_valid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.alpc.MessageAttribute.is_valid" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return <code class="docutils literal"><span class="pre">True</span></code> if <code class="docutils literal"><span class="pre">attribute</span></code> is valid</p>
+<dd><p>Return <code class="docutils literal notranslate"><span class="pre">True</span></code> if <code class="docutils literal notranslate"><span class="pre">attribute</span></code> is valid</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -252,7 +247,7 @@ ALPC messages over an ALPC port and the classes representing these messages.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">[<a class="reference internal" href="generated.html#windows.generated_def.Flag" title="windows.generated_def.Flag"><code class="xref py py-class docutils literal"><span class="pre">Flag</span></code></a>]</td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">[<a class="reference internal" href="generated.html#windows.generated_def.Flag" title="windows.generated_def.Flag"><code class="xref py py-class docutils literal notranslate"><span class="pre">Flag</span></code></a>]</td>
 </tr>
 </tbody>
 </table>
@@ -261,21 +256,21 @@ ALPC messages over an ALPC port and the classes representing these messages.</p>
 <dl class="classmethod">
 <dt id="windows.alpc.MessageAttribute.with_all_attributes">
 <em class="property">classmethod </em><code class="descname">with_all_attributes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/alpc.html#MessageAttribute.with_all_attributes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.alpc.MessageAttribute.with_all_attributes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a new <a class="reference internal" href="#windows.alpc.MessageAttribute" title="windows.alpc.MessageAttribute"><code class="xref py py-class docutils literal"><span class="pre">MessageAttribute</span></code></a> with the following attributes allocated:</p>
+<dd><p>Create a new <a class="reference internal" href="#windows.alpc.MessageAttribute" title="windows.alpc.MessageAttribute"><code class="xref py py-class docutils literal notranslate"><span class="pre">MessageAttribute</span></code></a> with the following attributes allocated:</p>
 <ul class="simple">
-<li><code class="xref py py-class docutils literal"><span class="pre">ALPC_MESSAGE_SECURITY_ATTRIBUTE</span></code></li>
-<li><code class="xref py py-class docutils literal"><span class="pre">ALPC_MESSAGE_VIEW_ATTRIBUTE</span></code></li>
-<li><code class="xref py py-class docutils literal"><span class="pre">ALPC_MESSAGE_CONTEXT_ATTRIBUTE</span></code></li>
-<li><code class="xref py py-class docutils literal"><span class="pre">ALPC_MESSAGE_HANDLE_ATTRIBUTE</span></code></li>
-<li><code class="xref py py-class docutils literal"><span class="pre">ALPC_MESSAGE_TOKEN_ATTRIBUTE</span></code></li>
-<li><code class="xref py py-class docutils literal"><span class="pre">ALPC_MESSAGE_DIRECT_ATTRIBUTE</span></code></li>
-<li><code class="xref py py-class docutils literal"><span class="pre">ALPC_MESSAGE_WORK_ON_BEHALF_ATTRIBUTE</span></code></li>
+<li><code class="xref py py-class docutils literal notranslate"><span class="pre">ALPC_MESSAGE_SECURITY_ATTRIBUTE</span></code></li>
+<li><code class="xref py py-class docutils literal notranslate"><span class="pre">ALPC_MESSAGE_VIEW_ATTRIBUTE</span></code></li>
+<li><code class="xref py py-class docutils literal notranslate"><span class="pre">ALPC_MESSAGE_CONTEXT_ATTRIBUTE</span></code></li>
+<li><code class="xref py py-class docutils literal notranslate"><span class="pre">ALPC_MESSAGE_HANDLE_ATTRIBUTE</span></code></li>
+<li><code class="xref py py-class docutils literal notranslate"><span class="pre">ALPC_MESSAGE_TOKEN_ATTRIBUTE</span></code></li>
+<li><code class="xref py py-class docutils literal notranslate"><span class="pre">ALPC_MESSAGE_DIRECT_ATTRIBUTE</span></code></li>
+<li><code class="xref py py-class docutils literal notranslate"><span class="pre">ALPC_MESSAGE_WORK_ON_BEHALF_ATTRIBUTE</span></code></li>
 </ul>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#windows.alpc.MessageAttribute" title="windows.alpc.MessageAttribute"><code class="xref py py-class docutils literal"><span class="pre">MessageAttribute</span></code></a></td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#windows.alpc.MessageAttribute" title="windows.alpc.MessageAttribute"><code class="xref py py-class docutils literal notranslate"><span class="pre">MessageAttribute</span></code></a></td>
 </tr>
 </tbody>
 </table>
@@ -284,12 +279,12 @@ ALPC messages over an ALPC port and the classes representing these messages.</p>
 <dl class="classmethod">
 <dt id="windows.alpc.MessageAttribute.with_attributes">
 <em class="property">classmethod </em><code class="descname">with_attributes</code><span class="sig-paren">(</span><em>attributes</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/alpc.html#MessageAttribute.with_attributes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.alpc.MessageAttribute.with_attributes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a new <a class="reference internal" href="#windows.alpc.MessageAttribute" title="windows.alpc.MessageAttribute"><code class="xref py py-class docutils literal"><span class="pre">MessageAttribute</span></code></a> with <code class="docutils literal"><span class="pre">attributes</span></code> allocated</p>
+<dd><p>Create a new <a class="reference internal" href="#windows.alpc.MessageAttribute" title="windows.alpc.MessageAttribute"><code class="xref py py-class docutils literal notranslate"><span class="pre">MessageAttribute</span></code></a> with <code class="docutils literal notranslate"><span class="pre">attributes</span></code> allocated</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#windows.alpc.MessageAttribute" title="windows.alpc.MessageAttribute"><code class="xref py py-class docutils literal"><span class="pre">MessageAttribute</span></code></a></td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#windows.alpc.MessageAttribute" title="windows.alpc.MessageAttribute"><code class="xref py py-class docutils literal notranslate"><span class="pre">MessageAttribute</span></code></a></td>
 </tr>
 </tbody>
 </table>
@@ -299,7 +294,7 @@ ALPC messages over an ALPC port and the classes representing these messages.</p>
 
 </div>
 <div class="section" id="alpc-client">
-<h2>10.2. ALPC client<a class="headerlink" href="#alpc-client" title="Permalink to this headline">¶</a></h2>
+<h2>11.2. ALPC client<a class="headerlink" href="#alpc-client" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="windows.alpc.AlpcClient">
 <em class="property">class </em><code class="descclassname">windows.alpc.</code><code class="descname">AlpcClient</code><span class="sig-paren">(</span><em>port_name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/alpc.html#AlpcClient"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.alpc.AlpcClient" title="Permalink to this definition">¶</a></dt>
@@ -307,18 +302,18 @@ ALPC messages over an ALPC port and the classes representing these messages.</p>
 <dl class="method">
 <dt id="windows.alpc.AlpcClient.connect_to_port">
 <code class="descname">connect_to_port</code><span class="sig-paren">(</span><em>port_name</em>, <em>connect_message=None</em>, <em>port_attr=None</em>, <em>port_attr_flags=65536</em>, <em>obj_attr=None</em>, <em>flags=ALPC_MSGFLG_SYNC_REQUEST(0x20000L)</em>, <em>timeout=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/alpc.html#AlpcClient.connect_to_port"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.alpc.AlpcClient.connect_to_port" title="Permalink to this definition">¶</a></dt>
-<dd><p>Connect to the ALPC port <code class="docutils literal"><span class="pre">port_name</span></code>. Most of the parameters have defauls value is <code class="docutils literal"><span class="pre">None</span></code> is passed.</p>
+<dd><p>Connect to the ALPC port <code class="docutils literal notranslate"><span class="pre">port_name</span></code>. Most of the parameters have defauls value is <code class="docutils literal notranslate"><span class="pre">None</span></code> is passed.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>connect_message</strong> (<a class="reference internal" href="#windows.alpc.AlpcMessage" title="windows.alpc.AlpcMessage"><em>AlpcMessage</em></a>) &#8211; The message send with the connection request, if not <code class="docutils literal"><span class="pre">None</span></code> the function will return an <a class="reference internal" href="#windows.alpc.AlpcMessage" title="windows.alpc.AlpcMessage"><code class="xref py py-class docutils literal"><span class="pre">AlpcMessage</span></code></a></li>
-<li><strong>port_attr</strong> (<em>ALPC_PORT_ATTRIBUTES</em>) &#8211; The port attributes, one with default value will be used if this parameter is <code class="docutils literal"><span class="pre">None</span></code></li>
-<li><strong>port_attr_flags</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; <code class="docutils literal"><span class="pre">ALPC_PORT_ATTRIBUTES.Flags</span></code> used if <code class="docutils literal"><span class="pre">port_attr</span></code> is <code class="docutils literal"><span class="pre">None</span></code> (MUTUALY EXCLUSINVE WITH <code class="docutils literal"><span class="pre">port_attr</span></code>)</li>
-<li><strong>obj_attr</strong> (<a class="reference internal" href="winstructs_generated.html#windows.generated_def.OBJECT_ATTRIBUTES" title="windows.generated_def.OBJECT_ATTRIBUTES"><em>OBJECT_ATTRIBUTES</em></a>) &#8211; The attributes of the port (can be None)</li>
-<li><strong>flags</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; The flags for <code class="xref py py-func docutils literal"><span class="pre">NtAlpcConnectPort()</span></code></li>
-<li><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; The timeout of the request</li>
+<li><strong>connect_message</strong> (<a class="reference internal" href="#windows.alpc.AlpcMessage" title="windows.alpc.AlpcMessage"><em>AlpcMessage</em></a>) – The message send with the connection request, if not <code class="docutils literal notranslate"><span class="pre">None</span></code> the function will return an <a class="reference internal" href="#windows.alpc.AlpcMessage" title="windows.alpc.AlpcMessage"><code class="xref py py-class docutils literal notranslate"><span class="pre">AlpcMessage</span></code></a></li>
+<li><strong>port_attr</strong> (<em>ALPC_PORT_ATTRIBUTES</em>) – The port attributes, one with default value will be used if this parameter is <code class="docutils literal notranslate"><span class="pre">None</span></code></li>
+<li><strong>port_attr_flags</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) – <code class="docutils literal notranslate"><span class="pre">ALPC_PORT_ATTRIBUTES.Flags</span></code> used if <code class="docutils literal notranslate"><span class="pre">port_attr</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code> (MUTUALY EXCLUSINVE WITH <code class="docutils literal notranslate"><span class="pre">port_attr</span></code>)</li>
+<li><strong>obj_attr</strong> (<a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.OBJECT_ATTRIBUTES" title="windows.generated_def.winstructs.OBJECT_ATTRIBUTES"><em>OBJECT_ATTRIBUTES</em></a>) – The attributes of the port (can be None)</li>
+<li><strong>flags</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) – The flags for <code class="xref py py-func docutils literal notranslate"><span class="pre">NtAlpcConnectPort()</span></code></li>
+<li><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) – The timeout of the request</li>
 </ul>
 </td>
 </tr>
@@ -329,14 +324,14 @@ ALPC messages over an ALPC port and the classes representing these messages.</p>
 <dl class="method">
 <dt id="windows.alpc.AlpcClient.recv">
 <code class="descname">recv</code><span class="sig-paren">(</span><em>receive_msg=None</em>, <em>flags=0</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.alpc.AlpcClient.recv" title="Permalink to this definition">¶</a></dt>
-<dd><p>Receive a message into <code class="docutils literal"><span class="pre">alpc_message</span></code> with <code class="docutils literal"><span class="pre">flags</span></code>.</p>
+<dd><p>Receive a message into <code class="docutils literal notranslate"><span class="pre">alpc_message</span></code> with <code class="docutils literal notranslate"><span class="pre">flags</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>receive_msg</strong> (<a class="reference internal" href="#windows.alpc.AlpcMessage" title="windows.alpc.AlpcMessage"><em>AlpcMessage</em></a><em> or </em><a class="reference external" href="https://docs.python.org/2/library/constants.html#None" title="(in Python v2.7)"><em>None</em></a>) &#8211; The message to send. If <code class="docutils literal"><span class="pre">receive_msg</span></code> is a <code class="docutils literal"><span class="pre">None</span></code> it create and return a simple <a class="reference internal" href="#windows.alpc.AlpcMessage" title="windows.alpc.AlpcMessage"><code class="xref py py-class docutils literal"><span class="pre">AlpcMessage</span></code></a></li>
-<li><strong>flags</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; The flags for <code class="xref py py-func docutils literal"><span class="pre">NtAlpcSendWaitReceivePort()</span></code></li>
+<li><strong>receive_msg</strong> (<a class="reference internal" href="#windows.alpc.AlpcMessage" title="windows.alpc.AlpcMessage"><em>AlpcMessage</em></a><em> or </em><em>None</em>) – The message to send. If <code class="docutils literal notranslate"><span class="pre">receive_msg</span></code> is a <code class="docutils literal notranslate"><span class="pre">None</span></code> it create and return a simple <a class="reference internal" href="#windows.alpc.AlpcMessage" title="windows.alpc.AlpcMessage"><code class="xref py py-class docutils literal notranslate"><span class="pre">AlpcMessage</span></code></a></li>
+<li><strong>flags</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) – The flags for <code class="xref py py-func docutils literal notranslate"><span class="pre">NtAlpcSendWaitReceivePort()</span></code></li>
 </ul>
 </td>
 </tr>
@@ -347,14 +342,14 @@ ALPC messages over an ALPC port and the classes representing these messages.</p>
 <dl class="method">
 <dt id="windows.alpc.AlpcClient.send">
 <code class="descname">send</code><span class="sig-paren">(</span><em>alpc_message</em>, <em>flags=0</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.alpc.AlpcClient.send" title="Permalink to this definition">¶</a></dt>
-<dd><p>Send the <code class="docutils literal"><span class="pre">alpc_message</span></code> with <code class="docutils literal"><span class="pre">flags</span></code></p>
+<dd><p>Send the <code class="docutils literal notranslate"><span class="pre">alpc_message</span></code> with <code class="docutils literal notranslate"><span class="pre">flags</span></code></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>alpc_message</strong> (<a class="reference internal" href="#windows.alpc.AlpcMessage" title="windows.alpc.AlpcMessage"><em>AlpcMessage</em></a><em> or </em><a class="reference internal" href="process.html#windows.winobject.process.WinUnicodeString.str" title="windows.winobject.process.WinUnicodeString.str"><em>str</em></a>) &#8211; The message to send. If <code class="docutils literal"><span class="pre">alpc_message</span></code> is a <a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a> it build an AlpcMessage with the message as data.</li>
-<li><strong>flags</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; The flags for <code class="xref py py-func docutils literal"><span class="pre">NtAlpcSendWaitReceivePort()</span></code></li>
+<li><strong>alpc_message</strong> (<a class="reference internal" href="#windows.alpc.AlpcMessage" title="windows.alpc.AlpcMessage"><em>AlpcMessage</em></a><em> or </em><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – The message to send. If <code class="docutils literal notranslate"><span class="pre">alpc_message</span></code> is a <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> it build an AlpcMessage with the message as data.</li>
+<li><strong>flags</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) – The flags for <code class="xref py py-func docutils literal notranslate"><span class="pre">NtAlpcSendWaitReceivePort()</span></code></li>
 </ul>
 </td>
 </tr>
@@ -365,15 +360,15 @@ ALPC messages over an ALPC port and the classes representing these messages.</p>
 <dl class="method">
 <dt id="windows.alpc.AlpcClient.send_receive">
 <code class="descname">send_receive</code><span class="sig-paren">(</span><em>alpc_message</em>, <em>receive_msg=None</em>, <em>flags=ALPC_MSGFLG_SYNC_REQUEST(0x20000L)</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.alpc.AlpcClient.send_receive" title="Permalink to this definition">¶</a></dt>
-<dd><p>Send and receive a message with <code class="docutils literal"><span class="pre">flags</span></code>.</p>
+<dd><p>Send and receive a message with <code class="docutils literal notranslate"><span class="pre">flags</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>alpc_message</strong> (<a class="reference internal" href="#windows.alpc.AlpcMessage" title="windows.alpc.AlpcMessage"><em>AlpcMessage</em></a><em> or </em><a class="reference internal" href="process.html#windows.winobject.process.WinUnicodeString.str" title="windows.winobject.process.WinUnicodeString.str"><em>str</em></a>) &#8211; The message to send. If <code class="docutils literal"><span class="pre">alpc_message</span></code> is a <a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a> it build an AlpcMessage with the message as data.</li>
-<li><strong>receive_msg</strong> (<a class="reference internal" href="#windows.alpc.AlpcMessage" title="windows.alpc.AlpcMessage"><em>AlpcMessage</em></a><em> or </em><a class="reference external" href="https://docs.python.org/2/library/constants.html#None" title="(in Python v2.7)"><em>None</em></a>) &#8211; The message to send. If <code class="docutils literal"><span class="pre">receive_msg</span></code> is a <code class="docutils literal"><span class="pre">None</span></code> it create and return a simple <a class="reference internal" href="#windows.alpc.AlpcMessage" title="windows.alpc.AlpcMessage"><code class="xref py py-class docutils literal"><span class="pre">AlpcMessage</span></code></a></li>
-<li><strong>flags</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; The flags for <code class="xref py py-func docutils literal"><span class="pre">NtAlpcSendWaitReceivePort()</span></code></li>
+<li><strong>alpc_message</strong> (<a class="reference internal" href="#windows.alpc.AlpcMessage" title="windows.alpc.AlpcMessage"><em>AlpcMessage</em></a><em> or </em><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – The message to send. If <code class="docutils literal notranslate"><span class="pre">alpc_message</span></code> is a <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> it build an AlpcMessage with the message as data.</li>
+<li><strong>receive_msg</strong> (<a class="reference internal" href="#windows.alpc.AlpcMessage" title="windows.alpc.AlpcMessage"><em>AlpcMessage</em></a><em> or </em><em>None</em>) – The message to send. If <code class="docutils literal notranslate"><span class="pre">receive_msg</span></code> is a <code class="docutils literal notranslate"><span class="pre">None</span></code> it create and return a simple <a class="reference internal" href="#windows.alpc.AlpcMessage" title="windows.alpc.AlpcMessage"><code class="xref py py-class docutils literal notranslate"><span class="pre">AlpcMessage</span></code></a></li>
+<li><strong>flags</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) – The flags for <code class="xref py py-func docutils literal notranslate"><span class="pre">NtAlpcSendWaitReceivePort()</span></code></li>
 </ul>
 </td>
 </tr>
@@ -385,7 +380,7 @@ ALPC messages over an ALPC port and the classes representing these messages.</p>
 
 </div>
 <div class="section" id="alpc-server">
-<h2>10.3. ALPC Server<a class="headerlink" href="#alpc-server" title="Permalink to this headline">¶</a></h2>
+<h2>11.3. ALPC Server<a class="headerlink" href="#alpc-server" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="windows.alpc.AlpcServer">
 <em class="property">class </em><code class="descclassname">windows.alpc.</code><code class="descname">AlpcServer</code><span class="sig-paren">(</span><em>port_name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/alpc.html#AlpcServer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.alpc.AlpcServer" title="Permalink to this definition">¶</a></dt>
@@ -393,16 +388,16 @@ ALPC messages over an ALPC port and the classes representing these messages.</p>
 <dl class="method">
 <dt id="windows.alpc.AlpcServer.accept_connection">
 <code class="descname">accept_connection</code><span class="sig-paren">(</span><em>msg</em>, <em>port_attr=None</em>, <em>port_context=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/alpc.html#AlpcServer.accept_connection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.alpc.AlpcServer.accept_connection" title="Permalink to this definition">¶</a></dt>
-<dd><p>Accept the connection for a <code class="docutils literal"><span class="pre">LPC_CONNECTION_REQUEST</span></code> message.
-<code class="docutils literal"><span class="pre">msg.MessageId</span></code> must be the same as the connection requesting message.</p>
+<dd><p>Accept the connection for a <code class="docutils literal notranslate"><span class="pre">LPC_CONNECTION_REQUEST</span></code> message.
+<code class="docutils literal notranslate"><span class="pre">msg.MessageId</span></code> must be the same as the connection requesting message.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>msg</strong> (<a class="reference internal" href="#windows.alpc.AlpcMessage" title="windows.alpc.AlpcMessage"><em>AlpcMessage</em></a>) &#8211; The response message.</li>
-<li><strong>port_attr</strong> (<em>ALPC_PORT_ATTRIBUTES</em>) &#8211; The attributes of the port, one with default value will be used if this parameter is <code class="docutils literal"><span class="pre">None</span></code></li>
-<li><strong>port_context</strong> (<em>PVOID</em>) &#8211; A value that will be copied in <code class="docutils literal"><span class="pre">ALPC_CONTEXT_ATTR.PortContext</span></code> of every message on this connection.</li>
+<li><strong>msg</strong> (<a class="reference internal" href="#windows.alpc.AlpcMessage" title="windows.alpc.AlpcMessage"><em>AlpcMessage</em></a>) – The response message.</li>
+<li><strong>port_attr</strong> (<em>ALPC_PORT_ATTRIBUTES</em>) – The attributes of the port, one with default value will be used if this parameter is <code class="docutils literal notranslate"><span class="pre">None</span></code></li>
+<li><strong>port_context</strong> (<em>PVOID</em>) – A value that will be copied in <code class="docutils literal notranslate"><span class="pre">ALPC_CONTEXT_ATTR.PortContext</span></code> of every message on this connection.</li>
 </ul>
 </td>
 </tr>
@@ -413,17 +408,17 @@ ALPC messages over an ALPC port and the classes representing these messages.</p>
 <dl class="method">
 <dt id="windows.alpc.AlpcServer.create_port">
 <code class="descname">create_port</code><span class="sig-paren">(</span><em>port_name</em>, <em>msglen=None</em>, <em>port_attr_flags=0</em>, <em>obj_attr=None</em>, <em>port_attr=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/alpc.html#AlpcServer.create_port"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.alpc.AlpcServer.create_port" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create the ALPC port <code class="docutils literal"><span class="pre">port_name</span></code>. Most of the parameters have defauls value is <code class="docutils literal"><span class="pre">None</span></code> is passed.</p>
+<dd><p>Create the ALPC port <code class="docutils literal notranslate"><span class="pre">port_name</span></code>. Most of the parameters have defauls value is <code class="docutils literal notranslate"><span class="pre">None</span></code> is passed.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>port_name</strong> (<a class="reference internal" href="process.html#windows.winobject.process.WinUnicodeString.str" title="windows.winobject.process.WinUnicodeString.str"><em>str</em></a>) &#8211; The port&#8217;s name to create.</li>
-<li><strong>msglen</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; <code class="docutils literal"><span class="pre">ALPC_PORT_ATTRIBUTES.MaxMessageLength</span></code> used if <code class="docutils literal"><span class="pre">port_attr</span></code> is <code class="docutils literal"><span class="pre">None</span></code> (MUTUALY EXCLUSINVE WITH <code class="docutils literal"><span class="pre">port_attr</span></code>)</li>
-<li><strong>port_attr_flags</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; <code class="docutils literal"><span class="pre">ALPC_PORT_ATTRIBUTES.Flags</span></code> used if <code class="docutils literal"><span class="pre">port_attr</span></code> is <code class="docutils literal"><span class="pre">None</span></code> (MUTUALY EXCLUSINVE WITH <code class="docutils literal"><span class="pre">port_attr</span></code>)</li>
-<li><strong>obj_attr</strong> (<a class="reference internal" href="winstructs_generated.html#windows.generated_def.OBJECT_ATTRIBUTES" title="windows.generated_def.OBJECT_ATTRIBUTES"><em>OBJECT_ATTRIBUTES</em></a>) &#8211; The attributes of the port, one with default value will be used if this parameter is <code class="docutils literal"><span class="pre">None</span></code></li>
-<li><strong>port_attr</strong> (<em>ALPC_PORT_ATTRIBUTES</em>) &#8211; The port attributes, one with default value will be used if this parameter is <code class="docutils literal"><span class="pre">None</span></code></li>
+<li><strong>port_name</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – The port’s name to create.</li>
+<li><strong>msglen</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) – <code class="docutils literal notranslate"><span class="pre">ALPC_PORT_ATTRIBUTES.MaxMessageLength</span></code> used if <code class="docutils literal notranslate"><span class="pre">port_attr</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code> (MUTUALY EXCLUSINVE WITH <code class="docutils literal notranslate"><span class="pre">port_attr</span></code>)</li>
+<li><strong>port_attr_flags</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) – <code class="docutils literal notranslate"><span class="pre">ALPC_PORT_ATTRIBUTES.Flags</span></code> used if <code class="docutils literal notranslate"><span class="pre">port_attr</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code> (MUTUALY EXCLUSINVE WITH <code class="docutils literal notranslate"><span class="pre">port_attr</span></code>)</li>
+<li><strong>obj_attr</strong> (<a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.OBJECT_ATTRIBUTES" title="windows.generated_def.winstructs.OBJECT_ATTRIBUTES"><em>OBJECT_ATTRIBUTES</em></a>) – The attributes of the port, one with default value will be used if this parameter is <code class="docutils literal notranslate"><span class="pre">None</span></code></li>
+<li><strong>port_attr</strong> (<em>ALPC_PORT_ATTRIBUTES</em>) – The port attributes, one with default value will be used if this parameter is <code class="docutils literal notranslate"><span class="pre">None</span></code></li>
 </ul>
 </td>
 </tr>
@@ -434,14 +429,14 @@ ALPC messages over an ALPC port and the classes representing these messages.</p>
 <dl class="method">
 <dt id="windows.alpc.AlpcServer.recv">
 <code class="descname">recv</code><span class="sig-paren">(</span><em>receive_msg=None</em>, <em>flags=0</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.alpc.AlpcServer.recv" title="Permalink to this definition">¶</a></dt>
-<dd><p>Receive a message into <code class="docutils literal"><span class="pre">alpc_message</span></code> with <code class="docutils literal"><span class="pre">flags</span></code>.</p>
+<dd><p>Receive a message into <code class="docutils literal notranslate"><span class="pre">alpc_message</span></code> with <code class="docutils literal notranslate"><span class="pre">flags</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>receive_msg</strong> (<a class="reference internal" href="#windows.alpc.AlpcMessage" title="windows.alpc.AlpcMessage"><em>AlpcMessage</em></a><em> or </em><a class="reference external" href="https://docs.python.org/2/library/constants.html#None" title="(in Python v2.7)"><em>None</em></a>) &#8211; The message to send. If <code class="docutils literal"><span class="pre">receive_msg</span></code> is a <code class="docutils literal"><span class="pre">None</span></code> it create and return a simple <a class="reference internal" href="#windows.alpc.AlpcMessage" title="windows.alpc.AlpcMessage"><code class="xref py py-class docutils literal"><span class="pre">AlpcMessage</span></code></a></li>
-<li><strong>flags</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; The flags for <code class="xref py py-func docutils literal"><span class="pre">NtAlpcSendWaitReceivePort()</span></code></li>
+<li><strong>receive_msg</strong> (<a class="reference internal" href="#windows.alpc.AlpcMessage" title="windows.alpc.AlpcMessage"><em>AlpcMessage</em></a><em> or </em><em>None</em>) – The message to send. If <code class="docutils literal notranslate"><span class="pre">receive_msg</span></code> is a <code class="docutils literal notranslate"><span class="pre">None</span></code> it create and return a simple <a class="reference internal" href="#windows.alpc.AlpcMessage" title="windows.alpc.AlpcMessage"><code class="xref py py-class docutils literal notranslate"><span class="pre">AlpcMessage</span></code></a></li>
+<li><strong>flags</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) – The flags for <code class="xref py py-func docutils literal notranslate"><span class="pre">NtAlpcSendWaitReceivePort()</span></code></li>
 </ul>
 </td>
 </tr>
@@ -452,14 +447,14 @@ ALPC messages over an ALPC port and the classes representing these messages.</p>
 <dl class="method">
 <dt id="windows.alpc.AlpcServer.send">
 <code class="descname">send</code><span class="sig-paren">(</span><em>alpc_message</em>, <em>flags=0</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.alpc.AlpcServer.send" title="Permalink to this definition">¶</a></dt>
-<dd><p>Send the <code class="docutils literal"><span class="pre">alpc_message</span></code> with <code class="docutils literal"><span class="pre">flags</span></code></p>
+<dd><p>Send the <code class="docutils literal notranslate"><span class="pre">alpc_message</span></code> with <code class="docutils literal notranslate"><span class="pre">flags</span></code></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>alpc_message</strong> (<a class="reference internal" href="#windows.alpc.AlpcMessage" title="windows.alpc.AlpcMessage"><em>AlpcMessage</em></a><em> or </em><a class="reference internal" href="process.html#windows.winobject.process.WinUnicodeString.str" title="windows.winobject.process.WinUnicodeString.str"><em>str</em></a>) &#8211; The message to send. If <code class="docutils literal"><span class="pre">alpc_message</span></code> is a <a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a> it build an AlpcMessage with the message as data.</li>
-<li><strong>flags</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; The flags for <code class="xref py py-func docutils literal"><span class="pre">NtAlpcSendWaitReceivePort()</span></code></li>
+<li><strong>alpc_message</strong> (<a class="reference internal" href="#windows.alpc.AlpcMessage" title="windows.alpc.AlpcMessage"><em>AlpcMessage</em></a><em> or </em><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – The message to send. If <code class="docutils literal notranslate"><span class="pre">alpc_message</span></code> is a <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> it build an AlpcMessage with the message as data.</li>
+<li><strong>flags</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) – The flags for <code class="xref py py-func docutils literal notranslate"><span class="pre">NtAlpcSendWaitReceivePort()</span></code></li>
 </ul>
 </td>
 </tr>
@@ -470,15 +465,15 @@ ALPC messages over an ALPC port and the classes representing these messages.</p>
 <dl class="method">
 <dt id="windows.alpc.AlpcServer.send_receive">
 <code class="descname">send_receive</code><span class="sig-paren">(</span><em>alpc_message</em>, <em>receive_msg=None</em>, <em>flags=ALPC_MSGFLG_SYNC_REQUEST(0x20000L)</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.alpc.AlpcServer.send_receive" title="Permalink to this definition">¶</a></dt>
-<dd><p>Send and receive a message with <code class="docutils literal"><span class="pre">flags</span></code>.</p>
+<dd><p>Send and receive a message with <code class="docutils literal notranslate"><span class="pre">flags</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>alpc_message</strong> (<a class="reference internal" href="#windows.alpc.AlpcMessage" title="windows.alpc.AlpcMessage"><em>AlpcMessage</em></a><em> or </em><a class="reference internal" href="process.html#windows.winobject.process.WinUnicodeString.str" title="windows.winobject.process.WinUnicodeString.str"><em>str</em></a>) &#8211; The message to send. If <code class="docutils literal"><span class="pre">alpc_message</span></code> is a <a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a> it build an AlpcMessage with the message as data.</li>
-<li><strong>receive_msg</strong> (<a class="reference internal" href="#windows.alpc.AlpcMessage" title="windows.alpc.AlpcMessage"><em>AlpcMessage</em></a><em> or </em><a class="reference external" href="https://docs.python.org/2/library/constants.html#None" title="(in Python v2.7)"><em>None</em></a>) &#8211; The message to send. If <code class="docutils literal"><span class="pre">receive_msg</span></code> is a <code class="docutils literal"><span class="pre">None</span></code> it create and return a simple <a class="reference internal" href="#windows.alpc.AlpcMessage" title="windows.alpc.AlpcMessage"><code class="xref py py-class docutils literal"><span class="pre">AlpcMessage</span></code></a></li>
-<li><strong>flags</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; The flags for <code class="xref py py-func docutils literal"><span class="pre">NtAlpcSendWaitReceivePort()</span></code></li>
+<li><strong>alpc_message</strong> (<a class="reference internal" href="#windows.alpc.AlpcMessage" title="windows.alpc.AlpcMessage"><em>AlpcMessage</em></a><em> or </em><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – The message to send. If <code class="docutils literal notranslate"><span class="pre">alpc_message</span></code> is a <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> it build an AlpcMessage with the message as data.</li>
+<li><strong>receive_msg</strong> (<a class="reference internal" href="#windows.alpc.AlpcMessage" title="windows.alpc.AlpcMessage"><em>AlpcMessage</em></a><em> or </em><em>None</em>) – The message to send. If <code class="docutils literal notranslate"><span class="pre">receive_msg</span></code> is a <code class="docutils literal notranslate"><span class="pre">None</span></code> it create and return a simple <a class="reference internal" href="#windows.alpc.AlpcMessage" title="windows.alpc.AlpcMessage"><code class="xref py py-class docutils literal notranslate"><span class="pre">AlpcMessage</span></code></a></li>
+<li><strong>flags</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) – The flags for <code class="xref py py-func docutils literal notranslate"><span class="pre">NtAlpcSendWaitReceivePort()</span></code></li>
 </ul>
 </td>
 </tr>
@@ -499,20 +494,20 @@ ALPC messages over an ALPC port and the classes representing these messages.</p>
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">10. <code class="docutils literal"><span class="pre">windows.alpc</span></code> &#8211; Advanced Local Procedure Call</a><ul>
-<li><a class="reference internal" href="#alpc-message">10.1. ALPC Message</a></li>
-<li><a class="reference internal" href="#alpc-client">10.2. ALPC client</a></li>
-<li><a class="reference internal" href="#alpc-server">10.3. ALPC Server</a></li>
+<li><a class="reference internal" href="#">11. <code class="docutils literal notranslate"><span class="pre">windows.alpc</span></code> – Advanced Local Procedure Call</a><ul>
+<li><a class="reference internal" href="#alpc-message">11.1. ALPC Message</a></li>
+<li><a class="reference internal" href="#alpc-client">11.2. ALPC client</a></li>
+<li><a class="reference internal" href="#alpc-server">11.3. ALPC Server</a></li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="crypto.html"
-                        title="previous chapter">9. <code class="docutils literal"><span class="pre">windows.crypto</span></code> &#8211; CryptoAPI</a></p>
+                        title="previous chapter">10. <code class="docutils literal notranslate"><span class="pre">windows.crypto</span></code> – CryptoAPI</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="rpc.html"
-                        title="next chapter">11. <code class="docutils literal"><span class="pre">windows.rpc</span></code> &#8211; ALPC-based Windows RPC</a></p>
+                        title="next chapter">12. <code class="docutils literal notranslate"><span class="pre">windows.rpc</span></code> – ALPC-based Windows RPC</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -522,12 +517,14 @@ ALPC messages over an ALPC port and the classes representing these messages.</p>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -544,17 +541,17 @@ ALPC messages over an ALPC port and the classes representing these messages.</p>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="rpc.html" title="11. windows.rpc – ALPC-based Windows RPC"
+          <a href="rpc.html" title="12. windows.rpc – ALPC-based Windows RPC"
              >next</a> |</li>
         <li class="right" >
-          <a href="crypto.html" title="9. windows.crypto – CryptoAPI"
+          <a href="crypto.html" title="10. windows.crypto – CryptoAPI"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.3 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
     </div>
   </body>
 </html>

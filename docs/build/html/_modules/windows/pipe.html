@@ -1,0 +1,179 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>windows.pipe &#8212; PythonForWindows 0.3 documentation</title>
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/css/mbasic.css" type="text/css" />
+    <script type="text/javascript" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">PythonForWindows 0.3 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for windows.pipe</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">windows</span>
+<span class="kn">from</span> <span class="nn">windows</span> <span class="k">import</span> <span class="n">winproxy</span>
+<span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
+
+<span class="kn">import</span> <span class="nn">_multiprocessing</span>
+
+<span class="c1"># Inspired from &#39;multiprocessing\connection.py&#39;</span>
+
+<div class="viewcode-block" id="full_pipe_address"><a class="viewcode-back" href="../../pipe.html#windows.pipe.full_pipe_address">[docs]</a><span class="k">def</span> <span class="nf">full_pipe_address</span><span class="p">(</span><span class="n">addr</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return the full address of the pipe `addr`&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">addr</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\\\</span><span class="s2">&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">addr</span></div>
+    <span class="k">return</span> <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">.\pipe\</span><span class="si">{addr}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">addr</span><span class="o">=</span><span class="n">addr</span><span class="p">)</span>
+
+<div class="viewcode-block" id="PipeConnection"><a class="viewcode-back" href="../../pipe.html#windows.pipe.PipeConnection">[docs]</a><span class="k">class</span> <span class="nc">PipeConnection</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span> <span class="c1"># Cannot inherit: crash the interpreter</span>
+    <span class="sd">&quot;&quot;&quot;A wrapper arround :class:`_multiprocessing.PipeConnection` able to work as a ContextManager&quot;&quot;&quot;</span>
+    <span class="n">BUFFER_SIZE</span> <span class="o">=</span> <span class="mh">0x2000</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connection</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">server</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">handle</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">fileno</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">connection</span> <span class="o">=</span> <span class="n">connection</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">server</span> <span class="o">=</span> <span class="n">server</span>
+
+<div class="viewcode-block" id="PipeConnection.from_handle"><a class="viewcode-back" href="../../pipe.html#windows.pipe.PipeConnection.from_handle">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_handle</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">phandle</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create a :class:`PipeConnection` from pipe handle `phandle`&quot;&quot;&quot;</span>
+        <span class="n">connection</span> <span class="o">=</span> <span class="n">_multiprocessing</span><span class="o">.</span><span class="n">PipeConnection</span><span class="p">(</span><span class="n">phandle</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="PipeConnection.create"><a class="viewcode-back" href="../../pipe.html#windows.pipe.PipeConnection.create">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">addr</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create a namedpipe pipe ``addr``</span>
+
+<span class="sd">        :returns type: :class:`PipeConnection`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">addr</span> <span class="o">=</span> <span class="n">full_pipe_address</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span>
+        <span class="n">pipehandle</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CreateNamedPipeA</span><span class="p">(</span>
+            <span class="n">addr</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PIPE_ACCESS_DUPLEX</span><span class="p">,</span>
+            <span class="n">gdef</span><span class="o">.</span><span class="n">PIPE_TYPE_MESSAGE</span> <span class="o">|</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PIPE_READMODE_MESSAGE</span> <span class="o">|</span>
+            <span class="n">gdef</span><span class="o">.</span><span class="n">PIPE_WAIT</span><span class="p">,</span>
+            <span class="n">gdef</span><span class="o">.</span><span class="n">PIPE_UNLIMITED_INSTANCES</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="n">BUFFER_SIZE</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="n">BUFFER_SIZE</span><span class="p">,</span>
+            <span class="n">gdef</span><span class="o">.</span><span class="n">NMPWAIT_WAIT_FOREVER</span><span class="p">,</span> <span class="kc">None</span>
+            <span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_handle</span><span class="p">(</span><span class="n">pipehandle</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">addr</span><span class="p">,</span> <span class="n">server</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<div class="viewcode-block" id="PipeConnection.connect"><a class="viewcode-back" href="../../pipe.html#windows.pipe.PipeConnection.connect">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">addr</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Connect to the named pipe ``addr``</span>
+
+<span class="sd">        :returns type: :class:`PipeConnection`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">addr</span> <span class="o">=</span> <span class="n">full_pipe_address</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span>
+        <span class="n">pipehandle</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CreateFileA</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">GENERIC_READ</span> <span class="o">|</span> <span class="n">gdef</span><span class="o">.</span><span class="n">GENERIC_WRITE</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">OPEN_EXISTING</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">SetNamedPipeHandleState</span><span class="p">(</span><span class="n">pipehandle</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ULONG</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">PIPE_READMODE_MESSAGE</span><span class="p">),</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_handle</span><span class="p">(</span><span class="n">pipehandle</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">addr</span><span class="p">,</span> <span class="n">server</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<div class="viewcode-block" id="PipeConnection.send"><a class="viewcode-back" href="../../pipe.html#windows.pipe.PipeConnection.send">[docs]</a>    <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Send an object on the pipe&quot;&quot;&quot;</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="PipeConnection.recv"><a class="viewcode-back" href="../../pipe.html#windows.pipe.PipeConnection.recv">[docs]</a>    <span class="k">def</span> <span class="nf">recv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Send an object from the pipe&quot;&quot;&quot;</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="PipeConnection.wait_connection"><a class="viewcode-back" href="../../pipe.html#windows.pipe.PipeConnection.wait_connection">[docs]</a>    <span class="k">def</span> <span class="nf">wait_connection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Wait for a client process to connect to the named pipe&quot;&quot;&quot;</span></div>
+        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">ConnectNamedPipe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+<div class="viewcode-block" id="PipeConnection.close"><a class="viewcode-back" href="../../pipe.html#windows.pipe.PipeConnection.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Close the handle of the pipe&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">handle</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="k">return</span> <span class="s2">&quot;&quot;&quot;&lt;</span><span class="si">{0}</span><span class="s2"> name=&quot;</span><span class="si">{1}</span><span class="s2">&quot; server=</span><span class="si">{2}</span><span class="s2">&gt;&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="p">)</span>
+
+
+<span class="n">connect</span> <span class="o">=</span> <span class="n">PipeConnection</span><span class="o">.</span><span class="n">connect</span>
+<span class="n">create</span> <span class="o">=</span> <span class="n">PipeConnection</span><span class="o">.</span><span class="n">create</span>
+
+<div class="viewcode-block" id="send_object"><a class="viewcode-back" href="../../pipe.html#windows.pipe.send_object">[docs]</a><span class="k">def</span> <span class="nf">send_object</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Send `obj` on pipe ``addr``&quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="n">connect</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span> <span class="k">as</span> <span class="n">np</span><span class="p">:</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="recv_object"><a class="viewcode-back" href="../../pipe.html#windows.pipe.recv_object">[docs]</a><span class="k">def</span> <span class="nf">recv_object</span><span class="p">(</span><span class="n">addr</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Receive an object from pipe ``addr``&quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="n">create</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span> <span class="k">as</span> <span class="n">np</span><span class="p">:</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">wait_connection</span><span class="p">()</span></div>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">PythonForWindows 0.3 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2015, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
+    </div>
+  </body>
+</html>

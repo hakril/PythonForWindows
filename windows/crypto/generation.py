@@ -9,7 +9,7 @@ from windows.crypto import DEFAULT_ENCODING, CertificateStore
 def generate_selfsigned_certificate(name="CN=DEFAULT", prov=None, key_info=None, flags=0, signature_algo=None):
     """Generate a selfsigned certificate.
 
-    See https://msdn.microsoft.com/en-us/library/windows/desktop/aa376039(v=vs.85).aspx
+    See `CertCreateSelfSignCertificate  <https://msdn.microsoft.com/en-us/library/windows/desktop/aa376039(v=vs.85).aspx>`_
 
     :return: :class:`windows.crypto.Certificate`
     """

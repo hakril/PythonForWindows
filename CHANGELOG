@@ -28,5 +28,15 @@ Since 0.2:
 
 Since 0.3:
 
-    * Rewrote pe_parse to minimize closure (allowing the refcount to dell all ref to WinProcess when the debugger detach it)
+    * Rewrote pe_parse to minimize closure (allowing the refcount to del all ref to WinProcess when the debugger detach it)
     * Fix debugger.detach / handling on exit_process
+
+
+Since 0.35:
+
+    * WinProcess.get_mapped_filename can now raise on non-standard error (like: ERROR_TRANSACTION_NOT_ACTIVE)
+    * WinProcess.get_mapped_filename now use GetMappedFilenameW (returning an unicode string)
+    * CertificateContext is replace by Certificate
+        * CertificateContext was a PPCERT_CONTEXT. Certificate is a CERT_CONTEXT (not a pointer anymore)
+    * EHCERTSTORE renamed to CertificateStore
+    * added windows.pipe

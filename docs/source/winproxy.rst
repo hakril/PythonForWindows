@@ -74,6 +74,24 @@ Calling it
     windows.winproxy.Kernel32Error: VirtualAlloc: [Error 8] Not enough storage is available to process this command.
     """
 
+
+Helper functions
+""""""""""""""""
+
+.. autofunction:: is_implemented
+
+    Example:
+        >>> windows.winproxy.is_implemented(windows.winproxy.NtWow64WriteVirtualMemory64)
+        True
+
+
+.. autofunction:: resolve
+
+    Example:
+        >>> hex(windows.winproxy.resolve(windows.winproxy.NtWow64WriteVirtualMemory64))
+        '0x77340520'
+
+
 Kernel32Error
 """""""""""""
 

@@ -4,7 +4,7 @@
 ************************************************
 
 
-:mod:`windows.native_exec` allows to create `Python` functions calling native code.
+:mod:`windows.native_exec` allows to create ``Python`` functions calling native code.
 it also provides a simple assembler for x86 and x64.
 
 :mod:`windows.native_exec` provides those functions:
@@ -55,7 +55,7 @@ Its features are:
     The assembler DOES NOT handle every instruction at all.
 
 
-The assembler instructions are `Python` object that may accept arguments representing
+The assembler instructions are ``Python`` object that may accept arguments representing
 the mnemonic operands.
 
 These parameters can be of type:

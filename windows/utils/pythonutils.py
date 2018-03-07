@@ -74,4 +74,5 @@ def print_ctypes_struct(struct, name="", ident=0, hexa=False):
 
 
 def sprint(struct, name="struct", hexa=True):
+    """Print recursively the content of a :mod:`ctypes` structure"""
     return print_ctypes_struct(struct, name=name, hexa=hexa)

@@ -8,11 +8,16 @@ def get_api_set_map_for_current_process(base):
     base = windows.current_process.peb.ApiSetMap
     version = windows.current_process.read_dword(base)
     if version not in API_SET_MAP_BY_VERSION:
-        raise NotImplementedError("ApiSetMap version <{0}> not implemented, please contact me, I need a sample to implem it ;)")
+        raise NotImplementedError("ApiSetMap version <{0}> not implemented, please contact me, I need a sample to implement it ;)")
     return API_SET_MAP_BY_VERSION[version](base)
 
 
 class ApiSetMap(object):
+    """The base class for the ApiSeMap
+    (see `Runtime DLL name resolution: ApiSetSchema <https://blog.quarkslab.com/runtime-dll-name-resolution-apisetschema-part-ii.html>`_)
+    """
+    version = None #: The version of the ApiSetMap
+
     def __init__(self, base):
         self.base = base
         self.target = windows.current_process
@@ -36,6 +41,12 @@ class ApiSetMap(object):
 
     @utils.fixedpropety
     def apisetmap_dict(self):
+        """The apisetmap dll-mapping content extracted from memory as a :class:`dict`
+
+        ``key -> value example``::
+
+            u'ext-ms-win-advapi32-encryptedfile-l1-1-1' -> u'advapi32.dll'
+        """
         res = {}
         for entry in self.entries_array():
             values = self.values_for_entry(entry)
@@ -48,6 +59,15 @@ class ApiSetMap(object):
 
     @utils.fixedpropety
     def resolution_dict(self):
+        """The :class:`dict` based on :obj:`apisetmap_dict` with only the part checked by ``Windows``.
+
+        ``Windows`` does not care about what is after the last ``-``
+
+        ``key -> value example``::
+
+           u'ext-ms-win-advapi32-encryptedfile-l1-1-' -> u'advapi32.dll'
+
+        """
         res = {}
         for name, resolved_name in self.apisetmap_dict.items():
             # ApiSetResolveToHost does not care about last version + extension
@@ -62,6 +82,9 @@ class ApiSetMap(object):
         return res
 
     def resolve(self, dllname):
+        """The method used to resolve a DLL name using the ApiSetMap.
+        The behavior should match the non-exported function ``ntdll!ApiSetResolveToHost``
+        """
         try:
             cutname = dllname[:dllname.rindex("-") + 1]
         except ValueError as e:
@@ -71,6 +94,9 @@ class ApiSetMap(object):
 
 
 class ApiSetMapVersion2(ApiSetMap):
+    """Represent an ApiSetMap version-2"""
+    version = 2 #: The version of the ApiSetMap
+
     def namespace(self):
         return gdef.API_SET_NAMESPACE_ARRAY_V2.from_address(self.base)
 
@@ -96,6 +122,9 @@ class ApiSetMapVersion2(ApiSetMap):
 
 
 class ApiSetMapVersion4(ApiSetMap):
+    """Represent an ApiSetMap version-4"""
+    version = 4 #: The version of the ApiSetMap
+
     def namespace(self):
         return gdef.API_SET_NAMESPACE_ARRAY_V4.from_address(self.base)
 
@@ -120,6 +149,9 @@ class ApiSetMapVersion4(ApiSetMap):
         return res
 
 class ApiSetMapVersion6(ApiSetMap):
+    """Represent an ApiSetMap version-6"""
+    version = 6 #: The version of the ApiSetMap
+
     def namespace(self):
         return gdef.API_SET_NAMESPACE_V6.from_address(self.base)
 

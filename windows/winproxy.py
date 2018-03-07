@@ -13,6 +13,7 @@ from windows.dbgprint import dbgprint
 ## winfuncs helpers
 
 def is_implemented(winfunc):
+    """Return :obj:`True` if DLL/Api can be found"""
     try:
         winfunc.force_resolution()
     except ExportNotFound:
@@ -28,15 +29,12 @@ def get_target(winfunc):
 # Rip-of windows.utils: should be removed from the other place ?
 def _get_func_addr(dll_name, func_name):
         # Load the DLL
-        ctypes.WinDLL(dll_name)
-        modules = windows.current_process.peb.modules
-        if not dll_name.lower().endswith(".dll"):
-            dll_name += ".dll"
-        mod = [x for x in modules if x.name == dll_name][0]
-        return mod.pe.exports[func_name]
+        windll = ctypes.WinDLL(dll_name)
+        return ctypes.cast(getattr(windll, func_name), PVOID).value
 
 
 def resolve(winfunc):
+    """Resolve the address of ``winfunc``. Might raise if ``winfunc`` is not implemented"""
     winfunc.force_resolution()
     return _get_func_addr(*get_target(winfunc))
 

@@ -1,33 +1,22 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>windows.utils.winutils &#8212; PythonForWindows 0.3 documentation</title>
-    
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '0.3',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" href="../../../_static/css/mbasic.css" type="text/css" />
+    <script type="text/javascript" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
-  </head>
-  <body role="document">
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -58,8 +47,9 @@
 
 <span class="kn">import</span> <span class="nn">windows</span>
 <span class="kn">from</span> <span class="nn">windows.dbgprint</span> <span class="k">import</span> <span class="n">dbgprint</span>
+<span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
+
 <span class="kn">from</span> <span class="nn">..</span> <span class="k">import</span> <span class="n">winproxy</span>
-<span class="kn">from</span> <span class="nn">..generated_def</span> <span class="k">import</span> <span class="n">windef</span>
 <span class="kn">from</span> <span class="nn">..generated_def.winstructs</span> <span class="k">import</span> <span class="o">*</span>
 
 
@@ -98,30 +88,31 @@
 
 <div class="viewcode-block" id="create_file_from_handle"><a class="viewcode-back" href="../../../utils.html#windows.utils.create_file_from_handle">[docs]</a><span class="k">def</span> <span class="nf">create_file_from_handle</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Return a Python :class:`file` around a ``Windows`` HANDLE&quot;&quot;&quot;</span>
-    <span class="n">fd</span> <span class="o">=</span> <span class="n">msvcrt</span><span class="o">.</span><span class="n">open_osfhandle</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">O_TEXT</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">fdopen</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span></div>
+    <span class="n">flags</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">O_BINARY</span> <span class="k">if</span> <span class="s2">&quot;b&quot;</span> <span class="ow">in</span> <span class="n">mode</span> <span class="k">else</span> <span class="n">os</span><span class="o">.</span><span class="n">O_TEXT</span>
+    <span class="n">fd</span> <span class="o">=</span> <span class="n">msvcrt</span><span class="o">.</span><span class="n">open_osfhandle</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">flags</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">fdopen</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="get_handle_from_file"><a class="viewcode-back" href="../../../utils.html#windows.utils.get_handle_from_file">[docs]</a><span class="k">def</span> <span class="nf">get_handle_from_file</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Get the ``Windows`` HANDLE of a python :class:`file`&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">msvcrt</span><span class="o">.</span><span class="n">get_osfhandle</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">fileno</span><span class="p">())</span></div>
+    <span class="sd">&quot;&quot;&quot;Get the ``Windows`` HANDLE of a python :class:`file`&quot;&quot;&quot;</span></div>
+    <span class="k">return</span> <span class="n">msvcrt</span><span class="o">.</span><span class="n">get_osfhandle</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">fileno</span><span class="p">())</span>
 
 
 <div class="viewcode-block" id="create_console"><a class="viewcode-back" href="../../../utils.html#windows.utils.create_console">[docs]</a><span class="k">def</span> <span class="nf">create_console</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Create a new console displaying STDOUT.</span>
 <span class="sd">       Useful in injection of GUI process&quot;&quot;&quot;</span>
     <span class="n">winproxy</span><span class="o">.</span><span class="n">AllocConsole</span><span class="p">()</span>
-    <span class="n">stdout_handle</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">GetStdHandle</span><span class="p">(</span><span class="n">windef</span><span class="o">.</span><span class="n">STD_OUTPUT_HANDLE</span><span class="p">)</span>
+    <span class="n">stdout_handle</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">GetStdHandle</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">STD_OUTPUT_HANDLE</span><span class="p">)</span>
     <span class="n">console_stdout</span> <span class="o">=</span> <span class="n">create_file_from_handle</span><span class="p">(</span><span class="n">stdout_handle</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
     <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="n">console_stdout</span>
 
-    <span class="n">stdin_handle</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">GetStdHandle</span><span class="p">(</span><span class="n">windef</span><span class="o">.</span><span class="n">STD_INPUT_HANDLE</span><span class="p">)</span>
+    <span class="n">stdin_handle</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">GetStdHandle</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">STD_INPUT_HANDLE</span><span class="p">)</span>
     <span class="n">console_stdin</span> <span class="o">=</span> <span class="n">create_file_from_handle</span><span class="p">(</span><span class="n">stdin_handle</span><span class="p">,</span> <span class="s2">&quot;r+&quot;</span><span class="p">)</span>
     <span class="n">sys</span><span class="o">.</span><span class="n">stdin</span> <span class="o">=</span> <span class="n">console_stdin</span>
 
-    <span class="n">stderr_handle</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">GetStdHandle</span><span class="p">(</span><span class="n">windef</span><span class="o">.</span><span class="n">STD_ERROR_HANDLE</span><span class="p">)</span>
-    <span class="n">console_stderr</span> <span class="o">=</span> <span class="n">create_file_from_handle</span><span class="p">(</span><span class="n">stderr_handle</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
-    <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span> <span class="o">=</span> <span class="n">console_stderr</span></div>
+    <span class="n">stderr_handle</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">GetStdHandle</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">STD_ERROR_HANDLE</span><span class="p">)</span>
+    <span class="n">console_stderr</span> <span class="o">=</span> <span class="n">create_file_from_handle</span><span class="p">(</span><span class="n">stderr_handle</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span></div>
+    <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span> <span class="o">=</span> <span class="n">console_stderr</span>
 
 
 <div class="viewcode-block" id="create_process"><a class="viewcode-back" href="../../../utils.html#windows.utils.create_process">[docs]</a><span class="k">def</span> <span class="nf">create_process</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dwCreationFlags</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">show_windows</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
@@ -140,8 +131,8 @@
     <span class="n">dbgprint</span><span class="p">(</span><span class="s2">&quot;CreateProcessA new process handle </span><span class="si">{:#x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">proc_info</span><span class="o">.</span><span class="n">hProcess</span><span class="p">),</span> <span class="s2">&quot;HANDLE&quot;</span><span class="p">)</span>
     <span class="n">dbgprint</span><span class="p">(</span><span class="s2">&quot;CreateProcessA new thread handle </span><span class="si">{:#x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">proc_info</span><span class="o">.</span><span class="n">hThread</span><span class="p">),</span> <span class="s2">&quot;HANDLE&quot;</span><span class="p">)</span>
     <span class="n">dbgprint</span><span class="p">(</span><span class="s2">&quot;Automatic close of thread handle </span><span class="si">{:#x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">proc_info</span><span class="o">.</span><span class="n">hThread</span><span class="p">),</span> <span class="s2">&quot;HANDLE&quot;</span><span class="p">)</span>
-    <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">CloseHandle</span><span class="p">(</span><span class="n">proc_info</span><span class="o">.</span><span class="n">hThread</span><span class="p">)</span>  <span class="c1"># Give access to a WinThread in addition of the WinProcess ?</span>
-    <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">winobject</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">WinProcess</span><span class="p">(</span><span class="n">pid</span><span class="o">=</span><span class="n">proc_info</span><span class="o">.</span><span class="n">dwProcessId</span><span class="p">,</span> <span class="n">handle</span><span class="o">=</span><span class="n">proc_info</span><span class="o">.</span><span class="n">hProcess</span><span class="p">)</span></div>
+    <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">CloseHandle</span><span class="p">(</span><span class="n">proc_info</span><span class="o">.</span><span class="n">hThread</span><span class="p">)</span>  <span class="c1"># Give access to a WinThread in addition of the WinProcess ?</span></div>
+    <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">winobject</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">WinProcess</span><span class="p">(</span><span class="n">pid</span><span class="o">=</span><span class="n">proc_info</span><span class="o">.</span><span class="n">dwProcessId</span><span class="p">,</span> <span class="n">handle</span><span class="o">=</span><span class="n">proc_info</span><span class="o">.</span><span class="n">hProcess</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">lookup_privilege_value</span><span class="p">(</span><span class="n">privilege_name</span><span class="p">):</span>
@@ -178,9 +169,9 @@
         <span class="n">tp</span><span class="o">.</span><span class="n">Privileges</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">Attributes</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">winproxy</span><span class="o">.</span><span class="n">AdjustTokenPrivileges</span><span class="p">(</span><span class="n">hToken</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">byref</span><span class="p">(</span><span class="n">tp</span><span class="p">),</span> <span class="n">sizeof</span><span class="p">(</span><span class="n">TOKEN_PRIVILEGES</span><span class="p">))</span>
     <span class="n">winproxy</span><span class="o">.</span><span class="n">CloseHandle</span><span class="p">(</span><span class="n">hToken</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">GetLastError</span><span class="p">()</span> <span class="o">==</span> <span class="n">windef</span><span class="o">.</span><span class="n">ERROR_NOT_ALL_ASSIGNED</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Failed to get privilege </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lpszPrivilege</span><span class="p">))</span>
-    <span class="k">return</span> <span class="kc">True</span></div>
+    <span class="k">if</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">GetLastError</span><span class="p">()</span> <span class="o">==</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ERROR_NOT_ALL_ASSIGNED</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Failed to get privilege </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lpszPrivilege</span><span class="p">))</span></div>
+    <span class="k">return</span> <span class="kc">True</span>
 
 
 <div class="viewcode-block" id="check_is_elevated"><a class="viewcode-back" href="../../../utils.html#windows.utils.check_is_elevated">[docs]</a><span class="k">def</span> <span class="nf">check_is_elevated</span><span class="p">():</span>
@@ -191,8 +182,8 @@
 
     <span class="n">winproxy</span><span class="o">.</span><span class="n">OpenProcessToken</span><span class="p">(</span><span class="n">winproxy</span><span class="o">.</span><span class="n">GetCurrentProcess</span><span class="p">(),</span> <span class="n">TOKEN_ALL_ACCESS</span><span class="p">,</span> <span class="n">byref</span><span class="p">(</span><span class="n">hToken</span><span class="p">))</span>
     <span class="n">winproxy</span><span class="o">.</span><span class="n">GetTokenInformation</span><span class="p">(</span><span class="n">hToken</span><span class="p">,</span> <span class="n">TokenElevation</span><span class="p">,</span> <span class="n">byref</span><span class="p">(</span><span class="n">elevation</span><span class="p">),</span> <span class="n">sizeof</span><span class="p">(</span><span class="n">elevation</span><span class="p">),</span> <span class="n">byref</span><span class="p">(</span><span class="n">cbsize</span><span class="p">))</span>
-    <span class="n">winproxy</span><span class="o">.</span><span class="n">CloseHandle</span><span class="p">(</span><span class="n">hToken</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">elevation</span><span class="o">.</span><span class="n">TokenIsElevated</span></div>
+    <span class="n">winproxy</span><span class="o">.</span><span class="n">CloseHandle</span><span class="p">(</span><span class="n">hToken</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">elevation</span><span class="o">.</span><span class="n">TokenIsElevated</span>
 
 
 <div class="viewcode-block" id="check_debug"><a class="viewcode-back" href="../../../utils.html#windows.utils.check_debug">[docs]</a><span class="k">def</span> <span class="nf">check_debug</span><span class="p">():</span>
@@ -216,17 +207,33 @@
     <span class="k">if</span> <span class="s2">&quot;DEBUG=NOUMEX&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">control</span><span class="p">:</span>
         <span class="k">pass</span>
         <span class="c1"># print &quot;[*] Warning noumex not set!&quot;</span>
-        <span class="c1"># print &quot;&gt; bcdedit /set noumex on&quot;</span>
-    <span class="k">return</span> <span class="kc">True</span></div>
+        <span class="c1"># print &quot;&gt; bcdedit /set noumex on&quot;</span></div>
+    <span class="k">return</span> <span class="kc">True</span>
 
+<span class="n">UNIX_EPOCH</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">1970</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">WINDOWS_EPOCH</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">1601</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="n">WIN_TO_UNIX_EPOCH_SECOND</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">UNIX_EPOCH</span> <span class="o">-</span> <span class="n">WINDOWS_EPOCH</span><span class="p">)</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">())</span>
+<span class="n">WIN_TICK_PER_SECOND_INT</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="mi">7</span>
+<span class="n">WIN_TICK_PER_SECOND_FLOAT</span> <span class="o">=</span> <span class="mf">10.0</span><span class="o">**</span><span class="mi">7</span>
+<span class="n">WIN_TO_UNIX_EPOCH_WIN_TICKS</span> <span class="o">=</span> <span class="n">WIN_TO_UNIX_EPOCH_SECOND</span> <span class="o">*</span> <span class="n">WIN_TICK_PER_SECOND_INT</span>
+
+<span class="c1"># TODO: look in python stblib how filetime -&gt; unix timestamp translation is down (os.stat code ?)</span>
+
+<span class="k">def</span> <span class="nf">unix_timestamp_from_filetime</span><span class="p">(</span><span class="n">filetime</span><span class="p">):</span>
+    <span class="c1"># Round the filetime</span>
+    <span class="n">round_win_ticks</span> <span class="o">=</span> <span class="p">((</span><span class="n">filetime</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">((</span><span class="n">filetime</span> <span class="o">%</span> <span class="mi">10</span><span class="p">)</span> <span class="o">/</span> <span class="mf">10.0</span><span class="p">)))</span> <span class="o">*</span> <span class="mi">10</span>
+    <span class="k">return</span> <span class="nb">round</span><span class="p">((</span><span class="n">round_win_ticks</span> <span class="o">-</span> <span class="n">WIN_TO_UNIX_EPOCH_WIN_TICKS</span><span class="p">)</span> <span class="o">/</span> <span class="n">WIN_TICK_PER_SECOND_FLOAT</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">datetime_from_filetime</span><span class="p">(</span><span class="n">filetime</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;return a :class:`datetime.datetime` from a ``windows`` FILETIME int&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">1601</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">microseconds</span><span class="o">=</span><span class="n">filetime</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>
+    <span class="c1"># Manual non-approx rounding as filetime will not have a perfect representation as Python float</span>
+    <span class="n">round_microsecond</span> <span class="o">=</span> <span class="p">(</span><span class="n">filetime</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">((</span><span class="n">filetime</span> <span class="o">%</span> <span class="mi">10</span><span class="p">)</span> <span class="o">/</span> <span class="mf">10.0</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">WINDOWS_EPOCH</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">microseconds</span><span class="o">=</span><span class="n">round_microsecond</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">filetime_from_datetime</span><span class="p">(</span><span class="n">dtime</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Return the FILETIME value from a :class:`datetime.datetime` in a python :class:`int`&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="nb">int</span><span class="p">((</span><span class="n">dtime</span> <span class="o">-</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">1601</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span> <span class="o">*</span> <span class="mi">10000</span>
+    <span class="k">return</span> <span class="nb">int</span><span class="p">((</span><span class="n">dtime</span> <span class="o">-</span> <span class="n">WINDOWS_EPOCH</span><span class="p">)</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">())</span> <span class="o">*</span> <span class="n">WIN_TICK_PER_SECOND_INT</span>
 
 
 <span class="k">class</span> <span class="nc">FixedInteractiveConsole</span><span class="p">(</span><span class="n">code</span><span class="o">.</span><span class="n">InteractiveConsole</span><span class="p">):</span>
@@ -239,8 +246,8 @@
     <span class="sd">&quot;&quot;&quot;Pop a console with an InterativeConsole&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">locs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">locs</span> <span class="o">=</span> <span class="nb">globals</span><span class="p">()</span>
-    <span class="n">create_console</span><span class="p">()</span>
-    <span class="n">FixedInteractiveConsole</span><span class="p">(</span><span class="n">locs</span><span class="p">)</span><span class="o">.</span><span class="n">interact</span><span class="p">()</span></div>
+    <span class="n">create_console</span><span class="p">()</span></div>
+    <span class="n">FixedInteractiveConsole</span><span class="p">(</span><span class="n">locs</span><span class="p">)</span><span class="o">.</span><span class="n">interact</span><span class="p">()</span>
 
 <span class="k">def</span> <span class="nf">get_kernel_modules</span><span class="p">():</span>
     <span class="k">if</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">is_wow_64</span><span class="p">:</span>
@@ -263,30 +270,140 @@
     <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">modules</span><span class="p">)</span>
 
 
+<span class="c1"># Split winutils.py ?</span>
+<span class="n">ntqueryinformationfile_info_structs</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FileAccessInformation</span><span class="p">:</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FILE_ACCESS_INFORMATION</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FileAlignmentInformation</span><span class="p">:</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FILE_ALIGNMENT_INFORMATION</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FileAllInformation</span><span class="p">:</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FILE_ALL_INFORMATION</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FileAttributeTagInformation</span><span class="p">:</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FILE_ATTRIBUTE_TAG_INFORMATION</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FileBasicInformation</span><span class="p">:</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FILE_BASIC_INFORMATION</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FileEaInformation</span><span class="p">:</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FILE_EA_INFORMATION</span> <span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FileInternalInformation</span><span class="p">:</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FILE_INTERNAL_INFORMATION</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FileIoPriorityHintInformation</span><span class="p">:</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FILE_IO_PRIORITY_HINT_INFORMATION</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FileModeInformation</span><span class="p">:</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FILE_MODE_INFORMATION</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FileNetworkOpenInformation</span><span class="p">:</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FILE_NETWORK_OPEN_INFORMATION</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FileNameInformation</span><span class="p">:</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FILE_NAME_INFORMATION</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FilePositionInformation</span><span class="p">:</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FILE_POSITION_INFORMATION</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FileStandardInformation</span><span class="p">:</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FILE_STANDARD_INFORMATION</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FileIsRemoteDeviceInformation</span><span class="p">:</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FILE_IS_REMOTE_DEVICE_INFORMATION</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="k">def</span> <span class="nf">query_file_information</span><span class="p">(</span><span class="n">file_or_handle</span><span class="p">,</span> <span class="n">file_info_class</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">file_or_handle</span><span class="p">,</span> <span class="n">file</span><span class="p">):</span>
+        <span class="n">file_or_handle</span> <span class="o">=</span> <span class="n">get_handle_from_file</span><span class="p">(</span><span class="n">file_or_handle</span><span class="p">)</span>
+    <span class="n">handle</span> <span class="o">=</span> <span class="n">file_or_handle</span>
+    <span class="n">io_status</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">IO_STATUS_BLOCK</span><span class="p">()</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="n">ntqueryinformationfile_info_structs</span><span class="p">[</span><span class="n">file_info_class</span><span class="p">]()</span>
+    <span class="c1"># Do helper for &#39;is_pointer&#39; / get pointed_size &amp; co ? (useful for winproxy)</span>
+    <span class="n">pinfo</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">pointer</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">NtQueryInformationFile</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">io_status</span><span class="p">,</span> <span class="n">pinfo</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">info</span><span class="p">),</span> <span class="n">FileInformationClass</span><span class="o">=</span><span class="n">file_info_class</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">winerror</span> <span class="o">&amp;</span> <span class="mh">0xffffffff</span><span class="p">)</span> <span class="o">==</span> <span class="n">gdef</span><span class="o">.</span><span class="n">STATUS_BUFFER_OVERFLOW</span><span class="p">:</span>
+            <span class="k">raise</span>
+        <span class="c1"># STATUS_BUFFER_OVERFLOW -&gt; Guess we have a FILE_NAME_INFORMATION somewhere that need a bigger buffer</span>
+        <span class="k">if</span> <span class="n">file_info_class</span> <span class="o">==</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FileNameInformation</span><span class="p">:</span>
+            <span class="n">file_name_length</span> <span class="o">=</span> <span class="n">pinfo</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">FileNameLength</span>
+        <span class="k">elif</span> <span class="n">file_info_class</span> <span class="o">==</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FileAllInformation</span><span class="p">:</span>
+            <span class="n">file_name_length</span> <span class="o">=</span> <span class="n">pinfo</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">NameInformation</span><span class="o">.</span><span class="n">FileNameLength</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span>
+        <span class="n">full_size</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">info</span><span class="p">)</span> <span class="o">+</span> <span class="n">file_name_length</span> <span class="c1"># We add a little too much size for the sake of simplicity</span>
+        <span class="n">buffer</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_buffer</span><span class="p">(</span><span class="n">full_size</span><span class="p">)</span>
+        <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">NtQueryInformationFile</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">io_status</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">full_size</span><span class="p">,</span> <span class="n">FileInformationClass</span><span class="o">=</span><span class="n">file_info_class</span><span class="p">)</span>
+        <span class="n">pinfo</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span>  <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ntqueryinformationfile_info_structs</span><span class="p">[</span><span class="n">file_info_class</span><span class="p">]))</span>
+        <span class="n">info</span> <span class="o">=</span> <span class="n">pinfo</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">info</span>
+
+
+<span class="n">ntqueryvolumeinformationfile_info_structs</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FileFsAttributeInformation</span><span class="p">:</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FILE_FS_ATTRIBUTE_INFORMATION</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FileFsControlInformation</span><span class="p">:</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FILE_FS_CONTROL_INFORMATION</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FileFsDeviceInformation</span><span class="p">:</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FILE_FS_DEVICE_INFORMATION</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FileFsDriverPathInformation</span><span class="p">:</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FILE_FS_DRIVER_PATH_INFORMATION</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FileFsFullSizeInformation</span><span class="p">:</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FILE_FS_FULL_SIZE_INFORMATION</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FileFsObjectIdInformation</span><span class="p">:</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FILE_FS_OBJECTID_INFORMATION</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FileFsSizeInformation</span><span class="p">:</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FILE_FS_SIZE_INFORMATION</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FileFsVolumeInformation</span><span class="p">:</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FILE_FS_VOLUME_INFORMATION</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FileFsSectorSizeInformation</span><span class="p">:</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FILE_FS_SECTOR_SIZE_INFORMATION</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<span class="c1"># TODO: FileFsDriverPathInformation</span>
+<span class="c1"># TODO: Extended FILE_FS_VOLUME_INFORMATION that can read the real value of &#39;VolumeLabel&#39;</span>
+<span class="k">def</span> <span class="nf">query_volume_information</span><span class="p">(</span><span class="n">file_or_handle</span><span class="p">,</span><span class="n">volume_info_class</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">file_or_handle</span><span class="p">,</span> <span class="n">file</span><span class="p">):</span>
+        <span class="n">file_or_handle</span> <span class="o">=</span> <span class="n">get_handle_from_file</span><span class="p">(</span><span class="n">file_or_handle</span><span class="p">)</span>
+    <span class="n">handle</span> <span class="o">=</span> <span class="n">file_or_handle</span>
+    <span class="n">io_status</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">IO_STATUS_BLOCK</span><span class="p">()</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="n">ntqueryvolumeinformationfile_info_structs</span><span class="p">[</span><span class="n">volume_info_class</span><span class="p">]()</span>
+    <span class="c1"># Do helper for &#39;is_pointer&#39; / get pointed_size &amp; co ? (useful for winproxy)</span>
+    <span class="n">pinfo</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">pointer</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">NtQueryVolumeInformationFile</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">io_status</span><span class="p">,</span> <span class="n">pinfo</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">info</span><span class="p">),</span> <span class="n">FsInformationClass</span><span class="o">=</span><span class="n">volume_info_class</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="c1"># import pdb;pdb.set_trace()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">winerror</span> <span class="o">&amp;</span> <span class="mh">0xffffffff</span><span class="p">)</span> <span class="o">==</span> <span class="n">gdef</span><span class="o">.</span><span class="n">STATUS_BUFFER_OVERFLOW</span><span class="p">:</span>
+            <span class="k">raise</span>
+        <span class="k">if</span> <span class="n">volume_info_class</span> <span class="o">==</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FileFsAttributeInformation</span><span class="p">:</span>
+            <span class="n">file_name_length</span> <span class="o">=</span> <span class="n">pinfo</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">FileSystemNameLength</span>
+        <span class="k">elif</span> <span class="n">volume_info_class</span> <span class="o">==</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FileFsVolumeInformation</span><span class="p">:</span>
+            <span class="n">file_name_length</span> <span class="o">=</span> <span class="n">pinfo</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">VolumeLabelLength</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span>
+        <span class="n">full_size</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">info</span><span class="p">)</span> <span class="o">+</span> <span class="n">file_name_length</span> <span class="c1"># We add a little too much size for the sake of simplicity</span>
+        <span class="n">buffer</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_buffer</span><span class="p">(</span><span class="n">full_size</span><span class="p">)</span>
+        <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">NtQueryVolumeInformationFile</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">io_status</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">full_size</span><span class="p">,</span> <span class="n">FsInformationClass</span><span class="o">=</span><span class="n">volume_info_class</span><span class="p">)</span>
+        <span class="n">pinfo</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span>  <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ntqueryvolumeinformationfile_info_structs</span><span class="p">[</span><span class="n">volume_info_class</span><span class="p">]))</span>
+        <span class="n">info</span> <span class="o">=</span> <span class="n">pinfo</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">info</span>
+    <span class="k">return</span> <span class="n">info</span>
+
 <span class="c1"># String stuff</span>
 <span class="k">def</span> <span class="nf">ntstatus</span><span class="p">(</span><span class="n">code</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">generated_def</span><span class="o">.</span><span class="n">ntstatus</span><span class="o">.</span><span class="n">NtStatusException</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">get_long_path</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Return the long path form for ``path``</span>
+<div class="viewcode-block" id="get_long_path"><a class="viewcode-back" href="../../../utils.html#windows.utils.get_long_path">[docs]</a><span class="k">def</span> <span class="nf">get_long_path</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return the long path form for ``path``.</span>
 
-<span class="sd">        :returns: :class:`str`</span>
+<span class="sd">        :raise: :class:`~windows.winproxy.Kernel32Error` if ``path`` does not exists</span>
+<span class="sd">        :param path: a valid Windows path</span>
+<span class="sd">        :type path: :class:`str` | :obj:`unicode`</span>
+<span class="sd">        :returns: :class:`str` | :obj:`unicode` -- same type as ``path`` parameter</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">size</span> <span class="o">=</span> <span class="mh">0x1000</span>
-    <span class="n">buffer</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_buffer</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
-    <span class="n">rsize</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">GetLongPathNameA</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">unicode</span><span class="p">):</span>
+        <span class="n">buffer</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">create_unicode_buffer</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
+        <span class="n">rsize</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">GetLongPathNameW</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">buffer</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_buffer</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
+        <span class="n">rsize</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">GetLongPathNameA</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span></div>
     <span class="k">return</span> <span class="n">buffer</span><span class="p">[:</span><span class="n">rsize</span><span class="p">]</span>
 
-<span class="k">def</span> <span class="nf">get_short_path</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+
+<div class="viewcode-block" id="get_short_path"><a class="viewcode-back" href="../../../utils.html#windows.utils.get_short_path">[docs]</a><span class="k">def</span> <span class="nf">get_short_path</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Return the short path form for ``path``</span>
 
-<span class="sd">        :returns: :class:`str`</span>
+<span class="sd">        :raise: :class:`~windows.winproxy.Kernel32Error` if ``path`` does not exists</span>
+<span class="sd">        :param path: a valid Windows path</span>
+<span class="sd">        :type path: :class:`str` | :obj:`unicode`</span>
+<span class="sd">        :returns: :class:`str` | :obj:`unicode` -- same type as ``path`` parameter</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">size</span> <span class="o">=</span> <span class="mh">0x1000</span>
-    <span class="n">buffer</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_buffer</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
-    <span class="n">rsize</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">GetShortPathNameA</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">unicode</span><span class="p">):</span>
+        <span class="n">buffer</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">create_unicode_buffer</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
+        <span class="n">rsize</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">GetShortPathNameW</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">buffer</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_buffer</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
+        <span class="n">rsize</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">GetShortPathNameA</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span></div>
     <span class="k">return</span> <span class="n">buffer</span><span class="p">[:</span><span class="n">rsize</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">dospath_to_ntpath</span><span class="p">(</span><span class="n">dospath</span><span class="p">):</span>
+    <span class="n">ustring</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">UNICODE_STRING</span><span class="p">()</span>
+    <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">RtlDosPathNameToNtPathName_U</span><span class="p">(</span><span class="n">dospath</span><span class="p">,</span> <span class="n">ustring</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ustring</span><span class="o">.</span><span class="n">str</span>
+
 
 <span class="k">def</span> <span class="nf">get_shared_mapping</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mh">0x1000</span><span class="p">):</span>
     <span class="c1"># TODO: real code</span>
@@ -334,7 +451,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A context manager usable like `VirtualProtect` that will restore the old protection at exit ::</span>
 
-<span class="sd">        with utils.VirtualProtected(IATentry.addr, ctypes.sizeof(PVOID), windef.PAGE_EXECUTE_READWRITE):</span>
+<span class="sd">        with utils.VirtualProtected(IATentry.addr, ctypes.sizeof(PVOID), gdef.PAGE_EXECUTE_READWRITE):</span>
 <span class="sd">            IATentry.value = 0x42424242</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">new_protect</span><span class="p">):</span>
@@ -350,8 +467,8 @@
         <span class="k">return</span> <span class="bp">self</span>
 
     <span class="k">def</span> <span class="nf">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
-        <span class="n">winproxy</span><span class="o">.</span><span class="n">VirtualProtect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">addr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">old_protect</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">old_protect</span><span class="p">))</span>
-        <span class="k">return</span> <span class="kc">False</span></div>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">VirtualProtect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">addr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">old_protect</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">old_protect</span><span class="p">))</span></div>
+        <span class="k">return</span> <span class="kc">False</span>
 
 
 <div class="viewcode-block" id="DisableWow64FsRedirection"><a class="viewcode-back" href="../../../utils.html#windows.utils.DisableWow64FsRedirection">[docs]</a><span class="k">class</span> <span class="nc">DisableWow64FsRedirection</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -373,8 +490,8 @@
     <span class="k">def</span> <span class="nf">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">64</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span>
-        <span class="n">winproxy</span><span class="o">.</span><span class="n">Wow64RevertWow64FsRedirection</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">OldValue</span><span class="p">)</span>
-        <span class="k">return</span> <span class="kc">False</span></div>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">Wow64RevertWow64FsRedirection</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">OldValue</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="kc">False</span>
 </pre></div>
 
           </div>
@@ -384,12 +501,14 @@
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -411,7 +530,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
     </div>
   </body>
 </html>

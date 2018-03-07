@@ -34,6 +34,7 @@ Documentation
    various.rst
    native_exec.rst
    winproxy.rst
+   pipe.rst
    utils.rst
    wintrust.rst
    debug.rst

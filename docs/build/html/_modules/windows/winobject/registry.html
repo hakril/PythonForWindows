@@ -1,33 +1,22 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>windows.winobject.registry &#8212; PythonForWindows 0.3 documentation</title>
-    
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '0.3',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" href="../../../_static/css/mbasic.css" type="text/css" />
+    <script type="text/javascript" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
-  </head>
-  <body role="document">
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -96,6 +85,18 @@
             <span class="k">raise</span> <span class="ne">WindowsError</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">winerror</span><span class="p">,</span> <span class="s2">&quot;Could not open registry key &lt;</span><span class="si">{0}</span><span class="s2">&gt; (</span><span class="si">{1}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fullname</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">strerror</span><span class="p">))</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_phkey</span>
 
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">exists</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Best way todo ?</span>
+        <span class="c1"># TODO: document</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_phkey</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">tmpphkey</span> <span class="o">=</span> <span class="n">_winreg</span><span class="o">.</span><span class="n">OpenKeyEx</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">surkey</span><span class="o">.</span><span class="n">phkey</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="n">_winreg</span><span class="o">.</span><span class="n">CloseKey</span><span class="p">(</span><span class="n">tmpphkey</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">subkeys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -117,7 +118,7 @@
         <span class="k">with</span> <span class="n">ExpectWindowsError</span><span class="p">(</span><span class="mi">259</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">count</span><span class="p">():</span>
                 <span class="n">name_value_type</span> <span class="o">=</span> <span class="n">_winreg</span><span class="o">.</span><span class="n">EnumValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phkey</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
-                <span class="c1"># _winreg doest not support REG_QWORD</span>
+                <span class="c1"># _winreg doest not support REG_QWORD in python2</span>
                 <span class="c1"># See http://bugs.python.org/issue23026</span>
                 <span class="k">if</span> <span class="n">name_value_type</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="n">REG_QWORD</span><span class="p">:</span>
                     <span class="n">name</span> <span class="o">=</span> <span class="n">name_value_type</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -142,14 +143,17 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">value</span><span class="p">,</span> <span class="nb">type</span> <span class="o">=</span> <span class="n">_winreg</span><span class="o">.</span><span class="n">QueryValueEx</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phkey</span><span class="p">,</span> <span class="n">value_name</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">REG_QWORD</span><span class="p">:</span>
-            <span class="n">value</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&lt;Q&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">KeyValue</span><span class="p">(</span><span class="n">value_name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span></div>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&lt;Q&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span></div>
+        <span class="k">return</span> <span class="n">KeyValue</span><span class="p">(</span><span class="n">value_name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_guess_value_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">_winreg</span><span class="o">.</span><span class="n">REG_SZ</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">long</span><span class="p">)):</span>
             <span class="k">return</span> <span class="n">_winreg</span><span class="o">.</span><span class="n">REG_DWORD</span>
+        <span class="c1"># elif isinstance(value, (list, tuple)):</span>
+            <span class="c1"># if all(isinstance(v, basestring) in value):</span>
+                <span class="c1"># return _winreg.REG_MULTI_SZ</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot guest registry type of value to set &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
 
 
@@ -158,8 +162,8 @@
         <span class="k">if</span> <span class="nb">type</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="nb">type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_guess_value_type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">REG_QWORD</span><span class="p">:</span>
-            <span class="n">value</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s2">&quot;&lt;Q&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">_winreg</span><span class="o">.</span><span class="n">SetValueEx</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phkey</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s2">&quot;&lt;Q&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">_winreg</span><span class="o">.</span><span class="n">SetValueEx</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phkey</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="PyHKey.open_subkey"><a class="viewcode-back" href="../../../registry.html#windows.winobject.registry.PyHKey.open_subkey">[docs]</a>    <span class="k">def</span> <span class="nf">open_subkey</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">sam</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -168,22 +172,30 @@
 <span class="sd">        :rtype: :class:`PyHKey`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">sam</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">sam</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sam</span>
-        <span class="k">return</span> <span class="n">PyHKey</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">sam</span><span class="p">)</span></div>
+            <span class="n">sam</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sam</span></div>
+        <span class="k">return</span> <span class="n">PyHKey</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">sam</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">reopen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_sam</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">PyHKey</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">surkey</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">new_sam</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># TODO: document</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_phkey</span> <span class="o">=</span> <span class="n">_winreg</span><span class="o">.</span><span class="n">CreateKeyEx</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">surkey</span><span class="o">.</span><span class="n">phkey</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sam</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">WindowsError</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">winerror</span><span class="p">,</span> <span class="s2">&quot;Could not create registry key &lt;</span><span class="si">{0}</span><span class="s2">&gt; (</span><span class="si">{1}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fullname</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">strerror</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_phkey</span>
 
 
 <div class="viewcode-block" id="PyHKey.__setitem__"><a class="viewcode-back" href="../../../registry.html#windows.winobject.registry.PyHKey.__setitem__">[docs]</a>    <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="n">rtype</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">long</span><span class="p">,</span> <span class="n">basestring</span><span class="p">)):</span>
-            <span class="n">value</span><span class="p">,</span> <span class="n">rtype</span> <span class="o">=</span> <span class="n">value</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">rtype</span><span class="p">)</span></div>
+            <span class="n">value</span><span class="p">,</span> <span class="n">rtype</span> <span class="o">=</span> <span class="n">value</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">rtype</span><span class="p">)</span>
 
     <span class="fm">__getitem__</span> <span class="o">=</span> <span class="n">get</span>
-
-    <span class="fm">__call__</span> <span class="o">=</span> <span class="n">open_subkey</span></div>
+</div>
+    <span class="fm">__call__</span> <span class="o">=</span> <span class="n">open_subkey</span>
 
 
 <span class="k">class</span> <span class="nc">DummyPHKEY</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -230,8 +242,8 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknow registry base key &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
         <span class="n">base_name</span><span class="p">,</span> <span class="n">subkey</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">base_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry_base_keys</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknow registry base key &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">base_name</span><span class="p">))</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry_base_keys</span><span class="p">[</span><span class="n">base_name</span><span class="p">](</span><span class="n">subkey</span><span class="p">,</span>  <span class="n">sam</span><span class="p">)</span></div>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknow registry base key &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">base_name</span><span class="p">))</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry_base_keys</span><span class="p">[</span><span class="n">base_name</span><span class="p">](</span><span class="n">subkey</span><span class="p">,</span>  <span class="n">sam</span><span class="p">)</span>
 </pre></div>
 
           </div>
@@ -241,12 +253,14 @@
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -268,7 +282,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
     </div>
   </body>
 </html>

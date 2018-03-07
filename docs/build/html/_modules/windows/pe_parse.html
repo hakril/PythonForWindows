@@ -1,33 +1,22 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>windows.pe_parse &#8212; PythonForWindows 0.3 documentation</title>
-    
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '0.3',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" href="../../_static/css/mbasic.css" type="text/css" />
+    <script type="text/javascript" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
-  </head>
-  <body role="document">
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -57,10 +46,6 @@
 <span class="kn">from</span> <span class="nn">windows.utils</span> <span class="k">import</span> <span class="n">transform_ctypes_fields</span>
 <span class="kn">import</span> <span class="nn">windows.remotectypes</span> <span class="k">as</span> <span class="nn">rctypes</span>
 
-<span class="c1"># This must go to windefs</span>
-<span class="n">IMAGE_DIRECTORY_ENTRY_EXPORT</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="n">IMAGE_DIRECTORY_ENTRY_IMPORT</span> <span class="o">=</span> <span class="mi">1</span>
-
 <span class="n">IMAGE_ORDINAL_FLAG32</span> <span class="o">=</span> <span class="mh">0x80000000</span>
 <span class="n">IMAGE_ORDINAL_FLAG64</span> <span class="o">=</span> <span class="mh">0x8000000000000000</span>
 
@@ -89,7 +74,7 @@
     <span class="k">return</span> <span class="n">ctypes_structure_transformer</span><span class="p">,</span> <span class="n">create_structure_at</span>
 
 <span class="k">def</span> <span class="nf">get_pe_bitness</span><span class="p">(</span><span class="n">baseaddr</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
-    <span class="c1"># We can force bitness as the filed we access are bitness-independant</span>
+    <span class="c1"># We can force bitness as the field we access are bitness-independant</span>
     <span class="n">pe</span> <span class="o">=</span> <span class="n">GetPEFile</span><span class="p">(</span><span class="n">baseaddr</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">force_bitness</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span>
     <span class="n">machine</span> <span class="o">=</span> <span class="n">pe</span><span class="o">.</span><span class="n">get_NT_HEADER</span><span class="p">()</span><span class="o">.</span><span class="n">FileHeader</span><span class="o">.</span><span class="n">Machine</span>
     <span class="k">if</span> <span class="n">machine</span> <span class="o">==</span> <span class="mh">0x14c</span><span class="p">:</span>
@@ -464,8 +449,8 @@
     <span class="n">transformers</span> <span class="o">=</span> <span class="n">get_structure_transformer_for_target</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">targetedbitness</span><span class="p">)</span>
     <span class="c1">#ctypes_structure_transformer, create_structure_at = transformers</span>
     <span class="n">transfor_funcs</span> <span class="o">=</span> <span class="n">CtypesStructureTransformers</span><span class="p">(</span><span class="o">*</span><span class="n">transformers</span><span class="p">)</span>  <span class="c1"># TODO: rename</span>
-
-    <span class="k">return</span> <span class="n">PEFile</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">baseaddr</span><span class="p">,</span> <span class="n">targetedbitness</span><span class="p">,</span> <span class="n">transfor_funcs</span><span class="p">)</span></div>
+</div>
+    <span class="k">return</span> <span class="n">PEFile</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">baseaddr</span><span class="p">,</span> <span class="n">targetedbitness</span><span class="p">,</span> <span class="n">transfor_funcs</span><span class="p">)</span>
 
 
 <span class="k">class</span> <span class="nc">THUNK_DATA</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">Union</span><span class="p">):</span>
@@ -559,16 +544,16 @@
 
         <span class="n">hook</span> <span class="o">=</span> <span class="n">hooks</span><span class="o">.</span><span class="n">IATHook</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">,</span> <span class="n">types</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">hook</span> <span class="o">=</span> <span class="n">hook</span>
-        <span class="n">hook</span><span class="o">.</span><span class="n">enable</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">hook</span></div>
+        <span class="n">hook</span><span class="o">.</span><span class="n">enable</span><span class="p">()</span></div>
+        <span class="k">return</span> <span class="n">hook</span>
 
 <div class="viewcode-block" id="IATEntry.remove_hook"><a class="viewcode-back" href="../../process.html#windows.pe_parse.IATEntry.remove_hook">[docs]</a>    <span class="k">def</span> <span class="nf">remove_hook</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Remove the hook on the entry&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hook</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">hook</span><span class="o">.</span><span class="n">disable</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">hook</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">return</span> <span class="kc">True</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hook</span> <span class="o">=</span> <span class="kc">None</span></div></div>
+        <span class="k">return</span> <span class="kc">True</span>
 
 
 <span class="k">class</span> <span class="nc">IMAGE_IMPORT_DESCRIPTOR</span><span class="p">(</span><span class="n">IMAGE_IMPORT_DESCRIPTOR</span><span class="p">):</span> <span class="c1"># TODO: use explicite name winstructs.IMAGE_IMPORT_DESCRIPTOR</span>
@@ -786,8 +771,8 @@
                     <span class="n">iat_entry</span><span class="o">.</span><span class="n">ord</span> <span class="o">=</span> <span class="nb">ord</span>
                     <span class="n">iat_entry</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span> <span class="k">if</span> <span class="n">name</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
             <span class="n">name</span> <span class="o">=</span> <span class="n">get_string</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">baseaddr</span> <span class="o">+</span> <span class="n">import_descriptor</span><span class="o">.</span><span class="n">Name</span><span class="p">)</span>
-            <span class="n">res</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="p">[])</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">IAT</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">res</span></div>
+            <span class="n">res</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="p">[])</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">IAT</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">res</span>
 </pre></div>
 
           </div>
@@ -797,12 +782,14 @@
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -824,7 +811,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
     </div>
   </body>
 </html>

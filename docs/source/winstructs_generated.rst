@@ -1,4 +1,4 @@
-.. currentmodule:: windows.generated_def
+.. currentmodule:: windows.generated_def.winstructs
 
 Winstructs
 ----------

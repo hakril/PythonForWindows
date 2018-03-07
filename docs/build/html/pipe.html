@@ -1,0 +1,245 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>5. windows.pipe – Inter-Process Communication &#8212; PythonForWindows 0.3 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/css/mbasic.css" type="text/css" />
+    <script type="text/javascript" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="6. windows.utils – Windows Utilities" href="utils.html" />
+    <link rel="prev" title="4. windows.winproxy – Windows API" href="winproxy.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="utils.html" title="6. windows.utils – Windows Utilities"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="winproxy.html" title="4. windows.winproxy – Windows API"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.3 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-windows.pipe">
+<span id="windows-pipe-inter-process-communication"></span><h1>5. <code class="docutils literal notranslate"><span class="pre">windows.pipe</span></code> – Inter-Process Communication<a class="headerlink" href="#module-windows.pipe" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference internal" href="#module-windows.pipe" title="windows.pipe"><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.pipe</span></code></a> is wrapper around <code class="xref py py-class docutils literal notranslate"><span class="pre">_multiprocessing.PipeConnection</span></code> simplifiying its use.</p>
+<p>The main improvement are:</p>
+<blockquote>
+<div><ul class="simple">
+<li>send/recv object from a pipe name in one line</li>
+<li>Context manager around pipe connection</li>
+</ul>
+</div></blockquote>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">see sample <a class="reference internal" href="sample.html#sample-pipe"><span class="std std-ref">windows.pipe</span></a></p>
+</div>
+<div class="section" id="helper-functions">
+<h2>5.1. Helper functions<a class="headerlink" href="#helper-functions" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="windows.pipe.create">
+<code class="descclassname">windows.pipe.</code><code class="descname">create</code><span class="sig-paren">(</span><em>addr</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.pipe.create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a namedpipe pipe <code class="docutils literal notranslate"><span class="pre">addr</span></code></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns type:</th><td class="field-body"><a class="reference internal" href="#windows.pipe.PipeConnection" title="windows.pipe.PipeConnection"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipeConnection</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="windows.pipe.connect">
+<code class="descclassname">windows.pipe.</code><code class="descname">connect</code><span class="sig-paren">(</span><em>addr</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.pipe.connect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Connect to the named pipe <code class="docutils literal notranslate"><span class="pre">addr</span></code></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns type:</th><td class="field-body"><a class="reference internal" href="#windows.pipe.PipeConnection" title="windows.pipe.PipeConnection"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipeConnection</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="windows.pipe.recv_object">
+<code class="descclassname">windows.pipe.</code><code class="descname">recv_object</code><span class="sig-paren">(</span><em>addr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/pipe.html#recv_object"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.pipe.recv_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Receive an object from pipe <code class="docutils literal notranslate"><span class="pre">addr</span></code></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="windows.pipe.send_object">
+<code class="descclassname">windows.pipe.</code><code class="descname">send_object</code><span class="sig-paren">(</span><em>addr</em>, <em>obj</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/pipe.html#send_object"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.pipe.send_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send <cite>obj</cite> on pipe <code class="docutils literal notranslate"><span class="pre">addr</span></code></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="windows.pipe.full_pipe_address">
+<code class="descclassname">windows.pipe.</code><code class="descname">full_pipe_address</code><span class="sig-paren">(</span><em>addr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/pipe.html#full_pipe_address"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.pipe.full_pipe_address" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the full address of the pipe <cite>addr</cite></p>
+</dd></dl>
+
+</div>
+<div class="section" id="pipeconnection">
+<h2>5.2. PipeConnection<a class="headerlink" href="#pipeconnection" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="windows.pipe.PipeConnection">
+<em class="property">class </em><code class="descclassname">windows.pipe.</code><code class="descname">PipeConnection</code><span class="sig-paren">(</span><em>connection</em>, <em>name=None</em>, <em>server=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/pipe.html#PipeConnection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.pipe.PipeConnection" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper arround <code class="xref py py-class docutils literal notranslate"><span class="pre">_multiprocessing.PipeConnection</span></code> able to work as a ContextManager</p>
+<dl class="method">
+<dt id="windows.pipe.PipeConnection.close">
+<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/pipe.html#PipeConnection.close"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.pipe.PipeConnection.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close the handle of the pipe</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="windows.pipe.PipeConnection.connect">
+<em class="property">classmethod </em><code class="descname">connect</code><span class="sig-paren">(</span><em>addr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/pipe.html#PipeConnection.connect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.pipe.PipeConnection.connect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Connect to the named pipe <code class="docutils literal notranslate"><span class="pre">addr</span></code></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns type:</th><td class="field-body"><a class="reference internal" href="#windows.pipe.PipeConnection" title="windows.pipe.PipeConnection"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipeConnection</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="windows.pipe.PipeConnection.create">
+<em class="property">classmethod </em><code class="descname">create</code><span class="sig-paren">(</span><em>addr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/pipe.html#PipeConnection.create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.pipe.PipeConnection.create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a namedpipe pipe <code class="docutils literal notranslate"><span class="pre">addr</span></code></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns type:</th><td class="field-body"><a class="reference internal" href="#windows.pipe.PipeConnection" title="windows.pipe.PipeConnection"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipeConnection</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="windows.pipe.PipeConnection.from_handle">
+<em class="property">classmethod </em><code class="descname">from_handle</code><span class="sig-paren">(</span><em>phandle</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/pipe.html#PipeConnection.from_handle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.pipe.PipeConnection.from_handle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a <a class="reference internal" href="#windows.pipe.PipeConnection" title="windows.pipe.PipeConnection"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipeConnection</span></code></a> from pipe handle <cite>phandle</cite></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.pipe.PipeConnection.recv">
+<code class="descname">recv</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/pipe.html#PipeConnection.recv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.pipe.PipeConnection.recv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send an object from the pipe</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.pipe.PipeConnection.send">
+<code class="descname">send</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/pipe.html#PipeConnection.send"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.pipe.PipeConnection.send" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send an object on the pipe</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.pipe.PipeConnection.wait_connection">
+<code class="descname">wait_connection</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/pipe.html#PipeConnection.wait_connection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.pipe.PipeConnection.wait_connection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wait for a client process to connect to the named pipe</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">5. <code class="docutils literal notranslate"><span class="pre">windows.pipe</span></code> – Inter-Process Communication</a><ul>
+<li><a class="reference internal" href="#helper-functions">5.1. Helper functions</a></li>
+<li><a class="reference internal" href="#pipeconnection">5.2. PipeConnection</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="winproxy.html"
+                        title="previous chapter">4. <code class="docutils literal notranslate"><span class="pre">windows.winproxy</span></code> – Windows API</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="utils.html"
+                        title="next chapter">6. <code class="docutils literal notranslate"><span class="pre">windows.utils</span></code> – Windows Utilities</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/pipe.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="utils.html" title="6. windows.utils – Windows Utilities"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="winproxy.html" title="4. windows.winproxy – Windows API"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.3 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2015, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
+    </div>
+  </body>
+</html>

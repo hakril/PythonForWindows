@@ -1,35 +1,24 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>7. windows.debug – Debugging &#8212; PythonForWindows 0.3 documentation</title>
-    
+    <title>8. windows.debug – Debugging &#8212; PythonForWindows 0.3 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '0.3',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" href="_static/css/mbasic.css" type="text/css" />
+    <script type="text/javascript" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="8. windows.com - Component Object Model" href="com.html" />
-    <link rel="prev" title="6. windows.wintrust – Checking signature" href="wintrust.html" /> 
-  </head>
-  <body role="document">
+    <link rel="next" title="9. windows.com - Component Object Model" href="com.html" />
+    <link rel="prev" title="7. windows.wintrust – Checking signature" href="wintrust.html" /> 
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -40,10 +29,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="com.html" title="8. windows.com - Component Object Model"
+          <a href="com.html" title="9. windows.com - Component Object Model"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="wintrust.html" title="6. windows.wintrust – Checking signature"
+          <a href="wintrust.html" title="7. windows.wintrust – Checking signature"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.3 documentation</a> &#187;</li> 
       </ul>
@@ -55,17 +44,17 @@
           <div class="body" role="main">
             
   <div class="section" id="module-windows.debug">
-<span id="windows-debug-debugging"></span><h1>7. <a class="reference internal" href="#module-windows.debug" title="windows.debug"><code class="xref py py-mod docutils literal"><span class="pre">windows.debug</span></code></a> &#8211; Debugging<a class="headerlink" href="#module-windows.debug" title="Permalink to this headline">¶</a></h1>
+<span id="windows-debug-debugging"></span><h1>8. <a class="reference internal" href="#module-windows.debug" title="windows.debug"><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.debug</span></code></a> – Debugging<a class="headerlink" href="#module-windows.debug" title="Permalink to this headline">¶</a></h1>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">See sample <a class="reference internal" href="sample.html#sample-debugger"><span class="std std-ref">Debugging</span></a></p>
 </div>
 <div class="section" id="debugger">
-<h2>7.1. <a class="reference internal" href="#windows.debug.Debugger" title="windows.debug.Debugger"><code class="xref py py-class docutils literal"><span class="pre">Debugger</span></code></a><a class="headerlink" href="#debugger" title="Permalink to this headline">¶</a></h2>
-<p>The <a class="reference internal" href="#windows.debug.Debugger" title="windows.debug.Debugger"><code class="xref py py-class docutils literal"><span class="pre">Debugger</span></code></a> is the base class to perform the debugging of a remote process.
-The <a class="reference internal" href="#windows.debug.Debugger" title="windows.debug.Debugger"><code class="xref py py-class docutils literal"><span class="pre">Debugger</span></code></a> have some functions called on given event that can be implemented by subclasses.</p>
-<p>All Memory-breakpoint are disabled when callind a public callback or a breakpoint <code class="docutils literal"><span class="pre">trigger()</span></code> function.</p>
-<p>This means that those methods see the original <code class="docutils literal"><span class="pre">current_process</span></code> memory access rights.</p>
+<h2>8.1. <a class="reference internal" href="#windows.debug.Debugger" title="windows.debug.Debugger"><code class="xref py py-class docutils literal notranslate"><span class="pre">Debugger</span></code></a><a class="headerlink" href="#debugger" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="#windows.debug.Debugger" title="windows.debug.Debugger"><code class="xref py py-class docutils literal notranslate"><span class="pre">Debugger</span></code></a> is the base class to perform the debugging of a remote process.
+The <a class="reference internal" href="#windows.debug.Debugger" title="windows.debug.Debugger"><code class="xref py py-class docutils literal notranslate"><span class="pre">Debugger</span></code></a> have some functions called on given event that can be implemented by subclasses.</p>
+<p>All Memory-breakpoint are disabled when callind a public callback or a breakpoint <code class="docutils literal notranslate"><span class="pre">trigger()</span></code> function.</p>
+<p>This means that those methods see the original <code class="docutils literal notranslate"><span class="pre">current_process</span></code> memory access rights.</p>
 <dl class="class">
 <dt id="windows.debug.Debugger">
 <em class="property">class </em><code class="descclassname">windows.debug.</code><code class="descname">Debugger</code><span class="sig-paren">(</span><em>target</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/debugger.html#Debugger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.Debugger" title="Permalink to this definition">¶</a></dt>
@@ -78,18 +67,18 @@ The <a class="reference internal" href="#windows.debug.Debugger" title="windows.
 <dl class="method">
 <dt id="windows.debug.Debugger.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>target</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/debugger.html#Debugger.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.Debugger.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p><code class="docutils literal"><span class="pre">target</span></code> must be a debuggable <code class="xref py py-class docutils literal"><span class="pre">WinProcess</span></code>.</p>
+<dd><p><code class="docutils literal notranslate"><span class="pre">target</span></code> must be a debuggable <code class="xref py py-class docutils literal notranslate"><span class="pre">WinProcess</span></code>.</p>
 </dd></dl>
 
 <dl class="classmethod">
 <dt id="windows.debug.Debugger.attach">
 <em class="property">classmethod </em><code class="descname">attach</code><span class="sig-paren">(</span><em>target</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/debugger.html#Debugger.attach"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.Debugger.attach" title="Permalink to this definition">¶</a></dt>
-<dd><p>attach to <code class="docutils literal"><span class="pre">target</span></code> (must be a <code class="xref py py-class docutils literal"><span class="pre">WinProcess</span></code>)</p>
+<dd><p>attach to <code class="docutils literal notranslate"><span class="pre">target</span></code> (must be a <code class="xref py py-class docutils literal notranslate"><span class="pre">WinProcess</span></code>)</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#windows.debug.Debugger" title="windows.debug.Debugger"><code class="xref py py-class docutils literal"><span class="pre">Debugger</span></code></a></td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#windows.debug.Debugger" title="windows.debug.Debugger"><code class="xref py py-class docutils literal notranslate"><span class="pre">Debugger</span></code></a></td>
 </tr>
 </tbody>
 </table>
@@ -102,7 +91,7 @@ The <a class="reference internal" href="#windows.debug.Debugger" title="windows.
 <dl class="method">
 <dt id="windows.debug.Debugger.detach">
 <code class="descname">detach</code><span class="sig-paren">(</span><em>target=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/debugger.html#Debugger.detach"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.Debugger.detach" title="Permalink to this definition">¶</a></dt>
-<dd><p>Detach from all debugged processes or process <code class="docutils literal"><span class="pre">target</span></code></p>
+<dd><p>Detach from all debugged processes or process <code class="docutils literal notranslate"><span class="pre">target</span></code></p>
 </dd></dl>
 
 <dl class="classmethod">
@@ -113,7 +102,7 @@ The <a class="reference internal" href="#windows.debug.Debugger" title="windows.
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#windows.debug.Debugger" title="windows.debug.Debugger"><code class="xref py py-class docutils literal"><span class="pre">Debugger</span></code></a></td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#windows.debug.Debugger" title="windows.debug.Debugger"><code class="xref py py-class docutils literal notranslate"><span class="pre">Debugger</span></code></a></td>
 </tr>
 </tbody>
 </table>
@@ -130,35 +119,35 @@ The <a class="reference internal" href="#windows.debug.Debugger" title="windows.
 <code class="descname">add_bp</code><span class="sig-paren">(</span><em>bp</em>, <em>addr=None</em>, <em>type=None</em>, <em>target=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/debugger.html#Debugger.add_bp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.Debugger.add_bp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a breakpoint, bp can be:</p>
 <ul class="simple">
-<li>a <a class="reference internal" href="#windows.debug.Breakpoint" title="windows.debug.Breakpoint"><code class="xref py py-class docutils literal"><span class="pre">Breakpoint</span></code></a> (addr and type must be <code class="docutils literal"><span class="pre">None</span></code>)</li>
-<li>any callable (addr and type must NOT be <code class="docutils literal"><span class="pre">None</span></code>) (NON-TESTED)</li>
+<li>a <a class="reference internal" href="#windows.debug.Breakpoint" title="windows.debug.Breakpoint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Breakpoint</span></code></a> (addr and type must be <code class="docutils literal notranslate"><span class="pre">None</span></code>)</li>
+<li>any callable (addr and type must NOT be <code class="docutils literal notranslate"><span class="pre">None</span></code>) (NON-TESTED)</li>
 </ul>
-<p>If the <code class="docutils literal"><span class="pre">bp</span></code> type is <code class="docutils literal"><span class="pre">STANDARD_BP</span></code> or <code class="docutils literal"><span class="pre">MEMORY_BREAKPOINT</span></code>, target can be <code class="docutils literal"><span class="pre">None</span></code> (all targets) or a process.</p>
-<p>If the <code class="docutils literal"><span class="pre">bp</span></code> type is <code class="docutils literal"><span class="pre">HARDWARE_EXEC_BP</span></code>, target can be <code class="docutils literal"><span class="pre">None</span></code> (all targets), a process or a thread.</p>
+<p>If the <code class="docutils literal notranslate"><span class="pre">bp</span></code> type is <code class="docutils literal notranslate"><span class="pre">STANDARD_BP</span></code> or <code class="docutils literal notranslate"><span class="pre">MEMORY_BREAKPOINT</span></code>, target can be <code class="docutils literal notranslate"><span class="pre">None</span></code> (all targets) or a process.</p>
+<p>If the <code class="docutils literal notranslate"><span class="pre">bp</span></code> type is <code class="docutils literal notranslate"><span class="pre">HARDWARE_EXEC_BP</span></code>, target can be <code class="docutils literal notranslate"><span class="pre">None</span></code> (all targets), a process or a thread.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="windows.debug.Debugger.del_bp">
 <code class="descname">del_bp</code><span class="sig-paren">(</span><em>bp</em>, <em>targets=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/debugger.html#Debugger.del_bp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.Debugger.del_bp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Delete a breakpoint, if targets is <code class="docutils literal"><span class="pre">None</span></code>: delete it from all targets</p>
+<dd><p>Delete a breakpoint, if targets is <code class="docutils literal notranslate"><span class="pre">None</span></code>: delete it from all targets</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="windows.debug.Debugger.single_step">
 <code class="descname">single_step</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/debugger.html#Debugger.single_step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.Debugger.single_step" title="Permalink to this definition">¶</a></dt>
-<dd><p>Make the <code class="docutils literal"><span class="pre">current_thread</span></code> <code class="docutils literal"><span class="pre">single_step</span></code>. <code class="docutils literal"><span class="pre">Debugger.on_single_step</span></code> will be called after that</p>
+<dd><p>Make the <code class="docutils literal notranslate"><span class="pre">current_thread</span></code> <code class="docutils literal notranslate"><span class="pre">single_step</span></code>. <code class="docutils literal notranslate"><span class="pre">Debugger.on_single_step</span></code> will be called after that</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="windows.debug.Debugger.get_memory_breakpoint_at">
 <code class="descname">get_memory_breakpoint_at</code><span class="sig-paren">(</span><em>addr</em>, <em>process=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/debugger.html#Debugger.get_memory_breakpoint_at"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.Debugger.get_memory_breakpoint_at" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the memory breakpoint that handle <code class="docutils literal"><span class="pre">addr</span></code></p>
+<dd><p>Get the memory breakpoint that handle <code class="docutils literal notranslate"><span class="pre">addr</span></code></p>
 <p>Return values are:</p>
 <blockquote>
 <div><ul class="simple">
-<li><code class="docutils literal"><span class="pre">False</span></code> if the page has no memory breakpoint (real fault)</li>
-<li><code class="docutils literal"><span class="pre">None</span></code> if the page as memBP but None handle <code class="docutils literal"><span class="pre">addr</span></code></li>
-<li><code class="docutils literal"><span class="pre">bp</span></code> the MemBP that handle <code class="docutils literal"><span class="pre">addr</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">False</span></code> if the page has no memory breakpoint (real fault)</li>
+<li><code class="docutils literal notranslate"><span class="pre">None</span></code> if the page as memBP but None handle <code class="docutils literal notranslate"><span class="pre">addr</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">bp</span></code> the MemBP that handle <code class="docutils literal notranslate"><span class="pre">addr</span></code></li>
 </ul>
 </div></blockquote>
 </dd></dl>
@@ -167,12 +156,12 @@ The <a class="reference internal" href="#windows.debug.Debugger" title="windows.
 <dt id="windows.debug.Debugger.disable_all_memory_breakpoints">
 <code class="descname">disable_all_memory_breakpoints</code><span class="sig-paren">(</span><em>target=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/debugger.html#Debugger.disable_all_memory_breakpoints"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.Debugger.disable_all_memory_breakpoints" title="Permalink to this definition">¶</a></dt>
 <dd><p>Restore all pages to their original access rights.
-If target is <code class="docutils literal"><span class="pre">None</span></code>, use <code class="docutils literal"><span class="pre">current_process</span></code></p>
+If target is <code class="docutils literal notranslate"><span class="pre">None</span></code>, use <code class="docutils literal notranslate"><span class="pre">current_process</span></code></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a mapping of all disabled breakpoints that must be passed to <a class="reference internal" href="#windows.debug.Debugger.restore_all_memory_breakpoints" title="windows.debug.Debugger.restore_all_memory_breakpoints"><code class="xref py py-func docutils literal"><span class="pre">restore_all_memory_breakpoints()</span></code></a></td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a mapping of all disabled breakpoints that must be passed to <a class="reference internal" href="#windows.debug.Debugger.restore_all_memory_breakpoints" title="windows.debug.Debugger.restore_all_memory_breakpoints"><code class="xref py py-func docutils literal notranslate"><span class="pre">restore_all_memory_breakpoints()</span></code></a></td>
 </tr>
 </tbody>
 </table>
@@ -182,13 +171,13 @@ If target is <code class="docutils literal"><span class="pre">None</span></code>
 <dt id="windows.debug.Debugger.restore_all_memory_breakpoints">
 <code class="descname">restore_all_memory_breakpoints</code><span class="sig-paren">(</span><em>data</em>, <em>target=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/debugger.html#Debugger.restore_all_memory_breakpoints"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.Debugger.restore_all_memory_breakpoints" title="Permalink to this definition">¶</a></dt>
 <dd><p>Re-setup all memory breakpoints, affecting pages access rights.
-If target is <code class="docutils literal"><span class="pre">None</span></code>, use <code class="docutils literal"><span class="pre">current_process</span></code></p>
-<p><code class="docutils literal"><span class="pre">data</span></code> is the result of the corresponding call to <a class="reference internal" href="#windows.debug.Debugger.disable_all_memory_breakpoints" title="windows.debug.Debugger.disable_all_memory_breakpoints"><code class="xref py py-func docutils literal"><span class="pre">disable_all_memory_breakpoints()</span></code></a></p>
+If target is <code class="docutils literal notranslate"><span class="pre">None</span></code>, use <code class="docutils literal notranslate"><span class="pre">current_process</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">data</span></code> is the result of the corresponding call to <a class="reference internal" href="#windows.debug.Debugger.disable_all_memory_breakpoints" title="windows.debug.Debugger.disable_all_memory_breakpoints"><code class="xref py py-func docutils literal notranslate"><span class="pre">disable_all_memory_breakpoints()</span></code></a></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="windows.debug.Debugger.DisabledMemoryBreakpoint">
-<code class="descname">DisabledMemoryBreakpoint</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwds</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/debugger.html#Debugger.DisabledMemoryBreakpoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.Debugger.DisabledMemoryBreakpoint" title="Permalink to this definition">¶</a></dt>
+<code class="descname">DisabledMemoryBreakpoint</code><span class="sig-paren">(</span><em>**kwds</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/debugger.html#Debugger.DisabledMemoryBreakpoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.Debugger.DisabledMemoryBreakpoint" title="Permalink to this definition">¶</a></dt>
 <dd><p>A context-manager that disable all memory breakpoints and restore them on exit</p>
 </dd></dl>
 
@@ -201,7 +190,7 @@ Useful when debugingg a 32b process from a 64bits one</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a> &#8211; 32 or 64</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> – 32 or 64</td>
 </tr>
 </tbody>
 </table>
@@ -210,28 +199,28 @@ Useful when debugingg a 32b process from a 64bits one</p>
 <dl class="method">
 <dt id="windows.debug.Debugger.on_exception">
 <code class="descname">on_exception</code><span class="sig-paren">(</span><em>exception</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/debugger.html#Debugger.on_exception"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.Debugger.on_exception" title="Permalink to this definition">¶</a></dt>
-<dd><p>Called on exception event other that known breakpoint or requested single step. <code class="docutils literal"><span class="pre">exception</span></code> is one of the following type:</p>
+<dd><p>Called on exception event other that known breakpoint or requested single step. <code class="docutils literal notranslate"><span class="pre">exception</span></code> is one of the following type:</p>
 <blockquote>
 <div><ul class="simple">
-<li><a class="reference internal" href="exception.html#windows.winobject.exception.EEXCEPTION_DEBUG_INFO32" title="windows.winobject.exception.EEXCEPTION_DEBUG_INFO32"><code class="xref py py-class docutils literal"><span class="pre">windows.winobject.exception.EEXCEPTION_DEBUG_INFO32</span></code></a></li>
-<li><a class="reference internal" href="exception.html#windows.winobject.exception.EEXCEPTION_DEBUG_INFO64" title="windows.winobject.exception.EEXCEPTION_DEBUG_INFO64"><code class="xref py py-class docutils literal"><span class="pre">windows.winobject.exception.EEXCEPTION_DEBUG_INFO64</span></code></a></li>
+<li><a class="reference internal" href="exception.html#windows.winobject.exception.EEXCEPTION_DEBUG_INFO32" title="windows.winobject.exception.EEXCEPTION_DEBUG_INFO32"><code class="xref py py-class docutils literal notranslate"><span class="pre">windows.winobject.exception.EEXCEPTION_DEBUG_INFO32</span></code></a></li>
+<li><a class="reference internal" href="exception.html#windows.winobject.exception.EEXCEPTION_DEBUG_INFO64" title="windows.winobject.exception.EEXCEPTION_DEBUG_INFO64"><code class="xref py py-class docutils literal notranslate"><span class="pre">windows.winobject.exception.EEXCEPTION_DEBUG_INFO64</span></code></a></li>
 </ul>
 </div></blockquote>
-<p>The default behaviour is to return <code class="docutils literal"><span class="pre">DBG_CONTINUE</span></code> for the known exception code
-and <code class="docutils literal"><span class="pre">DBG_EXCEPTION_NOT_HANDLED</span></code> else</p>
+<p>The default behaviour is to return <code class="docutils literal notranslate"><span class="pre">DBG_CONTINUE</span></code> for the known exception code
+and <code class="docutils literal notranslate"><span class="pre">DBG_EXCEPTION_NOT_HANDLED</span></code> else</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="windows.debug.Debugger.on_single_step">
 <code class="descname">on_single_step</code><span class="sig-paren">(</span><em>exception</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/debugger.html#Debugger.on_single_step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.Debugger.on_single_step" title="Permalink to this definition">¶</a></dt>
-<dd><p>Called on requested single step <code class="docutils literal"><span class="pre">exception</span></code> is one of the following type:</p>
+<dd><p>Called on requested single step <code class="docutils literal notranslate"><span class="pre">exception</span></code> is one of the following type:</p>
 <blockquote>
 <div><ul class="simple">
-<li><a class="reference internal" href="exception.html#windows.winobject.exception.EEXCEPTION_DEBUG_INFO32" title="windows.winobject.exception.EEXCEPTION_DEBUG_INFO32"><code class="xref py py-class docutils literal"><span class="pre">windows.winobject.exception.EEXCEPTION_DEBUG_INFO32</span></code></a></li>
-<li><a class="reference internal" href="exception.html#windows.winobject.exception.EEXCEPTION_DEBUG_INFO64" title="windows.winobject.exception.EEXCEPTION_DEBUG_INFO64"><code class="xref py py-class docutils literal"><span class="pre">windows.winobject.exception.EEXCEPTION_DEBUG_INFO64</span></code></a></li>
+<li><a class="reference internal" href="exception.html#windows.winobject.exception.EEXCEPTION_DEBUG_INFO32" title="windows.winobject.exception.EEXCEPTION_DEBUG_INFO32"><code class="xref py py-class docutils literal notranslate"><span class="pre">windows.winobject.exception.EEXCEPTION_DEBUG_INFO32</span></code></a></li>
+<li><a class="reference internal" href="exception.html#windows.winobject.exception.EEXCEPTION_DEBUG_INFO64" title="windows.winobject.exception.EEXCEPTION_DEBUG_INFO64"><code class="xref py py-class docutils literal notranslate"><span class="pre">windows.winobject.exception.EEXCEPTION_DEBUG_INFO64</span></code></a></li>
 </ul>
 </div></blockquote>
-<p>There is no default implementation, if you use <code class="docutils literal"><span class="pre">Debugger.single_step()</span></code> you should implement <code class="docutils literal"><span class="pre">on_single_step</span></code></p>
+<p>There is no default implementation, if you use <code class="docutils literal notranslate"><span class="pre">Debugger.single_step()</span></code> you should implement <code class="docutils literal notranslate"><span class="pre">on_single_step</span></code></p>
 </dd></dl>
 
 <dl class="method">
@@ -242,7 +231,7 @@ and <code class="docutils literal"><span class="pre">DBG_EXCEPTION_NOT_HANDLED</
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>create_process</strong> (<a class="reference internal" href="winstructs_generated.html#windows.generated_def.CREATE_PROCESS_DEBUG_INFO" title="windows.generated_def.CREATE_PROCESS_DEBUG_INFO"><em>CREATE_PROCESS_DEBUG_INFO</em></a>) &#8211; </td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>create_process</strong> (<a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.CREATE_PROCESS_DEBUG_INFO" title="windows.generated_def.winstructs.CREATE_PROCESS_DEBUG_INFO"><em>CREATE_PROCESS_DEBUG_INFO</em></a>) – </td>
 </tr>
 </tbody>
 </table>
@@ -256,7 +245,7 @@ and <code class="docutils literal"><span class="pre">DBG_EXCEPTION_NOT_HANDLED</
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>exit_process</strong> (<a class="reference internal" href="winstructs_generated.html#windows.generated_def.EXIT_PROCESS_DEBUG_INFO" title="windows.generated_def.EXIT_PROCESS_DEBUG_INFO"><em>EXIT_PROCESS_DEBUG_INFO</em></a>) &#8211; </td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>exit_process</strong> (<a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.EXIT_PROCESS_DEBUG_INFO" title="windows.generated_def.winstructs.EXIT_PROCESS_DEBUG_INFO"><em>EXIT_PROCESS_DEBUG_INFO</em></a>) – </td>
 </tr>
 </tbody>
 </table>
@@ -270,7 +259,7 @@ and <code class="docutils literal"><span class="pre">DBG_EXCEPTION_NOT_HANDLED</
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>create_thread</strong> (<a class="reference internal" href="winstructs_generated.html#windows.generated_def.CREATE_THREAD_DEBUG_INFO" title="windows.generated_def.CREATE_THREAD_DEBUG_INFO"><em>CREATE_THREAD_DEBUG_INFO</em></a>) &#8211; </td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>create_thread</strong> (<a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.CREATE_THREAD_DEBUG_INFO" title="windows.generated_def.winstructs.CREATE_THREAD_DEBUG_INFO"><em>CREATE_THREAD_DEBUG_INFO</em></a>) – </td>
 </tr>
 </tbody>
 </table>
@@ -284,7 +273,7 @@ and <code class="docutils literal"><span class="pre">DBG_EXCEPTION_NOT_HANDLED</
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>exit_thread</strong> (<a class="reference internal" href="winstructs_generated.html#windows.generated_def.EXIT_THREAD_DEBUG_INFO" title="windows.generated_def.EXIT_THREAD_DEBUG_INFO"><em>EXIT_THREAD_DEBUG_INFO</em></a>) &#8211; </td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>exit_thread</strong> (<a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.EXIT_THREAD_DEBUG_INFO" title="windows.generated_def.winstructs.EXIT_THREAD_DEBUG_INFO"><em>EXIT_THREAD_DEBUG_INFO</em></a>) – </td>
 </tr>
 </tbody>
 </table>
@@ -298,7 +287,7 @@ and <code class="docutils literal"><span class="pre">DBG_EXCEPTION_NOT_HANDLED</
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>load_dll</strong> (<a class="reference internal" href="winstructs_generated.html#windows.generated_def.LOAD_DLL_DEBUG_INFO" title="windows.generated_def.LOAD_DLL_DEBUG_INFO"><em>LOAD_DLL_DEBUG_INFO</em></a>) &#8211; </td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>load_dll</strong> (<a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.LOAD_DLL_DEBUG_INFO" title="windows.generated_def.winstructs.LOAD_DLL_DEBUG_INFO"><em>LOAD_DLL_DEBUG_INFO</em></a>) – </td>
 </tr>
 </tbody>
 </table>
@@ -312,7 +301,7 @@ and <code class="docutils literal"><span class="pre">DBG_EXCEPTION_NOT_HANDLED</
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>unload_dll</strong> (<a class="reference internal" href="winstructs_generated.html#windows.generated_def.UNLOAD_DLL_DEBUG_INFO" title="windows.generated_def.UNLOAD_DLL_DEBUG_INFO"><em>UNLOAD_DLL_DEBUG_INFO</em></a>) &#8211; </td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>unload_dll</strong> (<a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.UNLOAD_DLL_DEBUG_INFO" title="windows.generated_def.winstructs.UNLOAD_DLL_DEBUG_INFO"><em>UNLOAD_DLL_DEBUG_INFO</em></a>) – </td>
 </tr>
 </tbody>
 </table>
@@ -326,7 +315,7 @@ and <code class="docutils literal"><span class="pre">DBG_EXCEPTION_NOT_HANDLED</
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>debug_string</strong> (<a class="reference internal" href="winstructs_generated.html#windows.generated_def.OUTPUT_DEBUG_STRING_INFO" title="windows.generated_def.OUTPUT_DEBUG_STRING_INFO"><em>OUTPUT_DEBUG_STRING_INFO</em></a>) &#8211; </td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>debug_string</strong> (<a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.OUTPUT_DEBUG_STRING_INFO" title="windows.generated_def.winstructs.OUTPUT_DEBUG_STRING_INFO"><em>OUTPUT_DEBUG_STRING_INFO</em></a>) – </td>
 </tr>
 </tbody>
 </table>
@@ -340,7 +329,7 @@ and <code class="docutils literal"><span class="pre">DBG_EXCEPTION_NOT_HANDLED</
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>rip_info</strong> (<a class="reference internal" href="winstructs_generated.html#windows.generated_def.RIP_INFO" title="windows.generated_def.RIP_INFO"><em>RIP_INFO</em></a>) &#8211; </td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>rip_info</strong> (<a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.RIP_INFO" title="windows.generated_def.winstructs.RIP_INFO"><em>RIP_INFO</em></a>) – </td>
 </tr>
 </tbody>
 </table>
@@ -350,18 +339,18 @@ and <code class="docutils literal"><span class="pre">DBG_EXCEPTION_NOT_HANDLED</
 
 </div>
 <div class="section" id="localdebugger">
-<h2>7.2. <a class="reference internal" href="#windows.debug.LocalDebugger" title="windows.debug.LocalDebugger"><code class="xref py py-class docutils literal"><span class="pre">LocalDebugger</span></code></a><a class="headerlink" href="#localdebugger" title="Permalink to this headline">¶</a></h2>
+<h2>8.2. <a class="reference internal" href="#windows.debug.LocalDebugger" title="windows.debug.LocalDebugger"><code class="xref py py-class docutils literal notranslate"><span class="pre">LocalDebugger</span></code></a><a class="headerlink" href="#localdebugger" title="Permalink to this headline">¶</a></h2>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">See sample <a class="reference internal" href="sample.html#sample-local-debugger"><span class="std std-ref">LocalDebugger</span></a></p>
 </div>
-<p>The <a class="reference internal" href="#windows.debug.Debugger" title="windows.debug.Debugger"><code class="xref py py-class docutils literal"><span class="pre">Debugger</span></code></a> is the base class to perform the debugging the current process.
-It is based on <code class="xref py py-func docutils literal"><span class="pre">VectoredException()</span></code> (see <a class="reference internal" href="sample.html#sample-vectoredexception"><span class="std std-ref">VectoredException()</span></a>)</p>
+<p>The <a class="reference internal" href="#windows.debug.Debugger" title="windows.debug.Debugger"><code class="xref py py-class docutils literal notranslate"><span class="pre">Debugger</span></code></a> is the base class to perform the debugging the current process.
+It is based on <code class="xref py py-func docutils literal notranslate"><span class="pre">VectoredException()</span></code> (see <a class="reference internal" href="sample.html#sample-vectoredexception"><span class="std std-ref">VectoredException()</span></a>)</p>
 <p>There is not much documentation for now as the code might change soon.</p>
 <dl class="class">
 <dt id="windows.debug.LocalDebugger">
 <em class="property">class </em><code class="descclassname">windows.debug.</code><code class="descname">LocalDebugger</code><a class="reference internal" href="_modules/windows/debug/localdbg.html#LocalDebugger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.LocalDebugger" title="Permalink to this definition">¶</a></dt>
-<dd><p>A debugger interface around <code class="xref py py-func docutils literal"><span class="pre">AddVectoredExceptionHandler()</span></code>.</p>
+<dd><p>A debugger interface around <code class="xref py py-func docutils literal notranslate"><span class="pre">AddVectoredExceptionHandler()</span></code>.</p>
 <p>Handle:</p>
 <blockquote>
 <div><ul class="simple">
@@ -372,9 +361,9 @@ It is based on <code class="xref py py-func docutils literal"><span class="pre">
 <dl class="method">
 <dt id="windows.debug.LocalDebugger.add_bp">
 <code class="descname">add_bp</code><span class="sig-paren">(</span><em>bp</em>, <em>targets=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/localdbg.html#LocalDebugger.add_bp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.LocalDebugger.add_bp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add a breakpoint, bp is a &#8220;class:<cite>Breakpoint</cite></p>
-<p>If the <code class="docutils literal"><span class="pre">bp</span></code> type is <code class="docutils literal"><span class="pre">STANDARD_BP</span></code>, target must be None.</p>
-<p>If the <code class="docutils literal"><span class="pre">bp</span></code> type is <code class="docutils literal"><span class="pre">HARDWARE_EXEC_BP</span></code>, target can be None (all threads), or some threads of the process</p>
+<dd><p>Add a breakpoint, bp is a “class:<cite>Breakpoint</cite></p>
+<p>If the <code class="docutils literal notranslate"><span class="pre">bp</span></code> type is <code class="docutils literal notranslate"><span class="pre">STANDARD_BP</span></code>, target must be None.</p>
+<p>If the <code class="docutils literal notranslate"><span class="pre">bp</span></code> type is <code class="docutils literal notranslate"><span class="pre">HARDWARE_EXEC_BP</span></code>, target can be None (all threads), or some threads of the process</p>
 </dd></dl>
 
 <dl class="method">
@@ -411,29 +400,29 @@ It is based on <code class="xref py py-func docutils literal"><span class="pre">
 
 </div>
 <div class="section" id="breakpoint">
-<h2>7.3. <a class="reference internal" href="#windows.debug.Breakpoint" title="windows.debug.Breakpoint"><code class="xref py py-class docutils literal"><span class="pre">Breakpoint</span></code></a><a class="headerlink" href="#breakpoint" title="Permalink to this headline">¶</a></h2>
+<h2>8.3. <a class="reference internal" href="#windows.debug.Breakpoint" title="windows.debug.Breakpoint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Breakpoint</span></code></a><a class="headerlink" href="#breakpoint" title="Permalink to this headline">¶</a></h2>
 <p>Standard breakpoints types expect an address as argument.</p>
 <p>An address can be:</p>
 <blockquote>
 <div><ul>
-<li><p class="first">An <a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a></p>
+<li><p class="first">An <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></p>
 </li>
-<li><p class="first">A <a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a> of form (breakpoint will be put when <code class="docutils literal"><span class="pre">DLL</span></code> is loaded):</p>
+<li><p class="first">A <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> of form (breakpoint will be put when <code class="docutils literal notranslate"><span class="pre">DLL</span></code> is loaded):</p>
 <blockquote>
 <div><ul class="simple">
-<li><code class="docutils literal"><span class="pre">&quot;DLL!ApiName&quot;</span></code></li>
-<li><code class="docutils literal"><span class="pre">&quot;DLL!Offset&quot;</span></code> where offset is a int (&#8220;16&#8221;, &#8220;0x10&#8221;, ..)</li>
+<li><code class="docutils literal notranslate"><span class="pre">&quot;DLL!ApiName&quot;</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">&quot;DLL!Offset&quot;</span></code> where offset is a int (“16”, “0x10”, ..)</li>
 </ul>
 </div></blockquote>
 </li>
 </ul>
 </div></blockquote>
-<p>When a breakpoint is hit, its <code class="docutils literal"><span class="pre">trigger</span></code> function is called with the debugger and a
-<code class="docutils literal"><span class="pre">DEBUG_EXECEPTION_EVENT</span></code> structure as argument.</p>
+<p>When a breakpoint is hit, its <code class="docutils literal notranslate"><span class="pre">trigger</span></code> function is called with the debugger and a
+<code class="docutils literal notranslate"><span class="pre">DEBUG_EXECEPTION_EVENT</span></code> structure as argument.</p>
 <dl class="class">
 <dt id="windows.debug.Breakpoint">
 <em class="property">class </em><code class="descclassname">windows.debug.</code><code class="descname">Breakpoint</code><span class="sig-paren">(</span><em>addr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/breakpoints.html#Breakpoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.Breakpoint" title="Permalink to this definition">¶</a></dt>
-<dd><p>An standard (Int3) breakpoint (type == <code class="docutils literal"><span class="pre">STANDARD_BP</span></code>)</p>
+<dd><p>An standard (Int3) breakpoint (type == <code class="docutils literal notranslate"><span class="pre">STANDARD_BP</span></code>)</p>
 <dl class="method">
 <dt id="windows.debug.Breakpoint.trigger">
 <code class="descname">trigger</code><span class="sig-paren">(</span><em>dbg</em>, <em>exception</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/breakpoints.html#Breakpoint.trigger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.Breakpoint.trigger" title="Permalink to this definition">¶</a></dt>
@@ -445,7 +434,7 @@ It is based on <code class="xref py py-func docutils literal"><span class="pre">
 <dl class="class">
 <dt id="windows.debug.HXBreakpoint">
 <em class="property">class </em><code class="descclassname">windows.debug.</code><code class="descname">HXBreakpoint</code><span class="sig-paren">(</span><em>addr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/breakpoints.html#HXBreakpoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.HXBreakpoint" title="Permalink to this definition">¶</a></dt>
-<dd><p>An hardware-execution breakpoint (type == <code class="docutils literal"><span class="pre">HARDWARE_EXEC_BP</span></code>)</p>
+<dd><p>An hardware-execution breakpoint (type == <code class="docutils literal notranslate"><span class="pre">HARDWARE_EXEC_BP</span></code>)</p>
 <dl class="method">
 <dt id="windows.debug.HXBreakpoint.trigger">
 <code class="descname">trigger</code><span class="sig-paren">(</span><em>dbg</em>, <em>exception</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.debug.HXBreakpoint.trigger" title="Permalink to this definition">¶</a></dt>
@@ -457,12 +446,12 @@ It is based on <code class="xref py py-func docutils literal"><span class="pre">
 <dl class="class">
 <dt id="windows.debug.MemoryBreakpoint">
 <em class="property">class </em><code class="descclassname">windows.debug.</code><code class="descname">MemoryBreakpoint</code><span class="sig-paren">(</span><em>addr</em>, <em>size=None</em>, <em>events=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/breakpoints.html#MemoryBreakpoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.MemoryBreakpoint" title="Permalink to this definition">¶</a></dt>
-<dd><p>A memory breakpoint (type == <code class="docutils literal"><span class="pre">MEMORY_BREAKPOINT</span></code>)</p>
+<dd><p>A memory breakpoint (type == <code class="docutils literal notranslate"><span class="pre">MEMORY_BREAKPOINT</span></code>)</p>
 <dl class="method">
 <dt id="windows.debug.MemoryBreakpoint.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>addr</em>, <em>size=None</em>, <em>events=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/breakpoints.html#MemoryBreakpoint.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.MemoryBreakpoint.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p><code class="docutils literal"><span class="pre">size</span></code>: the size of the memory breakpoint.</p>
-<p><code class="docutils literal"><span class="pre">events</span></code>: a string representing the events that interest the BP (any of &#8220;RWX&#8221;)</p>
+<dd><p><code class="docutils literal notranslate"><span class="pre">size</span></code>: the size of the memory breakpoint.</p>
+<p><code class="docutils literal notranslate"><span class="pre">events</span></code>: a string representing the events that interest the BP (any of “RWX”)</p>
 </dd></dl>
 
 <dl class="method">
@@ -475,33 +464,39 @@ It is based on <code class="xref py py-func docutils literal"><span class="pre">
 
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p>MemoryBreakpoint are triggered based on the fault address only (as I don&#8217;t know a way to get the size of the read/write causing the fault without embedding a disassembler).</p>
-<p class="last">This means that a MEMBP at address <code class="docutils literal"><span class="pre">X</span></code> won&#8217;t be triggered by a write of size 4 at address <code class="docutils literal"><span class="pre">X</span> <span class="pre">-</span> <span class="pre">1</span></code>. it&#8217;s sad I know.</p>
+<p>MemoryBreakpoint are triggered based on the fault address only (as I don’t know a way to get the size of the read/write causing the fault without embedding a disassembler).</p>
+<p class="last">This means that a MEMBP at address <code class="docutils literal notranslate"><span class="pre">X</span></code> won’t be triggered by a write of size 4 at address <code class="docutils literal notranslate"><span class="pre">X</span> <span class="pre">-</span> <span class="pre">1</span></code>. it’s sad I know.</p>
 </div>
 <dl class="class">
 <dt id="windows.debug.FunctionBP">
 <em class="property">class </em><code class="descclassname">windows.debug.</code><code class="descname">FunctionBP</code><span class="sig-paren">(</span><em>addr=None</em>, <em>target=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/breakpoints.html#FunctionBP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.FunctionBP" title="Permalink to this definition">¶</a></dt>
-<dd><p>A breakpoint that accepts a function from <a class="reference internal" href="winproxy.html#module-windows.winproxy" title="windows.winproxy"><code class="xref py py-mod docutils literal"><span class="pre">windows.winproxy</span></code></a> and able to:</p>
+<dd><p>A breakpoint that accepts a function from <a class="reference internal" href="winproxy.html#module-windows.winproxy" title="windows.winproxy"><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.winproxy</span></code></a> and able to:</p>
 <ul class="simple">
 <li>Extract the arguments of the functions</li>
 <li>Break at the return of the function</li>
 </ul>
 <dl class="method">
+<dt id="windows.debug.FunctionBP.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>addr=None</em>, <em>target=None</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.debug.FunctionBP.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>x.__init__(…) initializes x; see help(type(x)) for signature</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="windows.debug.FunctionBP.break_on_ret">
 <code class="descname">break_on_ret</code><span class="sig-paren">(</span><em>dbg</em>, <em>exception</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.debug.FunctionBP.break_on_ret" title="Permalink to this definition">¶</a></dt>
-<dd><p>Setup a breakpoint at the return address of the function, this breakpoint will call <a class="reference internal" href="#windows.debug.FunctionBP.ret_trigger" title="windows.debug.FunctionBP.ret_trigger"><code class="xref py py-func docutils literal"><span class="pre">ret_trigger()</span></code></a></p>
+<dd><p>Setup a breakpoint at the return address of the function, this breakpoint will call <a class="reference internal" href="#windows.debug.FunctionBP.ret_trigger" title="windows.debug.FunctionBP.ret_trigger"><code class="xref py py-func docutils literal notranslate"><span class="pre">ret_trigger()</span></code></a></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="windows.debug.FunctionBP.extract_arguments">
 <code class="descname">extract_arguments</code><span class="sig-paren">(</span><em>cproc</em>, <em>cthread</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.debug.FunctionBP.extract_arguments" title="Permalink to this definition">¶</a></dt>
-<dd><p>Extracts the functions parameters in an <code class="xref py py-class docutils literal"><span class="pre">OrderedDict</span></code></p>
+<dd><p>Extracts the functions parameters in an <code class="xref py py-class docutils literal notranslate"><span class="pre">OrderedDict</span></code></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="windows.debug.FunctionBP.ret_trigger">
 <code class="descname">ret_trigger</code><span class="sig-paren">(</span><em>dbg</em>, <em>exception</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.debug.FunctionBP.ret_trigger" title="Permalink to this definition">¶</a></dt>
-<dd><p>Called at the return of the function if <a class="reference internal" href="#windows.debug.FunctionBP.break_on_ret" title="windows.debug.FunctionBP.break_on_ret"><code class="xref py py-func docutils literal"><span class="pre">break_on_ret()</span></code></a> was called</p>
+<dd><p>Called at the return of the function if <a class="reference internal" href="#windows.debug.FunctionBP.break_on_ret" title="windows.debug.FunctionBP.break_on_ret"><code class="xref py py-func docutils literal notranslate"><span class="pre">break_on_ret()</span></code></a> was called</p>
 </dd></dl>
 
 <dl class="method">
@@ -523,20 +518,20 @@ It is based on <code class="xref py py-func docutils literal"><span class="pre">
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">7. <code class="docutils literal"><span class="pre">windows.debug</span></code> &#8211; Debugging</a><ul>
-<li><a class="reference internal" href="#debugger">7.1. <code class="docutils literal"><span class="pre">Debugger</span></code></a></li>
-<li><a class="reference internal" href="#localdebugger">7.2. <code class="docutils literal"><span class="pre">LocalDebugger</span></code></a></li>
-<li><a class="reference internal" href="#breakpoint">7.3. <code class="docutils literal"><span class="pre">Breakpoint</span></code></a></li>
+<li><a class="reference internal" href="#">8. <code class="docutils literal notranslate"><span class="pre">windows.debug</span></code> – Debugging</a><ul>
+<li><a class="reference internal" href="#debugger">8.1. <code class="docutils literal notranslate"><span class="pre">Debugger</span></code></a></li>
+<li><a class="reference internal" href="#localdebugger">8.2. <code class="docutils literal notranslate"><span class="pre">LocalDebugger</span></code></a></li>
+<li><a class="reference internal" href="#breakpoint">8.3. <code class="docutils literal notranslate"><span class="pre">Breakpoint</span></code></a></li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="wintrust.html"
-                        title="previous chapter">6. <code class="docutils literal"><span class="pre">windows.wintrust</span></code> &#8211; Checking signature</a></p>
+                        title="previous chapter">7. <code class="docutils literal notranslate"><span class="pre">windows.wintrust</span></code> – Checking signature</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="com.html"
-                        title="next chapter">8. <code class="docutils literal"><span class="pre">windows.com</span></code> - Component Object Model</a></p>
+                        title="next chapter">9. <code class="docutils literal notranslate"><span class="pre">windows.com</span></code> - Component Object Model</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -546,12 +541,14 @@ It is based on <code class="xref py py-func docutils literal"><span class="pre">
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -568,17 +565,17 @@ It is based on <code class="xref py py-func docutils literal"><span class="pre">
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="com.html" title="8. windows.com - Component Object Model"
+          <a href="com.html" title="9. windows.com - Component Object Model"
              >next</a> |</li>
         <li class="right" >
-          <a href="wintrust.html" title="6. windows.wintrust – Checking signature"
+          <a href="wintrust.html" title="7. windows.wintrust – Checking signature"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.3 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
     </div>
   </body>
 </html>

@@ -1,4 +1,3 @@
-
 .. _sample_of_code:
 
 Samples of code
@@ -14,20 +13,10 @@ Processes
 
 .. literalinclude:: ..\..\samples\process\current_process.py
 
-Output::
+Output
 
-    (cmd λ) python32.exe process\current_process.py
-    current process is <windows.winobject.process.CurrentProcess object at 0x030A2590>
-    current process is a <32> bits process
-    current process is a SysWow64 process ? <True>
-    current process pid <8264>  and ppid <4100>
-    Here are the current process threads: <[<WinThread 13540 owner "python.exe" at 0x32d3210>]>
-    Let's execute some native code ! (0x41 + 1)
-    Native code returned <0x42>
-    Allocating memory in current process
-    Allocated memory is at <0xd60000>
-    Writing 'SOME STUFF' in allocation memory
-    Reading memory : <'SOME STUFF\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'>
+.. literalinclude:: samples_output\process_current_process.txt
+
 
 .. _sample_remote_process:
 
@@ -36,38 +25,11 @@ Remote process : :class:`WinProcess`
 
 .. literalinclude:: ..\..\samples\process\remote_process.py
 
-Output::
 
-    (cmd λ) python.exe process\remote_process.py
-    Creating a notepad
-    Looking for notepads in the processes
-    They are currently <1> notepads running on the system
-    Let's play with our notepad: <<WinProcess "notepad.exe" pid 2044 at 0x40ce850>>
-    Our notepad pid is 2044
-    Our notepad is a <32> bits process
-    Our notepad is a SysWow64 process ? <True>
-    Our notepad have threads ! <[<WinThread 7700 owner "notepad.exe" at 0x41faee0>, <WinThread 7264 owner "notepad.exe" at 0x41faf30>, ...]>
-    Exploring our notepad PEB ! <windows.winobject.process.RemotePEB object at 0x03F6CDA0>
-    Command line is <RemoteWinUnicodeString ""C:\windows\system32\notepad.exe"" at 0x3f6cf80>
-    Here are 3 loaded modules: [<RemoteLoadedModule "notepad.exe" at 0x3f6cf30>, <RemoteLoadedModule "ntdll.dll" at 0x3f6ce40>, <RemoteLoadedModule "kernel32.dll" at 0x3f6cee0>]
-    Allocating memory in our notepad
-    Allocated memory is at <0x6f80000>
-    Writing 'SOME STUFF' in allocated memory
-    Reading allocated memory : <'SOME STUFF\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'>
-    Execution some native code in our notepad (write 0x424242 at allocated address + return 0x1337)
-    Executing native code !
-    Return code = 0x1337L
-    Reading allocated memory : <'BBBB STUFF\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'>
-    Executing python code !
-    Reading allocated memory : <'HELLO FROM notepad\x00\x00'>
-    Trying to import in remote module 'FAKE_MODULE'
-    Remote ERROR !
-    Traceback (most recent call last):
-    File "<string>", line 3, in <module>
-    File "<string>", line 2, in func
-    ImportError: No module named FAKE_MODULE
+Output
 
-    That's all ! killing the notepad
+.. literalinclude:: samples_output\process_remote_process.txt
+
 
 
 .. _sample_peb_exploration:
@@ -77,31 +39,21 @@ Output::
 
 .. literalinclude:: ..\..\samples\process\peb.py
 
-Output::
+Output
 
-    (cmd λ) python.exe  process\peb.py
-    Exploring the current process PEB
-    PEB is <<windows.winobject.PEB object at 0x02649B70>>
-    Commandline object is <WinUnicodeString "python.exe   peb.py " at 0x2649c60>
-    Commandline string is u'python.exe   peb.py '
-    Imagepath  <WinUnicodeString "C:\Python27\python.exe" at 0x2649d50>
-    Printing some modules: <LoadedModule "python.exe" at 0x272a030>
-    <LoadedModule "ntdll.dll" at 0x272a080>
-    <LoadedModule "kernel32.dll" at 0x272acb0>
-    <LoadedModule "kernelbase.dll" at 0x272ad00>
-    <LoadedModule "python27.dll" at 0x272ad50>
-    <LoadedModule "msvcr90.dll" at 0x272ada0>
-    === K32  ===
-    Looking for kernel32.dll
-    Kernel32 module: <LoadedModule "kernel32.dll" at 0x272acb0>
-    Module name = <kernel32.dll> | Fullname = <C:\Windows\SYSTEM32\KERNEL32.DLL>
-    Kernel32 is loaded at address 0x774c0000
-    === K32 PE ===
-    PE Representation of k32: <windows.pe_parse.PEFile object at 0x0272D350>
-    Here are some exports {0: 2001566688L, u'CreateFileA': 2001635616L, 42: 2001647872L, u'VirtualAlloc': 2001570704L}
-    Import DLL dependancies are (without api-*): [u'ntdll.dll', u'kernelbase.dll']
-    IAT Entry for ntdll!NtCreateFile = <IATEntry "NtCreateFile" ordinal 253> | addr = 0x77541128L
-    Sections: [<PESection ".text">, <PESection ".rdata">, <PESection ".data">, <PESection ".rsrc">, <PESection ".reloc">]
+.. literalinclude:: samples_output\process_peb.txt
+
+.. _sample_apisetmap:
+
+ApiSetMap
+'''''''''
+
+.. literalinclude:: ..\..\samples\process\apisetmap.py
+
+Output
+
+.. literalinclude:: samples_output\process_apisetmap.txt
+
 
 .. _sample_iat_hook:
 
@@ -110,23 +62,10 @@ IAT hooking
 
 .. literalinclude:: ..\..\samples\process\iat_hook.py
 
-Output::
+Output
 
-    (cmd λ) python process\iat_hook.py
-    Asking for <MY_SECRET_KEY>
-    <in hook> Hook called | hKey = 0x12d687 | lpSubKey = <MY_SECRET_KEY>
-    <in hook> Secret key asked, returning magic handle 0x12345678
-    Result = 0x12345678
+.. literalinclude:: samples_output\process_iat_hook.txt
 
-    Asking for <MY_FAIL_KEY>
-    <in hook> Hook called | hKey = 0x12d687 | lpSubKey = <MY_FAIL_KEY>
-    <in hook> Asked for a failing key: returning 0x2a
-    WindowsError(42, 'Windows Error 0x2A')
-
-    Asking for <HKEY_CURRENT_USER/Software>
-    <in hook> Hook called | hKey = 0x80000001L | lpSubKey = <Software>
-    <in hook> Non-secret key : calling normal function
-    Result = 0x108
 
 .. _sample_system:
 
@@ -136,48 +75,9 @@ Output::
 
 .. literalinclude:: ..\..\samples\system.py
 
-Output::
+Output
 
-    (cmd λ) python system.py
-    Basic system infos:
-        version = (6, 3)
-        bitness = 64
-        computer_name = HAKRIL-PC
-        product_type = VER_NT_WORKSTATION(0x1L)
-        version_name = Windows 8.1
-
-    There is 117 processes
-    There is 1246 threads
-
-    Dumping first logical drive:
-        <LogicalDrive "C:\" (DRIVE_FIXED)>
-            name = C:\
-            type = DRIVE_FIXED(0x3L)
-            path = \Device\HarddiskVolume2
-
-    Dumping first service:
-        <ServiceA "ACPI">
-            name = ACPI
-            description = Microsoft ACPI Driver
-            status = ServiceStatus(type=SERVICE_KERNEL_DRIVER(0x1L), state=SERVICE_RUNNING(0x4L), control_accepted=1L, flags=0L)
-            process = None
-
-    Finding a service in a user process:
-        <ServiceA "Appinfo">
-            name = Appinfo
-            description = Application Information
-            status = ServiceStatus(type=SERVICE_WIN32_SHARE_PROCESS(0x20L), state=SERVICE_RUNNING(0x4L), control_accepted=129L, flags=0L)
-            process = <WinProcess "svchost.exe" pid 988 at 0x2e64750>
-
-    Enumerating handles:
-        There are 40664 handles:
-        First handle is: <Handle value=<0x4> in process pid=4>
-        Enumerating handles of the current process:
-            There are 255 handles for this process
-        Looking for a File handle:
-            Handle is <Handle value=<0x4> in process pid=14340>
-            Name is <\Device\ConDrv>
-
+.. literalinclude:: samples_output\system.txt
 
 
 .. _sample_network_exploration:
@@ -187,24 +87,9 @@ Output::
 
 .. literalinclude:: ..\..\samples\network\network.py
 
-Output::
+Output-New
 
-    (cmd λ) python.exe  network\network.py
-    Working on ipv4
-    == Listening ==
-    Some listening connections: [<TCP IPV4 Listening socket on 0.0.0.0:80>, <TCP IPV4 Listening socket on 0.0.0.0:135>, <TCP IPV4 Listening socket on 0.0.0.0:443>]
-    Listening ports are : [80, 135, 443, 445, 902, 912, 5357, 49152, 49153, 49154, 49155, 49157, 49159, 8307, 25340, 139, 139]
-    == Established ==
-    Some established connections: [<TCP IPV4 Connection 127.0.0.1:25340 -> 127.0.0.1:49472>, <TCP IPV4 Connection 127.0.0.1:49173 -> 127.0.0.1:49174>, <TCP IPV4 Connection 127.0.0.1:49174 -> 127.0.0.1:49173>]
-    == connection to localhost:80 ==
-    Our connection is [<TCP IPV4 Connection 127.0.0.1:49616 -> 127.0.0.1:80>]
-    Sending YOP
-    Closing socket
-    Sending LAIT
-    Traceback (most recent call last):
-    File ".\network.py", line 45, in <module>
-        s.send("LAIT")
-    socket.error: [Errno 10054] An existing connection was forcibly closed by the remote host
+.. literalinclude:: samples_output\network_network.txt
 
 
 .. _sample_registry:
@@ -214,36 +99,9 @@ Output::
 
 .. literalinclude:: ..\..\samples\registry\registry.py
 
-Output::
+Output
 
-    (cmd λ) python.exe registry\registry.py
-    Registry is <<windows.registry.Registry object at 0x02941290>>
-    HKEY_CURRENT_USER is <<PyHKey "HKEY_CURRENT_USER">>
-    HKEY_CURRENT_USER subkeys names are:
-    ['AppEvents',
-    'AppXBackupContentType',
-    'Console',
-    'Control Panel',
-    'Environment',
-    'EUDC',
-    'Identities',
-    'Keyboard Layout',
-    'Network',
-    'Printers',
-    'Software',
-    'System',
-    'Volatile Environment']
-    Opening 'Software' in HKEY_CURRENT_USER: <PyHKey "HKEY_CURRENT_USER\Software">
-    We can also open it in one access: <PyHKey "HKEY_CURRENT_USER\Sofware">
-    Looking at CurrentVersion
-    Key is <PyHKey "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion">
-    values are:
-    [KeyValue(name='SoftwareType', value=u'System', type=1),
-    KeyValue(name='RegisteredOwner', value=u'hakril', type=1),
-    KeyValue(name='InstallDate', value=0, type=4),
-    ...
-    KeyValue(name='PathName', value=u'C:\\Windows', type=1)]
-    registered owner = <KeyValue(name='RegisteredOwner', value=u'hakril', type=1)>
+.. literalinclude:: samples_output\registry_registry.txt
 
 
 .. _sample_wintrust:
@@ -253,23 +111,10 @@ Output::
 
 .. literalinclude:: ..\..\samples\crypto\wintrust.py
 
-Output::
+Output
 
-    (cmd λ) python crypto\wintrust.py
-    Checking signature of <C:\windows\system32\ntdll.dll>
-    is_signed: <True>
-    check_signature: <0>
-    full_signature_information:
-        * signed <True>
-        * catalog <C:\Windows\system32\CatRoot\{F750E6C3-38EE-11D1-85E5-00C04FC295EE}\Package_35_for_KB3128650~31bf3856ad364e35~amd64~~6.3.1.2.cat>
-        * catalogsigned <True>
-        * additionalinfo <0>
-    Checking signature of some loaded DLL
-    <c:\python27\python.exe> : False (TRUST_E_NOSIGNATURE(0x800b0100L))
-    <c:\windows\system32\ntdll.dll> : True
-    <c:\windows\system32\kernel32.dll> : True
-    <c:\windows\system32\kernelbase.dll> : True
-    <c:\windows\system32\python27.dll> : False (TRUST_E_NOSIGNATURE(0x800b0100L))
+.. literalinclude:: samples_output\crypto_wintrust.txt
+
 
 .. _sample_vectoredexception:
 
@@ -281,27 +126,10 @@ In local process
 
 .. literalinclude:: ..\..\samples\process\veh_segv.py
 
-Output::
+Output
 
-    (cmd λ) python.exe process\veh_segv.py
-    Protected page is at <0x1db0000>
-    Setting page protection to <PAGE_NOACCESS>
+.. literalinclude:: samples_output\process_veh_segv.txt
 
-    ==Entry of VEH handler==
-    Instr at 0x1d1ab574 accessed to addr 0x1db0000
-    Resetting page protection to <PAGE_READWRITE>
-    ==Entry of VEH handler==
-    Exception of type EXCEPTION_SINGLE_STEP(0x80000004L)
-    Resetting page protection to <PAGE_NOACCESS>
-    Value 1 read
-
-    ==Entry of VEH handler==
-    Instr at 0x1d1ab574 accessed to addr 0x1db0010
-    Resetting page protection to <PAGE_READWRITE>
-    ==Entry of VEH handler==
-    Exception of type EXCEPTION_SINGLE_STEP(0x80000004L)
-    Resetting page protection to <PAGE_NOACCESS>
-    Value 2 read
 
 
 In remote process
@@ -347,25 +175,11 @@ Debugging
 
 .. literalinclude:: ..\..\samples\debug\debugger_print_LdrLoaddll.py
 
-Ouput::
 
-    (cmd λ) python.exe debug\debugger_print_LdrLoaddll.py
-    Loading <KERNEL32.DLL>
-    Got exception EXCEPTION_BREAKPOINT(0x80000003L) at 0x77a73bad
-    Loading <C:\Windows\system32\IMM32.DLL>
-    Loading <C:\Windows\system32\uxtheme.dll>
-    Loading <C:\Windows\system32\uxtheme.dll>
-    Loading <C:\Windows\system32\uxtheme.dll>
-    Loading <C:\Windows\system32\uxtheme.dll>
-    Loading <kernel32.dll>
-    Loading <C:\Windows\WinSxS\x86_microsoft.windows.gdiplus_6595b64144ccf1df_1.1.9600.17415_none_dad8722c5bcc2d8f\gdiplus.dll>
-    Loading <comctl32.dll>
-    Loading <comctl32.dll>
-    Loading <comctl32.dll>
-    Loading <C:\Windows\system32\shell32.dll>
-    Loading <C:\Windows\SYSTEM32\WINMM.dll>
-    Loading <C:\Windows\system32\ole32.dll>
-    Ask to load <ole32.dll>: exiting process
+Output
+
+.. literalinclude:: samples_output\debug_debugger_print_LdrLoaddll.txt
+
 
 
 Single stepping
@@ -373,19 +187,9 @@ Single stepping
 
 .. literalinclude:: ..\..\samples\debug\debugger_membp_singlestep.py
 
-Ouput::
+Output
 
-    (cmd λ) python.exe debug\debugger_membp_singlestep.py
-    Got exception EXCEPTION_BREAKPOINT(0x80000003L) at 0x77ae3c7d
-    Instruction at <0x8d0006> wrote at <0x8e0000>
-    Got single_step EXCEPTION_SINGLE_STEP(0x80000004L) at 0x8d000c
-    Got single_step EXCEPTION_SINGLE_STEP(0x80000004L) at 0x8d0011
-    Instruction at <0x8d0011> wrote at <0x8e0004>
-    Got single_step EXCEPTION_SINGLE_STEP(0x80000004L) at 0x8d0017
-    Got single_step EXCEPTION_SINGLE_STEP(0x80000004L) at 0x8d001c
-    Got single_step EXCEPTION_SINGLE_STEP(0x80000004L) at 0x8d0022
-    Got single_step EXCEPTION_SINGLE_STEP(0x80000004L) at 0x8d0023
-    No more single step: exiting
+.. literalinclude:: samples_output\debug_debugger_membp_singlestep.txt
 
 
 :class:`windows.debug.FunctionBP`
@@ -393,19 +197,10 @@ Ouput::
 
 .. literalinclude:: ..\..\samples\debug\debug_functionbp.py
 
-Ouput::
+Output
 
-    (cmd λ) python.exe debug\debug_functionbp.py
-    NtCreateFile of <\??\C:\Windows\syswow64\en-US\calc.exe.mui>: handle = 0xac
-    Handle manually found! typename=<File>, name=<\Device\HarddiskVolume2\Windows\SysWOW64\en-US\calc.exe.mui>
+.. literalinclude:: samples_output\debug_debug_functionbp.txt
 
-    NtCreateFile of <\Device\DeviceApi\CMApi>: handle = 0x108
-    Handle manually found! typename=<File>, name=<\Device\DeviceApi>
-
-    NtCreateFile of <\??\C:\Windows\Fonts\staticcache.dat>: handle = 0x154
-    Handle manually found! typename=<File>, name=<\Device\HarddiskVolume2\Windows\Fonts\StaticCache.dat>
-
-    Exiting process
 
 .. _sample_debugger_attach:
 
@@ -414,25 +209,9 @@ Ouput::
 
 .. literalinclude:: ..\..\samples\debug\attach.py
 
-Ouput::
+Output
 
-    (cmd λ) python.exe debug\attach.py
-    Finding process with pid <11392>
-    Target is <WinProcess "notepad.exe" pid 11392 at 0x471a750>
-    Debugger attached: <windows.debug.debugger.Debugger object at 0x04707EF0>
-
-    NtCreateFile of <\??\C:\Windows\Fonts\staticcache.dat>: handle = 0x288
-    Handle manually found! typename=<File>, name=<\Device\HarddiskVolume4\Windows\Fonts\StaticCache.dat>
-
-    NtCreateFile of <\??\C:\WINDOWS\Registration\R000000000015.clb>: handle = 0x320
-    Handle manually found! typename=<File>, name=<\Device\HarddiskVolume4\Windows\Registration\R000000000015.clb>
-
-    NtCreateFile of <\??\C:\WINDOWS\Globalization\Sorting\sortdefault.nls>: handle = 0x334
-    Handle manually found! typename=<File>, name=<\Device\HarddiskVolume4\Windows\Globalization\Sorting\SortDefault.nls>
-
-    Exiting process
-
-
+.. literalinclude:: samples_output\debug_attach.txt
 
 
 
@@ -442,90 +221,9 @@ Native code tester
 .. literalinclude:: ..\..\samples\test_code.py
 
 
-Ouput::
+Ouput
 
-    (cmd λ) python.exe test_code.py "mov eax, 0x42424242" "eax=0x11223344"
-    Testing x86 code
-    Startup context is:
-    Eip -> 0x3f0000L
-    Esp -> 0x3bfae4L
-    Eax -> 0x11223344L
-    Ebx -> 0x5a6000L
-    Ecx -> 0x0L
-    Edx -> 0x0L
-    Ebp -> 0x0L
-    Edi -> 0x0L
-    Esi -> 0x0L
-    EFlags -> 0x202L
-    EEflags(0x202L:IF)
-    ==Post-exec context==
-    Eip -> 0x3f0007L
-    Esp -> 0x3bfae4L
-    Eax -> 0x42424242L
-    Ebx -> 0x5a6000L
-    Ecx -> 0x0L
-    Edx -> 0x0L
-    Ebp -> 0x0L
-    Edi -> 0x0L
-    Esi -> 0x0L
-    EFlags -> 0x202L
-    EEflags(0x202L:IF)
-    <Normal terminaison>
-    ==DIFF==
-    Eip: 0x3f0000 -> 0x3f0007 (+0x7)
-    Eax: 0x11223344 -> 0x42424242 (+0x31200efe)
-
-
-    (cmd λ) python64 test_code.py --x64 "mov r15, 0x11223344; push r14; call r15" "rcx=1; r14=0x4242424243434343"
-    Testing x64 code
-    Startup context is:
-    Rip -> 0x205a1d60000L
-    Rsp -> 0xe24a88fa88L
-    Rax -> 0x0L
-    Rbx -> 0x0L
-    Rcx -> 0x1L
-    Rdx -> 0xe24aaf9000L
-    Rbp -> 0x0L
-    Rdi -> 0x0L
-    Rsi -> 0x0L
-    R8 -> 0x0L
-    R9 -> 0x0L
-    R10 -> 0x0L
-    R11 -> 0x0L
-    R12 -> 0x0L
-    R13 -> 0x0L
-    R14 -> 0x4242424243434343L
-    R15 -> 0x0L
-    EFlags -> 0x200L
-    EEflags(0x200L:IF)
-    ==Post-exec context==
-    Rip -> 0x11223344L
-    Rsp -> 0xe24a88fa78L
-    Rax -> 0x0L
-    Rbx -> 0x0L
-    Rcx -> 0x1L
-    Rdx -> 0xe24aaf9000L
-    Rbp -> 0x0L
-    Rdi -> 0x0L
-    Rsi -> 0x0L
-    R8 -> 0x0L
-    R9 -> 0x0L
-    R10 -> 0x0L
-    R11 -> 0x0L
-    R12 -> 0x0L
-    R13 -> 0x0L
-    R14 -> 0x4242424243434343L
-    R15 -> 0x11223344L
-    EFlags -> 0x10202L
-    EEflags(0x10202L:IF|RF)
-    <EXCEPTION_ACCESS_VIOLATION(0xc0000005L)> at <0x11223344>
-    ==DIFF==
-    Rip: 0x205a1d60000 -> 0x11223344 (-0x20590b3ccbc)
-    Rsp: 0xe24a88fa88 -> 0xe24a88fa78 (-0x10)
-    R15: 0x0 -> 0x11223344 (+0x11223344)
-    EFlags: 0x200 -> 0x10202 (+0x10002)
-    Negative Stack: dumping:
-    E24A88FA88 0C 00 D6 A1 05 02 00 00  43 43 43 43 42 42 42 42 ........CCCCBBBB
+.. literalinclude:: samples_output\test_code.txt
 
 
 .. _sample_local_debugger:
@@ -539,22 +237,16 @@ In current process
 
 .. literalinclude:: ..\..\samples\debug\local_debugger.py
 
-Ouput::
+Output
 
-    (cmd λ) python.exe debug\local_debugger.py
-    Code addr = 0xcf0002
-    GOT AN HXBP at 0xcf0002
-    EXCEPTION !!!! Got a EXCEPTION_SINGLE_STEP(0x80000004L) at 0xcf0003
-    EXCEPTION !!!! Got a EXCEPTION_SINGLE_STEP(0x80000004L) at 0xcf0004
-    EXCEPTION !!!! Got a EXCEPTION_SINGLE_STEP(0x80000004L) at 0xcf0005
-    EXCEPTION !!!! Got a EXCEPTION_SINGLE_STEP(0x80000004L) at 0x770d7c04
-    Done!
+.. literalinclude:: samples_output\debug_local_debugger.txt
 
 
 In remote process
 ~~~~~~~~~~~~~~~~~
 
 .. literalinclude:: ..\..\samples\debug\local_debugger_remote_process.py
+
 
 Ouput::
 
@@ -590,26 +282,10 @@ WMI requests
 
 .. literalinclude:: ..\..\samples\wmi\wmi_request.py
 
+Output
 
-Ouput::
+.. literalinclude:: samples_output\wmi_wmi_request.txt
 
-    (cmd λ) python wmi\wmi_request.py
-    WMI requester is <windows.winobject.wmi.WmiRequester object at 0x02B37EF0>
-    Selecting * from 'Win32_Process'
-    They are <92> processes
-    Looking for ourself via pid
-    Some info about our process:
-        * Name -> python.exe
-        * ProcessId -> 7968
-        * OSName -> Microsoft Windows 8.1 Pro|C:\Windows|\Device\Harddisk0\Partition2
-        * UserModeTime -> 2812500
-        * WindowsVersion -> 6.3.9600
-        * CommandLine -> python.exe  .\samples\wmi_request.py
-    <Select Caption,FileSystem,FreeSpace from Win32_LogicalDisk>:
-        * {'Caption': u'C:', 'FreeSpace': u'43991547904', 'FileSystem': u'NTFS'}
-        * {'Caption': u'E:', 'FreeSpace': u'82776027136', 'FileSystem': u'NTFS'}
-        * {'Caption': u'F:', 'FreeSpace': u'5711265792', 'FileSystem': u'FAT32'}
-        * {'Caption': u'G:', 'FreeSpace': None, 'FileSystem': None}
 
 .. _sample_com_firewall:
 
@@ -618,23 +294,10 @@ using COM: ``INetFwPolicy2``
 
 .. literalinclude:: ..\..\samples\com\com_inetfwpolicy2.py
 
-Output::
+Output
 
-    (cmd λ) python com\com_inetfwpolicy2.py
-    Initialisation of COM
-    Creating INetFwPolicy2 variable
-    <INetFwPolicy2 object at 0x02DC8210> (value = None)
+.. literalinclude:: samples_output\com_com_inetfwpolicy2.txt
 
-    Generating CLSID
-    <IID "E2B3C97F-6AE1-41AC-817A-F6F92166D7DD">
-
-    Creating COM instance
-    <INetFwPolicy2 object at 0x02DC8210> (value = 0x8984848)
-
-    Checking for enabled profiles
-    * NET_FW_PROFILE2_DOMAIN(0x1L) -> True
-    * NET_FW_PROFILE2_PRIVATE(0x2L) -> True
-    * NET_FW_PROFILE2_PUBLIC(0x4L) -> True
 
 
 :mod:`windows.crypto`
@@ -670,7 +333,7 @@ Ouput::
     \xc6\x12x\x1am\xc8\x01t\xac\xa6\xf3#\x02\xd4J \x8eZ\xbb\x10W\xe1 0;\x06\t*\x86H\x86\xf7\r\x01\x07\x010\x14\x06\x08*
     \x86H\x86\xf7\r\x03\x07\x04\x08\x14F\x04\xad\xed9\xed<\x80\x18\x80]6\xccTV\xbc\xb8*\x84QY!~\xb3\n\x1aV\xd4\rf\xd1n:')
 
-    (cmd λ) python crypto\encryption_demo.py decrypt message.crypt mykey.pfx BADPASS
+    (cmd λ) python crypto\encryption_demo.py decrypt decrypt --password BADPASS message.crypt mykey.pfx
     Traceback (most recent call last):
     File "..\samples\encryption_demo.py", line 103, in <module>
         res.func(**res.__dict__)
@@ -686,7 +349,7 @@ Ouput::
         raise Kernel32Error(func_name)
     windows.winproxy.Kernel32Error: PFXImportCertStore: [Error 86] The specified network password is not correct.
 
-    (cmd λ) python crypto\encryption_demo.py decrypt message.crypt mykey.pfx MYPASSWORD
+    (cmd λ) python crypto\encryption_demo.py decrypt --password MYPASSWORD message.crypt mykey.pfx
     Result = <my secret message>
 
 
@@ -697,43 +360,9 @@ Certificate demo
 
 .. literalinclude:: ..\..\samples\crypto\certificate.py
 
+Output
 
-Ouput::
-
-
-    (cmd λ) python crypto\certificate.py
-    Analysing certificate: <CertificateContext "Microsoft Windows" serial="33 00 00 01 06 6e c3 25 c4 31 c9 18 0e 00 00 00 00 01 06">
-        * name: <Microsoft Windows>
-        * issuer: <Microsoft Windows Production PCA 2011>
-        * raw_serial: <[51, 0, 0, 1, 6, 110, 195, 37, 196, 49, 201, 24, 14, 0, 0, 0, 0, 1, 6]>
-        * serial: <33 00 00 01 06 6e c3 25 c4 31 c9 18 0e 00 00 00 00 01 06>
-        * encoded start: <bytearray(b'0\x82\x05\x040\x82\x03\xec\xa0\x03\x02\x01\x02\x02\x133\x00\x00\x01\x06')>
-
-    This certificate has 1 certificate chain(s)
-    Chain 0:
-    <CertificateContext "Microsoft Windows" serial="33 00 00 01 06 6e c3 25 c4 31 c9 18 0e 00 00 00 00 01 06">:
-        * issuer: <Microsoft Windows Production PCA 2011>
-    <CertificateContext "Microsoft Windows Production PCA 2011" serial="61 07 76 56 00 00 00 00 00 08">:
-        * issuer: <Microsoft Root Certificate Authority 2010>
-    <CertificateContext "Microsoft Root Certificate Authority 2010" serial="28 cc 3a 25 bf ba 44 ac 44 9a 9b 58 6b 43 39 aa">:
-        * issuer: <Microsoft Root Certificate Authority 2010>
-
-    Looking for <Microsoft Root Certificate Authority 2010> in trusted certificates
-    matches = [<CertificateContext "Microsoft Root Certificate Authority 2010" serial="28 cc 3a 25 bf ba 44 ac 44 9a 9b 58 6b 43 39 aa">]
-    Found it !
-
-    == PE Analysis ==
-    Target sha1 = <eb90bc0e33f3e62b0eac4afa8bfcf42a5d4e7bbb>
-    Analysing <CryptObject "C:\windows\system32\ntdll.dll" content_type=CERT_QUERY_CONTENT_PKCS7_SIGNED_EMBED(0xaL)>
-    File has 1 signer(s):
-    Signer 0:
-    * Issuer: bytearray(b'0\x81\x841\x0b0\t\x06\x03U\x04\x06\x13\x02US1\x130\x11\x06\x03U\x04\x08\x13\nWashington1\x100\x0e\x06\x03U\x04\x07\x13\x07Redmond1\x1e0\x1c\x06\x03U\x04\n\x13\x15Microsoft Corporation1.0,\x06\x03U\x04\x03\x13%Microsoft Windows Production PCA 2011')
-    * HashAlgorithme: 2.16.840.1.101.3.4.2.1
-    * Certificate: <CertificateContext "Microsoft Windows" serial="33 00 00 01 06 6e c3 25 c4 31 c9 18 0e 00 00 00 00 01 06">
-
-    File embdeds 2 certificate(s):
-    * 0) <CertificateContext "Microsoft Windows" serial="33 00 00 01 06 6e c3 25 c4 31 c9 18 0e 00 00 00 00 01 06">
-    * 1) <CertificateContext "Microsoft Windows Production PCA 2011" serial="61 07 76 56 00 00 00 00 00 08">
+.. literalinclude:: samples_output\crypto_certificate.txt
 
 
 
@@ -747,20 +376,10 @@ simple alpc communication
 
 .. literalinclude:: ..\..\samples\alpc\simple_alpc.py
 
-Ouput::
+Output
 
-    (cmd λ) python alpc\simple_alpc.py
-    [SERV] PORT <\RPC Control\PythonForWindowsPORT> CREATED
-    Client pid = 15044
-    [SERV] Message type = 0x300a
-    [SERV] Received data: <>
-    [SERV] Connection request
-    [CLIENT] Connected: <windows.alpc.AlpcClient object at 0x0377FDB0>
+.. literalinclude:: samples_output\alpc_simple_alpc.txt
 
-    [SERV] Received message: <Hello world !>
-    [SERV] Message type = 0x3001
-    [CLIENT] Response: <REQUEST 'Hello world !' DONE>
-    BYE
 
 .. _sample_advanced_alpc:
 
@@ -770,90 +389,9 @@ advanced alpc communication
 
 .. literalinclude:: ..\..\samples\alpc\advanced_alpc.py
 
+Output
 
-Output::
-
-    (cmd λ) python alpc\advanced_alpc.py
-    server pid = 13000
-    [SERV] PORT <\RPC Control\PythonForWindowsPORT_2> CREATED
-    Client pid = 2100
-    [CLIENT] == Connecting to port ==
-    [SERV] == Message received ==
-    * ALPC connection request: <Connection request client message>
-    [CLIENT] Connected with response: <Connection message response>
-
-    [CLIENT] == Sending a message ==
-    * Sending Message <Complex Message 1>
-    [SERV] == Message received ==
-    * ALPC request: <Complex Message 1>
-    * view_is_valid <False>
-    * security_is_valid <False>
-    * handle_is_valid <False>
-    * context_is_valid <True>
-    * message context attribute:
-        - CTX.PortContext -> 0x11223344
-        - CTX.MessageContext -> None
-        - CTX.Sequence -> 0x1L
-        - CTX.MessageId -> 0x0L
-        - CTX.CallbackId -> 0x0L
-    * message token attribute:
-    - TOKEN.TokenId -> 0x1e4ecaccL
-    - TOKEN.AuthenticationId -> 0x48989L
-    - TOKEN.ModifiedId -> 0x48995L
-    [CLIENT] Server response: <REQUEST 'Complex Message 1' DONE>
-    [CLIENT] RESP Message Valid ATTRS = [ALPC_MESSAGE_CONTEXT_ATTRIBUTE(0x20000000L)]
-
-    [Client] == Sending a message with a handle ==
-    [SERV] == Message received ==
-    * ALPC request: <some message with a file>
-    * view_is_valid <False>
-    * security_is_valid <False>
-    * handle_is_valid <True>
-    * message handle attribute:
-        - HANDLE.Flags -> 0x0L
-        - HANDLE.Handle -> 0x260
-        - HANDLE.ObjectType -> 0x1L
-        - HANDLE.DesiredAccess -> 0x13019fL
-    - File: <open file '<fdopen>', mode 'r' at 0x02D529C0>
-    - content: <Tempfile data <3>
-    * context_is_valid <True>
-    * message context attribute:
-        - CTX.PortContext -> 0x11223344
-        - CTX.MessageContext -> None
-        - CTX.Sequence -> 0x2L
-        - CTX.MessageId -> 0x0L
-        - CTX.CallbackId -> 0x0L
-    * message token attribute:
-    - TOKEN.TokenId -> 0x1e4ecaccL
-    - TOKEN.AuthenticationId -> 0x48989L
-    - TOKEN.ModifiedId -> 0x48995L
-
-    [Client] == Sending a message with a view ==
-    [SERV] == Message received ==
-    * ALPC request: <some message with a view>
-    * view_is_valid <True>
-    * message view attribute:
-        - VIEW.Flags -> 0x0L
-        - VIEW.SectionHandle -> None
-        - VIEW.ViewBase -> 0x2770000
-        - VIEW.ViewSize -> 0x4000
-    * Reading view content: <The content of the view :)>
-    * security_is_valid <False>
-    * handle_is_valid <False>
-    * context_is_valid <True>
-    * message context attribute:
-        - CTX.PortContext -> 0x11223344
-        - CTX.MessageContext -> None
-        - CTX.Sequence -> 0x3L
-        - CTX.MessageId -> 0x0L
-        - CTX.CallbackId -> 0x0L
-    * message token attribute:
-    - TOKEN.TokenId -> 0x1e4ecaccL
-    - TOKEN.AuthenticationId -> 0x48989L
-    - TOKEN.ModifiedId -> 0x48995L
-    BYE
-
-
+.. literalinclude:: samples_output\alpc_advanced_alpc.txt
 
 
 :mod:`windows.rpc`
@@ -891,42 +429,22 @@ Manual ``LsarEnumeratePrivileges``
 
 .. literalinclude:: ..\..\samples\rpc\lsass.py
 
-Output::
+Output
 
-    (cmd λ) python rpc\lsass.py
-    (2, u'SeCreateTokenPrivilege')
-    (3, u'SeAssignPrimaryTokenPrivilege')
-    (4, u'SeLockMemoryPrivilege')
-    (5, u'SeIncreaseQuotaPrivilege')
-    (6, u'SeMachineAccountPrivilege')
-    (7, u'SeTcbPrivilege')
-    (8, u'SeSecurityPrivilege')
-    (9, u'SeTakeOwnershipPrivilege')
-    (10, u'SeLoadDriverPrivilege')
-    (11, u'SeSystemProfilePrivilege')
-    (12, u'SeSystemtimePrivilege')
-    (13, u'SeProfileSingleProcessPrivilege')
-    (14, u'SeIncreaseBasePriorityPrivilege')
-    (15, u'SeCreatePagefilePrivilege')
-    (16, u'SeCreatePermanentPrivilege')
-    (17, u'SeBackupPrivilege')
-    (18, u'SeRestorePrivilege')
-    (19, u'SeShutdownPrivilege')
-    (20, u'SeDebugPrivilege')
-    (21, u'SeAuditPrivilege')
-    (22, u'SeSystemEnvironmentPrivilege')
-    (23, u'SeChangeNotifyPrivilege')
-    (24, u'SeRemoteShutdownPrivilege')
-    (25, u'SeUndockPrivilege')
-    (26, u'SeSyncAgentPrivilege')
-    (27, u'SeEnableDelegationPrivilege')
-    (28, u'SeManageVolumePrivilege')
-    (29, u'SeImpersonatePrivilege')
-    (30, u'SeCreateGlobalPrivilege')
-    (31, u'SeTrustedCredManAccessPrivilege')
-    (32, u'SeRelabelPrivilege')
-    (33, u'SeIncreaseWorkingSetPrivilege')
-    (34, u'SeTimeZonePrivilege')
-    (35, u'SeCreateSymbolicLinkPrivilege')
-    (36, u'SeDelegateSessionUserImpersonatePrivilege')
+.. literalinclude:: samples_output\rpc_lsass.txt
+
+
+.. _sample_pipe:
+
+:mod:`windows.pipe`
+"""""""""""""""""""
+
+Communication with an injected process
+''''''''''''''''''''''''''''''''''''''
+
+.. literalinclude:: ..\..\samples\pipe\child_send_object.py
+
+Output
+
+.. literalinclude:: samples_output\pipe_child_send_object.txt
 

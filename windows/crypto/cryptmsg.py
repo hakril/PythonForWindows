@@ -5,6 +5,9 @@ import windows.generated_def as gdef
 import windows.crypto
 
 class CryptMessage(gdef.HCRYPTMSG):
+    """Represent a PKCS #7 message
+    (see `Low-level Message Functions <https://msdn.microsoft.com/en-us/library/windows/desktop/aa380252(v=vs.85).aspx#low_level_message_functions>`_)
+    """
     MSG_PARAM_KNOW_TYPES = {gdef.CMSG_SIGNER_INFO_PARAM: gdef.CMSG_SIGNER_INFO,
                             gdef.CMSG_SIGNER_COUNT_PARAM: gdef.DWORD,
                             gdef.CMSG_CERT_COUNT_PARAM: gdef.DWORD}
@@ -39,17 +42,17 @@ class CryptMessage(gdef.HCRYPTMSG):
         return self.get_param(gdef.CMSG_CERT_PARAM, index)
 
     def get_cert(self, index=0):
-        """Return embded certificate number ``index``.
+        """Return embded :class:`Certificate` number ``index``.
 
-        note: not all embded certificate are directly used to sign the :class:`CryptObject`.
+        .. note::
 
-        :return: :class:`Certificate`
+            Not all embded certificate are directly used to sign the :class:`CryptObject`.
         """
         return windows.crypto.Certificate.from_buffer(self.get_raw_cert(index))
 
     @property
     def certs(self):
-        "TODO: DOC"
+        """The list of :class:`Certificate` embded in the message"""
         return [self.get_cert(i) for i in range(self.nb_cert)]
 
     # Signers accessors
@@ -71,16 +74,11 @@ class CryptMessage(gdef.HCRYPTMSG):
     def get_signer_data(self, index=0):
         """Returns the signer informations for signer nb ``index``
 
-        :return: :class:`CMSG_SIGNER_INFO`
+        :return: :class:`~windows.generated_def.winstructs.CMSG_SIGNER_INFO`
         """
         return self.get_param(gdef.CMSG_SIGNER_INFO_PARAM, index)
 
     @property
     def signers(self):
+        """The list of :class:`~windows.generated_def.winstructs.CMSG_SIGNER_INFO` embed in the message"""
         return [self.get_signer_data(i) for i in range(self.nb_signer)]
-
-    @property
-    def signers_and_certs(self):
-        return [(self.get_signer_data(i), self.get_signer_certificate(i)) for i in range(self.nb_signer)]
-
-    # def __repr__

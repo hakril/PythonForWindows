@@ -1,33 +1,22 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>windows.crypto.certificate &#8212; PythonForWindows 0.3 documentation</title>
-    
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '0.3',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" href="../../../_static/css/mbasic.css" type="text/css" />
+    <script type="text/javascript" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
-  </head>
-  <body role="document">
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -79,14 +68,15 @@
     <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_QUERY_CONTENT_PFX_AND_LOAD</span>
     <span class="p">]</span>
 
-<span class="n">CRYPT_OBJECT_FORMAT_TYPE_DICT</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">:</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">CRYPT_OBJECT_FORMAT_TYPE</span><span class="p">}</span>
+<span class="n">CRYPT_OBJECT_FORMAT_TYPE_DICT</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span><span class="o">*</span><span class="n">CRYPT_OBJECT_FORMAT_TYPE</span><span class="p">)</span>
 
 <span class="c1">## Move CryptObject to new .py ?</span>
 
 <div class="viewcode-block" id="CryptObject"><a class="viewcode-back" href="../../../crypto.html#windows.crypto.CryptObject">[docs]</a><span class="k">class</span> <span class="nc">CryptObject</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Extract information from an CryptoAPI object.</span>
+<span class="sd">    (see `CryptQueryObject &lt;https://msdn.microsoft.com/en-us/library/windows/desktop/aa380264(v=vs.85).aspx&gt;`_)</span>
 
-<span class="sd">       Current main use is extracting the signers certificates from a PE file.</span>
+<span class="sd">    Current main use is extracting the signers certificates from a PE file.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">MSG_PARAM_KNOW_TYPES</span> <span class="o">=</span> <span class="p">{</span><span class="n">gdef</span><span class="o">.</span><span class="n">CMSG_SIGNER_INFO_PARAM</span><span class="p">:</span> <span class="n">gdef</span><span class="o">.</span><span class="n">CMSG_SIGNER_INFO</span><span class="p">,</span>
                             <span class="n">gdef</span><span class="o">.</span><span class="n">CMSG_SIGNER_COUNT_PARAM</span><span class="p">:</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">,</span>
@@ -99,8 +89,8 @@
         <span class="n">dwEncoding</span>    <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">()</span>
         <span class="n">dwContentType</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">()</span>
         <span class="n">dwFormatType</span>  <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">()</span>
-        <span class="n">hStore</span>        <span class="o">=</span> <span class="n">EHCERTSTORE</span><span class="p">()</span>
-        <span class="n">hMsg</span>          <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">crypto</span><span class="o">.</span><span class="n">cryptmsg</span><span class="o">.</span><span class="n">CryptMessage</span><span class="p">()</span>
+        <span class="n">hStore</span>        <span class="o">=</span> <span class="n">CertificateStore</span><span class="p">()</span>
+        <span class="n">hMsg</span>          <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">crypto</span><span class="o">.</span><span class="n">CryptMessage</span><span class="p">()</span>
 
         <span class="n">winproxy</span><span class="o">.</span><span class="n">CryptQueryObject</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">CERT_QUERY_OBJECT_FILE</span><span class="p">,</span>
             <span class="n">gdef</span><span class="o">.</span><span class="n">LPWSTR</span><span class="p">(</span><span class="n">filename</span><span class="p">),</span>
@@ -116,31 +106,48 @@
             <span class="kc">None</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">cert_store</span> <span class="o">=</span> <span class="n">hStore</span> <span class="k">if</span> <span class="n">hStore</span> <span class="k">else</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">crypt_msg</span> <span class="o">=</span> <span class="n">hMsg</span> <span class="k">if</span> <span class="n">hMsg</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="sd">&quot;&quot;&quot;The :class:`CertificateStore` that includes all of the certificates, CRLs, and CTLs in the object&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">crypt_msg</span> <span class="o">=</span> <span class="n">hMsg</span> <span class="k">if</span> <span class="n">hMsg</span> <span class="k">else</span> <span class="kc">None</span> <span class="c1">#: yolo</span>
+        <span class="sd">&quot;&quot;&quot;The :class:`CryptMessage` for any ``PKCS7`` content in the object&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">encoding</span> <span class="o">=</span> <span class="n">dwEncoding</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">content_type</span> <span class="o">=</span> <span class="n">CRYPT_OBJECT_FORMAT_TYPE_DICT</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">dwContentType</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">dwContentType</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">content_type</span> <span class="o">=</span> <span class="n">CRYPT_OBJECT_FORMAT_TYPE_DICT</span><span class="p">[</span><span class="n">dwContentType</span><span class="o">.</span><span class="n">value</span><span class="p">]</span>
+        <span class="sd">&quot;&quot;&quot;The type of the opened message&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">_signers_and_certs_generator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">crypt_msg</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
         <span class="k">for</span> <span class="n">signer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">crypt_msg</span><span class="o">.</span><span class="n">signers</span><span class="p">:</span>
+            <span class="c1"># We could directly extract the certificates from the &#39;crypt_msg&#39; (I guess)</span>
+            <span class="c1"># But &#39;CryptQueryObject&#39; had the sympathy of already opening a CertificateStore</span>
+            <span class="c1"># for us. So we use it.</span>
+            <span class="c1"># I am open to counter-argument on this methodology.</span>
             <span class="n">cert</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cert_store</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">signer</span><span class="o">.</span><span class="n">Issuer</span><span class="p">,</span> <span class="n">signer</span><span class="o">.</span><span class="n">SerialNumber</span><span class="p">)</span>
             <span class="k">yield</span> <span class="n">signer</span><span class="p">,</span> <span class="n">cert</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">signers_and_certs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The list of signer info and certificates signing the object.</span>
+
+<span class="sd">        :rtype: [(:class:`~windows.generated_def.winstructs.CMSG_SIGNER_INFO`, :class:`Certificate`)]</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            :class:`~windows.generated_def.winstructs.CMSG_SIGNER_INFO` might be changed to a wrapping-subclass.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_signers_and_certs_generator</span><span class="p">())</span>
 
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;&lt;</span><span class="si">{0}</span><span class="s1"> &quot;</span><span class="si">{1}</span><span class="s1">&quot; content_type=</span><span class="si">{2}</span><span class="s1">&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">content_type</span><span class="p">)</span></div>
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="k">return</span> <span class="s1">&#39;&lt;</span><span class="si">{0}</span><span class="s1"> &quot;</span><span class="si">{1}</span><span class="s1">&quot; content_type=</span><span class="si">{2}</span><span class="s1">&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">content_type</span><span class="p">)</span>
 
-<span class="c1"># TODO: rename to CertificateStore ?</span>
+
 <span class="c1"># https://msdn.microsoft.com/en-us/library/windows/desktop/aa382037(v=vs.85).aspx</span>
-<div class="viewcode-block" id="EHCERTSTORE"><a class="viewcode-back" href="../../../crypto.html#windows.crypto.EHCERTSTORE">[docs]</a><span class="k">class</span> <span class="nc">EHCERTSTORE</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">HCERTSTORE</span><span class="p">):</span>
+<div class="viewcode-block" id="CertificateStore"><a class="viewcode-back" href="../../../crypto.html#windows.crypto.CertificateStore">[docs]</a><span class="k">class</span> <span class="nc">CertificateStore</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">HCERTSTORE</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A certificate store&quot;&quot;&quot;</span>
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">certs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The certificates in the store</span>
+        <span class="sd">&quot;&quot;&quot;The list of certificates in the store</span>
 
-<span class="sd">        :type: [:class:`CertificateContext`] -- A list of Certificate</span>
+<span class="sd">        :type: [:class:`Certificate`] -- A list of certificate</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">last</span> <span class="o">=</span> <span class="kc">None</span>
@@ -152,95 +159,95 @@
                     <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
                 <span class="k">raise</span>
             <span class="c1"># Need to duplicate as CertEnumCertificatesInStore will free the context &#39;last&#39;</span>
-            <span class="n">ecert</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">crypto</span><span class="o">.</span><span class="n">CertificateContext</span><span class="p">(</span><span class="n">cert</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">ecert</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">crypto</span><span class="o">.</span><span class="n">Certificate</span><span class="o">.</span><span class="n">from_pointer</span><span class="p">(</span><span class="n">cert</span><span class="p">)</span>
             <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ecert</span><span class="o">.</span><span class="n">duplicate</span><span class="p">())</span>
             <span class="n">last</span> <span class="o">=</span> <span class="n">ecert</span>
         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Out of infinit loop&quot;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="EHCERTSTORE.add_certificate"><a class="viewcode-back" href="../../../crypto.html#windows.crypto.EHCERTSTORE.add_certificate">[docs]</a>    <span class="k">def</span> <span class="nf">add_certificate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">certificate</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Add a certificate to the store&quot;&quot;&quot;</span>
-        <span class="n">winproxy</span><span class="o">.</span><span class="n">CertAddCertificateContextToStore</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">certificate</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_STORE_ADD_NEW</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
+<div class="viewcode-block" id="CertificateStore.add_certificate"><a class="viewcode-back" href="../../../crypto.html#windows.crypto.CertificateStore.add_certificate">[docs]</a>    <span class="k">def</span> <span class="nf">add_certificate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">certificate</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Add a certificate to the store&quot;&quot;&quot;</span></div>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">CertAddCertificateContextToStore</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">certificate</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_STORE_ADD_NEW</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
-    <span class="nd">@classmethod</span>
-<div class="viewcode-block" id="EHCERTSTORE.from_file"><a class="viewcode-back" href="../../../crypto.html#windows.crypto.EHCERTSTORE.from_file">[docs]</a>    <span class="k">def</span> <span class="nf">from_file</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Create a new :class:`EHCERTSTORE` from ``filename``&quot;&quot;&quot;</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CertOpenStore</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">CERT_STORE_PROV_FILENAME_A</span><span class="p">,</span> <span class="n">DEFAULT_ENCODING</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_STORE_OPEN_EXISTING_FLAG</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span></div>
+<div class="viewcode-block" id="CertificateStore.from_file"><a class="viewcode-back" href="../../../crypto.html#windows.crypto.CertificateStore.from_file">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_file</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create a new :class:`CertificateStore` from ``filename``&quot;&quot;&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CertOpenStore</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">CERT_STORE_PROV_FILENAME_A</span><span class="p">,</span> <span class="n">DEFAULT_ENCODING</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_STORE_OPEN_EXISTING_FLAG</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">yolo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_yolo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CertEnumCTLsInStore</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="n">title</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">CryptUIDlgViewContext</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">CERT_STORE_CTL_CONTEXT</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-
         <span class="k">return</span> <span class="n">x</span>
 
 
     <span class="c1"># See https://msdn.microsoft.com/en-us/library/windows/desktop/aa388136(v=vs.85).aspx</span>
-    <span class="nd">@classmethod</span>
-<div class="viewcode-block" id="EHCERTSTORE.from_system_store"><a class="viewcode-back" href="../../../crypto.html#windows.crypto.EHCERTSTORE.from_system_store">[docs]</a>    <span class="k">def</span> <span class="nf">from_system_store</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">store_name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Create a new :class:`EHCERTSTORE` from system store``store_name``</span>
-<span class="sd">        (see https://msdn.microsoft.com/en-us/library/windows/desktop/aa388136(v=vs.85).aspx)</span>
+<div class="viewcode-block" id="CertificateStore.from_system_store"><a class="viewcode-back" href="../../../crypto.html#windows.crypto.CertificateStore.from_system_store">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_system_store</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">store_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create a new :class:`CertificateStore` from system store ``store_name``</span>
+<span class="sd">        (see `System Store Locations &lt;https://msdn.microsoft.com/en-us/library/windows/desktop/aa388136(v=vs.85).aspx&gt;`_)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CertOpenStore</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">CERT_STORE_PROV_SYSTEM_A</span><span class="p">,</span> <span class="n">DEFAULT_ENCODING</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_SYSTEM_STORE_LOCAL_MACHINE</span> <span class="o">|</span> <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_STORE_READONLY_FLAG</span><span class="p">,</span> <span class="n">store_name</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span></div>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CertOpenStore</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">CERT_STORE_PROV_SYSTEM_A</span><span class="p">,</span> <span class="n">DEFAULT_ENCODING</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_SYSTEM_STORE_LOCAL_MACHINE</span> <span class="o">|</span> <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_STORE_READONLY_FLAG</span><span class="p">,</span> <span class="n">store_name</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span>
 
-    <span class="nd">@classmethod</span>
-<div class="viewcode-block" id="EHCERTSTORE.new_in_memory"><a class="viewcode-back" href="../../../crypto.html#windows.crypto.EHCERTSTORE.new_in_memory">[docs]</a>    <span class="k">def</span> <span class="nf">new_in_memory</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Create a new temporary :class:`EHCERTSTORE` in memory&quot;&quot;&quot;</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CertOpenStore</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">CERT_STORE_PROV_MEMORY</span><span class="p">,</span> <span class="n">DEFAULT_ENCODING</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span></div>
+<div class="viewcode-block" id="CertificateStore.new_in_memory"><a class="viewcode-back" href="../../../crypto.html#windows.crypto.CertificateStore.new_in_memory">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">new_in_memory</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create a new temporary :class:`CertificateStore` in memory&quot;&quot;&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CertOpenStore</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">CERT_STORE_PROV_MEMORY</span><span class="p">,</span> <span class="n">DEFAULT_ENCODING</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span>
 
 
     <span class="c1"># TODO: a more complete search API ?</span>
-<div class="viewcode-block" id="EHCERTSTORE.find"><a class="viewcode-back" href="../../../crypto.html#windows.crypto.EHCERTSTORE.find">[docs]</a>    <span class="k">def</span> <span class="nf">find</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">issuer</span><span class="p">,</span> <span class="n">serialnumber</span><span class="p">):</span>
+<div class="viewcode-block" id="CertificateStore.find"><a class="viewcode-back" href="../../../crypto.html#windows.crypto.CertificateStore.find">[docs]</a>    <span class="k">def</span> <span class="nf">find</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">issuer</span><span class="p">,</span> <span class="n">serialnumber</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the certificate that match `issuer` and `serialnumber`</span>
 
-<span class="sd">        :return: :class:`CertificateContext`</span>
+<span class="sd">        :return: :class:`Certificate`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># data = self.get_signer_data(index)</span>
         <span class="n">cert_info</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_INFO</span><span class="p">()</span>
         <span class="n">cert_info</span><span class="o">.</span><span class="n">Issuer</span> <span class="o">=</span> <span class="n">issuer</span>
         <span class="n">cert_info</span><span class="o">.</span><span class="n">SerialNumber</span> <span class="o">=</span> <span class="n">serialnumber</span>
-        <span class="n">rawcertcontext</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CertFindCertificateInStore</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">DEFAULT_ENCODING</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_FIND_SUBJECT_CERT</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">cert_info</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
-        <span class="c1"># return rawcertcontext</span>
-        <span class="k">return</span> <span class="n">CertificateContext</span><span class="p">(</span><span class="n">rawcertcontext</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span></div></div>
+        <span class="n">rawcertcontext</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CertFindCertificateInStore</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">DEFAULT_ENCODING</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_FIND_SUBJECT_CERT</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">cert_info</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="n">Certificate</span><span class="o">.</span><span class="n">from_pointer</span><span class="p">(</span><span class="n">rawcertcontext</span><span class="p">)</span>
 
 
 <span class="c1"># PKCS12_NO_PERSIST_KEY -&gt; do not save it in a key container on disk</span>
 <span class="c1"># Without it, a key container is created at &#39;C:\Users\USERNAME\AppData\Roaming\Microsoft\Crypto\RSA\S-1-5-21-3241049326-165485355-1070449050-1001&#39;</span>
-<div class="viewcode-block" id="import_pfx"><a class="viewcode-back" href="../../../crypto.html#windows.crypto.import_pfx">[docs]</a><span class="k">def</span> <span class="nf">import_pfx</span><span class="p">(</span><span class="n">pfx</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">CRYPT_USER_KEYSET</span> <span class="o">|</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PKCS12_NO_PERSIST_KEY</span><span class="p">):</span>
+<span class="c1"># More about this:</span>
+<span class="c1"># If you use &#39;PKCS12_NO_PERSIST_KEY&#39; the key are indeed NOT STORED but there is a problem</span>
+<span class="c1"># If you use an algo like &#39;szOID_NIST_AES256_CBC&#39; the function &#39;CryptDecryptMessage&#39; won&#39;t be able to decrypt the message</span>
+<span class="c1"># Unless you also specify the &#39;PKCS12_ALWAYS_CNG_KSP&#39; flags.</span>
+
+<span class="c1"># My guess: somewhere &#39;CryptDecryptMessage&#39; ask for each (CNG_KSP | CSP ?) to try to decrypt with the keys</span>
+<span class="c1"># BUT: as we DID NOT EXPORT the keys, they are not able to get the key from memory and expect them on disk.</span>
+<span class="c1"># By forcing PKCS12_ALWAYS_CNG_KSP we remove this as the key are directly linked to the correct CNG_KSP in the CertStore</span>
+<span class="c1"># Look like it&#39;s based on this part of the PFX:</span>
+<span class="c1"># Microsoft CSP Name: Microsoft Enhanced Cryptographic Provider v1.0</span>
+
+<div class="viewcode-block" id="import_pfx"><a class="viewcode-back" href="../../../crypto.html#windows.crypto.import_pfx">[docs]</a><span class="k">def</span> <span class="nf">import_pfx</span><span class="p">(</span><span class="n">pfx</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">CRYPT_USER_KEYSET</span> <span class="o">|</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PKCS12_NO_PERSIST_KEY</span> <span class="o">|</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PKCS12_ALWAYS_CNG_KSP</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Import the file ``pfx`` with the ``password``.</span>
 
 <span class="sd">    ``default flags = PKCS12_NO_PERSIST_KEY | CRYPT_USER_KEYSET``.</span>
 
 <span class="sd">    ``PKCS12_NO_PERSIST_KEY`` tells ``CryptoAPI`` to NOT save the keys in a on-disk container.</span>
 
-<span class="sd">    :return: :class:`EHCERTSTORE`</span>
+<span class="sd">    :return: :class:`CertificateStore`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pfx</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pfx</span><span class="p">,</span> <span class="p">(</span><span class="n">basestring</span><span class="p">,</span> <span class="nb">bytearray</span><span class="p">)):</span>
         <span class="n">pfx</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">CRYPT_DATA_BLOB</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">pfx</span><span class="p">)</span>
-    <span class="n">cert_store</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">PFXImportCertStore</span><span class="p">(</span><span class="n">pfx</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="n">flags</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">EHCERTSTORE</span><span class="p">(</span><span class="n">cert_store</span><span class="p">)</span></div>
+    <span class="n">cert_store</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">PFXImportCertStore</span><span class="p">(</span><span class="n">pfx</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="n">flags</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">CertificateStore</span><span class="p">(</span><span class="n">cert_store</span><span class="p">)</span>
 
 
-<span class="c1"># Why PCCERT_CONTEXT (pointer type) and not _CERT_CONTEXT ?</span>
-<div class="viewcode-block" id="CertificateContext"><a class="viewcode-back" href="../../../crypto.html#windows.crypto.CertificateContext">[docs]</a><span class="k">class</span> <span class="nc">CertificateContext</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">PCCERT_CONTEXT</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Represent a Certificate.</span>
-
-<span class="sd">       note: It is a pointer ctypes structure (``PCCERT_CONTEXT``)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">_type_</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PCCERT_CONTEXT</span><span class="o">.</span><span class="n">_type_</span> <span class="c1"># Not herited from PCCERT_CONTEXT</span>
-
-
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;&lt;</span><span class="si">{0}</span><span class="s1"> &quot;</span><span class="si">{1}</span><span class="s1">&quot; serial=&quot;</span><span class="si">{2}</span><span class="s1">&quot;&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">serial</span><span class="p">)</span>
+<div class="viewcode-block" id="Certificate"><a class="viewcode-back" href="../../../crypto.html#windows.crypto.Certificate">[docs]</a><span class="k">class</span> <span class="nc">Certificate</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">CERT_CONTEXT</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Represent a Certificate &quot;&quot;&quot;</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">raw_serial</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The raw serial number of the certificate.</span>
 
 <span class="sd">        :type: [:class:`int`]: A list of int ``0 &lt;= x &lt;= 255``&quot;&quot;&quot;</span>
-        <span class="n">serial_number</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">pCertInfo</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">SerialNumber</span>
+        <span class="n">serial_number</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pCertInfo</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">SerialNumber</span>
         <span class="k">return</span> <span class="p">[(</span><span class="n">c</span> <span class="o">&amp;</span> <span class="mh">0xff</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">serial_number</span><span class="o">.</span><span class="n">pbData</span><span class="p">[:</span><span class="n">serial_number</span><span class="o">.</span><span class="n">cbData</span><span class="p">][::</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
 
     <span class="nd">@property</span>
@@ -249,25 +256,46 @@
 
 <span class="sd">        :type: :class:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">serial_number</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">pCertInfo</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">SerialNumber</span>
         <span class="n">serial_bytes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_serial</span>
         <span class="k">return</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:02x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">serial_bytes</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="CertificateContext.get_name"><a class="viewcode-back" href="../../../crypto.html#windows.crypto.CertificateContext.get_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nametype</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">CERT_NAME_SIMPLE_DISPLAY_TYPE</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Retrieve the subject or issuer name of the certificate. See ``CertGetNameStringA``</span>
+<div class="viewcode-block" id="Certificate.get_name"><a class="viewcode-back" href="../../../crypto.html#windows.crypto.Certificate.get_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nametype</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">CERT_NAME_SIMPLE_DISPLAY_TYPE</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Retrieve the subject or issuer name of the certificate.</span>
+<span class="sd">        See `CertGetNameStringA &lt;https://msdn.microsoft.com/en-us/library/windows/desktop/aa376086(v=vs.85).aspx&gt;`_</span>
 
 <span class="sd">        :returns: :class:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">size</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CertGetNameStringA</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nametype</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
         <span class="n">namebuff</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_buffer</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
-        <span class="n">size</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CertGetNameStringA</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nametype</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">namebuff</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">namebuff</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span></div>
+        <span class="n">size</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CertGetNameStringA</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nametype</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">namebuff</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">namebuff</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
     <span class="n">name</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_name</span><span class="p">)</span>
     <span class="sd">&quot;&quot;&quot;The name of the certificate.</span>
 
 <span class="sd">    :type: :class:`str`&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">raw_hash</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+        <span class="n">buffer</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_buffer</span><span class="p">(</span><span class="n">size</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">CryptHashCertificate</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pbCertEncoded</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cbCertEncoded</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">LPBYTE</span><span class="p">),</span> <span class="n">size</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">buffer</span><span class="p">[:</span><span class="n">size</span><span class="o">.</span><span class="n">value</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">thumprint</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The thumprint of the certificate (which is the sha1 of the encoded cert).</span>
+
+<span class="sd">        Example:</span>
+
+<span class="sd">            &gt;&gt;&gt; x</span>
+<span class="sd">            &lt;Certificate &quot;YOLO2&quot; serial=&quot;6f 1d 3e 7d d9 77 59 a9 4c 1c 53 dc 80 db 0c fe&quot;&gt;</span>
+<span class="sd">            &gt;&gt;&gt; x.thumprint</span>
+<span class="sd">            &#39;E2 A2 DB 76 A1 DD 8E 70 0D C6 9F CB 71 CF 29 12 C6 D9 78 97&#39;</span>
+
+<span class="sd">        :type: :class:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:02X}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">bytearray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">raw_hash</span><span class="p">()))</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">issuer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -280,9 +308,9 @@
     <span class="k">def</span> <span class="nf">store</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The certificate store that contains the certificate</span>
 
-<span class="sd">        :type: :class:`EHCERTSTORE`</span>
+<span class="sd">        :type: :class:`CertificateStore`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">EHCERTSTORE</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">hCertStore</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">CertificateStore</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hCertStore</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">get_raw_certificate_chains</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="c1"># Rename to all_chains ?</span>
         <span class="n">chain_context</span> <span class="o">=</span> <span class="n">EPCCERT_CHAIN_CONTEXT</span><span class="p">()</span>
@@ -299,16 +327,18 @@
         <span class="n">chain_para</span><span class="o">.</span><span class="n">cbSize</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">chain_para</span><span class="p">)</span>
         <span class="n">chain_para</span><span class="o">.</span><span class="n">RequestedUsage</span> <span class="o">=</span> <span class="n">cert_usage</span>
 
-        <span class="n">winproxy</span><span class="o">.</span><span class="n">CertGetCertificateChain</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">hCertStore</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">chain_para</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">chain_context</span><span class="p">))</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">CertGetCertificateChain</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hCertStore</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">chain_para</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">chain_context</span><span class="p">))</span>
+        <span class="c1"># Lower chains ?</span>
+        <span class="c1"># winproxy.CertGetCertificateChain(None, self, None, self[0].hCertStore, ctypes.byref(chain_para), 0x80, None, ctypes.byref(chain_context))</span>
         <span class="c1">#return CertficateChain(chain_context)</span>
         <span class="k">return</span> <span class="n">chain_context</span>
 
     <span class="nd">@property</span> <span class="c1"># fixedproperty ?</span>
     <span class="k">def</span> <span class="nf">chains</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The list of chain context available for this certificate. Each elements of this list is a list of ``CertificateContext`` that should</span>
+        <span class="sd">&quot;&quot;&quot;The list of chain context available for this certificate. Each elements of this list is a list of ``Certificate`` that should</span>
 <span class="sd">        go from the ``self`` certificate to a trusted certificate.</span>
 
-<span class="sd">        :type: [[:class:`CertificateContext`]] -- A list of chain (list) of :class:`CertificateContext`</span>
+<span class="sd">        :type: [[:class:`Certificate`]] -- A list of chain (list) of :class:`Certificate`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">chain_context</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_raw_certificate_chains</span><span class="p">()</span>
         <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
@@ -320,24 +350,67 @@
     <span class="c1"># API Arround CertSelectCertificateChains ?</span>
     <span class="c1"># https://msdn.microsoft.com/en-us/library/windows/desktop/dd433797(v=vs.85).aspx</span>
 
-<div class="viewcode-block" id="CertificateContext.duplicate"><a class="viewcode-back" href="../../../crypto.html#windows.crypto.CertificateContext.duplicate">[docs]</a>    <span class="k">def</span> <span class="nf">duplicate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Duplicate the certificate by incrementing the internal refcount. (see ``CertDuplicateCertificateContext``)</span>
+<div class="viewcode-block" id="Certificate.duplicate"><a class="viewcode-back" href="../../../crypto.html#windows.crypto.Certificate.duplicate">[docs]</a>    <span class="k">def</span> <span class="nf">duplicate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Duplicate the certificate by incrementing the internal refcount. (see `CertDuplicateCertificateContext &lt;https://msdn.microsoft.com/en-us/library/windows/desktop/aa376045(v=vs.85).aspx&gt;`_)</span>
 
 <span class="sd">        note: The object returned is ``self``</span>
 
-<span class="sd">        :return: :class:`CertificateContext`</span>
+<span class="sd">        :return: :class:`Certificate`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">res</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CertDuplicateCertificateContext</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="c1"># Check what the doc says: the pointer returned is actually the PCERT in parameter</span>
         <span class="c1"># Only the refcount is incremented</span>
         <span class="c1"># This postulate allow us to return &#39;self&#39; directly</span>
         <span class="c1"># https://msdn.microsoft.com/en-us/library/windows/desktop/aa376045(v=vs.85).aspx</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PVOID</span><span class="p">)</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PVOID</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;CertDuplicateCertificateContext did not returned the argument (check doc)&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span></div>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">addressof</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">addressof</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;CertDuplicateCertificateContext did not returned the argument (check doc)&quot;</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span>
 
     <span class="k">def</span> <span class="nf">view</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">CryptUIDlgViewContext</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">CERT_STORE_CERTIFICATE_CONTEXT</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">CryptUIDlgViewContext</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">CERT_STORE_CERTIFICATE_CONTEXT</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span> <span class="kc">None</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="n">KNOWN_PROPERTIES_VALUES</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_KEY_PROV_HANDLE_PROP_ID</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_KEY_PROV_INFO_PROP_ID</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_SHA1_HASH_PROP_ID</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_MD5_HASH_PROP_ID</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_HASH_PROP_ID</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_KEY_CONTEXT_PROP_ID</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_KEY_SPEC_PROP_ID</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_IE30_RESERVED_PROP_ID</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_PUBKEY_HASH_RESERVED_PROP_ID</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_ENHKEY_USAGE_PROP_ID</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_CTL_USAGE_PROP_ID</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_NEXT_UPDATE_LOCATION_PROP_ID</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_FRIENDLY_NAME_PROP_ID</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_PVK_FILE_PROP_ID</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_DESCRIPTION_PROP_ID</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_ACCESS_STATE_PROP_ID</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_SIGNATURE_HASH_PROP_ID</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_SMART_CARD_DATA_PROP_ID</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_EFS_PROP_ID</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_FORTEZZA_DATA_PROP_ID</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_ARCHIVED_PROP_ID</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_KEY_IDENTIFIER_PROP_ID</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_AUTO_ENROLL_PROP_ID</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_PUBKEY_ALG_PARA_PROP_ID</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_CROSS_CERT_DIST_POINTS_PROP_ID</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_ISSUER_PUBLIC_KEY_MD5_HASH_PROP_ID</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_SUBJECT_PUBLIC_KEY_MD5_HASH_PROP_ID</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_ENROLLMENT_PROP_ID</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_DATE_STAMP_PROP_ID</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_ISSUER_SERIAL_NUMBER_MD5_HASH_PROP_ID</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_SUBJECT_NAME_MD5_HASH_PROP_ID</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_EXTENDED_ERROR_INFO_PROP_ID</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_RENEWAL_PROP_ID</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_ARCHIVED_KEY_HASH_PROP_ID</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_AUTO_ENROLL_RETRY_PROP_ID</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_AIA_URL_RETRIEVED_PROP_ID</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_AUTHORITY_INFO_ACCESS_PROP_ID</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_BACKED_UP_PROP_ID</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_OCSP_RESPONSE_PROP_ID</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_REQUEST_ORIGINATOR_PROP_ID</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_SOURCE_LOCATION_PROP_ID</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">enum_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">prop</span> <span class="o">=</span> <span class="mi">0</span>
@@ -346,10 +419,14 @@
             <span class="n">prop</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CertEnumCertificateContextProperties</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prop</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">prop</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">res</span>
-            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prop</span><span class="p">)</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">KNOWN_PROPERTIES_VALUES</span><span class="p">[</span><span class="n">prop</span><span class="p">])</span>
         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Unreachable code&quot;</span><span class="p">)</span>
 
     <span class="n">properties</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">enum_properties</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;The properties of the certificate</span>
+
+<span class="sd">    :type: [:class:`int` or :class:`~windows.generated_def.Flag`] -- A list of property ID</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1">#def get_property(self):</span>
         <span class="c1"># https://msdn.microsoft.com/en-us/library/windows/desktop/aa376079(v=vs.85).aspx</span>
@@ -362,43 +439,52 @@
         <span class="sd">&quot;&quot;&quot;The encoded certificate.</span>
 
 <span class="sd">        :type: :class:`bytearray`&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">bytearray</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">pbCertEncoded</span><span class="p">[:</span><span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">cbCertEncoded</span><span class="p">])</span>
+        <span class="k">return</span> <span class="nb">bytearray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pbCertEncoded</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">cbCertEncoded</span><span class="p">])</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="s2">&quot;TODO: doc&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">pbCertInfo</span><span class="o">.</span><span class="n">dwVersion</span>
+        <span class="sd">&quot;&quot;&quot;The version number of the certificate</span>
+
+<span class="sd">        :type: :class:`int`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pCertInfo</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">dwVersion</span>
 
 
-    <span class="nd">@classmethod</span>
-<div class="viewcode-block" id="CertificateContext.from_file"><a class="viewcode-back" href="../../../crypto.html#windows.crypto.CertificateContext.from_file">[docs]</a>    <span class="k">def</span> <span class="nf">from_file</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Create a :class:`CertificateContext` from the file ``filename``</span>
+<div class="viewcode-block" id="Certificate.from_file"><a class="viewcode-back" href="../../../crypto.html#windows.crypto.Certificate.from_file">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_file</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create a :class:`Certificate` from the file ``filename``</span>
 
-<span class="sd">        :return: :class:`CertificateContext`</span>
+<span class="sd">        :return: :class:`Certificate`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
             <span class="n">buf</span> <span class="o">=</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_ubyte</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))(</span><span class="o">*</span><span class="nb">bytearray</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
-            <span class="n">res</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">CertCreateCertificateContext</span><span class="p">(</span><span class="n">windows</span><span class="o">.</span><span class="n">crypto</span><span class="o">.</span><span class="n">DEFAULT_ENCODING</span><span class="p">,</span> <span class="n">buf</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
-            <span class="k">return</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span></div>
+            <span class="n">pcert</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">CertCreateCertificateContext</span><span class="p">(</span><span class="n">windows</span><span class="o">.</span><span class="n">crypto</span><span class="o">.</span><span class="n">DEFAULT_ENCODING</span><span class="p">,</span> <span class="n">buf</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))</span></div>
+            <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_pointer</span><span class="p">(</span><span class="n">pcert</span><span class="p">)</span>
 
-    <span class="nd">@classmethod</span>
-<div class="viewcode-block" id="CertificateContext.from_buffer"><a class="viewcode-back" href="../../../crypto.html#windows.crypto.CertificateContext.from_buffer">[docs]</a>    <span class="k">def</span> <span class="nf">from_buffer</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Create a :class:`CertificateContext` from the buffer ``data``</span>
+<div class="viewcode-block" id="Certificate.from_buffer"><a class="viewcode-back" href="../../../crypto.html#windows.crypto.Certificate.from_buffer">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_buffer</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create a :class:`Certificate` from the buffer ``data``</span>
 
-<span class="sd">        :return: :class:`CertificateContext`</span>
+<span class="sd">        :return: :class:`Certificate`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">buf</span> <span class="o">=</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_ubyte</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))(</span><span class="o">*</span><span class="nb">bytearray</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">CertCreateCertificateContext</span><span class="p">(</span><span class="n">windows</span><span class="o">.</span><span class="n">crypto</span><span class="o">.</span><span class="n">DEFAULT_ENCODING</span><span class="p">,</span> <span class="n">buf</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span></div>
+        <span class="n">pcert</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">CertCreateCertificateContext</span><span class="p">(</span><span class="n">windows</span><span class="o">.</span><span class="n">crypto</span><span class="o">.</span><span class="n">DEFAULT_ENCODING</span><span class="p">,</span> <span class="n">buf</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))</span></div>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_pointer</span><span class="p">(</span><span class="n">pcert</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_pointer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ptr</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">ptr</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">Certificate</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+
 
     <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">CertificateContext</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Certificate</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">NotImplemented</span>
-        <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">CertCompareCertificate</span><span class="p">(</span><span class="n">DEFAULT_ENCODING</span><span class="p">,</span> <span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">pCertInfo</span><span class="p">,</span> <span class="n">other</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">pCertInfo</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">CertCompareCertificate</span><span class="p">(</span><span class="n">DEFAULT_ENCODING</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pCertInfo</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">pCertInfo</span><span class="p">)</span>
 
-    <span class="c1"># CertCompareCertificate  ?</span>
-    <span class="c1"># https://msdn.microsoft.com/en-us/library/windows/desktop/aa376027(v=vs.85).aspx</span>
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="k">return</span> <span class="s1">&#39;&lt;</span><span class="si">{0}</span><span class="s1"> &quot;</span><span class="si">{1}</span><span class="s1">&quot; serial=&quot;</span><span class="si">{2}</span><span class="s1">&quot;&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">serial</span><span class="p">)</span>
+
 
 
 <span class="c1"># class CertficateChain(object):</span>
@@ -413,12 +499,19 @@
 
 
 <span class="c1"># Those classes are more of a POC than anything else</span>
+<span class="c1"># Should be the struct itself (like Certificate ?)</span>
 <span class="k">class</span> <span class="nc">EPCCERT_CHAIN_CONTEXT</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">PCCERT_CHAIN_CONTEXT</span><span class="p">):</span>
     <span class="n">_type_</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PCCERT_CHAIN_CONTEXT</span><span class="o">.</span><span class="n">_type_</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">chains</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># if (self[0].cLowerQualityChainContext):</span>
+            <span class="c1"># print(&quot;LOL&quot;)</span>
+            <span class="c1"># import pdb;pdb.set_trace()</span>
+        <span class="c1"># if self[0].cChain &gt; 1:</span>
+            <span class="c1"># print(&quot;HAAAAA&quot;)</span>
+            <span class="c1"># import pdb;pdb.set_trace()</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">cChain</span><span class="p">):</span>
             <span class="n">simple_chain</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">rgpChain</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">EPCCERT_SIMPLE_CHAIN</span><span class="p">)</span>
             <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">simple_chain</span><span class="p">)</span>
@@ -450,12 +543,16 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">cert</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">pCertContext</span><span class="p">,</span> <span class="n">CertificateContext</span><span class="p">)</span>
+        <span class="k">return</span>  <span class="n">Certificate</span><span class="o">.</span><span class="n">from_pointer</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">pCertContext</span><span class="p">)</span>
 
 
 <span class="c1"># Move this in another .py ?</span>
 <div class="viewcode-block" id="CryptContext"><a class="viewcode-back" href="../../../crypto.html#windows.crypto.CryptContext">[docs]</a><span class="k">class</span> <span class="nc">CryptContext</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">HCRYPTPROV</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; A context manager arround ``CryptAcquireContextW`` &amp; ``CryptReleaseContext``&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot; A context manager arround ``CryptAcquireContextW`` &amp; ``CryptReleaseContext``</span>
+
+<span class="sd">    .. note::</span>
+<span class="sd">        see usage in sample :ref:`sample_crypto_encryption` (function ``genkeys``)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">_type_</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">HCRYPTPROV</span><span class="o">.</span><span class="n">_type_</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pszContainer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">pszProvider</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dwProvType</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">dwFlags</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">retrycreate</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -482,8 +579,8 @@
                 <span class="k">raise</span>
         <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CryptAcquireContextW</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pszContainer</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pszProvider</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dwProvType</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dwFlags</span> <span class="o">|</span> <span class="n">gdef</span><span class="o">.</span><span class="n">CRYPT_NEWKEYSET</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">release</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CryptReleaseContext</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span></div>
+    <span class="k">def</span> <span class="nf">release</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CryptReleaseContext</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
 </pre></div>
 
           </div>
@@ -493,12 +590,14 @@
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -520,7 +619,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
     </div>
   </body>
 </html>

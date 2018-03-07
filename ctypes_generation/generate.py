@@ -414,7 +414,7 @@ class StructureDocGenerator(NoTemplatedGenerator):
     STRUCT_NAME_SEPARATOR = "'"
 
     def copy_template(self):
-        self.emitline(".. currentmodule:: windows.generated_def")
+        self.emitline(".. currentmodule:: windows.generated_def.winstructs")
         self.emitline("")
 
     def generate(self):

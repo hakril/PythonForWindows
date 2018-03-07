@@ -75,13 +75,35 @@ PEB
    :members:
    :inherited-members:
 
-.. autoclass:: WinUnicodeString
-
 LoadedModule
 ''''''''''''
 
 .. autoclass:: LoadedModule
 
+
+ApiSetMap
+'''''''''
+
+.. note::
+
+    see sample :ref:`sample_apisetmap`
+
+.. autoclass:: windows.winobject.apisetmap.ApiSetMap
+
+.. note::
+    Currently supported version for the ApiSetMap are 2/4/6
+
+
+
+.. autoclass:: windows.winobject.apisetmap.ApiSetMapVersion2
+    :no-inherited-members:
+    :members: version
+.. autoclass:: windows.winobject.apisetmap.ApiSetMapVersion4
+    :no-inherited-members:
+    :members: version
+.. autoclass:: windows.winobject.apisetmap.ApiSetMapVersion6
+    :no-inherited-members:
+    :members: version
 
 PEFile - Parsing loaded PE
 """"""""""""""""""""""""""

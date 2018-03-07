@@ -35,8 +35,9 @@ CRYPT_OBJECT_FORMAT_TYPE_DICT = gdef.FlagMapper(*CRYPT_OBJECT_FORMAT_TYPE)
 
 class CryptObject(object):
     """Extract information from an CryptoAPI object.
+    (see `CryptQueryObject <https://msdn.microsoft.com/en-us/library/windows/desktop/aa380264(v=vs.85).aspx>`_)
 
-       Current main use is extracting the signers certificates from a PE file.
+    Current main use is extracting the signers certificates from a PE file.
     """
     MSG_PARAM_KNOW_TYPES = {gdef.CMSG_SIGNER_INFO_PARAM: gdef.CMSG_SIGNER_INFO,
                             gdef.CMSG_SIGNER_COUNT_PARAM: gdef.DWORD,
@@ -50,7 +51,7 @@ class CryptObject(object):
         dwContentType = gdef.DWORD()
         dwFormatType  = gdef.DWORD()
         hStore        = CertificateStore()
-        hMsg          = windows.crypto.cryptmsg.CryptMessage()
+        hMsg          = windows.crypto.CryptMessage()
 
         winproxy.CryptQueryObject(gdef.CERT_QUERY_OBJECT_FILE,
             gdef.LPWSTR(filename),
@@ -66,33 +67,48 @@ class CryptObject(object):
             None)
 
         self.cert_store = hStore if hStore else None
-        self.crypt_msg = hMsg if hMsg else None
+        """The :class:`CertificateStore` that includes all of the certificates, CRLs, and CTLs in the object"""
+        self.crypt_msg = hMsg if hMsg else None #: yolo
+        """The :class:`CryptMessage` for any ``PKCS7`` content in the object"""
         self.encoding = dwEncoding
         self.content_type = CRYPT_OBJECT_FORMAT_TYPE_DICT[dwContentType.value]
+        """The type of the opened message"""
 
     def _signers_and_certs_generator(self):
         if self.crypt_msg is None:
             return
         for signer in self.crypt_msg.signers:
+            # We could directly extract the certificates from the 'crypt_msg' (I guess)
+            # But 'CryptQueryObject' had the sympathy of already opening a CertificateStore
+            # for us. So we use it.
+            # I am open to counter-argument on this methodology.
             cert = self.cert_store.find(signer.Issuer, signer.SerialNumber)
             yield signer, cert
 
     @property
     def signers_and_certs(self):
+        """The list of signer info and certificates signing the object.
+
+        :rtype: [(:class:`~windows.generated_def.winstructs.CMSG_SIGNER_INFO`, :class:`Certificate`)]
+
+        .. note::
+
+            :class:`~windows.generated_def.winstructs.CMSG_SIGNER_INFO` might be changed to a wrapping-subclass.
+        """
         return list(self._signers_and_certs_generator())
 
     def __repr__(self):
         return '<{0} "{1}" content_type={2}>'.format(type(self).__name__, self.filename, self.content_type)
 
-# TODO: rename to CertificateStore ?
+
 # https://msdn.microsoft.com/en-us/library/windows/desktop/aa382037(v=vs.85).aspx
 class CertificateStore(gdef.HCERTSTORE):
     """A certificate store"""
     @property
     def certs(self):
-        """The certificates in the store
+        """The list of certificates in the store
 
-        :type: [:class:`Certificate`] -- A list of Certificate
+        :type: [:class:`Certificate`] -- A list of certificate
         """
         res = []
         last = None
@@ -119,19 +135,18 @@ class CertificateStore(gdef.HCERTSTORE):
         res = winproxy.CertOpenStore(gdef.CERT_STORE_PROV_FILENAME_A, DEFAULT_ENCODING, None, gdef.CERT_STORE_OPEN_EXISTING_FLAG, filename)
         return ctypes.cast(res, cls)
 
-    def yolo(self):
+    def _yolo(self):
         x = winproxy.CertEnumCTLsInStore(self, None)
         title = None
         windows.winproxy.CryptUIDlgViewContext(gdef.CERT_STORE_CTL_CONTEXT, x, None, title, 0, None)
-
         return x
 
 
     # See https://msdn.microsoft.com/en-us/library/windows/desktop/aa388136(v=vs.85).aspx
     @classmethod
     def from_system_store(cls, store_name):
-        """Create a new :class:`CertificateStore` from system store``store_name``
-        (see https://msdn.microsoft.com/en-us/library/windows/desktop/aa388136(v=vs.85).aspx)
+        """Create a new :class:`CertificateStore` from system store ``store_name``
+        (see `System Store Locations <https://msdn.microsoft.com/en-us/library/windows/desktop/aa388136(v=vs.85).aspx>`_)
         """
         res = winproxy.CertOpenStore(gdef.CERT_STORE_PROV_SYSTEM_A, DEFAULT_ENCODING, None, gdef.CERT_SYSTEM_STORE_LOCAL_MACHINE | gdef.CERT_STORE_READONLY_FLAG, store_name)
         return ctypes.cast(res, cls)
@@ -207,7 +222,8 @@ class Certificate(gdef.CERT_CONTEXT):
 
 
     def get_name(self, nametype=gdef.CERT_NAME_SIMPLE_DISPLAY_TYPE, flags=0):
-        """Retrieve the subject or issuer name of the certificate. See ``CertGetNameStringA``
+        """Retrieve the subject or issuer name of the certificate.
+        See `CertGetNameStringA <https://msdn.microsoft.com/en-us/library/windows/desktop/aa376086(v=vs.85).aspx>`_
 
         :returns: :class:`str`
         """
@@ -229,8 +245,14 @@ class Certificate(gdef.CERT_CONTEXT):
 
     @property
     def thumprint(self):
-        """The thumprint of the certificate (which is the sha1 of the encoded cert) with the format:
-            'XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX'
+        """The thumprint of the certificate (which is the sha1 of the encoded cert).
+
+        Example:
+
+            >>> x
+            <Certificate "YOLO2" serial="6f 1d 3e 7d d9 77 59 a9 4c 1c 53 dc 80 db 0c fe">
+            >>> x.thumprint
+            'E2 A2 DB 76 A1 DD 8E 70 0D C6 9F CB 71 CF 29 12 C6 D9 78 97'
 
         :type: :class:`str`
         """
@@ -290,7 +312,7 @@ class Certificate(gdef.CERT_CONTEXT):
     # https://msdn.microsoft.com/en-us/library/windows/desktop/dd433797(v=vs.85).aspx
 
     def duplicate(self):
-        """Duplicate the certificate by incrementing the internal refcount. (see ``CertDuplicateCertificateContext``)
+        """Duplicate the certificate by incrementing the internal refcount. (see `CertDuplicateCertificateContext <https://msdn.microsoft.com/en-us/library/windows/desktop/aa376045(v=vs.85).aspx>`_)
 
         note: The object returned is ``self``
 
@@ -362,6 +384,10 @@ class Certificate(gdef.CERT_CONTEXT):
         raise RuntimeError("Unreachable code")
 
     properties = property(enum_properties)
+    """The properties of the certificate
+
+    :type: [:class:`int` or :class:`~windows.generated_def.Flag`] -- A list of property ID
+    """
 
     #def get_property(self):
         # https://msdn.microsoft.com/en-us/library/windows/desktop/aa376079(v=vs.85).aspx
@@ -378,7 +404,10 @@ class Certificate(gdef.CERT_CONTEXT):
 
     @property
     def version(self):
-        "TODO: doc"
+        """The version number of the certificate
+
+        :type: :class:`int`
+        """
         return self.pCertInfo[0].dwVersion
 
 
@@ -480,7 +509,11 @@ class EPCERT_CHAIN_ELEMENT(gdef.PCERT_CHAIN_ELEMENT):
 
 # Move this in another .py ?
 class CryptContext(gdef.HCRYPTPROV):
-    """ A context manager arround ``CryptAcquireContextW`` & ``CryptReleaseContext``"""
+    """ A context manager arround ``CryptAcquireContextW`` & ``CryptReleaseContext``
+
+    .. note::
+        see usage in sample :ref:`sample_crypto_encryption` (function ``genkeys``)
+    """
     _type_ = gdef.HCRYPTPROV._type_
 
     def __init__(self, pszContainer=None, pszProvider=None, dwProvType=0, dwFlags=0, retrycreate=False):

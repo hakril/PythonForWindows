@@ -1,33 +1,22 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>windows.rpc.client &#8212; PythonForWindows 0.3 documentation</title>
-    
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '0.3',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" href="../../../_static/css/mbasic.css" type="text/css" />
+    <script type="text/javascript" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
-  </head>
-  <body role="document">
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -56,20 +45,15 @@
 <span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
 
 
-<span class="n">KNOW_REQUEST_TYPE</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">:</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="n">gdef</span><span class="o">.</span><span class="n">RPC_REQUEST_TYPE_CALL</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">RPC_REQUEST_TYPE_BIND</span><span class="p">]}</span>
-
-
-<span class="n">KNOW_RESPONSE_TYPE</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">:</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="n">gdef</span><span class="o">.</span><span class="n">RPC_RESPONSE_TYPE_FAIL</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">RPC_RESPONSE_TYPE_SUCESS</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">RPC_RESPONSE_TYPE_BIND_OK</span><span class="p">]}</span>
-
-
-<span class="n">KNOWN_RPC_ERROR_CODE</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">:</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span>
+<span class="n">KNOW_REQUEST_TYPE</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">RPC_REQUEST_TYPE_CALL</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">RPC_REQUEST_TYPE_BIND</span><span class="p">)</span>
+<span class="n">KNOW_RESPONSE_TYPE</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">RPC_RESPONSE_TYPE_FAIL</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">RPC_RESPONSE_TYPE_SUCCESS</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">RPC_RESPONSE_TYPE_BIND_OK</span><span class="p">)</span>
+<span class="n">KNOWN_RPC_ERROR_CODE</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span>
         <span class="n">gdef</span><span class="o">.</span><span class="n">ERROR_INVALID_HANDLE</span><span class="p">,</span>
         <span class="n">gdef</span><span class="o">.</span><span class="n">RPC_X_BAD_STUB_DATA</span><span class="p">,</span>
         <span class="n">gdef</span><span class="o">.</span><span class="n">RPC_S_UNKNOWN_IF</span><span class="p">,</span>
         <span class="n">gdef</span><span class="o">.</span><span class="n">RPC_S_PROTOCOL_ERROR</span><span class="p">,</span>
         <span class="n">gdef</span><span class="o">.</span><span class="n">RPC_S_UNSUPPORTED_TRANS_SYN</span><span class="p">,</span>
-        <span class="n">gdef</span><span class="o">.</span><span class="n">RPC_S_PROCNUM_OUT_OF_RANGE</span><span class="p">,</span>
-        <span class="p">]}</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">RPC_S_PROCNUM_OUT_OF_RANGE</span><span class="p">)</span>
 
 <span class="n">NOT_USED</span> <span class="o">=</span> <span class="mh">0xBAADF00D</span>
 
@@ -134,12 +118,12 @@
         <span class="c1"># Parse reponse</span>
         <span class="n">request_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_request_type</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">request_type</span> <span class="o">!=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">RPC_RESPONSE_TYPE_BIND_OK</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unexpected reponse type. Expected RESPONSE_TYPE_BIND_OK got </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">KNOW_RESPONSE_TYPE</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">request_type</span><span class="p">,</span> <span class="n">request_type</span><span class="p">)))</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unexpected reponse type. Expected RESPONSE_TYPE_BIND_OK got </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">KNOW_RESPONSE_TYPE</span><span class="p">[</span><span class="n">request_type</span><span class="p">]))</span>
         <span class="n">iid_hash</span> <span class="o">=</span> <span class="nb">hash</span><span class="p">(</span><span class="n">buffer</span><span class="p">(</span><span class="n">IID</span><span class="p">)[:])</span> <span class="c1"># TODO: add __hash__ to IID</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">if_bind_number</span><span class="p">[</span><span class="n">iid_hash</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_bind_if</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">number_of_bind_if</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="c1">#TODO: attach version information to IID</span>
-        <span class="k">return</span> <span class="n">IID</span></div>
+        <span class="c1">#TODO: attach version information to IID</span></div>
+        <span class="k">return</span> <span class="n">IID</span>
 
 <div class="viewcode-block" id="RPCClient.call"><a class="viewcode-back" href="../../../rpc.html#windows.rpc.RPCClient.call">[docs]</a>    <span class="k">def</span> <span class="nf">call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">IID</span><span class="p">,</span> <span class="n">method_offset</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Call method number ``method_offset`` of interface ``IID`` with mashalled ``params``</span>
@@ -155,12 +139,12 @@
         <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_send_request</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
         <span class="c1"># Parse reponse</span>
         <span class="n">request_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_request_type</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">request_type</span> <span class="o">!=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">RPC_RESPONSE_TYPE_SUCESS</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unexpected reponse type. Expected RESPONSE_SUCESS got </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">KNOW_RESPONSE_TYPE</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">request_type</span><span class="p">,</span> <span class="n">request_type</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="n">request_type</span> <span class="o">!=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">RPC_RESPONSE_TYPE_SUCCESS</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unexpected reponse type. Expected RESPONSE_SUCCESS got </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">KNOW_RESPONSE_TYPE</span><span class="p">[</span><span class="n">request_type</span><span class="p">]))</span>
 
         <span class="n">data</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&lt;6I&quot;</span><span class="p">,</span> <span class="n">response</span><span class="p">[:</span><span class="mi">6</span> <span class="o">*</span> <span class="mi">4</span><span class="p">])</span>
-        <span class="k">assert</span> <span class="n">data</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">REQUEST_IDENTIFIER</span>
-        <span class="k">return</span> <span class="n">response</span><span class="p">[</span><span class="mi">4</span> <span class="o">*</span> <span class="mi">6</span><span class="p">:]</span> <span class="c1"># Should be the return value (not completly verified)</span></div>
+        <span class="k">assert</span> <span class="n">data</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">REQUEST_IDENTIFIER</span></div>
+        <span class="k">return</span> <span class="n">response</span><span class="p">[</span><span class="mi">4</span> <span class="o">*</span> <span class="mi">6</span><span class="p">:]</span> <span class="c1"># Should be the return value (not completly verified)</span>
 
     <span class="k">def</span> <span class="nf">_send_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
         <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpc_client</span><span class="o">.</span><span class="n">send_receive</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
@@ -199,8 +183,8 @@
         <span class="n">request_type</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&lt;I&quot;</span><span class="p">,</span> <span class="n">response</span><span class="p">[:</span><span class="mi">4</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">request_type</span> <span class="o">==</span> <span class="n">gdef</span><span class="o">.</span><span class="n">RPC_RESPONSE_TYPE_FAIL</span><span class="p">:</span>
             <span class="n">error_code</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&lt;5I&quot;</span><span class="p">,</span> <span class="n">response</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;RPC Response error </span><span class="si">{0}</span><span class="s2"> (</span><span class="si">{1}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">error_code</span><span class="p">,</span> <span class="n">KNOWN_RPC_ERROR_CODE</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">error_code</span><span class="p">,</span> <span class="n">error_code</span><span class="p">)))</span>
-        <span class="k">return</span> <span class="n">request_type</span></div>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;RPC Response error </span><span class="si">{0}</span><span class="s2"> (</span><span class="si">{1}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">error_code</span><span class="p">,</span> <span class="n">KNOWN_RPC_ERROR_CODE</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">error_code</span><span class="p">,</span> <span class="n">error_code</span><span class="p">)))</span></div>
+        <span class="k">return</span> <span class="n">request_type</span>
 </pre></div>
 
           </div>
@@ -210,12 +194,14 @@
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -237,7 +223,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
     </div>
   </body>
 </html>

@@ -1,15 +1,28 @@
 (cmd) python wmi\wmi_request.py
-WMI requester is <windows.winobject.wmi.WmiManager object at 0x052D7CA8>
+WMI requester is <windows.winobject.wmi.WmiManager object at 0x05C70CA8>
 Selecting * from 'Win32_Process'
-They are <224> processes
+They are <188> processes
 Looking for ourself via pid
 Some info about our process:
     * Name -> python.exe
-    * ProcessId -> 10136
+    * ProcessId -> 8144
     * OSName -> Microsoft Windows 10 Home|C:\WINDOWS|\Device\Harddisk0\Partition2
-    * UserModeTime -> 1718750
+    * UserModeTime -> 1875000
     * WindowsVersion -> 10.0.16299
     * CommandLine -> C:\Python27\python.exe  wmi\wmi_request.py
 <Select Caption,FileSystem,FreeSpace from Win32_LogicalDisk>:
-    * {'Caption': u'C:', 'FreeSpace': u'15900839936', 'FileSystem': u'NTFS'}
-    * {'Caption': u'D:', 'FreeSpace': u'301635821568', 'FileSystem': u'NTFS'}
+    * {'Caption': u'C:', 'FreeSpace': u'4704194560', 'FileSystem': u'NTFS'}
+    * {'Caption': u'D:', 'FreeSpace': u'269887504384', 'FileSystem': u'NTFS'}
+
+ ==== Advanced use ====
+Listing some namespaces:
+    * CIMV2
+    * SecurityCenter2
+    * StandardCimv2
+Querying non-default namespace: <WmiRequester namespace="root\SecurityCenter2">
+Listing some available classes:
+    * FirewallProduct
+    * AntiVirusProduct
+    * AntiSpywareProduct
+Listing <AntiVirusProduct>:
+    * Windows Defender

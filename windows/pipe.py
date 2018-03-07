@@ -30,7 +30,7 @@ class PipeConnection(object): # Cannot inherit: crash the interpreter
 
     @classmethod
     def create(cls, addr):
-        """Create a namedpipe pipe `addr`
+        """Create a namedpipe pipe ``addr``
 
         :returns type: :class:`PipeConnection`
         """
@@ -46,7 +46,7 @@ class PipeConnection(object): # Cannot inherit: crash the interpreter
 
     @classmethod
     def connect(cls, addr):
-        """Connect to the named pipe `addr`
+        """Connect to the named pipe ``addr``
 
         :returns type: :class:`PipeConnection`
         """
@@ -86,13 +86,13 @@ connect = PipeConnection.connect
 create = PipeConnection.create
 
 def send_object(addr, obj):
-    """Send `obj` on pipe `addr`"""
+    """Send `obj` on pipe ``addr``"""
     with connect(addr) as np:
         np.send(obj)
     return None
 
 def recv_object(addr):
-    """Receive an object from pipe `addr`"""
+    """Receive an object from pipe ``addr``"""
     with create(addr) as np:
         np.wait_connection()
         return np.recv()

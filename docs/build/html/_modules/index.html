@@ -1,33 +1,22 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Overview: module code &#8212; PythonForWindows 0.3 documentation</title>
-    
     <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '0.3',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" href="../_static/css/mbasic.css" type="text/css" />
+    <script type="text/javascript" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" /> 
-  </head>
-  <body role="document">
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -47,26 +36,31 @@
           <div class="body" role="main">
             
   <h1>All modules for which code is available</h1>
-<ul><li><a href="windows/alpc.html">windows.alpc</a></li>
+<ul><li><a href="ctypes.html">ctypes</a></li>
+<li><a href="windows/alpc.html">windows.alpc</a></li>
 <li><a href="windows/crypto/certificate.html">windows.crypto.certificate</a></li>
+<li><a href="windows/crypto/cryptmsg.html">windows.crypto.cryptmsg</a></li>
 <li><a href="windows/crypto/encrypt_decrypt.html">windows.crypto.encrypt_decrypt</a></li>
 <li><a href="windows/crypto/generation.html">windows.crypto.generation</a></li>
 <li><a href="windows/debug/breakpoints.html">windows.debug.breakpoints</a></li>
 <li><a href="windows/debug/debugger.html">windows.debug.debugger</a></li>
 <li><a href="windows/debug/localdbg.html">windows.debug.localdbg</a></li>
-<li><a href="windows/generated_def/windef.html">windows.generated_def.windef</a></li>
+<li><a href="windows/generated_def/flag.html">windows.generated_def.flag</a></li>
 <li><a href="windows/generated_def/winstructs.html">windows.generated_def.winstructs</a></li>
 <li><a href="windows/hooks.html">windows.hooks</a></li>
 <li><a href="windows/native_exec/cpuid.html">windows.native_exec.cpuid</a></li>
 <li><a href="windows/native_exec/native_function.html">windows.native_exec.native_function</a></li>
 <li><a href="windows/native_exec/simple_x86.html">windows.native_exec.simple_x86</a></li>
 <li><a href="windows/pe_parse.html">windows.pe_parse</a></li>
+<li><a href="windows/pipe.html">windows.pipe</a></li>
 <li><a href="windows/remotectypes.html">windows.remotectypes</a></li>
 <li><a href="windows/rpc/client.html">windows.rpc.client</a></li>
 <li><a href="windows/rpc/epmapper.html">windows.rpc.epmapper</a></li>
 <li><a href="windows/rpc/ndr.html">windows.rpc.ndr</a></li>
 <li><a href="windows/syswow64.html">windows.syswow64</a></li>
+<li><a href="windows/utils/pythonutils.html">windows.utils.pythonutils</a></li>
 <li><a href="windows/utils/winutils.html">windows.utils.winutils</a></li>
+<li><a href="windows/winobject/apisetmap.html">windows.winobject.apisetmap</a></li>
 <li><a href="windows/winobject/exception.html">windows.winobject.exception</a></li>
 <li><a href="windows/winobject/handle.html">windows.winobject.handle</a></li>
 <li><a href="windows/winobject/network.html">windows.winobject.network</a></li>
@@ -76,6 +70,7 @@
 <li><a href="windows/winobject/system.html">windows.winobject.system</a></li>
 <li><a href="windows/winobject/volume.html">windows.winobject.volume</a></li>
 <li><a href="windows/winobject/wmi.html">windows.winobject.wmi</a></li>
+<li><a href="windows/winproxy.html">windows.winproxy</a></li>
 <li><a href="windows/wintrust.html">windows.wintrust</a></li>
 </ul>
 
@@ -86,12 +81,14 @@
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -112,7 +109,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
     </div>
   </body>
 </html>

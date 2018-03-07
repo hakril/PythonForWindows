@@ -1,7 +1,560 @@
-.. currentmodule:: windows.generated_def
+.. currentmodule:: windows.generated_def.winstructs
 
 Winstructs
 ----------
+_GUID
+'''''
+.. class:: REFCLSID
+
+    Pointer to :class:`_GUID`
+
+.. class:: REFGUID
+
+    Pointer to :class:`_GUID`
+
+.. class:: LPGUID
+
+    Pointer to :class:`_GUID`
+
+.. class:: IID
+
+    Alias for :class:`_GUID`
+
+.. class:: CLSID
+
+    Alias for :class:`_GUID`
+
+.. class:: GUID
+
+    Alias for :class:`_GUID`
+
+.. class:: REFIID
+
+    Pointer to :class:`_GUID`
+
+.. class:: _GUID
+
+    .. attribute:: Data1
+
+        :class:`ULONG`
+
+
+    .. attribute:: Data2
+
+        :class:`USHORT`
+
+
+    .. attribute:: Data3
+
+        :class:`USHORT`
+
+
+    .. attribute:: Data4
+
+        :class:`BYTE` ``[8]``
+
+_SHITEMID
+'''''''''
+.. class:: SHITEMID
+
+    Alias for :class:`_SHITEMID`
+
+.. class:: _SHITEMID
+
+    .. attribute:: cb
+
+        :class:`USHORT`
+
+
+    .. attribute:: abID
+
+        :class:`BYTE` ``[1]``
+
+_ITEMIDLIST
+'''''''''''
+.. class:: ITEMIDLIST
+
+    Alias for :class:`_ITEMIDLIST`
+
+.. class:: PCIDLIST_ABSOLUTE
+
+    Pointer to :class:`_ITEMIDLIST`
+
+.. class:: PIDLIST_ABSOLUTE
+
+    Pointer to :class:`_ITEMIDLIST`
+
+.. class:: _ITEMIDLIST
+
+    .. attribute:: mkid
+
+        :class:`SHITEMID`
+
+tagRGBTRIPLE
+''''''''''''
+.. class:: NPRGBTRIPLE
+
+    Pointer to :class:`tagRGBTRIPLE`
+
+.. class:: LPRGBTRIPLE
+
+    Pointer to :class:`tagRGBTRIPLE`
+
+.. class:: RGBTRIPLE
+
+    Alias for :class:`tagRGBTRIPLE`
+
+.. class:: PRGBTRIPLE
+
+    Pointer to :class:`tagRGBTRIPLE`
+
+.. class:: tagRGBTRIPLE
+
+    .. attribute:: rgbtBlue
+
+        :class:`BYTE`
+
+
+    .. attribute:: rgbtGreen
+
+        :class:`BYTE`
+
+
+    .. attribute:: rgbtRed
+
+        :class:`BYTE`
+
+tagBITMAPFILEHEADER
+'''''''''''''''''''
+.. class:: BITMAPFILEHEADER
+
+    Alias for :class:`tagBITMAPFILEHEADER`
+
+.. class:: PBITMAPFILEHEADER
+
+    Pointer to :class:`tagBITMAPFILEHEADER`
+
+.. class:: LPBITMAPFILEHEADER
+
+    Pointer to :class:`tagBITMAPFILEHEADER`
+
+.. class:: tagBITMAPFILEHEADER
+
+    .. attribute:: bfType
+
+        :class:`WORD`
+
+
+    .. attribute:: bfSize
+
+        :class:`DWORD`
+
+
+    .. attribute:: bfReserved1
+
+        :class:`WORD`
+
+
+    .. attribute:: bfReserved2
+
+        :class:`WORD`
+
+
+    .. attribute:: bfOffBits
+
+        :class:`DWORD`
+
+tagBITMAPCOREHEADER
+'''''''''''''''''''
+.. class:: LPBITMAPCOREHEADER
+
+    Pointer to :class:`tagBITMAPCOREHEADER`
+
+.. class:: PBITMAPCOREHEADER
+
+    Pointer to :class:`tagBITMAPCOREHEADER`
+
+.. class:: BITMAPCOREHEADER
+
+    Alias for :class:`tagBITMAPCOREHEADER`
+
+.. class:: tagBITMAPCOREHEADER
+
+    .. attribute:: bcSize
+
+        :class:`DWORD`
+
+
+    .. attribute:: bcWidth
+
+        :class:`WORD`
+
+
+    .. attribute:: bcHeight
+
+        :class:`WORD`
+
+
+    .. attribute:: bcPlanes
+
+        :class:`WORD`
+
+
+    .. attribute:: bcBitCount
+
+        :class:`WORD`
+
+tagBITMAP
+'''''''''
+.. class:: NPBITMAP
+
+    Pointer to :class:`tagBITMAP`
+
+.. class:: LPBITMAP
+
+    Pointer to :class:`tagBITMAP`
+
+.. class:: PBITMAP
+
+    Pointer to :class:`tagBITMAP`
+
+.. class:: BITMAP
+
+    Alias for :class:`tagBITMAP`
+
+.. class:: tagBITMAP
+
+    .. attribute:: bmType
+
+        :class:`LONG`
+
+
+    .. attribute:: bmWidth
+
+        :class:`LONG`
+
+
+    .. attribute:: bmHeight
+
+        :class:`LONG`
+
+
+    .. attribute:: bmWidthBytes
+
+        :class:`LONG`
+
+
+    .. attribute:: bmPlanes
+
+        :class:`WORD`
+
+
+    .. attribute:: bmBitsPixel
+
+        :class:`WORD`
+
+
+    .. attribute:: bmBits
+
+        :class:`LPVOID`
+
+tagBITMAPINFOHEADER
+'''''''''''''''''''
+.. class:: BITMAPINFOHEADER
+
+    Alias for :class:`tagBITMAPINFOHEADER`
+
+.. class:: PBITMAPINFOHEADER
+
+    Pointer to :class:`tagBITMAPINFOHEADER`
+
+.. class:: LPBITMAPINFOHEADER
+
+    Pointer to :class:`tagBITMAPINFOHEADER`
+
+.. class:: tagBITMAPINFOHEADER
+
+    .. attribute:: biSize
+
+        :class:`DWORD`
+
+
+    .. attribute:: biWidth
+
+        :class:`LONG`
+
+
+    .. attribute:: biHeight
+
+        :class:`LONG`
+
+
+    .. attribute:: biPlanes
+
+        :class:`WORD`
+
+
+    .. attribute:: biBitCount
+
+        :class:`WORD`
+
+
+    .. attribute:: biCompression
+
+        :class:`DWORD`
+
+
+    .. attribute:: biSizeImage
+
+        :class:`DWORD`
+
+
+    .. attribute:: biXPelsPerMeter
+
+        :class:`LONG`
+
+
+    .. attribute:: biYPelsPerMeter
+
+        :class:`LONG`
+
+
+    .. attribute:: biClrUsed
+
+        :class:`DWORD`
+
+
+    .. attribute:: biClrImportant
+
+        :class:`DWORD`
+
+tagRGBQUAD
+''''''''''
+.. class:: RGBQUAD
+
+    Alias for :class:`tagRGBQUAD`
+
+.. class:: tagRGBQUAD
+
+    .. attribute:: rgbBlue
+
+        :class:`BYTE`
+
+
+    .. attribute:: rgbGreen
+
+        :class:`BYTE`
+
+
+    .. attribute:: rgbRed
+
+        :class:`BYTE`
+
+
+    .. attribute:: rgbReserved
+
+        :class:`BYTE`
+
+tagBITMAPINFO
+'''''''''''''
+.. class:: LPBITMAPINFO
+
+    Pointer to :class:`tagBITMAPINFO`
+
+.. class:: PBITMAPINFO
+
+    Pointer to :class:`tagBITMAPINFO`
+
+.. class:: BITMAPINFO
+
+    Alias for :class:`tagBITMAPINFO`
+
+.. class:: tagBITMAPINFO
+
+    .. attribute:: bmiHeader
+
+        :class:`BITMAPINFOHEADER`
+
+
+    .. attribute:: bmiColors
+
+        :class:`RGBQUAD` ``[1]``
+
+tagBITMAPCOREINFO
+'''''''''''''''''
+.. class:: LPBITMAPCOREINFO
+
+    Pointer to :class:`tagBITMAPCOREINFO`
+
+.. class:: BITMAPCOREINFO
+
+    Alias for :class:`tagBITMAPCOREINFO`
+
+.. class:: PBITMAPCOREINFO
+
+    Pointer to :class:`tagBITMAPCOREINFO`
+
+.. class:: tagBITMAPCOREINFO
+
+    .. attribute:: bmciHeader
+
+        :class:`BITMAPCOREHEADER`
+
+
+    .. attribute:: bmciColors
+
+        :class:`RGBTRIPLE` ``[1]``
+
+tagWNDCLASSEXA
+''''''''''''''
+.. class:: PWNDCLASSEXA
+
+    Pointer to :class:`tagWNDCLASSEXA`
+
+.. class:: LPWNDCLASSEXA
+
+    Pointer to :class:`tagWNDCLASSEXA`
+
+.. class:: WNDCLASSEXA
+
+    Alias for :class:`tagWNDCLASSEXA`
+
+.. class:: tagWNDCLASSEXA
+
+    .. attribute:: cbSize
+
+        :class:`UINT`
+
+
+    .. attribute:: style
+
+        :class:`UINT`
+
+
+    .. attribute:: lpfnWndProc
+
+        :class:`WNDPROC`
+
+
+    .. attribute:: cbClsExtra
+
+        :class:`INT`
+
+
+    .. attribute:: cbWndExtra
+
+        :class:`INT`
+
+
+    .. attribute:: hInstance
+
+        :class:`HINSTANCE`
+
+
+    .. attribute:: hIcon
+
+        :class:`HICON`
+
+
+    .. attribute:: hCursor
+
+        :class:`HCURSOR`
+
+
+    .. attribute:: hbrBackground
+
+        :class:`HBRUSH`
+
+
+    .. attribute:: lpszMenuName
+
+        :class:`LPCSTR`
+
+
+    .. attribute:: lpszClassName
+
+        :class:`LPCSTR`
+
+
+    .. attribute:: hIconSm
+
+        :class:`HICON`
+
+tagWNDCLASSEXW
+''''''''''''''
+.. class:: WNDCLASSEXW
+
+    Alias for :class:`tagWNDCLASSEXW`
+
+.. class:: LPWNDCLASSEXW
+
+    Pointer to :class:`tagWNDCLASSEXW`
+
+.. class:: PWNDCLASSEXW
+
+    Pointer to :class:`tagWNDCLASSEXW`
+
+.. class:: tagWNDCLASSEXW
+
+    .. attribute:: cbSize
+
+        :class:`UINT`
+
+
+    .. attribute:: style
+
+        :class:`UINT`
+
+
+    .. attribute:: lpfnWndProc
+
+        :class:`WNDPROC`
+
+
+    .. attribute:: cbClsExtra
+
+        :class:`INT`
+
+
+    .. attribute:: cbWndExtra
+
+        :class:`INT`
+
+
+    .. attribute:: hInstance
+
+        :class:`HINSTANCE`
+
+
+    .. attribute:: hIcon
+
+        :class:`HICON`
+
+
+    .. attribute:: hCursor
+
+        :class:`HCURSOR`
+
+
+    .. attribute:: hbrBackground
+
+        :class:`HBRUSH`
+
+
+    .. attribute:: lpszMenuName
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: lpszClassName
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: hIconSm
+
+        :class:`HICON`
+
 _LIST_ENTRY
 '''''''''''
 .. class:: PLIST_ENTRY
@@ -85,7 +638,59 @@ _LSA_UNICODE_STRING
 
     .. attribute:: Buffer
 
-        :class:`PWSTR`
+        :class:`PVOID`
+
+_CURDIR
+'''''''
+.. class:: PCURDIR
+
+    Pointer to :class:`_CURDIR`
+
+.. class:: CURDIR
+
+    Alias for :class:`_CURDIR`
+
+.. class:: _CURDIR
+
+    .. attribute:: DosPath
+
+        :class:`UNICODE_STRING`
+
+
+    .. attribute:: Handle
+
+        :class:`PVOID`
+
+_RTL_DRIVE_LETTER_CURDIR
+''''''''''''''''''''''''
+.. class:: PRTL_DRIVE_LETTER_CURDIR
+
+    Pointer to :class:`_RTL_DRIVE_LETTER_CURDIR`
+
+.. class:: RTL_DRIVE_LETTER_CURDIR
+
+    Alias for :class:`_RTL_DRIVE_LETTER_CURDIR`
+
+.. class:: _RTL_DRIVE_LETTER_CURDIR
+
+    .. attribute:: Flags
+
+        :class:`WORD`
+
+
+    .. attribute:: Length
+
+        :class:`WORD`
+
+
+    .. attribute:: TimeStamp
+
+        :class:`ULONG`
+
+
+    .. attribute:: DosPath
+
+        :class:`UNICODE_STRING`
 
 _RTL_USER_PROCESS_PARAMETERS
 ''''''''''''''''''''''''''''
@@ -99,14 +704,59 @@ _RTL_USER_PROCESS_PARAMETERS
 
 .. class:: _RTL_USER_PROCESS_PARAMETERS
 
-    .. attribute:: Reserved1
+    .. attribute:: MaximumLength
 
-        :class:`BYTE` ``[16]``
+        :class:`ULONG`
 
 
-    .. attribute:: Reserved2
+    .. attribute:: Length
 
-        :class:`PVOID` ``[10]``
+        :class:`ULONG`
+
+
+    .. attribute:: Flags
+
+        :class:`ULONG`
+
+
+    .. attribute:: DebugFlags
+
+        :class:`ULONG`
+
+
+    .. attribute:: ConsoleHandle
+
+        :class:`PVOID`
+
+
+    .. attribute:: ConsoleFlags
+
+        :class:`ULONG`
+
+
+    .. attribute:: StandardInput
+
+        :class:`PVOID`
+
+
+    .. attribute:: StandardOutput
+
+        :class:`PVOID`
+
+
+    .. attribute:: StandardError
+
+        :class:`PVOID`
+
+
+    .. attribute:: CurrentDirectory
+
+        :class:`CURDIR`
+
+
+    .. attribute:: DllPath
+
+        :class:`UNICODE_STRING`
 
 
     .. attribute:: ImagePathName
@@ -117,6 +767,179 @@ _RTL_USER_PROCESS_PARAMETERS
     .. attribute:: CommandLine
 
         :class:`UNICODE_STRING`
+
+
+    .. attribute:: Environment
+
+        :class:`PVOID`
+
+
+    .. attribute:: StartingX
+
+        :class:`ULONG`
+
+
+    .. attribute:: StartingY
+
+        :class:`ULONG`
+
+
+    .. attribute:: CountX
+
+        :class:`ULONG`
+
+
+    .. attribute:: CountY
+
+        :class:`ULONG`
+
+
+    .. attribute:: CountCharsX
+
+        :class:`ULONG`
+
+
+    .. attribute:: CountCharsY
+
+        :class:`ULONG`
+
+
+    .. attribute:: FillAttribute
+
+        :class:`ULONG`
+
+
+    .. attribute:: WindowFlags
+
+        :class:`ULONG`
+
+
+    .. attribute:: ShowWindowFlags
+
+        :class:`ULONG`
+
+
+    .. attribute:: WindowTitle
+
+        :class:`UNICODE_STRING`
+
+
+    .. attribute:: DesktopInfo
+
+        :class:`UNICODE_STRING`
+
+
+    .. attribute:: ShellInfo
+
+        :class:`UNICODE_STRING`
+
+
+    .. attribute:: RuntimeData
+
+        :class:`UNICODE_STRING`
+
+
+    .. attribute:: CurrentDirectores
+
+        :class:`RTL_DRIVE_LETTER_CURDIR` ``[32]``
+
+_ANON_PEB_SYSTEM_DEPENDENT_02
+'''''''''''''''''''''''''''''
+.. class:: _ANON_PEB_SYSTEM_DEPENDENT_02
+
+    .. attribute:: FastPebLockRoutine
+
+        :class:`PVOID`
+
+
+    .. attribute:: SparePtr1
+
+        :class:`PVOID`
+
+
+    .. attribute:: AtlThunkSListPtr
+
+        :class:`PVOID`
+
+_ANON_PEB_SYSTEM_DEPENDENT_03
+'''''''''''''''''''''''''''''
+.. class:: _ANON_PEB_SYSTEM_DEPENDENT_03
+
+    .. attribute:: FastPebUnlockRoutine
+
+        :class:`PVOID`
+
+
+    .. attribute:: SparePtr2
+
+        :class:`PVOID`
+
+
+    .. attribute:: IFEOKey
+
+        :class:`PVOID`
+
+_ANON_PEB_SYSTEM_DEPENDENT_06
+'''''''''''''''''''''''''''''
+.. class:: _ANON_PEB_SYSTEM_DEPENDENT_06
+
+    .. attribute:: FreeList
+
+        :class:`PVOID`
+
+
+    .. attribute:: SparePebPtr0
+
+        :class:`PVOID`
+
+
+    .. attribute:: ApiSetMap
+
+        :class:`PVOID`
+
+_ANON_PEB_SYSTEM_DEPENDENT_07
+'''''''''''''''''''''''''''''
+.. class:: _ANON_PEB_SYSTEM_DEPENDENT_07
+
+    .. attribute:: ReadOnlySharedMemoryHeap
+
+        :class:`PVOID`
+
+
+    .. attribute:: HotpatchInformation
+
+        :class:`PVOID`
+
+
+    .. attribute:: SparePvoid0
+
+        :class:`PVOID`
+
+_ANON_PEB_UNION_1
+'''''''''''''''''
+.. class:: _ANON_PEB_UNION_1
+
+    .. attribute:: KernelCallbackTable
+
+        :class:`PVOID`
+
+
+    .. attribute:: UserSharedInfoPtr
+
+        :class:`PVOID`
+
+_ANON_PEB_UNION_2
+'''''''''''''''''
+.. class:: _ANON_PEB_UNION_2
+
+    .. attribute:: ImageProcessAffinityMask
+
+        :class:`PVOID`
+
+
+    .. attribute:: ActiveProcessAffinityMask
+
+        :class:`PVOID`
 
 _PEB
 ''''
@@ -165,34 +988,294 @@ _PEB
         :class:`PRTL_USER_PROCESS_PARAMETERS`
 
 
-    .. attribute:: Reserved4
+    .. attribute:: SubSystemData
 
-        :class:`BYTE` ``[104]``
+        :class:`PVOID`
 
 
-    .. attribute:: Reserved5
+    .. attribute:: ProcessHeap
 
-        :class:`PVOID` ``[52]``
+        :class:`PVOID`
+
+
+    .. attribute:: FastPebLock
+
+        :class:`PVOID`
+
+
+    .. attribute:: _SYSTEM_DEPENDENT_02
+
+        :class:`_ANON_PEB_SYSTEM_DEPENDENT_02`
+
+
+    .. attribute:: _SYSTEM_DEPENDENT_03
+
+        :class:`_ANON_PEB_SYSTEM_DEPENDENT_03`
+
+
+    .. attribute:: _SYSTEM_DEPENDENT_04
+
+        :class:`PVOID`
+
+
+    .. attribute:: anon_union_1
+
+        :class:`_ANON_PEB_UNION_1`
+
+
+    .. attribute:: SystemReserved
+
+        :class:`DWORD`
+
+
+    .. attribute:: _SYSTEM_DEPENDENT_05
+
+        :class:`DWORD`
+
+
+    .. attribute:: _SYSTEM_DEPENDENT_06
+
+        :class:`_ANON_PEB_SYSTEM_DEPENDENT_06`
+
+
+    .. attribute:: TlsExpansionCounter
+
+        :class:`PVOID`
+
+
+    .. attribute:: TlsBitmap
+
+        :class:`PVOID`
+
+
+    .. attribute:: TlsBitmapBits
+
+        :class:`DWORD` ``[2]``
+
+
+    .. attribute:: ReadOnlySharedMemoryBase
+
+        :class:`PVOID`
+
+
+    .. attribute:: _SYSTEM_DEPENDENT_07
+
+        :class:`_ANON_PEB_SYSTEM_DEPENDENT_07`
+
+
+    .. attribute:: ReadOnlyStaticServerData
+
+        :class:`PVOID`
+
+
+    .. attribute:: AnsiCodePageData
+
+        :class:`PVOID`
+
+
+    .. attribute:: OemCodePageData
+
+        :class:`PVOID`
+
+
+    .. attribute:: UnicodeCaseTableData
+
+        :class:`PVOID`
+
+
+    .. attribute:: NumberOfProcessors
+
+        :class:`DWORD`
+
+
+    .. attribute:: NtGlobalFlag
+
+        :class:`DWORD`
+
+
+    .. attribute:: CriticalSectionTimeout
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: HeapSegmentReserve
+
+        :class:`PVOID`
+
+
+    .. attribute:: HeapSegmentCommit
+
+        :class:`PVOID`
+
+
+    .. attribute:: HeapDeCommitTotalFreeThreshold
+
+        :class:`PVOID`
+
+
+    .. attribute:: HeapDeCommitFreeBlockThreshold
+
+        :class:`PVOID`
+
+
+    .. attribute:: NumberOfHeaps
+
+        :class:`DWORD`
+
+
+    .. attribute:: MaximumNumberOfHeaps
+
+        :class:`DWORD`
+
+
+    .. attribute:: ProcessHeaps
+
+        :class:`PVOID`
+
+
+    .. attribute:: GdiSharedHandleTable
+
+        :class:`PVOID`
+
+
+    .. attribute:: ProcessStarterHelper
+
+        :class:`PVOID`
+
+
+    .. attribute:: GdiDCAttributeList
+
+        :class:`PVOID`
+
+
+    .. attribute:: LoaderLock
+
+        :class:`PVOID`
+
+
+    .. attribute:: OSMajorVersion
+
+        :class:`DWORD`
+
+
+    .. attribute:: OSMinorVersion
+
+        :class:`DWORD`
+
+
+    .. attribute:: OSBuildNumber
+
+        :class:`WORD`
+
+
+    .. attribute:: OSCSDVersion
+
+        :class:`WORD`
+
+
+    .. attribute:: OSPlatformId
+
+        :class:`DWORD`
+
+
+    .. attribute:: ImageSubsystem
+
+        :class:`DWORD`
+
+
+    .. attribute:: ImageSubsystemMajorVersion
+
+        :class:`DWORD`
+
+
+    .. attribute:: ImageSubsystemMinorVersion
+
+        :class:`PVOID`
+
+
+    .. attribute:: anon_union_2
+
+        :class:`_ANON_PEB_UNION_2`
+
+
+    .. attribute:: GdiHandleBuffer
+
+        :class:`PVOID` ``[26]``
+
+
+    .. attribute:: GdiHandleBuffer2
+
+        :class:`BYTE` ``[32]``
 
 
     .. attribute:: PostProcessInitRoutine
 
-        :class:`PPS_POST_PROCESS_INIT_ROUTINE`
+        :class:`PVOID`
 
 
-    .. attribute:: Reserved6
+    .. attribute:: TlsExpansionBitmap
 
-        :class:`BYTE` ``[128]``
+        :class:`PVOID`
 
 
-    .. attribute:: Reserved7
+    .. attribute:: TlsExpansionBitmapBits
 
-        :class:`PVOID` ``[1]``
+        :class:`DWORD` ``[32]``
 
 
     .. attribute:: SessionId
 
-        :class:`ULONG`
+        :class:`PVOID`
+
+
+    .. attribute:: AppCompatFlags
+
+        :class:`ULARGE_INTEGER`
+
+
+    .. attribute:: AppCompatFlagsUser
+
+        :class:`ULARGE_INTEGER`
+
+
+    .. attribute:: pShimData
+
+        :class:`PVOID`
+
+
+    .. attribute:: AppCompatInfo
+
+        :class:`PVOID`
+
+
+    .. attribute:: CSDVersion
+
+        :class:`UNICODE_STRING`
+
+
+    .. attribute:: ActivationContextData
+
+        :class:`PVOID`
+
+
+    .. attribute:: ProcessAssemblyStorageMap
+
+        :class:`PVOID`
+
+
+    .. attribute:: SystemDefaultActivationContextData
+
+        :class:`PVOID`
+
+
+    .. attribute:: SystemAssemblyStorageMap
+
+        :class:`PVOID`
+
+
+    .. attribute:: MinimumStackCommit
+
+        :class:`PVOID`
 
 _SECURITY_ATTRIBUTES
 ''''''''''''''''''''
@@ -1104,6 +2187,27 @@ _IMAGE_EXPORT_DIRECTORY
 
 
     .. attribute:: AddressOfNameOrdinals
+
+        :class:`DWORD`
+
+_IMAGE_BASE_RELOCATION
+''''''''''''''''''''''
+.. class:: PIMAGE_BASE_RELOCATION
+
+    Pointer to :class:`_IMAGE_BASE_RELOCATION`
+
+.. class:: IMAGE_BASE_RELOCATION
+
+    Alias for :class:`_IMAGE_BASE_RELOCATION`
+
+.. class:: _IMAGE_BASE_RELOCATION
+
+    .. attribute:: VirtualAddress
+
+        :class:`DWORD`
+
+
+    .. attribute:: SizeOfBlock
 
         :class:`DWORD`
 
@@ -4924,45 +6028,6 @@ _DEBUG_EXCEPTION_FILTER_PARAMETERS
 
         :class:`ULONG`
 
-_GUID
-'''''
-.. class:: IID
-
-    Alias for :class:`_GUID`
-
-.. class:: REFCLSID
-
-    Pointer to :class:`_GUID`
-
-.. class:: GUID
-
-    Alias for :class:`_GUID`
-
-.. class:: REFIID
-
-    Pointer to :class:`_GUID`
-
-.. class:: _GUID
-
-    .. attribute:: Data1
-
-        :class:`ULONG`
-
-
-    .. attribute:: Data2
-
-        :class:`USHORT`
-
-
-    .. attribute:: Data3
-
-        :class:`USHORT`
-
-
-    .. attribute:: Data4
-
-        :class:`BYTE` ``[8]``
-
 _TMP_signscale
 ''''''''''''''
 .. class:: _TMP_signscale
@@ -6305,31 +7370,6 @@ WINTRUST_SGNR_INFO_
 
         :class:`HCERTSTORE`
 
-_FILETIME
-'''''''''
-.. class:: LPFILETIME
-
-    Pointer to :class:`_FILETIME`
-
-.. class:: PFILETIME
-
-    Pointer to :class:`_FILETIME`
-
-.. class:: FILETIME
-
-    Alias for :class:`_FILETIME`
-
-.. class:: _FILETIME
-
-    .. attribute:: dwLowDateTime
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwHighDateTime
-
-        :class:`DWORD`
-
 WINTRUST_CERT_INFO_
 '''''''''''''''''''
 .. class:: WINTRUST_CERT_INFO
@@ -7338,97 +8378,6 @@ _PUBLIC_OBJECT_BASIC_INFORMATION
     .. attribute:: Reserved
 
         :class:`ULONG` ``[10]``
-
-_EVENTLOGRECORD
-'''''''''''''''
-.. class:: PEVENTLOGRECORD
-
-    Pointer to :class:`_EVENTLOGRECORD`
-
-.. class:: EVENTLOGRECORD
-
-    Alias for :class:`_EVENTLOGRECORD`
-
-.. class:: _EVENTLOGRECORD
-
-    .. attribute:: Length
-
-        :class:`DWORD`
-
-
-    .. attribute:: Reserved
-
-        :class:`DWORD`
-
-
-    .. attribute:: RecordNumber
-
-        :class:`DWORD`
-
-
-    .. attribute:: TimeGenerated
-
-        :class:`DWORD`
-
-
-    .. attribute:: TimeWritten
-
-        :class:`DWORD`
-
-
-    .. attribute:: EventID
-
-        :class:`DWORD`
-
-
-    .. attribute:: EventType
-
-        :class:`WORD`
-
-
-    .. attribute:: NumStrings
-
-        :class:`WORD`
-
-
-    .. attribute:: EventCategory
-
-        :class:`WORD`
-
-
-    .. attribute:: ReservedFlags
-
-        :class:`WORD`
-
-
-    .. attribute:: ClosingRecordNumber
-
-        :class:`DWORD`
-
-
-    .. attribute:: StringOffset
-
-        :class:`DWORD`
-
-
-    .. attribute:: UserSidLength
-
-        :class:`DWORD`
-
-
-    .. attribute:: UserSidOffset
-
-        :class:`DWORD`
-
-
-    .. attribute:: DataLength
-
-        :class:`DWORD`
-
-
-    .. attribute:: DataOffset
-
-        :class:`DWORD`
 
 tagSOLE_AUTHENTICATION_SERVICE
 ''''''''''''''''''''''''''''''
@@ -8965,31 +9914,6 @@ _CRYPT_ENCODE_PARA
 
         :class:`PVOID`
 
-tagPOINT
-''''''''
-.. class:: LPPOINT
-
-    Pointer to :class:`tagPOINT`
-
-.. class:: PPOINT
-
-    Pointer to :class:`tagPOINT`
-
-.. class:: POINT
-
-    Alias for :class:`tagPOINT`
-
-.. class:: tagPOINT
-
-    .. attribute:: x
-
-        :class:`LONG`
-
-
-    .. attribute:: y
-
-        :class:`LONG`
-
 _ACL
 ''''
 .. class:: PACL
@@ -9443,447 +10367,414 @@ _RTL_UNLOAD_EVENT_TRACE64
 
         :class:`ULONG` ``[2]``
 
-tagRECT
-'''''''
-.. class:: LPRECT
+_FILE_FS_ATTRIBUTE_INFORMATION
+''''''''''''''''''''''''''''''
+.. class:: PFILE_FS_ATTRIBUTE_INFORMATION
 
-    Pointer to :class:`tagRECT`
+    Pointer to :class:`_FILE_FS_ATTRIBUTE_INFORMATION`
 
-.. class:: NPRECT
+.. class:: FILE_FS_ATTRIBUTE_INFORMATION
 
-    Pointer to :class:`tagRECT`
+    Alias for :class:`_FILE_FS_ATTRIBUTE_INFORMATION`
 
-.. class:: RECT
+.. class:: _FILE_FS_ATTRIBUTE_INFORMATION
 
-    Alias for :class:`tagRECT`
+    .. attribute:: FileSystemAttributes
 
-.. class:: PRECT
+        :class:`ULONG`
 
-    Pointer to :class:`tagRECT`
 
-.. class:: tagRECT
-
-    .. attribute:: left
+    .. attribute:: MaximumComponentNameLength
 
         :class:`LONG`
 
 
-    .. attribute:: top
+    .. attribute:: FileSystemNameLength
 
-        :class:`LONG`
+        :class:`ULONG`
 
 
-    .. attribute:: right
+    .. attribute:: FileSystemName
 
-        :class:`LONG`
+        :class:`WCHAR` ``[1]``
 
+_FILE_FS_LABEL_INFORMATION
+''''''''''''''''''''''''''
+.. class:: FILE_FS_LABEL_INFORMATION
 
-    .. attribute:: bottom
+    Alias for :class:`_FILE_FS_LABEL_INFORMATION`
 
-        :class:`LONG`
+.. class:: PFILE_FS_LABEL_INFORMATION
 
-tagRGBTRIPLE
-''''''''''''
-.. class:: NPRGBTRIPLE
+    Pointer to :class:`_FILE_FS_LABEL_INFORMATION`
 
-    Pointer to :class:`tagRGBTRIPLE`
+.. class:: _FILE_FS_LABEL_INFORMATION
 
-.. class:: LPRGBTRIPLE
+    .. attribute:: VolumeLabelLength
 
-    Pointer to :class:`tagRGBTRIPLE`
+        :class:`ULONG`
 
-.. class:: RGBTRIPLE
 
-    Alias for :class:`tagRGBTRIPLE`
+    .. attribute:: VolumeLabel
 
-.. class:: PRGBTRIPLE
+        :class:`WCHAR` ``[1]``
 
-    Pointer to :class:`tagRGBTRIPLE`
+_FILE_FS_SIZE_INFORMATION
+'''''''''''''''''''''''''
+.. class:: PFILE_FS_SIZE_INFORMATION
 
-.. class:: tagRGBTRIPLE
+    Pointer to :class:`_FILE_FS_SIZE_INFORMATION`
 
-    .. attribute:: rgbtBlue
+.. class:: FILE_FS_SIZE_INFORMATION
 
-        :class:`BYTE`
+    Alias for :class:`_FILE_FS_SIZE_INFORMATION`
 
+.. class:: _FILE_FS_SIZE_INFORMATION
 
-    .. attribute:: rgbtGreen
+    .. attribute:: TotalAllocationUnits
 
-        :class:`BYTE`
+        :class:`LARGE_INTEGER`
 
 
-    .. attribute:: rgbtRed
+    .. attribute:: AvailableAllocationUnits
 
-        :class:`BYTE`
+        :class:`LARGE_INTEGER`
 
-tagBITMAPFILEHEADER
-'''''''''''''''''''
-.. class:: BITMAPFILEHEADER
 
-    Alias for :class:`tagBITMAPFILEHEADER`
+    .. attribute:: SectorsPerAllocationUnit
 
-.. class:: PBITMAPFILEHEADER
+        :class:`ULONG`
 
-    Pointer to :class:`tagBITMAPFILEHEADER`
 
-.. class:: LPBITMAPFILEHEADER
+    .. attribute:: BytesPerSector
 
-    Pointer to :class:`tagBITMAPFILEHEADER`
+        :class:`ULONG`
 
-.. class:: tagBITMAPFILEHEADER
+_FILE_FS_DEVICE_INFORMATION
+'''''''''''''''''''''''''''
+.. class:: FILE_FS_DEVICE_INFORMATION
 
-    .. attribute:: bfType
+    Alias for :class:`_FILE_FS_DEVICE_INFORMATION`
 
-        :class:`WORD`
+.. class:: PFILE_FS_DEVICE_INFORMATION
 
+    Pointer to :class:`_FILE_FS_DEVICE_INFORMATION`
 
-    .. attribute:: bfSize
+.. class:: _FILE_FS_DEVICE_INFORMATION
 
-        :class:`DWORD`
+    .. attribute:: DeviceType
 
+        :class:`DEVICE_TYPE`
 
-    .. attribute:: bfReserved1
 
-        :class:`WORD`
+    .. attribute:: Characteristics
 
+        :class:`ULONG`
 
-    .. attribute:: bfReserved2
+_FILE_FS_CONTROL_INFORMATION
+''''''''''''''''''''''''''''
+.. class:: FILE_FS_CONTROL_INFORMATION
 
-        :class:`WORD`
+    Alias for :class:`_FILE_FS_CONTROL_INFORMATION`
 
+.. class:: PFILE_FS_CONTROL_INFORMATION
 
-    .. attribute:: bfOffBits
+    Pointer to :class:`_FILE_FS_CONTROL_INFORMATION`
 
-        :class:`DWORD`
+.. class:: _FILE_FS_CONTROL_INFORMATION
 
-tagBITMAPCOREHEADER
-'''''''''''''''''''
-.. class:: LPBITMAPCOREHEADER
+    .. attribute:: FreeSpaceStartFiltering
 
-    Pointer to :class:`tagBITMAPCOREHEADER`
+        :class:`LARGE_INTEGER`
 
-.. class:: PBITMAPCOREHEADER
 
-    Pointer to :class:`tagBITMAPCOREHEADER`
+    .. attribute:: FreeSpaceThreshold
 
-.. class:: BITMAPCOREHEADER
+        :class:`LARGE_INTEGER`
 
-    Alias for :class:`tagBITMAPCOREHEADER`
 
-.. class:: tagBITMAPCOREHEADER
+    .. attribute:: FreeSpaceStopFiltering
 
-    .. attribute:: bcSize
+        :class:`LARGE_INTEGER`
 
-        :class:`DWORD`
 
+    .. attribute:: DefaultQuotaThreshold
 
-    .. attribute:: bcWidth
+        :class:`LARGE_INTEGER`
 
-        :class:`WORD`
 
+    .. attribute:: DefaultQuotaLimit
 
-    .. attribute:: bcHeight
+        :class:`LARGE_INTEGER`
 
-        :class:`WORD`
 
+    .. attribute:: FileSystemControlFlags
 
-    .. attribute:: bcPlanes
+        :class:`ULONG`
 
-        :class:`WORD`
+_FILE_FS_FULL_SIZE_INFORMATION
+''''''''''''''''''''''''''''''
+.. class:: PFILE_FS_FULL_SIZE_INFORMATION
 
+    Pointer to :class:`_FILE_FS_FULL_SIZE_INFORMATION`
 
-    .. attribute:: bcBitCount
+.. class:: FILE_FS_FULL_SIZE_INFORMATION
 
-        :class:`WORD`
+    Alias for :class:`_FILE_FS_FULL_SIZE_INFORMATION`
 
-tagBITMAP
-'''''''''
-.. class:: NPBITMAP
+.. class:: _FILE_FS_FULL_SIZE_INFORMATION
 
-    Pointer to :class:`tagBITMAP`
+    .. attribute:: TotalAllocationUnits
 
-.. class:: LPBITMAP
+        :class:`LARGE_INTEGER`
 
-    Pointer to :class:`tagBITMAP`
 
-.. class:: PBITMAP
+    .. attribute:: CallerAvailableAllocationUnits
 
-    Pointer to :class:`tagBITMAP`
+        :class:`LARGE_INTEGER`
 
-.. class:: BITMAP
 
-    Alias for :class:`tagBITMAP`
+    .. attribute:: ActualAvailableAllocationUnits
 
-.. class:: tagBITMAP
+        :class:`LARGE_INTEGER`
 
-    .. attribute:: bmType
 
-        :class:`LONG`
+    .. attribute:: SectorsPerAllocationUnit
 
+        :class:`ULONG`
 
-    .. attribute:: bmWidth
 
-        :class:`LONG`
+    .. attribute:: BytesPerSector
 
+        :class:`ULONG`
 
-    .. attribute:: bmHeight
+_FILE_FS_OBJECTID_INFORMATION
+'''''''''''''''''''''''''''''
+.. class:: FILE_FS_OBJECTID_INFORMATION
 
-        :class:`LONG`
+    Alias for :class:`_FILE_FS_OBJECTID_INFORMATION`
 
+.. class:: PFILE_FS_OBJECTID_INFORMATION
 
-    .. attribute:: bmWidthBytes
+    Pointer to :class:`_FILE_FS_OBJECTID_INFORMATION`
 
-        :class:`LONG`
+.. class:: _FILE_FS_OBJECTID_INFORMATION
 
+    .. attribute:: ObjectId
 
-    .. attribute:: bmPlanes
+        :class:`UCHAR` ``[16]``
 
-        :class:`WORD`
 
+    .. attribute:: ExtendedInfo
 
-    .. attribute:: bmBitsPixel
+        :class:`UCHAR` ``[48]``
 
-        :class:`WORD`
+_FILE_FS_DRIVER_PATH_INFORMATION
+''''''''''''''''''''''''''''''''
+.. class:: FILE_FS_DRIVER_PATH_INFORMATION
 
+    Alias for :class:`_FILE_FS_DRIVER_PATH_INFORMATION`
 
-    .. attribute:: bmBits
+.. class:: PFILE_FS_DRIVER_PATH_INFORMATION
 
-        :class:`LPVOID`
+    Pointer to :class:`_FILE_FS_DRIVER_PATH_INFORMATION`
 
-tagBITMAPINFOHEADER
-'''''''''''''''''''
-.. class:: BITMAPINFOHEADER
+.. class:: _FILE_FS_DRIVER_PATH_INFORMATION
 
-    Alias for :class:`tagBITMAPINFOHEADER`
+    .. attribute:: DriverInPath
 
-.. class:: PBITMAPINFOHEADER
+        :class:`BOOLEAN`
 
-    Pointer to :class:`tagBITMAPINFOHEADER`
 
-.. class:: LPBITMAPINFOHEADER
+    .. attribute:: DriverNameLength
 
-    Pointer to :class:`tagBITMAPINFOHEADER`
+        :class:`ULONG`
 
-.. class:: tagBITMAPINFOHEADER
 
-    .. attribute:: biSize
+    .. attribute:: DriverName
 
-        :class:`DWORD`
+        :class:`WCHAR` ``[1]``
 
+_FILE_FS_DRIVER_PATH_INFORMATION
+''''''''''''''''''''''''''''''''
+.. class:: FILE_FS_DRIVER_PATH_INFORMATION
 
-    .. attribute:: biWidth
+    Alias for :class:`_FILE_FS_DRIVER_PATH_INFORMATION`
 
-        :class:`LONG`
+.. class:: PFILE_FS_DRIVER_PATH_INFORMATION
 
+    Pointer to :class:`_FILE_FS_DRIVER_PATH_INFORMATION`
 
-    .. attribute:: biHeight
+.. class:: _FILE_FS_DRIVER_PATH_INFORMATION
 
-        :class:`LONG`
+    .. attribute:: DriverInPath
 
+        :class:`BOOLEAN`
 
-    .. attribute:: biPlanes
 
-        :class:`WORD`
+    .. attribute:: DriverNameLength
 
+        :class:`ULONG`
 
-    .. attribute:: biBitCount
 
-        :class:`WORD`
+    .. attribute:: DriverName
 
+        :class:`WCHAR` ``[1]``
 
-    .. attribute:: biCompression
+_FILE_FS_VOLUME_INFORMATION
+'''''''''''''''''''''''''''
+.. class:: FILE_FS_VOLUME_INFORMATION
 
-        :class:`DWORD`
+    Alias for :class:`_FILE_FS_VOLUME_INFORMATION`
 
+.. class:: PFILE_FS_VOLUME_INFORMATION
 
-    .. attribute:: biSizeImage
+    Pointer to :class:`_FILE_FS_VOLUME_INFORMATION`
 
-        :class:`DWORD`
+.. class:: _FILE_FS_VOLUME_INFORMATION
 
+    .. attribute:: VolumeCreationTime
 
-    .. attribute:: biXPelsPerMeter
+        :class:`LARGE_INTEGER`
 
-        :class:`LONG`
 
+    .. attribute:: VolumeSerialNumber
 
-    .. attribute:: biYPelsPerMeter
+        :class:`ULONG`
 
-        :class:`LONG`
 
+    .. attribute:: VolumeLabelLength
 
-    .. attribute:: biClrUsed
+        :class:`ULONG`
 
-        :class:`DWORD`
 
+    .. attribute:: SupportsObjects
 
-    .. attribute:: biClrImportant
+        :class:`BOOLEAN`
 
-        :class:`DWORD`
 
-tagRGBQUAD
-''''''''''
-.. class:: RGBQUAD
+    .. attribute:: VolumeLabel
 
-    Alias for :class:`tagRGBQUAD`
+        :class:`WCHAR` ``[1]``
 
-.. class:: tagRGBQUAD
+_FILE_FS_SECTOR_SIZE_INFORMATION
+''''''''''''''''''''''''''''''''
+.. class:: PFILE_FS_SECTOR_SIZE_INFORMATION
 
-    .. attribute:: rgbBlue
+    Pointer to :class:`_FILE_FS_SECTOR_SIZE_INFORMATION`
 
-        :class:`BYTE`
+.. class:: FILE_FS_SECTOR_SIZE_INFORMATION
 
+    Alias for :class:`_FILE_FS_SECTOR_SIZE_INFORMATION`
 
-    .. attribute:: rgbGreen
+.. class:: _FILE_FS_SECTOR_SIZE_INFORMATION
 
-        :class:`BYTE`
+    .. attribute:: LogicalBytesPerSector
 
+        :class:`ULONG`
 
-    .. attribute:: rgbRed
 
-        :class:`BYTE`
+    .. attribute:: PhysicalBytesPerSectorForAtomicity
 
+        :class:`ULONG`
 
-    .. attribute:: rgbReserved
 
-        :class:`BYTE`
+    .. attribute:: PhysicalBytesPerSectorForPerformance
 
-tagBITMAPINFO
-'''''''''''''
-.. class:: LPBITMAPINFO
+        :class:`ULONG`
 
-    Pointer to :class:`tagBITMAPINFO`
 
-.. class:: PBITMAPINFO
+    .. attribute:: FileSystemEffectivePhysicalBytesPerSectorForAtomicity
 
-    Pointer to :class:`tagBITMAPINFO`
+        :class:`ULONG`
 
-.. class:: BITMAPINFO
 
-    Alias for :class:`tagBITMAPINFO`
+    .. attribute:: Flags
 
-.. class:: tagBITMAPINFO
+        :class:`ULONG`
 
-    .. attribute:: bmiHeader
 
-        :class:`BITMAPINFOHEADER`
+    .. attribute:: ByteOffsetForSectorAlignment
 
+        :class:`ULONG`
 
-    .. attribute:: bmiColors
 
-        :class:`RGBQUAD` ``[1]``
+    .. attribute:: ByteOffsetForPartitionAlignment
 
-tagBITMAPCOREINFO
-'''''''''''''''''
-.. class:: LPBITMAPCOREINFO
+        :class:`ULONG`
 
-    Pointer to :class:`tagBITMAPCOREINFO`
-
-.. class:: BITMAPCOREINFO
-
-    Alias for :class:`tagBITMAPCOREINFO`
-
-.. class:: PBITMAPCOREINFO
-
-    Pointer to :class:`tagBITMAPCOREINFO`
-
-.. class:: tagBITMAPCOREINFO
-
-    .. attribute:: bmciHeader
-
-        :class:`BITMAPCOREHEADER`
-
-
-    .. attribute:: bmciColors
-
-        :class:`RGBTRIPLE` ``[1]``
-
-_BG_FILE_PROGRESS
-'''''''''''''''''
-.. class:: BG_FILE_PROGRESS
-
-    Alias for :class:`_BG_FILE_PROGRESS`
-
-.. class:: _BG_FILE_PROGRESS
-
-    .. attribute:: BytesTotal
-
-        :class:`UINT64`
-
-
-    .. attribute:: BytesTransferred
-
-        :class:`UINT64`
-
-
-    .. attribute:: Completed
-
-        :class:`BOOL`
-
-_BG_JOB_PROGRESS
+_RTLP_CURDIR_REF
 ''''''''''''''''
-.. class:: BG_JOB_PROGRESS
+.. class:: PRTLP_CURDIR_REF
 
-    Alias for :class:`_BG_JOB_PROGRESS`
+    Pointer to :class:`_RTLP_CURDIR_REF`
 
-.. class:: _BG_JOB_PROGRESS
+.. class:: RTLP_CURDIR_REF
 
-    .. attribute:: BytesTotal
+    Alias for :class:`_RTLP_CURDIR_REF`
 
-        :class:`UINT64`
+.. class:: _RTLP_CURDIR_REF
+
+    .. attribute:: RefCount
+
+        :class:`LONG`
 
 
-    .. attribute:: BytesTransferred
+    .. attribute:: Handle
 
-        :class:`UINT64`
+        :class:`HANDLE`
+
+_RTL_RELATIVE_NAME_U
+''''''''''''''''''''
+.. class:: PRTL_RELATIVE_NAME_U
+
+    Pointer to :class:`_RTL_RELATIVE_NAME_U`
+
+.. class:: RTL_RELATIVE_NAME_U
+
+    Alias for :class:`_RTL_RELATIVE_NAME_U`
+
+.. class:: _RTL_RELATIVE_NAME_U
+
+    .. attribute:: RelativeName
+
+        :class:`UNICODE_STRING`
 
 
-    .. attribute:: FilesTotal
+    .. attribute:: ContainingDirectory
+
+        :class:`HANDLE`
+
+
+    .. attribute:: CurDirRef
+
+        :class:`PRTLP_CURDIR_REF`
+
+_PROCESS_INSTRUMENTATION_CALLBACK_INFORMATION
+'''''''''''''''''''''''''''''''''''''''''''''
+.. class:: PPROCESS_INSTRUMENTATION_CALLBACK_INFORMATION
+
+    Pointer to :class:`_PROCESS_INSTRUMENTATION_CALLBACK_INFORMATION`
+
+.. class:: PROCESS_INSTRUMENTATION_CALLBACK_INFORMATION
+
+    Alias for :class:`_PROCESS_INSTRUMENTATION_CALLBACK_INFORMATION`
+
+.. class:: _PROCESS_INSTRUMENTATION_CALLBACK_INFORMATION
+
+    .. attribute:: Version
 
         :class:`ULONG`
 
 
-    .. attribute:: FilesTransferred
+    .. attribute:: Reserved
 
         :class:`ULONG`
 
-_BG_FILE_INFO
-'''''''''''''
-.. class:: BG_FILE_INFO
 
-    Alias for :class:`_BG_FILE_INFO`
+    .. attribute:: Callback
 
-.. class:: _BG_FILE_INFO
-
-    .. attribute:: RemoteName
-
-        :class:`LPWSTR`
-
-
-    .. attribute:: LocalName
-
-        :class:`LPWSTR`
-
-_BG_JOB_TIMES
-'''''''''''''
-.. class:: BG_JOB_TIMES
-
-    Alias for :class:`_BG_JOB_TIMES`
-
-.. class:: _BG_JOB_TIMES
-
-    .. attribute:: CreationTime
-
-        :class:`FILETIME`
-
-
-    .. attribute:: ModificationTime
-
-        :class:`FILETIME`
-
-
-    .. attribute:: TransferCompletionTime
-
-        :class:`FILETIME`
+        :class:`PVOID`
 
 _ALPC_PORT_ATTRIBUTES32
 '''''''''''''''''''''''
@@ -10732,6 +11623,944 @@ _RPC_IF_ID
 
         :class:`USHORT`
 
+_API_SET_VALUE_ENTRY
+''''''''''''''''''''
+.. class:: API_SET_VALUE_ENTRY
+
+    Alias for :class:`_API_SET_VALUE_ENTRY`
+
+.. class:: PAPI_SET_VALUE_ENTRY
+
+    Pointer to :class:`_API_SET_VALUE_ENTRY`
+
+.. class:: _API_SET_VALUE_ENTRY
+
+    .. attribute:: Flags
+
+        :class:`ULONG`
+
+
+    .. attribute:: NameOffset
+
+        :class:`ULONG`
+
+
+    .. attribute:: NameLength
+
+        :class:`ULONG`
+
+
+    .. attribute:: ValueOffset
+
+        :class:`ULONG`
+
+
+    .. attribute:: ValueLength
+
+        :class:`ULONG`
+
+_API_SET_NAMESPACE_ENTRY
+''''''''''''''''''''''''
+.. class:: PAPI_SET_NAMESPACE_ENTRY
+
+    Pointer to :class:`_API_SET_NAMESPACE_ENTRY`
+
+.. class:: API_SET_NAMESPACE_ENTRY
+
+    Alias for :class:`_API_SET_NAMESPACE_ENTRY`
+
+.. class:: _API_SET_NAMESPACE_ENTRY
+
+    .. attribute:: Flags
+
+        :class:`ULONG`
+
+
+    .. attribute:: NameOffset
+
+        :class:`ULONG`
+
+
+    .. attribute:: NameLength
+
+        :class:`ULONG`
+
+
+    .. attribute:: AliasOffset
+
+        :class:`ULONG`
+
+
+    .. attribute:: AliasLength
+
+        :class:`ULONG`
+
+
+    .. attribute:: DataOffset
+
+        :class:`ULONG`
+
+_API_SET_NAMESPACE_ARRAY
+''''''''''''''''''''''''
+.. class:: PAPI_SET_NAMESPACE_ARRAY
+
+    Pointer to :class:`_API_SET_NAMESPACE_ARRAY`
+
+.. class:: API_SET_NAMESPACE_ARRAY
+
+    Alias for :class:`_API_SET_NAMESPACE_ARRAY`
+
+.. class:: _API_SET_NAMESPACE_ARRAY
+
+    .. attribute:: Version
+
+        :class:`ULONG`
+
+
+    .. attribute:: Size
+
+        :class:`ULONG`
+
+
+    .. attribute:: Flags
+
+        :class:`ULONG`
+
+
+    .. attribute:: Count
+
+        :class:`ULONG`
+
+
+    .. attribute:: Array
+
+        :class:`API_SET_NAMESPACE_ENTRY` ``[ANYSIZE_ARRAY]``
+
+_API_SET_VALUE_ENTRY_V2
+'''''''''''''''''''''''
+.. class:: PAPI_SET_VALUE_ENTRY_V2
+
+    Pointer to :class:`_API_SET_VALUE_ENTRY_V2`
+
+.. class:: API_SET_VALUE_ENTRY_V2
+
+    Alias for :class:`_API_SET_VALUE_ENTRY_V2`
+
+.. class:: _API_SET_VALUE_ENTRY_V2
+
+    .. attribute:: NameOffset
+
+        :class:`ULONG`
+
+
+    .. attribute:: NameLength
+
+        :class:`ULONG`
+
+
+    .. attribute:: ValueOffset
+
+        :class:`ULONG`
+
+
+    .. attribute:: ValueLength
+
+        :class:`ULONG`
+
+_API_SET_VALUE_ARRAY_V2
+'''''''''''''''''''''''
+.. class:: API_SET_VALUE_ARRAY_V2
+
+    Alias for :class:`_API_SET_VALUE_ARRAY_V2`
+
+.. class:: PAPI_SET_VALUE_ARRAY_V2
+
+    Pointer to :class:`_API_SET_VALUE_ARRAY_V2`
+
+.. class:: _API_SET_VALUE_ARRAY_V2
+
+    .. attribute:: Count
+
+        :class:`ULONG`
+
+
+    .. attribute:: Array
+
+        :class:`API_SET_VALUE_ENTRY_V2` ``[ANYSIZE_ARRAY]``
+
+_API_SET_NAMESPACE_ENTRY_V2
+'''''''''''''''''''''''''''
+.. class:: PAPI_SET_NAMESPACE_ENTRY_V2
+
+    Pointer to :class:`_API_SET_NAMESPACE_ENTRY_V2`
+
+.. class:: API_SET_NAMESPACE_ENTRY_V2
+
+    Alias for :class:`_API_SET_NAMESPACE_ENTRY_V2`
+
+.. class:: _API_SET_NAMESPACE_ENTRY_V2
+
+    .. attribute:: NameOffset
+
+        :class:`ULONG`
+
+
+    .. attribute:: NameLength
+
+        :class:`ULONG`
+
+
+    .. attribute:: DataOffset
+
+        :class:`ULONG`
+
+_API_SET_NAMESPACE_ARRAY_V2
+'''''''''''''''''''''''''''
+.. class:: API_SET_NAMESPACE_ARRAY_V2
+
+    Alias for :class:`_API_SET_NAMESPACE_ARRAY_V2`
+
+.. class:: PAPI_SET_NAMESPACE_ARRAY_V2
+
+    Pointer to :class:`_API_SET_NAMESPACE_ARRAY_V2`
+
+.. class:: _API_SET_NAMESPACE_ARRAY_V2
+
+    .. attribute:: Version
+
+        :class:`ULONG`
+
+
+    .. attribute:: Count
+
+        :class:`ULONG`
+
+
+    .. attribute:: Array
+
+        :class:`API_SET_NAMESPACE_ENTRY_V2` ``[ANYSIZE_ARRAY]``
+
+_API_SET_VALUE_ARRAY_V4
+'''''''''''''''''''''''
+.. class:: API_SET_VALUE_ARRAY_V4
+
+    Alias for :class:`_API_SET_VALUE_ARRAY_V4`
+
+.. class:: PAPI_SET_VALUE_ARRAY_V2
+
+    Pointer to :class:`_API_SET_VALUE_ARRAY_V4`
+
+.. class:: _API_SET_VALUE_ARRAY_V4
+
+    .. attribute:: GuessFlags
+
+        :class:`ULONG`
+
+
+    .. attribute:: Count
+
+        :class:`ULONG`
+
+
+    .. attribute:: Array
+
+        :class:`API_SET_VALUE_ENTRY_V2` ``[ANYSIZE_ARRAY]``
+
+_API_SET_NAMESPACE_ARRAY_V4
+'''''''''''''''''''''''''''
+.. class:: API_SET_NAMESPACE_ARRAY_V4
+
+    Alias for :class:`_API_SET_NAMESPACE_ARRAY_V4`
+
+.. class:: PAPI_SET_NAMESPACE_ARRAY_V4
+
+    Pointer to :class:`_API_SET_NAMESPACE_ARRAY_V4`
+
+.. class:: _API_SET_NAMESPACE_ARRAY_V4
+
+    .. attribute:: Version
+
+        :class:`ULONG`
+
+
+    .. attribute:: Size
+
+        :class:`ULONG`
+
+
+    .. attribute:: Flags
+
+        :class:`ULONG`
+
+
+    .. attribute:: Count
+
+        :class:`ULONG`
+
+
+    .. attribute:: Array
+
+        :class:`API_SET_NAMESPACE_ENTRY` ``[ANYSIZE_ARRAY]``
+
+_API_SET_NAMESPACE_ENTRY_V4
+'''''''''''''''''''''''''''
+.. class:: PAPI_SET_NAMESPACE_ENTRY_V4
+
+    Pointer to :class:`_API_SET_NAMESPACE_ENTRY_V4`
+
+.. class:: API_SET_NAMESPACE_ENTRY_V4
+
+    Alias for :class:`_API_SET_NAMESPACE_ENTRY_V4`
+
+.. class:: _API_SET_NAMESPACE_ENTRY_V4
+
+    .. attribute:: Flags
+
+        :class:`ULONG`
+
+
+    .. attribute:: NameOffset
+
+        :class:`ULONG`
+
+
+    .. attribute:: NameLength
+
+        :class:`ULONG`
+
+
+    .. attribute:: AliasOffset
+
+        :class:`ULONG`
+
+
+    .. attribute:: AliasLength
+
+        :class:`ULONG`
+
+
+    .. attribute:: DataOffset
+
+        :class:`ULONG`
+
+_API_SET_NAMESPACE_ENTRY_V6
+'''''''''''''''''''''''''''
+.. class:: API_SET_NAMESPACE_ENTRY_V6
+
+    Alias for :class:`_API_SET_NAMESPACE_ENTRY_V6`
+
+.. class:: _API_SET_NAMESPACE_ENTRY_V6
+
+    .. attribute:: Flags
+
+        :class:`ULONG`
+
+
+    .. attribute:: NameOffset
+
+        :class:`ULONG`
+
+
+    .. attribute:: NameLength
+
+        :class:`ULONG`
+
+
+    .. attribute:: HashedLength
+
+        :class:`ULONG`
+
+
+    .. attribute:: ValueOffset
+
+        :class:`ULONG`
+
+
+    .. attribute:: ValueCount
+
+        :class:`ULONG`
+
+_API_SET_NAMESPACE_V6
+'''''''''''''''''''''
+.. class:: API_SET_NAMESPACE_V6
+
+    Alias for :class:`_API_SET_NAMESPACE_V6`
+
+.. class:: _API_SET_NAMESPACE_V6
+
+    .. attribute:: Version
+
+        :class:`ULONG`
+
+
+    .. attribute:: Size
+
+        :class:`ULONG`
+
+
+    .. attribute:: Flags
+
+        :class:`ULONG`
+
+
+    .. attribute:: Count
+
+        :class:`ULONG`
+
+
+    .. attribute:: EntryOffset
+
+        :class:`ULONG`
+
+
+    .. attribute:: HashOffset
+
+        :class:`ULONG`
+
+
+    .. attribute:: HashFactor
+
+        :class:`ULONG`
+
+_BG_FILE_PROGRESS
+'''''''''''''''''
+.. class:: BG_FILE_PROGRESS
+
+    Alias for :class:`_BG_FILE_PROGRESS`
+
+.. class:: _BG_FILE_PROGRESS
+
+    .. attribute:: BytesTotal
+
+        :class:`UINT64`
+
+
+    .. attribute:: BytesTransferred
+
+        :class:`UINT64`
+
+
+    .. attribute:: Completed
+
+        :class:`BOOL`
+
+_BG_JOB_PROGRESS
+''''''''''''''''
+.. class:: BG_JOB_PROGRESS
+
+    Alias for :class:`_BG_JOB_PROGRESS`
+
+.. class:: _BG_JOB_PROGRESS
+
+    .. attribute:: BytesTotal
+
+        :class:`UINT64`
+
+
+    .. attribute:: BytesTransferred
+
+        :class:`UINT64`
+
+
+    .. attribute:: FilesTotal
+
+        :class:`ULONG`
+
+
+    .. attribute:: FilesTransferred
+
+        :class:`ULONG`
+
+_BG_FILE_INFO
+'''''''''''''
+.. class:: BG_FILE_INFO
+
+    Alias for :class:`_BG_FILE_INFO`
+
+.. class:: _BG_FILE_INFO
+
+    .. attribute:: RemoteName
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: LocalName
+
+        :class:`LPWSTR`
+
+_BG_JOB_TIMES
+'''''''''''''
+.. class:: BG_JOB_TIMES
+
+    Alias for :class:`_BG_JOB_TIMES`
+
+.. class:: _BG_JOB_TIMES
+
+    .. attribute:: CreationTime
+
+        :class:`FILETIME`
+
+
+    .. attribute:: ModificationTime
+
+        :class:`FILETIME`
+
+
+    .. attribute:: TransferCompletionTime
+
+        :class:`FILETIME`
+
+_EVENTLOGRECORD
+'''''''''''''''
+.. class:: PEVENTLOGRECORD
+
+    Pointer to :class:`_EVENTLOGRECORD`
+
+.. class:: EVENTLOGRECORD
+
+    Alias for :class:`_EVENTLOGRECORD`
+
+.. class:: _EVENTLOGRECORD
+
+    .. attribute:: Length
+
+        :class:`DWORD`
+
+
+    .. attribute:: Reserved
+
+        :class:`DWORD`
+
+
+    .. attribute:: RecordNumber
+
+        :class:`DWORD`
+
+
+    .. attribute:: TimeGenerated
+
+        :class:`DWORD`
+
+
+    .. attribute:: TimeWritten
+
+        :class:`DWORD`
+
+
+    .. attribute:: EventID
+
+        :class:`DWORD`
+
+
+    .. attribute:: EventType
+
+        :class:`WORD`
+
+
+    .. attribute:: NumStrings
+
+        :class:`WORD`
+
+
+    .. attribute:: EventCategory
+
+        :class:`WORD`
+
+
+    .. attribute:: ReservedFlags
+
+        :class:`WORD`
+
+
+    .. attribute:: ClosingRecordNumber
+
+        :class:`DWORD`
+
+
+    .. attribute:: StringOffset
+
+        :class:`DWORD`
+
+
+    .. attribute:: UserSidLength
+
+        :class:`DWORD`
+
+
+    .. attribute:: UserSidOffset
+
+        :class:`DWORD`
+
+
+    .. attribute:: DataLength
+
+        :class:`DWORD`
+
+
+    .. attribute:: DataOffset
+
+        :class:`DWORD`
+
+_EVENTLOG_FULL_INFORMATION
+''''''''''''''''''''''''''
+.. class:: EVENTLOG_FULL_INFORMATION
+
+    Alias for :class:`_EVENTLOG_FULL_INFORMATION`
+
+.. class:: LPEVENTLOG_FULL_INFORMATION
+
+    Pointer to :class:`_EVENTLOG_FULL_INFORMATION`
+
+.. class:: _EVENTLOG_FULL_INFORMATION
+
+    .. attribute:: dwFull
+
+        :class:`DWORD`
+
+_FILE_INTERNAL_INFORMATION
+''''''''''''''''''''''''''
+.. class:: FILE_INTERNAL_INFORMATION
+
+    Alias for :class:`_FILE_INTERNAL_INFORMATION`
+
+.. class:: PFILE_INTERNAL_INFORMATION
+
+    Pointer to :class:`_FILE_INTERNAL_INFORMATION`
+
+.. class:: _FILE_INTERNAL_INFORMATION
+
+    .. attribute:: IndexNumber
+
+        :class:`LARGE_INTEGER`
+
+_FILE_ALIGNMENT_INFORMATION
+'''''''''''''''''''''''''''
+.. class:: PFILE_ALIGNMENT_INFORMATION
+
+    Pointer to :class:`_FILE_ALIGNMENT_INFORMATION`
+
+.. class:: FILE_ALIGNMENT_INFORMATION
+
+    Alias for :class:`_FILE_ALIGNMENT_INFORMATION`
+
+.. class:: _FILE_ALIGNMENT_INFORMATION
+
+    .. attribute:: AlignmentRequirement
+
+        :class:`ULONG`
+
+_FILE_ATTRIBUTE_TAG_INFORMATION
+'''''''''''''''''''''''''''''''
+.. class:: PFILE_ATTRIBUTE_TAG_INFORMATION
+
+    Pointer to :class:`_FILE_ATTRIBUTE_TAG_INFORMATION`
+
+.. class:: FILE_ATTRIBUTE_TAG_INFORMATION
+
+    Alias for :class:`_FILE_ATTRIBUTE_TAG_INFORMATION`
+
+.. class:: _FILE_ATTRIBUTE_TAG_INFORMATION
+
+    .. attribute:: FileAttributes
+
+        :class:`ULONG`
+
+
+    .. attribute:: ReparseTag
+
+        :class:`ULONG`
+
+_FILE_BASIC_INFORMATION
+'''''''''''''''''''''''
+.. class:: FILE_BASIC_INFORMATION
+
+    Alias for :class:`_FILE_BASIC_INFORMATION`
+
+.. class:: PFILE_BASIC_INFORMATION
+
+    Pointer to :class:`_FILE_BASIC_INFORMATION`
+
+.. class:: _FILE_BASIC_INFORMATION
+
+    .. attribute:: CreationTime
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: LastAccessTime
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: LastWriteTime
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: ChangeTime
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: FileAttributes
+
+        :class:`ULONG`
+
+_FILE_EA_INFORMATION
+''''''''''''''''''''
+.. class:: PFILE_EA_INFORMATION
+
+    Pointer to :class:`_FILE_EA_INFORMATION`
+
+.. class:: FILE_EA_INFORMATION
+
+    Alias for :class:`_FILE_EA_INFORMATION`
+
+.. class:: _FILE_EA_INFORMATION
+
+    .. attribute:: EaSize
+
+        :class:`ULONG`
+
+_FILE_IO_PRIORITY_HINT_INFORMATION
+''''''''''''''''''''''''''''''''''
+.. class:: PFILE_IO_PRIORITY_HINT_INFORMATION
+
+    Pointer to :class:`_FILE_IO_PRIORITY_HINT_INFORMATION`
+
+.. class:: FILE_IO_PRIORITY_HINT_INFORMATION
+
+    Alias for :class:`_FILE_IO_PRIORITY_HINT_INFORMATION`
+
+.. class:: _FILE_IO_PRIORITY_HINT_INFORMATION
+
+    .. attribute:: PriorityHint
+
+        :class:`IO_PRIORITY_HINT`
+
+_FILE_MODE_INFORMATION
+''''''''''''''''''''''
+.. class:: PFILE_MODE_INFORMATION
+
+    Pointer to :class:`_FILE_MODE_INFORMATION`
+
+.. class:: FILE_MODE_INFORMATION
+
+    Alias for :class:`_FILE_MODE_INFORMATION`
+
+.. class:: _FILE_MODE_INFORMATION
+
+    .. attribute:: Mode
+
+        :class:`ULONG`
+
+_FILE_NAME_INFORMATION
+''''''''''''''''''''''
+.. class:: PFILE_NAME_INFORMATION
+
+    Pointer to :class:`_FILE_NAME_INFORMATION`
+
+.. class:: FILE_NAME_INFORMATION
+
+    Alias for :class:`_FILE_NAME_INFORMATION`
+
+.. class:: _FILE_NAME_INFORMATION
+
+    .. attribute:: FileNameLength
+
+        :class:`ULONG`
+
+
+    .. attribute:: FileName
+
+        :class:`WCHAR` ``[1]``
+
+_FILE_NETWORK_OPEN_INFORMATION
+''''''''''''''''''''''''''''''
+.. class:: PFILE_NETWORK_OPEN_INFORMATION
+
+    Pointer to :class:`_FILE_NETWORK_OPEN_INFORMATION`
+
+.. class:: FILE_NETWORK_OPEN_INFORMATION
+
+    Alias for :class:`_FILE_NETWORK_OPEN_INFORMATION`
+
+.. class:: _FILE_NETWORK_OPEN_INFORMATION
+
+    .. attribute:: CreationTime
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: LastAccessTime
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: LastWriteTime
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: ChangeTime
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: AllocationSize
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: EndOfFile
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: FileAttributes
+
+        :class:`ULONG`
+
+_FILE_STANDARD_INFORMATION
+''''''''''''''''''''''''''
+.. class:: FILE_STANDARD_INFORMATION
+
+    Alias for :class:`_FILE_STANDARD_INFORMATION`
+
+.. class:: PFILE_STANDARD_INFORMATION
+
+    Pointer to :class:`_FILE_STANDARD_INFORMATION`
+
+.. class:: _FILE_STANDARD_INFORMATION
+
+    .. attribute:: AllocationSize
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: EndOfFile
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: NumberOfLinks
+
+        :class:`ULONG`
+
+
+    .. attribute:: DeletePending
+
+        :class:`BOOLEAN`
+
+
+    .. attribute:: Directory
+
+        :class:`BOOLEAN`
+
+_FILE_ACCESS_INFORMATION
+''''''''''''''''''''''''
+.. class:: FILE_ACCESS_INFORMATION
+
+    Alias for :class:`_FILE_ACCESS_INFORMATION`
+
+.. class:: PFILE_ACCESS_INFORMATION
+
+    Pointer to :class:`_FILE_ACCESS_INFORMATION`
+
+.. class:: _FILE_ACCESS_INFORMATION
+
+    .. attribute:: AccessFlags
+
+        :class:`ACCESS_MASK`
+
+_FILE_POSITION_INFORMATION
+''''''''''''''''''''''''''
+.. class:: PFILE_POSITION_INFORMATION
+
+    Pointer to :class:`_FILE_POSITION_INFORMATION`
+
+.. class:: FILE_POSITION_INFORMATION
+
+    Alias for :class:`_FILE_POSITION_INFORMATION`
+
+.. class:: _FILE_POSITION_INFORMATION
+
+    .. attribute:: CurrentByteOffset
+
+        :class:`LARGE_INTEGER`
+
+_FILE_IS_REMOTE_DEVICE_INFORMATION
+''''''''''''''''''''''''''''''''''
+.. class:: FILE_IS_REMOTE_DEVICE_INFORMATION
+
+    Alias for :class:`_FILE_IS_REMOTE_DEVICE_INFORMATION`
+
+.. class:: PFILE_IS_REMOTE_DEVICE_INFORMATION
+
+    Pointer to :class:`_FILE_IS_REMOTE_DEVICE_INFORMATION`
+
+.. class:: _FILE_IS_REMOTE_DEVICE_INFORMATION
+
+    .. attribute:: IsRemote
+
+        :class:`BOOLEAN`
+
+_FILE_ALL_INFORMATION
+'''''''''''''''''''''
+.. class:: PFILE_ALL_INFORMATION
+
+    Pointer to :class:`_FILE_ALL_INFORMATION`
+
+.. class:: FILE_ALL_INFORMATION
+
+    Alias for :class:`_FILE_ALL_INFORMATION`
+
+.. class:: _FILE_ALL_INFORMATION
+
+    .. attribute:: BasicInformation
+
+        :class:`FILE_BASIC_INFORMATION`
+
+
+    .. attribute:: StandardInformation
+
+        :class:`FILE_STANDARD_INFORMATION`
+
+
+    .. attribute:: InternalInformation
+
+        :class:`FILE_INTERNAL_INFORMATION`
+
+
+    .. attribute:: EaInformation
+
+        :class:`FILE_EA_INFORMATION`
+
+
+    .. attribute:: AccessInformation
+
+        :class:`FILE_ACCESS_INFORMATION`
+
+
+    .. attribute:: PositionInformation
+
+        :class:`FILE_POSITION_INFORMATION`
+
+
+    .. attribute:: ModeInformation
+
+        :class:`FILE_MODE_INFORMATION`
+
+
+    .. attribute:: AlignmentInformation
+
+        :class:`FILE_ALIGNMENT_INFORMATION`
+
+
+    .. attribute:: NameInformation
+
+        :class:`FILE_NAME_INFORMATION`
+
 WinEnums
 --------
 _SYSTEM_INFORMATION_CLASS
@@ -10739,6 +12568,7 @@ _SYSTEM_INFORMATION_CLASS
 .. class:: SYSTEM_INFORMATION_CLASS
 
     Alias for :class:`_SYSTEM_INFORMATION_CLASS`
+
 
 .. class:: _SYSTEM_INFORMATION_CLASS
 
@@ -10996,6 +12826,7 @@ _WELL_KNOWN_SID_TYPE
 .. class:: WELL_KNOWN_SID_TYPE
 
     Alias for :class:`_WELL_KNOWN_SID_TYPE`
+
 
 .. class:: _WELL_KNOWN_SID_TYPE
 
@@ -11290,6 +13121,7 @@ _SECTION_INHERIT
 
     Alias for :class:`_SECTION_INHERIT`
 
+
 .. class:: _SECTION_INHERIT
 
 
@@ -11298,11 +13130,152 @@ _SECTION_INHERIT
 
     .. attribute:: ViewUnmap(2)
 
+_PROCESSINFOCLASS
+'''''''''''''''''
+.. class:: PROCESS_INFORMATION_CLASS
+
+    Alias for :class:`_PROCESSINFOCLASS`
+
+
+.. class:: PROCESSINFOCLASS
+
+    Alias for :class:`_PROCESSINFOCLASS`
+
+
+.. class:: _PROCESSINFOCLASS
+
+
+    .. attribute:: ProcessBasicInformation(0)
+
+
+    .. attribute:: ProcessQuotaLimits(1)
+
+
+    .. attribute:: ProcessIoCounters(2)
+
+
+    .. attribute:: ProcessVmCounters(3)
+
+
+    .. attribute:: ProcessTimes(4)
+
+
+    .. attribute:: ProcessBasePriority(5)
+
+
+    .. attribute:: ProcessRaisePriority(6)
+
+
+    .. attribute:: ProcessDebugPort(7)
+
+
+    .. attribute:: ProcessExceptionPort(8)
+
+
+    .. attribute:: ProcessAccessToken(9)
+
+
+    .. attribute:: ProcessLdtInformation(10)
+
+
+    .. attribute:: ProcessLdtSize(11)
+
+
+    .. attribute:: ProcessDefaultHardErrorMode(12)
+
+
+    .. attribute:: ProcessIoPortHandlers(13)
+
+
+    .. attribute:: ProcessPooledUsageAndLimits(14)
+
+
+    .. attribute:: ProcessWorkingSetWatch(15)
+
+
+    .. attribute:: ProcessUserModeIOPL(16)
+
+
+    .. attribute:: ProcessEnableAlignmentFaultFixup(17)
+
+
+    .. attribute:: ProcessPriorityClass(18)
+
+
+    .. attribute:: ProcessWx86Information(19)
+
+
+    .. attribute:: ProcessHandleCount(20)
+
+
+    .. attribute:: ProcessAffinityMask(21)
+
+
+    .. attribute:: ProcessPriorityBoost(22)
+
+
+    .. attribute:: ProcessDeviceMap(23)
+
+
+    .. attribute:: ProcessSessionInformation(24)
+
+
+    .. attribute:: ProcessForegroundInformation(25)
+
+
+    .. attribute:: ProcessWow64Information(26)
+
+
+    .. attribute:: ProcessImageFileName(27)
+
+
+    .. attribute:: ProcessLUIDDeviceMapsEnabled(28)
+
+
+    .. attribute:: ProcessBreakOnTermination(29)
+
+
+    .. attribute:: ProcessDebugObjectHandle(30)
+
+
+    .. attribute:: ProcessDebugFlags(31)
+
+
+    .. attribute:: ProcessHandleTracing(32)
+
+
+    .. attribute:: ProcessIoPriority(33)
+
+
+    .. attribute:: ProcessExecuteFlags(34)
+
+
+    .. attribute:: ProcessResourceManagement(35)
+
+
+    .. attribute:: ProcessCookie(36)
+
+
+    .. attribute:: ProcessImageInformation(37)
+
+
+    .. attribute:: ProcessInformation38(38)
+
+
+    .. attribute:: ProcessInformation39(39)
+
+
+    .. attribute:: ProcessInstrumentationCallback(40)
+
+
+    .. attribute:: MaxProcessInfoClass(41)
+
 _MEMORY_INFORMATION_CLASS
 '''''''''''''''''''''''''
 .. class:: MEMORY_INFORMATION_CLASS
 
     Alias for :class:`_MEMORY_INFORMATION_CLASS`
+
 
 .. class:: _MEMORY_INFORMATION_CLASS
 
@@ -11327,9 +13300,11 @@ _THREAD_INFORMATION_CLASS
 
     Alias for :class:`_THREAD_INFORMATION_CLASS`
 
+
 .. class:: PTHREAD_INFORMATION_CLASS
 
     Pointer to :class:`_THREAD_INFORMATION_CLASS`
+
 
 .. class:: _THREAD_INFORMATION_CLASS
 
@@ -11393,6 +13368,7 @@ _TCP_TABLE_CLASS
 
     Alias for :class:`_TCP_TABLE_CLASS`
 
+
 .. class:: _TCP_TABLE_CLASS
 
 
@@ -11427,6 +13403,7 @@ _VARENUM
 .. class:: VARENUM
 
     Alias for :class:`_VARENUM`
+
 
 .. class:: _VARENUM
 
@@ -11592,6 +13569,7 @@ _UDP_TABLE_CLASS
 
     Alias for :class:`_UDP_TABLE_CLASS`
 
+
 .. class:: _UDP_TABLE_CLASS
 
 
@@ -11609,6 +13587,7 @@ NET_FW_RULE_DIRECTION_
 
     Alias for :class:`NET_FW_RULE_DIRECTION_`
 
+
 .. class:: NET_FW_RULE_DIRECTION_
 
 
@@ -11625,6 +13604,7 @@ NET_FW_PROFILE_TYPE2_
 .. class:: NET_FW_PROFILE_TYPE2
 
     Alias for :class:`NET_FW_PROFILE_TYPE2_`
+
 
 .. class:: NET_FW_PROFILE_TYPE2_
 
@@ -11645,6 +13625,7 @@ _MIB_TCP_STATE
 .. class:: MIB_TCP_STATE
 
     Alias for :class:`_MIB_TCP_STATE`
+
 
 .. class:: _MIB_TCP_STATE
 
@@ -11690,6 +13671,7 @@ NET_FW_IP_PROTOCOL_
 
     Alias for :class:`NET_FW_IP_PROTOCOL_`
 
+
 .. class:: NET_FW_IP_PROTOCOL_
 
 
@@ -11707,9 +13689,11 @@ _TOKEN_INFORMATION_CLASS
 
     Alias for :class:`_TOKEN_INFORMATION_CLASS`
 
+
 .. class:: PTOKEN_INFORMATION_CLASS
 
     Pointer to :class:`_TOKEN_INFORMATION_CLASS`
+
 
 .. class:: _TOKEN_INFORMATION_CLASS
 
@@ -11839,15 +13823,59 @@ _TOKEN_INFORMATION_CLASS
 
     .. attribute:: MaxTokenInfoClass(41)
 
+_FS_INFORMATION_CLASS
+'''''''''''''''''''''
+.. class:: FS_INFORMATION_CLASS
+
+    Alias for :class:`_FS_INFORMATION_CLASS`
+
+
+.. class:: _FS_INFORMATION_CLASS
+
+
+    .. attribute:: FileFsVolumeInformation(1)
+
+
+    .. attribute:: FileFsLabelInformation(2)
+
+
+    .. attribute:: FileFsSizeInformation(3)
+
+
+    .. attribute:: FileFsDeviceInformation(4)
+
+
+    .. attribute:: FileFsAttributeInformation(5)
+
+
+    .. attribute:: FileFsControlInformation(6)
+
+
+    .. attribute:: FileFsFullSizeInformation(7)
+
+
+    .. attribute:: FileFsObjectIdInformation(8)
+
+
+    .. attribute:: FileFsDriverPathInformation(9)
+
+
+    .. attribute:: FileFsVolumeFlagsInformation(10)
+
+
+    .. attribute:: FileFsSectorSizeInformation(11)
+
 _SECURITY_IMPERSONATION_LEVEL
 '''''''''''''''''''''''''''''
 .. class:: SECURITY_IMPERSONATION_LEVEL
 
     Alias for :class:`_SECURITY_IMPERSONATION_LEVEL`
 
+
 .. class:: PSECURITY_IMPERSONATION_LEVEL
 
     Pointer to :class:`_SECURITY_IMPERSONATION_LEVEL`
+
 
 .. class:: _SECURITY_IMPERSONATION_LEVEL
 
@@ -11869,6 +13897,7 @@ _SC_ENUM_TYPE
 
     Alias for :class:`_SC_ENUM_TYPE`
 
+
 .. class:: _SC_ENUM_TYPE
 
 
@@ -11880,6 +13909,7 @@ _SC_STATUS_TYPE
 
     Alias for :class:`_SC_STATUS_TYPE`
 
+
 .. class:: _SC_STATUS_TYPE
 
 
@@ -11890,6 +13920,7 @@ _OBJECT_INFORMATION_CLASS
 .. class:: OBJECT_INFORMATION_CLASS
 
     Alias for :class:`_OBJECT_INFORMATION_CLASS`
+
 
 .. class:: _OBJECT_INFORMATION_CLASS
 
@@ -11908,9 +13939,11 @@ _SID_NAME_USE
 
     Alias for :class:`_SID_NAME_USE`
 
+
 .. class:: PSID_NAME_USE
 
     Pointer to :class:`_SID_NAME_USE`
+
 
 .. class:: _SID_NAME_USE
 
@@ -11950,6 +13983,7 @@ NET_FW_ACTION_
 
     Alias for :class:`NET_FW_ACTION_`
 
+
 .. class:: NET_FW_ACTION_
 
 
@@ -11967,6 +14001,7 @@ NET_FW_MODIFY_STATE_
 
     Alias for :class:`NET_FW_MODIFY_STATE_`
 
+
 .. class:: NET_FW_MODIFY_STATE_
 
 
@@ -11983,6 +14018,7 @@ tag_WBEMSTATUS
 .. class:: WBEMSTATUS
 
     Alias for :class:`tag_WBEMSTATUS`
+
 
 .. class:: tag_WBEMSTATUS
 
@@ -12565,11 +14601,117 @@ tag_WBEMSTATUS
 
     .. attribute:: WBEMMOF_E_INVALID_DELETECLASS_SYNTAX(2147762225)
 
+tag_WBEM_CHANGE_FLAG_TYPE
+'''''''''''''''''''''''''
+.. class:: WBEM_CHANGE_FLAG_TYPE
+
+    Alias for :class:`tag_WBEM_CHANGE_FLAG_TYPE`
+
+
+.. class:: tag_WBEM_CHANGE_FLAG_TYPE
+
+
+    .. attribute:: WBEM_FLAG_CREATE_OR_UPDATE(0)
+
+
+    .. attribute:: WBEM_FLAG_UPDATE_ONLY(1)
+
+
+    .. attribute:: WBEM_FLAG_CREATE_ONLY(2)
+
+
+    .. attribute:: WBEM_FLAG_UPDATE_COMPATIBLE(0)
+
+
+    .. attribute:: WBEM_FLAG_UPDATE_SAFE_MODE(32)
+
+
+    .. attribute:: WBEM_FLAG_UPDATE_FORCE_MODE(64)
+
+
+    .. attribute:: WBEM_MASK_UPDATE_MODE(96)
+
+
+    .. attribute:: WBEM_FLAG_ADVISORY(65536)
+
+tag_WBEM_TIMEOUT_TYPE
+'''''''''''''''''''''
+.. class:: WBEM_TIMEOUT_TYPE
+
+    Alias for :class:`tag_WBEM_TIMEOUT_TYPE`
+
+
+.. class:: tag_WBEM_TIMEOUT_TYPE
+
+
+    .. attribute:: WBEM_NO_WAIT(0)
+
+
+    .. attribute:: WBEM_INFINITE(4294967295)
+
+tag_WBEM_GENERIC_FLAG_TYPE
+''''''''''''''''''''''''''
+.. class:: WBEM_GENERIC_FLAG_TYPE
+
+    Alias for :class:`tag_WBEM_GENERIC_FLAG_TYPE`
+
+
+.. class:: tag_WBEM_GENERIC_FLAG_TYPE
+
+
+    .. attribute:: WBEM_FLAG_RETURN_IMMEDIATELY(16)
+
+
+    .. attribute:: WBEM_FLAG_RETURN_WBEM_COMPLETE(0)
+
+
+    .. attribute:: WBEM_FLAG_BIDIRECTIONAL(0)
+
+
+    .. attribute:: WBEM_FLAG_FORWARD_ONLY(32)
+
+
+    .. attribute:: WBEM_FLAG_NO_ERROR_OBJECT(64)
+
+
+    .. attribute:: WBEM_FLAG_RETURN_ERROR_OBJECT(0)
+
+
+    .. attribute:: WBEM_FLAG_SEND_STATUS(128)
+
+
+    .. attribute:: WBEM_FLAG_DONT_SEND_STATUS(0)
+
+
+    .. attribute:: WBEM_FLAG_ENSURE_LOCATABLE(256)
+
+
+    .. attribute:: WBEM_FLAG_DIRECT_READ(512)
+
+
+    .. attribute:: WBEM_FLAG_SEND_ONLY_SELECTED(0)
+
+
+    .. attribute:: WBEM_RETURN_WHEN_COMPLETE(0)
+
+
+    .. attribute:: WBEM_RETURN_IMMEDIATELY(16)
+
+
+    .. attribute:: WBEM_MASK_RESERVED_FLAGS(126976)
+
+
+    .. attribute:: WBEM_FLAG_USE_AMENDED_QUALIFIERS(131072)
+
+
+    .. attribute:: WBEM_FLAG_STRONG_VALIDATION(1048576)
+
 tagCLSCTX
 '''''''''
 .. class:: CLSCTX
 
     Alias for :class:`tagCLSCTX`
+
 
 .. class:: tagCLSCTX
 
@@ -12651,6 +14793,7 @@ _SE_OBJECT_TYPE
 
     Alias for :class:`_SE_OBJECT_TYPE`
 
+
 .. class:: _SE_OBJECT_TYPE
 
 
@@ -12698,6 +14841,7 @@ _INTERNAL_IF_OPER_STATUS
 
     Alias for :class:`_INTERNAL_IF_OPER_STATUS`
 
+
 .. class:: _INTERNAL_IF_OPER_STATUS
 
 
@@ -12723,6 +14867,7 @@ _IMAGEHLP_SYMBOL_TYPE_INFO
 .. class:: IMAGEHLP_SYMBOL_TYPE_INFO
 
     Alias for :class:`_IMAGEHLP_SYMBOL_TYPE_INFO`
+
 
 .. class:: _IMAGEHLP_SYMBOL_TYPE_INFO
 
@@ -12834,6 +14979,7 @@ _PROCESSINFOCLASS
 
     Alias for :class:`_PROCESSINFOCLASS`
 
+
 .. class:: _PROCESSINFOCLASS
 
 
@@ -12847,6 +14993,7 @@ tagCOINIT
 .. class:: COINIT
 
     Alias for :class:`tagCOINIT`
+
 
 .. class:: tagCOINIT
 
@@ -12867,6 +15014,7 @@ tagTYPEKIND
 .. class:: TYPEKIND
 
     Alias for :class:`tagTYPEKIND`
+
 
 .. class:: tagTYPEKIND
 
@@ -12897,135 +15045,45 @@ tagTYPEKIND
 
     .. attribute:: TKIND_MAX(8)
 
-_BG_JOB_STATE
-'''''''''''''
-.. class:: BG_JOB_STATE
+_RTL_PATH_TYPE
+''''''''''''''
+.. class:: RTL_PATH_TYPE
 
-    Alias for :class:`_BG_JOB_STATE`
+    Alias for :class:`_RTL_PATH_TYPE`
 
-.. class:: _BG_JOB_STATE
 
+.. class:: _RTL_PATH_TYPE
 
-    .. attribute:: BG_JOB_STATE_QUEUED(0)
 
+    .. attribute:: RtlPathTypeUnknown(0)
 
-    .. attribute:: BG_JOB_STATE_CONNECTING(1)
 
+    .. attribute:: RtlPathTypeUncAbsolute(1)
 
-    .. attribute:: BG_JOB_STATE_TRANSFERRING(2)
 
+    .. attribute:: RtlPathTypeDriveAbsolute(2)
 
-    .. attribute:: BG_JOB_STATE_SUSPENDED(3)
 
+    .. attribute:: RtlPathTypeDriveRelative(3)
 
-    .. attribute:: BG_JOB_STATE_ERROR(4)
 
+    .. attribute:: RtlPathTypeRooted(4)
 
-    .. attribute:: BG_JOB_STATE_TRANSIENT_ERROR(5)
 
+    .. attribute:: RtlPathTypeRelative(5)
 
-    .. attribute:: BG_JOB_STATE_TRANSFERRED(6)
 
+    .. attribute:: RtlPathTypeLocalDevice(6)
 
-    .. attribute:: BG_JOB_STATE_ACKNOWLEDGED(7)
 
-
-    .. attribute:: BG_JOB_STATE_CANCELLED(8)
-
-_BG_JOB_PROXY_USAGE
-'''''''''''''''''''
-.. class:: BG_JOB_PROXY_USAGE
-
-    Alias for :class:`_BG_JOB_PROXY_USAGE`
-
-.. class:: _BG_JOB_PROXY_USAGE
-
-
-    .. attribute:: BG_JOB_PROXY_USAGE_PRECONFIG(0)
-
-
-    .. attribute:: BG_JOB_PROXY_USAGE_NO_PROXY(1)
-
-
-    .. attribute:: BG_JOB_PROXY_USAGE_OVERRIDE(2)
-
-
-    .. attribute:: BG_JOB_PROXY_USAGE_AUTODETECT(3)
-
-_BG_JOB_PRIORITY
-''''''''''''''''
-.. class:: BG_JOB_PRIORITY
-
-    Alias for :class:`_BG_JOB_PRIORITY`
-
-.. class:: _BG_JOB_PRIORITY
-
-
-    .. attribute:: BG_JOB_PRIORITY_FOREGROUND(0)
-
-
-    .. attribute:: BG_JOB_PRIORITY_HIGH(1)
-
-
-    .. attribute:: BG_JOB_PRIORITY_NORMAL(2)
-
-
-    .. attribute:: BG_JOB_PRIORITY_LOW(3)
-
-_BG_ERROR_CONTEXT
-'''''''''''''''''
-.. class:: BG_ERROR_CONTEXT
-
-    Alias for :class:`_BG_ERROR_CONTEXT`
-
-.. class:: _BG_ERROR_CONTEXT
-
-
-    .. attribute:: BG_ERROR_CONTEXT_NONE(0)
-
-
-    .. attribute:: BG_ERROR_CONTEXT_UNKNOWN(1)
-
-
-    .. attribute:: BG_ERROR_CONTEXT_GENERAL_QUEUE_MANAGER(2)
-
-
-    .. attribute:: BG_ERROR_CONTEXT_QUEUE_MANAGER_NOTIFICATION(3)
-
-
-    .. attribute:: BG_ERROR_CONTEXT_LOCAL_FILE(4)
-
-
-    .. attribute:: BG_ERROR_CONTEXT_REMOTE_FILE(5)
-
-
-    .. attribute:: BG_ERROR_CONTEXT_GENERAL_TRANSPORT(6)
-
-
-    .. attribute:: BG_ERROR_CONTEXT_REMOTE_APPLICATION(7)
-
-_BG_JOB_TYPE
-''''''''''''
-.. class:: BG_JOB_TYPE
-
-    Alias for :class:`_BG_JOB_TYPE`
-
-.. class:: _BG_JOB_TYPE
-
-
-    .. attribute:: BG_JOB_TYPE_DOWNLOAD(0)
-
-
-    .. attribute:: BG_JOB_TYPE_UPLOAD(1)
-
-
-    .. attribute:: BG_JOB_TYPE_UPLOAD_REPLY(2)
+    .. attribute:: RtlPathTypeRootLocalDevice(7)
 
 _ALPC_PORT_INFORMATION_CLASS
 ''''''''''''''''''''''''''''
 .. class:: ALPC_PORT_INFORMATION_CLASS
 
     Alias for :class:`_ALPC_PORT_INFORMATION_CLASS`
+
 
 .. class:: _ALPC_PORT_INFORMATION_CLASS
 
@@ -13067,4 +15125,404 @@ _ALPC_PORT_INFORMATION_CLASS
 
 
     .. attribute:: MaxAlpcPortInfoClass(12)
+
+_ALPC_MESSAGE_INFORMATION_CLASS
+'''''''''''''''''''''''''''''''
+.. class:: ALPC_MESSAGE_INFORMATION_CLASS
+
+    Alias for :class:`_ALPC_MESSAGE_INFORMATION_CLASS`
+
+
+.. class:: PALPC_MESSAGE_INFORMATION_CLASS
+
+    Pointer to :class:`_ALPC_MESSAGE_INFORMATION_CLASS`
+
+
+.. class:: _ALPC_MESSAGE_INFORMATION_CLASS
+
+
+    .. attribute:: AlpcMessageSidInformation(0)
+
+
+    .. attribute:: AlpcMessageTokenModifiedIdInformation(1)
+
+
+    .. attribute:: MaxAlpcMessageInfoClass(2)
+
+
+    .. attribute:: AlpcMessageHandleInformation(3)
+
+_BG_JOB_STATE
+'''''''''''''
+.. class:: BG_JOB_STATE
+
+    Alias for :class:`_BG_JOB_STATE`
+
+
+.. class:: _BG_JOB_STATE
+
+
+    .. attribute:: BG_JOB_STATE_QUEUED(0)
+
+
+    .. attribute:: BG_JOB_STATE_CONNECTING(1)
+
+
+    .. attribute:: BG_JOB_STATE_TRANSFERRING(2)
+
+
+    .. attribute:: BG_JOB_STATE_SUSPENDED(3)
+
+
+    .. attribute:: BG_JOB_STATE_ERROR(4)
+
+
+    .. attribute:: BG_JOB_STATE_TRANSIENT_ERROR(5)
+
+
+    .. attribute:: BG_JOB_STATE_TRANSFERRED(6)
+
+
+    .. attribute:: BG_JOB_STATE_ACKNOWLEDGED(7)
+
+
+    .. attribute:: BG_JOB_STATE_CANCELLED(8)
+
+_BG_JOB_PROXY_USAGE
+'''''''''''''''''''
+.. class:: BG_JOB_PROXY_USAGE
+
+    Alias for :class:`_BG_JOB_PROXY_USAGE`
+
+
+.. class:: _BG_JOB_PROXY_USAGE
+
+
+    .. attribute:: BG_JOB_PROXY_USAGE_PRECONFIG(0)
+
+
+    .. attribute:: BG_JOB_PROXY_USAGE_NO_PROXY(1)
+
+
+    .. attribute:: BG_JOB_PROXY_USAGE_OVERRIDE(2)
+
+
+    .. attribute:: BG_JOB_PROXY_USAGE_AUTODETECT(3)
+
+_BG_JOB_PRIORITY
+''''''''''''''''
+.. class:: BG_JOB_PRIORITY
+
+    Alias for :class:`_BG_JOB_PRIORITY`
+
+
+.. class:: _BG_JOB_PRIORITY
+
+
+    .. attribute:: BG_JOB_PRIORITY_FOREGROUND(0)
+
+
+    .. attribute:: BG_JOB_PRIORITY_HIGH(1)
+
+
+    .. attribute:: BG_JOB_PRIORITY_NORMAL(2)
+
+
+    .. attribute:: BG_JOB_PRIORITY_LOW(3)
+
+_BG_ERROR_CONTEXT
+'''''''''''''''''
+.. class:: BG_ERROR_CONTEXT
+
+    Alias for :class:`_BG_ERROR_CONTEXT`
+
+
+.. class:: _BG_ERROR_CONTEXT
+
+
+    .. attribute:: BG_ERROR_CONTEXT_NONE(0)
+
+
+    .. attribute:: BG_ERROR_CONTEXT_UNKNOWN(1)
+
+
+    .. attribute:: BG_ERROR_CONTEXT_GENERAL_QUEUE_MANAGER(2)
+
+
+    .. attribute:: BG_ERROR_CONTEXT_QUEUE_MANAGER_NOTIFICATION(3)
+
+
+    .. attribute:: BG_ERROR_CONTEXT_LOCAL_FILE(4)
+
+
+    .. attribute:: BG_ERROR_CONTEXT_REMOTE_FILE(5)
+
+
+    .. attribute:: BG_ERROR_CONTEXT_GENERAL_TRANSPORT(6)
+
+
+    .. attribute:: BG_ERROR_CONTEXT_REMOTE_APPLICATION(7)
+
+_BG_JOB_TYPE
+''''''''''''
+.. class:: BG_JOB_TYPE
+
+    Alias for :class:`_BG_JOB_TYPE`
+
+
+.. class:: _BG_JOB_TYPE
+
+
+    .. attribute:: BG_JOB_TYPE_DOWNLOAD(0)
+
+
+    .. attribute:: BG_JOB_TYPE_UPLOAD(1)
+
+
+    .. attribute:: BG_JOB_TYPE_UPLOAD_REPLY(2)
+
+_FILE_INFORMATION_CLASS
+'''''''''''''''''''''''
+.. class:: FILE_INFORMATION_CLASS
+
+    Alias for :class:`_FILE_INFORMATION_CLASS`
+
+
+.. class:: PFILE_INFORMATION_CLASS
+
+    Pointer to :class:`_FILE_INFORMATION_CLASS`
+
+
+.. class:: _FILE_INFORMATION_CLASS
+
+
+    .. attribute:: FakeFileInformationZero(0)
+
+
+    .. attribute:: FileDirectoryInformation(1)
+
+
+    .. attribute:: FileFullDirectoryInformation(2)
+
+
+    .. attribute:: FileBothDirectoryInformation(3)
+
+
+    .. attribute:: FileBasicInformation(4)
+
+
+    .. attribute:: FileStandardInformation(5)
+
+
+    .. attribute:: FileInternalInformation(6)
+
+
+    .. attribute:: FileEaInformation(7)
+
+
+    .. attribute:: FileAccessInformation(8)
+
+
+    .. attribute:: FileNameInformation(9)
+
+
+    .. attribute:: FileRenameInformation(10)
+
+
+    .. attribute:: FileLinkInformation(11)
+
+
+    .. attribute:: FileNamesInformation(12)
+
+
+    .. attribute:: FileDispositionInformation(13)
+
+
+    .. attribute:: FilePositionInformation(14)
+
+
+    .. attribute:: FileFullEaInformation(15)
+
+
+    .. attribute:: FileModeInformation(16)
+
+
+    .. attribute:: FileAlignmentInformation(17)
+
+
+    .. attribute:: FileAllInformation(18)
+
+
+    .. attribute:: FileAllocationInformation(19)
+
+
+    .. attribute:: FileEndOfFileInformation(20)
+
+
+    .. attribute:: FileAlternateNameInformation(21)
+
+
+    .. attribute:: FileStreamInformation(22)
+
+
+    .. attribute:: FilePipeInformation(23)
+
+
+    .. attribute:: FilePipeLocalInformation(24)
+
+
+    .. attribute:: FilePipeRemoteInformation(25)
+
+
+    .. attribute:: FileMailslotQueryInformation(26)
+
+
+    .. attribute:: FileMailslotSetInformation(27)
+
+
+    .. attribute:: FileCompressionInformation(28)
+
+
+    .. attribute:: FileObjectIdInformation(29)
+
+
+    .. attribute:: FileCompletionInformation(30)
+
+
+    .. attribute:: FileMoveClusterInformation(31)
+
+
+    .. attribute:: FileQuotaInformation(32)
+
+
+    .. attribute:: FileReparsePointInformation(33)
+
+
+    .. attribute:: FileNetworkOpenInformation(34)
+
+
+    .. attribute:: FileAttributeTagInformation(35)
+
+
+    .. attribute:: FileTrackingInformation(36)
+
+
+    .. attribute:: FileIdBothDirectoryInformation(37)
+
+
+    .. attribute:: FileIdFullDirectoryInformation(38)
+
+
+    .. attribute:: FileValidDataLengthInformation(39)
+
+
+    .. attribute:: FileShortNameInformation(40)
+
+
+    .. attribute:: FileIoCompletionNotificationInformation(41)
+
+
+    .. attribute:: FileIoStatusBlockRangeInformation(42)
+
+
+    .. attribute:: FileIoPriorityHintInformation(43)
+
+
+    .. attribute:: FileSfioReserveInformation(44)
+
+
+    .. attribute:: FileSfioVolumeInformation(45)
+
+
+    .. attribute:: FileHardLinkInformation(46)
+
+
+    .. attribute:: FileProcessIdsUsingFileInformation(47)
+
+
+    .. attribute:: FileNormalizedNameInformation(48)
+
+
+    .. attribute:: FileNetworkPhysicalNameInformation(49)
+
+
+    .. attribute:: FileIdGlobalTxDirectoryInformation(50)
+
+
+    .. attribute:: FileIsRemoteDeviceInformation(51)
+
+
+    .. attribute:: FileUnusedInformation(52)
+
+
+    .. attribute:: FileNumaNodeInformation(53)
+
+
+    .. attribute:: FileStandardLinkInformation(54)
+
+
+    .. attribute:: FileRemoteProtocolInformation(55)
+
+
+    .. attribute:: FileRenameInformationBypassAccessCheck(56)
+
+
+    .. attribute:: FileLinkInformationBypassAccessCheck(57)
+
+
+    .. attribute:: FileVolumeNameInformation(58)
+
+
+    .. attribute:: FileIdInformation(59)
+
+
+    .. attribute:: FileIdExtdDirectoryInformation(60)
+
+
+    .. attribute:: FileReplaceCompletionInformation(61)
+
+
+    .. attribute:: FileHardLinkFullIdInformation(62)
+
+
+    .. attribute:: FileIdExtdBothDirectoryInformation(63)
+
+
+    .. attribute:: FileDispositionInformationEx(64)
+
+
+    .. attribute:: FileRenameInformationEx(65)
+
+
+    .. attribute:: FileRenameInformationExBypassAccessCheck(66)
+
+
+    .. attribute:: FileMaximumInformation(67)
+
+_IO_PRIORITY_HINT
+'''''''''''''''''
+.. class:: IO_PRIORITY_HINT
+
+    Alias for :class:`_IO_PRIORITY_HINT`
+
+
+.. class:: _IO_PRIORITY_HINT
+
+
+    .. attribute:: IoPriorityVeryLow(0)
+
+
+    .. attribute:: IoPriorityLow(1)
+
+
+    .. attribute:: IoPriorityNormal(2)
+
+
+    .. attribute:: IoPriorityHigh(3)
+
+
+    .. attribute:: IoPriorityCritical(4)
+
+
+    .. attribute:: MaxIoPriorityTypes(5)
 

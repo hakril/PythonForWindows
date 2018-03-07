@@ -1,0 +1,12 @@
+(cmd) python process\apisetmap.py
+Computer is a <Windows 10>
+ApiSetMap: <windows.winobject.apisetmap.ApiSetMapVersion6 object at 0x0645ECB0> (version = 6)
+Entries in 'apisetmap_dict' are the full api-dll path extracted
+ * apisetmap.apisetmap_dict['api-ms-win-core-processthreads-l1-1-3'] -> kernelbase.dll
+Entries in 'resolution_dict' are the contains the util-part check by windows
+ * apisetmap.resolution_dict['api-ms-win-core-processthreads-l1-1-'] -> kernelbase.dll
+ApiSetMap.resolve resolve a api-dll based on the util part
+ * apisetmap.resolve('api-ms-win-core-processthreads-l1-1-1') -> kernelbase.dll
+ * apisetmap.resolve('api-ms-win-core-processthreads-l1-1-2') -> kernelbase.dll
+ * apisetmap.resolve('api-ms-win-core-processthreads-l1-1-PART_IS_IGNORED') -> kernelbase.dll
+ * apisetmap.resolve('BAD_DLL-3.dll') -> raised: KeyError('BAD_DLL-',)

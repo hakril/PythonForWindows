@@ -34,7 +34,7 @@ class System(object):
     def processes(self):
         """The list of running processes
 
-        :type: [:class:`process.WinProcess`] -- A list of Process
+        :type: [:class:`~windows.winobject.process.WinProcess`] -- A list of Process
 		"""
         return self.enumerate_processes()
 
@@ -42,7 +42,7 @@ class System(object):
     def threads(self):
         """The list of running threads
 
-        :type: [:class:`process.WinThread`] -- A list of Thread
+        :type: [:class:`~windows.winobject.process.WinThread`] -- A list of Thread
 		"""
         return self.enumerate_threads_setup_owners()
 
@@ -50,7 +50,7 @@ class System(object):
     def logicaldrives(self):
         """List of logical drives [C:\, ...]
 
-        :type: [:class:`volume.LogicalDrive`] -- A list of LogicalDrive
+        :type: [:class:`~windows.winobject.volume.LogicalDrive`] -- A list of LogicalDrive
         """
         return volume.enum_logical_drive()
 
@@ -58,14 +58,14 @@ class System(object):
     def services(self):
         """The list of services
 
-        :type: [:class:`service.ServiceA`] -- A list of Service"""
+        :type: [:class:`~windows.winobject.service.ServiceA`] -- A list of Service"""
         return service.enumerate_services()
 
     @property
     def handles(self):
         """The list of system handles
 
-        :type: [:class:`handle.Handle`] -- A list of Hanlde"""
+        :type: [:class:`~windows.winobject.handle.Handle`] -- A list of Hanlde"""
         return handle.enumerate_handles()
 
     @utils.fixedpropety
@@ -84,7 +84,7 @@ class System(object):
     def wmi(self):
         r"""An object to perform wmi requests to various namespaces
 
-        :type: :class:`windows.winobject.wmi.WmiManager`"""
+        :type: :class:`~windows.winobject.wmi.WmiManager`"""
         return wmi.WmiManager()
 
     #TODO: use GetComputerNameExA ? and recover other names ?

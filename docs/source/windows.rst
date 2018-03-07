@@ -12,6 +12,7 @@ The defaults objects accessible in ``windows`` are:
     * ``current_thread`` of type :class:`windows.winobject.process.CurrentThread`
 
 The submodules that you might use by themself are:
+    * :mod:`windows.generated_def`
     * :mod:`windows.native_exec`
     * :mod:`windows.winproxy`
     * :mod:`windows.wintrust`
@@ -19,6 +20,7 @@ The submodules that you might use by themself are:
     * :mod:`windows.utils`
     * :mod:`windows.debug`
     * :mod:`windows.alpc`
+    * :mod:`windows.pipe`
     * :mod:`windows.rpc`
     * :mod:`windows.com`
 

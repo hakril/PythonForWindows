@@ -75,6 +75,35 @@ Calling it
     """
 
 
+Helper functions
+""""""""""""""""
+
+.. autofunction:: is_implemented
+
+    Example:
+        >>> windows.winproxy.is_implemented(windows.winproxy.NtWow64WriteVirtualMemory64)
+        True
+
+
+.. autofunction:: resolve
+
+    Example:
+        >>> hex(windows.winproxy.resolve(windows.winproxy.NtWow64WriteVirtualMemory64))
+        '0x77340520'
+
+
+Kernel32Error
+"""""""""""""
+
+All errors raised by winproxy functions are instance of :class:`Kernel32Error` (or subclasses)
+
+.. autoclass:: Kernel32Error
+    :show-inheritance:
+
+    .. attribute:: api_name
+
+        The name of the API that raised the exception
+
 Functions in :mod:`windows.winproxy`
 """"""""""""""""""""""""""""""""""""
 

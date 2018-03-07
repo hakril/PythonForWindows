@@ -1,33 +1,22 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>windows.winobject.exception &#8212; PythonForWindows 0.3 documentation</title>
-    
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '0.3',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" href="../../../_static/css/mbasic.css" type="text/css" />
+    <script type="text/javascript" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
-  </head>
-  <body role="document">
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -108,35 +97,35 @@
 <div class="viewcode-block" id="EEXCEPTION_RECORD"><a class="viewcode-back" href="../../../exception.html#windows.winobject.exception.EEXCEPTION_RECORD">[docs]</a><span class="k">class</span> <span class="nc">EEXCEPTION_RECORD</span><span class="p">(</span><span class="n">EEXCEPTION_RECORDBase</span><span class="p">,</span> <span class="n">EXCEPTION_RECORD</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Enhanced exception record&quot;&quot;&quot;</span>
 
-    <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">EXCEPTION_RECORD</span><span class="o">.</span><span class="n">_fields_</span><span class="p">]</span>
-    <span class="sd">&quot;&quot;&quot;The fields of the structure&quot;&quot;&quot;</span></div>
+    <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">EXCEPTION_RECORD</span><span class="o">.</span><span class="n">_fields_</span><span class="p">]</span></div>
+    <span class="sd">&quot;&quot;&quot;The fields of the structure&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="EEXCEPTION_RECORD32"><a class="viewcode-back" href="../../../exception.html#windows.winobject.exception.EEXCEPTION_RECORD32">[docs]</a><span class="k">class</span> <span class="nc">EEXCEPTION_RECORD32</span><span class="p">(</span><span class="n">EEXCEPTION_RECORDBase</span><span class="p">,</span> <span class="n">EXCEPTION_RECORD32</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Enhanced exception record (32bits)&quot;&quot;&quot;</span>
 
-    <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">EXCEPTION_RECORD32</span><span class="o">.</span><span class="n">_fields_</span><span class="p">]</span>
-    <span class="sd">&quot;&quot;&quot;The fields of the structure&quot;&quot;&quot;</span></div>
+    <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">EXCEPTION_RECORD32</span><span class="o">.</span><span class="n">_fields_</span><span class="p">]</span></div>
+    <span class="sd">&quot;&quot;&quot;The fields of the structure&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="EEXCEPTION_RECORD64"><a class="viewcode-back" href="../../../exception.html#windows.winobject.exception.EEXCEPTION_RECORD64">[docs]</a><span class="k">class</span> <span class="nc">EEXCEPTION_RECORD64</span><span class="p">(</span><span class="n">EEXCEPTION_RECORDBase</span><span class="p">,</span> <span class="n">EXCEPTION_RECORD64</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Enhanced exception record (64bits)&quot;&quot;&quot;</span>
 
-    <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">EXCEPTION_RECORD64</span><span class="o">.</span><span class="n">_fields_</span><span class="p">]</span>
-    <span class="sd">&quot;&quot;&quot;The fields of the structure&quot;&quot;&quot;</span></div>
+    <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">EXCEPTION_RECORD64</span><span class="o">.</span><span class="n">_fields_</span><span class="p">]</span></div>
+    <span class="sd">&quot;&quot;&quot;The fields of the structure&quot;&quot;&quot;</span>
 
 
 <div class="viewcode-block" id="EEXCEPTION_DEBUG_INFO32"><a class="viewcode-back" href="../../../exception.html#windows.winobject.exception.EEXCEPTION_DEBUG_INFO32">[docs]</a><span class="k">class</span> <span class="nc">EEXCEPTION_DEBUG_INFO32</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Enhanced Debug info&quot;&quot;&quot;</span>
     <span class="n">_fields_</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">transform_ctypes_fields</span><span class="p">(</span><span class="n">EXCEPTION_DEBUG_INFO</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;ExceptionRecord&quot;</span><span class="p">:</span> <span class="n">EEXCEPTION_RECORD32</span><span class="p">})</span>
 
-    <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">_fields_</span><span class="p">]</span>
-    <span class="sd">&quot;&quot;&quot;The fields of the structure&quot;&quot;&quot;</span></div>
+    <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">_fields_</span><span class="p">]</span></div>
+    <span class="sd">&quot;&quot;&quot;The fields of the structure&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="EEXCEPTION_DEBUG_INFO64"><a class="viewcode-back" href="../../../exception.html#windows.winobject.exception.EEXCEPTION_DEBUG_INFO64">[docs]</a><span class="k">class</span> <span class="nc">EEXCEPTION_DEBUG_INFO64</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Enhanced Debug info&quot;&quot;&quot;</span>
     <span class="n">_fields_</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">transform_ctypes_fields</span><span class="p">(</span><span class="n">EXCEPTION_DEBUG_INFO</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;ExceptionRecord&quot;</span><span class="p">:</span> <span class="n">EEXCEPTION_RECORD64</span><span class="p">})</span>
 
-    <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">_fields_</span><span class="p">]</span>
-    <span class="sd">&quot;&quot;&quot;The fields of the structure&quot;&quot;&quot;</span></div>
+    <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">_fields_</span><span class="p">]</span></div>
+    <span class="sd">&quot;&quot;&quot;The fields of the structure&quot;&quot;&quot;</span>
 
 
 <div class="viewcode-block" id="EEflags"><a class="viewcode-back" href="../../../exception.html#windows.winobject.exception.EEflags">[docs]</a><span class="k">class</span> <span class="nc">EEflags</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
@@ -197,8 +186,8 @@
     <span class="n">raw</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_raw</span><span class="p">,</span> <span class="n">set_raw</span><span class="p">)</span>
     <span class="sd">&quot;&quot;&quot;Raw value of the eflags</span>
 
-<span class="sd">       :type: :class:`int`</span>
-<span class="sd">    &quot;&quot;&quot;</span></div>
+<span class="sd">       :type: :class:`int`</span></div>
+<span class="sd">    &quot;&quot;&quot;</span>
 
 
 <div class="viewcode-block" id="EDr7"><a class="viewcode-back" href="../../../exception.html#windows.winobject.exception.EDr7">[docs]</a><span class="k">class</span> <span class="nc">EDr7</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
@@ -226,8 +215,8 @@
                <span class="p">(</span><span class="s2">&quot;LEN3&quot;</span><span class="p">,</span> <span class="n">DWORD</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
                <span class="p">]</span>
 
-    <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">_fields_</span><span class="p">]</span>
-    <span class="sd">&quot;&quot;&quot;The fields of the structure&quot;&quot;&quot;</span></div>
+    <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">_fields_</span><span class="p">]</span></div>
+    <span class="sd">&quot;&quot;&quot;The fields of the structure&quot;&quot;&quot;</span>
 
 <span class="k">class</span> <span class="nc">ECONTEXTBase</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;DAT CONTEXT&quot;&quot;&quot;</span>
@@ -308,16 +297,16 @@
     <span class="n">pc_reg</span> <span class="o">=</span> <span class="s1">&#39;Eip&#39;</span>
     <span class="n">sp_reg</span> <span class="o">=</span> <span class="s1">&#39;Esp&#39;</span>
     <span class="n">func_result_reg</span> <span class="o">=</span> <span class="s1">&#39;Eax&#39;</span>
-    <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">CONTEXT32</span><span class="o">.</span><span class="n">_fields_</span><span class="p">]</span>
-    <span class="sd">&quot;&quot;&quot;The fields of the structure&quot;&quot;&quot;</span></div>
+    <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">CONTEXT32</span><span class="o">.</span><span class="n">_fields_</span><span class="p">]</span></div>
+    <span class="sd">&quot;&quot;&quot;The fields of the structure&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="ECONTEXTWOW64"><a class="viewcode-back" href="../../../exception.html#windows.winobject.exception.ECONTEXTWOW64">[docs]</a><span class="k">class</span> <span class="nc">ECONTEXTWOW64</span><span class="p">(</span><span class="n">ECONTEXTBase</span><span class="p">,</span> <span class="n">WOW64_CONTEXT</span><span class="p">):</span>
     <span class="n">default_dump</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Eip&#39;</span><span class="p">,</span> <span class="s1">&#39;Esp&#39;</span><span class="p">,</span> <span class="s1">&#39;Eax&#39;</span><span class="p">,</span> <span class="s1">&#39;Ebx&#39;</span><span class="p">,</span> <span class="s1">&#39;Ecx&#39;</span><span class="p">,</span> <span class="s1">&#39;Edx&#39;</span><span class="p">,</span> <span class="s1">&#39;Ebp&#39;</span><span class="p">,</span> <span class="s1">&#39;Edi&#39;</span><span class="p">,</span> <span class="s1">&#39;Esi&#39;</span><span class="p">,</span> <span class="s1">&#39;EFlags&#39;</span><span class="p">)</span>
     <span class="n">pc_reg</span> <span class="o">=</span> <span class="s1">&#39;Eip&#39;</span>
     <span class="n">sp_reg</span> <span class="o">=</span> <span class="s1">&#39;Esp&#39;</span>
     <span class="n">func_result_reg</span> <span class="o">=</span> <span class="s1">&#39;Eax&#39;</span>
-    <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">WOW64_CONTEXT</span><span class="o">.</span><span class="n">_fields_</span><span class="p">]</span>
-    <span class="sd">&quot;&quot;&quot;The fields of the structure&quot;&quot;&quot;</span></div>
+    <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">WOW64_CONTEXT</span><span class="o">.</span><span class="n">_fields_</span><span class="p">]</span></div>
+    <span class="sd">&quot;&quot;&quot;The fields of the structure&quot;&quot;&quot;</span>
 
 
 <div class="viewcode-block" id="ECONTEXT64"><a class="viewcode-back" href="../../../exception.html#windows.winobject.exception.ECONTEXT64">[docs]</a><span class="k">class</span> <span class="nc">ECONTEXT64</span><span class="p">(</span><span class="n">ECONTEXTBase</span><span class="p">,</span> <span class="n">CONTEXT64</span><span class="p">):</span>
@@ -329,8 +318,8 @@
     <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">CONTEXT64</span><span class="o">.</span><span class="n">_fields_</span><span class="p">]</span>
     <span class="sd">&quot;&quot;&quot;The fields of the structure&quot;&quot;&quot;</span>
 
-    <span class="nd">@classmethod</span>
-<div class="viewcode-block" id="ECONTEXT64.new_aligned"><a class="viewcode-back" href="../../../exception.html#windows.winobject.exception.ECONTEXT64.new_aligned">[docs]</a>    <span class="k">def</span> <span class="nf">new_aligned</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+<div class="viewcode-block" id="ECONTEXT64.new_aligned"><a class="viewcode-back" href="../../../exception.html#windows.winobject.exception.ECONTEXT64.new_aligned">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">new_aligned</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return a new :class:`ECONTEXT64` aligned on 16 bits</span>
 
 <span class="sd">           temporary workaround or horrible hack ? choose your side</span>
@@ -345,8 +334,8 @@
             <span class="n">struct_address</span> <span class="o">+=</span> <span class="mi">8</span>
         <span class="bp">self</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_address</span><span class="p">(</span><span class="n">struct_address</span><span class="p">)</span>
         <span class="c1"># Keep the raw buffer alive</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_buffer</span> <span class="o">=</span> <span class="n">buffer</span>
-        <span class="k">return</span> <span class="bp">self</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_buffer</span> <span class="o">=</span> <span class="n">buffer</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span>
 
 <span class="k">def</span> <span class="nf">bitness</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Return 32 or 64&quot;&quot;&quot;</span>
@@ -372,8 +361,8 @@
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Dumping Exception: &quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    ExceptionCode = </span><span class="si">{0}</span><span class="s2"> at </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">ExceptionCode</span><span class="p">,</span> <span class="nb">hex</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">ExceptionAddress</span><span class="p">)))</span>
         <span class="n">regs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ContextRecord</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">regs</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">regs</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    </span><span class="si">{0}</span><span class="s2"> -&gt; </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">hex</span><span class="p">(</span><span class="n">value</span><span class="p">)))</span></div></div>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">regs</span><span class="p">:</span></div></div>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    </span><span class="si">{0}</span><span class="s2"> -&gt; </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">hex</span><span class="p">(</span><span class="n">value</span><span class="p">)))</span>
 
 
 <div class="viewcode-block" id="VectoredException"><a class="viewcode-back" href="../../../exception.html#windows.winobject.exception.VectoredException">[docs]</a><span class="k">class</span> <span class="nc">VectoredException</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -393,8 +382,8 @@
         <span class="k">except</span> <span class="ne">BaseException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="kn">import</span> <span class="nn">traceback</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Ignored Python Exception in Vectored Exception: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
-            <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">()</span>
-            <span class="k">return</span> <span class="n">windef</span><span class="o">.</span><span class="n">EXCEPTION_CONTINUE_SEARCH</span></div>
+            <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">()</span></div>
+            <span class="k">return</span> <span class="n">windef</span><span class="o">.</span><span class="n">EXCEPTION_CONTINUE_SEARCH</span>
 
 
 <span class="k">class</span> <span class="nc">VectoredExceptionHandler</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -432,12 +421,14 @@
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -459,7 +450,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
     </div>
   </body>
 </html>

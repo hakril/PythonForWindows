@@ -134,8 +134,13 @@ class WmiRequester(object):
 
 class WmiManager(dict):
     """The main WMI class exposed, used to list and access differents WMI namespace, can be used as a dict to access
-    :class:`WmiRequester` by namespace"""
-    DEFAULT_NAMESPACE = "root\\cimv2"
+    :class:`WmiRequester` by namespace
+
+    Example:
+        >>> windows.system.wmi["root\\SecurityCenter2"]
+        <WmiRequester namespace="root\\SecurityCenter2">
+    """
+    DEFAULT_NAMESPACE = "root\\cimv2" #: The default namespace for :func:`select` & :func:`query`
     def __init__(self):
         self.wmi_requester_by_namespace = {}
 

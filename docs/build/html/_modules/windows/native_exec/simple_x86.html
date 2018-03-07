@@ -1,33 +1,22 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>windows.native_exec.simple_x86 &#8212; PythonForWindows 0.3 documentation</title>
-    
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '0.3',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" href="../../../_static/css/mbasic.css" type="text/css" />
+    <script type="text/javascript" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
-  </head>
-  <body role="document">
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -192,13 +181,13 @@
     <span class="k">if</span> <span class="n">scale</span> <span class="ow">and</span> <span class="n">index</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot create displacement with scale and no index&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">scale</span> <span class="ow">and</span> <span class="n">index</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;ESP&quot;</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot create displacement with index == ESP&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">mem_access</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">disp</span><span class="p">,</span> <span class="n">prefix</span><span class="p">)</span></div>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot create displacement with index == ESP&quot;</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">mem_access</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">disp</span><span class="p">,</span> <span class="n">prefix</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="deref"><a class="viewcode-back" href="../../../native_exec.html#windows.native_exec.simple_x86.deref">[docs]</a><span class="k">def</span> <span class="nf">deref</span><span class="p">(</span><span class="n">disp</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Create a memory access for an immediate value ``Ex: [0x42424242]``&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">create_displacement</span><span class="p">(</span><span class="n">disp</span><span class="o">=</span><span class="n">disp</span><span class="p">)</span></div>
+    <span class="sd">&quot;&quot;&quot;Create a memory access for an immediate value ``Ex: [0x42424242]``&quot;&quot;&quot;</span></div>
+    <span class="k">return</span> <span class="n">create_displacement</span><span class="p">(</span><span class="n">disp</span><span class="o">=</span><span class="n">disp</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="mem"><a class="viewcode-back" href="../../../native_exec.html#windows.native_exec.simple_x86.mem">[docs]</a><span class="k">def</span> <span class="nf">mem</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
@@ -264,8 +253,8 @@
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid base/index or displacement &lt;</span><span class="si">{0}</span><span class="s2">&gt; in mem access&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">item</span><span class="p">))</span>
             <span class="k">if</span> <span class="s1">&#39;disp&#39;</span> <span class="ow">in</span> <span class="n">parsed_items</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Multiple displacement in mem expression &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
-            <span class="n">parsed_items</span><span class="p">[</span><span class="s1">&#39;disp&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">disp</span>
-    <span class="k">return</span> <span class="n">create_displacement</span><span class="p">(</span><span class="o">**</span><span class="n">parsed_items</span><span class="p">)</span></div>
+            <span class="n">parsed_items</span><span class="p">[</span><span class="s1">&#39;disp&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">disp</span></div>
+    <span class="k">return</span> <span class="n">create_displacement</span><span class="p">(</span><span class="o">**</span><span class="n">parsed_items</span><span class="p">)</span>
 
 
 <span class="c1"># Helper to get the BitArray associated to a register</span>
@@ -318,6 +307,13 @@
         <span class="k">raise</span> <span class="n">ImmediatOverflow</span><span class="p">(</span><span class="s2">&quot;8bits signed Immediat overflow&quot;</span><span class="p">)</span>
 
 
+<span class="k">def</span> <span class="nf">accept_as_unsigned_8immediat</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s2">&quot;&lt;B&quot;</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">struct</span><span class="o">.</span><span class="n">error</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">ImmediatOverflow</span><span class="p">(</span><span class="s2">&quot;8bits signed Immediat overflow&quot;</span><span class="p">)</span>
+
+
 <span class="k">def</span> <span class="nf">accept_as_16immediat</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s2">&quot;&lt;h&quot;</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
@@ -350,6 +346,18 @@
             <span class="k">return</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">imm8</span> <span class="o">=</span> <span class="n">accept_as_8immediat</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">ImmediatOverflow</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">BitArray</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">imm8</span><span class="p">))</span>
+
+<span class="k">class</span> <span class="nc">UImm8</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">accept_arg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">instr_state</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">imm8</span> <span class="o">=</span> <span class="n">accept_as_unsigned_8immediat</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         <span class="k">except</span> <span class="n">ImmediatOverflow</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
         <span class="k">return</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">BitArray</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">imm8</span><span class="p">))</span>
@@ -863,9 +871,14 @@
 <span class="k">class</span> <span class="nc">Retf</span><span class="p">(</span><span class="n">Instruction</span><span class="p">):</span>
     <span class="n">encoding</span> <span class="o">=</span> <span class="p">[(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0xcb</span><span class="p">),)]</span>
 
+<span class="k">class</span> <span class="nc">Int</span><span class="p">(</span><span class="n">Instruction</span><span class="p">):</span>
+    <span class="n">encoding</span> <span class="o">=</span> <span class="p">[(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0xcd</span><span class="p">),</span> <span class="n">UImm8</span><span class="p">())]</span>
 
 <span class="k">class</span> <span class="nc">Int3</span><span class="p">(</span><span class="n">Instruction</span><span class="p">):</span>
     <span class="n">encoding</span> <span class="o">=</span> <span class="p">[(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0xcc</span><span class="p">),)]</span>
+
+<span class="k">class</span> <span class="nc">Iret</span><span class="p">(</span><span class="n">Instruction</span><span class="p">):</span>
+    <span class="n">encoding</span> <span class="o">=</span> <span class="p">[(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0xcf</span><span class="p">),)]</span>
 
 
 <span class="k">class</span> <span class="nc">_NopArtifact</span><span class="p">(</span><span class="n">Nop</span><span class="p">):</span>
@@ -1107,12 +1120,14 @@
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -1134,7 +1149,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
     </div>
   </body>
 </html>

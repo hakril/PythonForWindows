@@ -43,6 +43,17 @@ Output
 
 .. literalinclude:: samples_output\process_peb.txt
 
+.. _sample_apisetmap:
+
+ApiSetMap
+'''''''''
+
+.. literalinclude:: ..\..\samples\process\apisetmap.py
+
+Output
+
+.. literalinclude:: samples_output\process_apisetmap.txt
+
 
 .. _sample_iat_hook:
 
@@ -422,4 +433,18 @@ Output
 
 .. literalinclude:: samples_output\rpc_lsass.txt
 
+
+.. _sample_pipe:
+
+:mod:`windows.pipe`
+"""""""""""""""""""
+
+Communication with an injected process
+''''''''''''''''''''''''''''''''''''''
+
+.. literalinclude:: ..\..\samples\pipe\child_send_object.py
+
+Output
+
+.. literalinclude:: samples_output\pipe_child_send_object.txt
 

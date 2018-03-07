@@ -1,33 +1,22 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>windows.winobject.handle &#8212; PythonForWindows 0.3 documentation</title>
-    
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '0.3',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" href="../../../_static/css/mbasic.css" type="text/css" />
+    <script type="text/javascript" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
-  </head>
-  <body role="document">
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -54,11 +43,11 @@
 <span class="kn">import</span> <span class="nn">windows</span>
 <span class="kn">from</span> <span class="nn">windows</span> <span class="k">import</span> <span class="n">winproxy</span>
 <span class="kn">from</span> <span class="nn">windows.generated_def</span> <span class="k">import</span> <span class="n">windef</span>
-<span class="kn">from</span> <span class="nn">windows.winobject.process</span> <span class="k">import</span> <span class="n">WinUnicodeString</span>
 <span class="kn">from</span> <span class="nn">windows.generated_def.winstructs</span> <span class="k">import</span> <span class="o">*</span>
 
-<span class="k">class</span> <span class="nc">EPUBLIC_OBJECT_TYPE_INFORMATION</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
-    <span class="n">_fields_</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">transform_ctypes_fields</span><span class="p">(</span><span class="n">PUBLIC_OBJECT_TYPE_INFORMATION</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;TypeName&quot;</span><span class="p">:</span> <span class="n">windows</span><span class="o">.</span><span class="n">winobject</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">WinUnicodeString</span><span class="p">})</span>
+<span class="c1"># Remove this ?</span>
+<span class="k">class</span> <span class="nc">EPUBLIC_OBJECT_TYPE_INFORMATION</span><span class="p">(</span><span class="n">PUBLIC_OBJECT_TYPE_INFORMATION</span><span class="p">):</span>
+    <span class="k">pass</span>
 
 <span class="n">current_process_pid</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">()</span>
 
@@ -97,7 +86,7 @@
         <span class="n">size_needed</span> <span class="o">=</span> <span class="n">DWORD</span><span class="p">()</span>
         <span class="n">yyy</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_buffer</span><span class="p">(</span><span class="mh">0x1000</span><span class="p">)</span>
         <span class="n">winproxy</span><span class="o">.</span><span class="n">NtQueryObject</span><span class="p">(</span><span class="n">lh</span><span class="p">,</span> <span class="n">ObjectNameInformation</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">yyy</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">yyy</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">size_needed</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">WinUnicodeString</span><span class="o">.</span><span class="n">from_buffer_copy</span><span class="p">(</span><span class="n">yyy</span><span class="p">[:</span><span class="n">size_needed</span><span class="o">.</span><span class="n">value</span><span class="p">])</span><span class="o">.</span><span class="n">str</span>
+        <span class="k">return</span> <span class="n">LSA_UNICODE_STRING</span><span class="o">.</span><span class="n">from_buffer_copy</span><span class="p">(</span><span class="n">yyy</span><span class="p">[:</span><span class="n">size_needed</span><span class="o">.</span><span class="n">value</span><span class="p">])</span><span class="o">.</span><span class="n">str</span>
 
     <span class="k">def</span> <span class="nf">_get_object_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">lh</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">local_handle</span>
@@ -154,16 +143,14 @@
         <span class="k">del</span> <span class="n">thread</span><span class="o">.</span><span class="n">_handle</span>
         <span class="k">return</span> <span class="n">res</span>
 
-
-
     <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;&lt;</span><span class="si">{0}</span><span class="s2"> value=&lt;0x</span><span class="si">{1:x}</span><span class="s2">&gt; in process pid=</span><span class="si">{2}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">wValue</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dwProcessId</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dwProcessId</span> <span class="o">==</span> <span class="n">current_process_pid</span><span class="p">:</span>
             <span class="k">return</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_local_handle&quot;</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CloseHandle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_local_handle</span><span class="p">)</span></div>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_local_handle&quot;</span><span class="p">):</span></div>
+            <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CloseHandle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_local_handle</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">enumerate_handles</span><span class="p">():</span>
@@ -196,12 +183,14 @@
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -223,7 +212,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
     </div>
   </body>
 </html>

@@ -1,33 +1,22 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>windows.winobject.system &#8212; PythonForWindows 0.3 documentation</title>
-    
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '0.3',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <link rel="stylesheet" href="../../../_static/css/mbasic.css" type="text/css" />
+    <script type="text/javascript" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
-  </head>
-  <body role="document">
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -56,7 +45,8 @@
 <span class="kn">import</span> <span class="nn">windows</span>
 <span class="kn">from</span> <span class="nn">windows</span> <span class="k">import</span> <span class="n">winproxy</span>
 <span class="kn">from</span> <span class="nn">windows</span> <span class="k">import</span> <span class="n">utils</span>
-<span class="kn">from</span> <span class="nn">windows.generated_def</span> <span class="k">import</span> <span class="n">windef</span>
+
+<span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
 
 <span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="k">import</span> <span class="n">process</span>
 <span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="k">import</span> <span class="n">network</span>
@@ -83,7 +73,7 @@
     <span class="k">def</span> <span class="nf">processes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The list of running processes</span>
 
-<span class="sd">        :type: [:class:`process.WinProcess`] -- A list of Process</span>
+<span class="sd">        :type: [:class:`~windows.winobject.process.WinProcess`] -- A list of Process</span>
 <span class="sd">		&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">enumerate_processes</span><span class="p">()</span>
 
@@ -91,7 +81,7 @@
     <span class="k">def</span> <span class="nf">threads</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The list of running threads</span>
 
-<span class="sd">        :type: [:class:`process.WinThread`] -- A list of Thread</span>
+<span class="sd">        :type: [:class:`~windows.winobject.process.WinThread`] -- A list of Thread</span>
 <span class="sd">		&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">enumerate_threads_setup_owners</span><span class="p">()</span>
 
@@ -99,7 +89,7 @@
     <span class="k">def</span> <span class="nf">logicaldrives</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;List of logical drives [C:\, ...]</span>
 
-<span class="sd">        :type: [:class:`volume.LogicalDrive`] -- A list of LogicalDrive</span>
+<span class="sd">        :type: [:class:`~windows.winobject.volume.LogicalDrive`] -- A list of LogicalDrive</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">volume</span><span class="o">.</span><span class="n">enum_logical_drive</span><span class="p">()</span>
 
@@ -107,14 +97,14 @@
     <span class="k">def</span> <span class="nf">services</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The list of services</span>
 
-<span class="sd">        :type: [:class:`service.ServiceA`] -- A list of Service&quot;&quot;&quot;</span>
+<span class="sd">        :type: [:class:`~windows.winobject.service.ServiceA`] -- A list of Service&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">service</span><span class="o">.</span><span class="n">enumerate_services</span><span class="p">()</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">handles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The list of system handles</span>
 
-<span class="sd">        :type: [:class:`handle.Handle`] -- A list of Hanlde&quot;&quot;&quot;</span>
+<span class="sd">        :type: [:class:`~windows.winobject.handle.Handle`] -- A list of Hanlde&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">handle</span><span class="o">.</span><span class="n">enumerate_handles</span><span class="p">()</span>
 
     <span class="nd">@utils</span><span class="o">.</span><span class="n">fixedpropety</span>
@@ -133,8 +123,7 @@
     <span class="k">def</span> <span class="nf">wmi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;An object to perform wmi requests to various namespaces</span>
 
-<span class="sd">        :type: :class:`windows.winobject.wmi.WmiManager`&quot;&quot;&quot;</span>
-        <span class="c1"># return wmi.WmiRequester()</span>
+<span class="sd">        :type: :class:`~windows.winobject.wmi.WmiManager`&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">wmi</span><span class="o">.</span><span class="n">WmiManager</span><span class="p">()</span>
 
     <span class="c1">#TODO: use GetComputerNameExA ? and recover other names ?</span>
@@ -217,6 +206,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="s2">&quot;Unknow Windows &lt;version=</span><span class="si">{0}</span><span class="s2"> | is_workstation=</span><span class="si">{1}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">version</span><span class="p">,</span> <span class="n">is_workstation</span><span class="p">)</span>
 
+    <span class="n">VERSION_MAPPER</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span><span class="n">VER_NT_WORKSTATION</span><span class="p">,</span> <span class="n">VER_NT_DOMAIN_CONTROLLER</span><span class="p">,</span> <span class="n">VER_NT_SERVER</span><span class="p">)</span>
     <span class="nd">@utils</span><span class="o">.</span><span class="n">fixedpropety</span>
     <span class="k">def</span> <span class="nf">product_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The product type, value might be:</span>
@@ -227,9 +217,8 @@
 
 <span class="sd">        :type: :class:`long` or :class:`int` (or subclass)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">version_map</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">:</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="n">VER_NT_WORKSTATION</span><span class="p">,</span> <span class="n">VER_NT_DOMAIN_CONTROLLER</span><span class="p">,</span> <span class="n">VER_NT_SERVER</span><span class="p">]}</span>
         <span class="n">version</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_version</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">version_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">version</span><span class="o">.</span><span class="n">wProductType</span><span class="p">,</span> <span class="n">version</span><span class="o">.</span><span class="n">wProductType</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">VERSION_MAPPER</span><span class="p">[</span><span class="n">version</span><span class="o">.</span><span class="n">wProductType</span><span class="p">]</span>
 
 
     <span class="nd">@utils</span><span class="o">.</span><span class="n">fixedpropety</span>
@@ -261,14 +250,17 @@
 
     <span class="nd">@utils</span><span class="o">.</span><span class="n">fixedpropety</span>
     <span class="k">def</span> <span class="nf">build_number</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_file_version</span><span class="p">(</span><span class="s2">&quot;ntdll&quot;</span><span class="p">)</span>
+        <span class="c1"># This returns the last version where ntdll was updated</span>
+        <span class="c1"># Should look at HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion</span>
+        <span class="c1"># values:  CurrentBuild + UBR</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_file_version</span><span class="p">(</span><span class="s2">&quot;comctl32&quot;</span><span class="p">)</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">enumerate_processes</span><span class="p">():</span>
         <span class="n">dbgprint</span><span class="p">(</span><span class="s2">&quot;Enumerating processes with CreateToolhelp32Snapshot&quot;</span><span class="p">,</span> <span class="s2">&quot;SLOW&quot;</span><span class="p">)</span>
         <span class="n">process_entry</span> <span class="o">=</span> <span class="n">PROCESSENTRY32</span><span class="p">()</span>
         <span class="n">process_entry</span><span class="o">.</span><span class="n">dwSize</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">process_entry</span><span class="p">)</span>
-        <span class="n">snap</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CreateToolhelp32Snapshot</span><span class="p">(</span><span class="n">windef</span><span class="o">.</span><span class="n">TH32CS_SNAPPROCESS</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">snap</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CreateToolhelp32Snapshot</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TH32CS_SNAPPROCESS</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
         <span class="n">winproxy</span><span class="o">.</span><span class="n">Process32First</span><span class="p">(</span><span class="n">snap</span><span class="p">,</span> <span class="n">process_entry</span><span class="p">)</span>
         <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">process</span><span class="o">.</span><span class="n">WinProcess</span><span class="o">.</span><span class="n">_from_PROCESSENTRY32</span><span class="p">(</span><span class="n">process_entry</span><span class="p">))</span>
@@ -283,7 +275,7 @@
         <span class="n">dbgprint</span><span class="p">(</span><span class="s2">&quot;Enumerating threads with CreateToolhelp32Snapshot &lt;generator&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;SLOW&quot;</span><span class="p">)</span>
         <span class="n">thread_entry</span> <span class="o">=</span> <span class="n">THREADENTRY32</span><span class="p">()</span>
         <span class="n">thread_entry</span><span class="o">.</span><span class="n">dwSize</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">thread_entry</span><span class="p">)</span>
-        <span class="n">snap</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CreateToolhelp32Snapshot</span><span class="p">(</span><span class="n">windef</span><span class="o">.</span><span class="n">TH32CS_SNAPTHREAD</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">snap</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CreateToolhelp32Snapshot</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TH32CS_SNAPTHREAD</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
         <span class="n">dbgprint</span><span class="p">(</span><span class="s2">&quot;New handle CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD) &lt;generator&gt; | </span><span class="si">{0:#x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">snap</span><span class="p">),</span> <span class="s2">&quot;HANDLE&quot;</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">winproxy</span><span class="o">.</span><span class="n">Thread32First</span><span class="p">(</span><span class="n">snap</span><span class="p">,</span> <span class="n">thread_entry</span><span class="p">)</span>
@@ -308,7 +300,7 @@
         <span class="n">dbgprint</span><span class="p">(</span><span class="s2">&quot;Enumerating threads with CreateToolhelp32Snapshot and setup owner&quot;</span><span class="p">,</span> <span class="s2">&quot;SLOW&quot;</span><span class="p">)</span>
 
         <span class="c1"># One snap for both enum to be prevent race</span>
-        <span class="n">snap</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CreateToolhelp32Snapshot</span><span class="p">(</span><span class="n">windef</span><span class="o">.</span><span class="n">TH32CS_SNAPTHREAD</span> <span class="o">|</span> <span class="n">windef</span><span class="o">.</span><span class="n">TH32CS_SNAPPROCESS</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">snap</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CreateToolhelp32Snapshot</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TH32CS_SNAPTHREAD</span> <span class="o">|</span> <span class="n">gdef</span><span class="o">.</span><span class="n">TH32CS_SNAPPROCESS</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
         <span class="n">process_entry</span> <span class="o">=</span> <span class="n">PROCESSENTRY32</span><span class="p">()</span>
         <span class="n">process_entry</span><span class="o">.</span><span class="n">dwSize</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">process_entry</span><span class="p">)</span>
@@ -330,8 +322,8 @@
         <span class="k">while</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">Thread32Next</span><span class="p">(</span><span class="n">snap</span><span class="p">,</span> <span class="n">thread_entry</span><span class="p">):</span>
             <span class="n">parent</span> <span class="o">=</span> <span class="n">proc_dict</span><span class="p">[</span><span class="n">thread_entry</span><span class="o">.</span><span class="n">th32OwnerProcessID</span><span class="p">]</span>
             <span class="n">threads</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">process</span><span class="o">.</span><span class="n">WinThread</span><span class="o">.</span><span class="n">_from_THREADENTRY32</span><span class="p">(</span><span class="n">thread_entry</span><span class="p">,</span> <span class="n">owner</span><span class="o">=</span><span class="n">parent</span><span class="p">))</span>
-        <span class="n">winproxy</span><span class="o">.</span><span class="n">CloseHandle</span><span class="p">(</span><span class="n">snap</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">threads</span></div>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">CloseHandle</span><span class="p">(</span><span class="n">snap</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">threads</span>
 </pre></div>
 
           </div>
@@ -341,12 +333,14 @@
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -368,7 +362,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
     </div>
   </body>
 </html>

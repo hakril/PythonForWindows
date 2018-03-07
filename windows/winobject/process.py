@@ -459,7 +459,7 @@ class Process(AutoHandle):
     def query_memory(self, addr):
         """Query the memory informations about page at ``addr``
 
-        :rtype: :class:`~windows.generated_def.MEMORY_BASIC_INFORMATION`
+        :rtype: :class:`~windows.generated_def.winstructs.MEMORY_BASIC_INFORMATION`
 		"""
         if windows.current_process.bitness == 32 and self.bitness == 64:
             res = MEMORY_BASIC_INFORMATION64()
@@ -480,7 +480,7 @@ class Process(AutoHandle):
     def memory_state(self):
         """Yield the memory information for the whole address space of the process
 
-        :yield: :class:`~windows.generated_def.MEMORY_BASIC_INFORMATION`
+        :yield: :class:`~windows.generated_def.winstructs.MEMORY_BASIC_INFORMATION`
 		"""
         addr = 0
         res = []
@@ -1307,7 +1307,7 @@ class PEB(gdef.PEB):
     def imagepath(self):
         """The ImagePathName of the PEB
 
-        :type: :class:`~windows.generated_def.LSA_UNICODE_STRING`
+        :type: :class:`~windows.generated_def.winstructs.LSA_UNICODE_STRING`
 		"""
         return self.ProcessParameters.contents.ImagePathName
 
@@ -1315,7 +1315,7 @@ class PEB(gdef.PEB):
     def commandline(self):
         """The CommandLine of the PEB
 
-        :type: :class:`~windows.generated_def.LSA_UNICODE_STRING`
+        :type: :class:`~windows.generated_def.winstructs.LSA_UNICODE_STRING`
 		"""
         return self.ProcessParameters.contents.CommandLine
 
@@ -1352,6 +1352,12 @@ class PEB(gdef.PEB):
 
     @property
     def apisetmap(self):
+        """The :class:`~windows.winobject.apisetmap.ApiSetMap` of the process
+
+        :rtype: A subclass of :class:`~windows.winobject.apisetmap.ApiSetMap`
+        :raise: :class:`~exception.NotImplementedError` -- Before ``6.2`` ApiSetMap did not exist
+        :raise: :class:`~exception.NotImplementedError` -- Not implemented for remote process
+        """
         if windows.system.version < (6,2):
             raise NotImplementedError("ApiSetMap does not exist prior to Windows 7")
         return apisetmap.get_api_set_map_for_current_process(self.ApiSetMap)

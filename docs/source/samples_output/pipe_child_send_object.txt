@@ -1,0 +1,9 @@
+(cmd) python pipe\child_send_object.py
+Child is <WinProcess "notepad.exe" pid 4316 at 0x672fcf0>
+Created pipe is <PipeConnection name="\\.\pipe\PFW_Pipe" server=True>
+Receiving object from injected process
+Remote Address = 0x97a0000
+Querying memory in target at <0x97a0000>
+    * <MEMORY_BASIC_INFORMATION32 BaseAddress=0x97a0000 RegionSize=0x001000 State=MEM_COMMIT(0x1000L) Type=MEM_MAPPED(0x40000L) Protect=PAGE_READWRITE(0x4L)>
+Querying mapped file in target at <0x97a0000>
+    * \Device\HarddiskVolume2\Users\hakril\Documents\projets\PythonForWindows\samples\tst.txt
