@@ -9,7 +9,7 @@ from simpleparser import *
 class WinComParser(Parser):
     PARAM_INFO =  ["__RPC__deref_out", "__RPC__in", "__RPC__deref_out_opt", "__RPC__out", "__RPC__in_opt",
         "__RPC__deref_opt_inout_opt", "__in", "__out", "__out_opt", "__in_opt", "__inout",
-        "__reserved", "__RPC__in_opt_string", "__RPC__inout_opt", "__RPC__in_string"]
+        "__reserved", "__RPC__in_opt_string", "__RPC__inout_opt", "__RPC__in_string", "__deref_out_opt"]
     PARAM_INFO_WITH_VALUE = ["__RPC__in_ecount", "__RPC__out_ecount_part", "__RPC__in_ecount_full",
             "__RPC__in_range", "__RPC__out_ecount_full", "__out_ecount_opt", "__out_ecount", "__in_ecount_opt",
             "__in_ecount", "__out_bcount_opt", "__out_bcount", "__in_bcount", "__in_bcount_opt", "__RPC__out_ecount_full_string"]
@@ -68,9 +68,11 @@ class WinComParser(Parser):
         args = []
         self.assert_token_type(OpenParenthesisToken)
         while type(self.peek()) != CloseParenthesisToken:
-            # TODO: handle call with VARGS ?
-            if self.peek().value == "...":
+            if self.peek().value == "...": #TODO: '...' token ?
                 self.next_token()
+                # '...' should be last token before ')'
+                args.append("...") # Put a type ?
+                assert type(self.peek()) == CloseParenthesisToken
                 continue
             args.append(self.parse_argument())
             #print("Pass <{0}>".format(p))
@@ -117,7 +119,7 @@ class WinComParser(Parser):
 
         #print(self.data)
 
-Method = namedtuple("Method", ["ret_type", "name", "args"])
+Method = namedtuple("Method", ["ret_type", "name", "args", 'functype'])
 MethodArg = namedtuple("MethodArg", ["type", "byreflevel", "name"])
 class WinCOMVTABLE(object):
     def __init__(self, vtbl_name):
@@ -129,6 +131,11 @@ class WinCOMVTABLE(object):
 
     def add_method(self, ret_type, method_name, args):
         new_args = []
+        functype = 'stdcall'
+        if args[-1] == "...":
+            print("{0}.{1} is a cdecl COM method".format(self.name, method_name))
+            args = args[:-1]
+            functype = 'cdecl'
         for type, byreflevel, name in args:
             if type in ["long", "int"]:
                 type = type.upper()
@@ -136,7 +143,7 @@ class WinCOMVTABLE(object):
 
         if ret_type in ["long", "int"]:
             ret_type = ret_type.upper()
-        self.methods.append(Method(ret_type, method_name, new_args))
+        self.methods.append(Method(ret_type, method_name, new_args, functype))
 
 
 if __name__ == "__main__":

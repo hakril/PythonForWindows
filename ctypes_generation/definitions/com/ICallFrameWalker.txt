@@ -1,0 +1,25 @@
+typedef struct ICallFrameWalkerVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ICallFrameWalker * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            __RPC__deref_out  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ICallFrameWalker * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ICallFrameWalker * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *OnWalkInterface )( 
+            ICallFrameWalker * This,
+            /* [in] */ REFIID iid,
+            /* [in] */ PVOID *ppvInterface,
+            /* [in] */ BOOL fIn,
+            /* [in] */ BOOL fOut);
+        
+        END_INTERFACE
+    } ICallFrameWalkerVtbl;

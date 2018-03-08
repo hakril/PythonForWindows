@@ -1699,6 +1699,11 @@ def CoInitializeSecurity(pSecDesc, cAuthSvc, asAuthSvc, pReserved1, dwAuthnLevel
 def CoCreateInstance(rclsid, pUnkOuter=None, dwClsContext=CLSCTX_INPROC_SERVER, riid=NeededParameter, ppv=NeededParameter):
     return CoCreateInstance.ctypes_function(rclsid, pUnkOuter, dwClsContext, riid, ppv)
 
+
+@Ole32Proxy('CoGetInterceptor')
+def CoGetInterceptor(iidIntercepted, punkOuter, iid, ppv):
+    return CoGetInterceptor.ctypes_function(iidIntercepted, punkOuter, iid, ppv)
+
 # ## Shell32 ## #
 
 @Shell32Proxy('ShellExecuteA')

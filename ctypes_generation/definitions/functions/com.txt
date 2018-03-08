@@ -1,0 +1,31 @@
+HRESULT WINAPI CoInitializeEx(
+  _In_opt_ LPVOID pvReserved,
+  _In_     DWORD  dwCoInit
+);
+
+HRESULT WINAPI CoInitializeSecurity(
+  _In_opt_ PSECURITY_DESCRIPTOR        pSecDesc,
+  _In_     LONG                        cAuthSvc,
+  _In_opt_ SOLE_AUTHENTICATION_SERVICE *asAuthSvc,
+  _In_opt_ PVOID                        pReserved1,
+  _In_     DWORD                       dwAuthnLevel,
+  _In_     DWORD                       dwImpLevel,
+  _In_opt_ PVOID                       pAuthList,
+  _In_     DWORD                       dwCapabilities,
+  _In_opt_ PVOID                       pReserved3
+);
+
+HRESULT WINAPI CoCreateInstance(
+  _In_  REFCLSID  rclsid,
+  _In_  LPUNKNOWN pUnkOuter,
+  _In_  DWORD     dwClsContext,
+  _In_  REFIID    riid,
+  _Out_ LPVOID    *ppv
+);
+
+HRESULT WINAPI CoGetInterceptor(
+  _In_  REFIID   iidIntercepted,
+  _In_  IUnknown *punkOuter,
+  _In_  REFIID   iid,
+  _Out_ PVOID     *ppv
+);

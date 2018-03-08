@@ -1,4 +1,65 @@
 from winstructs import *
+from interfaces import *
+#def CoInitializeEx(pvReserved, dwCoInit):
+#    return CoInitializeEx.ctypes_function(pvReserved, dwCoInit)
+CoInitializeExPrototype = WINFUNCTYPE(HRESULT, LPVOID, DWORD)
+CoInitializeExParams = ((1, 'pvReserved'), (1, 'dwCoInit'))
+
+#def CoInitializeSecurity(pSecDesc, cAuthSvc, asAuthSvc, pReserved1, dwAuthnLevel, dwImpLevel, pAuthList, dwCapabilities, pReserved3):
+#    return CoInitializeSecurity.ctypes_function(pSecDesc, cAuthSvc, asAuthSvc, pReserved1, dwAuthnLevel, dwImpLevel, pAuthList, dwCapabilities, pReserved3)
+CoInitializeSecurityPrototype = WINFUNCTYPE(HRESULT, PSECURITY_DESCRIPTOR, LONG, POINTER(SOLE_AUTHENTICATION_SERVICE), PVOID, DWORD, DWORD, PVOID, DWORD, PVOID)
+CoInitializeSecurityParams = ((1, 'pSecDesc'), (1, 'cAuthSvc'), (1, 'asAuthSvc'), (1, 'pReserved1'), (1, 'dwAuthnLevel'), (1, 'dwImpLevel'), (1, 'pAuthList'), (1, 'dwCapabilities'), (1, 'pReserved3'))
+
+#def CoCreateInstance(rclsid, pUnkOuter, dwClsContext, riid, ppv):
+#    return CoCreateInstance.ctypes_function(rclsid, pUnkOuter, dwClsContext, riid, ppv)
+CoCreateInstancePrototype = WINFUNCTYPE(HRESULT, REFCLSID, LPUNKNOWN, DWORD, REFIID, POINTER(LPVOID))
+CoCreateInstanceParams = ((1, 'rclsid'), (1, 'pUnkOuter'), (1, 'dwClsContext'), (1, 'riid'), (1, 'ppv'))
+
+#def CoGetInterceptor(iidIntercepted, punkOuter, iid, ppv):
+#    return CoGetInterceptor.ctypes_function(iidIntercepted, punkOuter, iid, ppv)
+CoGetInterceptorPrototype = WINFUNCTYPE(HRESULT, REFIID, POINTER(IUnknown), REFIID, POINTER(PVOID))
+CoGetInterceptorParams = ((1, 'iidIntercepted'), (1, 'punkOuter'), (1, 'iid'), (1, 'ppv'))
+
+#def TpCallbackSendAlpcMessageOnCompletion(TpHandle, PortHandle, Flags, SendMessage):
+#    return TpCallbackSendAlpcMessageOnCompletion.ctypes_function(TpHandle, PortHandle, Flags, SendMessage)
+TpCallbackSendAlpcMessageOnCompletionPrototype = WINFUNCTYPE(NTSTATUS, HANDLE, HANDLE, ULONG, PPORT_MESSAGE)
+TpCallbackSendAlpcMessageOnCompletionParams = ((1, 'TpHandle'), (1, 'PortHandle'), (1, 'Flags'), (1, 'SendMessage'))
+
+#def OpenEventLogA(lpUNCServerName, lpSourceName):
+#    return OpenEventLogA.ctypes_function(lpUNCServerName, lpSourceName)
+OpenEventLogAPrototype = WINFUNCTYPE(HANDLE, LPCSTR, LPCSTR)
+OpenEventLogAParams = ((1, 'lpUNCServerName'), (1, 'lpSourceName'))
+
+#def OpenEventLogW(lpUNCServerName, lpSourceName):
+#    return OpenEventLogW.ctypes_function(lpUNCServerName, lpSourceName)
+OpenEventLogWPrototype = WINFUNCTYPE(HANDLE, LPWSTR, LPWSTR)
+OpenEventLogWParams = ((1, 'lpUNCServerName'), (1, 'lpSourceName'))
+
+#def ReadEventLogA(hEventLog, dwReadFlags, dwRecordOffset, lpBuffer, nNumberOfBytesToRead, pnBytesRead, pnMinNumberOfBytesNeeded):
+#    return ReadEventLogA.ctypes_function(hEventLog, dwReadFlags, dwRecordOffset, lpBuffer, nNumberOfBytesToRead, pnBytesRead, pnMinNumberOfBytesNeeded)
+ReadEventLogAPrototype = WINFUNCTYPE(BOOL, HANDLE, DWORD, DWORD, LPVOID, DWORD, POINTER(DWORD), POINTER(DWORD))
+ReadEventLogAParams = ((1, 'hEventLog'), (1, 'dwReadFlags'), (1, 'dwRecordOffset'), (1, 'lpBuffer'), (1, 'nNumberOfBytesToRead'), (1, 'pnBytesRead'), (1, 'pnMinNumberOfBytesNeeded'))
+
+#def ReadEventLogW(hEventLog, dwReadFlags, dwRecordOffset, lpBuffer, nNumberOfBytesToRead, pnBytesRead, pnMinNumberOfBytesNeeded):
+#    return ReadEventLogW.ctypes_function(hEventLog, dwReadFlags, dwRecordOffset, lpBuffer, nNumberOfBytesToRead, pnBytesRead, pnMinNumberOfBytesNeeded)
+ReadEventLogWPrototype = WINFUNCTYPE(BOOL, HANDLE, DWORD, DWORD, LPVOID, DWORD, POINTER(DWORD), POINTER(DWORD))
+ReadEventLogWParams = ((1, 'hEventLog'), (1, 'dwReadFlags'), (1, 'dwRecordOffset'), (1, 'lpBuffer'), (1, 'nNumberOfBytesToRead'), (1, 'pnBytesRead'), (1, 'pnMinNumberOfBytesNeeded'))
+
+#def GetEventLogInformation(hEventLog, dwInfoLevel, lpBuffer, cbBufSize, pcbBytesNeeded):
+#    return GetEventLogInformation.ctypes_function(hEventLog, dwInfoLevel, lpBuffer, cbBufSize, pcbBytesNeeded)
+GetEventLogInformationPrototype = WINFUNCTYPE(BOOL, HANDLE, DWORD, LPVOID, DWORD, LPDWORD)
+GetEventLogInformationParams = ((1, 'hEventLog'), (1, 'dwInfoLevel'), (1, 'lpBuffer'), (1, 'cbBufSize'), (1, 'pcbBytesNeeded'))
+
+#def GetNumberOfEventLogRecords(hEventLog, NumberOfRecords):
+#    return GetNumberOfEventLogRecords.ctypes_function(hEventLog, NumberOfRecords)
+GetNumberOfEventLogRecordsPrototype = WINFUNCTYPE(BOOL, HANDLE, PDWORD)
+GetNumberOfEventLogRecordsParams = ((1, 'hEventLog'), (1, 'NumberOfRecords'))
+
+#def CloseEventLog(hEventLog):
+#    return CloseEventLog.ctypes_function(hEventLog)
+CloseEventLogPrototype = WINFUNCTYPE(BOOL, HANDLE)
+CloseEventLogParams = ((1, 'hEventLog'),)
+
 #def CreateFileTransactedA(lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile, hTransaction, pusMiniVersion, pExtendedParameter):
 #    return CreateFileTransactedA.ctypes_function(lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile, hTransaction, pusMiniVersion, pExtendedParameter)
 CreateFileTransactedAPrototype = WINFUNCTYPE(HANDLE, LPCSTR, DWORD, DWORD, LPSECURITY_ATTRIBUTES, DWORD, DWORD, HANDLE, HANDLE, PUSHORT, PVOID)
@@ -1174,21 +1235,6 @@ LookupAccountSidAParams = ((1, 'lpSystemName'), (1, 'lpSid'), (1, 'lpName'), (1,
 LookupAccountSidWPrototype = WINFUNCTYPE(BOOL, LPWSTR, PSID, LPWSTR, LPDWORD, LPWSTR, LPDWORD, PSID_NAME_USE)
 LookupAccountSidWParams = ((1, 'lpSystemName'), (1, 'lpSid'), (1, 'lpName'), (1, 'cchName'), (1, 'lpReferencedDomainName'), (1, 'cchReferencedDomainName'), (1, 'peUse'))
 
-#def CoInitializeEx(pvReserved, dwCoInit):
-#    return CoInitializeEx.ctypes_function(pvReserved, dwCoInit)
-CoInitializeExPrototype = WINFUNCTYPE(HRESULT, LPVOID, DWORD)
-CoInitializeExParams = ((1, 'pvReserved'), (1, 'dwCoInit'))
-
-#def CoInitializeSecurity(pSecDesc, cAuthSvc, asAuthSvc, pReserved1, dwAuthnLevel, dwImpLevel, pAuthList, dwCapabilities, pReserved3):
-#    return CoInitializeSecurity.ctypes_function(pSecDesc, cAuthSvc, asAuthSvc, pReserved1, dwAuthnLevel, dwImpLevel, pAuthList, dwCapabilities, pReserved3)
-CoInitializeSecurityPrototype = WINFUNCTYPE(HRESULT, PSECURITY_DESCRIPTOR, LONG, POINTER(SOLE_AUTHENTICATION_SERVICE), PVOID, DWORD, DWORD, PVOID, DWORD, PVOID)
-CoInitializeSecurityParams = ((1, 'pSecDesc'), (1, 'cAuthSvc'), (1, 'asAuthSvc'), (1, 'pReserved1'), (1, 'dwAuthnLevel'), (1, 'dwImpLevel'), (1, 'pAuthList'), (1, 'dwCapabilities'), (1, 'pReserved3'))
-
-#def CoCreateInstance(rclsid, pUnkOuter, dwClsContext, riid, ppv):
-#    return CoCreateInstance.ctypes_function(rclsid, pUnkOuter, dwClsContext, riid, ppv)
-CoCreateInstancePrototype = WINFUNCTYPE(HRESULT, REFCLSID, LPUNKNOWN, DWORD, REFIID, POINTER(LPVOID))
-CoCreateInstanceParams = ((1, 'rclsid'), (1, 'pUnkOuter'), (1, 'dwClsContext'), (1, 'riid'), (1, 'ppv'))
-
 #def GetInterfaceInfo(pIfTable, dwOutBufLen):
 #    return GetInterfaceInfo.ctypes_function(pIfTable, dwOutBufLen)
 GetInterfaceInfoPrototype = WINFUNCTYPE(DWORD, PIP_INTERFACE_INFO, PULONG)
@@ -1373,6 +1419,151 @@ RtlDosPathNameToNtPathName_UParams = ((1, 'DosName'), (1, 'NtName'), (1, 'PartNa
 #    return ApiSetResolveToHost.ctypes_function(Schema, FileNameIn, ParentName, Resolved, HostBinary)
 ApiSetResolveToHostPrototype = WINFUNCTYPE(NTSTATUS, PVOID, PUNICODE_STRING, PUNICODE_STRING, PBOOLEAN, PUNICODE_STRING)
 ApiSetResolveToHostParams = ((1, 'Schema'), (1, 'FileNameIn'), (1, 'ParentName'), (1, 'Resolved'), (1, 'HostBinary'))
+
+#def GetCursorPos(lpPoint):
+#    return GetCursorPos.ctypes_function(lpPoint)
+GetCursorPosPrototype = WINFUNCTYPE(BOOL, LPPOINT)
+GetCursorPosParams = ((1, 'lpPoint'),)
+
+#def WindowFromPoint(Point):
+#    return WindowFromPoint.ctypes_function(Point)
+WindowFromPointPrototype = WINFUNCTYPE(HWND, POINT)
+WindowFromPointParams = ((1, 'Point'),)
+
+#def GetWindowRect(hWnd, lpRect):
+#    return GetWindowRect.ctypes_function(hWnd, lpRect)
+GetWindowRectPrototype = WINFUNCTYPE(BOOL, HWND, LPRECT)
+GetWindowRectParams = ((1, 'hWnd'), (1, 'lpRect'))
+
+#def EnumWindows(lpEnumFunc, lParam):
+#    return EnumWindows.ctypes_function(lpEnumFunc, lParam)
+EnumWindowsPrototype = WINFUNCTYPE(BOOL, WNDENUMPROC, LPARAM)
+EnumWindowsParams = ((1, 'lpEnumFunc'), (1, 'lParam'))
+
+#def GetWindowTextA(hWnd, lpString, nMaxCount):
+#    return GetWindowTextA.ctypes_function(hWnd, lpString, nMaxCount)
+GetWindowTextAPrototype = WINFUNCTYPE(INT, HWND, LPSTR, INT)
+GetWindowTextAParams = ((1, 'hWnd'), (1, 'lpString'), (1, 'nMaxCount'))
+
+#def GetParent(hWnd):
+#    return GetParent.ctypes_function(hWnd)
+GetParentPrototype = WINFUNCTYPE(HWND, HWND)
+GetParentParams = ((1, 'hWnd'),)
+
+#def GetWindowTextW(hWnd, lpString, nMaxCount):
+#    return GetWindowTextW.ctypes_function(hWnd, lpString, nMaxCount)
+GetWindowTextWPrototype = WINFUNCTYPE(INT, HWND, LPWSTR, INT)
+GetWindowTextWParams = ((1, 'hWnd'), (1, 'lpString'), (1, 'nMaxCount'))
+
+#def GetWindowModuleFileNameA(hwnd, pszFileName, cchFileNameMax):
+#    return GetWindowModuleFileNameA.ctypes_function(hwnd, pszFileName, cchFileNameMax)
+GetWindowModuleFileNameAPrototype = WINFUNCTYPE(UINT, HWND, LPSTR, UINT)
+GetWindowModuleFileNameAParams = ((1, 'hwnd'), (1, 'pszFileName'), (1, 'cchFileNameMax'))
+
+#def GetWindowModuleFileNameW(hwnd, pszFileName, cchFileNameMax):
+#    return GetWindowModuleFileNameW.ctypes_function(hwnd, pszFileName, cchFileNameMax)
+GetWindowModuleFileNameWPrototype = WINFUNCTYPE(UINT, HWND, LPWSTR, UINT)
+GetWindowModuleFileNameWParams = ((1, 'hwnd'), (1, 'pszFileName'), (1, 'cchFileNameMax'))
+
+#def EnumChildWindows(hWndParent, lpEnumFunc, lParam):
+#    return EnumChildWindows.ctypes_function(hWndParent, lpEnumFunc, lParam)
+EnumChildWindowsPrototype = WINFUNCTYPE(BOOL, HWND, WNDENUMPROC, LPARAM)
+EnumChildWindowsParams = ((1, 'hWndParent'), (1, 'lpEnumFunc'), (1, 'lParam'))
+
+#def CloseWindow(hWnd):
+#    return CloseWindow.ctypes_function(hWnd)
+CloseWindowPrototype = WINFUNCTYPE(BOOL, HWND)
+CloseWindowParams = ((1, 'hWnd'),)
+
+#def GetDesktopWindow():
+#    return GetDesktopWindow.ctypes_function()
+GetDesktopWindowPrototype = WINFUNCTYPE(HWND)
+GetDesktopWindowParams = ()
+
+#def GetForegroundWindow():
+#    return GetForegroundWindow.ctypes_function()
+GetForegroundWindowPrototype = WINFUNCTYPE(HWND)
+GetForegroundWindowParams = ()
+
+#def BringWindowToTop(hWnd):
+#    return BringWindowToTop.ctypes_function(hWnd)
+BringWindowToTopPrototype = WINFUNCTYPE(BOOL, HWND)
+BringWindowToTopParams = ((1, 'hWnd'),)
+
+#def MoveWindow(hWnd, X, Y, nWidth, nHeight, bRepaint):
+#    return MoveWindow.ctypes_function(hWnd, X, Y, nWidth, nHeight, bRepaint)
+MoveWindowPrototype = WINFUNCTYPE(BOOL, HWND, INT, INT, INT, INT, BOOL)
+MoveWindowParams = ((1, 'hWnd'), (1, 'X'), (1, 'Y'), (1, 'nWidth'), (1, 'nHeight'), (1, 'bRepaint'))
+
+#def SetWindowPos(hWnd, hWndInsertAfter, X, Y, cx, cy, uFlags):
+#    return SetWindowPos.ctypes_function(hWnd, hWndInsertAfter, X, Y, cx, cy, uFlags)
+SetWindowPosPrototype = WINFUNCTYPE(BOOL, HWND, HWND, INT, INT, INT, INT, UINT)
+SetWindowPosParams = ((1, 'hWnd'), (1, 'hWndInsertAfter'), (1, 'X'), (1, 'Y'), (1, 'cx'), (1, 'cy'), (1, 'uFlags'))
+
+#def SetWindowTextA(hWnd, lpString):
+#    return SetWindowTextA.ctypes_function(hWnd, lpString)
+SetWindowTextAPrototype = WINFUNCTYPE(BOOL, HWND, LPCSTR)
+SetWindowTextAParams = ((1, 'hWnd'), (1, 'lpString'))
+
+#def SetWindowTextW(hWnd, lpString):
+#    return SetWindowTextW.ctypes_function(hWnd, lpString)
+SetWindowTextWPrototype = WINFUNCTYPE(BOOL, HWND, LPWSTR)
+SetWindowTextWParams = ((1, 'hWnd'), (1, 'lpString'))
+
+#def RealGetWindowClassA(hwnd, pszType, cchType):
+#    return RealGetWindowClassA.ctypes_function(hwnd, pszType, cchType)
+RealGetWindowClassAPrototype = WINFUNCTYPE(UINT, HWND, LPCSTR, UINT)
+RealGetWindowClassAParams = ((1, 'hwnd'), (1, 'pszType'), (1, 'cchType'))
+
+#def RealGetWindowClassW(hwnd, pszType, cchType):
+#    return RealGetWindowClassW.ctypes_function(hwnd, pszType, cchType)
+RealGetWindowClassWPrototype = WINFUNCTYPE(UINT, HWND, LPWSTR, UINT)
+RealGetWindowClassWParams = ((1, 'hwnd'), (1, 'pszType'), (1, 'cchType'))
+
+#def GetClassInfoExA(hinst, lpszClass, lpwcx):
+#    return GetClassInfoExA.ctypes_function(hinst, lpszClass, lpwcx)
+GetClassInfoExAPrototype = WINFUNCTYPE(BOOL, HINSTANCE, LPCSTR, LPWNDCLASSEXA)
+GetClassInfoExAParams = ((1, 'hinst'), (1, 'lpszClass'), (1, 'lpwcx'))
+
+#def GetClassInfoExW(hinst, lpszClass, lpwcx):
+#    return GetClassInfoExW.ctypes_function(hinst, lpszClass, lpwcx)
+GetClassInfoExWPrototype = WINFUNCTYPE(BOOL, HINSTANCE, LPCWSTR, LPWNDCLASSEXW)
+GetClassInfoExWParams = ((1, 'hinst'), (1, 'lpszClass'), (1, 'lpwcx'))
+
+#def GetClassNameA(hWnd, lpClassName, nMaxCount):
+#    return GetClassNameA.ctypes_function(hWnd, lpClassName, nMaxCount)
+GetClassNameAPrototype = WINFUNCTYPE(INT, HWND, LPCSTR, INT)
+GetClassNameAParams = ((1, 'hWnd'), (1, 'lpClassName'), (1, 'nMaxCount'))
+
+#def GetClassNameW(hWnd, lpClassName, nMaxCount):
+#    return GetClassNameW.ctypes_function(hWnd, lpClassName, nMaxCount)
+GetClassNameWPrototype = WINFUNCTYPE(INT, HWND, LPWSTR, INT)
+GetClassNameWParams = ((1, 'hWnd'), (1, 'lpClassName'), (1, 'nMaxCount'))
+
+#def GetWindowThreadProcessId(hWnd, lpdwProcessId):
+#    return GetWindowThreadProcessId.ctypes_function(hWnd, lpdwProcessId)
+GetWindowThreadProcessIdPrototype = WINFUNCTYPE(DWORD, HWND, LPDWORD)
+GetWindowThreadProcessIdParams = ((1, 'hWnd'), (1, 'lpdwProcessId'))
+
+#def CreateNamedPipeA(lpName, dwOpenMode, dwPipeMode, nMaxInstances, nOutBufferSize, nInBufferSize, nDefaultTimeOut, lpSecurityAttributes):
+#    return CreateNamedPipeA.ctypes_function(lpName, dwOpenMode, dwPipeMode, nMaxInstances, nOutBufferSize, nInBufferSize, nDefaultTimeOut, lpSecurityAttributes)
+CreateNamedPipeAPrototype = WINFUNCTYPE(HANDLE, LPCSTR, DWORD, DWORD, DWORD, DWORD, DWORD, DWORD, LPSECURITY_ATTRIBUTES)
+CreateNamedPipeAParams = ((1, 'lpName'), (1, 'dwOpenMode'), (1, 'dwPipeMode'), (1, 'nMaxInstances'), (1, 'nOutBufferSize'), (1, 'nInBufferSize'), (1, 'nDefaultTimeOut'), (1, 'lpSecurityAttributes'))
+
+#def CreateNamedPipeW(lpName, dwOpenMode, dwPipeMode, nMaxInstances, nOutBufferSize, nInBufferSize, nDefaultTimeOut, lpSecurityAttributes):
+#    return CreateNamedPipeW.ctypes_function(lpName, dwOpenMode, dwPipeMode, nMaxInstances, nOutBufferSize, nInBufferSize, nDefaultTimeOut, lpSecurityAttributes)
+CreateNamedPipeWPrototype = WINFUNCTYPE(HANDLE, LPWSTR, DWORD, DWORD, DWORD, DWORD, DWORD, DWORD, LPSECURITY_ATTRIBUTES)
+CreateNamedPipeWParams = ((1, 'lpName'), (1, 'dwOpenMode'), (1, 'dwPipeMode'), (1, 'nMaxInstances'), (1, 'nOutBufferSize'), (1, 'nInBufferSize'), (1, 'nDefaultTimeOut'), (1, 'lpSecurityAttributes'))
+
+#def ConnectNamedPipe(hNamedPipe, lpOverlapped):
+#    return ConnectNamedPipe.ctypes_function(hNamedPipe, lpOverlapped)
+ConnectNamedPipePrototype = WINFUNCTYPE(BOOL, HANDLE, LPOVERLAPPED)
+ConnectNamedPipeParams = ((1, 'hNamedPipe'), (1, 'lpOverlapped'))
+
+#def SetNamedPipeHandleState(hNamedPipe, lpMode, lpMaxCollectionCount, lpCollectDataTimeout):
+#    return SetNamedPipeHandleState.ctypes_function(hNamedPipe, lpMode, lpMaxCollectionCount, lpCollectDataTimeout)
+SetNamedPipeHandleStatePrototype = WINFUNCTYPE(BOOL, HANDLE, LPDWORD, LPDWORD, LPDWORD)
+SetNamedPipeHandleStateParams = ((1, 'hNamedPipe'), (1, 'lpMode'), (1, 'lpMaxCollectionCount'), (1, 'lpCollectDataTimeout'))
 
 #def CryptCATAdminCalcHashFromFileHandle(hFile, pcbHash, pbHash, dwFlags):
 #    return CryptCATAdminCalcHashFromFileHandle.ctypes_function(hFile, pcbHash, pbHash, dwFlags)
@@ -1623,189 +1814,4 @@ CryptMsgVerifyCountersignatureEncodedExParams = ((1, 'hCryptProv'), (1, 'dwEncod
 #    return CryptHashCertificate.ctypes_function(hCryptProv, Algid, dwFlags, pbEncoded, cbEncoded, pbComputedHash, pcbComputedHash)
 CryptHashCertificatePrototype = WINFUNCTYPE(BOOL, HCRYPTPROV_LEGACY, ALG_ID, DWORD, POINTER(BYTE), DWORD, POINTER(BYTE), POINTER(DWORD))
 CryptHashCertificateParams = ((1, 'hCryptProv'), (1, 'Algid'), (1, 'dwFlags'), (1, 'pbEncoded'), (1, 'cbEncoded'), (1, 'pbComputedHash'), (1, 'pcbComputedHash'))
-
-#def GetCursorPos(lpPoint):
-#    return GetCursorPos.ctypes_function(lpPoint)
-GetCursorPosPrototype = WINFUNCTYPE(BOOL, LPPOINT)
-GetCursorPosParams = ((1, 'lpPoint'),)
-
-#def WindowFromPoint(Point):
-#    return WindowFromPoint.ctypes_function(Point)
-WindowFromPointPrototype = WINFUNCTYPE(HWND, POINT)
-WindowFromPointParams = ((1, 'Point'),)
-
-#def GetWindowRect(hWnd, lpRect):
-#    return GetWindowRect.ctypes_function(hWnd, lpRect)
-GetWindowRectPrototype = WINFUNCTYPE(BOOL, HWND, LPRECT)
-GetWindowRectParams = ((1, 'hWnd'), (1, 'lpRect'))
-
-#def EnumWindows(lpEnumFunc, lParam):
-#    return EnumWindows.ctypes_function(lpEnumFunc, lParam)
-EnumWindowsPrototype = WINFUNCTYPE(BOOL, WNDENUMPROC, LPARAM)
-EnumWindowsParams = ((1, 'lpEnumFunc'), (1, 'lParam'))
-
-#def GetWindowTextA(hWnd, lpString, nMaxCount):
-#    return GetWindowTextA.ctypes_function(hWnd, lpString, nMaxCount)
-GetWindowTextAPrototype = WINFUNCTYPE(INT, HWND, LPSTR, INT)
-GetWindowTextAParams = ((1, 'hWnd'), (1, 'lpString'), (1, 'nMaxCount'))
-
-#def GetParent(hWnd):
-#    return GetParent.ctypes_function(hWnd)
-GetParentPrototype = WINFUNCTYPE(HWND, HWND)
-GetParentParams = ((1, 'hWnd'),)
-
-#def GetWindowTextW(hWnd, lpString, nMaxCount):
-#    return GetWindowTextW.ctypes_function(hWnd, lpString, nMaxCount)
-GetWindowTextWPrototype = WINFUNCTYPE(INT, HWND, LPWSTR, INT)
-GetWindowTextWParams = ((1, 'hWnd'), (1, 'lpString'), (1, 'nMaxCount'))
-
-#def GetWindowModuleFileNameA(hwnd, pszFileName, cchFileNameMax):
-#    return GetWindowModuleFileNameA.ctypes_function(hwnd, pszFileName, cchFileNameMax)
-GetWindowModuleFileNameAPrototype = WINFUNCTYPE(UINT, HWND, LPSTR, UINT)
-GetWindowModuleFileNameAParams = ((1, 'hwnd'), (1, 'pszFileName'), (1, 'cchFileNameMax'))
-
-#def GetWindowModuleFileNameW(hwnd, pszFileName, cchFileNameMax):
-#    return GetWindowModuleFileNameW.ctypes_function(hwnd, pszFileName, cchFileNameMax)
-GetWindowModuleFileNameWPrototype = WINFUNCTYPE(UINT, HWND, LPWSTR, UINT)
-GetWindowModuleFileNameWParams = ((1, 'hwnd'), (1, 'pszFileName'), (1, 'cchFileNameMax'))
-
-#def EnumChildWindows(hWndParent, lpEnumFunc, lParam):
-#    return EnumChildWindows.ctypes_function(hWndParent, lpEnumFunc, lParam)
-EnumChildWindowsPrototype = WINFUNCTYPE(BOOL, HWND, WNDENUMPROC, LPARAM)
-EnumChildWindowsParams = ((1, 'hWndParent'), (1, 'lpEnumFunc'), (1, 'lParam'))
-
-#def CloseWindow(hWnd):
-#    return CloseWindow.ctypes_function(hWnd)
-CloseWindowPrototype = WINFUNCTYPE(BOOL, HWND)
-CloseWindowParams = ((1, 'hWnd'),)
-
-#def GetDesktopWindow():
-#    return GetDesktopWindow.ctypes_function()
-GetDesktopWindowPrototype = WINFUNCTYPE(HWND)
-GetDesktopWindowParams = ()
-
-#def GetForegroundWindow():
-#    return GetForegroundWindow.ctypes_function()
-GetForegroundWindowPrototype = WINFUNCTYPE(HWND)
-GetForegroundWindowParams = ()
-
-#def BringWindowToTop(hWnd):
-#    return BringWindowToTop.ctypes_function(hWnd)
-BringWindowToTopPrototype = WINFUNCTYPE(BOOL, HWND)
-BringWindowToTopParams = ((1, 'hWnd'),)
-
-#def MoveWindow(hWnd, X, Y, nWidth, nHeight, bRepaint):
-#    return MoveWindow.ctypes_function(hWnd, X, Y, nWidth, nHeight, bRepaint)
-MoveWindowPrototype = WINFUNCTYPE(BOOL, HWND, INT, INT, INT, INT, BOOL)
-MoveWindowParams = ((1, 'hWnd'), (1, 'X'), (1, 'Y'), (1, 'nWidth'), (1, 'nHeight'), (1, 'bRepaint'))
-
-#def SetWindowPos(hWnd, hWndInsertAfter, X, Y, cx, cy, uFlags):
-#    return SetWindowPos.ctypes_function(hWnd, hWndInsertAfter, X, Y, cx, cy, uFlags)
-SetWindowPosPrototype = WINFUNCTYPE(BOOL, HWND, HWND, INT, INT, INT, INT, UINT)
-SetWindowPosParams = ((1, 'hWnd'), (1, 'hWndInsertAfter'), (1, 'X'), (1, 'Y'), (1, 'cx'), (1, 'cy'), (1, 'uFlags'))
-
-#def SetWindowTextA(hWnd, lpString):
-#    return SetWindowTextA.ctypes_function(hWnd, lpString)
-SetWindowTextAPrototype = WINFUNCTYPE(BOOL, HWND, LPCSTR)
-SetWindowTextAParams = ((1, 'hWnd'), (1, 'lpString'))
-
-#def SetWindowTextW(hWnd, lpString):
-#    return SetWindowTextW.ctypes_function(hWnd, lpString)
-SetWindowTextWPrototype = WINFUNCTYPE(BOOL, HWND, LPWSTR)
-SetWindowTextWParams = ((1, 'hWnd'), (1, 'lpString'))
-
-#def RealGetWindowClassA(hwnd, pszType, cchType):
-#    return RealGetWindowClassA.ctypes_function(hwnd, pszType, cchType)
-RealGetWindowClassAPrototype = WINFUNCTYPE(UINT, HWND, LPCSTR, UINT)
-RealGetWindowClassAParams = ((1, 'hwnd'), (1, 'pszType'), (1, 'cchType'))
-
-#def RealGetWindowClassW(hwnd, pszType, cchType):
-#    return RealGetWindowClassW.ctypes_function(hwnd, pszType, cchType)
-RealGetWindowClassWPrototype = WINFUNCTYPE(UINT, HWND, LPWSTR, UINT)
-RealGetWindowClassWParams = ((1, 'hwnd'), (1, 'pszType'), (1, 'cchType'))
-
-#def GetClassInfoExA(hinst, lpszClass, lpwcx):
-#    return GetClassInfoExA.ctypes_function(hinst, lpszClass, lpwcx)
-GetClassInfoExAPrototype = WINFUNCTYPE(BOOL, HINSTANCE, LPCSTR, LPWNDCLASSEXA)
-GetClassInfoExAParams = ((1, 'hinst'), (1, 'lpszClass'), (1, 'lpwcx'))
-
-#def GetClassInfoExW(hinst, lpszClass, lpwcx):
-#    return GetClassInfoExW.ctypes_function(hinst, lpszClass, lpwcx)
-GetClassInfoExWPrototype = WINFUNCTYPE(BOOL, HINSTANCE, LPCWSTR, LPWNDCLASSEXW)
-GetClassInfoExWParams = ((1, 'hinst'), (1, 'lpszClass'), (1, 'lpwcx'))
-
-#def GetClassNameA(hWnd, lpClassName, nMaxCount):
-#    return GetClassNameA.ctypes_function(hWnd, lpClassName, nMaxCount)
-GetClassNameAPrototype = WINFUNCTYPE(INT, HWND, LPCSTR, INT)
-GetClassNameAParams = ((1, 'hWnd'), (1, 'lpClassName'), (1, 'nMaxCount'))
-
-#def GetClassNameW(hWnd, lpClassName, nMaxCount):
-#    return GetClassNameW.ctypes_function(hWnd, lpClassName, nMaxCount)
-GetClassNameWPrototype = WINFUNCTYPE(INT, HWND, LPWSTR, INT)
-GetClassNameWParams = ((1, 'hWnd'), (1, 'lpClassName'), (1, 'nMaxCount'))
-
-#def GetWindowThreadProcessId(hWnd, lpdwProcessId):
-#    return GetWindowThreadProcessId.ctypes_function(hWnd, lpdwProcessId)
-GetWindowThreadProcessIdPrototype = WINFUNCTYPE(DWORD, HWND, LPDWORD)
-GetWindowThreadProcessIdParams = ((1, 'hWnd'), (1, 'lpdwProcessId'))
-
-#def OpenEventLogA(lpUNCServerName, lpSourceName):
-#    return OpenEventLogA.ctypes_function(lpUNCServerName, lpSourceName)
-OpenEventLogAPrototype = WINFUNCTYPE(HANDLE, LPCSTR, LPCSTR)
-OpenEventLogAParams = ((1, 'lpUNCServerName'), (1, 'lpSourceName'))
-
-#def OpenEventLogW(lpUNCServerName, lpSourceName):
-#    return OpenEventLogW.ctypes_function(lpUNCServerName, lpSourceName)
-OpenEventLogWPrototype = WINFUNCTYPE(HANDLE, LPWSTR, LPWSTR)
-OpenEventLogWParams = ((1, 'lpUNCServerName'), (1, 'lpSourceName'))
-
-#def ReadEventLogA(hEventLog, dwReadFlags, dwRecordOffset, lpBuffer, nNumberOfBytesToRead, pnBytesRead, pnMinNumberOfBytesNeeded):
-#    return ReadEventLogA.ctypes_function(hEventLog, dwReadFlags, dwRecordOffset, lpBuffer, nNumberOfBytesToRead, pnBytesRead, pnMinNumberOfBytesNeeded)
-ReadEventLogAPrototype = WINFUNCTYPE(BOOL, HANDLE, DWORD, DWORD, LPVOID, DWORD, POINTER(DWORD), POINTER(DWORD))
-ReadEventLogAParams = ((1, 'hEventLog'), (1, 'dwReadFlags'), (1, 'dwRecordOffset'), (1, 'lpBuffer'), (1, 'nNumberOfBytesToRead'), (1, 'pnBytesRead'), (1, 'pnMinNumberOfBytesNeeded'))
-
-#def ReadEventLogW(hEventLog, dwReadFlags, dwRecordOffset, lpBuffer, nNumberOfBytesToRead, pnBytesRead, pnMinNumberOfBytesNeeded):
-#    return ReadEventLogW.ctypes_function(hEventLog, dwReadFlags, dwRecordOffset, lpBuffer, nNumberOfBytesToRead, pnBytesRead, pnMinNumberOfBytesNeeded)
-ReadEventLogWPrototype = WINFUNCTYPE(BOOL, HANDLE, DWORD, DWORD, LPVOID, DWORD, POINTER(DWORD), POINTER(DWORD))
-ReadEventLogWParams = ((1, 'hEventLog'), (1, 'dwReadFlags'), (1, 'dwRecordOffset'), (1, 'lpBuffer'), (1, 'nNumberOfBytesToRead'), (1, 'pnBytesRead'), (1, 'pnMinNumberOfBytesNeeded'))
-
-#def GetEventLogInformation(hEventLog, dwInfoLevel, lpBuffer, cbBufSize, pcbBytesNeeded):
-#    return GetEventLogInformation.ctypes_function(hEventLog, dwInfoLevel, lpBuffer, cbBufSize, pcbBytesNeeded)
-GetEventLogInformationPrototype = WINFUNCTYPE(BOOL, HANDLE, DWORD, LPVOID, DWORD, LPDWORD)
-GetEventLogInformationParams = ((1, 'hEventLog'), (1, 'dwInfoLevel'), (1, 'lpBuffer'), (1, 'cbBufSize'), (1, 'pcbBytesNeeded'))
-
-#def GetNumberOfEventLogRecords(hEventLog, NumberOfRecords):
-#    return GetNumberOfEventLogRecords.ctypes_function(hEventLog, NumberOfRecords)
-GetNumberOfEventLogRecordsPrototype = WINFUNCTYPE(BOOL, HANDLE, PDWORD)
-GetNumberOfEventLogRecordsParams = ((1, 'hEventLog'), (1, 'NumberOfRecords'))
-
-#def CloseEventLog(hEventLog):
-#    return CloseEventLog.ctypes_function(hEventLog)
-CloseEventLogPrototype = WINFUNCTYPE(BOOL, HANDLE)
-CloseEventLogParams = ((1, 'hEventLog'),)
-
-#def TpCallbackSendAlpcMessageOnCompletion(TpHandle, PortHandle, Flags, SendMessage):
-#    return TpCallbackSendAlpcMessageOnCompletion.ctypes_function(TpHandle, PortHandle, Flags, SendMessage)
-TpCallbackSendAlpcMessageOnCompletionPrototype = WINFUNCTYPE(NTSTATUS, HANDLE, HANDLE, ULONG, PPORT_MESSAGE)
-TpCallbackSendAlpcMessageOnCompletionParams = ((1, 'TpHandle'), (1, 'PortHandle'), (1, 'Flags'), (1, 'SendMessage'))
-
-#def CreateNamedPipeA(lpName, dwOpenMode, dwPipeMode, nMaxInstances, nOutBufferSize, nInBufferSize, nDefaultTimeOut, lpSecurityAttributes):
-#    return CreateNamedPipeA.ctypes_function(lpName, dwOpenMode, dwPipeMode, nMaxInstances, nOutBufferSize, nInBufferSize, nDefaultTimeOut, lpSecurityAttributes)
-CreateNamedPipeAPrototype = WINFUNCTYPE(HANDLE, LPCSTR, DWORD, DWORD, DWORD, DWORD, DWORD, DWORD, LPSECURITY_ATTRIBUTES)
-CreateNamedPipeAParams = ((1, 'lpName'), (1, 'dwOpenMode'), (1, 'dwPipeMode'), (1, 'nMaxInstances'), (1, 'nOutBufferSize'), (1, 'nInBufferSize'), (1, 'nDefaultTimeOut'), (1, 'lpSecurityAttributes'))
-
-#def CreateNamedPipeW(lpName, dwOpenMode, dwPipeMode, nMaxInstances, nOutBufferSize, nInBufferSize, nDefaultTimeOut, lpSecurityAttributes):
-#    return CreateNamedPipeW.ctypes_function(lpName, dwOpenMode, dwPipeMode, nMaxInstances, nOutBufferSize, nInBufferSize, nDefaultTimeOut, lpSecurityAttributes)
-CreateNamedPipeWPrototype = WINFUNCTYPE(HANDLE, LPWSTR, DWORD, DWORD, DWORD, DWORD, DWORD, DWORD, LPSECURITY_ATTRIBUTES)
-CreateNamedPipeWParams = ((1, 'lpName'), (1, 'dwOpenMode'), (1, 'dwPipeMode'), (1, 'nMaxInstances'), (1, 'nOutBufferSize'), (1, 'nInBufferSize'), (1, 'nDefaultTimeOut'), (1, 'lpSecurityAttributes'))
-
-#def ConnectNamedPipe(hNamedPipe, lpOverlapped):
-#    return ConnectNamedPipe.ctypes_function(hNamedPipe, lpOverlapped)
-ConnectNamedPipePrototype = WINFUNCTYPE(BOOL, HANDLE, LPOVERLAPPED)
-ConnectNamedPipeParams = ((1, 'hNamedPipe'), (1, 'lpOverlapped'))
-
-#def SetNamedPipeHandleState(hNamedPipe, lpMode, lpMaxCollectionCount, lpCollectDataTimeout):
-#    return SetNamedPipeHandleState.ctypes_function(hNamedPipe, lpMode, lpMaxCollectionCount, lpCollectDataTimeout)
-SetNamedPipeHandleStatePrototype = WINFUNCTYPE(BOOL, HANDLE, LPDWORD, LPDWORD, LPDWORD)
-SetNamedPipeHandleStateParams = ((1, 'hNamedPipe'), (1, 'lpMode'), (1, 'lpMaxCollectionCount'), (1, 'lpCollectDataTimeout'))
 

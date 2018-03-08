@@ -2,6 +2,132 @@
 
 Winstructs
 ----------
+_CALLFRAMEPARAMINFO
+'''''''''''''''''''
+.. class:: CALLFRAMEPARAMINFO
+
+    Alias for :class:`_CALLFRAMEPARAMINFO`
+
+.. class:: _CALLFRAMEPARAMINFO
+
+    .. attribute:: fIn
+
+        :class:`BOOLEAN`
+
+
+    .. attribute:: fOut
+
+        :class:`BOOLEAN`
+
+
+    .. attribute:: stackOffset
+
+        :class:`ULONG`
+
+
+    .. attribute:: cbParam
+
+        :class:`ULONG`
+
+_CALLFRAMEINFO
+''''''''''''''
+.. class:: CALLFRAMEINFO
+
+    Alias for :class:`_CALLFRAMEINFO`
+
+.. class:: _CALLFRAMEINFO
+
+    .. attribute:: iMethod
+
+        :class:`ULONG`
+
+
+    .. attribute:: fHasInValues
+
+        :class:`BOOL`
+
+
+    .. attribute:: fHasInOutValues
+
+        :class:`BOOL`
+
+
+    .. attribute:: fHasOutValues
+
+        :class:`BOOL`
+
+
+    .. attribute:: fDerivesFromIDispatch
+
+        :class:`BOOL`
+
+
+    .. attribute:: cInInterfacesMax
+
+        :class:`LONG`
+
+
+    .. attribute:: cInOutInterfacesMax
+
+        :class:`LONG`
+
+
+    .. attribute:: cOutInterfacesMax
+
+        :class:`LONG`
+
+
+    .. attribute:: cTopLevelInInterfaces
+
+        :class:`LONG`
+
+
+    .. attribute:: iid
+
+        :class:`IID`
+
+
+    .. attribute:: cMethod
+
+        :class:`ULONG`
+
+
+    .. attribute:: cParams
+
+        :class:`ULONG`
+
+_CALLFRAME_MARSHALCONTEXT
+'''''''''''''''''''''''''
+.. class:: CALLFRAME_MARSHALCONTEXT
+
+    Alias for :class:`_CALLFRAME_MARSHALCONTEXT`
+
+.. class:: _CALLFRAME_MARSHALCONTEXT
+
+    .. attribute:: fIn
+
+        :class:`BOOLEAN`
+
+
+    .. attribute:: dwDestContext
+
+        :class:`DWORD`
+
+
+    .. attribute:: pvDestContext
+
+        :class:`LPVOID`
+
+
+    .. attribute:: mshlmgr
+
+        :class:`PVOID`
+
+
+    .. attribute:: guidTransferSyntax
+
+        :class:`GUID`
+
 _GUID
 '''''
 .. class:: REFCLSID
@@ -12563,6 +12689,42 @@ _FILE_ALL_INFORMATION
 
 WinEnums
 --------
+_CALLFRAME_COPY
+'''''''''''''''
+.. class:: CALLFRAME_COPY
+
+    Alias for :class:`_CALLFRAME_COPY`
+
+
+.. class:: _CALLFRAME_COPY
+
+
+    .. attribute:: CALLFRAME_COPY_NESTED(1)
+
+
+    .. attribute:: CALLFRAME_COPY_INDEPENDENT(2)
+
+tagMSHLFLAGS
+''''''''''''
+.. class:: MSHLFLAGS
+
+    Alias for :class:`tagMSHLFLAGS`
+
+
+.. class:: tagMSHLFLAGS
+
+
+    .. attribute:: MSHLFLAGS_NORMAL(0)
+
+
+    .. attribute:: MSHLFLAGS_TABLESTRONG(1)
+
+
+    .. attribute:: MSHLFLAGS_TABLEWEAK(2)
+
+
+    .. attribute:: MSHLFLAGS_NOPING(4)
+
 _SYSTEM_INFORMATION_CLASS
 '''''''''''''''''''''''''
 .. class:: SYSTEM_INFORMATION_CLASS

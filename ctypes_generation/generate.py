@@ -333,10 +333,11 @@ class COMCtypesGenerator(CtypesGenerator):
         cls_format_param = {"name": name, "iid_python" : iid_python, "iid_str": iid_str}
 
         self.emitline("class {name}(COMInterface):".format(**cls_format_param))
-        self.emitline('    IID = generate_IID({iid_python}, name="{name}", strid="{iid_str}")'.format(**cls_format_param))
         self.emitline('    _functions_ = {')
         self.emit_com_interface_functions(cominterface)
         self.emitline('    }')
+        # Generate IID after functions because functions might use IID (the typedef of GUID)
+        self.emitline('    IID = generate_IID({iid_python}, name="{name}", strid="{iid_str}")'.format(**cls_format_param))
         self.emitline('')
 
 
@@ -364,7 +365,8 @@ class COMCtypesGenerator(CtypesGenerator):
 
             # methods_string.append(self.com_interface_method_template.format(method.name, ", ".join([method.ret_type] + str_args), method_nb))
             params = ", ".join([method.ret_type] + str_args)
-            self.emitline(indent + '"{0}": ctypes.WINFUNCTYPE({1})({2}, "{0}"),'.format(name, params, method_nb))
+            ctypes_functype = 'WINFUNCTYPE' if method.functype == 'stdcall' else 'CFUNCTYPE'
+            self.emitline(indent + '"{0}": ctypes.{functype}({1})({2}, "{0}"),'.format(name, params, method_nb, functype=ctypes_functype))
         return
 
 
@@ -624,15 +626,6 @@ structure_module_generator.add_module_dependancy(definemodulegenerator)
 structure_module_generator.resolve_dep_and_generate([BasicTypeNodes()])
 structure_module_generator.generate_doc(from_here(r"..\docs\source\winstructs_generated.rst"))
 
-print("== Generating functions ==")
-# Generate function
-functions_module_generator = ModuleGenerator("winfuncs", FunctionParsedFile, FunctionCtypesGenerator, None, from_here(r"definitions\functions"))
-# no template file
-functions_module_generator.get_template_filename = lambda : None
-functions_module_generator.parse_source_directory()
-functions_module_generator.add_module_dependancy(structure_module_generator)
-functions_module_generator.resolve_dep_and_generate([BasicTypeNodes()])
-
 print("== Generating COM interfaces ==")
 # Generate COM interfaces
 com_module_generator = ModuleGenerator("interfaces", COMParsedFile, COMCtypesGenerator, None, from_here(r"definitions\com"))
@@ -642,6 +635,17 @@ com_module_generator.parse_source_directory()
 com_module_generator.add_module_dependancy(structure_module_generator)
 com_module_generator.resolve_dependancies = com_module_generator.check_dependancies_without_flattening # No real flattening as we have circular dep in Interfaces VTBL
 com_module_generator.resolve_dep_and_generate([BasicTypeNodes()])
+
+print("== Generating functions ==")
+# Generate function
+functions_module_generator = ModuleGenerator("winfuncs", FunctionParsedFile, FunctionCtypesGenerator, None, from_here(r"definitions\functions"))
+# no template file
+functions_module_generator.get_template_filename = lambda : None
+functions_module_generator.parse_source_directory()
+functions_module_generator.add_module_dependancy(structure_module_generator)
+functions_module_generator.add_module_dependancy(com_module_generator)
+functions_module_generator.resolve_dep_and_generate([BasicTypeNodes()])
+
 
 print("== Generating META file ==")
 # Meta-file generator

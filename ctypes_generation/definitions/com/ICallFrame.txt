@@ -1,0 +1,127 @@
+typedef struct ICallFrameVtbl
+    {
+        BEGIN_INTERFACE
+
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+            ICallFrame * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */
+            __RPC__deref_out  void **ppvObject);
+
+        ULONG ( STDMETHODCALLTYPE *AddRef )(
+            ICallFrame * This);
+
+        ULONG ( STDMETHODCALLTYPE *Release )(
+            ICallFrame * This);
+
+        HRESULT ( STDMETHODCALLTYPE *GetInfo )(
+            ICallFrame * This,
+            /* [out] */ CALLFRAMEINFO *pInfo);
+
+        HRESULT ( STDMETHODCALLTYPE *GetIIDAndMethod )(
+            ICallFrame * This,
+            /* [out] */ IID *pIID,
+            /* [out] */ ULONG *piMethod);
+
+        HRESULT ( STDMETHODCALLTYPE *GetNames )(
+            ICallFrame * This,
+            /* [annotation][out] */
+            __deref_out_opt  LPWSTR *pwszInterface,
+            /* [annotation][out] */
+            __deref_out_opt  LPWSTR *pwszMethod);
+
+        PVOID ( STDMETHODCALLTYPE *GetStackLocation )(
+            ICallFrame * This);
+
+        VOID ( STDMETHODCALLTYPE *SetStackLocation )(
+            ICallFrame * This,
+            /* [in] */ PVOID pvStack);
+
+        VOID ( STDMETHODCALLTYPE *SetReturnValue )(
+            ICallFrame * This,
+            /* [in] */ HRESULT hr);
+
+        HRESULT ( STDMETHODCALLTYPE *GetReturnValue )(
+            ICallFrame * This);
+
+        HRESULT ( STDMETHODCALLTYPE *GetParamInfo )(
+            ICallFrame * This,
+            /* [in] */ ULONG iparam,
+            /* [out] */ CALLFRAMEPARAMINFO *pInfo);
+
+        HRESULT ( STDMETHODCALLTYPE *SetParam )(
+            ICallFrame * This,
+            /* [in] */ ULONG iparam,
+            /* [in] */ VARIANT *pvar);
+
+        HRESULT ( STDMETHODCALLTYPE *GetParam )(
+            ICallFrame * This,
+            /* [in] */ ULONG iparam,
+            /* [out] */ VARIANT *pvar);
+
+        HRESULT ( STDMETHODCALLTYPE *Copy )(
+            ICallFrame * This,
+            /* [in] */ CALLFRAME_COPY copyControl,
+            /* [in] */ ICallFrameWalker *pWalker,
+            /* [out] */ ICallFrame **ppFrame);
+
+        HRESULT ( STDMETHODCALLTYPE *Free )(
+            ICallFrame * This,
+            /* [in] */ ICallFrame *pframeArgsDest,
+            /* [in] */ ICallFrameWalker *pWalkerDestFree,
+            /* [in] */ ICallFrameWalker *pWalkerCopy,
+            /* [in] */ DWORD freeFlags,
+            /* [in] */ ICallFrameWalker *pWalkerFree,
+            /* [in] */ DWORD nullFlags);
+
+        HRESULT ( STDMETHODCALLTYPE *FreeParam )(
+            ICallFrame * This,
+            /* [in] */ ULONG iparam,
+            /* [in] */ DWORD freeFlags,
+            /* [in] */ ICallFrameWalker *pWalkerFree,
+            /* [in] */ DWORD nullFlags);
+
+        HRESULT ( STDMETHODCALLTYPE *WalkFrame )(
+            ICallFrame * This,
+            /* [in] */ DWORD walkWhat,
+            /* [in] */ ICallFrameWalker *pWalker);
+
+        HRESULT ( STDMETHODCALLTYPE *GetMarshalSizeMax )(
+            ICallFrame * This,
+            /* [in] */ CALLFRAME_MARSHALCONTEXT *pmshlContext,
+            /* [in] */ MSHLFLAGS mshlflags,
+            /* [out] */ ULONG *pcbBufferNeeded);
+
+        HRESULT ( STDMETHODCALLTYPE *Marshal )(
+            ICallFrame * This,
+            /* [in] */ CALLFRAME_MARSHALCONTEXT *pmshlContext,
+            /* [in] */ MSHLFLAGS mshlflags,
+            /* [size_is][in] */ PVOID pBuffer,
+            /* [in] */ ULONG cbBuffer,
+            /* [out] */ ULONG *pcbBufferUsed,
+            /* [out] */ RPCOLEDATAREP *pdataRep,
+            /* [out] */ ULONG *prpcFlags);
+
+        HRESULT ( STDMETHODCALLTYPE *Unmarshal )(
+            ICallFrame * This,
+            /* [size_is][in] */ PVOID pBuffer,
+            /* [in] */ ULONG cbBuffer,
+            /* [in] */ RPCOLEDATAREP dataRep,
+            /* [in] */ CALLFRAME_MARSHALCONTEXT *pcontext,
+            /* [out] */ ULONG *pcbUnmarshalled);
+
+        HRESULT ( STDMETHODCALLTYPE *ReleaseMarshalData )(
+            ICallFrame * This,
+            /* [size_is][in] */ PVOID pBuffer,
+            /* [in] */ ULONG cbBuffer,
+            /* [in] */ ULONG ibFirstRelease,
+            /* [in] */ RPCOLEDATAREP dataRep,
+            /* [in] */ CALLFRAME_MARSHALCONTEXT *pcontext);
+
+        HRESULT ( STDMETHODCALLTYPE *Invoke )(
+            ICallFrame * This,
+            /* [in] */ void *pvReceiver,
+            ...);
+
+        END_INTERFACE
+    } ICallFrameVtbl;

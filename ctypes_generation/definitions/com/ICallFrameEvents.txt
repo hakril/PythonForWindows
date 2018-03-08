@@ -1,0 +1,22 @@
+typedef struct ICallFrameEventsVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ICallFrameEvents * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            __RPC__deref_out  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ICallFrameEvents * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ICallFrameEvents * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *OnCall )( 
+            ICallFrameEvents * This,
+            /* [in] */ ICallFrame *pFrame);
+        
+        END_INTERFACE
+    } ICallFrameEventsVtbl;

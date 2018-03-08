@@ -1,0 +1,56 @@
+typedef struct ICallInterceptorVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ICallInterceptor * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            __RPC__deref_out  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ICallInterceptor * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ICallInterceptor * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *CallIndirect )( 
+            ICallInterceptor * This,
+            /* [out] */ HRESULT *phrReturn,
+            /* [in] */ ULONG iMethod,
+            /* [in] */ void *pvArgs,
+            /* [out] */ ULONG *cbArgs);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetMethodInfo )( 
+            ICallInterceptor * This,
+            /* [in] */ ULONG iMethod,
+            /* [out] */ CALLFRAMEINFO *pInfo,
+            /* [annotation][out] */ 
+            __deref_out_opt  LPWSTR *pwszMethod);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetStackSize )( 
+            ICallInterceptor * This,
+            /* [in] */ ULONG iMethod,
+            /* [out] */ ULONG *cbArgs);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIID )( 
+            ICallInterceptor * This,
+            /* [annotation][out] */ 
+            __out_opt  IID *piid,
+            /* [annotation][out] */ 
+            __out_opt  BOOL *pfDerivesFromIDispatch,
+            /* [annotation][out] */ 
+            __out_opt  ULONG *pcMethod,
+            /* [annotation][out] */ 
+            __deref_out_opt  LPWSTR *pwszInterface);
+        
+        HRESULT ( STDMETHODCALLTYPE *RegisterSink )( 
+            ICallInterceptor * This,
+            /* [in] */ ICallFrameEvents *psink);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetRegisteredSink )( 
+            ICallInterceptor * This,
+            /* [out] */ ICallFrameEvents **ppsink);
+        
+        END_INTERFACE
+    } ICallInterceptorVtbl;

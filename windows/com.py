@@ -9,7 +9,7 @@ from windows.generated_def.winstructs import *
 
 from windows.generated_def import RPC_C_IMP_LEVEL_IMPERSONATE, CLSCTX_INPROC_SERVER
 from windows.generated_def import interfaces
-from windows.generated_def.interfaces import generate_IID, IID
+from windows.generated_def.interfaces import generate_IID, IID, COMImplementation
 
 
 # Simple raw -> UUID

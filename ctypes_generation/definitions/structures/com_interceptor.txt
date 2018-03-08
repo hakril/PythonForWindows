@@ -1,0 +1,44 @@
+typedef struct _CALLFRAMEPARAMINFO{
+  BOOLEAN fIn;
+  BOOLEAN fOut;
+  ULONG   stackOffset;
+  ULONG   cbParam;
+} CALLFRAMEPARAMINFO;
+
+typedef struct _CALLFRAMEINFO{
+  ULONG iMethod;
+  BOOL  fHasInValues;
+  BOOL  fHasInOutValues;
+  BOOL  fHasOutValues;
+  BOOL  fDerivesFromIDispatch;
+  LONG  cInInterfacesMax;
+  LONG  cInOutInterfacesMax;
+  LONG  cOutInterfacesMax;
+  LONG  cTopLevelInInterfaces;
+  IID   iid;
+  ULONG cMethod;
+  ULONG cParams;
+} CALLFRAMEINFO;
+
+
+typedef struct _CALLFRAME_MARSHALCONTEXT{
+  BOOLEAN  fIn;
+  DWORD    dwDestContext;
+  LPVOID   pvDestContext;
+  PVOID *mshlmgr; // Was <IUnknown> how can I do for this circle dep ?
+  GUID     guidTransferSyntax;
+} CALLFRAME_MARSHALCONTEXT;
+
+
+typedef enum  _CALLFRAME_COPY{
+  CALLFRAME_COPY_NESTED       = 1,
+  CALLFRAME_COPY_INDEPENDENT  = 2
+} CALLFRAME_COPY;
+
+
+typedef enum tagMSHLFLAGS {
+  MSHLFLAGS_NORMAL       = 0,
+  MSHLFLAGS_TABLESTRONG  = 1,
+  MSHLFLAGS_TABLEWEAK    = 2,
+  MSHLFLAGS_NOPING       = 4
+} MSHLFLAGS;
