@@ -236,8 +236,10 @@ class CtypesGenerator(object):
         self.before_emit_template()
         self.copy_template()
         self.after_emit_template()
+        self.generate_files(self.files)
 
-        for file in self.files:
+    def generate_files(self, files):
+        for file in files:
             self.generate_for_file(file)
 
     def generate_for_file(self, file):
@@ -316,12 +318,17 @@ class COMCtypesGenerator(CtypesGenerator):
             name, iid = line.split("|")
             self.iids_def[name] = self.parse_iid(iid), iid
 
-    def generate_for_file(self, file):
-        define = []
-        cominterface = file.data
-        return self.generate_com_interface(cominterface)
+    def generate_files(self, files):
+        # We generate COM interface in 2 step
+        # 1) The Class intself with the IDD
+        # 2) The function list after all class we generated
+        #    - This allow COM function to refer the interface in their def :)
+        for file in files:
+            self.generate_com_interface_class_iid(file.data)
+        for file in files:
+            self.generate_com_interface_functions(file.data)
 
-    def generate_com_interface(self, cominterface):
+    def generate_com_interface_class_iid(self, cominterface):
         name = cominterface.name
         if cominterface.iid is not None:
             iid_str = cominterface.iid
@@ -329,17 +336,18 @@ class COMCtypesGenerator(CtypesGenerator):
         else:
             print("Lookup of IID for <{0}>".format(cominterface.name))
             iid_python, iid_str = self.iids_def[cominterface.name]
-
         cls_format_param = {"name": name, "iid_python" : iid_python, "iid_str": iid_str}
 
         self.emitline("class {name}(COMInterface):".format(**cls_format_param))
-        self.emitline('    _functions_ = {')
-        self.emit_com_interface_functions(cominterface)
-        self.emitline('    }')
-        # Generate IID after functions because functions might use IID (the typedef of GUID)
         self.emitline('    IID = generate_IID({iid_python}, name="{name}", strid="{iid_str}")'.format(**cls_format_param))
         self.emitline('')
 
+    def generate_com_interface_functions(self, cominterface):
+        name = cominterface.name
+        self.emitline("{name}._functions_ = {{".format(name=name))
+        self.emit_com_interface_functions(cominterface)
+        self.emitline('    }')
+        self.emitline('')
 
     def emit_com_interface_functions(self, cominterface):
         indent = " " * 8
@@ -356,14 +364,17 @@ class COMCtypesGenerator(CtypesGenerator):
                 atype = arg.type
                 byreflevel = arg.byreflevel
                 if atype in self.generated_interfaces_names:
+                    # If the parameter is a COM interface, remove a *
+                    # (as PFW ComInterface are PVOID)
                     byreflevel = arg.byreflevel - 1
-                    atype = "PVOID"
+                    if atype in self.IGNORED_INTERFACE:
+                        # If the interface if ignored -> replace by a raw pointer
+                        atype = "PVOID"
 
                 for i in range(byreflevel):
                     atype = "POINTER({0})".format(atype)
                 str_args.append(atype)
 
-            # methods_string.append(self.com_interface_method_template.format(method.name, ", ".join([method.ret_type] + str_args), method_nb))
             params = ", ".join([method.ret_type] + str_args)
             ctypes_functype = 'WINFUNCTYPE' if method.functype == 'stdcall' else 'CFUNCTYPE'
             self.emitline(indent + '"{0}": ctypes.{functype}({1})({2}, "{0}"),'.format(name, params, method_nb, functype=ctypes_functype))

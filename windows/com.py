@@ -9,7 +9,7 @@ from windows.generated_def.winstructs import *
 
 from windows.generated_def import RPC_C_IMP_LEVEL_IMPERSONATE, CLSCTX_INPROC_SERVER
 from windows.generated_def import interfaces
-from windows.generated_def.interfaces import generate_IID, IID, COMImplementation
+from windows.generated_def.interfaces import generate_IID, IID
 
 
 # Simple raw -> UUID
@@ -28,6 +28,13 @@ def initsecurity(): # Should take some parameters..
     return winproxy.CoInitializeSecurity(0, -1, None, 0, 0, RPC_C_IMP_LEVEL_IMPERSONATE, 0,0,0)
 
 
+def create_instance(clsiid, targetinterface, custom_iid=None, context=CLSCTX_INPROC_SERVER | CLSCTX_LOCAL_SERVER):
+    if custom_iid is None:
+        custom_iid = targetinterface.IID
+    return winproxy.CoCreateInstance(byref(clsiid), None, context, byref(custom_iid), byref(targetinterface))
+
+# Improved COM object
+# Todo: ctypes_genertation extended struct ?
 class ImprovedSAFEARRAY(SAFEARRAY):
         @classmethod
         def of_type(cls, addr, t):
@@ -181,7 +188,61 @@ ImprovedVariant.MAPPER = {
 }
 
 
-def create_instance(clsiid, targetinterface, custom_iid=None, context=CLSCTX_INPROC_SERVER | CLSCTX_LOCAL_SERVER):
-    if custom_iid is None:
-        custom_iid = targetinterface.IID
-    return winproxy.CoCreateInstance(byref(clsiid), None, context, byref(custom_iid), byref(targetinterface))
+
+class COMImplementation(object):
+    IMPLEMENT = None
+
+    def get_index_of_method(self, method):
+        # This code is horrible but not totally my fault
+        # the PyCFuncPtrObject->index is not exposed to Python..
+        # repr is: '<COM method offset 2: WinFunctionType at 0x035DDBE8>'
+        rpr = repr(method)
+        if not rpr.startswith("<COM method offset ") or ":" not in rpr:
+            raise ValueError("Could not extract offset of {0}".format(rpr))
+        return int(rpr[len("<COM method offset "): rpr.index(":")])
+
+    def extract_methods_order(self, interface):
+        index_and_method = sorted((self.get_index_of_method(m),name, m) for name, m in interface._functions_.items())
+        return index_and_method
+
+    def verify_implem(self, interface):
+        for func_name in interface._functions_:
+            implem = getattr(self, func_name, None)
+            if implem is None:
+                raise ValueError("<{0}> implementing <{1}> has no method <{2}>".format(type(self).__name__, self.IMPLEMENT.__name__, func_name))
+            if not callable(implem):
+                raise ValueError("{0} implementing <{1}>: <{2}> is not callable".format(type(self).__name__, self.IMPLEMENT.__name__, func_name))
+        return True
+
+    def _create_vtable(self, interface):
+        implems = []
+        names = []
+        for index, name, method in self.extract_methods_order(interface):
+            func_implem = getattr(self, name)
+            #'this' is a COM-interface of the type we are implementing
+            types = [method.restype, interface] + list(method.argtypes)
+            implems.append(ctypes.WINFUNCTYPE(*types)(func_implem))
+            names.append(name)
+        class Vtable(ctypes.Structure):
+            _fields_ = [(name, ctypes.c_void_p) for name in names]
+        return Vtable(*[ctypes.cast(x, ctypes.c_void_p) for x in implems]), implems
+
+    def __init__(self):
+        self.verify_implem(self.IMPLEMENT)
+        vtable, implems = self._create_vtable(self.IMPLEMENT)
+        self.vtable = vtable
+        self.implems = implems
+        self.vtable_pointer = ctypes.pointer(self.vtable)
+        self._as_parameter_ = ctypes.addressof(self.vtable_pointer)
+
+    def QueryInterface(self, this, piid, result):
+        if piid[0] in (IUnknown.IID, self.IMPLEMENT.IID):
+            result[0] = this
+            return 1
+        return E_NOINTERFACE
+
+    def AddRef(self, *args):
+        return 1
+
+    def Release(self, *args):
+        return 0

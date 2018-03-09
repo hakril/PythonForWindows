@@ -6,8 +6,6 @@ from windows import winproxy
 # Based on works by Pavel Yosifovich
 # http://blogs.microsoft.co.il/pavely/2018/02/28/intercepting-com-objects-with-cogetinterceptor/
 
-# TODO: clean / comment
-
 windows.com.init()
 
 # Create an interceptor for the firewall (INetFwPolicy2)
@@ -23,8 +21,9 @@ class MySink(windows.com.COMImplementation):
     IMPLEMENT = gdef.ICallFrameEvents
 
     def OnCall(self, this, frame):
-        this = gdef.ICallFrameEvents(this) # TODO: auto-translate this ?
-        frame = gdef.ICallFrame(frame)
+        import pdb;pdb.set_trace()
+        # this = gdef.ICallFrameEvents(this) # TODO: auto-translate this ?
+        # frame = gdef.ICallFrame(frame)
         ifname = gdef.PWSTR()
         methodname = gdef.PWSTR()
         print("Hello from python sink !")
@@ -55,6 +54,12 @@ enabled = gdef.VARIANT_BOOL()
 res = fakefirewall.get_FirewallEnabled(2, enabled)
 print("return value = {0}".format(res))
 print("firewall enabled = {0}".format(enabled))
+
+# Test a function taking a POINTER(ICallFrameEvents) (PTR to interface)
+sink2 = gdef.ICallFrameEvents()
+interceptor.GetRegisteredSink(sink2)
+print(sink2, sink2.value)
+
 
 
 # (cmd) python samples\com\icallinterceptor.py
