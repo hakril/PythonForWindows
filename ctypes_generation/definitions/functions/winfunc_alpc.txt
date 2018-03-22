@@ -1,0 +1,158 @@
+NTSTATUS WINAPI NtAlpcCreatePort(
+    _Out_ PHANDLE PortHandle,
+    _In_opt_ POBJECT_ATTRIBUTES ObjectAttributes,
+    _In_opt_ PALPC_PORT_ATTRIBUTES PortAttributes
+);
+
+NTSTATUS WINAPI NtAlpcQueryInformation(
+    _In_opt_ HANDLE PortHandle,
+    _In_ ALPC_PORT_INFORMATION_CLASS PortInformationClass,
+    _Inout_opt_ PVOID PortInformation,
+    _In_ ULONG Length,
+    _Out_opt_ PULONG ReturnLength
+);
+
+
+NTSTATUS WINAPI NtAlpcQueryInformationMessage(
+    _In_ HANDLE PortHandle,
+    _In_ PPORT_MESSAGE PortMessage,
+    _In_ ALPC_MESSAGE_INFORMATION_CLASS MessageInformationClass,
+    _Out_opt_ PVOID MessageInformation,
+    _In_ ULONG Length,
+    _Out_opt_ PULONG ReturnLength
+);
+
+NTSTATUS WINAPI NtAlpcConnectPort(
+    _Out_ PHANDLE PortHandle,
+    _In_ PUNICODE_STRING PortName,
+    _In_opt_ POBJECT_ATTRIBUTES ObjectAttributes,
+    _In_opt_ PALPC_PORT_ATTRIBUTES PortAttributes,
+    _In_ ULONG Flags,
+    _In_opt_ PSID RequiredServerSid,
+    _Inout_opt_ PPORT_MESSAGE ConnectionMessage,
+    _Inout_opt_ PULONG BufferLength,
+    _Inout_opt_ PALPC_MESSAGE_ATTRIBUTES OutMessageAttributes,
+    _Inout_opt_ PALPC_MESSAGE_ATTRIBUTES InMessageAttributes,
+    _In_opt_ PLARGE_INTEGER Timeout
+);
+
+NTSTATUS WINAPI NtAlpcConnectPortEx(
+    _Out_ PHANDLE PortHandle,
+    _In_ POBJECT_ATTRIBUTES ConnectionPortObjectAttributes,
+    _In_opt_ POBJECT_ATTRIBUTES ClientPortObjectAttributes,
+    _In_opt_ PALPC_PORT_ATTRIBUTES PortAttributes,
+    _In_ ULONG Flags,
+    _In_opt_ PSECURITY_DESCRIPTOR ServerSecurityRequirements,
+    _Inout_opt_ PPORT_MESSAGE ConnectionMessage,
+    _Inout_opt_ PSIZE_T BufferLength,
+    _Inout_opt_ PALPC_MESSAGE_ATTRIBUTES OutMessageAttributes,
+    _Inout_opt_ PALPC_MESSAGE_ATTRIBUTES InMessageAttributes,
+    _In_opt_ PLARGE_INTEGER Timeout
+);
+
+
+NTSTATUS WINAPI NtAlpcAcceptConnectPort(
+    _Out_ PHANDLE PortHandle,
+    _In_ HANDLE ConnectionPortHandle,
+    _In_ ULONG Flags,
+    _In_opt_ POBJECT_ATTRIBUTES ObjectAttributes,
+    _In_opt_ PALPC_PORT_ATTRIBUTES PortAttributes,
+    _In_opt_ PVOID PortContext,
+    _In_ PPORT_MESSAGE ConnectionRequest,
+    _Inout_opt_ PALPC_MESSAGE_ATTRIBUTES ConnectionMessageAttributes,
+    _In_ BOOLEAN AcceptConnection
+);
+
+NTSTATUS WINAPI AlpcInitializeMessageAttribute(
+    _In_ ULONG AttributeFlags,
+    _Out_opt_ PALPC_MESSAGE_ATTRIBUTES Buffer,
+    _In_ ULONG BufferSize,
+    _Out_ PULONG RequiredBufferSize
+);
+
+PVOID WINAPI AlpcGetMessageAttribute(
+    _In_ PALPC_MESSAGE_ATTRIBUTES Buffer,
+    _In_ ULONG AttributeFlag
+);
+
+NTSTATUS WINAPI NtAlpcSendWaitReceivePort(
+    _In_ HANDLE PortHandle,
+    _In_ ULONG Flags,
+    _In_opt_ PPORT_MESSAGE SendMessage,
+    _Inout_opt_ PALPC_MESSAGE_ATTRIBUTES SendMessageAttributes,
+    _Out_opt_ PPORT_MESSAGE ReceiveMessage,
+    _Inout_opt_ PSIZE_T BufferLength,
+    _Inout_opt_ PALPC_MESSAGE_ATTRIBUTES ReceiveMessageAttributes,
+    _In_opt_ PLARGE_INTEGER Timeout
+);
+
+NTSTATUS WINAPI NtAlpcDisconnectPort(
+    _In_ HANDLE PortHandle,
+    _In_ ULONG Flags
+);
+
+NTSTATUS WINAPI NtAlpcCreatePortSection(
+    _In_ HANDLE PortHandle,
+    _In_ ULONG Flags,
+    _In_opt_ HANDLE SectionHandle,
+    _In_ SIZE_T SectionSize,
+    _Out_ PALPC_HANDLE AlpcSectionHandle,
+    _Out_ PSIZE_T ActualSectionSize
+    );
+
+NTSTATUS WINAPI NtAlpcDeletePortSection(
+    _In_ HANDLE PortHandle,
+    _Reserved_ ULONG Flags,
+    _In_ ALPC_HANDLE SectionHandle
+    );
+
+
+
+NTSTATUS WINAPI NtAlpcCreateResourceReserve(
+    _In_ HANDLE PortHandle,
+    _Reserved_ ULONG Flags,
+    _In_ SIZE_T MessageSize,
+    _Out_ PALPC_HANDLE ResourceId
+    );
+
+
+NTSTATUS WINAPI NtAlpcDeleteResourceReserve(
+    _In_ HANDLE PortHandle,
+    _Reserved_ ULONG Flags,
+    _In_ ALPC_HANDLE ResourceId
+    );
+
+
+NTSTATUS WINAPI NtAlpcCreateSectionView(
+    _In_ HANDLE PortHandle,
+    _Reserved_ ULONG Flags,
+    _Inout_ PALPC_DATA_VIEW_ATTR ViewAttributes
+    );
+
+
+NTSTATUS WINAPI NtAlpcDeleteSectionView(
+    _In_ HANDLE PortHandle,
+    _Reserved_ ULONG Flags,
+    _In_ PVOID ViewBase
+    );
+
+
+NTSTATUS WINAPI NtAlpcCreateSecurityContext(
+    _In_ HANDLE PortHandle,
+    _Reserved_ ULONG Flags,
+    _Inout_ PALPC_SECURITY_ATTR SecurityAttribute
+    );
+
+
+NTSTATUS WINAPI NtAlpcDeleteSecurityContext(
+    _In_ HANDLE PortHandle,
+    _Reserved_ ULONG Flags,
+    _In_ ALPC_HANDLE ContextHandle
+    );
+
+
+NTSTATUS WINAPI NtAlpcRevokeSecurityContext(
+    _In_ HANDLE PortHandle,
+    _Reserved_ ULONG Flags,
+    _In_ ALPC_HANDLE ContextHandle
+    );

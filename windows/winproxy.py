@@ -525,6 +525,8 @@ def OpenEventA(dwDesiredAccess, bInheritHandle, lpName):
 def OpenEventW(dwDesiredAccess, bInheritHandle, lpName):
     return OpenEventA.ctypes_function(dwDesiredAccess, bInheritHandle, lpName)
 
+
+
 # File stuff
 @Kernel32Proxy("ReadFile")
 def ReadFile(hFile, lpBuffer, nNumberOfBytesToRead=None, lpNumberOfBytesRead=None, lpOverlapped=None):
@@ -814,9 +816,16 @@ def GetWindowsDirectoryW(lpBuffer, uSize=None):
 def NtReadVirtualMemory(hProcess, lpBaseAddress, lpBuffer, nSize, lpNumberOfBytesRead):
     return NtReadVirtualMemory.ctypes_function(hProcess, lpBaseAddress, lpBuffer, nSize, lpNumberOfBytesRead)
 
+
 @NtdllProxy('NtWow64ReadVirtualMemory64', error_ntstatus)
 def NtWow64ReadVirtualMemory64(hProcess, lpBaseAddress, lpBuffer, nSize, lpNumberOfBytesRead=None):
     return NtWow64ReadVirtualMemory64.ctypes_function(hProcess, lpBaseAddress, lpBuffer, nSize, lpNumberOfBytesRead)
+
+
+@NtdllProxy('NtWriteVirtualMemory', error_ntstatus)
+def NtWriteVirtualMemory(ProcessHandle, BaseAddress, Buffer, NumberOfBytesToWrite, NumberOfBytesWritten):
+    return NtWriteVirtualMemory.ctypes_function(ProcessHandle, BaseAddress, Buffer, NumberOfBytesToWrite, NumberOfBytesWritten)
+
 
 @NtdllProxy('NtWow64WriteVirtualMemory64', error_ntstatus)
 def NtWow64WriteVirtualMemory64(hProcess, lpBaseAddress, lpBuffer, nSize, lpNumberOfBytesWritten=None):
@@ -1698,6 +1707,10 @@ def CoInitializeSecurity(pSecDesc, cAuthSvc, asAuthSvc, pReserved1, dwAuthnLevel
 @Ole32Proxy('CoCreateInstance')
 def CoCreateInstance(rclsid, pUnkOuter=None, dwClsContext=CLSCTX_INPROC_SERVER, riid=NeededParameter, ppv=NeededParameter):
     return CoCreateInstance.ctypes_function(rclsid, pUnkOuter, dwClsContext, riid, ppv)
+
+@Ole32Proxy('CoCreateInstanceEx')
+def CoCreateInstanceEx(rclsid, punkOuter, dwClsCtx, pServerInfo, dwCount, pResults):
+    return CoCreateInstanceEx.ctypes_function(rclsid, punkOuter, dwClsCtx, pServerInfo, dwCount, pResults)
 
 
 @Ole32Proxy('CoGetInterceptor')

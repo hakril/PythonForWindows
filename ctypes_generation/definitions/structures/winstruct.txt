@@ -635,6 +635,11 @@ typedef enum _TOKEN_INFORMATION_CLASS {
   MaxTokenInfoClass,
 } TOKEN_INFORMATION_CLASS, *PTOKEN_INFORMATION_CLASS;
 
+typedef enum tagTOKEN_TYPE {
+  TokenPrimary        = 1,
+  TokenImpersonation  = 2
+} TOKEN_TYPE, *PTOKEN_TYPE;
+
 typedef enum  _FS_INFORMATION_CLASS {
   FileFsVolumeInformation       = 1,
   FileFsLabelInformation        = 2,

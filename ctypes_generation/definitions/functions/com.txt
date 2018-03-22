@@ -23,6 +23,16 @@ HRESULT WINAPI CoCreateInstance(
   _Out_ LPVOID    *ppv
 );
 
+HRESULT WINAPI CoCreateInstanceEx(
+  _In_    REFCLSID     rclsid,
+  _In_    IUnknown     *punkOuter,
+  _In_    DWORD        dwClsCtx,
+  _In_    COSERVERINFO *pServerInfo,
+  _In_    DWORD        dwCount,
+  _Inout_ MULTI_QI     *pResults
+);
+
+
 HRESULT WINAPI CoGetInterceptor(
   _In_  REFIID   iidIntercepted,
   _In_  IUnknown *punkOuter,

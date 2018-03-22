@@ -1,3 +1,38 @@
+typedef struct tagMULTI_QI {
+  IID *pIID;
+  PVOID  *pItf;
+  HRESULT   hr;
+} MULTI_QI;
+
+
+typedef struct _COAUTHIDENTITY {
+  USHORT *User;
+  ULONG  UserLength;
+  USHORT *Domain;
+  ULONG  DomainLength;
+  USHORT *Password;
+  ULONG  PasswordLength;
+  ULONG  Flags;
+} COAUTHIDENTITY;
+
+typedef struct _COAUTHINFO {
+  DWORD          dwAuthnSvc;
+  DWORD          dwAuthzSvc;
+  LPWSTR         pwszServerPrincName;
+  DWORD          dwAuthnLevel;
+  DWORD          dwImpersonationLevel;
+  COAUTHIDENTITY *pAuthIdentityData;
+  DWORD          dwCapabilities;
+} COAUTHINFO;
+
+typedef struct _COSERVERINFO {
+  DWORD      dwReserved1;
+  LPWSTR     pwszName;
+  COAUTHINFO *pAuthInfo;
+  DWORD      dwReserved2;
+} COSERVERINFO;
+
+
 typedef struct _CALLFRAMEPARAMINFO{
   BOOLEAN fIn;
   BOOLEAN fOut;
