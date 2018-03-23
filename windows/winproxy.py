@@ -885,6 +885,16 @@ def NtQueryInformationThread(ThreadHandle, ThreadInformationClass, ThreadInforma
     return NtQueryInformationThread.ctypes_function(ThreadHandle, ThreadInformationClass, ThreadInformation, ThreadInformationLength, ReturnLength)
 
 
+@NtdllProxy('NtFreeVirtualMemory', error_ntstatus)
+def NtFreeVirtualMemory(ProcessHandle, BaseAddress, RegionSize, FreeType):
+    return NtFreeVirtualMemory.ctypes_function(ProcessHandle, BaseAddress, RegionSize, FreeType)
+
+
+@NtdllProxy('NtAllocateVirtualMemory', error_ntstatus)
+def NtAllocateVirtualMemory(ProcessHandle, BaseAddress, ZeroBits, RegionSize, AllocationType, Protect):
+    return NtAllocateVirtualMemory.ctypes_function(ProcessHandle, BaseAddress, ZeroBits, RegionSize, AllocationType, Protect)
+
+
 @NtdllProxy('NtProtectVirtualMemory', error_ntstatus)
 def NtProtectVirtualMemory(ProcessHandle, BaseAddress, NumberOfBytesToProtect, NewAccessProtection, OldAccessProtection=None):
     if OldAccessProtection is None:

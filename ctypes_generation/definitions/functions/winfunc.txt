@@ -150,6 +150,16 @@ LPVOID WINAPI VirtualAllocEx(
   _In_      DWORD flProtect
 );
 
+NTSTATUS WINAPI NtAllocateVirtualMemory(
+  _In_    HANDLE    ProcessHandle,
+  _Inout_ PVOID     *BaseAddress,
+  _In_    ULONG_PTR ZeroBits,
+  _Inout_ PSIZE_T   RegionSize,
+  _In_    ULONG     AllocationType,
+  _In_    ULONG     Protect
+);
+
+
 NTSTATUS WINAPI NtProtectVirtualMemory(
   _In_ HANDLE               ProcessHandle,
   _Inout_ PVOID            *BaseAddress,
@@ -170,6 +180,14 @@ BOOL WINAPI VirtualFreeEx(
   _In_ LPVOID lpAddress,
   _In_ SIZE_T dwSize,
   _In_ DWORD  dwFreeType
+);
+
+
+NTSTATUS WINAPI NtFreeVirtualMemory(
+  _In_    HANDLE  ProcessHandle,
+  _Inout_ PVOID   *BaseAddress,
+  _Inout_ PSIZE_T RegionSize,
+  _In_    ULONG   FreeType
 );
 
 BOOL WINAPI VirtualProtect(

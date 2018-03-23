@@ -130,6 +130,11 @@ VirtualAllocParams = ((1, 'lpAddress'), (1, 'dwSize'), (1, 'flAllocationType'), 
 VirtualAllocExPrototype = WINFUNCTYPE(LPVOID, HANDLE, LPVOID, SIZE_T, DWORD, DWORD)
 VirtualAllocExParams = ((1, 'hProcess'), (1, 'lpAddress'), (1, 'dwSize'), (1, 'flAllocationType'), (1, 'flProtect'))
 
+#def NtAllocateVirtualMemory(ProcessHandle, BaseAddress, ZeroBits, RegionSize, AllocationType, Protect):
+#    return NtAllocateVirtualMemory.ctypes_function(ProcessHandle, BaseAddress, ZeroBits, RegionSize, AllocationType, Protect)
+NtAllocateVirtualMemoryPrototype = WINFUNCTYPE(NTSTATUS, HANDLE, POINTER(PVOID), ULONG_PTR, PSIZE_T, ULONG, ULONG)
+NtAllocateVirtualMemoryParams = ((1, 'ProcessHandle'), (1, 'BaseAddress'), (1, 'ZeroBits'), (1, 'RegionSize'), (1, 'AllocationType'), (1, 'Protect'))
+
 #def NtProtectVirtualMemory(ProcessHandle, BaseAddress, NumberOfBytesToProtect, NewAccessProtection, OldAccessProtection):
 #    return NtProtectVirtualMemory.ctypes_function(ProcessHandle, BaseAddress, NumberOfBytesToProtect, NewAccessProtection, OldAccessProtection)
 NtProtectVirtualMemoryPrototype = WINFUNCTYPE(NTSTATUS, HANDLE, POINTER(PVOID), PULONG, ULONG, PULONG)
@@ -144,6 +149,11 @@ VirtualFreeParams = ((1, 'lpAddress'), (1, 'dwSize'), (1, 'dwFreeType'))
 #    return VirtualFreeEx.ctypes_function(hProcess, lpAddress, dwSize, dwFreeType)
 VirtualFreeExPrototype = WINFUNCTYPE(BOOL, HANDLE, LPVOID, SIZE_T, DWORD)
 VirtualFreeExParams = ((1, 'hProcess'), (1, 'lpAddress'), (1, 'dwSize'), (1, 'dwFreeType'))
+
+#def NtFreeVirtualMemory(ProcessHandle, BaseAddress, RegionSize, FreeType):
+#    return NtFreeVirtualMemory.ctypes_function(ProcessHandle, BaseAddress, RegionSize, FreeType)
+NtFreeVirtualMemoryPrototype = WINFUNCTYPE(NTSTATUS, HANDLE, POINTER(PVOID), PSIZE_T, ULONG)
+NtFreeVirtualMemoryParams = ((1, 'ProcessHandle'), (1, 'BaseAddress'), (1, 'RegionSize'), (1, 'FreeType'))
 
 #def VirtualProtect(lpAddress, dwSize, flNewProtect, lpflOldProtect):
 #    return VirtualProtect.ctypes_function(lpAddress, dwSize, flNewProtect, lpflOldProtect)
