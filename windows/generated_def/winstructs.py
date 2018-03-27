@@ -264,95 +264,230 @@ HCERTSTORE = PVOID
 HCRYPTMSG = PVOID
 PALPC_PORT_ATTRIBUTES = PVOID
 PPORT_MESSAGE = PVOID
-BG_JOB_STATE_QUEUED = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_QUEUED", 0x0)
-BG_JOB_STATE_CONNECTING = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_CONNECTING", 0x1)
-BG_JOB_STATE_TRANSFERRING = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_TRANSFERRING", 0x2)
-BG_JOB_STATE_SUSPENDED = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_SUSPENDED", 0x3)
-BG_JOB_STATE_ERROR = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_ERROR", 0x4)
-BG_JOB_STATE_TRANSIENT_ERROR = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_TRANSIENT_ERROR", 0x5)
-BG_JOB_STATE_TRANSFERRED = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_TRANSFERRED", 0x6)
-BG_JOB_STATE_ACKNOWLEDGED = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_ACKNOWLEDGED", 0x7)
-BG_JOB_STATE_CANCELLED = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_CANCELLED", 0x8)
-class _BG_JOB_STATE(EnumType):
-    values = [BG_JOB_STATE_QUEUED, BG_JOB_STATE_CONNECTING, BG_JOB_STATE_TRANSFERRING, BG_JOB_STATE_SUSPENDED, BG_JOB_STATE_ERROR, BG_JOB_STATE_TRANSIENT_ERROR, BG_JOB_STATE_TRANSFERRED, BG_JOB_STATE_ACKNOWLEDGED, BG_JOB_STATE_CANCELLED]
-    mapper = {x:x for x in values}
-BG_JOB_STATE = _BG_JOB_STATE
-
-
-BG_JOB_PROXY_USAGE_PRECONFIG = EnumValue("_BG_JOB_PROXY_USAGE", "BG_JOB_PROXY_USAGE_PRECONFIG", 0x0)
-BG_JOB_PROXY_USAGE_NO_PROXY = EnumValue("_BG_JOB_PROXY_USAGE", "BG_JOB_PROXY_USAGE_NO_PROXY", 0x1)
-BG_JOB_PROXY_USAGE_OVERRIDE = EnumValue("_BG_JOB_PROXY_USAGE", "BG_JOB_PROXY_USAGE_OVERRIDE", 0x2)
-BG_JOB_PROXY_USAGE_AUTODETECT = EnumValue("_BG_JOB_PROXY_USAGE", "BG_JOB_PROXY_USAGE_AUTODETECT", 0x3)
-class _BG_JOB_PROXY_USAGE(EnumType):
-    values = [BG_JOB_PROXY_USAGE_PRECONFIG, BG_JOB_PROXY_USAGE_NO_PROXY, BG_JOB_PROXY_USAGE_OVERRIDE, BG_JOB_PROXY_USAGE_AUTODETECT]
-    mapper = {x:x for x in values}
-BG_JOB_PROXY_USAGE = _BG_JOB_PROXY_USAGE
-
-
-BG_JOB_PRIORITY_FOREGROUND = EnumValue("_BG_JOB_PRIORITY", "BG_JOB_PRIORITY_FOREGROUND", 0x0)
-BG_JOB_PRIORITY_HIGH = EnumValue("_BG_JOB_PRIORITY", "BG_JOB_PRIORITY_HIGH", 0x1)
-BG_JOB_PRIORITY_NORMAL = EnumValue("_BG_JOB_PRIORITY", "BG_JOB_PRIORITY_NORMAL", 0x2)
-BG_JOB_PRIORITY_LOW = EnumValue("_BG_JOB_PRIORITY", "BG_JOB_PRIORITY_LOW", 0x3)
-class _BG_JOB_PRIORITY(EnumType):
-    values = [BG_JOB_PRIORITY_FOREGROUND, BG_JOB_PRIORITY_HIGH, BG_JOB_PRIORITY_NORMAL, BG_JOB_PRIORITY_LOW]
-    mapper = {x:x for x in values}
-BG_JOB_PRIORITY = _BG_JOB_PRIORITY
-
-
-BG_ERROR_CONTEXT_NONE = EnumValue("_BG_ERROR_CONTEXT", "BG_ERROR_CONTEXT_NONE", 0x0)
-BG_ERROR_CONTEXT_UNKNOWN = EnumValue("_BG_ERROR_CONTEXT", "BG_ERROR_CONTEXT_UNKNOWN", 0x1)
-BG_ERROR_CONTEXT_GENERAL_QUEUE_MANAGER = EnumValue("_BG_ERROR_CONTEXT", "BG_ERROR_CONTEXT_GENERAL_QUEUE_MANAGER", 0x2)
-BG_ERROR_CONTEXT_QUEUE_MANAGER_NOTIFICATION = EnumValue("_BG_ERROR_CONTEXT", "BG_ERROR_CONTEXT_QUEUE_MANAGER_NOTIFICATION", 0x3)
-BG_ERROR_CONTEXT_LOCAL_FILE = EnumValue("_BG_ERROR_CONTEXT", "BG_ERROR_CONTEXT_LOCAL_FILE", 0x4)
-BG_ERROR_CONTEXT_REMOTE_FILE = EnumValue("_BG_ERROR_CONTEXT", "BG_ERROR_CONTEXT_REMOTE_FILE", 0x5)
-BG_ERROR_CONTEXT_GENERAL_TRANSPORT = EnumValue("_BG_ERROR_CONTEXT", "BG_ERROR_CONTEXT_GENERAL_TRANSPORT", 0x6)
-BG_ERROR_CONTEXT_REMOTE_APPLICATION = EnumValue("_BG_ERROR_CONTEXT", "BG_ERROR_CONTEXT_REMOTE_APPLICATION", 0x7)
-class _BG_ERROR_CONTEXT(EnumType):
-    values = [BG_ERROR_CONTEXT_NONE, BG_ERROR_CONTEXT_UNKNOWN, BG_ERROR_CONTEXT_GENERAL_QUEUE_MANAGER, BG_ERROR_CONTEXT_QUEUE_MANAGER_NOTIFICATION, BG_ERROR_CONTEXT_LOCAL_FILE, BG_ERROR_CONTEXT_REMOTE_FILE, BG_ERROR_CONTEXT_GENERAL_TRANSPORT, BG_ERROR_CONTEXT_REMOTE_APPLICATION]
-    mapper = {x:x for x in values}
-BG_ERROR_CONTEXT = _BG_ERROR_CONTEXT
-
-
-BG_JOB_TYPE_DOWNLOAD = EnumValue("_BG_JOB_TYPE", "BG_JOB_TYPE_DOWNLOAD", 0x0)
-BG_JOB_TYPE_UPLOAD = EnumValue("_BG_JOB_TYPE", "BG_JOB_TYPE_UPLOAD", 0x1)
-BG_JOB_TYPE_UPLOAD_REPLY = EnumValue("_BG_JOB_TYPE", "BG_JOB_TYPE_UPLOAD_REPLY", 0x2)
-class _BG_JOB_TYPE(EnumType):
-    values = [BG_JOB_TYPE_DOWNLOAD, BG_JOB_TYPE_UPLOAD, BG_JOB_TYPE_UPLOAD_REPLY]
-    mapper = {x:x for x in values}
-BG_JOB_TYPE = _BG_JOB_TYPE
-
-
-class _BG_FILE_PROGRESS(Structure):
+class _GUID(Structure):
     _fields_ = [
-        ("BytesTotal", UINT64),
-        ("BytesTransferred", UINT64),
-        ("Completed", BOOL),
+        ("Data1", ULONG),
+        ("Data2", USHORT),
+        ("Data3", USHORT),
+        ("Data4", BYTE * 8),
     ]
-BG_FILE_PROGRESS = _BG_FILE_PROGRESS
+REFCLSID = POINTER(_GUID)
+REFGUID = POINTER(_GUID)
+LPGUID = POINTER(_GUID)
+IID = _GUID
+CLSID = _GUID
+GUID = _GUID
+REFIID = POINTER(_GUID)
 
-class _BG_JOB_PROGRESS(Structure):
-    _fields_ = [
-        ("BytesTotal", UINT64),
-        ("BytesTransferred", UINT64),
-        ("FilesTotal", ULONG),
-        ("FilesTransferred", ULONG),
-    ]
-BG_JOB_PROGRESS = _BG_JOB_PROGRESS
+INITIAL_GUID = _GUID
+class _GUID(INITIAL_GUID):
+    def __init__(self, Data1=None, Data2=None, Data3=None, Data4=None, name=None, strid=None):
+        data_tuple = (Data1, Data2, Data3, Data4)
+        self.name = name
+        self.strid = strid
+        if all(data is None for data in data_tuple):
+            return super(_GUID, self).__init__()
+        if any(data is None for data in data_tuple):
+            raise ValueError("All or none of (Data1, Data2, Data3, Data4) should be None")
+        super(_GUID, self).__init__(Data1, Data2, Data3, Data4)
 
-class _BG_FILE_INFO(Structure):
-    _fields_ = [
-        ("RemoteName", LPWSTR),
-        ("LocalName", LPWSTR),
-    ]
-BG_FILE_INFO = _BG_FILE_INFO
+    def __repr__(self):
+        notpresent = object()
+        # Handle IID created without '__init__' (like ctypes-ptr deref)
+        if getattr(self, "strid", notpresent) is notpresent:
+            self.strid = self.to_string()
+        if self.strid is None:
+            return super(_GUID, self).__repr__()
 
-class _BG_JOB_TIMES(Structure):
+        if getattr(self, "name", notpresent) is notpresent:
+            self.name = None
+        if self.name is None:
+            return '<IID "{0}">'.format(self.strid.upper())
+        return '<IID "{0}({1})">'.format(self.strid.upper(), self.name)
+
+    def to_string(self):
+        data4_format = "{0:02X}{1:02X}-" + "".join("{{{i}:02X}}".format(i=i + 2) for i in range(6))
+        data4_str = data4_format.format(*self.Data4)
+        return "{0:08X}-{1:04X}-{2:04X}-".format(self.Data1, self.Data2, self.Data3) + data4_str
+
+    def update_strid(self):
+       new_strid = self.to_string()
+       self.strid = new_strid
+
+    @classmethod
+    def from_string(cls, iid):
+        part_iid = iid.split("-")
+        datas = [int(x, 16) for x in part_iid[:3]]
+        datas.append(int(part_iid[3][:2], 16))
+        datas.append(int(part_iid[3][2:], 16))
+        for i in range(6):
+            datas.append(int(part_iid[4][i * 2:(i + 1) * 2], 16))
+        return cls.from_raw(*datas, strid=iid)
+
+    @classmethod
+    def from_raw(cls, Data1, Data2, Data3, Data41, Data42, Data43, Data44, Data45, Data46, Data47, Data48, **kwargs):
+        return cls(Data1, Data2, Data3,  (BYTE*8)(Data41, Data42, Data43, Data44, Data45, Data46, Data47, Data48), **kwargs)
+
+    def __eq__(self, other):
+        if not isinstance(other, (_GUID, INITIAL_GUID)):
+            return NotImplemented
+        return (self.Data1, self.Data2, self.Data3, self.Data4[:]) == (other.Data1, other.Data2, other.Data3, other.Data4[:])
+
+REFCLSID = POINTER(_GUID)
+REFGUID = POINTER(_GUID)
+LPGUID = POINTER(_GUID)
+IID = _GUID
+CLSID = _GUID
+GUID = _GUID
+REFIID = POINTER(_GUID)
+class _SHITEMID(Structure):
     _fields_ = [
-        ("CreationTime", FILETIME),
-        ("ModificationTime", FILETIME),
-        ("TransferCompletionTime", FILETIME),
+        ("cb", USHORT),
+        ("abID", BYTE * 1),
     ]
-BG_JOB_TIMES = _BG_JOB_TIMES
+SHITEMID = _SHITEMID
+
+class _ITEMIDLIST(Structure):
+    _fields_ = [
+        ("mkid", SHITEMID),
+    ]
+ITEMIDLIST = _ITEMIDLIST
+PCIDLIST_ABSOLUTE = POINTER(_ITEMIDLIST)
+PIDLIST_ABSOLUTE = POINTER(_ITEMIDLIST)
+
+class tagRGBTRIPLE(Structure):
+    _fields_ = [
+        ("rgbtBlue", BYTE),
+        ("rgbtGreen", BYTE),
+        ("rgbtRed", BYTE),
+    ]
+NPRGBTRIPLE = POINTER(tagRGBTRIPLE)
+LPRGBTRIPLE = POINTER(tagRGBTRIPLE)
+RGBTRIPLE = tagRGBTRIPLE
+PRGBTRIPLE = POINTER(tagRGBTRIPLE)
+
+class tagBITMAPFILEHEADER(Structure):
+    _pack_ = 2
+    _fields_ = [
+        ("bfType", WORD),
+        ("bfSize", DWORD),
+        ("bfReserved1", WORD),
+        ("bfReserved2", WORD),
+        ("bfOffBits", DWORD),
+    ]
+BITMAPFILEHEADER = tagBITMAPFILEHEADER
+PBITMAPFILEHEADER = POINTER(tagBITMAPFILEHEADER)
+LPBITMAPFILEHEADER = POINTER(tagBITMAPFILEHEADER)
+
+class tagBITMAPCOREHEADER(Structure):
+    _fields_ = [
+        ("bcSize", DWORD),
+        ("bcWidth", WORD),
+        ("bcHeight", WORD),
+        ("bcPlanes", WORD),
+        ("bcBitCount", WORD),
+    ]
+LPBITMAPCOREHEADER = POINTER(tagBITMAPCOREHEADER)
+PBITMAPCOREHEADER = POINTER(tagBITMAPCOREHEADER)
+BITMAPCOREHEADER = tagBITMAPCOREHEADER
+
+class tagBITMAP(Structure):
+    _fields_ = [
+        ("bmType", LONG),
+        ("bmWidth", LONG),
+        ("bmHeight", LONG),
+        ("bmWidthBytes", LONG),
+        ("bmPlanes", WORD),
+        ("bmBitsPixel", WORD),
+        ("bmBits", LPVOID),
+    ]
+NPBITMAP = POINTER(tagBITMAP)
+LPBITMAP = POINTER(tagBITMAP)
+PBITMAP = POINTER(tagBITMAP)
+BITMAP = tagBITMAP
+
+class tagBITMAPINFOHEADER(Structure):
+    _fields_ = [
+        ("biSize", DWORD),
+        ("biWidth", LONG),
+        ("biHeight", LONG),
+        ("biPlanes", WORD),
+        ("biBitCount", WORD),
+        ("biCompression", DWORD),
+        ("biSizeImage", DWORD),
+        ("biXPelsPerMeter", LONG),
+        ("biYPelsPerMeter", LONG),
+        ("biClrUsed", DWORD),
+        ("biClrImportant", DWORD),
+    ]
+BITMAPINFOHEADER = tagBITMAPINFOHEADER
+PBITMAPINFOHEADER = POINTER(tagBITMAPINFOHEADER)
+LPBITMAPINFOHEADER = POINTER(tagBITMAPINFOHEADER)
+
+class tagRGBQUAD(Structure):
+    _fields_ = [
+        ("rgbBlue", BYTE),
+        ("rgbGreen", BYTE),
+        ("rgbRed", BYTE),
+        ("rgbReserved", BYTE),
+    ]
+RGBQUAD = tagRGBQUAD
+
+class tagBITMAPINFO(Structure):
+    _fields_ = [
+        ("bmiHeader", BITMAPINFOHEADER),
+        ("bmiColors", RGBQUAD * 1),
+    ]
+LPBITMAPINFO = POINTER(tagBITMAPINFO)
+PBITMAPINFO = POINTER(tagBITMAPINFO)
+BITMAPINFO = tagBITMAPINFO
+
+class tagBITMAPCOREINFO(Structure):
+    _fields_ = [
+        ("bmciHeader", BITMAPCOREHEADER),
+        ("bmciColors", RGBTRIPLE * 1),
+    ]
+LPBITMAPCOREINFO = POINTER(tagBITMAPCOREINFO)
+BITMAPCOREINFO = tagBITMAPCOREINFO
+PBITMAPCOREINFO = POINTER(tagBITMAPCOREINFO)
+
+class tagWNDCLASSEXA(Structure):
+    _fields_ = [
+        ("cbSize", UINT),
+        ("style", UINT),
+        ("lpfnWndProc", WNDPROC),
+        ("cbClsExtra", INT),
+        ("cbWndExtra", INT),
+        ("hInstance", HINSTANCE),
+        ("hIcon", HICON),
+        ("hCursor", HCURSOR),
+        ("hbrBackground", HBRUSH),
+        ("lpszMenuName", LPCSTR),
+        ("lpszClassName", LPCSTR),
+        ("hIconSm", HICON),
+    ]
+PWNDCLASSEXA = POINTER(tagWNDCLASSEXA)
+LPWNDCLASSEXA = POINTER(tagWNDCLASSEXA)
+WNDCLASSEXA = tagWNDCLASSEXA
+
+class tagWNDCLASSEXW(Structure):
+    _fields_ = [
+        ("cbSize", UINT),
+        ("style", UINT),
+        ("lpfnWndProc", WNDPROC),
+        ("cbClsExtra", INT),
+        ("cbWndExtra", INT),
+        ("hInstance", HINSTANCE),
+        ("hIcon", HICON),
+        ("hCursor", HCURSOR),
+        ("hbrBackground", HBRUSH),
+        ("lpszMenuName", LPWSTR),
+        ("lpszClassName", LPWSTR),
+        ("hIconSm", HICON),
+    ]
+WNDCLASSEXW = tagWNDCLASSEXW
+LPWNDCLASSEXW = POINTER(tagWNDCLASSEXW)
+PWNDCLASSEXW = POINTER(tagWNDCLASSEXW)
 
 FakeFileInformationZero = EnumValue("_FILE_INFORMATION_CLASS", "FakeFileInformationZero", 0x0)
 FileDirectoryInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileDirectoryInformation", 0x1)
@@ -563,231 +698,101 @@ class _FILE_ALL_INFORMATION(Structure):
 PFILE_ALL_INFORMATION = POINTER(_FILE_ALL_INFORMATION)
 FILE_ALL_INFORMATION = _FILE_ALL_INFORMATION
 
-class _SHITEMID(Structure):
+CALLFRAME_COPY_NESTED = EnumValue("_CALLFRAME_COPY", "CALLFRAME_COPY_NESTED", 0x1)
+CALLFRAME_COPY_INDEPENDENT = EnumValue("_CALLFRAME_COPY", "CALLFRAME_COPY_INDEPENDENT", 0x2)
+class _CALLFRAME_COPY(EnumType):
+    values = [CALLFRAME_COPY_NESTED, CALLFRAME_COPY_INDEPENDENT]
+    mapper = {x:x for x in values}
+CALLFRAME_COPY = _CALLFRAME_COPY
+
+
+MSHLFLAGS_NORMAL = EnumValue("tagMSHLFLAGS", "MSHLFLAGS_NORMAL", 0x0)
+MSHLFLAGS_TABLESTRONG = EnumValue("tagMSHLFLAGS", "MSHLFLAGS_TABLESTRONG", 0x1)
+MSHLFLAGS_TABLEWEAK = EnumValue("tagMSHLFLAGS", "MSHLFLAGS_TABLEWEAK", 0x2)
+MSHLFLAGS_NOPING = EnumValue("tagMSHLFLAGS", "MSHLFLAGS_NOPING", 0x4)
+class tagMSHLFLAGS(EnumType):
+    values = [MSHLFLAGS_NORMAL, MSHLFLAGS_TABLESTRONG, MSHLFLAGS_TABLEWEAK, MSHLFLAGS_NOPING]
+    mapper = {x:x for x in values}
+MSHLFLAGS = tagMSHLFLAGS
+
+
+class tagMULTI_QI(Structure):
     _fields_ = [
-        ("cb", USHORT),
-        ("abID", BYTE * 1),
+        ("pIID", POINTER(IID)),
+        ("pItf", POINTER(PVOID)),
+        ("hr", HRESULT),
     ]
-SHITEMID = _SHITEMID
+MULTI_QI = tagMULTI_QI
 
-class _ITEMIDLIST(Structure):
+class _COAUTHIDENTITY(Structure):
     _fields_ = [
-        ("mkid", SHITEMID),
+        ("User", POINTER(USHORT)),
+        ("UserLength", ULONG),
+        ("Domain", POINTER(USHORT)),
+        ("DomainLength", ULONG),
+        ("Password", POINTER(USHORT)),
+        ("PasswordLength", ULONG),
+        ("Flags", ULONG),
     ]
-ITEMIDLIST = _ITEMIDLIST
-PCIDLIST_ABSOLUTE = POINTER(_ITEMIDLIST)
-PIDLIST_ABSOLUTE = POINTER(_ITEMIDLIST)
+COAUTHIDENTITY = _COAUTHIDENTITY
 
-class tagRGBTRIPLE(Structure):
+class _COAUTHINFO(Structure):
     _fields_ = [
-        ("rgbtBlue", BYTE),
-        ("rgbtGreen", BYTE),
-        ("rgbtRed", BYTE),
+        ("dwAuthnSvc", DWORD),
+        ("dwAuthzSvc", DWORD),
+        ("pwszServerPrincName", LPWSTR),
+        ("dwAuthnLevel", DWORD),
+        ("dwImpersonationLevel", DWORD),
+        ("pAuthIdentityData", POINTER(COAUTHIDENTITY)),
+        ("dwCapabilities", DWORD),
     ]
-NPRGBTRIPLE = POINTER(tagRGBTRIPLE)
-LPRGBTRIPLE = POINTER(tagRGBTRIPLE)
-RGBTRIPLE = tagRGBTRIPLE
-PRGBTRIPLE = POINTER(tagRGBTRIPLE)
+COAUTHINFO = _COAUTHINFO
 
-class tagBITMAPFILEHEADER(Structure):
-    _pack_ = 2
+class _COSERVERINFO(Structure):
     _fields_ = [
-        ("bfType", WORD),
-        ("bfSize", DWORD),
-        ("bfReserved1", WORD),
-        ("bfReserved2", WORD),
-        ("bfOffBits", DWORD),
+        ("dwReserved1", DWORD),
+        ("pwszName", LPWSTR),
+        ("pAuthInfo", POINTER(COAUTHINFO)),
+        ("dwReserved2", DWORD),
     ]
-BITMAPFILEHEADER = tagBITMAPFILEHEADER
-PBITMAPFILEHEADER = POINTER(tagBITMAPFILEHEADER)
-LPBITMAPFILEHEADER = POINTER(tagBITMAPFILEHEADER)
+COSERVERINFO = _COSERVERINFO
 
-class tagBITMAPCOREHEADER(Structure):
+class _CALLFRAMEPARAMINFO(Structure):
     _fields_ = [
-        ("bcSize", DWORD),
-        ("bcWidth", WORD),
-        ("bcHeight", WORD),
-        ("bcPlanes", WORD),
-        ("bcBitCount", WORD),
+        ("fIn", BOOLEAN),
+        ("fOut", BOOLEAN),
+        ("stackOffset", ULONG),
+        ("cbParam", ULONG),
     ]
-LPBITMAPCOREHEADER = POINTER(tagBITMAPCOREHEADER)
-PBITMAPCOREHEADER = POINTER(tagBITMAPCOREHEADER)
-BITMAPCOREHEADER = tagBITMAPCOREHEADER
+CALLFRAMEPARAMINFO = _CALLFRAMEPARAMINFO
 
-class tagBITMAP(Structure):
+class _CALLFRAMEINFO(Structure):
     _fields_ = [
-        ("bmType", LONG),
-        ("bmWidth", LONG),
-        ("bmHeight", LONG),
-        ("bmWidthBytes", LONG),
-        ("bmPlanes", WORD),
-        ("bmBitsPixel", WORD),
-        ("bmBits", LPVOID),
+        ("iMethod", ULONG),
+        ("fHasInValues", BOOL),
+        ("fHasInOutValues", BOOL),
+        ("fHasOutValues", BOOL),
+        ("fDerivesFromIDispatch", BOOL),
+        ("cInInterfacesMax", LONG),
+        ("cInOutInterfacesMax", LONG),
+        ("cOutInterfacesMax", LONG),
+        ("cTopLevelInInterfaces", LONG),
+        ("iid", IID),
+        ("cMethod", ULONG),
+        ("cParams", ULONG),
     ]
-NPBITMAP = POINTER(tagBITMAP)
-LPBITMAP = POINTER(tagBITMAP)
-PBITMAP = POINTER(tagBITMAP)
-BITMAP = tagBITMAP
+CALLFRAMEINFO = _CALLFRAMEINFO
 
-class tagBITMAPINFOHEADER(Structure):
+class _CALLFRAME_MARSHALCONTEXT(Structure):
     _fields_ = [
-        ("biSize", DWORD),
-        ("biWidth", LONG),
-        ("biHeight", LONG),
-        ("biPlanes", WORD),
-        ("biBitCount", WORD),
-        ("biCompression", DWORD),
-        ("biSizeImage", DWORD),
-        ("biXPelsPerMeter", LONG),
-        ("biYPelsPerMeter", LONG),
-        ("biClrUsed", DWORD),
-        ("biClrImportant", DWORD),
+        ("fIn", BOOLEAN),
+        ("dwDestContext", DWORD),
+        ("pvDestContext", LPVOID),
+        ("mshlmgr", POINTER(PVOID)),
+        ("guidTransferSyntax", GUID),
     ]
-BITMAPINFOHEADER = tagBITMAPINFOHEADER
-PBITMAPINFOHEADER = POINTER(tagBITMAPINFOHEADER)
-LPBITMAPINFOHEADER = POINTER(tagBITMAPINFOHEADER)
+CALLFRAME_MARSHALCONTEXT = _CALLFRAME_MARSHALCONTEXT
 
-class tagRGBQUAD(Structure):
-    _fields_ = [
-        ("rgbBlue", BYTE),
-        ("rgbGreen", BYTE),
-        ("rgbRed", BYTE),
-        ("rgbReserved", BYTE),
-    ]
-RGBQUAD = tagRGBQUAD
-
-class tagBITMAPINFO(Structure):
-    _fields_ = [
-        ("bmiHeader", BITMAPINFOHEADER),
-        ("bmiColors", RGBQUAD * 1),
-    ]
-LPBITMAPINFO = POINTER(tagBITMAPINFO)
-PBITMAPINFO = POINTER(tagBITMAPINFO)
-BITMAPINFO = tagBITMAPINFO
-
-class tagBITMAPCOREINFO(Structure):
-    _fields_ = [
-        ("bmciHeader", BITMAPCOREHEADER),
-        ("bmciColors", RGBTRIPLE * 1),
-    ]
-LPBITMAPCOREINFO = POINTER(tagBITMAPCOREINFO)
-BITMAPCOREINFO = tagBITMAPCOREINFO
-PBITMAPCOREINFO = POINTER(tagBITMAPCOREINFO)
-
-class tagWNDCLASSEXA(Structure):
-    _fields_ = [
-        ("cbSize", UINT),
-        ("style", UINT),
-        ("lpfnWndProc", WNDPROC),
-        ("cbClsExtra", INT),
-        ("cbWndExtra", INT),
-        ("hInstance", HINSTANCE),
-        ("hIcon", HICON),
-        ("hCursor", HCURSOR),
-        ("hbrBackground", HBRUSH),
-        ("lpszMenuName", LPCSTR),
-        ("lpszClassName", LPCSTR),
-        ("hIconSm", HICON),
-    ]
-PWNDCLASSEXA = POINTER(tagWNDCLASSEXA)
-LPWNDCLASSEXA = POINTER(tagWNDCLASSEXA)
-WNDCLASSEXA = tagWNDCLASSEXA
-
-class tagWNDCLASSEXW(Structure):
-    _fields_ = [
-        ("cbSize", UINT),
-        ("style", UINT),
-        ("lpfnWndProc", WNDPROC),
-        ("cbClsExtra", INT),
-        ("cbWndExtra", INT),
-        ("hInstance", HINSTANCE),
-        ("hIcon", HICON),
-        ("hCursor", HCURSOR),
-        ("hbrBackground", HBRUSH),
-        ("lpszMenuName", LPWSTR),
-        ("lpszClassName", LPWSTR),
-        ("hIconSm", HICON),
-    ]
-WNDCLASSEXW = tagWNDCLASSEXW
-LPWNDCLASSEXW = POINTER(tagWNDCLASSEXW)
-PWNDCLASSEXW = POINTER(tagWNDCLASSEXW)
-
-class _GUID(Structure):
-    _fields_ = [
-        ("Data1", ULONG),
-        ("Data2", USHORT),
-        ("Data3", USHORT),
-        ("Data4", BYTE * 8),
-    ]
-REFCLSID = POINTER(_GUID)
-REFGUID = POINTER(_GUID)
-LPGUID = POINTER(_GUID)
-IID = _GUID
-CLSID = _GUID
-GUID = _GUID
-REFIID = POINTER(_GUID)
-
-INITIAL_GUID = _GUID
-class _GUID(INITIAL_GUID):
-    def __init__(self, Data1=None, Data2=None, Data3=None, Data4=None, name=None, strid=None):
-        data_tuple = (Data1, Data2, Data3, Data4)
-        self.name = name
-        self.strid = strid
-        if all(data is None for data in data_tuple):
-            return super(_GUID, self).__init__()
-        if any(data is None for data in data_tuple):
-            raise ValueError("All or none of (Data1, Data2, Data3, Data4) should be None")
-        super(_GUID, self).__init__(Data1, Data2, Data3, Data4)
-
-    def __repr__(self):
-        notpresent = object()
-        # Handle IID created without '__init__' (like ctypes-ptr deref)
-        if getattr(self, "strid", notpresent) is notpresent:
-            self.strid = self.to_string()
-        if self.strid is None:
-            return super(_GUID, self).__repr__()
-
-        if getattr(self, "name", notpresent) is notpresent:
-            self.name = None
-        if self.name is None:
-            return '<IID "{0}">'.format(self.strid.upper())
-        return '<IID "{0}({1})">'.format(self.strid.upper(), self.name)
-
-    def to_string(self):
-        data4_format = "{0:02X}{1:02X}-" + "".join("{{{i}:02X}}".format(i=i + 2) for i in range(6))
-        data4_str = data4_format.format(*self.Data4)
-        return "{0:08X}-{1:04X}-{2:04X}-".format(self.Data1, self.Data2, self.Data3) + data4_str
-
-    def update_strid(self):
-       new_strid = self.to_string()
-       self.strid = new_strid
-
-    @classmethod
-    def from_string(cls, iid):
-        part_iid = iid.split("-")
-        datas = [int(x, 16) for x in part_iid[:3]]
-        datas.append(int(part_iid[3][:2], 16))
-        datas.append(int(part_iid[3][2:], 16))
-        for i in range(6):
-            datas.append(int(part_iid[4][i * 2:(i + 1) * 2], 16))
-        return cls.from_raw(*datas, strid=iid)
-
-    @classmethod
-    def from_raw(cls, Data1, Data2, Data3, Data41, Data42, Data43, Data44, Data45, Data46, Data47, Data48, **kwargs):
-        return cls(Data1, Data2, Data3,  (BYTE*8)(Data41, Data42, Data43, Data44, Data45, Data46, Data47, Data48), **kwargs)
-
-    def __eq__(self, other):
-        if not isinstance(other, (_GUID, INITIAL_GUID)):
-            return NotImplemented
-        return (self.Data1, self.Data2, self.Data3, self.Data4[:]) == (other.Data1, other.Data2, other.Data3, other.Data4[:])
-
-REFCLSID = POINTER(_GUID)
-REFGUID = POINTER(_GUID)
-LPGUID = POINTER(_GUID)
-IID = _GUID
-CLSID = _GUID
-GUID = _GUID
-REFIID = POINTER(_GUID)
 SystemBasicInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemBasicInformation", 0x0)
 SystemProcessorInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemProcessorInformation", 0x1)
 SystemPerformanceInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemPerformanceInformation", 0x2)
@@ -4888,390 +4893,6 @@ class _PROCESS_INSTRUMENTATION_CALLBACK_INFORMATION(Structure):
 PPROCESS_INSTRUMENTATION_CALLBACK_INFORMATION = POINTER(_PROCESS_INSTRUMENTATION_CALLBACK_INFORMATION)
 PROCESS_INSTRUMENTATION_CALLBACK_INFORMATION = _PROCESS_INSTRUMENTATION_CALLBACK_INFORMATION
 
-CALLFRAME_COPY_NESTED = EnumValue("_CALLFRAME_COPY", "CALLFRAME_COPY_NESTED", 0x1)
-CALLFRAME_COPY_INDEPENDENT = EnumValue("_CALLFRAME_COPY", "CALLFRAME_COPY_INDEPENDENT", 0x2)
-class _CALLFRAME_COPY(EnumType):
-    values = [CALLFRAME_COPY_NESTED, CALLFRAME_COPY_INDEPENDENT]
-    mapper = {x:x for x in values}
-CALLFRAME_COPY = _CALLFRAME_COPY
-
-
-MSHLFLAGS_NORMAL = EnumValue("tagMSHLFLAGS", "MSHLFLAGS_NORMAL", 0x0)
-MSHLFLAGS_TABLESTRONG = EnumValue("tagMSHLFLAGS", "MSHLFLAGS_TABLESTRONG", 0x1)
-MSHLFLAGS_TABLEWEAK = EnumValue("tagMSHLFLAGS", "MSHLFLAGS_TABLEWEAK", 0x2)
-MSHLFLAGS_NOPING = EnumValue("tagMSHLFLAGS", "MSHLFLAGS_NOPING", 0x4)
-class tagMSHLFLAGS(EnumType):
-    values = [MSHLFLAGS_NORMAL, MSHLFLAGS_TABLESTRONG, MSHLFLAGS_TABLEWEAK, MSHLFLAGS_NOPING]
-    mapper = {x:x for x in values}
-MSHLFLAGS = tagMSHLFLAGS
-
-
-class tagMULTI_QI(Structure):
-    _fields_ = [
-        ("pIID", POINTER(IID)),
-        ("pItf", POINTER(PVOID)),
-        ("hr", HRESULT),
-    ]
-MULTI_QI = tagMULTI_QI
-
-class _COAUTHIDENTITY(Structure):
-    _fields_ = [
-        ("User", POINTER(USHORT)),
-        ("UserLength", ULONG),
-        ("Domain", POINTER(USHORT)),
-        ("DomainLength", ULONG),
-        ("Password", POINTER(USHORT)),
-        ("PasswordLength", ULONG),
-        ("Flags", ULONG),
-    ]
-COAUTHIDENTITY = _COAUTHIDENTITY
-
-class _COAUTHINFO(Structure):
-    _fields_ = [
-        ("dwAuthnSvc", DWORD),
-        ("dwAuthzSvc", DWORD),
-        ("pwszServerPrincName", LPWSTR),
-        ("dwAuthnLevel", DWORD),
-        ("dwImpersonationLevel", DWORD),
-        ("pAuthIdentityData", POINTER(COAUTHIDENTITY)),
-        ("dwCapabilities", DWORD),
-    ]
-COAUTHINFO = _COAUTHINFO
-
-class _COSERVERINFO(Structure):
-    _fields_ = [
-        ("dwReserved1", DWORD),
-        ("pwszName", LPWSTR),
-        ("pAuthInfo", POINTER(COAUTHINFO)),
-        ("dwReserved2", DWORD),
-    ]
-COSERVERINFO = _COSERVERINFO
-
-class _CALLFRAMEPARAMINFO(Structure):
-    _fields_ = [
-        ("fIn", BOOLEAN),
-        ("fOut", BOOLEAN),
-        ("stackOffset", ULONG),
-        ("cbParam", ULONG),
-    ]
-CALLFRAMEPARAMINFO = _CALLFRAMEPARAMINFO
-
-class _CALLFRAMEINFO(Structure):
-    _fields_ = [
-        ("iMethod", ULONG),
-        ("fHasInValues", BOOL),
-        ("fHasInOutValues", BOOL),
-        ("fHasOutValues", BOOL),
-        ("fDerivesFromIDispatch", BOOL),
-        ("cInInterfacesMax", LONG),
-        ("cInOutInterfacesMax", LONG),
-        ("cOutInterfacesMax", LONG),
-        ("cTopLevelInInterfaces", LONG),
-        ("iid", IID),
-        ("cMethod", ULONG),
-        ("cParams", ULONG),
-    ]
-CALLFRAMEINFO = _CALLFRAMEINFO
-
-class _CALLFRAME_MARSHALCONTEXT(Structure):
-    _fields_ = [
-        ("fIn", BOOLEAN),
-        ("dwDestContext", DWORD),
-        ("pvDestContext", LPVOID),
-        ("mshlmgr", POINTER(PVOID)),
-        ("guidTransferSyntax", GUID),
-    ]
-CALLFRAME_MARSHALCONTEXT = _CALLFRAME_MARSHALCONTEXT
-
-EvtVarTypeNull = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeNull", 0x0)
-EvtVarTypeString = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeString", 0x1)
-EvtVarTypeAnsiString = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeAnsiString", 0x2)
-EvtVarTypeSByte = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeSByte", 0x3)
-EvtVarTypeByte = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeByte", 0x4)
-EvtVarTypeInt16 = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeInt16", 0x5)
-EvtVarTypeUInt16 = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeUInt16", 0x6)
-EvtVarTypeInt32 = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeInt32", 0x7)
-EvtVarTypeUInt32 = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeUInt32", 0x8)
-EvtVarTypeInt64 = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeInt64", 0x9)
-EvtVarTypeUInt64 = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeUInt64", 0xa)
-EvtVarTypeSingle = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeSingle", 0xb)
-EvtVarTypeDouble = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeDouble", 0xc)
-EvtVarTypeBoolean = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeBoolean", 0xd)
-EvtVarTypeBinary = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeBinary", 0xe)
-EvtVarTypeGuid = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeGuid", 0xf)
-EvtVarTypeSizeT = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeSizeT", 0x10)
-EvtVarTypeFileTime = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeFileTime", 0x11)
-EvtVarTypeSysTime = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeSysTime", 0x12)
-EvtVarTypeSid = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeSid", 0x13)
-EvtVarTypeHexInt32 = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeHexInt32", 0x14)
-EvtVarTypeHexInt64 = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeHexInt64", 0x15)
-EvtVarTypeEvtHandle = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeEvtHandle", 0x20)
-EvtVarTypeEvtXml = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeEvtXml", 0x23)
-class _EVT_VARIANT_TYPE(EnumType):
-    values = [EvtVarTypeNull, EvtVarTypeString, EvtVarTypeAnsiString, EvtVarTypeSByte, EvtVarTypeByte, EvtVarTypeInt16, EvtVarTypeUInt16, EvtVarTypeInt32, EvtVarTypeUInt32, EvtVarTypeInt64, EvtVarTypeUInt64, EvtVarTypeSingle, EvtVarTypeDouble, EvtVarTypeBoolean, EvtVarTypeBinary, EvtVarTypeGuid, EvtVarTypeSizeT, EvtVarTypeFileTime, EvtVarTypeSysTime, EvtVarTypeSid, EvtVarTypeHexInt32, EvtVarTypeHexInt64, EvtVarTypeEvtHandle, EvtVarTypeEvtXml]
-    mapper = {x:x for x in values}
-EVT_VARIANT_TYPE = _EVT_VARIANT_TYPE
-
-
-EvtRenderContextValues = EnumValue("_EVT_RENDER_CONTEXT_FLAGS", "EvtRenderContextValues", 0x0)
-EvtRenderContextSystem = EnumValue("_EVT_RENDER_CONTEXT_FLAGS", "EvtRenderContextSystem", 0x1)
-EvtRenderContextUser = EnumValue("_EVT_RENDER_CONTEXT_FLAGS", "EvtRenderContextUser", 0x2)
-class _EVT_RENDER_CONTEXT_FLAGS(EnumType):
-    values = [EvtRenderContextValues, EvtRenderContextSystem, EvtRenderContextUser]
-    mapper = {x:x for x in values}
-EVT_RENDER_CONTEXT_FLAGS = _EVT_RENDER_CONTEXT_FLAGS
-
-
-EvtSystemProviderName = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemProviderName", 0x0)
-EvtSystemProviderGuid = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemProviderGuid", 0x1)
-EvtSystemEventID = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemEventID", 0x2)
-EvtSystemQualifiers = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemQualifiers", 0x3)
-EvtSystemLevel = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemLevel", 0x4)
-EvtSystemTask = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemTask", 0x5)
-EvtSystemOpcode = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemOpcode", 0x6)
-EvtSystemKeywords = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemKeywords", 0x7)
-EvtSystemTimeCreated = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemTimeCreated", 0x8)
-EvtSystemEventRecordId = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemEventRecordId", 0x9)
-EvtSystemActivityID = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemActivityID", 0xa)
-EvtSystemRelatedActivityID = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemRelatedActivityID", 0xb)
-EvtSystemProcessID = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemProcessID", 0xc)
-EvtSystemThreadID = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemThreadID", 0xd)
-EvtSystemChannel = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemChannel", 0xe)
-EvtSystemComputer = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemComputer", 0xf)
-EvtSystemUserID = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemUserID", 0x10)
-EvtSystemVersion = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemVersion", 0x11)
-EvtSystemPropertyIdEND = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemPropertyIdEND", 0x12)
-class _EVT_SYSTEM_PROPERTY_ID(EnumType):
-    values = [EvtSystemProviderName, EvtSystemProviderGuid, EvtSystemEventID, EvtSystemQualifiers, EvtSystemLevel, EvtSystemTask, EvtSystemOpcode, EvtSystemKeywords, EvtSystemTimeCreated, EvtSystemEventRecordId, EvtSystemActivityID, EvtSystemRelatedActivityID, EvtSystemProcessID, EvtSystemThreadID, EvtSystemChannel, EvtSystemComputer, EvtSystemUserID, EvtSystemVersion, EvtSystemPropertyIdEND]
-    mapper = {x:x for x in values}
-EVT_SYSTEM_PROPERTY_ID = _EVT_SYSTEM_PROPERTY_ID
-
-
-EvtRenderEventValues = EnumValue("_EVT_RENDER_FLAGS", "EvtRenderEventValues", 0x0)
-EvtRenderEventXml = EnumValue("_EVT_RENDER_FLAGS", "EvtRenderEventXml", 0x1)
-EvtRenderBookmark = EnumValue("_EVT_RENDER_FLAGS", "EvtRenderBookmark", 0x2)
-class _EVT_RENDER_FLAGS(EnumType):
-    values = [EvtRenderEventValues, EvtRenderEventXml, EvtRenderBookmark]
-    mapper = {x:x for x in values}
-EVT_RENDER_FLAGS = _EVT_RENDER_FLAGS
-
-
-EvtQueryChannelPath = EnumValue("_EVT_QUERY_FLAGS", "EvtQueryChannelPath", 0x1)
-EvtQueryFilePath = EnumValue("_EVT_QUERY_FLAGS", "EvtQueryFilePath", 0x2)
-EvtQueryForwardDirection = EnumValue("_EVT_QUERY_FLAGS", "EvtQueryForwardDirection", 0x100)
-EvtQueryReverseDirection = EnumValue("_EVT_QUERY_FLAGS", "EvtQueryReverseDirection", 0x200)
-EvtQueryTolerateQueryErrors = EnumValue("_EVT_QUERY_FLAGS", "EvtQueryTolerateQueryErrors", 0x1000)
-class _EVT_QUERY_FLAGS(EnumType):
-    values = [EvtQueryChannelPath, EvtQueryFilePath, EvtQueryForwardDirection, EvtQueryReverseDirection, EvtQueryTolerateQueryErrors]
-    mapper = {x:x for x in values}
-EVT_QUERY_FLAGS = _EVT_QUERY_FLAGS
-
-
-EvtLogCreationTime = EnumValue("_EVT_LOG_PROPERTY_ID", "EvtLogCreationTime", 0x0)
-EvtLogLastAccessTime = EnumValue("_EVT_LOG_PROPERTY_ID", "EvtLogLastAccessTime", 0x1)
-EvtLogLastWriteTime = EnumValue("_EVT_LOG_PROPERTY_ID", "EvtLogLastWriteTime", 0x2)
-EvtLogFileSize = EnumValue("_EVT_LOG_PROPERTY_ID", "EvtLogFileSize", 0x3)
-EvtLogAttributes = EnumValue("_EVT_LOG_PROPERTY_ID", "EvtLogAttributes", 0x4)
-EvtLogNumberOfLogRecords = EnumValue("_EVT_LOG_PROPERTY_ID", "EvtLogNumberOfLogRecords", 0x5)
-EvtLogOldestRecordNumber = EnumValue("_EVT_LOG_PROPERTY_ID", "EvtLogOldestRecordNumber", 0x6)
-EvtLogFull = EnumValue("_EVT_LOG_PROPERTY_ID", "EvtLogFull", 0x7)
-class _EVT_LOG_PROPERTY_ID(EnumType):
-    values = [EvtLogCreationTime, EvtLogLastAccessTime, EvtLogLastWriteTime, EvtLogFileSize, EvtLogAttributes, EvtLogNumberOfLogRecords, EvtLogOldestRecordNumber, EvtLogFull]
-    mapper = {x:x for x in values}
-EVT_LOG_PROPERTY_ID = _EVT_LOG_PROPERTY_ID
-
-
-EvtOpenChannelPath = EnumValue("_EVT_OPEN_LOG_FLAGS", "EvtOpenChannelPath", 0x1)
-EvtOpenFilePath = EnumValue("_EVT_OPEN_LOG_FLAGS", "EvtOpenFilePath", 0x2)
-class _EVT_OPEN_LOG_FLAGS(EnumType):
-    values = [EvtOpenChannelPath, EvtOpenFilePath]
-    mapper = {x:x for x in values}
-EVT_OPEN_LOG_FLAGS = _EVT_OPEN_LOG_FLAGS
-
-
-EvtChannelConfigEnabled = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelConfigEnabled", 0x0)
-EvtChannelConfigIsolation = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelConfigIsolation", 0x1)
-EvtChannelConfigType = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelConfigType", 0x2)
-EvtChannelConfigOwningPublisher = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelConfigOwningPublisher", 0x3)
-EvtChannelConfigClassicEventlog = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelConfigClassicEventlog", 0x4)
-EvtChannelConfigAccess = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelConfigAccess", 0x5)
-EvtChannelLoggingConfigRetention = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelLoggingConfigRetention", 0x6)
-EvtChannelLoggingConfigAutoBackup = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelLoggingConfigAutoBackup", 0x7)
-EvtChannelLoggingConfigMaxSize = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelLoggingConfigMaxSize", 0x8)
-EvtChannelLoggingConfigLogFilePath = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelLoggingConfigLogFilePath", 0x9)
-EvtChannelPublishingConfigLevel = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelPublishingConfigLevel", 0xa)
-EvtChannelPublishingConfigKeywords = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelPublishingConfigKeywords", 0xb)
-EvtChannelPublishingConfigControlGuid = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelPublishingConfigControlGuid", 0xc)
-EvtChannelPublishingConfigBufferSize = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelPublishingConfigBufferSize", 0xd)
-EvtChannelPublishingConfigMinBuffers = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelPublishingConfigMinBuffers", 0xe)
-EvtChannelPublishingConfigMaxBuffers = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelPublishingConfigMaxBuffers", 0xf)
-EvtChannelPublishingConfigLatency = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelPublishingConfigLatency", 0x10)
-EvtChannelPublishingConfigClockType = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelPublishingConfigClockType", 0x11)
-EvtChannelPublishingConfigSidType = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelPublishingConfigSidType", 0x12)
-EvtChannelPublisherList = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelPublisherList", 0x13)
-EvtChannelPublishingConfigFileMax = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelPublishingConfigFileMax", 0x14)
-EvtChannelConfigPropertyIdEND = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelConfigPropertyIdEND", 0x15)
-class _EVT_CHANNEL_CONFIG_PROPERTY_ID(EnumType):
-    values = [EvtChannelConfigEnabled, EvtChannelConfigIsolation, EvtChannelConfigType, EvtChannelConfigOwningPublisher, EvtChannelConfigClassicEventlog, EvtChannelConfigAccess, EvtChannelLoggingConfigRetention, EvtChannelLoggingConfigAutoBackup, EvtChannelLoggingConfigMaxSize, EvtChannelLoggingConfigLogFilePath, EvtChannelPublishingConfigLevel, EvtChannelPublishingConfigKeywords, EvtChannelPublishingConfigControlGuid, EvtChannelPublishingConfigBufferSize, EvtChannelPublishingConfigMinBuffers, EvtChannelPublishingConfigMaxBuffers, EvtChannelPublishingConfigLatency, EvtChannelPublishingConfigClockType, EvtChannelPublishingConfigSidType, EvtChannelPublisherList, EvtChannelPublishingConfigFileMax, EvtChannelConfigPropertyIdEND]
-    mapper = {x:x for x in values}
-EVT_CHANNEL_CONFIG_PROPERTY_ID = _EVT_CHANNEL_CONFIG_PROPERTY_ID
-
-
-EvtChannelTypeAdmin = EnumValue("_EVT_CHANNEL_TYPE", "EvtChannelTypeAdmin", 0x0)
-EvtChannelTypeOperational = EnumValue("_EVT_CHANNEL_TYPE", "EvtChannelTypeOperational", 0x1)
-EvtChannelTypeAnalytic = EnumValue("_EVT_CHANNEL_TYPE", "EvtChannelTypeAnalytic", 0x2)
-EvtChannelTypeDebug = EnumValue("_EVT_CHANNEL_TYPE", "EvtChannelTypeDebug", 0x3)
-class _EVT_CHANNEL_TYPE(EnumType):
-    values = [EvtChannelTypeAdmin, EvtChannelTypeOperational, EvtChannelTypeAnalytic, EvtChannelTypeDebug]
-    mapper = {x:x for x in values}
-EVT_CHANNEL_TYPE = _EVT_CHANNEL_TYPE
-
-
-EvtChannelIsolationTypeApplication = EnumValue("_EVT_CHANNEL_ISOLATION_TYPE", "EvtChannelIsolationTypeApplication", 0x0)
-EvtChannelIsolationTypeSystem = EnumValue("_EVT_CHANNEL_ISOLATION_TYPE", "EvtChannelIsolationTypeSystem", 0x1)
-EvtChannelIsolationTypeCustom = EnumValue("_EVT_CHANNEL_ISOLATION_TYPE", "EvtChannelIsolationTypeCustom", 0x2)
-class _EVT_CHANNEL_ISOLATION_TYPE(EnumType):
-    values = [EvtChannelIsolationTypeApplication, EvtChannelIsolationTypeSystem, EvtChannelIsolationTypeCustom]
-    mapper = {x:x for x in values}
-EVT_CHANNEL_ISOLATION_TYPE = _EVT_CHANNEL_ISOLATION_TYPE
-
-
-EventMetadataEventID = EnumValue("_EVT_EVENT_METADATA_PROPERTY_ID", "EventMetadataEventID", 0x0)
-EventMetadataEventVersion = EnumValue("_EVT_EVENT_METADATA_PROPERTY_ID", "EventMetadataEventVersion", 0x1)
-EventMetadataEventChannel = EnumValue("_EVT_EVENT_METADATA_PROPERTY_ID", "EventMetadataEventChannel", 0x2)
-EventMetadataEventLevel = EnumValue("_EVT_EVENT_METADATA_PROPERTY_ID", "EventMetadataEventLevel", 0x3)
-EventMetadataEventOpcode = EnumValue("_EVT_EVENT_METADATA_PROPERTY_ID", "EventMetadataEventOpcode", 0x4)
-EventMetadataEventTask = EnumValue("_EVT_EVENT_METADATA_PROPERTY_ID", "EventMetadataEventTask", 0x5)
-EventMetadataEventKeyword = EnumValue("_EVT_EVENT_METADATA_PROPERTY_ID", "EventMetadataEventKeyword", 0x6)
-EventMetadataEventMessageID = EnumValue("_EVT_EVENT_METADATA_PROPERTY_ID", "EventMetadataEventMessageID", 0x7)
-EventMetadataEventTemplate = EnumValue("_EVT_EVENT_METADATA_PROPERTY_ID", "EventMetadataEventTemplate", 0x8)
-EvtEventMetadataPropertyIdEND = EnumValue("_EVT_EVENT_METADATA_PROPERTY_ID", "EvtEventMetadataPropertyIdEND", 0x9)
-class _EVT_EVENT_METADATA_PROPERTY_ID(EnumType):
-    values = [EventMetadataEventID, EventMetadataEventVersion, EventMetadataEventChannel, EventMetadataEventLevel, EventMetadataEventOpcode, EventMetadataEventTask, EventMetadataEventKeyword, EventMetadataEventMessageID, EventMetadataEventTemplate, EvtEventMetadataPropertyIdEND]
-    mapper = {x:x for x in values}
-EVT_EVENT_METADATA_PROPERTY_ID = _EVT_EVENT_METADATA_PROPERTY_ID
-
-
-EvtPublisherMetadataPublisherGuid = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataPublisherGuid", 0x0)
-EvtPublisherMetadataResourceFilePath = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataResourceFilePath", 0x1)
-EvtPublisherMetadataParameterFilePath = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataParameterFilePath", 0x2)
-EvtPublisherMetadataMessageFilePath = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataMessageFilePath", 0x3)
-EvtPublisherMetadataHelpLink = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataHelpLink", 0x4)
-EvtPublisherMetadataPublisherMessageID = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataPublisherMessageID", 0x5)
-EvtPublisherMetadataChannelReferences = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataChannelReferences", 0x6)
-EvtPublisherMetadataChannelReferencePath = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataChannelReferencePath", 0x7)
-EvtPublisherMetadataChannelReferenceIndex = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataChannelReferenceIndex", 0x8)
-EvtPublisherMetadataChannelReferenceID = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataChannelReferenceID", 0x9)
-EvtPublisherMetadataChannelReferenceFlags = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataChannelReferenceFlags", 0xa)
-EvtPublisherMetadataChannelReferenceMessageID = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataChannelReferenceMessageID", 0xb)
-EvtPublisherMetadataLevels = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataLevels", 0xc)
-EvtPublisherMetadataLevelName = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataLevelName", 0xd)
-EvtPublisherMetadataLevelValue = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataLevelValue", 0xe)
-EvtPublisherMetadataLevelMessageID = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataLevelMessageID", 0xf)
-EvtPublisherMetadataTasks = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataTasks", 0x10)
-EvtPublisherMetadataTaskName = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataTaskName", 0x11)
-EvtPublisherMetadataTaskEventGuid = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataTaskEventGuid", 0x12)
-EvtPublisherMetadataTaskValue = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataTaskValue", 0x13)
-EvtPublisherMetadataTaskMessageID = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataTaskMessageID", 0x14)
-EvtPublisherMetadataOpcodes = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataOpcodes", 0x15)
-EvtPublisherMetadataOpcodeName = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataOpcodeName", 0x16)
-EvtPublisherMetadataOpcodeValue = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataOpcodeValue", 0x17)
-EvtPublisherMetadataOpcodeMessageID = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataOpcodeMessageID", 0x18)
-EvtPublisherMetadataKeywords = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataKeywords", 0x19)
-EvtPublisherMetadataKeywordName = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataKeywordName", 0x1a)
-EvtPublisherMetadataKeywordValue = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataKeywordValue", 0x1b)
-EvtPublisherMetadataKeywordMessageID = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataKeywordMessageID", 0x1c)
-EvtPublisherMetadataPropertyIdEND = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataPropertyIdEND", 0x1d)
-class _EVT_PUBLISHER_METADATA_PROPERTY_ID(EnumType):
-    values = [EvtPublisherMetadataPublisherGuid, EvtPublisherMetadataResourceFilePath, EvtPublisherMetadataParameterFilePath, EvtPublisherMetadataMessageFilePath, EvtPublisherMetadataHelpLink, EvtPublisherMetadataPublisherMessageID, EvtPublisherMetadataChannelReferences, EvtPublisherMetadataChannelReferencePath, EvtPublisherMetadataChannelReferenceIndex, EvtPublisherMetadataChannelReferenceID, EvtPublisherMetadataChannelReferenceFlags, EvtPublisherMetadataChannelReferenceMessageID, EvtPublisherMetadataLevels, EvtPublisherMetadataLevelName, EvtPublisherMetadataLevelValue, EvtPublisherMetadataLevelMessageID, EvtPublisherMetadataTasks, EvtPublisherMetadataTaskName, EvtPublisherMetadataTaskEventGuid, EvtPublisherMetadataTaskValue, EvtPublisherMetadataTaskMessageID, EvtPublisherMetadataOpcodes, EvtPublisherMetadataOpcodeName, EvtPublisherMetadataOpcodeValue, EvtPublisherMetadataOpcodeMessageID, EvtPublisherMetadataKeywords, EvtPublisherMetadataKeywordName, EvtPublisherMetadataKeywordValue, EvtPublisherMetadataKeywordMessageID, EvtPublisherMetadataPropertyIdEND]
-    mapper = {x:x for x in values}
-EVT_PUBLISHER_METADATA_PROPERTY_ID = _EVT_PUBLISHER_METADATA_PROPERTY_ID
-
-
-class _EVENTLOGRECORD(Structure):
-    _fields_ = [
-        ("Length", DWORD),
-        ("Reserved", DWORD),
-        ("RecordNumber", DWORD),
-        ("TimeGenerated", DWORD),
-        ("TimeWritten", DWORD),
-        ("EventID", DWORD),
-        ("EventType", WORD),
-        ("NumStrings", WORD),
-        ("EventCategory", WORD),
-        ("ReservedFlags", WORD),
-        ("ClosingRecordNumber", DWORD),
-        ("StringOffset", DWORD),
-        ("UserSidLength", DWORD),
-        ("UserSidOffset", DWORD),
-        ("DataLength", DWORD),
-        ("DataOffset", DWORD),
-    ]
-PEVENTLOGRECORD = POINTER(_EVENTLOGRECORD)
-EVENTLOGRECORD = _EVENTLOGRECORD
-
-class _EVENTLOG_FULL_INFORMATION(Structure):
-    _fields_ = [
-        ("dwFull", DWORD),
-    ]
-EVENTLOG_FULL_INFORMATION = _EVENTLOG_FULL_INFORMATION
-LPEVENTLOG_FULL_INFORMATION = POINTER(_EVENTLOG_FULL_INFORMATION)
-
-class _ANON_evt_variant_sub_union(Union):
-    _fields_ = [
-        ("BooleanVal", BOOL),
-        ("SByteVal", INT8),
-        ("Int16Val", INT16),
-        ("Int32Val", INT32),
-        ("Int64Val", INT64),
-        ("ByteVal", UINT8),
-        ("UInt16Val", UINT16),
-        ("UInt32Val", UINT32),
-        ("UInt64Val", UINT64),
-        ("SingleVal", FLOAT),
-        ("DoubleVal", DOUBLE),
-        ("FileTimeVal", ULONGLONG),
-        ("SysTimeVal", POINTER(SYSTEMTIME)),
-        ("GuidVal", POINTER(GUID)),
-        ("StringVal", LPCWSTR),
-        ("AnsiStringVal", LPCSTR),
-        ("BinaryVal", PBYTE),
-        ("SidVal", PSID),
-        ("SizeTVal", SIZE_T),
-        ("EvtHandleVal", EVT_HANDLE),
-        ("BooleanArr", POINTER(BOOL)),
-        ("SByteArr", POINTER(INT8)),
-        ("Int16Arr", POINTER(INT16)),
-        ("Int32Arr", POINTER(INT32)),
-        ("Int64Arr", POINTER(INT64)),
-        ("ByteArr", POINTER(UINT8)),
-        ("UInt16Arr", POINTER(UINT16)),
-        ("UInt32Arr", POINTER(UINT32)),
-        ("UInt64Arr", POINTER(UINT64)),
-        ("SingleArr", POINTER(FLOAT)),
-        ("DoubleArr", POINTER(DOUBLE)),
-        ("FileTimeArr", POINTER(FILETIME)),
-        ("SysTimeArr", POINTER(SYSTEMTIME)),
-        ("GuidArr", POINTER(GUID)),
-        ("StringArr", POINTER(LPWSTR)),
-        ("AnsiStringArr", POINTER(LPSTR)),
-        ("SidArr", POINTER(PSID)),
-        ("SizeTArr", POINTER(SIZE_T)),
-        ("XmlVal", LPCWSTR),
-        ("XmlValArr", POINTER(LPCWSTR)),
-    ]
-
-
-class _EVT_VARIANT(Structure):
-    _anonymous_ = ("_VARIANT_VALUE",)
-    _fields_ = [
-        ("_VARIANT_VALUE", _ANON_evt_variant_sub_union),
-        ("Count", DWORD),
-        ("Type", DWORD),
-    ]
-PEVT_VARIANT = POINTER(_EVT_VARIANT)
-EVT_VARIANT = _EVT_VARIANT
-
 AlpcBasicInformation = EnumValue("_ALPC_PORT_INFORMATION_CLASS", "AlpcBasicInformation", 0x0)
 AlpcPortInformation = EnumValue("_ALPC_PORT_INFORMATION_CLASS", "AlpcPortInformation", 0x1)
 AlpcAssociateCompletionPortInformation = EnumValue("_ALPC_PORT_INFORMATION_CLASS", "AlpcAssociateCompletionPortInformation", 0x2)
@@ -5597,3 +5218,93 @@ class _RPC_IF_ID(INITIAL_RPC_IF_ID):
     def __repr__(self):
         return '<RPC_IF_ID "{0}" ({1}, {2})>'.format(self.Uuid.to_string(), self.VersMajor, self.VersMinor)
 RPC_IF_ID = _RPC_IF_ID
+BG_JOB_STATE_QUEUED = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_QUEUED", 0x0)
+BG_JOB_STATE_CONNECTING = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_CONNECTING", 0x1)
+BG_JOB_STATE_TRANSFERRING = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_TRANSFERRING", 0x2)
+BG_JOB_STATE_SUSPENDED = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_SUSPENDED", 0x3)
+BG_JOB_STATE_ERROR = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_ERROR", 0x4)
+BG_JOB_STATE_TRANSIENT_ERROR = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_TRANSIENT_ERROR", 0x5)
+BG_JOB_STATE_TRANSFERRED = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_TRANSFERRED", 0x6)
+BG_JOB_STATE_ACKNOWLEDGED = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_ACKNOWLEDGED", 0x7)
+BG_JOB_STATE_CANCELLED = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_CANCELLED", 0x8)
+class _BG_JOB_STATE(EnumType):
+    values = [BG_JOB_STATE_QUEUED, BG_JOB_STATE_CONNECTING, BG_JOB_STATE_TRANSFERRING, BG_JOB_STATE_SUSPENDED, BG_JOB_STATE_ERROR, BG_JOB_STATE_TRANSIENT_ERROR, BG_JOB_STATE_TRANSFERRED, BG_JOB_STATE_ACKNOWLEDGED, BG_JOB_STATE_CANCELLED]
+    mapper = {x:x for x in values}
+BG_JOB_STATE = _BG_JOB_STATE
+
+
+BG_JOB_PROXY_USAGE_PRECONFIG = EnumValue("_BG_JOB_PROXY_USAGE", "BG_JOB_PROXY_USAGE_PRECONFIG", 0x0)
+BG_JOB_PROXY_USAGE_NO_PROXY = EnumValue("_BG_JOB_PROXY_USAGE", "BG_JOB_PROXY_USAGE_NO_PROXY", 0x1)
+BG_JOB_PROXY_USAGE_OVERRIDE = EnumValue("_BG_JOB_PROXY_USAGE", "BG_JOB_PROXY_USAGE_OVERRIDE", 0x2)
+BG_JOB_PROXY_USAGE_AUTODETECT = EnumValue("_BG_JOB_PROXY_USAGE", "BG_JOB_PROXY_USAGE_AUTODETECT", 0x3)
+class _BG_JOB_PROXY_USAGE(EnumType):
+    values = [BG_JOB_PROXY_USAGE_PRECONFIG, BG_JOB_PROXY_USAGE_NO_PROXY, BG_JOB_PROXY_USAGE_OVERRIDE, BG_JOB_PROXY_USAGE_AUTODETECT]
+    mapper = {x:x for x in values}
+BG_JOB_PROXY_USAGE = _BG_JOB_PROXY_USAGE
+
+
+BG_JOB_PRIORITY_FOREGROUND = EnumValue("_BG_JOB_PRIORITY", "BG_JOB_PRIORITY_FOREGROUND", 0x0)
+BG_JOB_PRIORITY_HIGH = EnumValue("_BG_JOB_PRIORITY", "BG_JOB_PRIORITY_HIGH", 0x1)
+BG_JOB_PRIORITY_NORMAL = EnumValue("_BG_JOB_PRIORITY", "BG_JOB_PRIORITY_NORMAL", 0x2)
+BG_JOB_PRIORITY_LOW = EnumValue("_BG_JOB_PRIORITY", "BG_JOB_PRIORITY_LOW", 0x3)
+class _BG_JOB_PRIORITY(EnumType):
+    values = [BG_JOB_PRIORITY_FOREGROUND, BG_JOB_PRIORITY_HIGH, BG_JOB_PRIORITY_NORMAL, BG_JOB_PRIORITY_LOW]
+    mapper = {x:x for x in values}
+BG_JOB_PRIORITY = _BG_JOB_PRIORITY
+
+
+BG_ERROR_CONTEXT_NONE = EnumValue("_BG_ERROR_CONTEXT", "BG_ERROR_CONTEXT_NONE", 0x0)
+BG_ERROR_CONTEXT_UNKNOWN = EnumValue("_BG_ERROR_CONTEXT", "BG_ERROR_CONTEXT_UNKNOWN", 0x1)
+BG_ERROR_CONTEXT_GENERAL_QUEUE_MANAGER = EnumValue("_BG_ERROR_CONTEXT", "BG_ERROR_CONTEXT_GENERAL_QUEUE_MANAGER", 0x2)
+BG_ERROR_CONTEXT_QUEUE_MANAGER_NOTIFICATION = EnumValue("_BG_ERROR_CONTEXT", "BG_ERROR_CONTEXT_QUEUE_MANAGER_NOTIFICATION", 0x3)
+BG_ERROR_CONTEXT_LOCAL_FILE = EnumValue("_BG_ERROR_CONTEXT", "BG_ERROR_CONTEXT_LOCAL_FILE", 0x4)
+BG_ERROR_CONTEXT_REMOTE_FILE = EnumValue("_BG_ERROR_CONTEXT", "BG_ERROR_CONTEXT_REMOTE_FILE", 0x5)
+BG_ERROR_CONTEXT_GENERAL_TRANSPORT = EnumValue("_BG_ERROR_CONTEXT", "BG_ERROR_CONTEXT_GENERAL_TRANSPORT", 0x6)
+BG_ERROR_CONTEXT_REMOTE_APPLICATION = EnumValue("_BG_ERROR_CONTEXT", "BG_ERROR_CONTEXT_REMOTE_APPLICATION", 0x7)
+class _BG_ERROR_CONTEXT(EnumType):
+    values = [BG_ERROR_CONTEXT_NONE, BG_ERROR_CONTEXT_UNKNOWN, BG_ERROR_CONTEXT_GENERAL_QUEUE_MANAGER, BG_ERROR_CONTEXT_QUEUE_MANAGER_NOTIFICATION, BG_ERROR_CONTEXT_LOCAL_FILE, BG_ERROR_CONTEXT_REMOTE_FILE, BG_ERROR_CONTEXT_GENERAL_TRANSPORT, BG_ERROR_CONTEXT_REMOTE_APPLICATION]
+    mapper = {x:x for x in values}
+BG_ERROR_CONTEXT = _BG_ERROR_CONTEXT
+
+
+BG_JOB_TYPE_DOWNLOAD = EnumValue("_BG_JOB_TYPE", "BG_JOB_TYPE_DOWNLOAD", 0x0)
+BG_JOB_TYPE_UPLOAD = EnumValue("_BG_JOB_TYPE", "BG_JOB_TYPE_UPLOAD", 0x1)
+BG_JOB_TYPE_UPLOAD_REPLY = EnumValue("_BG_JOB_TYPE", "BG_JOB_TYPE_UPLOAD_REPLY", 0x2)
+class _BG_JOB_TYPE(EnumType):
+    values = [BG_JOB_TYPE_DOWNLOAD, BG_JOB_TYPE_UPLOAD, BG_JOB_TYPE_UPLOAD_REPLY]
+    mapper = {x:x for x in values}
+BG_JOB_TYPE = _BG_JOB_TYPE
+
+
+class _BG_FILE_PROGRESS(Structure):
+    _fields_ = [
+        ("BytesTotal", UINT64),
+        ("BytesTransferred", UINT64),
+        ("Completed", BOOL),
+    ]
+BG_FILE_PROGRESS = _BG_FILE_PROGRESS
+
+class _BG_JOB_PROGRESS(Structure):
+    _fields_ = [
+        ("BytesTotal", UINT64),
+        ("BytesTransferred", UINT64),
+        ("FilesTotal", ULONG),
+        ("FilesTransferred", ULONG),
+    ]
+BG_JOB_PROGRESS = _BG_JOB_PROGRESS
+
+class _BG_FILE_INFO(Structure):
+    _fields_ = [
+        ("RemoteName", LPWSTR),
+        ("LocalName", LPWSTR),
+    ]
+BG_FILE_INFO = _BG_FILE_INFO
+
+class _BG_JOB_TIMES(Structure):
+    _fields_ = [
+        ("CreationTime", FILETIME),
+        ("ModificationTime", FILETIME),
+        ("TransferCompletionTime", FILETIME),
+    ]
+BG_JOB_TIMES = _BG_JOB_TIMES
+
