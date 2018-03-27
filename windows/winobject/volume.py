@@ -5,7 +5,7 @@ from windows import winproxy
 import windows.generated_def as gdef
 from windows.generated_def.winstructs import *
 
-from .process import AutoHandle
+from windows.utils import AutoHandle
 
 import sys
 
