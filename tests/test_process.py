@@ -1,6 +1,7 @@
 import pytest
 
 import os
+import sys
 import time
 import struct
 import textwrap
@@ -23,7 +24,8 @@ class TestCurrentProcessWithCheckGarbage(object):
         return windows.current_process.peb
 
     def test_get_current_process_modules(self):
-        assert "python" in windows.current_process.peb.modules[0].name
+        # Use sys.executable because executable can be a PyInstaller exe
+        assert os.path.basename(sys.executable) in windows.current_process.peb.modules[0].name
 
     def test_get_current_process_exe(self):
         exe = windows.current_process.peb.exe
@@ -151,7 +153,16 @@ class TestProcessWithCheckGarbage(object):
 
     # Python execution
 
+    def _skip_if_injection_dll_not_found(self, target):
+        if windows.current_process.bitness == target.bitness:
+            return # Should never fail if we have the same bitness
+        try:
+            windows.injection.validate_python_dll_presence_on_disk(target)
+        except IOError as e:
+            pytest.skip("Python DLL to inject not installed")
+
     def test_execute_python(self, proc32_64):
+        self._skip_if_injection_dll_not_found(proc32_64)
         with proc32_64.allocated_memory(0x1000) as addr:
             proc32_64.execute_python('import ctypes; ctypes.c_uint.from_address({0}).value = 0x42424242'.format(addr))
             dword = proc32_64.read_dword(addr)
@@ -159,6 +170,7 @@ class TestProcessWithCheckGarbage(object):
 
 
     def test_execute_python_suspended(self, proc32_64_suspended):
+        self._skip_if_injection_dll_not_found(proc32_64_suspended)
         proc = proc32_64_suspended
         with proc.allocated_memory(0x1000) as addr:
             proc.execute_python('import ctypes; ctypes.c_uint.from_address({0}).value = 0x42424242'.format(addr))
@@ -217,6 +229,7 @@ class TestProcessWithCheckGarbage(object):
         assert exe.bitness == exe_by_module.bitness
 
     def test_execute_python_raises(self, proc32_64):
+        self._skip_if_injection_dll_not_found(proc32_64)
         res = proc32_64.execute_python("import time;time.sleep(0.1); 2")
         assert res == True
         with pytest.raises(windows.injection.RemotePythonError) as ar:

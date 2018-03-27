@@ -21,9 +21,6 @@ class MySink(windows.com.COMImplementation):
     IMPLEMENT = gdef.ICallFrameEvents
 
     def OnCall(self, this, frame):
-        import pdb;pdb.set_trace()
-        # this = gdef.ICallFrameEvents(this) # TODO: auto-translate this ?
-        # frame = gdef.ICallFrame(frame)
         ifname = gdef.PWSTR()
         methodname = gdef.PWSTR()
         print("Hello from python sink !")

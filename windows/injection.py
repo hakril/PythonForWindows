@@ -16,8 +16,17 @@ from windows.dbgprint import dbgprint
 class InjectionFailedError(WindowsError):
     pass
 
+def get_kernel32_dll_name():
+    # Our injected shellcode search for 'kernel32.dll' with a strcmp
+    # The BaseDllName of k32 might be 'KERNEL32.DLL' or 'kernel32.dll' on different system32
+    # We base the name on our own loaded kernel32
+    k32 = [m for m in windows.current_process.peb.modules if m.name == "kernel32.dll"]
+    assert len(k32) == 1
+    k32name = k32[0].BaseDllName.str
+    return (k32name + "\x00").encode("utf-16-le")
+
 def perform_manual_getproc_loadlib_32(target, dll_name):
-    dll = "KERNEL32.DLL\x00".encode("utf-16-le")
+    dll = get_kernel32_dll_name()
     api = "LoadLibraryA\x00"
     dll_to_load = dll_name + "\x00"
 
@@ -54,7 +63,7 @@ def perform_manual_getproc_loadlib_32(target, dll_name):
     return True
 
 def perform_manual_getproc_loadlib_64(target, dll_name):
-    dll = "KERNEL32.DLL\x00".encode("utf-16-le")
+    dll = get_kernel32_dll_name()
     api = "LoadLibraryA\x00"
     dll_to_load = dll_name + "\x00"
 
@@ -94,6 +103,19 @@ def perform_manual_getproc_loadlib_64(target, dll_name):
             raise InjectionFailedError("Injection of <{0}> failed".format(dll_name))
     return True
 
+def generate_simple_LoadLibraryW_64(load_libraryW, remote_store):
+    code = RemoteLoadLibrayStub = x64.MultipleInstr()
+    # code += x64.Int3()
+    code += x64.Mov("RAX", load_libraryW)
+    code += (x64.Push("RDI") * 5) # Prepare stack
+    code += x64.Call("RAX")
+    code += (x64.Pop("RDI") * 5) # Clean stack
+    code += x64.Mov(x64.deref(remote_store), "RAX")
+    code += x64.Ret()
+    return RemoteLoadLibrayStub.get_code()
+
+
+
 def perform_manual_getproc_loadlib(target, *args, **kwargs):
     if target.bitness == 32:
         return perform_manual_getproc_loadlib_32(target, *args, **kwargs)
@@ -101,6 +123,8 @@ def perform_manual_getproc_loadlib(target, *args, **kwargs):
 
 
 def load_dll_in_remote_process(target, dll_name):
+    # if target.bitness == 64:
+        # import pdb;pdb.set_trace()
     rpeb = target.peb
     if rpeb.Ldr:
         # LDR est parcourable, ca va etre deja plus simple..
@@ -119,14 +143,33 @@ def load_dll_in_remote_process(target, dll_name):
                 raise ValueError("Kernel32 have no export <LoadLibraryA> (wtf)")
 
             with target.allocated_memory(0x1000) as addr:
-                target.write_memory(addr, (dll_name + "\x00").encode('utf-16le'))
-                t = target.create_thread(load_libraryW, addr)
-                t.wait()
-                if not t.exit_code:
-                    raise InjectionFailedError(u"Injection of <{0}> failed".format(dll_name))
+                if target.bitness == 32:
+                    target.write_memory(addr, (dll_name + "\x00").encode('utf-16le'))
+                    t = target.create_thread(load_libraryW, addr)
+                    t.wait()
+                    module_baseaddr = t.exit_code
+                else:
+                    # For 64b target we need a special stub as the return value of
+                    # load_libraryW does not fit in t.exit_code (DWORD)
+                    retval_addr = addr
+                    target.write_ptr(retval_addr, 0)
+                    addr += ctypes.sizeof(ctypes.c_ulonglong)
+                    full_dll_name = (dll_name + "\x00").encode('utf-16le')
+                    target.write_memory(addr, full_dll_name)
+                    param_addr = addr
+                    addr += len(full_dll_name)
+                    shellcode_addr = addr
+                    shellcode = generate_simple_LoadLibraryW_64(load_libraryW, retval_addr)
+                    target.write_memory(shellcode_addr, shellcode)
+                    t = target.create_thread(shellcode_addr, param_addr)
+                    t.wait()
+                    module_baseaddr = target.read_ptr(retval_addr)
+
+            if not module_baseaddr:
+                raise InjectionFailedError(u"Injection of <{0}> failed".format(dll_name))
             dbgprint("DLL Injected via LoadLibray", "DLLINJECT")
             # Cannot return the full return value of load_libraryW in 64b target.. (exit_code is a DWORD)
-            return t.exit_code
+            return module_baseaddr
     # Hardcore mode
     # We don't have k32 or PEB->Ldr
     # Go inject a GetProcAddress(LoadLib) + LoadLib shellcode :D
@@ -287,11 +330,11 @@ def validate_python_dll_presence_on_disk(process):
     if windows.current_process.bitness == 32 and process.bitness == 64:
         with windows.utils.DisableWow64FsRedirection():
             if not os.path.exists(r"C:\Windows\system32\python27.dll"):
-                raise ValueError("Could not find Python DLL to inject")
+                raise IOError("Could not find Python DLL to inject")
             return True
     if windows.current_process.bitness == 64 and process.bitness == 32:
         if not os.path.exists(r"C:\Windows\SysWOW64\python27.dll"):
-            raise ValueError("Could not find Python DLL to inject")
+            raise IOError("Could not find Python DLL to inject")
         return True
     raise NotImplementedError("Unknown bitness")
 

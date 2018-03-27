@@ -40,6 +40,8 @@ def full_alpc_server():
                 windows.utils.print_ctypes_struct(msg.view_attribute, "       - VIEW", hexa=True)
                 view_data = windows.current_process.read_string(msg.view_attribute.ViewBase)
                 print("   * Reading view content: <{0}>".format(view_data))
+                # Needed in Win7 - TODO: why is there a different behavior ?
+                msg.attributes.ValidAttributes -= gdef.ALPC_MESSAGE_VIEW_ATTRIBUTE
             print(" * security_is_valid <{0}>".format(msg.security_is_valid))
             print(" * handle_is_valid <{0}>".format(msg.handle_is_valid))
             if msg.handle_is_valid:

@@ -71,6 +71,7 @@ def alpc_view_test_server():
     assert msg.type & 0xfff  == gdef.LPC_REQUEST
     assert msg.view_is_valid
     view_data = windows.current_process.read_memory(msg.view_attribute.ViewBase, len(CLIENT_VIEW_DATA))
+    msg.attributes.ValidAttributes -= gdef.ALPC_MESSAGE_VIEW_ATTRIBUTE
     assert view_data == CLIENT_VIEW_DATA
     assert msg.data == CLIENT_VIEW_MESSAGE
     msg.data = SERVER_MESSAGE

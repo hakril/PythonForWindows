@@ -1,6 +1,5 @@
 import collections
 import struct
-from windows.dbgprint import dbgprint
 
 DEBUG = False
 
@@ -740,7 +739,6 @@ class Instruction(object):
     default_rex = BitArray.from_int(8, 0x40)
 
     def __init__(self, *initial_args):
-        dbgprint("Assembling {0}{1}".format(type(self).__name__, initial_args), "X64")
         for type_encoding in self.encoding:
             args = list(initial_args)
             res = []
@@ -759,7 +757,6 @@ class Instruction(object):
             else:  # if no break
                 if args:  # if still args: fail
                     continue
-                dbgprint("Valid encoding found: REX={0:#x}".format(ord(full_rex.dump())), "X64")
                 self.prefix = prefix
                 self.value = sum(res, BitArray(0, ""))
                 if str(full_rex.dump()) != "\x40":

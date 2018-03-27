@@ -41,6 +41,9 @@ RegOpenKeyExA_iat = [n for n in adv_imports if n.name == "RegOpenKeyExA"][0]
 # Setup our hook
 RegOpenKeyExA_iat.set_hook(open_reg_hook)
 
+### !!!! You must keep the iat_entry alive !!!!
+### If the hook is garbage collected while active -> python will crash
+
 # Use python native module _winreg that call 'RegOpenKeyExA'
 print("Asking for <MY_SECRET_KEY>")
 v = _winreg.OpenKey(1234567, "MY_SECRET_KEY")

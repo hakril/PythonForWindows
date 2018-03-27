@@ -33,44 +33,7 @@ TimeInfo = namedtuple("TimeInfo", ["creation", "exit", "kernel", "user"])
 """Time information about a process"""
 
 
-class AutoHandle(object):
-    """An abstract class that allow easy handle creation/destruction/wait"""
-     # Big bypass to prevent missing reference at programm close..
-    _close_function = ctypes.WinDLL("kernel32").CloseHandle
-    def _get_handle(self):
-        raise NotImplementedError("{0} is abstract".format(type(self).__name__))
-
-    @property
-    def handle(self):
-        """An handle on the object
-
-        :type: HANDLE
-
-           .. note::
-                The handle is automaticaly closed when the object is destroyed
-        """
-        if hasattr(self, "_handle"):
-            return self._handle
-        self._handle = self._get_handle()
-        dbgprint("Open handle {0} for {1}".format(hex(self._handle), self), "HANDLE")
-        #if "DEAD" in str(self):
-        #    print("OPEN FOR THE DEADS")
-        #    import pdb;pdb.set_trace()
-        return self._handle
-
-    def wait(self, timeout=INFINITE):
-        """Wait for the object"""
-        return winproxy.WaitForSingleObject(self.handle, timeout)
-
-    def __del__(self):
-        # sys.path is not None -> check if python shutdown
-        if hasattr(sys, "path") and sys.path is not None and hasattr(self, "_handle") and self._handle:
-            # Prevent some bug where dbgprint might be None when __del__ is called in a closing process
-            dbgprint("Closing Handle {0} for {1}".format(hex(self._handle), self), "HANDLE") if dbgprint is not None else None
-            self._close_function(self._handle)
-
-
-class WinThread(AutoHandle):
+class WinThread(utils.AutoHandle):
     """Represent a thread """
 
     def __init__(self, tid=None, handle=None, owner_pid=None, owner=None):
@@ -297,7 +260,7 @@ class WinThread(AutoHandle):
     #     return Token(token_handle.value)
 
 
-class DeadThread(AutoHandle):
+class DeadThread(utils.AutoHandle):
     """An already dead thread (returned only by API returning a new thread if thread die before being returned)"""
     def __init__(self, handle, tid=None):
         if tid is None:
@@ -325,7 +288,7 @@ class DeadThread(AutoHandle):
         return res.value
 
 
-class Process(AutoHandle):
+class Process(utils.AutoHandle):
     @utils.fixedpropety
     def is_wow_64(self):
         """``True`` if the process is a SysWow64 process (32bit process on 64bits system).
@@ -666,6 +629,12 @@ class Process(AutoHandle):
         """write a qword at ``addr``"""
         return self.write_memory(addr, struct.pack("<Q", qword))
 
+    def write_ptr(self, addr, value):
+        """Write a ``PTR`` at ``addr``"""
+        if self.bitness == 32:
+            return self.write_dword(addr, value)
+        return self.write_qword(addr, value)
+
     @property
     def time_info(self):
         """The time information of the process (creation, kernel/user time, exit time)
@@ -739,7 +708,7 @@ class Process(AutoHandle):
     #     winproxy.OpenProcessToken(self.handle, TOKEN_QUERY, byref(token_handle))
     #     return Token(token_handle.value)
 
-class CurrentThread(AutoHandle):
+class CurrentThread(utils.AutoHandle):
     """The current thread"""
     @property #It's not a fixedpropety because executing thread might change
     def tid(self):
@@ -874,8 +843,12 @@ class CurrentProcess(Process):
         return WinThread._from_handle(handle)
 
     def load_library(self, dll_path):
-        """Load the library in current process"""
-        return winproxy.LoadLibraryA(dll_path)
+        """Load the library in current process
+
+        :rtype: :class:`LoadedModule`
+        """
+        dllbase =  winproxy.LoadLibraryA(dll_path)
+        return [m for m in self.peb.modules if m.baseaddr == dllbase][0]
 
     def execute(self, code, parameter=0):
         """Execute native code ``code`` in the current thread.
@@ -907,6 +880,8 @@ class CurrentProcess(Process):
         token_handle = HANDLE()
         winproxy.OpenProcessToken(self.handle, flags, byref(token_handle))
         return Token(token_handle.value)
+
+    # TODO: use ctypes.string_ad / ctypes.wstring_at for read_string / read_wstring ?
 
 
     token = property(open_token)
@@ -947,7 +922,7 @@ class WinProcess(Process):
         :type: :class:`str`
 		"""
         buffer = ctypes.c_buffer(0x1024)
-        rsize = winproxy.GetProcessImageFileNameA(self.handle, buffer)
+        rsize = winproxy.GetProcessImageFileNameA(self.limited_handle, buffer)
         # GetProcessImageFileNameA returns the fullpath
         return buffer[:rsize].decode().split("\\")[-1]
 
@@ -1052,8 +1027,12 @@ class WinProcess(Process):
         return WinThread._from_handle(winproxy.CreateRemoteThread(hProcess=self.handle, lpStartAddress=addr, lpParameter=param))
 
     def load_library(self, dll_path):
-        """Load the library in remote process"""
-        return windows.injection.load_dll_in_remote_process(self, dll_path)
+        """Load the library in remote process
+
+        :rtype: :class:`RemoteLoadedModule`
+        """
+        dllbase = windows.injection.load_dll_in_remote_process(self, dll_path)
+        return [m for m in self.peb.modules if m.baseaddr == dllbase][0]
 
     def execute_python(self, pycode):
         """Execute Python code into the remote process.
@@ -1161,7 +1140,8 @@ SECURITY_MANDATORY_PROTECTED_PROCESS_RID]
 know_integrity_level_mapper = gdef.FlagMapper(*KNOW_INTEGRITY_LEVEL)
 
 # Create ProcessToken and Thread Token objects ?
-class Token(AutoHandle):
+# token.py ?
+class Token(utils.AutoHandle):
     """The token of a process"""
     def __init__(self, handle):
         self._handle = handle
@@ -1214,6 +1194,12 @@ class Token(AutoHandle):
     def username(self):
         """The username of the token"""
         return self._user_and_computer_name()[0]
+
+    def duplicate(self, access_rigth=0, attributes=None, impersonation_level=gdef.SecurityImpersonation, toktype=gdef.TokenPrimary):
+        newtoken = gdef.HANDLE()
+        winproxy.DuplicateTokenEx(self.handle, access_rigth, attributes, impersonation_level, toktype, newtoken)
+        return type(self)(newtoken.value)
+
 
     def _user_and_computer_name(self):
         tok_usr = self.token_user

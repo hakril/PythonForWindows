@@ -1,4 +1,5 @@
 import gc
+import time
 import pytest
 import collections
 
@@ -35,6 +36,7 @@ def generate_pop_and_exit_fixtures(proc_popers, ids=[], dwCreationFlags=DEFAULT_
     def pop_and_exit_process(request):
         proc_poper = request.param
         proc = proc_poper(dwCreationFlags=dwCreationFlags)
+        time.sleep(0.1) # Give time to the process to load :)
         yield weakref.proxy(proc)  # provide the fixture value
         try:
             proc.exit(0)

@@ -19,6 +19,8 @@ def dumped_apisetmap_base_and_version(request):
     ctypes_data = ctypes.c_buffer(data)
     yield ctypes.addressof(ctypes_data), version
 
+KNOWN_APISETMAP_PREFIX = ["api-", "ext-", "MS-Win-"]
+
 def verify_apisetmap_parsing(apisetmap_base, version=None):
     if version is not None:
         assert windows.current_process.read_dword(apisetmap_base) == version
@@ -29,12 +31,12 @@ def verify_apisetmap_parsing(apisetmap_base, version=None):
     # Verify that at least one entry resolve to kernel32.dll
     # This ensure that the ApiSetMap parsing works at least a little
     assert "kernel32.dll" in apisetmap_dict.values()
-    assert all(dll.startswith("api-") or dll.startswith("ext-") for dll in apisetmap_dict)
-    # This key was found in all current tested version by hand
-    # Might need to change that if I add another APISET dump
-    # But as it was in Windows7 to Windows10 there are big chance it will be in others APISET.
-    # We do as MS code and ignore everything after the last '-'
-    assert 'api-ms-win-core-com-l2-1-' in apisetmap_dict
+    assert all(any(dll.startswith(pref) for pref in KNOWN_APISETMAP_PREFIX) for dll in apisetmap_dict)
+    # This first key was found in most of the tested version by hand
+    # MS-Win found on: 6.1.7600 (Win7)
+    assert 'api-ms-win-core-com-l2-1-' in apisetmap_dict or "MS-Win-Core-ProcessThreads-L1-1-" in apisetmap_dict
+
+
 
 def test_apisetmap_parsing_current_process():
     return verify_apisetmap_parsing(windows.current_process.peb.ApiSetMap)

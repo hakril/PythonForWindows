@@ -247,6 +247,7 @@ class CtypesGenerator(object):
 
     def generate_into(self, filename):
         self.generate()
+        print("Writing generated code into {0}".format(filename))
         with open(filename, "w") as f:
             f.write(self.result.getvalue())
 
@@ -592,7 +593,7 @@ class ModuleGenerator(object):
 
         self.after_ctypes_generator_init(ctypesgen)
         finalfilename = "{0}.py".format(self.name)
-        ctypesgen.generate_into(to_dest(finalfilename))
+        ctypesgen.generate_into(to_dest(finalfilename)) # Need to handle dest != PythonForWindows
 
     def generate_doc(self, filename):
         nodelist = self.nodes

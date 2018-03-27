@@ -1,3 +1,5 @@
+import ctypes
+
 import windows
 import windows.generated_def as gdef
 
