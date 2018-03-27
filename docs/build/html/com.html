@@ -68,7 +68,7 @@ Then you need to retrieve the interface by using an API returning an object or <
 You can then use the instance to call whatever method you need.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">see sample <a class="reference internal" href="sample.html#sample-com-firewall"><span class="std std-ref">using COM: INetFwPolicy2</span></a></p>
+<p class="last">see samples <a class="reference internal" href="sample.html#sample-com"><span class="std std-ref">windows.com</span></a></p>
 </div>
 </div>
 <div class="section" id="implementing-a-com-interface">
@@ -82,6 +82,49 @@ You can then use the instance to call whatever method you need.</p>
 <li>Pass it to whatever native function expects it <a class="reference external" href="https://github.com/sogeti-esec-lab/LKD/blob/efabf3cc38b94d4180ebe8d2c554da5d76b2fea1/lkd/dbginterface/base.py#L272">CODE4</a></li>
 </ol>
 </div></blockquote>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">see samples <a class="reference internal" href="sample.html#sample-com-icallinterceptor"><span class="std std-ref">ICallInterceptor</span></a></p>
+</div>
+</div>
+<div class="section" id="api">
+<h2>9.3. API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="windows.com.init">
+<code class="descclassname">windows.com.</code><code class="descname">init</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/com.html#init"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.com.init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Init COM with some default parameters</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="windows.com.create_instance">
+<code class="descclassname">windows.com.</code><code class="descname">create_instance</code><span class="sig-paren">(</span><em>clsiid</em>, <em>targetinterface</em>, <em>custom_iid=None</em>, <em>context=5L</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/com.html#create_instance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.com.create_instance" title="Permalink to this definition">¶</a></dt>
+<dd><p>A simple wrapper around <code class="docutils literal notranslate"><span class="pre">CoCreateInstance</span> <span class="pre">&lt;https://msdn.microsoft.com/en-us/library/windows/desktop/ms686615(v=vs.85).aspx&gt;</span></code></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="windows.com.COMImplementation">
+<em class="property">class </em><code class="descclassname">windows.com.</code><code class="descname">COMImplementation</code><a class="reference internal" href="_modules/windows/com.html#COMImplementation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.com.COMImplementation" title="Permalink to this definition">¶</a></dt>
+<dd><p>The base class to implements COM object respecting a given interface</p>
+<dl class="method">
+<dt id="windows.com.COMImplementation.AddRef">
+<code class="descname">AddRef</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/com.html#COMImplementation.AddRef"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.com.COMImplementation.AddRef" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default <code class="docutils literal notranslate"><span class="pre">AddRef</span></code> implementation that returns <code class="docutils literal notranslate"><span class="pre">1</span></code></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.com.COMImplementation.QueryInterface">
+<code class="descname">QueryInterface</code><span class="sig-paren">(</span><em>this</em>, <em>piid</em>, <em>result</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/com.html#COMImplementation.QueryInterface"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.com.COMImplementation.QueryInterface" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default <code class="docutils literal notranslate"><span class="pre">QueryInterface</span></code> implementation that returns <code class="docutils literal notranslate"><span class="pre">self</span></code> if piid is the implemented interface</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.com.COMImplementation.Release">
+<code class="descname">Release</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/com.html#COMImplementation.Release"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.com.COMImplementation.Release" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default <code class="docutils literal notranslate"><span class="pre">Release</span></code> implementation that returns <code class="docutils literal notranslate"><span class="pre">1</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 </div>
 
@@ -96,6 +139,7 @@ You can then use the instance to call whatever method you need.</p>
 <li><a class="reference internal" href="#">9. <code class="docutils literal notranslate"><span class="pre">windows.com</span></code> - Component Object Model</a><ul>
 <li><a class="reference internal" href="#using-a-com-interface">9.1. Using a COM interface</a></li>
 <li><a class="reference internal" href="#implementing-a-com-interface">9.2. Implementing a COM interface</a></li>
+<li><a class="reference internal" href="#api">9.3. API</a></li>
 </ul>
 </li>
 </ul>

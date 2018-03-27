@@ -500,14 +500,20 @@
         <span class="k">return</span> <span class="bp">self</span>
 
 
+<span class="k">class</span> <span class="nc">IATPtr</span><span class="p">(</span><span class="n">PVOID</span><span class="p">):</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_iatentry</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">iat_entry</span><span class="p">):</span>
+        <span class="bp">self</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_address</span><span class="p">(</span><span class="n">iat_entry</span><span class="o">.</span><span class="n">addr</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">addr</span> <span class="o">=</span> <span class="n">iat_entry</span><span class="o">.</span><span class="n">addr</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nonhookvalue</span> <span class="o">=</span> <span class="n">iat_entry</span><span class="o">.</span><span class="n">nonhookvalue</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
 <div class="viewcode-block" id="IATEntry"><a class="viewcode-back" href="../../process.html#windows.pe_parse.IATEntry">[docs]</a><span class="k">class</span> <span class="nc">IATEntry</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Represent an entry in the IAT of a module</span>
 <span class="sd">    Can be used to get resolved value and setup hook</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
         <span class="p">(</span><span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="n">PVOID</span><span class="p">)]</span>
-
-
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="nb">ord</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">transformers</span><span class="p">):</span>
@@ -543,9 +549,17 @@
             <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Setting hook in remote process (use python code injection)&quot;</span><span class="p">)</span>
 
         <span class="n">hook</span> <span class="o">=</span> <span class="n">hooks</span><span class="o">.</span><span class="n">IATHook</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">,</span> <span class="n">types</span><span class="p">)</span>
+        <span class="kn">import</span> <span class="nn">weakref</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">whook</span> <span class="o">=</span> <span class="n">weakref</span><span class="o">.</span><span class="n">ref</span><span class="p">(</span><span class="n">hook</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_destroy</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">hook</span> <span class="o">=</span> <span class="n">hook</span>
         <span class="n">hook</span><span class="o">.</span><span class="n">enable</span><span class="p">()</span></div>
         <span class="k">return</span> <span class="n">hook</span>
+
+    <span class="k">def</span> <span class="nf">on_destroy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="c1"># We cannot know if the hook was enabled here..</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;DESTROY: </span><span class="si">{0}</span><span class="s2"> -&gt; &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">enabled</span><span class="p">))</span>
+        <span class="c1"># import pdb;pdb.set_trace()</span>
+        <span class="c1"># print(args[0]())</span>
 
 <div class="viewcode-block" id="IATEntry.remove_hook"><a class="viewcode-back" href="../../process.html#windows.pe_parse.IATEntry.remove_hook">[docs]</a>    <span class="k">def</span> <span class="nf">remove_hook</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Remove the hook on the entry&quot;&quot;&quot;</span>
@@ -554,6 +568,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">hook</span><span class="o">.</span><span class="n">disable</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">hook</span> <span class="o">=</span> <span class="kc">None</span></div></div>
         <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="c1"># def __del__(self):</span>
+        <span class="c1"># print(self.hook)</span>
+        <span class="c1"># if self.hook:</span>
+            <span class="c1"># print(&quot;LOL BYE {0}&quot;.format(self.hook))</span>
 
 
 <span class="k">class</span> <span class="nc">IMAGE_IMPORT_DESCRIPTOR</span><span class="p">(</span><span class="n">IMAGE_IMPORT_DESCRIPTOR</span><span class="p">):</span> <span class="c1"># TODO: use explicite name winstructs.IMAGE_IMPORT_DESCRIPTOR</span>

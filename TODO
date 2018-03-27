@@ -34,7 +34,7 @@ TODO:
     - winobject\exception.py
         - large part could be rewritten with ctypes-generation extended-def
 
-    - add wonobject/window.py + wonobject/kernobj.py to System()
+    - add winobject/window.py + winobject/kernobj.py to System()
         - Some test/doc on both
 
 
@@ -43,6 +43,12 @@ TODO:
 
     - COM:
         - test https://msdn.microsoft.com/en-us/library/vs/alm/hh846255(v=vs.85).aspx
+
+    - Hook
+        - Probleme with enabled hook + gc
+            - Prevent GC of enabled hook ?
+            - Raise on deletion of enabled hook ?
+                - if I implem __del__ -> we have a __del__ cycle -> no gc (gc.garbage instead..)
 
 
 Documentation

@@ -53,10 +53,11 @@ print("return value = {0}".format(res))
 print("firewall enabled = {0}".format(enabled))
 
 # Test a function taking a POINTER(ICallFrameEvents) (PTR to interface)
+print("Testing a function taking a PTR to a COM interface")
 sink2 = gdef.ICallFrameEvents()
+print("Before call: {0}".format((sink2, sink2.value)))
 interceptor.GetRegisteredSink(sink2)
-print(sink2, sink2.value)
-
+print("After call: {0}".format((sink2, sink2.value)))
 
 
 # (cmd) python samples\com\icallinterceptor.py
@@ -71,3 +72,6 @@ print(sink2, sink2.value)
 # Leaving the sink !
 # return value = 1234
 # firewall enabled = VARIANT_BOOL(True)
+# Testing a function taking a PTR to a COM interface
+# Before call: (<ICallFrameEvents object at 0x066EF3F0>, None)
+# After call: (<ICallFrameEvents object at 0x066EF3F0>, 107934504)

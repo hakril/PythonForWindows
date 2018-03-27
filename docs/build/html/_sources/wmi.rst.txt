@@ -19,7 +19,3 @@ WmiRequester
 """"""""""""
 
 .. autoclass:: WmiRequester
-
-
-
-

@@ -287,16 +287,33 @@ Output
 .. literalinclude:: samples_output\wmi_wmi_request.txt
 
 
+.. _sample_com:
+
+:mod:`windows.com`
+""""""""""""""""""
+
 .. _sample_com_firewall:
 
-using COM: ``INetFwPolicy2``
-""""""""""""""""""""""""""""
+``INetFwPolicy2``
+'''''''''''''''''
 
 .. literalinclude:: ..\..\samples\com\com_inetfwpolicy2.py
 
 Output
 
 .. literalinclude:: samples_output\com_com_inetfwpolicy2.txt
+
+
+.. _sample_com_icallinterceptor:
+
+``ICallInterceptor``
+''''''''''''''''''''
+
+.. literalinclude:: ..\..\samples\com\icallinterceptor.py
+
+Output
+
+.. literalinclude:: samples_output\com_icallinterceptor.txt
 
 
 

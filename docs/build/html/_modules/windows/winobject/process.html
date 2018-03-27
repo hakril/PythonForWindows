@@ -72,44 +72,7 @@
 <span class="sd">&quot;&quot;&quot;Time information about a process&quot;&quot;&quot;</span>
 
 
-<span class="k">class</span> <span class="nc">AutoHandle</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;An abstract class that allow easy handle creation/destruction/wait&quot;&quot;&quot;</span>
-     <span class="c1"># Big bypass to prevent missing reference at programm close..</span>
-    <span class="n">_close_function</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">WinDLL</span><span class="p">(</span><span class="s2">&quot;kernel32&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">CloseHandle</span>
-    <span class="k">def</span> <span class="nf">_get_handle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="s2"> is abstract&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">))</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">handle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;An handle on the object</span>
-
-<span class="sd">        :type: HANDLE</span>
-
-<span class="sd">           .. note::</span>
-<span class="sd">                The handle is automaticaly closed when the object is destroyed</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_handle&quot;</span><span class="p">):</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_handle</span><span class="p">()</span>
-        <span class="n">dbgprint</span><span class="p">(</span><span class="s2">&quot;Open handle </span><span class="si">{0}</span><span class="s2"> for </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="p">),</span> <span class="bp">self</span><span class="p">),</span> <span class="s2">&quot;HANDLE&quot;</span><span class="p">)</span>
-        <span class="c1">#if &quot;DEAD&quot; in str(self):</span>
-        <span class="c1">#    print(&quot;OPEN FOR THE DEADS&quot;)</span>
-        <span class="c1">#    import pdb;pdb.set_trace()</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span>
-
-    <span class="k">def</span> <span class="nf">wait</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">INFINITE</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Wait for the object&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">WaitForSingleObject</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">timeout</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># sys.path is not None -&gt; check if python shutdown</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">sys</span><span class="p">,</span> <span class="s2">&quot;path&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_handle&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="p">:</span>
-            <span class="c1"># Prevent some bug where dbgprint might be None when __del__ is called in a closing process</span>
-            <span class="n">dbgprint</span><span class="p">(</span><span class="s2">&quot;Closing Handle </span><span class="si">{0}</span><span class="s2"> for </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="p">),</span> <span class="bp">self</span><span class="p">),</span> <span class="s2">&quot;HANDLE&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">dbgprint</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_close_function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="p">)</span>
-
-
-<div class="viewcode-block" id="WinThread"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.WinThread">[docs]</a><span class="k">class</span> <span class="nc">WinThread</span><span class="p">(</span><span class="n">AutoHandle</span><span class="p">):</span>
+<div class="viewcode-block" id="WinThread"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.WinThread">[docs]</a><span class="k">class</span> <span class="nc">WinThread</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">AutoHandle</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Represent a thread &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">handle</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">owner_pid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">owner</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -336,7 +299,7 @@
     <span class="c1">#     return Token(token_handle.value)</span>
 
 
-<div class="viewcode-block" id="DeadThread"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.DeadThread">[docs]</a><span class="k">class</span> <span class="nc">DeadThread</span><span class="p">(</span><span class="n">AutoHandle</span><span class="p">):</span>
+<div class="viewcode-block" id="DeadThread"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.DeadThread">[docs]</a><span class="k">class</span> <span class="nc">DeadThread</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">AutoHandle</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;An already dead thread (returned only by API returning a new thread if thread die before being returned)&quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handle</span><span class="p">,</span> <span class="n">tid</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">tid</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -364,7 +327,7 @@
         <span class="k">return</span> <span class="n">res</span><span class="o">.</span><span class="n">value</span>
 
 
-<span class="k">class</span> <span class="nc">Process</span><span class="p">(</span><span class="n">AutoHandle</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Process</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">AutoHandle</span><span class="p">):</span>
     <span class="nd">@utils</span><span class="o">.</span><span class="n">fixedpropety</span>
     <span class="k">def</span> <span class="nf">is_wow_64</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;``True`` if the process is a SysWow64 process (32bit process on 64bits system).</span>
@@ -705,6 +668,12 @@
         <span class="sd">&quot;&quot;&quot;write a qword at ``addr``&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_memory</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s2">&quot;&lt;Q&quot;</span><span class="p">,</span> <span class="n">qword</span><span class="p">))</span>
 
+    <span class="k">def</span> <span class="nf">write_ptr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Write a ``PTR`` at ``addr``&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">32</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_dword</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_qword</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">time_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The time information of the process (creation, kernel/user time, exit time)</span>
@@ -778,7 +747,7 @@
     <span class="c1">#     winproxy.OpenProcessToken(self.handle, TOKEN_QUERY, byref(token_handle))</span>
     <span class="c1">#     return Token(token_handle.value)</span>
 
-<div class="viewcode-block" id="CurrentThread"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.CurrentThread">[docs]</a><span class="k">class</span> <span class="nc">CurrentThread</span><span class="p">(</span><span class="n">AutoHandle</span><span class="p">):</span>
+<div class="viewcode-block" id="CurrentThread"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.CurrentThread">[docs]</a><span class="k">class</span> <span class="nc">CurrentThread</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">AutoHandle</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;The current thread&quot;&quot;&quot;</span>
     <span class="nd">@property</span> <span class="c1">#It&#39;s not a fixedpropety because executing thread might change</span>
     <span class="k">def</span> <span class="nf">tid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -913,8 +882,12 @@
         <span class="k">return</span> <span class="n">WinThread</span><span class="o">.</span><span class="n">_from_handle</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
 
 <div class="viewcode-block" id="CurrentProcess.load_library"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.CurrentProcess.load_library">[docs]</a>    <span class="k">def</span> <span class="nf">load_library</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dll_path</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Load the library in current process&quot;&quot;&quot;</span></div>
-        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">LoadLibraryA</span><span class="p">(</span><span class="n">dll_path</span><span class="p">)</span>
+        <span class="sd">&quot;&quot;&quot;Load the library in current process</span>
+
+<span class="sd">        :rtype: :class:`LoadedModule`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dllbase</span> <span class="o">=</span>  <span class="n">winproxy</span><span class="o">.</span><span class="n">LoadLibraryA</span><span class="p">(</span><span class="n">dll_path</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="p">[</span><span class="n">m</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">peb</span><span class="o">.</span><span class="n">modules</span> <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">baseaddr</span> <span class="o">==</span> <span class="n">dllbase</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 
 <div class="viewcode-block" id="CurrentProcess.execute"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.CurrentProcess.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">code</span><span class="p">,</span> <span class="n">parameter</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Execute native code ``code`` in the current thread.</span>
@@ -946,6 +919,8 @@
         <span class="n">token_handle</span> <span class="o">=</span> <span class="n">HANDLE</span><span class="p">()</span>
         <span class="n">winproxy</span><span class="o">.</span><span class="n">OpenProcessToken</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="n">byref</span><span class="p">(</span><span class="n">token_handle</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">Token</span><span class="p">(</span><span class="n">token_handle</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+
+    <span class="c1"># TODO: use ctypes.string_ad / ctypes.wstring_at for read_string / read_wstring ?</span>
 
 </div>
     <span class="n">token</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">open_token</span><span class="p">)</span>
@@ -986,7 +961,7 @@
 <span class="sd">        :type: :class:`str`</span>
 <span class="sd">		&quot;&quot;&quot;</span>
         <span class="n">buffer</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_buffer</span><span class="p">(</span><span class="mh">0x1024</span><span class="p">)</span>
-        <span class="n">rsize</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">GetProcessImageFileNameA</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">buffer</span><span class="p">)</span>
+        <span class="n">rsize</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">GetProcessImageFileNameA</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">limited_handle</span><span class="p">,</span> <span class="n">buffer</span><span class="p">)</span>
         <span class="c1"># GetProcessImageFileNameA returns the fullpath</span>
         <span class="k">return</span> <span class="n">buffer</span><span class="p">[:</span><span class="n">rsize</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
@@ -1091,8 +1066,12 @@
         <span class="k">return</span> <span class="n">WinThread</span><span class="o">.</span><span class="n">_from_handle</span><span class="p">(</span><span class="n">winproxy</span><span class="o">.</span><span class="n">CreateRemoteThread</span><span class="p">(</span><span class="n">hProcess</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">lpStartAddress</span><span class="o">=</span><span class="n">addr</span><span class="p">,</span> <span class="n">lpParameter</span><span class="o">=</span><span class="n">param</span><span class="p">))</span>
 
 <div class="viewcode-block" id="WinProcess.load_library"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.WinProcess.load_library">[docs]</a>    <span class="k">def</span> <span class="nf">load_library</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dll_path</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Load the library in remote process&quot;&quot;&quot;</span></div>
-        <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">injection</span><span class="o">.</span><span class="n">load_dll_in_remote_process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dll_path</span><span class="p">)</span>
+        <span class="sd">&quot;&quot;&quot;Load the library in remote process</span>
+
+<span class="sd">        :rtype: :class:`RemoteLoadedModule`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dllbase</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">injection</span><span class="o">.</span><span class="n">load_dll_in_remote_process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dll_path</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="p">[</span><span class="n">m</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">peb</span><span class="o">.</span><span class="n">modules</span> <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">baseaddr</span> <span class="o">==</span> <span class="n">dllbase</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 
 <div class="viewcode-block" id="WinProcess.execute_python"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.WinProcess.execute_python">[docs]</a>    <span class="k">def</span> <span class="nf">execute_python</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pycode</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Execute Python code into the remote process.</span>
@@ -1200,7 +1179,8 @@
 <span class="n">know_integrity_level_mapper</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span><span class="o">*</span><span class="n">KNOW_INTEGRITY_LEVEL</span><span class="p">)</span>
 
 <span class="c1"># Create ProcessToken and Thread Token objects ?</span>
-<div class="viewcode-block" id="Token"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.Token">[docs]</a><span class="k">class</span> <span class="nc">Token</span><span class="p">(</span><span class="n">AutoHandle</span><span class="p">):</span>
+<span class="c1"># token.py ?</span>
+<div class="viewcode-block" id="Token"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.Token">[docs]</a><span class="k">class</span> <span class="nc">Token</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">AutoHandle</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;The token of a process&quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handle</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span> <span class="o">=</span> <span class="n">handle</span>
@@ -1253,6 +1233,12 @@
     <span class="k">def</span> <span class="nf">username</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The username of the token&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_user_and_computer_name</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">duplicate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">access_rigth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">attributes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">impersonation_level</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">SecurityImpersonation</span><span class="p">,</span> <span class="n">toktype</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">TokenPrimary</span><span class="p">):</span>
+        <span class="n">newtoken</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">HANDLE</span><span class="p">()</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">DuplicateTokenEx</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">access_rigth</span><span class="p">,</span> <span class="n">attributes</span><span class="p">,</span> <span class="n">impersonation_level</span><span class="p">,</span> <span class="n">toktype</span><span class="p">,</span> <span class="n">newtoken</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)(</span><span class="n">newtoken</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+
 
     <span class="k">def</span> <span class="nf">_user_and_computer_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">tok_usr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">token_user</span>

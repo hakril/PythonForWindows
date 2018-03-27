@@ -2,6 +2,265 @@
 
 Winstructs
 ----------
+tagMULTI_QI
+'''''''''''
+.. class:: MULTI_QI
+
+    Alias for :class:`tagMULTI_QI`
+
+.. class:: tagMULTI_QI
+
+    .. attribute:: pIID
+
+        :class:`IID`
+
+
+    .. attribute:: pItf
+
+        :class:`PVOID`
+
+
+    .. attribute:: hr
+
+        :class:`HRESULT`
+
+_COAUTHIDENTITY
+'''''''''''''''
+.. class:: COAUTHIDENTITY
+
+    Alias for :class:`_COAUTHIDENTITY`
+
+.. class:: _COAUTHIDENTITY
+
+    .. attribute:: User
+
+        :class:`USHORT`
+
+
+    .. attribute:: UserLength
+
+        :class:`ULONG`
+
+
+    .. attribute:: Domain
+
+        :class:`USHORT`
+
+
+    .. attribute:: DomainLength
+
+        :class:`ULONG`
+
+
+    .. attribute:: Password
+
+        :class:`USHORT`
+
+
+    .. attribute:: PasswordLength
+
+        :class:`ULONG`
+
+
+    .. attribute:: Flags
+
+        :class:`ULONG`
+
+_COAUTHINFO
+'''''''''''
+.. class:: COAUTHINFO
+
+    Alias for :class:`_COAUTHINFO`
+
+.. class:: _COAUTHINFO
+
+    .. attribute:: dwAuthnSvc
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwAuthzSvc
+
+        :class:`DWORD`
+
+
+    .. attribute:: pwszServerPrincName
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: dwAuthnLevel
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwImpersonationLevel
+
+        :class:`DWORD`
+
+
+    .. attribute:: pAuthIdentityData
+
+        :class:`COAUTHIDENTITY`
+
+
+    .. attribute:: dwCapabilities
+
+        :class:`DWORD`
+
+_COSERVERINFO
+'''''''''''''
+.. class:: COSERVERINFO
+
+    Alias for :class:`_COSERVERINFO`
+
+.. class:: _COSERVERINFO
+
+    .. attribute:: dwReserved1
+
+        :class:`DWORD`
+
+
+    .. attribute:: pwszName
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: pAuthInfo
+
+        :class:`COAUTHINFO`
+
+
+    .. attribute:: dwReserved2
+
+        :class:`DWORD`
+
+_CALLFRAMEPARAMINFO
+'''''''''''''''''''
+.. class:: CALLFRAMEPARAMINFO
+
+    Alias for :class:`_CALLFRAMEPARAMINFO`
+
+.. class:: _CALLFRAMEPARAMINFO
+
+    .. attribute:: fIn
+
+        :class:`BOOLEAN`
+
+
+    .. attribute:: fOut
+
+        :class:`BOOLEAN`
+
+
+    .. attribute:: stackOffset
+
+        :class:`ULONG`
+
+
+    .. attribute:: cbParam
+
+        :class:`ULONG`
+
+_CALLFRAMEINFO
+''''''''''''''
+.. class:: CALLFRAMEINFO
+
+    Alias for :class:`_CALLFRAMEINFO`
+
+.. class:: _CALLFRAMEINFO
+
+    .. attribute:: iMethod
+
+        :class:`ULONG`
+
+
+    .. attribute:: fHasInValues
+
+        :class:`BOOL`
+
+
+    .. attribute:: fHasInOutValues
+
+        :class:`BOOL`
+
+
+    .. attribute:: fHasOutValues
+
+        :class:`BOOL`
+
+
+    .. attribute:: fDerivesFromIDispatch
+
+        :class:`BOOL`
+
+
+    .. attribute:: cInInterfacesMax
+
+        :class:`LONG`
+
+
+    .. attribute:: cInOutInterfacesMax
+
+        :class:`LONG`
+
+
+    .. attribute:: cOutInterfacesMax
+
+        :class:`LONG`
+
+
+    .. attribute:: cTopLevelInInterfaces
+
+        :class:`LONG`
+
+
+    .. attribute:: iid
+
+        :class:`IID`
+
+
+    .. attribute:: cMethod
+
+        :class:`ULONG`
+
+
+    .. attribute:: cParams
+
+        :class:`ULONG`
+
+_CALLFRAME_MARSHALCONTEXT
+'''''''''''''''''''''''''
+.. class:: CALLFRAME_MARSHALCONTEXT
+
+    Alias for :class:`_CALLFRAME_MARSHALCONTEXT`
+
+.. class:: _CALLFRAME_MARSHALCONTEXT
+
+    .. attribute:: fIn
+
+        :class:`BOOLEAN`
+
+
+    .. attribute:: dwDestContext
+
+        :class:`DWORD`
+
+
+    .. attribute:: pvDestContext
+
+        :class:`LPVOID`
+
+
+    .. attribute:: mshlmgr
+
+        :class:`PVOID`
+
+
+    .. attribute:: guidTransferSyntax
+
+        :class:`GUID`
+
 _GUID
 '''''
 .. class:: REFCLSID
@@ -12217,6 +12476,235 @@ _EVENTLOG_FULL_INFORMATION
 
         :class:`DWORD`
 
+_ANON_evt_variant_sub_union
+'''''''''''''''''''''''''''
+.. class:: _ANON_evt_variant_sub_union
+
+    .. attribute:: BooleanVal
+
+        :class:`BOOL`
+
+
+    .. attribute:: SByteVal
+
+        :class:`INT8`
+
+
+    .. attribute:: Int16Val
+
+        :class:`INT16`
+
+
+    .. attribute:: Int32Val
+
+        :class:`INT32`
+
+
+    .. attribute:: Int64Val
+
+        :class:`INT64`
+
+
+    .. attribute:: ByteVal
+
+        :class:`UINT8`
+
+
+    .. attribute:: UInt16Val
+
+        :class:`UINT16`
+
+
+    .. attribute:: UInt32Val
+
+        :class:`UINT32`
+
+
+    .. attribute:: UInt64Val
+
+        :class:`UINT64`
+
+
+    .. attribute:: SingleVal
+
+        :class:`FLOAT`
+
+
+    .. attribute:: DoubleVal
+
+        :class:`DOUBLE`
+
+
+    .. attribute:: FileTimeVal
+
+        :class:`ULONGLONG`
+
+
+    .. attribute:: SysTimeVal
+
+        :class:`SYSTEMTIME`
+
+
+    .. attribute:: GuidVal
+
+        :class:`GUID`
+
+
+    .. attribute:: StringVal
+
+        :class:`LPCWSTR`
+
+
+    .. attribute:: AnsiStringVal
+
+        :class:`LPCSTR`
+
+
+    .. attribute:: BinaryVal
+
+        :class:`PBYTE`
+
+
+    .. attribute:: SidVal
+
+        :class:`PSID`
+
+
+    .. attribute:: SizeTVal
+
+        :class:`SIZE_T`
+
+
+    .. attribute:: EvtHandleVal
+
+        :class:`EVT_HANDLE`
+
+
+    .. attribute:: BooleanArr
+
+        :class:`BOOL`
+
+
+    .. attribute:: SByteArr
+
+        :class:`INT8`
+
+
+    .. attribute:: Int16Arr
+
+        :class:`INT16`
+
+
+    .. attribute:: Int32Arr
+
+        :class:`INT32`
+
+
+    .. attribute:: Int64Arr
+
+        :class:`INT64`
+
+
+    .. attribute:: ByteArr
+
+        :class:`UINT8`
+
+
+    .. attribute:: UInt16Arr
+
+        :class:`UINT16`
+
+
+    .. attribute:: UInt32Arr
+
+        :class:`UINT32`
+
+
+    .. attribute:: UInt64Arr
+
+        :class:`UINT64`
+
+
+    .. attribute:: SingleArr
+
+        :class:`FLOAT`
+
+
+    .. attribute:: DoubleArr
+
+        :class:`DOUBLE`
+
+
+    .. attribute:: FileTimeArr
+
+        :class:`FILETIME`
+
+
+    .. attribute:: SysTimeArr
+
+        :class:`SYSTEMTIME`
+
+
+    .. attribute:: GuidArr
+
+        :class:`GUID`
+
+
+    .. attribute:: StringArr
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: AnsiStringArr
+
+        :class:`LPSTR`
+
+
+    .. attribute:: SidArr
+
+        :class:`PSID`
+
+
+    .. attribute:: SizeTArr
+
+        :class:`SIZE_T`
+
+
+    .. attribute:: XmlVal
+
+        :class:`LPCWSTR`
+
+
+    .. attribute:: XmlValArr
+
+        :class:`LPCWSTR`
+
+_EVT_VARIANT
+''''''''''''
+.. class:: PEVT_VARIANT
+
+    Pointer to :class:`_EVT_VARIANT`
+
+.. class:: EVT_VARIANT
+
+    Alias for :class:`_EVT_VARIANT`
+
+.. class:: _EVT_VARIANT
+
+    .. attribute:: _VARIANT_VALUE
+
+        :class:`_ANON_evt_variant_sub_union`
+
+
+    .. attribute:: Count
+
+        :class:`DWORD`
+
+
+    .. attribute:: Type
+
+        :class:`DWORD`
+
 _FILE_INTERNAL_INFORMATION
 ''''''''''''''''''''''''''
 .. class:: FILE_INTERNAL_INFORMATION
@@ -12563,6 +13051,42 @@ _FILE_ALL_INFORMATION
 
 WinEnums
 --------
+_CALLFRAME_COPY
+'''''''''''''''
+.. class:: CALLFRAME_COPY
+
+    Alias for :class:`_CALLFRAME_COPY`
+
+
+.. class:: _CALLFRAME_COPY
+
+
+    .. attribute:: CALLFRAME_COPY_NESTED(1)
+
+
+    .. attribute:: CALLFRAME_COPY_INDEPENDENT(2)
+
+tagMSHLFLAGS
+''''''''''''
+.. class:: MSHLFLAGS
+
+    Alias for :class:`tagMSHLFLAGS`
+
+
+.. class:: tagMSHLFLAGS
+
+
+    .. attribute:: MSHLFLAGS_NORMAL(0)
+
+
+    .. attribute:: MSHLFLAGS_TABLESTRONG(1)
+
+
+    .. attribute:: MSHLFLAGS_TABLEWEAK(2)
+
+
+    .. attribute:: MSHLFLAGS_NOPING(4)
+
 _SYSTEM_INFORMATION_CLASS
 '''''''''''''''''''''''''
 .. class:: SYSTEM_INFORMATION_CLASS
@@ -13822,6 +14346,26 @@ _TOKEN_INFORMATION_CLASS
 
 
     .. attribute:: MaxTokenInfoClass(41)
+
+tagTOKEN_TYPE
+'''''''''''''
+.. class:: TOKEN_TYPE
+
+    Alias for :class:`tagTOKEN_TYPE`
+
+
+.. class:: PTOKEN_TYPE
+
+    Pointer to :class:`tagTOKEN_TYPE`
+
+
+.. class:: tagTOKEN_TYPE
+
+
+    .. attribute:: TokenPrimary(1)
+
+
+    .. attribute:: TokenImpersonation(2)
 
 _FS_INFORMATION_CLASS
 '''''''''''''''''''''
@@ -15280,6 +15824,549 @@ _BG_JOB_TYPE
 
 
     .. attribute:: BG_JOB_TYPE_UPLOAD_REPLY(2)
+
+_EVT_VARIANT_TYPE
+'''''''''''''''''
+.. class:: EVT_VARIANT_TYPE
+
+    Alias for :class:`_EVT_VARIANT_TYPE`
+
+
+.. class:: _EVT_VARIANT_TYPE
+
+
+    .. attribute:: EvtVarTypeNull(0)
+
+
+    .. attribute:: EvtVarTypeString(1)
+
+
+    .. attribute:: EvtVarTypeAnsiString(2)
+
+
+    .. attribute:: EvtVarTypeSByte(3)
+
+
+    .. attribute:: EvtVarTypeByte(4)
+
+
+    .. attribute:: EvtVarTypeInt16(5)
+
+
+    .. attribute:: EvtVarTypeUInt16(6)
+
+
+    .. attribute:: EvtVarTypeInt32(7)
+
+
+    .. attribute:: EvtVarTypeUInt32(8)
+
+
+    .. attribute:: EvtVarTypeInt64(9)
+
+
+    .. attribute:: EvtVarTypeUInt64(10)
+
+
+    .. attribute:: EvtVarTypeSingle(11)
+
+
+    .. attribute:: EvtVarTypeDouble(12)
+
+
+    .. attribute:: EvtVarTypeBoolean(13)
+
+
+    .. attribute:: EvtVarTypeBinary(14)
+
+
+    .. attribute:: EvtVarTypeGuid(15)
+
+
+    .. attribute:: EvtVarTypeSizeT(16)
+
+
+    .. attribute:: EvtVarTypeFileTime(17)
+
+
+    .. attribute:: EvtVarTypeSysTime(18)
+
+
+    .. attribute:: EvtVarTypeSid(19)
+
+
+    .. attribute:: EvtVarTypeHexInt32(20)
+
+
+    .. attribute:: EvtVarTypeHexInt64(21)
+
+
+    .. attribute:: EvtVarTypeEvtHandle(32)
+
+
+    .. attribute:: EvtVarTypeEvtXml(35)
+
+_EVT_RENDER_CONTEXT_FLAGS
+'''''''''''''''''''''''''
+.. class:: EVT_RENDER_CONTEXT_FLAGS
+
+    Alias for :class:`_EVT_RENDER_CONTEXT_FLAGS`
+
+
+.. class:: _EVT_RENDER_CONTEXT_FLAGS
+
+
+    .. attribute:: EvtRenderContextValues(0)
+
+
+    .. attribute:: EvtRenderContextSystem(1)
+
+
+    .. attribute:: EvtRenderContextUser(2)
+
+_EVT_SYSTEM_PROPERTY_ID
+'''''''''''''''''''''''
+.. class:: EVT_SYSTEM_PROPERTY_ID
+
+    Alias for :class:`_EVT_SYSTEM_PROPERTY_ID`
+
+
+.. class:: _EVT_SYSTEM_PROPERTY_ID
+
+
+    .. attribute:: EvtSystemProviderName(0)
+
+
+    .. attribute:: EvtSystemProviderGuid(1)
+
+
+    .. attribute:: EvtSystemEventID(2)
+
+
+    .. attribute:: EvtSystemQualifiers(3)
+
+
+    .. attribute:: EvtSystemLevel(4)
+
+
+    .. attribute:: EvtSystemTask(5)
+
+
+    .. attribute:: EvtSystemOpcode(6)
+
+
+    .. attribute:: EvtSystemKeywords(7)
+
+
+    .. attribute:: EvtSystemTimeCreated(8)
+
+
+    .. attribute:: EvtSystemEventRecordId(9)
+
+
+    .. attribute:: EvtSystemActivityID(10)
+
+
+    .. attribute:: EvtSystemRelatedActivityID(11)
+
+
+    .. attribute:: EvtSystemProcessID(12)
+
+
+    .. attribute:: EvtSystemThreadID(13)
+
+
+    .. attribute:: EvtSystemChannel(14)
+
+
+    .. attribute:: EvtSystemComputer(15)
+
+
+    .. attribute:: EvtSystemUserID(16)
+
+
+    .. attribute:: EvtSystemVersion(17)
+
+
+    .. attribute:: EvtSystemPropertyIdEND(18)
+
+_EVT_RENDER_FLAGS
+'''''''''''''''''
+.. class:: EVT_RENDER_FLAGS
+
+    Alias for :class:`_EVT_RENDER_FLAGS`
+
+
+.. class:: _EVT_RENDER_FLAGS
+
+
+    .. attribute:: EvtRenderEventValues(0)
+
+
+    .. attribute:: EvtRenderEventXml(1)
+
+
+    .. attribute:: EvtRenderBookmark(2)
+
+_EVT_QUERY_FLAGS
+''''''''''''''''
+.. class:: EVT_QUERY_FLAGS
+
+    Alias for :class:`_EVT_QUERY_FLAGS`
+
+
+.. class:: _EVT_QUERY_FLAGS
+
+
+    .. attribute:: EvtQueryChannelPath(1)
+
+
+    .. attribute:: EvtQueryFilePath(2)
+
+
+    .. attribute:: EvtQueryForwardDirection(256)
+
+
+    .. attribute:: EvtQueryReverseDirection(512)
+
+
+    .. attribute:: EvtQueryTolerateQueryErrors(4096)
+
+_EVT_LOG_PROPERTY_ID
+''''''''''''''''''''
+.. class:: EVT_LOG_PROPERTY_ID
+
+    Alias for :class:`_EVT_LOG_PROPERTY_ID`
+
+
+.. class:: _EVT_LOG_PROPERTY_ID
+
+
+    .. attribute:: EvtLogCreationTime(0)
+
+
+    .. attribute:: EvtLogLastAccessTime(1)
+
+
+    .. attribute:: EvtLogLastWriteTime(2)
+
+
+    .. attribute:: EvtLogFileSize(3)
+
+
+    .. attribute:: EvtLogAttributes(4)
+
+
+    .. attribute:: EvtLogNumberOfLogRecords(5)
+
+
+    .. attribute:: EvtLogOldestRecordNumber(6)
+
+
+    .. attribute:: EvtLogFull(7)
+
+_EVT_OPEN_LOG_FLAGS
+'''''''''''''''''''
+.. class:: EVT_OPEN_LOG_FLAGS
+
+    Alias for :class:`_EVT_OPEN_LOG_FLAGS`
+
+
+.. class:: _EVT_OPEN_LOG_FLAGS
+
+
+    .. attribute:: EvtOpenChannelPath(1)
+
+
+    .. attribute:: EvtOpenFilePath(2)
+
+_EVT_CHANNEL_CONFIG_PROPERTY_ID
+'''''''''''''''''''''''''''''''
+.. class:: EVT_CHANNEL_CONFIG_PROPERTY_ID
+
+    Alias for :class:`_EVT_CHANNEL_CONFIG_PROPERTY_ID`
+
+
+.. class:: _EVT_CHANNEL_CONFIG_PROPERTY_ID
+
+
+    .. attribute:: EvtChannelConfigEnabled(0)
+
+
+    .. attribute:: EvtChannelConfigIsolation(1)
+
+
+    .. attribute:: EvtChannelConfigType(2)
+
+
+    .. attribute:: EvtChannelConfigOwningPublisher(3)
+
+
+    .. attribute:: EvtChannelConfigClassicEventlog(4)
+
+
+    .. attribute:: EvtChannelConfigAccess(5)
+
+
+    .. attribute:: EvtChannelLoggingConfigRetention(6)
+
+
+    .. attribute:: EvtChannelLoggingConfigAutoBackup(7)
+
+
+    .. attribute:: EvtChannelLoggingConfigMaxSize(8)
+
+
+    .. attribute:: EvtChannelLoggingConfigLogFilePath(9)
+
+
+    .. attribute:: EvtChannelPublishingConfigLevel(10)
+
+
+    .. attribute:: EvtChannelPublishingConfigKeywords(11)
+
+
+    .. attribute:: EvtChannelPublishingConfigControlGuid(12)
+
+
+    .. attribute:: EvtChannelPublishingConfigBufferSize(13)
+
+
+    .. attribute:: EvtChannelPublishingConfigMinBuffers(14)
+
+
+    .. attribute:: EvtChannelPublishingConfigMaxBuffers(15)
+
+
+    .. attribute:: EvtChannelPublishingConfigLatency(16)
+
+
+    .. attribute:: EvtChannelPublishingConfigClockType(17)
+
+
+    .. attribute:: EvtChannelPublishingConfigSidType(18)
+
+
+    .. attribute:: EvtChannelPublisherList(19)
+
+
+    .. attribute:: EvtChannelPublishingConfigFileMax(20)
+
+
+    .. attribute:: EvtChannelConfigPropertyIdEND(21)
+
+_EVT_CHANNEL_TYPE
+'''''''''''''''''
+.. class:: EVT_CHANNEL_TYPE
+
+    Alias for :class:`_EVT_CHANNEL_TYPE`
+
+
+.. class:: _EVT_CHANNEL_TYPE
+
+
+    .. attribute:: EvtChannelTypeAdmin(0)
+
+
+    .. attribute:: EvtChannelTypeOperational(1)
+
+
+    .. attribute:: EvtChannelTypeAnalytic(2)
+
+
+    .. attribute:: EvtChannelTypeDebug(3)
+
+_EVT_CHANNEL_ISOLATION_TYPE
+'''''''''''''''''''''''''''
+.. class:: EVT_CHANNEL_ISOLATION_TYPE
+
+    Alias for :class:`_EVT_CHANNEL_ISOLATION_TYPE`
+
+
+.. class:: _EVT_CHANNEL_ISOLATION_TYPE
+
+
+    .. attribute:: EvtChannelIsolationTypeApplication(0)
+
+
+    .. attribute:: EvtChannelIsolationTypeSystem(1)
+
+
+    .. attribute:: EvtChannelIsolationTypeCustom(2)
+
+_EVT_EVENT_METADATA_PROPERTY_ID
+'''''''''''''''''''''''''''''''
+.. class:: EVT_EVENT_METADATA_PROPERTY_ID
+
+    Alias for :class:`_EVT_EVENT_METADATA_PROPERTY_ID`
+
+
+.. class:: _EVT_EVENT_METADATA_PROPERTY_ID
+
+
+    .. attribute:: EventMetadataEventID(0)
+
+
+    .. attribute:: EventMetadataEventVersion(1)
+
+
+    .. attribute:: EventMetadataEventChannel(2)
+
+
+    .. attribute:: EventMetadataEventLevel(3)
+
+
+    .. attribute:: EventMetadataEventOpcode(4)
+
+
+    .. attribute:: EventMetadataEventTask(5)
+
+
+    .. attribute:: EventMetadataEventKeyword(6)
+
+
+    .. attribute:: EventMetadataEventMessageID(7)
+
+
+    .. attribute:: EventMetadataEventTemplate(8)
+
+
+    .. attribute:: EvtEventMetadataPropertyIdEND(9)
+
+_EVT_PUBLISHER_METADATA_PROPERTY_ID
+'''''''''''''''''''''''''''''''''''
+.. class:: EVT_PUBLISHER_METADATA_PROPERTY_ID
+
+    Alias for :class:`_EVT_PUBLISHER_METADATA_PROPERTY_ID`
+
+
+.. class:: _EVT_PUBLISHER_METADATA_PROPERTY_ID
+
+
+    .. attribute:: EvtPublisherMetadataPublisherGuid(0)
+
+
+    .. attribute:: EvtPublisherMetadataResourceFilePath(1)
+
+
+    .. attribute:: EvtPublisherMetadataParameterFilePath(2)
+
+
+    .. attribute:: EvtPublisherMetadataMessageFilePath(3)
+
+
+    .. attribute:: EvtPublisherMetadataHelpLink(4)
+
+
+    .. attribute:: EvtPublisherMetadataPublisherMessageID(5)
+
+
+    .. attribute:: EvtPublisherMetadataChannelReferences(6)
+
+
+    .. attribute:: EvtPublisherMetadataChannelReferencePath(7)
+
+
+    .. attribute:: EvtPublisherMetadataChannelReferenceIndex(8)
+
+
+    .. attribute:: EvtPublisherMetadataChannelReferenceID(9)
+
+
+    .. attribute:: EvtPublisherMetadataChannelReferenceFlags(10)
+
+
+    .. attribute:: EvtPublisherMetadataChannelReferenceMessageID(11)
+
+
+    .. attribute:: EvtPublisherMetadataLevels(12)
+
+
+    .. attribute:: EvtPublisherMetadataLevelName(13)
+
+
+    .. attribute:: EvtPublisherMetadataLevelValue(14)
+
+
+    .. attribute:: EvtPublisherMetadataLevelMessageID(15)
+
+
+    .. attribute:: EvtPublisherMetadataTasks(16)
+
+
+    .. attribute:: EvtPublisherMetadataTaskName(17)
+
+
+    .. attribute:: EvtPublisherMetadataTaskEventGuid(18)
+
+
+    .. attribute:: EvtPublisherMetadataTaskValue(19)
+
+
+    .. attribute:: EvtPublisherMetadataTaskMessageID(20)
+
+
+    .. attribute:: EvtPublisherMetadataOpcodes(21)
+
+
+    .. attribute:: EvtPublisherMetadataOpcodeName(22)
+
+
+    .. attribute:: EvtPublisherMetadataOpcodeValue(23)
+
+
+    .. attribute:: EvtPublisherMetadataOpcodeMessageID(24)
+
+
+    .. attribute:: EvtPublisherMetadataKeywords(25)
+
+
+    .. attribute:: EvtPublisherMetadataKeywordName(26)
+
+
+    .. attribute:: EvtPublisherMetadataKeywordValue(27)
+
+
+    .. attribute:: EvtPublisherMetadataKeywordMessageID(28)
+
+
+    .. attribute:: EvtPublisherMetadataPropertyIdEND(29)
+
+_EVT_FORMAT_MESSAGE_FLAGS
+'''''''''''''''''''''''''
+.. class:: EVT_FORMAT_MESSAGE_FLAGS
+
+    Alias for :class:`_EVT_FORMAT_MESSAGE_FLAGS`
+
+
+.. class:: _EVT_FORMAT_MESSAGE_FLAGS
+
+
+    .. attribute:: EvtFormatMessageEvent(1)
+
+
+    .. attribute:: EvtFormatMessageLevel(2)
+
+
+    .. attribute:: EvtFormatMessageTask(3)
+
+
+    .. attribute:: EvtFormatMessageOpcode(4)
+
+
+    .. attribute:: EvtFormatMessageKeyword(5)
+
+
+    .. attribute:: EvtFormatMessageChannel(6)
+
+
+    .. attribute:: EvtFormatMessageProvider(7)
+
+
+    .. attribute:: EvtFormatMessageId(8)
+
+
+    .. attribute:: EvtFormatMessageXml(9)
 
 _FILE_INFORMATION_CLASS
 '''''''''''''''''''''''

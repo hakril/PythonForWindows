@@ -57,6 +57,7 @@
 <span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="k">import</span> <span class="n">wmi</span>
 <span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="k">import</span> <span class="n">kernobj</span>
 <span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="k">import</span> <span class="n">handle</span>
+<span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="k">import</span> <span class="n">evtlog</span>
 
 <span class="kn">from</span> <span class="nn">windows.generated_def.winstructs</span> <span class="k">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">windows.dbgprint</span> <span class="k">import</span> <span class="n">dbgprint</span>
@@ -125,6 +126,11 @@
 
 <span class="sd">        :type: :class:`~windows.winobject.wmi.WmiManager`&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">wmi</span><span class="o">.</span><span class="n">WmiManager</span><span class="p">()</span>
+
+    <span class="nd">@utils</span><span class="o">.</span><span class="n">fixedpropety</span>
+    <span class="k">def</span> <span class="nf">evtlog</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">evtlog</span><span class="o">.</span><span class="n">EvtlogManager</span><span class="p">()</span>
+
 
     <span class="c1">#TODO: use GetComputerNameExA ? and recover other names ?</span>
     <span class="nd">@utils</span><span class="o">.</span><span class="n">fixedpropety</span>
@@ -253,6 +259,8 @@
         <span class="c1"># This returns the last version where ntdll was updated</span>
         <span class="c1"># Should look at HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion</span>
         <span class="c1"># values:  CurrentBuild + UBR</span>
+        <span class="c1"># windows.system.registry(r&quot;HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion&quot;)[&quot;CurrentBuild&quot;].value</span>
+        <span class="c1"># windows.system.registry(r&quot;HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion&quot;)[&quot;UBR&quot;].value</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_file_version</span><span class="p">(</span><span class="s2">&quot;comctl32&quot;</span><span class="p">)</span>
 
     <span class="nd">@staticmethod</span>

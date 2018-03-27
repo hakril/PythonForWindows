@@ -16,6 +16,7 @@ from windows.generated_def.interfaces import generate_IID, IID
 # "-".join("{:02X}".format(c) for c in struct.unpack("<IHHHBBBBBB", x))
 
 def init():
+    """Init COM with some default parameters"""
     try:
         t = winproxy.CoInitializeEx()
     except WindowsError as e:
@@ -29,6 +30,7 @@ def initsecurity(): # Should take some parameters..
 
 
 def create_instance(clsiid, targetinterface, custom_iid=None, context=CLSCTX_INPROC_SERVER | CLSCTX_LOCAL_SERVER):
+    """A simple wrapper around ``CoCreateInstance <https://msdn.microsoft.com/en-us/library/windows/desktop/ms686615(v=vs.85).aspx>``"""
     if custom_iid is None:
         custom_iid = targetinterface.IID
     return winproxy.CoCreateInstance(byref(clsiid), None, context, byref(custom_iid), byref(targetinterface))
@@ -190,6 +192,7 @@ ImprovedVariant.MAPPER = {
 
 
 class COMImplementation(object):
+    """The base class to implements COM object respecting a given interface"""
     IMPLEMENT = None
 
     def get_index_of_method(self, method):
@@ -236,13 +239,16 @@ class COMImplementation(object):
         self._as_parameter_ = ctypes.addressof(self.vtable_pointer)
 
     def QueryInterface(self, this, piid, result):
+        """Default ``QueryInterface`` implementation that returns ``self`` if piid is the implemented interface"""
         if piid[0] in (IUnknown.IID, self.IMPLEMENT.IID):
             result[0] = this
             return 1
         return E_NOINTERFACE
 
     def AddRef(self, *args):
+        """Default ``AddRef`` implementation that returns ``1``"""
         return 1
 
     def Release(self, *args):
+        """Default ``Release`` implementation that returns ``1``"""
         return 0

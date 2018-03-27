@@ -38,9 +38,13 @@
             
   <h1>Source code for windows.utils.pythonutils</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;utils fonctions non windows-related&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">ctypes</span>
 <span class="kn">import</span> <span class="nn">_ctypes</span>
-<span class="kn">from</span> <span class="nn">windows.generated_def</span> <span class="k">import</span> <span class="n">Flag</span><span class="p">,</span> <span class="n">LPCSTR</span><span class="p">,</span> <span class="n">LPWSTR</span>
+<span class="kn">from</span> <span class="nn">windows.generated_def</span> <span class="k">import</span> <span class="n">Flag</span><span class="p">,</span> <span class="n">LPCSTR</span><span class="p">,</span> <span class="n">LPWSTR</span><span class="p">,</span> <span class="n">INFINITE</span>
+
+<span class="kn">from</span> <span class="nn">windows.dbgprint</span> <span class="k">import</span> <span class="n">dbgprint</span>
+<span class="kn">from</span> <span class="nn">windows</span> <span class="k">import</span> <span class="n">winproxy</span>
 
 
 <span class="k">def</span> <span class="nf">buffer</span><span class="p">(</span><span class="n">size</span><span class="p">):</span> <span class="c1"># Test</span>
@@ -51,6 +55,26 @@
     <span class="k">class</span> <span class="nc">ImprovedCtypesBufferImpl</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">Array</span><span class="p">):</span>
         <span class="n">_length_</span> <span class="o">=</span> <span class="n">size</span>
         <span class="n">_type_</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_char</span>
+        <span class="k">def</span> <span class="nf">lol</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="k">return</span> <span class="s2">&quot;lol&quot;</span>
+
+        <span class="k">def</span> <span class="nf">as_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">LPCSTR</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
+
+        <span class="k">def</span> <span class="nf">as_wstring</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">LPWSTR</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="k">return</span> <span class="n">ImprovedCtypesBufferImpl</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">wbuffer</span><span class="p">(</span><span class="n">size</span><span class="p">):</span> <span class="c1"># Test</span>
+    <span class="n">buf</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">create_string_buffer</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
+    <span class="n">buf</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">size</span>
+    <span class="n">buf</span><span class="o">.</span><span class="n">address</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">addressof</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">ImprovedCtypesBufferImpl</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">Array</span><span class="p">):</span>
+        <span class="n">_length_</span> <span class="o">=</span> <span class="n">size</span>
+        <span class="n">_type_</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_wchar</span>
         <span class="k">def</span> <span class="nf">lol</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
             <span class="k">return</span> <span class="s2">&quot;lol&quot;</span>
 
@@ -112,9 +136,43 @@
         <span class="n">print_ctypes_struct</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">.</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">fname</span><span class="p">),</span> <span class="n">hexa</span><span class="o">=</span><span class="n">hexa</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="sprint"><a class="viewcode-back" href="../../../utils.html#windows.utils.sprint">[docs]</a><span class="k">def</span> <span class="nf">sprint</span><span class="p">(</span><span class="n">struct</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;struct&quot;</span><span class="p">,</span> <span class="n">hexa</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="sprint"><a class="viewcode-back" href="../../../utils.html#windows.winobject.process.sprint">[docs]</a><span class="k">def</span> <span class="nf">sprint</span><span class="p">(</span><span class="n">struct</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;struct&quot;</span><span class="p">,</span> <span class="n">hexa</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Print recursively the content of a :mod:`ctypes` structure&quot;&quot;&quot;</span></div>
     <span class="k">return</span> <span class="n">print_ctypes_struct</span><span class="p">(</span><span class="n">struct</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">hexa</span><span class="o">=</span><span class="n">hexa</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">AutoHandle</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An abstract class that allow easy handle creation/destruction/wait&quot;&quot;&quot;</span>
+     <span class="c1"># Big bypass to prevent missing reference at programm exit..</span>
+    <span class="n">_close_function</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">WinDLL</span><span class="p">(</span><span class="s2">&quot;kernel32&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">CloseHandle</span>
+    <span class="k">def</span> <span class="nf">_get_handle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="s2"> is abstract&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">))</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">handle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;An handle on the object</span>
+
+<span class="sd">        :type: HANDLE</span>
+
+<span class="sd">           .. note::</span>
+<span class="sd">                The handle is automaticaly closed when the object is destroyed</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_handle&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_handle</span><span class="p">()</span>
+        <span class="n">dbgprint</span><span class="p">(</span><span class="s2">&quot;Open handle </span><span class="si">{0}</span><span class="s2"> for </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="p">),</span> <span class="bp">self</span><span class="p">),</span> <span class="s2">&quot;HANDLE&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span>
+
+    <span class="k">def</span> <span class="nf">wait</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">INFINITE</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Wait for the object&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">WaitForSingleObject</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">timeout</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># sys.path is not None -&gt; check if python shutdown</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">sys</span><span class="p">,</span> <span class="s2">&quot;path&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_handle&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="p">:</span>
+            <span class="c1"># Prevent some bug where dbgprint might be None when __del__ is called in a closing process</span>
+            <span class="n">dbgprint</span><span class="p">(</span><span class="s2">&quot;Closing Handle </span><span class="si">{0}</span><span class="s2"> for </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="p">),</span> <span class="bp">self</span><span class="p">),</span> <span class="s2">&quot;HANDLE&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">dbgprint</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_close_function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="p">)</span>
 </pre></div>
 
           </div>

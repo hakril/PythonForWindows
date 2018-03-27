@@ -272,6 +272,11 @@
     <span class="n">APIDLL</span> <span class="o">=</span> <span class="s2">&quot;Ktmw32&quot;</span>
     <span class="n">default_error_check</span> <span class="o">=</span> <span class="nb">staticmethod</span><span class="p">(</span><span class="n">zero_is_fail_error_check</span><span class="p">)</span>
 
+<span class="k">class</span> <span class="nc">WevtapiProxy</span><span class="p">(</span><span class="n">ApiProxy</span><span class="p">):</span>
+    <span class="n">APIDLL</span> <span class="o">=</span> <span class="s2">&quot;Wevtapi&quot;</span>
+    <span class="n">default_error_check</span> <span class="o">=</span> <span class="nb">staticmethod</span><span class="p">(</span><span class="n">zero_is_fail_error_check</span><span class="p">)</span>
+
+
 <span class="c1">#class OptionalExport(object):</span>
 <span class="c1">#    &quot;&quot;&quot;used &#39;around&#39; a Proxy decorator</span>
 <span class="c1">#       Should be used for export that are not available everywhere (ntdll internals | 32/64 bits stuff)</span>
@@ -564,6 +569,8 @@
 <span class="k">def</span> <span class="nf">OpenEventW</span><span class="p">(</span><span class="n">dwDesiredAccess</span><span class="p">,</span> <span class="n">bInheritHandle</span><span class="p">,</span> <span class="n">lpName</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">OpenEventA</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">dwDesiredAccess</span><span class="p">,</span> <span class="n">bInheritHandle</span><span class="p">,</span> <span class="n">lpName</span><span class="p">)</span>
 
+
+
 <span class="c1"># File stuff</span>
 <span class="nd">@Kernel32Proxy</span><span class="p">(</span><span class="s2">&quot;ReadFile&quot;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">ReadFile</span><span class="p">(</span><span class="n">hFile</span><span class="p">,</span> <span class="n">lpBuffer</span><span class="p">,</span> <span class="n">nNumberOfBytesToRead</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lpNumberOfBytesRead</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lpOverlapped</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -853,9 +860,16 @@
 <span class="k">def</span> <span class="nf">NtReadVirtualMemory</span><span class="p">(</span><span class="n">hProcess</span><span class="p">,</span> <span class="n">lpBaseAddress</span><span class="p">,</span> <span class="n">lpBuffer</span><span class="p">,</span> <span class="n">nSize</span><span class="p">,</span> <span class="n">lpNumberOfBytesRead</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">NtReadVirtualMemory</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">hProcess</span><span class="p">,</span> <span class="n">lpBaseAddress</span><span class="p">,</span> <span class="n">lpBuffer</span><span class="p">,</span> <span class="n">nSize</span><span class="p">,</span> <span class="n">lpNumberOfBytesRead</span><span class="p">)</span>
 
+
 <span class="nd">@NtdllProxy</span><span class="p">(</span><span class="s1">&#39;NtWow64ReadVirtualMemory64&#39;</span><span class="p">,</span> <span class="n">error_ntstatus</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">NtWow64ReadVirtualMemory64</span><span class="p">(</span><span class="n">hProcess</span><span class="p">,</span> <span class="n">lpBaseAddress</span><span class="p">,</span> <span class="n">lpBuffer</span><span class="p">,</span> <span class="n">nSize</span><span class="p">,</span> <span class="n">lpNumberOfBytesRead</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">NtWow64ReadVirtualMemory64</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">hProcess</span><span class="p">,</span> <span class="n">lpBaseAddress</span><span class="p">,</span> <span class="n">lpBuffer</span><span class="p">,</span> <span class="n">nSize</span><span class="p">,</span> <span class="n">lpNumberOfBytesRead</span><span class="p">)</span>
+
+
+<span class="nd">@NtdllProxy</span><span class="p">(</span><span class="s1">&#39;NtWriteVirtualMemory&#39;</span><span class="p">,</span> <span class="n">error_ntstatus</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">NtWriteVirtualMemory</span><span class="p">(</span><span class="n">ProcessHandle</span><span class="p">,</span> <span class="n">BaseAddress</span><span class="p">,</span> <span class="n">Buffer</span><span class="p">,</span> <span class="n">NumberOfBytesToWrite</span><span class="p">,</span> <span class="n">NumberOfBytesWritten</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">NtWriteVirtualMemory</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">ProcessHandle</span><span class="p">,</span> <span class="n">BaseAddress</span><span class="p">,</span> <span class="n">Buffer</span><span class="p">,</span> <span class="n">NumberOfBytesToWrite</span><span class="p">,</span> <span class="n">NumberOfBytesWritten</span><span class="p">)</span>
+
 
 <span class="nd">@NtdllProxy</span><span class="p">(</span><span class="s1">&#39;NtWow64WriteVirtualMemory64&#39;</span><span class="p">,</span> <span class="n">error_ntstatus</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">NtWow64WriteVirtualMemory64</span><span class="p">(</span><span class="n">hProcess</span><span class="p">,</span> <span class="n">lpBaseAddress</span><span class="p">,</span> <span class="n">lpBuffer</span><span class="p">,</span> <span class="n">nSize</span><span class="p">,</span> <span class="n">lpNumberOfBytesWritten</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -913,6 +927,17 @@
     <span class="k">if</span> <span class="n">ThreadInformation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">ThreadInformationLength</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">ThreadInformationLength</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">ThreadInformation</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">NtQueryInformationThread</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">ThreadHandle</span><span class="p">,</span> <span class="n">ThreadInformationClass</span><span class="p">,</span> <span class="n">ThreadInformation</span><span class="p">,</span> <span class="n">ThreadInformationLength</span><span class="p">,</span> <span class="n">ReturnLength</span><span class="p">)</span>
+
+
+<span class="nd">@NtdllProxy</span><span class="p">(</span><span class="s1">&#39;NtAllocateVirtualMemory&#39;</span><span class="p">,</span> <span class="n">error_ntstatus</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">NtAllocateVirtualMemory</span><span class="p">(</span><span class="n">ProcessHandle</span><span class="p">,</span> <span class="n">BaseAddress</span><span class="p">,</span> <span class="n">ZeroBits</span><span class="p">,</span> <span class="n">RegionSize</span><span class="p">,</span> <span class="n">AllocationType</span><span class="p">,</span> <span class="n">Protect</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">NtAllocateVirtualMemory</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">ProcessHandle</span><span class="p">,</span> <span class="n">BaseAddress</span><span class="p">,</span> <span class="n">ZeroBits</span><span class="p">,</span> <span class="n">RegionSize</span><span class="p">,</span> <span class="n">AllocationType</span><span class="p">,</span> <span class="n">Protect</span><span class="p">)</span>
+
+
+<span class="nd">@NtdllProxy</span><span class="p">(</span><span class="s1">&#39;NtFreeVirtualMemory&#39;</span><span class="p">,</span> <span class="n">error_ntstatus</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">NtFreeVirtualMemory</span><span class="p">(</span><span class="n">ProcessHandle</span><span class="p">,</span> <span class="n">BaseAddress</span><span class="p">,</span> <span class="n">RegionSize</span><span class="p">,</span> <span class="n">FreeType</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">NtFreeVirtualMemory</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">ProcessHandle</span><span class="p">,</span> <span class="n">BaseAddress</span><span class="p">,</span> <span class="n">RegionSize</span><span class="p">,</span> <span class="n">FreeType</span><span class="p">)</span>
+
 
 
 <span class="nd">@NtdllProxy</span><span class="p">(</span><span class="s1">&#39;NtProtectVirtualMemory&#39;</span><span class="p">,</span> <span class="n">error_ntstatus</span><span class="p">)</span>
@@ -1135,6 +1160,19 @@
 <span class="k">def</span> <span class="nf">OpenThreadToken</span><span class="p">(</span><span class="n">ThreadHandle</span><span class="p">,</span> <span class="n">DesiredAccess</span><span class="p">,</span> <span class="n">OpenAsSelf</span><span class="p">,</span> <span class="n">TokenHandle</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">OpenThreadToken</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">ThreadHandle</span><span class="p">,</span> <span class="n">DesiredAccess</span><span class="p">,</span> <span class="n">OpenAsSelf</span><span class="p">,</span> <span class="n">TokenHandle</span><span class="p">)</span>
 
+<span class="nd">@Advapi32Proxy</span><span class="p">(</span><span class="s1">&#39;SetThreadToken&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">SetThreadToken</span><span class="p">(</span><span class="n">Thread</span><span class="p">,</span> <span class="n">Token</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">SetThreadToken</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">Thread</span><span class="p">,</span> <span class="n">Token</span><span class="p">)</span>
+
+<span class="nd">@Advapi32Proxy</span><span class="p">(</span><span class="s1">&#39;DuplicateToken&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">DuplicateToken</span><span class="p">(</span><span class="n">ExistingTokenHandle</span><span class="p">,</span> <span class="n">ImpersonationLevel</span><span class="p">,</span> <span class="n">DuplicateTokenHandle</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">DuplicateToken</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">ExistingTokenHandle</span><span class="p">,</span> <span class="n">ImpersonationLevel</span><span class="p">,</span> <span class="n">DuplicateTokenHandle</span><span class="p">)</span>
+
+<span class="nd">@Advapi32Proxy</span><span class="p">(</span><span class="s1">&#39;DuplicateTokenEx&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">DuplicateTokenEx</span><span class="p">(</span><span class="n">hExistingToken</span><span class="p">,</span> <span class="n">dwDesiredAccess</span><span class="p">,</span> <span class="n">lpTokenAttributes</span><span class="p">,</span> <span class="n">ImpersonationLevel</span><span class="p">,</span> <span class="n">TokenType</span><span class="p">,</span> <span class="n">phNewToken</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">DuplicateTokenEx</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">hExistingToken</span><span class="p">,</span> <span class="n">dwDesiredAccess</span><span class="p">,</span> <span class="n">lpTokenAttributes</span><span class="p">,</span> <span class="n">ImpersonationLevel</span><span class="p">,</span> <span class="n">TokenType</span><span class="p">,</span> <span class="n">phNewToken</span><span class="p">)</span>
+
+
 <span class="nd">@Advapi32Proxy</span><span class="p">(</span><span class="s1">&#39;LookupPrivilegeValueA&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">LookupPrivilegeValueA</span><span class="p">(</span><span class="n">lpSystemName</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lpName</span><span class="o">=</span><span class="n">NeededParameter</span><span class="p">,</span> <span class="n">lpLuid</span><span class="o">=</span><span class="n">NeededParameter</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">LookupPrivilegeValueA</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">lpSystemName</span><span class="p">,</span> <span class="n">lpName</span><span class="p">,</span> <span class="n">lpLuid</span><span class="p">)</span>
@@ -1325,6 +1363,15 @@
 <span class="nd">@Advapi32Proxy</span><span class="p">(</span><span class="s1">&#39;OpenEventLogW&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">OpenEventLogW</span><span class="p">(</span><span class="n">lpUNCServerName</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lpSourceName</span><span class="o">=</span><span class="n">NeededParameter</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">OpenEventLogW</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">lpUNCServerName</span><span class="p">,</span> <span class="n">lpSourceName</span><span class="p">)</span>
+
+<span class="nd">@Advapi32Proxy</span><span class="p">(</span><span class="s1">&#39;OpenBackupEventLogA&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">OpenBackupEventLogA</span><span class="p">(</span><span class="n">lpUNCServerName</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lpSourceName</span><span class="o">=</span><span class="n">NeededParameter</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">OpenBackupEventLogA</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">lpUNCServerName</span><span class="p">,</span> <span class="n">lpSourceName</span><span class="p">)</span>
+
+<span class="nd">@Advapi32Proxy</span><span class="p">(</span><span class="s1">&#39;OpenBackupEventLogW&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">OpenBackupEventLogW</span><span class="p">(</span><span class="n">lpUNCServerName</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lpSourceName</span><span class="o">=</span><span class="n">NeededParameter</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">OpenBackupEventLogW</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">lpUNCServerName</span><span class="p">,</span> <span class="n">lpSourceName</span><span class="p">)</span>
+
 
 <span class="nd">@Advapi32Proxy</span><span class="p">(</span><span class="s1">&#39;ReadEventLogA&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">ReadEventLogA</span><span class="p">(</span><span class="n">hEventLog</span><span class="p">,</span> <span class="n">dwReadFlags</span><span class="p">,</span> <span class="n">dwRecordOffset</span><span class="p">,</span> <span class="n">lpBuffer</span><span class="p">,</span> <span class="n">nNumberOfBytesToRead</span><span class="p">,</span> <span class="n">pnBytesRead</span><span class="p">,</span> <span class="n">pnMinNumberOfBytesNeeded</span><span class="p">):</span>
@@ -1738,6 +1785,15 @@
 <span class="k">def</span> <span class="nf">CoCreateInstance</span><span class="p">(</span><span class="n">rclsid</span><span class="p">,</span> <span class="n">pUnkOuter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dwClsContext</span><span class="o">=</span><span class="n">CLSCTX_INPROC_SERVER</span><span class="p">,</span> <span class="n">riid</span><span class="o">=</span><span class="n">NeededParameter</span><span class="p">,</span> <span class="n">ppv</span><span class="o">=</span><span class="n">NeededParameter</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">CoCreateInstance</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">rclsid</span><span class="p">,</span> <span class="n">pUnkOuter</span><span class="p">,</span> <span class="n">dwClsContext</span><span class="p">,</span> <span class="n">riid</span><span class="p">,</span> <span class="n">ppv</span><span class="p">)</span>
 
+<span class="nd">@Ole32Proxy</span><span class="p">(</span><span class="s1">&#39;CoCreateInstanceEx&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">CoCreateInstanceEx</span><span class="p">(</span><span class="n">rclsid</span><span class="p">,</span> <span class="n">punkOuter</span><span class="p">,</span> <span class="n">dwClsCtx</span><span class="p">,</span> <span class="n">pServerInfo</span><span class="p">,</span> <span class="n">dwCount</span><span class="p">,</span> <span class="n">pResults</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">CoCreateInstanceEx</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">rclsid</span><span class="p">,</span> <span class="n">punkOuter</span><span class="p">,</span> <span class="n">dwClsCtx</span><span class="p">,</span> <span class="n">pServerInfo</span><span class="p">,</span> <span class="n">dwCount</span><span class="p">,</span> <span class="n">pResults</span><span class="p">)</span>
+
+
+<span class="nd">@Ole32Proxy</span><span class="p">(</span><span class="s1">&#39;CoGetInterceptor&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">CoGetInterceptor</span><span class="p">(</span><span class="n">iidIntercepted</span><span class="p">,</span> <span class="n">punkOuter</span><span class="p">,</span> <span class="n">iid</span><span class="p">,</span> <span class="n">ppv</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">CoGetInterceptor</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">iidIntercepted</span><span class="p">,</span> <span class="n">punkOuter</span><span class="p">,</span> <span class="n">iid</span><span class="p">,</span> <span class="n">ppv</span><span class="p">)</span>
+
 <span class="c1"># ## Shell32 ## #</span>
 
 <span class="nd">@Shell32Proxy</span><span class="p">(</span><span class="s1">&#39;ShellExecuteA&#39;</span><span class="p">)</span>
@@ -1798,6 +1854,111 @@
 <span class="k">def</span> <span class="nf">SetNamedPipeHandleState</span><span class="p">(</span><span class="n">hNamedPipe</span><span class="p">,</span> <span class="n">lpMode</span><span class="p">,</span> <span class="n">lpMaxCollectionCount</span><span class="p">,</span> <span class="n">lpCollectDataTimeout</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">SetNamedPipeHandleState</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">hNamedPipe</span><span class="p">,</span> <span class="n">lpMode</span><span class="p">,</span> <span class="n">lpMaxCollectionCount</span><span class="p">,</span> <span class="n">lpCollectDataTimeout</span><span class="p">)</span>
 
+
+<span class="c1"># Eventlog stuff</span>
+
+<span class="nd">@WevtapiProxy</span><span class="p">(</span><span class="s2">&quot;EvtOpenLog&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">EvtOpenLog</span><span class="p">(</span><span class="n">Session</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="n">Flags</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">EvtOpenLog</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">Session</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="n">Flags</span><span class="p">)</span>
+
+
+<span class="nd">@WevtapiProxy</span><span class="p">(</span><span class="s2">&quot;EvtClose&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">EvtClose</span><span class="p">(</span><span class="n">Object</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">EvtClose</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">Object</span><span class="p">)</span>
+
+
+<span class="nd">@WevtapiProxy</span><span class="p">(</span><span class="s2">&quot;EvtQuery&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">EvtQuery</span><span class="p">(</span><span class="n">Session</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="n">Query</span><span class="p">,</span> <span class="n">Flags</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">EvtQuery</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">Session</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="n">Query</span><span class="p">,</span> <span class="n">Flags</span><span class="p">)</span>
+
+
+<span class="nd">@WevtapiProxy</span><span class="p">(</span><span class="s2">&quot;EvtNext&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">EvtNext</span><span class="p">(</span><span class="n">ResultSet</span><span class="p">,</span> <span class="n">EventArraySize</span><span class="p">,</span> <span class="n">EventArray</span><span class="p">,</span> <span class="n">Timeout</span><span class="p">,</span> <span class="n">Flags</span><span class="p">,</span> <span class="n">Returned</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">EvtNext</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">ResultSet</span><span class="p">,</span> <span class="n">EventArraySize</span><span class="p">,</span> <span class="n">EventArray</span><span class="p">,</span> <span class="n">Timeout</span><span class="p">,</span> <span class="n">Flags</span><span class="p">,</span> <span class="n">Returned</span><span class="p">)</span>
+
+
+<span class="nd">@WevtapiProxy</span><span class="p">(</span><span class="s2">&quot;EvtCreateRenderContext&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">EvtCreateRenderContext</span><span class="p">(</span><span class="n">ValuePathsCount</span><span class="p">,</span> <span class="n">ValuePaths</span><span class="p">,</span> <span class="n">Flags</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">EvtCreateRenderContext</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">ValuePathsCount</span><span class="p">,</span> <span class="n">ValuePaths</span><span class="p">,</span> <span class="n">Flags</span><span class="p">)</span>
+
+
+<span class="nd">@WevtapiProxy</span><span class="p">(</span><span class="s2">&quot;EvtRender&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">EvtRender</span><span class="p">(</span><span class="n">Context</span><span class="p">,</span> <span class="n">Fragment</span><span class="p">,</span> <span class="n">Flags</span><span class="p">,</span> <span class="n">BufferSize</span><span class="p">,</span> <span class="n">Buffer</span><span class="p">,</span> <span class="n">BufferUsed</span><span class="p">,</span> <span class="n">PropertyCount</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">EvtRender</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">Context</span><span class="p">,</span> <span class="n">Fragment</span><span class="p">,</span> <span class="n">Flags</span><span class="p">,</span> <span class="n">BufferSize</span><span class="p">,</span> <span class="n">Buffer</span><span class="p">,</span> <span class="n">BufferUsed</span><span class="p">,</span> <span class="n">PropertyCount</span><span class="p">)</span>
+
+
+<span class="nd">@WevtapiProxy</span><span class="p">(</span><span class="s2">&quot;EvtOpenChannelEnum&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">EvtOpenChannelEnum</span><span class="p">(</span><span class="n">Session</span><span class="p">,</span> <span class="n">Flags</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">EvtOpenChannelEnum</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">Session</span><span class="p">,</span> <span class="n">Flags</span><span class="p">)</span>
+
+
+<span class="nd">@WevtapiProxy</span><span class="p">(</span><span class="s2">&quot;EvtNextChannelPath&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">EvtNextChannelPath</span><span class="p">(</span><span class="n">ChannelEnum</span><span class="p">,</span> <span class="n">ChannelPathBufferSize</span><span class="p">,</span> <span class="n">ChannelPathBuffer</span><span class="p">,</span> <span class="n">ChannelPathBufferUsed</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">EvtNextChannelPath</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">ChannelEnum</span><span class="p">,</span> <span class="n">ChannelPathBufferSize</span><span class="p">,</span> <span class="n">ChannelPathBuffer</span><span class="p">,</span> <span class="n">ChannelPathBufferUsed</span><span class="p">)</span>
+
+
+<span class="nd">@WevtapiProxy</span><span class="p">(</span><span class="s2">&quot;EvtOpenPublisherEnum&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">EvtOpenPublisherEnum</span><span class="p">(</span><span class="n">Session</span><span class="p">,</span> <span class="n">Flags</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">EvtOpenPublisherEnum</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">Session</span><span class="p">,</span> <span class="n">Flags</span><span class="p">)</span>
+
+
+<span class="nd">@WevtapiProxy</span><span class="p">(</span><span class="s2">&quot;EvtNextPublisherId&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">EvtNextPublisherId</span><span class="p">(</span><span class="n">PublisherEnum</span><span class="p">,</span> <span class="n">PublisherIdBufferSize</span><span class="p">,</span> <span class="n">PublisherIdBuffer</span><span class="p">,</span> <span class="n">PublisherIdBufferUsed</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">EvtNextPublisherId</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">PublisherEnum</span><span class="p">,</span> <span class="n">PublisherIdBufferSize</span><span class="p">,</span> <span class="n">PublisherIdBuffer</span><span class="p">,</span> <span class="n">PublisherIdBufferUsed</span><span class="p">)</span>
+
+
+<span class="nd">@WevtapiProxy</span><span class="p">(</span><span class="s2">&quot;EvtGetLogInfo&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">EvtGetLogInfo</span><span class="p">(</span><span class="n">Log</span><span class="p">,</span> <span class="n">PropertyId</span><span class="p">,</span> <span class="n">PropertyValueBufferSize</span><span class="p">,</span> <span class="n">PropertyValueBuffer</span><span class="p">,</span> <span class="n">PropertyValueBufferUsed</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">EvtGetLogInfo</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">Log</span><span class="p">,</span> <span class="n">PropertyId</span><span class="p">,</span> <span class="n">PropertyValueBufferSize</span><span class="p">,</span> <span class="n">PropertyValueBuffer</span><span class="p">,</span> <span class="n">PropertyValueBufferUsed</span><span class="p">)</span>
+
+
+<span class="nd">@WevtapiProxy</span><span class="p">(</span><span class="s2">&quot;EvtOpenChannelConfig&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">EvtOpenChannelConfig</span><span class="p">(</span><span class="n">Session</span><span class="p">,</span> <span class="n">ChannelPath</span><span class="p">,</span> <span class="n">Flags</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">EvtOpenChannelConfig</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">Session</span><span class="p">,</span> <span class="n">ChannelPath</span><span class="p">,</span> <span class="n">Flags</span><span class="p">)</span>
+
+
+<span class="nd">@WevtapiProxy</span><span class="p">(</span><span class="s2">&quot;EvtGetChannelConfigProperty&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">EvtGetChannelConfigProperty</span><span class="p">(</span><span class="n">ChannelConfig</span><span class="p">,</span> <span class="n">PropertyId</span><span class="p">,</span> <span class="n">Flags</span><span class="p">,</span> <span class="n">PropertyValueBufferSize</span><span class="p">,</span> <span class="n">PropertyValueBuffer</span><span class="p">,</span> <span class="n">PropertyValueBufferUsed</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">EvtGetChannelConfigProperty</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">ChannelConfig</span><span class="p">,</span> <span class="n">PropertyId</span><span class="p">,</span> <span class="n">Flags</span><span class="p">,</span> <span class="n">PropertyValueBufferSize</span><span class="p">,</span> <span class="n">PropertyValueBuffer</span><span class="p">,</span> <span class="n">PropertyValueBufferUsed</span><span class="p">)</span>
+
+
+<span class="nd">@WevtapiProxy</span><span class="p">(</span><span class="s2">&quot;EvtOpenPublisherMetadata&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">EvtOpenPublisherMetadata</span><span class="p">(</span><span class="n">Session</span><span class="p">,</span> <span class="n">PublisherIdentity</span><span class="p">,</span> <span class="n">LogFilePath</span><span class="p">,</span> <span class="n">Locale</span><span class="p">,</span> <span class="n">Flags</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">EvtOpenPublisherMetadata</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">Session</span><span class="p">,</span> <span class="n">PublisherIdentity</span><span class="p">,</span> <span class="n">LogFilePath</span><span class="p">,</span> <span class="n">Locale</span><span class="p">,</span> <span class="n">Flags</span><span class="p">)</span>
+
+
+<span class="nd">@WevtapiProxy</span><span class="p">(</span><span class="s2">&quot;EvtOpenEventMetadataEnum&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">EvtOpenEventMetadataEnum</span><span class="p">(</span><span class="n">PublisherMetadata</span><span class="p">,</span> <span class="n">Flags</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">EvtOpenEventMetadataEnum</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">PublisherMetadata</span><span class="p">,</span> <span class="n">Flags</span><span class="p">)</span>
+
+
+<span class="nd">@WevtapiProxy</span><span class="p">(</span><span class="s2">&quot;EvtNextEventMetadata&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">EvtNextEventMetadata</span><span class="p">(</span><span class="n">EventMetadataEnum</span><span class="p">,</span> <span class="n">Flags</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">EvtNextEventMetadata</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">EventMetadataEnum</span><span class="p">,</span> <span class="n">Flags</span><span class="p">)</span>
+
+
+<span class="nd">@WevtapiProxy</span><span class="p">(</span><span class="s2">&quot;EvtGetEventMetadataProperty&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">EvtGetEventMetadataProperty</span><span class="p">(</span><span class="n">EventMetadata</span><span class="p">,</span> <span class="n">PropertyId</span><span class="p">,</span> <span class="n">Flags</span><span class="p">,</span> <span class="n">EventMetadataPropertyBufferSize</span><span class="p">,</span> <span class="n">EventMetadataPropertyBuffer</span><span class="p">,</span> <span class="n">EventMetadataPropertyBufferUsed</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">EvtGetEventMetadataProperty</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">EventMetadata</span><span class="p">,</span> <span class="n">PropertyId</span><span class="p">,</span> <span class="n">Flags</span><span class="p">,</span> <span class="n">EventMetadataPropertyBufferSize</span><span class="p">,</span> <span class="n">EventMetadataPropertyBuffer</span><span class="p">,</span> <span class="n">EventMetadataPropertyBufferUsed</span><span class="p">)</span>
+
+
+<span class="nd">@WevtapiProxy</span><span class="p">(</span><span class="s2">&quot;EvtGetPublisherMetadataProperty&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">EvtGetPublisherMetadataProperty</span><span class="p">(</span><span class="n">PublisherMetadata</span><span class="p">,</span> <span class="n">PropertyId</span><span class="p">,</span> <span class="n">Flags</span><span class="p">,</span> <span class="n">PublisherMetadataPropertyBufferSize</span><span class="p">,</span> <span class="n">PublisherMetadataPropertyBuffer</span><span class="p">,</span> <span class="n">PublisherMetadataPropertyBufferUsed</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">EvtGetPublisherMetadataProperty</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">PublisherMetadata</span><span class="p">,</span> <span class="n">PropertyId</span><span class="p">,</span> <span class="n">Flags</span><span class="p">,</span> <span class="n">PublisherMetadataPropertyBufferSize</span><span class="p">,</span> <span class="n">PublisherMetadataPropertyBuffer</span><span class="p">,</span> <span class="n">PublisherMetadataPropertyBufferUsed</span><span class="p">)</span>
+
+
+<span class="nd">@WevtapiProxy</span><span class="p">(</span><span class="s2">&quot;EvtGetObjectArraySize&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">EvtGetObjectArraySize</span><span class="p">(</span><span class="n">ObjectArray</span><span class="p">,</span> <span class="n">ObjectArraySize</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">EvtGetObjectArraySize</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">ObjectArray</span><span class="p">,</span> <span class="n">ObjectArraySize</span><span class="p">)</span>
+
+
+<span class="nd">@WevtapiProxy</span><span class="p">(</span><span class="s2">&quot;EvtGetObjectArrayProperty&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">EvtGetObjectArrayProperty</span><span class="p">(</span><span class="n">ObjectArray</span><span class="p">,</span> <span class="n">PropertyId</span><span class="p">,</span> <span class="n">ArrayIndex</span><span class="p">,</span> <span class="n">Flags</span><span class="p">,</span> <span class="n">PropertyValueBufferSize</span><span class="p">,</span> <span class="n">PropertyValueBuffer</span><span class="p">,</span> <span class="n">PropertyValueBufferUsed</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">EvtGetObjectArrayProperty</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">ObjectArray</span><span class="p">,</span> <span class="n">PropertyId</span><span class="p">,</span> <span class="n">ArrayIndex</span><span class="p">,</span> <span class="n">Flags</span><span class="p">,</span> <span class="n">PropertyValueBufferSize</span><span class="p">,</span> <span class="n">PropertyValueBuffer</span><span class="p">,</span> <span class="n">PropertyValueBufferUsed</span><span class="p">)</span>
+
+<span class="nd">@WevtapiProxy</span><span class="p">(</span><span class="s2">&quot;EvtFormatMessage&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">EvtFormatMessage</span><span class="p">(</span><span class="n">PublisherMetadata</span><span class="p">,</span> <span class="n">Event</span><span class="p">,</span> <span class="n">MessageId</span><span class="p">,</span> <span class="n">ValueCount</span><span class="p">,</span> <span class="n">Values</span><span class="p">,</span> <span class="n">Flags</span><span class="p">,</span> <span class="n">BufferSize</span><span class="p">,</span> <span class="n">Buffer</span><span class="p">,</span> <span class="n">BufferUsed</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">EvtFormatMessage</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">PublisherMetadata</span><span class="p">,</span> <span class="n">Event</span><span class="p">,</span> <span class="n">MessageId</span><span class="p">,</span> <span class="n">ValueCount</span><span class="p">,</span> <span class="n">Values</span><span class="p">,</span> <span class="n">Flags</span><span class="p">,</span> <span class="n">BufferSize</span><span class="p">,</span> <span class="n">Buffer</span><span class="p">,</span> <span class="n">BufferUsed</span><span class="p">)</span>
 </pre></div>
 
           </div>

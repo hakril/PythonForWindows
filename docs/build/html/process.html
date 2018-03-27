@@ -198,6 +198,14 @@
 <dt id="windows.winobject.process.CurrentProcess.load_library">
 <code class="descname">load_library</code><span class="sig-paren">(</span><em>dll_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/process.html#CurrentProcess.load_library"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.process.CurrentProcess.load_library" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load the library in current process</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.process.LoadedModule" title="windows.winobject.process.LoadedModule"><code class="xref py py-class docutils literal notranslate"><span class="pre">LoadedModule</span></code></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -429,6 +437,12 @@
 </dd></dl>
 
 <dl class="method">
+<dt id="windows.winobject.process.CurrentProcess.write_ptr">
+<code class="descname">write_ptr</code><span class="sig-paren">(</span><em>addr</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.process.CurrentProcess.write_ptr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a <code class="docutils literal notranslate"><span class="pre">PTR</span></code> at <code class="docutils literal notranslate"><span class="pre">addr</span></code></p>
+</dd></dl>
+
+<dl class="method">
 <dt id="windows.winobject.process.CurrentProcess.write_qword">
 <code class="descname">write_qword</code><span class="sig-paren">(</span><em>addr</em>, <em>qword</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.process.CurrentProcess.write_qword" title="Permalink to this definition">¶</a></dt>
 <dd><p>write a qword at <code class="docutils literal notranslate"><span class="pre">addr</span></code></p>
@@ -448,7 +462,7 @@
 <dl class="class">
 <dt id="windows.winobject.process.CurrentThread">
 <em class="property">class </em><code class="descclassname">windows.winobject.process.</code><code class="descname">CurrentThread</code><a class="reference internal" href="_modules/windows/winobject/process.html#CurrentThread"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.process.CurrentThread" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">windows.winobject.process.AutoHandle</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">windows.utils.pythonutils.AutoHandle</span></code></p>
 <p>The current thread</p>
 <dl class="method">
 <dt id="windows.winobject.process.CurrentThread.exit">
@@ -696,6 +710,14 @@ raises an exception if the remote thread raised one</p>
 <dt id="windows.winobject.process.WinProcess.load_library">
 <code class="descname">load_library</code><span class="sig-paren">(</span><em>dll_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/process.html#WinProcess.load_library"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.process.WinProcess.load_library" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load the library in remote process</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">RemoteLoadedModule</span></code></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -969,6 +991,12 @@ raises an exception if the remote thread raised one</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="windows.winobject.process.WinProcess.write_ptr">
+<code class="descname">write_ptr</code><span class="sig-paren">(</span><em>addr</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.process.WinProcess.write_ptr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a <code class="docutils literal notranslate"><span class="pre">PTR</span></code> at <code class="docutils literal notranslate"><span class="pre">addr</span></code></p>
+</dd></dl>
+
+<dl class="method">
 <dt id="windows.winobject.process.WinProcess.write_qword">
 <code class="descname">write_qword</code><span class="sig-paren">(</span><em>addr</em>, <em>qword</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.process.WinProcess.write_qword" title="Permalink to this definition">¶</a></dt>
 <dd><p>write a qword at <code class="docutils literal notranslate"><span class="pre">addr</span></code></p>
@@ -988,7 +1016,7 @@ raises an exception if the remote thread raised one</p>
 <dl class="class">
 <dt id="windows.winobject.process.WinThread">
 <em class="property">class </em><code class="descclassname">windows.winobject.process.</code><code class="descname">WinThread</code><span class="sig-paren">(</span><em>tid=None</em>, <em>handle=None</em>, <em>owner_pid=None</em>, <em>owner=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/process.html#WinThread"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.process.WinThread" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">windows.winobject.process.AutoHandle</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">windows.utils.pythonutils.AutoHandle</span></code></p>
 <p>Represent a thread</p>
 <dl class="attribute">
 <dt id="windows.winobject.process.WinThread.context">
@@ -1162,7 +1190,7 @@ raises an exception if the remote thread raised one</p>
 <dl class="class">
 <dt id="windows.winobject.process.DeadThread">
 <em class="property">class </em><code class="descclassname">windows.winobject.process.</code><code class="descname">DeadThread</code><span class="sig-paren">(</span><em>handle</em>, <em>tid=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/process.html#DeadThread"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.process.DeadThread" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">windows.winobject.process.AutoHandle</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">windows.utils.pythonutils.AutoHandle</span></code></p>
 <p>An already dead thread (returned only by API returning a new thread if thread die before being returned)</p>
 <dl class="attribute">
 <dt id="windows.winobject.process.DeadThread.exit_code">

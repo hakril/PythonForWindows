@@ -31,7 +31,7 @@ You can then use the instance to call whatever method you need.
 
 .. note::
 
-    see sample :ref:`sample_com_firewall`
+    see samples :ref:`sample_com`
 
 Implementing a COM interface
 ''''''''''''''''''''''''''''
@@ -42,3 +42,14 @@ To create `COM` object you need to:
     2. Implements the methods of the interface `CODE 2 <https://github.com/sogeti-esec-lab/LKD/blob/efabf3cc38b94d4180ebe8d2c554da5d76b2fea1/lkd/dbginterface/base.py#L55>`_
     3. Create an instance `CODE3 <https://github.com/sogeti-esec-lab/LKD/blob/efabf3cc38b94d4180ebe8d2c554da5d76b2fea1/lkd/dbginterface/base.py#L59>`_
     4. Pass it to whatever native function expects it `CODE4 <https://github.com/sogeti-esec-lab/LKD/blob/efabf3cc38b94d4180ebe8d2c554da5d76b2fea1/lkd/dbginterface/base.py#L272>`_
+
+.. note::
+
+    see samples :ref:`sample_com_icallinterceptor`
+
+API
+'''
+
+.. autofunction:: init
+.. autofunction:: create_instance
+.. autoclass:: COMImplementation

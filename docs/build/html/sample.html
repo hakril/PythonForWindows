@@ -400,6 +400,9 @@ Sections: [&lt;PESection &quot;.text&quot;&gt;, &lt;PESection &quot;.rdata&quot;
 <span class="c1"># Setup our hook</span>
 <span class="n">RegOpenKeyExA_iat</span><span class="o">.</span><span class="n">set_hook</span><span class="p">(</span><span class="n">open_reg_hook</span><span class="p">)</span>
 
+<span class="c1">### !!!! You must keep the iat_entry alive !!!!</span>
+<span class="c1">### If the hook is garbage collected while active -&gt; python will crash</span>
+
 <span class="c1"># Use python native module _winreg that call &#39;RegOpenKeyExA&#39;</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Asking for &lt;MY_SECRET_KEY&gt;&quot;</span><span class="p">)</span>
 <span class="n">v</span> <span class="o">=</span> <span class="n">_winreg</span><span class="o">.</span><span class="n">OpenKey</span><span class="p">(</span><span class="mi">1234567</span><span class="p">,</span> <span class="s2">&quot;MY_SECRET_KEY&quot;</span><span class="p">)</span>
@@ -1658,8 +1661,10 @@ Done!
 </pre></div>
 </div>
 </div>
-<div class="section" id="using-com-inetfwpolicy2">
-<span id="sample-com-firewall"></span><h2>17.9. using COM: <code class="docutils literal notranslate"><span class="pre">INetFwPolicy2</span></code><a class="headerlink" href="#using-com-inetfwpolicy2" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="windows-com">
+<span id="sample-com"></span><h2>17.9. <a class="reference internal" href="com.html#module-windows.com" title="windows.com"><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.com</span></code></a><a class="headerlink" href="#windows-com" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="inetfwpolicy2">
+<span id="sample-com-firewall"></span><h3>17.9.1. <code class="docutils literal notranslate"><span class="pre">INetFwPolicy2</span></code><a class="headerlink" href="#inetfwpolicy2" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
@@ -1711,6 +1716,107 @@ Done!
    <span class="o">*</span> <span class="n">NET_FW_PROFILE2_PRIVATE</span><span class="p">(</span><span class="mh">0x2</span><span class="n">L</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">True</span>
    <span class="o">*</span> <span class="n">NET_FW_PROFILE2_PUBLIC</span><span class="p">(</span><span class="mh">0x4</span><span class="n">L</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">True</span>
 </pre></div>
+</div>
+</div>
+<div class="section" id="icallinterceptor">
+<span id="sample-com-icallinterceptor"></span><h3>17.9.2. <code class="docutils literal notranslate"><span class="pre">ICallInterceptor</span></code><a class="headerlink" href="#icallinterceptor" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">windows</span>
+<span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
+<span class="kn">from</span> <span class="nn">windows</span> <span class="k">import</span> <span class="n">winproxy</span>
+
+<span class="c1"># POC of ICallInterceptor</span>
+<span class="c1"># Based on works by Pavel Yosifovich</span>
+<span class="c1"># http://blogs.microsoft.co.il/pavely/2018/02/28/intercepting-com-objects-with-cogetinterceptor/</span>
+
+<span class="n">windows</span><span class="o">.</span><span class="n">com</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+
+<span class="c1"># Create an interceptor for the firewall (INetFwPolicy2)</span>
+<span class="n">interceptor</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ICallInterceptor</span><span class="p">()</span>
+<span class="n">winproxy</span><span class="o">.</span><span class="n">CoGetInterceptor</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">INetFwPolicy2</span><span class="o">.</span><span class="n">IID</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">interceptor</span><span class="o">.</span><span class="n">IID</span><span class="p">,</span> <span class="n">interceptor</span><span class="p">)</span>
+
+<span class="c1"># The PythonForWindows firewall object is a real/valid INetFwPolicy2</span>
+<span class="c1"># used for demos of ICallFrameEvents.Invoke</span>
+<span class="n">real_firewall</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">firewall</span>
+
+<span class="c1"># Custom Python ICallFrameEvents implementation</span>
+<span class="k">class</span> <span class="nc">MySink</span><span class="p">(</span><span class="n">windows</span><span class="o">.</span><span class="n">com</span><span class="o">.</span><span class="n">COMImplementation</span><span class="p">):</span>
+    <span class="n">IMPLEMENT</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ICallFrameEvents</span>
+
+    <span class="k">def</span> <span class="nf">OnCall</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">this</span><span class="p">,</span> <span class="n">frame</span><span class="p">):</span>
+        <span class="n">ifname</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PWSTR</span><span class="p">()</span>
+        <span class="n">methodname</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PWSTR</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Hello from python sink !&quot;</span><span class="p">)</span>
+        <span class="n">frame</span><span class="o">.</span><span class="n">GetNames</span><span class="p">(</span><span class="n">ifname</span><span class="p">,</span> <span class="n">methodname</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Catching call to &lt;</span><span class="si">{0}</span><span class="s2">.</span><span class="si">{1}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ifname</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">methodname</span><span class="o">.</span><span class="n">value</span><span class="p">))</span>
+        <span class="n">param0info</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">CALLFRAMEPARAMINFO</span><span class="p">()</span>
+        <span class="n">param0</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">com</span><span class="o">.</span><span class="n">ImprovedVariant</span><span class="p">()</span>
+        <span class="n">frame</span><span class="o">.</span><span class="n">GetParamInfo</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">param0info</span><span class="p">)</span>
+        <span class="n">frame</span><span class="o">.</span><span class="n">GetParam</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">param0</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Info about parameters 0:&quot;</span><span class="p">)</span>
+        <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">sprint</span><span class="p">(</span><span class="n">param0info</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot; * param0info&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;param0 value = </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">param0</span><span class="o">.</span><span class="n">aslong</span><span class="p">))</span>
+        <span class="n">frame</span><span class="o">.</span><span class="n">Invoke</span><span class="p">(</span><span class="n">real_firewall</span><span class="p">)</span>
+        <span class="n">frame</span><span class="o">.</span><span class="n">SetReturnValue</span><span class="p">(</span><span class="mi">1234</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Leaving the sink !&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">0</span>
+
+<span class="c1"># Create and register our ICallFrameEvents sink</span>
+<span class="n">xsink</span> <span class="o">=</span> <span class="n">MySink</span><span class="p">()</span>
+<span class="n">interceptor</span><span class="o">.</span><span class="n">RegisterSink</span><span class="p">(</span><span class="n">xsink</span><span class="p">)</span>
+<span class="c1"># Create the INetFwPolicy2 interceptor interface</span>
+<span class="n">fakefirewall</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">INetFwPolicy2</span><span class="p">()</span>
+<span class="n">interceptor</span><span class="o">.</span><span class="n">QueryInterface</span><span class="p">(</span><span class="n">fakefirewall</span><span class="o">.</span><span class="n">IID</span><span class="p">,</span> <span class="n">fakefirewall</span><span class="p">)</span>
+
+<span class="c1"># Calling one of the INetFwPolicy2 function for testing</span>
+<span class="c1"># Testing on https://msdn.microsoft.com/en-us/library/windows/desktop/aa365316(v=vs.85).aspx</span>
+<span class="n">enabled</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">VARIANT_BOOL</span><span class="p">()</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">fakefirewall</span><span class="o">.</span><span class="n">get_FirewallEnabled</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">enabled</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;return value = </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">res</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;firewall enabled = </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">enabled</span><span class="p">))</span>
+
+<span class="c1"># Test a function taking a POINTER(ICallFrameEvents) (PTR to interface)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Testing a function taking a PTR to a COM interface&quot;</span><span class="p">)</span>
+<span class="n">sink2</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ICallFrameEvents</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Before call: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">((</span><span class="n">sink2</span><span class="p">,</span> <span class="n">sink2</span><span class="o">.</span><span class="n">value</span><span class="p">)))</span>
+<span class="n">interceptor</span><span class="o">.</span><span class="n">GetRegisteredSink</span><span class="p">(</span><span class="n">sink2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;After call: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">((</span><span class="n">sink2</span><span class="p">,</span> <span class="n">sink2</span><span class="o">.</span><span class="n">value</span><span class="p">)))</span>
+
+
+<span class="c1"># (cmd) python samples\com\icallinterceptor.py</span>
+<span class="c1"># Hello from python sink !</span>
+<span class="c1"># Catching call to &lt;INetFwPolicy2.FirewallEnabled&gt;</span>
+<span class="c1"># Info about parameters 0:</span>
+<span class="c1">#  * param0info.fIn -&gt; 0x1</span>
+<span class="c1">#  * param0info.fOut -&gt; 0x0</span>
+<span class="c1">#  * param0info.stackOffset -&gt; 0x4L</span>
+<span class="c1">#  * param0info.cbParam -&gt; 0x4L</span>
+<span class="c1"># param0 value = 2</span>
+<span class="c1"># Leaving the sink !</span>
+<span class="c1"># return value = 1234</span>
+<span class="c1"># firewall enabled = VARIANT_BOOL(True)</span>
+<span class="c1"># Testing a function taking a PTR to a COM interface</span>
+<span class="c1"># Before call: (&lt;ICallFrameEvents object at 0x066EF3F0&gt;, None)</span>
+<span class="c1"># After call: (&lt;ICallFrameEvents object at 0x066EF3F0&gt;, 107934504)</span>
+</pre></div>
+</div>
+<p>Output</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(cmd) python com\icallinterceptor.py
+Hello from python sink !
+Catching call to &lt;INetFwPolicy2.FirewallEnabled&gt;
+Info about parameters 0:
+ * param0info.fIn -&gt; 0x1
+ * param0info.fOut -&gt; 0x0
+ * param0info.stackOffset -&gt; 0x4L
+ * param0info.cbParam -&gt; 0x4L
+param0 value = 2
+Leaving the sink !
+return value = 1234
+firewall enabled = VARIANT_BOOL(True)
+Testing a function taking a PTR to a COM interface
+Before call: (&lt;ICallFrameEvents object at 0x066EF3F0&gt;, None)
+After call: (&lt;ICallFrameEvents object at 0x066EF3F0&gt;, 107934504)
+</pre></div>
+</div>
 </div>
 </div>
 <div class="section" id="windows-crypto">
@@ -2139,6 +2245,8 @@ BYE
                 <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">print_ctypes_struct</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">view_attribute</span><span class="p">,</span> <span class="s2">&quot;       - VIEW&quot;</span><span class="p">,</span> <span class="n">hexa</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
                 <span class="n">view_data</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">read_string</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">view_attribute</span><span class="o">.</span><span class="n">ViewBase</span><span class="p">)</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   * Reading view content: &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">view_data</span><span class="p">))</span>
+                <span class="c1"># Needed in Win7 - TODO: why is there a different behavior ?</span>
+                <span class="n">msg</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">ValidAttributes</span> <span class="o">-=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_MESSAGE_VIEW_ATTRIBUTE</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; * security_is_valid &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">security_is_valid</span><span class="p">))</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; * handle_is_valid &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">handle_is_valid</span><span class="p">))</span>
             <span class="k">if</span> <span class="n">msg</span><span class="o">.</span><span class="n">handle_is_valid</span><span class="p">:</span>
@@ -2676,7 +2784,11 @@ BYE
 </ul>
 </li>
 <li><a class="reference internal" href="#wmi-requests">17.8. WMI requests</a></li>
-<li><a class="reference internal" href="#using-com-inetfwpolicy2">17.9. using COM: <code class="docutils literal notranslate"><span class="pre">INetFwPolicy2</span></code></a></li>
+<li><a class="reference internal" href="#windows-com">17.9. <code class="docutils literal notranslate"><span class="pre">windows.com</span></code></a><ul>
+<li><a class="reference internal" href="#inetfwpolicy2">17.9.1. <code class="docutils literal notranslate"><span class="pre">INetFwPolicy2</span></code></a></li>
+<li><a class="reference internal" href="#icallinterceptor">17.9.2. <code class="docutils literal notranslate"><span class="pre">ICallInterceptor</span></code></a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#windows-crypto">17.10. <code class="docutils literal notranslate"><span class="pre">windows.crypto</span></code></a><ul>
 <li><a class="reference internal" href="#encryption-demo">17.10.1. Encryption demo</a></li>
 <li><a class="reference internal" href="#certificate-demo">17.10.2. Certificate demo</a></li>
