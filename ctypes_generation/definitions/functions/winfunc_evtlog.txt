@@ -8,6 +8,18 @@ HANDLE WINAPI OpenEventLogW(
   _In_ LPWSTR lpSourceName
 );
 
+
+HANDLE WINAPI OpenBackupEventLogA(
+  _In_ LPCSTR lpUNCServerName,
+  _In_ LPCSTR lpSourceName
+);
+
+HANDLE WINAPI OpenBackupEventLogW(
+  _In_ LPWSTR lpUNCServerName,
+  _In_ LPWSTR lpSourceName
+);
+
+
 BOOL WINAPI ReadEventLogA(
   _In_  HANDLE hEventLog,
   _In_  DWORD  dwReadFlags,
@@ -44,3 +56,170 @@ BOOL WINAPI GetNumberOfEventLogRecords(
 BOOL WINAPI CloseEventLog(
   _Inout_ HANDLE hEventLog
 );
+
+
+/* Event logging */
+
+EVT_HANDLE WINAPI EvtOpenLog(
+  _In_ EVT_HANDLE Session,
+  _In_ LPCWSTR    Path,
+  _In_ DWORD      Flags
+);
+
+
+EVT_HANDLE WINAPI EvtQuery(
+  _In_ EVT_HANDLE Session,
+  _In_ LPCWSTR    Path,
+  _In_ LPCWSTR    Query,
+  _In_ DWORD      Flags
+);
+
+
+BOOL WINAPI EvtNext(
+  _In_  EVT_HANDLE  ResultSet,
+  _In_  DWORD       EventArraySize,
+  _In_  EVT_HANDLE* EventArray,
+  _In_  DWORD       Timeout,
+  _In_  DWORD       Flags,
+  _Out_ PDWORD      Returned
+);
+
+EVT_HANDLE WINAPI EvtCreateRenderContext(
+  _In_ DWORD   ValuePathsCount,
+  _In_ LPCWSTR *ValuePaths,
+  _In_ DWORD   Flags
+);
+
+BOOL WINAPI EvtRender(
+  _In_  EVT_HANDLE Context,
+  _In_  EVT_HANDLE Fragment,
+  _In_  DWORD      Flags,
+  _In_  DWORD      BufferSize,
+  _In_  PVOID      Buffer,
+  _Out_ PDWORD     BufferUsed,
+  _Out_ PDWORD     PropertyCount
+);
+
+
+BOOL WINAPI EvtClose(
+  _In_ EVT_HANDLE Object
+);
+
+
+EVT_HANDLE WINAPI EvtOpenChannelEnum(
+  _In_ EVT_HANDLE Session,
+  _In_ DWORD      Flags
+);
+
+BOOL WINAPI EvtNextChannelPath(
+  _In_  EVT_HANDLE ChannelEnum,
+  _In_  DWORD      ChannelPathBufferSize,
+  _In_  LPWSTR     ChannelPathBuffer,
+  _Out_ PDWORD     ChannelPathBufferUsed
+);
+
+EVT_HANDLE WINAPI EvtOpenPublisherEnum(
+  _In_ EVT_HANDLE Session,
+  _In_ DWORD      Flags
+);
+
+
+BOOL WINAPI EvtNextPublisherId(
+  _In_  EVT_HANDLE PublisherEnum,
+  _In_  DWORD      PublisherIdBufferSize,
+  _In_  LPWSTR     PublisherIdBuffer,
+  _Out_ PDWORD     PublisherIdBufferUsed
+);
+
+
+BOOL WINAPI EvtGetLogInfo(
+  _In_  EVT_HANDLE          Log,
+  _In_  EVT_LOG_PROPERTY_ID PropertyId,
+  _In_  DWORD               PropertyValueBufferSize,
+  _In_  PEVT_VARIANT        PropertyValueBuffer,
+  _Out_ PDWORD              PropertyValueBufferUsed
+);
+
+
+EVT_HANDLE WINAPI EvtOpenChannelConfig(
+  _In_ EVT_HANDLE Session,
+  _In_ LPCWSTR    ChannelPath,
+  _In_ DWORD      Flags
+);
+
+BOOL WINAPI EvtGetChannelConfigProperty(
+  _In_  EVT_HANDLE                     ChannelConfig,
+  _In_  EVT_CHANNEL_CONFIG_PROPERTY_ID PropertyId,
+  _In_  DWORD                          Flags,
+  _In_  DWORD                          PropertyValueBufferSize,
+  _In_  PEVT_VARIANT                   PropertyValueBuffer,
+  _Out_ PDWORD                         PropertyValueBufferUsed
+);
+
+EVT_HANDLE WINAPI EvtOpenPublisherMetadata(
+  _In_opt_ EVT_HANDLE Session,
+  _In_     LPCWSTR    PublisherIdentity,
+  _In_opt_ LPCWSTR    LogFilePath,
+  _In_     LCID       Locale,
+  _In_     DWORD      Flags
+);
+
+EVT_HANDLE WINAPI EvtOpenEventMetadataEnum(
+  _In_ EVT_HANDLE PublisherMetadata,
+  _In_ DWORD      Flags
+);
+
+EVT_HANDLE WINAPI EvtNextEventMetadata(
+  _In_ EVT_HANDLE EventMetadataEnum,
+  _In_ DWORD      Flags
+);
+
+BOOL WINAPI EvtGetEventMetadataProperty(
+  _In_  EVT_HANDLE                     EventMetadata,
+  _In_  EVT_EVENT_METADATA_PROPERTY_ID PropertyId,
+  _In_  DWORD                          Flags,
+  _In_  DWORD                          EventMetadataPropertyBufferSize,
+  _In_  PEVT_VARIANT                   EventMetadataPropertyBuffer,
+  _Out_ PDWORD                         EventMetadataPropertyBufferUsed
+);
+
+
+BOOL WINAPI EvtGetPublisherMetadataProperty(
+  _In_  EVT_HANDLE                         PublisherMetadata,
+  _In_  EVT_PUBLISHER_METADATA_PROPERTY_ID PropertyId,
+  _In_  DWORD                              Flags,
+  _In_  DWORD                              PublisherMetadataPropertyBufferSize,
+  _In_  PEVT_VARIANT                       PublisherMetadataPropertyBuffer,
+  _Out_ PDWORD                             PublisherMetadataPropertyBufferUsed
+);
+
+
+BOOL WINAPI EvtGetObjectArraySize(
+  _In_  EVT_OBJECT_ARRAY_PROPERTY_HANDLE ObjectArray,
+  _Out_ PDWORD                           ObjectArraySize
+);
+
+
+BOOL WINAPI EvtGetObjectArrayProperty(
+  _In_  EVT_OBJECT_ARRAY_PROPERTY_HANDLE ObjectArray,
+  _In_  DWORD                            PropertyId,
+  _In_  DWORD                            ArrayIndex,
+  _In_  DWORD                            Flags,
+  _In_  DWORD                            PropertyValueBufferSize,
+  _In_  PEVT_VARIANT                     PropertyValueBuffer,
+  _Out_ PDWORD                           PropertyValueBufferUsed
+);
+
+
+BOOL WINAPI EvtFormatMessage(
+  _In_  EVT_HANDLE   PublisherMetadata,
+  _In_  EVT_HANDLE   Event,
+  _In_  DWORD        MessageId,
+  _In_  DWORD        ValueCount,
+  _In_  PEVT_VARIANT Values,
+  _In_  DWORD        Flags,
+  _In_  DWORD        BufferSize,
+  _In_  LPWSTR       Buffer,
+  _Out_ PDWORD       BufferUsed
+);
+
