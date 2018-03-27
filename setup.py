@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 PKG_NAME = "PythonForWindows"
-VERSION  = "0.3"
+VERSION  = "0.4"
 
 
 setup(
@@ -10,7 +10,7 @@ setup(
     version = VERSION,
     author = 'Hakril',
     author_email = 'none',
-    description = 'Python wrapper around parts of Windows',
+    description = 'A codebase aimed to make interaction with Windows and native execution easier',
     license = 'BSD',
     keywords = 'windows python',
     url = '',
