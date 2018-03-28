@@ -27,7 +27,7 @@ class TestSyswowCurrentProcess(object):
         wow64 = [m for m in peb64.modules if m.name == "wow64.dll"][0]
         assert "Wow64LdrpInitialize" in wow64.pe.exports
 
-
+@python_injection
 @windows_64bit_only
 class TestSyswowRemoteProcess(object):
     def test_remote_pebsyswow(self, proc32):

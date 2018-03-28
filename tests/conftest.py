@@ -60,7 +60,6 @@ else:
 
 
 
-
 class HandleDebugger(object):
     def __init__(self, pid):
         self.pid = pid

@@ -1,6 +1,13 @@
 TODO:
 
-=== CRITICAL BEFORE 0.4 ===
+=== CRITICAL BEFORE 0.5 ===
+
+- Add news features to index.html
+- Document / fix / release:
+    - windows.bits
+    - evtlog
+    - kernobj
+    - window
 
 ======
 

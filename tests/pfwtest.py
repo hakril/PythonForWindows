@@ -1,6 +1,7 @@
+import os.path
 import pytest
-import windows
 
+import windows
 import windows.generated_def as gdef
 
 is_process_32_bits = windows.current_process.bitness == 32
@@ -25,3 +26,32 @@ check_for_handle_leak = pytest.mark.usefixtures("check_for_handle_leak")
 
 test_binary_name = "notepad.exe"
 DEFAULT_CREATION_FLAGS = gdef.CREATE_NEW_CONSOLE
+
+
+# Python Injection check fixture
+
+python_is_installed = {
+    windows.current_process.bitness: True
+}
+
+if windows.current_process.bitness == 32:
+    with windows.utils.DisableWow64FsRedirection():
+        python_is_installed[64] = os.path.exists(r"C:\Windows\system32\python27.dll")
+
+if windows.current_process.bitness == 64:
+    python_is_installed[32] = os.path.exists(r"C:\Windows\SysWOW64\python27.dll")
+
+@pytest.fixture
+def check_injected_python_installed(request):
+    # Find the process parameter
+    procparams = [argname for argname in request.funcargnames if argname.startswith("proc")]
+    if len(procparams) != 1:
+        raise ValueError("Could not find the fixture name of the injected python")
+    procparam = procparams[0]
+    proc = request.getfuncargvalue(procparam)
+    if not python_is_installed[proc.bitness]:
+        pytest.skip("Python {0}b not installed -> skipping test with python injection into {0}b process".format(proc.bitness))
+    return None
+
+
+python_injection =  pytest.mark.usefixtures("check_injected_python_installed")
