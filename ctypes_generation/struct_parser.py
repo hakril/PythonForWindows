@@ -52,10 +52,17 @@ class WinStructParser(Parser):
             sep = self.next_token()
         self.assert_token_type(ColonToken, sep)
 
-    def parse_enum(self):
+    def parse_enum(self, is_typedef):
         """Handle enum typedef with no value assignement and 1 typedef after"""
-        enum_name = self.assert_token_type(NameToken).value
-        res_enum = WinEnum(enum_name)
+        if not type(self.peek()) == OpenBracketToken:
+            # Not an ANON enum
+            enum_name = self.assert_token_type(NameToken).value
+            res_enum = WinEnum(enum_name)
+        else:
+            if not is_typedef:
+                raise ValueError("Anonymous union not in a typedef")
+            res_enum = WinEnum(None)
+
         self.assert_token_type(OpenBracketToken)
         count = itertools.count()
         assigned_value = False
@@ -84,7 +91,6 @@ class WinStructParser(Parser):
         return res_enum
 
 
-
     def parse_winstruct(self):
         is_typedef = False
         peeked = self.peek()
@@ -94,17 +100,24 @@ class WinStructParser(Parser):
 
         def_type = self.assert_token_type(KeywordToken)
         if def_type.value == "enum":
-            return self.parse_enum()
+            return self.parse_enum(is_typedef)
         if def_type.value == "struct":
             WinDefType = WinStruct
         elif def_type.value == "union":
             WinDefType = WinUnion
         else:
             raise ParsingError("Expecting union or struct got <{0}> instead".format(def_type.value))
-        struct_name = self.assert_token_type(NameToken)
+        if not type(self.peek()) == OpenBracketToken:
+            # Not an anonymous structure def
+            struct_name = self.assert_token_type(NameToken).value
+        else:
+            # Anonymous structure def: check if we are ina  typedef
+            if not is_typedef:
+                raise ValueError("Anonymous structure/union not in a typedef")
+            struct_name = None #
         self.assert_token_type(OpenBracketToken)
 
-        result = WinDefType(struct_name.value, self.pack)
+        result = WinDefType(struct_name, self.pack)
 
         while type(self.peek()) != CloseBracketToken:
             tok_type, tok_name, nb_rep = self.parse_def()

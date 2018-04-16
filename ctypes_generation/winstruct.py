@@ -39,11 +39,15 @@ class WinStruct(object):
         self.fields.append(field)
 
     def add_typedef(self, name):
+        if self.name is None:
+            self.name = name
         if name in self.typedef:
             raise ValueError("nop")
         self.typedef[name] = self
 
     def add_ptr_typedef(self, name):
+        if self.name is None:
+            raise ValueError("Anonymous struct first typedef ({0}) should not be a PTR type".format(name))
         if name in self.typedef:
             raise ValueError("nop")
         self.typedef[name] = Ptr(self)
@@ -103,6 +107,8 @@ class WinStruct(object):
         typedef_ctypes = []
         for typedef_name, value in self.typedef.items():
             str_value = self.name
+            if typedef_name == str_value: # Do not generate "X= X" line (anonymous structs gen this)
+                continue
             if type(value) == Ptr:
                 str_value = "POINTER({0})".format(self.name)
             typedef_ctypes += ["{0} = {1}".format(typedef_name, str_value)]
@@ -130,11 +136,16 @@ class WinEnum(object):
         self.fields.append((number, name))
 
     def add_typedef(self, name):
+        if self.name is None:
+            # Setup our name to our first typedef
+            self.name = name
         if name in self.typedef:
             raise ValueError("nop")
         self.typedef[name] = self
 
     def add_ptr_typedef(self, name):
+        if self.name is None:
+            raise ValueError("Anonymous enum first typedef ({0}) should not be a PTR type".format(name))
         if name in self.typedef:
             raise ValueError("nop")
         self.typedef[name] = Ptr(self)
@@ -152,6 +163,8 @@ class WinEnum(object):
 
         for typedef_name, value in self.typedef.items():
             str_value = self.name
+            if typedef_name == str_value: # Do not generate "X= X" line (anonymous enum gen this)
+                continue
             if type(value) == Ptr:
                 str_value = "POINTER({0})".format(self.name)
             lines += ["{0} = {1}".format(typedef_name, str_value)]

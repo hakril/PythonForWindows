@@ -14,6 +14,8 @@ import func_parser
 import def_parser
 import com_parser
 
+from simpleparser import ParsingError
+
 pjoin = os.path.join
 pexists = os.path.exists
 dedent = textwrap.dedent
@@ -28,7 +30,13 @@ to_dest = lambda path: pjoin(DEST_DIR, path)
 class ParsedFile(object):
     def __init__(self, filename):
         self.filename = filename
-        self.data = self.PARSER(open(filename).read()).parse()
+        try:
+            self.data = self.PARSER(open(filename).read()).parse()
+        except ParsingError as e:
+            print(" !! Error while parsing file <{0}> !!".format(filename))
+            print(e)
+            raise
+
         self.exports = set()
         self.imports = set()
         self.compute_imports_exports(self.data)
@@ -131,12 +139,13 @@ class COMParsedFile(ParsedFile):
 
 
 class ParsedFileGraph(object):
-    def __init__(self, nodes, depnodes): # depnodes: nodes that we dont have to handle but want can take export from
+    def __init__(self, nodes, depnodes, missing_handler=None): # depnodes: nodes that we dont have to handle but want can take export from
         self.nodes = nodes
         self.depnodes = depnodes
         self.exports_database = {}
         self.depandances_database = {node: set() for node in nodes}
         self.build_export_database(self.nodes)
+        self.missing_handler = missing_handler
         self.build_depandance_database()
 
     def build_dependancy_graph(self):
@@ -166,7 +175,13 @@ class ParsedFileGraph(object):
                 try:
                     self.depandances_database[node].add(self.exports_database[import_])
                 except KeyError as e:
-                    raise ValueError("Missing dependancy <{0}> of {1}".format(import_, node))
+                    self.on_missing_dependancy(import_, node)
+                    # raise ValueError("Missing dependancy <{0}> of {1}".format(import_, node))
+
+    def on_missing_dependancy(self, import_, node):
+        if self.missing_handler is not None:
+            return self.missing_handler(import_, node)
+        raise ValueError("Missing dependancy <{0}> of {1}".format(import_, node))
 
 
     def build_export_database(self, nodes):
@@ -194,8 +209,23 @@ class FakeExporter(object):
         self.exports = exports
 
 class ParsedDirectory(object):
-    def __init__(self, filetype, directory):
-        self.nodes = [filetype(f) for f in glob.glob(directory)]
+    def __init__(self, filetype, src, recurse=False):
+        if not recurse:
+            if os.path.isdir(src):
+                srcglob = pjoin(src, "*.txt")
+            else:
+                srcglob = src
+            files = glob.glob(srcglob)
+        else:
+            # Recurse search of .txt files
+            files = [os.path.join(path, filename)
+                        for (path, _, files) in os.walk(src)
+                            for filename in files
+                                if filename.endswith(".txt")]
+
+
+
+        self.nodes = [filetype(f) for f in files]
 
 
 ### Generation Class ###
@@ -528,7 +558,6 @@ class MetaFileGenerator(NoTemplatedGenerator):
                 self.emitline("import {0} as {0}_module".format(modname))
                 self.emitline("{0}_walker = generate_walker({0}, {1}_module)".format(name, modname))
 
-
 class ModuleGenerator(object):
     def __init__(self, name, filetype, ctypesgenerator, docgenerator, src):
         self.name = name
@@ -543,26 +572,43 @@ class ModuleGenerator(object):
     def add_module_dependancy(self, module):
         self.dependances_modules.add(module)
 
-    def parse_directory(self, globdir):
-        self.nodes += ParsedDirectory(self.filetype, globdir).nodes
 
     def get_template_filename(self):
         return pjoin(self.src, "template.py")
 
-    def parse_source_directory(self):
-        if os.path.isdir(self.src):
-            srcglob = pjoin(self.src, "*.txt")
-        else:
-            srcglob = self.src
-        self.parse_directory(srcglob)
+    def parse_source_directory(self, recurse=False):
+        self.nodes += ParsedDirectory(self.filetype, self.src, recurse=recurse).nodes
 
     def resolve_dependancies(self, depnodes=[]):
         g = ParsedFileGraph(self.nodes, depnodes=depnodes)
         return g.build_dependancy_graph()
 
     def check_dependancies_without_flattening(self, depnodes):
-        g = ParsedFileGraph(self.nodes, depnodes=depnodes) # init check for missing dependance
+        self.missing_interfaces = []
+        g = ParsedFileGraph(self.nodes, depnodes=depnodes, missing_handler=self.missing_com_interface) # init check for missing dependance
+        if self.missing_interfaces:
+            missing_names = [x[0] for x in self.missing_interfaces]
+            if not args.autocopy:
+                raise ValueError("Missing COM dependancy Names : {0}".format(missing_names))
+
+            print("Missing COM interfaces are: {0}".format(missing_names))
+            autocopied = []
+            for name, node in self.missing_interfaces:
+                filename = "{0}\\{1}.txt".format(args.autocopy, name)
+                if os.path.exists(filename):
+                    autocopied.append(name)
+                    print("Auto-copy <{0}>".format(filename))
+                    targetdir = os.path.dirname(node.filename)
+                    print(filename, targetdir)
+                    shutil.copy(filename, targetdir)
+            if autocopied:
+                raise ValueError("Auto-copyied Names : {0}".format(autocopied))
+            raise ValueError("Missing COM dependancy Names : {0}".format(missing_names))
         return g.nodes
+
+    def missing_com_interface(self, import_, node):
+        print("Missing name <{0}> in file <{1}>".format(import_, node.filename))
+        self.missing_interfaces.append((import_, node))
 
     def generate(self):
         self.parse_source_directory()
@@ -607,6 +653,14 @@ class ModuleGenerator(object):
         return res
 
 
+import argparse
+
+parser = argparse.ArgumentParser(prog=__file__)
+parser.add_argument('--autocopy', help="[PRIVATE OPTION] A directory used to find missing COM interface")
+args = parser.parse_args()
+
+
+
 # Copy Flag code
 shutil.copy(from_here(r"definitions\flag.py"), DEST_DIR)
 
@@ -643,7 +697,7 @@ print("== Generating COM interfaces ==")
 com_module_generator = ModuleGenerator("interfaces", COMParsedFile, COMCtypesGenerator, None, from_here(r"definitions\com"))
 # Load the interface_to_iid file needed by the 'COMCtypesGenerator'
 com_module_generator.after_ctypes_generator_init = lambda cgen: cgen.parse_iid_file(from_here("definitions\\interface_to_iid.txt"))
-com_module_generator.parse_source_directory()
+com_module_generator.parse_source_directory(recurse=True)
 com_module_generator.add_module_dependancy(structure_module_generator)
 com_module_generator.resolve_dependancies = com_module_generator.check_dependancies_without_flattening # No real flattening as we have circular dep in Interfaces VTBL
 com_module_generator.resolve_dep_and_generate([BasicTypeNodes()])
