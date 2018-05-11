@@ -1,0 +1,72 @@
+typedef struct ITriggerCollectionVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ITriggerCollection * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            __RPC__deref_out  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ITriggerCollection * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ITriggerCollection * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ITriggerCollection * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ITriggerCollection * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ITriggerCollection * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ITriggerCollection * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+            ITriggerCollection * This,
+            /* [retval][out] */ long *pCount);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+            ITriggerCollection * This,
+            /* [in] */ long index,
+            /* [retval][out] */ ITrigger **ppTrigger);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+            ITriggerCollection * This,
+            /* [retval][out] */ IUnknown **ppEnum);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Create )( 
+            ITriggerCollection * This,
+            /* [in] */ TASK_TRIGGER_TYPE2 type,
+            /* [retval][out] */ ITrigger **ppTrigger);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Remove )( 
+            ITriggerCollection * This,
+            /* [in] */ VARIANT index);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Clear )( 
+            ITriggerCollection * This);
+        
+        END_INTERFACE
+    } ITriggerCollectionVtbl;

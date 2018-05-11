@@ -1,0 +1,59 @@
+typedef struct IActionVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IAction * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            __RPC__deref_out  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IAction * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IAction * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IAction * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IAction * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IAction * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IAction * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Id )( 
+            IAction * This,
+            /* [retval][out] */ BSTR *pId);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Id )( 
+            IAction * This,
+            /* [in] */ BSTR Id);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Type )( 
+            IAction * This,
+            /* [retval][out] */ TASK_ACTION_TYPE *pType);
+        
+        END_INTERFACE
+    } IActionVtbl;

@@ -1,0 +1,75 @@
+typedef struct IComHandlerActionVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IComHandlerAction * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            __RPC__deref_out  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IComHandlerAction * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IComHandlerAction * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IComHandlerAction * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IComHandlerAction * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IComHandlerAction * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IComHandlerAction * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Id )( 
+            IComHandlerAction * This,
+            /* [retval][out] */ BSTR *pId);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Id )( 
+            IComHandlerAction * This,
+            /* [in] */ BSTR Id);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Type )( 
+            IComHandlerAction * This,
+            /* [retval][out] */ TASK_ACTION_TYPE *pType);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_ClassId )( 
+            IComHandlerAction * This,
+            /* [retval][out] */ BSTR *pClsid);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_ClassId )( 
+            IComHandlerAction * This,
+            /* [in] */ BSTR clsid);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Data )( 
+            IComHandlerAction * This,
+            /* [retval][out] */ BSTR *pData);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Data )( 
+            IComHandlerAction * This,
+            /* [in] */ BSTR data);
+        
+        END_INTERFACE
+    } IComHandlerActionVtbl;

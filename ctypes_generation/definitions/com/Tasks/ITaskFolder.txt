@@ -1,0 +1,123 @@
+typedef struct ITaskFolderVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            __RPC__in ITaskFolder * This,
+            /* [in] */ __RPC__in REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            __RPC__deref_out  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            __RPC__in ITaskFolder * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            __RPC__in ITaskFolder * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            __RPC__in ITaskFolder * This,
+            /* [out] */ __RPC__out UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            __RPC__in ITaskFolder * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ __RPC__deref_out_opt ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            __RPC__in ITaskFolder * This,
+            /* [in] */ __RPC__in REFIID riid,
+            /* [size_is][in] */ __RPC__in_ecount_full(cNames) LPOLESTR *rgszNames,
+            /* [range][in] */ __RPC__in_range(0,16384) UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ __RPC__out_ecount_full(cNames) DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ITaskFolder * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+            __RPC__in ITaskFolder * This,
+            /* [retval][out] */ __RPC__deref_out_opt BSTR *pName);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Path )( 
+            __RPC__in ITaskFolder * This,
+            /* [retval][out] */ __RPC__deref_out_opt BSTR *pPath);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetFolder )( 
+            __RPC__in ITaskFolder * This,
+            __RPC__in BSTR path,
+            /* [retval][out] */ __RPC__deref_out_opt ITaskFolder **ppFolder);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetFolders )( 
+            __RPC__in ITaskFolder * This,
+            /* [in] */ LONG flags,
+            /* [retval][out] */ __RPC__deref_out_opt ITaskFolderCollection **ppFolders);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateFolder )( 
+            __RPC__in ITaskFolder * This,
+            /* [in] */ __RPC__in BSTR subFolderName,
+            /* [optional][in] */ VARIANT sddl,
+            /* [retval][out] */ __RPC__deref_out_opt ITaskFolder **ppFolder);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *DeleteFolder )( 
+            __RPC__in ITaskFolder * This,
+            __RPC__in BSTR subFolderName,
+            /* [in] */ LONG flags);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetTask )( 
+            __RPC__in ITaskFolder * This,
+            /* [in] */ __RPC__in BSTR path,
+            /* [retval][out] */ __RPC__deref_out_opt IRegisteredTask **ppTask);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetTasks )( 
+            __RPC__in ITaskFolder * This,
+            /* [in] */ LONG flags,
+            /* [retval][out] */ __RPC__deref_out_opt IRegisteredTaskCollection **ppTasks);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *DeleteTask )( 
+            __RPC__in ITaskFolder * This,
+            /* [in] */ __RPC__in BSTR name,
+            /* [in] */ LONG flags);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RegisterTask )( 
+            __RPC__in ITaskFolder * This,
+            /* [in] */ __RPC__in BSTR path,
+            /* [in] */ __RPC__in BSTR xmlText,
+            /* [in] */ LONG flags,
+            /* [in] */ VARIANT userId,
+            /* [in] */ VARIANT password,
+            /* [in] */ TASK_LOGON_TYPE logonType,
+            /* [optional][in] */ VARIANT sddl,
+            /* [retval][out] */ __RPC__deref_out_opt IRegisteredTask **ppTask);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RegisterTaskDefinition )( 
+            __RPC__in ITaskFolder * This,
+            /* [in] */ __RPC__in BSTR path,
+            /* [in] */ __RPC__in_opt ITaskDefinition *pDefinition,
+            /* [in] */ LONG flags,
+            /* [in] */ VARIANT userId,
+            /* [in] */ VARIANT password,
+            /* [in] */ TASK_LOGON_TYPE logonType,
+            /* [optional][in] */ VARIANT sddl,
+            /* [retval][out] */ __RPC__deref_out_opt IRegisteredTask **ppTask);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetSecurityDescriptor )( 
+            __RPC__in ITaskFolder * This,
+            LONG securityInformation,
+            /* [retval][out] */ __RPC__deref_out_opt BSTR *pSddl);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetSecurityDescriptor )( 
+            __RPC__in ITaskFolder * This,
+            /* [in] */ __RPC__in BSTR sddl,
+            /* [in] */ LONG flags);
+        
+        END_INTERFACE
+    } ITaskFolderVtbl;

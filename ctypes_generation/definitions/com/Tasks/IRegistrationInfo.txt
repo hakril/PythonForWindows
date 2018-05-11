@@ -1,0 +1,119 @@
+typedef struct IRegistrationInfoVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IRegistrationInfo * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            __RPC__deref_out  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IRegistrationInfo * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IRegistrationInfo * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IRegistrationInfo * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IRegistrationInfo * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IRegistrationInfo * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IRegistrationInfo * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Description )( 
+            IRegistrationInfo * This,
+            /* [retval][out] */ BSTR *pDescription);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Description )( 
+            IRegistrationInfo * This,
+            /* [in] */ BSTR description);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Author )( 
+            IRegistrationInfo * This,
+            /* [retval][out] */ BSTR *pAuthor);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Author )( 
+            IRegistrationInfo * This,
+            /* [in] */ BSTR author);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Version )( 
+            IRegistrationInfo * This,
+            /* [retval][out] */ BSTR *pVersion);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Version )( 
+            IRegistrationInfo * This,
+            /* [in] */ BSTR version);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Date )( 
+            IRegistrationInfo * This,
+            /* [retval][out] */ BSTR *pDate);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Date )( 
+            IRegistrationInfo * This,
+            /* [in] */ BSTR date);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Documentation )( 
+            IRegistrationInfo * This,
+            /* [retval][out] */ BSTR *pDocumentation);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Documentation )( 
+            IRegistrationInfo * This,
+            /* [in] */ BSTR documentation);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_XmlText )( 
+            IRegistrationInfo * This,
+            /* [retval][out] */ BSTR *pText);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_XmlText )( 
+            IRegistrationInfo * This,
+            /* [in] */ BSTR text);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_URI )( 
+            IRegistrationInfo * This,
+            /* [retval][out] */ BSTR *pUri);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_URI )( 
+            IRegistrationInfo * This,
+            /* [in] */ BSTR uri);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_SecurityDescriptor )( 
+            IRegistrationInfo * This,
+            /* [retval][out] */ VARIANT *pSddl);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_SecurityDescriptor )( 
+            IRegistrationInfo * This,
+            /* [in] */ VARIANT sddl);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Source )( 
+            IRegistrationInfo * This,
+            /* [retval][out] */ BSTR *pSource);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Source )( 
+            IRegistrationInfo * This,
+            /* [in] */ BSTR source);
+        
+        END_INTERFACE
+    } IRegistrationInfoVtbl;

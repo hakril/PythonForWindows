@@ -1,0 +1,207 @@
+typedef struct ITaskSettingsVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ITaskSettings * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            __RPC__deref_out  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ITaskSettings * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ITaskSettings * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ITaskSettings * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ITaskSettings * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ITaskSettings * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ITaskSettings * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_AllowDemandStart )( 
+            ITaskSettings * This,
+            /* [retval][out] */ VARIANT_BOOL *pAllowDemandStart);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_AllowDemandStart )( 
+            ITaskSettings * This,
+            /* [in] */ VARIANT_BOOL allowDemandStart);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_RestartInterval )( 
+            ITaskSettings * This,
+            /* [retval][out] */ BSTR *pRestartInterval);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_RestartInterval )( 
+            ITaskSettings * This,
+            /* [in] */ BSTR restartInterval);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_RestartCount )( 
+            ITaskSettings * This,
+            /* [retval][out] */ int *pRestartCount);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_RestartCount )( 
+            ITaskSettings * This,
+            /* [in] */ int restartCount);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_MultipleInstances )( 
+            ITaskSettings * This,
+            /* [retval][out] */ TASK_INSTANCES_POLICY *pPolicy);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_MultipleInstances )( 
+            ITaskSettings * This,
+            /* [in] */ TASK_INSTANCES_POLICY policy);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_StopIfGoingOnBatteries )( 
+            ITaskSettings * This,
+            /* [retval][out] */ VARIANT_BOOL *pStopIfOnBatteries);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_StopIfGoingOnBatteries )( 
+            ITaskSettings * This,
+            /* [in] */ VARIANT_BOOL stopIfOnBatteries);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_DisallowStartIfOnBatteries )( 
+            ITaskSettings * This,
+            /* [retval][out] */ VARIANT_BOOL *pDisallowStart);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_DisallowStartIfOnBatteries )( 
+            ITaskSettings * This,
+            /* [in] */ VARIANT_BOOL disallowStart);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_AllowHardTerminate )( 
+            ITaskSettings * This,
+            /* [retval][out] */ VARIANT_BOOL *pAllowHardTerminate);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_AllowHardTerminate )( 
+            ITaskSettings * This,
+            /* [in] */ VARIANT_BOOL allowHardTerminate);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_StartWhenAvailable )( 
+            ITaskSettings * This,
+            /* [retval][out] */ VARIANT_BOOL *pStartWhenAvailable);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_StartWhenAvailable )( 
+            ITaskSettings * This,
+            /* [in] */ VARIANT_BOOL startWhenAvailable);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_XmlText )( 
+            ITaskSettings * This,
+            /* [retval][out] */ BSTR *pText);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_XmlText )( 
+            ITaskSettings * This,
+            /* [in] */ BSTR text);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_RunOnlyIfNetworkAvailable )( 
+            ITaskSettings * This,
+            /* [retval][out] */ VARIANT_BOOL *pRunOnlyIfNetworkAvailable);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_RunOnlyIfNetworkAvailable )( 
+            ITaskSettings * This,
+            /* [in] */ VARIANT_BOOL runOnlyIfNetworkAvailable);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_ExecutionTimeLimit )( 
+            ITaskSettings * This,
+            /* [retval][out] */ BSTR *pExecutionTimeLimit);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_ExecutionTimeLimit )( 
+            ITaskSettings * This,
+            /* [in] */ BSTR executionTimeLimit);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Enabled )( 
+            ITaskSettings * This,
+            /* [retval][out] */ VARIANT_BOOL *pEnabled);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Enabled )( 
+            ITaskSettings * This,
+            /* [in] */ VARIANT_BOOL enabled);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_DeleteExpiredTaskAfter )( 
+            ITaskSettings * This,
+            /* [retval][out] */ BSTR *pExpirationDelay);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_DeleteExpiredTaskAfter )( 
+            ITaskSettings * This,
+            /* [in] */ BSTR expirationDelay);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Priority )( 
+            ITaskSettings * This,
+            /* [retval][out] */ int *pPriority);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Priority )( 
+            ITaskSettings * This,
+            /* [in] */ int priority);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Compatibility )( 
+            ITaskSettings * This,
+            /* [retval][out] */ TASK_COMPATIBILITY *pCompatLevel);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Compatibility )( 
+            ITaskSettings * This,
+            /* [in] */ TASK_COMPATIBILITY compatLevel);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Hidden )( 
+            ITaskSettings * This,
+            /* [retval][out] */ VARIANT_BOOL *pHidden);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Hidden )( 
+            ITaskSettings * This,
+            /* [in] */ VARIANT_BOOL hidden);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_IdleSettings )( 
+            ITaskSettings * This,
+            /* [retval][out] */ IIdleSettings **ppIdleSettings);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_IdleSettings )( 
+            ITaskSettings * This,
+            /* [in] */ IIdleSettings *pIdleSettings);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_RunOnlyIfIdle )( 
+            ITaskSettings * This,
+            /* [retval][out] */ VARIANT_BOOL *pRunOnlyIfIdle);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_RunOnlyIfIdle )( 
+            ITaskSettings * This,
+            /* [in] */ VARIANT_BOOL runOnlyIfIdle);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_WakeToRun )( 
+            ITaskSettings * This,
+            /* [retval][out] */ VARIANT_BOOL *pWake);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_WakeToRun )( 
+            ITaskSettings * This,
+            /* [in] */ VARIANT_BOOL wake);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_NetworkSettings )( 
+            ITaskSettings * This,
+            /* [retval][out] */ INetworkSettings **ppNetworkSettings);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_NetworkSettings )( 
+            ITaskSettings * This,
+            /* [in] */ INetworkSettings *pNetworkSettings);
+        
+        END_INTERFACE
+    } ITaskSettingsVtbl;

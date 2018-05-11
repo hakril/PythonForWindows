@@ -1,0 +1,139 @@
+typedef struct IEmailActionVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IEmailAction * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            __RPC__deref_out  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IEmailAction * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IEmailAction * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IEmailAction * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IEmailAction * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IEmailAction * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IEmailAction * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Id )( 
+            IEmailAction * This,
+            /* [retval][out] */ BSTR *pId);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Id )( 
+            IEmailAction * This,
+            /* [in] */ BSTR Id);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Type )( 
+            IEmailAction * This,
+            /* [retval][out] */ TASK_ACTION_TYPE *pType);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Server )( 
+            IEmailAction * This,
+            /* [retval][out] */ BSTR *pServer);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Server )( 
+            IEmailAction * This,
+            /* [in] */ BSTR server);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Subject )( 
+            IEmailAction * This,
+            /* [retval][out] */ BSTR *pSubject);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Subject )( 
+            IEmailAction * This,
+            /* [in] */ BSTR subject);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_To )( 
+            IEmailAction * This,
+            /* [retval][out] */ BSTR *pTo);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_To )( 
+            IEmailAction * This,
+            /* [in] */ BSTR to);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Cc )( 
+            IEmailAction * This,
+            /* [retval][out] */ BSTR *pCc);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Cc )( 
+            IEmailAction * This,
+            /* [in] */ BSTR cc);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Bcc )( 
+            IEmailAction * This,
+            /* [retval][out] */ BSTR *pBcc);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Bcc )( 
+            IEmailAction * This,
+            /* [in] */ BSTR bcc);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_ReplyTo )( 
+            IEmailAction * This,
+            /* [retval][out] */ BSTR *pReplyTo);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_ReplyTo )( 
+            IEmailAction * This,
+            /* [in] */ BSTR replyTo);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_From )( 
+            IEmailAction * This,
+            /* [retval][out] */ BSTR *pFrom);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_From )( 
+            IEmailAction * This,
+            /* [in] */ BSTR from);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_HeaderFields )( 
+            IEmailAction * This,
+            /* [retval][out] */ ITaskNamedValueCollection **ppHeaderFields);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_HeaderFields )( 
+            IEmailAction * This,
+            /* [in] */ ITaskNamedValueCollection *pHeaderFields);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Body )( 
+            IEmailAction * This,
+            /* [retval][out] */ BSTR *pBody);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Body )( 
+            IEmailAction * This,
+            /* [in] */ BSTR body);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Attachments )( 
+            IEmailAction * This,
+            /* [retval][out] */ SAFEARRAY * *pAttachements);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Attachments )( 
+            IEmailAction * This,
+            /* [max_is][in] */ SAFEARRAY * pAttachements);
+        
+        END_INTERFACE
+    } IEmailActionVtbl;
