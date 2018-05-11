@@ -4,6 +4,15 @@ import collections
 
 #Ptr = collections.namedtuple('Ptr', [''])
 
+
+class BitFieldValue(object):
+    def __init__(self, nb_bits):
+        assert isinstance(nb_bits, int)
+        self.nb_bits = nb_bits
+
+    def __int__(self):
+        return self.nb_bits
+
 class WinStructType(object):
     def __init__(self, name):
         self.name = name
@@ -70,7 +79,9 @@ class WinStruct(object):
             res += ["{0}._pack_ = ".format(self.pack)]
         res += ["{0}._fields_ = [".format(self.name)]
         for (ftype, name, nb_rep) in self.fields:
-            if  nb_rep == 1:
+            if isinstance(nb_rep, BitFieldValue):
+                res += ['    ("{0}", {1}, {2}),'.format(name, ftype.generate_ctypes(), nb_rep.nb_bits)]
+            elif  nb_rep == 1:
                 res+= ['    ("{0}", {1}),'.format(name, ftype.generate_ctypes())]
             else:
                 res+= ['    ("{0}", {1} * {2}),'.format(name, ftype.generate_ctypes(), nb_rep)]
@@ -96,7 +107,10 @@ class WinStruct(object):
 
 
         for (ftype, name, nb_rep) in self.fields:
-            if  nb_rep == 1:
+            if isinstance(nb_rep, BitFieldValue):
+                # Should I check 'ftype' somewhere when we have a bitfield ?
+                res+= '        ("{0}", {1}, {2}),\n'.format(name, ftype.generate_ctypes(), nb_rep.nb_bits)
+            elif  nb_rep == 1:
                 res+= '        ("{0}", {1}),\n'.format(name, ftype.generate_ctypes())
             else:
                 res+= '        ("{0}", {1} * {2}),\n'.format(name, ftype.generate_ctypes(), nb_rep)

@@ -77,7 +77,7 @@ class WinComParser(Parser):
             args.append(self.parse_argument())
             #print("Pass <{0}>".format(p))
         self.next_token()
-        self.assert_token_type(ColonToken)
+        self.assert_token_type(SemiColonToken)
         return ret_type.value, method_name.value, args
 
     def parse(self):
@@ -113,7 +113,7 @@ class WinComParser(Parser):
             self.next_token()
             self.assert_token_type(StarToken)
             typedefptr = self.assert_token_type(NameToken).value
-        self.assert_token_type(ColonToken)
+        self.assert_token_type(SemiColonToken)
         res.typedefptr = typedefptr
         return res
 

@@ -30,6 +30,7 @@ OLECHAR = c_wchar
 POLECHAR = c_wchar_p
 PUCHAR = POINTER(UCHAR)
 double = c_double
+DATE = double
 PSID = PVOID
 ULONGLONG = c_ulonglong
 LONGLONG = c_longlong

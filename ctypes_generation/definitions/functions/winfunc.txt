@@ -1677,3 +1677,27 @@ NTSTATUS WINAPI ApiSetResolveToHost (
     _Out_ PBOOLEAN Resolved,
     _Out_ PUNICODE_STRING HostBinary
     );
+
+
+VOID WINAPI Sleep(
+  _In_ DWORD dwMilliseconds
+);
+
+DWORD WINAPI SleepEx(
+  _In_ DWORD dwMilliseconds,
+  _In_ BOOL  bAlertable
+);
+
+BOOL WINAPI GetProcessMitigationPolicy(
+  _In_  HANDLE                    hProcess,
+  _In_  PROCESS_MITIGATION_POLICY MitigationPolicy,
+  _Out_ PVOID                     lpBuffer,
+  _In_  SIZE_T                    dwLength
+);
+
+
+BOOL WINAPI SetProcessMitigationPolicy(
+  _In_ PROCESS_MITIGATION_POLICY MitigationPolicy,
+  _In_ PVOID                     lpBuffer,
+  _In_ SIZE_T                    dwLength
+);
