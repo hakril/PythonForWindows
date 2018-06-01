@@ -1,0 +1,10 @@
+PWSTR WINAPI StrStrIW(
+  _In_ PWSTR  pszFirst,
+  _In_ PWSTR pszSrch
+);
+
+PCSTR WINAPI StrStrIA(
+  _In_ PCSTR  pszFirst,
+  _In_ PCSTR pszSrch
+);
+

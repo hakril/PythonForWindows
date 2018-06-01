@@ -104,6 +104,19 @@ Output
 .. literalinclude:: samples_output\registry_registry.txt
 
 
+.. _sample_scheduled_task:
+
+Scheduled tasks
+"""""""""""""""
+
+.. literalinclude:: ..\..\samples\scheduled_tasks\scheduled_task.py
+
+Output
+
+.. literalinclude:: samples_output\scheduled_task_scheduled_task.txt
+
+
+
 .. _sample_wintrust:
 
 ``windows.wintrust``

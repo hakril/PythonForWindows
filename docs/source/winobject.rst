@@ -17,3 +17,4 @@ This sections describes them by group of relation.
     volume.rst
     wmi.rst
     handle.rst
+    task_scheduler.rst

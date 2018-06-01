@@ -31,7 +31,7 @@ Documentation
    :numbered:
 
    windows.rst
-   various.rst
+   winobject.rst
    native_exec.rst
    winproxy.rst
    pipe.rst

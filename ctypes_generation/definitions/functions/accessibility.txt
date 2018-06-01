@@ -1,0 +1,6 @@
+HRESULT WINAPI ObjectFromLresult(
+  _In_  LRESULT lResult,
+  _In_  REFIID  riid,
+  _In_  WPARAM  wParam,
+  _Out_ PVOID   *ppvObject
+);
