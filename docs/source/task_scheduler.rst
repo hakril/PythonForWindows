@@ -7,6 +7,10 @@ Task scheduler
 
     See sample :ref:`sample_scheduled_task`
 
+.. warning::
+
+    This API have not been tested on real case yet and may be subject to changes.
+
 
 TaskService
 """""""""""

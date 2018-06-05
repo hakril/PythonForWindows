@@ -174,6 +174,7 @@ def pytest_terminal_summary(terminalreporter, exitstatus):
             terminalreporter.write_sep("_", "{0}::{1}".format(file, test))
             for type, items in leak_report.LEAK.items():
                 terminalreporter.write_line("Leaked handles of type <{0}>".format(type) , Purple=True, bold=True)
+                terminalreporter.write_line("* <{0}>".format(items) , Purple=True, bold=True)
                 for item in items:
                     try:
                         descr = item.description()

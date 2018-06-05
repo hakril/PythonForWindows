@@ -5,8 +5,6 @@ import os.path
 import windows
 import windows.generated_def as gdef
 
-from pfwtest import require_admin
-
 SCHTASKS = "c:\Windows\System32\schtasks.exe"
 
 task_scheduler = windows.system.task_scheduler

@@ -13,12 +13,15 @@ is_windows_64_bits = windows.system.bitness == 64
 
 is_windows_10 = (windows.system.version[0] == 10)
 
+is_admin = windows.current_process.token.is_elevated
+
 windows_32bit_only = pytest.mark.skipif(not is_windows_32_bits, reason="Test for 32bits Kernel only")
 windows_64bit_only = pytest.mark.skipif(not is_windows_64_bits, reason="Test for 64bits Kernel only")
 
 process_32bit_only = pytest.mark.skipif(not is_process_32_bits, reason="Test for 32bits process only")
 process_64bit_only = pytest.mark.skipif(not is_process_64_bits, reason="Test for 64bits process only")
 process_syswow_only = pytest.mark.skipif(not is_process_syswow, reason="Test for syswow process only")
+require_admin = pytest.mark.skipif(not is_admin, reason="Test must be launched as admin")
 
 
 check_for_gc_garbage = pytest.mark.usefixtures("check_for_gc_garbage")

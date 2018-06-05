@@ -18,3 +18,4 @@ This sections describes them by group of relation.
     wmi.rst
     handle.rst
     task_scheduler.rst
+    evtlog.rst

@@ -116,6 +116,19 @@ Output
 .. literalinclude:: samples_output\scheduled_task_scheduled_task.txt
 
 
+.. _sample_event_log:
+
+Event Log
+"""""""""
+
+.. literalinclude:: ..\..\samples\event_log\eventlog.py
+
+Output
+
+.. literalinclude:: samples_output\event_log_eventlog.txt
+
+
+
 
 .. _sample_wintrust:
 

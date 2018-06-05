@@ -140,7 +140,7 @@ class TestProcessWithCheckGarbage(object):
                 proc32.execute(shellcode.get_code())
                 time.sleep(0.1)
                 dword = proc32.read_dword(addr)
-                assert dword, 0x42424242
+                assert dword == 0x42424242
 
     @windows_64bit_only
     def test_execute_to_64(self, proc64):
