@@ -20,6 +20,7 @@ from windows.winobject import kernobj
 from windows.winobject import handle
 from windows.winobject import event_log
 from windows.winobject import task_scheduler
+from windows.winobject import system_module
 
 from windows.generated_def.winstructs import *
 from windows.dbgprint import dbgprint
@@ -69,6 +70,11 @@ class System(object):
 
         :type: [:class:`~windows.winobject.handle.Handle`] -- A list of Hanlde"""
         return handle.enumerate_handles()
+
+    @property
+    def modules(self):
+        # TODO: doc
+        return system_module.enumerate_kernel_modules()
 
     @utils.fixedpropety
     def bitness(self):
@@ -237,6 +243,8 @@ class System(object):
         # This returns the last version where ntdll was updated
         # Should look at HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion
         # values:  CurrentBuild + UBR
+        # windows.system.registry(r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion")["CurrentBuild"].value
+        # windows.system.registry(r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion")["UBR"].value
         return self.get_file_version("comctl32")
 
     @staticmethod
