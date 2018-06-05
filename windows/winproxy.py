@@ -194,7 +194,8 @@ class IphlpapiProxy(ApiProxy):
 
 class NtdllProxy(ApiProxy):
     APIDLL = "ntdll"
-    default_error_check = staticmethod(should_return_zero_check)
+    default_error_check = staticmethod(should_return_zero_check) # Setup to: error_ntstatus ?
+
 
 class WinTrustProxy(ApiProxy):
     APIDLL = "wintrust"
@@ -1146,23 +1147,23 @@ def TpCallbackSendAlpcMessageOnCompletion(TpHandle, PortHandle, Flags, SendMessa
 
 # low level registry
 
-@NtdllProxy("NtOpenKey")
+@NtdllProxy("NtOpenKey", error_ntstatus)
 def NtOpenKey(KeyHandle, DesiredAccess, ObjectAttributes):
     return NtOpenKey.ctypes_function(KeyHandle, DesiredAccess, ObjectAttributes)
 
-@NtdllProxy("NtCreateKey")
+@NtdllProxy("NtCreateKey", error_ntstatus)
 def NtCreateKey(pKeyHandle, DesiredAccess, ObjectAttributes, TitleIndex, Class, CreateOptions, Disposition):
     return NtCreateKey.ctypes_function(pKeyHandle, DesiredAccess, ObjectAttributes, TitleIndex, Class, CreateOptions, Disposition)
 
-@NtdllProxy("NtSetValueKey")
+@NtdllProxy("NtSetValueKey", error_ntstatus)
 def NtSetValueKey(KeyHandle, ValueName, TitleIndex, Type, Data, DataSize):
     return NtSetValueKey.ctypes_function(KeyHandle, ValueName, TitleIndex, Type, Data, DataSize)
 
-@NtdllProxy("NtQueryValueKey")
+@NtdllProxy("NtQueryValueKey", error_ntstatus)
 def NtQueryValueKey(KeyHandle, ValueName, KeyValueInformationClass, KeyValueInformation, Length, ResultLength):
     return NtQueryValueKey.ctypes_function(KeyHandle, ValueName, KeyValueInformationClass, KeyValueInformation, Length, ResultLength)
 
-@NtdllProxy("NtEnumerateValueKey")
+@NtdllProxy("NtEnumerateValueKey", error_ntstatus)
 def NtEnumerateValueKey(KeyHandle, Index, KeyValueInformationClass, KeyValueInformation, Length, ResultLength):
     return NtEnumerateValueKey.ctypes_function(KeyHandle, Index, KeyValueInformationClass, KeyValueInformation, Length, ResultLength)
 
