@@ -112,25 +112,21 @@ def scmanagera(access):
         windows.winproxy.CloseServiceHandle(scmanager)
 
 def enumerate_services():
-    # TODO: fix this so we don't have a scmanager leak..
-    scmanager = windows.winproxy.OpenSCManagerA(dwDesiredAccess=SC_MANAGER_ENUMERATE_SERVICE)
-
-    size_needed = DWORD()
-    nb_services = DWORD()
-    counter = DWORD()
-    try:
-        windows.winproxy.EnumServicesStatusExA(scmanager, SC_ENUM_PROCESS_INFO, SERVICE_TYPE_ALL, SERVICE_STATE_ALL, None, 0, ctypes.byref(size_needed), ctypes.byref(nb_services), byref(counter), None)
-    except WindowsError:
-        pass
-
-    while True:
-        size = size_needed.value
-        buffer = (BYTE * size)()
-
+    with scmanagera(SC_MANAGER_ENUMERATE_SERVICE) as scm:
+        size_needed = DWORD()
+        nb_services = DWORD()
+        counter = DWORD()
         try:
-            windows.winproxy.EnumServicesStatusExA(scmanager, SC_ENUM_PROCESS_INFO, SERVICE_TYPE_ALL, SERVICE_STATE_ALL, buffer, size, ctypes.byref(size_needed), ctypes.byref(nb_services), byref(counter), None)
-        except WindowsError as e:
-            continue
+            windows.winproxy.EnumServicesStatusExA(scm, SC_ENUM_PROCESS_INFO, SERVICE_TYPE_ALL, SERVICE_STATE_ALL, None, 0, ctypes.byref(size_needed), ctypes.byref(nb_services), byref(counter), None)
+        except WindowsError:
+            pass
 
-        return_type = (ServiceA * nb_services.value)
-        return list(return_type.from_buffer(buffer))
+        while True:
+            size = size_needed.value
+            buffer = (BYTE * size)()
+            try:
+                windows.winproxy.EnumServicesStatusExA(scm, SC_ENUM_PROCESS_INFO, SERVICE_TYPE_ALL, SERVICE_STATE_ALL, buffer, size, ctypes.byref(size_needed), ctypes.byref(nb_services), byref(counter), None)
+            except WindowsError as e:
+                continue
+            return_type = (ServiceA * nb_services.value)
+            return list(return_type.from_buffer(buffer))

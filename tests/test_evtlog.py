@@ -1,6 +1,4 @@
 import pytest
-import subprocess
-import os.path
 
 import windows
 import windows.generated_def as gdef

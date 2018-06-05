@@ -17,12 +17,6 @@ class TestSystemWithCheckGarbage(object):
     def test_services(self):
         return windows.system.services
 
-    def test_services_process(self):
-        services_with_process = [s for s in windows.system.services if s.ServiceStatusProcess.dwProcessId]
-        service = services_with_process[0]
-        proc = service.process
-        assert proc.pid == service.ServiceStatusProcess.dwProcessId
-
     def test_logicaldrives(self):
         return windows.system.logicaldrives
 
