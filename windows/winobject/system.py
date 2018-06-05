@@ -18,6 +18,7 @@ from windows.winobject import volume
 from windows.winobject import wmi
 from windows.winobject import kernobj
 from windows.winobject import handle
+from windows.winobject import event_log
 from windows.winobject import task_scheduler
 
 from windows.generated_def.winstructs import *
@@ -90,6 +91,11 @@ class System(object):
 
 
     @utils.fixedpropety
+    def event_log(self):
+        return event_log.EvtlogManager()
+
+
+    @utils.fixedpropety
     def task_scheduler(self):
         """An object able to manage scheduled tasks on the local system
 
@@ -98,6 +104,8 @@ class System(object):
         windows.com.init()
         clsid_task_scheduler = gdef.IID.from_string("0f87369f-a4e5-4cfc-bd3e-73e6154572dd")
         task_service = task_scheduler.TaskService()
+        # What is non-implemented (WinXP)
+        # Raise (NotImplementedError?) ? Return NotImplemented ?
         windows.com.create_instance(clsid_task_scheduler, task_service)
         task_service.connect()
         return task_service
