@@ -458,7 +458,7 @@ class StructureDocGenerator(NoTemplatedGenerator):
     STRUCT_NAME_SEPARATOR = "'"
 
     def copy_template(self):
-        self.emitline(".. currentmodule:: windows.generated_def.winstructs")
+        self.emitline(".. module:: windows.generated_def.winstructs")
         self.emitline("")
 
     def generate(self):
@@ -476,6 +476,21 @@ class StructureDocGenerator(NoTemplatedGenerator):
 
     def generate_doc_simple_type_file(self, file):
         # TODO !
+
+        self.emitline("Simple types")
+        self.emitline(self.STRUCT_NAME_SEPARATOR * len("Simple types"))
+
+
+        for simpledef in file.data:
+            if simpledef.rvalue.startswith("POINTER("):
+                # import pdb;pdb.set_trace()
+                rtype = simpledef.rvalue[len("POINTER("):-1]
+                self.emitline(".. class:: {0}".format(simpledef.lvalue))
+                self.emitline("")
+                self.emitline("    Pointer to :class:`{0}`".format(rtype))
+            else:
+                self.emitline(".. autoclass:: {0}".format(simpledef.lvalue))
+            self.emitline("")
         return
 
     def generate_structures_for_file(self, file):
