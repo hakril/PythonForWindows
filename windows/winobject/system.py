@@ -16,7 +16,7 @@ from windows.winobject import exception
 from windows.winobject import service
 from windows.winobject import volume
 from windows.winobject import wmi
-from windows.winobject import kernobj
+from windows.winobject import object_manager
 from windows.winobject import handle
 from windows.winobject import event_log
 from windows.winobject import task_scheduler
@@ -28,6 +28,7 @@ from windows.dbgprint import dbgprint
 class System(object):
     """The state of the current ``Windows`` system ``Python`` is running on"""
 
+    # Setup these in a fixedproperty ?
     network = network.Network()
     """Object of class :class:`windows.winobject.network.Network`"""
     registry = registry.Registry()
@@ -118,6 +119,14 @@ class System(object):
         windows.com.create_instance(clsid_task_scheduler, task_service)
         task_service.connect()
         return task_service
+
+    @utils.fixedpropety
+    def object_manager(self):
+        """An object to query the objects in the kernel object manager.
+
+        :type: :class:`~windows.winobject.object_manager.ObjectManager`
+        """
+        return windows.winobject.object_manager.ObjectManager()
 
     #TODO: use GetComputerNameExA ? and recover other names ?
     @utils.fixedpropety

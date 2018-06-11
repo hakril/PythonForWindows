@@ -18,5 +18,6 @@ This sections describes them by group of relation.
     wmi.rst
     handle.rst
     system_module.rst
+    object_manager.rst
     task_scheduler.rst
     evtlog.rst
