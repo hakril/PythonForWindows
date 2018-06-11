@@ -73,7 +73,10 @@ class System(object):
 
     @property
     def modules(self):
-        # TODO: doc
+        """The list of system modules
+
+        :type: [:class:`~windows.winobject.system_module.SystemModule`] -- A list of :class:`~windows.winobject.system_module.SystemModule` or :class:`~windows.winobject.system_module.SystemModuleWow64`
+        """
         return system_module.enumerate_kernel_modules()
 
     @utils.fixedpropety

@@ -140,11 +140,15 @@ class PyHKey(object):
             sam = self.sam
         return PyHKey(self, name, sam)
 
-    def reopen(self, new_sam):
-        return PyHKey(self.surkey, self.name, new_sam)
+    def reopen(self, sam):
+        """Reopen the registry key with a new ``sam``
+
+        :rtype: :class:`PyHKey`
+        """
+        return PyHKey(self.surkey, self.name, sam)
 
     def create(self):
-        # TODO: document
+        """Create the registry key"""
         try:
             self._phkey = _winreg.CreateKeyEx(self.surkey.phkey, self.name, 0, self.sam)
         except WindowsError as e:
@@ -152,6 +156,7 @@ class PyHKey(object):
         return self
 
     def delete(self):
+        """Delete the registry key"""
         try:
             _winreg.DeleteKeyEx(self.surkey.phkey, self.name, self.sam, 0)
         except WindowsError as e:
@@ -188,7 +193,7 @@ HKEY_USERS = PyHKey(DummyPHKEY(_winreg.HKEY_USERS, "HKEY_USERS"), "", _winreg.KE
 
 
 class Registry(object):
-    """The ``Windows`` registry: a read only (for now) mapping"""
+    """The ``Windows`` registry"""
 
     registry_base_keys = {
         "HKEY_LOCAL_MACHINE" : HKEY_LOCAL_MACHINE,
@@ -204,6 +209,10 @@ class Registry(object):
 
     @classmethod
     def reopen(cls, sam):
+        """Return a new :class:`Registry` using ``sam`` as the new default
+
+        :rtype: :class:`Registry`
+        """
         return cls(sam)
 
     def __call__(self, name, sam=None):

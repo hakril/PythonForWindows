@@ -3,6 +3,9 @@ Task scheduler
 
 .. module:: windows.winobject.task_scheduler
 
+The :class:`TaskService` is accessible via :py:attr:`windows.system.task_scheduler
+<windows.winobject.system.System.task_scheduler>`
+
 .. note::
 
     See sample :ref:`sample_scheduled_task`
