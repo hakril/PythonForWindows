@@ -1,0 +1,193 @@
+#define SEC_WINNT_AUTH_IDENTITY_ANSI        0x1
+#define SEC_WINNT_AUTH_IDENTITY_UNICODE     0x2
+
+#define SE_OWNER_DEFAULTED      0x00000001
+#define SE_GROUP_DEFAULTED      0x00000002
+#define SE_DACL_PRESENT         0x00000004
+#define SE_DACL_DEFAULTED       0x00000008
+#define SE_SACL_PRESENT         0x00000010
+#define SE_SACL_DEFAULTED       0x00000020
+#define SE_DACL_AUTO_INHERIT_REQ    0x00000100
+#define SE_SACL_AUTO_INHERIT_REQ    0x00000200
+#define SE_DACL_AUTO_INHERITED      0x00000400
+#define SE_SACL_AUTO_INHERITED      0x00000800
+#define SE_DACL_PROTECTED       0x00001000
+#define SE_SACL_PROTECTED       0x00002000
+#define SE_RM_CONTROL_VALID     0x00004000
+#define SE_SELF_RELATIVE        0x00008000
+
+#define SDDL_REVISION_1 0x1
+
+#define SID_NULL                            "S-1-0-0"
+#define SID_WORLD                           "S-1-1-0"
+#define SID_LOCAL                           "S-1-2-0"
+#define SID_CREATOR_OWNER_ID                "S-1-3-0"
+#define SID_CREATOR_GROUP_ID                "S-1-3-1"
+#define SECURITY_DIALUP_RID                 "S-1-5-1"
+#define SECURITY_NETWORK_RID                "S-1-5-2"
+#define SECURITY_BATCH_RID                  "S-1-5-3"
+#define SECURITY_INTERACTIVE_RID            "S-1-5-4"
+
+#define SECURITY_SERVICE_RID                "S-1-5-6"
+#define SECURITY_ANONYMOUS_LOGON_RID        "S-1-5-7"
+#define SECURITY_PROXY_RID                  "S-1-5-8"
+#define SECURITY_ENTERPRISE_CONTROLLERS_RID "S-1-5-9"
+#define SECURITY_PRINCIPAL_SELF_RID         "S-1-5-10"
+#define SECURITY_AUTHENTICATED_USER_RID     "S-1-5-11"
+#define SECURITY_RESTRICTED_CODE_RID        "S-1-5-12"
+#define SECURITY_TERMINAL_SERVER_RID        "S-1-5-13"
+#define SECURITY_LOCAL_SYSTEM_RID           "S-1-5-18"
+#define SECURITY_NT_NON_UNIQUE              "S-1-5-21"
+#define SECURITY_BUILTIN_DOMAIN_RID         "S-1-5-32"
+
+
+#define ACE_OBJECT_TYPE_PRESENT           0x1
+#define ACE_INHERITED_OBJECT_TYPE_PRESENT 0x2
+
+#define SDDL_OBJECT_INHERIT_ACE              "CI"
+#define SDDL_CONTAINER_INHERIT_ACE           "OI"
+#define SDDL_NO_PROPAGATE_INHERIT_ACE        "NP"
+#define SDDL_INHERIT_ONLY_ACE                "IO"
+#define SDDL_INHERITED_ACE                   "ID"
+#define SDDL_SUCCESSFUL_ACCESS_ACE_FLAG      "SA"
+#define SDDL_FAILED_ACCESS_ACE_FLAG          "FA"
+
+#define SDDL_DOMAIN_ADMINISTRATORS          "DA"
+#define SDDL_DOMAIN_GUESTS                  "DG"
+#define SDDL_DOMAIN_USERS                   "DU"
+#define SDDL_ENTERPRISE_DOMAIN_CONTROLLERS  "ED"
+#define SDDL_DOMAIN_DOMAIN_CONTROLLERS      "DD"
+#define SDDL_DOMAIN_COMPUTERS               "DC"
+#define SDDL_BUILTIN_ADMINISTRATORS         "BA"
+#define SDDL_BUILTIN_GUESTS                 "BG"
+#define SDDL_BUILTIN_USERS                  "BU"
+#define SDDL_LOCAL_ADMIN                    "LA"
+#define SDDL_LOCAL_GUEST                    "LG"
+#define SDDL_ACCOUNT_OPERATORS              "AO"
+#define SDDL_BACKUP_OPERATORS               "BO"
+#define SDDL_PRINTER_OPERATORS              "PO"
+#define SDDL_SERVER_OPERATORS               "SO"
+#define SDDL_AUTHENTICATED_USERS            "AU"
+#define SDDL_PERSONAL_SELF                  "PS"
+#define SDDL_CREATOR_OWNER                  "CO"
+#define SDDL_CREATOR_GROUP                  "CG"
+#define SDDL_LOCAL_SYSTEM                   "SY"
+#define SDDL_POWER_USERS                    "PU"
+#define SDDL_EVERYONE                       "WD"
+#define SDDL_REPLICATOR                     "RE"
+#define SDDL_INTERACTIVE                    "IU"
+#define SDDL_NETWORK                        "NU"
+#define SDDL_SERVICE                        "SU"
+#define SDDL_RESTRICTED_CODE                "RC"
+#define SDDL_WRITE_RESTRICTED_CODE          "WR"
+#define SDDL_ANONYMOUS                      "AN"
+#define SDDL_SCHEMA_ADMINISTRATORS          "SA"
+#define SDDL_CERT_SERV_ADMINISTRATORS       "CA"
+#define SDDL_RAS_SERVERS                    "RS"
+#define SDDL_ENTERPRISE_ADMINS              "EA"
+#define SDDL_GROUP_POLICY_ADMINS            "PA"
+#define SDDL_ALIAS_PREW2KCOMPACC            "RU"
+#define SDDL_LOCAL_SERVICE                  "LS"
+#define SDDL_NETWORK_SERVICE                "NS"
+#define SDDL_REMOTE_DESKTOP                 "RD"
+#define SDDL_NETWORK_CONFIGURATION_OPS      "NO"
+#define SDDL_PERFMON_USERS                  "MU"
+#define SDDL_PERFLOG_USERS                  "LU"
+#define SDDL_IIS_USERS                      "IS"
+#define SDDL_CRYPTO_OPERATORS               "CY"
+#define SDDL_OWNER_RIGHTS                   "OW"
+#define SDDL_EVENT_LOG_READERS              "ER"
+#define SDDL_ENTERPRISE_RO_DCs              "RO"
+#define SDDL_CERTSVC_DCOM_ACCESS            "CD"
+#define SDDL_ALL_APP_PACKAGES               "AC"
+#define SDDL_RDS_REMOTE_ACCESS_SERVERS      "RA"
+#define SDDL_RDS_ENDPOINT_SERVERS           "ES"
+#define SDDL_RDS_MANAGEMENT_SERVERS         "MS"
+#define SDDL_USER_MODE_DRIVERS              "UD"
+#define SDDL_HYPER_V_ADMINS                 "HA"
+#define SDDL_CLONEABLE_CONTROLLERS          "CN"
+#define SDDL_ACCESS_CONTROL_ASSISTANCE_OPS  "AA"
+#define SDDL_REMOTE_MANAGEMENT_USERS        "RM"
+#define SDDL_AUTHORITY_ASSERTED             "AS"
+#define SDDL_SERVICE_ASSERTED               "SS"
+#define SDDL_PROTECTED_USERS                "AP"
+
+
+#define OBJECT_INHERIT_ACE                (0x1)
+#define CONTAINER_INHERIT_ACE             (0x2)
+#define NO_PROPAGATE_INHERIT_ACE          (0x4)
+#define INHERIT_ONLY_ACE                  (0x8)
+#define INHERITED_ACE                     (0x10)
+#define VALID_INHERIT_FLAGS               (0x1F)
+#define SUCCESSFUL_ACCESS_ACE_FLAG        (0x40)
+#define FAILED_ACCESS_ACE_FLAG            (0x80)
+
+#define SDDL_OWNER                          "O"
+#define SDDL_GROUP                          "G"
+#define SDDL_DACL                           "D"
+#define SDDL_SACL                           "S"
+
+#define SDDL_PROTECTED                      "P"
+#define SDDL_AUTO_INHERIT_REQ               "AR"
+#define SDDL_AUTO_INHERITED                 "AI"
+#define SDDL_NULL_ACL                       "NO_ACCESS_CONTROL"
+
+#define SDDL_ACCESS_ALLOWED                 "A"
+#define SDDL_ACCESS_DENIED                  "D"
+#define SDDL_OBJECT_ACCESS_ALLOWED          "OA"
+#define SDDL_OBJECT_ACCESS_DENIED           "OD"
+#define SDDL_AUDIT                          "AU"
+#define SDDL_ALARM                          "AL"
+#define SDDL_OBJECT_AUDIT                   "OU"
+#define SDDL_OBJECT_ALARM                   "OL"
+#define SDDL_MANDATORY_LABEL                "ML"
+#define SDDL_PROCESS_TRUST_LABEL            "TL"
+#define SDDL_CALLBACK_ACCESS_ALLOWED        "XA"
+#define SDDL_CALLBACK_ACCESS_DENIED         "XD"
+#define SDDL_RESOURCE_ATTRIBUTE             "RA"
+#define SDDL_SCOPED_POLICY_ID               "SP"
+#define SDDL_CALLBACK_AUDIT                 "XU"
+#define SDDL_CALLBACK_OBJECT_ACCESS_ALLOWED "ZA"
+
+#define SDDL_CONTAINER_INHERIT              "CI"
+#define SDDL_OBJECT_INHERIT                 "OI"
+#define SDDL_NO_PROPAGATE                   "NP"
+#define SDDL_INHERIT_ONLY                   "IO"
+#define SDDL_INHERITED                      "ID"
+#define SDDL_AUDIT_SUCCESS                  "SA"
+#define SDDL_AUDIT_FAILURE                  "FA"
+
+#define SDDL_READ_PROPERTY                  "RP"
+#define SDDL_WRITE_PROPERTY                 "WP"
+#define SDDL_CREATE_CHILD                   "CC"
+#define SDDL_DELETE_CHILD                   "DC"
+#define SDDL_LIST_CHILDREN                  "LC"
+#define SDDL_SELF_WRITE                     "SW"
+#define SDDL_LIST_OBJECT                    "LO"
+#define SDDL_DELETE_TREE                    "DT"
+#define SDDL_CONTROL_ACCESS                 "CR"
+#define SDDL_READ_CONTROL                   "RC"
+#define SDDL_WRITE_DAC                      "WD"
+#define SDDL_WRITE_OWNER                    "WO"
+#define SDDL_STANDARD_DELETE                "SD"
+#define SDDL_GENERIC_ALL                    "GA"
+#define SDDL_GENERIC_READ                   "GR"
+#define SDDL_GENERIC_WRITE                  "GW"
+#define SDDL_GENERIC_EXECUTE                "GX"
+#define SDDL_FILE_ALL                       "FA"
+#define SDDL_FILE_READ                      "FR"
+#define SDDL_FILE_WRITE                     "FW"
+#define SDDL_FILE_EXECUTE                   "FX"
+#define SDDL_KEY_ALL                        "KA"
+#define SDDL_KEY_READ                       "KR"
+#define SDDL_KEY_WRITE                      "KW"
+#define SDDL_KEY_EXECUTE                    "KX"
+#define SDDL_NO_WRITE_UP                    "NW"
+#define SDDL_NO_READ_UP                     "NR"
+#define SDDL_NO_EXECUTE_UP                  "NX"
+
+#define SYSTEM_MANDATORY_LABEL_NO_WRITE_UP      0x1
+#define SYSTEM_MANDATORY_LABEL_NO_READ_UP       0x2
+#define SYSTEM_MANDATORY_LABEL_NO_EXECUTE_UP    0x4
+
+
