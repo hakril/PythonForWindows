@@ -388,6 +388,81 @@ The local debugger handles
 * Standard breakpoint ``int3``
 * Hardware Execution breakpoint ``DrX``
 
+
+### Security
+
+You can access security information about Windows securable objects with the help of the security module.
+
+```python
+import windows.winproxy as winproxy
+import windows.security as security
+from windows.generated_def import *
+
+# The main object you want to manipulate is security.EPSECURITY_DESCRIPTOR
+# It can be instanciated from several objects
+
+## SDDL Strings https://docs.microsoft.com/en-us/windows/desktop/secauthz/security-descriptor-string-format
+SDDL = "O:LAG:S-1-5-32-544D:AI(A;OICIID;FA;;;SY)(A;OICIID;FA;;;BA)S:AI(AU;OICISA;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;LA)(AU;OICIFA;DCLCRPCR;;;LA)"
+print "# Instanciating of the security descriptor from the SDDL"
+pSecurityDescriptor = security.EPSECURITY_DESCRIPTOR.from_string(SDDL)
+print "Security descriptor is valid: ", pSecurityDescriptor.valid
+print "pSecurityDescriptor.owner: ", pSecurityDescriptor.owner
+print
+
+## HANDLES
+## The object type enum is defined here : https://docs.microsoft.com/fr-fr/windows/desktop/api/accctrl/ne-accctrl-_se_object_type
+print "# Instanciating of the security descriptor from a handle to the lsass.exe file" 
+handle = winproxy.CreateFileA('C:\\Windows\\System32\\lsass.exe', GENERIC_READ, FILE_SHARE_READ, None, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL)
+pSecurityDescriptor = security.EPSECURITY_DESCRIPTOR.from_handle(handle, object_type=SE_FILE_OBJECT) # You need to provide the object type behind the handle
+winproxy.CloseHandle(handle)
+print "pSecurityDescriptor.owner: ", pSecurityDescriptor.owner.lookup() # This should be owner by 'NT SERVICE\TrustedInstaller' 
+print
+
+## NAME
+## The object type enum is defined here : https://docs.microsoft.com/fr-fr/windows/desktop/api/accctrl/ne-accctrl-_se_object_type
+print "# Instanciating of the security descriptor from the name of a registry key"
+pSecurityDescriptor = security.EPSECURITY_DESCRIPTOR.from_name('CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run', object_type=SE_REGISTRY_KEY)
+print "pSecurityDescriptor.owner: ", pSecurityDescriptor.owner # This should be owner by 'S-1-5-18' 
+print
+
+## ACCESS RIGHT
+## If you instanciate the security descriptor from a windows object, you might want to access the SACL
+## You must have the 'SeSecurityPrivilege' privilege on you process, either you already have it or you can enable the privilege
+from windows.utils import enable_privilege
+print "# Enabling SeSecurityPrivilege privilege"
+enable_privilege("SeSecurityPrivilege", True) # You need admin access for this to work
+print "# Instanciating of the security from a service name"
+pSecurityDescriptor = security.EPSECURITY_DESCRIPTOR.from_name('Spooler', object_type=SE_SERVICE, desired_access=SACL_SECURITY_INFORMATION) 
+print "len(pSecurityDescriptor.sacl) : ", len(pSecurityDescriptor.sacl) 
+print "repr(pSecurityDescriptor.sacl[0]) : "
+print repr(pSecurityDescriptor.sacl[0]) # SACLs and DACLs act like lists, are iterable and indexable
+
+
+## OUTPUT ##
+
+
+# Instanciating of the security descriptor from the SDDL
+Security descriptor is valid:  True
+pSecurityDescriptor.owner:  S-1-5-21-2339421519-2002173573-4286560122-500
+
+# Instanciating of the security descriptor from a handle to the lsass.exe file
+pSecurityDescriptor.owner:  NT SERVICE\TrustedInstaller
+
+# Instanciating of the security descriptor from the name of a registry key
+pSecurityDescriptor.owner:  S-1-5-18
+
+# Enabling SeSecurityPrivilege privilege
+# Instanciating of the security from a service name
+len(pSecurityDescriptor.sacl) :  1
+repr(pSecurityDescriptor.sacl[0]) :
+<ACE AceType: SYSTEM_AUDIT_ACE_TYPE(0x2L) - AceFlags: [FAILED_ACCESS_ACE_FLAG(0x80L)]
+        Mask: [ADS_RIGHT_DS_CREATE_CHILD(0x1L), ADS_RIGHT_DS_DELETE_CHILD(0x2L), ADS_RIGHT_ACTRL_DS_LIST(0x4L), ADS_RIGHT_DS_SELF(0x8L), ADS_RIGHT_DS_READ_PROP(0x10L), ADS_RIGHT_DS_WRITE_PROP(0x20L), ADS_RIGHT_DS_DELETE_TREE(0x40L), ADS_RIGHT_DS_LIST_OBJECT(0x80L), ADS_RIGHT_DS_CONTROL_ACCESS(0x100L), ADS_RIGHT_DELETE(0x10000L), ADS_RIGHT_READ_CONTROL(0x20000L), ADS_RIGHT_WRITE_DAC(0x40000L), ADS_RIGHT_WRITE_OWNER(0x80000L)]
+        Sid: S-1-1-0
+>
+```
+
+
+
 ### Other stuff (see doc / samples)
 
 - Network
