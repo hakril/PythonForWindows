@@ -60,7 +60,6 @@ def test_security_descriptor_dacl():
     assert dacl[0].Mask == ADS_RIGHT_DS_CREATE_CHILD | ADS_RIGHT_DS_SELF | ADS_RIGHT_DS_WRITE_PROP | ADS_RIGHT_DS_LIST_OBJECT | ADS_RIGHT_READ_CONTROL | ADS_RIGHT_SYNCHRONIZE
     
     
-    
 def test_security_descriptor_sacl():
     pSecurityDescriptor = EPSECURITY_DESCRIPTOR().from_string(SDDL)
     sacl = pSecurityDescriptor.sacl
@@ -74,16 +73,24 @@ def test_security_descriptor_sacl():
     
 
 def test_security_descriptor_load_from_handle():
-    filename = __file__
+    filename = "C:\\Windows\\System32\\lsass.exe"
+    if windows.current_process.bitness == 32:
+        filename = "C:\\Windows\\sysnative\\lsass.exe"
     handle = winproxy.CreateFileA(filename, GENERIC_READ, FILE_SHARE_READ, None, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL)
     pSecurityDescriptor = EPSECURITY_DESCRIPTOR.from_handle(handle, object_type=SE_FILE_OBJECT)
     assert pSecurityDescriptor.valid
+    assert pSecurityDescriptor.owner.lookup() == "NT SERVICE\\TrustedInstaller"
     winproxy.CloseHandle(handle)
 
 
 def test_security_descriptor_load_from_name():
-    pSecurityDescriptor = EPSECURITY_DESCRIPTOR.from_name(__file__, object_type=SE_FILE_OBJECT)
+    filename = "C:\\Windows\\System32\\lsass.exe"
+    if windows.current_process.bitness == 32:
+        filename = "C:\\Windows\\sysnative\\lsass.exe"
+    pSecurityDescriptor = EPSECURITY_DESCRIPTOR.from_name(filename, object_type=SE_FILE_OBJECT)
     assert pSecurityDescriptor.valid
+    assert pSecurityDescriptor.valid
+    assert pSecurityDescriptor.owner.lookup() == "NT SERVICE\\TrustedInstaller"
     
     pSecurityDescriptor = EPSECURITY_DESCRIPTOR.from_name('Spooler', object_type=SE_SERVICE)
     assert str(pSecurityDescriptor.owner) == SECURITY_LOCAL_SYSTEM_RID
