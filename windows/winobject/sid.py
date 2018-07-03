@@ -21,9 +21,9 @@ class EPSID(PSID):
         
     def lookup(self):
         Name = LPCSTR()
-        cchName = DWORD(-1)
+        cchName = DWORD(0x1000)
         ReferencedDomainName = LPCSTR()
-        cchReferencedDomainName = DWORD(-1)
+        cchReferencedDomainName = DWORD(0x1000)
         peUse = SID_NAME_USE()
         
         result = winproxy.LookupAccountSidA(
