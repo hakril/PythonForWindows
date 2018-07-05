@@ -2,7 +2,6 @@ import pytest
 import threading
 import time
 
-#import windows.alpc
 from windows.security import *
 import windows.generated_def as gdef
 
