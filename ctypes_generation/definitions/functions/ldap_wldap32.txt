@@ -1,0 +1,394 @@
+ULONG LDAPAPI LdapGetLastError(
+);
+
+PLDAP LDAPAPI ldap_open(
+  _In_ LPCSTR HostName,
+  _In_ ULONG PortNumber
+);
+
+ULONG LDAPAPI ldap_bind_s(
+  _In_ PLDAP    ld,
+  _In_ LPCSTR   dn,
+  _In_ PVOID    cred,
+  _In_ ULONG    method
+);
+
+ULONG LDAPAPI ldap_bind(
+  _In_ PLDAP    ld,
+  _In_ LPCSTR   dn,
+  _In_ PVOID   cred,
+  _In_ ULONG    method
+);
+
+ULONG LDAPAPI ldap_unbind_s(
+  _In_ PLDAP    ld
+);
+
+ULONG LDAPAPI ldap_unbind(
+  _In_ PLDAP    ld
+);
+
+ULONG LDAPAPI ldap_connect(
+  _In_ PLDAP         ld,
+  _In_ LDAP_TIMEVAL *timeout
+);
+
+ULONG LDAPAPI ldap_simple_bind(
+  _In_ PLDAP  ld,
+  _In_ LPCSTR dn,
+  _In_ LPCSTR passwd
+);
+
+ULONG LDAPAPI ldap_simple_bind_s(
+  _In_ PLDAP  ld,
+  _In_ LPCSTR dn,
+  _In_ LPCSTR passwd
+);
+
+PLDAP LDAPAPI ldap_init(
+  _In_ LPCSTR HostName,
+  _In_ ULONG PortNumber
+);
+PLDAP LDAPAPI ldap_initW(
+  _In_ LPCSTR HostName,
+  _In_ ULONG PortNumber
+);
+
+PLDAP LDAPAPI ldap_sslinit(
+  _In_ LPCSTR HostName,
+  _In_ ULONG PortNumber,
+  _In_ INT   secure
+);
+
+ULONG LDAPAPI ldap_get_option(
+  _In_  PLDAP ld,
+  _In_  INT   option,
+  _Out_ PVOID outvalue
+);
+
+ULONG LDAPAPI ldap_set_option(
+  _In_ PLDAP ld,
+  _In_ INT   option,
+  _In_ INT  *invalue
+);
+
+ULONG LDAPAPI ldap_abandon(
+  _In_ PLDAP  ld,
+  _In_ ULONG  msgid
+);
+
+
+ULONG LDAPAPI ldap_check_filterA(
+  _In_ PLDAP   ld,
+  _In_ LPCSTR SearchFilter
+);
+
+ULONG LDAPAPI ldap_count_entries(
+  _In_ PLDAP        ld,
+  _In_ PVOID        res
+);
+
+LPCSTR LDAPAPI ldap_first_attribute(
+  _In_  PLDAP        ld,
+  _In_  PLDAPMessage entry,
+  _Out_ PBerElement  *ptr
+);
+
+LPCSTR LDAPAPI ldap_next_attribute(
+  _In_    PLDAP         ld,
+  _In_    PLDAPMessage  entry,
+  _Inout_ PBerElement    ptr
+);
+
+PLDAPMessage LDAPAPI ldap_first_entry(
+  _In_ PLDAP        ld,
+  _In_ PLDAPMessage res
+);
+
+PLDAPMessage LDAPAPI ldap_next_entry(
+  _In_ PLDAP        ld,
+  _In_ PLDAPMessage entry
+);
+
+PLDAPMessage LDAPAPI ldap_first_reference(
+  _In_ PLDAP        ld,
+  _In_ PLDAPMessage res
+);
+
+PLDAPMessage LDAPAPI ldap_next_reference(
+  _In_ PLDAP        ld,
+  _In_ PLDAPMessage entry
+);
+
+ULONG LDAPAPI ldap_get_next_page(
+  _In_  PLDAP       ExternalHandle,
+  _In_  PLDAPSearch SearchHandle,
+  _In_  ULONG       PageSize,
+  _Out_ ULONG       *MessageNumber
+);
+
+ULONG  LDAPAPI ldap_get_next_page_s(
+  _In_  PLDAP            ExternalHandle,
+  _In_  PLDAPSearch      SearchHandle,
+  _In_  LDAP_TIMEVAL    *timeout,
+  _In_  ULONG            PageSize,
+  _Out_ ULONG            *TotalCount,
+  _Out_ PLDAPMessage     *Results
+);
+
+ULONG LDAPAPI ldap_count_references(
+  _In_ PLDAP        ld,
+  _In_ PVOID        res
+);
+
+ULONG LDAPAPI ldap_count_values(
+  _In_ PLPCSTR vals
+);
+
+ULONG LDAPAPI ldap_escape_filter_element(
+  _In_  LPCSTR sourceFilterElement,
+  _In_  ULONG  sourceLength,
+  _Out_ LPCSTR destFilterElement,
+  _In_  ULONG  destLength
+);
+
+ULONG LDAPAPI ldap_get_paged_count(
+  _In_  PLDAP        ExternalHandle,
+  _In_  PLDAPSearch  SearchBlock,
+  _Out_ ULONG        *TotalCount,
+  _Out_ PLDAPMessage Results
+);
+
+PLPCSTR LDAPAPI ldap_get_values(
+  _In_ PLDAP        ld,
+  _In_ PLDAPMessage entry,
+  _In_ LPCSTR       attr
+);
+
+PVOID LDAPAPI ldap_get_values_len(
+  _In_ PLDAP        ExternalHandle,
+  _In_ PLDAPMessage Message,
+  _In_ LPCSTR       attr
+);
+
+ULONG LDAPAPI ldap_parse_extended_result(
+  _In_  PLDAP          Connection,
+  _In_  PLDAPMessage   ResultMessage,
+  _Out_ LPCSTR         *ResultOID,
+  _Out_ PVOID  ResultData,
+  _In_  BOOLEAN        Freeit
+);
+
+ULONG LDAPAPI ldap_create_page_control(
+  _In_  PLDAP         ExternalHandle,
+  _In_  ULONG         PageSize,
+  _In_  PBerElement   Cookie,
+  _In_  UCHAR         IsCritical,
+  _Out_ PLDAPControl  *Control
+);
+
+
+ULONG LDAPAPI ldap_parse_page_control(
+  _In_  PLDAP         ExternalHandle,
+  _In_  PLDAPControl  *ServerControls,
+  _Out_ ULONG         *TotalCount,
+  _Out_ PVOID Cookie
+);
+
+ULONG LDAPAPI ldap_parse_reference(
+  _In_  PLDAP        Connection,
+  _In_  PLDAPMessage ResultMessage,
+  _Out_ PLPCSTR       *Referrals
+);
+
+ULONG LDAPAPI ldap_parse_result(
+  _In_      PLDAP         Connection,
+  _In_      PLDAPMessage  ResultMessage,
+  _Out_opt_ ULONG         *ReturnCode,
+  _Out_opt_ LPCWSTR       *MatchedDNs,
+  _Out_opt_ LPCWSTR       *ErrorMessage,
+  _Out_opt_ PLPCWSTR      *Referrals,
+  _Out_opt_ PVOID  ServerControls,
+  _In_      BOOLEAN      Freeit
+);
+
+ULONG LDAPAPI ldap_parse_sort_control(
+  _In_  PLDAP        ExternalHandle,
+  _In_  PLDAPControl *Control,
+  _Out_ ULONG        *Result,
+  _Out_ LPCSTR        *Attribute
+);
+
+ULONG LDAPAPI ldap_result(
+  _In_  PLDAP             ld,
+  _In_  ULONG            msgid,
+  _In_  ULONG            all,
+  _In_  LDAP_TIMEVAL    *timeout,
+  _Out_ PLDAPMessage      *res
+);
+
+ULONG LDAPAPI ldap_search_s(
+  _In_  PLDAP        ld,
+  _In_  LPCSTR       base,
+  _In_  ULONG       scope,
+  _In_  LPCSTR       filter,
+  _In_  PLPCSTR       attrs,
+  _In_  ULONG       attrsonly,
+  _Out_ PLDAPMessage *res
+);
+
+ULONG LDAPAPI ldap_search_st(
+  _In_  PLDAP             ld,
+  _In_  LPCSTR            base,
+  _In_  ULONG            scope,
+  _In_  LPCSTR           filter,
+  _In_  PLPCSTR          attrs,
+  _In_  ULONG            attrsonly,
+  _In_  LDAP_TIMEVAL     *timeout,
+  _Out_ PLDAPMessage      *res
+);
+
+ULONG LDAPAPI ldap_search_ext(
+  _In_  PLDAP         ld,
+  _In_  LPCSTR        base,
+  _In_  ULONG        scope,
+  _In_  LPCSTR        filter,
+  _In_  PLPCSTR        attrs,
+  _In_  ULONG        attrsonly,
+  _In_  PLDAPControl *ServerControls,
+  _In_  PLDAPControl *ClientControls,
+  _In_  ULONG        TimeLimit,
+  _In_  ULONG        SizeLimit,
+  _Out_ ULONG        *MessageNumber
+);
+
+ULONG LDAPAPI ldap_search_ext_s(
+  _In_  PLDAP             ld,
+  _In_  LPCSTR            base,
+  _In_  ULONG            scope,
+  _In_  LPCSTR            filter,
+  _In_  LPCSTR           *attrs,
+  _In_  ULONG            attrsonly,
+  _In_  PLDAPControl     *ServerControls,
+  _In_  PLDAPControl     *ClientControls,
+  _In_  LDAP_TIMEVAL     *timeout,
+  _In_  ULONG            SizeLimit,
+  _Out_ PLDAPMessage      *res
+);
+
+PLDAPSearch LDAPAPI ldap_search_init_page(
+  _In_ PLDAP        ExternalHandle,
+  _In_ LPCSTR        DistinguishedName,
+  _In_ ULONG        ScopeOfSearch,
+  _In_ LPCSTR        SearchFilter,
+  _In_ PLPCSTR        AttributeList,
+  _In_ ULONG        AttributesOnly,
+  _In_ PLDAPControl *ServerControls,
+  _In_ PLDAPControl *ClientControls,
+  _In_ ULONG        PageTimeLimit,
+  _In_ ULONG        TotalSizeLimit,
+  _In_ PLDAPSortKey *SortKeys
+);
+PLDAPSearch LDAPAPI ldap_search_init_pageA(
+  _In_ PLDAP        ExternalHandle,
+  _In_ LPCSTR        DistinguishedName,
+  _In_ ULONG        ScopeOfSearch,
+  _In_ LPCSTR        SearchFilter,
+  _In_ PLPCSTR        AttributeList,
+  _In_ ULONG        AttributesOnly,
+  _In_ PLDAPControl *ServerControls,
+  _In_ PLDAPControl *ClientControls,
+  _In_ ULONG        PageTimeLimit,
+  _In_ ULONG        TotalSizeLimit,
+  _In_ PLDAPSortKey *SortKeys
+);
+
+ULONG LDAPAPI ldap_search_abandon_page(
+  _In_ PLDAP       ExternalHandle,
+  _In_ PLDAPSearch SearchBlock
+);
+
+ULONG LDAPAPI ldap_msgfree(
+  _In_ PLDAPMessage res
+);
+
+ULONG LDAPAPI ldap_value_free(
+   _In_ PLPCSTR vals
+);
+
+ULONG LDAPAPI ldap_value_free_len(
+  _In_ PVOID vals
+);
+
+
+VOID LDAPAPI ldap_memfree(
+  _In_ LPCSTR Block
+);
+
+LPCSTR LDAPAPI ldap_get_dn(
+  _In_ PLDAP        ld,
+  _In_ PLDAPMessage entry
+);
+
+
+PBerElement LDAPAPI ber_init(
+  _In_ PBERVAL pBerVal
+);
+
+VOID LDAPAPI ber_free(
+  _In_ PBerElement pBerElement,
+  _In_ INT        fbuf
+);
+
+
+VOID LDAPAPI ber_bvfree(
+  _In_ PBERVAL  pBerVal
+);
+
+VOID LDAPAPI ber_bvecfree(
+  _In_ PBERVAL *pBerVal
+);
+
+PBERVAL LDAPAPI ber_bvdup(
+  _In_ PBERVAL pBerVal
+);
+
+PBerElement LDAPAPI ber_alloc_t(
+  _In_ INT options
+);
+
+ULONG LDAPAPI ber_skip_tag(
+  _In_  PBerElement pBerElement,
+  _Out_ ULONG      *pLen
+);
+
+ULONG LDAPAPI ber_peek_tag(
+  _In_  PBerElement pBerElement,
+  _Out_ ULONG      *pLen
+);
+
+ULONG LDAPAPI ber_first_element(
+  _In_  PBerElement pBerElement,
+  _Out_ ULONG      *pLen,
+  _Out_ LPCSTR     *ppOpaque
+);
+
+ULONG LDAPAPI ber_next_element(
+  _In_    PBerElement pBerElement,
+  _Inout_ ULONG      *pLen,
+  _Inout_ LPCSTR     opaque
+);
+
+INT LDAPAPI ber_flatten(
+  _In_  PBerElement pBerElement,
+  _Out_ PBERVAL    *pBerVal
+);
+
+INT LDAPAPI ber_printf(
+  _Inout_ PBerElement pBerElement,
+  _In_    LPCSTR      fmt,
+  _In_    INT     argument
+);
+
+
+
