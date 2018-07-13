@@ -859,6 +859,11 @@ def GetWindowsDirectoryW(lpBuffer, uSize=None):
     return GetWindowsDirectoryW.ctypes_function(lpBuffer, uSize)
 
 
+@Kernel32Proxy("GetProductInfo")
+def GetProductInfo(dwOSMajorVersion, dwOSMinorVersion, dwSpMajorVersion, dwSpMinorVersion, pdwReturnedProductType):
+   return GetProductInfo.ctypes_function(dwOSMajorVersion, dwOSMinorVersion, dwSpMajorVersion, dwSpMinorVersion, pdwReturnedProductType)
+
+
 # ### NTDLL #### #
 
 @NtdllProxy('NtReadVirtualMemory', error_ntstatus)
@@ -1166,6 +1171,12 @@ def NtQueryValueKey(KeyHandle, ValueName, KeyValueInformationClass, KeyValueInfo
 @NtdllProxy("NtEnumerateValueKey", error_ntstatus)
 def NtEnumerateValueKey(KeyHandle, Index, KeyValueInformationClass, KeyValueInformation, Length, ResultLength):
     return NtEnumerateValueKey.ctypes_function(KeyHandle, Index, KeyValueInformationClass, KeyValueInformation, Length, ResultLength)
+
+@NtdllProxy("NtQueryLicenseValue", error_ntstatus)
+def NtQueryLicenseValue(Name, Type, Buffer, Length=None, DataLength=NeededParameter):
+    if Length is None and Buffer:
+        Length = len(buffer)
+    return NtQueryLicenseValue.ctypes_function(Name, Type, Buffer, Length, DataLength)
 
 
 # Not exported
@@ -1822,6 +1833,10 @@ def CoCreateInstanceEx(rclsid, punkOuter, dwClsCtx, pServerInfo, dwCount, pResul
 @Ole32Proxy('CoGetInterceptor')
 def CoGetInterceptor(iidIntercepted, punkOuter, iid, ppv):
     return CoGetInterceptor.ctypes_function(iidIntercepted, punkOuter, iid, ppv)
+
+@Ole32Proxy('CLSIDFromProgID')
+def CLSIDFromProgID(lpszProgID, lpclsid):
+    return CLSIDFromProgID.ctypes_function(lpszProgID, lpclsid)
 
 # ## Shell32 ## #
 

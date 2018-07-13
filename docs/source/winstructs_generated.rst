@@ -283,6 +283,10 @@ _GUID
 
     Alias for :class:`_GUID`
 
+.. class:: LPCLSID
+
+    Pointer to :class:`_GUID`
+
 .. class:: GUID
 
     Alias for :class:`_GUID`
@@ -13696,6 +13700,10 @@ Simple types
 
 .. autoclass:: ULONGLONG
 
+.. class:: PULONGLONG
+
+    Pointer to :class:`ULONGLONG`
+
 .. autoclass:: LONGLONG
 
 .. autoclass:: ULONG64
@@ -13709,6 +13717,10 @@ Simple types
     Pointer to :class:`LARGE_INTEGER`
 
 .. autoclass:: DWORD64
+
+.. class:: PDWORD64
+
+    Pointer to :class:`DWORD64`
 
 .. autoclass:: SCODE
 

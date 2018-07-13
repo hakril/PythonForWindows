@@ -150,6 +150,8 @@ class ParsedFileGraph(object):
 
     def build_dependancy_graph(self):
         todo = set(self.nodes)
+        if not todo:
+            return []
         start = self.find_starting_node()
         print("Starting node is {0}".format(start))
         todo.remove(start)

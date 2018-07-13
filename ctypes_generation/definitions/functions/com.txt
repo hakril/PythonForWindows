@@ -39,3 +39,9 @@ HRESULT WINAPI CoGetInterceptor(
   _In_  REFIID   iid,
   _Out_ PVOID     *ppv
 );
+
+
+HRESULT WINAPI CLSIDFromProgID(
+  _In_  LPCOLESTR lpszProgID,
+  _Out_ LPCLSID   lpclsid
+);

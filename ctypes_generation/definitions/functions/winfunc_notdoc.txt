@@ -4,3 +4,12 @@ NTSTATUS WINAPI TpCallbackSendAlpcMessageOnCompletion(
     _In_ ULONG Flags,
     _In_opt_ PPORT_MESSAGE SendMessage,
 );
+
+
+NTSTATUS NtQueryLicenseValue(
+    PUNICODE_STRING Name,
+    ULONG *Type,
+    PVOID Buffer,
+    ULONG Length,
+    ULONG *DataLength
+);
