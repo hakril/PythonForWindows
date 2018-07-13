@@ -128,6 +128,26 @@ Output
 .. literalinclude:: samples_output\event_log_eventlog.txt
 
 
+.. _sample_object_manager:
+
+Object manager
+""""""""""""""
+
+.. literalinclude:: ..\..\samples\object_manager\object_manager.py
+
+Output
+
+.. literalinclude:: samples_output\object_manager_object_manager.txt
+
+find objects
+''''''''''''
+
+
+.. literalinclude:: ..\..\samples\object_manager\findobj.py
+
+Output
+
+.. literalinclude:: samples_output\object_manager_findobj.txt
 
 
 .. _sample_wintrust:

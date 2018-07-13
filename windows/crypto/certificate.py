@@ -244,14 +244,14 @@ class Certificate(gdef.CERT_CONTEXT):
         return buffer[:size.value]
 
     @property
-    def thumprint(self):
-        """The thumprint of the certificate (which is the sha1 of the encoded cert).
+    def thumbprint(self):
+        """The thumbprint of the certificate (which is the sha1 of the encoded cert).
 
         Example:
 
             >>> x
             <Certificate "YOLO2" serial="6f 1d 3e 7d d9 77 59 a9 4c 1c 53 dc 80 db 0c fe">
-            >>> x.thumprint
+            >>> x.thumbprint
             'E2 A2 DB 76 A1 DD 8E 70 0D C6 9F CB 71 CF 29 12 C6 D9 78 97'
 
         :type: :class:`str`

@@ -12,7 +12,7 @@ The :class:`TaskService` is accessible via :py:attr:`windows.system.task_schedul
 
 .. warning::
 
-    This API have not been tested on real case yet and may be subject to changes.
+    This API have not been tested on real cases yet and may be subject to changes.
 
 
 TaskService
