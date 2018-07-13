@@ -4,11 +4,11 @@ from collections import namedtuple
 
 import windows
 from windows import winproxy
-# from windows.generated_def.winstructs import *
 import windows.generated_def as gdef
 
 
 def query_link(linkpath):
+    """Resolve the link object with path ``linkpath``"""
     obj_attr = gdef.OBJECT_ATTRIBUTES()
     obj_attr.Length = ctypes.sizeof(obj_attr)
     obj_attr.RootDirectory = 0
@@ -20,11 +20,12 @@ def query_link(linkpath):
     x = winproxy.NtOpenSymbolicLinkObject(res, gdef.DIRECTORY_QUERY | gdef.READ_CONTROL , obj_attr)
     v = gdef.LSA_UNICODE_STRING.from_string("\x00" * 1000)
     s = gdef.ULONG()
-    winproxy.NtQuerySymbolicLinkObject(res, v, s)
+    winproxy.NtQuerySymbolicLinkObject(res, v, s) # Handle Buffer-too-small ?
     return v.str
 
 
 class KernelObject(object):
+    """Represent an object in the Object Manager namespace"""
     def __init__(self, path, name, type):
         self.path = path
         self.name = name
@@ -35,20 +36,55 @@ class KernelObject(object):
 
     @property
     def target(self):
+        """Resolve the target of a symbolic link object.
+
+        :rtype:  :class:`str` or None if object is not a link
+        """
         try:
             return query_link(self.fullname)
         except windows.generated_def.ntstatus.NtStatusException as e:
+            if e.code != gdef.STATUS_OBJECT_TYPE_MISMATCH:
+                raise
             return None
 
     def items(self):
-        """Todo: better name ?"""
+        """Return the list of tuple (object's name, object) in the current directory object.
+
+        :rtype: [(:class:`str`, :class:`KernelObject`)] -- A list of tuple
+
+        .. note::
+
+            the :class:`KernelObject` must be of type ``Directory`` or
+            it will raise :class:`~windows.generated_def.ntstatus.NtStatusException` with
+            code :data:`~windows.generated_def.STATUS_OBJECT_TYPE_MISMATCH`
+        """
         path = self.fullname
         return [(name, KernelObject(path, name, typename)) for name, typename in self._directory_query_generator()]
 
     def keys(self):
+        """Return the list of objects' name in the current directory object.
+
+        :rtype: [:class:`str`] -- A list of name
+
+        .. note::
+
+            the :class:`KernelObject` must be of type ``Directory`` or
+            it will raise :class:`~windows.generated_def.ntstatus.NtStatusException` with
+            code :data:`~windows.generated_def.STATUS_OBJECT_TYPE_MISMATCH`
+        """
         return list(self)
 
     def values(self):
+        """Return the list of objects in the current directory object.
+
+        :rtype: [:class:`KernelObject`] -- A list of object
+
+        .. note::
+
+            the :class:`KernelObject` must be of type ``Directory`` or
+            it will raise :class:`~windows.generated_def.ntstatus.NtStatusException` with
+            code :data:`~windows.generated_def.STATUS_OBJECT_TYPE_MISMATCH`
+        """
         path = self.fullname
         return [KernelObject(path, name, typename) for name, typename in self._directory_query_generator()]
 
@@ -96,6 +132,16 @@ class KernelObject(object):
             yield v.Name.str, v.TypeName.str
 
     def __iter__(self):
+        """Iter over the list of name in the Directory object.
+
+        :yield: :class:`str` -- The names of objects in the directory.
+
+        .. note::
+
+            the :class:`KernelObject` must be of type ``Directory`` or
+            it will raise :class:`~windows.generated_def.ntstatus.NtStatusException` with
+            code :data:`~windows.generated_def.STATUS_OBJECT_TYPE_MISMATCH`
+        """
         return (name for name, type in self._directory_query_generator())
 
     def __repr__(self):
@@ -111,20 +157,30 @@ class KernelObject(object):
                 return KernelObject(self.fullname, name, objtype)
         raise KeyError("Could not find WinObject <{0}> under <{1}>".format(name, self.fullname))
 
-    def __getitem__(self, value):
-        print(self, value)
-        if value.startswith("\\"):
+    def __getitem__(self, name):
+        """Query object ``name`` from the directory, split and subquery on ``\\``::
+
+            >>> obj
+            <KernelObject "\Windows" (type="Directory")>
+            >>> obj["WindowStations"]["WinSta0"]
+            <KernelObject "\Windows\WindowStations" (type="Directory")>
+            >>> obj["WindowStations\\WinSta0"]
+            <KernelObject "\Windows\WindowStations" (type="Directory")>
+
+        :rtype: :class:`KernelObject`
+        :raise: :class:`KeyError` if ``name`` can not be found.
+        """
+        if name.startswith("\\"):
             # Are we the root directory ?
             if not self.fullname == "\\" :
                 raise ValueError("Cannot query an object path begining by '\\' from an object other than '\\'")
-            elif value == "\\": # Ask for root ? return ourself
+            elif name == "\\": # Ask for root ? return ourself
                 return self
             else:
-                value = value[1:]
+                name = name[1:]
 
         obj = self
-        print(value.split("\\"))
-        for part in value.split("\\"):
+        for part in name.split("\\"):
             try:
                 obj = obj.get(part)
             except gdef.NtStatusException as e:
@@ -160,3 +216,4 @@ class ObjectManager(object):
         :rtype: :class:`KernelObject`
         """
         return self.root[name]
+

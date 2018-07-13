@@ -1,0 +1,23 @@
+(cmd) python object_manager\findobj.py
+Looking for object name containing <ls>
+* <KernelObject "\KnownDlls32" (type="Directory")>
+* <KernelObject "\Win32kCrossSessionGlobals" (type="Section")>
+* <KernelObject "\KnownDlls" (type="Directory")>
+<\DriverStores\SYSTEM> -> STATUS_ACCESS_DENIED
+* <KernelObject "\Device\MailslotRedirector" (type="SymbolicLink")> -> <\Device\Mup\;MailslotRedirector>
+* <KernelObject "\Device\Mailslot" (type="Device")>
+<\Device\00000020> -> STATUS_ACCESS_DENIED
+<\Device\00000020> -> STATUS_ACCESS_DENIED
+<\Device\00000020> -> STATUS_ACCESS_DENIED
+<\Device\00000020> -> STATUS_ACCESS_DENIED
+<\Device\00000020> -> STATUS_ACCESS_DENIED
+<\KernelObjects\PrefetchTracesReady> -> STATUS_ACCESS_DENIED
+<\KnownDlls\powrprof.dll> -> STATUS_ACCESS_DENIED
+* <KernelObject "\RPC Control\lsapolicylookup" (type="ALPC Port")>
+* <KernelObject "\RPC Control\lsacap" (type="ALPC Port")>
+* <KernelObject "\RPC Control\lsasspirpc" (type="ALPC Port")>
+<\Windows\SbApiPort> -> STATUS_ACCESS_DENIED
+<\Windows\SbApiPort> -> STATUS_ACCESS_DENIED
+<\Sessions\BNOLINKS\1> -> STATUS_ACCESS_DENIED
+<\Sessions\BNOLINKS\1> -> STATUS_ACCESS_DENIED
+<\Sessions\BNOLINKS\1> -> STATUS_ACCESS_DENIED
