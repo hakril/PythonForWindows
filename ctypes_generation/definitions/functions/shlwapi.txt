@@ -8,3 +8,7 @@ PCSTR WINAPI StrStrIA(
   _In_ PCSTR pszSrch
 );
 
+
+BOOL IsOS(
+  DWORD dwOS
+);

@@ -273,131 +273,6 @@ class _PROCESS_MITIGATION_IMAGE_LOAD_POLICY(Structure):
 PPROCESS_MITIGATION_IMAGE_LOAD_POLICY = POINTER(_PROCESS_MITIGATION_IMAGE_LOAD_POLICY)
 PROCESS_MITIGATION_IMAGE_LOAD_POLICY = _PROCESS_MITIGATION_IMAGE_LOAD_POLICY
 
-class _API_SET_VALUE_ENTRY(Structure):
-    _fields_ = [
-        ("Flags", ULONG),
-        ("NameOffset", ULONG),
-        ("NameLength", ULONG),
-        ("ValueOffset", ULONG),
-        ("ValueLength", ULONG),
-    ]
-API_SET_VALUE_ENTRY = _API_SET_VALUE_ENTRY
-PAPI_SET_VALUE_ENTRY = POINTER(_API_SET_VALUE_ENTRY)
-
-class _API_SET_NAMESPACE_ENTRY(Structure):
-    _fields_ = [
-        ("Flags", ULONG),
-        ("NameOffset", ULONG),
-        ("NameLength", ULONG),
-        ("AliasOffset", ULONG),
-        ("AliasLength", ULONG),
-        ("DataOffset", ULONG),
-    ]
-PAPI_SET_NAMESPACE_ENTRY = POINTER(_API_SET_NAMESPACE_ENTRY)
-API_SET_NAMESPACE_ENTRY = _API_SET_NAMESPACE_ENTRY
-
-class _API_SET_NAMESPACE_ARRAY(Structure):
-    _fields_ = [
-        ("Version", ULONG),
-        ("Size", ULONG),
-        ("Flags", ULONG),
-        ("Count", ULONG),
-        ("Array", API_SET_NAMESPACE_ENTRY * ANYSIZE_ARRAY),
-    ]
-PAPI_SET_NAMESPACE_ARRAY = POINTER(_API_SET_NAMESPACE_ARRAY)
-API_SET_NAMESPACE_ARRAY = _API_SET_NAMESPACE_ARRAY
-
-class _API_SET_VALUE_ENTRY_V2(Structure):
-    _fields_ = [
-        ("NameOffset", ULONG),
-        ("NameLength", ULONG),
-        ("ValueOffset", ULONG),
-        ("ValueLength", ULONG),
-    ]
-PAPI_SET_VALUE_ENTRY_V2 = POINTER(_API_SET_VALUE_ENTRY_V2)
-API_SET_VALUE_ENTRY_V2 = _API_SET_VALUE_ENTRY_V2
-
-class _API_SET_VALUE_ARRAY_V2(Structure):
-    _fields_ = [
-        ("Count", ULONG),
-        ("Array", API_SET_VALUE_ENTRY_V2 * ANYSIZE_ARRAY),
-    ]
-API_SET_VALUE_ARRAY_V2 = _API_SET_VALUE_ARRAY_V2
-PAPI_SET_VALUE_ARRAY_V2 = POINTER(_API_SET_VALUE_ARRAY_V2)
-
-class _API_SET_NAMESPACE_ENTRY_V2(Structure):
-    _fields_ = [
-        ("NameOffset", ULONG),
-        ("NameLength", ULONG),
-        ("DataOffset", ULONG),
-    ]
-PAPI_SET_NAMESPACE_ENTRY_V2 = POINTER(_API_SET_NAMESPACE_ENTRY_V2)
-API_SET_NAMESPACE_ENTRY_V2 = _API_SET_NAMESPACE_ENTRY_V2
-
-class _API_SET_NAMESPACE_ARRAY_V2(Structure):
-    _fields_ = [
-        ("Version", ULONG),
-        ("Count", ULONG),
-        ("Array", API_SET_NAMESPACE_ENTRY_V2 * ANYSIZE_ARRAY),
-    ]
-API_SET_NAMESPACE_ARRAY_V2 = _API_SET_NAMESPACE_ARRAY_V2
-PAPI_SET_NAMESPACE_ARRAY_V2 = POINTER(_API_SET_NAMESPACE_ARRAY_V2)
-
-class _API_SET_VALUE_ARRAY_V4(Structure):
-    _fields_ = [
-        ("GuessFlags", ULONG),
-        ("Count", ULONG),
-        ("Array", API_SET_VALUE_ENTRY_V2 * ANYSIZE_ARRAY),
-    ]
-API_SET_VALUE_ARRAY_V4 = _API_SET_VALUE_ARRAY_V4
-PAPI_SET_VALUE_ARRAY_V2 = POINTER(_API_SET_VALUE_ARRAY_V4)
-
-class _API_SET_NAMESPACE_ARRAY_V4(Structure):
-    _fields_ = [
-        ("Version", ULONG),
-        ("Size", ULONG),
-        ("Flags", ULONG),
-        ("Count", ULONG),
-        ("Array", API_SET_NAMESPACE_ENTRY * ANYSIZE_ARRAY),
-    ]
-API_SET_NAMESPACE_ARRAY_V4 = _API_SET_NAMESPACE_ARRAY_V4
-PAPI_SET_NAMESPACE_ARRAY_V4 = POINTER(_API_SET_NAMESPACE_ARRAY_V4)
-
-class _API_SET_NAMESPACE_ENTRY_V4(Structure):
-    _fields_ = [
-        ("Flags", ULONG),
-        ("NameOffset", ULONG),
-        ("NameLength", ULONG),
-        ("AliasOffset", ULONG),
-        ("AliasLength", ULONG),
-        ("DataOffset", ULONG),
-    ]
-PAPI_SET_NAMESPACE_ENTRY_V4 = POINTER(_API_SET_NAMESPACE_ENTRY_V4)
-API_SET_NAMESPACE_ENTRY_V4 = _API_SET_NAMESPACE_ENTRY_V4
-
-class _API_SET_NAMESPACE_ENTRY_V6(Structure):
-    _fields_ = [
-        ("Flags", ULONG),
-        ("NameOffset", ULONG),
-        ("NameLength", ULONG),
-        ("HashedLength", ULONG),
-        ("ValueOffset", ULONG),
-        ("ValueCount", ULONG),
-    ]
-API_SET_NAMESPACE_ENTRY_V6 = _API_SET_NAMESPACE_ENTRY_V6
-
-class _API_SET_NAMESPACE_V6(Structure):
-    _fields_ = [
-        ("Version", ULONG),
-        ("Size", ULONG),
-        ("Flags", ULONG),
-        ("Count", ULONG),
-        ("EntryOffset", ULONG),
-        ("HashOffset", ULONG),
-        ("HashFactor", ULONG),
-    ]
-API_SET_NAMESPACE_V6 = _API_SET_NAMESPACE_V6
-
 VOID = DWORD
 BYTE = c_ubyte
 PWSTR = LPWSTR
@@ -507,139 +382,50 @@ HCERTSTORE = PVOID
 HCRYPTMSG = PVOID
 PALPC_PORT_ATTRIBUTES = PVOID
 PPORT_MESSAGE = PVOID
-class tagRGBTRIPLE(Structure):
-    _fields_ = [
-        ("rgbtBlue", BYTE),
-        ("rgbtGreen", BYTE),
-        ("rgbtRed", BYTE),
-    ]
-NPRGBTRIPLE = POINTER(tagRGBTRIPLE)
-LPRGBTRIPLE = POINTER(tagRGBTRIPLE)
-RGBTRIPLE = tagRGBTRIPLE
-PRGBTRIPLE = POINTER(tagRGBTRIPLE)
+KeyValueBasicInformation = EnumValue("_KEY_VALUE_INFORMATION_CLASS", "KeyValueBasicInformation", 0x0)
+KeyValueFullInformation = EnumValue("_KEY_VALUE_INFORMATION_CLASS", "KeyValueFullInformation", 0x1)
+KeyValuePartialInformation = EnumValue("_KEY_VALUE_INFORMATION_CLASS", "KeyValuePartialInformation", 0x2)
+KeyValueFullInformationAlign64 = EnumValue("_KEY_VALUE_INFORMATION_CLASS", "KeyValueFullInformationAlign64", 0x3)
+KeyValuePartialInformationAlign64 = EnumValue("_KEY_VALUE_INFORMATION_CLASS", "KeyValuePartialInformationAlign64", 0x4)
+KeyValueLayerInformation = EnumValue("_KEY_VALUE_INFORMATION_CLASS", "KeyValueLayerInformation", 0x5)
+MaxKeyValueInfoClass = EnumValue("_KEY_VALUE_INFORMATION_CLASS", "MaxKeyValueInfoClass", 0x6)
+class _KEY_VALUE_INFORMATION_CLASS(EnumType):
+    values = [KeyValueBasicInformation, KeyValueFullInformation, KeyValuePartialInformation, KeyValueFullInformationAlign64, KeyValuePartialInformationAlign64, KeyValueLayerInformation, MaxKeyValueInfoClass]
+    mapper = {x:x for x in values}
+KEY_VALUE_INFORMATION_CLASS = _KEY_VALUE_INFORMATION_CLASS
 
-class tagBITMAPFILEHEADER(Structure):
-    _pack_ = 2
-    _fields_ = [
-        ("bfType", WORD),
-        ("bfSize", DWORD),
-        ("bfReserved1", WORD),
-        ("bfReserved2", WORD),
-        ("bfOffBits", DWORD),
-    ]
-BITMAPFILEHEADER = tagBITMAPFILEHEADER
-PBITMAPFILEHEADER = POINTER(tagBITMAPFILEHEADER)
-LPBITMAPFILEHEADER = POINTER(tagBITMAPFILEHEADER)
 
-class tagBITMAPCOREHEADER(Structure):
+class _KEY_VALUE_BASIC_INFORMATION(Structure):
     _fields_ = [
-        ("bcSize", DWORD),
-        ("bcWidth", WORD),
-        ("bcHeight", WORD),
-        ("bcPlanes", WORD),
-        ("bcBitCount", WORD),
+        ("TitleIndex", ULONG),
+        ("Type", ULONG),
+        ("NameLength", ULONG),
+        ("Name", WCHAR * 1),
     ]
-LPBITMAPCOREHEADER = POINTER(tagBITMAPCOREHEADER)
-PBITMAPCOREHEADER = POINTER(tagBITMAPCOREHEADER)
-BITMAPCOREHEADER = tagBITMAPCOREHEADER
+PKEY_VALUE_BASIC_INFORMATION = POINTER(_KEY_VALUE_BASIC_INFORMATION)
+KEY_VALUE_BASIC_INFORMATION = _KEY_VALUE_BASIC_INFORMATION
 
-class tagBITMAP(Structure):
+class _KEY_VALUE_FULL_INFORMATION(Structure):
     _fields_ = [
-        ("bmType", LONG),
-        ("bmWidth", LONG),
-        ("bmHeight", LONG),
-        ("bmWidthBytes", LONG),
-        ("bmPlanes", WORD),
-        ("bmBitsPixel", WORD),
-        ("bmBits", LPVOID),
+        ("TitleIndex", ULONG),
+        ("Type", ULONG),
+        ("DataOffset", ULONG),
+        ("DataLength", ULONG),
+        ("NameLength", ULONG),
+        ("Name", WCHAR * 1),
     ]
-NPBITMAP = POINTER(tagBITMAP)
-LPBITMAP = POINTER(tagBITMAP)
-PBITMAP = POINTER(tagBITMAP)
-BITMAP = tagBITMAP
+KEY_VALUE_FULL_INFORMATION = _KEY_VALUE_FULL_INFORMATION
+PKEY_VALUE_FULL_INFORMATION = POINTER(_KEY_VALUE_FULL_INFORMATION)
 
-class tagBITMAPINFOHEADER(Structure):
+class _KEY_VALUE_PARTIAL_INFORMATION(Structure):
     _fields_ = [
-        ("biSize", DWORD),
-        ("biWidth", LONG),
-        ("biHeight", LONG),
-        ("biPlanes", WORD),
-        ("biBitCount", WORD),
-        ("biCompression", DWORD),
-        ("biSizeImage", DWORD),
-        ("biXPelsPerMeter", LONG),
-        ("biYPelsPerMeter", LONG),
-        ("biClrUsed", DWORD),
-        ("biClrImportant", DWORD),
+        ("TitleIndex", ULONG),
+        ("Type", ULONG),
+        ("DataLength", ULONG),
+        ("Data", UCHAR * 1),
     ]
-BITMAPINFOHEADER = tagBITMAPINFOHEADER
-PBITMAPINFOHEADER = POINTER(tagBITMAPINFOHEADER)
-LPBITMAPINFOHEADER = POINTER(tagBITMAPINFOHEADER)
-
-class tagRGBQUAD(Structure):
-    _fields_ = [
-        ("rgbBlue", BYTE),
-        ("rgbGreen", BYTE),
-        ("rgbRed", BYTE),
-        ("rgbReserved", BYTE),
-    ]
-RGBQUAD = tagRGBQUAD
-
-class tagBITMAPINFO(Structure):
-    _fields_ = [
-        ("bmiHeader", BITMAPINFOHEADER),
-        ("bmiColors", RGBQUAD * 1),
-    ]
-LPBITMAPINFO = POINTER(tagBITMAPINFO)
-PBITMAPINFO = POINTER(tagBITMAPINFO)
-BITMAPINFO = tagBITMAPINFO
-
-class tagBITMAPCOREINFO(Structure):
-    _fields_ = [
-        ("bmciHeader", BITMAPCOREHEADER),
-        ("bmciColors", RGBTRIPLE * 1),
-    ]
-LPBITMAPCOREINFO = POINTER(tagBITMAPCOREINFO)
-BITMAPCOREINFO = tagBITMAPCOREINFO
-PBITMAPCOREINFO = POINTER(tagBITMAPCOREINFO)
-
-class tagWNDCLASSEXA(Structure):
-    _fields_ = [
-        ("cbSize", UINT),
-        ("style", UINT),
-        ("lpfnWndProc", WNDPROC),
-        ("cbClsExtra", INT),
-        ("cbWndExtra", INT),
-        ("hInstance", HINSTANCE),
-        ("hIcon", HICON),
-        ("hCursor", HCURSOR),
-        ("hbrBackground", HBRUSH),
-        ("lpszMenuName", LPCSTR),
-        ("lpszClassName", LPCSTR),
-        ("hIconSm", HICON),
-    ]
-PWNDCLASSEXA = POINTER(tagWNDCLASSEXA)
-LPWNDCLASSEXA = POINTER(tagWNDCLASSEXA)
-WNDCLASSEXA = tagWNDCLASSEXA
-
-class tagWNDCLASSEXW(Structure):
-    _fields_ = [
-        ("cbSize", UINT),
-        ("style", UINT),
-        ("lpfnWndProc", WNDPROC),
-        ("cbClsExtra", INT),
-        ("cbWndExtra", INT),
-        ("hInstance", HINSTANCE),
-        ("hIcon", HICON),
-        ("hCursor", HCURSOR),
-        ("hbrBackground", HBRUSH),
-        ("lpszMenuName", LPWSTR),
-        ("lpszClassName", LPWSTR),
-        ("hIconSm", HICON),
-    ]
-WNDCLASSEXW = tagWNDCLASSEXW
-LPWNDCLASSEXW = POINTER(tagWNDCLASSEXW)
-PWNDCLASSEXW = POINTER(tagWNDCLASSEXW)
+PKEY_VALUE_PARTIAL_INFORMATION = POINTER(_KEY_VALUE_PARTIAL_INFORMATION)
+KEY_VALUE_PARTIAL_INFORMATION = _KEY_VALUE_PARTIAL_INFORMATION
 
 FakeFileInformationZero = EnumValue("_FILE_INFORMATION_CLASS", "FakeFileInformationZero", 0x0)
 FileDirectoryInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileDirectoryInformation", 0x1)
@@ -850,6 +636,140 @@ class _FILE_ALL_INFORMATION(Structure):
 PFILE_ALL_INFORMATION = POINTER(_FILE_ALL_INFORMATION)
 FILE_ALL_INFORMATION = _FILE_ALL_INFORMATION
 
+class tagRGBTRIPLE(Structure):
+    _fields_ = [
+        ("rgbtBlue", BYTE),
+        ("rgbtGreen", BYTE),
+        ("rgbtRed", BYTE),
+    ]
+NPRGBTRIPLE = POINTER(tagRGBTRIPLE)
+LPRGBTRIPLE = POINTER(tagRGBTRIPLE)
+RGBTRIPLE = tagRGBTRIPLE
+PRGBTRIPLE = POINTER(tagRGBTRIPLE)
+
+class tagBITMAPFILEHEADER(Structure):
+    _pack_ = 2
+    _fields_ = [
+        ("bfType", WORD),
+        ("bfSize", DWORD),
+        ("bfReserved1", WORD),
+        ("bfReserved2", WORD),
+        ("bfOffBits", DWORD),
+    ]
+BITMAPFILEHEADER = tagBITMAPFILEHEADER
+PBITMAPFILEHEADER = POINTER(tagBITMAPFILEHEADER)
+LPBITMAPFILEHEADER = POINTER(tagBITMAPFILEHEADER)
+
+class tagBITMAPCOREHEADER(Structure):
+    _fields_ = [
+        ("bcSize", DWORD),
+        ("bcWidth", WORD),
+        ("bcHeight", WORD),
+        ("bcPlanes", WORD),
+        ("bcBitCount", WORD),
+    ]
+LPBITMAPCOREHEADER = POINTER(tagBITMAPCOREHEADER)
+PBITMAPCOREHEADER = POINTER(tagBITMAPCOREHEADER)
+BITMAPCOREHEADER = tagBITMAPCOREHEADER
+
+class tagBITMAP(Structure):
+    _fields_ = [
+        ("bmType", LONG),
+        ("bmWidth", LONG),
+        ("bmHeight", LONG),
+        ("bmWidthBytes", LONG),
+        ("bmPlanes", WORD),
+        ("bmBitsPixel", WORD),
+        ("bmBits", LPVOID),
+    ]
+NPBITMAP = POINTER(tagBITMAP)
+LPBITMAP = POINTER(tagBITMAP)
+PBITMAP = POINTER(tagBITMAP)
+BITMAP = tagBITMAP
+
+class tagBITMAPINFOHEADER(Structure):
+    _fields_ = [
+        ("biSize", DWORD),
+        ("biWidth", LONG),
+        ("biHeight", LONG),
+        ("biPlanes", WORD),
+        ("biBitCount", WORD),
+        ("biCompression", DWORD),
+        ("biSizeImage", DWORD),
+        ("biXPelsPerMeter", LONG),
+        ("biYPelsPerMeter", LONG),
+        ("biClrUsed", DWORD),
+        ("biClrImportant", DWORD),
+    ]
+BITMAPINFOHEADER = tagBITMAPINFOHEADER
+PBITMAPINFOHEADER = POINTER(tagBITMAPINFOHEADER)
+LPBITMAPINFOHEADER = POINTER(tagBITMAPINFOHEADER)
+
+class tagRGBQUAD(Structure):
+    _fields_ = [
+        ("rgbBlue", BYTE),
+        ("rgbGreen", BYTE),
+        ("rgbRed", BYTE),
+        ("rgbReserved", BYTE),
+    ]
+RGBQUAD = tagRGBQUAD
+
+class tagBITMAPINFO(Structure):
+    _fields_ = [
+        ("bmiHeader", BITMAPINFOHEADER),
+        ("bmiColors", RGBQUAD * 1),
+    ]
+LPBITMAPINFO = POINTER(tagBITMAPINFO)
+PBITMAPINFO = POINTER(tagBITMAPINFO)
+BITMAPINFO = tagBITMAPINFO
+
+class tagBITMAPCOREINFO(Structure):
+    _fields_ = [
+        ("bmciHeader", BITMAPCOREHEADER),
+        ("bmciColors", RGBTRIPLE * 1),
+    ]
+LPBITMAPCOREINFO = POINTER(tagBITMAPCOREINFO)
+BITMAPCOREINFO = tagBITMAPCOREINFO
+PBITMAPCOREINFO = POINTER(tagBITMAPCOREINFO)
+
+class tagWNDCLASSEXA(Structure):
+    _fields_ = [
+        ("cbSize", UINT),
+        ("style", UINT),
+        ("lpfnWndProc", WNDPROC),
+        ("cbClsExtra", INT),
+        ("cbWndExtra", INT),
+        ("hInstance", HINSTANCE),
+        ("hIcon", HICON),
+        ("hCursor", HCURSOR),
+        ("hbrBackground", HBRUSH),
+        ("lpszMenuName", LPCSTR),
+        ("lpszClassName", LPCSTR),
+        ("hIconSm", HICON),
+    ]
+PWNDCLASSEXA = POINTER(tagWNDCLASSEXA)
+LPWNDCLASSEXA = POINTER(tagWNDCLASSEXA)
+WNDCLASSEXA = tagWNDCLASSEXA
+
+class tagWNDCLASSEXW(Structure):
+    _fields_ = [
+        ("cbSize", UINT),
+        ("style", UINT),
+        ("lpfnWndProc", WNDPROC),
+        ("cbClsExtra", INT),
+        ("cbWndExtra", INT),
+        ("hInstance", HINSTANCE),
+        ("hIcon", HICON),
+        ("hCursor", HCURSOR),
+        ("hbrBackground", HBRUSH),
+        ("lpszMenuName", LPWSTR),
+        ("lpszClassName", LPWSTR),
+        ("hIconSm", HICON),
+    ]
+WNDCLASSEXW = tagWNDCLASSEXW
+LPWNDCLASSEXW = POINTER(tagWNDCLASSEXW)
+PWNDCLASSEXW = POINTER(tagWNDCLASSEXW)
+
 BG_JOB_STATE_QUEUED = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_QUEUED", 0x0)
 BG_JOB_STATE_CONNECTING = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_CONNECTING", 0x1)
 BG_JOB_STATE_TRANSFERRING = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_TRANSFERRING", 0x2)
@@ -940,6 +860,131 @@ class _BG_JOB_TIMES(Structure):
     ]
 BG_JOB_TIMES = _BG_JOB_TIMES
 
+class _API_SET_VALUE_ENTRY(Structure):
+    _fields_ = [
+        ("Flags", ULONG),
+        ("NameOffset", ULONG),
+        ("NameLength", ULONG),
+        ("ValueOffset", ULONG),
+        ("ValueLength", ULONG),
+    ]
+API_SET_VALUE_ENTRY = _API_SET_VALUE_ENTRY
+PAPI_SET_VALUE_ENTRY = POINTER(_API_SET_VALUE_ENTRY)
+
+class _API_SET_NAMESPACE_ENTRY(Structure):
+    _fields_ = [
+        ("Flags", ULONG),
+        ("NameOffset", ULONG),
+        ("NameLength", ULONG),
+        ("AliasOffset", ULONG),
+        ("AliasLength", ULONG),
+        ("DataOffset", ULONG),
+    ]
+PAPI_SET_NAMESPACE_ENTRY = POINTER(_API_SET_NAMESPACE_ENTRY)
+API_SET_NAMESPACE_ENTRY = _API_SET_NAMESPACE_ENTRY
+
+class _API_SET_NAMESPACE_ARRAY(Structure):
+    _fields_ = [
+        ("Version", ULONG),
+        ("Size", ULONG),
+        ("Flags", ULONG),
+        ("Count", ULONG),
+        ("Array", API_SET_NAMESPACE_ENTRY * ANYSIZE_ARRAY),
+    ]
+PAPI_SET_NAMESPACE_ARRAY = POINTER(_API_SET_NAMESPACE_ARRAY)
+API_SET_NAMESPACE_ARRAY = _API_SET_NAMESPACE_ARRAY
+
+class _API_SET_VALUE_ENTRY_V2(Structure):
+    _fields_ = [
+        ("NameOffset", ULONG),
+        ("NameLength", ULONG),
+        ("ValueOffset", ULONG),
+        ("ValueLength", ULONG),
+    ]
+PAPI_SET_VALUE_ENTRY_V2 = POINTER(_API_SET_VALUE_ENTRY_V2)
+API_SET_VALUE_ENTRY_V2 = _API_SET_VALUE_ENTRY_V2
+
+class _API_SET_VALUE_ARRAY_V2(Structure):
+    _fields_ = [
+        ("Count", ULONG),
+        ("Array", API_SET_VALUE_ENTRY_V2 * ANYSIZE_ARRAY),
+    ]
+API_SET_VALUE_ARRAY_V2 = _API_SET_VALUE_ARRAY_V2
+PAPI_SET_VALUE_ARRAY_V2 = POINTER(_API_SET_VALUE_ARRAY_V2)
+
+class _API_SET_NAMESPACE_ENTRY_V2(Structure):
+    _fields_ = [
+        ("NameOffset", ULONG),
+        ("NameLength", ULONG),
+        ("DataOffset", ULONG),
+    ]
+PAPI_SET_NAMESPACE_ENTRY_V2 = POINTER(_API_SET_NAMESPACE_ENTRY_V2)
+API_SET_NAMESPACE_ENTRY_V2 = _API_SET_NAMESPACE_ENTRY_V2
+
+class _API_SET_NAMESPACE_ARRAY_V2(Structure):
+    _fields_ = [
+        ("Version", ULONG),
+        ("Count", ULONG),
+        ("Array", API_SET_NAMESPACE_ENTRY_V2 * ANYSIZE_ARRAY),
+    ]
+API_SET_NAMESPACE_ARRAY_V2 = _API_SET_NAMESPACE_ARRAY_V2
+PAPI_SET_NAMESPACE_ARRAY_V2 = POINTER(_API_SET_NAMESPACE_ARRAY_V2)
+
+class _API_SET_VALUE_ARRAY_V4(Structure):
+    _fields_ = [
+        ("GuessFlags", ULONG),
+        ("Count", ULONG),
+        ("Array", API_SET_VALUE_ENTRY_V2 * ANYSIZE_ARRAY),
+    ]
+API_SET_VALUE_ARRAY_V4 = _API_SET_VALUE_ARRAY_V4
+PAPI_SET_VALUE_ARRAY_V2 = POINTER(_API_SET_VALUE_ARRAY_V4)
+
+class _API_SET_NAMESPACE_ARRAY_V4(Structure):
+    _fields_ = [
+        ("Version", ULONG),
+        ("Size", ULONG),
+        ("Flags", ULONG),
+        ("Count", ULONG),
+        ("Array", API_SET_NAMESPACE_ENTRY * ANYSIZE_ARRAY),
+    ]
+API_SET_NAMESPACE_ARRAY_V4 = _API_SET_NAMESPACE_ARRAY_V4
+PAPI_SET_NAMESPACE_ARRAY_V4 = POINTER(_API_SET_NAMESPACE_ARRAY_V4)
+
+class _API_SET_NAMESPACE_ENTRY_V4(Structure):
+    _fields_ = [
+        ("Flags", ULONG),
+        ("NameOffset", ULONG),
+        ("NameLength", ULONG),
+        ("AliasOffset", ULONG),
+        ("AliasLength", ULONG),
+        ("DataOffset", ULONG),
+    ]
+PAPI_SET_NAMESPACE_ENTRY_V4 = POINTER(_API_SET_NAMESPACE_ENTRY_V4)
+API_SET_NAMESPACE_ENTRY_V4 = _API_SET_NAMESPACE_ENTRY_V4
+
+class _API_SET_NAMESPACE_ENTRY_V6(Structure):
+    _fields_ = [
+        ("Flags", ULONG),
+        ("NameOffset", ULONG),
+        ("NameLength", ULONG),
+        ("HashedLength", ULONG),
+        ("ValueOffset", ULONG),
+        ("ValueCount", ULONG),
+    ]
+API_SET_NAMESPACE_ENTRY_V6 = _API_SET_NAMESPACE_ENTRY_V6
+
+class _API_SET_NAMESPACE_V6(Structure):
+    _fields_ = [
+        ("Version", ULONG),
+        ("Size", ULONG),
+        ("Flags", ULONG),
+        ("Count", ULONG),
+        ("EntryOffset", ULONG),
+        ("HashOffset", ULONG),
+        ("HashFactor", ULONG),
+    ]
+API_SET_NAMESPACE_V6 = _API_SET_NAMESPACE_V6
+
 class _SHITEMID(Structure):
     _fields_ = [
         ("cb", USHORT),
@@ -954,51 +999,6 @@ class _ITEMIDLIST(Structure):
 ITEMIDLIST = _ITEMIDLIST
 PCIDLIST_ABSOLUTE = POINTER(_ITEMIDLIST)
 PIDLIST_ABSOLUTE = POINTER(_ITEMIDLIST)
-
-KeyValueBasicInformation = EnumValue("_KEY_VALUE_INFORMATION_CLASS", "KeyValueBasicInformation", 0x0)
-KeyValueFullInformation = EnumValue("_KEY_VALUE_INFORMATION_CLASS", "KeyValueFullInformation", 0x1)
-KeyValuePartialInformation = EnumValue("_KEY_VALUE_INFORMATION_CLASS", "KeyValuePartialInformation", 0x2)
-KeyValueFullInformationAlign64 = EnumValue("_KEY_VALUE_INFORMATION_CLASS", "KeyValueFullInformationAlign64", 0x3)
-KeyValuePartialInformationAlign64 = EnumValue("_KEY_VALUE_INFORMATION_CLASS", "KeyValuePartialInformationAlign64", 0x4)
-KeyValueLayerInformation = EnumValue("_KEY_VALUE_INFORMATION_CLASS", "KeyValueLayerInformation", 0x5)
-MaxKeyValueInfoClass = EnumValue("_KEY_VALUE_INFORMATION_CLASS", "MaxKeyValueInfoClass", 0x6)
-class _KEY_VALUE_INFORMATION_CLASS(EnumType):
-    values = [KeyValueBasicInformation, KeyValueFullInformation, KeyValuePartialInformation, KeyValueFullInformationAlign64, KeyValuePartialInformationAlign64, KeyValueLayerInformation, MaxKeyValueInfoClass]
-    mapper = {x:x for x in values}
-KEY_VALUE_INFORMATION_CLASS = _KEY_VALUE_INFORMATION_CLASS
-
-
-class _KEY_VALUE_BASIC_INFORMATION(Structure):
-    _fields_ = [
-        ("TitleIndex", ULONG),
-        ("Type", ULONG),
-        ("NameLength", ULONG),
-        ("Name", WCHAR * 1),
-    ]
-PKEY_VALUE_BASIC_INFORMATION = POINTER(_KEY_VALUE_BASIC_INFORMATION)
-KEY_VALUE_BASIC_INFORMATION = _KEY_VALUE_BASIC_INFORMATION
-
-class _KEY_VALUE_FULL_INFORMATION(Structure):
-    _fields_ = [
-        ("TitleIndex", ULONG),
-        ("Type", ULONG),
-        ("DataOffset", ULONG),
-        ("DataLength", ULONG),
-        ("NameLength", ULONG),
-        ("Name", WCHAR * 1),
-    ]
-KEY_VALUE_FULL_INFORMATION = _KEY_VALUE_FULL_INFORMATION
-PKEY_VALUE_FULL_INFORMATION = POINTER(_KEY_VALUE_FULL_INFORMATION)
-
-class _KEY_VALUE_PARTIAL_INFORMATION(Structure):
-    _fields_ = [
-        ("TitleIndex", ULONG),
-        ("Type", ULONG),
-        ("DataLength", ULONG),
-        ("Data", UCHAR * 1),
-    ]
-PKEY_VALUE_PARTIAL_INFORMATION = POINTER(_KEY_VALUE_PARTIAL_INFORMATION)
-KEY_VALUE_PARTIAL_INFORMATION = _KEY_VALUE_PARTIAL_INFORMATION
 
 TASK_ACTION_EXEC = EnumValue("_TASK_ACTION_TYPE", "TASK_ACTION_EXEC", 0x0)
 TASK_ACTION_COM_HANDLER = EnumValue("_TASK_ACTION_TYPE", "TASK_ACTION_COM_HANDLER", 0x5)

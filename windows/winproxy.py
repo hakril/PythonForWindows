@@ -144,6 +144,8 @@ class ApiProxy(object):
         python_proxy.errcheck = self.error_check
         python_proxy.target_dll = self.APIDLL
         python_proxy.target_func = self.func_name
+        # Give access to the 'ApiProxy' object from the function
+        python_proxy.proxy = self
         params_name = [param[1] for param in params]
         if (self.error_check.__doc__):
             doc = python_proxy.__doc__
@@ -2014,6 +2016,15 @@ def StrStrIW(pszFirst, pszSrch):
 @ShlwapiProxy("StrStrIA")
 def StrStrIA(pszFirst, pszSrch):
     return StrStrIA.ctypes_function(pszFirst, pszSrch)
+
+@ShlwapiProxy("IsOS")
+def IsOS(dwOS):
+    if not is_implemented(IsOS) and windows.system.version[0] < 6:
+        # Before Vista:
+        # If so use ordinal 437 from DOCUMENTATION
+        # https://docs.microsoft.com/en-us/windows/desktop/api/shlwapi/nf-shlwapi-isos#remarks
+        IsOS.proxy.func_name = 437
+    return IsOS.ctypes_function(dwOS)
 
 
 # OleaccProxy
