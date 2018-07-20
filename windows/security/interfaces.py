@@ -211,20 +211,20 @@ class EACE(object):
     def object_type(self):
         if getattr(self, "ObjectType", None) is not None:
             if not self.has_object_type:
-                raise ValueError("The current ACE does not have an ObjectType")
+                return None
             return cast(addressof(self) + type(self).ObjectType.offset, POINTER(IID)).contents
-        return ""
+        return None
     
     @property
     def inherited_object_type(self):
         if getattr(self, "InheritedObjectType", None) is not None:
             if not self.has_inherited_object_type:
-                raise ValueError("The current ACE does not have an InheritedObjectType")
+                return None
             baseaddress = addressof(self) + type(self).InheritedObjectType.offset
             if not self.has_object_type:
                 baseaddress -= type(self).InheritedObjectType.offset
             return cast(baseaddress, POINTER(IID)).contents
-        return ""
+        return None
     
     @property
     def type(self):
@@ -232,7 +232,7 @@ class EACE(object):
     
     @property
     def flags(self):
-        return self.header.flags
+        return self._extract_flags()
     
     @property
     def has_object_type(self):
@@ -245,7 +245,7 @@ class EACE(object):
     def _extract_flags(self):
         attrs = []
         for mask in (1 << i for i in range(64)):
-            if self.Flags & mask:
+            if getattr(self, "Flags", 0) & mask:
                 attrs.append(mask)
         return [self.FLAGS_MAPPING.get(x, x) for x in attrs]
     
