@@ -67,7 +67,7 @@ def test_security_descriptor_sacl():
     
     # 1st SACL ACE = Success access on all properties by Everyone (WD)
     assert sacl[0].type == SYSTEM_AUDIT_ACE_TYPE
-    assert SUCCESSFUL_ACCESS_ACE_FLAG in sacl[0].flags
+    assert SUCCESSFUL_ACCESS_ACE_FLAG in sacl[0].header.flags
     assert str(sacl[0].sid) == "S-1-1-0"
     
 
@@ -78,7 +78,7 @@ def test_security_descriptor_load_from_handle():
     handle = winproxy.CreateFileA(filename, GENERIC_READ, FILE_SHARE_READ, None, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL)
     pSecurityDescriptor = EPSECURITY_DESCRIPTOR.from_handle(handle, object_type=SE_FILE_OBJECT)
     assert pSecurityDescriptor.valid
-    assert pSecurityDescriptor.owner.lookup() == "NT SERVICE\\TrustedInstaller"
+    assert pSecurityDescriptor.owner.lookup() == ("NT SERVICE", "TrustedInstaller")
     winproxy.CloseHandle(handle)
 
 
@@ -89,7 +89,7 @@ def test_security_descriptor_load_from_name():
     pSecurityDescriptor = EPSECURITY_DESCRIPTOR.from_name(filename, object_type=SE_FILE_OBJECT)
     assert pSecurityDescriptor.valid
     assert pSecurityDescriptor.valid
-    assert pSecurityDescriptor.owner.lookup() == "NT SERVICE\\TrustedInstaller"
+    assert pSecurityDescriptor.owner.lookup() == ("NT SERVICE", "TrustedInstaller")
     
     pSecurityDescriptor = EPSECURITY_DESCRIPTOR.from_name('Spooler', object_type=SE_SERVICE)
     assert str(pSecurityDescriptor.owner) == SECURITY_LOCAL_SYSTEM_RID

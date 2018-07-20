@@ -2,6 +2,7 @@ import ctypes
 from windows.generated_def import *
 from windows import winproxy
 
+
 class EPSID(PSID):
     def __repr__(self):
         return '<Sid "{0}" at {1:#8x}>'.format(str(self), id(self))
@@ -18,8 +19,9 @@ class EPSID(PSID):
         self = cls()
         winproxy.ConvertStringSidToSidA(sidstr, self)
         return self
-        
-    def lookup(self):
+    
+
+    def internal_lookup(self):
         Name = LPCSTR()
         cchName = DWORD(0x1000)
         ReferencedDomainName = LPCSTR()
@@ -55,6 +57,12 @@ class EPSID(PSID):
             ctypes.byref(peUse)
         )
         
-        result = "{0}\\{1}".format(ReferencedDomainName.value, Name.value)
-        return result
+        return ReferencedDomainName.value, Name.value
 
+    
+    def lookup(self):
+        return self.internal_lookup()
+    
+    
+    def __eq__(self, other):
+        return str(self) == str(other)
