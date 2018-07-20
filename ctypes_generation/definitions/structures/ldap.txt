@@ -15,6 +15,12 @@ typedef struct berval {
 } LDAP_BERVAL, *PLDAP_BERVAL, BERVAL, *PBERVAL, BerValue;
 
 
+typedef struct berElement {
+  LPCSTR opaque;
+} BerElement, *PBerElement;
+
+
+
 typedef struct ldapmsg {
     ULONG lm_msgid;
     ULONG lm_msgtype;
@@ -41,9 +47,6 @@ typedef struct l_timeval {
   LONG tv_usec;
 } LDAP_TIMEVAL, *PLDAP_TIMEVAL;
 
-typedef struct berElement {
-  LPCSTR opaque;
-} BerElement, *PBerElement;
 
 typedef struct ldap_apifeature_info {
   INT       ldapaif_info_version;
