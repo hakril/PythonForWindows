@@ -161,7 +161,27 @@ class LDAPSchema(object):
         with open(os.path.join(self.cache_folder, self.domain_controller), "wb") as f:
             f.write(json.dumps(self.cache, indent=4, encoding="latin-1"))
 
-        
+    
+    @property
+    def root_dse(self):
+        return self.cache['root_dse']
+
+    
+    @property
+    def schema(self):
+        return self.cache['schema']
+    
+    
+    @property
+    def extended_rights(self):
+        return self.cache['extended_rights']
+    
+    
+    @property
+    def classes(self):
+        return self.cache['classes']
+
+    
     def load(self, conn):
         self.load_root_dse(conn)
         self.load_schema_attributes(conn)

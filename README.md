@@ -461,6 +461,59 @@ repr(pSecurityDescriptor.sacl[0]) :
 >
 ```
 
+### LDAP
+
+You can access ldap services with PythonForWindows.
+
+```python
+import getpass
+from windows.generated_def import *
+from windows.ldap.ldap_connection import EPLDAP
+
+
+LDAP_SERVER = 'my.domain.local'
+LDAP_USERNAME = 'user'
+LDAP_PASSWORD = getpass.getpass('Password: ')
+LDAP_DOMAIN = 'DOMAIN'
+
+# LDAP connections are context managers to help with cleanup when the access is not needed anymore
+with EPLDAP.get_connection(LDAP_SERVER) as conn
+    conn.bind(LDAP_USERNAME, LDAP_PASSWORD, LDAP_DOMAIN) # LDAP bind with negociate authentication technique 
+                                                         # You can use simple authentication which does not use
+                                                         # sasl for easy debugging
+    # Setup the list of attributes you want to get from the LDAP.
+    # Set to None for all attributes.
+    attributes = ['cn', 'objectClass']
+    
+    # Simple search that uses the kwargs to build an AND filter
+    user = conn.find_one(sAMAccountName='user2', returned_attributes=attributes)
+    print "dict(user): ", dict(user) # LDAP Entries behave like python dicts
+    print "user.cn: ", user.cn       # LDAP Entries attributes can also be accessed directly
+    
+    attributes = ['nTSecurityDescriptor']
+    # This time we will use the paged search
+    # The conn object holds reference to a schema attribute that has a cache to several 
+    # information from the Active Directory. The cache is stored in the ".cache" directory
+    # by default so that it is loaded once per Domain.
+    user = conn.search_s_paged(
+        base_dn=conn.schema.root_dse['rootNamingContext'], 
+        filter='(cn=user2)', 
+        scope=LDAP_SCOPE_SUBTREE, 
+        returned_attributes=attributes
+    )
+    
+    # The nTSecurityDescriptor is cast to a EPSECURITY_DESCRIPTOR (see the security chapter) 
+    print "type(user.nTSecurityDescriptor): ", type(user.nTSecurityDescriptor)
+    print "user.nTSecurityDescriptor.control: ", user.nTSecurityDescriptor.control 
+    
+
+## OUTPUT ##
+Password: 
+dict(user):  {'objectClass': [u'top', u'person', u'organizationalPerson', u'user'], 'distinguishedName': 'CN=user2,OU=Users,DC=my,DC=domain,DC=local', 'cn': u'user2'}
+user.cn:  user2
+type(user.nTSecurityDescriptor):  <class 'windows.security.interfaces.EPSECURITY_DESCRIPTOR'>
+user.nTSecurityDescriptor.control:  <SECURITY_DESCRIPTOR_CONTROL "[SE_DACL_PRESENT(0x4L), SE_DACL_AUTO_INHERITED(0x400L), SE_SACL_AUTO_INHERITED(0x800L), SE_SELF_RELATIVE(0x8000L)]">
+```
 
 
 ### Other stuff (see doc / samples)
