@@ -4,6 +4,15 @@ BOOL WINAPI CryptCATAdminCalcHashFromFileHandle(
     _Out_opt_ BYTE *pbHash,
     __in DWORD dwFlags);
 
+
+BOOL CryptCATAdminCalcHashFromFileHandle2(
+  HCATADMIN hCatAdmin,
+  HANDLE    hFile,
+  DWORD     *pcbHash,
+  BYTE      *pbHash,
+  DWORD     dwFlags
+);
+
 HCATINFO WINAPI CryptCATAdminEnumCatalogFromHash(
     __in HCATADMIN hCatAdmin,
     __in BYTE *pbHash,
@@ -15,6 +24,14 @@ BOOL WINAPI CryptCATAdminAcquireContext(
   _Out_       HCATADMIN *phCatAdmin,
   _In_        GUID      *pgSubsystem,
   _In_        DWORD     dwFlags
+);
+
+BOOL CryptCATAdminAcquireContext2(
+  HCATADMIN               *phCatAdmin,
+  GUID              *pgSubsystem,
+  PCWSTR                  pwszHashAlgorithm,
+  PCCERT_STRONG_SIGN_PARA pStrongHashPolicy,
+  DWORD                   dwFlags
 );
 
 BOOL WINAPI CryptCATCatalogInfoFromContext(

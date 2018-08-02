@@ -2235,6 +2235,24 @@ typedef struct tagEXCEPINFO {
     SCODE scode;
 } EXCEPINFO;
 
+typedef struct _CERT_STRONG_SIGN_SERIALIZED_INFO {
+  DWORD  dwFlags;
+  LPWSTR pwszCNGSignHashAlgids;
+  LPWSTR pwszCNGPubKeyMinBitLengths;
+} CERT_STRONG_SIGN_SERIALIZED_INFO, *PCERT_STRONG_SIGN_SERIALIZED_INFO;
+
+typedef union TMP_CERT_STRONG_SIGN_PARA_UNION_TYPE {
+    PVOID                              pvInfo;
+    PCERT_STRONG_SIGN_SERIALIZED_INFO pSerializedInfo;
+    LPSTR                             pszOID;
+};
+
+typedef struct _CERT_STRONG_SIGN_PARA {
+  DWORD cbSize;
+  DWORD dwInfoChoice;
+  TMP_CERT_STRONG_SIGN_PARA_UNION_TYPE tmp_union;
+} CERT_STRONG_SIGN_PARA, *PCERT_STRONG_SIGN_PARA, *PCCERT_STRONG_SIGN_PARA;
+
 
 typedef struct _CRYPTOAPI_BLOB {
     DWORD   cbData;
@@ -3316,6 +3334,7 @@ typedef enum _RTL_PATH_TYPE
     RtlPathTypeLocalDevice,
     RtlPathTypeRootLocalDevice
 } RTL_PATH_TYPE;
+
 
 
 // Based on Alex Ionescu works on HookingNirvana

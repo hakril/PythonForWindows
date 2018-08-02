@@ -261,6 +261,22 @@ _CALLFRAME_MARSHALCONTEXT
 
         :class:`GUID`
 
+_FILE_DISPOSITION_INFORMATION
+'''''''''''''''''''''''''''''
+.. class:: PFILE_DISPOSITION_INFORMATION
+
+    Pointer to :class:`_FILE_DISPOSITION_INFORMATION`
+
+.. class:: FILE_DISPOSITION_INFORMATION
+
+    Alias for :class:`_FILE_DISPOSITION_INFORMATION`
+
+.. class:: _FILE_DISPOSITION_INFORMATION
+
+    .. attribute:: DeleteFile
+
+        :class:`BOOLEAN`
+
 _GUID
 '''''
 .. class:: REFCLSID
@@ -7242,6 +7258,80 @@ tagEXCEPINFO
     .. attribute:: scode
 
         :class:`SCODE`
+
+_CERT_STRONG_SIGN_SERIALIZED_INFO
+'''''''''''''''''''''''''''''''''
+.. class:: CERT_STRONG_SIGN_SERIALIZED_INFO
+
+    Alias for :class:`_CERT_STRONG_SIGN_SERIALIZED_INFO`
+
+.. class:: PCERT_STRONG_SIGN_SERIALIZED_INFO
+
+    Pointer to :class:`_CERT_STRONG_SIGN_SERIALIZED_INFO`
+
+.. class:: _CERT_STRONG_SIGN_SERIALIZED_INFO
+
+    .. attribute:: dwFlags
+
+        :class:`DWORD`
+
+
+    .. attribute:: pwszCNGSignHashAlgids
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: pwszCNGPubKeyMinBitLengths
+
+        :class:`LPWSTR`
+
+TMP_CERT_STRONG_SIGN_PARA_UNION_TYPE
+''''''''''''''''''''''''''''''''''''
+.. class:: TMP_CERT_STRONG_SIGN_PARA_UNION_TYPE
+
+    .. attribute:: pvInfo
+
+        :class:`PVOID`
+
+
+    .. attribute:: pSerializedInfo
+
+        :class:`PCERT_STRONG_SIGN_SERIALIZED_INFO`
+
+
+    .. attribute:: pszOID
+
+        :class:`LPSTR`
+
+_CERT_STRONG_SIGN_PARA
+''''''''''''''''''''''
+.. class:: CERT_STRONG_SIGN_PARA
+
+    Alias for :class:`_CERT_STRONG_SIGN_PARA`
+
+.. class:: PCCERT_STRONG_SIGN_PARA
+
+    Pointer to :class:`_CERT_STRONG_SIGN_PARA`
+
+.. class:: PCERT_STRONG_SIGN_PARA
+
+    Pointer to :class:`_CERT_STRONG_SIGN_PARA`
+
+.. class:: _CERT_STRONG_SIGN_PARA
+
+    .. attribute:: cbSize
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwInfoChoice
+
+        :class:`DWORD`
+
+
+    .. attribute:: tmp_union
+
+        :class:`TMP_CERT_STRONG_SIGN_PARA_UNION_TYPE`
 
 _CRYPTOAPI_BLOB
 '''''''''''''''
