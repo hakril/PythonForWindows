@@ -116,7 +116,7 @@ def test_certificate(rawcert):
     assert cert.serial == '1b 8e 94 cb 0b 3e eb b6 41 39 f3 c9 09 b1 6b 46'
     assert cert.name == 'PythonForWindowsTest'
     assert cert.issuer == 'PythonForWindowsTest'
-    assert cert.thumprint == 'EF 0C A8 C9 F9 E0 96 AF 74 18 56 8B C1 C9 57 27 A0 89 29 6A'
+    assert cert.thumbprint == 'EF 0C A8 C9 F9 E0 96 AF 74 18 56 8B C1 C9 57 27 A0 89 29 6A'
     assert cert.encoded == rawcert
     assert cert.version == 2
     assert cert == cert
