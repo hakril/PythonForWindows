@@ -23,6 +23,26 @@ I am always glad to have feedbacks from people using this project.
 
 Examples are available on the `github page <https://github.com/hakril/pythonforwindows#pythonforwindows>`_  and in the :ref:`sample_of_code`.
 
+
+Installation
+''''''''''''
+
+Installing using setup.py
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+You can install PythonForWindows using the ``setup.py`` at the root of the project::
+
+    python setup.py install
+
+In its current state the project only support Python2 and
+``setup.py`` will raise an :class:`NotImplementedError` is launched from python3.
+
+
+.. warning::
+
+    PythonForWindows is not available on Pypi for now and thus cannot be directly installed using ``pip``.
+
+
 Documentation
 """""""""""""
 

@@ -1,8 +1,12 @@
-﻿from setuptools import setup
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
+import sys
+from setuptools import setup
 
 PKG_NAME = "PythonForWindows"
 VERSION  = "0.4"
+
+if sys.version_info[0] != 2:
+    raise NotImplementedError("PythonForWindows only support Python2 for now")
 
 
 setup(
@@ -13,7 +17,7 @@ setup(
     description = 'A codebase aimed to make interaction with Windows and native execution easier',
     license = 'BSD',
     keywords = 'windows python',
-    url = '',
+    url = 'https://github.com/hakril/PythonForWindows',
     packages = ['windows',
                 'windows.crypto',
                 'windows.debug',
@@ -22,4 +26,6 @@ setup(
                 'windows.rpc',
                 'windows.utils',
                 'windows.winobject'],
+    classifiers = ['Programming Language :: Python :: 2 :: Only',
+                   'Programming Language :: Python :: 2.7']
 )

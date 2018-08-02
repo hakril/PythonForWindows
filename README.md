@@ -17,6 +17,16 @@ Parts of PythonForWindows are used in the [LKD project][LKD_GITHUB].
 If you have any issue, question, suggestion do not hesitate to contact me.
 I am always glad to have feedbacks from people using this project.
 
+## Installation
+
+You can install PythonForWindows using the ``setup.py`` script:
+
+``
+python setup.py install
+``
+
+Note that PythonForWindows only support Python2 at the moment.
+
 ## Overview
 
 ### Processes / Threads

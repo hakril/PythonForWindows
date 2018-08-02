@@ -14,7 +14,7 @@ The :class:`ObjectManager` instance is accessible via :py:attr:`windows.system.o
 
 .. warning::
 
-    This API have not been tested on real case yet and may be subject to changes.
+    This API have not been tested on real cases yet and may be subject to changes.
 
 ObjectManager
 """""""""""""
