@@ -988,6 +988,10 @@ def NtSetContextThread(hThread, lpContext):
 def NtOpenEvent(EventHandle, DesiredAccess, ObjectAttributes):
     return NtOpenEvent.ctypes_function(EventHandle, DesiredAccess, ObjectAttributes)
 
+@NtdllProxy("NtSetInformationFile", error_ntstatus)
+def NtSetInformationFile(FileHandle, IoStatusBlock, FileInformation, Length, FileInformationClass):
+    return NtSetInformationFile.ctypes_function(FileHandle, IoStatusBlock, FileInformation, Length, FileInformationClass)
+
 
 @NtdllProxy("NtAlpcCreatePort", error_ntstatus)
 def NtAlpcCreatePort(PortHandle, ObjectAttributes, PortAttributes):
@@ -1483,15 +1487,21 @@ def WinVerifyTrust(hwnd, pgActionID, pWVTData):
 def CryptCATAdminCalcHashFromFileHandle(hFile, pcbHash, pbHash, dwFlags):
     return CryptCATAdminCalcHashFromFileHandle.ctypes_function(hFile, pcbHash, pbHash, dwFlags)
 
+@WinTrustProxy('CryptCATAdminCalcHashFromFileHandle2', error_check=zero_is_fail_error_check)
+def CryptCATAdminCalcHashFromFileHandle2(hCatAdmin, hFile, pcbHash, pbHash, dwFlags):
+    return CryptCATAdminCalcHashFromFileHandle2.ctypes_function(hCatAdmin, hFile, pcbHash, pbHash, dwFlags)
 
 @WinTrustProxy('CryptCATAdminEnumCatalogFromHash')
 def CryptCATAdminEnumCatalogFromHash(hCatAdmin, pbHash, cbHash, dwFlags, phPrevCatInfo):
     return CryptCATAdminEnumCatalogFromHash.ctypes_function(hCatAdmin, pbHash, cbHash, dwFlags, phPrevCatInfo)
 
-
 @WinTrustProxy('CryptCATAdminAcquireContext', error_check=zero_is_fail_error_check)
 def CryptCATAdminAcquireContext(phCatAdmin, pgSubsystem, dwFlags):
     return CryptCATAdminAcquireContext.ctypes_function(phCatAdmin, pgSubsystem, dwFlags)
+
+@WinTrustProxy('CryptCATAdminAcquireContext2', error_check=zero_is_fail_error_check)
+def CryptCATAdminAcquireContext2(phCatAdmin, pgSubsystem, pwszHashAlgorithm, pStrongHashPolicy, dwFlags):
+    return CryptCATAdminAcquireContext2.ctypes_function(phCatAdmin, pgSubsystem, pwszHashAlgorithm, pStrongHashPolicy, dwFlags)
 
 
 @WinTrustProxy('CryptCATCatalogInfoFromContext', error_check=zero_is_fail_error_check)

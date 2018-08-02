@@ -198,6 +198,8 @@ class EvtEvent(gdef.EVT_HANDLE):
 
         :type: :class:`dict`
         """
+        # What about classic channels where there is no event_metadata ?
+        # Return a dict with [0-1-2-3-4] as key ? raise ?
         return {k:v for k,v in zip(self.metadata.event_data, self.event_values())}
 
 

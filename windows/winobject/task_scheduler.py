@@ -82,10 +82,7 @@ class AbstractAction(object):
 
 class Action(gdef.IAction, AbstractAction):
     """Describe an action performed by a task"""
-    ACTION_SUBTYPE = {
-        gdef.TASK_ACTION_SEND_EMAIL: gdef.IEmailAction,
-        gdef.TASK_ACTION_SHOW_MESSAGE: gdef.IShowMessageAction
-    }
+    ACTION_SUBTYPE = {}
 
 
     @property
@@ -132,6 +129,17 @@ class ComHandlerAction(gdef.IComHandlerAction, AbstractAction):
 # Register action subtype
 Action.ACTION_SUBTYPE[gdef.TASK_ACTION_COM_HANDLER] = ComHandlerAction
 
+
+class EmailAction(gdef.IEmailAction, AbstractAction):
+    pass
+
+
+Action.ACTION_SUBTYPE[gdef.TASK_ACTION_SEND_EMAIL] = EmailAction
+
+class ShowMessageAction(gdef.IShowMessageAction, AbstractAction):
+    pass
+
+Action.ACTION_SUBTYPE[gdef.TASK_ACTION_SHOW_MESSAGE] = ShowMessageAction
 
 class Trigger(gdef.ITrigger):
     """A task trigger"""

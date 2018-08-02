@@ -6,8 +6,15 @@ import windows.generated_def as gdef
 
 class BaseSystemModule(object):
     """[ABSTRACT] A common base class for all system modules"""
+
+    @property
+    def name(self):
+        """The name of the system module: alias for ``ImageName``"""
+        return self.ImageName
+
     def __repr__(self):
         return """<{0} name="{1}" base={2:#x}>""".format(type(self).__name__, self.ImageName, self.Base)
+
 
 
 class SystemModule(BaseSystemModule, gdef.SYSTEM_MODULE):
