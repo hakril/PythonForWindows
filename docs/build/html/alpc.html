@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/css/mbasic.css" type="text/css" />
-    <script type="text/javascript" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
@@ -330,7 +330,7 @@ ALPC messages over an ALPC port and the classes representing these messages.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>receive_msg</strong> (<a class="reference internal" href="#windows.alpc.AlpcMessage" title="windows.alpc.AlpcMessage"><em>AlpcMessage</em></a><em> or </em><em>None</em>) – The message to send. If <code class="docutils literal notranslate"><span class="pre">receive_msg</span></code> is a <code class="docutils literal notranslate"><span class="pre">None</span></code> it create and return a simple <a class="reference internal" href="#windows.alpc.AlpcMessage" title="windows.alpc.AlpcMessage"><code class="xref py py-class docutils literal notranslate"><span class="pre">AlpcMessage</span></code></a></li>
+<li><strong>receive_msg</strong> (<a class="reference internal" href="#windows.alpc.AlpcMessage" title="windows.alpc.AlpcMessage"><em>AlpcMessage</em></a><em> or </em><a class="reference external" href="https://docs.python.org/2.7/library/constants.html#None" title="(in Python v2.7)"><em>None</em></a>) – The message to send. If <code class="docutils literal notranslate"><span class="pre">receive_msg</span></code> is a <code class="docutils literal notranslate"><span class="pre">None</span></code> it create and return a simple <a class="reference internal" href="#windows.alpc.AlpcMessage" title="windows.alpc.AlpcMessage"><code class="xref py py-class docutils literal notranslate"><span class="pre">AlpcMessage</span></code></a></li>
 <li><strong>flags</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) – The flags for <code class="xref py py-func docutils literal notranslate"><span class="pre">NtAlpcSendWaitReceivePort()</span></code></li>
 </ul>
 </td>
@@ -367,7 +367,7 @@ ALPC messages over an ALPC port and the classes representing these messages.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>alpc_message</strong> (<a class="reference internal" href="#windows.alpc.AlpcMessage" title="windows.alpc.AlpcMessage"><em>AlpcMessage</em></a><em> or </em><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – The message to send. If <code class="docutils literal notranslate"><span class="pre">alpc_message</span></code> is a <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> it build an AlpcMessage with the message as data.</li>
-<li><strong>receive_msg</strong> (<a class="reference internal" href="#windows.alpc.AlpcMessage" title="windows.alpc.AlpcMessage"><em>AlpcMessage</em></a><em> or </em><em>None</em>) – The message to send. If <code class="docutils literal notranslate"><span class="pre">receive_msg</span></code> is a <code class="docutils literal notranslate"><span class="pre">None</span></code> it create and return a simple <a class="reference internal" href="#windows.alpc.AlpcMessage" title="windows.alpc.AlpcMessage"><code class="xref py py-class docutils literal notranslate"><span class="pre">AlpcMessage</span></code></a></li>
+<li><strong>receive_msg</strong> (<a class="reference internal" href="#windows.alpc.AlpcMessage" title="windows.alpc.AlpcMessage"><em>AlpcMessage</em></a><em> or </em><a class="reference external" href="https://docs.python.org/2.7/library/constants.html#None" title="(in Python v2.7)"><em>None</em></a>) – The message to send. If <code class="docutils literal notranslate"><span class="pre">receive_msg</span></code> is a <code class="docutils literal notranslate"><span class="pre">None</span></code> it create and return a simple <a class="reference internal" href="#windows.alpc.AlpcMessage" title="windows.alpc.AlpcMessage"><code class="xref py py-class docutils literal notranslate"><span class="pre">AlpcMessage</span></code></a></li>
 <li><strong>flags</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) – The flags for <code class="xref py py-func docutils literal notranslate"><span class="pre">NtAlpcSendWaitReceivePort()</span></code></li>
 </ul>
 </td>
@@ -435,7 +435,7 @@ ALPC messages over an ALPC port and the classes representing these messages.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>receive_msg</strong> (<a class="reference internal" href="#windows.alpc.AlpcMessage" title="windows.alpc.AlpcMessage"><em>AlpcMessage</em></a><em> or </em><em>None</em>) – The message to send. If <code class="docutils literal notranslate"><span class="pre">receive_msg</span></code> is a <code class="docutils literal notranslate"><span class="pre">None</span></code> it create and return a simple <a class="reference internal" href="#windows.alpc.AlpcMessage" title="windows.alpc.AlpcMessage"><code class="xref py py-class docutils literal notranslate"><span class="pre">AlpcMessage</span></code></a></li>
+<li><strong>receive_msg</strong> (<a class="reference internal" href="#windows.alpc.AlpcMessage" title="windows.alpc.AlpcMessage"><em>AlpcMessage</em></a><em> or </em><a class="reference external" href="https://docs.python.org/2.7/library/constants.html#None" title="(in Python v2.7)"><em>None</em></a>) – The message to send. If <code class="docutils literal notranslate"><span class="pre">receive_msg</span></code> is a <code class="docutils literal notranslate"><span class="pre">None</span></code> it create and return a simple <a class="reference internal" href="#windows.alpc.AlpcMessage" title="windows.alpc.AlpcMessage"><code class="xref py py-class docutils literal notranslate"><span class="pre">AlpcMessage</span></code></a></li>
 <li><strong>flags</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) – The flags for <code class="xref py py-func docutils literal notranslate"><span class="pre">NtAlpcSendWaitReceivePort()</span></code></li>
 </ul>
 </td>
@@ -472,7 +472,7 @@ ALPC messages over an ALPC port and the classes representing these messages.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>alpc_message</strong> (<a class="reference internal" href="#windows.alpc.AlpcMessage" title="windows.alpc.AlpcMessage"><em>AlpcMessage</em></a><em> or </em><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – The message to send. If <code class="docutils literal notranslate"><span class="pre">alpc_message</span></code> is a <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> it build an AlpcMessage with the message as data.</li>
-<li><strong>receive_msg</strong> (<a class="reference internal" href="#windows.alpc.AlpcMessage" title="windows.alpc.AlpcMessage"><em>AlpcMessage</em></a><em> or </em><em>None</em>) – The message to send. If <code class="docutils literal notranslate"><span class="pre">receive_msg</span></code> is a <code class="docutils literal notranslate"><span class="pre">None</span></code> it create and return a simple <a class="reference internal" href="#windows.alpc.AlpcMessage" title="windows.alpc.AlpcMessage"><code class="xref py py-class docutils literal notranslate"><span class="pre">AlpcMessage</span></code></a></li>
+<li><strong>receive_msg</strong> (<a class="reference internal" href="#windows.alpc.AlpcMessage" title="windows.alpc.AlpcMessage"><em>AlpcMessage</em></a><em> or </em><a class="reference external" href="https://docs.python.org/2.7/library/constants.html#None" title="(in Python v2.7)"><em>None</em></a>) – The message to send. If <code class="docutils literal notranslate"><span class="pre">receive_msg</span></code> is a <code class="docutils literal notranslate"><span class="pre">None</span></code> it create and return a simple <a class="reference internal" href="#windows.alpc.AlpcMessage" title="windows.alpc.AlpcMessage"><code class="xref py py-class docutils literal notranslate"><span class="pre">AlpcMessage</span></code></a></li>
 <li><strong>flags</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) – The flags for <code class="xref py py-func docutils literal notranslate"><span class="pre">NtAlpcSendWaitReceivePort()</span></code></li>
 </ul>
 </td>
@@ -551,7 +551,7 @@ ALPC messages over an ALPC port and the classes representing these messages.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
     </div>
   </body>
 </html>

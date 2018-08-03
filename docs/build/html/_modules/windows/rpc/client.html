@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/css/mbasic.css" type="text/css" />
-    <script type="text/javascript" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
@@ -122,8 +122,8 @@
         <span class="n">iid_hash</span> <span class="o">=</span> <span class="nb">hash</span><span class="p">(</span><span class="n">buffer</span><span class="p">(</span><span class="n">IID</span><span class="p">)[:])</span> <span class="c1"># TODO: add __hash__ to IID</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">if_bind_number</span><span class="p">[</span><span class="n">iid_hash</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_bind_if</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">number_of_bind_if</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="c1">#TODO: attach version information to IID</span></div>
-        <span class="k">return</span> <span class="n">IID</span>
+        <span class="c1">#TODO: attach version information to IID</span>
+        <span class="k">return</span> <span class="n">IID</span></div>
 
 <div class="viewcode-block" id="RPCClient.call"><a class="viewcode-back" href="../../../rpc.html#windows.rpc.RPCClient.call">[docs]</a>    <span class="k">def</span> <span class="nf">call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">IID</span><span class="p">,</span> <span class="n">method_offset</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Call method number ``method_offset`` of interface ``IID`` with mashalled ``params``</span>
@@ -143,8 +143,8 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unexpected reponse type. Expected RESPONSE_SUCCESS got </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">KNOW_RESPONSE_TYPE</span><span class="p">[</span><span class="n">request_type</span><span class="p">]))</span>
 
         <span class="n">data</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&lt;6I&quot;</span><span class="p">,</span> <span class="n">response</span><span class="p">[:</span><span class="mi">6</span> <span class="o">*</span> <span class="mi">4</span><span class="p">])</span>
-        <span class="k">assert</span> <span class="n">data</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">REQUEST_IDENTIFIER</span></div>
-        <span class="k">return</span> <span class="n">response</span><span class="p">[</span><span class="mi">4</span> <span class="o">*</span> <span class="mi">6</span><span class="p">:]</span> <span class="c1"># Should be the return value (not completly verified)</span>
+        <span class="k">assert</span> <span class="n">data</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">REQUEST_IDENTIFIER</span>
+        <span class="k">return</span> <span class="n">response</span><span class="p">[</span><span class="mi">4</span> <span class="o">*</span> <span class="mi">6</span><span class="p">:]</span> <span class="c1"># Should be the return value (not completly verified)</span></div>
 
     <span class="k">def</span> <span class="nf">_send_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
         <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpc_client</span><span class="o">.</span><span class="n">send_receive</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
@@ -183,8 +183,8 @@
         <span class="n">request_type</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&lt;I&quot;</span><span class="p">,</span> <span class="n">response</span><span class="p">[:</span><span class="mi">4</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">request_type</span> <span class="o">==</span> <span class="n">gdef</span><span class="o">.</span><span class="n">RPC_RESPONSE_TYPE_FAIL</span><span class="p">:</span>
             <span class="n">error_code</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&lt;5I&quot;</span><span class="p">,</span> <span class="n">response</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;RPC Response error </span><span class="si">{0}</span><span class="s2"> (</span><span class="si">{1}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">error_code</span><span class="p">,</span> <span class="n">KNOWN_RPC_ERROR_CODE</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">error_code</span><span class="p">,</span> <span class="n">error_code</span><span class="p">)))</span></div>
-        <span class="k">return</span> <span class="n">request_type</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;RPC Response error </span><span class="si">{0}</span><span class="s2"> (</span><span class="si">{1}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">error_code</span><span class="p">,</span> <span class="n">KNOWN_RPC_ERROR_CODE</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">error_code</span><span class="p">,</span> <span class="n">error_code</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="n">request_type</span></div>
 </pre></div>
 
           </div>
@@ -223,7 +223,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
     </div>
   </body>
 </html>

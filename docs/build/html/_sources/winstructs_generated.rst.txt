@@ -1,4 +1,4 @@
-.. currentmodule:: windows.generated_def.winstructs
+.. module:: windows.generated_def.winstructs
 
 Winstructs
 ----------
@@ -261,6 +261,22 @@ _CALLFRAME_MARSHALCONTEXT
 
         :class:`GUID`
 
+_FILE_DISPOSITION_INFORMATION
+'''''''''''''''''''''''''''''
+.. class:: PFILE_DISPOSITION_INFORMATION
+
+    Pointer to :class:`_FILE_DISPOSITION_INFORMATION`
+
+.. class:: FILE_DISPOSITION_INFORMATION
+
+    Alias for :class:`_FILE_DISPOSITION_INFORMATION`
+
+.. class:: _FILE_DISPOSITION_INFORMATION
+
+    .. attribute:: DeleteFile
+
+        :class:`BOOLEAN`
+
 _GUID
 '''''
 .. class:: REFCLSID
@@ -282,6 +298,10 @@ _GUID
 .. class:: CLSID
 
     Alias for :class:`_GUID`
+
+.. class:: LPCLSID
+
+    Pointer to :class:`_GUID`
 
 .. class:: GUID
 
@@ -311,6 +331,557 @@ _GUID
     .. attribute:: Data4
 
         :class:`BYTE` ``[8]``
+
+_ANON_PROCESS_MITIGATION_DEP_POLICY_BITFIELD
+''''''''''''''''''''''''''''''''''''''''''''
+.. class:: _ANON_PROCESS_MITIGATION_DEP_POLICY_BITFIELD
+
+    .. attribute:: Enable
+
+        :class:`DWORD`
+
+
+    .. attribute:: DisableAtlThunkEmulation
+
+        :class:`DWORD`
+
+
+    .. attribute:: ReservedFlags
+
+        :class:`DWORD`
+
+_ANON_PROCESS_MITIGATION_DEP_POLICY_UNION
+'''''''''''''''''''''''''''''''''''''''''
+.. class:: _ANON_PROCESS_MITIGATION_DEP_POLICY_UNION
+
+    .. attribute:: Flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: anon
+
+        :class:`_ANON_PROCESS_MITIGATION_DEP_POLICY_BITFIELD`
+
+_PROCESS_MITIGATION_DEP_POLICY
+''''''''''''''''''''''''''''''
+.. class:: PPROCESS_MITIGATION_DEP_POLICY
+
+    Pointer to :class:`_PROCESS_MITIGATION_DEP_POLICY`
+
+.. class:: PROCESS_MITIGATION_DEP_POLICY
+
+    Alias for :class:`_PROCESS_MITIGATION_DEP_POLICY`
+
+.. class:: _PROCESS_MITIGATION_DEP_POLICY
+
+    .. attribute:: anon
+
+        :class:`_ANON_PROCESS_MITIGATION_DEP_POLICY_UNION`
+
+
+    .. attribute:: Permanent
+
+        :class:`BOOLEAN`
+
+_ANON_PROCESS_MITIGATION_ASLR_POLICY_BITFIELD
+'''''''''''''''''''''''''''''''''''''''''''''
+.. class:: _ANON_PROCESS_MITIGATION_ASLR_POLICY_BITFIELD
+
+    .. attribute:: EnableBottomUpRandomization
+
+        :class:`DWORD`
+
+
+    .. attribute:: EnableForceRelocateImages
+
+        :class:`DWORD`
+
+
+    .. attribute:: EnableHighEntropy
+
+        :class:`DWORD`
+
+
+    .. attribute:: DisallowStrippedImages
+
+        :class:`DWORD`
+
+
+    .. attribute:: ReservedFlags
+
+        :class:`DWORD`
+
+_ANON_PROCESS_MITIGATION_ASLR_POLICY_UNION
+''''''''''''''''''''''''''''''''''''''''''
+.. class:: _ANON_PROCESS_MITIGATION_ASLR_POLICY_UNION
+
+    .. attribute:: Flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: anon
+
+        :class:`_ANON_PROCESS_MITIGATION_ASLR_POLICY_BITFIELD`
+
+_PROCESS_MITIGATION_ASLR_POLICY
+'''''''''''''''''''''''''''''''
+.. class:: PPROCESS_MITIGATION_ASLR_POLICY
+
+    Pointer to :class:`_PROCESS_MITIGATION_ASLR_POLICY`
+
+.. class:: PROCESS_MITIGATION_ASLR_POLICY
+
+    Alias for :class:`_PROCESS_MITIGATION_ASLR_POLICY`
+
+.. class:: _PROCESS_MITIGATION_ASLR_POLICY
+
+    .. attribute:: anon
+
+        :class:`_ANON_PROCESS_MITIGATION_ASLR_POLICY_UNION`
+
+_ANON_PROCESS_MITIGATION_DYNAMIC_CODE_POLICY_BITFIELD
+'''''''''''''''''''''''''''''''''''''''''''''''''''''
+.. class:: _ANON_PROCESS_MITIGATION_DYNAMIC_CODE_POLICY_BITFIELD
+
+    .. attribute:: ProhibitDynamicCode
+
+        :class:`DWORD`
+
+
+    .. attribute:: AllowThreadOptOut
+
+        :class:`DWORD`
+
+
+    .. attribute:: AllowRemoteDowngrade
+
+        :class:`DWORD`
+
+
+    .. attribute:: ReservedFlags
+
+        :class:`DWORD`
+
+_ANON_PROCESS_MITIGATION_DYNAMIC_CODE_POLICY_UNION
+''''''''''''''''''''''''''''''''''''''''''''''''''
+.. class:: _ANON_PROCESS_MITIGATION_DYNAMIC_CODE_POLICY_UNION
+
+    .. attribute:: Flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: anon
+
+        :class:`_ANON_PROCESS_MITIGATION_DYNAMIC_CODE_POLICY_BITFIELD`
+
+_PROCESS_MITIGATION_DYNAMIC_CODE_POLICY
+'''''''''''''''''''''''''''''''''''''''
+.. class:: PROCESS_MITIGATION_DYNAMIC_CODE_POLICY
+
+    Alias for :class:`_PROCESS_MITIGATION_DYNAMIC_CODE_POLICY`
+
+.. class:: PPROCESS_MITIGATION_DYNAMIC_CODE_POLICY
+
+    Pointer to :class:`_PROCESS_MITIGATION_DYNAMIC_CODE_POLICY`
+
+.. class:: _PROCESS_MITIGATION_DYNAMIC_CODE_POLICY
+
+    .. attribute:: anon
+
+        :class:`_ANON_PROCESS_MITIGATION_DYNAMIC_CODE_POLICY_UNION`
+
+_ANON_PROCESS_MITIGATION_STRICT_HANDLE_CHECK_POLICY_BITFIELD
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+.. class:: _ANON_PROCESS_MITIGATION_STRICT_HANDLE_CHECK_POLICY_BITFIELD
+
+    .. attribute:: RaiseExceptionOnInvalidHandleReference
+
+        :class:`DWORD`
+
+
+    .. attribute:: HandleExceptionsPermanentlyEnabled
+
+        :class:`DWORD`
+
+
+    .. attribute:: ReservedFlags
+
+        :class:`DWORD`
+
+_ANON_PROCESS_MITIGATION_STRICT_HANDLE_CHECK_POLICY_UNION
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+.. class:: _ANON_PROCESS_MITIGATION_STRICT_HANDLE_CHECK_POLICY_UNION
+
+    .. attribute:: Flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: ANON_STRUCT
+
+        :class:`_ANON_PROCESS_MITIGATION_STRICT_HANDLE_CHECK_POLICY_BITFIELD`
+
+_PROCESS_MITIGATION_STRICT_HANDLE_CHECK_POLICY
+''''''''''''''''''''''''''''''''''''''''''''''
+.. class:: PROCESS_MITIGATION_STRICT_HANDLE_CHECK_POLICY
+
+    Alias for :class:`_PROCESS_MITIGATION_STRICT_HANDLE_CHECK_POLICY`
+
+.. class:: PPROCESS_MITIGATION_STRICT_HANDLE_CHECK_POLICY
+
+    Pointer to :class:`_PROCESS_MITIGATION_STRICT_HANDLE_CHECK_POLICY`
+
+.. class:: _PROCESS_MITIGATION_STRICT_HANDLE_CHECK_POLICY
+
+    .. attribute:: anon
+
+        :class:`_ANON_PROCESS_MITIGATION_STRICT_HANDLE_CHECK_POLICY_UNION`
+
+_ANON_PROCESS_MITIGATION_SYSTEM_CALL_DISABLE_POLICY_BITFIELD
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+.. class:: _ANON_PROCESS_MITIGATION_SYSTEM_CALL_DISABLE_POLICY_BITFIELD
+
+    .. attribute:: DisallowWin32kSystemCalls
+
+        :class:`DWORD`
+
+
+    .. attribute:: ReservedFlags
+
+        :class:`DWORD`
+
+_ANON_PROCESS_MITIGATION_SYSTEM_CALL_DISABLE_POLICY_UNION
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+.. class:: _ANON_PROCESS_MITIGATION_SYSTEM_CALL_DISABLE_POLICY_UNION
+
+    .. attribute:: Flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: ANON_STRUCT
+
+        :class:`_ANON_PROCESS_MITIGATION_SYSTEM_CALL_DISABLE_POLICY_BITFIELD`
+
+_PROCESS_MITIGATION_SYSTEM_CALL_DISABLE_POLICY
+''''''''''''''''''''''''''''''''''''''''''''''
+.. class:: PPROCESS_MITIGATION_SYSTEM_CALL_DISABLE_POLICY
+
+    Pointer to :class:`_PROCESS_MITIGATION_SYSTEM_CALL_DISABLE_POLICY`
+
+.. class:: PROCESS_MITIGATION_SYSTEM_CALL_DISABLE_POLICY
+
+    Alias for :class:`_PROCESS_MITIGATION_SYSTEM_CALL_DISABLE_POLICY`
+
+.. class:: _PROCESS_MITIGATION_SYSTEM_CALL_DISABLE_POLICY
+
+    .. attribute:: anon
+
+        :class:`_ANON_PROCESS_MITIGATION_SYSTEM_CALL_DISABLE_POLICY_UNION`
+
+_ANON_PROCESS_MITIGATION_EXTENSION_POINT_DISABLE_POLICY_BITFIELD
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+.. class:: _ANON_PROCESS_MITIGATION_EXTENSION_POINT_DISABLE_POLICY_BITFIELD
+
+    .. attribute:: DisableExtensionPoints
+
+        :class:`DWORD`
+
+
+    .. attribute:: ReservedFlags
+
+        :class:`DWORD`
+
+_ANON_PROCESS_MITIGATION_EXTENSION_POINT_DISABLE_POLICY_UNION
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+.. class:: _ANON_PROCESS_MITIGATION_EXTENSION_POINT_DISABLE_POLICY_UNION
+
+    .. attribute:: Flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: ANON_STRUCT
+
+        :class:`_ANON_PROCESS_MITIGATION_EXTENSION_POINT_DISABLE_POLICY_BITFIELD`
+
+_PROCESS_MITIGATION_EXTENSION_POINT_DISABLE_POLICY
+''''''''''''''''''''''''''''''''''''''''''''''''''
+.. class:: PROCESS_MITIGATION_EXTENSION_POINT_DISABLE_POLICY
+
+    Alias for :class:`_PROCESS_MITIGATION_EXTENSION_POINT_DISABLE_POLICY`
+
+.. class:: PPROCESS_MITIGATION_EXTENSION_POINT_DISABLE_POLICY
+
+    Pointer to :class:`_PROCESS_MITIGATION_EXTENSION_POINT_DISABLE_POLICY`
+
+.. class:: _PROCESS_MITIGATION_EXTENSION_POINT_DISABLE_POLICY
+
+    .. attribute:: anon
+
+        :class:`_ANON_PROCESS_MITIGATION_EXTENSION_POINT_DISABLE_POLICY_UNION`
+
+_ANON_PROCESS_MITIGATION_CONTROL_FLOW_GUARD_POLICY_BITFIELD
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+.. class:: _ANON_PROCESS_MITIGATION_CONTROL_FLOW_GUARD_POLICY_BITFIELD
+
+    .. attribute:: EnableControlFlowGuard
+
+        :class:`DWORD`
+
+
+    .. attribute:: EnableExportSuppression
+
+        :class:`DWORD`
+
+
+    .. attribute:: StrictMode
+
+        :class:`DWORD`
+
+
+    .. attribute:: ReservedFlags
+
+        :class:`DWORD`
+
+_ANON_PROCESS_MITIGATION_CONTROL_FLOW_GUARD_POLICY_UNION
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+.. class:: _ANON_PROCESS_MITIGATION_CONTROL_FLOW_GUARD_POLICY_UNION
+
+    .. attribute:: Flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: ANON_STRUCT
+
+        :class:`_ANON_PROCESS_MITIGATION_CONTROL_FLOW_GUARD_POLICY_BITFIELD`
+
+_PROCESS_MITIGATION_CONTROL_FLOW_GUARD_POLICY
+'''''''''''''''''''''''''''''''''''''''''''''
+.. class:: PPROCESS_MITIGATION_CONTROL_FLOW_GUARD_POLICY
+
+    Pointer to :class:`_PROCESS_MITIGATION_CONTROL_FLOW_GUARD_POLICY`
+
+.. class:: PROCESS_MITIGATION_CONTROL_FLOW_GUARD_POLICY
+
+    Alias for :class:`_PROCESS_MITIGATION_CONTROL_FLOW_GUARD_POLICY`
+
+.. class:: _PROCESS_MITIGATION_CONTROL_FLOW_GUARD_POLICY
+
+    .. attribute:: anon
+
+        :class:`_ANON_PROCESS_MITIGATION_CONTROL_FLOW_GUARD_POLICY_UNION`
+
+_ANON_PROCESS_MITIGATION_BINARY_SIGNATURE_POLICY_BITFIELD
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+.. class:: _ANON_PROCESS_MITIGATION_BINARY_SIGNATURE_POLICY_BITFIELD
+
+    .. attribute:: MicrosoftSignedOnly
+
+        :class:`DWORD`
+
+
+    .. attribute:: StoreSignedOnly
+
+        :class:`DWORD`
+
+
+    .. attribute:: MitigationOptIn
+
+        :class:`DWORD`
+
+
+    .. attribute:: ReservedFlags
+
+        :class:`DWORD`
+
+_ANON_PROCESS_MITIGATION_BINARY_SIGNATURE_POLICY_UNION
+''''''''''''''''''''''''''''''''''''''''''''''''''''''
+.. class:: _ANON_PROCESS_MITIGATION_BINARY_SIGNATURE_POLICY_UNION
+
+    .. attribute:: Flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: ANON_STRUCT
+
+        :class:`_ANON_PROCESS_MITIGATION_BINARY_SIGNATURE_POLICY_BITFIELD`
+
+_PROCESS_MITIGATION_BINARY_SIGNATURE_POLICY
+'''''''''''''''''''''''''''''''''''''''''''
+.. class:: PPROCESS_MITIGATION_BINARY_SIGNATURE_POLICY
+
+    Pointer to :class:`_PROCESS_MITIGATION_BINARY_SIGNATURE_POLICY`
+
+.. class:: PROCESS_MITIGATION_BINARY_SIGNATURE_POLICY
+
+    Alias for :class:`_PROCESS_MITIGATION_BINARY_SIGNATURE_POLICY`
+
+.. class:: _PROCESS_MITIGATION_BINARY_SIGNATURE_POLICY
+
+    .. attribute:: anon
+
+        :class:`_ANON_PROCESS_MITIGATION_BINARY_SIGNATURE_POLICY_UNION`
+
+_ANON_PROCESS_MITIGATION_IMAGE_LOAD_POLICY_BITFIELD
+'''''''''''''''''''''''''''''''''''''''''''''''''''
+.. class:: _ANON_PROCESS_MITIGATION_IMAGE_LOAD_POLICY_BITFIELD
+
+    .. attribute:: NoRemoteImages
+
+        :class:`DWORD`
+
+
+    .. attribute:: NoLowMandatoryLabelImages
+
+        :class:`DWORD`
+
+
+    .. attribute:: PreferSystem32Images
+
+        :class:`DWORD`
+
+
+    .. attribute:: ReservedFlags
+
+        :class:`DWORD`
+
+_ANON_PROCESS_MITIGATION_IMAGE_LOAD_POLICY_UNION
+''''''''''''''''''''''''''''''''''''''''''''''''
+.. class:: _ANON_PROCESS_MITIGATION_IMAGE_LOAD_POLICY_UNION
+
+    .. attribute:: Flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: ANON_STRUCT
+
+        :class:`_ANON_PROCESS_MITIGATION_IMAGE_LOAD_POLICY_BITFIELD`
+
+_PROCESS_MITIGATION_IMAGE_LOAD_POLICY
+'''''''''''''''''''''''''''''''''''''
+.. class:: PPROCESS_MITIGATION_IMAGE_LOAD_POLICY
+
+    Pointer to :class:`_PROCESS_MITIGATION_IMAGE_LOAD_POLICY`
+
+.. class:: PROCESS_MITIGATION_IMAGE_LOAD_POLICY
+
+    Alias for :class:`_PROCESS_MITIGATION_IMAGE_LOAD_POLICY`
+
+.. class:: _PROCESS_MITIGATION_IMAGE_LOAD_POLICY
+
+    .. attribute:: anon
+
+        :class:`_ANON_PROCESS_MITIGATION_IMAGE_LOAD_POLICY_UNION`
+
+_KEY_VALUE_BASIC_INFORMATION
+''''''''''''''''''''''''''''
+.. class:: PKEY_VALUE_BASIC_INFORMATION
+
+    Pointer to :class:`_KEY_VALUE_BASIC_INFORMATION`
+
+.. class:: KEY_VALUE_BASIC_INFORMATION
+
+    Alias for :class:`_KEY_VALUE_BASIC_INFORMATION`
+
+.. class:: _KEY_VALUE_BASIC_INFORMATION
+
+    .. attribute:: TitleIndex
+
+        :class:`ULONG`
+
+
+    .. attribute:: Type
+
+        :class:`ULONG`
+
+
+    .. attribute:: NameLength
+
+        :class:`ULONG`
+
+
+    .. attribute:: Name
+
+        :class:`WCHAR` ``[1]``
+
+_KEY_VALUE_FULL_INFORMATION
+'''''''''''''''''''''''''''
+.. class:: KEY_VALUE_FULL_INFORMATION
+
+    Alias for :class:`_KEY_VALUE_FULL_INFORMATION`
+
+.. class:: PKEY_VALUE_FULL_INFORMATION
+
+    Pointer to :class:`_KEY_VALUE_FULL_INFORMATION`
+
+.. class:: _KEY_VALUE_FULL_INFORMATION
+
+    .. attribute:: TitleIndex
+
+        :class:`ULONG`
+
+
+    .. attribute:: Type
+
+        :class:`ULONG`
+
+
+    .. attribute:: DataOffset
+
+        :class:`ULONG`
+
+
+    .. attribute:: DataLength
+
+        :class:`ULONG`
+
+
+    .. attribute:: NameLength
+
+        :class:`ULONG`
+
+
+    .. attribute:: Name
+
+        :class:`WCHAR` ``[1]``
+
+_KEY_VALUE_PARTIAL_INFORMATION
+''''''''''''''''''''''''''''''
+.. class:: PKEY_VALUE_PARTIAL_INFORMATION
+
+    Pointer to :class:`_KEY_VALUE_PARTIAL_INFORMATION`
+
+.. class:: KEY_VALUE_PARTIAL_INFORMATION
+
+    Alias for :class:`_KEY_VALUE_PARTIAL_INFORMATION`
+
+.. class:: _KEY_VALUE_PARTIAL_INFORMATION
+
+    .. attribute:: TitleIndex
+
+        :class:`ULONG`
+
+
+    .. attribute:: Type
+
+        :class:`ULONG`
+
+
+    .. attribute:: DataLength
+
+        :class:`ULONG`
+
+
+    .. attribute:: Data
+
+        :class:`UCHAR` ``[1]``
 
 _SHITEMID
 '''''''''
@@ -6688,6 +7259,80 @@ tagEXCEPINFO
 
         :class:`SCODE`
 
+_CERT_STRONG_SIGN_SERIALIZED_INFO
+'''''''''''''''''''''''''''''''''
+.. class:: CERT_STRONG_SIGN_SERIALIZED_INFO
+
+    Alias for :class:`_CERT_STRONG_SIGN_SERIALIZED_INFO`
+
+.. class:: PCERT_STRONG_SIGN_SERIALIZED_INFO
+
+    Pointer to :class:`_CERT_STRONG_SIGN_SERIALIZED_INFO`
+
+.. class:: _CERT_STRONG_SIGN_SERIALIZED_INFO
+
+    .. attribute:: dwFlags
+
+        :class:`DWORD`
+
+
+    .. attribute:: pwszCNGSignHashAlgids
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: pwszCNGPubKeyMinBitLengths
+
+        :class:`LPWSTR`
+
+TMP_CERT_STRONG_SIGN_PARA_UNION_TYPE
+''''''''''''''''''''''''''''''''''''
+.. class:: TMP_CERT_STRONG_SIGN_PARA_UNION_TYPE
+
+    .. attribute:: pvInfo
+
+        :class:`PVOID`
+
+
+    .. attribute:: pSerializedInfo
+
+        :class:`PCERT_STRONG_SIGN_SERIALIZED_INFO`
+
+
+    .. attribute:: pszOID
+
+        :class:`LPSTR`
+
+_CERT_STRONG_SIGN_PARA
+''''''''''''''''''''''
+.. class:: CERT_STRONG_SIGN_PARA
+
+    Alias for :class:`_CERT_STRONG_SIGN_PARA`
+
+.. class:: PCCERT_STRONG_SIGN_PARA
+
+    Pointer to :class:`_CERT_STRONG_SIGN_PARA`
+
+.. class:: PCERT_STRONG_SIGN_PARA
+
+    Pointer to :class:`_CERT_STRONG_SIGN_PARA`
+
+.. class:: _CERT_STRONG_SIGN_PARA
+
+    .. attribute:: cbSize
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwInfoChoice
+
+        :class:`DWORD`
+
+
+    .. attribute:: tmp_union
+
+        :class:`TMP_CERT_STRONG_SIGN_PARA_UNION_TYPE`
+
 _CRYPTOAPI_BLOB
 '''''''''''''''
 .. class:: CRYPT_INTEGER_BLOB
@@ -9892,6 +10537,10 @@ _CERT_CHAIN_ENGINE_CONFIG
 
 _SYSTEMTIME
 '''''''''''
+.. class:: LPSYSTEMTIME
+
+    Pointer to :class:`_SYSTEMTIME`
+
 .. class:: SYSTEMTIME
 
     Alias for :class:`_SYSTEMTIME`
@@ -13049,6 +13698,274 @@ _FILE_ALL_INFORMATION
 
         :class:`FILE_NAME_INFORMATION`
 
+Simple types
+''''''''''''
+.. autoclass:: VOID
+
+.. autoclass:: BYTE
+
+.. autoclass:: PWSTR
+
+.. autoclass:: PCWSTR
+
+.. autoclass:: SIZE_T
+
+.. class:: PSIZE_T
+
+    Pointer to :class:`SIZE_T`
+
+.. autoclass:: PVOID
+
+.. autoclass:: NTSTATUS
+
+.. autoclass:: SECURITY_INFORMATION
+
+.. class:: PSECURITY_INFORMATION
+
+    Pointer to :class:`SECURITY_INFORMATION`
+
+.. class:: PULONG
+
+    Pointer to :class:`ULONG`
+
+.. class:: PDWORD
+
+    Pointer to :class:`DWORD`
+
+.. class:: LPDWORD
+
+    Pointer to :class:`DWORD`
+
+.. class:: LPBYTE
+
+    Pointer to :class:`BYTE`
+
+.. autoclass:: ULONG_PTR
+
+.. autoclass:: LONG_PTR
+
+.. autoclass:: DWORD_PTR
+
+.. autoclass:: KAFFINITY
+
+.. autoclass:: KPRIORITY
+
+.. autoclass:: CHAR
+
+.. autoclass:: UCHAR
+
+.. autoclass:: CSHORT
+
+.. autoclass:: VARTYPE
+
+.. class:: PUSHORT
+
+    Pointer to :class:`USHORT`
+
+.. class:: PBOOL
+
+    Pointer to :class:`BOOL`
+
+.. autoclass:: PSTR
+
+.. autoclass:: PCSTR
+
+.. autoclass:: va_list
+
+.. autoclass:: BSTR
+
+.. autoclass:: OLECHAR
+
+.. autoclass:: POLECHAR
+
+.. class:: PUCHAR
+
+    Pointer to :class:`UCHAR`
+
+.. autoclass:: double
+
+.. autoclass:: DATE
+
+.. autoclass:: PSID
+
+.. autoclass:: ULONGLONG
+
+.. class:: PULONGLONG
+
+    Pointer to :class:`ULONGLONG`
+
+.. autoclass:: LONGLONG
+
+.. autoclass:: ULONG64
+
+.. autoclass:: UINT64
+
+.. autoclass:: LONG64
+
+.. class:: PLARGE_INTEGER
+
+    Pointer to :class:`LARGE_INTEGER`
+
+.. autoclass:: DWORD64
+
+.. class:: PDWORD64
+
+    Pointer to :class:`DWORD64`
+
+.. autoclass:: SCODE
+
+.. autoclass:: CIMTYPE
+
+.. autoclass:: NET_IFINDEX
+
+.. autoclass:: IF_INDEX
+
+.. autoclass:: IFTYPE
+
+.. class:: PULONG64
+
+    Pointer to :class:`ULONG64`
+
+.. class:: PBYTE
+
+    Pointer to :class:`BYTE`
+
+.. class:: PUINT
+
+    Pointer to :class:`UINT`
+
+.. class:: PHKEY
+
+    Pointer to :class:`HKEY`
+
+.. autoclass:: ACCESS_MASK
+
+.. autoclass:: REGSAM
+
+.. class:: PBOOLEAN
+
+    Pointer to :class:`BOOLEAN`
+
+.. autoclass:: SECURITY_CONTEXT_TRACKING_MODE
+
+.. autoclass:: HCRYPTPROV_LEGACY
+
+.. autoclass:: HCRYPTKEY
+
+.. autoclass:: HCRYPTPROV
+
+.. autoclass:: HCRYPTHASH
+
+.. autoclass:: ALG_ID
+
+.. autoclass:: DISPID
+
+.. autoclass:: MEMBERID
+
+.. autoclass:: LRESULT
+
+.. autoclass:: PSECURITY_DESCRIPTOR
+
+.. class:: LPUNKNOWN
+
+    Pointer to :class:`PVOID`
+
+.. class:: LPFILETIME
+
+    Pointer to :class:`FILETIME`
+
+.. class:: LPPOINT
+
+    Pointer to :class:`POINT`
+
+.. class:: LPRECT
+
+    Pointer to :class:`RECT`
+
+.. autoclass:: SPC_UUID
+
+.. autoclass:: DEVICE_TYPE
+
+.. autoclass:: PWINDBG_EXTENSION_APIS32
+
+.. autoclass:: PWINDBG_EXTENSION_APIS64
+
+.. autoclass:: INT8
+
+.. autoclass:: INT16
+
+.. autoclass:: INT32
+
+.. autoclass:: INT64
+
+.. autoclass:: UINT8
+
+.. autoclass:: UINT16
+
+.. autoclass:: UINT32
+
+.. autoclass:: UINT64
+
+.. class:: PHANDLE
+
+    Pointer to :class:`HANDLE`
+
+.. autoclass:: HCATADMIN
+
+.. autoclass:: HCATINFO
+
+.. autoclass:: HCERTCHAINENGINE
+
+.. class:: LPHANDLE
+
+    Pointer to :class:`HANDLE`
+
+.. autoclass:: ALPC_HANDLE
+
+.. class:: PALPC_HANDLE
+
+    Pointer to :class:`ALPC_HANDLE`
+
+.. autoclass:: HCURSOR
+
+.. autoclass:: HBRUSH
+
+.. autoclass:: HCRYPTPROV_OR_NCRYPT_KEY_HANDLE
+
+.. autoclass:: EVT_HANDLE
+
+.. autoclass:: EVT_OBJECT_ARRAY_PROPERTY_HANDLE
+
+.. autoclass:: RPCOLEDATAREP
+
+.. autoclass:: WNDPROC
+
+.. autoclass:: LPPROC_THREAD_ATTRIBUTE_LIST
+
+.. autoclass:: PPS_POST_PROCESS_INIT_ROUTINE
+
+.. autoclass:: LPTHREAD_START_ROUTINE
+
+.. autoclass:: WNDENUMPROC
+
+.. autoclass:: PHANDLER_ROUTINE
+
+.. autoclass:: FARPROC
+
+.. autoclass:: PIO_APC_ROUTINE
+
+.. autoclass:: PVECTORED_EXCEPTION_HANDLER
+
+.. autoclass:: LPCONTEXT
+
+.. autoclass:: HCERTSTORE
+
+.. autoclass:: HCRYPTMSG
+
+.. autoclass:: PALPC_PORT_ATTRIBUTES
+
+.. autoclass:: PPORT_MESSAGE
+
 WinEnums
 --------
 _CALLFRAME_COPY
@@ -13086,6 +14003,335 @@ tagMSHLFLAGS
 
 
     .. attribute:: MSHLFLAGS_NOPING(4)
+
+tagCALLFRAME_WALK
+'''''''''''''''''
+.. class:: CALLFRAME_WALK
+
+    Alias for :class:`tagCALLFRAME_WALK`
+
+
+.. class:: tagCALLFRAME_WALK
+
+
+    .. attribute:: CALLFRAME_WALK_IN(1)
+
+
+    .. attribute:: CALLFRAME_WALK_INOUT(2)
+
+
+    .. attribute:: CALLFRAME_WALK_OUT(4)
+
+_PROCESS_MITIGATION_POLICY
+''''''''''''''''''''''''''
+.. class:: PROCESS_MITIGATION_POLICY
+
+    Alias for :class:`_PROCESS_MITIGATION_POLICY`
+
+
+.. class:: PPROCESS_MITIGATION_POLICY
+
+    Pointer to :class:`_PROCESS_MITIGATION_POLICY`
+
+
+.. class:: _PROCESS_MITIGATION_POLICY
+
+
+    .. attribute:: ProcessDEPPolicy(0)
+
+
+    .. attribute:: ProcessASLRPolicy(1)
+
+
+    .. attribute:: ProcessDynamicCodePolicy(2)
+
+
+    .. attribute:: ProcessStrictHandleCheckPolicy(3)
+
+
+    .. attribute:: ProcessSystemCallDisablePolicy(4)
+
+
+    .. attribute:: ProcessMitigationOptionsMask(5)
+
+
+    .. attribute:: ProcessExtensionPointDisablePolicy(6)
+
+
+    .. attribute:: ProcessReserved1Policy(7)
+
+
+    .. attribute:: ProcessSignaturePolicy(8)
+
+
+    .. attribute:: MaxProcessMitigationPolicy(9)
+
+_KEY_VALUE_INFORMATION_CLASS
+''''''''''''''''''''''''''''
+.. class:: KEY_VALUE_INFORMATION_CLASS
+
+    Alias for :class:`_KEY_VALUE_INFORMATION_CLASS`
+
+
+.. class:: _KEY_VALUE_INFORMATION_CLASS
+
+
+    .. attribute:: KeyValueBasicInformation(0)
+
+
+    .. attribute:: KeyValueFullInformation(1)
+
+
+    .. attribute:: KeyValuePartialInformation(2)
+
+
+    .. attribute:: KeyValueFullInformationAlign64(3)
+
+
+    .. attribute:: KeyValuePartialInformationAlign64(4)
+
+
+    .. attribute:: KeyValueLayerInformation(5)
+
+
+    .. attribute:: MaxKeyValueInfoClass(6)
+
+_TASK_ACTION_TYPE
+'''''''''''''''''
+.. class:: TASK_ACTION_TYPE
+
+    Alias for :class:`_TASK_ACTION_TYPE`
+
+
+.. class:: _TASK_ACTION_TYPE
+
+
+    .. attribute:: TASK_ACTION_EXEC(0)
+
+
+    .. attribute:: TASK_ACTION_COM_HANDLER(5)
+
+
+    .. attribute:: TASK_ACTION_SEND_EMAIL(6)
+
+
+    .. attribute:: TASK_ACTION_SHOW_MESSAGE(7)
+
+_TASK_RUNLEVEL_TYPE
+'''''''''''''''''''
+.. class:: TASK_RUNLEVEL_TYPE
+
+    Alias for :class:`_TASK_RUNLEVEL_TYPE`
+
+
+.. class:: _TASK_RUNLEVEL_TYPE
+
+
+    .. attribute:: TASK_RUNLEVEL_LUA(0)
+
+
+    .. attribute:: TASK_RUNLEVEL_HIGHEST(1)
+
+_TASK_LOGON_TYPE
+''''''''''''''''
+.. class:: TASK_LOGON_TYPE
+
+    Alias for :class:`_TASK_LOGON_TYPE`
+
+
+.. class:: _TASK_LOGON_TYPE
+
+
+    .. attribute:: TASK_LOGON_NONE(0)
+
+
+    .. attribute:: TASK_LOGON_PASSWORD(1)
+
+
+    .. attribute:: TASK_LOGON_S4U(2)
+
+
+    .. attribute:: TASK_LOGON_INTERACTIVE_TOKEN(3)
+
+
+    .. attribute:: TASK_LOGON_GROUP(4)
+
+
+    .. attribute:: TASK_LOGON_SERVICE_ACCOUNT(5)
+
+
+    .. attribute:: TASK_LOGON_INTERACTIVE_TOKEN_OR_PASSWORD(6)
+
+_TASK_STATE
+'''''''''''
+.. class:: TASK_STATE
+
+    Alias for :class:`_TASK_STATE`
+
+
+.. class:: _TASK_STATE
+
+
+    .. attribute:: TASK_STATE_UNKNOWN(0)
+
+
+    .. attribute:: TASK_STATE_DISABLED(1)
+
+
+    .. attribute:: TASK_STATE_QUEUED(2)
+
+
+    .. attribute:: TASK_STATE_READY(3)
+
+
+    .. attribute:: TASK_STATE_RUNNING(4)
+
+_TASK_INSTANCES_POLICY
+''''''''''''''''''''''
+.. class:: TASK_INSTANCES_POLICY
+
+    Alias for :class:`_TASK_INSTANCES_POLICY`
+
+
+.. class:: _TASK_INSTANCES_POLICY
+
+
+    .. attribute:: TASK_INSTANCES_PARALLEL(0)
+
+
+    .. attribute:: TASK_INSTANCES_QUEUE(1)
+
+
+    .. attribute:: TASK_INSTANCES_IGNORE_NEW(2)
+
+
+    .. attribute:: TASK_INSTANCES_STOP_EXISTING(3)
+
+_TASK_COMPATIBILITY
+'''''''''''''''''''
+.. class:: TASK_COMPATIBILITY
+
+    Alias for :class:`_TASK_COMPATIBILITY`
+
+
+.. class:: _TASK_COMPATIBILITY
+
+
+    .. attribute:: TASK_COMPATIBILITY_AT(0)
+
+
+    .. attribute:: TASK_COMPATIBILITY_V1(1)
+
+
+    .. attribute:: TASK_COMPATIBILITY_V2(2)
+
+_TASK_TRIGGER_TYPE2
+'''''''''''''''''''
+.. class:: TASK_TRIGGER_TYPE2
+
+    Alias for :class:`_TASK_TRIGGER_TYPE2`
+
+
+.. class:: _TASK_TRIGGER_TYPE2
+
+
+    .. attribute:: TASK_TRIGGER_EVENT(0)
+
+
+    .. attribute:: TASK_TRIGGER_TIME(1)
+
+
+    .. attribute:: TASK_TRIGGER_DAILY(2)
+
+
+    .. attribute:: TASK_TRIGGER_WEEKLY(3)
+
+
+    .. attribute:: TASK_TRIGGER_MONTHLY(4)
+
+
+    .. attribute:: TASK_TRIGGER_MONTHLYDOW(5)
+
+
+    .. attribute:: TASK_TRIGGER_IDLE(6)
+
+
+    .. attribute:: TASK_TRIGGER_REGISTRATION(7)
+
+
+    .. attribute:: TASK_TRIGGER_BOOT(8)
+
+
+    .. attribute:: TASK_TRIGGER_LOGON(9)
+
+
+    .. attribute:: TASK_TRIGGER_SESSION_STATE_CHANGE(11)
+
+_TASK_ENUM_FLAGS
+''''''''''''''''
+.. class:: TASK_ENUM_FLAGS
+
+    Alias for :class:`_TASK_ENUM_FLAGS`
+
+
+.. class:: _TASK_ENUM_FLAGS
+
+
+    .. attribute:: TASK_ENUM_HIDDEN(1)
+
+_TASK_CREATION
+''''''''''''''
+.. class:: TASK_CREATION
+
+    Alias for :class:`_TASK_CREATION`
+
+
+.. class:: _TASK_CREATION
+
+
+    .. attribute:: TASK_VALIDATE_ONLY(1)
+
+
+    .. attribute:: TASK_CREATE(2)
+
+
+    .. attribute:: TASK_UPDATE(4)
+
+
+    .. attribute:: TASK_CREATE_OR_UPDATE(6)
+
+
+    .. attribute:: TASK_DISABLE(8)
+
+
+    .. attribute:: TASK_DONT_ADD_PRINCIPAL_ACE(16)
+
+
+    .. attribute:: TASK_IGNORE_REGISTRATION_TRIGGERS(32)
+
+TASK_RUN_FLAGS
+''''''''''''''
+.. class:: TASK_RUN_FLAGS
+
+    Alias for :class:`TASK_RUN_FLAGS`
+
+
+.. class:: TASK_RUN_FLAGS
+
+
+    .. attribute:: TASK_RUN_NO_FLAGS(0)
+
+
+    .. attribute:: TASK_RUN_AS_SELF(1)
+
+
+    .. attribute:: TASK_RUN_IGNORE_CONSTRAINTS(2)
+
+
+    .. attribute:: TASK_RUN_USE_SESSION_ID(4)
+
+
+    .. attribute:: TASK_RUN_USER_SID(8)
 
 _SYSTEM_INFORMATION_CLASS
 '''''''''''''''''''''''''

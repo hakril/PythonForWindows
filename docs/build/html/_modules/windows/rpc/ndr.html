@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/css/mbasic.css" type="text/css" />
-    <script type="text/javascript" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
@@ -100,8 +100,8 @@
     <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream</span><span class="p">):</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">partial_unpack</span><span class="p">(</span><span class="s2">&quot;&lt;I&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">None</span></div>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">subcls</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">subcls</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span></div>
 
 <span class="k">class</span> <span class="nc">NdrFixedArray</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subcls</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
@@ -127,14 +127,14 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">subcount</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">GetSidSubAuthorityCount</span><span class="p">(</span><span class="n">psid</span><span class="p">)</span>
         <span class="n">size</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">GetLengthSid</span><span class="p">(</span><span class="n">psid</span><span class="p">)</span>
-        <span class="n">sid_data</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">read_memory</span><span class="p">(</span><span class="n">psid</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span></div>
-        <span class="k">return</span> <span class="n">pack_dword</span><span class="p">(</span><span class="n">subcount</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="n">dword_pad</span><span class="p">(</span><span class="n">sid_data</span><span class="p">)</span>
+        <span class="n">sid_data</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">read_memory</span><span class="p">(</span><span class="n">psid</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">pack_dword</span><span class="p">(</span><span class="n">subcount</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="n">dword_pad</span><span class="p">(</span><span class="n">sid_data</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NdrSID.unpack"><a class="viewcode-back" href="../../../rpc.html#windows.rpc.ndr.NdrSID.unpack">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">unpack</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">stream</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Unpack a PSID, partial implementation that returns a :class:`str` and not a PSID&quot;&quot;&quot;</span>
-        <span class="n">subcount</span> <span class="o">=</span> <span class="n">NdrLong</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span></div></div>
-        <span class="k">return</span> <span class="n">stream</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">8</span> <span class="o">+</span> <span class="p">(</span><span class="n">subcount</span> <span class="o">*</span> <span class="mi">4</span><span class="p">))</span>
+        <span class="n">subcount</span> <span class="o">=</span> <span class="n">NdrLong</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">stream</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">8</span> <span class="o">+</span> <span class="p">(</span><span class="n">subcount</span> <span class="o">*</span> <span class="mi">4</span><span class="p">))</span></div></div>
 
 <span class="k">class</span> <span class="nc">NdrVaryingCString</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="nd">@classmethod</span>
@@ -163,8 +163,8 @@
         <span class="n">size1</span><span class="p">,</span> <span class="n">zero</span><span class="p">,</span> <span class="n">size2</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">partial_unpack</span><span class="p">(</span><span class="s2">&quot;&lt;3I&quot;</span><span class="p">)</span>
         <span class="k">assert</span> <span class="n">size1</span> <span class="o">==</span> <span class="n">size2</span>
         <span class="k">assert</span> <span class="n">zero</span> <span class="o">==</span> <span class="mi">0</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">size1</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span></div>
-        <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-16-le&quot;</span><span class="p">)</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">size1</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-16-le&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NdrCString"><a class="viewcode-back" href="../../../rpc.html#windows.rpc.ndr.NdrCString">[docs]</a><span class="k">class</span> <span class="nc">NdrCString</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="nd">@classmethod</span>
@@ -173,8 +173,8 @@
             <span class="k">return</span> <span class="kc">None</span>
         <span class="n">l</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
         <span class="n">result</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s2">&quot;&lt;3I&quot;</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">l</span><span class="p">)</span>
-        <span class="n">result</span> <span class="o">+=</span> <span class="n">data</span></div>
-        <span class="k">return</span> <span class="n">dword_pad</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="n">data</span>
+        <span class="k">return</span> <span class="n">dword_pad</span><span class="p">(</span><span class="n">result</span><span class="p">)</span></div>
 
     <span class="c1"># @classmethod</span>
     <span class="c1"># def unpack(self, stream):</span>
@@ -191,8 +191,8 @@
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">unpack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream</span><span class="p">):</span>
-        <span class="n">stream</span><span class="o">.</span><span class="n">align</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span></div>
-        <span class="k">return</span> <span class="n">stream</span><span class="o">.</span><span class="n">partial_unpack</span><span class="p">(</span><span class="s2">&quot;&lt;I&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">stream</span><span class="o">.</span><span class="n">align</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">stream</span><span class="o">.</span><span class="n">partial_unpack</span><span class="p">(</span><span class="s2">&quot;&lt;I&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="NdrHyper"><a class="viewcode-back" href="../../../rpc.html#windows.rpc.ndr.NdrHyper">[docs]</a><span class="k">class</span> <span class="nc">NdrHyper</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="nd">@classmethod</span>
@@ -201,8 +201,8 @@
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">unpack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream</span><span class="p">):</span>
-        <span class="n">stream</span><span class="o">.</span><span class="n">align</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span></div>
-        <span class="k">return</span> <span class="n">stream</span><span class="o">.</span><span class="n">partial_unpack</span><span class="p">(</span><span class="s2">&quot;&lt;Q&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">stream</span><span class="o">.</span><span class="n">align</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">stream</span><span class="o">.</span><span class="n">partial_unpack</span><span class="p">(</span><span class="s2">&quot;&lt;Q&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="NdrShort"><a class="viewcode-back" href="../../../rpc.html#windows.rpc.ndr.NdrShort">[docs]</a><span class="k">class</span> <span class="nc">NdrShort</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="nd">@classmethod</span>
@@ -210,8 +210,8 @@
         <span class="k">return</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s2">&quot;&lt;H&quot;</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
 
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">unpack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream</span><span class="p">):</span></div>
-        <span class="k">return</span> <span class="n">stream</span><span class="o">.</span><span class="n">partial_unpack</span><span class="p">(</span><span class="s2">&quot;&lt;H&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">def</span> <span class="nf">unpack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">stream</span><span class="o">.</span><span class="n">partial_unpack</span><span class="p">(</span><span class="s2">&quot;&lt;H&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span></div>
 
 
 <div class="viewcode-block" id="NdrByte"><a class="viewcode-back" href="../../../rpc.html#windows.rpc.ndr.NdrByte">[docs]</a><span class="k">class</span> <span class="nc">NdrByte</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -220,8 +220,8 @@
         <span class="k">return</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s2">&quot;&lt;B&quot;</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
 
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">unpack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream</span><span class="p">):</span></div>
-        <span class="k">return</span> <span class="n">stream</span><span class="o">.</span><span class="n">partial_unpack</span><span class="p">(</span><span class="s2">&quot;&lt;B&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">def</span> <span class="nf">unpack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">stream</span><span class="o">.</span><span class="n">partial_unpack</span><span class="p">(</span><span class="s2">&quot;&lt;B&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span></div>
 
 
 <span class="k">class</span> <span class="nc">NdrContextHandle</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -266,8 +266,8 @@
                 <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">packed_member</span> <span class="o">=</span> <span class="n">member</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">memberdata</span><span class="p">)</span>
-                <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">packed_member</span><span class="p">)</span></div>
-        <span class="k">return</span> <span class="n">dword_pad</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">conformant_size</span><span class="p">))</span> <span class="o">+</span> <span class="n">dword_pad</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">res</span><span class="p">))</span> <span class="o">+</span> <span class="n">dword_pad</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pointed</span><span class="p">))</span>
+                <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">packed_member</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">dword_pad</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">conformant_size</span><span class="p">))</span> <span class="o">+</span> <span class="n">dword_pad</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">res</span><span class="p">))</span> <span class="o">+</span> <span class="n">dword_pad</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pointed</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="NdrStructure.unpack"><a class="viewcode-back" href="../../../rpc.html#windows.rpc.ndr.NdrStructure.unpack">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">unpack</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">stream</span><span class="p">):</span>
@@ -295,12 +295,12 @@
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">member</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">stream</span><span class="p">))</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">post_subcls</span><span class="p">:</span>
-            <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span></div>
-        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">post_unpack</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">post_unpack</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></div>
 
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">post_unpack</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span></div>
-        <span class="k">return</span> <span class="n">data</span>
+    <span class="k">def</span> <span class="nf">post_unpack</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">data</span></div>
 
 
 
@@ -328,8 +328,8 @@
         <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">member</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">MEMBERS</span><span class="p">:</span>
             <span class="n">unpacked_member</span> <span class="o">=</span> <span class="n">member</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
-            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">unpacked_member</span><span class="p">)</span></div>
-        <span class="k">return</span> <span class="n">res</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">unpacked_member</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">res</span></div>
 
 
 <div class="viewcode-block" id="NdrConformantArray"><a class="viewcode-back" href="../../../rpc.html#windows.rpc.ndr.NdrConformantArray">[docs]</a><span class="k">class</span> <span class="nc">NdrConformantArray</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -348,8 +348,8 @@
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">unpack_conformant</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">stream</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
         <span class="n">res</span> <span class="o">=</span> <span class="p">[</span><span class="bp">cls</span><span class="o">.</span><span class="n">MEMBER_TYPE</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">size</span><span class="p">)]</span>
-        <span class="n">stream</span><span class="o">.</span><span class="n">align</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span></div>
-        <span class="k">return</span> <span class="n">res</span>
+        <span class="n">stream</span><span class="o">.</span><span class="n">align</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">res</span></div>
 
 
 <div class="viewcode-block" id="NdrConformantVaryingArrays"><a class="viewcode-back" href="../../../rpc.html#windows.rpc.ndr.NdrConformantVaryingArrays">[docs]</a><span class="k">class</span> <span class="nc">NdrConformantVaryingArrays</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -390,8 +390,8 @@
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_post_unpack</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">_post_unpack</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">result</span><span class="p">):</span></div>
-        <span class="k">return</span> <span class="n">result</span>
+    <span class="k">def</span> <span class="nf">_post_unpack</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">result</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">result</span></div>
 
 
 <span class="k">class</span> <span class="nc">NdrWcharConformantVaryingArrays</span><span class="p">(</span><span class="n">NdrConformantVaryingArrays</span><span class="p">):</span>
@@ -402,12 +402,12 @@
         <span class="k">return</span> <span class="sa">u</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">unichr</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">result</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="NdrLongConformantArray"><a class="viewcode-back" href="../../../rpc.html#windows.rpc.ndr.NdrLongConformantArray">[docs]</a><span class="k">class</span> <span class="nc">NdrLongConformantArray</span><span class="p">(</span><span class="n">NdrConformantArray</span><span class="p">):</span></div>
-    <span class="n">MEMBER_TYPE</span> <span class="o">=</span> <span class="n">NdrLong</span>
+<div class="viewcode-block" id="NdrLongConformantArray"><a class="viewcode-back" href="../../../rpc.html#windows.rpc.ndr.NdrLongConformantArray">[docs]</a><span class="k">class</span> <span class="nc">NdrLongConformantArray</span><span class="p">(</span><span class="n">NdrConformantArray</span><span class="p">):</span>
+    <span class="n">MEMBER_TYPE</span> <span class="o">=</span> <span class="n">NdrLong</span></div>
 
 
-<div class="viewcode-block" id="NdrByteConformantArray"><a class="viewcode-back" href="../../../rpc.html#windows.rpc.ndr.NdrByteConformantArray">[docs]</a><span class="k">class</span> <span class="nc">NdrByteConformantArray</span><span class="p">(</span><span class="n">NdrConformantArray</span><span class="p">):</span></div>
-    <span class="n">MEMBER_TYPE</span> <span class="o">=</span> <span class="n">NdrByte</span>
+<div class="viewcode-block" id="NdrByteConformantArray"><a class="viewcode-back" href="../../../rpc.html#windows.rpc.ndr.NdrByteConformantArray">[docs]</a><span class="k">class</span> <span class="nc">NdrByteConformantArray</span><span class="p">(</span><span class="n">NdrConformantArray</span><span class="p">):</span>
+    <span class="n">MEMBER_TYPE</span> <span class="o">=</span> <span class="n">NdrByte</span></div>
 
 
 
@@ -443,8 +443,8 @@
         <span class="n">already_read</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fulldata</span><span class="p">)</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">already_read</span> <span class="o">%</span> <span class="n">size</span><span class="p">:</span>
             <span class="c1"># Realign</span>
-            <span class="n">size_to_align</span> <span class="o">=</span> <span class="p">(</span><span class="n">size</span> <span class="o">-</span> <span class="p">(</span><span class="n">already_read</span> <span class="o">%</span> <span class="n">size</span><span class="p">))</span></div></div>
-            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">size_to_align</span><span class="p">:]</span>
+            <span class="n">size_to_align</span> <span class="o">=</span> <span class="p">(</span><span class="n">size</span> <span class="o">-</span> <span class="p">(</span><span class="n">already_read</span> <span class="o">%</span> <span class="n">size</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">size_to_align</span><span class="p">:]</span></div></div>
 
 
 <span class="k">def</span> <span class="nf">make_parameters</span><span class="p">(</span><span class="n">types</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -494,7 +494,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
     </div>
   </body>
 </html>

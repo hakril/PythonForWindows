@@ -17,3 +17,7 @@ This sections describes them by group of relation.
     volume.rst
     wmi.rst
     handle.rst
+    system_module.rst
+    object_manager.rst
+    task_scheduler.rst
+    evtlog.rst

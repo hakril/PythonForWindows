@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/css/mbasic.css" type="text/css" />
-    <script type="text/javascript" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
@@ -151,8 +151,8 @@
     <span class="n">func_type</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">CFUNCTYPE</span><span class="p">(</span><span class="o">*</span><span class="n">types</span><span class="p">)</span>
     <span class="n">addr</span> <span class="o">=</span> <span class="n">allocator</span><span class="o">.</span><span class="n">write_code</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
     <span class="n">res</span> <span class="o">=</span> <span class="n">func_type</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span>
-    <span class="n">res</span><span class="o">.</span><span class="n">code_addr</span> <span class="o">=</span> <span class="n">addr</span></div>
-    <span class="k">return</span> <span class="n">res</span>
+    <span class="n">res</span><span class="o">.</span><span class="n">code_addr</span> <span class="o">=</span> <span class="n">addr</span>
+    <span class="k">return</span> <span class="n">res</span></div>
 </pre></div>
 
           </div>
@@ -191,7 +191,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
     </div>
   </body>
 </html>

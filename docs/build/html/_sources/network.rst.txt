@@ -3,6 +3,9 @@ Network
 
 .. module:: windows.winobject.network
 
+The :class:`Network` instance is accessible via :py:attr:`windows.system.network
+<windows.winobject.system.System.network>`
+
 .. note::
 
     See sample :ref:`sample_network_exploration`

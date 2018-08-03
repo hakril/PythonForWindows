@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/css/mbasic.css" type="text/css" />
-    <script type="text/javascript" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
@@ -56,8 +56,8 @@
     <span class="k">try</span><span class="p">:</span>
         <span class="n">winfunc</span><span class="o">.</span><span class="n">force_resolution</span><span class="p">()</span>
     <span class="k">except</span> <span class="n">ExportNotFound</span><span class="p">:</span>
-        <span class="k">return</span> <span class="kc">False</span></div>
-    <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="kc">True</span></div>
 
 
 <span class="k">def</span> <span class="nf">get_target</span><span class="p">(</span><span class="n">winfunc</span><span class="p">):</span>
@@ -74,8 +74,8 @@
 
 <div class="viewcode-block" id="resolve"><a class="viewcode-back" href="../../winproxy.html#windows.winproxy.resolve">[docs]</a><span class="k">def</span> <span class="nf">resolve</span><span class="p">(</span><span class="n">winfunc</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Resolve the address of ``winfunc``. Might raise if ``winfunc`` is not implemented&quot;&quot;&quot;</span>
-    <span class="n">winfunc</span><span class="o">.</span><span class="n">force_resolution</span><span class="p">()</span></div>
-    <span class="k">return</span> <span class="n">_get_func_addr</span><span class="p">(</span><span class="o">*</span><span class="n">get_target</span><span class="p">(</span><span class="n">winfunc</span><span class="p">))</span>
+    <span class="n">winfunc</span><span class="o">.</span><span class="n">force_resolution</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">_get_func_addr</span><span class="p">(</span><span class="o">*</span><span class="n">get_target</span><span class="p">(</span><span class="n">winfunc</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="Kernel32Error"><a class="viewcode-back" href="../../winproxy.html#windows.winproxy.Kernel32Error">[docs]</a><span class="k">class</span> <span class="nc">Kernel32Error</span><span class="p">(</span><span class="ne">WindowsError</span><span class="p">):</span>
@@ -91,8 +91,8 @@
     <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">: </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api_name</span><span class="p">,</span> <span class="nb">super</span><span class="p">(</span><span class="n">Kernel32Error</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">())</span>
 
-    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">: </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api_name</span><span class="p">,</span> <span class="nb">super</span><span class="p">(</span><span class="n">Kernel32Error</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__str__</span><span class="p">())</span>
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">: </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api_name</span><span class="p">,</span> <span class="nb">super</span><span class="p">(</span><span class="n">Kernel32Error</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__str__</span><span class="p">())</span></div>
 
 
 <span class="k">class</span> <span class="nc">IphlpapiError</span><span class="p">(</span><span class="n">Kernel32Error</span><span class="p">):</span>
@@ -183,6 +183,8 @@
         <span class="n">python_proxy</span><span class="o">.</span><span class="n">errcheck</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">error_check</span>
         <span class="n">python_proxy</span><span class="o">.</span><span class="n">target_dll</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">APIDLL</span>
         <span class="n">python_proxy</span><span class="o">.</span><span class="n">target_func</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">func_name</span>
+        <span class="c1"># Give access to the &#39;ApiProxy&#39; object from the function</span>
+        <span class="n">python_proxy</span><span class="o">.</span><span class="n">proxy</span> <span class="o">=</span> <span class="bp">self</span>
         <span class="n">params_name</span> <span class="o">=</span> <span class="p">[</span><span class="n">param</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">params</span><span class="p">]</span>
         <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">error_check</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">):</span>
             <span class="n">doc</span> <span class="o">=</span> <span class="n">python_proxy</span><span class="o">.</span><span class="vm">__doc__</span>
@@ -233,7 +235,8 @@
 
 <span class="k">class</span> <span class="nc">NtdllProxy</span><span class="p">(</span><span class="n">ApiProxy</span><span class="p">):</span>
     <span class="n">APIDLL</span> <span class="o">=</span> <span class="s2">&quot;ntdll&quot;</span>
-    <span class="n">default_error_check</span> <span class="o">=</span> <span class="nb">staticmethod</span><span class="p">(</span><span class="n">should_return_zero_check</span><span class="p">)</span>
+    <span class="n">default_error_check</span> <span class="o">=</span> <span class="nb">staticmethod</span><span class="p">(</span><span class="n">should_return_zero_check</span><span class="p">)</span> <span class="c1"># Setup to: error_ntstatus ?</span>
+
 
 <span class="k">class</span> <span class="nc">WinTrustProxy</span><span class="p">(</span><span class="n">ApiProxy</span><span class="p">):</span>
     <span class="n">APIDLL</span> <span class="o">=</span> <span class="s2">&quot;wintrust&quot;</span>
@@ -275,6 +278,14 @@
 <span class="k">class</span> <span class="nc">WevtapiProxy</span><span class="p">(</span><span class="n">ApiProxy</span><span class="p">):</span>
     <span class="n">APIDLL</span> <span class="o">=</span> <span class="s2">&quot;Wevtapi&quot;</span>
     <span class="n">default_error_check</span> <span class="o">=</span> <span class="nb">staticmethod</span><span class="p">(</span><span class="n">zero_is_fail_error_check</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">ShlwapiProxy</span><span class="p">(</span><span class="n">ApiProxy</span><span class="p">):</span>
+    <span class="n">APIDLL</span> <span class="o">=</span> <span class="s2">&quot;Shlwapi&quot;</span>
+    <span class="n">default_error_check</span> <span class="o">=</span> <span class="nb">staticmethod</span><span class="p">(</span><span class="n">zero_is_fail_error_check</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">OleaccProxy</span><span class="p">(</span><span class="n">ApiProxy</span><span class="p">):</span>
+    <span class="n">APIDLL</span> <span class="o">=</span> <span class="s2">&quot;Oleacc&quot;</span>
+    <span class="n">default_error_check</span> <span class="o">=</span> <span class="nb">staticmethod</span><span class="p">(</span><span class="n">should_return_zero_check</span><span class="p">)</span>
 
 
 <span class="c1">#class OptionalExport(object):</span>
@@ -372,7 +383,6 @@
 <span class="n">GetComputerNameA</span> <span class="o">=</span> <span class="n">TransparentKernel32Proxy</span><span class="p">(</span><span class="s2">&quot;GetComputerNameA&quot;</span><span class="p">)</span>
 <span class="n">GetComputerNameW</span> <span class="o">=</span> <span class="n">TransparentKernel32Proxy</span><span class="p">(</span><span class="s2">&quot;GetComputerNameW&quot;</span><span class="p">)</span>
 <span class="n">LocalFree</span> <span class="o">=</span> <span class="n">TransparentKernel32Proxy</span><span class="p">(</span><span class="s2">&quot;LocalFree&quot;</span><span class="p">,</span> <span class="n">should_return_zero_check</span><span class="p">)</span>
-
 
 
 <span class="n">Wow64DisableWow64FsRedirection</span> <span class="o">=</span> <span class="n">TransparentKernel32Proxy</span><span class="p">(</span><span class="s2">&quot;Wow64DisableWow64FsRedirection&quot;</span><span class="p">)</span>
@@ -561,6 +571,33 @@
 <span class="k">def</span> <span class="nf">SetPriorityClass</span><span class="p">(</span><span class="n">hProcess</span><span class="p">,</span> <span class="n">dwPriorityClass</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">SetPriorityClass</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">hProcess</span><span class="p">,</span> <span class="n">dwPriorityClass</span><span class="p">)</span>
 
+<span class="n">PROCESS_MITIGATION_STUCTS</span> <span class="o">=</span> <span class="p">(</span><span class="n">PROCESS_MITIGATION_ASLR_POLICY</span><span class="p">,</span>
+                                <span class="n">PROCESS_MITIGATION_BINARY_SIGNATURE_POLICY</span><span class="p">,</span>
+                                <span class="n">PROCESS_MITIGATION_CONTROL_FLOW_GUARD_POLICY</span><span class="p">,</span>
+                                <span class="n">PROCESS_MITIGATION_DEP_POLICY</span><span class="p">,</span>
+                                <span class="n">PROCESS_MITIGATION_DYNAMIC_CODE_POLICY</span><span class="p">,</span>
+                                <span class="n">PROCESS_MITIGATION_EXTENSION_POINT_DISABLE_POLICY</span><span class="p">,</span>
+                                <span class="n">PROCESS_MITIGATION_IMAGE_LOAD_POLICY</span><span class="p">,</span>
+                                <span class="n">PROCESS_MITIGATION_POLICY</span><span class="p">,</span>
+                                <span class="n">PROCESS_MITIGATION_STRICT_HANDLE_CHECK_POLICY</span><span class="p">,</span>
+                                <span class="n">PROCESS_MITIGATION_SYSTEM_CALL_DISABLE_POLICY</span><span class="p">)</span>
+
+<span class="nd">@Kernel32Proxy</span><span class="p">(</span><span class="s2">&quot;GetProcessMitigationPolicy&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">GetProcessMitigationPolicy</span><span class="p">(</span><span class="n">hProcess</span><span class="p">,</span> <span class="n">MitigationPolicy</span><span class="p">,</span> <span class="n">lpBuffer</span><span class="p">,</span> <span class="n">dwLength</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">dwLength</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">dwLength</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">lpBuffer</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">GetProcessMitigationPolicy</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">hProcess</span><span class="p">,</span> <span class="n">MitigationPolicy</span><span class="p">,</span> <span class="n">lpBuffer</span><span class="p">,</span> <span class="n">dwLength</span><span class="p">)</span>
+
+
+<span class="nd">@Kernel32Proxy</span><span class="p">(</span><span class="s2">&quot;SetProcessMitigationPolicy&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">SetProcessMitigationPolicy</span><span class="p">(</span><span class="n">MitigationPolicy</span><span class="p">,</span> <span class="n">lpBuffer</span><span class="p">,</span> <span class="n">dwLength</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">dwLength</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">dwLength</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">lpBuffer</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">lpBuffer</span><span class="p">,</span> <span class="n">PROCESS_MITIGATION_STUCTS</span><span class="p">):</span>
+        <span class="n">lpBuffer</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">lpBuffer</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">SetProcessMitigationPolicy</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">MitigationPolicy</span><span class="p">,</span> <span class="n">lpBuffer</span><span class="p">,</span> <span class="n">dwLength</span><span class="p">)</span>
+
+
 <span class="nd">@Kernel32Proxy</span><span class="p">(</span><span class="s2">&quot;OpenEventA&quot;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">OpenEventA</span><span class="p">(</span><span class="n">dwDesiredAccess</span><span class="p">,</span> <span class="n">bInheritHandle</span><span class="p">,</span> <span class="n">lpName</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">OpenEventA</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">dwDesiredAccess</span><span class="p">,</span> <span class="n">bInheritHandle</span><span class="p">,</span> <span class="n">lpName</span><span class="p">)</span>
@@ -568,6 +605,8 @@
 <span class="nd">@Kernel32Proxy</span><span class="p">(</span><span class="s2">&quot;OpenEventW&quot;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">OpenEventW</span><span class="p">(</span><span class="n">dwDesiredAccess</span><span class="p">,</span> <span class="n">bInheritHandle</span><span class="p">,</span> <span class="n">lpName</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">OpenEventA</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">dwDesiredAccess</span><span class="p">,</span> <span class="n">bInheritHandle</span><span class="p">,</span> <span class="n">lpName</span><span class="p">)</span>
+
+
 
 
 
@@ -589,6 +628,13 @@
         <span class="n">lpNumberOfBytesWritten</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">DWORD</span><span class="p">())</span>
     <span class="k">return</span> <span class="n">WriteFile</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">hFile</span><span class="p">,</span> <span class="n">lpBuffer</span><span class="p">,</span> <span class="n">nNumberOfBytesToWrite</span><span class="p">,</span> <span class="n">lpNumberOfBytesWritten</span><span class="p">,</span> <span class="n">lpOverlapped</span><span class="p">)</span>
 
+<span class="nd">@Kernel32Proxy</span><span class="p">(</span><span class="s2">&quot;Sleep&quot;</span><span class="p">,</span> <span class="n">no_error_check</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">Sleep</span><span class="p">(</span><span class="n">dwMilliseconds</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">Sleep</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">dwMilliseconds</span><span class="p">)</span>
+
+<span class="nd">@Kernel32Proxy</span><span class="p">(</span><span class="s2">&quot;SleepEx&quot;</span><span class="p">,</span> <span class="n">no_error_check</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">SleepEx</span><span class="p">(</span><span class="n">dwMilliseconds</span><span class="p">,</span> <span class="n">bAlertable</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">SleepEx</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">dwMilliseconds</span><span class="p">,</span> <span class="n">bAlertable</span><span class="p">)</span>
 
 <span class="c1"># Exception stuff</span>
 <span class="nd">@Kernel32Proxy</span><span class="p">(</span><span class="s2">&quot;AddVectoredContinueHandler&quot;</span><span class="p">)</span>
@@ -854,6 +900,11 @@
     <span class="k">return</span> <span class="n">GetWindowsDirectoryW</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">lpBuffer</span><span class="p">,</span> <span class="n">uSize</span><span class="p">)</span>
 
 
+<span class="nd">@Kernel32Proxy</span><span class="p">(</span><span class="s2">&quot;GetProductInfo&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">GetProductInfo</span><span class="p">(</span><span class="n">dwOSMajorVersion</span><span class="p">,</span> <span class="n">dwOSMinorVersion</span><span class="p">,</span> <span class="n">dwSpMajorVersion</span><span class="p">,</span> <span class="n">dwSpMinorVersion</span><span class="p">,</span> <span class="n">pdwReturnedProductType</span><span class="p">):</span>
+   <span class="k">return</span> <span class="n">GetProductInfo</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">dwOSMajorVersion</span><span class="p">,</span> <span class="n">dwOSMinorVersion</span><span class="p">,</span> <span class="n">dwSpMajorVersion</span><span class="p">,</span> <span class="n">dwSpMinorVersion</span><span class="p">,</span> <span class="n">pdwReturnedProductType</span><span class="p">)</span>
+
+
 <span class="c1"># ### NTDLL #### #</span>
 
 <span class="nd">@NtdllProxy</span><span class="p">(</span><span class="s1">&#39;NtReadVirtualMemory&#39;</span><span class="p">,</span> <span class="n">error_ntstatus</span><span class="p">)</span>
@@ -975,6 +1026,10 @@
 <span class="nd">@NtdllProxy</span><span class="p">(</span><span class="s2">&quot;NtOpenEvent&quot;</span><span class="p">,</span> <span class="n">error_ntstatus</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">NtOpenEvent</span><span class="p">(</span><span class="n">EventHandle</span><span class="p">,</span> <span class="n">DesiredAccess</span><span class="p">,</span> <span class="n">ObjectAttributes</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">NtOpenEvent</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">EventHandle</span><span class="p">,</span> <span class="n">DesiredAccess</span><span class="p">,</span> <span class="n">ObjectAttributes</span><span class="p">)</span>
+
+<span class="nd">@NtdllProxy</span><span class="p">(</span><span class="s2">&quot;NtSetInformationFile&quot;</span><span class="p">,</span> <span class="n">error_ntstatus</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">NtSetInformationFile</span><span class="p">(</span><span class="n">FileHandle</span><span class="p">,</span> <span class="n">IoStatusBlock</span><span class="p">,</span> <span class="n">FileInformation</span><span class="p">,</span> <span class="n">Length</span><span class="p">,</span> <span class="n">FileInformationClass</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">NtSetInformationFile</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">FileHandle</span><span class="p">,</span> <span class="n">IoStatusBlock</span><span class="p">,</span> <span class="n">FileInformation</span><span class="p">,</span> <span class="n">Length</span><span class="p">,</span> <span class="n">FileInformationClass</span><span class="p">)</span>
 
 
 <span class="nd">@NtdllProxy</span><span class="p">(</span><span class="s2">&quot;NtAlpcCreatePort&quot;</span><span class="p">,</span> <span class="n">error_ntstatus</span><span class="p">)</span>
@@ -1138,6 +1193,36 @@
 <span class="nd">@NtdllProxy</span><span class="p">(</span><span class="s2">&quot;TpCallbackSendAlpcMessageOnCompletion&quot;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">TpCallbackSendAlpcMessageOnCompletion</span><span class="p">(</span><span class="n">TpHandle</span><span class="p">,</span> <span class="n">PortHandle</span><span class="p">,</span> <span class="n">Flags</span><span class="p">,</span> <span class="n">SendMessage</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">TpCallbackSendAlpcMessageOnCompletion</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">TpHandle</span><span class="p">,</span> <span class="n">PortHandle</span><span class="p">,</span> <span class="n">Flags</span><span class="p">,</span> <span class="n">SendMessage</span><span class="p">)</span>
+
+
+<span class="c1"># low level registry</span>
+
+<span class="nd">@NtdllProxy</span><span class="p">(</span><span class="s2">&quot;NtOpenKey&quot;</span><span class="p">,</span> <span class="n">error_ntstatus</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">NtOpenKey</span><span class="p">(</span><span class="n">KeyHandle</span><span class="p">,</span> <span class="n">DesiredAccess</span><span class="p">,</span> <span class="n">ObjectAttributes</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">NtOpenKey</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">KeyHandle</span><span class="p">,</span> <span class="n">DesiredAccess</span><span class="p">,</span> <span class="n">ObjectAttributes</span><span class="p">)</span>
+
+<span class="nd">@NtdllProxy</span><span class="p">(</span><span class="s2">&quot;NtCreateKey&quot;</span><span class="p">,</span> <span class="n">error_ntstatus</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">NtCreateKey</span><span class="p">(</span><span class="n">pKeyHandle</span><span class="p">,</span> <span class="n">DesiredAccess</span><span class="p">,</span> <span class="n">ObjectAttributes</span><span class="p">,</span> <span class="n">TitleIndex</span><span class="p">,</span> <span class="n">Class</span><span class="p">,</span> <span class="n">CreateOptions</span><span class="p">,</span> <span class="n">Disposition</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">NtCreateKey</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">pKeyHandle</span><span class="p">,</span> <span class="n">DesiredAccess</span><span class="p">,</span> <span class="n">ObjectAttributes</span><span class="p">,</span> <span class="n">TitleIndex</span><span class="p">,</span> <span class="n">Class</span><span class="p">,</span> <span class="n">CreateOptions</span><span class="p">,</span> <span class="n">Disposition</span><span class="p">)</span>
+
+<span class="nd">@NtdllProxy</span><span class="p">(</span><span class="s2">&quot;NtSetValueKey&quot;</span><span class="p">,</span> <span class="n">error_ntstatus</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">NtSetValueKey</span><span class="p">(</span><span class="n">KeyHandle</span><span class="p">,</span> <span class="n">ValueName</span><span class="p">,</span> <span class="n">TitleIndex</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Data</span><span class="p">,</span> <span class="n">DataSize</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">NtSetValueKey</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">KeyHandle</span><span class="p">,</span> <span class="n">ValueName</span><span class="p">,</span> <span class="n">TitleIndex</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Data</span><span class="p">,</span> <span class="n">DataSize</span><span class="p">)</span>
+
+<span class="nd">@NtdllProxy</span><span class="p">(</span><span class="s2">&quot;NtQueryValueKey&quot;</span><span class="p">,</span> <span class="n">error_ntstatus</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">NtQueryValueKey</span><span class="p">(</span><span class="n">KeyHandle</span><span class="p">,</span> <span class="n">ValueName</span><span class="p">,</span> <span class="n">KeyValueInformationClass</span><span class="p">,</span> <span class="n">KeyValueInformation</span><span class="p">,</span> <span class="n">Length</span><span class="p">,</span> <span class="n">ResultLength</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">NtQueryValueKey</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">KeyHandle</span><span class="p">,</span> <span class="n">ValueName</span><span class="p">,</span> <span class="n">KeyValueInformationClass</span><span class="p">,</span> <span class="n">KeyValueInformation</span><span class="p">,</span> <span class="n">Length</span><span class="p">,</span> <span class="n">ResultLength</span><span class="p">)</span>
+
+<span class="nd">@NtdllProxy</span><span class="p">(</span><span class="s2">&quot;NtEnumerateValueKey&quot;</span><span class="p">,</span> <span class="n">error_ntstatus</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">NtEnumerateValueKey</span><span class="p">(</span><span class="n">KeyHandle</span><span class="p">,</span> <span class="n">Index</span><span class="p">,</span> <span class="n">KeyValueInformationClass</span><span class="p">,</span> <span class="n">KeyValueInformation</span><span class="p">,</span> <span class="n">Length</span><span class="p">,</span> <span class="n">ResultLength</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">NtEnumerateValueKey</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">KeyHandle</span><span class="p">,</span> <span class="n">Index</span><span class="p">,</span> <span class="n">KeyValueInformationClass</span><span class="p">,</span> <span class="n">KeyValueInformation</span><span class="p">,</span> <span class="n">Length</span><span class="p">,</span> <span class="n">ResultLength</span><span class="p">)</span>
+
+<span class="nd">@NtdllProxy</span><span class="p">(</span><span class="s2">&quot;NtQueryLicenseValue&quot;</span><span class="p">,</span> <span class="n">error_ntstatus</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">NtQueryLicenseValue</span><span class="p">(</span><span class="n">Name</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Buffer</span><span class="p">,</span> <span class="n">Length</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">DataLength</span><span class="o">=</span><span class="n">NeededParameter</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">Length</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">Buffer</span><span class="p">:</span>
+        <span class="n">Length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">NtQueryLicenseValue</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">Name</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Buffer</span><span class="p">,</span> <span class="n">Length</span><span class="p">,</span> <span class="n">DataLength</span><span class="p">)</span>
+
 
 <span class="c1"># Not exported</span>
 
@@ -1441,15 +1526,21 @@
 <span class="k">def</span> <span class="nf">CryptCATAdminCalcHashFromFileHandle</span><span class="p">(</span><span class="n">hFile</span><span class="p">,</span> <span class="n">pcbHash</span><span class="p">,</span> <span class="n">pbHash</span><span class="p">,</span> <span class="n">dwFlags</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">CryptCATAdminCalcHashFromFileHandle</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">hFile</span><span class="p">,</span> <span class="n">pcbHash</span><span class="p">,</span> <span class="n">pbHash</span><span class="p">,</span> <span class="n">dwFlags</span><span class="p">)</span>
 
+<span class="nd">@WinTrustProxy</span><span class="p">(</span><span class="s1">&#39;CryptCATAdminCalcHashFromFileHandle2&#39;</span><span class="p">,</span> <span class="n">error_check</span><span class="o">=</span><span class="n">zero_is_fail_error_check</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">CryptCATAdminCalcHashFromFileHandle2</span><span class="p">(</span><span class="n">hCatAdmin</span><span class="p">,</span> <span class="n">hFile</span><span class="p">,</span> <span class="n">pcbHash</span><span class="p">,</span> <span class="n">pbHash</span><span class="p">,</span> <span class="n">dwFlags</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">CryptCATAdminCalcHashFromFileHandle2</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">hCatAdmin</span><span class="p">,</span> <span class="n">hFile</span><span class="p">,</span> <span class="n">pcbHash</span><span class="p">,</span> <span class="n">pbHash</span><span class="p">,</span> <span class="n">dwFlags</span><span class="p">)</span>
 
 <span class="nd">@WinTrustProxy</span><span class="p">(</span><span class="s1">&#39;CryptCATAdminEnumCatalogFromHash&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">CryptCATAdminEnumCatalogFromHash</span><span class="p">(</span><span class="n">hCatAdmin</span><span class="p">,</span> <span class="n">pbHash</span><span class="p">,</span> <span class="n">cbHash</span><span class="p">,</span> <span class="n">dwFlags</span><span class="p">,</span> <span class="n">phPrevCatInfo</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">CryptCATAdminEnumCatalogFromHash</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">hCatAdmin</span><span class="p">,</span> <span class="n">pbHash</span><span class="p">,</span> <span class="n">cbHash</span><span class="p">,</span> <span class="n">dwFlags</span><span class="p">,</span> <span class="n">phPrevCatInfo</span><span class="p">)</span>
 
-
 <span class="nd">@WinTrustProxy</span><span class="p">(</span><span class="s1">&#39;CryptCATAdminAcquireContext&#39;</span><span class="p">,</span> <span class="n">error_check</span><span class="o">=</span><span class="n">zero_is_fail_error_check</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">CryptCATAdminAcquireContext</span><span class="p">(</span><span class="n">phCatAdmin</span><span class="p">,</span> <span class="n">pgSubsystem</span><span class="p">,</span> <span class="n">dwFlags</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">CryptCATAdminAcquireContext</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">phCatAdmin</span><span class="p">,</span> <span class="n">pgSubsystem</span><span class="p">,</span> <span class="n">dwFlags</span><span class="p">)</span>
+
+<span class="nd">@WinTrustProxy</span><span class="p">(</span><span class="s1">&#39;CryptCATAdminAcquireContext2&#39;</span><span class="p">,</span> <span class="n">error_check</span><span class="o">=</span><span class="n">zero_is_fail_error_check</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">CryptCATAdminAcquireContext2</span><span class="p">(</span><span class="n">phCatAdmin</span><span class="p">,</span> <span class="n">pgSubsystem</span><span class="p">,</span> <span class="n">pwszHashAlgorithm</span><span class="p">,</span> <span class="n">pStrongHashPolicy</span><span class="p">,</span> <span class="n">dwFlags</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">CryptCATAdminAcquireContext2</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">phCatAdmin</span><span class="p">,</span> <span class="n">pgSubsystem</span><span class="p">,</span> <span class="n">pwszHashAlgorithm</span><span class="p">,</span> <span class="n">pStrongHashPolicy</span><span class="p">,</span> <span class="n">dwFlags</span><span class="p">)</span>
 
 
 <span class="nd">@WinTrustProxy</span><span class="p">(</span><span class="s1">&#39;CryptCATCatalogInfoFromContext&#39;</span><span class="p">,</span> <span class="n">error_check</span><span class="o">=</span><span class="n">zero_is_fail_error_check</span><span class="p">)</span>
@@ -1794,6 +1885,10 @@
 <span class="k">def</span> <span class="nf">CoGetInterceptor</span><span class="p">(</span><span class="n">iidIntercepted</span><span class="p">,</span> <span class="n">punkOuter</span><span class="p">,</span> <span class="n">iid</span><span class="p">,</span> <span class="n">ppv</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">CoGetInterceptor</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">iidIntercepted</span><span class="p">,</span> <span class="n">punkOuter</span><span class="p">,</span> <span class="n">iid</span><span class="p">,</span> <span class="n">ppv</span><span class="p">)</span>
 
+<span class="nd">@Ole32Proxy</span><span class="p">(</span><span class="s1">&#39;CLSIDFromProgID&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">CLSIDFromProgID</span><span class="p">(</span><span class="n">lpszProgID</span><span class="p">,</span> <span class="n">lpclsid</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">CLSIDFromProgID</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">lpszProgID</span><span class="p">,</span> <span class="n">lpclsid</span><span class="p">)</span>
+
 <span class="c1"># ## Shell32 ## #</span>
 
 <span class="nd">@Shell32Proxy</span><span class="p">(</span><span class="s1">&#39;ShellExecuteA&#39;</span><span class="p">)</span>
@@ -1959,6 +2054,33 @@
 <span class="nd">@WevtapiProxy</span><span class="p">(</span><span class="s2">&quot;EvtFormatMessage&quot;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">EvtFormatMessage</span><span class="p">(</span><span class="n">PublisherMetadata</span><span class="p">,</span> <span class="n">Event</span><span class="p">,</span> <span class="n">MessageId</span><span class="p">,</span> <span class="n">ValueCount</span><span class="p">,</span> <span class="n">Values</span><span class="p">,</span> <span class="n">Flags</span><span class="p">,</span> <span class="n">BufferSize</span><span class="p">,</span> <span class="n">Buffer</span><span class="p">,</span> <span class="n">BufferUsed</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">EvtFormatMessage</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">PublisherMetadata</span><span class="p">,</span> <span class="n">Event</span><span class="p">,</span> <span class="n">MessageId</span><span class="p">,</span> <span class="n">ValueCount</span><span class="p">,</span> <span class="n">Values</span><span class="p">,</span> <span class="n">Flags</span><span class="p">,</span> <span class="n">BufferSize</span><span class="p">,</span> <span class="n">Buffer</span><span class="p">,</span> <span class="n">BufferUsed</span><span class="p">)</span>
+
+
+<span class="c1"># ShlwapiProxy</span>
+
+<span class="nd">@ShlwapiProxy</span><span class="p">(</span><span class="s2">&quot;StrStrIW&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">StrStrIW</span><span class="p">(</span><span class="n">pszFirst</span><span class="p">,</span> <span class="n">pszSrch</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">StrStrIW</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">pszFirst</span><span class="p">,</span> <span class="n">pszSrch</span><span class="p">)</span>
+
+<span class="nd">@ShlwapiProxy</span><span class="p">(</span><span class="s2">&quot;StrStrIA&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">StrStrIA</span><span class="p">(</span><span class="n">pszFirst</span><span class="p">,</span> <span class="n">pszSrch</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">StrStrIA</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">pszFirst</span><span class="p">,</span> <span class="n">pszSrch</span><span class="p">)</span>
+
+<span class="nd">@ShlwapiProxy</span><span class="p">(</span><span class="s2">&quot;IsOS&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">IsOS</span><span class="p">(</span><span class="n">dwOS</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">is_implemented</span><span class="p">(</span><span class="n">IsOS</span><span class="p">)</span> <span class="ow">and</span> <span class="n">windows</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">version</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">6</span><span class="p">:</span>
+        <span class="c1"># Before Vista:</span>
+        <span class="c1"># If so use ordinal 437 from DOCUMENTATION</span>
+        <span class="c1"># https://docs.microsoft.com/en-us/windows/desktop/api/shlwapi/nf-shlwapi-isos#remarks</span>
+        <span class="n">IsOS</span><span class="o">.</span><span class="n">proxy</span><span class="o">.</span><span class="n">func_name</span> <span class="o">=</span> <span class="mi">437</span>
+    <span class="k">return</span> <span class="n">IsOS</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">dwOS</span><span class="p">)</span>
+
+
+<span class="c1"># OleaccProxy</span>
+
+<span class="nd">@OleaccProxy</span><span class="p">(</span><span class="s2">&quot;ObjectFromLresult&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">ObjectFromLresult</span><span class="p">(</span><span class="n">lResult</span><span class="p">,</span> <span class="n">riid</span><span class="p">,</span> <span class="n">wParam</span><span class="p">,</span> <span class="n">ppvObject</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">ObjectFromLresult</span><span class="o">.</span><span class="n">ctypes_function</span><span class="p">(</span><span class="n">lResult</span><span class="p">,</span> <span class="n">riid</span><span class="p">,</span> <span class="n">wParam</span><span class="p">,</span> <span class="n">ppvObject</span><span class="p">)</span>
 </pre></div>
 
           </div>
@@ -1997,7 +2119,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
     </div>
   </body>
 </html>

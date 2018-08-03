@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/css/mbasic.css" type="text/css" />
-    <script type="text/javascript" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
@@ -56,8 +56,8 @@
     <span class="n">buffer</span> <span class="o">=</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_ubyte</span> <span class="o">*</span> <span class="n">size</span><span class="o">.</span><span class="n">value</span><span class="p">)()</span>
     <span class="n">winproxy</span><span class="o">.</span><span class="n">CertStrToNameA</span><span class="p">(</span><span class="n">X509_ASN_ENCODING</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span>  <span class="n">CERT_OID_NAME_STR</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
     <span class="n">blobname</span> <span class="o">=</span> <span class="n">ECRYPT_DATA_BLOB</span><span class="p">(</span><span class="n">size</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">buffer</span><span class="p">)</span>
-    <span class="n">cert</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CertCreateSelfSignCertificate</span><span class="p">(</span><span class="n">prov</span><span class="p">,</span> <span class="n">blobname</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="n">key_info</span><span class="p">,</span> <span class="n">signature_algo</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
-    <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">crypto</span><span class="o">.</span><span class="n">Certificate</span><span class="o">.</span><span class="n">from_pointer</span><span class="p">(</span><span class="n">cert</span><span class="p">)</span>
+    <span class="n">cert</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CertCreateSelfSignCertificate</span><span class="p">(</span><span class="n">prov</span><span class="p">,</span> <span class="n">blobname</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="n">key_info</span><span class="p">,</span> <span class="n">signature_algo</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">crypto</span><span class="o">.</span><span class="n">Certificate</span><span class="o">.</span><span class="n">from_pointer</span><span class="p">(</span><span class="n">cert</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="generate_key"><a class="viewcode-back" href="../../../crypto.html#windows.crypto.generation.generate_key">[docs]</a><span class="k">def</span> <span class="nf">generate_key</span><span class="p">(</span><span class="n">prov</span><span class="p">,</span> <span class="n">keytype</span><span class="o">=</span><span class="n">AT_KEYEXCHANGE</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">CRYPT_EXPORTABLE</span><span class="p">):</span>
@@ -66,8 +66,8 @@
 <span class="sd">    :return: :class:`HCRYPTKEY`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">key</span> <span class="o">=</span> <span class="n">HCRYPTKEY</span><span class="p">()</span>
-    <span class="n">winproxy</span><span class="o">.</span><span class="n">CryptGenKey</span><span class="p">(</span><span class="n">prov</span><span class="p">,</span> <span class="n">keytype</span><span class="p">,</span> <span class="n">flags</span> <span class="p">,</span> <span class="n">key</span><span class="p">)</span></div>
-    <span class="k">return</span> <span class="n">key</span>
+    <span class="n">winproxy</span><span class="o">.</span><span class="n">CryptGenKey</span><span class="p">(</span><span class="n">prov</span><span class="p">,</span> <span class="n">keytype</span><span class="p">,</span> <span class="n">flags</span> <span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">key</span></div>
     <span class="c1"># print(key[0])</span>
     <span class="c1"># print(&quot;[OK] Key created&quot;)</span>
     <span class="c1"># size = DWORD()</span>
@@ -90,8 +90,8 @@
     <span class="n">blob</span> <span class="o">=</span> <span class="n">ECRYPT_DATA_BLOB</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
     <span class="n">winproxy</span><span class="o">.</span><span class="n">PFXExportCertStoreEx</span><span class="p">(</span><span class="n">hstore</span><span class="p">,</span> <span class="n">blob</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">EXPORT_PRIVATE_KEYS</span> <span class="o">|</span> <span class="n">REPORT_NO_PRIVATE_KEY</span> <span class="o">|</span> <span class="n">REPORT_NOT_ABLE_TO_EXPORT_PRIVATE_KEY</span><span class="p">)</span>
     <span class="n">blob</span><span class="o">.</span><span class="n">pbData</span> <span class="o">=</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_ubyte</span> <span class="o">*</span> <span class="n">blob</span><span class="o">.</span><span class="n">cbData</span><span class="p">)()</span>
-    <span class="n">winproxy</span><span class="o">.</span><span class="n">PFXExportCertStoreEx</span><span class="p">(</span><span class="n">hstore</span><span class="p">,</span> <span class="n">blob</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">EXPORT_PRIVATE_KEYS</span> <span class="o">|</span> <span class="n">REPORT_NO_PRIVATE_KEY</span> <span class="o">|</span> <span class="n">REPORT_NOT_ABLE_TO_EXPORT_PRIVATE_KEY</span><span class="p">)</span></div>
-    <span class="k">return</span> <span class="n">blob</span><span class="o">.</span><span class="n">data</span>
+    <span class="n">winproxy</span><span class="o">.</span><span class="n">PFXExportCertStoreEx</span><span class="p">(</span><span class="n">hstore</span><span class="p">,</span> <span class="n">blob</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">EXPORT_PRIVATE_KEYS</span> <span class="o">|</span> <span class="n">REPORT_NO_PRIVATE_KEY</span> <span class="o">|</span> <span class="n">REPORT_NOT_ABLE_TO_EXPORT_PRIVATE_KEY</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">blob</span><span class="o">.</span><span class="n">data</span></div>
 </pre></div>
 
           </div>
@@ -130,7 +130,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
     </div>
   </body>
 </html>

@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/css/mbasic.css" type="text/css" />
-    <script type="text/javascript" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
@@ -86,8 +86,8 @@
 <span class="sd">        .. note::</span>
 
 <span class="sd">            Not all embded certificate are directly used to sign the :class:`CryptObject`.</span>
-<span class="sd">        &quot;&quot;&quot;</span></div>
-        <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">crypto</span><span class="o">.</span><span class="n">Certificate</span><span class="o">.</span><span class="n">from_buffer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_raw_cert</span><span class="p">(</span><span class="n">index</span><span class="p">))</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">crypto</span><span class="o">.</span><span class="n">Certificate</span><span class="o">.</span><span class="n">from_buffer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_raw_cert</span><span class="p">(</span><span class="n">index</span><span class="p">))</span></div>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">certs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -114,13 +114,13 @@
         <span class="sd">&quot;&quot;&quot;Returns the signer informations for signer nb ``index``</span>
 
 <span class="sd">        :return: :class:`~windows.generated_def.winstructs.CMSG_SIGNER_INFO`</span>
-<span class="sd">        &quot;&quot;&quot;</span></div>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">CMSG_SIGNER_INFO_PARAM</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">CMSG_SIGNER_INFO_PARAM</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span></div>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">signers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The list of :class:`~windows.generated_def.winstructs.CMSG_SIGNER_INFO` embed in the message&quot;&quot;&quot;</span></div>
-        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">get_signer_data</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nb_signer</span><span class="p">)]</span>
+        <span class="sd">&quot;&quot;&quot;The list of :class:`~windows.generated_def.winstructs.CMSG_SIGNER_INFO` embed in the message&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">get_signer_data</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nb_signer</span><span class="p">)]</span></div>
 </pre></div>
 
           </div>
@@ -159,7 +159,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
     </div>
   </body>
 </html>

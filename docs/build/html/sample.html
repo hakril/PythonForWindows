@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/css/mbasic.css" type="text/css" />
-    <script type="text/javascript" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
@@ -503,6 +503,17 @@ Sections: [&lt;PESection &quot;.text&quot;&gt;, &lt;PESection &quot;.rdata&quot;
 <span class="n">file_h</span> <span class="o">=</span> <span class="p">[</span><span class="n">h</span> <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">cp_handles</span> <span class="k">if</span> <span class="n">h</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">&quot;File&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;        Handle is </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">file_h</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;        Name is &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">file_h</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Dumping the first system module&quot;</span><span class="p">)</span>
+<span class="n">kmod</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">kmod</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">((</span><span class="s2">&quot; &quot;</span> <span class="o">*</span> <span class="mi">8</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;ImageName = </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">kmod</span><span class="o">.</span><span class="n">ImageName</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">((</span><span class="s2">&quot; &quot;</span> <span class="o">*</span> <span class="mi">8</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;Base = </span><span class="si">{0:#x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">kmod</span><span class="o">.</span><span class="n">Base</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">((</span><span class="s2">&quot; &quot;</span> <span class="o">*</span> <span class="mi">8</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;Size = </span><span class="si">{0:#x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">kmod</span><span class="o">.</span><span class="n">Size</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">((</span><span class="s2">&quot; &quot;</span> <span class="o">*</span> <span class="mi">8</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;Flags = </span><span class="si">{0:#x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">kmod</span><span class="o">.</span><span class="n">Flags</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">((</span><span class="s2">&quot; &quot;</span> <span class="o">*</span> <span class="mi">8</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;LoadCount = </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">kmod</span><span class="o">.</span><span class="n">LoadCount</span><span class="p">))</span>
 </pre></div>
 </div>
 <p>Output</p>
@@ -514,8 +525,8 @@ Sections: [&lt;PESection &quot;.text&quot;&gt;, &lt;PESection &quot;.rdata&quot;
     <span class="n">product_type</span> <span class="o">=</span> <span class="n">VER_NT_WORKSTATION</span><span class="p">(</span><span class="mh">0x1</span><span class="n">L</span><span class="p">)</span>
     <span class="n">version_name</span> <span class="o">=</span> <span class="n">Windows</span> <span class="mi">10</span>
 
-<span class="n">There</span> <span class="ow">is</span> <span class="mi">222</span> <span class="n">processes</span>
-<span class="n">There</span> <span class="ow">is</span> <span class="mi">2716</span> <span class="n">threads</span>
+<span class="n">There</span> <span class="ow">is</span> <span class="mi">194</span> <span class="n">processes</span>
+<span class="n">There</span> <span class="ow">is</span> <span class="mi">2324</span> <span class="n">threads</span>
 
 <span class="n">Dumping</span> <span class="n">first</span> <span class="n">logical</span> <span class="n">drive</span><span class="p">:</span>
     <span class="o">&lt;</span><span class="n">LogicalDrive</span> <span class="s2">&quot;C:</span><span class="se">\&quot;</span><span class="s2"> (DRIVE_FIXED)&gt;</span>
@@ -531,20 +542,28 @@ Sections: [&lt;PESection &quot;.text&quot;&gt;, &lt;PESection &quot;.rdata&quot;
         <span class="n">process</span> <span class="o">=</span> <span class="kc">None</span>
 
 <span class="n">Finding</span> <span class="n">a</span> <span class="n">service</span> <span class="ow">in</span> <span class="n">a</span> <span class="n">user</span> <span class="n">process</span><span class="p">:</span>
-    <span class="o">&lt;</span><span class="n">ServiceA</span> <span class="s2">&quot;Appinfo&quot;</span> <span class="n">SERVICE_RUNNING</span><span class="p">(</span><span class="mh">0x4</span><span class="n">L</span><span class="p">)</span><span class="o">&gt;</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="n">Appinfo</span>
-        <span class="n">description</span> <span class="o">=</span> <span class="n">Application</span> <span class="n">Information</span>
-        <span class="n">status</span> <span class="o">=</span> <span class="n">ServiceStatus</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="mi">48</span><span class="n">L</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="n">SERVICE_RUNNING</span><span class="p">(</span><span class="mh">0x4</span><span class="n">L</span><span class="p">),</span> <span class="n">control_accepted</span><span class="o">=</span><span class="mi">129</span><span class="n">L</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="mi">0</span><span class="n">L</span><span class="p">)</span>
-        <span class="n">process</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">WinProcess</span> <span class="s2">&quot;svchost.exe&quot;</span> <span class="n">pid</span> <span class="mi">13288</span> <span class="n">at</span> <span class="mh">0x63ffc10</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="n">ServiceA</span> <span class="s2">&quot;AppIDSvc&quot;</span> <span class="n">SERVICE_RUNNING</span><span class="p">(</span><span class="mh">0x4</span><span class="n">L</span><span class="p">)</span><span class="o">&gt;</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">AppIDSvc</span>
+        <span class="n">description</span> <span class="o">=</span> <span class="n">Application</span> <span class="n">Identity</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="n">ServiceStatus</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="mi">48</span><span class="n">L</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="n">SERVICE_RUNNING</span><span class="p">(</span><span class="mh">0x4</span><span class="n">L</span><span class="p">),</span> <span class="n">control_accepted</span><span class="o">=</span><span class="mi">5</span><span class="n">L</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="mi">0</span><span class="n">L</span><span class="p">)</span>
+        <span class="n">process</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">WinProcess</span> <span class="s2">&quot;!cannot-retrieve-name&quot;</span> <span class="n">pid</span> <span class="mi">7076</span> <span class="n">at</span> <span class="mh">0x631eb70</span><span class="o">&gt;</span>
 
 <span class="n">Enumerating</span> <span class="n">handles</span><span class="p">:</span>
-    <span class="n">There</span> <span class="n">are</span> <span class="mi">106325</span> <span class="n">handles</span><span class="p">:</span>
+    <span class="n">There</span> <span class="n">are</span> <span class="mi">78079</span> <span class="n">handles</span><span class="p">:</span>
     <span class="n">First</span> <span class="n">handle</span> <span class="ow">is</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">Handle</span> <span class="n">value</span><span class="o">=&lt;</span><span class="mh">0x4</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="n">process</span> <span class="n">pid</span><span class="o">=</span><span class="mi">4</span><span class="o">&gt;</span>
     <span class="n">Enumerating</span> <span class="n">handles</span> <span class="n">of</span> <span class="n">the</span> <span class="n">current</span> <span class="n">process</span><span class="p">:</span>
-        <span class="n">There</span> <span class="n">are</span> <span class="mi">261</span> <span class="n">handles</span> <span class="k">for</span> <span class="n">this</span> <span class="n">process</span>
+        <span class="n">There</span> <span class="n">are</span> <span class="mi">260</span> <span class="n">handles</span> <span class="k">for</span> <span class="n">this</span> <span class="n">process</span>
     <span class="n">Looking</span> <span class="k">for</span> <span class="n">a</span> <span class="n">File</span> <span class="n">handle</span><span class="p">:</span>
-        <span class="n">Handle</span> <span class="ow">is</span> <span class="o">&lt;</span><span class="n">Handle</span> <span class="n">value</span><span class="o">=&lt;</span><span class="mh">0x4</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="n">process</span> <span class="n">pid</span><span class="o">=</span><span class="mi">16752</span><span class="o">&gt;</span>
+        <span class="n">Handle</span> <span class="ow">is</span> <span class="o">&lt;</span><span class="n">Handle</span> <span class="n">value</span><span class="o">=&lt;</span><span class="mh">0x4</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="n">process</span> <span class="n">pid</span><span class="o">=</span><span class="mi">10968</span><span class="o">&gt;</span>
         <span class="n">Name</span> <span class="ow">is</span> <span class="o">&lt;</span>\<span class="n">Device</span>\<span class="n">ConDrv</span><span class="o">&gt;</span>
+
+<span class="n">Dumping</span> <span class="n">the</span> <span class="n">first</span> <span class="n">system</span> <span class="n">module</span>
+    <span class="o">&lt;</span><span class="n">SystemModuleWow64</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;\SystemRoot\system32</span><span class="se">\n</span><span class="s2">toskrnl.exe&quot;</span> <span class="n">base</span><span class="o">=</span><span class="mh">0xfffff803f9697000</span><span class="o">&gt;</span>
+        <span class="n">ImageName</span> <span class="o">=</span> \<span class="n">SystemRoot</span>\<span class="n">system32</span>\<span class="n">ntoskrnl</span><span class="o">.</span><span class="n">exe</span>
+        <span class="n">Base</span> <span class="o">=</span> <span class="mh">0xfffff803f9697000</span>
+        <span class="n">Size</span> <span class="o">=</span> <span class="mh">0x8d5000</span>
+        <span class="n">Flags</span> <span class="o">=</span> <span class="mh">0x8804000</span>
+        <span class="n">LoadCount</span> <span class="o">=</span> <span class="mi">139</span>
 </pre></div>
 </div>
 </div>
@@ -669,8 +688,383 @@ Sections: [&lt;PESection &quot;.text&quot;&gt;, &lt;PESection &quot;.rdata&quot;
 </pre></div>
 </div>
 </div>
+<div class="section" id="scheduled-tasks">
+<span id="sample-scheduled-task"></span><h2>17.5. Scheduled tasks<a class="headerlink" href="#scheduled-tasks" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os.path</span>
+<span class="kn">import</span> <span class="nn">pprint</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span> <span class="o">+</span> <span class="s2">&quot;\..\..&quot;</span><span class="p">))</span>
+
+<span class="kn">import</span> <span class="nn">windows</span>
+<span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
+
+<span class="n">tscheduler</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">task_scheduler</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Task scheduler is </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tscheduler</span><span class="p">))</span>
+<span class="n">root</span> <span class="o">=</span> <span class="n">tscheduler</span><span class="o">.</span><span class="n">root</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Root folder is </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">root</span><span class="p">))</span>
+<span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;Listing sub folders&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">subfolder</span> <span class="ow">in</span> <span class="n">root</span><span class="o">.</span><span class="n">folders</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   * </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">subfolder</span><span class="p">))</span>
+    <span class="n">last_name</span> <span class="o">=</span> <span class="n">subfolder</span><span class="o">.</span><span class="n">name</span>
+
+<span class="n">demo_folder</span> <span class="o">=</span> <span class="s2">&quot;\Microsoft\Windows\AppID&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Manually opening subfolder &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">demo_folder</span><span class="p">))</span>
+<span class="n">subfolder</span> <span class="o">=</span> <span class="n">root</span><span class="p">(</span><span class="n">demo_folder</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Working into </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">subfolder</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">task</span> <span class="ow">in</span> <span class="n">subfolder</span><span class="o">.</span><span class="n">tasks</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   * </span><span class="si">{task.name}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">task</span><span class="o">=</span><span class="n">task</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Analysing task </span><span class="si">{task}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">task</span><span class="o">=</span><span class="n">task</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   * Name: &lt;</span><span class="si">{task.name}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">task</span><span class="o">=</span><span class="n">task</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   * Path: &lt;</span><span class="si">{task.path}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">task</span><span class="o">=</span><span class="n">task</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   * Definition: &lt;</span><span class="si">{task.definition}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">task</span><span class="o">=</span><span class="n">task</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Listing actions:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="n">task</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">actions</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   * Action: &lt;</span><span class="si">{action}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="n">action</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;     * Type: &lt;</span><span class="si">{action.type}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="n">action</span><span class="p">))</span>
+    <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">action</span><span class="p">,</span> <span class="s2">&quot;path&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;     * path: &lt;</span><span class="si">{action.path}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="n">action</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;     * arguments: &lt;</span><span class="si">{action.arguments}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="n">action</span><span class="p">))</span>
+
+    <span class="c1"># import pdb;pdb.set_trace()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Listing triggers:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">trigger</span> <span class="ow">in</span> <span class="n">task</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">triggers</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   * Trigger type: &lt;</span><span class="si">{trigger.type}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">trigger</span><span class="o">=</span><span class="n">trigger</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="n">DEMO_FOLDER_NAME</span> <span class="o">=</span> <span class="s2">&quot;PFW_DEMO_FOLDER&quot;</span>
+<span class="n">DEMO_TASK_NAME</span> <span class="o">=</span> <span class="s2">&quot;PFW_DEMO_TASK&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Creating folder &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">DEMO_FOLDER_NAME</span><span class="p">))</span>
+<span class="n">demo_folder</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">create_folder</span><span class="p">(</span><span class="n">DEMO_FOLDER_NAME</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Demo folder is </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">demo_folder</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Creating Task definition&quot;</span><span class="p">)</span>
+<span class="c1"># Create a Task definition</span>
+<span class="n">new_task_definition</span> <span class="o">=</span> <span class="n">tscheduler</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+<span class="n">actions</span> <span class="o">=</span> <span class="n">new_task_definition</span><span class="o">.</span><span class="n">actions</span>
+<span class="c1"># Add an TASK_ACTION_EXEC action to the task def</span>
+<span class="n">new_action</span> <span class="o">=</span> <span class="n">actions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TASK_ACTION_EXEC</span><span class="p">)</span>
+<span class="n">new_action</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">executable</span>
+<span class="n">new_action</span><span class="o">.</span><span class="n">arguments</span> <span class="o">=</span> <span class="s2">&quot;-c &#39;Hello !&#39;&quot;</span>
+<span class="c1"># Register the new task under &#39;DEMO_TASK_NAME&#39;</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Registering task definition as &lt;</span><span class="si">{0}</span><span class="s2">&gt; in &lt;</span><span class="si">{1}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">DEMO_TASK_NAME</span><span class="p">,</span> <span class="n">demo_folder</span><span class="p">))</span>
+<span class="n">new_task</span> <span class="o">=</span> <span class="n">demo_folder</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">DEMO_TASK_NAME</span><span class="p">,</span> <span class="n">new_task_definition</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Created task is </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">new_task</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Deleting the demo task&quot;</span><span class="p">)</span>
+<span class="k">del</span> <span class="n">demo_folder</span><span class="p">[</span><span class="n">DEMO_TASK_NAME</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Deleting the demo folder&quot;</span><span class="p">)</span>
+<span class="n">root</span><span class="o">.</span><span class="n">delete_folder</span><span class="p">(</span><span class="n">DEMO_FOLDER_NAME</span><span class="p">)</span>
+
+</pre></div>
+</div>
+<p>Output</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span> <span class="n">python</span> <span class="n">scheduled_tasks</span>\<span class="n">scheduled_task</span><span class="o">.</span><span class="n">py</span>
+<span class="n">Task</span> <span class="n">scheduler</span> <span class="ow">is</span> <span class="o">&lt;</span><span class="n">TaskService</span> <span class="n">at</span> <span class="mh">0x6f2a1c0</span><span class="o">&gt;</span>
+<span class="n">Root</span> <span class="n">folder</span> <span class="ow">is</span> <span class="o">&lt;</span><span class="n">TaskFolder</span> <span class="s2">&quot;</span><span class="se">\&quot;</span><span class="s2"> at 0x6f2a2b0&gt;</span>
+<span class="n">Listing</span> <span class="n">sub</span> <span class="n">folders</span>
+   <span class="o">*</span> <span class="o">&lt;</span><span class="n">TaskFolder</span> <span class="s2">&quot;\ASUS&quot;</span> <span class="n">at</span> <span class="mh">0x6f2a350</span><span class="o">&gt;</span>
+   <span class="o">*</span> <span class="o">&lt;</span><span class="n">TaskFolder</span> <span class="s2">&quot;\Intel&quot;</span> <span class="n">at</span> <span class="mh">0x6f2a300</span><span class="o">&gt;</span>
+   <span class="o">*</span> <span class="o">&lt;</span><span class="n">TaskFolder</span> <span class="s2">&quot;\Microsoft&quot;</span> <span class="n">at</span> <span class="mh">0x6f2a3a0</span><span class="o">&gt;</span>
+<span class="n">Manually</span> <span class="n">opening</span> <span class="n">subfolder</span> <span class="o">&lt;</span>\<span class="n">Microsoft</span>\<span class="n">Windows</span>\<span class="n">AppID</span><span class="o">&gt;</span>
+<span class="n">Working</span> <span class="n">into</span> <span class="o">&lt;</span><span class="n">TaskFolder</span> <span class="s2">&quot;\Microsoft\Windows\AppID&quot;</span> <span class="n">at</span> <span class="mh">0x6f2a3f0</span><span class="o">&gt;</span>
+   <span class="o">*</span> <span class="n">PolicyConverter</span>
+   <span class="o">*</span> <span class="n">SmartScreenSpecific</span>
+   <span class="o">*</span> <span class="n">VerifiedPublisherCertStoreCheck</span>
+
+<span class="n">Analysing</span> <span class="n">task</span> <span class="o">&lt;</span><span class="n">Task</span> <span class="s2">&quot;VerifiedPublisherCertStoreCheck&quot;</span> <span class="n">at</span> <span class="mh">0x6f2a300</span><span class="o">&gt;</span>
+   <span class="o">*</span> <span class="n">Name</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">VerifiedPublisherCertStoreCheck</span><span class="o">&gt;</span>
+   <span class="o">*</span> <span class="n">Path</span><span class="p">:</span> <span class="o">&lt;</span>\<span class="n">Microsoft</span>\<span class="n">Windows</span>\<span class="n">AppID</span>\<span class="n">VerifiedPublisherCertStoreCheck</span><span class="o">&gt;</span>
+   <span class="o">*</span> <span class="n">Definition</span><span class="p">:</span> <span class="o">&lt;&lt;</span><span class="n">TaskDefinition</span> <span class="n">at</span> <span class="mh">0x6f2a3a0</span><span class="o">&gt;&gt;</span>
+<span class="n">Listing</span> <span class="n">actions</span><span class="p">:</span>
+   <span class="o">*</span> <span class="n">Action</span><span class="p">:</span> <span class="o">&lt;&lt;</span><span class="n">ExecAction</span> <span class="n">at</span> <span class="mh">0x6f2a350</span><span class="o">&gt;&gt;</span>
+     <span class="o">*</span> <span class="n">Type</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">TASK_ACTION_EXEC</span><span class="p">(</span><span class="mh">0x0</span><span class="n">L</span><span class="p">)</span><span class="o">&gt;</span>
+     <span class="o">*</span> <span class="n">path</span><span class="p">:</span> <span class="o">&lt;%</span><span class="n">windir</span><span class="o">%</span>\<span class="n">system32</span>\<span class="n">appidcertstorecheck</span><span class="o">.</span><span class="n">exe</span><span class="o">&gt;</span>
+     <span class="o">*</span> <span class="n">arguments</span><span class="p">:</span> <span class="o">&lt;</span><span class="kc">None</span><span class="o">&gt;</span>
+<span class="n">Listing</span> <span class="n">triggers</span><span class="p">:</span>
+   <span class="o">*</span> <span class="n">Trigger</span> <span class="nb">type</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">TASK_TRIGGER_BOOT</span><span class="p">(</span><span class="mh">0x8</span><span class="n">L</span><span class="p">)</span><span class="o">&gt;</span>
+
+<span class="n">Creating</span> <span class="n">folder</span> <span class="o">&lt;</span><span class="n">PFW_DEMO_FOLDER</span><span class="o">&gt;</span>
+<span class="n">Demo</span> <span class="n">folder</span> <span class="ow">is</span> <span class="o">&lt;</span><span class="n">TaskFolder</span> <span class="s2">&quot;\PFW_DEMO_FOLDER&quot;</span> <span class="n">at</span> <span class="mh">0x6f2a3a0</span><span class="o">&gt;</span>
+<span class="n">Creating</span> <span class="n">Task</span> <span class="n">definition</span>
+<span class="n">Registering</span> <span class="n">task</span> <span class="n">definition</span> <span class="k">as</span> <span class="o">&lt;</span><span class="n">PFW_DEMO_TASK</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;&lt;</span><span class="n">TaskFolder</span> <span class="s2">&quot;\PFW_DEMO_FOLDER&quot;</span> <span class="n">at</span> <span class="mh">0x6f2a3a0</span><span class="o">&gt;&gt;</span>
+<span class="n">Created</span> <span class="n">task</span> <span class="ow">is</span> <span class="o">&lt;</span><span class="n">Task</span> <span class="s2">&quot;PFW_DEMO_TASK&quot;</span> <span class="n">at</span> <span class="mh">0x6f2a530</span><span class="o">&gt;</span>
+<span class="n">Deleting</span> <span class="n">the</span> <span class="n">demo</span> <span class="n">task</span>
+<span class="n">Deleting</span> <span class="n">the</span> <span class="n">demo</span> <span class="n">folder</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="event-log">
+<span id="sample-event-log"></span><h2>17.6. Event Log<a class="headerlink" href="#event-log" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">windows</span>
+<span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
+
+<span class="n">evtlogmgr</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">event_log</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Event log Manager is: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">evtlogmgr</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;They are &lt;</span><span class="si">{0}</span><span class="s2">&gt; channels&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">evtlogmgr</span><span class="o">.</span><span class="n">channels</span><span class="p">))))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;They are &lt;</span><span class="si">{0}</span><span class="s2">&gt; publishers&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">evtlogmgr</span><span class="o">.</span><span class="n">publishers</span><span class="p">))))</span>
+
+
+<span class="n">FIREWALL_CHANNEL</span> <span class="o">=</span> <span class="s2">&quot;Microsoft-Windows-Windows Firewall With Advanced Security/Firewall&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Openning channel &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">FIREWALL_CHANNEL</span><span class="p">))</span>
+<span class="n">evtchan</span> <span class="o">=</span> <span class="n">evtlogmgr</span><span class="p">[</span><span class="n">FIREWALL_CHANNEL</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Channel is </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">evtchan</span><span class="p">))</span>
+<span class="c1"># Note that `evtchan.events` is an alias for `evtchan.query().all()`</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The channel contains &lt;</span><span class="si">{0}</span><span class="s2">&gt; events&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">evtchan</span><span class="o">.</span><span class="n">events</span><span class="p">)))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="n">EVT_QUERY</span> <span class="o">=</span> <span class="s2">&quot;Event/EventData[Data=&#39;C:</span><span class="se">\\</span><span class="s2">WINDOWS</span><span class="se">\\</span><span class="s2">System32</span><span class="se">\\</span><span class="s2">svchost.exe&#39;] and Event/System[EventID=2006]&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;Querying &quot;</span><span class="si">{0}</span><span class="s2">&quot;&gt;&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">EVT_QUERY</span><span class="p">))</span>
+<span class="n">query</span> <span class="o">=</span> <span class="n">evtchan</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">EVT_QUERY</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Query is </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">query</span><span class="p">))</span>
+<span class="n">event_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;List contains </span><span class="si">{0}</span><span class="s2"> event&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">event_list</span><span class="p">)))</span>
+<span class="n">event</span> <span class="o">=</span> <span class="n">event_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;First event is </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">event</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;System values:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot; * ID: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">id</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot; * version: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">version</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot; * level: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">level</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot; * opcode: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">opcode</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot; * time_created: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">time_created</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot; * ID: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">id</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Event specific values:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">event</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; * &lt;</span><span class="si">{0}</span><span class="s2">&gt; -&gt; &lt;</span><span class="si">{1}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="n">evtmeta</span> <span class="o">=</span>  <span class="n">event</span><span class="o">.</span><span class="n">metadata</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Event metadata is </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">evtmeta</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot; * id : </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">evtmeta</span><span class="o">.</span><span class="n">id</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot; * channel_id : </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">evtmeta</span><span class="o">.</span><span class="n">channel_id</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot; * message_id : </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">evtmeta</span><span class="o">.</span><span class="n">message_id</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot; * event_data : </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">evtmeta</span><span class="o">.</span><span class="n">event_data</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot; * EventData template :</span><span class="se">\n</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">evtmeta</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\r\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)))</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Exploring complex Evt types:&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Channel is still </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">evtchan</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Channel config is </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">evtchan</span><span class="o">.</span><span class="n">config</span><span class="p">))</span>
+<span class="n">publisher</span> <span class="o">=</span> <span class="n">evtchan</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">publisher</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Channel publisher is </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">publisher</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Channel publisher metadata is </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">publisher</span><span class="o">.</span><span class="n">metadata</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Publisher&#39;s channels are:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">chan</span> <span class="ow">in</span> <span class="n">publisher</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">channels</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; * </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">chan</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Some publisher&#39;s event metadata are:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">evtmeta</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">publisher</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">events_metadata</span><span class="p">)[:</span><span class="mi">3</span><span class="p">]:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; * </span><span class="si">{0}</span><span class="s2">: id=</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">evtmeta</span><span class="p">,</span> <span class="n">evtmeta</span><span class="o">.</span><span class="n">id</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Output</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span> <span class="n">python</span> <span class="n">event_log</span>\<span class="n">eventlog</span><span class="o">.</span><span class="n">py</span>
+<span class="n">Event</span> <span class="n">log</span> <span class="n">Manager</span> <span class="ow">is</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">windows</span><span class="o">.</span><span class="n">winobject</span><span class="o">.</span><span class="n">event_log</span><span class="o">.</span><span class="n">EvtlogManager</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x0592DB70</span><span class="o">&gt;</span>
+<span class="n">They</span> <span class="n">are</span> <span class="o">&lt;</span><span class="mi">1155</span><span class="o">&gt;</span> <span class="n">channels</span>
+<span class="n">They</span> <span class="n">are</span> <span class="o">&lt;</span><span class="mi">1179</span><span class="o">&gt;</span> <span class="n">publishers</span>
+<span class="n">Openning</span> <span class="n">channel</span> <span class="o">&lt;</span><span class="n">Microsoft</span><span class="o">-</span><span class="n">Windows</span><span class="o">-</span><span class="n">Windows</span> <span class="n">Firewall</span> <span class="n">With</span> <span class="n">Advanced</span> <span class="n">Security</span><span class="o">/</span><span class="n">Firewall</span><span class="o">&gt;</span>
+<span class="n">Channel</span> <span class="ow">is</span> <span class="o">&lt;</span><span class="n">EvtChannel</span> <span class="s2">&quot;Microsoft-Windows-Windows Firewall With Advanced Security/Firewall&quot;</span><span class="o">&gt;</span>
+<span class="n">The</span> <span class="n">channel</span> <span class="n">contains</span> <span class="o">&lt;</span><span class="mi">1037</span><span class="o">&gt;</span> <span class="n">events</span>
+
+<span class="n">Querying</span> <span class="s2">&quot;Event/EventData[Data=&#39;C:\WINDOWS\System32\svchost.exe&#39;] and Event/System[EventID=2006]&quot;</span><span class="o">&gt;</span>
+<span class="n">Query</span> <span class="ow">is</span> <span class="o">&lt;</span><span class="n">EvtQuery</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x06E9F440</span><span class="o">&gt;</span>
+<span class="n">List</span> <span class="n">contains</span> <span class="mi">304</span> <span class="n">event</span>
+
+<span class="n">First</span> <span class="n">event</span> <span class="ow">is</span> <span class="o">&lt;</span><span class="n">EvtEvent</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;2006&quot;</span> <span class="n">time</span><span class="o">=</span><span class="s2">&quot;2018-05-06 08:03:06.210109&quot;</span><span class="o">&gt;</span>
+<span class="n">System</span> <span class="n">values</span><span class="p">:</span>
+ <span class="o">*</span> <span class="n">ID</span><span class="p">:</span> <span class="mi">2006</span>
+ <span class="o">*</span> <span class="n">version</span><span class="p">:</span> <span class="mi">0</span>
+ <span class="o">*</span> <span class="n">level</span><span class="p">:</span> <span class="mi">4</span>
+ <span class="o">*</span> <span class="n">opcode</span><span class="p">:</span> <span class="mi">0</span>
+ <span class="o">*</span> <span class="n">time_created</span><span class="p">:</span> <span class="mi">131700673862101088</span>
+ <span class="o">*</span> <span class="n">ID</span><span class="p">:</span> <span class="mi">2006</span>
+<span class="n">Event</span> <span class="n">specific</span> <span class="n">values</span><span class="p">:</span>
+ <span class="o">*</span> <span class="o">&lt;</span><span class="n">ModifyingUser</span><span class="o">&gt;</span> <span class="o">-&gt;</span> <span class="o">&lt;</span><span class="mi">108703760</span><span class="o">&gt;</span>
+ <span class="o">*</span> <span class="o">&lt;</span><span class="n">RuleName</span><span class="o">&gt;</span> <span class="o">-&gt;</span> <span class="o">&lt;</span><span class="n">ByteCodeGeneration</span><span class="o">&gt;</span>
+ <span class="o">*</span> <span class="o">&lt;</span><span class="n">ModifyingApplication</span><span class="o">&gt;</span> <span class="o">-&gt;</span> <span class="o">&lt;</span><span class="n">C</span><span class="p">:</span>\<span class="n">WINDOWS</span>\<span class="n">System32</span>\<span class="n">svchost</span><span class="o">.</span><span class="n">exe</span><span class="o">&gt;</span>
+ <span class="o">*</span> <span class="o">&lt;</span><span class="n">RuleId</span><span class="o">&gt;</span> <span class="o">-&gt;</span> <span class="o">&lt;</span><span class="p">{</span><span class="mi">318</span><span class="n">EF1CF</span><span class="o">-</span><span class="n">A3FA</span><span class="o">-</span><span class="mi">4</span><span class="n">B04</span><span class="o">-</span><span class="mi">8</span><span class="n">AAC</span><span class="o">-</span><span class="mi">712276661117</span><span class="p">}</span><span class="o">&gt;</span>
+
+<span class="n">Event</span> <span class="n">metadata</span> <span class="ow">is</span> <span class="o">&lt;</span><span class="n">EventMetadata</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x06EB96C0</span><span class="o">&gt;</span>
+ <span class="o">*</span> <span class="nb">id</span> <span class="p">:</span> <span class="mi">2006</span>
+ <span class="o">*</span> <span class="n">channel_id</span> <span class="p">:</span> <span class="mi">16</span>
+ <span class="o">*</span> <span class="n">message_id</span> <span class="p">:</span> <span class="mi">2986346454</span>
+ <span class="o">*</span> <span class="n">event_data</span> <span class="p">:</span> <span class="p">[</span><span class="sa">u</span><span class="s1">&#39;RuleId&#39;</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;RuleName&#39;</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;ModifyingUser&#39;</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;ModifyingApplication&#39;</span><span class="p">]</span>
+ <span class="o">*</span> <span class="n">EventData</span> <span class="n">template</span> <span class="p">:</span>
+<span class="o">&lt;</span><span class="n">template</span> <span class="n">xmlns</span><span class="o">=</span><span class="s2">&quot;http://schemas.microsoft.com/win/2004/08/events&quot;</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="n">data</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;RuleId&quot;</span> <span class="n">inType</span><span class="o">=</span><span class="s2">&quot;win:UnicodeString&quot;</span> <span class="n">outType</span><span class="o">=</span><span class="s2">&quot;xs:string&quot;</span><span class="o">/&gt;</span>
+  <span class="o">&lt;</span><span class="n">data</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;RuleName&quot;</span> <span class="n">inType</span><span class="o">=</span><span class="s2">&quot;win:UnicodeString&quot;</span> <span class="n">outType</span><span class="o">=</span><span class="s2">&quot;xs:string&quot;</span><span class="o">/&gt;</span>
+  <span class="o">&lt;</span><span class="n">data</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;ModifyingUser&quot;</span> <span class="n">inType</span><span class="o">=</span><span class="s2">&quot;win:SID&quot;</span> <span class="n">outType</span><span class="o">=</span><span class="s2">&quot;xs:string&quot;</span><span class="o">/&gt;</span>
+  <span class="o">&lt;</span><span class="n">data</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;ModifyingApplication&quot;</span> <span class="n">inType</span><span class="o">=</span><span class="s2">&quot;win:UnicodeString&quot;</span> <span class="n">outType</span><span class="o">=</span><span class="s2">&quot;xs:string&quot;</span><span class="o">/&gt;</span>
+<span class="o">&lt;/</span><span class="n">template</span><span class="o">&gt;</span>
+
+
+<span class="n">Exploring</span> <span class="nb">complex</span> <span class="n">Evt</span> <span class="n">types</span><span class="p">:</span>
+<span class="n">Channel</span> <span class="ow">is</span> <span class="n">still</span> <span class="o">&lt;</span><span class="n">EvtChannel</span> <span class="s2">&quot;Microsoft-Windows-Windows Firewall With Advanced Security/Firewall&quot;</span><span class="o">&gt;</span>
+<span class="n">Channel</span> <span class="n">config</span> <span class="ow">is</span> <span class="o">&lt;</span><span class="n">ChannelConfig</span> <span class="s2">&quot;Microsoft-Windows-Windows Firewall With Advanced Security/Firewall&quot;</span><span class="o">&gt;</span>
+<span class="n">Channel</span> <span class="n">publisher</span> <span class="ow">is</span> <span class="o">&lt;</span><span class="n">EvtPublisher</span> <span class="s2">&quot;Microsoft-Windows-Windows Firewall With Advanced Security&quot;</span><span class="o">&gt;</span>
+<span class="n">Channel</span> <span class="n">publisher</span> <span class="n">metadata</span> <span class="ow">is</span> <span class="o">&lt;</span><span class="n">PublisherMetadata</span> <span class="s2">&quot;Microsoft-Windows-Windows Firewall With Advanced Security&quot;</span><span class="o">&gt;</span>
+<span class="n">Publisher</span><span class="s1">&#39;s channels are:</span>
+ <span class="o">*</span> <span class="o">&lt;</span><span class="n">EvtChannel</span> <span class="s2">&quot;Microsoft-Windows-Windows Firewall With Advanced Security/Firewall&quot;</span><span class="o">&gt;</span>
+ <span class="o">*</span> <span class="o">&lt;</span><span class="n">EvtChannel</span> <span class="s2">&quot;Microsoft-Windows-Windows Firewall With Advanced Security/ConnectionSecurity&quot;</span><span class="o">&gt;</span>
+ <span class="o">*</span> <span class="o">&lt;</span><span class="n">EvtChannel</span> <span class="s2">&quot;Microsoft-Windows-Windows Firewall With Advanced Security/FirewallVerbose&quot;</span><span class="o">&gt;</span>
+ <span class="o">*</span> <span class="o">&lt;</span><span class="n">EvtChannel</span> <span class="s2">&quot;Microsoft-Windows-Windows Firewall With Advanced Security/ConnectionSecurityVerbose&quot;</span><span class="o">&gt;</span>
+ <span class="o">*</span> <span class="o">&lt;</span><span class="n">EvtChannel</span> <span class="s2">&quot;Network Isolation Operational&quot;</span><span class="o">&gt;</span>
+<span class="n">Some</span> <span class="n">publisher</span><span class="s1">&#39;s event metadata are:</span>
+ <span class="o">*</span> <span class="o">&lt;</span><span class="n">EventMetadata</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x06EBE710</span><span class="o">&gt;</span><span class="p">:</span> <span class="nb">id</span><span class="o">=</span><span class="mi">2000</span>
+ <span class="o">*</span> <span class="o">&lt;</span><span class="n">EventMetadata</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x06EBE7B0</span><span class="o">&gt;</span><span class="p">:</span> <span class="nb">id</span><span class="o">=</span><span class="mi">2001</span>
+ <span class="o">*</span> <span class="o">&lt;</span><span class="n">EventMetadata</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x06EBE3F0</span><span class="o">&gt;</span><span class="p">:</span> <span class="nb">id</span><span class="o">=</span><span class="mi">2002</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="object-manager">
+<span id="sample-object-manager"></span><h2>17.7. Object manager<a class="headerlink" href="#object-manager" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os.path</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span> <span class="o">+</span> <span class="s2">&quot;\..\..&quot;</span><span class="p">))</span>
+
+<span class="kn">import</span> <span class="nn">windows</span>
+<span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
+
+<span class="n">object_manager</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">object_manager</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Object manager is </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">object_manager</span><span class="p">))</span>
+<span class="n">root</span> <span class="o">=</span> <span class="n">object_manager</span><span class="o">.</span><span class="n">root</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Root object is </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">root</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Listing some of root-subobject:&quot;</span><span class="p">)</span>
+<span class="c1"># Kernel object of type &#39;Directory&#39; are iterable</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  * </span><span class="si">{0}</span><span class="s2">: </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">obj</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="k">break</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Retrieving &lt;\Rpc Control\lsasspirpc&gt;:&quot;</span><span class="p">)</span>
+<span class="c1"># You can retrieve this value in one request</span>
+<span class="n">x1</span> <span class="o">=</span> <span class="n">root</span><span class="p">[</span><span class="sa">r</span><span class="s2">&quot;\Rpc Control\lsasspirpc&quot;</span><span class="p">]</span>
+<span class="c1"># Sub-directory also allow __getitem__</span>
+<span class="n">x2</span> <span class="o">=</span> <span class="n">root</span><span class="p">[</span><span class="s2">&quot;Rpc Control&quot;</span><span class="p">][</span><span class="s2">&quot;lsasspirpc&quot;</span><span class="p">]</span>
+<span class="c1"># You can directly request the object manager that will request `root`</span>
+<span class="n">x3</span> <span class="o">=</span> <span class="n">object_manager</span><span class="p">[</span><span class="sa">r</span><span class="s2">&quot;\Rpc Control\lsasspirpc&quot;</span><span class="p">]</span>
+<span class="k">assert</span> <span class="n">x1</span><span class="o">.</span><span class="n">fullname</span> <span class="o">==</span> <span class="n">x2</span><span class="o">.</span><span class="n">fullname</span> <span class="o">==</span> <span class="n">x3</span><span class="o">.</span><span class="n">fullname</span>
+
+<span class="n">lsasspirpc</span> <span class="o">=</span> <span class="n">x1</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Object is: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lsasspirpc</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   * name: &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lsasspirpc</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   * path: &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lsasspirpc</span><span class="o">.</span><span class="n">path</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   * fullname: &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lsasspirpc</span><span class="o">.</span><span class="n">fullname</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   * type: &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lsasspirpc</span><span class="o">.</span><span class="n">type</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   * target: &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lsasspirpc</span><span class="o">.</span><span class="n">target</span><span class="p">))</span> <span class="c1"># None on non-symlink</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Looking for a SymbolicLink in &lt;ArcName&gt;&quot;</span><span class="p">)</span>
+<span class="n">slo</span> <span class="o">=</span> <span class="p">[</span><span class="n">o</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">root</span><span class="p">[</span><span class="s2">&quot;ArcName&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">if</span> <span class="n">o</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">&quot;SymbolicLink&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Object is: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">slo</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   * name: &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">slo</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   * target: &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">slo</span><span class="o">.</span><span class="n">target</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Output</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span> <span class="n">python</span> <span class="n">object_manager</span>\<span class="n">object_manager</span><span class="o">.</span><span class="n">py</span>
+<span class="n">Object</span> <span class="n">manager</span> <span class="ow">is</span> <span class="o">&lt;</span><span class="n">windows</span><span class="o">.</span><span class="n">winobject</span><span class="o">.</span><span class="n">object_manager</span><span class="o">.</span><span class="n">ObjectManager</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x0370ED10</span><span class="o">&gt;</span>
+<span class="n">Root</span> <span class="nb">object</span> <span class="ow">is</span> <span class="o">&lt;</span><span class="n">KernelObject</span> <span class="s2">&quot;</span><span class="se">\&quot;</span><span class="s2"> (type=&quot;</span><span class="n">Directory</span><span class="s2">&quot;)&gt;</span>
+
+<span class="n">Listing</span> <span class="n">some</span> <span class="n">of</span> <span class="n">root</span><span class="o">-</span><span class="n">subobject</span><span class="p">:</span>
+  <span class="o">*</span> <span class="n">PendingRenameMutex</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">KernelObject</span> <span class="s2">&quot;\PendingRenameMutex&quot;</span> <span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;Mutant&quot;</span><span class="p">)</span><span class="o">&gt;</span>
+  <span class="o">*</span> <span class="n">ObjectTypes</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">KernelObject</span> <span class="s2">&quot;\ObjectTypes&quot;</span> <span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;Directory&quot;</span><span class="p">)</span><span class="o">&gt;</span>
+  <span class="o">*</span> <span class="n">storqosfltport</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">KernelObject</span> <span class="s2">&quot;\storqosfltport&quot;</span> <span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;FilterConnectionPort&quot;</span><span class="p">)</span><span class="o">&gt;</span>
+  <span class="o">*</span> <span class="n">MicrosoftMalwareProtectionRemoteIoPortWD</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">KernelObject</span> <span class="s2">&quot;\MicrosoftMalwareProtectionRemoteIoPortWD&quot;</span> <span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;FilterConnectionPort&quot;</span><span class="p">)</span><span class="o">&gt;</span>
+
+<span class="n">Retrieving</span> <span class="o">&lt;</span>\<span class="n">Rpc</span> <span class="n">Control</span>\<span class="n">lsasspirpc</span><span class="o">&gt;</span><span class="p">:</span>
+<span class="n">Object</span> <span class="ow">is</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">KernelObject</span> <span class="s2">&quot;\Rpc Control\lsasspirpc&quot;</span> <span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;ALPC Port&quot;</span><span class="p">)</span><span class="o">&gt;</span>
+   <span class="o">*</span> <span class="n">name</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">lsasspirpc</span><span class="o">&gt;</span>
+   <span class="o">*</span> <span class="n">path</span><span class="p">:</span> <span class="o">&lt;</span>\<span class="n">Rpc</span> <span class="n">Control</span><span class="o">&gt;</span>
+   <span class="o">*</span> <span class="n">fullname</span><span class="p">:</span> <span class="o">&lt;</span>\<span class="n">Rpc</span> <span class="n">Control</span>\<span class="n">lsasspirpc</span><span class="o">&gt;</span>
+   <span class="o">*</span> <span class="nb">type</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">ALPC</span> <span class="n">Port</span><span class="o">&gt;</span>
+   <span class="o">*</span> <span class="n">target</span><span class="p">:</span> <span class="o">&lt;</span><span class="kc">None</span><span class="o">&gt;</span>
+
+<span class="n">Looking</span> <span class="k">for</span> <span class="n">a</span> <span class="n">SymbolicLink</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">ArcName</span><span class="o">&gt;</span>
+<span class="n">Object</span> <span class="ow">is</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">KernelObject</span> <span class="s2">&quot;\ArcName\multi(0)disk(0)rdisk(0)&quot;</span> <span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;SymbolicLink&quot;</span><span class="p">)</span><span class="o">&gt;</span>
+   <span class="o">*</span> <span class="n">name</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">multi</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="n">disk</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="n">rdisk</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">&gt;</span>
+   <span class="o">*</span> <span class="n">target</span><span class="p">:</span> <span class="o">&lt;</span>\<span class="n">Device</span>\<span class="n">Harddisk0</span>\<span class="n">Partition0</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<div class="section" id="find-objects">
+<h3>17.7.1. find objects<a class="headerlink" href="#find-objects" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">argparse</span>
+
+<span class="kn">import</span> <span class="nn">windows</span>
+<span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
+
+<span class="k">def</span> <span class="nf">obj_with_link</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">target</span>
+    <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2"> -&gt; &lt;</span><span class="si">{1}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">find_name</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">findname</span><span class="p">):</span>
+    <span class="n">TODO</span> <span class="o">=</span> <span class="p">[</span><span class="n">root</span><span class="p">]</span>
+    <span class="k">while</span> <span class="n">TODO</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">TODO</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">findname</span> <span class="ow">in</span> <span class="n">name</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;* </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">obj_with_link</span><span class="p">(</span><span class="n">obj</span><span class="p">)))</span>
+                <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">&quot;Directory&quot;</span><span class="p">:</span>
+                    <span class="n">TODO</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">gdef</span><span class="o">.</span><span class="n">NtStatusException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&lt;</span><span class="si">{0}</span><span class="s2">&gt; -&gt; </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">fullname</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+
+
+
+<span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="vm">__file__</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;?&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;ls&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;The name of the object to find&#39;</span><span class="p">)</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+<span class="n">objmanag</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">object_manager</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Looking for object name containing &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+<span class="n">find_name</span><span class="p">(</span><span class="n">objmanag</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">res</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+
+</pre></div>
+</div>
+<p>Output</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span> <span class="n">python</span> <span class="n">object_manager</span>\<span class="n">findobj</span><span class="o">.</span><span class="n">py</span>
+<span class="n">Looking</span> <span class="k">for</span> <span class="nb">object</span> <span class="n">name</span> <span class="n">containing</span> <span class="o">&lt;</span><span class="n">ls</span><span class="o">&gt;</span>
+<span class="o">*</span> <span class="o">&lt;</span><span class="n">KernelObject</span> <span class="s2">&quot;\KnownDlls32&quot;</span> <span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;Directory&quot;</span><span class="p">)</span><span class="o">&gt;</span>
+<span class="o">*</span> <span class="o">&lt;</span><span class="n">KernelObject</span> <span class="s2">&quot;\Win32kCrossSessionGlobals&quot;</span> <span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;Section&quot;</span><span class="p">)</span><span class="o">&gt;</span>
+<span class="o">*</span> <span class="o">&lt;</span><span class="n">KernelObject</span> <span class="s2">&quot;\KnownDlls&quot;</span> <span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;Directory&quot;</span><span class="p">)</span><span class="o">&gt;</span>
+<span class="o">&lt;</span>\<span class="n">DriverStores</span>\<span class="n">SYSTEM</span><span class="o">&gt;</span> <span class="o">-&gt;</span> <span class="n">STATUS_ACCESS_DENIED</span>
+<span class="o">*</span> <span class="o">&lt;</span><span class="n">KernelObject</span> <span class="s2">&quot;\Device\MailslotRedirector&quot;</span> <span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;SymbolicLink&quot;</span><span class="p">)</span><span class="o">&gt;</span> <span class="o">-&gt;</span> <span class="o">&lt;</span>\<span class="n">Device</span>\<span class="n">Mup</span>\<span class="p">;</span><span class="n">MailslotRedirector</span><span class="o">&gt;</span>
+<span class="o">*</span> <span class="o">&lt;</span><span class="n">KernelObject</span> <span class="s2">&quot;\Device\Mailslot&quot;</span> <span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;Device&quot;</span><span class="p">)</span><span class="o">&gt;</span>
+<span class="o">&lt;</span>\<span class="n">Device</span>\<span class="mi">00000020</span><span class="o">&gt;</span> <span class="o">-&gt;</span> <span class="n">STATUS_ACCESS_DENIED</span>
+<span class="o">&lt;</span>\<span class="n">Device</span>\<span class="mi">00000020</span><span class="o">&gt;</span> <span class="o">-&gt;</span> <span class="n">STATUS_ACCESS_DENIED</span>
+<span class="o">&lt;</span>\<span class="n">Device</span>\<span class="mi">00000020</span><span class="o">&gt;</span> <span class="o">-&gt;</span> <span class="n">STATUS_ACCESS_DENIED</span>
+<span class="o">&lt;</span>\<span class="n">Device</span>\<span class="mi">00000020</span><span class="o">&gt;</span> <span class="o">-&gt;</span> <span class="n">STATUS_ACCESS_DENIED</span>
+<span class="o">&lt;</span>\<span class="n">Device</span>\<span class="mi">00000020</span><span class="o">&gt;</span> <span class="o">-&gt;</span> <span class="n">STATUS_ACCESS_DENIED</span>
+<span class="o">&lt;</span>\<span class="n">KernelObjects</span>\<span class="n">PrefetchTracesReady</span><span class="o">&gt;</span> <span class="o">-&gt;</span> <span class="n">STATUS_ACCESS_DENIED</span>
+<span class="o">&lt;</span>\<span class="n">KnownDlls</span>\<span class="n">powrprof</span><span class="o">.</span><span class="n">dll</span><span class="o">&gt;</span> <span class="o">-&gt;</span> <span class="n">STATUS_ACCESS_DENIED</span>
+<span class="o">*</span> <span class="o">&lt;</span><span class="n">KernelObject</span> <span class="s2">&quot;\RPC Control\lsapolicylookup&quot;</span> <span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;ALPC Port&quot;</span><span class="p">)</span><span class="o">&gt;</span>
+<span class="o">*</span> <span class="o">&lt;</span><span class="n">KernelObject</span> <span class="s2">&quot;\RPC Control\lsacap&quot;</span> <span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;ALPC Port&quot;</span><span class="p">)</span><span class="o">&gt;</span>
+<span class="o">*</span> <span class="o">&lt;</span><span class="n">KernelObject</span> <span class="s2">&quot;\RPC Control\lsasspirpc&quot;</span> <span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;ALPC Port&quot;</span><span class="p">)</span><span class="o">&gt;</span>
+<span class="o">&lt;</span>\<span class="n">Windows</span>\<span class="n">SbApiPort</span><span class="o">&gt;</span> <span class="o">-&gt;</span> <span class="n">STATUS_ACCESS_DENIED</span>
+<span class="o">&lt;</span>\<span class="n">Windows</span>\<span class="n">SbApiPort</span><span class="o">&gt;</span> <span class="o">-&gt;</span> <span class="n">STATUS_ACCESS_DENIED</span>
+<span class="o">&lt;</span>\<span class="n">Sessions</span>\<span class="n">BNOLINKS</span>\<span class="mi">1</span><span class="o">&gt;</span> <span class="o">-&gt;</span> <span class="n">STATUS_ACCESS_DENIED</span>
+<span class="o">&lt;</span>\<span class="n">Sessions</span>\<span class="n">BNOLINKS</span>\<span class="mi">1</span><span class="o">&gt;</span> <span class="o">-&gt;</span> <span class="n">STATUS_ACCESS_DENIED</span>
+<span class="o">&lt;</span>\<span class="n">Sessions</span>\<span class="n">BNOLINKS</span>\<span class="mi">1</span><span class="o">&gt;</span> <span class="o">-&gt;</span> <span class="n">STATUS_ACCESS_DENIED</span>
+</pre></div>
+</div>
+</div>
+</div>
 <div class="section" id="windows-wintrust">
-<span id="sample-wintrust"></span><h2>17.5. <code class="docutils literal notranslate"><span class="pre">windows.wintrust</span></code><a class="headerlink" href="#windows-wintrust" title="Permalink to this headline">¶</a></h2>
+<span id="sample-wintrust"></span><h2>17.8. <code class="docutils literal notranslate"><span class="pre">windows.wintrust</span></code><a class="headerlink" href="#windows-wintrust" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span> <span class="o">+</span> <span class="s2">&quot;\..\..&quot;</span><span class="p">))</span>
@@ -722,9 +1116,9 @@ Sections: [&lt;PESection &quot;.text&quot;&gt;, &lt;PESection &quot;.rdata&quot;
 </div>
 </div>
 <div class="section" id="vectoredexception">
-<span id="sample-vectoredexception"></span><h2>17.6. <code class="xref py py-func docutils literal notranslate"><span class="pre">VectoredException()</span></code><a class="headerlink" href="#vectoredexception" title="Permalink to this headline">¶</a></h2>
+<span id="sample-vectoredexception"></span><h2>17.9. <code class="xref py py-func docutils literal notranslate"><span class="pre">VectoredException()</span></code><a class="headerlink" href="#vectoredexception" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="in-local-process">
-<h3>17.6.1. In local process<a class="headerlink" href="#in-local-process" title="Permalink to this headline">¶</a></h3>
+<h3>17.9.1. In local process<a class="headerlink" href="#in-local-process" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
@@ -794,7 +1188,7 @@ Sections: [&lt;PESection &quot;.text&quot;&gt;, &lt;PESection &quot;.rdata&quot;
 </div>
 </div>
 <div class="section" id="in-remote-process">
-<h3>17.6.2. In remote process<a class="headerlink" href="#in-remote-process" title="Permalink to this headline">¶</a></h3>
+<h3>17.9.2. In remote process<a class="headerlink" href="#in-remote-process" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
@@ -896,9 +1290,9 @@ No more tracing !
 </div>
 </div>
 <div class="section" id="debugging">
-<span id="sample-debugger"></span><h2>17.7. Debugging<a class="headerlink" href="#debugging" title="Permalink to this headline">¶</a></h2>
+<span id="sample-debugger"></span><h2>17.10. Debugging<a class="headerlink" href="#debugging" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="debugger">
-<h3>17.7.1. <code class="xref py py-class docutils literal notranslate"><span class="pre">Debugger</span></code><a class="headerlink" href="#debugger" title="Permalink to this headline">¶</a></h3>
+<h3>17.10.1. <code class="xref py py-class docutils literal notranslate"><span class="pre">Debugger</span></code><a class="headerlink" href="#debugger" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
@@ -975,7 +1369,7 @@ No more tracing !
 </pre></div>
 </div>
 <div class="section" id="single-stepping">
-<h4>17.7.1.1. Single stepping<a class="headerlink" href="#single-stepping" title="Permalink to this headline">¶</a></h4>
+<h4>17.10.1.1. Single stepping<a class="headerlink" href="#single-stepping" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
@@ -1061,7 +1455,7 @@ No more tracing !
 </div>
 </div>
 <div class="section" id="windows-debug-functionbp">
-<h4>17.7.1.2. <a class="reference internal" href="debug.html#windows.debug.FunctionBP" title="windows.debug.FunctionBP"><code class="xref py py-class docutils literal notranslate"><span class="pre">windows.debug.FunctionBP</span></code></a><a class="headerlink" href="#windows-debug-functionbp" title="Permalink to this headline">¶</a></h4>
+<h4>17.10.1.2. <a class="reference internal" href="debug.html#windows.debug.FunctionBP" title="windows.debug.FunctionBP"><code class="xref py py-class docutils literal notranslate"><span class="pre">windows.debug.FunctionBP</span></code></a><a class="headerlink" href="#windows-debug-functionbp" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
@@ -1128,7 +1522,7 @@ Exiting process
 </div>
 </div>
 <div class="section" id="debugger-attach">
-<span id="sample-debugger-attach"></span><h4>17.7.1.3. <a class="reference internal" href="debug.html#windows.debug.Debugger.attach" title="windows.debug.Debugger.attach"><code class="xref py py-func docutils literal notranslate"><span class="pre">Debugger.attach</span></code></a><a class="headerlink" href="#debugger-attach" title="Permalink to this headline">¶</a></h4>
+<span id="sample-debugger-attach"></span><h4>17.10.1.3. <a class="reference internal" href="debug.html#windows.debug.Debugger.attach" title="windows.debug.Debugger.attach"><code class="xref py py-func docutils literal notranslate"><span class="pre">Debugger.attach</span></code></a><a class="headerlink" href="#debugger-attach" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
@@ -1181,7 +1575,7 @@ Exiting process
 </div>
 </div>
 <div class="section" id="native-code-tester">
-<h4>17.7.1.4. Native code tester<a class="headerlink" href="#native-code-tester" title="Permalink to this headline">¶</a></h4>
+<h4>17.10.1.4. Native code tester<a class="headerlink" href="#native-code-tester" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">argparse</span>
 
@@ -1281,6 +1675,11 @@ Exiting process
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&lt;Normal terminaison&gt;&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&lt;</span><span class="si">{0}</span><span class="s2">&gt; at &lt;</span><span class="si">{1:#x}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">exc_code</span><span class="p">,</span> <span class="n">exc_addr</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">exc_code</span> <span class="o">==</span> <span class="n">EXCEPTION_ACCESS_VIOLATION</span><span class="p">:</span>
+                <span class="n">exc_infos</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">ExceptionRecord</span><span class="o">.</span><span class="n">ExceptionInformation</span>
+                <span class="n">read_write</span> <span class="o">=</span> <span class="s2">&quot;write&quot;</span> <span class="k">if</span> <span class="n">exc_infos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">else</span> <span class="s2">&quot;read&quot;</span>
+                <span class="n">target_addr</span> <span class="o">=</span> <span class="n">exc_infos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   * Access of type &lt;</span><span class="si">{0}</span><span class="s2">&gt; at address &lt;</span><span class="si">{1:#x}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">read_write</span><span class="p">,</span> <span class="n">target_addr</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">report_ctx_diff</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context_exec</span><span class="p">,</span> <span class="n">ctx</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
         <span class="k">return</span>
@@ -1445,9 +1844,9 @@ Exiting process
 </div>
 </div>
 <div class="section" id="localdebugger">
-<span id="sample-local-debugger"></span><h3>17.7.2. <code class="xref py py-class docutils literal notranslate"><span class="pre">LocalDebugger</span></code><a class="headerlink" href="#localdebugger" title="Permalink to this headline">¶</a></h3>
+<span id="sample-local-debugger"></span><h3>17.10.2. <code class="xref py py-class docutils literal notranslate"><span class="pre">LocalDebugger</span></code><a class="headerlink" href="#localdebugger" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="in-current-process">
-<h4>17.7.2.1. In current process<a class="headerlink" href="#in-current-process" title="Permalink to this headline">¶</a></h4>
+<h4>17.10.2.1. In current process<a class="headerlink" href="#in-current-process" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
@@ -1506,7 +1905,7 @@ Done!
 </div>
 </div>
 <div class="section" id="id1">
-<h4>17.7.2.2. In remote process<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
+<h4>17.10.2.2. In remote process<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
@@ -1582,7 +1981,7 @@ Done!
 </div>
 </div>
 <div class="section" id="wmi-requests">
-<span id="wmi-request"></span><h2>17.8. WMI requests<a class="headerlink" href="#wmi-requests" title="Permalink to this headline">¶</a></h2>
+<span id="wmi-request"></span><h2>17.11. WMI requests<a class="headerlink" href="#wmi-requests" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
@@ -1662,9 +2061,9 @@ Done!
 </div>
 </div>
 <div class="section" id="windows-com">
-<span id="sample-com"></span><h2>17.9. <a class="reference internal" href="com.html#module-windows.com" title="windows.com"><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.com</span></code></a><a class="headerlink" href="#windows-com" title="Permalink to this headline">¶</a></h2>
+<span id="sample-com"></span><h2>17.12. <a class="reference internal" href="com.html#module-windows.com" title="windows.com"><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.com</span></code></a><a class="headerlink" href="#windows-com" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="inetfwpolicy2">
-<span id="sample-com-firewall"></span><h3>17.9.1. <code class="docutils literal notranslate"><span class="pre">INetFwPolicy2</span></code><a class="headerlink" href="#inetfwpolicy2" title="Permalink to this headline">¶</a></h3>
+<span id="sample-com-firewall"></span><h3>17.12.1. <code class="docutils literal notranslate"><span class="pre">INetFwPolicy2</span></code><a class="headerlink" href="#inetfwpolicy2" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
@@ -1719,7 +2118,7 @@ Done!
 </div>
 </div>
 <div class="section" id="icallinterceptor">
-<span id="sample-com-icallinterceptor"></span><h3>17.9.2. <code class="docutils literal notranslate"><span class="pre">ICallInterceptor</span></code><a class="headerlink" href="#icallinterceptor" title="Permalink to this headline">¶</a></h3>
+<span id="sample-com-icallinterceptor"></span><h3>17.12.2. <code class="docutils literal notranslate"><span class="pre">ICallInterceptor</span></code><a class="headerlink" href="#icallinterceptor" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">windows</span>
 <span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
 <span class="kn">from</span> <span class="nn">windows</span> <span class="k">import</span> <span class="n">winproxy</span>
@@ -1820,9 +2219,9 @@ After call: (&lt;ICallFrameEvents object at 0x066EF3F0&gt;, 107934504)
 </div>
 </div>
 <div class="section" id="windows-crypto">
-<h2>17.10. <a class="reference internal" href="crypto.html#module-windows.crypto" title="windows.crypto"><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.crypto</span></code></a><a class="headerlink" href="#windows-crypto" title="Permalink to this headline">¶</a></h2>
+<h2>17.13. <a class="reference internal" href="crypto.html#module-windows.crypto" title="windows.crypto"><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.crypto</span></code></a><a class="headerlink" href="#windows-crypto" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="encryption-demo">
-<span id="sample-crypto-encryption"></span><h3>17.10.1. Encryption demo<a class="headerlink" href="#encryption-demo" title="Permalink to this headline">¶</a></h3>
+<span id="sample-crypto-encryption"></span><h3>17.13.1. Encryption demo<a class="headerlink" href="#encryption-demo" title="Permalink to this headline">¶</a></h3>
 <p>This sample is a working POC able to generate key-pair, encrypt and decrypt file.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">argparse</span>
 <span class="kn">import</span> <span class="nn">getpass</span>
@@ -1999,7 +2398,7 @@ Result = &lt;my secret message&gt;
 </div>
 </div>
 <div class="section" id="certificate-demo">
-<span id="sample-crypto-certificate"></span><h3>17.10.2. Certificate demo<a class="headerlink" href="#certificate-demo" title="Permalink to this headline">¶</a></h3>
+<span id="sample-crypto-certificate"></span><h3>17.13.2. Certificate demo<a class="headerlink" href="#certificate-demo" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">hashlib</span>
 <span class="kn">import</span> <span class="nn">windows.crypto</span>
 
@@ -2130,9 +2529,9 @@ File embdeds 2 certificate(s):
 </div>
 </div>
 <div class="section" id="windows-alpc">
-<h2>17.11. <a class="reference internal" href="alpc.html#module-windows.alpc" title="windows.alpc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.alpc</span></code></a><a class="headerlink" href="#windows-alpc" title="Permalink to this headline">¶</a></h2>
+<h2>17.14. <a class="reference internal" href="alpc.html#module-windows.alpc" title="windows.alpc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.alpc</span></code></a><a class="headerlink" href="#windows-alpc" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="simple-alpc-communication">
-<span id="sample-alpc"></span><h3>17.11.1. simple alpc communication<a class="headerlink" href="#simple-alpc-communication" title="Permalink to this headline">¶</a></h3>
+<span id="sample-alpc"></span><h3>17.14.1. simple alpc communication<a class="headerlink" href="#simple-alpc-communication" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">multiprocessing</span>
 
 <span class="kn">import</span> <span class="nn">windows.alpc</span>
@@ -2202,7 +2601,7 @@ BYE
 </div>
 </div>
 <div class="section" id="advanced-alpc-communication">
-<span id="sample-advanced-alpc"></span><h3>17.11.2. advanced alpc communication<a class="headerlink" href="#advanced-alpc-communication" title="Permalink to this headline">¶</a></h3>
+<span id="sample-advanced-alpc"></span><h3>17.14.2. advanced alpc communication<a class="headerlink" href="#advanced-alpc-communication" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">multiprocessing</span>
 
@@ -2450,9 +2849,9 @@ BYE
 </div>
 </div>
 <div class="section" id="windows-rpc">
-<h2>17.12. <a class="reference internal" href="rpc.html#module-windows.rpc" title="windows.rpc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.rpc</span></code></a><a class="headerlink" href="#windows-rpc" title="Permalink to this headline">¶</a></h2>
+<h2>17.15. <a class="reference internal" href="rpc.html#module-windows.rpc" title="windows.rpc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.rpc</span></code></a><a class="headerlink" href="#windows-rpc" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="manual-uac">
-<span id="sample-rpc-uac"></span><h3>17.12.1. Manual UAC<a class="headerlink" href="#manual-uac" title="Permalink to this headline">¶</a></h3>
+<span id="sample-rpc-uac"></span><h3>17.15.1. Manual UAC<a class="headerlink" href="#manual-uac" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">argparse</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 
@@ -2561,7 +2960,7 @@ BYE
 </div>
 </div>
 <div class="section" id="manual-lsarenumerateprivileges">
-<span id="sample-rpc-lsass"></span><h3>17.12.2. Manual <code class="docutils literal notranslate"><span class="pre">LsarEnumeratePrivileges</span></code><a class="headerlink" href="#manual-lsarenumerateprivileges" title="Permalink to this headline">¶</a></h3>
+<span id="sample-rpc-lsass"></span><h3>17.15.2. Manual <code class="docutils literal notranslate"><span class="pre">LsarEnumeratePrivileges</span></code><a class="headerlink" href="#manual-lsarenumerateprivileges" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">windows.rpc</span>
 <span class="kn">from</span> <span class="nn">windows.rpc</span> <span class="k">import</span> <span class="n">ndr</span>
 
@@ -2690,9 +3089,9 @@ BYE
 </div>
 </div>
 <div class="section" id="windows-pipe">
-<span id="sample-pipe"></span><h2>17.13. <a class="reference internal" href="pipe.html#module-windows.pipe" title="windows.pipe"><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.pipe</span></code></a><a class="headerlink" href="#windows-pipe" title="Permalink to this headline">¶</a></h2>
+<span id="sample-pipe"></span><h2>17.16. <a class="reference internal" href="pipe.html#module-windows.pipe" title="windows.pipe"><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.pipe</span></code></a><a class="headerlink" href="#windows-pipe" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="communication-with-an-injected-process">
-<h3>17.13.1. Communication with an injected process<a class="headerlink" href="#communication-with-an-injected-process" title="Permalink to this headline">¶</a></h3>
+<h3>17.16.1. Communication with an injected process<a class="headerlink" href="#communication-with-an-injected-process" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">windows</span>
 <span class="kn">import</span> <span class="nn">windows.test</span>
 
@@ -2762,50 +3161,56 @@ BYE
 <li><a class="reference internal" href="#windows-system">17.2. <code class="docutils literal notranslate"><span class="pre">windows.system</span></code></a></li>
 <li><a class="reference internal" href="#network-socket-exploration">17.3. <code class="docutils literal notranslate"><span class="pre">Network</span></code> - socket exploration</a></li>
 <li><a class="reference internal" href="#registry">17.4. <code class="docutils literal notranslate"><span class="pre">Registry</span></code></a></li>
-<li><a class="reference internal" href="#windows-wintrust">17.5. <code class="docutils literal notranslate"><span class="pre">windows.wintrust</span></code></a></li>
-<li><a class="reference internal" href="#vectoredexception">17.6. <code class="docutils literal notranslate"><span class="pre">VectoredException()</span></code></a><ul>
-<li><a class="reference internal" href="#in-local-process">17.6.1. In local process</a></li>
-<li><a class="reference internal" href="#in-remote-process">17.6.2. In remote process</a></li>
+<li><a class="reference internal" href="#scheduled-tasks">17.5. Scheduled tasks</a></li>
+<li><a class="reference internal" href="#event-log">17.6. Event Log</a></li>
+<li><a class="reference internal" href="#object-manager">17.7. Object manager</a><ul>
+<li><a class="reference internal" href="#find-objects">17.7.1. find objects</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#debugging">17.7. Debugging</a><ul>
-<li><a class="reference internal" href="#debugger">17.7.1. <code class="docutils literal notranslate"><span class="pre">Debugger</span></code></a><ul>
-<li><a class="reference internal" href="#single-stepping">17.7.1.1. Single stepping</a></li>
-<li><a class="reference internal" href="#windows-debug-functionbp">17.7.1.2. <code class="docutils literal notranslate"><span class="pre">windows.debug.FunctionBP</span></code></a></li>
-<li><a class="reference internal" href="#debugger-attach">17.7.1.3. <code class="docutils literal notranslate"><span class="pre">Debugger.attach</span></code></a></li>
-<li><a class="reference internal" href="#native-code-tester">17.7.1.4. Native code tester</a></li>
+<li><a class="reference internal" href="#windows-wintrust">17.8. <code class="docutils literal notranslate"><span class="pre">windows.wintrust</span></code></a></li>
+<li><a class="reference internal" href="#vectoredexception">17.9. <code class="docutils literal notranslate"><span class="pre">VectoredException()</span></code></a><ul>
+<li><a class="reference internal" href="#in-local-process">17.9.1. In local process</a></li>
+<li><a class="reference internal" href="#in-remote-process">17.9.2. In remote process</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#localdebugger">17.7.2. <code class="docutils literal notranslate"><span class="pre">LocalDebugger</span></code></a><ul>
-<li><a class="reference internal" href="#in-current-process">17.7.2.1. In current process</a></li>
-<li><a class="reference internal" href="#id1">17.7.2.2. In remote process</a></li>
+<li><a class="reference internal" href="#debugging">17.10. Debugging</a><ul>
+<li><a class="reference internal" href="#debugger">17.10.1. <code class="docutils literal notranslate"><span class="pre">Debugger</span></code></a><ul>
+<li><a class="reference internal" href="#single-stepping">17.10.1.1. Single stepping</a></li>
+<li><a class="reference internal" href="#windows-debug-functionbp">17.10.1.2. <code class="docutils literal notranslate"><span class="pre">windows.debug.FunctionBP</span></code></a></li>
+<li><a class="reference internal" href="#debugger-attach">17.10.1.3. <code class="docutils literal notranslate"><span class="pre">Debugger.attach</span></code></a></li>
+<li><a class="reference internal" href="#native-code-tester">17.10.1.4. Native code tester</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#localdebugger">17.10.2. <code class="docutils literal notranslate"><span class="pre">LocalDebugger</span></code></a><ul>
+<li><a class="reference internal" href="#in-current-process">17.10.2.1. In current process</a></li>
+<li><a class="reference internal" href="#id1">17.10.2.2. In remote process</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#wmi-requests">17.8. WMI requests</a></li>
-<li><a class="reference internal" href="#windows-com">17.9. <code class="docutils literal notranslate"><span class="pre">windows.com</span></code></a><ul>
-<li><a class="reference internal" href="#inetfwpolicy2">17.9.1. <code class="docutils literal notranslate"><span class="pre">INetFwPolicy2</span></code></a></li>
-<li><a class="reference internal" href="#icallinterceptor">17.9.2. <code class="docutils literal notranslate"><span class="pre">ICallInterceptor</span></code></a></li>
+<li><a class="reference internal" href="#wmi-requests">17.11. WMI requests</a></li>
+<li><a class="reference internal" href="#windows-com">17.12. <code class="docutils literal notranslate"><span class="pre">windows.com</span></code></a><ul>
+<li><a class="reference internal" href="#inetfwpolicy2">17.12.1. <code class="docutils literal notranslate"><span class="pre">INetFwPolicy2</span></code></a></li>
+<li><a class="reference internal" href="#icallinterceptor">17.12.2. <code class="docutils literal notranslate"><span class="pre">ICallInterceptor</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#windows-crypto">17.10. <code class="docutils literal notranslate"><span class="pre">windows.crypto</span></code></a><ul>
-<li><a class="reference internal" href="#encryption-demo">17.10.1. Encryption demo</a></li>
-<li><a class="reference internal" href="#certificate-demo">17.10.2. Certificate demo</a></li>
+<li><a class="reference internal" href="#windows-crypto">17.13. <code class="docutils literal notranslate"><span class="pre">windows.crypto</span></code></a><ul>
+<li><a class="reference internal" href="#encryption-demo">17.13.1. Encryption demo</a></li>
+<li><a class="reference internal" href="#certificate-demo">17.13.2. Certificate demo</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#windows-alpc">17.11. <code class="docutils literal notranslate"><span class="pre">windows.alpc</span></code></a><ul>
-<li><a class="reference internal" href="#simple-alpc-communication">17.11.1. simple alpc communication</a></li>
-<li><a class="reference internal" href="#advanced-alpc-communication">17.11.2. advanced alpc communication</a></li>
+<li><a class="reference internal" href="#windows-alpc">17.14. <code class="docutils literal notranslate"><span class="pre">windows.alpc</span></code></a><ul>
+<li><a class="reference internal" href="#simple-alpc-communication">17.14.1. simple alpc communication</a></li>
+<li><a class="reference internal" href="#advanced-alpc-communication">17.14.2. advanced alpc communication</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#windows-rpc">17.12. <code class="docutils literal notranslate"><span class="pre">windows.rpc</span></code></a><ul>
-<li><a class="reference internal" href="#manual-uac">17.12.1. Manual UAC</a></li>
-<li><a class="reference internal" href="#manual-lsarenumerateprivileges">17.12.2. Manual <code class="docutils literal notranslate"><span class="pre">LsarEnumeratePrivileges</span></code></a></li>
+<li><a class="reference internal" href="#windows-rpc">17.15. <code class="docutils literal notranslate"><span class="pre">windows.rpc</span></code></a><ul>
+<li><a class="reference internal" href="#manual-uac">17.15.1. Manual UAC</a></li>
+<li><a class="reference internal" href="#manual-lsarenumerateprivileges">17.15.2. Manual <code class="docutils literal notranslate"><span class="pre">LsarEnumeratePrivileges</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#windows-pipe">17.13. <code class="docutils literal notranslate"><span class="pre">windows.pipe</span></code></a><ul>
-<li><a class="reference internal" href="#communication-with-an-injected-process">17.13.1. Communication with an injected process</a></li>
+<li><a class="reference internal" href="#windows-pipe">17.16. <code class="docutils literal notranslate"><span class="pre">windows.pipe</span></code></a><ul>
+<li><a class="reference internal" href="#communication-with-an-injected-process">17.16.1. Communication with an injected process</a></li>
 </ul>
 </li>
 </ul>
@@ -2855,7 +3260,7 @@ BYE
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
     </div>
   </body>
 </html>

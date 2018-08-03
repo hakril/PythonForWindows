@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/css/mbasic.css" type="text/css" />
-    <script type="text/javascript" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
@@ -204,8 +204,8 @@
     <span class="n">stream</span> <span class="o">=</span> <span class="n">ndr</span><span class="o">.</span><span class="n">NdrStream</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
     <span class="n">unpacked</span> <span class="o">=</span> <span class="n">EptMapAuthResults</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
     <span class="c1"># Looks like there is a memory leak here (in stream.data) if nb_response &gt; len(unpacked[2])</span>
-    <span class="c1"># Parse towers</span></div>
-    <span class="k">return</span> <span class="p">[</span><span class="n">explode_alpc_tower</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">unpacked</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span>
+    <span class="c1"># Parse towers</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">explode_alpc_tower</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">unpacked</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span></div>
 
 
 <div class="viewcode-block" id="find_alpc_endpoint_and_connect"><a class="viewcode-back" href="../../../rpc.html#windows.rpc.epmapper.find_alpc_endpoint_and_connect">[docs]</a><span class="k">def</span> <span class="nf">find_alpc_endpoint_and_connect</span><span class="p">(</span><span class="n">targetiid</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="n">sid</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">WinLocalSystemSid</span><span class="p">):</span>
@@ -231,8 +231,8 @@
         <span class="k">break</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Could not find a valid endpoint for target &lt;</span><span class="si">{0}</span><span class="s2">&gt; version &lt;</span><span class="si">{1}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">targetiid</span><span class="p">,</span> <span class="n">version</span><span class="p">))</span>
-    <span class="n">dbgprint</span><span class="p">(</span><span class="s1">&#39;Connected to ALPC port &quot;</span><span class="si">{0}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">alpc_port</span><span class="p">),</span> <span class="s2">&quot;RPC&quot;</span><span class="p">)</span></div>
-    <span class="k">return</span> <span class="n">client</span>
+    <span class="n">dbgprint</span><span class="p">(</span><span class="s1">&#39;Connected to ALPC port &quot;</span><span class="si">{0}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">alpc_port</span><span class="p">),</span> <span class="s2">&quot;RPC&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">client</span></div>
 
 </pre></div>
 
@@ -272,7 +272,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
     </div>
   </body>
 </html>

@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/css/mbasic.css" type="text/css" />
-    <script type="text/javascript" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
@@ -127,8 +127,8 @@
     <span class="n">winproxy</span><span class="o">.</span><span class="n">CryptEncryptMessage</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">certs</span><span class="p">),</span> <span class="n">certs</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">msg</span><span class="p">),</span> <span class="kc">None</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
     <span class="c1">#Encrypt the msg</span>
     <span class="n">buf</span> <span class="o">=</span>  <span class="p">(</span><span class="n">BYTE</span> <span class="o">*</span> <span class="n">size</span><span class="o">.</span><span class="n">value</span><span class="p">)()</span>
-    <span class="n">winproxy</span><span class="o">.</span><span class="n">CryptEncryptMessage</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">certs</span><span class="p">),</span> <span class="n">certs</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">msg</span><span class="p">),</span> <span class="n">buf</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span></div>
-    <span class="k">return</span> <span class="nb">bytearray</span><span class="p">(</span><span class="n">buf</span><span class="p">[:</span><span class="n">size</span><span class="o">.</span><span class="n">value</span><span class="p">])</span>
+    <span class="n">winproxy</span><span class="o">.</span><span class="n">CryptEncryptMessage</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">certs</span><span class="p">),</span> <span class="n">certs</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">msg</span><span class="p">),</span> <span class="n">buf</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">bytearray</span><span class="p">(</span><span class="n">buf</span><span class="p">[:</span><span class="n">size</span><span class="o">.</span><span class="n">value</span><span class="p">])</span></div>
 
 
 <div class="viewcode-block" id="decrypt"><a class="viewcode-back" href="../../../crypto.html#windows.crypto.decrypt">[docs]</a><span class="k">def</span> <span class="nf">decrypt</span><span class="p">(</span><span class="n">cert_store</span><span class="p">,</span> <span class="n">encrypted</span><span class="p">):</span>
@@ -154,8 +154,8 @@
     <span class="n">winproxy</span><span class="o">.</span><span class="n">CryptDecryptMessage</span><span class="p">(</span><span class="n">dparam</span><span class="p">,</span> <span class="n">buf</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">buf</span><span class="p">),</span> <span class="kc">None</span><span class="p">,</span> <span class="n">dcryptsize</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
     <span class="c1">#Decrypt the msg</span>
     <span class="n">dcryptbuff</span> <span class="o">=</span> <span class="p">(</span><span class="n">BYTE</span> <span class="o">*</span> <span class="n">dcryptsize</span><span class="o">.</span><span class="n">value</span><span class="p">)()</span>
-    <span class="n">winproxy</span><span class="o">.</span><span class="n">CryptDecryptMessage</span><span class="p">(</span><span class="n">dparam</span><span class="p">,</span> <span class="n">buf</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">buf</span><span class="p">),</span> <span class="n">dcryptbuff</span><span class="p">,</span> <span class="n">dcryptsize</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
-    <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">(</span><span class="n">dcryptbuff</span><span class="p">[:</span><span class="n">dcryptsize</span><span class="o">.</span><span class="n">value</span><span class="p">]))</span>
+    <span class="n">winproxy</span><span class="o">.</span><span class="n">CryptDecryptMessage</span><span class="p">(</span><span class="n">dparam</span><span class="p">,</span> <span class="n">buf</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">buf</span><span class="p">),</span> <span class="n">dcryptbuff</span><span class="p">,</span> <span class="n">dcryptsize</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">(</span><span class="n">dcryptbuff</span><span class="p">[:</span><span class="n">dcryptsize</span><span class="o">.</span><span class="n">value</span><span class="p">]))</span></div>
 </pre></div>
 
           </div>
@@ -194,7 +194,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
     </div>
   </body>
 </html>

@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/css/mbasic.css" type="text/css" />
-    <script type="text/javascript" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
@@ -109,8 +109,8 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_watched_pages</span> <span class="o">=</span> <span class="p">{}</span><span class="c1"># Dict [page_modif] -&gt; [mem bp on the page]</span>
 
-        <span class="c1"># [start] -&gt; (size, current_proctection, original_prot)</span></div>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_virtual_protected_memory</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># List of memory-range modified by a MemBP</span>
+        <span class="c1"># [start] -&gt; (size, current_proctection, original_prot)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_virtual_protected_memory</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># List of memory-range modified by a MemBP</span></div>
 
 
 <div class="viewcode-block" id="Debugger.attach"><a class="viewcode-back" href="../../../debug.html#windows.debug.Debugger.attach">[docs]</a>    <span class="nd">@classmethod</span>
@@ -122,8 +122,8 @@
 <span class="sd">        .. note::</span>
 
 <span class="sd">            see :ref:`Debugger.attach sample &lt;sample_debugger_attach&gt;`&quot;&quot;&quot;</span>
-        <span class="n">winproxy</span><span class="o">.</span><span class="n">DebugActiveProcess</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">pid</span><span class="p">)</span></div>
-        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">DebugActiveProcess</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">pid</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">target</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Debugger.detach"><a class="viewcode-back" href="../../../debug.html#windows.debug.Debugger.detach">[docs]</a>    <span class="k">def</span> <span class="nf">detach</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Detach from all debugged processes or process ``target``&quot;&quot;&quot;</span>
@@ -177,8 +177,8 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">current_thread</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="ow">and</span> <span class="n">target</span><span class="o">.</span><span class="n">pid</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">pid</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="kc">None</span></div>
-        <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">DebugActiveProcessStop</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">pid</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">DebugActiveProcessStop</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">pid</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_killed_in_action</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return ``True`` if current process have been detached by user callback&quot;&quot;&quot;</span>
@@ -191,8 +191,8 @@
 
 <span class="sd">        :rtype: :class:`Debugger`&quot;&quot;&quot;</span>
         <span class="n">dwCreationFlags</span> <span class="o">|=</span> <span class="n">DEBUG_PROCESS</span>
-        <span class="n">c</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">create_process</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">dwCreationFlags</span><span class="o">=</span><span class="n">dwCreationFlags</span><span class="p">,</span> <span class="n">show_windows</span><span class="o">=</span><span class="n">show_windows</span><span class="p">)</span></div>
-        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">create_process</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">dwCreationFlags</span><span class="o">=</span><span class="n">dwCreationFlags</span><span class="p">,</span> <span class="n">show_windows</span><span class="o">=</span><span class="n">show_windows</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">c</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_init_dispatch_handlers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">dbg_evt_dispatch</span> <span class="o">=</span> <span class="p">{}</span>
@@ -232,7 +232,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">current_thread</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">threads</span><span class="p">[</span><span class="n">debug_event</span><span class="o">.</span><span class="n">dwThreadId</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">_dispatch_debug_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">debug_event</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;DISPATCH </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">DEBUG_EVENT</span><span class="o">.</span><span class="n">KNOWN_EVENT_CODE</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">debug_event</span><span class="o">.</span><span class="n">dwDebugEventCode</span><span class="p">)))</span>
         <span class="n">handler</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_DebugEventCode_dispatch</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">debug_event</span><span class="o">.</span><span class="n">dwDebugEventCode</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle_unknown_debug_event</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">handler</span><span class="p">(</span><span class="n">debug_event</span><span class="p">)</span>
 
@@ -878,8 +877,8 @@
                 <span class="c1"># rhaaa _killed_in_action is a REALLY bad name, it&#39;s not killed, it&#39;s detached</span>
                 <span class="c1"># TODO: FIXME</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_finish_debug_event</span><span class="p">(</span><span class="n">debug_event</span><span class="p">,</span> <span class="n">dbg_continue_flag</span><span class="p">)</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">processes</span><span class="p">:</span></div>
-                <span class="k">break</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">processes</span><span class="p">:</span>
+                <span class="k">break</span></div>
 
 <div class="viewcode-block" id="Debugger.add_bp"><a class="viewcode-back" href="../../../debug.html#windows.debug.Debugger.add_bp">[docs]</a>    <span class="k">def</span> <span class="nf">add_bp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bp</span><span class="p">,</span> <span class="n">addr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Add a breakpoint, bp can be:</span>
@@ -910,8 +909,8 @@
             <span class="c1">#    if target == self.target: # Original target (that have not been lauched yet)</span>
                     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_pending_breakpoint</span><span class="p">(</span><span class="n">bp</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
             <span class="c1">#    else:</span>
-            <span class="c1">#        raise ValueError(&quot;Unknown target {0}&quot;.format(target))</span></div>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_setup_breakpoint</span><span class="p">(</span><span class="n">bp</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+            <span class="c1">#        raise ValueError(&quot;Unknown target {0}&quot;.format(target))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_setup_breakpoint</span><span class="p">(</span><span class="n">bp</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Debugger.del_bp"><a class="viewcode-back" href="../../../debug.html#windows.debug.Debugger.del_bp">[docs]</a>    <span class="k">def</span> <span class="nf">del_bp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bp</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Delete a breakpoint, if targets is ``None``: delete it from all targets&quot;&quot;&quot;</span>
@@ -924,15 +923,15 @@
                 <span class="n">targets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">threads</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">targets</span><span class="p">:</span>
             <span class="n">_remove_method</span><span class="p">(</span><span class="n">bp</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">original_target</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span></div>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">remove_pending_breakpoint</span><span class="p">(</span><span class="n">bp</span><span class="p">,</span> <span class="n">original_target</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">original_target</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">remove_pending_breakpoint</span><span class="p">(</span><span class="n">bp</span><span class="p">,</span> <span class="n">original_target</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Debugger.single_step"><a class="viewcode-back" href="../../../debug.html#windows.debug.Debugger.single_step">[docs]</a>    <span class="k">def</span> <span class="nf">single_step</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Make the ``current_thread`` ``single_step``. ``Debugger.on_single_step`` will be called after that&quot;&quot;&quot;</span>
         <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_thread</span>
         <span class="n">ctx</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">context</span>
-        <span class="n">ctx</span><span class="o">.</span><span class="n">EEFlags</span><span class="o">.</span><span class="n">TF</span> <span class="o">=</span> <span class="mi">1</span></div>
-        <span class="n">t</span><span class="o">.</span><span class="n">set_context</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
+        <span class="n">ctx</span><span class="o">.</span><span class="n">EEFlags</span><span class="o">.</span><span class="n">TF</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">t</span><span class="o">.</span><span class="n">set_context</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span></div>
 
     <span class="c1">## Memory Breakpoint helper</span>
 <div class="viewcode-block" id="Debugger.get_memory_breakpoint_at"><a class="viewcode-back" href="../../../debug.html#windows.debug.Debugger.get_memory_breakpoint_at">[docs]</a>    <span class="k">def</span> <span class="nf">get_memory_breakpoint_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">process</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -953,8 +952,8 @@
 
         <span class="k">for</span> <span class="n">bp</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_watched_pages</span><span class="p">[</span><span class="n">process</span><span class="o">.</span><span class="n">pid</span><span class="p">][</span><span class="n">fault_page</span><span class="p">]</span><span class="o">.</span><span class="n">bps</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">bp</span><span class="o">.</span><span class="n">_addr</span> <span class="o">&lt;=</span> <span class="n">addr</span> <span class="o">&lt;</span> <span class="n">bp</span><span class="o">.</span><span class="n">_addr</span> <span class="o">+</span> <span class="n">bp</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">bp</span></div>
-        <span class="k">return</span> <span class="kc">None</span>
+                <span class="k">return</span> <span class="n">bp</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
 
 <div class="viewcode-block" id="Debugger.disable_all_memory_breakpoints"><a class="viewcode-back" href="../../../debug.html#windows.debug.Debugger.disable_all_memory_breakpoints">[docs]</a>    <span class="k">def</span> <span class="nf">disable_all_memory_breakpoints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Restore all pages to their original access rights.</span>
@@ -979,8 +978,8 @@
                 <span class="k">for</span> <span class="n">bp</span> <span class="ow">in</span> <span class="n">watched_page</span><span class="o">.</span><span class="n">bps</span><span class="p">:</span>
                     <span class="c1"># TODO: Document</span>
                     <span class="n">bp</span><span class="o">.</span><span class="n">on_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">page_addr</span><span class="p">)</span>
-            <span class="n">res</span><span class="p">[</span><span class="n">page_addr</span><span class="p">]</span> <span class="o">=</span> <span class="n">page_protection</span><span class="o">.</span><span class="n">value</span></div>
-        <span class="k">return</span> <span class="n">res</span>
+            <span class="n">res</span><span class="p">[</span><span class="n">page_addr</span><span class="p">]</span> <span class="o">=</span> <span class="n">page_protection</span><span class="o">.</span><span class="n">value</span>
+        <span class="k">return</span> <span class="n">res</span></div>
 
 
 <div class="viewcode-block" id="Debugger.restore_all_memory_breakpoints"><a class="viewcode-back" href="../../../debug.html#windows.debug.Debugger.restore_all_memory_breakpoints">[docs]</a>    <span class="k">def</span> <span class="nf">restore_all_memory_breakpoints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -993,8 +992,8 @@
         <span class="k">for</span> <span class="n">page_addr</span><span class="p">,</span> <span class="n">protection</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="c1"># Prevent restoring deleted breakpoints</span>
             <span class="k">if</span> <span class="n">page_addr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_watched_pages</span><span class="p">[</span><span class="n">target</span><span class="o">.</span><span class="n">pid</span><span class="p">]:</span>
-                <span class="n">target</span><span class="o">.</span><span class="n">virtual_protect</span><span class="p">(</span><span class="n">page_addr</span><span class="p">,</span> <span class="n">PAGE_SIZE</span><span class="p">,</span> <span class="n">protection</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
-        <span class="k">return</span>
+                <span class="n">target</span><span class="o">.</span><span class="n">virtual_protect</span><span class="p">(</span><span class="n">page_addr</span><span class="p">,</span> <span class="n">PAGE_SIZE</span><span class="p">,</span> <span class="n">protection</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">return</span></div>
 
 <div class="viewcode-block" id="Debugger.DisabledMemoryBreakpoint"><a class="viewcode-back" href="../../../debug.html#windows.debug.Debugger.DisabledMemoryBreakpoint">[docs]</a>    <span class="nd">@contextmanager</span>
     <span class="k">def</span> <span class="nf">DisabledMemoryBreakpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -1003,8 +1002,8 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="k">yield</span>
         <span class="k">finally</span><span class="p">:</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_killed_in_action</span><span class="p">():</span></div>
-                <span class="bp">self</span><span class="o">.</span><span class="n">restore_all_memory_breakpoints</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_killed_in_action</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">restore_all_memory_breakpoints</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Debugger.get_exception_bitness"><a class="viewcode-back" href="../../../debug.html#windows.debug.Debugger.get_exception_bitness">[docs]</a>    <span class="k">def</span> <span class="nf">get_exception_bitness</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the bitness in which the exception occured.</span>
@@ -1014,8 +1013,8 @@
         <span class="k">if</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">32</span><span class="p">:</span>
             <span class="k">return</span> <span class="mi">32</span>
         <span class="k">if</span> <span class="n">exc</span><span class="o">.</span><span class="n">ExceptionRecord</span><span class="o">.</span><span class="n">ExceptionCode</span> <span class="ow">in</span> <span class="p">[</span><span class="n">STATUS_WX86_BREAKPOINT</span><span class="p">,</span> <span class="n">STATUS_WX86_SINGLE_STEP</span><span class="p">]:</span>
-            <span class="k">return</span> <span class="mi">32</span></div>
-        <span class="k">return</span> <span class="mi">64</span>
+            <span class="k">return</span> <span class="mi">32</span>
+        <span class="k">return</span> <span class="mi">64</span></div>
 
     <span class="c1"># Public callback</span>
 <div class="viewcode-block" id="Debugger.on_exception"><a class="viewcode-back" href="../../../debug.html#windows.debug.Debugger.on_exception">[docs]</a>    <span class="k">def</span> <span class="nf">on_exception</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exception</span><span class="p">):</span>
@@ -1029,8 +1028,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">dbgprint</span><span class="p">(</span><span class="s2">&quot;Exception: </span><span class="si">{0}</span><span class="s2"> at &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">exception</span><span class="o">.</span><span class="n">ExceptionRecord</span><span class="o">.</span><span class="n">ExceptionCode</span><span class="p">,</span> <span class="n">exception</span><span class="o">.</span><span class="n">ExceptionRecord</span><span class="o">.</span><span class="n">ExceptionAddress</span><span class="p">),</span> <span class="s2">&quot;DBG&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">exception</span><span class="o">.</span><span class="n">ExceptionRecord</span><span class="o">.</span><span class="n">ExceptionCode</span> <span class="ow">in</span> <span class="n">winexception</span><span class="o">.</span><span class="n">exception_name_by_value</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">DBG_EXCEPTION_NOT_HANDLED</span></div>
-        <span class="k">return</span> <span class="n">DBG_CONTINUE</span>
+            <span class="k">return</span> <span class="n">DBG_EXCEPTION_NOT_HANDLED</span>
+        <span class="k">return</span> <span class="n">DBG_CONTINUE</span></div>
 
 <div class="viewcode-block" id="Debugger.on_single_step"><a class="viewcode-back" href="../../../debug.html#windows.debug.Debugger.on_single_step">[docs]</a>    <span class="k">def</span> <span class="nf">on_single_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exception</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Called on requested single step ``exception`` is one of the following type:</span>
@@ -1039,56 +1038,56 @@
 <span class="sd">                * :class:`windows.winobject.exception.EEXCEPTION_DEBUG_INFO64`</span>
 
 <span class="sd">        There is no default implementation, if you use ``Debugger.single_step()`` you should implement ``on_single_step``</span>
-<span class="sd">        &quot;&quot;&quot;</span></div>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Debugger that explicitly single step should implement &lt;on_single_step&gt;&quot;</span><span class="p">)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Debugger that explicitly single step should implement &lt;on_single_step&gt;&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Debugger.on_create_process"><a class="viewcode-back" href="../../../debug.html#windows.debug.Debugger.on_create_process">[docs]</a>    <span class="k">def</span> <span class="nf">on_create_process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">create_process</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Called on create_process event</span>
 
-<span class="sd">            :param CREATE_PROCESS_DEBUG_INFO create_process:&quot;&quot;&quot;</span></div>
-        <span class="k">pass</span>
+<span class="sd">            :param CREATE_PROCESS_DEBUG_INFO create_process:&quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
 
 <div class="viewcode-block" id="Debugger.on_exit_process"><a class="viewcode-back" href="../../../debug.html#windows.debug.Debugger.on_exit_process">[docs]</a>    <span class="k">def</span> <span class="nf">on_exit_process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exit_process</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Called on exit_process event</span>
 
-<span class="sd">            :param EXIT_PROCESS_DEBUG_INFO exit_process:&quot;&quot;&quot;</span></div>
-        <span class="k">pass</span>
+<span class="sd">            :param EXIT_PROCESS_DEBUG_INFO exit_process:&quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
 
 <div class="viewcode-block" id="Debugger.on_create_thread"><a class="viewcode-back" href="../../../debug.html#windows.debug.Debugger.on_create_thread">[docs]</a>    <span class="k">def</span> <span class="nf">on_create_thread</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">create_thread</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Called on create_thread event</span>
 
-<span class="sd">            :param CREATE_THREAD_DEBUG_INFO create_thread:&quot;&quot;&quot;</span></div>
-        <span class="k">pass</span>
+<span class="sd">            :param CREATE_THREAD_DEBUG_INFO create_thread:&quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
 
 <div class="viewcode-block" id="Debugger.on_exit_thread"><a class="viewcode-back" href="../../../debug.html#windows.debug.Debugger.on_exit_thread">[docs]</a>    <span class="k">def</span> <span class="nf">on_exit_thread</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exit_thread</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Called on exit_thread event</span>
 
-<span class="sd">            :param EXIT_THREAD_DEBUG_INFO exit_thread:&quot;&quot;&quot;</span></div>
-        <span class="k">pass</span>
+<span class="sd">            :param EXIT_THREAD_DEBUG_INFO exit_thread:&quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
 
 <div class="viewcode-block" id="Debugger.on_load_dll"><a class="viewcode-back" href="../../../debug.html#windows.debug.Debugger.on_load_dll">[docs]</a>    <span class="k">def</span> <span class="nf">on_load_dll</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">load_dll</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Called on load_dll event</span>
 
-<span class="sd">            :param LOAD_DLL_DEBUG_INFO load_dll:&quot;&quot;&quot;</span></div>
-        <span class="k">pass</span>
+<span class="sd">            :param LOAD_DLL_DEBUG_INFO load_dll:&quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
 
 <div class="viewcode-block" id="Debugger.on_unload_dll"><a class="viewcode-back" href="../../../debug.html#windows.debug.Debugger.on_unload_dll">[docs]</a>    <span class="k">def</span> <span class="nf">on_unload_dll</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unload_dll</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Called on unload_dll event</span>
 
-<span class="sd">            :param UNLOAD_DLL_DEBUG_INFO unload_dll:&quot;&quot;&quot;</span></div>
-        <span class="k">pass</span>
+<span class="sd">            :param UNLOAD_DLL_DEBUG_INFO unload_dll:&quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
 
 <div class="viewcode-block" id="Debugger.on_output_debug_string"><a class="viewcode-back" href="../../../debug.html#windows.debug.Debugger.on_output_debug_string">[docs]</a>    <span class="k">def</span> <span class="nf">on_output_debug_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">debug_string</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Called on debug_string event</span>
 
-<span class="sd">            :param OUTPUT_DEBUG_STRING_INFO debug_string:&quot;&quot;&quot;</span></div>
-        <span class="k">pass</span>
+<span class="sd">            :param OUTPUT_DEBUG_STRING_INFO debug_string:&quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
 
 <div class="viewcode-block" id="Debugger.on_rip"><a class="viewcode-back" href="../../../debug.html#windows.debug.Debugger.on_rip">[docs]</a>    <span class="k">def</span> <span class="nf">on_rip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rip_info</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Called on rip_info event</span>
 
-<span class="sd">            :param RIP_INFO rip_info:&quot;&quot;&quot;</span></div></div>
-        <span class="k">pass</span>
+<span class="sd">            :param RIP_INFO rip_info:&quot;&quot;&quot;</span>
+        <span class="k">pass</span></div></div>
 </pre></div>
 
           </div>
@@ -1127,7 +1126,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
     </div>
   </body>
 </html>

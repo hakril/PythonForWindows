@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/css/mbasic.css" type="text/css" />
-    <script type="text/javascript" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
@@ -129,8 +129,8 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="n">cutname</span> <span class="o">=</span> <span class="n">dllname</span><span class="p">[:</span><span class="n">dllname</span><span class="o">.</span><span class="n">rindex</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
         <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">None</span></div></div>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">resolution_dict</span><span class="p">[</span><span class="n">cutname</span><span class="p">]</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">resolution_dict</span><span class="p">[</span><span class="n">cutname</span><span class="p">]</span></div></div>
 
 
 
@@ -158,8 +158,8 @@
         <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">values_array</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">ValueLength</span><span class="p">:</span>
                 <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_apiset_wstring</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">ValueOffset</span><span class="p">,</span> <span class="n">value</span><span class="o">.</span><span class="n">ValueLength</span><span class="p">)</span>
-                <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="p">)</span></div>
-        <span class="k">return</span> <span class="n">res</span>
+                <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">res</span></div>
 
 
 <div class="viewcode-block" id="ApiSetMapVersion4"><a class="viewcode-back" href="../../../process.html#windows.winobject.apisetmap.ApiSetMapVersion4">[docs]</a><span class="k">class</span> <span class="nc">ApiSetMapVersion4</span><span class="p">(</span><span class="n">ApiSetMap</span><span class="p">):</span>
@@ -186,8 +186,8 @@
         <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">values_array</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">ValueLength</span><span class="p">:</span>
                 <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_apiset_wstring</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">ValueOffset</span><span class="p">,</span> <span class="n">value</span><span class="o">.</span><span class="n">ValueLength</span><span class="p">)</span>
-                <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="p">)</span></div>
-        <span class="k">return</span> <span class="n">res</span>
+                <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">res</span></div>
 
 <div class="viewcode-block" id="ApiSetMapVersion6"><a class="viewcode-back" href="../../../process.html#windows.winobject.apisetmap.ApiSetMapVersion6">[docs]</a><span class="k">class</span> <span class="nc">ApiSetMapVersion6</span><span class="p">(</span><span class="n">ApiSetMap</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Represent an ApiSetMap version-6&quot;&quot;&quot;</span>
@@ -210,8 +210,8 @@
         <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">values_array</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">ValueLength</span><span class="p">:</span>
                 <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_apiset_wstring</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">ValueOffset</span><span class="p">,</span> <span class="n">value</span><span class="o">.</span><span class="n">ValueLength</span><span class="p">)</span>
-                <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="p">)</span></div>
-        <span class="k">return</span> <span class="n">res</span>
+                <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">res</span></div>
 
 <span class="n">API_SET_MAP_BY_VERSION</span> <span class="o">=</span> <span class="p">{</span>
     <span class="mi">2</span><span class="p">:</span> <span class="n">ApiSetMapVersion2</span><span class="p">,</span>
@@ -256,7 +256,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
     </div>
   </body>
 </html>

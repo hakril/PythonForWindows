@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/css/mbasic.css" type="text/css" />
-    <script type="text/javascript" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
@@ -40,7 +40,7 @@
 <span></span><span class="kn">import</span> <span class="nn">struct</span>
 <span class="kn">import</span> <span class="nn">ctypes</span>
 <span class="kn">import</span> <span class="nn">functools</span>
-<span class="kn">from</span> <span class="nn">ctypes.wintypes</span> <span class="k">import</span> <span class="n">HRESULT</span><span class="p">,</span> <span class="n">byref</span><span class="p">,</span> <span class="n">pointer</span><span class="p">,</span> <span class="n">cast</span>
+<span class="kn">from</span> <span class="nn">ctypes</span> <span class="k">import</span> <span class="n">HRESULT</span><span class="p">,</span> <span class="n">byref</span><span class="p">,</span> <span class="n">cast</span>
 
 <span class="kn">import</span> <span class="nn">windows</span>
 <span class="kn">from</span> <span class="nn">windows</span> <span class="k">import</span> <span class="n">winproxy</span>
@@ -61,8 +61,8 @@
     <span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="n">t</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">winerror</span>
     <span class="k">if</span> <span class="n">t</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">t</span></div>
-    <span class="k">return</span> <span class="n">initsecurity</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">t</span>
+    <span class="k">return</span> <span class="n">initsecurity</span><span class="p">()</span></div>
 
 <span class="k">def</span> <span class="nf">initsecurity</span><span class="p">():</span> <span class="c1"># Should take some parameters..</span>
     <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CoInitializeSecurity</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">RPC_C_IMP_LEVEL_IMPERSONATE</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
@@ -71,8 +71,16 @@
 <div class="viewcode-block" id="create_instance"><a class="viewcode-back" href="../../com.html#windows.com.create_instance">[docs]</a><span class="k">def</span> <span class="nf">create_instance</span><span class="p">(</span><span class="n">clsiid</span><span class="p">,</span> <span class="n">targetinterface</span><span class="p">,</span> <span class="n">custom_iid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="n">CLSCTX_INPROC_SERVER</span> <span class="o">|</span> <span class="n">CLSCTX_LOCAL_SERVER</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A simple wrapper around ``CoCreateInstance &lt;https://msdn.microsoft.com/en-us/library/windows/desktop/ms686615(v=vs.85).aspx&gt;``&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">custom_iid</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">custom_iid</span> <span class="o">=</span> <span class="n">targetinterface</span><span class="o">.</span><span class="n">IID</span></div>
-    <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CoCreateInstance</span><span class="p">(</span><span class="n">byref</span><span class="p">(</span><span class="n">clsiid</span><span class="p">),</span> <span class="kc">None</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">byref</span><span class="p">(</span><span class="n">custom_iid</span><span class="p">),</span> <span class="n">byref</span><span class="p">(</span><span class="n">targetinterface</span><span class="p">))</span>
+        <span class="n">custom_iid</span> <span class="o">=</span> <span class="n">targetinterface</span><span class="o">.</span><span class="n">IID</span>
+    <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CoCreateInstance</span><span class="p">(</span><span class="n">byref</span><span class="p">(</span><span class="n">clsiid</span><span class="p">),</span> <span class="kc">None</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">byref</span><span class="p">(</span><span class="n">custom_iid</span><span class="p">),</span> <span class="n">byref</span><span class="p">(</span><span class="n">targetinterface</span><span class="p">))</span></div>
+
+
+<span class="k">def</span> <span class="nf">resolve_progid</span><span class="p">(</span><span class="n">progid</span><span class="p">):</span>
+    <span class="n">clsid</span> <span class="o">=</span> <span class="n">CLSID</span><span class="p">()</span>
+    <span class="n">winproxy</span><span class="o">.</span><span class="n">CLSIDFromProgID</span><span class="p">(</span><span class="n">progid</span><span class="p">,</span> <span class="n">clsid</span><span class="p">)</span>
+    <span class="c1"># We just filed the CLSID: refresh the __repr__</span>
+    <span class="n">clsid</span><span class="o">.</span><span class="n">update_strid</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">clsid</span>
 
 <span class="c1"># Improved COM object</span>
 <span class="c1"># Todo: ctypes_genertation extended struct ?</span>
@@ -281,16 +289,16 @@
         <span class="sd">&quot;&quot;&quot;Default ``QueryInterface`` implementation that returns ``self`` if piid is the implemented interface&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">piid</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="n">IUnknown</span><span class="o">.</span><span class="n">IID</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">IMPLEMENT</span><span class="o">.</span><span class="n">IID</span><span class="p">):</span>
             <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">this</span>
-            <span class="k">return</span> <span class="mi">1</span></div>
-        <span class="k">return</span> <span class="n">E_NOINTERFACE</span>
+            <span class="k">return</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">E_NOINTERFACE</span></div>
 
 <div class="viewcode-block" id="COMImplementation.AddRef"><a class="viewcode-back" href="../../com.html#windows.com.COMImplementation.AddRef">[docs]</a>    <span class="k">def</span> <span class="nf">AddRef</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Default ``AddRef`` implementation that returns ``1``&quot;&quot;&quot;</span></div>
-        <span class="k">return</span> <span class="mi">1</span>
+        <span class="sd">&quot;&quot;&quot;Default ``AddRef`` implementation that returns ``1``&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mi">1</span></div>
 
 <div class="viewcode-block" id="COMImplementation.Release"><a class="viewcode-back" href="../../com.html#windows.com.COMImplementation.Release">[docs]</a>    <span class="k">def</span> <span class="nf">Release</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Default ``Release`` implementation that returns ``1``&quot;&quot;&quot;</span></div></div>
-        <span class="k">return</span> <span class="mi">0</span>
+        <span class="sd">&quot;&quot;&quot;Default ``Release`` implementation that returns ``1``&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mi">0</span></div></div>
 </pre></div>
 
           </div>
@@ -329,7 +337,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
     </div>
   </body>
 </html>
