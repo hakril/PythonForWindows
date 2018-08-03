@@ -5,13 +5,14 @@ TODO:
 - Add news features to index.html
 - Document / fix / release:
     - windows.bits
-    - evtlog
-    - kernobj
     - window
 
 ======
 
     - DBG
+        - FIX BP API !!
+            - add_bp(target=XXX) vs del_bp(targets=XXX) ....
+
         - Verif multiple bp at same place..
         - Verif multiple pending at same place
         - Test !! (bp, BP_HX, bp on only on process, bp_hx on only one thread..)
@@ -61,6 +62,7 @@ TODO:
 Documentation
     * verif samples
     * windows.bits
+    - Document change in CurrentProcess read/write memory behavior ?
 
 RESSOURCE
     * read http://www.codeproject.com/Articles/18975/Listing-Used-Files
