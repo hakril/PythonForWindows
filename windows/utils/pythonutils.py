@@ -2,13 +2,29 @@
 import sys
 import ctypes
 import _ctypes
-from windows.generated_def import Flag, LPCSTR, LPWSTR, INFINITE
+import windows.generated_def as gdef
 
 from windows.dbgprint import dbgprint
 from windows import winproxy
 
 
-def buffer(size): # Test
+## TESTING Improved Buffer code ###
+
+class ImprovedCtypesBufferBase(object):
+    def cast(self, type):
+        return ctypes.cast(self, type)
+
+    def as_string(self):
+        return ctypes.cast(self, LPCSTR).value
+
+    def as_wstring(self):
+        return ctypes.cast(self, LPWSTR).value
+
+    def as_pvoid(self):
+        return self.cast(gdef.PVOID)
+
+def buffer(size): # Test: DONT USE
+    raise NotImplementedError("utils.buffer")
     buf = ctypes.create_string_buffer(size)
     buf.size = size
     buf.address = ctypes.addressof(buf)
@@ -19,16 +35,11 @@ def buffer(size): # Test
         def lol(self):
             return "lol"
 
-        def as_string(self):
-            return ctypes.cast(self, LPCSTR).value
-
-        def as_wstring(self):
-            return ctypes.cast(self, LPWSTR).value
-
     return ImprovedCtypesBufferImpl()
 
 
-def wbuffer(size): # Test
+def wbuffer(size): # Test: DONT USE
+    raise NotImplementedError("utils.buffer")
     buf = ctypes.create_string_buffer(size)
     buf.size = size
     buf.address = ctypes.addressof(buf)
@@ -39,14 +50,44 @@ def wbuffer(size): # Test
         def lol(self):
             return "lol"
 
-        def as_string(self):
-            return ctypes.cast(self, LPCSTR).value
-
-        def as_wstring(self):
-            return ctypes.cast(self, LPWSTR).value
-
     return ImprovedCtypesBufferImpl()
 
+# Used in windows.crypto.sign_verify for test
+class PartialBufferType(object):
+    def __init__(self, type, size=None):
+        self.type = type
+        self.size = None
+
+    @staticmethod
+    def create_real_implem(item_type, size):
+        cls_name = "YOLO<IMPLE><{0}><{1}>".format(item_type.__name__, size)
+
+        class TmpImplemArrayName(ctypes.Array, ImprovedCtypesBufferBase):
+            _type_ = item_type
+            _length_ = size
+
+        TmpImplemArrayName.__name__ = cls_name
+        return TmpImplemArrayName
+
+    def from_buffer(self, buffer):
+        return self.create_real_implem(self.type, len(buffer)).from_buffer(buffer)
+
+    def from_buffer_copy(self, buffer):
+        return self.create_real_implem(self.type, len(buffer)).from_buffer_copy(buffer)
+
+    def __call__(self, *args):
+        return self.create_real_implem(self.type, len(args))(*args)
+
+CharBuffer = PartialBufferType(gdef.CHAR)
+# CharBuffer vs CharString that append the +1 ?
+
+def buffer(type, size=None):
+    if size is None:
+        return PartialBufferType(type)
+    return PartialBufferType.create_real_implem(type, size)
+
+
+### Other utils ###
 
 def fixedpropety(f):
     cache_name = "_" + f.__name__
@@ -79,7 +120,7 @@ def print_ctypes_struct(struct, name="", ident=0, hexa=False):
 
         if isinstance(value, basestring):
             value = repr(value)
-        if hexa and not isinstance(value, Flag):
+        if hexa and not isinstance(value, gdef.Flag):
             try:
                 print("{0} -> {1}".format(name, hex(value)))
                 return
@@ -124,7 +165,7 @@ class AutoHandle(object):
         dbgprint("Open handle {0} for {1}".format(hex(self._handle), self), "HANDLE")
         return self._handle
 
-    def wait(self, timeout=INFINITE):
+    def wait(self, timeout=gdef.INFINITE):
         """Wait for the object"""
         return winproxy.WaitForSingleObject(self.handle, timeout)
 
