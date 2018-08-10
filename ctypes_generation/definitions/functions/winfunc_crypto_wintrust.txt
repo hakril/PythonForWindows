@@ -396,3 +396,65 @@ BOOL WINAPI CryptHashCertificate(
   _Out_         BYTE              *pbComputedHash,
   _Inout_       DWORD             *pcbComputedHash
 );
+
+
+BOOL CryptSignMessage(
+  PCRYPT_SIGN_MESSAGE_PARA pSignPara,
+  BOOL                     fDetachedSignature,
+  DWORD                    cToBeSigned,
+  PBYTE                 *rgpbToBeSigned,
+  DWORD                 *rgcbToBeSigned,
+  BYTE                     *pbSignedBlob,
+  DWORD                    *pcbSignedBlob
+);
+
+
+BOOL CryptSignAndEncryptMessage(
+  PCRYPT_SIGN_MESSAGE_PARA    pSignPara,
+  PCRYPT_ENCRYPT_MESSAGE_PARA pEncryptPara,
+  DWORD                       cRecipientCert,
+  PCCERT_CONTEXT           *rgpRecipientCert,
+  BYTE                  *pbToBeSignedAndEncrypted,
+  DWORD                       cbToBeSignedAndEncrypted,
+  BYTE                        *pbSignedAndEncryptedBlob,
+  DWORD                       *pcbSignedAndEncryptedBlob
+);
+
+BOOL CryptVerifyMessageSignature(
+  PCRYPT_VERIFY_MESSAGE_PARA pVerifyPara,
+  DWORD                      dwSignerIndex,
+  BYTE                 *pbSignedBlob,
+  DWORD                      cbSignedBlob,
+  BYTE                       *pbDecoded,
+  DWORD                      *pcbDecoded,
+  PCCERT_CONTEXT             *ppSignerCert
+);
+
+BOOL CryptVerifyMessageSignatureWithKey(
+  PCRYPT_KEY_VERIFY_MESSAGE_PARA pVerifyPara,
+  PCERT_PUBLIC_KEY_INFO          pPublicKeyInfo,
+  BYTE                     *pbSignedBlob,
+  DWORD                          cbSignedBlob,
+  BYTE                           *pbDecoded,
+  DWORD                          *pcbDecoded
+);
+
+
+BOOL CryptVerifyMessageHash(
+  PCRYPT_HASH_MESSAGE_PARA pHashPara,
+  BYTE                     *pbHashedBlob,
+  DWORD                    cbHashedBlob,
+  BYTE                     *pbToBeHashed,
+  DWORD                    *pcbToBeHashed,
+  BYTE                     *pbComputedHash,
+  DWORD                    *pcbComputedHash
+);
+
+
+
+PCCERT_CONTEXT PfnCryptGetSignerCertificate(
+  PVOID pvGetArg,
+  DWORD dwCertEncodingType,
+  PCERT_INFO pSignerId,
+  HCERTSTORE hMsgCertStore
+);

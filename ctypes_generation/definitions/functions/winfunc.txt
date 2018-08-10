@@ -1719,3 +1719,10 @@ NTSTATUS NtSetInformationFile(
   ULONG                  Length,
   FILE_INFORMATION_CLASS FileInformationClass
 );
+
+
+BOOL GetProcessMemoryInfo(
+  HANDLE                   Process,
+  PPROCESS_MEMORY_COUNTERS ppsmemCounters,
+  DWORD                    cb
+);

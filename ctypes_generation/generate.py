@@ -56,21 +56,38 @@ class ParsedFile(object):
 class StructureParsedFile(ParsedFile):
     PARSER = struct_parser.WinStructParser
 
+    def __init__(self, *args, **kwargs):
+        self.imports_by_struct = {}
+        super(StructureParsedFile, self).__init__(*args, **kwargs)
+
     def compute_imports_exports(self, data):
         structs, enums = data
         for enum in enums:
             self.add_exports(enum.name)
             self.add_exports(*enum.typedef)
         for struct in structs:
+            self.asser_struct_not_already_in_import(struct)
+            if any(x in self.imports for x in [struct.name] + struct.typedef.keys()):
+                print("Export <{0}> defined after first use".format(struct.name))
+                raise ValueError("LOL")
             self.add_exports(struct.name)
             self.add_exports(*struct.typedef)
             for field_type, field_name, nb_rep in struct.fields:
                 if field_type.name not in self.exports:
                     self.add_imports(field_type.name)
+                    self.imports_by_struct[field_type.name] = struct.name
                 try:
                     int(nb_rep)
                 except:
                     self.add_imports(nb_rep)
+
+    def asser_struct_not_already_in_import(self, struct):
+        for sname in [struct.name] + struct.typedef.keys():
+            try:
+                already_used = self.imports_by_struct[sname]
+                raise ValueError("Structure <{0}> is defined after being used in <{1}>".format(sname, already_used))
+            except KeyError as e:
+                pass
 
 class SimpleTypeParsedFile(ParsedFile):
     PARSER = struct_parser.SimpleTypesParser
@@ -162,6 +179,7 @@ class ParsedFileGraph(object):
                 if self.depandances_database[node].issubset(depdone):
                     break
             else:
+                import pdb;pdb.set_trace()
                 raise ValueError("Could not find a next node for dep flattening")
 
             flatten.append(node)
@@ -175,7 +193,10 @@ class ParsedFileGraph(object):
         for node in self.nodes:
             for import_ in node.imports:
                 try:
-                    self.depandances_database[node].add(self.exports_database[import_])
+                    depnod = self.exports_database[import_]
+                    if node is depnod:
+                        raise ValueError("[ERROR] Node depend of itself {0}".format(node))
+                    self.depandances_database[node].add(depnod)
                 except KeyError as e:
                     self.on_missing_dependancy(import_, node)
                     # raise ValueError("Missing dependancy <{0}> of {1}".format(import_, node))
