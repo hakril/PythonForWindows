@@ -44,7 +44,7 @@ class Kernel32Error(WindowsError):
         win_error = ctypes.WinError()
         api_error = super(Kernel32Error, cls).__new__(cls)
         api_error.api_name = func_name
-        api_error.winerror = win_error.winerror
+        api_error.winerror = win_error.winerror & 0xffffffff
         api_error.strerror = win_error.strerror
         api_error.args = (func_name, win_error.winerror, win_error.strerror)
         return api_error
@@ -690,15 +690,15 @@ def GetMappedFileNameAWrapper(hProcess, lpv, lpFilename, nSize=None):
     return GetMappedFileNameAWrapper.ctypes_function(hProcess, lpv, lpFilename, nSize)
 GetMappedFileNameA = Kernel32Proxy("GetMappedFileNameA")(GetMappedFileNameAWrapper)
 
+
 def QueryWorkingSetWrapper(hProcess, pv, cb):
     return QueryWorkingSet.ctypes_function(hProcess, pv, cb)
 QueryWorkingSet = Kernel32Proxy("QueryWorkingSet")(QueryWorkingSetWrapper)
 
+
 def QueryWorkingSetExWrapper(hProcess, pv, cb):
     return QueryWorkingSetEx.ctypes_function(hProcess, pv, cb)
 QueryWorkingSetEx = Kernel32Proxy("QueryWorkingSetEx")(QueryWorkingSetExWrapper)
-
-
 
 if not is_implemented(GetMappedFileNameA):
     GetMappedFileNameW = PsapiProxy("GetMappedFileNameW")(GetMappedFileNameWWrapper)
@@ -712,7 +712,6 @@ def GetModuleBaseNameAWrapper(hProcess, hModule, lpBaseName, nSize=None):
     return GetModuleBaseNameAWrapper.ctypes_function(hProcess, hModule, lpBaseName, nSize)
 GetModuleBaseNameA = Kernel32Proxy("GetMappedFileNameA")(GetModuleBaseNameAWrapper)
 
-
 def GetModuleBaseNameWWrapper(hProcess, hModule, lpBaseName, nSize=None):
     if nSize is None:
         nSize = len(lpBaseName)
@@ -722,7 +721,6 @@ GetModuleBaseNameA = Kernel32Proxy("GetModuleBaseNameW")(GetModuleBaseNameWWrapp
 if not is_implemented(GetModuleBaseNameA):
     GetModuleBaseNameA = PsapiProxy("GetModuleBaseNameA")(GetModuleBaseNameAWrapper)
     GetModuleBaseNameW = PsapiProxy("GetModuleBaseNameW")(GetModuleBaseNameWWrapper)
-
 
 def GetProcessImageFileNameAWrapper(hProcess, lpImageFileName, nSize=None):
     if nSize is None:
@@ -739,6 +737,14 @@ GetProcessImageFileNameW = Kernel32Proxy("GetProcessImageFileNameW")(GetProcessI
 if not is_implemented(GetProcessImageFileNameA):
     GetProcessImageFileNameA = PsapiProxy("GetProcessImageFileNameA")(GetProcessImageFileNameAWrapper)
     GetProcessImageFileNameW = PsapiProxy("GetProcessImageFileNameW")(GetProcessImageFileNameWWrapper)
+
+
+def GetProcessMemoryInfoWrapper(Process, ppsmemCounters, cb):
+    return GetProcessMemoryInfo.ctypes_function(Process, ppsmemCounters, cb)
+GetProcessMemoryInfo = Kernel32Proxy("GetProcessMemoryInfo")(QueryWorkingSetExWrapper)
+
+if not is_implemented(GetProcessMemoryInfo):
+    GetProcessMemoryInfo = PsapiProxy("GetProcessMemoryInfo")(GetProcessMemoryInfoWrapper)
 
 # Debug API
 
@@ -1712,6 +1718,33 @@ def CryptMsgVerifyCountersignatureEncodedEx(hCryptProv, dwEncodingType, pbSigner
 @Crypt32Proxy('CryptHashCertificate')
 def CryptHashCertificate(hCryptProv, Algid, dwFlags, pbEncoded, cbEncoded, pbComputedHash, pcbComputedHash):
    return CryptHashCertificate.ctypes_function(hCryptProv, Algid, dwFlags, pbEncoded, cbEncoded, pbComputedHash, pcbComputedHash)
+
+
+@Crypt32Proxy('CryptSignMessage')
+def CryptSignMessage(pSignPara, fDetachedSignature, cToBeSigned, rgpbToBeSigned, rgcbToBeSigned, pbSignedBlob, pcbSignedBlob):
+    return CryptSignMessage.ctypes_function(pSignPara, fDetachedSignature, cToBeSigned, rgpbToBeSigned, rgcbToBeSigned, pbSignedBlob, pcbSignedBlob)
+
+
+@Crypt32Proxy('CryptSignAndEncryptMessage')
+def CryptSignAndEncryptMessage(pSignPara, pEncryptPara, cRecipientCert, rgpRecipientCert, pbToBeSignedAndEncrypted, cbToBeSignedAndEncrypted, pbSignedAndEncryptedBlob, pcbSignedAndEncryptedBlob):
+    return CryptSignAndEncryptMessage.ctypes_function(pSignPara, pEncryptPara, cRecipientCert, rgpRecipientCert, pbToBeSignedAndEncrypted, cbToBeSignedAndEncrypted, pbSignedAndEncryptedBlob, pcbSignedAndEncryptedBlob)
+
+
+@Crypt32Proxy('CryptVerifyMessageSignature')
+def CryptVerifyMessageSignature(pVerifyPara, dwSignerIndex, pbSignedBlob, cbSignedBlob, pbDecoded, pcbDecoded, ppSignerCert):
+    return CryptVerifyMessageSignature.ctypes_function(pVerifyPara, dwSignerIndex, pbSignedBlob, cbSignedBlob, pbDecoded, pcbDecoded, ppSignerCert)
+
+
+@Crypt32Proxy('CryptVerifyMessageSignatureWithKey')
+def CryptVerifyMessageSignatureWithKey(pVerifyPara, pPublicKeyInfo, pbSignedBlob, cbSignedBlob, pbDecoded, pcbDecoded):
+    return CryptVerifyMessageSignatureWithKey.ctypes_function(pVerifyPara, pPublicKeyInfo, pbSignedBlob, cbSignedBlob, pbDecoded, pcbDecoded)
+
+
+@Crypt32Proxy('CryptVerifyMessageHash')
+def CryptVerifyMessageHash(pHashPara, pbHashedBlob, cbHashedBlob, pbToBeHashed, pcbToBeHashed, pbComputedHash, pcbComputedHash):
+    return CryptVerifyMessageHash.ctypes_function(pHashPara, pbHashedBlob, cbHashedBlob, pbToBeHashed, pcbToBeHashed, pbComputedHash, pcbComputedHash)
+
+
 
 # ## CryptUI ## #
 

@@ -4,7 +4,8 @@ from windows import winproxy
 from windows.crypto import DEFAULT_ENCODING
 from windows.crypto.helper import ECRYPT_DATA_BLOB
 from windows.generated_def import *
-from windows.crypto import Certificate
+
+__all__ = ["encrypt", "decrypt"]
 
 def encode_init_vector(data):
     blob = ECRYPT_DATA_BLOB.from_string(data)
