@@ -1726,3 +1726,19 @@ BOOL GetProcessMemoryInfo(
   PPROCESS_MEMORY_COUNTERS ppsmemCounters,
   DWORD                    cb
 );
+
+
+HMODULE WINAPI GetModuleHandleA(
+  _In_opt_ LPCSTR lpModuleName
+);
+
+HMODULE WINAPI GetModuleHandleW(
+  _In_opt_ LPWSTR lpModuleName
+);
+
+
+BOOLEAN RtlEqualUnicodeString(
+  PUNICODE_STRING String1,
+  PUNICODE_STRING String2,
+  BOOLEAN          CaseInSensitive
+);
