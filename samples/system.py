@@ -54,3 +54,14 @@ print("    Looking for a File handle:")
 file_h = [h for h in cp_handles if h.type == "File"][0]
 print("        Handle is {0}".format(file_h))
 print("        Name is <{0}>".format(file_h.name))
+print("")
+
+
+print("Dumping the first system module")
+kmod = windows.system.modules[0]
+print("    " + str(kmod))
+print((" " * 8) + "ImageName = {0}".format(kmod.ImageName))
+print((" " * 8) + "Base = {0:#x}".format(kmod.Base))
+print((" " * 8) + "Size = {0:#x}".format(kmod.Size))
+print((" " * 8) + "Flags = {0:#x}".format(kmod.Flags))
+print((" " * 8) + "LoadCount = {0}".format(kmod.LoadCount))

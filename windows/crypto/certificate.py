@@ -221,21 +221,27 @@ class Certificate(gdef.CERT_CONTEXT):
         return " ".join("{:02x}".format(x) for x in serial_bytes)
 
 
-    def get_name(self, nametype=gdef.CERT_NAME_SIMPLE_DISPLAY_TYPE, flags=0):
+    def get_name(self, nametype=gdef.CERT_NAME_SIMPLE_DISPLAY_TYPE, param_type=0, flags=0):
         """Retrieve the subject or issuer name of the certificate.
         See `CertGetNameStringA <https://msdn.microsoft.com/en-us/library/windows/desktop/aa376086(v=vs.85).aspx>`_
 
         :returns: :class:`str`
         """
-        size = winproxy.CertGetNameStringA(self, nametype, flags, None, None, 0)
+        if nametype == gdef.CERT_NAME_RDN_TYPE:
+            param_type = gdef.DWORD(param_type)
+            param_type = gdef.LPDWORD(param_type)
+        size = winproxy.CertGetNameStringA(self, nametype, flags, param_type, None, 0)
         namebuff = ctypes.c_buffer(size)
-        size = winproxy.CertGetNameStringA(self, nametype, flags, None, namebuff, size)
+        size = winproxy.CertGetNameStringA(self, nametype, flags, param_type, namebuff, size)
         return namebuff[:-1]
+
+
 
     name = property(get_name)
     """The name of the certificate.
 
     :type: :class:`str`"""
+
 
     def raw_hash(self):
         size = gdef.DWORD(100)
@@ -244,14 +250,14 @@ class Certificate(gdef.CERT_CONTEXT):
         return buffer[:size.value]
 
     @property
-    def thumprint(self):
-        """The thumprint of the certificate (which is the sha1 of the encoded cert).
+    def thumbprint(self):
+        """The thumbprint of the certificate (which is the sha1 of the encoded cert).
 
         Example:
 
             >>> x
             <Certificate "YOLO2" serial="6f 1d 3e 7d d9 77 59 a9 4c 1c 53 dc 80 db 0c fe">
-            >>> x.thumprint
+            >>> x.thumbprint
             'E2 A2 DB 76 A1 DD 8E 70 0D C6 9F CB 71 CF 29 12 C6 D9 78 97'
 
         :type: :class:`str`
@@ -259,11 +265,27 @@ class Certificate(gdef.CERT_CONTEXT):
         return " ".join("{:02X}".format(x) for x in bytearray(self.raw_hash()))
 
     @property
+    def distinguished_name(self):
+        """The distinguished name (DN) of the certificate.
+
+        Example:
+
+            >>> x
+            <Certificate "Microsoft Windows Production PCA 2011" serial="61 07 76 56 00 00 00 00 00 08">
+            >>> x.distinguished_name
+            'C=US, S=Washington, L=Redmond, O=Microsoft Corporation, CN=Microsoft Windows Production PCA 2011'
+
+        :type: :class:`str`
+        """
+        return self.get_name(gdef.CERT_NAME_RDN_TYPE, gdef.CERT_X500_NAME_STR)
+
+    @property
     def issuer(self):
         """The name of the certificate's issuer.
 
         :type: :class:`str`"""
         return self.get_name(flags=gdef.CERT_NAME_ISSUER_FLAG)
+
 
     @property
     def store(self):

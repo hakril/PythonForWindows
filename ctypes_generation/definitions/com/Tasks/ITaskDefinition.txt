@@ -1,0 +1,103 @@
+typedef struct ITaskDefinitionVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ITaskDefinition * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            __RPC__deref_out  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ITaskDefinition * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ITaskDefinition * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ITaskDefinition * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ITaskDefinition * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ITaskDefinition * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ITaskDefinition * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_RegistrationInfo )( 
+            ITaskDefinition * This,
+            /* [retval][out] */ IRegistrationInfo **ppRegistrationInfo);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_RegistrationInfo )( 
+            ITaskDefinition * This,
+            /* [in] */ IRegistrationInfo *pRegistrationInfo);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Triggers )( 
+            ITaskDefinition * This,
+            /* [retval][out] */ ITriggerCollection **ppTriggers);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Triggers )( 
+            ITaskDefinition * This,
+            /* [in] */ ITriggerCollection *pTriggers);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Settings )( 
+            ITaskDefinition * This,
+            /* [retval][out] */ ITaskSettings **ppSettings);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Settings )( 
+            ITaskDefinition * This,
+            /* [in] */ ITaskSettings *pSettings);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Data )( 
+            ITaskDefinition * This,
+            /* [retval][out] */ BSTR *pData);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Data )( 
+            ITaskDefinition * This,
+            /* [in] */ BSTR data);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Principal )( 
+            ITaskDefinition * This,
+            /* [retval][out] */ IPrincipal **ppPrincipal);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Principal )( 
+            ITaskDefinition * This,
+            /* [in] */ IPrincipal *pPrincipal);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Actions )( 
+            ITaskDefinition * This,
+            /* [retval][out] */ IActionCollection **ppActions);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Actions )( 
+            ITaskDefinition * This,
+            /* [in] */ IActionCollection *pActions);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_XmlText )( 
+            ITaskDefinition * This,
+            /* [retval][out] */ BSTR *pXml);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_XmlText )( 
+            ITaskDefinition * This,
+            /* [in] */ BSTR xml);
+        
+        END_INTERFACE
+    } ITaskDefinitionVtbl;

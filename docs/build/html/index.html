@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/css/mbasic.css" type="text/css" />
-    <script type="text/javascript" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
@@ -52,6 +52,22 @@ Let’s say that the codebase evolves with my needs and my curiosity.</p>
 <p>If you have any issue, question, suggestion do not hesitate to contact me.
 I am always glad to have feedbacks from people using this project.</p>
 <p>Examples are available on the <a class="reference external" href="https://github.com/hakril/pythonforwindows#pythonforwindows">github page</a>  and in the <a class="reference internal" href="sample.html#sample-of-code"><span class="std std-ref">Samples of code</span></a>.</p>
+<div class="section" id="installation">
+<h3>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="installing-using-setup-py">
+<h4>Installing using setup.py<a class="headerlink" href="#installing-using-setup-py" title="Permalink to this headline">¶</a></h4>
+<p>You can install PythonForWindows using the <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> at the root of the project:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
+</pre></div>
+</div>
+<p>In its current state the project only support Python2 and
+<code class="docutils literal notranslate"><span class="pre">setup.py</span></code> will raise an <code class="xref py py-class docutils literal notranslate"><span class="pre">NotImplementedError</span></code> is launched from python3.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">PythonForWindows is not available on Pypi for now and thus cannot be directly installed using <code class="docutils literal notranslate"><span class="pre">pip</span></code>.</p>
+</div>
+</div>
+</div>
 </div>
 <div class="section" id="documentation">
 <h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h2>
@@ -61,7 +77,7 @@ I am always glad to have feedbacks from people using this project.</p>
 <li class="toctree-l2"><a class="reference internal" href="windows.html#the-system-object">1.1. The <code class="docutils literal notranslate"><span class="pre">system</span></code> object</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="various.html">2. The <code class="docutils literal notranslate"><span class="pre">windows</span></code> objects</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="winobject.html">2. The <code class="docutils literal notranslate"><span class="pre">windows</span></code> objects</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="process.html">2.1. Processes and Threads</a></li>
 <li class="toctree-l2"><a class="reference internal" href="process.html#peb-exploration">2.2. PEB Exploration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="process.html#pefile-parsing-loaded-pe">2.3. PEFile - Parsing loaded PE</a></li>
@@ -72,6 +88,10 @@ I am always glad to have feedbacks from people using this project.</p>
 <li class="toctree-l2"><a class="reference internal" href="volume.html">2.8. Volume – The logical drives</a></li>
 <li class="toctree-l2"><a class="reference internal" href="wmi.html">2.9. WMI – Make request to WMI</a></li>
 <li class="toctree-l2"><a class="reference internal" href="handle.html">2.10. Handle – Processes handles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_module.html">2.11. System Module – Loaded kernel modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="object_manager.html">2.12. Object Manager – Kernel objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="task_scheduler.html">2.13. Task scheduler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evtlog.html">2.14. Event Log</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="native_exec.html">3. <code class="docutils literal notranslate"><span class="pre">windows.native_exec</span></code> – Native Code Execution</a><ul>
@@ -157,15 +177,18 @@ I am always glad to have feedbacks from people using this project.</p>
 <li class="toctree-l2"><a class="reference internal" href="sample.html#windows-system">17.2. <code class="docutils literal notranslate"><span class="pre">windows.system</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="sample.html#network-socket-exploration">17.3. <code class="docutils literal notranslate"><span class="pre">Network</span></code> - socket exploration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sample.html#registry">17.4. <code class="docutils literal notranslate"><span class="pre">Registry</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="sample.html#windows-wintrust">17.5. <code class="docutils literal notranslate"><span class="pre">windows.wintrust</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="sample.html#vectoredexception">17.6. <code class="docutils literal notranslate"><span class="pre">VectoredException()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="sample.html#debugging">17.7. Debugging</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sample.html#wmi-requests">17.8. WMI requests</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sample.html#windows-com">17.9. <code class="docutils literal notranslate"><span class="pre">windows.com</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="sample.html#windows-crypto">17.10. <code class="docutils literal notranslate"><span class="pre">windows.crypto</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="sample.html#windows-alpc">17.11. <code class="docutils literal notranslate"><span class="pre">windows.alpc</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="sample.html#windows-rpc">17.12. <code class="docutils literal notranslate"><span class="pre">windows.rpc</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="sample.html#windows-pipe">17.13. <code class="docutils literal notranslate"><span class="pre">windows.pipe</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sample.html#scheduled-tasks">17.5. Scheduled tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sample.html#event-log">17.6. Event Log</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sample.html#object-manager">17.7. Object manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sample.html#windows-wintrust">17.8. <code class="docutils literal notranslate"><span class="pre">windows.wintrust</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sample.html#vectoredexception">17.9. <code class="docutils literal notranslate"><span class="pre">VectoredException()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sample.html#debugging">17.10. Debugging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sample.html#wmi-requests">17.11. WMI requests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sample.html#windows-com">17.12. <code class="docutils literal notranslate"><span class="pre">windows.com</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sample.html#windows-crypto">17.13. <code class="docutils literal notranslate"><span class="pre">windows.crypto</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sample.html#windows-alpc">17.14. <code class="docutils literal notranslate"><span class="pre">windows.alpc</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sample.html#windows-rpc">17.15. <code class="docutils literal notranslate"><span class="pre">windows.rpc</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sample.html#windows-pipe">17.16. <code class="docutils literal notranslate"><span class="pre">windows.pipe</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -190,7 +213,13 @@ I am always glad to have feedbacks from people using this project.</p>
   <h3><a href="#">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Welcome to PythonForWindows’s documentation!</a><ul>
-<li><a class="reference internal" href="#description">Description</a></li>
+<li><a class="reference internal" href="#description">Description</a><ul>
+<li><a class="reference internal" href="#installation">Installation</a><ul>
+<li><a class="reference internal" href="#installing-using-setup-py">Installing using setup.py</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li><a class="reference internal" href="#documentation">Documentation</a></li>
 </ul>
 </li>
@@ -240,7 +269,7 @@ I am always glad to have feedbacks from people using this project.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
     </div>
   </body>
 </html>

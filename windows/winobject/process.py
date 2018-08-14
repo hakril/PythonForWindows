@@ -694,6 +694,7 @@ class Process(utils.AutoHandle):
         # sys.path is not None -> check if python shutdown
         if sys.path is not None and hasattr(self, "_limited_handle") and self._limited_handle:
             # Prevent some bug where dbgprint might be None when __del__ is called in a closing process
+            # This line is bad -> it reopens a handle closed by 'super(Process, self).__del__()' ._.
             dbgprint("Closing limited handle {0} for {1}".format(hex(self._limited_handle), self), "HANDLE") if dbgprint is not None else None
             self._close_function(self._limited_handle)
 
@@ -820,8 +821,9 @@ class CurrentProcess(Process):
 
     def write_memory(self, addr, data):
         """Write data at addr"""
-        buffertype = (c_char * len(data)).from_address(addr)
-        buffertype[:len(data)] = data
+        # buffertype = (c_char * len(data)).from_address(addr)
+        # buffertype[:len(data)] = data
+        ctypes.memmove(addr, data, len(data))
         return True
 
     def read_memory(self, addr, size):
@@ -831,7 +833,8 @@ class CurrentProcess(Process):
         :rtype: :class:`str`
 		"""
         dbgprint('Read CurrentProcess Memory', 'READMEM')
-        buffer = (c_char * size).from_address(addr)
+        buffer = ctypes.c_buffer(size)
+        ctypes.memmove(buffer, addr, size)
         return buffer[:]
 
     def create_thread(self, lpStartAddress, lpParameter, dwCreationFlags=0):
@@ -1029,7 +1032,7 @@ class WinProcess(Process):
     def load_library(self, dll_path):
         """Load the library in remote process
 
-        :rtype: :class:`RemoteLoadedModule`
+        :rtype: :class:`LoadedModule`
         """
         dllbase = windows.injection.load_dll_in_remote_process(self, dll_path)
         return [m for m in self.peb.modules if m.baseaddr == dllbase][0]

@@ -10,13 +10,13 @@
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/css/mbasic.css" type="text/css" />
-    <script type="text/javascript" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="2. The windows objects" href="various.html" />
+    <link rel="next" title="2. The windows objects" href="winobject.html" />
     <link rel="prev" title="Welcome to PythonForWindows’s documentation!" href="index.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -29,7 +29,7 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="various.html" title="2. The windows objects"
+          <a href="winobject.html" title="2. The windows objects"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="index.html" title="Welcome to PythonForWindows’s documentation!"
@@ -139,9 +139,37 @@ It also offers some submodules aimed to help the interfacing with <code class="d
 </dd></dl>
 
 <dl class="attribute">
+<dt id="windows.winobject.system.System.modules">
+<code class="descname">modules</code><a class="headerlink" href="#windows.winobject.system.System.modules" title="Permalink to this definition">¶</a></dt>
+<dd><p>The list of system modules</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">[<a class="reference internal" href="system_module.html#windows.winobject.system_module.SystemModule" title="windows.winobject.system_module.SystemModule"><code class="xref py py-class docutils literal notranslate"><span class="pre">SystemModule</span></code></a>] – A list of <a class="reference internal" href="system_module.html#windows.winobject.system_module.SystemModule" title="windows.winobject.system_module.SystemModule"><code class="xref py py-class docutils literal notranslate"><span class="pre">SystemModule</span></code></a> or <a class="reference internal" href="system_module.html#windows.winobject.system_module.SystemModuleWow64" title="windows.winobject.system_module.SystemModuleWow64"><code class="xref py py-class docutils literal notranslate"><span class="pre">SystemModuleWow64</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
 <dt id="windows.winobject.system.System.network">
 <code class="descname">network</code><em class="property"> = &lt;windows.winobject.network.Network object&gt;</em><a class="headerlink" href="#windows.winobject.system.System.network" title="Permalink to this definition">¶</a></dt>
 <dd><p>Object of class <a class="reference internal" href="network.html#windows.winobject.network.Network" title="windows.winobject.network.Network"><code class="xref py py-class docutils literal notranslate"><span class="pre">windows.winobject.network.Network</span></code></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.system.System.object_manager">
+<code class="descname">object_manager</code><a class="headerlink" href="#windows.winobject.system.System.object_manager" title="Permalink to this definition">¶</a></dt>
+<dd><p>An object to query the objects in the kernel object manager.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="object_manager.html#windows.winobject.object_manager.ObjectManager" title="windows.winobject.object_manager.ObjectManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectManager</span></code></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="attribute">
@@ -194,6 +222,20 @@ It also offers some submodules aimed to help the interfacing with <code class="d
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">[<a class="reference internal" href="service.html#windows.winobject.service.ServiceA" title="windows.winobject.service.ServiceA"><code class="xref py py-class docutils literal notranslate"><span class="pre">ServiceA</span></code></a>] – A list of Service</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.system.System.task_scheduler">
+<code class="descname">task_scheduler</code><a class="headerlink" href="#windows.winobject.system.System.task_scheduler" title="Permalink to this definition">¶</a></dt>
+<dd><p>An object able to manage scheduled tasks on the local system</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="task_scheduler.html#windows.winobject.task_scheduler.TaskService" title="windows.winobject.task_scheduler.TaskService"><code class="xref py py-class docutils literal notranslate"><span class="pre">TaskService</span></code></a></td>
 </tr>
 </tbody>
 </table>
@@ -299,7 +341,7 @@ It also offers some submodules aimed to help the interfacing with <code class="d
   <p class="topless"><a href="index.html"
                         title="previous chapter">Welcome to PythonForWindows’s documentation!</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="various.html"
+  <p class="topless"><a href="winobject.html"
                         title="next chapter">2. The <code class="docutils literal notranslate"><span class="pre">windows</span></code> objects</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
@@ -334,7 +376,7 @@ It also offers some submodules aimed to help the interfacing with <code class="d
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="various.html" title="2. The windows objects"
+          <a href="winobject.html" title="2. The windows objects"
              >next</a> |</li>
         <li class="right" >
           <a href="index.html" title="Welcome to PythonForWindows’s documentation!"
@@ -344,7 +386,7 @@ It also offers some submodules aimed to help the interfacing with <code class="d
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
     </div>
   </body>
 </html>

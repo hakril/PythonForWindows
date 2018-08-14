@@ -1,0 +1,55 @@
+(cmd) python event_log\eventlog.py
+Event log Manager is: <windows.winobject.event_log.EvtlogManager object at 0x0592DB70>
+They are <1155> channels
+They are <1179> publishers
+Openning channel <Microsoft-Windows-Windows Firewall With Advanced Security/Firewall>
+Channel is <EvtChannel "Microsoft-Windows-Windows Firewall With Advanced Security/Firewall">
+The channel contains <1037> events
+
+Querying "Event/EventData[Data='C:\WINDOWS\System32\svchost.exe'] and Event/System[EventID=2006]">
+Query is <EvtQuery object at 0x06E9F440>
+List contains 304 event
+
+First event is <EvtEvent id="2006" time="2018-05-06 08:03:06.210109">
+System values:
+ * ID: 2006
+ * version: 0
+ * level: 4
+ * opcode: 0
+ * time_created: 131700673862101088
+ * ID: 2006
+Event specific values:
+ * <ModifyingUser> -> <108703760>
+ * <RuleName> -> <ByteCodeGeneration>
+ * <ModifyingApplication> -> <C:\WINDOWS\System32\svchost.exe>
+ * <RuleId> -> <{318EF1CF-A3FA-4B04-8AAC-712276661117}>
+
+Event metadata is <EventMetadata object at 0x06EB96C0>
+ * id : 2006
+ * channel_id : 16
+ * message_id : 2986346454
+ * event_data : [u'RuleId', u'RuleName', u'ModifyingUser', u'ModifyingApplication']
+ * EventData template :
+<template xmlns="http://schemas.microsoft.com/win/2004/08/events">
+  <data name="RuleId" inType="win:UnicodeString" outType="xs:string"/>
+  <data name="RuleName" inType="win:UnicodeString" outType="xs:string"/>
+  <data name="ModifyingUser" inType="win:SID" outType="xs:string"/>
+  <data name="ModifyingApplication" inType="win:UnicodeString" outType="xs:string"/>
+</template>
+
+
+Exploring complex Evt types:
+Channel is still <EvtChannel "Microsoft-Windows-Windows Firewall With Advanced Security/Firewall">
+Channel config is <ChannelConfig "Microsoft-Windows-Windows Firewall With Advanced Security/Firewall">
+Channel publisher is <EvtPublisher "Microsoft-Windows-Windows Firewall With Advanced Security">
+Channel publisher metadata is <PublisherMetadata "Microsoft-Windows-Windows Firewall With Advanced Security">
+Publisher's channels are:
+ * <EvtChannel "Microsoft-Windows-Windows Firewall With Advanced Security/Firewall">
+ * <EvtChannel "Microsoft-Windows-Windows Firewall With Advanced Security/ConnectionSecurity">
+ * <EvtChannel "Microsoft-Windows-Windows Firewall With Advanced Security/FirewallVerbose">
+ * <EvtChannel "Microsoft-Windows-Windows Firewall With Advanced Security/ConnectionSecurityVerbose">
+ * <EvtChannel "Network Isolation Operational">
+Some publisher's event metadata are:
+ * <EventMetadata object at 0x06EBE710>: id=2000
+ * <EventMetadata object at 0x06EBE7B0>: id=2001
+ * <EventMetadata object at 0x06EBE3F0>: id=2002

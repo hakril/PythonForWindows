@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/css/mbasic.css" type="text/css" />
-    <script type="text/javascript" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
@@ -360,7 +360,7 @@ It is based on <code class="xref py py-func docutils literal notranslate"><span 
 </div></blockquote>
 <dl class="method">
 <dt id="windows.debug.LocalDebugger.add_bp">
-<code class="descname">add_bp</code><span class="sig-paren">(</span><em>bp</em>, <em>targets=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/localdbg.html#LocalDebugger.add_bp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.LocalDebugger.add_bp" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_bp</code><span class="sig-paren">(</span><em>bp</em>, <em>target=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/localdbg.html#LocalDebugger.add_bp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.LocalDebugger.add_bp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a breakpoint, bp is a “class:<cite>Breakpoint</cite></p>
 <p>If the <code class="docutils literal notranslate"><span class="pre">bp</span></code> type is <code class="docutils literal notranslate"><span class="pre">STANDARD_BP</span></code>, target must be None.</p>
 <p>If the <code class="docutils literal notranslate"><span class="pre">bp</span></code> type is <code class="docutils literal notranslate"><span class="pre">HARDWARE_EXEC_BP</span></code>, target can be None (all threads), or some threads of the process</p>
@@ -368,7 +368,7 @@ It is based on <code class="xref py py-func docutils literal notranslate"><span 
 
 <dl class="method">
 <dt id="windows.debug.LocalDebugger.del_bp">
-<code class="descname">del_bp</code><span class="sig-paren">(</span><em>bp</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/localdbg.html#LocalDebugger.del_bp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.LocalDebugger.del_bp" title="Permalink to this definition">¶</a></dt>
+<code class="descname">del_bp</code><span class="sig-paren">(</span><em>bp</em>, <em>targets=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/localdbg.html#LocalDebugger.del_bp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.LocalDebugger.del_bp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Delete a breakpoint</p>
 </dd></dl>
 
@@ -482,6 +482,12 @@ It is based on <code class="xref py py-func docutils literal notranslate"><span 
 </dd></dl>
 
 <dl class="method">
+<dt id="windows.debug.FunctionBP.arguments">
+<code class="descname">arguments</code><span class="sig-paren">(</span><em>dbg</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.debug.FunctionBP.arguments" title="Permalink to this definition">¶</a></dt>
+<dd><p>TEST PARAM DICT</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="windows.debug.FunctionBP.break_on_ret">
 <code class="descname">break_on_ret</code><span class="sig-paren">(</span><em>dbg</em>, <em>exception</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.debug.FunctionBP.break_on_ret" title="Permalink to this definition">¶</a></dt>
 <dd><p>Setup a breakpoint at the return address of the function, this breakpoint will call <a class="reference internal" href="#windows.debug.FunctionBP.ret_trigger" title="windows.debug.FunctionBP.ret_trigger"><code class="xref py py-func docutils literal notranslate"><span class="pre">ret_trigger()</span></code></a></p>
@@ -575,7 +581,7 @@ It is based on <code class="xref py py-func docutils literal notranslate"><span 
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
     </div>
   </body>
 </html>

@@ -107,8 +107,8 @@ class WinFuncParser(Parser):
             params.append(self.parse_func_arg(has_declaration))
 
         self.assert_token_type(CloseParenthesisToken)
-        self.assert_token_type(ColonToken)
-        return WinFunc(return_type, func_name, declaration, params)
+        self.assert_token_type(SemiColonToken)
+        return WinFunc(return_type, func_name, params)
 
     def parse(self):
         res = []

@@ -1,6 +1,10 @@
 Volume -- The logical drives
 ============================
 
+The list of logical drives is accessible via :py:attr:`windows.system.logicaldrives
+<windows.winobject.system.System.logicaldrives>`
+
+
 .. note::
 
     See sample :ref:`sample_system`

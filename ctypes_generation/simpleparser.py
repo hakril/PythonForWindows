@@ -24,6 +24,10 @@ class NameToken(Token):
     pass
 
 class ColonToken(NoValueToken):
+    value = ":"
+    pass
+
+class SemiColonToken(NoValueToken):
     value = ";"
     pass
 
@@ -73,8 +77,9 @@ class Lexer(object):
     keywords = ["typedef", "struct", "enum", "union", "const"]
 
     token_chr = {"*" : StarToken, "[" : OpenSquareBracketToken, "]" : CloseSquareBracketToken,
-                    "{" : OpenBracketToken, "}" : CloseBracketToken, ";" : ColonToken,
-                    "," : CommaToken, "(" : OpenParenthesisToken, ")" :  CloseParenthesisToken, "#" : SharpToken, "=" : EqualToken}
+                    "{" : OpenBracketToken, "}" : CloseBracketToken, ";" : SemiColonToken,
+                    "," : CommaToken, "(" : OpenParenthesisToken, ")" :  CloseParenthesisToken, "#" : SharpToken, "=" : EqualToken,
+                    ":": ColonToken}
 
     def __init__(self, code, newlinetoken=False):
         self.code = code

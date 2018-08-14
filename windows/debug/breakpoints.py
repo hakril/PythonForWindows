@@ -65,12 +65,22 @@ class X86ArgumentRetriever(object):
     def get_arg(self, nb, proc, thread):
         return proc.read_dword(thread.context.sp + 4 + (4 * nb))
 
+    def set_arg(self, nb, value, proc, thread):
+        return proc.write_dword(thread.context.sp + 4 + (4 * nb), value)
+
 class X64ArgumentRetriever(object):
     REG_ARGS = ["Rcx", "Rdx", "R8", "R9"]
     def get_arg(self, nb, proc, thread):
         if nb < len(self.REG_ARGS):
             return getattr(thread.context, self.REG_ARGS[nb])
         return proc.read_qword(thread.context.sp + 8 + (8 * nb))
+
+    def set_arg(self, nb, value, proc, thread):
+        if nb < len(self.REG_ARGS):
+            ctx = thread.context
+            setattr(ctx, self.REG_ARGS[nb], value)
+            return thread.set_context(ctx)
+        return proc.write_qword(thread.context.sp + 8 + (8 * nb), value)
 
 ## Behaviour breakpoint !
 # class FunctionParamDumpBP(Breakpoint):
@@ -134,6 +144,57 @@ class FunctionParamDumpBPAbstract(object):
         if cthread.context.SegCs == windows.syswow64.CS_32bits:
             return self.extract_arguments_32bits(cproc, cthread)
         return self.extract_arguments_64bits(cproc, cthread)
+
+    def arguments(self, dbg):
+        "TEST PARAM DICT"
+        if windows.current_process.bitness == 32:
+            extractor = windows.debug.X86ArgumentRetriever()
+        elif dbg.current_process.bitness == 64:
+            extractor = windows.debug.X64ArgumentRetriever()
+        elif dbg.current_thread.context.SegCs == windows.syswow64.CS_32bits:
+            extractor = windows.debug.X86ArgumentRetriever()
+        else:
+            extractor = windows.debug.X64ArgumentRetriever()
+        name_map = {name:i for i, name in enumerate(t[1] for t in self.target_params)}
+        return FunctionParameterProxy(extractor, name_map, self.target_args, dbg)
+
+class FunctionParameterProxy(object):
+    # TODO: clean this + put more of the logic in the X64ArgumentRetriever
+    def __init__(self, extractor, name_map, parameters_type, x):
+        self.extractor = extractor
+        self.name_map = name_map
+        self.parameters_type = parameters_type
+        self.x = x
+
+    def __getitem__(self, x):
+        if isinstance(x, basestring):
+            x = self.name_map[x]
+        # import pdb;pdb.set_trace()
+        argtype = self.parameters_type[x]
+        value = self.extractor.get_arg(x, self.x.current_process, self.x.current_thread)
+        rt = windows.remotectypes.transform_type_to_remote32bits(argtype)
+        if issubclass(rt, windows.remotectypes.RemoteValue):
+            t = rt(value, self.x.current_process)
+        else:
+            t = rt(value)
+        if not hasattr(t, "contents"):
+            try:
+                t = t.value
+            except AttributeError:
+                pass
+        return t
+
+    def __setitem__(self, x, value):
+        if isinstance(x, basestring):
+            x = self.name_map[x]
+        try:
+            ctypes.cast(value, PVOID)
+        except ctypes.ArgumentError:
+            pass
+        value = getattr(value, "value", value)
+        return self.extractor.set_arg(x, value, self.x.current_process, self.x.current_thread)
+
+
 
 class FunctionParamDumpBP(FunctionParamDumpBPAbstract, Breakpoint):
     pass

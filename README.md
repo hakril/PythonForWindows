@@ -17,6 +17,16 @@ Parts of PythonForWindows are used in the [LKD project][LKD_GITHUB].
 If you have any issue, question, suggestion do not hesitate to contact me.
 I am always glad to have feedbacks from people using this project.
 
+## Installation
+
+You can install PythonForWindows using the ``setup.py`` script:
+
+``
+python setup.py install
+``
+
+Note that PythonForWindows only support Python2 at the moment.
+
 ## Overview
 
 ### Processes / Threads
@@ -94,6 +104,9 @@ VER_NT_WORKSTATION(0x1L)
 [<WinProcess "[System Process]" pid 0 at 0x433f7d0>, <WinProcess "System" pid 4 at 0x433fd30>]
 >>> windows.system.logicaldrives[0]
 <LogicalDrive "C:\" (DRIVE_FIXED)>
+>>> windows.system.services[23]
+<ServiceA "Appinfo" SERVICE_RUNNING(0x4L)>
+
 ```
 
 ### IAT Hook
@@ -235,6 +248,86 @@ KeyValue(name='MYQWORD', value=123456789987654321L, type=11)
 # Explore Values
 >>> tstkey.values
 [KeyValue(name='MYQWORD', value=123456789987654321L, type=11), KeyValue(name='VALUE', value=u'a_value_for_my_key', type=1)]
+```
+
+### Object manager
+
+PythonForWindows uses the native Windows NT API to display some information about the object in the Object Manager's name space.
+Just like the well-known tools ``winobj.exe``
+
+```python
+>>> windows.system.object_manager.root
+<KernelObject "\" (type="Directory")>
+# The objects of type "Directory" can be acceded just like a dict
+>>> list(windows.system.object_manager.root)[:3]
+[u'PendingRenameMutex', u'ObjectTypes', u'storqosfltport']
+# Find an object by its path
+>>> windows.system.object_manager["KnownDLLs\\kernel32.dll"]
+<KernelObject "\KnownDLLs\kernel32.dll" (type="Section")>
+>>> k32 = windows.system.object_manager["KnownDLLs\\kernel32.dll"]
+>>> k32.name, k32.fullname, k32.type
+('kernel32.dll', '\\KnownDLLs\\kernel32.dll', u'Section')
+# Follow SymbolicLink object
+>>> windows.system.object_manager["\\KnownDLLs\\KnownDLLPath"]
+<KernelObject "\KnownDLLs\KnownDLLPath" (type="SymbolicLink")>
+>>> windows.system.object_manager["\\KnownDLLs\\KnownDLLPath"].target
+u'C:\\WINDOWS\\System32'
+```
+
+### Scheduled Task
+
+The ``windows.system.task_scheduler`` object allows to query and create scheduled task.
+
+**This part is still in developpement and the API may evolve**
+
+```python
+>>> windows.system.task_scheduler
+<TaskService at 0x4774670>
+>>> windows.system.task_scheduler.root
+<TaskFolder "\" at 0x4774710>
+>>> task = windows.system.task_scheduler.root.tasks[2]
+>>> task
+<Task "DemoTask" at 0x47748f0>
+>>> task.name
+u'DemoTask'
+# Explore task actions
+>>> task.definition.actions[1]
+<ExecAction at 0x4774800>
+>>> task.definition.actions[1].path
+u'c:\\windows\\python\\python.exe'
+>>> task.definition.actions[1].arguments
+u'yolo.py --test'
+```
+
+### Event logs
+
+The ``windows.system.event_log`` object allows to query event logs.
+
+**This part is still in developpement and the API may evolve**
+
+```python
+>>> windows.system.event_log
+<windows.winobject.event_log.EvtlogManager object at 0x04A78270>
+# Find a channel by its name
+>>> chan = windows.system.event_log["Microsoft-Windows-Windows Firewall With Advanced Security/Firewall"]
+>>> chan
+<EvtChannel "Microsoft-Windows-Windows Firewall With Advanced Security/Firewall">
+# Open .evtx files
+>>> windows.system.event_log["test.evtx"]
+<EvtFile "test.evtx">
+# Query a channel for all events
+>>> chan.query().all()[:2]
+[<EvtEvent id="2004" time="2018-07-12 07:44:08.081504">, <EvtEvent id="2006" time="2018-07-12 07:57:59.806938">]
+# Query a channel for some ids
+>>> chan.query(ids=2004).all()[:2]
+[<EvtEvent id="2004" time="2018-07-12 07:44:08.081504">, <EvtEvent id="2004" time="2018-07-12 07:57:59.815156">]
+# Query a channel via XPATH
+>>> evt = chan.query("Event/EventData[Data='Netflix']").all()[0]
+# Explore event information
+>>> evt
+<EvtEvent id="2006" time="2018-07-17 10:32:39.160423">
+>>> evt.data
+{u'ModifyingUser': 69828304, u'RuleName': u'Netflix', u'ModifyingApplication': ...}
 ```
 
 ### ALPC-RPC
@@ -519,7 +612,6 @@ user.nTSecurityDescriptor.control:  <SECURITY_DESCRIPTOR_CONTROL "[SE_DACL_PRESE
 ### Other stuff (see doc / samples)
 
 - Network
-- Services
 - COM
 
 

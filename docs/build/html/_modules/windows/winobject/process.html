@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/css/mbasic.css" type="text/css" />
-    <script type="text/javascript" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
@@ -165,8 +165,8 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">owner</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">bitness</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">SetThreadContext</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">64</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">owner</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">32</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">Wow64SetThreadContext</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span></div>
-        <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">syswow64</span><span class="o">.</span><span class="n">NtSetContextThread_32_to_64</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">context</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">Wow64SetThreadContext</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">syswow64</span><span class="o">.</span><span class="n">NtSetContextThread_32_to_64</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">context</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="WinThread.set_syswow_context"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.WinThread.set_syswow_context">[docs]</a>    <span class="k">def</span> <span class="nf">set_syswow_context</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
@@ -174,8 +174,8 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">owner</span><span class="o">.</span><span class="n">is_wow_64</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Not a syswow process&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">64</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">SetThreadContext</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span></div>
-        <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">syswow64</span><span class="o">.</span><span class="n">NtSetContextThread_32_to_64</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">context</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">SetThreadContext</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">syswow64</span><span class="o">.</span><span class="n">NtSetContextThread_32_to_64</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">context</span><span class="p">))</span></div>
 
 
     <span class="nd">@property</span>
@@ -219,16 +219,16 @@
         <span class="k">return</span> <span class="n">res</span><span class="o">.</span><span class="n">TebBaseAddress</span>
 
 <div class="viewcode-block" id="WinThread.exit"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.WinThread.exit">[docs]</a>    <span class="k">def</span> <span class="nf">exit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">code</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Exit the thread&quot;&quot;&quot;</span></div>
-        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">TerminateThread</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">code</span><span class="p">)</span>
+        <span class="sd">&quot;&quot;&quot;Exit the thread&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">TerminateThread</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">code</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="WinThread.resume"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.WinThread.resume">[docs]</a>    <span class="k">def</span> <span class="nf">resume</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Resume the thread&quot;&quot;&quot;</span></div>
-        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">ResumeThread</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">)</span>
+        <span class="sd">&quot;&quot;&quot;Resume the thread&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">ResumeThread</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="WinThread.suspend"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.WinThread.suspend">[docs]</a>    <span class="k">def</span> <span class="nf">suspend</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Suspend the thread&quot;&quot;&quot;</span></div>
-        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">SuspendThread</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">)</span>
+        <span class="sd">&quot;&quot;&quot;Suspend the thread&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">SuspendThread</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_get_handle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">OpenThread</span><span class="p">(</span><span class="n">dwThreadId</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tid</span><span class="p">)</span>
@@ -284,8 +284,8 @@
 
     <span class="k">if</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">is_implemented</span><span class="p">(</span><span class="n">winproxy</span><span class="o">.</span><span class="n">GetThreadId</span><span class="p">):</span>
         <span class="n">_get_thread_id</span> <span class="o">=</span> <span class="n">_get_thread_id_by_api</span>
-    <span class="k">else</span><span class="p">:</span></div>
-        <span class="n">_get_thread_id</span> <span class="o">=</span> <span class="n">_get_thread_id_manual</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">_get_thread_id</span> <span class="o">=</span> <span class="n">_get_thread_id_manual</span></div>
 
 
 
@@ -323,8 +323,8 @@
 <span class="sd">        :type: :class:`int`</span>
 <span class="sd">		&quot;&quot;&quot;</span>
         <span class="n">res</span> <span class="o">=</span> <span class="n">DWORD</span><span class="p">()</span>
-        <span class="n">winproxy</span><span class="o">.</span><span class="n">GetExitCodeThread</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">byref</span><span class="p">(</span><span class="n">res</span><span class="p">))</span></div>
-        <span class="k">return</span> <span class="n">res</span><span class="o">.</span><span class="n">value</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">GetExitCodeThread</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">byref</span><span class="p">(</span><span class="n">res</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">res</span><span class="o">.</span><span class="n">value</span></div>
 
 
 <span class="k">class</span> <span class="nc">Process</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">AutoHandle</span><span class="p">):</span>
@@ -733,6 +733,7 @@
         <span class="c1"># sys.path is not None -&gt; check if python shutdown</span>
         <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_limited_handle&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_limited_handle</span><span class="p">:</span>
             <span class="c1"># Prevent some bug where dbgprint might be None when __del__ is called in a closing process</span>
+            <span class="c1"># This line is bad -&gt; it reopens a handle closed by &#39;super(Process, self).__del__()&#39; ._.</span>
             <span class="n">dbgprint</span><span class="p">(</span><span class="s2">&quot;Closing limited handle </span><span class="si">{0}</span><span class="s2"> for </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_limited_handle</span><span class="p">),</span> <span class="bp">self</span><span class="p">),</span> <span class="s2">&quot;HANDLE&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">dbgprint</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_close_function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_limited_handle</span><span class="p">)</span>
 
@@ -772,12 +773,12 @@
         <span class="k">pass</span>
 
 <div class="viewcode-block" id="CurrentThread.exit"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.CurrentThread.exit">[docs]</a>    <span class="k">def</span> <span class="nf">exit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">code</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Exit the thread&quot;&quot;&quot;</span></div>
-        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">ExitThread</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
+        <span class="sd">&quot;&quot;&quot;Exit the thread&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">ExitThread</span><span class="p">(</span><span class="n">code</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="CurrentThread.wait"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.CurrentThread.wait">[docs]</a>    <span class="k">def</span> <span class="nf">wait</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">INFINITE</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Raise :class:`ValueError` to prevent deadlock :D&quot;&quot;&quot;</span></div></div>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;wait() on current thread&quot;</span><span class="p">)</span>
+        <span class="sd">&quot;&quot;&quot;Raise :class:`ValueError` to prevent deadlock :D&quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;wait() on current thread&quot;</span><span class="p">)</span></div></div>
 
     <span class="c1">#def token(self):</span>
 
@@ -850,18 +851,19 @@
 
 <span class="sd">        :return: The address of the allocated memory</span>
 <span class="sd">        :rtype: :class:`int`</span>
-<span class="sd">		&quot;&quot;&quot;</span></div>
-        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">VirtualAlloc</span><span class="p">(</span><span class="n">dwSize</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">flProtect</span><span class="o">=</span><span class="n">prot</span><span class="p">)</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">VirtualAlloc</span><span class="p">(</span><span class="n">dwSize</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">flProtect</span><span class="o">=</span><span class="n">prot</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="CurrentProcess.virtual_free"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.CurrentProcess.virtual_free">[docs]</a>    <span class="k">def</span> <span class="nf">virtual_free</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addr</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Free memory in the process by virtual_alloc&quot;&quot;&quot;</span></div>
-        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">VirtualFree</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span>
+        <span class="sd">&quot;&quot;&quot;Free memory in the process by virtual_alloc&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">VirtualFree</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="CurrentProcess.write_memory"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.CurrentProcess.write_memory">[docs]</a>    <span class="k">def</span> <span class="nf">write_memory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Write data at addr&quot;&quot;&quot;</span>
-        <span class="n">buffertype</span> <span class="o">=</span> <span class="p">(</span><span class="n">c_char</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))</span><span class="o">.</span><span class="n">from_address</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span>
-        <span class="n">buffertype</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)]</span> <span class="o">=</span> <span class="n">data</span></div>
-        <span class="k">return</span> <span class="kc">True</span>
+        <span class="c1"># buffertype = (c_char * len(data)).from_address(addr)</span>
+        <span class="c1"># buffertype[:len(data)] = data</span>
+        <span class="n">ctypes</span><span class="o">.</span><span class="n">memmove</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="CurrentProcess.read_memory"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.CurrentProcess.read_memory">[docs]</a>    <span class="k">def</span> <span class="nf">read_memory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Read ``size`` from ``addr``</span>
@@ -870,39 +872,40 @@
 <span class="sd">        :rtype: :class:`str`</span>
 <span class="sd">		&quot;&quot;&quot;</span>
         <span class="n">dbgprint</span><span class="p">(</span><span class="s1">&#39;Read CurrentProcess Memory&#39;</span><span class="p">,</span> <span class="s1">&#39;READMEM&#39;</span><span class="p">)</span>
-        <span class="n">buffer</span> <span class="o">=</span> <span class="p">(</span><span class="n">c_char</span> <span class="o">*</span> <span class="n">size</span><span class="p">)</span><span class="o">.</span><span class="n">from_address</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span></div>
-        <span class="k">return</span> <span class="n">buffer</span><span class="p">[:]</span>
+        <span class="n">buffer</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_buffer</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
+        <span class="n">ctypes</span><span class="o">.</span><span class="n">memmove</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">buffer</span><span class="p">[:]</span></div>
 
 <div class="viewcode-block" id="CurrentProcess.create_thread"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.CurrentProcess.create_thread">[docs]</a>    <span class="k">def</span> <span class="nf">create_thread</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lpStartAddress</span><span class="p">,</span> <span class="n">lpParameter</span><span class="p">,</span> <span class="n">dwCreationFlags</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Create a new thread</span>
 
 <span class="sd">        :rtype: :class:`WinThread` or :class:`DeadThread`</span>
 <span class="sd">		&quot;&quot;&quot;</span>
-        <span class="n">handle</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CreateThread</span><span class="p">(</span><span class="n">lpStartAddress</span><span class="o">=</span><span class="n">lpStartAddress</span><span class="p">,</span> <span class="n">lpParameter</span><span class="o">=</span><span class="n">lpParameter</span><span class="p">,</span> <span class="n">dwCreationFlags</span><span class="o">=</span><span class="n">dwCreationFlags</span><span class="p">)</span></div>
-        <span class="k">return</span> <span class="n">WinThread</span><span class="o">.</span><span class="n">_from_handle</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
+        <span class="n">handle</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CreateThread</span><span class="p">(</span><span class="n">lpStartAddress</span><span class="o">=</span><span class="n">lpStartAddress</span><span class="p">,</span> <span class="n">lpParameter</span><span class="o">=</span><span class="n">lpParameter</span><span class="p">,</span> <span class="n">dwCreationFlags</span><span class="o">=</span><span class="n">dwCreationFlags</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">WinThread</span><span class="o">.</span><span class="n">_from_handle</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="CurrentProcess.load_library"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.CurrentProcess.load_library">[docs]</a>    <span class="k">def</span> <span class="nf">load_library</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dll_path</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Load the library in current process</span>
 
 <span class="sd">        :rtype: :class:`LoadedModule`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">dllbase</span> <span class="o">=</span>  <span class="n">winproxy</span><span class="o">.</span><span class="n">LoadLibraryA</span><span class="p">(</span><span class="n">dll_path</span><span class="p">)</span></div>
-        <span class="k">return</span> <span class="p">[</span><span class="n">m</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">peb</span><span class="o">.</span><span class="n">modules</span> <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">baseaddr</span> <span class="o">==</span> <span class="n">dllbase</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">dllbase</span> <span class="o">=</span>  <span class="n">winproxy</span><span class="o">.</span><span class="n">LoadLibraryA</span><span class="p">(</span><span class="n">dll_path</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">m</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">peb</span><span class="o">.</span><span class="n">modules</span> <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">baseaddr</span> <span class="o">==</span> <span class="n">dllbase</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="CurrentProcess.execute"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.CurrentProcess.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">code</span><span class="p">,</span> <span class="n">parameter</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Execute native code ``code`` in the current thread.</span>
 
 <span class="sd">        :rtype: :class:`int` the return value of the native code&quot;&quot;&quot;</span>
-        <span class="n">f</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">native_exec</span><span class="o">.</span><span class="n">create_function</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="p">[</span><span class="n">PVOID</span><span class="p">,</span> <span class="n">PVOID</span><span class="p">])</span></div>
-        <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="n">parameter</span><span class="p">)</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">native_exec</span><span class="o">.</span><span class="n">create_function</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="p">[</span><span class="n">PVOID</span><span class="p">,</span> <span class="n">PVOID</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="n">parameter</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="CurrentProcess.exit"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.CurrentProcess.exit">[docs]</a>    <span class="k">def</span> <span class="nf">exit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">code</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Exit the process&quot;&quot;&quot;</span></div>
-        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">ExitProcess</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
+        <span class="sd">&quot;&quot;&quot;Exit the process&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">ExitProcess</span><span class="p">(</span><span class="n">code</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="CurrentProcess.wait"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.CurrentProcess.wait">[docs]</a>    <span class="k">def</span> <span class="nf">wait</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">INFINITE</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Raise :class:`ValueError` to prevent deadlock :D&quot;&quot;&quot;</span></div>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;wait() on current thread&quot;</span><span class="p">)</span>
+        <span class="sd">&quot;&quot;&quot;Raise :class:`ValueError` to prevent deadlock :D&quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;wait() on current thread&quot;</span><span class="p">)</span></div>
 
     <span class="nd">@utils</span><span class="o">.</span><span class="n">fixedpropety</span>
     <span class="k">def</span> <span class="nf">peb_syswow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -922,8 +925,8 @@
 
     <span class="c1"># TODO: use ctypes.string_ad / ctypes.wstring_at for read_string / read_wstring ?</span>
 
-</div>
-    <span class="n">token</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">open_token</span><span class="p">)</span>
+
+    <span class="n">token</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">open_token</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="WinProcess"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.WinProcess">[docs]</a><span class="k">class</span> <span class="nc">WinProcess</span><span class="p">(</span><span class="n">Process</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A Process on the system&quot;&quot;&quot;</span>
@@ -993,20 +996,20 @@
 
 <span class="sd">        :return: The address of the allocated memory</span>
 <span class="sd">        :rtype: :class:`int`</span>
-<span class="sd">		&quot;&quot;&quot;</span></div>
-        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">VirtualAllocEx</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">dwSize</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">flProtect</span><span class="o">=</span><span class="n">prot</span><span class="p">)</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">VirtualAllocEx</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">dwSize</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">flProtect</span><span class="o">=</span><span class="n">prot</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="WinProcess.virtual_free"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.WinProcess.virtual_free">[docs]</a>    <span class="k">def</span> <span class="nf">virtual_free</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addr</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Free memory in the process by virtual_alloc&quot;&quot;&quot;</span></div>
-        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">VirtualFreeEx</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">addr</span><span class="p">)</span>
+        <span class="sd">&quot;&quot;&quot;Free memory in the process by virtual_alloc&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">VirtualFreeEx</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">addr</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="WinProcess.write_memory"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.WinProcess.write_memory">[docs]</a>    <span class="k">def</span> <span class="nf">write_memory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Write `data` at `addr`&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">32</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">64</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">is_implemented</span><span class="p">(</span><span class="n">winproxy</span><span class="o">.</span><span class="n">NtWow64WriteVirtualMemory64</span><span class="p">):</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;NtWow64WriteVirtualMemory64 non available in ntdll: cannot write into 64bits processus&quot;</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">NtWow64WriteVirtualMemory64</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))</span></div>
-        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">WriteProcessMemory</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">lpBuffer</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">NtWow64WriteVirtualMemory64</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">WriteProcessMemory</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">lpBuffer</span><span class="o">=</span><span class="n">data</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">low_read_memory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">buffer_addr</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">32</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">64</span><span class="p">:</span>
@@ -1025,8 +1028,8 @@
 <span class="sd">        :rtype: :class:`str`</span>
 <span class="sd">		&quot;&quot;&quot;</span>
         <span class="n">buffer</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">create_string_buffer</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">low_read_memory</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">buffer</span><span class="p">),</span> <span class="n">size</span><span class="p">)</span></div>
-        <span class="k">return</span> <span class="n">buffer</span><span class="p">[:]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">low_read_memory</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">buffer</span><span class="p">),</span> <span class="n">size</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">buffer</span><span class="p">[:]</span></div>
 
     <span class="c1"># Simple cache test</span>
     <span class="c1"># real_read = read_memory</span>
@@ -1051,8 +1054,8 @@
 
 <span class="sd">            :returns: struct</span>
 <span class="sd">		&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">low_read_memory</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">struct</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">struct</span><span class="p">))</span></div>
-        <span class="k">return</span> <span class="n">struct</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">low_read_memory</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">struct</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">struct</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">struct</span></div>
 
 <div class="viewcode-block" id="WinProcess.create_thread"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.WinProcess.create_thread">[docs]</a>    <span class="k">def</span> <span class="nf">create_thread</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">param</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Create a remote thread</span>
@@ -1062,31 +1065,31 @@
         <span class="k">if</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">32</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">64</span><span class="p">:</span>
             <span class="n">thread_handle</span> <span class="o">=</span> <span class="n">HANDLE</span><span class="p">()</span>
             <span class="n">windows</span><span class="o">.</span><span class="n">syswow64</span><span class="o">.</span><span class="n">NtCreateThreadEx_32_to_64</span><span class="p">(</span><span class="n">ThreadHandle</span><span class="o">=</span><span class="n">byref</span><span class="p">(</span><span class="n">thread_handle</span><span class="p">)</span> <span class="p">,</span><span class="n">ProcessHandle</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">lpStartAddress</span><span class="o">=</span><span class="n">addr</span><span class="p">,</span> <span class="n">lpParameter</span><span class="o">=</span><span class="n">param</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">WinThread</span><span class="o">.</span><span class="n">_from_handle</span><span class="p">(</span><span class="n">thread_handle</span><span class="o">.</span><span class="n">value</span><span class="p">)</span></div>
-        <span class="k">return</span> <span class="n">WinThread</span><span class="o">.</span><span class="n">_from_handle</span><span class="p">(</span><span class="n">winproxy</span><span class="o">.</span><span class="n">CreateRemoteThread</span><span class="p">(</span><span class="n">hProcess</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">lpStartAddress</span><span class="o">=</span><span class="n">addr</span><span class="p">,</span> <span class="n">lpParameter</span><span class="o">=</span><span class="n">param</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">WinThread</span><span class="o">.</span><span class="n">_from_handle</span><span class="p">(</span><span class="n">thread_handle</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">WinThread</span><span class="o">.</span><span class="n">_from_handle</span><span class="p">(</span><span class="n">winproxy</span><span class="o">.</span><span class="n">CreateRemoteThread</span><span class="p">(</span><span class="n">hProcess</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">lpStartAddress</span><span class="o">=</span><span class="n">addr</span><span class="p">,</span> <span class="n">lpParameter</span><span class="o">=</span><span class="n">param</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="WinProcess.load_library"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.WinProcess.load_library">[docs]</a>    <span class="k">def</span> <span class="nf">load_library</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dll_path</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Load the library in remote process</span>
 
 <span class="sd">        :rtype: :class:`LoadedModule`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">dllbase</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">injection</span><span class="o">.</span><span class="n">load_dll_in_remote_process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dll_path</span><span class="p">)</span></div>
-        <span class="k">return</span> <span class="p">[</span><span class="n">m</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">peb</span><span class="o">.</span><span class="n">modules</span> <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">baseaddr</span> <span class="o">==</span> <span class="n">dllbase</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">dllbase</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">injection</span><span class="o">.</span><span class="n">load_dll_in_remote_process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dll_path</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">m</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">peb</span><span class="o">.</span><span class="n">modules</span> <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">baseaddr</span> <span class="o">==</span> <span class="n">dllbase</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="WinProcess.execute_python"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.WinProcess.execute_python">[docs]</a>    <span class="k">def</span> <span class="nf">execute_python</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pycode</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Execute Python code into the remote process.</span>
 
 <span class="sd">        This function waits for the remote process to end and</span>
 <span class="sd">        raises an exception if the remote thread raised one</span>
-<span class="sd">		&quot;&quot;&quot;</span></div>
-        <span class="k">return</span> <span class="n">injection</span><span class="o">.</span><span class="n">safe_execute_python</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pycode</span><span class="p">)</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">injection</span><span class="o">.</span><span class="n">safe_execute_python</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pycode</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="WinProcess.execute_python_unsafe"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.WinProcess.execute_python_unsafe">[docs]</a>    <span class="k">def</span> <span class="nf">execute_python_unsafe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pycode</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Execute Python code into the remote process.</span>
 
 <span class="sd">        :rtype: :rtype: :class:`WinThread` or :class:`DeadThread` : The thread executing the python code</span>
-<span class="sd">        &quot;&quot;&quot;</span></div>
-        <span class="k">return</span> <span class="n">injection</span><span class="o">.</span><span class="n">execute_python_code</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pycode</span><span class="p">)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">injection</span><span class="o">.</span><span class="n">execute_python_code</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pycode</span><span class="p">)</span></div>
 
     <span class="nd">@utils</span><span class="o">.</span><span class="n">fixedpropety</span>
     <span class="k">def</span> <span class="nf">peb_addr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1164,8 +1167,8 @@
             <span class="k">return</span> <span class="n">RemotePEB64</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">peb_syswow_addr</span><span class="p">,</span> <span class="n">windows</span><span class="o">.</span><span class="n">syswow64</span><span class="o">.</span><span class="n">ReadSyswow64Process</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
 
 <div class="viewcode-block" id="WinProcess.exit"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.WinProcess.exit">[docs]</a>    <span class="k">def</span> <span class="nf">exit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">code</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Exit the process&quot;&quot;&quot;</span></div></div>
-        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">TerminateProcess</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">code</span><span class="p">)</span>
+        <span class="sd">&quot;&quot;&quot;Exit the process&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">TerminateProcess</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">code</span><span class="p">)</span></div></div>
 
 <span class="n">KNOW_INTEGRITY_LEVEL</span> <span class="o">=</span> <span class="p">[</span>
 <span class="n">SECURITY_MANDATORY_UNTRUSTED_RID</span><span class="p">,</span>
@@ -1195,8 +1198,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">get_informations</span><span class="p">(</span><span class="n">TokenIntegrityLevel</span><span class="p">,</span> <span class="n">buffer</span><span class="p">)</span>
         <span class="n">sid</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">TOKEN_MANDATORY_LABEL</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">Label</span><span class="o">.</span><span class="n">Sid</span>
         <span class="n">count</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">GetSidSubAuthorityCount</span><span class="p">(</span><span class="n">sid</span><span class="p">)</span>
-        <span class="n">integrity</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">GetSidSubAuthority</span><span class="p">(</span><span class="n">sid</span><span class="p">,</span> <span class="n">count</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span></div>
-        <span class="k">return</span> <span class="n">know_integrity_level_mapper</span><span class="p">[</span><span class="n">integrity</span><span class="p">]</span>
+        <span class="n">integrity</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">GetSidSubAuthority</span><span class="p">(</span><span class="n">sid</span><span class="p">,</span> <span class="n">count</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">know_integrity_level_mapper</span><span class="p">[</span><span class="n">integrity</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="Token.set_integrity"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.Token.set_integrity">[docs]</a>    <span class="k">def</span> <span class="nf">set_integrity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">integrity</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Set the integrity level of a token</span>
@@ -1205,8 +1208,8 @@
 <span class="sd">		&quot;&quot;&quot;</span>
         <span class="n">mandatory_label</span> <span class="o">=</span> <span class="n">TOKEN_MANDATORY_LABEL</span><span class="p">()</span>
         <span class="n">mandatory_label</span><span class="o">.</span><span class="n">Label</span><span class="o">.</span><span class="n">Attributes</span> <span class="o">=</span> <span class="mh">0x60</span>
-        <span class="n">mandatory_label</span><span class="o">.</span><span class="n">Label</span><span class="o">.</span><span class="n">Sid</span> <span class="o">=</span> <span class="n">sid</span><span class="o">.</span><span class="n">EPSID</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s2">&quot;S-1-16-</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">integrity</span><span class="p">))</span></div>
-        <span class="bp">self</span><span class="o">.</span><span class="n">set_informations</span><span class="p">(</span><span class="n">TokenIntegrityLevel</span><span class="p">,</span> <span class="n">mandatory_label</span><span class="p">)</span>
+        <span class="n">mandatory_label</span><span class="o">.</span><span class="n">Label</span><span class="o">.</span><span class="n">Sid</span> <span class="o">=</span> <span class="n">sid</span><span class="o">.</span><span class="n">EPSID</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s2">&quot;S-1-16-</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">integrity</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_informations</span><span class="p">(</span><span class="n">TokenIntegrityLevel</span><span class="p">,</span> <span class="n">mandatory_label</span><span class="p">)</span></div>
 
     <span class="n">integrity</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_integrity</span><span class="p">,</span> <span class="n">set_integrity</span><span class="p">)</span>
 
@@ -1266,8 +1269,8 @@
         <span class="k">return</span> <span class="n">cbsize</span><span class="o">.</span><span class="n">value</span>
 
     <span class="c1">#TODO: TEST + DOC</span>
-    <span class="k">def</span> <span class="nf">set_informations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info_type</span><span class="p">,</span> <span class="n">infos</span><span class="p">):</span></div>
-        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">SetTokenInformation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">info_type</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">infos</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">infos</span><span class="p">))</span>
+    <span class="k">def</span> <span class="nf">set_informations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info_type</span><span class="p">,</span> <span class="n">infos</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">SetTokenInformation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">info_type</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">infos</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">infos</span><span class="p">))</span></div>
 
 
 <span class="k">def</span> <span class="nf">transform_ctypes_fields</span><span class="p">(</span><span class="n">struct</span><span class="p">,</span> <span class="n">replacement</span><span class="p">):</span>
@@ -1308,8 +1311,8 @@
         <span class="sd">&quot;&quot;&quot;A PE representation of the module</span>
 
 <span class="sd">        :type: :class:`windows.pe_parse.PEFile`</span>
-<span class="sd">		&quot;&quot;&quot;</span></div>
-        <span class="k">return</span> <span class="n">pe_parse</span><span class="o">.</span><span class="n">GetPEFile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">baseaddr</span><span class="p">)</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">pe_parse</span><span class="o">.</span><span class="n">GetPEFile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">baseaddr</span><span class="p">)</span></div>
 
 
 <span class="k">class</span> <span class="nc">LIST_ENTRY_PTR</span><span class="p">(</span><span class="n">PVOID</span><span class="p">):</span>
@@ -1384,8 +1387,8 @@
 <span class="sd">        :raise: :class:`~exception.NotImplementedError` -- Not implemented for remote process</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">windows</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">version</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">2</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;ApiSetMap does not exist prior to Windows 7&quot;</span><span class="p">)</span></div>
-        <span class="k">return</span> <span class="n">apisetmap</span><span class="o">.</span><span class="n">get_api_set_map_for_current_process</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ApiSetMap</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;ApiSetMap does not exist prior to Windows 7&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">apisetmap</span><span class="o">.</span><span class="n">get_api_set_map_for_current_process</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ApiSetMap</span><span class="p">)</span></div>
 
 
 <span class="c1"># Memory stuff</span>
@@ -1634,7 +1637,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
     </div>
   </body>
 </html>

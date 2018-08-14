@@ -1,0 +1,300 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>windows.winobject.object_manager &#8212; PythonForWindows 0.4 documentation</title>
+    <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/css/mbasic.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.4 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for windows.winobject.object_manager</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os.path</span>
+<span class="kn">import</span> <span class="nn">ctypes</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">namedtuple</span>
+
+<span class="kn">import</span> <span class="nn">windows</span>
+<span class="kn">from</span> <span class="nn">windows</span> <span class="k">import</span> <span class="n">winproxy</span>
+<span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
+
+
+<span class="k">def</span> <span class="nf">query_link</span><span class="p">(</span><span class="n">linkpath</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Resolve the link object with path ``linkpath``&quot;&quot;&quot;</span>
+    <span class="n">obj_attr</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">OBJECT_ATTRIBUTES</span><span class="p">()</span>
+    <span class="n">obj_attr</span><span class="o">.</span><span class="n">Length</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">obj_attr</span><span class="p">)</span>
+    <span class="n">obj_attr</span><span class="o">.</span><span class="n">RootDirectory</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">obj_attr</span><span class="o">.</span><span class="n">ObjectName</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">pointer</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">LSA_UNICODE_STRING</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">linkpath</span><span class="p">))</span>
+    <span class="n">obj_attr</span><span class="o">.</span><span class="n">Attributes</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">OBJ_CASE_INSENSITIVE</span>
+    <span class="n">obj_attr</span><span class="o">.</span><span class="n">SecurityDescriptor</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">obj_attr</span><span class="o">.</span><span class="n">SecurityQualityOfService</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">HANDLE</span><span class="p">()</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">NtOpenSymbolicLinkObject</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DIRECTORY_QUERY</span> <span class="o">|</span> <span class="n">gdef</span><span class="o">.</span><span class="n">READ_CONTROL</span> <span class="p">,</span> <span class="n">obj_attr</span><span class="p">)</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">LSA_UNICODE_STRING</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ULONG</span><span class="p">()</span>
+    <span class="n">winproxy</span><span class="o">.</span><span class="n">NtQuerySymbolicLinkObject</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span> <span class="c1"># Handle Buffer-too-small ?</span>
+    <span class="k">return</span> <span class="n">v</span><span class="o">.</span><span class="n">str</span>
+
+
+<div class="viewcode-block" id="KernelObject"><a class="viewcode-back" href="../../../object_manager.html#windows.winobject.object_manager.KernelObject">[docs]</a><span class="k">class</span> <span class="nc">KernelObject</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Represent an object in the Object Manager namespace&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="nb">type</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="k">if</span> <span class="n">path</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">):</span>
+            <span class="n">path</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fullname</span> <span class="o">=</span> <span class="n">path</span> <span class="o">+</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="nb">type</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">target</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Resolve the target of a symbolic link object.</span>
+
+<span class="sd">        :rtype:  :class:`str` or None if object is not a link</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">query_link</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fullname</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">windows</span><span class="o">.</span><span class="n">generated_def</span><span class="o">.</span><span class="n">ntstatus</span><span class="o">.</span><span class="n">NtStatusException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">code</span> <span class="o">!=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">STATUS_OBJECT_TYPE_MISMATCH</span><span class="p">:</span>
+                <span class="k">raise</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="KernelObject.items"><a class="viewcode-back" href="../../../object_manager.html#windows.winobject.object_manager.KernelObject.items">[docs]</a>    <span class="k">def</span> <span class="nf">items</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the list of tuple (object&#39;s name, object) in the current directory object.</span>
+
+<span class="sd">        :rtype: [(:class:`str`, :class:`KernelObject`)] -- A list of tuple</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            the :class:`KernelObject` must be of type ``Directory`` or</span>
+<span class="sd">            it will raise :class:`~windows.generated_def.ntstatus.NtStatusException` with</span>
+<span class="sd">            code :data:`~windows.generated_def.STATUS_OBJECT_TYPE_MISMATCH`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fullname</span>
+        <span class="k">return</span> <span class="p">[(</span><span class="n">name</span><span class="p">,</span> <span class="n">KernelObject</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">typename</span><span class="p">))</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">typename</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_directory_query_generator</span><span class="p">()]</span></div>
+
+<div class="viewcode-block" id="KernelObject.keys"><a class="viewcode-back" href="../../../object_manager.html#windows.winobject.object_manager.KernelObject.keys">[docs]</a>    <span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the list of objects&#39; name in the current directory object.</span>
+
+<span class="sd">        :rtype: [:class:`str`] -- A list of name</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            the :class:`KernelObject` must be of type ``Directory`` or</span>
+<span class="sd">            it will raise :class:`~windows.generated_def.ntstatus.NtStatusException` with</span>
+<span class="sd">            code :data:`~windows.generated_def.STATUS_OBJECT_TYPE_MISMATCH`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="KernelObject.values"><a class="viewcode-back" href="../../../object_manager.html#windows.winobject.object_manager.KernelObject.values">[docs]</a>    <span class="k">def</span> <span class="nf">values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the list of objects in the current directory object.</span>
+
+<span class="sd">        :rtype: [:class:`KernelObject`] -- A list of object</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            the :class:`KernelObject` must be of type ``Directory`` or</span>
+<span class="sd">            it will raise :class:`~windows.generated_def.ntstatus.NtStatusException` with</span>
+<span class="sd">            code :data:`~windows.generated_def.STATUS_OBJECT_TYPE_MISMATCH`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fullname</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">KernelObject</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">typename</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">typename</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_directory_query_generator</span><span class="p">()]</span></div>
+
+    <span class="k">def</span> <span class="nf">_open_directory</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fullname</span>
+        <span class="n">utf16_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span>
+        <span class="n">obj_attr</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">OBJECT_ATTRIBUTES</span><span class="p">()</span>
+        <span class="n">obj_attr</span><span class="o">.</span><span class="n">Length</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">obj_attr</span><span class="p">)</span>
+        <span class="n">obj_attr</span><span class="o">.</span><span class="n">RootDirectory</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">obj_attr</span><span class="o">.</span><span class="n">ObjectName</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">pointer</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">LSA_UNICODE_STRING</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">path</span><span class="p">))</span>
+        <span class="n">obj_attr</span><span class="o">.</span><span class="n">Attributes</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">OBJ_CASE_INSENSITIVE</span>
+        <span class="n">obj_attr</span><span class="o">.</span><span class="n">SecurityDescriptor</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">obj_attr</span><span class="o">.</span><span class="n">SecurityQualityOfService</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">HANDLE</span><span class="p">()</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">NtOpenDirectoryObject</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DIRECTORY_QUERY</span> <span class="o">|</span> <span class="n">gdef</span><span class="o">.</span><span class="n">READ_CONTROL</span> <span class="p">,</span> <span class="n">obj_attr</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">res</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="k">def</span> <span class="nf">_directory_query_generator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">handle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_open_directory</span><span class="p">()</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="mh">0x1000</span>
+        <span class="n">buf</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_buffer</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
+        <span class="n">rres</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ULONG</span><span class="p">()</span>
+        <span class="n">ctx</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ULONG</span><span class="p">()</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c1"># Restart == True has we don&#39;t save the buffer when resizing it for next call</span>
+                <span class="n">winproxy</span><span class="o">.</span><span class="n">NtQueryDirectoryObject</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">buf</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">ctx</span><span class="p">),</span> <span class="n">rres</span><span class="p">)</span>
+                <span class="k">break</span>
+            <span class="k">except</span> <span class="n">gdef</span><span class="o">.</span><span class="n">NtStatusException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">code</span> <span class="o">==</span> <span class="n">gdef</span><span class="o">.</span><span class="n">STATUS_NO_MORE_ENTRIES</span><span class="p">:</span>
+                    <span class="k">return</span>
+                <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">code</span> <span class="o">==</span> <span class="n">gdef</span><span class="o">.</span><span class="n">STATUS_MORE_ENTRIES</span><span class="p">:</span>
+                    <span class="c1"># If the call did not extrack all data: retry with bigger buffer</span>
+                    <span class="n">size</span> <span class="o">*=</span> <span class="mi">2</span>
+                    <span class="n">buf</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_buffer</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
+                    <span class="k">continue</span>
+                <span class="k">raise</span>
+        <span class="c1"># Function -&gt; _extract_objects ?</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">OBJECT_DIRECTORY_INFORMATION</span><span class="o">.</span><span class="n">from_buffer</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">POBJECT_DIRECTORY_INFORMATION</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">t</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">Name</span><span class="o">.</span><span class="n">Buffer</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="k">yield</span> <span class="n">v</span><span class="o">.</span><span class="n">Name</span><span class="o">.</span><span class="n">str</span><span class="p">,</span> <span class="n">v</span><span class="o">.</span><span class="n">TypeName</span><span class="o">.</span><span class="n">str</span>
+
+<div class="viewcode-block" id="KernelObject.__iter__"><a class="viewcode-back" href="../../../object_manager.html#windows.winobject.object_manager.KernelObject.__iter__">[docs]</a>    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Iter over the list of name in the Directory object.</span>
+
+<span class="sd">        :yield: :class:`str` -- The names of objects in the directory.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            the :class:`KernelObject` must be of type ``Directory`` or</span>
+<span class="sd">            it will raise :class:`~windows.generated_def.ntstatus.NtStatusException` with</span>
+<span class="sd">            code :data:`~windows.generated_def.STATUS_OBJECT_TYPE_MISMATCH`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="nb">type</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_directory_query_generator</span><span class="p">())</span></div>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;&quot;&lt;</span><span class="si">{0}</span><span class="s2"> &quot;</span><span class="si">{1}</span><span class="s2">&quot; (type=&quot;</span><span class="si">{2}</span><span class="s2">&quot;)&gt;&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fullname</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
+
+<div class="viewcode-block" id="KernelObject.get"><a class="viewcode-back" href="../../../object_manager.html#windows.winobject.object_manager.KernelObject.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Retrieve the object ``name`` in the current directory.</span>
+
+<span class="sd">        :rtype: :class:`KernelObject`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">objname</span><span class="p">,</span> <span class="n">objtype</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_directory_query_generator</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">objname</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+                <span class="k">return</span> <span class="n">KernelObject</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fullname</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">objtype</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;Could not find WinObject &lt;</span><span class="si">{0}</span><span class="s2">&gt; under &lt;</span><span class="si">{1}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fullname</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="KernelObject.__getitem__"><a class="viewcode-back" href="../../../object_manager.html#windows.winobject.object_manager.KernelObject.__getitem__">[docs]</a>    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Query object ``name`` from the directory, split and subquery on ``\\``::</span>
+
+<span class="sd">            &gt;&gt;&gt; obj</span>
+<span class="sd">            &lt;KernelObject &quot;\Windows&quot; (type=&quot;Directory&quot;)&gt;</span>
+<span class="sd">            &gt;&gt;&gt; obj[&quot;WindowStations&quot;][&quot;WinSta0&quot;]</span>
+<span class="sd">            &lt;KernelObject &quot;\Windows\WindowStations&quot; (type=&quot;Directory&quot;)&gt;</span>
+<span class="sd">            &gt;&gt;&gt; obj[&quot;WindowStations\\WinSta0&quot;]</span>
+<span class="sd">            &lt;KernelObject &quot;\Windows\WindowStations&quot; (type=&quot;Directory&quot;)&gt;</span>
+
+<span class="sd">        :rtype: :class:`KernelObject`</span>
+<span class="sd">        :raise: :class:`KeyError` if ``name`` can not be found.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">):</span>
+            <span class="c1"># Are we the root directory ?</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">fullname</span> <span class="o">==</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span> <span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot query an object path begining by &#39;</span><span class="se">\\</span><span class="s2">&#39; from an object other than &#39;</span><span class="se">\\</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">:</span> <span class="c1"># Ask for root ? return ourself</span>
+                <span class="k">return</span> <span class="bp">self</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+
+        <span class="n">obj</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">obj</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">part</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">gdef</span><span class="o">.</span><span class="n">NtStatusException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">code</span> <span class="o">==</span> <span class="n">gdef</span><span class="o">.</span><span class="n">STATUS_OBJECT_TYPE_MISMATCH</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;Could not find object &lt;</span><span class="si">{0}</span><span class="s2">&gt; under &lt;</span><span class="si">{1}</span><span class="s2">&gt; because it is a &lt;</span><span class="si">{2}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                                    <span class="n">part</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">type</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">obj</span></div></div>
+
+
+<div class="viewcode-block" id="ObjectManager"><a class="viewcode-back" href="../../../object_manager.html#windows.winobject.object_manager.ObjectManager">[docs]</a><span class="k">class</span> <span class="nc">ObjectManager</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Represent the object manager.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        For now, it only offers the ``root`` :class:`KernelObject`. But I want a ``manager`` object accessible</span>
+<span class="sd">        from ``windows.system`` just like other API and not directly the ``root`` directory.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">root</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The root ``\\`` Directory</span>
+
+<span class="sd">        :type: :class:`KernelObject` -- The root :class:`KernelObject`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">KernelObject</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;Directory&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ObjectManager.__getitem__"><a class="viewcode-back" href="../../../object_manager.html#windows.winobject.object_manager.ObjectManager.__getitem__">[docs]</a>    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Query ``name`` from the root ``\\`` directory::</span>
+
+<span class="sd">            object_manager[&quot;RPC Control&quot;][&quot;lsasspirpc&quot;]</span>
+<span class="sd">            object_manager[r&quot;\\RPC Control\\lsasspirpc&quot;]</span>
+
+<span class="sd">        :rtype: :class:`KernelObject`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">[</span><span class="n">name</span><span class="p">]</span></div></div>
+
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.4 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2015, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

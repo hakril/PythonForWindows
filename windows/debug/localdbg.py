@@ -9,6 +9,23 @@ from windows.generated_def import windef
 from windows.generated_def.winstructs import *
 from .breakpoints import *
 
+class FakeDebuggerCurrentThread(object):
+    """A pseudo thread representing the current thread at exception time"""
+    def __init__(self, dbg):
+        self.dbg = dbg
+
+    @property
+    def tid(self):
+        return windows.current_thread.tid
+
+    @property
+    def context(self):
+        """!!! This context in-place modification will be effective without set_context"""
+        return self.dbg.get_exception_context()
+
+    def set_context(self, context):
+        # The context returned by 'self.context' already modify the return context in place..
+        pass
 
 class LocalDebugger(object):
     """A debugger interface around :func:`AddVectoredExceptionHandler`.
@@ -16,7 +33,8 @@ class LocalDebugger(object):
     Handle:
 
         * Standard BP (int3)
-        * Hardware-Exec BP (DrX)"""
+        * Hardware-Exec BP (DrX)
+    """
 
     def __init__(self):
         self.breakpoints = {}
@@ -33,6 +51,7 @@ class LocalDebugger(object):
         self.current_exception = None
         self.exceptions_stack = [None]
         self.current_process =  windows.current_process
+        self.current_thread = FakeDebuggerCurrentThread(self)
 
     @contextmanager
     def NewCurrentException(self, exc):
@@ -98,7 +117,6 @@ class LocalDebugger(object):
         exp_code = self.get_exception_code()
         context = self.get_exception_context()
         exp_addr = context.pc
-
         if exp_code == EXCEPTION_BREAKPOINT and exp_addr in self.breakpoints:
             res = self.breakpoints[exp_addr].trigger(self, exc)
             single_step = self.get_exception_context().EEFlags.TF # single step activated by breakpoint
@@ -108,9 +126,9 @@ class LocalDebugger(object):
 
         if exp_code == EXCEPTION_SINGLE_STEP and windows.current_thread.tid in self._reput_breakpoint:
             bp, single_step = self._reput_breakpoint[windows.current_thread.tid]
-            self._memory_save[bp.addr] = windows.current_process.read_memory(bp.addr, 1)
-            with windows.utils.VirtualProtected(bp.addr, 1, PAGE_EXECUTE_READWRITE):
-                windows.current_process.write_memory(bp.addr, "\xcc")
+            self._memory_save[bp._addr] = windows.current_process.read_memory(bp._addr, 1)
+            with windows.utils.VirtualProtected(bp._addr, 1, PAGE_EXECUTE_READWRITE):
+                windows.current_process.write_memory(bp._addr, "\xcc")
             del self._reput_breakpoint[windows.current_thread.tid]
             if single_step:
                 return self.on_exception(exc)
@@ -127,8 +145,9 @@ class LocalDebugger(object):
             return windef.EXCEPTION_CONTINUE_SEARCH
         return windef.EXCEPTION_CONTINUE_EXECUTION
 
-    def del_bp(self, bp):
+    def del_bp(self, bp, targets=None):
         """Delete a breakpoint"""
+        # TODO: check targets..
         if bp.type == STANDARD_BP:
             with windows.utils.VirtualProtected(bp.addr, 1, PAGE_EXECUTE_READWRITE):
                 windows.current_process.write_memory(bp.addr, self._memory_save[bp.addr])
@@ -147,7 +166,7 @@ class LocalDebugger(object):
             return
         raise NotImplementedError("Unknow BP type {0}".format(bp.type))
 
-    def add_bp(self, bp, targets=None):
+    def add_bp(self, bp, target=None):
         """Add a breakpoint, bp is a "class:`Breakpoint`
 
             If the ``bp`` type is ``STANDARD_BP``, target must be None.
@@ -155,12 +174,13 @@ class LocalDebugger(object):
             If the ``bp`` type is ``HARDWARE_EXEC_BP``, target can be None (all threads), or some threads of the process
         """
         if bp.type == HARDWARE_EXEC_BP:
-            return self.add_bp_hxbp(bp, targets)
+            return self.add_bp_hxbp(bp, target)
         if bp.type != STANDARD_BP:
             raise NotImplementedError("Unknow BP type {0}".format(bp.type))
-        if targets is not None:
+        if target not in [None, windows.current_process]:
             raise ValueError("LocalDebugger: STANDARD_BP doest not support targets {0}".format(targets))
         addr = self._local_resolve(bp.addr)
+        bp._addr = addr
         self.breakpoints[addr] = bp
         self._memory_save[addr] = windows.current_process.read_memory(addr, 1)
         with windows.utils.VirtualProtected(addr, 1, PAGE_EXECUTE_READWRITE):

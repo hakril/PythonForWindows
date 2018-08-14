@@ -80,6 +80,7 @@ def test_self_iat_hook_multithread():
     assert len(calling_thread) == 2
     x.disable()
 
+@python_injection
 @check_for_gc_garbage
 def test_remote_iat_hook(proc32_64):
     proc32_64.execute_python("import windows")

@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/css/mbasic.css" type="text/css" />
-    <script type="text/javascript" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
@@ -137,8 +137,8 @@
         <span class="k">with</span> <span class="n">scmanagera</span><span class="p">(</span><span class="n">SC_MANAGER_CONNECT</span><span class="p">)</span> <span class="k">as</span> <span class="n">scm</span><span class="p">:</span>
             <span class="c1"># windows.winproxy.StartServiceA()</span>
             <span class="n">servh</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">OpenServiceA</span><span class="p">(</span><span class="n">scm</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">SERVICE_START</span><span class="p">)</span>
-            <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">StartServiceA</span><span class="p">(</span><span class="n">servh</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
-            <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">CloseServiceHandle</span><span class="p">(</span><span class="n">servh</span><span class="p">)</span>
+            <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">StartServiceA</span><span class="p">(</span><span class="n">servh</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">CloseServiceHandle</span><span class="p">(</span><span class="n">servh</span><span class="p">)</span></div>
 
 
 <span class="nd">@contextmanager</span>
@@ -151,28 +151,24 @@
         <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">CloseServiceHandle</span><span class="p">(</span><span class="n">scmanager</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">enumerate_services</span><span class="p">():</span>
-    <span class="c1"># TODO: fix this so we don&#39;t have a scmanager leak..</span>
-    <span class="n">scmanager</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">OpenSCManagerA</span><span class="p">(</span><span class="n">dwDesiredAccess</span><span class="o">=</span><span class="n">SC_MANAGER_ENUMERATE_SERVICE</span><span class="p">)</span>
-
-    <span class="n">size_needed</span> <span class="o">=</span> <span class="n">DWORD</span><span class="p">()</span>
-    <span class="n">nb_services</span> <span class="o">=</span> <span class="n">DWORD</span><span class="p">()</span>
-    <span class="n">counter</span> <span class="o">=</span> <span class="n">DWORD</span><span class="p">()</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">EnumServicesStatusExA</span><span class="p">(</span><span class="n">scmanager</span><span class="p">,</span> <span class="n">SC_ENUM_PROCESS_INFO</span><span class="p">,</span> <span class="n">SERVICE_TYPE_ALL</span><span class="p">,</span> <span class="n">SERVICE_STATE_ALL</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">size_needed</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">nb_services</span><span class="p">),</span> <span class="n">byref</span><span class="p">(</span><span class="n">counter</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
-    <span class="k">except</span> <span class="ne">WindowsError</span><span class="p">:</span>
-        <span class="k">pass</span>
-
-    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="n">size</span> <span class="o">=</span> <span class="n">size_needed</span><span class="o">.</span><span class="n">value</span>
-        <span class="n">buffer</span> <span class="o">=</span> <span class="p">(</span><span class="n">BYTE</span> <span class="o">*</span> <span class="n">size</span><span class="p">)()</span>
-
+    <span class="k">with</span> <span class="n">scmanagera</span><span class="p">(</span><span class="n">SC_MANAGER_ENUMERATE_SERVICE</span><span class="p">)</span> <span class="k">as</span> <span class="n">scm</span><span class="p">:</span>
+        <span class="n">size_needed</span> <span class="o">=</span> <span class="n">DWORD</span><span class="p">()</span>
+        <span class="n">nb_services</span> <span class="o">=</span> <span class="n">DWORD</span><span class="p">()</span>
+        <span class="n">counter</span> <span class="o">=</span> <span class="n">DWORD</span><span class="p">()</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">EnumServicesStatusExA</span><span class="p">(</span><span class="n">scmanager</span><span class="p">,</span> <span class="n">SC_ENUM_PROCESS_INFO</span><span class="p">,</span> <span class="n">SERVICE_TYPE_ALL</span><span class="p">,</span> <span class="n">SERVICE_STATE_ALL</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">size_needed</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">nb_services</span><span class="p">),</span> <span class="n">byref</span><span class="p">(</span><span class="n">counter</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
-        <span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="k">continue</span>
+            <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">EnumServicesStatusExA</span><span class="p">(</span><span class="n">scm</span><span class="p">,</span> <span class="n">SC_ENUM_PROCESS_INFO</span><span class="p">,</span> <span class="n">SERVICE_TYPE_ALL</span><span class="p">,</span> <span class="n">SERVICE_STATE_ALL</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">size_needed</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">nb_services</span><span class="p">),</span> <span class="n">byref</span><span class="p">(</span><span class="n">counter</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">WindowsError</span><span class="p">:</span>
+            <span class="k">pass</span>
 
-        <span class="n">return_type</span> <span class="o">=</span> <span class="p">(</span><span class="n">ServiceA</span> <span class="o">*</span> <span class="n">nb_services</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
-        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">return_type</span><span class="o">.</span><span class="n">from_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">))</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">size</span> <span class="o">=</span> <span class="n">size_needed</span><span class="o">.</span><span class="n">value</span>
+            <span class="n">buffer</span> <span class="o">=</span> <span class="p">(</span><span class="n">BYTE</span> <span class="o">*</span> <span class="n">size</span><span class="p">)()</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">EnumServicesStatusExA</span><span class="p">(</span><span class="n">scm</span><span class="p">,</span> <span class="n">SC_ENUM_PROCESS_INFO</span><span class="p">,</span> <span class="n">SERVICE_TYPE_ALL</span><span class="p">,</span> <span class="n">SERVICE_STATE_ALL</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">size_needed</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">nb_services</span><span class="p">),</span> <span class="n">byref</span><span class="p">(</span><span class="n">counter</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">return_type</span> <span class="o">=</span> <span class="p">(</span><span class="n">ServiceA</span> <span class="o">*</span> <span class="n">nb_services</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">return_type</span><span class="o">.</span><span class="n">from_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">))</span>
 </pre></div>
 
           </div>
@@ -211,7 +207,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
     </div>
   </body>
 </html>

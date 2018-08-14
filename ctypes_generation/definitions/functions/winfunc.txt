@@ -1677,3 +1677,68 @@ NTSTATUS WINAPI ApiSetResolveToHost (
     _Out_ PBOOLEAN Resolved,
     _Out_ PUNICODE_STRING HostBinary
     );
+
+
+VOID WINAPI Sleep(
+  _In_ DWORD dwMilliseconds
+);
+
+DWORD WINAPI SleepEx(
+  _In_ DWORD dwMilliseconds,
+  _In_ BOOL  bAlertable
+);
+
+BOOL WINAPI GetProcessMitigationPolicy(
+  _In_  HANDLE                    hProcess,
+  _In_  PROCESS_MITIGATION_POLICY MitigationPolicy,
+  _Out_ PVOID                     lpBuffer,
+  _In_  SIZE_T                    dwLength
+);
+
+
+BOOL WINAPI SetProcessMitigationPolicy(
+  _In_ PROCESS_MITIGATION_POLICY MitigationPolicy,
+  _In_ PVOID                     lpBuffer,
+  _In_ SIZE_T                    dwLength
+);
+
+
+BOOL WINAPI GetProductInfo(
+  _In_  DWORD  dwOSMajorVersion,
+  _In_  DWORD  dwOSMinorVersion,
+  _In_  DWORD  dwSpMajorVersion,
+  _In_  DWORD  dwSpMinorVersion,
+  _Out_ PDWORD pdwReturnedProductType
+);
+
+
+NTSTATUS NtSetInformationFile(
+  HANDLE                 FileHandle,
+  PIO_STATUS_BLOCK       IoStatusBlock,
+  PVOID                  FileInformation,
+  ULONG                  Length,
+  FILE_INFORMATION_CLASS FileInformationClass
+);
+
+
+BOOL GetProcessMemoryInfo(
+  HANDLE                   Process,
+  PPROCESS_MEMORY_COUNTERS ppsmemCounters,
+  DWORD                    cb
+);
+
+
+HMODULE WINAPI GetModuleHandleA(
+  _In_opt_ LPCSTR lpModuleName
+);
+
+HMODULE WINAPI GetModuleHandleW(
+  _In_opt_ LPWSTR lpModuleName
+);
+
+
+BOOLEAN RtlEqualUnicodeString(
+  PUNICODE_STRING String1,
+  PUNICODE_STRING String2,
+  BOOLEAN          CaseInSensitive
+);

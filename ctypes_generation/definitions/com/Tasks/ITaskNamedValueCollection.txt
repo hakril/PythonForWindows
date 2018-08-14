@@ -1,0 +1,73 @@
+typedef struct ITaskNamedValueCollectionVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ITaskNamedValueCollection * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            __RPC__deref_out  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ITaskNamedValueCollection * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ITaskNamedValueCollection * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ITaskNamedValueCollection * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ITaskNamedValueCollection * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ITaskNamedValueCollection * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ITaskNamedValueCollection * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+            ITaskNamedValueCollection * This,
+            /* [retval][out] */ long *pCount);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+            ITaskNamedValueCollection * This,
+            /* [in] */ LONG index,
+            /* [retval][out] */ ITaskNamedValuePair **ppPair);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+            ITaskNamedValueCollection * This,
+            /* [retval][out] */ IUnknown **ppEnum);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Create )( 
+            ITaskNamedValueCollection * This,
+            /* [in] */ BSTR name,
+            /* [in] */ BSTR value,
+            /* [retval][out] */ ITaskNamedValuePair **ppPair);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Remove )( 
+            ITaskNamedValueCollection * This,
+            /* [in] */ LONG index);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Clear )( 
+            ITaskNamedValueCollection * This);
+        
+        END_INTERFACE
+    } ITaskNamedValueCollectionVtbl;

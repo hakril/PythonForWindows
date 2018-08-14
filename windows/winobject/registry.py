@@ -126,6 +126,10 @@ class PyHKey(object):
             value = struct.pack("<Q", value)
         return _winreg.SetValueEx(self.phkey, name, 0, type, value)
 
+    def delete_value(self, name):
+        """Delete the value with ``name``"""
+        return _winreg.DeleteValue(self.phkey, name)
+
 
     def open_subkey(self, name, sam=None):
         """Open the subkey ``name``
@@ -136,16 +140,29 @@ class PyHKey(object):
             sam = self.sam
         return PyHKey(self, name, sam)
 
-    def reopen(self, new_sam):
-        return PyHKey(self.surkey, self.name, new_sam)
+    def reopen(self, sam):
+        """Reopen the registry key with a new ``sam``
+
+        :rtype: :class:`PyHKey`
+        """
+        return PyHKey(self.surkey, self.name, sam)
 
     def create(self):
-        # TODO: document
+        """Create the registry key"""
         try:
             self._phkey = _winreg.CreateKeyEx(self.surkey.phkey, self.name, 0, self.sam)
         except WindowsError as e:
             raise WindowsError(e.winerror, "Could not create registry key <{0}> ({1})".format(self.fullname, e.strerror))
-        return self._phkey
+        return self
+
+    def delete(self):
+        """Delete the registry key"""
+        try:
+            _winreg.DeleteKeyEx(self.surkey.phkey, self.name, self.sam, 0)
+        except WindowsError as e:
+            raise WindowsError(e.winerror, "Could not delete registry key <{0}> ({1})".format(self.fullname, e.strerror))
+        return None
+
 
 
     def __setitem__(self, name, value):
@@ -155,6 +172,8 @@ class PyHKey(object):
         return self.set(name, value, rtype)
 
     __getitem__ = get
+
+    __delitem__ = delete_value
 
     __call__ = open_subkey
 
@@ -174,7 +193,7 @@ HKEY_USERS = PyHKey(DummyPHKEY(_winreg.HKEY_USERS, "HKEY_USERS"), "", _winreg.KE
 
 
 class Registry(object):
-    """The ``Windows`` registry: a read only (for now) mapping"""
+    """The ``Windows`` registry"""
 
     registry_base_keys = {
         "HKEY_LOCAL_MACHINE" : HKEY_LOCAL_MACHINE,
@@ -185,7 +204,18 @@ class Registry(object):
         "HKEY_USERS" : HKEY_USERS
     }
 
-    def __call__(self, name, sam=KEY_READ):
+    def __init__(self, sam=KEY_READ):
+        self.sam = sam
+
+    @classmethod
+    def reopen(cls, sam):
+        """Return a new :class:`Registry` using ``sam`` as the new default
+
+        :rtype: :class:`Registry`
+        """
+        return cls(sam)
+
+    def __call__(self, name, sam=None):
         """Get a registry key::
 
             registry(r"HKEY_LOCAL_MACHINE\\Software")
@@ -193,6 +223,8 @@ class Registry(object):
 
         :rtype: :class:`PyHKey`
         """
+        if sam is None:
+            sam = self.sam
 
         if name in self.registry_base_keys:
             key = self.registry_base_keys[name]

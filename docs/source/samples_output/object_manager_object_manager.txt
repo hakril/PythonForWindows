@@ -1,0 +1,22 @@
+(cmd) python object_manager\object_manager.py
+Object manager is <windows.winobject.object_manager.ObjectManager object at 0x0370ED10>
+Root object is <KernelObject "\" (type="Directory")>
+
+Listing some of root-subobject:
+  * PendingRenameMutex: <KernelObject "\PendingRenameMutex" (type="Mutant")>
+  * ObjectTypes: <KernelObject "\ObjectTypes" (type="Directory")>
+  * storqosfltport: <KernelObject "\storqosfltport" (type="FilterConnectionPort")>
+  * MicrosoftMalwareProtectionRemoteIoPortWD: <KernelObject "\MicrosoftMalwareProtectionRemoteIoPortWD" (type="FilterConnectionPort")>
+
+Retrieving <\Rpc Control\lsasspirpc>:
+Object is: <KernelObject "\Rpc Control\lsasspirpc" (type="ALPC Port")>
+   * name: <lsasspirpc>
+   * path: <\Rpc Control>
+   * fullname: <\Rpc Control\lsasspirpc>
+   * type: <ALPC Port>
+   * target: <None>
+
+Looking for a SymbolicLink in <ArcName>
+Object is: <KernelObject "\ArcName\multi(0)disk(0)rdisk(0)" (type="SymbolicLink")>
+   * name: <multi(0)disk(0)rdisk(0)>
+   * target: <\Device\Harddisk0\Partition0>

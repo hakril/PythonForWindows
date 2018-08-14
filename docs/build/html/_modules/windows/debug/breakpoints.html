@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/css/mbasic.css" type="text/css" />
-    <script type="text/javascript" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
@@ -59,8 +59,8 @@
         <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">WinProcess</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Breakpoint.trigger"><a class="viewcode-back" href="../../../debug.html#windows.debug.Breakpoint.trigger">[docs]</a>    <span class="k">def</span> <span class="nf">trigger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbg</span><span class="p">,</span> <span class="n">exception</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Called when breakpoint is hit&quot;&quot;&quot;</span></div></div>
-        <span class="k">pass</span>
+        <span class="sd">&quot;&quot;&quot;Called when breakpoint is hit&quot;&quot;&quot;</span>
+        <span class="k">pass</span></div></div>
 
 
 <span class="k">class</span> <span class="nc">ProxyBreakpoint</span><span class="p">(</span><span class="n">Breakpoint</span><span class="p">):</span>
@@ -77,8 +77,8 @@
     <span class="sd">&quot;&quot;&quot;An hardware-execution breakpoint (type == ``HARDWARE_EXEC_BP``)&quot;&quot;&quot;</span>
     <span class="nb">type</span> <span class="o">=</span> <span class="n">HARDWARE_EXEC_BP</span>
 
-    <span class="k">def</span> <span class="nf">apply_to_target</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span></div>
-        <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">WinThread</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">apply_to_target</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">WinThread</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="MemoryBreakpoint"><a class="viewcode-back" href="../../../debug.html#windows.debug.MemoryBreakpoint">[docs]</a><span class="k">class</span> <span class="nc">MemoryBreakpoint</span><span class="p">(</span><span class="n">Breakpoint</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A memory breakpoint (type == ``MEMORY_BREAKPOINT``)&quot;&quot;&quot;</span>
@@ -91,12 +91,12 @@
 <span class="sd">        ``events``: a string representing the events that interest the BP (any of &quot;RWX&quot;)&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">MemoryBreakpoint</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">size</span> <span class="k">if</span> <span class="n">size</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">DEFAULT_SIZE</span>
-        <span class="n">events</span> <span class="o">=</span> <span class="n">events</span> <span class="k">if</span> <span class="n">events</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">DEFAULT_EVENTS</span></div>
-        <span class="bp">self</span><span class="o">.</span><span class="n">events</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">events</span><span class="p">)</span>
+        <span class="n">events</span> <span class="o">=</span> <span class="n">events</span> <span class="k">if</span> <span class="n">events</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">DEFAULT_EVENTS</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">events</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">events</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="MemoryBreakpoint.trigger"><a class="viewcode-back" href="../../../debug.html#windows.debug.MemoryBreakpoint.trigger">[docs]</a>    <span class="k">def</span> <span class="nf">trigger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbg</span><span class="p">,</span> <span class="n">exception</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Called when breakpoint is hit&quot;&quot;&quot;</span></div></div>
-        <span class="k">pass</span>
+        <span class="sd">&quot;&quot;&quot;Called when breakpoint is hit&quot;&quot;&quot;</span>
+        <span class="k">pass</span></div></div>
 
 
 <span class="c1">## Arguments Helper (need to move this elsewhere)</span>
@@ -104,12 +104,22 @@
     <span class="k">def</span> <span class="nf">get_arg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nb</span><span class="p">,</span> <span class="n">proc</span><span class="p">,</span> <span class="n">thread</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">proc</span><span class="o">.</span><span class="n">read_dword</span><span class="p">(</span><span class="n">thread</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">sp</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">+</span> <span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">nb</span><span class="p">))</span>
 
+    <span class="k">def</span> <span class="nf">set_arg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nb</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">proc</span><span class="p">,</span> <span class="n">thread</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">proc</span><span class="o">.</span><span class="n">write_dword</span><span class="p">(</span><span class="n">thread</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">sp</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">+</span> <span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">nb</span><span class="p">),</span> <span class="n">value</span><span class="p">)</span>
+
 <span class="k">class</span> <span class="nc">X64ArgumentRetriever</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="n">REG_ARGS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Rcx&quot;</span><span class="p">,</span> <span class="s2">&quot;Rdx&quot;</span><span class="p">,</span> <span class="s2">&quot;R8&quot;</span><span class="p">,</span> <span class="s2">&quot;R9&quot;</span><span class="p">]</span>
     <span class="k">def</span> <span class="nf">get_arg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nb</span><span class="p">,</span> <span class="n">proc</span><span class="p">,</span> <span class="n">thread</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">nb</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">REG_ARGS</span><span class="p">):</span>
             <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">thread</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">REG_ARGS</span><span class="p">[</span><span class="n">nb</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">proc</span><span class="o">.</span><span class="n">read_qword</span><span class="p">(</span><span class="n">thread</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">sp</span> <span class="o">+</span> <span class="mi">8</span> <span class="o">+</span> <span class="p">(</span><span class="mi">8</span> <span class="o">*</span> <span class="n">nb</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">set_arg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nb</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">proc</span><span class="p">,</span> <span class="n">thread</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">nb</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">REG_ARGS</span><span class="p">):</span>
+            <span class="n">ctx</span> <span class="o">=</span> <span class="n">thread</span><span class="o">.</span><span class="n">context</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">REG_ARGS</span><span class="p">[</span><span class="n">nb</span><span class="p">],</span> <span class="n">value</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">thread</span><span class="o">.</span><span class="n">set_context</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">proc</span><span class="o">.</span><span class="n">write_qword</span><span class="p">(</span><span class="n">thread</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">sp</span> <span class="o">+</span> <span class="mi">8</span> <span class="o">+</span> <span class="p">(</span><span class="mi">8</span> <span class="o">*</span> <span class="n">nb</span><span class="p">),</span> <span class="n">value</span><span class="p">)</span>
 
 <span class="c1">## Behaviour breakpoint !</span>
 <span class="c1"># class FunctionParamDumpBP(Breakpoint):</span>
@@ -174,6 +184,57 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_arguments_32bits</span><span class="p">(</span><span class="n">cproc</span><span class="p">,</span> <span class="n">cthread</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_arguments_64bits</span><span class="p">(</span><span class="n">cproc</span><span class="p">,</span> <span class="n">cthread</span><span class="p">)</span>
 
+    <span class="k">def</span> <span class="nf">arguments</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbg</span><span class="p">):</span>
+        <span class="s2">&quot;TEST PARAM DICT&quot;</span>
+        <span class="k">if</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">32</span><span class="p">:</span>
+            <span class="n">extractor</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">debug</span><span class="o">.</span><span class="n">X86ArgumentRetriever</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">dbg</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">64</span><span class="p">:</span>
+            <span class="n">extractor</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">debug</span><span class="o">.</span><span class="n">X64ArgumentRetriever</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">dbg</span><span class="o">.</span><span class="n">current_thread</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">SegCs</span> <span class="o">==</span> <span class="n">windows</span><span class="o">.</span><span class="n">syswow64</span><span class="o">.</span><span class="n">CS_32bits</span><span class="p">:</span>
+            <span class="n">extractor</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">debug</span><span class="o">.</span><span class="n">X86ArgumentRetriever</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">extractor</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">debug</span><span class="o">.</span><span class="n">X64ArgumentRetriever</span><span class="p">()</span>
+        <span class="n">name_map</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_params</span><span class="p">)}</span>
+        <span class="k">return</span> <span class="n">FunctionParameterProxy</span><span class="p">(</span><span class="n">extractor</span><span class="p">,</span> <span class="n">name_map</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_args</span><span class="p">,</span> <span class="n">dbg</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">FunctionParameterProxy</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="c1"># TODO: clean this + put more of the logic in the X64ArgumentRetriever</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">extractor</span><span class="p">,</span> <span class="n">name_map</span><span class="p">,</span> <span class="n">parameters_type</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">extractor</span> <span class="o">=</span> <span class="n">extractor</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name_map</span> <span class="o">=</span> <span class="n">name_map</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters_type</span> <span class="o">=</span> <span class="n">parameters_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name_map</span><span class="p">[</span><span class="n">x</span><span class="p">]</span>
+        <span class="c1"># import pdb;pdb.set_trace()</span>
+        <span class="n">argtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters_type</span><span class="p">[</span><span class="n">x</span><span class="p">]</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extractor</span><span class="o">.</span><span class="n">get_arg</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">current_process</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">current_thread</span><span class="p">)</span>
+        <span class="n">rt</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">remotectypes</span><span class="o">.</span><span class="n">transform_type_to_remote32bits</span><span class="p">(</span><span class="n">argtype</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">rt</span><span class="p">,</span> <span class="n">windows</span><span class="o">.</span><span class="n">remotectypes</span><span class="o">.</span><span class="n">RemoteValue</span><span class="p">):</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">rt</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">current_process</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">rt</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="s2">&quot;contents&quot;</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">t</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">value</span>
+            <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+                <span class="k">pass</span>
+        <span class="k">return</span> <span class="n">t</span>
+
+    <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name_map</span><span class="p">[</span><span class="n">x</span><span class="p">]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">PVOID</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">ArgumentError</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">extractor</span><span class="o">.</span><span class="n">set_arg</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">current_process</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">current_thread</span><span class="p">)</span>
+
+
+
 <span class="k">class</span> <span class="nc">FunctionParamDumpBP</span><span class="p">(</span><span class="n">FunctionParamDumpBPAbstract</span><span class="p">,</span> <span class="n">Breakpoint</span><span class="p">):</span>
     <span class="k">pass</span>
 
@@ -206,8 +267,8 @@
     <span class="sd">&quot;&quot;&quot;A breakpoint that accepts a function from :mod:`windows.winproxy` and able to:</span>
 
 <span class="sd">        - Extract the arguments of the functions</span>
-<span class="sd">        - Break at the return of the function</span></div>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">        - Break at the return of the function</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
 
 <span class="k">class</span> <span class="nc">PrintBP</span><span class="p">(</span><span class="n">Breakpoint</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="nb">format</span><span class="p">,</span> <span class="n">func</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -259,7 +320,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
     </div>
   </body>
 </html>

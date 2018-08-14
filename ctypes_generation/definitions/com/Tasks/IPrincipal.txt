@@ -1,0 +1,95 @@
+typedef struct IPrincipalVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IPrincipal * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            __RPC__deref_out  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IPrincipal * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IPrincipal * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IPrincipal * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IPrincipal * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IPrincipal * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IPrincipal * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Id )( 
+            IPrincipal * This,
+            /* [retval][out] */ BSTR *pId);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Id )( 
+            IPrincipal * This,
+            /* [in] */ BSTR Id);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_DisplayName )( 
+            IPrincipal * This,
+            /* [retval][out] */ BSTR *pName);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_DisplayName )( 
+            IPrincipal * This,
+            /* [in] */ BSTR name);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_UserId )( 
+            IPrincipal * This,
+            /* [retval][out] */ BSTR *pUser);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_UserId )( 
+            IPrincipal * This,
+            /* [in] */ BSTR user);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_LogonType )( 
+            IPrincipal * This,
+            /* [retval][out] */ TASK_LOGON_TYPE *pLogon);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_LogonType )( 
+            IPrincipal * This,
+            /* [in] */ TASK_LOGON_TYPE logon);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_GroupId )( 
+            IPrincipal * This,
+            /* [retval][out] */ BSTR *pGroup);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_GroupId )( 
+            IPrincipal * This,
+            /* [in] */ BSTR group);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_RunLevel )( 
+            IPrincipal * This,
+            /* [retval][out] */ TASK_RUNLEVEL_TYPE *pRunLevel);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_RunLevel )( 
+            IPrincipal * This,
+            /* [in] */ TASK_RUNLEVEL_TYPE runLevel);
+        
+        END_INTERFACE
+    } IPrincipalVtbl;

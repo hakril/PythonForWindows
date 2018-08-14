@@ -796,6 +796,7 @@
 #define PERSIST_E_SIZEINDEFINITE         (0x800B000AL)
 #define PERSIST_E_NOTSELFSIZING          (0x800B000BL)
 #define TRUST_E_NOSIGNATURE              (0x800B0100L)
+#define TRUST_E_BAD_DIGEST               (0x80096010L)
 #define CERT_E_EXPIRED                   (0x800B0101L)
 #define CERT_E_VALIDITYPERIODNESTING     (0x800B0102L)
 #define CERT_E_PURPOSE                   (0x800B0106L)

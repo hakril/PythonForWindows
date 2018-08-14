@@ -104,6 +104,52 @@ Output
 .. literalinclude:: samples_output\registry_registry.txt
 
 
+.. _sample_scheduled_task:
+
+Scheduled tasks
+"""""""""""""""
+
+.. literalinclude:: ..\..\samples\scheduled_tasks\scheduled_task.py
+
+Output
+
+.. literalinclude:: samples_output\scheduled_task_scheduled_task.txt
+
+
+.. _sample_event_log:
+
+Event Log
+"""""""""
+
+.. literalinclude:: ..\..\samples\event_log\eventlog.py
+
+Output
+
+.. literalinclude:: samples_output\event_log_eventlog.txt
+
+
+.. _sample_object_manager:
+
+Object manager
+""""""""""""""
+
+.. literalinclude:: ..\..\samples\object_manager\object_manager.py
+
+Output
+
+.. literalinclude:: samples_output\object_manager_object_manager.txt
+
+find objects
+''''''''''''
+
+
+.. literalinclude:: ..\..\samples\object_manager\findobj.py
+
+Output
+
+.. literalinclude:: samples_output\object_manager_findobj.txt
+
+
 .. _sample_wintrust:
 
 ``windows.wintrust``

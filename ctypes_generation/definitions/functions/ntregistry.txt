@@ -1,0 +1,45 @@
+NTSTATUS WINAPI  NtOpenKey(
+       _Out_ PHANDLE KeyHandle,
+       _In_ ACCESS_MASK DesiredAccess,
+       _In_ POBJECT_ATTRIBUTES ObjectAttributes
+);
+
+
+NTSTATUS WINAPI NtCreateKey(
+  _Out_ PHANDLE             pKeyHandle,
+  _In_ ACCESS_MASK          DesiredAccess,
+  _In_ POBJECT_ATTRIBUTES   ObjectAttributes,
+  _In_ ULONG                TitleIndex,
+  _In_ PUNICODE_STRING      Class,
+  _In_ ULONG                CreateOptions,
+  _Out_ PULONG              Disposition
+);
+
+NTSTATUS WINAPI NtSetValueKey(
+  _In_ HANDLE               KeyHandle,
+  _In_ PUNICODE_STRING      ValueName,
+  _In_ ULONG                TitleIndex,
+  _In_ ULONG                Type,
+  _In_ PVOID                Data,
+  _In_ ULONG                DataSize
+);
+
+
+NTSTATUS NtQueryValueKey(
+  HANDLE                      KeyHandle,
+  PUNICODE_STRING             ValueName,
+  KEY_VALUE_INFORMATION_CLASS KeyValueInformationClass,
+  PVOID                       KeyValueInformation,
+  ULONG                       Length,
+  PULONG                      ResultLength
+);
+
+
+NTSTATUS NtEnumerateValueKey(
+  HANDLE                      KeyHandle,
+  ULONG                       Index,
+  KEY_VALUE_INFORMATION_CLASS KeyValueInformationClass,
+  PVOID                       KeyValueInformation,
+  ULONG                       Length,
+  PULONG                      ResultLength
+);

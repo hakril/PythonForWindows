@@ -1,7 +1,7 @@
 import struct
 import ctypes
 import functools
-from ctypes.wintypes import HRESULT, byref, pointer, cast
+from ctypes import HRESULT, byref, cast
 
 import windows
 from windows import winproxy

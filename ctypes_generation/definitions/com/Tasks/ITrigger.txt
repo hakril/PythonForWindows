@@ -1,0 +1,99 @@
+typedef struct ITriggerVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ITrigger * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            __RPC__deref_out  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ITrigger * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ITrigger * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ITrigger * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ITrigger * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ITrigger * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ITrigger * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Type )( 
+            ITrigger * This,
+            /* [retval][out] */ TASK_TRIGGER_TYPE2 *pType);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Id )( 
+            ITrigger * This,
+            /* [retval][out] */ BSTR *pId);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Id )( 
+            ITrigger * This,
+            /* [in] */ BSTR id);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Repetition )( 
+            ITrigger * This,
+            /* [retval][out] */ IRepetitionPattern **ppRepeat);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Repetition )( 
+            ITrigger * This,
+            /* [in] */ IRepetitionPattern *pRepeat);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_ExecutionTimeLimit )( 
+            ITrigger * This,
+            /* [retval][out] */ BSTR *pTimeLimit);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_ExecutionTimeLimit )( 
+            ITrigger * This,
+            /* [in] */ BSTR timelimit);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_StartBoundary )( 
+            ITrigger * This,
+            /* [retval][out] */ BSTR *pStart);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_StartBoundary )( 
+            ITrigger * This,
+            /* [in] */ BSTR start);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_EndBoundary )( 
+            ITrigger * This,
+            /* [retval][out] */ BSTR *pEnd);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_EndBoundary )( 
+            ITrigger * This,
+            /* [in] */ BSTR end);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Enabled )( 
+            ITrigger * This,
+            /* [retval][out] */ VARIANT_BOOL *pEnabled);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Enabled )( 
+            ITrigger * This,
+            /* [in] */ VARIANT_BOOL enabled);
+        
+        END_INTERFACE
+    } ITriggerVtbl;

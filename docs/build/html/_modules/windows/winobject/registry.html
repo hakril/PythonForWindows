@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/css/mbasic.css" type="text/css" />
-    <script type="text/javascript" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
@@ -143,8 +143,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">value</span><span class="p">,</span> <span class="nb">type</span> <span class="o">=</span> <span class="n">_winreg</span><span class="o">.</span><span class="n">QueryValueEx</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phkey</span><span class="p">,</span> <span class="n">value_name</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">REG_QWORD</span><span class="p">:</span>
-            <span class="n">value</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&lt;Q&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span></div>
-        <span class="k">return</span> <span class="n">KeyValue</span><span class="p">(</span><span class="n">value_name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&lt;Q&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">KeyValue</span><span class="p">(</span><span class="n">value_name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_guess_value_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
@@ -162,8 +162,12 @@
         <span class="k">if</span> <span class="nb">type</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="nb">type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_guess_value_type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">REG_QWORD</span><span class="p">:</span>
-            <span class="n">value</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s2">&quot;&lt;Q&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div>
-        <span class="k">return</span> <span class="n">_winreg</span><span class="o">.</span><span class="n">SetValueEx</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phkey</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s2">&quot;&lt;Q&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_winreg</span><span class="o">.</span><span class="n">SetValueEx</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phkey</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PyHKey.delete_value"><a class="viewcode-back" href="../../../registry.html#windows.winobject.registry.PyHKey.delete_value">[docs]</a>    <span class="k">def</span> <span class="nf">delete_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Delete the value with ``name``&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">_winreg</span><span class="o">.</span><span class="n">DeleteValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phkey</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="PyHKey.open_subkey"><a class="viewcode-back" href="../../../registry.html#windows.winobject.registry.PyHKey.open_subkey">[docs]</a>    <span class="k">def</span> <span class="nf">open_subkey</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">sam</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -172,30 +176,45 @@
 <span class="sd">        :rtype: :class:`PyHKey`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">sam</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">sam</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sam</span></div>
-        <span class="k">return</span> <span class="n">PyHKey</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">sam</span><span class="p">)</span>
+            <span class="n">sam</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sam</span>
+        <span class="k">return</span> <span class="n">PyHKey</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">sam</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">reopen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_sam</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">PyHKey</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">surkey</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">new_sam</span><span class="p">)</span>
+<div class="viewcode-block" id="PyHKey.reopen"><a class="viewcode-back" href="../../../registry.html#windows.winobject.registry.PyHKey.reopen">[docs]</a>    <span class="k">def</span> <span class="nf">reopen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sam</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Reopen the registry key with a new ``sam``</span>
 
-    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># TODO: document</span>
+<span class="sd">        :rtype: :class:`PyHKey`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">PyHKey</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">surkey</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">sam</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PyHKey.create"><a class="viewcode-back" href="../../../registry.html#windows.winobject.registry.PyHKey.create">[docs]</a>    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create the registry key&quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_phkey</span> <span class="o">=</span> <span class="n">_winreg</span><span class="o">.</span><span class="n">CreateKeyEx</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">surkey</span><span class="o">.</span><span class="n">phkey</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sam</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">WindowsError</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">winerror</span><span class="p">,</span> <span class="s2">&quot;Could not create registry key &lt;</span><span class="si">{0}</span><span class="s2">&gt; (</span><span class="si">{1}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fullname</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">strerror</span><span class="p">))</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_phkey</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="PyHKey.delete"><a class="viewcode-back" href="../../../registry.html#windows.winobject.registry.PyHKey.delete">[docs]</a>    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Delete the registry key&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">_winreg</span><span class="o">.</span><span class="n">DeleteKeyEx</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">surkey</span><span class="o">.</span><span class="n">phkey</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sam</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">WindowsError</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">winerror</span><span class="p">,</span> <span class="s2">&quot;Could not delete registry key &lt;</span><span class="si">{0}</span><span class="s2">&gt; (</span><span class="si">{1}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fullname</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">strerror</span><span class="p">))</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
 
 
 <div class="viewcode-block" id="PyHKey.__setitem__"><a class="viewcode-back" href="../../../registry.html#windows.winobject.registry.PyHKey.__setitem__">[docs]</a>    <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="n">rtype</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">long</span><span class="p">,</span> <span class="n">basestring</span><span class="p">)):</span>
-            <span class="n">value</span><span class="p">,</span> <span class="n">rtype</span> <span class="o">=</span> <span class="n">value</span></div>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">rtype</span><span class="p">)</span>
+            <span class="n">value</span><span class="p">,</span> <span class="n">rtype</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">rtype</span><span class="p">)</span></div>
 
     <span class="fm">__getitem__</span> <span class="o">=</span> <span class="n">get</span>
-</div>
-    <span class="fm">__call__</span> <span class="o">=</span> <span class="n">open_subkey</span>
+
+    <span class="fm">__delitem__</span> <span class="o">=</span> <span class="n">delete_value</span>
+
+    <span class="fm">__call__</span> <span class="o">=</span> <span class="n">open_subkey</span></div>
 
 
 <span class="k">class</span> <span class="nc">DummyPHKEY</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -213,7 +232,7 @@
 
 
 <div class="viewcode-block" id="Registry"><a class="viewcode-back" href="../../../registry.html#windows.winobject.registry.Registry">[docs]</a><span class="k">class</span> <span class="nc">Registry</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;The ``Windows`` registry: a read only (for now) mapping&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;The ``Windows`` registry&quot;&quot;&quot;</span>
 
     <span class="n">registry_base_keys</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;HKEY_LOCAL_MACHINE&quot;</span> <span class="p">:</span> <span class="n">HKEY_LOCAL_MACHINE</span><span class="p">,</span>
@@ -224,7 +243,18 @@
         <span class="s2">&quot;HKEY_USERS&quot;</span> <span class="p">:</span> <span class="n">HKEY_USERS</span>
     <span class="p">}</span>
 
-    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">sam</span><span class="o">=</span><span class="n">KEY_READ</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sam</span><span class="o">=</span><span class="n">KEY_READ</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sam</span> <span class="o">=</span> <span class="n">sam</span>
+
+<div class="viewcode-block" id="Registry.reopen"><a class="viewcode-back" href="../../../registry.html#windows.winobject.registry.Registry.reopen">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">reopen</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">sam</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a new :class:`Registry` using ``sam`` as the new default</span>
+
+<span class="sd">        :rtype: :class:`Registry`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">sam</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Registry.__call__"><a class="viewcode-back" href="../../../registry.html#windows.winobject.registry.Registry.__call__">[docs]</a>    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">sam</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get a registry key::</span>
 
 <span class="sd">            registry(r&quot;HKEY_LOCAL_MACHINE\\Software&quot;)</span>
@@ -232,6 +262,8 @@
 
 <span class="sd">        :rtype: :class:`PyHKey`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">sam</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">sam</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sam</span>
 
         <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry_base_keys</span><span class="p">:</span>
             <span class="n">key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry_base_keys</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
@@ -242,8 +274,8 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknow registry base key &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
         <span class="n">base_name</span><span class="p">,</span> <span class="n">subkey</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">base_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry_base_keys</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknow registry base key &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">base_name</span><span class="p">))</span></div>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry_base_keys</span><span class="p">[</span><span class="n">base_name</span><span class="p">](</span><span class="n">subkey</span><span class="p">,</span>  <span class="n">sam</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknow registry base key &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">base_name</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry_base_keys</span><span class="p">[</span><span class="n">base_name</span><span class="p">](</span><span class="n">subkey</span><span class="p">,</span>  <span class="n">sam</span><span class="p">)</span></div></div>
 </pre></div>
 
           </div>
@@ -282,7 +314,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
     </div>
   </body>
 </html>

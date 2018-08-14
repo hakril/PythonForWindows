@@ -9,7 +9,7 @@ from simpleparser import *
 class WinComParser(Parser):
     PARAM_INFO =  ["__RPC__deref_out", "__RPC__in", "__RPC__deref_out_opt", "__RPC__out", "__RPC__in_opt",
         "__RPC__deref_opt_inout_opt", "__in", "__out", "__out_opt", "__in_opt", "__inout",
-        "__reserved", "__RPC__in_opt_string", "__RPC__inout_opt", "__RPC__in_string", "__deref_out_opt"]
+        "__reserved", "__RPC__in_opt_string", "__RPC__inout_opt", "__RPC__in_string", "__deref_out_opt", "__RPC__inout"]
     PARAM_INFO_WITH_VALUE = ["__RPC__in_ecount", "__RPC__out_ecount_part", "__RPC__in_ecount_full",
             "__RPC__in_range", "__RPC__out_ecount_full", "__out_ecount_opt", "__out_ecount", "__in_ecount_opt",
             "__in_ecount", "__out_bcount_opt", "__out_bcount", "__in_bcount", "__in_bcount_opt", "__RPC__out_ecount_full_string"]
@@ -77,7 +77,7 @@ class WinComParser(Parser):
             args.append(self.parse_argument())
             #print("Pass <{0}>".format(p))
         self.next_token()
-        self.assert_token_type(ColonToken)
+        self.assert_token_type(SemiColonToken)
         return ret_type.value, method_name.value, args
 
     def parse(self):
@@ -113,7 +113,7 @@ class WinComParser(Parser):
             self.next_token()
             self.assert_token_type(StarToken)
             typedefptr = self.assert_token_type(NameToken).value
-        self.assert_token_type(ColonToken)
+        self.assert_token_type(SemiColonToken)
         res.typedefptr = typedefptr
         return res
 

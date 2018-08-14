@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/css/mbasic.css" type="text/css" />
-    <script type="text/javascript" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
@@ -58,8 +58,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">types</span> <span class="o">=</span> <span class="n">types</span>
 
     <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
-        <span class="n">func</span><span class="o">.</span><span class="n">_types_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">types</span></div>
-        <span class="k">return</span> <span class="n">func</span>
+        <span class="n">func</span><span class="o">.</span><span class="n">_types_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">types</span>
+        <span class="k">return</span> <span class="n">func</span></div>
 
 
 <span class="k">class</span> <span class="nc">KnownCallback</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -110,8 +110,6 @@
         <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stub_addr</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">realfunction</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">WINFUNCTYPE</span><span class="p">(</span><span class="o">*</span><span class="n">types</span><span class="p">)(</span><span class="n">IAT_entry</span><span class="o">.</span><span class="n">nonhookvalue</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">is_enable</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="c1"># import pdb;pdb.set_trace()</span>
-        <span class="c1">#IATHook.yolo.append(self)</span>
 
     <span class="k">def</span> <span class="nf">transform_arguments</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">types</span><span class="p">):</span>
         <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
@@ -127,15 +125,15 @@
         <span class="k">with</span> <span class="n">utils</span><span class="o">.</span><span class="n">VirtualProtected</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entry</span><span class="o">.</span><span class="n">addr</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">PVOID</span><span class="p">),</span> <span class="n">PAGE_EXECUTE_READWRITE</span><span class="p">):</span>
             <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stub_addr</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">entry</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stub_addr</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">is_enable</span> <span class="o">=</span> <span class="kc">True</span></div>
-        <span class="bp">self</span><span class="o">.</span><span class="n">entry</span><span class="o">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_enable</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entry</span><span class="o">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="IATHook.disable"><a class="viewcode-back" href="../../iat_hook.html#windows.hooks.IATHook.disable">[docs]</a>    <span class="k">def</span> <span class="nf">disable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Disable the IAT hook&quot;&quot;&quot;</span>
         <span class="k">with</span> <span class="n">utils</span><span class="o">.</span><span class="n">VirtualProtected</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entry</span><span class="o">.</span><span class="n">addr</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">PVOID</span><span class="p">),</span> <span class="n">PAGE_EXECUTE_READWRITE</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">entry</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry</span><span class="o">.</span><span class="n">nonhookvalue</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">is_enable</span> <span class="o">=</span> <span class="kc">False</span></div>
-        <span class="bp">self</span><span class="o">.</span><span class="n">entry</span><span class="o">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_enable</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entry</span><span class="o">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="kc">True</span></div>
 
     <span class="k">def</span> <span class="nf">hook_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
         <span class="n">adapted_args</span> <span class="o">=</span> <span class="p">[]</span>
@@ -150,8 +148,8 @@
         <span class="k">def</span> <span class="nf">real_function</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">args</span> <span class="o">==</span> <span class="p">():</span>
                 <span class="n">args</span> <span class="o">=</span> <span class="n">adapted_args</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">realfunction</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span></div>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="o">*</span><span class="n">adapted_args</span><span class="p">,</span> <span class="n">real_function</span><span class="o">=</span><span class="n">real_function</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">realfunction</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="o">*</span><span class="n">adapted_args</span><span class="p">,</span> <span class="n">real_function</span><span class="o">=</span><span class="n">real_function</span><span class="p">)</span></div>
 
     <span class="c1"># Use this tricks to prevent garbage collection of hook ?</span>
     <span class="c1"># That&#39;s dirty..</span>
@@ -216,7 +214,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
     </div>
   </body>
 </html>

@@ -1,4 +1,4 @@
-.. currentmodule:: windows.generated_def.winstructs
+.. module:: windows.generated_def.winstructs
 
 Winstructs
 ----------
@@ -261,6 +261,2315 @@ _CALLFRAME_MARSHALCONTEXT
 
         :class:`GUID`
 
+_CERT_STRONG_SIGN_SERIALIZED_INFO
+'''''''''''''''''''''''''''''''''
+.. class:: CERT_STRONG_SIGN_SERIALIZED_INFO
+
+    Alias for :class:`_CERT_STRONG_SIGN_SERIALIZED_INFO`
+
+.. class:: PCERT_STRONG_SIGN_SERIALIZED_INFO
+
+    Pointer to :class:`_CERT_STRONG_SIGN_SERIALIZED_INFO`
+
+.. class:: _CERT_STRONG_SIGN_SERIALIZED_INFO
+
+    .. attribute:: dwFlags
+
+        :class:`DWORD`
+
+
+    .. attribute:: pwszCNGSignHashAlgids
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: pwszCNGPubKeyMinBitLengths
+
+        :class:`LPWSTR`
+
+TMP_CERT_STRONG_SIGN_PARA_UNION_TYPE
+''''''''''''''''''''''''''''''''''''
+.. class:: TMP_CERT_STRONG_SIGN_PARA_UNION_TYPE
+
+    .. attribute:: pvInfo
+
+        :class:`PVOID`
+
+
+    .. attribute:: pSerializedInfo
+
+        :class:`PCERT_STRONG_SIGN_SERIALIZED_INFO`
+
+
+    .. attribute:: pszOID
+
+        :class:`LPSTR`
+
+_CERT_STRONG_SIGN_PARA
+''''''''''''''''''''''
+.. class:: CERT_STRONG_SIGN_PARA
+
+    Alias for :class:`_CERT_STRONG_SIGN_PARA`
+
+.. class:: PCCERT_STRONG_SIGN_PARA
+
+    Pointer to :class:`_CERT_STRONG_SIGN_PARA`
+
+.. class:: PCERT_STRONG_SIGN_PARA
+
+    Pointer to :class:`_CERT_STRONG_SIGN_PARA`
+
+.. class:: _CERT_STRONG_SIGN_PARA
+
+    .. attribute:: cbSize
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwInfoChoice
+
+        :class:`DWORD`
+
+
+    .. attribute:: tmp_union
+
+        :class:`TMP_CERT_STRONG_SIGN_PARA_UNION_TYPE`
+
+_CRYPTOAPI_BLOB
+'''''''''''''''
+.. class:: CRYPT_INTEGER_BLOB
+
+    Alias for :class:`_CRYPTOAPI_BLOB`
+
+.. class:: PCRYPT_DATA_BLOB
+
+    Pointer to :class:`_CRYPTOAPI_BLOB`
+
+.. class:: PCRYPT_OBJID_BLOB
+
+    Pointer to :class:`_CRYPTOAPI_BLOB`
+
+.. class:: PCRYPT_DER_BLOB
+
+    Pointer to :class:`_CRYPTOAPI_BLOB`
+
+.. class:: PCRL_BLOB
+
+    Pointer to :class:`_CRYPTOAPI_BLOB`
+
+.. class:: PCRYPT_UINT_BLOB
+
+    Pointer to :class:`_CRYPTOAPI_BLOB`
+
+.. class:: CERT_NAME_BLOB
+
+    Alias for :class:`_CRYPTOAPI_BLOB`
+
+.. class:: PCRYPT_DIGEST_BLOB
+
+    Pointer to :class:`_CRYPTOAPI_BLOB`
+
+.. class:: PCRYPT_INTEGER_BLOB
+
+    Pointer to :class:`_CRYPTOAPI_BLOB`
+
+.. class:: CERT_RDN_VALUE_BLOB
+
+    Alias for :class:`_CRYPTOAPI_BLOB`
+
+.. class:: PCERT_NAME_BLOB
+
+    Pointer to :class:`_CRYPTOAPI_BLOB`
+
+.. class:: PCRYPT_HASH_BLOB
+
+    Pointer to :class:`_CRYPTOAPI_BLOB`
+
+.. class:: CRYPT_DATA_BLOB
+
+    Alias for :class:`_CRYPTOAPI_BLOB`
+
+.. class:: DATA_BLOB
+
+    Alias for :class:`_CRYPTOAPI_BLOB`
+
+.. class:: CRYPT_UINT_BLOB
+
+    Alias for :class:`_CRYPTOAPI_BLOB`
+
+.. class:: PCERT_RDN_VALUE_BLOB
+
+    Pointer to :class:`_CRYPTOAPI_BLOB`
+
+.. class:: CRYPT_HASH_BLOB
+
+    Alias for :class:`_CRYPTOAPI_BLOB`
+
+.. class:: CRL_BLOB
+
+    Alias for :class:`_CRYPTOAPI_BLOB`
+
+.. class:: PCERT_BLOB
+
+    Pointer to :class:`_CRYPTOAPI_BLOB`
+
+.. class:: CRYPT_DIGEST_BLOB
+
+    Alias for :class:`_CRYPTOAPI_BLOB`
+
+.. class:: CRYPT_OBJID_BLOB
+
+    Alias for :class:`_CRYPTOAPI_BLOB`
+
+.. class:: CERT_BLOB
+
+    Alias for :class:`_CRYPTOAPI_BLOB`
+
+.. class:: CRYPT_DER_BLOB
+
+    Alias for :class:`_CRYPTOAPI_BLOB`
+
+.. class:: PDATA_BLOB
+
+    Pointer to :class:`_CRYPTOAPI_BLOB`
+
+.. class:: PCRYPT_ATTR_BLOB
+
+    Pointer to :class:`_CRYPTOAPI_BLOB`
+
+.. class:: CRYPT_ATTR_BLOB
+
+    Alias for :class:`_CRYPTOAPI_BLOB`
+
+.. class:: _CRYPTOAPI_BLOB
+
+    .. attribute:: cbData
+
+        :class:`DWORD`
+
+
+    .. attribute:: pbData
+
+        :class:`BYTE`
+
+CRYPTCATATTRIBUTE_
+''''''''''''''''''
+.. class:: CRYPTCATATTRIBUTE
+
+    Alias for :class:`CRYPTCATATTRIBUTE_`
+
+.. class:: PCRYPTCATATTRIBUTE
+
+    Pointer to :class:`CRYPTCATATTRIBUTE_`
+
+.. class:: CRYPTCATATTRIBUTE_
+
+    .. attribute:: cbStruct
+
+        :class:`DWORD`
+
+
+    .. attribute:: pwszReferenceTag
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: dwAttrTypeAndAction
+
+        :class:`DWORD`
+
+
+    .. attribute:: cbValue
+
+        :class:`DWORD`
+
+
+    .. attribute:: pbValue
+
+        :class:`BYTE`
+
+
+    .. attribute:: dwReserved
+
+        :class:`DWORD`
+
+_CRYPT_ATTRIBUTE_TYPE_VALUE
+'''''''''''''''''''''''''''
+.. class:: CRYPT_ATTRIBUTE_TYPE_VALUE
+
+    Alias for :class:`_CRYPT_ATTRIBUTE_TYPE_VALUE`
+
+.. class:: PCRYPT_ATTRIBUTE_TYPE_VALUE
+
+    Pointer to :class:`_CRYPT_ATTRIBUTE_TYPE_VALUE`
+
+.. class:: _CRYPT_ATTRIBUTE_TYPE_VALUE
+
+    .. attribute:: pszObjId
+
+        :class:`LPSTR`
+
+
+    .. attribute:: Value
+
+        :class:`CRYPT_OBJID_BLOB`
+
+_CRYPT_ALGORITHM_IDENTIFIER
+'''''''''''''''''''''''''''
+.. class:: CRYPT_ALGORITHM_IDENTIFIER
+
+    Alias for :class:`_CRYPT_ALGORITHM_IDENTIFIER`
+
+.. class:: PCRYPT_ALGORITHM_IDENTIFIER
+
+    Pointer to :class:`_CRYPT_ALGORITHM_IDENTIFIER`
+
+.. class:: _CRYPT_ALGORITHM_IDENTIFIER
+
+    .. attribute:: pszObjId
+
+        :class:`LPSTR`
+
+
+    .. attribute:: Parameters
+
+        :class:`CRYPT_OBJID_BLOB`
+
+SIP_INDIRECT_DATA_
+''''''''''''''''''
+.. class:: SIP_INDIRECT_DATA
+
+    Alias for :class:`SIP_INDIRECT_DATA_`
+
+.. class:: PSIP_INDIRECT_DATA
+
+    Pointer to :class:`SIP_INDIRECT_DATA_`
+
+.. class:: SIP_INDIRECT_DATA_
+
+    .. attribute:: Data
+
+        :class:`CRYPT_ATTRIBUTE_TYPE_VALUE`
+
+
+    .. attribute:: DigestAlgorithm
+
+        :class:`CRYPT_ALGORITHM_IDENTIFIER`
+
+
+    .. attribute:: Digest
+
+        :class:`CRYPT_HASH_BLOB`
+
+CRYPTCATMEMBER_
+'''''''''''''''
+.. class:: CRYPTCATMEMBER
+
+    Alias for :class:`CRYPTCATMEMBER_`
+
+.. class:: PCRYPTCATMEMBER
+
+    Pointer to :class:`CRYPTCATMEMBER_`
+
+.. class:: CRYPTCATMEMBER_
+
+    .. attribute:: cbStruct
+
+        :class:`DWORD`
+
+
+    .. attribute:: pwszReferenceTag
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: pwszFileName
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: gSubjectType
+
+        :class:`GUID`
+
+
+    .. attribute:: fdwMemberFlags
+
+        :class:`DWORD`
+
+
+    .. attribute:: pIndirectData
+
+        :class:`SIP_INDIRECT_DATA`
+
+
+    .. attribute:: dwCertVersion
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwReserved
+
+        :class:`DWORD`
+
+
+    .. attribute:: hReserved
+
+        :class:`HANDLE`
+
+
+    .. attribute:: sEncodedIndirectData
+
+        :class:`CRYPT_ATTR_BLOB`
+
+
+    .. attribute:: sEncodedMemberInfo
+
+        :class:`CRYPT_ATTR_BLOB`
+
+WINTRUST_FILE_INFO_
+'''''''''''''''''''
+.. class:: WINTRUST_FILE_INFO
+
+    Alias for :class:`WINTRUST_FILE_INFO_`
+
+.. class:: PWINTRUST_FILE_INFO
+
+    Pointer to :class:`WINTRUST_FILE_INFO_`
+
+.. class:: WINTRUST_FILE_INFO_
+
+    .. attribute:: cbStruct
+
+        :class:`DWORD`
+
+
+    .. attribute:: pcwszFilePath
+
+        :class:`LPCWSTR`
+
+
+    .. attribute:: hFile
+
+        :class:`HANDLE`
+
+
+    .. attribute:: pgKnownSubject
+
+        :class:`GUID`
+
+_CRYPT_ATTRIBUTE
+''''''''''''''''
+.. class:: PCRYPT_ATTRIBUTE
+
+    Pointer to :class:`_CRYPT_ATTRIBUTE`
+
+.. class:: CRYPT_ATTRIBUTE
+
+    Alias for :class:`_CRYPT_ATTRIBUTE`
+
+.. class:: _CRYPT_ATTRIBUTE
+
+    .. attribute:: pszObjId
+
+        :class:`LPSTR`
+
+
+    .. attribute:: cValue
+
+        :class:`DWORD`
+
+
+    .. attribute:: rgValue
+
+        :class:`PCRYPT_ATTR_BLOB`
+
+_CTL_ENTRY
+''''''''''
+.. class:: PCTL_ENTRY
+
+    Pointer to :class:`_CTL_ENTRY`
+
+.. class:: CTL_ENTRY
+
+    Alias for :class:`_CTL_ENTRY`
+
+.. class:: _CTL_ENTRY
+
+    .. attribute:: SubjectIdentifier
+
+        :class:`CRYPT_DATA_BLOB`
+
+
+    .. attribute:: cAttribute
+
+        :class:`DWORD`
+
+
+    .. attribute:: rgAttribute
+
+        :class:`PCRYPT_ATTRIBUTE`
+
+_CRYPT_ATTRIBUTE
+''''''''''''''''
+.. class:: PCRYPT_ATTRIBUTE
+
+    Pointer to :class:`_CRYPT_ATTRIBUTE`
+
+.. class:: CRYPT_ATTRIBUTE
+
+    Alias for :class:`_CRYPT_ATTRIBUTE`
+
+.. class:: _CRYPT_ATTRIBUTE
+
+    .. attribute:: pszObjId
+
+        :class:`LPSTR`
+
+
+    .. attribute:: cValue
+
+        :class:`DWORD`
+
+
+    .. attribute:: rgValue
+
+        :class:`PCRYPT_ATTR_BLOB`
+
+_CRYPT_ATTRIBUTES
+'''''''''''''''''
+.. class:: CRYPT_ATTRIBUTES
+
+    Alias for :class:`_CRYPT_ATTRIBUTES`
+
+.. class:: PCRYPT_ATTRIBUTES
+
+    Pointer to :class:`_CRYPT_ATTRIBUTES`
+
+.. class:: _CRYPT_ATTRIBUTES
+
+    .. attribute:: cAttr
+
+        :class:`DWORD`
+
+
+    .. attribute:: rgAttr
+
+        :class:`PCRYPT_ATTRIBUTE`
+
+_CERT_EXTENSION
+'''''''''''''''
+.. class:: CERT_EXTENSION
+
+    Alias for :class:`_CERT_EXTENSION`
+
+.. class:: PCERT_EXTENSION
+
+    Pointer to :class:`_CERT_EXTENSION`
+
+.. class:: _CERT_EXTENSION
+
+    .. attribute:: pszObjId
+
+        :class:`LPSTR`
+
+
+    .. attribute:: fCritical
+
+        :class:`BOOL`
+
+
+    .. attribute:: Value
+
+        :class:`CRYPT_OBJID_BLOB`
+
+_CRL_ENTRY
+''''''''''
+.. class:: CRL_ENTRY
+
+    Alias for :class:`_CRL_ENTRY`
+
+.. class:: PCRL_ENTRY
+
+    Pointer to :class:`_CRL_ENTRY`
+
+.. class:: _CRL_ENTRY
+
+    .. attribute:: SerialNumber
+
+        :class:`CRYPT_INTEGER_BLOB`
+
+
+    .. attribute:: RevocationDate
+
+        :class:`FILETIME`
+
+
+    .. attribute:: cExtension
+
+        :class:`DWORD`
+
+
+    .. attribute:: rgExtension
+
+        :class:`PCERT_EXTENSION`
+
+_CRL_INFO
+'''''''''
+.. class:: CRL_INFO
+
+    Alias for :class:`_CRL_INFO`
+
+.. class:: PCRL_INFO
+
+    Pointer to :class:`_CRL_INFO`
+
+.. class:: _CRL_INFO
+
+    .. attribute:: dwVersion
+
+        :class:`DWORD`
+
+
+    .. attribute:: SignatureAlgorithm
+
+        :class:`CRYPT_ALGORITHM_IDENTIFIER`
+
+
+    .. attribute:: Issuer
+
+        :class:`CERT_NAME_BLOB`
+
+
+    .. attribute:: ThisUpdate
+
+        :class:`FILETIME`
+
+
+    .. attribute:: NextUpdate
+
+        :class:`FILETIME`
+
+
+    .. attribute:: cCRLEntry
+
+        :class:`DWORD`
+
+
+    .. attribute:: rgCRLEntry
+
+        :class:`PCRL_ENTRY`
+
+
+    .. attribute:: cExtension
+
+        :class:`DWORD`
+
+
+    .. attribute:: rgExtension
+
+        :class:`PCERT_EXTENSION`
+
+_CRL_CONTEXT
+''''''''''''
+.. class:: PCCRL_CONTEXT
+
+    Pointer to :class:`_CRL_CONTEXT`
+
+.. class:: CRL_CONTEXT
+
+    Alias for :class:`_CRL_CONTEXT`
+
+.. class:: PCRL_CONTEXT
+
+    Pointer to :class:`_CRL_CONTEXT`
+
+.. class:: _CRL_CONTEXT
+
+    .. attribute:: dwCertEncodingType
+
+        :class:`DWORD`
+
+
+    .. attribute:: pbCrlEncoded
+
+        :class:`BYTE`
+
+
+    .. attribute:: cbCrlEncoded
+
+        :class:`DWORD`
+
+
+    .. attribute:: pCrlInfo
+
+        :class:`PCRL_INFO`
+
+
+    .. attribute:: hCertStore
+
+        :class:`HCERTSTORE`
+
+_CMSG_SIGNER_INFO
+'''''''''''''''''
+.. class:: CMSG_SIGNER_INFO
+
+    Alias for :class:`_CMSG_SIGNER_INFO`
+
+.. class:: PCMSG_SIGNER_INFO
+
+    Pointer to :class:`_CMSG_SIGNER_INFO`
+
+.. class:: _CMSG_SIGNER_INFO
+
+    .. attribute:: dwVersion
+
+        :class:`DWORD`
+
+
+    .. attribute:: Issuer
+
+        :class:`CERT_NAME_BLOB`
+
+
+    .. attribute:: SerialNumber
+
+        :class:`CRYPT_INTEGER_BLOB`
+
+
+    .. attribute:: HashAlgorithm
+
+        :class:`CRYPT_ALGORITHM_IDENTIFIER`
+
+
+    .. attribute:: HashEncryptionAlgorithm
+
+        :class:`CRYPT_ALGORITHM_IDENTIFIER`
+
+
+    .. attribute:: EncryptedHash
+
+        :class:`CRYPT_DATA_BLOB`
+
+
+    .. attribute:: AuthAttrs
+
+        :class:`CRYPT_ATTRIBUTES`
+
+
+    .. attribute:: UnauthAttrs
+
+        :class:`CRYPT_ATTRIBUTES`
+
+_CTL_USAGE
+''''''''''
+.. class:: CERT_ENHKEY_USAGE
+
+    Alias for :class:`_CTL_USAGE`
+
+.. class:: PCTL_USAGE
+
+    Pointer to :class:`_CTL_USAGE`
+
+.. class:: CTL_USAGE
+
+    Alias for :class:`_CTL_USAGE`
+
+.. class:: PCERT_ENHKEY_USAGE
+
+    Pointer to :class:`_CTL_USAGE`
+
+.. class:: _CTL_USAGE
+
+    .. attribute:: cUsageIdentifier
+
+        :class:`DWORD`
+
+
+    .. attribute:: rgpszUsageIdentifier
+
+        :class:`LPSTR`
+
+_CTL_INFO
+'''''''''
+.. class:: CTL_INFO
+
+    Alias for :class:`_CTL_INFO`
+
+.. class:: PCTL_INFO
+
+    Pointer to :class:`_CTL_INFO`
+
+.. class:: _CTL_INFO
+
+    .. attribute:: dwVersion
+
+        :class:`DWORD`
+
+
+    .. attribute:: SubjectUsage
+
+        :class:`CTL_USAGE`
+
+
+    .. attribute:: ListIdentifier
+
+        :class:`CRYPT_DATA_BLOB`
+
+
+    .. attribute:: SequenceNumber
+
+        :class:`CRYPT_INTEGER_BLOB`
+
+
+    .. attribute:: ThisUpdate
+
+        :class:`FILETIME`
+
+
+    .. attribute:: NextUpdate
+
+        :class:`FILETIME`
+
+
+    .. attribute:: SubjectAlgorithm
+
+        :class:`CRYPT_ALGORITHM_IDENTIFIER`
+
+
+    .. attribute:: cCTLEntry
+
+        :class:`DWORD`
+
+
+    .. attribute:: rgCTLEntry
+
+        :class:`PCTL_ENTRY`
+
+
+    .. attribute:: cExtension
+
+        :class:`DWORD`
+
+
+    .. attribute:: rgExtension
+
+        :class:`PCERT_EXTENSION`
+
+_CTL_CONTEXT
+''''''''''''
+.. class:: PCTL_CONTEXT
+
+    Pointer to :class:`_CTL_CONTEXT`
+
+.. class:: CTL_CONTEXT
+
+    Alias for :class:`_CTL_CONTEXT`
+
+.. class:: PCCTL_CONTEXT
+
+    Pointer to :class:`_CTL_CONTEXT`
+
+.. class:: _CTL_CONTEXT
+
+    .. attribute:: dwMsgAndCertEncodingType
+
+        :class:`DWORD`
+
+
+    .. attribute:: pbCtlEncoded
+
+        :class:`BYTE`
+
+
+    .. attribute:: cbCtlEncoded
+
+        :class:`DWORD`
+
+
+    .. attribute:: pCtlInfo
+
+        :class:`PCTL_INFO`
+
+
+    .. attribute:: hCertStore
+
+        :class:`HCERTSTORE`
+
+
+    .. attribute:: hCryptMsg
+
+        :class:`HCRYPTMSG`
+
+
+    .. attribute:: pbCtlContent
+
+        :class:`BYTE`
+
+
+    .. attribute:: cbCtlContent
+
+        :class:`DWORD`
+
+WINTRUST_CATALOG_INFO_
+''''''''''''''''''''''
+.. class:: PWINTRUST_CATALOG_INFO
+
+    Pointer to :class:`WINTRUST_CATALOG_INFO_`
+
+.. class:: WINTRUST_CATALOG_INFO
+
+    Alias for :class:`WINTRUST_CATALOG_INFO_`
+
+.. class:: WINTRUST_CATALOG_INFO_
+
+    .. attribute:: cbStruct
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwCatalogVersion
+
+        :class:`DWORD`
+
+
+    .. attribute:: pcwszCatalogFilePath
+
+        :class:`LPCWSTR`
+
+
+    .. attribute:: pcwszMemberTag
+
+        :class:`LPCWSTR`
+
+
+    .. attribute:: pcwszMemberFilePath
+
+        :class:`LPCWSTR`
+
+
+    .. attribute:: hMemberFile
+
+        :class:`HANDLE`
+
+
+    .. attribute:: pbCalculatedFileHash
+
+        :class:`BYTE`
+
+
+    .. attribute:: cbCalculatedFileHash
+
+        :class:`DWORD`
+
+
+    .. attribute:: pcCatalogContext
+
+        :class:`PCCTL_CONTEXT`
+
+WINTRUST_BLOB_INFO_
+'''''''''''''''''''
+.. class:: PWINTRUST_BLOB_INFO
+
+    Pointer to :class:`WINTRUST_BLOB_INFO_`
+
+.. class:: WINTRUST_BLOB_INFO
+
+    Alias for :class:`WINTRUST_BLOB_INFO_`
+
+.. class:: WINTRUST_BLOB_INFO_
+
+    .. attribute:: cbStruct
+
+        :class:`DWORD`
+
+
+    .. attribute:: gSubject
+
+        :class:`GUID`
+
+
+    .. attribute:: pcwszDisplayName
+
+        :class:`LPCWSTR`
+
+
+    .. attribute:: cbMemObject
+
+        :class:`DWORD`
+
+
+    .. attribute:: pbMemObject
+
+        :class:`BYTE`
+
+
+    .. attribute:: cbMemSignedMsg
+
+        :class:`DWORD`
+
+
+    .. attribute:: pbMemSignedMsg
+
+        :class:`BYTE`
+
+_CRYPT_BIT_BLOB
+'''''''''''''''
+.. class:: CRYPT_BIT_BLOB
+
+    Alias for :class:`_CRYPT_BIT_BLOB`
+
+.. class:: PCRYPT_BIT_BLOB
+
+    Pointer to :class:`_CRYPT_BIT_BLOB`
+
+.. class:: _CRYPT_BIT_BLOB
+
+    .. attribute:: cbData
+
+        :class:`DWORD`
+
+
+    .. attribute:: pbData
+
+        :class:`BYTE`
+
+
+    .. attribute:: cUnusedBits
+
+        :class:`DWORD`
+
+_CERT_PUBLIC_KEY_INFO
+'''''''''''''''''''''
+.. class:: PCERT_PUBLIC_KEY_INFO
+
+    Pointer to :class:`_CERT_PUBLIC_KEY_INFO`
+
+.. class:: CERT_PUBLIC_KEY_INFO
+
+    Alias for :class:`_CERT_PUBLIC_KEY_INFO`
+
+.. class:: _CERT_PUBLIC_KEY_INFO
+
+    .. attribute:: Algorithm
+
+        :class:`CRYPT_ALGORITHM_IDENTIFIER`
+
+
+    .. attribute:: PublicKey
+
+        :class:`CRYPT_BIT_BLOB`
+
+_CERT_INFO
+''''''''''
+.. class:: CERT_INFO
+
+    Alias for :class:`_CERT_INFO`
+
+.. class:: PCERT_INFO
+
+    Pointer to :class:`_CERT_INFO`
+
+.. class:: _CERT_INFO
+
+    .. attribute:: dwVersion
+
+        :class:`DWORD`
+
+
+    .. attribute:: SerialNumber
+
+        :class:`CRYPT_INTEGER_BLOB`
+
+
+    .. attribute:: SignatureAlgorithm
+
+        :class:`CRYPT_ALGORITHM_IDENTIFIER`
+
+
+    .. attribute:: Issuer
+
+        :class:`CERT_NAME_BLOB`
+
+
+    .. attribute:: NotBefore
+
+        :class:`FILETIME`
+
+
+    .. attribute:: NotAfter
+
+        :class:`FILETIME`
+
+
+    .. attribute:: Subject
+
+        :class:`CERT_NAME_BLOB`
+
+
+    .. attribute:: SubjectPublicKeyInfo
+
+        :class:`CERT_PUBLIC_KEY_INFO`
+
+
+    .. attribute:: IssuerUniqueId
+
+        :class:`CRYPT_BIT_BLOB`
+
+
+    .. attribute:: SubjectUniqueId
+
+        :class:`CRYPT_BIT_BLOB`
+
+
+    .. attribute:: cExtension
+
+        :class:`DWORD`
+
+
+    .. attribute:: rgExtension
+
+        :class:`PCERT_EXTENSION`
+
+_CERT_CONTEXT
+'''''''''''''
+.. class:: PCCERT_CONTEXT
+
+    Pointer to :class:`_CERT_CONTEXT`
+
+.. class:: CERT_CONTEXT
+
+    Alias for :class:`_CERT_CONTEXT`
+
+.. class:: PCERT_CONTEXT
+
+    Pointer to :class:`_CERT_CONTEXT`
+
+.. class:: _CERT_CONTEXT
+
+    .. attribute:: dwCertEncodingType
+
+        :class:`DWORD`
+
+
+    .. attribute:: pbCertEncoded
+
+        :class:`BYTE`
+
+
+    .. attribute:: cbCertEncoded
+
+        :class:`DWORD`
+
+
+    .. attribute:: pCertInfo
+
+        :class:`PCERT_INFO`
+
+
+    .. attribute:: hCertStore
+
+        :class:`HCERTSTORE`
+
+WINTRUST_SGNR_INFO_
+'''''''''''''''''''
+.. class:: WINTRUST_SGNR_INFO
+
+    Alias for :class:`WINTRUST_SGNR_INFO_`
+
+.. class:: PWINTRUST_SGNR_INFO
+
+    Pointer to :class:`WINTRUST_SGNR_INFO_`
+
+.. class:: WINTRUST_SGNR_INFO_
+
+    .. attribute:: cbStruct
+
+        :class:`DWORD`
+
+
+    .. attribute:: pcwszDisplayName
+
+        :class:`LPCWSTR`
+
+
+    .. attribute:: psSignerInfo
+
+        :class:`CMSG_SIGNER_INFO`
+
+
+    .. attribute:: chStores
+
+        :class:`DWORD`
+
+
+    .. attribute:: pahStores
+
+        :class:`HCERTSTORE`
+
+WINTRUST_CERT_INFO_
+'''''''''''''''''''
+.. class:: WINTRUST_CERT_INFO
+
+    Alias for :class:`WINTRUST_CERT_INFO_`
+
+.. class:: PWINTRUST_CERT_INFO
+
+    Pointer to :class:`WINTRUST_CERT_INFO_`
+
+.. class:: WINTRUST_CERT_INFO_
+
+    .. attribute:: cbStruct
+
+        :class:`DWORD`
+
+
+    .. attribute:: pcwszDisplayName
+
+        :class:`LPCWSTR`
+
+
+    .. attribute:: psCertContext
+
+        :class:`CERT_CONTEXT`
+
+
+    .. attribute:: chStores
+
+        :class:`DWORD`
+
+
+    .. attribute:: pahStores
+
+        :class:`HCERTSTORE`
+
+
+    .. attribute:: dwFlags
+
+        :class:`DWORD`
+
+
+    .. attribute:: psftVerifyAsOf
+
+        :class:`FILETIME`
+
+_TMP_WINTRUST_UNION_TYPE
+''''''''''''''''''''''''
+.. class:: TMP_WINTRUST_UNION_TYPE
+
+    Alias for :class:`_TMP_WINTRUST_UNION_TYPE`
+
+.. class:: _TMP_WINTRUST_UNION_TYPE
+
+    .. attribute:: pFile
+
+        :class:`WINTRUST_FILE_INFO_`
+
+
+    .. attribute:: pCatalog
+
+        :class:`WINTRUST_CATALOG_INFO_`
+
+
+    .. attribute:: pBlob
+
+        :class:`WINTRUST_BLOB_INFO_`
+
+
+    .. attribute:: pSgnr
+
+        :class:`WINTRUST_SGNR_INFO_`
+
+
+    .. attribute:: pCert
+
+        :class:`WINTRUST_CERT_INFO_`
+
+_WINTRUST_DATA
+''''''''''''''
+.. class:: PWINTRUST_DATA
+
+    Pointer to :class:`_WINTRUST_DATA`
+
+.. class:: WINTRUST_DATA
+
+    Alias for :class:`_WINTRUST_DATA`
+
+.. class:: _WINTRUST_DATA
+
+    .. attribute:: cbStruct
+
+        :class:`DWORD`
+
+
+    .. attribute:: pPolicyCallbackData
+
+        :class:`LPVOID`
+
+
+    .. attribute:: pSIPClientData
+
+        :class:`LPVOID`
+
+
+    .. attribute:: dwUIChoice
+
+        :class:`DWORD`
+
+
+    .. attribute:: fdwRevocationChecks
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwUnionChoice
+
+        :class:`DWORD`
+
+
+    .. attribute:: tmp_union
+
+        :class:`TMP_WINTRUST_UNION_TYPE`
+
+
+    .. attribute:: dwStateAction
+
+        :class:`DWORD`
+
+
+    .. attribute:: hWVTStateData
+
+        :class:`HANDLE`
+
+
+    .. attribute:: pwszURLReference
+
+        :class:`WCHAR`
+
+
+    .. attribute:: dwProvFlags
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwUIContext
+
+        :class:`DWORD`
+
+_CRYPT_SIGN_MESSAGE_PARA
+''''''''''''''''''''''''
+.. class:: CRYPT_SIGN_MESSAGE_PARA
+
+    Alias for :class:`_CRYPT_SIGN_MESSAGE_PARA`
+
+.. class:: PCRYPT_SIGN_MESSAGE_PARA
+
+    Pointer to :class:`_CRYPT_SIGN_MESSAGE_PARA`
+
+.. class:: _CRYPT_SIGN_MESSAGE_PARA
+
+    .. attribute:: cbSize
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwMsgEncodingType
+
+        :class:`DWORD`
+
+
+    .. attribute:: pSigningCert
+
+        :class:`PCCERT_CONTEXT`
+
+
+    .. attribute:: HashAlgorithm
+
+        :class:`CRYPT_ALGORITHM_IDENTIFIER`
+
+
+    .. attribute:: pvHashAuxInfo
+
+        :class:`PVOID`
+
+
+    .. attribute:: cMsgCert
+
+        :class:`DWORD`
+
+
+    .. attribute:: rgpMsgCert
+
+        :class:`PCCERT_CONTEXT`
+
+
+    .. attribute:: cMsgCrl
+
+        :class:`DWORD`
+
+
+    .. attribute:: rgpMsgCrl
+
+        :class:`PCCRL_CONTEXT`
+
+
+    .. attribute:: cAuthAttr
+
+        :class:`DWORD`
+
+
+    .. attribute:: rgAuthAttr
+
+        :class:`PCRYPT_ATTRIBUTE`
+
+
+    .. attribute:: cUnauthAttr
+
+        :class:`DWORD`
+
+
+    .. attribute:: rgUnauthAttr
+
+        :class:`PCRYPT_ATTRIBUTE`
+
+
+    .. attribute:: dwFlags
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwInnerContentType
+
+        :class:`DWORD`
+
+
+    .. attribute:: HashEncryptionAlgorithm
+
+        :class:`CRYPT_ALGORITHM_IDENTIFIER`
+
+
+    .. attribute:: pvHashEncryptionAuxInfo
+
+        :class:`PVOID`
+
+_CRYPT_HASH_MESSAGE_PARA
+''''''''''''''''''''''''
+.. class:: PCRYPT_HASH_MESSAGE_PARA
+
+    Pointer to :class:`_CRYPT_HASH_MESSAGE_PARA`
+
+.. class:: CRYPT_HASH_MESSAGE_PARA
+
+    Alias for :class:`_CRYPT_HASH_MESSAGE_PARA`
+
+.. class:: _CRYPT_HASH_MESSAGE_PARA
+
+    .. attribute:: cbSize
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwMsgEncodingType
+
+        :class:`DWORD`
+
+
+    .. attribute:: hCryptProv
+
+        :class:`HCRYPTPROV_LEGACY`
+
+
+    .. attribute:: HashAlgorithm
+
+        :class:`CRYPT_ALGORITHM_IDENTIFIER`
+
+
+    .. attribute:: pvHashAuxInfo
+
+        :class:`PVOID`
+
+_CRYPT_KEY_VERIFY_MESSAGE_PARA
+''''''''''''''''''''''''''''''
+.. class:: CRYPT_KEY_VERIFY_MESSAGE_PARA
+
+    Alias for :class:`_CRYPT_KEY_VERIFY_MESSAGE_PARA`
+
+.. class:: PCRYPT_KEY_VERIFY_MESSAGE_PARA
+
+    Pointer to :class:`_CRYPT_KEY_VERIFY_MESSAGE_PARA`
+
+.. class:: _CRYPT_KEY_VERIFY_MESSAGE_PARA
+
+    .. attribute:: cbSize
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwMsgEncodingType
+
+        :class:`DWORD`
+
+
+    .. attribute:: hCryptProv
+
+        :class:`HCRYPTPROV_LEGACY`
+
+_CRYPT_VERIFY_MESSAGE_PARA
+''''''''''''''''''''''''''
+.. class:: CRYPT_VERIFY_MESSAGE_PARA
+
+    Alias for :class:`_CRYPT_VERIFY_MESSAGE_PARA`
+
+.. class:: PCRYPT_VERIFY_MESSAGE_PARA
+
+    Pointer to :class:`_CRYPT_VERIFY_MESSAGE_PARA`
+
+.. class:: _CRYPT_VERIFY_MESSAGE_PARA
+
+    .. attribute:: cbSize
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwMsgAndCertEncodingType
+
+        :class:`DWORD`
+
+
+    .. attribute:: hCryptProv
+
+        :class:`HCRYPTPROV_LEGACY`
+
+
+    .. attribute:: pfnGetSignerCertificate
+
+        :class:`PFN_CRYPT_GET_SIGNER_CERTIFICATE`
+
+
+    .. attribute:: pvGetArg
+
+        :class:`PVOID`
+
+
+    .. attribute:: pStrongSignPara
+
+        :class:`PCCERT_STRONG_SIGN_PARA`
+
+_SPC_SERIALIZED_OBJECT
+''''''''''''''''''''''
+.. class:: SPC_SERIALIZED_OBJECT
+
+    Alias for :class:`_SPC_SERIALIZED_OBJECT`
+
+.. class:: PSPC_SERIALIZED_OBJECT
+
+    Pointer to :class:`_SPC_SERIALIZED_OBJECT`
+
+.. class:: _SPC_SERIALIZED_OBJECT
+
+    .. attribute:: ClassId
+
+        :class:`SPC_UUID`
+
+
+    .. attribute:: SerializedData
+
+        :class:`CRYPT_DATA_BLOB`
+
+_TMP_SPC_LINK_UNION
+'''''''''''''''''''
+.. class:: TMP_SPC_LINK_UNION
+
+    Alias for :class:`_TMP_SPC_LINK_UNION`
+
+.. class:: _TMP_SPC_LINK_UNION
+
+    .. attribute:: pwszUrl
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: Moniker
+
+        :class:`SPC_SERIALIZED_OBJECT`
+
+
+    .. attribute:: pwszFile
+
+        :class:`LPWSTR`
+
+SPC_LINK_
+'''''''''
+.. class:: PSPC_LINK
+
+    Pointer to :class:`SPC_LINK_`
+
+.. class:: SPC_LINK
+
+    Alias for :class:`SPC_LINK_`
+
+.. class:: SPC_LINK_
+
+    .. attribute:: dwLinkChoice
+
+        :class:`DWORD`
+
+
+    .. attribute:: u
+
+        :class:`TMP_SPC_LINK_UNION`
+
+_SPC_SP_OPUS_INFO
+'''''''''''''''''
+.. class:: PSPC_SP_OPUS_INFO
+
+    Pointer to :class:`_SPC_SP_OPUS_INFO`
+
+.. class:: SPC_SP_OPUS_INFO
+
+    Alias for :class:`_SPC_SP_OPUS_INFO`
+
+.. class:: _SPC_SP_OPUS_INFO
+
+    .. attribute:: pwszProgramName
+
+        :class:`LPCWSTR`
+
+
+    .. attribute:: pMoreInfo
+
+        :class:`SPC_LINK_`
+
+
+    .. attribute:: pPublisherInfo
+
+        :class:`SPC_LINK_`
+
+_CERT_TRUST_STATUS
+''''''''''''''''''
+.. class:: PCERT_TRUST_STATUS
+
+    Pointer to :class:`_CERT_TRUST_STATUS`
+
+.. class:: CERT_TRUST_STATUS
+
+    Alias for :class:`_CERT_TRUST_STATUS`
+
+.. class:: _CERT_TRUST_STATUS
+
+    .. attribute:: dwErrorStatus
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwInfoStatus
+
+        :class:`DWORD`
+
+_CERT_TRUST_LIST_INFO
+'''''''''''''''''''''
+.. class:: PCERT_TRUST_LIST_INFO
+
+    Pointer to :class:`_CERT_TRUST_LIST_INFO`
+
+.. class:: CERT_TRUST_LIST_INFO
+
+    Alias for :class:`_CERT_TRUST_LIST_INFO`
+
+.. class:: _CERT_TRUST_LIST_INFO
+
+    .. attribute:: cbSize
+
+        :class:`DWORD`
+
+
+    .. attribute:: pCtlEntry
+
+        :class:`PCTL_ENTRY`
+
+
+    .. attribute:: pCtlContext
+
+        :class:`PCCTL_CONTEXT`
+
+_CERT_REVOCATION_CRL_INFO
+'''''''''''''''''''''''''
+.. class:: CERT_REVOCATION_CRL_INFO
+
+    Alias for :class:`_CERT_REVOCATION_CRL_INFO`
+
+.. class:: PCERT_REVOCATION_CRL_INFO
+
+    Pointer to :class:`_CERT_REVOCATION_CRL_INFO`
+
+.. class:: _CERT_REVOCATION_CRL_INFO
+
+    .. attribute:: cbSize
+
+        :class:`DWORD`
+
+
+    .. attribute:: pBaseCrlContext
+
+        :class:`PCCRL_CONTEXT`
+
+
+    .. attribute:: pDeltaCrlContext
+
+        :class:`PCCRL_CONTEXT`
+
+
+    .. attribute:: pCrlEntry
+
+        :class:`PCRL_ENTRY`
+
+
+    .. attribute:: fDeltaCrlEntry
+
+        :class:`BOOL`
+
+_CERT_REVOCATION_INFO
+'''''''''''''''''''''
+.. class:: CERT_REVOCATION_INFO
+
+    Alias for :class:`_CERT_REVOCATION_INFO`
+
+.. class:: PCERT_REVOCATION_INFO
+
+    Pointer to :class:`_CERT_REVOCATION_INFO`
+
+.. class:: _CERT_REVOCATION_INFO
+
+    .. attribute:: cbSize
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwRevocationResult
+
+        :class:`DWORD`
+
+
+    .. attribute:: pszRevocationOid
+
+        :class:`LPCSTR`
+
+
+    .. attribute:: pvOidSpecificInfo
+
+        :class:`LPVOID`
+
+
+    .. attribute:: fHasFreshnessTime
+
+        :class:`BOOL`
+
+
+    .. attribute:: dwFreshnessTime
+
+        :class:`DWORD`
+
+
+    .. attribute:: pCrlInfo
+
+        :class:`PCERT_REVOCATION_CRL_INFO`
+
+_CERT_CHAIN_ELEMENT
+'''''''''''''''''''
+.. class:: PCERT_CHAIN_ELEMENT
+
+    Pointer to :class:`_CERT_CHAIN_ELEMENT`
+
+.. class:: CERT_CHAIN_ELEMENT
+
+    Alias for :class:`_CERT_CHAIN_ELEMENT`
+
+.. class:: PCCERT_CHAIN_ELEMENT
+
+    Pointer to :class:`_CERT_CHAIN_ELEMENT`
+
+.. class:: _CERT_CHAIN_ELEMENT
+
+    .. attribute:: cbSize
+
+        :class:`DWORD`
+
+
+    .. attribute:: pCertContext
+
+        :class:`PCCERT_CONTEXT`
+
+
+    .. attribute:: TrustStatus
+
+        :class:`CERT_TRUST_STATUS`
+
+
+    .. attribute:: pRevocationInfo
+
+        :class:`PCERT_REVOCATION_INFO`
+
+
+    .. attribute:: pIssuanceUsage
+
+        :class:`PCERT_ENHKEY_USAGE`
+
+
+    .. attribute:: pApplicationUsage
+
+        :class:`PCERT_ENHKEY_USAGE`
+
+
+    .. attribute:: pwszExtendedErrorInfo
+
+        :class:`LPCWSTR`
+
+_CERT_SIMPLE_CHAIN
+''''''''''''''''''
+.. class:: CERT_SIMPLE_CHAIN
+
+    Alias for :class:`_CERT_SIMPLE_CHAIN`
+
+.. class:: PCERT_SIMPLE_CHAIN
+
+    Pointer to :class:`_CERT_SIMPLE_CHAIN`
+
+.. class:: PCCERT_SIMPLE_CHAIN
+
+    Pointer to :class:`_CERT_SIMPLE_CHAIN`
+
+.. class:: _CERT_SIMPLE_CHAIN
+
+    .. attribute:: cbSize
+
+        :class:`DWORD`
+
+
+    .. attribute:: TrustStatus
+
+        :class:`CERT_TRUST_STATUS`
+
+
+    .. attribute:: cElement
+
+        :class:`DWORD`
+
+
+    .. attribute:: rgpElement
+
+        :class:`PCERT_CHAIN_ELEMENT`
+
+
+    .. attribute:: pTrustListInfo
+
+        :class:`PCERT_TRUST_LIST_INFO`
+
+
+    .. attribute:: fHasRevocationFreshnessTime
+
+        :class:`BOOL`
+
+
+    .. attribute:: dwRevocationFreshnessTime
+
+        :class:`DWORD`
+
+_CERT_CHAIN_CONTEXT
+'''''''''''''''''''
+.. class:: CERT_CHAIN_CONTEXT
+
+    Alias for :class:`_CERT_CHAIN_CONTEXT`
+
+.. class:: PCERT_CHAIN_CONTEXT
+
+    Pointer to :class:`_CERT_CHAIN_CONTEXT`
+
+.. class:: PCCERT_CHAIN_CONTEXT
+
+    Pointer to :class:`_CERT_CHAIN_CONTEXT`
+
+.. class:: _CERT_CHAIN_CONTEXT
+
+    .. attribute:: cbSize
+
+        :class:`DWORD`
+
+
+    .. attribute:: TrustStatus
+
+        :class:`CERT_TRUST_STATUS`
+
+
+    .. attribute:: cChain
+
+        :class:`DWORD`
+
+
+    .. attribute:: rgpChain
+
+        :class:`PCERT_SIMPLE_CHAIN`
+
+
+    .. attribute:: cLowerQualityChainContext
+
+        :class:`DWORD`
+
+
+    .. attribute:: rgpLowerQualityChainContext
+
+        :class:`PCCERT_CHAIN_CONTEXT`
+
+
+    .. attribute:: fHasRevocationFreshnessTime
+
+        :class:`BOOL`
+
+
+    .. attribute:: dwRevocationFreshnessTime
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwCreateFlags
+
+        :class:`DWORD`
+
+
+    .. attribute:: ChainId
+
+        :class:`GUID`
+
+_CERT_USAGE_MATCH
+'''''''''''''''''
+.. class:: CERT_USAGE_MATCH
+
+    Alias for :class:`_CERT_USAGE_MATCH`
+
+.. class:: PCERT_USAGE_MATCH
+
+    Pointer to :class:`_CERT_USAGE_MATCH`
+
+.. class:: _CERT_USAGE_MATCH
+
+    .. attribute:: dwType
+
+        :class:`DWORD`
+
+
+    .. attribute:: Usage
+
+        :class:`CERT_ENHKEY_USAGE`
+
+_CERT_CHAIN_PARA
+''''''''''''''''
+.. class:: CERT_CHAIN_PARA
+
+    Alias for :class:`_CERT_CHAIN_PARA`
+
+.. class:: PCERT_CHAIN_PARA
+
+    Pointer to :class:`_CERT_CHAIN_PARA`
+
+.. class:: _CERT_CHAIN_PARA
+
+    .. attribute:: cbSize
+
+        :class:`DWORD`
+
+
+    .. attribute:: RequestedUsage
+
+        :class:`CERT_USAGE_MATCH`
+
+
+    .. attribute:: RequestedIssuancePolicy
+
+        :class:`CERT_USAGE_MATCH`
+
+
+    .. attribute:: dwUrlRetrievalTimeout
+
+        :class:`DWORD`
+
+
+    .. attribute:: fCheckRevocationFreshnessTime
+
+        :class:`BOOL`
+
+
+    .. attribute:: dwRevocationFreshnessTime
+
+        :class:`DWORD`
+
+
+    .. attribute:: pftCacheResync
+
+        :class:`LPFILETIME`
+
+_CERT_CHAIN_ENGINE_CONFIG
+'''''''''''''''''''''''''
+.. class:: CERT_CHAIN_ENGINE_CONFIG
+
+    Alias for :class:`_CERT_CHAIN_ENGINE_CONFIG`
+
+.. class:: PCERT_CHAIN_ENGINE_CONFIG
+
+    Pointer to :class:`_CERT_CHAIN_ENGINE_CONFIG`
+
+.. class:: _CERT_CHAIN_ENGINE_CONFIG
+
+    .. attribute:: cbSize
+
+        :class:`DWORD`
+
+
+    .. attribute:: hRestrictedRoot
+
+        :class:`HCERTSTORE`
+
+
+    .. attribute:: hRestrictedTrust
+
+        :class:`HCERTSTORE`
+
+
+    .. attribute:: hRestrictedOther
+
+        :class:`HCERTSTORE`
+
+
+    .. attribute:: cAdditionalStore
+
+        :class:`DWORD`
+
+
+    .. attribute:: rghAdditionalStore
+
+        :class:`HCERTSTORE`
+
+
+    .. attribute:: dwFlags
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwUrlRetrievalTimeout
+
+        :class:`DWORD`
+
+
+    .. attribute:: MaximumCachedCertificates
+
+        :class:`DWORD`
+
+
+    .. attribute:: CycleDetectionModulus
+
+        :class:`DWORD`
+
+_SYSTEMTIME
+'''''''''''
+.. class:: LPSYSTEMTIME
+
+    Pointer to :class:`_SYSTEMTIME`
+
+.. class:: SYSTEMTIME
+
+    Alias for :class:`_SYSTEMTIME`
+
+.. class:: PSYSTEMTIME
+
+    Pointer to :class:`_SYSTEMTIME`
+
+.. class:: _SYSTEMTIME
+
+    .. attribute:: wYear
+
+        :class:`WORD`
+
+
+    .. attribute:: wMonth
+
+        :class:`WORD`
+
+
+    .. attribute:: wDayOfWeek
+
+        :class:`WORD`
+
+
+    .. attribute:: wDay
+
+        :class:`WORD`
+
+
+    .. attribute:: wHour
+
+        :class:`WORD`
+
+
+    .. attribute:: wMinute
+
+        :class:`WORD`
+
+
+    .. attribute:: wSecond
+
+        :class:`WORD`
+
+
+    .. attribute:: wMilliseconds
+
+        :class:`WORD`
+
+_CERT_EXTENSIONS
+''''''''''''''''
+.. class:: PCERT_EXTENSIONS
+
+    Pointer to :class:`_CERT_EXTENSIONS`
+
+.. class:: CERT_EXTENSIONS
+
+    Alias for :class:`_CERT_EXTENSIONS`
+
+.. class:: _CERT_EXTENSIONS
+
+    .. attribute:: cExtension
+
+        :class:`DWORD`
+
+
+    .. attribute:: rgExtension
+
+        :class:`PCERT_EXTENSION`
+
+_CRYPT_KEY_PROV_PARAM
+'''''''''''''''''''''
+.. class:: CRYPT_KEY_PROV_PARAM
+
+    Alias for :class:`_CRYPT_KEY_PROV_PARAM`
+
+.. class:: PCRYPT_KEY_PROV_PARAM
+
+    Pointer to :class:`_CRYPT_KEY_PROV_PARAM`
+
+.. class:: _CRYPT_KEY_PROV_PARAM
+
+    .. attribute:: dwParam
+
+        :class:`DWORD`
+
+
+    .. attribute:: pbData
+
+        :class:`BYTE`
+
+
+    .. attribute:: cbData
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwFlags
+
+        :class:`DWORD`
+
+_CRYPT_KEY_PROV_INFO
+''''''''''''''''''''
+.. class:: CRYPT_KEY_PROV_INFO
+
+    Alias for :class:`_CRYPT_KEY_PROV_INFO`
+
+.. class:: PCRYPT_KEY_PROV_INFO
+
+    Pointer to :class:`_CRYPT_KEY_PROV_INFO`
+
+.. class:: _CRYPT_KEY_PROV_INFO
+
+    .. attribute:: pwszContainerName
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: pwszProvName
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: dwProvType
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwFlags
+
+        :class:`DWORD`
+
+
+    .. attribute:: cProvParam
+
+        :class:`DWORD`
+
+
+    .. attribute:: rgProvParam
+
+        :class:`PCRYPT_KEY_PROV_PARAM`
+
+
+    .. attribute:: dwKeySpec
+
+        :class:`DWORD`
+
+_CRYPT_ENCRYPT_MESSAGE_PARA
+'''''''''''''''''''''''''''
+.. class:: PCRYPT_ENCRYPT_MESSAGE_PARA
+
+    Pointer to :class:`_CRYPT_ENCRYPT_MESSAGE_PARA`
+
+.. class:: CRYPT_ENCRYPT_MESSAGE_PARA
+
+    Alias for :class:`_CRYPT_ENCRYPT_MESSAGE_PARA`
+
+.. class:: _CRYPT_ENCRYPT_MESSAGE_PARA
+
+    .. attribute:: cbSize
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwMsgEncodingType
+
+        :class:`DWORD`
+
+
+    .. attribute:: hCryptProv
+
+        :class:`HCRYPTPROV_LEGACY`
+
+
+    .. attribute:: ContentEncryptionAlgorithm
+
+        :class:`CRYPT_ALGORITHM_IDENTIFIER`
+
+
+    .. attribute:: pvEncryptionAuxInfo
+
+        :class:`VOID`
+
+
+    .. attribute:: dwFlags
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwInnerContentType
+
+        :class:`DWORD`
+
+_CRYPT_DECRYPT_MESSAGE_PARA
+'''''''''''''''''''''''''''
+.. class:: PCRYPT_DECRYPT_MESSAGE_PARA
+
+    Pointer to :class:`_CRYPT_DECRYPT_MESSAGE_PARA`
+
+.. class:: CRYPT_DECRYPT_MESSAGE_PARA
+
+    Alias for :class:`_CRYPT_DECRYPT_MESSAGE_PARA`
+
+.. class:: _CRYPT_DECRYPT_MESSAGE_PARA
+
+    .. attribute:: cbSize
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwMsgAndCertEncodingType
+
+        :class:`DWORD`
+
+
+    .. attribute:: cCertStore
+
+        :class:`DWORD`
+
+
+    .. attribute:: rghCertStore
+
+        :class:`HCERTSTORE`
+
+
+    .. attribute:: dwFlags
+
+        :class:`DWORD`
+
+_CERT_KEY_CONTEXT
+'''''''''''''''''
+.. class:: CERT_KEY_CONTEXT
+
+    Alias for :class:`_CERT_KEY_CONTEXT`
+
+.. class:: PCERT_KEY_CONTEXT
+
+    Pointer to :class:`_CERT_KEY_CONTEXT`
+
+.. class:: _CERT_KEY_CONTEXT
+
+    .. attribute:: cbSize
+
+        :class:`DWORD`
+
+
+    .. attribute:: hCryptProv
+
+        :class:`HCRYPTPROV`
+
+
+    .. attribute:: dwKeySpec
+
+        :class:`DWORD`
+
+_CRYPT_ENCODE_PARA
+''''''''''''''''''
+.. class:: PCRYPT_ENCODE_PARA
+
+    Pointer to :class:`_CRYPT_ENCODE_PARA`
+
+.. class:: CRYPT_ENCODE_PARA
+
+    Alias for :class:`_CRYPT_ENCODE_PARA`
+
+.. class:: _CRYPT_ENCODE_PARA
+
+    .. attribute:: cbSize
+
+        :class:`DWORD`
+
+
+    .. attribute:: pfnAlloc
+
+        :class:`PVOID`
+
+
+    .. attribute:: pfnFree
+
+        :class:`PVOID`
+
+_FILE_DISPOSITION_INFORMATION
+'''''''''''''''''''''''''''''
+.. class:: PFILE_DISPOSITION_INFORMATION
+
+    Pointer to :class:`_FILE_DISPOSITION_INFORMATION`
+
+.. class:: FILE_DISPOSITION_INFORMATION
+
+    Alias for :class:`_FILE_DISPOSITION_INFORMATION`
+
+.. class:: _FILE_DISPOSITION_INFORMATION
+
+    .. attribute:: DeleteFile
+
+        :class:`BOOLEAN`
+
 _GUID
 '''''
 .. class:: REFCLSID
@@ -282,6 +2591,10 @@ _GUID
 .. class:: CLSID
 
     Alias for :class:`_GUID`
+
+.. class:: LPCLSID
+
+    Pointer to :class:`_GUID`
 
 .. class:: GUID
 
@@ -311,6 +2624,557 @@ _GUID
     .. attribute:: Data4
 
         :class:`BYTE` ``[8]``
+
+_ANON_PROCESS_MITIGATION_DEP_POLICY_BITFIELD
+''''''''''''''''''''''''''''''''''''''''''''
+.. class:: _ANON_PROCESS_MITIGATION_DEP_POLICY_BITFIELD
+
+    .. attribute:: Enable
+
+        :class:`DWORD`
+
+
+    .. attribute:: DisableAtlThunkEmulation
+
+        :class:`DWORD`
+
+
+    .. attribute:: ReservedFlags
+
+        :class:`DWORD`
+
+_ANON_PROCESS_MITIGATION_DEP_POLICY_UNION
+'''''''''''''''''''''''''''''''''''''''''
+.. class:: _ANON_PROCESS_MITIGATION_DEP_POLICY_UNION
+
+    .. attribute:: Flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: anon
+
+        :class:`_ANON_PROCESS_MITIGATION_DEP_POLICY_BITFIELD`
+
+_PROCESS_MITIGATION_DEP_POLICY
+''''''''''''''''''''''''''''''
+.. class:: PPROCESS_MITIGATION_DEP_POLICY
+
+    Pointer to :class:`_PROCESS_MITIGATION_DEP_POLICY`
+
+.. class:: PROCESS_MITIGATION_DEP_POLICY
+
+    Alias for :class:`_PROCESS_MITIGATION_DEP_POLICY`
+
+.. class:: _PROCESS_MITIGATION_DEP_POLICY
+
+    .. attribute:: anon
+
+        :class:`_ANON_PROCESS_MITIGATION_DEP_POLICY_UNION`
+
+
+    .. attribute:: Permanent
+
+        :class:`BOOLEAN`
+
+_ANON_PROCESS_MITIGATION_ASLR_POLICY_BITFIELD
+'''''''''''''''''''''''''''''''''''''''''''''
+.. class:: _ANON_PROCESS_MITIGATION_ASLR_POLICY_BITFIELD
+
+    .. attribute:: EnableBottomUpRandomization
+
+        :class:`DWORD`
+
+
+    .. attribute:: EnableForceRelocateImages
+
+        :class:`DWORD`
+
+
+    .. attribute:: EnableHighEntropy
+
+        :class:`DWORD`
+
+
+    .. attribute:: DisallowStrippedImages
+
+        :class:`DWORD`
+
+
+    .. attribute:: ReservedFlags
+
+        :class:`DWORD`
+
+_ANON_PROCESS_MITIGATION_ASLR_POLICY_UNION
+''''''''''''''''''''''''''''''''''''''''''
+.. class:: _ANON_PROCESS_MITIGATION_ASLR_POLICY_UNION
+
+    .. attribute:: Flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: anon
+
+        :class:`_ANON_PROCESS_MITIGATION_ASLR_POLICY_BITFIELD`
+
+_PROCESS_MITIGATION_ASLR_POLICY
+'''''''''''''''''''''''''''''''
+.. class:: PPROCESS_MITIGATION_ASLR_POLICY
+
+    Pointer to :class:`_PROCESS_MITIGATION_ASLR_POLICY`
+
+.. class:: PROCESS_MITIGATION_ASLR_POLICY
+
+    Alias for :class:`_PROCESS_MITIGATION_ASLR_POLICY`
+
+.. class:: _PROCESS_MITIGATION_ASLR_POLICY
+
+    .. attribute:: anon
+
+        :class:`_ANON_PROCESS_MITIGATION_ASLR_POLICY_UNION`
+
+_ANON_PROCESS_MITIGATION_DYNAMIC_CODE_POLICY_BITFIELD
+'''''''''''''''''''''''''''''''''''''''''''''''''''''
+.. class:: _ANON_PROCESS_MITIGATION_DYNAMIC_CODE_POLICY_BITFIELD
+
+    .. attribute:: ProhibitDynamicCode
+
+        :class:`DWORD`
+
+
+    .. attribute:: AllowThreadOptOut
+
+        :class:`DWORD`
+
+
+    .. attribute:: AllowRemoteDowngrade
+
+        :class:`DWORD`
+
+
+    .. attribute:: ReservedFlags
+
+        :class:`DWORD`
+
+_ANON_PROCESS_MITIGATION_DYNAMIC_CODE_POLICY_UNION
+''''''''''''''''''''''''''''''''''''''''''''''''''
+.. class:: _ANON_PROCESS_MITIGATION_DYNAMIC_CODE_POLICY_UNION
+
+    .. attribute:: Flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: anon
+
+        :class:`_ANON_PROCESS_MITIGATION_DYNAMIC_CODE_POLICY_BITFIELD`
+
+_PROCESS_MITIGATION_DYNAMIC_CODE_POLICY
+'''''''''''''''''''''''''''''''''''''''
+.. class:: PROCESS_MITIGATION_DYNAMIC_CODE_POLICY
+
+    Alias for :class:`_PROCESS_MITIGATION_DYNAMIC_CODE_POLICY`
+
+.. class:: PPROCESS_MITIGATION_DYNAMIC_CODE_POLICY
+
+    Pointer to :class:`_PROCESS_MITIGATION_DYNAMIC_CODE_POLICY`
+
+.. class:: _PROCESS_MITIGATION_DYNAMIC_CODE_POLICY
+
+    .. attribute:: anon
+
+        :class:`_ANON_PROCESS_MITIGATION_DYNAMIC_CODE_POLICY_UNION`
+
+_ANON_PROCESS_MITIGATION_STRICT_HANDLE_CHECK_POLICY_BITFIELD
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+.. class:: _ANON_PROCESS_MITIGATION_STRICT_HANDLE_CHECK_POLICY_BITFIELD
+
+    .. attribute:: RaiseExceptionOnInvalidHandleReference
+
+        :class:`DWORD`
+
+
+    .. attribute:: HandleExceptionsPermanentlyEnabled
+
+        :class:`DWORD`
+
+
+    .. attribute:: ReservedFlags
+
+        :class:`DWORD`
+
+_ANON_PROCESS_MITIGATION_STRICT_HANDLE_CHECK_POLICY_UNION
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+.. class:: _ANON_PROCESS_MITIGATION_STRICT_HANDLE_CHECK_POLICY_UNION
+
+    .. attribute:: Flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: ANON_STRUCT
+
+        :class:`_ANON_PROCESS_MITIGATION_STRICT_HANDLE_CHECK_POLICY_BITFIELD`
+
+_PROCESS_MITIGATION_STRICT_HANDLE_CHECK_POLICY
+''''''''''''''''''''''''''''''''''''''''''''''
+.. class:: PROCESS_MITIGATION_STRICT_HANDLE_CHECK_POLICY
+
+    Alias for :class:`_PROCESS_MITIGATION_STRICT_HANDLE_CHECK_POLICY`
+
+.. class:: PPROCESS_MITIGATION_STRICT_HANDLE_CHECK_POLICY
+
+    Pointer to :class:`_PROCESS_MITIGATION_STRICT_HANDLE_CHECK_POLICY`
+
+.. class:: _PROCESS_MITIGATION_STRICT_HANDLE_CHECK_POLICY
+
+    .. attribute:: anon
+
+        :class:`_ANON_PROCESS_MITIGATION_STRICT_HANDLE_CHECK_POLICY_UNION`
+
+_ANON_PROCESS_MITIGATION_SYSTEM_CALL_DISABLE_POLICY_BITFIELD
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+.. class:: _ANON_PROCESS_MITIGATION_SYSTEM_CALL_DISABLE_POLICY_BITFIELD
+
+    .. attribute:: DisallowWin32kSystemCalls
+
+        :class:`DWORD`
+
+
+    .. attribute:: ReservedFlags
+
+        :class:`DWORD`
+
+_ANON_PROCESS_MITIGATION_SYSTEM_CALL_DISABLE_POLICY_UNION
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+.. class:: _ANON_PROCESS_MITIGATION_SYSTEM_CALL_DISABLE_POLICY_UNION
+
+    .. attribute:: Flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: ANON_STRUCT
+
+        :class:`_ANON_PROCESS_MITIGATION_SYSTEM_CALL_DISABLE_POLICY_BITFIELD`
+
+_PROCESS_MITIGATION_SYSTEM_CALL_DISABLE_POLICY
+''''''''''''''''''''''''''''''''''''''''''''''
+.. class:: PPROCESS_MITIGATION_SYSTEM_CALL_DISABLE_POLICY
+
+    Pointer to :class:`_PROCESS_MITIGATION_SYSTEM_CALL_DISABLE_POLICY`
+
+.. class:: PROCESS_MITIGATION_SYSTEM_CALL_DISABLE_POLICY
+
+    Alias for :class:`_PROCESS_MITIGATION_SYSTEM_CALL_DISABLE_POLICY`
+
+.. class:: _PROCESS_MITIGATION_SYSTEM_CALL_DISABLE_POLICY
+
+    .. attribute:: anon
+
+        :class:`_ANON_PROCESS_MITIGATION_SYSTEM_CALL_DISABLE_POLICY_UNION`
+
+_ANON_PROCESS_MITIGATION_EXTENSION_POINT_DISABLE_POLICY_BITFIELD
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+.. class:: _ANON_PROCESS_MITIGATION_EXTENSION_POINT_DISABLE_POLICY_BITFIELD
+
+    .. attribute:: DisableExtensionPoints
+
+        :class:`DWORD`
+
+
+    .. attribute:: ReservedFlags
+
+        :class:`DWORD`
+
+_ANON_PROCESS_MITIGATION_EXTENSION_POINT_DISABLE_POLICY_UNION
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+.. class:: _ANON_PROCESS_MITIGATION_EXTENSION_POINT_DISABLE_POLICY_UNION
+
+    .. attribute:: Flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: ANON_STRUCT
+
+        :class:`_ANON_PROCESS_MITIGATION_EXTENSION_POINT_DISABLE_POLICY_BITFIELD`
+
+_PROCESS_MITIGATION_EXTENSION_POINT_DISABLE_POLICY
+''''''''''''''''''''''''''''''''''''''''''''''''''
+.. class:: PROCESS_MITIGATION_EXTENSION_POINT_DISABLE_POLICY
+
+    Alias for :class:`_PROCESS_MITIGATION_EXTENSION_POINT_DISABLE_POLICY`
+
+.. class:: PPROCESS_MITIGATION_EXTENSION_POINT_DISABLE_POLICY
+
+    Pointer to :class:`_PROCESS_MITIGATION_EXTENSION_POINT_DISABLE_POLICY`
+
+.. class:: _PROCESS_MITIGATION_EXTENSION_POINT_DISABLE_POLICY
+
+    .. attribute:: anon
+
+        :class:`_ANON_PROCESS_MITIGATION_EXTENSION_POINT_DISABLE_POLICY_UNION`
+
+_ANON_PROCESS_MITIGATION_CONTROL_FLOW_GUARD_POLICY_BITFIELD
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+.. class:: _ANON_PROCESS_MITIGATION_CONTROL_FLOW_GUARD_POLICY_BITFIELD
+
+    .. attribute:: EnableControlFlowGuard
+
+        :class:`DWORD`
+
+
+    .. attribute:: EnableExportSuppression
+
+        :class:`DWORD`
+
+
+    .. attribute:: StrictMode
+
+        :class:`DWORD`
+
+
+    .. attribute:: ReservedFlags
+
+        :class:`DWORD`
+
+_ANON_PROCESS_MITIGATION_CONTROL_FLOW_GUARD_POLICY_UNION
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+.. class:: _ANON_PROCESS_MITIGATION_CONTROL_FLOW_GUARD_POLICY_UNION
+
+    .. attribute:: Flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: ANON_STRUCT
+
+        :class:`_ANON_PROCESS_MITIGATION_CONTROL_FLOW_GUARD_POLICY_BITFIELD`
+
+_PROCESS_MITIGATION_CONTROL_FLOW_GUARD_POLICY
+'''''''''''''''''''''''''''''''''''''''''''''
+.. class:: PPROCESS_MITIGATION_CONTROL_FLOW_GUARD_POLICY
+
+    Pointer to :class:`_PROCESS_MITIGATION_CONTROL_FLOW_GUARD_POLICY`
+
+.. class:: PROCESS_MITIGATION_CONTROL_FLOW_GUARD_POLICY
+
+    Alias for :class:`_PROCESS_MITIGATION_CONTROL_FLOW_GUARD_POLICY`
+
+.. class:: _PROCESS_MITIGATION_CONTROL_FLOW_GUARD_POLICY
+
+    .. attribute:: anon
+
+        :class:`_ANON_PROCESS_MITIGATION_CONTROL_FLOW_GUARD_POLICY_UNION`
+
+_ANON_PROCESS_MITIGATION_BINARY_SIGNATURE_POLICY_BITFIELD
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+.. class:: _ANON_PROCESS_MITIGATION_BINARY_SIGNATURE_POLICY_BITFIELD
+
+    .. attribute:: MicrosoftSignedOnly
+
+        :class:`DWORD`
+
+
+    .. attribute:: StoreSignedOnly
+
+        :class:`DWORD`
+
+
+    .. attribute:: MitigationOptIn
+
+        :class:`DWORD`
+
+
+    .. attribute:: ReservedFlags
+
+        :class:`DWORD`
+
+_ANON_PROCESS_MITIGATION_BINARY_SIGNATURE_POLICY_UNION
+''''''''''''''''''''''''''''''''''''''''''''''''''''''
+.. class:: _ANON_PROCESS_MITIGATION_BINARY_SIGNATURE_POLICY_UNION
+
+    .. attribute:: Flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: ANON_STRUCT
+
+        :class:`_ANON_PROCESS_MITIGATION_BINARY_SIGNATURE_POLICY_BITFIELD`
+
+_PROCESS_MITIGATION_BINARY_SIGNATURE_POLICY
+'''''''''''''''''''''''''''''''''''''''''''
+.. class:: PPROCESS_MITIGATION_BINARY_SIGNATURE_POLICY
+
+    Pointer to :class:`_PROCESS_MITIGATION_BINARY_SIGNATURE_POLICY`
+
+.. class:: PROCESS_MITIGATION_BINARY_SIGNATURE_POLICY
+
+    Alias for :class:`_PROCESS_MITIGATION_BINARY_SIGNATURE_POLICY`
+
+.. class:: _PROCESS_MITIGATION_BINARY_SIGNATURE_POLICY
+
+    .. attribute:: anon
+
+        :class:`_ANON_PROCESS_MITIGATION_BINARY_SIGNATURE_POLICY_UNION`
+
+_ANON_PROCESS_MITIGATION_IMAGE_LOAD_POLICY_BITFIELD
+'''''''''''''''''''''''''''''''''''''''''''''''''''
+.. class:: _ANON_PROCESS_MITIGATION_IMAGE_LOAD_POLICY_BITFIELD
+
+    .. attribute:: NoRemoteImages
+
+        :class:`DWORD`
+
+
+    .. attribute:: NoLowMandatoryLabelImages
+
+        :class:`DWORD`
+
+
+    .. attribute:: PreferSystem32Images
+
+        :class:`DWORD`
+
+
+    .. attribute:: ReservedFlags
+
+        :class:`DWORD`
+
+_ANON_PROCESS_MITIGATION_IMAGE_LOAD_POLICY_UNION
+''''''''''''''''''''''''''''''''''''''''''''''''
+.. class:: _ANON_PROCESS_MITIGATION_IMAGE_LOAD_POLICY_UNION
+
+    .. attribute:: Flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: ANON_STRUCT
+
+        :class:`_ANON_PROCESS_MITIGATION_IMAGE_LOAD_POLICY_BITFIELD`
+
+_PROCESS_MITIGATION_IMAGE_LOAD_POLICY
+'''''''''''''''''''''''''''''''''''''
+.. class:: PPROCESS_MITIGATION_IMAGE_LOAD_POLICY
+
+    Pointer to :class:`_PROCESS_MITIGATION_IMAGE_LOAD_POLICY`
+
+.. class:: PROCESS_MITIGATION_IMAGE_LOAD_POLICY
+
+    Alias for :class:`_PROCESS_MITIGATION_IMAGE_LOAD_POLICY`
+
+.. class:: _PROCESS_MITIGATION_IMAGE_LOAD_POLICY
+
+    .. attribute:: anon
+
+        :class:`_ANON_PROCESS_MITIGATION_IMAGE_LOAD_POLICY_UNION`
+
+_KEY_VALUE_BASIC_INFORMATION
+''''''''''''''''''''''''''''
+.. class:: PKEY_VALUE_BASIC_INFORMATION
+
+    Pointer to :class:`_KEY_VALUE_BASIC_INFORMATION`
+
+.. class:: KEY_VALUE_BASIC_INFORMATION
+
+    Alias for :class:`_KEY_VALUE_BASIC_INFORMATION`
+
+.. class:: _KEY_VALUE_BASIC_INFORMATION
+
+    .. attribute:: TitleIndex
+
+        :class:`ULONG`
+
+
+    .. attribute:: Type
+
+        :class:`ULONG`
+
+
+    .. attribute:: NameLength
+
+        :class:`ULONG`
+
+
+    .. attribute:: Name
+
+        :class:`WCHAR` ``[1]``
+
+_KEY_VALUE_FULL_INFORMATION
+'''''''''''''''''''''''''''
+.. class:: KEY_VALUE_FULL_INFORMATION
+
+    Alias for :class:`_KEY_VALUE_FULL_INFORMATION`
+
+.. class:: PKEY_VALUE_FULL_INFORMATION
+
+    Pointer to :class:`_KEY_VALUE_FULL_INFORMATION`
+
+.. class:: _KEY_VALUE_FULL_INFORMATION
+
+    .. attribute:: TitleIndex
+
+        :class:`ULONG`
+
+
+    .. attribute:: Type
+
+        :class:`ULONG`
+
+
+    .. attribute:: DataOffset
+
+        :class:`ULONG`
+
+
+    .. attribute:: DataLength
+
+        :class:`ULONG`
+
+
+    .. attribute:: NameLength
+
+        :class:`ULONG`
+
+
+    .. attribute:: Name
+
+        :class:`WCHAR` ``[1]``
+
+_KEY_VALUE_PARTIAL_INFORMATION
+''''''''''''''''''''''''''''''
+.. class:: PKEY_VALUE_PARTIAL_INFORMATION
+
+    Pointer to :class:`_KEY_VALUE_PARTIAL_INFORMATION`
+
+.. class:: KEY_VALUE_PARTIAL_INFORMATION
+
+    Alias for :class:`_KEY_VALUE_PARTIAL_INFORMATION`
+
+.. class:: _KEY_VALUE_PARTIAL_INFORMATION
+
+    .. attribute:: TitleIndex
+
+        :class:`ULONG`
+
+
+    .. attribute:: Type
+
+        :class:`ULONG`
+
+
+    .. attribute:: DataLength
+
+        :class:`ULONG`
+
+
+    .. attribute:: Data
+
+        :class:`UCHAR` ``[1]``
 
 _SHITEMID
 '''''''''
@@ -6688,1096 +9552,6 @@ tagEXCEPINFO
 
         :class:`SCODE`
 
-_CRYPTOAPI_BLOB
-'''''''''''''''
-.. class:: CRYPT_INTEGER_BLOB
-
-    Alias for :class:`_CRYPTOAPI_BLOB`
-
-.. class:: PCRYPT_DATA_BLOB
-
-    Pointer to :class:`_CRYPTOAPI_BLOB`
-
-.. class:: PCRYPT_OBJID_BLOB
-
-    Pointer to :class:`_CRYPTOAPI_BLOB`
-
-.. class:: PCRYPT_DER_BLOB
-
-    Pointer to :class:`_CRYPTOAPI_BLOB`
-
-.. class:: PCRL_BLOB
-
-    Pointer to :class:`_CRYPTOAPI_BLOB`
-
-.. class:: PCRYPT_UINT_BLOB
-
-    Pointer to :class:`_CRYPTOAPI_BLOB`
-
-.. class:: CERT_NAME_BLOB
-
-    Alias for :class:`_CRYPTOAPI_BLOB`
-
-.. class:: PCRYPT_DIGEST_BLOB
-
-    Pointer to :class:`_CRYPTOAPI_BLOB`
-
-.. class:: PCRYPT_INTEGER_BLOB
-
-    Pointer to :class:`_CRYPTOAPI_BLOB`
-
-.. class:: CERT_RDN_VALUE_BLOB
-
-    Alias for :class:`_CRYPTOAPI_BLOB`
-
-.. class:: PCERT_NAME_BLOB
-
-    Pointer to :class:`_CRYPTOAPI_BLOB`
-
-.. class:: PCRYPT_HASH_BLOB
-
-    Pointer to :class:`_CRYPTOAPI_BLOB`
-
-.. class:: CRYPT_DATA_BLOB
-
-    Alias for :class:`_CRYPTOAPI_BLOB`
-
-.. class:: DATA_BLOB
-
-    Alias for :class:`_CRYPTOAPI_BLOB`
-
-.. class:: CRYPT_UINT_BLOB
-
-    Alias for :class:`_CRYPTOAPI_BLOB`
-
-.. class:: PCERT_RDN_VALUE_BLOB
-
-    Pointer to :class:`_CRYPTOAPI_BLOB`
-
-.. class:: CRYPT_HASH_BLOB
-
-    Alias for :class:`_CRYPTOAPI_BLOB`
-
-.. class:: CRL_BLOB
-
-    Alias for :class:`_CRYPTOAPI_BLOB`
-
-.. class:: PCERT_BLOB
-
-    Pointer to :class:`_CRYPTOAPI_BLOB`
-
-.. class:: CRYPT_DIGEST_BLOB
-
-    Alias for :class:`_CRYPTOAPI_BLOB`
-
-.. class:: CRYPT_OBJID_BLOB
-
-    Alias for :class:`_CRYPTOAPI_BLOB`
-
-.. class:: CERT_BLOB
-
-    Alias for :class:`_CRYPTOAPI_BLOB`
-
-.. class:: CRYPT_DER_BLOB
-
-    Alias for :class:`_CRYPTOAPI_BLOB`
-
-.. class:: PDATA_BLOB
-
-    Pointer to :class:`_CRYPTOAPI_BLOB`
-
-.. class:: PCRYPT_ATTR_BLOB
-
-    Pointer to :class:`_CRYPTOAPI_BLOB`
-
-.. class:: CRYPT_ATTR_BLOB
-
-    Alias for :class:`_CRYPTOAPI_BLOB`
-
-.. class:: _CRYPTOAPI_BLOB
-
-    .. attribute:: cbData
-
-        :class:`DWORD`
-
-
-    .. attribute:: pbData
-
-        :class:`BYTE`
-
-CRYPTCATATTRIBUTE_
-''''''''''''''''''
-.. class:: CRYPTCATATTRIBUTE
-
-    Alias for :class:`CRYPTCATATTRIBUTE_`
-
-.. class:: PCRYPTCATATTRIBUTE
-
-    Pointer to :class:`CRYPTCATATTRIBUTE_`
-
-.. class:: CRYPTCATATTRIBUTE_
-
-    .. attribute:: cbStruct
-
-        :class:`DWORD`
-
-
-    .. attribute:: pwszReferenceTag
-
-        :class:`LPWSTR`
-
-
-    .. attribute:: dwAttrTypeAndAction
-
-        :class:`DWORD`
-
-
-    .. attribute:: cbValue
-
-        :class:`DWORD`
-
-
-    .. attribute:: pbValue
-
-        :class:`BYTE`
-
-
-    .. attribute:: dwReserved
-
-        :class:`DWORD`
-
-_CRYPT_ATTRIBUTE_TYPE_VALUE
-'''''''''''''''''''''''''''
-.. class:: CRYPT_ATTRIBUTE_TYPE_VALUE
-
-    Alias for :class:`_CRYPT_ATTRIBUTE_TYPE_VALUE`
-
-.. class:: PCRYPT_ATTRIBUTE_TYPE_VALUE
-
-    Pointer to :class:`_CRYPT_ATTRIBUTE_TYPE_VALUE`
-
-.. class:: _CRYPT_ATTRIBUTE_TYPE_VALUE
-
-    .. attribute:: pszObjId
-
-        :class:`LPSTR`
-
-
-    .. attribute:: Value
-
-        :class:`CRYPT_OBJID_BLOB`
-
-_CRYPT_ALGORITHM_IDENTIFIER
-'''''''''''''''''''''''''''
-.. class:: CRYPT_ALGORITHM_IDENTIFIER
-
-    Alias for :class:`_CRYPT_ALGORITHM_IDENTIFIER`
-
-.. class:: PCRYPT_ALGORITHM_IDENTIFIER
-
-    Pointer to :class:`_CRYPT_ALGORITHM_IDENTIFIER`
-
-.. class:: _CRYPT_ALGORITHM_IDENTIFIER
-
-    .. attribute:: pszObjId
-
-        :class:`LPSTR`
-
-
-    .. attribute:: Parameters
-
-        :class:`CRYPT_OBJID_BLOB`
-
-SIP_INDIRECT_DATA_
-''''''''''''''''''
-.. class:: SIP_INDIRECT_DATA
-
-    Alias for :class:`SIP_INDIRECT_DATA_`
-
-.. class:: PSIP_INDIRECT_DATA
-
-    Pointer to :class:`SIP_INDIRECT_DATA_`
-
-.. class:: SIP_INDIRECT_DATA_
-
-    .. attribute:: Data
-
-        :class:`CRYPT_ATTRIBUTE_TYPE_VALUE`
-
-
-    .. attribute:: DigestAlgorithm
-
-        :class:`CRYPT_ALGORITHM_IDENTIFIER`
-
-
-    .. attribute:: Digest
-
-        :class:`CRYPT_HASH_BLOB`
-
-CRYPTCATMEMBER_
-'''''''''''''''
-.. class:: CRYPTCATMEMBER
-
-    Alias for :class:`CRYPTCATMEMBER_`
-
-.. class:: PCRYPTCATMEMBER
-
-    Pointer to :class:`CRYPTCATMEMBER_`
-
-.. class:: CRYPTCATMEMBER_
-
-    .. attribute:: cbStruct
-
-        :class:`DWORD`
-
-
-    .. attribute:: pwszReferenceTag
-
-        :class:`LPWSTR`
-
-
-    .. attribute:: pwszFileName
-
-        :class:`LPWSTR`
-
-
-    .. attribute:: gSubjectType
-
-        :class:`GUID`
-
-
-    .. attribute:: fdwMemberFlags
-
-        :class:`DWORD`
-
-
-    .. attribute:: pIndirectData
-
-        :class:`SIP_INDIRECT_DATA`
-
-
-    .. attribute:: dwCertVersion
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwReserved
-
-        :class:`DWORD`
-
-
-    .. attribute:: hReserved
-
-        :class:`HANDLE`
-
-
-    .. attribute:: sEncodedIndirectData
-
-        :class:`CRYPT_ATTR_BLOB`
-
-
-    .. attribute:: sEncodedMemberInfo
-
-        :class:`CRYPT_ATTR_BLOB`
-
-WINTRUST_FILE_INFO_
-'''''''''''''''''''
-.. class:: WINTRUST_FILE_INFO
-
-    Alias for :class:`WINTRUST_FILE_INFO_`
-
-.. class:: PWINTRUST_FILE_INFO
-
-    Pointer to :class:`WINTRUST_FILE_INFO_`
-
-.. class:: WINTRUST_FILE_INFO_
-
-    .. attribute:: cbStruct
-
-        :class:`DWORD`
-
-
-    .. attribute:: pcwszFilePath
-
-        :class:`LPCWSTR`
-
-
-    .. attribute:: hFile
-
-        :class:`HANDLE`
-
-
-    .. attribute:: pgKnownSubject
-
-        :class:`GUID`
-
-_CRYPT_ATTRIBUTE
-''''''''''''''''
-.. class:: PCRYPT_ATTRIBUTE
-
-    Pointer to :class:`_CRYPT_ATTRIBUTE`
-
-.. class:: CRYPT_ATTRIBUTE
-
-    Alias for :class:`_CRYPT_ATTRIBUTE`
-
-.. class:: _CRYPT_ATTRIBUTE
-
-    .. attribute:: pszObjId
-
-        :class:`LPSTR`
-
-
-    .. attribute:: cValue
-
-        :class:`DWORD`
-
-
-    .. attribute:: rgValue
-
-        :class:`PCRYPT_ATTR_BLOB`
-
-_CTL_ENTRY
-''''''''''
-.. class:: PCTL_ENTRY
-
-    Pointer to :class:`_CTL_ENTRY`
-
-.. class:: CTL_ENTRY
-
-    Alias for :class:`_CTL_ENTRY`
-
-.. class:: _CTL_ENTRY
-
-    .. attribute:: SubjectIdentifier
-
-        :class:`CRYPT_DATA_BLOB`
-
-
-    .. attribute:: cAttribute
-
-        :class:`DWORD`
-
-
-    .. attribute:: rgAttribute
-
-        :class:`PCRYPT_ATTRIBUTE`
-
-_CRYPT_ATTRIBUTE
-''''''''''''''''
-.. class:: PCRYPT_ATTRIBUTE
-
-    Pointer to :class:`_CRYPT_ATTRIBUTE`
-
-.. class:: CRYPT_ATTRIBUTE
-
-    Alias for :class:`_CRYPT_ATTRIBUTE`
-
-.. class:: _CRYPT_ATTRIBUTE
-
-    .. attribute:: pszObjId
-
-        :class:`LPSTR`
-
-
-    .. attribute:: cValue
-
-        :class:`DWORD`
-
-
-    .. attribute:: rgValue
-
-        :class:`PCRYPT_ATTR_BLOB`
-
-_CRYPT_ATTRIBUTES
-'''''''''''''''''
-.. class:: CRYPT_ATTRIBUTES
-
-    Alias for :class:`_CRYPT_ATTRIBUTES`
-
-.. class:: PCRYPT_ATTRIBUTES
-
-    Pointer to :class:`_CRYPT_ATTRIBUTES`
-
-.. class:: _CRYPT_ATTRIBUTES
-
-    .. attribute:: cAttr
-
-        :class:`DWORD`
-
-
-    .. attribute:: rgAttr
-
-        :class:`PCRYPT_ATTRIBUTE`
-
-_CMSG_SIGNER_INFO
-'''''''''''''''''
-.. class:: CMSG_SIGNER_INFO
-
-    Alias for :class:`_CMSG_SIGNER_INFO`
-
-.. class:: PCMSG_SIGNER_INFO
-
-    Pointer to :class:`_CMSG_SIGNER_INFO`
-
-.. class:: _CMSG_SIGNER_INFO
-
-    .. attribute:: dwVersion
-
-        :class:`DWORD`
-
-
-    .. attribute:: Issuer
-
-        :class:`CERT_NAME_BLOB`
-
-
-    .. attribute:: SerialNumber
-
-        :class:`CRYPT_INTEGER_BLOB`
-
-
-    .. attribute:: HashAlgorithm
-
-        :class:`CRYPT_ALGORITHM_IDENTIFIER`
-
-
-    .. attribute:: HashEncryptionAlgorithm
-
-        :class:`CRYPT_ALGORITHM_IDENTIFIER`
-
-
-    .. attribute:: EncryptedHash
-
-        :class:`CRYPT_DATA_BLOB`
-
-
-    .. attribute:: AuthAttrs
-
-        :class:`CRYPT_ATTRIBUTES`
-
-
-    .. attribute:: UnauthAttrs
-
-        :class:`CRYPT_ATTRIBUTES`
-
-_CERT_EXTENSION
-'''''''''''''''
-.. class:: CERT_EXTENSION
-
-    Alias for :class:`_CERT_EXTENSION`
-
-.. class:: PCERT_EXTENSION
-
-    Pointer to :class:`_CERT_EXTENSION`
-
-.. class:: _CERT_EXTENSION
-
-    .. attribute:: pszObjId
-
-        :class:`LPSTR`
-
-
-    .. attribute:: fCritical
-
-        :class:`BOOL`
-
-
-    .. attribute:: Value
-
-        :class:`CRYPT_OBJID_BLOB`
-
-_CTL_USAGE
-''''''''''
-.. class:: CERT_ENHKEY_USAGE
-
-    Alias for :class:`_CTL_USAGE`
-
-.. class:: PCTL_USAGE
-
-    Pointer to :class:`_CTL_USAGE`
-
-.. class:: CTL_USAGE
-
-    Alias for :class:`_CTL_USAGE`
-
-.. class:: PCERT_ENHKEY_USAGE
-
-    Pointer to :class:`_CTL_USAGE`
-
-.. class:: _CTL_USAGE
-
-    .. attribute:: cUsageIdentifier
-
-        :class:`DWORD`
-
-
-    .. attribute:: rgpszUsageIdentifier
-
-        :class:`LPSTR`
-
-_CTL_INFO
-'''''''''
-.. class:: CTL_INFO
-
-    Alias for :class:`_CTL_INFO`
-
-.. class:: PCTL_INFO
-
-    Pointer to :class:`_CTL_INFO`
-
-.. class:: _CTL_INFO
-
-    .. attribute:: dwVersion
-
-        :class:`DWORD`
-
-
-    .. attribute:: SubjectUsage
-
-        :class:`CTL_USAGE`
-
-
-    .. attribute:: ListIdentifier
-
-        :class:`CRYPT_DATA_BLOB`
-
-
-    .. attribute:: SequenceNumber
-
-        :class:`CRYPT_INTEGER_BLOB`
-
-
-    .. attribute:: ThisUpdate
-
-        :class:`FILETIME`
-
-
-    .. attribute:: NextUpdate
-
-        :class:`FILETIME`
-
-
-    .. attribute:: SubjectAlgorithm
-
-        :class:`CRYPT_ALGORITHM_IDENTIFIER`
-
-
-    .. attribute:: cCTLEntry
-
-        :class:`DWORD`
-
-
-    .. attribute:: rgCTLEntry
-
-        :class:`PCTL_ENTRY`
-
-
-    .. attribute:: cExtension
-
-        :class:`DWORD`
-
-
-    .. attribute:: rgExtension
-
-        :class:`PCERT_EXTENSION`
-
-_CTL_CONTEXT
-''''''''''''
-.. class:: PCTL_CONTEXT
-
-    Pointer to :class:`_CTL_CONTEXT`
-
-.. class:: CTL_CONTEXT
-
-    Alias for :class:`_CTL_CONTEXT`
-
-.. class:: PCCTL_CONTEXT
-
-    Pointer to :class:`_CTL_CONTEXT`
-
-.. class:: _CTL_CONTEXT
-
-    .. attribute:: dwMsgAndCertEncodingType
-
-        :class:`DWORD`
-
-
-    .. attribute:: pbCtlEncoded
-
-        :class:`BYTE`
-
-
-    .. attribute:: cbCtlEncoded
-
-        :class:`DWORD`
-
-
-    .. attribute:: pCtlInfo
-
-        :class:`PCTL_INFO`
-
-
-    .. attribute:: hCertStore
-
-        :class:`HCERTSTORE`
-
-
-    .. attribute:: hCryptMsg
-
-        :class:`HCRYPTMSG`
-
-
-    .. attribute:: pbCtlContent
-
-        :class:`BYTE`
-
-
-    .. attribute:: cbCtlContent
-
-        :class:`DWORD`
-
-WINTRUST_CATALOG_INFO_
-''''''''''''''''''''''
-.. class:: PWINTRUST_CATALOG_INFO
-
-    Pointer to :class:`WINTRUST_CATALOG_INFO_`
-
-.. class:: WINTRUST_CATALOG_INFO
-
-    Alias for :class:`WINTRUST_CATALOG_INFO_`
-
-.. class:: WINTRUST_CATALOG_INFO_
-
-    .. attribute:: cbStruct
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwCatalogVersion
-
-        :class:`DWORD`
-
-
-    .. attribute:: pcwszCatalogFilePath
-
-        :class:`LPCWSTR`
-
-
-    .. attribute:: pcwszMemberTag
-
-        :class:`LPCWSTR`
-
-
-    .. attribute:: pcwszMemberFilePath
-
-        :class:`LPCWSTR`
-
-
-    .. attribute:: hMemberFile
-
-        :class:`HANDLE`
-
-
-    .. attribute:: pbCalculatedFileHash
-
-        :class:`BYTE`
-
-
-    .. attribute:: cbCalculatedFileHash
-
-        :class:`DWORD`
-
-
-    .. attribute:: pcCatalogContext
-
-        :class:`PCCTL_CONTEXT`
-
-WINTRUST_BLOB_INFO_
-'''''''''''''''''''
-.. class:: PWINTRUST_BLOB_INFO
-
-    Pointer to :class:`WINTRUST_BLOB_INFO_`
-
-.. class:: WINTRUST_BLOB_INFO
-
-    Alias for :class:`WINTRUST_BLOB_INFO_`
-
-.. class:: WINTRUST_BLOB_INFO_
-
-    .. attribute:: cbStruct
-
-        :class:`DWORD`
-
-
-    .. attribute:: gSubject
-
-        :class:`GUID`
-
-
-    .. attribute:: pcwszDisplayName
-
-        :class:`LPCWSTR`
-
-
-    .. attribute:: cbMemObject
-
-        :class:`DWORD`
-
-
-    .. attribute:: pbMemObject
-
-        :class:`BYTE`
-
-
-    .. attribute:: cbMemSignedMsg
-
-        :class:`DWORD`
-
-
-    .. attribute:: pbMemSignedMsg
-
-        :class:`BYTE`
-
-_CRYPT_BIT_BLOB
-'''''''''''''''
-.. class:: CRYPT_BIT_BLOB
-
-    Alias for :class:`_CRYPT_BIT_BLOB`
-
-.. class:: PCRYPT_BIT_BLOB
-
-    Pointer to :class:`_CRYPT_BIT_BLOB`
-
-.. class:: _CRYPT_BIT_BLOB
-
-    .. attribute:: cbData
-
-        :class:`DWORD`
-
-
-    .. attribute:: pbData
-
-        :class:`BYTE`
-
-
-    .. attribute:: cUnusedBits
-
-        :class:`DWORD`
-
-_CERT_PUBLIC_KEY_INFO
-'''''''''''''''''''''
-.. class:: PCERT_PUBLIC_KEY_INFO
-
-    Pointer to :class:`_CERT_PUBLIC_KEY_INFO`
-
-.. class:: CERT_PUBLIC_KEY_INFO
-
-    Alias for :class:`_CERT_PUBLIC_KEY_INFO`
-
-.. class:: _CERT_PUBLIC_KEY_INFO
-
-    .. attribute:: Algorithm
-
-        :class:`CRYPT_ALGORITHM_IDENTIFIER`
-
-
-    .. attribute:: PublicKey
-
-        :class:`CRYPT_BIT_BLOB`
-
-_CERT_INFO
-''''''''''
-.. class:: CERT_INFO
-
-    Alias for :class:`_CERT_INFO`
-
-.. class:: PCERT_INFO
-
-    Pointer to :class:`_CERT_INFO`
-
-.. class:: _CERT_INFO
-
-    .. attribute:: dwVersion
-
-        :class:`DWORD`
-
-
-    .. attribute:: SerialNumber
-
-        :class:`CRYPT_INTEGER_BLOB`
-
-
-    .. attribute:: SignatureAlgorithm
-
-        :class:`CRYPT_ALGORITHM_IDENTIFIER`
-
-
-    .. attribute:: Issuer
-
-        :class:`CERT_NAME_BLOB`
-
-
-    .. attribute:: NotBefore
-
-        :class:`FILETIME`
-
-
-    .. attribute:: NotAfter
-
-        :class:`FILETIME`
-
-
-    .. attribute:: Subject
-
-        :class:`CERT_NAME_BLOB`
-
-
-    .. attribute:: SubjectPublicKeyInfo
-
-        :class:`CERT_PUBLIC_KEY_INFO`
-
-
-    .. attribute:: IssuerUniqueId
-
-        :class:`CRYPT_BIT_BLOB`
-
-
-    .. attribute:: SubjectUniqueId
-
-        :class:`CRYPT_BIT_BLOB`
-
-
-    .. attribute:: cExtension
-
-        :class:`DWORD`
-
-
-    .. attribute:: rgExtension
-
-        :class:`PCERT_EXTENSION`
-
-_CERT_CONTEXT
-'''''''''''''
-.. class:: CERT_CONTEXT
-
-    Alias for :class:`_CERT_CONTEXT`
-
-.. class:: PCERT_CONTEXT
-
-    Pointer to :class:`_CERT_CONTEXT`
-
-.. class:: _CERT_CONTEXT
-
-    .. attribute:: dwCertEncodingType
-
-        :class:`DWORD`
-
-
-    .. attribute:: pbCertEncoded
-
-        :class:`BYTE`
-
-
-    .. attribute:: cbCertEncoded
-
-        :class:`DWORD`
-
-
-    .. attribute:: pCertInfo
-
-        :class:`PCERT_INFO`
-
-
-    .. attribute:: hCertStore
-
-        :class:`HCERTSTORE`
-
-WINTRUST_SGNR_INFO_
-'''''''''''''''''''
-.. class:: WINTRUST_SGNR_INFO
-
-    Alias for :class:`WINTRUST_SGNR_INFO_`
-
-.. class:: PWINTRUST_SGNR_INFO
-
-    Pointer to :class:`WINTRUST_SGNR_INFO_`
-
-.. class:: WINTRUST_SGNR_INFO_
-
-    .. attribute:: cbStruct
-
-        :class:`DWORD`
-
-
-    .. attribute:: pcwszDisplayName
-
-        :class:`LPCWSTR`
-
-
-    .. attribute:: psSignerInfo
-
-        :class:`CMSG_SIGNER_INFO`
-
-
-    .. attribute:: chStores
-
-        :class:`DWORD`
-
-
-    .. attribute:: pahStores
-
-        :class:`HCERTSTORE`
-
-WINTRUST_CERT_INFO_
-'''''''''''''''''''
-.. class:: WINTRUST_CERT_INFO
-
-    Alias for :class:`WINTRUST_CERT_INFO_`
-
-.. class:: PWINTRUST_CERT_INFO
-
-    Pointer to :class:`WINTRUST_CERT_INFO_`
-
-.. class:: WINTRUST_CERT_INFO_
-
-    .. attribute:: cbStruct
-
-        :class:`DWORD`
-
-
-    .. attribute:: pcwszDisplayName
-
-        :class:`LPCWSTR`
-
-
-    .. attribute:: psCertContext
-
-        :class:`CERT_CONTEXT`
-
-
-    .. attribute:: chStores
-
-        :class:`DWORD`
-
-
-    .. attribute:: pahStores
-
-        :class:`HCERTSTORE`
-
-
-    .. attribute:: dwFlags
-
-        :class:`DWORD`
-
-
-    .. attribute:: psftVerifyAsOf
-
-        :class:`FILETIME`
-
-_TMP_WINTRUST_UNION_TYPE
-''''''''''''''''''''''''
-.. class:: TMP_WINTRUST_UNION_TYPE
-
-    Alias for :class:`_TMP_WINTRUST_UNION_TYPE`
-
-.. class:: _TMP_WINTRUST_UNION_TYPE
-
-    .. attribute:: pFile
-
-        :class:`WINTRUST_FILE_INFO_`
-
-
-    .. attribute:: pCatalog
-
-        :class:`WINTRUST_CATALOG_INFO_`
-
-
-    .. attribute:: pBlob
-
-        :class:`WINTRUST_BLOB_INFO_`
-
-
-    .. attribute:: pSgnr
-
-        :class:`WINTRUST_SGNR_INFO_`
-
-
-    .. attribute:: pCert
-
-        :class:`WINTRUST_CERT_INFO_`
-
-_WINTRUST_DATA
-''''''''''''''
-.. class:: PWINTRUST_DATA
-
-    Pointer to :class:`_WINTRUST_DATA`
-
-.. class:: WINTRUST_DATA
-
-    Alias for :class:`_WINTRUST_DATA`
-
-.. class:: _WINTRUST_DATA
-
-    .. attribute:: cbStruct
-
-        :class:`DWORD`
-
-
-    .. attribute:: pPolicyCallbackData
-
-        :class:`LPVOID`
-
-
-    .. attribute:: pSIPClientData
-
-        :class:`LPVOID`
-
-
-    .. attribute:: dwUIChoice
-
-        :class:`DWORD`
-
-
-    .. attribute:: fdwRevocationChecks
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwUnionChoice
-
-        :class:`DWORD`
-
-
-    .. attribute:: tmp_union
-
-        :class:`TMP_WINTRUST_UNION_TYPE`
-
-
-    .. attribute:: dwStateAction
-
-        :class:`DWORD`
-
-
-    .. attribute:: hWVTStateData
-
-        :class:`HANDLE`
-
-
-    .. attribute:: pwszURLReference
-
-        :class:`WCHAR`
-
-
-    .. attribute:: dwProvFlags
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwUIContext
-
-        :class:`DWORD`
-
 _PROCESS_BASIC_INFORMATION
 ''''''''''''''''''''''''''
 .. class:: PPROCESS_BASIC_INFORMATION
@@ -9160,1019 +10934,6 @@ _DEBUG_SYMBOL_SOURCE_ENTRY
 
         :class:`ULONG`
 
-_CMSG_SIGNER_INFO
-'''''''''''''''''
-.. class:: CMSG_SIGNER_INFO
-
-    Alias for :class:`_CMSG_SIGNER_INFO`
-
-.. class:: PCMSG_SIGNER_INFO
-
-    Pointer to :class:`_CMSG_SIGNER_INFO`
-
-.. class:: _CMSG_SIGNER_INFO
-
-    .. attribute:: dwVersion
-
-        :class:`DWORD`
-
-
-    .. attribute:: Issuer
-
-        :class:`CERT_NAME_BLOB`
-
-
-    .. attribute:: SerialNumber
-
-        :class:`CRYPT_INTEGER_BLOB`
-
-
-    .. attribute:: HashAlgorithm
-
-        :class:`CRYPT_ALGORITHM_IDENTIFIER`
-
-
-    .. attribute:: HashEncryptionAlgorithm
-
-        :class:`CRYPT_ALGORITHM_IDENTIFIER`
-
-
-    .. attribute:: EncryptedHash
-
-        :class:`CRYPT_DATA_BLOB`
-
-
-    .. attribute:: AuthAttrs
-
-        :class:`CRYPT_ATTRIBUTES`
-
-
-    .. attribute:: UnauthAttrs
-
-        :class:`CRYPT_ATTRIBUTES`
-
-_SPC_SERIALIZED_OBJECT
-''''''''''''''''''''''
-.. class:: SPC_SERIALIZED_OBJECT
-
-    Alias for :class:`_SPC_SERIALIZED_OBJECT`
-
-.. class:: PSPC_SERIALIZED_OBJECT
-
-    Pointer to :class:`_SPC_SERIALIZED_OBJECT`
-
-.. class:: _SPC_SERIALIZED_OBJECT
-
-    .. attribute:: ClassId
-
-        :class:`SPC_UUID`
-
-
-    .. attribute:: SerializedData
-
-        :class:`CRYPT_DATA_BLOB`
-
-_TMP_SPC_LINK_UNION
-'''''''''''''''''''
-.. class:: TMP_SPC_LINK_UNION
-
-    Alias for :class:`_TMP_SPC_LINK_UNION`
-
-.. class:: _TMP_SPC_LINK_UNION
-
-    .. attribute:: pwszUrl
-
-        :class:`LPWSTR`
-
-
-    .. attribute:: Moniker
-
-        :class:`SPC_SERIALIZED_OBJECT`
-
-
-    .. attribute:: pwszFile
-
-        :class:`LPWSTR`
-
-SPC_LINK_
-'''''''''
-.. class:: PSPC_LINK
-
-    Pointer to :class:`SPC_LINK_`
-
-.. class:: SPC_LINK
-
-    Alias for :class:`SPC_LINK_`
-
-.. class:: SPC_LINK_
-
-    .. attribute:: dwLinkChoice
-
-        :class:`DWORD`
-
-
-    .. attribute:: u
-
-        :class:`TMP_SPC_LINK_UNION`
-
-_SPC_SP_OPUS_INFO
-'''''''''''''''''
-.. class:: PSPC_SP_OPUS_INFO
-
-    Pointer to :class:`_SPC_SP_OPUS_INFO`
-
-.. class:: SPC_SP_OPUS_INFO
-
-    Alias for :class:`_SPC_SP_OPUS_INFO`
-
-.. class:: _SPC_SP_OPUS_INFO
-
-    .. attribute:: pwszProgramName
-
-        :class:`LPCWSTR`
-
-
-    .. attribute:: pMoreInfo
-
-        :class:`SPC_LINK_`
-
-
-    .. attribute:: pPublisherInfo
-
-        :class:`SPC_LINK_`
-
-_CERT_TRUST_STATUS
-''''''''''''''''''
-.. class:: PCERT_TRUST_STATUS
-
-    Pointer to :class:`_CERT_TRUST_STATUS`
-
-.. class:: CERT_TRUST_STATUS
-
-    Alias for :class:`_CERT_TRUST_STATUS`
-
-.. class:: _CERT_TRUST_STATUS
-
-    .. attribute:: dwErrorStatus
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwInfoStatus
-
-        :class:`DWORD`
-
-_CERT_TRUST_LIST_INFO
-'''''''''''''''''''''
-.. class:: PCERT_TRUST_LIST_INFO
-
-    Pointer to :class:`_CERT_TRUST_LIST_INFO`
-
-.. class:: CERT_TRUST_LIST_INFO
-
-    Alias for :class:`_CERT_TRUST_LIST_INFO`
-
-.. class:: _CERT_TRUST_LIST_INFO
-
-    .. attribute:: cbSize
-
-        :class:`DWORD`
-
-
-    .. attribute:: pCtlEntry
-
-        :class:`PCTL_ENTRY`
-
-
-    .. attribute:: pCtlContext
-
-        :class:`PCCTL_CONTEXT`
-
-_CERT_CONTEXT
-'''''''''''''
-.. class:: PCCERT_CONTEXT
-
-    Pointer to :class:`_CERT_CONTEXT`
-
-.. class:: CERT_CONTEXT
-
-    Alias for :class:`_CERT_CONTEXT`
-
-.. class:: PCERT_CONTEXT
-
-    Pointer to :class:`_CERT_CONTEXT`
-
-.. class:: _CERT_CONTEXT
-
-    .. attribute:: dwCertEncodingType
-
-        :class:`DWORD`
-
-
-    .. attribute:: pbCertEncoded
-
-        :class:`BYTE`
-
-
-    .. attribute:: cbCertEncoded
-
-        :class:`DWORD`
-
-
-    .. attribute:: pCertInfo
-
-        :class:`PCERT_INFO`
-
-
-    .. attribute:: hCertStore
-
-        :class:`HCERTSTORE`
-
-_CRL_ENTRY
-''''''''''
-.. class:: CRL_ENTRY
-
-    Alias for :class:`_CRL_ENTRY`
-
-.. class:: PCRL_ENTRY
-
-    Pointer to :class:`_CRL_ENTRY`
-
-.. class:: _CRL_ENTRY
-
-    .. attribute:: SerialNumber
-
-        :class:`CRYPT_INTEGER_BLOB`
-
-
-    .. attribute:: RevocationDate
-
-        :class:`FILETIME`
-
-
-    .. attribute:: cExtension
-
-        :class:`DWORD`
-
-
-    .. attribute:: rgExtension
-
-        :class:`PCERT_EXTENSION`
-
-_CRL_INFO
-'''''''''
-.. class:: CRL_INFO
-
-    Alias for :class:`_CRL_INFO`
-
-.. class:: PCRL_INFO
-
-    Pointer to :class:`_CRL_INFO`
-
-.. class:: _CRL_INFO
-
-    .. attribute:: dwVersion
-
-        :class:`DWORD`
-
-
-    .. attribute:: SignatureAlgorithm
-
-        :class:`CRYPT_ALGORITHM_IDENTIFIER`
-
-
-    .. attribute:: Issuer
-
-        :class:`CERT_NAME_BLOB`
-
-
-    .. attribute:: ThisUpdate
-
-        :class:`FILETIME`
-
-
-    .. attribute:: NextUpdate
-
-        :class:`FILETIME`
-
-
-    .. attribute:: cCRLEntry
-
-        :class:`DWORD`
-
-
-    .. attribute:: rgCRLEntry
-
-        :class:`PCRL_ENTRY`
-
-
-    .. attribute:: cExtension
-
-        :class:`DWORD`
-
-
-    .. attribute:: rgExtension
-
-        :class:`PCERT_EXTENSION`
-
-_CRL_CONTEXT
-''''''''''''
-.. class:: PCCRL_CONTEXT
-
-    Pointer to :class:`_CRL_CONTEXT`
-
-.. class:: CRL_CONTEXT
-
-    Alias for :class:`_CRL_CONTEXT`
-
-.. class:: PCRL_CONTEXT
-
-    Pointer to :class:`_CRL_CONTEXT`
-
-.. class:: _CRL_CONTEXT
-
-    .. attribute:: dwCertEncodingType
-
-        :class:`DWORD`
-
-
-    .. attribute:: pbCrlEncoded
-
-        :class:`BYTE`
-
-
-    .. attribute:: cbCrlEncoded
-
-        :class:`DWORD`
-
-
-    .. attribute:: pCrlInfo
-
-        :class:`PCRL_INFO`
-
-
-    .. attribute:: hCertStore
-
-        :class:`HCERTSTORE`
-
-_CERT_REVOCATION_CRL_INFO
-'''''''''''''''''''''''''
-.. class:: CERT_REVOCATION_CRL_INFO
-
-    Alias for :class:`_CERT_REVOCATION_CRL_INFO`
-
-.. class:: PCERT_REVOCATION_CRL_INFO
-
-    Pointer to :class:`_CERT_REVOCATION_CRL_INFO`
-
-.. class:: _CERT_REVOCATION_CRL_INFO
-
-    .. attribute:: cbSize
-
-        :class:`DWORD`
-
-
-    .. attribute:: pBaseCrlContext
-
-        :class:`PCCRL_CONTEXT`
-
-
-    .. attribute:: pDeltaCrlContext
-
-        :class:`PCCRL_CONTEXT`
-
-
-    .. attribute:: pCrlEntry
-
-        :class:`PCRL_ENTRY`
-
-
-    .. attribute:: fDeltaCrlEntry
-
-        :class:`BOOL`
-
-_CERT_REVOCATION_INFO
-'''''''''''''''''''''
-.. class:: CERT_REVOCATION_INFO
-
-    Alias for :class:`_CERT_REVOCATION_INFO`
-
-.. class:: PCERT_REVOCATION_INFO
-
-    Pointer to :class:`_CERT_REVOCATION_INFO`
-
-.. class:: _CERT_REVOCATION_INFO
-
-    .. attribute:: cbSize
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwRevocationResult
-
-        :class:`DWORD`
-
-
-    .. attribute:: pszRevocationOid
-
-        :class:`LPCSTR`
-
-
-    .. attribute:: pvOidSpecificInfo
-
-        :class:`LPVOID`
-
-
-    .. attribute:: fHasFreshnessTime
-
-        :class:`BOOL`
-
-
-    .. attribute:: dwFreshnessTime
-
-        :class:`DWORD`
-
-
-    .. attribute:: pCrlInfo
-
-        :class:`PCERT_REVOCATION_CRL_INFO`
-
-_CERT_CHAIN_ELEMENT
-'''''''''''''''''''
-.. class:: PCERT_CHAIN_ELEMENT
-
-    Pointer to :class:`_CERT_CHAIN_ELEMENT`
-
-.. class:: CERT_CHAIN_ELEMENT
-
-    Alias for :class:`_CERT_CHAIN_ELEMENT`
-
-.. class:: PCCERT_CHAIN_ELEMENT
-
-    Pointer to :class:`_CERT_CHAIN_ELEMENT`
-
-.. class:: _CERT_CHAIN_ELEMENT
-
-    .. attribute:: cbSize
-
-        :class:`DWORD`
-
-
-    .. attribute:: pCertContext
-
-        :class:`PCCERT_CONTEXT`
-
-
-    .. attribute:: TrustStatus
-
-        :class:`CERT_TRUST_STATUS`
-
-
-    .. attribute:: pRevocationInfo
-
-        :class:`PCERT_REVOCATION_INFO`
-
-
-    .. attribute:: pIssuanceUsage
-
-        :class:`PCERT_ENHKEY_USAGE`
-
-
-    .. attribute:: pApplicationUsage
-
-        :class:`PCERT_ENHKEY_USAGE`
-
-
-    .. attribute:: pwszExtendedErrorInfo
-
-        :class:`LPCWSTR`
-
-_CERT_SIMPLE_CHAIN
-''''''''''''''''''
-.. class:: CERT_SIMPLE_CHAIN
-
-    Alias for :class:`_CERT_SIMPLE_CHAIN`
-
-.. class:: PCERT_SIMPLE_CHAIN
-
-    Pointer to :class:`_CERT_SIMPLE_CHAIN`
-
-.. class:: PCCERT_SIMPLE_CHAIN
-
-    Pointer to :class:`_CERT_SIMPLE_CHAIN`
-
-.. class:: _CERT_SIMPLE_CHAIN
-
-    .. attribute:: cbSize
-
-        :class:`DWORD`
-
-
-    .. attribute:: TrustStatus
-
-        :class:`CERT_TRUST_STATUS`
-
-
-    .. attribute:: cElement
-
-        :class:`DWORD`
-
-
-    .. attribute:: rgpElement
-
-        :class:`PCERT_CHAIN_ELEMENT`
-
-
-    .. attribute:: pTrustListInfo
-
-        :class:`PCERT_TRUST_LIST_INFO`
-
-
-    .. attribute:: fHasRevocationFreshnessTime
-
-        :class:`BOOL`
-
-
-    .. attribute:: dwRevocationFreshnessTime
-
-        :class:`DWORD`
-
-_CERT_CHAIN_CONTEXT
-'''''''''''''''''''
-.. class:: CERT_CHAIN_CONTEXT
-
-    Alias for :class:`_CERT_CHAIN_CONTEXT`
-
-.. class:: PCERT_CHAIN_CONTEXT
-
-    Pointer to :class:`_CERT_CHAIN_CONTEXT`
-
-.. class:: PCCERT_CHAIN_CONTEXT
-
-    Pointer to :class:`_CERT_CHAIN_CONTEXT`
-
-.. class:: _CERT_CHAIN_CONTEXT
-
-    .. attribute:: cbSize
-
-        :class:`DWORD`
-
-
-    .. attribute:: TrustStatus
-
-        :class:`CERT_TRUST_STATUS`
-
-
-    .. attribute:: cChain
-
-        :class:`DWORD`
-
-
-    .. attribute:: rgpChain
-
-        :class:`PCERT_SIMPLE_CHAIN`
-
-
-    .. attribute:: cLowerQualityChainContext
-
-        :class:`DWORD`
-
-
-    .. attribute:: rgpLowerQualityChainContext
-
-        :class:`PCCERT_CHAIN_CONTEXT`
-
-
-    .. attribute:: fHasRevocationFreshnessTime
-
-        :class:`BOOL`
-
-
-    .. attribute:: dwRevocationFreshnessTime
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwCreateFlags
-
-        :class:`DWORD`
-
-
-    .. attribute:: ChainId
-
-        :class:`GUID`
-
-_CERT_USAGE_MATCH
-'''''''''''''''''
-.. class:: CERT_USAGE_MATCH
-
-    Alias for :class:`_CERT_USAGE_MATCH`
-
-.. class:: PCERT_USAGE_MATCH
-
-    Pointer to :class:`_CERT_USAGE_MATCH`
-
-.. class:: _CERT_USAGE_MATCH
-
-    .. attribute:: dwType
-
-        :class:`DWORD`
-
-
-    .. attribute:: Usage
-
-        :class:`CERT_ENHKEY_USAGE`
-
-_CERT_CHAIN_PARA
-''''''''''''''''
-.. class:: CERT_CHAIN_PARA
-
-    Alias for :class:`_CERT_CHAIN_PARA`
-
-.. class:: PCERT_CHAIN_PARA
-
-    Pointer to :class:`_CERT_CHAIN_PARA`
-
-.. class:: _CERT_CHAIN_PARA
-
-    .. attribute:: cbSize
-
-        :class:`DWORD`
-
-
-    .. attribute:: RequestedUsage
-
-        :class:`CERT_USAGE_MATCH`
-
-
-    .. attribute:: RequestedIssuancePolicy
-
-        :class:`CERT_USAGE_MATCH`
-
-
-    .. attribute:: dwUrlRetrievalTimeout
-
-        :class:`DWORD`
-
-
-    .. attribute:: fCheckRevocationFreshnessTime
-
-        :class:`BOOL`
-
-
-    .. attribute:: dwRevocationFreshnessTime
-
-        :class:`DWORD`
-
-
-    .. attribute:: pftCacheResync
-
-        :class:`LPFILETIME`
-
-_CERT_CHAIN_ENGINE_CONFIG
-'''''''''''''''''''''''''
-.. class:: CERT_CHAIN_ENGINE_CONFIG
-
-    Alias for :class:`_CERT_CHAIN_ENGINE_CONFIG`
-
-.. class:: PCERT_CHAIN_ENGINE_CONFIG
-
-    Pointer to :class:`_CERT_CHAIN_ENGINE_CONFIG`
-
-.. class:: _CERT_CHAIN_ENGINE_CONFIG
-
-    .. attribute:: cbSize
-
-        :class:`DWORD`
-
-
-    .. attribute:: hRestrictedRoot
-
-        :class:`HCERTSTORE`
-
-
-    .. attribute:: hRestrictedTrust
-
-        :class:`HCERTSTORE`
-
-
-    .. attribute:: hRestrictedOther
-
-        :class:`HCERTSTORE`
-
-
-    .. attribute:: cAdditionalStore
-
-        :class:`DWORD`
-
-
-    .. attribute:: rghAdditionalStore
-
-        :class:`HCERTSTORE`
-
-
-    .. attribute:: dwFlags
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwUrlRetrievalTimeout
-
-        :class:`DWORD`
-
-
-    .. attribute:: MaximumCachedCertificates
-
-        :class:`DWORD`
-
-
-    .. attribute:: CycleDetectionModulus
-
-        :class:`DWORD`
-
-_SYSTEMTIME
-'''''''''''
-.. class:: SYSTEMTIME
-
-    Alias for :class:`_SYSTEMTIME`
-
-.. class:: PSYSTEMTIME
-
-    Pointer to :class:`_SYSTEMTIME`
-
-.. class:: _SYSTEMTIME
-
-    .. attribute:: wYear
-
-        :class:`WORD`
-
-
-    .. attribute:: wMonth
-
-        :class:`WORD`
-
-
-    .. attribute:: wDayOfWeek
-
-        :class:`WORD`
-
-
-    .. attribute:: wDay
-
-        :class:`WORD`
-
-
-    .. attribute:: wHour
-
-        :class:`WORD`
-
-
-    .. attribute:: wMinute
-
-        :class:`WORD`
-
-
-    .. attribute:: wSecond
-
-        :class:`WORD`
-
-
-    .. attribute:: wMilliseconds
-
-        :class:`WORD`
-
-_CERT_EXTENSIONS
-''''''''''''''''
-.. class:: PCERT_EXTENSIONS
-
-    Pointer to :class:`_CERT_EXTENSIONS`
-
-.. class:: CERT_EXTENSIONS
-
-    Alias for :class:`_CERT_EXTENSIONS`
-
-.. class:: _CERT_EXTENSIONS
-
-    .. attribute:: cExtension
-
-        :class:`DWORD`
-
-
-    .. attribute:: rgExtension
-
-        :class:`PCERT_EXTENSION`
-
-_CRYPT_KEY_PROV_PARAM
-'''''''''''''''''''''
-.. class:: CRYPT_KEY_PROV_PARAM
-
-    Alias for :class:`_CRYPT_KEY_PROV_PARAM`
-
-.. class:: PCRYPT_KEY_PROV_PARAM
-
-    Pointer to :class:`_CRYPT_KEY_PROV_PARAM`
-
-.. class:: _CRYPT_KEY_PROV_PARAM
-
-    .. attribute:: dwParam
-
-        :class:`DWORD`
-
-
-    .. attribute:: pbData
-
-        :class:`BYTE`
-
-
-    .. attribute:: cbData
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwFlags
-
-        :class:`DWORD`
-
-_CRYPT_KEY_PROV_INFO
-''''''''''''''''''''
-.. class:: CRYPT_KEY_PROV_INFO
-
-    Alias for :class:`_CRYPT_KEY_PROV_INFO`
-
-.. class:: PCRYPT_KEY_PROV_INFO
-
-    Pointer to :class:`_CRYPT_KEY_PROV_INFO`
-
-.. class:: _CRYPT_KEY_PROV_INFO
-
-    .. attribute:: pwszContainerName
-
-        :class:`LPWSTR`
-
-
-    .. attribute:: pwszProvName
-
-        :class:`LPWSTR`
-
-
-    .. attribute:: dwProvType
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwFlags
-
-        :class:`DWORD`
-
-
-    .. attribute:: cProvParam
-
-        :class:`DWORD`
-
-
-    .. attribute:: rgProvParam
-
-        :class:`PCRYPT_KEY_PROV_PARAM`
-
-
-    .. attribute:: dwKeySpec
-
-        :class:`DWORD`
-
-_CRYPT_ENCRYPT_MESSAGE_PARA
-'''''''''''''''''''''''''''
-.. class:: PCRYPT_ENCRYPT_MESSAGE_PARA
-
-    Pointer to :class:`_CRYPT_ENCRYPT_MESSAGE_PARA`
-
-.. class:: CRYPT_ENCRYPT_MESSAGE_PARA
-
-    Alias for :class:`_CRYPT_ENCRYPT_MESSAGE_PARA`
-
-.. class:: _CRYPT_ENCRYPT_MESSAGE_PARA
-
-    .. attribute:: cbSize
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwMsgEncodingType
-
-        :class:`DWORD`
-
-
-    .. attribute:: hCryptProv
-
-        :class:`HCRYPTPROV_LEGACY`
-
-
-    .. attribute:: ContentEncryptionAlgorithm
-
-        :class:`CRYPT_ALGORITHM_IDENTIFIER`
-
-
-    .. attribute:: pvEncryptionAuxInfo
-
-        :class:`VOID`
-
-
-    .. attribute:: dwFlags
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwInnerContentType
-
-        :class:`DWORD`
-
-_CRYPT_DECRYPT_MESSAGE_PARA
-'''''''''''''''''''''''''''
-.. class:: PCRYPT_DECRYPT_MESSAGE_PARA
-
-    Pointer to :class:`_CRYPT_DECRYPT_MESSAGE_PARA`
-
-.. class:: CRYPT_DECRYPT_MESSAGE_PARA
-
-    Alias for :class:`_CRYPT_DECRYPT_MESSAGE_PARA`
-
-.. class:: _CRYPT_DECRYPT_MESSAGE_PARA
-
-    .. attribute:: cbSize
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwMsgAndCertEncodingType
-
-        :class:`DWORD`
-
-
-    .. attribute:: cCertStore
-
-        :class:`DWORD`
-
-
-    .. attribute:: rghCertStore
-
-        :class:`HCERTSTORE`
-
-
-    .. attribute:: dwFlags
-
-        :class:`DWORD`
-
-_CERT_KEY_CONTEXT
-'''''''''''''''''
-.. class:: CERT_KEY_CONTEXT
-
-    Alias for :class:`_CERT_KEY_CONTEXT`
-
-.. class:: PCERT_KEY_CONTEXT
-
-    Pointer to :class:`_CERT_KEY_CONTEXT`
-
-.. class:: _CERT_KEY_CONTEXT
-
-    .. attribute:: cbSize
-
-        :class:`DWORD`
-
-
-    .. attribute:: hCryptProv
-
-        :class:`HCRYPTPROV`
-
-
-    .. attribute:: dwKeySpec
-
-        :class:`DWORD`
-
-_CRYPT_ENCODE_PARA
-''''''''''''''''''
-.. class:: PCRYPT_ENCODE_PARA
-
-    Pointer to :class:`_CRYPT_ENCODE_PARA`
-
-.. class:: CRYPT_ENCODE_PARA
-
-    Alias for :class:`_CRYPT_ENCODE_PARA`
-
-.. class:: _CRYPT_ENCODE_PARA
-
-    .. attribute:: cbSize
-
-        :class:`DWORD`
-
-
-    .. attribute:: pfnAlloc
-
-        :class:`PVOID`
-
-
-    .. attribute:: pfnFree
-
-        :class:`PVOID`
-
 _ACL
 ''''
 .. class:: PACL
@@ -11034,6 +11795,129 @@ _PROCESS_INSTRUMENTATION_CALLBACK_INFORMATION
     .. attribute:: Callback
 
         :class:`PVOID`
+
+_PROCESS_MEMORY_COUNTERS
+''''''''''''''''''''''''
+.. class:: PPROCESS_MEMORY_COUNTERS
+
+    Pointer to :class:`_PROCESS_MEMORY_COUNTERS`
+
+.. class:: PROCESS_MEMORY_COUNTERS
+
+    Alias for :class:`_PROCESS_MEMORY_COUNTERS`
+
+.. class:: _PROCESS_MEMORY_COUNTERS
+
+    .. attribute:: cb
+
+        :class:`DWORD`
+
+
+    .. attribute:: PageFaultCount
+
+        :class:`DWORD`
+
+
+    .. attribute:: PeakWorkingSetSize
+
+        :class:`SIZE_T`
+
+
+    .. attribute:: WorkingSetSize
+
+        :class:`SIZE_T`
+
+
+    .. attribute:: QuotaPeakPagedPoolUsage
+
+        :class:`SIZE_T`
+
+
+    .. attribute:: QuotaPagedPoolUsage
+
+        :class:`SIZE_T`
+
+
+    .. attribute:: QuotaPeakNonPagedPoolUsage
+
+        :class:`SIZE_T`
+
+
+    .. attribute:: QuotaNonPagedPoolUsage
+
+        :class:`SIZE_T`
+
+
+    .. attribute:: PagefileUsage
+
+        :class:`SIZE_T`
+
+
+    .. attribute:: PeakPagefileUsage
+
+        :class:`SIZE_T`
+
+_PROCESS_MEMORY_COUNTERS_EX
+'''''''''''''''''''''''''''
+.. class:: PROCESS_MEMORY_COUNTERS_EX
+
+    Alias for :class:`_PROCESS_MEMORY_COUNTERS_EX`
+
+.. class:: _PROCESS_MEMORY_COUNTERS_EX
+
+    .. attribute:: cb
+
+        :class:`DWORD`
+
+
+    .. attribute:: PageFaultCount
+
+        :class:`DWORD`
+
+
+    .. attribute:: PeakWorkingSetSize
+
+        :class:`SIZE_T`
+
+
+    .. attribute:: WorkingSetSize
+
+        :class:`SIZE_T`
+
+
+    .. attribute:: QuotaPeakPagedPoolUsage
+
+        :class:`SIZE_T`
+
+
+    .. attribute:: QuotaPagedPoolUsage
+
+        :class:`SIZE_T`
+
+
+    .. attribute:: QuotaPeakNonPagedPoolUsage
+
+        :class:`SIZE_T`
+
+
+    .. attribute:: QuotaNonPagedPoolUsage
+
+        :class:`SIZE_T`
+
+
+    .. attribute:: PagefileUsage
+
+        :class:`SIZE_T`
+
+
+    .. attribute:: PeakPagefileUsage
+
+        :class:`SIZE_T`
+
+
+    .. attribute:: PrivateUsage
+
+        :class:`SIZE_T`
 
 _ALPC_PORT_ATTRIBUTES32
 '''''''''''''''''''''''
@@ -13049,6 +13933,276 @@ _FILE_ALL_INFORMATION
 
         :class:`FILE_NAME_INFORMATION`
 
+Simple types
+''''''''''''
+.. autoclass:: VOID
+
+.. autoclass:: BYTE
+
+.. autoclass:: PWSTR
+
+.. autoclass:: PCWSTR
+
+.. autoclass:: SIZE_T
+
+.. class:: PSIZE_T
+
+    Pointer to :class:`SIZE_T`
+
+.. autoclass:: PVOID
+
+.. autoclass:: NTSTATUS
+
+.. autoclass:: SECURITY_INFORMATION
+
+.. class:: PSECURITY_INFORMATION
+
+    Pointer to :class:`SECURITY_INFORMATION`
+
+.. class:: PULONG
+
+    Pointer to :class:`ULONG`
+
+.. class:: PDWORD
+
+    Pointer to :class:`DWORD`
+
+.. class:: LPDWORD
+
+    Pointer to :class:`DWORD`
+
+.. class:: LPBYTE
+
+    Pointer to :class:`BYTE`
+
+.. autoclass:: ULONG_PTR
+
+.. autoclass:: LONG_PTR
+
+.. autoclass:: DWORD_PTR
+
+.. autoclass:: KAFFINITY
+
+.. autoclass:: KPRIORITY
+
+.. autoclass:: CHAR
+
+.. autoclass:: UCHAR
+
+.. autoclass:: CSHORT
+
+.. autoclass:: VARTYPE
+
+.. class:: PUSHORT
+
+    Pointer to :class:`USHORT`
+
+.. class:: PBOOL
+
+    Pointer to :class:`BOOL`
+
+.. autoclass:: PSTR
+
+.. autoclass:: PCSTR
+
+.. autoclass:: va_list
+
+.. autoclass:: BSTR
+
+.. autoclass:: OLECHAR
+
+.. autoclass:: POLECHAR
+
+.. class:: PUCHAR
+
+    Pointer to :class:`UCHAR`
+
+.. autoclass:: double
+
+.. autoclass:: DATE
+
+.. autoclass:: PSID
+
+.. autoclass:: ULONGLONG
+
+.. class:: PULONGLONG
+
+    Pointer to :class:`ULONGLONG`
+
+.. autoclass:: LONGLONG
+
+.. autoclass:: ULONG64
+
+.. autoclass:: UINT64
+
+.. autoclass:: LONG64
+
+.. class:: PLARGE_INTEGER
+
+    Pointer to :class:`LARGE_INTEGER`
+
+.. autoclass:: DWORD64
+
+.. class:: PDWORD64
+
+    Pointer to :class:`DWORD64`
+
+.. autoclass:: SCODE
+
+.. autoclass:: CIMTYPE
+
+.. autoclass:: NET_IFINDEX
+
+.. autoclass:: IF_INDEX
+
+.. autoclass:: IFTYPE
+
+.. class:: PULONG64
+
+    Pointer to :class:`ULONG64`
+
+.. class:: PBYTE
+
+    Pointer to :class:`BYTE`
+
+.. class:: PUINT
+
+    Pointer to :class:`UINT`
+
+.. class:: PHKEY
+
+    Pointer to :class:`HKEY`
+
+.. autoclass:: ACCESS_MASK
+
+.. autoclass:: REGSAM
+
+.. class:: PBOOLEAN
+
+    Pointer to :class:`BOOLEAN`
+
+.. autoclass:: SECURITY_CONTEXT_TRACKING_MODE
+
+.. autoclass:: HCRYPTPROV_LEGACY
+
+.. autoclass:: HCRYPTKEY
+
+.. autoclass:: HCRYPTPROV
+
+.. autoclass:: HCRYPTHASH
+
+.. autoclass:: ALG_ID
+
+.. autoclass:: DISPID
+
+.. autoclass:: MEMBERID
+
+.. autoclass:: LRESULT
+
+.. autoclass:: PSECURITY_DESCRIPTOR
+
+.. class:: LPUNKNOWN
+
+    Pointer to :class:`PVOID`
+
+.. class:: LPFILETIME
+
+    Pointer to :class:`FILETIME`
+
+.. class:: LPPOINT
+
+    Pointer to :class:`POINT`
+
+.. class:: LPRECT
+
+    Pointer to :class:`RECT`
+
+.. autoclass:: SPC_UUID
+
+.. autoclass:: DEVICE_TYPE
+
+.. autoclass:: PWINDBG_EXTENSION_APIS32
+
+.. autoclass:: PWINDBG_EXTENSION_APIS64
+
+.. autoclass:: INT8
+
+.. autoclass:: INT16
+
+.. autoclass:: INT32
+
+.. autoclass:: INT64
+
+.. autoclass:: UINT8
+
+.. autoclass:: UINT16
+
+.. autoclass:: UINT32
+
+.. autoclass:: UINT64
+
+.. class:: PHANDLE
+
+    Pointer to :class:`HANDLE`
+
+.. autoclass:: HCATADMIN
+
+.. autoclass:: HCATINFO
+
+.. autoclass:: HCERTCHAINENGINE
+
+.. class:: LPHANDLE
+
+    Pointer to :class:`HANDLE`
+
+.. autoclass:: ALPC_HANDLE
+
+.. class:: PALPC_HANDLE
+
+    Pointer to :class:`ALPC_HANDLE`
+
+.. autoclass:: HCURSOR
+
+.. autoclass:: HBRUSH
+
+.. autoclass:: HCRYPTPROV_OR_NCRYPT_KEY_HANDLE
+
+.. autoclass:: EVT_HANDLE
+
+.. autoclass:: EVT_OBJECT_ARRAY_PROPERTY_HANDLE
+
+.. autoclass:: RPCOLEDATAREP
+
+.. autoclass:: WNDPROC
+
+.. autoclass:: LPPROC_THREAD_ATTRIBUTE_LIST
+
+.. autoclass:: PPS_POST_PROCESS_INIT_ROUTINE
+
+.. autoclass:: LPTHREAD_START_ROUTINE
+
+.. autoclass:: WNDENUMPROC
+
+.. autoclass:: PHANDLER_ROUTINE
+
+.. autoclass:: FARPROC
+
+.. autoclass:: PIO_APC_ROUTINE
+
+.. autoclass:: PVECTORED_EXCEPTION_HANDLER
+
+.. autoclass:: PFN_CRYPT_GET_SIGNER_CERTIFICATE
+
+.. autoclass:: LPCONTEXT
+
+.. autoclass:: HCERTSTORE
+
+.. autoclass:: HCRYPTMSG
+
+.. autoclass:: PALPC_PORT_ATTRIBUTES
+
+.. autoclass:: PPORT_MESSAGE
+
 WinEnums
 --------
 _CALLFRAME_COPY
@@ -13086,6 +14240,335 @@ tagMSHLFLAGS
 
 
     .. attribute:: MSHLFLAGS_NOPING(4)
+
+tagCALLFRAME_WALK
+'''''''''''''''''
+.. class:: CALLFRAME_WALK
+
+    Alias for :class:`tagCALLFRAME_WALK`
+
+
+.. class:: tagCALLFRAME_WALK
+
+
+    .. attribute:: CALLFRAME_WALK_IN(1)
+
+
+    .. attribute:: CALLFRAME_WALK_INOUT(2)
+
+
+    .. attribute:: CALLFRAME_WALK_OUT(4)
+
+_PROCESS_MITIGATION_POLICY
+''''''''''''''''''''''''''
+.. class:: PROCESS_MITIGATION_POLICY
+
+    Alias for :class:`_PROCESS_MITIGATION_POLICY`
+
+
+.. class:: PPROCESS_MITIGATION_POLICY
+
+    Pointer to :class:`_PROCESS_MITIGATION_POLICY`
+
+
+.. class:: _PROCESS_MITIGATION_POLICY
+
+
+    .. attribute:: ProcessDEPPolicy(0)
+
+
+    .. attribute:: ProcessASLRPolicy(1)
+
+
+    .. attribute:: ProcessDynamicCodePolicy(2)
+
+
+    .. attribute:: ProcessStrictHandleCheckPolicy(3)
+
+
+    .. attribute:: ProcessSystemCallDisablePolicy(4)
+
+
+    .. attribute:: ProcessMitigationOptionsMask(5)
+
+
+    .. attribute:: ProcessExtensionPointDisablePolicy(6)
+
+
+    .. attribute:: ProcessReserved1Policy(7)
+
+
+    .. attribute:: ProcessSignaturePolicy(8)
+
+
+    .. attribute:: MaxProcessMitigationPolicy(9)
+
+_KEY_VALUE_INFORMATION_CLASS
+''''''''''''''''''''''''''''
+.. class:: KEY_VALUE_INFORMATION_CLASS
+
+    Alias for :class:`_KEY_VALUE_INFORMATION_CLASS`
+
+
+.. class:: _KEY_VALUE_INFORMATION_CLASS
+
+
+    .. attribute:: KeyValueBasicInformation(0)
+
+
+    .. attribute:: KeyValueFullInformation(1)
+
+
+    .. attribute:: KeyValuePartialInformation(2)
+
+
+    .. attribute:: KeyValueFullInformationAlign64(3)
+
+
+    .. attribute:: KeyValuePartialInformationAlign64(4)
+
+
+    .. attribute:: KeyValueLayerInformation(5)
+
+
+    .. attribute:: MaxKeyValueInfoClass(6)
+
+_TASK_ACTION_TYPE
+'''''''''''''''''
+.. class:: TASK_ACTION_TYPE
+
+    Alias for :class:`_TASK_ACTION_TYPE`
+
+
+.. class:: _TASK_ACTION_TYPE
+
+
+    .. attribute:: TASK_ACTION_EXEC(0)
+
+
+    .. attribute:: TASK_ACTION_COM_HANDLER(5)
+
+
+    .. attribute:: TASK_ACTION_SEND_EMAIL(6)
+
+
+    .. attribute:: TASK_ACTION_SHOW_MESSAGE(7)
+
+_TASK_RUNLEVEL_TYPE
+'''''''''''''''''''
+.. class:: TASK_RUNLEVEL_TYPE
+
+    Alias for :class:`_TASK_RUNLEVEL_TYPE`
+
+
+.. class:: _TASK_RUNLEVEL_TYPE
+
+
+    .. attribute:: TASK_RUNLEVEL_LUA(0)
+
+
+    .. attribute:: TASK_RUNLEVEL_HIGHEST(1)
+
+_TASK_LOGON_TYPE
+''''''''''''''''
+.. class:: TASK_LOGON_TYPE
+
+    Alias for :class:`_TASK_LOGON_TYPE`
+
+
+.. class:: _TASK_LOGON_TYPE
+
+
+    .. attribute:: TASK_LOGON_NONE(0)
+
+
+    .. attribute:: TASK_LOGON_PASSWORD(1)
+
+
+    .. attribute:: TASK_LOGON_S4U(2)
+
+
+    .. attribute:: TASK_LOGON_INTERACTIVE_TOKEN(3)
+
+
+    .. attribute:: TASK_LOGON_GROUP(4)
+
+
+    .. attribute:: TASK_LOGON_SERVICE_ACCOUNT(5)
+
+
+    .. attribute:: TASK_LOGON_INTERACTIVE_TOKEN_OR_PASSWORD(6)
+
+_TASK_STATE
+'''''''''''
+.. class:: TASK_STATE
+
+    Alias for :class:`_TASK_STATE`
+
+
+.. class:: _TASK_STATE
+
+
+    .. attribute:: TASK_STATE_UNKNOWN(0)
+
+
+    .. attribute:: TASK_STATE_DISABLED(1)
+
+
+    .. attribute:: TASK_STATE_QUEUED(2)
+
+
+    .. attribute:: TASK_STATE_READY(3)
+
+
+    .. attribute:: TASK_STATE_RUNNING(4)
+
+_TASK_INSTANCES_POLICY
+''''''''''''''''''''''
+.. class:: TASK_INSTANCES_POLICY
+
+    Alias for :class:`_TASK_INSTANCES_POLICY`
+
+
+.. class:: _TASK_INSTANCES_POLICY
+
+
+    .. attribute:: TASK_INSTANCES_PARALLEL(0)
+
+
+    .. attribute:: TASK_INSTANCES_QUEUE(1)
+
+
+    .. attribute:: TASK_INSTANCES_IGNORE_NEW(2)
+
+
+    .. attribute:: TASK_INSTANCES_STOP_EXISTING(3)
+
+_TASK_COMPATIBILITY
+'''''''''''''''''''
+.. class:: TASK_COMPATIBILITY
+
+    Alias for :class:`_TASK_COMPATIBILITY`
+
+
+.. class:: _TASK_COMPATIBILITY
+
+
+    .. attribute:: TASK_COMPATIBILITY_AT(0)
+
+
+    .. attribute:: TASK_COMPATIBILITY_V1(1)
+
+
+    .. attribute:: TASK_COMPATIBILITY_V2(2)
+
+_TASK_TRIGGER_TYPE2
+'''''''''''''''''''
+.. class:: TASK_TRIGGER_TYPE2
+
+    Alias for :class:`_TASK_TRIGGER_TYPE2`
+
+
+.. class:: _TASK_TRIGGER_TYPE2
+
+
+    .. attribute:: TASK_TRIGGER_EVENT(0)
+
+
+    .. attribute:: TASK_TRIGGER_TIME(1)
+
+
+    .. attribute:: TASK_TRIGGER_DAILY(2)
+
+
+    .. attribute:: TASK_TRIGGER_WEEKLY(3)
+
+
+    .. attribute:: TASK_TRIGGER_MONTHLY(4)
+
+
+    .. attribute:: TASK_TRIGGER_MONTHLYDOW(5)
+
+
+    .. attribute:: TASK_TRIGGER_IDLE(6)
+
+
+    .. attribute:: TASK_TRIGGER_REGISTRATION(7)
+
+
+    .. attribute:: TASK_TRIGGER_BOOT(8)
+
+
+    .. attribute:: TASK_TRIGGER_LOGON(9)
+
+
+    .. attribute:: TASK_TRIGGER_SESSION_STATE_CHANGE(11)
+
+_TASK_ENUM_FLAGS
+''''''''''''''''
+.. class:: TASK_ENUM_FLAGS
+
+    Alias for :class:`_TASK_ENUM_FLAGS`
+
+
+.. class:: _TASK_ENUM_FLAGS
+
+
+    .. attribute:: TASK_ENUM_HIDDEN(1)
+
+_TASK_CREATION
+''''''''''''''
+.. class:: TASK_CREATION
+
+    Alias for :class:`_TASK_CREATION`
+
+
+.. class:: _TASK_CREATION
+
+
+    .. attribute:: TASK_VALIDATE_ONLY(1)
+
+
+    .. attribute:: TASK_CREATE(2)
+
+
+    .. attribute:: TASK_UPDATE(4)
+
+
+    .. attribute:: TASK_CREATE_OR_UPDATE(6)
+
+
+    .. attribute:: TASK_DISABLE(8)
+
+
+    .. attribute:: TASK_DONT_ADD_PRINCIPAL_ACE(16)
+
+
+    .. attribute:: TASK_IGNORE_REGISTRATION_TRIGGERS(32)
+
+TASK_RUN_FLAGS
+''''''''''''''
+.. class:: TASK_RUN_FLAGS
+
+    Alias for :class:`TASK_RUN_FLAGS`
+
+
+.. class:: TASK_RUN_FLAGS
+
+
+    .. attribute:: TASK_RUN_NO_FLAGS(0)
+
+
+    .. attribute:: TASK_RUN_AS_SELF(1)
+
+
+    .. attribute:: TASK_RUN_IGNORE_CONSTRAINTS(2)
+
+
+    .. attribute:: TASK_RUN_USE_SESSION_ID(4)
+
+
+    .. attribute:: TASK_RUN_USER_SID(8)
 
 _SYSTEM_INFORMATION_CLASS
 '''''''''''''''''''''''''

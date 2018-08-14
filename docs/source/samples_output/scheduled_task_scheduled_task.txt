@@ -1,0 +1,32 @@
+(cmd) python scheduled_tasks\scheduled_task.py
+Task scheduler is <TaskService at 0x6f2a1c0>
+Root folder is <TaskFolder "\" at 0x6f2a2b0>
+Listing sub folders
+   * <TaskFolder "\ASUS" at 0x6f2a350>
+   * <TaskFolder "\Intel" at 0x6f2a300>
+   * <TaskFolder "\Microsoft" at 0x6f2a3a0>
+Manually opening subfolder <\Microsoft\Windows\AppID>
+Working into <TaskFolder "\Microsoft\Windows\AppID" at 0x6f2a3f0>
+   * PolicyConverter
+   * SmartScreenSpecific
+   * VerifiedPublisherCertStoreCheck
+
+Analysing task <Task "VerifiedPublisherCertStoreCheck" at 0x6f2a300>
+   * Name: <VerifiedPublisherCertStoreCheck>
+   * Path: <\Microsoft\Windows\AppID\VerifiedPublisherCertStoreCheck>
+   * Definition: <<TaskDefinition at 0x6f2a3a0>>
+Listing actions:
+   * Action: <<ExecAction at 0x6f2a350>>
+     * Type: <TASK_ACTION_EXEC(0x0L)>
+     * path: <%windir%\system32\appidcertstorecheck.exe>
+     * arguments: <None>
+Listing triggers:
+   * Trigger type: <TASK_TRIGGER_BOOT(0x8L)>
+
+Creating folder <PFW_DEMO_FOLDER>
+Demo folder is <TaskFolder "\PFW_DEMO_FOLDER" at 0x6f2a3a0>
+Creating Task definition
+Registering task definition as <PFW_DEMO_TASK> in <<TaskFolder "\PFW_DEMO_FOLDER" at 0x6f2a3a0>>
+Created task is <Task "PFW_DEMO_TASK" at 0x6f2a530>
+Deleting the demo task
+Deleting the demo folder

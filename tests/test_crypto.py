@@ -116,7 +116,7 @@ def test_certificate(rawcert):
     assert cert.serial == '1b 8e 94 cb 0b 3e eb b6 41 39 f3 c9 09 b1 6b 46'
     assert cert.name == 'PythonForWindowsTest'
     assert cert.issuer == 'PythonForWindowsTest'
-    assert cert.thumprint == 'EF 0C A8 C9 F9 E0 96 AF 74 18 56 8B C1 C9 57 27 A0 89 29 6A'
+    assert cert.thumbprint == 'EF 0C A8 C9 F9 E0 96 AF 74 18 56 8B C1 C9 57 27 A0 89 29 6A'
     assert cert.encoded == rawcert
     assert cert.version == 2
     assert cert == cert
@@ -194,5 +194,30 @@ def test_crypt_obj():
 
 def test_certificate_from_store():
     return windows.crypto.CertificateStore.from_system_store("Root")
+
+
+def test_sign_verify(rawcert, rawpfx):
+    message_to_sign = "Testing message \xff\x01"
+    # Load PFX (priv+pub key) & certif (pubkey only)
+    pfx = windows.crypto.import_pfx(rawpfx, TEST_PFX_PASSWORD)
+    cert = windows.crypto.Certificate.from_buffer(rawcert)
+    signed_blob = windows.crypto.sign(pfx.certs[0], message_to_sign)
+    assert message_to_sign in signed_blob
+    decoded_blob = windows.crypto.verify_signature(cert, signed_blob)
+    assert decoded_blob == message_to_sign
+
+
+def test_sign_verify_fail(rawcert, rawpfx):
+    message_to_sign = "Testing message \xff\x01"
+    # Load PFX (priv+pub key) & certif (pubkey only)
+    pfx = windows.crypto.import_pfx(rawpfx, TEST_PFX_PASSWORD)
+    cert = windows.crypto.Certificate.from_buffer(rawcert)
+    signed_blob = windows.crypto.sign(pfx.certs[0], message_to_sign)
+    assert message_to_sign in signed_blob
+    # Tamper the signed mesasge content
+    signed_blob = signed_blob.replace("message", "massage")
+    with pytest.raises(windows.winproxy.Kernel32Error) as excinfo:
+        decoded_blob = windows.crypto.verify_signature(cert, signed_blob)
+    assert excinfo.value.winerror == gdef.STATUS_INVALID_SIGNATURE
 
 

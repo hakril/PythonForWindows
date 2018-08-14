@@ -1,0 +1,315 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>2.12. Object Manager – Kernel objects &#8212; PythonForWindows 0.4 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/css/mbasic.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="2.13. Task scheduler" href="task_scheduler.html" />
+    <link rel="prev" title="2.11. System Module – Loaded kernel modules" href="system_module.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="task_scheduler.html" title="2.13. Task scheduler"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="system_module.html" title="2.11. System Module – Loaded kernel modules"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.4 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="winobject.html" accesskey="U">2. The <code class="docutils literal notranslate"><span class="pre">windows</span></code> objects</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-windows.winobject.object_manager">
+<span id="object-manager-kernel-objects"></span><h1>2.12. Object Manager – Kernel objects<a class="headerlink" href="#module-windows.winobject.object_manager" title="Permalink to this headline">¶</a></h1>
+<p>The <a class="reference internal" href="#windows.winobject.object_manager.ObjectManager" title="windows.winobject.object_manager.ObjectManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectManager</span></code></a> instance is accessible via <a class="reference internal" href="windows.html#windows.winobject.system.System.object_manager" title="windows.winobject.system.System.object_manager"><code class="xref py py-attr docutils literal notranslate"><span class="pre">windows.system.object_manager</span></code></a></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">See sample at <a class="reference internal" href="sample.html#sample-object-manager"><span class="std std-ref">Object manager</span></a></p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This API have not been tested on real cases yet and may be subject to changes.</p>
+</div>
+<div class="section" id="objectmanager">
+<h2>2.12.1. ObjectManager<a class="headerlink" href="#objectmanager" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="windows.winobject.object_manager.ObjectManager">
+<em class="property">class </em><code class="descclassname">windows.winobject.object_manager.</code><code class="descname">ObjectManager</code><a class="reference internal" href="_modules/windows/winobject/object_manager.html#ObjectManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.object_manager.ObjectManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represent the object manager.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">For now, it only offers the <code class="docutils literal notranslate"><span class="pre">root</span></code> <a class="reference internal" href="#windows.winobject.object_manager.KernelObject" title="windows.winobject.object_manager.KernelObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">KernelObject</span></code></a>. But I want a <code class="docutils literal notranslate"><span class="pre">manager</span></code> object accessible
+from <code class="docutils literal notranslate"><span class="pre">windows.system</span></code> just like other API and not directly the <code class="docutils literal notranslate"><span class="pre">root</span></code> directory.</p>
+</div>
+<dl class="method">
+<dt id="windows.winobject.object_manager.ObjectManager.__getitem__">
+<code class="descname">__getitem__</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/object_manager.html#ObjectManager.__getitem__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.object_manager.ObjectManager.__getitem__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Query <code class="docutils literal notranslate"><span class="pre">name</span></code> from the root <code class="docutils literal notranslate"><span class="pre">\</span></code> directory:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">object_manager</span><span class="p">[</span><span class="s2">&quot;RPC Control&quot;</span><span class="p">][</span><span class="s2">&quot;lsasspirpc&quot;</span><span class="p">]</span>
+<span class="n">object_manager</span><span class="p">[</span><span class="sa">r</span><span class="s2">&quot;\RPC Control\lsasspirpc&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.object_manager.KernelObject" title="windows.winobject.object_manager.KernelObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">KernelObject</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.object_manager.ObjectManager.root">
+<code class="descname">root</code><a class="headerlink" href="#windows.winobject.object_manager.ObjectManager.root" title="Permalink to this definition">¶</a></dt>
+<dd><p>The root <code class="docutils literal notranslate"><span class="pre">\</span></code> Directory</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.object_manager.KernelObject" title="windows.winobject.object_manager.KernelObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">KernelObject</span></code></a> – The root <a class="reference internal" href="#windows.winobject.object_manager.KernelObject" title="windows.winobject.object_manager.KernelObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">KernelObject</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="kernelobject">
+<h2>2.12.2. KernelObject<a class="headerlink" href="#kernelobject" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="windows.winobject.object_manager.KernelObject">
+<em class="property">class </em><code class="descclassname">windows.winobject.object_manager.</code><code class="descname">KernelObject</code><span class="sig-paren">(</span><em>path</em>, <em>name</em>, <em>type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/object_manager.html#KernelObject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.object_manager.KernelObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represent an object in the Object Manager namespace</p>
+<dl class="method">
+<dt id="windows.winobject.object_manager.KernelObject.__getitem__">
+<code class="descname">__getitem__</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/object_manager.html#KernelObject.__getitem__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.object_manager.KernelObject.__getitem__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Query object <code class="docutils literal notranslate"><span class="pre">name</span></code> from the directory, split and subquery on <code class="docutils literal notranslate"><span class="pre">\</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span>
+<span class="go">&lt;KernelObject &quot;\Windows&quot; (type=&quot;Directory&quot;)&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;WindowStations&quot;</span><span class="p">][</span><span class="s2">&quot;WinSta0&quot;</span><span class="p">]</span>
+<span class="go">&lt;KernelObject &quot;\Windows\WindowStations&quot; (type=&quot;Directory&quot;)&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;WindowStations\WinSta0&quot;</span><span class="p">]</span>
+<span class="go">&lt;KernelObject &quot;\Windows\WindowStations&quot; (type=&quot;Directory&quot;)&gt;</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.object_manager.KernelObject" title="windows.winobject.object_manager.KernelObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">KernelObject</span></code></a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raise:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">KeyError</span></code> if <code class="docutils literal notranslate"><span class="pre">name</span></code> can not be found.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.object_manager.KernelObject.__iter__">
+<code class="descname">__iter__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/object_manager.html#KernelObject.__iter__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.object_manager.KernelObject.__iter__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iter over the list of name in the Directory object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Yield:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> – The names of objects in the directory.</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">the <a class="reference internal" href="#windows.winobject.object_manager.KernelObject" title="windows.winobject.object_manager.KernelObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">KernelObject</span></code></a> must be of type <code class="docutils literal notranslate"><span class="pre">Directory</span></code> or
+it will raise <code class="xref py py-class docutils literal notranslate"><span class="pre">NtStatusException</span></code> with
+code <a class="reference internal" href="ntstatus_generated.html#windows.generated_def.STATUS_OBJECT_TYPE_MISMATCH" title="windows.generated_def.STATUS_OBJECT_TYPE_MISMATCH"><code class="xref py py-data docutils literal notranslate"><span class="pre">STATUS_OBJECT_TYPE_MISMATCH</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.object_manager.KernelObject.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/object_manager.html#KernelObject.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.object_manager.KernelObject.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the object <code class="docutils literal notranslate"><span class="pre">name</span></code> in the current directory.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.object_manager.KernelObject" title="windows.winobject.object_manager.KernelObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">KernelObject</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.object_manager.KernelObject.items">
+<code class="descname">items</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/object_manager.html#KernelObject.items"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.object_manager.KernelObject.items" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the list of tuple (object’s name, object) in the current directory object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">[(<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference internal" href="#windows.winobject.object_manager.KernelObject" title="windows.winobject.object_manager.KernelObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">KernelObject</span></code></a>)] – A list of tuple</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">the <a class="reference internal" href="#windows.winobject.object_manager.KernelObject" title="windows.winobject.object_manager.KernelObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">KernelObject</span></code></a> must be of type <code class="docutils literal notranslate"><span class="pre">Directory</span></code> or
+it will raise <code class="xref py py-class docutils literal notranslate"><span class="pre">NtStatusException</span></code> with
+code <a class="reference internal" href="ntstatus_generated.html#windows.generated_def.STATUS_OBJECT_TYPE_MISMATCH" title="windows.generated_def.STATUS_OBJECT_TYPE_MISMATCH"><code class="xref py py-data docutils literal notranslate"><span class="pre">STATUS_OBJECT_TYPE_MISMATCH</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.object_manager.KernelObject.keys">
+<code class="descname">keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/object_manager.html#KernelObject.keys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.object_manager.KernelObject.keys" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the list of objects’ name in the current directory object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">[<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>] – A list of name</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">the <a class="reference internal" href="#windows.winobject.object_manager.KernelObject" title="windows.winobject.object_manager.KernelObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">KernelObject</span></code></a> must be of type <code class="docutils literal notranslate"><span class="pre">Directory</span></code> or
+it will raise <code class="xref py py-class docutils literal notranslate"><span class="pre">NtStatusException</span></code> with
+code <a class="reference internal" href="ntstatus_generated.html#windows.generated_def.STATUS_OBJECT_TYPE_MISMATCH" title="windows.generated_def.STATUS_OBJECT_TYPE_MISMATCH"><code class="xref py py-data docutils literal notranslate"><span class="pre">STATUS_OBJECT_TYPE_MISMATCH</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.object_manager.KernelObject.target">
+<code class="descname">target</code><a class="headerlink" href="#windows.winobject.object_manager.KernelObject.target" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resolve the target of a symbolic link object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> or None if object is not a link</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.object_manager.KernelObject.values">
+<code class="descname">values</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/object_manager.html#KernelObject.values"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.object_manager.KernelObject.values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the list of objects in the current directory object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">[<a class="reference internal" href="#windows.winobject.object_manager.KernelObject" title="windows.winobject.object_manager.KernelObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">KernelObject</span></code></a>] – A list of object</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">the <a class="reference internal" href="#windows.winobject.object_manager.KernelObject" title="windows.winobject.object_manager.KernelObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">KernelObject</span></code></a> must be of type <code class="docutils literal notranslate"><span class="pre">Directory</span></code> or
+it will raise <code class="xref py py-class docutils literal notranslate"><span class="pre">NtStatusException</span></code> with
+code <a class="reference internal" href="ntstatus_generated.html#windows.generated_def.STATUS_OBJECT_TYPE_MISMATCH" title="windows.generated_def.STATUS_OBJECT_TYPE_MISMATCH"><code class="xref py py-data docutils literal notranslate"><span class="pre">STATUS_OBJECT_TYPE_MISMATCH</span></code></a></p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">2.12. Object Manager – Kernel objects</a><ul>
+<li><a class="reference internal" href="#objectmanager">2.12.1. ObjectManager</a></li>
+<li><a class="reference internal" href="#kernelobject">2.12.2. KernelObject</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="system_module.html"
+                        title="previous chapter">2.11. System Module – Loaded kernel modules</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="task_scheduler.html"
+                        title="next chapter">2.13. Task scheduler</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/object_manager.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="task_scheduler.html" title="2.13. Task scheduler"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="system_module.html" title="2.11. System Module – Loaded kernel modules"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.4 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="winobject.html" >2. The <code class="docutils literal notranslate"><span class="pre">windows</span></code> objects</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2015, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

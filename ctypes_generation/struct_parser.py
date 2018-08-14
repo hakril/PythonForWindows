@@ -1,18 +1,27 @@
 import dummy_wintypes
 import itertools
-from winstruct import WinStruct, WinUnion, WinStructType, Ptr, WinEnum
+from winstruct import WinStruct, WinUnion, WinStructType, Ptr, WinEnum, BitFieldValue
 from simpleparser import *
+
+
 
 class WinStructParser(Parser):
     def __init__(self, *args, **kwargs):
         super(WinStructParser, self).__init__(*args, **kwargs)
         self.pack = None
 
-    def parse_array(self, ):
-        self.assert_token_type(OpenSquareBracketToken)
-        number = self.assert_token_type(NameToken).value
-        self.assert_token_type(CloseSquareBracketToken)
-        return number
+    def parse_array_or_bitfield(self):
+        if type(self.peek()) == OpenSquareBracketToken:
+            # Array
+            self.assert_token_type(OpenSquareBracketToken)
+            number = self.assert_token_type(NameToken).value
+            self.assert_token_type(CloseSquareBracketToken)
+            return number
+        # Bitfield
+        self.assert_token_type(ColonToken)
+        nb_bits = self.promote_to_int(self.next_token())
+        return BitFieldValue(nb_bits)
+
 
     def parse_def(self):
         if self.peek() == KeywordToken("struct"):
@@ -26,16 +35,16 @@ class WinStructParser(Parser):
 
         def_name = self.assert_token_type(NameToken)
 
-        if type(self.peek()) == ColonToken:
+        if type(self.peek()) == SemiColonToken:
             self.next_token()
             return (def_type, def_name, 1)
 
-        number_rep = self.parse_array()
-        self.assert_token_type(ColonToken)
+        number_rep = self.parse_array_or_bitfield()
+        self.assert_token_type(SemiColonToken)
         return (def_type, def_name, number_rep)
 
     def parse_typedef(self, struct):
-        if type(self.peek()) == ColonToken: # Just a ; no typedef
+        if type(self.peek()) == SemiColonToken: # Just a ; no typedef
             self.next_token()
             return
         sep = CommaToken()
@@ -50,12 +59,19 @@ class WinStructParser(Parser):
                 name = self.assert_token_type(NameToken)
             add_to_typedef(name.value)
             sep = self.next_token()
-        self.assert_token_type(ColonToken, sep)
+        self.assert_token_type(SemiColonToken, sep)
 
-    def parse_enum(self):
+    def parse_enum(self, is_typedef):
         """Handle enum typedef with no value assignement and 1 typedef after"""
-        enum_name = self.assert_token_type(NameToken).value
-        res_enum = WinEnum(enum_name)
+        if not type(self.peek()) == OpenBracketToken:
+            # Not an ANON enum
+            enum_name = self.assert_token_type(NameToken).value
+            res_enum = WinEnum(enum_name)
+        else:
+            if not is_typedef:
+                raise ValueError("Anonymous union not in a typedef")
+            res_enum = WinEnum(None)
+
         self.assert_token_type(OpenBracketToken)
         count = itertools.count()
         assigned_value = False
@@ -80,9 +96,8 @@ class WinStructParser(Parser):
         self.parse_typedef(res_enum)
         #other_name = self.assert_token_type(NameToken).value
         #res_enum.add_typedef(other_name)
-        #self.assert_token_type(ColonToken)
+        #self.assert_token_type(SemiColonToken)
         return res_enum
-
 
 
     def parse_winstruct(self):
@@ -94,17 +109,24 @@ class WinStructParser(Parser):
 
         def_type = self.assert_token_type(KeywordToken)
         if def_type.value == "enum":
-            return self.parse_enum()
+            return self.parse_enum(is_typedef)
         if def_type.value == "struct":
             WinDefType = WinStruct
         elif def_type.value == "union":
             WinDefType = WinUnion
         else:
             raise ParsingError("Expecting union or struct got <{0}> instead".format(def_type.value))
-        struct_name = self.assert_token_type(NameToken)
+        if not type(self.peek()) == OpenBracketToken:
+            # Not an anonymous structure def
+            struct_name = self.assert_token_type(NameToken).value
+        else:
+            # Anonymous structure def: check if we are ina  typedef
+            if not is_typedef:
+                raise ValueError("Anonymous structure/union not in a typedef")
+            struct_name = None #
         self.assert_token_type(OpenBracketToken)
 
-        result = WinDefType(struct_name.value, self.pack)
+        result = WinDefType(struct_name, self.pack)
 
         while type(self.peek()) != CloseBracketToken:
             tok_type, tok_name, nb_rep = self.parse_def()
@@ -113,7 +135,7 @@ class WinStructParser(Parser):
         if is_typedef:
             self.parse_typedef(result)
         else:
-            self.assert_token_type(ColonToken)
+            self.assert_token_type(SemiColonToken)
         return result
 
     def parse(self):

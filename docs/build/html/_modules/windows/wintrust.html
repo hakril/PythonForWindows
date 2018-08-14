@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/css/mbasic.css" type="text/css" />
-    <script type="text/javascript" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
@@ -57,6 +57,7 @@
 <span class="n">TRUST_E_SUBJECT_FORM_UNKNOWN</span><span class="p">,</span>
 <span class="n">DIGSIG_E_ENCODE</span><span class="p">,</span>
 <span class="n">TRUST_E_SUBJECT_NOT_TRUSTED</span><span class="p">,</span>
+<span class="n">TRUST_E_BAD_DIGEST</span><span class="p">,</span>
 <span class="n">DIGSIG_E_DECODE</span><span class="p">,</span>
 <span class="n">DIGSIG_E_EXTENSIBILITY</span><span class="p">,</span>
 <span class="n">PERSIST_E_SIZEDEFINITE</span><span class="p">,</span>
@@ -116,8 +117,8 @@
 
     <span class="n">x</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">WinVerifyTrust</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">WVTPolicyGUID</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">win_trust_data</span><span class="p">))</span>
     <span class="n">win_trust_data</span><span class="o">.</span><span class="n">dwStateAction</span> <span class="o">=</span> <span class="n">WTD_STATEACTION_CLOSE</span>
-    <span class="n">winproxy</span><span class="o">.</span><span class="n">WinVerifyTrust</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">WVTPolicyGUID</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">win_trust_data</span><span class="p">))</span></div>
-    <span class="k">return</span> <span class="n">wintrust_return_value_mapper</span><span class="p">[</span><span class="n">x</span> <span class="o">&amp;</span> <span class="mh">0xffffffff</span><span class="p">]</span>
+    <span class="n">winproxy</span><span class="o">.</span><span class="n">WinVerifyTrust</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">WVTPolicyGUID</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">win_trust_data</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">wintrust_return_value_mapper</span><span class="p">[</span><span class="n">x</span> <span class="o">&amp;</span> <span class="mh">0xffffffff</span><span class="p">]</span></div>
 
 
 <span class="k">def</span> <span class="nf">get_catalog_for_filename</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
@@ -157,6 +158,28 @@
         <span class="k">raise</span>
     <span class="k">return</span> <span class="n">buffer</span>
 
+<span class="k">def</span> <span class="nf">get_file_hash2</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span>
+    <span class="n">handle</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">get_handle_from_file</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+    <span class="n">cathand</span> <span class="o">=</span> <span class="n">HANDLE</span><span class="p">()</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CryptCATAdminAcquireContext2</span><span class="p">(</span><span class="n">cathand</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;SHA256&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">cathand</span><span class="p">)</span>
+
+    <span class="n">size</span> <span class="o">=</span> <span class="n">DWORD</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CryptCATAdminCalcHashFromFileHandle2</span><span class="p">(</span><span class="n">cathand</span><span class="p">,</span> <span class="n">handle</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">size</span><span class="p">),</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">buffer</span> <span class="o">=</span> <span class="p">(</span><span class="n">BYTE</span> <span class="o">*</span> <span class="n">size</span><span class="o">.</span><span class="n">value</span><span class="p">)()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CryptCATAdminCalcHashFromFileHandle2</span><span class="p">(</span><span class="n">cathand</span><span class="p">,</span> <span class="n">handle</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">size</span><span class="p">),</span> <span class="n">buffer</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">winerror</span> <span class="o">==</span> <span class="mi">1006</span><span class="p">:</span>
+            <span class="c1"># CryptCATAdminCalcHashFromFileHandle: [Error 1006]</span>
+            <span class="c1"># The volume for a file has been externally altered so that the opened file is no longer valid.</span>
+            <span class="c1"># (returned for empty file)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">raise</span>
+    <span class="k">return</span> <span class="n">buffer</span>
+
 
 <span class="k">def</span> <span class="nf">get_catalog_name_from_handle</span><span class="p">(</span><span class="n">handle</span><span class="p">):</span>
     <span class="n">cat_info</span> <span class="o">=</span> <span class="n">CATALOG_INFO</span><span class="p">()</span>
@@ -185,8 +208,8 @@
     <span class="n">catalog</span> <span class="o">=</span> <span class="n">get_catalog_for_filename</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">catalog</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">SignatureData</span><span class="p">(</span><span class="n">signed</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">check_sign</span><span class="p">)</span>
-    <span class="n">catalogsigned</span> <span class="o">=</span> <span class="ow">not</span> <span class="nb">bool</span><span class="p">(</span><span class="n">check_signature</span><span class="p">(</span><span class="n">catalog</span><span class="p">))</span></div>
-    <span class="k">return</span> <span class="n">SignatureData</span><span class="p">(</span><span class="n">signed</span><span class="p">,</span> <span class="n">catalog</span><span class="p">,</span> <span class="n">catalogsigned</span><span class="p">,</span> <span class="n">check_sign</span><span class="p">)</span>
+    <span class="n">catalogsigned</span> <span class="o">=</span> <span class="ow">not</span> <span class="nb">bool</span><span class="p">(</span><span class="n">check_signature</span><span class="p">(</span><span class="n">catalog</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">SignatureData</span><span class="p">(</span><span class="n">signed</span><span class="p">,</span> <span class="n">catalog</span><span class="p">,</span> <span class="n">catalogsigned</span><span class="p">,</span> <span class="n">check_sign</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="is_signed"><a class="viewcode-back" href="../../wintrust.html#windows.wintrust.is_signed">[docs]</a><span class="k">def</span> <span class="nf">is_signed</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Check if ``filename`` is signed:</span>
@@ -202,8 +225,8 @@
     <span class="n">catalog</span> <span class="o">=</span> <span class="n">get_catalog_for_filename</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">catalog</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">False</span>
-    <span class="n">catalogsigned</span> <span class="o">=</span> <span class="ow">not</span> <span class="nb">bool</span><span class="p">(</span><span class="n">check_signature</span><span class="p">(</span><span class="n">catalog</span><span class="p">))</span></div>
-    <span class="k">return</span> <span class="n">catalogsigned</span>
+    <span class="n">catalogsigned</span> <span class="o">=</span> <span class="ow">not</span> <span class="nb">bool</span><span class="p">(</span><span class="n">check_signature</span><span class="p">(</span><span class="n">catalog</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">catalogsigned</span></div>
 </pre></div>
 
           </div>
@@ -242,7 +265,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
     </div>
   </body>
 </html>

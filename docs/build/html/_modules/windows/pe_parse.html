@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/css/mbasic.css" type="text/css" />
-    <script type="text/javascript" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
@@ -449,8 +449,8 @@
     <span class="n">transformers</span> <span class="o">=</span> <span class="n">get_structure_transformer_for_target</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">targetedbitness</span><span class="p">)</span>
     <span class="c1">#ctypes_structure_transformer, create_structure_at = transformers</span>
     <span class="n">transfor_funcs</span> <span class="o">=</span> <span class="n">CtypesStructureTransformers</span><span class="p">(</span><span class="o">*</span><span class="n">transformers</span><span class="p">)</span>  <span class="c1"># TODO: rename</span>
-</div>
-    <span class="k">return</span> <span class="n">PEFile</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">baseaddr</span><span class="p">,</span> <span class="n">targetedbitness</span><span class="p">,</span> <span class="n">transfor_funcs</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">PEFile</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">baseaddr</span><span class="p">,</span> <span class="n">targetedbitness</span><span class="p">,</span> <span class="n">transfor_funcs</span><span class="p">)</span></div>
 
 
 <span class="k">class</span> <span class="nc">THUNK_DATA</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">Union</span><span class="p">):</span>
@@ -552,8 +552,8 @@
         <span class="kn">import</span> <span class="nn">weakref</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">whook</span> <span class="o">=</span> <span class="n">weakref</span><span class="o">.</span><span class="n">ref</span><span class="p">(</span><span class="n">hook</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_destroy</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">hook</span> <span class="o">=</span> <span class="n">hook</span>
-        <span class="n">hook</span><span class="o">.</span><span class="n">enable</span><span class="p">()</span></div>
-        <span class="k">return</span> <span class="n">hook</span>
+        <span class="n">hook</span><span class="o">.</span><span class="n">enable</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">hook</span></div>
 
     <span class="k">def</span> <span class="nf">on_destroy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
         <span class="c1"># We cannot know if the hook was enabled here..</span>
@@ -566,8 +566,8 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hook</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">hook</span><span class="o">.</span><span class="n">disable</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">hook</span> <span class="o">=</span> <span class="kc">None</span></div></div>
-        <span class="k">return</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hook</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="kc">True</span></div></div>
 
     <span class="c1"># def __del__(self):</span>
         <span class="c1"># print(self.hook)</span>
@@ -790,8 +790,8 @@
                     <span class="n">iat_entry</span><span class="o">.</span><span class="n">ord</span> <span class="o">=</span> <span class="nb">ord</span>
                     <span class="n">iat_entry</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span> <span class="k">if</span> <span class="n">name</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
             <span class="n">name</span> <span class="o">=</span> <span class="n">get_string</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">baseaddr</span> <span class="o">+</span> <span class="n">import_descriptor</span><span class="o">.</span><span class="n">Name</span><span class="p">)</span>
-            <span class="n">res</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="p">[])</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">IAT</span><span class="p">)</span></div>
-        <span class="k">return</span> <span class="n">res</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="p">[])</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">IAT</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">res</span></div>
 </pre></div>
 
           </div>
@@ -830,7 +830,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
     </div>
   </body>
 </html>

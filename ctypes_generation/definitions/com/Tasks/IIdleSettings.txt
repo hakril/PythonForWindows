@@ -1,0 +1,79 @@
+typedef struct IIdleSettingsVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IIdleSettings * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            __RPC__deref_out  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IIdleSettings * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IIdleSettings * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IIdleSettings * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IIdleSettings * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IIdleSettings * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IIdleSettings * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_IdleDuration )( 
+            IIdleSettings * This,
+            /* [retval][out] */ BSTR *pDelay);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_IdleDuration )( 
+            IIdleSettings * This,
+            /* [in] */ BSTR delay);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_WaitTimeout )( 
+            IIdleSettings * This,
+            /* [retval][out] */ BSTR *pTimeout);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_WaitTimeout )( 
+            IIdleSettings * This,
+            /* [in] */ BSTR timeout);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_StopOnIdleEnd )( 
+            IIdleSettings * This,
+            /* [retval][out] */ VARIANT_BOOL *pStop);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_StopOnIdleEnd )( 
+            IIdleSettings * This,
+            /* [in] */ VARIANT_BOOL stop);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_RestartOnIdle )( 
+            IIdleSettings * This,
+            /* [retval][out] */ VARIANT_BOOL *pRestart);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_RestartOnIdle )( 
+            IIdleSettings * This,
+            /* [in] */ VARIANT_BOOL restart);
+        
+        END_INTERFACE
+    } IIdleSettingsVtbl;

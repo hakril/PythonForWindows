@@ -353,6 +353,8 @@ def test_memory_breakpoint_exec(proc32_64_debug):
 
 # breakpoint remove
 import threading
+
+@python_injection
 @pytest.mark.parametrize("bptype", [windows.debug.FunctionParamDumpHXBP, windows.debug.FunctionParamDumpBP])
 def test_standard_breakpoint_self_remove(proc32_64_debug, bptype):
     data = []
@@ -379,6 +381,7 @@ def test_standard_breakpoint_self_remove(proc32_64_debug, bptype):
     d.loop()
     assert data == [u"FILENAME1", u"FILENAME2"]
 
+@python_injection
 @pytest.mark.parametrize("bptype", [windows.debug.FunctionParamDumpHXBP, windows.debug.FunctionParamDumpBP])
 def test_standard_breakpoint_remove(proc32_64_debug, bptype):
     data = []

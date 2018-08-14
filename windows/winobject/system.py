@@ -16,8 +16,11 @@ from windows.winobject import exception
 from windows.winobject import service
 from windows.winobject import volume
 from windows.winobject import wmi
-from windows.winobject import kernobj
+from windows.winobject import object_manager
 from windows.winobject import handle
+from windows.winobject import event_log
+from windows.winobject import task_scheduler
+from windows.winobject import system_module
 
 from windows.generated_def.winstructs import *
 from windows.dbgprint import dbgprint
@@ -25,6 +28,7 @@ from windows.dbgprint import dbgprint
 class System(object):
     """The state of the current ``Windows`` system ``Python`` is running on"""
 
+    # Setup these in a fixedproperty ?
     network = network.Network()
     """Object of class :class:`windows.winobject.network.Network`"""
     registry = registry.Registry()
@@ -68,6 +72,14 @@ class System(object):
         :type: [:class:`~windows.winobject.handle.Handle`] -- A list of Hanlde"""
         return handle.enumerate_handles()
 
+    @property
+    def modules(self):
+        """The list of system modules
+
+        :type: [:class:`~windows.winobject.system_module.SystemModule`] -- A list of :class:`~windows.winobject.system_module.SystemModule` or :class:`~windows.winobject.system_module.SystemModuleWow64`
+        """
+        return system_module.enumerate_kernel_modules()
+
     @utils.fixedpropety
     def bitness(self):
         """The bitness of the system
@@ -86,6 +98,35 @@ class System(object):
 
         :type: :class:`~windows.winobject.wmi.WmiManager`"""
         return wmi.WmiManager()
+
+
+    @utils.fixedpropety
+    def event_log(self):
+        return event_log.EvtlogManager()
+
+
+    @utils.fixedpropety
+    def task_scheduler(self):
+        """An object able to manage scheduled tasks on the local system
+
+        :type: :class:`~windows.winobject.task_scheduler.TaskService`
+        """
+        windows.com.init()
+        clsid_task_scheduler = gdef.IID.from_string("0f87369f-a4e5-4cfc-bd3e-73e6154572dd")
+        task_service = task_scheduler.TaskService()
+        # What is non-implemented (WinXP)
+        # Raise (NotImplementedError?) ? Return NotImplemented ?
+        windows.com.create_instance(clsid_task_scheduler, task_service)
+        task_service.connect()
+        return task_service
+
+    @utils.fixedpropety
+    def object_manager(self):
+        """An object to query the objects in the kernel object manager.
+
+        :type: :class:`~windows.winobject.object_manager.ObjectManager`
+        """
+        return windows.winobject.object_manager.ObjectManager()
 
     #TODO: use GetComputerNameExA ? and recover other names ?
     @utils.fixedpropety
@@ -182,6 +223,115 @@ class System(object):
         return self.VERSION_MAPPER[version.wProductType]
 
 
+    EDITION_MAPPER = gdef.FlagMapper(PRODUCT_UNDEFINED,
+        PRODUCT_ULTIMATE,
+        PRODUCT_HOME_BASIC,
+        PRODUCT_HOME_PREMIUM,
+        PRODUCT_ENTERPRISE,
+        PRODUCT_HOME_BASIC_N,
+        PRODUCT_BUSINESS,
+        PRODUCT_STANDARD_SERVER,
+        PRODUCT_DATACENTER_SERVER,
+        PRODUCT_SMALLBUSINESS_SERVER,
+        PRODUCT_ENTERPRISE_SERVER,
+        PRODUCT_STARTER,
+        PRODUCT_DATACENTER_SERVER_CORE,
+        PRODUCT_STANDARD_SERVER_CORE,
+        PRODUCT_ENTERPRISE_SERVER_CORE,
+        PRODUCT_ENTERPRISE_SERVER_IA64,
+        PRODUCT_BUSINESS_N,
+        PRODUCT_WEB_SERVER,
+        PRODUCT_CLUSTER_SERVER,
+        PRODUCT_HOME_SERVER,
+        PRODUCT_STORAGE_EXPRESS_SERVER,
+        PRODUCT_STORAGE_STANDARD_SERVER,
+        PRODUCT_STORAGE_WORKGROUP_SERVER,
+        PRODUCT_STORAGE_ENTERPRISE_SERVER,
+        PRODUCT_SERVER_FOR_SMALLBUSINESS,
+        PRODUCT_SMALLBUSINESS_SERVER_PREMIUM,
+        PRODUCT_HOME_PREMIUM_N,
+        PRODUCT_ENTERPRISE_N,
+        PRODUCT_ULTIMATE_N,
+        PRODUCT_WEB_SERVER_CORE,
+        PRODUCT_MEDIUMBUSINESS_SERVER_MANAGEMENT,
+        PRODUCT_MEDIUMBUSINESS_SERVER_SECURITY,
+        PRODUCT_MEDIUMBUSINESS_SERVER_MESSAGING,
+        PRODUCT_SERVER_FOUNDATION,
+        PRODUCT_HOME_PREMIUM_SERVER,
+        PRODUCT_SERVER_FOR_SMALLBUSINESS_V,
+        PRODUCT_STANDARD_SERVER_V,
+        PRODUCT_DATACENTER_SERVER_V,
+        PRODUCT_ENTERPRISE_SERVER_V,
+        PRODUCT_DATACENTER_SERVER_CORE_V,
+        PRODUCT_STANDARD_SERVER_CORE_V,
+        PRODUCT_ENTERPRISE_SERVER_CORE_V,
+        PRODUCT_HYPERV,
+        PRODUCT_STORAGE_EXPRESS_SERVER_CORE,
+        PRODUCT_STORAGE_STANDARD_SERVER_CORE,
+        PRODUCT_STORAGE_WORKGROUP_SERVER_CORE,
+        PRODUCT_STORAGE_ENTERPRISE_SERVER_CORE,
+        PRODUCT_STARTER_N,
+        PRODUCT_PROFESSIONAL,
+        PRODUCT_PROFESSIONAL_N,
+        PRODUCT_SB_SOLUTION_SERVER,
+        PRODUCT_SERVER_FOR_SB_SOLUTIONS,
+        PRODUCT_STANDARD_SERVER_SOLUTIONS,
+        PRODUCT_STANDARD_SERVER_SOLUTIONS_CORE,
+        PRODUCT_SB_SOLUTION_SERVER_EM,
+        PRODUCT_SERVER_FOR_SB_SOLUTIONS_EM,
+        PRODUCT_SOLUTION_EMBEDDEDSERVER,
+        PRODUCT_SOLUTION_EMBEDDEDSERVER_CORE,
+        PRODUCT_SMALLBUSINESS_SERVER_PREMIUM_CORE,
+        PRODUCT_ESSENTIALBUSINESS_SERVER_MGMT,
+        PRODUCT_ESSENTIALBUSINESS_SERVER_ADDL,
+        PRODUCT_ESSENTIALBUSINESS_SERVER_MGMTSVC,
+        PRODUCT_ESSENTIALBUSINESS_SERVER_ADDLSVC,
+        PRODUCT_CLUSTER_SERVER_V,
+        PRODUCT_EMBEDDED,
+        PRODUCT_STARTER_E,
+        PRODUCT_HOME_BASIC_E,
+        PRODUCT_HOME_PREMIUM_E,
+        PRODUCT_PROFESSIONAL_E,
+        PRODUCT_ENTERPRISE_E,
+        PRODUCT_ULTIMATE_E,
+        PRODUCT_ENTERPRISE_EVALUATION,
+        PRODUCT_MULTIPOINT_STANDARD_SERVER,
+        PRODUCT_MULTIPOINT_PREMIUM_SERVER,
+        PRODUCT_STANDARD_EVALUATION_SERVER,
+        PRODUCT_DATACENTER_EVALUATION_SERVER,
+        PRODUCT_ENTERPRISE_N_EVALUATION,
+        PRODUCT_STORAGE_WORKGROUP_EVALUATION_SERVER,
+        PRODUCT_STORAGE_STANDARD_EVALUATION_SERVER,
+        PRODUCT_CORE_ARM,
+        PRODUCT_CORE_N,
+        PRODUCT_CORE_COUNTRYSPECIFIC,
+        PRODUCT_CORE_LANGUAGESPECIFIC,
+        PRODUCT_CORE,
+        PRODUCT_PROFESSIONAL_WMC,
+        PRODUCT_UNLICENSED)
+
+    @utils.fixedpropety
+    def edition(self): # Find a better name ?
+        version = self.get_version()
+        edition = DWORD()
+        try:
+            winproxy.GetProductInfo(version.dwMajorVersion,
+                                        version.dwMinorVersion,
+                                        version.wServicePackMajor,
+                                        version.wServicePackMinor,
+                                        edition)
+        except winproxy.ExportNotFound as e:
+            # Windows XP does not implem GetProductInfo
+            assert version.dwMajorVersion, version.dwMinorVersion == (5,1)
+            return self._edition_windows_xp()
+        return self.EDITION_MAPPER[edition.value]
+
+    def _edition_windows_xp(self):
+        # Emulate standard response from IsOS(gdef.OS_PROFESSIONAL)
+        if winproxy.IsOS(gdef.OS_PROFESSIONAL):
+            return PRODUCT_PROFESSIONAL
+        return PRODUCT_HOME_BASIC
+
     @utils.fixedpropety
     def windir(self):
         buffer = ctypes.c_buffer(0x100)
@@ -214,6 +364,8 @@ class System(object):
         # This returns the last version where ntdll was updated
         # Should look at HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion
         # values:  CurrentBuild + UBR
+        # windows.system.registry(r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion")["CurrentBuild"].value
+        # windows.system.registry(r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion")["UBR"].value
         return self.get_file_version("comctl32")
 
     @staticmethod

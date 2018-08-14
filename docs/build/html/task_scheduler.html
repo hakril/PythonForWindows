@@ -1,0 +1,814 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>2.13. Task scheduler &#8212; PythonForWindows 0.4 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/css/mbasic.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="2.14. Event Log" href="evtlog.html" />
+    <link rel="prev" title="2.12. Object Manager – Kernel objects" href="object_manager.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="evtlog.html" title="2.14. Event Log"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="object_manager.html" title="2.12. Object Manager – Kernel objects"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.4 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="winobject.html" accesskey="U">2. The <code class="docutils literal notranslate"><span class="pre">windows</span></code> objects</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-windows.winobject.task_scheduler">
+<span id="task-scheduler"></span><h1>2.13. Task scheduler<a class="headerlink" href="#module-windows.winobject.task_scheduler" title="Permalink to this headline">¶</a></h1>
+<p>The <a class="reference internal" href="#windows.winobject.task_scheduler.TaskService" title="windows.winobject.task_scheduler.TaskService"><code class="xref py py-class docutils literal notranslate"><span class="pre">TaskService</span></code></a> is accessible via <a class="reference internal" href="windows.html#windows.winobject.system.System.task_scheduler" title="windows.winobject.system.System.task_scheduler"><code class="xref py py-attr docutils literal notranslate"><span class="pre">windows.system.task_scheduler</span></code></a></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">See sample <a class="reference internal" href="sample.html#sample-scheduled-task"><span class="std std-ref">Scheduled tasks</span></a></p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This API have not been tested on real cases yet and may be subject to changes.</p>
+</div>
+<div class="section" id="taskservice">
+<h2>2.13.1. TaskService<a class="headerlink" href="#taskservice" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="windows.winobject.task_scheduler.TaskService">
+<em class="property">class </em><code class="descclassname">windows.winobject.task_scheduler.</code><code class="descname">TaskService</code><a class="reference internal" href="_modules/windows/winobject/task_scheduler.html#TaskService"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.task_scheduler.TaskService" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">windows.generated_def.interfaces.ITaskService</span></code></p>
+<p>The task scheduler</p>
+<dl class="method">
+<dt id="windows.winobject.task_scheduler.TaskService.__call__">
+<code class="descname">__call__</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.task_scheduler.TaskService.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for <a class="reference internal" href="#windows.winobject.task_scheduler.TaskService.folder" title="windows.winobject.task_scheduler.TaskService.folder"><code class="xref py py-func docutils literal notranslate"><span class="pre">folder()</span></code></a></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.task_scheduler.TaskService.create">
+<code class="descname">create</code><span class="sig-paren">(</span><em>flags=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/task_scheduler.html#TaskService.create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.task_scheduler.TaskService.create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new <a class="reference internal" href="#windows.winobject.task_scheduler.TaskDefinition" title="windows.winobject.task_scheduler.TaskDefinition"><code class="xref py py-class docutils literal notranslate"><span class="pre">TaskDefinition</span></code></a> that can be used to create/register a new scheduled task</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.task_scheduler.TaskDefinition" title="windows.winobject.task_scheduler.TaskDefinition"><code class="xref py py-class docutils literal notranslate"><span class="pre">TaskDefinition</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.task_scheduler.TaskService.folder">
+<code class="descname">folder</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/task_scheduler.html#TaskService.folder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.task_scheduler.TaskService.folder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the <a class="reference internal" href="#windows.winobject.task_scheduler.TaskFolder" title="windows.winobject.task_scheduler.TaskFolder"><code class="xref py py-class docutils literal notranslate"><span class="pre">TaskFolder</span></code></a> with <code class="docutils literal notranslate"><span class="pre">name</span></code></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.task_scheduler.TaskFolder" title="windows.winobject.task_scheduler.TaskFolder"><code class="xref py py-class docutils literal notranslate"><span class="pre">TaskFolder</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.task_scheduler.TaskService.root">
+<code class="descname">root</code><a class="headerlink" href="#windows.winobject.task_scheduler.TaskService.root" title="Permalink to this definition">¶</a></dt>
+<dd><p>The root <code class="docutils literal notranslate"><span class="pre">\</span></code> <a class="reference internal" href="#windows.winobject.task_scheduler.TaskFolder" title="windows.winobject.task_scheduler.TaskFolder"><code class="xref py py-class docutils literal notranslate"><span class="pre">TaskFolder</span></code></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.task_scheduler.TaskService.value">
+<code class="descname">value</code><a class="headerlink" href="#windows.winobject.task_scheduler.TaskService.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>current value</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="taskfolder">
+<h2>2.13.2. TaskFolder<a class="headerlink" href="#taskfolder" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="windows.winobject.task_scheduler.TaskFolder">
+<em class="property">class </em><code class="descclassname">windows.winobject.task_scheduler.</code><code class="descname">TaskFolder</code><a class="reference internal" href="_modules/windows/winobject/task_scheduler.html#TaskFolder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.task_scheduler.TaskFolder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">windows.generated_def.interfaces.ITaskFolder</span></code></p>
+<p>A folder of tasks</p>
+<dl class="method">
+<dt id="windows.winobject.task_scheduler.TaskFolder.__call__">
+<code class="descname">__call__</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.task_scheduler.TaskFolder.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for <a class="reference internal" href="#windows.winobject.task_scheduler.TaskFolder.folder" title="windows.winobject.task_scheduler.TaskFolder.folder"><code class="xref py py-func docutils literal notranslate"><span class="pre">folder()</span></code></a></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.task_scheduler.TaskFolder.__delitem__">
+<code class="descname">__delitem__</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.task_scheduler.TaskFolder.__delitem__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for <a class="reference internal" href="#windows.winobject.task_scheduler.TaskFolder.delete_task" title="windows.winobject.task_scheduler.TaskFolder.delete_task"><code class="xref py py-func docutils literal notranslate"><span class="pre">delete_task()</span></code></a></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.task_scheduler.TaskFolder.__getitem__">
+<code class="descname">__getitem__</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.task_scheduler.TaskFolder.__getitem__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for <a class="reference internal" href="#windows.winobject.task_scheduler.TaskFolder.get_task" title="windows.winobject.task_scheduler.TaskFolder.get_task"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_task()</span></code></a></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.task_scheduler.TaskFolder.create_folder">
+<code class="descname">create_folder</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/task_scheduler.html#TaskFolder.create_folder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.task_scheduler.TaskFolder.create_folder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new sub-<a class="reference internal" href="#windows.winobject.task_scheduler.TaskFolder" title="windows.winobject.task_scheduler.TaskFolder"><code class="xref py py-class docutils literal notranslate"><span class="pre">TaskFolder</span></code></a> with <code class="docutils literal notranslate"><span class="pre">name</span></code></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.task_scheduler.TaskFolder.delete_folder">
+<code class="descname">delete_folder</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/task_scheduler.html#TaskFolder.delete_folder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.task_scheduler.TaskFolder.delete_folder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete the sub-folder with <code class="docutils literal notranslate"><span class="pre">name</span></code> in the current folder</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.task_scheduler.TaskFolder.delete_task">
+<code class="descname">delete_task</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/task_scheduler.html#TaskFolder.delete_task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.task_scheduler.TaskFolder.delete_task" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete the task with <code class="docutils literal notranslate"><span class="pre">name</span></code> in the current folder</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.task_scheduler.TaskFolder.folder">
+<code class="descname">folder</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/task_scheduler.html#TaskFolder.folder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.task_scheduler.TaskFolder.folder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the <a class="reference internal" href="#windows.winobject.task_scheduler.TaskFolder" title="windows.winobject.task_scheduler.TaskFolder"><code class="xref py py-class docutils literal notranslate"><span class="pre">TaskFolder</span></code></a> with <code class="docutils literal notranslate"><span class="pre">name</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.task_scheduler.TaskFolder.folders">
+<code class="descname">folders</code><a class="headerlink" href="#windows.winobject.task_scheduler.TaskFolder.folders" title="Permalink to this definition">¶</a></dt>
+<dd><p>The list of sub-folders</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.task_scheduler.TaskFolderCollection" title="windows.winobject.task_scheduler.TaskFolderCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">TaskFolderCollection</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.task_scheduler.TaskFolder.get_task">
+<code class="descname">get_task</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/task_scheduler.html#TaskFolder.get_task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.task_scheduler.TaskFolder.get_task" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the task with <code class="docutils literal notranslate"><span class="pre">name</span></code> in the current folder</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.task_scheduler.Task" title="windows.winobject.task_scheduler.Task"><code class="xref py py-class docutils literal notranslate"><span class="pre">Task</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.task_scheduler.TaskFolder.register">
+<code class="descname">register</code><span class="sig-paren">(</span><em>name</em>, <em>taskdef</em>, <em>flags=_TASK_CREATION.TASK_CREATE(0x2L)</em>, <em>userid=None</em>, <em>password=None</em>, <em>logonType=_TASK_LOGON_TYPE.TASK_LOGON_NONE(0x0L)</em>, <em>ssid=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/task_scheduler.html#TaskFolder.register"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.task_scheduler.TaskFolder.register" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register the task definition <code class="docutils literal notranslate"><span class="pre">taskdef</span></code> as a new task with <code class="docutils literal notranslate"><span class="pre">name</span></code></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.task_scheduler.Task" title="windows.winobject.task_scheduler.Task"><code class="xref py py-class docutils literal notranslate"><span class="pre">Task</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.task_scheduler.TaskFolder.tasks">
+<code class="descname">tasks</code><a class="headerlink" href="#windows.winobject.task_scheduler.TaskFolder.tasks" title="Permalink to this definition">¶</a></dt>
+<dd><p>The list of tasks in the folder</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.task_scheduler.TaskCollection" title="windows.winobject.task_scheduler.TaskCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">TaskCollection</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.task_scheduler.TaskFolder.value">
+<code class="descname">value</code><a class="headerlink" href="#windows.winobject.task_scheduler.TaskFolder.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>current value</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="task">
+<h2>2.13.3. Task<a class="headerlink" href="#task" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="windows.winobject.task_scheduler.Task">
+<em class="property">class </em><code class="descclassname">windows.winobject.task_scheduler.</code><code class="descname">Task</code><a class="reference internal" href="_modules/windows/winobject/task_scheduler.html#Task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.task_scheduler.Task" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">windows.generated_def.interfaces.IRegisteredTask</span></code></p>
+<p>A scheduled task</p>
+<dl class="attribute">
+<dt id="windows.winobject.task_scheduler.Task.definition">
+<code class="descname">definition</code><a class="headerlink" href="#windows.winobject.task_scheduler.Task.definition" title="Permalink to this definition">¶</a></dt>
+<dd><p>The definition of the task</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.task_scheduler.TaskDefinition" title="windows.winobject.task_scheduler.TaskDefinition"><code class="xref py py-class docutils literal notranslate"><span class="pre">TaskDefinition</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.task_scheduler.Task.name">
+<code class="descname">name</code><a class="headerlink" href="#windows.winobject.task_scheduler.Task.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the task</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.task_scheduler.Task.path">
+<code class="descname">path</code><a class="headerlink" href="#windows.winobject.task_scheduler.Task.path" title="Permalink to this definition">¶</a></dt>
+<dd><p>The path of the task</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.task_scheduler.Task.state">
+<code class="descname">state</code><a class="headerlink" href="#windows.winobject.task_scheduler.Task.state" title="Permalink to this definition">¶</a></dt>
+<dd><p>The state of the task</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.TASK_STATE" title="windows.generated_def.winstructs.TASK_STATE"><code class="xref py py-class docutils literal notranslate"><span class="pre">TASK_STATE</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.task_scheduler.Task.value">
+<code class="descname">value</code><a class="headerlink" href="#windows.winobject.task_scheduler.Task.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>current value</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="taskdefinition">
+<h2>2.13.4. TaskDefinition<a class="headerlink" href="#taskdefinition" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="windows.winobject.task_scheduler.TaskDefinition">
+<em class="property">class </em><code class="descclassname">windows.winobject.task_scheduler.</code><code class="descname">TaskDefinition</code><a class="reference internal" href="_modules/windows/winobject/task_scheduler.html#TaskDefinition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.task_scheduler.TaskDefinition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">windows.generated_def.interfaces.ITaskDefinition</span></code></p>
+<p>The definition of a task</p>
+<dl class="attribute">
+<dt id="windows.winobject.task_scheduler.TaskDefinition.actions">
+<code class="descname">actions</code><a class="headerlink" href="#windows.winobject.task_scheduler.TaskDefinition.actions" title="Permalink to this definition">¶</a></dt>
+<dd><p>The list of actions of the task</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.task_scheduler.ActionCollection" title="windows.winobject.task_scheduler.ActionCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">ActionCollection</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.task_scheduler.TaskDefinition.triggers">
+<code class="descname">triggers</code><a class="headerlink" href="#windows.winobject.task_scheduler.TaskDefinition.triggers" title="Permalink to this definition">¶</a></dt>
+<dd><p>The list of triggers of the task</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.task_scheduler.TriggerCollection" title="windows.winobject.task_scheduler.TriggerCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">TriggerCollection</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.task_scheduler.TaskDefinition.value">
+<code class="descname">value</code><a class="headerlink" href="#windows.winobject.task_scheduler.TaskDefinition.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>current value</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="action">
+<h2>2.13.5. Action<a class="headerlink" href="#action" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id1">
+<h3>2.13.5.1. Action<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="windows.winobject.task_scheduler.Action">
+<em class="property">class </em><code class="descclassname">windows.winobject.task_scheduler.</code><code class="descname">Action</code><a class="reference internal" href="_modules/windows/winobject/task_scheduler.html#Action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.task_scheduler.Action" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">windows.generated_def.interfaces.IAction</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">windows.winobject.task_scheduler.AbstractAction</span></code></p>
+<p>Describe an action performed by a task</p>
+<dl class="attribute">
+<dt id="windows.winobject.task_scheduler.Action.id">
+<code class="descname">id</code><a class="headerlink" href="#windows.winobject.task_scheduler.Action.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>The action id</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.BSTR" title="windows.generated_def.winstructs.BSTR"><code class="xref py py-class docutils literal notranslate"><span class="pre">BSTR</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.task_scheduler.Action.subtype">
+<code class="descname">subtype</code><a class="headerlink" href="#windows.winobject.task_scheduler.Action.subtype" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the <a class="reference internal" href="#windows.winobject.task_scheduler.Action" title="windows.winobject.task_scheduler.Action"><code class="xref py py-class docutils literal notranslate"><span class="pre">Action</span></code></a>-subtype according to <code class="xref py py-data docutils literal notranslate"><span class="pre">AbstractAction.type</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.task_scheduler.Action.type">
+<code class="descname">type</code><a class="headerlink" href="#windows.winobject.task_scheduler.Action.type" title="Permalink to this definition">¶</a></dt>
+<dd><p>The type of action</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.TASK_ACTION_TYPE" title="windows.generated_def.winstructs.TASK_ACTION_TYPE"><code class="xref py py-class docutils literal notranslate"><span class="pre">TASK_ACTION_TYPE</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.task_scheduler.Action.value">
+<code class="descname">value</code><a class="headerlink" href="#windows.winobject.task_scheduler.Action.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>current value</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="execaction">
+<h3>2.13.5.2. ExecAction<a class="headerlink" href="#execaction" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="windows.winobject.task_scheduler.ExecAction">
+<em class="property">class </em><code class="descclassname">windows.winobject.task_scheduler.</code><code class="descname">ExecAction</code><a class="reference internal" href="_modules/windows/winobject/task_scheduler.html#ExecAction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.task_scheduler.ExecAction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">windows.generated_def.interfaces.IExecAction</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">windows.winobject.task_scheduler.AbstractAction</span></code></p>
+<p>Represent an action of type
+<a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs._TASK_ACTION_TYPE.TASK_ACTION_EXEC" title="windows.generated_def.winstructs._TASK_ACTION_TYPE.TASK_ACTION_EXEC"><code class="xref py py-data docutils literal notranslate"><span class="pre">TASK_ACTION_EXEC</span></code></a></p>
+<dl class="attribute">
+<dt id="windows.winobject.task_scheduler.ExecAction.arguments">
+<code class="descname">arguments</code><a class="headerlink" href="#windows.winobject.task_scheduler.ExecAction.arguments" title="Permalink to this definition">¶</a></dt>
+<dd><p>[R-W] The arguments for the command to execute</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.task_scheduler.ExecAction.id">
+<code class="descname">id</code><a class="headerlink" href="#windows.winobject.task_scheduler.ExecAction.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>The action id</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.BSTR" title="windows.generated_def.winstructs.BSTR"><code class="xref py py-class docutils literal notranslate"><span class="pre">BSTR</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.task_scheduler.ExecAction.path">
+<code class="descname">path</code><a class="headerlink" href="#windows.winobject.task_scheduler.ExecAction.path" title="Permalink to this definition">¶</a></dt>
+<dd><p>[R-W] The path of the programm to execute</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.task_scheduler.ExecAction.type">
+<code class="descname">type</code><a class="headerlink" href="#windows.winobject.task_scheduler.ExecAction.type" title="Permalink to this definition">¶</a></dt>
+<dd><p>The type of action</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.TASK_ACTION_TYPE" title="windows.generated_def.winstructs.TASK_ACTION_TYPE"><code class="xref py py-class docutils literal notranslate"><span class="pre">TASK_ACTION_TYPE</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.task_scheduler.ExecAction.value">
+<code class="descname">value</code><a class="headerlink" href="#windows.winobject.task_scheduler.ExecAction.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>current value</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.task_scheduler.ExecAction.working_directory">
+<code class="descname">working_directory</code><a class="headerlink" href="#windows.winobject.task_scheduler.ExecAction.working_directory" title="Permalink to this definition">¶</a></dt>
+<dd><p>The working directory for the command to execute</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="comhandleraction">
+<h3>2.13.5.3. ComHandlerAction<a class="headerlink" href="#comhandleraction" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="windows.winobject.task_scheduler.ComHandlerAction">
+<em class="property">class </em><code class="descclassname">windows.winobject.task_scheduler.</code><code class="descname">ComHandlerAction</code><a class="reference internal" href="_modules/windows/winobject/task_scheduler.html#ComHandlerAction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.task_scheduler.ComHandlerAction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">windows.generated_def.interfaces.IComHandlerAction</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">windows.winobject.task_scheduler.AbstractAction</span></code></p>
+<p>Represent an action of type
+<a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs._TASK_ACTION_TYPE.TASK_ACTION_COM_HANDLER" title="windows.generated_def.winstructs._TASK_ACTION_TYPE.TASK_ACTION_COM_HANDLER"><code class="xref py py-data docutils literal notranslate"><span class="pre">TASK_ACTION_COM_HANDLER</span></code></a></p>
+<dl class="attribute">
+<dt id="windows.winobject.task_scheduler.ComHandlerAction.classid">
+<code class="descname">classid</code><a class="headerlink" href="#windows.winobject.task_scheduler.ComHandlerAction.classid" title="Permalink to this definition">¶</a></dt>
+<dd><p>The CLSID of the COM server executed</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.BSTR" title="windows.generated_def.winstructs.BSTR"><code class="xref py py-class docutils literal notranslate"><span class="pre">BSTR</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.task_scheduler.ComHandlerAction.data">
+<code class="descname">data</code><a class="headerlink" href="#windows.winobject.task_scheduler.ComHandlerAction.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>The DATA for the COM class</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.BSTR" title="windows.generated_def.winstructs.BSTR"><code class="xref py py-class docutils literal notranslate"><span class="pre">BSTR</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.task_scheduler.ComHandlerAction.id">
+<code class="descname">id</code><a class="headerlink" href="#windows.winobject.task_scheduler.ComHandlerAction.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>The action id</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.BSTR" title="windows.generated_def.winstructs.BSTR"><code class="xref py py-class docutils literal notranslate"><span class="pre">BSTR</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.task_scheduler.ComHandlerAction.type">
+<code class="descname">type</code><a class="headerlink" href="#windows.winobject.task_scheduler.ComHandlerAction.type" title="Permalink to this definition">¶</a></dt>
+<dd><p>The type of action</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.TASK_ACTION_TYPE" title="windows.generated_def.winstructs.TASK_ACTION_TYPE"><code class="xref py py-class docutils literal notranslate"><span class="pre">TASK_ACTION_TYPE</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.task_scheduler.ComHandlerAction.value">
+<code class="descname">value</code><a class="headerlink" href="#windows.winobject.task_scheduler.ComHandlerAction.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>current value</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="trigger">
+<h2>2.13.6. Trigger<a class="headerlink" href="#trigger" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="windows.winobject.task_scheduler.Trigger">
+<em class="property">class </em><code class="descclassname">windows.winobject.task_scheduler.</code><code class="descname">Trigger</code><a class="reference internal" href="_modules/windows/winobject/task_scheduler.html#Trigger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.task_scheduler.Trigger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">windows.generated_def.interfaces.ITrigger</span></code></p>
+<p>A task trigger</p>
+<dl class="attribute">
+<dt id="windows.winobject.task_scheduler.Trigger.type">
+<code class="descname">type</code><a class="headerlink" href="#windows.winobject.task_scheduler.Trigger.type" title="Permalink to this definition">¶</a></dt>
+<dd><p>The type of trigger</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.TASK_TRIGGER_TYPE2" title="windows.generated_def.winstructs.TASK_TRIGGER_TYPE2"><code class="xref py py-class docutils literal notranslate"><span class="pre">TASK_TRIGGER_TYPE2</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.task_scheduler.Trigger.value">
+<code class="descname">value</code><a class="headerlink" href="#windows.winobject.task_scheduler.Trigger.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>current value</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="collections">
+<h2>2.13.7. Collections<a class="headerlink" href="#collections" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="taskfoldercollection">
+<h3>2.13.7.1. TaskFolderCollection<a class="headerlink" href="#taskfoldercollection" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="windows.winobject.task_scheduler.TaskFolderCollection">
+<em class="property">class </em><code class="descclassname">windows.winobject.task_scheduler.</code><code class="descname">TaskFolderCollection</code><a class="reference internal" href="_modules/windows/winobject/task_scheduler.html#TaskFolderCollection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.task_scheduler.TaskFolderCollection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">windows.generated_def.interfaces.ITaskFolderCollection</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">windows.winobject.task_scheduler.TaskCollectionType</span></code></p>
+<dl class="attribute">
+<dt id="windows.winobject.task_scheduler.TaskFolderCollection.ITEM_TYPE">
+<code class="descname">ITEM_TYPE</code><a class="headerlink" href="#windows.winobject.task_scheduler.TaskFolderCollection.ITEM_TYPE" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#windows.winobject.task_scheduler.TaskFolder" title="windows.winobject.task_scheduler.TaskFolder"><code class="xref py py-class docutils literal notranslate"><span class="pre">TaskFolder</span></code></a></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.task_scheduler.TaskFolderCollection.get_item">
+<code class="descname">get_item</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.task_scheduler.TaskFolderCollection.get_item" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return elements nb <code class="docutils literal notranslate"><span class="pre">index</span></code>. Collection index starts at 1</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.task_scheduler.TaskFolderCollection.items">
+<code class="descname">items</code><a class="headerlink" href="#windows.winobject.task_scheduler.TaskFolderCollection.items" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the list of item in the collection</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.task_scheduler.TaskFolderCollection.value">
+<code class="descname">value</code><a class="headerlink" href="#windows.winobject.task_scheduler.TaskFolderCollection.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>current value</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="taskcollection">
+<h3>2.13.7.2. TaskCollection<a class="headerlink" href="#taskcollection" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="windows.winobject.task_scheduler.TaskCollection">
+<em class="property">class </em><code class="descclassname">windows.winobject.task_scheduler.</code><code class="descname">TaskCollection</code><a class="reference internal" href="_modules/windows/winobject/task_scheduler.html#TaskCollection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.task_scheduler.TaskCollection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">windows.generated_def.interfaces.IRegisteredTaskCollection</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">windows.winobject.task_scheduler.TaskCollectionType</span></code></p>
+<dl class="attribute">
+<dt id="windows.winobject.task_scheduler.TaskCollection.ITEM_TYPE">
+<code class="descname">ITEM_TYPE</code><a class="headerlink" href="#windows.winobject.task_scheduler.TaskCollection.ITEM_TYPE" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#windows.winobject.task_scheduler.Task" title="windows.winobject.task_scheduler.Task"><code class="xref py py-class docutils literal notranslate"><span class="pre">Task</span></code></a></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.task_scheduler.TaskCollection.get_item">
+<code class="descname">get_item</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.task_scheduler.TaskCollection.get_item" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return elements nb <code class="docutils literal notranslate"><span class="pre">index</span></code>. Collection index starts at 1</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.task_scheduler.TaskCollection.items">
+<code class="descname">items</code><a class="headerlink" href="#windows.winobject.task_scheduler.TaskCollection.items" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the list of item in the collection</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.task_scheduler.TaskCollection.value">
+<code class="descname">value</code><a class="headerlink" href="#windows.winobject.task_scheduler.TaskCollection.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>current value</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="actioncollection">
+<h3>2.13.7.3. ActionCollection<a class="headerlink" href="#actioncollection" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="windows.winobject.task_scheduler.ActionCollection">
+<em class="property">class </em><code class="descclassname">windows.winobject.task_scheduler.</code><code class="descname">ActionCollection</code><a class="reference internal" href="_modules/windows/winobject/task_scheduler.html#ActionCollection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.task_scheduler.ActionCollection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">windows.generated_def.interfaces.IActionCollection</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">windows.winobject.task_scheduler.TaskCollectionType</span></code></p>
+<dl class="attribute">
+<dt id="windows.winobject.task_scheduler.ActionCollection.ITEM_TYPE">
+<code class="descname">ITEM_TYPE</code><a class="headerlink" href="#windows.winobject.task_scheduler.ActionCollection.ITEM_TYPE" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#windows.winobject.task_scheduler.Action" title="windows.winobject.task_scheduler.Action"><code class="xref py py-class docutils literal notranslate"><span class="pre">Action</span></code></a></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.task_scheduler.ActionCollection.create">
+<code class="descname">create</code><span class="sig-paren">(</span><em>action_type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/task_scheduler.html#ActionCollection.create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.task_scheduler.ActionCollection.create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new action of type <code class="docutils literal notranslate"><span class="pre">action_type</span></code></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">A subclass of <a class="reference internal" href="#windows.winobject.task_scheduler.Action" title="windows.winobject.task_scheduler.Action"><code class="xref py py-class docutils literal notranslate"><span class="pre">Action</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.task_scheduler.ActionCollection.get_item">
+<code class="descname">get_item</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/task_scheduler.html#ActionCollection.get_item"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.task_scheduler.ActionCollection.get_item" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return elements nb <code class="docutils literal notranslate"><span class="pre">index</span></code>. Collection index starts at 1</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.task_scheduler.ActionCollection.items">
+<code class="descname">items</code><a class="headerlink" href="#windows.winobject.task_scheduler.ActionCollection.items" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the list of item in the collection</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.task_scheduler.ActionCollection.value">
+<code class="descname">value</code><a class="headerlink" href="#windows.winobject.task_scheduler.ActionCollection.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>current value</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="triggercollection">
+<h3>2.13.7.4. TriggerCollection<a class="headerlink" href="#triggercollection" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="windows.winobject.task_scheduler.TriggerCollection">
+<em class="property">class </em><code class="descclassname">windows.winobject.task_scheduler.</code><code class="descname">TriggerCollection</code><a class="reference internal" href="_modules/windows/winobject/task_scheduler.html#TriggerCollection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.task_scheduler.TriggerCollection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">windows.generated_def.interfaces.ITriggerCollection</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">windows.winobject.task_scheduler.TaskCollectionType</span></code></p>
+<dl class="attribute">
+<dt id="windows.winobject.task_scheduler.TriggerCollection.ITEM_TYPE">
+<code class="descname">ITEM_TYPE</code><a class="headerlink" href="#windows.winobject.task_scheduler.TriggerCollection.ITEM_TYPE" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#windows.winobject.task_scheduler.Trigger" title="windows.winobject.task_scheduler.Trigger"><code class="xref py py-class docutils literal notranslate"><span class="pre">Trigger</span></code></a></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.task_scheduler.TriggerCollection.get_item">
+<code class="descname">get_item</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.task_scheduler.TriggerCollection.get_item" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return elements nb <code class="docutils literal notranslate"><span class="pre">index</span></code>. Collection index starts at 1</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.task_scheduler.TriggerCollection.items">
+<code class="descname">items</code><a class="headerlink" href="#windows.winobject.task_scheduler.TriggerCollection.items" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the list of item in the collection</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.task_scheduler.TriggerCollection.value">
+<code class="descname">value</code><a class="headerlink" href="#windows.winobject.task_scheduler.TriggerCollection.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>current value</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">2.13. Task scheduler</a><ul>
+<li><a class="reference internal" href="#taskservice">2.13.1. TaskService</a></li>
+<li><a class="reference internal" href="#taskfolder">2.13.2. TaskFolder</a></li>
+<li><a class="reference internal" href="#task">2.13.3. Task</a></li>
+<li><a class="reference internal" href="#taskdefinition">2.13.4. TaskDefinition</a></li>
+<li><a class="reference internal" href="#action">2.13.5. Action</a><ul>
+<li><a class="reference internal" href="#id1">2.13.5.1. Action</a></li>
+<li><a class="reference internal" href="#execaction">2.13.5.2. ExecAction</a></li>
+<li><a class="reference internal" href="#comhandleraction">2.13.5.3. ComHandlerAction</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#trigger">2.13.6. Trigger</a></li>
+<li><a class="reference internal" href="#collections">2.13.7. Collections</a><ul>
+<li><a class="reference internal" href="#taskfoldercollection">2.13.7.1. TaskFolderCollection</a></li>
+<li><a class="reference internal" href="#taskcollection">2.13.7.2. TaskCollection</a></li>
+<li><a class="reference internal" href="#actioncollection">2.13.7.3. ActionCollection</a></li>
+<li><a class="reference internal" href="#triggercollection">2.13.7.4. TriggerCollection</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="object_manager.html"
+                        title="previous chapter">2.12. Object Manager – Kernel objects</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="evtlog.html"
+                        title="next chapter">2.14. Event Log</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/task_scheduler.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="evtlog.html" title="2.14. Event Log"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="object_manager.html" title="2.12. Object Manager – Kernel objects"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.4 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="winobject.html" >2. The <code class="docutils literal notranslate"><span class="pre">windows</span></code> objects</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2015, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

@@ -25,9 +25,9 @@ def search_name_in_struct(target):
             print(name, struct)
         if hasattr(struct, "_fields_"):
             # import pdb;pdb.set_trace()
-            for fname, ftype in struct._fields_:
-                if match(target, fname):
-                    print("Field <{0}> in <{1}>: {2}".format(fname, name, struct))
+            for finfo in struct._fields_:
+                if match(target, finfo[0]):
+                    print("Field <{0}> in <{1}>: {2}".format(finfo[0], name, struct))
 
 def search_name_in_windef(target):
     for name, windef in meta.windef_walker():

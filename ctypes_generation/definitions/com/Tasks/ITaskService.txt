@@ -1,0 +1,89 @@
+typedef struct ITaskServiceVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            __RPC__in ITaskService * This,
+            /* [in] */ __RPC__in REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            __RPC__deref_out  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            __RPC__in ITaskService * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            __RPC__in ITaskService * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            __RPC__in ITaskService * This,
+            /* [out] */ __RPC__out UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            __RPC__in ITaskService * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ __RPC__deref_out_opt ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            __RPC__in ITaskService * This,
+            /* [in] */ __RPC__in REFIID riid,
+            /* [size_is][in] */ __RPC__in_ecount_full(cNames) LPOLESTR *rgszNames,
+            /* [range][in] */ __RPC__in_range(0,16384) UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ __RPC__out_ecount_full(cNames) DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ITaskService * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetFolder )( 
+            __RPC__in ITaskService * This,
+            /* [in] */ __RPC__in BSTR path,
+            /* [retval][out] */ __RPC__deref_out_opt ITaskFolder **ppFolder);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetRunningTasks )( 
+            __RPC__in ITaskService * This,
+            /* [in] */ LONG flags,
+            /* [retval][out] */ __RPC__deref_out_opt IRunningTaskCollection **ppRunningTasks);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *NewTask )( 
+            __RPC__in ITaskService * This,
+            /* [in] */ DWORD flags,
+            /* [retval][out] */ __RPC__deref_out_opt ITaskDefinition **ppDefinition);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Connect )( 
+            __RPC__in ITaskService * This,
+            /* [optional][in] */ VARIANT serverName,
+            /* [optional][in] */ VARIANT user,
+            /* [optional][in] */ VARIANT domain,
+            /* [optional][in] */ VARIANT password);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Connected )( 
+            __RPC__in ITaskService * This,
+            /* [retval][out] */ __RPC__out VARIANT_BOOL *pConnected);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TargetServer )( 
+            __RPC__in ITaskService * This,
+            /* [retval][out] */ __RPC__deref_out_opt BSTR *pServer);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ConnectedUser )( 
+            __RPC__in ITaskService * This,
+            /* [retval][out] */ __RPC__deref_out_opt BSTR *pUser);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ConnectedDomain )( 
+            __RPC__in ITaskService * This,
+            /* [retval][out] */ __RPC__deref_out_opt BSTR *pDomain);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HighestVersion )( 
+            __RPC__in ITaskService * This,
+            /* [retval][out] */ __RPC__out DWORD *pVersion);
+        
+        END_INTERFACE
+    } ITaskServiceVtbl;

@@ -1,0 +1,130 @@
+typedef struct IRegisteredTaskVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            __RPC__in IRegisteredTask * This,
+            /* [in] */ __RPC__in REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            __RPC__deref_out  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            __RPC__in IRegisteredTask * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            __RPC__in IRegisteredTask * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            __RPC__in IRegisteredTask * This,
+            /* [out] */ __RPC__out UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            __RPC__in IRegisteredTask * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ __RPC__deref_out_opt ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            __RPC__in IRegisteredTask * This,
+            /* [in] */ __RPC__in REFIID riid,
+            /* [size_is][in] */ __RPC__in_ecount_full(cNames) LPOLESTR *rgszNames,
+            /* [range][in] */ __RPC__in_range(0,16384) UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ __RPC__out_ecount_full(cNames) DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IRegisteredTask * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+            __RPC__in IRegisteredTask * This,
+            /* [retval][out] */ __RPC__deref_out_opt BSTR *pName);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Path )( 
+            __RPC__in IRegisteredTask * This,
+            /* [retval][out] */ __RPC__deref_out_opt BSTR *pPath);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_State )( 
+            __RPC__in IRegisteredTask * This,
+            /* [retval][out] */ __RPC__out TASK_STATE *pState);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Enabled )( 
+            __RPC__in IRegisteredTask * This,
+            /* [retval][out] */ __RPC__out VARIANT_BOOL *pEnabled);
+        
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Enabled )( 
+            __RPC__in IRegisteredTask * This,
+            VARIANT_BOOL enabled);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Run )( 
+            __RPC__in IRegisteredTask * This,
+            /* [in] */ VARIANT params,
+            /* [retval][out] */ __RPC__deref_out_opt IRunningTask **ppRunningTask);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RunEx )( 
+            __RPC__in IRegisteredTask * This,
+            /* [in] */ VARIANT params,
+            /* [in] */ LONG flags,
+            /* [in] */ LONG sessionID,
+            /* [in] */ __RPC__in BSTR user,
+            /* [retval][out] */ __RPC__deref_out_opt IRunningTask **ppRunningTask);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetInstances )( 
+            __RPC__in IRegisteredTask * This,
+            /* [in] */ LONG flags,
+            /* [retval][out] */ __RPC__deref_out_opt IRunningTaskCollection **ppRunningTasks);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LastRunTime )( 
+            __RPC__in IRegisteredTask * This,
+            /* [retval][out] */ __RPC__out DATE *pLastRunTime);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LastTaskResult )( 
+            __RPC__in IRegisteredTask * This,
+            /* [retval][out] */ __RPC__out LONG *pLastTaskResult);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_NumberOfMissedRuns )( 
+            __RPC__in IRegisteredTask * This,
+            /* [retval][out] */ __RPC__out LONG *pNumberOfMissedRuns);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_NextRunTime )( 
+            __RPC__in IRegisteredTask * This,
+            /* [retval][out] */ __RPC__out DATE *pNextRunTime);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Definition )( 
+            __RPC__in IRegisteredTask * This,
+            /* [retval][out] */ __RPC__deref_out_opt ITaskDefinition **ppDefinition);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Xml )( 
+            __RPC__in IRegisteredTask * This,
+            /* [retval][out] */ __RPC__deref_out_opt BSTR *pXml);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetSecurityDescriptor )( 
+            __RPC__in IRegisteredTask * This,
+            /* [in] */ LONG securityInformation,
+            /* [retval][out] */ __RPC__deref_out_opt BSTR *pSddl);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetSecurityDescriptor )( 
+            __RPC__in IRegisteredTask * This,
+            /* [in] */ __RPC__in BSTR sddl,
+            /* [in] */ LONG flags);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Stop )( 
+            __RPC__in IRegisteredTask * This,
+            /* [in] */ LONG flags);
+        
+        /* [helpstring][hidden][restricted] */ HRESULT ( STDMETHODCALLTYPE *GetRunTimes )( 
+            __RPC__in IRegisteredTask * This,
+            /* [in] */ __RPC__in const LPSYSTEMTIME pstStart,
+            /* [in] */ __RPC__in const LPSYSTEMTIME pstEnd,
+            /* [out][in] */ __RPC__inout DWORD *pCount,
+            /* [out] */ __RPC__deref_out_opt LPSYSTEMTIME *pRunTimes);
+        
+        END_INTERFACE
+    } IRegisteredTaskVtbl;

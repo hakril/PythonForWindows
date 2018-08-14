@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/css/mbasic.css" type="text/css" />
-    <script type="text/javascript" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
@@ -71,15 +71,15 @@
         <span class="sd">&quot;&quot;&quot;Select ``attrs`` from ``frm``</span>
 
 <span class="sd">        :rtype: list of dict</span>
-<span class="sd">        &quot;&quot;&quot;</span></div>
-        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gen_select</span><span class="p">(</span><span class="n">frm</span><span class="p">,</span> <span class="n">attrs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gen_select</span><span class="p">(</span><span class="n">frm</span><span class="p">,</span> <span class="n">attrs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="WmiRequester.gen_select"><a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiRequester.gen_select">[docs]</a>    <span class="k">def</span> <span class="nf">gen_select</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frm</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="s2">&quot;*&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Select ``attrs`` from ``frm`` in a generator (like :func:`gen_query`)</span>
 
 <span class="sd">        :rtype: generator</span>
-<span class="sd">        &quot;&quot;&quot;</span></div>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gen_query</span><span class="p">(</span><span class="s2">&quot;select * from </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">frm</span><span class="p">),</span> <span class="n">attrs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gen_query</span><span class="p">(</span><span class="s2">&quot;select * from </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">frm</span><span class="p">),</span> <span class="n">attrs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">classes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -94,8 +94,8 @@
 <span class="sd">        Timeout is not applied for the full query time but the time to retrieve one object each time.</span>
 
 <span class="sd">        :rtype: list of dict</span>
-<span class="sd">        &quot;&quot;&quot;</span></div>
-        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gen_query</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">attrs</span><span class="p">,</span> <span class="n">timeout</span><span class="p">))</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gen_query</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">attrs</span><span class="p">,</span> <span class="n">timeout</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="WmiRequester.gen_query"><a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiRequester.gen_query">[docs]</a>    <span class="k">def</span> <span class="nf">gen_query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="s2">&quot;*&quot;</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">WBEM_INFINITE</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Execute WMI ``query`` and return a generator that will yield the ``attrs`` for one object each time.</span>
@@ -109,8 +109,8 @@
                 <span class="k">if</span> <span class="n">obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">WindowsError</span><span class="p">(</span><span class="n">retval</span><span class="p">,</span> <span class="n">WBEMSTATUS</span><span class="p">(</span><span class="n">retval</span> <span class="o">&amp;</span> <span class="mh">0xffffffff</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
                 <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">_iwbemclassobject_to_dict</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
-        <span class="k">finally</span><span class="p">:</span></div>
-            <span class="n">enumerator</span><span class="o">.</span><span class="n">Release</span><span class="p">()</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">enumerator</span><span class="o">.</span><span class="n">Release</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="nf">_exec_query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="n">ctx</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="n">enumerator</span> <span class="o">=</span> <span class="n">IEnumWbemClassObject</span><span class="p">()</span>
@@ -168,8 +168,8 @@
         <span class="n">safe_array</span><span class="o">.</span><span class="n">elt_type</span> <span class="o">=</span> <span class="n">BSTR</span>
         <span class="k">return</span> <span class="n">safe_array</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-        <span class="k">return</span> <span class="s2">&quot;&quot;&quot;&lt;</span><span class="si">{0}</span><span class="s2"> namespace=&quot;</span><span class="si">{1}</span><span class="s2">&quot;&gt;&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">namespace</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;&quot;&lt;</span><span class="si">{0}</span><span class="s2"> namespace=&quot;</span><span class="si">{1}</span><span class="s2">&quot;&gt;&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">namespace</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="WmiManager"><a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiManager">[docs]</a><span class="k">class</span> <span class="nc">WmiManager</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;The main WMI class exposed, used to list and access differents WMI namespace, can be used as a dict to access</span>
@@ -206,8 +206,8 @@
         <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_open_wmi_requester</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
-        <span class="k">return</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
 </pre></div>
 
           </div>
@@ -246,7 +246,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
     </div>
   </body>
 </html>

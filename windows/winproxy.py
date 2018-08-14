@@ -44,7 +44,7 @@ class Kernel32Error(WindowsError):
         win_error = ctypes.WinError()
         api_error = super(Kernel32Error, cls).__new__(cls)
         api_error.api_name = func_name
-        api_error.winerror = win_error.winerror
+        api_error.winerror = win_error.winerror & 0xffffffff
         api_error.strerror = win_error.strerror
         api_error.args = (func_name, win_error.winerror, win_error.strerror)
         return api_error
@@ -144,6 +144,8 @@ class ApiProxy(object):
         python_proxy.errcheck = self.error_check
         python_proxy.target_dll = self.APIDLL
         python_proxy.target_func = self.func_name
+        # Give access to the 'ApiProxy' object from the function
+        python_proxy.proxy = self
         params_name = [param[1] for param in params]
         if (self.error_check.__doc__):
             doc = python_proxy.__doc__
@@ -194,7 +196,8 @@ class IphlpapiProxy(ApiProxy):
 
 class NtdllProxy(ApiProxy):
     APIDLL = "ntdll"
-    default_error_check = staticmethod(should_return_zero_check)
+    default_error_check = staticmethod(should_return_zero_check) # Setup to: error_ntstatus ?
+
 
 class WinTrustProxy(ApiProxy):
     APIDLL = "wintrust"
@@ -232,6 +235,19 @@ class Shell32Proxy(ApiProxy):
 class Ktmw32Proxy(ApiProxy):
     APIDLL = "Ktmw32"
     default_error_check = staticmethod(zero_is_fail_error_check)
+
+class WevtapiProxy(ApiProxy):
+    APIDLL = "Wevtapi"
+    default_error_check = staticmethod(zero_is_fail_error_check)
+
+class ShlwapiProxy(ApiProxy):
+    APIDLL = "Shlwapi"
+    default_error_check = staticmethod(zero_is_fail_error_check)
+
+class OleaccProxy(ApiProxy):
+    APIDLL = "Oleacc"
+    default_error_check = staticmethod(should_return_zero_check)
+
 
 #class OptionalExport(object):
 #    """used 'around' a Proxy decorator
@@ -328,7 +344,6 @@ GetVersionExW = TransparentKernel32Proxy("GetVersionExW")
 GetComputerNameA = TransparentKernel32Proxy("GetComputerNameA")
 GetComputerNameW = TransparentKernel32Proxy("GetComputerNameW")
 LocalFree = TransparentKernel32Proxy("LocalFree", should_return_zero_check)
-
 
 
 Wow64DisableWow64FsRedirection = TransparentKernel32Proxy("Wow64DisableWow64FsRedirection")
@@ -517,6 +532,33 @@ def GetPriorityClass(hProcess):
 def SetPriorityClass(hProcess, dwPriorityClass):
     return SetPriorityClass.ctypes_function(hProcess, dwPriorityClass)
 
+PROCESS_MITIGATION_STUCTS = (PROCESS_MITIGATION_ASLR_POLICY,
+                                PROCESS_MITIGATION_BINARY_SIGNATURE_POLICY,
+                                PROCESS_MITIGATION_CONTROL_FLOW_GUARD_POLICY,
+                                PROCESS_MITIGATION_DEP_POLICY,
+                                PROCESS_MITIGATION_DYNAMIC_CODE_POLICY,
+                                PROCESS_MITIGATION_EXTENSION_POINT_DISABLE_POLICY,
+                                PROCESS_MITIGATION_IMAGE_LOAD_POLICY,
+                                PROCESS_MITIGATION_POLICY,
+                                PROCESS_MITIGATION_STRICT_HANDLE_CHECK_POLICY,
+                                PROCESS_MITIGATION_SYSTEM_CALL_DISABLE_POLICY)
+
+@Kernel32Proxy("GetProcessMitigationPolicy")
+def GetProcessMitigationPolicy(hProcess, MitigationPolicy, lpBuffer, dwLength=None):
+    if dwLength is None:
+        dwLength = ctypes.sizeof(lpBuffer)
+    return GetProcessMitigationPolicy.ctypes_function(hProcess, MitigationPolicy, lpBuffer, dwLength)
+
+
+@Kernel32Proxy("SetProcessMitigationPolicy")
+def SetProcessMitigationPolicy(MitigationPolicy, lpBuffer, dwLength=None):
+    if dwLength is None:
+        dwLength = ctypes.sizeof(lpBuffer)
+    if isinstance(lpBuffer, PROCESS_MITIGATION_STUCTS):
+        lpBuffer = ctypes.byref(lpBuffer)
+    return SetProcessMitigationPolicy.ctypes_function(MitigationPolicy, lpBuffer, dwLength)
+
+
 @Kernel32Proxy("OpenEventA")
 def OpenEventA(dwDesiredAccess, bInheritHandle, lpName):
     return OpenEventA.ctypes_function(dwDesiredAccess, bInheritHandle, lpName)
@@ -525,6 +567,13 @@ def OpenEventA(dwDesiredAccess, bInheritHandle, lpName):
 def OpenEventW(dwDesiredAccess, bInheritHandle, lpName):
     return OpenEventA.ctypes_function(dwDesiredAccess, bInheritHandle, lpName)
 
+@Kernel32Proxy("GetModuleHandleA")
+def GetModuleHandleA(lpModuleName):
+    return GetModuleHandleA.ctypes_function(lpModuleName)
+
+@Kernel32Proxy("GetModuleHandleW")
+def GetModuleHandleW(lpModuleName):
+    return GetModuleHandleW.ctypes_function(lpModuleName)
 
 
 # File stuff
@@ -545,6 +594,13 @@ def WriteFile(hFile, lpBuffer, nNumberOfBytesToWrite=None, lpNumberOfBytesWritte
         lpNumberOfBytesWritten = ctypes.byref(DWORD())
     return WriteFile.ctypes_function(hFile, lpBuffer, nNumberOfBytesToWrite, lpNumberOfBytesWritten, lpOverlapped)
 
+@Kernel32Proxy("Sleep", no_error_check)
+def Sleep(dwMilliseconds):
+    return Sleep.ctypes_function(dwMilliseconds)
+
+@Kernel32Proxy("SleepEx", no_error_check)
+def SleepEx(dwMilliseconds, bAlertable=False):
+    return SleepEx.ctypes_function(dwMilliseconds, bAlertable)
 
 # Exception stuff
 @Kernel32Proxy("AddVectoredContinueHandler")
@@ -639,15 +695,15 @@ def GetMappedFileNameAWrapper(hProcess, lpv, lpFilename, nSize=None):
     return GetMappedFileNameAWrapper.ctypes_function(hProcess, lpv, lpFilename, nSize)
 GetMappedFileNameA = Kernel32Proxy("GetMappedFileNameA")(GetMappedFileNameAWrapper)
 
+
 def QueryWorkingSetWrapper(hProcess, pv, cb):
     return QueryWorkingSet.ctypes_function(hProcess, pv, cb)
 QueryWorkingSet = Kernel32Proxy("QueryWorkingSet")(QueryWorkingSetWrapper)
 
+
 def QueryWorkingSetExWrapper(hProcess, pv, cb):
     return QueryWorkingSetEx.ctypes_function(hProcess, pv, cb)
 QueryWorkingSetEx = Kernel32Proxy("QueryWorkingSetEx")(QueryWorkingSetExWrapper)
-
-
 
 if not is_implemented(GetMappedFileNameA):
     GetMappedFileNameW = PsapiProxy("GetMappedFileNameW")(GetMappedFileNameWWrapper)
@@ -661,7 +717,6 @@ def GetModuleBaseNameAWrapper(hProcess, hModule, lpBaseName, nSize=None):
     return GetModuleBaseNameAWrapper.ctypes_function(hProcess, hModule, lpBaseName, nSize)
 GetModuleBaseNameA = Kernel32Proxy("GetMappedFileNameA")(GetModuleBaseNameAWrapper)
 
-
 def GetModuleBaseNameWWrapper(hProcess, hModule, lpBaseName, nSize=None):
     if nSize is None:
         nSize = len(lpBaseName)
@@ -671,7 +726,6 @@ GetModuleBaseNameA = Kernel32Proxy("GetModuleBaseNameW")(GetModuleBaseNameWWrapp
 if not is_implemented(GetModuleBaseNameA):
     GetModuleBaseNameA = PsapiProxy("GetModuleBaseNameA")(GetModuleBaseNameAWrapper)
     GetModuleBaseNameW = PsapiProxy("GetModuleBaseNameW")(GetModuleBaseNameWWrapper)
-
 
 def GetProcessImageFileNameAWrapper(hProcess, lpImageFileName, nSize=None):
     if nSize is None:
@@ -688,6 +742,14 @@ GetProcessImageFileNameW = Kernel32Proxy("GetProcessImageFileNameW")(GetProcessI
 if not is_implemented(GetProcessImageFileNameA):
     GetProcessImageFileNameA = PsapiProxy("GetProcessImageFileNameA")(GetProcessImageFileNameAWrapper)
     GetProcessImageFileNameW = PsapiProxy("GetProcessImageFileNameW")(GetProcessImageFileNameWWrapper)
+
+
+def GetProcessMemoryInfoWrapper(Process, ppsmemCounters, cb):
+    return GetProcessMemoryInfo.ctypes_function(Process, ppsmemCounters, cb)
+GetProcessMemoryInfo = Kernel32Proxy("GetProcessMemoryInfo")(QueryWorkingSetExWrapper)
+
+if not is_implemented(GetProcessMemoryInfo):
+    GetProcessMemoryInfo = PsapiProxy("GetProcessMemoryInfo")(GetProcessMemoryInfoWrapper)
 
 # Debug API
 
@@ -810,6 +872,11 @@ def GetWindowsDirectoryW(lpBuffer, uSize=None):
     return GetWindowsDirectoryW.ctypes_function(lpBuffer, uSize)
 
 
+@Kernel32Proxy("GetProductInfo")
+def GetProductInfo(dwOSMajorVersion, dwOSMinorVersion, dwSpMajorVersion, dwSpMinorVersion, pdwReturnedProductType):
+   return GetProductInfo.ctypes_function(dwOSMajorVersion, dwOSMinorVersion, dwSpMajorVersion, dwSpMinorVersion, pdwReturnedProductType)
+
+
 # ### NTDLL #### #
 
 @NtdllProxy('NtReadVirtualMemory', error_ntstatus)
@@ -885,14 +952,15 @@ def NtQueryInformationThread(ThreadHandle, ThreadInformationClass, ThreadInforma
     return NtQueryInformationThread.ctypes_function(ThreadHandle, ThreadInformationClass, ThreadInformation, ThreadInformationLength, ReturnLength)
 
 
+@NtdllProxy('NtAllocateVirtualMemory', error_ntstatus)
+def NtAllocateVirtualMemory(ProcessHandle, BaseAddress, ZeroBits, RegionSize, AllocationType, Protect):
+    return NtAllocateVirtualMemory.ctypes_function(ProcessHandle, BaseAddress, ZeroBits, RegionSize, AllocationType, Protect)
+
+
 @NtdllProxy('NtFreeVirtualMemory', error_ntstatus)
 def NtFreeVirtualMemory(ProcessHandle, BaseAddress, RegionSize, FreeType):
     return NtFreeVirtualMemory.ctypes_function(ProcessHandle, BaseAddress, RegionSize, FreeType)
 
-
-@NtdllProxy('NtAllocateVirtualMemory', error_ntstatus)
-def NtAllocateVirtualMemory(ProcessHandle, BaseAddress, ZeroBits, RegionSize, AllocationType, Protect):
-    return NtAllocateVirtualMemory.ctypes_function(ProcessHandle, BaseAddress, ZeroBits, RegionSize, AllocationType, Protect)
 
 
 @NtdllProxy('NtProtectVirtualMemory', error_ntstatus)
@@ -930,6 +998,10 @@ def NtSetContextThread(hThread, lpContext):
 @NtdllProxy("NtOpenEvent", error_ntstatus)
 def NtOpenEvent(EventHandle, DesiredAccess, ObjectAttributes):
     return NtOpenEvent.ctypes_function(EventHandle, DesiredAccess, ObjectAttributes)
+
+@NtdllProxy("NtSetInformationFile", error_ntstatus)
+def NtSetInformationFile(FileHandle, IoStatusBlock, FileInformation, Length, FileInformationClass):
+    return NtSetInformationFile.ctypes_function(FileHandle, IoStatusBlock, FileInformation, Length, FileInformationClass)
 
 
 @NtdllProxy("NtAlpcCreatePort", error_ntstatus)
@@ -1062,6 +1134,15 @@ def RtlGetCompressionWorkSpaceSize(CompressionFormatAndEngine, CompressBufferWor
 def RtlDosPathNameToNtPathName_U(DosName, NtName=None, PartName=None, RelativeName=None):
     return RtlDosPathNameToNtPathName_U.ctypes_function(DosName, NtName, PartName, RelativeName)
 
+@NtdllProxy("RtlEqualUnicodeString", no_error_check)
+def RtlEqualUnicodeString(String1, String2, CaseInSensitive):
+   return RtlEqualUnicodeString.ctypes_function(String1, String2, CaseInSensitive)
+
+
+
+
+
+
 
 # Section stuff
 
@@ -1094,6 +1175,36 @@ def RtlGetUnloadEventTraceEx(ElementSize, ElementCount, EventTrace):
 def TpCallbackSendAlpcMessageOnCompletion(TpHandle, PortHandle, Flags, SendMessage):
     return TpCallbackSendAlpcMessageOnCompletion.ctypes_function(TpHandle, PortHandle, Flags, SendMessage)
 
+
+# low level registry
+
+@NtdllProxy("NtOpenKey", error_ntstatus)
+def NtOpenKey(KeyHandle, DesiredAccess, ObjectAttributes):
+    return NtOpenKey.ctypes_function(KeyHandle, DesiredAccess, ObjectAttributes)
+
+@NtdllProxy("NtCreateKey", error_ntstatus)
+def NtCreateKey(pKeyHandle, DesiredAccess, ObjectAttributes, TitleIndex, Class, CreateOptions, Disposition):
+    return NtCreateKey.ctypes_function(pKeyHandle, DesiredAccess, ObjectAttributes, TitleIndex, Class, CreateOptions, Disposition)
+
+@NtdllProxy("NtSetValueKey", error_ntstatus)
+def NtSetValueKey(KeyHandle, ValueName, TitleIndex, Type, Data, DataSize):
+    return NtSetValueKey.ctypes_function(KeyHandle, ValueName, TitleIndex, Type, Data, DataSize)
+
+@NtdllProxy("NtQueryValueKey", error_ntstatus)
+def NtQueryValueKey(KeyHandle, ValueName, KeyValueInformationClass, KeyValueInformation, Length, ResultLength):
+    return NtQueryValueKey.ctypes_function(KeyHandle, ValueName, KeyValueInformationClass, KeyValueInformation, Length, ResultLength)
+
+@NtdllProxy("NtEnumerateValueKey", error_ntstatus)
+def NtEnumerateValueKey(KeyHandle, Index, KeyValueInformationClass, KeyValueInformation, Length, ResultLength):
+    return NtEnumerateValueKey.ctypes_function(KeyHandle, Index, KeyValueInformationClass, KeyValueInformation, Length, ResultLength)
+
+@NtdllProxy("NtQueryLicenseValue", error_ntstatus)
+def NtQueryLicenseValue(Name, Type, Buffer, Length=None, DataLength=NeededParameter):
+    if Length is None and Buffer:
+        Length = len(buffer)
+    return NtQueryLicenseValue.ctypes_function(Name, Type, Buffer, Length, DataLength)
+
+
 # Not exported
 
 # @NtdllProxy("ApiSetResolveToHost")
@@ -1114,6 +1225,19 @@ def OpenProcessToken(ProcessHandle=None, DesiredAccess=NeededParameter, TokenHan
 @Advapi32Proxy('OpenThreadToken')
 def OpenThreadToken(ThreadHandle, DesiredAccess, OpenAsSelf, TokenHandle):
     return OpenThreadToken.ctypes_function(ThreadHandle, DesiredAccess, OpenAsSelf, TokenHandle)
+
+@Advapi32Proxy('SetThreadToken')
+def SetThreadToken(Thread, Token):
+    return SetThreadToken.ctypes_function(Thread, Token)
+
+@Advapi32Proxy('DuplicateToken')
+def DuplicateToken(ExistingTokenHandle, ImpersonationLevel, DuplicateTokenHandle):
+    return DuplicateToken.ctypes_function(ExistingTokenHandle, ImpersonationLevel, DuplicateTokenHandle)
+
+@Advapi32Proxy('DuplicateTokenEx')
+def DuplicateTokenEx(hExistingToken, dwDesiredAccess, lpTokenAttributes, ImpersonationLevel, TokenType, phNewToken):
+    return DuplicateTokenEx.ctypes_function(hExistingToken, dwDesiredAccess, lpTokenAttributes, ImpersonationLevel, TokenType, phNewToken)
+
 
 @Advapi32Proxy('LookupPrivilegeValueA')
 def LookupPrivilegeValueA(lpSystemName=None, lpName=NeededParameter, lpLuid=NeededParameter):
@@ -1306,6 +1430,15 @@ def OpenEventLogA(lpUNCServerName=None, lpSourceName=NeededParameter):
 def OpenEventLogW(lpUNCServerName=None, lpSourceName=NeededParameter):
     return OpenEventLogW.ctypes_function(lpUNCServerName, lpSourceName)
 
+@Advapi32Proxy('OpenBackupEventLogA')
+def OpenBackupEventLogA(lpUNCServerName=None, lpSourceName=NeededParameter):
+    return OpenBackupEventLogA.ctypes_function(lpUNCServerName, lpSourceName)
+
+@Advapi32Proxy('OpenBackupEventLogW')
+def OpenBackupEventLogW(lpUNCServerName=None, lpSourceName=NeededParameter):
+    return OpenBackupEventLogW.ctypes_function(lpUNCServerName, lpSourceName)
+
+
 @Advapi32Proxy('ReadEventLogA')
 def ReadEventLogA(hEventLog, dwReadFlags, dwRecordOffset, lpBuffer, nNumberOfBytesToRead, pnBytesRead, pnMinNumberOfBytesNeeded):
     return ReadEventLogA.ctypes_function(hEventLog, dwReadFlags, dwRecordOffset, lpBuffer, nNumberOfBytesToRead, pnBytesRead, pnMinNumberOfBytesNeeded)
@@ -1374,15 +1507,21 @@ def WinVerifyTrust(hwnd, pgActionID, pWVTData):
 def CryptCATAdminCalcHashFromFileHandle(hFile, pcbHash, pbHash, dwFlags):
     return CryptCATAdminCalcHashFromFileHandle.ctypes_function(hFile, pcbHash, pbHash, dwFlags)
 
+@WinTrustProxy('CryptCATAdminCalcHashFromFileHandle2', error_check=zero_is_fail_error_check)
+def CryptCATAdminCalcHashFromFileHandle2(hCatAdmin, hFile, pcbHash, pbHash, dwFlags):
+    return CryptCATAdminCalcHashFromFileHandle2.ctypes_function(hCatAdmin, hFile, pcbHash, pbHash, dwFlags)
 
 @WinTrustProxy('CryptCATAdminEnumCatalogFromHash')
 def CryptCATAdminEnumCatalogFromHash(hCatAdmin, pbHash, cbHash, dwFlags, phPrevCatInfo):
     return CryptCATAdminEnumCatalogFromHash.ctypes_function(hCatAdmin, pbHash, cbHash, dwFlags, phPrevCatInfo)
 
-
 @WinTrustProxy('CryptCATAdminAcquireContext', error_check=zero_is_fail_error_check)
 def CryptCATAdminAcquireContext(phCatAdmin, pgSubsystem, dwFlags):
     return CryptCATAdminAcquireContext.ctypes_function(phCatAdmin, pgSubsystem, dwFlags)
+
+@WinTrustProxy('CryptCATAdminAcquireContext2', error_check=zero_is_fail_error_check)
+def CryptCATAdminAcquireContext2(phCatAdmin, pgSubsystem, pwszHashAlgorithm, pStrongHashPolicy, dwFlags):
+    return CryptCATAdminAcquireContext2.ctypes_function(phCatAdmin, pgSubsystem, pwszHashAlgorithm, pStrongHashPolicy, dwFlags)
 
 
 @WinTrustProxy('CryptCATCatalogInfoFromContext', error_check=zero_is_fail_error_check)
@@ -1594,6 +1733,33 @@ def CryptMsgVerifyCountersignatureEncodedEx(hCryptProv, dwEncodingType, pbSigner
 def CryptHashCertificate(hCryptProv, Algid, dwFlags, pbEncoded, cbEncoded, pbComputedHash, pcbComputedHash):
    return CryptHashCertificate.ctypes_function(hCryptProv, Algid, dwFlags, pbEncoded, cbEncoded, pbComputedHash, pcbComputedHash)
 
+
+@Crypt32Proxy('CryptSignMessage')
+def CryptSignMessage(pSignPara, fDetachedSignature, cToBeSigned, rgpbToBeSigned, rgcbToBeSigned, pbSignedBlob, pcbSignedBlob):
+    return CryptSignMessage.ctypes_function(pSignPara, fDetachedSignature, cToBeSigned, rgpbToBeSigned, rgcbToBeSigned, pbSignedBlob, pcbSignedBlob)
+
+
+@Crypt32Proxy('CryptSignAndEncryptMessage')
+def CryptSignAndEncryptMessage(pSignPara, pEncryptPara, cRecipientCert, rgpRecipientCert, pbToBeSignedAndEncrypted, cbToBeSignedAndEncrypted, pbSignedAndEncryptedBlob, pcbSignedAndEncryptedBlob):
+    return CryptSignAndEncryptMessage.ctypes_function(pSignPara, pEncryptPara, cRecipientCert, rgpRecipientCert, pbToBeSignedAndEncrypted, cbToBeSignedAndEncrypted, pbSignedAndEncryptedBlob, pcbSignedAndEncryptedBlob)
+
+
+@Crypt32Proxy('CryptVerifyMessageSignature')
+def CryptVerifyMessageSignature(pVerifyPara, dwSignerIndex, pbSignedBlob, cbSignedBlob, pbDecoded, pcbDecoded, ppSignerCert):
+    return CryptVerifyMessageSignature.ctypes_function(pVerifyPara, dwSignerIndex, pbSignedBlob, cbSignedBlob, pbDecoded, pcbDecoded, ppSignerCert)
+
+
+@Crypt32Proxy('CryptVerifyMessageSignatureWithKey')
+def CryptVerifyMessageSignatureWithKey(pVerifyPara, pPublicKeyInfo, pbSignedBlob, cbSignedBlob, pbDecoded, pcbDecoded):
+    return CryptVerifyMessageSignatureWithKey.ctypes_function(pVerifyPara, pPublicKeyInfo, pbSignedBlob, cbSignedBlob, pbDecoded, pcbDecoded)
+
+
+@Crypt32Proxy('CryptVerifyMessageHash')
+def CryptVerifyMessageHash(pHashPara, pbHashedBlob, cbHashedBlob, pbToBeHashed, pcbToBeHashed, pbComputedHash, pcbComputedHash):
+    return CryptVerifyMessageHash.ctypes_function(pHashPara, pbHashedBlob, cbHashedBlob, pbToBeHashed, pcbToBeHashed, pbComputedHash, pcbComputedHash)
+
+
+
 # ## CryptUI ## #
 
 @CryptUIProxy('CryptUIDlgViewContext')
@@ -1727,6 +1893,10 @@ def CoCreateInstanceEx(rclsid, punkOuter, dwClsCtx, pServerInfo, dwCount, pResul
 def CoGetInterceptor(iidIntercepted, punkOuter, iid, ppv):
     return CoGetInterceptor.ctypes_function(iidIntercepted, punkOuter, iid, ppv)
 
+@Ole32Proxy('CLSIDFromProgID')
+def CLSIDFromProgID(lpszProgID, lpclsid):
+    return CLSIDFromProgID.ctypes_function(lpszProgID, lpclsid)
+
 # ## Shell32 ## #
 
 @Shell32Proxy('ShellExecuteA')
@@ -1787,3 +1957,135 @@ def ConnectNamedPipe(hNamedPipe, lpOverlapped):
 def SetNamedPipeHandleState(hNamedPipe, lpMode, lpMaxCollectionCount, lpCollectDataTimeout):
     return SetNamedPipeHandleState.ctypes_function(hNamedPipe, lpMode, lpMaxCollectionCount, lpCollectDataTimeout)
 
+
+# Eventlog stuff
+
+@WevtapiProxy("EvtOpenLog")
+def EvtOpenLog(Session, Path, Flags):
+    return EvtOpenLog.ctypes_function(Session, Path, Flags)
+
+
+@WevtapiProxy("EvtClose")
+def EvtClose(Object):
+    return EvtClose.ctypes_function(Object)
+
+
+@WevtapiProxy("EvtQuery")
+def EvtQuery(Session, Path, Query, Flags):
+    return EvtQuery.ctypes_function(Session, Path, Query, Flags)
+
+
+@WevtapiProxy("EvtNext")
+def EvtNext(ResultSet, EventArraySize, EventArray, Timeout, Flags, Returned):
+    return EvtNext.ctypes_function(ResultSet, EventArraySize, EventArray, Timeout, Flags, Returned)
+
+
+@WevtapiProxy("EvtCreateRenderContext")
+def EvtCreateRenderContext(ValuePathsCount, ValuePaths, Flags):
+    return EvtCreateRenderContext.ctypes_function(ValuePathsCount, ValuePaths, Flags)
+
+
+@WevtapiProxy("EvtRender")
+def EvtRender(Context, Fragment, Flags, BufferSize, Buffer, BufferUsed, PropertyCount):
+    return EvtRender.ctypes_function(Context, Fragment, Flags, BufferSize, Buffer, BufferUsed, PropertyCount)
+
+
+@WevtapiProxy("EvtOpenChannelEnum")
+def EvtOpenChannelEnum(Session, Flags):
+    return EvtOpenChannelEnum.ctypes_function(Session, Flags)
+
+
+@WevtapiProxy("EvtNextChannelPath")
+def EvtNextChannelPath(ChannelEnum, ChannelPathBufferSize, ChannelPathBuffer, ChannelPathBufferUsed):
+    return EvtNextChannelPath.ctypes_function(ChannelEnum, ChannelPathBufferSize, ChannelPathBuffer, ChannelPathBufferUsed)
+
+
+@WevtapiProxy("EvtOpenPublisherEnum")
+def EvtOpenPublisherEnum(Session, Flags):
+    return EvtOpenPublisherEnum.ctypes_function(Session, Flags)
+
+
+@WevtapiProxy("EvtNextPublisherId")
+def EvtNextPublisherId(PublisherEnum, PublisherIdBufferSize, PublisherIdBuffer, PublisherIdBufferUsed):
+    return EvtNextPublisherId.ctypes_function(PublisherEnum, PublisherIdBufferSize, PublisherIdBuffer, PublisherIdBufferUsed)
+
+
+@WevtapiProxy("EvtGetLogInfo")
+def EvtGetLogInfo(Log, PropertyId, PropertyValueBufferSize, PropertyValueBuffer, PropertyValueBufferUsed):
+    return EvtGetLogInfo.ctypes_function(Log, PropertyId, PropertyValueBufferSize, PropertyValueBuffer, PropertyValueBufferUsed)
+
+
+@WevtapiProxy("EvtOpenChannelConfig")
+def EvtOpenChannelConfig(Session, ChannelPath, Flags):
+    return EvtOpenChannelConfig.ctypes_function(Session, ChannelPath, Flags)
+
+
+@WevtapiProxy("EvtGetChannelConfigProperty")
+def EvtGetChannelConfigProperty(ChannelConfig, PropertyId, Flags, PropertyValueBufferSize, PropertyValueBuffer, PropertyValueBufferUsed):
+    return EvtGetChannelConfigProperty.ctypes_function(ChannelConfig, PropertyId, Flags, PropertyValueBufferSize, PropertyValueBuffer, PropertyValueBufferUsed)
+
+
+@WevtapiProxy("EvtOpenPublisherMetadata")
+def EvtOpenPublisherMetadata(Session, PublisherIdentity, LogFilePath, Locale, Flags):
+    return EvtOpenPublisherMetadata.ctypes_function(Session, PublisherIdentity, LogFilePath, Locale, Flags)
+
+
+@WevtapiProxy("EvtOpenEventMetadataEnum")
+def EvtOpenEventMetadataEnum(PublisherMetadata, Flags):
+    return EvtOpenEventMetadataEnum.ctypes_function(PublisherMetadata, Flags)
+
+
+@WevtapiProxy("EvtNextEventMetadata")
+def EvtNextEventMetadata(EventMetadataEnum, Flags):
+    return EvtNextEventMetadata.ctypes_function(EventMetadataEnum, Flags)
+
+
+@WevtapiProxy("EvtGetEventMetadataProperty")
+def EvtGetEventMetadataProperty(EventMetadata, PropertyId, Flags, EventMetadataPropertyBufferSize, EventMetadataPropertyBuffer, EventMetadataPropertyBufferUsed):
+    return EvtGetEventMetadataProperty.ctypes_function(EventMetadata, PropertyId, Flags, EventMetadataPropertyBufferSize, EventMetadataPropertyBuffer, EventMetadataPropertyBufferUsed)
+
+
+@WevtapiProxy("EvtGetPublisherMetadataProperty")
+def EvtGetPublisherMetadataProperty(PublisherMetadata, PropertyId, Flags, PublisherMetadataPropertyBufferSize, PublisherMetadataPropertyBuffer, PublisherMetadataPropertyBufferUsed):
+    return EvtGetPublisherMetadataProperty.ctypes_function(PublisherMetadata, PropertyId, Flags, PublisherMetadataPropertyBufferSize, PublisherMetadataPropertyBuffer, PublisherMetadataPropertyBufferUsed)
+
+
+@WevtapiProxy("EvtGetObjectArraySize")
+def EvtGetObjectArraySize(ObjectArray, ObjectArraySize):
+    return EvtGetObjectArraySize.ctypes_function(ObjectArray, ObjectArraySize)
+
+
+@WevtapiProxy("EvtGetObjectArrayProperty")
+def EvtGetObjectArrayProperty(ObjectArray, PropertyId, ArrayIndex, Flags, PropertyValueBufferSize, PropertyValueBuffer, PropertyValueBufferUsed):
+    return EvtGetObjectArrayProperty.ctypes_function(ObjectArray, PropertyId, ArrayIndex, Flags, PropertyValueBufferSize, PropertyValueBuffer, PropertyValueBufferUsed)
+
+@WevtapiProxy("EvtFormatMessage")
+def EvtFormatMessage(PublisherMetadata, Event, MessageId, ValueCount, Values, Flags, BufferSize, Buffer, BufferUsed):
+    return EvtFormatMessage.ctypes_function(PublisherMetadata, Event, MessageId, ValueCount, Values, Flags, BufferSize, Buffer, BufferUsed)
+
+
+# ShlwapiProxy
+
+@ShlwapiProxy("StrStrIW")
+def StrStrIW(pszFirst, pszSrch):
+    return StrStrIW.ctypes_function(pszFirst, pszSrch)
+
+@ShlwapiProxy("StrStrIA")
+def StrStrIA(pszFirst, pszSrch):
+    return StrStrIA.ctypes_function(pszFirst, pszSrch)
+
+@ShlwapiProxy("IsOS")
+def IsOS(dwOS):
+    if not is_implemented(IsOS) and windows.system.version[0] < 6:
+        # Before Vista:
+        # If so use ordinal 437 from DOCUMENTATION
+        # https://docs.microsoft.com/en-us/windows/desktop/api/shlwapi/nf-shlwapi-isos#remarks
+        IsOS.proxy.func_name = 437
+    return IsOS.ctypes_function(dwOS)
+
+
+# OleaccProxy
+
+@OleaccProxy("ObjectFromLresult")
+def ObjectFromLresult(lResult, riid, wParam, ppvObject):
+    return ObjectFromLresult.ctypes_function(lResult, riid, wParam, ppvObject)

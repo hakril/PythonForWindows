@@ -71,6 +71,10 @@ class TestCurrentProcessWithCheckGarbage(object):
         image_path_from_module = windows.current_process.peb.modules[0].fullname.lower()
         assert image_path_from_process_params == image_path_from_module
 
+
+
+
+
 @check_for_gc_garbage
 class TestProcessWithCheckGarbage(object):
     def test_pop_proc_32(self, proc32):
@@ -127,7 +131,6 @@ class TestProcessWithCheckGarbage(object):
             assert proc32_64.read_wstring(addr) ==  test_string
 
     # Test native execution
-
     def test_execute_to_proc32(self, proc32):
             with proc32.allocated_memory(0x1000) as addr:
                 shellcode = x86.MultipleInstr()
@@ -137,7 +140,7 @@ class TestProcessWithCheckGarbage(object):
                 proc32.execute(shellcode.get_code())
                 time.sleep(0.1)
                 dword = proc32.read_dword(addr)
-                assert dword, 0x42424242
+                assert dword == 0x42424242
 
     @windows_64bit_only
     def test_execute_to_64(self, proc64):
@@ -151,26 +154,16 @@ class TestProcessWithCheckGarbage(object):
             qword = proc64.read_qword(addr)
             assert qword == 0x4242424243434343
 
-    # Python execution
 
-    def _skip_if_injection_dll_not_found(self, target):
-        if windows.current_process.bitness == target.bitness:
-            return # Should never fail if we have the same bitness
-        try:
-            windows.injection.validate_python_dll_presence_on_disk(target)
-        except IOError as e:
-            pytest.skip("Python DLL to inject not installed")
-
+    @python_injection
     def test_execute_python(self, proc32_64):
-        self._skip_if_injection_dll_not_found(proc32_64)
         with proc32_64.allocated_memory(0x1000) as addr:
             proc32_64.execute_python('import ctypes; ctypes.c_uint.from_address({0}).value = 0x42424242'.format(addr))
             dword = proc32_64.read_dword(addr)
             assert dword == 0x42424242
 
-
+    @python_injection
     def test_execute_python_suspended(self, proc32_64_suspended):
-        self._skip_if_injection_dll_not_found(proc32_64_suspended)
         proc = proc32_64_suspended
         with proc.allocated_memory(0x1000) as addr:
             proc.execute_python('import ctypes; ctypes.c_uint.from_address({0}).value = 0x42424242'.format(addr))
@@ -193,7 +186,7 @@ class TestProcessWithCheckGarbage(object):
         import time; time.sleep(0.1)
         assert proc32_64.peb.modules[0].name == test_binary_name
 
-
+    @python_injection
     def test_parse_remote_pe(self, proc32_64):
         # Wait for PEB initialization
         # Yeah a don't know but on 32bits system the parsing might begin before
@@ -228,8 +221,8 @@ class TestProcessWithCheckGarbage(object):
         assert exe.baseaddr == exe_by_module.baseaddr
         assert exe.bitness == exe_by_module.bitness
 
+    @python_injection
     def test_execute_python_raises(self, proc32_64):
-        self._skip_if_injection_dll_not_found(proc32_64)
         res = proc32_64.execute_python("import time;time.sleep(0.1); 2")
         assert res == True
         with pytest.raises(windows.injection.RemotePythonError) as ar:

@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/css/mbasic.css" type="text/css" />
-    <script type="text/javascript" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
@@ -99,6 +99,60 @@ parts are accessible.</p>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="handle.html">2.10. Handle – Processes handles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="system_module.html">2.11. System Module – Loaded kernel modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="system_module.html#systemmodule">2.11.1. SystemModule</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_module.html#systemmodulewow64">2.11.2. SystemModuleWow64</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_module.html#basesystemmodule">2.11.3. BaseSystemModule</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="object_manager.html">2.12. Object Manager – Kernel objects</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="object_manager.html#objectmanager">2.12.1. ObjectManager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="object_manager.html#kernelobject">2.12.2. KernelObject</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="task_scheduler.html">2.13. Task scheduler</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="task_scheduler.html#taskservice">2.13.1. TaskService</a></li>
+<li class="toctree-l2"><a class="reference internal" href="task_scheduler.html#taskfolder">2.13.2. TaskFolder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="task_scheduler.html#task">2.13.3. Task</a></li>
+<li class="toctree-l2"><a class="reference internal" href="task_scheduler.html#taskdefinition">2.13.4. TaskDefinition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="task_scheduler.html#action">2.13.5. Action</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="task_scheduler.html#id1">2.13.5.1. Action</a></li>
+<li class="toctree-l3"><a class="reference internal" href="task_scheduler.html#execaction">2.13.5.2. ExecAction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="task_scheduler.html#comhandleraction">2.13.5.3. ComHandlerAction</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="task_scheduler.html#trigger">2.13.6. Trigger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="task_scheduler.html#collections">2.13.7. Collections</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="task_scheduler.html#taskfoldercollection">2.13.7.1. TaskFolderCollection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="task_scheduler.html#taskcollection">2.13.7.2. TaskCollection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="task_scheduler.html#actioncollection">2.13.7.3. ActionCollection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="task_scheduler.html#triggercollection">2.13.7.4. TriggerCollection</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="evtlog.html">2.14. Event Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="evtlog.html#evtlogmanager">2.14.1. EvtlogManager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evtlog.html#channel">2.14.2. Channel</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="evtlog.html#evtchannel">2.14.2.1. EvtChannel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="evtlog.html#channelconfig">2.14.2.2. ChannelConfig</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="evtlog.html#publisher">2.14.3. Publisher</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="evtlog.html#evtpublisher">2.14.3.1. EvtPublisher</a></li>
+<li class="toctree-l3"><a class="reference internal" href="evtlog.html#publishermetadata">2.14.3.2. PublisherMetadata</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="evtlog.html#evtfile">2.14.4. EvtFile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evtlog.html#event">2.14.5. Event</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="evtlog.html#evtevent">2.14.5.1. EvtEvent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="evtlog.html#eventmetadata">2.14.5.2. EventMetadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="evtlog.html#evtquery">2.14.5.3. EvtQuery</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="evtlog.html#todo">2.14.6. TODO</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -118,7 +172,7 @@ parts are accessible.</p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/various.rst.txt"
+      <li><a href="_sources/winobject.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -158,7 +212,7 @@ parts are accessible.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2015, Clement Rouault.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
     </div>
   </body>
 </html>

@@ -16,6 +16,8 @@ div.body {
     max-width: none;
 }
 
+div.bodywrapper { margin-right: 20px; }
+
 div.admonition-todo {
     border-top: 2px solid red;
     border-bottom: 2px solid red;
