@@ -567,8 +567,13 @@ def OpenEventA(dwDesiredAccess, bInheritHandle, lpName):
 def OpenEventW(dwDesiredAccess, bInheritHandle, lpName):
     return OpenEventA.ctypes_function(dwDesiredAccess, bInheritHandle, lpName)
 
+@Kernel32Proxy("GetModuleHandleA")
+def GetModuleHandleA(lpModuleName):
+    return GetModuleHandleA.ctypes_function(lpModuleName)
 
-
+@Kernel32Proxy("GetModuleHandleW")
+def GetModuleHandleW(lpModuleName):
+    return GetModuleHandleW.ctypes_function(lpModuleName)
 
 
 # File stuff
@@ -1128,6 +1133,15 @@ def RtlGetCompressionWorkSpaceSize(CompressionFormatAndEngine, CompressBufferWor
 @NtdllProxy("RtlDosPathNameToNtPathName_U", zero_is_fail_error_check)
 def RtlDosPathNameToNtPathName_U(DosName, NtName=None, PartName=None, RelativeName=None):
     return RtlDosPathNameToNtPathName_U.ctypes_function(DosName, NtName, PartName, RelativeName)
+
+@NtdllProxy("RtlEqualUnicodeString", no_error_check)
+def RtlEqualUnicodeString(String1, String2, CaseInSensitive):
+   return RtlEqualUnicodeString.ctypes_function(String1, String2, CaseInSensitive)
+
+
+
+
+
 
 
 # Section stuff
