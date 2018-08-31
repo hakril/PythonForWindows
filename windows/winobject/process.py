@@ -662,6 +662,14 @@ class Process(utils.AutoHandle):
         PROCESS_MODE_BACKGROUND_END,
         REALTIME_PRIORITY_CLASS)
 
+    @property
+    def memory_info(self):
+        result = gdef.PROCESS_MEMORY_COUNTERS_EX()
+        result.cb = sizeof(gdef.PROCESS_MEMORY_COUNTERS_EX)
+        cast_result = cast(pointer(result),  gdef.PPROCESS_MEMORY_COUNTERS)
+        windows.winproxy.GetProcessMemoryInfo(self.limited_handle, cast_result, result.cb)
+        return result
+
     def query_info(self, information_class, data=None):
         winproxy.NtQueryInformationProcess(self.handle, information_class, byref(data), sizeof(data))
         return data

@@ -611,7 +611,12 @@
 
 #define MS_DEF_RSA_SIG_PROV_A   "Microsoft RSA Signature Cryptographic Provider"
 #define MS_DEF_RSA_SIG_PROV_W   u"Microsoft RSA Signature Cryptographic Provider"
-#define MS_DEF_RSA_SIG_PROV   MS_DEF_RSA_SIG_PROV_W
+#define MS_DEF_RSA_SIG_PROV   MS_DEF_RSA_SIG_PROV_A
+
+#define MS_ENH_RSA_AES_PROV_A    "Microsoft Enhanced RSA and AES Cryptographic Provider"
+#define MS_ENH_RSA_AES_PROV_W    u"Microsoft Enhanced RSA and AES Cryptographic Provider"
+#define MS_ENH_RSA_AES_PROV_XP_A "Microsoft Enhanced RSA and AES Cryptographic Provider (Prototype)"
+#define MS_ENH_RSA_AES_PROV_XP_W u"Microsoft Enhanced RSA and AES Cryptographic Provider (Prototype)"
 
 
 #define CERT_STORE_ADD_NEW                                  1

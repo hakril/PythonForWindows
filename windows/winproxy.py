@@ -746,7 +746,7 @@ if not is_implemented(GetProcessImageFileNameA):
 
 def GetProcessMemoryInfoWrapper(Process, ppsmemCounters, cb):
     return GetProcessMemoryInfo.ctypes_function(Process, ppsmemCounters, cb)
-GetProcessMemoryInfo = Kernel32Proxy("GetProcessMemoryInfo")(QueryWorkingSetExWrapper)
+GetProcessMemoryInfo = Kernel32Proxy("GetProcessMemoryInfo")(GetProcessMemoryInfoWrapper)
 
 if not is_implemented(GetProcessMemoryInfo):
     GetProcessMemoryInfo = PsapiProxy("GetProcessMemoryInfo")(GetProcessMemoryInfoWrapper)

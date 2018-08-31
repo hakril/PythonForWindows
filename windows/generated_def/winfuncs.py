@@ -1,9 +1,459 @@
-from winstructs import *
 from interfaces import *
+from winstructs import *
 #def ObjectFromLresult(lResult, riid, wParam, ppvObject):
 #    return ObjectFromLresult.ctypes_function(lResult, riid, wParam, ppvObject)
 ObjectFromLresultPrototype = WINFUNCTYPE(HRESULT, LRESULT, REFIID, WPARAM, POINTER(PVOID))
 ObjectFromLresultParams = ((1, 'lResult'), (1, 'riid'), (1, 'wParam'), (1, 'ppvObject'))
+
+#def TpCallbackSendAlpcMessageOnCompletion(TpHandle, PortHandle, Flags, SendMessage):
+#    return TpCallbackSendAlpcMessageOnCompletion.ctypes_function(TpHandle, PortHandle, Flags, SendMessage)
+TpCallbackSendAlpcMessageOnCompletionPrototype = WINFUNCTYPE(NTSTATUS, HANDLE, HANDLE, ULONG, PPORT_MESSAGE)
+TpCallbackSendAlpcMessageOnCompletionParams = ((1, 'TpHandle'), (1, 'PortHandle'), (1, 'Flags'), (1, 'SendMessage'))
+
+#def NtQueryLicenseValue(Name, Type, Buffer, Length, DataLength):
+#    return NtQueryLicenseValue.ctypes_function(Name, Type, Buffer, Length, DataLength)
+NtQueryLicenseValuePrototype = WINFUNCTYPE(NTSTATUS, PUNICODE_STRING, POINTER(ULONG), PVOID, ULONG, POINTER(ULONG))
+NtQueryLicenseValueParams = ((1, 'Name'), (1, 'Type'), (1, 'Buffer'), (1, 'Length'), (1, 'DataLength'))
+
+#def GetCursorPos(lpPoint):
+#    return GetCursorPos.ctypes_function(lpPoint)
+GetCursorPosPrototype = WINFUNCTYPE(BOOL, LPPOINT)
+GetCursorPosParams = ((1, 'lpPoint'),)
+
+#def WindowFromPoint(Point):
+#    return WindowFromPoint.ctypes_function(Point)
+WindowFromPointPrototype = WINFUNCTYPE(HWND, POINT)
+WindowFromPointParams = ((1, 'Point'),)
+
+#def GetWindowRect(hWnd, lpRect):
+#    return GetWindowRect.ctypes_function(hWnd, lpRect)
+GetWindowRectPrototype = WINFUNCTYPE(BOOL, HWND, LPRECT)
+GetWindowRectParams = ((1, 'hWnd'), (1, 'lpRect'))
+
+#def EnumWindows(lpEnumFunc, lParam):
+#    return EnumWindows.ctypes_function(lpEnumFunc, lParam)
+EnumWindowsPrototype = WINFUNCTYPE(BOOL, WNDENUMPROC, LPARAM)
+EnumWindowsParams = ((1, 'lpEnumFunc'), (1, 'lParam'))
+
+#def GetWindowTextA(hWnd, lpString, nMaxCount):
+#    return GetWindowTextA.ctypes_function(hWnd, lpString, nMaxCount)
+GetWindowTextAPrototype = WINFUNCTYPE(INT, HWND, LPSTR, INT)
+GetWindowTextAParams = ((1, 'hWnd'), (1, 'lpString'), (1, 'nMaxCount'))
+
+#def GetParent(hWnd):
+#    return GetParent.ctypes_function(hWnd)
+GetParentPrototype = WINFUNCTYPE(HWND, HWND)
+GetParentParams = ((1, 'hWnd'),)
+
+#def GetWindowTextW(hWnd, lpString, nMaxCount):
+#    return GetWindowTextW.ctypes_function(hWnd, lpString, nMaxCount)
+GetWindowTextWPrototype = WINFUNCTYPE(INT, HWND, LPWSTR, INT)
+GetWindowTextWParams = ((1, 'hWnd'), (1, 'lpString'), (1, 'nMaxCount'))
+
+#def GetWindowModuleFileNameA(hwnd, pszFileName, cchFileNameMax):
+#    return GetWindowModuleFileNameA.ctypes_function(hwnd, pszFileName, cchFileNameMax)
+GetWindowModuleFileNameAPrototype = WINFUNCTYPE(UINT, HWND, LPSTR, UINT)
+GetWindowModuleFileNameAParams = ((1, 'hwnd'), (1, 'pszFileName'), (1, 'cchFileNameMax'))
+
+#def GetWindowModuleFileNameW(hwnd, pszFileName, cchFileNameMax):
+#    return GetWindowModuleFileNameW.ctypes_function(hwnd, pszFileName, cchFileNameMax)
+GetWindowModuleFileNameWPrototype = WINFUNCTYPE(UINT, HWND, LPWSTR, UINT)
+GetWindowModuleFileNameWParams = ((1, 'hwnd'), (1, 'pszFileName'), (1, 'cchFileNameMax'))
+
+#def EnumChildWindows(hWndParent, lpEnumFunc, lParam):
+#    return EnumChildWindows.ctypes_function(hWndParent, lpEnumFunc, lParam)
+EnumChildWindowsPrototype = WINFUNCTYPE(BOOL, HWND, WNDENUMPROC, LPARAM)
+EnumChildWindowsParams = ((1, 'hWndParent'), (1, 'lpEnumFunc'), (1, 'lParam'))
+
+#def CloseWindow(hWnd):
+#    return CloseWindow.ctypes_function(hWnd)
+CloseWindowPrototype = WINFUNCTYPE(BOOL, HWND)
+CloseWindowParams = ((1, 'hWnd'),)
+
+#def GetDesktopWindow():
+#    return GetDesktopWindow.ctypes_function()
+GetDesktopWindowPrototype = WINFUNCTYPE(HWND)
+GetDesktopWindowParams = ()
+
+#def GetForegroundWindow():
+#    return GetForegroundWindow.ctypes_function()
+GetForegroundWindowPrototype = WINFUNCTYPE(HWND)
+GetForegroundWindowParams = ()
+
+#def BringWindowToTop(hWnd):
+#    return BringWindowToTop.ctypes_function(hWnd)
+BringWindowToTopPrototype = WINFUNCTYPE(BOOL, HWND)
+BringWindowToTopParams = ((1, 'hWnd'),)
+
+#def MoveWindow(hWnd, X, Y, nWidth, nHeight, bRepaint):
+#    return MoveWindow.ctypes_function(hWnd, X, Y, nWidth, nHeight, bRepaint)
+MoveWindowPrototype = WINFUNCTYPE(BOOL, HWND, INT, INT, INT, INT, BOOL)
+MoveWindowParams = ((1, 'hWnd'), (1, 'X'), (1, 'Y'), (1, 'nWidth'), (1, 'nHeight'), (1, 'bRepaint'))
+
+#def SetWindowPos(hWnd, hWndInsertAfter, X, Y, cx, cy, uFlags):
+#    return SetWindowPos.ctypes_function(hWnd, hWndInsertAfter, X, Y, cx, cy, uFlags)
+SetWindowPosPrototype = WINFUNCTYPE(BOOL, HWND, HWND, INT, INT, INT, INT, UINT)
+SetWindowPosParams = ((1, 'hWnd'), (1, 'hWndInsertAfter'), (1, 'X'), (1, 'Y'), (1, 'cx'), (1, 'cy'), (1, 'uFlags'))
+
+#def SetWindowTextA(hWnd, lpString):
+#    return SetWindowTextA.ctypes_function(hWnd, lpString)
+SetWindowTextAPrototype = WINFUNCTYPE(BOOL, HWND, LPCSTR)
+SetWindowTextAParams = ((1, 'hWnd'), (1, 'lpString'))
+
+#def SetWindowTextW(hWnd, lpString):
+#    return SetWindowTextW.ctypes_function(hWnd, lpString)
+SetWindowTextWPrototype = WINFUNCTYPE(BOOL, HWND, LPWSTR)
+SetWindowTextWParams = ((1, 'hWnd'), (1, 'lpString'))
+
+#def RealGetWindowClassA(hwnd, pszType, cchType):
+#    return RealGetWindowClassA.ctypes_function(hwnd, pszType, cchType)
+RealGetWindowClassAPrototype = WINFUNCTYPE(UINT, HWND, LPCSTR, UINT)
+RealGetWindowClassAParams = ((1, 'hwnd'), (1, 'pszType'), (1, 'cchType'))
+
+#def RealGetWindowClassW(hwnd, pszType, cchType):
+#    return RealGetWindowClassW.ctypes_function(hwnd, pszType, cchType)
+RealGetWindowClassWPrototype = WINFUNCTYPE(UINT, HWND, LPWSTR, UINT)
+RealGetWindowClassWParams = ((1, 'hwnd'), (1, 'pszType'), (1, 'cchType'))
+
+#def GetClassInfoExA(hinst, lpszClass, lpwcx):
+#    return GetClassInfoExA.ctypes_function(hinst, lpszClass, lpwcx)
+GetClassInfoExAPrototype = WINFUNCTYPE(BOOL, HINSTANCE, LPCSTR, LPWNDCLASSEXA)
+GetClassInfoExAParams = ((1, 'hinst'), (1, 'lpszClass'), (1, 'lpwcx'))
+
+#def GetClassInfoExW(hinst, lpszClass, lpwcx):
+#    return GetClassInfoExW.ctypes_function(hinst, lpszClass, lpwcx)
+GetClassInfoExWPrototype = WINFUNCTYPE(BOOL, HINSTANCE, LPCWSTR, LPWNDCLASSEXW)
+GetClassInfoExWParams = ((1, 'hinst'), (1, 'lpszClass'), (1, 'lpwcx'))
+
+#def GetClassNameA(hWnd, lpClassName, nMaxCount):
+#    return GetClassNameA.ctypes_function(hWnd, lpClassName, nMaxCount)
+GetClassNameAPrototype = WINFUNCTYPE(INT, HWND, LPCSTR, INT)
+GetClassNameAParams = ((1, 'hWnd'), (1, 'lpClassName'), (1, 'nMaxCount'))
+
+#def GetClassNameW(hWnd, lpClassName, nMaxCount):
+#    return GetClassNameW.ctypes_function(hWnd, lpClassName, nMaxCount)
+GetClassNameWPrototype = WINFUNCTYPE(INT, HWND, LPWSTR, INT)
+GetClassNameWParams = ((1, 'hWnd'), (1, 'lpClassName'), (1, 'nMaxCount'))
+
+#def GetWindowThreadProcessId(hWnd, lpdwProcessId):
+#    return GetWindowThreadProcessId.ctypes_function(hWnd, lpdwProcessId)
+GetWindowThreadProcessIdPrototype = WINFUNCTYPE(DWORD, HWND, LPDWORD)
+GetWindowThreadProcessIdParams = ((1, 'hWnd'), (1, 'lpdwProcessId'))
+
+#def OpenEventLogA(lpUNCServerName, lpSourceName):
+#    return OpenEventLogA.ctypes_function(lpUNCServerName, lpSourceName)
+OpenEventLogAPrototype = WINFUNCTYPE(HANDLE, LPCSTR, LPCSTR)
+OpenEventLogAParams = ((1, 'lpUNCServerName'), (1, 'lpSourceName'))
+
+#def OpenEventLogW(lpUNCServerName, lpSourceName):
+#    return OpenEventLogW.ctypes_function(lpUNCServerName, lpSourceName)
+OpenEventLogWPrototype = WINFUNCTYPE(HANDLE, LPWSTR, LPWSTR)
+OpenEventLogWParams = ((1, 'lpUNCServerName'), (1, 'lpSourceName'))
+
+#def OpenBackupEventLogA(lpUNCServerName, lpSourceName):
+#    return OpenBackupEventLogA.ctypes_function(lpUNCServerName, lpSourceName)
+OpenBackupEventLogAPrototype = WINFUNCTYPE(HANDLE, LPCSTR, LPCSTR)
+OpenBackupEventLogAParams = ((1, 'lpUNCServerName'), (1, 'lpSourceName'))
+
+#def OpenBackupEventLogW(lpUNCServerName, lpSourceName):
+#    return OpenBackupEventLogW.ctypes_function(lpUNCServerName, lpSourceName)
+OpenBackupEventLogWPrototype = WINFUNCTYPE(HANDLE, LPWSTR, LPWSTR)
+OpenBackupEventLogWParams = ((1, 'lpUNCServerName'), (1, 'lpSourceName'))
+
+#def ReadEventLogA(hEventLog, dwReadFlags, dwRecordOffset, lpBuffer, nNumberOfBytesToRead, pnBytesRead, pnMinNumberOfBytesNeeded):
+#    return ReadEventLogA.ctypes_function(hEventLog, dwReadFlags, dwRecordOffset, lpBuffer, nNumberOfBytesToRead, pnBytesRead, pnMinNumberOfBytesNeeded)
+ReadEventLogAPrototype = WINFUNCTYPE(BOOL, HANDLE, DWORD, DWORD, LPVOID, DWORD, POINTER(DWORD), POINTER(DWORD))
+ReadEventLogAParams = ((1, 'hEventLog'), (1, 'dwReadFlags'), (1, 'dwRecordOffset'), (1, 'lpBuffer'), (1, 'nNumberOfBytesToRead'), (1, 'pnBytesRead'), (1, 'pnMinNumberOfBytesNeeded'))
+
+#def ReadEventLogW(hEventLog, dwReadFlags, dwRecordOffset, lpBuffer, nNumberOfBytesToRead, pnBytesRead, pnMinNumberOfBytesNeeded):
+#    return ReadEventLogW.ctypes_function(hEventLog, dwReadFlags, dwRecordOffset, lpBuffer, nNumberOfBytesToRead, pnBytesRead, pnMinNumberOfBytesNeeded)
+ReadEventLogWPrototype = WINFUNCTYPE(BOOL, HANDLE, DWORD, DWORD, LPVOID, DWORD, POINTER(DWORD), POINTER(DWORD))
+ReadEventLogWParams = ((1, 'hEventLog'), (1, 'dwReadFlags'), (1, 'dwRecordOffset'), (1, 'lpBuffer'), (1, 'nNumberOfBytesToRead'), (1, 'pnBytesRead'), (1, 'pnMinNumberOfBytesNeeded'))
+
+#def GetEventLogInformation(hEventLog, dwInfoLevel, lpBuffer, cbBufSize, pcbBytesNeeded):
+#    return GetEventLogInformation.ctypes_function(hEventLog, dwInfoLevel, lpBuffer, cbBufSize, pcbBytesNeeded)
+GetEventLogInformationPrototype = WINFUNCTYPE(BOOL, HANDLE, DWORD, LPVOID, DWORD, LPDWORD)
+GetEventLogInformationParams = ((1, 'hEventLog'), (1, 'dwInfoLevel'), (1, 'lpBuffer'), (1, 'cbBufSize'), (1, 'pcbBytesNeeded'))
+
+#def GetNumberOfEventLogRecords(hEventLog, NumberOfRecords):
+#    return GetNumberOfEventLogRecords.ctypes_function(hEventLog, NumberOfRecords)
+GetNumberOfEventLogRecordsPrototype = WINFUNCTYPE(BOOL, HANDLE, PDWORD)
+GetNumberOfEventLogRecordsParams = ((1, 'hEventLog'), (1, 'NumberOfRecords'))
+
+#def CloseEventLog(hEventLog):
+#    return CloseEventLog.ctypes_function(hEventLog)
+CloseEventLogPrototype = WINFUNCTYPE(BOOL, HANDLE)
+CloseEventLogParams = ((1, 'hEventLog'),)
+
+#def EvtOpenLog(Session, Path, Flags):
+#    return EvtOpenLog.ctypes_function(Session, Path, Flags)
+EvtOpenLogPrototype = WINFUNCTYPE(EVT_HANDLE, EVT_HANDLE, LPCWSTR, DWORD)
+EvtOpenLogParams = ((1, 'Session'), (1, 'Path'), (1, 'Flags'))
+
+#def EvtQuery(Session, Path, Query, Flags):
+#    return EvtQuery.ctypes_function(Session, Path, Query, Flags)
+EvtQueryPrototype = WINFUNCTYPE(EVT_HANDLE, EVT_HANDLE, LPCWSTR, LPCWSTR, DWORD)
+EvtQueryParams = ((1, 'Session'), (1, 'Path'), (1, 'Query'), (1, 'Flags'))
+
+#def EvtNext(ResultSet, EventArraySize, EventArray, Timeout, Flags, Returned):
+#    return EvtNext.ctypes_function(ResultSet, EventArraySize, EventArray, Timeout, Flags, Returned)
+EvtNextPrototype = WINFUNCTYPE(BOOL, EVT_HANDLE, DWORD, POINTER(EVT_HANDLE), DWORD, DWORD, PDWORD)
+EvtNextParams = ((1, 'ResultSet'), (1, 'EventArraySize'), (1, 'EventArray'), (1, 'Timeout'), (1, 'Flags'), (1, 'Returned'))
+
+#def EvtCreateRenderContext(ValuePathsCount, ValuePaths, Flags):
+#    return EvtCreateRenderContext.ctypes_function(ValuePathsCount, ValuePaths, Flags)
+EvtCreateRenderContextPrototype = WINFUNCTYPE(EVT_HANDLE, DWORD, POINTER(LPCWSTR), DWORD)
+EvtCreateRenderContextParams = ((1, 'ValuePathsCount'), (1, 'ValuePaths'), (1, 'Flags'))
+
+#def EvtRender(Context, Fragment, Flags, BufferSize, Buffer, BufferUsed, PropertyCount):
+#    return EvtRender.ctypes_function(Context, Fragment, Flags, BufferSize, Buffer, BufferUsed, PropertyCount)
+EvtRenderPrototype = WINFUNCTYPE(BOOL, EVT_HANDLE, EVT_HANDLE, DWORD, DWORD, PVOID, PDWORD, PDWORD)
+EvtRenderParams = ((1, 'Context'), (1, 'Fragment'), (1, 'Flags'), (1, 'BufferSize'), (1, 'Buffer'), (1, 'BufferUsed'), (1, 'PropertyCount'))
+
+#def EvtClose(Object):
+#    return EvtClose.ctypes_function(Object)
+EvtClosePrototype = WINFUNCTYPE(BOOL, EVT_HANDLE)
+EvtCloseParams = ((1, 'Object'),)
+
+#def EvtOpenChannelEnum(Session, Flags):
+#    return EvtOpenChannelEnum.ctypes_function(Session, Flags)
+EvtOpenChannelEnumPrototype = WINFUNCTYPE(EVT_HANDLE, EVT_HANDLE, DWORD)
+EvtOpenChannelEnumParams = ((1, 'Session'), (1, 'Flags'))
+
+#def EvtNextChannelPath(ChannelEnum, ChannelPathBufferSize, ChannelPathBuffer, ChannelPathBufferUsed):
+#    return EvtNextChannelPath.ctypes_function(ChannelEnum, ChannelPathBufferSize, ChannelPathBuffer, ChannelPathBufferUsed)
+EvtNextChannelPathPrototype = WINFUNCTYPE(BOOL, EVT_HANDLE, DWORD, LPWSTR, PDWORD)
+EvtNextChannelPathParams = ((1, 'ChannelEnum'), (1, 'ChannelPathBufferSize'), (1, 'ChannelPathBuffer'), (1, 'ChannelPathBufferUsed'))
+
+#def EvtOpenPublisherEnum(Session, Flags):
+#    return EvtOpenPublisherEnum.ctypes_function(Session, Flags)
+EvtOpenPublisherEnumPrototype = WINFUNCTYPE(EVT_HANDLE, EVT_HANDLE, DWORD)
+EvtOpenPublisherEnumParams = ((1, 'Session'), (1, 'Flags'))
+
+#def EvtNextPublisherId(PublisherEnum, PublisherIdBufferSize, PublisherIdBuffer, PublisherIdBufferUsed):
+#    return EvtNextPublisherId.ctypes_function(PublisherEnum, PublisherIdBufferSize, PublisherIdBuffer, PublisherIdBufferUsed)
+EvtNextPublisherIdPrototype = WINFUNCTYPE(BOOL, EVT_HANDLE, DWORD, LPWSTR, PDWORD)
+EvtNextPublisherIdParams = ((1, 'PublisherEnum'), (1, 'PublisherIdBufferSize'), (1, 'PublisherIdBuffer'), (1, 'PublisherIdBufferUsed'))
+
+#def EvtGetLogInfo(Log, PropertyId, PropertyValueBufferSize, PropertyValueBuffer, PropertyValueBufferUsed):
+#    return EvtGetLogInfo.ctypes_function(Log, PropertyId, PropertyValueBufferSize, PropertyValueBuffer, PropertyValueBufferUsed)
+EvtGetLogInfoPrototype = WINFUNCTYPE(BOOL, EVT_HANDLE, EVT_LOG_PROPERTY_ID, DWORD, PEVT_VARIANT, PDWORD)
+EvtGetLogInfoParams = ((1, 'Log'), (1, 'PropertyId'), (1, 'PropertyValueBufferSize'), (1, 'PropertyValueBuffer'), (1, 'PropertyValueBufferUsed'))
+
+#def EvtOpenChannelConfig(Session, ChannelPath, Flags):
+#    return EvtOpenChannelConfig.ctypes_function(Session, ChannelPath, Flags)
+EvtOpenChannelConfigPrototype = WINFUNCTYPE(EVT_HANDLE, EVT_HANDLE, LPCWSTR, DWORD)
+EvtOpenChannelConfigParams = ((1, 'Session'), (1, 'ChannelPath'), (1, 'Flags'))
+
+#def EvtGetChannelConfigProperty(ChannelConfig, PropertyId, Flags, PropertyValueBufferSize, PropertyValueBuffer, PropertyValueBufferUsed):
+#    return EvtGetChannelConfigProperty.ctypes_function(ChannelConfig, PropertyId, Flags, PropertyValueBufferSize, PropertyValueBuffer, PropertyValueBufferUsed)
+EvtGetChannelConfigPropertyPrototype = WINFUNCTYPE(BOOL, EVT_HANDLE, EVT_CHANNEL_CONFIG_PROPERTY_ID, DWORD, DWORD, PEVT_VARIANT, PDWORD)
+EvtGetChannelConfigPropertyParams = ((1, 'ChannelConfig'), (1, 'PropertyId'), (1, 'Flags'), (1, 'PropertyValueBufferSize'), (1, 'PropertyValueBuffer'), (1, 'PropertyValueBufferUsed'))
+
+#def EvtOpenPublisherMetadata(Session, PublisherIdentity, LogFilePath, Locale, Flags):
+#    return EvtOpenPublisherMetadata.ctypes_function(Session, PublisherIdentity, LogFilePath, Locale, Flags)
+EvtOpenPublisherMetadataPrototype = WINFUNCTYPE(EVT_HANDLE, EVT_HANDLE, LPCWSTR, LPCWSTR, LCID, DWORD)
+EvtOpenPublisherMetadataParams = ((1, 'Session'), (1, 'PublisherIdentity'), (1, 'LogFilePath'), (1, 'Locale'), (1, 'Flags'))
+
+#def EvtOpenEventMetadataEnum(PublisherMetadata, Flags):
+#    return EvtOpenEventMetadataEnum.ctypes_function(PublisherMetadata, Flags)
+EvtOpenEventMetadataEnumPrototype = WINFUNCTYPE(EVT_HANDLE, EVT_HANDLE, DWORD)
+EvtOpenEventMetadataEnumParams = ((1, 'PublisherMetadata'), (1, 'Flags'))
+
+#def EvtNextEventMetadata(EventMetadataEnum, Flags):
+#    return EvtNextEventMetadata.ctypes_function(EventMetadataEnum, Flags)
+EvtNextEventMetadataPrototype = WINFUNCTYPE(EVT_HANDLE, EVT_HANDLE, DWORD)
+EvtNextEventMetadataParams = ((1, 'EventMetadataEnum'), (1, 'Flags'))
+
+#def EvtGetEventMetadataProperty(EventMetadata, PropertyId, Flags, EventMetadataPropertyBufferSize, EventMetadataPropertyBuffer, EventMetadataPropertyBufferUsed):
+#    return EvtGetEventMetadataProperty.ctypes_function(EventMetadata, PropertyId, Flags, EventMetadataPropertyBufferSize, EventMetadataPropertyBuffer, EventMetadataPropertyBufferUsed)
+EvtGetEventMetadataPropertyPrototype = WINFUNCTYPE(BOOL, EVT_HANDLE, EVT_EVENT_METADATA_PROPERTY_ID, DWORD, DWORD, PEVT_VARIANT, PDWORD)
+EvtGetEventMetadataPropertyParams = ((1, 'EventMetadata'), (1, 'PropertyId'), (1, 'Flags'), (1, 'EventMetadataPropertyBufferSize'), (1, 'EventMetadataPropertyBuffer'), (1, 'EventMetadataPropertyBufferUsed'))
+
+#def EvtGetPublisherMetadataProperty(PublisherMetadata, PropertyId, Flags, PublisherMetadataPropertyBufferSize, PublisherMetadataPropertyBuffer, PublisherMetadataPropertyBufferUsed):
+#    return EvtGetPublisherMetadataProperty.ctypes_function(PublisherMetadata, PropertyId, Flags, PublisherMetadataPropertyBufferSize, PublisherMetadataPropertyBuffer, PublisherMetadataPropertyBufferUsed)
+EvtGetPublisherMetadataPropertyPrototype = WINFUNCTYPE(BOOL, EVT_HANDLE, EVT_PUBLISHER_METADATA_PROPERTY_ID, DWORD, DWORD, PEVT_VARIANT, PDWORD)
+EvtGetPublisherMetadataPropertyParams = ((1, 'PublisherMetadata'), (1, 'PropertyId'), (1, 'Flags'), (1, 'PublisherMetadataPropertyBufferSize'), (1, 'PublisherMetadataPropertyBuffer'), (1, 'PublisherMetadataPropertyBufferUsed'))
+
+#def EvtGetObjectArraySize(ObjectArray, ObjectArraySize):
+#    return EvtGetObjectArraySize.ctypes_function(ObjectArray, ObjectArraySize)
+EvtGetObjectArraySizePrototype = WINFUNCTYPE(BOOL, EVT_OBJECT_ARRAY_PROPERTY_HANDLE, PDWORD)
+EvtGetObjectArraySizeParams = ((1, 'ObjectArray'), (1, 'ObjectArraySize'))
+
+#def EvtGetObjectArrayProperty(ObjectArray, PropertyId, ArrayIndex, Flags, PropertyValueBufferSize, PropertyValueBuffer, PropertyValueBufferUsed):
+#    return EvtGetObjectArrayProperty.ctypes_function(ObjectArray, PropertyId, ArrayIndex, Flags, PropertyValueBufferSize, PropertyValueBuffer, PropertyValueBufferUsed)
+EvtGetObjectArrayPropertyPrototype = WINFUNCTYPE(BOOL, EVT_OBJECT_ARRAY_PROPERTY_HANDLE, DWORD, DWORD, DWORD, DWORD, PEVT_VARIANT, PDWORD)
+EvtGetObjectArrayPropertyParams = ((1, 'ObjectArray'), (1, 'PropertyId'), (1, 'ArrayIndex'), (1, 'Flags'), (1, 'PropertyValueBufferSize'), (1, 'PropertyValueBuffer'), (1, 'PropertyValueBufferUsed'))
+
+#def EvtFormatMessage(PublisherMetadata, Event, MessageId, ValueCount, Values, Flags, BufferSize, Buffer, BufferUsed):
+#    return EvtFormatMessage.ctypes_function(PublisherMetadata, Event, MessageId, ValueCount, Values, Flags, BufferSize, Buffer, BufferUsed)
+EvtFormatMessagePrototype = WINFUNCTYPE(BOOL, EVT_HANDLE, EVT_HANDLE, DWORD, DWORD, PEVT_VARIANT, DWORD, DWORD, LPWSTR, PDWORD)
+EvtFormatMessageParams = ((1, 'PublisherMetadata'), (1, 'Event'), (1, 'MessageId'), (1, 'ValueCount'), (1, 'Values'), (1, 'Flags'), (1, 'BufferSize'), (1, 'Buffer'), (1, 'BufferUsed'))
+
+#def NtOpenKey(KeyHandle, DesiredAccess, ObjectAttributes):
+#    return NtOpenKey.ctypes_function(KeyHandle, DesiredAccess, ObjectAttributes)
+NtOpenKeyPrototype = WINFUNCTYPE(NTSTATUS, PHANDLE, ACCESS_MASK, POBJECT_ATTRIBUTES)
+NtOpenKeyParams = ((1, 'KeyHandle'), (1, 'DesiredAccess'), (1, 'ObjectAttributes'))
+
+#def NtCreateKey(pKeyHandle, DesiredAccess, ObjectAttributes, TitleIndex, Class, CreateOptions, Disposition):
+#    return NtCreateKey.ctypes_function(pKeyHandle, DesiredAccess, ObjectAttributes, TitleIndex, Class, CreateOptions, Disposition)
+NtCreateKeyPrototype = WINFUNCTYPE(NTSTATUS, PHANDLE, ACCESS_MASK, POBJECT_ATTRIBUTES, ULONG, PUNICODE_STRING, ULONG, PULONG)
+NtCreateKeyParams = ((1, 'pKeyHandle'), (1, 'DesiredAccess'), (1, 'ObjectAttributes'), (1, 'TitleIndex'), (1, 'Class'), (1, 'CreateOptions'), (1, 'Disposition'))
+
+#def NtSetValueKey(KeyHandle, ValueName, TitleIndex, Type, Data, DataSize):
+#    return NtSetValueKey.ctypes_function(KeyHandle, ValueName, TitleIndex, Type, Data, DataSize)
+NtSetValueKeyPrototype = WINFUNCTYPE(NTSTATUS, HANDLE, PUNICODE_STRING, ULONG, ULONG, PVOID, ULONG)
+NtSetValueKeyParams = ((1, 'KeyHandle'), (1, 'ValueName'), (1, 'TitleIndex'), (1, 'Type'), (1, 'Data'), (1, 'DataSize'))
+
+#def NtQueryValueKey(KeyHandle, ValueName, KeyValueInformationClass, KeyValueInformation, Length, ResultLength):
+#    return NtQueryValueKey.ctypes_function(KeyHandle, ValueName, KeyValueInformationClass, KeyValueInformation, Length, ResultLength)
+NtQueryValueKeyPrototype = WINFUNCTYPE(NTSTATUS, HANDLE, PUNICODE_STRING, KEY_VALUE_INFORMATION_CLASS, PVOID, ULONG, PULONG)
+NtQueryValueKeyParams = ((1, 'KeyHandle'), (1, 'ValueName'), (1, 'KeyValueInformationClass'), (1, 'KeyValueInformation'), (1, 'Length'), (1, 'ResultLength'))
+
+#def NtEnumerateValueKey(KeyHandle, Index, KeyValueInformationClass, KeyValueInformation, Length, ResultLength):
+#    return NtEnumerateValueKey.ctypes_function(KeyHandle, Index, KeyValueInformationClass, KeyValueInformation, Length, ResultLength)
+NtEnumerateValueKeyPrototype = WINFUNCTYPE(NTSTATUS, HANDLE, ULONG, KEY_VALUE_INFORMATION_CLASS, PVOID, ULONG, PULONG)
+NtEnumerateValueKeyParams = ((1, 'KeyHandle'), (1, 'Index'), (1, 'KeyValueInformationClass'), (1, 'KeyValueInformation'), (1, 'Length'), (1, 'ResultLength'))
+
+#def NtAlpcCreatePort(PortHandle, ObjectAttributes, PortAttributes):
+#    return NtAlpcCreatePort.ctypes_function(PortHandle, ObjectAttributes, PortAttributes)
+NtAlpcCreatePortPrototype = WINFUNCTYPE(NTSTATUS, PHANDLE, POBJECT_ATTRIBUTES, PALPC_PORT_ATTRIBUTES)
+NtAlpcCreatePortParams = ((1, 'PortHandle'), (1, 'ObjectAttributes'), (1, 'PortAttributes'))
+
+#def NtAlpcQueryInformation(PortHandle, PortInformationClass, PortInformation, Length, ReturnLength):
+#    return NtAlpcQueryInformation.ctypes_function(PortHandle, PortInformationClass, PortInformation, Length, ReturnLength)
+NtAlpcQueryInformationPrototype = WINFUNCTYPE(NTSTATUS, HANDLE, ALPC_PORT_INFORMATION_CLASS, PVOID, ULONG, PULONG)
+NtAlpcQueryInformationParams = ((1, 'PortHandle'), (1, 'PortInformationClass'), (1, 'PortInformation'), (1, 'Length'), (1, 'ReturnLength'))
+
+#def NtAlpcQueryInformationMessage(PortHandle, PortMessage, MessageInformationClass, MessageInformation, Length, ReturnLength):
+#    return NtAlpcQueryInformationMessage.ctypes_function(PortHandle, PortMessage, MessageInformationClass, MessageInformation, Length, ReturnLength)
+NtAlpcQueryInformationMessagePrototype = WINFUNCTYPE(NTSTATUS, HANDLE, PPORT_MESSAGE, ALPC_MESSAGE_INFORMATION_CLASS, PVOID, ULONG, PULONG)
+NtAlpcQueryInformationMessageParams = ((1, 'PortHandle'), (1, 'PortMessage'), (1, 'MessageInformationClass'), (1, 'MessageInformation'), (1, 'Length'), (1, 'ReturnLength'))
+
+#def NtAlpcConnectPort(PortHandle, PortName, ObjectAttributes, PortAttributes, Flags, RequiredServerSid, ConnectionMessage, BufferLength, OutMessageAttributes, InMessageAttributes, Timeout):
+#    return NtAlpcConnectPort.ctypes_function(PortHandle, PortName, ObjectAttributes, PortAttributes, Flags, RequiredServerSid, ConnectionMessage, BufferLength, OutMessageAttributes, InMessageAttributes, Timeout)
+NtAlpcConnectPortPrototype = WINFUNCTYPE(NTSTATUS, PHANDLE, PUNICODE_STRING, POBJECT_ATTRIBUTES, PALPC_PORT_ATTRIBUTES, ULONG, PSID, PPORT_MESSAGE, PULONG, PALPC_MESSAGE_ATTRIBUTES, PALPC_MESSAGE_ATTRIBUTES, PLARGE_INTEGER)
+NtAlpcConnectPortParams = ((1, 'PortHandle'), (1, 'PortName'), (1, 'ObjectAttributes'), (1, 'PortAttributes'), (1, 'Flags'), (1, 'RequiredServerSid'), (1, 'ConnectionMessage'), (1, 'BufferLength'), (1, 'OutMessageAttributes'), (1, 'InMessageAttributes'), (1, 'Timeout'))
+
+#def NtAlpcConnectPortEx(PortHandle, ConnectionPortObjectAttributes, ClientPortObjectAttributes, PortAttributes, Flags, ServerSecurityRequirements, ConnectionMessage, BufferLength, OutMessageAttributes, InMessageAttributes, Timeout):
+#    return NtAlpcConnectPortEx.ctypes_function(PortHandle, ConnectionPortObjectAttributes, ClientPortObjectAttributes, PortAttributes, Flags, ServerSecurityRequirements, ConnectionMessage, BufferLength, OutMessageAttributes, InMessageAttributes, Timeout)
+NtAlpcConnectPortExPrototype = WINFUNCTYPE(NTSTATUS, PHANDLE, POBJECT_ATTRIBUTES, POBJECT_ATTRIBUTES, PALPC_PORT_ATTRIBUTES, ULONG, PSECURITY_DESCRIPTOR, PPORT_MESSAGE, PSIZE_T, PALPC_MESSAGE_ATTRIBUTES, PALPC_MESSAGE_ATTRIBUTES, PLARGE_INTEGER)
+NtAlpcConnectPortExParams = ((1, 'PortHandle'), (1, 'ConnectionPortObjectAttributes'), (1, 'ClientPortObjectAttributes'), (1, 'PortAttributes'), (1, 'Flags'), (1, 'ServerSecurityRequirements'), (1, 'ConnectionMessage'), (1, 'BufferLength'), (1, 'OutMessageAttributes'), (1, 'InMessageAttributes'), (1, 'Timeout'))
+
+#def NtAlpcAcceptConnectPort(PortHandle, ConnectionPortHandle, Flags, ObjectAttributes, PortAttributes, PortContext, ConnectionRequest, ConnectionMessageAttributes, AcceptConnection):
+#    return NtAlpcAcceptConnectPort.ctypes_function(PortHandle, ConnectionPortHandle, Flags, ObjectAttributes, PortAttributes, PortContext, ConnectionRequest, ConnectionMessageAttributes, AcceptConnection)
+NtAlpcAcceptConnectPortPrototype = WINFUNCTYPE(NTSTATUS, PHANDLE, HANDLE, ULONG, POBJECT_ATTRIBUTES, PALPC_PORT_ATTRIBUTES, PVOID, PPORT_MESSAGE, PALPC_MESSAGE_ATTRIBUTES, BOOLEAN)
+NtAlpcAcceptConnectPortParams = ((1, 'PortHandle'), (1, 'ConnectionPortHandle'), (1, 'Flags'), (1, 'ObjectAttributes'), (1, 'PortAttributes'), (1, 'PortContext'), (1, 'ConnectionRequest'), (1, 'ConnectionMessageAttributes'), (1, 'AcceptConnection'))
+
+#def AlpcInitializeMessageAttribute(AttributeFlags, Buffer, BufferSize, RequiredBufferSize):
+#    return AlpcInitializeMessageAttribute.ctypes_function(AttributeFlags, Buffer, BufferSize, RequiredBufferSize)
+AlpcInitializeMessageAttributePrototype = WINFUNCTYPE(NTSTATUS, ULONG, PALPC_MESSAGE_ATTRIBUTES, ULONG, PULONG)
+AlpcInitializeMessageAttributeParams = ((1, 'AttributeFlags'), (1, 'Buffer'), (1, 'BufferSize'), (1, 'RequiredBufferSize'))
+
+#def AlpcGetMessageAttribute(Buffer, AttributeFlag):
+#    return AlpcGetMessageAttribute.ctypes_function(Buffer, AttributeFlag)
+AlpcGetMessageAttributePrototype = WINFUNCTYPE(PVOID, PALPC_MESSAGE_ATTRIBUTES, ULONG)
+AlpcGetMessageAttributeParams = ((1, 'Buffer'), (1, 'AttributeFlag'))
+
+#def NtAlpcSendWaitReceivePort(PortHandle, Flags, SendMessage, SendMessageAttributes, ReceiveMessage, BufferLength, ReceiveMessageAttributes, Timeout):
+#    return NtAlpcSendWaitReceivePort.ctypes_function(PortHandle, Flags, SendMessage, SendMessageAttributes, ReceiveMessage, BufferLength, ReceiveMessageAttributes, Timeout)
+NtAlpcSendWaitReceivePortPrototype = WINFUNCTYPE(NTSTATUS, HANDLE, ULONG, PPORT_MESSAGE, PALPC_MESSAGE_ATTRIBUTES, PPORT_MESSAGE, PSIZE_T, PALPC_MESSAGE_ATTRIBUTES, PLARGE_INTEGER)
+NtAlpcSendWaitReceivePortParams = ((1, 'PortHandle'), (1, 'Flags'), (1, 'SendMessage'), (1, 'SendMessageAttributes'), (1, 'ReceiveMessage'), (1, 'BufferLength'), (1, 'ReceiveMessageAttributes'), (1, 'Timeout'))
+
+#def NtAlpcDisconnectPort(PortHandle, Flags):
+#    return NtAlpcDisconnectPort.ctypes_function(PortHandle, Flags)
+NtAlpcDisconnectPortPrototype = WINFUNCTYPE(NTSTATUS, HANDLE, ULONG)
+NtAlpcDisconnectPortParams = ((1, 'PortHandle'), (1, 'Flags'))
+
+#def NtAlpcCreatePortSection(PortHandle, Flags, SectionHandle, SectionSize, AlpcSectionHandle, ActualSectionSize):
+#    return NtAlpcCreatePortSection.ctypes_function(PortHandle, Flags, SectionHandle, SectionSize, AlpcSectionHandle, ActualSectionSize)
+NtAlpcCreatePortSectionPrototype = WINFUNCTYPE(NTSTATUS, HANDLE, ULONG, HANDLE, SIZE_T, PALPC_HANDLE, PSIZE_T)
+NtAlpcCreatePortSectionParams = ((1, 'PortHandle'), (1, 'Flags'), (1, 'SectionHandle'), (1, 'SectionSize'), (1, 'AlpcSectionHandle'), (1, 'ActualSectionSize'))
+
+#def NtAlpcDeletePortSection(PortHandle, Flags, SectionHandle):
+#    return NtAlpcDeletePortSection.ctypes_function(PortHandle, Flags, SectionHandle)
+NtAlpcDeletePortSectionPrototype = WINFUNCTYPE(NTSTATUS, HANDLE, ULONG, ALPC_HANDLE)
+NtAlpcDeletePortSectionParams = ((1, 'PortHandle'), (1, 'Flags'), (1, 'SectionHandle'))
+
+#def NtAlpcCreateResourceReserve(PortHandle, Flags, MessageSize, ResourceId):
+#    return NtAlpcCreateResourceReserve.ctypes_function(PortHandle, Flags, MessageSize, ResourceId)
+NtAlpcCreateResourceReservePrototype = WINFUNCTYPE(NTSTATUS, HANDLE, ULONG, SIZE_T, PALPC_HANDLE)
+NtAlpcCreateResourceReserveParams = ((1, 'PortHandle'), (1, 'Flags'), (1, 'MessageSize'), (1, 'ResourceId'))
+
+#def NtAlpcDeleteResourceReserve(PortHandle, Flags, ResourceId):
+#    return NtAlpcDeleteResourceReserve.ctypes_function(PortHandle, Flags, ResourceId)
+NtAlpcDeleteResourceReservePrototype = WINFUNCTYPE(NTSTATUS, HANDLE, ULONG, ALPC_HANDLE)
+NtAlpcDeleteResourceReserveParams = ((1, 'PortHandle'), (1, 'Flags'), (1, 'ResourceId'))
+
+#def NtAlpcCreateSectionView(PortHandle, Flags, ViewAttributes):
+#    return NtAlpcCreateSectionView.ctypes_function(PortHandle, Flags, ViewAttributes)
+NtAlpcCreateSectionViewPrototype = WINFUNCTYPE(NTSTATUS, HANDLE, ULONG, PALPC_DATA_VIEW_ATTR)
+NtAlpcCreateSectionViewParams = ((1, 'PortHandle'), (1, 'Flags'), (1, 'ViewAttributes'))
+
+#def NtAlpcDeleteSectionView(PortHandle, Flags, ViewBase):
+#    return NtAlpcDeleteSectionView.ctypes_function(PortHandle, Flags, ViewBase)
+NtAlpcDeleteSectionViewPrototype = WINFUNCTYPE(NTSTATUS, HANDLE, ULONG, PVOID)
+NtAlpcDeleteSectionViewParams = ((1, 'PortHandle'), (1, 'Flags'), (1, 'ViewBase'))
+
+#def NtAlpcCreateSecurityContext(PortHandle, Flags, SecurityAttribute):
+#    return NtAlpcCreateSecurityContext.ctypes_function(PortHandle, Flags, SecurityAttribute)
+NtAlpcCreateSecurityContextPrototype = WINFUNCTYPE(NTSTATUS, HANDLE, ULONG, PALPC_SECURITY_ATTR)
+NtAlpcCreateSecurityContextParams = ((1, 'PortHandle'), (1, 'Flags'), (1, 'SecurityAttribute'))
+
+#def NtAlpcDeleteSecurityContext(PortHandle, Flags, ContextHandle):
+#    return NtAlpcDeleteSecurityContext.ctypes_function(PortHandle, Flags, ContextHandle)
+NtAlpcDeleteSecurityContextPrototype = WINFUNCTYPE(NTSTATUS, HANDLE, ULONG, ALPC_HANDLE)
+NtAlpcDeleteSecurityContextParams = ((1, 'PortHandle'), (1, 'Flags'), (1, 'ContextHandle'))
+
+#def NtAlpcRevokeSecurityContext(PortHandle, Flags, ContextHandle):
+#    return NtAlpcRevokeSecurityContext.ctypes_function(PortHandle, Flags, ContextHandle)
+NtAlpcRevokeSecurityContextPrototype = WINFUNCTYPE(NTSTATUS, HANDLE, ULONG, ALPC_HANDLE)
+NtAlpcRevokeSecurityContextParams = ((1, 'PortHandle'), (1, 'Flags'), (1, 'ContextHandle'))
+
+#def StrStrIW(pszFirst, pszSrch):
+#    return StrStrIW.ctypes_function(pszFirst, pszSrch)
+StrStrIWPrototype = WINFUNCTYPE(PWSTR, PWSTR, PWSTR)
+StrStrIWParams = ((1, 'pszFirst'), (1, 'pszSrch'))
+
+#def StrStrIA(pszFirst, pszSrch):
+#    return StrStrIA.ctypes_function(pszFirst, pszSrch)
+StrStrIAPrototype = WINFUNCTYPE(PCSTR, PCSTR, PCSTR)
+StrStrIAParams = ((1, 'pszFirst'), (1, 'pszSrch'))
+
+#def IsOS(dwOS):
+#    return IsOS.ctypes_function(dwOS)
+IsOSPrototype = WINFUNCTYPE(BOOL, DWORD)
+IsOSParams = ((1, 'dwOS'),)
+
+#def CreateFileTransactedA(lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile, hTransaction, pusMiniVersion, pExtendedParameter):
+#    return CreateFileTransactedA.ctypes_function(lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile, hTransaction, pusMiniVersion, pExtendedParameter)
+CreateFileTransactedAPrototype = WINFUNCTYPE(HANDLE, LPCSTR, DWORD, DWORD, LPSECURITY_ATTRIBUTES, DWORD, DWORD, HANDLE, HANDLE, PUSHORT, PVOID)
+CreateFileTransactedAParams = ((1, 'lpFileName'), (1, 'dwDesiredAccess'), (1, 'dwShareMode'), (1, 'lpSecurityAttributes'), (1, 'dwCreationDisposition'), (1, 'dwFlagsAndAttributes'), (1, 'hTemplateFile'), (1, 'hTransaction'), (1, 'pusMiniVersion'), (1, 'pExtendedParameter'))
+
+#def CreateFileTransactedW(lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile, hTransaction, pusMiniVersion, pExtendedParameter):
+#    return CreateFileTransactedW.ctypes_function(lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile, hTransaction, pusMiniVersion, pExtendedParameter)
+CreateFileTransactedWPrototype = WINFUNCTYPE(HANDLE, LPWSTR, DWORD, DWORD, LPSECURITY_ATTRIBUTES, DWORD, DWORD, HANDLE, HANDLE, PUSHORT, PVOID)
+CreateFileTransactedWParams = ((1, 'lpFileName'), (1, 'dwDesiredAccess'), (1, 'dwShareMode'), (1, 'lpSecurityAttributes'), (1, 'dwCreationDisposition'), (1, 'dwFlagsAndAttributes'), (1, 'hTemplateFile'), (1, 'hTransaction'), (1, 'pusMiniVersion'), (1, 'pExtendedParameter'))
+
+#def CommitTransaction(TransactionHandle):
+#    return CommitTransaction.ctypes_function(TransactionHandle)
+CommitTransactionPrototype = WINFUNCTYPE(BOOL, HANDLE)
+CommitTransactionParams = ((1, 'TransactionHandle'),)
+
+#def CreateTransaction(lpTransactionAttributes, UOW, CreateOptions, IsolationLevel, IsolationFlags, Timeout, Description):
+#    return CreateTransaction.ctypes_function(lpTransactionAttributes, UOW, CreateOptions, IsolationLevel, IsolationFlags, Timeout, Description)
+CreateTransactionPrototype = WINFUNCTYPE(HANDLE, LPSECURITY_ATTRIBUTES, LPGUID, DWORD, DWORD, DWORD, DWORD, LPWSTR)
+CreateTransactionParams = ((1, 'lpTransactionAttributes'), (1, 'UOW'), (1, 'CreateOptions'), (1, 'IsolationLevel'), (1, 'IsolationFlags'), (1, 'Timeout'), (1, 'Description'))
+
+#def RollbackTransaction(TransactionHandle):
+#    return RollbackTransaction.ctypes_function(TransactionHandle)
+RollbackTransactionPrototype = WINFUNCTYPE(BOOL, HANDLE)
+RollbackTransactionParams = ((1, 'TransactionHandle'),)
+
+#def OpenTransaction(dwDesiredAccess, TransactionId):
+#    return OpenTransaction.ctypes_function(dwDesiredAccess, TransactionId)
+OpenTransactionPrototype = WINFUNCTYPE(HANDLE, DWORD, LPGUID)
+OpenTransactionParams = ((1, 'dwDesiredAccess'), (1, 'TransactionId'))
 
 #def ExitProcess(uExitCode):
 #    return ExitProcess.ctypes_function(uExitCode)
@@ -1320,31 +1770,6 @@ GetModuleHandleWParams = ((1, 'lpModuleName'),)
 RtlEqualUnicodeStringPrototype = WINFUNCTYPE(BOOLEAN, PUNICODE_STRING, PUNICODE_STRING, BOOLEAN)
 RtlEqualUnicodeStringParams = ((1, 'String1'), (1, 'String2'), (1, 'CaseInSensitive'))
 
-#def NtOpenKey(KeyHandle, DesiredAccess, ObjectAttributes):
-#    return NtOpenKey.ctypes_function(KeyHandle, DesiredAccess, ObjectAttributes)
-NtOpenKeyPrototype = WINFUNCTYPE(NTSTATUS, PHANDLE, ACCESS_MASK, POBJECT_ATTRIBUTES)
-NtOpenKeyParams = ((1, 'KeyHandle'), (1, 'DesiredAccess'), (1, 'ObjectAttributes'))
-
-#def NtCreateKey(pKeyHandle, DesiredAccess, ObjectAttributes, TitleIndex, Class, CreateOptions, Disposition):
-#    return NtCreateKey.ctypes_function(pKeyHandle, DesiredAccess, ObjectAttributes, TitleIndex, Class, CreateOptions, Disposition)
-NtCreateKeyPrototype = WINFUNCTYPE(NTSTATUS, PHANDLE, ACCESS_MASK, POBJECT_ATTRIBUTES, ULONG, PUNICODE_STRING, ULONG, PULONG)
-NtCreateKeyParams = ((1, 'pKeyHandle'), (1, 'DesiredAccess'), (1, 'ObjectAttributes'), (1, 'TitleIndex'), (1, 'Class'), (1, 'CreateOptions'), (1, 'Disposition'))
-
-#def NtSetValueKey(KeyHandle, ValueName, TitleIndex, Type, Data, DataSize):
-#    return NtSetValueKey.ctypes_function(KeyHandle, ValueName, TitleIndex, Type, Data, DataSize)
-NtSetValueKeyPrototype = WINFUNCTYPE(NTSTATUS, HANDLE, PUNICODE_STRING, ULONG, ULONG, PVOID, ULONG)
-NtSetValueKeyParams = ((1, 'KeyHandle'), (1, 'ValueName'), (1, 'TitleIndex'), (1, 'Type'), (1, 'Data'), (1, 'DataSize'))
-
-#def NtQueryValueKey(KeyHandle, ValueName, KeyValueInformationClass, KeyValueInformation, Length, ResultLength):
-#    return NtQueryValueKey.ctypes_function(KeyHandle, ValueName, KeyValueInformationClass, KeyValueInformation, Length, ResultLength)
-NtQueryValueKeyPrototype = WINFUNCTYPE(NTSTATUS, HANDLE, PUNICODE_STRING, KEY_VALUE_INFORMATION_CLASS, PVOID, ULONG, PULONG)
-NtQueryValueKeyParams = ((1, 'KeyHandle'), (1, 'ValueName'), (1, 'KeyValueInformationClass'), (1, 'KeyValueInformation'), (1, 'Length'), (1, 'ResultLength'))
-
-#def NtEnumerateValueKey(KeyHandle, Index, KeyValueInformationClass, KeyValueInformation, Length, ResultLength):
-#    return NtEnumerateValueKey.ctypes_function(KeyHandle, Index, KeyValueInformationClass, KeyValueInformation, Length, ResultLength)
-NtEnumerateValueKeyPrototype = WINFUNCTYPE(NTSTATUS, HANDLE, ULONG, KEY_VALUE_INFORMATION_CLASS, PVOID, ULONG, PULONG)
-NtEnumerateValueKeyParams = ((1, 'KeyHandle'), (1, 'Index'), (1, 'KeyValueInformationClass'), (1, 'KeyValueInformation'), (1, 'Length'), (1, 'ResultLength'))
-
 #def CreatePipe(hReadPipe, hWritePipe, lpPipeAttributes, nSize):
 #    return CreatePipe.ctypes_function(hReadPipe, hWritePipe, lpPipeAttributes, nSize)
 CreatePipePrototype = WINFUNCTYPE(BOOL, PHANDLE, PHANDLE, LPSECURITY_ATTRIBUTES, DWORD)
@@ -1694,429 +2119,4 @@ CryptVerifyMessageHashParams = ((1, 'pHashPara'), (1, 'pbHashedBlob'), (1, 'cbHa
 #    return PfnCryptGetSignerCertificate.ctypes_function(pvGetArg, dwCertEncodingType, pSignerId, hMsgCertStore)
 PfnCryptGetSignerCertificatePrototype = WINFUNCTYPE(PCCERT_CONTEXT, PVOID, DWORD, PCERT_INFO, HCERTSTORE)
 PfnCryptGetSignerCertificateParams = ((1, 'pvGetArg'), (1, 'dwCertEncodingType'), (1, 'pSignerId'), (1, 'hMsgCertStore'))
-
-#def OpenEventLogA(lpUNCServerName, lpSourceName):
-#    return OpenEventLogA.ctypes_function(lpUNCServerName, lpSourceName)
-OpenEventLogAPrototype = WINFUNCTYPE(HANDLE, LPCSTR, LPCSTR)
-OpenEventLogAParams = ((1, 'lpUNCServerName'), (1, 'lpSourceName'))
-
-#def OpenEventLogW(lpUNCServerName, lpSourceName):
-#    return OpenEventLogW.ctypes_function(lpUNCServerName, lpSourceName)
-OpenEventLogWPrototype = WINFUNCTYPE(HANDLE, LPWSTR, LPWSTR)
-OpenEventLogWParams = ((1, 'lpUNCServerName'), (1, 'lpSourceName'))
-
-#def OpenBackupEventLogA(lpUNCServerName, lpSourceName):
-#    return OpenBackupEventLogA.ctypes_function(lpUNCServerName, lpSourceName)
-OpenBackupEventLogAPrototype = WINFUNCTYPE(HANDLE, LPCSTR, LPCSTR)
-OpenBackupEventLogAParams = ((1, 'lpUNCServerName'), (1, 'lpSourceName'))
-
-#def OpenBackupEventLogW(lpUNCServerName, lpSourceName):
-#    return OpenBackupEventLogW.ctypes_function(lpUNCServerName, lpSourceName)
-OpenBackupEventLogWPrototype = WINFUNCTYPE(HANDLE, LPWSTR, LPWSTR)
-OpenBackupEventLogWParams = ((1, 'lpUNCServerName'), (1, 'lpSourceName'))
-
-#def ReadEventLogA(hEventLog, dwReadFlags, dwRecordOffset, lpBuffer, nNumberOfBytesToRead, pnBytesRead, pnMinNumberOfBytesNeeded):
-#    return ReadEventLogA.ctypes_function(hEventLog, dwReadFlags, dwRecordOffset, lpBuffer, nNumberOfBytesToRead, pnBytesRead, pnMinNumberOfBytesNeeded)
-ReadEventLogAPrototype = WINFUNCTYPE(BOOL, HANDLE, DWORD, DWORD, LPVOID, DWORD, POINTER(DWORD), POINTER(DWORD))
-ReadEventLogAParams = ((1, 'hEventLog'), (1, 'dwReadFlags'), (1, 'dwRecordOffset'), (1, 'lpBuffer'), (1, 'nNumberOfBytesToRead'), (1, 'pnBytesRead'), (1, 'pnMinNumberOfBytesNeeded'))
-
-#def ReadEventLogW(hEventLog, dwReadFlags, dwRecordOffset, lpBuffer, nNumberOfBytesToRead, pnBytesRead, pnMinNumberOfBytesNeeded):
-#    return ReadEventLogW.ctypes_function(hEventLog, dwReadFlags, dwRecordOffset, lpBuffer, nNumberOfBytesToRead, pnBytesRead, pnMinNumberOfBytesNeeded)
-ReadEventLogWPrototype = WINFUNCTYPE(BOOL, HANDLE, DWORD, DWORD, LPVOID, DWORD, POINTER(DWORD), POINTER(DWORD))
-ReadEventLogWParams = ((1, 'hEventLog'), (1, 'dwReadFlags'), (1, 'dwRecordOffset'), (1, 'lpBuffer'), (1, 'nNumberOfBytesToRead'), (1, 'pnBytesRead'), (1, 'pnMinNumberOfBytesNeeded'))
-
-#def GetEventLogInformation(hEventLog, dwInfoLevel, lpBuffer, cbBufSize, pcbBytesNeeded):
-#    return GetEventLogInformation.ctypes_function(hEventLog, dwInfoLevel, lpBuffer, cbBufSize, pcbBytesNeeded)
-GetEventLogInformationPrototype = WINFUNCTYPE(BOOL, HANDLE, DWORD, LPVOID, DWORD, LPDWORD)
-GetEventLogInformationParams = ((1, 'hEventLog'), (1, 'dwInfoLevel'), (1, 'lpBuffer'), (1, 'cbBufSize'), (1, 'pcbBytesNeeded'))
-
-#def GetNumberOfEventLogRecords(hEventLog, NumberOfRecords):
-#    return GetNumberOfEventLogRecords.ctypes_function(hEventLog, NumberOfRecords)
-GetNumberOfEventLogRecordsPrototype = WINFUNCTYPE(BOOL, HANDLE, PDWORD)
-GetNumberOfEventLogRecordsParams = ((1, 'hEventLog'), (1, 'NumberOfRecords'))
-
-#def CloseEventLog(hEventLog):
-#    return CloseEventLog.ctypes_function(hEventLog)
-CloseEventLogPrototype = WINFUNCTYPE(BOOL, HANDLE)
-CloseEventLogParams = ((1, 'hEventLog'),)
-
-#def EvtOpenLog(Session, Path, Flags):
-#    return EvtOpenLog.ctypes_function(Session, Path, Flags)
-EvtOpenLogPrototype = WINFUNCTYPE(EVT_HANDLE, EVT_HANDLE, LPCWSTR, DWORD)
-EvtOpenLogParams = ((1, 'Session'), (1, 'Path'), (1, 'Flags'))
-
-#def EvtQuery(Session, Path, Query, Flags):
-#    return EvtQuery.ctypes_function(Session, Path, Query, Flags)
-EvtQueryPrototype = WINFUNCTYPE(EVT_HANDLE, EVT_HANDLE, LPCWSTR, LPCWSTR, DWORD)
-EvtQueryParams = ((1, 'Session'), (1, 'Path'), (1, 'Query'), (1, 'Flags'))
-
-#def EvtNext(ResultSet, EventArraySize, EventArray, Timeout, Flags, Returned):
-#    return EvtNext.ctypes_function(ResultSet, EventArraySize, EventArray, Timeout, Flags, Returned)
-EvtNextPrototype = WINFUNCTYPE(BOOL, EVT_HANDLE, DWORD, POINTER(EVT_HANDLE), DWORD, DWORD, PDWORD)
-EvtNextParams = ((1, 'ResultSet'), (1, 'EventArraySize'), (1, 'EventArray'), (1, 'Timeout'), (1, 'Flags'), (1, 'Returned'))
-
-#def EvtCreateRenderContext(ValuePathsCount, ValuePaths, Flags):
-#    return EvtCreateRenderContext.ctypes_function(ValuePathsCount, ValuePaths, Flags)
-EvtCreateRenderContextPrototype = WINFUNCTYPE(EVT_HANDLE, DWORD, POINTER(LPCWSTR), DWORD)
-EvtCreateRenderContextParams = ((1, 'ValuePathsCount'), (1, 'ValuePaths'), (1, 'Flags'))
-
-#def EvtRender(Context, Fragment, Flags, BufferSize, Buffer, BufferUsed, PropertyCount):
-#    return EvtRender.ctypes_function(Context, Fragment, Flags, BufferSize, Buffer, BufferUsed, PropertyCount)
-EvtRenderPrototype = WINFUNCTYPE(BOOL, EVT_HANDLE, EVT_HANDLE, DWORD, DWORD, PVOID, PDWORD, PDWORD)
-EvtRenderParams = ((1, 'Context'), (1, 'Fragment'), (1, 'Flags'), (1, 'BufferSize'), (1, 'Buffer'), (1, 'BufferUsed'), (1, 'PropertyCount'))
-
-#def EvtClose(Object):
-#    return EvtClose.ctypes_function(Object)
-EvtClosePrototype = WINFUNCTYPE(BOOL, EVT_HANDLE)
-EvtCloseParams = ((1, 'Object'),)
-
-#def EvtOpenChannelEnum(Session, Flags):
-#    return EvtOpenChannelEnum.ctypes_function(Session, Flags)
-EvtOpenChannelEnumPrototype = WINFUNCTYPE(EVT_HANDLE, EVT_HANDLE, DWORD)
-EvtOpenChannelEnumParams = ((1, 'Session'), (1, 'Flags'))
-
-#def EvtNextChannelPath(ChannelEnum, ChannelPathBufferSize, ChannelPathBuffer, ChannelPathBufferUsed):
-#    return EvtNextChannelPath.ctypes_function(ChannelEnum, ChannelPathBufferSize, ChannelPathBuffer, ChannelPathBufferUsed)
-EvtNextChannelPathPrototype = WINFUNCTYPE(BOOL, EVT_HANDLE, DWORD, LPWSTR, PDWORD)
-EvtNextChannelPathParams = ((1, 'ChannelEnum'), (1, 'ChannelPathBufferSize'), (1, 'ChannelPathBuffer'), (1, 'ChannelPathBufferUsed'))
-
-#def EvtOpenPublisherEnum(Session, Flags):
-#    return EvtOpenPublisherEnum.ctypes_function(Session, Flags)
-EvtOpenPublisherEnumPrototype = WINFUNCTYPE(EVT_HANDLE, EVT_HANDLE, DWORD)
-EvtOpenPublisherEnumParams = ((1, 'Session'), (1, 'Flags'))
-
-#def EvtNextPublisherId(PublisherEnum, PublisherIdBufferSize, PublisherIdBuffer, PublisherIdBufferUsed):
-#    return EvtNextPublisherId.ctypes_function(PublisherEnum, PublisherIdBufferSize, PublisherIdBuffer, PublisherIdBufferUsed)
-EvtNextPublisherIdPrototype = WINFUNCTYPE(BOOL, EVT_HANDLE, DWORD, LPWSTR, PDWORD)
-EvtNextPublisherIdParams = ((1, 'PublisherEnum'), (1, 'PublisherIdBufferSize'), (1, 'PublisherIdBuffer'), (1, 'PublisherIdBufferUsed'))
-
-#def EvtGetLogInfo(Log, PropertyId, PropertyValueBufferSize, PropertyValueBuffer, PropertyValueBufferUsed):
-#    return EvtGetLogInfo.ctypes_function(Log, PropertyId, PropertyValueBufferSize, PropertyValueBuffer, PropertyValueBufferUsed)
-EvtGetLogInfoPrototype = WINFUNCTYPE(BOOL, EVT_HANDLE, EVT_LOG_PROPERTY_ID, DWORD, PEVT_VARIANT, PDWORD)
-EvtGetLogInfoParams = ((1, 'Log'), (1, 'PropertyId'), (1, 'PropertyValueBufferSize'), (1, 'PropertyValueBuffer'), (1, 'PropertyValueBufferUsed'))
-
-#def EvtOpenChannelConfig(Session, ChannelPath, Flags):
-#    return EvtOpenChannelConfig.ctypes_function(Session, ChannelPath, Flags)
-EvtOpenChannelConfigPrototype = WINFUNCTYPE(EVT_HANDLE, EVT_HANDLE, LPCWSTR, DWORD)
-EvtOpenChannelConfigParams = ((1, 'Session'), (1, 'ChannelPath'), (1, 'Flags'))
-
-#def EvtGetChannelConfigProperty(ChannelConfig, PropertyId, Flags, PropertyValueBufferSize, PropertyValueBuffer, PropertyValueBufferUsed):
-#    return EvtGetChannelConfigProperty.ctypes_function(ChannelConfig, PropertyId, Flags, PropertyValueBufferSize, PropertyValueBuffer, PropertyValueBufferUsed)
-EvtGetChannelConfigPropertyPrototype = WINFUNCTYPE(BOOL, EVT_HANDLE, EVT_CHANNEL_CONFIG_PROPERTY_ID, DWORD, DWORD, PEVT_VARIANT, PDWORD)
-EvtGetChannelConfigPropertyParams = ((1, 'ChannelConfig'), (1, 'PropertyId'), (1, 'Flags'), (1, 'PropertyValueBufferSize'), (1, 'PropertyValueBuffer'), (1, 'PropertyValueBufferUsed'))
-
-#def EvtOpenPublisherMetadata(Session, PublisherIdentity, LogFilePath, Locale, Flags):
-#    return EvtOpenPublisherMetadata.ctypes_function(Session, PublisherIdentity, LogFilePath, Locale, Flags)
-EvtOpenPublisherMetadataPrototype = WINFUNCTYPE(EVT_HANDLE, EVT_HANDLE, LPCWSTR, LPCWSTR, LCID, DWORD)
-EvtOpenPublisherMetadataParams = ((1, 'Session'), (1, 'PublisherIdentity'), (1, 'LogFilePath'), (1, 'Locale'), (1, 'Flags'))
-
-#def EvtOpenEventMetadataEnum(PublisherMetadata, Flags):
-#    return EvtOpenEventMetadataEnum.ctypes_function(PublisherMetadata, Flags)
-EvtOpenEventMetadataEnumPrototype = WINFUNCTYPE(EVT_HANDLE, EVT_HANDLE, DWORD)
-EvtOpenEventMetadataEnumParams = ((1, 'PublisherMetadata'), (1, 'Flags'))
-
-#def EvtNextEventMetadata(EventMetadataEnum, Flags):
-#    return EvtNextEventMetadata.ctypes_function(EventMetadataEnum, Flags)
-EvtNextEventMetadataPrototype = WINFUNCTYPE(EVT_HANDLE, EVT_HANDLE, DWORD)
-EvtNextEventMetadataParams = ((1, 'EventMetadataEnum'), (1, 'Flags'))
-
-#def EvtGetEventMetadataProperty(EventMetadata, PropertyId, Flags, EventMetadataPropertyBufferSize, EventMetadataPropertyBuffer, EventMetadataPropertyBufferUsed):
-#    return EvtGetEventMetadataProperty.ctypes_function(EventMetadata, PropertyId, Flags, EventMetadataPropertyBufferSize, EventMetadataPropertyBuffer, EventMetadataPropertyBufferUsed)
-EvtGetEventMetadataPropertyPrototype = WINFUNCTYPE(BOOL, EVT_HANDLE, EVT_EVENT_METADATA_PROPERTY_ID, DWORD, DWORD, PEVT_VARIANT, PDWORD)
-EvtGetEventMetadataPropertyParams = ((1, 'EventMetadata'), (1, 'PropertyId'), (1, 'Flags'), (1, 'EventMetadataPropertyBufferSize'), (1, 'EventMetadataPropertyBuffer'), (1, 'EventMetadataPropertyBufferUsed'))
-
-#def EvtGetPublisherMetadataProperty(PublisherMetadata, PropertyId, Flags, PublisherMetadataPropertyBufferSize, PublisherMetadataPropertyBuffer, PublisherMetadataPropertyBufferUsed):
-#    return EvtGetPublisherMetadataProperty.ctypes_function(PublisherMetadata, PropertyId, Flags, PublisherMetadataPropertyBufferSize, PublisherMetadataPropertyBuffer, PublisherMetadataPropertyBufferUsed)
-EvtGetPublisherMetadataPropertyPrototype = WINFUNCTYPE(BOOL, EVT_HANDLE, EVT_PUBLISHER_METADATA_PROPERTY_ID, DWORD, DWORD, PEVT_VARIANT, PDWORD)
-EvtGetPublisherMetadataPropertyParams = ((1, 'PublisherMetadata'), (1, 'PropertyId'), (1, 'Flags'), (1, 'PublisherMetadataPropertyBufferSize'), (1, 'PublisherMetadataPropertyBuffer'), (1, 'PublisherMetadataPropertyBufferUsed'))
-
-#def EvtGetObjectArraySize(ObjectArray, ObjectArraySize):
-#    return EvtGetObjectArraySize.ctypes_function(ObjectArray, ObjectArraySize)
-EvtGetObjectArraySizePrototype = WINFUNCTYPE(BOOL, EVT_OBJECT_ARRAY_PROPERTY_HANDLE, PDWORD)
-EvtGetObjectArraySizeParams = ((1, 'ObjectArray'), (1, 'ObjectArraySize'))
-
-#def EvtGetObjectArrayProperty(ObjectArray, PropertyId, ArrayIndex, Flags, PropertyValueBufferSize, PropertyValueBuffer, PropertyValueBufferUsed):
-#    return EvtGetObjectArrayProperty.ctypes_function(ObjectArray, PropertyId, ArrayIndex, Flags, PropertyValueBufferSize, PropertyValueBuffer, PropertyValueBufferUsed)
-EvtGetObjectArrayPropertyPrototype = WINFUNCTYPE(BOOL, EVT_OBJECT_ARRAY_PROPERTY_HANDLE, DWORD, DWORD, DWORD, DWORD, PEVT_VARIANT, PDWORD)
-EvtGetObjectArrayPropertyParams = ((1, 'ObjectArray'), (1, 'PropertyId'), (1, 'ArrayIndex'), (1, 'Flags'), (1, 'PropertyValueBufferSize'), (1, 'PropertyValueBuffer'), (1, 'PropertyValueBufferUsed'))
-
-#def EvtFormatMessage(PublisherMetadata, Event, MessageId, ValueCount, Values, Flags, BufferSize, Buffer, BufferUsed):
-#    return EvtFormatMessage.ctypes_function(PublisherMetadata, Event, MessageId, ValueCount, Values, Flags, BufferSize, Buffer, BufferUsed)
-EvtFormatMessagePrototype = WINFUNCTYPE(BOOL, EVT_HANDLE, EVT_HANDLE, DWORD, DWORD, PEVT_VARIANT, DWORD, DWORD, LPWSTR, PDWORD)
-EvtFormatMessageParams = ((1, 'PublisherMetadata'), (1, 'Event'), (1, 'MessageId'), (1, 'ValueCount'), (1, 'Values'), (1, 'Flags'), (1, 'BufferSize'), (1, 'Buffer'), (1, 'BufferUsed'))
-
-#def GetCursorPos(lpPoint):
-#    return GetCursorPos.ctypes_function(lpPoint)
-GetCursorPosPrototype = WINFUNCTYPE(BOOL, LPPOINT)
-GetCursorPosParams = ((1, 'lpPoint'),)
-
-#def WindowFromPoint(Point):
-#    return WindowFromPoint.ctypes_function(Point)
-WindowFromPointPrototype = WINFUNCTYPE(HWND, POINT)
-WindowFromPointParams = ((1, 'Point'),)
-
-#def GetWindowRect(hWnd, lpRect):
-#    return GetWindowRect.ctypes_function(hWnd, lpRect)
-GetWindowRectPrototype = WINFUNCTYPE(BOOL, HWND, LPRECT)
-GetWindowRectParams = ((1, 'hWnd'), (1, 'lpRect'))
-
-#def EnumWindows(lpEnumFunc, lParam):
-#    return EnumWindows.ctypes_function(lpEnumFunc, lParam)
-EnumWindowsPrototype = WINFUNCTYPE(BOOL, WNDENUMPROC, LPARAM)
-EnumWindowsParams = ((1, 'lpEnumFunc'), (1, 'lParam'))
-
-#def GetWindowTextA(hWnd, lpString, nMaxCount):
-#    return GetWindowTextA.ctypes_function(hWnd, lpString, nMaxCount)
-GetWindowTextAPrototype = WINFUNCTYPE(INT, HWND, LPSTR, INT)
-GetWindowTextAParams = ((1, 'hWnd'), (1, 'lpString'), (1, 'nMaxCount'))
-
-#def GetParent(hWnd):
-#    return GetParent.ctypes_function(hWnd)
-GetParentPrototype = WINFUNCTYPE(HWND, HWND)
-GetParentParams = ((1, 'hWnd'),)
-
-#def GetWindowTextW(hWnd, lpString, nMaxCount):
-#    return GetWindowTextW.ctypes_function(hWnd, lpString, nMaxCount)
-GetWindowTextWPrototype = WINFUNCTYPE(INT, HWND, LPWSTR, INT)
-GetWindowTextWParams = ((1, 'hWnd'), (1, 'lpString'), (1, 'nMaxCount'))
-
-#def GetWindowModuleFileNameA(hwnd, pszFileName, cchFileNameMax):
-#    return GetWindowModuleFileNameA.ctypes_function(hwnd, pszFileName, cchFileNameMax)
-GetWindowModuleFileNameAPrototype = WINFUNCTYPE(UINT, HWND, LPSTR, UINT)
-GetWindowModuleFileNameAParams = ((1, 'hwnd'), (1, 'pszFileName'), (1, 'cchFileNameMax'))
-
-#def GetWindowModuleFileNameW(hwnd, pszFileName, cchFileNameMax):
-#    return GetWindowModuleFileNameW.ctypes_function(hwnd, pszFileName, cchFileNameMax)
-GetWindowModuleFileNameWPrototype = WINFUNCTYPE(UINT, HWND, LPWSTR, UINT)
-GetWindowModuleFileNameWParams = ((1, 'hwnd'), (1, 'pszFileName'), (1, 'cchFileNameMax'))
-
-#def EnumChildWindows(hWndParent, lpEnumFunc, lParam):
-#    return EnumChildWindows.ctypes_function(hWndParent, lpEnumFunc, lParam)
-EnumChildWindowsPrototype = WINFUNCTYPE(BOOL, HWND, WNDENUMPROC, LPARAM)
-EnumChildWindowsParams = ((1, 'hWndParent'), (1, 'lpEnumFunc'), (1, 'lParam'))
-
-#def CloseWindow(hWnd):
-#    return CloseWindow.ctypes_function(hWnd)
-CloseWindowPrototype = WINFUNCTYPE(BOOL, HWND)
-CloseWindowParams = ((1, 'hWnd'),)
-
-#def GetDesktopWindow():
-#    return GetDesktopWindow.ctypes_function()
-GetDesktopWindowPrototype = WINFUNCTYPE(HWND)
-GetDesktopWindowParams = ()
-
-#def GetForegroundWindow():
-#    return GetForegroundWindow.ctypes_function()
-GetForegroundWindowPrototype = WINFUNCTYPE(HWND)
-GetForegroundWindowParams = ()
-
-#def BringWindowToTop(hWnd):
-#    return BringWindowToTop.ctypes_function(hWnd)
-BringWindowToTopPrototype = WINFUNCTYPE(BOOL, HWND)
-BringWindowToTopParams = ((1, 'hWnd'),)
-
-#def MoveWindow(hWnd, X, Y, nWidth, nHeight, bRepaint):
-#    return MoveWindow.ctypes_function(hWnd, X, Y, nWidth, nHeight, bRepaint)
-MoveWindowPrototype = WINFUNCTYPE(BOOL, HWND, INT, INT, INT, INT, BOOL)
-MoveWindowParams = ((1, 'hWnd'), (1, 'X'), (1, 'Y'), (1, 'nWidth'), (1, 'nHeight'), (1, 'bRepaint'))
-
-#def SetWindowPos(hWnd, hWndInsertAfter, X, Y, cx, cy, uFlags):
-#    return SetWindowPos.ctypes_function(hWnd, hWndInsertAfter, X, Y, cx, cy, uFlags)
-SetWindowPosPrototype = WINFUNCTYPE(BOOL, HWND, HWND, INT, INT, INT, INT, UINT)
-SetWindowPosParams = ((1, 'hWnd'), (1, 'hWndInsertAfter'), (1, 'X'), (1, 'Y'), (1, 'cx'), (1, 'cy'), (1, 'uFlags'))
-
-#def SetWindowTextA(hWnd, lpString):
-#    return SetWindowTextA.ctypes_function(hWnd, lpString)
-SetWindowTextAPrototype = WINFUNCTYPE(BOOL, HWND, LPCSTR)
-SetWindowTextAParams = ((1, 'hWnd'), (1, 'lpString'))
-
-#def SetWindowTextW(hWnd, lpString):
-#    return SetWindowTextW.ctypes_function(hWnd, lpString)
-SetWindowTextWPrototype = WINFUNCTYPE(BOOL, HWND, LPWSTR)
-SetWindowTextWParams = ((1, 'hWnd'), (1, 'lpString'))
-
-#def RealGetWindowClassA(hwnd, pszType, cchType):
-#    return RealGetWindowClassA.ctypes_function(hwnd, pszType, cchType)
-RealGetWindowClassAPrototype = WINFUNCTYPE(UINT, HWND, LPCSTR, UINT)
-RealGetWindowClassAParams = ((1, 'hwnd'), (1, 'pszType'), (1, 'cchType'))
-
-#def RealGetWindowClassW(hwnd, pszType, cchType):
-#    return RealGetWindowClassW.ctypes_function(hwnd, pszType, cchType)
-RealGetWindowClassWPrototype = WINFUNCTYPE(UINT, HWND, LPWSTR, UINT)
-RealGetWindowClassWParams = ((1, 'hwnd'), (1, 'pszType'), (1, 'cchType'))
-
-#def GetClassInfoExA(hinst, lpszClass, lpwcx):
-#    return GetClassInfoExA.ctypes_function(hinst, lpszClass, lpwcx)
-GetClassInfoExAPrototype = WINFUNCTYPE(BOOL, HINSTANCE, LPCSTR, LPWNDCLASSEXA)
-GetClassInfoExAParams = ((1, 'hinst'), (1, 'lpszClass'), (1, 'lpwcx'))
-
-#def GetClassInfoExW(hinst, lpszClass, lpwcx):
-#    return GetClassInfoExW.ctypes_function(hinst, lpszClass, lpwcx)
-GetClassInfoExWPrototype = WINFUNCTYPE(BOOL, HINSTANCE, LPCWSTR, LPWNDCLASSEXW)
-GetClassInfoExWParams = ((1, 'hinst'), (1, 'lpszClass'), (1, 'lpwcx'))
-
-#def GetClassNameA(hWnd, lpClassName, nMaxCount):
-#    return GetClassNameA.ctypes_function(hWnd, lpClassName, nMaxCount)
-GetClassNameAPrototype = WINFUNCTYPE(INT, HWND, LPCSTR, INT)
-GetClassNameAParams = ((1, 'hWnd'), (1, 'lpClassName'), (1, 'nMaxCount'))
-
-#def GetClassNameW(hWnd, lpClassName, nMaxCount):
-#    return GetClassNameW.ctypes_function(hWnd, lpClassName, nMaxCount)
-GetClassNameWPrototype = WINFUNCTYPE(INT, HWND, LPWSTR, INT)
-GetClassNameWParams = ((1, 'hWnd'), (1, 'lpClassName'), (1, 'nMaxCount'))
-
-#def GetWindowThreadProcessId(hWnd, lpdwProcessId):
-#    return GetWindowThreadProcessId.ctypes_function(hWnd, lpdwProcessId)
-GetWindowThreadProcessIdPrototype = WINFUNCTYPE(DWORD, HWND, LPDWORD)
-GetWindowThreadProcessIdParams = ((1, 'hWnd'), (1, 'lpdwProcessId'))
-
-#def CreateFileTransactedA(lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile, hTransaction, pusMiniVersion, pExtendedParameter):
-#    return CreateFileTransactedA.ctypes_function(lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile, hTransaction, pusMiniVersion, pExtendedParameter)
-CreateFileTransactedAPrototype = WINFUNCTYPE(HANDLE, LPCSTR, DWORD, DWORD, LPSECURITY_ATTRIBUTES, DWORD, DWORD, HANDLE, HANDLE, PUSHORT, PVOID)
-CreateFileTransactedAParams = ((1, 'lpFileName'), (1, 'dwDesiredAccess'), (1, 'dwShareMode'), (1, 'lpSecurityAttributes'), (1, 'dwCreationDisposition'), (1, 'dwFlagsAndAttributes'), (1, 'hTemplateFile'), (1, 'hTransaction'), (1, 'pusMiniVersion'), (1, 'pExtendedParameter'))
-
-#def CreateFileTransactedW(lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile, hTransaction, pusMiniVersion, pExtendedParameter):
-#    return CreateFileTransactedW.ctypes_function(lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile, hTransaction, pusMiniVersion, pExtendedParameter)
-CreateFileTransactedWPrototype = WINFUNCTYPE(HANDLE, LPWSTR, DWORD, DWORD, LPSECURITY_ATTRIBUTES, DWORD, DWORD, HANDLE, HANDLE, PUSHORT, PVOID)
-CreateFileTransactedWParams = ((1, 'lpFileName'), (1, 'dwDesiredAccess'), (1, 'dwShareMode'), (1, 'lpSecurityAttributes'), (1, 'dwCreationDisposition'), (1, 'dwFlagsAndAttributes'), (1, 'hTemplateFile'), (1, 'hTransaction'), (1, 'pusMiniVersion'), (1, 'pExtendedParameter'))
-
-#def CommitTransaction(TransactionHandle):
-#    return CommitTransaction.ctypes_function(TransactionHandle)
-CommitTransactionPrototype = WINFUNCTYPE(BOOL, HANDLE)
-CommitTransactionParams = ((1, 'TransactionHandle'),)
-
-#def CreateTransaction(lpTransactionAttributes, UOW, CreateOptions, IsolationLevel, IsolationFlags, Timeout, Description):
-#    return CreateTransaction.ctypes_function(lpTransactionAttributes, UOW, CreateOptions, IsolationLevel, IsolationFlags, Timeout, Description)
-CreateTransactionPrototype = WINFUNCTYPE(HANDLE, LPSECURITY_ATTRIBUTES, LPGUID, DWORD, DWORD, DWORD, DWORD, LPWSTR)
-CreateTransactionParams = ((1, 'lpTransactionAttributes'), (1, 'UOW'), (1, 'CreateOptions'), (1, 'IsolationLevel'), (1, 'IsolationFlags'), (1, 'Timeout'), (1, 'Description'))
-
-#def RollbackTransaction(TransactionHandle):
-#    return RollbackTransaction.ctypes_function(TransactionHandle)
-RollbackTransactionPrototype = WINFUNCTYPE(BOOL, HANDLE)
-RollbackTransactionParams = ((1, 'TransactionHandle'),)
-
-#def OpenTransaction(dwDesiredAccess, TransactionId):
-#    return OpenTransaction.ctypes_function(dwDesiredAccess, TransactionId)
-OpenTransactionPrototype = WINFUNCTYPE(HANDLE, DWORD, LPGUID)
-OpenTransactionParams = ((1, 'dwDesiredAccess'), (1, 'TransactionId'))
-
-#def StrStrIW(pszFirst, pszSrch):
-#    return StrStrIW.ctypes_function(pszFirst, pszSrch)
-StrStrIWPrototype = WINFUNCTYPE(PWSTR, PWSTR, PWSTR)
-StrStrIWParams = ((1, 'pszFirst'), (1, 'pszSrch'))
-
-#def StrStrIA(pszFirst, pszSrch):
-#    return StrStrIA.ctypes_function(pszFirst, pszSrch)
-StrStrIAPrototype = WINFUNCTYPE(PCSTR, PCSTR, PCSTR)
-StrStrIAParams = ((1, 'pszFirst'), (1, 'pszSrch'))
-
-#def IsOS(dwOS):
-#    return IsOS.ctypes_function(dwOS)
-IsOSPrototype = WINFUNCTYPE(BOOL, DWORD)
-IsOSParams = ((1, 'dwOS'),)
-
-#def TpCallbackSendAlpcMessageOnCompletion(TpHandle, PortHandle, Flags, SendMessage):
-#    return TpCallbackSendAlpcMessageOnCompletion.ctypes_function(TpHandle, PortHandle, Flags, SendMessage)
-TpCallbackSendAlpcMessageOnCompletionPrototype = WINFUNCTYPE(NTSTATUS, HANDLE, HANDLE, ULONG, PPORT_MESSAGE)
-TpCallbackSendAlpcMessageOnCompletionParams = ((1, 'TpHandle'), (1, 'PortHandle'), (1, 'Flags'), (1, 'SendMessage'))
-
-#def NtQueryLicenseValue(Name, Type, Buffer, Length, DataLength):
-#    return NtQueryLicenseValue.ctypes_function(Name, Type, Buffer, Length, DataLength)
-NtQueryLicenseValuePrototype = WINFUNCTYPE(NTSTATUS, PUNICODE_STRING, POINTER(ULONG), PVOID, ULONG, POINTER(ULONG))
-NtQueryLicenseValueParams = ((1, 'Name'), (1, 'Type'), (1, 'Buffer'), (1, 'Length'), (1, 'DataLength'))
-
-#def NtAlpcCreatePort(PortHandle, ObjectAttributes, PortAttributes):
-#    return NtAlpcCreatePort.ctypes_function(PortHandle, ObjectAttributes, PortAttributes)
-NtAlpcCreatePortPrototype = WINFUNCTYPE(NTSTATUS, PHANDLE, POBJECT_ATTRIBUTES, PALPC_PORT_ATTRIBUTES)
-NtAlpcCreatePortParams = ((1, 'PortHandle'), (1, 'ObjectAttributes'), (1, 'PortAttributes'))
-
-#def NtAlpcQueryInformation(PortHandle, PortInformationClass, PortInformation, Length, ReturnLength):
-#    return NtAlpcQueryInformation.ctypes_function(PortHandle, PortInformationClass, PortInformation, Length, ReturnLength)
-NtAlpcQueryInformationPrototype = WINFUNCTYPE(NTSTATUS, HANDLE, ALPC_PORT_INFORMATION_CLASS, PVOID, ULONG, PULONG)
-NtAlpcQueryInformationParams = ((1, 'PortHandle'), (1, 'PortInformationClass'), (1, 'PortInformation'), (1, 'Length'), (1, 'ReturnLength'))
-
-#def NtAlpcQueryInformationMessage(PortHandle, PortMessage, MessageInformationClass, MessageInformation, Length, ReturnLength):
-#    return NtAlpcQueryInformationMessage.ctypes_function(PortHandle, PortMessage, MessageInformationClass, MessageInformation, Length, ReturnLength)
-NtAlpcQueryInformationMessagePrototype = WINFUNCTYPE(NTSTATUS, HANDLE, PPORT_MESSAGE, ALPC_MESSAGE_INFORMATION_CLASS, PVOID, ULONG, PULONG)
-NtAlpcQueryInformationMessageParams = ((1, 'PortHandle'), (1, 'PortMessage'), (1, 'MessageInformationClass'), (1, 'MessageInformation'), (1, 'Length'), (1, 'ReturnLength'))
-
-#def NtAlpcConnectPort(PortHandle, PortName, ObjectAttributes, PortAttributes, Flags, RequiredServerSid, ConnectionMessage, BufferLength, OutMessageAttributes, InMessageAttributes, Timeout):
-#    return NtAlpcConnectPort.ctypes_function(PortHandle, PortName, ObjectAttributes, PortAttributes, Flags, RequiredServerSid, ConnectionMessage, BufferLength, OutMessageAttributes, InMessageAttributes, Timeout)
-NtAlpcConnectPortPrototype = WINFUNCTYPE(NTSTATUS, PHANDLE, PUNICODE_STRING, POBJECT_ATTRIBUTES, PALPC_PORT_ATTRIBUTES, ULONG, PSID, PPORT_MESSAGE, PULONG, PALPC_MESSAGE_ATTRIBUTES, PALPC_MESSAGE_ATTRIBUTES, PLARGE_INTEGER)
-NtAlpcConnectPortParams = ((1, 'PortHandle'), (1, 'PortName'), (1, 'ObjectAttributes'), (1, 'PortAttributes'), (1, 'Flags'), (1, 'RequiredServerSid'), (1, 'ConnectionMessage'), (1, 'BufferLength'), (1, 'OutMessageAttributes'), (1, 'InMessageAttributes'), (1, 'Timeout'))
-
-#def NtAlpcConnectPortEx(PortHandle, ConnectionPortObjectAttributes, ClientPortObjectAttributes, PortAttributes, Flags, ServerSecurityRequirements, ConnectionMessage, BufferLength, OutMessageAttributes, InMessageAttributes, Timeout):
-#    return NtAlpcConnectPortEx.ctypes_function(PortHandle, ConnectionPortObjectAttributes, ClientPortObjectAttributes, PortAttributes, Flags, ServerSecurityRequirements, ConnectionMessage, BufferLength, OutMessageAttributes, InMessageAttributes, Timeout)
-NtAlpcConnectPortExPrototype = WINFUNCTYPE(NTSTATUS, PHANDLE, POBJECT_ATTRIBUTES, POBJECT_ATTRIBUTES, PALPC_PORT_ATTRIBUTES, ULONG, PSECURITY_DESCRIPTOR, PPORT_MESSAGE, PSIZE_T, PALPC_MESSAGE_ATTRIBUTES, PALPC_MESSAGE_ATTRIBUTES, PLARGE_INTEGER)
-NtAlpcConnectPortExParams = ((1, 'PortHandle'), (1, 'ConnectionPortObjectAttributes'), (1, 'ClientPortObjectAttributes'), (1, 'PortAttributes'), (1, 'Flags'), (1, 'ServerSecurityRequirements'), (1, 'ConnectionMessage'), (1, 'BufferLength'), (1, 'OutMessageAttributes'), (1, 'InMessageAttributes'), (1, 'Timeout'))
-
-#def NtAlpcAcceptConnectPort(PortHandle, ConnectionPortHandle, Flags, ObjectAttributes, PortAttributes, PortContext, ConnectionRequest, ConnectionMessageAttributes, AcceptConnection):
-#    return NtAlpcAcceptConnectPort.ctypes_function(PortHandle, ConnectionPortHandle, Flags, ObjectAttributes, PortAttributes, PortContext, ConnectionRequest, ConnectionMessageAttributes, AcceptConnection)
-NtAlpcAcceptConnectPortPrototype = WINFUNCTYPE(NTSTATUS, PHANDLE, HANDLE, ULONG, POBJECT_ATTRIBUTES, PALPC_PORT_ATTRIBUTES, PVOID, PPORT_MESSAGE, PALPC_MESSAGE_ATTRIBUTES, BOOLEAN)
-NtAlpcAcceptConnectPortParams = ((1, 'PortHandle'), (1, 'ConnectionPortHandle'), (1, 'Flags'), (1, 'ObjectAttributes'), (1, 'PortAttributes'), (1, 'PortContext'), (1, 'ConnectionRequest'), (1, 'ConnectionMessageAttributes'), (1, 'AcceptConnection'))
-
-#def AlpcInitializeMessageAttribute(AttributeFlags, Buffer, BufferSize, RequiredBufferSize):
-#    return AlpcInitializeMessageAttribute.ctypes_function(AttributeFlags, Buffer, BufferSize, RequiredBufferSize)
-AlpcInitializeMessageAttributePrototype = WINFUNCTYPE(NTSTATUS, ULONG, PALPC_MESSAGE_ATTRIBUTES, ULONG, PULONG)
-AlpcInitializeMessageAttributeParams = ((1, 'AttributeFlags'), (1, 'Buffer'), (1, 'BufferSize'), (1, 'RequiredBufferSize'))
-
-#def AlpcGetMessageAttribute(Buffer, AttributeFlag):
-#    return AlpcGetMessageAttribute.ctypes_function(Buffer, AttributeFlag)
-AlpcGetMessageAttributePrototype = WINFUNCTYPE(PVOID, PALPC_MESSAGE_ATTRIBUTES, ULONG)
-AlpcGetMessageAttributeParams = ((1, 'Buffer'), (1, 'AttributeFlag'))
-
-#def NtAlpcSendWaitReceivePort(PortHandle, Flags, SendMessage, SendMessageAttributes, ReceiveMessage, BufferLength, ReceiveMessageAttributes, Timeout):
-#    return NtAlpcSendWaitReceivePort.ctypes_function(PortHandle, Flags, SendMessage, SendMessageAttributes, ReceiveMessage, BufferLength, ReceiveMessageAttributes, Timeout)
-NtAlpcSendWaitReceivePortPrototype = WINFUNCTYPE(NTSTATUS, HANDLE, ULONG, PPORT_MESSAGE, PALPC_MESSAGE_ATTRIBUTES, PPORT_MESSAGE, PSIZE_T, PALPC_MESSAGE_ATTRIBUTES, PLARGE_INTEGER)
-NtAlpcSendWaitReceivePortParams = ((1, 'PortHandle'), (1, 'Flags'), (1, 'SendMessage'), (1, 'SendMessageAttributes'), (1, 'ReceiveMessage'), (1, 'BufferLength'), (1, 'ReceiveMessageAttributes'), (1, 'Timeout'))
-
-#def NtAlpcDisconnectPort(PortHandle, Flags):
-#    return NtAlpcDisconnectPort.ctypes_function(PortHandle, Flags)
-NtAlpcDisconnectPortPrototype = WINFUNCTYPE(NTSTATUS, HANDLE, ULONG)
-NtAlpcDisconnectPortParams = ((1, 'PortHandle'), (1, 'Flags'))
-
-#def NtAlpcCreatePortSection(PortHandle, Flags, SectionHandle, SectionSize, AlpcSectionHandle, ActualSectionSize):
-#    return NtAlpcCreatePortSection.ctypes_function(PortHandle, Flags, SectionHandle, SectionSize, AlpcSectionHandle, ActualSectionSize)
-NtAlpcCreatePortSectionPrototype = WINFUNCTYPE(NTSTATUS, HANDLE, ULONG, HANDLE, SIZE_T, PALPC_HANDLE, PSIZE_T)
-NtAlpcCreatePortSectionParams = ((1, 'PortHandle'), (1, 'Flags'), (1, 'SectionHandle'), (1, 'SectionSize'), (1, 'AlpcSectionHandle'), (1, 'ActualSectionSize'))
-
-#def NtAlpcDeletePortSection(PortHandle, Flags, SectionHandle):
-#    return NtAlpcDeletePortSection.ctypes_function(PortHandle, Flags, SectionHandle)
-NtAlpcDeletePortSectionPrototype = WINFUNCTYPE(NTSTATUS, HANDLE, ULONG, ALPC_HANDLE)
-NtAlpcDeletePortSectionParams = ((1, 'PortHandle'), (1, 'Flags'), (1, 'SectionHandle'))
-
-#def NtAlpcCreateResourceReserve(PortHandle, Flags, MessageSize, ResourceId):
-#    return NtAlpcCreateResourceReserve.ctypes_function(PortHandle, Flags, MessageSize, ResourceId)
-NtAlpcCreateResourceReservePrototype = WINFUNCTYPE(NTSTATUS, HANDLE, ULONG, SIZE_T, PALPC_HANDLE)
-NtAlpcCreateResourceReserveParams = ((1, 'PortHandle'), (1, 'Flags'), (1, 'MessageSize'), (1, 'ResourceId'))
-
-#def NtAlpcDeleteResourceReserve(PortHandle, Flags, ResourceId):
-#    return NtAlpcDeleteResourceReserve.ctypes_function(PortHandle, Flags, ResourceId)
-NtAlpcDeleteResourceReservePrototype = WINFUNCTYPE(NTSTATUS, HANDLE, ULONG, ALPC_HANDLE)
-NtAlpcDeleteResourceReserveParams = ((1, 'PortHandle'), (1, 'Flags'), (1, 'ResourceId'))
-
-#def NtAlpcCreateSectionView(PortHandle, Flags, ViewAttributes):
-#    return NtAlpcCreateSectionView.ctypes_function(PortHandle, Flags, ViewAttributes)
-NtAlpcCreateSectionViewPrototype = WINFUNCTYPE(NTSTATUS, HANDLE, ULONG, PALPC_DATA_VIEW_ATTR)
-NtAlpcCreateSectionViewParams = ((1, 'PortHandle'), (1, 'Flags'), (1, 'ViewAttributes'))
-
-#def NtAlpcDeleteSectionView(PortHandle, Flags, ViewBase):
-#    return NtAlpcDeleteSectionView.ctypes_function(PortHandle, Flags, ViewBase)
-NtAlpcDeleteSectionViewPrototype = WINFUNCTYPE(NTSTATUS, HANDLE, ULONG, PVOID)
-NtAlpcDeleteSectionViewParams = ((1, 'PortHandle'), (1, 'Flags'), (1, 'ViewBase'))
-
-#def NtAlpcCreateSecurityContext(PortHandle, Flags, SecurityAttribute):
-#    return NtAlpcCreateSecurityContext.ctypes_function(PortHandle, Flags, SecurityAttribute)
-NtAlpcCreateSecurityContextPrototype = WINFUNCTYPE(NTSTATUS, HANDLE, ULONG, PALPC_SECURITY_ATTR)
-NtAlpcCreateSecurityContextParams = ((1, 'PortHandle'), (1, 'Flags'), (1, 'SecurityAttribute'))
-
-#def NtAlpcDeleteSecurityContext(PortHandle, Flags, ContextHandle):
-#    return NtAlpcDeleteSecurityContext.ctypes_function(PortHandle, Flags, ContextHandle)
-NtAlpcDeleteSecurityContextPrototype = WINFUNCTYPE(NTSTATUS, HANDLE, ULONG, ALPC_HANDLE)
-NtAlpcDeleteSecurityContextParams = ((1, 'PortHandle'), (1, 'Flags'), (1, 'ContextHandle'))
-
-#def NtAlpcRevokeSecurityContext(PortHandle, Flags, ContextHandle):
-#    return NtAlpcRevokeSecurityContext.ctypes_function(PortHandle, Flags, ContextHandle)
-NtAlpcRevokeSecurityContextPrototype = WINFUNCTYPE(NTSTATUS, HANDLE, ULONG, ALPC_HANDLE)
-NtAlpcRevokeSecurityContextParams = ((1, 'PortHandle'), (1, 'Flags'), (1, 'ContextHandle'))
 
