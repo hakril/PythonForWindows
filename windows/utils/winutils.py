@@ -292,7 +292,7 @@ ntqueryvolumeinformationfile_info_structs = {
 
 # TODO: FileFsDriverPathInformation
 # TODO: Extended FILE_FS_VOLUME_INFORMATION that can read the real value of 'VolumeLabel'
-def query_volume_information(file_or_handle,volume_info_class):
+def query_volume_information(file_or_handle, volume_info_class):
     if isinstance(file_or_handle, file):
         file_or_handle = get_handle_from_file(file_or_handle)
     handle = file_or_handle
@@ -309,7 +309,7 @@ def query_volume_information(file_or_handle,volume_info_class):
         if volume_info_class == gdef.FileFsAttributeInformation:
             file_name_length = pinfo[0].FileSystemNameLength
         elif volume_info_class == gdef.FileFsVolumeInformation:
-            file_name_length = pinfo[0].VolumeLabelLength
+            file_name_length = pinfo[0].VolumeLabelLength + 0x8 # I have seen cases where the VolumeLabelLength is not even enough..
         else:
             raise
         full_size = ctypes.sizeof(info) + file_name_length # We add a little too much size for the sake of simplicity
