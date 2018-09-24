@@ -461,6 +461,11 @@ class StructureCtypesGenerator(CtypesGenerator):
     def generate_for_simple_type_file(self, file):
         for simple_type in file.data:
             self.emitline(simple_type.generate_ctypes())
+            if simple_type.lvalue in EXTENDED_STRUCT:
+                extended_struct_filename = from_here(os.path.join("extended_structs", "{0}.py".format(simple_type.lvalue)))
+                print("Including extended definition for <{0}>".format(simple_type.lvalue))
+                with open(extended_struct_filename) as f:
+                    self.emitline(f.read())
 
     def generate_for_file(self, file):
         if isinstance(file, SimpleTypeParsedFile):
