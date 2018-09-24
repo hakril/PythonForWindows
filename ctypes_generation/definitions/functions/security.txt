@@ -1,0 +1,130 @@
+BOOL WINAPI IsValidSecurityDescriptor(
+  _In_ PSECURITY_DESCRIPTOR pSecurityDescriptor
+);
+
+BOOL WINAPI ConvertStringSecurityDescriptorToSecurityDescriptorA(
+  _In_  LPCSTR              StringSecurityDescriptor,
+  _In_  DWORD                StringSDRevision,
+  _Out_ PSECURITY_DESCRIPTOR *SecurityDescriptor,
+  _Out_ PULONG               SecurityDescriptorSize
+);
+
+BOOL WINAPI ConvertStringSecurityDescriptorToSecurityDescriptorW(
+  _In_  LPWSTR              StringSecurityDescriptor,
+  _In_  DWORD                StringSDRevision,
+  _Out_ PSECURITY_DESCRIPTOR *SecurityDescriptor,
+  _Out_ PULONG               SecurityDescriptorSize
+);
+
+BOOL WINAPI ConvertSecurityDescriptorToStringSecurityDescriptorA(
+  _In_  PSECURITY_DESCRIPTOR SecurityDescriptor,
+  _In_  DWORD                RequestedStringSDRevision,
+  _In_  DWORD                SecurityInformation,
+  _Out_ LPCSTR               *StringSecurityDescriptor,
+  _Out_ PULONG               StringSecurityDescriptorLen
+);
+
+
+BOOL WINAPI ConvertSecurityDescriptorToStringSecurityDescriptorW(
+  _In_  PSECURITY_DESCRIPTOR SecurityDescriptor,
+  _In_  DWORD                RequestedStringSDRevision,
+  _In_  DWORD                SecurityInformation,
+  _Out_ LPWSTR               *StringSecurityDescriptor,
+  _Out_ PULONG               StringSecurityDescriptorLen
+);
+
+
+/* From Win10 securitybaseapi.h*/
+
+
+BOOL WINAPI GetSecurityDescriptorControl(
+    _In_ PSECURITY_DESCRIPTOR pSecurityDescriptor,
+    _Out_ PSECURITY_DESCRIPTOR_CONTROL pControl,
+    _Out_ LPDWORD lpdwRevision
+    );
+
+
+
+BOOL WINAPI GetSecurityDescriptorDacl(
+    _In_ PSECURITY_DESCRIPTOR pSecurityDescriptor,
+    _Out_ LPBOOL lpbDaclPresent,
+    _Outptr_ PACL * pDacl,
+    _Out_ LPBOOL lpbDaclDefaulted
+    );
+
+
+BOOL WINAPI GetSecurityDescriptorGroup(
+    _In_ PSECURITY_DESCRIPTOR pSecurityDescriptor,
+    _Outptr_ PSID * pGroup,
+    _Out_ LPBOOL lpbGroupDefaulted
+    );
+
+
+DWORD WINAPI GetSecurityDescriptorLength(
+    _In_ PSECURITY_DESCRIPTOR pSecurityDescriptor
+    );
+
+
+BOOL WINAPI GetSecurityDescriptorOwner(
+    _In_ PSECURITY_DESCRIPTOR pSecurityDescriptor,
+    _Outptr_ PSID * pOwner,
+    _Out_ LPBOOL lpbOwnerDefaulted
+    );
+
+
+DWORD WINAPI GetSecurityDescriptorRMControl(
+    _In_ PSECURITY_DESCRIPTOR SecurityDescriptor,
+    _Out_ PUCHAR RMControl
+    );
+
+
+BOOL WINAPI GetSecurityDescriptorSacl(
+    _In_ PSECURITY_DESCRIPTOR pSecurityDescriptor,
+    _Out_ LPBOOL lpbSaclPresent,
+    _Outptr_ PACL * pSacl,
+    _Out_ LPBOOL lpbSaclDefaulted
+    );
+
+DWORD WINAPI GetLengthSid(
+  _In_ PSID pSid
+);
+
+
+PSID_IDENTIFIER_AUTHORITY WINAPI GetSidIdentifierAuthority(
+    _In_ PSID pSid
+);
+
+
+DWORD WINAPI GetSidLengthRequired(
+    _In_ UCHAR nSubAuthorityCount
+);
+
+
+PDWORD WINAPI GetSidSubAuthority(
+    _In_ PSID pSid,
+    _In_ DWORD nSubAuthority
+);
+
+
+PUCHAR WINAPI GetSidSubAuthorityCount(
+    _In_ PSID pSid
+    );
+
+PVOID WINAPI FreeSid(
+    _In_ PSID pSid
+    );
+
+
+BOOL WINAPI GetAce(
+    _In_ PACL pAcl,
+    _In_ DWORD dwAceIndex,
+    _Outptr_ LPVOID * pAce
+    );
+
+
+BOOL WINAPI GetAclInformation(
+    _In_ PACL pAcl,
+    _Out_ LPVOID pAclInformation,
+    _In_ DWORD nAclInformationLength,
+    _In_ ACL_INFORMATION_CLASS dwAclInformationClass
+    );

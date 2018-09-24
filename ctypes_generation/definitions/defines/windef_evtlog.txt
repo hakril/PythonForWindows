@@ -11,6 +11,9 @@
 #define EVENTLOG_FORWARDS_READ          0x0004
 #define EVENTLOG_BACKWARDS_READ         0x0008
 
+#define EVT_VARIANT_TYPE_MASK           0x7f
+#define EVT_VARIANT_TYPE_ARRAY          128
+
 
 ///////////////////////////////////////////////////
 //                                               //

@@ -893,22 +893,8 @@ BOOL WINAPI SetTokenInformation (
     __in DWORD TokenInformationLength
 );
 
-PSID_IDENTIFIER_AUTHORITY WINAPI GetSidIdentifierAuthority (
-    __in PSID pSid
-    );
 
-PDWORD WINAPI GetSidSubAuthority (
-    __in PSID pSid,
-    __in DWORD nSubAuthority
-    );
 
-LPBYTE WINAPI GetSidSubAuthorityCount (
-    __in PSID pSid
-    );
-
-DWORD WINAPI GetLengthSid(
-  _In_ PSID pSid
-);
 
 BOOL WINAPI CreateWellKnownSid(
   _In_      WELL_KNOWN_SID_TYPE WellKnownSidType,

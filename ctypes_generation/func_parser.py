@@ -44,8 +44,12 @@ class WinFunc(object):
 
 
 class WinFuncParser(Parser):
-
-    known_io_info_type = ["__in", "__in_opt", "_In_", "_In_opt_", "_Inout_", "_Out_opt_", "_Out_", "_Reserved_", "_Inout_opt_", "__inout_opt", "__out", "__inout", "__deref_out"]
+    known_io_info_type = ["__in", "__in_opt", "_In_", "_In_opt_", "_Inout_", "_Out_opt_", "_Out_", "_Reserved_", "_Inout_opt_", "__inout_opt", "__out", "__inout", "__deref_out", "_Outptr_"]
+    known_declarations = {
+        "WINAPI" : "WINFUNCTYPE",
+        "LDAPAPI" : "CFUNCTYPE"
+    }
+    default_calling_convention = "WINFUNCTYPE"
 
     def assert_argument_io_info(self):
         io_info = self.assert_token_type(NameToken)

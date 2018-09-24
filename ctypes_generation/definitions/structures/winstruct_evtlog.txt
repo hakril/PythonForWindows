@@ -93,7 +93,7 @@ union _ANON_evt_variant_sub_union {
     SIZE_T     *SizeTArr;
     LPCWSTR    XmlVal;
     LPCWSTR*   XmlValArr;
-  };
+};
 
 typedef struct _EVT_VARIANT {
   _ANON_evt_variant_sub_union _VARIANT_VALUE;

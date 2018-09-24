@@ -1,0 +1,72 @@
+#define ACCESS_MIN_MS_ACE_TYPE                  (0x0)
+#define ACCESS_ALLOWED_ACE_TYPE                 (0x0)
+#define ACCESS_DENIED_ACE_TYPE                  (0x1)
+#define SYSTEM_AUDIT_ACE_TYPE                   (0x2)
+#define SYSTEM_ALARM_ACE_TYPE                   (0x3)
+#define ACCESS_MAX_MS_V2_ACE_TYPE               (0x3)
+#define ACCESS_ALLOWED_COMPOUND_ACE_TYPE        (0x4)
+#define ACCESS_MAX_MS_V3_ACE_TYPE               (0x4)
+#define ACCESS_MIN_MS_OBJECT_ACE_TYPE           (0x5)
+#define ACCESS_ALLOWED_OBJECT_ACE_TYPE          (0x5)
+#define ACCESS_DENIED_OBJECT_ACE_TYPE           (0x6)
+#define SYSTEM_AUDIT_OBJECT_ACE_TYPE            (0x7)
+#define SYSTEM_ALARM_OBJECT_ACE_TYPE            (0x8)
+#define ACCESS_MAX_MS_OBJECT_ACE_TYPE           (0x8)
+#define ACCESS_MAX_MS_V4_ACE_TYPE               (0x8)
+#define ACCESS_MAX_MS_ACE_TYPE                  (0x8)
+#define ACCESS_ALLOWED_CALLBACK_ACE_TYPE        (0x9)
+#define ACCESS_DENIED_CALLBACK_ACE_TYPE         (0xA)
+#define ACCESS_ALLOWED_CALLBACK_OBJECT_ACE_TYPE (0xB)
+#define ACCESS_DENIED_CALLBACK_OBJECT_ACE_TYPE  (0xC)
+#define SYSTEM_AUDIT_CALLBACK_ACE_TYPE          (0xD)
+#define SYSTEM_ALARM_CALLBACK_ACE_TYPE          (0xE)
+#define SYSTEM_AUDIT_CALLBACK_OBJECT_ACE_TYPE   (0xF)
+#define SYSTEM_ALARM_CALLBACK_OBJECT_ACE_TYPE   (0x10)
+#define SYSTEM_MANDATORY_LABEL_ACE_TYPE         (0x11)
+#define ACCESS_MAX_MS_V5_ACE_TYPE               (0x11)
+#define SYSTEM_RESOURCE_ATTRIBUTE_ACE_TYPE      (0x12)
+#define SYSTEM_SCOPED_POLICY_ID_ACE_TYPE        (0x13)
+#define SYSTEM_PROCESS_TRUST_LABEL_ACE_TYPE     (0x14)
+#define ACCESS_MAX_MS_V5_ACE_TYPE               (0x14)
+
+#define SEC_WINNT_AUTH_IDENTITY_ANSI        0x1
+#define SEC_WINNT_AUTH_IDENTITY_UNICODE     0x2
+
+#define SE_OWNER_DEFAULTED      0x00000001
+#define SE_GROUP_DEFAULTED      0x00000002
+#define SE_DACL_PRESENT         0x00000004
+#define SE_DACL_DEFAULTED       0x00000008
+#define SE_SACL_PRESENT         0x00000010
+#define SE_SACL_DEFAULTED       0x00000020
+#define SE_DACL_AUTO_INHERIT_REQ    0x00000100
+#define SE_SACL_AUTO_INHERIT_REQ    0x00000200
+#define SE_DACL_AUTO_INHERITED      0x00000400
+#define SE_SACL_AUTO_INHERITED      0x00000800
+#define SE_DACL_PROTECTED       0x00001000
+#define SE_SACL_PROTECTED       0x00002000
+#define SE_RM_CONTROL_VALID     0x00004000
+#define SE_SELF_RELATIVE        0x00008000
+
+#define SDDL_REVISION_1 0x1
+
+
+#define ACE_OBJECT_TYPE_PRESENT           0x1
+#define ACE_INHERITED_OBJECT_TYPE_PRESENT 0x2
+
+
+#define OBJECT_INHERIT_ACE                (0x1)
+#define CONTAINER_INHERIT_ACE             (0x2)
+#define NO_PROPAGATE_INHERIT_ACE          (0x4)
+#define INHERIT_ONLY_ACE                  (0x8)
+#define INHERITED_ACE                     (0x10)
+#define VALID_INHERIT_FLAGS               (0x1F)
+#define SUCCESSFUL_ACCESS_ACE_FLAG        (0x40)
+#define FAILED_ACCESS_ACE_FLAG            (0x80)
+
+
+#define SYSTEM_MANDATORY_LABEL_NO_WRITE_UP      0x1
+#define SYSTEM_MANDATORY_LABEL_NO_READ_UP       0x2
+#define SYSTEM_MANDATORY_LABEL_NO_EXECUTE_UP    0x4
+
+#define SYSTEM_PROCESS_TRUST_LABEL_VALID_MASK      0x00ffffff
+#define SYSTEM_PROCESS_TRUST_NOCONSTRAINT_MASK     0xffffffff

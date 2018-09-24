@@ -1,4 +1,5 @@
 from windef import *
+import windows # Allow extended-struct to use windows/winproxy/...
 from ctypes import *
 from ctypes.wintypes import *
 
@@ -41,827 +42,6 @@ class _FILE_DISPOSITION_INFORMATION(Structure):
     ]
 PFILE_DISPOSITION_INFORMATION = POINTER(_FILE_DISPOSITION_INFORMATION)
 FILE_DISPOSITION_INFORMATION = _FILE_DISPOSITION_INFORMATION
-
-TASK_ACTION_EXEC = EnumValue("_TASK_ACTION_TYPE", "TASK_ACTION_EXEC", 0x0)
-TASK_ACTION_COM_HANDLER = EnumValue("_TASK_ACTION_TYPE", "TASK_ACTION_COM_HANDLER", 0x5)
-TASK_ACTION_SEND_EMAIL = EnumValue("_TASK_ACTION_TYPE", "TASK_ACTION_SEND_EMAIL", 0x6)
-TASK_ACTION_SHOW_MESSAGE = EnumValue("_TASK_ACTION_TYPE", "TASK_ACTION_SHOW_MESSAGE", 0x7)
-class _TASK_ACTION_TYPE(EnumType):
-    values = [TASK_ACTION_EXEC, TASK_ACTION_COM_HANDLER, TASK_ACTION_SEND_EMAIL, TASK_ACTION_SHOW_MESSAGE]
-    mapper = {x:x for x in values}
-TASK_ACTION_TYPE = _TASK_ACTION_TYPE
-
-
-TASK_RUNLEVEL_LUA = EnumValue("_TASK_RUNLEVEL_TYPE", "TASK_RUNLEVEL_LUA", 0x0)
-TASK_RUNLEVEL_HIGHEST = EnumValue("_TASK_RUNLEVEL_TYPE", "TASK_RUNLEVEL_HIGHEST", 0x1)
-class _TASK_RUNLEVEL_TYPE(EnumType):
-    values = [TASK_RUNLEVEL_LUA, TASK_RUNLEVEL_HIGHEST]
-    mapper = {x:x for x in values}
-TASK_RUNLEVEL_TYPE = _TASK_RUNLEVEL_TYPE
-
-
-TASK_LOGON_NONE = EnumValue("_TASK_LOGON_TYPE", "TASK_LOGON_NONE", 0x0)
-TASK_LOGON_PASSWORD = EnumValue("_TASK_LOGON_TYPE", "TASK_LOGON_PASSWORD", 0x1)
-TASK_LOGON_S4U = EnumValue("_TASK_LOGON_TYPE", "TASK_LOGON_S4U", 0x2)
-TASK_LOGON_INTERACTIVE_TOKEN = EnumValue("_TASK_LOGON_TYPE", "TASK_LOGON_INTERACTIVE_TOKEN", 0x3)
-TASK_LOGON_GROUP = EnumValue("_TASK_LOGON_TYPE", "TASK_LOGON_GROUP", 0x4)
-TASK_LOGON_SERVICE_ACCOUNT = EnumValue("_TASK_LOGON_TYPE", "TASK_LOGON_SERVICE_ACCOUNT", 0x5)
-TASK_LOGON_INTERACTIVE_TOKEN_OR_PASSWORD = EnumValue("_TASK_LOGON_TYPE", "TASK_LOGON_INTERACTIVE_TOKEN_OR_PASSWORD", 0x6)
-class _TASK_LOGON_TYPE(EnumType):
-    values = [TASK_LOGON_NONE, TASK_LOGON_PASSWORD, TASK_LOGON_S4U, TASK_LOGON_INTERACTIVE_TOKEN, TASK_LOGON_GROUP, TASK_LOGON_SERVICE_ACCOUNT, TASK_LOGON_INTERACTIVE_TOKEN_OR_PASSWORD]
-    mapper = {x:x for x in values}
-TASK_LOGON_TYPE = _TASK_LOGON_TYPE
-
-
-TASK_STATE_UNKNOWN = EnumValue("_TASK_STATE", "TASK_STATE_UNKNOWN", 0x0)
-TASK_STATE_DISABLED = EnumValue("_TASK_STATE", "TASK_STATE_DISABLED", 0x1)
-TASK_STATE_QUEUED = EnumValue("_TASK_STATE", "TASK_STATE_QUEUED", 0x2)
-TASK_STATE_READY = EnumValue("_TASK_STATE", "TASK_STATE_READY", 0x3)
-TASK_STATE_RUNNING = EnumValue("_TASK_STATE", "TASK_STATE_RUNNING", 0x4)
-class _TASK_STATE(EnumType):
-    values = [TASK_STATE_UNKNOWN, TASK_STATE_DISABLED, TASK_STATE_QUEUED, TASK_STATE_READY, TASK_STATE_RUNNING]
-    mapper = {x:x for x in values}
-TASK_STATE = _TASK_STATE
-
-
-TASK_INSTANCES_PARALLEL = EnumValue("_TASK_INSTANCES_POLICY", "TASK_INSTANCES_PARALLEL", 0x0)
-TASK_INSTANCES_QUEUE = EnumValue("_TASK_INSTANCES_POLICY", "TASK_INSTANCES_QUEUE", 0x1)
-TASK_INSTANCES_IGNORE_NEW = EnumValue("_TASK_INSTANCES_POLICY", "TASK_INSTANCES_IGNORE_NEW", 0x2)
-TASK_INSTANCES_STOP_EXISTING = EnumValue("_TASK_INSTANCES_POLICY", "TASK_INSTANCES_STOP_EXISTING", 0x3)
-class _TASK_INSTANCES_POLICY(EnumType):
-    values = [TASK_INSTANCES_PARALLEL, TASK_INSTANCES_QUEUE, TASK_INSTANCES_IGNORE_NEW, TASK_INSTANCES_STOP_EXISTING]
-    mapper = {x:x for x in values}
-TASK_INSTANCES_POLICY = _TASK_INSTANCES_POLICY
-
-
-TASK_COMPATIBILITY_AT = EnumValue("_TASK_COMPATIBILITY", "TASK_COMPATIBILITY_AT", 0x0)
-TASK_COMPATIBILITY_V1 = EnumValue("_TASK_COMPATIBILITY", "TASK_COMPATIBILITY_V1", 0x1)
-TASK_COMPATIBILITY_V2 = EnumValue("_TASK_COMPATIBILITY", "TASK_COMPATIBILITY_V2", 0x2)
-class _TASK_COMPATIBILITY(EnumType):
-    values = [TASK_COMPATIBILITY_AT, TASK_COMPATIBILITY_V1, TASK_COMPATIBILITY_V2]
-    mapper = {x:x for x in values}
-TASK_COMPATIBILITY = _TASK_COMPATIBILITY
-
-
-TASK_TRIGGER_EVENT = EnumValue("_TASK_TRIGGER_TYPE2", "TASK_TRIGGER_EVENT", 0x0)
-TASK_TRIGGER_TIME = EnumValue("_TASK_TRIGGER_TYPE2", "TASK_TRIGGER_TIME", 0x1)
-TASK_TRIGGER_DAILY = EnumValue("_TASK_TRIGGER_TYPE2", "TASK_TRIGGER_DAILY", 0x2)
-TASK_TRIGGER_WEEKLY = EnumValue("_TASK_TRIGGER_TYPE2", "TASK_TRIGGER_WEEKLY", 0x3)
-TASK_TRIGGER_MONTHLY = EnumValue("_TASK_TRIGGER_TYPE2", "TASK_TRIGGER_MONTHLY", 0x4)
-TASK_TRIGGER_MONTHLYDOW = EnumValue("_TASK_TRIGGER_TYPE2", "TASK_TRIGGER_MONTHLYDOW", 0x5)
-TASK_TRIGGER_IDLE = EnumValue("_TASK_TRIGGER_TYPE2", "TASK_TRIGGER_IDLE", 0x6)
-TASK_TRIGGER_REGISTRATION = EnumValue("_TASK_TRIGGER_TYPE2", "TASK_TRIGGER_REGISTRATION", 0x7)
-TASK_TRIGGER_BOOT = EnumValue("_TASK_TRIGGER_TYPE2", "TASK_TRIGGER_BOOT", 0x8)
-TASK_TRIGGER_LOGON = EnumValue("_TASK_TRIGGER_TYPE2", "TASK_TRIGGER_LOGON", 0x9)
-TASK_TRIGGER_SESSION_STATE_CHANGE = EnumValue("_TASK_TRIGGER_TYPE2", "TASK_TRIGGER_SESSION_STATE_CHANGE", 0xb)
-class _TASK_TRIGGER_TYPE2(EnumType):
-    values = [TASK_TRIGGER_EVENT, TASK_TRIGGER_TIME, TASK_TRIGGER_DAILY, TASK_TRIGGER_WEEKLY, TASK_TRIGGER_MONTHLY, TASK_TRIGGER_MONTHLYDOW, TASK_TRIGGER_IDLE, TASK_TRIGGER_REGISTRATION, TASK_TRIGGER_BOOT, TASK_TRIGGER_LOGON, TASK_TRIGGER_SESSION_STATE_CHANGE]
-    mapper = {x:x for x in values}
-TASK_TRIGGER_TYPE2 = _TASK_TRIGGER_TYPE2
-
-
-TASK_ENUM_HIDDEN = EnumValue("_TASK_ENUM_FLAGS", "TASK_ENUM_HIDDEN", 0x1)
-class _TASK_ENUM_FLAGS(EnumType):
-    values = [TASK_ENUM_HIDDEN]
-    mapper = {x:x for x in values}
-TASK_ENUM_FLAGS = _TASK_ENUM_FLAGS
-
-
-TASK_VALIDATE_ONLY = EnumValue("_TASK_CREATION", "TASK_VALIDATE_ONLY", 0x1)
-TASK_CREATE = EnumValue("_TASK_CREATION", "TASK_CREATE", 0x2)
-TASK_UPDATE = EnumValue("_TASK_CREATION", "TASK_UPDATE", 0x4)
-TASK_CREATE_OR_UPDATE = EnumValue("_TASK_CREATION", "TASK_CREATE_OR_UPDATE", 0x6)
-TASK_DISABLE = EnumValue("_TASK_CREATION", "TASK_DISABLE", 0x8)
-TASK_DONT_ADD_PRINCIPAL_ACE = EnumValue("_TASK_CREATION", "TASK_DONT_ADD_PRINCIPAL_ACE", 0x10)
-TASK_IGNORE_REGISTRATION_TRIGGERS = EnumValue("_TASK_CREATION", "TASK_IGNORE_REGISTRATION_TRIGGERS", 0x20)
-class _TASK_CREATION(EnumType):
-    values = [TASK_VALIDATE_ONLY, TASK_CREATE, TASK_UPDATE, TASK_CREATE_OR_UPDATE, TASK_DISABLE, TASK_DONT_ADD_PRINCIPAL_ACE, TASK_IGNORE_REGISTRATION_TRIGGERS]
-    mapper = {x:x for x in values}
-TASK_CREATION = _TASK_CREATION
-
-
-TASK_RUN_NO_FLAGS = EnumValue("TASK_RUN_FLAGS", "TASK_RUN_NO_FLAGS", 0x0)
-TASK_RUN_AS_SELF = EnumValue("TASK_RUN_FLAGS", "TASK_RUN_AS_SELF", 0x1)
-TASK_RUN_IGNORE_CONSTRAINTS = EnumValue("TASK_RUN_FLAGS", "TASK_RUN_IGNORE_CONSTRAINTS", 0x2)
-TASK_RUN_USE_SESSION_ID = EnumValue("TASK_RUN_FLAGS", "TASK_RUN_USE_SESSION_ID", 0x4)
-TASK_RUN_USER_SID = EnumValue("TASK_RUN_FLAGS", "TASK_RUN_USER_SID", 0x8)
-class TASK_RUN_FLAGS(EnumType):
-    values = [TASK_RUN_NO_FLAGS, TASK_RUN_AS_SELF, TASK_RUN_IGNORE_CONSTRAINTS, TASK_RUN_USE_SESSION_ID, TASK_RUN_USER_SID]
-    mapper = {x:x for x in values}
-
-
-VOID = DWORD
-BYTE = c_ubyte
-PWSTR = LPWSTR
-PCWSTR = LPWSTR
-SIZE_T = c_size_t
-PSIZE_T = POINTER(SIZE_T)
-PVOID = c_void_p
-NTSTATUS = DWORD
-SECURITY_INFORMATION = DWORD
-PSECURITY_INFORMATION = POINTER(SECURITY_INFORMATION)
-PULONG = POINTER(ULONG)
-PDWORD = POINTER(DWORD)
-LPDWORD = POINTER(DWORD)
-LPBYTE = POINTER(BYTE)
-ULONG_PTR = PVOID
-LONG_PTR = PVOID
-DWORD_PTR = ULONG_PTR
-KAFFINITY = ULONG_PTR
-KPRIORITY = LONG
-CHAR = c_char
-UCHAR = c_char
-CSHORT = c_short
-VARTYPE = c_ushort
-PUSHORT = POINTER(USHORT)
-PBOOL = POINTER(BOOL)
-PSTR = LPSTR
-PCSTR = LPSTR
-va_list = c_char_p
-BSTR = c_wchar_p
-OLECHAR = c_wchar
-POLECHAR = c_wchar_p
-PUCHAR = POINTER(UCHAR)
-double = c_double
-DATE = double
-PSID = PVOID
-ULONGLONG = c_ulonglong
-PULONGLONG = POINTER(ULONGLONG)
-LONGLONG = c_longlong
-ULONG64 = c_ulonglong
-UINT64 = ULONG64
-LONG64 = c_longlong
-PLARGE_INTEGER = POINTER(LARGE_INTEGER)
-DWORD64 = ULONG64
-PDWORD64 = POINTER(DWORD64)
-SCODE = LONG
-CIMTYPE = LONG
-NET_IFINDEX = ULONG
-IF_INDEX = NET_IFINDEX
-IFTYPE = ULONG
-PULONG64 = POINTER(ULONG64)
-PBYTE = POINTER(BYTE)
-PUINT = POINTER(UINT)
-PHKEY = POINTER(HKEY)
-ACCESS_MASK = DWORD
-REGSAM = ACCESS_MASK
-PBOOLEAN = POINTER(BOOLEAN)
-SECURITY_CONTEXT_TRACKING_MODE = BOOLEAN
-HCRYPTPROV_LEGACY = PULONG
-HCRYPTKEY = PULONG
-HCRYPTPROV = PULONG
-HCRYPTHASH = PULONG
-ALG_ID = UINT
-DISPID = LONG
-MEMBERID = DISPID
-LRESULT = LONG_PTR
-PSECURITY_DESCRIPTOR = PVOID
-LPUNKNOWN = POINTER(PVOID)
-LPFILETIME = POINTER(FILETIME)
-LPPOINT = POINTER(POINT)
-LPRECT = POINTER(RECT)
-SPC_UUID = BYTE*16
-DEVICE_TYPE = DWORD
-PWINDBG_EXTENSION_APIS32 = PVOID
-PWINDBG_EXTENSION_APIS64 = PVOID
-INT8 = c_byte
-INT16 = SHORT
-INT32 = INT
-INT64 = LONGLONG
-UINT8 = BYTE
-UINT16 = USHORT
-UINT32 = UINT
-UINT64 = ULONGLONG
-PHANDLE = POINTER(HANDLE)
-HCATADMIN = HANDLE
-HCATINFO = HANDLE
-HCERTCHAINENGINE = HANDLE
-LPHANDLE = POINTER(HANDLE)
-ALPC_HANDLE = HANDLE
-PALPC_HANDLE = POINTER(ALPC_HANDLE)
-HCURSOR = HANDLE
-HBRUSH = HANDLE
-HCRYPTPROV_OR_NCRYPT_KEY_HANDLE = PULONG
-EVT_HANDLE = HANDLE
-EVT_OBJECT_ARRAY_PROPERTY_HANDLE = HANDLE
-RPCOLEDATAREP = ULONG
-WNDPROC = PVOID
-LPPROC_THREAD_ATTRIBUTE_LIST = PVOID
-PPS_POST_PROCESS_INIT_ROUTINE = PVOID
-LPTHREAD_START_ROUTINE = PVOID
-WNDENUMPROC = PVOID
-PHANDLER_ROUTINE = PVOID
-FARPROC = PVOID
-PIO_APC_ROUTINE = PVOID
-PVECTORED_EXCEPTION_HANDLER = PVOID
-PFN_CRYPT_GET_SIGNER_CERTIFICATE = PVOID
-LPCONTEXT = PVOID
-HCERTSTORE = PVOID
-HCRYPTMSG = PVOID
-PALPC_PORT_ATTRIBUTES = PVOID
-PPORT_MESSAGE = PVOID
-FakeFileInformationZero = EnumValue("_FILE_INFORMATION_CLASS", "FakeFileInformationZero", 0x0)
-FileDirectoryInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileDirectoryInformation", 0x1)
-FileFullDirectoryInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileFullDirectoryInformation", 0x2)
-FileBothDirectoryInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileBothDirectoryInformation", 0x3)
-FileBasicInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileBasicInformation", 0x4)
-FileStandardInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileStandardInformation", 0x5)
-FileInternalInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileInternalInformation", 0x6)
-FileEaInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileEaInformation", 0x7)
-FileAccessInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileAccessInformation", 0x8)
-FileNameInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileNameInformation", 0x9)
-FileRenameInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileRenameInformation", 0xa)
-FileLinkInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileLinkInformation", 0xb)
-FileNamesInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileNamesInformation", 0xc)
-FileDispositionInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileDispositionInformation", 0xd)
-FilePositionInformation = EnumValue("_FILE_INFORMATION_CLASS", "FilePositionInformation", 0xe)
-FileFullEaInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileFullEaInformation", 0xf)
-FileModeInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileModeInformation", 0x10)
-FileAlignmentInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileAlignmentInformation", 0x11)
-FileAllInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileAllInformation", 0x12)
-FileAllocationInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileAllocationInformation", 0x13)
-FileEndOfFileInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileEndOfFileInformation", 0x14)
-FileAlternateNameInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileAlternateNameInformation", 0x15)
-FileStreamInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileStreamInformation", 0x16)
-FilePipeInformation = EnumValue("_FILE_INFORMATION_CLASS", "FilePipeInformation", 0x17)
-FilePipeLocalInformation = EnumValue("_FILE_INFORMATION_CLASS", "FilePipeLocalInformation", 0x18)
-FilePipeRemoteInformation = EnumValue("_FILE_INFORMATION_CLASS", "FilePipeRemoteInformation", 0x19)
-FileMailslotQueryInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileMailslotQueryInformation", 0x1a)
-FileMailslotSetInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileMailslotSetInformation", 0x1b)
-FileCompressionInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileCompressionInformation", 0x1c)
-FileObjectIdInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileObjectIdInformation", 0x1d)
-FileCompletionInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileCompletionInformation", 0x1e)
-FileMoveClusterInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileMoveClusterInformation", 0x1f)
-FileQuotaInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileQuotaInformation", 0x20)
-FileReparsePointInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileReparsePointInformation", 0x21)
-FileNetworkOpenInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileNetworkOpenInformation", 0x22)
-FileAttributeTagInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileAttributeTagInformation", 0x23)
-FileTrackingInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileTrackingInformation", 0x24)
-FileIdBothDirectoryInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileIdBothDirectoryInformation", 0x25)
-FileIdFullDirectoryInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileIdFullDirectoryInformation", 0x26)
-FileValidDataLengthInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileValidDataLengthInformation", 0x27)
-FileShortNameInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileShortNameInformation", 0x28)
-FileIoCompletionNotificationInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileIoCompletionNotificationInformation", 0x29)
-FileIoStatusBlockRangeInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileIoStatusBlockRangeInformation", 0x2a)
-FileIoPriorityHintInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileIoPriorityHintInformation", 0x2b)
-FileSfioReserveInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileSfioReserveInformation", 0x2c)
-FileSfioVolumeInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileSfioVolumeInformation", 0x2d)
-FileHardLinkInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileHardLinkInformation", 0x2e)
-FileProcessIdsUsingFileInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileProcessIdsUsingFileInformation", 0x2f)
-FileNormalizedNameInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileNormalizedNameInformation", 0x30)
-FileNetworkPhysicalNameInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileNetworkPhysicalNameInformation", 0x31)
-FileIdGlobalTxDirectoryInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileIdGlobalTxDirectoryInformation", 0x32)
-FileIsRemoteDeviceInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileIsRemoteDeviceInformation", 0x33)
-FileUnusedInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileUnusedInformation", 0x34)
-FileNumaNodeInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileNumaNodeInformation", 0x35)
-FileStandardLinkInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileStandardLinkInformation", 0x36)
-FileRemoteProtocolInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileRemoteProtocolInformation", 0x37)
-FileRenameInformationBypassAccessCheck = EnumValue("_FILE_INFORMATION_CLASS", "FileRenameInformationBypassAccessCheck", 0x38)
-FileLinkInformationBypassAccessCheck = EnumValue("_FILE_INFORMATION_CLASS", "FileLinkInformationBypassAccessCheck", 0x39)
-FileVolumeNameInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileVolumeNameInformation", 0x3a)
-FileIdInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileIdInformation", 0x3b)
-FileIdExtdDirectoryInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileIdExtdDirectoryInformation", 0x3c)
-FileReplaceCompletionInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileReplaceCompletionInformation", 0x3d)
-FileHardLinkFullIdInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileHardLinkFullIdInformation", 0x3e)
-FileIdExtdBothDirectoryInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileIdExtdBothDirectoryInformation", 0x3f)
-FileDispositionInformationEx = EnumValue("_FILE_INFORMATION_CLASS", "FileDispositionInformationEx", 0x40)
-FileRenameInformationEx = EnumValue("_FILE_INFORMATION_CLASS", "FileRenameInformationEx", 0x41)
-FileRenameInformationExBypassAccessCheck = EnumValue("_FILE_INFORMATION_CLASS", "FileRenameInformationExBypassAccessCheck", 0x42)
-FileMaximumInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileMaximumInformation", 0x43)
-class _FILE_INFORMATION_CLASS(EnumType):
-    values = [FakeFileInformationZero, FileDirectoryInformation, FileFullDirectoryInformation, FileBothDirectoryInformation, FileBasicInformation, FileStandardInformation, FileInternalInformation, FileEaInformation, FileAccessInformation, FileNameInformation, FileRenameInformation, FileLinkInformation, FileNamesInformation, FileDispositionInformation, FilePositionInformation, FileFullEaInformation, FileModeInformation, FileAlignmentInformation, FileAllInformation, FileAllocationInformation, FileEndOfFileInformation, FileAlternateNameInformation, FileStreamInformation, FilePipeInformation, FilePipeLocalInformation, FilePipeRemoteInformation, FileMailslotQueryInformation, FileMailslotSetInformation, FileCompressionInformation, FileObjectIdInformation, FileCompletionInformation, FileMoveClusterInformation, FileQuotaInformation, FileReparsePointInformation, FileNetworkOpenInformation, FileAttributeTagInformation, FileTrackingInformation, FileIdBothDirectoryInformation, FileIdFullDirectoryInformation, FileValidDataLengthInformation, FileShortNameInformation, FileIoCompletionNotificationInformation, FileIoStatusBlockRangeInformation, FileIoPriorityHintInformation, FileSfioReserveInformation, FileSfioVolumeInformation, FileHardLinkInformation, FileProcessIdsUsingFileInformation, FileNormalizedNameInformation, FileNetworkPhysicalNameInformation, FileIdGlobalTxDirectoryInformation, FileIsRemoteDeviceInformation, FileUnusedInformation, FileNumaNodeInformation, FileStandardLinkInformation, FileRemoteProtocolInformation, FileRenameInformationBypassAccessCheck, FileLinkInformationBypassAccessCheck, FileVolumeNameInformation, FileIdInformation, FileIdExtdDirectoryInformation, FileReplaceCompletionInformation, FileHardLinkFullIdInformation, FileIdExtdBothDirectoryInformation, FileDispositionInformationEx, FileRenameInformationEx, FileRenameInformationExBypassAccessCheck, FileMaximumInformation]
-    mapper = {x:x for x in values}
-FILE_INFORMATION_CLASS = _FILE_INFORMATION_CLASS
-PFILE_INFORMATION_CLASS = POINTER(_FILE_INFORMATION_CLASS)
-
-
-IoPriorityVeryLow = EnumValue("_IO_PRIORITY_HINT", "IoPriorityVeryLow", 0x0)
-IoPriorityLow = EnumValue("_IO_PRIORITY_HINT", "IoPriorityLow", 0x1)
-IoPriorityNormal = EnumValue("_IO_PRIORITY_HINT", "IoPriorityNormal", 0x2)
-IoPriorityHigh = EnumValue("_IO_PRIORITY_HINT", "IoPriorityHigh", 0x3)
-IoPriorityCritical = EnumValue("_IO_PRIORITY_HINT", "IoPriorityCritical", 0x4)
-MaxIoPriorityTypes = EnumValue("_IO_PRIORITY_HINT", "MaxIoPriorityTypes", 0x5)
-class _IO_PRIORITY_HINT(EnumType):
-    values = [IoPriorityVeryLow, IoPriorityLow, IoPriorityNormal, IoPriorityHigh, IoPriorityCritical, MaxIoPriorityTypes]
-    mapper = {x:x for x in values}
-IO_PRIORITY_HINT = _IO_PRIORITY_HINT
-
-
-class _FILE_INTERNAL_INFORMATION(Structure):
-    _fields_ = [
-        ("IndexNumber", LARGE_INTEGER),
-    ]
-FILE_INTERNAL_INFORMATION = _FILE_INTERNAL_INFORMATION
-PFILE_INTERNAL_INFORMATION = POINTER(_FILE_INTERNAL_INFORMATION)
-
-class _FILE_ALIGNMENT_INFORMATION(Structure):
-    _fields_ = [
-        ("AlignmentRequirement", ULONG),
-    ]
-PFILE_ALIGNMENT_INFORMATION = POINTER(_FILE_ALIGNMENT_INFORMATION)
-FILE_ALIGNMENT_INFORMATION = _FILE_ALIGNMENT_INFORMATION
-
-class _FILE_ATTRIBUTE_TAG_INFORMATION(Structure):
-    _fields_ = [
-        ("FileAttributes", ULONG),
-        ("ReparseTag", ULONG),
-    ]
-PFILE_ATTRIBUTE_TAG_INFORMATION = POINTER(_FILE_ATTRIBUTE_TAG_INFORMATION)
-FILE_ATTRIBUTE_TAG_INFORMATION = _FILE_ATTRIBUTE_TAG_INFORMATION
-
-class _FILE_BASIC_INFORMATION(Structure):
-    _fields_ = [
-        ("CreationTime", LARGE_INTEGER),
-        ("LastAccessTime", LARGE_INTEGER),
-        ("LastWriteTime", LARGE_INTEGER),
-        ("ChangeTime", LARGE_INTEGER),
-        ("FileAttributes", ULONG),
-    ]
-FILE_BASIC_INFORMATION = _FILE_BASIC_INFORMATION
-PFILE_BASIC_INFORMATION = POINTER(_FILE_BASIC_INFORMATION)
-
-class _FILE_EA_INFORMATION(Structure):
-    _fields_ = [
-        ("EaSize", ULONG),
-    ]
-PFILE_EA_INFORMATION = POINTER(_FILE_EA_INFORMATION)
-FILE_EA_INFORMATION = _FILE_EA_INFORMATION
-
-class _FILE_IO_PRIORITY_HINT_INFORMATION(Structure):
-    _fields_ = [
-        ("PriorityHint", IO_PRIORITY_HINT),
-    ]
-PFILE_IO_PRIORITY_HINT_INFORMATION = POINTER(_FILE_IO_PRIORITY_HINT_INFORMATION)
-FILE_IO_PRIORITY_HINT_INFORMATION = _FILE_IO_PRIORITY_HINT_INFORMATION
-
-class _FILE_MODE_INFORMATION(Structure):
-    _fields_ = [
-        ("Mode", ULONG),
-    ]
-PFILE_MODE_INFORMATION = POINTER(_FILE_MODE_INFORMATION)
-FILE_MODE_INFORMATION = _FILE_MODE_INFORMATION
-
-class _FILE_NAME_INFORMATION(Structure):
-    _fields_ = [
-        ("FileNameLength", ULONG),
-        ("FileName", WCHAR * 1),
-    ]
-PFILE_NAME_INFORMATION = POINTER(_FILE_NAME_INFORMATION)
-FILE_NAME_INFORMATION = _FILE_NAME_INFORMATION
-
-class _FILE_NETWORK_OPEN_INFORMATION(Structure):
-    _fields_ = [
-        ("CreationTime", LARGE_INTEGER),
-        ("LastAccessTime", LARGE_INTEGER),
-        ("LastWriteTime", LARGE_INTEGER),
-        ("ChangeTime", LARGE_INTEGER),
-        ("AllocationSize", LARGE_INTEGER),
-        ("EndOfFile", LARGE_INTEGER),
-        ("FileAttributes", ULONG),
-    ]
-PFILE_NETWORK_OPEN_INFORMATION = POINTER(_FILE_NETWORK_OPEN_INFORMATION)
-FILE_NETWORK_OPEN_INFORMATION = _FILE_NETWORK_OPEN_INFORMATION
-
-class _FILE_STANDARD_INFORMATION(Structure):
-    _fields_ = [
-        ("AllocationSize", LARGE_INTEGER),
-        ("EndOfFile", LARGE_INTEGER),
-        ("NumberOfLinks", ULONG),
-        ("DeletePending", BOOLEAN),
-        ("Directory", BOOLEAN),
-    ]
-FILE_STANDARD_INFORMATION = _FILE_STANDARD_INFORMATION
-PFILE_STANDARD_INFORMATION = POINTER(_FILE_STANDARD_INFORMATION)
-
-class _FILE_ACCESS_INFORMATION(Structure):
-    _fields_ = [
-        ("AccessFlags", ACCESS_MASK),
-    ]
-FILE_ACCESS_INFORMATION = _FILE_ACCESS_INFORMATION
-PFILE_ACCESS_INFORMATION = POINTER(_FILE_ACCESS_INFORMATION)
-
-class _FILE_POSITION_INFORMATION(Structure):
-    _fields_ = [
-        ("CurrentByteOffset", LARGE_INTEGER),
-    ]
-PFILE_POSITION_INFORMATION = POINTER(_FILE_POSITION_INFORMATION)
-FILE_POSITION_INFORMATION = _FILE_POSITION_INFORMATION
-
-class _FILE_IS_REMOTE_DEVICE_INFORMATION(Structure):
-    _fields_ = [
-        ("IsRemote", BOOLEAN),
-    ]
-FILE_IS_REMOTE_DEVICE_INFORMATION = _FILE_IS_REMOTE_DEVICE_INFORMATION
-PFILE_IS_REMOTE_DEVICE_INFORMATION = POINTER(_FILE_IS_REMOTE_DEVICE_INFORMATION)
-
-class _FILE_ALL_INFORMATION(Structure):
-    _fields_ = [
-        ("BasicInformation", FILE_BASIC_INFORMATION),
-        ("StandardInformation", FILE_STANDARD_INFORMATION),
-        ("InternalInformation", FILE_INTERNAL_INFORMATION),
-        ("EaInformation", FILE_EA_INFORMATION),
-        ("AccessInformation", FILE_ACCESS_INFORMATION),
-        ("PositionInformation", FILE_POSITION_INFORMATION),
-        ("ModeInformation", FILE_MODE_INFORMATION),
-        ("AlignmentInformation", FILE_ALIGNMENT_INFORMATION),
-        ("NameInformation", FILE_NAME_INFORMATION),
-    ]
-PFILE_ALL_INFORMATION = POINTER(_FILE_ALL_INFORMATION)
-FILE_ALL_INFORMATION = _FILE_ALL_INFORMATION
-
-KeyValueBasicInformation = EnumValue("_KEY_VALUE_INFORMATION_CLASS", "KeyValueBasicInformation", 0x0)
-KeyValueFullInformation = EnumValue("_KEY_VALUE_INFORMATION_CLASS", "KeyValueFullInformation", 0x1)
-KeyValuePartialInformation = EnumValue("_KEY_VALUE_INFORMATION_CLASS", "KeyValuePartialInformation", 0x2)
-KeyValueFullInformationAlign64 = EnumValue("_KEY_VALUE_INFORMATION_CLASS", "KeyValueFullInformationAlign64", 0x3)
-KeyValuePartialInformationAlign64 = EnumValue("_KEY_VALUE_INFORMATION_CLASS", "KeyValuePartialInformationAlign64", 0x4)
-KeyValueLayerInformation = EnumValue("_KEY_VALUE_INFORMATION_CLASS", "KeyValueLayerInformation", 0x5)
-MaxKeyValueInfoClass = EnumValue("_KEY_VALUE_INFORMATION_CLASS", "MaxKeyValueInfoClass", 0x6)
-class _KEY_VALUE_INFORMATION_CLASS(EnumType):
-    values = [KeyValueBasicInformation, KeyValueFullInformation, KeyValuePartialInformation, KeyValueFullInformationAlign64, KeyValuePartialInformationAlign64, KeyValueLayerInformation, MaxKeyValueInfoClass]
-    mapper = {x:x for x in values}
-KEY_VALUE_INFORMATION_CLASS = _KEY_VALUE_INFORMATION_CLASS
-
-
-class _KEY_VALUE_BASIC_INFORMATION(Structure):
-    _fields_ = [
-        ("TitleIndex", ULONG),
-        ("Type", ULONG),
-        ("NameLength", ULONG),
-        ("Name", WCHAR * 1),
-    ]
-PKEY_VALUE_BASIC_INFORMATION = POINTER(_KEY_VALUE_BASIC_INFORMATION)
-KEY_VALUE_BASIC_INFORMATION = _KEY_VALUE_BASIC_INFORMATION
-
-class _KEY_VALUE_FULL_INFORMATION(Structure):
-    _fields_ = [
-        ("TitleIndex", ULONG),
-        ("Type", ULONG),
-        ("DataOffset", ULONG),
-        ("DataLength", ULONG),
-        ("NameLength", ULONG),
-        ("Name", WCHAR * 1),
-    ]
-KEY_VALUE_FULL_INFORMATION = _KEY_VALUE_FULL_INFORMATION
-PKEY_VALUE_FULL_INFORMATION = POINTER(_KEY_VALUE_FULL_INFORMATION)
-
-class _KEY_VALUE_PARTIAL_INFORMATION(Structure):
-    _fields_ = [
-        ("TitleIndex", ULONG),
-        ("Type", ULONG),
-        ("DataLength", ULONG),
-        ("Data", UCHAR * 1),
-    ]
-PKEY_VALUE_PARTIAL_INFORMATION = POINTER(_KEY_VALUE_PARTIAL_INFORMATION)
-KEY_VALUE_PARTIAL_INFORMATION = _KEY_VALUE_PARTIAL_INFORMATION
-
-BG_JOB_STATE_QUEUED = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_QUEUED", 0x0)
-BG_JOB_STATE_CONNECTING = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_CONNECTING", 0x1)
-BG_JOB_STATE_TRANSFERRING = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_TRANSFERRING", 0x2)
-BG_JOB_STATE_SUSPENDED = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_SUSPENDED", 0x3)
-BG_JOB_STATE_ERROR = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_ERROR", 0x4)
-BG_JOB_STATE_TRANSIENT_ERROR = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_TRANSIENT_ERROR", 0x5)
-BG_JOB_STATE_TRANSFERRED = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_TRANSFERRED", 0x6)
-BG_JOB_STATE_ACKNOWLEDGED = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_ACKNOWLEDGED", 0x7)
-BG_JOB_STATE_CANCELLED = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_CANCELLED", 0x8)
-class _BG_JOB_STATE(EnumType):
-    values = [BG_JOB_STATE_QUEUED, BG_JOB_STATE_CONNECTING, BG_JOB_STATE_TRANSFERRING, BG_JOB_STATE_SUSPENDED, BG_JOB_STATE_ERROR, BG_JOB_STATE_TRANSIENT_ERROR, BG_JOB_STATE_TRANSFERRED, BG_JOB_STATE_ACKNOWLEDGED, BG_JOB_STATE_CANCELLED]
-    mapper = {x:x for x in values}
-BG_JOB_STATE = _BG_JOB_STATE
-
-
-BG_JOB_PROXY_USAGE_PRECONFIG = EnumValue("_BG_JOB_PROXY_USAGE", "BG_JOB_PROXY_USAGE_PRECONFIG", 0x0)
-BG_JOB_PROXY_USAGE_NO_PROXY = EnumValue("_BG_JOB_PROXY_USAGE", "BG_JOB_PROXY_USAGE_NO_PROXY", 0x1)
-BG_JOB_PROXY_USAGE_OVERRIDE = EnumValue("_BG_JOB_PROXY_USAGE", "BG_JOB_PROXY_USAGE_OVERRIDE", 0x2)
-BG_JOB_PROXY_USAGE_AUTODETECT = EnumValue("_BG_JOB_PROXY_USAGE", "BG_JOB_PROXY_USAGE_AUTODETECT", 0x3)
-class _BG_JOB_PROXY_USAGE(EnumType):
-    values = [BG_JOB_PROXY_USAGE_PRECONFIG, BG_JOB_PROXY_USAGE_NO_PROXY, BG_JOB_PROXY_USAGE_OVERRIDE, BG_JOB_PROXY_USAGE_AUTODETECT]
-    mapper = {x:x for x in values}
-BG_JOB_PROXY_USAGE = _BG_JOB_PROXY_USAGE
-
-
-BG_JOB_PRIORITY_FOREGROUND = EnumValue("_BG_JOB_PRIORITY", "BG_JOB_PRIORITY_FOREGROUND", 0x0)
-BG_JOB_PRIORITY_HIGH = EnumValue("_BG_JOB_PRIORITY", "BG_JOB_PRIORITY_HIGH", 0x1)
-BG_JOB_PRIORITY_NORMAL = EnumValue("_BG_JOB_PRIORITY", "BG_JOB_PRIORITY_NORMAL", 0x2)
-BG_JOB_PRIORITY_LOW = EnumValue("_BG_JOB_PRIORITY", "BG_JOB_PRIORITY_LOW", 0x3)
-class _BG_JOB_PRIORITY(EnumType):
-    values = [BG_JOB_PRIORITY_FOREGROUND, BG_JOB_PRIORITY_HIGH, BG_JOB_PRIORITY_NORMAL, BG_JOB_PRIORITY_LOW]
-    mapper = {x:x for x in values}
-BG_JOB_PRIORITY = _BG_JOB_PRIORITY
-
-
-BG_ERROR_CONTEXT_NONE = EnumValue("_BG_ERROR_CONTEXT", "BG_ERROR_CONTEXT_NONE", 0x0)
-BG_ERROR_CONTEXT_UNKNOWN = EnumValue("_BG_ERROR_CONTEXT", "BG_ERROR_CONTEXT_UNKNOWN", 0x1)
-BG_ERROR_CONTEXT_GENERAL_QUEUE_MANAGER = EnumValue("_BG_ERROR_CONTEXT", "BG_ERROR_CONTEXT_GENERAL_QUEUE_MANAGER", 0x2)
-BG_ERROR_CONTEXT_QUEUE_MANAGER_NOTIFICATION = EnumValue("_BG_ERROR_CONTEXT", "BG_ERROR_CONTEXT_QUEUE_MANAGER_NOTIFICATION", 0x3)
-BG_ERROR_CONTEXT_LOCAL_FILE = EnumValue("_BG_ERROR_CONTEXT", "BG_ERROR_CONTEXT_LOCAL_FILE", 0x4)
-BG_ERROR_CONTEXT_REMOTE_FILE = EnumValue("_BG_ERROR_CONTEXT", "BG_ERROR_CONTEXT_REMOTE_FILE", 0x5)
-BG_ERROR_CONTEXT_GENERAL_TRANSPORT = EnumValue("_BG_ERROR_CONTEXT", "BG_ERROR_CONTEXT_GENERAL_TRANSPORT", 0x6)
-BG_ERROR_CONTEXT_REMOTE_APPLICATION = EnumValue("_BG_ERROR_CONTEXT", "BG_ERROR_CONTEXT_REMOTE_APPLICATION", 0x7)
-class _BG_ERROR_CONTEXT(EnumType):
-    values = [BG_ERROR_CONTEXT_NONE, BG_ERROR_CONTEXT_UNKNOWN, BG_ERROR_CONTEXT_GENERAL_QUEUE_MANAGER, BG_ERROR_CONTEXT_QUEUE_MANAGER_NOTIFICATION, BG_ERROR_CONTEXT_LOCAL_FILE, BG_ERROR_CONTEXT_REMOTE_FILE, BG_ERROR_CONTEXT_GENERAL_TRANSPORT, BG_ERROR_CONTEXT_REMOTE_APPLICATION]
-    mapper = {x:x for x in values}
-BG_ERROR_CONTEXT = _BG_ERROR_CONTEXT
-
-
-BG_JOB_TYPE_DOWNLOAD = EnumValue("_BG_JOB_TYPE", "BG_JOB_TYPE_DOWNLOAD", 0x0)
-BG_JOB_TYPE_UPLOAD = EnumValue("_BG_JOB_TYPE", "BG_JOB_TYPE_UPLOAD", 0x1)
-BG_JOB_TYPE_UPLOAD_REPLY = EnumValue("_BG_JOB_TYPE", "BG_JOB_TYPE_UPLOAD_REPLY", 0x2)
-class _BG_JOB_TYPE(EnumType):
-    values = [BG_JOB_TYPE_DOWNLOAD, BG_JOB_TYPE_UPLOAD, BG_JOB_TYPE_UPLOAD_REPLY]
-    mapper = {x:x for x in values}
-BG_JOB_TYPE = _BG_JOB_TYPE
-
-
-class _BG_FILE_PROGRESS(Structure):
-    _fields_ = [
-        ("BytesTotal", UINT64),
-        ("BytesTransferred", UINT64),
-        ("Completed", BOOL),
-    ]
-BG_FILE_PROGRESS = _BG_FILE_PROGRESS
-
-class _BG_JOB_PROGRESS(Structure):
-    _fields_ = [
-        ("BytesTotal", UINT64),
-        ("BytesTransferred", UINT64),
-        ("FilesTotal", ULONG),
-        ("FilesTransferred", ULONG),
-    ]
-BG_JOB_PROGRESS = _BG_JOB_PROGRESS
-
-class _BG_FILE_INFO(Structure):
-    _fields_ = [
-        ("RemoteName", LPWSTR),
-        ("LocalName", LPWSTR),
-    ]
-BG_FILE_INFO = _BG_FILE_INFO
-
-class _BG_JOB_TIMES(Structure):
-    _fields_ = [
-        ("CreationTime", FILETIME),
-        ("ModificationTime", FILETIME),
-        ("TransferCompletionTime", FILETIME),
-    ]
-BG_JOB_TIMES = _BG_JOB_TIMES
-
-class tagRGBTRIPLE(Structure):
-    _fields_ = [
-        ("rgbtBlue", BYTE),
-        ("rgbtGreen", BYTE),
-        ("rgbtRed", BYTE),
-    ]
-NPRGBTRIPLE = POINTER(tagRGBTRIPLE)
-LPRGBTRIPLE = POINTER(tagRGBTRIPLE)
-RGBTRIPLE = tagRGBTRIPLE
-PRGBTRIPLE = POINTER(tagRGBTRIPLE)
-
-class tagBITMAPFILEHEADER(Structure):
-    _pack_ = 2
-    _fields_ = [
-        ("bfType", WORD),
-        ("bfSize", DWORD),
-        ("bfReserved1", WORD),
-        ("bfReserved2", WORD),
-        ("bfOffBits", DWORD),
-    ]
-BITMAPFILEHEADER = tagBITMAPFILEHEADER
-PBITMAPFILEHEADER = POINTER(tagBITMAPFILEHEADER)
-LPBITMAPFILEHEADER = POINTER(tagBITMAPFILEHEADER)
-
-class tagBITMAPCOREHEADER(Structure):
-    _fields_ = [
-        ("bcSize", DWORD),
-        ("bcWidth", WORD),
-        ("bcHeight", WORD),
-        ("bcPlanes", WORD),
-        ("bcBitCount", WORD),
-    ]
-LPBITMAPCOREHEADER = POINTER(tagBITMAPCOREHEADER)
-PBITMAPCOREHEADER = POINTER(tagBITMAPCOREHEADER)
-BITMAPCOREHEADER = tagBITMAPCOREHEADER
-
-class tagBITMAP(Structure):
-    _fields_ = [
-        ("bmType", LONG),
-        ("bmWidth", LONG),
-        ("bmHeight", LONG),
-        ("bmWidthBytes", LONG),
-        ("bmPlanes", WORD),
-        ("bmBitsPixel", WORD),
-        ("bmBits", LPVOID),
-    ]
-NPBITMAP = POINTER(tagBITMAP)
-LPBITMAP = POINTER(tagBITMAP)
-PBITMAP = POINTER(tagBITMAP)
-BITMAP = tagBITMAP
-
-class tagBITMAPINFOHEADER(Structure):
-    _fields_ = [
-        ("biSize", DWORD),
-        ("biWidth", LONG),
-        ("biHeight", LONG),
-        ("biPlanes", WORD),
-        ("biBitCount", WORD),
-        ("biCompression", DWORD),
-        ("biSizeImage", DWORD),
-        ("biXPelsPerMeter", LONG),
-        ("biYPelsPerMeter", LONG),
-        ("biClrUsed", DWORD),
-        ("biClrImportant", DWORD),
-    ]
-BITMAPINFOHEADER = tagBITMAPINFOHEADER
-PBITMAPINFOHEADER = POINTER(tagBITMAPINFOHEADER)
-LPBITMAPINFOHEADER = POINTER(tagBITMAPINFOHEADER)
-
-class tagRGBQUAD(Structure):
-    _fields_ = [
-        ("rgbBlue", BYTE),
-        ("rgbGreen", BYTE),
-        ("rgbRed", BYTE),
-        ("rgbReserved", BYTE),
-    ]
-RGBQUAD = tagRGBQUAD
-
-class tagBITMAPINFO(Structure):
-    _fields_ = [
-        ("bmiHeader", BITMAPINFOHEADER),
-        ("bmiColors", RGBQUAD * 1),
-    ]
-LPBITMAPINFO = POINTER(tagBITMAPINFO)
-PBITMAPINFO = POINTER(tagBITMAPINFO)
-BITMAPINFO = tagBITMAPINFO
-
-class tagBITMAPCOREINFO(Structure):
-    _fields_ = [
-        ("bmciHeader", BITMAPCOREHEADER),
-        ("bmciColors", RGBTRIPLE * 1),
-    ]
-LPBITMAPCOREINFO = POINTER(tagBITMAPCOREINFO)
-BITMAPCOREINFO = tagBITMAPCOREINFO
-PBITMAPCOREINFO = POINTER(tagBITMAPCOREINFO)
-
-class tagWNDCLASSEXA(Structure):
-    _fields_ = [
-        ("cbSize", UINT),
-        ("style", UINT),
-        ("lpfnWndProc", WNDPROC),
-        ("cbClsExtra", INT),
-        ("cbWndExtra", INT),
-        ("hInstance", HINSTANCE),
-        ("hIcon", HICON),
-        ("hCursor", HCURSOR),
-        ("hbrBackground", HBRUSH),
-        ("lpszMenuName", LPCSTR),
-        ("lpszClassName", LPCSTR),
-        ("hIconSm", HICON),
-    ]
-PWNDCLASSEXA = POINTER(tagWNDCLASSEXA)
-LPWNDCLASSEXA = POINTER(tagWNDCLASSEXA)
-WNDCLASSEXA = tagWNDCLASSEXA
-
-class tagWNDCLASSEXW(Structure):
-    _fields_ = [
-        ("cbSize", UINT),
-        ("style", UINT),
-        ("lpfnWndProc", WNDPROC),
-        ("cbClsExtra", INT),
-        ("cbWndExtra", INT),
-        ("hInstance", HINSTANCE),
-        ("hIcon", HICON),
-        ("hCursor", HCURSOR),
-        ("hbrBackground", HBRUSH),
-        ("lpszMenuName", LPWSTR),
-        ("lpszClassName", LPWSTR),
-        ("hIconSm", HICON),
-    ]
-WNDCLASSEXW = tagWNDCLASSEXW
-LPWNDCLASSEXW = POINTER(tagWNDCLASSEXW)
-PWNDCLASSEXW = POINTER(tagWNDCLASSEXW)
-
-class _API_SET_VALUE_ENTRY(Structure):
-    _fields_ = [
-        ("Flags", ULONG),
-        ("NameOffset", ULONG),
-        ("NameLength", ULONG),
-        ("ValueOffset", ULONG),
-        ("ValueLength", ULONG),
-    ]
-API_SET_VALUE_ENTRY = _API_SET_VALUE_ENTRY
-PAPI_SET_VALUE_ENTRY = POINTER(_API_SET_VALUE_ENTRY)
-
-class _API_SET_NAMESPACE_ENTRY(Structure):
-    _fields_ = [
-        ("Flags", ULONG),
-        ("NameOffset", ULONG),
-        ("NameLength", ULONG),
-        ("AliasOffset", ULONG),
-        ("AliasLength", ULONG),
-        ("DataOffset", ULONG),
-    ]
-PAPI_SET_NAMESPACE_ENTRY = POINTER(_API_SET_NAMESPACE_ENTRY)
-API_SET_NAMESPACE_ENTRY = _API_SET_NAMESPACE_ENTRY
-
-class _API_SET_NAMESPACE_ARRAY(Structure):
-    _fields_ = [
-        ("Version", ULONG),
-        ("Size", ULONG),
-        ("Flags", ULONG),
-        ("Count", ULONG),
-        ("Array", API_SET_NAMESPACE_ENTRY * ANYSIZE_ARRAY),
-    ]
-PAPI_SET_NAMESPACE_ARRAY = POINTER(_API_SET_NAMESPACE_ARRAY)
-API_SET_NAMESPACE_ARRAY = _API_SET_NAMESPACE_ARRAY
-
-class _API_SET_VALUE_ENTRY_V2(Structure):
-    _fields_ = [
-        ("NameOffset", ULONG),
-        ("NameLength", ULONG),
-        ("ValueOffset", ULONG),
-        ("ValueLength", ULONG),
-    ]
-PAPI_SET_VALUE_ENTRY_V2 = POINTER(_API_SET_VALUE_ENTRY_V2)
-API_SET_VALUE_ENTRY_V2 = _API_SET_VALUE_ENTRY_V2
-
-class _API_SET_VALUE_ARRAY_V2(Structure):
-    _fields_ = [
-        ("Count", ULONG),
-        ("Array", API_SET_VALUE_ENTRY_V2 * ANYSIZE_ARRAY),
-    ]
-API_SET_VALUE_ARRAY_V2 = _API_SET_VALUE_ARRAY_V2
-PAPI_SET_VALUE_ARRAY_V2 = POINTER(_API_SET_VALUE_ARRAY_V2)
-
-class _API_SET_NAMESPACE_ENTRY_V2(Structure):
-    _fields_ = [
-        ("NameOffset", ULONG),
-        ("NameLength", ULONG),
-        ("DataOffset", ULONG),
-    ]
-PAPI_SET_NAMESPACE_ENTRY_V2 = POINTER(_API_SET_NAMESPACE_ENTRY_V2)
-API_SET_NAMESPACE_ENTRY_V2 = _API_SET_NAMESPACE_ENTRY_V2
-
-class _API_SET_NAMESPACE_ARRAY_V2(Structure):
-    _fields_ = [
-        ("Version", ULONG),
-        ("Count", ULONG),
-        ("Array", API_SET_NAMESPACE_ENTRY_V2 * ANYSIZE_ARRAY),
-    ]
-API_SET_NAMESPACE_ARRAY_V2 = _API_SET_NAMESPACE_ARRAY_V2
-PAPI_SET_NAMESPACE_ARRAY_V2 = POINTER(_API_SET_NAMESPACE_ARRAY_V2)
-
-class _API_SET_VALUE_ARRAY_V4(Structure):
-    _fields_ = [
-        ("GuessFlags", ULONG),
-        ("Count", ULONG),
-        ("Array", API_SET_VALUE_ENTRY_V2 * ANYSIZE_ARRAY),
-    ]
-API_SET_VALUE_ARRAY_V4 = _API_SET_VALUE_ARRAY_V4
-PAPI_SET_VALUE_ARRAY_V2 = POINTER(_API_SET_VALUE_ARRAY_V4)
-
-class _API_SET_NAMESPACE_ARRAY_V4(Structure):
-    _fields_ = [
-        ("Version", ULONG),
-        ("Size", ULONG),
-        ("Flags", ULONG),
-        ("Count", ULONG),
-        ("Array", API_SET_NAMESPACE_ENTRY * ANYSIZE_ARRAY),
-    ]
-API_SET_NAMESPACE_ARRAY_V4 = _API_SET_NAMESPACE_ARRAY_V4
-PAPI_SET_NAMESPACE_ARRAY_V4 = POINTER(_API_SET_NAMESPACE_ARRAY_V4)
-
-class _API_SET_NAMESPACE_ENTRY_V4(Structure):
-    _fields_ = [
-        ("Flags", ULONG),
-        ("NameOffset", ULONG),
-        ("NameLength", ULONG),
-        ("AliasOffset", ULONG),
-        ("AliasLength", ULONG),
-        ("DataOffset", ULONG),
-    ]
-PAPI_SET_NAMESPACE_ENTRY_V4 = POINTER(_API_SET_NAMESPACE_ENTRY_V4)
-API_SET_NAMESPACE_ENTRY_V4 = _API_SET_NAMESPACE_ENTRY_V4
-
-class _API_SET_NAMESPACE_ENTRY_V6(Structure):
-    _fields_ = [
-        ("Flags", ULONG),
-        ("NameOffset", ULONG),
-        ("NameLength", ULONG),
-        ("HashedLength", ULONG),
-        ("ValueOffset", ULONG),
-        ("ValueCount", ULONG),
-    ]
-API_SET_NAMESPACE_ENTRY_V6 = _API_SET_NAMESPACE_ENTRY_V6
-
-class _API_SET_NAMESPACE_V6(Structure):
-    _fields_ = [
-        ("Version", ULONG),
-        ("Size", ULONG),
-        ("Flags", ULONG),
-        ("Count", ULONG),
-        ("EntryOffset", ULONG),
-        ("HashOffset", ULONG),
-        ("HashFactor", ULONG),
-    ]
-API_SET_NAMESPACE_V6 = _API_SET_NAMESPACE_V6
 
 ProcessDEPPolicy = EnumValue("_PROCESS_MITIGATION_POLICY", "ProcessDEPPolicy", 0x0)
 ProcessASLRPolicy = EnumValue("_PROCESS_MITIGATION_POLICY", "ProcessASLRPolicy", 0x1)
@@ -1101,6 +281,391 @@ class _PROCESS_MITIGATION_IMAGE_LOAD_POLICY(Structure):
 PPROCESS_MITIGATION_IMAGE_LOAD_POLICY = POINTER(_PROCESS_MITIGATION_IMAGE_LOAD_POLICY)
 PROCESS_MITIGATION_IMAGE_LOAD_POLICY = _PROCESS_MITIGATION_IMAGE_LOAD_POLICY
 
+TASK_ACTION_EXEC = EnumValue("_TASK_ACTION_TYPE", "TASK_ACTION_EXEC", 0x0)
+TASK_ACTION_COM_HANDLER = EnumValue("_TASK_ACTION_TYPE", "TASK_ACTION_COM_HANDLER", 0x5)
+TASK_ACTION_SEND_EMAIL = EnumValue("_TASK_ACTION_TYPE", "TASK_ACTION_SEND_EMAIL", 0x6)
+TASK_ACTION_SHOW_MESSAGE = EnumValue("_TASK_ACTION_TYPE", "TASK_ACTION_SHOW_MESSAGE", 0x7)
+class _TASK_ACTION_TYPE(EnumType):
+    values = [TASK_ACTION_EXEC, TASK_ACTION_COM_HANDLER, TASK_ACTION_SEND_EMAIL, TASK_ACTION_SHOW_MESSAGE]
+    mapper = {x:x for x in values}
+TASK_ACTION_TYPE = _TASK_ACTION_TYPE
+
+
+TASK_RUNLEVEL_LUA = EnumValue("_TASK_RUNLEVEL_TYPE", "TASK_RUNLEVEL_LUA", 0x0)
+TASK_RUNLEVEL_HIGHEST = EnumValue("_TASK_RUNLEVEL_TYPE", "TASK_RUNLEVEL_HIGHEST", 0x1)
+class _TASK_RUNLEVEL_TYPE(EnumType):
+    values = [TASK_RUNLEVEL_LUA, TASK_RUNLEVEL_HIGHEST]
+    mapper = {x:x for x in values}
+TASK_RUNLEVEL_TYPE = _TASK_RUNLEVEL_TYPE
+
+
+TASK_LOGON_NONE = EnumValue("_TASK_LOGON_TYPE", "TASK_LOGON_NONE", 0x0)
+TASK_LOGON_PASSWORD = EnumValue("_TASK_LOGON_TYPE", "TASK_LOGON_PASSWORD", 0x1)
+TASK_LOGON_S4U = EnumValue("_TASK_LOGON_TYPE", "TASK_LOGON_S4U", 0x2)
+TASK_LOGON_INTERACTIVE_TOKEN = EnumValue("_TASK_LOGON_TYPE", "TASK_LOGON_INTERACTIVE_TOKEN", 0x3)
+TASK_LOGON_GROUP = EnumValue("_TASK_LOGON_TYPE", "TASK_LOGON_GROUP", 0x4)
+TASK_LOGON_SERVICE_ACCOUNT = EnumValue("_TASK_LOGON_TYPE", "TASK_LOGON_SERVICE_ACCOUNT", 0x5)
+TASK_LOGON_INTERACTIVE_TOKEN_OR_PASSWORD = EnumValue("_TASK_LOGON_TYPE", "TASK_LOGON_INTERACTIVE_TOKEN_OR_PASSWORD", 0x6)
+class _TASK_LOGON_TYPE(EnumType):
+    values = [TASK_LOGON_NONE, TASK_LOGON_PASSWORD, TASK_LOGON_S4U, TASK_LOGON_INTERACTIVE_TOKEN, TASK_LOGON_GROUP, TASK_LOGON_SERVICE_ACCOUNT, TASK_LOGON_INTERACTIVE_TOKEN_OR_PASSWORD]
+    mapper = {x:x for x in values}
+TASK_LOGON_TYPE = _TASK_LOGON_TYPE
+
+
+TASK_STATE_UNKNOWN = EnumValue("_TASK_STATE", "TASK_STATE_UNKNOWN", 0x0)
+TASK_STATE_DISABLED = EnumValue("_TASK_STATE", "TASK_STATE_DISABLED", 0x1)
+TASK_STATE_QUEUED = EnumValue("_TASK_STATE", "TASK_STATE_QUEUED", 0x2)
+TASK_STATE_READY = EnumValue("_TASK_STATE", "TASK_STATE_READY", 0x3)
+TASK_STATE_RUNNING = EnumValue("_TASK_STATE", "TASK_STATE_RUNNING", 0x4)
+class _TASK_STATE(EnumType):
+    values = [TASK_STATE_UNKNOWN, TASK_STATE_DISABLED, TASK_STATE_QUEUED, TASK_STATE_READY, TASK_STATE_RUNNING]
+    mapper = {x:x for x in values}
+TASK_STATE = _TASK_STATE
+
+
+TASK_INSTANCES_PARALLEL = EnumValue("_TASK_INSTANCES_POLICY", "TASK_INSTANCES_PARALLEL", 0x0)
+TASK_INSTANCES_QUEUE = EnumValue("_TASK_INSTANCES_POLICY", "TASK_INSTANCES_QUEUE", 0x1)
+TASK_INSTANCES_IGNORE_NEW = EnumValue("_TASK_INSTANCES_POLICY", "TASK_INSTANCES_IGNORE_NEW", 0x2)
+TASK_INSTANCES_STOP_EXISTING = EnumValue("_TASK_INSTANCES_POLICY", "TASK_INSTANCES_STOP_EXISTING", 0x3)
+class _TASK_INSTANCES_POLICY(EnumType):
+    values = [TASK_INSTANCES_PARALLEL, TASK_INSTANCES_QUEUE, TASK_INSTANCES_IGNORE_NEW, TASK_INSTANCES_STOP_EXISTING]
+    mapper = {x:x for x in values}
+TASK_INSTANCES_POLICY = _TASK_INSTANCES_POLICY
+
+
+TASK_COMPATIBILITY_AT = EnumValue("_TASK_COMPATIBILITY", "TASK_COMPATIBILITY_AT", 0x0)
+TASK_COMPATIBILITY_V1 = EnumValue("_TASK_COMPATIBILITY", "TASK_COMPATIBILITY_V1", 0x1)
+TASK_COMPATIBILITY_V2 = EnumValue("_TASK_COMPATIBILITY", "TASK_COMPATIBILITY_V2", 0x2)
+class _TASK_COMPATIBILITY(EnumType):
+    values = [TASK_COMPATIBILITY_AT, TASK_COMPATIBILITY_V1, TASK_COMPATIBILITY_V2]
+    mapper = {x:x for x in values}
+TASK_COMPATIBILITY = _TASK_COMPATIBILITY
+
+
+TASK_TRIGGER_EVENT = EnumValue("_TASK_TRIGGER_TYPE2", "TASK_TRIGGER_EVENT", 0x0)
+TASK_TRIGGER_TIME = EnumValue("_TASK_TRIGGER_TYPE2", "TASK_TRIGGER_TIME", 0x1)
+TASK_TRIGGER_DAILY = EnumValue("_TASK_TRIGGER_TYPE2", "TASK_TRIGGER_DAILY", 0x2)
+TASK_TRIGGER_WEEKLY = EnumValue("_TASK_TRIGGER_TYPE2", "TASK_TRIGGER_WEEKLY", 0x3)
+TASK_TRIGGER_MONTHLY = EnumValue("_TASK_TRIGGER_TYPE2", "TASK_TRIGGER_MONTHLY", 0x4)
+TASK_TRIGGER_MONTHLYDOW = EnumValue("_TASK_TRIGGER_TYPE2", "TASK_TRIGGER_MONTHLYDOW", 0x5)
+TASK_TRIGGER_IDLE = EnumValue("_TASK_TRIGGER_TYPE2", "TASK_TRIGGER_IDLE", 0x6)
+TASK_TRIGGER_REGISTRATION = EnumValue("_TASK_TRIGGER_TYPE2", "TASK_TRIGGER_REGISTRATION", 0x7)
+TASK_TRIGGER_BOOT = EnumValue("_TASK_TRIGGER_TYPE2", "TASK_TRIGGER_BOOT", 0x8)
+TASK_TRIGGER_LOGON = EnumValue("_TASK_TRIGGER_TYPE2", "TASK_TRIGGER_LOGON", 0x9)
+TASK_TRIGGER_SESSION_STATE_CHANGE = EnumValue("_TASK_TRIGGER_TYPE2", "TASK_TRIGGER_SESSION_STATE_CHANGE", 0xb)
+class _TASK_TRIGGER_TYPE2(EnumType):
+    values = [TASK_TRIGGER_EVENT, TASK_TRIGGER_TIME, TASK_TRIGGER_DAILY, TASK_TRIGGER_WEEKLY, TASK_TRIGGER_MONTHLY, TASK_TRIGGER_MONTHLYDOW, TASK_TRIGGER_IDLE, TASK_TRIGGER_REGISTRATION, TASK_TRIGGER_BOOT, TASK_TRIGGER_LOGON, TASK_TRIGGER_SESSION_STATE_CHANGE]
+    mapper = {x:x for x in values}
+TASK_TRIGGER_TYPE2 = _TASK_TRIGGER_TYPE2
+
+
+TASK_ENUM_HIDDEN = EnumValue("_TASK_ENUM_FLAGS", "TASK_ENUM_HIDDEN", 0x1)
+class _TASK_ENUM_FLAGS(EnumType):
+    values = [TASK_ENUM_HIDDEN]
+    mapper = {x:x for x in values}
+TASK_ENUM_FLAGS = _TASK_ENUM_FLAGS
+
+
+TASK_VALIDATE_ONLY = EnumValue("_TASK_CREATION", "TASK_VALIDATE_ONLY", 0x1)
+TASK_CREATE = EnumValue("_TASK_CREATION", "TASK_CREATE", 0x2)
+TASK_UPDATE = EnumValue("_TASK_CREATION", "TASK_UPDATE", 0x4)
+TASK_CREATE_OR_UPDATE = EnumValue("_TASK_CREATION", "TASK_CREATE_OR_UPDATE", 0x6)
+TASK_DISABLE = EnumValue("_TASK_CREATION", "TASK_DISABLE", 0x8)
+TASK_DONT_ADD_PRINCIPAL_ACE = EnumValue("_TASK_CREATION", "TASK_DONT_ADD_PRINCIPAL_ACE", 0x10)
+TASK_IGNORE_REGISTRATION_TRIGGERS = EnumValue("_TASK_CREATION", "TASK_IGNORE_REGISTRATION_TRIGGERS", 0x20)
+class _TASK_CREATION(EnumType):
+    values = [TASK_VALIDATE_ONLY, TASK_CREATE, TASK_UPDATE, TASK_CREATE_OR_UPDATE, TASK_DISABLE, TASK_DONT_ADD_PRINCIPAL_ACE, TASK_IGNORE_REGISTRATION_TRIGGERS]
+    mapper = {x:x for x in values}
+TASK_CREATION = _TASK_CREATION
+
+
+TASK_RUN_NO_FLAGS = EnumValue("TASK_RUN_FLAGS", "TASK_RUN_NO_FLAGS", 0x0)
+TASK_RUN_AS_SELF = EnumValue("TASK_RUN_FLAGS", "TASK_RUN_AS_SELF", 0x1)
+TASK_RUN_IGNORE_CONSTRAINTS = EnumValue("TASK_RUN_FLAGS", "TASK_RUN_IGNORE_CONSTRAINTS", 0x2)
+TASK_RUN_USE_SESSION_ID = EnumValue("TASK_RUN_FLAGS", "TASK_RUN_USE_SESSION_ID", 0x4)
+TASK_RUN_USER_SID = EnumValue("TASK_RUN_FLAGS", "TASK_RUN_USER_SID", 0x8)
+class TASK_RUN_FLAGS(EnumType):
+    values = [TASK_RUN_NO_FLAGS, TASK_RUN_AS_SELF, TASK_RUN_IGNORE_CONSTRAINTS, TASK_RUN_USE_SESSION_ID, TASK_RUN_USER_SID]
+    mapper = {x:x for x in values}
+
+
+class _API_SET_VALUE_ENTRY(Structure):
+    _fields_ = [
+        ("Flags", ULONG),
+        ("NameOffset", ULONG),
+        ("NameLength", ULONG),
+        ("ValueOffset", ULONG),
+        ("ValueLength", ULONG),
+    ]
+API_SET_VALUE_ENTRY = _API_SET_VALUE_ENTRY
+PAPI_SET_VALUE_ENTRY = POINTER(_API_SET_VALUE_ENTRY)
+
+class _API_SET_NAMESPACE_ENTRY(Structure):
+    _fields_ = [
+        ("Flags", ULONG),
+        ("NameOffset", ULONG),
+        ("NameLength", ULONG),
+        ("AliasOffset", ULONG),
+        ("AliasLength", ULONG),
+        ("DataOffset", ULONG),
+    ]
+PAPI_SET_NAMESPACE_ENTRY = POINTER(_API_SET_NAMESPACE_ENTRY)
+API_SET_NAMESPACE_ENTRY = _API_SET_NAMESPACE_ENTRY
+
+class _API_SET_NAMESPACE_ARRAY(Structure):
+    _fields_ = [
+        ("Version", ULONG),
+        ("Size", ULONG),
+        ("Flags", ULONG),
+        ("Count", ULONG),
+        ("Array", API_SET_NAMESPACE_ENTRY * ANYSIZE_ARRAY),
+    ]
+PAPI_SET_NAMESPACE_ARRAY = POINTER(_API_SET_NAMESPACE_ARRAY)
+API_SET_NAMESPACE_ARRAY = _API_SET_NAMESPACE_ARRAY
+
+class _API_SET_VALUE_ENTRY_V2(Structure):
+    _fields_ = [
+        ("NameOffset", ULONG),
+        ("NameLength", ULONG),
+        ("ValueOffset", ULONG),
+        ("ValueLength", ULONG),
+    ]
+PAPI_SET_VALUE_ENTRY_V2 = POINTER(_API_SET_VALUE_ENTRY_V2)
+API_SET_VALUE_ENTRY_V2 = _API_SET_VALUE_ENTRY_V2
+
+class _API_SET_VALUE_ARRAY_V2(Structure):
+    _fields_ = [
+        ("Count", ULONG),
+        ("Array", API_SET_VALUE_ENTRY_V2 * ANYSIZE_ARRAY),
+    ]
+API_SET_VALUE_ARRAY_V2 = _API_SET_VALUE_ARRAY_V2
+PAPI_SET_VALUE_ARRAY_V2 = POINTER(_API_SET_VALUE_ARRAY_V2)
+
+class _API_SET_NAMESPACE_ENTRY_V2(Structure):
+    _fields_ = [
+        ("NameOffset", ULONG),
+        ("NameLength", ULONG),
+        ("DataOffset", ULONG),
+    ]
+PAPI_SET_NAMESPACE_ENTRY_V2 = POINTER(_API_SET_NAMESPACE_ENTRY_V2)
+API_SET_NAMESPACE_ENTRY_V2 = _API_SET_NAMESPACE_ENTRY_V2
+
+class _API_SET_NAMESPACE_ARRAY_V2(Structure):
+    _fields_ = [
+        ("Version", ULONG),
+        ("Count", ULONG),
+        ("Array", API_SET_NAMESPACE_ENTRY_V2 * ANYSIZE_ARRAY),
+    ]
+API_SET_NAMESPACE_ARRAY_V2 = _API_SET_NAMESPACE_ARRAY_V2
+PAPI_SET_NAMESPACE_ARRAY_V2 = POINTER(_API_SET_NAMESPACE_ARRAY_V2)
+
+class _API_SET_VALUE_ARRAY_V4(Structure):
+    _fields_ = [
+        ("GuessFlags", ULONG),
+        ("Count", ULONG),
+        ("Array", API_SET_VALUE_ENTRY_V2 * ANYSIZE_ARRAY),
+    ]
+API_SET_VALUE_ARRAY_V4 = _API_SET_VALUE_ARRAY_V4
+PAPI_SET_VALUE_ARRAY_V2 = POINTER(_API_SET_VALUE_ARRAY_V4)
+
+class _API_SET_NAMESPACE_ARRAY_V4(Structure):
+    _fields_ = [
+        ("Version", ULONG),
+        ("Size", ULONG),
+        ("Flags", ULONG),
+        ("Count", ULONG),
+        ("Array", API_SET_NAMESPACE_ENTRY * ANYSIZE_ARRAY),
+    ]
+API_SET_NAMESPACE_ARRAY_V4 = _API_SET_NAMESPACE_ARRAY_V4
+PAPI_SET_NAMESPACE_ARRAY_V4 = POINTER(_API_SET_NAMESPACE_ARRAY_V4)
+
+class _API_SET_NAMESPACE_ENTRY_V4(Structure):
+    _fields_ = [
+        ("Flags", ULONG),
+        ("NameOffset", ULONG),
+        ("NameLength", ULONG),
+        ("AliasOffset", ULONG),
+        ("AliasLength", ULONG),
+        ("DataOffset", ULONG),
+    ]
+PAPI_SET_NAMESPACE_ENTRY_V4 = POINTER(_API_SET_NAMESPACE_ENTRY_V4)
+API_SET_NAMESPACE_ENTRY_V4 = _API_SET_NAMESPACE_ENTRY_V4
+
+class _API_SET_NAMESPACE_ENTRY_V6(Structure):
+    _fields_ = [
+        ("Flags", ULONG),
+        ("NameOffset", ULONG),
+        ("NameLength", ULONG),
+        ("HashedLength", ULONG),
+        ("ValueOffset", ULONG),
+        ("ValueCount", ULONG),
+    ]
+API_SET_NAMESPACE_ENTRY_V6 = _API_SET_NAMESPACE_ENTRY_V6
+
+class _API_SET_NAMESPACE_V6(Structure):
+    _fields_ = [
+        ("Version", ULONG),
+        ("Size", ULONG),
+        ("Flags", ULONG),
+        ("Count", ULONG),
+        ("EntryOffset", ULONG),
+        ("HashOffset", ULONG),
+        ("HashFactor", ULONG),
+    ]
+API_SET_NAMESPACE_V6 = _API_SET_NAMESPACE_V6
+
+VOID = DWORD
+BYTE = c_ubyte
+PWSTR = LPWSTR
+PCWSTR = LPWSTR
+SIZE_T = c_size_t
+PSIZE_T = POINTER(SIZE_T)
+PVOID = c_void_p
+NTSTATUS = DWORD
+SECURITY_INFORMATION = DWORD
+PSECURITY_INFORMATION = POINTER(SECURITY_INFORMATION)
+PULONG = POINTER(ULONG)
+PDWORD = POINTER(DWORD)
+LPDWORD = POINTER(DWORD)
+LPBYTE = POINTER(BYTE)
+ULONG_PTR = PVOID
+LONG_PTR = PVOID
+DWORD_PTR = ULONG_PTR
+KAFFINITY = ULONG_PTR
+KPRIORITY = LONG
+CHAR = c_char
+UCHAR = c_char
+CSHORT = c_short
+VARTYPE = c_ushort
+PUSHORT = POINTER(USHORT)
+PBOOL = POINTER(BOOL)
+LPBOOL = PBOOL
+PSTR = LPSTR
+PCSTR = LPSTR
+va_list = c_char_p
+BSTR = c_wchar_p
+OLECHAR = c_wchar
+POLECHAR = c_wchar_p
+PUCHAR = POINTER(UCHAR)
+double = c_double
+DATE = double
+ULONGLONG = c_ulonglong
+PULONGLONG = POINTER(ULONGLONG)
+LONGLONG = c_longlong
+ULONG64 = c_ulonglong
+UINT64 = ULONG64
+LONG64 = c_longlong
+PLARGE_INTEGER = POINTER(LARGE_INTEGER)
+DWORD64 = ULONG64
+PDWORD64 = POINTER(DWORD64)
+SCODE = LONG
+CIMTYPE = LONG
+NET_IFINDEX = ULONG
+IF_INDEX = NET_IFINDEX
+IFTYPE = ULONG
+PULONG64 = POINTER(ULONG64)
+PBYTE = POINTER(BYTE)
+PUINT = POINTER(UINT)
+PHKEY = POINTER(HKEY)
+ACCESS_MASK = DWORD
+REGSAM = ACCESS_MASK
+PBOOLEAN = POINTER(BOOLEAN)
+SECURITY_CONTEXT_TRACKING_MODE = BOOLEAN
+HCRYPTPROV_LEGACY = PULONG
+HCRYPTKEY = PULONG
+HCRYPTPROV = PULONG
+HCRYPTHASH = PULONG
+ALG_ID = UINT
+DISPID = LONG
+MEMBERID = DISPID
+LRESULT = LONG_PTR
+LPUNKNOWN = POINTER(PVOID)
+LPFILETIME = POINTER(FILETIME)
+LPPOINT = POINTER(POINT)
+LPRECT = POINTER(RECT)
+SPC_UUID = BYTE*16
+DEVICE_TYPE = DWORD
+PWINDBG_EXTENSION_APIS32 = PVOID
+PWINDBG_EXTENSION_APIS64 = PVOID
+INT8 = c_byte
+INT16 = SHORT
+INT32 = INT
+INT64 = LONGLONG
+UINT8 = BYTE
+UINT16 = USHORT
+UINT32 = UINT
+UINT64 = ULONGLONG
+PHANDLE = POINTER(HANDLE)
+HCATADMIN = HANDLE
+HCATINFO = HANDLE
+HCERTCHAINENGINE = HANDLE
+LPHANDLE = POINTER(HANDLE)
+ALPC_HANDLE = HANDLE
+PALPC_HANDLE = POINTER(ALPC_HANDLE)
+HCURSOR = HANDLE
+HBRUSH = HANDLE
+HCRYPTPROV_OR_NCRYPT_KEY_HANDLE = PULONG
+EVT_HANDLE = HANDLE
+EVT_OBJECT_ARRAY_PROPERTY_HANDLE = HANDLE
+PSECURITY_DESCRIPTOR = PVOID
+SECURITY_DESCRIPTOR_CONTROL = WORD
+PSECURITY_DESCRIPTOR_CONTROL = POINTER(SECURITY_DESCRIPTOR_CONTROL)
+ACCESS_MASK = DWORD
+PACCESS_MASK = POINTER(ACCESS_MASK)
+SECURITY_INFORMATION = DWORD
+PSECURITY_INFORMATION = POINTER(SECURITY_INFORMATION)
+PSID = PVOID
+_INITIAL_PSID = PSID
+class PSID(_INITIAL_PSID): # _INITIAL_PSID -> PVOID
+    # def __init__(self, strsid=None):
+        # if strsid is not None:
+            # windows.winproxy.ConvertStringSidToSidA(strsid, self)
+
+    def __str__(self):
+       sid_str  = LPCSTR()
+       windows.winproxy.ConvertSidToStringSidA(self, sid_str)
+       result = sid_str.value
+       windows.winproxy.LocalFree(sid_str)
+       return result
+
+    @classmethod
+    def from_string(cls, strsid):
+        self = cls()
+        windows.winproxy.ConvertStringSidToSidA(strsid, self)
+        return self
+
+    def to_string(self):
+       sid_str  = LPCSTR()
+       windows.winproxy.ConvertSidToStringSidA(self, sid_str)
+       result = sid_str.value
+       windows.winproxy.LocalFree(sid_str)
+       return result
+
+    def __repr__(self):
+        try:
+            return """<{0} "{1}">""".format(type(self).__name__, self.to_string())
+        except WindowsError: # Case of PSID is not valide
+            if not self:
+                return """<{0} "None" at {1:#x}>""".format(type(self).__name__, id(self))
+            return """<{0} "<conversion-failed>" at {1:#x}>""".format(type(self).__name__, id(self))
+
+
+RPCOLEDATAREP = ULONG
+WNDPROC = PVOID
+LPPROC_THREAD_ATTRIBUTE_LIST = PVOID
+PPS_POST_PROCESS_INIT_ROUTINE = PVOID
+LPTHREAD_START_ROUTINE = PVOID
+WNDENUMPROC = PVOID
+PHANDLER_ROUTINE = PVOID
+FARPROC = PVOID
+PIO_APC_ROUTINE = PVOID
+PVECTORED_EXCEPTION_HANDLER = PVOID
+PFN_CRYPT_GET_SIGNER_CERTIFICATE = PVOID
+LPCONTEXT = PVOID
+HCERTSTORE = PVOID
+HCRYPTMSG = PVOID
+PALPC_PORT_ATTRIBUTES = PVOID
+PPORT_MESSAGE = PVOID
 class _GUID(Structure):
     _fields_ = [
         ("Data1", ULONG),
@@ -1910,6 +1475,474 @@ class _CRYPT_ENCODE_PARA(Structure):
 PCRYPT_ENCODE_PARA = POINTER(_CRYPT_ENCODE_PARA)
 CRYPT_ENCODE_PARA = _CRYPT_ENCODE_PARA
 
+FakeFileInformationZero = EnumValue("_FILE_INFORMATION_CLASS", "FakeFileInformationZero", 0x0)
+FileDirectoryInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileDirectoryInformation", 0x1)
+FileFullDirectoryInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileFullDirectoryInformation", 0x2)
+FileBothDirectoryInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileBothDirectoryInformation", 0x3)
+FileBasicInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileBasicInformation", 0x4)
+FileStandardInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileStandardInformation", 0x5)
+FileInternalInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileInternalInformation", 0x6)
+FileEaInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileEaInformation", 0x7)
+FileAccessInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileAccessInformation", 0x8)
+FileNameInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileNameInformation", 0x9)
+FileRenameInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileRenameInformation", 0xa)
+FileLinkInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileLinkInformation", 0xb)
+FileNamesInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileNamesInformation", 0xc)
+FileDispositionInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileDispositionInformation", 0xd)
+FilePositionInformation = EnumValue("_FILE_INFORMATION_CLASS", "FilePositionInformation", 0xe)
+FileFullEaInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileFullEaInformation", 0xf)
+FileModeInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileModeInformation", 0x10)
+FileAlignmentInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileAlignmentInformation", 0x11)
+FileAllInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileAllInformation", 0x12)
+FileAllocationInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileAllocationInformation", 0x13)
+FileEndOfFileInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileEndOfFileInformation", 0x14)
+FileAlternateNameInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileAlternateNameInformation", 0x15)
+FileStreamInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileStreamInformation", 0x16)
+FilePipeInformation = EnumValue("_FILE_INFORMATION_CLASS", "FilePipeInformation", 0x17)
+FilePipeLocalInformation = EnumValue("_FILE_INFORMATION_CLASS", "FilePipeLocalInformation", 0x18)
+FilePipeRemoteInformation = EnumValue("_FILE_INFORMATION_CLASS", "FilePipeRemoteInformation", 0x19)
+FileMailslotQueryInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileMailslotQueryInformation", 0x1a)
+FileMailslotSetInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileMailslotSetInformation", 0x1b)
+FileCompressionInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileCompressionInformation", 0x1c)
+FileObjectIdInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileObjectIdInformation", 0x1d)
+FileCompletionInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileCompletionInformation", 0x1e)
+FileMoveClusterInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileMoveClusterInformation", 0x1f)
+FileQuotaInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileQuotaInformation", 0x20)
+FileReparsePointInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileReparsePointInformation", 0x21)
+FileNetworkOpenInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileNetworkOpenInformation", 0x22)
+FileAttributeTagInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileAttributeTagInformation", 0x23)
+FileTrackingInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileTrackingInformation", 0x24)
+FileIdBothDirectoryInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileIdBothDirectoryInformation", 0x25)
+FileIdFullDirectoryInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileIdFullDirectoryInformation", 0x26)
+FileValidDataLengthInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileValidDataLengthInformation", 0x27)
+FileShortNameInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileShortNameInformation", 0x28)
+FileIoCompletionNotificationInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileIoCompletionNotificationInformation", 0x29)
+FileIoStatusBlockRangeInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileIoStatusBlockRangeInformation", 0x2a)
+FileIoPriorityHintInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileIoPriorityHintInformation", 0x2b)
+FileSfioReserveInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileSfioReserveInformation", 0x2c)
+FileSfioVolumeInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileSfioVolumeInformation", 0x2d)
+FileHardLinkInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileHardLinkInformation", 0x2e)
+FileProcessIdsUsingFileInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileProcessIdsUsingFileInformation", 0x2f)
+FileNormalizedNameInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileNormalizedNameInformation", 0x30)
+FileNetworkPhysicalNameInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileNetworkPhysicalNameInformation", 0x31)
+FileIdGlobalTxDirectoryInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileIdGlobalTxDirectoryInformation", 0x32)
+FileIsRemoteDeviceInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileIsRemoteDeviceInformation", 0x33)
+FileUnusedInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileUnusedInformation", 0x34)
+FileNumaNodeInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileNumaNodeInformation", 0x35)
+FileStandardLinkInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileStandardLinkInformation", 0x36)
+FileRemoteProtocolInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileRemoteProtocolInformation", 0x37)
+FileRenameInformationBypassAccessCheck = EnumValue("_FILE_INFORMATION_CLASS", "FileRenameInformationBypassAccessCheck", 0x38)
+FileLinkInformationBypassAccessCheck = EnumValue("_FILE_INFORMATION_CLASS", "FileLinkInformationBypassAccessCheck", 0x39)
+FileVolumeNameInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileVolumeNameInformation", 0x3a)
+FileIdInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileIdInformation", 0x3b)
+FileIdExtdDirectoryInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileIdExtdDirectoryInformation", 0x3c)
+FileReplaceCompletionInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileReplaceCompletionInformation", 0x3d)
+FileHardLinkFullIdInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileHardLinkFullIdInformation", 0x3e)
+FileIdExtdBothDirectoryInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileIdExtdBothDirectoryInformation", 0x3f)
+FileDispositionInformationEx = EnumValue("_FILE_INFORMATION_CLASS", "FileDispositionInformationEx", 0x40)
+FileRenameInformationEx = EnumValue("_FILE_INFORMATION_CLASS", "FileRenameInformationEx", 0x41)
+FileRenameInformationExBypassAccessCheck = EnumValue("_FILE_INFORMATION_CLASS", "FileRenameInformationExBypassAccessCheck", 0x42)
+FileMaximumInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileMaximumInformation", 0x43)
+class _FILE_INFORMATION_CLASS(EnumType):
+    values = [FakeFileInformationZero, FileDirectoryInformation, FileFullDirectoryInformation, FileBothDirectoryInformation, FileBasicInformation, FileStandardInformation, FileInternalInformation, FileEaInformation, FileAccessInformation, FileNameInformation, FileRenameInformation, FileLinkInformation, FileNamesInformation, FileDispositionInformation, FilePositionInformation, FileFullEaInformation, FileModeInformation, FileAlignmentInformation, FileAllInformation, FileAllocationInformation, FileEndOfFileInformation, FileAlternateNameInformation, FileStreamInformation, FilePipeInformation, FilePipeLocalInformation, FilePipeRemoteInformation, FileMailslotQueryInformation, FileMailslotSetInformation, FileCompressionInformation, FileObjectIdInformation, FileCompletionInformation, FileMoveClusterInformation, FileQuotaInformation, FileReparsePointInformation, FileNetworkOpenInformation, FileAttributeTagInformation, FileTrackingInformation, FileIdBothDirectoryInformation, FileIdFullDirectoryInformation, FileValidDataLengthInformation, FileShortNameInformation, FileIoCompletionNotificationInformation, FileIoStatusBlockRangeInformation, FileIoPriorityHintInformation, FileSfioReserveInformation, FileSfioVolumeInformation, FileHardLinkInformation, FileProcessIdsUsingFileInformation, FileNormalizedNameInformation, FileNetworkPhysicalNameInformation, FileIdGlobalTxDirectoryInformation, FileIsRemoteDeviceInformation, FileUnusedInformation, FileNumaNodeInformation, FileStandardLinkInformation, FileRemoteProtocolInformation, FileRenameInformationBypassAccessCheck, FileLinkInformationBypassAccessCheck, FileVolumeNameInformation, FileIdInformation, FileIdExtdDirectoryInformation, FileReplaceCompletionInformation, FileHardLinkFullIdInformation, FileIdExtdBothDirectoryInformation, FileDispositionInformationEx, FileRenameInformationEx, FileRenameInformationExBypassAccessCheck, FileMaximumInformation]
+    mapper = {x:x for x in values}
+FILE_INFORMATION_CLASS = _FILE_INFORMATION_CLASS
+PFILE_INFORMATION_CLASS = POINTER(_FILE_INFORMATION_CLASS)
+
+
+IoPriorityVeryLow = EnumValue("_IO_PRIORITY_HINT", "IoPriorityVeryLow", 0x0)
+IoPriorityLow = EnumValue("_IO_PRIORITY_HINT", "IoPriorityLow", 0x1)
+IoPriorityNormal = EnumValue("_IO_PRIORITY_HINT", "IoPriorityNormal", 0x2)
+IoPriorityHigh = EnumValue("_IO_PRIORITY_HINT", "IoPriorityHigh", 0x3)
+IoPriorityCritical = EnumValue("_IO_PRIORITY_HINT", "IoPriorityCritical", 0x4)
+MaxIoPriorityTypes = EnumValue("_IO_PRIORITY_HINT", "MaxIoPriorityTypes", 0x5)
+class _IO_PRIORITY_HINT(EnumType):
+    values = [IoPriorityVeryLow, IoPriorityLow, IoPriorityNormal, IoPriorityHigh, IoPriorityCritical, MaxIoPriorityTypes]
+    mapper = {x:x for x in values}
+IO_PRIORITY_HINT = _IO_PRIORITY_HINT
+
+
+class _FILE_INTERNAL_INFORMATION(Structure):
+    _fields_ = [
+        ("IndexNumber", LARGE_INTEGER),
+    ]
+FILE_INTERNAL_INFORMATION = _FILE_INTERNAL_INFORMATION
+PFILE_INTERNAL_INFORMATION = POINTER(_FILE_INTERNAL_INFORMATION)
+
+class _FILE_ALIGNMENT_INFORMATION(Structure):
+    _fields_ = [
+        ("AlignmentRequirement", ULONG),
+    ]
+PFILE_ALIGNMENT_INFORMATION = POINTER(_FILE_ALIGNMENT_INFORMATION)
+FILE_ALIGNMENT_INFORMATION = _FILE_ALIGNMENT_INFORMATION
+
+class _FILE_ATTRIBUTE_TAG_INFORMATION(Structure):
+    _fields_ = [
+        ("FileAttributes", ULONG),
+        ("ReparseTag", ULONG),
+    ]
+PFILE_ATTRIBUTE_TAG_INFORMATION = POINTER(_FILE_ATTRIBUTE_TAG_INFORMATION)
+FILE_ATTRIBUTE_TAG_INFORMATION = _FILE_ATTRIBUTE_TAG_INFORMATION
+
+class _FILE_BASIC_INFORMATION(Structure):
+    _fields_ = [
+        ("CreationTime", LARGE_INTEGER),
+        ("LastAccessTime", LARGE_INTEGER),
+        ("LastWriteTime", LARGE_INTEGER),
+        ("ChangeTime", LARGE_INTEGER),
+        ("FileAttributes", ULONG),
+    ]
+FILE_BASIC_INFORMATION = _FILE_BASIC_INFORMATION
+PFILE_BASIC_INFORMATION = POINTER(_FILE_BASIC_INFORMATION)
+
+class _FILE_EA_INFORMATION(Structure):
+    _fields_ = [
+        ("EaSize", ULONG),
+    ]
+PFILE_EA_INFORMATION = POINTER(_FILE_EA_INFORMATION)
+FILE_EA_INFORMATION = _FILE_EA_INFORMATION
+
+class _FILE_IO_PRIORITY_HINT_INFORMATION(Structure):
+    _fields_ = [
+        ("PriorityHint", IO_PRIORITY_HINT),
+    ]
+PFILE_IO_PRIORITY_HINT_INFORMATION = POINTER(_FILE_IO_PRIORITY_HINT_INFORMATION)
+FILE_IO_PRIORITY_HINT_INFORMATION = _FILE_IO_PRIORITY_HINT_INFORMATION
+
+class _FILE_MODE_INFORMATION(Structure):
+    _fields_ = [
+        ("Mode", ULONG),
+    ]
+PFILE_MODE_INFORMATION = POINTER(_FILE_MODE_INFORMATION)
+FILE_MODE_INFORMATION = _FILE_MODE_INFORMATION
+
+class _FILE_NAME_INFORMATION(Structure):
+    _fields_ = [
+        ("FileNameLength", ULONG),
+        ("FileName", WCHAR * 1),
+    ]
+PFILE_NAME_INFORMATION = POINTER(_FILE_NAME_INFORMATION)
+FILE_NAME_INFORMATION = _FILE_NAME_INFORMATION
+
+class _FILE_NETWORK_OPEN_INFORMATION(Structure):
+    _fields_ = [
+        ("CreationTime", LARGE_INTEGER),
+        ("LastAccessTime", LARGE_INTEGER),
+        ("LastWriteTime", LARGE_INTEGER),
+        ("ChangeTime", LARGE_INTEGER),
+        ("AllocationSize", LARGE_INTEGER),
+        ("EndOfFile", LARGE_INTEGER),
+        ("FileAttributes", ULONG),
+    ]
+PFILE_NETWORK_OPEN_INFORMATION = POINTER(_FILE_NETWORK_OPEN_INFORMATION)
+FILE_NETWORK_OPEN_INFORMATION = _FILE_NETWORK_OPEN_INFORMATION
+
+class _FILE_STANDARD_INFORMATION(Structure):
+    _fields_ = [
+        ("AllocationSize", LARGE_INTEGER),
+        ("EndOfFile", LARGE_INTEGER),
+        ("NumberOfLinks", ULONG),
+        ("DeletePending", BOOLEAN),
+        ("Directory", BOOLEAN),
+    ]
+FILE_STANDARD_INFORMATION = _FILE_STANDARD_INFORMATION
+PFILE_STANDARD_INFORMATION = POINTER(_FILE_STANDARD_INFORMATION)
+
+class _FILE_ACCESS_INFORMATION(Structure):
+    _fields_ = [
+        ("AccessFlags", ACCESS_MASK),
+    ]
+FILE_ACCESS_INFORMATION = _FILE_ACCESS_INFORMATION
+PFILE_ACCESS_INFORMATION = POINTER(_FILE_ACCESS_INFORMATION)
+
+class _FILE_POSITION_INFORMATION(Structure):
+    _fields_ = [
+        ("CurrentByteOffset", LARGE_INTEGER),
+    ]
+PFILE_POSITION_INFORMATION = POINTER(_FILE_POSITION_INFORMATION)
+FILE_POSITION_INFORMATION = _FILE_POSITION_INFORMATION
+
+class _FILE_IS_REMOTE_DEVICE_INFORMATION(Structure):
+    _fields_ = [
+        ("IsRemote", BOOLEAN),
+    ]
+FILE_IS_REMOTE_DEVICE_INFORMATION = _FILE_IS_REMOTE_DEVICE_INFORMATION
+PFILE_IS_REMOTE_DEVICE_INFORMATION = POINTER(_FILE_IS_REMOTE_DEVICE_INFORMATION)
+
+class _FILE_ALL_INFORMATION(Structure):
+    _fields_ = [
+        ("BasicInformation", FILE_BASIC_INFORMATION),
+        ("StandardInformation", FILE_STANDARD_INFORMATION),
+        ("InternalInformation", FILE_INTERNAL_INFORMATION),
+        ("EaInformation", FILE_EA_INFORMATION),
+        ("AccessInformation", FILE_ACCESS_INFORMATION),
+        ("PositionInformation", FILE_POSITION_INFORMATION),
+        ("ModeInformation", FILE_MODE_INFORMATION),
+        ("AlignmentInformation", FILE_ALIGNMENT_INFORMATION),
+        ("NameInformation", FILE_NAME_INFORMATION),
+    ]
+PFILE_ALL_INFORMATION = POINTER(_FILE_ALL_INFORMATION)
+FILE_ALL_INFORMATION = _FILE_ALL_INFORMATION
+
+AclRevisionInformation = EnumValue("_ACL_INFORMATION_CLASS", "AclRevisionInformation", 0x1)
+AclSizeInformation = EnumValue("_ACL_INFORMATION_CLASS", "AclSizeInformation", 0x2)
+class _ACL_INFORMATION_CLASS(EnumType):
+    values = [AclRevisionInformation, AclSizeInformation]
+    mapper = {x:x for x in values}
+ACL_INFORMATION_CLASS = _ACL_INFORMATION_CLASS
+
+
+class _ACL(Structure):
+    _fields_ = [
+        ("AclRevision", BYTE),
+        ("Sbz1", BYTE),
+        ("AclSize", WORD),
+        ("AceCount", WORD),
+        ("Sbz2", WORD),
+    ]
+PACL = POINTER(_ACL)
+ACL = _ACL
+
+class _ACL_REVISION_INFORMATION(Structure):
+    _fields_ = [
+        ("AclRevision", DWORD),
+    ]
+PACL_REVISION_INFORMATION = POINTER(_ACL_REVISION_INFORMATION)
+ACL_REVISION_INFORMATION = _ACL_REVISION_INFORMATION
+
+class _ACL_SIZE_INFORMATION(Structure):
+    _fields_ = [
+        ("AceCount", DWORD),
+        ("AclBytesInUse", DWORD),
+        ("AclBytesFree", DWORD),
+    ]
+PACL_SIZE_INFORMATION = POINTER(_ACL_SIZE_INFORMATION)
+ACL_SIZE_INFORMATION = _ACL_SIZE_INFORMATION
+
+class _ACE_HEADER(Structure):
+    _fields_ = [
+        ("AceType", BYTE),
+        ("AceFlags", BYTE),
+        ("AceSize", WORD),
+    ]
+PACE_HEADER = POINTER(_ACE_HEADER)
+ACE_HEADER = _ACE_HEADER
+
+class _ACCESS_ALLOWED_ACE(Structure):
+    _fields_ = [
+        ("Header", ACE_HEADER),
+        ("Mask", ACCESS_MASK),
+        ("SidStart", DWORD),
+    ]
+PACCESS_ALLOWED_ACE = POINTER(_ACCESS_ALLOWED_ACE)
+ACCESS_ALLOWED_ACE = _ACCESS_ALLOWED_ACE
+
+class _ACCESS_ALLOWED_CALLBACK_ACE(Structure):
+    _fields_ = [
+        ("Header", ACE_HEADER),
+        ("Mask", ACCESS_MASK),
+        ("SidStart", DWORD),
+    ]
+PACCESS_ALLOWED_CALLBACK_ACE = POINTER(_ACCESS_ALLOWED_CALLBACK_ACE)
+ACCESS_ALLOWED_CALLBACK_ACE = _ACCESS_ALLOWED_CALLBACK_ACE
+
+class _ACCESS_ALLOWED_CALLBACK_OBJECT_ACE(Structure):
+    _fields_ = [
+        ("Header", ACE_HEADER),
+        ("Mask", ACCESS_MASK),
+        ("Flags", DWORD),
+        ("ObjectType", GUID),
+        ("InheritedObjectType", GUID),
+        ("SidStart", DWORD),
+    ]
+PACCESS_ALLOWED_CALLBACK_OBJECT_ACE = POINTER(_ACCESS_ALLOWED_CALLBACK_OBJECT_ACE)
+ACCESS_ALLOWED_CALLBACK_OBJECT_ACE = _ACCESS_ALLOWED_CALLBACK_OBJECT_ACE
+
+class _ACCESS_DENIED_CALLBACK_OBJECT_ACE(Structure):
+    _fields_ = [
+        ("Header", ACE_HEADER),
+        ("Mask", ACCESS_MASK),
+        ("Flags", DWORD),
+        ("ObjectType", GUID),
+        ("InheritedObjectType", GUID),
+        ("SidStart", DWORD),
+    ]
+ACCESS_DENIED_CALLBACK_OBJECT_ACE = _ACCESS_DENIED_CALLBACK_OBJECT_ACE
+PACCESS_DENIED_CALLBACK_OBJECT_ACE = POINTER(_ACCESS_DENIED_CALLBACK_OBJECT_ACE)
+
+class _ACCESS_ALLOWED_OBJECT_ACE(Structure):
+    _fields_ = [
+        ("Header", ACE_HEADER),
+        ("Mask", ACCESS_MASK),
+        ("Flags", DWORD),
+        ("ObjectType", GUID),
+        ("InheritedObjectType", GUID),
+        ("SidStart", DWORD),
+    ]
+PACCESS_ALLOWED_OBJECT_ACE = POINTER(_ACCESS_ALLOWED_OBJECT_ACE)
+ACCESS_ALLOWED_OBJECT_ACE = _ACCESS_ALLOWED_OBJECT_ACE
+
+class _ACCESS_DENIED_ACE(Structure):
+    _fields_ = [
+        ("Header", ACE_HEADER),
+        ("Mask", ACCESS_MASK),
+        ("SidStart", DWORD),
+    ]
+ACCESS_DENIED_ACE = _ACCESS_DENIED_ACE
+PACCESS_DENIED_ACE = POINTER(_ACCESS_DENIED_ACE)
+
+class _ACCESS_DENIED_CALLBACK_ACE(Structure):
+    _fields_ = [
+        ("Header", ACE_HEADER),
+        ("Mask", ACCESS_MASK),
+        ("SidStart", DWORD),
+    ]
+ACCESS_DENIED_CALLBACK_ACE = _ACCESS_DENIED_CALLBACK_ACE
+PACCESS_DENIED_CALLBACK_ACE = POINTER(_ACCESS_DENIED_CALLBACK_ACE)
+
+class _ACCESS_DENIED_OBJECT_ACE(Structure):
+    _fields_ = [
+        ("Header", ACE_HEADER),
+        ("Mask", ACCESS_MASK),
+        ("Flags", DWORD),
+        ("ObjectType", GUID),
+        ("InheritedObjectType", GUID),
+        ("SidStart", DWORD),
+    ]
+ACCESS_DENIED_OBJECT_ACE = _ACCESS_DENIED_OBJECT_ACE
+PACCESS_DENIED_OBJECT_ACE = POINTER(_ACCESS_DENIED_OBJECT_ACE)
+
+class _SYSTEM_MANDATORY_LABEL_ACE(Structure):
+    _fields_ = [
+        ("Header", ACE_HEADER),
+        ("Mask", ACCESS_MASK),
+        ("SidStart", DWORD),
+    ]
+SYSTEM_MANDATORY_LABEL_ACE = _SYSTEM_MANDATORY_LABEL_ACE
+PSYSTEM_MANDATORY_LABEL_ACE = POINTER(_SYSTEM_MANDATORY_LABEL_ACE)
+
+class _SYSTEM_AUDIT_ACE(Structure):
+    _fields_ = [
+        ("Header", ACE_HEADER),
+        ("Mask", ACCESS_MASK),
+        ("SidStart", DWORD),
+    ]
+SYSTEM_AUDIT_ACE = _SYSTEM_AUDIT_ACE
+
+class _SYSTEM_ALARM_ACE(Structure):
+    _fields_ = [
+        ("Header", ACE_HEADER),
+        ("Mask", ACCESS_MASK),
+        ("SidStart", DWORD),
+    ]
+SYSTEM_ALARM_ACE = _SYSTEM_ALARM_ACE
+
+class _SYSTEM_RESOURCE_ATTRIBUTE_ACE(Structure):
+    _fields_ = [
+        ("Header", ACE_HEADER),
+        ("Mask", ACCESS_MASK),
+        ("SidStart", DWORD),
+    ]
+PSYSTEM_RESOURCE_ATTRIBUTE_ACE = POINTER(_SYSTEM_RESOURCE_ATTRIBUTE_ACE)
+SYSTEM_RESOURCE_ATTRIBUTE_ACE = _SYSTEM_RESOURCE_ATTRIBUTE_ACE
+
+class _SYSTEM_SCOPED_POLICY_ID_ACE(Structure):
+    _fields_ = [
+        ("Header", ACE_HEADER),
+        ("Mask", ACCESS_MASK),
+        ("SidStart", DWORD),
+    ]
+SYSTEM_SCOPED_POLICY_ID_ACE = _SYSTEM_SCOPED_POLICY_ID_ACE
+PSYSTEM_SCOPED_POLICY_ID_ACE = POINTER(_SYSTEM_SCOPED_POLICY_ID_ACE)
+
+class _SYSTEM_PROCESS_TRUST_LABEL_ACE(Structure):
+    _fields_ = [
+        ("Header", ACE_HEADER),
+        ("Mask", ACCESS_MASK),
+        ("SidStart", DWORD),
+    ]
+PSYSTEM_PROCESS_TRUST_LABEL_ACE = POINTER(_SYSTEM_PROCESS_TRUST_LABEL_ACE)
+SYSTEM_PROCESS_TRUST_LABEL_ACE = _SYSTEM_PROCESS_TRUST_LABEL_ACE
+
+class _SYSTEM_AUDIT_OBJECT_ACE(Structure):
+    _fields_ = [
+        ("Header", ACE_HEADER),
+        ("Mask", ACCESS_MASK),
+        ("Flags", DWORD),
+        ("ObjectType", GUID),
+        ("InheritedObjectType", GUID),
+        ("SidStart", DWORD),
+    ]
+SYSTEM_AUDIT_OBJECT_ACE = _SYSTEM_AUDIT_OBJECT_ACE
+PSYSTEM_AUDIT_OBJECT_ACE = POINTER(_SYSTEM_AUDIT_OBJECT_ACE)
+
+class _SYSTEM_ALARM_OBJECT_ACE(Structure):
+    _fields_ = [
+        ("Header", ACE_HEADER),
+        ("Mask", ACCESS_MASK),
+        ("Flags", DWORD),
+        ("ObjectType", GUID),
+        ("InheritedObjectType", GUID),
+        ("SidStart", DWORD),
+    ]
+SYSTEM_ALARM_OBJECT_ACE = _SYSTEM_ALARM_OBJECT_ACE
+PSYSTEM_ALARM_OBJECT_ACE = POINTER(_SYSTEM_ALARM_OBJECT_ACE)
+
+class _SYSTEM_AUDIT_CALLBACK_ACE(Structure):
+    _fields_ = [
+        ("Header", ACE_HEADER),
+        ("Mask", ACCESS_MASK),
+        ("SidStart", DWORD),
+    ]
+PSYSTEM_AUDIT_CALLBACK_ACE = POINTER(_SYSTEM_AUDIT_CALLBACK_ACE)
+SYSTEM_AUDIT_CALLBACK_ACE = _SYSTEM_AUDIT_CALLBACK_ACE
+
+class _SYSTEM_ALARM_CALLBACK_ACE(Structure):
+    _fields_ = [
+        ("Header", ACE_HEADER),
+        ("Mask", ACCESS_MASK),
+        ("SidStart", DWORD),
+    ]
+SYSTEM_ALARM_CALLBACK_ACE = _SYSTEM_ALARM_CALLBACK_ACE
+PSYSTEM_ALARM_CALLBACK_ACE = POINTER(_SYSTEM_ALARM_CALLBACK_ACE)
+
+class _SYSTEM_AUDIT_CALLBACK_OBJECT_ACE(Structure):
+    _fields_ = [
+        ("Header", ACE_HEADER),
+        ("Mask", ACCESS_MASK),
+        ("Flags", DWORD),
+        ("ObjectType", GUID),
+        ("InheritedObjectType", GUID),
+        ("SidStart", DWORD),
+    ]
+PSYSTEM_AUDIT_CALLBACK_OBJECT_ACE = POINTER(_SYSTEM_AUDIT_CALLBACK_OBJECT_ACE)
+SYSTEM_AUDIT_CALLBACK_OBJECT_ACE = _SYSTEM_AUDIT_CALLBACK_OBJECT_ACE
+
+class _SYSTEM_ALARM_CALLBACK_OBJECT_ACE(Structure):
+    _fields_ = [
+        ("Header", ACE_HEADER),
+        ("Mask", ACCESS_MASK),
+        ("Flags", DWORD),
+        ("ObjectType", GUID),
+        ("InheritedObjectType", GUID),
+        ("SidStart", DWORD),
+    ]
+PSYSTEM_ALARM_CALLBACK_OBJECT_ACE = POINTER(_SYSTEM_ALARM_CALLBACK_OBJECT_ACE)
+SYSTEM_ALARM_CALLBACK_OBJECT_ACE = _SYSTEM_ALARM_CALLBACK_OBJECT_ACE
+
+class _SECURITY_DESCRIPTOR(Structure):
+    _fields_ = [
+        ("Revision", BYTE),
+        ("Sbz1", BYTE),
+        ("Control", SECURITY_DESCRIPTOR_CONTROL),
+        ("Owner", PSID),
+        ("Group", PSID),
+        ("Sacl", PACL),
+        ("Dacl", PACL),
+    ]
+PISECURITY_DESCRIPTOR = POINTER(_SECURITY_DESCRIPTOR)
+SECURITY_DESCRIPTOR = _SECURITY_DESCRIPTOR
+
 CALLFRAME_COPY_NESTED = EnumValue("_CALLFRAME_COPY", "CALLFRAME_COPY_NESTED", 0x1)
 CALLFRAME_COPY_INDEPENDENT = EnumValue("_CALLFRAME_COPY", "CALLFRAME_COPY_INDEPENDENT", 0x2)
 class _CALLFRAME_COPY(EnumType):
@@ -2013,6 +2046,275 @@ class _CALLFRAME_MARSHALCONTEXT(Structure):
         ("guidTransferSyntax", GUID),
     ]
 CALLFRAME_MARSHALCONTEXT = _CALLFRAME_MARSHALCONTEXT
+
+class tagRGBTRIPLE(Structure):
+    _fields_ = [
+        ("rgbtBlue", BYTE),
+        ("rgbtGreen", BYTE),
+        ("rgbtRed", BYTE),
+    ]
+NPRGBTRIPLE = POINTER(tagRGBTRIPLE)
+LPRGBTRIPLE = POINTER(tagRGBTRIPLE)
+RGBTRIPLE = tagRGBTRIPLE
+PRGBTRIPLE = POINTER(tagRGBTRIPLE)
+
+class tagBITMAPFILEHEADER(Structure):
+    _pack_ = 2
+    _fields_ = [
+        ("bfType", WORD),
+        ("bfSize", DWORD),
+        ("bfReserved1", WORD),
+        ("bfReserved2", WORD),
+        ("bfOffBits", DWORD),
+    ]
+BITMAPFILEHEADER = tagBITMAPFILEHEADER
+PBITMAPFILEHEADER = POINTER(tagBITMAPFILEHEADER)
+LPBITMAPFILEHEADER = POINTER(tagBITMAPFILEHEADER)
+
+class tagBITMAPCOREHEADER(Structure):
+    _fields_ = [
+        ("bcSize", DWORD),
+        ("bcWidth", WORD),
+        ("bcHeight", WORD),
+        ("bcPlanes", WORD),
+        ("bcBitCount", WORD),
+    ]
+LPBITMAPCOREHEADER = POINTER(tagBITMAPCOREHEADER)
+PBITMAPCOREHEADER = POINTER(tagBITMAPCOREHEADER)
+BITMAPCOREHEADER = tagBITMAPCOREHEADER
+
+class tagBITMAP(Structure):
+    _fields_ = [
+        ("bmType", LONG),
+        ("bmWidth", LONG),
+        ("bmHeight", LONG),
+        ("bmWidthBytes", LONG),
+        ("bmPlanes", WORD),
+        ("bmBitsPixel", WORD),
+        ("bmBits", LPVOID),
+    ]
+NPBITMAP = POINTER(tagBITMAP)
+LPBITMAP = POINTER(tagBITMAP)
+PBITMAP = POINTER(tagBITMAP)
+BITMAP = tagBITMAP
+
+class tagBITMAPINFOHEADER(Structure):
+    _fields_ = [
+        ("biSize", DWORD),
+        ("biWidth", LONG),
+        ("biHeight", LONG),
+        ("biPlanes", WORD),
+        ("biBitCount", WORD),
+        ("biCompression", DWORD),
+        ("biSizeImage", DWORD),
+        ("biXPelsPerMeter", LONG),
+        ("biYPelsPerMeter", LONG),
+        ("biClrUsed", DWORD),
+        ("biClrImportant", DWORD),
+    ]
+BITMAPINFOHEADER = tagBITMAPINFOHEADER
+PBITMAPINFOHEADER = POINTER(tagBITMAPINFOHEADER)
+LPBITMAPINFOHEADER = POINTER(tagBITMAPINFOHEADER)
+
+class tagRGBQUAD(Structure):
+    _fields_ = [
+        ("rgbBlue", BYTE),
+        ("rgbGreen", BYTE),
+        ("rgbRed", BYTE),
+        ("rgbReserved", BYTE),
+    ]
+RGBQUAD = tagRGBQUAD
+
+class tagBITMAPINFO(Structure):
+    _fields_ = [
+        ("bmiHeader", BITMAPINFOHEADER),
+        ("bmiColors", RGBQUAD * 1),
+    ]
+LPBITMAPINFO = POINTER(tagBITMAPINFO)
+PBITMAPINFO = POINTER(tagBITMAPINFO)
+BITMAPINFO = tagBITMAPINFO
+
+class tagBITMAPCOREINFO(Structure):
+    _fields_ = [
+        ("bmciHeader", BITMAPCOREHEADER),
+        ("bmciColors", RGBTRIPLE * 1),
+    ]
+LPBITMAPCOREINFO = POINTER(tagBITMAPCOREINFO)
+BITMAPCOREINFO = tagBITMAPCOREINFO
+PBITMAPCOREINFO = POINTER(tagBITMAPCOREINFO)
+
+class tagWNDCLASSEXA(Structure):
+    _fields_ = [
+        ("cbSize", UINT),
+        ("style", UINT),
+        ("lpfnWndProc", WNDPROC),
+        ("cbClsExtra", INT),
+        ("cbWndExtra", INT),
+        ("hInstance", HINSTANCE),
+        ("hIcon", HICON),
+        ("hCursor", HCURSOR),
+        ("hbrBackground", HBRUSH),
+        ("lpszMenuName", LPCSTR),
+        ("lpszClassName", LPCSTR),
+        ("hIconSm", HICON),
+    ]
+PWNDCLASSEXA = POINTER(tagWNDCLASSEXA)
+LPWNDCLASSEXA = POINTER(tagWNDCLASSEXA)
+WNDCLASSEXA = tagWNDCLASSEXA
+
+class tagWNDCLASSEXW(Structure):
+    _fields_ = [
+        ("cbSize", UINT),
+        ("style", UINT),
+        ("lpfnWndProc", WNDPROC),
+        ("cbClsExtra", INT),
+        ("cbWndExtra", INT),
+        ("hInstance", HINSTANCE),
+        ("hIcon", HICON),
+        ("hCursor", HCURSOR),
+        ("hbrBackground", HBRUSH),
+        ("lpszMenuName", LPWSTR),
+        ("lpszClassName", LPWSTR),
+        ("hIconSm", HICON),
+    ]
+WNDCLASSEXW = tagWNDCLASSEXW
+LPWNDCLASSEXW = POINTER(tagWNDCLASSEXW)
+PWNDCLASSEXW = POINTER(tagWNDCLASSEXW)
+
+KeyValueBasicInformation = EnumValue("_KEY_VALUE_INFORMATION_CLASS", "KeyValueBasicInformation", 0x0)
+KeyValueFullInformation = EnumValue("_KEY_VALUE_INFORMATION_CLASS", "KeyValueFullInformation", 0x1)
+KeyValuePartialInformation = EnumValue("_KEY_VALUE_INFORMATION_CLASS", "KeyValuePartialInformation", 0x2)
+KeyValueFullInformationAlign64 = EnumValue("_KEY_VALUE_INFORMATION_CLASS", "KeyValueFullInformationAlign64", 0x3)
+KeyValuePartialInformationAlign64 = EnumValue("_KEY_VALUE_INFORMATION_CLASS", "KeyValuePartialInformationAlign64", 0x4)
+KeyValueLayerInformation = EnumValue("_KEY_VALUE_INFORMATION_CLASS", "KeyValueLayerInformation", 0x5)
+MaxKeyValueInfoClass = EnumValue("_KEY_VALUE_INFORMATION_CLASS", "MaxKeyValueInfoClass", 0x6)
+class _KEY_VALUE_INFORMATION_CLASS(EnumType):
+    values = [KeyValueBasicInformation, KeyValueFullInformation, KeyValuePartialInformation, KeyValueFullInformationAlign64, KeyValuePartialInformationAlign64, KeyValueLayerInformation, MaxKeyValueInfoClass]
+    mapper = {x:x for x in values}
+KEY_VALUE_INFORMATION_CLASS = _KEY_VALUE_INFORMATION_CLASS
+
+
+class _KEY_VALUE_BASIC_INFORMATION(Structure):
+    _fields_ = [
+        ("TitleIndex", ULONG),
+        ("Type", ULONG),
+        ("NameLength", ULONG),
+        ("Name", WCHAR * 1),
+    ]
+PKEY_VALUE_BASIC_INFORMATION = POINTER(_KEY_VALUE_BASIC_INFORMATION)
+KEY_VALUE_BASIC_INFORMATION = _KEY_VALUE_BASIC_INFORMATION
+
+class _KEY_VALUE_FULL_INFORMATION(Structure):
+    _fields_ = [
+        ("TitleIndex", ULONG),
+        ("Type", ULONG),
+        ("DataOffset", ULONG),
+        ("DataLength", ULONG),
+        ("NameLength", ULONG),
+        ("Name", WCHAR * 1),
+    ]
+KEY_VALUE_FULL_INFORMATION = _KEY_VALUE_FULL_INFORMATION
+PKEY_VALUE_FULL_INFORMATION = POINTER(_KEY_VALUE_FULL_INFORMATION)
+
+class _KEY_VALUE_PARTIAL_INFORMATION(Structure):
+    _fields_ = [
+        ("TitleIndex", ULONG),
+        ("Type", ULONG),
+        ("DataLength", ULONG),
+        ("Data", UCHAR * 1),
+    ]
+PKEY_VALUE_PARTIAL_INFORMATION = POINTER(_KEY_VALUE_PARTIAL_INFORMATION)
+KEY_VALUE_PARTIAL_INFORMATION = _KEY_VALUE_PARTIAL_INFORMATION
+
+BG_JOB_STATE_QUEUED = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_QUEUED", 0x0)
+BG_JOB_STATE_CONNECTING = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_CONNECTING", 0x1)
+BG_JOB_STATE_TRANSFERRING = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_TRANSFERRING", 0x2)
+BG_JOB_STATE_SUSPENDED = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_SUSPENDED", 0x3)
+BG_JOB_STATE_ERROR = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_ERROR", 0x4)
+BG_JOB_STATE_TRANSIENT_ERROR = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_TRANSIENT_ERROR", 0x5)
+BG_JOB_STATE_TRANSFERRED = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_TRANSFERRED", 0x6)
+BG_JOB_STATE_ACKNOWLEDGED = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_ACKNOWLEDGED", 0x7)
+BG_JOB_STATE_CANCELLED = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_CANCELLED", 0x8)
+class _BG_JOB_STATE(EnumType):
+    values = [BG_JOB_STATE_QUEUED, BG_JOB_STATE_CONNECTING, BG_JOB_STATE_TRANSFERRING, BG_JOB_STATE_SUSPENDED, BG_JOB_STATE_ERROR, BG_JOB_STATE_TRANSIENT_ERROR, BG_JOB_STATE_TRANSFERRED, BG_JOB_STATE_ACKNOWLEDGED, BG_JOB_STATE_CANCELLED]
+    mapper = {x:x for x in values}
+BG_JOB_STATE = _BG_JOB_STATE
+
+
+BG_JOB_PROXY_USAGE_PRECONFIG = EnumValue("_BG_JOB_PROXY_USAGE", "BG_JOB_PROXY_USAGE_PRECONFIG", 0x0)
+BG_JOB_PROXY_USAGE_NO_PROXY = EnumValue("_BG_JOB_PROXY_USAGE", "BG_JOB_PROXY_USAGE_NO_PROXY", 0x1)
+BG_JOB_PROXY_USAGE_OVERRIDE = EnumValue("_BG_JOB_PROXY_USAGE", "BG_JOB_PROXY_USAGE_OVERRIDE", 0x2)
+BG_JOB_PROXY_USAGE_AUTODETECT = EnumValue("_BG_JOB_PROXY_USAGE", "BG_JOB_PROXY_USAGE_AUTODETECT", 0x3)
+class _BG_JOB_PROXY_USAGE(EnumType):
+    values = [BG_JOB_PROXY_USAGE_PRECONFIG, BG_JOB_PROXY_USAGE_NO_PROXY, BG_JOB_PROXY_USAGE_OVERRIDE, BG_JOB_PROXY_USAGE_AUTODETECT]
+    mapper = {x:x for x in values}
+BG_JOB_PROXY_USAGE = _BG_JOB_PROXY_USAGE
+
+
+BG_JOB_PRIORITY_FOREGROUND = EnumValue("_BG_JOB_PRIORITY", "BG_JOB_PRIORITY_FOREGROUND", 0x0)
+BG_JOB_PRIORITY_HIGH = EnumValue("_BG_JOB_PRIORITY", "BG_JOB_PRIORITY_HIGH", 0x1)
+BG_JOB_PRIORITY_NORMAL = EnumValue("_BG_JOB_PRIORITY", "BG_JOB_PRIORITY_NORMAL", 0x2)
+BG_JOB_PRIORITY_LOW = EnumValue("_BG_JOB_PRIORITY", "BG_JOB_PRIORITY_LOW", 0x3)
+class _BG_JOB_PRIORITY(EnumType):
+    values = [BG_JOB_PRIORITY_FOREGROUND, BG_JOB_PRIORITY_HIGH, BG_JOB_PRIORITY_NORMAL, BG_JOB_PRIORITY_LOW]
+    mapper = {x:x for x in values}
+BG_JOB_PRIORITY = _BG_JOB_PRIORITY
+
+
+BG_ERROR_CONTEXT_NONE = EnumValue("_BG_ERROR_CONTEXT", "BG_ERROR_CONTEXT_NONE", 0x0)
+BG_ERROR_CONTEXT_UNKNOWN = EnumValue("_BG_ERROR_CONTEXT", "BG_ERROR_CONTEXT_UNKNOWN", 0x1)
+BG_ERROR_CONTEXT_GENERAL_QUEUE_MANAGER = EnumValue("_BG_ERROR_CONTEXT", "BG_ERROR_CONTEXT_GENERAL_QUEUE_MANAGER", 0x2)
+BG_ERROR_CONTEXT_QUEUE_MANAGER_NOTIFICATION = EnumValue("_BG_ERROR_CONTEXT", "BG_ERROR_CONTEXT_QUEUE_MANAGER_NOTIFICATION", 0x3)
+BG_ERROR_CONTEXT_LOCAL_FILE = EnumValue("_BG_ERROR_CONTEXT", "BG_ERROR_CONTEXT_LOCAL_FILE", 0x4)
+BG_ERROR_CONTEXT_REMOTE_FILE = EnumValue("_BG_ERROR_CONTEXT", "BG_ERROR_CONTEXT_REMOTE_FILE", 0x5)
+BG_ERROR_CONTEXT_GENERAL_TRANSPORT = EnumValue("_BG_ERROR_CONTEXT", "BG_ERROR_CONTEXT_GENERAL_TRANSPORT", 0x6)
+BG_ERROR_CONTEXT_REMOTE_APPLICATION = EnumValue("_BG_ERROR_CONTEXT", "BG_ERROR_CONTEXT_REMOTE_APPLICATION", 0x7)
+class _BG_ERROR_CONTEXT(EnumType):
+    values = [BG_ERROR_CONTEXT_NONE, BG_ERROR_CONTEXT_UNKNOWN, BG_ERROR_CONTEXT_GENERAL_QUEUE_MANAGER, BG_ERROR_CONTEXT_QUEUE_MANAGER_NOTIFICATION, BG_ERROR_CONTEXT_LOCAL_FILE, BG_ERROR_CONTEXT_REMOTE_FILE, BG_ERROR_CONTEXT_GENERAL_TRANSPORT, BG_ERROR_CONTEXT_REMOTE_APPLICATION]
+    mapper = {x:x for x in values}
+BG_ERROR_CONTEXT = _BG_ERROR_CONTEXT
+
+
+BG_JOB_TYPE_DOWNLOAD = EnumValue("_BG_JOB_TYPE", "BG_JOB_TYPE_DOWNLOAD", 0x0)
+BG_JOB_TYPE_UPLOAD = EnumValue("_BG_JOB_TYPE", "BG_JOB_TYPE_UPLOAD", 0x1)
+BG_JOB_TYPE_UPLOAD_REPLY = EnumValue("_BG_JOB_TYPE", "BG_JOB_TYPE_UPLOAD_REPLY", 0x2)
+class _BG_JOB_TYPE(EnumType):
+    values = [BG_JOB_TYPE_DOWNLOAD, BG_JOB_TYPE_UPLOAD, BG_JOB_TYPE_UPLOAD_REPLY]
+    mapper = {x:x for x in values}
+BG_JOB_TYPE = _BG_JOB_TYPE
+
+
+class _BG_FILE_PROGRESS(Structure):
+    _fields_ = [
+        ("BytesTotal", UINT64),
+        ("BytesTransferred", UINT64),
+        ("Completed", BOOL),
+    ]
+BG_FILE_PROGRESS = _BG_FILE_PROGRESS
+
+class _BG_JOB_PROGRESS(Structure):
+    _fields_ = [
+        ("BytesTotal", UINT64),
+        ("BytesTransferred", UINT64),
+        ("FilesTotal", ULONG),
+        ("FilesTransferred", ULONG),
+    ]
+BG_JOB_PROGRESS = _BG_JOB_PROGRESS
+
+class _BG_FILE_INFO(Structure):
+    _fields_ = [
+        ("RemoteName", LPWSTR),
+        ("LocalName", LPWSTR),
+    ]
+BG_FILE_INFO = _BG_FILE_INFO
+
+class _BG_JOB_TIMES(Structure):
+    _fields_ = [
+        ("CreationTime", FILETIME),
+        ("ModificationTime", FILETIME),
+        ("TransferCompletionTime", FILETIME),
+    ]
+BG_JOB_TIMES = _BG_JOB_TIMES
 
 EvtVarTypeNull = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeNull", 0x0)
 EvtVarTypeString = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeString", 0x1)
@@ -2317,6 +2619,21 @@ class _EVT_VARIANT(Structure):
     ]
 PEVT_VARIANT = POINTER(_EVT_VARIANT)
 EVT_VARIANT = _EVT_VARIANT
+
+class _SHITEMID(Structure):
+    _fields_ = [
+        ("cb", USHORT),
+        ("abID", BYTE * 1),
+    ]
+SHITEMID = _SHITEMID
+
+class _ITEMIDLIST(Structure):
+    _fields_ = [
+        ("mkid", SHITEMID),
+    ]
+ITEMIDLIST = _ITEMIDLIST
+PCIDLIST_ABSOLUTE = POINTER(_ITEMIDLIST)
+PIDLIST_ABSOLUTE = POINTER(_ITEMIDLIST)
 
 SystemBasicInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemBasicInformation", 0x0)
 SystemProcessorInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemProcessorInformation", 0x1)
@@ -5477,107 +5794,6 @@ class _DEBUG_SYMBOL_SOURCE_ENTRY(Structure):
 DEBUG_SYMBOL_SOURCE_ENTRY = _DEBUG_SYMBOL_SOURCE_ENTRY
 PDEBUG_SYMBOL_SOURCE_ENTRY = POINTER(_DEBUG_SYMBOL_SOURCE_ENTRY)
 
-class _ACL(Structure):
-    _fields_ = [
-        ("AclRevision", BYTE),
-        ("Sbz1", BYTE),
-        ("AclSize", WORD),
-        ("AceCount", WORD),
-        ("Sbz2", WORD),
-    ]
-PACL = POINTER(_ACL)
-ACL = _ACL
-
-class _ACE_HEADER(Structure):
-    _fields_ = [
-        ("AceType", BYTE),
-        ("AceFlags", BYTE),
-        ("AceSize", WORD),
-    ]
-PACE_HEADER = POINTER(_ACE_HEADER)
-ACE_HEADER = _ACE_HEADER
-
-class _ACCESS_ALLOWED_ACE(Structure):
-    _fields_ = [
-        ("Header", ACE_HEADER),
-        ("Mask", ACCESS_MASK),
-        ("SidStart", DWORD),
-    ]
-PACCESS_ALLOWED_ACE = POINTER(_ACCESS_ALLOWED_ACE)
-ACCESS_ALLOWED_ACE = _ACCESS_ALLOWED_ACE
-
-class _ACCESS_ALLOWED_CALLBACK_ACE(Structure):
-    _fields_ = [
-        ("Header", ACE_HEADER),
-        ("Mask", ACCESS_MASK),
-        ("SidStart", DWORD),
-    ]
-PACCESS_ALLOWED_CALLBACK_ACE = POINTER(_ACCESS_ALLOWED_CALLBACK_ACE)
-ACCESS_ALLOWED_CALLBACK_ACE = _ACCESS_ALLOWED_CALLBACK_ACE
-
-class _ACCESS_ALLOWED_CALLBACK_OBJECT_ACE(Structure):
-    _fields_ = [
-        ("Header", ACE_HEADER),
-        ("Mask", ACCESS_MASK),
-        ("Flags", DWORD),
-        ("ObjectType", GUID),
-        ("InheritedObjectType", GUID),
-        ("SidStart", DWORD),
-    ]
-PACCESS_ALLOWED_CALLBACK_OBJECT_ACE = POINTER(_ACCESS_ALLOWED_CALLBACK_OBJECT_ACE)
-ACCESS_ALLOWED_CALLBACK_OBJECT_ACE = _ACCESS_ALLOWED_CALLBACK_OBJECT_ACE
-
-class _ACCESS_ALLOWED_OBJECT_ACE(Structure):
-    _fields_ = [
-        ("Header", ACE_HEADER),
-        ("Mask", ACCESS_MASK),
-        ("Flags", DWORD),
-        ("ObjectType", GUID),
-        ("InheritedObjectType", GUID),
-        ("SidStart", DWORD),
-    ]
-PACCESS_ALLOWED_OBJECT_ACE = POINTER(_ACCESS_ALLOWED_OBJECT_ACE)
-ACCESS_ALLOWED_OBJECT_ACE = _ACCESS_ALLOWED_OBJECT_ACE
-
-class _ACCESS_DENIED_ACE(Structure):
-    _fields_ = [
-        ("Header", ACE_HEADER),
-        ("Mask", ACCESS_MASK),
-        ("SidStart", DWORD),
-    ]
-ACCESS_DENIED_ACE = _ACCESS_DENIED_ACE
-PACCESS_DENIED_ACE = POINTER(_ACCESS_DENIED_ACE)
-
-class _ACCESS_DENIED_CALLBACK_ACE(Structure):
-    _fields_ = [
-        ("Header", ACE_HEADER),
-        ("Mask", ACCESS_MASK),
-        ("SidStart", DWORD),
-    ]
-ACCESS_DENIED_CALLBACK_ACE = _ACCESS_DENIED_CALLBACK_ACE
-PACCESS_DENIED_CALLBACK_ACE = POINTER(_ACCESS_DENIED_CALLBACK_ACE)
-
-class _ACCESS_DENIED_OBJECT_ACE(Structure):
-    _fields_ = [
-        ("Header", ACE_HEADER),
-        ("Mask", ACCESS_MASK),
-        ("Flags", DWORD),
-        ("ObjectType", GUID),
-        ("InheritedObjectType", GUID),
-        ("SidStart", DWORD),
-    ]
-ACCESS_DENIED_OBJECT_ACE = _ACCESS_DENIED_OBJECT_ACE
-PACCESS_DENIED_OBJECT_ACE = POINTER(_ACCESS_DENIED_OBJECT_ACE)
-
-class _SYSTEM_MANDATORY_LABEL_ACE(Structure):
-    _fields_ = [
-        ("Header", ACE_HEADER),
-        ("Mask", ACCESS_MASK),
-        ("SidStart", DWORD),
-    ]
-SYSTEM_MANDATORY_LABEL_ACE = _SYSTEM_MANDATORY_LABEL_ACE
-PSYSTEM_MANDATORY_LABEL_ACE = POINTER(_SYSTEM_MANDATORY_LABEL_ACE)
-
 class _RTL_UNLOAD_EVENT_TRACE(Structure):
     _fields_ = [
         ("BaseAddress", PVOID),
@@ -6109,18 +6325,3 @@ class _RPC_IF_ID(INITIAL_RPC_IF_ID):
     def __repr__(self):
         return '<RPC_IF_ID "{0}" ({1}, {2})>'.format(self.Uuid.to_string(), self.VersMajor, self.VersMinor)
 RPC_IF_ID = _RPC_IF_ID
-class _SHITEMID(Structure):
-    _fields_ = [
-        ("cb", USHORT),
-        ("abID", BYTE * 1),
-    ]
-SHITEMID = _SHITEMID
-
-class _ITEMIDLIST(Structure):
-    _fields_ = [
-        ("mkid", SHITEMID),
-    ]
-ITEMIDLIST = _ITEMIDLIST
-PCIDLIST_ABSOLUTE = POINTER(_ITEMIDLIST)
-PIDLIST_ABSOLUTE = POINTER(_ITEMIDLIST)
-

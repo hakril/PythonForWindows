@@ -1,0 +1,198 @@
+/* Enum */
+
+typedef enum _ACL_INFORMATION_CLASS {
+    AclRevisionInformation = 1,
+    AclSizeInformation = 2,
+} ACL_INFORMATION_CLASS;
+
+/* ACL Stuff */
+
+typedef struct _ACL {
+  BYTE AclRevision;
+  BYTE Sbz1;
+  WORD AclSize;
+  WORD AceCount;
+  WORD Sbz2;
+} ACL, *PACL;
+
+
+typedef struct _ACL_REVISION_INFORMATION {
+    DWORD AclRevision;
+} ACL_REVISION_INFORMATION, *PACL_REVISION_INFORMATION;
+
+
+typedef struct _ACL_SIZE_INFORMATION {
+    DWORD AceCount;
+    DWORD AclBytesInUse;
+    DWORD AclBytesFree;
+} ACL_SIZE_INFORMATION, *PACL_SIZE_INFORMATION;
+
+typedef struct _ACE_HEADER {
+  BYTE AceType;
+  BYTE AceFlags;
+  WORD AceSize;
+} ACE_HEADER, *PACE_HEADER;
+
+
+typedef struct _ACCESS_ALLOWED_ACE {
+  ACE_HEADER  Header;
+  ACCESS_MASK Mask;
+  DWORD       SidStart;
+} ACCESS_ALLOWED_ACE, *PACCESS_ALLOWED_ACE;
+
+typedef struct _ACCESS_ALLOWED_CALLBACK_ACE {
+  ACE_HEADER  Header;
+  ACCESS_MASK Mask;
+  DWORD       SidStart;
+} ACCESS_ALLOWED_CALLBACK_ACE, *PACCESS_ALLOWED_CALLBACK_ACE;
+
+
+typedef struct _ACCESS_ALLOWED_CALLBACK_OBJECT_ACE {
+  ACE_HEADER  Header;
+  ACCESS_MASK Mask;
+  DWORD       Flags;
+  GUID        ObjectType;
+  GUID        InheritedObjectType;
+  DWORD       SidStart;
+} ACCESS_ALLOWED_CALLBACK_OBJECT_ACE, *PACCESS_ALLOWED_CALLBACK_OBJECT_ACE;
+
+typedef struct _ACCESS_DENIED_CALLBACK_OBJECT_ACE {
+    ACE_HEADER Header;
+    ACCESS_MASK Mask;
+    DWORD Flags;
+    GUID ObjectType;
+    GUID InheritedObjectType;
+    DWORD SidStart;
+    // Opaque resource manager specific data
+} ACCESS_DENIED_CALLBACK_OBJECT_ACE, *PACCESS_DENIED_CALLBACK_OBJECT_ACE;
+
+
+typedef struct _ACCESS_ALLOWED_OBJECT_ACE {
+  ACE_HEADER  Header;
+  ACCESS_MASK Mask;
+  DWORD       Flags;
+  GUID        ObjectType;
+  GUID        InheritedObjectType;
+  DWORD       SidStart;
+} ACCESS_ALLOWED_OBJECT_ACE, *PACCESS_ALLOWED_OBJECT_ACE;
+
+
+typedef struct _ACCESS_DENIED_ACE {
+  ACE_HEADER  Header;
+  ACCESS_MASK Mask;
+  DWORD       SidStart;
+} ACCESS_DENIED_ACE, *PACCESS_DENIED_ACE;
+
+
+typedef struct _ACCESS_DENIED_CALLBACK_ACE {
+  ACE_HEADER  Header;
+  ACCESS_MASK Mask;
+  DWORD       SidStart;
+} ACCESS_DENIED_CALLBACK_ACE, *PACCESS_DENIED_CALLBACK_ACE;
+
+
+typedef struct _ACCESS_DENIED_OBJECT_ACE {
+  ACE_HEADER  Header;
+  ACCESS_MASK Mask;
+  DWORD       Flags;
+  GUID        ObjectType;
+  GUID        InheritedObjectType;
+  DWORD       SidStart;
+} ACCESS_DENIED_OBJECT_ACE, *PACCESS_DENIED_OBJECT_ACE;
+
+
+typedef struct _SYSTEM_MANDATORY_LABEL_ACE {
+    ACE_HEADER Header;
+    ACCESS_MASK Mask;
+    DWORD SidStart;
+} SYSTEM_MANDATORY_LABEL_ACE, *PSYSTEM_MANDATORY_LABEL_ACE;
+
+typedef struct _SYSTEM_AUDIT_ACE {
+    ACE_HEADER Header;
+    ACCESS_MASK Mask;
+    DWORD SidStart;
+} SYSTEM_AUDIT_ACE;
+
+typedef struct _SYSTEM_ALARM_ACE {
+    ACE_HEADER Header;
+    ACCESS_MASK Mask;
+    DWORD SidStart;
+} SYSTEM_ALARM_ACE;
+
+typedef struct _SYSTEM_RESOURCE_ATTRIBUTE_ACE {
+    ACE_HEADER Header;
+    ACCESS_MASK Mask;
+    DWORD SidStart;
+} SYSTEM_RESOURCE_ATTRIBUTE_ACE, *PSYSTEM_RESOURCE_ATTRIBUTE_ACE;
+
+typedef struct _SYSTEM_SCOPED_POLICY_ID_ACE {
+    ACE_HEADER Header;
+    ACCESS_MASK Mask;
+    DWORD SidStart;
+} SYSTEM_SCOPED_POLICY_ID_ACE, *PSYSTEM_SCOPED_POLICY_ID_ACE;
+
+typedef struct _SYSTEM_PROCESS_TRUST_LABEL_ACE {
+    ACE_HEADER Header;
+    ACCESS_MASK Mask;
+    DWORD SidStart;
+} SYSTEM_PROCESS_TRUST_LABEL_ACE, *PSYSTEM_PROCESS_TRUST_LABEL_ACE;
+
+
+typedef struct _SYSTEM_AUDIT_OBJECT_ACE {
+    ACE_HEADER Header;
+    ACCESS_MASK Mask;
+    DWORD Flags;
+    GUID ObjectType;
+    GUID InheritedObjectType;
+    DWORD SidStart;
+} SYSTEM_AUDIT_OBJECT_ACE, *PSYSTEM_AUDIT_OBJECT_ACE;
+
+typedef struct _SYSTEM_ALARM_OBJECT_ACE {
+    ACE_HEADER Header;
+    ACCESS_MASK Mask;
+    DWORD Flags;
+    GUID ObjectType;
+    GUID InheritedObjectType;
+    DWORD SidStart;
+} SYSTEM_ALARM_OBJECT_ACE, *PSYSTEM_ALARM_OBJECT_ACE;
+
+
+typedef struct _SYSTEM_AUDIT_CALLBACK_ACE {
+  ACE_HEADER  Header;
+  ACCESS_MASK Mask;
+  DWORD       SidStart;
+} SYSTEM_AUDIT_CALLBACK_ACE, *PSYSTEM_AUDIT_CALLBACK_ACE;
+
+typedef struct _SYSTEM_ALARM_CALLBACK_ACE {
+  ACE_HEADER  Header;
+  ACCESS_MASK Mask;
+  DWORD       SidStart;
+} SYSTEM_ALARM_CALLBACK_ACE, *PSYSTEM_ALARM_CALLBACK_ACE;
+
+typedef struct _SYSTEM_AUDIT_CALLBACK_OBJECT_ACE {
+  ACE_HEADER  Header;
+  ACCESS_MASK Mask;
+  DWORD       Flags;
+  GUID        ObjectType;
+  GUID        InheritedObjectType;
+  DWORD       SidStart;
+} SYSTEM_AUDIT_CALLBACK_OBJECT_ACE, *PSYSTEM_AUDIT_CALLBACK_OBJECT_ACE;
+
+typedef struct _SYSTEM_ALARM_CALLBACK_OBJECT_ACE {
+  ACE_HEADER  Header;
+  ACCESS_MASK Mask;
+  DWORD       Flags;
+  GUID        ObjectType;
+  GUID        InheritedObjectType;
+  DWORD       SidStart;
+} SYSTEM_ALARM_CALLBACK_OBJECT_ACE, *PSYSTEM_ALARM_CALLBACK_OBJECT_ACE;
+
+typedef struct _SECURITY_DESCRIPTOR {
+  BYTE                        Revision;
+  BYTE                        Sbz1;
+  SECURITY_DESCRIPTOR_CONTROL Control;
+  PSID                        Owner;
+  PSID                        Group;
+  PACL                        Sacl;
+  PACL                        Dacl;
+} SECURITY_DESCRIPTOR, *PISECURITY_DESCRIPTOR;

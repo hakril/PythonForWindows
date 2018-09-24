@@ -1,3 +1,4 @@
+import windows # Allow extended-struct to use windows/winproxy/...
 from ctypes import *
 from ctypes.wintypes import *
 
