@@ -608,7 +608,7 @@ class JmpType(Instruction):
             arg = initial_args[0]
             if isinstance(arg, str) and arg[0] == ":":
                 return DelayedJump(cls, arg)
-        return super(JmpType, cls).__new__(cls, *initial_args)
+        return super(JmpType, cls).__new__(cls)
 
 
 class JmpImm(object):
@@ -847,8 +847,25 @@ class _NopArtifact(Nop):
     pass
 
 
-class Label(object):
+class Byte(Instruction):
+    """Output a raw byte"""
+    encoding = [(UImm8(),)]
 
+
+class Raw(Instruction):
+    """Output raw data"""
+    def __init__(self, *initial_args):
+        if len(initial_args) != 1:
+            raise ValueError("raw 'opcode' only accept one argument")
+        self.data = initial_args[0].decode("hex")
+
+    def get_code(self):
+        return self.data
+
+
+
+
+class Label(object):
     def __init__(self, name):
         self.name = name
 

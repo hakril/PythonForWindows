@@ -789,7 +789,7 @@ class JmpType(Instruction):
             arg = initial_args[0]
             if isinstance(arg, str) and arg[0] == ":":
                 return DelayedJump(cls, arg)
-        return super(JmpType, cls).__new__(cls, *initial_args)
+        return super(JmpType, cls).__new__(cls)
 
 
 class Push(Instruction):
