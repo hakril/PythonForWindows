@@ -70,3 +70,89 @@
 
 #define SYSTEM_PROCESS_TRUST_LABEL_VALID_MASK      0x00ffffff
 #define SYSTEM_PROCESS_TRUST_NOCONSTRAINT_MASK     0xffffffff
+
+
+#define CLAIM_SECURITY_ATTRIBUTE_TYPE_INVALID   0x00
+#define CLAIM_SECURITY_ATTRIBUTE_TYPE_INT64     0x01
+#define CLAIM_SECURITY_ATTRIBUTE_TYPE_UINT64    0x02
+#define CLAIM_SECURITY_ATTRIBUTE_TYPE_STRING    0x03
+#define CLAIM_SECURITY_ATTRIBUTE_TYPE_FQBN      0x04
+#define CLAIM_SECURITY_ATTRIBUTE_TYPE_SID       0x05
+#define CLAIM_SECURITY_ATTRIBUTE_TYPE_BOOLEAN   0x06
+#define CLAIM_SECURITY_ATTRIBUTE_TYPE_OCTET_STRING  0x10
+
+
+
+#define SE_GROUP_MANDATORY                 (0x00000001L)
+#define SE_GROUP_ENABLED_BY_DEFAULT        (0x00000002L)
+#define SE_GROUP_ENABLED                   (0x00000004L)
+#define SE_GROUP_OWNER                     (0x00000008L)
+#define SE_GROUP_USE_FOR_DENY_ONLY         (0x00000010L)
+#define SE_GROUP_INTEGRITY                 (0x00000020L)
+#define SE_GROUP_INTEGRITY_ENABLED         (0x00000040L)
+#define SE_GROUP_LOGON_ID                  (0xC0000000L)
+#define SE_GROUP_RESOURCE                  (0x20000000L)
+
+#define SE_GROUP_VALID_ATTRIBUTES          (SE_GROUP_MANDATORY          | \
+                                            SE_GROUP_ENABLED_BY_DEFAULT | \
+                                            SE_GROUP_ENABLED            | \
+                                            SE_GROUP_OWNER              | \
+                                            SE_GROUP_USE_FOR_DENY_ONLY  | \
+                                            SE_GROUP_LOGON_ID           | \
+                                            SE_GROUP_RESOURCE           | \
+                                            SE_GROUP_INTEGRITY          | \
+                                            SE_GROUP_INTEGRITY_ENABLED)
+
+
+#define OWNER_SECURITY_INFORMATION       (0x00000001L)
+#define GROUP_SECURITY_INFORMATION       (0x00000002L)
+#define DACL_SECURITY_INFORMATION        (0x00000004L)
+#define SACL_SECURITY_INFORMATION        (0x00000008L)
+#define LABEL_SECURITY_INFORMATION       (0x00000010L)
+#define ATTRIBUTE_SECURITY_INFORMATION   (0x00000020L)
+#define SCOPE_SECURITY_INFORMATION       (0x00000040L)
+#define PROCESS_TRUST_LABEL_SECURITY_INFORMATION (0x00000080L)
+#define BACKUP_SECURITY_INFORMATION      (0x00010000L)
+
+#define PROTECTED_DACL_SECURITY_INFORMATION     (0x80000000L)
+#define PROTECTED_SACL_SECURITY_INFORMATION     (0x40000000L)
+#define UNPROTECTED_DACL_SECURITY_INFORMATION   (0x20000000L)
+#define UNPROTECTED_SACL_SECURITY_INFORMATION   (0x10000000L)
+
+/* PRIVILEGES */
+
+#define SE_CREATE_TOKEN_NAME              ("SeCreateTokenPrivilege")
+#define SE_ASSIGNPRIMARYTOKEN_NAME        ("SeAssignPrimaryTokenPrivilege")
+#define SE_LOCK_MEMORY_NAME               ("SeLockMemoryPrivilege")
+#define SE_INCREASE_QUOTA_NAME            ("SeIncreaseQuotaPrivilege")
+#define SE_UNSOLICITED_INPUT_NAME         ("SeUnsolicitedInputPrivilege")
+#define SE_MACHINE_ACCOUNT_NAME           ("SeMachineAccountPrivilege")
+#define SE_TCB_NAME                       ("SeTcbPrivilege")
+#define SE_SECURITY_NAME                  ("SeSecurityPrivilege")
+#define SE_TAKE_OWNERSHIP_NAME            ("SeTakeOwnershipPrivilege")
+#define SE_LOAD_DRIVER_NAME               ("SeLoadDriverPrivilege")
+#define SE_SYSTEM_PROFILE_NAME            ("SeSystemProfilePrivilege")
+#define SE_SYSTEMTIME_NAME                ("SeSystemtimePrivilege")
+#define SE_PROF_SINGLE_PROCESS_NAME       ("SeProfileSingleProcessPrivilege")
+#define SE_INC_BASE_PRIORITY_NAME         ("SeIncreaseBasePriorityPrivilege")
+#define SE_CREATE_PAGEFILE_NAME           ("SeCreatePagefilePrivilege")
+#define SE_CREATE_PERMANENT_NAME          ("SeCreatePermanentPrivilege")
+#define SE_BACKUP_NAME                    ("SeBackupPrivilege")
+#define SE_RESTORE_NAME                   ("SeRestorePrivilege")
+#define SE_SHUTDOWN_NAME                  ("SeShutdownPrivilege")
+#define SE_DEBUG_NAME                     ("SeDebugPrivilege")
+#define SE_AUDIT_NAME                     ("SeAuditPrivilege")
+#define SE_SYSTEM_ENVIRONMENT_NAME        ("SeSystemEnvironmentPrivilege")
+#define SE_CHANGE_NOTIFY_NAME             ("SeChangeNotifyPrivilege")
+#define SE_REMOTE_SHUTDOWN_NAME           ("SeRemoteShutdownPrivilege")
+#define SE_UNDOCK_NAME                    ("SeUndockPrivilege")
+#define SE_SYNC_AGENT_NAME                ("SeSyncAgentPrivilege")
+#define SE_ENABLE_DELEGATION_NAME         ("SeEnableDelegationPrivilege")
+#define SE_MANAGE_VOLUME_NAME             ("SeManageVolumePrivilege")
+#define SE_IMPERSONATE_NAME               ("SeImpersonatePrivilege")
+#define SE_CREATE_GLOBAL_NAME             ("SeCreateGlobalPrivilege")
+#define SE_TRUSTED_CREDMAN_ACCESS_NAME    ("SeTrustedCredManAccessPrivilege")
+#define SE_RELABEL_NAME                   ("SeRelabelPrivilege")
+#define SE_INC_WORKING_SET_NAME           ("SeIncreaseWorkingSetPrivilege")
+#define SE_TIME_ZONE_NAME                 ("SeTimeZonePrivilege")
+#define SE_CREATE_SYMBOLIC_LINK_NAME      ("SeCreateSymbolicLinkPrivilege")

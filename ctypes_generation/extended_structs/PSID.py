@@ -11,6 +11,13 @@ class PSID(_INITIAL_PSID): # _INITIAL_PSID -> PVOID
        windows.winproxy.LocalFree(sid_str)
        return result
 
+    def __eq__(self, other):
+        return windows.winproxy.EqualSid(self, other)
+
+    @property
+    def size(self):
+        return windows.winproxy.GetLengthSid(self)
+
     @classmethod
     def from_string(cls, strsid):
         self = cls()

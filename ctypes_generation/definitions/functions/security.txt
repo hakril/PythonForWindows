@@ -89,6 +89,11 @@ DWORD WINAPI GetLengthSid(
   _In_ PSID pSid
 );
 
+BOOL EqualSid(
+  PSID pSid1,
+  PSID pSid2
+);
+
 
 PSID_IDENTIFIER_AUTHORITY WINAPI GetSidIdentifierAuthority(
     _In_ PSID pSid
@@ -105,8 +110,10 @@ PDWORD WINAPI GetSidSubAuthority(
     _In_ DWORD nSubAuthority
 );
 
-
-PUCHAR WINAPI GetSidSubAuthorityCount(
+/* Yep not the good definition (return PUCHAR)
+ * but who want this function to returns Python String..
+ */
+LPBYTE WINAPI GetSidSubAuthorityCount(
     _In_ PSID pSid
     );
 

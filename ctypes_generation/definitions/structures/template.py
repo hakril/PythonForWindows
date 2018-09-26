@@ -2,7 +2,7 @@ import windows # Allow extended-struct to use windows/winproxy/...
 from ctypes import *
 from ctypes.wintypes import *
 
-from flag import Flag, FlagMapper
+from flag import Flag, FlagMapper, FlagExatractor
 
 class EnumValue(Flag):
     def __new__(cls, enum_name, name, value):
