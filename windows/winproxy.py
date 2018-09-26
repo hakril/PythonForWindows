@@ -40,14 +40,17 @@ def resolve(winfunc):
 
 
 class Kernel32Error(WindowsError):
-    def __new__(cls, func_name):
-        win_error = ctypes.WinError()
+    def __new__(cls, func_name, error_code=None):
+        win_error = ctypes.WinError(error_code) #GetLastError by default
         api_error = super(Kernel32Error, cls).__new__(cls)
         api_error.api_name = func_name
         api_error.winerror = win_error.winerror & 0xffffffff
         api_error.strerror = win_error.strerror
         api_error.args = (func_name, win_error.winerror, win_error.strerror)
         return api_error
+
+    def __init__(self, func_name, error_code=None):
+        super(Kernel32Error, self).__init__(func_name)
 
     def __repr__(self):
         return "{0}: {1}".format(self.api_name, super(Kernel32Error, self).__repr__())
@@ -97,6 +100,12 @@ def should_return_zero_check(func_name, result, func, args):
     """raise Kernel32Error if result is NOT 0"""
     if result:
         raise Kernel32Error(func_name)
+    return args
+
+def result_error_code_check(func_name, result, func, args):
+    """TODO: DOC"""
+    if result:
+        raise Kernel32Error(func_name, error_code=result)
     return args
 
 
@@ -1282,6 +1291,7 @@ def CreateWellKnownSid(WellKnownSidType, DomainSid=None, pSid=None, cbSid=Needed
 GetSidSubAuthorityCount = TransparentAdvapi32Proxy("GetSidSubAuthorityCount")
 GetSidSubAuthority = TransparentAdvapi32Proxy("GetSidSubAuthority")
 GetLengthSid = TransparentAdvapi32Proxy("GetLengthSid")
+EqualSid = TransparentAdvapi32Proxy("EqualSid")
 
 @Advapi32Proxy('GetTokenInformation')
 def GetTokenInformation(TokenHandle=NeededParameter, TokenInformationClass=NeededParameter, TokenInformation=None, TokenInformationLength=0, ReturnLength=None):
@@ -1300,12 +1310,12 @@ def RegOpenKeyExA(hKey, lpSubKey, ulOptions, samDesired, phkResult):
 
 # Security stuff
 
-@Advapi32Proxy('GetNamedSecurityInfoA', should_return_zero_check)
+@Advapi32Proxy('GetNamedSecurityInfoA', result_error_code_check)
 def GetNamedSecurityInfoA(pObjectName, ObjectType, SecurityInfo, ppsidOwner=None, ppsidGroup=None, ppDacl=None, ppSacl=None, ppSecurityDescriptor=None):
     return GetNamedSecurityInfoA.ctypes_function(pObjectName, ObjectType, SecurityInfo, ppsidOwner, ppsidGroup, ppDacl, ppSacl, ppSecurityDescriptor)
 
 
-@Advapi32Proxy('GetNamedSecurityInfoW', should_return_zero_check)
+@Advapi32Proxy('GetNamedSecurityInfoW', result_error_code_check)
 def GetNamedSecurityInfoW(pObjectName, ObjectType, SecurityInfo, ppsidOwner=None, ppsidGroup=None, ppDacl=None, ppSacl=None, ppSecurityDescriptor=None):
     return GetNamedSecurityInfoW.ctypes_function(pObjectName, ObjectType, SecurityInfo, ppsidOwner, ppsidGroup, ppDacl, ppSacl, ppSecurityDescriptor)
 
@@ -1458,6 +1468,73 @@ def GetNumberOfEventLogRecords(hEventLog, NumberOfRecords):
 @Advapi32Proxy('CloseEventLog')
 def CloseEventLog(hEventLog):
     return CloseEventLog.ctypes_function(hEventLog)
+
+
+## Security stuff
+
+## Security stuff
+
+@Advapi32Proxy("IsValidSecurityDescriptor")
+def IsValidSecurityDescriptor(pSecurityDescriptor):
+   return IsValidSecurityDescriptor.ctypes_function(pSecurityDescriptor)
+
+@Advapi32Proxy("ConvertStringSecurityDescriptorToSecurityDescriptorA")
+def ConvertStringSecurityDescriptorToSecurityDescriptorA(StringSecurityDescriptor, StringSDRevision, SecurityDescriptor, SecurityDescriptorSize):
+   return ConvertStringSecurityDescriptorToSecurityDescriptorA.ctypes_function(StringSecurityDescriptor, StringSDRevision, SecurityDescriptor, SecurityDescriptorSize)
+
+@Advapi32Proxy("ConvertStringSecurityDescriptorToSecurityDescriptorW")
+def ConvertStringSecurityDescriptorToSecurityDescriptorW(StringSecurityDescriptor, StringSDRevision, SecurityDescriptor, SecurityDescriptorSize):
+   return ConvertStringSecurityDescriptorToSecurityDescriptorW.ctypes_function(StringSecurityDescriptor, StringSDRevision, SecurityDescriptor, SecurityDescriptorSize)
+
+@Advapi32Proxy("ConvertSecurityDescriptorToStringSecurityDescriptorA")
+def ConvertSecurityDescriptorToStringSecurityDescriptorA(SecurityDescriptor, RequestedStringSDRevision, SecurityInformation, StringSecurityDescriptor, StringSecurityDescriptorLen):
+   return ConvertSecurityDescriptorToStringSecurityDescriptorA.ctypes_function(SecurityDescriptor, RequestedStringSDRevision, SecurityInformation, StringSecurityDescriptor, StringSecurityDescriptorLen)
+
+@Advapi32Proxy("ConvertSecurityDescriptorToStringSecurityDescriptorW")
+def ConvertSecurityDescriptorToStringSecurityDescriptorW(SecurityDescriptor, RequestedStringSDRevision, SecurityInformation, StringSecurityDescriptor, StringSecurityDescriptorLen):
+   return ConvertSecurityDescriptorToStringSecurityDescriptorW.ctypes_function(SecurityDescriptor, RequestedStringSDRevision, SecurityInformation, StringSecurityDescriptor, StringSecurityDescriptorLen)
+
+@Advapi32Proxy("GetSecurityDescriptorDacl")
+def GetSecurityDescriptorDacl(pSecurityDescriptor, lpbDaclPresent, pDacl, lpbDaclDefaulted):
+   return GetSecurityDescriptorDacl.ctypes_function(pSecurityDescriptor, lpbDaclPresent, pDacl, lpbDaclDefaulted)
+
+
+@Advapi32Proxy("GetAclInformation")
+def GetAclInformation(pAcl, pAclInformation, nAclInformationLength, dwAclInformationClass):
+    return GetAclInformation.ctypes_function(pAcl, pAclInformation, nAclInformationLength, dwAclInformationClass)
+
+
+@Advapi32Proxy("GetSecurityDescriptorLength")
+def GetSecurityDescriptorLength(pSecurityDescriptor):
+   return GetSecurityDescriptorLength.ctypes_function(pSecurityDescriptor)
+
+@Advapi32Proxy("IsValidSecurityDescriptor")
+def IsValidSecurityDescriptor(pSecurityDescriptor):
+   return IsValidSecurityDescriptor.ctypes_function(pSecurityDescriptor)
+
+@Advapi32Proxy("GetSecurityDescriptorControl")
+def GetSecurityDescriptorControl(pSecurityDescriptor, pControl, lpdwRevision):
+   return GetSecurityDescriptorControl.ctypes_function(pSecurityDescriptor, pControl, lpdwRevision)
+
+@Advapi32Proxy("GetSecurityDescriptorOwner")
+def GetSecurityDescriptorOwner(pSecurityDescriptor, pOwner, lpbOwnerDefaulted):
+   return GetSecurityDescriptorOwner.ctypes_function(pSecurityDescriptor, pOwner, lpbOwnerDefaulted)
+
+@Advapi32Proxy("GetSecurityDescriptorGroup")
+def GetSecurityDescriptorGroup(pSecurityDescriptor, pGroup, lpbGroupDefaulted):
+   return GetSecurityDescriptorGroup.ctypes_function(pSecurityDescriptor, pGroup, lpbGroupDefaulted)
+
+@Advapi32Proxy("GetSecurityDescriptorDacl")
+def GetSecurityDescriptorDacl(pSecurityDescriptor, lpbDaclPresent, pDacl, lpbDaclDefaulted):
+   return GetSecurityDescriptorDacl.ctypes_function(pSecurityDescriptor, lpbDaclPresent, pDacl, lpbDaclDefaulted)
+
+@Advapi32Proxy("GetSecurityDescriptorSacl")
+def GetSecurityDescriptorSacl(pSecurityDescriptor, lpbSaclPresent, pSacl, lpbSaclDefaulted):
+   return GetSecurityDescriptorSacl.ctypes_function(pSecurityDescriptor, lpbSaclPresent, pSacl, lpbSaclDefaulted)
+
+@Advapi32Proxy("GetAce")
+def GetAce(pAcl, dwAceIndex, pAce):
+   return GetAce.ctypes_function(pAcl, dwAceIndex, pAce)
 
 # ##### Iphlpapi (network list and stuff) ###### #
 

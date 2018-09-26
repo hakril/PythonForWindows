@@ -486,6 +486,10 @@ The local debugger handles
 - Network
 - COM
 
+## Acknowledgments
+
+* clmntb for his initial work on ``windows.security``
+
 
 [LKD_GITHUB]: https://github.com/sogeti-esec-lab/LKD/
 [SAMPLE_DIR]: https://github.com/hakril/PythonForWindows/tree/master/samples
