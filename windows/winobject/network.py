@@ -415,7 +415,7 @@ class Network(object):
         size = ctypes.c_uint(0)
         try:
             winproxy.GetExtendedTcpTable(None, ctypes.byref(size), ulAf=AF_INET)
-        except winproxy.IphlpapiError:
+        except winproxy.WinproxyError:
             pass  # Allow us to set size to the needed value
         buffer = (ctypes.c_char * size.value)()
         winproxy.GetExtendedTcpTable(buffer, ctypes.byref(size), ulAf=AF_INET)
@@ -427,7 +427,7 @@ class Network(object):
         size = ctypes.c_uint(0)
         try:
             winproxy.GetExtendedTcpTable(None, ctypes.byref(size), ulAf=AF_INET6)
-        except winproxy.IphlpapiError:
+        except winproxy.WinproxyError:
             pass  # Allow us to set size to the needed value
         buffer = (ctypes.c_char * size.value)()
         winproxy.GetExtendedTcpTable(buffer, ctypes.byref(size), ulAf=AF_INET6)

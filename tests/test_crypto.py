@@ -216,7 +216,7 @@ def test_sign_verify_fail(rawcert, rawpfx):
     assert message_to_sign in signed_blob
     # Tamper the signed mesasge content
     signed_blob = signed_blob.replace("message", "massage")
-    with pytest.raises(windows.winproxy.Kernel32Error) as excinfo:
+    with pytest.raises(windows.winproxy.WinproxyError) as excinfo:
         decoded_blob = windows.crypto.verify_signature(cert, signed_blob)
     assert excinfo.value.winerror == gdef.STATUS_INVALID_SIGNATURE
 

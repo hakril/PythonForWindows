@@ -96,7 +96,7 @@ def encrypt(cert_or_certlist, msg, algo=szOID_NIST_AES256_CBC, initvector=genini
 def decrypt(cert_store, encrypted):
     """Try to decrypt the ``encrypted`` msg with any certificate in ``cert_store``.
 
-        If there is no certificate able to decrypt the message ``Kernel32Error(winerror=0x8009200c)`` is raised.
+        If there is no certificate able to decrypt the message ``WinproxyError(winerror=0x8009200c)`` is raised.
 
         :param cert_store:
         :type cert_store: :class:`CertificateStore`

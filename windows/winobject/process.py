@@ -25,7 +25,6 @@ from windows.generated_def.winstructs import *
 from windows.generated_def.ntstatus import NtStatusException
 
 from windows.winobject import exception
-from windows.winobject import sid
 from windows.winobject import apisetmap
 
 
@@ -430,7 +429,7 @@ class Process(utils.AutoHandle):
                 v = windows.syswow64.NtQueryVirtualMemory_32_to_64(ProcessHandle=self.handle, BaseAddress=addr, MemoryInformationClass=MemoryBasicInformation, MemoryInformation=res)
             except NtStatusException as e:
                 if e.code & 0xffffffff == 0XC000000D:
-                    raise winproxy.Kernel32Error("NtQueryVirtualMemory_32_to_64")
+                    raise winproxy.WinproxyError("NtQueryVirtualMemory_32_to_64")
                 raise
             return res
 
@@ -451,7 +450,7 @@ class Process(utils.AutoHandle):
             try:
                 x = self.query_memory(addr)
                 yield x
-            except winproxy.Kernel32Error:
+            except winproxy.WinproxyError:
                 return
             addr += x.RegionSize
 
@@ -533,7 +532,7 @@ class Process(utils.AutoHandle):
 
         try:
                 size = winproxy.GetMappedFileNameW(self.handle, addr, buffer, buffer_size)
-        except winproxy.Kernel32Error as e:
+        except winproxy.WinproxyError as e:
             if e.winerror not in (gdef.ERROR_UNEXP_NET_ERR, gdef.ERROR_FILE_INVALID):
                 raise # Raise if error type is not expected: detect mapped aborted transaction
             return None
@@ -573,7 +572,7 @@ class Process(utils.AutoHandle):
         for i in itertools.count():
             try:
                 x = self.read_memory(addr + readden, read_size)
-            except winproxy.Kernel32Error as e:
+            except winproxy.WinproxyError as e:
                 if read_size == 2:
                     raise
                 # handle read_wstring at end of page
@@ -597,7 +596,7 @@ class Process(utils.AutoHandle):
         while True:
             try:
                 x = self.read_memory(addr + readden, read_size)
-            except winproxy.Kernel32Error as e:
+            except winproxy.WinproxyError as e:
                 if read_size == 2:
                     raise
                 # handle read_wstring at end of page
@@ -1177,7 +1176,7 @@ class Token(utils.AutoHandle):
 		"""
         mandatory_label = TOKEN_MANDATORY_LABEL()
         mandatory_label.Label.Attributes = 0x60
-        mandatory_label.Label.Sid = sid.EPSID.from_string("S-1-16-{0}".format(integrity))
+        mandatory_label.Label.Sid = PSID.from_string("S-1-16-{0}".format(integrity))
         self.set_informations(TokenIntegrityLevel, mandatory_label)
 
     integrity = property(get_integrity, set_integrity)

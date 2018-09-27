@@ -10,7 +10,7 @@ import windows.native_exec.simple_x64 as x64
 from generated_def.winstructs import *
 from windows.winobject import process
 from windows import winproxy
-from winproxy import NeededParameter, NtdllProxy, error_ntstatus
+from winproxy import NeededParameter
 
 # Special code for syswow64 process
 CS_32bits = 0x23
@@ -239,7 +239,7 @@ def ntquerysysteminformation_syswow64_error_check(result, func, args):
     # Ignore STATUS_INFO_LENGTH_MISMATCH if SystemInformation is None
     if result == STATUS_INFO_LENGTH_MISMATCH and not args[1]:
         return args
-    raise Kernel32Error("{0} failed with NTStatus {1}".format(func_name, hex(result)))
+    raise WinproxyError("{0} failed with NTStatus {1}".format(func_name, hex(result)))
 
 @Syswow64ApiProxy(winproxy.NtQuerySystemInformation, errcheck=ntquerysysteminformation_syswow64_error_check)
 # @Syswow64ApiProxy(winproxy.NtQuerySystemInformation)

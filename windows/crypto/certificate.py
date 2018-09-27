@@ -115,7 +115,7 @@ class CertificateStore(gdef.HCERTSTORE):
         while True:
             try:
                 cert = winproxy.CertEnumCertificatesInStore(self, last)
-            except winproxy.Kernel32Error as e:
+            except winproxy.WinproxyError as e:
                 if (e.winerror & 0xffffffff) in (gdef.CRYPT_E_NOT_FOUND,):
                     return tuple(res)
                 raise

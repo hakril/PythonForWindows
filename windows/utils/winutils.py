@@ -37,7 +37,7 @@ def get_remote_func_addr(target, dll_name, func_name):
 def is_wow_64(hProcess):
     try:
         fnIsWow64Process = get_func_addr("kernel32.dll", "IsWow64Process")
-    except winproxy.Kernel32Error:
+    except winproxy.WinproxyError:
         return False
     IsWow64Process = ctypes.WINFUNCTYPE(BOOL, HANDLE, ctypes.POINTER(BOOL))(fnIsWow64Process)
     Wow64Process = BOOL()
@@ -328,7 +328,7 @@ def ntstatus(code):
 def get_long_path(path):
     """Return the long path form for ``path``.
 
-        :raise: :class:`~windows.winproxy.Kernel32Error` if ``path`` does not exists
+        :raise: :class:`~windows.winproxy.WinproxyError` if ``path`` does not exists
         :param path: a valid Windows path
         :type path: :class:`str` | :obj:`unicode`
         :returns: :class:`str` | :obj:`unicode` -- same type as ``path`` parameter
@@ -346,7 +346,7 @@ def get_long_path(path):
 def get_short_path(path):
     """Return the short path form for ``path``
 
-        :raise: :class:`~windows.winproxy.Kernel32Error` if ``path`` does not exists
+        :raise: :class:`~windows.winproxy.WinproxyError` if ``path`` does not exists
         :param path: a valid Windows path
         :type path: :class:`str` | :obj:`unicode`
         :returns: :class:`str` | :obj:`unicode` -- same type as ``path`` parameter
