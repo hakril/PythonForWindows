@@ -102,6 +102,8 @@ class NdrVaryingCString(object):
     def pack(cls, data):
         if data is None:
             return None
+        if not data.endswith('\x00'):
+            data += '\x00'
         l = len(data)
         result = struct.pack("<2I", 0, l)
         result += data
@@ -112,6 +114,8 @@ class NdrWString(object):
     def pack(cls, data):
         if data is None:
             return None
+        if not data.endswith('\x00'):
+            data += '\x00'
         data = data.encode("utf-16-le")
         l = (len(data) / 2)
         result = struct.pack("<3I", l, 0, l)
@@ -132,6 +136,8 @@ class NdrCString(object):
     def pack(cls, data):
         if data is None:
             return None
+        if not data.endswith('\x00'):
+            data += '\x00'
         l = len(data)
         result = struct.pack("<3I", l, 0, l)
         result += data
