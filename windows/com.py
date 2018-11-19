@@ -7,6 +7,7 @@ import windows
 from windows import winproxy
 from windows.generated_def.winstructs import *
 
+import windows.generated_def as gdef
 from windows.generated_def import RPC_C_IMP_LEVEL_IMPERSONATE, CLSCTX_INPROC_SERVER
 from windows.generated_def import interfaces
 from windows.generated_def.interfaces import generate_IID, IID
@@ -35,9 +36,17 @@ def create_instance(clsiid, targetinterface, custom_iid=None, context=CLSCTX_INP
         custom_iid = targetinterface.IID
     return winproxy.CoCreateInstance(byref(clsiid), None, context, byref(custom_iid), byref(targetinterface))
 
+
+def resolve_progid(progid):
+    clsid = CLSID()
+    winproxy.CLSIDFromProgID(progid, clsid)
+    # We just filed the CLSID: refresh the __repr__
+    clsid.update_strid()
+    return clsid
+
 # Improved COM object
-# Todo: ctypes_genertation extended struct ?
-class ImprovedSAFEARRAY(SAFEARRAY):
+# Todo: ctypes_generation extended struct ?
+class SafeArray(SAFEARRAY):
         @classmethod
         def of_type(cls, addr, t):
             self = cls.from_address(addr)
@@ -46,7 +55,7 @@ class ImprovedSAFEARRAY(SAFEARRAY):
 
         @classmethod
         def from_PSAFEARRAY(self, psafearray):
-            res = cast(psafearray, POINTER(ImprovedSAFEARRAY))[0]
+            res = cast(psafearray, POINTER(SafeArray))[0]
             return res
 
         def to_list(self, t=None):
@@ -83,111 +92,155 @@ class ImprovedSAFEARRAY(SAFEARRAY):
 #VT_LPWSTR : LPWSTR,
 #}
 
-class ImprovedVariant(VARIANT):
-    @property
-    def asbstr(self):
-        if self.vt != VT_BSTR:
-            raise ValueError("asbstr on non-bstr variant")
-        #import pdb;pdb.set_trace()
-        return self._VARIANT_NAME_3.bstrVal
+# VARIANT type checker
+# Allow to guess a VARIANT_TYPE og a python value
 
-    @property
-    def aslong(self):
-        if not self.vt in [VT_I4]:
-            raise ValueError("aslong on non-long variant")
-        return self._VARIANT_NAME_3.lVal
+def never_match(value):
+    return False
 
-    @property
-    def asbool(self):
-        if not self.vt in [VT_BOOL]:
-            raise ValueError("get_bstr on non-bool variant")
-        return bool(self._VARIANT_NAME_3.boolVal)
+def check_type_null(value):
+    return value is None
 
-    @property
-    def asdispatch(self):
-        if not self.vt in [VT_DISPATCH]:
-            raise ValueError("asdispatch on non-VT_DISPATCH variant")
-        return interfaces.IDispatch(self._VARIANT_NAME_3.pdispVal)
+def check_type_i4(value):
+    # 31 ? as we may want to keep sign :)
+    return isinstance(value, (int, long)) and (value).bit_length() <= 32
 
-    @property
-    def asshort(self):
-        if not self.vt in [VT_I2]:
-            raise ValueError("asshort on non-VT_I2 variant")
-        return self._VARIANT_NAME_3.iVal
+def check_type_i8(value):
+    # 63 ? as we may want to keep sign :)
+    return isinstance(value, (int, long)) and (value).bit_length() <= 64
 
-    @property
-    def asbyte(self):
-        if not self.vt in [VT_UI1]:
-            raise ValueError("asbyte on non-VT_UI1 variant")
-        return self._VARIANT_NAME_3.bVal
+def check_type_bstr(value):
+    return isinstance(value, basestring)
 
-    @property
-    def asunknown(self):
-        if not self.vt in [VT_UNKNOWN]:
-            raise ValueError("asunknown on non-VT_UNKNOWN variant")
-        return self._VARIANT_NAME_3.punkVal
+def check_type_bool(value):
+    return isinstance(value, bool)
 
-    @property
-    def asarray(self):
-        if not self.vt & VT_ARRAY:
-            raise ValueError("asarray on non-VT_ARRAY variant")
-        # TODO: auto extract VT_TYPE for the array ?
-        #type = VT_VALUE_TO_TYPE[self.vt & VT_TYPEMASK]
-        return ImprovedSAFEARRAY.from_PSAFEARRAY(self._VARIANT_NAME_3.parray)
+def check_type_array(value):
+    return True
 
 
-    @property
-    def aslong_array(self):
-        if not self.vt & VT_I4:
-            raise ValueError("as_bstr_array on non-VT_BSTR variant")
-        return self.asarray.to_list(LONG)
+VARIAN_NAME_3_TYPE = [f[1] for f in VARIANT._fields_ if f[0] == "_VARIANT_NAME_3"][0]
 
-    def generate_asarray_property(vttype):
+empty = object()
+class Variant(VARIANT):
+    def __init__(self, value=empty, type=None):
+        if type is not None:
+            self.set_value_and_type(value, type)
+            return
+        elif value is empty:
+            self.vt = VT_EMPTY
+            return
+        self.guess_type_and_set_value(value)
+
+    # Copy raw-ctypes fields which is a descriptor :)
+    rawvt = VARIANT.vt
+
+    # Most of the value in the colunm[1]
+    # are attribute of the sub-union _VARIANT_NAME_3
+    # This union must be ctypes-anonymous for this code to works
+    # We want to access these directly from the VARIANT
+    # to allow custom descriptor for complexe type to be referenced here
+    CHECK_TYPE = [
+        # Order is important
+        # as VT_I4 check may match VT_BOOL values
+        # VT_BOOL check must be before VT_I4 one
+        (VT_BOOL, "boolVal", check_type_bool),
+        (VT_I4, "lVal", check_type_i4),
+        (VT_I8, "llVal", check_type_i8),
+        (VT_BSTR, "bstrVal", check_type_bstr),
+        (VT_NULL, None, check_type_null),
+        (VT_EMPTY, None, never_match),
+        (VT_DISPATCH, "pdispVal", never_match), # I cannot recognize DISPATCH ptr for now
+        (VT_UNKNOWN, "punkVal", never_match), # recognise PFW ComInterface ?
+        # Test: do not allow auto-creation of small int values
+        # I don't know but a feel it may confuse some API expecting VT_I4
+        (VT_I2, "iVal", never_match),
+        (VT_UI1, "bVal", never_match),
+    ]
+
+    VARIANT_TYPE_BY_NAME = {f[0]: f[1] for f in VARIAN_NAME_3_TYPE._fields_}
+    QUICK_CHECK_TYPE = {x: y for x,y, _ in CHECK_TYPE}
+
+    def get_vt(self):
+        rawvt = super(Variant, self).vt
+        return gdef.VARENUM.mapper[self.rawvt]
+
+    def set_vt(self, value):
+        self.rawvt = value
+
+    vt = property(get_vt, set_vt)
+
+    def set_value_and_type(self, value, type):
+        attr = self.QUICK_CHECK_TYPE[type]
+        # No check: user must be careful about non-match value&type
+        setattr(self, attr, value)
+        self.vt = type
+
+    def get_value_based_on_type(self):
+        rawvt = self.rawvt
+        if rawvt & VT_ARRAY:
+            realtype = rawvt & ~VT_ARRAY
+            attr = self.QUICK_CHECK_TYPE[realtype]
+            attrtype = self.VARIANT_TYPE_BY_NAME[attr]
+            array = SafeArray.from_PSAFEARRAY(self._VARIANT_NAME_3.parray)
+            return array.to_list(attrtype)
+        attr = self.QUICK_CHECK_TYPE[rawvt]
+        if attr is None:
+            return None
+        return getattr(self, attr)
+
+    def guess_type_and_set_value(self, value):
+        for t, attr, check in self.CHECK_TYPE:
+            try:
+                checkres = check(value)
+            except TypeError as e:
+                continue
+            if checkres:
+                self.vt = t
+                if attr is not None:
+                    setattr(self, attr, value)
+                return True
+        raise ValueError("Could not guess VT_TYPE for <{0}> of type <{1}>".format(value, type(value)))
+
+    value = property(get_value_based_on_type, guess_type_and_set_value)
+
+    # quick_check: bypass python lookup-limitation
+    def generate_getter(vt_type, transfo=(lambda x:x), quick_check=QUICK_CHECK_TYPE):
+        attr = quick_check[vt_type]
         @property
-        def as_array_generated(self):
-            # TODO: vt check like the others ?
-            return self.asarray.to_list(vttype)
-        return as_array_generated
+        def getter(self):
+            if not self.rawvt == vt_type:
+                raise ValueError("Invalid vt-type for attribute expected <{0}> got <{1}>".format(vt_type, self.vt))
+            return transfo(getattr(self, attr))
+        return getter
 
-    asbstr_array = generate_asarray_property(BSTR)
-    aslong_array = generate_asarray_property(LONG)
-    asbyte_array = generate_asarray_property(BYTE)
-    asbool_array = generate_asarray_property(VARIANT_BOOL)
+    asbstr = generate_getter(VT_BSTR)
+    aslong = generate_getter(VT_I4)
+    asbool = generate_getter(VT_BOOL)
+    asdispatch = generate_getter(VT_DISPATCH, transfo=interfaces.IDispatch)
+    asshort = generate_getter(VT_I2)
+    asbyte = generate_getter(VT_UI1)
+    asunknown = generate_getter(VT_UNKNOWN)
 
-    def to_pyobject(self):
-        # if self.vt & VT_ARRAY:
-            # # Something better TODO i guess
-            # if self.vt & VT_TYPEMASK == VT_BSTR:
-                # import pdb;pdb.set_trace()
-                # print("VT_TYPEMASK ARRAY")
-                # return self.asarray.to_list(BSTR)
-            # if self.vt & VT_TYPEMASK == VT_I4:
-                # import pdb;pdb.set_trace()
-                # print("VT_TYPEMASK ARRAY")
-                # return self.asarray.to_list(LONG)
-            # raise NotImplementedError("Variant of type {0:#x}".format(self.vt))
-        # use the ImprovedVariant.MAPPER that dispatch by self.vt
-        try:
-            return self.MAPPER[self.vt](self)
-        except KeyError:
-            raise NotImplementedError("Variant of type {0:#x}".format(self.vt))
+    def __repr__(self):
+        return """<{0} of type {1}>""".format(type(self).__name__, self.vt)
 
-
-ImprovedVariant.MAPPER = {
-    VT_UI1: ImprovedVariant.asbyte.fget,
-    VT_I2: ImprovedVariant.asshort.fget,
-    VT_DISPATCH: ImprovedVariant.asdispatch.fget,
-    VT_BOOL: ImprovedVariant.asbool.fget,
-    VT_I4: ImprovedVariant.aslong.fget,
-    VT_BSTR: ImprovedVariant.asbstr.fget,
-    VT_EMPTY: (lambda x: None),
-    VT_NULL: (lambda x: None),
-    VT_UNKNOWN: ImprovedVariant.asunknown.fget,
-    (VT_ARRAY | VT_BSTR): ImprovedVariant.asbstr_array.fget,
-    (VT_ARRAY | VT_I4): ImprovedVariant.aslong_array.fget,
-    (VT_ARRAY | VT_UI1): ImprovedVariant.asbyte_array.fget,
-    (VT_ARRAY | VT_BOOL): ImprovedVariant.asbool_array.fget
-}
+# Deprecated: remove me when test pass :)
+# ImprovedVariant.MAPPER = {
+    # VT_UI1: ImprovedVariant.asbyte.fget,
+    # VT_I2: ImprovedVariant.asshort.fget,
+    # VT_DISPATCH: ImprovedVariant.asdispatch.fget,
+    # VT_BOOL: ImprovedVariant.asbool.fget,
+    # VT_I4: ImprovedVariant.aslong.fget,
+    # VT_BSTR: ImprovedVariant.asbstr.fget,
+    # VT_EMPTY: (lambda x: None),
+    # VT_NULL: (lambda x: None),
+    # VT_UNKNOWN: ImprovedVariant.asunknown.fget,
+    # (VT_ARRAY | VT_BSTR): ImprovedVariant.asbstr_array.fget,
+    # (VT_ARRAY | VT_I4): ImprovedVariant.aslong_array.fget,
+    # (VT_ARRAY | VT_UI1): ImprovedVariant.asbyte_array.fget,
+    # (VT_ARRAY | VT_BOOL): ImprovedVariant.asbool_array.fget
+# }
 
 
 
