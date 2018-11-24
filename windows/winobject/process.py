@@ -26,6 +26,7 @@ from windows.generated_def.ntstatus import NtStatusException
 
 from windows.winobject import exception
 from windows.winobject import apisetmap
+from windows.winobject import token
 
 
 TimeInfo = namedtuple("TimeInfo", ["creation", "exit", "kernel", "user"])
@@ -689,7 +690,7 @@ class Process(utils.AutoHandle):
     def open_token(self, flags=TOKEN_QUERY):
         token_handle = HANDLE()
         winproxy.OpenProcessToken(self.limited_handle, flags, byref(token_handle))
-        return Token(token_handle.value)
+        return token.Token(token_handle.value)
 
 
     token = property(open_token)
@@ -889,7 +890,7 @@ class CurrentProcess(Process):
     def open_token(self, flags=TOKEN_ALL_ACCESS):
         token_handle = HANDLE()
         winproxy.OpenProcessToken(self.handle, flags, byref(token_handle))
-        return Token(token_handle.value)
+        return token.Token(token_handle.value)
 
     # TODO: use ctypes.string_ad / ctypes.wstring_at for read_string / read_wstring ?
 
@@ -1138,107 +1139,7 @@ class WinProcess(Process):
         """Exit the process"""
         return winproxy.TerminateProcess(self.handle, code)
 
-KNOW_INTEGRITY_LEVEL = [
-SECURITY_MANDATORY_UNTRUSTED_RID,
-SECURITY_MANDATORY_LOW_RID,
-SECURITY_MANDATORY_MEDIUM_RID,
-SECURITY_MANDATORY_MEDIUM_PLUS_RID,
-SECURITY_MANDATORY_HIGH_RID,
-SECURITY_MANDATORY_SYSTEM_RID,
-SECURITY_MANDATORY_PROTECTED_PROCESS_RID]
 
-know_integrity_level_mapper = gdef.FlagMapper(*KNOW_INTEGRITY_LEVEL)
-
-# Create ProcessToken and Thread Token objects ?
-# token.py ?
-class Token(utils.AutoHandle):
-    """The token of a process"""
-    def __init__(self, handle):
-        self._handle = handle
-
-    def get_integrity(self):
-        """Return the integrity level of a token
-
-        :type: :class:`int`
-		"""
-        buffer_size = self.get_required_information_size(TokenIntegrityLevel)
-        buffer = ctypes.c_buffer(buffer_size)
-        self.get_informations(TokenIntegrityLevel, buffer)
-        sid = ctypes.cast(buffer, POINTER(TOKEN_MANDATORY_LABEL))[0].Label.Sid
-        count = winproxy.GetSidSubAuthorityCount(sid)
-        integrity = winproxy.GetSidSubAuthority(sid, count[0] - 1)[0]
-        return know_integrity_level_mapper[integrity]
-
-    def set_integrity(self, integrity):
-        """Set the integrity level of a token
-
-        :param type: :class:`int`
-		"""
-        mandatory_label = TOKEN_MANDATORY_LABEL()
-        mandatory_label.Label.Attributes = 0x60
-        mandatory_label.Label.Sid = PSID.from_string("S-1-16-{0}".format(integrity))
-        self.set_informations(TokenIntegrityLevel, mandatory_label)
-
-    integrity = property(get_integrity, set_integrity)
-
-    @property
-    def is_elevated(self):
-        """``True`` if process is Admin"""
-        elevation = TOKEN_ELEVATION()
-        self.get_informations(TokenElevation, elevation)
-        return bool(elevation.TokenIsElevated)
-
-    @property
-    def token_user(self):
-        buffer_size = self.get_required_information_size(TokenUser)
-        buffer = ctypes.c_buffer(buffer_size)
-        self.get_informations(TokenUser, buffer)
-        return ctypes.cast(buffer, POINTER(TOKEN_USER))[0]
-
-    @property
-    def computername(self):
-        """The computername of the token"""
-        return self._user_and_computer_name()[1]
-
-    @property
-    def username(self):
-        """The username of the token"""
-        return self._user_and_computer_name()[0]
-
-    def duplicate(self, access_rigth=0, attributes=None, impersonation_level=gdef.SecurityImpersonation, toktype=gdef.TokenPrimary):
-        newtoken = gdef.HANDLE()
-        winproxy.DuplicateTokenEx(self.handle, access_rigth, attributes, impersonation_level, toktype, newtoken)
-        return type(self)(newtoken.value)
-
-
-    def _user_and_computer_name(self):
-        tok_usr = self.token_user
-        sid = tok_usr.User.Sid
-        usernamesize = DWORD(0x1000)
-        computernamesize = DWORD(0x1000)
-        username = ctypes.c_buffer(usernamesize.value)
-        computername = ctypes.c_buffer(computernamesize.value)
-        peUse = SID_NAME_USE()
-        winproxy.LookupAccountSidA(None, sid, username, usernamesize, computername, computernamesize, peUse)
-        return username[:usernamesize.value], computername[:computernamesize.value]
-
-    def get_informations(self, info_type, data):
-        cbsize = DWORD()
-        winproxy.GetTokenInformation(self.handle, info_type, ctypes.byref(data), ctypes.sizeof(data), ctypes.byref(cbsize))
-        return cbsize.value
-
-    def get_required_information_size(self, info_type):
-        cbsize = DWORD()
-        try:
-            winproxy.GetTokenInformation(self.handle, info_type, None, 0, ctypes.byref(cbsize))
-        except WindowsError as e:
-            if not e.winerror == ERROR_INSUFFICIENT_BUFFER:
-                raise
-        return cbsize.value
-
-    #TODO: TEST + DOC
-    def set_informations(self, info_type, infos):
-        return winproxy.SetTokenInformation(self.handle, info_type, ctypes.byref(infos), ctypes.sizeof(infos))
 
 
 def transform_ctypes_fields(struct, replacement):
