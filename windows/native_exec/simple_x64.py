@@ -317,6 +317,12 @@ def accept_as_16immediat(x):
     except struct.error:
         raise ImmediatOverflow("16bits signed Immediat overflow")
 
+def accept_as_unsigned_16immediat(x):
+    try:
+        return struct.pack("<H", x)
+    except struct.error:
+        raise ImmediatOverflow("16bits unsigned Immediat overflow")
+
 
 def accept_as_32immediat(x):
     try:
@@ -384,6 +390,18 @@ class Imm16(object):
         except ImmediatOverflow:
             return None, None
         return (1, BitArray.from_string(imm16), None)
+
+class UImm16(object):
+    def accept_arg(self, args, instr_state):
+        try:
+            x = int(args[0])
+        except (ValueError, TypeError):
+            return (None, None)
+        try:
+            imm16 = accept_as_unsigned_16immediat(x)
+        except ImmediatOverflow:
+            return None, None
+        return (1, BitArray.from_string(imm16))
 
 
 class Imm32(object):
@@ -810,7 +828,8 @@ class Xchg(Instruction):
 
 
 class Ret(Instruction):
-    encoding = [(RawBits.from_int(8, 0xc3),)]
+    encoding = [(RawBits.from_int(8, 0xc3),),
+                (RawBits.from_int(8, 0xc2), UImm16())]
 
 
 class Int(Instruction):

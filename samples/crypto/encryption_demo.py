@@ -37,6 +37,24 @@ def decrypt(src, pfxfile, password, outfile=None, **kwargs):
             f.write(decrypted)
     return decrypted
 
+
+def sign(src, pfxfile, password, outfile=None, **kwargs):
+    if password is None:
+        password = getpass.getpass()
+    pfx = crypto.import_pfx(pfxfile.read(), password)
+    # Decrypt the content of the file
+    certs = pfx.certs
+    if len(certs) != 1:
+        raise ValueError("PFX containing exactly one certificate expected for signature")
+    cert = certs[0]
+    signed = crypto.sign(cert, src.read())
+    if outfile is None:
+        print(u"Result = <{0}>".format(signed))
+    else:
+        with open(outfile, "wb") as f:
+            f.write(signed)
+    return signed
+
 PFW_TMP_KEY_CONTAINER = "PythonForWindowsTMPContainer"
 
 def genkeys(common_name, pfxpassword, outname, keysize=2048, **kwargs):
@@ -74,6 +92,7 @@ def genkeys(common_name, pfxpassword, outname, keysize=2048, **kwargs):
     # Add the newly created certificate to our TMP cert-store
     cert_store.add_certificate(certif)
     # Generate a pfx from the TMP cert-store
+    print("Password is <{0}>".format(pfxpassword))
     pfx = gencrypt.generate_pfx(cert_store, pfxpassword)
     if outname is None:
         outname = common_name.lower()
@@ -103,8 +122,10 @@ def genkeys(common_name, pfxpassword, outname, keysize=2048, **kwargs):
 ### openssl asn1parse -inform DER -in {file}
 
 
-parser = argparse.ArgumentParser(prog=__file__)
-subparsers = parser.add_subparsers(description='valid subcommands',)
+
+
+parser = argparse.ArgumentParser(prog=__file__, formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+subparsers = parser.add_subparsers(description='valid subcommands')
 
 cryptparse = subparsers.add_parser('crypt')
 cryptparse.set_defaults(func=crypt)
@@ -121,7 +142,16 @@ decryptparse.add_argument('pfxfile', type=argparse.FileType('rb'), help='PFX fil
 decryptparse.add_argument('--password', help='Password of the PFX')
 decryptparse.add_argument('--outfile', default=None, help='The outputfile default is print')
 
-genkeysparse = subparsers.add_parser('genkey')
+
+decryptparse = subparsers.add_parser('sign')
+decryptparse.set_defaults(func=sign)
+decryptparse.add_argument('src', type=argparse.FileType('rb'), help='File to sign')
+decryptparse.add_argument('pfxfile', type=argparse.FileType('rb'), help='PFX file to use')
+decryptparse.add_argument('--password', help='Password of the PFX')
+decryptparse.add_argument('--outfile', default=None, help='The outputfile default is print')
+
+
+genkeysparse = subparsers.add_parser('genkey', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 genkeysparse.set_defaults(func=genkeys)
 genkeysparse.add_argument('common_name', nargs='?', metavar='CommonName', default='DEFAULT', help='the common name of the certificate')
 genkeysparse.add_argument('outname', nargs='?',help='The filename base for the generated files')

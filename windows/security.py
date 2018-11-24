@@ -356,6 +356,7 @@ class Acl(gdef.ACL):
     def __repr__(self):
         return "<Acl count={0}>".format(self.AceCount)
 
+PAcl = ctypes.POINTER(Acl)
 
 # Security descriptor
 
@@ -416,7 +417,7 @@ class SecurityDescriptor(gdef.PSECURITY_DESCRIPTOR):
         winproxy.GetSecurityDescriptorDacl(self, dacl_present, pdacl, lpbDaclDefaulted)
         if not dacl_present or not pdacl:
             return None
-        return ctypes.cast(pdacl, ctypes.POINTER(Acl))[0]
+        return ctypes.cast(pdacl, PAcl)[0]
 
     @property
     def sacl(self):
@@ -426,7 +427,7 @@ class SecurityDescriptor(gdef.PSECURITY_DESCRIPTOR):
         winproxy.GetSecurityDescriptorSacl(self, sacl_present, psacl, lpbSaclDefaulted)
         if not sacl_present or not psacl:
             return None
-        return ctypes.cast(psacl, ctypes.POINTER(Acl))[0]
+        return ctypes.cast(psacl, PAcl)[0]
 
     # Constructors
     @classmethod

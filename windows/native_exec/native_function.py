@@ -63,7 +63,8 @@ class CustomAllocator(object):
 
     def __init__(self):
         self.maps = []
-        self.get_new_page(0x1000)
+        self.cur_offset = 0
+        self.cur_page_size = 0 # Force get_new_page on first request
         self.names = []
 
     @classmethod

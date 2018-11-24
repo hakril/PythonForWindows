@@ -785,7 +785,8 @@ class Cpuid(Instruction):
 
 
 class Ret(Instruction):
-    encoding = [(RawBits.from_int(8, 0xc3),)]
+    encoding = [(RawBits.from_int(8, 0xc3),),
+                (RawBits.from_int(8, 0xc2), UImm16())]
 
 
 class ScasB(Instruction):
