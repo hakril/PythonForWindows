@@ -6,6 +6,14 @@ TODO:
 - Document / fix / release:
     - windows.bits
     - window
+- WMI
+    - verif samples
+    - add create_process sample to doc
+    - rewrite / check doc + samples
+- Token
+    - Finish code
+    - samples
+    - doc :)
 
 ======
 
@@ -42,9 +50,8 @@ TODO:
     - winobject\exception.py
         - large part could be rewritten with ctypes-generation extended-def
 
-    - add winobject/window.py + winobject/kernobj.py to System()
-        - Some test/doc on both
-
+    - add winobject/window.py
+        - Some test/doc
 
     - wintrust doc:
         add : https://blogs.msdn.microsoft.com/winsdk/2016/01/05/why-cryptcatadmincalchashfromfilehandle-fails-with-a-seemingly-unexpected-error-code/

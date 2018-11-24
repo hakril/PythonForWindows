@@ -8,86 +8,6 @@ from windows.dbgprint import dbgprint
 from windows import winproxy
 
 
-## TESTING Improved Buffer code ###
-
-class ImprovedCtypesBufferBase(object):
-    def cast(self, type):
-        return ctypes.cast(self, type)
-
-    def as_string(self):
-        return ctypes.cast(self, LPCSTR).value
-
-    def as_wstring(self):
-        return ctypes.cast(self, LPWSTR).value
-
-    def as_pvoid(self):
-        return self.cast(gdef.PVOID)
-
-def buffer(size): # Test: DONT USE
-    raise NotImplementedError("utils.buffer")
-    buf = ctypes.create_string_buffer(size)
-    buf.size = size
-    buf.address = ctypes.addressof(buf)
-
-    class ImprovedCtypesBufferImpl(ctypes.Array):
-        _length_ = size
-        _type_ = ctypes.c_char
-        def lol(self):
-            return "lol"
-
-    return ImprovedCtypesBufferImpl()
-
-
-def wbuffer(size): # Test: DONT USE
-    raise NotImplementedError("utils.buffer")
-    buf = ctypes.create_string_buffer(size)
-    buf.size = size
-    buf.address = ctypes.addressof(buf)
-
-    class ImprovedCtypesBufferImpl(ctypes.Array):
-        _length_ = size
-        _type_ = ctypes.c_wchar
-        def lol(self):
-            return "lol"
-
-    return ImprovedCtypesBufferImpl()
-
-# Used in windows.crypto.sign_verify for test
-class PartialBufferType(object):
-    def __init__(self, type, size=None):
-        self.type = type
-        self.size = None
-
-    @staticmethod
-    def create_real_implem(item_type, size):
-        cls_name = "YOLO<IMPLE><{0}><{1}>".format(item_type.__name__, size)
-
-        class TmpImplemArrayName(ctypes.Array, ImprovedCtypesBufferBase):
-            _type_ = item_type
-            _length_ = size
-
-        TmpImplemArrayName.__name__ = cls_name
-        return TmpImplemArrayName
-
-    def from_buffer(self, buffer):
-        return self.create_real_implem(self.type, len(buffer)).from_buffer(buffer)
-
-    def from_buffer_copy(self, buffer):
-        return self.create_real_implem(self.type, len(buffer)).from_buffer_copy(buffer)
-
-    def __call__(self, *args):
-        return self.create_real_implem(self.type, len(args))(*args)
-
-CharBuffer = PartialBufferType(gdef.CHAR)
-# CharBuffer vs CharString that append the +1 ?
-
-def buffer(type, size=None):
-    if size is None:
-        return PartialBufferType(type)
-    return PartialBufferType.create_real_implem(type, size)
-
-
-### Other utils ###
 
 def fixedpropety(f):
     cache_name = "_" + f.__name__
@@ -106,7 +26,15 @@ def transform_ctypes_fields(struct, replacement):
     return [(name, replacement.get(name, type)) for name, type in struct._fields_]
 
 
-def print_ctypes_struct(struct, name="", ident=0, hexa=False):
+def print_ctypes_struct(struct, name="", hexa=False):
+    sprint_method = getattr(struct, "__sprint__", None)
+    if sprint_method is not None:
+        # Allow function to accept 'hexa' param
+        # But handle function that don't, So we can just do:
+        #  __sprint__ = __repr__
+        print("{0} -> {1}".format(name, sprint_method()))
+        return
+
     if isinstance(struct, _ctypes._Pointer):
         if ctypes.cast(struct, ctypes.c_void_p).value is None:
             print("{0} -> NULL".format(name))
