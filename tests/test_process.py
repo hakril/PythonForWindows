@@ -59,13 +59,6 @@ class TestCurrentProcessWithCheckGarbage(object):
         sections[0].start
         sections[0].size
 
-    def test_token_info(self):
-        token = windows.current_process.token
-        assert isinstance(token.computername, basestring)
-        assert isinstance(token.username, basestring)
-        assert isinstance(token.integrity, (int, long))
-        assert isinstance(token.is_elevated, (bool))
-
     def test_local_ProcessParameters_LSA_UNICODE_STRING(self):
         image_path_from_process_params = windows.current_process.peb.ProcessParameters.contents.ImagePathName.str.lower()
         image_path_from_module = windows.current_process.peb.modules[0].fullname.lower()
@@ -417,18 +410,6 @@ class TestProcessWithCheckGarbage(object):
         image_path_from_process_params = proc32_64.peb.ProcessParameters.contents.ImagePathName.str.lower()
         image_path_from_module = proc32_64.peb.modules[0].fullname.lower()
         assert image_path_from_process_params == image_path_from_module
-
-    def test_lower_integrity(self, proc32):
-        # Lowering the integrity in remote process
-        # Because we don't want to mess with the token of our testing process
-
-        proc32.execute_python("import windows")
-        # We stock the handle becase lowering the integrity
-        # will mess with token retrieval
-        proc32.execute_python("token = windows.current_process.token")
-        proc32.execute_python("token.integrity = 123")
-        # execute_python will raise this in our own process :)
-        proc32.execute_python("assert token.integrity == 123")
 
     def test_remote_assertion_error(self, proc32):
         proc32.execute_python("assert 1 == 1")

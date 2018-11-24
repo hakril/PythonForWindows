@@ -51,16 +51,20 @@ def hexdump(string, start_addr=0):
         result += linebuf+"\n"
     return result
 
+class StartStepBP(dbg.breakpoints.HXBreakpoint):
+    def trigger(self, dbg, exc):
+        dbg.del_bp(self)
+        dbg.on_single_step(exc) # Trigger single step processing
 
 class CodeTesteur(dbg.Debugger):
-    def __init__(self, process, code, register_start={}):
+    def __init__(self, process, code, register_start={}, steps=False):
         super(CodeTesteur, self).__init__(process)
 
         self.initial_code = code
         code += "\xcc"
 
-        code_addr = self.write_code_in_target(process, code)
-        register_start["pc"] = code_addr
+        self.code_addr = self.write_code_in_target(process, code)
+        register_start["pc"] = self.code_addr
         self.thread_exec = process.threads[0]
         self.context_exec = self.thread_exec.context
         self.setup_target_context(self.context_exec, register_start)
@@ -71,6 +75,12 @@ class CodeTesteur(dbg.Debugger):
         self.thread_exec.set_context(self.context_exec)
         self.thread_exec.resume()
         self.init_breakpoint = False
+        # Test code
+        if steps:
+            self.steps = True
+            self.add_bp(StartStepBP(self.code_addr))
+            self.last_context = self.context_exec
+            self.last_code = self.initial_code
 
     def write_code_in_target(self, process, code):
         addr = process.virtual_alloc(len(code))
@@ -82,6 +92,15 @@ class CodeTesteur(dbg.Debugger):
             if not hasattr(ctx, name):
                 raise ValueError("Unknown register to setup <{0}>".format(name))
             setattr(ctx, name, value)
+
+    def on_single_step(self, x):
+        print("* New step !")
+        # print("EIP = {0:#x}".format(self.current_thread.context.pc))
+        self.report_ctx_diff(self.last_context, self.current_thread.context)
+        self.last_context = self.current_thread.context
+        self.last_code = self.report_code_diff(self.last_code)
+        self.single_step()
+        print ("")
 
     def on_exception(self, x):
         exc_code = x.ExceptionRecord.ExceptionCode
@@ -97,12 +116,18 @@ class CodeTesteur(dbg.Debugger):
             print("<Normal terminaison>")
         else:
             print("<{0}> at <{1:#x}>".format(exc_code, exc_addr))
+            if exc_code == EXCEPTION_ACCESS_VIOLATION:
+                exc_infos = x.ExceptionRecord.ExceptionInformation
+                read_write = "write" if exc_infos[0] else "read"
+                target_addr = exc_infos[1]
+                print("   * Access of type <{0}> at address <{1:#x}>".format(read_write, target_addr))
         self.report_ctx_diff(self.context_exec, ctx)
+        self.report_code_diff(self.initial_code)
         self.current_process.exit()
         return
 
     def report_ctx_diff(self, start, now):
-        print("==DIFF==")
+        print("== DIFF ==")
         for name, start_value in start.regs():
             now_value = getattr(now, name)
             if start_value != now_value:
@@ -113,8 +138,19 @@ class CodeTesteur(dbg.Debugger):
             data = self.current_process.read_memory(now.sp, start.sp - now.sp)
             print(hexdump(data, start.sp))
 
+    def report_code_diff(self, initial_code):
+        code_size = len(initial_code)
+        final_code = self.current_process.read_memory(self.code_addr, code_size)
+        if final_code == initial_code:
+            return initial_code
+        print("== Executable code DIFF == ")
+        print("Before:")
+        print(hexdump(initial_code, self.code_addr))
+        print("After:")
+        print(hexdump(final_code, self.code_addr))
+        return final_code
 
-def test_code_x86(code, regs=None, raw=False, **kwargs):
+def test_code_x86(code, regs=None, raw=False, steps=False, **kwargs):
     print("Testing x86 code")
     process = windows.test.pop_proc_32(dwCreationFlags=DEBUG_PROCESS)
     if raw:
@@ -133,7 +169,7 @@ def test_code_x86(code, regs=None, raw=False, **kwargs):
             start_register[name] = value
 
 
-    x = CodeTesteur(process, code, start_register)
+    x = CodeTesteur(process, code, start_register, steps)
     x.loop()
 
 def test_code_x64(code, regs=None, raw=False, **kwargs):
@@ -156,7 +192,6 @@ def test_code_x64(code, regs=None, raw=False, **kwargs):
             value = int(value.strip(), 0)
             start_register[name] = value
 
-
     x = CodeTesteur(process, code, start_register)
     x.loop()
 
@@ -165,6 +200,7 @@ parser = argparse.ArgumentParser(prog=__file__)
 
 parser.add_argument('--x64', action='store_const', dest="func", const=test_code_x64, default=test_code_x86, help='Code is x64')
 parser.add_argument('--raw', action='store_true', help='argument is raw assembled code (in hex)')
+parser.add_argument('--steps', action='store_true', help='Get all step info')
 parser.add_argument('code', help='The code to execute')
 parser.add_argument('regs', nargs="?", help='The default values of the registers')
 

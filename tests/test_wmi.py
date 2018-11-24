@@ -12,6 +12,18 @@ from pfwtest import *
 # does not allow to perform the request we want..
 # So we try & do it ourself here.
 
+
+pytestmark = pytest.mark.usefixtures("init_com_security")
+
+@pytest.fixture(scope="module")
+def init_com_security():
+    # Init com security if not done
+    try:
+        return windows.com.initsecurity()
+    except WindowsError:
+        pass
+
+
 wmimanager = windows.system.wmi
 
 @pytest.mark.parametrize("name, expected_cls", [
@@ -27,7 +39,6 @@ def test_wmimanager_getnamespace(name, expected_cls):
 def test_wmimanager_subnamespaces():
     subnamespaces = wmimanager.get_subnamespaces("root")
     subnamespaces = [x.lower() for x in subnamespaces]
-
     assert "cimv2" in subnamespaces
     assert "security" in subnamespaces
     assert "subscription" in subnamespaces
@@ -74,7 +85,6 @@ def test_get_object(name, cls):
 
 # Todo: test
 #   - put_instance
-#   - exec_method
 
 @pytest.mark.parametrize("cmdline", [r"c:\windows\notepad.exe trolol.exe"])
 def test_exec_method_Win32_Process_create(cmdline):
