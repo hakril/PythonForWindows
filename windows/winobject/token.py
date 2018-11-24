@@ -122,7 +122,7 @@ class Token(utils.AutoHandle):
     def _get_token_infomations(self, infos_class, rtype):
         required_size = self._get_required_token_information_size(infos_class)
         requested_size = max(required_size, ctypes.sizeof(rtype))
-        buffer = utils.buffer_type(rtype, 1)(size=requested_size)
+        buffer = utils.BUFFER(rtype, 1)(size=requested_size)
         cbsize = gdef.DWORD()
         winproxy.GetTokenInformation(self.handle, infos_class, buffer, buffer.real_size, cbsize)
         return buffer[0]
