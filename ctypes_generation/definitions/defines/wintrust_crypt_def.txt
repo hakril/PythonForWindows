@@ -680,3 +680,62 @@
 #define CERT_SYSTEM_STORE_LOCAL_MACHINE_GROUP_POLICY      (CERT_SYSTEM_STORE_LOCAL_MACHINE_GROUP_POLICY_ID << CERT_SYSTEM_STORE_LOCATION_SHIFT)
 #define CERT_SYSTEM_STORE_LOCAL_MACHINE_ENTERPRISE      (CERT_SYSTEM_STORE_LOCAL_MACHINE_ENTERPRISE_ID << CERT_SYSTEM_STORE_LOCATION_SHIFT)
 
+//+-------------------------------------------------------------------------
+//  Message types
+//--------------------------------------------------------------------------
+#define CMSG_DATA                    1
+#define CMSG_SIGNED                  2
+#define CMSG_ENVELOPED               3
+#define CMSG_SIGNED_AND_ENVELOPED    4
+#define CMSG_HASHED                  5
+#define CMSG_ENCRYPTED               6
+
+//+-------------------------------------------------------------------------
+//  Open dwFlags
+//--------------------------------------------------------------------------
+#define CMSG_BARE_CONTENT_FLAG              0x00000001
+#define CMSG_LENGTH_ONLY_FLAG               0x00000002
+#define CMSG_DETACHED_FLAG                  0x00000004
+#define CMSG_AUTHENTICATED_ATTRIBUTES_FLAG  0x00000008
+#define CMSG_CONTENTS_OCTETS_FLAG           0x00000010
+#define CMSG_MAX_LENGTH_FLAG                0x00000020
+
+// When set, nonData type inner content is encapsulated within an
+// OCTET STRING. Applicable to both Signed and Enveloped messages.
+#define CMSG_CMS_ENCAPSULATED_CONTENT_FLAG  0x00000040
+
+// If set, then, the hCryptProv passed to CryptMsgOpenToEncode or
+// CryptMsgOpenToDecode is released on the final CryptMsgClose.
+// Not released if CryptMsgOpenToEncode or CryptMsgOpenToDecode fails.
+//
+// Also applies to hNCryptKey where applicable.
+//
+// Note, the envelope recipient hCryptProv's aren't released.
+#define CMSG_CRYPT_RELEASE_CONTEXT_FLAG     0x00008000
+
+
+#define CMSG_INDEFINITE_LENGTH       (0xFFFFFFFF)
+
+
+//+-------------------------------------------------------------------------
+//  Message control types
+//--------------------------------------------------------------------------
+#define CMSG_CTRL_VERIFY_SIGNATURE       1
+#define CMSG_CTRL_DECRYPT                2
+#define CMSG_CTRL_VERIFY_HASH            5
+#define CMSG_CTRL_ADD_SIGNER             6
+#define CMSG_CTRL_DEL_SIGNER             7
+#define CMSG_CTRL_ADD_SIGNER_UNAUTH_ATTR 8
+#define CMSG_CTRL_DEL_SIGNER_UNAUTH_ATTR 9
+#define CMSG_CTRL_ADD_CERT               10
+#define CMSG_CTRL_DEL_CERT               11
+#define CMSG_CTRL_ADD_CRL                12
+#define CMSG_CTRL_DEL_CRL                13
+#define CMSG_CTRL_ADD_ATTR_CERT          14
+#define CMSG_CTRL_DEL_ATTR_CERT          15
+#define CMSG_CTRL_KEY_TRANS_DECRYPT      16
+#define CMSG_CTRL_KEY_AGREE_DECRYPT      17
+#define CMSG_CTRL_MAIL_LIST_DECRYPT      18
+#define CMSG_CTRL_VERIFY_SIGNATURE_EX    19
+#define CMSG_CTRL_ADD_CMS_SIGNER_INFO    20
+#define CMSG_CTRL_ENABLE_STRONG_SIGNATURE 21

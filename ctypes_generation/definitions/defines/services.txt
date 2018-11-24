@@ -1,0 +1,20 @@
+//
+// Service trigger types
+//
+#define SERVICE_TRIGGER_TYPE_DEVICE_INTERFACE_ARRIVAL               1
+#define SERVICE_TRIGGER_TYPE_IP_ADDRESS_AVAILABILITY                2
+#define SERVICE_TRIGGER_TYPE_DOMAIN_JOIN                            3
+#define SERVICE_TRIGGER_TYPE_FIREWALL_PORT_EVENT                    4
+#define SERVICE_TRIGGER_TYPE_GROUP_POLICY                           5
+#define SERVICE_TRIGGER_TYPE_NETWORK_ENDPOINT                       6
+#define SERVICE_TRIGGER_TYPE_CUSTOM_SYSTEM_STATE_CHANGE             7
+#define SERVICE_TRIGGER_TYPE_CUSTOM                                 20
+
+//
+// Service trigger data types
+//
+#define SERVICE_TRIGGER_DATA_TYPE_BINARY                            1
+#define SERVICE_TRIGGER_DATA_TYPE_STRING                            2
+#define SERVICE_TRIGGER_DATA_TYPE_LEVEL                             3
+#define SERVICE_TRIGGER_DATA_TYPE_KEYWORD_ANY                       4
+#define SERVICE_TRIGGER_DATA_TYPE_KEYWORD_ALL                       5

@@ -134,3 +134,12 @@ DWORD WINAPI GetWindowThreadProcessId(
   _Out_opt_ LPDWORD lpdwProcessId
 );
 
+HWND FindWindowA(
+  LPCSTR lpClassName,
+  LPCSTR lpWindowName
+);
+
+HWND FindWindowW(
+  LPCWSTR lpClassName,
+  LPCWSTR lpWindowName
+);

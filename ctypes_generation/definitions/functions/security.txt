@@ -94,6 +94,12 @@ BOOL EqualSid(
   PSID pSid2
 );
 
+BOOL CopySid(
+  DWORD nDestinationSidLength,
+  PSID  pDestinationSid,
+  PSID  pSourceSid
+);
+
 
 PSID_IDENTIFIER_AUTHORITY WINAPI GetSidIdentifierAuthority(
     _In_ PSID pSid

@@ -242,6 +242,22 @@ typedef struct _CERT_INFO {
 } CERT_INFO, *PCERT_INFO;
 
 
+typedef struct _CERT_ISSUER_SERIAL_NUMBER {
+  CERT_NAME_BLOB     Issuer;
+  CRYPT_INTEGER_BLOB SerialNumber;
+} CERT_ISSUER_SERIAL_NUMBER, *PCERT_ISSUER_SERIAL_NUMBER;
+
+typedef union _TMPUNION_CERT_ID {
+    CERT_ISSUER_SERIAL_NUMBER IssuerSerialNumber;
+    CRYPT_HASH_BLOB           KeyId;
+    CRYPT_HASH_BLOB           HashId;
+} TMPUNION_CERT_ID;
+
+typedef struct _CERT_ID {
+  DWORD dwIdChoice;
+  TMPUNION_CERT_ID DUMMYUNIONNAME;
+} CERT_ID, *PCERT_ID;
+
 typedef struct _CERT_CONTEXT {
     DWORD                   dwCertEncodingType;
     BYTE                    *pbCertEncoded;
@@ -249,6 +265,7 @@ typedef struct _CERT_CONTEXT {
     PCERT_INFO              pCertInfo;
     HCERTSTORE              hCertStore;
 } CERT_CONTEXT, *PCERT_CONTEXT, *PCCERT_CONTEXT;
+
 
 
 typedef struct WINTRUST_SGNR_INFO_
@@ -561,3 +578,120 @@ typedef struct _CRYPT_ENCODE_PARA {
   PVOID  pfnFree;
 } CRYPT_ENCODE_PARA, *PCRYPT_ENCODE_PARA;
 
+typedef union _TMPUNION_CMSG_MAIL_LIST_RECIPIENT_ENCODE_INFO {
+    HCRYPTKEY hKeyEncryptionKey;
+    PVOID     pvKeyEncryptionKey;
+}TMPUNION_CMSG_MAIL_LIST_RECIPIENT_ENCODE_INFO;
+
+typedef struct _CMSG_MAIL_LIST_RECIPIENT_ENCODE_INFO {
+  DWORD                       cbSize;
+  CRYPT_ALGORITHM_IDENTIFIER  KeyEncryptionAlgorithm;
+  PVOID                       pvKeyEncryptionAuxInfo;
+  HCRYPTPROV                  hCryptProv;
+  DWORD                       dwKeyChoice;
+  TMPUNION_CMSG_MAIL_LIST_RECIPIENT_ENCODE_INFO DUMMYUNIONNAME;
+  CRYPT_DATA_BLOB             KeyId;
+  FILETIME                    Date;
+  PCRYPT_ATTRIBUTE_TYPE_VALUE pOtherAttr;
+} CMSG_MAIL_LIST_RECIPIENT_ENCODE_INFO, *PCMSG_MAIL_LIST_RECIPIENT_ENCODE_INFO;
+
+
+
+typedef struct _CMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO {
+  DWORD                      cbSize;
+  CRYPT_ALGORITHM_IDENTIFIER KeyEncryptionAlgorithm;
+  PVOID                      pvKeyEncryptionAuxInfo;
+  HCRYPTPROV_LEGACY          hCryptProv;
+  CRYPT_BIT_BLOB             RecipientPublicKey;
+  CERT_ID                    RecipientId;
+} CMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO, *PCMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO;
+
+typedef struct _CMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO {
+  DWORD                      cbSize;
+  CRYPT_ALGORITHM_IDENTIFIER KeyEncryptionAlgorithm;
+  PVOID                      pvKeyEncryptionAuxInfo;
+  HCRYPTPROV_LEGACY          hCryptProv;
+  CRYPT_BIT_BLOB             RecipientPublicKey;
+  CERT_ID                    RecipientId;
+} CMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO, *PCMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO;
+
+
+typedef union _TMPUNION_CMSG_KEY_AGREE_RECIPIENT_ENCODE_INFO {
+    PCRYPT_ALGORITHM_IDENTIFIER pEphemeralAlgorithm;
+    PCERT_ID                    pSenderId;
+}TMPUNION_CMSG_KEY_AGREE_RECIPIENT_ENCODE_INFO;
+
+typedef struct _CMSG_RECIPIENT_ENCRYPTED_KEY_ENCODE_INFO {
+  DWORD                       cbSize;
+  CRYPT_BIT_BLOB              RecipientPublicKey;
+  CERT_ID                     RecipientId;
+  FILETIME                    Date;
+  PCRYPT_ATTRIBUTE_TYPE_VALUE pOtherAttr;
+} CMSG_RECIPIENT_ENCRYPTED_KEY_ENCODE_INFO, *PCMSG_RECIPIENT_ENCRYPTED_KEY_ENCODE_INFO;
+
+typedef struct _CMSG_KEY_AGREE_RECIPIENT_ENCODE_INFO {
+  DWORD                                     cbSize;
+  CRYPT_ALGORITHM_IDENTIFIER                KeyEncryptionAlgorithm;
+  PVOID                                     pvKeyEncryptionAuxInfo;
+  CRYPT_ALGORITHM_IDENTIFIER                KeyWrapAlgorithm;
+  PVOID                                     pvKeyWrapAuxInfo;
+  HCRYPTPROV_LEGACY                         hCryptProv;
+  DWORD                                     dwKeySpec;
+  DWORD                                     dwKeyChoice;
+  TMPUNION_CMSG_KEY_AGREE_RECIPIENT_ENCODE_INFO DUMMYUNIONNAME;
+  CRYPT_DATA_BLOB                           UserKeyingMaterial;
+  DWORD                                     cRecipientEncryptedKeys;
+  PCMSG_RECIPIENT_ENCRYPTED_KEY_ENCODE_INFO *rgpRecipientEncryptedKeys;
+} CMSG_KEY_AGREE_RECIPIENT_ENCODE_INFO, *PCMSG_KEY_AGREE_RECIPIENT_ENCODE_INFO;
+
+
+typedef union _TMP_CMSG_RECIPIENT_ENCODE_INFO_UNION {
+    PCMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO pKeyTrans;
+    PCMSG_KEY_AGREE_RECIPIENT_ENCODE_INFO pKeyAgree;
+    PCMSG_MAIL_LIST_RECIPIENT_ENCODE_INFO pMailList;
+} TMP_CMSG_RECIPIENT_ENCODE_INFO_UNION;
+
+typedef struct _CMSG_RECIPIENT_ENCODE_INFO {
+  DWORD dwRecipientChoice;
+  TMP_CMSG_RECIPIENT_ENCODE_INFO_UNION DUMMYUNIONNAME;
+} CMSG_RECIPIENT_ENCODE_INFO, *PCMSG_RECIPIENT_ENCODE_INFO;
+
+
+typedef struct _CMSG_ENVELOPED_ENCODE_INFO {
+  DWORD                       cbSize;
+  HCRYPTPROV_LEGACY           hCryptProv;
+  CRYPT_ALGORITHM_IDENTIFIER  ContentEncryptionAlgorithm;
+  PVOID                       pvEncryptionAuxInfo;
+  DWORD                       cRecipients;
+  PCERT_INFO                  *rgpRecipients;
+  PCMSG_RECIPIENT_ENCODE_INFO rgCmsRecipients;
+  DWORD                       cCertEncoded;
+  PCERT_BLOB                  rgCertEncoded;
+  DWORD                       cCrlEncoded;
+  PCRL_BLOB                   rgCrlEncoded;
+  DWORD                       cAttrCertEncoded;
+  PCERT_BLOB                  rgAttrCertEncoded;
+  DWORD                       cUnprotectedAttr;
+  PCRYPT_ATTRIBUTE            rgUnprotectedAttr;
+} CMSG_ENVELOPED_ENCODE_INFO, *PCMSG_ENVELOPED_ENCODE_INFO;
+
+
+typedef struct _CMSG_STREAM_INFO {
+  DWORD                  cbContent;
+  PVOID pfnStreamOutput;
+  PVOID                  pvArg;
+} CMSG_STREAM_INFO, *PCMSG_STREAM_INFO;
+
+
+typedef union _TMPUNION_CMSG_CTRL_DECRYPT_PARA {
+    HCRYPTPROV        hCryptProv;
+    NCRYPT_KEY_HANDLE hNCryptKey;
+} TMPUNION_CMSG_CTRL_DECRYPT_PARA;
+
+
+typedef struct _CMSG_CTRL_DECRYPT_PARA {
+  DWORD cbSize;
+  TMPUNION_CMSG_CTRL_DECRYPT_PARA DUMMYUNIONNAME;
+  DWORD dwKeySpec;
+  DWORD dwRecipientIndex;
+} CMSG_CTRL_DECRYPT_PARA, *PCMSG_CTRL_DECRYPT_PARA;

@@ -8,8 +8,6 @@ class PsapiProxy(ApiProxy):
     APIDLL = "psapi"
     default_error_check = staticmethod(fail_on_zero)
 
-    # TODO: fallback to kernel32 for old version
-
 
 @PsapiProxy()
 def GetMappedFileNameW(hProcess, lpv, lpFilename, nSize=None):
@@ -17,23 +15,19 @@ def GetMappedFileNameW(hProcess, lpv, lpFilename, nSize=None):
         nSize = ctypes.sizeof(lpFilename)
     return GetMappedFileNameW.ctypes_function(hProcess, lpv, lpFilename, nSize)
 
-
 @PsapiProxy()
 def GetMappedFileNameA(hProcess, lpv, lpFilename, nSize=None):
     if nSize is None:
         nSize = ctypes.sizeof(lpFilename)
     return GetMappedFileNameA.ctypes_function(hProcess, lpv, lpFilename, nSize)
 
-
 @PsapiProxy()
 def QueryWorkingSet(hProcess, pv, cb):
     return QueryWorkingSet.ctypes_function(hProcess, pv, cb)
 
-
 @PsapiProxy()
 def QueryWorkingSetEx(hProcess, pv, cb):
     return QueryWorkingSetEx.ctypes_function(hProcess, pv, cb)
-
 
 @PsapiProxy()
 def GetModuleBaseNameA(hProcess, hModule, lpBaseName, nSize=None):

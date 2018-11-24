@@ -57,6 +57,14 @@ def NtQueryVolumeInformationFile(FileHandle, IoStatusBlock, FsInformation, Lengt
         Length = ctypes.sizeof(FsInformation)
     return NtQueryVolumeInformationFile.ctypes_function(FileHandle, IoStatusBlock, FsInformation, Length, FsInformationClass)
 
+@NtdllProxy()
+def NtQueryEaFile(FileHandle, IoStatusBlock, Buffer, Length, ReturnSingleEntry, EaList, EaListLength, EaIndex, RestartScan):
+    return NtQueryEaFile.ctypes_function(FileHandle, IoStatusBlock, Buffer, Length, ReturnSingleEntry, EaList, EaListLength, EaIndex, RestartScan)
+
+@NtdllProxy()
+def NtSetEaFile(FileHandle, IoStatusBlock, Buffer, Length):
+    return NtSetEaFile.ctypes_function(FileHandle, IoStatusBlock, Buffer, Length)
+
 
 # Process
 
@@ -340,6 +348,12 @@ def NtQueryLicenseValue(Name, Type, Buffer, Length=None, DataLength=NeededParame
 def RtlEqualUnicodeString(String1, String2, CaseInSensitive):
    return RtlEqualUnicodeString.ctypes_function(String1, String2, CaseInSensitive)
 
+
+# Firmware
+
+@NtdllProxy()
+def NtEnumerateSystemEnvironmentValuesEx(InformationClass, Buffer, BufferLength):
+    return NtEnumerateSystemEnvironmentValuesEx.ctypes_function(InformationClass, Buffer, BufferLength)
 
 
 #########

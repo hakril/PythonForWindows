@@ -21,8 +21,10 @@ class _GUID(INITIAL_GUID):
         if getattr(self, "name", notpresent) is notpresent:
             self.name = None
         if self.name is None:
-            return '<IID "{0}">'.format(self.strid.upper())
-        return '<IID "{0}({1})">'.format(self.strid.upper(), self.name)
+            return '<GUID "{0}">'.format(self.strid.upper())
+        return '<GUID "{0}({1})">'.format(self.strid.upper(), self.name)
+
+    __sprint__ = __repr__
 
     def to_string(self):
         data4_format = "{0:02X}{1:02X}-" + "".join("{{{i}:02X}}".format(i=i + 2) for i in range(6))

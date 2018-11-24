@@ -26,6 +26,12 @@ class _MEMORY_BASIC_INFORMATION64(INITIAL_MEMORY_BASIC_INFORMATION64):
         # Finally make a chooser somewhere ?
         return self.PROTECT_MAPPER[raw_protect]
 
+    @property
+    def AllocationProtect(self):
+        raw_protect = super(_MEMORY_BASIC_INFORMATION32, self).AllocationProtect
+        # Finally make a chooser somewhere ?
+        return self.PROTECT_MAPPER[raw_protect]
+
     def __repr__(self):
         return "<MEMORY_BASIC_INFORMATION64 BaseAddress={0:#08x} RegionSize={1:#08x} State={2} Type={3} Protect={4}>".format(
             self.BaseAddress, self.RegionSize, self.State, self.Type, self.Protect)

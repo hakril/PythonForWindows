@@ -458,3 +458,60 @@ PCCERT_CONTEXT PfnCryptGetSignerCertificate(
   PCERT_INFO pSignerId,
   HCERTSTORE hMsgCertStore
 );
+
+
+BOOL CryptEncrypt(
+  HCRYPTKEY  hKey,
+  HCRYPTHASH hHash,
+  BOOL       Final,
+  DWORD      dwFlags,
+  BYTE       *pbData,
+  DWORD      *pdwDataLen,
+  DWORD      dwBufLen
+);
+
+
+BOOL CryptDecrypt(
+  HCRYPTKEY  hKey,
+  HCRYPTHASH hHash,
+  BOOL       Final,
+  DWORD      dwFlags,
+  BYTE       *pbData,
+  DWORD      *pdwDataLen
+);
+
+HCRYPTMSG CryptMsgOpenToEncode(
+  DWORD             dwMsgEncodingType,
+  DWORD             dwFlags,
+  DWORD             dwMsgType,
+  PVOID             pvMsgEncodeInfo,
+  LPSTR             pszInnerContentObjID,
+  PCMSG_STREAM_INFO pStreamInfo
+);
+
+HCRYPTMSG CryptMsgOpenToDecode(
+  DWORD             dwMsgEncodingType,
+  DWORD             dwFlags,
+  DWORD             dwMsgType,
+  HCRYPTPROV_LEGACY hCryptProv,
+  PCERT_INFO        pRecipientInfo,
+  PCMSG_STREAM_INFO pStreamInfo
+);
+
+BOOL CryptMsgUpdate(
+  HCRYPTMSG  hCryptMsg,
+  BYTE      *pbData,
+  DWORD      cbData,
+  BOOL       fFinal
+);
+
+BOOL CryptMsgControl(
+  HCRYPTMSG  hCryptMsg,
+  DWORD      dwFlags,
+  DWORD      dwCtrlType,
+  PVOID      pvCtrlPara
+);
+
+BOOL CryptMsgClose(
+  HCRYPTMSG hCryptMsg
+);

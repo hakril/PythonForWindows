@@ -83,3 +83,72 @@ typedef enum tagCALLFRAME_WALK {
   CALLFRAME_WALK_INOUT  = 2,
   CALLFRAME_WALK_OUT    = 4
 } CALLFRAME_WALK;
+
+typedef struct tagSAFEARRAYBOUND
+{
+    ULONG cElements;
+    LONG lLbound;
+}   SAFEARRAYBOUND, *LPSAFEARRAYBOUND;
+
+
+typedef struct tagSAFEARRAY
+{
+  USHORT cDims;
+  USHORT fFeatures;
+  ULONG cbElements;
+  ULONG cLocks;
+  PVOID pvData;
+  SAFEARRAYBOUND rgsabound[ 1 ];
+}   SAFEARRAY;
+
+typedef struct __tagBRECORD {
+    PVOID pvRecord;
+    PVOID pRecInfo;
+} _tagBRECORD;
+
+union _ANON_TMP_variant_sub_union{
+    LONGLONG llVal;
+    LONG lVal;
+    BYTE bVal;
+    SHORT iVal;
+    FLOAT fltVal;
+    DOUBLE dblVal;
+    VARIANT_BOOL boolVal;
+    SCODE scode;
+    BSTR bstrVal;
+    PVOID punkVal;
+    PVOID pdispVal;
+    SAFEARRAY *parray;
+    BYTE *pbVal;
+    SHORT *piVal;
+    LONG *plVal;
+    LONGLONG *pllVal;
+    FLOAT *pfltVal;
+    DOUBLE *pdblVal;
+    VARIANT_BOOL *pboolVal;
+    SCODE *pscode;
+    BSTR *pbstrVal;
+    PVOID byref;
+    CHAR cVal;
+    USHORT uiVal;
+    ULONG ulVal;
+    ULONGLONG ullVal;
+    INT intVal;
+    UINT uintVal;
+    CHAR *pcVal;
+    USHORT *puiVal;
+    ULONG *pulVal;
+    ULONGLONG *pullVal;
+    INT *pintVal;
+    UINT *puintVal;
+    _tagBRECORD _VARIANT_NAME_4;
+};
+
+
+typedef struct __tagVARIANT {
+    VARTYPE vt;
+    WORD wReserved1;
+    WORD wReserved2;
+    WORD wReserved3;
+    _ANON_TMP_variant_sub_union _VARIANT_NAME_3;
+} _tagVARIANT, VARIANT, VARIANTARG, *LPVARIANT, *LPVARIANTARG;

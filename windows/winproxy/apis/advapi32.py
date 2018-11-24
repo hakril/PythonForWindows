@@ -11,7 +11,18 @@ class Advapi32Proxy(ApiProxy):
 # Process
 
 @Advapi32Proxy()
-def CreateProcessAsUserA(hToken, lpApplicationName, lpCommandLine, lpProcessAttributes, lpThreadAttributes, bInheritHandles, dwCreationFlags, lpEnvironment, lpCurrentDirectory, lpStartupInfo, lpProcessInformation):
+def CreateProcessAsUserA(hToken, lpApplicationName, lpCommandLine=None, lpProcessAttributes=None, lpThreadAttributes=None, bInheritHandles=False,
+                            dwCreationFlags=0, lpEnvironment=None, lpCurrentDirectory=None, lpStartupInfo=None, lpProcessInformation=None):
+    if lpStartupInfo is None:
+        StartupInfo = gdef.STARTUPINFOA()
+        StartupInfo.cb = ctypes.sizeof(StartupInfo)
+        StartupInfo.dwFlags = 0
+        # StartupInfo.wShowWindow = gdef.SW_HIDE
+        lpStartupInfo = ctypes.byref(StartupInfo)
+    if lpProcessInformation is None:
+        lpProcessInformation = ctypes.byref(gdef.PROCESS_INFORMATION())
+    return CreateProcessAsUserA.ctypes_function(hToken, lpApplicationName, lpCommandLine, lpProcessAttributes, lpThreadAttributes, bInheritHandles, dwCreationFlags, lpEnvironment, lpCurrentDirectory, lpStartupInfo, lpProcessInformation)
+
     return CreateProcessAsUserA.ctypes_function(hToken, lpApplicationName, lpCommandLine, lpProcessAttributes, lpThreadAttributes, bInheritHandles, dwCreationFlags, lpEnvironment, lpCurrentDirectory, lpStartupInfo, lpProcessInformation)
 
 @Advapi32Proxy()
@@ -113,8 +124,6 @@ def GetSidSubAuthority(pSid, nSubAuthority):
 def GetSidSubAuthorityCount(pSid):
     return GetSidSubAuthorityCount.ctypes_function(pSid)
 
-# Sid stuff
-
 @Advapi32Proxy()
 def ConvertStringSidToSidA(StringSid, Sid):
     return ConvertStringSidToSidA.ctypes_function(StringSid, Sid)
@@ -130,6 +139,11 @@ def ConvertSidToStringSidA(Sid, StringSid):
 @Advapi32Proxy()
 def ConvertSidToStringSidW(Sid, StringSid):
     return ConvertSidToStringSidW.ctypes_function(Sid, StringSid)
+
+@Advapi32Proxy()
+def CopySid(nDestinationSidLength, pDestinationSid, pSourceSid):
+    return CopySid.ctypes_function(nDestinationSidLength, pDestinationSid, pSourceSid)
+
 
 # Security descriptor
 

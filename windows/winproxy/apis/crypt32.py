@@ -172,13 +172,32 @@ def CryptDecodeObject(dwCertEncodingType, lpszStructType, pbEncoded, cbEncoded, 
 def CryptMsgGetParam(hCryptMsg, dwParamType, dwIndex, pvData, pcbData):
     return CryptMsgGetParam.ctypes_function(hCryptMsg, dwParamType, dwIndex, pvData, pcbData)
 
+@Crypt32Proxy()
+def CryptMsgOpenToEncode(dwMsgEncodingType, dwFlags, dwMsgType, pvMsgEncodeInfo, pszInnerContentObjID, pStreamInfo):
+    return CryptMsgOpenToEncode.ctypes_function(dwMsgEncodingType, dwFlags, dwMsgType, pvMsgEncodeInfo, pszInnerContentObjID, pStreamInfo)
+
+@Crypt32Proxy()
+def CryptMsgOpenToDecode(dwMsgEncodingType, dwFlags, dwMsgType, hCryptProv, pRecipientInfo, pStreamInfo):
+    return CryptMsgOpenToDecode.ctypes_function(dwMsgEncodingType, dwFlags, dwMsgType, hCryptProv, pRecipientInfo, pStreamInfo)
+
+@Crypt32Proxy()
+def CryptMsgUpdate(hCryptMsg, pbData, cbData, fFinal):
+    return CryptMsgUpdate.ctypes_function(hCryptMsg, pbData, cbData, fFinal)
+
+@Crypt32Proxy()
+def CryptMsgControl(hCryptMsg, dwFlags, dwCtrlType, pvCtrlPara):
+    return CryptMsgControl.ctypes_function(hCryptMsg, dwFlags, dwCtrlType, pvCtrlPara)
+
 
 @Crypt32Proxy()
 def CryptMsgVerifyCountersignatureEncoded(hCryptProv, dwEncodingType, pbSignerInfo, cbSignerInfo, pbSignerInfoCountersignature, cbSignerInfoCountersignature, pciCountersigner):
     return CryptMsgVerifyCountersignatureEncoded.ctypes_function(hCryptProv, dwEncodingType, pbSignerInfo, cbSignerInfo, pbSignerInfoCountersignature, cbSignerInfoCountersignature, pciCountersigner)
 
-
 @Crypt32Proxy()
 def CryptMsgVerifyCountersignatureEncodedEx(hCryptProv, dwEncodingType, pbSignerInfo, cbSignerInfo, pbSignerInfoCountersignature, cbSignerInfoCountersignature, dwSignerType, pvSigner, dwFlags, pvExtra):
     return CryptMsgVerifyCountersignatureEncodedEx.ctypes_function(hCryptProv, dwEncodingType, pbSignerInfo, cbSignerInfo, pbSignerInfoCountersignature, cbSignerInfoCountersignature, dwSignerType, pvSigner, dwFlags, pvExtra)
 
+
+@Crypt32Proxy()
+def CryptMsgClose(hCryptMsg):
+    return CryptMsgClose.ctypes_function(hCryptMsg)

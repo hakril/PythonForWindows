@@ -148,6 +148,14 @@ def GetModuleHandleA(lpModuleName):
 def GetModuleHandleW(lpModuleName):
     return GetModuleHandleW.ctypes_function(lpModuleName)
 
+@Kernel32Proxy()
+def GetModuleFileNameA(hModule, lpFilename, nSize):
+    return GetModuleFileNameA.ctypes_function(hModule, lpFilename, nSize)
+
+@Kernel32Proxy()
+def GetModuleFileNameW(hModule, lpFilename, nSize):
+    return GetModuleFileNameW.ctypes_function(hModule, lpFilename, nSize)
+
 ## Thread
 
 @Kernel32Proxy()
@@ -276,7 +284,7 @@ def WriteProcessMemory(hProcess, lpBaseAddress, lpBuffer, nSize=None, lpNumberOf
 
 ## Error
 
-@Kernel32Proxy()
+@Kernel32Proxy(error_check=no_error_check)
 def GetLastError():
     return GetLastError.ctypes_function()
 
@@ -691,5 +699,22 @@ def ConnectNamedPipe(hNamedPipe, lpOverlapped):
 def SetNamedPipeHandleState(hNamedPipe, lpMode, lpMaxCollectionCount, lpCollectDataTimeout):
     return SetNamedPipeHandleState.ctypes_function(hNamedPipe, lpMode, lpMaxCollectionCount, lpCollectDataTimeout)
 
+# Firmware
+
+@Kernel32Proxy()
+def GetFirmwareEnvironmentVariableA(lpName, lpGuid, pBuffer, nSize):
+    return GetFirmwareEnvironmentVariableA.ctypes_function(lpName, lpGuid, pBuffer, nSize)
+
+@Kernel32Proxy()
+def GetFirmwareEnvironmentVariableW(lpName, lpGuid, pBuffer, nSize):
+    return GetFirmwareEnvironmentVariableW.ctypes_function(lpName, lpGuid, pBuffer, nSize)
+
+@Kernel32Proxy()
+def GetFirmwareEnvironmentVariableExA(lpName, lpGuid, pBuffer, nSize, pdwAttribubutes):
+    return GetFirmwareEnvironmentVariableExA.ctypes_function(lpName, lpGuid, pBuffer, nSize, pdwAttribubutes)
+
+@Kernel32Proxy()
+def GetFirmwareEnvironmentVariableExW(lpName, lpGuid, pBuffer, nSize, pdwAttribubutes):
+    return GetFirmwareEnvironmentVariableExW.ctypes_function(lpName, lpGuid, pBuffer, nSize, pdwAttribubutes)
 
 #####

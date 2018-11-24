@@ -2,7 +2,7 @@ import ctypes
 import windows.generated_def as gdef
 
 from ..apiproxy import ApiProxy, NeededParameter
-from ..error import fail_on_zero
+from ..error import fail_on_zero, no_error_check
 
 class User32Proxy(ApiProxy):
     APIDLL = "user32"
@@ -16,16 +16,24 @@ def EnumWindows(lpEnumFunc, lParam):
     return EnumWindows.ctypes_function(lpEnumFunc, lParam)
 
 @User32Proxy()
+def GetParent(hWnd):
+    return GetParent.ctypes_function(hWnd)
+
+@User32Proxy(error_check=no_error_check)
 def GetWindowTextA(hWnd, lpString, nMaxCount):
     return GetWindowTextA.ctypes_function(hWnd, lpString, nMaxCount)
 
 @User32Proxy()
-def GetParent(hWnd):
-    return GetParent.ctypes_function(hWnd)
-
-@User32Proxy()
 def GetWindowTextW(hWnd, lpString, nMaxCount):
     return GetWindowTextW.ctypes_function(hWnd, lpString, nMaxCount)
+
+@User32Proxy()
+def FindWindowA(lpClassName, lpWindowName):
+    return FindWindowA.ctypes_function(lpClassName, lpWindowName)
+
+@User32Proxy()
+def FindWindowW(lpClassName, lpWindowName):
+    return FindWindowW.ctypes_function(lpClassName, lpWindowName)
 
 @User32Proxy()
 def GetWindowModuleFileNameA(hwnd, pszFileName, cchFileNameMax):

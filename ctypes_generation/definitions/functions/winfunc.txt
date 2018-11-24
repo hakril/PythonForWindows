@@ -1728,3 +1728,42 @@ BOOLEAN RtlEqualUnicodeString(
   PUNICODE_STRING String2,
   BOOLEAN          CaseInSensitive
 );
+
+
+DWORD WINAPI GetFirmwareEnvironmentVariableA(
+  _In_ LPCSTR lpName,
+  _In_ LPCSTR lpGuid,
+  _Out_ PVOID pBuffer,
+  _In_ DWORD    nSize
+);
+
+DWORD WINAPI GetFirmwareEnvironmentVariableW(
+  _In_ LPCWSTR lpName,
+  _In_ LPCWSTR lpGuid,
+  _Out_ PVOID pBuffer,
+  _In_ DWORD    nSize
+);
+
+DWORD WINAPI GetFirmwareEnvironmentVariableExA(
+  _In_ LPCSTR lpName,
+  _In_ LPCSTR lpGuid,
+  _Out_ PVOID pBuffer,
+  _In_ DWORD    nSize,
+  _Out_ PDWORD pdwAttribubutes
+);
+
+DWORD WINAPI GetFirmwareEnvironmentVariableExW(
+  _In_ LPCWSTR lpName,
+  _In_ LPCWSTR lpGuid,
+  _Out_ PVOID pBuffer,
+  _In_ DWORD    nSize,
+  _Out_ PDWORD pdwAttribubutes
+);
+
+NTSTATUS WINAPI NtEnumerateSystemEnvironmentValuesEx(
+    _In_ ULONG InformationClass,
+    _In_ PVOID Buffer,
+    _In_ ULONG BufferLength
+);
+
+

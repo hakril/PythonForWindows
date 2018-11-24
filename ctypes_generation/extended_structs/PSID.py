@@ -18,6 +18,12 @@ class PSID(_INITIAL_PSID): # _INITIAL_PSID -> PVOID
     def size(self):
         return windows.winproxy.GetLengthSid(self)
 
+    def duplicate(self):
+        size = self.size
+        buffer = ctypes.c_buffer(size)
+        windows.winproxy.CopySid(size, buffer, self)
+        return ctypes.cast(buffer, type(self))
+
     @classmethod
     def from_string(cls, strsid):
         self = cls()
@@ -39,3 +45,4 @@ class PSID(_INITIAL_PSID): # _INITIAL_PSID -> PVOID
                 return """<{0} "None" at {1:#x}>""".format(type(self).__name__, id(self))
             return """<{0} "<conversion-failed>" at {1:#x}>""".format(type(self).__name__, id(self))
 
+    __sprint__ = __repr__

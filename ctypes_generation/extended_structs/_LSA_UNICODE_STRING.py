@@ -22,3 +22,10 @@ class _LSA_UNICODE_STRING(INITIAL_LSA_UNICODE_STRING):
 
     def __repr__(self):
         return """<{0} "{1}" at {2}>""".format(type(self).__name__, self.str, hex(id(self)))
+
+    def __sprint__(self):
+        try:
+            return self.__repr__()
+        except TypeError as e:
+            # Bad buffer: print raw infos
+            return """<{0} len={1} maxlen={2} buffer={3}>""".format(type(self).__name__, self.Length, self.MaximumLength, self.Buffer)
