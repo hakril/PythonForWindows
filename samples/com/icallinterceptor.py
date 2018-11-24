@@ -27,7 +27,7 @@ class MySink(windows.com.COMImplementation):
         frame.GetNames(ifname, methodname)
         print("Catching call to <{0}.{1}>".format(ifname.value, methodname.value))
         param0info = gdef.CALLFRAMEPARAMINFO()
-        param0 = windows.com.ImprovedVariant()
+        param0 = windows.com.Variant()
         frame.GetParamInfo(0, param0info)
         frame.GetParam(0, param0)
         print("Info about parameters 0:")

@@ -191,7 +191,7 @@ class Firewall(cominterfaces.INetFwPolicy2):
         unknw.QueryInterface(pVariant.IID, pVariant)
 
         count = gdef.ULONG()
-        var = windows.com.ImprovedVariant()
+        var = windows.com.Variant()
 
         rules = []
         for i in range(nb_rules.value):

@@ -122,7 +122,7 @@ class RemoteWCharP(RemotePtr, ctypes.c_char_p):
         while True:
             try:
                 x = self.read_memory(addr + readden, read_size)
-            except winproxy.Kernel32Error as e:
+            except winproxy.WinproxyError as e:
                 if read_size == 2:
                     raise
                 # handle read_wstring at end of page

@@ -30,10 +30,6 @@ class TaskCollectionType(object):
 
     def get_item(self, index):
         """Return elements nb ``index``. Collection index starts at 1"""
-        # TODO: ImprovedVariant.from_int()
-        # vindex = windows.com.ImprovedVariant()
-        # vindex.vt = gdef.VT_I4
-        # vindex._VARIANT_NAME_3.lVal = index
         if index == 0:
             raise IndexError("<{0}> Index start as 1".format(type(self).__name__))
         index = self.get_index(index)
@@ -214,7 +210,7 @@ class Task(gdef.IRegisteredTask):
 class TaskCollection(gdef.IRegisteredTaskCollection, TaskCollectionType):
     ITEM_TYPE = Task
     def get_index(self, index):
-        vindex = windows.com.ImprovedVariant()
+        vindex = windows.com.Variant()
         vindex.vt = gdef.VT_I4
         vindex._VARIANT_NAME_3.lVal = index
         return vindex
@@ -343,7 +339,7 @@ class TaskFolderCollection(gdef.ITaskFolderCollection, TaskCollectionType):
     ITEM_TYPE = TaskFolder
 
     def get_index(self, index):
-        vindex = windows.com.ImprovedVariant()
+        vindex = windows.com.Variant()
         vindex.vt = gdef.VT_I4
         vindex._VARIANT_NAME_3.lVal = index
         return vindex
