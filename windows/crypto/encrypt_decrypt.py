@@ -2,13 +2,12 @@ from os import urandom
 
 from windows import winproxy
 from windows.crypto import DEFAULT_ENCODING
-from windows.crypto.helper import ECRYPT_DATA_BLOB
 from windows.generated_def import *
 
 __all__ = ["encrypt", "decrypt"]
 
 def encode_init_vector(data):
-    blob = ECRYPT_DATA_BLOB.from_string(data)
+    blob = CRYPT_DATA_BLOB.from_string(data)
     size = DWORD()
     buf = None
     winproxy.CryptEncodeObjectEx(DEFAULT_ENCODING, X509_OCTET_STRING, ctypes.byref(blob), 0, None, buf, size)
@@ -67,10 +66,10 @@ def encrypt(cert_or_certlist, msg, algo=szOID_NIST_AES256_CBC, initvector=genini
         if initvector is None:
             raise ValueError("I don't know how to generate an <initvector> for <{0}> please provide one (or None)".format(algo))
         initvector_encoded = encode_init_vector(initvector)
-        alg_ident.Parameters = ECRYPT_DATA_BLOB.from_string(initvector_encoded)
+        alg_ident.Parameters = CRYPT_DATA_BLOB.from_string(initvector_encoded)
     else:
         initvector_encoded = encode_init_vector(initvector)
-        alg_ident.Parameters = ECRYPT_DATA_BLOB.from_string(initvector_encoded)
+        alg_ident.Parameters = CRYPT_DATA_BLOB.from_string(initvector_encoded)
 
     # Setup encryption parameters
     param = CRYPT_ENCRYPT_MESSAGE_PARA()

@@ -1,8 +1,6 @@
 import windows
 from windows import winproxy
 from windows.generated_def import *
-
-from windows.crypto.helper import ECRYPT_DATA_BLOB
 from windows.crypto import DEFAULT_ENCODING, CertificateStore
 
 
@@ -16,7 +14,7 @@ def generate_selfsigned_certificate(name="CN=DEFAULT", prov=None, key_info=None,
     size = ULONG(len(name) + 0x100)
     buffer = (ctypes.c_ubyte * size.value)()
     winproxy.CertStrToNameA(X509_ASN_ENCODING, name,  CERT_OID_NAME_STR, None, buffer, size, None)
-    blobname = ECRYPT_DATA_BLOB(size.value, buffer)
+    blobname = CRYPT_DATA_BLOB(size.value, buffer)
     cert = winproxy.CertCreateSelfSignCertificate(prov, blobname, flags, key_info, signature_algo, None, None, None)
     return windows.crypto.Certificate.from_pointer(cert)
 
@@ -48,7 +46,7 @@ def generate_pfx(hstore, password=None):
 
     :return: :class:`bytearray` -- The raw PFX
     """
-    blob = ECRYPT_DATA_BLOB(0, None)
+    blob = CRYPT_DATA_BLOB(0, None)
     winproxy.PFXExportCertStoreEx(hstore, blob, password, None, EXPORT_PRIVATE_KEYS | REPORT_NO_PRIVATE_KEY | REPORT_NOT_ABLE_TO_EXPORT_PRIVATE_KEY)
     blob.pbData = (ctypes.c_ubyte * blob.cbData)()
     winproxy.PFXExportCertStoreEx(hstore, blob, password, None, EXPORT_PRIVATE_KEYS | REPORT_NO_PRIVATE_KEY | REPORT_NOT_ABLE_TO_EXPORT_PRIVATE_KEY)

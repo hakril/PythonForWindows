@@ -162,13 +162,18 @@ class CertificateStore(gdef.HCERTSTORE):
     def find(self, issuer, serialnumber):
         """Return the certificate that match `issuer` and `serialnumber`
 
-        :return: :class:`Certificate`
+        :return: :class:`Certificate` -- ``None`` if certificate is not found
         """
         # data = self.get_signer_data(index)
         cert_info = gdef.CERT_INFO()
         cert_info.Issuer = issuer
         cert_info.SerialNumber = serialnumber
-        rawcertcontext = winproxy.CertFindCertificateInStore(self, DEFAULT_ENCODING, 0, gdef.CERT_FIND_SUBJECT_CERT, ctypes.byref(cert_info), None)
+        try:
+            rawcertcontext = winproxy.CertFindCertificateInStore(self, DEFAULT_ENCODING, 0, gdef.CERT_FIND_SUBJECT_CERT, ctypes.byref(cert_info), None)
+        except WindowsError as e:
+            if not e.winerror & 0xffffffff == gdef.CRYPT_E_NOT_FOUND:
+                raise
+            return None
         return Certificate.from_pointer(rawcertcontext)
 
 
@@ -415,6 +420,14 @@ class Certificate(gdef.CERT_CONTEXT):
         # https://msdn.microsoft.com/en-us/library/windows/desktop/aa376079(v=vs.85).aspx
         # - Usefull:
             # CERT_SHA1_HASH_PROP_ID
+
+    def get_property(self, prop):
+        "TODO: DOC :D + auto-type ?"
+        datasize = gdef.DWORD()
+        windows.winproxy.CertGetCertificateContextProperty(self, prop, None, datasize)
+        buf = (gdef.BYTE * datasize.value)()
+        windows.winproxy.CertGetCertificateContextProperty(self, prop, buf, datasize)
+        return bytearray(buf)
 
 
     @property

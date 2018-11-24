@@ -1,7 +1,6 @@
 import windows
 from windows import winproxy
 from windows.crypto import DEFAULT_ENCODING
-from windows.crypto.helper import ECRYPT_DATA_BLOB
 import windows.generated_def as gdef
 
 import ctypes
@@ -33,12 +32,20 @@ def sign(cert, msg, detached_signature=False):
     sign_para.HashEncryptionAlgorithm = alg_hash
     sign_para.pvHashEncryptionAuxInfo = None
 
-    # TODO: Clean
-    result_buffer = windows.utils.buffer(gdef.BYTE, len(msg) + 0x2000)()
+    ByteBuffer = windows.utils.BUFFER(gdef.BYTE)
+
+    result_buffer = ByteBuffer(nbelt=0x2000)
     result_size = gdef.DWORD(len(result_buffer))
-    buff_pr = windows.utils.buffer(gdef.LPBYTE)(windows.utils.CharBuffer.from_buffer_copy(msg).cast(gdef.LPBYTE))
+    buff = ByteBuffer(*bytearray(msg))
+    buff_pr = windows.utils.BUFFER(gdef.LPBYTE, nbelt=1)(buff)
     buff_size = gdef.DWORD(len(msg))
-    windows.winproxy.CryptSignMessage(sign_para, False, 1, buff_pr, buff_size, result_buffer.cast(gdef.LPBYTE), result_size)
+    try:
+        windows.winproxy.CryptSignMessage(sign_para, False, 1, buff_pr, buff_size, result_buffer, result_size)
+    except WindowsError as e:
+        if not e.winerror == gdef.ERROR_MORE_DATA:
+            raise
+        result_buffer = ByteBuffer(nbelt=result_size.value)
+        windows.winproxy.CryptSignMessage(sign_para, False, 1, buff_pr, buff_size, result_buffer, result_size)
     return bytearray(result_buffer[:result_size.value])
 
 
@@ -51,13 +58,13 @@ def verify_signature(cert, encoded_blob):
     # The public key used
     pubkey = cert.pCertInfo[0].SubjectPublicKeyInfo
     # Preparing in/out buffer/size
-    signed_buffer = windows.utils.buffer(gdef.BYTE).from_buffer_copy(encoded_blob)
-    decoded_buffer = windows.utils.CharBuffer.from_buffer_copy(encoded_blob)
+    signed_buffer = windows.utils.BUFFER(gdef.BYTE).from_buffer_copy(encoded_blob)
+    decoded_buffer = windows.utils.BUFFER(gdef.BYTE).from_buffer_copy(encoded_blob)
     decoded_size = gdef.DWORD(len(decoded_buffer))
     winproxy.CryptVerifyMessageSignatureWithKey(verif_param,
                                                     pubkey,
-                                                    signed_buffer.cast(gdef.LPBYTE),
+                                                    signed_buffer,
                                                     len(encoded_blob),
-                                                    decoded_buffer.cast(gdef.LPBYTE),
+                                                    decoded_buffer,
                                                     decoded_size)
-    return decoded_buffer[:decoded_size.value]
+    return bytearray(decoded_buffer[:decoded_size.value])

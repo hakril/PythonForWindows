@@ -10,7 +10,11 @@ class CryptMessage(gdef.HCRYPTMSG):
     """
     MSG_PARAM_KNOW_TYPES = {gdef.CMSG_SIGNER_INFO_PARAM: gdef.CMSG_SIGNER_INFO,
                             gdef.CMSG_SIGNER_COUNT_PARAM: gdef.DWORD,
-                            gdef.CMSG_CERT_COUNT_PARAM: gdef.DWORD}
+                            gdef.CMSG_CERT_COUNT_PARAM: gdef.DWORD,
+                            gdef.CMSG_ENVELOPE_ALGORITHM_PARAM: gdef.CRYPT_ALGORITHM_IDENTIFIER,
+                            gdef.CMSG_RECIPIENT_COUNT_PARAM: gdef.DWORD,
+                            gdef.CMSG_RECIPIENT_INFO_PARAM: gdef.CERT_INFO,
+                            }
 
 
     def get_param(self, param_type, index=0, raw=False):
@@ -82,3 +86,18 @@ class CryptMessage(gdef.HCRYPTMSG):
     def signers(self):
         """The list of :class:`~windows.generated_def.winstructs.CMSG_SIGNER_INFO` embed in the message"""
         return [self.get_signer_data(i) for i in range(self.nb_signer)]
+
+    @property
+    def nb_recipient(self):
+        """TODO: DOC"""
+        return self.get_param(gdef.CMSG_RECIPIENT_COUNT_PARAM)
+
+
+    def get_recipient_data(self, index=0):
+        """TODO: DOC"""
+        return self.get_param(gdef.CMSG_RECIPIENT_INFO_PARAM, index)
+
+    @property
+    def recipients(self):
+        """TODO: DOC"""
+        return [self.get_recipient_data(i) for i in range(self.nb_recipient)]
