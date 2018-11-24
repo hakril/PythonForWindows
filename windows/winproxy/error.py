@@ -25,12 +25,7 @@ class WinproxyError(WindowsError):
 
 
 # winproxy Error check
-
-# Try None instead :')
-def no_error_check(func_name, result, func, args):
-    """No error check"""
-    return args
-
+no_error_check = None
 
 def fail_on_minus_one(func_name, result, func, args):
     """Raise WinproxyError if call result is -1"""
