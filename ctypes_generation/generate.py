@@ -103,6 +103,11 @@ class DefinitionParsedFile(ParsedFile):
     def compute_imports_exports(self, data):
         for windef in data:
             self.add_exports(windef.name) # No dependancy check on rvalue for now
+            if "|" in windef.code: # Multi flags ? Allow cross-file dependancies
+                # Quick parsing: add all names in the imports
+                all_imports_words = re.findall(r"\b[A-Z_]\w+", windef.code)
+                real_deps = [word for word in all_imports_words if word not in self.exports]
+                self.add_imports(*real_deps)
 
 class NtStatusParsedFile(ParsedFile):
     PARSER = def_parser.NtStatusParser

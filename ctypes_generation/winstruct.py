@@ -173,7 +173,7 @@ class WinEnum(object):
 
         lines += ["class {0}(EnumType):".format(self.name)]
         lines += ["    values = [{0}]".format(", ".join([name for i, name in self.fields]))]
-        lines += ["    mapper = {{x:x for x in values}}".format(self.name)]
+        lines += ["    mapper = FlagMapper(*values)".format(self.name)]
 
         for typedef_name, value in self.typedef.items():
             str_value = self.name

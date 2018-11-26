@@ -45,6 +45,7 @@ class WinFunc(object):
 
 class WinFuncParser(Parser):
     known_io_info_type = ["__in", "__in_opt", "_In_", "_In_opt_", "_Inout_", "_Out_opt_", "_Out_", "_Reserved_", "_Inout_opt_", "__inout_opt", "__out", "__inout", "__deref_out", "_Outptr_"]
+    known_io_info_with_param = ["_Out_writes_bytes_", "_In_reads_bytes_opt_", "_In_reads_bytes_"]
     known_declarations = {
         "WINAPI" : "WINFUNCTYPE",
         "LDAPAPI" : "CFUNCTYPE"
@@ -54,7 +55,13 @@ class WinFuncParser(Parser):
     def assert_argument_io_info(self):
         io_info = self.assert_token_type(NameToken)
         if io_info.value not in self.known_io_info_type:
-            raise ParsingError("Was expection IO_INFO got {0} instead".format(io_info))
+            if io_info.value not in self.known_io_info_with_param:
+                raise ParsingError("Was expection IO_INFO got {0} instead".format(io_info))
+            # Ignore IO infor params.
+            # Only 1 param accepted for now
+            self.assert_token_type(OpenParenthesisToken)
+            self.assert_token_type(NameToken)
+            self.assert_token_type(CloseParenthesisToken)
         return io_info
 
     def parse_func_arg(self, has_winapi):
