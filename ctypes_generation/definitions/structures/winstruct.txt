@@ -590,50 +590,7 @@ typedef enum NET_FW_IP_PROTOCOL_ {
     NET_FW_IP_PROTOCOL_ANY  = 256
 }   NET_FW_IP_PROTOCOL;
 
-typedef enum _TOKEN_INFORMATION_CLASS {
-  TokenInvalid,
-  TokenUser,
-  TokenGroups,
-  TokenPrivileges,
-  TokenOwner,
-  TokenPrimaryGroup,
-  TokenDefaultDacl,
-  TokenSource,
-  TokenType,
-  TokenImpersonationLevel,
-  TokenStatistics,
-  TokenRestrictedSids,
-  TokenSessionId,
-  TokenGroupsAndPrivileges,
-  TokenSessionReference,
-  TokenSandBoxInert,
-  TokenAuditPolicy,
-  TokenOrigin,
-  TokenElevationType,
-  TokenLinkedToken,
-  TokenElevation,
-  TokenHasRestrictions,
-  TokenAccessInformation,
-  TokenVirtualizationAllowed,
-  TokenVirtualizationEnabled,
-  TokenIntegrityLevel,
-  TokenUIAccess,
-  TokenMandatoryPolicy,
-  TokenLogonSid,
-  TokenIsAppContainer,
-  TokenCapabilities,
-  TokenAppContainerSid,
-  TokenAppContainerNumber,
-  TokenUserClaimAttributes,
-  TokenDeviceClaimAttributes,
-  TokenRestrictedUserClaimAttributes,
-  TokenRestrictedDeviceClaimAttributes,
-  TokenDeviceGroups,
-  TokenRestrictedDeviceGroups,
-  TokenSecurityAttributes,
-  TokenIsRestricted,
-  MaxTokenInfoClass,
-} TOKEN_INFORMATION_CLASS, *PTOKEN_INFORMATION_CLASS;
+
 
 typedef enum tagTOKEN_TYPE {
   TokenPrimary        = 1,
@@ -749,6 +706,10 @@ typedef enum _SE_OBJECT_TYPE {
   SE_REGISTRY_WOW64_32KEY = 12,
 } SE_OBJECT_TYPE;
 
+typedef enum _SECTION_INHERIT {
+    ViewShare = 1,
+    ViewUnmap = 2
+} SECTION_INHERIT;
 
 typedef struct _CLIENT_ID{
    HANDLE UniqueProcess;

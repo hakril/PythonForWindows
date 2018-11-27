@@ -313,6 +313,18 @@ def LoadLibraryA(lpFileName):
 def LoadLibraryW(lpFileName):
     return LoadLibraryW.ctypes_function(lpFileName)
 
+@Kernel32Proxy()
+def LoadLibraryExA(lpLibFileName, hFile, dwFlags):
+    return LoadLibraryExA.ctypes_function(lpLibFileName, hFile, dwFlags)
+
+@Kernel32Proxy()
+def LoadLibraryExW(lpLibFileName, hFile, dwFlags):
+    return LoadLibraryExW.ctypes_function(lpLibFileName, hFile, dwFlags)
+
+@Kernel32Proxy()
+def FreeLibrary(hLibModule):
+    return FreeLibrary.ctypes_function(hLibModule)
+
 ## Version
 
 @Kernel32Proxy()

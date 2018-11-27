@@ -463,6 +463,22 @@ HMODULE WINAPI LoadLibraryW(
     __in LPCWSTR lpFileName
 );
 
+HMODULE LoadLibraryExA(
+  LPCSTR lpLibFileName,
+  HANDLE hFile,
+  DWORD  dwFlags
+);
+
+HMODULE LoadLibraryExW(
+  LPCWSTR lpLibFileName,
+  HANDLE  hFile,
+  DWORD   dwFlags
+);
+
+BOOL FreeLibrary(
+  HMODULE hLibModule
+);
+
 BOOL WINAPI OpenProcessToken(
   _In_   HANDLE ProcessHandle,
   _In_   DWORD DesiredAccess,
