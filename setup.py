@@ -25,7 +25,9 @@ setup(
                 'windows.native_exec',
                 'windows.rpc',
                 'windows.utils',
-                'windows.winobject'],
+                'windows.winobject',
+                'windows.winproxy',
+                'windows.winproxy.apis'],
     classifiers = ['Programming Language :: Python :: 2 :: Only',
                    'Programming Language :: Python :: 2.7']
 )
