@@ -320,10 +320,13 @@ Ouput::
     I AM LOADING <C:\Windows\system32\ole32.dll>
 
 
-.. _wmi_request:
+.. _wmi_samples:
+
+WMI
+"""
 
 WMI requests
-""""""""""""
+''''''''''''
 
 
 .. literalinclude:: ..\..\samples\wmi\wmi_request.py
@@ -331,6 +334,15 @@ WMI requests
 Output
 
 .. literalinclude:: samples_output\wmi_wmi_request.txt
+
+WMI Create Process
+''''''''''''''''''
+
+.. literalinclude:: ..\..\samples\wmi\create_process.py
+
+Output
+
+.. literalinclude:: samples_output\wmi_create_process.txt
 
 
 .. _sample_com:

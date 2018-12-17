@@ -1,36 +1,34 @@
+import time
 import windows
-import windows.com
-import windows.generated_def as gdef
-
-def bstr_variant(s):
-    v = windows.com.Variant()
-    v.vt = gdef.VT_BSTR
-    v._VARIANT_NAME_3.bstrVal = s
-    return v
 
 
-wmireq = windows.system.wmi["root\\cimv2"]
-proc_class = wmireq.get_object("Win32_process")
+wmispace = windows.system.wmi["root\\cimv2"]
+print("WMI namespace is <{0}>".format(wmispace))
+proc_class = wmispace.get_object("Win32_process")
+print("Process class is {0}".format(proc_class))
 
-# # Method 1
-inparam = proc_class.get_method("Create").inparam.spawn_instance()
-inparam["CommandLine"] = r"c:\windows\system32\notepad.exe trolol.exe"
-# Create a test checking return value
-xx = wmireq.exec_method(proc_class, "Create", inparam)
-print(xx)
-print(xx.as_dict())
+inparam_cls = proc_class.get_method("Create").inparam
+print("Method Create InParams is <{0}>".format(inparam_cls))
+print("Method Create InParams properties are <{0}>".format(inparam_cls.properties))
+print("Creating instance of inparam")
 
-## Method2
+inparam = inparam_cls()
+print("InParam instance is <{0}>".format(inparam))
+print("Setting <CommandLine>")
+inparam["CommandLine"] = r"c:\windows\system32\notepad.exe"
 
-# class MyResult(gdef.IWbemCallResult):
-    # def result(self):
-        # res = type(proc_class)()
-        # self.GetResultObject(gdef.WBEM_INFINITE, res)
-        # return res
+print("Executing method")
+# This API may change for something that better wraps cls/object/Parameters handling
+outparam = wmispace.exec_method(proc_class, "Create", inparam)
+
+print("OutParams is {0}".format(outparam))
+print("Out params values are: {0}".format(outparam.properties))
+target = windows.WinProcess(pid=int(outparam["ProcessId"]))
+print("Created process is {0}".format(target))
+print("Waiting 1s")
+time.sleep(1)
+print("Killing the process")
+target.exit(0)
 
 
-# proc = proc_class.spawn()
-# cmdline = bstr_variant(r"c:\windows\system32\notepad.exe")
-# proc.put_variant("CommandLine", cmdline)
-# res = wmireq.put_instance(proc)
 

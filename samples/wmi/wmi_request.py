@@ -22,8 +22,9 @@ print("    * {0} -> {1}".format("WindowsVersion", us["WindowsVersion"]))
 print("    * {0} -> {1}".format("CommandLine", us["CommandLine"]))
 
 print("<Select Caption,FileSystem,FreeSpace from Win32_LogicalDisk>:")
-for vol in windows.system.wmi.select("Win32_LogicalDisk", ["Caption", "FileSystem", "FreeSpace"]):
-    print("    * " + str(vol))
+for vol in windows.system.wmi.query("select Caption,FileSystem,FreeSpace from Win32_LogicalDisk"):
+    # Filter out system-properties for the sample
+    print("    * " + str({k:v for k,v in vol.items() if not k.startswith("_")}))
 
 print("\n ==== Advanced use ====")
 print("Listing some namespaces:")
@@ -33,7 +34,7 @@ for namespace in [ns for ns in windows.system.wmi.namespaces if "2" in ns]:
 security2 = windows.system.wmi["root\\SecurityCenter2"]
 print("Querying non-default namespace: {0}".format(security2))
 print("Listing some available classes:")
-for clsname in [x for x in security2.classes if x.endswith("Product")]:
+for clsname in [x for x in security2.classes if x["__CLASS"].endswith("Product")]:
     print("    * {0}".format(clsname))
 
 print("Listing <AntiVirusProduct>:")
