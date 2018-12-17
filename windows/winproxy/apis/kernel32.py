@@ -302,6 +302,14 @@ def DuplicateHandle(hSourceProcessHandle, hSourceHandle, hTargetProcessHandle, l
 
 ## Process Modules
 @Kernel32Proxy()
+def GetModuleHandleA(lpModuleName=None):
+    return GetModuleHandleA.ctypes_function(lpModuleName)
+
+@Kernel32Proxy()
+def GetModuleHandleW(lpModuleName=None):
+    return GetModuleHandleW.ctypes_function(lpModuleName)
+
+@Kernel32Proxy()
 def GetProcAddress(hModule, lpProcName):
     return GetProcAddress.ctypes_function(hModule, lpProcName)
 
