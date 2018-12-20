@@ -1,0 +1,21 @@
+(cmd) python token\token_demo.py
+Our process token is <Token TokenId=0x3f1f98fd Type=TokenPrimary(0x1L)>
+Retrieving some infos
+Username: <hakril>
+User: <PSID "S-1-5-21-184905214-2723199098-2761450773-1001">
+  - lookup : ('WILLIE', 'hakril')
+Primary group: <PSID "S-1-5-21-184905214-2723199098-2761450773-513">
+  - lookup : ('WILLIE', 'Aucun')
+
+Token Groups is <TokenGroups count=15>
+First group SID is <PSID "S-1-5-21-184905214-2723199098-2761450773-513">
+Some sid and attributes:
+ - S-1-5-21-184905214-2723199098-2761450773-513: 7
+ - S-1-1-0: 7
+ - S-1-5-114: 16
+
+Duplicate token is <Token TokenId=0x3f1fac85 Type=TokenImpersonation(0x2L) ImpersonationLevel=SecurityImpersonation(0x2L)>
+Enabling <SeShutDownPrivilege>
+Current thread token is <None>
+Setting impersonation token !
+Current thread token is <Token TokenId=0x3f1fac85 Type=TokenImpersonation(0x2L) ImpersonationLevel=SecurityImpersonation(0x2L)>

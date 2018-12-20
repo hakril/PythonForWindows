@@ -1,0 +1,10 @@
+(cmd) python debug\debugger_on_setup.py
+== With on_setup ==
+Setup called: <WinProcess "whoami.exe" pid 29796 at 0x4ccb790>
+<whoami output>
+Process exit: <WinProcess "whoami.exe" pid 29796 (DEAD) at 0x4ccb790>
+
+== Without on_setup ==
+Exception: EXCEPTION_BREAKPOINT(0x80000003L)
+<whoami output>
+Process exit: <WinProcess "whoami.exe" pid 33328 (DEAD) at 0x4ccbdb0>
