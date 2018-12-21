@@ -374,7 +374,7 @@ def safe_execute_python(process, code):
     t.wait() # Wait terminaison of the thread
     if t.exit_code == 0:
         return True
-    if t.exit_code == STATUS_THREAD_IS_TERMINATING:
+    if t.exit_code == STATUS_THREAD_IS_TERMINATING or process.is_exit:
         raise WindowsError("{0} died during execution of python command".format(process))
     if t.exit_code != 0xffffffff:
         raise ValueError("Unknown exit code {0}".format(hex(t.exit_code)))
