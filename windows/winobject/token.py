@@ -594,15 +594,20 @@ class Token(utils.AutoHandle):
             buffsize = ctypes.sizeof(privileges)
         winproxy.AdjustTokenPrivileges(self.handle, False, privileges, buffsize, None, None)
         if winproxy.GetLastError() == gdef.ERROR_NOT_ALL_ASSIGNED:
-            raise ValueError("Failed to adjust all privileges")
+            # Transform this in a real WindowsError
+            raise WindowsError(gdef.ERROR_NOT_ALL_ASSIGNED, "Failed to adjust all privileges")
 
     def enable_privilege(self, name):
-        """Enable privilege ``name`` in the token"""
+        """Enable privilege ``name`` in the token
+
+        :raises: :class:`ValueError` if :class:`Token` has no privilege ``name``
+        """
         privs = self.privileges
         try:
             privs[name] = gdef.SE_PRIVILEGE_ENABLED
         except KeyError as e:
-            raise ValueError("{0} as no privilege <{1}>".format(self, name))
+            # Emulate the WindowsError that would be triggered in 'adjust_privileges' ?
+            raise ValueError("{0} has no privilege <{1}>".format(self, name))
         return self.adjust_privileges(privs)
 
     def __repr__(self):

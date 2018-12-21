@@ -82,7 +82,13 @@ class ApiProxy(object):
 
         def generate_ctypes_function():
             try:
-                c_prototyped = prototype((self.func_name, getattr(ctypes.windll, self.APIDLL)), params)
+                api_dll = ctypes.windll[self.APIDLL]
+            except WindowsError as e:
+                if e.winerror == gdef.ERROR_BAD_EXE_FORMAT:
+                    e.strerror = e.strerror.replace("%1", "<{0}>".format(self.APIDLL))
+                raise
+            try:
+                c_prototyped = prototype((self.func_name, api_dll), params)
             except (AttributeError, WindowsError):
                 raise ExportNotFound(self.func_name, self.APIDLL)
             if self.error_check is not None:

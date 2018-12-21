@@ -52,12 +52,12 @@ iid = client.bind(UAC_UIID)
 
 # Marshalling parameters.
 parameters = RAiLaunchAdminProcessParameters.pack([
-    params.target + "\x00", # Application Path
-    params.cmdline + "\x00", # Commandline
+    params.target, # Application Path
+    params.cmdline, # Commandline
     params.uacflags, # UAC-Request Flag
     params.creationflags, # dwCreationFlags
-    "\x00", # StartDirectory
-    "WinSta0\\Default\x00", # Station
+    "", # StartDirectory
+    "WinSta0\\Default", # Station
         # Startup Info
         (None, # Title
         0, # dwX

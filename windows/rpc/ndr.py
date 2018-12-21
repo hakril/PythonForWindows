@@ -100,6 +100,7 @@ class NdrSID(object):
 class NdrVaryingCString(object):
     @classmethod
     def pack(cls, data):
+        """Pack string ``data``. append ``\\x00`` if not present at the end of the string"""
         if data is None:
             return None
         if not data.endswith('\x00'):
@@ -112,6 +113,7 @@ class NdrVaryingCString(object):
 class NdrWString(object):
     @classmethod
     def pack(cls, data):
+        """Pack string ``data``. append ``\\x00`` if not present at the end of the string"""
         if data is None:
             return None
         if not data.endswith('\x00'):
@@ -134,6 +136,7 @@ class NdrWString(object):
 class NdrCString(object):
     @classmethod
     def pack(cls, data):
+        """Pack string ``data``. append ``\\x00`` if not present at the end of the string"""
         if data is None:
             return None
         if not data.endswith('\x00'):
@@ -168,7 +171,7 @@ class NdrHyper(object):
 
     @classmethod
     def unpack(self, stream):
-        stream.align(4)
+        stream.align(8)
         return stream.partial_unpack("<Q")[0]
 
 class NdrShort(object):
@@ -190,6 +193,18 @@ class NdrByte(object):
     def unpack(self, stream):
         return stream.partial_unpack("<B")[0]
 
+
+class NdrGuid(object):
+    @classmethod
+    def pack(cls, data):
+        if not isinstance(data, gdef.IID):
+            data = gdef.IID.from_string(data)
+        return str(bytearray(data))
+
+    @classmethod
+    def unpack(self, stream):
+        rawguid = stream.partial_unpack("16s")[0]
+        return gdef.IID.from_buffer_copy(rawguid)
 
 class NdrContextHandle(object):
     @classmethod
@@ -252,15 +267,17 @@ class NdrStructure(object):
                 data.append(member.unpack_conformant(stream, conformant_size))
             else:
                 if hasattr(member, "unpack_in_struct"):
+                    # print("[{0}] Dereferenced unpacking".format(i))
                     ptr, subcls = member.unpack_in_struct(stream)
                     if not ptr:
                         data.append(None)
                     else:
                         data.append(ptr)
                     post_subcls.append((i, subcls))
-                    print(post_subcls)
+                    # print(post_subcls)
                 else:
                     data.append(member.unpack(stream))
+        # print("Applying deref unpack")
         for i, entry in post_subcls:
             data[i] = entry.unpack(stream)
         return cls.post_unpack(data)
@@ -369,13 +386,27 @@ class NdrWcharConformantVaryingArrays(NdrConformantVaryingArrays):
         return u"".join(unichr(c) for c in result)
 
 
+class NdrHyperConformantVaryingArrays(NdrConformantVaryingArrays):
+    MEMBER_TYPE = NdrHyper
+
+class NdrHyperConformantArray(NdrConformantArray):
+    MEMBER_TYPE = NdrHyper
+
 class NdrLongConformantArray(NdrConformantArray):
     MEMBER_TYPE = NdrLong
 
+class NdrShortConformantArray(NdrConformantArray):
+    MEMBER_TYPE = NdrShort
 
 class NdrByteConformantArray(NdrConformantArray):
     MEMBER_TYPE = NdrByte
 
+    @classmethod
+    def _post_unpack(self, result):
+        return bytearray(result)
+
+class NdrGuidConformantArray(NdrConformantArray):
+    MEMBER_TYPE = NdrGuid
 
 
 class NdrStream(object):
@@ -412,6 +443,8 @@ class NdrStream(object):
             # Realign
             size_to_align = (size - (already_read % size))
             self.data = self.data[size_to_align:]
+            return size_to_align
+        return 0
 
 
 def make_parameters(types, name=None):
