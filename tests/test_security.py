@@ -19,6 +19,13 @@ TEST_SDDL = [
 def test_security_descriptor_from_string(sddl):
     sd = SecurityDescriptor.from_string(sddl)
 
+def test_empty_security_descriptor():
+    esd = SecurityDescriptor.from_string("")
+    assert esd.owner is None # Should NOT be NULL PSID but None
+    assert esd.group is None # Should NOT be NULL PSID but None
+    assert esd.dacl is None
+    assert esd.sacl is None
+
 
 def test_pacl_object():
     SDDL = "O:ANG:S-1-2-3D:(A;;;;;S-1-42-42)(A;;;;;S-1-42-43)(A;;;;;S-1-42-44)"
@@ -191,5 +198,6 @@ def test_conditional_ace_applicationdata(sddl, expected_value):
     # https://msdn.microsoft.com/en-us/library/hh877860.aspx
     assert appdata.startswith("artx")
     assert expected_value in appdata.replace("\x00", "")
+
 
 

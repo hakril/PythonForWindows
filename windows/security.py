@@ -6,15 +6,171 @@ import windows.generated_def as gdef
 from windows import winproxy
 
 # Temporary ? real API ?
+# Mov to utils ?
 def lookup_sid(psid):
     usernamesize = gdef.DWORD(0x1000)
     computernamesize = gdef.DWORD(0x1000)
-    username = ctypes.c_buffer(usernamesize.value)
-    computername = ctypes.c_buffer(computernamesize.value)
+    username = ctypes.create_unicode_buffer(usernamesize.value)
+    computername = ctypes.create_unicode_buffer(computernamesize.value)
     peUse = gdef.SID_NAME_USE()
-    winproxy.LookupAccountSidA(None, psid, username, usernamesize, computername, computernamesize, peUse)
+    winproxy.LookupAccountSidW(None, psid, username, usernamesize, computername, computernamesize, peUse)
     return computername[:computernamesize.value], username[:usernamesize.value]
 
+# Specific access right
+
+FILE_ACCESS_RIGHT = gdef.FlagMapper(
+    gdef.FILE_READ_DATA,
+    gdef.FILE_WRITE_DATA,
+    gdef.FILE_APPEND_DATA,
+    gdef.FILE_READ_EA,
+    gdef.FILE_WRITE_EA,
+    gdef.FILE_EXECUTE,
+    gdef.FILE_READ_ATTRIBUTES,
+    gdef.FILE_WRITE_ATTRIBUTES
+)
+
+DIRECTORY_ACCESS_RIGHT = gdef.FlagMapper(
+    gdef.FILE_LIST_DIRECTORY,
+    gdef.FILE_ADD_FILE,
+    gdef.FILE_ADD_SUBDIRECTORY,
+    gdef.FILE_READ_EA,
+    gdef.FILE_WRITE_EA,
+    gdef.FILE_TRAVERSE,
+    gdef.FILE_DELETE_CHILD,
+    gdef.FILE_READ_ATTRIBUTES,
+    gdef.FILE_WRITE_ATTRIBUTES,
+)
+NAMED_PIPE_ACCESS_RIGHT = gdef.FlagMapper(
+    gdef.FILE_READ_DATA,
+    gdef.FILE_WRITE_DATA,
+    gdef.FILE_CREATE_PIPE_INSTANCE,
+    gdef.FILE_READ_ATTRIBUTES,
+    gdef.FILE_WRITE_ATTRIBUTES,
+)
+
+TOKEN_ACCESS_RIGHT = gdef.FlagMapper(
+    gdef.TOKEN_ASSIGN_PRIMARY,
+    gdef.TOKEN_DUPLICATE,
+    gdef.TOKEN_IMPERSONATE,
+    gdef.TOKEN_QUERY,
+    gdef.TOKEN_QUERY_SOURCE,
+    gdef.TOKEN_ADJUST_PRIVILEGES,
+    gdef.TOKEN_ADJUST_GROUPS,
+    gdef.TOKEN_ADJUST_DEFAULT,
+    gdef.TOKEN_ADJUST_SESSIONID,
+)
+
+CLUSTER_API_ACCESS_RIGH = gdef.FlagMapper(
+    gdef.CLUSAPI_READ_ACCESS,
+    gdef.CLUSAPI_CHANGE_ACCESS,
+    gdef.CLUSAPI_NO_ACCESS,
+)
+
+FAX_ACCESS_RIGHT = gdef.FlagMapper(
+    gdef.FAX_JOB_SUBMIT,
+    gdef.FAX_JOB_QUERY,
+    gdef.FAX_CONFIG_QUERY,
+    gdef.FAX_CONFIG_SET,
+    gdef.FAX_PORT_QUERY,
+    gdef.FAX_PORT_SET,
+    gdef.FAX_JOB_MANAGE,
+)
+
+CALLBACK_ACCESS_RIGHT = gdef.FlagMapper(
+    gdef.CALLBACK_MODIFY_STATE,
+)
+
+MUTANT_ACCESS_RIGHT = gdef.FlagMapper(
+    gdef.MUTANT_QUERY_STATE,
+)
+
+EVENT_ACCESS_RIGHT = gdef.FlagMapper(
+    gdef.EVENT_QUERY_STATE,
+    gdef.EVENT_MODIFY_STATE,
+)
+
+SEMAPHORE_ACCESS_RIGHT = gdef.FlagMapper(
+    gdef.SEMAPHORE_QUERY_STATE,
+    gdef.SEMAPHORE_MODIFY_STATE,
+)
+
+SEMAPHORE_ACCESS_RIGHT = gdef.FlagMapper(
+    gdef.TIMER_QUERY_STATE,
+    gdef.TIMER_QUERY_STATE,
+)
+
+IO_COMPLETION_ACCESS_RIGHT = gdef.FlagMapper(
+    gdef.IO_COMPLETION_QUERY_STATE,
+    gdef.IO_COMPLETION_MODIFY_STATE,
+)
+
+PORT_ACCESS_RIGHT = gdef.FlagMapper(
+    gdef.PORT_CONNECT,
+)
+
+OBJECT_MANAGER_TYPE_ACCESS_RIGHT = gdef.FlagMapper(
+    gdef.OBJECT_TYPE_CREATE
+)
+
+OBJECT_MANAGER_DIRECTORY_ACCESS_RIGHT = gdef.FlagMapper(
+    gdef.DIRECTORY_QUERY,
+    gdef.DIRECTORY_TRAVERSE,
+    gdef.DIRECTORY_CREATE_OBJECT,
+    gdef.DIRECTORY_CREATE_SUBDIRECTORY,
+)
+
+OBJECT_MANAGER_SIMLINK_ACCESS_RIGHT = gdef.FlagMapper(
+    gdef.SYMBOLIC_LINK_QUERY,
+)
+
+PROCESS_ACCESS_RIGHT = gdef.FlagMapper(
+    gdef.PROCESS_TERMINATE                  ,
+    gdef.PROCESS_CREATE_THREAD              ,
+    gdef.PROCESS_SET_SESSIONID              ,
+    gdef.PROCESS_VM_OPERATION               ,
+    gdef.PROCESS_VM_READ                    ,
+    gdef.PROCESS_VM_WRITE                   ,
+    gdef.PROCESS_DUP_HANDLE                 ,
+    gdef.PROCESS_CREATE_PROCESS             ,
+    gdef.PROCESS_SET_QUOTA                  ,
+    gdef.PROCESS_SET_INFORMATION            ,
+    gdef.PROCESS_QUERY_INFORMATION          ,
+    gdef.PROCESS_SUSPEND_RESUME             ,
+    gdef.PROCESS_QUERY_LIMITED_INFORMATION  ,
+    gdef.PROCESS_SET_LIMITED_INFORMATION    ,
+)
+
+THREAD_ACCESS_RIGHT = gdef.FlagMapper(
+    gdef.THREAD_TERMINATE,
+    gdef.THREAD_SUSPEND_RESUME,
+    gdef.THREAD_GET_CONTEXT,
+    gdef.THREAD_SET_CONTEXT,
+    gdef.THREAD_QUERY_INFORMATION,
+    gdef.THREAD_SET_INFORMATION,
+    gdef.THREAD_SET_THREAD_TOKEN,
+    gdef.THREAD_IMPERSONATE,
+    gdef.THREAD_DIRECT_IMPERSONATION,
+)
+
+JOB_ACCESS_RIGHT = gdef.FlagMapper(
+    gdef.JOB_OBJECT_ASSIGN_PROCESS         ,
+    gdef.JOB_OBJECT_SET_ATTRIBUTES         ,
+    gdef.JOB_OBJECT_QUERY                  ,
+    gdef.JOB_OBJECT_TERMINATE              ,
+    gdef.JOB_OBJECT_SET_SECURITY_ATTRIBUTES,
+)
+
+KEY_ACCESS_RIGHT = gdef.FlagMapper(
+    gdef.KEY_QUERY_VALUE         ,
+    gdef.KEY_SET_VALUE           ,
+    gdef.KEY_CREATE_SUB_KEY      ,
+    gdef.KEY_ENUMERATE_SUB_KEYS  ,
+    gdef.KEY_NOTIFY              ,
+    gdef.KEY_CREATE_LINK         ,
+    gdef.KEY_WOW64_64KEY         ,
+    gdef.KEY_WOW64_32KEY         ,
+    # KEY_WOW64_RES           (0x0300) # Just a mask of the 2 last
+)
 
 # ACE
 
@@ -47,11 +203,16 @@ class AceHeader(gdef.ACE_HEADER):
 
     @property
     def AceType(self):
+        """The type of the Ace header"""
         raw_type = super(AceHeader, self).AceType
         return ACE_CLASS_TYPE_MAPPER[raw_type]
 
     @property
     def flags(self):
+        """The flags of the Ace header
+
+        :type: [:class:`int`] - A list of :class:`int`
+        """
         return list(self._flags_generator())
 
     def _flags_generator(self):
@@ -71,28 +232,43 @@ class AceHeader(gdef.ACE_HEADER):
 
 
 class AceBase(object): # Ca ou mettre flags extraction dans le ctypes generated
+    """Base object for all ``ACE`` classes. provide access to an improved header"""
     @property
     def Header(self): # Override the ctypes Header for the struct -> return extended header
+        """The Header of the ``ACE``
+
+        :type: :class:`AceHeader`
+        """
         addr = ctypes.addressof(self)
         sheader = super(AceBase, type(self)).Header
         return AceHeader.from_address(addr + sheader.offset)
 
 
 class MaskAndSidACE(AceBase):
-    # "Virtual" ACE for ACE struct with
-    # ACE_HEADER Header;
-    # ACCESS_MASK Mask;
-    # DWORD SidStart;
+    """`Virtual` ACE for ACE struct with the following layout:
+
+        - ACE_HEADER Header
+        - ACCESS_MASK Mask
+        - DWORD SidStart
+    """
 
     def _sid_offset(self):
         return type(self).SidStart.offset
 
     @property
     def sid(self):
+        """The sid described by the ``ACE``
+
+        :type: :class:`windows.generated_def.winstructs.PSID`
+        """
         return gdef.PSID(ctypes.addressof(self) + self._sid_offset())
 
     @property
     def mask(self):
+        """The list of flags described by the ``ACE``
+
+        :type: [:class:`int`] - A list of :class:`int`
+        """
         return list(self._mask_generator())
 
     def _mask_generator(self):
@@ -109,7 +285,12 @@ class MaskAndSidACE(AceBase):
 class CallbackACE(MaskAndSidACE):
     @property
     def application_data(self):
-        """FROM : https://msdn.microsoft.com/en-us/library/hh877860.aspx"""
+        """The application-specific data
+
+        see : https://msdn.microsoft.com/en-us/library/hh877860.aspx
+
+        :type: :class:`str`
+        """
         selfptr = ctypes.cast(ctypes.addressof(self), gdef.PUCHAR)
         datastart = ctypes.sizeof(self) + self.sid.size - 4
         dataend = self.Header.AceSize
@@ -122,17 +303,29 @@ class ObjectRelatedACE(MaskAndSidACE):
 
     @property
     def flags(self):
+        """The flags of the ``ACE``
+
+        :type: [:class:`int`] - A list of :class:`int`
+        """
         flags = self.Flags
         return [x for x in self.FLAGS_VALUES if flags & x]
 
     @property
     def object_type(self):
+        """The ``ObjectType`` described in the ACE. ``None`` if `ACE`` has no ``ObjectType``
+
+        :type: :class:`~windows.generated_def.winstructs.PSID` or ``None``
+        """
         if not self.Flags & gdef.ACE_OBJECT_TYPE_PRESENT:
             return None
         return self.ObjectType
 
     @property
     def inherited_object_type(self):
+        """The ``InheritedObjectType`` described in the ACE. ``None`` if `ACE`` has no ``InheritedObjectType``
+
+        :type: :class:`~windows.generated_def.winstructs.PSID` or ``None``
+        """
         if not self.Flags & gdef.ACE_INHERITED_OBJECT_TYPE_PRESENT:
             return None
         if self.Flags & gdef.ACE_OBJECT_TYPE_PRESENT:
@@ -220,7 +413,6 @@ class SystemResourceAttributeACE(MaskAndSidACE, gdef.SYSTEM_RESOURCE_ATTRIBUTE_A
         # Sid-size not in the initial struct
         sid_size_over = self.sid.size - type(self).SidStart.size
         sec_attr_addr = ctypes.addressof(self) + ctypes.sizeof(self) + sid_size_over
-
         return ClaimSecurityAttributeRelativeV1.from_address(sec_attr_addr)
 
 class SystemScopedPolicyIDACE(MaskAndSidACE, gdef.SYSTEM_SCOPED_POLICY_ID_ACE):
@@ -257,7 +449,6 @@ ACE_CLASS_BY_ACE_TYPE = {cls.ACE_TYPE: cls for cls in (
 )}
 
 ACE_CLASS_TYPE_MAPPER = gdef.FlagMapper(*ACE_CLASS_BY_ACE_TYPE.keys())
-
 
 # CLAIM_SECURITY_ATTRIBUTE_RELATIVE_V1 follow the SYSTEM_RESOURCE_ATTRIBUTE_ACE
 # For ACE of type SYSTEM_RESOURCE_ATTRIBUTE_ACE_TYPE
@@ -322,6 +513,7 @@ class ClaimSecurityAttributeRelativeV1(gdef.CLAIM_SECURITY_ATTRIBUTE_RELATIVE_V1
 
 # ACL
 class Acl(gdef.ACL):
+    """All the ``ACE`` returned by :class:`Acl` methods/property are described in the :ref:`Ace section <security_ace>`"""
     @property
     def size_info(self):
         size_info = gdef.ACL_SIZE_INFORMATION()
@@ -329,6 +521,10 @@ class Acl(gdef.ACL):
         return size_info
 
     def get_ace(self, i):
+        """Retrieve ``ACE`` number ``i``
+
+        :return: :class:`Ace`
+        """
         ace = gdef.PVOID()
         winproxy.GetAce(self, i, ace)
         # TODO: subclass ACL
@@ -336,9 +532,14 @@ class Acl(gdef.ACL):
 
     @property
     def aces(self):
+        """The list of ``ACE`` in the ACL :class:`Acl`
+
+        :type: [:class:`Ace`] - A list of ACE
+        """
         return list(self)
 
     def __len__(self):
+        """The number of ``ACE`` in the :class:`Acl`"""
         return self.AceCount
 
     def __getitem__(self, i):
@@ -350,6 +551,9 @@ class Acl(gdef.ACL):
             raise
 
     def __iter__(self):
+        """Return an iterable over all the ``ACE`` in the :class:`Acl`
+
+        :yield: :class:`Ace`"""
         for i in range(self.AceCount):
             yield self.get_ace(i)
 
@@ -359,11 +563,12 @@ class Acl(gdef.ACL):
 PAcl = ctypes.POINTER(Acl)
 
 # Security descriptor
-
 class SecurityDescriptor(gdef.PSECURITY_DESCRIPTOR):
-    """TODO: free the underliying buffer when not needed anymore
+    """A Security Descriptor
 
-    for now the underliying memory is never free
+    .. warning::
+
+        TODO: free the underliying buffer when not needed anymore for now the underliying memory is never freed.
     """
     DEFAULT_SECURITY_INFORMATION = (
         gdef.OWNER_SECURITY_INFORMATION     |
@@ -374,14 +579,35 @@ class SecurityDescriptor(gdef.PSECURITY_DESCRIPTOR):
         gdef.SCOPE_SECURITY_INFORMATION     |
         gdef.PROCESS_TRUST_LABEL_SECURITY_INFORMATION
     )
+    """The default ``flags`` value for functions expecting a
+    `SECURITY_INFORMATION <https://docs.microsoft.com/en-us/windows/desktop/SecAuthZ/security-information>`_.
+
+    This value regroups the followings flags:
+
+        - ``OWNER_SECURITY_INFORMATION``
+        - ``GROUP_SECURITY_INFORMATION``
+        - ``DACL_SECURITY_INFORMATION``
+        - ``ATTRIBUTE_SECURITY_INFORMATION``
+        - ``SCOPE_SECURITY_INFORMATION``
+        - ``PROCESS_TRUST_LABEL_SECURITY_INFORMATION``
+
+    .. warning::
+
+        Note that the value ``SACL_SECURITY_INFORMATION`` needed to access the SACL is not present as it require the ``SeSecurityPrivilege``.
+
+        To query the SACL enable the ``SeSecurityPrivilege`` and use the parameter ``query_sacl=True`` on the functions expecting a ``flags``
+
+        see SACL sample
+    """
 
     _close_function = winproxy.LocalFree
 
-    # def __init__(self, needs_free=True):
-        # self._needs_free = needs_free
-
     @property
     def control(self):
+        """The security descriptor control
+
+        :type: :class:`~windows.generated_def.winstructs.SECURITY_DESCRIPTOR_CONTROL`
+        """
         lpdwRevision = gdef.DWORD()
         control = gdef.SECURITY_DESCRIPTOR_CONTROL()
         winproxy.GetSecurityDescriptorControl(self, control, lpdwRevision)
@@ -389,6 +615,10 @@ class SecurityDescriptor(gdef.PSECURITY_DESCRIPTOR):
 
     @property
     def revision(self):
+        """The security descriptor's revision
+
+        :type: :class:`int`
+        """
         lpdwRevision = gdef.DWORD()
         control = gdef.SECURITY_DESCRIPTOR_CONTROL()
         winproxy.GetSecurityDescriptorControl(self, control, lpdwRevision)
@@ -396,21 +626,35 @@ class SecurityDescriptor(gdef.PSECURITY_DESCRIPTOR):
 
     @property
     def owner(self):
+        """The owner of the security descriptor
+
+        :type: :class:`~windows.generated_def.winstructs.PSID` or ``None``
+        """
         owner = gdef.PSID()
         lpbOwnerDefaulted = gdef.BOOL()
         winproxy.GetSecurityDescriptorOwner(self, owner, lpbOwnerDefaulted)
-        return owner
+        # Return None of owner is NULL
+        return owner or None
 
     @property
     def group(self):
+        """The group of the security descriptor
+
+        :type: :class:`~windows.generated_def.winstructs.PSID` or ``None``
+        """
         group = gdef.PSID()
         lpbGroupDefaulted = gdef.BOOL()
         winproxy.GetSecurityDescriptorGroup(self, group, lpbGroupDefaulted)
-        return group
+        # Return None of group is NULL
+        return group or None
 
 
     @property
     def dacl(self):
+        """The DACL of the security descriptor.
+
+        :type: :class:`Acl` or ``None`` if the DACL was ``NULL`` or not present
+        """
         dacl_present = gdef.BOOL()
         pdacl = gdef.PACL()
         lpbDaclDefaulted = gdef.BOOL()
@@ -421,6 +665,10 @@ class SecurityDescriptor(gdef.PSECURITY_DESCRIPTOR):
 
     @property
     def sacl(self):
+        """The SACL of the security descriptor. You may need special attention to retrieve it (see :any:`DEFAULT_SECURITY_INFORMATION`)
+
+        :type: :class:`Acl` or ``None`` if the SACL was ``NULL`` or not present
+        """
         sacl_present = gdef.BOOL()
         psacl = gdef.PACL()
         lpbSaclDefaulted = gdef.BOOL()
@@ -432,6 +680,16 @@ class SecurityDescriptor(gdef.PSECURITY_DESCRIPTOR):
     # Constructors
     @classmethod
     def from_string(cls, sddl):
+        """Return a new :class:`SecurityDescriptor` from the ``SDDL``.
+
+        :returns: :class:`SecurityDescriptor`
+
+        .. warning::
+
+            At the moment the underliying buffer is never freed.
+
+            See `ConvertStringSecurityDescriptorToSecurityDescriptorA <https://docs.microsoft.com/en-us/windows/desktop/api/sddl/nf-sddl-convertstringsecuritydescriptortosecuritydescriptora>`_
+        """
         self = cls()
         winproxy.ConvertStringSecurityDescriptorToSecurityDescriptorA(
             sddl,
@@ -443,16 +701,16 @@ class SecurityDescriptor(gdef.PSECURITY_DESCRIPTOR):
         return self
 
     @classmethod
-    def _from_name_and_type(cls, objname, objtype, query_sacl=False, security_infos=DEFAULT_SECURITY_INFORMATION):
+    def _from_name_and_type(cls, objname, objtype, flags=DEFAULT_SECURITY_INFORMATION, query_sacl=False):
         self = cls()
 
         if query_sacl:
-            security_infos |= gdef.SACL_SECURITY_INFORMATION
+            flags |= gdef.SACL_SECURITY_INFORMATION
 
         winproxy.GetNamedSecurityInfoA(
             objname,
             objtype,
-            security_infos,
+            flags,
             None,
             None,
             None,
@@ -462,10 +720,48 @@ class SecurityDescriptor(gdef.PSECURITY_DESCRIPTOR):
         return self
 
     @classmethod
-    def from_filename(cls, filename, query_sacl=False):
-        return cls._from_name_and_type(filename, gdef.SE_FILE_OBJECT, query_sacl=query_sacl)
+    def _from_handle_and_type(cls, handle, objtype, flags=DEFAULT_SECURITY_INFORMATION, query_sacl=False):
+        self = cls()
+
+        if query_sacl:
+            flags |= gdef.SACL_SECURITY_INFORMATION
+
+        winproxy.GetSecurityInfo(
+            handle,
+            objtype,
+            flags,
+            None,
+            None,
+            None,
+            None,
+            self
+        )
+        return self
+
+    @classmethod
+    def from_filename(cls, filename, query_sacl=False, flags=DEFAULT_SECURITY_INFORMATION):
+        """Retrieve the security descriptor for the file ``filename``"""
+        return cls._from_name_and_type(filename, gdef.SE_FILE_OBJECT, flags=flags, query_sacl=query_sacl)
+
+    @classmethod
+    def from_handle(cls, handle, query_sacl=False, flags=DEFAULT_SECURITY_INFORMATION):
+        """Retrieve the security descriptor for the kernel object described by``handle``"""
+        return cls._from_handle_and_type(handle, gdef.SE_KERNEL_OBJECT, flags=flags, query_sacl=query_sacl)
+
+    @classmethod
+    def from_binary(cls, data):
+        """Retrieve the security descriptor described by the binary ``data``.
+        Binary security descriptor can be found in the registry for example
+        """
+        if isinstance(data, basestring):
+            data = ctypes.c_buffer(data)
+        return ctypes.cast(data, cls)
 
     def to_string(self, security_information=DEFAULT_SECURITY_INFORMATION):
+        """Return the SDDL representation of the security descriptor
+
+        :type: :class:`str`
+        """
         result_cstr = gdef.LPSTR()
         winproxy.ConvertSecurityDescriptorToStringSecurityDescriptorA(
             self,
@@ -476,6 +772,7 @@ class SecurityDescriptor(gdef.PSECURITY_DESCRIPTOR):
         result = result_cstr.value # Retrieve a python-str copy
         winproxy.LocalFree(result_cstr)
         return result
+
 
     # TST
 
