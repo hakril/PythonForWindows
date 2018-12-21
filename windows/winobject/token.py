@@ -6,7 +6,6 @@ import windows
 from windows import utils
 from windows import winproxy
 import windows.generated_def as gdef
-import windows.security
 
 
 KNOW_INTEGRITY_LEVEL = gdef.FlagMapper(
@@ -282,7 +281,7 @@ class Token(utils.AutoHandle):
         return self._user_and_computer_name()[0]
 
     def _user_and_computer_name(self):
-        return windows.security.lookup_sid(self.user)
+        return windows.utils.lookup_sid(self.user)
 
 
     groups = TokenGroups #: Alias for TokenGroups (type may change in the future for improved struct)
@@ -309,6 +308,7 @@ class Token(utils.AutoHandle):
 
         :type: :class:`windows.security.Acl`
         """
+        import window.security # Beuk move token.py & in a security/ directory ?
         return self.get_token_infomations(gdef.TokenDefaultDacl, windows.security.PAcl)[0]
 
     # def source(self): (tok.TokenSource) ??

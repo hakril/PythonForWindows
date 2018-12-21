@@ -5,16 +5,8 @@ import windows
 import windows.generated_def as gdef
 from windows import winproxy
 
-# Temporary ? real API ?
-# Mov to utils ?
-def lookup_sid(psid):
-    usernamesize = gdef.DWORD(0x1000)
-    computernamesize = gdef.DWORD(0x1000)
-    username = ctypes.create_unicode_buffer(usernamesize.value)
-    computername = ctypes.create_unicode_buffer(computernamesize.value)
-    peUse = gdef.SID_NAME_USE()
-    winproxy.LookupAccountSidW(None, psid, username, usernamesize, computername, computernamesize, peUse)
-    return computername[:computernamesize.value], username[:usernamesize.value]
+from windows.winobject.token import Token
+
 
 # Specific access right
 

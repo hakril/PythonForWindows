@@ -110,6 +110,20 @@ def lookup_privilege_name(privilege_value):
     winproxy.LookupPrivilegeNameA(None, privilege_value, buff, size)
     return buff[:size.value]
 
+
+def lookup_sid(psid):
+    """Retrieves the name of the Computer/Domain and the name of the Account for a given SID
+
+    :returns: (:class:`unicode`, :class:`unicode`) - A tuple of two unicode strings
+    """
+    usernamesize = gdef.DWORD(0x1000)
+    computernamesize = gdef.DWORD(0x1000)
+    username = ctypes.create_unicode_buffer(usernamesize.value)
+    computername = ctypes.create_unicode_buffer(computernamesize.value)
+    peUse = gdef.SID_NAME_USE()
+    winproxy.LookupAccountSidW(None, psid, username, usernamesize, computername, computernamesize, peUse)
+    return computername[:computernamesize.value], username[:usernamesize.value]
+
 def enable_privilege(lpszPrivilege, bEnablePrivilege):
     """
     Enable or disable a privilege::

@@ -1,5 +1,4 @@
 import windows
-import windows.security
 import windows.generated_def as gdef
 
 tok = windows.current_process.token
@@ -7,9 +6,9 @@ print("Our process token is {0}".format(tok))
 print("Retrieving some infos")
 print("Username: <{0}>".format(tok.username))
 print("User: {0!r}".format(tok.user))
-print("  - lookup : {0}".format(windows.security.lookup_sid(tok.user)))
+print("  - lookup : {0}".format(windows.utils.lookup_sid(tok.user)))
 print("Primary group: {0!r}".format(tok.primary_group))
-print("  - lookup : {0}".format(windows.security.lookup_sid(tok.primary_group)))
+print("  - lookup : {0}".format(windows.utils.lookup_sid(tok.primary_group)))
 
 print("")
 groups = tok.groups

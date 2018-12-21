@@ -6,9 +6,9 @@ sd = windows.security.SecurityDescriptor.from_string(SDDL)
 print("Security descriptor is: {0}".format(sd))
 
 print("Owner: {0}".format(sd.owner))
-print("  - lookup: {0}".format(windows.security.lookup_sid(sd.owner)))
+print("  - lookup: {0}".format(windows.utils.lookup_sid(sd.owner)))
 print("Group: {0}".format(sd.group))
-print("  - lookup: {0}".format(windows.security.lookup_sid(sd.group)))
+print("  - lookup: {0}".format(windows.utils.lookup_sid(sd.group)))
 
 dacl = sd.dacl
 print("Dacl: {0}".format(dacl))

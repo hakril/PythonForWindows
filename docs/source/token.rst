@@ -9,6 +9,15 @@ This module expose the :class:`Token` object that can be primarily  retrieved th
     * :data:`windows.winobject.process.WinThread.token`
     * :data:`windows.current_process.token <windows.winobject.process.CurrentProcess.token>`
     * :data:`windows.current_thread.token <windows.winobject.process.CurrentThread.token>`
+    * :class:`windows.security.Token`
+
+.. note::
+
+    If you need to directly access the :class:`Token` class, please use :class:`windows.security.Token` as the
+    path of ``token.py`` may change.
+
+    Indeed ``SecurityDescriptor`` & ``Token`` are deeply related and I may move ``token.py`` to a
+    ``security/`` directory in the futur.
 
 .. note::
 

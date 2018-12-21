@@ -18,6 +18,17 @@ This module give access to :class:`SecurityDescriptor` and related structures (`
 
     See sample :ref:`sample_security`
 
+Token
+"""""
+
+The :mod:`windows.security` module is the official module where to retrieve the :class:`~windows.winobject.token.Token` class if ever needed.
+
+Indeed ``SecurityDescriptor`` & ``Token`` are deeply related and I may move ``token.py`` to a ``security/`` directory in the futur.
+
+
+    >>> windows.security.Token
+    <class 'windows.winobject.token.Token'>
+
 
 SecurityDescriptor
 """"""""""""""""""
