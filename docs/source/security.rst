@@ -12,6 +12,12 @@
 
 .. module:: windows.security
 
+This module give access to :class:`SecurityDescriptor` and related structures (``Acl`` & ``Ace``).
+
+.. note::
+
+    See sample :ref:`sample_security`
+
 
 SecurityDescriptor
 """"""""""""""""""
@@ -218,36 +224,36 @@ SystemProcessTrustLabelACE
 
 
 Ace common base
-"""""""""""""""
+'''''''''''''''
 
 These classes are internals and here for completness sake.
 You should not need to instanciate/use them directly.
 
 AceHeader
-'''''''''
+~~~~~~~~~
 
 .. autoclass:: AceHeader
 
 AceBase
-'''''''
+~~~~~~~
 
 .. autoclass:: AceBase
 
 
 MaskAndSidACE
-'''''''''''''
+~~~~~~~~~~~~~
 
 .. autoclass:: MaskAndSidACE
 
 
 CallbackACE
-'''''''''''
+~~~~~~~~~~~
 
 .. autoclass:: CallbackACE
 
 
 ObjectRelatedACE
-''''''''''''''''
+~~~~~~~~~~~~~~~~
 
 .. autoclass:: ObjectRelatedACE
 

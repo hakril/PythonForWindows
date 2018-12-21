@@ -597,7 +597,7 @@ class SecurityDescriptor(gdef.PSECURITY_DESCRIPTOR):
 
         To query the SACL enable the ``SeSecurityPrivilege`` and use the parameter ``query_sacl=True`` on the functions expecting a ``flags``
 
-        see SACL sample
+        see :ref:`Query SACL sample <sample_security_sacl>`
     """
 
     _close_function = winproxy.LocalFree

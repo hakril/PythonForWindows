@@ -14,6 +14,8 @@
 
 import sys
 import os
+import sphinx
+import docutils
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -45,6 +47,7 @@ extensions = [
 ]
 
 autodoc_default_flags = ['inherited-members']
+# autodoc_member_order = "groupwise"
 todo_include_todos = True
 
 # Add any paths that contain templates here, relative to this directory.
@@ -375,5 +378,30 @@ def get_rst(app, what, name, obj, options, lines):
 def get_rst2(app, what, name, obj, options, signature, return_annotation):
     pass
 
+
+# Test code to handle :class:`gdef.STRUCTURE_NAME`
+# demo of custom xref for not-found structures
+# Test was for ref to 'SECURITY_DESCRIPTOR_CONTROL' in SecurityDescriptor.control
+def miss_ref(app, env, node, contnode):
+    # import pdb;pdb.set_trace()
+    if not node["reftype"] == "class":
+        return
+    print(node, node["reftype"], node["reftarget"], contnode)
+    # import pdb;pdb.set_trace()
+
+    if "SECURITY_DESCRIPTOR_CONTROL" not in node["reftarget"]:
+        return
+
+    res = docutils.nodes.reference("", "")
+    py_domain = env.domains["py"]
+    full_name = "windows.generated_def.winstructs.{0}".format(node["reftarget"].rsplit(".", 1)[-1])
+    t = [x for x in py_domain.get_objects() if full_name == x[0]][0]
+    res["refdocname"] = node["refdoc"]
+    res.append(contnode)
+    uri = app.builder.get_relative_uri(node["refdoc"], t[3])
+    res['refuri'] = "{0}#{1}".format(uri, t[0])
+    return res
+
 def setup(app):
     app.add_stylesheet('css/mbasic.css')  # may also be an URL
+    # app.connect('missing-reference', miss_ref)

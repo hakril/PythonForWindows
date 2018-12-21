@@ -35,7 +35,7 @@ You can install PythonForWindows using the ``setup.py`` at the root of the proje
     python setup.py install
 
 In its current state the project only support Python2 and
-``setup.py`` will raise an :class:`NotImplementedError` is launched from python3.
+``setup.py`` will raise an :class:`NotImplementedError` if launched from python3.
 
 
 .. warning::
@@ -54,6 +54,7 @@ Documentation
    winobject.rst
    native_exec.rst
    winproxy.rst
+   security.rst
    pipe.rst
    utils.rst
    wintrust.rst

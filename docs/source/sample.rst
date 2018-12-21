@@ -67,6 +67,18 @@ Output
 .. literalinclude:: samples_output\process_iat_hook.txt
 
 
+.. _token_sample:
+
+Token
+"""""
+
+.. literalinclude:: ..\..\samples\token\token_demo.py
+
+Output
+
+.. literalinclude:: samples_output\token_token_demo.txt
+
+
 .. _sample_system:
 
 
@@ -226,6 +238,17 @@ Output
 
 .. literalinclude:: samples_output\debug_debugger_print_LdrLoaddll.txt
 
+.. _sample_debugger_on_setup:
+
+on_setup
+~~~~~~~~
+
+.. literalinclude:: ..\..\samples\debug\debugger_on_setup.py
+
+
+Output
+
+.. literalinclude:: samples_output\debug_debugger_on_setup.txt
 
 
 Single stepping
@@ -523,3 +546,28 @@ Output
 
 .. literalinclude:: samples_output\pipe_child_send_object.txt
 
+
+.. _sample_security:
+
+:mod:`windows.security`
+"""""""""""""""""""""""
+
+Security Descriptor
+'''''''''''''''''''
+
+.. literalinclude:: ..\..\samples\security\security_descriptor.py
+
+Output
+
+.. literalinclude:: samples_output\security_security_descriptor.txt
+
+.. _sample_security_sacl:
+
+Query SACL
+''''''''''
+
+.. literalinclude:: ..\..\samples\security\query_sacl.py
+
+Output
+
+.. literalinclude:: samples_output\security_query_sacl.txt
