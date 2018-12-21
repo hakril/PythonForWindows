@@ -33,233 +33,6 @@ TimeInfo = namedtuple("TimeInfo", ["creation", "exit", "kernel", "user"])
 """Time information about a process"""
 
 
-class WinThread(utils.AutoHandle):
-    """Represent a thread """
-
-    def __init__(self, tid=None, handle=None, owner_pid=None, owner=None):
-        if tid is None and handle is None:
-            raise ValueError("Need at least <pid> or <handle> to create a {0}".format(type(self).__name__))
-
-        if tid is not None:    self._tid = tid
-        if handle is not None: self._handle = handle
-        if owner is not None:   self._owner = owner
-        if owner_pid is not None:   self._owner_pid = owner_pid
-        if owner_pid is None and owner:
-            self._owner_pid = owner.pid
-
-    @classmethod
-    def _from_THREADENTRY32(cls, entry, owner=None):
-        tid = entry.th32ThreadID
-        owner_pid = entry.th32OwnerProcessID
-        return cls(tid=tid, owner_pid=owner_pid, owner=owner)
-
-    @classmethod
-    def _from_handle(cls, handle):
-        # Create a DeadThread if thread is already dead ?
-        return WinThread(handle=handle)
-
-    @utils.fixedpropety
-    def tid(self):
-        """Thread ID
-
-        :type: :class:`int`"""
-        return self._get_thread_id(self.handle)
-
-    @utils.fixedpropety
-    def owner_pid(self):
-        return self._get_thread_owner_pid(self.handle)
-
-    @utils.fixedpropety
-    def owner(self):
-        """The Process owning the thread
-
-        :type: :class:`WinProcess`
-		"""
-        return WinProcess(pid=self.owner_pid)
-
-    @property
-    def context(self):
-        """The context of the thread, type depend of the target process.
-
-        :type: :class:`windows.exception.ECONTEXT32` or  :class:`windows.exception.ECONTEXT64` or :class:`windows.exception.ECONTEXTWOW64`
-		"""
-        if self.owner.bitness == 32 and windows.current_process.bitness == 64:
-            # Wow64
-            x = exception.ECONTEXTWOW64()
-            x.ContextFlags = CONTEXT_ALL
-            winproxy.Wow64GetThreadContext(self.handle, x)
-            return x
-
-        if self.owner.bitness == 64 and windows.current_process.bitness == 32:
-            x = exception.ECONTEXT64.new_aligned()
-            x.ContextFlags = CONTEXT_ALL
-            windows.syswow64.NtGetContextThread_32_to_64(self.handle, x)
-            return x
-
-        if self.owner.bitness == 32:
-            x = exception.ECONTEXT32()
-        else:
-            x = exception.ECONTEXT64.new_aligned()
-        x.ContextFlags = CONTEXT_ALL
-        winproxy.GetThreadContext(self.handle, x)
-        return x
-
-    @property
-    def context_syswow(self):
-        """The 64 bits context of a syswow thread.
-
-        :type:  :class:`windows.exception.ECONTEXT64`
-		"""
-        if not self.owner.is_wow_64:
-            raise ValueError("Not a syswow process")
-        x = exception.ECONTEXT64.new_aligned()
-        x.ContextFlags = CONTEXT_ALL
-        if windows.current_process.bitness == 64:
-            winproxy.GetThreadContext(self.handle, x)
-        else:
-            windows.syswow64.NtGetContextThread_32_to_64(self.handle, x)
-        return x
-
-
-    def set_context(self, context):
-        """Set the thread's context to ``context``"""
-        if self.owner.bitness == windows.current_process.bitness:
-            return winproxy.SetThreadContext(self.handle, context)
-        if windows.current_process.bitness == 64 and self.owner.bitness == 32:
-            return winproxy.Wow64SetThreadContext(self.handle, context)
-        return windows.syswow64.NtSetContextThread_32_to_64(self.handle, ctypes.byref(context))
-
-
-    def set_syswow_context(self, context):
-        """Set a syswow thread's 64 context to ``context``"""
-        if not self.owner.is_wow_64:
-            raise ValueError("Not a syswow process")
-        if windows.current_process.bitness == 64:
-            return winproxy.SetThreadContext(self.handle, context)
-        return windows.syswow64.NtSetContextThread_32_to_64(self.handle, ctypes.byref(context))
-
-
-    @property
-    def start_address(self):
-        """The start address of the thread
-
-            :type: :class:`int`
-		"""
-        if windows.current_process.bitness == 32 and self.owner.bitness == 64:
-            res = ULONGLONG()
-            windows.syswow64.NtQueryInformationThread_32_to_64(self.handle, ThreadQuerySetWin32StartAddress, byref(res), ctypes.sizeof(res))
-            return res.value
-        res_size = max(self.owner.bitness, windows.current_process.bitness)
-        if res_size == 32:
-            res = ULONG()
-        else:
-            res = ULONGLONG()
-        winproxy.NtQueryInformationThread(self.handle, ThreadQuerySetWin32StartAddress, byref(res), ctypes.sizeof(res))
-        return res.value
-
-    @property
-    def teb_base(self):
-        """The address of the thread's TEB
-
-            :type: :class:`int`
-		"""
-        if windows.current_process.bitness == 32 and self.owner.bitness == 64:
-            restype = rctypes.transform_type_to_remote64bits(THREAD_BASIC_INFORMATION)
-            ressize = (ctypes.sizeof(restype))
-            # Manual aligned allocation :DDDD
-            nb_qword = (ressize + 8) / ctypes.sizeof(ULONGLONG)
-            buffer = (nb_qword * ULONGLONG)()
-            struct_address = ctypes.addressof(buffer)
-            if (struct_address & 0xf) not in [0, 8]:
-                raise ValueError("ULONGLONG array not aligned on 8")
-            windows.syswow64.NtQueryInformationThread_32_to_64(self.handle, ThreadBasicInformation, struct_address, ressize)
-            return restype(struct_address, windows.current_process).TebBaseAddress
-
-        res = THREAD_BASIC_INFORMATION()
-        windows.winproxy.NtQueryInformationThread(self.handle, ThreadBasicInformation, byref(res), ctypes.sizeof(res))
-        return res.TebBaseAddress
-
-    def exit(self, code=0):
-        """Exit the thread"""
-        return winproxy.TerminateThread(self.handle, code)
-
-    def resume(self):
-        """Resume the thread"""
-        return winproxy.ResumeThread(self.handle)
-
-    def suspend(self):
-        """Suspend the thread"""
-        return winproxy.SuspendThread(self.handle)
-
-    def _get_handle(self):
-        return winproxy.OpenThread(dwThreadId=self.tid)
-
-    @property
-    def is_exit(self):
-        """``True`` if the thread is terminated
-
-        :type: :class:`bool`
-		"""
-        return self.exit_code != STILL_ACTIVE
-
-    @property
-    def exit_code(self):
-        """The exit code of the thread : ``STILL_ACTIVE`` means the process is not dead
-
-        :type: :class:`int`
-		"""
-        res = DWORD()
-        winproxy.GetExitCodeThread(self.handle, byref(res))
-        return res.value
-
-    def __repr__(self):
-        owner = self.owner
-        if owner is None:
-            owner_name = "<Dead process with pid {0}>".format(hex(self.th32OwnerProcessID))
-        else:
-            try:
-                owner_name = owner.name
-            except EnvironmentError:
-                owner_name = "!cannot-retrieve-owner-name"
-        return '<{0} {1} owner "{2}" at {3}>'.format(self.__class__.__name__, self.tid, owner_name, hex(id(self)))
-
-    @staticmethod
-    def _get_thread_id_by_api(handle):
-        return winproxy.GetThreadId(handle)
-
-    @staticmethod
-    def _get_thread_id_manual(handle):
-        if windows.current_process.bitness == 32 and self.owner.bitness == 64:
-            raise NotImplementedError("[_get_thread_id_manual] 32 -> 64 (XP64 bits + Syswow process ?)")
-        res = THREAD_BASIC_INFORMATION()
-        windows.winproxy.NtQueryInformationThread(handle, ThreadBasicInformation, byref(res), ctypes.sizeof(res))
-        id2 = res.ClientId.UniqueThread
-        return id2
-
-    def _get_thread_owner_pid(self, handle):
-        res = THREAD_BASIC_INFORMATION()
-        windows.winproxy.NtQueryInformationThread(handle, ThreadBasicInformation, byref(res), ctypes.sizeof(res))
-        id2 = res.ClientId.UniqueProcess
-        return id2
-
-
-    if winproxy.is_implemented(winproxy.GetThreadId):
-        _get_thread_id = _get_thread_id_by_api
-    else:
-        _get_thread_id = _get_thread_id_manual
-
-
-
-    # def token(self):
-    #     """The token of the process
-    #
-    #     :type: :class:`Token`
-	# 	"""
-    #     token_handle = HANDLE()
-    #     winproxy.OpenThreadToken(self.handle, TOKEN_QUERY, False, byref(token_handle))
-    #     return Token(token_handle.value)
-
-
 class DeadThread(utils.AutoHandle):
     """An already dead thread (returned only by API returning a new thread if thread die before being returned)"""
     def __init__(self, handle, tid=None):
@@ -687,13 +460,16 @@ class Process(utils.AutoHandle):
     """The priority of the process"""
 
 
-    def open_token(self, flags=TOKEN_QUERY):
+    def open_token(self, flags=MAXIMUM_ALLOWED):
+        """Open the process Token
+
+        :returns: :class:`~windows.winobject.token.Token`
+        """
         token_handle = HANDLE()
         winproxy.OpenProcessToken(self.limited_handle, flags, byref(token_handle))
         return token.Token(token_handle.value)
 
-
-    token = property(open_token)
+    token = property(open_token, doc="The process :class:`~windows.winobject.token.Token`")
 
     def __del__(self):
         super(Process, self).__del__()
@@ -706,18 +482,44 @@ class Process(utils.AutoHandle):
             dbgprint("Closing limited handle {0} for {1}".format(hex(self._limited_handle), self), "HANDLE") if dbgprint is not None else None
             self._close_function(self._limited_handle)
 
+class Thread(utils.AutoHandle):
+    def open_token(self, flags=MAXIMUM_ALLOWED, as_self=False):
+        """Open the Thread token if any (Impersonation) else return None.
+        ``as_self`` tells which security context should be used
 
-    # @utils.fixedpropety
-    # def token(self):
-    #     """The token of the process
-    #
-    #     :type: :class:`Token`
-	# 	"""
-    #     token_handle = HANDLE()
-    #     winproxy.OpenProcessToken(self.handle, TOKEN_QUERY, byref(token_handle))
-    #     return Token(token_handle.value)
+        :returns: :class:`~windows.winobject.token.Token`
 
-class CurrentThread(utils.AutoHandle):
+        .. note::
+
+            see https://docs.microsoft.com/en-us/windows/desktop/api/processthreadsapi/nf-processthreadsapi-openthreadtoken
+
+        """
+        token_handle = HANDLE()
+        try:
+            winproxy.OpenThreadToken(self.handle, flags, as_self, byref(token_handle))
+        except WindowsError as e:
+            if e.winerror == gdef.ERROR_NO_TOKEN:
+                # No token to open: return None
+                return None
+            raise
+        return token.Token(token_handle.value)
+
+    def set_token(self, token):
+        """Set the token for the thread (impersonation). Setting the token to None revert the impersonation"""
+        thandle = getattr(token, "handle", token) # Accept raw handle & token object
+        return winproxy.SetThreadToken(self.handle, thandle)
+
+
+    _TOKEN_PROPERTY_DOC = """The thread :class:`~windows.winobject.token.Token`
+
+    :getter: :func:`open_token`
+    :setter: :func:`set_token`
+    """
+
+    token = property(open_token, set_token, doc=_TOKEN_PROPERTY_DOC)
+
+
+class CurrentThread(Thread):
     """The current thread"""
     @property #It's not a fixedpropety because executing thread might change
     def tid(self):
@@ -745,13 +547,11 @@ class CurrentThread(utils.AutoHandle):
         """Exit the thread"""
         return winproxy.ExitThread(code)
 
+
+
     def wait(self, timeout=INFINITE):
         """Raise :class:`ValueError` to prevent deadlock :D"""
         raise ValueError("wait() on current thread")
-
-    #def token(self):
-
-       # GetCurrentThreadToken()
 
 
 class CurrentProcess(Process):
@@ -886,16 +686,220 @@ class CurrentProcess(Process):
             raise ValueError("Not a syswow process")
         return windows.syswow64.get_current_process_syswow_peb()
 
-
-    def open_token(self, flags=TOKEN_ALL_ACCESS):
-        token_handle = HANDLE()
-        winproxy.OpenProcessToken(self.handle, flags, byref(token_handle))
-        return token.Token(token_handle.value)
-
     # TODO: use ctypes.string_ad / ctypes.wstring_at for read_string / read_wstring ?
 
+class WinThread(Thread):
+    """Represent a thread """
 
-    token = property(open_token)
+    def __init__(self, tid=None, handle=None, owner_pid=None, owner=None):
+        if tid is None and handle is None:
+            raise ValueError("Need at least <pid> or <handle> to create a {0}".format(type(self).__name__))
+
+        if tid is not None:    self._tid = tid
+        if handle is not None: self._handle = handle
+        if owner is not None:   self._owner = owner
+        if owner_pid is not None:   self._owner_pid = owner_pid
+        if owner_pid is None and owner:
+            self._owner_pid = owner.pid
+
+    @classmethod
+    def _from_THREADENTRY32(cls, entry, owner=None):
+        tid = entry.th32ThreadID
+        owner_pid = entry.th32OwnerProcessID
+        return cls(tid=tid, owner_pid=owner_pid, owner=owner)
+
+    @classmethod
+    def _from_handle(cls, handle):
+        # Create a DeadThread if thread is already dead ?
+        return WinThread(handle=handle)
+
+    @utils.fixedpropety
+    def tid(self):
+        """Thread ID
+
+        :type: :class:`int`"""
+        return self._get_thread_id(self.handle)
+
+    @utils.fixedpropety
+    def owner_pid(self):
+        res = THREAD_BASIC_INFORMATION()
+        windows.winproxy.NtQueryInformationThread(self.handle, ThreadBasicInformation, byref(res), ctypes.sizeof(res))
+        owner_id = res.ClientId.UniqueProcess
+        return owner_id
+
+    @utils.fixedpropety
+    def owner(self):
+        """The Process owning the thread
+
+        :type: :class:`WinProcess`
+		"""
+        return WinProcess(pid=self.owner_pid)
+
+    @property
+    def context(self):
+        """The context of the thread, type depend of the target process.
+
+        :type: :class:`windows.exception.ECONTEXT32` or  :class:`windows.exception.ECONTEXT64` or :class:`windows.exception.ECONTEXTWOW64`
+		"""
+        if self.owner.bitness == 32 and windows.current_process.bitness == 64:
+            # Wow64
+            x = exception.ECONTEXTWOW64()
+            x.ContextFlags = CONTEXT_ALL
+            winproxy.Wow64GetThreadContext(self.handle, x)
+            return x
+
+        if self.owner.bitness == 64 and windows.current_process.bitness == 32:
+            x = exception.ECONTEXT64.new_aligned()
+            x.ContextFlags = CONTEXT_ALL
+            windows.syswow64.NtGetContextThread_32_to_64(self.handle, x)
+            return x
+
+        if self.owner.bitness == 32:
+            x = exception.ECONTEXT32()
+        else:
+            x = exception.ECONTEXT64.new_aligned()
+        x.ContextFlags = CONTEXT_ALL
+        winproxy.GetThreadContext(self.handle, x)
+        return x
+
+    @property
+    def context_syswow(self):
+        """The 64 bits context of a syswow thread.
+
+        :type:  :class:`windows.exception.ECONTEXT64`
+		"""
+        if not self.owner.is_wow_64:
+            raise ValueError("Not a syswow process")
+        x = exception.ECONTEXT64.new_aligned()
+        x.ContextFlags = CONTEXT_ALL
+        if windows.current_process.bitness == 64:
+            winproxy.GetThreadContext(self.handle, x)
+        else:
+            windows.syswow64.NtGetContextThread_32_to_64(self.handle, x)
+        return x
+
+
+    def set_context(self, context):
+        """Set the thread's context to ``context``"""
+        if self.owner.bitness == windows.current_process.bitness:
+            return winproxy.SetThreadContext(self.handle, context)
+        if windows.current_process.bitness == 64 and self.owner.bitness == 32:
+            return winproxy.Wow64SetThreadContext(self.handle, context)
+        return windows.syswow64.NtSetContextThread_32_to_64(self.handle, ctypes.byref(context))
+
+
+    def set_syswow_context(self, context):
+        """Set a syswow thread's 64 context to ``context``"""
+        if not self.owner.is_wow_64:
+            raise ValueError("Not a syswow process")
+        if windows.current_process.bitness == 64:
+            return winproxy.SetThreadContext(self.handle, context)
+        return windows.syswow64.NtSetContextThread_32_to_64(self.handle, ctypes.byref(context))
+
+
+    @property
+    def start_address(self):
+        """The start address of the thread
+
+            :type: :class:`int`
+		"""
+        if windows.current_process.bitness == 32 and self.owner.bitness == 64:
+            res = ULONGLONG()
+            windows.syswow64.NtQueryInformationThread_32_to_64(self.handle, ThreadQuerySetWin32StartAddress, byref(res), ctypes.sizeof(res))
+            return res.value
+        res_size = max(self.owner.bitness, windows.current_process.bitness)
+        if res_size == 32:
+            res = ULONG()
+        else:
+            res = ULONGLONG()
+        winproxy.NtQueryInformationThread(self.handle, ThreadQuerySetWin32StartAddress, byref(res), ctypes.sizeof(res))
+        return res.value
+
+    @property
+    def teb_base(self):
+        """The address of the thread's TEB
+
+            :type: :class:`int`
+		"""
+        if windows.current_process.bitness == 32 and self.owner.bitness == 64:
+            restype = rctypes.transform_type_to_remote64bits(THREAD_BASIC_INFORMATION)
+            ressize = (ctypes.sizeof(restype))
+            # Manual aligned allocation :DDDD
+            nb_qword = (ressize + 8) / ctypes.sizeof(ULONGLONG)
+            buffer = (nb_qword * ULONGLONG)()
+            struct_address = ctypes.addressof(buffer)
+            if (struct_address & 0xf) not in [0, 8]:
+                raise ValueError("ULONGLONG array not aligned on 8")
+            windows.syswow64.NtQueryInformationThread_32_to_64(self.handle, ThreadBasicInformation, struct_address, ressize)
+            return restype(struct_address, windows.current_process).TebBaseAddress
+
+        res = THREAD_BASIC_INFORMATION()
+        windows.winproxy.NtQueryInformationThread(self.handle, ThreadBasicInformation, byref(res), ctypes.sizeof(res))
+        return res.TebBaseAddress
+
+    def exit(self, code=0):
+        """Exit the thread"""
+        return winproxy.TerminateThread(self.handle, code)
+
+    def resume(self):
+        """Resume the thread"""
+        return winproxy.ResumeThread(self.handle)
+
+    def suspend(self):
+        """Suspend the thread"""
+        return winproxy.SuspendThread(self.handle)
+
+    def _get_handle(self):
+        return winproxy.OpenThread(dwThreadId=self.tid)
+
+    @property
+    def is_exit(self):
+        """``True`` if the thread is terminated
+
+        :type: :class:`bool`
+		"""
+        return self.exit_code != STILL_ACTIVE
+
+    @property
+    def exit_code(self):
+        """The exit code of the thread : ``STILL_ACTIVE`` means the process is not dead
+
+        :type: :class:`int`
+		"""
+        res = DWORD()
+        winproxy.GetExitCodeThread(self.handle, byref(res))
+        return res.value
+
+    def __repr__(self):
+        owner = self.owner
+        if owner is None:
+            owner_name = "<Dead process with pid {0}>".format(hex(self.th32OwnerProcessID))
+        else:
+            try:
+                owner_name = owner.name
+            except EnvironmentError:
+                owner_name = "!cannot-retrieve-owner-name"
+        return '<{0} {1} owner "{2}" at {3}>'.format(self.__class__.__name__, self.tid, owner_name, hex(id(self)))
+
+
+    @staticmethod
+    def _get_thread_id_by_api(handle):
+        return winproxy.GetThreadId(handle)
+
+    @staticmethod
+    def _get_thread_id_manual(handle):
+        if windows.current_process.bitness == 32 and self.owner.bitness == 64:
+            raise NotImplementedError("[_get_thread_id_manual] 32 -> 64 (XP64 bits + Syswow process ?)")
+        res = THREAD_BASIC_INFORMATION()
+        windows.winproxy.NtQueryInformationThread(handle, ThreadBasicInformation, byref(res), ctypes.sizeof(res))
+        id2 = res.ClientId.UniqueThread
+        return id2
+
+    if winproxy.is_implemented(winproxy.GetThreadId):
+        _get_thread_id = _get_thread_id_by_api
+    else:
+        _get_thread_id = _get_thread_id_manual
+
 
 class WinProcess(Process):
     """A Process on the system"""

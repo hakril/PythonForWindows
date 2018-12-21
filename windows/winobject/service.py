@@ -64,7 +64,7 @@ class Service(object):
         """
         return self.lpDisplayName
 
-    @utils.fixedpropety
+    @property
     def status(self):
         """The status of the service
 
