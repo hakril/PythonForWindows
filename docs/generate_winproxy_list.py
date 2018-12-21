@@ -9,14 +9,9 @@ import windows
 
 winprox = windows.winproxy
 all_in_module = [getattr(winprox, x) for x in dir(winprox)]
-transp = [f for f in all_in_module if isinstance(f, winprox.TransparentApiProxy)]
-functions = [f for f in all_in_module if hasattr(f, "prototype") and f not in transp]
+functions = [f for f in all_in_module if hasattr(f, "prototype")]
 
-
-print ("Transparent proxies:")
-print("")
-for f in transp:
-    print("* {0}({1})".format(f.target_func, ", ".join([x[1] for x in f.params])))
+import pdb;pdb.set_trace()
 
 print ("Functions:")
 print("")

@@ -55,21 +55,24 @@ class ApiProxy(object):
         self.func_name = func_name
         if error_check is sentinel:
             error_check = self.default_error_check
-        if error_check is not None:
-            self.error_check = functools.wraps(error_check)(functools.partial(error_check, func_name))
-        else:
-            self.error_check = None
+
+        self.error_check = error_check
         self._cprototyped = None
 
     def __call__(self, python_proxy):
         # Use the name of the sub-function if None was given
         if self.func_name is None:
             self.func_name = python_proxy.__name__
+
+        errchk = None
+        if self.error_check is not None:
+            errchk = functools.wraps(self.error_check)(functools.partial(self.error_check, self.func_name))
+
         prototype = getattr(self.deffunc_module, self.func_name + "Prototype")
         params = getattr(self.deffunc_module, self.func_name + "Params")
         python_proxy.prototype = prototype
         python_proxy.params = params
-        python_proxy.errcheck = self.error_check
+        python_proxy.errcheck = errchk
         python_proxy.target_dll = self.APIDLL
         python_proxy.target_func = self.func_name
         # Give access to the 'ApiProxy' object from the function
@@ -91,8 +94,8 @@ class ApiProxy(object):
                 c_prototyped = prototype((self.func_name, api_dll), params)
             except (AttributeError, WindowsError):
                 raise ExportNotFound(self.func_name, self.APIDLL)
-            if self.error_check is not None:
-                c_prototyped.errcheck = self.error_check
+            if errchk is not None:
+                c_prototyped.errcheck = errchk
             self._cprototyped = c_prototyped
 
         def perform_call(*args):
