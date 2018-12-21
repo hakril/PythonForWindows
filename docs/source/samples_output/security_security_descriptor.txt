@@ -1,0 +1,23 @@
+(cmd) python security\security_descriptor.py
+Security descriptor is: <SecurityDescriptor object at 0x03E151C0>
+Owner: S-1-5-32-544
+  - lookup: (u'BUILTIN', u'Administrateurs')
+Group: S-1-5-7
+  - lookup: (u'AUTORITE NT', u'ANONYMOUS LOGON')
+Dacl: <Acl count=2>
+
+  ACE [0]: <AccessAllowedACE mask=269353023>
+    - Header-AceType: ACCESS_ALLOWED_ACE_TYPE(0x0L)
+    - Header-AceFlags: 1
+    - Header-flags: [OBJECT_INHERIT_ACE(0x1L)]
+    - Mask: 269353023
+    - mask: [1L, 2L, 4L, 8L, 16L, 32L, READ_CONTROL(0x20000L), WRITE_DAC(0x40000L), WRITE_OWNER(0x80000L), GENERIC_ALL(0x10000000L)]
+    - Sid:  S-1-0-0
+
+  ACE [1]: <AccessDeniedACE mask=269353023>
+    - Header-AceType: ACCESS_DENIED_ACE_TYPE(0x1L)
+    - Header-AceFlags: 10
+    - Header-flags: [CONTAINER_INHERIT_ACE(0x2L), INHERIT_ONLY_ACE(0x8L)]
+    - Mask: 269353023
+    - mask: [1L, 2L, 4L, 8L, 16L, 32L, READ_CONTROL(0x20000L), WRITE_DAC(0x40000L), WRITE_OWNER(0x80000L), GENERIC_ALL(0x10000000L)]
+    - Sid:  S-1-0-0

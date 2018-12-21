@@ -118,7 +118,7 @@ def buffer(obj, eltclass=None):
     return BUFFER(eltclass, dlen)(*obj)
 
 def resized_array(array, newnbelt):
-    btype = buffer_type(array._type_, newnbelt)
+    btype = BUFFER(array._type_, newnbelt)
     new_array = btype.from_address(ctypes.addressof(array))
     new_array._base_array_ = array # Keep a ref to prevent some gc
     return new_array

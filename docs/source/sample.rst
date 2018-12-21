@@ -431,7 +431,7 @@ Ouput::
     \xc6\x12x\x1am\xc8\x01t\xac\xa6\xf3#\x02\xd4J \x8eZ\xbb\x10W\xe1 0;\x06\t*\x86H\x86\xf7\r\x01\x07\x010\x14\x06\x08*
     \x86H\x86\xf7\r\x03\x07\x04\x08\x14F\x04\xad\xed9\xed<\x80\x18\x80]6\xccTV\xbc\xb8*\x84QY!~\xb3\n\x1aV\xd4\rf\xd1n:')
 
-    (cmd λ) python crypto\encryption_demo.py decrypt decrypt --password BADPASS message.crypt mykey.pfx
+    (cmd λ) python crypto\encryption_demo.py decrypt --password BADPASS message.crypt mykey.pfx
     Traceback (most recent call last):
     File "..\samples\encryption_demo.py", line 103, in <module>
         res.func(**res.__dict__)
@@ -444,8 +444,8 @@ Ouput::
     File "c:\users\hakril\documents\work\pythonforwindows\windows\winproxy.py", line 148, in perform_call
         return self._cprototyped(*args)
     File "c:\users\hakril\documents\work\pythonforwindows\windows\winproxy.py", line 69, in kernel32_error_check
-        raise Kernel32Error(func_name)
-    windows.winproxy.Kernel32Error: PFXImportCertStore: [Error 86] The specified network password is not correct.
+        raise WinproxyError(func_name)
+    windows.winproxy.error.WinproxyError: PFXImportCertStore: [Error 86] The specified network password is not correct.
 
     (cmd λ) python crypto\encryption_demo.py decrypt --password MYPASSWORD message.crypt mykey.pfx
     Result = <my secret message>

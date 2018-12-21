@@ -151,7 +151,7 @@ def test_wmiobject_getitem(wmi_cls):
 
     props = wmi_obj.get_properties()
     assert isinstance(props, list)
-    assert len(props) > wmi_obj["__PROPERTY_COUNT"]
+    assert len(props) == wmi_obj["__PROPERTY_COUNT"]
     # Check that other dict-like methods exists
     assert wmi_obj.keys()
     assert wmi_obj.values()

@@ -1,0 +1,26 @@
+(cmd) python security\query_sacl.py
+This sample should be run as admin to demonstration SACL access
+
+[NO-PRIV] Querying <C:\windows\notepad.exe> SecurityDescriptor without SACL
+sacl = <Acl count=0>
+
+[NO-PRIV] Querying <C:\windows\notepad.exe> SecurityDescriptor with SACL
+None: [Error 1314] A required privilege is not held by the client.
+
+Enabling <SeSecurityPrivilege>
+[ERROR] <Token TokenId=0xd6db5cc Type=TokenPrimary(0x1L)> has no privilege <SeSecurityPrivilege>
+
+
+(cmd-admin) python security\query_sacl.py
+
+[NO-PRIV] Querying <C:\windows\notepad.exe> SecurityDescriptor without SACL
+sacl = <Acl count=0>
+
+[NO-PRIV] Querying <C:\windows\notepad.exe> SecurityDescriptor with SACL
+None: [Error 1314] A required privilege is not held by the client.
+
+Enabling <SeSecurityPrivilege>
+
+[PRIV] Querying <C:\windows\notepad.exe> SecurityDescriptor with SACL
+sacl = <Acl count=1>
+[<SystemAuditACE mask=852246>]

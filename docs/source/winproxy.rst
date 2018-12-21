@@ -70,8 +70,8 @@ Calling it
     File "windows\winproxy.py", line 133, in perform_call
         return self._cprototyped(*args)
     File "windows\winproxy.py", line 59, in kernel32_error_check
-        raise Kernel32Error(func_name)
-    windows.winproxy.Kernel32Error: VirtualAlloc: [Error 8] Not enough storage is available to process this command.
+        raise WinproxyError(func_name)
+    windows.winproxy.error.WinproxyError: None: [Error 8] Not enough storage is available to process this command.
     """
 
 
@@ -92,12 +92,12 @@ Helper functions
         '0x77340520'
 
 
-Kernel32Error
+WinproxyError
 """""""""""""
 
-All errors raised by winproxy functions are instance of :class:`Kernel32Error` (or subclasses)
+All errors raised by winproxy functions are instance of :class:`WinproxyError` (or subclasses)
 
-.. autoclass:: Kernel32Error
+.. autoclass:: WinproxyError
     :show-inheritance:
 
     .. attribute:: api_name

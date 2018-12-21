@@ -50,31 +50,31 @@ You can also make some operation on threads (suspend/resume/wait/get(or set) con
 32
 >>> windows.current_process.token.integrity
 SECURITY_MANDATORY_MEDIUM_RID(0x2000L)
->>> calc = [p for p in windows.system.processes if p.name == "calc.exe"][0]
->>> calc
-<WinProcess "calc.exe" pid 6960 at 0x37391f0>
->>> calc.bitness
+>>> proc = [p for p in windows.system.processes if p.name == "notepad.exe"][0]
+>>> proc
+<WinProcess "notepad.exe" pid 16520 at 0x544e410>
+>>> proc.bitness
 64
->>> calc.peb.modules[:3]
-[<RemoteLoadedModule64 "calc.exe" at 0x3671e90>, <RemoteLoadedModule64 "ntdll.dll" at 0x3671030>, <RemoteLoadedModule64 "kernel32.dll" at 0x3671080>]
->>> k32 = calc.peb.modules[2]
+>>> proc.peb.modules[:3]
+[<RemoteLoadedModule64 "notepad.exe" at 0x3671e90>, <RemoteLoadedModule64 "ntdll.dll" at 0x3671030>, <RemoteLoadedModule64 "kernel32.dll" at 0x3671080>]
+>>> k32 = proc.peb.modules[2]
 >>> hex(k32.pe.exports["CreateFileW"])
 '0x7ffee6761550L'
->>> calc.threads[0]
-<WinThread 3932 owner "calc.exe" at 0x3646350>
->>> hex(calc.threads[0].context.Rip)
+>>> proc.threads[0]
+<WinThread 17688 owner "notepad.exe" at 0x53b47f0>
+>>> hex(proc.threads[0].context.Rip)
 '0x7ffee68b54b0L'
->>> calc.execute_python("import os")
+>>> proc.execute_python("import os")
 True
->>> calc.execute_python("exit(os.getpid() + 1)")
+>>> proc.execute_python("exit(os.getpid() + 1)")
 # execute_python raise if process died
 Traceback (most recent call last):
 ...
-WindowsError: <WinProcess "calc.exe" pid 6960 (DEAD) at 0x37391f0> died during execution of python command
+WindowsError: <WinProcess "notepad.exe" pid 16520 (DEAD) at 0x579f610> died during execution of python command
 >>> calc
-<WinProcess "calc.exe" pid 6960 (DEAD) at 0x37391f0>
+<WinProcess "notepad.exe" pid 16520 (DEAD) at 0x579f610>
 >>> calc.exit_code
-6961L
+16521L
 ```
 
 ### System information
@@ -126,7 +126,7 @@ but some have default values and the functions raise exception on call error (I 
 # Help on function VirtualAlloc in module windows.winproxy:
 # VirtualAlloc(lpAddress=0, dwSize=NeededParameter, flAllocationType=MEM_COMMIT(0x1000L), flProtect=PAGE_EXECUTE_READWRITE(0x40L))
 #     Errcheck:
-#     raise Kernel32Error if result is 0
+#     raise WinproxyError if result is 0
 
 # Positional arguments
 >>> windows.winproxy.VirtualAlloc(0, 0x1000)
@@ -158,8 +158,8 @@ File "windows\winproxy.py", line 264, in VirtualAlloc
 File "windows\winproxy.py", line 133, in perform_call
     return self._cprototyped(*args)
 File "windows\winproxy.py", line 59, in kernel32_error_check
-    raise Kernel32Error(func_name)
-windows.winproxy.Kernel32Error: VirtualAlloc: [Error 8] Not enough storage is available to process this command.
+    raise WinproxyError(func_name)
+windows.winproxy.error.WinproxyError: VirtualAlloc: [Error 87] The parameter is incorrect.
 """
 ```
 
@@ -212,10 +212,11 @@ To extract/play with even more information about the system, PythonForWindows is
 ```python
 >>> import windows
 >>> windows.system.wmi.select
-<bound method WmiRequester.select of <windows.winobject.wmi.WmiRequester object at 0x036BA590>>
->>> windows.system.wmi.select("Win32_Process", ["Name", "Handle"])[:4]
-[{'Handle': u'0', 'Name': u'System Idle Process'}, {'Handle': u'4', 'Name': u'System'}, {'Handle': u'412', 'Name': u'smss.exe'}, {'Handle': u'528', 'Name': u'csrss.exe'}]
-# Get WMI data for current process
+<bound method WmiNamespace.select of <WmiNamespace "root\cimv2">>
+>>> windows.system.wmi.select("Win32_Process")[:3]
+[<WmiObject instance of "Win32_Process">, <WmiObject instance of "Win32_Process">, <WmiObject instance of "Win32_Process">]# Get WMI data for current process
+>>> windows.system.wmi.select("Win32_Process")[42]["Name"]
+u'svchost.exe'
 >>> wmi_cp = [p for p in windows.system.wmi.select("Win32_Process") if int(p["Handle"]) == windows.current_process.pid][0]
 >>> wmi_cp["CommandLine"], wmi_cp["HandleCount"]
 (u'"C:\\Python27\\python.exe"', 227)
@@ -388,20 +389,20 @@ import windows
 import windows.debug
 import windows.test
 import windows.native_exec.simple_x86 as x86
+import windows.generated_def as gdef
 
-from windows.test import pop_calc_32
-from windows.generated_def import EXCEPTION_ACCESS_VIOLATION
+from windows.test import pop_proc_32
 
 class MyDebugger(windows.debug.Debugger):
     def on_exception(self, exception):
         code = exception.ExceptionRecord.ExceptionCode
         addr = exception.ExceptionRecord.ExceptionAddress
         print("Got exception {0} at 0x{1:x}".format(code, addr))
-        if code == EXCEPTION_ACCESS_VIOLATION:
+        if code == gdef.EXCEPTION_ACCESS_VIOLATION:
             print("Access Violation: kill target process")
             self.current_process.exit()
 
-calc = windows.test.pop_calc_32(dwCreationFlags=DEBUG_PROCESS)
+calc = windows.test.pop_proc_32(dwCreationFlags=gdef.DEBUG_PROCESS)
 d = MyDebugger(calc)
 calc.execute(x86.assemble("int3; mov [0x42424242], EAX; ret"))
 d.loop()
