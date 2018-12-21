@@ -1,0 +1,29 @@
+HINSTANCE WINAPI ShellExecuteA(
+  _In_opt_ HWND    hwnd,
+  _In_opt_ LPCSTR lpOperation,
+  _In_     LPCSTR lpFile,
+  _In_opt_ LPCSTR lpParameters,
+  _In_opt_ LPCSTR lpDirectory,
+  _In_     INT     nShowCmd
+);
+
+
+HINSTANCE WINAPI ShellExecuteW(
+  _In_opt_ HWND    hwnd,
+  _In_opt_ LPWSTR lpOperation,
+  _In_     LPWSTR lpFile,
+  _In_opt_ LPWSTR lpParameters,
+  _In_opt_ LPWSTR lpDirectory,
+  _In_     INT     nShowCmd
+);
+
+
+BOOL SHGetPathFromIDListA(
+  PCIDLIST_ABSOLUTE pidl,
+  LPCSTR             pszPath
+);
+
+BOOL SHGetPathFromIDListW(
+  PCIDLIST_ABSOLUTE pidl,
+  LPWSTR             pszPath
+);

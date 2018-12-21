@@ -42,7 +42,7 @@ class PSID(_INITIAL_PSID): # _INITIAL_PSID -> PVOID
             return """<{0} "{1}">""".format(type(self).__name__, self.to_string())
         except WindowsError: # Case of PSID is not valide
             if not self:
-                return """<{0} "None" at {1:#x}>""".format(type(self).__name__, id(self))
+                return """<{0} (NULL) at {1:#x}>""".format(type(self).__name__, id(self))
             return """<{0} "<conversion-failed>" at {1:#x}>""".format(type(self).__name__, id(self))
 
     __sprint__ = __repr__

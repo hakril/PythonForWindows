@@ -46,6 +46,8 @@ def OpenThreadToken(ThreadHandle, DesiredAccess, OpenAsSelf, TokenHandle):
 
 @Advapi32Proxy()
 def SetThreadToken(Thread, Token):
+    if isinstance(Thread, (int, long)):
+        Thread = gdef.HANDLE(Thread)
     return SetThreadToken.ctypes_function(Thread, Token)
 
 @Advapi32Proxy()

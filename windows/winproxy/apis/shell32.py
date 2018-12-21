@@ -15,3 +15,11 @@ def ShellExecuteA(hwnd, lpOperation, lpFile, lpParameters, lpDirectory, nShowCmd
 @Shell32Proxy()
 def ShellExecuteW(hwnd, lpOperation, lpFile, lpParameters, lpDirectory, nShowCmd):
     return ShellExecuteW.ctypes_function(hwnd, lpOperation, lpFile, lpParameters, lpDirectory, nShowCmd)
+
+@Shell32Proxy()
+def SHGetPathFromIDListA(pidl, pszPath):
+    return SHGetPathFromIDListA.ctypes_function(pidl, pszPath)
+
+@Shell32Proxy()
+def SHGetPathFromIDListW(pidl, pszPath):
+    return SHGetPathFromIDListW.ctypes_function(pidl, pszPath)

@@ -1,6 +1,7 @@
 from advapi32 import *
 from crypt32 import *
 from cryptui import *
+from dbghelp import *
 from iphlpapi import *
 from kernel32 import *
 from ktmw32 import *

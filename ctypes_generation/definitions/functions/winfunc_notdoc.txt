@@ -32,3 +32,16 @@ NTSTATUS WINAPI NtSetEaFile(
     _In_reads_bytes_(Length) PVOID Buffer,
     _In_ ULONG Length
 );
+
+
+NTSTATUS WINAPI NtCreateProcessEx(
+   _Out_ PHANDLE ProcessHandle,
+   _In_ ACCESS_MASK DesiredAccess,
+   _In_ POBJECT_ATTRIBUTES ObjectAttributes,
+   _In_ HANDLE ParentProcess,
+   _In_ ULONG Flags,
+   _In_ HANDLE SectionHandle,
+   _In_ HANDLE DebugPort,
+   _In_ HANDLE ExceptionPort,
+   _In_ BOOLEAN InJob
+);

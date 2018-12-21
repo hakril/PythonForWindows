@@ -1,0 +1,37 @@
+DWORD64 WINAPI SymLoadModuleExA(
+  _In_ HANDLE        hProcess,
+  _In_ HANDLE        hFile,
+  _In_ PCSTR        ImageName,
+  _In_ PCSTR        ModuleName,
+  _In_ DWORD64       BaseOfDll,
+  _In_ DWORD         DllSize,
+  _In_ PMODLOAD_DATA Data,
+  _In_ DWORD         Flags
+);
+
+
+DWORD64 WINAPI SymLoadModuleExW(
+  _In_ HANDLE        hProcess,
+  _In_ HANDLE        hFile,
+  _In_ PCWSTR        ImageName,
+  _In_ PCWSTR        ModuleName,
+  _In_ DWORD64       BaseOfDll,
+  _In_ DWORD         DllSize,
+  _In_ PMODLOAD_DATA Data,
+  _In_ DWORD         Flags
+);
+
+
+BOOL WINAPI SymFromAddr(
+  _In_      HANDLE       hProcess,
+  _In_      DWORD64      Address,
+  _Out_opt_ PDWORD64     Displacement,
+  _Inout_   PSYMBOL_INFO Symbol
+);
+
+
+BOOL WINAPI SymGetModuleInfo64(
+  _In_  HANDLE             hProcess,
+  _In_  DWORD64            dwAddr,
+  _Out_ PIMAGEHLP_MODULE64 ModuleInfo
+);

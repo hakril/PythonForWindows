@@ -108,6 +108,11 @@ def NtQueryInformationThread(ThreadHandle, ThreadInformationClass, ThreadInforma
         ThreadInformationLength = ctypes.sizeof(ThreadInformation)
     return NtQueryInformationThread.ctypes_function(ThreadHandle, ThreadInformationClass, ThreadInformation, ThreadInformationLength, ReturnLength)
 
+
+@NtdllProxy()
+def NtCreateProcessEx(ProcessHandle, DesiredAccess, ObjectAttributes=None, ParentProcess=NeededParameter, Flags=NeededParameter, SectionHandle=NeededParameter, DebugPort=None, ExceptionPort=None, InJob=False):
+    return NtCreateProcessEx.ctypes_function(ProcessHandle, DesiredAccess, ObjectAttributes, ParentProcess, Flags, SectionHandle, DebugPort, ExceptionPort, InJob)
+
 @NtdllProxy()
 def NtCreateThreadEx(ThreadHandle=None, DesiredAccess=0x1fffff, ObjectAttributes=0, ProcessHandle=NeededParameter, lpStartAddress=NeededParameter, lpParameter=NeededParameter, CreateSuspended=0, dwStackSize=0, Unknown1=0, Unknown2=0, Unknown=0):
     if ThreadHandle is None:
