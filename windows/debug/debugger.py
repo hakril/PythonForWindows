@@ -39,19 +39,19 @@ class Debugger(object):
 
         * Standard BP (int3)
         * Hardware-Exec BP (DrX)
-        * Memory BP (virtual_protect)"""
+        * Memory BP (virtual_protect)
+    """
 
     def __init__(self, target):
         """``target`` must be a debuggable :class:`WinProcess`."""
         self._init_dispatch_handlers()
         self.target = target
         self.is_target_launched = False
-        #if not already_debuggable:
-        #    winproxy.DebugActiveProcess(target.pid)
         self.processes = {}
         self.threads = {}
         self.current_process = None
         self.current_thread = None
+        self.first_bp_encoutered = False
         # List of breakpoints
         self.breakpoints = {}
         self._pending_breakpoints = {} #Breakpoints to put in new process / threads
@@ -497,6 +497,15 @@ class Debugger(object):
 
     def _handle_exception_breakpoint(self, exception, excp_addr):
         excp_bitness = self.get_exception_bitness(exception)
+        # Sub-method _do_setup() ?
+        if not self.first_bp_encoutered:
+            dbg_has_setup = not getattr(self.on_setup, "_abstract_on_setup_", False)
+            self.first_bp_encoutered = True
+            if dbg_has_setup:
+                with self.DisabledMemoryBreakpoint():
+                    continue_flag = self.on_setup() # Handle single-step here ?
+                    # Check killed in action ?
+        # What if setup + BP object()
         if excp_addr in self.breakpoints[self.current_process.pid]:
             thread = self.current_thread
             if self.current_process.bitness == 32 and excp_bitness == 64:
@@ -516,6 +525,8 @@ class Debugger(object):
             if excp_addr in self.breakpoints[self.current_process.pid]:
                 # Setup BP if not suppressed
                 self._pass_breakpoint(excp_addr)
+            return continue_flag
+        if dbg_has_setup: # setup() was called on this BP-event: no on_exception()
             return continue_flag
         with self.DisabledMemoryBreakpoint():
             return self.on_exception(exception)
@@ -624,7 +635,7 @@ class Debugger(object):
 
         excp_code = exception.ExceptionRecord.ExceptionCode
         excp_addr = exception.ExceptionRecord.ExceptionAddress
-        if excp_code in [EXCEPTION_BREAKPOINT, STATUS_WX86_BREAKPOINT] and excp_addr in self.breakpoints[self.current_process.pid]:
+        if excp_code in [EXCEPTION_BREAKPOINT, STATUS_WX86_BREAKPOINT]:
             return self._handle_exception_breakpoint(exception, excp_addr)
         elif excp_code in [EXCEPTION_SINGLE_STEP, STATUS_WX86_SINGLE_STEP]:
             return self._handle_exception_singlestep(exception, excp_addr)
@@ -956,6 +967,24 @@ class Debugger(object):
         return 64
 
     # Public callback
+    def on_setup(self):
+        """Called on the first breakpoint event occuring in the debugger.
+        This callback allow to setup hook / interact with the debugee when ready:
+
+        - If :func:`on_setup` is overriden by a subclass it will be called and :func:`on_exception` will NOT be called for this event (first BP).
+        - If :func:`on_setup` is not defined the first BP will trigger an :func:`on_exception`.
+
+        .. note::
+
+            see sample :ref:`sample_debugger_on_setup`
+
+        """
+        return None
+
+    # Help detect if on_setup was override
+    on_setup._abstract_on_setup_ = True
+
+
     def on_exception(self, exception):
         """Called on exception event other that known breakpoint or requested single step. ``exception`` is one of the following type:
 
