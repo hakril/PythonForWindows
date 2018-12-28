@@ -2,6 +2,853 @@
 
 Winstructs
 ----------
+_ALPC_PORT_ATTRIBUTES32
+'''''''''''''''''''''''
+.. class:: PALPC_PORT_ATTRIBUTES32
+
+    Pointer to :class:`_ALPC_PORT_ATTRIBUTES32`
+
+.. class:: ALPC_PORT_ATTRIBUTES32
+
+    Alias for :class:`_ALPC_PORT_ATTRIBUTES32`
+
+.. class:: _ALPC_PORT_ATTRIBUTES32
+
+    .. attribute:: Flags
+
+        :class:`ULONG`
+
+
+    .. attribute:: SecurityQos
+
+        :class:`SECURITY_QUALITY_OF_SERVICE`
+
+
+    .. attribute:: MaxMessageLength
+
+        :class:`SIZE_T`
+
+
+    .. attribute:: MemoryBandwidth
+
+        :class:`SIZE_T`
+
+
+    .. attribute:: MaxPoolUsage
+
+        :class:`SIZE_T`
+
+
+    .. attribute:: MaxSectionSize
+
+        :class:`SIZE_T`
+
+
+    .. attribute:: MaxViewSize
+
+        :class:`SIZE_T`
+
+
+    .. attribute:: MaxTotalSectionSize
+
+        :class:`SIZE_T`
+
+
+    .. attribute:: DupObjectTypes
+
+        :class:`ULONG`
+
+_ALPC_PORT_ATTRIBUTES64
+'''''''''''''''''''''''
+.. class:: ALPC_PORT_ATTRIBUTES64
+
+    Alias for :class:`_ALPC_PORT_ATTRIBUTES64`
+
+.. class:: PALPC_PORT_ATTRIBUTES64
+
+    Pointer to :class:`_ALPC_PORT_ATTRIBUTES64`
+
+.. class:: _ALPC_PORT_ATTRIBUTES64
+
+    .. attribute:: Flags
+
+        :class:`ULONG`
+
+
+    .. attribute:: SecurityQos
+
+        :class:`SECURITY_QUALITY_OF_SERVICE`
+
+
+    .. attribute:: MaxMessageLength
+
+        :class:`SIZE_T`
+
+
+    .. attribute:: MemoryBandwidth
+
+        :class:`SIZE_T`
+
+
+    .. attribute:: MaxPoolUsage
+
+        :class:`SIZE_T`
+
+
+    .. attribute:: MaxSectionSize
+
+        :class:`SIZE_T`
+
+
+    .. attribute:: MaxViewSize
+
+        :class:`SIZE_T`
+
+
+    .. attribute:: MaxTotalSectionSize
+
+        :class:`SIZE_T`
+
+
+    .. attribute:: DupObjectTypes
+
+        :class:`ULONG`
+
+
+    .. attribute:: Reserved
+
+        :class:`ULONG`
+
+_ALPC_MESSAGE_ATTRIBUTES
+''''''''''''''''''''''''
+.. class:: ALPC_MESSAGE_ATTRIBUTES
+
+    Alias for :class:`_ALPC_MESSAGE_ATTRIBUTES`
+
+.. class:: PALPC_MESSAGE_ATTRIBUTES
+
+    Pointer to :class:`_ALPC_MESSAGE_ATTRIBUTES`
+
+.. class:: _ALPC_MESSAGE_ATTRIBUTES
+
+    .. attribute:: AllocatedAttributes
+
+        :class:`ULONG`
+
+
+    .. attribute:: ValidAttributes
+
+        :class:`ULONG`
+
+_PORT_MESSAGE32_TMP_UNION
+'''''''''''''''''''''''''
+.. class:: PORT_MESSAGE_TMP_UNION
+
+    Alias for :class:`_PORT_MESSAGE32_TMP_UNION`
+
+.. class:: _PORT_MESSAGE32_TMP_UNION
+
+    .. attribute:: ClientViewSize
+
+        :class:`ULONG`
+
+
+    .. attribute:: CallbackId
+
+        :class:`ULONG`
+
+_PORT_MESSAGE64_TMP_UNION
+'''''''''''''''''''''''''
+.. class:: PORT_MESSAGE_TMP_UNION
+
+    Alias for :class:`_PORT_MESSAGE64_TMP_UNION`
+
+.. class:: _PORT_MESSAGE64_TMP_UNION
+
+    .. attribute:: ClientViewSize
+
+        :class:`ULONGLONG`
+
+
+    .. attribute:: CallbackId
+
+        :class:`ULONG`
+
+_PORT_MESSAGE_TMP_SUBSTRUCT_S1
+''''''''''''''''''''''''''''''
+.. class:: _PORT_MESSAGE_TMP_SUBSTRUCT_S1
+
+    Alias for :class:`_PORT_MESSAGE_TMP_SUBSTRUCT_S1`
+
+.. class:: _PORT_MESSAGE_TMP_SUBSTRUCT_S1
+
+    .. attribute:: DataLength
+
+        :class:`CSHORT`
+
+
+    .. attribute:: TotalLength
+
+        :class:`CSHORT`
+
+_PORT_MESSAGE_TMP_UNION_U1
+''''''''''''''''''''''''''
+.. class:: _PORT_MESSAGE_TMP_UNION_U1
+
+    Alias for :class:`_PORT_MESSAGE_TMP_UNION_U1`
+
+.. class:: _PORT_MESSAGE_TMP_UNION_U1
+
+    .. attribute:: Length
+
+        :class:`ULONG`
+
+
+    .. attribute:: s1
+
+        :class:`_PORT_MESSAGE_TMP_SUBSTRUCT_S1`
+
+_PORT_MESSAGE_TMP_SUBSTRUCT_S2
+''''''''''''''''''''''''''''''
+.. class:: _PORT_MESSAGE_TMP_SUBSTRUCT_S2
+
+    Alias for :class:`_PORT_MESSAGE_TMP_SUBSTRUCT_S2`
+
+.. class:: _PORT_MESSAGE_TMP_SUBSTRUCT_S2
+
+    .. attribute:: Type
+
+        :class:`CSHORT`
+
+
+    .. attribute:: DataInfoOffset
+
+        :class:`CSHORT`
+
+_PORT_MESSAGE_TMP_UNION_U2
+''''''''''''''''''''''''''
+.. class:: _PORT_MESSAGE_TMP_UNION_U2
+
+    Alias for :class:`_PORT_MESSAGE_TMP_UNION_U2`
+
+.. class:: _PORT_MESSAGE_TMP_UNION_U2
+
+    .. attribute:: ZeroInit
+
+        :class:`ULONG`
+
+
+    .. attribute:: s2
+
+        :class:`_PORT_MESSAGE_TMP_SUBSTRUCT_S2`
+
+_PORT_MESSAGE32
+'''''''''''''''
+.. class:: PORT_MESSAGE32
+
+    Alias for :class:`_PORT_MESSAGE32`
+
+.. class:: PPORT_MESSAGE32
+
+    Pointer to :class:`_PORT_MESSAGE32`
+
+.. class:: _PORT_MESSAGE32
+
+    .. attribute:: u1
+
+        :class:`_PORT_MESSAGE_TMP_UNION_U1`
+
+
+    .. attribute:: u2
+
+        :class:`_PORT_MESSAGE_TMP_UNION_U2`
+
+
+    .. attribute:: ClientId
+
+        :class:`CLIENT_ID32`
+
+
+    .. attribute:: MessageId
+
+        :class:`ULONG`
+
+
+    .. attribute:: tmp_union
+
+        :class:`_PORT_MESSAGE32_TMP_UNION`
+
+_PORT_MESSAGE64
+'''''''''''''''
+.. class:: PPORT_MESSAGE64
+
+    Pointer to :class:`_PORT_MESSAGE64`
+
+.. class:: PORT_MESSAGE64
+
+    Alias for :class:`_PORT_MESSAGE64`
+
+.. class:: _PORT_MESSAGE64
+
+    .. attribute:: u1
+
+        :class:`_PORT_MESSAGE_TMP_UNION_U1`
+
+
+    .. attribute:: u2
+
+        :class:`_PORT_MESSAGE_TMP_UNION_U2`
+
+
+    .. attribute:: ClientId
+
+        :class:`CLIENT_ID64`
+
+
+    .. attribute:: MessageId
+
+        :class:`ULONG`
+
+
+    .. attribute:: tmp_union
+
+        :class:`_PORT_MESSAGE64_TMP_UNION`
+
+_ALPC_SERVER_INFORMATION_TMP_IN
+'''''''''''''''''''''''''''''''
+.. class:: ALPC_SERVER_INFORMATION_TMP_IN
+
+    Alias for :class:`_ALPC_SERVER_INFORMATION_TMP_IN`
+
+.. class:: _ALPC_SERVER_INFORMATION_TMP_IN
+
+    .. attribute:: ThreadHandle
+
+        :class:`HANDLE`
+
+_ALPC_SERVER_INFORMATION_TMP_OUT
+''''''''''''''''''''''''''''''''
+.. class:: ALPC_SERVER_INFORMATION_TMP_OUT
+
+    Alias for :class:`_ALPC_SERVER_INFORMATION_TMP_OUT`
+
+.. class:: _ALPC_SERVER_INFORMATION_TMP_OUT
+
+    .. attribute:: ThreadBlocked
+
+        :class:`BOOLEAN`
+
+
+    .. attribute:: ConnectedProcessId
+
+        :class:`HANDLE`
+
+
+    .. attribute:: ConnectionPortName
+
+        :class:`UNICODE_STRING`
+
+ALPC_SERVER_INFORMATION
+'''''''''''''''''''''''
+.. class:: ALPC_SERVER_INFORMATION
+
+    Alias for :class:`ALPC_SERVER_INFORMATION`
+
+.. class:: ALPC_SERVER_INFORMATION
+
+    .. attribute:: In
+
+        :class:`ALPC_SERVER_INFORMATION_TMP_IN`
+
+
+    .. attribute:: Out
+
+        :class:`ALPC_SERVER_INFORMATION_TMP_OUT`
+
+_ALPC_CONTEXT_ATTR
+''''''''''''''''''
+.. class:: PALPC_CONTEXT_ATTR
+
+    Pointer to :class:`_ALPC_CONTEXT_ATTR`
+
+.. class:: ALPC_CONTEXT_ATTR
+
+    Alias for :class:`_ALPC_CONTEXT_ATTR`
+
+.. class:: _ALPC_CONTEXT_ATTR
+
+    .. attribute:: PortContext
+
+        :class:`PVOID`
+
+
+    .. attribute:: MessageContext
+
+        :class:`PVOID`
+
+
+    .. attribute:: Sequence
+
+        :class:`ULONG`
+
+
+    .. attribute:: MessageId
+
+        :class:`ULONG`
+
+
+    .. attribute:: CallbackId
+
+        :class:`ULONG`
+
+_ALPC_CONTEXT_ATTR32
+''''''''''''''''''''
+.. class:: ALPC_CONTEXT_ATTR32
+
+    Alias for :class:`_ALPC_CONTEXT_ATTR32`
+
+.. class:: PALPC_CONTEXT_ATTR32
+
+    Pointer to :class:`_ALPC_CONTEXT_ATTR32`
+
+.. class:: _ALPC_CONTEXT_ATTR32
+
+    .. attribute:: PortContext
+
+        :class:`ULONG`
+
+
+    .. attribute:: MessageContext
+
+        :class:`ULONG`
+
+
+    .. attribute:: Sequence
+
+        :class:`ULONG`
+
+
+    .. attribute:: MessageId
+
+        :class:`ULONG`
+
+
+    .. attribute:: CallbackId
+
+        :class:`ULONG`
+
+_ALPC_CONTEXT_ATTR64
+''''''''''''''''''''
+.. class:: ALPC_CONTEXT_ATTR64
+
+    Alias for :class:`_ALPC_CONTEXT_ATTR64`
+
+.. class:: PALPC_CONTEXT_ATTR64
+
+    Pointer to :class:`_ALPC_CONTEXT_ATTR64`
+
+.. class:: _ALPC_CONTEXT_ATTR64
+
+    .. attribute:: PortContext
+
+        :class:`ULONGLONG`
+
+
+    .. attribute:: MessageContext
+
+        :class:`ULONGLONG`
+
+
+    .. attribute:: Sequence
+
+        :class:`ULONG`
+
+
+    .. attribute:: MessageId
+
+        :class:`ULONG`
+
+
+    .. attribute:: CallbackId
+
+        :class:`ULONG`
+
+_ALPC_HANDLE_ATTR
+'''''''''''''''''
+.. class:: PALPC_HANDLE_ATTR
+
+    Pointer to :class:`_ALPC_HANDLE_ATTR`
+
+.. class:: ALPC_HANDLE_ATTR
+
+    Alias for :class:`_ALPC_HANDLE_ATTR`
+
+.. class:: _ALPC_HANDLE_ATTR
+
+    .. attribute:: Flags
+
+        :class:`ULONG`
+
+
+    .. attribute:: Handle
+
+        :class:`HANDLE`
+
+
+    .. attribute:: ObjectType
+
+        :class:`ULONG`
+
+
+    .. attribute:: DesiredAccess
+
+        :class:`ACCESS_MASK`
+
+_ALPC_HANDLE_ATTR32
+'''''''''''''''''''
+.. class:: ALPC_HANDLE_ATTR32
+
+    Alias for :class:`_ALPC_HANDLE_ATTR32`
+
+.. class:: PALPC_HANDLE_ATTR32
+
+    Pointer to :class:`_ALPC_HANDLE_ATTR32`
+
+.. class:: _ALPC_HANDLE_ATTR32
+
+    .. attribute:: Flags
+
+        :class:`ULONG`
+
+
+    .. attribute:: Handle
+
+        :class:`ULONG`
+
+
+    .. attribute:: ObjectType
+
+        :class:`ULONG`
+
+
+    .. attribute:: DesiredAccess
+
+        :class:`ACCESS_MASK`
+
+_ALPC_HANDLE_ATTR64
+'''''''''''''''''''
+.. class:: PALPC_HANDLE_ATTR64
+
+    Pointer to :class:`_ALPC_HANDLE_ATTR64`
+
+.. class:: ALPC_HANDLE_ATTR64
+
+    Alias for :class:`_ALPC_HANDLE_ATTR64`
+
+.. class:: _ALPC_HANDLE_ATTR64
+
+    .. attribute:: Flags
+
+        :class:`ULONG`
+
+
+    .. attribute:: Handle
+
+        :class:`ULONGLONG`
+
+
+    .. attribute:: ObjectType
+
+        :class:`ULONG`
+
+
+    .. attribute:: DesiredAccess
+
+        :class:`ACCESS_MASK`
+
+_ALPC_SECURITY_ATTR
+'''''''''''''''''''
+.. class:: PALPC_SECURITY_ATTR
+
+    Pointer to :class:`_ALPC_SECURITY_ATTR`
+
+.. class:: ALPC_SECURITY_ATTR
+
+    Alias for :class:`_ALPC_SECURITY_ATTR`
+
+.. class:: _ALPC_SECURITY_ATTR
+
+    .. attribute:: Flags
+
+        :class:`ULONG`
+
+
+    .. attribute:: QoS
+
+        :class:`PSECURITY_QUALITY_OF_SERVICE`
+
+
+    .. attribute:: ContextHandle
+
+        :class:`ALPC_HANDLE`
+
+_ALPC_SECURITY_ATTR32
+'''''''''''''''''''''
+.. class:: ALPC_SECURITY_ATTR32
+
+    Alias for :class:`_ALPC_SECURITY_ATTR32`
+
+.. class:: PALPC_SECURITY_ATTR32
+
+    Pointer to :class:`_ALPC_SECURITY_ATTR32`
+
+.. class:: _ALPC_SECURITY_ATTR32
+
+    .. attribute:: Flags
+
+        :class:`ULONG`
+
+
+    .. attribute:: QoS
+
+        :class:`ULONG`
+
+
+    .. attribute:: ContextHandle
+
+        :class:`ULONG`
+
+_ALPC_SECURITY_ATTR64
+'''''''''''''''''''''
+.. class:: PALPC_SECURITY_ATTR64
+
+    Pointer to :class:`_ALPC_SECURITY_ATTR64`
+
+.. class:: ALPC_SECURITY_ATTR64
+
+    Alias for :class:`_ALPC_SECURITY_ATTR64`
+
+.. class:: _ALPC_SECURITY_ATTR64
+
+    .. attribute:: Flags
+
+        :class:`ULONGLONG`
+
+
+    .. attribute:: QoS
+
+        :class:`ULONGLONG`
+
+
+    .. attribute:: ContextHandle
+
+        :class:`ULONGLONG`
+
+_ALPC_DATA_VIEW_ATTR
+''''''''''''''''''''
+.. class:: PALPC_DATA_VIEW_ATTR
+
+    Pointer to :class:`_ALPC_DATA_VIEW_ATTR`
+
+.. class:: ALPC_DATA_VIEW_ATTR
+
+    Alias for :class:`_ALPC_DATA_VIEW_ATTR`
+
+.. class:: _ALPC_DATA_VIEW_ATTR
+
+    .. attribute:: Flags
+
+        :class:`ULONG`
+
+
+    .. attribute:: SectionHandle
+
+        :class:`ALPC_HANDLE`
+
+
+    .. attribute:: ViewBase
+
+        :class:`PVOID`
+
+
+    .. attribute:: ViewSize
+
+        :class:`PVOID`
+
+_ALPC_DATA_VIEW_ATTR32
+''''''''''''''''''''''
+.. class:: PALPC_DATA_VIEW_ATTR32
+
+    Pointer to :class:`_ALPC_DATA_VIEW_ATTR32`
+
+.. class:: ALPC_DATA_VIEW_ATTR32
+
+    Alias for :class:`_ALPC_DATA_VIEW_ATTR32`
+
+.. class:: _ALPC_DATA_VIEW_ATTR32
+
+    .. attribute:: Flags
+
+        :class:`ULONG`
+
+
+    .. attribute:: SectionHandle
+
+        :class:`ULONG`
+
+
+    .. attribute:: ViewBase
+
+        :class:`ULONG`
+
+
+    .. attribute:: ViewSize
+
+        :class:`ULONG`
+
+_ALPC_DATA_VIEW_ATTR64
+''''''''''''''''''''''
+.. class:: PALPC_DATA_VIEW_ATTR64
+
+    Pointer to :class:`_ALPC_DATA_VIEW_ATTR64`
+
+.. class:: ALPC_DATA_VIEW_ATTR64
+
+    Alias for :class:`_ALPC_DATA_VIEW_ATTR64`
+
+.. class:: _ALPC_DATA_VIEW_ATTR64
+
+    .. attribute:: Flags
+
+        :class:`ULONG`
+
+
+    .. attribute:: SectionHandle
+
+        :class:`ULONGLONG`
+
+
+    .. attribute:: ViewBase
+
+        :class:`ULONGLONG`
+
+
+    .. attribute:: ViewSize
+
+        :class:`ULONGLONG`
+
+_ALPC_TOKEN_ATTR
+''''''''''''''''
+.. class:: ALPC_TOKEN_ATTR
+
+    Alias for :class:`_ALPC_TOKEN_ATTR`
+
+.. class:: PALPC_TOKEN_ATTR
+
+    Pointer to :class:`_ALPC_TOKEN_ATTR`
+
+.. class:: _ALPC_TOKEN_ATTR
+
+    .. attribute:: TokenId
+
+        :class:`ULONGLONG`
+
+
+    .. attribute:: AuthenticationId
+
+        :class:`ULONGLONG`
+
+
+    .. attribute:: ModifiedId
+
+        :class:`ULONGLONG`
+
+_ALPC_DIRECT_ATTR
+'''''''''''''''''
+.. class:: ALPC_DIRECT_ATTR
+
+    Alias for :class:`_ALPC_DIRECT_ATTR`
+
+.. class:: PALPC_DIRECT_ATTR
+
+    Pointer to :class:`_ALPC_DIRECT_ATTR`
+
+.. class:: _ALPC_DIRECT_ATTR
+
+    .. attribute:: Event
+
+        :class:`HANDLE`
+
+_ALPC_DIRECT_ATTR32
+'''''''''''''''''''
+.. class:: PALPC_DIRECT_ATTR32
+
+    Pointer to :class:`_ALPC_DIRECT_ATTR32`
+
+.. class:: ALPC_DIRECT_ATTR32
+
+    Alias for :class:`_ALPC_DIRECT_ATTR32`
+
+.. class:: _ALPC_DIRECT_ATTR32
+
+    .. attribute:: Event
+
+        :class:`ULONG`
+
+_ALPC_DIRECT_ATTR64
+'''''''''''''''''''
+.. class:: ALPC_DIRECT_ATTR64
+
+    Alias for :class:`_ALPC_DIRECT_ATTR64`
+
+.. class:: PALPC_DIRECT_ATTR64
+
+    Pointer to :class:`_ALPC_DIRECT_ATTR64`
+
+.. class:: _ALPC_DIRECT_ATTR64
+
+    .. attribute:: Event
+
+        :class:`ULONGLONG`
+
+_ALPC_WORK_ON_BEHALF_ATTR
+'''''''''''''''''''''''''
+.. class:: PALPC_WORK_ON_BEHALF_ATTR
+
+    Pointer to :class:`_ALPC_WORK_ON_BEHALF_ATTR`
+
+.. class:: ALPC_WORK_ON_BEHALF_ATTR
+
+    Alias for :class:`_ALPC_WORK_ON_BEHALF_ATTR`
+
+.. class:: _ALPC_WORK_ON_BEHALF_ATTR
+
+    .. attribute:: Ticket
+
+        :class:`ULONGLONG`
+
+_RPC_IF_ID
+''''''''''
+.. class:: RPC_IF_ID
+
+    Alias for :class:`_RPC_IF_ID`
+
+.. class:: _RPC_IF_ID
+
+    .. attribute:: Uuid
+
+        :class:`IID`
+
+
+    .. attribute:: VersMajor
+
+        :class:`USHORT`
+
+
+    .. attribute:: VersMinor
+
+        :class:`USHORT`
+
 tagMULTI_QI
 '''''''''''
 .. class:: MULTI_QI
@@ -260,6 +1107,307 @@ _CALLFRAME_MARSHALCONTEXT
     .. attribute:: guidTransferSyntax
 
         :class:`GUID`
+
+tagSAFEARRAYBOUND
+'''''''''''''''''
+.. class:: SAFEARRAYBOUND
+
+    Alias for :class:`tagSAFEARRAYBOUND`
+
+.. class:: LPSAFEARRAYBOUND
+
+    Pointer to :class:`tagSAFEARRAYBOUND`
+
+.. class:: tagSAFEARRAYBOUND
+
+    .. attribute:: cElements
+
+        :class:`ULONG`
+
+
+    .. attribute:: lLbound
+
+        :class:`LONG`
+
+tagSAFEARRAY
+''''''''''''
+.. class:: SAFEARRAY
+
+    Alias for :class:`tagSAFEARRAY`
+
+.. class:: tagSAFEARRAY
+
+    .. attribute:: cDims
+
+        :class:`USHORT`
+
+
+    .. attribute:: fFeatures
+
+        :class:`USHORT`
+
+
+    .. attribute:: cbElements
+
+        :class:`ULONG`
+
+
+    .. attribute:: cLocks
+
+        :class:`ULONG`
+
+
+    .. attribute:: pvData
+
+        :class:`PVOID`
+
+
+    .. attribute:: rgsabound
+
+        :class:`SAFEARRAYBOUND` ``[1]``
+
+__tagBRECORD
+''''''''''''
+.. class:: _tagBRECORD
+
+    Alias for :class:`__tagBRECORD`
+
+.. class:: __tagBRECORD
+
+    .. attribute:: pvRecord
+
+        :class:`PVOID`
+
+
+    .. attribute:: pRecInfo
+
+        :class:`PVOID`
+
+_ANON_TMP_variant_sub_union
+'''''''''''''''''''''''''''
+.. class:: _ANON_TMP_variant_sub_union
+
+    .. attribute:: llVal
+
+        :class:`LONGLONG`
+
+
+    .. attribute:: lVal
+
+        :class:`LONG`
+
+
+    .. attribute:: bVal
+
+        :class:`BYTE`
+
+
+    .. attribute:: iVal
+
+        :class:`SHORT`
+
+
+    .. attribute:: fltVal
+
+        :class:`FLOAT`
+
+
+    .. attribute:: dblVal
+
+        :class:`DOUBLE`
+
+
+    .. attribute:: boolVal
+
+        :class:`VARIANT_BOOL`
+
+
+    .. attribute:: scode
+
+        :class:`SCODE`
+
+
+    .. attribute:: bstrVal
+
+        :class:`BSTR`
+
+
+    .. attribute:: punkVal
+
+        :class:`PVOID`
+
+
+    .. attribute:: pdispVal
+
+        :class:`PVOID`
+
+
+    .. attribute:: parray
+
+        :class:`SAFEARRAY`
+
+
+    .. attribute:: pbVal
+
+        :class:`BYTE`
+
+
+    .. attribute:: piVal
+
+        :class:`SHORT`
+
+
+    .. attribute:: plVal
+
+        :class:`LONG`
+
+
+    .. attribute:: pllVal
+
+        :class:`LONGLONG`
+
+
+    .. attribute:: pfltVal
+
+        :class:`FLOAT`
+
+
+    .. attribute:: pdblVal
+
+        :class:`DOUBLE`
+
+
+    .. attribute:: pboolVal
+
+        :class:`VARIANT_BOOL`
+
+
+    .. attribute:: pscode
+
+        :class:`SCODE`
+
+
+    .. attribute:: pbstrVal
+
+        :class:`BSTR`
+
+
+    .. attribute:: byref
+
+        :class:`PVOID`
+
+
+    .. attribute:: cVal
+
+        :class:`CHAR`
+
+
+    .. attribute:: uiVal
+
+        :class:`USHORT`
+
+
+    .. attribute:: ulVal
+
+        :class:`ULONG`
+
+
+    .. attribute:: ullVal
+
+        :class:`ULONGLONG`
+
+
+    .. attribute:: intVal
+
+        :class:`INT`
+
+
+    .. attribute:: uintVal
+
+        :class:`UINT`
+
+
+    .. attribute:: pcVal
+
+        :class:`CHAR`
+
+
+    .. attribute:: puiVal
+
+        :class:`USHORT`
+
+
+    .. attribute:: pulVal
+
+        :class:`ULONG`
+
+
+    .. attribute:: pullVal
+
+        :class:`ULONGLONG`
+
+
+    .. attribute:: pintVal
+
+        :class:`INT`
+
+
+    .. attribute:: puintVal
+
+        :class:`UINT`
+
+
+    .. attribute:: _VARIANT_NAME_4
+
+        :class:`_tagBRECORD`
+
+__tagVARIANT
+''''''''''''
+.. class:: LPVARIANTARG
+
+    Pointer to :class:`__tagVARIANT`
+
+.. class:: VARIANTARG
+
+    Alias for :class:`__tagVARIANT`
+
+.. class:: VARIANT
+
+    Alias for :class:`__tagVARIANT`
+
+.. class:: LPVARIANT
+
+    Pointer to :class:`__tagVARIANT`
+
+.. class:: _tagVARIANT
+
+    Alias for :class:`__tagVARIANT`
+
+.. class:: __tagVARIANT
+
+    .. attribute:: vt
+
+        :class:`VARTYPE`
+
+
+    .. attribute:: wReserved1
+
+        :class:`WORD`
+
+
+    .. attribute:: wReserved2
+
+        :class:`WORD`
+
+
+    .. attribute:: wReserved3
+
+        :class:`WORD`
+
+
+    .. attribute:: _VARIANT_NAME_3
+
+        :class:`_ANON_TMP_variant_sub_union`
 
 _CERT_STRONG_SIGN_SERIALIZED_INFO
 '''''''''''''''''''''''''''''''''
@@ -1330,6 +2478,70 @@ _CERT_INFO
     .. attribute:: rgExtension
 
         :class:`PCERT_EXTENSION`
+
+_CERT_ISSUER_SERIAL_NUMBER
+''''''''''''''''''''''''''
+.. class:: CERT_ISSUER_SERIAL_NUMBER
+
+    Alias for :class:`_CERT_ISSUER_SERIAL_NUMBER`
+
+.. class:: PCERT_ISSUER_SERIAL_NUMBER
+
+    Pointer to :class:`_CERT_ISSUER_SERIAL_NUMBER`
+
+.. class:: _CERT_ISSUER_SERIAL_NUMBER
+
+    .. attribute:: Issuer
+
+        :class:`CERT_NAME_BLOB`
+
+
+    .. attribute:: SerialNumber
+
+        :class:`CRYPT_INTEGER_BLOB`
+
+_TMPUNION_CERT_ID
+'''''''''''''''''
+.. class:: TMPUNION_CERT_ID
+
+    Alias for :class:`_TMPUNION_CERT_ID`
+
+.. class:: _TMPUNION_CERT_ID
+
+    .. attribute:: IssuerSerialNumber
+
+        :class:`CERT_ISSUER_SERIAL_NUMBER`
+
+
+    .. attribute:: KeyId
+
+        :class:`CRYPT_HASH_BLOB`
+
+
+    .. attribute:: HashId
+
+        :class:`CRYPT_HASH_BLOB`
+
+_CERT_ID
+''''''''
+.. class:: CERT_ID
+
+    Alias for :class:`_CERT_ID`
+
+.. class:: PCERT_ID
+
+    Pointer to :class:`_CERT_ID`
+
+.. class:: _CERT_ID
+
+    .. attribute:: dwIdChoice
+
+        :class:`DWORD`
+
+
+    .. attribute:: DUMMYUNIONNAME
+
+        :class:`TMPUNION_CERT_ID`
 
 _CERT_CONTEXT
 '''''''''''''
@@ -2554,6 +3766,868 @@ _CRYPT_ENCODE_PARA
 
         :class:`PVOID`
 
+_TMPUNION_CMSG_MAIL_LIST_RECIPIENT_ENCODE_INFO
+''''''''''''''''''''''''''''''''''''''''''''''
+.. class:: TMPUNION_CMSG_MAIL_LIST_RECIPIENT_ENCODE_INFO
+
+    Alias for :class:`_TMPUNION_CMSG_MAIL_LIST_RECIPIENT_ENCODE_INFO`
+
+.. class:: _TMPUNION_CMSG_MAIL_LIST_RECIPIENT_ENCODE_INFO
+
+    .. attribute:: hKeyEncryptionKey
+
+        :class:`HCRYPTKEY`
+
+
+    .. attribute:: pvKeyEncryptionKey
+
+        :class:`PVOID`
+
+_CMSG_MAIL_LIST_RECIPIENT_ENCODE_INFO
+'''''''''''''''''''''''''''''''''''''
+.. class:: PCMSG_MAIL_LIST_RECIPIENT_ENCODE_INFO
+
+    Pointer to :class:`_CMSG_MAIL_LIST_RECIPIENT_ENCODE_INFO`
+
+.. class:: CMSG_MAIL_LIST_RECIPIENT_ENCODE_INFO
+
+    Alias for :class:`_CMSG_MAIL_LIST_RECIPIENT_ENCODE_INFO`
+
+.. class:: _CMSG_MAIL_LIST_RECIPIENT_ENCODE_INFO
+
+    .. attribute:: cbSize
+
+        :class:`DWORD`
+
+
+    .. attribute:: KeyEncryptionAlgorithm
+
+        :class:`CRYPT_ALGORITHM_IDENTIFIER`
+
+
+    .. attribute:: pvKeyEncryptionAuxInfo
+
+        :class:`PVOID`
+
+
+    .. attribute:: hCryptProv
+
+        :class:`HCRYPTPROV`
+
+
+    .. attribute:: dwKeyChoice
+
+        :class:`DWORD`
+
+
+    .. attribute:: DUMMYUNIONNAME
+
+        :class:`TMPUNION_CMSG_MAIL_LIST_RECIPIENT_ENCODE_INFO`
+
+
+    .. attribute:: KeyId
+
+        :class:`CRYPT_DATA_BLOB`
+
+
+    .. attribute:: Date
+
+        :class:`FILETIME`
+
+
+    .. attribute:: pOtherAttr
+
+        :class:`PCRYPT_ATTRIBUTE_TYPE_VALUE`
+
+_CMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO
+'''''''''''''''''''''''''''''''''''''
+.. class:: PCMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO
+
+    Pointer to :class:`_CMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO`
+
+.. class:: CMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO
+
+    Alias for :class:`_CMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO`
+
+.. class:: _CMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO
+
+    .. attribute:: cbSize
+
+        :class:`DWORD`
+
+
+    .. attribute:: KeyEncryptionAlgorithm
+
+        :class:`CRYPT_ALGORITHM_IDENTIFIER`
+
+
+    .. attribute:: pvKeyEncryptionAuxInfo
+
+        :class:`PVOID`
+
+
+    .. attribute:: hCryptProv
+
+        :class:`HCRYPTPROV_LEGACY`
+
+
+    .. attribute:: RecipientPublicKey
+
+        :class:`CRYPT_BIT_BLOB`
+
+
+    .. attribute:: RecipientId
+
+        :class:`CERT_ID`
+
+_CMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO
+'''''''''''''''''''''''''''''''''''''
+.. class:: PCMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO
+
+    Pointer to :class:`_CMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO`
+
+.. class:: CMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO
+
+    Alias for :class:`_CMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO`
+
+.. class:: _CMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO
+
+    .. attribute:: cbSize
+
+        :class:`DWORD`
+
+
+    .. attribute:: KeyEncryptionAlgorithm
+
+        :class:`CRYPT_ALGORITHM_IDENTIFIER`
+
+
+    .. attribute:: pvKeyEncryptionAuxInfo
+
+        :class:`PVOID`
+
+
+    .. attribute:: hCryptProv
+
+        :class:`HCRYPTPROV_LEGACY`
+
+
+    .. attribute:: RecipientPublicKey
+
+        :class:`CRYPT_BIT_BLOB`
+
+
+    .. attribute:: RecipientId
+
+        :class:`CERT_ID`
+
+_TMPUNION_CMSG_KEY_AGREE_RECIPIENT_ENCODE_INFO
+''''''''''''''''''''''''''''''''''''''''''''''
+.. class:: TMPUNION_CMSG_KEY_AGREE_RECIPIENT_ENCODE_INFO
+
+    Alias for :class:`_TMPUNION_CMSG_KEY_AGREE_RECIPIENT_ENCODE_INFO`
+
+.. class:: _TMPUNION_CMSG_KEY_AGREE_RECIPIENT_ENCODE_INFO
+
+    .. attribute:: pEphemeralAlgorithm
+
+        :class:`PCRYPT_ALGORITHM_IDENTIFIER`
+
+
+    .. attribute:: pSenderId
+
+        :class:`PCERT_ID`
+
+_CMSG_RECIPIENT_ENCRYPTED_KEY_ENCODE_INFO
+'''''''''''''''''''''''''''''''''''''''''
+.. class:: PCMSG_RECIPIENT_ENCRYPTED_KEY_ENCODE_INFO
+
+    Pointer to :class:`_CMSG_RECIPIENT_ENCRYPTED_KEY_ENCODE_INFO`
+
+.. class:: CMSG_RECIPIENT_ENCRYPTED_KEY_ENCODE_INFO
+
+    Alias for :class:`_CMSG_RECIPIENT_ENCRYPTED_KEY_ENCODE_INFO`
+
+.. class:: _CMSG_RECIPIENT_ENCRYPTED_KEY_ENCODE_INFO
+
+    .. attribute:: cbSize
+
+        :class:`DWORD`
+
+
+    .. attribute:: RecipientPublicKey
+
+        :class:`CRYPT_BIT_BLOB`
+
+
+    .. attribute:: RecipientId
+
+        :class:`CERT_ID`
+
+
+    .. attribute:: Date
+
+        :class:`FILETIME`
+
+
+    .. attribute:: pOtherAttr
+
+        :class:`PCRYPT_ATTRIBUTE_TYPE_VALUE`
+
+_CMSG_KEY_AGREE_RECIPIENT_ENCODE_INFO
+'''''''''''''''''''''''''''''''''''''
+.. class:: PCMSG_KEY_AGREE_RECIPIENT_ENCODE_INFO
+
+    Pointer to :class:`_CMSG_KEY_AGREE_RECIPIENT_ENCODE_INFO`
+
+.. class:: CMSG_KEY_AGREE_RECIPIENT_ENCODE_INFO
+
+    Alias for :class:`_CMSG_KEY_AGREE_RECIPIENT_ENCODE_INFO`
+
+.. class:: _CMSG_KEY_AGREE_RECIPIENT_ENCODE_INFO
+
+    .. attribute:: cbSize
+
+        :class:`DWORD`
+
+
+    .. attribute:: KeyEncryptionAlgorithm
+
+        :class:`CRYPT_ALGORITHM_IDENTIFIER`
+
+
+    .. attribute:: pvKeyEncryptionAuxInfo
+
+        :class:`PVOID`
+
+
+    .. attribute:: KeyWrapAlgorithm
+
+        :class:`CRYPT_ALGORITHM_IDENTIFIER`
+
+
+    .. attribute:: pvKeyWrapAuxInfo
+
+        :class:`PVOID`
+
+
+    .. attribute:: hCryptProv
+
+        :class:`HCRYPTPROV_LEGACY`
+
+
+    .. attribute:: dwKeySpec
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwKeyChoice
+
+        :class:`DWORD`
+
+
+    .. attribute:: DUMMYUNIONNAME
+
+        :class:`TMPUNION_CMSG_KEY_AGREE_RECIPIENT_ENCODE_INFO`
+
+
+    .. attribute:: UserKeyingMaterial
+
+        :class:`CRYPT_DATA_BLOB`
+
+
+    .. attribute:: cRecipientEncryptedKeys
+
+        :class:`DWORD`
+
+
+    .. attribute:: rgpRecipientEncryptedKeys
+
+        :class:`PCMSG_RECIPIENT_ENCRYPTED_KEY_ENCODE_INFO`
+
+_TMP_CMSG_RECIPIENT_ENCODE_INFO_UNION
+'''''''''''''''''''''''''''''''''''''
+.. class:: TMP_CMSG_RECIPIENT_ENCODE_INFO_UNION
+
+    Alias for :class:`_TMP_CMSG_RECIPIENT_ENCODE_INFO_UNION`
+
+.. class:: _TMP_CMSG_RECIPIENT_ENCODE_INFO_UNION
+
+    .. attribute:: pKeyTrans
+
+        :class:`PCMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO`
+
+
+    .. attribute:: pKeyAgree
+
+        :class:`PCMSG_KEY_AGREE_RECIPIENT_ENCODE_INFO`
+
+
+    .. attribute:: pMailList
+
+        :class:`PCMSG_MAIL_LIST_RECIPIENT_ENCODE_INFO`
+
+_CMSG_RECIPIENT_ENCODE_INFO
+'''''''''''''''''''''''''''
+.. class:: CMSG_RECIPIENT_ENCODE_INFO
+
+    Alias for :class:`_CMSG_RECIPIENT_ENCODE_INFO`
+
+.. class:: PCMSG_RECIPIENT_ENCODE_INFO
+
+    Pointer to :class:`_CMSG_RECIPIENT_ENCODE_INFO`
+
+.. class:: _CMSG_RECIPIENT_ENCODE_INFO
+
+    .. attribute:: dwRecipientChoice
+
+        :class:`DWORD`
+
+
+    .. attribute:: DUMMYUNIONNAME
+
+        :class:`TMP_CMSG_RECIPIENT_ENCODE_INFO_UNION`
+
+_CMSG_ENVELOPED_ENCODE_INFO
+'''''''''''''''''''''''''''
+.. class:: PCMSG_ENVELOPED_ENCODE_INFO
+
+    Pointer to :class:`_CMSG_ENVELOPED_ENCODE_INFO`
+
+.. class:: CMSG_ENVELOPED_ENCODE_INFO
+
+    Alias for :class:`_CMSG_ENVELOPED_ENCODE_INFO`
+
+.. class:: _CMSG_ENVELOPED_ENCODE_INFO
+
+    .. attribute:: cbSize
+
+        :class:`DWORD`
+
+
+    .. attribute:: hCryptProv
+
+        :class:`HCRYPTPROV_LEGACY`
+
+
+    .. attribute:: ContentEncryptionAlgorithm
+
+        :class:`CRYPT_ALGORITHM_IDENTIFIER`
+
+
+    .. attribute:: pvEncryptionAuxInfo
+
+        :class:`PVOID`
+
+
+    .. attribute:: cRecipients
+
+        :class:`DWORD`
+
+
+    .. attribute:: rgpRecipients
+
+        :class:`PCERT_INFO`
+
+
+    .. attribute:: rgCmsRecipients
+
+        :class:`PCMSG_RECIPIENT_ENCODE_INFO`
+
+
+    .. attribute:: cCertEncoded
+
+        :class:`DWORD`
+
+
+    .. attribute:: rgCertEncoded
+
+        :class:`PCERT_BLOB`
+
+
+    .. attribute:: cCrlEncoded
+
+        :class:`DWORD`
+
+
+    .. attribute:: rgCrlEncoded
+
+        :class:`PCRL_BLOB`
+
+
+    .. attribute:: cAttrCertEncoded
+
+        :class:`DWORD`
+
+
+    .. attribute:: rgAttrCertEncoded
+
+        :class:`PCERT_BLOB`
+
+
+    .. attribute:: cUnprotectedAttr
+
+        :class:`DWORD`
+
+
+    .. attribute:: rgUnprotectedAttr
+
+        :class:`PCRYPT_ATTRIBUTE`
+
+_CMSG_STREAM_INFO
+'''''''''''''''''
+.. class:: CMSG_STREAM_INFO
+
+    Alias for :class:`_CMSG_STREAM_INFO`
+
+.. class:: PCMSG_STREAM_INFO
+
+    Pointer to :class:`_CMSG_STREAM_INFO`
+
+.. class:: _CMSG_STREAM_INFO
+
+    .. attribute:: cbContent
+
+        :class:`DWORD`
+
+
+    .. attribute:: pfnStreamOutput
+
+        :class:`PVOID`
+
+
+    .. attribute:: pvArg
+
+        :class:`PVOID`
+
+_TMPUNION_CMSG_CTRL_DECRYPT_PARA
+''''''''''''''''''''''''''''''''
+.. class:: TMPUNION_CMSG_CTRL_DECRYPT_PARA
+
+    Alias for :class:`_TMPUNION_CMSG_CTRL_DECRYPT_PARA`
+
+.. class:: _TMPUNION_CMSG_CTRL_DECRYPT_PARA
+
+    .. attribute:: hCryptProv
+
+        :class:`HCRYPTPROV`
+
+
+    .. attribute:: hNCryptKey
+
+        :class:`NCRYPT_KEY_HANDLE`
+
+_CMSG_CTRL_DECRYPT_PARA
+'''''''''''''''''''''''
+.. class:: PCMSG_CTRL_DECRYPT_PARA
+
+    Pointer to :class:`_CMSG_CTRL_DECRYPT_PARA`
+
+.. class:: CMSG_CTRL_DECRYPT_PARA
+
+    Alias for :class:`_CMSG_CTRL_DECRYPT_PARA`
+
+.. class:: _CMSG_CTRL_DECRYPT_PARA
+
+    .. attribute:: cbSize
+
+        :class:`DWORD`
+
+
+    .. attribute:: DUMMYUNIONNAME
+
+        :class:`TMPUNION_CMSG_CTRL_DECRYPT_PARA`
+
+
+    .. attribute:: dwKeySpec
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwRecipientIndex
+
+        :class:`DWORD`
+
+_FILE_INTERNAL_INFORMATION
+''''''''''''''''''''''''''
+.. class:: FILE_INTERNAL_INFORMATION
+
+    Alias for :class:`_FILE_INTERNAL_INFORMATION`
+
+.. class:: PFILE_INTERNAL_INFORMATION
+
+    Pointer to :class:`_FILE_INTERNAL_INFORMATION`
+
+.. class:: _FILE_INTERNAL_INFORMATION
+
+    .. attribute:: IndexNumber
+
+        :class:`LARGE_INTEGER`
+
+_FILE_ALIGNMENT_INFORMATION
+'''''''''''''''''''''''''''
+.. class:: PFILE_ALIGNMENT_INFORMATION
+
+    Pointer to :class:`_FILE_ALIGNMENT_INFORMATION`
+
+.. class:: FILE_ALIGNMENT_INFORMATION
+
+    Alias for :class:`_FILE_ALIGNMENT_INFORMATION`
+
+.. class:: _FILE_ALIGNMENT_INFORMATION
+
+    .. attribute:: AlignmentRequirement
+
+        :class:`ULONG`
+
+_FILE_ATTRIBUTE_TAG_INFORMATION
+'''''''''''''''''''''''''''''''
+.. class:: PFILE_ATTRIBUTE_TAG_INFORMATION
+
+    Pointer to :class:`_FILE_ATTRIBUTE_TAG_INFORMATION`
+
+.. class:: FILE_ATTRIBUTE_TAG_INFORMATION
+
+    Alias for :class:`_FILE_ATTRIBUTE_TAG_INFORMATION`
+
+.. class:: _FILE_ATTRIBUTE_TAG_INFORMATION
+
+    .. attribute:: FileAttributes
+
+        :class:`ULONG`
+
+
+    .. attribute:: ReparseTag
+
+        :class:`ULONG`
+
+_FILE_BASIC_INFORMATION
+'''''''''''''''''''''''
+.. class:: FILE_BASIC_INFORMATION
+
+    Alias for :class:`_FILE_BASIC_INFORMATION`
+
+.. class:: PFILE_BASIC_INFORMATION
+
+    Pointer to :class:`_FILE_BASIC_INFORMATION`
+
+.. class:: _FILE_BASIC_INFORMATION
+
+    .. attribute:: CreationTime
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: LastAccessTime
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: LastWriteTime
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: ChangeTime
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: FileAttributes
+
+        :class:`ULONG`
+
+_FILE_EA_INFORMATION
+''''''''''''''''''''
+.. class:: PFILE_EA_INFORMATION
+
+    Pointer to :class:`_FILE_EA_INFORMATION`
+
+.. class:: FILE_EA_INFORMATION
+
+    Alias for :class:`_FILE_EA_INFORMATION`
+
+.. class:: _FILE_EA_INFORMATION
+
+    .. attribute:: EaSize
+
+        :class:`ULONG`
+
+_FILE_IO_PRIORITY_HINT_INFORMATION
+''''''''''''''''''''''''''''''''''
+.. class:: PFILE_IO_PRIORITY_HINT_INFORMATION
+
+    Pointer to :class:`_FILE_IO_PRIORITY_HINT_INFORMATION`
+
+.. class:: FILE_IO_PRIORITY_HINT_INFORMATION
+
+    Alias for :class:`_FILE_IO_PRIORITY_HINT_INFORMATION`
+
+.. class:: _FILE_IO_PRIORITY_HINT_INFORMATION
+
+    .. attribute:: PriorityHint
+
+        :class:`IO_PRIORITY_HINT`
+
+_FILE_MODE_INFORMATION
+''''''''''''''''''''''
+.. class:: PFILE_MODE_INFORMATION
+
+    Pointer to :class:`_FILE_MODE_INFORMATION`
+
+.. class:: FILE_MODE_INFORMATION
+
+    Alias for :class:`_FILE_MODE_INFORMATION`
+
+.. class:: _FILE_MODE_INFORMATION
+
+    .. attribute:: Mode
+
+        :class:`ULONG`
+
+_FILE_NAME_INFORMATION
+''''''''''''''''''''''
+.. class:: PFILE_NAME_INFORMATION
+
+    Pointer to :class:`_FILE_NAME_INFORMATION`
+
+.. class:: FILE_NAME_INFORMATION
+
+    Alias for :class:`_FILE_NAME_INFORMATION`
+
+.. class:: _FILE_NAME_INFORMATION
+
+    .. attribute:: FileNameLength
+
+        :class:`ULONG`
+
+
+    .. attribute:: FileName
+
+        :class:`WCHAR` ``[1]``
+
+_FILE_NETWORK_OPEN_INFORMATION
+''''''''''''''''''''''''''''''
+.. class:: PFILE_NETWORK_OPEN_INFORMATION
+
+    Pointer to :class:`_FILE_NETWORK_OPEN_INFORMATION`
+
+.. class:: FILE_NETWORK_OPEN_INFORMATION
+
+    Alias for :class:`_FILE_NETWORK_OPEN_INFORMATION`
+
+.. class:: _FILE_NETWORK_OPEN_INFORMATION
+
+    .. attribute:: CreationTime
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: LastAccessTime
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: LastWriteTime
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: ChangeTime
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: AllocationSize
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: EndOfFile
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: FileAttributes
+
+        :class:`ULONG`
+
+_FILE_STANDARD_INFORMATION
+''''''''''''''''''''''''''
+.. class:: FILE_STANDARD_INFORMATION
+
+    Alias for :class:`_FILE_STANDARD_INFORMATION`
+
+.. class:: PFILE_STANDARD_INFORMATION
+
+    Pointer to :class:`_FILE_STANDARD_INFORMATION`
+
+.. class:: _FILE_STANDARD_INFORMATION
+
+    .. attribute:: AllocationSize
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: EndOfFile
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: NumberOfLinks
+
+        :class:`ULONG`
+
+
+    .. attribute:: DeletePending
+
+        :class:`BOOLEAN`
+
+
+    .. attribute:: Directory
+
+        :class:`BOOLEAN`
+
+_FILE_ACCESS_INFORMATION
+''''''''''''''''''''''''
+.. class:: FILE_ACCESS_INFORMATION
+
+    Alias for :class:`_FILE_ACCESS_INFORMATION`
+
+.. class:: PFILE_ACCESS_INFORMATION
+
+    Pointer to :class:`_FILE_ACCESS_INFORMATION`
+
+.. class:: _FILE_ACCESS_INFORMATION
+
+    .. attribute:: AccessFlags
+
+        :class:`ACCESS_MASK`
+
+_FILE_POSITION_INFORMATION
+''''''''''''''''''''''''''
+.. class:: PFILE_POSITION_INFORMATION
+
+    Pointer to :class:`_FILE_POSITION_INFORMATION`
+
+.. class:: FILE_POSITION_INFORMATION
+
+    Alias for :class:`_FILE_POSITION_INFORMATION`
+
+.. class:: _FILE_POSITION_INFORMATION
+
+    .. attribute:: CurrentByteOffset
+
+        :class:`LARGE_INTEGER`
+
+_FILE_IS_REMOTE_DEVICE_INFORMATION
+''''''''''''''''''''''''''''''''''
+.. class:: FILE_IS_REMOTE_DEVICE_INFORMATION
+
+    Alias for :class:`_FILE_IS_REMOTE_DEVICE_INFORMATION`
+
+.. class:: PFILE_IS_REMOTE_DEVICE_INFORMATION
+
+    Pointer to :class:`_FILE_IS_REMOTE_DEVICE_INFORMATION`
+
+.. class:: _FILE_IS_REMOTE_DEVICE_INFORMATION
+
+    .. attribute:: IsRemote
+
+        :class:`BOOLEAN`
+
+_FILE_ALL_INFORMATION
+'''''''''''''''''''''
+.. class:: PFILE_ALL_INFORMATION
+
+    Pointer to :class:`_FILE_ALL_INFORMATION`
+
+.. class:: FILE_ALL_INFORMATION
+
+    Alias for :class:`_FILE_ALL_INFORMATION`
+
+.. class:: _FILE_ALL_INFORMATION
+
+    .. attribute:: BasicInformation
+
+        :class:`FILE_BASIC_INFORMATION`
+
+
+    .. attribute:: StandardInformation
+
+        :class:`FILE_STANDARD_INFORMATION`
+
+
+    .. attribute:: InternalInformation
+
+        :class:`FILE_INTERNAL_INFORMATION`
+
+
+    .. attribute:: EaInformation
+
+        :class:`FILE_EA_INFORMATION`
+
+
+    .. attribute:: AccessInformation
+
+        :class:`FILE_ACCESS_INFORMATION`
+
+
+    .. attribute:: PositionInformation
+
+        :class:`FILE_POSITION_INFORMATION`
+
+
+    .. attribute:: ModeInformation
+
+        :class:`FILE_MODE_INFORMATION`
+
+
+    .. attribute:: AlignmentInformation
+
+        :class:`FILE_ALIGNMENT_INFORMATION`
+
+
+    .. attribute:: NameInformation
+
+        :class:`FILE_NAME_INFORMATION`
+
+_FILE_STREAM_INFORMATION
+''''''''''''''''''''''''
+.. class:: FILE_STREAM_INFORMATION
+
+    Alias for :class:`_FILE_STREAM_INFORMATION`
+
+.. class:: PFILE_STREAM_INFORMATION
+
+    Pointer to :class:`_FILE_STREAM_INFORMATION`
+
+.. class:: _FILE_STREAM_INFORMATION
+
+    .. attribute:: NextEntryOffset
+
+        :class:`ULONG`
+
+
+    .. attribute:: StreamNameLength
+
+        :class:`ULONG`
+
+
+    .. attribute:: StreamSize
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: StreamAllocationSize
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: StreamName
+
+        :class:`WCHAR` ``[1]``
+
 _FILE_DISPOSITION_INFORMATION
 '''''''''''''''''''''''''''''
 .. class:: PFILE_DISPOSITION_INFORMATION
@@ -2569,6 +4643,68 @@ _FILE_DISPOSITION_INFORMATION
     .. attribute:: DeleteFile
 
         :class:`BOOLEAN`
+
+_FILE_FULL_EA_INFORMATION
+'''''''''''''''''''''''''
+.. class:: FILE_FULL_EA_INFORMATION
+
+    Alias for :class:`_FILE_FULL_EA_INFORMATION`
+
+.. class:: PFILE_FULL_EA_INFORMATION
+
+    Pointer to :class:`_FILE_FULL_EA_INFORMATION`
+
+.. class:: _FILE_FULL_EA_INFORMATION
+
+    .. attribute:: NextEntryOffset
+
+        :class:`ULONG`
+
+
+    .. attribute:: Flags
+
+        :class:`UCHAR`
+
+
+    .. attribute:: EaNameLength
+
+        :class:`UCHAR`
+
+
+    .. attribute:: EaValueLength
+
+        :class:`USHORT`
+
+
+    .. attribute:: EaName
+
+        :class:`CHAR` ``[1]``
+
+_FILE_GET_EA_INFORMATION
+''''''''''''''''''''''''
+.. class:: FILE_GET_EA_INFORMATION
+
+    Alias for :class:`_FILE_GET_EA_INFORMATION`
+
+.. class:: PFILE_GET_EA_INFORMATION
+
+    Pointer to :class:`_FILE_GET_EA_INFORMATION`
+
+.. class:: _FILE_GET_EA_INFORMATION
+
+    .. attribute:: NextEntryOffset
+
+        :class:`ULONG`
+
+
+    .. attribute:: EaNameLength
+
+        :class:`UCHAR`
+
+
+    .. attribute:: EaName
+
+        :class:`CHAR` ``[1]``
 
 _GUID
 '''''
@@ -3176,6 +5312,1040 @@ _KEY_VALUE_PARTIAL_INFORMATION
 
         :class:`UCHAR` ``[1]``
 
+_ACL
+''''
+.. class:: PACL
+
+    Pointer to :class:`_ACL`
+
+.. class:: ACL
+
+    Alias for :class:`_ACL`
+
+.. class:: _ACL
+
+    .. attribute:: AclRevision
+
+        :class:`BYTE`
+
+
+    .. attribute:: Sbz1
+
+        :class:`BYTE`
+
+
+    .. attribute:: AclSize
+
+        :class:`WORD`
+
+
+    .. attribute:: AceCount
+
+        :class:`WORD`
+
+
+    .. attribute:: Sbz2
+
+        :class:`WORD`
+
+_ACL_REVISION_INFORMATION
+'''''''''''''''''''''''''
+.. class:: PACL_REVISION_INFORMATION
+
+    Pointer to :class:`_ACL_REVISION_INFORMATION`
+
+.. class:: ACL_REVISION_INFORMATION
+
+    Alias for :class:`_ACL_REVISION_INFORMATION`
+
+.. class:: _ACL_REVISION_INFORMATION
+
+    .. attribute:: AclRevision
+
+        :class:`DWORD`
+
+_ACL_SIZE_INFORMATION
+'''''''''''''''''''''
+.. class:: PACL_SIZE_INFORMATION
+
+    Pointer to :class:`_ACL_SIZE_INFORMATION`
+
+.. class:: ACL_SIZE_INFORMATION
+
+    Alias for :class:`_ACL_SIZE_INFORMATION`
+
+.. class:: _ACL_SIZE_INFORMATION
+
+    .. attribute:: AceCount
+
+        :class:`DWORD`
+
+
+    .. attribute:: AclBytesInUse
+
+        :class:`DWORD`
+
+
+    .. attribute:: AclBytesFree
+
+        :class:`DWORD`
+
+_ACE_HEADER
+'''''''''''
+.. class:: PACE_HEADER
+
+    Pointer to :class:`_ACE_HEADER`
+
+.. class:: ACE_HEADER
+
+    Alias for :class:`_ACE_HEADER`
+
+.. class:: _ACE_HEADER
+
+    .. attribute:: AceType
+
+        :class:`BYTE`
+
+
+    .. attribute:: AceFlags
+
+        :class:`BYTE`
+
+
+    .. attribute:: AceSize
+
+        :class:`WORD`
+
+_ACCESS_ALLOWED_ACE
+'''''''''''''''''''
+.. class:: PACCESS_ALLOWED_ACE
+
+    Pointer to :class:`_ACCESS_ALLOWED_ACE`
+
+.. class:: ACCESS_ALLOWED_ACE
+
+    Alias for :class:`_ACCESS_ALLOWED_ACE`
+
+.. class:: _ACCESS_ALLOWED_ACE
+
+    .. attribute:: Header
+
+        :class:`ACE_HEADER`
+
+
+    .. attribute:: Mask
+
+        :class:`ACCESS_MASK`
+
+
+    .. attribute:: SidStart
+
+        :class:`DWORD`
+
+_ACCESS_ALLOWED_CALLBACK_ACE
+''''''''''''''''''''''''''''
+.. class:: PACCESS_ALLOWED_CALLBACK_ACE
+
+    Pointer to :class:`_ACCESS_ALLOWED_CALLBACK_ACE`
+
+.. class:: ACCESS_ALLOWED_CALLBACK_ACE
+
+    Alias for :class:`_ACCESS_ALLOWED_CALLBACK_ACE`
+
+.. class:: _ACCESS_ALLOWED_CALLBACK_ACE
+
+    .. attribute:: Header
+
+        :class:`ACE_HEADER`
+
+
+    .. attribute:: Mask
+
+        :class:`ACCESS_MASK`
+
+
+    .. attribute:: SidStart
+
+        :class:`DWORD`
+
+_ACCESS_ALLOWED_CALLBACK_OBJECT_ACE
+'''''''''''''''''''''''''''''''''''
+.. class:: PACCESS_ALLOWED_CALLBACK_OBJECT_ACE
+
+    Pointer to :class:`_ACCESS_ALLOWED_CALLBACK_OBJECT_ACE`
+
+.. class:: ACCESS_ALLOWED_CALLBACK_OBJECT_ACE
+
+    Alias for :class:`_ACCESS_ALLOWED_CALLBACK_OBJECT_ACE`
+
+.. class:: _ACCESS_ALLOWED_CALLBACK_OBJECT_ACE
+
+    .. attribute:: Header
+
+        :class:`ACE_HEADER`
+
+
+    .. attribute:: Mask
+
+        :class:`ACCESS_MASK`
+
+
+    .. attribute:: Flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: ObjectType
+
+        :class:`GUID`
+
+
+    .. attribute:: InheritedObjectType
+
+        :class:`GUID`
+
+
+    .. attribute:: SidStart
+
+        :class:`DWORD`
+
+_ACCESS_DENIED_CALLBACK_OBJECT_ACE
+''''''''''''''''''''''''''''''''''
+.. class:: ACCESS_DENIED_CALLBACK_OBJECT_ACE
+
+    Alias for :class:`_ACCESS_DENIED_CALLBACK_OBJECT_ACE`
+
+.. class:: PACCESS_DENIED_CALLBACK_OBJECT_ACE
+
+    Pointer to :class:`_ACCESS_DENIED_CALLBACK_OBJECT_ACE`
+
+.. class:: _ACCESS_DENIED_CALLBACK_OBJECT_ACE
+
+    .. attribute:: Header
+
+        :class:`ACE_HEADER`
+
+
+    .. attribute:: Mask
+
+        :class:`ACCESS_MASK`
+
+
+    .. attribute:: Flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: ObjectType
+
+        :class:`GUID`
+
+
+    .. attribute:: InheritedObjectType
+
+        :class:`GUID`
+
+
+    .. attribute:: SidStart
+
+        :class:`DWORD`
+
+_ACCESS_ALLOWED_OBJECT_ACE
+''''''''''''''''''''''''''
+.. class:: PACCESS_ALLOWED_OBJECT_ACE
+
+    Pointer to :class:`_ACCESS_ALLOWED_OBJECT_ACE`
+
+.. class:: ACCESS_ALLOWED_OBJECT_ACE
+
+    Alias for :class:`_ACCESS_ALLOWED_OBJECT_ACE`
+
+.. class:: _ACCESS_ALLOWED_OBJECT_ACE
+
+    .. attribute:: Header
+
+        :class:`ACE_HEADER`
+
+
+    .. attribute:: Mask
+
+        :class:`ACCESS_MASK`
+
+
+    .. attribute:: Flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: ObjectType
+
+        :class:`GUID`
+
+
+    .. attribute:: InheritedObjectType
+
+        :class:`GUID`
+
+
+    .. attribute:: SidStart
+
+        :class:`DWORD`
+
+_ACCESS_DENIED_ACE
+''''''''''''''''''
+.. class:: ACCESS_DENIED_ACE
+
+    Alias for :class:`_ACCESS_DENIED_ACE`
+
+.. class:: PACCESS_DENIED_ACE
+
+    Pointer to :class:`_ACCESS_DENIED_ACE`
+
+.. class:: _ACCESS_DENIED_ACE
+
+    .. attribute:: Header
+
+        :class:`ACE_HEADER`
+
+
+    .. attribute:: Mask
+
+        :class:`ACCESS_MASK`
+
+
+    .. attribute:: SidStart
+
+        :class:`DWORD`
+
+_ACCESS_DENIED_CALLBACK_ACE
+'''''''''''''''''''''''''''
+.. class:: ACCESS_DENIED_CALLBACK_ACE
+
+    Alias for :class:`_ACCESS_DENIED_CALLBACK_ACE`
+
+.. class:: PACCESS_DENIED_CALLBACK_ACE
+
+    Pointer to :class:`_ACCESS_DENIED_CALLBACK_ACE`
+
+.. class:: _ACCESS_DENIED_CALLBACK_ACE
+
+    .. attribute:: Header
+
+        :class:`ACE_HEADER`
+
+
+    .. attribute:: Mask
+
+        :class:`ACCESS_MASK`
+
+
+    .. attribute:: SidStart
+
+        :class:`DWORD`
+
+_ACCESS_DENIED_OBJECT_ACE
+'''''''''''''''''''''''''
+.. class:: ACCESS_DENIED_OBJECT_ACE
+
+    Alias for :class:`_ACCESS_DENIED_OBJECT_ACE`
+
+.. class:: PACCESS_DENIED_OBJECT_ACE
+
+    Pointer to :class:`_ACCESS_DENIED_OBJECT_ACE`
+
+.. class:: _ACCESS_DENIED_OBJECT_ACE
+
+    .. attribute:: Header
+
+        :class:`ACE_HEADER`
+
+
+    .. attribute:: Mask
+
+        :class:`ACCESS_MASK`
+
+
+    .. attribute:: Flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: ObjectType
+
+        :class:`GUID`
+
+
+    .. attribute:: InheritedObjectType
+
+        :class:`GUID`
+
+
+    .. attribute:: SidStart
+
+        :class:`DWORD`
+
+_SYSTEM_MANDATORY_LABEL_ACE
+'''''''''''''''''''''''''''
+.. class:: SYSTEM_MANDATORY_LABEL_ACE
+
+    Alias for :class:`_SYSTEM_MANDATORY_LABEL_ACE`
+
+.. class:: PSYSTEM_MANDATORY_LABEL_ACE
+
+    Pointer to :class:`_SYSTEM_MANDATORY_LABEL_ACE`
+
+.. class:: _SYSTEM_MANDATORY_LABEL_ACE
+
+    .. attribute:: Header
+
+        :class:`ACE_HEADER`
+
+
+    .. attribute:: Mask
+
+        :class:`ACCESS_MASK`
+
+
+    .. attribute:: SidStart
+
+        :class:`DWORD`
+
+_SYSTEM_AUDIT_ACE
+'''''''''''''''''
+.. class:: SYSTEM_AUDIT_ACE
+
+    Alias for :class:`_SYSTEM_AUDIT_ACE`
+
+.. class:: _SYSTEM_AUDIT_ACE
+
+    .. attribute:: Header
+
+        :class:`ACE_HEADER`
+
+
+    .. attribute:: Mask
+
+        :class:`ACCESS_MASK`
+
+
+    .. attribute:: SidStart
+
+        :class:`DWORD`
+
+_SYSTEM_ALARM_ACE
+'''''''''''''''''
+.. class:: SYSTEM_ALARM_ACE
+
+    Alias for :class:`_SYSTEM_ALARM_ACE`
+
+.. class:: _SYSTEM_ALARM_ACE
+
+    .. attribute:: Header
+
+        :class:`ACE_HEADER`
+
+
+    .. attribute:: Mask
+
+        :class:`ACCESS_MASK`
+
+
+    .. attribute:: SidStart
+
+        :class:`DWORD`
+
+_SYSTEM_RESOURCE_ATTRIBUTE_ACE
+''''''''''''''''''''''''''''''
+.. class:: PSYSTEM_RESOURCE_ATTRIBUTE_ACE
+
+    Pointer to :class:`_SYSTEM_RESOURCE_ATTRIBUTE_ACE`
+
+.. class:: SYSTEM_RESOURCE_ATTRIBUTE_ACE
+
+    Alias for :class:`_SYSTEM_RESOURCE_ATTRIBUTE_ACE`
+
+.. class:: _SYSTEM_RESOURCE_ATTRIBUTE_ACE
+
+    .. attribute:: Header
+
+        :class:`ACE_HEADER`
+
+
+    .. attribute:: Mask
+
+        :class:`ACCESS_MASK`
+
+
+    .. attribute:: SidStart
+
+        :class:`DWORD`
+
+_SYSTEM_SCOPED_POLICY_ID_ACE
+''''''''''''''''''''''''''''
+.. class:: SYSTEM_SCOPED_POLICY_ID_ACE
+
+    Alias for :class:`_SYSTEM_SCOPED_POLICY_ID_ACE`
+
+.. class:: PSYSTEM_SCOPED_POLICY_ID_ACE
+
+    Pointer to :class:`_SYSTEM_SCOPED_POLICY_ID_ACE`
+
+.. class:: _SYSTEM_SCOPED_POLICY_ID_ACE
+
+    .. attribute:: Header
+
+        :class:`ACE_HEADER`
+
+
+    .. attribute:: Mask
+
+        :class:`ACCESS_MASK`
+
+
+    .. attribute:: SidStart
+
+        :class:`DWORD`
+
+_SYSTEM_PROCESS_TRUST_LABEL_ACE
+'''''''''''''''''''''''''''''''
+.. class:: PSYSTEM_PROCESS_TRUST_LABEL_ACE
+
+    Pointer to :class:`_SYSTEM_PROCESS_TRUST_LABEL_ACE`
+
+.. class:: SYSTEM_PROCESS_TRUST_LABEL_ACE
+
+    Alias for :class:`_SYSTEM_PROCESS_TRUST_LABEL_ACE`
+
+.. class:: _SYSTEM_PROCESS_TRUST_LABEL_ACE
+
+    .. attribute:: Header
+
+        :class:`ACE_HEADER`
+
+
+    .. attribute:: Mask
+
+        :class:`ACCESS_MASK`
+
+
+    .. attribute:: SidStart
+
+        :class:`DWORD`
+
+_SYSTEM_AUDIT_OBJECT_ACE
+''''''''''''''''''''''''
+.. class:: SYSTEM_AUDIT_OBJECT_ACE
+
+    Alias for :class:`_SYSTEM_AUDIT_OBJECT_ACE`
+
+.. class:: PSYSTEM_AUDIT_OBJECT_ACE
+
+    Pointer to :class:`_SYSTEM_AUDIT_OBJECT_ACE`
+
+.. class:: _SYSTEM_AUDIT_OBJECT_ACE
+
+    .. attribute:: Header
+
+        :class:`ACE_HEADER`
+
+
+    .. attribute:: Mask
+
+        :class:`ACCESS_MASK`
+
+
+    .. attribute:: Flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: ObjectType
+
+        :class:`GUID`
+
+
+    .. attribute:: InheritedObjectType
+
+        :class:`GUID`
+
+
+    .. attribute:: SidStart
+
+        :class:`DWORD`
+
+_SYSTEM_ALARM_OBJECT_ACE
+''''''''''''''''''''''''
+.. class:: SYSTEM_ALARM_OBJECT_ACE
+
+    Alias for :class:`_SYSTEM_ALARM_OBJECT_ACE`
+
+.. class:: PSYSTEM_ALARM_OBJECT_ACE
+
+    Pointer to :class:`_SYSTEM_ALARM_OBJECT_ACE`
+
+.. class:: _SYSTEM_ALARM_OBJECT_ACE
+
+    .. attribute:: Header
+
+        :class:`ACE_HEADER`
+
+
+    .. attribute:: Mask
+
+        :class:`ACCESS_MASK`
+
+
+    .. attribute:: Flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: ObjectType
+
+        :class:`GUID`
+
+
+    .. attribute:: InheritedObjectType
+
+        :class:`GUID`
+
+
+    .. attribute:: SidStart
+
+        :class:`DWORD`
+
+_SYSTEM_AUDIT_CALLBACK_ACE
+''''''''''''''''''''''''''
+.. class:: PSYSTEM_AUDIT_CALLBACK_ACE
+
+    Pointer to :class:`_SYSTEM_AUDIT_CALLBACK_ACE`
+
+.. class:: SYSTEM_AUDIT_CALLBACK_ACE
+
+    Alias for :class:`_SYSTEM_AUDIT_CALLBACK_ACE`
+
+.. class:: _SYSTEM_AUDIT_CALLBACK_ACE
+
+    .. attribute:: Header
+
+        :class:`ACE_HEADER`
+
+
+    .. attribute:: Mask
+
+        :class:`ACCESS_MASK`
+
+
+    .. attribute:: SidStart
+
+        :class:`DWORD`
+
+_SYSTEM_ALARM_CALLBACK_ACE
+''''''''''''''''''''''''''
+.. class:: SYSTEM_ALARM_CALLBACK_ACE
+
+    Alias for :class:`_SYSTEM_ALARM_CALLBACK_ACE`
+
+.. class:: PSYSTEM_ALARM_CALLBACK_ACE
+
+    Pointer to :class:`_SYSTEM_ALARM_CALLBACK_ACE`
+
+.. class:: _SYSTEM_ALARM_CALLBACK_ACE
+
+    .. attribute:: Header
+
+        :class:`ACE_HEADER`
+
+
+    .. attribute:: Mask
+
+        :class:`ACCESS_MASK`
+
+
+    .. attribute:: SidStart
+
+        :class:`DWORD`
+
+_SYSTEM_AUDIT_CALLBACK_OBJECT_ACE
+'''''''''''''''''''''''''''''''''
+.. class:: PSYSTEM_AUDIT_CALLBACK_OBJECT_ACE
+
+    Pointer to :class:`_SYSTEM_AUDIT_CALLBACK_OBJECT_ACE`
+
+.. class:: SYSTEM_AUDIT_CALLBACK_OBJECT_ACE
+
+    Alias for :class:`_SYSTEM_AUDIT_CALLBACK_OBJECT_ACE`
+
+.. class:: _SYSTEM_AUDIT_CALLBACK_OBJECT_ACE
+
+    .. attribute:: Header
+
+        :class:`ACE_HEADER`
+
+
+    .. attribute:: Mask
+
+        :class:`ACCESS_MASK`
+
+
+    .. attribute:: Flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: ObjectType
+
+        :class:`GUID`
+
+
+    .. attribute:: InheritedObjectType
+
+        :class:`GUID`
+
+
+    .. attribute:: SidStart
+
+        :class:`DWORD`
+
+_SYSTEM_ALARM_CALLBACK_OBJECT_ACE
+'''''''''''''''''''''''''''''''''
+.. class:: PSYSTEM_ALARM_CALLBACK_OBJECT_ACE
+
+    Pointer to :class:`_SYSTEM_ALARM_CALLBACK_OBJECT_ACE`
+
+.. class:: SYSTEM_ALARM_CALLBACK_OBJECT_ACE
+
+    Alias for :class:`_SYSTEM_ALARM_CALLBACK_OBJECT_ACE`
+
+.. class:: _SYSTEM_ALARM_CALLBACK_OBJECT_ACE
+
+    .. attribute:: Header
+
+        :class:`ACE_HEADER`
+
+
+    .. attribute:: Mask
+
+        :class:`ACCESS_MASK`
+
+
+    .. attribute:: Flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: ObjectType
+
+        :class:`GUID`
+
+
+    .. attribute:: InheritedObjectType
+
+        :class:`GUID`
+
+
+    .. attribute:: SidStart
+
+        :class:`DWORD`
+
+_CLAIM_SECURITY_ATTRIBUTE_RELATIVE_V1_UNION
+'''''''''''''''''''''''''''''''''''''''''''
+.. class:: CLAIM_SECURITY_ATTRIBUTE_RELATIVE_V1_UNION
+
+    Alias for :class:`_CLAIM_SECURITY_ATTRIBUTE_RELATIVE_V1_UNION`
+
+.. class:: _CLAIM_SECURITY_ATTRIBUTE_RELATIVE_V1_UNION
+
+    .. attribute:: pInt64
+
+        :class:`DWORD` ``[ANYSIZE_ARRAY]``
+
+
+    .. attribute:: pUint64
+
+        :class:`DWORD` ``[ANYSIZE_ARRAY]``
+
+
+    .. attribute:: ppString
+
+        :class:`DWORD` ``[ANYSIZE_ARRAY]``
+
+
+    .. attribute:: pFqbn
+
+        :class:`DWORD` ``[ANYSIZE_ARRAY]``
+
+
+    .. attribute:: pOctetString
+
+        :class:`DWORD` ``[ANYSIZE_ARRAY]``
+
+_CLAIM_SECURITY_ATTRIBUTE_RELATIVE_V1
+'''''''''''''''''''''''''''''''''''''
+.. class:: PCLAIM_SECURITY_ATTRIBUTE_RELATIVE_V1
+
+    Pointer to :class:`_CLAIM_SECURITY_ATTRIBUTE_RELATIVE_V1`
+
+.. class:: CLAIM_SECURITY_ATTRIBUTE_RELATIVE_V1
+
+    Alias for :class:`_CLAIM_SECURITY_ATTRIBUTE_RELATIVE_V1`
+
+.. class:: _CLAIM_SECURITY_ATTRIBUTE_RELATIVE_V1
+
+    .. attribute:: Name
+
+        :class:`DWORD`
+
+
+    .. attribute:: ValueType
+
+        :class:`WORD`
+
+
+    .. attribute:: Reserved
+
+        :class:`WORD`
+
+
+    .. attribute:: Flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: ValueCount
+
+        :class:`DWORD`
+
+
+    .. attribute:: Values
+
+        :class:`CLAIM_SECURITY_ATTRIBUTE_RELATIVE_V1_UNION`
+
+_CLAIM_SECURITY_ATTRIBUTE_FQBN_VALUE
+''''''''''''''''''''''''''''''''''''
+.. class:: PCLAIM_SECURITY_ATTRIBUTE_FQBN_VALUE
+
+    Pointer to :class:`_CLAIM_SECURITY_ATTRIBUTE_FQBN_VALUE`
+
+.. class:: CLAIM_SECURITY_ATTRIBUTE_FQBN_VALUE
+
+    Alias for :class:`_CLAIM_SECURITY_ATTRIBUTE_FQBN_VALUE`
+
+.. class:: _CLAIM_SECURITY_ATTRIBUTE_FQBN_VALUE
+
+    .. attribute:: Version
+
+        :class:`DWORD64`
+
+
+    .. attribute:: Name
+
+        :class:`PWSTR`
+
+_CLAIM_SECURITY_ATTRIBUTE_OCTET_STRING_VALUE
+''''''''''''''''''''''''''''''''''''''''''''
+.. class:: PCLAIM_SECURITY_ATTRIBUTE_OCTET_STRING_VALUE
+
+    Pointer to :class:`_CLAIM_SECURITY_ATTRIBUTE_OCTET_STRING_VALUE`
+
+.. class:: CLAIM_SECURITY_ATTRIBUTE_OCTET_STRING_VALUE
+
+    Alias for :class:`_CLAIM_SECURITY_ATTRIBUTE_OCTET_STRING_VALUE`
+
+.. class:: _CLAIM_SECURITY_ATTRIBUTE_OCTET_STRING_VALUE
+
+    .. attribute:: pValue
+
+        :class:`PVOID`
+
+
+    .. attribute:: ValueLength
+
+        :class:`DWORD`
+
+_CLAIM_SECURITY_ATTRIBUTE_OCTET_STRING_RELATIVE
+'''''''''''''''''''''''''''''''''''''''''''''''
+.. class:: PCLAIM_SECURITY_ATTRIBUTE_OCTET_STRING_RELATIVE
+
+    Pointer to :class:`_CLAIM_SECURITY_ATTRIBUTE_OCTET_STRING_RELATIVE`
+
+.. class:: CLAIM_SECURITY_ATTRIBUTE_OCTET_STRING_RELATIVE
+
+    Alias for :class:`_CLAIM_SECURITY_ATTRIBUTE_OCTET_STRING_RELATIVE`
+
+.. class:: _CLAIM_SECURITY_ATTRIBUTE_OCTET_STRING_RELATIVE
+
+    .. attribute:: Length
+
+        :class:`DWORD`
+
+
+    .. attribute:: OctetString
+
+        :class:`BYTE` ``[ANYSIZE_ARRAY]``
+
+_CLAIM_SECURITY_ATTRIBUTE_V1_UNION
+''''''''''''''''''''''''''''''''''
+.. class:: CLAIM_SECURITY_ATTRIBUTE_V1_UNION
+
+    Alias for :class:`_CLAIM_SECURITY_ATTRIBUTE_V1_UNION`
+
+.. class:: _CLAIM_SECURITY_ATTRIBUTE_V1_UNION
+
+    .. attribute:: pInt64
+
+        :class:`PLONG64`
+
+
+    .. attribute:: pUint64
+
+        :class:`PDWORD64`
+
+
+    .. attribute:: ppString
+
+        :class:`PWSTR`
+
+
+    .. attribute:: pFqbn
+
+        :class:`PCLAIM_SECURITY_ATTRIBUTE_FQBN_VALUE`
+
+
+    .. attribute:: pOctetString
+
+        :class:`PCLAIM_SECURITY_ATTRIBUTE_OCTET_STRING_VALUE`
+
+_CLAIM_SECURITY_ATTRIBUTE_V1
+''''''''''''''''''''''''''''
+.. class:: CLAIM_SECURITY_ATTRIBUTE_V1
+
+    Alias for :class:`_CLAIM_SECURITY_ATTRIBUTE_V1`
+
+.. class:: PCLAIM_SECURITY_ATTRIBUTE_V1
+
+    Pointer to :class:`_CLAIM_SECURITY_ATTRIBUTE_V1`
+
+.. class:: _CLAIM_SECURITY_ATTRIBUTE_V1
+
+    .. attribute:: Name
+
+        :class:`PWSTR`
+
+
+    .. attribute:: ValueType
+
+        :class:`WORD`
+
+
+    .. attribute:: Reserved
+
+        :class:`WORD`
+
+
+    .. attribute:: Flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: ValueCount
+
+        :class:`DWORD`
+
+
+    .. attribute:: Values
+
+        :class:`CLAIM_SECURITY_ATTRIBUTE_V1_UNION`
+
+_CLAIM_SECURITY_ATTRIBUTES_INFORMATION_UNION
+''''''''''''''''''''''''''''''''''''''''''''
+.. class:: CLAIM_SECURITY_ATTRIBUTES_INFORMATION_UNION
+
+    Alias for :class:`_CLAIM_SECURITY_ATTRIBUTES_INFORMATION_UNION`
+
+.. class:: _CLAIM_SECURITY_ATTRIBUTES_INFORMATION_UNION
+
+    .. attribute:: pAttributeV1
+
+        :class:`PCLAIM_SECURITY_ATTRIBUTE_V1`
+
+_CLAIM_SECURITY_ATTRIBUTES_INFORMATION
+''''''''''''''''''''''''''''''''''''''
+.. class:: CLAIM_SECURITY_ATTRIBUTES_INFORMATION
+
+    Alias for :class:`_CLAIM_SECURITY_ATTRIBUTES_INFORMATION`
+
+.. class:: PCLAIM_SECURITY_ATTRIBUTES_INFORMATION
+
+    Pointer to :class:`_CLAIM_SECURITY_ATTRIBUTES_INFORMATION`
+
+.. class:: _CLAIM_SECURITY_ATTRIBUTES_INFORMATION
+
+    .. attribute:: Version
+
+        :class:`WORD`
+
+
+    .. attribute:: Reserved
+
+        :class:`WORD`
+
+
+    .. attribute:: AttributeCount
+
+        :class:`DWORD`
+
+
+    .. attribute:: Attribute
+
+        :class:`CLAIM_SECURITY_ATTRIBUTES_INFORMATION_UNION`
+
+_SECURITY_DESCRIPTOR
+''''''''''''''''''''
+.. class:: PISECURITY_DESCRIPTOR
+
+    Pointer to :class:`_SECURITY_DESCRIPTOR`
+
+.. class:: SECURITY_DESCRIPTOR
+
+    Alias for :class:`_SECURITY_DESCRIPTOR`
+
+.. class:: _SECURITY_DESCRIPTOR
+
+    .. attribute:: Revision
+
+        :class:`BYTE`
+
+
+    .. attribute:: Sbz1
+
+        :class:`BYTE`
+
+
+    .. attribute:: Control
+
+        :class:`SECURITY_DESCRIPTOR_CONTROL`
+
+
+    .. attribute:: Owner
+
+        :class:`PSID`
+
+
+    .. attribute:: Group
+
+        :class:`PSID`
+
+
+    .. attribute:: Sacl
+
+        :class:`PACL`
+
+
+    .. attribute:: Dacl
+
+        :class:`PACL`
+
 _SHITEMID
 '''''''''
 .. class:: SHITEMID
@@ -3212,6 +6382,758 @@ _ITEMIDLIST
     .. attribute:: mkid
 
         :class:`SHITEMID`
+
+_IMAGEHLP_MODULE64
+''''''''''''''''''
+.. class:: PIMAGEHLP_MODULE64
+
+    Pointer to :class:`_IMAGEHLP_MODULE64`
+
+.. class:: IMAGEHLP_MODULE64
+
+    Alias for :class:`_IMAGEHLP_MODULE64`
+
+.. class:: _IMAGEHLP_MODULE64
+
+    .. attribute:: SizeOfStruct
+
+        :class:`DWORD`
+
+
+    .. attribute:: BaseOfImage
+
+        :class:`DWORD64`
+
+
+    .. attribute:: ImageSize
+
+        :class:`DWORD`
+
+
+    .. attribute:: TimeDateStamp
+
+        :class:`DWORD`
+
+
+    .. attribute:: CheckSum
+
+        :class:`DWORD`
+
+
+    .. attribute:: NumSyms
+
+        :class:`DWORD`
+
+
+    .. attribute:: SymType
+
+        :class:`SYM_TYPE`
+
+
+    .. attribute:: ModuleName
+
+        :class:`CHAR` ``[32]``
+
+
+    .. attribute:: ImageName
+
+        :class:`CHAR` ``[256]``
+
+
+    .. attribute:: LoadedImageName
+
+        :class:`CHAR` ``[256]``
+
+
+    .. attribute:: LoadedPdbName
+
+        :class:`CHAR` ``[256]``
+
+
+    .. attribute:: CVSig
+
+        :class:`DWORD`
+
+
+    .. attribute:: CVData
+
+        :class:`CHAR` ``[780]``
+
+
+    .. attribute:: PdbSig
+
+        :class:`DWORD`
+
+
+    .. attribute:: PdbSig70
+
+        :class:`GUID`
+
+
+    .. attribute:: PdbAge
+
+        :class:`DWORD`
+
+
+    .. attribute:: PdbUnmatched
+
+        :class:`BOOL`
+
+
+    .. attribute:: DbgUnmatched
+
+        :class:`BOOL`
+
+
+    .. attribute:: LineNumbers
+
+        :class:`BOOL`
+
+
+    .. attribute:: GlobalSymbols
+
+        :class:`BOOL`
+
+
+    .. attribute:: TypeInfo
+
+        :class:`BOOL`
+
+
+    .. attribute:: SourceIndexed
+
+        :class:`BOOL`
+
+
+    .. attribute:: Publics
+
+        :class:`BOOL`
+
+_TOKEN_PRIVILEGES
+'''''''''''''''''
+.. class:: TOKEN_PRIVILEGES
+
+    Alias for :class:`_TOKEN_PRIVILEGES`
+
+.. class:: PTOKEN_PRIVILEGES
+
+    Pointer to :class:`_TOKEN_PRIVILEGES`
+
+.. class:: _TOKEN_PRIVILEGES
+
+    .. attribute:: PrivilegeCount
+
+        :class:`DWORD`
+
+
+    .. attribute:: Privileges
+
+        :class:`LUID_AND_ATTRIBUTES` ``[ANYSIZE_ARRAY]``
+
+_TOKEN_ELEVATION
+''''''''''''''''
+.. class:: TOKEN_ELEVATION
+
+    Alias for :class:`_TOKEN_ELEVATION`
+
+.. class:: PTOKEN_ELEVATION
+
+    Pointer to :class:`_TOKEN_ELEVATION`
+
+.. class:: _TOKEN_ELEVATION
+
+    .. attribute:: TokenIsElevated
+
+        :class:`DWORD`
+
+_SID_AND_ATTRIBUTES
+'''''''''''''''''''
+.. class:: SID_AND_ATTRIBUTES
+
+    Alias for :class:`_SID_AND_ATTRIBUTES`
+
+.. class:: PSID_AND_ATTRIBUTES
+
+    Pointer to :class:`_SID_AND_ATTRIBUTES`
+
+.. class:: _SID_AND_ATTRIBUTES
+
+    .. attribute:: Sid
+
+        :class:`PSID`
+
+
+    .. attribute:: Attributes
+
+        :class:`DWORD`
+
+_TOKEN_MANDATORY_LABEL
+''''''''''''''''''''''
+.. class:: TOKEN_MANDATORY_LABEL
+
+    Alias for :class:`_TOKEN_MANDATORY_LABEL`
+
+.. class:: PTOKEN_MANDATORY_LABEL
+
+    Pointer to :class:`_TOKEN_MANDATORY_LABEL`
+
+.. class:: _TOKEN_MANDATORY_LABEL
+
+    .. attribute:: Label
+
+        :class:`SID_AND_ATTRIBUTES`
+
+_TOKEN_USER
+'''''''''''
+.. class:: PTOKEN_USER
+
+    Pointer to :class:`_TOKEN_USER`
+
+.. class:: TOKEN_USER
+
+    Alias for :class:`_TOKEN_USER`
+
+.. class:: _TOKEN_USER
+
+    .. attribute:: User
+
+        :class:`SID_AND_ATTRIBUTES`
+
+_TOKEN_DEFAULT_DACL
+'''''''''''''''''''
+.. class:: TOKEN_DEFAULT_DACL
+
+    Alias for :class:`_TOKEN_DEFAULT_DACL`
+
+.. class:: PTOKEN_DEFAULT_DACL
+
+    Pointer to :class:`_TOKEN_DEFAULT_DACL`
+
+.. class:: _TOKEN_DEFAULT_DACL
+
+    .. attribute:: DefaultDacl
+
+        :class:`PACL`
+
+_TOKEN_GROUPS
+'''''''''''''
+.. class:: TOKEN_GROUPS
+
+    Alias for :class:`_TOKEN_GROUPS`
+
+.. class:: PTOKEN_GROUPS
+
+    Pointer to :class:`_TOKEN_GROUPS`
+
+.. class:: _TOKEN_GROUPS
+
+    .. attribute:: GroupCount
+
+        :class:`DWORD`
+
+
+    .. attribute:: Groups
+
+        :class:`SID_AND_ATTRIBUTES` ``[ANYSIZE_ARRAY]``
+
+_TOKEN_OWNER
+''''''''''''
+.. class:: TOKEN_OWNER
+
+    Alias for :class:`_TOKEN_OWNER`
+
+.. class:: PTOKEN_OWNER
+
+    Pointer to :class:`_TOKEN_OWNER`
+
+.. class:: _TOKEN_OWNER
+
+    .. attribute:: Owner
+
+        :class:`PSID`
+
+_TOKEN_PRIMARY_GROUP
+''''''''''''''''''''
+.. class:: PTOKEN_PRIMARY_GROUP
+
+    Pointer to :class:`_TOKEN_PRIMARY_GROUP`
+
+.. class:: TOKEN_PRIMARY_GROUP
+
+    Alias for :class:`_TOKEN_PRIMARY_GROUP`
+
+.. class:: _TOKEN_PRIMARY_GROUP
+
+    .. attribute:: PrimaryGroup
+
+        :class:`PSID`
+
+_TOKEN_SOURCE
+'''''''''''''
+.. class:: PTOKEN_SOURCE
+
+    Pointer to :class:`_TOKEN_SOURCE`
+
+.. class:: TOKEN_SOURCE
+
+    Alias for :class:`_TOKEN_SOURCE`
+
+.. class:: _TOKEN_SOURCE
+
+    .. attribute:: SourceName
+
+        :class:`CHAR` ``[TOKEN_SOURCE_LENGTH]``
+
+
+    .. attribute:: SourceIdentifier
+
+        :class:`LUID`
+
+_TOKEN_STATISTICS
+'''''''''''''''''
+.. class:: PTOKEN_STATISTICS
+
+    Pointer to :class:`_TOKEN_STATISTICS`
+
+.. class:: TOKEN_STATISTICS
+
+    Alias for :class:`_TOKEN_STATISTICS`
+
+.. class:: _TOKEN_STATISTICS
+
+    .. attribute:: TokenId
+
+        :class:`LUID`
+
+
+    .. attribute:: AuthenticationId
+
+        :class:`LUID`
+
+
+    .. attribute:: ExpirationTime
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: TokenType
+
+        :class:`TOKEN_TYPE`
+
+
+    .. attribute:: ImpersonationLevel
+
+        :class:`SECURITY_IMPERSONATION_LEVEL`
+
+
+    .. attribute:: DynamicCharged
+
+        :class:`DWORD`
+
+
+    .. attribute:: DynamicAvailable
+
+        :class:`DWORD`
+
+
+    .. attribute:: GroupCount
+
+        :class:`DWORD`
+
+
+    .. attribute:: PrivilegeCount
+
+        :class:`DWORD`
+
+
+    .. attribute:: ModifiedId
+
+        :class:`LUID`
+
+_TOKEN_ORIGIN
+'''''''''''''
+.. class:: TOKEN_ORIGIN
+
+    Alias for :class:`_TOKEN_ORIGIN`
+
+.. class:: PTOKEN_ORIGIN
+
+    Pointer to :class:`_TOKEN_ORIGIN`
+
+.. class:: _TOKEN_ORIGIN
+
+    .. attribute:: OriginatingLogonSession
+
+        :class:`LUID`
+
+_TOKEN_LINKED_TOKEN
+'''''''''''''''''''
+.. class:: PTOKEN_LINKED_TOKEN
+
+    Pointer to :class:`_TOKEN_LINKED_TOKEN`
+
+.. class:: TOKEN_LINKED_TOKEN
+
+    Alias for :class:`_TOKEN_LINKED_TOKEN`
+
+.. class:: _TOKEN_LINKED_TOKEN
+
+    .. attribute:: LinkedToken
+
+        :class:`HANDLE`
+
+_TOKEN_MANDATORY_POLICY
+'''''''''''''''''''''''
+.. class:: TOKEN_MANDATORY_POLICY
+
+    Alias for :class:`_TOKEN_MANDATORY_POLICY`
+
+.. class:: PTOKEN_MANDATORY_POLICY
+
+    Pointer to :class:`_TOKEN_MANDATORY_POLICY`
+
+.. class:: _TOKEN_MANDATORY_POLICY
+
+    .. attribute:: Policy
+
+        :class:`DWORD`
+
+_SID_AND_ATTRIBUTES_HASH
+''''''''''''''''''''''''
+.. class:: SID_AND_ATTRIBUTES_HASH
+
+    Alias for :class:`_SID_AND_ATTRIBUTES_HASH`
+
+.. class:: PSID_AND_ATTRIBUTES_HASH
+
+    Pointer to :class:`_SID_AND_ATTRIBUTES_HASH`
+
+.. class:: _SID_AND_ATTRIBUTES_HASH
+
+    .. attribute:: SidCount
+
+        :class:`DWORD`
+
+
+    .. attribute:: SidAttr
+
+        :class:`PSID_AND_ATTRIBUTES`
+
+
+    .. attribute:: Hash
+
+        :class:`SID_HASH_ENTRY` ``[SID_HASH_SIZE]``
+
+_TOKEN_APPCONTAINER_INFORMATION
+'''''''''''''''''''''''''''''''
+.. class:: PTOKEN_APPCONTAINER_INFORMATION
+
+    Pointer to :class:`_TOKEN_APPCONTAINER_INFORMATION`
+
+.. class:: TOKEN_APPCONTAINER_INFORMATION
+
+    Alias for :class:`_TOKEN_APPCONTAINER_INFORMATION`
+
+.. class:: _TOKEN_APPCONTAINER_INFORMATION
+
+    .. attribute:: TokenAppContainer
+
+        :class:`PSID`
+
+_TOKEN_ACCESS_INFORMATION
+'''''''''''''''''''''''''
+.. class:: PTOKEN_ACCESS_INFORMATION
+
+    Pointer to :class:`_TOKEN_ACCESS_INFORMATION`
+
+.. class:: TOKEN_ACCESS_INFORMATION
+
+    Alias for :class:`_TOKEN_ACCESS_INFORMATION`
+
+.. class:: _TOKEN_ACCESS_INFORMATION
+
+    .. attribute:: SidHash
+
+        :class:`PSID_AND_ATTRIBUTES_HASH`
+
+
+    .. attribute:: RestrictedSidHash
+
+        :class:`PSID_AND_ATTRIBUTES_HASH`
+
+
+    .. attribute:: Privileges
+
+        :class:`PTOKEN_PRIVILEGES`
+
+
+    .. attribute:: AuthenticationId
+
+        :class:`LUID`
+
+
+    .. attribute:: TokenType
+
+        :class:`TOKEN_TYPE`
+
+
+    .. attribute:: ImpersonationLevel
+
+        :class:`SECURITY_IMPERSONATION_LEVEL`
+
+
+    .. attribute:: MandatoryPolicy
+
+        :class:`TOKEN_MANDATORY_POLICY`
+
+
+    .. attribute:: Flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: AppContainerNumber
+
+        :class:`DWORD`
+
+
+    .. attribute:: PackageSid
+
+        :class:`PSID`
+
+
+    .. attribute:: CapabilitiesHash
+
+        :class:`PSID_AND_ATTRIBUTES_HASH`
+
+
+    .. attribute:: TrustLevelSid
+
+        :class:`PSID`
+
+
+    .. attribute:: SecurityAttributes
+
+        :class:`PSECURITY_ATTRIBUTES_OPAQUE`
+
+_TOKEN_GROUPS_AND_PRIVILEGES
+''''''''''''''''''''''''''''
+.. class:: TOKEN_GROUPS_AND_PRIVILEGES
+
+    Alias for :class:`_TOKEN_GROUPS_AND_PRIVILEGES`
+
+.. class:: PTOKEN_GROUPS_AND_PRIVILEGES
+
+    Pointer to :class:`_TOKEN_GROUPS_AND_PRIVILEGES`
+
+.. class:: _TOKEN_GROUPS_AND_PRIVILEGES
+
+    .. attribute:: SidCount
+
+        :class:`DWORD`
+
+
+    .. attribute:: SidLength
+
+        :class:`DWORD`
+
+
+    .. attribute:: Sids
+
+        :class:`PSID_AND_ATTRIBUTES`
+
+
+    .. attribute:: RestrictedSidCount
+
+        :class:`DWORD`
+
+
+    .. attribute:: RestrictedSidLength
+
+        :class:`DWORD`
+
+
+    .. attribute:: RestrictedSids
+
+        :class:`PSID_AND_ATTRIBUTES`
+
+
+    .. attribute:: PrivilegeCount
+
+        :class:`DWORD`
+
+
+    .. attribute:: PrivilegeLength
+
+        :class:`DWORD`
+
+
+    .. attribute:: Privileges
+
+        :class:`PLUID_AND_ATTRIBUTES`
+
+
+    .. attribute:: AuthenticationId
+
+        :class:`LUID`
+
+_TOKEN_SECURITY_ATTRIBUTE_FQBN_VALUE
+''''''''''''''''''''''''''''''''''''
+.. class:: PTOKEN_SECURITY_ATTRIBUTE_FQBN_VALUE
+
+    Pointer to :class:`_TOKEN_SECURITY_ATTRIBUTE_FQBN_VALUE`
+
+.. class:: TOKEN_SECURITY_ATTRIBUTE_FQBN_VALUE
+
+    Alias for :class:`_TOKEN_SECURITY_ATTRIBUTE_FQBN_VALUE`
+
+.. class:: _TOKEN_SECURITY_ATTRIBUTE_FQBN_VALUE
+
+    .. attribute:: Version
+
+        :class:`ULONG64`
+
+
+    .. attribute:: Name
+
+        :class:`UNICODE_STRING`
+
+_TOKEN_SECURITY_ATTRIBUTE_OCTET_STRING_VALUE
+''''''''''''''''''''''''''''''''''''''''''''
+.. class:: PTOKEN_SECURITY_ATTRIBUTE_OCTET_STRING_VALUE
+
+    Pointer to :class:`_TOKEN_SECURITY_ATTRIBUTE_OCTET_STRING_VALUE`
+
+.. class:: TOKEN_SECURITY_ATTRIBUTE_OCTET_STRING_VALUE
+
+    Alias for :class:`_TOKEN_SECURITY_ATTRIBUTE_OCTET_STRING_VALUE`
+
+.. class:: _TOKEN_SECURITY_ATTRIBUTE_OCTET_STRING_VALUE
+
+    .. attribute:: pValue
+
+        :class:`PVOID`
+
+
+    .. attribute:: ValueLength
+
+        :class:`ULONG`
+
+_TOKEN_SECURITY_ATTRIBUTE_V1_UNION
+''''''''''''''''''''''''''''''''''
+.. class:: TOKEN_SECURITY_ATTRIBUTE_V1_UNION
+
+    Alias for :class:`_TOKEN_SECURITY_ATTRIBUTE_V1_UNION`
+
+.. class:: _TOKEN_SECURITY_ATTRIBUTE_V1_UNION
+
+    .. attribute:: pInt64
+
+        :class:`PLONG64`
+
+
+    .. attribute:: pUint64
+
+        :class:`PULONG64`
+
+
+    .. attribute:: pString
+
+        :class:`PUNICODE_STRING`
+
+
+    .. attribute:: pFqbn
+
+        :class:`PTOKEN_SECURITY_ATTRIBUTE_FQBN_VALUE`
+
+
+    .. attribute:: pOctetString
+
+        :class:`PTOKEN_SECURITY_ATTRIBUTE_OCTET_STRING_VALUE`
+
+_TOKEN_SECURITY_ATTRIBUTE_V1
+''''''''''''''''''''''''''''
+.. class:: TOKEN_SECURITY_ATTRIBUTE_V1
+
+    Alias for :class:`_TOKEN_SECURITY_ATTRIBUTE_V1`
+
+.. class:: PTOKEN_SECURITY_ATTRIBUTE_V1
+
+    Pointer to :class:`_TOKEN_SECURITY_ATTRIBUTE_V1`
+
+.. class:: _TOKEN_SECURITY_ATTRIBUTE_V1
+
+    .. attribute:: Name
+
+        :class:`UNICODE_STRING`
+
+
+    .. attribute:: ValueType
+
+        :class:`USHORT`
+
+
+    .. attribute:: Reserved
+
+        :class:`USHORT`
+
+
+    .. attribute:: Flags
+
+        :class:`ULONG`
+
+
+    .. attribute:: ValueCount
+
+        :class:`ULONG`
+
+
+    .. attribute:: Values
+
+        :class:`TOKEN_SECURITY_ATTRIBUTE_V1_UNION`
+
+_TOKEN_SECURITY_ATTRIBUTES_INFORMATION_UNION
+''''''''''''''''''''''''''''''''''''''''''''
+.. class:: TOKEN_SECURITY_ATTRIBUTES_INFORMATION_UNION
+
+    Alias for :class:`_TOKEN_SECURITY_ATTRIBUTES_INFORMATION_UNION`
+
+.. class:: _TOKEN_SECURITY_ATTRIBUTES_INFORMATION_UNION
+
+    .. attribute:: pAttributeV1
+
+        :class:`PTOKEN_SECURITY_ATTRIBUTE_V1`
+
+_TOKEN_SECURITY_ATTRIBUTES_INFORMATION
+''''''''''''''''''''''''''''''''''''''
+.. class:: PTOKEN_SECURITY_ATTRIBUTES_INFORMATION
+
+    Pointer to :class:`_TOKEN_SECURITY_ATTRIBUTES_INFORMATION`
+
+.. class:: TOKEN_SECURITY_ATTRIBUTES_INFORMATION
+
+    Alias for :class:`_TOKEN_SECURITY_ATTRIBUTES_INFORMATION`
+
+.. class:: _TOKEN_SECURITY_ATTRIBUTES_INFORMATION
+
+    .. attribute:: Version
+
+        :class:`USHORT`
+
+
+    .. attribute:: Reserved
+
+        :class:`USHORT`
+
+
+    .. attribute:: AttributeCount
+
+        :class:`ULONG`
+
+
+    .. attribute:: Attribute
+
+        :class:`TOKEN_SECURITY_ATTRIBUTES_INFORMATION_UNION`
 
 tagRGBTRIPLE
 ''''''''''''
@@ -7198,96 +11120,6 @@ _LUID_AND_ATTRIBUTES
 
         :class:`DWORD`
 
-_TOKEN_PRIVILEGES
-'''''''''''''''''
-.. class:: TOKEN_PRIVILEGES
-
-    Alias for :class:`_TOKEN_PRIVILEGES`
-
-.. class:: PTOKEN_PRIVILEGES
-
-    Pointer to :class:`_TOKEN_PRIVILEGES`
-
-.. class:: _TOKEN_PRIVILEGES
-
-    .. attribute:: PrivilegeCount
-
-        :class:`DWORD`
-
-
-    .. attribute:: Privileges
-
-        :class:`LUID_AND_ATTRIBUTES` ``[ANYSIZE_ARRAY]``
-
-_TOKEN_ELEVATION
-''''''''''''''''
-.. class:: TOKEN_ELEVATION
-
-    Alias for :class:`_TOKEN_ELEVATION`
-
-.. class:: PTOKEN_ELEVATION
-
-    Pointer to :class:`_TOKEN_ELEVATION`
-
-.. class:: _TOKEN_ELEVATION
-
-    .. attribute:: TokenIsElevated
-
-        :class:`DWORD`
-
-_SID_AND_ATTRIBUTES
-'''''''''''''''''''
-.. class:: SID_AND_ATTRIBUTES
-
-    Alias for :class:`_SID_AND_ATTRIBUTES`
-
-.. class:: PSID_AND_ATTRIBUTES
-
-    Pointer to :class:`_SID_AND_ATTRIBUTES`
-
-.. class:: _SID_AND_ATTRIBUTES
-
-    .. attribute:: Sid
-
-        :class:`PSID`
-
-
-    .. attribute:: Attributes
-
-        :class:`DWORD`
-
-_TOKEN_MANDATORY_LABEL
-''''''''''''''''''''''
-.. class:: TOKEN_MANDATORY_LABEL
-
-    Alias for :class:`_TOKEN_MANDATORY_LABEL`
-
-.. class:: PTOKEN_MANDATORY_LABEL
-
-    Pointer to :class:`_TOKEN_MANDATORY_LABEL`
-
-.. class:: _TOKEN_MANDATORY_LABEL
-
-    .. attribute:: Label
-
-        :class:`SID_AND_ATTRIBUTES`
-
-_TOKEN_USER
-'''''''''''
-.. class:: PTOKEN_USER
-
-    Pointer to :class:`_TOKEN_USER`
-
-.. class:: TOKEN_USER
-
-    Alias for :class:`_TOKEN_USER`
-
-.. class:: _TOKEN_USER
-
-    .. attribute:: User
-
-        :class:`SID_AND_ATTRIBUTES`
-
 _OSVERSIONINFOA
 '''''''''''''''
 .. class:: POSVERSIONINFOA
@@ -8721,64 +12553,6 @@ _SYSTEM_MODULE_INFORMATION64
 
         :class:`SYSTEM_MODULE64` ``[0]``
 
-tagSAFEARRAYBOUND
-'''''''''''''''''
-.. class:: SAFEARRAYBOUND
-
-    Alias for :class:`tagSAFEARRAYBOUND`
-
-.. class:: LPSAFEARRAYBOUND
-
-    Pointer to :class:`tagSAFEARRAYBOUND`
-
-.. class:: tagSAFEARRAYBOUND
-
-    .. attribute:: cElements
-
-        :class:`ULONG`
-
-
-    .. attribute:: lLbound
-
-        :class:`LONG`
-
-tagSAFEARRAY
-''''''''''''
-.. class:: SAFEARRAY
-
-    Alias for :class:`tagSAFEARRAY`
-
-.. class:: tagSAFEARRAY
-
-    .. attribute:: cDims
-
-        :class:`USHORT`
-
-
-    .. attribute:: fFeatures
-
-        :class:`USHORT`
-
-
-    .. attribute:: cbElements
-
-        :class:`ULONG`
-
-
-    .. attribute:: cLocks
-
-        :class:`ULONG`
-
-
-    .. attribute:: pvData
-
-        :class:`PVOID`
-
-
-    .. attribute:: rgsabound
-
-        :class:`SAFEARRAYBOUND` ``[1]``
-
 _DEBUG_BREAKPOINT_PARAMETERS
 ''''''''''''''''''''''''''''
 .. class:: PDEBUG_BREAKPOINT_PARAMETERS
@@ -9229,249 +13003,6 @@ tagDEC
     .. attribute:: u2
 
         :class:`TMP_signscale_union`
-
-__tagBRECORD
-''''''''''''
-.. class:: _tagBRECORD
-
-    Alias for :class:`__tagBRECORD`
-
-.. class:: __tagBRECORD
-
-    .. attribute:: pvRecord
-
-        :class:`PVOID`
-
-
-    .. attribute:: pRecInfo
-
-        :class:`PVOID`
-
-TMP_variant_sub_union
-'''''''''''''''''''''
-.. class:: TMP_variant_sub_union
-
-    .. attribute:: llVal
-
-        :class:`LONGLONG`
-
-
-    .. attribute:: lVal
-
-        :class:`LONG`
-
-
-    .. attribute:: bVal
-
-        :class:`BYTE`
-
-
-    .. attribute:: iVal
-
-        :class:`SHORT`
-
-
-    .. attribute:: fltVal
-
-        :class:`FLOAT`
-
-
-    .. attribute:: dblVal
-
-        :class:`DOUBLE`
-
-
-    .. attribute:: boolVal
-
-        :class:`VARIANT_BOOL`
-
-
-    .. attribute:: scode
-
-        :class:`SCODE`
-
-
-    .. attribute:: bstrVal
-
-        :class:`BSTR`
-
-
-    .. attribute:: punkVal
-
-        :class:`PVOID`
-
-
-    .. attribute:: pdispVal
-
-        :class:`PVOID`
-
-
-    .. attribute:: parray
-
-        :class:`SAFEARRAY`
-
-
-    .. attribute:: pbVal
-
-        :class:`BYTE`
-
-
-    .. attribute:: piVal
-
-        :class:`SHORT`
-
-
-    .. attribute:: plVal
-
-        :class:`LONG`
-
-
-    .. attribute:: pllVal
-
-        :class:`LONGLONG`
-
-
-    .. attribute:: pfltVal
-
-        :class:`FLOAT`
-
-
-    .. attribute:: pdblVal
-
-        :class:`DOUBLE`
-
-
-    .. attribute:: pboolVal
-
-        :class:`VARIANT_BOOL`
-
-
-    .. attribute:: pscode
-
-        :class:`SCODE`
-
-
-    .. attribute:: pbstrVal
-
-        :class:`BSTR`
-
-
-    .. attribute:: byref
-
-        :class:`PVOID`
-
-
-    .. attribute:: cVal
-
-        :class:`CHAR`
-
-
-    .. attribute:: uiVal
-
-        :class:`USHORT`
-
-
-    .. attribute:: ulVal
-
-        :class:`ULONG`
-
-
-    .. attribute:: ullVal
-
-        :class:`ULONGLONG`
-
-
-    .. attribute:: intVal
-
-        :class:`INT`
-
-
-    .. attribute:: uintVal
-
-        :class:`UINT`
-
-
-    .. attribute:: pcVal
-
-        :class:`CHAR`
-
-
-    .. attribute:: puiVal
-
-        :class:`USHORT`
-
-
-    .. attribute:: pulVal
-
-        :class:`ULONG`
-
-
-    .. attribute:: pullVal
-
-        :class:`ULONGLONG`
-
-
-    .. attribute:: pintVal
-
-        :class:`INT`
-
-
-    .. attribute:: puintVal
-
-        :class:`UINT`
-
-
-    .. attribute:: _VARIANT_NAME_4
-
-        :class:`_tagBRECORD`
-
-__tagVARIANT
-''''''''''''
-.. class:: LPVARIANTARG
-
-    Pointer to :class:`__tagVARIANT`
-
-.. class:: VARIANTARG
-
-    Alias for :class:`__tagVARIANT`
-
-.. class:: VARIANT
-
-    Alias for :class:`__tagVARIANT`
-
-.. class:: LPVARIANT
-
-    Pointer to :class:`__tagVARIANT`
-
-.. class:: _tagVARIANT
-
-    Alias for :class:`__tagVARIANT`
-
-.. class:: __tagVARIANT
-
-    .. attribute:: vt
-
-        :class:`VARTYPE`
-
-
-    .. attribute:: wReserved1
-
-        :class:`WORD`
-
-
-    .. attribute:: wReserved2
-
-        :class:`WORD`
-
-
-    .. attribute:: wReserved3
-
-        :class:`WORD`
-
-
-    .. attribute:: _VARIANT_NAME_3
-
-        :class:`TMP_variant_sub_union`
 
 tagDISPPARAMS
 '''''''''''''
@@ -10934,321 +14465,6 @@ _DEBUG_SYMBOL_SOURCE_ENTRY
 
         :class:`ULONG`
 
-_ACL
-''''
-.. class:: PACL
-
-    Pointer to :class:`_ACL`
-
-.. class:: ACL
-
-    Alias for :class:`_ACL`
-
-.. class:: _ACL
-
-    .. attribute:: AclRevision
-
-        :class:`BYTE`
-
-
-    .. attribute:: Sbz1
-
-        :class:`BYTE`
-
-
-    .. attribute:: AclSize
-
-        :class:`WORD`
-
-
-    .. attribute:: AceCount
-
-        :class:`WORD`
-
-
-    .. attribute:: Sbz2
-
-        :class:`WORD`
-
-_ACE_HEADER
-'''''''''''
-.. class:: PACE_HEADER
-
-    Pointer to :class:`_ACE_HEADER`
-
-.. class:: ACE_HEADER
-
-    Alias for :class:`_ACE_HEADER`
-
-.. class:: _ACE_HEADER
-
-    .. attribute:: AceType
-
-        :class:`BYTE`
-
-
-    .. attribute:: AceFlags
-
-        :class:`BYTE`
-
-
-    .. attribute:: AceSize
-
-        :class:`WORD`
-
-_ACCESS_ALLOWED_ACE
-'''''''''''''''''''
-.. class:: PACCESS_ALLOWED_ACE
-
-    Pointer to :class:`_ACCESS_ALLOWED_ACE`
-
-.. class:: ACCESS_ALLOWED_ACE
-
-    Alias for :class:`_ACCESS_ALLOWED_ACE`
-
-.. class:: _ACCESS_ALLOWED_ACE
-
-    .. attribute:: Header
-
-        :class:`ACE_HEADER`
-
-
-    .. attribute:: Mask
-
-        :class:`ACCESS_MASK`
-
-
-    .. attribute:: SidStart
-
-        :class:`DWORD`
-
-_ACCESS_ALLOWED_CALLBACK_ACE
-''''''''''''''''''''''''''''
-.. class:: PACCESS_ALLOWED_CALLBACK_ACE
-
-    Pointer to :class:`_ACCESS_ALLOWED_CALLBACK_ACE`
-
-.. class:: ACCESS_ALLOWED_CALLBACK_ACE
-
-    Alias for :class:`_ACCESS_ALLOWED_CALLBACK_ACE`
-
-.. class:: _ACCESS_ALLOWED_CALLBACK_ACE
-
-    .. attribute:: Header
-
-        :class:`ACE_HEADER`
-
-
-    .. attribute:: Mask
-
-        :class:`ACCESS_MASK`
-
-
-    .. attribute:: SidStart
-
-        :class:`DWORD`
-
-_ACCESS_ALLOWED_CALLBACK_OBJECT_ACE
-'''''''''''''''''''''''''''''''''''
-.. class:: PACCESS_ALLOWED_CALLBACK_OBJECT_ACE
-
-    Pointer to :class:`_ACCESS_ALLOWED_CALLBACK_OBJECT_ACE`
-
-.. class:: ACCESS_ALLOWED_CALLBACK_OBJECT_ACE
-
-    Alias for :class:`_ACCESS_ALLOWED_CALLBACK_OBJECT_ACE`
-
-.. class:: _ACCESS_ALLOWED_CALLBACK_OBJECT_ACE
-
-    .. attribute:: Header
-
-        :class:`ACE_HEADER`
-
-
-    .. attribute:: Mask
-
-        :class:`ACCESS_MASK`
-
-
-    .. attribute:: Flags
-
-        :class:`DWORD`
-
-
-    .. attribute:: ObjectType
-
-        :class:`GUID`
-
-
-    .. attribute:: InheritedObjectType
-
-        :class:`GUID`
-
-
-    .. attribute:: SidStart
-
-        :class:`DWORD`
-
-_ACCESS_ALLOWED_OBJECT_ACE
-''''''''''''''''''''''''''
-.. class:: PACCESS_ALLOWED_OBJECT_ACE
-
-    Pointer to :class:`_ACCESS_ALLOWED_OBJECT_ACE`
-
-.. class:: ACCESS_ALLOWED_OBJECT_ACE
-
-    Alias for :class:`_ACCESS_ALLOWED_OBJECT_ACE`
-
-.. class:: _ACCESS_ALLOWED_OBJECT_ACE
-
-    .. attribute:: Header
-
-        :class:`ACE_HEADER`
-
-
-    .. attribute:: Mask
-
-        :class:`ACCESS_MASK`
-
-
-    .. attribute:: Flags
-
-        :class:`DWORD`
-
-
-    .. attribute:: ObjectType
-
-        :class:`GUID`
-
-
-    .. attribute:: InheritedObjectType
-
-        :class:`GUID`
-
-
-    .. attribute:: SidStart
-
-        :class:`DWORD`
-
-_ACCESS_DENIED_ACE
-''''''''''''''''''
-.. class:: ACCESS_DENIED_ACE
-
-    Alias for :class:`_ACCESS_DENIED_ACE`
-
-.. class:: PACCESS_DENIED_ACE
-
-    Pointer to :class:`_ACCESS_DENIED_ACE`
-
-.. class:: _ACCESS_DENIED_ACE
-
-    .. attribute:: Header
-
-        :class:`ACE_HEADER`
-
-
-    .. attribute:: Mask
-
-        :class:`ACCESS_MASK`
-
-
-    .. attribute:: SidStart
-
-        :class:`DWORD`
-
-_ACCESS_DENIED_CALLBACK_ACE
-'''''''''''''''''''''''''''
-.. class:: ACCESS_DENIED_CALLBACK_ACE
-
-    Alias for :class:`_ACCESS_DENIED_CALLBACK_ACE`
-
-.. class:: PACCESS_DENIED_CALLBACK_ACE
-
-    Pointer to :class:`_ACCESS_DENIED_CALLBACK_ACE`
-
-.. class:: _ACCESS_DENIED_CALLBACK_ACE
-
-    .. attribute:: Header
-
-        :class:`ACE_HEADER`
-
-
-    .. attribute:: Mask
-
-        :class:`ACCESS_MASK`
-
-
-    .. attribute:: SidStart
-
-        :class:`DWORD`
-
-_ACCESS_DENIED_OBJECT_ACE
-'''''''''''''''''''''''''
-.. class:: ACCESS_DENIED_OBJECT_ACE
-
-    Alias for :class:`_ACCESS_DENIED_OBJECT_ACE`
-
-.. class:: PACCESS_DENIED_OBJECT_ACE
-
-    Pointer to :class:`_ACCESS_DENIED_OBJECT_ACE`
-
-.. class:: _ACCESS_DENIED_OBJECT_ACE
-
-    .. attribute:: Header
-
-        :class:`ACE_HEADER`
-
-
-    .. attribute:: Mask
-
-        :class:`ACCESS_MASK`
-
-
-    .. attribute:: Flags
-
-        :class:`DWORD`
-
-
-    .. attribute:: ObjectType
-
-        :class:`GUID`
-
-
-    .. attribute:: InheritedObjectType
-
-        :class:`GUID`
-
-
-    .. attribute:: SidStart
-
-        :class:`DWORD`
-
-_SYSTEM_MANDATORY_LABEL_ACE
-'''''''''''''''''''''''''''
-.. class:: SYSTEM_MANDATORY_LABEL_ACE
-
-    Alias for :class:`_SYSTEM_MANDATORY_LABEL_ACE`
-
-.. class:: PSYSTEM_MANDATORY_LABEL_ACE
-
-    Pointer to :class:`_SYSTEM_MANDATORY_LABEL_ACE`
-
-.. class:: _SYSTEM_MANDATORY_LABEL_ACE
-
-    .. attribute:: Header
-
-        :class:`ACE_HEADER`
-
-
-    .. attribute:: Mask
-
-        :class:`ACCESS_MASK`
-
-
-    .. attribute:: SidStart
-
-        :class:`DWORD`
-
 _RTL_UNLOAD_EVENT_TRACE
 '''''''''''''''''''''''
 .. class:: PRTL_UNLOAD_EVENT_TRACE
@@ -11918,853 +15134,6 @@ _PROCESS_MEMORY_COUNTERS_EX
     .. attribute:: PrivateUsage
 
         :class:`SIZE_T`
-
-_ALPC_PORT_ATTRIBUTES32
-'''''''''''''''''''''''
-.. class:: PALPC_PORT_ATTRIBUTES32
-
-    Pointer to :class:`_ALPC_PORT_ATTRIBUTES32`
-
-.. class:: ALPC_PORT_ATTRIBUTES32
-
-    Alias for :class:`_ALPC_PORT_ATTRIBUTES32`
-
-.. class:: _ALPC_PORT_ATTRIBUTES32
-
-    .. attribute:: Flags
-
-        :class:`ULONG`
-
-
-    .. attribute:: SecurityQos
-
-        :class:`SECURITY_QUALITY_OF_SERVICE`
-
-
-    .. attribute:: MaxMessageLength
-
-        :class:`SIZE_T`
-
-
-    .. attribute:: MemoryBandwidth
-
-        :class:`SIZE_T`
-
-
-    .. attribute:: MaxPoolUsage
-
-        :class:`SIZE_T`
-
-
-    .. attribute:: MaxSectionSize
-
-        :class:`SIZE_T`
-
-
-    .. attribute:: MaxViewSize
-
-        :class:`SIZE_T`
-
-
-    .. attribute:: MaxTotalSectionSize
-
-        :class:`SIZE_T`
-
-
-    .. attribute:: DupObjectTypes
-
-        :class:`ULONG`
-
-_ALPC_PORT_ATTRIBUTES64
-'''''''''''''''''''''''
-.. class:: ALPC_PORT_ATTRIBUTES64
-
-    Alias for :class:`_ALPC_PORT_ATTRIBUTES64`
-
-.. class:: PALPC_PORT_ATTRIBUTES64
-
-    Pointer to :class:`_ALPC_PORT_ATTRIBUTES64`
-
-.. class:: _ALPC_PORT_ATTRIBUTES64
-
-    .. attribute:: Flags
-
-        :class:`ULONG`
-
-
-    .. attribute:: SecurityQos
-
-        :class:`SECURITY_QUALITY_OF_SERVICE`
-
-
-    .. attribute:: MaxMessageLength
-
-        :class:`SIZE_T`
-
-
-    .. attribute:: MemoryBandwidth
-
-        :class:`SIZE_T`
-
-
-    .. attribute:: MaxPoolUsage
-
-        :class:`SIZE_T`
-
-
-    .. attribute:: MaxSectionSize
-
-        :class:`SIZE_T`
-
-
-    .. attribute:: MaxViewSize
-
-        :class:`SIZE_T`
-
-
-    .. attribute:: MaxTotalSectionSize
-
-        :class:`SIZE_T`
-
-
-    .. attribute:: DupObjectTypes
-
-        :class:`ULONG`
-
-
-    .. attribute:: Reserved
-
-        :class:`ULONG`
-
-_ALPC_MESSAGE_ATTRIBUTES
-''''''''''''''''''''''''
-.. class:: ALPC_MESSAGE_ATTRIBUTES
-
-    Alias for :class:`_ALPC_MESSAGE_ATTRIBUTES`
-
-.. class:: PALPC_MESSAGE_ATTRIBUTES
-
-    Pointer to :class:`_ALPC_MESSAGE_ATTRIBUTES`
-
-.. class:: _ALPC_MESSAGE_ATTRIBUTES
-
-    .. attribute:: AllocatedAttributes
-
-        :class:`ULONG`
-
-
-    .. attribute:: ValidAttributes
-
-        :class:`ULONG`
-
-_PORT_MESSAGE32_TMP_UNION
-'''''''''''''''''''''''''
-.. class:: PORT_MESSAGE_TMP_UNION
-
-    Alias for :class:`_PORT_MESSAGE32_TMP_UNION`
-
-.. class:: _PORT_MESSAGE32_TMP_UNION
-
-    .. attribute:: ClientViewSize
-
-        :class:`ULONG`
-
-
-    .. attribute:: CallbackId
-
-        :class:`ULONG`
-
-_PORT_MESSAGE64_TMP_UNION
-'''''''''''''''''''''''''
-.. class:: PORT_MESSAGE_TMP_UNION
-
-    Alias for :class:`_PORT_MESSAGE64_TMP_UNION`
-
-.. class:: _PORT_MESSAGE64_TMP_UNION
-
-    .. attribute:: ClientViewSize
-
-        :class:`ULONGLONG`
-
-
-    .. attribute:: CallbackId
-
-        :class:`ULONG`
-
-_PORT_MESSAGE_TMP_SUBSTRUCT_S1
-''''''''''''''''''''''''''''''
-.. class:: _PORT_MESSAGE_TMP_SUBSTRUCT_S1
-
-    Alias for :class:`_PORT_MESSAGE_TMP_SUBSTRUCT_S1`
-
-.. class:: _PORT_MESSAGE_TMP_SUBSTRUCT_S1
-
-    .. attribute:: DataLength
-
-        :class:`CSHORT`
-
-
-    .. attribute:: TotalLength
-
-        :class:`CSHORT`
-
-_PORT_MESSAGE_TMP_UNION_U1
-''''''''''''''''''''''''''
-.. class:: _PORT_MESSAGE_TMP_UNION_U1
-
-    Alias for :class:`_PORT_MESSAGE_TMP_UNION_U1`
-
-.. class:: _PORT_MESSAGE_TMP_UNION_U1
-
-    .. attribute:: Length
-
-        :class:`ULONG`
-
-
-    .. attribute:: s1
-
-        :class:`_PORT_MESSAGE_TMP_SUBSTRUCT_S1`
-
-_PORT_MESSAGE_TMP_SUBSTRUCT_S2
-''''''''''''''''''''''''''''''
-.. class:: _PORT_MESSAGE_TMP_SUBSTRUCT_S2
-
-    Alias for :class:`_PORT_MESSAGE_TMP_SUBSTRUCT_S2`
-
-.. class:: _PORT_MESSAGE_TMP_SUBSTRUCT_S2
-
-    .. attribute:: Type
-
-        :class:`CSHORT`
-
-
-    .. attribute:: DataInfoOffset
-
-        :class:`CSHORT`
-
-_PORT_MESSAGE_TMP_UNION_U2
-''''''''''''''''''''''''''
-.. class:: _PORT_MESSAGE_TMP_UNION_U2
-
-    Alias for :class:`_PORT_MESSAGE_TMP_UNION_U2`
-
-.. class:: _PORT_MESSAGE_TMP_UNION_U2
-
-    .. attribute:: ZeroInit
-
-        :class:`ULONG`
-
-
-    .. attribute:: s2
-
-        :class:`_PORT_MESSAGE_TMP_SUBSTRUCT_S2`
-
-_PORT_MESSAGE32
-'''''''''''''''
-.. class:: PORT_MESSAGE32
-
-    Alias for :class:`_PORT_MESSAGE32`
-
-.. class:: PPORT_MESSAGE32
-
-    Pointer to :class:`_PORT_MESSAGE32`
-
-.. class:: _PORT_MESSAGE32
-
-    .. attribute:: u1
-
-        :class:`_PORT_MESSAGE_TMP_UNION_U1`
-
-
-    .. attribute:: u2
-
-        :class:`_PORT_MESSAGE_TMP_UNION_U2`
-
-
-    .. attribute:: ClientId
-
-        :class:`CLIENT_ID32`
-
-
-    .. attribute:: MessageId
-
-        :class:`ULONG`
-
-
-    .. attribute:: tmp_union
-
-        :class:`_PORT_MESSAGE32_TMP_UNION`
-
-_PORT_MESSAGE64
-'''''''''''''''
-.. class:: PPORT_MESSAGE64
-
-    Pointer to :class:`_PORT_MESSAGE64`
-
-.. class:: PORT_MESSAGE64
-
-    Alias for :class:`_PORT_MESSAGE64`
-
-.. class:: _PORT_MESSAGE64
-
-    .. attribute:: u1
-
-        :class:`_PORT_MESSAGE_TMP_UNION_U1`
-
-
-    .. attribute:: u2
-
-        :class:`_PORT_MESSAGE_TMP_UNION_U2`
-
-
-    .. attribute:: ClientId
-
-        :class:`CLIENT_ID64`
-
-
-    .. attribute:: MessageId
-
-        :class:`ULONG`
-
-
-    .. attribute:: tmp_union
-
-        :class:`_PORT_MESSAGE64_TMP_UNION`
-
-_ALPC_SERVER_INFORMATION_TMP_IN
-'''''''''''''''''''''''''''''''
-.. class:: ALPC_SERVER_INFORMATION_TMP_IN
-
-    Alias for :class:`_ALPC_SERVER_INFORMATION_TMP_IN`
-
-.. class:: _ALPC_SERVER_INFORMATION_TMP_IN
-
-    .. attribute:: ThreadHandle
-
-        :class:`HANDLE`
-
-_ALPC_SERVER_INFORMATION_TMP_OUT
-''''''''''''''''''''''''''''''''
-.. class:: ALPC_SERVER_INFORMATION_TMP_OUT
-
-    Alias for :class:`_ALPC_SERVER_INFORMATION_TMP_OUT`
-
-.. class:: _ALPC_SERVER_INFORMATION_TMP_OUT
-
-    .. attribute:: ThreadBlocked
-
-        :class:`BOOLEAN`
-
-
-    .. attribute:: ConnectedProcessId
-
-        :class:`HANDLE`
-
-
-    .. attribute:: ConnectionPortName
-
-        :class:`UNICODE_STRING`
-
-ALPC_SERVER_INFORMATION
-'''''''''''''''''''''''
-.. class:: ALPC_SERVER_INFORMATION
-
-    Alias for :class:`ALPC_SERVER_INFORMATION`
-
-.. class:: ALPC_SERVER_INFORMATION
-
-    .. attribute:: In
-
-        :class:`ALPC_SERVER_INFORMATION_TMP_IN`
-
-
-    .. attribute:: Out
-
-        :class:`ALPC_SERVER_INFORMATION_TMP_OUT`
-
-_ALPC_CONTEXT_ATTR
-''''''''''''''''''
-.. class:: PALPC_CONTEXT_ATTR
-
-    Pointer to :class:`_ALPC_CONTEXT_ATTR`
-
-.. class:: ALPC_CONTEXT_ATTR
-
-    Alias for :class:`_ALPC_CONTEXT_ATTR`
-
-.. class:: _ALPC_CONTEXT_ATTR
-
-    .. attribute:: PortContext
-
-        :class:`PVOID`
-
-
-    .. attribute:: MessageContext
-
-        :class:`PVOID`
-
-
-    .. attribute:: Sequence
-
-        :class:`ULONG`
-
-
-    .. attribute:: MessageId
-
-        :class:`ULONG`
-
-
-    .. attribute:: CallbackId
-
-        :class:`ULONG`
-
-_ALPC_CONTEXT_ATTR32
-''''''''''''''''''''
-.. class:: ALPC_CONTEXT_ATTR32
-
-    Alias for :class:`_ALPC_CONTEXT_ATTR32`
-
-.. class:: PALPC_CONTEXT_ATTR32
-
-    Pointer to :class:`_ALPC_CONTEXT_ATTR32`
-
-.. class:: _ALPC_CONTEXT_ATTR32
-
-    .. attribute:: PortContext
-
-        :class:`ULONG`
-
-
-    .. attribute:: MessageContext
-
-        :class:`ULONG`
-
-
-    .. attribute:: Sequence
-
-        :class:`ULONG`
-
-
-    .. attribute:: MessageId
-
-        :class:`ULONG`
-
-
-    .. attribute:: CallbackId
-
-        :class:`ULONG`
-
-_ALPC_CONTEXT_ATTR64
-''''''''''''''''''''
-.. class:: ALPC_CONTEXT_ATTR64
-
-    Alias for :class:`_ALPC_CONTEXT_ATTR64`
-
-.. class:: PALPC_CONTEXT_ATTR64
-
-    Pointer to :class:`_ALPC_CONTEXT_ATTR64`
-
-.. class:: _ALPC_CONTEXT_ATTR64
-
-    .. attribute:: PortContext
-
-        :class:`ULONGLONG`
-
-
-    .. attribute:: MessageContext
-
-        :class:`ULONGLONG`
-
-
-    .. attribute:: Sequence
-
-        :class:`ULONG`
-
-
-    .. attribute:: MessageId
-
-        :class:`ULONG`
-
-
-    .. attribute:: CallbackId
-
-        :class:`ULONG`
-
-_ALPC_HANDLE_ATTR
-'''''''''''''''''
-.. class:: PALPC_HANDLE_ATTR
-
-    Pointer to :class:`_ALPC_HANDLE_ATTR`
-
-.. class:: ALPC_HANDLE_ATTR
-
-    Alias for :class:`_ALPC_HANDLE_ATTR`
-
-.. class:: _ALPC_HANDLE_ATTR
-
-    .. attribute:: Flags
-
-        :class:`ULONG`
-
-
-    .. attribute:: Handle
-
-        :class:`HANDLE`
-
-
-    .. attribute:: ObjectType
-
-        :class:`ULONG`
-
-
-    .. attribute:: DesiredAccess
-
-        :class:`ACCESS_MASK`
-
-_ALPC_HANDLE_ATTR32
-'''''''''''''''''''
-.. class:: ALPC_HANDLE_ATTR32
-
-    Alias for :class:`_ALPC_HANDLE_ATTR32`
-
-.. class:: PALPC_HANDLE_ATTR32
-
-    Pointer to :class:`_ALPC_HANDLE_ATTR32`
-
-.. class:: _ALPC_HANDLE_ATTR32
-
-    .. attribute:: Flags
-
-        :class:`ULONG`
-
-
-    .. attribute:: Handle
-
-        :class:`ULONG`
-
-
-    .. attribute:: ObjectType
-
-        :class:`ULONG`
-
-
-    .. attribute:: DesiredAccess
-
-        :class:`ACCESS_MASK`
-
-_ALPC_HANDLE_ATTR64
-'''''''''''''''''''
-.. class:: PALPC_HANDLE_ATTR64
-
-    Pointer to :class:`_ALPC_HANDLE_ATTR64`
-
-.. class:: ALPC_HANDLE_ATTR64
-
-    Alias for :class:`_ALPC_HANDLE_ATTR64`
-
-.. class:: _ALPC_HANDLE_ATTR64
-
-    .. attribute:: Flags
-
-        :class:`ULONG`
-
-
-    .. attribute:: Handle
-
-        :class:`ULONGLONG`
-
-
-    .. attribute:: ObjectType
-
-        :class:`ULONG`
-
-
-    .. attribute:: DesiredAccess
-
-        :class:`ACCESS_MASK`
-
-_ALPC_SECURITY_ATTR
-'''''''''''''''''''
-.. class:: PALPC_SECURITY_ATTR
-
-    Pointer to :class:`_ALPC_SECURITY_ATTR`
-
-.. class:: ALPC_SECURITY_ATTR
-
-    Alias for :class:`_ALPC_SECURITY_ATTR`
-
-.. class:: _ALPC_SECURITY_ATTR
-
-    .. attribute:: Flags
-
-        :class:`ULONG`
-
-
-    .. attribute:: QoS
-
-        :class:`PSECURITY_QUALITY_OF_SERVICE`
-
-
-    .. attribute:: ContextHandle
-
-        :class:`ALPC_HANDLE`
-
-_ALPC_SECURITY_ATTR32
-'''''''''''''''''''''
-.. class:: ALPC_SECURITY_ATTR32
-
-    Alias for :class:`_ALPC_SECURITY_ATTR32`
-
-.. class:: PALPC_SECURITY_ATTR32
-
-    Pointer to :class:`_ALPC_SECURITY_ATTR32`
-
-.. class:: _ALPC_SECURITY_ATTR32
-
-    .. attribute:: Flags
-
-        :class:`ULONG`
-
-
-    .. attribute:: QoS
-
-        :class:`ULONG`
-
-
-    .. attribute:: ContextHandle
-
-        :class:`ULONG`
-
-_ALPC_SECURITY_ATTR64
-'''''''''''''''''''''
-.. class:: PALPC_SECURITY_ATTR64
-
-    Pointer to :class:`_ALPC_SECURITY_ATTR64`
-
-.. class:: ALPC_SECURITY_ATTR64
-
-    Alias for :class:`_ALPC_SECURITY_ATTR64`
-
-.. class:: _ALPC_SECURITY_ATTR64
-
-    .. attribute:: Flags
-
-        :class:`ULONGLONG`
-
-
-    .. attribute:: QoS
-
-        :class:`ULONGLONG`
-
-
-    .. attribute:: ContextHandle
-
-        :class:`ULONGLONG`
-
-_ALPC_DATA_VIEW_ATTR
-''''''''''''''''''''
-.. class:: PALPC_DATA_VIEW_ATTR
-
-    Pointer to :class:`_ALPC_DATA_VIEW_ATTR`
-
-.. class:: ALPC_DATA_VIEW_ATTR
-
-    Alias for :class:`_ALPC_DATA_VIEW_ATTR`
-
-.. class:: _ALPC_DATA_VIEW_ATTR
-
-    .. attribute:: Flags
-
-        :class:`ULONG`
-
-
-    .. attribute:: SectionHandle
-
-        :class:`ALPC_HANDLE`
-
-
-    .. attribute:: ViewBase
-
-        :class:`PVOID`
-
-
-    .. attribute:: ViewSize
-
-        :class:`PVOID`
-
-_ALPC_DATA_VIEW_ATTR32
-''''''''''''''''''''''
-.. class:: PALPC_DATA_VIEW_ATTR32
-
-    Pointer to :class:`_ALPC_DATA_VIEW_ATTR32`
-
-.. class:: ALPC_DATA_VIEW_ATTR32
-
-    Alias for :class:`_ALPC_DATA_VIEW_ATTR32`
-
-.. class:: _ALPC_DATA_VIEW_ATTR32
-
-    .. attribute:: Flags
-
-        :class:`ULONG`
-
-
-    .. attribute:: SectionHandle
-
-        :class:`ULONG`
-
-
-    .. attribute:: ViewBase
-
-        :class:`ULONG`
-
-
-    .. attribute:: ViewSize
-
-        :class:`ULONG`
-
-_ALPC_DATA_VIEW_ATTR64
-''''''''''''''''''''''
-.. class:: PALPC_DATA_VIEW_ATTR64
-
-    Pointer to :class:`_ALPC_DATA_VIEW_ATTR64`
-
-.. class:: ALPC_DATA_VIEW_ATTR64
-
-    Alias for :class:`_ALPC_DATA_VIEW_ATTR64`
-
-.. class:: _ALPC_DATA_VIEW_ATTR64
-
-    .. attribute:: Flags
-
-        :class:`ULONG`
-
-
-    .. attribute:: SectionHandle
-
-        :class:`ULONGLONG`
-
-
-    .. attribute:: ViewBase
-
-        :class:`ULONGLONG`
-
-
-    .. attribute:: ViewSize
-
-        :class:`ULONGLONG`
-
-_ALPC_TOKEN_ATTR
-''''''''''''''''
-.. class:: ALPC_TOKEN_ATTR
-
-    Alias for :class:`_ALPC_TOKEN_ATTR`
-
-.. class:: PALPC_TOKEN_ATTR
-
-    Pointer to :class:`_ALPC_TOKEN_ATTR`
-
-.. class:: _ALPC_TOKEN_ATTR
-
-    .. attribute:: TokenId
-
-        :class:`ULONGLONG`
-
-
-    .. attribute:: AuthenticationId
-
-        :class:`ULONGLONG`
-
-
-    .. attribute:: ModifiedId
-
-        :class:`ULONGLONG`
-
-_ALPC_DIRECT_ATTR
-'''''''''''''''''
-.. class:: ALPC_DIRECT_ATTR
-
-    Alias for :class:`_ALPC_DIRECT_ATTR`
-
-.. class:: PALPC_DIRECT_ATTR
-
-    Pointer to :class:`_ALPC_DIRECT_ATTR`
-
-.. class:: _ALPC_DIRECT_ATTR
-
-    .. attribute:: Event
-
-        :class:`HANDLE`
-
-_ALPC_DIRECT_ATTR32
-'''''''''''''''''''
-.. class:: PALPC_DIRECT_ATTR32
-
-    Pointer to :class:`_ALPC_DIRECT_ATTR32`
-
-.. class:: ALPC_DIRECT_ATTR32
-
-    Alias for :class:`_ALPC_DIRECT_ATTR32`
-
-.. class:: _ALPC_DIRECT_ATTR32
-
-    .. attribute:: Event
-
-        :class:`ULONG`
-
-_ALPC_DIRECT_ATTR64
-'''''''''''''''''''
-.. class:: ALPC_DIRECT_ATTR64
-
-    Alias for :class:`_ALPC_DIRECT_ATTR64`
-
-.. class:: PALPC_DIRECT_ATTR64
-
-    Pointer to :class:`_ALPC_DIRECT_ATTR64`
-
-.. class:: _ALPC_DIRECT_ATTR64
-
-    .. attribute:: Event
-
-        :class:`ULONGLONG`
-
-_ALPC_WORK_ON_BEHALF_ATTR
-'''''''''''''''''''''''''
-.. class:: PALPC_WORK_ON_BEHALF_ATTR
-
-    Pointer to :class:`_ALPC_WORK_ON_BEHALF_ATTR`
-
-.. class:: ALPC_WORK_ON_BEHALF_ATTR
-
-    Alias for :class:`_ALPC_WORK_ON_BEHALF_ATTR`
-
-.. class:: _ALPC_WORK_ON_BEHALF_ATTR
-
-    .. attribute:: Ticket
-
-        :class:`ULONGLONG`
-
-_RPC_IF_ID
-''''''''''
-.. class:: RPC_IF_ID
-
-    Alias for :class:`_RPC_IF_ID`
-
-.. class:: _RPC_IF_ID
-
-    .. attribute:: Uuid
-
-        :class:`IID`
-
-
-    .. attribute:: VersMajor
-
-        :class:`USHORT`
-
-
-    .. attribute:: VersMinor
-
-        :class:`USHORT`
 
 _API_SET_VALUE_ENTRY
 ''''''''''''''''''''
@@ -13589,350 +15958,6 @@ _EVT_VARIANT
 
         :class:`DWORD`
 
-_FILE_INTERNAL_INFORMATION
-''''''''''''''''''''''''''
-.. class:: FILE_INTERNAL_INFORMATION
-
-    Alias for :class:`_FILE_INTERNAL_INFORMATION`
-
-.. class:: PFILE_INTERNAL_INFORMATION
-
-    Pointer to :class:`_FILE_INTERNAL_INFORMATION`
-
-.. class:: _FILE_INTERNAL_INFORMATION
-
-    .. attribute:: IndexNumber
-
-        :class:`LARGE_INTEGER`
-
-_FILE_ALIGNMENT_INFORMATION
-'''''''''''''''''''''''''''
-.. class:: PFILE_ALIGNMENT_INFORMATION
-
-    Pointer to :class:`_FILE_ALIGNMENT_INFORMATION`
-
-.. class:: FILE_ALIGNMENT_INFORMATION
-
-    Alias for :class:`_FILE_ALIGNMENT_INFORMATION`
-
-.. class:: _FILE_ALIGNMENT_INFORMATION
-
-    .. attribute:: AlignmentRequirement
-
-        :class:`ULONG`
-
-_FILE_ATTRIBUTE_TAG_INFORMATION
-'''''''''''''''''''''''''''''''
-.. class:: PFILE_ATTRIBUTE_TAG_INFORMATION
-
-    Pointer to :class:`_FILE_ATTRIBUTE_TAG_INFORMATION`
-
-.. class:: FILE_ATTRIBUTE_TAG_INFORMATION
-
-    Alias for :class:`_FILE_ATTRIBUTE_TAG_INFORMATION`
-
-.. class:: _FILE_ATTRIBUTE_TAG_INFORMATION
-
-    .. attribute:: FileAttributes
-
-        :class:`ULONG`
-
-
-    .. attribute:: ReparseTag
-
-        :class:`ULONG`
-
-_FILE_BASIC_INFORMATION
-'''''''''''''''''''''''
-.. class:: FILE_BASIC_INFORMATION
-
-    Alias for :class:`_FILE_BASIC_INFORMATION`
-
-.. class:: PFILE_BASIC_INFORMATION
-
-    Pointer to :class:`_FILE_BASIC_INFORMATION`
-
-.. class:: _FILE_BASIC_INFORMATION
-
-    .. attribute:: CreationTime
-
-        :class:`LARGE_INTEGER`
-
-
-    .. attribute:: LastAccessTime
-
-        :class:`LARGE_INTEGER`
-
-
-    .. attribute:: LastWriteTime
-
-        :class:`LARGE_INTEGER`
-
-
-    .. attribute:: ChangeTime
-
-        :class:`LARGE_INTEGER`
-
-
-    .. attribute:: FileAttributes
-
-        :class:`ULONG`
-
-_FILE_EA_INFORMATION
-''''''''''''''''''''
-.. class:: PFILE_EA_INFORMATION
-
-    Pointer to :class:`_FILE_EA_INFORMATION`
-
-.. class:: FILE_EA_INFORMATION
-
-    Alias for :class:`_FILE_EA_INFORMATION`
-
-.. class:: _FILE_EA_INFORMATION
-
-    .. attribute:: EaSize
-
-        :class:`ULONG`
-
-_FILE_IO_PRIORITY_HINT_INFORMATION
-''''''''''''''''''''''''''''''''''
-.. class:: PFILE_IO_PRIORITY_HINT_INFORMATION
-
-    Pointer to :class:`_FILE_IO_PRIORITY_HINT_INFORMATION`
-
-.. class:: FILE_IO_PRIORITY_HINT_INFORMATION
-
-    Alias for :class:`_FILE_IO_PRIORITY_HINT_INFORMATION`
-
-.. class:: _FILE_IO_PRIORITY_HINT_INFORMATION
-
-    .. attribute:: PriorityHint
-
-        :class:`IO_PRIORITY_HINT`
-
-_FILE_MODE_INFORMATION
-''''''''''''''''''''''
-.. class:: PFILE_MODE_INFORMATION
-
-    Pointer to :class:`_FILE_MODE_INFORMATION`
-
-.. class:: FILE_MODE_INFORMATION
-
-    Alias for :class:`_FILE_MODE_INFORMATION`
-
-.. class:: _FILE_MODE_INFORMATION
-
-    .. attribute:: Mode
-
-        :class:`ULONG`
-
-_FILE_NAME_INFORMATION
-''''''''''''''''''''''
-.. class:: PFILE_NAME_INFORMATION
-
-    Pointer to :class:`_FILE_NAME_INFORMATION`
-
-.. class:: FILE_NAME_INFORMATION
-
-    Alias for :class:`_FILE_NAME_INFORMATION`
-
-.. class:: _FILE_NAME_INFORMATION
-
-    .. attribute:: FileNameLength
-
-        :class:`ULONG`
-
-
-    .. attribute:: FileName
-
-        :class:`WCHAR` ``[1]``
-
-_FILE_NETWORK_OPEN_INFORMATION
-''''''''''''''''''''''''''''''
-.. class:: PFILE_NETWORK_OPEN_INFORMATION
-
-    Pointer to :class:`_FILE_NETWORK_OPEN_INFORMATION`
-
-.. class:: FILE_NETWORK_OPEN_INFORMATION
-
-    Alias for :class:`_FILE_NETWORK_OPEN_INFORMATION`
-
-.. class:: _FILE_NETWORK_OPEN_INFORMATION
-
-    .. attribute:: CreationTime
-
-        :class:`LARGE_INTEGER`
-
-
-    .. attribute:: LastAccessTime
-
-        :class:`LARGE_INTEGER`
-
-
-    .. attribute:: LastWriteTime
-
-        :class:`LARGE_INTEGER`
-
-
-    .. attribute:: ChangeTime
-
-        :class:`LARGE_INTEGER`
-
-
-    .. attribute:: AllocationSize
-
-        :class:`LARGE_INTEGER`
-
-
-    .. attribute:: EndOfFile
-
-        :class:`LARGE_INTEGER`
-
-
-    .. attribute:: FileAttributes
-
-        :class:`ULONG`
-
-_FILE_STANDARD_INFORMATION
-''''''''''''''''''''''''''
-.. class:: FILE_STANDARD_INFORMATION
-
-    Alias for :class:`_FILE_STANDARD_INFORMATION`
-
-.. class:: PFILE_STANDARD_INFORMATION
-
-    Pointer to :class:`_FILE_STANDARD_INFORMATION`
-
-.. class:: _FILE_STANDARD_INFORMATION
-
-    .. attribute:: AllocationSize
-
-        :class:`LARGE_INTEGER`
-
-
-    .. attribute:: EndOfFile
-
-        :class:`LARGE_INTEGER`
-
-
-    .. attribute:: NumberOfLinks
-
-        :class:`ULONG`
-
-
-    .. attribute:: DeletePending
-
-        :class:`BOOLEAN`
-
-
-    .. attribute:: Directory
-
-        :class:`BOOLEAN`
-
-_FILE_ACCESS_INFORMATION
-''''''''''''''''''''''''
-.. class:: FILE_ACCESS_INFORMATION
-
-    Alias for :class:`_FILE_ACCESS_INFORMATION`
-
-.. class:: PFILE_ACCESS_INFORMATION
-
-    Pointer to :class:`_FILE_ACCESS_INFORMATION`
-
-.. class:: _FILE_ACCESS_INFORMATION
-
-    .. attribute:: AccessFlags
-
-        :class:`ACCESS_MASK`
-
-_FILE_POSITION_INFORMATION
-''''''''''''''''''''''''''
-.. class:: PFILE_POSITION_INFORMATION
-
-    Pointer to :class:`_FILE_POSITION_INFORMATION`
-
-.. class:: FILE_POSITION_INFORMATION
-
-    Alias for :class:`_FILE_POSITION_INFORMATION`
-
-.. class:: _FILE_POSITION_INFORMATION
-
-    .. attribute:: CurrentByteOffset
-
-        :class:`LARGE_INTEGER`
-
-_FILE_IS_REMOTE_DEVICE_INFORMATION
-''''''''''''''''''''''''''''''''''
-.. class:: FILE_IS_REMOTE_DEVICE_INFORMATION
-
-    Alias for :class:`_FILE_IS_REMOTE_DEVICE_INFORMATION`
-
-.. class:: PFILE_IS_REMOTE_DEVICE_INFORMATION
-
-    Pointer to :class:`_FILE_IS_REMOTE_DEVICE_INFORMATION`
-
-.. class:: _FILE_IS_REMOTE_DEVICE_INFORMATION
-
-    .. attribute:: IsRemote
-
-        :class:`BOOLEAN`
-
-_FILE_ALL_INFORMATION
-'''''''''''''''''''''
-.. class:: PFILE_ALL_INFORMATION
-
-    Pointer to :class:`_FILE_ALL_INFORMATION`
-
-.. class:: FILE_ALL_INFORMATION
-
-    Alias for :class:`_FILE_ALL_INFORMATION`
-
-.. class:: _FILE_ALL_INFORMATION
-
-    .. attribute:: BasicInformation
-
-        :class:`FILE_BASIC_INFORMATION`
-
-
-    .. attribute:: StandardInformation
-
-        :class:`FILE_STANDARD_INFORMATION`
-
-
-    .. attribute:: InternalInformation
-
-        :class:`FILE_INTERNAL_INFORMATION`
-
-
-    .. attribute:: EaInformation
-
-        :class:`FILE_EA_INFORMATION`
-
-
-    .. attribute:: AccessInformation
-
-        :class:`FILE_ACCESS_INFORMATION`
-
-
-    .. attribute:: PositionInformation
-
-        :class:`FILE_POSITION_INFORMATION`
-
-
-    .. attribute:: ModeInformation
-
-        :class:`FILE_MODE_INFORMATION`
-
-
-    .. attribute:: AlignmentInformation
-
-        :class:`FILE_ALIGNMENT_INFORMATION`
-
-
-    .. attribute:: NameInformation
-
-        :class:`FILE_NAME_INFORMATION`
-
 Simple types
 ''''''''''''
 .. autoclass:: VOID
@@ -14001,6 +16026,8 @@ Simple types
 
     Pointer to :class:`BOOL`
 
+.. autoclass:: LPBOOL
+
 .. autoclass:: PSTR
 
 .. autoclass:: PCSTR
@@ -14020,8 +16047,6 @@ Simple types
 .. autoclass:: double
 
 .. autoclass:: DATE
-
-.. autoclass:: PSID
 
 .. autoclass:: ULONGLONG
 
@@ -14056,6 +16081,10 @@ Simple types
 .. autoclass:: IF_INDEX
 
 .. autoclass:: IFTYPE
+
+.. class:: PLONG64
+
+    Pointer to :class:`LONG64`
 
 .. class:: PULONG64
 
@@ -14099,8 +16128,6 @@ Simple types
 
 .. autoclass:: LRESULT
 
-.. autoclass:: PSECURITY_DESCRIPTOR
-
 .. class:: LPUNKNOWN
 
     Pointer to :class:`PVOID`
@@ -14124,6 +16151,16 @@ Simple types
 .. autoclass:: PWINDBG_EXTENSION_APIS32
 
 .. autoclass:: PWINDBG_EXTENSION_APIS64
+
+.. autoclass:: NCRYPT_HANDLE
+
+.. autoclass:: NCRYPT_PROV_HANDLE
+
+.. autoclass:: NCRYPT_KEY_HANDLE
+
+.. autoclass:: NCRYPT_HASH_HANDLE
+
+.. autoclass:: NCRYPT_SECRET_HANDLE
 
 .. autoclass:: INT8
 
@@ -14171,6 +16208,36 @@ Simple types
 
 .. autoclass:: EVT_OBJECT_ARRAY_PROPERTY_HANDLE
 
+.. autoclass:: PSECURITY_DESCRIPTOR
+
+.. autoclass:: SECURITY_DESCRIPTOR_CONTROL
+
+.. class:: PSECURITY_DESCRIPTOR_CONTROL
+
+    Pointer to :class:`SECURITY_DESCRIPTOR_CONTROL`
+
+.. autoclass:: ACCESS_MASK
+
+.. class:: PACCESS_MASK
+
+    Pointer to :class:`ACCESS_MASK`
+
+.. autoclass:: SECURITY_INFORMATION
+
+.. class:: PSECURITY_INFORMATION
+
+    Pointer to :class:`SECURITY_INFORMATION`
+
+.. autoclass:: PSECURITY_ATTRIBUTES_OPAQUE
+
+.. autoclass:: SID_HASH_ENTRY
+
+.. class:: PSID_HASH_ENTRY
+
+    Pointer to :class:`SID_HASH_ENTRY`
+
+.. autoclass:: PSID
+
 .. autoclass:: RPCOLEDATAREP
 
 .. autoclass:: WNDPROC
@@ -14205,6 +16272,80 @@ Simple types
 
 WinEnums
 --------
+_ALPC_PORT_INFORMATION_CLASS
+''''''''''''''''''''''''''''
+.. class:: ALPC_PORT_INFORMATION_CLASS
+
+    Alias for :class:`_ALPC_PORT_INFORMATION_CLASS`
+
+
+.. class:: _ALPC_PORT_INFORMATION_CLASS
+
+
+    .. attribute:: AlpcBasicInformation(0)
+
+
+    .. attribute:: AlpcPortInformation(1)
+
+
+    .. attribute:: AlpcAssociateCompletionPortInformation(2)
+
+
+    .. attribute:: AlpcConnectedSIDInformation(3)
+
+
+    .. attribute:: AlpcServerInformation(4)
+
+
+    .. attribute:: AlpcMessageZoneInformation(5)
+
+
+    .. attribute:: AlpcRegisterCompletionListInformation(6)
+
+
+    .. attribute:: AlpcUnregisterCompletionListInformation(7)
+
+
+    .. attribute:: AlpcAdjustCompletionListConcurrencyCountInformation(8)
+
+
+    .. attribute:: AlpcRegisterCallbackInformation(9)
+
+
+    .. attribute:: AlpcCompletionListRundownInformation(10)
+
+
+    .. attribute:: AlpcWaitForPortReferences(11)
+
+
+    .. attribute:: MaxAlpcPortInfoClass(12)
+
+_ALPC_MESSAGE_INFORMATION_CLASS
+'''''''''''''''''''''''''''''''
+.. class:: ALPC_MESSAGE_INFORMATION_CLASS
+
+    Alias for :class:`_ALPC_MESSAGE_INFORMATION_CLASS`
+
+
+.. class:: PALPC_MESSAGE_INFORMATION_CLASS
+
+    Pointer to :class:`_ALPC_MESSAGE_INFORMATION_CLASS`
+
+
+.. class:: _ALPC_MESSAGE_INFORMATION_CLASS
+
+
+    .. attribute:: AlpcMessageSidInformation(0)
+
+
+    .. attribute:: AlpcMessageTokenModifiedIdInformation(1)
+
+
+    .. attribute:: MaxAlpcMessageInfoClass(2)
+
+
+    .. attribute:: AlpcMessageHandleInformation(3)
+
 _CALLFRAME_COPY
 '''''''''''''''
 .. class:: CALLFRAME_COPY
@@ -14258,6 +16399,251 @@ tagCALLFRAME_WALK
 
 
     .. attribute:: CALLFRAME_WALK_OUT(4)
+
+_FILE_INFORMATION_CLASS
+'''''''''''''''''''''''
+.. class:: FILE_INFORMATION_CLASS
+
+    Alias for :class:`_FILE_INFORMATION_CLASS`
+
+
+.. class:: PFILE_INFORMATION_CLASS
+
+    Pointer to :class:`_FILE_INFORMATION_CLASS`
+
+
+.. class:: _FILE_INFORMATION_CLASS
+
+
+    .. attribute:: FakeFileInformationZero(0)
+
+
+    .. attribute:: FileDirectoryInformation(1)
+
+
+    .. attribute:: FileFullDirectoryInformation(2)
+
+
+    .. attribute:: FileBothDirectoryInformation(3)
+
+
+    .. attribute:: FileBasicInformation(4)
+
+
+    .. attribute:: FileStandardInformation(5)
+
+
+    .. attribute:: FileInternalInformation(6)
+
+
+    .. attribute:: FileEaInformation(7)
+
+
+    .. attribute:: FileAccessInformation(8)
+
+
+    .. attribute:: FileNameInformation(9)
+
+
+    .. attribute:: FileRenameInformation(10)
+
+
+    .. attribute:: FileLinkInformation(11)
+
+
+    .. attribute:: FileNamesInformation(12)
+
+
+    .. attribute:: FileDispositionInformation(13)
+
+
+    .. attribute:: FilePositionInformation(14)
+
+
+    .. attribute:: FileFullEaInformation(15)
+
+
+    .. attribute:: FileModeInformation(16)
+
+
+    .. attribute:: FileAlignmentInformation(17)
+
+
+    .. attribute:: FileAllInformation(18)
+
+
+    .. attribute:: FileAllocationInformation(19)
+
+
+    .. attribute:: FileEndOfFileInformation(20)
+
+
+    .. attribute:: FileAlternateNameInformation(21)
+
+
+    .. attribute:: FileStreamInformation(22)
+
+
+    .. attribute:: FilePipeInformation(23)
+
+
+    .. attribute:: FilePipeLocalInformation(24)
+
+
+    .. attribute:: FilePipeRemoteInformation(25)
+
+
+    .. attribute:: FileMailslotQueryInformation(26)
+
+
+    .. attribute:: FileMailslotSetInformation(27)
+
+
+    .. attribute:: FileCompressionInformation(28)
+
+
+    .. attribute:: FileObjectIdInformation(29)
+
+
+    .. attribute:: FileCompletionInformation(30)
+
+
+    .. attribute:: FileMoveClusterInformation(31)
+
+
+    .. attribute:: FileQuotaInformation(32)
+
+
+    .. attribute:: FileReparsePointInformation(33)
+
+
+    .. attribute:: FileNetworkOpenInformation(34)
+
+
+    .. attribute:: FileAttributeTagInformation(35)
+
+
+    .. attribute:: FileTrackingInformation(36)
+
+
+    .. attribute:: FileIdBothDirectoryInformation(37)
+
+
+    .. attribute:: FileIdFullDirectoryInformation(38)
+
+
+    .. attribute:: FileValidDataLengthInformation(39)
+
+
+    .. attribute:: FileShortNameInformation(40)
+
+
+    .. attribute:: FileIoCompletionNotificationInformation(41)
+
+
+    .. attribute:: FileIoStatusBlockRangeInformation(42)
+
+
+    .. attribute:: FileIoPriorityHintInformation(43)
+
+
+    .. attribute:: FileSfioReserveInformation(44)
+
+
+    .. attribute:: FileSfioVolumeInformation(45)
+
+
+    .. attribute:: FileHardLinkInformation(46)
+
+
+    .. attribute:: FileProcessIdsUsingFileInformation(47)
+
+
+    .. attribute:: FileNormalizedNameInformation(48)
+
+
+    .. attribute:: FileNetworkPhysicalNameInformation(49)
+
+
+    .. attribute:: FileIdGlobalTxDirectoryInformation(50)
+
+
+    .. attribute:: FileIsRemoteDeviceInformation(51)
+
+
+    .. attribute:: FileUnusedInformation(52)
+
+
+    .. attribute:: FileNumaNodeInformation(53)
+
+
+    .. attribute:: FileStandardLinkInformation(54)
+
+
+    .. attribute:: FileRemoteProtocolInformation(55)
+
+
+    .. attribute:: FileRenameInformationBypassAccessCheck(56)
+
+
+    .. attribute:: FileLinkInformationBypassAccessCheck(57)
+
+
+    .. attribute:: FileVolumeNameInformation(58)
+
+
+    .. attribute:: FileIdInformation(59)
+
+
+    .. attribute:: FileIdExtdDirectoryInformation(60)
+
+
+    .. attribute:: FileReplaceCompletionInformation(61)
+
+
+    .. attribute:: FileHardLinkFullIdInformation(62)
+
+
+    .. attribute:: FileIdExtdBothDirectoryInformation(63)
+
+
+    .. attribute:: FileDispositionInformationEx(64)
+
+
+    .. attribute:: FileRenameInformationEx(65)
+
+
+    .. attribute:: FileRenameInformationExBypassAccessCheck(66)
+
+
+    .. attribute:: FileMaximumInformation(67)
+
+_IO_PRIORITY_HINT
+'''''''''''''''''
+.. class:: IO_PRIORITY_HINT
+
+    Alias for :class:`_IO_PRIORITY_HINT`
+
+
+.. class:: _IO_PRIORITY_HINT
+
+
+    .. attribute:: IoPriorityVeryLow(0)
+
+
+    .. attribute:: IoPriorityLow(1)
+
+
+    .. attribute:: IoPriorityNormal(2)
+
+
+    .. attribute:: IoPriorityHigh(3)
+
+
+    .. attribute:: IoPriorityCritical(4)
+
+
+    .. attribute:: MaxIoPriorityTypes(5)
 
 _PROCESS_MITIGATION_POLICY
 ''''''''''''''''''''''''''
@@ -14332,6 +16718,60 @@ _KEY_VALUE_INFORMATION_CLASS
 
 
     .. attribute:: MaxKeyValueInfoClass(6)
+
+_ACL_INFORMATION_CLASS
+''''''''''''''''''''''
+.. class:: ACL_INFORMATION_CLASS
+
+    Alias for :class:`_ACL_INFORMATION_CLASS`
+
+
+.. class:: _ACL_INFORMATION_CLASS
+
+
+    .. attribute:: AclRevisionInformation(1)
+
+
+    .. attribute:: AclSizeInformation(2)
+
+SYM_TYPE
+''''''''
+.. class:: SYM_TYPE
+
+    Alias for :class:`SYM_TYPE`
+
+
+.. class:: SYM_TYPE
+
+
+    .. attribute:: SymNone(0)
+
+
+    .. attribute:: SymCoff(1)
+
+
+    .. attribute:: SymCv(2)
+
+
+    .. attribute:: SymPdb(3)
+
+
+    .. attribute:: SymExport(4)
+
+
+    .. attribute:: SymDeferred(5)
+
+
+    .. attribute:: SymSym(6)
+
+
+    .. attribute:: SymDia(7)
+
+
+    .. attribute:: SymVirtual(8)
+
+
+    .. attribute:: NumSymTypes(9)
 
 _TASK_ACTION_TYPE
 '''''''''''''''''
@@ -14569,6 +17009,184 @@ TASK_RUN_FLAGS
 
 
     .. attribute:: TASK_RUN_USER_SID(8)
+
+_TOKEN_INFORMATION_CLASS
+''''''''''''''''''''''''
+.. class:: TOKEN_INFORMATION_CLASS
+
+    Alias for :class:`_TOKEN_INFORMATION_CLASS`
+
+
+.. class:: PTOKEN_INFORMATION_CLASS
+
+    Pointer to :class:`_TOKEN_INFORMATION_CLASS`
+
+
+.. class:: _TOKEN_INFORMATION_CLASS
+
+
+    .. attribute:: TokenInvalid(0)
+
+
+    .. attribute:: TokenUser(1)
+
+
+    .. attribute:: TokenGroups(2)
+
+
+    .. attribute:: TokenPrivileges(3)
+
+
+    .. attribute:: TokenOwner(4)
+
+
+    .. attribute:: TokenPrimaryGroup(5)
+
+
+    .. attribute:: TokenDefaultDacl(6)
+
+
+    .. attribute:: TokenSource(7)
+
+
+    .. attribute:: TokenType(8)
+
+
+    .. attribute:: TokenImpersonationLevel(9)
+
+
+    .. attribute:: TokenStatistics(10)
+
+
+    .. attribute:: TokenRestrictedSids(11)
+
+
+    .. attribute:: TokenSessionId(12)
+
+
+    .. attribute:: TokenGroupsAndPrivileges(13)
+
+
+    .. attribute:: TokenSessionReference(14)
+
+
+    .. attribute:: TokenSandBoxInert(15)
+
+
+    .. attribute:: TokenAuditPolicy(16)
+
+
+    .. attribute:: TokenOrigin(17)
+
+
+    .. attribute:: TokenElevationType(18)
+
+
+    .. attribute:: TokenLinkedToken(19)
+
+
+    .. attribute:: TokenElevation(20)
+
+
+    .. attribute:: TokenHasRestrictions(21)
+
+
+    .. attribute:: TokenAccessInformation(22)
+
+
+    .. attribute:: TokenVirtualizationAllowed(23)
+
+
+    .. attribute:: TokenVirtualizationEnabled(24)
+
+
+    .. attribute:: TokenIntegrityLevel(25)
+
+
+    .. attribute:: TokenUIAccess(26)
+
+
+    .. attribute:: TokenMandatoryPolicy(27)
+
+
+    .. attribute:: TokenLogonSid(28)
+
+
+    .. attribute:: TokenIsAppContainer(29)
+
+
+    .. attribute:: TokenCapabilities(30)
+
+
+    .. attribute:: TokenAppContainerSid(31)
+
+
+    .. attribute:: TokenAppContainerNumber(32)
+
+
+    .. attribute:: TokenUserClaimAttributes(33)
+
+
+    .. attribute:: TokenDeviceClaimAttributes(34)
+
+
+    .. attribute:: TokenRestrictedUserClaimAttributes(35)
+
+
+    .. attribute:: TokenRestrictedDeviceClaimAttributes(36)
+
+
+    .. attribute:: TokenDeviceGroups(37)
+
+
+    .. attribute:: TokenRestrictedDeviceGroups(38)
+
+
+    .. attribute:: TokenSecurityAttributes(39)
+
+
+    .. attribute:: TokenIsRestricted(40)
+
+
+    .. attribute:: TokenProcessTrustLevel(41)
+
+
+    .. attribute:: TokenPrivateNameSpace(42)
+
+
+    .. attribute:: TokenSingletonAttributes(43)
+
+
+    .. attribute:: TokenBnoIsolation(44)
+
+
+    .. attribute:: TokenChildProcessFlags(45)
+
+
+    .. attribute:: MaxTokenInfoClass(46)
+
+_TOKEN_ELEVATION_TYPE
+'''''''''''''''''''''
+.. class:: TOKEN_ELEVATION_TYPE
+
+    Alias for :class:`_TOKEN_ELEVATION_TYPE`
+
+
+.. class:: PTOKEN_ELEVATION_TYPE
+
+    Pointer to :class:`_TOKEN_ELEVATION_TYPE`
+
+
+.. class:: _TOKEN_ELEVATION_TYPE
+
+
+    .. attribute:: TokenElevationTypeDefault(1)
+
+
+    .. attribute:: TokenElevationTypeFull(2)
+
+
+    .. attribute:: TokenElevationTypeLimited(3)
 
 _SYSTEM_INFORMATION_CLASS
 '''''''''''''''''''''''''
@@ -15690,146 +18308,6 @@ NET_FW_IP_PROTOCOL_
 
     .. attribute:: NET_FW_IP_PROTOCOL_ANY(256)
 
-_TOKEN_INFORMATION_CLASS
-''''''''''''''''''''''''
-.. class:: TOKEN_INFORMATION_CLASS
-
-    Alias for :class:`_TOKEN_INFORMATION_CLASS`
-
-
-.. class:: PTOKEN_INFORMATION_CLASS
-
-    Pointer to :class:`_TOKEN_INFORMATION_CLASS`
-
-
-.. class:: _TOKEN_INFORMATION_CLASS
-
-
-    .. attribute:: TokenInvalid(0)
-
-
-    .. attribute:: TokenUser(1)
-
-
-    .. attribute:: TokenGroups(2)
-
-
-    .. attribute:: TokenPrivileges(3)
-
-
-    .. attribute:: TokenOwner(4)
-
-
-    .. attribute:: TokenPrimaryGroup(5)
-
-
-    .. attribute:: TokenDefaultDacl(6)
-
-
-    .. attribute:: TokenSource(7)
-
-
-    .. attribute:: TokenType(8)
-
-
-    .. attribute:: TokenImpersonationLevel(9)
-
-
-    .. attribute:: TokenStatistics(10)
-
-
-    .. attribute:: TokenRestrictedSids(11)
-
-
-    .. attribute:: TokenSessionId(12)
-
-
-    .. attribute:: TokenGroupsAndPrivileges(13)
-
-
-    .. attribute:: TokenSessionReference(14)
-
-
-    .. attribute:: TokenSandBoxInert(15)
-
-
-    .. attribute:: TokenAuditPolicy(16)
-
-
-    .. attribute:: TokenOrigin(17)
-
-
-    .. attribute:: TokenElevationType(18)
-
-
-    .. attribute:: TokenLinkedToken(19)
-
-
-    .. attribute:: TokenElevation(20)
-
-
-    .. attribute:: TokenHasRestrictions(21)
-
-
-    .. attribute:: TokenAccessInformation(22)
-
-
-    .. attribute:: TokenVirtualizationAllowed(23)
-
-
-    .. attribute:: TokenVirtualizationEnabled(24)
-
-
-    .. attribute:: TokenIntegrityLevel(25)
-
-
-    .. attribute:: TokenUIAccess(26)
-
-
-    .. attribute:: TokenMandatoryPolicy(27)
-
-
-    .. attribute:: TokenLogonSid(28)
-
-
-    .. attribute:: TokenIsAppContainer(29)
-
-
-    .. attribute:: TokenCapabilities(30)
-
-
-    .. attribute:: TokenAppContainerSid(31)
-
-
-    .. attribute:: TokenAppContainerNumber(32)
-
-
-    .. attribute:: TokenUserClaimAttributes(33)
-
-
-    .. attribute:: TokenDeviceClaimAttributes(34)
-
-
-    .. attribute:: TokenRestrictedUserClaimAttributes(35)
-
-
-    .. attribute:: TokenRestrictedDeviceClaimAttributes(36)
-
-
-    .. attribute:: TokenDeviceGroups(37)
-
-
-    .. attribute:: TokenRestrictedDeviceGroups(38)
-
-
-    .. attribute:: TokenSecurityAttributes(39)
-
-
-    .. attribute:: TokenIsRestricted(40)
-
-
-    .. attribute:: MaxTokenInfoClass(41)
-
 tagTOKEN_TYPE
 '''''''''''''
 .. class:: TOKEN_TYPE
@@ -16040,699 +18518,6 @@ NET_FW_MODIFY_STATE_
 
     .. attribute:: NET_FW_MODIFY_STATE_INBOUND_BLOCKED(2)
 
-tag_WBEMSTATUS
-''''''''''''''
-.. class:: WBEMSTATUS
-
-    Alias for :class:`tag_WBEMSTATUS`
-
-
-.. class:: tag_WBEMSTATUS
-
-
-    .. attribute:: WBEM_NO_ERROR(0)
-
-
-    .. attribute:: WBEM_S_NO_ERROR(0)
-
-
-    .. attribute:: WBEM_S_SAME(0)
-
-
-    .. attribute:: WBEM_S_FALSE(1)
-
-
-    .. attribute:: WBEM_S_ALREADY_EXISTS(262145)
-
-
-    .. attribute:: WBEM_S_RESET_TO_DEFAULT(262146)
-
-
-    .. attribute:: WBEM_S_DIFFERENT(262147)
-
-
-    .. attribute:: WBEM_S_TIMEDOUT(262148)
-
-
-    .. attribute:: WBEM_S_NO_MORE_DATA(262149)
-
-
-    .. attribute:: WBEM_S_OPERATION_CANCELLED(262150)
-
-
-    .. attribute:: WBEM_S_PENDING(262151)
-
-
-    .. attribute:: WBEM_S_DUPLICATE_OBJECTS(262152)
-
-
-    .. attribute:: WBEM_S_ACCESS_DENIED(262153)
-
-
-    .. attribute:: WBEM_S_PARTIAL_RESULTS(262160)
-
-
-    .. attribute:: WBEM_S_SOURCE_NOT_AVAILABLE(262167)
-
-
-    .. attribute:: WBEM_E_FAILED(2147749889)
-
-
-    .. attribute:: WBEM_E_NOT_FOUND(2147749890)
-
-
-    .. attribute:: WBEM_E_ACCESS_DENIED(2147749891)
-
-
-    .. attribute:: WBEM_E_PROVIDER_FAILURE(2147749892)
-
-
-    .. attribute:: WBEM_E_TYPE_MISMATCH(2147749893)
-
-
-    .. attribute:: WBEM_E_OUT_OF_MEMORY(2147749894)
-
-
-    .. attribute:: WBEM_E_INVALID_CONTEXT(2147749895)
-
-
-    .. attribute:: WBEM_E_INVALID_PARAMETER(2147749896)
-
-
-    .. attribute:: WBEM_E_NOT_AVAILABLE(2147749897)
-
-
-    .. attribute:: WBEM_E_CRITICAL_ERROR(2147749898)
-
-
-    .. attribute:: WBEM_E_INVALID_STREAM(2147749899)
-
-
-    .. attribute:: WBEM_E_NOT_SUPPORTED(2147749900)
-
-
-    .. attribute:: WBEM_E_INVALID_SUPERCLASS(2147749901)
-
-
-    .. attribute:: WBEM_E_INVALID_NAMESPACE(2147749902)
-
-
-    .. attribute:: WBEM_E_INVALID_OBJECT(2147749903)
-
-
-    .. attribute:: WBEM_E_INVALID_CLASS(2147749904)
-
-
-    .. attribute:: WBEM_E_PROVIDER_NOT_FOUND(2147749905)
-
-
-    .. attribute:: WBEM_E_INVALID_PROVIDER_REGISTRATION(2147749906)
-
-
-    .. attribute:: WBEM_E_PROVIDER_LOAD_FAILURE(2147749907)
-
-
-    .. attribute:: WBEM_E_INITIALIZATION_FAILURE(2147749908)
-
-
-    .. attribute:: WBEM_E_TRANSPORT_FAILURE(2147749909)
-
-
-    .. attribute:: WBEM_E_INVALID_OPERATION(2147749910)
-
-
-    .. attribute:: WBEM_E_INVALID_QUERY(2147749911)
-
-
-    .. attribute:: WBEM_E_INVALID_QUERY_TYPE(2147749912)
-
-
-    .. attribute:: WBEM_E_ALREADY_EXISTS(2147749913)
-
-
-    .. attribute:: WBEM_E_OVERRIDE_NOT_ALLOWED(2147749914)
-
-
-    .. attribute:: WBEM_E_PROPAGATED_QUALIFIER(2147749915)
-
-
-    .. attribute:: WBEM_E_PROPAGATED_PROPERTY(2147749916)
-
-
-    .. attribute:: WBEM_E_UNEXPECTED(2147749917)
-
-
-    .. attribute:: WBEM_E_ILLEGAL_OPERATION(2147749918)
-
-
-    .. attribute:: WBEM_E_CANNOT_BE_KEY(2147749919)
-
-
-    .. attribute:: WBEM_E_INCOMPLETE_CLASS(2147749920)
-
-
-    .. attribute:: WBEM_E_INVALID_SYNTAX(2147749921)
-
-
-    .. attribute:: WBEM_E_NONDECORATED_OBJECT(2147749922)
-
-
-    .. attribute:: WBEM_E_READ_ONLY(2147749923)
-
-
-    .. attribute:: WBEM_E_PROVIDER_NOT_CAPABLE(2147749924)
-
-
-    .. attribute:: WBEM_E_CLASS_HAS_CHILDREN(2147749925)
-
-
-    .. attribute:: WBEM_E_CLASS_HAS_INSTANCES(2147749926)
-
-
-    .. attribute:: WBEM_E_QUERY_NOT_IMPLEMENTED(2147749927)
-
-
-    .. attribute:: WBEM_E_ILLEGAL_NULL(2147749928)
-
-
-    .. attribute:: WBEM_E_INVALID_QUALIFIER_TYPE(2147749929)
-
-
-    .. attribute:: WBEM_E_INVALID_PROPERTY_TYPE(2147749930)
-
-
-    .. attribute:: WBEM_E_VALUE_OUT_OF_RANGE(2147749931)
-
-
-    .. attribute:: WBEM_E_CANNOT_BE_SINGLETON(2147749932)
-
-
-    .. attribute:: WBEM_E_INVALID_CIM_TYPE(2147749933)
-
-
-    .. attribute:: WBEM_E_INVALID_METHOD(2147749934)
-
-
-    .. attribute:: WBEM_E_INVALID_METHOD_PARAMETERS(2147749935)
-
-
-    .. attribute:: WBEM_E_SYSTEM_PROPERTY(2147749936)
-
-
-    .. attribute:: WBEM_E_INVALID_PROPERTY(2147749937)
-
-
-    .. attribute:: WBEM_E_CALL_CANCELLED(2147749938)
-
-
-    .. attribute:: WBEM_E_SHUTTING_DOWN(2147749939)
-
-
-    .. attribute:: WBEM_E_PROPAGATED_METHOD(2147749940)
-
-
-    .. attribute:: WBEM_E_UNSUPPORTED_PARAMETER(2147749941)
-
-
-    .. attribute:: WBEM_E_MISSING_PARAMETER_ID(2147749942)
-
-
-    .. attribute:: WBEM_E_INVALID_PARAMETER_ID(2147749943)
-
-
-    .. attribute:: WBEM_E_NONCONSECUTIVE_PARAMETER_IDS(2147749944)
-
-
-    .. attribute:: WBEM_E_PARAMETER_ID_ON_RETVAL(2147749945)
-
-
-    .. attribute:: WBEM_E_INVALID_OBJECT_PATH(2147749946)
-
-
-    .. attribute:: WBEM_E_OUT_OF_DISK_SPACE(2147749947)
-
-
-    .. attribute:: WBEM_E_BUFFER_TOO_SMALL(2147749948)
-
-
-    .. attribute:: WBEM_E_UNSUPPORTED_PUT_EXTENSION(2147749949)
-
-
-    .. attribute:: WBEM_E_UNKNOWN_OBJECT_TYPE(2147749950)
-
-
-    .. attribute:: WBEM_E_UNKNOWN_PACKET_TYPE(2147749951)
-
-
-    .. attribute:: WBEM_E_MARSHAL_VERSION_MISMATCH(2147749952)
-
-
-    .. attribute:: WBEM_E_MARSHAL_INVALID_SIGNATURE(2147749953)
-
-
-    .. attribute:: WBEM_E_INVALID_QUALIFIER(2147749954)
-
-
-    .. attribute:: WBEM_E_INVALID_DUPLICATE_PARAMETER(2147749955)
-
-
-    .. attribute:: WBEM_E_TOO_MUCH_DATA(2147749956)
-
-
-    .. attribute:: WBEM_E_SERVER_TOO_BUSY(2147749957)
-
-
-    .. attribute:: WBEM_E_INVALID_FLAVOR(2147749958)
-
-
-    .. attribute:: WBEM_E_CIRCULAR_REFERENCE(2147749959)
-
-
-    .. attribute:: WBEM_E_UNSUPPORTED_CLASS_UPDATE(2147749960)
-
-
-    .. attribute:: WBEM_E_CANNOT_CHANGE_KEY_INHERITANCE(2147749961)
-
-
-    .. attribute:: WBEM_E_CANNOT_CHANGE_INDEX_INHERITANCE(2147749968)
-
-
-    .. attribute:: WBEM_E_TOO_MANY_PROPERTIES(2147749969)
-
-
-    .. attribute:: WBEM_E_UPDATE_TYPE_MISMATCH(2147749970)
-
-
-    .. attribute:: WBEM_E_UPDATE_OVERRIDE_NOT_ALLOWED(2147749971)
-
-
-    .. attribute:: WBEM_E_UPDATE_PROPAGATED_METHOD(2147749972)
-
-
-    .. attribute:: WBEM_E_METHOD_NOT_IMPLEMENTED(2147749973)
-
-
-    .. attribute:: WBEM_E_METHOD_DISABLED(2147749974)
-
-
-    .. attribute:: WBEM_E_REFRESHER_BUSY(2147749975)
-
-
-    .. attribute:: WBEM_E_UNPARSABLE_QUERY(2147749976)
-
-
-    .. attribute:: WBEM_E_NOT_EVENT_CLASS(2147749977)
-
-
-    .. attribute:: WBEM_E_MISSING_GROUP_WITHIN(2147749978)
-
-
-    .. attribute:: WBEM_E_MISSING_AGGREGATION_LIST(2147749979)
-
-
-    .. attribute:: WBEM_E_PROPERTY_NOT_AN_OBJECT(2147749980)
-
-
-    .. attribute:: WBEM_E_AGGREGATING_BY_OBJECT(2147749981)
-
-
-    .. attribute:: WBEM_E_UNINTERPRETABLE_PROVIDER_QUERY(2147749983)
-
-
-    .. attribute:: WBEM_E_BACKUP_RESTORE_WINMGMT_RUNNING(2147749984)
-
-
-    .. attribute:: WBEM_E_QUEUE_OVERFLOW(2147749985)
-
-
-    .. attribute:: WBEM_E_PRIVILEGE_NOT_HELD(2147749986)
-
-
-    .. attribute:: WBEM_E_INVALID_OPERATOR(2147749987)
-
-
-    .. attribute:: WBEM_E_LOCAL_CREDENTIALS(2147749988)
-
-
-    .. attribute:: WBEM_E_CANNOT_BE_ABSTRACT(2147749989)
-
-
-    .. attribute:: WBEM_E_AMENDED_OBJECT(2147749990)
-
-
-    .. attribute:: WBEM_E_CLIENT_TOO_SLOW(2147749991)
-
-
-    .. attribute:: WBEM_E_NULL_SECURITY_DESCRIPTOR(2147749992)
-
-
-    .. attribute:: WBEM_E_TIMED_OUT(2147749993)
-
-
-    .. attribute:: WBEM_E_INVALID_ASSOCIATION(2147749994)
-
-
-    .. attribute:: WBEM_E_AMBIGUOUS_OPERATION(2147749995)
-
-
-    .. attribute:: WBEM_E_QUOTA_VIOLATION(2147749996)
-
-
-    .. attribute:: WBEM_E_RESERVED_001(2147749997)
-
-
-    .. attribute:: WBEM_E_RESERVED_002(2147749998)
-
-
-    .. attribute:: WBEM_E_UNSUPPORTED_LOCALE(2147749999)
-
-
-    .. attribute:: WBEM_E_HANDLE_OUT_OF_DATE(2147750000)
-
-
-    .. attribute:: WBEM_E_CONNECTION_FAILED(2147750001)
-
-
-    .. attribute:: WBEM_E_INVALID_HANDLE_REQUEST(2147750002)
-
-
-    .. attribute:: WBEM_E_PROPERTY_NAME_TOO_WIDE(2147750003)
-
-
-    .. attribute:: WBEM_E_CLASS_NAME_TOO_WIDE(2147750004)
-
-
-    .. attribute:: WBEM_E_METHOD_NAME_TOO_WIDE(2147750005)
-
-
-    .. attribute:: WBEM_E_QUALIFIER_NAME_TOO_WIDE(2147750006)
-
-
-    .. attribute:: WBEM_E_RERUN_COMMAND(2147750007)
-
-
-    .. attribute:: WBEM_E_DATABASE_VER_MISMATCH(2147750008)
-
-
-    .. attribute:: WBEM_E_VETO_DELETE(2147750009)
-
-
-    .. attribute:: WBEM_E_VETO_PUT(2147750010)
-
-
-    .. attribute:: WBEM_E_INVALID_LOCALE(2147750016)
-
-
-    .. attribute:: WBEM_E_PROVIDER_SUSPENDED(2147750017)
-
-
-    .. attribute:: WBEM_E_SYNCHRONIZATION_REQUIRED(2147750018)
-
-
-    .. attribute:: WBEM_E_NO_SCHEMA(2147750019)
-
-
-    .. attribute:: WBEM_E_PROVIDER_ALREADY_REGISTERED(2147750020)
-
-
-    .. attribute:: WBEM_E_PROVIDER_NOT_REGISTERED(2147750021)
-
-
-    .. attribute:: WBEM_E_FATAL_TRANSPORT_ERROR(2147750022)
-
-
-    .. attribute:: WBEM_E_ENCRYPTED_CONNECTION_REQUIRED(2147750023)
-
-
-    .. attribute:: WBEM_E_PROVIDER_TIMED_OUT(2147750024)
-
-
-    .. attribute:: WBEM_E_NO_KEY(2147750025)
-
-
-    .. attribute:: WBEM_E_PROVIDER_DISABLED(2147750026)
-
-
-    .. attribute:: WBEMESS_E_REGISTRATION_TOO_BROAD(2147753985)
-
-
-    .. attribute:: WBEMESS_E_REGISTRATION_TOO_PRECISE(2147753986)
-
-
-    .. attribute:: WBEMESS_E_AUTHZ_NOT_PRIVILEGED(2147753987)
-
-
-    .. attribute:: WBEMMOF_E_EXPECTED_QUALIFIER_NAME(2147762177)
-
-
-    .. attribute:: WBEMMOF_E_EXPECTED_SEMI(2147762178)
-
-
-    .. attribute:: WBEMMOF_E_EXPECTED_OPEN_BRACE(2147762179)
-
-
-    .. attribute:: WBEMMOF_E_EXPECTED_CLOSE_BRACE(2147762180)
-
-
-    .. attribute:: WBEMMOF_E_EXPECTED_CLOSE_BRACKET(2147762181)
-
-
-    .. attribute:: WBEMMOF_E_EXPECTED_CLOSE_PAREN(2147762182)
-
-
-    .. attribute:: WBEMMOF_E_ILLEGAL_CONSTANT_VALUE(2147762183)
-
-
-    .. attribute:: WBEMMOF_E_EXPECTED_TYPE_IDENTIFIER(2147762184)
-
-
-    .. attribute:: WBEMMOF_E_EXPECTED_OPEN_PAREN(2147762185)
-
-
-    .. attribute:: WBEMMOF_E_UNRECOGNIZED_TOKEN(2147762186)
-
-
-    .. attribute:: WBEMMOF_E_UNRECOGNIZED_TYPE(2147762187)
-
-
-    .. attribute:: WBEMMOF_E_EXPECTED_PROPERTY_NAME(2147762188)
-
-
-    .. attribute:: WBEMMOF_E_TYPEDEF_NOT_SUPPORTED(2147762189)
-
-
-    .. attribute:: WBEMMOF_E_UNEXPECTED_ALIAS(2147762190)
-
-
-    .. attribute:: WBEMMOF_E_UNEXPECTED_ARRAY_INIT(2147762191)
-
-
-    .. attribute:: WBEMMOF_E_INVALID_AMENDMENT_SYNTAX(2147762192)
-
-
-    .. attribute:: WBEMMOF_E_INVALID_DUPLICATE_AMENDMENT(2147762193)
-
-
-    .. attribute:: WBEMMOF_E_INVALID_PRAGMA(2147762194)
-
-
-    .. attribute:: WBEMMOF_E_INVALID_NAMESPACE_SYNTAX(2147762195)
-
-
-    .. attribute:: WBEMMOF_E_EXPECTED_CLASS_NAME(2147762196)
-
-
-    .. attribute:: WBEMMOF_E_TYPE_MISMATCH(2147762197)
-
-
-    .. attribute:: WBEMMOF_E_EXPECTED_ALIAS_NAME(2147762198)
-
-
-    .. attribute:: WBEMMOF_E_INVALID_CLASS_DECLARATION(2147762199)
-
-
-    .. attribute:: WBEMMOF_E_INVALID_INSTANCE_DECLARATION(2147762200)
-
-
-    .. attribute:: WBEMMOF_E_EXPECTED_DOLLAR(2147762201)
-
-
-    .. attribute:: WBEMMOF_E_CIMTYPE_QUALIFIER(2147762202)
-
-
-    .. attribute:: WBEMMOF_E_DUPLICATE_PROPERTY(2147762203)
-
-
-    .. attribute:: WBEMMOF_E_INVALID_NAMESPACE_SPECIFICATION(2147762204)
-
-
-    .. attribute:: WBEMMOF_E_OUT_OF_RANGE(2147762205)
-
-
-    .. attribute:: WBEMMOF_E_INVALID_FILE(2147762206)
-
-
-    .. attribute:: WBEMMOF_E_ALIASES_IN_EMBEDDED(2147762207)
-
-
-    .. attribute:: WBEMMOF_E_NULL_ARRAY_ELEM(2147762208)
-
-
-    .. attribute:: WBEMMOF_E_DUPLICATE_QUALIFIER(2147762209)
-
-
-    .. attribute:: WBEMMOF_E_EXPECTED_FLAVOR_TYPE(2147762210)
-
-
-    .. attribute:: WBEMMOF_E_INCOMPATIBLE_FLAVOR_TYPES(2147762211)
-
-
-    .. attribute:: WBEMMOF_E_MULTIPLE_ALIASES(2147762212)
-
-
-    .. attribute:: WBEMMOF_E_INCOMPATIBLE_FLAVOR_TYPES2(2147762213)
-
-
-    .. attribute:: WBEMMOF_E_NO_ARRAYS_RETURNED(2147762214)
-
-
-    .. attribute:: WBEMMOF_E_MUST_BE_IN_OR_OUT(2147762215)
-
-
-    .. attribute:: WBEMMOF_E_INVALID_FLAGS_SYNTAX(2147762216)
-
-
-    .. attribute:: WBEMMOF_E_EXPECTED_BRACE_OR_BAD_TYPE(2147762217)
-
-
-    .. attribute:: WBEMMOF_E_UNSUPPORTED_CIMV22_QUAL_VALUE(2147762218)
-
-
-    .. attribute:: WBEMMOF_E_UNSUPPORTED_CIMV22_DATA_TYPE(2147762219)
-
-
-    .. attribute:: WBEMMOF_E_INVALID_DELETEINSTANCE_SYNTAX(2147762220)
-
-
-    .. attribute:: WBEMMOF_E_INVALID_QUALIFIER_SYNTAX(2147762221)
-
-
-    .. attribute:: WBEMMOF_E_QUALIFIER_USED_OUTSIDE_SCOPE(2147762222)
-
-
-    .. attribute:: WBEMMOF_E_ERROR_CREATING_TEMP_FILE(2147762223)
-
-
-    .. attribute:: WBEMMOF_E_ERROR_INVALID_INCLUDE_FILE(2147762224)
-
-
-    .. attribute:: WBEMMOF_E_INVALID_DELETECLASS_SYNTAX(2147762225)
-
-tag_WBEM_CHANGE_FLAG_TYPE
-'''''''''''''''''''''''''
-.. class:: WBEM_CHANGE_FLAG_TYPE
-
-    Alias for :class:`tag_WBEM_CHANGE_FLAG_TYPE`
-
-
-.. class:: tag_WBEM_CHANGE_FLAG_TYPE
-
-
-    .. attribute:: WBEM_FLAG_CREATE_OR_UPDATE(0)
-
-
-    .. attribute:: WBEM_FLAG_UPDATE_ONLY(1)
-
-
-    .. attribute:: WBEM_FLAG_CREATE_ONLY(2)
-
-
-    .. attribute:: WBEM_FLAG_UPDATE_COMPATIBLE(0)
-
-
-    .. attribute:: WBEM_FLAG_UPDATE_SAFE_MODE(32)
-
-
-    .. attribute:: WBEM_FLAG_UPDATE_FORCE_MODE(64)
-
-
-    .. attribute:: WBEM_MASK_UPDATE_MODE(96)
-
-
-    .. attribute:: WBEM_FLAG_ADVISORY(65536)
-
-tag_WBEM_TIMEOUT_TYPE
-'''''''''''''''''''''
-.. class:: WBEM_TIMEOUT_TYPE
-
-    Alias for :class:`tag_WBEM_TIMEOUT_TYPE`
-
-
-.. class:: tag_WBEM_TIMEOUT_TYPE
-
-
-    .. attribute:: WBEM_NO_WAIT(0)
-
-
-    .. attribute:: WBEM_INFINITE(4294967295)
-
-tag_WBEM_GENERIC_FLAG_TYPE
-''''''''''''''''''''''''''
-.. class:: WBEM_GENERIC_FLAG_TYPE
-
-    Alias for :class:`tag_WBEM_GENERIC_FLAG_TYPE`
-
-
-.. class:: tag_WBEM_GENERIC_FLAG_TYPE
-
-
-    .. attribute:: WBEM_FLAG_RETURN_IMMEDIATELY(16)
-
-
-    .. attribute:: WBEM_FLAG_RETURN_WBEM_COMPLETE(0)
-
-
-    .. attribute:: WBEM_FLAG_BIDIRECTIONAL(0)
-
-
-    .. attribute:: WBEM_FLAG_FORWARD_ONLY(32)
-
-
-    .. attribute:: WBEM_FLAG_NO_ERROR_OBJECT(64)
-
-
-    .. attribute:: WBEM_FLAG_RETURN_ERROR_OBJECT(0)
-
-
-    .. attribute:: WBEM_FLAG_SEND_STATUS(128)
-
-
-    .. attribute:: WBEM_FLAG_DONT_SEND_STATUS(0)
-
-
-    .. attribute:: WBEM_FLAG_ENSURE_LOCATABLE(256)
-
-
-    .. attribute:: WBEM_FLAG_DIRECT_READ(512)
-
-
-    .. attribute:: WBEM_FLAG_SEND_ONLY_SELECTED(0)
-
-
-    .. attribute:: WBEM_RETURN_WHEN_COMPLETE(0)
-
-
-    .. attribute:: WBEM_RETURN_IMMEDIATELY(16)
-
-
-    .. attribute:: WBEM_MASK_RESERVED_FLAGS(126976)
-
-
-    .. attribute:: WBEM_FLAG_USE_AMENDED_QUALIFIERS(131072)
-
-
-    .. attribute:: WBEM_FLAG_STRONG_VALIDATION(1048576)
-
 tagCLSCTX
 '''''''''
 .. class:: CLSCTX
@@ -16861,6 +18646,21 @@ _SE_OBJECT_TYPE
 
 
     .. attribute:: SE_REGISTRY_WOW64_32KEY(12)
+
+_SECTION_INHERIT
+''''''''''''''''
+.. class:: SECTION_INHERIT
+
+    Alias for :class:`_SECTION_INHERIT`
+
+
+.. class:: _SECTION_INHERIT
+
+
+    .. attribute:: ViewShare(1)
+
+
+    .. attribute:: ViewUnmap(2)
 
 _INTERNAL_IF_OPER_STATUS
 ''''''''''''''''''''''''
@@ -17104,80 +18904,6 @@ _RTL_PATH_TYPE
 
 
     .. attribute:: RtlPathTypeRootLocalDevice(7)
-
-_ALPC_PORT_INFORMATION_CLASS
-''''''''''''''''''''''''''''
-.. class:: ALPC_PORT_INFORMATION_CLASS
-
-    Alias for :class:`_ALPC_PORT_INFORMATION_CLASS`
-
-
-.. class:: _ALPC_PORT_INFORMATION_CLASS
-
-
-    .. attribute:: AlpcBasicInformation(0)
-
-
-    .. attribute:: AlpcPortInformation(1)
-
-
-    .. attribute:: AlpcAssociateCompletionPortInformation(2)
-
-
-    .. attribute:: AlpcConnectedSIDInformation(3)
-
-
-    .. attribute:: AlpcServerInformation(4)
-
-
-    .. attribute:: AlpcMessageZoneInformation(5)
-
-
-    .. attribute:: AlpcRegisterCompletionListInformation(6)
-
-
-    .. attribute:: AlpcUnregisterCompletionListInformation(7)
-
-
-    .. attribute:: AlpcAdjustCompletionListConcurrencyCountInformation(8)
-
-
-    .. attribute:: AlpcRegisterCallbackInformation(9)
-
-
-    .. attribute:: AlpcCompletionListRundownInformation(10)
-
-
-    .. attribute:: AlpcWaitForPortReferences(11)
-
-
-    .. attribute:: MaxAlpcPortInfoClass(12)
-
-_ALPC_MESSAGE_INFORMATION_CLASS
-'''''''''''''''''''''''''''''''
-.. class:: ALPC_MESSAGE_INFORMATION_CLASS
-
-    Alias for :class:`_ALPC_MESSAGE_INFORMATION_CLASS`
-
-
-.. class:: PALPC_MESSAGE_INFORMATION_CLASS
-
-    Pointer to :class:`_ALPC_MESSAGE_INFORMATION_CLASS`
-
-
-.. class:: _ALPC_MESSAGE_INFORMATION_CLASS
-
-
-    .. attribute:: AlpcMessageSidInformation(0)
-
-
-    .. attribute:: AlpcMessageTokenModifiedIdInformation(1)
-
-
-    .. attribute:: MaxAlpcMessageInfoClass(2)
-
-
-    .. attribute:: AlpcMessageHandleInformation(3)
 
 _BG_JOB_STATE
 '''''''''''''
@@ -17851,248 +19577,747 @@ _EVT_FORMAT_MESSAGE_FLAGS
 
     .. attribute:: EvtFormatMessageXml(9)
 
-_FILE_INFORMATION_CLASS
-'''''''''''''''''''''''
-.. class:: FILE_INFORMATION_CLASS
+tag_WBEM_GENUS_TYPE
+'''''''''''''''''''
+.. class:: WBEM_GENUS_TYPE
 
-    Alias for :class:`_FILE_INFORMATION_CLASS`
+    Alias for :class:`tag_WBEM_GENUS_TYPE`
 
 
-.. class:: PFILE_INFORMATION_CLASS
+.. class:: tag_WBEM_GENUS_TYPE
 
-    Pointer to :class:`_FILE_INFORMATION_CLASS`
 
+    .. attribute:: WBEM_GENUS_CLASS(1)
 
-.. class:: _FILE_INFORMATION_CLASS
 
+    .. attribute:: WBEM_GENUS_INSTANCE(2)
 
-    .. attribute:: FakeFileInformationZero(0)
+tag_WBEM_CHANGE_FLAG_TYPE
+'''''''''''''''''''''''''
+.. class:: WBEM_CHANGE_FLAG_TYPE
 
+    Alias for :class:`tag_WBEM_CHANGE_FLAG_TYPE`
 
-    .. attribute:: FileDirectoryInformation(1)
 
+.. class:: tag_WBEM_CHANGE_FLAG_TYPE
 
-    .. attribute:: FileFullDirectoryInformation(2)
 
+    .. attribute:: WBEM_FLAG_CREATE_OR_UPDATE(0)
 
-    .. attribute:: FileBothDirectoryInformation(3)
 
+    .. attribute:: WBEM_FLAG_UPDATE_ONLY(1)
 
-    .. attribute:: FileBasicInformation(4)
 
+    .. attribute:: WBEM_FLAG_CREATE_ONLY(2)
 
-    .. attribute:: FileStandardInformation(5)
 
+    .. attribute:: WBEM_FLAG_UPDATE_COMPATIBLE(0)
 
-    .. attribute:: FileInternalInformation(6)
 
+    .. attribute:: WBEM_FLAG_UPDATE_SAFE_MODE(32)
 
-    .. attribute:: FileEaInformation(7)
 
+    .. attribute:: WBEM_FLAG_UPDATE_FORCE_MODE(64)
 
-    .. attribute:: FileAccessInformation(8)
 
+    .. attribute:: WBEM_MASK_UPDATE_MODE(96)
 
-    .. attribute:: FileNameInformation(9)
 
+    .. attribute:: WBEM_FLAG_ADVISORY(65536)
 
-    .. attribute:: FileRenameInformation(10)
+tag_WBEMSTATUS
+''''''''''''''
+.. class:: WBEMSTATUS
 
+    Alias for :class:`tag_WBEMSTATUS`
 
-    .. attribute:: FileLinkInformation(11)
 
+.. class:: tag_WBEMSTATUS
 
-    .. attribute:: FileNamesInformation(12)
 
+    .. attribute:: WBEM_NO_ERROR(0)
 
-    .. attribute:: FileDispositionInformation(13)
 
+    .. attribute:: WBEM_S_NO_ERROR(0)
 
-    .. attribute:: FilePositionInformation(14)
 
+    .. attribute:: WBEM_S_SAME(0)
 
-    .. attribute:: FileFullEaInformation(15)
 
+    .. attribute:: WBEM_S_FALSE(1)
 
-    .. attribute:: FileModeInformation(16)
 
+    .. attribute:: WBEM_S_ALREADY_EXISTS(262145)
 
-    .. attribute:: FileAlignmentInformation(17)
 
+    .. attribute:: WBEM_S_RESET_TO_DEFAULT(262146)
 
-    .. attribute:: FileAllInformation(18)
 
+    .. attribute:: WBEM_S_DIFFERENT(262147)
 
-    .. attribute:: FileAllocationInformation(19)
 
+    .. attribute:: WBEM_S_TIMEDOUT(262148)
 
-    .. attribute:: FileEndOfFileInformation(20)
 
+    .. attribute:: WBEM_S_NO_MORE_DATA(262149)
 
-    .. attribute:: FileAlternateNameInformation(21)
 
+    .. attribute:: WBEM_S_OPERATION_CANCELLED(262150)
 
-    .. attribute:: FileStreamInformation(22)
 
+    .. attribute:: WBEM_S_PENDING(262151)
 
-    .. attribute:: FilePipeInformation(23)
 
+    .. attribute:: WBEM_S_DUPLICATE_OBJECTS(262152)
 
-    .. attribute:: FilePipeLocalInformation(24)
 
+    .. attribute:: WBEM_S_ACCESS_DENIED(262153)
 
-    .. attribute:: FilePipeRemoteInformation(25)
 
+    .. attribute:: WBEM_S_PARTIAL_RESULTS(262160)
 
-    .. attribute:: FileMailslotQueryInformation(26)
 
+    .. attribute:: WBEM_S_SOURCE_NOT_AVAILABLE(262167)
 
-    .. attribute:: FileMailslotSetInformation(27)
 
+    .. attribute:: WBEM_E_FAILED(2147749889)
 
-    .. attribute:: FileCompressionInformation(28)
 
+    .. attribute:: WBEM_E_NOT_FOUND(2147749890)
 
-    .. attribute:: FileObjectIdInformation(29)
 
+    .. attribute:: WBEM_E_ACCESS_DENIED(2147749891)
 
-    .. attribute:: FileCompletionInformation(30)
 
+    .. attribute:: WBEM_E_PROVIDER_FAILURE(2147749892)
 
-    .. attribute:: FileMoveClusterInformation(31)
 
+    .. attribute:: WBEM_E_TYPE_MISMATCH(2147749893)
 
-    .. attribute:: FileQuotaInformation(32)
 
+    .. attribute:: WBEM_E_OUT_OF_MEMORY(2147749894)
 
-    .. attribute:: FileReparsePointInformation(33)
 
+    .. attribute:: WBEM_E_INVALID_CONTEXT(2147749895)
 
-    .. attribute:: FileNetworkOpenInformation(34)
 
+    .. attribute:: WBEM_E_INVALID_PARAMETER(2147749896)
 
-    .. attribute:: FileAttributeTagInformation(35)
 
+    .. attribute:: WBEM_E_NOT_AVAILABLE(2147749897)
 
-    .. attribute:: FileTrackingInformation(36)
 
+    .. attribute:: WBEM_E_CRITICAL_ERROR(2147749898)
 
-    .. attribute:: FileIdBothDirectoryInformation(37)
 
+    .. attribute:: WBEM_E_INVALID_STREAM(2147749899)
 
-    .. attribute:: FileIdFullDirectoryInformation(38)
 
+    .. attribute:: WBEM_E_NOT_SUPPORTED(2147749900)
 
-    .. attribute:: FileValidDataLengthInformation(39)
 
+    .. attribute:: WBEM_E_INVALID_SUPERCLASS(2147749901)
 
-    .. attribute:: FileShortNameInformation(40)
 
+    .. attribute:: WBEM_E_INVALID_NAMESPACE(2147749902)
 
-    .. attribute:: FileIoCompletionNotificationInformation(41)
 
+    .. attribute:: WBEM_E_INVALID_OBJECT(2147749903)
 
-    .. attribute:: FileIoStatusBlockRangeInformation(42)
 
+    .. attribute:: WBEM_E_INVALID_CLASS(2147749904)
 
-    .. attribute:: FileIoPriorityHintInformation(43)
 
+    .. attribute:: WBEM_E_PROVIDER_NOT_FOUND(2147749905)
 
-    .. attribute:: FileSfioReserveInformation(44)
 
+    .. attribute:: WBEM_E_INVALID_PROVIDER_REGISTRATION(2147749906)
 
-    .. attribute:: FileSfioVolumeInformation(45)
 
+    .. attribute:: WBEM_E_PROVIDER_LOAD_FAILURE(2147749907)
 
-    .. attribute:: FileHardLinkInformation(46)
 
+    .. attribute:: WBEM_E_INITIALIZATION_FAILURE(2147749908)
 
-    .. attribute:: FileProcessIdsUsingFileInformation(47)
 
+    .. attribute:: WBEM_E_TRANSPORT_FAILURE(2147749909)
 
-    .. attribute:: FileNormalizedNameInformation(48)
 
+    .. attribute:: WBEM_E_INVALID_OPERATION(2147749910)
 
-    .. attribute:: FileNetworkPhysicalNameInformation(49)
 
+    .. attribute:: WBEM_E_INVALID_QUERY(2147749911)
 
-    .. attribute:: FileIdGlobalTxDirectoryInformation(50)
 
+    .. attribute:: WBEM_E_INVALID_QUERY_TYPE(2147749912)
 
-    .. attribute:: FileIsRemoteDeviceInformation(51)
 
+    .. attribute:: WBEM_E_ALREADY_EXISTS(2147749913)
 
-    .. attribute:: FileUnusedInformation(52)
 
+    .. attribute:: WBEM_E_OVERRIDE_NOT_ALLOWED(2147749914)
 
-    .. attribute:: FileNumaNodeInformation(53)
 
+    .. attribute:: WBEM_E_PROPAGATED_QUALIFIER(2147749915)
 
-    .. attribute:: FileStandardLinkInformation(54)
 
+    .. attribute:: WBEM_E_PROPAGATED_PROPERTY(2147749916)
 
-    .. attribute:: FileRemoteProtocolInformation(55)
 
+    .. attribute:: WBEM_E_UNEXPECTED(2147749917)
 
-    .. attribute:: FileRenameInformationBypassAccessCheck(56)
 
+    .. attribute:: WBEM_E_ILLEGAL_OPERATION(2147749918)
 
-    .. attribute:: FileLinkInformationBypassAccessCheck(57)
 
+    .. attribute:: WBEM_E_CANNOT_BE_KEY(2147749919)
 
-    .. attribute:: FileVolumeNameInformation(58)
 
+    .. attribute:: WBEM_E_INCOMPLETE_CLASS(2147749920)
 
-    .. attribute:: FileIdInformation(59)
 
+    .. attribute:: WBEM_E_INVALID_SYNTAX(2147749921)
 
-    .. attribute:: FileIdExtdDirectoryInformation(60)
 
+    .. attribute:: WBEM_E_NONDECORATED_OBJECT(2147749922)
 
-    .. attribute:: FileReplaceCompletionInformation(61)
 
+    .. attribute:: WBEM_E_READ_ONLY(2147749923)
 
-    .. attribute:: FileHardLinkFullIdInformation(62)
 
+    .. attribute:: WBEM_E_PROVIDER_NOT_CAPABLE(2147749924)
 
-    .. attribute:: FileIdExtdBothDirectoryInformation(63)
 
+    .. attribute:: WBEM_E_CLASS_HAS_CHILDREN(2147749925)
 
-    .. attribute:: FileDispositionInformationEx(64)
 
+    .. attribute:: WBEM_E_CLASS_HAS_INSTANCES(2147749926)
 
-    .. attribute:: FileRenameInformationEx(65)
 
+    .. attribute:: WBEM_E_QUERY_NOT_IMPLEMENTED(2147749927)
 
-    .. attribute:: FileRenameInformationExBypassAccessCheck(66)
 
+    .. attribute:: WBEM_E_ILLEGAL_NULL(2147749928)
 
-    .. attribute:: FileMaximumInformation(67)
 
-_IO_PRIORITY_HINT
-'''''''''''''''''
-.. class:: IO_PRIORITY_HINT
+    .. attribute:: WBEM_E_INVALID_QUALIFIER_TYPE(2147749929)
 
-    Alias for :class:`_IO_PRIORITY_HINT`
 
+    .. attribute:: WBEM_E_INVALID_PROPERTY_TYPE(2147749930)
 
-.. class:: _IO_PRIORITY_HINT
 
+    .. attribute:: WBEM_E_VALUE_OUT_OF_RANGE(2147749931)
 
-    .. attribute:: IoPriorityVeryLow(0)
 
+    .. attribute:: WBEM_E_CANNOT_BE_SINGLETON(2147749932)
 
-    .. attribute:: IoPriorityLow(1)
 
+    .. attribute:: WBEM_E_INVALID_CIM_TYPE(2147749933)
 
-    .. attribute:: IoPriorityNormal(2)
 
+    .. attribute:: WBEM_E_INVALID_METHOD(2147749934)
 
-    .. attribute:: IoPriorityHigh(3)
 
+    .. attribute:: WBEM_E_INVALID_METHOD_PARAMETERS(2147749935)
 
-    .. attribute:: IoPriorityCritical(4)
 
+    .. attribute:: WBEM_E_SYSTEM_PROPERTY(2147749936)
 
-    .. attribute:: MaxIoPriorityTypes(5)
+
+    .. attribute:: WBEM_E_INVALID_PROPERTY(2147749937)
+
+
+    .. attribute:: WBEM_E_CALL_CANCELLED(2147749938)
+
+
+    .. attribute:: WBEM_E_SHUTTING_DOWN(2147749939)
+
+
+    .. attribute:: WBEM_E_PROPAGATED_METHOD(2147749940)
+
+
+    .. attribute:: WBEM_E_UNSUPPORTED_PARAMETER(2147749941)
+
+
+    .. attribute:: WBEM_E_MISSING_PARAMETER_ID(2147749942)
+
+
+    .. attribute:: WBEM_E_INVALID_PARAMETER_ID(2147749943)
+
+
+    .. attribute:: WBEM_E_NONCONSECUTIVE_PARAMETER_IDS(2147749944)
+
+
+    .. attribute:: WBEM_E_PARAMETER_ID_ON_RETVAL(2147749945)
+
+
+    .. attribute:: WBEM_E_INVALID_OBJECT_PATH(2147749946)
+
+
+    .. attribute:: WBEM_E_OUT_OF_DISK_SPACE(2147749947)
+
+
+    .. attribute:: WBEM_E_BUFFER_TOO_SMALL(2147749948)
+
+
+    .. attribute:: WBEM_E_UNSUPPORTED_PUT_EXTENSION(2147749949)
+
+
+    .. attribute:: WBEM_E_UNKNOWN_OBJECT_TYPE(2147749950)
+
+
+    .. attribute:: WBEM_E_UNKNOWN_PACKET_TYPE(2147749951)
+
+
+    .. attribute:: WBEM_E_MARSHAL_VERSION_MISMATCH(2147749952)
+
+
+    .. attribute:: WBEM_E_MARSHAL_INVALID_SIGNATURE(2147749953)
+
+
+    .. attribute:: WBEM_E_INVALID_QUALIFIER(2147749954)
+
+
+    .. attribute:: WBEM_E_INVALID_DUPLICATE_PARAMETER(2147749955)
+
+
+    .. attribute:: WBEM_E_TOO_MUCH_DATA(2147749956)
+
+
+    .. attribute:: WBEM_E_SERVER_TOO_BUSY(2147749957)
+
+
+    .. attribute:: WBEM_E_INVALID_FLAVOR(2147749958)
+
+
+    .. attribute:: WBEM_E_CIRCULAR_REFERENCE(2147749959)
+
+
+    .. attribute:: WBEM_E_UNSUPPORTED_CLASS_UPDATE(2147749960)
+
+
+    .. attribute:: WBEM_E_CANNOT_CHANGE_KEY_INHERITANCE(2147749961)
+
+
+    .. attribute:: WBEM_E_CANNOT_CHANGE_INDEX_INHERITANCE(2147749968)
+
+
+    .. attribute:: WBEM_E_TOO_MANY_PROPERTIES(2147749969)
+
+
+    .. attribute:: WBEM_E_UPDATE_TYPE_MISMATCH(2147749970)
+
+
+    .. attribute:: WBEM_E_UPDATE_OVERRIDE_NOT_ALLOWED(2147749971)
+
+
+    .. attribute:: WBEM_E_UPDATE_PROPAGATED_METHOD(2147749972)
+
+
+    .. attribute:: WBEM_E_METHOD_NOT_IMPLEMENTED(2147749973)
+
+
+    .. attribute:: WBEM_E_METHOD_DISABLED(2147749974)
+
+
+    .. attribute:: WBEM_E_REFRESHER_BUSY(2147749975)
+
+
+    .. attribute:: WBEM_E_UNPARSABLE_QUERY(2147749976)
+
+
+    .. attribute:: WBEM_E_NOT_EVENT_CLASS(2147749977)
+
+
+    .. attribute:: WBEM_E_MISSING_GROUP_WITHIN(2147749978)
+
+
+    .. attribute:: WBEM_E_MISSING_AGGREGATION_LIST(2147749979)
+
+
+    .. attribute:: WBEM_E_PROPERTY_NOT_AN_OBJECT(2147749980)
+
+
+    .. attribute:: WBEM_E_AGGREGATING_BY_OBJECT(2147749981)
+
+
+    .. attribute:: WBEM_E_UNINTERPRETABLE_PROVIDER_QUERY(2147749983)
+
+
+    .. attribute:: WBEM_E_BACKUP_RESTORE_WINMGMT_RUNNING(2147749984)
+
+
+    .. attribute:: WBEM_E_QUEUE_OVERFLOW(2147749985)
+
+
+    .. attribute:: WBEM_E_PRIVILEGE_NOT_HELD(2147749986)
+
+
+    .. attribute:: WBEM_E_INVALID_OPERATOR(2147749987)
+
+
+    .. attribute:: WBEM_E_LOCAL_CREDENTIALS(2147749988)
+
+
+    .. attribute:: WBEM_E_CANNOT_BE_ABSTRACT(2147749989)
+
+
+    .. attribute:: WBEM_E_AMENDED_OBJECT(2147749990)
+
+
+    .. attribute:: WBEM_E_CLIENT_TOO_SLOW(2147749991)
+
+
+    .. attribute:: WBEM_E_NULL_SECURITY_DESCRIPTOR(2147749992)
+
+
+    .. attribute:: WBEM_E_TIMED_OUT(2147749993)
+
+
+    .. attribute:: WBEM_E_INVALID_ASSOCIATION(2147749994)
+
+
+    .. attribute:: WBEM_E_AMBIGUOUS_OPERATION(2147749995)
+
+
+    .. attribute:: WBEM_E_QUOTA_VIOLATION(2147749996)
+
+
+    .. attribute:: WBEM_E_RESERVED_001(2147749997)
+
+
+    .. attribute:: WBEM_E_RESERVED_002(2147749998)
+
+
+    .. attribute:: WBEM_E_UNSUPPORTED_LOCALE(2147749999)
+
+
+    .. attribute:: WBEM_E_HANDLE_OUT_OF_DATE(2147750000)
+
+
+    .. attribute:: WBEM_E_CONNECTION_FAILED(2147750001)
+
+
+    .. attribute:: WBEM_E_INVALID_HANDLE_REQUEST(2147750002)
+
+
+    .. attribute:: WBEM_E_PROPERTY_NAME_TOO_WIDE(2147750003)
+
+
+    .. attribute:: WBEM_E_CLASS_NAME_TOO_WIDE(2147750004)
+
+
+    .. attribute:: WBEM_E_METHOD_NAME_TOO_WIDE(2147750005)
+
+
+    .. attribute:: WBEM_E_QUALIFIER_NAME_TOO_WIDE(2147750006)
+
+
+    .. attribute:: WBEM_E_RERUN_COMMAND(2147750007)
+
+
+    .. attribute:: WBEM_E_DATABASE_VER_MISMATCH(2147750008)
+
+
+    .. attribute:: WBEM_E_VETO_DELETE(2147750009)
+
+
+    .. attribute:: WBEM_E_VETO_PUT(2147750010)
+
+
+    .. attribute:: WBEM_E_INVALID_LOCALE(2147750016)
+
+
+    .. attribute:: WBEM_E_PROVIDER_SUSPENDED(2147750017)
+
+
+    .. attribute:: WBEM_E_SYNCHRONIZATION_REQUIRED(2147750018)
+
+
+    .. attribute:: WBEM_E_NO_SCHEMA(2147750019)
+
+
+    .. attribute:: WBEM_E_PROVIDER_ALREADY_REGISTERED(2147750020)
+
+
+    .. attribute:: WBEM_E_PROVIDER_NOT_REGISTERED(2147750021)
+
+
+    .. attribute:: WBEM_E_FATAL_TRANSPORT_ERROR(2147750022)
+
+
+    .. attribute:: WBEM_E_ENCRYPTED_CONNECTION_REQUIRED(2147750023)
+
+
+    .. attribute:: WBEM_E_PROVIDER_TIMED_OUT(2147750024)
+
+
+    .. attribute:: WBEM_E_NO_KEY(2147750025)
+
+
+    .. attribute:: WBEM_E_PROVIDER_DISABLED(2147750026)
+
+
+    .. attribute:: WBEMESS_E_REGISTRATION_TOO_BROAD(2147753985)
+
+
+    .. attribute:: WBEMESS_E_REGISTRATION_TOO_PRECISE(2147753986)
+
+
+    .. attribute:: WBEMESS_E_AUTHZ_NOT_PRIVILEGED(2147753987)
+
+
+    .. attribute:: WBEMMOF_E_EXPECTED_QUALIFIER_NAME(2147762177)
+
+
+    .. attribute:: WBEMMOF_E_EXPECTED_SEMI(2147762178)
+
+
+    .. attribute:: WBEMMOF_E_EXPECTED_OPEN_BRACE(2147762179)
+
+
+    .. attribute:: WBEMMOF_E_EXPECTED_CLOSE_BRACE(2147762180)
+
+
+    .. attribute:: WBEMMOF_E_EXPECTED_CLOSE_BRACKET(2147762181)
+
+
+    .. attribute:: WBEMMOF_E_EXPECTED_CLOSE_PAREN(2147762182)
+
+
+    .. attribute:: WBEMMOF_E_ILLEGAL_CONSTANT_VALUE(2147762183)
+
+
+    .. attribute:: WBEMMOF_E_EXPECTED_TYPE_IDENTIFIER(2147762184)
+
+
+    .. attribute:: WBEMMOF_E_EXPECTED_OPEN_PAREN(2147762185)
+
+
+    .. attribute:: WBEMMOF_E_UNRECOGNIZED_TOKEN(2147762186)
+
+
+    .. attribute:: WBEMMOF_E_UNRECOGNIZED_TYPE(2147762187)
+
+
+    .. attribute:: WBEMMOF_E_EXPECTED_PROPERTY_NAME(2147762188)
+
+
+    .. attribute:: WBEMMOF_E_TYPEDEF_NOT_SUPPORTED(2147762189)
+
+
+    .. attribute:: WBEMMOF_E_UNEXPECTED_ALIAS(2147762190)
+
+
+    .. attribute:: WBEMMOF_E_UNEXPECTED_ARRAY_INIT(2147762191)
+
+
+    .. attribute:: WBEMMOF_E_INVALID_AMENDMENT_SYNTAX(2147762192)
+
+
+    .. attribute:: WBEMMOF_E_INVALID_DUPLICATE_AMENDMENT(2147762193)
+
+
+    .. attribute:: WBEMMOF_E_INVALID_PRAGMA(2147762194)
+
+
+    .. attribute:: WBEMMOF_E_INVALID_NAMESPACE_SYNTAX(2147762195)
+
+
+    .. attribute:: WBEMMOF_E_EXPECTED_CLASS_NAME(2147762196)
+
+
+    .. attribute:: WBEMMOF_E_TYPE_MISMATCH(2147762197)
+
+
+    .. attribute:: WBEMMOF_E_EXPECTED_ALIAS_NAME(2147762198)
+
+
+    .. attribute:: WBEMMOF_E_INVALID_CLASS_DECLARATION(2147762199)
+
+
+    .. attribute:: WBEMMOF_E_INVALID_INSTANCE_DECLARATION(2147762200)
+
+
+    .. attribute:: WBEMMOF_E_EXPECTED_DOLLAR(2147762201)
+
+
+    .. attribute:: WBEMMOF_E_CIMTYPE_QUALIFIER(2147762202)
+
+
+    .. attribute:: WBEMMOF_E_DUPLICATE_PROPERTY(2147762203)
+
+
+    .. attribute:: WBEMMOF_E_INVALID_NAMESPACE_SPECIFICATION(2147762204)
+
+
+    .. attribute:: WBEMMOF_E_OUT_OF_RANGE(2147762205)
+
+
+    .. attribute:: WBEMMOF_E_INVALID_FILE(2147762206)
+
+
+    .. attribute:: WBEMMOF_E_ALIASES_IN_EMBEDDED(2147762207)
+
+
+    .. attribute:: WBEMMOF_E_NULL_ARRAY_ELEM(2147762208)
+
+
+    .. attribute:: WBEMMOF_E_DUPLICATE_QUALIFIER(2147762209)
+
+
+    .. attribute:: WBEMMOF_E_EXPECTED_FLAVOR_TYPE(2147762210)
+
+
+    .. attribute:: WBEMMOF_E_INCOMPATIBLE_FLAVOR_TYPES(2147762211)
+
+
+    .. attribute:: WBEMMOF_E_MULTIPLE_ALIASES(2147762212)
+
+
+    .. attribute:: WBEMMOF_E_INCOMPATIBLE_FLAVOR_TYPES2(2147762213)
+
+
+    .. attribute:: WBEMMOF_E_NO_ARRAYS_RETURNED(2147762214)
+
+
+    .. attribute:: WBEMMOF_E_MUST_BE_IN_OR_OUT(2147762215)
+
+
+    .. attribute:: WBEMMOF_E_INVALID_FLAGS_SYNTAX(2147762216)
+
+
+    .. attribute:: WBEMMOF_E_EXPECTED_BRACE_OR_BAD_TYPE(2147762217)
+
+
+    .. attribute:: WBEMMOF_E_UNSUPPORTED_CIMV22_QUAL_VALUE(2147762218)
+
+
+    .. attribute:: WBEMMOF_E_UNSUPPORTED_CIMV22_DATA_TYPE(2147762219)
+
+
+    .. attribute:: WBEMMOF_E_INVALID_DELETEINSTANCE_SYNTAX(2147762220)
+
+
+    .. attribute:: WBEMMOF_E_INVALID_QUALIFIER_SYNTAX(2147762221)
+
+
+    .. attribute:: WBEMMOF_E_QUALIFIER_USED_OUTSIDE_SCOPE(2147762222)
+
+
+    .. attribute:: WBEMMOF_E_ERROR_CREATING_TEMP_FILE(2147762223)
+
+
+    .. attribute:: WBEMMOF_E_ERROR_INVALID_INCLUDE_FILE(2147762224)
+
+
+    .. attribute:: WBEMMOF_E_INVALID_DELETECLASS_SYNTAX(2147762225)
+
+tag_WBEM_TIMEOUT_TYPE
+'''''''''''''''''''''
+.. class:: WBEM_TIMEOUT_TYPE
+
+    Alias for :class:`tag_WBEM_TIMEOUT_TYPE`
+
+
+.. class:: tag_WBEM_TIMEOUT_TYPE
+
+
+    .. attribute:: WBEM_NO_WAIT(0)
+
+
+    .. attribute:: WBEM_INFINITE(4294967295)
+
+tag_WBEM_GENERIC_FLAG_TYPE
+''''''''''''''''''''''''''
+.. class:: WBEM_GENERIC_FLAG_TYPE
+
+    Alias for :class:`tag_WBEM_GENERIC_FLAG_TYPE`
+
+
+.. class:: tag_WBEM_GENERIC_FLAG_TYPE
+
+
+    .. attribute:: WBEM_FLAG_RETURN_IMMEDIATELY(16)
+
+
+    .. attribute:: WBEM_FLAG_RETURN_WBEM_COMPLETE(0)
+
+
+    .. attribute:: WBEM_FLAG_BIDIRECTIONAL(0)
+
+
+    .. attribute:: WBEM_FLAG_FORWARD_ONLY(32)
+
+
+    .. attribute:: WBEM_FLAG_NO_ERROR_OBJECT(64)
+
+
+    .. attribute:: WBEM_FLAG_RETURN_ERROR_OBJECT(0)
+
+
+    .. attribute:: WBEM_FLAG_SEND_STATUS(128)
+
+
+    .. attribute:: WBEM_FLAG_DONT_SEND_STATUS(0)
+
+
+    .. attribute:: WBEM_FLAG_ENSURE_LOCATABLE(256)
+
+
+    .. attribute:: WBEM_FLAG_DIRECT_READ(512)
+
+
+    .. attribute:: WBEM_FLAG_SEND_ONLY_SELECTED(0)
+
+
+    .. attribute:: WBEM_RETURN_WHEN_COMPLETE(0)
+
+
+    .. attribute:: WBEM_RETURN_IMMEDIATELY(16)
+
+
+    .. attribute:: WBEM_MASK_RESERVED_FLAGS(126976)
+
+
+    .. attribute:: WBEM_FLAG_USE_AMENDED_QUALIFIERS(131072)
+
+
+    .. attribute:: WBEM_FLAG_STRONG_VALIDATION(1048576)
+
+tag_WBEM_CONNECT_OPTIONS
+''''''''''''''''''''''''
+.. class:: WBEM_CONNECT_OPTIONS
+
+    Alias for :class:`tag_WBEM_CONNECT_OPTIONS`
+
+
+.. class:: tag_WBEM_CONNECT_OPTIONS
+
+
+    .. attribute:: WBEM_FLAG_CONNECT_REPOSITORY_ONLY(64)
+
+
+    .. attribute:: WBEM_FLAG_CONNECT_USE_MAX_WAIT(128)
+
+
+    .. attribute:: WBEM_FLAG_CONNECT_PROVIDERS(256)
+
+tag_WBEM_QUERY_FLAG_TYPE
+''''''''''''''''''''''''
+.. class:: WBEM_QUERY_FLAG_TYPE
+
+    Alias for :class:`tag_WBEM_QUERY_FLAG_TYPE`
+
+
+.. class:: tag_WBEM_QUERY_FLAG_TYPE
+
+
+    .. attribute:: WBEM_FLAG_DEEP(0)
+
+
+    .. attribute:: WBEM_FLAG_SHALLOW(1)
+
+
+    .. attribute:: WBEM_FLAG_PROTOTYPE(2)
 
