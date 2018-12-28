@@ -12,7 +12,7 @@ class Flag(long):
         self.name = name
 
     def __repr__(self):
-        return "{0}({1})".format(self.name, hex(self))
+        return "{0}({1:#x})".format(self.name, self)
 
     __str__ = __repr__
 
