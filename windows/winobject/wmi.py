@@ -83,18 +83,18 @@ class WmiObject(gdef.IWbemClassObject, WmiComInterface):
     def genus(self):
         """The genus of the object.
 
-        :returns: ``WBEM_GENUS_CLASS(0x1L)`` if the :class:`WmiObject` is a Class and
-        ``WBEM_GENUS_INSTANCE(0x2L)`` for instances and events
+        :returns: ``WBEM_GENUS_CLASS(0x1L)`` if the :class:`WmiObject` is a Class and ``WBEM_GENUS_INSTANCE(0x2L)`` for instances and events.
         """
         return gdef.tag_WBEM_GENUS_TYPE.mapper[self.get("__GENUS")]
 
     ## Higher level API
 
     def get_properties(self, system_properties=False):
-        """Return the list of properties' names available for the current object.
-        If ``system_properties`` is ``False`` property names begining with ``_` are ignored.
+        """Return the list of properties names available for the current object.
+        If ``system_properties`` is ``False`` property names begining with ``_`` are ignored.
 
         :returns: [:class:`str`] -- A list of string
+
         .. note:
 
             About system properties: https://docs.microsoft.com/en-us/windows/desktop/wmisdk/wmi-system-properties

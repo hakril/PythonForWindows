@@ -1,17 +1,31 @@
-Between 0.5 & 0.6:
-    windows.wmi
-        - WmiRequester -> WmiNamespace qui herite maintenat de Iwebmservice
-        - real error display handling :)
-        - Toutes les API WMI :)
+Between 0.4 & 0.5:
+    == New features ==
+        - windows.security
+            - SecurityDescriptor / ACL / ACE objects
+        - Improved Token object
+        - windows.debug
+            - New callback Debugger.on_setup
+
+    == Change / Break ==
+    - windows.winproxy
+        - Kernel32Error replaced by WinproxyError
+            - It seemed weird that ntdll/advapi32/etc raised Kernel32Error..
+    - windows.wmi
+        - Wmi API changed, most of them do not return dict anymore but WmiObject
+            - It can be used like mapping
+            - It offers improved feature
+            - real error display handling :)
+
     - windows.com
-        - ImprovedVariant -> variant + new api variant
-    - debugger.on_setup
-    - ndr string add final \x00 if needed
+        - ImprovedVariant renamed Variant + new api variant
+            - This is not documented yet
+
+    - windows.rpc.ndr
+        - ndr strings add final \x00 when packing if not present
     - crypto
         - CertificateStore.find return None if certif is not found (was raising in the past)
         - removed ECRYPT_DATA_BLOB
             - new CRYPT_DATA_BLOB is an _extended_struct :)
-
 
 
 

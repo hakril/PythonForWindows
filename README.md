@@ -49,7 +49,7 @@ You can also make some operation on threads (suspend/resume/wait/get(or set) con
 >>> windows.current_process.bitness
 32
 >>> windows.current_process.token.integrity
-SECURITY_MANDATORY_MEDIUM_RID(0x2000L)
+SECURITY_MANDATORY_MEDIUM_RID(0x2000)
 >>> proc = [p for p in windows.system.processes if p.name == "notepad.exe"][0]
 >>> proc
 <WinProcess "notepad.exe" pid 16520 at 0x544e410>
@@ -89,7 +89,7 @@ Information about the Windows computer running the script are available through 
 >>> windows.system.computer_name
 'DESKTOP-VKUGISR'
 >>> windows.system.product_type
-VER_NT_WORKSTATION(0x1L)
+VER_NT_WORKSTATION(0x1)
 >>> windows.system.version
 (10, 0)
 >>> windows.system.version_name
@@ -105,7 +105,7 @@ VER_NT_WORKSTATION(0x1L)
 >>> windows.system.logicaldrives[0]
 <LogicalDrive "C:\" (DRIVE_FIXED)>
 >>> windows.system.services[23]
-<ServiceA "Appinfo" SERVICE_RUNNING(0x4L)>
+<ServiceA "Appinfo" SERVICE_RUNNING(0x4)>
 
 ```
 
@@ -187,6 +187,39 @@ a simple x86/x64 assembler.
 '\x81\xff\x00\x00\x00\x00u\x06\xc7\xc0\x01\x00\x00\x00\xc3'
 ```
 
+### Token / Security Descriptor
+
+Objects easing access to some information about ``Token`` and ``SecurityDescriptor`` are also available.
+
+```python
+>>> import windows.security
+>>> import windows.generated_def as gdef
+>>> tok = windows.current_process.token
+>>> tok
+<Token TokenId=0x6a2b4550 Type=TokenPrimary(0x1)>
+>>> tok.username
+u'hakril'
+>>> tok.type
+tagTOKEN_TYPE.TokenPrimary(0x1)
+>>> tok.integrity
+SECURITY_MANDATORY_MEDIUM_RID(0x2000)
+>>> tok.duplicate(type=gdef.TokenImpersonation, impersonation_level=gdef.SecurityIdentification)
+<Token TokenId=0x6a3532ce Type=TokenImpersonation(0x2) ImpersonationLevel=SecurityIdentification(0x1)>
+
+# Security Descriptor
+>>> sd = windows.security.SecurityDescriptor.from_filename("c:\windows\system32\kernel32.dll")
+>>> sd
+<SecurityDescriptor object at 0x054E3DF0>
+>>> windows.utils.lookup_sid(sd.owner)
+(u'NT SERVICE', u'TrustedInstaller')
+>>> sd.dacl
+<Acl count=6>
+>>> list(sd.dacl)
+[<AccessAllowedACE mask=2032127>, <AccessAllowedACE mask=1179817>, <AccessAllowedACE mask=1179817>, <AccessAllowedACE mask=1179817>, <AccessAllowedACE mask=1179817>, <AccessAllowedACE mask=1179817>]
+>>> sd.dacl[1].sid
+<PSID "S-1-5-32-544">
+```
+
 ### Wintrust
 
 To easily script some signature check script, PythonForWindows implements some wrapper functions around ``wintrust.dll``
@@ -202,7 +235,7 @@ SignatureData(signed=True,
     catalog=u'C:\\Windows\\system32\\CatRoot\\{F750E6C3-38EE-11D1-85E5-00C04FC295EE}\\Package_35_for_KB3128650~31bf3856ad364e35~amd64~~6.3.1.2.cat',
     catalogsigned=True, additionalinfo=0L)
 >>> windows.wintrust.full_signature_information(r"C:\Windows\system32\python27.dll")
-SignatureData(signed=False, catalog=None, catalogsigned=False, additionalinfo=TRUST_E_NOSIGNATURE(0x800b0100L))
+SignatureData(signed=False, catalog=None, catalogsigned=False, additionalinfo=TRUST_E_NOSIGNATURE(0x800b0100))
 ```
 
 ### WMI
@@ -234,7 +267,7 @@ The project also contains some wrapping classes around `_winreg` for simpler use
 >>> cuuser_software
 <PyHKey "HKEY_CURRENT_USER\Software">
 >>> cuuser_software.sam
-KEY_READ(0x20019L)
+KEY_READ(0x20019)
 # Explore subkeys
 >>> cuuser_software.subkeys[:3]
 [<PyHKey "HKEY_CURRENT_USER\Software\7-Zip">, <PyHKey "HKEY_CURRENT_USER\Software\AppDataLow">, <PyHKey "HKEY_CURRENT_USER\Software\Audacity">]
@@ -408,9 +441,9 @@ calc.execute(x86.assemble("int3; mov [0x42424242], EAX; ret"))
 d.loop()
 
 ## Ouput ##
-Got exception EXCEPTION_BREAKPOINT(0x80000003L) at 0x77e13c7d
-Got exception EXCEPTION_BREAKPOINT(0x80000003L) at 0x230000
-Got exception EXCEPTION_ACCESS_VIOLATION(0xc0000005L) at 0x230001
+Got exception EXCEPTION_BREAKPOINT(0x80000003) at 0x77e13c7d
+Got exception EXCEPTION_BREAKPOINT(0x80000003) at 0x230000
+Got exception EXCEPTION_ACCESS_VIOLATION(0xc0000005) at 0x230001
 Access Violation: kill target process
 ```
 
@@ -469,10 +502,10 @@ print("Done!")
 
 Code addr = 0x6a0002
 GOT AN HXBP at 0x6a0002
-EXCEPTION !!!! Got a EXCEPTION_SINGLE_STEP(0x80000004L) at 0x6a0003
-EXCEPTION !!!! Got a EXCEPTION_SINGLE_STEP(0x80000004L) at 0x6a0004
-EXCEPTION !!!! Got a EXCEPTION_SINGLE_STEP(0x80000004L) at 0x6a0005
-EXCEPTION !!!! Got a EXCEPTION_SINGLE_STEP(0x80000004L) at 0x770c7c04
+EXCEPTION !!!! Got a EXCEPTION_SINGLE_STEP(0x80000004) at 0x6a0003
+EXCEPTION !!!! Got a EXCEPTION_SINGLE_STEP(0x80000004) at 0x6a0004
+EXCEPTION !!!! Got a EXCEPTION_SINGLE_STEP(0x80000004) at 0x6a0005
+EXCEPTION !!!! Got a EXCEPTION_SINGLE_STEP(0x80000004) at 0x770c7c04
 Done!
 
 ```

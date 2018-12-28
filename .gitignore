@@ -2,3 +2,7 @@
 doctrees
 *.inv
 *.pickle
+
+.vscode/
+.cache/
+dist/

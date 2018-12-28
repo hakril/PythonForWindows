@@ -2,18 +2,15 @@ TODO:
 
 === CRITICAL BEFORE 0.5 ===
 
-- Add news features to index.html
+
+-- CRITICAL BEFORE 0.6 ? --
+
 - Document / fix / release:
     - windows.bits
     - window
-- WMI
-    - verif samples
-    - add create_process sample to doc
-    - rewrite / check doc + samples
-- Token
-    - Finish code
-    - samples
-    - doc :)
+- Ndr:
+    - Handle les struct conformant imbriquees
+    - Handle le packing de struct specifique
 
 ======
 
