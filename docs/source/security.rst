@@ -40,7 +40,7 @@ Acl
 """
 
 .. autoclass:: Acl
-    :special-members: __len__, __iter__
+    :special-members: __len__, __iter__, __getitem__
 
 
 .. _security_ace:

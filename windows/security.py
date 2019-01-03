@@ -535,6 +535,10 @@ class Acl(gdef.ACL):
         return self.AceCount
 
     def __getitem__(self, i):
+        """Return ``ACE`` nb ``i``
+
+        :return: :class:`Ace`
+        """
         try:
             return self.get_ace(i)
         except WindowsError as e:

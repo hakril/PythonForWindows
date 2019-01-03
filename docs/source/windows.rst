@@ -15,6 +15,7 @@ The submodules that you might use by themself are:
     * :mod:`windows.generated_def`
     * :mod:`windows.native_exec`
     * :mod:`windows.winproxy`
+    * :mod:`windows.security`
     * :mod:`windows.wintrust`
     * :mod:`windows.security`
     * :mod:`windows.crypto`
