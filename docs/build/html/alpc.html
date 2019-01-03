@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>11. windows.alpc – Advanced Local Procedure Call &#8212; PythonForWindows 0.4 documentation</title>
+    <title>12. windows.alpc – Advanced Local Procedure Call &#8212; PythonForWindows 0.5 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/css/mbasic.css" type="text/css" />
@@ -16,8 +16,8 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="12. windows.rpc – ALPC-based Windows RPC" href="rpc.html" />
-    <link rel="prev" title="10. windows.crypto – CryptoAPI" href="crypto.html" /> 
+    <link rel="next" title="13. windows.rpc – ALPC-based Windows RPC" href="rpc.html" />
+    <link rel="prev" title="11. windows.crypto – CryptoAPI" href="crypto.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -29,12 +29,12 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="rpc.html" title="12. windows.rpc – ALPC-based Windows RPC"
+          <a href="rpc.html" title="13. windows.rpc – ALPC-based Windows RPC"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="crypto.html" title="10. windows.crypto – CryptoAPI"
+          <a href="crypto.html" title="11. windows.crypto – CryptoAPI"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.4 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.5 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -44,7 +44,7 @@
           <div class="body" role="main">
             
   <div class="section" id="module-windows.alpc">
-<span id="windows-alpc-advanced-local-procedure-call"></span><h1>11. <code class="docutils literal notranslate"><span class="pre">windows.alpc</span></code> – Advanced Local Procedure Call<a class="headerlink" href="#module-windows.alpc" title="Permalink to this headline">¶</a></h1>
+<span id="windows-alpc-advanced-local-procedure-call"></span><h1>12. <code class="docutils literal notranslate"><span class="pre">windows.alpc</span></code> – Advanced Local Procedure Call<a class="headerlink" href="#module-windows.alpc" title="Permalink to this headline">¶</a></h1>
 <p>The <a class="reference internal" href="#module-windows.alpc" title="windows.alpc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.alpc</span></code></a> module regroups the classes that permits to send and receive
 ALPC messages over an ALPC port and the classes representing these messages.</p>
 <div class="admonition note">
@@ -58,7 +58,7 @@ ALPC messages over an ALPC port and the classes representing these messages.</p>
 </div></blockquote>
 </div>
 <div class="section" id="alpc-message">
-<h2>11.1. ALPC Message<a class="headerlink" href="#alpc-message" title="Permalink to this headline">¶</a></h2>
+<h2>12.1. ALPC Message<a class="headerlink" href="#alpc-message" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="windows.alpc.AlpcMessage">
 <em class="property">class </em><code class="descclassname">windows.alpc.</code><code class="descname">AlpcMessage</code><span class="sig-paren">(</span><em>msg_or_size=4096</em>, <em>attributes=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/alpc.html#AlpcMessage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.alpc.AlpcMessage" title="Permalink to this definition">¶</a></dt>
@@ -294,14 +294,14 @@ ALPC messages over an ALPC port and the classes representing these messages.</p>
 
 </div>
 <div class="section" id="alpc-client">
-<h2>11.2. ALPC client<a class="headerlink" href="#alpc-client" title="Permalink to this headline">¶</a></h2>
+<h2>12.2. ALPC client<a class="headerlink" href="#alpc-client" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="windows.alpc.AlpcClient">
 <em class="property">class </em><code class="descclassname">windows.alpc.</code><code class="descname">AlpcClient</code><span class="sig-paren">(</span><em>port_name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/alpc.html#AlpcClient"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.alpc.AlpcClient" title="Permalink to this definition">¶</a></dt>
 <dd><p>An ALPC client able to connect to a port and send/receive messages</p>
 <dl class="method">
 <dt id="windows.alpc.AlpcClient.connect_to_port">
-<code class="descname">connect_to_port</code><span class="sig-paren">(</span><em>port_name</em>, <em>connect_message=None</em>, <em>port_attr=None</em>, <em>port_attr_flags=65536</em>, <em>obj_attr=None</em>, <em>flags=ALPC_MSGFLG_SYNC_REQUEST(0x20000L)</em>, <em>timeout=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/alpc.html#AlpcClient.connect_to_port"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.alpc.AlpcClient.connect_to_port" title="Permalink to this definition">¶</a></dt>
+<code class="descname">connect_to_port</code><span class="sig-paren">(</span><em>port_name</em>, <em>connect_message=None</em>, <em>port_attr=None</em>, <em>port_attr_flags=65536</em>, <em>obj_attr=None</em>, <em>flags=ALPC_MSGFLG_SYNC_REQUEST(0x20000)</em>, <em>timeout=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/alpc.html#AlpcClient.connect_to_port"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.alpc.AlpcClient.connect_to_port" title="Permalink to this definition">¶</a></dt>
 <dd><p>Connect to the ALPC port <code class="docutils literal notranslate"><span class="pre">port_name</span></code>. Most of the parameters have defauls value is <code class="docutils literal notranslate"><span class="pre">None</span></code> is passed.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -359,7 +359,7 @@ ALPC messages over an ALPC port and the classes representing these messages.</p>
 
 <dl class="method">
 <dt id="windows.alpc.AlpcClient.send_receive">
-<code class="descname">send_receive</code><span class="sig-paren">(</span><em>alpc_message</em>, <em>receive_msg=None</em>, <em>flags=ALPC_MSGFLG_SYNC_REQUEST(0x20000L)</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.alpc.AlpcClient.send_receive" title="Permalink to this definition">¶</a></dt>
+<code class="descname">send_receive</code><span class="sig-paren">(</span><em>alpc_message</em>, <em>receive_msg=None</em>, <em>flags=ALPC_MSGFLG_SYNC_REQUEST(0x20000)</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.alpc.AlpcClient.send_receive" title="Permalink to this definition">¶</a></dt>
 <dd><p>Send and receive a message with <code class="docutils literal notranslate"><span class="pre">flags</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -380,7 +380,7 @@ ALPC messages over an ALPC port and the classes representing these messages.</p>
 
 </div>
 <div class="section" id="alpc-server">
-<h2>11.3. ALPC Server<a class="headerlink" href="#alpc-server" title="Permalink to this headline">¶</a></h2>
+<h2>12.3. ALPC Server<a class="headerlink" href="#alpc-server" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="windows.alpc.AlpcServer">
 <em class="property">class </em><code class="descclassname">windows.alpc.</code><code class="descname">AlpcServer</code><span class="sig-paren">(</span><em>port_name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/alpc.html#AlpcServer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.alpc.AlpcServer" title="Permalink to this definition">¶</a></dt>
@@ -464,7 +464,7 @@ ALPC messages over an ALPC port and the classes representing these messages.</p>
 
 <dl class="method">
 <dt id="windows.alpc.AlpcServer.send_receive">
-<code class="descname">send_receive</code><span class="sig-paren">(</span><em>alpc_message</em>, <em>receive_msg=None</em>, <em>flags=ALPC_MSGFLG_SYNC_REQUEST(0x20000L)</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.alpc.AlpcServer.send_receive" title="Permalink to this definition">¶</a></dt>
+<code class="descname">send_receive</code><span class="sig-paren">(</span><em>alpc_message</em>, <em>receive_msg=None</em>, <em>flags=ALPC_MSGFLG_SYNC_REQUEST(0x20000)</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.alpc.AlpcServer.send_receive" title="Permalink to this definition">¶</a></dt>
 <dd><p>Send and receive a message with <code class="docutils literal notranslate"><span class="pre">flags</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -494,20 +494,20 @@ ALPC messages over an ALPC port and the classes representing these messages.</p>
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">11. <code class="docutils literal notranslate"><span class="pre">windows.alpc</span></code> – Advanced Local Procedure Call</a><ul>
-<li><a class="reference internal" href="#alpc-message">11.1. ALPC Message</a></li>
-<li><a class="reference internal" href="#alpc-client">11.2. ALPC client</a></li>
-<li><a class="reference internal" href="#alpc-server">11.3. ALPC Server</a></li>
+<li><a class="reference internal" href="#">12. <code class="docutils literal notranslate"><span class="pre">windows.alpc</span></code> – Advanced Local Procedure Call</a><ul>
+<li><a class="reference internal" href="#alpc-message">12.1. ALPC Message</a></li>
+<li><a class="reference internal" href="#alpc-client">12.2. ALPC client</a></li>
+<li><a class="reference internal" href="#alpc-server">12.3. ALPC Server</a></li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="crypto.html"
-                        title="previous chapter">10. <code class="docutils literal notranslate"><span class="pre">windows.crypto</span></code> – CryptoAPI</a></p>
+                        title="previous chapter">11. <code class="docutils literal notranslate"><span class="pre">windows.crypto</span></code> – CryptoAPI</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="rpc.html"
-                        title="next chapter">12. <code class="docutils literal notranslate"><span class="pre">windows.rpc</span></code> – ALPC-based Windows RPC</a></p>
+                        title="next chapter">13. <code class="docutils literal notranslate"><span class="pre">windows.rpc</span></code> – ALPC-based Windows RPC</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -541,12 +541,12 @@ ALPC messages over an ALPC port and the classes representing these messages.</p>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="rpc.html" title="12. windows.rpc – ALPC-based Windows RPC"
+          <a href="rpc.html" title="13. windows.rpc – ALPC-based Windows RPC"
              >next</a> |</li>
         <li class="right" >
-          <a href="crypto.html" title="10. windows.crypto – CryptoAPI"
+          <a href="crypto.html" title="11. windows.crypto – CryptoAPI"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.4 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.5 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

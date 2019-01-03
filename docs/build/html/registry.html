@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>2.5. Registry &#8212; PythonForWindows 0.4 documentation</title>
+    <title>2.6. Registry &#8212; PythonForWindows 0.5 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/css/mbasic.css" type="text/css" />
@@ -16,8 +16,8 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="2.6. Network" href="network.html" />
-    <link rel="prev" title="2.4. Exception and Context related structures" href="exception.html" /> 
+    <link rel="next" title="2.7. Network" href="network.html" />
+    <link rel="prev" title="2.5. Exception and Context related structures" href="exception.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -29,12 +29,12 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="network.html" title="2.6. Network"
+          <a href="network.html" title="2.7. Network"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="exception.html" title="2.4. Exception and Context related structures"
+          <a href="exception.html" title="2.5. Exception and Context related structures"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="winobject.html" accesskey="U">2. The <code class="docutils literal notranslate"><span class="pre">windows</span></code> objects</a> &#187;</li> 
       </ul>
     </div>  
@@ -45,17 +45,17 @@
           <div class="body" role="main">
             
   <div class="section" id="module-windows.winobject.registry">
-<span id="registry"></span><h1>2.5. Registry<a class="headerlink" href="#module-windows.winobject.registry" title="Permalink to this headline">¶</a></h1>
+<span id="registry"></span><h1>2.6. Registry<a class="headerlink" href="#module-windows.winobject.registry" title="Permalink to this headline">¶</a></h1>
 <p>The <a class="reference internal" href="#windows.winobject.registry.Registry" title="windows.winobject.registry.Registry"><code class="xref py py-class docutils literal notranslate"><span class="pre">Registry</span></code></a> instance is accessible via <a class="reference internal" href="windows.html#windows.winobject.system.System.registry" title="windows.winobject.system.System.registry"><code class="xref py py-attr docutils literal notranslate"><span class="pre">windows.system.registry</span></code></a></p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">See sample <a class="reference internal" href="sample.html#sample-registry"><span class="std std-ref">Registry</span></a></p>
 </div>
 <div class="section" id="id1">
-<h2>2.5.1. Registry<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<h2>2.6.1. Registry<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="windows.winobject.registry.Registry">
-<em class="property">class </em><code class="descclassname">windows.winobject.registry.</code><code class="descname">Registry</code><span class="sig-paren">(</span><em>sam=KEY_READ(0x20019L)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/registry.html#Registry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.registry.Registry" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">windows.winobject.registry.</code><code class="descname">Registry</code><span class="sig-paren">(</span><em>sam=KEY_READ(0x20019)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/registry.html#Registry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.registry.Registry" title="Permalink to this definition">¶</a></dt>
 <dd><p>The <code class="docutils literal notranslate"><span class="pre">Windows</span></code> registry</p>
 <dl class="method">
 <dt id="windows.winobject.registry.Registry.__call__">
@@ -93,10 +93,10 @@
 
 </div>
 <div class="section" id="pyhkey">
-<h2>2.5.2. PyHKey<a class="headerlink" href="#pyhkey" title="Permalink to this headline">¶</a></h2>
+<h2>2.6.2. PyHKey<a class="headerlink" href="#pyhkey" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="windows.winobject.registry.PyHKey">
-<em class="property">class </em><code class="descclassname">windows.winobject.registry.</code><code class="descname">PyHKey</code><span class="sig-paren">(</span><em>surkey</em>, <em>name</em>, <em>sam=KEY_READ(0x20019L)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/registry.html#PyHKey"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.registry.PyHKey" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">windows.winobject.registry.</code><code class="descname">PyHKey</code><span class="sig-paren">(</span><em>surkey</em>, <em>name</em>, <em>sam=KEY_READ(0x20019)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/registry.html#PyHKey"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.registry.PyHKey" title="Permalink to this definition">¶</a></dt>
 <dd><p>A windows registry key</p>
 <dl class="function">
 <dt id="windows.winobject.registry.PyHKey.__call__">
@@ -220,7 +220,7 @@
 
 </div>
 <div class="section" id="keyvalue">
-<h2>2.5.3. KeyValue<a class="headerlink" href="#keyvalue" title="Permalink to this headline">¶</a></h2>
+<h2>2.6.3. KeyValue<a class="headerlink" href="#keyvalue" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="windows.winobject.registry.KeyValue">
 <em class="property">class </em><code class="descclassname">windows.winobject.registry.</code><code class="descname">KeyValue</code><span class="sig-paren">(</span><em>name</em>, <em>value</em>, <em>type</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.registry.KeyValue" title="Permalink to this definition">¶</a></dt>
@@ -256,20 +256,20 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">2.5. Registry</a><ul>
-<li><a class="reference internal" href="#id1">2.5.1. Registry</a></li>
-<li><a class="reference internal" href="#pyhkey">2.5.2. PyHKey</a></li>
-<li><a class="reference internal" href="#keyvalue">2.5.3. KeyValue</a></li>
+<li><a class="reference internal" href="#">2.6. Registry</a><ul>
+<li><a class="reference internal" href="#id1">2.6.1. Registry</a></li>
+<li><a class="reference internal" href="#pyhkey">2.6.2. PyHKey</a></li>
+<li><a class="reference internal" href="#keyvalue">2.6.3. KeyValue</a></li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="exception.html"
-                        title="previous chapter">2.4. Exception and Context related structures</a></p>
+                        title="previous chapter">2.5. Exception and Context related structures</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="network.html"
-                        title="next chapter">2.6. Network</a></p>
+                        title="next chapter">2.7. Network</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -303,12 +303,12 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="network.html" title="2.6. Network"
+          <a href="network.html" title="2.7. Network"
              >next</a> |</li>
         <li class="right" >
-          <a href="exception.html" title="2.4. Exception and Context related structures"
+          <a href="exception.html" title="2.5. Exception and Context related structures"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="winobject.html" >2. The <code class="docutils literal notranslate"><span class="pre">windows</span></code> objects</a> &#187;</li> 
       </ul>
     </div>

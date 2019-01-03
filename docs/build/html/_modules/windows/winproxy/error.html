@@ -1,0 +1,151 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>windows.winproxy.error &#8212; PythonForWindows 0.5 documentation</title>
+    <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/css/mbasic.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.5 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for windows.winproxy.error</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">ctypes</span>
+
+<span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
+<span class="kn">from</span> <span class="nn">windows.generated_def.ntstatus</span> <span class="k">import</span> <span class="n">NtStatusException</span>
+
+<span class="c1"># PFW Winproxy Exception type</span>
+<div class="viewcode-block" id="WinproxyError"><a class="viewcode-back" href="../../../winproxy.html#windows.winproxy.WinproxyError">[docs]</a><span class="k">class</span> <span class="nc">WinproxyError</span><span class="p">(</span><span class="ne">WindowsError</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">func_name</span><span class="p">,</span> <span class="n">error_code</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">win_error</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">WinError</span><span class="p">(</span><span class="n">error_code</span><span class="p">)</span> <span class="c1">#GetLastError by default</span>
+        <span class="n">api_error</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">WinproxyError</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+        <span class="n">api_error</span><span class="o">.</span><span class="n">api_name</span> <span class="o">=</span> <span class="n">func_name</span>
+        <span class="n">api_error</span><span class="o">.</span><span class="n">winerror</span> <span class="o">=</span> <span class="n">win_error</span><span class="o">.</span><span class="n">winerror</span> <span class="o">&amp;</span> <span class="mh">0xffffffff</span>
+        <span class="n">api_error</span><span class="o">.</span><span class="n">strerror</span> <span class="o">=</span> <span class="n">win_error</span><span class="o">.</span><span class="n">strerror</span>
+        <span class="n">api_error</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="p">(</span><span class="n">func_name</span><span class="p">,</span> <span class="n">win_error</span><span class="o">.</span><span class="n">winerror</span><span class="p">,</span> <span class="n">win_error</span><span class="o">.</span><span class="n">strerror</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">api_error</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func_name</span><span class="p">,</span> <span class="n">error_code</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">WinproxyError</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">func_name</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">: </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api_name</span><span class="p">,</span> <span class="nb">super</span><span class="p">(</span><span class="n">WinproxyError</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">: </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api_name</span><span class="p">,</span> <span class="nb">super</span><span class="p">(</span><span class="n">WinproxyError</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__str__</span><span class="p">())</span></div>
+
+
+<span class="c1"># winproxy Error check</span>
+<span class="n">no_error_check</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="k">def</span> <span class="nf">fail_on_minus_one</span><span class="p">(</span><span class="n">func_name</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Raise WinproxyError if call result is -1&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">result</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">WinproxyError</span><span class="p">(</span><span class="n">func_name</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">args</span>
+
+
+<span class="k">def</span> <span class="nf">fail_on_zero</span><span class="p">(</span><span class="n">func_name</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;raise WinproxyError if result is 0&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">result</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">WinproxyError</span><span class="p">(</span><span class="n">func_name</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">args</span>
+
+
+<span class="k">def</span> <span class="nf">succeed_on_zero</span><span class="p">(</span><span class="n">func_name</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;raise WinproxyError if result is NOT 0&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">result</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">WinproxyError</span><span class="p">(</span><span class="n">func_name</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">args</span>
+
+
+<span class="k">def</span> <span class="nf">result_is_error_code</span><span class="p">(</span><span class="n">func_name</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;raise WinproxyError(result) if result is NOT 0&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">result</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">WinproxyError</span><span class="p">(</span><span class="n">func_name</span><span class="p">,</span> <span class="n">error_code</span><span class="o">=</span><span class="n">result</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">args</span>
+
+
+<span class="k">def</span> <span class="nf">result_is_ntstatus</span><span class="p">(</span><span class="n">func_name</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;raise NtStatusException is result is not 0&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">result</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">NtStatusException</span><span class="p">(</span><span class="n">result</span> <span class="o">&amp;</span> <span class="mh">0xffffffff</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">args</span>
+
+
+<span class="k">def</span> <span class="nf">result_is_handle</span><span class="p">(</span><span class="n">func_name</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;raise WinproxyError is result is INVALID_HANDLE_VALUE&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">result</span> <span class="o">==</span> <span class="n">gdef</span><span class="o">.</span><span class="n">INVALID_HANDLE_VALUE</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">WinproxyError</span><span class="p">(</span><span class="n">func_name</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">args</span>
+
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.5 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2015, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

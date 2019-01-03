@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>windows.winobject.event_log &#8212; PythonForWindows 0.4 documentation</title>
+    <title>windows.winobject.event_log &#8212; PythonForWindows 0.5 documentation</title>
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/css/mbasic.css" type="text/css" />
@@ -26,7 +26,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -121,7 +121,14 @@
 
 <span class="sd">        :rtype: [:class:`EvtEvent`] -- A list of Event</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EvtQuery.first"><a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.EvtQuery.first">[docs]</a>    <span class="k">def</span> <span class="nf">first</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="c1"># SqlAlchemy like :) -&gt; allow testing in interactive console</span>
+        <span class="sd">&quot;&quot;&quot;Return the first query result</span>
+
+<span class="sd">        :rtype: :class:`EvtEvent` -- An Event</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span></div></div>
 
 
 <div class="viewcode-block" id="EvtEvent"><a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.EvtEvent">[docs]</a><span class="k">class</span> <span class="nc">EvtEvent</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">EVT_HANDLE</span><span class="p">):</span>
@@ -186,7 +193,23 @@
         <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EvtRenderEventValues</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">value</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">result</span><span class="p">]</span>
 
+    <span class="k">def</span> <span class="nf">get_raw_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">EvtRenderContextValues</span><span class="p">):</span>
+        <span class="n">nbelt</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+        <span class="n">pwstr_values</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">LPWSTR</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">values</span><span class="p">)</span>
+        <span class="n">pwstr_rarray</span> <span class="o">=</span> <span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">LPWSTR</span> <span class="o">*</span> <span class="n">nbelt</span><span class="p">)(</span><span class="o">*</span><span class="n">pwstr_values</span><span class="p">)</span>
+        <span class="c1"># https://msdn.microsoft.com/en-us/library/windows/desktop/aa385352(v=vs.85).aspx</span>
+        <span class="c1"># An array of XPath expressions that uniquely identify a node or attribute in the event that you want to render.</span>
+        <span class="c1"># Each value wil return 1 node :)</span>
+        <span class="n">ctx</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">EvtCreateRenderContext</span><span class="p">(</span><span class="n">nbelt</span><span class="p">,</span> <span class="n">pwstr_rarray</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EvtRenderContextValues</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EvtRenderEventValues</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+
     <span class="c1"># Properties arround common Event/System values</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">provider</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">system_values</span><span class="p">()[</span><span class="n">gdef</span><span class="o">.</span><span class="n">EvtSystemProviderName</span><span class="p">]</span>
+
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The ID of the Event&quot;&quot;&quot;</span>
@@ -228,7 +251,16 @@
 
 <span class="sd">        :type: :class:`EventMetadata`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel</span><span class="o">.</span><span class="n">get_event_metadata</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel</span><span class="o">.</span><span class="n">get_event_metadata</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">classic</span><span class="p">:</span>
+                <span class="k">raise</span>
+        <span class="c1"># id not found: try via the Provider in the event (classic channel)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel</span><span class="o">.</span><span class="n">get_classic_event_metadata</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">provider</span><span class="p">)</span>
+
+
+
 
     <span class="c1"># Test</span>
     <span class="nd">@property</span>
@@ -239,6 +271,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># What about classic channels where there is no event_metadata ?</span>
         <span class="c1"># Return a dict with [0-1-2-3-4] as key ? raise ?</span>
+
         <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span><span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">event_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">event_values</span><span class="p">())}</span>
 
 
@@ -269,22 +302,36 @@
         <span class="n">gdef</span><span class="o">.</span><span class="n">EvtVarTypeFileTime</span>   <span class="p">:</span> <span class="s1">&#39;FileTimeVal&#39;</span><span class="p">,</span>
         <span class="n">gdef</span><span class="o">.</span><span class="n">EvtVarTypeSysTime</span>    <span class="p">:</span> <span class="s1">&#39;SysTimeVal&#39;</span><span class="p">,</span>
         <span class="n">gdef</span><span class="o">.</span><span class="n">EvtVarTypeSid</span>        <span class="p">:</span> <span class="s1">&#39;SidVal&#39;</span><span class="p">,</span>
-        <span class="n">gdef</span><span class="o">.</span><span class="n">EvtVarTypeHexInt32</span>   <span class="p">:</span> <span class="s1">&#39;BinaryVal&#39;</span><span class="p">,</span>
-        <span class="n">gdef</span><span class="o">.</span><span class="n">EvtVarTypeHexInt64</span>   <span class="p">:</span> <span class="s1">&#39;BinaryVal&#39;</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">EvtVarTypeHexInt32</span>   <span class="p">:</span> <span class="s1">&#39;UInt32Val&#39;</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">EvtVarTypeHexInt64</span>   <span class="p">:</span> <span class="s1">&#39;UInt64Val&#39;</span><span class="p">,</span>
         <span class="n">gdef</span><span class="o">.</span><span class="n">EvtVarTypeEvtHandle</span>  <span class="p">:</span> <span class="s1">&#39;EvtHandleVal&#39;</span><span class="p">,</span>
         <span class="n">gdef</span><span class="o">.</span><span class="n">EvtVarTypeEvtXml</span>     <span class="p">:</span> <span class="s1">&#39;XmlVal&#39;</span><span class="p">,</span>
+        <span class="c1"># Array types: TODO: generic stuff</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">EvtVarTypeString</span> <span class="o">+</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EVT_VARIANT_TYPE_ARRAY</span> <span class="p">:</span> <span class="s2">&quot;StringArr&quot;</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">EvtVarTypeUInt16</span> <span class="o">+</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EVT_VARIANT_TYPE_ARRAY</span> <span class="p">:</span> <span class="s2">&quot;UInt16Arr&quot;</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">EvtVarTypeUInt32</span> <span class="o">+</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EVT_VARIANT_TYPE_ARRAY</span> <span class="p">:</span> <span class="s2">&quot;UInt32Arr&quot;</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">EvtVarTypeUInt64</span> <span class="o">+</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EVT_VARIANT_TYPE_ARRAY</span> <span class="p">:</span> <span class="s2">&quot;UInt64Arr&quot;</span><span class="p">,</span>
     <span class="p">}</span>
     <span class="n">NoneValue</span> <span class="o">=</span> <span class="kc">None</span>
+
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">Type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">raw_type</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">ImprovedEVT_VARIANT</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">Type</span>
-        <span class="k">return</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EVT_VARIANT_TYPE</span><span class="o">.</span><span class="n">mapper</span><span class="p">[</span><span class="n">raw_type</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EVT_VARIANT_TYPE</span><span class="o">.</span><span class="n">mapper</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">raw_type</span><span class="p">,</span> <span class="n">raw_type</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="c1"># Prototype !!</span>
         <span class="n">attrname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">VALUE_MAPPER</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">Type</span><span class="p">]</span>
         <span class="c1"># print(&quot;Resolve type &lt;{0}&gt; -&gt; {1}&quot;.format(self.Type, attrname))</span>
-        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attrname</span><span class="p">)</span>
+        <span class="n">v</span> <span class="o">=</span>  <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attrname</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Type</span> <span class="o">==</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EvtVarTypeBinary</span><span class="p">:</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">v</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">Count</span><span class="p">]</span> <span class="c1"># No need for a raw UBYTE ptr</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">Type</span> <span class="o">==</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EvtVarTypeGuid</span><span class="p">:</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># Deref LP_GUID</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">Type</span> <span class="o">&amp;</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EVT_VARIANT_TYPE_ARRAY</span><span class="p">:</span>
+            <span class="c1"># TODO: handle all array type</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">v</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">Count</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">v</span>
 
     <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;&lt;</span><span class="si">{0}</span><span class="s2"> of type=</span><span class="si">{1}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Type</span><span class="p">)</span>
@@ -318,6 +365,7 @@
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">event_metadata_by_id</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">classic_event_metadata_by_id</span> <span class="o">=</span> <span class="p">{}</span> <span class="c1"># For classic only</span>
 
 <div class="viewcode-block" id="EvtChannel.query"><a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.EvtChannel.query">[docs]</a>    <span class="k">def</span> <span class="nf">query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ids</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Query the event with the ``ids`` or perform a query with the raw query ``filter``</span>
@@ -377,6 +425,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">event_metadata_by_id</span> <span class="o">=</span> <span class="p">{</span><span class="n">evtm</span><span class="o">.</span><span class="n">id</span><span class="p">:</span> <span class="n">evtm</span> <span class="k">for</span> <span class="n">evtm</span> <span class="ow">in</span> <span class="n">pub_metada</span><span class="o">.</span><span class="n">events_metadata</span><span class="p">}</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">event_metadata_by_id</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span></div>
 
+    <span class="k">def</span> <span class="nf">get_classic_event_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">providername</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">providername</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">classic_event_metadata_by_id</span><span class="p">:</span>
+            <span class="c1"># print(&quot;CALCUL FOR PROVIDER: &lt;{0}&gt; !!!!!!!!!!!!!!&quot;.format(providername))</span>
+            <span class="n">publisher</span> <span class="o">=</span> <span class="n">EvtPublisher</span><span class="p">(</span><span class="n">providername</span><span class="p">)</span>
+            <span class="n">events_metadata</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="o">.</span><span class="n">id</span><span class="p">:</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">publisher</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">events_metadata</span><span class="p">}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">classic_event_metadata_by_id</span><span class="p">[</span><span class="n">providername</span><span class="p">]</span> <span class="o">=</span> <span class="n">events_metadata</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">classic_event_metadata_by_id</span><span class="p">[</span><span class="n">providername</span><span class="p">][</span><span class="nb">id</span><span class="p">]</span>
+
 
     <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;&lt;</span><span class="si">{0}</span><span class="s1"> &quot;</span><span class="si">{1}</span><span class="s1">&quot;&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
@@ -411,6 +467,9 @@
         <span class="sd">&quot;&quot;&quot;The :class:`EvtPublisher` for the channel&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">EvtPublisher</span><span class="p">(</span><span class="n">chaninfo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EvtChannelConfigOwningPublisher</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 
+<div class="viewcode-block" id="ChannelConfig.publishers"><a class="viewcode-back" href="../../../evtlog.html#windows.winobject.event_log.ChannelConfig.publishers">[docs]</a>    <span class="k">def</span> <span class="nf">publishers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s2">&quot;TEST&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">EvtPublisher</span><span class="p">(</span><span class="n">pub</span><span class="p">)</span> <span class="k">for</span> <span class="n">pub</span> <span class="ow">in</span> <span class="n">chaninfo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EvtChannelPublisherList</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">]</span></div>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">classic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -539,6 +598,11 @@
         <span class="k">return</span> <span class="n">eventinfo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EventMetadataEventID</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
 
     <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The version of the Event&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">eventinfo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EventMetadataEventVersion</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">channel_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The the Channel attribute of the Event definition&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">eventinfo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">EventMetadataEventChannel</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
@@ -656,12 +720,14 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">open_channel</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="k">pass</span>
+            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">winerror</span> <span class="o">==</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ERROR_ACCESS_DENIED</span><span class="p">:</span>
+                <span class="k">raise</span>
 
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">open_publisher</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="k">pass</span>
+            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">winerror</span> <span class="o">==</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ERROR_ACCESS_DENIED</span><span class="p">:</span>
+                <span class="k">raise</span>
         <span class="c1"># Raise FILE_NOT_FOUND if not found (last chance)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">open_evtx_file</span><span class="p">(</span><span class="n">name</span><span class="p">)</span></div></div>
 
@@ -731,7 +797,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>

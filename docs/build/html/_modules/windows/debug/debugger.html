@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>windows.debug.debugger &#8212; PythonForWindows 0.4 documentation</title>
+    <title>windows.debug.debugger &#8212; PythonForWindows 0.5 documentation</title>
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/css/mbasic.css" type="text/css" />
@@ -26,7 +26,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -78,19 +78,19 @@
 
 <span class="sd">        * Standard BP (int3)</span>
 <span class="sd">        * Hardware-Exec BP (DrX)</span>
-<span class="sd">        * Memory BP (virtual_protect)&quot;&quot;&quot;</span>
+<span class="sd">        * Memory BP (virtual_protect)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Debugger.__init__"><a class="viewcode-back" href="../../../debug.html#windows.debug.Debugger.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;``target`` must be a debuggable :class:`WinProcess`.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_init_dispatch_handlers</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="n">target</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">is_target_launched</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="c1">#if not already_debuggable:</span>
-        <span class="c1">#    winproxy.DebugActiveProcess(target.pid)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">processes</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">threads</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">current_process</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">current_thread</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">first_bp_encoutered</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="c1"># List of breakpoints</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">breakpoints</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_pending_breakpoints</span> <span class="o">=</span> <span class="p">{}</span> <span class="c1">#Breakpoints to put in new process / threads</span>
@@ -301,6 +301,7 @@
         <span class="n">addr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resolve</span><span class="p">(</span><span class="n">bp</span><span class="o">.</span><span class="n">addr</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">addr</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span>
+        <span class="n">dbgprint</span><span class="p">(</span><span class="s2">&quot;Setting soft-BP at &lt;</span><span class="si">{0:#x}</span><span class="s2">&gt; in &lt;</span><span class="si">{1}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="n">target</span><span class="p">),</span> <span class="s2">&quot;DBG&quot;</span><span class="p">)</span>
         <span class="n">bp</span><span class="o">.</span><span class="n">_addr</span> <span class="o">=</span> <span class="n">addr</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_memory_save</span><span class="p">[</span><span class="n">target</span><span class="o">.</span><span class="n">pid</span><span class="p">][</span><span class="n">addr</span><span class="p">]</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">read_memory</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">breakpoints</span><span class="p">[</span><span class="n">target</span><span class="o">.</span><span class="n">pid</span><span class="p">][</span><span class="n">addr</span><span class="p">]</span> <span class="o">=</span> <span class="n">bp</span>
@@ -342,6 +343,7 @@
         <span class="n">x</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">empty_drx</span><span class="p">)]</span> <span class="o">=</span> <span class="n">bp</span>
         <span class="n">target</span><span class="o">.</span><span class="n">set_context</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">breakpoints</span><span class="p">[</span><span class="n">target</span><span class="o">.</span><span class="n">owner</span><span class="o">.</span><span class="n">pid</span><span class="p">][</span><span class="n">addr</span><span class="p">]</span> <span class="o">=</span> <span class="n">bp</span>
+        <span class="n">dbgprint</span><span class="p">(</span><span class="s2">&quot;Setting HXBP at &lt;</span><span class="si">{0:#x}</span><span class="s2">&gt; in &lt;</span><span class="si">{1}</span><span class="s2">&gt; (Dr</span><span class="si">{2}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">empty_drx</span><span class="p">),</span> <span class="s2">&quot;DBG&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">True</span>
 
     <span class="k">def</span> <span class="nf">_remove_breakpoint_HXBP</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bp</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
@@ -540,6 +542,17 @@
             <span class="n">dbgprint</span><span class="p">(</span><span class="s2">&quot;Single step as begin of _handle_exception_breakpoint&quot;</span><span class="p">,</span> <span class="s2">&quot;DBG&quot;</span><span class="p">)</span>
             <span class="c1"># import pdb;pdb.set_trace()</span>
             <span class="n">YOLO</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="c1"># Sub-method _do_setup() ?</span>
+        <span class="n">dbg_has_setup</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">first_bp_encoutered</span><span class="p">:</span>
+            <span class="n">dbg_has_setup</span> <span class="o">=</span> <span class="ow">not</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_setup</span><span class="p">,</span> <span class="s2">&quot;_abstract_on_setup_&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">first_bp_encoutered</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">if</span> <span class="n">dbg_has_setup</span><span class="p">:</span>
+                <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">DisabledMemoryBreakpoint</span><span class="p">():</span>
+                    <span class="n">continue_flag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_setup</span><span class="p">()</span> <span class="c1"># Handle single-step here ?</span>
+                    <span class="c1"># Check killed in action ?</span>
+        <span class="c1"># What if setup + BP object() ?</span>
         <span class="k">if</span> <span class="n">excp_addr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">breakpoints</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">pid</span><span class="p">]:</span>
             <span class="n">thread</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_thread</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">32</span> <span class="ow">and</span> <span class="n">excp_bitness</span> <span class="o">==</span> <span class="mi">64</span><span class="p">:</span>
@@ -561,6 +574,8 @@
             <span class="k">if</span> <span class="n">excp_addr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">breakpoints</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">pid</span><span class="p">]:</span>
                 <span class="c1"># Setup BP if not suppressed</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_pass_breakpoint</span><span class="p">(</span><span class="n">excp_addr</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">continue_flag</span>
+        <span class="k">if</span> <span class="n">dbg_has_setup</span><span class="p">:</span> <span class="c1"># setup() was called on this BP-event: no on_exception()</span>
             <span class="k">return</span> <span class="n">continue_flag</span>
         <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">DisabledMemoryBreakpoint</span><span class="p">():</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_exception</span><span class="p">(</span><span class="n">exception</span><span class="p">)</span>
@@ -679,7 +694,7 @@
 
         <span class="n">excp_code</span> <span class="o">=</span> <span class="n">exception</span><span class="o">.</span><span class="n">ExceptionRecord</span><span class="o">.</span><span class="n">ExceptionCode</span>
         <span class="n">excp_addr</span> <span class="o">=</span> <span class="n">exception</span><span class="o">.</span><span class="n">ExceptionRecord</span><span class="o">.</span><span class="n">ExceptionAddress</span>
-        <span class="k">if</span> <span class="n">excp_code</span> <span class="ow">in</span> <span class="p">[</span><span class="n">EXCEPTION_BREAKPOINT</span><span class="p">,</span> <span class="n">STATUS_WX86_BREAKPOINT</span><span class="p">]</span> <span class="ow">and</span> <span class="n">excp_addr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">breakpoints</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">pid</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">excp_code</span> <span class="ow">in</span> <span class="p">[</span><span class="n">EXCEPTION_BREAKPOINT</span><span class="p">,</span> <span class="n">STATUS_WX86_BREAKPOINT</span><span class="p">]:</span>
             <span class="n">dbgprint</span><span class="p">(</span><span class="s2">&quot;Handle exception as breakpoint&quot;</span><span class="p">,</span> <span class="s2">&quot;DBG&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle_exception_breakpoint</span><span class="p">(</span><span class="n">exception</span><span class="p">,</span> <span class="n">excp_addr</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">excp_code</span> <span class="ow">in</span> <span class="p">[</span><span class="n">EXCEPTION_SINGLE_STEP</span><span class="p">,</span> <span class="n">STATUS_WX86_SINGLE_STEP</span><span class="p">]:</span>
@@ -1017,6 +1032,24 @@
         <span class="k">return</span> <span class="mi">64</span></div>
 
     <span class="c1"># Public callback</span>
+<div class="viewcode-block" id="Debugger.on_setup"><a class="viewcode-back" href="../../../debug.html#windows.debug.Debugger.on_setup">[docs]</a>    <span class="k">def</span> <span class="nf">on_setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Called on the first breakpoint event occuring in the debugger.</span>
+<span class="sd">        This callback allow to setup hook / interact with the debugee when ready:</span>
+
+<span class="sd">        - If :func:`on_setup` is overriden by a subclass it will be called and :func:`on_exception` will NOT be called for this event (first BP).</span>
+<span class="sd">        - If :func:`on_setup` is not defined the first BP will trigger an :func:`on_exception`.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            see sample :ref:`sample_debugger_on_setup`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+    <span class="c1"># Help detect if on_setup was override</span>
+    <span class="n">on_setup</span><span class="o">.</span><span class="n">_abstract_on_setup_</span> <span class="o">=</span> <span class="kc">True</span>
+
+
 <div class="viewcode-block" id="Debugger.on_exception"><a class="viewcode-back" href="../../../debug.html#windows.debug.Debugger.on_exception">[docs]</a>    <span class="k">def</span> <span class="nf">on_exception</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exception</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Called on exception event other that known breakpoint or requested single step. ``exception`` is one of the following type:</span>
 
@@ -1120,7 +1153,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>

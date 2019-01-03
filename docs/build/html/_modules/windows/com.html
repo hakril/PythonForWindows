@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>windows.com &#8212; PythonForWindows 0.4 documentation</title>
+    <title>windows.com &#8212; PythonForWindows 0.5 documentation</title>
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/css/mbasic.css" type="text/css" />
@@ -26,7 +26,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">PythonForWindows 0.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">PythonForWindows 0.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -46,6 +46,7 @@
 <span class="kn">from</span> <span class="nn">windows</span> <span class="k">import</span> <span class="n">winproxy</span>
 <span class="kn">from</span> <span class="nn">windows.generated_def.winstructs</span> <span class="k">import</span> <span class="o">*</span>
 
+<span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
 <span class="kn">from</span> <span class="nn">windows.generated_def</span> <span class="k">import</span> <span class="n">RPC_C_IMP_LEVEL_IMPERSONATE</span><span class="p">,</span> <span class="n">CLSCTX_INPROC_SERVER</span>
 <span class="kn">from</span> <span class="nn">windows.generated_def</span> <span class="k">import</span> <span class="n">interfaces</span>
 <span class="kn">from</span> <span class="nn">windows.generated_def.interfaces</span> <span class="k">import</span> <span class="n">generate_IID</span><span class="p">,</span> <span class="n">IID</span>
@@ -83,8 +84,8 @@
     <span class="k">return</span> <span class="n">clsid</span>
 
 <span class="c1"># Improved COM object</span>
-<span class="c1"># Todo: ctypes_genertation extended struct ?</span>
-<span class="k">class</span> <span class="nc">ImprovedSAFEARRAY</span><span class="p">(</span><span class="n">SAFEARRAY</span><span class="p">):</span>
+<span class="c1"># Todo: ctypes_generation extended struct ?</span>
+<span class="k">class</span> <span class="nc">SafeArray</span><span class="p">(</span><span class="n">SAFEARRAY</span><span class="p">):</span>
         <span class="nd">@classmethod</span>
         <span class="k">def</span> <span class="nf">of_type</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
             <span class="bp">self</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_address</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span>
@@ -93,7 +94,7 @@
 
         <span class="nd">@classmethod</span>
         <span class="k">def</span> <span class="nf">from_PSAFEARRAY</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">psafearray</span><span class="p">):</span>
-            <span class="n">res</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">psafearray</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">ImprovedSAFEARRAY</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">psafearray</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">SafeArray</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
             <span class="k">return</span> <span class="n">res</span>
 
         <span class="k">def</span> <span class="nf">to_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -130,111 +131,155 @@
 <span class="c1">#VT_LPWSTR : LPWSTR,</span>
 <span class="c1">#}</span>
 
-<span class="k">class</span> <span class="nc">ImprovedVariant</span><span class="p">(</span><span class="n">VARIANT</span><span class="p">):</span>
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">asbstr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">vt</span> <span class="o">!=</span> <span class="n">VT_BSTR</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;asbstr on non-bstr variant&quot;</span><span class="p">)</span>
-        <span class="c1">#import pdb;pdb.set_trace()</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_VARIANT_NAME_3</span><span class="o">.</span><span class="n">bstrVal</span>
+<span class="c1"># VARIANT type checker</span>
+<span class="c1"># Allow to guess a VARIANT_TYPE og a python value</span>
 
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">aslong</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">vt</span> <span class="ow">in</span> <span class="p">[</span><span class="n">VT_I4</span><span class="p">]:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;aslong on non-long variant&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_VARIANT_NAME_3</span><span class="o">.</span><span class="n">lVal</span>
+<span class="k">def</span> <span class="nf">never_match</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="k">return</span> <span class="kc">False</span>
 
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">asbool</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">vt</span> <span class="ow">in</span> <span class="p">[</span><span class="n">VT_BOOL</span><span class="p">]:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;get_bstr on non-bool variant&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_VARIANT_NAME_3</span><span class="o">.</span><span class="n">boolVal</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">check_type_null</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span>
 
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">asdispatch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">vt</span> <span class="ow">in</span> <span class="p">[</span><span class="n">VT_DISPATCH</span><span class="p">]:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;asdispatch on non-VT_DISPATCH variant&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">interfaces</span><span class="o">.</span><span class="n">IDispatch</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_VARIANT_NAME_3</span><span class="o">.</span><span class="n">pdispVal</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">check_type_i4</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="c1"># 31 ? as we may want to keep sign :)</span>
+    <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">long</span><span class="p">))</span> <span class="ow">and</span> <span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="mi">32</span>
 
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">asshort</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">vt</span> <span class="ow">in</span> <span class="p">[</span><span class="n">VT_I2</span><span class="p">]:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;asshort on non-VT_I2 variant&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_VARIANT_NAME_3</span><span class="o">.</span><span class="n">iVal</span>
+<span class="k">def</span> <span class="nf">check_type_i8</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="c1"># 63 ? as we may want to keep sign :)</span>
+    <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">long</span><span class="p">))</span> <span class="ow">and</span> <span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="mi">64</span>
 
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">asbyte</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">vt</span> <span class="ow">in</span> <span class="p">[</span><span class="n">VT_UI1</span><span class="p">]:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;asbyte on non-VT_UI1 variant&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_VARIANT_NAME_3</span><span class="o">.</span><span class="n">bVal</span>
+<span class="k">def</span> <span class="nf">check_type_bstr</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">basestring</span><span class="p">)</span>
 
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">asunknown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">vt</span> <span class="ow">in</span> <span class="p">[</span><span class="n">VT_UNKNOWN</span><span class="p">]:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;asunknown on non-VT_UNKNOWN variant&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_VARIANT_NAME_3</span><span class="o">.</span><span class="n">punkVal</span>
+<span class="k">def</span> <span class="nf">check_type_bool</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">bool</span><span class="p">)</span>
 
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">asarray</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">vt</span> <span class="o">&amp;</span> <span class="n">VT_ARRAY</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;asarray on non-VT_ARRAY variant&quot;</span><span class="p">)</span>
-        <span class="c1"># TODO: auto extract VT_TYPE for the array ?</span>
-        <span class="c1">#type = VT_VALUE_TO_TYPE[self.vt &amp; VT_TYPEMASK]</span>
-        <span class="k">return</span> <span class="n">ImprovedSAFEARRAY</span><span class="o">.</span><span class="n">from_PSAFEARRAY</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_VARIANT_NAME_3</span><span class="o">.</span><span class="n">parray</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">check_type_array</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="k">return</span> <span class="kc">True</span>
 
 
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">aslong_array</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">vt</span> <span class="o">&amp;</span> <span class="n">VT_I4</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;as_bstr_array on non-VT_BSTR variant&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">asarray</span><span class="o">.</span><span class="n">to_list</span><span class="p">(</span><span class="n">LONG</span><span class="p">)</span>
+<span class="n">VARIAN_NAME_3_TYPE</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">VARIANT</span><span class="o">.</span><span class="n">_fields_</span> <span class="k">if</span> <span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;_VARIANT_NAME_3&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="nf">generate_asarray_property</span><span class="p">(</span><span class="n">vttype</span><span class="p">):</span>
+<span class="n">empty</span> <span class="o">=</span> <span class="nb">object</span><span class="p">()</span>
+<span class="k">class</span> <span class="nc">Variant</span><span class="p">(</span><span class="n">VARIANT</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">empty</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_value_and_type</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">elif</span> <span class="n">value</span> <span class="ow">is</span> <span class="n">empty</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vt</span> <span class="o">=</span> <span class="n">VT_EMPTY</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">guess_type_and_set_value</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+    <span class="c1"># Copy raw-ctypes fields which is a descriptor :)</span>
+    <span class="n">rawvt</span> <span class="o">=</span> <span class="n">VARIANT</span><span class="o">.</span><span class="n">vt</span>
+
+    <span class="c1"># Most of the value in the colunm[1]</span>
+    <span class="c1"># are attribute of the sub-union _VARIANT_NAME_3</span>
+    <span class="c1"># This union must be ctypes-anonymous for this code to works</span>
+    <span class="c1"># We want to access these directly from the VARIANT</span>
+    <span class="c1"># to allow custom descriptor for complexe type to be referenced here</span>
+    <span class="n">CHECK_TYPE</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="c1"># Order is important</span>
+        <span class="c1"># as VT_I4 check may match VT_BOOL values</span>
+        <span class="c1"># VT_BOOL check must be before VT_I4 one</span>
+        <span class="p">(</span><span class="n">VT_BOOL</span><span class="p">,</span> <span class="s2">&quot;boolVal&quot;</span><span class="p">,</span> <span class="n">check_type_bool</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">VT_I4</span><span class="p">,</span> <span class="s2">&quot;lVal&quot;</span><span class="p">,</span> <span class="n">check_type_i4</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">VT_I8</span><span class="p">,</span> <span class="s2">&quot;llVal&quot;</span><span class="p">,</span> <span class="n">check_type_i8</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">VT_BSTR</span><span class="p">,</span> <span class="s2">&quot;bstrVal&quot;</span><span class="p">,</span> <span class="n">check_type_bstr</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">VT_NULL</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">check_type_null</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">VT_EMPTY</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">never_match</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">VT_DISPATCH</span><span class="p">,</span> <span class="s2">&quot;pdispVal&quot;</span><span class="p">,</span> <span class="n">never_match</span><span class="p">),</span> <span class="c1"># I cannot recognize DISPATCH ptr for now</span>
+        <span class="p">(</span><span class="n">VT_UNKNOWN</span><span class="p">,</span> <span class="s2">&quot;punkVal&quot;</span><span class="p">,</span> <span class="n">never_match</span><span class="p">),</span> <span class="c1"># recognise PFW ComInterface ?</span>
+        <span class="c1"># Test: do not allow auto-creation of small int values</span>
+        <span class="c1"># I don&#39;t know but a feel it may confuse some API expecting VT_I4</span>
+        <span class="p">(</span><span class="n">VT_I2</span><span class="p">,</span> <span class="s2">&quot;iVal&quot;</span><span class="p">,</span> <span class="n">never_match</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">VT_UI1</span><span class="p">,</span> <span class="s2">&quot;bVal&quot;</span><span class="p">,</span> <span class="n">never_match</span><span class="p">),</span>
+    <span class="p">]</span>
+
+    <span class="n">VARIANT_TYPE_BY_NAME</span> <span class="o">=</span> <span class="p">{</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="n">f</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">VARIAN_NAME_3_TYPE</span><span class="o">.</span><span class="n">_fields_</span><span class="p">}</span>
+    <span class="n">QUICK_CHECK_TYPE</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">:</span> <span class="n">y</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">CHECK_TYPE</span><span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">get_vt</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">rawvt</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">Variant</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">vt</span>
+        <span class="k">return</span> <span class="n">gdef</span><span class="o">.</span><span class="n">VARENUM</span><span class="o">.</span><span class="n">mapper</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">rawvt</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">set_vt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rawvt</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="n">vt</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_vt</span><span class="p">,</span> <span class="n">set_vt</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">set_value_and_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="nb">type</span><span class="p">):</span>
+        <span class="n">attr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">QUICK_CHECK_TYPE</span><span class="p">[</span><span class="nb">type</span><span class="p">]</span>
+        <span class="c1"># No check: user must be careful about non-match value&amp;type</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vt</span> <span class="o">=</span> <span class="nb">type</span>
+
+    <span class="k">def</span> <span class="nf">get_value_based_on_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">rawvt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rawvt</span>
+        <span class="k">if</span> <span class="n">rawvt</span> <span class="o">&amp;</span> <span class="n">VT_ARRAY</span><span class="p">:</span>
+            <span class="n">realtype</span> <span class="o">=</span> <span class="n">rawvt</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">VT_ARRAY</span>
+            <span class="n">attr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">QUICK_CHECK_TYPE</span><span class="p">[</span><span class="n">realtype</span><span class="p">]</span>
+            <span class="n">attrtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">VARIANT_TYPE_BY_NAME</span><span class="p">[</span><span class="n">attr</span><span class="p">]</span>
+            <span class="n">array</span> <span class="o">=</span> <span class="n">SafeArray</span><span class="o">.</span><span class="n">from_PSAFEARRAY</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_VARIANT_NAME_3</span><span class="o">.</span><span class="n">parray</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">array</span><span class="o">.</span><span class="n">to_list</span><span class="p">(</span><span class="n">attrtype</span><span class="p">)</span>
+        <span class="n">attr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">QUICK_CHECK_TYPE</span><span class="p">[</span><span class="n">rawvt</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">attr</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">guess_type_and_set_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">attr</span><span class="p">,</span> <span class="n">check</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">CHECK_TYPE</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">checkres</span> <span class="o">=</span> <span class="n">check</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">checkres</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">vt</span> <span class="o">=</span> <span class="n">t</span>
+                <span class="k">if</span> <span class="n">attr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Could not guess VT_TYPE for &lt;</span><span class="si">{0}</span><span class="s2">&gt; of type &lt;</span><span class="si">{1}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)))</span>
+
+    <span class="n">value</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_value_based_on_type</span><span class="p">,</span> <span class="n">guess_type_and_set_value</span><span class="p">)</span>
+
+    <span class="c1"># quick_check: bypass python lookup-limitation</span>
+    <span class="k">def</span> <span class="nf">generate_getter</span><span class="p">(</span><span class="n">vt_type</span><span class="p">,</span> <span class="n">transfo</span><span class="o">=</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span><span class="n">x</span><span class="p">),</span> <span class="n">quick_check</span><span class="o">=</span><span class="n">QUICK_CHECK_TYPE</span><span class="p">):</span>
+        <span class="n">attr</span> <span class="o">=</span> <span class="n">quick_check</span><span class="p">[</span><span class="n">vt_type</span><span class="p">]</span>
         <span class="nd">@property</span>
-        <span class="k">def</span> <span class="nf">as_array_generated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-            <span class="c1"># TODO: vt check like the others ?</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">asarray</span><span class="o">.</span><span class="n">to_list</span><span class="p">(</span><span class="n">vttype</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">as_array_generated</span>
+        <span class="k">def</span> <span class="nf">getter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">rawvt</span> <span class="o">==</span> <span class="n">vt_type</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid vt-type for attribute expected &lt;</span><span class="si">{0}</span><span class="s2">&gt; got &lt;</span><span class="si">{1}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">vt_type</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">vt</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">transfo</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">getter</span>
 
-    <span class="n">asbstr_array</span> <span class="o">=</span> <span class="n">generate_asarray_property</span><span class="p">(</span><span class="n">BSTR</span><span class="p">)</span>
-    <span class="n">aslong_array</span> <span class="o">=</span> <span class="n">generate_asarray_property</span><span class="p">(</span><span class="n">LONG</span><span class="p">)</span>
-    <span class="n">asbyte_array</span> <span class="o">=</span> <span class="n">generate_asarray_property</span><span class="p">(</span><span class="n">BYTE</span><span class="p">)</span>
-    <span class="n">asbool_array</span> <span class="o">=</span> <span class="n">generate_asarray_property</span><span class="p">(</span><span class="n">VARIANT_BOOL</span><span class="p">)</span>
+    <span class="n">asbstr</span> <span class="o">=</span> <span class="n">generate_getter</span><span class="p">(</span><span class="n">VT_BSTR</span><span class="p">)</span>
+    <span class="n">aslong</span> <span class="o">=</span> <span class="n">generate_getter</span><span class="p">(</span><span class="n">VT_I4</span><span class="p">)</span>
+    <span class="n">asbool</span> <span class="o">=</span> <span class="n">generate_getter</span><span class="p">(</span><span class="n">VT_BOOL</span><span class="p">)</span>
+    <span class="n">asdispatch</span> <span class="o">=</span> <span class="n">generate_getter</span><span class="p">(</span><span class="n">VT_DISPATCH</span><span class="p">,</span> <span class="n">transfo</span><span class="o">=</span><span class="n">interfaces</span><span class="o">.</span><span class="n">IDispatch</span><span class="p">)</span>
+    <span class="n">asshort</span> <span class="o">=</span> <span class="n">generate_getter</span><span class="p">(</span><span class="n">VT_I2</span><span class="p">)</span>
+    <span class="n">asbyte</span> <span class="o">=</span> <span class="n">generate_getter</span><span class="p">(</span><span class="n">VT_UI1</span><span class="p">)</span>
+    <span class="n">asunknown</span> <span class="o">=</span> <span class="n">generate_getter</span><span class="p">(</span><span class="n">VT_UNKNOWN</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">to_pyobject</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># if self.vt &amp; VT_ARRAY:</span>
-            <span class="c1"># # Something better TODO i guess</span>
-            <span class="c1"># if self.vt &amp; VT_TYPEMASK == VT_BSTR:</span>
-                <span class="c1"># import pdb;pdb.set_trace()</span>
-                <span class="c1"># print(&quot;VT_TYPEMASK ARRAY&quot;)</span>
-                <span class="c1"># return self.asarray.to_list(BSTR)</span>
-            <span class="c1"># if self.vt &amp; VT_TYPEMASK == VT_I4:</span>
-                <span class="c1"># import pdb;pdb.set_trace()</span>
-                <span class="c1"># print(&quot;VT_TYPEMASK ARRAY&quot;)</span>
-                <span class="c1"># return self.asarray.to_list(LONG)</span>
-            <span class="c1"># raise NotImplementedError(&quot;Variant of type {0:#x}&quot;.format(self.vt))</span>
-        <span class="c1"># use the ImprovedVariant.MAPPER that dispatch by self.vt</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">MAPPER</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">vt</span><span class="p">](</span><span class="bp">self</span><span class="p">)</span>
-        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Variant of type </span><span class="si">{0:#x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vt</span><span class="p">))</span>
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;&quot;&lt;</span><span class="si">{0}</span><span class="s2"> of type </span><span class="si">{1}</span><span class="s2">&gt;&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">vt</span><span class="p">)</span>
 
-
-<span class="n">ImprovedVariant</span><span class="o">.</span><span class="n">MAPPER</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="n">VT_UI1</span><span class="p">:</span> <span class="n">ImprovedVariant</span><span class="o">.</span><span class="n">asbyte</span><span class="o">.</span><span class="n">fget</span><span class="p">,</span>
-    <span class="n">VT_I2</span><span class="p">:</span> <span class="n">ImprovedVariant</span><span class="o">.</span><span class="n">asshort</span><span class="o">.</span><span class="n">fget</span><span class="p">,</span>
-    <span class="n">VT_DISPATCH</span><span class="p">:</span> <span class="n">ImprovedVariant</span><span class="o">.</span><span class="n">asdispatch</span><span class="o">.</span><span class="n">fget</span><span class="p">,</span>
-    <span class="n">VT_BOOL</span><span class="p">:</span> <span class="n">ImprovedVariant</span><span class="o">.</span><span class="n">asbool</span><span class="o">.</span><span class="n">fget</span><span class="p">,</span>
-    <span class="n">VT_I4</span><span class="p">:</span> <span class="n">ImprovedVariant</span><span class="o">.</span><span class="n">aslong</span><span class="o">.</span><span class="n">fget</span><span class="p">,</span>
-    <span class="n">VT_BSTR</span><span class="p">:</span> <span class="n">ImprovedVariant</span><span class="o">.</span><span class="n">asbstr</span><span class="o">.</span><span class="n">fget</span><span class="p">,</span>
-    <span class="n">VT_EMPTY</span><span class="p">:</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="n">VT_NULL</span><span class="p">:</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="n">VT_UNKNOWN</span><span class="p">:</span> <span class="n">ImprovedVariant</span><span class="o">.</span><span class="n">asunknown</span><span class="o">.</span><span class="n">fget</span><span class="p">,</span>
-    <span class="p">(</span><span class="n">VT_ARRAY</span> <span class="o">|</span> <span class="n">VT_BSTR</span><span class="p">):</span> <span class="n">ImprovedVariant</span><span class="o">.</span><span class="n">asbstr_array</span><span class="o">.</span><span class="n">fget</span><span class="p">,</span>
-    <span class="p">(</span><span class="n">VT_ARRAY</span> <span class="o">|</span> <span class="n">VT_I4</span><span class="p">):</span> <span class="n">ImprovedVariant</span><span class="o">.</span><span class="n">aslong_array</span><span class="o">.</span><span class="n">fget</span><span class="p">,</span>
-    <span class="p">(</span><span class="n">VT_ARRAY</span> <span class="o">|</span> <span class="n">VT_UI1</span><span class="p">):</span> <span class="n">ImprovedVariant</span><span class="o">.</span><span class="n">asbyte_array</span><span class="o">.</span><span class="n">fget</span><span class="p">,</span>
-    <span class="p">(</span><span class="n">VT_ARRAY</span> <span class="o">|</span> <span class="n">VT_BOOL</span><span class="p">):</span> <span class="n">ImprovedVariant</span><span class="o">.</span><span class="n">asbool_array</span><span class="o">.</span><span class="n">fget</span>
-<span class="p">}</span>
+<span class="c1"># Deprecated: remove me when test pass :)</span>
+<span class="c1"># ImprovedVariant.MAPPER = {</span>
+    <span class="c1"># VT_UI1: ImprovedVariant.asbyte.fget,</span>
+    <span class="c1"># VT_I2: ImprovedVariant.asshort.fget,</span>
+    <span class="c1"># VT_DISPATCH: ImprovedVariant.asdispatch.fget,</span>
+    <span class="c1"># VT_BOOL: ImprovedVariant.asbool.fget,</span>
+    <span class="c1"># VT_I4: ImprovedVariant.aslong.fget,</span>
+    <span class="c1"># VT_BSTR: ImprovedVariant.asbstr.fget,</span>
+    <span class="c1"># VT_EMPTY: (lambda x: None),</span>
+    <span class="c1"># VT_NULL: (lambda x: None),</span>
+    <span class="c1"># VT_UNKNOWN: ImprovedVariant.asunknown.fget,</span>
+    <span class="c1"># (VT_ARRAY | VT_BSTR): ImprovedVariant.asbstr_array.fget,</span>
+    <span class="c1"># (VT_ARRAY | VT_I4): ImprovedVariant.aslong_array.fget,</span>
+    <span class="c1"># (VT_ARRAY | VT_UI1): ImprovedVariant.asbyte_array.fget,</span>
+    <span class="c1"># (VT_ARRAY | VT_BOOL): ImprovedVariant.asbool_array.fget</span>
+<span class="c1"># }</span>
 
 
 
@@ -331,7 +376,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">PythonForWindows 0.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">PythonForWindows 0.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>

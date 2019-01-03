@@ -1,0 +1,867 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>windows.security &#8212; PythonForWindows 0.5 documentation</title>
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/css/mbasic.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">PythonForWindows 0.5 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for windows.security</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">ctypes</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">import</span> <span class="nn">windows</span>
+<span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
+<span class="kn">from</span> <span class="nn">windows</span> <span class="k">import</span> <span class="n">winproxy</span>
+
+<span class="kn">from</span> <span class="nn">windows.winobject.token</span> <span class="k">import</span> <span class="n">Token</span>
+
+
+<span class="c1"># Specific access right</span>
+
+<span class="n">FILE_ACCESS_RIGHT</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FILE_READ_DATA</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FILE_WRITE_DATA</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FILE_APPEND_DATA</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FILE_READ_EA</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FILE_WRITE_EA</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FILE_EXECUTE</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FILE_READ_ATTRIBUTES</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FILE_WRITE_ATTRIBUTES</span>
+<span class="p">)</span>
+
+<span class="n">DIRECTORY_ACCESS_RIGHT</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FILE_LIST_DIRECTORY</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FILE_ADD_FILE</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FILE_ADD_SUBDIRECTORY</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FILE_READ_EA</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FILE_WRITE_EA</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FILE_TRAVERSE</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FILE_DELETE_CHILD</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FILE_READ_ATTRIBUTES</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FILE_WRITE_ATTRIBUTES</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">NAMED_PIPE_ACCESS_RIGHT</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FILE_READ_DATA</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FILE_WRITE_DATA</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FILE_CREATE_PIPE_INSTANCE</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FILE_READ_ATTRIBUTES</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FILE_WRITE_ATTRIBUTES</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">TOKEN_ACCESS_RIGHT</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">TOKEN_ASSIGN_PRIMARY</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">TOKEN_DUPLICATE</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">TOKEN_IMPERSONATE</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">TOKEN_QUERY</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">TOKEN_QUERY_SOURCE</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">TOKEN_ADJUST_PRIVILEGES</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">TOKEN_ADJUST_GROUPS</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">TOKEN_ADJUST_DEFAULT</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">TOKEN_ADJUST_SESSIONID</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">CLUSTER_API_ACCESS_RIGH</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">CLUSAPI_READ_ACCESS</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">CLUSAPI_CHANGE_ACCESS</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">CLUSAPI_NO_ACCESS</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">FAX_ACCESS_RIGHT</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FAX_JOB_SUBMIT</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FAX_JOB_QUERY</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FAX_CONFIG_QUERY</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FAX_CONFIG_SET</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FAX_PORT_QUERY</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FAX_PORT_SET</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FAX_JOB_MANAGE</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">CALLBACK_ACCESS_RIGHT</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">CALLBACK_MODIFY_STATE</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">MUTANT_ACCESS_RIGHT</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">MUTANT_QUERY_STATE</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">EVENT_ACCESS_RIGHT</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">EVENT_QUERY_STATE</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">EVENT_MODIFY_STATE</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">SEMAPHORE_ACCESS_RIGHT</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">SEMAPHORE_QUERY_STATE</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">SEMAPHORE_MODIFY_STATE</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">SEMAPHORE_ACCESS_RIGHT</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">TIMER_QUERY_STATE</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">TIMER_QUERY_STATE</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">IO_COMPLETION_ACCESS_RIGHT</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">IO_COMPLETION_QUERY_STATE</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">IO_COMPLETION_MODIFY_STATE</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">PORT_ACCESS_RIGHT</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">PORT_CONNECT</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">OBJECT_MANAGER_TYPE_ACCESS_RIGHT</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">OBJECT_TYPE_CREATE</span>
+<span class="p">)</span>
+
+<span class="n">OBJECT_MANAGER_DIRECTORY_ACCESS_RIGHT</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">DIRECTORY_QUERY</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">DIRECTORY_TRAVERSE</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">DIRECTORY_CREATE_OBJECT</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">DIRECTORY_CREATE_SUBDIRECTORY</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">OBJECT_MANAGER_SIMLINK_ACCESS_RIGHT</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">SYMBOLIC_LINK_QUERY</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">PROCESS_ACCESS_RIGHT</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">PROCESS_TERMINATE</span>                  <span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">PROCESS_CREATE_THREAD</span>              <span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">PROCESS_SET_SESSIONID</span>              <span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">PROCESS_VM_OPERATION</span>               <span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">PROCESS_VM_READ</span>                    <span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">PROCESS_VM_WRITE</span>                   <span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">PROCESS_DUP_HANDLE</span>                 <span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">PROCESS_CREATE_PROCESS</span>             <span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">PROCESS_SET_QUOTA</span>                  <span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">PROCESS_SET_INFORMATION</span>            <span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">PROCESS_QUERY_INFORMATION</span>          <span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">PROCESS_SUSPEND_RESUME</span>             <span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">PROCESS_QUERY_LIMITED_INFORMATION</span>  <span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">PROCESS_SET_LIMITED_INFORMATION</span>    <span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">THREAD_ACCESS_RIGHT</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">THREAD_TERMINATE</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">THREAD_SUSPEND_RESUME</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">THREAD_GET_CONTEXT</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">THREAD_SET_CONTEXT</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">THREAD_QUERY_INFORMATION</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">THREAD_SET_INFORMATION</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">THREAD_SET_THREAD_TOKEN</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">THREAD_IMPERSONATE</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">THREAD_DIRECT_IMPERSONATION</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">JOB_ACCESS_RIGHT</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">JOB_OBJECT_ASSIGN_PROCESS</span>         <span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">JOB_OBJECT_SET_ATTRIBUTES</span>         <span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">JOB_OBJECT_QUERY</span>                  <span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">JOB_OBJECT_TERMINATE</span>              <span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">JOB_OBJECT_SET_SECURITY_ATTRIBUTES</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">KEY_ACCESS_RIGHT</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">KEY_QUERY_VALUE</span>         <span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">KEY_SET_VALUE</span>           <span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">KEY_CREATE_SUB_KEY</span>      <span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">KEY_ENUMERATE_SUB_KEYS</span>  <span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">KEY_NOTIFY</span>              <span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">KEY_CREATE_LINK</span>         <span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">KEY_WOW64_64KEY</span>         <span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">KEY_WOW64_32KEY</span>         <span class="p">,</span>
+    <span class="c1"># KEY_WOW64_RES           (0x0300) # Just a mask of the 2 last</span>
+<span class="p">)</span>
+
+<span class="c1"># ACE</span>
+
+<span class="n">ACE_FLAGS</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">OBJECT_INHERIT_ACE</span>        <span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">CONTAINER_INHERIT_ACE</span>     <span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">NO_PROPAGATE_INHERIT_ACE</span>  <span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">INHERIT_ONLY_ACE</span>          <span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">INHERITED_ACE</span>             <span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">VALID_INHERIT_FLAGS</span>       <span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">SUCCESSFUL_ACCESS_ACE_FLAG</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">FAILED_ACCESS_ACE_FLAG</span>
+<span class="p">)</span>
+
+<span class="n">ACE_MASKS</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">GENERIC_READ</span>                     <span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">GENERIC_WRITE</span>                    <span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">GENERIC_EXECUTE</span>                  <span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">GENERIC_ALL</span>                      <span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">READ_CONTROL</span>                     <span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">DELETE</span>                           <span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">WRITE_DAC</span>                        <span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">WRITE_OWNER</span>                      <span class="p">,</span>
+<span class="p">)</span>
+
+<div class="viewcode-block" id="AceHeader"><a class="viewcode-back" href="../../security.html#windows.security.AceHeader">[docs]</a><span class="k">class</span> <span class="nc">AceHeader</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">ACE_HEADER</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Improved ACE_HEADER&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">_to_ace_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ace_type</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ace_type</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">AceType</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The type of the Ace header&quot;&quot;&quot;</span>
+        <span class="n">raw_type</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">AceHeader</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">AceType</span>
+        <span class="k">return</span> <span class="n">ACE_CLASS_TYPE_MAPPER</span><span class="p">[</span><span class="n">raw_type</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">flags</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The flags of the Ace header</span>
+
+<span class="sd">        :type: [:class:`int`] - A list of :class:`int`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_flags_generator</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">_flags_generator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">flags</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">AceFlags</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">):</span> <span class="c1"># Sizeof(AceFlags) * 8</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">flags</span> <span class="o">&amp;</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">i</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">v</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="n">ACE_FLAGS</span><span class="p">[</span><span class="n">v</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">subclass</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># ACE_CLASS_BY_ACE_TYPE is defined later in this file</span>
+        <span class="n">subcls</span> <span class="o">=</span>  <span class="n">ACE_CLASS_BY_ACE_TYPE</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">AceType</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_ace_type</span><span class="p">(</span><span class="n">subcls</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&lt;</span><span class="si">{0}</span><span class="s2"> type=</span><span class="si">{1}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">AceType</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="AceBase"><a class="viewcode-back" href="../../security.html#windows.security.AceBase">[docs]</a><span class="k">class</span> <span class="nc">AceBase</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span> <span class="c1"># Ca ou mettre flags extraction dans le ctypes generated</span>
+    <span class="sd">&quot;&quot;&quot;Base object for all ``ACE`` classes. provide access to an improved header&quot;&quot;&quot;</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">Header</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="c1"># Override the ctypes Header for the struct -&gt; return extended header</span>
+        <span class="sd">&quot;&quot;&quot;The Header of the ``ACE``</span>
+
+<span class="sd">        :type: :class:`AceHeader`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">addr</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">addressof</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">sheader</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">AceBase</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span><span class="o">.</span><span class="n">Header</span>
+        <span class="k">return</span> <span class="n">AceHeader</span><span class="o">.</span><span class="n">from_address</span><span class="p">(</span><span class="n">addr</span> <span class="o">+</span> <span class="n">sheader</span><span class="o">.</span><span class="n">offset</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MaskAndSidACE"><a class="viewcode-back" href="../../security.html#windows.security.MaskAndSidACE">[docs]</a><span class="k">class</span> <span class="nc">MaskAndSidACE</span><span class="p">(</span><span class="n">AceBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;`Virtual` ACE for ACE struct with the following layout:</span>
+
+<span class="sd">        - ACE_HEADER Header</span>
+<span class="sd">        - ACCESS_MASK Mask</span>
+<span class="sd">        - DWORD SidStart</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_sid_offset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">SidStart</span><span class="o">.</span><span class="n">offset</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">sid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The sid described by the ``ACE``</span>
+
+<span class="sd">        :type: :class:`windows.generated_def.winstructs.PSID`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PSID</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">addressof</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sid_offset</span><span class="p">())</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">mask</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The list of flags described by the ``ACE``</span>
+
+<span class="sd">        :type: [:class:`int`] - A list of :class:`int`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mask_generator</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">_mask_generator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Mask</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">32</span><span class="p">):</span> <span class="c1"># sizeof ACCESS_MASK * 8</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">mask</span> <span class="o">&amp;</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">i</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">v</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="n">ACE_MASKS</span><span class="p">[</span><span class="n">v</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&lt;</span><span class="si">{0}</span><span class="s2"> mask=</span><span class="si">{1}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Mask</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CallbackACE"><a class="viewcode-back" href="../../security.html#windows.security.CallbackACE">[docs]</a><span class="k">class</span> <span class="nc">CallbackACE</span><span class="p">(</span><span class="n">MaskAndSidACE</span><span class="p">):</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">application_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The application-specific data</span>
+
+<span class="sd">        see : https://msdn.microsoft.com/en-us/library/hh877860.aspx</span>
+
+<span class="sd">        :type: :class:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">selfptr</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">addressof</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PUCHAR</span><span class="p">)</span>
+        <span class="n">datastart</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">sid</span><span class="o">.</span><span class="n">size</span> <span class="o">-</span> <span class="mi">4</span>
+        <span class="n">dataend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Header</span><span class="o">.</span><span class="n">AceSize</span>
+        <span class="k">return</span> <span class="n">selfptr</span><span class="p">[</span><span class="n">datastart</span><span class="p">:</span> <span class="n">dataend</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="ObjectRelatedACE"><a class="viewcode-back" href="../../security.html#windows.security.ObjectRelatedACE">[docs]</a><span class="k">class</span> <span class="nc">ObjectRelatedACE</span><span class="p">(</span><span class="n">MaskAndSidACE</span><span class="p">):</span>
+    <span class="n">FLAGS_VALUES</span> <span class="o">=</span> <span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">ACE_OBJECT_TYPE_PRESENT</span><span class="p">,</span>
+                        <span class="n">gdef</span><span class="o">.</span><span class="n">ACE_INHERITED_OBJECT_TYPE_PRESENT</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">flags</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The flags of the ``ACE``</span>
+
+<span class="sd">        :type: [:class:`int`] - A list of :class:`int`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">flags</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Flags</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">FLAGS_VALUES</span> <span class="k">if</span> <span class="n">flags</span> <span class="o">&amp;</span> <span class="n">x</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">object_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The ``ObjectType`` described in the ACE. ``None`` if `ACE`` has no ``ObjectType``</span>
+
+<span class="sd">        :type: :class:`~windows.generated_def.winstructs.PSID` or ``None``</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">Flags</span> <span class="o">&amp;</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ACE_OBJECT_TYPE_PRESENT</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ObjectType</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">inherited_object_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The ``InheritedObjectType`` described in the ACE. ``None`` if `ACE`` has no ``InheritedObjectType``</span>
+
+<span class="sd">        :type: :class:`~windows.generated_def.winstructs.PSID` or ``None``</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">Flags</span> <span class="o">&amp;</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ACE_INHERITED_OBJECT_TYPE_PRESENT</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Flags</span> <span class="o">&amp;</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ACE_OBJECT_TYPE_PRESENT</span><span class="p">:</span>
+            <span class="c1"># There is an ObjectType so our offset is the good one</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">InheritedObjectType</span>
+        <span class="c1"># No ObjectType -&gt; InheritedObjectType is at ObjectType offset</span>
+        <span class="c1"># Those are the same type so we can directly use ObjectType</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ObjectType</span>
+
+    <span class="k">def</span> <span class="nf">_sid_offset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">base_offset</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">SidStart</span><span class="o">.</span><span class="n">offset</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">Flags</span> <span class="o">&amp;</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ACE_OBJECT_TYPE_PRESENT</span><span class="p">:</span>
+            <span class="n">base_offset</span> <span class="o">-=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">GUID</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">Flags</span> <span class="o">&amp;</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ACE_INHERITED_OBJECT_TYPE_PRESENT</span><span class="p">:</span>
+            <span class="n">base_offset</span> <span class="o">-=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">GUID</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">base_offset</span></div>
+
+<span class="c1"># DACL related ACE</span>
+
+<span class="c1"># Allow the resolution of Header first</span>
+<div class="viewcode-block" id="AccessAllowedACE"><a class="viewcode-back" href="../../security.html#windows.security.AccessAllowedACE">[docs]</a><span class="k">class</span> <span class="nc">AccessAllowedACE</span><span class="p">(</span><span class="n">MaskAndSidACE</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ACCESS_ALLOWED_ACE</span><span class="p">):</span>
+    <span class="n">ACE_TYPE</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ACCESS_ALLOWED_ACE_TYPE</span></div>
+
+<div class="viewcode-block" id="AccessDeniedACE"><a class="viewcode-back" href="../../security.html#windows.security.AccessDeniedACE">[docs]</a><span class="k">class</span> <span class="nc">AccessDeniedACE</span><span class="p">(</span><span class="n">MaskAndSidACE</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ACCESS_DENIED_ACE</span><span class="p">):</span>
+    <span class="n">ACE_TYPE</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ACCESS_DENIED_ACE_TYPE</span></div>
+
+<div class="viewcode-block" id="AccessAllowedCallbackACE"><a class="viewcode-back" href="../../security.html#windows.security.AccessAllowedCallbackACE">[docs]</a><span class="k">class</span> <span class="nc">AccessAllowedCallbackACE</span><span class="p">(</span><span class="n">CallbackACE</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ACCESS_ALLOWED_CALLBACK_ACE</span><span class="p">):</span>
+    <span class="n">ACE_TYPE</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ACCESS_ALLOWED_CALLBACK_ACE_TYPE</span></div>
+
+<div class="viewcode-block" id="AccessDeniedCallbackACE"><a class="viewcode-back" href="../../security.html#windows.security.AccessDeniedCallbackACE">[docs]</a><span class="k">class</span> <span class="nc">AccessDeniedCallbackACE</span><span class="p">(</span><span class="n">CallbackACE</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ACCESS_DENIED_CALLBACK_ACE</span><span class="p">):</span>
+    <span class="n">ACE_TYPE</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ACCESS_DENIED_CALLBACK_ACE_TYPE</span></div>
+
+<div class="viewcode-block" id="AccessAllowedObjectACE"><a class="viewcode-back" href="../../security.html#windows.security.AccessAllowedObjectACE">[docs]</a><span class="k">class</span> <span class="nc">AccessAllowedObjectACE</span><span class="p">(</span><span class="n">ObjectRelatedACE</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ACCESS_ALLOWED_OBJECT_ACE</span><span class="p">):</span>
+    <span class="n">ACE_TYPE</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ACCESS_ALLOWED_OBJECT_ACE_TYPE</span></div>
+
+<div class="viewcode-block" id="AccessDeniedObjectACE"><a class="viewcode-back" href="../../security.html#windows.security.AccessDeniedObjectACE">[docs]</a><span class="k">class</span> <span class="nc">AccessDeniedObjectACE</span><span class="p">(</span><span class="n">ObjectRelatedACE</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ACCESS_DENIED_OBJECT_ACE</span><span class="p">):</span>
+    <span class="n">ACE_TYPE</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ACCESS_DENIED_OBJECT_ACE_TYPE</span></div>
+
+<div class="viewcode-block" id="AccessAllowedCallbackObjectACE"><a class="viewcode-back" href="../../security.html#windows.security.AccessAllowedCallbackObjectACE">[docs]</a><span class="k">class</span> <span class="nc">AccessAllowedCallbackObjectACE</span><span class="p">(</span><span class="n">CallbackACE</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ACCESS_ALLOWED_CALLBACK_OBJECT_ACE</span><span class="p">):</span>
+    <span class="n">ACE_TYPE</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ACCESS_ALLOWED_CALLBACK_OBJECT_ACE_TYPE</span></div>
+
+<span class="c1"># Strangly -&gt; no SDDL for this one</span>
+<div class="viewcode-block" id="AccessDeniedCallbackObjectACE"><a class="viewcode-back" href="../../security.html#windows.security.AccessDeniedCallbackObjectACE">[docs]</a><span class="k">class</span> <span class="nc">AccessDeniedCallbackObjectACE</span><span class="p">(</span><span class="n">CallbackACE</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ACCESS_DENIED_CALLBACK_OBJECT_ACE</span><span class="p">):</span>
+    <span class="n">ACE_TYPE</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ACCESS_DENIED_CALLBACK_OBJECT_ACE_TYPE</span></div>
+
+
+<span class="c1"># SACL related ACE</span>
+
+<div class="viewcode-block" id="SystemAuditACE"><a class="viewcode-back" href="../../security.html#windows.security.SystemAuditACE">[docs]</a><span class="k">class</span> <span class="nc">SystemAuditACE</span><span class="p">(</span><span class="n">MaskAndSidACE</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SYSTEM_AUDIT_ACE</span><span class="p">):</span>
+    <span class="n">ACE_TYPE</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SYSTEM_AUDIT_ACE_TYPE</span></div>
+
+<div class="viewcode-block" id="SystemAlarmACE"><a class="viewcode-back" href="../../security.html#windows.security.SystemAlarmACE">[docs]</a><span class="k">class</span> <span class="nc">SystemAlarmACE</span><span class="p">(</span><span class="n">MaskAndSidACE</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SYSTEM_ALARM_ACE</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;reserved for future use.&quot;&quot;&quot;</span>
+    <span class="n">ACE_TYPE</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SYSTEM_ALARM_ACE_TYPE</span></div>
+
+<div class="viewcode-block" id="SystemAuditObjectACE"><a class="viewcode-back" href="../../security.html#windows.security.SystemAuditObjectACE">[docs]</a><span class="k">class</span> <span class="nc">SystemAuditObjectACE</span><span class="p">(</span><span class="n">ObjectRelatedACE</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SYSTEM_AUDIT_OBJECT_ACE</span><span class="p">):</span>
+    <span class="n">ACE_TYPE</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SYSTEM_AUDIT_OBJECT_ACE_TYPE</span></div>
+
+<div class="viewcode-block" id="SystemAlarmObjectACE"><a class="viewcode-back" href="../../security.html#windows.security.SystemAlarmObjectACE">[docs]</a><span class="k">class</span> <span class="nc">SystemAlarmObjectACE</span><span class="p">(</span><span class="n">ObjectRelatedACE</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SYSTEM_ALARM_OBJECT_ACE</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;reserved for future use.&quot;&quot;&quot;</span>
+    <span class="n">ACE_TYPE</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SYSTEM_ALARM_OBJECT_ACE_TYPE</span></div>
+
+<div class="viewcode-block" id="SystemAuditCallbackACE"><a class="viewcode-back" href="../../security.html#windows.security.SystemAuditCallbackACE">[docs]</a><span class="k">class</span> <span class="nc">SystemAuditCallbackACE</span><span class="p">(</span><span class="n">CallbackACE</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SYSTEM_AUDIT_CALLBACK_ACE</span><span class="p">):</span>
+    <span class="n">ACE_TYPE</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SYSTEM_AUDIT_CALLBACK_ACE_TYPE</span></div>
+
+<div class="viewcode-block" id="SystemAlarmCallbackACE"><a class="viewcode-back" href="../../security.html#windows.security.SystemAlarmCallbackACE">[docs]</a><span class="k">class</span> <span class="nc">SystemAlarmCallbackACE</span><span class="p">(</span><span class="n">CallbackACE</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SYSTEM_ALARM_CALLBACK_ACE</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;reserved for future use.&quot;&quot;&quot;</span>
+    <span class="n">ACE_TYPE</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SYSTEM_ALARM_CALLBACK_ACE_TYPE</span></div>
+
+<div class="viewcode-block" id="SystemAuditCallbackObjectACE"><a class="viewcode-back" href="../../security.html#windows.security.SystemAuditCallbackObjectACE">[docs]</a><span class="k">class</span> <span class="nc">SystemAuditCallbackObjectACE</span><span class="p">(</span><span class="n">CallbackACE</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SYSTEM_AUDIT_CALLBACK_OBJECT_ACE</span><span class="p">):</span>
+    <span class="n">ACE_TYPE</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SYSTEM_AUDIT_CALLBACK_OBJECT_ACE_TYPE</span></div>
+
+<div class="viewcode-block" id="SystemAlarmCallbackObjectACE"><a class="viewcode-back" href="../../security.html#windows.security.SystemAlarmCallbackObjectACE">[docs]</a><span class="k">class</span> <span class="nc">SystemAlarmCallbackObjectACE</span><span class="p">(</span><span class="n">CallbackACE</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SYSTEM_ALARM_CALLBACK_OBJECT_ACE</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Reserved for future use&quot;&quot;&quot;</span>
+    <span class="n">ACE_TYPE</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SYSTEM_ALARM_CALLBACK_OBJECT_ACE_TYPE</span></div>
+
+<div class="viewcode-block" id="SystemMandatoryLabelACE"><a class="viewcode-back" href="../../security.html#windows.security.SystemMandatoryLabelACE">[docs]</a><span class="k">class</span> <span class="nc">SystemMandatoryLabelACE</span><span class="p">(</span><span class="n">MaskAndSidACE</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SYSTEM_MANDATORY_LABEL_ACE</span><span class="p">):</span>
+    <span class="n">ACE_TYPE</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SYSTEM_MANDATORY_LABEL_ACE_TYPE</span></div>
+
+<div class="viewcode-block" id="SystemResourceAttributeACE"><a class="viewcode-back" href="../../security.html#windows.security.SystemResourceAttributeACE">[docs]</a><span class="k">class</span> <span class="nc">SystemResourceAttributeACE</span><span class="p">(</span><span class="n">MaskAndSidACE</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SYSTEM_RESOURCE_ATTRIBUTE_ACE</span><span class="p">):</span>
+    <span class="n">ACE_TYPE</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SYSTEM_RESOURCE_ATTRIBUTE_ACE_TYPE</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Sid-size not in the initial struct</span>
+        <span class="n">sid_size_over</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sid</span><span class="o">.</span><span class="n">size</span> <span class="o">-</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">SidStart</span><span class="o">.</span><span class="n">size</span>
+        <span class="n">sec_attr_addr</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">addressof</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">+</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">+</span> <span class="n">sid_size_over</span>
+        <span class="k">return</span> <span class="n">ClaimSecurityAttributeRelativeV1</span><span class="o">.</span><span class="n">from_address</span><span class="p">(</span><span class="n">sec_attr_addr</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SystemScopedPolicyIDACE"><a class="viewcode-back" href="../../security.html#windows.security.SystemScopedPolicyIDACE">[docs]</a><span class="k">class</span> <span class="nc">SystemScopedPolicyIDACE</span><span class="p">(</span><span class="n">MaskAndSidACE</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SYSTEM_SCOPED_POLICY_ID_ACE</span><span class="p">):</span>
+    <span class="n">ACE_TYPE</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SYSTEM_SCOPED_POLICY_ID_ACE_TYPE</span></div>
+
+<div class="viewcode-block" id="SystemProcessTrustLabelACE"><a class="viewcode-back" href="../../security.html#windows.security.SystemProcessTrustLabelACE">[docs]</a><span class="k">class</span> <span class="nc">SystemProcessTrustLabelACE</span><span class="p">(</span><span class="n">MaskAndSidACE</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SYSTEM_PROCESS_TRUST_LABEL_ACE</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Reserved. (from MSDC)&quot;&quot;&quot;</span>
+    <span class="n">ACE_TYPE</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SYSTEM_PROCESS_TRUST_LABEL_ACE_TYPE</span></div>
+
+
+<span class="n">ACE_CLASS_BY_ACE_TYPE</span> <span class="o">=</span> <span class="p">{</span><span class="bp">cls</span><span class="o">.</span><span class="n">ACE_TYPE</span><span class="p">:</span> <span class="bp">cls</span> <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="p">(</span>
+    <span class="c1"># DACL</span>
+    <span class="n">AccessAllowedACE</span><span class="p">,</span>
+    <span class="n">AccessDeniedACE</span><span class="p">,</span>
+    <span class="n">AccessAllowedCallbackACE</span><span class="p">,</span>
+    <span class="n">AccessDeniedCallbackACE</span><span class="p">,</span>
+    <span class="n">AccessAllowedObjectACE</span><span class="p">,</span>
+    <span class="n">AccessDeniedObjectACE</span><span class="p">,</span>
+    <span class="n">AccessAllowedCallbackObjectACE</span><span class="p">,</span>
+    <span class="c1"># SACL</span>
+    <span class="n">SystemAuditACE</span><span class="p">,</span>
+    <span class="n">SystemAlarmACE</span><span class="p">,</span> <span class="c1"># reserved for future use.</span>
+    <span class="n">SystemAuditObjectACE</span><span class="p">,</span>
+    <span class="n">SystemAlarmObjectACE</span><span class="p">,</span> <span class="c1"># reserved for future use.</span>
+    <span class="n">SystemAuditCallbackACE</span><span class="p">,</span>
+    <span class="n">SystemAlarmCallbackACE</span><span class="p">,</span> <span class="c1"># reserved for future use.</span>
+    <span class="n">SystemAuditCallbackObjectACE</span><span class="p">,</span>
+    <span class="n">SystemAlarmCallbackObjectACE</span><span class="p">,</span> <span class="c1"># reserved for future use.</span>
+    <span class="n">SystemMandatoryLabelACE</span><span class="p">,</span>
+    <span class="n">SystemResourceAttributeACE</span><span class="p">,</span>
+    <span class="n">SystemScopedPolicyIDACE</span><span class="p">,</span>
+    <span class="n">SystemProcessTrustLabelACE</span><span class="p">,</span>
+
+<span class="p">)}</span>
+
+<span class="n">ACE_CLASS_TYPE_MAPPER</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span><span class="o">*</span><span class="n">ACE_CLASS_BY_ACE_TYPE</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+<span class="c1"># CLAIM_SECURITY_ATTRIBUTE_RELATIVE_V1 follow the SYSTEM_RESOURCE_ATTRIBUTE_ACE</span>
+<span class="c1"># For ACE of type SYSTEM_RESOURCE_ATTRIBUTE_ACE_TYPE</span>
+
+<span class="k">def</span> <span class="nf">retrieve_long64_from_addr</span><span class="p">(</span><span class="n">addr</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">gdef</span><span class="o">.</span><span class="n">LONG64</span><span class="o">.</span><span class="n">from_address</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
+
+<span class="k">def</span> <span class="nf">retrieve_ulong64_from_addr</span><span class="p">(</span><span class="n">addr</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ULONG64</span><span class="o">.</span><span class="n">from_address</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
+
+<span class="k">def</span> <span class="nf">retrieve_wstr_from_addr</span><span class="p">(</span><span class="n">addr</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">gdef</span><span class="o">.</span><span class="n">LPWSTR</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
+
+<span class="c1"># https://msdn.microsoft.com/en-us/library/hh877847.aspx</span>
+<span class="k">def</span> <span class="nf">retrieve_psid_from_addr</span><span class="p">(</span><span class="n">addr</span><span class="p">):</span>
+    <span class="n">psid_addr</span> <span class="o">=</span> <span class="n">addr</span> <span class="o">+</span> <span class="n">gdef</span><span class="o">.</span><span class="n">CLAIM_SECURITY_ATTRIBUTE_OCTET_STRING_RELATIVE</span><span class="o">.</span><span class="n">OctetString</span><span class="o">.</span><span class="n">offset</span>
+    <span class="k">return</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PSID</span><span class="p">(</span><span class="n">psid_addr</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">retrieve_bool_from_addr</span><span class="p">(</span><span class="n">addr</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">ULONG64</span><span class="o">.</span><span class="n">from_address</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">retrieve_octet_string_from_addr</span><span class="p">(</span><span class="n">addr</span><span class="p">):</span>
+    <span class="c1"># Good doc: https://msdn.microsoft.com/en-us/library/hh877833.aspx</span>
+    <span class="c1"># Doc broken in: https://docs.microsoft.com/en-us/windows/desktop/api/winnt/ns-winnt-_claim_security_attribute_relative_v1</span>
+    <span class="n">ostring</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">CLAIM_SECURITY_ATTRIBUTE_OCTET_STRING_RELATIVE</span><span class="o">.</span><span class="n">from_address</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span>
+    <span class="c1"># Bypass the array limit</span>
+    <span class="k">return</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">ostring</span><span class="o">.</span><span class="n">OctetString</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PUCHAR</span><span class="p">)[:</span><span class="n">ostring</span><span class="o">.</span><span class="n">Length</span><span class="p">]</span>
+
+<span class="k">class</span> <span class="nc">ClaimSecurityAttributeRelativeV1</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">CLAIM_SECURITY_ATTRIBUTE_RELATIVE_V1</span><span class="p">):</span>
+    <span class="n">VALUE_ARRAY_PTR_BY_TYPE</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">CLAIM_SECURITY_ATTRIBUTE_TYPE_INT64</span><span class="p">:</span>
+            <span class="p">(</span><span class="s2">&quot;pInt64&quot;</span><span class="p">,</span> <span class="n">retrieve_long64_from_addr</span><span class="p">),</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">CLAIM_SECURITY_ATTRIBUTE_TYPE_UINT64</span><span class="p">:</span>
+            <span class="p">(</span><span class="s2">&quot;pUint64&quot;</span><span class="p">,</span> <span class="n">retrieve_ulong64_from_addr</span><span class="p">),</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">CLAIM_SECURITY_ATTRIBUTE_TYPE_STRING</span><span class="p">:</span>
+            <span class="p">(</span><span class="s2">&quot;ppString&quot;</span><span class="p">,</span> <span class="n">retrieve_wstr_from_addr</span><span class="p">),</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">CLAIM_SECURITY_ATTRIBUTE_TYPE_SID</span><span class="p">:</span>
+            <span class="c1"># ppString is not the good one</span>
+            <span class="c1"># But none is doc for PSID</span>
+            <span class="p">(</span><span class="s2">&quot;ppString&quot;</span><span class="p">,</span> <span class="n">retrieve_psid_from_addr</span><span class="p">),</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">CLAIM_SECURITY_ATTRIBUTE_TYPE_BOOLEAN</span><span class="p">:</span>
+            <span class="p">(</span><span class="s2">&quot;pUint64&quot;</span><span class="p">,</span> <span class="n">retrieve_bool_from_addr</span><span class="p">),</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">CLAIM_SECURITY_ATTRIBUTE_TYPE_OCTET_STRING</span><span class="p">:</span>
+            <span class="p">(</span><span class="s2">&quot;pOctetString&quot;</span><span class="p">,</span> <span class="n">retrieve_octet_string_from_addr</span><span class="p">),</span>
+    <span class="p">}</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">gdef</span><span class="o">.</span><span class="n">LPWSTR</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">addressof</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">Name</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">array_name</span><span class="p">,</span> <span class="n">get_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">VALUE_ARRAY_PTR_BY_TYPE</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ValueType</span><span class="p">]</span>
+        <span class="n">base</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">addressof</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">array</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Values</span><span class="p">,</span> <span class="n">array_name</span><span class="p">)</span>
+        <span class="c1"># The pointer allow us to bypass the array _length_ of 1</span>
+        <span class="n">array_ptr</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">array</span><span class="o">.</span><span class="n">_type_</span><span class="p">))</span>
+        <span class="n">offsets</span> <span class="o">=</span> <span class="n">array_ptr</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">ValueCount</span><span class="p">]</span>
+        <span class="c1"># Cast values</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">get_value</span><span class="p">(</span><span class="n">base</span> <span class="o">+</span> <span class="n">off</span><span class="p">)</span> <span class="k">for</span> <span class="n">off</span> <span class="ow">in</span> <span class="n">offsets</span><span class="p">)</span>
+
+
+<span class="c1"># ACL</span>
+<div class="viewcode-block" id="Acl"><a class="viewcode-back" href="../../security.html#windows.security.Acl">[docs]</a><span class="k">class</span> <span class="nc">Acl</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">ACL</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;All the ``ACE`` returned by :class:`Acl` methods/property are described in the :ref:`Ace section &lt;security_ace&gt;`&quot;&quot;&quot;</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">size_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">size_info</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ACL_SIZE_INFORMATION</span><span class="p">()</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">GetAclInformation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">size_info</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">size_info</span><span class="p">),</span> <span class="n">gdef</span><span class="o">.</span><span class="n">AclSizeInformation</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">size_info</span>
+
+<div class="viewcode-block" id="Acl.get_ace"><a class="viewcode-back" href="../../security.html#windows.security.Acl.get_ace">[docs]</a>    <span class="k">def</span> <span class="nf">get_ace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Retrieve ``ACE`` number ``i``</span>
+
+<span class="sd">        :return: :class:`Ace`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ace</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PVOID</span><span class="p">()</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">GetAce</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">ace</span><span class="p">)</span>
+        <span class="c1"># TODO: subclass ACL</span>
+        <span class="k">return</span> <span class="n">AceHeader</span><span class="o">.</span><span class="n">from_address</span><span class="p">(</span><span class="n">ace</span><span class="o">.</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">subclass</span><span class="p">()</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">aces</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The list of ``ACE`` in the ACL :class:`Acl`</span>
+
+<span class="sd">        :type: [:class:`Ace`] - A list of ACE</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Acl.__len__"><a class="viewcode-back" href="../../security.html#windows.security.Acl.__len__">[docs]</a>    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The number of ``ACE`` in the :class:`Acl`&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">AceCount</span></div>
+
+<div class="viewcode-block" id="Acl.__getitem__"><a class="viewcode-back" href="../../security.html#windows.security.Acl.__getitem__">[docs]</a>    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return ``ACE`` nb ``i``</span>
+
+<span class="sd">        :return: :class:`Ace`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_ace</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">winerror</span> <span class="o">==</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ERROR_INVALID_PARAMETER</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s2">&quot;Invalid ACL index </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+            <span class="k">raise</span></div>
+
+<div class="viewcode-block" id="Acl.__iter__"><a class="viewcode-back" href="../../security.html#windows.security.Acl.__iter__">[docs]</a>    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return an iterable over all the ``ACE`` in the :class:`Acl`</span>
+
+<span class="sd">        :yield: :class:`Ace`&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">AceCount</span><span class="p">):</span>
+            <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_ace</span><span class="p">(</span><span class="n">i</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&lt;Acl count=</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">AceCount</span><span class="p">)</span></div>
+
+<span class="n">PAcl</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">Acl</span><span class="p">)</span>
+
+<span class="c1"># Security descriptor</span>
+<div class="viewcode-block" id="SecurityDescriptor"><a class="viewcode-back" href="../../security.html#windows.security.SecurityDescriptor">[docs]</a><span class="k">class</span> <span class="nc">SecurityDescriptor</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">PSECURITY_DESCRIPTOR</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A Security Descriptor</span>
+
+<span class="sd">    .. warning::</span>
+
+<span class="sd">        TODO: free the underliying buffer when not needed anymore for now the underliying memory is never freed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">DEFAULT_SECURITY_INFORMATION</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">OWNER_SECURITY_INFORMATION</span>     <span class="o">|</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">GROUP_SECURITY_INFORMATION</span>     <span class="o">|</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">DACL_SECURITY_INFORMATION</span>      <span class="o">|</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">ATTRIBUTE_SECURITY_INFORMATION</span> <span class="o">|</span>
+        <span class="c1"># gdef.SACL_SECURITY_INFORMATION  | # Need special rights</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">SCOPE_SECURITY_INFORMATION</span>     <span class="o">|</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PROCESS_TRUST_LABEL_SECURITY_INFORMATION</span>
+    <span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;The default ``flags`` value for functions expecting a</span>
+<span class="sd">    `SECURITY_INFORMATION &lt;https://docs.microsoft.com/en-us/windows/desktop/SecAuthZ/security-information&gt;`_.</span>
+
+<span class="sd">    This value regroups the followings flags:</span>
+
+<span class="sd">        - ``OWNER_SECURITY_INFORMATION``</span>
+<span class="sd">        - ``GROUP_SECURITY_INFORMATION``</span>
+<span class="sd">        - ``DACL_SECURITY_INFORMATION``</span>
+<span class="sd">        - ``ATTRIBUTE_SECURITY_INFORMATION``</span>
+<span class="sd">        - ``SCOPE_SECURITY_INFORMATION``</span>
+<span class="sd">        - ``PROCESS_TRUST_LABEL_SECURITY_INFORMATION``</span>
+
+<span class="sd">    .. warning::</span>
+
+<span class="sd">        Note that the value ``SACL_SECURITY_INFORMATION`` needed to access the SACL is not present as it require the ``SeSecurityPrivilege``.</span>
+
+<span class="sd">        To query the SACL enable the ``SeSecurityPrivilege`` and use the parameter ``query_sacl=True`` on the functions expecting a ``flags``</span>
+
+<span class="sd">        see :ref:`Query SACL sample &lt;sample_security_sacl&gt;`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_close_function</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">LocalFree</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">control</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The security descriptor control</span>
+
+<span class="sd">        :type: :class:`~windows.generated_def.winstructs.SECURITY_DESCRIPTOR_CONTROL`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lpdwRevision</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">()</span>
+        <span class="n">control</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SECURITY_DESCRIPTOR_CONTROL</span><span class="p">()</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">GetSecurityDescriptorControl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">control</span><span class="p">,</span> <span class="n">lpdwRevision</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">control</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">revision</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The security descriptor&#39;s revision</span>
+
+<span class="sd">        :type: :class:`int`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lpdwRevision</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">()</span>
+        <span class="n">control</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SECURITY_DESCRIPTOR_CONTROL</span><span class="p">()</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">GetSecurityDescriptorControl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">control</span><span class="p">,</span> <span class="n">lpdwRevision</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">lpdwRevision</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">owner</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The owner of the security descriptor</span>
+
+<span class="sd">        :type: :class:`~windows.generated_def.winstructs.PSID` or ``None``</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">owner</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PSID</span><span class="p">()</span>
+        <span class="n">lpbOwnerDefaulted</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BOOL</span><span class="p">()</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">GetSecurityDescriptorOwner</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">owner</span><span class="p">,</span> <span class="n">lpbOwnerDefaulted</span><span class="p">)</span>
+        <span class="c1"># Return None of owner is NULL</span>
+        <span class="k">return</span> <span class="n">owner</span> <span class="ow">or</span> <span class="kc">None</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">group</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The group of the security descriptor</span>
+
+<span class="sd">        :type: :class:`~windows.generated_def.winstructs.PSID` or ``None``</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">group</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PSID</span><span class="p">()</span>
+        <span class="n">lpbGroupDefaulted</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BOOL</span><span class="p">()</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">GetSecurityDescriptorGroup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group</span><span class="p">,</span> <span class="n">lpbGroupDefaulted</span><span class="p">)</span>
+        <span class="c1"># Return None of group is NULL</span>
+        <span class="k">return</span> <span class="n">group</span> <span class="ow">or</span> <span class="kc">None</span>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">dacl</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The DACL of the security descriptor.</span>
+
+<span class="sd">        :type: :class:`Acl` or ``None`` if the DACL was ``NULL`` or not present</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dacl_present</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BOOL</span><span class="p">()</span>
+        <span class="n">pdacl</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PACL</span><span class="p">()</span>
+        <span class="n">lpbDaclDefaulted</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BOOL</span><span class="p">()</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">GetSecurityDescriptorDacl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dacl_present</span><span class="p">,</span> <span class="n">pdacl</span><span class="p">,</span> <span class="n">lpbDaclDefaulted</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">dacl_present</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">pdacl</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">pdacl</span><span class="p">,</span> <span class="n">PAcl</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">sacl</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The SACL of the security descriptor. You may need special attention to retrieve it (see :any:`DEFAULT_SECURITY_INFORMATION`)</span>
+
+<span class="sd">        :type: :class:`Acl` or ``None`` if the SACL was ``NULL`` or not present</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sacl_present</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BOOL</span><span class="p">()</span>
+        <span class="n">psacl</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PACL</span><span class="p">()</span>
+        <span class="n">lpbSaclDefaulted</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BOOL</span><span class="p">()</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">GetSecurityDescriptorSacl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sacl_present</span><span class="p">,</span> <span class="n">psacl</span><span class="p">,</span> <span class="n">lpbSaclDefaulted</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">sacl_present</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">psacl</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">psacl</span><span class="p">,</span> <span class="n">PAcl</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># Constructors</span>
+<div class="viewcode-block" id="SecurityDescriptor.from_string"><a class="viewcode-back" href="../../security.html#windows.security.SecurityDescriptor.from_string">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_string</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">sddl</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a new :class:`SecurityDescriptor` from the ``SDDL``.</span>
+
+<span class="sd">        :returns: :class:`SecurityDescriptor`</span>
+
+<span class="sd">        .. warning::</span>
+
+<span class="sd">            At the moment the underliying buffer is never freed.</span>
+
+<span class="sd">            See `ConvertStringSecurityDescriptorToSecurityDescriptorA &lt;https://docs.microsoft.com/en-us/windows/desktop/api/sddl/nf-sddl-convertstringsecuritydescriptortosecuritydescriptora&gt;`_</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">ConvertStringSecurityDescriptorToSecurityDescriptorA</span><span class="p">(</span>
+            <span class="n">sddl</span><span class="p">,</span>
+            <span class="n">gdef</span><span class="o">.</span><span class="n">SDDL_REVISION_1</span><span class="p">,</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="kc">None</span><span class="p">)</span>
+        <span class="c1"># TODO: we need to free this buffer..</span>
+        <span class="c1"># Keep track of Security Descritor state ?</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_from_name_and_type</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">objname</span><span class="p">,</span> <span class="n">objtype</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">DEFAULT_SECURITY_INFORMATION</span><span class="p">,</span> <span class="n">query_sacl</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="bp">self</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">query_sacl</span><span class="p">:</span>
+            <span class="n">flags</span> <span class="o">|=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SACL_SECURITY_INFORMATION</span>
+
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">GetNamedSecurityInfoA</span><span class="p">(</span>
+            <span class="n">objname</span><span class="p">,</span>
+            <span class="n">objtype</span><span class="p">,</span>
+            <span class="n">flags</span><span class="p">,</span>
+            <span class="kc">None</span><span class="p">,</span>
+            <span class="kc">None</span><span class="p">,</span>
+            <span class="kc">None</span><span class="p">,</span>
+            <span class="kc">None</span><span class="p">,</span>
+            <span class="bp">self</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_from_handle_and_type</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">handle</span><span class="p">,</span> <span class="n">objtype</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">DEFAULT_SECURITY_INFORMATION</span><span class="p">,</span> <span class="n">query_sacl</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="bp">self</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">query_sacl</span><span class="p">:</span>
+            <span class="n">flags</span> <span class="o">|=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SACL_SECURITY_INFORMATION</span>
+
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">GetSecurityInfo</span><span class="p">(</span>
+            <span class="n">handle</span><span class="p">,</span>
+            <span class="n">objtype</span><span class="p">,</span>
+            <span class="n">flags</span><span class="p">,</span>
+            <span class="kc">None</span><span class="p">,</span>
+            <span class="kc">None</span><span class="p">,</span>
+            <span class="kc">None</span><span class="p">,</span>
+            <span class="kc">None</span><span class="p">,</span>
+            <span class="bp">self</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+<div class="viewcode-block" id="SecurityDescriptor.from_filename"><a class="viewcode-back" href="../../security.html#windows.security.SecurityDescriptor.from_filename">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_filename</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">query_sacl</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">DEFAULT_SECURITY_INFORMATION</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Retrieve the security descriptor for the file ``filename``&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_from_name_and_type</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SE_FILE_OBJECT</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">flags</span><span class="p">,</span> <span class="n">query_sacl</span><span class="o">=</span><span class="n">query_sacl</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SecurityDescriptor.from_handle"><a class="viewcode-back" href="../../security.html#windows.security.SecurityDescriptor.from_handle">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_handle</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">handle</span><span class="p">,</span> <span class="n">query_sacl</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">DEFAULT_SECURITY_INFORMATION</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Retrieve the security descriptor for the kernel object described by``handle``&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_from_handle_and_type</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SE_KERNEL_OBJECT</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">flags</span><span class="p">,</span> <span class="n">query_sacl</span><span class="o">=</span><span class="n">query_sacl</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SecurityDescriptor.from_binary"><a class="viewcode-back" href="../../security.html#windows.security.SecurityDescriptor.from_binary">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_binary</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Retrieve the security descriptor described by the binary ``data``.</span>
+<span class="sd">        Binary security descriptor can be found in the registry for example</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_buffer</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SecurityDescriptor.to_string"><a class="viewcode-back" href="../../security.html#windows.security.SecurityDescriptor.to_string">[docs]</a>    <span class="k">def</span> <span class="nf">to_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">security_information</span><span class="o">=</span><span class="n">DEFAULT_SECURITY_INFORMATION</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the SDDL representation of the security descriptor</span>
+
+<span class="sd">        :type: :class:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result_cstr</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">LPSTR</span><span class="p">()</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">ConvertSecurityDescriptorToStringSecurityDescriptorA</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">gdef</span><span class="o">.</span><span class="n">SDDL_REVISION_1</span><span class="p">,</span>
+            <span class="n">security_information</span><span class="p">,</span>
+            <span class="n">result_cstr</span><span class="p">,</span>
+            <span class="kc">None</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">result_cstr</span><span class="o">.</span><span class="n">value</span> <span class="c1"># Retrieve a python-str copy</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">LocalFree</span><span class="p">(</span><span class="n">result_cstr</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span></div></div>
+
+
+    <span class="c1"># TST</span>
+
+    <span class="c1"># def relative(self):</span>
+        <span class="c1"># return bool(self.control &amp; gdef.SE_SELF_RELATIVE)</span>
+
+    <span class="c1"># If we want auto-free we need to handle relf-relative SD</span>
+    <span class="c1"># We need to keep-track of sub-object of the SD</span>
+    <span class="c1"># Just a ref to SD from SACL / DACL ?</span>
+
+    <span class="c1"># def __del__(self):</span>
+        <span class="c1"># if self._needs_free and sys.path is not None:</span>
+            <span class="c1"># print(&quot;FREE SELF&quot;)</span>
+            <span class="c1"># self._close_function(self)</span>
+
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">PythonForWindows 0.5 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2015, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

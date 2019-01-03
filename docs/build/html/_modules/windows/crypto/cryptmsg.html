@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>windows.crypto.cryptmsg &#8212; PythonForWindows 0.4 documentation</title>
+    <title>windows.crypto.cryptmsg &#8212; PythonForWindows 0.5 documentation</title>
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/css/mbasic.css" type="text/css" />
@@ -26,7 +26,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -49,7 +49,11 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">MSG_PARAM_KNOW_TYPES</span> <span class="o">=</span> <span class="p">{</span><span class="n">gdef</span><span class="o">.</span><span class="n">CMSG_SIGNER_INFO_PARAM</span><span class="p">:</span> <span class="n">gdef</span><span class="o">.</span><span class="n">CMSG_SIGNER_INFO</span><span class="p">,</span>
                             <span class="n">gdef</span><span class="o">.</span><span class="n">CMSG_SIGNER_COUNT_PARAM</span><span class="p">:</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">,</span>
-                            <span class="n">gdef</span><span class="o">.</span><span class="n">CMSG_CERT_COUNT_PARAM</span><span class="p">:</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">}</span>
+                            <span class="n">gdef</span><span class="o">.</span><span class="n">CMSG_CERT_COUNT_PARAM</span><span class="p">:</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">,</span>
+                            <span class="n">gdef</span><span class="o">.</span><span class="n">CMSG_ENVELOPE_ALGORITHM_PARAM</span><span class="p">:</span> <span class="n">gdef</span><span class="o">.</span><span class="n">CRYPT_ALGORITHM_IDENTIFIER</span><span class="p">,</span>
+                            <span class="n">gdef</span><span class="o">.</span><span class="n">CMSG_RECIPIENT_COUNT_PARAM</span><span class="p">:</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">,</span>
+                            <span class="n">gdef</span><span class="o">.</span><span class="n">CMSG_RECIPIENT_INFO_PARAM</span><span class="p">:</span> <span class="n">gdef</span><span class="o">.</span><span class="n">CERT_INFO</span><span class="p">,</span>
+                            <span class="p">}</span>
 
 
     <span class="k">def</span> <span class="nf">get_param</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param_type</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">raw</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -120,7 +124,22 @@
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">signers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The list of :class:`~windows.generated_def.winstructs.CMSG_SIGNER_INFO` embed in the message&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">get_signer_data</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nb_signer</span><span class="p">)]</span></div>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">get_signer_data</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nb_signer</span><span class="p">)]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">nb_recipient</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;TODO: DOC&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">CMSG_RECIPIENT_COUNT_PARAM</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="CryptMessage.get_recipient_data"><a class="viewcode-back" href="../../../crypto.html#windows.crypto.CryptMessage.get_recipient_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_recipient_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;TODO: DOC&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">CMSG_RECIPIENT_INFO_PARAM</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">recipients</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;TODO: DOC&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">get_recipient_data</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nb_recipient</span><span class="p">)]</span></div>
 </pre></div>
 
           </div>
@@ -153,7 +172,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>

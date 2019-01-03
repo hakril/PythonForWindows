@@ -1,0 +1,700 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>windows.winobject.token &#8212; PythonForWindows 0.5 documentation</title>
+    <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/css/mbasic.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.5 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for windows.winobject.token</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">ctypes</span>
+<span class="kn">import</span> <span class="nn">functools</span>
+<span class="kn">from</span> <span class="nn">__builtin__</span> <span class="k">import</span> <span class="nb">type</span> <span class="k">as</span> <span class="n">bltn_type</span>
+
+<span class="kn">import</span> <span class="nn">windows</span>
+<span class="kn">from</span> <span class="nn">windows</span> <span class="k">import</span> <span class="n">utils</span>
+<span class="kn">from</span> <span class="nn">windows</span> <span class="k">import</span> <span class="n">winproxy</span>
+<span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
+
+
+<span class="n">KNOW_INTEGRITY_LEVEL</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">SECURITY_MANDATORY_UNTRUSTED_RID</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">SECURITY_MANDATORY_LOW_RID</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">SECURITY_MANDATORY_MEDIUM_RID</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">SECURITY_MANDATORY_MEDIUM_PLUS_RID</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">SECURITY_MANDATORY_HIGH_RID</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">SECURITY_MANDATORY_SYSTEM_RID</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">SECURITY_MANDATORY_PROTECTED_PROCESS_RID</span>
+<span class="p">)</span>
+
+<span class="c1"># Voodoo to fix lookup-strangeness in class declaration</span>
+<span class="k">def</span> <span class="nf">meta_craft</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">partial_applier</span><span class="p">(</span><span class="n">infos_class</span><span class="p">,</span> <span class="n">rtype</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">property</span><span class="p">(</span><span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">infos_class</span><span class="o">=</span><span class="n">infos_class</span><span class="p">,</span> <span class="n">rtype</span><span class="o">=</span><span class="n">rtype</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">partial_applier</span>
+
+
+<div class="viewcode-block" id="TokenGroups"><a class="viewcode-back" href="../../../token.html#windows.winobject.token.TokenGroups">[docs]</a><span class="k">class</span> <span class="nc">TokenGroups</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TOKEN_GROUPS</span><span class="p">):</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">_groups</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">resized_array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Groups</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">GroupCount</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">sids_and_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The sids and attributes of each group</span>
+
+<span class="sd">        :type: [:class:`~windows.generated_def.winstructs.SID_AND_ATTRIBUTES`] - A list of :class:`~windows.generated_def.winstructs.SID_AND_ATTRIBUTES`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_groups</span> <span class="c1"># Something else ?</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">sids</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The sids of each group</span>
+
+<span class="sd">        :type: [:class:`~windows.generated_def.winstructs.PSID`] - A list of :class:`~windows.generated_def.winstructs.PSID`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">g</span><span class="o">.</span><span class="n">Sid</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_groups</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&lt;</span><span class="si">{0}</span><span class="s2"> count=</span><span class="si">{1}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">GroupCount</span><span class="p">)</span></div>
+
+<span class="n">TokenGroupsType</span> <span class="o">=</span> <span class="n">TokenGroups</span> <span class="c1"># Prevent confusion with token.TokenGroups</span>
+
+<div class="viewcode-block" id="TokenPrivileges"><a class="viewcode-back" href="../../../token.html#windows.winobject.token.TokenPrivileges">[docs]</a><span class="k">class</span> <span class="nc">TokenPrivileges</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TOKEN_PRIVILEGES</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Improved ``TOKEN_PRIVILEGES`` usable like a mapping&quot;&quot;&quot;</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">_privileges</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">resized_array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Privileges</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">PrivilegeCount</span><span class="p">)</span>
+
+<div class="viewcode-block" id="TokenPrivileges.all"><a class="viewcode-back" href="../../../token.html#windows.winobject.token.TokenPrivileges.all">[docs]</a>    <span class="k">def</span> <span class="nf">all</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The list of all privileges</span>
+
+<span class="sd">        :returns: [:class:`~windows.generated_def.winstructs.LUID_AND_ATTRIBUTES`] - A list of :class:`~windows.generated_def.winstructs.LUID_AND_ATTRIBUTES`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_privileges</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TokenPrivileges.keys"><a class="viewcode-back" href="../../../token.html#windows.winobject.token.TokenPrivileges.keys">[docs]</a>    <span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The name of all privileges in the TokenPrivileges</span>
+
+<span class="sd">        :returns: [:class:`str`] - A list of name</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_lookup_name</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">Luid</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_privileges</span><span class="p">]</span></div>
+
+    <span class="fm">__iter__</span> <span class="o">=</span> <span class="n">keys</span>
+
+<div class="viewcode-block" id="TokenPrivileges.items"><a class="viewcode-back" href="../../../token.html#windows.winobject.token.TokenPrivileges.items">[docs]</a>    <span class="k">def</span> <span class="nf">items</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The (name, Attribute) of all privileges in the TokenPrivileges</span>
+
+<span class="sd">        :returns: [(:class:`str`, :class:`int`)] - A list of (name, Attribute) tuple</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">_lookup_name</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">Luid</span><span class="p">),</span> <span class="n">p</span><span class="o">.</span><span class="n">Attributes</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_privileges</span><span class="p">]</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_priv_by_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="n">luid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lookup_value</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_privileges</span> <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">Luid</span> <span class="o">==</span> <span class="n">luid</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">x</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<div class="viewcode-block" id="TokenPrivileges.__getitem__"><a class="viewcode-back" href="../../../token.html#windows.winobject.token.TokenPrivileges.__getitem__">[docs]</a>    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Retrieve the attribute value for privilege ``name``</span>
+
+<span class="sd">        :raises: KeyError if privilege ``name`` not in the TokenPrivileges</span>
+<span class="sd">        :returns: :class:`int`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">priv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_priv_by_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">priv</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">priv</span><span class="o">.</span><span class="n">Attributes</span></div>
+
+<div class="viewcode-block" id="TokenPrivileges.__setitem__"><a class="viewcode-back" href="../../../token.html#windows.winobject.token.TokenPrivileges.__setitem__">[docs]</a>    <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the attribute value for privilege ``name``</span>
+
+<span class="sd">        :raises: KeyError if privilege ``name`` not in the TokenPrivileges</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">priv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_priv_by_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">priv</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">priv</span><span class="o">.</span><span class="n">Attributes</span> <span class="o">=</span> <span class="n">value</span></div>
+
+    <span class="c1"># __delitem__ that set SE_PRIVILEGE_REMOVED ?</span>
+
+    <span class="k">def</span> <span class="nf">_lookup_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">luid</span><span class="p">):</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">(</span><span class="mh">0x100</span><span class="p">)</span>
+        <span class="n">buff</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_buffer</span><span class="p">(</span><span class="n">size</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">LookupPrivilegeNameA</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">luid</span><span class="p">,</span> <span class="n">buff</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">buff</span><span class="p">[:</span><span class="n">size</span><span class="o">.</span><span class="n">value</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_lookup_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="n">luid</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">LUID</span><span class="p">()</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">LookupPrivilegeValueA</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">luid</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">luid</span></div>
+
+
+
+<span class="n">TokenPrivilegesType</span> <span class="o">=</span> <span class="n">TokenPrivileges</span>
+
+<div class="viewcode-block" id="TokenSecurityAttributesInformation"><a class="viewcode-back" href="../../../token.html#windows.winobject.token.TokenSecurityAttributesInformation">[docs]</a><span class="k">class</span> <span class="nc">TokenSecurityAttributesInformation</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TOKEN_SECURITY_ATTRIBUTES_INFORMATION</span><span class="p">):</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return all the attributes as :class:`TokenSecurityAttributeV1`</span>
+
+<span class="sd">        :type: [:class:`TokenSecurityAttributeV1`] - A list of token security attributes</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tptr</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Attribute</span><span class="o">.</span><span class="n">pAttributeV1</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">TokenSecurityAttributeV1</span><span class="p">))</span>
+        <span class="c1"># Well look like this cast does NOT keep a ref to self.</span>
+        <span class="c1"># Setup the base object ref ourself</span>
+        <span class="n">tptr</span><span class="o">.</span><span class="n">_custom_base_</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="k">return</span> <span class="n">tptr</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">AttributeCount</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="TokenSecurityAttributeV1"><a class="viewcode-back" href="../../../token.html#windows.winobject.token.TokenSecurityAttributeV1">[docs]</a><span class="k">class</span> <span class="nc">TokenSecurityAttributeV1</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TOKEN_SECURITY_ATTRIBUTE_V1</span><span class="p">):</span>
+    <span class="n">VALUE_ARRAY_PTR_BY_TYPE</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">TOKEN_SECURITY_ATTRIBUTE_TYPE_INT64</span><span class="p">:</span> <span class="s2">&quot;pInt64&quot;</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">TOKEN_SECURITY_ATTRIBUTE_TYPE_UINT64</span><span class="p">:</span> <span class="s2">&quot;pUint64&quot;</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">TOKEN_SECURITY_ATTRIBUTE_TYPE_STRING</span><span class="p">:</span> <span class="s2">&quot;pString&quot;</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">TOKEN_SECURITY_ATTRIBUTE_TYPE_FQBN</span><span class="p">:</span> <span class="s2">&quot;pFqbn&quot;</span><span class="p">,</span>
+        <span class="c1"># TOKEN_SECURITY_ATTRIBUTE_TYPE_SID</span>
+        <span class="c1"># TOKEN_SECURITY_ATTRIBUTE_TYPE_BOOLEAN</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">TOKEN_SECURITY_ATTRIBUTE_TYPE_OCTET_STRING</span><span class="p">:</span> <span class="s2">&quot;pOctetString&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The name of the security attribute&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">Name</span><span class="o">.</span><span class="n">str</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The values of the security attribute&quot;&quot;&quot;</span>
+        <span class="n">array_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">VALUE_ARRAY_PTR_BY_TYPE</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ValueType</span><span class="p">]</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Values</span><span class="p">,</span> <span class="n">array_name</span><span class="p">)[:</span><span class="bp">self</span><span class="o">.</span><span class="n">ValueCount</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;&quot;&lt;</span><span class="si">{0}</span><span class="s2"> name=&quot;</span><span class="si">{1}</span><span class="s2">&quot;&gt;&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># https://docs.microsoft.com/en-us/windows/desktop/SecAuthZ/access-tokens</span>
+<div class="viewcode-block" id="Token"><a class="viewcode-back" href="../../../token.html#windows.winobject.token.Token">[docs]</a><span class="k">class</span> <span class="nc">Token</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">AutoHandle</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Represent a Windows Token.</span>
+<span class="sd">    The attributes only documented by a type are from the :class:`~windows.generated_def.winstructs.TOKEN_INFORMATION_CLASS`, such return values may be improved version of the structure.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        see `[MSDN] TOKEN_INFORMATION_CLASS &lt;https://docs.microsoft.com/en-us/windows/desktop/api/winnt/ne-winnt-_token_information_class&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handle</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span> <span class="o">=</span> <span class="n">handle</span>
+
+    <span class="k">def</span> <span class="nf">_get_required_token_information_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">infos_class</span><span class="p">):</span>
+        <span class="n">cbsize</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">winproxy</span><span class="o">.</span><span class="n">GetTokenInformation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">infos_class</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">cbsize</span><span class="p">))</span>
+        <span class="k">except</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">WinproxyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+             <span class="k">if</span> <span class="ow">not</span> <span class="n">e</span><span class="o">.</span><span class="n">winerror</span> <span class="ow">in</span> <span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">ERROR_INSUFFICIENT_BUFFER</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ERROR_BAD_LENGTH</span><span class="p">):</span>
+                <span class="k">raise</span>
+        <span class="k">return</span> <span class="n">cbsize</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="k">def</span> <span class="nf">get_token_infomations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">infos_class</span><span class="p">,</span> <span class="n">rtype</span><span class="p">):</span>
+        <span class="n">required_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_required_token_information_size</span><span class="p">(</span><span class="n">infos_class</span><span class="p">)</span>
+        <span class="n">requested_size</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">required_size</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">rtype</span><span class="p">))</span>
+        <span class="n">buffer</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">BUFFER</span><span class="p">(</span><span class="n">rtype</span><span class="p">,</span> <span class="mi">1</span><span class="p">)(</span><span class="n">size</span><span class="o">=</span><span class="n">requested_size</span><span class="p">)</span>
+        <span class="n">cbsize</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">()</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">GetTokenInformation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">infos_class</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">buffer</span><span class="o">.</span><span class="n">real_size</span><span class="p">,</span> <span class="n">cbsize</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">buffer</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+
+    <span class="k">def</span> <span class="nf">set_informations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info_type</span><span class="p">,</span> <span class="n">infos</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">SetTokenInformation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">info_type</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">infos</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">infos</span><span class="p">))</span>
+
+
+    <span class="n">craft</span> <span class="o">=</span> <span class="n">meta_craft</span><span class="p">(</span><span class="n">get_token_infomations</span><span class="p">)</span>
+    <span class="c1"># https://docs.microsoft.com/en-us/windows/desktop/api/winnt/ne-winnt-_token_information_class</span>
+    <span class="n">TokenUser</span> <span class="o">=</span> <span class="n">craft</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TokenUser</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">TOKEN_USER</span><span class="p">)</span> <span class="c1">#: :class:`~windows.generated_def.winstructs.TOKEN_USER`</span>
+    <span class="n">TokenGroups</span> <span class="o">=</span> <span class="n">craft</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TokenGroups</span> <span class="p">,</span> <span class="n">TokenGroupsType</span><span class="p">)</span> <span class="c1">#: :class:`TokenGroups`</span>
+    <span class="n">TokenPrivileges</span> <span class="o">=</span> <span class="n">craft</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TokenPrivileges</span> <span class="p">,</span> <span class="n">TokenPrivilegesType</span><span class="p">)</span> <span class="c1">#: :class:`TokenPrivileges`</span>
+    <span class="n">TokenOwner</span> <span class="o">=</span> <span class="n">craft</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TokenOwner</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">TOKEN_OWNER</span><span class="p">)</span> <span class="c1">#: :class:`~windows.generated_def.winstructs.TOKEN_OWNER`</span>
+    <span class="n">TokenPrimaryGroup</span> <span class="o">=</span> <span class="n">craft</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TokenPrimaryGroup</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">TOKEN_PRIMARY_GROUP</span><span class="p">)</span> <span class="c1">#: :class:`~windows.generated_def.winstructs.TOKEN_PRIMARY_GROUP`</span>
+    <span class="n">TokenDefaultDacl</span> <span class="o">=</span> <span class="n">craft</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TokenDefaultDacl</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">TOKEN_DEFAULT_DACL</span><span class="p">)</span> <span class="c1">#: :class:`~windows.generated_def.winstructs.TOKEN_DEFAULT_DACL`</span>
+    <span class="n">TokenSource</span> <span class="o">=</span> <span class="n">craft</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TokenSource</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">TOKEN_SOURCE</span><span class="p">)</span> <span class="c1">#: :class:`~windows.generated_def.winstructs.TOKEN_SOURCE`</span>
+    <span class="n">TokenType</span> <span class="o">=</span> <span class="n">craft</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TokenType</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">TOKEN_TYPE</span><span class="p">)</span> <span class="c1">#: :class:`~windows.generated_def.winstructs.TOKEN_TYPE`</span>
+    <span class="n">TokenImpersonationLevel</span> <span class="o">=</span> <span class="n">craft</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TokenImpersonationLevel</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SECURITY_IMPERSONATION_LEVEL</span><span class="p">)</span> <span class="c1">#: :class:`~windows.generated_def.winstructs.SECURITY_IMPERSONATION_LEVEL`</span>
+    <span class="n">TokenStatistics</span> <span class="o">=</span> <span class="n">craft</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TokenStatistics</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">TOKEN_STATISTICS</span><span class="p">)</span> <span class="c1">#: :class:`~windows.generated_def.winstructs.TOKEN_STATISTICS`</span>
+    <span class="n">TokenRestrictedSids</span> <span class="o">=</span> <span class="n">craft</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TokenRestrictedSids</span><span class="p">,</span> <span class="n">TokenGroupsType</span><span class="p">)</span> <span class="c1">#: :class:`~windows.generated_def.winstructs.TokenGroups`</span>
+    <span class="n">TokenSessionId</span> <span class="o">=</span> <span class="n">craft</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TokenSessionId</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">)</span> <span class="c1">#: :class:`~windows.generated_def.winstructs.DWORD`</span>
+    <span class="n">TokenGroupsAndPrivileges</span> <span class="o">=</span> <span class="n">craft</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TokenGroupsAndPrivileges</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">TOKEN_GROUPS_AND_PRIVILEGES</span><span class="p">)</span> <span class="c1">#: :class:`~windows.generated_def.winstructs.TOKEN_GROUPS_AND_PRIVILEGES`</span>
+    <span class="c1"># TokenSessionReference = craft(gdef.TokenSessionReference, ???) # Reserved.</span>
+    <span class="n">TokenSandBoxInert</span> <span class="o">=</span> <span class="n">craft</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TokenSandBoxInert</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">)</span> <span class="c1">#: :class:`~windows.generated_def.winstructs.DWORD`</span>
+    <span class="c1"># TokenAuditPolicy = craft(gdef.TokenAuditPolicy, ???) # Reserved.</span>
+    <span class="n">TokenOrigin</span> <span class="o">=</span> <span class="n">craft</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TokenOrigin</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">TOKEN_ORIGIN</span><span class="p">)</span> <span class="c1">#: :class:`~windows.generated_def.winstructs.TOKEN_ORIGIN`</span>
+    <span class="n">TokenElevationType</span> <span class="o">=</span> <span class="n">craft</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TokenElevationType</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">TOKEN_ELEVATION_TYPE</span><span class="p">)</span> <span class="c1">#: :class:`~windows.generated_def.winstructs.TOKEN_ELEVATION_TYPE`</span>
+    <span class="n">TokenLinkedToken</span> <span class="o">=</span> <span class="n">craft</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TokenLinkedToken</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">TOKEN_LINKED_TOKEN</span><span class="p">)</span> <span class="c1">#: :class:`~windows.generated_def.winstructs.TOKEN_LINKED_TOKEN`</span>
+    <span class="n">TokenElevation</span> <span class="o">=</span> <span class="n">craft</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TokenElevation</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">TOKEN_ELEVATION</span><span class="p">)</span> <span class="c1">#: :class:`~windows.generated_def.winstructs.TOKEN_ELEVATION`</span>
+    <span class="n">TokenHasRestrictions</span> <span class="o">=</span> <span class="n">craft</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TokenHasRestrictions</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">)</span> <span class="c1">#: :class:`~windows.generated_def.winstructs.DWORD`</span>
+    <span class="n">TokenAccessInformation</span> <span class="o">=</span> <span class="n">craft</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TokenAccessInformation</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">TOKEN_ACCESS_INFORMATION</span><span class="p">)</span> <span class="c1">#: :class:`~windows.generated_def.winstructs.TOKEN_ACCESS_INFORMATION`</span>
+    <span class="n">TokenVirtualizationAllowed</span> <span class="o">=</span> <span class="n">craft</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TokenVirtualizationAllowed</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">)</span> <span class="c1">#: :class:`~windows.generated_def.winstructs.DWORD`</span>
+    <span class="n">TokenVirtualizationEnabled</span> <span class="o">=</span> <span class="n">craft</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TokenVirtualizationEnabled</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">)</span> <span class="c1">#: :class:`~windows.generated_def.winstructs.DWORD`</span>
+    <span class="n">TokenIntegrityLevel</span> <span class="o">=</span> <span class="n">craft</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TokenIntegrityLevel</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">TOKEN_MANDATORY_LABEL</span><span class="p">)</span> <span class="c1">#: :class:`~windows.generated_def.winstructs.TOKEN_MANDATORY_LABEL`</span>
+    <span class="n">TokenUIAccess</span> <span class="o">=</span> <span class="n">craft</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TokenUIAccess</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">)</span> <span class="c1">#: :class:`~windows.generated_def.winstructs.DWORD`</span>
+    <span class="n">TokenMandatoryPolicy</span> <span class="o">=</span> <span class="n">craft</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TokenMandatoryPolicy</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">TOKEN_MANDATORY_POLICY</span><span class="p">)</span> <span class="c1">#: :class:`~windows.generated_def.winstructs.TOKEN_MANDATORY_POLICY`</span>
+    <span class="n">TokenLogonSid</span> <span class="o">=</span> <span class="n">craft</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TokenLogonSid</span><span class="p">,</span> <span class="n">TokenGroupsType</span><span class="p">)</span> <span class="c1">#: :class:`TokenGroups`</span>
+    <span class="n">TokenIsAppContainer</span> <span class="o">=</span> <span class="n">craft</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TokenIsAppContainer</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">)</span> <span class="c1">#: :class:`~windows.generated_def.winstructs.DWORD`</span>
+    <span class="n">TokenCapabilities</span> <span class="o">=</span> <span class="n">craft</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TokenCapabilities</span><span class="p">,</span> <span class="n">TokenGroupsType</span><span class="p">)</span> <span class="c1">#: :class:`TokenGroups`</span>
+    <span class="n">TokenAppContainerSid</span> <span class="o">=</span> <span class="n">craft</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TokenAppContainerSid</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">TOKEN_APPCONTAINER_INFORMATION</span><span class="p">)</span> <span class="c1">#: :class:`~windows.generated_def.winstructs.TOKEN_APPCONTAINER_INFORMATION`</span>
+    <span class="n">TokenAppContainerNumber</span> <span class="o">=</span> <span class="n">craft</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TokenAppContainerNumber</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">)</span> <span class="c1">#: :class:`~windows.generated_def.winstructs.DWORD`</span>
+    <span class="n">TokenUserClaimAttributes</span> <span class="o">=</span> <span class="n">craft</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TokenUserClaimAttributes</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">CLAIM_SECURITY_ATTRIBUTES_INFORMATION</span><span class="p">)</span> <span class="c1">#: :class:`~windows.generated_def.winstructs.CLAIM_SECURITY_ATTRIBUTES_INFORMATION`</span>
+    <span class="n">TokenDeviceClaimAttributes</span> <span class="o">=</span> <span class="n">craft</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TokenDeviceClaimAttributes</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">CLAIM_SECURITY_ATTRIBUTES_INFORMATION</span><span class="p">)</span> <span class="c1">#: :class:`~windows.generated_def.winstructs.CLAIM_SECURITY_ATTRIBUTES_INFORMATION`</span>
+    <span class="c1"># TokenRestrictedUserClaimAttributes = craft(gdef.TokenRestrictedUserClaimAttributes, ???) # Reserved.</span>
+    <span class="c1"># TokenRestrictedDeviceClaimAttributes = craft(gdef.TokenRestrictedDeviceClaimAttributes, ???) # Reserved.</span>
+    <span class="n">TokenDeviceGroups</span> <span class="o">=</span> <span class="n">craft</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TokenDeviceGroups</span><span class="p">,</span> <span class="n">TokenGroupsType</span><span class="p">)</span> <span class="c1">#: :class:`TokenGroups`</span>
+    <span class="n">TokenRestrictedDeviceGroups</span> <span class="o">=</span> <span class="n">craft</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TokenRestrictedDeviceGroups</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">TOKEN_GROUPS</span><span class="p">)</span> <span class="c1">#: :class:`~windows.generated_def.winstructs.TOKEN_GROUPS`</span>
+    <span class="c1"># Reserved.</span>
+    <span class="c1"># Structure found in ntseapi.h (thx internet)</span>
+    <span class="n">TokenSecurityAttributes</span> <span class="o">=</span> <span class="n">craft</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TokenSecurityAttributes</span><span class="p">,</span> <span class="n">TokenSecurityAttributesInformation</span><span class="p">)</span> <span class="c1">#: :class:`TokenSecurityAttributesInformation`</span>
+    <span class="c1"># Help would be appreciated for the structures of the following query type</span>
+
+    <span class="c1"># TokenIsRestricted = craft(gdef.TokenIsRestricted, ???) # Reserved.</span>
+    <span class="n">TokenProcessTrustLevel</span> <span class="o">=</span> <span class="n">craft</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TokenProcessTrustLevel</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PSID</span><span class="p">)</span> <span class="c1">#: :class:`~windows.generated_def.winstructs.PSID`</span>
+    <span class="c1"># TokenPrivateNameSpace = craft(gdef.TokenPrivateNameSpace, gdef.ULONG) # Reserved.</span>
+    <span class="c1"># TokenSingletonAttributes = craft(gdef.TokenSingletonAttributes, ???) # Reserved.</span>
+    <span class="c1"># TokenBnoIsolation = craft(gdef.TokenBnoIsolation, ???) # Reserved.</span>
+    <span class="c1"># TokenChildProcessFlags = craft(gdef.TokenChildProcessFlags, ???) # Reserved.</span>
+    <span class="c1"># TokenIsLessPrivilegedAppContainer = craft(gdef.TokenIsLessPrivilegedAppContainer, ???) # Reserved.</span>
+
+    <span class="c1"># High level properties</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">user</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The user sid of the token</span>
+
+<span class="sd">        :type: :class:`~windows.generated_def.winstructs.PSID`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">TokenUser</span><span class="o">.</span><span class="n">User</span><span class="o">.</span><span class="n">Sid</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">username</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The username of the token</span>
+
+<span class="sd">        :type: :class:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_user_and_computer_name</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">computername</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The computername of the token</span>
+
+<span class="sd">        :type: :class:`str`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_user_and_computer_name</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_user_and_computer_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">lookup_sid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
+
+
+    <span class="n">groups</span> <span class="o">=</span> <span class="n">TokenGroups</span> <span class="c1">#: Alias for TokenGroups (type may change in the future for improved struct)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">owner</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The owner sid of the token</span>
+
+<span class="sd">        :type: :class:`~windows.generated_def.winstructs.PSID`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">TokenOwner</span><span class="o">.</span><span class="n">Owner</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">primary_group</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The sid of the primary group of the token</span>
+
+<span class="sd">        :type: :class:`~windows.generated_def.winstructs.PSID`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">TokenPrimaryGroup</span><span class="o">.</span><span class="n">PrimaryGroup</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">default_dacl</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The defaul DACL of the token</span>
+
+<span class="sd">        :type: :class:`windows.security.Acl`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">import</span> <span class="nn">window.security</span> <span class="c1"># Beuk move token.py &amp; in a security/ directory ?</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_token_infomations</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TokenDefaultDacl</span><span class="p">,</span> <span class="n">windows</span><span class="o">.</span><span class="n">security</span><span class="o">.</span><span class="n">PAcl</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># def source(self): (tok.TokenSource) ??</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The type (Primary / Impersonation) of the token</span>
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">TokenType</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">impersonation_level</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The impersonation level of a ``TokenImpersonation`` token.</span>
+
+<span class="sd">        :raises: :class:`WindowsError` if token is not a ``TokenImpersonation``</span>
+<span class="sd">        :type: :class:`int` -- Enum value from :class:`~windows.generated_def.winstructs.SECURITY_IMPERSONATION_LEVEL`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">TokenImpersonationLevel</span><span class="o">.</span><span class="n">value</span>
+        <span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">winerror</span> <span class="o">==</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ERROR_INVALID_PARAMETER</span> <span class="ow">and</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">!=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">TokenImpersonation</span><span class="p">):</span>
+                <span class="c1"># raise ValueError ?</span>
+                <span class="n">e</span><span class="o">.</span><span class="n">strerror</span> <span class="o">+=</span> <span class="s2">&quot; This Token is not an Impersonation token&quot;</span>
+            <span class="k">raise</span>
+
+    <span class="n">statistics</span> <span class="o">=</span> <span class="n">TokenStatistics</span> <span class="c1">#: Alias for TokenStatistics (type may change in the future for improved struct)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The TokenId Specifies an unique identifier that identifies this instance of the token object.</span>
+
+<span class="sd">        :type: :class:`int`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">TokenStatistics</span><span class="o">.</span><span class="n">TokenId</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">authentication_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The AuthenticationId Specifies an unique identifier assigned to the session this token represents.</span>
+<span class="sd">        There can be many tokens representing a single logon session.</span>
+
+<span class="sd">        :type: :class:`int`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">TokenStatistics</span><span class="o">.</span><span class="n">AuthenticationId</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">modified_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The ModifiedId Specifies an unique identifier that changes each time the token is modified.</span>
+
+<span class="sd">        :type: :class:`int`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">TokenStatistics</span><span class="o">.</span><span class="n">ModifiedId</span><span class="p">)</span>
+
+    <span class="n">restricted_sids</span> <span class="o">=</span> <span class="n">TokenRestrictedSids</span> <span class="c1">#: Alias for TokenRestrictedSids (type may change in the future for improved struct)</span>
+    <span class="n">session_id</span> <span class="o">=</span> <span class="n">TokenSessionId</span> <span class="c1">#: Alias for TokenSessionId (type may change in the future for improved struct)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">groups_and_privileges</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Alias for TokenGroupsAndPrivileges (type may change in the future for improved struct)&quot;&quot;&quot;</span>
+        <span class="c1"># Return enhanced &#39;TOKEN_GROUPS_AND_PRIVILEGES&#39; ?</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">TokenGroupsAndPrivileges</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">privileges</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Alias for ``TokenPrivileges``</span>
+
+<span class="sd">        :type: :class:`TokenPrivileges`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">TokenPrivileges</span>
+
+    <span class="n">sandbox_inert</span> <span class="o">=</span> <span class="n">TokenSandBoxInert</span> <span class="c1">#: Alias for TokenSandBoxInert (type may change in the future for improved struct)</span>
+
+    <span class="c1"># def audit_policy(self):</span>
+        <span class="c1"># raise NotImplementedError(&quot;Need to find the type of TokenAuditPolicy&quot;)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">origin</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The originating logon session of the token.</span>
+
+<span class="sd">        :type: :class:`int`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">origin_logon_session</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">TokenOrigin</span><span class="o">.</span><span class="n">OriginatingLogonSession</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">origin_logon_session</span><span class="p">)</span> <span class="c1"># improved LUID implem __int__ :)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">elevation_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The elevation type of the token.</span>
+
+<span class="sd">        :type: :class:`int` -- Enum value from :class:`~windows.generated_def.winstructs.TOKEN_ELEVATION_TYPE`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">TokenElevationType</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">linked_token</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The token linked to our token if present (may raise else)</span>
+
+<span class="sd">        :type: :class:`Token`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO: return None if not present ?</span>
+        <span class="k">return</span> <span class="n">Token</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">TokenLinkedToken</span><span class="o">.</span><span class="n">LinkedToken</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">elevated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;``True`` if token is an elevated token&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">TokenElevation</span><span class="o">.</span><span class="n">TokenIsElevated</span><span class="p">)</span>
+
+    <span class="n">is_elevated</span> <span class="o">=</span> <span class="n">elevated</span> <span class="c1">#: Alias for ``elevated`` deprecated and may disapear</span>
+    <span class="n">has_restriction</span> <span class="o">=</span> <span class="n">TokenHasRestrictions</span> <span class="c1">#: Alias for TokenHasRestrictions (type may change in the future for improved struct)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">access_information</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Alias for TokenAccessInformation (type may change in the future for improved struct)&quot;&quot;&quot;</span>
+        <span class="c1"># Return enhanced subclass ?</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">TokenAccessInformation</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">trust_level</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The trust level of the process if present else ``None``.</span>
+
+<span class="sd">        :type: :class:`~windows.generated_def.winstructs.PSID`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">TokenProcessTrustLevel</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">tl</span><span class="p">:</span> <span class="c1"># NULL:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">tl</span>
+
+    <span class="n">virtualization_allowed</span> <span class="o">=</span> <span class="n">TokenVirtualizationAllowed</span> <span class="c1">#: Alias for TokenVirtualizationAllowed (type may change in the future for improved struct)</span>
+    <span class="n">virtualization_enabled</span> <span class="o">=</span> <span class="n">TokenVirtualizationEnabled</span> <span class="c1">#: Alias for TokenVirtualizationEnabled (type may change in the future for improved struct)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">integrity_level</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The integrity level and attributes of the token</span>
+
+<span class="sd">        :type: :class:`windows.generated_def.winstructs.SID_AND_ATTRIBUTES`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">TokenIntegrityLevel</span><span class="o">.</span><span class="n">Label</span> <span class="c1"># SID_AND_ATTRIBUTES</span>
+
+<div class="viewcode-block" id="Token.get_integrity"><a class="viewcode-back" href="../../../token.html#windows.winobject.token.Token.get_integrity">[docs]</a>    <span class="k">def</span> <span class="nf">get_integrity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the integrity level of the token</span>
+
+<span class="sd">        :type: :class:`int`</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+        <span class="n">sid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">integrity_level</span><span class="o">.</span><span class="n">Sid</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">GetSidSubAuthorityCount</span><span class="p">(</span><span class="n">sid</span><span class="p">)</span>
+        <span class="n">integrity</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">GetSidSubAuthority</span><span class="p">(</span><span class="n">sid</span><span class="p">,</span> <span class="n">count</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">KNOW_INTEGRITY_LEVEL</span><span class="p">[</span><span class="n">integrity</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Token.set_integrity"><a class="viewcode-back" href="../../../token.html#windows.winobject.token.Token.set_integrity">[docs]</a>    <span class="k">def</span> <span class="nf">set_integrity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">integrity</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the integrity level of a token</span>
+
+<span class="sd">        :param type: :class:`int`</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+        <span class="n">mandatory_label</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">TOKEN_MANDATORY_LABEL</span><span class="p">()</span>
+        <span class="n">mandatory_label</span><span class="o">.</span><span class="n">Label</span><span class="o">.</span><span class="n">Attributes</span> <span class="o">=</span> <span class="mh">0x60</span>
+        <span class="n">mandatory_label</span><span class="o">.</span><span class="n">Label</span><span class="o">.</span><span class="n">Sid</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PSID</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s2">&quot;S-1-16-</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">integrity</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_informations</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TokenIntegrityLevel</span><span class="p">,</span> <span class="n">mandatory_label</span><span class="p">)</span></div>
+
+    <span class="n">_INTEGRITY_PROPERTY_DOC</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;The integrity of the token as an int (extracted from integrity PSID)</span>
+
+<span class="s2">    :getter: :func:`get_integrity`</span>
+<span class="s2">    :setter: :func:`set_integrity`</span>
+<span class="s2">    &quot;&quot;&quot;</span>
+
+    <span class="n">integrity</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_integrity</span><span class="p">,</span> <span class="n">set_integrity</span><span class="p">,</span> <span class="n">doc</span><span class="o">=</span><span class="n">_INTEGRITY_PROPERTY_DOC</span><span class="p">)</span>
+
+    <span class="n">ui_access</span> <span class="o">=</span> <span class="n">TokenUIAccess</span> <span class="c1">#: Alias for TokenUIAccess (type may change in the future for improved struct)</span>
+
+    <span class="n">VALID_TOKEN_POLICIES</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">TOKEN_MANDATORY_POLICY_OFF</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">TOKEN_MANDATORY_POLICY_NO_WRITE_UP</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">TOKEN_MANDATORY_POLICY_NEW_PROCESS_MIN</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">TOKEN_MANDATORY_POLICY_VALID_MASK</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">mandatory_policy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;mandatory integrity access policy for the associated token</span>
+
+<span class="sd">        :type: :class:`int` -- see `[MSDN] mandatory policy &lt;https://docs.microsoft.com/en-us/windows/desktop/api/winnt/ns-winnt-_token_mandatory_policy&gt;`_</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">VALID_TOKEN_POLICIES</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">TokenMandatoryPolicy</span><span class="o">.</span><span class="n">Policy</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">logon_sid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The logon sid of the token. (Case of multiple logon sid not handled and will raise AssertionError)</span>
+
+<span class="sd">        :type: :class:`windows.generated_def.winstructs.SID_AND_ATTRIBUTES`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">rgroups</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">TokenLogonSid</span>
+        <span class="k">assert</span> <span class="n">rgroups</span><span class="o">.</span><span class="n">GroupCount</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;More than 1 TokenLogonSid&quot;</span>
+        <span class="k">return</span> <span class="n">rgroups</span><span class="o">.</span><span class="n">Groups</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">is_appcontainer</span> <span class="o">=</span> <span class="n">TokenIsAppContainer</span> <span class="c1">#: Alias for TokenIsAppContainer (type may change in the future for improved struct)</span>
+    <span class="n">capabilities</span> <span class="o">=</span> <span class="n">TokenCapabilities</span> <span class="c1">#: Alias for TokenCapabilities (type may change in the future for improved struct)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">appcontainer_sid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The sid of the TokenAppContainerSid if present else ``None``</span>
+
+<span class="sd">        :type: :class:`~windows.generated_def.winstructs.PSID`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">TokenAppContainerSid</span><span class="o">.</span><span class="n">TokenAppContainer</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">sid</span><span class="p">:</span> <span class="c1"># NULL</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">sid</span>
+
+    <span class="n">appcontainer_number</span> <span class="o">=</span> <span class="n">TokenAppContainerNumber</span> <span class="c1">#: Alias for TokenAppContainerNumber (type may change in the future for improved struct)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">security_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The security attributes of the token</span>
+
+<span class="sd">        :type: [:class:`TokenSecurityAttributeV1`] - A list of token security attributes</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">TokenSecurityAttributes</span><span class="o">.</span><span class="n">attributes</span>
+
+
+    <span class="c1">## Token Methods</span>
+<div class="viewcode-block" id="Token.duplicate"><a class="viewcode-back" href="../../../token.html#windows.winobject.token.Token.duplicate">[docs]</a>    <span class="k">def</span> <span class="nf">duplicate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">access_rigth</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">MAXIMUM_ALLOWED</span><span class="p">,</span> <span class="n">attributes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">impersonation_level</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Duplicate the token into a new :class:`Token`.</span>
+
+<span class="sd">        :param type: The type of token: ``TokenPrimary(0x1L)`` or ``TokenImpersonation(0x2L)``</span>
+<span class="sd">        :param impersonation_level: The :class:`~windows.generated_def.winstructs.SECURITY_IMPERSONATION_LEVEL` for a ``TokenImpersonation(0x2L)``:</span>
+
+<span class="sd">            - If ``type`` is ``TokenPrimary(0x1L)`` this parameter is ignored if ``None`` or used as-is.</span>
+<span class="sd">            - If ``type`` is ``TokenImpersonation(0x2L)`` and this parameter is None, ``self.impersonation_level`` is used.</span>
+<span class="sd">            - If ``type`` is ``TokenImpersonation(0x2L)`` and our Token is a ``TokenPrimary(0x1L)`` this parameter MUST be provided</span>
+
+<span class="sd">        :returns: :class:`Token` - The duplicate token</span>
+
+<span class="sd">        Example:</span>
+
+<span class="sd">            &gt;&gt;&gt; tok</span>
+<span class="sd">            &lt;Token TokenId=0x39d6dde5 Type=TokenPrimary(0x1L)&gt;</span>
+<span class="sd">            &gt;&gt;&gt; tok.duplicate()</span>
+<span class="sd">            &lt;Token TokenId=0x39d7b206 Type=TokenPrimary(0x1L)&gt;</span>
+<span class="sd">            &gt;&gt;&gt; tok.duplicate(type=gdef.TokenImpersonation)</span>
+<span class="sd">            ...</span>
+<span class="sd">            ValueError: Duplicating a PrimaryToken as a TokenImpersonation require explicit &lt;impersonation_level&gt; parameter</span>
+<span class="sd">            &gt;&gt;&gt; tok.duplicate(type=gdef.TokenImpersonation, impersonation_level=gdef.SecurityImpersonation)</span>
+<span class="sd">            &lt;Token TokenId=0x39dadbf8 Type=TokenImpersonation(0x2L) ImpersonationLevel=SecurityImpersonation(0x2L)&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">newtoken</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">HANDLE</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">type</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span>
+        <span class="k">if</span> <span class="n">impersonation_level</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">gdef</span><span class="o">.</span><span class="n">TokenImpersonation</span><span class="p">:</span>
+                <span class="n">impersonation_level</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">impersonation_level</span>
+            <span class="k">elif</span> <span class="nb">type</span> <span class="o">!=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">TokenImpersonation</span><span class="p">:</span>
+                <span class="n">impersonation_level</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1">#: ignored</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Duplicating a PrimaryToken as a TokenImpersonation require explicit &lt;impersonation_level&gt; parameter&quot;</span><span class="p">)</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">DuplicateTokenEx</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">access_rigth</span><span class="p">,</span> <span class="n">attributes</span><span class="p">,</span> <span class="n">impersonation_level</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">newtoken</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">bltn_type</span><span class="p">(</span><span class="bp">self</span><span class="p">)(</span><span class="n">newtoken</span><span class="o">.</span><span class="n">value</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Token.adjust_privileges"><a class="viewcode-back" href="../../../token.html#windows.winobject.token.Token.adjust_privileges">[docs]</a>    <span class="k">def</span> <span class="nf">adjust_privileges</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">privileges</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Adjust the token privileges according to ``privileges``.</span>
+<span class="sd">        This API is the `complex one` to adjust multiple privileges at once.</span>
+
+<span class="sd">        To simply enable one privilege see :func:`enable_privilege`.</span>
+
+<span class="sd">        :param privileges: :class:`~windows.generated_def.winstructs.TOKEN_PRIVILEGES` (or subclass as :class:`TokenPrivileges`). To easily update your token privileges use the result of :data:`privileges`.</span>
+
+<span class="sd">        Example:</span>
+
+<span class="sd">            &gt;&gt;&gt; tok = windows.current_process.token</span>
+<span class="sd">            &gt;&gt;&gt; privs = tok.privileges</span>
+<span class="sd">            &gt;&gt;&gt; privs[&quot;SeShutdownPrivilege&quot;] = gdef.SE_PRIVILEGE_ENABLED</span>
+<span class="sd">            &gt;&gt;&gt; privs[&quot;SeUndockPrivilege&quot;] = gdef.SE_PRIVILEGE_ENABLED</span>
+<span class="sd">            &gt;&gt;&gt; tok.adjust_privileges(privs)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">buffsize</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">privileges</span><span class="p">,</span> <span class="n">TokenPrivilegesType</span><span class="p">):</span>
+            <span class="c1"># The TokenPrivilegesType should come from a PTR via Improved buffer</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">buffsize</span> <span class="o">=</span> <span class="n">privileges</span><span class="o">.</span><span class="n">_b_base_</span><span class="o">.</span><span class="n">real_size</span>
+            <span class="k">except</span> <span class="ne">AttributeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">pass</span>
+        <span class="k">if</span> <span class="n">buffsize</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">buffsize</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">privileges</span><span class="p">)</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">AdjustTokenPrivileges</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">privileges</span><span class="p">,</span> <span class="n">buffsize</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">GetLastError</span><span class="p">()</span> <span class="o">==</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ERROR_NOT_ALL_ASSIGNED</span><span class="p">:</span>
+            <span class="c1"># Transform this in a real WindowsError</span>
+            <span class="k">raise</span> <span class="ne">WindowsError</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">ERROR_NOT_ALL_ASSIGNED</span><span class="p">,</span> <span class="s2">&quot;Failed to adjust all privileges&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Token.enable_privilege"><a class="viewcode-back" href="../../../token.html#windows.winobject.token.Token.enable_privilege">[docs]</a>    <span class="k">def</span> <span class="nf">enable_privilege</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Enable privilege ``name`` in the token</span>
+
+<span class="sd">        :raises: :class:`ValueError` if :class:`Token` has no privilege ``name``</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">privs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">privileges</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">privs</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SE_PRIVILEGE_ENABLED</span>
+        <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="c1"># Emulate the WindowsError that would be triggered in &#39;adjust_privileges&#39; ?</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="s2"> has no privilege &lt;</span><span class="si">{1}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">adjust_privileges</span><span class="p">(</span><span class="n">privs</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">flag_repr</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">Flag</span><span class="o">.</span><span class="fm">__repr__</span>
+        <span class="n">tid_int</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">TokenStatistics</span><span class="o">.</span><span class="n">TokenId</span><span class="p">)</span>
+        <span class="n">toktype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span>
+        <span class="k">if</span> <span class="n">toktype</span> <span class="o">==</span> <span class="n">gdef</span><span class="o">.</span><span class="n">TokenPrimary</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;&lt;</span><span class="si">{0}</span><span class="s2"> TokenId=</span><span class="si">{1:#x}</span><span class="s2"> Type=</span><span class="si">{2}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">tid_int</span><span class="p">,</span> <span class="n">flag_repr</span><span class="p">(</span><span class="n">toktype</span><span class="p">))</span>
+        <span class="k">return</span> <span class="s2">&quot;&lt;</span><span class="si">{0}</span><span class="s2"> TokenId=</span><span class="si">{1:#x}</span><span class="s2"> Type=</span><span class="si">{2}</span><span class="s2"> ImpersonationLevel=</span><span class="si">{3}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">tid_int</span><span class="p">,</span> <span class="n">flag_repr</span><span class="p">(</span><span class="n">toktype</span><span class="p">),</span> <span class="n">flag_repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">impersonation_level</span><span class="p">))</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.5 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2015, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

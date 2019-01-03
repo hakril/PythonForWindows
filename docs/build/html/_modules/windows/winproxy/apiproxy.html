@@ -1,0 +1,209 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>windows.winproxy.apiproxy &#8212; PythonForWindows 0.5 documentation</title>
+    <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/css/mbasic.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.5 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for windows.winproxy.apiproxy</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">ctypes</span>
+<span class="kn">import</span> <span class="nn">functools</span>
+
+<span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
+
+<span class="c1"># Utils</span>
+<div class="viewcode-block" id="is_implemented"><a class="viewcode-back" href="../../../winproxy.html#windows.winproxy.is_implemented">[docs]</a><span class="k">def</span> <span class="nf">is_implemented</span><span class="p">(</span><span class="n">apiproxy</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return :obj:`True` if DLL/Api can be found&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">apiproxy</span><span class="o">.</span><span class="n">force_resolution</span><span class="p">()</span>
+    <span class="k">except</span> <span class="n">ExportNotFound</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<span class="k">def</span> <span class="nf">get_target</span><span class="p">(</span><span class="n">apiproxy</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;POC for newshook&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">apiproxy</span><span class="o">.</span><span class="n">target_dll</span><span class="p">,</span> <span class="n">apiproxy</span><span class="o">.</span><span class="n">target_func</span>
+
+
+<div class="viewcode-block" id="resolve"><a class="viewcode-back" href="../../../winproxy.html#windows.winproxy.resolve">[docs]</a><span class="k">def</span> <span class="nf">resolve</span><span class="p">(</span><span class="n">apiproxy</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Resolve the address of ``apiproxy``. Might raise if ``apiproxy`` is not implemented&quot;&quot;&quot;</span>
+    <span class="n">apiproxy</span><span class="o">.</span><span class="n">force_resolution</span><span class="p">()</span>
+    <span class="n">func</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">WinDLL</span><span class="p">(</span><span class="n">dll_name</span><span class="p">)[</span><span class="n">func_name</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PVOID</span><span class="p">)</span><span class="o">.</span><span class="n">value</span></div>
+
+
+<span class="c1"># ApiProxy stuff</span>
+<span class="k">class</span> <span class="nc">ExportNotFound</span><span class="p">(</span><span class="ne">RuntimeError</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func_name</span><span class="p">,</span> <span class="n">api_name</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">func_name</span> <span class="o">=</span> <span class="n">func_name</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">api_name</span> <span class="o">=</span> <span class="n">api_name</span>
+            <span class="nb">super</span><span class="p">(</span><span class="n">ExportNotFound</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s2">&quot;Function </span><span class="si">{0}</span><span class="s2"> not found into </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">func_name</span><span class="p">,</span> <span class="n">api_name</span><span class="p">))</span>
+
+
+<span class="k">class</span> <span class="nc">NeededParameterType</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="n">_inst</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_inst</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">_inst</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">NeededParameterType</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_inst</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;NeededParameter&quot;</span>
+
+<span class="n">NeededParameter</span> <span class="o">=</span> <span class="n">NeededParameterType</span><span class="p">()</span>
+<span class="n">sentinel</span> <span class="o">=</span> <span class="nb">object</span><span class="p">()</span>
+
+<span class="k">class</span> <span class="nc">ApiProxy</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="n">APIDLL</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="sd">&quot;&quot;&quot;Create a python wrapper around a kernel32 function&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">error_check</span><span class="o">=</span><span class="n">sentinel</span><span class="p">,</span> <span class="n">deffunc_module</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">deffunc_module</span> <span class="o">=</span> <span class="n">deffunc_module</span> <span class="k">if</span> <span class="n">deffunc_module</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">gdef</span><span class="o">.</span><span class="n">winfuncs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">func_name</span> <span class="o">=</span> <span class="n">func_name</span>
+        <span class="k">if</span> <span class="n">error_check</span> <span class="ow">is</span> <span class="n">sentinel</span><span class="p">:</span>
+            <span class="n">error_check</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_error_check</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">error_check</span> <span class="o">=</span> <span class="n">error_check</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cprototyped</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">python_proxy</span><span class="p">):</span>
+        <span class="c1"># Use the name of the sub-function if None was given</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">func_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">func_name</span> <span class="o">=</span> <span class="n">python_proxy</span><span class="o">.</span><span class="vm">__name__</span>
+
+        <span class="n">errchk</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">error_check</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">errchk</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">error_check</span><span class="p">)(</span><span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">error_check</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">func_name</span><span class="p">))</span>
+
+        <span class="n">prototype</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">deffunc_module</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">func_name</span> <span class="o">+</span> <span class="s2">&quot;Prototype&quot;</span><span class="p">)</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">deffunc_module</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">func_name</span> <span class="o">+</span> <span class="s2">&quot;Params&quot;</span><span class="p">)</span>
+        <span class="n">python_proxy</span><span class="o">.</span><span class="n">prototype</span> <span class="o">=</span> <span class="n">prototype</span>
+        <span class="n">python_proxy</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="n">params</span>
+        <span class="n">python_proxy</span><span class="o">.</span><span class="n">errcheck</span> <span class="o">=</span> <span class="n">errchk</span>
+        <span class="n">python_proxy</span><span class="o">.</span><span class="n">target_dll</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">APIDLL</span>
+        <span class="n">python_proxy</span><span class="o">.</span><span class="n">target_func</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">func_name</span>
+        <span class="c1"># Give access to the &#39;ApiProxy&#39; object from the function</span>
+        <span class="n">python_proxy</span><span class="o">.</span><span class="n">proxy</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="n">params_name</span> <span class="o">=</span> <span class="p">[</span><span class="n">param</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">params</span><span class="p">]</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">error_check</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">):</span>
+            <span class="n">doc</span> <span class="o">=</span> <span class="n">python_proxy</span><span class="o">.</span><span class="vm">__doc__</span>
+            <span class="n">doc</span> <span class="o">=</span> <span class="n">doc</span> <span class="k">if</span> <span class="n">doc</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+            <span class="n">python_proxy</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="n">doc</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Errcheck:</span><span class="se">\n</span><span class="s2">   &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">error_check</span><span class="o">.</span><span class="vm">__doc__</span>
+
+        <span class="k">def</span> <span class="nf">generate_ctypes_function</span><span class="p">():</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">api_dll</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">windll</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">APIDLL</span><span class="p">]</span>
+            <span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">winerror</span> <span class="o">==</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ERROR_BAD_EXE_FORMAT</span><span class="p">:</span>
+                    <span class="n">e</span><span class="o">.</span><span class="n">strerror</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">strerror</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;%1&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">APIDLL</span><span class="p">))</span>
+                <span class="k">raise</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">c_prototyped</span> <span class="o">=</span> <span class="n">prototype</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">func_name</span><span class="p">,</span> <span class="n">api_dll</span><span class="p">),</span> <span class="n">params</span><span class="p">)</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">AttributeError</span><span class="p">,</span> <span class="ne">WindowsError</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">ExportNotFound</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">func_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">APIDLL</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">errchk</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">c_prototyped</span><span class="o">.</span><span class="n">errcheck</span> <span class="o">=</span> <span class="n">errchk</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_cprototyped</span> <span class="o">=</span> <span class="n">c_prototyped</span>
+
+        <span class="k">def</span> <span class="nf">perform_call</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cprototyped</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">generate_ctypes_function</span><span class="p">()</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cprototyped</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">ArgumentError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="c1"># We just add a conversion ctypes argument fail</span>
+                <span class="c1"># We can do some heavy computation if needed</span>
+                <span class="c1"># Not a case that normally happen</span>
+
+                <span class="c1"># &quot;argument 2: &lt;type &#39;exceptions.TypeError&#39;&gt;: wrong type&quot;</span>
+                <span class="c1"># Thx ctypes..</span>
+                <span class="n">argnbstr</span><span class="p">,</span> <span class="n">ecx</span><span class="p">,</span> <span class="n">reason</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">argnbstr</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;argument &quot;</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="c1"># Don&#39;t knnow if it can happen</span>
+                <span class="n">argnb</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">argnbstr</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="s2">&quot;argument &quot;</span><span class="p">):])</span>
+                <span class="n">badarg</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="n">argnb</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">badarg</span> <span class="ow">is</span> <span class="n">NeededParameter</span><span class="p">:</span>
+                    <span class="n">badargname</span> <span class="o">=</span> <span class="n">params_name</span><span class="p">[</span><span class="n">argnb</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+                    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">: Missing Mandatory parameter &lt;</span><span class="si">{1}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">func_name</span><span class="p">,</span> <span class="n">badargname</span><span class="p">))</span>
+                <span class="c1"># Not NeededParameter: the caller need to fix the used param :)</span>
+                <span class="c1"># raise the real ctypes error</span>
+                <span class="k">raise</span>
+
+
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">python_proxy</span><span class="p">,</span> <span class="s2">&quot;ctypes_function&quot;</span><span class="p">,</span> <span class="n">perform_call</span><span class="p">)</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">python_proxy</span><span class="p">,</span> <span class="s2">&quot;force_resolution&quot;</span><span class="p">,</span> <span class="n">generate_ctypes_function</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">python_proxy</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.5 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2015, Clement Rouault.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

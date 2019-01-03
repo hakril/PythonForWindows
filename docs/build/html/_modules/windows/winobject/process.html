@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>windows.winobject.process &#8212; PythonForWindows 0.4 documentation</title>
+    <title>windows.winobject.process &#8212; PythonForWindows 0.5 documentation</title>
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/css/mbasic.css" type="text/css" />
@@ -26,7 +26,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -64,239 +64,12 @@
 <span class="kn">from</span> <span class="nn">windows.generated_def.ntstatus</span> <span class="k">import</span> <span class="n">NtStatusException</span>
 
 <span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="k">import</span> <span class="n">exception</span>
-<span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="k">import</span> <span class="n">sid</span>
 <span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="k">import</span> <span class="n">apisetmap</span>
+<span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="k">import</span> <span class="n">token</span>
 
 
 <span class="n">TimeInfo</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s2">&quot;TimeInfo&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;creation&quot;</span><span class="p">,</span> <span class="s2">&quot;exit&quot;</span><span class="p">,</span> <span class="s2">&quot;kernel&quot;</span><span class="p">,</span> <span class="s2">&quot;user&quot;</span><span class="p">])</span>
 <span class="sd">&quot;&quot;&quot;Time information about a process&quot;&quot;&quot;</span>
-
-
-<div class="viewcode-block" id="WinThread"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.WinThread">[docs]</a><span class="k">class</span> <span class="nc">WinThread</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">AutoHandle</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Represent a thread &quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">handle</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">owner_pid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">owner</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">tid</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">handle</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Need at least &lt;pid&gt; or &lt;handle&gt; to create a </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">))</span>
-
-        <span class="k">if</span> <span class="n">tid</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>    <span class="bp">self</span><span class="o">.</span><span class="n">_tid</span> <span class="o">=</span> <span class="n">tid</span>
-        <span class="k">if</span> <span class="n">handle</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span> <span class="o">=</span> <span class="n">handle</span>
-        <span class="k">if</span> <span class="n">owner</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>   <span class="bp">self</span><span class="o">.</span><span class="n">_owner</span> <span class="o">=</span> <span class="n">owner</span>
-        <span class="k">if</span> <span class="n">owner_pid</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>   <span class="bp">self</span><span class="o">.</span><span class="n">_owner_pid</span> <span class="o">=</span> <span class="n">owner_pid</span>
-        <span class="k">if</span> <span class="n">owner_pid</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">owner</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_owner_pid</span> <span class="o">=</span> <span class="n">owner</span><span class="o">.</span><span class="n">pid</span>
-
-    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">_from_THREADENTRY32</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">entry</span><span class="p">,</span> <span class="n">owner</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="n">tid</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">th32ThreadID</span>
-        <span class="n">owner_pid</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">th32OwnerProcessID</span>
-        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">tid</span><span class="o">=</span><span class="n">tid</span><span class="p">,</span> <span class="n">owner_pid</span><span class="o">=</span><span class="n">owner_pid</span><span class="p">,</span> <span class="n">owner</span><span class="o">=</span><span class="n">owner</span><span class="p">)</span>
-
-    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">_from_handle</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">handle</span><span class="p">):</span>
-        <span class="c1"># Create a DeadThread if thread is already dead ?</span>
-        <span class="k">return</span> <span class="n">WinThread</span><span class="p">(</span><span class="n">handle</span><span class="o">=</span><span class="n">handle</span><span class="p">)</span>
-
-    <span class="nd">@utils</span><span class="o">.</span><span class="n">fixedpropety</span>
-    <span class="k">def</span> <span class="nf">tid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Thread ID</span>
-
-<span class="sd">        :type: :class:`int`&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_thread_id</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">)</span>
-
-    <span class="nd">@utils</span><span class="o">.</span><span class="n">fixedpropety</span>
-    <span class="k">def</span> <span class="nf">owner_pid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_thread_owner_pid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">)</span>
-
-    <span class="nd">@utils</span><span class="o">.</span><span class="n">fixedpropety</span>
-    <span class="k">def</span> <span class="nf">owner</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The Process owning the thread</span>
-
-<span class="sd">        :type: :class:`WinProcess`</span>
-<span class="sd">		&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">WinProcess</span><span class="p">(</span><span class="n">pid</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">owner_pid</span><span class="p">)</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">context</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The context of the thread, type depend of the target process.</span>
-
-<span class="sd">        :type: :class:`windows.exception.ECONTEXT32` or  :class:`windows.exception.ECONTEXT64` or :class:`windows.exception.ECONTEXTWOW64`</span>
-<span class="sd">		&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">owner</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">32</span> <span class="ow">and</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">64</span><span class="p">:</span>
-            <span class="c1"># Wow64</span>
-            <span class="n">x</span> <span class="o">=</span> <span class="n">exception</span><span class="o">.</span><span class="n">ECONTEXTWOW64</span><span class="p">()</span>
-            <span class="n">x</span><span class="o">.</span><span class="n">ContextFlags</span> <span class="o">=</span> <span class="n">CONTEXT_ALL</span>
-            <span class="n">winproxy</span><span class="o">.</span><span class="n">Wow64GetThreadContext</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">x</span>
-
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">owner</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">64</span> <span class="ow">and</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">32</span><span class="p">:</span>
-            <span class="n">x</span> <span class="o">=</span> <span class="n">exception</span><span class="o">.</span><span class="n">ECONTEXT64</span><span class="o">.</span><span class="n">new_aligned</span><span class="p">()</span>
-            <span class="n">x</span><span class="o">.</span><span class="n">ContextFlags</span> <span class="o">=</span> <span class="n">CONTEXT_ALL</span>
-            <span class="n">windows</span><span class="o">.</span><span class="n">syswow64</span><span class="o">.</span><span class="n">NtGetContextThread_32_to_64</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">x</span>
-
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">owner</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">32</span><span class="p">:</span>
-            <span class="n">x</span> <span class="o">=</span> <span class="n">exception</span><span class="o">.</span><span class="n">ECONTEXT32</span><span class="p">()</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">x</span> <span class="o">=</span> <span class="n">exception</span><span class="o">.</span><span class="n">ECONTEXT64</span><span class="o">.</span><span class="n">new_aligned</span><span class="p">()</span>
-        <span class="n">x</span><span class="o">.</span><span class="n">ContextFlags</span> <span class="o">=</span> <span class="n">CONTEXT_ALL</span>
-        <span class="n">winproxy</span><span class="o">.</span><span class="n">GetThreadContext</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">x</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">context_syswow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The 64 bits context of a syswow thread.</span>
-
-<span class="sd">        :type:  :class:`windows.exception.ECONTEXT64`</span>
-<span class="sd">		&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">owner</span><span class="o">.</span><span class="n">is_wow_64</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Not a syswow process&quot;</span><span class="p">)</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="n">exception</span><span class="o">.</span><span class="n">ECONTEXT64</span><span class="o">.</span><span class="n">new_aligned</span><span class="p">()</span>
-        <span class="n">x</span><span class="o">.</span><span class="n">ContextFlags</span> <span class="o">=</span> <span class="n">CONTEXT_ALL</span>
-        <span class="k">if</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">64</span><span class="p">:</span>
-            <span class="n">winproxy</span><span class="o">.</span><span class="n">GetThreadContext</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">windows</span><span class="o">.</span><span class="n">syswow64</span><span class="o">.</span><span class="n">NtGetContextThread_32_to_64</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">x</span>
-
-
-<div class="viewcode-block" id="WinThread.set_context"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.WinThread.set_context">[docs]</a>    <span class="k">def</span> <span class="nf">set_context</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Set the thread&#39;s context to ``context``&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">owner</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">bitness</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">SetThreadContext</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">64</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">owner</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">32</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">Wow64SetThreadContext</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">syswow64</span><span class="o">.</span><span class="n">NtSetContextThread_32_to_64</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">context</span><span class="p">))</span></div>
-
-
-<div class="viewcode-block" id="WinThread.set_syswow_context"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.WinThread.set_syswow_context">[docs]</a>    <span class="k">def</span> <span class="nf">set_syswow_context</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Set a syswow thread&#39;s 64 context to ``context``&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">owner</span><span class="o">.</span><span class="n">is_wow_64</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Not a syswow process&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">64</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">SetThreadContext</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">syswow64</span><span class="o">.</span><span class="n">NtSetContextThread_32_to_64</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">context</span><span class="p">))</span></div>
-
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">start_address</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The start address of the thread</span>
-
-<span class="sd">            :type: :class:`int`</span>
-<span class="sd">		&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">32</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">owner</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">64</span><span class="p">:</span>
-            <span class="n">res</span> <span class="o">=</span> <span class="n">ULONGLONG</span><span class="p">()</span>
-            <span class="n">windows</span><span class="o">.</span><span class="n">syswow64</span><span class="o">.</span><span class="n">NtQueryInformationThread_32_to_64</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">ThreadQuerySetWin32StartAddress</span><span class="p">,</span> <span class="n">byref</span><span class="p">(</span><span class="n">res</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">res</span><span class="p">))</span>
-            <span class="k">return</span> <span class="n">res</span><span class="o">.</span><span class="n">value</span>
-        <span class="n">res_size</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">owner</span><span class="o">.</span><span class="n">bitness</span><span class="p">,</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">bitness</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">res_size</span> <span class="o">==</span> <span class="mi">32</span><span class="p">:</span>
-            <span class="n">res</span> <span class="o">=</span> <span class="n">ULONG</span><span class="p">()</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">res</span> <span class="o">=</span> <span class="n">ULONGLONG</span><span class="p">()</span>
-        <span class="n">winproxy</span><span class="o">.</span><span class="n">NtQueryInformationThread</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">ThreadQuerySetWin32StartAddress</span><span class="p">,</span> <span class="n">byref</span><span class="p">(</span><span class="n">res</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">res</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">res</span><span class="o">.</span><span class="n">value</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">teb_base</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The address of the thread&#39;s TEB</span>
-
-<span class="sd">            :type: :class:`int`</span>
-<span class="sd">		&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">32</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">owner</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">64</span><span class="p">:</span>
-            <span class="n">restype</span> <span class="o">=</span> <span class="n">rctypes</span><span class="o">.</span><span class="n">transform_type_to_remote64bits</span><span class="p">(</span><span class="n">THREAD_BASIC_INFORMATION</span><span class="p">)</span>
-            <span class="n">ressize</span> <span class="o">=</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">restype</span><span class="p">))</span>
-            <span class="c1"># Manual aligned allocation :DDDD</span>
-            <span class="n">nb_qword</span> <span class="o">=</span> <span class="p">(</span><span class="n">ressize</span> <span class="o">+</span> <span class="mi">8</span><span class="p">)</span> <span class="o">/</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">ULONGLONG</span><span class="p">)</span>
-            <span class="n">buffer</span> <span class="o">=</span> <span class="p">(</span><span class="n">nb_qword</span> <span class="o">*</span> <span class="n">ULONGLONG</span><span class="p">)()</span>
-            <span class="n">struct_address</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">addressof</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">struct_address</span> <span class="o">&amp;</span> <span class="mh">0xf</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">]:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;ULONGLONG array not aligned on 8&quot;</span><span class="p">)</span>
-            <span class="n">windows</span><span class="o">.</span><span class="n">syswow64</span><span class="o">.</span><span class="n">NtQueryInformationThread_32_to_64</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">ThreadBasicInformation</span><span class="p">,</span> <span class="n">struct_address</span><span class="p">,</span> <span class="n">ressize</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">restype</span><span class="p">(</span><span class="n">struct_address</span><span class="p">,</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="p">)</span><span class="o">.</span><span class="n">TebBaseAddress</span>
-
-        <span class="n">res</span> <span class="o">=</span> <span class="n">THREAD_BASIC_INFORMATION</span><span class="p">()</span>
-        <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">NtQueryInformationThread</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">ThreadBasicInformation</span><span class="p">,</span> <span class="n">byref</span><span class="p">(</span><span class="n">res</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">res</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">res</span><span class="o">.</span><span class="n">TebBaseAddress</span>
-
-<div class="viewcode-block" id="WinThread.exit"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.WinThread.exit">[docs]</a>    <span class="k">def</span> <span class="nf">exit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">code</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Exit the thread&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">TerminateThread</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">code</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="WinThread.resume"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.WinThread.resume">[docs]</a>    <span class="k">def</span> <span class="nf">resume</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Resume the thread&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">ResumeThread</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="WinThread.suspend"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.WinThread.suspend">[docs]</a>    <span class="k">def</span> <span class="nf">suspend</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Suspend the thread&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">SuspendThread</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">)</span></div>
-
-    <span class="k">def</span> <span class="nf">_get_handle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">OpenThread</span><span class="p">(</span><span class="n">dwThreadId</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tid</span><span class="p">)</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">is_exit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;``True`` if the thread is terminated</span>
-
-<span class="sd">        :type: :class:`bool`</span>
-<span class="sd">		&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">exit_code</span> <span class="o">!=</span> <span class="n">STILL_ACTIVE</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">exit_code</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The exit code of the thread : ``STILL_ACTIVE`` means the process is not dead</span>
-
-<span class="sd">        :type: :class:`int`</span>
-<span class="sd">		&quot;&quot;&quot;</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="n">DWORD</span><span class="p">()</span>
-        <span class="n">winproxy</span><span class="o">.</span><span class="n">GetExitCodeThread</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">byref</span><span class="p">(</span><span class="n">res</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">res</span><span class="o">.</span><span class="n">value</span>
-
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">owner</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">owner</span>
-        <span class="k">if</span> <span class="n">owner</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">owner_name</span> <span class="o">=</span> <span class="s2">&quot;&lt;Dead process with pid </span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">th32OwnerProcessID</span><span class="p">))</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">owner_name</span> <span class="o">=</span> <span class="n">owner</span><span class="o">.</span><span class="n">name</span>
-            <span class="k">except</span> <span class="ne">EnvironmentError</span><span class="p">:</span>
-                <span class="n">owner_name</span> <span class="o">=</span> <span class="s2">&quot;!cannot-retrieve-owner-name&quot;</span>
-        <span class="k">return</span> <span class="s1">&#39;&lt;</span><span class="si">{0}</span><span class="s1"> </span><span class="si">{1}</span><span class="s1"> owner &quot;</span><span class="si">{2}</span><span class="s1">&quot; at </span><span class="si">{3}</span><span class="s1">&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tid</span><span class="p">,</span> <span class="n">owner_name</span><span class="p">,</span> <span class="nb">hex</span><span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">)))</span>
-
-    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_get_thread_id_by_api</span><span class="p">(</span><span class="n">handle</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">GetThreadId</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
-
-    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_get_thread_id_manual</span><span class="p">(</span><span class="n">handle</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">32</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">owner</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">64</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;[_get_thread_id_manual] 32 -&gt; 64 (XP64 bits + Syswow process ?)&quot;</span><span class="p">)</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="n">THREAD_BASIC_INFORMATION</span><span class="p">()</span>
-        <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">NtQueryInformationThread</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">ThreadBasicInformation</span><span class="p">,</span> <span class="n">byref</span><span class="p">(</span><span class="n">res</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">res</span><span class="p">))</span>
-        <span class="n">id2</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">ClientId</span><span class="o">.</span><span class="n">UniqueThread</span>
-        <span class="k">return</span> <span class="n">id2</span>
-
-    <span class="k">def</span> <span class="nf">_get_thread_owner_pid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handle</span><span class="p">):</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="n">THREAD_BASIC_INFORMATION</span><span class="p">()</span>
-        <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">NtQueryInformationThread</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">ThreadBasicInformation</span><span class="p">,</span> <span class="n">byref</span><span class="p">(</span><span class="n">res</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">res</span><span class="p">))</span>
-        <span class="n">id2</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">ClientId</span><span class="o">.</span><span class="n">UniqueProcess</span>
-        <span class="k">return</span> <span class="n">id2</span>
-
-
-    <span class="k">if</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">is_implemented</span><span class="p">(</span><span class="n">winproxy</span><span class="o">.</span><span class="n">GetThreadId</span><span class="p">):</span>
-        <span class="n">_get_thread_id</span> <span class="o">=</span> <span class="n">_get_thread_id_by_api</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">_get_thread_id</span> <span class="o">=</span> <span class="n">_get_thread_id_manual</span></div>
-
-
-
-    <span class="c1"># def token(self):</span>
-    <span class="c1">#     &quot;&quot;&quot;The token of the process</span>
-    <span class="c1">#</span>
-    <span class="c1">#     :type: :class:`Token`</span>
-	<span class="c1"># 	&quot;&quot;&quot;</span>
-    <span class="c1">#     token_handle = HANDLE()</span>
-    <span class="c1">#     winproxy.OpenThreadToken(self.handle, TOKEN_QUERY, False, byref(token_handle))</span>
-    <span class="c1">#     return Token(token_handle.value)</span>
 
 
 <div class="viewcode-block" id="DeadThread"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.DeadThread">[docs]</a><span class="k">class</span> <span class="nc">DeadThread</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">AutoHandle</span><span class="p">):</span>
@@ -469,7 +242,7 @@
                 <span class="n">v</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">syswow64</span><span class="o">.</span><span class="n">NtQueryVirtualMemory_32_to_64</span><span class="p">(</span><span class="n">ProcessHandle</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">BaseAddress</span><span class="o">=</span><span class="n">addr</span><span class="p">,</span> <span class="n">MemoryInformationClass</span><span class="o">=</span><span class="n">MemoryBasicInformation</span><span class="p">,</span> <span class="n">MemoryInformation</span><span class="o">=</span><span class="n">res</span><span class="p">)</span>
             <span class="k">except</span> <span class="n">NtStatusException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">code</span> <span class="o">&amp;</span> <span class="mh">0xffffffff</span> <span class="o">==</span> <span class="mh">0XC000000D</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">Kernel32Error</span><span class="p">(</span><span class="s2">&quot;NtQueryVirtualMemory_32_to_64&quot;</span><span class="p">)</span>
+                    <span class="k">raise</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">WinproxyError</span><span class="p">(</span><span class="s2">&quot;NtQueryVirtualMemory_32_to_64&quot;</span><span class="p">)</span>
                 <span class="k">raise</span>
             <span class="k">return</span> <span class="n">res</span>
 
@@ -490,7 +263,7 @@
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">query_memory</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span>
                 <span class="k">yield</span> <span class="n">x</span>
-            <span class="k">except</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">Kernel32Error</span><span class="p">:</span>
+            <span class="k">except</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">WinproxyError</span><span class="p">:</span>
                 <span class="k">return</span>
             <span class="n">addr</span> <span class="o">+=</span> <span class="n">x</span><span class="o">.</span><span class="n">RegionSize</span>
 
@@ -572,7 +345,7 @@
 
         <span class="k">try</span><span class="p">:</span>
                 <span class="n">size</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">GetMappedFileNameW</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">buffer_size</span><span class="p">)</span>
-        <span class="k">except</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">Kernel32Error</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">except</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">WinproxyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">winerror</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">ERROR_UNEXP_NET_ERR</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ERROR_FILE_INVALID</span><span class="p">):</span>
                 <span class="k">raise</span> <span class="c1"># Raise if error type is not expected: detect mapped aborted transaction</span>
             <span class="k">return</span> <span class="kc">None</span>
@@ -612,7 +385,7 @@
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">count</span><span class="p">():</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_memory</span><span class="p">(</span><span class="n">addr</span> <span class="o">+</span> <span class="n">readden</span><span class="p">,</span> <span class="n">read_size</span><span class="p">)</span>
-            <span class="k">except</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">Kernel32Error</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">except</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">WinproxyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">read_size</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
                     <span class="k">raise</span>
                 <span class="c1"># handle read_wstring at end of page</span>
@@ -636,7 +409,7 @@
         <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_memory</span><span class="p">(</span><span class="n">addr</span> <span class="o">+</span> <span class="n">readden</span><span class="p">,</span> <span class="n">read_size</span><span class="p">)</span>
-            <span class="k">except</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">Kernel32Error</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">except</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">WinproxyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">read_size</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
                     <span class="k">raise</span>
                 <span class="c1"># handle read_wstring at end of page</span>
@@ -701,6 +474,14 @@
         <span class="n">PROCESS_MODE_BACKGROUND_END</span><span class="p">,</span>
         <span class="n">REALTIME_PRIORITY_CLASS</span><span class="p">)</span>
 
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">memory_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PROCESS_MEMORY_COUNTERS_EX</span><span class="p">()</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">cb</span> <span class="o">=</span> <span class="n">sizeof</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">PROCESS_MEMORY_COUNTERS_EX</span><span class="p">)</span>
+        <span class="n">cast_result</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">pointer</span><span class="p">(</span><span class="n">result</span><span class="p">),</span>  <span class="n">gdef</span><span class="o">.</span><span class="n">PPROCESS_MEMORY_COUNTERS</span><span class="p">)</span>
+        <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">GetProcessMemoryInfo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">limited_handle</span><span class="p">,</span> <span class="n">cast_result</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">cb</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span>
+
     <span class="k">def</span> <span class="nf">query_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">information_class</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="n">winproxy</span><span class="o">.</span><span class="n">NtQueryInformationProcess</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">information_class</span><span class="p">,</span> <span class="n">byref</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">sizeof</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">data</span>
@@ -718,13 +499,16 @@
     <span class="sd">&quot;&quot;&quot;The priority of the process&quot;&quot;&quot;</span>
 
 
-    <span class="k">def</span> <span class="nf">open_token</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">TOKEN_QUERY</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">open_token</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">MAXIMUM_ALLOWED</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Open the process Token</span>
+
+<span class="sd">        :returns: :class:`~windows.winobject.token.Token`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">token_handle</span> <span class="o">=</span> <span class="n">HANDLE</span><span class="p">()</span>
         <span class="n">winproxy</span><span class="o">.</span><span class="n">OpenProcessToken</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">limited_handle</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="n">byref</span><span class="p">(</span><span class="n">token_handle</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">Token</span><span class="p">(</span><span class="n">token_handle</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">token</span><span class="o">.</span><span class="n">Token</span><span class="p">(</span><span class="n">token_handle</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 
-
-    <span class="n">token</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">open_token</span><span class="p">)</span>
+    <span class="n">token</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">open_token</span><span class="p">,</span> <span class="n">doc</span><span class="o">=</span><span class="s2">&quot;The process :class:`~windows.winobject.token.Token`&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Process</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__del__</span><span class="p">()</span>
@@ -737,18 +521,44 @@
             <span class="n">dbgprint</span><span class="p">(</span><span class="s2">&quot;Closing limited handle </span><span class="si">{0}</span><span class="s2"> for </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_limited_handle</span><span class="p">),</span> <span class="bp">self</span><span class="p">),</span> <span class="s2">&quot;HANDLE&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">dbgprint</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_close_function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_limited_handle</span><span class="p">)</span>
 
+<span class="k">class</span> <span class="nc">Thread</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">AutoHandle</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">open_token</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">MAXIMUM_ALLOWED</span><span class="p">,</span> <span class="n">as_self</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Open the Thread token if any (Impersonation) else return None.</span>
+<span class="sd">        ``as_self`` tells which security context should be used</span>
 
-    <span class="c1"># @utils.fixedpropety</span>
-    <span class="c1"># def token(self):</span>
-    <span class="c1">#     &quot;&quot;&quot;The token of the process</span>
-    <span class="c1">#</span>
-    <span class="c1">#     :type: :class:`Token`</span>
-	<span class="c1"># 	&quot;&quot;&quot;</span>
-    <span class="c1">#     token_handle = HANDLE()</span>
-    <span class="c1">#     winproxy.OpenProcessToken(self.handle, TOKEN_QUERY, byref(token_handle))</span>
-    <span class="c1">#     return Token(token_handle.value)</span>
+<span class="sd">        :returns: :class:`~windows.winobject.token.Token`</span>
 
-<div class="viewcode-block" id="CurrentThread"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.CurrentThread">[docs]</a><span class="k">class</span> <span class="nc">CurrentThread</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">AutoHandle</span><span class="p">):</span>
+<span class="sd">        .. note::</span>
+
+<span class="sd">            see https://docs.microsoft.com/en-us/windows/desktop/api/processthreadsapi/nf-processthreadsapi-openthreadtoken</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">token_handle</span> <span class="o">=</span> <span class="n">HANDLE</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">winproxy</span><span class="o">.</span><span class="n">OpenThreadToken</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="n">as_self</span><span class="p">,</span> <span class="n">byref</span><span class="p">(</span><span class="n">token_handle</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">winerror</span> <span class="o">==</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ERROR_NO_TOKEN</span><span class="p">:</span>
+                <span class="c1"># No token to open: return None</span>
+                <span class="k">return</span> <span class="kc">None</span>
+            <span class="k">raise</span>
+        <span class="k">return</span> <span class="n">token</span><span class="o">.</span><span class="n">Token</span><span class="p">(</span><span class="n">token_handle</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">set_token</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">token</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the token for the thread (impersonation). Setting the token to None revert the impersonation&quot;&quot;&quot;</span>
+        <span class="n">thandle</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">token</span><span class="p">,</span> <span class="s2">&quot;handle&quot;</span><span class="p">,</span> <span class="n">token</span><span class="p">)</span> <span class="c1"># Accept raw handle &amp; token object</span>
+        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">SetThreadToken</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">thandle</span><span class="p">)</span>
+
+
+    <span class="n">_TOKEN_PROPERTY_DOC</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;The thread :class:`~windows.winobject.token.Token`</span>
+
+<span class="s2">    :getter: :func:`open_token`</span>
+<span class="s2">    :setter: :func:`set_token`</span>
+<span class="s2">    &quot;&quot;&quot;</span>
+
+    <span class="n">token</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">open_token</span><span class="p">,</span> <span class="n">set_token</span><span class="p">,</span> <span class="n">doc</span><span class="o">=</span><span class="n">_TOKEN_PROPERTY_DOC</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="CurrentThread"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.CurrentThread">[docs]</a><span class="k">class</span> <span class="nc">CurrentThread</span><span class="p">(</span><span class="n">Thread</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;The current thread&quot;&quot;&quot;</span>
     <span class="nd">@property</span> <span class="c1">#It&#39;s not a fixedpropety because executing thread might change</span>
     <span class="k">def</span> <span class="nf">tid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -776,13 +586,11 @@
         <span class="sd">&quot;&quot;&quot;Exit the thread&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">ExitThread</span><span class="p">(</span><span class="n">code</span><span class="p">)</span></div>
 
+
+
 <div class="viewcode-block" id="CurrentThread.wait"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.CurrentThread.wait">[docs]</a>    <span class="k">def</span> <span class="nf">wait</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">INFINITE</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Raise :class:`ValueError` to prevent deadlock :D&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;wait() on current thread&quot;</span><span class="p">)</span></div></div>
-
-    <span class="c1">#def token(self):</span>
-
-       <span class="c1"># GetCurrentThreadToken()</span>
 
 
 <div class="viewcode-block" id="CurrentProcess"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.CurrentProcess">[docs]</a><span class="k">class</span> <span class="nc">CurrentProcess</span><span class="p">(</span><span class="n">Process</span><span class="p">):</span>
@@ -915,18 +723,222 @@
 <span class="sd">		&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_wow_64</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Not a syswow process&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">syswow64</span><span class="o">.</span><span class="n">get_current_process_syswow_peb</span><span class="p">()</span>
-
-
-    <span class="k">def</span> <span class="nf">open_token</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">TOKEN_ALL_ACCESS</span><span class="p">):</span>
-        <span class="n">token_handle</span> <span class="o">=</span> <span class="n">HANDLE</span><span class="p">()</span>
-        <span class="n">winproxy</span><span class="o">.</span><span class="n">OpenProcessToken</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="n">byref</span><span class="p">(</span><span class="n">token_handle</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">Token</span><span class="p">(</span><span class="n">token_handle</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">syswow64</span><span class="o">.</span><span class="n">get_current_process_syswow_peb</span><span class="p">()</span></div>
 
     <span class="c1"># TODO: use ctypes.string_ad / ctypes.wstring_at for read_string / read_wstring ?</span>
 
+<div class="viewcode-block" id="WinThread"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.WinThread">[docs]</a><span class="k">class</span> <span class="nc">WinThread</span><span class="p">(</span><span class="n">Thread</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Represent a thread &quot;&quot;&quot;</span>
 
-    <span class="n">token</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">open_token</span><span class="p">)</span></div>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">handle</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">owner_pid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">owner</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">tid</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">handle</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Need at least &lt;pid&gt; or &lt;handle&gt; to create a </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">tid</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>    <span class="bp">self</span><span class="o">.</span><span class="n">_tid</span> <span class="o">=</span> <span class="n">tid</span>
+        <span class="k">if</span> <span class="n">handle</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span> <span class="o">=</span> <span class="n">handle</span>
+        <span class="k">if</span> <span class="n">owner</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>   <span class="bp">self</span><span class="o">.</span><span class="n">_owner</span> <span class="o">=</span> <span class="n">owner</span>
+        <span class="k">if</span> <span class="n">owner_pid</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>   <span class="bp">self</span><span class="o">.</span><span class="n">_owner_pid</span> <span class="o">=</span> <span class="n">owner_pid</span>
+        <span class="k">if</span> <span class="n">owner_pid</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">owner</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_owner_pid</span> <span class="o">=</span> <span class="n">owner</span><span class="o">.</span><span class="n">pid</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_from_THREADENTRY32</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">entry</span><span class="p">,</span> <span class="n">owner</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">tid</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">th32ThreadID</span>
+        <span class="n">owner_pid</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">th32OwnerProcessID</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">tid</span><span class="o">=</span><span class="n">tid</span><span class="p">,</span> <span class="n">owner_pid</span><span class="o">=</span><span class="n">owner_pid</span><span class="p">,</span> <span class="n">owner</span><span class="o">=</span><span class="n">owner</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_from_handle</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">handle</span><span class="p">):</span>
+        <span class="c1"># Create a DeadThread if thread is already dead ?</span>
+        <span class="k">return</span> <span class="n">WinThread</span><span class="p">(</span><span class="n">handle</span><span class="o">=</span><span class="n">handle</span><span class="p">)</span>
+
+    <span class="nd">@utils</span><span class="o">.</span><span class="n">fixedpropety</span>
+    <span class="k">def</span> <span class="nf">tid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Thread ID</span>
+
+<span class="sd">        :type: :class:`int`&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_thread_id</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">)</span>
+
+    <span class="nd">@utils</span><span class="o">.</span><span class="n">fixedpropety</span>
+    <span class="k">def</span> <span class="nf">owner_pid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">THREAD_BASIC_INFORMATION</span><span class="p">()</span>
+        <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">NtQueryInformationThread</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">ThreadBasicInformation</span><span class="p">,</span> <span class="n">byref</span><span class="p">(</span><span class="n">res</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">res</span><span class="p">))</span>
+        <span class="n">owner_id</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">ClientId</span><span class="o">.</span><span class="n">UniqueProcess</span>
+        <span class="k">return</span> <span class="n">owner_id</span>
+
+    <span class="nd">@utils</span><span class="o">.</span><span class="n">fixedpropety</span>
+    <span class="k">def</span> <span class="nf">owner</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The Process owning the thread</span>
+
+<span class="sd">        :type: :class:`WinProcess`</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">WinProcess</span><span class="p">(</span><span class="n">pid</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">owner_pid</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">context</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The context of the thread, type depend of the target process.</span>
+
+<span class="sd">        :type: :class:`windows.exception.ECONTEXT32` or  :class:`windows.exception.ECONTEXT64` or :class:`windows.exception.ECONTEXTWOW64`</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">owner</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">32</span> <span class="ow">and</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">64</span><span class="p">:</span>
+            <span class="c1"># Wow64</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">exception</span><span class="o">.</span><span class="n">ECONTEXTWOW64</span><span class="p">()</span>
+            <span class="n">x</span><span class="o">.</span><span class="n">ContextFlags</span> <span class="o">=</span> <span class="n">CONTEXT_ALL</span>
+            <span class="n">winproxy</span><span class="o">.</span><span class="n">Wow64GetThreadContext</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">x</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">owner</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">64</span> <span class="ow">and</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">32</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">exception</span><span class="o">.</span><span class="n">ECONTEXT64</span><span class="o">.</span><span class="n">new_aligned</span><span class="p">()</span>
+            <span class="n">x</span><span class="o">.</span><span class="n">ContextFlags</span> <span class="o">=</span> <span class="n">CONTEXT_ALL</span>
+            <span class="n">windows</span><span class="o">.</span><span class="n">syswow64</span><span class="o">.</span><span class="n">NtGetContextThread_32_to_64</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">x</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">owner</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">32</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">exception</span><span class="o">.</span><span class="n">ECONTEXT32</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">exception</span><span class="o">.</span><span class="n">ECONTEXT64</span><span class="o">.</span><span class="n">new_aligned</span><span class="p">()</span>
+        <span class="n">x</span><span class="o">.</span><span class="n">ContextFlags</span> <span class="o">=</span> <span class="n">CONTEXT_ALL</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">GetThreadContext</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">context_syswow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The 64 bits context of a syswow thread.</span>
+
+<span class="sd">        :type:  :class:`windows.exception.ECONTEXT64`</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">owner</span><span class="o">.</span><span class="n">is_wow_64</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Not a syswow process&quot;</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">exception</span><span class="o">.</span><span class="n">ECONTEXT64</span><span class="o">.</span><span class="n">new_aligned</span><span class="p">()</span>
+        <span class="n">x</span><span class="o">.</span><span class="n">ContextFlags</span> <span class="o">=</span> <span class="n">CONTEXT_ALL</span>
+        <span class="k">if</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">64</span><span class="p">:</span>
+            <span class="n">winproxy</span><span class="o">.</span><span class="n">GetThreadContext</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">windows</span><span class="o">.</span><span class="n">syswow64</span><span class="o">.</span><span class="n">NtGetContextThread_32_to_64</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span>
+
+
+<div class="viewcode-block" id="WinThread.set_context"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.WinThread.set_context">[docs]</a>    <span class="k">def</span> <span class="nf">set_context</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the thread&#39;s context to ``context``&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">owner</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">bitness</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">SetThreadContext</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">64</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">owner</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">32</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">Wow64SetThreadContext</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">syswow64</span><span class="o">.</span><span class="n">NtSetContextThread_32_to_64</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">context</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="WinThread.set_syswow_context"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.WinThread.set_syswow_context">[docs]</a>    <span class="k">def</span> <span class="nf">set_syswow_context</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set a syswow thread&#39;s 64 context to ``context``&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">owner</span><span class="o">.</span><span class="n">is_wow_64</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Not a syswow process&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">64</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">SetThreadContext</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">syswow64</span><span class="o">.</span><span class="n">NtSetContextThread_32_to_64</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">context</span><span class="p">))</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">start_address</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The start address of the thread</span>
+
+<span class="sd">            :type: :class:`int`</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">32</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">owner</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">64</span><span class="p">:</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">ULONGLONG</span><span class="p">()</span>
+            <span class="n">windows</span><span class="o">.</span><span class="n">syswow64</span><span class="o">.</span><span class="n">NtQueryInformationThread_32_to_64</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">ThreadQuerySetWin32StartAddress</span><span class="p">,</span> <span class="n">byref</span><span class="p">(</span><span class="n">res</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">res</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">res</span><span class="o">.</span><span class="n">value</span>
+        <span class="n">res_size</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">owner</span><span class="o">.</span><span class="n">bitness</span><span class="p">,</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">bitness</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">res_size</span> <span class="o">==</span> <span class="mi">32</span><span class="p">:</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">ULONG</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">ULONGLONG</span><span class="p">()</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">NtQueryInformationThread</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">ThreadQuerySetWin32StartAddress</span><span class="p">,</span> <span class="n">byref</span><span class="p">(</span><span class="n">res</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">res</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">res</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">teb_base</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The address of the thread&#39;s TEB</span>
+
+<span class="sd">            :type: :class:`int`</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">32</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">owner</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">64</span><span class="p">:</span>
+            <span class="n">restype</span> <span class="o">=</span> <span class="n">rctypes</span><span class="o">.</span><span class="n">transform_type_to_remote64bits</span><span class="p">(</span><span class="n">THREAD_BASIC_INFORMATION</span><span class="p">)</span>
+            <span class="n">ressize</span> <span class="o">=</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">restype</span><span class="p">))</span>
+            <span class="c1"># Manual aligned allocation :DDDD</span>
+            <span class="n">nb_qword</span> <span class="o">=</span> <span class="p">(</span><span class="n">ressize</span> <span class="o">+</span> <span class="mi">8</span><span class="p">)</span> <span class="o">/</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">ULONGLONG</span><span class="p">)</span>
+            <span class="n">buffer</span> <span class="o">=</span> <span class="p">(</span><span class="n">nb_qword</span> <span class="o">*</span> <span class="n">ULONGLONG</span><span class="p">)()</span>
+            <span class="n">struct_address</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">addressof</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">struct_address</span> <span class="o">&amp;</span> <span class="mh">0xf</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">]:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;ULONGLONG array not aligned on 8&quot;</span><span class="p">)</span>
+            <span class="n">windows</span><span class="o">.</span><span class="n">syswow64</span><span class="o">.</span><span class="n">NtQueryInformationThread_32_to_64</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">ThreadBasicInformation</span><span class="p">,</span> <span class="n">struct_address</span><span class="p">,</span> <span class="n">ressize</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">restype</span><span class="p">(</span><span class="n">struct_address</span><span class="p">,</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="p">)</span><span class="o">.</span><span class="n">TebBaseAddress</span>
+
+        <span class="n">res</span> <span class="o">=</span> <span class="n">THREAD_BASIC_INFORMATION</span><span class="p">()</span>
+        <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">NtQueryInformationThread</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">ThreadBasicInformation</span><span class="p">,</span> <span class="n">byref</span><span class="p">(</span><span class="n">res</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">res</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">res</span><span class="o">.</span><span class="n">TebBaseAddress</span>
+
+<div class="viewcode-block" id="WinThread.exit"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.WinThread.exit">[docs]</a>    <span class="k">def</span> <span class="nf">exit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">code</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Exit the thread&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">TerminateThread</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">code</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="WinThread.resume"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.WinThread.resume">[docs]</a>    <span class="k">def</span> <span class="nf">resume</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Resume the thread&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">ResumeThread</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="WinThread.suspend"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.WinThread.suspend">[docs]</a>    <span class="k">def</span> <span class="nf">suspend</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Suspend the thread&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">SuspendThread</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_handle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">OpenThread</span><span class="p">(</span><span class="n">dwThreadId</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tid</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">is_exit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;``True`` if the thread is terminated</span>
+
+<span class="sd">        :type: :class:`bool`</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">exit_code</span> <span class="o">!=</span> <span class="n">STILL_ACTIVE</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">exit_code</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The exit code of the thread : ``STILL_ACTIVE`` means the process is not dead</span>
+
+<span class="sd">        :type: :class:`int`</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">DWORD</span><span class="p">()</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">GetExitCodeThread</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">byref</span><span class="p">(</span><span class="n">res</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">res</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">owner</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">owner</span>
+        <span class="k">if</span> <span class="n">owner</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">owner_name</span> <span class="o">=</span> <span class="s2">&quot;&lt;Dead process with pid </span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">th32OwnerProcessID</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">owner_name</span> <span class="o">=</span> <span class="n">owner</span><span class="o">.</span><span class="n">name</span>
+            <span class="k">except</span> <span class="ne">EnvironmentError</span><span class="p">:</span>
+                <span class="n">owner_name</span> <span class="o">=</span> <span class="s2">&quot;!cannot-retrieve-owner-name&quot;</span>
+        <span class="k">return</span> <span class="s1">&#39;&lt;</span><span class="si">{0}</span><span class="s1"> </span><span class="si">{1}</span><span class="s1"> owner &quot;</span><span class="si">{2}</span><span class="s1">&quot; at </span><span class="si">{3}</span><span class="s1">&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tid</span><span class="p">,</span> <span class="n">owner_name</span><span class="p">,</span> <span class="nb">hex</span><span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">)))</span>
+
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_get_thread_id_by_api</span><span class="p">(</span><span class="n">handle</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">GetThreadId</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_get_thread_id_manual</span><span class="p">(</span><span class="n">handle</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">32</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">owner</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">64</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;[_get_thread_id_manual] 32 -&gt; 64 (XP64 bits + Syswow process ?)&quot;</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">THREAD_BASIC_INFORMATION</span><span class="p">()</span>
+        <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">NtQueryInformationThread</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">ThreadBasicInformation</span><span class="p">,</span> <span class="n">byref</span><span class="p">(</span><span class="n">res</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">res</span><span class="p">))</span>
+        <span class="n">id2</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">ClientId</span><span class="o">.</span><span class="n">UniqueThread</span>
+        <span class="k">return</span> <span class="n">id2</span>
+
+    <span class="k">if</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">is_implemented</span><span class="p">(</span><span class="n">winproxy</span><span class="o">.</span><span class="n">GetThreadId</span><span class="p">):</span>
+        <span class="n">_get_thread_id</span> <span class="o">=</span> <span class="n">_get_thread_id_by_api</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">_get_thread_id</span> <span class="o">=</span> <span class="n">_get_thread_id_manual</span></div>
+
 
 <div class="viewcode-block" id="WinProcess"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.WinProcess">[docs]</a><span class="k">class</span> <span class="nc">WinProcess</span><span class="p">(</span><span class="n">Process</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A Process on the system&quot;&quot;&quot;</span>
@@ -1170,107 +1182,7 @@
         <span class="sd">&quot;&quot;&quot;Exit the process&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">TerminateProcess</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">code</span><span class="p">)</span></div></div>
 
-<span class="n">KNOW_INTEGRITY_LEVEL</span> <span class="o">=</span> <span class="p">[</span>
-<span class="n">SECURITY_MANDATORY_UNTRUSTED_RID</span><span class="p">,</span>
-<span class="n">SECURITY_MANDATORY_LOW_RID</span><span class="p">,</span>
-<span class="n">SECURITY_MANDATORY_MEDIUM_RID</span><span class="p">,</span>
-<span class="n">SECURITY_MANDATORY_MEDIUM_PLUS_RID</span><span class="p">,</span>
-<span class="n">SECURITY_MANDATORY_HIGH_RID</span><span class="p">,</span>
-<span class="n">SECURITY_MANDATORY_SYSTEM_RID</span><span class="p">,</span>
-<span class="n">SECURITY_MANDATORY_PROTECTED_PROCESS_RID</span><span class="p">]</span>
 
-<span class="n">know_integrity_level_mapper</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span><span class="o">*</span><span class="n">KNOW_INTEGRITY_LEVEL</span><span class="p">)</span>
-
-<span class="c1"># Create ProcessToken and Thread Token objects ?</span>
-<span class="c1"># token.py ?</span>
-<div class="viewcode-block" id="Token"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.Token">[docs]</a><span class="k">class</span> <span class="nc">Token</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">AutoHandle</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;The token of a process&quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handle</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span> <span class="o">=</span> <span class="n">handle</span>
-
-<div class="viewcode-block" id="Token.get_integrity"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.Token.get_integrity">[docs]</a>    <span class="k">def</span> <span class="nf">get_integrity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return the integrity level of a token</span>
-
-<span class="sd">        :type: :class:`int`</span>
-<span class="sd">		&quot;&quot;&quot;</span>
-        <span class="n">buffer_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_required_information_size</span><span class="p">(</span><span class="n">TokenIntegrityLevel</span><span class="p">)</span>
-        <span class="n">buffer</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_buffer</span><span class="p">(</span><span class="n">buffer_size</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">get_informations</span><span class="p">(</span><span class="n">TokenIntegrityLevel</span><span class="p">,</span> <span class="n">buffer</span><span class="p">)</span>
-        <span class="n">sid</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">TOKEN_MANDATORY_LABEL</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">Label</span><span class="o">.</span><span class="n">Sid</span>
-        <span class="n">count</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">GetSidSubAuthorityCount</span><span class="p">(</span><span class="n">sid</span><span class="p">)</span>
-        <span class="n">integrity</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">GetSidSubAuthority</span><span class="p">(</span><span class="n">sid</span><span class="p">,</span> <span class="n">count</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">know_integrity_level_mapper</span><span class="p">[</span><span class="n">integrity</span><span class="p">]</span></div>
-
-<div class="viewcode-block" id="Token.set_integrity"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.Token.set_integrity">[docs]</a>    <span class="k">def</span> <span class="nf">set_integrity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">integrity</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Set the integrity level of a token</span>
-
-<span class="sd">        :param type: :class:`int`</span>
-<span class="sd">		&quot;&quot;&quot;</span>
-        <span class="n">mandatory_label</span> <span class="o">=</span> <span class="n">TOKEN_MANDATORY_LABEL</span><span class="p">()</span>
-        <span class="n">mandatory_label</span><span class="o">.</span><span class="n">Label</span><span class="o">.</span><span class="n">Attributes</span> <span class="o">=</span> <span class="mh">0x60</span>
-        <span class="n">mandatory_label</span><span class="o">.</span><span class="n">Label</span><span class="o">.</span><span class="n">Sid</span> <span class="o">=</span> <span class="n">sid</span><span class="o">.</span><span class="n">EPSID</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s2">&quot;S-1-16-</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">integrity</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">set_informations</span><span class="p">(</span><span class="n">TokenIntegrityLevel</span><span class="p">,</span> <span class="n">mandatory_label</span><span class="p">)</span></div>
-
-    <span class="n">integrity</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_integrity</span><span class="p">,</span> <span class="n">set_integrity</span><span class="p">)</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">is_elevated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;``True`` if process is Admin&quot;&quot;&quot;</span>
-        <span class="n">elevation</span> <span class="o">=</span> <span class="n">TOKEN_ELEVATION</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">get_informations</span><span class="p">(</span><span class="n">TokenElevation</span><span class="p">,</span> <span class="n">elevation</span><span class="p">)</span>
-        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">elevation</span><span class="o">.</span><span class="n">TokenIsElevated</span><span class="p">)</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">token_user</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">buffer_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_required_information_size</span><span class="p">(</span><span class="n">TokenUser</span><span class="p">)</span>
-        <span class="n">buffer</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_buffer</span><span class="p">(</span><span class="n">buffer_size</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">get_informations</span><span class="p">(</span><span class="n">TokenUser</span><span class="p">,</span> <span class="n">buffer</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">TOKEN_USER</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">computername</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The computername of the token&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_user_and_computer_name</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">username</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The username of the token&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_user_and_computer_name</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
-
-    <span class="k">def</span> <span class="nf">duplicate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">access_rigth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">attributes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">impersonation_level</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">SecurityImpersonation</span><span class="p">,</span> <span class="n">toktype</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">TokenPrimary</span><span class="p">):</span>
-        <span class="n">newtoken</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">HANDLE</span><span class="p">()</span>
-        <span class="n">winproxy</span><span class="o">.</span><span class="n">DuplicateTokenEx</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">access_rigth</span><span class="p">,</span> <span class="n">attributes</span><span class="p">,</span> <span class="n">impersonation_level</span><span class="p">,</span> <span class="n">toktype</span><span class="p">,</span> <span class="n">newtoken</span><span class="p">)</span>
-        <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)(</span><span class="n">newtoken</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
-
-
-    <span class="k">def</span> <span class="nf">_user_and_computer_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">tok_usr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">token_user</span>
-        <span class="n">sid</span> <span class="o">=</span> <span class="n">tok_usr</span><span class="o">.</span><span class="n">User</span><span class="o">.</span><span class="n">Sid</span>
-        <span class="n">usernamesize</span> <span class="o">=</span> <span class="n">DWORD</span><span class="p">(</span><span class="mh">0x1000</span><span class="p">)</span>
-        <span class="n">computernamesize</span> <span class="o">=</span> <span class="n">DWORD</span><span class="p">(</span><span class="mh">0x1000</span><span class="p">)</span>
-        <span class="n">username</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_buffer</span><span class="p">(</span><span class="n">usernamesize</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
-        <span class="n">computername</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_buffer</span><span class="p">(</span><span class="n">computernamesize</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
-        <span class="n">peUse</span> <span class="o">=</span> <span class="n">SID_NAME_USE</span><span class="p">()</span>
-        <span class="n">winproxy</span><span class="o">.</span><span class="n">LookupAccountSidA</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">sid</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">usernamesize</span><span class="p">,</span> <span class="n">computername</span><span class="p">,</span> <span class="n">computernamesize</span><span class="p">,</span> <span class="n">peUse</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">username</span><span class="p">[:</span><span class="n">usernamesize</span><span class="o">.</span><span class="n">value</span><span class="p">],</span> <span class="n">computername</span><span class="p">[:</span><span class="n">computernamesize</span><span class="o">.</span><span class="n">value</span><span class="p">]</span>
-
-    <span class="k">def</span> <span class="nf">get_informations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info_type</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
-        <span class="n">cbsize</span> <span class="o">=</span> <span class="n">DWORD</span><span class="p">()</span>
-        <span class="n">winproxy</span><span class="o">.</span><span class="n">GetTokenInformation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">info_type</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">cbsize</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">cbsize</span><span class="o">.</span><span class="n">value</span>
-
-    <span class="k">def</span> <span class="nf">get_required_information_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info_type</span><span class="p">):</span>
-        <span class="n">cbsize</span> <span class="o">=</span> <span class="n">DWORD</span><span class="p">()</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">winproxy</span><span class="o">.</span><span class="n">GetTokenInformation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">info_type</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">cbsize</span><span class="p">))</span>
-        <span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">e</span><span class="o">.</span><span class="n">winerror</span> <span class="o">==</span> <span class="n">ERROR_INSUFFICIENT_BUFFER</span><span class="p">:</span>
-                <span class="k">raise</span>
-        <span class="k">return</span> <span class="n">cbsize</span><span class="o">.</span><span class="n">value</span>
-
-    <span class="c1">#TODO: TEST + DOC</span>
-    <span class="k">def</span> <span class="nf">set_informations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info_type</span><span class="p">,</span> <span class="n">infos</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">SetTokenInformation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">info_type</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">infos</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">infos</span><span class="p">))</span></div>
 
 
 <span class="k">def</span> <span class="nf">transform_ctypes_fields</span><span class="p">(</span><span class="n">struct</span><span class="p">,</span> <span class="n">replacement</span><span class="p">):</span>
@@ -1631,7 +1543,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>

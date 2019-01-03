@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>2.1. Processes and Threads &#8212; PythonForWindows 0.4 documentation</title>
+    <title>2.1. Processes and Threads &#8212; PythonForWindows 0.5 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/css/mbasic.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="2.4. Exception and Context related structures" href="exception.html" />
+    <link rel="next" title="2.4. Token" href="token.html" />
     <link rel="prev" title="2. The windows objects" href="winobject.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -29,12 +29,12 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="exception.html" title="2.4. Exception and Context related structures"
+          <a href="token.html" title="2.4. Token"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="winobject.html" title="2. The windows objects"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="winobject.html" accesskey="U">2. The <code class="docutils literal notranslate"><span class="pre">windows</span></code> objects</a> &#187;</li> 
       </ul>
     </div>  
@@ -222,6 +222,20 @@
 </table>
 </dd></dl>
 
+<dl class="method">
+<dt id="windows.winobject.process.CurrentProcess.open_token">
+<code class="descname">open_token</code><span class="sig-paren">(</span><em>flags=MAXIMUM_ALLOWED(0x2000000)</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.process.CurrentProcess.open_token" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open the process Token</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="token.html#windows.winobject.token.Token" title="windows.winobject.token.Token"><code class="xref py py-class docutils literal notranslate"><span class="pre">Token</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="attribute">
 <dt id="windows.winobject.process.CurrentProcess.peb">
 <code class="descname">peb</code><a class="headerlink" href="#windows.winobject.process.CurrentProcess.peb" title="Permalink to this definition">¶</a></dt>
@@ -378,9 +392,15 @@
 </table>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="windows.winobject.process.CurrentProcess.token">
+<code class="descname">token</code><a class="headerlink" href="#windows.winobject.process.CurrentProcess.token" title="Permalink to this definition">¶</a></dt>
+<dd><p>The process <a class="reference internal" href="token.html#windows.winobject.token.Token" title="windows.winobject.token.Token"><code class="xref py py-class docutils literal notranslate"><span class="pre">Token</span></code></a></p>
+</dd></dl>
+
 <dl class="method">
 <dt id="windows.winobject.process.CurrentProcess.virtual_alloc">
-<code class="descname">virtual_alloc</code><span class="sig-paren">(</span><em>size</em>, <em>prot=PAGE_EXECUTE_READWRITE(0x40L)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/process.html#CurrentProcess.virtual_alloc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.process.CurrentProcess.virtual_alloc" title="Permalink to this definition">¶</a></dt>
+<code class="descname">virtual_alloc</code><span class="sig-paren">(</span><em>size</em>, <em>prot=PAGE_EXECUTE_READWRITE(0x40)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/process.html#CurrentProcess.virtual_alloc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.process.CurrentProcess.virtual_alloc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Allocate memory in the process</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -414,7 +434,7 @@
 
 <dl class="method">
 <dt id="windows.winobject.process.CurrentProcess.wait">
-<code class="descname">wait</code><span class="sig-paren">(</span><em>timeout=INFINITE(0xffffffffL)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/process.html#CurrentProcess.wait"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.process.CurrentProcess.wait" title="Permalink to this definition">¶</a></dt>
+<code class="descname">wait</code><span class="sig-paren">(</span><em>timeout=INFINITE(0xffffffff)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/process.html#CurrentProcess.wait"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.process.CurrentProcess.wait" title="Permalink to this definition">¶</a></dt>
 <dd><p>Raise <code class="xref py py-class docutils literal notranslate"><span class="pre">ValueError</span></code> to prevent deadlock :D</p>
 </dd></dl>
 
@@ -462,7 +482,7 @@
 <dl class="class">
 <dt id="windows.winobject.process.CurrentThread">
 <em class="property">class </em><code class="descclassname">windows.winobject.process.</code><code class="descname">CurrentThread</code><a class="reference internal" href="_modules/windows/winobject/process.html#CurrentThread"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.process.CurrentThread" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">windows.utils.pythonutils.AutoHandle</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">windows.winobject.process.Thread</span></code></p>
 <p>The current thread</p>
 <dl class="method">
 <dt id="windows.winobject.process.CurrentThread.exit">
@@ -489,6 +509,25 @@
 </table>
 </dd></dl>
 
+<dl class="method">
+<dt id="windows.winobject.process.CurrentThread.open_token">
+<code class="descname">open_token</code><span class="sig-paren">(</span><em>flags=MAXIMUM_ALLOWED(0x2000000)</em>, <em>as_self=False</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.process.CurrentThread.open_token" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open the Thread token if any (Impersonation) else return None.
+<code class="docutils literal notranslate"><span class="pre">as_self</span></code> tells which security context should be used</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="token.html#windows.winobject.token.Token" title="windows.winobject.token.Token"><code class="xref py py-class docutils literal notranslate"><span class="pre">Token</span></code></a></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">see <a class="reference external" href="https://docs.microsoft.com/en-us/windows/desktop/api/processthreadsapi/nf-processthreadsapi-openthreadtoken">https://docs.microsoft.com/en-us/windows/desktop/api/processthreadsapi/nf-processthreadsapi-openthreadtoken</a></p>
+</div>
+</dd></dl>
+
 <dl class="attribute">
 <dt id="windows.winobject.process.CurrentThread.owner">
 <code class="descname">owner</code><a class="headerlink" href="#windows.winobject.process.CurrentThread.owner" title="Permalink to this definition">¶</a></dt>
@@ -501,6 +540,12 @@
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.process.CurrentThread.set_token">
+<code class="descname">set_token</code><span class="sig-paren">(</span><em>token</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.process.CurrentThread.set_token" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the token for the thread (impersonation). Setting the token to None revert the impersonation</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -517,9 +562,25 @@
 </table>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="windows.winobject.process.CurrentThread.token">
+<code class="descname">token</code><a class="headerlink" href="#windows.winobject.process.CurrentThread.token" title="Permalink to this definition">¶</a></dt>
+<dd><p>The thread <a class="reference internal" href="token.html#windows.winobject.token.Token" title="windows.winobject.token.Token"><code class="xref py py-class docutils literal notranslate"><span class="pre">Token</span></code></a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Getter:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.process.CurrentThread.open_token" title="windows.winobject.process.CurrentThread.open_token"><code class="xref py py-func docutils literal notranslate"><span class="pre">open_token()</span></code></a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Setter:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.process.CurrentThread.set_token" title="windows.winobject.process.CurrentThread.set_token"><code class="xref py py-func docutils literal notranslate"><span class="pre">set_token()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="method">
 <dt id="windows.winobject.process.CurrentThread.wait">
-<code class="descname">wait</code><span class="sig-paren">(</span><em>timeout=INFINITE(0xffffffffL)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/process.html#CurrentThread.wait"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.process.CurrentThread.wait" title="Permalink to this definition">¶</a></dt>
+<code class="descname">wait</code><span class="sig-paren">(</span><em>timeout=INFINITE(0xffffffff)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/process.html#CurrentThread.wait"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.process.CurrentThread.wait" title="Permalink to this definition">¶</a></dt>
 <dd><p>Raise <code class="xref py py-class docutils literal notranslate"><span class="pre">ValueError</span></code> to prevent deadlock :D</p>
 </dd></dl>
 
@@ -748,6 +809,20 @@ raises an exception if the remote thread raised one</p>
 </table>
 </dd></dl>
 
+<dl class="method">
+<dt id="windows.winobject.process.WinProcess.open_token">
+<code class="descname">open_token</code><span class="sig-paren">(</span><em>flags=MAXIMUM_ALLOWED(0x2000000)</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.process.WinProcess.open_token" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open the process Token</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="token.html#windows.winobject.token.Token" title="windows.winobject.token.Token"><code class="xref py py-class docutils literal notranslate"><span class="pre">Token</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="attribute">
 <dt id="windows.winobject.process.WinProcess.peb">
 <code class="descname">peb</code><a class="headerlink" href="#windows.winobject.process.WinProcess.peb" title="Permalink to this definition">¶</a></dt>
@@ -932,9 +1007,15 @@ raises an exception if the remote thread raised one</p>
 </table>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="windows.winobject.process.WinProcess.token">
+<code class="descname">token</code><a class="headerlink" href="#windows.winobject.process.WinProcess.token" title="Permalink to this definition">¶</a></dt>
+<dd><p>The process <a class="reference internal" href="token.html#windows.winobject.token.Token" title="windows.winobject.token.Token"><code class="xref py py-class docutils literal notranslate"><span class="pre">Token</span></code></a></p>
+</dd></dl>
+
 <dl class="method">
 <dt id="windows.winobject.process.WinProcess.virtual_alloc">
-<code class="descname">virtual_alloc</code><span class="sig-paren">(</span><em>size</em>, <em>prot=PAGE_EXECUTE_READWRITE(0x40L)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/process.html#WinProcess.virtual_alloc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.process.WinProcess.virtual_alloc" title="Permalink to this definition">¶</a></dt>
+<code class="descname">virtual_alloc</code><span class="sig-paren">(</span><em>size</em>, <em>prot=PAGE_EXECUTE_READWRITE(0x40)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/process.html#WinProcess.virtual_alloc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.process.WinProcess.virtual_alloc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Allocate memory in the process</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -968,7 +1049,7 @@ raises an exception if the remote thread raised one</p>
 
 <dl class="method">
 <dt id="windows.winobject.process.WinProcess.wait">
-<code class="descname">wait</code><span class="sig-paren">(</span><em>timeout=INFINITE(0xffffffffL)</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.process.WinProcess.wait" title="Permalink to this definition">¶</a></dt>
+<code class="descname">wait</code><span class="sig-paren">(</span><em>timeout=INFINITE(0xffffffff)</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.process.WinProcess.wait" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wait for the object</p>
 </dd></dl>
 
@@ -1016,7 +1097,7 @@ raises an exception if the remote thread raised one</p>
 <dl class="class">
 <dt id="windows.winobject.process.WinThread">
 <em class="property">class </em><code class="descclassname">windows.winobject.process.</code><code class="descname">WinThread</code><span class="sig-paren">(</span><em>tid=None</em>, <em>handle=None</em>, <em>owner_pid=None</em>, <em>owner=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/process.html#WinThread"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.process.WinThread" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">windows.utils.pythonutils.AutoHandle</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">windows.winobject.process.Thread</span></code></p>
 <p>Represent a thread</p>
 <dl class="attribute">
 <dt id="windows.winobject.process.WinThread.context">
@@ -1099,6 +1180,25 @@ raises an exception if the remote thread raised one</p>
 </table>
 </dd></dl>
 
+<dl class="method">
+<dt id="windows.winobject.process.WinThread.open_token">
+<code class="descname">open_token</code><span class="sig-paren">(</span><em>flags=MAXIMUM_ALLOWED(0x2000000)</em>, <em>as_self=False</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.process.WinThread.open_token" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open the Thread token if any (Impersonation) else return None.
+<code class="docutils literal notranslate"><span class="pre">as_self</span></code> tells which security context should be used</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="token.html#windows.winobject.token.Token" title="windows.winobject.token.Token"><code class="xref py py-class docutils literal notranslate"><span class="pre">Token</span></code></a></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">see <a class="reference external" href="https://docs.microsoft.com/en-us/windows/desktop/api/processthreadsapi/nf-processthreadsapi-openthreadtoken">https://docs.microsoft.com/en-us/windows/desktop/api/processthreadsapi/nf-processthreadsapi-openthreadtoken</a></p>
+</div>
+</dd></dl>
+
 <dl class="attribute">
 <dt id="windows.winobject.process.WinThread.owner">
 <code class="descname">owner</code><a class="headerlink" href="#windows.winobject.process.WinThread.owner" title="Permalink to this definition">¶</a></dt>
@@ -1129,6 +1229,12 @@ raises an exception if the remote thread raised one</p>
 <dt id="windows.winobject.process.WinThread.set_syswow_context">
 <code class="descname">set_syswow_context</code><span class="sig-paren">(</span><em>context</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/process.html#WinThread.set_syswow_context"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.process.WinThread.set_syswow_context" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set a syswow thread’s 64 context to <code class="docutils literal notranslate"><span class="pre">context</span></code></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.process.WinThread.set_token">
+<code class="descname">set_token</code><span class="sig-paren">(</span><em>token</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.process.WinThread.set_token" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the token for the thread (impersonation). Setting the token to None revert the impersonation</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -1179,9 +1285,25 @@ raises an exception if the remote thread raised one</p>
 </table>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="windows.winobject.process.WinThread.token">
+<code class="descname">token</code><a class="headerlink" href="#windows.winobject.process.WinThread.token" title="Permalink to this definition">¶</a></dt>
+<dd><p>The thread <a class="reference internal" href="token.html#windows.winobject.token.Token" title="windows.winobject.token.Token"><code class="xref py py-class docutils literal notranslate"><span class="pre">Token</span></code></a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Getter:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.process.WinThread.open_token" title="windows.winobject.process.WinThread.open_token"><code class="xref py py-func docutils literal notranslate"><span class="pre">open_token()</span></code></a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Setter:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.process.WinThread.set_token" title="windows.winobject.process.WinThread.set_token"><code class="xref py py-func docutils literal notranslate"><span class="pre">set_token()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="method">
 <dt id="windows.winobject.process.WinThread.wait">
-<code class="descname">wait</code><span class="sig-paren">(</span><em>timeout=INFINITE(0xffffffffL)</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.process.WinThread.wait" title="Permalink to this definition">¶</a></dt>
+<code class="descname">wait</code><span class="sig-paren">(</span><em>timeout=INFINITE(0xffffffff)</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.process.WinThread.wait" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wait for the object</p>
 </dd></dl>
 
@@ -1241,101 +1363,7 @@ raises an exception if the remote thread raised one</p>
 
 <dl class="method">
 <dt id="windows.winobject.process.DeadThread.wait">
-<code class="descname">wait</code><span class="sig-paren">(</span><em>timeout=INFINITE(0xffffffffL)</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.process.DeadThread.wait" title="Permalink to this definition">¶</a></dt>
-<dd><p>Wait for the object</p>
-</dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="token">
-<h2>2.1.5. Token<a class="headerlink" href="#token" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="windows.winobject.process.Token">
-<em class="property">class </em><code class="descclassname">windows.winobject.process.</code><code class="descname">Token</code><span class="sig-paren">(</span><em>handle</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/process.html#Token"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.process.Token" title="Permalink to this definition">¶</a></dt>
-<dd><p>The token of a process</p>
-<dl class="attribute">
-<dt id="windows.winobject.process.Token.computername">
-<code class="descname">computername</code><a class="headerlink" href="#windows.winobject.process.Token.computername" title="Permalink to this definition">¶</a></dt>
-<dd><p>The computername of the token</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="windows.winobject.process.Token.get_integrity">
-<code class="descname">get_integrity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/process.html#Token.get_integrity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.process.Token.get_integrity" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the integrity level of a token</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="windows.winobject.process.Token.handle">
-<code class="descname">handle</code><a class="headerlink" href="#windows.winobject.process.Token.handle" title="Permalink to this definition">¶</a></dt>
-<dd><p>An handle on the object</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><p class="first">HANDLE</p>
-<div class="last admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">The handle is automaticaly closed when the object is destroyed</p>
-</div>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="windows.winobject.process.Token.integrity">
-<code class="descname">integrity</code><a class="headerlink" href="#windows.winobject.process.Token.integrity" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the integrity level of a token</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="windows.winobject.process.Token.is_elevated">
-<code class="descname">is_elevated</code><a class="headerlink" href="#windows.winobject.process.Token.is_elevated" title="Permalink to this definition">¶</a></dt>
-<dd><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if process is Admin</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="windows.winobject.process.Token.set_integrity">
-<code class="descname">set_integrity</code><span class="sig-paren">(</span><em>integrity</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/process.html#Token.set_integrity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.process.Token.set_integrity" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the integrity level of a token</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>type</strong> – <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="windows.winobject.process.Token.username">
-<code class="descname">username</code><a class="headerlink" href="#windows.winobject.process.Token.username" title="Permalink to this definition">¶</a></dt>
-<dd><p>The username of the token</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="windows.winobject.process.Token.wait">
-<code class="descname">wait</code><span class="sig-paren">(</span><em>timeout=INFINITE(0xffffffffL)</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.process.Token.wait" title="Permalink to this definition">¶</a></dt>
+<code class="descname">wait</code><span class="sig-paren">(</span><em>timeout=INFINITE(0xffffffff)</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.process.DeadThread.wait" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wait for the object</p>
 </dd></dl>
 
@@ -1606,7 +1634,7 @@ The behavior should match the non-exported function <code class="docutils litera
 </table>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">If target is <code class="docutils literal notranslate"><span class="pre">None</span></code> it refers to the curent process</p>
+<p class="last">If target is <code class="docutils literal notranslate"><span class="pre">None</span></code> it refers to the current process</p>
 </div>
 </dd></dl>
 
@@ -1750,7 +1778,6 @@ You MUST keep a reference to the hook while the hook is enabled.</p>
 <li><a class="reference internal" href="#currentthread">2.1.2. CurrentThread</a></li>
 <li><a class="reference internal" href="#winprocess">2.1.3. WinProcess</a></li>
 <li><a class="reference internal" href="#winthread">2.1.4. WinThread</a></li>
-<li><a class="reference internal" href="#token">2.1.5. Token</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#peb-exploration">2.2. PEB Exploration</a><ul>
@@ -1773,8 +1800,8 @@ You MUST keep a reference to the hook while the hook is enabled.</p>
   <p class="topless"><a href="winobject.html"
                         title="previous chapter">2. The <code class="docutils literal notranslate"><span class="pre">windows</span></code> objects</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="exception.html"
-                        title="next chapter">2.4. Exception and Context related structures</a></p>
+  <p class="topless"><a href="token.html"
+                        title="next chapter">2.4. Token</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -1808,12 +1835,12 @@ You MUST keep a reference to the hook while the hook is enabled.</p>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="exception.html" title="2.4. Exception and Context related structures"
+          <a href="token.html" title="2.4. Token"
              >next</a> |</li>
         <li class="right" >
           <a href="winobject.html" title="2. The windows objects"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="winobject.html" >2. The <code class="docutils literal notranslate"><span class="pre">windows</span></code> objects</a> &#187;</li> 
       </ul>
     </div>

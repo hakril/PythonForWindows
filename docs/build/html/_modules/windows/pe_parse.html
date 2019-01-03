@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>windows.pe_parse &#8212; PythonForWindows 0.4 documentation</title>
+    <title>windows.pe_parse &#8212; PythonForWindows 0.5 documentation</title>
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/css/mbasic.css" type="text/css" />
@@ -26,7 +26,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">PythonForWindows 0.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">PythonForWindows 0.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -437,7 +437,7 @@
 
 <span class="sd">    .. note::</span>
 
-<span class="sd">        If target is ``None`` it refers to the curent process</span>
+<span class="sd">        If target is ``None`` it refers to the current process</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">proc_bitness</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">bitness</span>
 
@@ -449,7 +449,6 @@
     <span class="n">transformers</span> <span class="o">=</span> <span class="n">get_structure_transformer_for_target</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">targetedbitness</span><span class="p">)</span>
     <span class="c1">#ctypes_structure_transformer, create_structure_at = transformers</span>
     <span class="n">transfor_funcs</span> <span class="o">=</span> <span class="n">CtypesStructureTransformers</span><span class="p">(</span><span class="o">*</span><span class="n">transformers</span><span class="p">)</span>  <span class="c1"># TODO: rename</span>
-
     <span class="k">return</span> <span class="n">PEFile</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">baseaddr</span><span class="p">,</span> <span class="n">targetedbitness</span><span class="p">,</span> <span class="n">transfor_funcs</span><span class="p">)</span></div>
 
 
@@ -824,7 +823,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">PythonForWindows 0.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">PythonForWindows 0.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>

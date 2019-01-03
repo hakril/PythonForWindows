@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>5. windows.pipe – Inter-Process Communication &#8212; PythonForWindows 0.4 documentation</title>
+    <title>6. windows.pipe – Inter-Process Communication &#8212; PythonForWindows 0.5 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/css/mbasic.css" type="text/css" />
@@ -16,8 +16,8 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="6. windows.utils – Windows Utilities" href="utils.html" />
-    <link rel="prev" title="4. windows.winproxy – Windows API" href="winproxy.html" /> 
+    <link rel="next" title="7. windows.utils – Windows Utilities" href="utils.html" />
+    <link rel="prev" title="5. windows.security – Security Descriptor &amp; related" href="security.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -29,12 +29,12 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="utils.html" title="6. windows.utils – Windows Utilities"
+          <a href="utils.html" title="7. windows.utils – Windows Utilities"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="winproxy.html" title="4. windows.winproxy – Windows API"
+          <a href="security.html" title="5. windows.security – Security Descriptor &amp; related"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.4 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.5 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -44,7 +44,7 @@
           <div class="body" role="main">
             
   <div class="section" id="module-windows.pipe">
-<span id="windows-pipe-inter-process-communication"></span><h1>5. <code class="docutils literal notranslate"><span class="pre">windows.pipe</span></code> – Inter-Process Communication<a class="headerlink" href="#module-windows.pipe" title="Permalink to this headline">¶</a></h1>
+<span id="windows-pipe-inter-process-communication"></span><h1>6. <code class="docutils literal notranslate"><span class="pre">windows.pipe</span></code> – Inter-Process Communication<a class="headerlink" href="#module-windows.pipe" title="Permalink to this headline">¶</a></h1>
 <p><a class="reference internal" href="#module-windows.pipe" title="windows.pipe"><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.pipe</span></code></a> is wrapper around <code class="xref py py-class docutils literal notranslate"><span class="pre">_multiprocessing.PipeConnection</span></code> simplifiying its use.</p>
 <p>The main improvement are:</p>
 <blockquote>
@@ -58,7 +58,7 @@
 <p class="last">see sample <a class="reference internal" href="sample.html#sample-pipe"><span class="std std-ref">windows.pipe</span></a></p>
 </div>
 <div class="section" id="helper-functions">
-<h2>5.1. Helper functions<a class="headerlink" href="#helper-functions" title="Permalink to this headline">¶</a></h2>
+<h2>6.1. Helper functions<a class="headerlink" href="#helper-functions" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="windows.pipe.create">
 <code class="descclassname">windows.pipe.</code><code class="descname">create</code><span class="sig-paren">(</span><em>addr</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.pipe.create" title="Permalink to this definition">¶</a></dt>
@@ -107,7 +107,7 @@
 
 </div>
 <div class="section" id="pipeconnection">
-<h2>5.2. PipeConnection<a class="headerlink" href="#pipeconnection" title="Permalink to this headline">¶</a></h2>
+<h2>6.2. PipeConnection<a class="headerlink" href="#pipeconnection" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="windows.pipe.PipeConnection">
 <em class="property">class </em><code class="descclassname">windows.pipe.</code><code class="descname">PipeConnection</code><span class="sig-paren">(</span><em>connection</em>, <em>name=None</em>, <em>server=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/pipe.html#PipeConnection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.pipe.PipeConnection" title="Permalink to this definition">¶</a></dt>
@@ -183,19 +183,19 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">5. <code class="docutils literal notranslate"><span class="pre">windows.pipe</span></code> – Inter-Process Communication</a><ul>
-<li><a class="reference internal" href="#helper-functions">5.1. Helper functions</a></li>
-<li><a class="reference internal" href="#pipeconnection">5.2. PipeConnection</a></li>
+<li><a class="reference internal" href="#">6. <code class="docutils literal notranslate"><span class="pre">windows.pipe</span></code> – Inter-Process Communication</a><ul>
+<li><a class="reference internal" href="#helper-functions">6.1. Helper functions</a></li>
+<li><a class="reference internal" href="#pipeconnection">6.2. PipeConnection</a></li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="winproxy.html"
-                        title="previous chapter">4. <code class="docutils literal notranslate"><span class="pre">windows.winproxy</span></code> – Windows API</a></p>
+  <p class="topless"><a href="security.html"
+                        title="previous chapter">5. <code class="docutils literal notranslate"><span class="pre">windows.security</span></code> – Security Descriptor &amp; related</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="utils.html"
-                        title="next chapter">6. <code class="docutils literal notranslate"><span class="pre">windows.utils</span></code> – Windows Utilities</a></p>
+                        title="next chapter">7. <code class="docutils literal notranslate"><span class="pre">windows.utils</span></code> – Windows Utilities</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -229,12 +229,12 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="utils.html" title="6. windows.utils – Windows Utilities"
+          <a href="utils.html" title="7. windows.utils – Windows Utilities"
              >next</a> |</li>
         <li class="right" >
-          <a href="winproxy.html" title="4. windows.winproxy – Windows API"
+          <a href="security.html" title="5. windows.security – Security Descriptor &amp; related"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.4 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.5 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

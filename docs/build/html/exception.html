@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>2.4. Exception and Context related structures &#8212; PythonForWindows 0.4 documentation</title>
+    <title>2.5. Exception and Context related structures &#8212; PythonForWindows 0.5 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/css/mbasic.css" type="text/css" />
@@ -16,8 +16,8 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="2.5. Registry" href="registry.html" />
-    <link rel="prev" title="2.1. Processes and Threads" href="process.html" /> 
+    <link rel="next" title="2.6. Registry" href="registry.html" />
+    <link rel="prev" title="2.4. Token" href="token.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -29,12 +29,12 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="registry.html" title="2.5. Registry"
+          <a href="registry.html" title="2.6. Registry"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="process.html" title="2.1. Processes and Threads"
+          <a href="token.html" title="2.4. Token"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="winobject.html" accesskey="U">2. The <code class="docutils literal notranslate"><span class="pre">windows</span></code> objects</a> &#187;</li> 
       </ul>
     </div>  
@@ -45,7 +45,7 @@
           <div class="body" role="main">
             
   <div class="section" id="module-windows.winobject.exception">
-<span id="exception-and-context-related-structures"></span><h1>2.4. Exception and Context related structures<a class="headerlink" href="#module-windows.winobject.exception" title="Permalink to this headline">¶</a></h1>
+<span id="exception-and-context-related-structures"></span><h1>2.5. Exception and Context related structures<a class="headerlink" href="#module-windows.winobject.exception" title="Permalink to this headline">¶</a></h1>
 <p>This module regroups all the Exception/Context related structures and functions.
 Most of the structures are the Windows structure with a prefix <code class="docutils literal notranslate"><span class="pre">E</span></code> (For enhanced)</p>
 <p>Those structure have the same fields that the normal windows ones but their types might vary for a simpler use.</p>
@@ -55,7 +55,7 @@ Most of the structures are the Windows structure with a prefix <code class="docu
 <p class="last">See sample <a class="reference internal" href="sample.html#sample-vectoredexception"><span class="std std-ref">VectoredException()</span></a> samples</p>
 </div>
 <div class="section" id="exception-records">
-<h2>2.4.1. Exception Records<a class="headerlink" href="#exception-records" title="Permalink to this headline">¶</a></h2>
+<h2>2.5.1. Exception Records<a class="headerlink" href="#exception-records" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="windows.winobject.exception.EEXCEPTION_RECORD">
 <em class="property">class </em><code class="descclassname">windows.winobject.exception.</code><code class="descname">EEXCEPTION_RECORD</code><a class="reference internal" href="_modules/windows/winobject/exception.html#EEXCEPTION_RECORD"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.exception.EEXCEPTION_RECORD" title="Permalink to this definition">¶</a></dt>
@@ -178,7 +178,7 @@ Most of the structures are the Windows structure with a prefix <code class="docu
 
 </div>
 <div class="section" id="exception-debug-info">
-<h2>2.4.2. EXCEPTION DEBUG INFO<a class="headerlink" href="#exception-debug-info" title="Permalink to this headline">¶</a></h2>
+<h2>2.5.2. EXCEPTION DEBUG INFO<a class="headerlink" href="#exception-debug-info" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="windows.winobject.exception.EEXCEPTION_DEBUG_INFO32">
 <em class="property">class </em><code class="descclassname">windows.winobject.exception.</code><code class="descname">EEXCEPTION_DEBUG_INFO32</code><a class="reference internal" href="_modules/windows/winobject/exception.html#EEXCEPTION_DEBUG_INFO32"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.exception.EEXCEPTION_DEBUG_INFO32" title="Permalink to this definition">¶</a></dt>
@@ -231,7 +231,7 @@ Most of the structures are the Windows structure with a prefix <code class="docu
 
 </div>
 <div class="section" id="context">
-<h2>2.4.3. Context<a class="headerlink" href="#context" title="Permalink to this headline">¶</a></h2>
+<h2>2.5.3. Context<a class="headerlink" href="#context" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="windows.winobject.exception.ECONTEXT32">
 <em class="property">class </em><code class="descclassname">windows.winobject.exception.</code><code class="descname">ECONTEXT32</code><a class="reference internal" href="_modules/windows/winobject/exception.html#ECONTEXT32"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.exception.ECONTEXT32" title="Permalink to this definition">¶</a></dt>
@@ -510,7 +510,7 @@ Most of the structures are the Windows structure with a prefix <code class="docu
 
 </div>
 <div class="section" id="exception-pointers">
-<h2>2.4.4. EXCEPTION POINTERS<a class="headerlink" href="#exception-pointers" title="Permalink to this headline">¶</a></h2>
+<h2>2.5.4. EXCEPTION POINTERS<a class="headerlink" href="#exception-pointers" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="windows.winobject.exception.EEXCEPTION_POINTERS">
 <em class="property">class </em><code class="descclassname">windows.winobject.exception.</code><code class="descname">EEXCEPTION_POINTERS</code><a class="reference internal" href="_modules/windows/winobject/exception.html#EEXCEPTION_POINTERS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.exception.EEXCEPTION_POINTERS" title="Permalink to this definition">¶</a></dt>
@@ -550,7 +550,7 @@ Most of the structures are the Windows structure with a prefix <code class="docu
 
 </div>
 <div class="section" id="vectored-exception">
-<span id="vectoredexception"></span><h2>2.4.5. Vectored Exception<a class="headerlink" href="#vectored-exception" title="Permalink to this headline">¶</a></h2>
+<span id="vectoredexception"></span><h2>2.5.5. Vectored Exception<a class="headerlink" href="#vectored-exception" title="Permalink to this headline">¶</a></h2>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">See sample <a class="reference internal" href="sample.html#sample-vectoredexception"><span class="std std-ref">VectoredException()</span></a></p>
@@ -578,22 +578,22 @@ Most of the structures are the Windows structure with a prefix <code class="docu
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">2.4. Exception and Context related structures</a><ul>
-<li><a class="reference internal" href="#exception-records">2.4.1. Exception Records</a></li>
-<li><a class="reference internal" href="#exception-debug-info">2.4.2. EXCEPTION DEBUG INFO</a></li>
-<li><a class="reference internal" href="#context">2.4.3. Context</a></li>
-<li><a class="reference internal" href="#exception-pointers">2.4.4. EXCEPTION POINTERS</a></li>
-<li><a class="reference internal" href="#vectored-exception">2.4.5. Vectored Exception</a></li>
+<li><a class="reference internal" href="#">2.5. Exception and Context related structures</a><ul>
+<li><a class="reference internal" href="#exception-records">2.5.1. Exception Records</a></li>
+<li><a class="reference internal" href="#exception-debug-info">2.5.2. EXCEPTION DEBUG INFO</a></li>
+<li><a class="reference internal" href="#context">2.5.3. Context</a></li>
+<li><a class="reference internal" href="#exception-pointers">2.5.4. EXCEPTION POINTERS</a></li>
+<li><a class="reference internal" href="#vectored-exception">2.5.5. Vectored Exception</a></li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="process.html"
-                        title="previous chapter">2.1. Processes and Threads</a></p>
+  <p class="topless"><a href="token.html"
+                        title="previous chapter">2.4. Token</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="registry.html"
-                        title="next chapter">2.5. Registry</a></p>
+                        title="next chapter">2.6. Registry</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -627,12 +627,12 @@ Most of the structures are the Windows structure with a prefix <code class="docu
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="registry.html" title="2.5. Registry"
+          <a href="registry.html" title="2.6. Registry"
              >next</a> |</li>
         <li class="right" >
-          <a href="process.html" title="2.1. Processes and Threads"
+          <a href="token.html" title="2.4. Token"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="winobject.html" >2. The <code class="docutils literal notranslate"><span class="pre">windows</span></code> objects</a> &#187;</li> 
       </ul>
     </div>

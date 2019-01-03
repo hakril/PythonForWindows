@@ -17,7 +17,6 @@ The submodules that you might use by themself are:
     * :mod:`windows.winproxy`
     * :mod:`windows.security`
     * :mod:`windows.wintrust`
-    * :mod:`windows.security`
     * :mod:`windows.crypto`
     * :mod:`windows.utils`
     * :mod:`windows.debug`

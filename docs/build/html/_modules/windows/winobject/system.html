@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>windows.winobject.system &#8212; PythonForWindows 0.4 documentation</title>
+    <title>windows.winobject.system &#8212; PythonForWindows 0.5 documentation</title>
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/css/mbasic.css" type="text/css" />
@@ -26,7 +26,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -401,11 +401,17 @@
     <span class="nd">@utils</span><span class="o">.</span><span class="n">fixedpropety</span>
     <span class="k">def</span> <span class="nf">build_number</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># This returns the last version where ntdll was updated</span>
-        <span class="c1"># Should look at HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion</span>
-        <span class="c1"># values:  CurrentBuild + UBR</span>
-        <span class="c1"># windows.system.registry(r&quot;HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion&quot;)[&quot;CurrentBuild&quot;].value</span>
-        <span class="c1"># windows.system.registry(r&quot;HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion&quot;)[&quot;UBR&quot;].value</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_file_version</span><span class="p">(</span><span class="s2">&quot;comctl32&quot;</span><span class="p">)</span>
+        <span class="c1"># return self.get_file_version(&quot;comctl32&quot;)</span>
+
+        <span class="c1"># Fallback on self.get_file_version(&quot;comctl32&quot;) is key/values not presents ?</span>
+        <span class="n">curver_key</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">registry</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion&quot;</span><span class="p">)</span>
+        <span class="n">major</span> <span class="o">=</span> <span class="n">curver_key</span><span class="p">[</span><span class="s2">&quot;CurrentMajorVersionNumber&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+        <span class="n">minor</span> <span class="o">=</span> <span class="n">curver_key</span><span class="p">[</span><span class="s2">&quot;CurrentMinorVersionNumber&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+        <span class="n">build</span> <span class="o">=</span> <span class="n">curver_key</span><span class="p">[</span><span class="s2">&quot;CurrentBuildNumber&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+        <span class="c1"># Update Build Revision</span>
+        <span class="n">ubr</span> <span class="o">=</span> <span class="n">curver_key</span><span class="p">[</span><span class="s2">&quot;UBR&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">.</span><span class="si">{1}</span><span class="s2">.</span><span class="si">{2}</span><span class="s2">.</span><span class="si">{3}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">major</span><span class="p">,</span> <span class="n">minor</span><span class="p">,</span> <span class="n">build</span><span class="p">,</span> <span class="n">ubr</span><span class="p">)</span>
+
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">enumerate_processes</span><span class="p">():</span>
@@ -508,7 +514,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>2.9. WMI – Make request to WMI &#8212; PythonForWindows 0.4 documentation</title>
+    <title>2.10. WMI – Make request to WMI &#8212; PythonForWindows 0.5 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/css/mbasic.css" type="text/css" />
@@ -16,8 +16,8 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="2.10. Handle – Processes handles" href="handle.html" />
-    <link rel="prev" title="2.8. Volume – The logical drives" href="volume.html" /> 
+    <link rel="next" title="2.11. Handle – Processes handles" href="handle.html" />
+    <link rel="prev" title="2.9. Volume – The logical drives" href="volume.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -29,12 +29,12 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="handle.html" title="2.10. Handle – Processes handles"
+          <a href="handle.html" title="2.11. Handle – Processes handles"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="volume.html" title="2.8. Volume – The logical drives"
+          <a href="volume.html" title="2.9. Volume – The logical drives"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="winobject.html" accesskey="U">2. The <code class="docutils literal notranslate"><span class="pre">windows</span></code> objects</a> &#187;</li> 
       </ul>
     </div>  
@@ -45,23 +45,23 @@
           <div class="body" role="main">
             
   <div class="section" id="module-windows.winobject.wmi">
-<span id="wmi-make-request-to-wmi"></span><h1>2.9. WMI – Make request to WMI<a class="headerlink" href="#module-windows.winobject.wmi" title="Permalink to this headline">¶</a></h1>
+<span id="wmi-make-request-to-wmi"></span><h1>2.10. WMI – Make request to WMI<a class="headerlink" href="#module-windows.winobject.wmi" title="Permalink to this headline">¶</a></h1>
 <p>The <a class="reference internal" href="#windows.winobject.wmi.WmiManager" title="windows.winobject.wmi.WmiManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">WmiManager</span></code></a> is accessible via <a class="reference internal" href="windows.html#windows.winobject.system.System.wmi" title="windows.winobject.system.System.wmi"><code class="xref py py-attr docutils literal notranslate"><span class="pre">windows.system.wmi</span></code></a></p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">See sample <a class="reference internal" href="sample.html#wmi-request"><span class="std std-ref">WMI requests</span></a></p>
+<p class="last">See sample <a class="reference internal" href="sample.html#wmi-samples"><span class="std std-ref">WMI</span></a></p>
 </div>
 <div class="section" id="wmimanager">
-<h2>2.9.1. WmiManager<a class="headerlink" href="#wmimanager" title="Permalink to this headline">¶</a></h2>
+<h2>2.10.1. WmiManager<a class="headerlink" href="#wmimanager" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="windows.winobject.wmi.WmiManager">
 <em class="property">class </em><code class="descclassname">windows.winobject.wmi.</code><code class="descname">WmiManager</code><a class="reference internal" href="_modules/windows/winobject/wmi.html#WmiManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.wmi.WmiManager" title="Permalink to this definition">¶</a></dt>
 <dd><p>The main WMI class exposed, used to list and access differents WMI namespace, can be used as a dict to access
-<a class="reference internal" href="#windows.winobject.wmi.WmiRequester" title="windows.winobject.wmi.WmiRequester"><code class="xref py py-class docutils literal notranslate"><span class="pre">WmiRequester</span></code></a> by namespace</p>
+<a class="reference internal" href="#windows.winobject.wmi.WmiNamespace" title="windows.winobject.wmi.WmiNamespace"><code class="xref py py-class docutils literal notranslate"><span class="pre">WmiNamespace</span></code></a> by name</p>
 <dl class="docutils">
 <dt>Example:</dt>
 <dd><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">windows</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">wmi</span><span class="p">[</span><span class="s2">&quot;root\SecurityCenter2&quot;</span><span class="p">]</span>
-<span class="go">&lt;WmiRequester namespace=&quot;root\SecurityCenter2&quot;&gt;</span>
+<span class="go">&lt;WmiNamespace &quot;root\SecurityCenter2&quot;&gt;</span>
 </pre></div>
 </div>
 </dd>
@@ -81,94 +81,465 @@
 <dl class="attribute">
 <dt id="windows.winobject.wmi.WmiManager.query">
 <code class="descname">query</code><a class="headerlink" href="#windows.winobject.wmi.WmiManager.query" title="Permalink to this definition">¶</a></dt>
-<dd><p><a class="reference internal" href="#windows.winobject.wmi.WmiRequester.query" title="windows.winobject.wmi.WmiRequester.query"><code class="xref py py-func docutils literal notranslate"><span class="pre">WmiRequester.query()</span></code></a> for default WMI namespace ‘root\cimv2’</p>
+<dd><p><code class="xref py py-func docutils literal notranslate"><span class="pre">WmiRequester.query()</span></code> for default WMI namespace ‘root\cimv2’</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="windows.winobject.wmi.WmiManager.select">
 <code class="descname">select</code><a class="headerlink" href="#windows.winobject.wmi.WmiManager.select" title="Permalink to this definition">¶</a></dt>
-<dd><p><a class="reference internal" href="#windows.winobject.wmi.WmiRequester.select" title="windows.winobject.wmi.WmiRequester.select"><code class="xref py py-func docutils literal notranslate"><span class="pre">WmiRequester.select()</span></code></a> for default WMI namespace ‘root\cimv2’</p>
+<dd><p><code class="xref py py-func docutils literal notranslate"><span class="pre">WmiRequester.select()</span></code> for default WMI namespace ‘root\cimv2’</p>
 </dd></dl>
 
 </dd></dl>
 
 </div>
-<div class="section" id="wmirequester">
-<h2>2.9.2. WmiRequester<a class="headerlink" href="#wmirequester" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="wminamespace">
+<h2>2.10.2. WmiNamespace<a class="headerlink" href="#wminamespace" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="windows.winobject.wmi.WmiRequester">
-<em class="property">class </em><code class="descclassname">windows.winobject.wmi.</code><code class="descname">WmiRequester</code><span class="sig-paren">(</span><em>target='root\cimv2'</em>, <em>user=None</em>, <em>password=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/wmi.html#WmiRequester"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.wmi.WmiRequester" title="Permalink to this definition">¶</a></dt>
-<dd><p>An object to perform wmi request to <code class="docutils literal notranslate"><span class="pre">root\cimv2</span></code></p>
+<dt id="windows.winobject.wmi.WmiNamespace">
+<em class="property">class </em><code class="descclassname">windows.winobject.wmi.</code><code class="descname">WmiNamespace</code><span class="sig-paren">(</span><em>namespace</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/wmi.html#WmiNamespace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.wmi.WmiNamespace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">windows.generated_def.interfaces.IWbemServices</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">windows.winobject.wmi.WmiComInterface</span></code></p>
+<p>An object to perform wmi request to a given <code class="docutils literal notranslate"><span class="pre">namespace</span></code></p>
 <dl class="attribute">
-<dt id="windows.winobject.wmi.WmiRequester.classes">
-<code class="descname">classes</code><a class="headerlink" href="#windows.winobject.wmi.WmiRequester.classes" title="Permalink to this definition">¶</a></dt>
-<dd><p>The list of class available</p>
+<dt id="windows.winobject.wmi.WmiNamespace.DEFAULT_ENUM_FLAGS">
+<code class="descname">DEFAULT_ENUM_FLAGS</code><em class="property"> = 48L</em><a class="headerlink" href="#windows.winobject.wmi.WmiNamespace.DEFAULT_ENUM_FLAGS" title="Permalink to this definition">¶</a></dt>
+<dd><p>The defauls flags used for enumeration. <code class="docutils literal notranslate"><span class="pre">(WBEM_FLAG_RETURN_IMMEDIATELY</span> <span class="pre">|</span> <span class="pre">WBEM_FLAG_FORWARD_ONLY)</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.wmi.WmiNamespace.classes">
+<code class="descname">classes</code><a class="headerlink" href="#windows.winobject.wmi.WmiNamespace.classes" title="Permalink to this definition">¶</a></dt>
+<dd><p>The list of classes in the namespace. This a a wrapper arround <a class="reference internal" href="#windows.winobject.wmi.WmiNamespace.create_class_enum" title="windows.winobject.wmi.WmiNamespace.create_class_enum"><code class="xref py py-func docutils literal notranslate"><span class="pre">create_class_enum()</span></code></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list of str</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">[<a class="reference internal" href="#windows.winobject.wmi.WmiObject" title="windows.winobject.wmi.WmiObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">WmiObject</span></code></a>] - A list of <a class="reference internal" href="#windows.winobject.wmi.WmiObject" title="windows.winobject.wmi.WmiObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">WmiObject</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="windows.winobject.wmi.WmiNamespace.connect">
+<em class="property">classmethod </em><code class="descname">connect</code><span class="sig-paren">(</span><em>namespace</em>, <em>user=None</em>, <em>password=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/wmi.html#WmiNamespace.connect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.wmi.WmiNamespace.connect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Connect to <code class="docutils literal notranslate"><span class="pre">namespace</span></code> using <code class="docutils literal notranslate"><span class="pre">user</span></code> and <code class="docutils literal notranslate"><span class="pre">password</span></code> for authentification if given</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.wmi.WmiNamespace" title="windows.winobject.wmi.WmiNamespace"><code class="xref py py-class docutils literal notranslate"><span class="pre">WmiNamespace</span></code></a> - The connected <a class="reference internal" href="#windows.winobject.wmi.WmiNamespace" title="windows.winobject.wmi.WmiNamespace"><code class="xref py py-class docutils literal notranslate"><span class="pre">WmiNamespace</span></code></a></td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="method">
-<dt id="windows.winobject.wmi.WmiRequester.gen_query">
-<code class="descname">gen_query</code><span class="sig-paren">(</span><em>query</em>, <em>attrs='*'</em>, <em>timeout=tag_WBEM_TIMEOUT_TYPE.WBEM_INFINITE(0xffffffffL)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/wmi.html#WmiRequester.gen_query"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.wmi.WmiRequester.gen_query" title="Permalink to this definition">¶</a></dt>
-<dd><p>Execute WMI <code class="docutils literal notranslate"><span class="pre">query</span></code> and return a generator that will yield the <code class="docutils literal notranslate"><span class="pre">attrs</span></code> for one object each time.
-Each iteration is susceptible to raise.</p>
+<dt id="windows.winobject.wmi.WmiNamespace.create_class_enum">
+<code class="descname">create_class_enum</code><span class="sig-paren">(</span><em>superclass</em>, <em>flags=48L</em>, <em>deep=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/wmi.html#WmiNamespace.create_class_enum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.wmi.WmiNamespace.create_class_enum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enumerate the classes in the <code class="docutils literal notranslate"><span class="pre">namespace</span></code> that match <code class="docutils literal notranslate"><span class="pre">superclass</span></code>.
+if <code class="docutils literal notranslate"><span class="pre">superclass</span></code> is None will enumerate all top-level class. <code class="docutils literal notranslate"><span class="pre">deep</span></code> allow to returns all subclasses</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">generator</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.wmi.WmiEnumeration" title="windows.winobject.wmi.WmiEnumeration"><code class="xref py py-class docutils literal notranslate"><span class="pre">WmiEnumeration</span></code></a></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">See <a class="reference external" href="https://docs.microsoft.com/en-us/windows/desktop/api/wbemcli/nf-wbemcli-iwbemservices-createclassenum">https://docs.microsoft.com/en-us/windows/desktop/api/wbemcli/nf-wbemcli-iwbemservices-createclassenum</a></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.wmi.WmiNamespace.create_instance_enum">
+<code class="descname">create_instance_enum</code><span class="sig-paren">(</span><em>clsname</em>, <em>flags=48L</em>, <em>deep=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/wmi.html#WmiNamespace.create_instance_enum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.wmi.WmiNamespace.create_instance_enum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enumerate the instances of <code class="docutils literal notranslate"><span class="pre">clsname</span></code>. Deep allows to enumerate the instance of subclasses as well</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.wmi.WmiEnumeration" title="windows.winobject.wmi.WmiEnumeration"><code class="xref py py-class docutils literal notranslate"><span class="pre">WmiEnumeration</span></code></a></td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>Example:</dt>
+<dd><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">windows</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">wmi</span><span class="p">[</span><span class="s2">&quot;root\subscription&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">create_instance_enum</span><span class="p">(</span><span class="s2">&quot;__EventConsumer&quot;</span><span class="p">,</span> <span class="n">deep</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+<span class="go">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">windows</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">wmi</span><span class="p">[</span><span class="s2">&quot;root\subscription&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">create_instance_enum</span><span class="p">(</span><span class="s2">&quot;__EventConsumer&quot;</span><span class="p">,</span> <span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+<span class="go">[&lt;WmiObject instance of &quot;NTEventLogEventConsumer&quot;&gt;]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">See <a class="reference external" href="https://docs.microsoft.com/en-us/windows/desktop/api/wbemcli/nf-wbemcli-iwbemservices-createinstanceenum">https://docs.microsoft.com/en-us/windows/desktop/api/wbemcli/nf-wbemcli-iwbemservices-createinstanceenum</a></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.wmi.WmiNamespace.exec_method">
+<code class="descname">exec_method</code><span class="sig-paren">(</span><em>obj</em>, <em>method</em>, <em>inparam</em>, <em>flags=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/wmi.html#WmiNamespace.exec_method"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.wmi.WmiNamespace.exec_method" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exec method named on <code class="docutils literal notranslate"><span class="pre">object</span></code> with <code class="docutils literal notranslate"><span class="pre">inparam</span></code>.</p>
+<blockquote>
+<div><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">params obj:</th><td class="field-body">The <a class="reference internal" href="#windows.winobject.wmi.WmiObject" title="windows.winobject.wmi.WmiObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">WmiObject</span></code></a> or path of the object the call apply to</td>
+</tr>
+<tr class="field-even field"><th class="field-name">params method:</th><td class="field-body">The name of the method to call on the object</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">params inparam:</th><td class="field-body">The <a class="reference internal" href="#windows.winobject.wmi.WmiObject" title="windows.winobject.wmi.WmiObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">WmiObject</span></code></a> representing the input parameters and retrieve using <a class="reference internal" href="#windows.winobject.wmi.WmiObject.get_method" title="windows.winobject.wmi.WmiObject.get_method"><code class="xref py py-func docutils literal notranslate"><span class="pre">WmiObject.get_method()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.wmi.WmiCallResult" title="windows.winobject.wmi.WmiCallResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">WmiCallResult</span></code></a> <code class="docutils literal notranslate"><span class="pre">(object)</span></code> if flag <cite>WBEM_FLAG_RETURN_IMMEDIATELY</cite> was passed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.wmi.WmiObject" title="windows.winobject.wmi.WmiObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">WmiObject</span></code></a> the outparam object if flag <cite>WBEM_FLAG_RETURN_IMMEDIATELY</cite> was NOT passed</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This API will lakely change to better wrap with WmiObject/inparam/Dict &amp; co</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.wmi.WmiNamespace.exec_query">
+<code class="descname">exec_query</code><span class="sig-paren">(</span><em>query</em>, <em>flags=48L</em>, <em>ctx=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/wmi.html#WmiNamespace.exec_query"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.wmi.WmiNamespace.exec_query" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute a WQL query with custom flags and returns a :<a class="reference internal" href="#windows.winobject.wmi.WmiEnumeration" title="windows.winobject.wmi.WmiEnumeration"><code class="xref py py-class docutils literal notranslate"><span class="pre">WmiEnumeration</span></code></a> that can be used to
+iter the result with timeouts</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.wmi.WmiEnumeration" title="windows.winobject.wmi.WmiEnumeration"><code class="xref py py-class docutils literal notranslate"><span class="pre">WmiEnumeration</span></code></a></td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="method">
-<dt id="windows.winobject.wmi.WmiRequester.gen_select">
-<code class="descname">gen_select</code><span class="sig-paren">(</span><em>frm</em>, <em>attrs='*'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/wmi.html#WmiRequester.gen_select"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.wmi.WmiRequester.gen_select" title="Permalink to this definition">¶</a></dt>
-<dd><p>Select <code class="docutils literal notranslate"><span class="pre">attrs</span></code> from <code class="docutils literal notranslate"><span class="pre">frm</span></code> in a generator (like <a class="reference internal" href="#windows.winobject.wmi.WmiRequester.gen_query" title="windows.winobject.wmi.WmiRequester.gen_query"><code class="xref py py-func docutils literal notranslate"><span class="pre">gen_query()</span></code></a>)</p>
+<dt id="windows.winobject.wmi.WmiNamespace.get_object">
+<code class="descname">get_object</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/wmi.html#WmiNamespace.get_object"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.wmi.WmiNamespace.get_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the object matching <code class="docutils literal notranslate"><span class="pre">path</span></code>. If <code class="docutils literal notranslate"><span class="pre">path</span></code> is a class name return the class object``</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">generator</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.wmi.WmiObject" title="windows.winobject.wmi.WmiObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">WmiObject</span></code></a></td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="method">
-<dt id="windows.winobject.wmi.WmiRequester.query">
-<code class="descname">query</code><span class="sig-paren">(</span><em>query</em>, <em>attrs='*'</em>, <em>timeout=tag_WBEM_TIMEOUT_TYPE.WBEM_INFINITE(0xffffffffL)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/wmi.html#WmiRequester.query"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.wmi.WmiRequester.query" title="Permalink to this definition">¶</a></dt>
-<dd><p>Execute WMI <code class="docutils literal notranslate"><span class="pre">query</span></code> and return the attributes <code class="docutils literal notranslate"><span class="pre">attrs</span></code>
-Timeout is not applied for the full query time but the time to retrieve one object each time.</p>
+<dt id="windows.winobject.wmi.WmiNamespace.put_instance">
+<code class="descname">put_instance</code><span class="sig-paren">(</span><em>instance</em>, <em>flags=tag_WBEM_CHANGE_FLAG_TYPE.WBEM_FLAG_CREATE_ONLY(0x2L)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/wmi.html#WmiNamespace.put_instance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.wmi.WmiNamespace.put_instance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates or updates an instance of an existing class in the namespace</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list of dict</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.wmi.WmiCallResult" title="windows.winobject.wmi.WmiCallResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">WmiCallResult</span></code></a> <code class="docutils literal notranslate"><span class="pre">(string)</span></code> - Used to retrieve the string representing the path of the object created/updated</td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="method">
-<dt id="windows.winobject.wmi.WmiRequester.select">
-<code class="descname">select</code><span class="sig-paren">(</span><em>frm</em>, <em>attrs='*'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/wmi.html#WmiRequester.select"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.wmi.WmiRequester.select" title="Permalink to this definition">¶</a></dt>
-<dd><p>Select <code class="docutils literal notranslate"><span class="pre">attrs</span></code> from <code class="docutils literal notranslate"><span class="pre">frm</span></code></p>
+<dt id="windows.winobject.wmi.WmiNamespace.query">
+<code class="descname">query</code><span class="sig-paren">(</span><em>query</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/wmi.html#WmiNamespace.query"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.wmi.WmiNamespace.query" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the list of <a class="reference internal" href="#windows.winobject.wmi.WmiObject" title="windows.winobject.wmi.WmiObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">WmiObject</span></code></a> matching <code class="docutils literal notranslate"><span class="pre">query</span></code>.</p>
+<p>This API is the <cite>simple one</cite>, if you need timeout or complexe feature see <a class="reference internal" href="#windows.winobject.wmi.WmiNamespace.exec_query" title="windows.winobject.wmi.WmiNamespace.exec_query"><code class="xref py py-func docutils literal notranslate"><span class="pre">exec_query()</span></code></a></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list of dict</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">[<a class="reference internal" href="#windows.winobject.wmi.WmiObject" title="windows.winobject.wmi.WmiObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">WmiObject</span></code></a>] - A list of <a class="reference internal" href="#windows.winobject.wmi.WmiObject" title="windows.winobject.wmi.WmiObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">WmiObject</span></code></a></td>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.wmi.WmiNamespace.select">
+<code class="descname">select</code><span class="sig-paren">(</span><em>clsname</em>, <em>deep=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/wmi.html#WmiNamespace.select"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.wmi.WmiNamespace.select" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the list of <a class="reference internal" href="#windows.winobject.wmi.WmiObject" title="windows.winobject.wmi.WmiObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">WmiObject</span></code></a> that are instance of <code class="docutils literal notranslate"><span class="pre">clsname</span></code>. Deep has the same meaning as in <a class="reference internal" href="#windows.winobject.wmi.WmiNamespace.create_instance_enum" title="windows.winobject.wmi.WmiNamespace.create_instance_enum"><code class="xref py py-func docutils literal notranslate"><span class="pre">create_instance_enum()</span></code></a>.</p>
+<p>This API is the <cite>simple one</cite>, if you need timeout or complexe feature see <a class="reference internal" href="#windows.winobject.wmi.WmiNamespace.create_instance_enum" title="windows.winobject.wmi.WmiNamespace.create_instance_enum"><code class="xref py py-func docutils literal notranslate"><span class="pre">create_instance_enum()</span></code></a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">[<a class="reference internal" href="#windows.winobject.wmi.WmiObject" title="windows.winobject.wmi.WmiObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">WmiObject</span></code></a>] - A list of <a class="reference internal" href="#windows.winobject.wmi.WmiObject" title="windows.winobject.wmi.WmiObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">WmiObject</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.wmi.WmiNamespace.value">
+<code class="descname">value</code><a class="headerlink" href="#windows.winobject.wmi.WmiNamespace.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>current value</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="wmiobject">
+<h2>2.10.3. WmiObject<a class="headerlink" href="#wmiobject" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="windows.winobject.wmi.WmiObject">
+<em class="property">class </em><code class="descclassname">windows.winobject.wmi.</code><code class="descname">WmiObject</code><a class="reference internal" href="_modules/windows/winobject/wmi.html#WmiObject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.wmi.WmiObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">windows.generated_def.interfaces.IWbemClassObject</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">windows.winobject.wmi.WmiComInterface</span></code></p>
+<p>The WmiObject (which wrap <code class="docutils literal notranslate"><span class="pre">IWbemClassObject</span></code>) contains and manipulates both class definitions and class object instances.
+Can be used as a mapping to access properties.</p>
+<dl class="method">
+<dt id="windows.winobject.wmi.WmiObject.__call__">
+<code class="descname">__call__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.wmi.WmiObject.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new object of the class represented by the current <a class="reference internal" href="#windows.winobject.wmi.WmiObject" title="windows.winobject.wmi.WmiObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">WmiObject</span></code></a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.wmi.WmiObject" title="windows.winobject.wmi.WmiObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">WmiObject</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.wmi.WmiObject.__getitem__">
+<code class="descname">__getitem__</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.wmi.WmiObject.__getitem__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the value of the property <code class="docutils literal notranslate"><span class="pre">name</span></code>. The return value depends of the type of the property and can vary</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.wmi.WmiObject.__setitem__">
+<code class="descname">__setitem__</code><span class="sig-paren">(</span><em>name</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.winobject.wmi.WmiObject.__setitem__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the property <code class="docutils literal notranslate"><span class="pre">name</span></code> to <code class="docutils literal notranslate"><span class="pre">value</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.wmi.WmiObject.genus">
+<code class="descname">genus</code><a class="headerlink" href="#windows.winobject.wmi.WmiObject.genus" title="Permalink to this definition">¶</a></dt>
+<dd><p>The genus of the object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">WBEM_GENUS_CLASS(0x1L)</span></code> if the <a class="reference internal" href="#windows.winobject.wmi.WmiObject" title="windows.winobject.wmi.WmiObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">WmiObject</span></code></a> is a Class and <code class="docutils literal notranslate"><span class="pre">WBEM_GENUS_INSTANCE(0x2L)</span></code> for instances and events.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.wmi.WmiObject.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/wmi.html#WmiObject.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.wmi.WmiObject.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the value of the property <code class="docutils literal notranslate"><span class="pre">name</span></code>. The return value depends of the type of the property and can vary</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.wmi.WmiObject.get_method">
+<code class="descname">get_method</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/wmi.html#WmiObject.get_method"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.wmi.WmiObject.get_method" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the information about the method <code class="docutils literal notranslate"><span class="pre">name</span></code></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">WmiMethod</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.wmi.WmiObject.get_properties">
+<code class="descname">get_properties</code><span class="sig-paren">(</span><em>system_properties=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/wmi.html#WmiObject.get_properties"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.wmi.WmiObject.get_properties" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the list of properties names available for the current object.
+If <code class="docutils literal notranslate"><span class="pre">system_properties</span></code> is <code class="docutils literal notranslate"><span class="pre">False</span></code> property names begining with <code class="docutils literal notranslate"><span class="pre">_</span></code> are ignored.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">[<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>] – A list of string</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.wmi.WmiObject.get_variant">
+<code class="descname">get_variant</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/wmi.html#WmiObject.get_variant"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.wmi.WmiObject.get_variant" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the value of property <code class="docutils literal notranslate"><span class="pre">name</span></code> as a <code class="xref py py-class docutils literal notranslate"><span class="pre">Variant</span></code></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">Variant</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.wmi.WmiObject.keys">
+<code class="descname">keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/wmi.html#WmiObject.keys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.wmi.WmiObject.keys" title="Permalink to this definition">¶</a></dt>
+<dd><p>The properties of the object (include system properties)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.wmi.WmiObject.properties">
+<code class="descname">properties</code><a class="headerlink" href="#windows.winobject.wmi.WmiObject.properties" title="Permalink to this definition">¶</a></dt>
+<dd><p>The properties of the object (exclude system properties)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.wmi.WmiObject.put">
+<code class="descname">put</code><span class="sig-paren">(</span><em>name</em>, <em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/wmi.html#WmiObject.put"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.wmi.WmiObject.put" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the property <code class="docutils literal notranslate"><span class="pre">name</span></code> to <code class="docutils literal notranslate"><span class="pre">value</span></code></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.wmi.WmiObject.spawn_instance">
+<code class="descname">spawn_instance</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/wmi.html#WmiObject.spawn_instance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.wmi.WmiObject.spawn_instance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new object of the class represented by the current <a class="reference internal" href="#windows.winobject.wmi.WmiObject" title="windows.winobject.wmi.WmiObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">WmiObject</span></code></a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.wmi.WmiObject" title="windows.winobject.wmi.WmiObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">WmiObject</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.wmi.WmiObject.value">
+<code class="descname">value</code><a class="headerlink" href="#windows.winobject.wmi.WmiObject.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>current value</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="wmicallresult">
+<h2>2.10.4. WmiCallResult<a class="headerlink" href="#wmicallresult" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="windows.winobject.wmi.WmiCallResult">
+<em class="property">class </em><code class="descclassname">windows.winobject.wmi.</code><code class="descname">WmiCallResult</code><span class="sig-paren">(</span><em>result_type=None</em>, <em>namespace_name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/wmi.html#WmiCallResult"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.wmi.WmiCallResult" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">windows.generated_def.interfaces.IWbemCallResult</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">windows.winobject.wmi.WmiComInterface</span></code></p>
+<p>The result of a WMI call/query. Real result value type depends of the context</p>
+<dl class="method">
+<dt id="windows.winobject.wmi.WmiCallResult.get_call_status">
+<code class="descname">get_call_status</code><span class="sig-paren">(</span><em>timeout=tag_WBEM_TIMEOUT_TYPE.WBEM_INFINITE(0xffffffffL)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/wmi.html#WmiCallResult.get_call_status"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.wmi.WmiCallResult.get_call_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>The status of the call</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.wmi.WmiCallResult.get_result_object">
+<code class="descname">get_result_object</code><span class="sig-paren">(</span><em>timeout=tag_WBEM_TIMEOUT_TYPE.WBEM_INFINITE(0xffffffffL)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/wmi.html#WmiCallResult.get_result_object"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.wmi.WmiCallResult.get_result_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>The result as a <a class="reference internal" href="#windows.winobject.wmi.WmiObject" title="windows.winobject.wmi.WmiObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">WmiObject</span></code></a> (returned by <a class="reference internal" href="#windows.winobject.wmi.WmiNamespace.exec_method" title="windows.winobject.wmi.WmiNamespace.exec_method"><code class="xref py py-func docutils literal notranslate"><span class="pre">WmiNamespace.exec_method()</span></code></a>)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.wmi.WmiCallResult.get_result_service">
+<code class="descname">get_result_service</code><span class="sig-paren">(</span><em>timeout=tag_WBEM_TIMEOUT_TYPE.WBEM_INFINITE(0xffffffffL)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/wmi.html#WmiCallResult.get_result_service"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.wmi.WmiCallResult.get_result_service" title="Permalink to this definition">¶</a></dt>
+<dd><p>The result as a <a class="reference internal" href="#windows.winobject.wmi.WmiNamespace" title="windows.winobject.wmi.WmiNamespace"><code class="xref py py-class docutils literal notranslate"><span class="pre">WmiNamespace</span></code></a> (not used yet)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.wmi.WmiCallResult.get_result_string">
+<code class="descname">get_result_string</code><span class="sig-paren">(</span><em>timeout=tag_WBEM_TIMEOUT_TYPE.WBEM_INFINITE(0xffffffffL)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/wmi.html#WmiCallResult.get_result_string"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.wmi.WmiCallResult.get_result_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>The result as a <a class="reference internal" href="#windows.winobject.wmi.WmiObject" title="windows.winobject.wmi.WmiObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">WmiObject</span></code></a> (returned by <a class="reference internal" href="#windows.winobject.wmi.WmiNamespace.put_instance" title="windows.winobject.wmi.WmiNamespace.put_instance"><code class="xref py py-func docutils literal notranslate"><span class="pre">WmiNamespace.put_instance()</span></code></a>)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.wmi.WmiCallResult.result">
+<code class="descname">result</code><a class="headerlink" href="#windows.winobject.wmi.WmiCallResult.result" title="Permalink to this definition">¶</a></dt>
+<dd><p>The result of the correct type based on <code class="docutils literal notranslate"><span class="pre">self.result_type</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.wmi.WmiCallResult.value">
+<code class="descname">value</code><a class="headerlink" href="#windows.winobject.wmi.WmiCallResult.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>current value</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="wmienumeration">
+<h2>2.10.5. WmiEnumeration<a class="headerlink" href="#wmienumeration" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="windows.winobject.wmi.WmiEnumeration">
+<em class="property">class </em><code class="descclassname">windows.winobject.wmi.</code><code class="descname">WmiEnumeration</code><a class="reference internal" href="_modules/windows/winobject/wmi.html#WmiEnumeration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.wmi.WmiEnumeration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">windows.generated_def.interfaces.IEnumWbemClassObject</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">windows.winobject.wmi.WmiComInterface</span></code></p>
+<p>Represent an enumeration of object that can be itered</p>
+<dl class="attribute">
+<dt id="windows.winobject.wmi.WmiEnumeration.DEFAULT_TIMEOUT">
+<code class="descname">DEFAULT_TIMEOUT</code><em class="property"> = tag_WBEM_TIMEOUT_TYPE.WBEM_INFINITE(0xffffffffL)</em><a class="headerlink" href="#windows.winobject.wmi.WmiEnumeration.DEFAULT_TIMEOUT" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default timeout</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.wmi.WmiEnumeration.__iter__">
+<code class="descname">__iter__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/wmi.html#WmiEnumeration.__iter__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.wmi.WmiEnumeration.__iter__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an iterator with <code class="docutils literal notranslate"><span class="pre">DEFAULT_TIMEOUT</span></code></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.wmi.WmiEnumeration.all">
+<code class="descname">all</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/wmi.html#WmiEnumeration.all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.wmi.WmiEnumeration.all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return all elements in the enumeration as a list</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">[<a class="reference internal" href="#windows.winobject.wmi.WmiObject" title="windows.winobject.wmi.WmiObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">WmiObject</span></code></a>] - A list of <a class="reference internal" href="#windows.winobject.wmi.WmiObject" title="windows.winobject.wmi.WmiObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">WmiObject</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.wmi.WmiEnumeration.iter_timeout">
+<code class="descname">iter_timeout</code><span class="sig-paren">(</span><em>timeout=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/wmi.html#WmiEnumeration.iter_timeout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.wmi.WmiEnumeration.iter_timeout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an iterator with a custom <code class="docutils literal notranslate"><span class="pre">timeout</span></code></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.wmi.WmiEnumeration.next">
+<code class="descname">next</code><span class="sig-paren">(</span><em>timeout=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/wmi.html#WmiEnumeration.next"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.wmi.WmiEnumeration.next" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the next object in the enumeration with <cite>timeout</cite>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">WindowsError(WBEM_S_TIMEDOUT)</span></code> if timeout expire</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.wmi.WmiObject" title="windows.winobject.wmi.WmiObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">WmiObject</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.wmi.WmiEnumeration.value">
+<code class="descname">value</code><a class="headerlink" href="#windows.winobject.wmi.WmiEnumeration.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>current value</p>
 </dd></dl>
 
 </dd></dl>
@@ -184,19 +555,22 @@ Timeout is not applied for the full query time but the time to retrieve one obje
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">2.9. WMI – Make request to WMI</a><ul>
-<li><a class="reference internal" href="#wmimanager">2.9.1. WmiManager</a></li>
-<li><a class="reference internal" href="#wmirequester">2.9.2. WmiRequester</a></li>
+<li><a class="reference internal" href="#">2.10. WMI – Make request to WMI</a><ul>
+<li><a class="reference internal" href="#wmimanager">2.10.1. WmiManager</a></li>
+<li><a class="reference internal" href="#wminamespace">2.10.2. WmiNamespace</a></li>
+<li><a class="reference internal" href="#wmiobject">2.10.3. WmiObject</a></li>
+<li><a class="reference internal" href="#wmicallresult">2.10.4. WmiCallResult</a></li>
+<li><a class="reference internal" href="#wmienumeration">2.10.5. WmiEnumeration</a></li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="volume.html"
-                        title="previous chapter">2.8. Volume – The logical drives</a></p>
+                        title="previous chapter">2.9. Volume – The logical drives</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="handle.html"
-                        title="next chapter">2.10. Handle – Processes handles</a></p>
+                        title="next chapter">2.11. Handle – Processes handles</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -230,12 +604,12 @@ Timeout is not applied for the full query time but the time to retrieve one obje
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="handle.html" title="2.10. Handle – Processes handles"
+          <a href="handle.html" title="2.11. Handle – Processes handles"
              >next</a> |</li>
         <li class="right" >
-          <a href="volume.html" title="2.8. Volume – The logical drives"
+          <a href="volume.html" title="2.9. Volume – The logical drives"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="winobject.html" >2. The <code class="docutils literal notranslate"><span class="pre">windows</span></code> objects</a> &#187;</li> 
       </ul>
     </div>

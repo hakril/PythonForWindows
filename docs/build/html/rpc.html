@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>12. windows.rpc – ALPC-based Windows RPC &#8212; PythonForWindows 0.4 documentation</title>
+    <title>13. windows.rpc – ALPC-based Windows RPC &#8212; PythonForWindows 0.5 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/css/mbasic.css" type="text/css" />
@@ -16,8 +16,8 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="13. windows.generated_def – generated Windows defines and structures" href="generated.html" />
-    <link rel="prev" title="11. windows.alpc – Advanced Local Procedure Call" href="alpc.html" /> 
+    <link rel="next" title="14. windows.generated_def – generated Windows defines and structures" href="generated.html" />
+    <link rel="prev" title="12. windows.alpc – Advanced Local Procedure Call" href="alpc.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -29,12 +29,12 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="generated.html" title="13. windows.generated_def – generated Windows defines and structures"
+          <a href="generated.html" title="14. windows.generated_def – generated Windows defines and structures"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="alpc.html" title="11. windows.alpc – Advanced Local Procedure Call"
+          <a href="alpc.html" title="12. windows.alpc – Advanced Local Procedure Call"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.4 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.5 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -44,7 +44,7 @@
           <div class="body" role="main">
             
   <div class="section" id="module-windows.rpc">
-<span id="windows-rpc-alpc-based-windows-rpc"></span><h1>12. <code class="docutils literal notranslate"><span class="pre">windows.rpc</span></code> – ALPC-based Windows RPC<a class="headerlink" href="#module-windows.rpc" title="Permalink to this headline">¶</a></h1>
+<span id="windows-rpc-alpc-based-windows-rpc"></span><h1>13. <code class="docutils literal notranslate"><span class="pre">windows.rpc</span></code> – ALPC-based Windows RPC<a class="headerlink" href="#module-windows.rpc" title="Permalink to this headline">¶</a></h1>
 <p>The <a class="reference internal" href="#module-windows.rpc" title="windows.rpc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.rpc</span></code></a> allows to perform the basic for MS-RPC:</p>
 <blockquote>
 <div><ul class="simple">
@@ -66,7 +66,7 @@
 </div></blockquote>
 </div>
 <div class="section" id="rpcclient">
-<h2>12.1. RPCClient<a class="headerlink" href="#rpcclient" title="Permalink to this headline">¶</a></h2>
+<h2>13.1. RPCClient<a class="headerlink" href="#rpcclient" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="windows.rpc.RPCClient">
 <em class="property">class </em><code class="descclassname">windows.rpc.</code><code class="descname">RPCClient</code><span class="sig-paren">(</span><em>port</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/rpc/client.html#RPCClient"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.rpc.RPCClient" title="Permalink to this definition">¶</a></dt>
@@ -111,7 +111,7 @@
 
 </div>
 <div class="section" id="epmapper">
-<h2>12.2. Epmapper<a class="headerlink" href="#epmapper" title="Permalink to this headline">¶</a></h2>
+<h2>13.2. Epmapper<a class="headerlink" href="#epmapper" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="windows.rpc.epmapper.UnpackTower">
 <em class="property">class </em><code class="descclassname">windows.rpc.epmapper.</code><code class="descname">UnpackTower</code><span class="sig-paren">(</span><em>protseq</em>, <em>endpoint</em>, <em>address</em>, <em>object</em>, <em>syntax</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.rpc.epmapper.UnpackTower" title="Permalink to this definition">¶</a></dt>
@@ -148,7 +148,7 @@
 </dd></dl>
 
 <div class="section" id="find-alpc-endpoints">
-<h3>12.2.1. <a class="reference internal" href="#windows.rpc.find_alpc_endpoints" title="windows.rpc.find_alpc_endpoints"><code class="xref py py-func docutils literal notranslate"><span class="pre">find_alpc_endpoints()</span></code></a><a class="headerlink" href="#find-alpc-endpoints" title="Permalink to this headline">¶</a></h3>
+<h3>13.2.1. <a class="reference internal" href="#windows.rpc.find_alpc_endpoints" title="windows.rpc.find_alpc_endpoints"><code class="xref py py-func docutils literal notranslate"><span class="pre">find_alpc_endpoints()</span></code></a><a class="headerlink" href="#find-alpc-endpoints" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
 <dt id="windows.rpc.find_alpc_endpoints">
 <code class="descclassname">windows.rpc.</code><code class="descname">find_alpc_endpoints</code><span class="sig-paren">(</span><em>targetiid</em>, <em>version=(1</em>, <em>0)</em>, <em>nb_response=1</em>, <em>sid=_WELL_KNOWN_SID_TYPE.WinLocalSystemSid(0x16L)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/rpc/epmapper.html#find_alpc_endpoints"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.rpc.find_alpc_endpoints" title="Permalink to this definition">¶</a></dt>
@@ -185,7 +185,7 @@
 </div>
 </div>
 <div class="section" id="find-alpc-endpoint-and-connect">
-<h3>12.2.2. <a class="reference internal" href="#windows.rpc.find_alpc_endpoint_and_connect" title="windows.rpc.find_alpc_endpoint_and_connect"><code class="xref py py-func docutils literal notranslate"><span class="pre">find_alpc_endpoint_and_connect()</span></code></a><a class="headerlink" href="#find-alpc-endpoint-and-connect" title="Permalink to this headline">¶</a></h3>
+<h3>13.2.2. <a class="reference internal" href="#windows.rpc.find_alpc_endpoint_and_connect" title="windows.rpc.find_alpc_endpoint_and_connect"><code class="xref py py-func docutils literal notranslate"><span class="pre">find_alpc_endpoint_and_connect()</span></code></a><a class="headerlink" href="#find-alpc-endpoint-and-connect" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
 <dt id="windows.rpc.find_alpc_endpoint_and_connect">
 <code class="descclassname">windows.rpc.</code><code class="descname">find_alpc_endpoint_and_connect</code><span class="sig-paren">(</span><em>targetiid</em>, <em>version=(1</em>, <em>0)</em>, <em>sid=_WELL_KNOWN_SID_TYPE.WinLocalSystemSid(0x16L)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/rpc/epmapper.html#find_alpc_endpoint_and_connect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.rpc.find_alpc_endpoint_and_connect" title="Permalink to this definition">¶</a></dt>
@@ -224,7 +224,7 @@
 </div>
 </div>
 <div class="section" id="module-windows.rpc.ndr">
-<span id="ndr"></span><h2>12.3. Ndr<a class="headerlink" href="#module-windows.rpc.ndr" title="Permalink to this headline">¶</a></h2>
+<span id="ndr"></span><h2>13.3. Ndr<a class="headerlink" href="#module-windows.rpc.ndr" title="Permalink to this headline">¶</a></h2>
 <p>The <a class="reference internal" href="#module-windows.rpc.ndr" title="windows.rpc.ndr"><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.rpc.ndr</span></code></a> module offers some construction to help marshalling types and structures to NDR.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -242,7 +242,7 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>psid</strong> (<em>PSID</em>) – </td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>psid</strong> (<a class="reference internal" href="winstructs_generated.html#windows.generated_def.winstructs.PSID" title="windows.generated_def.winstructs.PSID"><em>PSID</em></a>) – </td>
 </tr>
 </tbody>
 </table>
@@ -271,7 +271,13 @@
 <dl class="class">
 <dt id="windows.rpc.ndr.NdrWString">
 <em class="property">class </em><code class="descclassname">windows.rpc.ndr.</code><code class="descname">NdrWString</code><a class="reference internal" href="_modules/windows/rpc/ndr.html#NdrWString"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.rpc.ndr.NdrWString" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><dl class="classmethod">
+<dt id="windows.rpc.ndr.NdrWString.pack">
+<em class="property">classmethod </em><code class="descname">pack</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/rpc/ndr.html#NdrWString.pack"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.rpc.ndr.NdrWString.pack" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pack string <code class="docutils literal notranslate"><span class="pre">data</span></code>. append <code class="docutils literal notranslate"><span class="pre">\x00</span></code> if not present at the end of the string</p>
+</dd></dl>
+
+</dd></dl>
 
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">windows.rpc</span> <span class="kn">import</span> <span class="n">ndr</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">ndr</span><span class="o">.</span><span class="n">NdrWString</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s2">&quot;Test-String</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -284,7 +290,13 @@
 <dl class="class">
 <dt id="windows.rpc.ndr.NdrCString">
 <em class="property">class </em><code class="descclassname">windows.rpc.ndr.</code><code class="descname">NdrCString</code><a class="reference internal" href="_modules/windows/rpc/ndr.html#NdrCString"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.rpc.ndr.NdrCString" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><dl class="classmethod">
+<dt id="windows.rpc.ndr.NdrCString.pack">
+<em class="property">classmethod </em><code class="descname">pack</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/rpc/ndr.html#NdrCString.pack"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.rpc.ndr.NdrCString.pack" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pack string <code class="docutils literal notranslate"><span class="pre">data</span></code>. append <code class="docutils literal notranslate"><span class="pre">\x00</span></code> if not present at the end of the string</p>
+</dd></dl>
+
+</dd></dl>
 
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">windows.rpc</span> <span class="kn">import</span> <span class="n">ndr</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">ndr</span><span class="o">.</span><span class="n">NdrCString</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s2">&quot;Test-String</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -424,7 +436,7 @@ an attribute <code class="docutils literal notranslate"><span class="pre">MEMBER
 </dd></dl>
 
 <div class="section" id="ndr-stream">
-<h3>12.3.1. NDR STREAM<a class="headerlink" href="#ndr-stream" title="Permalink to this headline">¶</a></h3>
+<h3>13.3.1. NDR STREAM<a class="headerlink" href="#ndr-stream" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="windows.rpc.ndr.NdrStream">
 <em class="property">class </em><code class="descclassname">windows.rpc.ndr.</code><code class="descname">NdrStream</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/rpc/ndr.html#NdrStream"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.rpc.ndr.NdrStream" title="Permalink to this definition">¶</a></dt>
@@ -466,15 +478,15 @@ an attribute <code class="docutils literal notranslate"><span class="pre">MEMBER
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">12. <code class="docutils literal notranslate"><span class="pre">windows.rpc</span></code> – ALPC-based Windows RPC</a><ul>
-<li><a class="reference internal" href="#rpcclient">12.1. RPCClient</a></li>
-<li><a class="reference internal" href="#epmapper">12.2. Epmapper</a><ul>
-<li><a class="reference internal" href="#find-alpc-endpoints">12.2.1. <code class="docutils literal notranslate"><span class="pre">find_alpc_endpoints()</span></code></a></li>
-<li><a class="reference internal" href="#find-alpc-endpoint-and-connect">12.2.2. <code class="docutils literal notranslate"><span class="pre">find_alpc_endpoint_and_connect()</span></code></a></li>
+<li><a class="reference internal" href="#">13. <code class="docutils literal notranslate"><span class="pre">windows.rpc</span></code> – ALPC-based Windows RPC</a><ul>
+<li><a class="reference internal" href="#rpcclient">13.1. RPCClient</a></li>
+<li><a class="reference internal" href="#epmapper">13.2. Epmapper</a><ul>
+<li><a class="reference internal" href="#find-alpc-endpoints">13.2.1. <code class="docutils literal notranslate"><span class="pre">find_alpc_endpoints()</span></code></a></li>
+<li><a class="reference internal" href="#find-alpc-endpoint-and-connect">13.2.2. <code class="docutils literal notranslate"><span class="pre">find_alpc_endpoint_and_connect()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#module-windows.rpc.ndr">12.3. Ndr</a><ul>
-<li><a class="reference internal" href="#ndr-stream">12.3.1. NDR STREAM</a></li>
+<li><a class="reference internal" href="#module-windows.rpc.ndr">13.3. Ndr</a><ul>
+<li><a class="reference internal" href="#ndr-stream">13.3.1. NDR STREAM</a></li>
 </ul>
 </li>
 </ul>
@@ -483,10 +495,10 @@ an attribute <code class="docutils literal notranslate"><span class="pre">MEMBER
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="alpc.html"
-                        title="previous chapter">11. <code class="docutils literal notranslate"><span class="pre">windows.alpc</span></code> – Advanced Local Procedure Call</a></p>
+                        title="previous chapter">12. <code class="docutils literal notranslate"><span class="pre">windows.alpc</span></code> – Advanced Local Procedure Call</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="generated.html"
-                        title="next chapter">13. <code class="docutils literal notranslate"><span class="pre">windows.generated_def</span></code> – generated Windows defines and structures</a></p>
+                        title="next chapter">14. <code class="docutils literal notranslate"><span class="pre">windows.generated_def</span></code> – generated Windows defines and structures</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -520,12 +532,12 @@ an attribute <code class="docutils literal notranslate"><span class="pre">MEMBER
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="generated.html" title="13. windows.generated_def – generated Windows defines and structures"
+          <a href="generated.html" title="14. windows.generated_def – generated Windows defines and structures"
              >next</a> |</li>
         <li class="right" >
-          <a href="alpc.html" title="11. windows.alpc – Advanced Local Procedure Call"
+          <a href="alpc.html" title="12. windows.alpc – Advanced Local Procedure Call"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.4 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.5 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

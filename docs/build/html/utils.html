@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>6. windows.utils – Windows Utilities &#8212; PythonForWindows 0.4 documentation</title>
+    <title>7. windows.utils – Windows Utilities &#8212; PythonForWindows 0.5 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/css/mbasic.css" type="text/css" />
@@ -16,8 +16,8 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="7. windows.wintrust – Checking signature" href="wintrust.html" />
-    <link rel="prev" title="5. windows.pipe – Inter-Process Communication" href="pipe.html" /> 
+    <link rel="next" title="8. windows.wintrust – Checking signature" href="wintrust.html" />
+    <link rel="prev" title="6. windows.pipe – Inter-Process Communication" href="pipe.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -29,12 +29,12 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="wintrust.html" title="7. windows.wintrust – Checking signature"
+          <a href="wintrust.html" title="8. windows.wintrust – Checking signature"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="pipe.html" title="5. windows.pipe – Inter-Process Communication"
+          <a href="pipe.html" title="6. windows.pipe – Inter-Process Communication"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.4 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.5 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -44,13 +44,13 @@
           <div class="body" role="main">
             
   <div class="section" id="module-windows.utils">
-<span id="windows-utils-windows-utilities"></span><h1>6. <code class="docutils literal notranslate"><span class="pre">windows.utils</span></code> – Windows Utilities<a class="headerlink" href="#module-windows.utils" title="Permalink to this headline">¶</a></h1>
+<span id="windows-utils-windows-utilities"></span><h1>7. <code class="docutils literal notranslate"><span class="pre">windows.utils</span></code> – Windows Utilities<a class="headerlink" href="#module-windows.utils" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="context-managers">
-<h2>6.1. Context Managers<a class="headerlink" href="#context-managers" title="Permalink to this headline">¶</a></h2>
+<h2>7.1. Context Managers<a class="headerlink" href="#context-managers" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference internal" href="#module-windows.utils" title="windows.utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.utils</span></code></a> provides some context managers wrapping <cite>standard</cite> contextual operations
 like <code class="docutils literal notranslate"><span class="pre">VirtualProtect</span></code> or <code class="docutils literal notranslate"><span class="pre">SysWow</span> <span class="pre">Redirection</span></code></p>
 <div class="section" id="virtualprotected">
-<h3>6.1.1. VirtualProtected<a class="headerlink" href="#virtualprotected" title="Permalink to this headline">¶</a></h3>
+<h3>7.1.1. VirtualProtected<a class="headerlink" href="#virtualprotected" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="windows.utils.VirtualProtected">
 <em class="property">class </em><code class="descclassname">windows.utils.</code><code class="descname">VirtualProtected</code><span class="sig-paren">(</span><em>addr</em>, <em>size</em>, <em>new_protect</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/utils/winutils.html#VirtualProtected"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.utils.VirtualProtected" title="Permalink to this definition">¶</a></dt>
@@ -63,7 +63,7 @@ like <code class="docutils literal notranslate"><span class="pre">VirtualProtect
 
 </div>
 <div class="section" id="disablewow64fsredirection">
-<h3>6.1.2. DisableWow64FsRedirection<a class="headerlink" href="#disablewow64fsredirection" title="Permalink to this headline">¶</a></h3>
+<h3>7.1.2. DisableWow64FsRedirection<a class="headerlink" href="#disablewow64fsredirection" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="windows.utils.DisableWow64FsRedirection">
 <em class="property">class </em><code class="descclassname">windows.utils.</code><code class="descname">DisableWow64FsRedirection</code><a class="reference internal" href="_modules/windows/utils/winutils.html#DisableWow64FsRedirection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.utils.DisableWow64FsRedirection" title="Permalink to this definition">¶</a></dt>
@@ -79,7 +79,7 @@ like <code class="docutils literal notranslate"><span class="pre">VirtualProtect
 </div>
 </div>
 <div class="section" id="helper-functions">
-<h2>6.2. Helper functions<a class="headerlink" href="#helper-functions" title="Permalink to this headline">¶</a></h2>
+<h2>7.2. Helper functions<a class="headerlink" href="#helper-functions" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="windows.utils.sprint">
 <code class="descclassname">windows.utils.</code><code class="descname">sprint</code><span class="sig-paren">(</span><em>struct</em>, <em>name='struct'</em>, <em>hexa=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/utils/pythonutils.html#sprint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.utils.sprint" title="Permalink to this definition">¶</a></dt>
@@ -172,7 +172,7 @@ Useful in injection of GUI process</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><a class="reference internal" href="winproxy.html#windows.winproxy.Kernel32Error" title="windows.winproxy.Kernel32Error"><code class="xref py py-class docutils literal notranslate"><span class="pre">Kernel32Error</span></code></a> if <code class="docutils literal notranslate"><span class="pre">path</span></code> does not exists</td>
+<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><a class="reference internal" href="winproxy.html#windows.winproxy.WinproxyError" title="windows.winproxy.WinproxyError"><code class="xref py py-class docutils literal notranslate"><span class="pre">WinproxyError</span></code></a> if <code class="docutils literal notranslate"><span class="pre">path</span></code> does not exists</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#unicode" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">unicode</span></code></a>) – a valid Windows path</td>
 </tr>
@@ -190,7 +190,7 @@ Useful in injection of GUI process</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><a class="reference internal" href="winproxy.html#windows.winproxy.Kernel32Error" title="windows.winproxy.Kernel32Error"><code class="xref py py-class docutils literal notranslate"><span class="pre">Kernel32Error</span></code></a> if <code class="docutils literal notranslate"><span class="pre">path</span></code> does not exists</td>
+<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><a class="reference internal" href="winproxy.html#windows.winproxy.WinproxyError" title="windows.winproxy.WinproxyError"><code class="xref py py-class docutils literal notranslate"><span class="pre">WinproxyError</span></code></a> if <code class="docutils literal notranslate"><span class="pre">path</span></code> does not exists</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path</strong> (<a class="reference external" href="https://docs.python.org/2.7/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <a class="reference external" href="https://docs.python.org/2.7/library/functions.html#unicode" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">unicode</span></code></a>) – a valid Windows path</td>
 </tr>
@@ -211,23 +211,23 @@ Useful in injection of GUI process</p>
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">6. <code class="docutils literal notranslate"><span class="pre">windows.utils</span></code> – Windows Utilities</a><ul>
-<li><a class="reference internal" href="#context-managers">6.1. Context Managers</a><ul>
-<li><a class="reference internal" href="#virtualprotected">6.1.1. VirtualProtected</a></li>
-<li><a class="reference internal" href="#disablewow64fsredirection">6.1.2. DisableWow64FsRedirection</a></li>
+<li><a class="reference internal" href="#">7. <code class="docutils literal notranslate"><span class="pre">windows.utils</span></code> – Windows Utilities</a><ul>
+<li><a class="reference internal" href="#context-managers">7.1. Context Managers</a><ul>
+<li><a class="reference internal" href="#virtualprotected">7.1.1. VirtualProtected</a></li>
+<li><a class="reference internal" href="#disablewow64fsredirection">7.1.2. DisableWow64FsRedirection</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#helper-functions">6.2. Helper functions</a></li>
+<li><a class="reference internal" href="#helper-functions">7.2. Helper functions</a></li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="pipe.html"
-                        title="previous chapter">5. <code class="docutils literal notranslate"><span class="pre">windows.pipe</span></code> – Inter-Process Communication</a></p>
+                        title="previous chapter">6. <code class="docutils literal notranslate"><span class="pre">windows.pipe</span></code> – Inter-Process Communication</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="wintrust.html"
-                        title="next chapter">7. <code class="docutils literal notranslate"><span class="pre">windows.wintrust</span></code> – Checking signature</a></p>
+                        title="next chapter">8. <code class="docutils literal notranslate"><span class="pre">windows.wintrust</span></code> – Checking signature</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -261,12 +261,12 @@ Useful in injection of GUI process</p>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="wintrust.html" title="7. windows.wintrust – Checking signature"
+          <a href="wintrust.html" title="8. windows.wintrust – Checking signature"
              >next</a> |</li>
         <li class="right" >
-          <a href="pipe.html" title="5. windows.pipe – Inter-Process Communication"
+          <a href="pipe.html" title="6. windows.pipe – Inter-Process Communication"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.4 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.5 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

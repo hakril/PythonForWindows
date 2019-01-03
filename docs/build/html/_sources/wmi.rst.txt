@@ -9,7 +9,7 @@ The :class:`WmiManager` is accessible via :py:attr:`windows.system.wmi
 
 .. note::
 
-    See sample :ref:`wmi_request`
+    See sample :ref:`wmi_samples`
 
 
 WmiManager
@@ -19,7 +19,34 @@ WmiManager
     :no-inherited-members:
     :members: DEFAULT_NAMESPACE, select, query, namespaces
 
-WmiRequester
+
+WmiNamespace
 """"""""""""
 
-.. autoclass:: WmiRequester
+.. autoclass:: WmiNamespace
+    :members:
+    :show-inheritance:
+
+WmiObject
+"""""""""
+
+.. autoclass:: WmiObject
+    :members:
+    :special-members: __call__, __getitem__, __setitem__
+    :show-inheritance:
+
+
+WmiCallResult
+"""""""""""""
+
+.. autoclass:: WmiCallResult
+    :members:
+    :show-inheritance:
+
+WmiEnumeration
+""""""""""""""
+
+.. autoclass:: WmiEnumeration
+    :members:
+    :special-members: __call__, __iter__
+    :show-inheritance:

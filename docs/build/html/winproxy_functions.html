@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>4. windows.winproxy – Windows API &#8212; PythonForWindows 0.5 documentation</title>
+    <title>&lt;no title&gt; &#8212; PythonForWindows 0.5 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/css/mbasic.css" type="text/css" />
@@ -15,9 +15,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="5. windows.security – Security Descriptor &amp; related" href="security.html" />
-    <link rel="prev" title="3. windows.native_exec – Native Code Execution" href="native_exec.html" /> 
+    <link rel="search" title="Search" href="search.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -28,12 +26,6 @@
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="security.html" title="5. windows.security – Security Descriptor &amp; related"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="native_exec.html" title="3. windows.native_exec – Native Code Execution"
-             accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.5 documentation</a> &#187;</li> 
       </ul>
     </div>  
@@ -43,150 +35,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-windows.winproxy">
-<span id="windows-winproxy-windows-api"></span><h1>4. <code class="docutils literal notranslate"><span class="pre">windows.winproxy</span></code> – Windows API<a class="headerlink" href="#module-windows.winproxy" title="Permalink to this headline">¶</a></h1>
-<p><a class="reference internal" href="#module-windows.winproxy" title="windows.winproxy"><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.winproxy</span></code></a> tries to be a pythontic wrapper around windows API of various DLL.
-It also heavily relies on <a class="reference external" href="https://docs.python.org/2.7/library/ctypes.html#module-ctypes" title="(in Python v2.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ctypes</span></code></a> and <code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.generated_def.winfuncs</span></code></p>
-<dl class="docutils">
-<dt>Here are the things to know about <a class="reference internal" href="#module-windows.winproxy" title="windows.winproxy"><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.winproxy</span></code></a></dt>
-<dd><ul class="first last simple">
-<li>All of this is based on <code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.generated_def.winfuncs</span></code></li>
-<li>DLL is loaded the first time an API of it is called</li>
-<li>All parameters can be passed by ordinal or keyword</li>
-<li>The call will fail if an argument with default value <code class="docutils literal notranslate"><span class="pre">NeededParamater</span></code> have been called without another value.</li>
-<li>The call will raise a subclass of <code class="xref py py-class docutils literal notranslate"><span class="pre">WindowsError</span></code> if it fails.</li>
-<li>Some functions are ‘transparent proxy’ it means that all parameters are mandatory</li>
-</ul>
-</dd>
-</dl>
-<div class="section" id="example-virtualalloc">
-<h2>4.1. Example: <code class="docutils literal notranslate"><span class="pre">VirtualAlloc</span></code><a class="headerlink" href="#example-virtualalloc" title="Permalink to this headline">¶</a></h2>
-<p>Exemple with the function <cite>VirtualAlloc</cite> in <a class="reference internal" href="#module-windows.winproxy" title="windows.winproxy"><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.winproxy</span></code></a></p>
-<p>Documentation:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">windows</span>
-<span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">VirtualAlloc</span>
-<span class="c1"># &lt;function VirtualAlloc at 0x02ED63F0&gt;</span>
-
-<span class="n">help</span><span class="p">(</span><span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">VirtualAlloc</span><span class="p">)</span>
-<span class="c1"># Help on function VirtualAlloc in module windows.winproxy:</span>
-<span class="c1"># VirtualAlloc(lpAddress=0, dwSize=NeededParameter, flAllocationType=MEM_COMMIT(0x1000L), flProtect=PAGE_EXECUTE_READWRITE(0x40L))</span>
-<span class="c1">#     Errcheck:</span>
-<span class="c1">#     raise Kernel32Error if result is 0</span>
-</pre></div>
-</div>
-<p>Calling it</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">windows</span>
-
-<span class="c1"># Ordinal arguments</span>
-<span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">VirtualAlloc</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mh">0x1000</span><span class="p">)</span>
-<span class="mi">34537472</span>
-
-<span class="c1"># Keyword arguments</span>
-<span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">VirtualAlloc</span><span class="p">(</span><span class="n">dwSize</span><span class="o">=</span><span class="mh">0x1000</span><span class="p">)</span>
-<span class="mi">34603008</span>
-
-<span class="c1"># NeededParameter must be provided</span>
-<span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">VirtualAlloc</span><span class="p">()</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Traceback (most recent call last):</span>
-<span class="sd">File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;</span>
-<span class="sd">File &quot;windows\winproxy.py&quot;, line 264, in VirtualAlloc</span>
-<span class="sd">    return VirtualAlloc.ctypes_function(lpAddress, dwSize, flAllocationType, flProtect)</span>
-<span class="sd">File &quot;windows\winproxy.py&quot;, line 130, in perform_call</span>
-<span class="sd">    raise TypeError(&quot;{0}: Missing Mandatory parameter &lt;{1}&gt;&quot;.format(self.func_name, param_name))</span>
-<span class="sd">TypeError: VirtualAlloc: Missing Mandatory parameter &lt;dwSize&gt;</span>
-<span class="sd">&quot;&quot;&quot;</span>
-
-<span class="c1"># Error raises exception</span>
-<span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">VirtualAlloc</span><span class="p">(</span><span class="n">dwSize</span><span class="o">=</span><span class="mh">0xffffffff</span><span class="p">)</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Traceback (most recent call last):</span>
-<span class="sd">File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;</span>
-<span class="sd">File &quot;windows\winproxy.py&quot;, line 264, in VirtualAlloc</span>
-<span class="sd">    return VirtualAlloc.ctypes_function(lpAddress, dwSize, flAllocationType, flProtect)</span>
-<span class="sd">File &quot;windows\winproxy.py&quot;, line 133, in perform_call</span>
-<span class="sd">    return self._cprototyped(*args)</span>
-<span class="sd">File &quot;windows\winproxy.py&quot;, line 59, in kernel32_error_check</span>
-<span class="sd">    raise WinproxyError(func_name)</span>
-<span class="sd">windows.winproxy.error.WinproxyError: None: [Error 8] Not enough storage is available to process this command.</span>
-<span class="sd">&quot;&quot;&quot;</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="helper-functions">
-<h2>4.2. Helper functions<a class="headerlink" href="#helper-functions" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
-<dt id="windows.winproxy.is_implemented">
-<code class="descclassname">windows.winproxy.</code><code class="descname">is_implemented</code><span class="sig-paren">(</span><em>apiproxy</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winproxy/apiproxy.html#is_implemented"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winproxy.is_implemented" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return <a class="reference external" href="https://docs.python.org/2.7/library/constants.html#True" title="(in Python v2.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a> if DLL/Api can be found</p>
-<dl class="docutils">
-<dt>Example:</dt>
-<dd><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">is_implemented</span><span class="p">(</span><span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">NtWow64WriteVirtualMemory64</span><span class="p">)</span>
-<span class="go">True</span>
-</pre></div>
-</div>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="windows.winproxy.resolve">
-<code class="descclassname">windows.winproxy.</code><code class="descname">resolve</code><span class="sig-paren">(</span><em>apiproxy</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winproxy/apiproxy.html#resolve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winproxy.resolve" title="Permalink to this definition">¶</a></dt>
-<dd><p>Resolve the address of <code class="docutils literal notranslate"><span class="pre">apiproxy</span></code>. Might raise if <code class="docutils literal notranslate"><span class="pre">apiproxy</span></code> is not implemented</p>
-<dl class="docutils">
-<dt>Example:</dt>
-<dd><div class="first last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">hex</span><span class="p">(</span><span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">NtWow64WriteVirtualMemory64</span><span class="p">))</span>
-<span class="go">&#39;0x77340520&#39;</span>
-</pre></div>
-</div>
-</dd>
-</dl>
-</dd></dl>
-
-</div>
-<div class="section" id="winproxyerror">
-<h2>4.3. WinproxyError<a class="headerlink" href="#winproxyerror" title="Permalink to this headline">¶</a></h2>
-<p>All errors raised by winproxy functions are instance of <a class="reference internal" href="#windows.winproxy.WinproxyError" title="windows.winproxy.WinproxyError"><code class="xref py py-class docutils literal notranslate"><span class="pre">WinproxyError</span></code></a> (or subclasses)</p>
-<dl class="class">
-<dt id="windows.winproxy.WinproxyError">
-<em class="property">class </em><code class="descclassname">windows.winproxy.</code><code class="descname">WinproxyError</code><span class="sig-paren">(</span><em>func_name</em>, <em>error_code=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winproxy/error.html#WinproxyError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winproxy.WinproxyError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2.7/library/exceptions.html#exceptions.WindowsError" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">exceptions.WindowsError</span></code></a></p>
-<dl class="attribute">
-<dt id="windows.winproxy.WinproxyError.api_name">
-<code class="descname">api_name</code><a class="headerlink" href="#windows.winproxy.WinproxyError.api_name" title="Permalink to this definition">¶</a></dt>
-<dd><p>The name of the API that raised the exception</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="windows.winproxy.WinproxyError.errno">
-<code class="descname">errno</code><a class="headerlink" href="#windows.winproxy.WinproxyError.errno" title="Permalink to this definition">¶</a></dt>
-<dd><p>POSIX exception code</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="windows.winproxy.WinproxyError.filename">
-<code class="descname">filename</code><a class="headerlink" href="#windows.winproxy.WinproxyError.filename" title="Permalink to this definition">¶</a></dt>
-<dd><p>exception filename</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="windows.winproxy.WinproxyError.strerror">
-<code class="descname">strerror</code><a class="headerlink" href="#windows.winproxy.WinproxyError.strerror" title="Permalink to this definition">¶</a></dt>
-<dd><p>exception strerror</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="windows.winproxy.WinproxyError.winerror">
-<code class="descname">winerror</code><a class="headerlink" href="#windows.winproxy.WinproxyError.winerror" title="Permalink to this definition">¶</a></dt>
-<dd><p>Win32 exception code</p>
-</dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="functions-in-windows-winproxy">
-<h2>4.4. Functions in <a class="reference internal" href="#module-windows.winproxy" title="windows.winproxy"><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.winproxy</span></code></a><a class="headerlink" href="#functions-in-windows-winproxy" title="Permalink to this headline">¶</a></h2>
-<p>Functions:</p>
+  <p>Functions:</p>
 <ul>
 <li><p class="first">AddVectoredContinueHandler:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">AddVectoredContinueHandler</span><span class="p">(</span><span class="n">FirstHandler</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">VectoredHandler</span><span class="o">=</span><span class="n">NeededParameter</span><span class="p">)</span>
@@ -2969,8 +2818,6 @@ It also heavily relies on <a class="reference external" href="https://docs.pytho
 </div>
 </li>
 </ul>
-</div>
-</div>
 
 
           </div>
@@ -2978,27 +2825,10 @@ It also heavily relies on <a class="reference external" href="https://docs.pytho
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">4. <code class="docutils literal notranslate"><span class="pre">windows.winproxy</span></code> – Windows API</a><ul>
-<li><a class="reference internal" href="#example-virtualalloc">4.1. Example: <code class="docutils literal notranslate"><span class="pre">VirtualAlloc</span></code></a></li>
-<li><a class="reference internal" href="#helper-functions">4.2. Helper functions</a></li>
-<li><a class="reference internal" href="#winproxyerror">4.3. WinproxyError</a></li>
-<li><a class="reference internal" href="#functions-in-windows-winproxy">4.4. Functions in <code class="docutils literal notranslate"><span class="pre">windows.winproxy</span></code></a></li>
-</ul>
-</li>
-</ul>
-
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="native_exec.html"
-                        title="previous chapter">3. <code class="docutils literal notranslate"><span class="pre">windows.native_exec</span></code> – Native Code Execution</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="security.html"
-                        title="next chapter">5. <code class="docutils literal notranslate"><span class="pre">windows.security</span></code> – Security Descriptor &amp; related</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/winproxy.rst.txt"
+      <li><a href="_sources/winproxy_functions.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -3027,12 +2857,6 @@ It also heavily relies on <a class="reference external" href="https://docs.pytho
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="security.html" title="5. windows.security – Security Descriptor &amp; related"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="native_exec.html" title="3. windows.native_exec – Native Code Execution"
-             >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.5 documentation</a> &#187;</li> 
       </ul>
     </div>

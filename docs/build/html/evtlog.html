@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>2.14. Event Log &#8212; PythonForWindows 0.4 documentation</title>
+    <title>2.15. Event Log &#8212; PythonForWindows 0.5 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/css/mbasic.css" type="text/css" />
@@ -17,7 +17,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="3. windows.native_exec – Native Code Execution" href="native_exec.html" />
-    <link rel="prev" title="2.13. Task scheduler" href="task_scheduler.html" /> 
+    <link rel="prev" title="2.14. Task scheduler" href="task_scheduler.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -32,9 +32,9 @@
           <a href="native_exec.html" title="3. windows.native_exec – Native Code Execution"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="task_scheduler.html" title="2.13. Task scheduler"
+          <a href="task_scheduler.html" title="2.14. Task scheduler"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="winobject.html" accesskey="U">2. The <code class="docutils literal notranslate"><span class="pre">windows</span></code> objects</a> &#187;</li> 
       </ul>
     </div>  
@@ -45,7 +45,7 @@
           <div class="body" role="main">
             
   <div class="section" id="module-windows.winobject.event_log">
-<span id="event-log"></span><h1>2.14. Event Log<a class="headerlink" href="#module-windows.winobject.event_log" title="Permalink to this headline">¶</a></h1>
+<span id="event-log"></span><h1>2.15. Event Log<a class="headerlink" href="#module-windows.winobject.event_log" title="Permalink to this headline">¶</a></h1>
 <p>Some part of the Event Log WINAPI are not straightforward.</p>
 <p>I have tried to offer some abstraction without completly hidding the some underlying subtilities (for now).</p>
 <p>The current API may need some works to provide simpler/highter level API in the future.</p>
@@ -59,7 +59,7 @@
 <p class="last">This API have not been tested on real case yet and may be subject to changes.</p>
 </div>
 <div class="section" id="evtlogmanager">
-<h2>2.14.1. EvtlogManager<a class="headerlink" href="#evtlogmanager" title="Permalink to this headline">¶</a></h2>
+<h2>2.15.1. EvtlogManager<a class="headerlink" href="#evtlogmanager" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="windows.winobject.event_log.EvtlogManager">
 <em class="property">class </em><code class="descclassname">windows.winobject.event_log.</code><code class="descname">EvtlogManager</code><a class="reference internal" href="_modules/windows/winobject/event_log.html#EvtlogManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.event_log.EvtlogManager" title="Permalink to this definition">¶</a></dt>
@@ -131,9 +131,9 @@
 
 </div>
 <div class="section" id="channel">
-<h2>2.14.2. Channel<a class="headerlink" href="#channel" title="Permalink to this headline">¶</a></h2>
+<h2>2.15.2. Channel<a class="headerlink" href="#channel" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="evtchannel">
-<h3>2.14.2.1. EvtChannel<a class="headerlink" href="#evtchannel" title="Permalink to this headline">¶</a></h3>
+<h3>2.15.2.1. EvtChannel<a class="headerlink" href="#evtchannel" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="windows.winobject.event_log.EvtChannel">
 <em class="property">class </em><code class="descclassname">windows.winobject.event_log.</code><code class="descname">EvtChannel</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#EvtChannel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.event_log.EvtChannel" title="Permalink to this definition">¶</a></dt>
@@ -211,7 +211,7 @@
 
 </div>
 <div class="section" id="channelconfig">
-<h3>2.14.2.2. ChannelConfig<a class="headerlink" href="#channelconfig" title="Permalink to this headline">¶</a></h3>
+<h3>2.15.2.2. ChannelConfig<a class="headerlink" href="#channelconfig" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="windows.winobject.event_log.ChannelConfig">
 <em class="property">class </em><code class="descclassname">windows.winobject.event_log.</code><code class="descname">ChannelConfig</code><span class="sig-paren">(</span><em>handle</em>, <em>name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#ChannelConfig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.event_log.ChannelConfig" title="Permalink to this definition">¶</a></dt>
@@ -234,6 +234,12 @@
 <dd><p>The <a class="reference internal" href="#windows.winobject.event_log.EvtPublisher" title="windows.winobject.event_log.EvtPublisher"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvtPublisher</span></code></a> for the channel</p>
 </dd></dl>
 
+<dl class="method">
+<dt id="windows.winobject.event_log.ChannelConfig.publishers">
+<code class="descname">publishers</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#ChannelConfig.publishers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.event_log.ChannelConfig.publishers" title="Permalink to this definition">¶</a></dt>
+<dd><p>TEST</p>
+</dd></dl>
+
 <dl class="attribute">
 <dt id="windows.winobject.event_log.ChannelConfig.value">
 <code class="descname">value</code><a class="headerlink" href="#windows.winobject.event_log.ChannelConfig.value" title="Permalink to this definition">¶</a></dt>
@@ -245,9 +251,9 @@
 </div>
 </div>
 <div class="section" id="publisher">
-<h2>2.14.3. Publisher<a class="headerlink" href="#publisher" title="Permalink to this headline">¶</a></h2>
+<h2>2.15.3. Publisher<a class="headerlink" href="#publisher" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="evtpublisher">
-<h3>2.14.3.1. EvtPublisher<a class="headerlink" href="#evtpublisher" title="Permalink to this headline">¶</a></h3>
+<h3>2.15.3.1. EvtPublisher<a class="headerlink" href="#evtpublisher" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="windows.winobject.event_log.EvtPublisher">
 <em class="property">class </em><code class="descclassname">windows.winobject.event_log.</code><code class="descname">EvtPublisher</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#EvtPublisher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.event_log.EvtPublisher" title="Permalink to this definition">¶</a></dt>
@@ -270,7 +276,7 @@
 
 </div>
 <div class="section" id="publishermetadata">
-<h3>2.14.3.2. PublisherMetadata<a class="headerlink" href="#publishermetadata" title="Permalink to this headline">¶</a></h3>
+<h3>2.15.3.2. PublisherMetadata<a class="headerlink" href="#publishermetadata" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="windows.winobject.event_log.PublisherMetadata">
 <em class="property">class </em><code class="descclassname">windows.winobject.event_log.</code><code class="descname">PublisherMetadata</code><span class="sig-paren">(</span><em>handle</em>, <em>name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#PublisherMetadata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata" title="Permalink to this definition">¶</a></dt>
@@ -354,7 +360,7 @@
 </div>
 </div>
 <div class="section" id="evtfile">
-<h2>2.14.4. EvtFile<a class="headerlink" href="#evtfile" title="Permalink to this headline">¶</a></h2>
+<h2>2.15.4. EvtFile<a class="headerlink" href="#evtfile" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="windows.winobject.event_log.EvtFile">
 <em class="property">class </em><code class="descclassname">windows.winobject.event_log.</code><code class="descname">EvtFile</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#EvtFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.event_log.EvtFile" title="Permalink to this definition">¶</a></dt>
@@ -432,9 +438,9 @@
 
 </div>
 <div class="section" id="event">
-<h2>2.14.5. Event<a class="headerlink" href="#event" title="Permalink to this headline">¶</a></h2>
+<h2>2.15.5. Event<a class="headerlink" href="#event" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="evtevent">
-<h3>2.14.5.1. EvtEvent<a class="headerlink" href="#evtevent" title="Permalink to this headline">¶</a></h3>
+<h3>2.15.5.1. EvtEvent<a class="headerlink" href="#evtevent" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="windows.winobject.event_log.EvtEvent">
 <em class="property">class </em><code class="descclassname">windows.winobject.event_log.</code><code class="descname">EvtEvent</code><span class="sig-paren">(</span><em>handle=0</em>, <em>channel=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#EvtEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.event_log.EvtEvent" title="Permalink to this definition">¶</a></dt>
@@ -521,7 +527,7 @@
 
 </div>
 <div class="section" id="eventmetadata">
-<h3>2.14.5.2. EventMetadata<a class="headerlink" href="#eventmetadata" title="Permalink to this headline">¶</a></h3>
+<h3>2.15.5.2. EventMetadata<a class="headerlink" href="#eventmetadata" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="windows.winobject.event_log.EventMetadata">
 <em class="property">class </em><code class="descclassname">windows.winobject.event_log.</code><code class="descname">EventMetadata</code><a class="reference internal" href="_modules/windows/winobject/event_log.html#EventMetadata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.event_log.EventMetadata" title="Permalink to this definition">¶</a></dt>
@@ -564,11 +570,17 @@ Retrieved by parsing <a class="reference internal" href="#windows.winobject.even
 <dd><p>current value</p>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="windows.winobject.event_log.EventMetadata.version">
+<code class="descname">version</code><a class="headerlink" href="#windows.winobject.event_log.EventMetadata.version" title="Permalink to this definition">¶</a></dt>
+<dd><p>The version of the Event</p>
+</dd></dl>
+
 </dd></dl>
 
 </div>
 <div class="section" id="evtquery">
-<h3>2.14.5.3. EvtQuery<a class="headerlink" href="#evtquery" title="Permalink to this headline">¶</a></h3>
+<h3>2.15.5.3. EvtQuery<a class="headerlink" href="#evtquery" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="windows.winobject.event_log.EvtQuery">
 <em class="property">class </em><code class="descclassname">windows.winobject.event_log.</code><code class="descname">EvtQuery</code><span class="sig-paren">(</span><em>handle=0</em>, <em>channel=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#EvtQuery"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.event_log.EvtQuery" title="Permalink to this definition">¶</a></dt>
@@ -582,6 +594,20 @@ Retrieved by parsing <a class="reference internal" href="#windows.winobject.even
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">[<a class="reference internal" href="#windows.winobject.event_log.EvtEvent" title="windows.winobject.event_log.EvtEvent"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvtEvent</span></code></a>] – A list of Event</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.winobject.event_log.EvtQuery.first">
+<code class="descname">first</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#EvtQuery.first"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.event_log.EvtQuery.first" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the first query result</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.event_log.EvtEvent" title="windows.winobject.event_log.EvtEvent"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvtEvent</span></code></a> – An Event</td>
 </tr>
 </tbody>
 </table>
@@ -604,7 +630,7 @@ Retrieved by parsing <a class="reference internal" href="#windows.winobject.even
 </div>
 </div>
 <div class="section" id="todo">
-<h2>2.14.6. TODO<a class="headerlink" href="#todo" title="Permalink to this headline">¶</a></h2>
+<h2>2.15.6. TODO<a class="headerlink" href="#todo" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="windows.winobject.event_log.PropertyArray">
 <em class="property">class </em><code class="descclassname">windows.winobject.event_log.</code><code class="descname">PropertyArray</code><a class="reference internal" href="_modules/windows/winobject/event_log.html#PropertyArray"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.event_log.PropertyArray" title="Permalink to this definition">¶</a></dt>
@@ -628,33 +654,33 @@ Retrieved by parsing <a class="reference internal" href="#windows.winobject.even
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">2.14. Event Log</a><ul>
-<li><a class="reference internal" href="#evtlogmanager">2.14.1. EvtlogManager</a></li>
-<li><a class="reference internal" href="#channel">2.14.2. Channel</a><ul>
-<li><a class="reference internal" href="#evtchannel">2.14.2.1. EvtChannel</a></li>
-<li><a class="reference internal" href="#channelconfig">2.14.2.2. ChannelConfig</a></li>
+<li><a class="reference internal" href="#">2.15. Event Log</a><ul>
+<li><a class="reference internal" href="#evtlogmanager">2.15.1. EvtlogManager</a></li>
+<li><a class="reference internal" href="#channel">2.15.2. Channel</a><ul>
+<li><a class="reference internal" href="#evtchannel">2.15.2.1. EvtChannel</a></li>
+<li><a class="reference internal" href="#channelconfig">2.15.2.2. ChannelConfig</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#publisher">2.14.3. Publisher</a><ul>
-<li><a class="reference internal" href="#evtpublisher">2.14.3.1. EvtPublisher</a></li>
-<li><a class="reference internal" href="#publishermetadata">2.14.3.2. PublisherMetadata</a></li>
+<li><a class="reference internal" href="#publisher">2.15.3. Publisher</a><ul>
+<li><a class="reference internal" href="#evtpublisher">2.15.3.1. EvtPublisher</a></li>
+<li><a class="reference internal" href="#publishermetadata">2.15.3.2. PublisherMetadata</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#evtfile">2.14.4. EvtFile</a></li>
-<li><a class="reference internal" href="#event">2.14.5. Event</a><ul>
-<li><a class="reference internal" href="#evtevent">2.14.5.1. EvtEvent</a></li>
-<li><a class="reference internal" href="#eventmetadata">2.14.5.2. EventMetadata</a></li>
-<li><a class="reference internal" href="#evtquery">2.14.5.3. EvtQuery</a></li>
+<li><a class="reference internal" href="#evtfile">2.15.4. EvtFile</a></li>
+<li><a class="reference internal" href="#event">2.15.5. Event</a><ul>
+<li><a class="reference internal" href="#evtevent">2.15.5.1. EvtEvent</a></li>
+<li><a class="reference internal" href="#eventmetadata">2.15.5.2. EventMetadata</a></li>
+<li><a class="reference internal" href="#evtquery">2.15.5.3. EvtQuery</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#todo">2.14.6. TODO</a></li>
+<li><a class="reference internal" href="#todo">2.15.6. TODO</a></li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="task_scheduler.html"
-                        title="previous chapter">2.13. Task scheduler</a></p>
+                        title="previous chapter">2.14. Task scheduler</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="native_exec.html"
                         title="next chapter">3. <code class="docutils literal notranslate"><span class="pre">windows.native_exec</span></code> – Native Code Execution</a></p>
@@ -694,9 +720,9 @@ Retrieved by parsing <a class="reference internal" href="#windows.winobject.even
           <a href="native_exec.html" title="3. windows.native_exec – Native Code Execution"
              >next</a> |</li>
         <li class="right" >
-          <a href="task_scheduler.html" title="2.13. Task scheduler"
+          <a href="task_scheduler.html" title="2.14. Task scheduler"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="winobject.html" >2. The <code class="docutils literal notranslate"><span class="pre">windows</span></code> objects</a> &#187;</li> 
       </ul>
     </div>

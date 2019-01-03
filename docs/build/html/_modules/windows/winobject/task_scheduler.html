@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>windows.winobject.task_scheduler &#8212; PythonForWindows 0.4 documentation</title>
+    <title>windows.winobject.task_scheduler &#8212; PythonForWindows 0.5 documentation</title>
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/css/mbasic.css" type="text/css" />
@@ -26,7 +26,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -69,10 +69,6 @@
 
     <span class="k">def</span> <span class="nf">get_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return elements nb ``index``. Collection index starts at 1&quot;&quot;&quot;</span>
-        <span class="c1"># TODO: ImprovedVariant.from_int()</span>
-        <span class="c1"># vindex = windows.com.ImprovedVariant()</span>
-        <span class="c1"># vindex.vt = gdef.VT_I4</span>
-        <span class="c1"># vindex._VARIANT_NAME_3.lVal = index</span>
         <span class="k">if</span> <span class="n">index</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s2">&quot;&lt;</span><span class="si">{0}</span><span class="s2">&gt; Index start as 1&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">))</span>
         <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_index</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
@@ -253,7 +249,7 @@
 <div class="viewcode-block" id="TaskCollection"><a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.TaskCollection">[docs]</a><span class="k">class</span> <span class="nc">TaskCollection</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">IRegisteredTaskCollection</span><span class="p">,</span> <span class="n">TaskCollectionType</span><span class="p">):</span>
     <span class="n">ITEM_TYPE</span> <span class="o">=</span> <span class="n">Task</span>
     <span class="k">def</span> <span class="nf">get_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
-        <span class="n">vindex</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">com</span><span class="o">.</span><span class="n">ImprovedVariant</span><span class="p">()</span>
+        <span class="n">vindex</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">com</span><span class="o">.</span><span class="n">Variant</span><span class="p">()</span>
         <span class="n">vindex</span><span class="o">.</span><span class="n">vt</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">VT_I4</span>
         <span class="n">vindex</span><span class="o">.</span><span class="n">_VARIANT_NAME_3</span><span class="o">.</span><span class="n">lVal</span> <span class="o">=</span> <span class="n">index</span>
         <span class="k">return</span> <span class="n">vindex</span></div>
@@ -382,7 +378,7 @@
     <span class="n">ITEM_TYPE</span> <span class="o">=</span> <span class="n">TaskFolder</span>
 
     <span class="k">def</span> <span class="nf">get_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
-        <span class="n">vindex</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">com</span><span class="o">.</span><span class="n">ImprovedVariant</span><span class="p">()</span>
+        <span class="n">vindex</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">com</span><span class="o">.</span><span class="n">Variant</span><span class="p">()</span>
         <span class="n">vindex</span><span class="o">.</span><span class="n">vt</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">VT_I4</span>
         <span class="n">vindex</span><span class="o">.</span><span class="n">_VARIANT_NAME_3</span><span class="o">.</span><span class="n">lVal</span> <span class="o">=</span> <span class="n">index</span>
         <span class="k">return</span> <span class="n">vindex</span></div>
@@ -451,7 +447,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PythonForWindows 0.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>2. The windows objects &#8212; PythonForWindows 0.4 documentation</title>
+    <title>2. The windows objects &#8212; PythonForWindows 0.5 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/css/mbasic.css" type="text/css" />
@@ -34,7 +34,7 @@
         <li class="right" >
           <a href="windows.html" title="1. The windows module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.4 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.5 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -55,7 +55,6 @@ parts are accessible.</p>
 <li class="toctree-l2"><a class="reference internal" href="process.html#currentthread">2.1.2. CurrentThread</a></li>
 <li class="toctree-l2"><a class="reference internal" href="process.html#winprocess">2.1.3. WinProcess</a></li>
 <li class="toctree-l2"><a class="reference internal" href="process.html#winthread">2.1.4. WinThread</a></li>
-<li class="toctree-l2"><a class="reference internal" href="process.html#token">2.1.5. Token</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="process.html#peb-exploration">2.2. PEB Exploration</a><ul>
@@ -72,85 +71,96 @@ parts are accessible.</p>
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="exception.html">2.4. Exception and Context related structures</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="exception.html#exception-records">2.4.1. Exception Records</a></li>
-<li class="toctree-l2"><a class="reference internal" href="exception.html#exception-debug-info">2.4.2. EXCEPTION DEBUG INFO</a></li>
-<li class="toctree-l2"><a class="reference internal" href="exception.html#context">2.4.3. Context</a></li>
-<li class="toctree-l2"><a class="reference internal" href="exception.html#exception-pointers">2.4.4. EXCEPTION POINTERS</a></li>
-<li class="toctree-l2"><a class="reference internal" href="exception.html#vectored-exception">2.4.5. Vectored Exception</a></li>
+<li class="toctree-l1"><a class="reference internal" href="token.html">2.4. Token</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="token.html#id1">2.4.1. Token</a></li>
+<li class="toctree-l2"><a class="reference internal" href="token.html#tokengroups">2.4.2. TokenGroups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="token.html#tokenprivileges">2.4.3. TokenPrivileges</a></li>
+<li class="toctree-l2"><a class="reference internal" href="token.html#tokensecurityattributesinformation">2.4.4. TokenSecurityAttributesInformation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="token.html#tokensecurityattributev1">2.4.5. TokenSecurityAttributeV1</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="registry.html">2.5. Registry</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="registry.html#id1">2.5.1. Registry</a></li>
-<li class="toctree-l2"><a class="reference internal" href="registry.html#pyhkey">2.5.2. PyHKey</a></li>
-<li class="toctree-l2"><a class="reference internal" href="registry.html#keyvalue">2.5.3. KeyValue</a></li>
+<li class="toctree-l1"><a class="reference internal" href="exception.html">2.5. Exception and Context related structures</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="exception.html#exception-records">2.5.1. Exception Records</a></li>
+<li class="toctree-l2"><a class="reference internal" href="exception.html#exception-debug-info">2.5.2. EXCEPTION DEBUG INFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="exception.html#context">2.5.3. Context</a></li>
+<li class="toctree-l2"><a class="reference internal" href="exception.html#exception-pointers">2.5.4. EXCEPTION POINTERS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="exception.html#vectored-exception">2.5.5. Vectored Exception</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="network.html">2.6. Network</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="network.html#connections">2.6.1. Connections</a></li>
-<li class="toctree-l2"><a class="reference internal" href="network.html#firewall">2.6.2. Firewall</a></li>
+<li class="toctree-l1"><a class="reference internal" href="registry.html">2.6. Registry</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="registry.html#id1">2.6.1. Registry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="registry.html#pyhkey">2.6.2. PyHKey</a></li>
+<li class="toctree-l2"><a class="reference internal" href="registry.html#keyvalue">2.6.3. KeyValue</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="service.html">2.7. Service</a></li>
-<li class="toctree-l1"><a class="reference internal" href="volume.html">2.8. Volume – The logical drives</a></li>
-<li class="toctree-l1"><a class="reference internal" href="wmi.html">2.9. WMI – Make request to WMI</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="wmi.html#wmimanager">2.9.1. WmiManager</a></li>
-<li class="toctree-l2"><a class="reference internal" href="wmi.html#wmirequester">2.9.2. WmiRequester</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">2.7. Network</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="network.html#connections">2.7.1. Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="network.html#firewall">2.7.2. Firewall</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="handle.html">2.10. Handle – Processes handles</a></li>
-<li class="toctree-l1"><a class="reference internal" href="system_module.html">2.11. System Module – Loaded kernel modules</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="system_module.html#systemmodule">2.11.1. SystemModule</a></li>
-<li class="toctree-l2"><a class="reference internal" href="system_module.html#systemmodulewow64">2.11.2. SystemModuleWow64</a></li>
-<li class="toctree-l2"><a class="reference internal" href="system_module.html#basesystemmodule">2.11.3. BaseSystemModule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="service.html">2.8. Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="volume.html">2.9. Volume – The logical drives</a></li>
+<li class="toctree-l1"><a class="reference internal" href="wmi.html">2.10. WMI – Make request to WMI</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="wmi.html#wmimanager">2.10.1. WmiManager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wmi.html#wminamespace">2.10.2. WmiNamespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wmi.html#wmiobject">2.10.3. WmiObject</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wmi.html#wmicallresult">2.10.4. WmiCallResult</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wmi.html#wmienumeration">2.10.5. WmiEnumeration</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="object_manager.html">2.12. Object Manager – Kernel objects</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="object_manager.html#objectmanager">2.12.1. ObjectManager</a></li>
-<li class="toctree-l2"><a class="reference internal" href="object_manager.html#kernelobject">2.12.2. KernelObject</a></li>
+<li class="toctree-l1"><a class="reference internal" href="handle.html">2.11. Handle – Processes handles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="system_module.html">2.12. System Module – Loaded kernel modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="system_module.html#systemmodule">2.12.1. SystemModule</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_module.html#systemmodulewow64">2.12.2. SystemModuleWow64</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system_module.html#basesystemmodule">2.12.3. BaseSystemModule</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="task_scheduler.html">2.13. Task scheduler</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="task_scheduler.html#taskservice">2.13.1. TaskService</a></li>
-<li class="toctree-l2"><a class="reference internal" href="task_scheduler.html#taskfolder">2.13.2. TaskFolder</a></li>
-<li class="toctree-l2"><a class="reference internal" href="task_scheduler.html#task">2.13.3. Task</a></li>
-<li class="toctree-l2"><a class="reference internal" href="task_scheduler.html#taskdefinition">2.13.4. TaskDefinition</a></li>
-<li class="toctree-l2"><a class="reference internal" href="task_scheduler.html#action">2.13.5. Action</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="task_scheduler.html#id1">2.13.5.1. Action</a></li>
-<li class="toctree-l3"><a class="reference internal" href="task_scheduler.html#execaction">2.13.5.2. ExecAction</a></li>
-<li class="toctree-l3"><a class="reference internal" href="task_scheduler.html#comhandleraction">2.13.5.3. ComHandlerAction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="object_manager.html">2.13. Object Manager – Kernel objects</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="object_manager.html#objectmanager">2.13.1. ObjectManager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="object_manager.html#kernelobject">2.13.2. KernelObject</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="task_scheduler.html#trigger">2.13.6. Trigger</a></li>
-<li class="toctree-l2"><a class="reference internal" href="task_scheduler.html#collections">2.13.7. Collections</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="task_scheduler.html#taskfoldercollection">2.13.7.1. TaskFolderCollection</a></li>
-<li class="toctree-l3"><a class="reference internal" href="task_scheduler.html#taskcollection">2.13.7.2. TaskCollection</a></li>
-<li class="toctree-l3"><a class="reference internal" href="task_scheduler.html#actioncollection">2.13.7.3. ActionCollection</a></li>
-<li class="toctree-l3"><a class="reference internal" href="task_scheduler.html#triggercollection">2.13.7.4. TriggerCollection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="task_scheduler.html">2.14. Task scheduler</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="task_scheduler.html#taskservice">2.14.1. TaskService</a></li>
+<li class="toctree-l2"><a class="reference internal" href="task_scheduler.html#taskfolder">2.14.2. TaskFolder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="task_scheduler.html#task">2.14.3. Task</a></li>
+<li class="toctree-l2"><a class="reference internal" href="task_scheduler.html#taskdefinition">2.14.4. TaskDefinition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="task_scheduler.html#action">2.14.5. Action</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="task_scheduler.html#id1">2.14.5.1. Action</a></li>
+<li class="toctree-l3"><a class="reference internal" href="task_scheduler.html#execaction">2.14.5.2. ExecAction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="task_scheduler.html#comhandleraction">2.14.5.3. ComHandlerAction</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="task_scheduler.html#trigger">2.14.6. Trigger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="task_scheduler.html#collections">2.14.7. Collections</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="task_scheduler.html#taskfoldercollection">2.14.7.1. TaskFolderCollection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="task_scheduler.html#taskcollection">2.14.7.2. TaskCollection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="task_scheduler.html#actioncollection">2.14.7.3. ActionCollection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="task_scheduler.html#triggercollection">2.14.7.4. TriggerCollection</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="evtlog.html">2.14. Event Log</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="evtlog.html#evtlogmanager">2.14.1. EvtlogManager</a></li>
-<li class="toctree-l2"><a class="reference internal" href="evtlog.html#channel">2.14.2. Channel</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="evtlog.html#evtchannel">2.14.2.1. EvtChannel</a></li>
-<li class="toctree-l3"><a class="reference internal" href="evtlog.html#channelconfig">2.14.2.2. ChannelConfig</a></li>
+<li class="toctree-l1"><a class="reference internal" href="evtlog.html">2.15. Event Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="evtlog.html#evtlogmanager">2.15.1. EvtlogManager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evtlog.html#channel">2.15.2. Channel</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="evtlog.html#evtchannel">2.15.2.1. EvtChannel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="evtlog.html#channelconfig">2.15.2.2. ChannelConfig</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="evtlog.html#publisher">2.14.3. Publisher</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="evtlog.html#evtpublisher">2.14.3.1. EvtPublisher</a></li>
-<li class="toctree-l3"><a class="reference internal" href="evtlog.html#publishermetadata">2.14.3.2. PublisherMetadata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evtlog.html#publisher">2.15.3. Publisher</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="evtlog.html#evtpublisher">2.15.3.1. EvtPublisher</a></li>
+<li class="toctree-l3"><a class="reference internal" href="evtlog.html#publishermetadata">2.15.3.2. PublisherMetadata</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="evtlog.html#evtfile">2.14.4. EvtFile</a></li>
-<li class="toctree-l2"><a class="reference internal" href="evtlog.html#event">2.14.5. Event</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="evtlog.html#evtevent">2.14.5.1. EvtEvent</a></li>
-<li class="toctree-l3"><a class="reference internal" href="evtlog.html#eventmetadata">2.14.5.2. EventMetadata</a></li>
-<li class="toctree-l3"><a class="reference internal" href="evtlog.html#evtquery">2.14.5.3. EvtQuery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evtlog.html#evtfile">2.15.4. EvtFile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evtlog.html#event">2.15.5. Event</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="evtlog.html#evtevent">2.15.5.1. EvtEvent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="evtlog.html#eventmetadata">2.15.5.2. EventMetadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="evtlog.html#evtquery">2.15.5.3. EvtQuery</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="evtlog.html#todo">2.14.6. TODO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evtlog.html#todo">2.15.6. TODO</a></li>
 </ul>
 </li>
 </ul>
@@ -207,7 +217,7 @@ parts are accessible.</p>
         <li class="right" >
           <a href="windows.html" title="1. The windows module"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.4 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.5 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

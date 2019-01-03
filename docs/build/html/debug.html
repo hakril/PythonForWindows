@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>8. windows.debug – Debugging &#8212; PythonForWindows 0.4 documentation</title>
+    <title>9. windows.debug – Debugging &#8212; PythonForWindows 0.5 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/css/mbasic.css" type="text/css" />
@@ -16,8 +16,8 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="9. windows.com - Component Object Model" href="com.html" />
-    <link rel="prev" title="7. windows.wintrust – Checking signature" href="wintrust.html" /> 
+    <link rel="next" title="10. windows.com - Component Object Model" href="com.html" />
+    <link rel="prev" title="8. windows.wintrust – Checking signature" href="wintrust.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -29,12 +29,12 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="com.html" title="9. windows.com - Component Object Model"
+          <a href="com.html" title="10. windows.com - Component Object Model"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="wintrust.html" title="7. windows.wintrust – Checking signature"
+          <a href="wintrust.html" title="8. windows.wintrust – Checking signature"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.4 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.5 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -44,13 +44,13 @@
           <div class="body" role="main">
             
   <div class="section" id="module-windows.debug">
-<span id="windows-debug-debugging"></span><h1>8. <a class="reference internal" href="#module-windows.debug" title="windows.debug"><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.debug</span></code></a> – Debugging<a class="headerlink" href="#module-windows.debug" title="Permalink to this headline">¶</a></h1>
+<span id="windows-debug-debugging"></span><h1>9. <a class="reference internal" href="#module-windows.debug" title="windows.debug"><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.debug</span></code></a> – Debugging<a class="headerlink" href="#module-windows.debug" title="Permalink to this headline">¶</a></h1>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">See sample <a class="reference internal" href="sample.html#sample-debugger"><span class="std std-ref">Debugging</span></a></p>
 </div>
 <div class="section" id="debugger">
-<h2>8.1. <a class="reference internal" href="#windows.debug.Debugger" title="windows.debug.Debugger"><code class="xref py py-class docutils literal notranslate"><span class="pre">Debugger</span></code></a><a class="headerlink" href="#debugger" title="Permalink to this headline">¶</a></h2>
+<h2>9.1. <a class="reference internal" href="#windows.debug.Debugger" title="windows.debug.Debugger"><code class="xref py py-class docutils literal notranslate"><span class="pre">Debugger</span></code></a><a class="headerlink" href="#debugger" title="Permalink to this headline">¶</a></h2>
 <p>The <a class="reference internal" href="#windows.debug.Debugger" title="windows.debug.Debugger"><code class="xref py py-class docutils literal notranslate"><span class="pre">Debugger</span></code></a> is the base class to perform the debugging of a remote process.
 The <a class="reference internal" href="#windows.debug.Debugger" title="windows.debug.Debugger"><code class="xref py py-class docutils literal notranslate"><span class="pre">Debugger</span></code></a> have some functions called on given event that can be implemented by subclasses.</p>
 <p>All Memory-breakpoint are disabled when callind a public callback or a breakpoint <code class="docutils literal notranslate"><span class="pre">trigger()</span></code> function.</p>
@@ -197,6 +197,21 @@ Useful when debugingg a 32b process from a 64bits one</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="windows.debug.Debugger.on_setup">
+<code class="descname">on_setup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/debugger.html#Debugger.on_setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.Debugger.on_setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called on the first breakpoint event occuring in the debugger.
+This callback allow to setup hook / interact with the debugee when ready:</p>
+<ul class="simple">
+<li>If <a class="reference internal" href="#windows.debug.Debugger.on_setup" title="windows.debug.Debugger.on_setup"><code class="xref py py-func docutils literal notranslate"><span class="pre">on_setup()</span></code></a> is overriden by a subclass it will be called and <a class="reference internal" href="#windows.debug.Debugger.on_exception" title="windows.debug.Debugger.on_exception"><code class="xref py py-func docutils literal notranslate"><span class="pre">on_exception()</span></code></a> will NOT be called for this event (first BP).</li>
+<li>If <a class="reference internal" href="#windows.debug.Debugger.on_setup" title="windows.debug.Debugger.on_setup"><code class="xref py py-func docutils literal notranslate"><span class="pre">on_setup()</span></code></a> is not defined the first BP will trigger an <a class="reference internal" href="#windows.debug.Debugger.on_exception" title="windows.debug.Debugger.on_exception"><code class="xref py py-func docutils literal notranslate"><span class="pre">on_exception()</span></code></a>.</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">see sample <a class="reference internal" href="sample.html#sample-debugger-on-setup"><span class="std std-ref">on_setup</span></a></p>
+</div>
+</dd></dl>
+
+<dl class="method">
 <dt id="windows.debug.Debugger.on_exception">
 <code class="descname">on_exception</code><span class="sig-paren">(</span><em>exception</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/debugger.html#Debugger.on_exception"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.Debugger.on_exception" title="Permalink to this definition">¶</a></dt>
 <dd><p>Called on exception event other that known breakpoint or requested single step. <code class="docutils literal notranslate"><span class="pre">exception</span></code> is one of the following type:</p>
@@ -339,7 +354,7 @@ and <code class="docutils literal notranslate"><span class="pre">DBG_EXCEPTION_N
 
 </div>
 <div class="section" id="localdebugger">
-<h2>8.2. <a class="reference internal" href="#windows.debug.LocalDebugger" title="windows.debug.LocalDebugger"><code class="xref py py-class docutils literal notranslate"><span class="pre">LocalDebugger</span></code></a><a class="headerlink" href="#localdebugger" title="Permalink to this headline">¶</a></h2>
+<h2>9.2. <a class="reference internal" href="#windows.debug.LocalDebugger" title="windows.debug.LocalDebugger"><code class="xref py py-class docutils literal notranslate"><span class="pre">LocalDebugger</span></code></a><a class="headerlink" href="#localdebugger" title="Permalink to this headline">¶</a></h2>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">See sample <a class="reference internal" href="sample.html#sample-local-debugger"><span class="std std-ref">LocalDebugger</span></a></p>
@@ -400,7 +415,7 @@ It is based on <code class="xref py py-func docutils literal notranslate"><span 
 
 </div>
 <div class="section" id="breakpoint">
-<h2>8.3. <a class="reference internal" href="#windows.debug.Breakpoint" title="windows.debug.Breakpoint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Breakpoint</span></code></a><a class="headerlink" href="#breakpoint" title="Permalink to this headline">¶</a></h2>
+<h2>9.3. <a class="reference internal" href="#windows.debug.Breakpoint" title="windows.debug.Breakpoint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Breakpoint</span></code></a><a class="headerlink" href="#breakpoint" title="Permalink to this headline">¶</a></h2>
 <p>Standard breakpoints types expect an address as argument.</p>
 <p>An address can be:</p>
 <blockquote>
@@ -524,20 +539,20 @@ It is based on <code class="xref py py-func docutils literal notranslate"><span 
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">8. <code class="docutils literal notranslate"><span class="pre">windows.debug</span></code> – Debugging</a><ul>
-<li><a class="reference internal" href="#debugger">8.1. <code class="docutils literal notranslate"><span class="pre">Debugger</span></code></a></li>
-<li><a class="reference internal" href="#localdebugger">8.2. <code class="docutils literal notranslate"><span class="pre">LocalDebugger</span></code></a></li>
-<li><a class="reference internal" href="#breakpoint">8.3. <code class="docutils literal notranslate"><span class="pre">Breakpoint</span></code></a></li>
+<li><a class="reference internal" href="#">9. <code class="docutils literal notranslate"><span class="pre">windows.debug</span></code> – Debugging</a><ul>
+<li><a class="reference internal" href="#debugger">9.1. <code class="docutils literal notranslate"><span class="pre">Debugger</span></code></a></li>
+<li><a class="reference internal" href="#localdebugger">9.2. <code class="docutils literal notranslate"><span class="pre">LocalDebugger</span></code></a></li>
+<li><a class="reference internal" href="#breakpoint">9.3. <code class="docutils literal notranslate"><span class="pre">Breakpoint</span></code></a></li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="wintrust.html"
-                        title="previous chapter">7. <code class="docutils literal notranslate"><span class="pre">windows.wintrust</span></code> – Checking signature</a></p>
+                        title="previous chapter">8. <code class="docutils literal notranslate"><span class="pre">windows.wintrust</span></code> – Checking signature</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="com.html"
-                        title="next chapter">9. <code class="docutils literal notranslate"><span class="pre">windows.com</span></code> - Component Object Model</a></p>
+                        title="next chapter">10. <code class="docutils literal notranslate"><span class="pre">windows.com</span></code> - Component Object Model</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -571,12 +586,12 @@ It is based on <code class="xref py py-func docutils literal notranslate"><span 
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="com.html" title="9. windows.com - Component Object Model"
+          <a href="com.html" title="10. windows.com - Component Object Model"
              >next</a> |</li>
         <li class="right" >
-          <a href="wintrust.html" title="7. windows.wintrust – Checking signature"
+          <a href="wintrust.html" title="8. windows.wintrust – Checking signature"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.4 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PythonForWindows 0.5 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
