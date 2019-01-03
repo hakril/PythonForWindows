@@ -123,6 +123,17 @@ class TestProcessWithCheckGarbage(object):
             proc32_64.write_memory(addr, "\x00".join(string_to_write))
             assert proc32_64.read_wstring(addr) ==  test_string
 
+    def test_query_memory(self, proc32_64):
+        addr = proc32_64.virtual_alloc(0x2000, prot=gdef.PAGE_EXECUTE_READWRITE)
+        proc32_64.virtual_protect(addr, 0x2000, gdef.PAGE_READONLY)
+        meminfo = proc32_64.query_memory(addr + 0x1000)
+        assert meminfo.AllocationBase == addr
+        assert meminfo.AllocationProtect == gdef.PAGE_EXECUTE_READWRITE
+        assert meminfo.BaseAddress == addr + 0x1000
+        assert meminfo.RegionSize == 0x1000 # 0x2000 - 0x1000
+        assert meminfo.Type == gdef.MEM_PRIVATE
+        assert meminfo.Protect == gdef.PAGE_READONLY
+
     # Test native execution
     def test_execute_to_proc32(self, proc32):
             with proc32.allocated_memory(0x1000) as addr:

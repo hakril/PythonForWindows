@@ -28,7 +28,7 @@ class _MEMORY_BASIC_INFORMATION64(INITIAL_MEMORY_BASIC_INFORMATION64):
 
     @property
     def AllocationProtect(self):
-        raw_protect = super(_MEMORY_BASIC_INFORMATION32, self).AllocationProtect
+        raw_protect = super(_MEMORY_BASIC_INFORMATION64, self).AllocationProtect
         # Finally make a chooser somewhere ?
         return self.PROTECT_MAPPER[raw_protect]
 
