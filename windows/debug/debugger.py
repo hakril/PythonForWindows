@@ -193,7 +193,6 @@ class Debugger(object):
         self.current_thread = self.threads[debug_event.dwThreadId]
 
     def _dispatch_debug_event(self, debug_event):
-        #print("DISPATCH {0}".format(DEBUG_EVENT.KNOWN_EVENT_CODE.get(debug_event.dwDebugEventCode)))
         handler = self._DebugEventCode_dispatch.get(debug_event.dwDebugEventCode, self._handle_unknown_debug_event)
         return handler(debug_event)
 
@@ -498,6 +497,7 @@ class Debugger(object):
     def _handle_exception_breakpoint(self, exception, excp_addr):
         excp_bitness = self.get_exception_bitness(exception)
         # Sub-method _do_setup() ?
+        dbg_has_setup = None
         if not self.first_bp_encoutered:
             dbg_has_setup = not getattr(self.on_setup, "_abstract_on_setup_", False)
             self.first_bp_encoutered = True
@@ -505,7 +505,7 @@ class Debugger(object):
                 with self.DisabledMemoryBreakpoint():
                     continue_flag = self.on_setup() # Handle single-step here ?
                     # Check killed in action ?
-        # What if setup + BP object()
+        # What if setup + BP object() ?
         if excp_addr in self.breakpoints[self.current_process.pid]:
             thread = self.current_thread
             if self.current_process.bitness == 32 and excp_bitness == 64:
