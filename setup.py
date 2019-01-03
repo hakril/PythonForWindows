@@ -3,7 +3,7 @@ import sys
 from setuptools import setup
 
 PKG_NAME = "PythonForWindows"
-VERSION  = "0.4"
+VERSION  = "0.5"
 
 if sys.version_info[0] != 2:
     raise NotImplementedError("PythonForWindows only support Python2 for now")
