@@ -1,0 +1,125 @@
+typedef struct ITypeInfoVtbl
+    {
+        BEGIN_INTERFACE
+
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+            __RPC__in ITypeInfo * This,
+            /* [in] */ __RPC__in REFIID riid,
+            /* [annotation][iid_is][out] */
+            __RPC__deref_out  void **ppvObject);
+
+        ULONG ( STDMETHODCALLTYPE *AddRef )(
+            __RPC__in ITypeInfo * This);
+
+        ULONG ( STDMETHODCALLTYPE *Release )(
+            __RPC__in ITypeInfo * This);
+
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetTypeAttr )(
+            ITypeInfo * This,
+            /* [out] */ TYPEATTR **ppTypeAttr);
+
+        HRESULT ( STDMETHODCALLTYPE *GetTypeComp )(
+            __RPC__in ITypeInfo * This,
+            /* [out] */ __RPC__deref_out_opt ITypeComp **ppTComp);
+
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetFuncDesc )(
+            ITypeInfo * This,
+            /* [in] */ UINT index,
+            /* [out] */ FUNCDESC **ppFuncDesc);
+
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetVarDesc )(
+            ITypeInfo * This,
+            /* [in] */ UINT index,
+            /* [out] */ VARDESC **ppVarDesc);
+
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetNames )(
+            ITypeInfo * This,
+            /* [in] */ MEMBERID memid,
+            /* [length_is][size_is][out] */ BSTR *rgBstrNames,
+            /* [in] */ UINT cMaxNames,
+            /* [out] */ UINT *pcNames);
+
+        HRESULT ( STDMETHODCALLTYPE *GetRefTypeOfImplType )(
+            __RPC__in ITypeInfo * This,
+            /* [in] */ UINT index,
+            /* [out] */ __RPC__out HREFTYPE *pRefType);
+
+        HRESULT ( STDMETHODCALLTYPE *GetImplTypeFlags )(
+            __RPC__in ITypeInfo * This,
+            /* [in] */ UINT index,
+            /* [out] */ __RPC__out INT *pImplTypeFlags);
+
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )(
+            ITypeInfo * This,
+            /* [annotation][size_is][in] */
+            __RPC__in_ecount(cNames)  LPOLESTR *rgszNames,
+            /* [in] */ UINT cNames,
+            /* [size_is][out] */ MEMBERID *pMemId);
+
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )(
+            ITypeInfo * This,
+            /* [in] */ PVOID pvInstance,
+            /* [in] */ MEMBERID memid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetDocumentation )(
+            ITypeInfo * This,
+            /* [in] */ MEMBERID memid,
+            /* [out] */ BSTR *pBstrName,
+            /* [out] */ BSTR *pBstrDocString,
+            /* [out] */ DWORD *pdwHelpContext,
+            /* [out] */ BSTR *pBstrHelpFile);
+
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetDllEntry )(
+            ITypeInfo * This,
+            /* [in] */ MEMBERID memid,
+            /* [in] */ INVOKEKIND invKind,
+            /* [out] */ BSTR *pBstrDllName,
+            /* [out] */ BSTR *pBstrName,
+            /* [out] */ WORD *pwOrdinal);
+
+        HRESULT ( STDMETHODCALLTYPE *GetRefTypeInfo )(
+            __RPC__in ITypeInfo * This,
+            /* [in] */ HREFTYPE hRefType,
+            /* [out] */ __RPC__deref_out_opt ITypeInfo **ppTInfo);
+
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *AddressOfMember )(
+            ITypeInfo * This,
+            /* [in] */ MEMBERID memid,
+            /* [in] */ INVOKEKIND invKind,
+            /* [out] */ PVOID *ppv);
+
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *CreateInstance )(
+            ITypeInfo * This,
+            /* [in] */ IUnknown *pUnkOuter,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ PVOID *ppvObj);
+
+        HRESULT ( STDMETHODCALLTYPE *GetMops )(
+            __RPC__in ITypeInfo * This,
+            /* [in] */ MEMBERID memid,
+            /* [out] */ __RPC__deref_out_opt BSTR *pBstrMops);
+
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetContainingTypeLib )(
+            ITypeInfo * This,
+            /* [out] */ ITypeLib **ppTLib,
+            /* [out] */ UINT *pIndex);
+
+        /* [local] */ DWORD /*void*/ ( STDMETHODCALLTYPE *ReleaseTypeAttr )(
+            ITypeInfo * This,
+            /* [in] */ TYPEATTR *pTypeAttr);
+
+        /* [local] */ DWORD ( STDMETHODCALLTYPE *ReleaseFuncDesc )(
+            ITypeInfo * This,
+            /* [in] */ FUNCDESC *pFuncDesc);
+
+        /* [local] */ DWORD ( STDMETHODCALLTYPE *ReleaseVarDesc )(
+            ITypeInfo * This,
+            /* [in] */ VARDESC *pVarDesc);
+
+        END_INTERFACE
+    } ITypeInfoVtbl;

@@ -1,0 +1,36 @@
+typedef struct ITypeCompVtbl
+    {
+        BEGIN_INTERFACE
+
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+            __RPC__in ITypeComp * This,
+            /* [in] */ __RPC__in REFIID riid,
+            /* [annotation][iid_is][out] */
+            __RPC__deref_out  PVOID *ppvObject);
+
+        ULONG ( STDMETHODCALLTYPE *AddRef )(
+            __RPC__in ITypeComp * This);
+
+        ULONG ( STDMETHODCALLTYPE *Release )(
+            __RPC__in ITypeComp * This);
+
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Bind )(
+            ITypeComp * This,
+            /* [annotation][in] */
+            __RPC__in  LPOLESTR szName,
+            /* [in] */ ULONG lHashVal,
+            /* [in] */ WORD wFlags,
+            /* [out] */ ITypeInfo **ppTInfo,
+            /* [out] */ DESCKIND *pDescKind,
+            /* [out] */ BINDPTR *pBindPtr);
+
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *BindType )(
+            ITypeComp * This,
+            /* [annotation][in] */
+            __RPC__in  LPOLESTR szName,
+            /* [in] */ ULONG lHashVal,
+            /* [out] */ ITypeInfo **ppTInfo,
+            /* [out] */ ITypeComp **ppTComp);
+
+        END_INTERFACE
+    } ITypeCompVtbl;

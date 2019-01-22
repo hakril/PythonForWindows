@@ -134,7 +134,8 @@ class FunctionParsedFile(ParsedFile):
 
 class COMParsedFile(ParsedFile):
     PARSER = com_parser.WinComParser
-    IGNORED_INTERFACE = set(["ITypeInfo"])
+    # IGNORED_INTERFACE = set(["ITypeInfo"])
+    IGNORED_INTERFACE = set()
 
     def compute_imports_exports(self, cominterface):
         self.add_exports(cominterface.name)

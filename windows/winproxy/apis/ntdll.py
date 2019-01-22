@@ -210,6 +210,14 @@ def NtOpenSymbolicLinkObject(LinkHandle, DesiredAccess, ObjectAttributes):
 def NtOpenEvent(EventHandle, DesiredAccess, ObjectAttributes):
     return NtOpenEvent.ctypes_function(EventHandle, DesiredAccess, ObjectAttributes)
 
+
+# LPC
+
+@NtdllProxy()
+def NtConnectPort(PortHandle, PortName, SecurityQos, ClientView, ServerView, MaxMessageLength, ConnectionInformation, ConnectionInformationLength):
+    return NtConnectPort.ctypes_function(PortHandle, PortName, SecurityQos, ClientView, ServerView, MaxMessageLength, ConnectionInformation, ConnectionInformationLength)
+
+
 # ALPC
 
 @NtdllProxy()
@@ -275,6 +283,10 @@ def NtAlpcQueryInformationMessage(PortHandle, PortMessage, MessageInformationCla
 @NtdllProxy()
 def TpCallbackSendAlpcMessageOnCompletion(TpHandle, PortHandle, Flags, SendMessage):
     return TpCallbackSendAlpcMessageOnCompletion.ctypes_function(TpHandle, PortHandle, Flags, SendMessage)
+
+@NtdllProxy()
+def NtAlpcImpersonateClientOfPort(PortHandle, Message, Flags):
+    return NtAlpcImpersonateClientOfPort.ctypes_function(PortHandle, Message, Flags)
 
 
 # Compression

@@ -120,6 +120,15 @@ class IShellLinkA(COMInterface):
 class IShellLinkW(COMInterface):
     IID = generate_IID(0x000214F9, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IShellLinkW", strid="000214F9-0000-0000-C000-000000000046")
 
+class ITypeComp(COMInterface):
+    IID = generate_IID(0x00020403, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="ITypeComp", strid="00020403-0000-0000-C000-000000000046")
+
+class ITypeInfo(COMInterface):
+    IID = generate_IID(0x00020401, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="ITypeInfo", strid="00020401-0000-0000-C000-000000000046")
+
+class ITypeLib(COMInterface):
+    IID = generate_IID(0x00020402, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="ITypeLib", strid="00020402-0000-0000-C000-000000000046")
+
 class IUnknown(COMInterface):
     IID = generate_IID(0x00000000, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IUnknown", strid="00000000-0000-0000-C000-000000000046")
 
@@ -455,7 +464,7 @@ IDispatch._functions_ = {
         # GetTypeInfoCount -> pctinfo:*UINT
         "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(PVOID))(4, "GetTypeInfo"),
+        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
         "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
@@ -546,7 +555,7 @@ INetFwPolicy2._functions_ = {
         # GetTypeInfoCount -> pctinfo:*UINT
         "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(PVOID))(4, "GetTypeInfo"),
+        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
         "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
@@ -607,7 +616,7 @@ INetFwRules._functions_ = {
         # GetTypeInfoCount -> pctinfo:*UINT
         "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(PVOID))(4, "GetTypeInfo"),
+        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
         "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
@@ -634,7 +643,7 @@ INetFwRule._functions_ = {
         # GetTypeInfoCount -> pctinfo:*UINT
         "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(PVOID))(4, "GetTypeInfo"),
+        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
         "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
@@ -723,7 +732,7 @@ INetFwServiceRestriction._functions_ = {
         # GetTypeInfoCount -> pctinfo:*UINT
         "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(PVOID))(4, "GetTypeInfo"),
+        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
         "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
@@ -845,6 +854,95 @@ IShellLinkW._functions_ = {
         "Resolve": ctypes.WINFUNCTYPE(HRESULT, HWND, DWORD)(19, "Resolve"),
         # SetPath -> pszFile:LPCWSTR
         "SetPath": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(20, "SetPath"),
+    }
+
+ITypeComp._functions_ = {
+        # QueryInterface -> riid:REFIID, ppvObject:*PVOID
+        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        # AddRef -> 
+        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        # Release -> 
+        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        # Bind -> szName:LPOLESTR, lHashVal:ULONG, wFlags:WORD, ppTInfo:**ITypeInfo, pDescKind:*DESCKIND, pBindPtr:*BINDPTR
+        "Bind": ctypes.WINFUNCTYPE(HRESULT, LPOLESTR, ULONG, WORD, POINTER(ITypeInfo), POINTER(DESCKIND), POINTER(BINDPTR))(3, "Bind"),
+        # BindType -> szName:LPOLESTR, lHashVal:ULONG, ppTInfo:**ITypeInfo, ppTComp:**ITypeComp
+        "BindType": ctypes.WINFUNCTYPE(HRESULT, LPOLESTR, ULONG, POINTER(ITypeInfo), POINTER(ITypeComp))(4, "BindType"),
+    }
+
+ITypeInfo._functions_ = {
+        # QueryInterface -> riid:REFIID, ppvObject:**void
+        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        # AddRef -> 
+        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        # Release -> 
+        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        # GetTypeAttr -> ppTypeAttr:**TYPEATTR
+        "GetTypeAttr": ctypes.WINFUNCTYPE(HRESULT, POINTER(POINTER(TYPEATTR)))(3, "GetTypeAttr"),
+        # GetTypeComp -> ppTComp:**ITypeComp
+        "GetTypeComp": ctypes.WINFUNCTYPE(HRESULT, POINTER(ITypeComp))(4, "GetTypeComp"),
+        # GetFuncDesc -> index:UINT, ppFuncDesc:**FUNCDESC
+        "GetFuncDesc": ctypes.WINFUNCTYPE(HRESULT, UINT, POINTER(POINTER(FUNCDESC)))(5, "GetFuncDesc"),
+        # GetVarDesc -> index:UINT, ppVarDesc:**VARDESC
+        "GetVarDesc": ctypes.WINFUNCTYPE(HRESULT, UINT, POINTER(POINTER(VARDESC)))(6, "GetVarDesc"),
+        # GetNames -> memid:MEMBERID, rgBstrNames:*BSTR, cMaxNames:UINT, pcNames:*UINT
+        "GetNames": ctypes.WINFUNCTYPE(HRESULT, MEMBERID, POINTER(BSTR), UINT, POINTER(UINT))(7, "GetNames"),
+        # GetRefTypeOfImplType -> index:UINT, pRefType:*HREFTYPE
+        "GetRefTypeOfImplType": ctypes.WINFUNCTYPE(HRESULT, UINT, POINTER(HREFTYPE))(8, "GetRefTypeOfImplType"),
+        # GetImplTypeFlags -> index:UINT, pImplTypeFlags:*INT
+        "GetImplTypeFlags": ctypes.WINFUNCTYPE(HRESULT, UINT, POINTER(INT))(9, "GetImplTypeFlags"),
+        # GetIDsOfNames -> rgszNames:*LPOLESTR, cNames:UINT, pMemId:*MEMBERID
+        "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPOLESTR), UINT, POINTER(MEMBERID))(10, "GetIDsOfNames"),
+        # Invoke -> pvInstance:PVOID, memid:MEMBERID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
+        "Invoke": ctypes.WINFUNCTYPE(HRESULT, PVOID, MEMBERID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT))(11, "Invoke"),
+        # GetDocumentation -> memid:MEMBERID, pBstrName:*BSTR, pBstrDocString:*BSTR, pdwHelpContext:*DWORD, pBstrHelpFile:*BSTR
+        "GetDocumentation": ctypes.WINFUNCTYPE(HRESULT, MEMBERID, POINTER(BSTR), POINTER(BSTR), POINTER(DWORD), POINTER(BSTR))(12, "GetDocumentation"),
+        # GetDllEntry -> memid:MEMBERID, invKind:INVOKEKIND, pBstrDllName:*BSTR, pBstrName:*BSTR, pwOrdinal:*WORD
+        "GetDllEntry": ctypes.WINFUNCTYPE(HRESULT, MEMBERID, INVOKEKIND, POINTER(BSTR), POINTER(BSTR), POINTER(WORD))(13, "GetDllEntry"),
+        # GetRefTypeInfo -> hRefType:HREFTYPE, ppTInfo:**ITypeInfo
+        "GetRefTypeInfo": ctypes.WINFUNCTYPE(HRESULT, HREFTYPE, POINTER(ITypeInfo))(14, "GetRefTypeInfo"),
+        # AddressOfMember -> memid:MEMBERID, invKind:INVOKEKIND, ppv:*PVOID
+        "AddressOfMember": ctypes.WINFUNCTYPE(HRESULT, MEMBERID, INVOKEKIND, POINTER(PVOID))(15, "AddressOfMember"),
+        # CreateInstance -> pUnkOuter:*IUnknown, riid:REFIID, ppvObj:*PVOID
+        "CreateInstance": ctypes.WINFUNCTYPE(HRESULT, IUnknown, REFIID, POINTER(PVOID))(16, "CreateInstance"),
+        # GetMops -> memid:MEMBERID, pBstrMops:*BSTR
+        "GetMops": ctypes.WINFUNCTYPE(HRESULT, MEMBERID, POINTER(BSTR))(17, "GetMops"),
+        # GetContainingTypeLib -> ppTLib:**ITypeLib, pIndex:*UINT
+        "GetContainingTypeLib": ctypes.WINFUNCTYPE(HRESULT, POINTER(ITypeLib), POINTER(UINT))(18, "GetContainingTypeLib"),
+        # ReleaseTypeAttr -> pTypeAttr:*TYPEATTR
+        "ReleaseTypeAttr": ctypes.WINFUNCTYPE(DWORD, POINTER(TYPEATTR))(19, "ReleaseTypeAttr"),
+        # ReleaseFuncDesc -> pFuncDesc:*FUNCDESC
+        "ReleaseFuncDesc": ctypes.WINFUNCTYPE(DWORD, POINTER(FUNCDESC))(20, "ReleaseFuncDesc"),
+        # ReleaseVarDesc -> pVarDesc:*VARDESC
+        "ReleaseVarDesc": ctypes.WINFUNCTYPE(DWORD, POINTER(VARDESC))(21, "ReleaseVarDesc"),
+    }
+
+ITypeLib._functions_ = {
+        # QueryInterface -> riid:REFIID, ppvObject:**void
+        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        # AddRef -> 
+        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        # Release -> 
+        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        # GetTypeInfoCount -> 
+        "GetTypeInfoCount": ctypes.WINFUNCTYPE(UINT)(3, "GetTypeInfoCount"),
+        # GetTypeInfo -> index:UINT, ppTInfo:**ITypeInfo
+        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, POINTER(ITypeInfo))(4, "GetTypeInfo"),
+        # GetTypeInfoType -> index:UINT, pTKind:*TYPEKIND
+        "GetTypeInfoType": ctypes.WINFUNCTYPE(HRESULT, UINT, POINTER(TYPEKIND))(5, "GetTypeInfoType"),
+        # GetTypeInfoOfGuid -> guid:REFGUID, ppTinfo:**ITypeInfo
+        "GetTypeInfoOfGuid": ctypes.WINFUNCTYPE(HRESULT, REFGUID, POINTER(ITypeInfo))(6, "GetTypeInfoOfGuid"),
+        # GetLibAttr -> ppTLibAttr:**TLIBATTR
+        "GetLibAttr": ctypes.WINFUNCTYPE(HRESULT, POINTER(POINTER(TLIBATTR)))(7, "GetLibAttr"),
+        # GetTypeComp -> ppTComp:**ITypeComp
+        "GetTypeComp": ctypes.WINFUNCTYPE(HRESULT, POINTER(ITypeComp))(8, "GetTypeComp"),
+        # GetDocumentation -> index:INT, pBstrName:*BSTR, pBstrDocString:*BSTR, pdwHelpContext:*DWORD, pBstrHelpFile:*BSTR
+        "GetDocumentation": ctypes.WINFUNCTYPE(HRESULT, INT, POINTER(BSTR), POINTER(BSTR), POINTER(DWORD), POINTER(BSTR))(9, "GetDocumentation"),
+        # IsName -> szNameBuf:LPOLESTR, lHashVal:ULONG, pfName:*BOOL
+        "IsName": ctypes.WINFUNCTYPE(HRESULT, LPOLESTR, ULONG, POINTER(BOOL))(10, "IsName"),
+        # FindName -> szNameBuf:LPOLESTR, lHashVal:ULONG, ppTInfo:**ITypeInfo, rgMemId:*MEMBERID, pcFound:*USHORT
+        "FindName": ctypes.WINFUNCTYPE(HRESULT, LPOLESTR, ULONG, POINTER(ITypeInfo), POINTER(MEMBERID), POINTER(USHORT))(11, "FindName"),
+        # ReleaseTLibAttr -> pTLibAttr:*TLIBATTR
+        "ReleaseTLibAttr": ctypes.WINFUNCTYPE(DWORD, POINTER(TLIBATTR))(12, "ReleaseTLibAttr"),
     }
 
 IUnknown._functions_ = {
@@ -1069,7 +1167,7 @@ IAction._functions_ = {
         # GetTypeInfoCount -> pctinfo:*UINT
         "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(PVOID))(4, "GetTypeInfo"),
+        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
         "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
@@ -1092,7 +1190,7 @@ IActionCollection._functions_ = {
         # GetTypeInfoCount -> pctinfo:*UINT
         "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(PVOID))(4, "GetTypeInfo"),
+        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
         "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
@@ -1129,7 +1227,7 @@ IComHandlerAction._functions_ = {
         # GetTypeInfoCount -> pctinfo:*UINT
         "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(PVOID))(4, "GetTypeInfo"),
+        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
         "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
@@ -1160,7 +1258,7 @@ IEmailAction._functions_ = {
         # GetTypeInfoCount -> pctinfo:*UINT
         "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(PVOID))(4, "GetTypeInfo"),
+        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
         "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
@@ -1223,7 +1321,7 @@ IExecAction._functions_ = {
         # GetTypeInfoCount -> pctinfo:*UINT
         "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(PVOID))(4, "GetTypeInfo"),
+        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
         "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
@@ -1258,7 +1356,7 @@ IIdleSettings._functions_ = {
         # GetTypeInfoCount -> pctinfo:*UINT
         "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(PVOID))(4, "GetTypeInfo"),
+        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
         "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
@@ -1291,7 +1389,7 @@ INetworkSettings._functions_ = {
         # GetTypeInfoCount -> pctinfo:*UINT
         "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(PVOID))(4, "GetTypeInfo"),
+        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
         "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
@@ -1316,7 +1414,7 @@ IPrincipal._functions_ = {
         # GetTypeInfoCount -> pctinfo:*UINT
         "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(PVOID))(4, "GetTypeInfo"),
+        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
         "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
@@ -1357,7 +1455,7 @@ IRegisteredTask._functions_ = {
         # GetTypeInfoCount -> pctinfo:*UINT
         "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(PVOID))(4, "GetTypeInfo"),
+        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
         "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
@@ -1410,7 +1508,7 @@ IRegisteredTaskCollection._functions_ = {
         # GetTypeInfoCount -> pctinfo:*UINT
         "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(PVOID))(4, "GetTypeInfo"),
+        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
         "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
@@ -1433,7 +1531,7 @@ IRegistrationInfo._functions_ = {
         # GetTypeInfoCount -> pctinfo:*UINT
         "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(PVOID))(4, "GetTypeInfo"),
+        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
         "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
@@ -1486,7 +1584,7 @@ IRepetitionPattern._functions_ = {
         # GetTypeInfoCount -> pctinfo:*UINT
         "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(PVOID))(4, "GetTypeInfo"),
+        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
         "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
@@ -1515,7 +1613,7 @@ IRunningTask._functions_ = {
         # GetTypeInfoCount -> pctinfo:*UINT
         "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(PVOID))(4, "GetTypeInfo"),
+        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
         "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
@@ -1548,7 +1646,7 @@ IRunningTaskCollection._functions_ = {
         # GetTypeInfoCount -> pctinfo:*UINT
         "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(PVOID))(4, "GetTypeInfo"),
+        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
         "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
@@ -1571,7 +1669,7 @@ IShowMessageAction._functions_ = {
         # GetTypeInfoCount -> pctinfo:*UINT
         "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(PVOID))(4, "GetTypeInfo"),
+        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
         "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
@@ -1602,7 +1700,7 @@ ITaskDefinition._functions_ = {
         # GetTypeInfoCount -> pctinfo:*UINT
         "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(PVOID))(4, "GetTypeInfo"),
+        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
         "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
@@ -1647,7 +1745,7 @@ ITaskFolder._functions_ = {
         # GetTypeInfoCount -> pctinfo:*UINT
         "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(PVOID))(4, "GetTypeInfo"),
+        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
         "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
@@ -1690,7 +1788,7 @@ ITaskFolderCollection._functions_ = {
         # GetTypeInfoCount -> pctinfo:*UINT
         "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(PVOID))(4, "GetTypeInfo"),
+        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
         "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
@@ -1713,7 +1811,7 @@ ITaskNamedValueCollection._functions_ = {
         # GetTypeInfoCount -> pctinfo:*UINT
         "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(PVOID))(4, "GetTypeInfo"),
+        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
         "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
@@ -1742,7 +1840,7 @@ ITaskNamedValuePair._functions_ = {
         # GetTypeInfoCount -> pctinfo:*UINT
         "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(PVOID))(4, "GetTypeInfo"),
+        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
         "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
@@ -1767,7 +1865,7 @@ ITaskService._functions_ = {
         # GetTypeInfoCount -> pctinfo:*UINT
         "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(PVOID))(4, "GetTypeInfo"),
+        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
         "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
@@ -1802,7 +1900,7 @@ ITaskSettings._functions_ = {
         # GetTypeInfoCount -> pctinfo:*UINT
         "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(PVOID))(4, "GetTypeInfo"),
+        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
         "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
@@ -1899,7 +1997,7 @@ ITrigger._functions_ = {
         # GetTypeInfoCount -> pctinfo:*UINT
         "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(PVOID))(4, "GetTypeInfo"),
+        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
         "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
@@ -1942,7 +2040,7 @@ ITriggerCollection._functions_ = {
         # GetTypeInfoCount -> pctinfo:*UINT
         "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
         # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
-        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(PVOID))(4, "GetTypeInfo"),
+        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
         # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
         "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
         # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT

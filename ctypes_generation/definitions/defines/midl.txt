@@ -1,0 +1,5 @@
+#define FC_ALLOCATE_ALL_NODES       0x01
+#define FC_DONT_FREE                0x02
+#define FC_ALLOCED_ON_STACK         0x04
+#define FC_SIMPLE_POINTER           0x08
+#define FC_POINTER_DEREF            0x10

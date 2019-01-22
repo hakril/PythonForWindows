@@ -1,0 +1,161 @@
+typedef enum tagVARKIND {
+  VAR_PERINSTANCE,
+  VAR_STATIC,
+  VAR_CONST,
+  VAR_DISPATCH
+} VARKIND;
+
+typedef enum tagINVOKEKIND {
+  INVOKE_FUNC,
+  INVOKE_PROPERTYGET,
+  INVOKE_PROPERTYPUT,
+  INVOKE_PROPERTYPUTREF
+} INVOKEKIND;
+
+typedef enum tagFUNCKIND {
+  FUNC_VIRTUAL,
+  FUNC_PUREVIRTUAL,
+  FUNC_NONVIRTUAL,
+  FUNC_STATIC,
+  FUNC_DISPATCH
+} FUNCKIND;
+
+typedef enum tagSYSKIND {
+  SYS_WIN16,
+  SYS_WIN32,
+  SYS_MAC,
+  SYS_WIN64
+} SYSKIND;
+
+typedef enum tagCALLCONV {
+  CC_FASTCALL,
+  CC_CDECL,
+  CC_MSCPASCAL,
+  CC_PASCAL,
+  CC_MACPASCAL,
+  CC_STDCALL,
+  CC_FPFASTCALL,
+  CC_SYSCALL,
+  CC_MPWCDECL,
+  CC_MPWPASCAL,
+  CC_MAX
+} CALLCONV;
+
+typedef enum tagDESCKIND {
+  DESCKIND_NONE,
+  DESCKIND_FUNCDESC,
+  DESCKIND_VARDESC,
+  DESCKIND_TYPECOMP,
+  DESCKIND_IMPLICITAPPOBJ,
+  DESCKIND_MAX
+} DESCKIND;
+
+typedef struct tagPARAMDESCEX {
+  ULONG      cBytes;
+  VARIANTARG varDefaultValue;
+} PARAMDESCEX, *LPPARAMDESCEX;
+
+typedef struct tagPARAMDESC {
+  LPPARAMDESCEX pparamdescex;
+  USHORT        wParamFlags;
+} PARAMDESC, *LPPARAMDESC;
+
+
+
+typedef union _TMP_TYPEDESC_UNION {
+    PVOID lptdesc; // struct tagTYPEDESC  *lptdesc; // Temporrary fix..
+    PVOID lpadesc; // struct tagARRAYDESC *lpadesc;
+    HREFTYPE            hreftype;
+}TMP_TYPEDESC_UNION;
+
+
+typedef struct tagTYPEDESC {
+  TMP_TYPEDESC_UNION DUMMYUNIONNAME;
+  VARTYPE vt;
+} TYPEDESC;
+
+typedef struct tagARRAYDESC {
+  TYPEDESC       tdescElem;
+  USHORT         cDims;
+  SAFEARRAYBOUND rgbounds[1];
+} ARRAYDESC;
+
+typedef struct tagELEMDESC {
+  TYPEDESC  tdesc;
+  PARAMDESC paramdesc;
+} ELEMDESC, *LPELEMDESC;
+
+
+typedef struct tagFUNCDESC {
+  MEMBERID   memid;
+  SCODE      *lprgscode;
+  ELEMDESC   *lprgelemdescParam;
+  FUNCKIND   funckind;
+  INVOKEKIND invkind;
+  CALLCONV   callconv;
+  SHORT      cParams;
+  SHORT      cParamsOpt;
+  SHORT      oVft;
+  SHORT      cScodes;
+  ELEMDESC   elemdescFunc;
+  WORD       wFuncFlags;
+} FUNCDESC, *LPFUNCDESC;
+
+
+typedef union _TMP_VARDESC_UNION {
+    ULONG   oInst;
+    VARIANT *lpvarValue;
+}TMP_VARDESC_UNION;
+
+typedef struct tagVARDESC {
+  MEMBERID memid;
+  LPOLESTR lpstrSchema;
+  TMP_VARDESC_UNION DUMMYUNIONNAME;
+  ELEMDESC elemdescVar;
+  WORD     wVarFlags;
+  VARKIND  varkind;
+} VARDESC, *LPVARDESC;
+
+
+typedef union tagBINDPTR {
+  FUNCDESC  *lpfuncdesc;
+  VARDESC   *lpvardesc;
+  PVOID lptcomp; // ITypeComp*
+} BINDPTR, *LPBINDPTR;
+
+
+typedef struct tagIDLDESC {
+    ULONG_PTR dwReserved;
+    USHORT wIDLFlags;
+}   IDLDESC, *LPIDLDESC;
+
+
+typedef struct tagTLIBATTR {
+  GUID    guid;
+  LCID    lcid;
+  SYSKIND syskind;
+  WORD    wMajorVerNum;
+  WORD    wMinorVerNum;
+  WORD    wLibFlags;
+} TLIBATTR, *LPTLIBATTR;
+
+typedef struct tagTYPEATTR {
+  GUID     guid;
+  LCID     lcid;
+  DWORD    dwReserved;
+  MEMBERID memidConstructor;
+  MEMBERID memidDestructor;
+  LPOLESTR lpstrSchema;
+  ULONG    cbSizeInstance;
+  TYPEKIND typekind;
+  WORD     cFuncs;
+  WORD     cVars;
+  WORD     cImplTypes;
+  WORD     cbSizeVft;
+  WORD     cbAlignment;
+  WORD     wTypeFlags;
+  WORD     wMajorVerNum;
+  WORD     wMinorVerNum;
+  TYPEDESC tdescAlias;
+  IDLDESC  idldescType;
+} TYPEATTR, *LPTYPEATTR;

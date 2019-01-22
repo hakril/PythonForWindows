@@ -1,0 +1,72 @@
+typedef struct ITypeLibVtbl
+    {
+        BEGIN_INTERFACE
+
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+            __RPC__in ITypeLib * This,
+            /* [in] */ __RPC__in REFIID riid,
+            /* [annotation][iid_is][out] */
+            __RPC__deref_out  void **ppvObject);
+
+        ULONG ( STDMETHODCALLTYPE *AddRef )(
+            __RPC__in ITypeLib * This);
+
+        ULONG ( STDMETHODCALLTYPE *Release )(
+            __RPC__in ITypeLib * This);
+
+        /* [local] */ UINT ( STDMETHODCALLTYPE *GetTypeInfoCount )(
+            ITypeLib * This);
+
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )(
+            __RPC__in ITypeLib * This,
+            /* [in] */ UINT index,
+            /* [out] */ __RPC__deref_out_opt ITypeInfo **ppTInfo);
+
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoType )(
+            __RPC__in ITypeLib * This,
+            /* [in] */ UINT index,
+            /* [out] */ __RPC__out TYPEKIND *pTKind);
+
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoOfGuid )(
+            __RPC__in ITypeLib * This,
+            /* [in] */ __RPC__in REFGUID guid,
+            /* [out] */ __RPC__deref_out_opt ITypeInfo **ppTinfo);
+
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetLibAttr )(
+            ITypeLib * This,
+            /* [out] */ TLIBATTR **ppTLibAttr);
+
+        HRESULT ( STDMETHODCALLTYPE *GetTypeComp )(
+            __RPC__in ITypeLib * This,
+            /* [out] */ __RPC__deref_out_opt ITypeComp **ppTComp);
+
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetDocumentation )(
+            ITypeLib * This,
+            /* [in] */ INT index,
+            /* [out] */ BSTR *pBstrName,
+            /* [out] */ BSTR *pBstrDocString,
+            /* [out] */ DWORD *pdwHelpContext,
+            /* [out] */ BSTR *pBstrHelpFile);
+
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *IsName )(
+            ITypeLib * This,
+            /* [annotation][out][in] */
+            __RPC__inout  LPOLESTR szNameBuf,
+            /* [in] */ ULONG lHashVal,
+            /* [out] */ BOOL *pfName);
+
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *FindName )(
+            ITypeLib * This,
+            /* [annotation][out][in] */
+            __RPC__inout  LPOLESTR szNameBuf,
+            /* [in] */ ULONG lHashVal,
+            /* [length_is][size_is][out] */ ITypeInfo **ppTInfo,
+            /* [length_is][size_is][out] */ MEMBERID *rgMemId,
+            /* [out][in] */ USHORT *pcFound);
+
+        /* [local] */ DWORD /* void */ ( STDMETHODCALLTYPE *ReleaseTLibAttr )(
+            ITypeLib * This,
+            /* [in] */ TLIBATTR *pTLibAttr);
+
+        END_INTERFACE
+    } ITypeLibVtbl;

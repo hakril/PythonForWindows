@@ -70,24 +70,22 @@ class WinStructParser(Parser):
         else:
             if not is_typedef:
                 raise ValueError("Anonymous union not in a typedef")
+            enum_name = "<anonymous>"
             res_enum = WinEnum(None)
 
         self.assert_token_type(OpenBracketToken)
         count = itertools.count()
-        assigned_value = False
         while type(self.peek()) != CloseBracketToken:
             i = next(count)
             name = self.assert_token_type(NameToken)
             if type(self.peek()) == EqualToken:
-                if i != 0 and not assigned_value:
-                    raise ParsingError("Enum {0} mix def with and without equal".format(enum_name))
-                assigned_value = True
+                # Equal sign (hard define of enum value)
                 self.assert_token_type(EqualToken)
                 i = self.promote_to_int(self.next_token())
-            else:
-                if assigned_value:
-                    raise ParsingError("Enum {0} mix def with and without equal".format(enum_name))
-
+                # print(i, new_i)
+                # assert new_i >= i, "Cannot define eum value with inferior current value ({0})".format(enum_name)
+                # Setup new counter from here
+                count = itertools.count(i + 1)
             res_enum.add_enum_entry(i, name.value)
             if not type(self.peek()) == CloseBracketToken:
                 self.assert_token_type(CommaToken)

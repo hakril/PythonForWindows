@@ -22,6 +22,17 @@ NTSTATUS WINAPI NtAlpcQueryInformationMessage(
     _Out_opt_ PULONG ReturnLength
 );
 
+NTSTATUS WINAPI NtConnectPort(
+    _Out_ PHANDLE PortHandle,
+    _In_ PUNICODE_STRING PortName,
+    _In_ PSECURITY_QUALITY_OF_SERVICE SecurityQos,
+    _Inout_opt_ PPORT_VIEW ClientView,
+    _Inout_opt_ PREMOTE_PORT_VIEW ServerView,
+    _Out_opt_ PULONG MaxMessageLength,
+    _Inout_opt_ PVOID ConnectionInformation,
+    _Inout_opt_ PULONG ConnectionInformationLength
+    );
+
 NTSTATUS WINAPI NtAlpcConnectPort(
     _Out_ PHANDLE PortHandle,
     _In_ PUNICODE_STRING PortName,
@@ -155,4 +166,11 @@ NTSTATUS WINAPI NtAlpcRevokeSecurityContext(
     _In_ HANDLE PortHandle,
     _Reserved_ ULONG Flags,
     _In_ ALPC_HANDLE ContextHandle
+    );
+
+
+NTSTATUS WINAPI NtAlpcImpersonateClientOfPort(
+    _In_ HANDLE PortHandle,
+    _In_ PPORT_MESSAGE Message,
+    _In_ PVOID Flags
     );

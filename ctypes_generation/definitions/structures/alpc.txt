@@ -274,3 +274,55 @@ typedef struct _RPC_IF_ID {
   USHORT VersMajor;
   USHORT VersMinor;
 } RPC_IF_ID;
+
+
+typedef struct _PORT_VIEW  {
+    ULONG  Length;
+    HANDLE  SectionHandle;
+    ULONG  SectionOffset;
+    ULONG  ViewSize;
+    PVOID  ViewBase;
+    PVOID  TargetViewBase;
+} PORT_VIEW, *PPORT_VIEW;
+
+typedef struct _REMOTE_PORT_VIEW {
+    ULONG  Length;
+    ULONG  ViewSize;
+    PVOID  ViewBase;
+} REMOTE_PORT_VIEW, *PREMOTE_PORT_VIEW;
+
+ typedef struct tagCOMVERSION
+ {
+     USHORT MajorVersion;
+     USHORT MinorVersion;
+ } COMVERSION;
+
+typedef struct tagORPCTHIS {
+   COMVERSION version;
+   ULONG flags;
+   ULONG reserved1;
+   GUID cid;
+   PVOID extensions; // [unique] ORPC_EXTENT_ARRAY *extensions;
+ } ORPCTHIS;
+
+
+typedef struct __MIDL_XmitDefs_0001 {
+    GUID asyncOperationId;
+    ULONG64 oxidClientProcessNA;
+    GUID originalClientLogicalThreadId;
+    ULONG64 uClientCausalityTraceId;
+} MIDL_XmitDefs_0001;
+
+typedef struct _LOCALTHIS {
+    DWORD dwFlags;
+    DWORD dwClientThread;
+    GUID passthroughTraceActivity;
+    GUID callTraceActivity;
+    MIDL_XmitDefs_0001 asyncRequestBlock;
+    DWORD reserved;
+    PVOID pTouchedAstaArray; // Ptr32 __MIDL_XmitDefs_0002
+} LOCALTHIS;
+
+
+
+
