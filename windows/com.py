@@ -12,6 +12,9 @@ from windows.generated_def import RPC_C_IMP_LEVEL_IMPERSONATE, CLSCTX_INPROC_SER
 from windows.generated_def import interfaces
 from windows.generated_def.interfaces import generate_IID, IID
 
+# We have    windows.com.COMImplementation
+# So we need windows.com.COMInterface
+COMInterface = interfaces.COMInterface
 
 # Simple raw -> UUID
 # "-".join("{:02X}".format(c) for c in struct.unpack("<IHHHBBBBBB", x))
@@ -34,7 +37,10 @@ def create_instance(clsiid, targetinterface, custom_iid=None, context=CLSCTX_INP
     """A simple wrapper around ``CoCreateInstance <https://msdn.microsoft.com/en-us/library/windows/desktop/ms686615(v=vs.85).aspx>``"""
     if custom_iid is None:
         custom_iid = targetinterface.IID
-    return winproxy.CoCreateInstance(byref(clsiid), None, context, byref(custom_iid), byref(targetinterface))
+    if isinstance(clsiid, basestring):
+        clsiid = IID.from_string(clsiid)
+    winproxy.CoCreateInstance(byref(clsiid), None, context, byref(custom_iid), byref(targetinterface))
+    return targetinterface
 
 
 def resolve_progid(progid):

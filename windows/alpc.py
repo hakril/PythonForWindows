@@ -292,7 +292,7 @@ class MessageAttribute(gdef.ALPC_MESSAGE_ATTRIBUTES):
 AlpcSection = namedtuple("AlpcSection", ["handle", "size"])
 
 class AlpcTransportBase(object):
-    def send_receive(self, alpc_message, receive_msg=None, flags=gdef.ALPC_MSGFLG_SYNC_REQUEST):
+    def send_receive(self, alpc_message, receive_msg=None, flags=gdef.ALPC_MSGFLG_SYNC_REQUEST, timeout=None):
         """Send and receive a message with ``flags``.
 
             :param alpc_message: The message to send. If ``alpc_message`` is a :class:`str` it build an AlpcMessage with the message as data.
@@ -309,7 +309,7 @@ class AlpcTransportBase(object):
         if receive_msg is None:
             receive_msg = AlpcMessage(0x1000)
         receive_size = gdef.SIZE_T(receive_msg.port_message_buffer_size)
-        winproxy.NtAlpcSendWaitReceivePort(self.handle, flags, alpc_message.port_message, alpc_message.attributes, receive_msg.port_message, receive_size, receive_msg.attributes, None)
+        winproxy.NtAlpcSendWaitReceivePort(self.handle, flags, alpc_message.port_message, alpc_message.attributes, receive_msg.port_message, receive_size, receive_msg.attributes, timeout)
         return receive_msg
 
     def send(self, alpc_message, flags=0):
@@ -408,7 +408,6 @@ class AlpcClient(AlpcTransportBase):
         else:
             raise ValueError("Don't know how to send <{0!r}> as connect message".format(connect_message))
 
-        # windows.utils.print_ctypes_struct(port_attr, "port_attr_connect", hexa=True)
         receive_attr = MessageAttribute.with_all_attributes()
         winproxy.NtAlpcConnectPort(handle, port_name_unicode, obj_attr, port_attr, flags, None, send_msg, buffersize, send_msg_attr, receive_attr, timeout)
         # If send_msg is not None, it contains the ClientId.UniqueProcess : PID of the server :)
@@ -433,7 +432,8 @@ class AlpcClient(AlpcTransportBase):
         return view_attributes
 
     def disconnect(self):
-        self._close_port(self.handle)
+        if self.handle:
+            self._close_port(self.handle)
 
     def __del__(self):
         if sys.path is not None:
@@ -447,6 +447,7 @@ class AlpcServer(AlpcTransportBase):
     def __init__(self, port_name=None):
         self.port_name = None
         self.communication_port_list = []
+        self.handle = None
         if port_name is not None:
             self.create_port(port_name)
 
@@ -526,7 +527,8 @@ class AlpcServer(AlpcTransportBase):
         return msg
 
     def disconnect(self):
-        self._close_port(self.handle)
+        if self.handle:
+            self._close_port(self.handle)
         for com_port_handle in self.communication_port_list:
             self._close_port(com_port_handle)
 

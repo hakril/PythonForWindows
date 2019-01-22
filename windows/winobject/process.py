@@ -471,6 +471,11 @@ class Process(utils.AutoHandle):
 
     token = property(open_token, doc="The process :class:`~windows.winobject.token.Token`")
 
+    @property # Document ?
+    def handles(self):
+        pid = self.pid
+        return [h for h in windows.system.handles if h.dwProcessId == pid]
+
     def __del__(self):
         super(Process, self).__del__()
         # Same logic that AutoHandle.__del__ for Process.limited_handle
