@@ -50,8 +50,19 @@ eventinfo = generate_query_function(winproxy.EvtGetEventMetadataProperty)
 publishinfo = generate_query_function(winproxy.EvtGetPublisherMetadataProperty)
 
 
+class EvtHandle(gdef.EVT_HANDLE):
+    # Class attribute function
+    # Will pass (self) as first parameter (binding)
+    # No need to pass any param to close ourself :)
+    _close_function = windows.winproxy.EvtClose
+
+    def __del__(self):
+        if not bool(self):
+            return
+        self._close_function()
+
 # Class high-level API
-class EvtQuery(gdef.EVT_HANDLE):
+class EvtQuery(EvtHandle):
     """Represent an Event-log query"""
     TIMEOUT = 0x1000
 
@@ -70,7 +81,7 @@ class EvtQuery(gdef.EVT_HANDLE):
                 raise StopIteration
             raise
         assert ret.value == 1
-        return  event
+        return event
 
     def __iter__(self):
         return self
@@ -84,8 +95,15 @@ class EvtQuery(gdef.EVT_HANDLE):
         """
         return list(self)
 
+    def first(self): # SqlAlchemy like :) -> allow testing in interactive console
+        """Return the first query result
 
-class EvtEvent(gdef.EVT_HANDLE):
+        :rtype: :class:`EvtEvent` -- An Event
+        """
+        return next(iter(self))
+
+
+class EvtEvent(EvtHandle):
     """An Event log"""
     def __init__(self, handle=0, channel=None):
         super(EvtEvent, self).__init__(handle)
@@ -230,22 +248,36 @@ class ImprovedEVT_VARIANT(gdef.EVT_VARIANT):
         gdef.EvtVarTypeFileTime   : 'FileTimeVal',
         gdef.EvtVarTypeSysTime    : 'SysTimeVal',
         gdef.EvtVarTypeSid        : 'SidVal',
-        gdef.EvtVarTypeHexInt32   : 'BinaryVal',
-        gdef.EvtVarTypeHexInt64   : 'BinaryVal',
+        gdef.EvtVarTypeHexInt32   : 'UInt32Val',
+        gdef.EvtVarTypeHexInt64   : 'UInt64Val',
         gdef.EvtVarTypeEvtHandle  : 'EvtHandleVal',
         gdef.EvtVarTypeEvtXml     : 'XmlVal',
+        # Array types: TODO: generic stuff
+        gdef.EvtVarTypeString + gdef.EVT_VARIANT_TYPE_ARRAY : "StringArr",
+        gdef.EvtVarTypeUInt16 + gdef.EVT_VARIANT_TYPE_ARRAY : "UInt16Arr",
+        gdef.EvtVarTypeUInt32 + gdef.EVT_VARIANT_TYPE_ARRAY : "UInt32Arr",
+        gdef.EvtVarTypeUInt64 + gdef.EVT_VARIANT_TYPE_ARRAY : "UInt64Arr",
     }
     NoneValue = None
+
     @property
     def Type(self):
         raw_type = super(ImprovedEVT_VARIANT, self).Type
-        return gdef.EVT_VARIANT_TYPE.mapper[raw_type]
+        return gdef.EVT_VARIANT_TYPE.mapper.get(raw_type, raw_type)
 
     @property
     def value(self): # Prototype !!
         attrname = self.VALUE_MAPPER[self.Type]
         # print("Resolve type <{0}> -> {1}".format(self.Type, attrname))
-        return getattr(self, attrname)
+        v =  getattr(self, attrname)
+        if self.Type == gdef.EvtVarTypeBinary:
+            v = v[:self.Count] # No need for a raw UBYTE ptr
+        elif self.Type == gdef.EvtVarTypeGuid:
+            v = v[0] # Deref LP_GUID
+        elif self.Type & gdef.EVT_VARIANT_TYPE_ARRAY:
+            # TODO: handle all array type
+            v = v[:self.Count]
+        return v
 
     def __repr__(self):
         return "<{0} of type={1}>".format(type(self).__name__, self.Type)
@@ -356,7 +388,7 @@ class EvtFile(EvtChannel):
         raise NotImplementedError("Cannot retrieve the configuration of an EvtFile")
 
 
-class ChannelConfig(gdef.EVT_HANDLE):
+class ChannelConfig(EvtHandle):
     """The configuration of a event channel"""
     def __init__(self, handle, name=None):
         super(ChannelConfig, self).__init__(handle)
@@ -372,6 +404,13 @@ class ChannelConfig(gdef.EVT_HANDLE):
         """The :class:`EvtPublisher` for the channel"""
         return EvtPublisher(chaninfo(self, gdef.EvtChannelConfigOwningPublisher).value)
 
+    def publishers(self):
+        "TEST"
+        return [EvtPublisher(pub) for pub in chaninfo(self, gdef.EvtChannelPublisherList).value]
+
+    @property
+    def enabled(self):
+        return bool(chaninfo(self, gdef.EvtChannelConfigEnabled).value)
 
     @property
     def classic(self):
@@ -399,7 +438,7 @@ class EvtPublisher(object):
         return '<{0} "{1}">'.format(type(self).__name__, self.name)
 
 
-class PublisherMetadata(gdef.EVT_HANDLE):
+class PublisherMetadata(EvtHandle):
     """The metadata about an event provider"""
     def __init__(self, handle, name=None):
         super(PublisherMetadata, self).__init__(handle)
@@ -487,7 +526,7 @@ class PropertyArray(gdef.EVT_OBJECT_ARRAY_PROPERTY_HANDLE):
     def property(self, type, index):
         return arrayproperty(self, type, index).value
 
-class EventMetadata(gdef.EVT_HANDLE):
+class EventMetadata(EvtHandle):
     """The Metadata about a given Event type
 
 
@@ -497,7 +536,19 @@ class EventMetadata(gdef.EVT_HANDLE):
     @property
     def id(self):
         """The ID of the Event"""
-        return eventinfo(self, gdef.EventMetadataEventID).value
+        # https://docs.microsoft.com/en-us/windows/desktop/wes/eventschema-systempropertiestype-complextype
+        # Qualifiers:
+        # A legacy provider uses a 32-bit number to identify its events.
+        # If the event is logged by a legacy provider, the value of EventID
+        # element contains the low-order 16 bits of the event identifier and the
+        # Qualifier attribute contains the high-order 16 bits of the event identifier.
+        # [Question] Only true for legacy provider / channels ??
+        return eventinfo(self, gdef.EventMetadataEventID).value & 0xffff
+
+    @property
+    def version(self):
+        """The version of the Event"""
+        return eventinfo(self, gdef.EventMetadataEventVersion).value
 
     @property
     def channel_id(self):
