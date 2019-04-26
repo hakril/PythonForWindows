@@ -231,7 +231,8 @@ class BasicTypeNodes(object):
     @property
     def exports(self):
         # Let allow ourself to redefine the bugged BYTE define & MAX_PATH which is NOT A TYPE !
-        return set(dummy_wintypes.names) - set(["BYTE", "MAX_PATH"])
+        # Also ourself to redifine FILETIME (to trigger the extended struct generation)
+        return set(dummy_wintypes.names) - set(["BYTE", "MAX_PATH", "_FILETIME", "FILETIME"])
 
 class FakeExporter(object):
     def __init__(self, exports):

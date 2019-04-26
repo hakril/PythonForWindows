@@ -1,4 +1,5 @@
 import collections
+import itertools
 
 #WinStructType = collections.namedtuple('WinStructType', ['name'])
 
@@ -58,7 +59,7 @@ class WinStruct(object):
         if self.name is None:
             raise ValueError("Anonymous struct first typedef ({0}) should not be a PTR type".format(name))
         if name in self.typedef:
-            raise ValueError("nop")
+            raise ValueError("Multiple typedef for <{0}>".format(name))
         self.typedef[name] = Ptr(self)
 
     def is_self_referencing(self):
@@ -68,6 +69,27 @@ class WinStruct(object):
             if type.name in self.typedef:
                 return True
         return False
+
+    def contains_anon_struct(self):
+        return any(name is None for type,name,nb in self.fields)
+
+    def prepare_anon_struct(self):
+        new_fields = []
+        code = []
+        i = 0
+        for type, name, nb in self.fields:
+            if name is not None:
+                new_fields.append((type, name, nb))
+                continue
+            i += 1
+            # Should begin by "_ANON_" to trigger <generate_anonymous_union>
+            type.name = "_ANON_{0}_SUB_{1}_{2}".format(self.name, type.ctypes_type, i).upper()
+            code.append(type.generate_ctypes()) # Generate class for the code
+            # Replace the type name + field name in fields list
+
+            new_fields.append((WinStructType(type.name), "anon_{0:02}".format(i), nb))
+        self.fields = new_fields
+        return "\n".join(code)
 
     def generate_selfref_ctypes_class(self):
         res = ["# Self referencing struct tricks"]
@@ -129,13 +151,21 @@ class WinStruct(object):
         return "\n".join(typedef_ctypes)
 
     def generate_ctypes(self):
+        anon_code = ""
+        if self.contains_anon_struct():
+            anon_code = self.prepare_anon_struct()
+
         if self.is_self_referencing():
             print("{0} is self referencing".format(self.name))
             return self.generate_selfref_ctypes_class() + "\n"
 
+
+            import pdb;pdb.set_trace()
+            print("LOL")
+
         ctypes_class = self.generate_ctypes_class()
         ctypes_typedef = self.generate_typedef_ctypes()
-        return "\n".join([ctypes_class, ctypes_typedef]) + "\n"
+        return anon_code + "\n".join([ctypes_class, ctypes_typedef]) + "\n"
 
 class WinUnion(WinStruct):
     ctypes_type = "Union"

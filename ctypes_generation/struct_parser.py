@@ -24,8 +24,21 @@ class WinStructParser(Parser):
 
 
     def parse_def(self):
-        if self.peek() == KeywordToken("struct"):
-            discard = self.next_token()
+        if type(self.peek()) != NameToken and self.peek() in (KeywordToken("union"), KeywordToken("struct")):
+            # Anonymous union-structure :)
+            # kword = self.assert_token_type(KeywordToken)
+            # Not a name. Anon union/struct ?
+            subdef_type = self.next_token() # union / struct
+            if type(self.peek()) == OpenBracketToken:
+                print("<{0}> ANON START WITH <{1}>".format(self._yolo, self.peek()))
+                sub = self.parse_winstruct(anonymous=True, anon_type=subdef_type)
+                print("Anon is <{0}>".format(sub))
+                return (sub, NameToken(None), 1)
+            else:
+                # struct _MYNAME_ -> no anon juste the name of the struct.
+                # Nothing special: juste drop the struct
+                assert subdef_type.value == "struct"
+                # Name will be enforced by nest line.
 
         def_type_tok  = self.assert_token_type(NameToken)
         def_type = WinStructType(def_type_tok.value)
@@ -98,14 +111,17 @@ class WinStructParser(Parser):
         return res_enum
 
 
-    def parse_winstruct(self):
+    def parse_winstruct(self, anonymous=False, anon_type=None):
         is_typedef = False
         peeked = self.peek()
         if peeked == KeywordToken("typedef"):
             self.assert_keyword("typedef")
             is_typedef = True
 
-        def_type = self.assert_token_type(KeywordToken)
+        if not anonymous:
+            def_type = self.assert_token_type(KeywordToken)
+        else:
+            def_type = anon_type # Hack car le lexeing a ete fait avant, l'info est donc passee en param.
         if def_type.value == "enum":
             return self.parse_enum(is_typedef)
         if def_type.value == "struct":
@@ -118,14 +134,14 @@ class WinStructParser(Parser):
             # Not an anonymous structure def
             struct_name = self.assert_token_type(NameToken).value
         else:
-            # Anonymous structure def: check if we are ina  typedef
-            if not is_typedef:
+            # Anonymous structure def: check if we are ina typedef
+            if not is_typedef and not anonymous:
                 raise ValueError("Anonymous structure/union not in a typedef")
-            struct_name = None #
+            struct_name = "anon"
         self.assert_token_type(OpenBracketToken)
+        self._yolo = struct_name
 
         result = WinDefType(struct_name, self.pack)
-
         while type(self.peek()) != CloseBracketToken:
             tok_type, tok_name, nb_rep = self.parse_def()
             result.add_field((tok_type, tok_name.value, nb_rep))
