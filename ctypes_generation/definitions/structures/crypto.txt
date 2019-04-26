@@ -10,6 +10,7 @@ typedef union TMP_CERT_STRONG_SIGN_PARA_UNION_TYPE {
     LPSTR                             pszOID;
 };
 
+
 typedef struct _CERT_STRONG_SIGN_PARA {
   DWORD cbSize;
   DWORD dwInfoChoice;
@@ -66,7 +67,7 @@ typedef struct CRYPTCATMEMBER_ {
   LPWSTR                    pwszFileName;
   GUID                      gSubjectType;
   DWORD                     fdwMemberFlags;
-  struct SIP_INDIRECT_DATA  *pIndirectData;
+  SIP_INDIRECT_DATA  *pIndirectData;
   DWORD                     dwCertVersion;
   DWORD                     dwReserved;
   HANDLE                    hReserved;
@@ -291,11 +292,11 @@ typedef struct WINTRUST_CERT_INFO_
 
 typedef union _TMP_WINTRUST_UNION_TYPE
 {
-        struct WINTRUST_FILE_INFO_      *pFile;
-        struct WINTRUST_CATALOG_INFO_   *pCatalog;
-        struct WINTRUST_BLOB_INFO_      *pBlob;
-        struct WINTRUST_SGNR_INFO_      *pSgnr;
-        struct WINTRUST_CERT_INFO_      *pCert;
+        WINTRUST_FILE_INFO      *pFile;
+        WINTRUST_CATALOG_INFO   *pCatalog;
+        WINTRUST_BLOB_INFO      *pBlob;
+        WINTRUST_SGNR_INFO      *pSgnr;
+        WINTRUST_CERT_INFO      *pCert;
 } TMP_WINTRUST_UNION_TYPE;
 
 
@@ -391,9 +392,8 @@ typedef struct SPC_LINK_
 typedef struct _SPC_SP_OPUS_INFO
 {
     LPCWSTR                     pwszProgramName;
-    struct SPC_LINK_            *pMoreInfo;
-    struct SPC_LINK_            *pPublisherInfo;
-
+    SPC_LINK            *pMoreInfo;
+    SPC_LINK            *pPublisherInfo;
 } SPC_SP_OPUS_INFO, *PSPC_SP_OPUS_INFO;
 
 

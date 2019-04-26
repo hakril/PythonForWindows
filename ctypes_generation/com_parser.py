@@ -12,7 +12,8 @@ class WinComParser(Parser):
         "__reserved", "__RPC__in_opt_string", "__RPC__inout_opt", "__RPC__in_string", "__deref_out_opt", "__RPC__inout"]
     PARAM_INFO_WITH_VALUE = ["__RPC__in_ecount", "__RPC__out_ecount_part", "__RPC__in_ecount_full",
             "__RPC__in_range", "__RPC__out_ecount_full", "__out_ecount_opt", "__out_ecount", "__in_ecount_opt",
-            "__in_ecount", "__out_bcount_opt", "__out_bcount", "__in_bcount", "__in_bcount_opt", "__RPC__out_ecount_full_string"]
+            "__in_ecount", "__out_bcount_opt", "__out_bcount", "__in_bcount", "__in_bcount_opt", "__RPC__out_ecount_full_string",
+            "__RPC__deref_out_ecount_full_opt"]
 
     def __init__(self, data):
         # data = self.initial_processing(data)
@@ -34,9 +35,13 @@ class WinComParser(Parser):
             if ign.value in self.PARAM_INFO_WITH_VALUE:
                 # pass __RPC__in_ecount(cNames)
                 self.assert_token_type(OpenParenthesisToken)
-                while type(self.peek()) != CloseParenthesisToken:
-                    self.next_token()
-                self.next_token()
+                depth = 1
+                while depth:
+                    ntok = self.next_token()
+                    if type(ntok) == CloseParenthesisToken:
+                        depth -= 1
+                    elif type(ntok) == OpenParenthesisToken:
+                        depth +=1
         if self.peek() == KeywordToken("const"):
             self.next_token()
         type_name = self.assert_token_type(NameToken)

@@ -35,3 +35,7 @@ class EnumType(DWORD):
             value = self.value
             return "<{0} {1}({2})>".format(type(self).__name__, value.name, hex(raw_value))
         return "<{0}({1})>".format(type(self).__name__, hex(self.value))
+
+# Sale: windef is hardcoded
+import windef
+SZOID_MAPPER = FlagMapper(*(getattr(windef, x) for x in dir(windef) if x.startswith("szOID")))

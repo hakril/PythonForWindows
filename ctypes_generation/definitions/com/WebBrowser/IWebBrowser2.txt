@@ -1,0 +1,321 @@
+    typedef struct IWebBrowser2Vtbl
+    {
+        BEGIN_INTERFACE
+
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+            __RPC__in IWebBrowser2 * This,
+            /* [in] */ __RPC__in REFIID riid,
+            /* [annotation][iid_is][out] */
+            void **ppvObject);
+
+        ULONG ( STDMETHODCALLTYPE *AddRef )(
+            __RPC__in IWebBrowser2 * This);
+
+        ULONG ( STDMETHODCALLTYPE *Release )(
+            __RPC__in IWebBrowser2 * This);
+
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )(
+            __RPC__in IWebBrowser2 * This,
+            /* [out] */ __RPC__out UINT *pctinfo);
+
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )(
+            __RPC__in IWebBrowser2 * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ __RPC__deref_out_opt ITypeInfo **ppTInfo);
+
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )(
+            __RPC__in IWebBrowser2 * This,
+            /* [in] */ __RPC__in REFIID riid,
+            /* [size_is][in] */ __RPC__in_ecount_full(cNames) LPOLESTR *rgszNames,
+            /* [range][in] */ __RPC__in_range(0,16384) UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ __RPC__out_ecount_full(cNames) DISPID *rgDispId);
+
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )(
+            IWebBrowser2 * This,
+            /* [annotation][in] */
+            DISPID dispIdMember,
+            /* [annotation][in] */
+              REFIID riid,
+            /* [annotation][in] */
+              LCID lcid,
+            /* [annotation][in] */
+              WORD wFlags,
+            /* [annotation][out][in] */
+             DISPPARAMS *pDispParams,
+            /* [annotation][out] */
+              VARIANT *pVarResult,
+            /* [annotation][out] */
+              EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */
+              UINT *puArgErr);
+
+        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GoBack )(
+            __RPC__in IWebBrowser2 * This);
+
+        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GoForward )(
+            __RPC__in IWebBrowser2 * This);
+
+        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GoHome )(
+            __RPC__in IWebBrowser2 * This);
+
+        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GoSearch )(
+            __RPC__in IWebBrowser2 * This);
+
+        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Navigate )(
+            __RPC__in IWebBrowser2 * This,
+            /* [in] */ __RPC__in BSTR URL,
+            /* [unique][optional][in] */ __RPC__in_opt VARIANT *Flags,
+            /* [unique][optional][in] */ __RPC__in_opt VARIANT *TargetFrameName,
+            /* [unique][optional][in] */ __RPC__in_opt VARIANT *PostData,
+            /* [unique][optional][in] */ __RPC__in_opt VARIANT *Headers);
+
+        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Refresh )(
+            __RPC__in IWebBrowser2 * This);
+
+        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Refresh2 )(
+            __RPC__in IWebBrowser2 * This,
+            /* [unique][optional][in] */ __RPC__in_opt VARIANT *Level);
+
+        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Stop )(
+            __RPC__in IWebBrowser2 * This);
+
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Application )(
+            __RPC__in IWebBrowser2 * This,
+            /* [retval][out] */ __RPC__deref_out_opt IDispatch **ppDisp);
+
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )(
+            __RPC__in IWebBrowser2 * This,
+            /* [retval][out] */ __RPC__deref_out_opt IDispatch **ppDisp);
+
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Container )(
+            __RPC__in IWebBrowser2 * This,
+            /* [retval][out] */ __RPC__deref_out_opt IDispatch **ppDisp);
+
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Document )(
+            __RPC__in IWebBrowser2 * This,
+            /* [retval][out] */ __RPC__deref_out_opt IDispatch **ppDisp);
+
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_TopLevelContainer )(
+            __RPC__in IWebBrowser2 * This,
+            /* [retval][out] */ __RPC__out VARIANT_BOOL *pBool);
+
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Type )(
+            __RPC__in IWebBrowser2 * This,
+            /* [retval][out] */ __RPC__deref_out_opt BSTR *Type);
+
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Left )(
+            __RPC__in IWebBrowser2 * This,
+            /* [retval][out] */ __RPC__out long *pl);
+
+        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Left )(
+            __RPC__in IWebBrowser2 * This,
+            /* [in] */ long Left);
+
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Top )(
+            __RPC__in IWebBrowser2 * This,
+            /* [retval][out] */ __RPC__out long *pl);
+
+        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Top )(
+            __RPC__in IWebBrowser2 * This,
+            /* [in] */ long Top);
+
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Width )(
+            __RPC__in IWebBrowser2 * This,
+            /* [retval][out] */ __RPC__out long *pl);
+
+        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Width )(
+            __RPC__in IWebBrowser2 * This,
+            /* [in] */ long Width);
+
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Height )(
+            __RPC__in IWebBrowser2 * This,
+            /* [retval][out] */ __RPC__out long *pl);
+
+        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Height )(
+            __RPC__in IWebBrowser2 * This,
+            /* [in] */ long Height);
+
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_LocationName )(
+            __RPC__in IWebBrowser2 * This,
+            /* [retval][out] */ __RPC__deref_out_opt BSTR *LocationName);
+
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_LocationURL )(
+            __RPC__in IWebBrowser2 * This,
+            /* [retval][out] */ __RPC__deref_out_opt BSTR *LocationURL);
+
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Busy )(
+            __RPC__in IWebBrowser2 * This,
+            /* [retval][out] */ __RPC__out VARIANT_BOOL *pBool);
+
+        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Quit )(
+            __RPC__in IWebBrowser2 * This);
+
+        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ClientToWindow )(
+            __RPC__in IWebBrowser2 * This,
+            /* [out][in] */ __RPC__inout int *pcx,
+            /* [out][in] */ __RPC__inout int *pcy);
+
+        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *PutProperty )(
+            __RPC__in IWebBrowser2 * This,
+            /* [in] */ __RPC__in BSTR Property,
+            /* [in] */ VARIANT vtValue);
+
+        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetProperty )(
+            __RPC__in IWebBrowser2 * This,
+            /* [in] */ __RPC__in BSTR Property,
+            /* [retval][out] */ __RPC__out VARIANT *pvtValue);
+
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Name )(
+            __RPC__in IWebBrowser2 * This,
+            /* [retval][out] */ __RPC__deref_out_opt BSTR *Name);
+
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_HWND )(
+            __RPC__in IWebBrowser2 * This,
+            /* [retval][out] */ __RPC__out PVOID *pHWND);
+
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_FullName )(
+            __RPC__in IWebBrowser2 * This,
+            /* [retval][out] */ __RPC__deref_out_opt BSTR *FullName);
+
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Path )(
+            __RPC__in IWebBrowser2 * This,
+            /* [retval][out] */ __RPC__deref_out_opt BSTR *Path);
+
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Visible )(
+            __RPC__in IWebBrowser2 * This,
+            /* [retval][out] */ __RPC__out VARIANT_BOOL *pBool);
+
+        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Visible )(
+            __RPC__in IWebBrowser2 * This,
+            /* [in] */ VARIANT_BOOL Value);
+
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_StatusBar )(
+            __RPC__in IWebBrowser2 * This,
+            /* [retval][out] */ __RPC__out VARIANT_BOOL *pBool);
+
+        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_StatusBar )(
+            __RPC__in IWebBrowser2 * This,
+            /* [in] */ VARIANT_BOOL Value);
+
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_StatusText )(
+            __RPC__in IWebBrowser2 * This,
+            /* [retval][out] */ __RPC__deref_out_opt BSTR *StatusText);
+
+        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_StatusText )(
+            __RPC__in IWebBrowser2 * This,
+            /* [in] */ __RPC__in BSTR StatusText);
+
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_ToolBar )(
+            __RPC__in IWebBrowser2 * This,
+            /* [retval][out] */ __RPC__out int *Value);
+
+        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_ToolBar )(
+            __RPC__in IWebBrowser2 * This,
+            /* [in] */ int Value);
+
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_MenuBar )(
+            __RPC__in IWebBrowser2 * This,
+            /* [retval][out] */ __RPC__out VARIANT_BOOL *Value);
+
+        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_MenuBar )(
+            __RPC__in IWebBrowser2 * This,
+            /* [in] */ VARIANT_BOOL Value);
+
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_FullScreen )(
+            __RPC__in IWebBrowser2 * This,
+            /* [retval][out] */ __RPC__out VARIANT_BOOL *pbFullScreen);
+
+        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_FullScreen )(
+            __RPC__in IWebBrowser2 * This,
+            /* [in] */ VARIANT_BOOL bFullScreen);
+
+        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Navigate2 )(
+            __RPC__in IWebBrowser2 * This,
+            /* [in] */ __RPC__in VARIANT *URL,
+            /* [unique][optional][in] */ __RPC__in_opt VARIANT *Flags,
+            /* [unique][optional][in] */ __RPC__in_opt VARIANT *TargetFrameName,
+            /* [unique][optional][in] */ __RPC__in_opt VARIANT *PostData,
+            /* [unique][optional][in] */ __RPC__in_opt VARIANT *Headers);
+
+        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *QueryStatusWB )(
+            __RPC__in IWebBrowser2 * This,
+            /* [in] */ DWORD cmdID,
+            /* [retval][out] */ __RPC__out DWORD *pcmdf);
+
+        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ExecWB )(
+            __RPC__in IWebBrowser2 * This,
+            /* [in] */ DWORD cmdID,
+            /* [in] */ DWORD cmdexecopt,
+            /* [unique][optional][in] */ __RPC__in_opt VARIANT *pvaIn,
+            /* [unique][optional][out][in] */ __RPC__inout_opt VARIANT *pvaOut);
+
+        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ShowBrowserBar )(
+            __RPC__in IWebBrowser2 * This,
+            /* [in] */ __RPC__in VARIANT *pvaClsid,
+            /* [unique][optional][in] */ __RPC__in_opt VARIANT *pvarShow,
+            /* [unique][optional][in] */ __RPC__in_opt VARIANT *pvarSize);
+
+        /* [bindable][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_ReadyState )(
+            __RPC__in IWebBrowser2 * This,
+            /* [out][retval] */ __RPC__out DWORD *plReadyState);
+
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Offline )(
+            __RPC__in IWebBrowser2 * This,
+            /* [retval][out] */ __RPC__out VARIANT_BOOL *pbOffline);
+
+        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Offline )(
+            __RPC__in IWebBrowser2 * This,
+            /* [in] */ VARIANT_BOOL bOffline);
+
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Silent )(
+            __RPC__in IWebBrowser2 * This,
+            /* [retval][out] */ __RPC__out VARIANT_BOOL *pbSilent);
+
+        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Silent )(
+            __RPC__in IWebBrowser2 * This,
+            /* [in] */ VARIANT_BOOL bSilent);
+
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_RegisterAsBrowser )(
+            __RPC__in IWebBrowser2 * This,
+            /* [retval][out] */ __RPC__out VARIANT_BOOL *pbRegister);
+
+        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_RegisterAsBrowser )(
+            __RPC__in IWebBrowser2 * This,
+            /* [in] */ VARIANT_BOOL bRegister);
+
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_RegisterAsDropTarget )(
+            __RPC__in IWebBrowser2 * This,
+            /* [retval][out] */ __RPC__out VARIANT_BOOL *pbRegister);
+
+        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_RegisterAsDropTarget )(
+            __RPC__in IWebBrowser2 * This,
+            /* [in] */ VARIANT_BOOL bRegister);
+
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_TheaterMode )(
+            __RPC__in IWebBrowser2 * This,
+            /* [retval][out] */ __RPC__out VARIANT_BOOL *pbRegister);
+
+        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_TheaterMode )(
+            __RPC__in IWebBrowser2 * This,
+            /* [in] */ VARIANT_BOOL bRegister);
+
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_AddressBar )(
+            __RPC__in IWebBrowser2 * This,
+            /* [retval][out] */ __RPC__out VARIANT_BOOL *Value);
+
+        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_AddressBar )(
+            __RPC__in IWebBrowser2 * This,
+            /* [in] */ VARIANT_BOOL Value);
+
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Resizable )(
+            __RPC__in IWebBrowser2 * This,
+            /* [retval][out] */ __RPC__out VARIANT_BOOL *Value);
+
+        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Resizable )(
+            __RPC__in IWebBrowser2 * This,
+            /* [in] */ VARIANT_BOOL Value);
+
+        END_INTERFACE
+    } IWebBrowser2Vtbl;

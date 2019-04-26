@@ -1,0 +1,39 @@
+typedef enum __MIDL_IBackgroundCopyJob2_0002 {
+  BG_AUTH_SCHEME_BASIC,
+  BG_AUTH_SCHEME_DIGEST,
+  BG_AUTH_SCHEME_NTLM,
+  BG_AUTH_SCHEME_NEGOTIATE,
+  BG_AUTH_SCHEME_PASSPORT
+} BG_AUTH_SCHEME;
+
+
+typedef enum __MIDL_IBackgroundCopyJob2_0001 {
+  BG_AUTH_TARGET_SERVER,
+  BG_AUTH_TARGET_PROXY
+} BG_AUTH_TARGET;
+
+
+typedef struct __MIDL_IBackgroundCopyJob2_0003 {
+  LPWSTR UserName;
+  LPWSTR Password;
+} BG_BASIC_CREDENTIALS;
+
+typedef union __MIDL_IBackgroundCopyJob2_0004 {
+  BG_BASIC_CREDENTIALS Basic;
+} BG_AUTH_CREDENTIALS_UNION;
+
+typedef struct {
+  BG_AUTH_TARGET            Target;
+  BG_AUTH_SCHEME            Scheme;
+  BG_AUTH_CREDENTIALS_UNION Credentials;
+} BG_AUTH_CREDENTIALS;
+
+typedef struct _BG_JOB_REPLY_PROGRESS {
+  UINT64 BytesTotal;
+  UINT64 BytesTransferred;
+} BG_JOB_REPLY_PROGRESS;
+
+typedef struct _BG_FILE_RANGE {
+  UINT64 InitialOffset;
+  UINT64 Length;
+} BG_FILE_RANGE;

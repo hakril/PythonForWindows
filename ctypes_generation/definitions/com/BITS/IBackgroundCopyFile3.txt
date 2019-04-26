@@ -1,0 +1,55 @@
+typedef struct IBackgroundCopyFile3Vtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            __RPC__in IBackgroundCopyFile3 * This,
+            /* [in] */ __RPC__in REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            __RPC__deref_out  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            __RPC__in IBackgroundCopyFile3 * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            __RPC__in IBackgroundCopyFile3 * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetRemoteName )( 
+            __RPC__in IBackgroundCopyFile3 * This,
+            /* [out] */ __RPC__deref_out_opt LPWSTR *pVal);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetLocalName )( 
+            __RPC__in IBackgroundCopyFile3 * This,
+            /* [out] */ __RPC__deref_out_opt LPWSTR *pVal);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetProgress )( 
+            __RPC__in IBackgroundCopyFile3 * This,
+            /* [out] */ __RPC__out BG_FILE_PROGRESS *pVal);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetFileRanges )( 
+            __RPC__in IBackgroundCopyFile3 * This,
+            /* [unique][out][in] */ __RPC__inout_opt DWORD *RangeCount,
+            /* [size_is][size_is][out] */ __RPC__deref_out_ecount_full_opt(*RangeCount) BG_FILE_RANGE **Ranges);
+        
+        HRESULT ( STDMETHODCALLTYPE *SetRemoteName )( 
+            __RPC__in IBackgroundCopyFile3 * This,
+            __RPC__in LPCWSTR Val);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTemporaryName )( 
+            __RPC__in IBackgroundCopyFile3 * This,
+            /* [out] */ __RPC__deref_out_opt LPWSTR *pFilename);
+        
+        HRESULT ( STDMETHODCALLTYPE *SetValidationState )( 
+            __RPC__in IBackgroundCopyFile3 * This,
+            /* [in] */ BOOL state);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetValidationState )( 
+            __RPC__in IBackgroundCopyFile3 * This,
+            /* [out] */ __RPC__out BOOL *pState);
+        
+        HRESULT ( STDMETHODCALLTYPE *IsDownloadedFromPeer )( 
+            __RPC__in IBackgroundCopyFile3 * This,
+            /* [out] */ __RPC__out BOOL *pVal);
+        
+        END_INTERFACE
+    } IBackgroundCopyFile3Vtbl;

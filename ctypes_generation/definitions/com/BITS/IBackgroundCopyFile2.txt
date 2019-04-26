@@ -1,0 +1,39 @@
+typedef struct IBackgroundCopyFile2Vtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            __RPC__in IBackgroundCopyFile2 * This,
+            /* [in] */ __RPC__in REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            __RPC__deref_out  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            __RPC__in IBackgroundCopyFile2 * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            __RPC__in IBackgroundCopyFile2 * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetRemoteName )( 
+            __RPC__in IBackgroundCopyFile2 * This,
+            /* [out] */ __RPC__deref_out_opt LPWSTR *pVal);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetLocalName )( 
+            __RPC__in IBackgroundCopyFile2 * This,
+            /* [out] */ __RPC__deref_out_opt LPWSTR *pVal);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetProgress )( 
+            __RPC__in IBackgroundCopyFile2 * This,
+            /* [out] */ __RPC__out BG_FILE_PROGRESS *pVal);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetFileRanges )( 
+            __RPC__in IBackgroundCopyFile2 * This,
+            /* [unique][out][in] */ __RPC__inout_opt DWORD *RangeCount,
+            /* [size_is][size_is][out] */ __RPC__deref_out_ecount_full_opt(*RangeCount) BG_FILE_RANGE **Ranges);
+        
+        HRESULT ( STDMETHODCALLTYPE *SetRemoteName )( 
+            __RPC__in IBackgroundCopyFile2 * This,
+            __RPC__in LPCWSTR Val);
+        
+        END_INTERFACE
+    } IBackgroundCopyFile2Vtbl;

@@ -180,8 +180,8 @@ typedef struct _FILE_DISPOSITION_INFORMATION {
 typedef struct _FILE_FULL_EA_INFORMATION
 {
     ULONG NextEntryOffset;
-    UCHAR Flags;
-    UCHAR EaNameLength;
+    BYTE Flags;
+    BYTE EaNameLength;
     USHORT EaValueLength;
     CHAR EaName[1];
 } FILE_FULL_EA_INFORMATION, *PFILE_FULL_EA_INFORMATION;
@@ -192,3 +192,20 @@ typedef struct _FILE_GET_EA_INFORMATION
     UCHAR EaNameLength;
     CHAR EaName[1];
 } FILE_GET_EA_INFORMATION, *PFILE_GET_EA_INFORMATION;
+
+
+typedef struct tagVS_FIXEDFILEINFO {
+  DWORD dwSignature;
+  DWORD dwStrucVersion;
+  DWORD dwFileVersionMS;
+  DWORD dwFileVersionLS;
+  DWORD dwProductVersionMS;
+  DWORD dwProductVersionLS;
+  DWORD dwFileFlagsMask;
+  DWORD dwFileFlags;
+  DWORD dwFileOS;
+  DWORD dwFileType;
+  DWORD dwFileSubtype;
+  DWORD dwFileDateMS;
+  DWORD dwFileDateLS;
+} VS_FIXEDFILEINFO;

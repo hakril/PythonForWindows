@@ -32,6 +32,14 @@ HRESULT WINAPI CoCreateInstanceEx(
   _Inout_ MULTI_QI     *pResults
 );
 
+HRESULT CoGetClassObject(
+  REFCLSID rclsid,
+  DWORD    dwClsContext,
+  LPVOID   pvReserved,
+  REFIID   riid,
+  LPVOID   *ppv
+);
+
 
 HRESULT WINAPI CoGetInterceptor(
   _In_  REFIID   iidIntercepted,
@@ -44,4 +52,8 @@ HRESULT WINAPI CoGetInterceptor(
 HRESULT WINAPI CLSIDFromProgID(
   _In_  LPCOLESTR lpszProgID,
   _Out_ LPCLSID   lpclsid
+);
+
+PVOID  CoTaskMemFree(
+  LPVOID pv
 );

@@ -702,40 +702,7 @@ HMODULE WINAPI LoadLibraryExW(
   _In_       DWORD   dwFlags
 );
 
-BOOL WINAPI SymInitialize(
-  _In_     HANDLE hProcess,
-  _In_opt_ LPCSTR UserSearchPath,
-  _In_     BOOL   fInvadeProcess
-);
 
-BOOL WINAPI SymFromName(
-  _In_    HANDLE       hProcess,
-  _In_    LPCSTR       Name,
-  _Inout_ PSYMBOL_INFO Symbol
-);
-
-DWORD64 WINAPI SymLoadModuleEx(
-  _In_ HANDLE        hProcess,
-  _In_ HANDLE        hFile,
-  _In_ LPCSTR        ImageName,
-  _In_ LPCSTR        ModuleName,
-  _In_ DWORD64       BaseOfDll,
-  _In_ DWORD         DllSize,
-  _In_ PMODLOAD_DATA Data,
-  _In_ DWORD         Flags
-);
-
-DWORD WINAPI SymSetOptions(
-  _In_ DWORD SymOptions
-);
-
-BOOL WINAPI SymGetTypeInfo(
-  _In_  HANDLE                    hProcess,
-  _In_  DWORD64                   ModBase,
-  _In_  ULONG                     TypeId,
-  _In_  IMAGEHLP_SYMBOL_TYPE_INFO GetType,
-  _Out_ PVOID                     pInfo
-);
 
 BOOL WINAPI DeviceIoControl(
   _In_        HANDLE       hDevice,

@@ -1,0 +1,183 @@
+typedef struct IBackgroundCopyJob2Vtbl
+    {
+        BEGIN_INTERFACE
+
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+            __RPC__in IBackgroundCopyJob2 * This,
+            /* [in] */ __RPC__in REFIID riid,
+            /* [annotation][iid_is][out] */
+            __RPC__deref_out  void **ppvObject);
+
+        ULONG ( STDMETHODCALLTYPE *AddRef )(
+            __RPC__in IBackgroundCopyJob2 * This);
+
+        ULONG ( STDMETHODCALLTYPE *Release )(
+            __RPC__in IBackgroundCopyJob2 * This);
+
+        HRESULT ( STDMETHODCALLTYPE *AddFileSet )(
+            __RPC__in IBackgroundCopyJob2 * This,
+            /* [in] */ ULONG cFileCount,
+            /* [size_is][in] */ __RPC__in_ecount_full(cFileCount) BG_FILE_INFO *pFileSet);
+
+        HRESULT ( STDMETHODCALLTYPE *AddFile )(
+            __RPC__in IBackgroundCopyJob2 * This,
+            /* [in] */ __RPC__in LPCWSTR RemoteUrl,
+            /* [in] */ __RPC__in LPCWSTR LocalName);
+
+        HRESULT ( STDMETHODCALLTYPE *EnumFiles )(
+            __RPC__in IBackgroundCopyJob2 * This,
+            /* [out] */ __RPC__deref_out_opt IEnumBackgroundCopyFiles **pEnum);
+
+        HRESULT ( STDMETHODCALLTYPE *Suspend )(
+            __RPC__in IBackgroundCopyJob2 * This);
+
+        HRESULT ( STDMETHODCALLTYPE *Resume )(
+            __RPC__in IBackgroundCopyJob2 * This);
+
+        HRESULT ( STDMETHODCALLTYPE *Cancel )(
+            __RPC__in IBackgroundCopyJob2 * This);
+
+        HRESULT ( STDMETHODCALLTYPE *Complete )(
+            __RPC__in IBackgroundCopyJob2 * This);
+
+        HRESULT ( STDMETHODCALLTYPE *GetId )(
+            __RPC__in IBackgroundCopyJob2 * This,
+            /* [out] */ __RPC__out GUID *pVal);
+
+        HRESULT ( STDMETHODCALLTYPE *GetType )(
+            __RPC__in IBackgroundCopyJob2 * This,
+            /* [out] */ __RPC__out BG_JOB_TYPE *pVal);
+
+        HRESULT ( STDMETHODCALLTYPE *GetProgress )(
+            __RPC__in IBackgroundCopyJob2 * This,
+            /* [out] */ __RPC__out BG_JOB_PROGRESS *pVal);
+
+        HRESULT ( STDMETHODCALLTYPE *GetTimes )(
+            __RPC__in IBackgroundCopyJob2 * This,
+            /* [out] */ __RPC__out BG_JOB_TIMES *pVal);
+
+        HRESULT ( STDMETHODCALLTYPE *GetState )(
+            __RPC__in IBackgroundCopyJob2 * This,
+            /* [out] */ __RPC__out BG_JOB_STATE *pVal);
+
+        HRESULT ( STDMETHODCALLTYPE *GetError )(
+            __RPC__in IBackgroundCopyJob2 * This,
+            /* [out] */ __RPC__deref_out_opt IBackgroundCopyError **ppError);
+
+        HRESULT ( STDMETHODCALLTYPE *GetOwner )(
+            __RPC__in IBackgroundCopyJob2 * This,
+            /* [out] */ __RPC__deref_out_opt LPWSTR *pVal);
+
+        HRESULT ( STDMETHODCALLTYPE *SetDisplayName )(
+            __RPC__in IBackgroundCopyJob2 * This,
+            /* [in] */ __RPC__in LPCWSTR Val);
+
+        HRESULT ( STDMETHODCALLTYPE *GetDisplayName )(
+            __RPC__in IBackgroundCopyJob2 * This,
+            /* [out] */ __RPC__deref_out_opt LPWSTR *pVal);
+
+        HRESULT ( STDMETHODCALLTYPE *SetDescription )(
+            __RPC__in IBackgroundCopyJob2 * This,
+            /* [in] */ __RPC__in LPCWSTR Val);
+
+        HRESULT ( STDMETHODCALLTYPE *GetDescription )(
+            __RPC__in IBackgroundCopyJob2 * This,
+            /* [out] */ __RPC__deref_out_opt LPWSTR *pVal);
+
+        HRESULT ( STDMETHODCALLTYPE *SetPriority )(
+            __RPC__in IBackgroundCopyJob2 * This,
+            /* [in] */ BG_JOB_PRIORITY Val);
+
+        HRESULT ( STDMETHODCALLTYPE *GetPriority )(
+            __RPC__in IBackgroundCopyJob2 * This,
+            /* [out] */ __RPC__out BG_JOB_PRIORITY *pVal);
+
+        HRESULT ( STDMETHODCALLTYPE *SetNotifyFlags )(
+            __RPC__in IBackgroundCopyJob2 * This,
+            /* [in] */ ULONG Val);
+
+        HRESULT ( STDMETHODCALLTYPE *GetNotifyFlags )(
+            __RPC__in IBackgroundCopyJob2 * This,
+            /* [out] */ __RPC__out ULONG *pVal);
+
+        HRESULT ( STDMETHODCALLTYPE *SetNotifyInterface )(
+            __RPC__in IBackgroundCopyJob2 * This,
+            /* [in] */ __RPC__in_opt IUnknown *Val);
+
+        HRESULT ( STDMETHODCALLTYPE *GetNotifyInterface )(
+            __RPC__in IBackgroundCopyJob2 * This,
+            /* [out] */ __RPC__deref_out_opt IUnknown **pVal);
+
+        HRESULT ( STDMETHODCALLTYPE *SetMinimumRetryDelay )(
+            __RPC__in IBackgroundCopyJob2 * This,
+            /* [in] */ ULONG Seconds);
+
+        HRESULT ( STDMETHODCALLTYPE *GetMinimumRetryDelay )(
+            __RPC__in IBackgroundCopyJob2 * This,
+            /* [out] */ __RPC__out ULONG *Seconds);
+
+        HRESULT ( STDMETHODCALLTYPE *SetNoProgressTimeout )(
+            __RPC__in IBackgroundCopyJob2 * This,
+            /* [in] */ ULONG Seconds);
+
+        HRESULT ( STDMETHODCALLTYPE *GetNoProgressTimeout )(
+            __RPC__in IBackgroundCopyJob2 * This,
+            /* [out] */ __RPC__out ULONG *Seconds);
+
+        HRESULT ( STDMETHODCALLTYPE *GetErrorCount )(
+            __RPC__in IBackgroundCopyJob2 * This,
+            /* [out] */ __RPC__out ULONG *Errors);
+
+        HRESULT ( STDMETHODCALLTYPE *SetProxySettings )(
+            __RPC__in IBackgroundCopyJob2 * This,
+            /* [in] */ BG_JOB_PROXY_USAGE ProxyUsage,
+            /* [unique][string][in] */ __RPC__in_opt_string const WCHAR *ProxyList,
+            /* [unique][string][in] */ __RPC__in_opt_string const WCHAR *ProxyBypassList);
+
+        HRESULT ( STDMETHODCALLTYPE *GetProxySettings )(
+            __RPC__in IBackgroundCopyJob2 * This,
+            /* [out] */ __RPC__out BG_JOB_PROXY_USAGE *pProxyUsage,
+            /* [out] */ __RPC__deref_out_opt LPWSTR *pProxyList,
+            /* [out] */ __RPC__deref_out_opt LPWSTR *pProxyBypassList);
+
+        HRESULT ( STDMETHODCALLTYPE *TakeOwnership )(
+            __RPC__in IBackgroundCopyJob2 * This);
+
+        HRESULT ( STDMETHODCALLTYPE *SetNotifyCmdLine )(
+            __RPC__in IBackgroundCopyJob2 * This,
+            /* [unique][in] */ __RPC__in_opt LPCWSTR Program,
+            /* [unique][in] */ __RPC__in_opt LPCWSTR Parameters);
+
+        HRESULT ( STDMETHODCALLTYPE *GetNotifyCmdLine )(
+            __RPC__in IBackgroundCopyJob2 * This,
+            /* [out] */ __RPC__deref_out_opt LPWSTR *pProgram,
+            /* [out] */ __RPC__deref_out_opt LPWSTR *pParameters);
+
+        HRESULT ( STDMETHODCALLTYPE *GetReplyProgress )(
+            __RPC__in IBackgroundCopyJob2 * This,
+            /* [out][in] */ __RPC__inout BG_JOB_REPLY_PROGRESS *pProgress);
+
+        HRESULT ( STDMETHODCALLTYPE *GetReplyData )(
+            __RPC__in IBackgroundCopyJob2 * This,
+            /* [size_is][size_is][out] */ __RPC__deref_out_ecount_full_opt(( unsigned long  )*pLength) BYTE **ppBuffer,
+            /* [unique][out][in] */ __RPC__inout_opt UINT64 *pLength);
+
+        HRESULT ( STDMETHODCALLTYPE *SetReplyFileName )(
+            __RPC__in IBackgroundCopyJob2 * This,
+            /* [unique][in] */ __RPC__in_opt LPCWSTR ReplyFileName);
+
+        HRESULT ( STDMETHODCALLTYPE *GetReplyFileName )(
+            __RPC__in IBackgroundCopyJob2 * This,
+            /* [out] */ __RPC__deref_out_opt LPWSTR *pReplyFileName);
+
+        HRESULT ( STDMETHODCALLTYPE *SetCredentials )(
+            __RPC__in IBackgroundCopyJob2 * This,
+            __RPC__in BG_AUTH_CREDENTIALS *credentials);
+
+        HRESULT ( STDMETHODCALLTYPE *RemoveCredentials )(
+            __RPC__in IBackgroundCopyJob2 * This,
+            BG_AUTH_TARGET Target,
+            BG_AUTH_SCHEME Scheme);
+
+        END_INTERFACE
+    } IBackgroundCopyJob2Vtbl;
