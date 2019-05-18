@@ -15,3 +15,5 @@ from user32 import *
 from version import *
 from wevtapi import *
 from wintrust import *
+from tdh import *
+from dnsapi import *

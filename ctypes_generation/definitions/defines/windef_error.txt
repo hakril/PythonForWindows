@@ -508,6 +508,30 @@
 #define ERROR_RESOURCE_NAME_NOT_FOUND    1814L
 #define ERROR_RESOURCE_LANG_NOT_FOUND    1815L
 
+
+////////////////////////////////////
+//                                //
+//     WMI Error Codes            //
+//                                //
+////////////////////////////////////
+
+#define ERROR_WMI_GUID_NOT_FOUND         4200L
+#define ERROR_WMI_INSTANCE_NOT_FOUND     4201L
+#define ERROR_WMI_ITEMID_NOT_FOUND       4202L
+#define ERROR_WMI_TRY_AGAIN              4203L
+#define ERROR_WMI_DP_NOT_FOUND           4204L
+#define ERROR_WMI_UNRESOLVED_INSTANCE_REF 4205L
+#define ERROR_WMI_ALREADY_ENABLED        4206L
+#define ERROR_WMI_GUID_DISCONNECTED      4207L
+#define ERROR_WMI_SERVER_UNAVAILABLE     4208L
+#define ERROR_WMI_DP_FAILED              4209L
+#define ERROR_WMI_INVALID_MOF            4210L
+#define ERROR_WMI_INVALID_REGINFO        4211L
+#define ERROR_WMI_ALREADY_DISABLED       4212L
+#define ERROR_WMI_READ_ONLY              4213L
+#define ERROR_WMI_SET_FAILURE            4214L
+
+
 #define ERROR_INVALID_TRANSACTION 6700
 #define ERROR_TRANSACTION_NOT_ACTIVE 6701
 #define ERROR_TRANSACTION_REQUEST_NOT_VALID 6702

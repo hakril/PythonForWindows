@@ -1,0 +1,12 @@
+typedef struct _TRACE_PROVIDER_INFO {
+  GUID  ProviderGuid;
+  ULONG SchemaSource;
+  ULONG ProviderNameOffset;
+} TRACE_PROVIDER_INFO;
+
+
+typedef struct _PROVIDER_ENUMERATION_INFO {
+  ULONG               NumberOfProviders;
+  ULONG               Reserved;
+  TRACE_PROVIDER_INFO TraceProviderInfoArray[ANYSIZE_ARRAY];
+} PROVIDER_ENUMERATION_INFO, *PPROVIDER_ENUMERATION_INFO;

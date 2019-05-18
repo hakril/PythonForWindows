@@ -1,0 +1,19 @@
+BOOL FileTimeToSystemTime(
+  FILETIME *lpFileTime,
+  LPSYSTEMTIME   lpSystemTime
+);
+
+BOOL SystemTimeToFileTime(
+  SYSTEMTIME *lpSystemTime,
+  LPFILETIME       lpFileTime
+);
+
+// void
+PVOID GetSystemTime(
+  LPSYSTEMTIME lpSystemTime
+);
+
+// void
+PVOID GetSystemTimeAsFileTime(
+  LPFILETIME lpSystemTimeAsFileTime
+);

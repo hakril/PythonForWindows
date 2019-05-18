@@ -32,3 +32,18 @@ typedef struct _KEY_VALUE_PARTIAL_INFORMATION {
   ULONG DataLength;
   UCHAR Data[1];
 } KEY_VALUE_PARTIAL_INFORMATION, *PKEY_VALUE_PARTIAL_INFORMATION;
+
+
+typedef enum _KEY_INFORMATION_CLASS {
+  KeyBasicInformation,
+  KeyNodeInformation,
+  KeyFullInformation,
+  KeyNameInformation,
+  KeyCachedInformation,
+  KeyFlagsInformation,
+  KeyVirtualizationInformation,
+  KeyHandleTagsInformation,
+  KeyTrustInformation,
+  KeyLayerInformation,
+  MaxKeyInfoClass
+} KEY_INFORMATION_CLASS;

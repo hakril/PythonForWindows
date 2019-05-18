@@ -122,7 +122,10 @@ typedef struct _PEB {
   _ANON_PEB_SYSTEM_DEPENDENT_02 _SYSTEM_DEPENDENT_02;
   _ANON_PEB_SYSTEM_DEPENDENT_03 _SYSTEM_DEPENDENT_03;
   PVOID                         _SYSTEM_DEPENDENT_04;
-  _ANON_PEB_UNION_1             anon_union_1;
+  union {
+      PVOID KernelCallbackTable;
+      PVOID UserSharedInfoPtr;
+  };
   DWORD                         SystemReserved;
   DWORD                         _SYSTEM_DEPENDENT_05;
   _ANON_PEB_SYSTEM_DEPENDENT_06 _SYSTEM_DEPENDENT_06;
@@ -157,8 +160,10 @@ typedef struct _PEB {
   DWORD                         ImageSubsystem;
   DWORD                         ImageSubsystemMajorVersion;
   PVOID                         ImageSubsystemMinorVersion;
-
-  _ANON_PEB_UNION_2             anon_union_2;
+  union {
+      PVOID ImageProcessAffinityMask;
+      PVOID ActiveProcessAffinityMask;
+  };
   PVOID                         GdiHandleBuffer[26];
   BYTE                          GdiHandleBuffer2[32];
   PVOID                         PostProcessInitRoutine;
@@ -483,17 +488,7 @@ typedef enum _THREAD_INFORMATION_CLASS {
     ThreadHideFromDebugger
 } THREAD_INFORMATION_CLASS, *PTHREAD_INFORMATION_CLASS;
 
-typedef enum _TCP_TABLE_CLASS {
-  TCP_TABLE_BASIC_LISTENER,
-  TCP_TABLE_BASIC_CONNECTIONS,
-  TCP_TABLE_BASIC_ALL,
-  TCP_TABLE_OWNER_PID_LISTENER,
-  TCP_TABLE_OWNER_PID_CONNECTIONS,
-  TCP_TABLE_OWNER_PID_ALL,
-  TCP_TABLE_OWNER_MODULE_LISTENER,
-  TCP_TABLE_OWNER_MODULE_CONNECTIONS,
-  TCP_TABLE_OWNER_MODULE_ALL
-} TCP_TABLE_CLASS;
+
 
 typedef enum _VARENUM{
     VT_EMPTY    = 0,
@@ -569,26 +564,6 @@ typedef enum NET_FW_PROFILE_TYPE2_ {
   NET_FW_PROFILE2_ALL      = 0x7FFFFFFF
 } NET_FW_PROFILE_TYPE2;
 
-typedef enum _MIB_TCP_STATE{
-    MIB_TCP_STATE_CLOSED     =  1,
-    MIB_TCP_STATE_LISTEN     =  2,
-    MIB_TCP_STATE_SYN_SENT   =  3,
-    MIB_TCP_STATE_SYN_RCVD   =  4,
-    MIB_TCP_STATE_ESTAB      =  5,
-    MIB_TCP_STATE_FIN_WAIT1  =  6,
-    MIB_TCP_STATE_FIN_WAIT2  =  7,
-    MIB_TCP_STATE_CLOSE_WAIT =  8,
-    MIB_TCP_STATE_CLOSING    =  9,
-    MIB_TCP_STATE_LAST_ACK   = 10,
-    MIB_TCP_STATE_TIME_WAIT  = 11,
-    MIB_TCP_STATE_DELETE_TCB = 12,
-} MIB_TCP_STATE;
-
-typedef enum NET_FW_IP_PROTOCOL_ {
-    NET_FW_IP_PROTOCOL_TCP  = 6,
-    NET_FW_IP_PROTOCOL_UDP  = 17,
-    NET_FW_IP_PROTOCOL_ANY  = 256
-}   NET_FW_IP_PROTOCOL;
 
 
 
@@ -1379,136 +1354,6 @@ typedef struct _OVERLAPPED {
   HANDLE    hEvent;
 } OVERLAPPED, *LPOVERLAPPED;
 
-typedef struct _MIB_IPADDRROW_XP {
-    DWORD dwAddr;
-    IF_INDEX dwIndex;
-    DWORD dwMask;
-    DWORD dwBCastAddr;
-    DWORD dwReasmSize;
-    USHORT unused1;
-    USHORT wType;
-} MIB_IPADDRROW, MIB_IPADDRROW_XP, *PMIB_IPADDRROW_XP;
-
-typedef struct _MIB_IPADDRTABLE {
-    DWORD dwNumEntries;
-    MIB_IPADDRROW table[ANY_SIZE];
-} MIB_IPADDRTABLE, *PMIB_IPADDRTABLE;
-
-
-typedef enum _INTERNAL_IF_OPER_STATUS {
-    IF_OPER_STATUS_NON_OPERATIONAL = 0,
-    IF_OPER_STATUS_UNREACHABLE     = 1,
-    IF_OPER_STATUS_DISCONNECTED    = 2,
-    IF_OPER_STATUS_CONNECTING      = 3,
-    IF_OPER_STATUS_CONNECTED       = 4,
-    IF_OPER_STATUS_OPERATIONAL     = 5,
-} INTERNAL_IF_OPER_STATUS;
-
-typedef struct _MIB_IFROW {
-    WCHAR wszName[MAX_INTERFACE_NAME_LEN];
-    IF_INDEX dwIndex;
-    IFTYPE dwType;
-    DWORD dwMtu;
-    DWORD dwSpeed;
-    DWORD dwPhysAddrLen;
-    BYTE bPhysAddr[MAXLEN_PHYSADDR];
-    DWORD dwAdminStatus;
-    INTERNAL_IF_OPER_STATUS dwOperStatus;
-    DWORD dwLastChange;
-    DWORD dwInOctets;
-    DWORD dwInUcastPkts;
-    DWORD dwInNUcastPkts;
-    DWORD dwInDiscards;
-    DWORD dwInErrors;
-    DWORD dwInUnknownProtos;
-    DWORD dwOutOctets;
-    DWORD dwOutUcastPkts;
-    DWORD dwOutNUcastPkts;
-    DWORD dwOutDiscards;
-    DWORD dwOutErrors;
-    DWORD dwOutQLen;
-    DWORD dwDescrLen;
-    UCHAR bDescr[MAXLEN_IFDESCR];
-} MIB_IFROW, *PMIB_IFROW;
-
-typedef struct _MIB_IFTABLE {
-    DWORD dwNumEntries;
-    MIB_IFROW table[ANY_SIZE];
-} MIB_IFTABLE, *PMIB_IFTABLE;
-
-
-typedef struct _MIB_TCPROW_OWNER_PID {
-  DWORD dwState;
-  DWORD dwLocalAddr;
-  DWORD dwLocalPort;
-  DWORD dwRemoteAddr;
-  DWORD dwRemotePort;
-  DWORD dwOwningPid;
-} MIB_TCPROW_OWNER_PID, *PMIB_TCPROW_OWNER_PID;
-
-typedef struct _MIB_TCPTABLE_OWNER_PID{
-  DWORD                dwNumEntries;
-  MIB_TCPROW_OWNER_PID table[ANY_SIZE];
-} MIB_TCPTABLE_OWNER_PID, *PMIB_TCPTABLE_OWNER_PID;
-
-typedef struct _MIB_UDPROW_OWNER_PID {
-  DWORD dwLocalAddr;
-  DWORD dwLocalPort;
-  DWORD dwOwningPid;
-} MIB_UDPROW_OWNER_PID, *PMIB_UDPROW_OWNER_PID;
-
-typedef struct _MIB_UDPTABLE_OWNER_PID {
-  DWORD                dwNumEntries;
-  MIB_UDPROW_OWNER_PID table[ANY_SIZE];
-} MIB_UDPTABLE_OWNER_PID, *PMIB_UDPTABLE_OWNER_PID;
-
-
-typedef struct _MIB_UDP6ROW_OWNER_PID {
-  UCHAR ucLocalAddr[16];
-  DWORD dwLocalScopeId;
-  DWORD dwLocalPort;
-  DWORD dwOwningPid;
-} MIB_UDP6ROW_OWNER_PID, *PMIB_UDP6ROW_OWNER_PID;
-
-typedef struct _MIB_UDP6TABLE_OWNER_PID{
-  DWORD                 dwNumEntries;
-  MIB_UDP6ROW_OWNER_PID table[ANY_SIZE];
-} MIB_UDP6TABLE_OWNER_PID, *PMIB_UDP6TABLE_OWNER_PID;
-
-typedef struct _MIB_TCP6ROW_OWNER_PID {
-  UCHAR ucLocalAddr[16];
-  DWORD dwLocalScopeId;
-  DWORD dwLocalPort;
-  UCHAR ucRemoteAddr[16];
-  DWORD dwRemoteScopeId;
-  DWORD dwRemotePort;
-  DWORD dwState;
-  DWORD dwOwningPid;
-} MIB_TCP6ROW_OWNER_PID, *PMIB_TCP6ROW_OWNER_PID;
-
-typedef struct _MIB_TCP6TABLE_OWNER_PID {
-  DWORD                 dwNumEntries;
-  MIB_TCP6ROW_OWNER_PID table[ANY_SIZE];
-} MIB_TCP6TABLE_OWNER_PID, *PMIB_TCP6TABLE_OWNER_PID;
-
-typedef struct _MIB_TCPROW {
-  DWORD dwState;
-  DWORD dwLocalAddr;
-  DWORD dwLocalPort;
-  DWORD dwRemoteAddr;
-  DWORD dwRemotePort;
-} MIB_TCPROW, *PMIB_TCPROW;
-
-typedef struct _IP_ADAPTER_INDEX_MAP {
-  ULONG Index;
-  WCHAR Name[MAX_ADAPTER_NAME];
-} IP_ADAPTER_INDEX_MAP, *PIP_ADAPTER_INDEX_MAP;
-
-typedef struct _IP_INTERFACE_INFO {
-  LONG                 NumAdapters;
-  IP_ADAPTER_INDEX_MAP Adapter[1];
-} IP_INTERFACE_INFO, *PIP_INTERFACE_INFO;
-
 
 typedef struct _EXCEPTION_RECORD {
   DWORD                    ExceptionCode;
@@ -2010,12 +1855,29 @@ typedef struct _SYSTEM_HANDLE
 }
 SYSTEM_HANDLE;
 
+typedef struct _SYSTEM_HANDLE64
+{
+    DWORD    dwProcessId;
+    BYTE     bObjectType;
+    BYTE     bFlags;
+    WORD     wValue;
+    ULONG64    pAddress;
+    DWORD    GrantedAccess;
+} SYSTEM_HANDLE64;
+
 
 typedef struct _SYSTEM_HANDLE_INFORMATION
 {
     ULONG HandleCount;
     SYSTEM_HANDLE Handles[1];
 } SYSTEM_HANDLE_INFORMATION, *PSYSTEM_HANDLE_INFORMATION;
+
+typedef struct _SYSTEM_HANDLE_INFORMATION64
+{
+    ULONG HandleCount;
+    SYSTEM_HANDLE64 Handles[1];
+} SYSTEM_HANDLE_INFORMATION64, *PSYSTEM_HANDLE_INFORMATION64;
+
 
 typedef struct __PUBLIC_OBJECT_TYPE_INFORMATION {
     UNICODE_STRING TypeName;

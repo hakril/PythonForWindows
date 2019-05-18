@@ -1,0 +1,4 @@
+#define SYMSEARCH_MASKOBJS      0x01    // used internally to implement other APIs
+#define SYMSEARCH_RECURSE       0X02    // recurse scopes
+#define SYMSEARCH_GLOBALSONLY   0X04    // search only for global symbols
+#define SYMSEARCH_ALLITEMS      0X08    // search for everything in the pdb, not just normal scoped symbols

@@ -174,3 +174,11 @@ NTSTATUS WINAPI NtAlpcImpersonateClientOfPort(
     _In_ PPORT_MESSAGE Message,
     _In_ PVOID Flags
     );
+
+// Not documented
+NTSTATUS WINAPI TpCallbackSendAlpcMessageOnCompletion(
+    _In_ HANDLE TpHandle,
+    _In_ HANDLE PortHandle,
+    _In_ ULONG Flags,
+    _In_opt_ PPORT_MESSAGE SendMessage,
+);

@@ -2,6 +2,7 @@ import ctypes
 import functools
 
 import windows.generated_def as gdef
+from .error import ExportNotFound
 
 # Utils
 def is_implemented(apiproxy):
@@ -23,14 +24,6 @@ def resolve(apiproxy):
     apiproxy.force_resolution()
     func = ctypes.WinDLL(dll_name)[func_name]
     return ctypes.cast(func, gdef.PVOID).value
-
-
-# ApiProxy stuff
-class ExportNotFound(RuntimeError):
-        def __init__(self, func_name, api_name):
-            self.func_name = func_name
-            self.api_name = api_name
-            super(ExportNotFound, self).__init__("Function {0} not found into {1}".format(func_name, api_name))
 
 
 class NeededParameterType(object):

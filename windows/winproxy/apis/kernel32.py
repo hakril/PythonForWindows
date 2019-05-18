@@ -427,11 +427,15 @@ def DeviceIoControl(hDevice, dwIoControlCode, lpInBuffer, nInBufferSize=None, lp
 # Wow64
 
 @Kernel32Proxy()
-def Wow64DisableWow64FsRedirection(OldValue):
+def Wow64DisableWow64FsRedirection(OldValue=None):
+    if OldValue is None:
+        OldValue = gdef.PVOID()
     return Wow64DisableWow64FsRedirection.ctypes_function(OldValue)
 
 @Kernel32Proxy()
-def Wow64RevertWow64FsRedirection(OldValue):
+def Wow64RevertWow64FsRedirection(OldValue=None):
+    if OldValue is None:
+        OldValue = gdef.PVOID()
     return Wow64RevertWow64FsRedirection.ctypes_function(OldValue)
 
 @Kernel32Proxy()
@@ -711,6 +715,10 @@ def ConnectNamedPipe(hNamedPipe, lpOverlapped):
 def SetNamedPipeHandleState(hNamedPipe, lpMode, lpMaxCollectionCount, lpCollectDataTimeout):
     return SetNamedPipeHandleState.ctypes_function(hNamedPipe, lpMode, lpMaxCollectionCount, lpCollectDataTimeout)
 
+@Kernel32Proxy()
+def CreatePipe(hReadPipe, hWritePipe, lpPipeAttributes, nSize):
+    return CreatePipe.ctypes_function(hReadPipe, hWritePipe, lpPipeAttributes, nSize)
+
 # Firmware
 
 @Kernel32Proxy()
@@ -730,3 +738,21 @@ def GetFirmwareEnvironmentVariableExW(lpName, lpGuid, pBuffer, nSize, pdwAttribu
     return GetFirmwareEnvironmentVariableExW.ctypes_function(lpName, lpGuid, pBuffer, nSize, pdwAttribubutes)
 
 #####
+
+# Time
+
+@Kernel32Proxy(error_check=fail_on_zero)
+def FileTimeToSystemTime(lpFileTime, lpSystemTime):
+   return FileTimeToSystemTime.ctypes_function(lpFileTime, lpSystemTime)
+
+@Kernel32Proxy(error_check=fail_on_zero)
+def SystemTimeToFileTime(lpSystemTime, lpFileTime):
+   return SystemTimeToFileTime.ctypes_function(lpSystemTime, lpFileTime)
+
+@Kernel32Proxy(error_check=None)
+def GetSystemTime(lpSystemTime):
+   return GetSystemTime.ctypes_function(lpSystemTime)
+
+@Kernel32Proxy(error_check=None)
+def GetSystemTimeAsFileTime(lpSystemTimeAsFileTime):
+   return GetSystemTimeAsFileTime.ctypes_function(lpSystemTimeAsFileTime)

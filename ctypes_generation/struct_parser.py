@@ -30,9 +30,7 @@ class WinStructParser(Parser):
             # Not a name. Anon union/struct ?
             subdef_type = self.next_token() # union / struct
             if type(self.peek()) == OpenBracketToken:
-                print("<{0}> ANON START WITH <{1}>".format(self._yolo, self.peek()))
                 sub = self.parse_winstruct(anonymous=True, anon_type=subdef_type)
-                print("Anon is <{0}>".format(sub))
                 return (sub, NameToken(None), 1)
             else:
                 # struct _MYNAME_ -> no anon juste the name of the struct.
@@ -137,9 +135,8 @@ class WinStructParser(Parser):
             # Anonymous structure def: check if we are ina typedef
             if not is_typedef and not anonymous:
                 raise ValueError("Anonymous structure/union not in a typedef")
-            struct_name = "anon"
+            struct_name = None
         self.assert_token_type(OpenBracketToken)
-        self._yolo = struct_name
 
         result = WinDefType(struct_name, self.pack)
         while type(self.peek()) != CloseBracketToken:
@@ -148,6 +145,10 @@ class WinStructParser(Parser):
         self.assert_token_type(CloseBracketToken)
         if is_typedef:
             self.parse_typedef(result)
+        elif anonymous:
+            if type(self.peek()) == NameToken:
+                result.add_typedef(self.assert_token_type(NameToken).value)
+            self.assert_token_type(SemiColonToken)
         else:
             self.assert_token_type(SemiColonToken)
         return result

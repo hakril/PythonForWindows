@@ -1,0 +1,62 @@
+DWORD WINAPI GetExtendedTcpTable(
+  _Out_    PVOID pTcpTable,
+  _Inout_  PDWORD pdwSize,
+  _In_     BOOL bOrder,
+  _In_     ULONG ulAf,
+  _In_     TCP_TABLE_CLASS TableClass,
+  _In_     ULONG Reserved
+);
+
+DWORD WINAPI GetExtendedUdpTable(
+  _Out_    PVOID pUdpTable,
+  _Inout_  PDWORD pdwSize,
+  _In_     BOOL bOrder,
+  _In_     ULONG ulAf,
+  _In_     UDP_TABLE_CLASS TableClass,
+  _In_     ULONG Reserved
+);
+
+DWORD WINAPI SetTcpEntry(
+  _In_  PMIB_TCPROW pTcpRow
+);
+
+
+DWORD DnsGetCacheDataTable(
+    PDNS_CACHE_ENTRY *DnsEntries
+);
+
+
+VOID WINAPI DnsFree(
+    _In_ PVOID pData,
+    _In_ DNS_FREE_TYPE FreeType
+);
+
+
+DNS_STATUS DnsQuery_A(
+  PCSTR       pszName,
+  WORD        wType,
+  DWORD       Options,
+  PVOID       pExtra,
+  PDNS_RECORDA *ppQueryResults,
+  PVOID       *pReserved
+);
+
+
+DNS_STATUS DnsQuery_W(
+  PCWSTR      pszName,
+  WORD        wType,
+  DWORD       Options,
+  PVOID       pExtra,
+  PDNS_RECORDW *ppQueryResults,
+  PVOID       *pReserved
+);
+
+
+// DNS_STATUS DnsQuery_UTF8(
+//   PCSTR       pszName,
+//   WORD        wType,
+//   DWORD       Options,
+//   PVOID       pExtra,
+//   PDNS_RECORD *ppQueryResults,
+//   PVOID       *pReserved
+// );

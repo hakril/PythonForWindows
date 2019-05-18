@@ -1,0 +1,114 @@
+//
+// Enable flags for Kernel Events on Win7 and above
+//
+#define EVENT_TRACE_FLAG_DISPATCHER         0x00000800  // scheduler (ReadyThread)
+#define EVENT_TRACE_FLAG_VIRTUAL_ALLOC      0x00004000  // VM operations
+
+//
+// Enable flags for Kernel Events on Win8 and above
+//
+#define EVENT_TRACE_FLAG_VAMAP              0x00008000  // map/unmap (excluding images)
+#define EVENT_TRACE_FLAG_NO_SYSCONFIG       0x10000000  // Do not do sys config rundown
+
+//
+// Pre-defined Enable flags for everybody else
+//
+#define EVENT_TRACE_FLAG_EXTENSION          0x80000000  // Indicates more flags
+#define EVENT_TRACE_FLAG_FORWARD_WMI        0x40000000  // Can forward to WMI
+#define EVENT_TRACE_FLAG_ENABLE_RESERVE     0x20000000  // Reserved
+
+//
+// Logger Mode flags
+//
+#define EVENT_TRACE_FILE_MODE_NONE          0x00000000  // Logfile is off
+#define EVENT_TRACE_FILE_MODE_SEQUENTIAL    0x00000001  // Log sequentially
+#define EVENT_TRACE_FILE_MODE_CIRCULAR      0x00000002  // Log in circular manner
+#define EVENT_TRACE_FILE_MODE_APPEND        0x00000004  // Append sequential log
+
+#define EVENT_TRACE_REAL_TIME_MODE          0x00000100  // Real time mode on
+#define EVENT_TRACE_DELAY_OPEN_FILE_MODE    0x00000200  // Delay opening file
+#define EVENT_TRACE_BUFFERING_MODE          0x00000400  // Buffering mode only
+#define EVENT_TRACE_PRIVATE_LOGGER_MODE     0x00000800  // Process Private Logger
+#define EVENT_TRACE_ADD_HEADER_MODE         0x00001000  // Add a logfile header
+
+#define EVENT_TRACE_USE_GLOBAL_SEQUENCE     0x00004000  // Use global sequence no.
+#define EVENT_TRACE_USE_LOCAL_SEQUENCE      0x00008000  // Use local sequence no.
+
+#define EVENT_TRACE_RELOG_MODE              0x00010000  // Relogger
+
+#define EVENT_TRACE_USE_PAGED_MEMORY        0x01000000  // Use pageable buffers
+
+//
+// Logger Mode flags on XP and above
+//
+
+#define EVENT_TRACE_FILE_MODE_NEWFILE       0x00000008  // Auto-switch log file
+#define EVENT_TRACE_FILE_MODE_PREALLOCATE   0x00000020  // Pre-allocate mode
+
+
+//
+// ControlTrace Codes
+//
+
+#define EVENT_TRACE_CONTROL_QUERY           0
+#define EVENT_TRACE_CONTROL_STOP            1
+#define EVENT_TRACE_CONTROL_UPDATE          2
+
+//
+// Flush ControlTrace Codes for XP and above
+//
+
+#define EVENT_TRACE_CONTROL_FLUSH           3       // Flushes all the buffers
+
+
+//
+// Consumer API
+//
+
+#define PROCESS_TRACE_MODE_REAL_TIME                0x00000100
+#define PROCESS_TRACE_MODE_RAW_TIMESTAMP            0x00001000
+#define PROCESS_TRACE_MODE_EVENT_RECORD             0x10000000
+
+
+
+#define EVENT_HEADER_PROPERTY_XML               0x0001
+#define EVENT_HEADER_PROPERTY_FORWARDED_XML     0x0002
+#define EVENT_HEADER_PROPERTY_LEGACY_EVENTLOG   0x0004
+
+#define EVENT_HEADER_FLAG_EXTENDED_INFO         0x0001
+#define EVENT_HEADER_FLAG_PRIVATE_SESSION       0x0002
+#define EVENT_HEADER_FLAG_STRING_ONLY           0x0004
+#define EVENT_HEADER_FLAG_TRACE_MESSAGE         0x0008
+#define EVENT_HEADER_FLAG_NO_CPUTIME            0x0010
+#define EVENT_HEADER_FLAG_32_BIT_HEADER         0x0020
+#define EVENT_HEADER_FLAG_64_BIT_HEADER         0x0040
+#define EVENT_HEADER_FLAG_CLASSIC_HEADER        0x0100
+#define EVENT_HEADER_FLAG_PROCESSOR_INDEX       0x0200
+
+
+
+// Event types for system configuration records
+//
+#define EVENT_TRACE_TYPE_CONFIG_CPU             0x0A     // CPU Configuration
+#define EVENT_TRACE_TYPE_CONFIG_PHYSICALDISK    0x0B     // Physical Disk Configuration
+#define EVENT_TRACE_TYPE_CONFIG_LOGICALDISK     0x0C     // Logical Disk Configuration
+#define EVENT_TRACE_TYPE_CONFIG_NIC             0x0D     // NIC Configuration
+#define EVENT_TRACE_TYPE_CONFIG_VIDEO           0x0E     // Video Adapter Configuration
+#define EVENT_TRACE_TYPE_CONFIG_SERVICES        0x0F     // Active Services
+#define EVENT_TRACE_TYPE_CONFIG_POWER           0x10     // ACPI Configuration
+#define EVENT_TRACE_TYPE_CONFIG_NETINFO         0x11     // Networking Configuration
+
+//
+// Enable flags for SystemControlGuid only
+//
+#define EVENT_TRACE_FLAG_PROCESS            0x00000001  // process start & end
+#define EVENT_TRACE_FLAG_THREAD             0x00000002  // thread start & end
+#define EVENT_TRACE_FLAG_IMAGE_LOAD         0x00000004  // image load
+#define EVENT_TRACE_FLAG_DISK_IO            0x00000100  // physical disk IO
+#define EVENT_TRACE_FLAG_DISK_FILE_IO       0x00000200  // requires disk IO
+#define EVENT_TRACE_FLAG_MEMORY_PAGE_FAULTS 0x00001000  // all page faults
+#define EVENT_TRACE_FLAG_MEMORY_HARD_FAULTS 0x00002000  // hard faults only
+#define EVENT_TRACE_FLAG_NETWORK_TCPIP      0x00010000  // tcpip send & receive
+#define EVENT_TRACE_FLAG_REGISTRY           0x00020000  // registry calls
+#define EVENT_TRACE_FLAG_DBGPRINT           0x00040000  // DbgPrint(ex) Calls
+#define EVENT_TRACE_FLAG_VOLMGR             0x00200000  // volume manager traces

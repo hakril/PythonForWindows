@@ -50,9 +50,8 @@ typedef enum _EVT_VARIANT_TYPE {
 } EVT_VARIANT_TYPE;
 
 
-
-
-union _ANON_evt_variant_sub_union {
+typedef struct _EVT_VARIANT {
+  union {
     BOOL       BooleanVal;
     INT8       SByteVal;
     INT16      Int16Val;
@@ -72,7 +71,6 @@ union _ANON_evt_variant_sub_union {
     PBYTE      BinaryVal;
     PSID       SidVal;
     SIZE_T     SizeTVal;
-    EVT_HANDLE EvtHandleVal;
     BOOL       *BooleanArr;
     INT8       *SByteArr;
     INT16      *Int16Arr;
@@ -91,12 +89,10 @@ union _ANON_evt_variant_sub_union {
     LPSTR      *AnsiStringArr;
     PSID       *SidArr;
     SIZE_T     *SizeTArr;
+    EVT_HANDLE EvtHandleVal;
     LPCWSTR    XmlVal;
-    LPCWSTR*   XmlValArr;
-};
-
-typedef struct _EVT_VARIANT {
-  _ANON_evt_variant_sub_union _VARIANT_VALUE;
+    LPCWSTR    *XmlValArr;
+  };
   DWORD Count;
   DWORD Type;
 } EVT_VARIANT, *PEVT_VARIANT;

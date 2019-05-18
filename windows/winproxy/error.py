@@ -3,6 +3,15 @@ import ctypes
 import windows.generated_def as gdef
 from windows.generated_def.ntstatus import NtStatusException
 
+
+# ApiProxy stuff
+class ExportNotFound(RuntimeError):
+        def __init__(self, func_name, api_name):
+            self.func_name = func_name
+            self.api_name = api_name
+            super(ExportNotFound, self).__init__("Function {0} not found into {1}".format(func_name, api_name))
+
+
 # PFW Winproxy Exception type
 class WinproxyError(WindowsError):
     def __new__(cls, func_name, error_code=None):

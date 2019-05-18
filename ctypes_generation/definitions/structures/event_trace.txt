@@ -1,0 +1,308 @@
+typedef enum {
+  TraceGuidQueryList,
+  TraceGuidQueryInfo,
+  TraceGuidQueryProcess,
+  TraceStackTracingInfo,
+  TraceSystemTraceEnableFlagsInfo,
+  TraceSampledProfileIntervalInfo,
+  TraceProfileSourceConfigInfo,
+  TraceProfileSourceListInfo,
+  TracePmcEventListInfo,
+  TracePmcCounterListInfo,
+  TraceSetDisallowList,
+  TraceVersionInfo,
+  TraceGroupQueryList,
+  TraceGroupQueryInfo,
+  TraceDisallowListQuery,
+  TraceInfoReserved15, // Reserved, not on MSDN...
+  TracePeriodicCaptureStateListInfo,
+  TracePeriodicCaptureStateInfo,
+  TraceProviderBinaryTracking,
+  TraceMaxLoggersQuery,
+  MaxTraceSetInfoClass
+} TRACE_INFO_CLASS, TRACE_QUERY_INFO_CLASS;
+
+
+
+typedef struct _TRACE_GUID_INFO {
+  ULONG InstanceCount;
+  ULONG Reserved;
+} TRACE_GUID_INFO, *PTRACE_GUID_INFO;
+
+
+typedef struct _TRACE_PROVIDER_INSTANCE_INFO {
+  ULONG NextOffset;
+  ULONG EnableCount;
+  ULONG Pid;
+  ULONG Flags;
+} TRACE_PROVIDER_INSTANCE_INFO, *PTRACE_PROVIDER_INSTANCE_INFO;
+
+
+typedef struct _TRACE_ENABLE_INFO {
+  ULONG     IsEnabled;
+  UCHAR     Level;
+  UCHAR     Reserved1;
+  USHORT    LoggerId;
+  ULONG     EnableProperty;
+  ULONG     Reserved2;
+  ULONGLONG MatchAnyKeyword;
+  ULONGLONG MatchAllKeyword;
+} TRACE_ENABLE_INFO, *PTRACE_ENABLE_INFO;
+
+
+typedef struct _WNODE_HEADER {
+  ULONG BufferSize;
+  ULONG ProviderId;
+  union {
+    ULONG64 HistoricalContext;
+    struct {
+      ULONG Version;
+      ULONG Linkage;
+    };
+  };
+  union {
+    HANDLE        KernelHandle;
+    LARGE_INTEGER TimeStamp;
+  };
+  GUID  Guid;
+  ULONG ClientContext;
+  ULONG Flags;
+} WNODE_HEADER, *PWNODE_HEADER;
+
+typedef struct _EVENT_TRACE_PROPERTIES {
+  WNODE_HEADER Wnode;
+  ULONG        BufferSize;
+  ULONG        MinimumBuffers;
+  ULONG        MaximumBuffers;
+  ULONG        MaximumFileSize;
+  ULONG        LogFileMode;
+  ULONG        FlushTimer;
+  ULONG        EnableFlags;
+  LONG         AgeLimit;
+  ULONG        NumberOfBuffers;
+  ULONG        FreeBuffers;
+  ULONG        EventsLost;
+  ULONG        BuffersWritten;
+  ULONG        LogBuffersLost;
+  ULONG        RealTimeBuffersLost;
+  HANDLE       LoggerThreadId;
+  ULONG        LogFileNameOffset;
+  ULONG        LoggerNameOffset;
+} EVENT_TRACE_PROPERTIES, *PEVENT_TRACE_PROPERTIES;
+
+typedef struct _EVENT_TRACE_HEADER {
+  USHORT        Size;
+  union {
+    USHORT FieldTypeFlags;
+    struct {
+      BYTE HeaderType;
+      BYTE MarkerFlags;
+    };
+  };
+  union {
+    ULONG Version;
+    struct {
+      BYTE  Type;
+      BYTE  Level;
+      USHORT Version;
+    }Class;
+  };
+  ULONG         ThreadId;
+  ULONG         ProcessId;
+  LARGE_INTEGER TimeStamp;
+  union {
+    GUID      Guid;
+    ULONGLONG GuidPtr;
+  };
+  union {
+    struct {
+      ULONG KernelTime;
+      ULONG UserTime;
+    };
+    ULONG64 ProcessorTime;
+    struct {
+      ULONG ClientContext;
+      ULONG Flags;
+    };
+  };
+} EVENT_TRACE_HEADER, *PEVENT_TRACE_HEADER;
+
+typedef struct _ETW_BUFFER_CONTEXT {
+  union {
+    struct {
+      BYTE ProcessorNumber;
+      BYTE Alignment;
+    };
+    USHORT ProcessorIndex;
+  };
+  USHORT LoggerId;
+} ETW_BUFFER_CONTEXT, *PETW_BUFFER_CONTEXT;
+
+typedef struct _EVENT_TRACE {
+  EVENT_TRACE_HEADER Header;
+  ULONG              InstanceId;
+  ULONG              ParentInstanceId;
+  GUID               ParentGuid;
+  PVOID              MofData;
+  ULONG              MofLength;
+  union {
+    ULONG              ClientContext;
+    ETW_BUFFER_CONTEXT BufferContext;
+  };
+} EVENT_TRACE, *PEVENT_TRACE;
+
+
+typedef struct _TRACE_LOGFILE_HEADER {
+    ULONG           BufferSize;         // Logger buffer size in Kbytes
+    union {
+        ULONG       Version;            // Logger version
+        struct {
+            UCHAR   MajorVersion;
+            UCHAR   MinorVersion;
+            UCHAR   SubVersion;
+            UCHAR   SubMinorVersion;
+        } VersionDetail;
+    } DUMMYUNIONNAME;
+    ULONG           ProviderVersion;    // defaults to NT version
+    ULONG           NumberOfProcessors; // Number of Processors
+    LARGE_INTEGER   EndTime;            // Time when logger stops
+    ULONG           TimerResolution;    // assumes timer is constant!!!
+    ULONG           MaximumFileSize;    // Maximum in Mbytes
+    ULONG           LogFileMode;        // specify logfile mode
+    ULONG           BuffersWritten;     // used to file start of Circular File
+    union {
+        GUID LogInstanceGuid;           // For RealTime Buffer Delivery
+        struct {
+            ULONG   StartBuffers;       // Count of buffers written at start.
+            ULONG   PointerSize;        // Size of pointer type in bits
+            ULONG   EventsLost;         // Events losts during log session
+            ULONG   CpuSpeedInMHz;      // Cpu Speed in MHz
+        } DUMMYSTRUCTNAME;
+    } DUMMYUNIONNAME2;
+    LPWSTR          LoggerName;
+    LPWSTR          LogFileName;
+    TIME_ZONE_INFORMATION TimeZone;
+    LARGE_INTEGER   BootTime;
+    LARGE_INTEGER   PerfFreq;           // Reserved
+    LARGE_INTEGER   StartTime;          // Reserved
+    ULONG           ReservedFlags;      // ClockType
+    ULONG           BuffersLost;
+} TRACE_LOGFILE_HEADER, *PTRACE_LOGFILE_HEADER;
+
+
+typedef struct _EVENT_TRACE_LOGFILEA {
+  LPSTR                         LogFileName;
+  LPSTR                         LoggerName;
+  LONGLONG                      CurrentTime;
+  ULONG                         BuffersRead;
+  union {
+    ULONG LogFileMode;
+    ULONG ProcessTraceMode;
+  };
+  EVENT_TRACE                   CurrentEvent;
+  TRACE_LOGFILE_HEADER          LogfileHeader;
+  PEVENT_TRACE_BUFFER_CALLBACKA BufferCallback;
+  ULONG                         BufferSize;
+  ULONG                         Filled;
+  ULONG                         EventsLost;
+  union {
+    PEVENT_CALLBACK        EventCallback;
+    PEVENT_RECORD_CALLBACK EventRecordCallback;
+  };
+  ULONG                         IsKernelTrace;
+  PVOID                         Context;
+} EVENT_TRACE_LOGFILEA, *PEVENT_TRACE_LOGFILEA;
+
+
+typedef struct _EVENT_TRACE_LOGFILEW {
+  LPWSTR                        LogFileName;
+  LPWSTR                        LoggerName;
+  LONGLONG                      CurrentTime;
+  ULONG                         BuffersRead;
+  union {
+    ULONG LogFileMode;
+    ULONG ProcessTraceMode;
+  };
+  EVENT_TRACE                   CurrentEvent;
+  TRACE_LOGFILE_HEADER          LogfileHeader;
+  PEVENT_TRACE_BUFFER_CALLBACKW BufferCallback;
+  ULONG                         BufferSize;
+  ULONG                         Filled;
+  ULONG                         EventsLost;
+  union {
+    PEVENT_CALLBACK        EventCallback;
+    PEVENT_RECORD_CALLBACK EventRecordCallback;
+  };
+  ULONG                         IsKernelTrace;
+  PVOID                         Context;
+} EVENT_TRACE_LOGFILEW, *PEVENT_TRACE_LOGFILEW;
+
+
+typedef struct _EVENT_FILTER_DESCRIPTOR {
+  ULONGLONG Ptr;
+  ULONG     Size;
+  ULONG     Type;
+} EVENT_FILTER_DESCRIPTOR, *PEVENT_FILTER_DESCRIPTOR;
+
+
+
+typedef struct _ENABLE_TRACE_PARAMETERS {
+  ULONG                    Version;
+  ULONG                    EnableProperty;
+  ULONG                    ControlFlags;
+  GUID                     SourceId;
+  PEVENT_FILTER_DESCRIPTOR EnableFilterDesc;
+  ULONG                    FilterDescCount;
+} ENABLE_TRACE_PARAMETERS, *PENABLE_TRACE_PARAMETERS;
+
+typedef struct _EVENT_DESCRIPTOR {
+  USHORT    Id;
+  BYTE     Version;
+  BYTE     Channel;
+  BYTE     Level;
+  BYTE     Opcode;
+  USHORT    Task;
+  ULONGLONG Keyword;
+} EVENT_DESCRIPTOR, *PEVENT_DESCRIPTOR;
+
+typedef struct _EVENT_HEADER {
+  USHORT           Size;
+  USHORT           HeaderType;
+  USHORT           Flags;
+  USHORT           EventProperty;
+  ULONG            ThreadId;
+  ULONG            ProcessId;
+  LARGE_INTEGER    TimeStamp;
+  GUID             ProviderId;
+  EVENT_DESCRIPTOR EventDescriptor;
+  union {
+    struct {
+      ULONG KernelTime;
+      ULONG UserTime;
+    } DUMMYSTRUCTNAME;
+    ULONG64 ProcessorTime;
+  } DUMMYUNIONNAME;
+  GUID             ActivityId;
+} EVENT_HEADER, *PEVENT_HEADER;
+
+
+typedef struct _EVENT_HEADER_EXTENDED_DATA_ITEM {
+  USHORT    Reserved1;
+  USHORT    ExtType;
+  struct {
+    USHORT Linkage : 1;
+    USHORT Reserved2 : 15;
+  };
+  USHORT    DataSize;
+  ULONGLONG DataPtr;
+} EVENT_HEADER_EXTENDED_DATA_ITEM, *PEVENT_HEADER_EXTENDED_DATA_ITEM;
+
+typedef struct _EVENT_RECORD {
+  EVENT_HEADER                     EventHeader;
+  ETW_BUFFER_CONTEXT               BufferContext;
+  USHORT                           ExtendedDataCount;
+  USHORT                           UserDataLength;
+  PEVENT_HEADER_EXTENDED_DATA_ITEM ExtendedData;
+  PVOID                            UserData;
+  PVOID                            UserContext;
+} EVENT_RECORD, *PEVENT_RECORD;

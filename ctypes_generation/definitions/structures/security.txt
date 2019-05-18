@@ -263,3 +263,18 @@ typedef struct _SECURITY_DESCRIPTOR {
   PACL                        Sacl;
   PACL                        Dacl;
 } SECURITY_DESCRIPTOR, *PISECURITY_DESCRIPTOR;
+
+
+typedef struct _GENERIC_MAPPING {
+  ACCESS_MASK GenericRead;
+  ACCESS_MASK GenericWrite;
+  ACCESS_MASK GenericExecute;
+  ACCESS_MASK GenericAll;
+} GENERIC_MAPPING, *PGENERIC_MAPPING;
+
+
+typedef struct _PRIVILEGE_SET {
+  DWORD               PrivilegeCount;
+  DWORD               Control;
+  LUID_AND_ATTRIBUTES Privilege[ANYSIZE_ARRAY];
+} PRIVILEGE_SET, *PPRIVILEGE_SET;

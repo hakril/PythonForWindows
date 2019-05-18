@@ -34,6 +34,13 @@ NTSTATUS NtQueryValueKey(
   PULONG                      ResultLength
 );
 
+NTSTATUS NtQueryKey(
+  HANDLE                KeyHandle,
+  KEY_INFORMATION_CLASS KeyInformationClass,
+  PVOID                 KeyInformation,
+  ULONG                 Length,
+  PULONG                ResultLength
+);
 
 NTSTATUS NtEnumerateValueKey(
   HANDLE                      KeyHandle,

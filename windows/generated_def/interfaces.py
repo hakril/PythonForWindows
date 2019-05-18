@@ -57,21 +57,6 @@ class COMInterface(ctypes.c_void_p):
 
 
 
-class IBackgroundCopyCallback(COMInterface):
-    IID = generate_IID(0x97EA99C7, 0x0186, 0x4AD4, 0x8D, 0xF9, 0xC5, 0xB4, 0xE0, 0xED, 0x6B, 0x22, name="IBackgroundCopyCallback", strid="97EA99C7-0186-4AD4-8DF9-C5B4E0ED6B22")
-
-class IBackgroundCopyError(COMInterface):
-    IID = generate_IID(0x19C613A0, 0xFCB8, 0x4F28, 0x81, 0xAE, 0x89, 0x7C, 0x3D, 0x07, 0x8F, 0x81, name="IBackgroundCopyError", strid="19C613A0-FCB8-4F28-81AE-897C3D078F81")
-
-class IBackgroundCopyFile(COMInterface):
-    IID = generate_IID(0x01B7BD23, 0xFB88, 0x4A77, 0x84, 0x90, 0x58, 0x91, 0xD3, 0xE4, 0x65, 0x3A, name="IBackgroundCopyFile", strid="01B7BD23-FB88-4A77-8490-5891D3E4653A")
-
-class IBackgroundCopyJob(COMInterface):
-    IID = generate_IID(0x37668D37, 0x507E, 0x4160, 0x93, 0x16, 0x26, 0x30, 0x6D, 0x15, 0x0B, 0x12, name="IBackgroundCopyJob", strid="37668D37-507E-4160-9316-26306D150B12")
-
-class IBackgroundCopyManager(COMInterface):
-    IID = generate_IID(0x5CE34C0D, 0x0DC9, 0x4C1F, 0x89, 0x7C, 0xDA, 0xA1, 0xB7, 0x8C, 0xEE, 0x7C, name="IBackgroundCopyManager", strid="5CE34C0D-0DC9-4C1F-897C-DAA1B78CEE7C")
-
 class ICallFrame(COMInterface):
     IID = generate_IID(0xD573B4B0, 0x894E, 0x11D2, 0xB8, 0xB6, 0x00, 0xC0, 0x4F, 0xB9, 0x61, 0x8A, name="ICallFrame", strid="D573B4B0-894E-11D2-B8B6-00C04FB9618A")
 
@@ -87,17 +72,8 @@ class ICallInterceptor(COMInterface):
 class IDispatch(COMInterface):
     IID = generate_IID(0x00020400, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IDispatch", strid="00020400-0000-0000-C000-000000000046")
 
-class IEnumBackgroundCopyFiles(COMInterface):
-    IID = generate_IID(0xCA51E165, 0xC365, 0x424C, 0x8D, 0x41, 0x24, 0xAA, 0xA4, 0xFF, 0x3C, 0x40, name="IEnumBackgroundCopyFiles", strid="CA51E165-C365-424C-8D41-24AAA4FF3C40")
-
-class IEnumBackgroundCopyJobs(COMInterface):
-    IID = generate_IID(0x1AF4F612, 0x3B71, 0x466F, 0x8F, 0x58, 0x7B, 0x6F, 0x73, 0xAC, 0x57, 0xAD, name="IEnumBackgroundCopyJobs", strid="1AF4F612-3B71-466F-8F58-7B6F73AC57AD")
-
 class IEnumVARIANT(COMInterface):
     IID = generate_IID(0x00020404, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IEnumVARIANT", strid="00020404-0000-0000-C000-000000000046")
-
-class IEnumWbemClassObject(COMInterface):
-    IID = generate_IID(0x027947E1, 0xD731, 0x11CE, 0xA3, 0x57, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, name="IEnumWbemClassObject", strid="027947E1-D731-11CE-A357-000000000001")
 
 class INetFwPolicy2(COMInterface):
     IID = generate_IID(0x98325047, 0xC671, 0x4174, 0x8D, 0x81, 0xDE, 0xFC, 0xD3, 0xF0, 0x31, 0x86, name="INetFwPolicy2", strid="98325047-C671-4174-8D81-DEFCD3F03186")
@@ -110,6 +86,9 @@ class INetFwRule(COMInterface):
 
 class INetFwServiceRestriction(COMInterface):
     IID = generate_IID(0x8267BBE3, 0xF890, 0x491C, 0xB7, 0xB6, 0x2D, 0xB1, 0xEF, 0x0E, 0x5D, 0x2B, name="INetFwServiceRestriction", strid="8267BBE3-F890-491C-B7B6-2DB1EF0E5D2B")
+
+class IPersist(COMInterface):
+    IID = generate_IID(0x0000010C, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IPersist", strid="0000010C-0000-0000-C000-000000000046")
 
 class IPersistFile(COMInterface):
     IID = generate_IID(0x0000010B, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IPersistFile", strid="0000010B-0000-0000-C000-000000000046")
@@ -132,26 +111,35 @@ class ITypeLib(COMInterface):
 class IUnknown(COMInterface):
     IID = generate_IID(0x00000000, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IUnknown", strid="00000000-0000-0000-C000-000000000046")
 
-class IWbemCallResult(COMInterface):
-    IID = generate_IID(0x44ACA675, 0xE8FC, 0x11D0, 0xA0, 0x7C, 0x00, 0xC0, 0x4F, 0xB6, 0x88, 0x20, name="IWbemCallResult", strid="44ACA675-E8FC-11D0-A07C-00C04FB68820")
+class IBackgroundCopyCallback(COMInterface):
+    IID = generate_IID(0x97EA99C7, 0x0186, 0x4AD4, 0x8D, 0xF9, 0xC5, 0xB4, 0xE0, 0xED, 0x6B, 0x22, name="IBackgroundCopyCallback", strid="97EA99C7-0186-4AD4-8DF9-C5B4E0ED6B22")
 
-class IWbemClassObject(COMInterface):
-    IID = generate_IID(0xDC12A681, 0x737F, 0x11CF, 0x88, 0x4D, 0x00, 0xAA, 0x00, 0x4B, 0x2E, 0x24, name="IWbemClassObject", strid="DC12A681-737F-11CF-884D-00AA004B2E24")
+class IBackgroundCopyError(COMInterface):
+    IID = generate_IID(0x19C613A0, 0xFCB8, 0x4F28, 0x81, 0xAE, 0x89, 0x7C, 0x3D, 0x07, 0x8F, 0x81, name="IBackgroundCopyError", strid="19C613A0-FCB8-4F28-81AE-897C3D078F81")
 
-class IWbemContext(COMInterface):
-    IID = generate_IID(0x44ACA674, 0xE8FC, 0x11D0, 0xA0, 0x7C, 0x00, 0xC0, 0x4F, 0xB6, 0x88, 0x20, name="IWbemContext", strid="44ACA674-E8FC-11D0-A07C-00C04FB68820")
+class IBackgroundCopyFile(COMInterface):
+    IID = generate_IID(0x01B7BD23, 0xFB88, 0x4A77, 0x84, 0x90, 0x58, 0x91, 0xD3, 0xE4, 0x65, 0x3A, name="IBackgroundCopyFile", strid="01B7BD23-FB88-4A77-8490-5891D3E4653A")
 
-class IWbemLocator(COMInterface):
-    IID = generate_IID(0xDC12A687, 0x737F, 0x11CF, 0x88, 0x4D, 0x00, 0xAA, 0x00, 0x4B, 0x2E, 0x24, name="IWbemLocator", strid="DC12A687-737F-11CF-884D-00AA004B2E24")
+class IBackgroundCopyFile2(COMInterface):
+    IID = generate_IID(0x83E81B93, 0x0873, 0x474D, 0x8A, 0x8C, 0xF2, 0x01, 0x8B, 0x1A, 0x93, 0x9C, name="IBackgroundCopyFile2", strid="83E81B93-0873-474D-8A8C-F2018B1A939C")
 
-class IWbemObjectSink(COMInterface):
-    IID = generate_IID(0x7C857801, 0x7381, 0x11CF, 0x88, 0x4D, 0x00, 0xAA, 0x00, 0x4B, 0x2E, 0x24, name="IWbemObjectSink", strid="7C857801-7381-11CF-884D-00AA004B2E24")
+class IBackgroundCopyFile3(COMInterface):
+    IID = generate_IID(0x659CDEAA, 0x489E, 0x11D9, 0xA9, 0xCD, 0x00, 0x0D, 0x56, 0x96, 0x52, 0x51, name="IBackgroundCopyFile3", strid="659CDEAA-489E-11D9-A9CD-000D56965251")
 
-class IWbemQualifierSet(COMInterface):
-    IID = generate_IID(0xDC12A680, 0x737F, 0x11CF, 0x88, 0x4D, 0x00, 0xAA, 0x00, 0x4B, 0x2E, 0x24, name="IWbemQualifierSet", strid="DC12A680-737F-11CF-884D-00AA004B2E24")
+class IBackgroundCopyJob(COMInterface):
+    IID = generate_IID(0x37668D37, 0x507E, 0x4160, 0x93, 0x16, 0x26, 0x30, 0x6D, 0x15, 0x0B, 0x12, name="IBackgroundCopyJob", strid="37668D37-507E-4160-9316-26306D150B12")
 
-class IWbemServices(COMInterface):
-    IID = generate_IID(0x9556DC99, 0x828C, 0x11CF, 0xA3, 0x7E, 0x00, 0xAA, 0x00, 0x32, 0x40, 0xC7, name="IWbemServices", strid="9556DC99-828C-11CF-A37E-00AA003240C7")
+class IBackgroundCopyJob2(COMInterface):
+    IID = generate_IID(0x54B50739, 0x686F, 0x45EB, 0x9D, 0xFF, 0xD6, 0xA9, 0xA0, 0xFA, 0xA9, 0xAF, name="IBackgroundCopyJob2", strid="54B50739-686F-45EB-9DFF-D6A9A0FAA9AF")
+
+class IBackgroundCopyManager(COMInterface):
+    IID = generate_IID(0x5CE34C0D, 0x0DC9, 0x4C1F, 0x89, 0x7C, 0xDA, 0xA1, 0xB7, 0x8C, 0xEE, 0x7C, name="IBackgroundCopyManager", strid="5CE34C0D-0DC9-4C1F-897C-DAA1B78CEE7C")
+
+class IEnumBackgroundCopyFiles(COMInterface):
+    IID = generate_IID(0xCA51E165, 0xC365, 0x424C, 0x8D, 0x41, 0x24, 0xAA, 0xA4, 0xFF, 0x3C, 0x40, name="IEnumBackgroundCopyFiles", strid="CA51E165-C365-424C-8D41-24AAA4FF3C40")
+
+class IEnumBackgroundCopyJobs(COMInterface):
+    IID = generate_IID(0x1AF4F612, 0x3B71, 0x466F, 0x8F, 0x58, 0x7B, 0x6F, 0x73, 0xAC, 0x57, 0xAD, name="IEnumBackgroundCopyJobs", strid="1AF4F612-3B71-466F-8F58-7B6F73AC57AD")
 
 class IAction(COMInterface):
     IID = generate_IID(0xBAE54997, 0x48B1, 0x4CBE, 0x99, 0x65, 0xD6, 0xBE, 0x26, 0x3E, 0xBE, 0xA4, name="IAction", strid="BAE54997-48B1-4CBE-9965-D6BE263EBEA4")
@@ -225,144 +213,32 @@ class ITrigger(COMInterface):
 class ITriggerCollection(COMInterface):
     IID = generate_IID(0x85DF5081, 0x1B24, 0x4F32, 0x87, 0x8A, 0xD9, 0xD1, 0x4D, 0xF4, 0xCB, 0x77, name="ITriggerCollection", strid="85DF5081-1B24-4F32-878A-D9D14DF4CB77")
 
-IBackgroundCopyCallback._functions_ = {
-        # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
-        # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
-        # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
-        # JobTransferred -> pJob:*IBackgroundCopyJob
-        "JobTransferred": ctypes.WINFUNCTYPE(HRESULT, IBackgroundCopyJob)(3, "JobTransferred"),
-        # JobError -> pJob:*IBackgroundCopyJob, pError:*IBackgroundCopyError
-        "JobError": ctypes.WINFUNCTYPE(HRESULT, IBackgroundCopyJob, IBackgroundCopyError)(4, "JobError"),
-        # JobModification -> pJob:*IBackgroundCopyJob, dwReserved:DWORD
-        "JobModification": ctypes.WINFUNCTYPE(HRESULT, IBackgroundCopyJob, DWORD)(5, "JobModification"),
-    }
+class IWebBrowser2(COMInterface):
+    IID = generate_IID(0xD30C1661, 0xCDAF, 0x11D0, 0x8A, 0x3E, 0x00, 0xC0, 0x4F, 0xC9, 0xE2, 0x6E, name="IWebBrowser2", strid="D30C1661-CDAF-11D0-8A3E-00C04FC9E26E")
 
-IBackgroundCopyError._functions_ = {
-        # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
-        # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
-        # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
-        # GetError -> pContext:*BG_ERROR_CONTEXT, pCode:*HRESULT
-        "GetError": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_ERROR_CONTEXT), POINTER(HRESULT))(3, "GetError"),
-        # GetFile -> pVal:**IBackgroundCopyFile
-        "GetFile": ctypes.WINFUNCTYPE(HRESULT, POINTER(IBackgroundCopyFile))(4, "GetFile"),
-        # GetErrorDescription -> LanguageId:DWORD, pErrorDescription:*LPWSTR
-        "GetErrorDescription": ctypes.WINFUNCTYPE(HRESULT, DWORD, POINTER(LPWSTR))(5, "GetErrorDescription"),
-        # GetErrorContextDescription -> LanguageId:DWORD, pContextDescription:*LPWSTR
-        "GetErrorContextDescription": ctypes.WINFUNCTYPE(HRESULT, DWORD, POINTER(LPWSTR))(6, "GetErrorContextDescription"),
-        # GetProtocol -> pProtocol:*LPWSTR
-        "GetProtocol": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR))(7, "GetProtocol"),
-    }
+class IEnumWbemClassObject(COMInterface):
+    IID = generate_IID(0x027947E1, 0xD731, 0x11CE, 0xA3, 0x57, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, name="IEnumWbemClassObject", strid="027947E1-D731-11CE-A357-000000000001")
 
-IBackgroundCopyFile._functions_ = {
-        # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
-        # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
-        # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
-        # GetRemoteName -> pVal:*LPWSTR
-        "GetRemoteName": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR))(3, "GetRemoteName"),
-        # GetLocalName -> pVal:*LPWSTR
-        "GetLocalName": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR))(4, "GetLocalName"),
-        # GetProgress -> pVal:*BG_FILE_PROGRESS
-        "GetProgress": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_FILE_PROGRESS))(5, "GetProgress"),
-    }
+class IWbemCallResult(COMInterface):
+    IID = generate_IID(0x44ACA675, 0xE8FC, 0x11D0, 0xA0, 0x7C, 0x00, 0xC0, 0x4F, 0xB6, 0x88, 0x20, name="IWbemCallResult", strid="44ACA675-E8FC-11D0-A07C-00C04FB68820")
 
-IBackgroundCopyJob._functions_ = {
-        # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
-        # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
-        # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
-        # AddFileSet -> cFileCount:ULONG, pFileSet:*BG_FILE_INFO
-        "AddFileSet": ctypes.WINFUNCTYPE(HRESULT, ULONG, POINTER(BG_FILE_INFO))(3, "AddFileSet"),
-        # AddFile -> RemoteUrl:LPCWSTR, LocalName:LPCWSTR
-        "AddFile": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LPCWSTR)(4, "AddFile"),
-        # EnumFiles -> pEnum:**IEnumBackgroundCopyFiles
-        "EnumFiles": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumBackgroundCopyFiles))(5, "EnumFiles"),
-        # Suspend -> 
-        "Suspend": ctypes.WINFUNCTYPE(HRESULT)(6, "Suspend"),
-        # Resume -> 
-        "Resume": ctypes.WINFUNCTYPE(HRESULT)(7, "Resume"),
-        # Cancel -> 
-        "Cancel": ctypes.WINFUNCTYPE(HRESULT)(8, "Cancel"),
-        # Complete -> 
-        "Complete": ctypes.WINFUNCTYPE(HRESULT)(9, "Complete"),
-        # GetId -> pVal:*GUID
-        "GetId": ctypes.WINFUNCTYPE(HRESULT, POINTER(GUID))(10, "GetId"),
-        # GetType -> pVal:*BG_JOB_TYPE
-        "GetType": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_JOB_TYPE))(11, "GetType"),
-        # GetProgress -> pVal:*BG_JOB_PROGRESS
-        "GetProgress": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_JOB_PROGRESS))(12, "GetProgress"),
-        # GetTimes -> pVal:*BG_JOB_TIMES
-        "GetTimes": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_JOB_TIMES))(13, "GetTimes"),
-        # GetState -> pVal:*BG_JOB_STATE
-        "GetState": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_JOB_STATE))(14, "GetState"),
-        # GetError -> ppError:**IBackgroundCopyError
-        "GetError": ctypes.WINFUNCTYPE(HRESULT, POINTER(IBackgroundCopyError))(15, "GetError"),
-        # GetOwner -> pVal:*LPWSTR
-        "GetOwner": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR))(16, "GetOwner"),
-        # SetDisplayName -> Val:LPCWSTR
-        "SetDisplayName": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(17, "SetDisplayName"),
-        # GetDisplayName -> pVal:*LPWSTR
-        "GetDisplayName": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR))(18, "GetDisplayName"),
-        # SetDescription -> Val:LPCWSTR
-        "SetDescription": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(19, "SetDescription"),
-        # GetDescription -> pVal:*LPWSTR
-        "GetDescription": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR))(20, "GetDescription"),
-        # SetPriority -> Val:BG_JOB_PRIORITY
-        "SetPriority": ctypes.WINFUNCTYPE(HRESULT, BG_JOB_PRIORITY)(21, "SetPriority"),
-        # GetPriority -> pVal:*BG_JOB_PRIORITY
-        "GetPriority": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_JOB_PRIORITY))(22, "GetPriority"),
-        # SetNotifyFlags -> Val:ULONG
-        "SetNotifyFlags": ctypes.WINFUNCTYPE(HRESULT, ULONG)(23, "SetNotifyFlags"),
-        # GetNotifyFlags -> pVal:*ULONG
-        "GetNotifyFlags": ctypes.WINFUNCTYPE(HRESULT, POINTER(ULONG))(24, "GetNotifyFlags"),
-        # SetNotifyInterface -> Val:*IUnknown
-        "SetNotifyInterface": ctypes.WINFUNCTYPE(HRESULT, IUnknown)(25, "SetNotifyInterface"),
-        # GetNotifyInterface -> pVal:**IUnknown
-        "GetNotifyInterface": ctypes.WINFUNCTYPE(HRESULT, POINTER(IUnknown))(26, "GetNotifyInterface"),
-        # SetMinimumRetryDelay -> Seconds:ULONG
-        "SetMinimumRetryDelay": ctypes.WINFUNCTYPE(HRESULT, ULONG)(27, "SetMinimumRetryDelay"),
-        # GetMinimumRetryDelay -> Seconds:*ULONG
-        "GetMinimumRetryDelay": ctypes.WINFUNCTYPE(HRESULT, POINTER(ULONG))(28, "GetMinimumRetryDelay"),
-        # SetNoProgressTimeout -> Seconds:ULONG
-        "SetNoProgressTimeout": ctypes.WINFUNCTYPE(HRESULT, ULONG)(29, "SetNoProgressTimeout"),
-        # GetNoProgressTimeout -> Seconds:*ULONG
-        "GetNoProgressTimeout": ctypes.WINFUNCTYPE(HRESULT, POINTER(ULONG))(30, "GetNoProgressTimeout"),
-        # GetErrorCount -> Errors:*ULONG
-        "GetErrorCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(ULONG))(31, "GetErrorCount"),
-        # SetProxySettings -> ProxyUsage:BG_JOB_PROXY_USAGE, ProxyList:*WCHAR, ProxyBypassList:*WCHAR
-        "SetProxySettings": ctypes.WINFUNCTYPE(HRESULT, BG_JOB_PROXY_USAGE, POINTER(WCHAR), POINTER(WCHAR))(32, "SetProxySettings"),
-        # GetProxySettings -> pProxyUsage:*BG_JOB_PROXY_USAGE, pProxyList:*LPWSTR, pProxyBypassList:*LPWSTR
-        "GetProxySettings": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_JOB_PROXY_USAGE), POINTER(LPWSTR), POINTER(LPWSTR))(33, "GetProxySettings"),
-        # TakeOwnership -> 
-        "TakeOwnership": ctypes.WINFUNCTYPE(HRESULT)(34, "TakeOwnership"),
-    }
+class IWbemClassObject(COMInterface):
+    IID = generate_IID(0xDC12A681, 0x737F, 0x11CF, 0x88, 0x4D, 0x00, 0xAA, 0x00, 0x4B, 0x2E, 0x24, name="IWbemClassObject", strid="DC12A681-737F-11CF-884D-00AA004B2E24")
 
-IBackgroundCopyManager._functions_ = {
-        # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
-        # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
-        # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
-        # CreateJob -> DisplayName:LPCWSTR, Type:BG_JOB_TYPE, pJobId:*GUID, ppJob:**IBackgroundCopyJob
-        "CreateJob": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, BG_JOB_TYPE, POINTER(GUID), POINTER(IBackgroundCopyJob))(3, "CreateJob"),
-        # GetJob -> jobID:REFGUID, ppJob:**IBackgroundCopyJob
-        "GetJob": ctypes.WINFUNCTYPE(HRESULT, REFGUID, POINTER(IBackgroundCopyJob))(4, "GetJob"),
-        # EnumJobs -> dwFlags:DWORD, ppEnum:**IEnumBackgroundCopyJobs
-        "EnumJobs": ctypes.WINFUNCTYPE(HRESULT, DWORD, POINTER(IEnumBackgroundCopyJobs))(5, "EnumJobs"),
-        # GetErrorDescription -> hResult:HRESULT, LanguageId:DWORD, pErrorDescription:*LPWSTR
-        "GetErrorDescription": ctypes.WINFUNCTYPE(HRESULT, HRESULT, DWORD, POINTER(LPWSTR))(6, "GetErrorDescription"),
-    }
+class IWbemContext(COMInterface):
+    IID = generate_IID(0x44ACA674, 0xE8FC, 0x11D0, 0xA0, 0x7C, 0x00, 0xC0, 0x4F, 0xB6, 0x88, 0x20, name="IWbemContext", strid="44ACA674-E8FC-11D0-A07C-00C04FB68820")
+
+class IWbemLocator(COMInterface):
+    IID = generate_IID(0xDC12A687, 0x737F, 0x11CF, 0x88, 0x4D, 0x00, 0xAA, 0x00, 0x4B, 0x2E, 0x24, name="IWbemLocator", strid="DC12A687-737F-11CF-884D-00AA004B2E24")
+
+class IWbemObjectSink(COMInterface):
+    IID = generate_IID(0x7C857801, 0x7381, 0x11CF, 0x88, 0x4D, 0x00, 0xAA, 0x00, 0x4B, 0x2E, 0x24, name="IWbemObjectSink", strid="7C857801-7381-11CF-884D-00AA004B2E24")
+
+class IWbemQualifierSet(COMInterface):
+    IID = generate_IID(0xDC12A680, 0x737F, 0x11CF, 0x88, 0x4D, 0x00, 0xAA, 0x00, 0x4B, 0x2E, 0x24, name="IWbemQualifierSet", strid="DC12A680-737F-11CF-884D-00AA004B2E24")
+
+class IWbemServices(COMInterface):
+    IID = generate_IID(0x9556DC99, 0x828C, 0x11CF, 0xA3, 0x7E, 0x00, 0xAA, 0x00, 0x32, 0x40, 0xC7, name="IWbemServices", strid="9556DC99-828C-11CF-A37E-00AA003240C7")
 
 ICallFrame._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
@@ -471,44 +347,6 @@ IDispatch._functions_ = {
         "Invoke": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT))(6, "Invoke"),
     }
 
-IEnumBackgroundCopyFiles._functions_ = {
-        # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
-        # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
-        # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
-        # Next -> celt:ULONG, rgelt:**IBackgroundCopyFile, pceltFetched:*ULONG
-        "Next": ctypes.WINFUNCTYPE(HRESULT, ULONG, POINTER(IBackgroundCopyFile), POINTER(ULONG))(3, "Next"),
-        # Skip -> celt:ULONG
-        "Skip": ctypes.WINFUNCTYPE(HRESULT, ULONG)(4, "Skip"),
-        # Reset -> 
-        "Reset": ctypes.WINFUNCTYPE(HRESULT)(5, "Reset"),
-        # Clone -> ppenum:**IEnumBackgroundCopyFiles
-        "Clone": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumBackgroundCopyFiles))(6, "Clone"),
-        # GetCount -> puCount:*ULONG
-        "GetCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(ULONG))(7, "GetCount"),
-    }
-
-IEnumBackgroundCopyJobs._functions_ = {
-        # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
-        # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
-        # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
-        # Next -> celt:ULONG, rgelt:**IBackgroundCopyJob, pceltFetched:*ULONG
-        "Next": ctypes.WINFUNCTYPE(HRESULT, ULONG, POINTER(IBackgroundCopyJob), POINTER(ULONG))(3, "Next"),
-        # Skip -> celt:ULONG
-        "Skip": ctypes.WINFUNCTYPE(HRESULT, ULONG)(4, "Skip"),
-        # Reset -> 
-        "Reset": ctypes.WINFUNCTYPE(HRESULT)(5, "Reset"),
-        # Clone -> ppenum:**IEnumBackgroundCopyJobs
-        "Clone": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumBackgroundCopyJobs))(6, "Clone"),
-        # GetCount -> puCount:*ULONG
-        "GetCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(ULONG))(7, "GetCount"),
-    }
-
 IEnumVARIANT._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -524,25 +362,6 @@ IEnumVARIANT._functions_ = {
         "Reset": ctypes.WINFUNCTYPE(HRESULT)(5, "Reset"),
         # Clone -> ppEnum:**IEnumVARIANT
         "Clone": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumVARIANT))(6, "Clone"),
-    }
-
-IEnumWbemClassObject._functions_ = {
-        # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
-        # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
-        # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
-        # Reset -> 
-        "Reset": ctypes.WINFUNCTYPE(HRESULT)(3, "Reset"),
-        # Next -> lTimeout:LONG, uCount:ULONG, apObjects:**IWbemClassObject, puReturned:*ULONG
-        "Next": ctypes.WINFUNCTYPE(HRESULT, LONG, ULONG, POINTER(IWbemClassObject), POINTER(ULONG))(4, "Next"),
-        # NextAsync -> uCount:ULONG, pSink:*IWbemObjectSink
-        "NextAsync": ctypes.WINFUNCTYPE(HRESULT, ULONG, IWbemObjectSink)(5, "NextAsync"),
-        # Clone -> ppEnum:**IEnumWbemClassObject
-        "Clone": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumWbemClassObject))(6, "Clone"),
-        # Skip -> lTimeout:LONG, nCount:ULONG
-        "Skip": ctypes.WINFUNCTYPE(HRESULT, LONG, ULONG)(7, "Skip"),
     }
 
 INetFwPolicy2._functions_ = {
@@ -743,6 +562,17 @@ INetFwServiceRestriction._functions_ = {
         "ServiceRestricted": ctypes.WINFUNCTYPE(HRESULT, BSTR, BSTR, POINTER(VARIANT_BOOL))(8, "ServiceRestricted"),
         # get_Rules -> rules:**INetFwRules
         "get_Rules": ctypes.WINFUNCTYPE(HRESULT, POINTER(INetFwRules))(9, "get_Rules"),
+    }
+
+IPersist._functions_ = {
+        # QueryInterface -> riid:REFIID, ppvObject:**void
+        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        # AddRef -> 
+        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        # Release -> 
+        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        # GetClassID -> pClassID:*CLSID
+        "GetClassID": ctypes.WINFUNCTYPE(HRESULT, POINTER(CLSID))(3, "GetClassID"),
     }
 
 IPersistFile._functions_ = {
@@ -954,207 +784,316 @@ IUnknown._functions_ = {
         "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
     }
 
-IWbemCallResult._functions_ = {
+IBackgroundCopyCallback._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
         # AddRef -> 
         "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
         # Release -> 
         "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
-        # GetResultObject -> lTimeout:LONG, ppResultObject:**IWbemClassObject
-        "GetResultObject": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(IWbemClassObject))(3, "GetResultObject"),
-        # GetResultString -> lTimeout:LONG, pstrResultString:*BSTR
-        "GetResultString": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(BSTR))(4, "GetResultString"),
-        # GetResultServices -> lTimeout:LONG, ppServices:**IWbemServices
-        "GetResultServices": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(IWbemServices))(5, "GetResultServices"),
-        # GetCallStatus -> lTimeout:LONG, plStatus:*LONG
-        "GetCallStatus": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(LONG))(6, "GetCallStatus"),
+        # JobTransferred -> pJob:*IBackgroundCopyJob
+        "JobTransferred": ctypes.WINFUNCTYPE(HRESULT, IBackgroundCopyJob)(3, "JobTransferred"),
+        # JobError -> pJob:*IBackgroundCopyJob, pError:*IBackgroundCopyError
+        "JobError": ctypes.WINFUNCTYPE(HRESULT, IBackgroundCopyJob, IBackgroundCopyError)(4, "JobError"),
+        # JobModification -> pJob:*IBackgroundCopyJob, dwReserved:DWORD
+        "JobModification": ctypes.WINFUNCTYPE(HRESULT, IBackgroundCopyJob, DWORD)(5, "JobModification"),
     }
 
-IWbemClassObject._functions_ = {
+IBackgroundCopyError._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
         # AddRef -> 
         "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
         # Release -> 
         "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
-        # GetQualifierSet -> ppQualSet:**IWbemQualifierSet
-        "GetQualifierSet": ctypes.WINFUNCTYPE(HRESULT, POINTER(IWbemQualifierSet))(3, "GetQualifierSet"),
-        # Get -> wszName:LPCWSTR, lFlags:LONG, pVal:*VARIANT, pType:*CIMTYPE, plFlavor:*LONG
-        "Get": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LONG, POINTER(VARIANT), POINTER(CIMTYPE), POINTER(LONG))(4, "Get"),
-        # Put -> wszName:LPCWSTR, lFlags:LONG, pVal:*VARIANT, Type:CIMTYPE
-        "Put": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LONG, POINTER(VARIANT), CIMTYPE)(5, "Put"),
-        # Delete -> wszName:LPCWSTR
-        "Delete": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(6, "Delete"),
-        # GetNames -> wszQualifierName:LPCWSTR, lFlags:LONG, pQualifierVal:*VARIANT, pNames:**SAFEARRAY
-        "GetNames": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LONG, POINTER(VARIANT), POINTER(POINTER(SAFEARRAY)))(7, "GetNames"),
-        # BeginEnumeration -> lEnumFlags:LONG
-        "BeginEnumeration": ctypes.WINFUNCTYPE(HRESULT, LONG)(8, "BeginEnumeration"),
-        # Next -> lFlags:LONG, strName:*BSTR, pVal:*VARIANT, pType:*CIMTYPE, plFlavor:*LONG
-        "Next": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(BSTR), POINTER(VARIANT), POINTER(CIMTYPE), POINTER(LONG))(9, "Next"),
-        # EndEnumeration -> 
-        "EndEnumeration": ctypes.WINFUNCTYPE(HRESULT)(10, "EndEnumeration"),
-        # GetPropertyQualifierSet -> wszProperty:LPCWSTR, ppQualSet:**IWbemQualifierSet
-        "GetPropertyQualifierSet": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, POINTER(IWbemQualifierSet))(11, "GetPropertyQualifierSet"),
-        # Clone -> ppCopy:**IWbemClassObject
-        "Clone": ctypes.WINFUNCTYPE(HRESULT, POINTER(IWbemClassObject))(12, "Clone"),
-        # GetObjectText -> lFlags:LONG, pstrObjectText:*BSTR
-        "GetObjectText": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(BSTR))(13, "GetObjectText"),
-        # SpawnDerivedClass -> lFlags:LONG, ppNewClass:**IWbemClassObject
-        "SpawnDerivedClass": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(IWbemClassObject))(14, "SpawnDerivedClass"),
-        # SpawnInstance -> lFlags:LONG, ppNewInstance:**IWbemClassObject
-        "SpawnInstance": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(IWbemClassObject))(15, "SpawnInstance"),
-        # CompareTo -> lFlags:LONG, pCompareTo:*IWbemClassObject
-        "CompareTo": ctypes.WINFUNCTYPE(HRESULT, LONG, IWbemClassObject)(16, "CompareTo"),
-        # GetPropertyOrigin -> wszName:LPCWSTR, pstrClassName:*BSTR
-        "GetPropertyOrigin": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, POINTER(BSTR))(17, "GetPropertyOrigin"),
-        # InheritsFrom -> strAncestor:LPCWSTR
-        "InheritsFrom": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(18, "InheritsFrom"),
-        # GetMethod -> wszName:LPCWSTR, lFlags:LONG, ppInSignature:**IWbemClassObject, ppOutSignature:**IWbemClassObject
-        "GetMethod": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LONG, POINTER(IWbemClassObject), POINTER(IWbemClassObject))(19, "GetMethod"),
-        # PutMethod -> wszName:LPCWSTR, lFlags:LONG, pInSignature:*IWbemClassObject, pOutSignature:*IWbemClassObject
-        "PutMethod": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LONG, IWbemClassObject, IWbemClassObject)(20, "PutMethod"),
-        # DeleteMethod -> wszName:LPCWSTR
-        "DeleteMethod": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(21, "DeleteMethod"),
-        # BeginMethodEnumeration -> lEnumFlags:LONG
-        "BeginMethodEnumeration": ctypes.WINFUNCTYPE(HRESULT, LONG)(22, "BeginMethodEnumeration"),
-        # NextMethod -> lFlags:LONG, pstrName:*BSTR, ppInSignature:**IWbemClassObject, ppOutSignature:**IWbemClassObject
-        "NextMethod": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(BSTR), POINTER(IWbemClassObject), POINTER(IWbemClassObject))(23, "NextMethod"),
-        # EndMethodEnumeration -> 
-        "EndMethodEnumeration": ctypes.WINFUNCTYPE(HRESULT)(24, "EndMethodEnumeration"),
-        # GetMethodQualifierSet -> wszMethod:LPCWSTR, ppQualSet:**IWbemQualifierSet
-        "GetMethodQualifierSet": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, POINTER(IWbemQualifierSet))(25, "GetMethodQualifierSet"),
-        # GetMethodOrigin -> wszMethodName:LPCWSTR, pstrClassName:*BSTR
-        "GetMethodOrigin": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, POINTER(BSTR))(26, "GetMethodOrigin"),
+        # GetError -> pContext:*BG_ERROR_CONTEXT, pCode:*HRESULT
+        "GetError": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_ERROR_CONTEXT), POINTER(HRESULT))(3, "GetError"),
+        # GetFile -> pVal:**IBackgroundCopyFile
+        "GetFile": ctypes.WINFUNCTYPE(HRESULT, POINTER(IBackgroundCopyFile))(4, "GetFile"),
+        # GetErrorDescription -> LanguageId:DWORD, pErrorDescription:*LPWSTR
+        "GetErrorDescription": ctypes.WINFUNCTYPE(HRESULT, DWORD, POINTER(LPWSTR))(5, "GetErrorDescription"),
+        # GetErrorContextDescription -> LanguageId:DWORD, pContextDescription:*LPWSTR
+        "GetErrorContextDescription": ctypes.WINFUNCTYPE(HRESULT, DWORD, POINTER(LPWSTR))(6, "GetErrorContextDescription"),
+        # GetProtocol -> pProtocol:*LPWSTR
+        "GetProtocol": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR))(7, "GetProtocol"),
     }
 
-IWbemContext._functions_ = {
+IBackgroundCopyFile._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
         # AddRef -> 
         "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
         # Release -> 
         "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
-        # Clone -> ppNewCopy:**IWbemContext
-        "Clone": ctypes.WINFUNCTYPE(HRESULT, POINTER(IWbemContext))(3, "Clone"),
-        # GetNames -> lFlags:LONG, pNames:**SAFEARRAY
-        "GetNames": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(POINTER(SAFEARRAY)))(4, "GetNames"),
-        # BeginEnumeration -> lFlags:LONG
-        "BeginEnumeration": ctypes.WINFUNCTYPE(HRESULT, LONG)(5, "BeginEnumeration"),
-        # Next -> lFlags:LONG, pstrName:*BSTR, pValue:*VARIANT
-        "Next": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(BSTR), POINTER(VARIANT))(6, "Next"),
-        # EndEnumeration -> 
-        "EndEnumeration": ctypes.WINFUNCTYPE(HRESULT)(7, "EndEnumeration"),
-        # SetValue -> wszName:LPCWSTR, lFlags:LONG, pValue:*VARIANT
-        "SetValue": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LONG, POINTER(VARIANT))(8, "SetValue"),
-        # GetValue -> wszName:LPCWSTR, lFlags:LONG, pValue:*VARIANT
-        "GetValue": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LONG, POINTER(VARIANT))(9, "GetValue"),
-        # DeleteValue -> wszName:LPCWSTR, lFlags:LONG
-        "DeleteValue": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LONG)(10, "DeleteValue"),
-        # DeleteAll -> 
-        "DeleteAll": ctypes.WINFUNCTYPE(HRESULT)(11, "DeleteAll"),
+        # GetRemoteName -> pVal:*LPWSTR
+        "GetRemoteName": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR))(3, "GetRemoteName"),
+        # GetLocalName -> pVal:*LPWSTR
+        "GetLocalName": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR))(4, "GetLocalName"),
+        # GetProgress -> pVal:*BG_FILE_PROGRESS
+        "GetProgress": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_FILE_PROGRESS))(5, "GetProgress"),
     }
 
-IWbemLocator._functions_ = {
+IBackgroundCopyFile2._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
         # AddRef -> 
         "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
         # Release -> 
         "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
-        # ConnectServer -> strNetworkResource:BSTR, strUser:BSTR, strPassword:BSTR, strLocale:BSTR, lSecurityFlags:LONG, strAuthority:BSTR, pCtx:*IWbemContext, ppNamespace:**IWbemServices
-        "ConnectServer": ctypes.WINFUNCTYPE(HRESULT, BSTR, BSTR, BSTR, BSTR, LONG, BSTR, IWbemContext, POINTER(IWbemServices))(3, "ConnectServer"),
+        # GetRemoteName -> pVal:*LPWSTR
+        "GetRemoteName": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR))(3, "GetRemoteName"),
+        # GetLocalName -> pVal:*LPWSTR
+        "GetLocalName": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR))(4, "GetLocalName"),
+        # GetProgress -> pVal:*BG_FILE_PROGRESS
+        "GetProgress": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_FILE_PROGRESS))(5, "GetProgress"),
+        # GetFileRanges -> RangeCount:*DWORD, Ranges:**BG_FILE_RANGE
+        "GetFileRanges": ctypes.WINFUNCTYPE(HRESULT, POINTER(DWORD), POINTER(POINTER(BG_FILE_RANGE)))(6, "GetFileRanges"),
+        # SetRemoteName -> Val:LPCWSTR
+        "SetRemoteName": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(7, "SetRemoteName"),
     }
 
-IWbemObjectSink._functions_ = {
+IBackgroundCopyFile3._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
         # AddRef -> 
         "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
         # Release -> 
         "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
-        # Indicate -> lObjectCount:LONG, apObjArray:**IWbemClassObject
-        "Indicate": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(IWbemClassObject))(3, "Indicate"),
-        # SetStatus -> lFlags:LONG, hResult:HRESULT, strParam:BSTR, pObjParam:*IWbemClassObject
-        "SetStatus": ctypes.WINFUNCTYPE(HRESULT, LONG, HRESULT, BSTR, IWbemClassObject)(4, "SetStatus"),
+        # GetRemoteName -> pVal:*LPWSTR
+        "GetRemoteName": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR))(3, "GetRemoteName"),
+        # GetLocalName -> pVal:*LPWSTR
+        "GetLocalName": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR))(4, "GetLocalName"),
+        # GetProgress -> pVal:*BG_FILE_PROGRESS
+        "GetProgress": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_FILE_PROGRESS))(5, "GetProgress"),
+        # GetFileRanges -> RangeCount:*DWORD, Ranges:**BG_FILE_RANGE
+        "GetFileRanges": ctypes.WINFUNCTYPE(HRESULT, POINTER(DWORD), POINTER(POINTER(BG_FILE_RANGE)))(6, "GetFileRanges"),
+        # SetRemoteName -> Val:LPCWSTR
+        "SetRemoteName": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(7, "SetRemoteName"),
+        # GetTemporaryName -> pFilename:*LPWSTR
+        "GetTemporaryName": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR))(8, "GetTemporaryName"),
+        # SetValidationState -> state:BOOL
+        "SetValidationState": ctypes.WINFUNCTYPE(HRESULT, BOOL)(9, "SetValidationState"),
+        # GetValidationState -> pState:*BOOL
+        "GetValidationState": ctypes.WINFUNCTYPE(HRESULT, POINTER(BOOL))(10, "GetValidationState"),
+        # IsDownloadedFromPeer -> pVal:*BOOL
+        "IsDownloadedFromPeer": ctypes.WINFUNCTYPE(HRESULT, POINTER(BOOL))(11, "IsDownloadedFromPeer"),
     }
 
-IWbemQualifierSet._functions_ = {
+IBackgroundCopyJob._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
         # AddRef -> 
         "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
         # Release -> 
         "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
-        # Get -> wszName:LPCWSTR, lFlags:LONG, pVal:*VARIANT, plFlavor:*LONG
-        "Get": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LONG, POINTER(VARIANT), POINTER(LONG))(3, "Get"),
-        # Put -> wszName:LPCWSTR, pVal:*VARIANT, lFlavor:LONG
-        "Put": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, POINTER(VARIANT), LONG)(4, "Put"),
-        # Delete -> wszName:LPCWSTR
-        "Delete": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(5, "Delete"),
-        # GetNames -> lFlags:LONG, pNames:**SAFEARRAY
-        "GetNames": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(POINTER(SAFEARRAY)))(6, "GetNames"),
-        # BeginEnumeration -> lFlags:LONG
-        "BeginEnumeration": ctypes.WINFUNCTYPE(HRESULT, LONG)(7, "BeginEnumeration"),
-        # Next -> lFlags:LONG, pstrName:*BSTR, pVal:*VARIANT, plFlavor:*LONG
-        "Next": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(BSTR), POINTER(VARIANT), POINTER(LONG))(8, "Next"),
-        # EndEnumeration -> 
-        "EndEnumeration": ctypes.WINFUNCTYPE(HRESULT)(9, "EndEnumeration"),
+        # AddFileSet -> cFileCount:ULONG, pFileSet:*BG_FILE_INFO
+        "AddFileSet": ctypes.WINFUNCTYPE(HRESULT, ULONG, POINTER(BG_FILE_INFO))(3, "AddFileSet"),
+        # AddFile -> RemoteUrl:LPCWSTR, LocalName:LPCWSTR
+        "AddFile": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LPCWSTR)(4, "AddFile"),
+        # EnumFiles -> pEnum:**IEnumBackgroundCopyFiles
+        "EnumFiles": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumBackgroundCopyFiles))(5, "EnumFiles"),
+        # Suspend -> 
+        "Suspend": ctypes.WINFUNCTYPE(HRESULT)(6, "Suspend"),
+        # Resume -> 
+        "Resume": ctypes.WINFUNCTYPE(HRESULT)(7, "Resume"),
+        # Cancel -> 
+        "Cancel": ctypes.WINFUNCTYPE(HRESULT)(8, "Cancel"),
+        # Complete -> 
+        "Complete": ctypes.WINFUNCTYPE(HRESULT)(9, "Complete"),
+        # GetId -> pVal:*GUID
+        "GetId": ctypes.WINFUNCTYPE(HRESULT, POINTER(GUID))(10, "GetId"),
+        # GetType -> pVal:*BG_JOB_TYPE
+        "GetType": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_JOB_TYPE))(11, "GetType"),
+        # GetProgress -> pVal:*BG_JOB_PROGRESS
+        "GetProgress": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_JOB_PROGRESS))(12, "GetProgress"),
+        # GetTimes -> pVal:*BG_JOB_TIMES
+        "GetTimes": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_JOB_TIMES))(13, "GetTimes"),
+        # GetState -> pVal:*BG_JOB_STATE
+        "GetState": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_JOB_STATE))(14, "GetState"),
+        # GetError -> ppError:**IBackgroundCopyError
+        "GetError": ctypes.WINFUNCTYPE(HRESULT, POINTER(IBackgroundCopyError))(15, "GetError"),
+        # GetOwner -> pVal:*LPWSTR
+        "GetOwner": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR))(16, "GetOwner"),
+        # SetDisplayName -> Val:LPCWSTR
+        "SetDisplayName": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(17, "SetDisplayName"),
+        # GetDisplayName -> pVal:*LPWSTR
+        "GetDisplayName": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR))(18, "GetDisplayName"),
+        # SetDescription -> Val:LPCWSTR
+        "SetDescription": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(19, "SetDescription"),
+        # GetDescription -> pVal:*LPWSTR
+        "GetDescription": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR))(20, "GetDescription"),
+        # SetPriority -> Val:BG_JOB_PRIORITY
+        "SetPriority": ctypes.WINFUNCTYPE(HRESULT, BG_JOB_PRIORITY)(21, "SetPriority"),
+        # GetPriority -> pVal:*BG_JOB_PRIORITY
+        "GetPriority": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_JOB_PRIORITY))(22, "GetPriority"),
+        # SetNotifyFlags -> Val:ULONG
+        "SetNotifyFlags": ctypes.WINFUNCTYPE(HRESULT, ULONG)(23, "SetNotifyFlags"),
+        # GetNotifyFlags -> pVal:*ULONG
+        "GetNotifyFlags": ctypes.WINFUNCTYPE(HRESULT, POINTER(ULONG))(24, "GetNotifyFlags"),
+        # SetNotifyInterface -> Val:*IUnknown
+        "SetNotifyInterface": ctypes.WINFUNCTYPE(HRESULT, IUnknown)(25, "SetNotifyInterface"),
+        # GetNotifyInterface -> pVal:**IUnknown
+        "GetNotifyInterface": ctypes.WINFUNCTYPE(HRESULT, POINTER(IUnknown))(26, "GetNotifyInterface"),
+        # SetMinimumRetryDelay -> Seconds:ULONG
+        "SetMinimumRetryDelay": ctypes.WINFUNCTYPE(HRESULT, ULONG)(27, "SetMinimumRetryDelay"),
+        # GetMinimumRetryDelay -> Seconds:*ULONG
+        "GetMinimumRetryDelay": ctypes.WINFUNCTYPE(HRESULT, POINTER(ULONG))(28, "GetMinimumRetryDelay"),
+        # SetNoProgressTimeout -> Seconds:ULONG
+        "SetNoProgressTimeout": ctypes.WINFUNCTYPE(HRESULT, ULONG)(29, "SetNoProgressTimeout"),
+        # GetNoProgressTimeout -> Seconds:*ULONG
+        "GetNoProgressTimeout": ctypes.WINFUNCTYPE(HRESULT, POINTER(ULONG))(30, "GetNoProgressTimeout"),
+        # GetErrorCount -> Errors:*ULONG
+        "GetErrorCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(ULONG))(31, "GetErrorCount"),
+        # SetProxySettings -> ProxyUsage:BG_JOB_PROXY_USAGE, ProxyList:*WCHAR, ProxyBypassList:*WCHAR
+        "SetProxySettings": ctypes.WINFUNCTYPE(HRESULT, BG_JOB_PROXY_USAGE, POINTER(WCHAR), POINTER(WCHAR))(32, "SetProxySettings"),
+        # GetProxySettings -> pProxyUsage:*BG_JOB_PROXY_USAGE, pProxyList:*LPWSTR, pProxyBypassList:*LPWSTR
+        "GetProxySettings": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_JOB_PROXY_USAGE), POINTER(LPWSTR), POINTER(LPWSTR))(33, "GetProxySettings"),
+        # TakeOwnership -> 
+        "TakeOwnership": ctypes.WINFUNCTYPE(HRESULT)(34, "TakeOwnership"),
     }
 
-IWbemServices._functions_ = {
+IBackgroundCopyJob2._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
         # AddRef -> 
         "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
         # Release -> 
         "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
-        # OpenNamespace -> strNamespace:BSTR, lFlags:LONG, pCtx:*IWbemContext, ppWorkingNamespace:**IWbemServices, ppResult:**IWbemCallResult
-        "OpenNamespace": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG, IWbemContext, POINTER(IWbemServices), POINTER(IWbemCallResult))(3, "OpenNamespace"),
-        # CancelAsyncCall -> pSink:*IWbemObjectSink
-        "CancelAsyncCall": ctypes.WINFUNCTYPE(HRESULT, IWbemObjectSink)(4, "CancelAsyncCall"),
-        # QueryObjectSink -> lFlags:LONG, ppResponseHandler:**IWbemObjectSink
-        "QueryObjectSink": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(IWbemObjectSink))(5, "QueryObjectSink"),
-        # GetObject -> strObjectPath:BSTR, lFlags:LONG, pCtx:*IWbemContext, ppObject:**IWbemClassObject, ppCallResult:**IWbemCallResult
-        "GetObject": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG, IWbemContext, POINTER(IWbemClassObject), POINTER(IWbemCallResult))(6, "GetObject"),
-        # GetObjectAsync -> strObjectPath:BSTR, lFlags:LONG, pCtx:*IWbemContext, pResponseHandler:*IWbemObjectSink
-        "GetObjectAsync": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG, IWbemContext, IWbemObjectSink)(7, "GetObjectAsync"),
-        # PutClass -> pObject:*IWbemClassObject, lFlags:LONG, pCtx:*IWbemContext, ppCallResult:**IWbemCallResult
-        "PutClass": ctypes.WINFUNCTYPE(HRESULT, IWbemClassObject, LONG, IWbemContext, POINTER(IWbemCallResult))(8, "PutClass"),
-        # PutClassAsync -> pObject:*IWbemClassObject, lFlags:LONG, pCtx:*IWbemContext, pResponseHandler:*IWbemObjectSink
-        "PutClassAsync": ctypes.WINFUNCTYPE(HRESULT, IWbemClassObject, LONG, IWbemContext, IWbemObjectSink)(9, "PutClassAsync"),
-        # DeleteClass -> strClass:BSTR, lFlags:LONG, pCtx:*IWbemContext, ppCallResult:**IWbemCallResult
-        "DeleteClass": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG, IWbemContext, POINTER(IWbemCallResult))(10, "DeleteClass"),
-        # DeleteClassAsync -> strClass:BSTR, lFlags:LONG, pCtx:*IWbemContext, pResponseHandler:*IWbemObjectSink
-        "DeleteClassAsync": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG, IWbemContext, IWbemObjectSink)(11, "DeleteClassAsync"),
-        # CreateClassEnum -> strSuperclass:BSTR, lFlags:LONG, pCtx:*IWbemContext, ppEnum:**IEnumWbemClassObject
-        "CreateClassEnum": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG, IWbemContext, POINTER(IEnumWbemClassObject))(12, "CreateClassEnum"),
-        # CreateClassEnumAsync -> strSuperclass:BSTR, lFlags:LONG, pCtx:*IWbemContext, pResponseHandler:*IWbemObjectSink
-        "CreateClassEnumAsync": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG, IWbemContext, IWbemObjectSink)(13, "CreateClassEnumAsync"),
-        # PutInstance -> pInst:*IWbemClassObject, lFlags:LONG, pCtx:*IWbemContext, ppCallResult:**IWbemCallResult
-        "PutInstance": ctypes.WINFUNCTYPE(HRESULT, IWbemClassObject, LONG, IWbemContext, POINTER(IWbemCallResult))(14, "PutInstance"),
-        # PutInstanceAsync -> pInst:*IWbemClassObject, lFlags:LONG, pCtx:*IWbemContext, pResponseHandler:*IWbemObjectSink
-        "PutInstanceAsync": ctypes.WINFUNCTYPE(HRESULT, IWbemClassObject, LONG, IWbemContext, IWbemObjectSink)(15, "PutInstanceAsync"),
-        # DeleteInstance -> strObjectPath:BSTR, lFlags:LONG, pCtx:*IWbemContext, ppCallResult:**IWbemCallResult
-        "DeleteInstance": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG, IWbemContext, POINTER(IWbemCallResult))(16, "DeleteInstance"),
-        # DeleteInstanceAsync -> strObjectPath:BSTR, lFlags:LONG, pCtx:*IWbemContext, pResponseHandler:*IWbemObjectSink
-        "DeleteInstanceAsync": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG, IWbemContext, IWbemObjectSink)(17, "DeleteInstanceAsync"),
-        # CreateInstanceEnum -> strFilter:BSTR, lFlags:LONG, pCtx:*IWbemContext, ppEnum:**IEnumWbemClassObject
-        "CreateInstanceEnum": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG, IWbemContext, POINTER(IEnumWbemClassObject))(18, "CreateInstanceEnum"),
-        # CreateInstanceEnumAsync -> strFilter:BSTR, lFlags:LONG, pCtx:*IWbemContext, pResponseHandler:*IWbemObjectSink
-        "CreateInstanceEnumAsync": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG, IWbemContext, IWbemObjectSink)(19, "CreateInstanceEnumAsync"),
-        # ExecQuery -> strQueryLanguage:BSTR, strQuery:BSTR, lFlags:LONG, pCtx:*IWbemContext, ppEnum:**IEnumWbemClassObject
-        "ExecQuery": ctypes.WINFUNCTYPE(HRESULT, BSTR, BSTR, LONG, IWbemContext, POINTER(IEnumWbemClassObject))(20, "ExecQuery"),
-        # ExecQueryAsync -> strQueryLanguage:BSTR, strQuery:BSTR, lFlags:LONG, pCtx:*IWbemContext, pResponseHandler:*IWbemObjectSink
-        "ExecQueryAsync": ctypes.WINFUNCTYPE(HRESULT, BSTR, BSTR, LONG, IWbemContext, IWbemObjectSink)(21, "ExecQueryAsync"),
-        # ExecNotificationQuery -> strQueryLanguage:BSTR, strQuery:BSTR, lFlags:LONG, pCtx:*IWbemContext, ppEnum:**IEnumWbemClassObject
-        "ExecNotificationQuery": ctypes.WINFUNCTYPE(HRESULT, BSTR, BSTR, LONG, IWbemContext, POINTER(IEnumWbemClassObject))(22, "ExecNotificationQuery"),
-        # ExecNotificationQueryAsync -> strQueryLanguage:BSTR, strQuery:BSTR, lFlags:LONG, pCtx:*IWbemContext, pResponseHandler:*IWbemObjectSink
-        "ExecNotificationQueryAsync": ctypes.WINFUNCTYPE(HRESULT, BSTR, BSTR, LONG, IWbemContext, IWbemObjectSink)(23, "ExecNotificationQueryAsync"),
-        # ExecMethod -> strObjectPath:BSTR, strMethodName:BSTR, lFlags:LONG, pCtx:*IWbemContext, pInParams:*IWbemClassObject, ppOutParams:**IWbemClassObject, ppCallResult:**IWbemCallResult
-        "ExecMethod": ctypes.WINFUNCTYPE(HRESULT, BSTR, BSTR, LONG, IWbemContext, IWbemClassObject, POINTER(IWbemClassObject), POINTER(IWbemCallResult))(24, "ExecMethod"),
-        # ExecMethodAsync -> strObjectPath:BSTR, strMethodName:BSTR, lFlags:LONG, pCtx:*IWbemContext, pInParams:*IWbemClassObject, pResponseHandler:*IWbemObjectSink
-        "ExecMethodAsync": ctypes.WINFUNCTYPE(HRESULT, BSTR, BSTR, LONG, IWbemContext, IWbemClassObject, IWbemObjectSink)(25, "ExecMethodAsync"),
+        # AddFileSet -> cFileCount:ULONG, pFileSet:*BG_FILE_INFO
+        "AddFileSet": ctypes.WINFUNCTYPE(HRESULT, ULONG, POINTER(BG_FILE_INFO))(3, "AddFileSet"),
+        # AddFile -> RemoteUrl:LPCWSTR, LocalName:LPCWSTR
+        "AddFile": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LPCWSTR)(4, "AddFile"),
+        # EnumFiles -> pEnum:**IEnumBackgroundCopyFiles
+        "EnumFiles": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumBackgroundCopyFiles))(5, "EnumFiles"),
+        # Suspend -> 
+        "Suspend": ctypes.WINFUNCTYPE(HRESULT)(6, "Suspend"),
+        # Resume -> 
+        "Resume": ctypes.WINFUNCTYPE(HRESULT)(7, "Resume"),
+        # Cancel -> 
+        "Cancel": ctypes.WINFUNCTYPE(HRESULT)(8, "Cancel"),
+        # Complete -> 
+        "Complete": ctypes.WINFUNCTYPE(HRESULT)(9, "Complete"),
+        # GetId -> pVal:*GUID
+        "GetId": ctypes.WINFUNCTYPE(HRESULT, POINTER(GUID))(10, "GetId"),
+        # GetType -> pVal:*BG_JOB_TYPE
+        "GetType": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_JOB_TYPE))(11, "GetType"),
+        # GetProgress -> pVal:*BG_JOB_PROGRESS
+        "GetProgress": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_JOB_PROGRESS))(12, "GetProgress"),
+        # GetTimes -> pVal:*BG_JOB_TIMES
+        "GetTimes": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_JOB_TIMES))(13, "GetTimes"),
+        # GetState -> pVal:*BG_JOB_STATE
+        "GetState": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_JOB_STATE))(14, "GetState"),
+        # GetError -> ppError:**IBackgroundCopyError
+        "GetError": ctypes.WINFUNCTYPE(HRESULT, POINTER(IBackgroundCopyError))(15, "GetError"),
+        # GetOwner -> pVal:*LPWSTR
+        "GetOwner": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR))(16, "GetOwner"),
+        # SetDisplayName -> Val:LPCWSTR
+        "SetDisplayName": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(17, "SetDisplayName"),
+        # GetDisplayName -> pVal:*LPWSTR
+        "GetDisplayName": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR))(18, "GetDisplayName"),
+        # SetDescription -> Val:LPCWSTR
+        "SetDescription": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(19, "SetDescription"),
+        # GetDescription -> pVal:*LPWSTR
+        "GetDescription": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR))(20, "GetDescription"),
+        # SetPriority -> Val:BG_JOB_PRIORITY
+        "SetPriority": ctypes.WINFUNCTYPE(HRESULT, BG_JOB_PRIORITY)(21, "SetPriority"),
+        # GetPriority -> pVal:*BG_JOB_PRIORITY
+        "GetPriority": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_JOB_PRIORITY))(22, "GetPriority"),
+        # SetNotifyFlags -> Val:ULONG
+        "SetNotifyFlags": ctypes.WINFUNCTYPE(HRESULT, ULONG)(23, "SetNotifyFlags"),
+        # GetNotifyFlags -> pVal:*ULONG
+        "GetNotifyFlags": ctypes.WINFUNCTYPE(HRESULT, POINTER(ULONG))(24, "GetNotifyFlags"),
+        # SetNotifyInterface -> Val:*IUnknown
+        "SetNotifyInterface": ctypes.WINFUNCTYPE(HRESULT, IUnknown)(25, "SetNotifyInterface"),
+        # GetNotifyInterface -> pVal:**IUnknown
+        "GetNotifyInterface": ctypes.WINFUNCTYPE(HRESULT, POINTER(IUnknown))(26, "GetNotifyInterface"),
+        # SetMinimumRetryDelay -> Seconds:ULONG
+        "SetMinimumRetryDelay": ctypes.WINFUNCTYPE(HRESULT, ULONG)(27, "SetMinimumRetryDelay"),
+        # GetMinimumRetryDelay -> Seconds:*ULONG
+        "GetMinimumRetryDelay": ctypes.WINFUNCTYPE(HRESULT, POINTER(ULONG))(28, "GetMinimumRetryDelay"),
+        # SetNoProgressTimeout -> Seconds:ULONG
+        "SetNoProgressTimeout": ctypes.WINFUNCTYPE(HRESULT, ULONG)(29, "SetNoProgressTimeout"),
+        # GetNoProgressTimeout -> Seconds:*ULONG
+        "GetNoProgressTimeout": ctypes.WINFUNCTYPE(HRESULT, POINTER(ULONG))(30, "GetNoProgressTimeout"),
+        # GetErrorCount -> Errors:*ULONG
+        "GetErrorCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(ULONG))(31, "GetErrorCount"),
+        # SetProxySettings -> ProxyUsage:BG_JOB_PROXY_USAGE, ProxyList:*WCHAR, ProxyBypassList:*WCHAR
+        "SetProxySettings": ctypes.WINFUNCTYPE(HRESULT, BG_JOB_PROXY_USAGE, POINTER(WCHAR), POINTER(WCHAR))(32, "SetProxySettings"),
+        # GetProxySettings -> pProxyUsage:*BG_JOB_PROXY_USAGE, pProxyList:*LPWSTR, pProxyBypassList:*LPWSTR
+        "GetProxySettings": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_JOB_PROXY_USAGE), POINTER(LPWSTR), POINTER(LPWSTR))(33, "GetProxySettings"),
+        # TakeOwnership -> 
+        "TakeOwnership": ctypes.WINFUNCTYPE(HRESULT)(34, "TakeOwnership"),
+        # SetNotifyCmdLine -> Program:LPCWSTR, Parameters:LPCWSTR
+        "SetNotifyCmdLine": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LPCWSTR)(35, "SetNotifyCmdLine"),
+        # GetNotifyCmdLine -> pProgram:*LPWSTR, pParameters:*LPWSTR
+        "GetNotifyCmdLine": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR), POINTER(LPWSTR))(36, "GetNotifyCmdLine"),
+        # GetReplyProgress -> pProgress:*BG_JOB_REPLY_PROGRESS
+        "GetReplyProgress": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_JOB_REPLY_PROGRESS))(37, "GetReplyProgress"),
+        # GetReplyData -> ppBuffer:**BYTE, pLength:*UINT64
+        "GetReplyData": ctypes.WINFUNCTYPE(HRESULT, POINTER(POINTER(BYTE)), POINTER(UINT64))(38, "GetReplyData"),
+        # SetReplyFileName -> ReplyFileName:LPCWSTR
+        "SetReplyFileName": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(39, "SetReplyFileName"),
+        # GetReplyFileName -> pReplyFileName:*LPWSTR
+        "GetReplyFileName": ctypes.WINFUNCTYPE(HRESULT, POINTER(LPWSTR))(40, "GetReplyFileName"),
+        # SetCredentials -> credentials:*BG_AUTH_CREDENTIALS
+        "SetCredentials": ctypes.WINFUNCTYPE(HRESULT, POINTER(BG_AUTH_CREDENTIALS))(41, "SetCredentials"),
+        # RemoveCredentials -> Target:BG_AUTH_TARGET, Scheme:BG_AUTH_SCHEME
+        "RemoveCredentials": ctypes.WINFUNCTYPE(HRESULT, BG_AUTH_TARGET, BG_AUTH_SCHEME)(42, "RemoveCredentials"),
+    }
+
+IBackgroundCopyManager._functions_ = {
+        # QueryInterface -> riid:REFIID, ppvObject:**void
+        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        # AddRef -> 
+        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        # Release -> 
+        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        # CreateJob -> DisplayName:LPCWSTR, Type:BG_JOB_TYPE, pJobId:*GUID, ppJob:**IBackgroundCopyJob
+        "CreateJob": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, BG_JOB_TYPE, POINTER(GUID), POINTER(IBackgroundCopyJob))(3, "CreateJob"),
+        # GetJob -> jobID:REFGUID, ppJob:**IBackgroundCopyJob
+        "GetJob": ctypes.WINFUNCTYPE(HRESULT, REFGUID, POINTER(IBackgroundCopyJob))(4, "GetJob"),
+        # EnumJobs -> dwFlags:DWORD, ppEnum:**IEnumBackgroundCopyJobs
+        "EnumJobs": ctypes.WINFUNCTYPE(HRESULT, DWORD, POINTER(IEnumBackgroundCopyJobs))(5, "EnumJobs"),
+        # GetErrorDescription -> hResult:HRESULT, LanguageId:DWORD, pErrorDescription:*LPWSTR
+        "GetErrorDescription": ctypes.WINFUNCTYPE(HRESULT, HRESULT, DWORD, POINTER(LPWSTR))(6, "GetErrorDescription"),
+    }
+
+IEnumBackgroundCopyFiles._functions_ = {
+        # QueryInterface -> riid:REFIID, ppvObject:**void
+        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        # AddRef -> 
+        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        # Release -> 
+        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        # Next -> celt:ULONG, rgelt:**IBackgroundCopyFile, pceltFetched:*ULONG
+        "Next": ctypes.WINFUNCTYPE(HRESULT, ULONG, POINTER(IBackgroundCopyFile), POINTER(ULONG))(3, "Next"),
+        # Skip -> celt:ULONG
+        "Skip": ctypes.WINFUNCTYPE(HRESULT, ULONG)(4, "Skip"),
+        # Reset -> 
+        "Reset": ctypes.WINFUNCTYPE(HRESULT)(5, "Reset"),
+        # Clone -> ppenum:**IEnumBackgroundCopyFiles
+        "Clone": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumBackgroundCopyFiles))(6, "Clone"),
+        # GetCount -> puCount:*ULONG
+        "GetCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(ULONG))(7, "GetCount"),
+    }
+
+IEnumBackgroundCopyJobs._functions_ = {
+        # QueryInterface -> riid:REFIID, ppvObject:**void
+        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        # AddRef -> 
+        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        # Release -> 
+        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        # Next -> celt:ULONG, rgelt:**IBackgroundCopyJob, pceltFetched:*ULONG
+        "Next": ctypes.WINFUNCTYPE(HRESULT, ULONG, POINTER(IBackgroundCopyJob), POINTER(ULONG))(3, "Next"),
+        # Skip -> celt:ULONG
+        "Skip": ctypes.WINFUNCTYPE(HRESULT, ULONG)(4, "Skip"),
+        # Reset -> 
+        "Reset": ctypes.WINFUNCTYPE(HRESULT)(5, "Reset"),
+        # Clone -> ppenum:**IEnumBackgroundCopyJobs
+        "Clone": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumBackgroundCopyJobs))(6, "Clone"),
+        # GetCount -> puCount:*ULONG
+        "GetCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(ULONG))(7, "GetCount"),
     }
 
 IAction._functions_ = {
@@ -2057,5 +1996,372 @@ ITriggerCollection._functions_ = {
         "Remove": ctypes.WINFUNCTYPE(HRESULT, VARIANT)(11, "Remove"),
         # Clear -> 
         "Clear": ctypes.WINFUNCTYPE(HRESULT)(12, "Clear"),
+    }
+
+IWebBrowser2._functions_ = {
+        # QueryInterface -> riid:REFIID, ppvObject:**void
+        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        # AddRef -> 
+        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        # Release -> 
+        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        # GetTypeInfoCount -> pctinfo:*UINT
+        "GetTypeInfoCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(UINT))(3, "GetTypeInfoCount"),
+        # GetTypeInfo -> iTInfo:UINT, lcid:LCID, ppTInfo:**ITypeInfo
+        "GetTypeInfo": ctypes.WINFUNCTYPE(HRESULT, UINT, LCID, POINTER(ITypeInfo))(4, "GetTypeInfo"),
+        # GetIDsOfNames -> riid:REFIID, rgszNames:*LPOLESTR, cNames:UINT, lcid:LCID, rgDispId:*DISPID
+        "GetIDsOfNames": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(LPOLESTR), UINT, LCID, POINTER(DISPID))(5, "GetIDsOfNames"),
+        # Invoke -> dispIdMember:DISPID, riid:REFIID, lcid:LCID, wFlags:WORD, pDispParams:*DISPPARAMS, pVarResult:*VARIANT, pExcepInfo:*EXCEPINFO, puArgErr:*UINT
+        "Invoke": ctypes.WINFUNCTYPE(HRESULT, DISPID, REFIID, LCID, WORD, POINTER(DISPPARAMS), POINTER(VARIANT), POINTER(EXCEPINFO), POINTER(UINT))(6, "Invoke"),
+        # GoBack -> 
+        "GoBack": ctypes.WINFUNCTYPE(HRESULT)(7, "GoBack"),
+        # GoForward -> 
+        "GoForward": ctypes.WINFUNCTYPE(HRESULT)(8, "GoForward"),
+        # GoHome -> 
+        "GoHome": ctypes.WINFUNCTYPE(HRESULT)(9, "GoHome"),
+        # GoSearch -> 
+        "GoSearch": ctypes.WINFUNCTYPE(HRESULT)(10, "GoSearch"),
+        # Navigate -> URL:BSTR, Flags:*VARIANT, TargetFrameName:*VARIANT, PostData:*VARIANT, Headers:*VARIANT
+        "Navigate": ctypes.WINFUNCTYPE(HRESULT, BSTR, POINTER(VARIANT), POINTER(VARIANT), POINTER(VARIANT), POINTER(VARIANT))(11, "Navigate"),
+        # Refresh -> 
+        "Refresh": ctypes.WINFUNCTYPE(HRESULT)(12, "Refresh"),
+        # Refresh2 -> Level:*VARIANT
+        "Refresh2": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT))(13, "Refresh2"),
+        # Stop -> 
+        "Stop": ctypes.WINFUNCTYPE(HRESULT)(14, "Stop"),
+        # get_Application -> ppDisp:**IDispatch
+        "get_Application": ctypes.WINFUNCTYPE(HRESULT, POINTER(IDispatch))(15, "get_Application"),
+        # get_Parent -> ppDisp:**IDispatch
+        "get_Parent": ctypes.WINFUNCTYPE(HRESULT, POINTER(IDispatch))(16, "get_Parent"),
+        # get_Container -> ppDisp:**IDispatch
+        "get_Container": ctypes.WINFUNCTYPE(HRESULT, POINTER(IDispatch))(17, "get_Container"),
+        # get_Document -> ppDisp:**IDispatch
+        "get_Document": ctypes.WINFUNCTYPE(HRESULT, POINTER(IDispatch))(18, "get_Document"),
+        # get_TopLevelContainer -> pBool:*VARIANT_BOOL
+        "get_TopLevelContainer": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL))(19, "get_TopLevelContainer"),
+        # get_Type -> Type:*BSTR
+        "get_Type": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(20, "get_Type"),
+        # get_Left -> pl:*LONG
+        "get_Left": ctypes.WINFUNCTYPE(HRESULT, POINTER(LONG))(21, "get_Left"),
+        # put_Left -> Left:LONG
+        "put_Left": ctypes.WINFUNCTYPE(HRESULT, LONG)(22, "put_Left"),
+        # get_Top -> pl:*LONG
+        "get_Top": ctypes.WINFUNCTYPE(HRESULT, POINTER(LONG))(23, "get_Top"),
+        # put_Top -> Top:LONG
+        "put_Top": ctypes.WINFUNCTYPE(HRESULT, LONG)(24, "put_Top"),
+        # get_Width -> pl:*LONG
+        "get_Width": ctypes.WINFUNCTYPE(HRESULT, POINTER(LONG))(25, "get_Width"),
+        # put_Width -> Width:LONG
+        "put_Width": ctypes.WINFUNCTYPE(HRESULT, LONG)(26, "put_Width"),
+        # get_Height -> pl:*LONG
+        "get_Height": ctypes.WINFUNCTYPE(HRESULT, POINTER(LONG))(27, "get_Height"),
+        # put_Height -> Height:LONG
+        "put_Height": ctypes.WINFUNCTYPE(HRESULT, LONG)(28, "put_Height"),
+        # get_LocationName -> LocationName:*BSTR
+        "get_LocationName": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(29, "get_LocationName"),
+        # get_LocationURL -> LocationURL:*BSTR
+        "get_LocationURL": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(30, "get_LocationURL"),
+        # get_Busy -> pBool:*VARIANT_BOOL
+        "get_Busy": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL))(31, "get_Busy"),
+        # Quit -> 
+        "Quit": ctypes.WINFUNCTYPE(HRESULT)(32, "Quit"),
+        # ClientToWindow -> pcx:*INT, pcy:*INT
+        "ClientToWindow": ctypes.WINFUNCTYPE(HRESULT, POINTER(INT), POINTER(INT))(33, "ClientToWindow"),
+        # PutProperty -> Property:BSTR, vtValue:VARIANT
+        "PutProperty": ctypes.WINFUNCTYPE(HRESULT, BSTR, VARIANT)(34, "PutProperty"),
+        # GetProperty -> Property:BSTR, pvtValue:*VARIANT
+        "GetProperty": ctypes.WINFUNCTYPE(HRESULT, BSTR, POINTER(VARIANT))(35, "GetProperty"),
+        # get_Name -> Name:*BSTR
+        "get_Name": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(36, "get_Name"),
+        # get_HWND -> pHWND:*PVOID
+        "get_HWND": ctypes.WINFUNCTYPE(HRESULT, POINTER(PVOID))(37, "get_HWND"),
+        # get_FullName -> FullName:*BSTR
+        "get_FullName": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(38, "get_FullName"),
+        # get_Path -> Path:*BSTR
+        "get_Path": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(39, "get_Path"),
+        # get_Visible -> pBool:*VARIANT_BOOL
+        "get_Visible": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL))(40, "get_Visible"),
+        # put_Visible -> Value:VARIANT_BOOL
+        "put_Visible": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL)(41, "put_Visible"),
+        # get_StatusBar -> pBool:*VARIANT_BOOL
+        "get_StatusBar": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL))(42, "get_StatusBar"),
+        # put_StatusBar -> Value:VARIANT_BOOL
+        "put_StatusBar": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL)(43, "put_StatusBar"),
+        # get_StatusText -> StatusText:*BSTR
+        "get_StatusText": ctypes.WINFUNCTYPE(HRESULT, POINTER(BSTR))(44, "get_StatusText"),
+        # put_StatusText -> StatusText:BSTR
+        "put_StatusText": ctypes.WINFUNCTYPE(HRESULT, BSTR)(45, "put_StatusText"),
+        # get_ToolBar -> Value:*INT
+        "get_ToolBar": ctypes.WINFUNCTYPE(HRESULT, POINTER(INT))(46, "get_ToolBar"),
+        # put_ToolBar -> Value:INT
+        "put_ToolBar": ctypes.WINFUNCTYPE(HRESULT, INT)(47, "put_ToolBar"),
+        # get_MenuBar -> Value:*VARIANT_BOOL
+        "get_MenuBar": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL))(48, "get_MenuBar"),
+        # put_MenuBar -> Value:VARIANT_BOOL
+        "put_MenuBar": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL)(49, "put_MenuBar"),
+        # get_FullScreen -> pbFullScreen:*VARIANT_BOOL
+        "get_FullScreen": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL))(50, "get_FullScreen"),
+        # put_FullScreen -> bFullScreen:VARIANT_BOOL
+        "put_FullScreen": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL)(51, "put_FullScreen"),
+        # Navigate2 -> URL:*VARIANT, Flags:*VARIANT, TargetFrameName:*VARIANT, PostData:*VARIANT, Headers:*VARIANT
+        "Navigate2": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT), POINTER(VARIANT), POINTER(VARIANT), POINTER(VARIANT), POINTER(VARIANT))(52, "Navigate2"),
+        # QueryStatusWB -> cmdID:DWORD, pcmdf:*DWORD
+        "QueryStatusWB": ctypes.WINFUNCTYPE(HRESULT, DWORD, POINTER(DWORD))(53, "QueryStatusWB"),
+        # ExecWB -> cmdID:DWORD, cmdexecopt:DWORD, pvaIn:*VARIANT, pvaOut:*VARIANT
+        "ExecWB": ctypes.WINFUNCTYPE(HRESULT, DWORD, DWORD, POINTER(VARIANT), POINTER(VARIANT))(54, "ExecWB"),
+        # ShowBrowserBar -> pvaClsid:*VARIANT, pvarShow:*VARIANT, pvarSize:*VARIANT
+        "ShowBrowserBar": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT), POINTER(VARIANT), POINTER(VARIANT))(55, "ShowBrowserBar"),
+        # get_ReadyState -> plReadyState:*DWORD
+        "get_ReadyState": ctypes.WINFUNCTYPE(HRESULT, POINTER(DWORD))(56, "get_ReadyState"),
+        # get_Offline -> pbOffline:*VARIANT_BOOL
+        "get_Offline": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL))(57, "get_Offline"),
+        # put_Offline -> bOffline:VARIANT_BOOL
+        "put_Offline": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL)(58, "put_Offline"),
+        # get_Silent -> pbSilent:*VARIANT_BOOL
+        "get_Silent": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL))(59, "get_Silent"),
+        # put_Silent -> bSilent:VARIANT_BOOL
+        "put_Silent": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL)(60, "put_Silent"),
+        # get_RegisterAsBrowser -> pbRegister:*VARIANT_BOOL
+        "get_RegisterAsBrowser": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL))(61, "get_RegisterAsBrowser"),
+        # put_RegisterAsBrowser -> bRegister:VARIANT_BOOL
+        "put_RegisterAsBrowser": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL)(62, "put_RegisterAsBrowser"),
+        # get_RegisterAsDropTarget -> pbRegister:*VARIANT_BOOL
+        "get_RegisterAsDropTarget": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL))(63, "get_RegisterAsDropTarget"),
+        # put_RegisterAsDropTarget -> bRegister:VARIANT_BOOL
+        "put_RegisterAsDropTarget": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL)(64, "put_RegisterAsDropTarget"),
+        # get_TheaterMode -> pbRegister:*VARIANT_BOOL
+        "get_TheaterMode": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL))(65, "get_TheaterMode"),
+        # put_TheaterMode -> bRegister:VARIANT_BOOL
+        "put_TheaterMode": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL)(66, "put_TheaterMode"),
+        # get_AddressBar -> Value:*VARIANT_BOOL
+        "get_AddressBar": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL))(67, "get_AddressBar"),
+        # put_AddressBar -> Value:VARIANT_BOOL
+        "put_AddressBar": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL)(68, "put_AddressBar"),
+        # get_Resizable -> Value:*VARIANT_BOOL
+        "get_Resizable": ctypes.WINFUNCTYPE(HRESULT, POINTER(VARIANT_BOOL))(69, "get_Resizable"),
+        # put_Resizable -> Value:VARIANT_BOOL
+        "put_Resizable": ctypes.WINFUNCTYPE(HRESULT, VARIANT_BOOL)(70, "put_Resizable"),
+    }
+
+IEnumWbemClassObject._functions_ = {
+        # QueryInterface -> riid:REFIID, ppvObject:**void
+        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        # AddRef -> 
+        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        # Release -> 
+        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        # Reset -> 
+        "Reset": ctypes.WINFUNCTYPE(HRESULT)(3, "Reset"),
+        # Next -> lTimeout:LONG, uCount:ULONG, apObjects:**IWbemClassObject, puReturned:*ULONG
+        "Next": ctypes.WINFUNCTYPE(HRESULT, LONG, ULONG, POINTER(IWbemClassObject), POINTER(ULONG))(4, "Next"),
+        # NextAsync -> uCount:ULONG, pSink:*IWbemObjectSink
+        "NextAsync": ctypes.WINFUNCTYPE(HRESULT, ULONG, IWbemObjectSink)(5, "NextAsync"),
+        # Clone -> ppEnum:**IEnumWbemClassObject
+        "Clone": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumWbemClassObject))(6, "Clone"),
+        # Skip -> lTimeout:LONG, nCount:ULONG
+        "Skip": ctypes.WINFUNCTYPE(HRESULT, LONG, ULONG)(7, "Skip"),
+    }
+
+IWbemCallResult._functions_ = {
+        # QueryInterface -> riid:REFIID, ppvObject:**void
+        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        # AddRef -> 
+        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        # Release -> 
+        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        # GetResultObject -> lTimeout:LONG, ppResultObject:**IWbemClassObject
+        "GetResultObject": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(IWbemClassObject))(3, "GetResultObject"),
+        # GetResultString -> lTimeout:LONG, pstrResultString:*BSTR
+        "GetResultString": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(BSTR))(4, "GetResultString"),
+        # GetResultServices -> lTimeout:LONG, ppServices:**IWbemServices
+        "GetResultServices": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(IWbemServices))(5, "GetResultServices"),
+        # GetCallStatus -> lTimeout:LONG, plStatus:*LONG
+        "GetCallStatus": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(LONG))(6, "GetCallStatus"),
+    }
+
+IWbemClassObject._functions_ = {
+        # QueryInterface -> riid:REFIID, ppvObject:**void
+        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        # AddRef -> 
+        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        # Release -> 
+        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        # GetQualifierSet -> ppQualSet:**IWbemQualifierSet
+        "GetQualifierSet": ctypes.WINFUNCTYPE(HRESULT, POINTER(IWbemQualifierSet))(3, "GetQualifierSet"),
+        # Get -> wszName:LPCWSTR, lFlags:LONG, pVal:*VARIANT, pType:*CIMTYPE, plFlavor:*LONG
+        "Get": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LONG, POINTER(VARIANT), POINTER(CIMTYPE), POINTER(LONG))(4, "Get"),
+        # Put -> wszName:LPCWSTR, lFlags:LONG, pVal:*VARIANT, Type:CIMTYPE
+        "Put": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LONG, POINTER(VARIANT), CIMTYPE)(5, "Put"),
+        # Delete -> wszName:LPCWSTR
+        "Delete": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(6, "Delete"),
+        # GetNames -> wszQualifierName:LPCWSTR, lFlags:LONG, pQualifierVal:*VARIANT, pNames:**SAFEARRAY
+        "GetNames": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LONG, POINTER(VARIANT), POINTER(POINTER(SAFEARRAY)))(7, "GetNames"),
+        # BeginEnumeration -> lEnumFlags:LONG
+        "BeginEnumeration": ctypes.WINFUNCTYPE(HRESULT, LONG)(8, "BeginEnumeration"),
+        # Next -> lFlags:LONG, strName:*BSTR, pVal:*VARIANT, pType:*CIMTYPE, plFlavor:*LONG
+        "Next": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(BSTR), POINTER(VARIANT), POINTER(CIMTYPE), POINTER(LONG))(9, "Next"),
+        # EndEnumeration -> 
+        "EndEnumeration": ctypes.WINFUNCTYPE(HRESULT)(10, "EndEnumeration"),
+        # GetPropertyQualifierSet -> wszProperty:LPCWSTR, ppQualSet:**IWbemQualifierSet
+        "GetPropertyQualifierSet": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, POINTER(IWbemQualifierSet))(11, "GetPropertyQualifierSet"),
+        # Clone -> ppCopy:**IWbemClassObject
+        "Clone": ctypes.WINFUNCTYPE(HRESULT, POINTER(IWbemClassObject))(12, "Clone"),
+        # GetObjectText -> lFlags:LONG, pstrObjectText:*BSTR
+        "GetObjectText": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(BSTR))(13, "GetObjectText"),
+        # SpawnDerivedClass -> lFlags:LONG, ppNewClass:**IWbemClassObject
+        "SpawnDerivedClass": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(IWbemClassObject))(14, "SpawnDerivedClass"),
+        # SpawnInstance -> lFlags:LONG, ppNewInstance:**IWbemClassObject
+        "SpawnInstance": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(IWbemClassObject))(15, "SpawnInstance"),
+        # CompareTo -> lFlags:LONG, pCompareTo:*IWbemClassObject
+        "CompareTo": ctypes.WINFUNCTYPE(HRESULT, LONG, IWbemClassObject)(16, "CompareTo"),
+        # GetPropertyOrigin -> wszName:LPCWSTR, pstrClassName:*BSTR
+        "GetPropertyOrigin": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, POINTER(BSTR))(17, "GetPropertyOrigin"),
+        # InheritsFrom -> strAncestor:LPCWSTR
+        "InheritsFrom": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(18, "InheritsFrom"),
+        # GetMethod -> wszName:LPCWSTR, lFlags:LONG, ppInSignature:**IWbemClassObject, ppOutSignature:**IWbemClassObject
+        "GetMethod": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LONG, POINTER(IWbemClassObject), POINTER(IWbemClassObject))(19, "GetMethod"),
+        # PutMethod -> wszName:LPCWSTR, lFlags:LONG, pInSignature:*IWbemClassObject, pOutSignature:*IWbemClassObject
+        "PutMethod": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LONG, IWbemClassObject, IWbemClassObject)(20, "PutMethod"),
+        # DeleteMethod -> wszName:LPCWSTR
+        "DeleteMethod": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(21, "DeleteMethod"),
+        # BeginMethodEnumeration -> lEnumFlags:LONG
+        "BeginMethodEnumeration": ctypes.WINFUNCTYPE(HRESULT, LONG)(22, "BeginMethodEnumeration"),
+        # NextMethod -> lFlags:LONG, pstrName:*BSTR, ppInSignature:**IWbemClassObject, ppOutSignature:**IWbemClassObject
+        "NextMethod": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(BSTR), POINTER(IWbemClassObject), POINTER(IWbemClassObject))(23, "NextMethod"),
+        # EndMethodEnumeration -> 
+        "EndMethodEnumeration": ctypes.WINFUNCTYPE(HRESULT)(24, "EndMethodEnumeration"),
+        # GetMethodQualifierSet -> wszMethod:LPCWSTR, ppQualSet:**IWbemQualifierSet
+        "GetMethodQualifierSet": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, POINTER(IWbemQualifierSet))(25, "GetMethodQualifierSet"),
+        # GetMethodOrigin -> wszMethodName:LPCWSTR, pstrClassName:*BSTR
+        "GetMethodOrigin": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, POINTER(BSTR))(26, "GetMethodOrigin"),
+    }
+
+IWbemContext._functions_ = {
+        # QueryInterface -> riid:REFIID, ppvObject:**void
+        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        # AddRef -> 
+        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        # Release -> 
+        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        # Clone -> ppNewCopy:**IWbemContext
+        "Clone": ctypes.WINFUNCTYPE(HRESULT, POINTER(IWbemContext))(3, "Clone"),
+        # GetNames -> lFlags:LONG, pNames:**SAFEARRAY
+        "GetNames": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(POINTER(SAFEARRAY)))(4, "GetNames"),
+        # BeginEnumeration -> lFlags:LONG
+        "BeginEnumeration": ctypes.WINFUNCTYPE(HRESULT, LONG)(5, "BeginEnumeration"),
+        # Next -> lFlags:LONG, pstrName:*BSTR, pValue:*VARIANT
+        "Next": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(BSTR), POINTER(VARIANT))(6, "Next"),
+        # EndEnumeration -> 
+        "EndEnumeration": ctypes.WINFUNCTYPE(HRESULT)(7, "EndEnumeration"),
+        # SetValue -> wszName:LPCWSTR, lFlags:LONG, pValue:*VARIANT
+        "SetValue": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LONG, POINTER(VARIANT))(8, "SetValue"),
+        # GetValue -> wszName:LPCWSTR, lFlags:LONG, pValue:*VARIANT
+        "GetValue": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LONG, POINTER(VARIANT))(9, "GetValue"),
+        # DeleteValue -> wszName:LPCWSTR, lFlags:LONG
+        "DeleteValue": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LONG)(10, "DeleteValue"),
+        # DeleteAll -> 
+        "DeleteAll": ctypes.WINFUNCTYPE(HRESULT)(11, "DeleteAll"),
+    }
+
+IWbemLocator._functions_ = {
+        # QueryInterface -> riid:REFIID, ppvObject:**void
+        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        # AddRef -> 
+        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        # Release -> 
+        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        # ConnectServer -> strNetworkResource:BSTR, strUser:BSTR, strPassword:BSTR, strLocale:BSTR, lSecurityFlags:LONG, strAuthority:BSTR, pCtx:*IWbemContext, ppNamespace:**IWbemServices
+        "ConnectServer": ctypes.WINFUNCTYPE(HRESULT, BSTR, BSTR, BSTR, BSTR, LONG, BSTR, IWbemContext, POINTER(IWbemServices))(3, "ConnectServer"),
+    }
+
+IWbemObjectSink._functions_ = {
+        # QueryInterface -> riid:REFIID, ppvObject:**void
+        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        # AddRef -> 
+        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        # Release -> 
+        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        # Indicate -> lObjectCount:LONG, apObjArray:**IWbemClassObject
+        "Indicate": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(IWbemClassObject))(3, "Indicate"),
+        # SetStatus -> lFlags:LONG, hResult:HRESULT, strParam:BSTR, pObjParam:*IWbemClassObject
+        "SetStatus": ctypes.WINFUNCTYPE(HRESULT, LONG, HRESULT, BSTR, IWbemClassObject)(4, "SetStatus"),
+    }
+
+IWbemQualifierSet._functions_ = {
+        # QueryInterface -> riid:REFIID, ppvObject:**void
+        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        # AddRef -> 
+        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        # Release -> 
+        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        # Get -> wszName:LPCWSTR, lFlags:LONG, pVal:*VARIANT, plFlavor:*LONG
+        "Get": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LONG, POINTER(VARIANT), POINTER(LONG))(3, "Get"),
+        # Put -> wszName:LPCWSTR, pVal:*VARIANT, lFlavor:LONG
+        "Put": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, POINTER(VARIANT), LONG)(4, "Put"),
+        # Delete -> wszName:LPCWSTR
+        "Delete": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(5, "Delete"),
+        # GetNames -> lFlags:LONG, pNames:**SAFEARRAY
+        "GetNames": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(POINTER(SAFEARRAY)))(6, "GetNames"),
+        # BeginEnumeration -> lFlags:LONG
+        "BeginEnumeration": ctypes.WINFUNCTYPE(HRESULT, LONG)(7, "BeginEnumeration"),
+        # Next -> lFlags:LONG, pstrName:*BSTR, pVal:*VARIANT, plFlavor:*LONG
+        "Next": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(BSTR), POINTER(VARIANT), POINTER(LONG))(8, "Next"),
+        # EndEnumeration -> 
+        "EndEnumeration": ctypes.WINFUNCTYPE(HRESULT)(9, "EndEnumeration"),
+    }
+
+IWbemServices._functions_ = {
+        # QueryInterface -> riid:REFIID, ppvObject:**void
+        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        # AddRef -> 
+        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        # Release -> 
+        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        # OpenNamespace -> strNamespace:BSTR, lFlags:LONG, pCtx:*IWbemContext, ppWorkingNamespace:**IWbemServices, ppResult:**IWbemCallResult
+        "OpenNamespace": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG, IWbemContext, POINTER(IWbemServices), POINTER(IWbemCallResult))(3, "OpenNamespace"),
+        # CancelAsyncCall -> pSink:*IWbemObjectSink
+        "CancelAsyncCall": ctypes.WINFUNCTYPE(HRESULT, IWbemObjectSink)(4, "CancelAsyncCall"),
+        # QueryObjectSink -> lFlags:LONG, ppResponseHandler:**IWbemObjectSink
+        "QueryObjectSink": ctypes.WINFUNCTYPE(HRESULT, LONG, POINTER(IWbemObjectSink))(5, "QueryObjectSink"),
+        # GetObject -> strObjectPath:BSTR, lFlags:LONG, pCtx:*IWbemContext, ppObject:**IWbemClassObject, ppCallResult:**IWbemCallResult
+        "GetObject": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG, IWbemContext, POINTER(IWbemClassObject), POINTER(IWbemCallResult))(6, "GetObject"),
+        # GetObjectAsync -> strObjectPath:BSTR, lFlags:LONG, pCtx:*IWbemContext, pResponseHandler:*IWbemObjectSink
+        "GetObjectAsync": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG, IWbemContext, IWbemObjectSink)(7, "GetObjectAsync"),
+        # PutClass -> pObject:*IWbemClassObject, lFlags:LONG, pCtx:*IWbemContext, ppCallResult:**IWbemCallResult
+        "PutClass": ctypes.WINFUNCTYPE(HRESULT, IWbemClassObject, LONG, IWbemContext, POINTER(IWbemCallResult))(8, "PutClass"),
+        # PutClassAsync -> pObject:*IWbemClassObject, lFlags:LONG, pCtx:*IWbemContext, pResponseHandler:*IWbemObjectSink
+        "PutClassAsync": ctypes.WINFUNCTYPE(HRESULT, IWbemClassObject, LONG, IWbemContext, IWbemObjectSink)(9, "PutClassAsync"),
+        # DeleteClass -> strClass:BSTR, lFlags:LONG, pCtx:*IWbemContext, ppCallResult:**IWbemCallResult
+        "DeleteClass": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG, IWbemContext, POINTER(IWbemCallResult))(10, "DeleteClass"),
+        # DeleteClassAsync -> strClass:BSTR, lFlags:LONG, pCtx:*IWbemContext, pResponseHandler:*IWbemObjectSink
+        "DeleteClassAsync": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG, IWbemContext, IWbemObjectSink)(11, "DeleteClassAsync"),
+        # CreateClassEnum -> strSuperclass:BSTR, lFlags:LONG, pCtx:*IWbemContext, ppEnum:**IEnumWbemClassObject
+        "CreateClassEnum": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG, IWbemContext, POINTER(IEnumWbemClassObject))(12, "CreateClassEnum"),
+        # CreateClassEnumAsync -> strSuperclass:BSTR, lFlags:LONG, pCtx:*IWbemContext, pResponseHandler:*IWbemObjectSink
+        "CreateClassEnumAsync": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG, IWbemContext, IWbemObjectSink)(13, "CreateClassEnumAsync"),
+        # PutInstance -> pInst:*IWbemClassObject, lFlags:LONG, pCtx:*IWbemContext, ppCallResult:**IWbemCallResult
+        "PutInstance": ctypes.WINFUNCTYPE(HRESULT, IWbemClassObject, LONG, IWbemContext, POINTER(IWbemCallResult))(14, "PutInstance"),
+        # PutInstanceAsync -> pInst:*IWbemClassObject, lFlags:LONG, pCtx:*IWbemContext, pResponseHandler:*IWbemObjectSink
+        "PutInstanceAsync": ctypes.WINFUNCTYPE(HRESULT, IWbemClassObject, LONG, IWbemContext, IWbemObjectSink)(15, "PutInstanceAsync"),
+        # DeleteInstance -> strObjectPath:BSTR, lFlags:LONG, pCtx:*IWbemContext, ppCallResult:**IWbemCallResult
+        "DeleteInstance": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG, IWbemContext, POINTER(IWbemCallResult))(16, "DeleteInstance"),
+        # DeleteInstanceAsync -> strObjectPath:BSTR, lFlags:LONG, pCtx:*IWbemContext, pResponseHandler:*IWbemObjectSink
+        "DeleteInstanceAsync": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG, IWbemContext, IWbemObjectSink)(17, "DeleteInstanceAsync"),
+        # CreateInstanceEnum -> strFilter:BSTR, lFlags:LONG, pCtx:*IWbemContext, ppEnum:**IEnumWbemClassObject
+        "CreateInstanceEnum": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG, IWbemContext, POINTER(IEnumWbemClassObject))(18, "CreateInstanceEnum"),
+        # CreateInstanceEnumAsync -> strFilter:BSTR, lFlags:LONG, pCtx:*IWbemContext, pResponseHandler:*IWbemObjectSink
+        "CreateInstanceEnumAsync": ctypes.WINFUNCTYPE(HRESULT, BSTR, LONG, IWbemContext, IWbemObjectSink)(19, "CreateInstanceEnumAsync"),
+        # ExecQuery -> strQueryLanguage:BSTR, strQuery:BSTR, lFlags:LONG, pCtx:*IWbemContext, ppEnum:**IEnumWbemClassObject
+        "ExecQuery": ctypes.WINFUNCTYPE(HRESULT, BSTR, BSTR, LONG, IWbemContext, POINTER(IEnumWbemClassObject))(20, "ExecQuery"),
+        # ExecQueryAsync -> strQueryLanguage:BSTR, strQuery:BSTR, lFlags:LONG, pCtx:*IWbemContext, pResponseHandler:*IWbemObjectSink
+        "ExecQueryAsync": ctypes.WINFUNCTYPE(HRESULT, BSTR, BSTR, LONG, IWbemContext, IWbemObjectSink)(21, "ExecQueryAsync"),
+        # ExecNotificationQuery -> strQueryLanguage:BSTR, strQuery:BSTR, lFlags:LONG, pCtx:*IWbemContext, ppEnum:**IEnumWbemClassObject
+        "ExecNotificationQuery": ctypes.WINFUNCTYPE(HRESULT, BSTR, BSTR, LONG, IWbemContext, POINTER(IEnumWbemClassObject))(22, "ExecNotificationQuery"),
+        # ExecNotificationQueryAsync -> strQueryLanguage:BSTR, strQuery:BSTR, lFlags:LONG, pCtx:*IWbemContext, pResponseHandler:*IWbemObjectSink
+        "ExecNotificationQueryAsync": ctypes.WINFUNCTYPE(HRESULT, BSTR, BSTR, LONG, IWbemContext, IWbemObjectSink)(23, "ExecNotificationQueryAsync"),
+        # ExecMethod -> strObjectPath:BSTR, strMethodName:BSTR, lFlags:LONG, pCtx:*IWbemContext, pInParams:*IWbemClassObject, ppOutParams:**IWbemClassObject, ppCallResult:**IWbemCallResult
+        "ExecMethod": ctypes.WINFUNCTYPE(HRESULT, BSTR, BSTR, LONG, IWbemContext, IWbemClassObject, POINTER(IWbemClassObject), POINTER(IWbemCallResult))(24, "ExecMethod"),
+        # ExecMethodAsync -> strObjectPath:BSTR, strMethodName:BSTR, lFlags:LONG, pCtx:*IWbemContext, pInParams:*IWbemClassObject, pResponseHandler:*IWbemObjectSink
+        "ExecMethodAsync": ctypes.WINFUNCTYPE(HRESULT, BSTR, BSTR, LONG, IWbemContext, IWbemClassObject, IWbemObjectSink)(25, "ExecMethodAsync"),
     }
 

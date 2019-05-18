@@ -1,0 +1,149 @@
+DWORD64 WINAPI SymLoadModuleExA(
+  _In_ HANDLE        hProcess,
+  _In_ HANDLE        hFile,
+  _In_ PCSTR        ImageName,
+  _In_ PCSTR        ModuleName,
+  _In_ DWORD64       BaseOfDll,
+  _In_ DWORD         DllSize,
+  _In_ PMODLOAD_DATA Data,
+  _In_ DWORD         Flags
+);
+
+
+DWORD64 WINAPI SymLoadModuleExW(
+  _In_ HANDLE        hProcess,
+  _In_ HANDLE        hFile,
+  _In_ PCWSTR        ImageName,
+  _In_ PCWSTR        ModuleName,
+  _In_ DWORD64       BaseOfDll,
+  _In_ DWORD         DllSize,
+  _In_ PMODLOAD_DATA Data,
+  _In_ DWORD         Flags
+);
+
+
+BOOL WINAPI SymFromAddr(
+  _In_      HANDLE       hProcess,
+  _In_      DWORD64      Address,
+  _Out_opt_ PDWORD64     Displacement,
+  _Inout_   PSYMBOL_INFO Symbol
+);
+
+
+BOOL WINAPI SymGetModuleInfo64(
+  _In_  HANDLE             hProcess,
+  _In_  DWORD64            dwAddr,
+  _Out_ PIMAGEHLP_MODULE64 ModuleInfo
+);
+
+BOOL WINAPI SymInitialize(
+  _In_     HANDLE hProcess,
+  _In_opt_ LPCSTR UserSearchPath,
+  _In_     BOOL   fInvadeProcess
+);
+
+BOOL WINAPI SymFromName(
+  _In_    HANDLE       hProcess,
+  _In_    LPCSTR       Name,
+  _Inout_ PSYMBOL_INFO Symbol
+);
+
+
+
+DWORD64 WINAPI SymLoadModuleEx(
+  _In_ HANDLE        hProcess,
+  _In_ HANDLE        hFile,
+  _In_ LPCSTR        ImageName,
+  _In_ LPCSTR        ModuleName,
+  _In_ DWORD64       BaseOfDll,
+  _In_ DWORD         DllSize,
+  _In_ PMODLOAD_DATA Data,
+  _In_ DWORD         Flags
+);
+
+DWORD WINAPI SymSetOptions(
+  _In_ DWORD SymOptions
+);
+
+
+BOOL WINAPI SymEnumSymbols(
+  _In_ HANDLE                         hProcess,
+  _In_ ULONG64                        BaseOfDll,
+  _In_ PCSTR                          Mask,
+  _In_ PVOID                          EnumSymbolsCallback,
+  _In_ PVOID                          UserContext
+);
+
+
+BOOL WINAPI SymEnumSymbolsEx(
+  _In_ HANDLE                         hProcess,
+  _In_ ULONG64                        BaseOfDll,
+  _In_ PCSTR                          Mask,
+  _In_ PVOID                          EnumSymbolsCallback,
+  _In_ PVOID                          UserContext,
+  _In_ DWORD                          Options
+);
+
+BOOL WINAPI SymEnumTypes(
+  _In_ HANDLE                         hProcess,
+  _In_ ULONG64                        BaseOfDll,
+  _In_ PVOID                          EnumSymbolsCallback,
+  _In_ PVOID                          UserContext
+);
+
+BOOL WINAPI SymEnumTypesByName(
+  _In_ HANDLE                         hProcess,
+  _In_ ULONG64                        BaseOfDll,
+  _In_ PCSTR                          mask,
+  _In_ PVOID                          EnumSymbolsCallback,
+  _In_ PVOID                          UserContext
+);
+
+BOOL WINAPI SymEnumerateModules64(
+  _In_ HANDLE                      hProcess,
+  _In_ PVOID                        EnumModulesCallback,
+  _In_ PVOID                       UserContext
+);
+
+
+BOOL WINAPI SymGetTypeFromName(
+  _In_ HANDLE hProcess,
+  _In_ ULONG64 BaseOfDll,
+  _In_ PCSTR Name,
+  _Inout_ PSYMBOL_INFO Symbol
+);
+
+
+BOOL WINAPI SymGetTypeInfo(
+  _In_  HANDLE                    hProcess,
+  _In_  DWORD64                   ModBase,
+  _In_  ULONG                     TypeId,
+  _In_  IMAGEHLP_SYMBOL_TYPE_INFO GetType,
+  _Out_ PVOID                     pInfo
+);
+
+
+BOOL SymSearch(
+  HANDLE                         hProcess,
+  ULONG64                        BaseOfDll,
+  DWORD                          Index,
+  DWORD                          SymTag,
+  PCSTR                          Mask,
+  DWORD64                        Address,
+  PSYM_ENUMERATESYMBOLS_CALLBACK EnumSymbolsCallback,
+  PVOID                          UserContext,
+  DWORD                          Options
+);
+
+
+BOOL SymSearchW(
+  HANDLE                          hProcess,
+  ULONG64                         BaseOfDll,
+  DWORD                           Index,
+  DWORD                           SymTag,
+  PCWSTR                          Mask,
+  DWORD64                         Address,
+  PSYM_ENUMERATESYMBOLS_CALLBACKW EnumSymbolsCallback,
+  PVOID                           UserContext,
+  DWORD                           Options
+);

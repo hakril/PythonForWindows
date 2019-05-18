@@ -19,7 +19,7 @@ def GetFileVersionInfoA(lptstrFilename, dwHandle=0, dwLen=None, lpData=NeededPar
 def GetFileVersionInfoW(lptstrFilename, dwHandle=0, dwLen=None, lpData=NeededParameter):
     if dwLen is None and lpData is not None:
         dwLen = len(lpData)
-    return GetFileVersionInfoA.ctypes_function(lptstrFilename, dwHandle, dwLen, lpData)
+    return GetFileVersionInfoW.ctypes_function(lptstrFilename, dwHandle, dwLen, lpData)
 
 @VersionProxy()
 def GetFileVersionInfoSizeA(lptstrFilename, lpdwHandle=None):

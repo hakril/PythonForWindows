@@ -36,6 +36,11 @@ def NtCreateFile(FileHandle, DesiredAccess, ObjectAttributes, IoStatusBlock, All
     return NtCreateFile.ctypes_function(FileHandle, DesiredAccess, ObjectAttributes, IoStatusBlock, AllocationSize, FileAttributes, ShareAccess, CreateDisposition, CreateOptions, EaBuffer, EaLength)
 
 @NtdllProxy()
+def NtOpenFile(FileHandle, DesiredAccess, ObjectAttributes, IoStatusBlock, ShareAccess, OpenOptions):
+    return NtOpenFile.ctypes_function(FileHandle, DesiredAccess, ObjectAttributes, IoStatusBlock, ShareAccess, OpenOptions)
+
+
+@NtdllProxy()
 def NtSetInformationFile(FileHandle, IoStatusBlock, FileInformation, Length, FileInformationClass):
     return NtSetInformationFile.ctypes_function(FileHandle, IoStatusBlock, FileInformation, Length, FileInformationClass)
 
@@ -195,13 +200,18 @@ def NtQueryDirectoryObject(DirectoryHandle, Buffer, Length, ReturnSingleEntry, R
 
 
 @NtdllProxy()
-def NtQuerySymbolicLinkObject(LinkHandle, LinkTarget, ReturnedLength):
-    return NtQuerySymbolicLinkObject.ctypes_function(LinkHandle, LinkTarget, ReturnedLength)
+def NtCreateSymbolicLinkObject(pHandle, DesiredAccess, ObjectAttributes, DestinationName):
+    return NtCreateSymbolicLinkObject.ctypes_function(pHandle, DesiredAccess, ObjectAttributes, DestinationName)
 
 
 @NtdllProxy()
 def NtOpenSymbolicLinkObject(LinkHandle, DesiredAccess, ObjectAttributes):
     return NtOpenSymbolicLinkObject.ctypes_function(LinkHandle, DesiredAccess, ObjectAttributes)
+
+
+@NtdllProxy()
+def NtQuerySymbolicLinkObject(LinkHandle, LinkTarget, ReturnedLength):
+    return NtQuerySymbolicLinkObject.ctypes_function(LinkHandle, LinkTarget, ReturnedLength)
 
 
 # Event
@@ -358,6 +368,9 @@ def NtQueryLicenseValue(Name, Type, Buffer, Length=None, DataLength=NeededParame
         Length = len(buffer)
     return NtQueryLicenseValue.ctypes_function(Name, Type, Buffer, Length, DataLength)
 
+@NtdllProxy()
+def NtQueryKey(KeyHandle, KeyInformationClass, KeyInformation, Length, ResultLength):
+    return NtQueryKey.ctypes_function(KeyHandle, KeyInformationClass, KeyInformation, Length, ResultLength)
 
 # Other
 
@@ -371,6 +384,12 @@ def RtlEqualUnicodeString(String1, String2, CaseInSensitive):
 @NtdllProxy()
 def NtEnumerateSystemEnvironmentValuesEx(InformationClass, Buffer, BufferLength):
     return NtEnumerateSystemEnvironmentValuesEx.ctypes_function(InformationClass, Buffer, BufferLength)
+
+
+# Pipe
+@NtdllProxy()
+def NtCreateNamedPipeFile(NamedPipeFileHandle, DesiredAccess, ObjectAttributes, IoStatusBlock, ShareAccess, CreateDisposition, CreateOptions, WriteModeMessage, ReadModeMessage, NonBlocking, MaxInstances, InBufferSize, OutBufferSize, DefaultTimeOut):
+    return NtCreateNamedPipeFile.ctypes_function(NamedPipeFileHandle, DesiredAccess, ObjectAttributes, IoStatusBlock, ShareAccess, CreateDisposition, CreateOptions, WriteModeMessage, ReadModeMessage, NonBlocking, MaxInstances, InBufferSize, OutBufferSize, DefaultTimeOut)
 
 
 #########

@@ -83,11 +83,17 @@ class WinStruct(object):
                 continue
             i += 1
             # Should begin by "_ANON_" to trigger <generate_anonymous_union>
+            if type.typedef:
+                assert len(type.typedef) == 1, "Anonymous structure should have only one name"
+                field_name = list(type.typedef)[0]
+                type.typedef = {} # Remove typedef so that there is no use of it when genering the code for this anon-struct
+            else:
+                field_name = "anon_{0:02}".format(i)
             type.name = "_ANON_{0}_SUB_{1}_{2}".format(self.name, type.ctypes_type, i).upper()
             code.append(type.generate_ctypes()) # Generate class for the code
             # Replace the type name + field name in fields list
 
-            new_fields.append((WinStructType(type.name), "anon_{0:02}".format(i), nb))
+            new_fields.append((WinStructType(type.name), field_name, nb))
         self.fields = new_fields
         return "\n".join(code)
 
@@ -157,11 +163,7 @@ class WinStruct(object):
 
         if self.is_self_referencing():
             print("{0} is self referencing".format(self.name))
-            return self.generate_selfref_ctypes_class() + "\n"
-
-
-            import pdb;pdb.set_trace()
-            print("LOL")
+            return anon_code + self.generate_selfref_ctypes_class() + "\n"
 
         ctypes_class = self.generate_ctypes_class()
         ctypes_typedef = self.generate_typedef_ctypes()

@@ -33,9 +33,17 @@ def CoCreateInstanceEx(rclsid, punkOuter, dwClsCtx, pServerInfo, dwCount, pResul
 
 
 @Ole32Proxy()
+def CoGetClassObject(rclsid, dwClsContext, pvReserved, riid, ppv):
+    return CoGetClassObject.ctypes_function(rclsid, dwClsContext, pvReserved, riid, ppv)
+
+@Ole32Proxy()
 def CoGetInterceptor(iidIntercepted, punkOuter, iid, ppv):
     return CoGetInterceptor.ctypes_function(iidIntercepted, punkOuter, iid, ppv)
 
 @Ole32Proxy()
 def CLSIDFromProgID(lpszProgID, lpclsid):
     return CLSIDFromProgID.ctypes_function(lpszProgID, lpclsid)
+
+@Ole32Proxy()
+def CoTaskMemFree(pv):
+    return CoTaskMemFree.ctypes_function(pv)

@@ -32,19 +32,7 @@ HANDLE WINAPI CreateFileW(
     );
 
 
-NTSTATUS WINAPI NtCreateFile(
-  _Out_    PHANDLE            FileHandle,
-  _In_     ACCESS_MASK        DesiredAccess,
-  _In_     POBJECT_ATTRIBUTES ObjectAttributes,
-  _Out_    PIO_STATUS_BLOCK   IoStatusBlock,
-  _In_opt_ PLARGE_INTEGER     AllocationSize,
-  _In_     ULONG              FileAttributes,
-  _In_     ULONG              ShareAccess,
-  _In_     ULONG              CreateDisposition,
-  _In_     ULONG              CreateOptions,
-  _In_     PVOID              EaBuffer,
-  _In_     ULONG              EaLength
-);
+
 
 NTSTATUS WINAPI LdrLoadDll(
   __in_opt LPCWSTR               PathToFile,
@@ -53,67 +41,8 @@ NTSTATUS WINAPI LdrLoadDll(
   _Out_ PHANDLE             ModuleHandle
 );
 
-NTSTATUS WINAPI NtQuerySystemInformation(
-  _In_       SYSTEM_INFORMATION_CLASS SystemInformationClass,
-  _Inout_    PVOID SystemInformation,
-  _In_       ULONG SystemInformationLength,
-  _Out_opt_  PULONG ReturnLength
-);
 
 
-NTSTATUS WINAPI NtQueryInformationProcess(
-  _In_      HANDLE           ProcessHandle,
-  _In_      PROCESSINFOCLASS ProcessInformationClass,
-  _Out_     PVOID            ProcessInformation,
-  _In_      ULONG            ProcessInformationLength,
-  _Out_opt_ PULONG           ReturnLength
-);
-
-NTSTATUS WINAPI NtSetInformationProcess(
-  _In_ HANDLE               ProcessHandle,
-  _In_ PROCESS_INFORMATION_CLASS ProcessInformationClass,
-  _In_ PVOID                ProcessInformation,
-  _In_ ULONG                ProcessInformationLength
-);
-
-NTSTATUS WINAPI NtQueryVirtualMemory(
-  _In_      HANDLE                   ProcessHandle,
-  _In_opt_  PVOID                    BaseAddress,
-  _In_      MEMORY_INFORMATION_CLASS MemoryInformationClass,
-  _Out_     PVOID                    MemoryInformation,
-  _In_      SIZE_T                   MemoryInformationLength,
-  _Out_opt_ PSIZE_T                  ReturnLength
-);
-
-NTSTATUS WINAPI NtQueryVolumeInformationFile(
-  _In_  HANDLE               FileHandle,
-  _Out_ PIO_STATUS_BLOCK     IoStatusBlock,
-  _Out_ PVOID                FsInformation,
-  _In_  ULONG                Length,
-  _In_  FS_INFORMATION_CLASS FsInformationClass
-);
-
-NTSTATUS NtCreateThreadEx(
-        PHANDLE                 ThreadHandle,
-        ACCESS_MASK             DesiredAccess,
-        LPVOID                  ObjectAttributes,
-        HANDLE                  ProcessHandle,
-        LPTHREAD_START_ROUTINE  lpStartAddress,
-        LPVOID                  lpParameter,
-        BOOL                    CreateSuspended,
-        DWORD                   dwStackSize,
-        DWORD                   Unknown1,
-        DWORD                   Unknown2,
-        LPVOID                  Unknown3
-);
-
-NTSTATUS WINAPI NtQueryInformationThread (
-    _In_ HANDLE ThreadHandle,
-    _In_ THREAD_INFORMATION_CLASS ThreadInformationClass,
-    _Out_ PVOID ThreadInformation,
-    _In_ ULONG ThreadInformationLength,
-    _Out_ PULONG ReturnLength
-);
 
 BOOL WINAPI GetExitCodeThread(
     _In_  HANDLE hThread,
@@ -150,23 +79,7 @@ LPVOID WINAPI VirtualAllocEx(
   _In_      DWORD flProtect
 );
 
-NTSTATUS WINAPI NtAllocateVirtualMemory(
-  _In_    HANDLE    ProcessHandle,
-  _Inout_ PVOID     *BaseAddress,
-  _In_    ULONG_PTR ZeroBits,
-  _Inout_ PSIZE_T   RegionSize,
-  _In_    ULONG     AllocationType,
-  _In_    ULONG     Protect
-);
 
-
-NTSTATUS WINAPI NtProtectVirtualMemory(
-  _In_ HANDLE               ProcessHandle,
-  _Inout_ PVOID            *BaseAddress,
-  _Inout_ PULONG           NumberOfBytesToProtect,
-  _In_ ULONG                NewAccessProtection,
-  _Out_ PULONG              OldAccessProtection
-);
 
 
 BOOL WINAPI VirtualFree(
@@ -183,12 +96,6 @@ BOOL WINAPI VirtualFreeEx(
 );
 
 
-NTSTATUS WINAPI NtFreeVirtualMemory(
-  _In_    HANDLE  ProcessHandle,
-  _Inout_ PVOID   *BaseAddress,
-  _Inout_ PSIZE_T RegionSize,
-  _In_    ULONG   FreeType
-);
 
 BOOL WINAPI VirtualProtect(
   _In_   LPVOID lpAddress,
@@ -330,20 +237,12 @@ BOOL WINAPI GetThreadContext(
     __inout LPCONTEXT lpContext
 );
 
-NTSTATUS WINAPI NtGetContextThread(
-    __in    HANDLE hThread,
-    __inout LPCONTEXT lpContext
-);
 
 BOOL WINAPI SetThreadContext(
     __in HANDLE hThread,
     __in CONST LPCONTEXT lpContext
 );
 
-NTSTATUS WINAPI NtSetContextThread(
-    __in HANDLE hThread,
-    __in CONST LPCONTEXT lpContext
-);
 
 
 HANDLE WINAPI OpenThread(
@@ -378,13 +277,7 @@ NTSTATUS WINAPI NtWow64ReadVirtualMemory64(
   _Out_  PULONG64   lpNumberOfBytesRead
 );
 
-NTSTATUS WINAPI NtReadVirtualMemory(
-  _In_   HANDLE     hProcess,
-  _In_   PVOID      lpBaseAddress,
-  _Out_  LPVOID     lpBuffer,
-  _In_   ULONG      nSize,
-  _Out_  PULONG     lpNumberOfBytesRead
-);
+
 
 
 BOOL WINAPI WriteProcessMemory(
@@ -405,13 +298,6 @@ NTSTATUS WINAPI NtWow64WriteVirtualMemory64(
 );
 
 
-NTSTATUS WINAPI NtWriteVirtualMemory(
-  _In_ HANDLE               ProcessHandle,
-  _In_ PVOID                BaseAddress,
-  _In_ PVOID                Buffer,
-  _In_ ULONG                NumberOfBytesToWrite,
-  _Out_ PULONG              NumberOfBytesWritten
-);
 
 
 HANDLE WINAPI CreateToolhelp32Snapshot(
@@ -625,27 +511,6 @@ BOOL WINAPI WriteFile(
   _Inout_opt_  LPOVERLAPPED lpOverlapped
 );
 
-DWORD WINAPI GetExtendedTcpTable(
-  _Out_    PVOID pTcpTable,
-  _Inout_  PDWORD pdwSize,
-  _In_     BOOL bOrder,
-  _In_     ULONG ulAf,
-  _In_     TCP_TABLE_CLASS TableClass,
-  _In_     ULONG Reserved
-);
-
-DWORD WINAPI GetExtendedUdpTable(
-  _Out_    PVOID pUdpTable,
-  _Inout_  PDWORD pdwSize,
-  _In_     BOOL bOrder,
-  _In_     ULONG ulAf,
-  _In_     UDP_TABLE_CLASS TableClass,
-  _In_     ULONG Reserved
-);
-
-DWORD WINAPI SetTcpEntry(
-  _In_  PMIB_TCPROW pTcpRow
-);
 
 PVOID WINAPI AddVectoredContinueHandler(
   _In_  ULONG FirstHandler,
@@ -981,39 +846,6 @@ NTSTATUS RtlGetCompressionWorkSpaceSize(
    PULONG CompressFragmentWorkSpaceSize
 );
 
-NTSTATUS NtCreateSection(
-    PHANDLE            SectionHandle,
-    ACCESS_MASK        DesiredAccess,
-    POBJECT_ATTRIBUTES ObjectAttributes,
-    PLARGE_INTEGER     MaximumSize,
-    ULONG              SectionPageProtection,
-    ULONG              AllocationAttributes,
-    HANDLE             FileHandle
-);
-
-NTSTATUS NtOpenSection(
-    PHANDLE            SectionHandle,
-    ACCESS_MASK        DesiredAccess,
-    POBJECT_ATTRIBUTES ObjectAttributes
-);
-
-NTSTATUS NtMapViewOfSection(
-    HANDLE          SectionHandle,
-    HANDLE          ProcessHandle,
-    PVOID           *BaseAddress,
-    ULONG_PTR       ZeroBits,
-    SIZE_T          CommitSize,
-    PLARGE_INTEGER  SectionOffset,
-    PSIZE_T         ViewSize,
-    SECTION_INHERIT InheritDisposition,
-    ULONG           AllocationType,
-    ULONG           Win32Protect
-);
-
-NTSTATUS NtUnmapViewOfSection(
-    HANDLE ProcessHandle,
-    PVOID  BaseAddress
-);
 
 HANDLE WINAPI OpenEventA(
     __in DWORD dwDesiredAccess,
@@ -1028,11 +860,6 @@ HANDLE WINAPI OpenEventW(
     __in LPCWSTR lpName
 );
 
-NTSTATUS WINAPI NtOpenEvent(
-    __out PHANDLE EventHandle,
-    __in ACCESS_MASK DesiredAccess,
-    __in POBJECT_ATTRIBUTES ObjectAttributes
-);
 
 
 INT WINAPI lstrcmpA(
@@ -1237,13 +1064,7 @@ BOOL WINAPI FindNextVolumeW(
   _In_  DWORD  cchBufferLength
 );
 
-NTSTATUS WINAPI NtQueryObject(
-  _In_opt_  HANDLE                   Handle,
-  _In_      OBJECT_INFORMATION_CLASS ObjectInformationClass,
-  _Out_opt_ PVOID                    ObjectInformation,
-  _In_      ULONG                    ObjectInformationLength,
-  _Out_opt_ PULONG                   ReturnLength
-);
+
 
 BOOL WINAPI DuplicateHandle(
   _In_  HANDLE   hSourceProcessHandle,
@@ -1380,35 +1201,6 @@ DWORD WINAPI GetIpAddrTable(
   _Out_   PMIB_IPADDRTABLE pIpAddrTable,
   _Inout_ PULONG           pdwSize,
   _In_    BOOL             bOrder
-);
-
-NTSTATUS WINAPI NtOpenDirectoryObject(
-    __out PHANDLE DirectoryHandle,
-    __in ACCESS_MASK DesiredAccess,
-    __in POBJECT_ATTRIBUTES ObjectAttributes
-);
-
-
-NTSTATUS WINAPI NtQueryDirectoryObject(
-    __in HANDLE DirectoryHandle,
-    __out PVOID Buffer,
-    __in ULONG Length,
-    __in BOOLEAN ReturnSingleEntry,
-    __in BOOLEAN RestartScan,
-    __inout PULONG Context,
-    _Out_opt_ PULONG ReturnLength
-    );
-
-NTSTATUS WINAPI NtQuerySymbolicLinkObject(
-  _In_      HANDLE          LinkHandle,
-  _Inout_   PUNICODE_STRING LinkTarget,
-  _Out_opt_ PULONG          ReturnedLength
-);
-
-NTSTATUS WINAPI NtOpenSymbolicLinkObject(
-  _Out_ PHANDLE            LinkHandle,
-  _In_  ACCESS_MASK        DesiredAccess,
-  _In_  POBJECT_ATTRIBUTES ObjectAttributes
 );
 
 BOOL WINAPI GetProcessTimes(
@@ -1588,29 +1380,6 @@ VOID WINAPI RtlGetUnloadEventTraceEx(
 );
 
 
-NTSTATUS WINAPI NtQueryInformationFile(
-  _In_  HANDLE                 FileHandle,
-  _Out_ PIO_STATUS_BLOCK       IoStatusBlock,
-  _Out_ PVOID                  FileInformation,
-  _In_  ULONG                  Length,
-  _In_  FILE_INFORMATION_CLASS FileInformationClass
-);
-
-NTSTATUS WINAPI NtQueryDirectoryFile(
-  _In_     HANDLE                 FileHandle,
-  _In_opt_ HANDLE                 Event,
-  _In_opt_ PIO_APC_ROUTINE        ApcRoutine,
-  _In_opt_ PVOID                  ApcContext,
-  _Out_    PIO_STATUS_BLOCK       IoStatusBlock,
-  _Out_    PVOID                  FileInformation,
-  _In_     ULONG                  Length,
-  _In_     FILE_INFORMATION_CLASS FileInformationClass,
-  _In_     BOOLEAN                ReturnSingleEntry,
-  _In_opt_ PUNICODE_STRING        FileName,
-  _In_     BOOLEAN                RestartScan
-);
-
-
 BOOLEAN WINAPI RtlDosPathNameToNtPathName_U(
     _In_ PCWSTR DosName,
     _Out_ PUNICODE_STRING NtName,
@@ -1661,13 +1430,7 @@ BOOL WINAPI GetProductInfo(
 );
 
 
-NTSTATUS NtSetInformationFile(
-  HANDLE                 FileHandle,
-  PIO_STATUS_BLOCK       IoStatusBlock,
-  PVOID                  FileInformation,
-  ULONG                  Length,
-  FILE_INFORMATION_CLASS FileInformationClass
-);
+
 
 
 BOOL GetProcessMemoryInfo(
@@ -1723,10 +1486,6 @@ DWORD WINAPI GetFirmwareEnvironmentVariableExW(
   _Out_ PDWORD pdwAttribubutes
 );
 
-NTSTATUS WINAPI NtEnumerateSystemEnvironmentValuesEx(
-    _In_ ULONG InformationClass,
-    _In_ PVOID Buffer,
-    _In_ ULONG BufferLength
-);
+
 
 

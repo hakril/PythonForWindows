@@ -141,3 +141,21 @@ BOOL WINAPI GetAclInformation(
     _In_ DWORD nAclInformationLength,
     _In_ ACL_INFORMATION_CLASS dwAclInformationClass
     );
+
+/* VOID */
+PVOID MapGenericMask(
+  PDWORD           AccessMask,
+  PGENERIC_MAPPING GenericMapping
+);
+
+BOOL AccessCheck(
+  PSECURITY_DESCRIPTOR pSecurityDescriptor,
+  HANDLE               ClientToken,
+  DWORD                DesiredAccess,
+  PGENERIC_MAPPING     GenericMapping,
+  PPRIVILEGE_SET       PrivilegeSet,
+  LPDWORD              PrivilegeSetLength,
+  LPDWORD              GrantedAccess,
+  LPBOOL               AccessStatus
+);
+

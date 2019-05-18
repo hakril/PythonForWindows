@@ -45,6 +45,7 @@ class _GUID(INITIAL_GUID):
             datas.append(int(part_iid[4][i * 2:(i + 1) * 2], 16))
         return cls.from_raw(*datas, strid=iid)
 
+
     @classmethod
     def from_raw(cls, Data1, Data2, Data3, Data41, Data42, Data43, Data44, Data45, Data46, Data47, Data48, **kwargs):
         return cls(Data1, Data2, Data3,  (BYTE*8)(Data41, Data42, Data43, Data44, Data45, Data46, Data47, Data48), **kwargs)

@@ -1,0 +1,822 @@
+typedef enum _TCP_TABLE_CLASS {
+  TCP_TABLE_BASIC_LISTENER,
+  TCP_TABLE_BASIC_CONNECTIONS,
+  TCP_TABLE_BASIC_ALL,
+  TCP_TABLE_OWNER_PID_LISTENER,
+  TCP_TABLE_OWNER_PID_CONNECTIONS,
+  TCP_TABLE_OWNER_PID_ALL,
+  TCP_TABLE_OWNER_MODULE_LISTENER,
+  TCP_TABLE_OWNER_MODULE_CONNECTIONS,
+  TCP_TABLE_OWNER_MODULE_ALL
+} TCP_TABLE_CLASS;
+
+typedef enum _MIB_TCP_STATE{
+    MIB_TCP_STATE_CLOSED     =  1,
+    MIB_TCP_STATE_LISTEN     =  2,
+    MIB_TCP_STATE_SYN_SENT   =  3,
+    MIB_TCP_STATE_SYN_RCVD   =  4,
+    MIB_TCP_STATE_ESTAB      =  5,
+    MIB_TCP_STATE_FIN_WAIT1  =  6,
+    MIB_TCP_STATE_FIN_WAIT2  =  7,
+    MIB_TCP_STATE_CLOSE_WAIT =  8,
+    MIB_TCP_STATE_CLOSING    =  9,
+    MIB_TCP_STATE_LAST_ACK   = 10,
+    MIB_TCP_STATE_TIME_WAIT  = 11,
+    MIB_TCP_STATE_DELETE_TCB = 12,
+} MIB_TCP_STATE;
+
+typedef enum NET_FW_IP_PROTOCOL_ {
+    NET_FW_IP_PROTOCOL_TCP  = 6,
+    NET_FW_IP_PROTOCOL_UDP  = 17,
+    NET_FW_IP_PROTOCOL_ANY  = 256
+}   NET_FW_IP_PROTOCOL;
+
+
+typedef struct {
+  ULONGLONG IP6Qword[2]; // Was QWORD
+} IP6_ADDRESS, *PIP6_ADDRESS;
+
+typedef struct _MIB_IPADDRROW_XP {
+    DWORD dwAddr;
+    IF_INDEX dwIndex;
+    DWORD dwMask;
+    DWORD dwBCastAddr;
+    DWORD dwReasmSize;
+    USHORT unused1;
+    USHORT wType;
+} MIB_IPADDRROW, MIB_IPADDRROW_XP, *PMIB_IPADDRROW_XP;
+
+typedef struct _MIB_IPADDRTABLE {
+    DWORD dwNumEntries;
+    MIB_IPADDRROW table[ANY_SIZE];
+} MIB_IPADDRTABLE, *PMIB_IPADDRTABLE;
+
+
+typedef enum _INTERNAL_IF_OPER_STATUS {
+    IF_OPER_STATUS_NON_OPERATIONAL = 0,
+    IF_OPER_STATUS_UNREACHABLE     = 1,
+    IF_OPER_STATUS_DISCONNECTED    = 2,
+    IF_OPER_STATUS_CONNECTING      = 3,
+    IF_OPER_STATUS_CONNECTED       = 4,
+    IF_OPER_STATUS_OPERATIONAL     = 5,
+} INTERNAL_IF_OPER_STATUS;
+
+typedef struct _MIB_IFROW {
+    WCHAR wszName[MAX_INTERFACE_NAME_LEN];
+    IF_INDEX dwIndex;
+    IFTYPE dwType;
+    DWORD dwMtu;
+    DWORD dwSpeed;
+    DWORD dwPhysAddrLen;
+    BYTE bPhysAddr[MAXLEN_PHYSADDR];
+    DWORD dwAdminStatus;
+    INTERNAL_IF_OPER_STATUS dwOperStatus;
+    DWORD dwLastChange;
+    DWORD dwInOctets;
+    DWORD dwInUcastPkts;
+    DWORD dwInNUcastPkts;
+    DWORD dwInDiscards;
+    DWORD dwInErrors;
+    DWORD dwInUnknownProtos;
+    DWORD dwOutOctets;
+    DWORD dwOutUcastPkts;
+    DWORD dwOutNUcastPkts;
+    DWORD dwOutDiscards;
+    DWORD dwOutErrors;
+    DWORD dwOutQLen;
+    DWORD dwDescrLen;
+    UCHAR bDescr[MAXLEN_IFDESCR];
+} MIB_IFROW, *PMIB_IFROW;
+
+typedef struct _MIB_IFTABLE {
+    DWORD dwNumEntries;
+    MIB_IFROW table[ANY_SIZE];
+} MIB_IFTABLE, *PMIB_IFTABLE;
+
+
+typedef struct _MIB_TCPROW_OWNER_PID {
+  DWORD dwState;
+  DWORD dwLocalAddr;
+  DWORD dwLocalPort;
+  DWORD dwRemoteAddr;
+  DWORD dwRemotePort;
+  DWORD dwOwningPid;
+} MIB_TCPROW_OWNER_PID, *PMIB_TCPROW_OWNER_PID;
+
+typedef struct _MIB_TCPTABLE_OWNER_PID{
+  DWORD                dwNumEntries;
+  MIB_TCPROW_OWNER_PID table[ANY_SIZE];
+} MIB_TCPTABLE_OWNER_PID, *PMIB_TCPTABLE_OWNER_PID;
+
+typedef struct _MIB_UDPROW_OWNER_PID {
+  DWORD dwLocalAddr;
+  DWORD dwLocalPort;
+  DWORD dwOwningPid;
+} MIB_UDPROW_OWNER_PID, *PMIB_UDPROW_OWNER_PID;
+
+typedef struct _MIB_UDPTABLE_OWNER_PID {
+  DWORD                dwNumEntries;
+  MIB_UDPROW_OWNER_PID table[ANY_SIZE];
+} MIB_UDPTABLE_OWNER_PID, *PMIB_UDPTABLE_OWNER_PID;
+
+
+typedef struct _MIB_UDP6ROW_OWNER_PID {
+  UCHAR ucLocalAddr[16];
+  DWORD dwLocalScopeId;
+  DWORD dwLocalPort;
+  DWORD dwOwningPid;
+} MIB_UDP6ROW_OWNER_PID, *PMIB_UDP6ROW_OWNER_PID;
+
+typedef struct _MIB_UDP6TABLE_OWNER_PID{
+  DWORD                 dwNumEntries;
+  MIB_UDP6ROW_OWNER_PID table[ANY_SIZE];
+} MIB_UDP6TABLE_OWNER_PID, *PMIB_UDP6TABLE_OWNER_PID;
+
+typedef struct _MIB_TCP6ROW_OWNER_PID {
+  UCHAR ucLocalAddr[16];
+  DWORD dwLocalScopeId;
+  DWORD dwLocalPort;
+  UCHAR ucRemoteAddr[16];
+  DWORD dwRemoteScopeId;
+  DWORD dwRemotePort;
+  DWORD dwState;
+  DWORD dwOwningPid;
+} MIB_TCP6ROW_OWNER_PID, *PMIB_TCP6ROW_OWNER_PID;
+
+typedef struct _MIB_TCP6TABLE_OWNER_PID {
+  DWORD                 dwNumEntries;
+  MIB_TCP6ROW_OWNER_PID table[ANY_SIZE];
+} MIB_TCP6TABLE_OWNER_PID, *PMIB_TCP6TABLE_OWNER_PID;
+
+typedef struct _MIB_TCPROW {
+  DWORD dwState;
+  DWORD dwLocalAddr;
+  DWORD dwLocalPort;
+  DWORD dwRemoteAddr;
+  DWORD dwRemotePort;
+} MIB_TCPROW, *PMIB_TCPROW;
+
+typedef struct _IP_ADAPTER_INDEX_MAP {
+  ULONG Index;
+  WCHAR Name[MAX_ADAPTER_NAME];
+} IP_ADAPTER_INDEX_MAP, *PIP_ADAPTER_INDEX_MAP;
+
+typedef struct _IP_INTERFACE_INFO {
+  LONG                 NumAdapters;
+  IP_ADAPTER_INDEX_MAP Adapter[1];
+} IP_INTERFACE_INFO, *PIP_INTERFACE_INFO;
+
+// DNS stuff
+
+typedef enum
+{
+    DnsFreeFlat = 0,
+    DnsFreeRecordList,
+    DnsFreeParsedMessageFields
+}
+DNS_FREE_TYPE;
+
+typedef struct _DNS_CACHE_ENTRY
+{
+    struct _DNS_CACHE_ENTRY* pNext;
+    PCWSTR pszName;
+    USHORT wType;
+    USHORT wDataLength;
+    ULONG dwFlags;
+} DNS_CACHE_ENTRY, *PDNS_CACHE_ENTRY;
+
+
+typedef struct {
+  IP4_ADDRESS IpAddress;
+} DNS_A_DATA, *PDNS_A_DATA;
+
+typedef struct
+{
+    PWSTR           pNameHost;
+}
+DNS_PTR_DATAW, *PDNS_PTR_DATAW;
+
+
+typedef struct
+{
+    PSTR            pNameHost;
+}
+DNS_PTR_DATAA, *PDNS_PTR_DATAA;
+
+
+typedef struct
+{
+    PWSTR           pNamePrimaryServer;
+    PWSTR           pNameAdministrator;
+    DWORD           dwSerialNo;
+    DWORD           dwRefresh;
+    DWORD           dwRetry;
+    DWORD           dwExpire;
+    DWORD           dwDefaultTtl;
+}
+DNS_SOA_DATAW, *PDNS_SOA_DATAW;
+
+typedef struct
+{
+    PSTR            pNamePrimaryServer;
+    PSTR            pNameAdministrator;
+    DWORD           dwSerialNo;
+    DWORD           dwRefresh;
+    DWORD           dwRetry;
+    DWORD           dwExpire;
+    DWORD           dwDefaultTtl;
+}
+DNS_SOA_DATAA, *PDNS_SOA_DATAA;
+
+
+typedef struct
+{
+    PWSTR           pNameMailbox;
+    PWSTR           pNameErrorsMailbox;
+}
+DNS_MINFO_DATAW, *PDNS_MINFO_DATAW;
+
+typedef struct
+{
+    PSTR            pNameMailbox;
+    PSTR            pNameErrorsMailbox;
+}
+DNS_MINFO_DATAA, *PDNS_MINFO_DATAA;
+
+typedef struct
+{
+    PWSTR           pNameExchange;
+    WORD            wPreference;
+    WORD            Pad;        // keep ptrs DWORD aligned
+}
+DNS_MX_DATAW, *PDNS_MX_DATAW;
+
+typedef struct
+{
+    PSTR            pNameExchange;
+    WORD            wPreference;
+    WORD            Pad;        // keep ptrs DWORD aligned
+}
+DNS_MX_DATAA, *PDNS_MX_DATAA;
+
+
+
+typedef struct
+{
+    DWORD           dwStringCount;
+    PWSTR           pStringArray[1];
+}
+DNS_TXT_DATAW, *PDNS_TXT_DATAW;
+
+typedef struct
+{
+    DWORD           dwStringCount;
+    PSTR            pStringArray[1];
+}
+DNS_TXT_DATAA, *PDNS_TXT_DATAA;
+
+
+typedef struct
+{
+    DWORD           dwByteCount;
+    BYTE            Data[1];
+}
+DNS_NULL_DATA, *PDNS_NULL_DATA;
+
+typedef struct
+{
+    IP4_ADDRESS     IpAddress;
+    UCHAR           chProtocol;
+    BYTE            BitMask[1];
+}
+DNS_WKS_DATA, *PDNS_WKS_DATA;
+
+typedef struct
+{
+    IP6_ADDRESS     Ip6Address;
+}
+DNS_AAAA_DATA, *PDNS_AAAA_DATA;
+
+
+typedef struct
+{
+    WORD            wTypeCovered;
+    BYTE            chAlgorithm;
+    BYTE            chLabelCount;
+    DWORD           dwOriginalTtl;
+    DWORD           dwExpiration;
+    DWORD           dwTimeSigned;
+    WORD            wKeyTag;
+    WORD            wSignatureLength;
+    PWSTR           pNameSigner;
+    BYTE            Signature[1];
+}
+DNS_SIG_DATAW, *PDNS_SIG_DATAW, DNS_RRSIG_DATAW, *PDNS_RRSIG_DATAW;
+
+typedef struct
+{
+    WORD            wTypeCovered;
+    BYTE            chAlgorithm;
+    BYTE            chLabelCount;
+    DWORD           dwOriginalTtl;
+    DWORD           dwExpiration;
+    DWORD           dwTimeSigned;
+    WORD            wKeyTag;
+    WORD            wSignatureLength;
+    PSTR            pNameSigner;
+    BYTE            Signature[1];
+}
+DNS_SIG_DATAA, *PDNS_SIG_DATAA, DNS_RRSIG_DATAA, *PDNS_RRSIG_DATAA;
+
+typedef struct
+{
+    WORD            wFlags;
+    BYTE            chProtocol;
+    BYTE            chAlgorithm;
+    WORD            wKeyLength;
+    WORD            wPad;            // keep byte field aligned
+    BYTE            Key[1];
+}
+DNS_KEY_DATA, *PDNS_KEY_DATA, DNS_DNSKEY_DATA, *PDNS_DNSKEY_DATA;
+
+
+typedef struct
+{
+    DWORD           dwByteCount;
+    BYTE            DHCID[1];
+}
+DNS_DHCID_DATA, *PDNS_DHCID_DATA;
+
+
+typedef struct
+{
+    PWSTR           pNextDomainName;
+    WORD            wTypeBitMapsLength;
+    WORD            wPad;            // keep byte field aligned
+    BYTE            TypeBitMaps[1];
+}
+DNS_NSEC_DATAW, *PDNS_NSEC_DATAW;
+
+typedef struct
+{
+    PSTR            pNextDomainName;
+    WORD            wTypeBitMapsLength;
+    WORD            wPad;            // keep byte field aligned
+    BYTE            TypeBitMaps[1];
+}
+DNS_NSEC_DATAA, *PDNS_NSEC_DATAA;
+
+typedef struct
+{
+    BYTE            chAlgorithm;
+    BYTE            bFlags;
+    WORD            wIterations;
+    BYTE            bSaltLength;
+    BYTE            bHashLength;
+    WORD            wTypeBitMapsLength;
+    BYTE            chData[1];
+}
+DNS_NSEC3_DATA, *PDNS_NSEC3_DATA;
+
+typedef struct
+{
+    BYTE            chAlgorithm;
+    BYTE            bFlags;
+    WORD            wIterations;
+    BYTE            bSaltLength;
+    BYTE            bPad[3];        // keep salt field aligned
+    BYTE            pbSalt[1];
+}
+DNS_NSEC3PARAM_DATA, *PDNS_NSEC3PARAM_DATA;
+
+
+typedef struct
+{
+    WORD            wKeyTag;
+    BYTE            chAlgorithm;
+    BYTE            chDigestType;
+    WORD            wDigestLength;
+    WORD            wPad;            // keep byte field aligned
+    BYTE            Digest[1];
+}
+DNS_DS_DATA, *PDNS_DS_DATA;
+
+typedef struct
+{
+    WORD            wDataLength;
+    WORD            wPad;            // keep byte field aligned
+    BYTE            Data[1];
+}
+DNS_OPT_DATA, *PDNS_OPT_DATA;
+
+
+typedef struct
+{
+    WORD            wVersion;
+    WORD            wSize;
+    WORD            wHorPrec;
+    WORD            wVerPrec;
+    DWORD           dwLatitude;
+    DWORD           dwLongitude;
+    DWORD           dwAltitude;
+}
+DNS_LOC_DATA, *PDNS_LOC_DATA;
+
+
+typedef struct
+{
+    PWSTR           pNameNext;
+    WORD            wNumTypes;
+    WORD            wTypes[1];
+}
+DNS_NXT_DATAW, *PDNS_NXT_DATAW;
+
+typedef struct
+{
+    PSTR            pNameNext;
+    WORD            wNumTypes;
+    WORD            wTypes[1];
+}
+DNS_NXT_DATAA, *PDNS_NXT_DATAA;
+
+typedef struct
+{
+    PWSTR           pNameTarget;
+    WORD            wPriority;
+    WORD            wWeight;
+    WORD            wPort;
+    WORD            Pad;            // keep ptrs DWORD aligned
+}
+DNS_SRV_DATAW, *PDNS_SRV_DATAW;
+
+typedef struct
+{
+    PSTR            pNameTarget;
+    WORD            wPriority;
+    WORD            wWeight;
+    WORD            wPort;
+    WORD            Pad;            // keep ptrs DWORD aligned
+}
+DNS_SRV_DATAA, *PDNS_SRV_DATAA;
+
+typedef struct
+{
+    WORD            wOrder;
+    WORD            wPreference;
+    PWSTR           pFlags;
+    PWSTR           pService;
+    PWSTR           pRegularExpression;
+    PWSTR           pReplacement;
+}
+DNS_NAPTR_DATAW, *PDNS_NAPTR_DATAW;
+
+typedef struct
+{
+    WORD            wOrder;
+    WORD            wPreference;
+    PSTR            pFlags;
+    PSTR            pService;
+    PSTR            pRegularExpression;
+    PSTR            pReplacement;
+}
+DNS_NAPTR_DATAA, *PDNS_NAPTR_DATAA;
+
+
+typedef struct
+{
+    BYTE            AddressType;
+    BYTE            Address[ DNS_ATMA_MAX_ADDR_LENGTH ];
+
+    //  E164 -- Null terminated string of less than
+    //      DNS_ATMA_MAX_ADDR_LENGTH
+    //
+    //  For NSAP (AESA) BCD encoding of exactly
+    //      DNS_ATMA_AESA_ADDR_LENGTH
+}
+DNS_ATMA_DATA, *PDNS_ATMA_DATA;
+
+typedef struct
+{
+    PWSTR           pNameAlgorithm;
+    PBYTE           pAlgorithmPacket;
+    PBYTE           pKey;
+    PBYTE           pOtherData;
+    DWORD           dwCreateTime;
+    DWORD           dwExpireTime;
+    WORD            wMode;
+    WORD            wError;
+    WORD            wKeyLength;
+    WORD            wOtherLength;
+    UCHAR           cAlgNameLength;
+    BOOL            bPacketPointers;
+}
+DNS_TKEY_DATAW, *PDNS_TKEY_DATAW;
+
+typedef struct
+{
+    PSTR            pNameAlgorithm;
+    PBYTE           pAlgorithmPacket;
+    PBYTE           pKey;
+    PBYTE           pOtherData;
+    DWORD           dwCreateTime;
+    DWORD           dwExpireTime;
+    WORD            wMode;
+    WORD            wError;
+    WORD            wKeyLength;
+    WORD            wOtherLength;
+    UCHAR           cAlgNameLength;
+    BOOL            bPacketPointers;
+}
+DNS_TKEY_DATAA, *PDNS_TKEY_DATAA;
+
+
+typedef struct
+{
+    PWSTR           pNameAlgorithm;
+    PBYTE           pAlgorithmPacket;
+    PBYTE           pSignature;
+    PBYTE           pOtherData;
+    LONGLONG        i64CreateTime;
+    WORD            wFudgeTime;
+    WORD            wOriginalXid;
+    WORD            wError;
+    WORD            wSigLength;
+    WORD            wOtherLength;
+    UCHAR           cAlgNameLength;
+    BOOL            bPacketPointers;
+}
+DNS_TSIG_DATAW, *PDNS_TSIG_DATAW;
+
+typedef struct
+{
+    PSTR            pNameAlgorithm;
+    PBYTE           pAlgorithmPacket;
+    PBYTE           pSignature;
+    PBYTE           pOtherData;
+    LONGLONG        i64CreateTime;
+    WORD            wFudgeTime;
+    WORD            wOriginalXid;
+    WORD            wError;
+    WORD            wSigLength;
+    WORD            wOtherLength;
+    UCHAR           cAlgNameLength;
+    BOOL            bPacketPointers;
+}
+DNS_TSIG_DATAA, *PDNS_TSIG_DATAA;
+
+typedef struct
+{
+    DWORD           dwMappingFlag;
+    DWORD           dwLookupTimeout;
+    DWORD           dwCacheTimeout;
+    DWORD           cWinsServerCount;
+    IP4_ADDRESS     WinsServers[1];
+}
+DNS_WINS_DATA, *PDNS_WINS_DATA;
+
+typedef struct
+{
+    DWORD           dwMappingFlag;
+    DWORD           dwLookupTimeout;
+    DWORD           dwCacheTimeout;
+    PWSTR           pNameResultDomain;
+}
+DNS_WINSR_DATAW, *PDNS_WINSR_DATAW;
+
+typedef struct
+{
+    DWORD           dwMappingFlag;
+    DWORD           dwLookupTimeout;
+    DWORD           dwCacheTimeout;
+    PSTR            pNameResultDomain;
+}
+DNS_WINSR_DATAA, *PDNS_WINSR_DATAA;
+
+typedef struct
+{
+ 	BYTE            bCertUsage;
+ 	BYTE            bSelector;
+ 	BYTE            bMatchingType;
+ 	WORD            bCertificateAssociationDataLength;
+ 	BYTE            bPad[3];        // keep certificate association data field a 	ligned
+ 	BYTE            bCertificateAssociationData[1];
+} DNS_TLSA_DATA, *PDNS_TLSA_DATA;
+
+typedef struct
+{
+    DWORD           dwByteCount;
+    BYTE            bData[1];
+}
+DNS_UNKNOWN_DATA, *PDNS_UNKNOWN_DATA;
+
+
+typedef struct _DnsRecordFlags
+{
+    DWORD   Section     : 2;
+    DWORD   Delete      : 1;
+    DWORD   CharSet     : 2;
+    DWORD   Unused      : 3;
+
+    DWORD   Reserved    : 24;
+}
+DNS_RECORD_FLAGS;
+
+
+typedef struct _DnsRecordA {
+  struct _DnsRecordA *pNext;
+  PSTR               pName;
+  WORD               wType;
+  WORD               wDataLength;
+  union {
+    DWORD            DW;
+    DNS_RECORD_FLAGS S;
+  } Flags;
+  DWORD              dwTtl;
+  DWORD              dwReserved;
+  union {
+    DNS_A_DATA          A;
+    DNS_SOA_DATAA       SOA;
+    DNS_SOA_DATAA       Soa;
+    DNS_PTR_DATAA       PTR;
+    DNS_PTR_DATAA       Ptr;
+    DNS_PTR_DATAA       NS;
+    DNS_PTR_DATAA       Ns;
+    DNS_PTR_DATAA       CNAME;
+    DNS_PTR_DATAA       Cname;
+    DNS_PTR_DATAA       DNAME;
+    DNS_PTR_DATAA       Dname;
+    DNS_PTR_DATAA       MB;
+    DNS_PTR_DATAA       Mb;
+    DNS_PTR_DATAA       MD;
+    DNS_PTR_DATAA       Md;
+    DNS_PTR_DATAA       MF;
+    DNS_PTR_DATAA       Mf;
+    DNS_PTR_DATAA       MG;
+    DNS_PTR_DATAA       Mg;
+    DNS_PTR_DATAA       MR;
+    DNS_PTR_DATAA       Mr;
+    DNS_MINFO_DATAA     MINFO;
+    DNS_MINFO_DATAA     Minfo;
+    DNS_MINFO_DATAA     RP;
+    DNS_MINFO_DATAA     Rp;
+    DNS_MX_DATAA        MX;
+    DNS_MX_DATAA        Mx;
+    DNS_MX_DATAA        AFSDB;
+    DNS_MX_DATAA        Afsdb;
+    DNS_MX_DATAA        RT;
+    DNS_MX_DATAA        Rt;
+    DNS_TXT_DATAA       HINFO;
+    DNS_TXT_DATAA       Hinfo;
+    DNS_TXT_DATAA       ISDN;
+    DNS_TXT_DATAA       Isdn;
+    DNS_TXT_DATAA       TXT;
+    DNS_TXT_DATAA       Txt;
+    DNS_TXT_DATAA       X25;
+    DNS_NULL_DATA       Null;
+    DNS_WKS_DATA        WKS;
+    DNS_WKS_DATA        Wks;
+    DNS_AAAA_DATA       AAAA;
+    DNS_KEY_DATA        KEY;
+    DNS_KEY_DATA        Key;
+    DNS_SIG_DATAA       SIG;
+    DNS_SIG_DATAA       Sig;
+    DNS_ATMA_DATA       ATMA;
+    DNS_ATMA_DATA       Atma;
+    DNS_NXT_DATAA       NXT;
+    DNS_NXT_DATAA       Nxt;
+    DNS_SRV_DATAA       SRV;
+    DNS_SRV_DATAA       Srv;
+    DNS_NAPTR_DATAA     NAPTR;
+    DNS_NAPTR_DATAA     Naptr;
+    DNS_OPT_DATA        OPT;
+    DNS_OPT_DATA        Opt;
+    DNS_DS_DATA         DS;
+    DNS_DS_DATA         Ds;
+    DNS_RRSIG_DATAA     RRSIG;
+    DNS_RRSIG_DATAA     Rrsig;
+    DNS_NSEC_DATAA      NSEC;
+    DNS_NSEC_DATAA      Nsec;
+    DNS_DNSKEY_DATA     DNSKEY;
+    DNS_DNSKEY_DATA     Dnskey;
+    DNS_TKEY_DATAA      TKEY;
+    DNS_TKEY_DATAA      Tkey;
+    DNS_TSIG_DATAA      TSIG;
+    DNS_TSIG_DATAA      Tsig;
+    DNS_WINS_DATA       WINS;
+    DNS_WINS_DATA       Wins;
+    DNS_WINSR_DATAA     WINSR;
+    DNS_WINSR_DATAA     WinsR;
+    DNS_WINSR_DATAA     NBSTAT;
+    DNS_WINSR_DATAA     Nbstat;
+    DNS_DHCID_DATA      DHCID;
+    DNS_NSEC3_DATA      NSEC3;
+    DNS_NSEC3_DATA      Nsec3;
+    DNS_NSEC3PARAM_DATA NSEC3PARAM;
+    DNS_NSEC3PARAM_DATA Nsec3Param;
+    DNS_TLSA_DATA       TLSA;
+    DNS_TLSA_DATA       Tlsa;
+    DNS_UNKNOWN_DATA    UNKNOWN;
+    DNS_UNKNOWN_DATA    Unknown;
+    PBYTE               pDataPtr;
+  } Data;
+} DNS_RECORDA, *PDNS_RECORDA;
+
+
+typedef struct _DnsRecordW {
+  struct _DnsRecordW *pNext;
+  PWSTR              pName;
+  WORD               wType;
+  WORD               wDataLength;
+  union {
+    DWORD            DW;
+    DNS_RECORD_FLAGS S;
+  } Flags;
+  DWORD              dwTtl;
+  DWORD              dwReserved;
+  union {
+    DNS_A_DATA          A;
+    DNS_SOA_DATAW       SOA;
+    DNS_SOA_DATAW       Soa;
+    DNS_PTR_DATAW       PTR;
+    DNS_PTR_DATAW       Ptr;
+    DNS_PTR_DATAW       NS;
+    DNS_PTR_DATAW       Ns;
+    DNS_PTR_DATAW       CNAME;
+    DNS_PTR_DATAW       Cname;
+    DNS_PTR_DATAW       DNAME;
+    DNS_PTR_DATAW       Dname;
+    DNS_PTR_DATAW       MB;
+    DNS_PTR_DATAW       Mb;
+    DNS_PTR_DATAW       MD;
+    DNS_PTR_DATAW       Md;
+    DNS_PTR_DATAW       MF;
+    DNS_PTR_DATAW       Mf;
+    DNS_PTR_DATAW       MG;
+    DNS_PTR_DATAW       Mg;
+    DNS_PTR_DATAW       MR;
+    DNS_PTR_DATAW       Mr;
+    DNS_MINFO_DATAW     MINFO;
+    DNS_MINFO_DATAW     Minfo;
+    DNS_MINFO_DATAW     RP;
+    DNS_MINFO_DATAW     Rp;
+    DNS_MX_DATAW        MX;
+    DNS_MX_DATAW        Mx;
+    DNS_MX_DATAW        AFSDB;
+    DNS_MX_DATAW        Afsdb;
+    DNS_MX_DATAW        RT;
+    DNS_MX_DATAW        Rt;
+    DNS_TXT_DATAW       HINFO;
+    DNS_TXT_DATAW       Hinfo;
+    DNS_TXT_DATAW       ISDN;
+    DNS_TXT_DATAW       Isdn;
+    DNS_TXT_DATAW       TXT;
+    DNS_TXT_DATAW       Txt;
+    DNS_TXT_DATAW       X25;
+    DNS_NULL_DATA       Null;
+    DNS_WKS_DATA        WKS;
+    DNS_WKS_DATA        Wks;
+    DNS_AAAA_DATA       AAAA;
+    DNS_KEY_DATA        KEY;
+    DNS_KEY_DATA        Key;
+    DNS_SIG_DATAW       SIG;
+    DNS_SIG_DATAW       Sig;
+    DNS_ATMA_DATA       ATMA;
+    DNS_ATMA_DATA       Atma;
+    DNS_NXT_DATAW       NXT;
+    DNS_NXT_DATAW       Nxt;
+    DNS_SRV_DATAW       SRV;
+    DNS_SRV_DATAW       Srv;
+    DNS_NAPTR_DATAW     NAPTR;
+    DNS_NAPTR_DATAW     Naptr;
+    DNS_OPT_DATA        OPT;
+    DNS_OPT_DATA        Opt;
+    DNS_DS_DATA         DS;
+    DNS_DS_DATA         Ds;
+    DNS_RRSIG_DATAW     RRSIG;
+    DNS_RRSIG_DATAW     Rrsig;
+    DNS_NSEC_DATAW      NSEC;
+    DNS_NSEC_DATAW      Nsec;
+    DNS_DNSKEY_DATA     DNSKEY;
+    DNS_DNSKEY_DATA     Dnskey;
+    DNS_TKEY_DATAW      TKEY;
+    DNS_TKEY_DATAW      Tkey;
+    DNS_TSIG_DATAW      TSIG;
+    DNS_TSIG_DATAW      Tsig;
+    DNS_WINS_DATA       WINS;
+    DNS_WINS_DATA       Wins;
+    DNS_WINSR_DATAW     WINSR;
+    DNS_WINSR_DATAW     WinsR;
+    DNS_WINSR_DATAW     NBSTAT;
+    DNS_WINSR_DATAW     Nbstat;
+    DNS_DHCID_DATA      DHCID;
+    DNS_NSEC3_DATA      NSEC3;
+    DNS_NSEC3_DATA      Nsec3;
+    DNS_NSEC3PARAM_DATA NSEC3PARAM;
+    DNS_NSEC3PARAM_DATA Nsec3Param;
+    DNS_TLSA_DATA       TLSA;
+    DNS_TLSA_DATA       Tlsa;
+    DNS_UNKNOWN_DATA    UNKNOWN;
+    DNS_UNKNOWN_DATA    Unknown;
+    PBYTE               pDataPtr;
+  } Data;
+} DNS_RECORDW, *PDNS_RECORDW;

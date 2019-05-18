@@ -1,0 +1,22 @@
+typedef struct IPersistVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            __RPC__in IPersist * This,
+            /* [in] */ __RPC__in REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            __RPC__deref_out  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            __RPC__in IPersist * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            __RPC__in IPersist * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetClassID )( 
+            __RPC__in IPersist * This,
+            /* [out] */ __RPC__out CLSID *pClassID);
+        
+        END_INTERFACE
+    } IPersistVtbl;

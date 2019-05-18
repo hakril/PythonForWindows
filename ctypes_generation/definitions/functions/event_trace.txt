@@ -1,0 +1,134 @@
+ULONG WINAPI EnumerateTraceGuidsEx(
+  _In_  TRACE_QUERY_INFO_CLASS TraceQueryInfoClass,
+  _In_  PVOID                  InBuffer,
+  _In_  ULONG                  InBufferSize,
+  _Out_ PVOID                  OutBuffer,
+  _In_  ULONG                  OutBufferSize,
+  _Out_ PULONG                 ReturnLength
+);
+
+
+ULONG WINAPI QueryAllTracesA(
+  _Out_ PEVENT_TRACE_PROPERTIES *PropertyArray,
+  _In_  ULONG                   PropertyArrayCount,
+  _Out_ PULONG                  SessionCount
+);
+
+
+ULONG WINAPI QueryAllTracesW(
+  _Out_ PEVENT_TRACE_PROPERTIES *PropertyArray,
+  _In_  ULONG                   PropertyArrayCount,
+  _Out_ PULONG                  SessionCount
+);
+
+
+TRACEHANDLE WINAPI OpenTraceA(
+  _Inout_ PEVENT_TRACE_LOGFILEA Logfile
+);
+
+
+TRACEHANDLE WINAPI OpenTraceW(
+  _Inout_ PEVENT_TRACE_LOGFILEW Logfile
+);
+
+
+ULONG StartTraceA(
+  PTRACEHANDLE            TraceHandle,
+  LPCSTR                  InstanceName,
+  PEVENT_TRACE_PROPERTIES Properties
+);
+
+
+ULONG StartTraceW(
+  PTRACEHANDLE            TraceHandle,
+  LPCWSTR                 InstanceName,
+  PEVENT_TRACE_PROPERTIES Properties
+);
+
+
+ULONG StopTraceA(
+  TRACEHANDLE             TraceHandle,
+  LPCSTR                  InstanceName,
+  PEVENT_TRACE_PROPERTIES Properties
+);
+
+
+ULONG StopTraceW(
+  TRACEHANDLE             TraceHandle,
+  LPCWSTR                 InstanceName,
+  PEVENT_TRACE_PROPERTIES Properties
+);
+
+
+ULONG ControlTraceA(
+  TRACEHANDLE             TraceHandle,
+  LPCSTR                  InstanceName,
+  PEVENT_TRACE_PROPERTIES Properties,
+  ULONG                   ControlCode
+);
+
+
+ULONG ControlTraceW(
+  TRACEHANDLE             TraceHandle,
+  LPCWSTR                 InstanceName,
+  PEVENT_TRACE_PROPERTIES Properties,
+  ULONG                   ControlCode
+);
+
+
+ULONG WINAPI ProcessTrace(
+  _In_ PTRACEHANDLE HandleArray,
+  _In_ ULONG        HandleCount,
+  _In_ LPFILETIME   StartTime,
+  _In_ LPFILETIME   EndTime
+);
+
+
+ULONG WINAPI EnableTrace(
+  _In_ ULONG       Enable,
+  _In_ ULONG       EnableFlag,
+  _In_ ULONG       EnableLevel,
+  _In_ LPCGUID     ControlGuid,
+  _In_ TRACEHANDLE SessionHandle
+);
+
+
+ULONG WINAPI EnableTraceEx(
+  _In_     LPCGUID                  ProviderId,
+  _In_opt_ LPCGUID                  SourceId,
+  _In_     TRACEHANDLE              TraceHandle,
+  _In_     ULONG                    IsEnabled,
+  _In_     UCHAR                    Level,
+  _In_     ULONGLONG                MatchAnyKeyword,
+  _In_     ULONGLONG                MatchAllKeyword,
+  _In_     ULONG                    EnableProperty,
+  _In_opt_ PEVENT_FILTER_DESCRIPTOR EnableFilterDesc
+);
+
+
+ULONG WINAPI EnableTraceEx2(
+  _In_     TRACEHANDLE              TraceHandle,
+  _In_     LPCGUID                  ProviderId,
+  _In_     ULONG                    ControlCode,
+  _In_     UCHAR                    Level,
+  _In_     ULONGLONG                MatchAnyKeyword,
+  _In_     ULONGLONG                MatchAllKeyword,
+  _In_     ULONG                    Timeout,
+  _In_opt_ PENABLE_TRACE_PARAMETERS EnableParameters
+);
+
+ULONG WINAPI TraceQueryInformation(
+  _In_      TRACEHANDLE            SessionHandle,
+  _In_      TRACE_QUERY_INFO_CLASS InformationClass,
+  _Out_     PVOID                  TraceInformation,
+  _In_      ULONG                  InformationLength,
+  _Out_opt_ PULONG                 ReturnLength
+);
+
+
+ULONG WINAPI TraceSetInformation(
+  _In_ TRACEHANDLE      SessionHandle,
+  _In_ TRACE_INFO_CLASS InformationClass,
+  _In_ PVOID            TraceInformation,
+  _In_ ULONG            InformationLength
+);

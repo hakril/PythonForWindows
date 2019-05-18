@@ -2,7 +2,7 @@ import ctypes
 import windows.generated_def as gdef
 
 from ..apiproxy import ApiProxy, NeededParameter
-from ..error import fail_on_zero, succeed_on_zero, result_is_error_code
+from ..error import fail_on_zero, succeed_on_zero, result_is_error_code, result_is_handle
 
 class Advapi32Proxy(ApiProxy):
     APIDLL = "advapi32"
@@ -94,6 +94,16 @@ def AdjustTokenPrivileges(TokenHandle, DisableAllPrivileges=False, NewState=Need
     if BufferLength is None:
         BufferLength = ctypes.sizeof(NewState)
     return AdjustTokenPrivileges.ctypes_function(TokenHandle, DisableAllPrivileges, NewState, BufferLength, PreviousState, ReturnLength)
+
+# Access check
+
+@Advapi32Proxy()
+def MapGenericMask(AccessMask, GenericMapping):
+    return MapGenericMask.ctypes_function(AccessMask, GenericMapping)
+
+@Advapi32Proxy()
+def AccessCheck(pSecurityDescriptor, ClientToken, DesiredAccess, GenericMapping, PrivilegeSet, PrivilegeSetLength, GrantedAccess, AccessStatus):
+    return AccessCheck.ctypes_function(pSecurityDescriptor, ClientToken, DesiredAccess, GenericMapping, PrivilegeSet, PrivilegeSetLength, GrantedAccess, AccessStatus)
 
 # Sid
 
@@ -355,3 +365,81 @@ def CryptAcquireContextW(phProv, pszContainer, pszProvider, dwProvType, dwFlags)
 def CryptReleaseContext(hProv, dwFlags):
     return CryptReleaseContext.ctypes_function(hProv, dwFlags)
 
+
+## Event Tracing
+
+@Advapi32Proxy(error_check=succeed_on_zero)
+def EnumerateTraceGuidsEx(TraceQueryInfoClass, InBuffer, InBufferSize, OutBuffer, OutBufferSize, ReturnLength):
+    if isinstance(InBuffer, gdef.GUID):
+        # GUID is not convertible to a pointer directly
+        # But we want to use it as an array for this function
+        # Test/Assert on InBufferSize?
+        InBuffer = ctypes.cast(ctypes.pointer(InBuffer), gdef.PVOID) # Caller keep a ref
+    return EnumerateTraceGuidsEx.ctypes_function(TraceQueryInfoClass, InBuffer, InBufferSize, OutBuffer, OutBufferSize, ReturnLength)
+
+@Advapi32Proxy(error_check=result_is_error_code)
+def QueryAllTracesA(PropertyArray, PropertyArrayCount, SessionCount):
+    return QueryAllTracesA.ctypes_function(PropertyArray, PropertyArrayCount, SessionCount)
+
+
+@Advapi32Proxy(error_check=result_is_error_code)
+def QueryAllTracesW(PropertyArray, PropertyArrayCount, SessionCount):
+    return QueryAllTracesW.ctypes_function(PropertyArray, PropertyArrayCount, SessionCount)
+
+
+@Advapi32Proxy(error_check=result_is_handle)
+def OpenTraceA(Logfile):
+    return OpenTraceA.ctypes_function(Logfile)
+
+@Advapi32Proxy(error_check=result_is_handle)
+def OpenTraceW(Logfile):
+    return OpenTraceW.ctypes_function(Logfile)
+
+
+@Advapi32Proxy(error_check=result_is_error_code)
+def StartTraceA(TraceHandle, InstanceName, Properties):
+    return StartTraceA.ctypes_function(TraceHandle, InstanceName, Properties)
+
+@Advapi32Proxy(error_check=result_is_error_code)
+def StartTraceW(TraceHandle, InstanceName, Properties):
+    return StartTraceW.ctypes_function(TraceHandle, InstanceName, Properties)
+
+@Advapi32Proxy(error_check=result_is_error_code)
+def StopTraceA(TraceHandle, InstanceName, Properties):
+    return StopTraceA.ctypes_function(TraceHandle, InstanceName, Properties)
+
+@Advapi32Proxy(error_check=result_is_error_code)
+def StopTraceW(TraceHandle, InstanceName, Properties):
+    return StopTraceW.ctypes_function(TraceHandle, InstanceName, Properties)
+
+@Advapi32Proxy(error_check=result_is_error_code)
+def ControlTraceA(TraceHandle, InstanceName, Properties, ControlCode):
+    return ControlTraceA.ctypes_function(TraceHandle, InstanceName, Properties, ControlCode)
+
+@Advapi32Proxy(error_check=result_is_error_code)
+def ControlTraceW(TraceHandle, InstanceName, Properties, ControlCode):
+    return ControlTraceW.ctypes_function(TraceHandle, InstanceName, Properties, ControlCode)
+
+@Advapi32Proxy(error_check=result_is_error_code)
+def ProcessTrace(HandleArray, HandleCount, StartTime, EndTime):
+   return ProcessTrace.ctypes_function(HandleArray, HandleCount, StartTime, EndTime)
+
+@Advapi32Proxy(error_check=result_is_error_code)
+def EnableTrace(Enable, EnableFlag, EnableLevel, ControlGuid, SessionHandle):
+    return EnableTrace.ctypes_function(Enable, EnableFlag, EnableLevel, ControlGuid, SessionHandle)
+
+@Advapi32Proxy(error_check=result_is_error_code)
+def EnableTraceEx(ProviderId, SourceId, TraceHandle, IsEnabled, Level, MatchAnyKeyword, MatchAllKeyword, EnableProperty, EnableFilterDesc):
+    return EnableTraceEx.ctypes_function(ProviderId, SourceId, TraceHandle, IsEnabled, Level, MatchAnyKeyword, MatchAllKeyword, EnableProperty, EnableFilterDesc)
+
+@Advapi32Proxy(error_check=result_is_error_code)
+def EnableTraceEx2(TraceHandle, ProviderId, ControlCode, Level, MatchAnyKeyword, MatchAllKeyword, Timeout, EnableParameters):
+    return EnableTraceEx2.ctypes_function(TraceHandle, ProviderId, ControlCode, Level, MatchAnyKeyword, MatchAllKeyword, Timeout, EnableParameters)
+
+@Advapi32Proxy(error_check=result_is_error_code)
+def TraceQueryInformation(SessionHandle, InformationClass, TraceInformation, InformationLength, ReturnLength):
+    return TraceQueryInformation.ctypes_function(SessionHandle, InformationClass, TraceInformation, InformationLength, ReturnLength)
+
+@Advapi32Proxy(error_check=result_is_error_code)
+def TraceSetInformation(SessionHandle, InformationClass, TraceInformation, InformationLength):
+    return TraceSetInformation.ctypes_function(SessionHandle, InformationClass, TraceInformation, InformationLength)

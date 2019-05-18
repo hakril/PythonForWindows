@@ -1,0 +1,4 @@
+TDHSTATUS TdhEnumerateProviders(
+  PPROVIDER_ENUMERATION_INFO pBuffer,
+  ULONG                      *pBufferSize
+);

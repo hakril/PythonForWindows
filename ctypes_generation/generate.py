@@ -66,20 +66,29 @@ class StructureParsedFile(ParsedFile):
             self.add_exports(enum.name)
             self.add_exports(*enum.typedef)
         for struct in structs:
-            self.asser_struct_not_already_in_import(struct)
-            if any(x in self.imports for x in [struct.name] + struct.typedef.keys()):
-                print("Export <{0}> defined after first use".format(struct.name))
-                raise ValueError("LOL")
+            self.compute_imports_exports_for_struct(struct)
+
+
+    def compute_imports_exports_for_struct(self, struct):
+        self.asser_struct_not_already_in_import(struct)
+        if any(x in self.imports for x in [struct.name] + struct.typedef.keys()):
+            print("Export <{0}> defined after first use".format(struct.name))
+            raise ValueError("LOL")
+        if struct.name is not None: # Anonymous structs
             self.add_exports(struct.name)
-            self.add_exports(*struct.typedef)
-            for field_type, field_name, nb_rep in struct.fields:
-                if field_type.name not in self.exports:
-                    self.add_imports(field_type.name)
-                    self.imports_by_struct[field_type.name] = struct.name
-                try:
-                    int(nb_rep)
-                except:
-                    self.add_imports(nb_rep)
+        self.add_exports(*struct.typedef)
+        for field_type, field_name, nb_rep in struct.fields:
+            if field_name is None:
+                # Anon sub-struct/union
+                self.compute_imports_exports_for_struct(field_type)
+                continue
+            if field_type.name not in self.exports:
+                self.add_imports(field_type.name)
+                self.imports_by_struct[field_type.name] = struct.name
+            try:
+                int(nb_rep)
+            except:
+                self.add_imports(nb_rep)
 
     def asser_struct_not_already_in_import(self, struct):
         for sname in [struct.name] + struct.typedef.keys():
