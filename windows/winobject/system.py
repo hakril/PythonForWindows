@@ -9,6 +9,8 @@ from windows import utils
 
 import windows.generated_def as gdef
 
+
+
 from windows.winobject import process
 from windows.winobject import network
 from windows.winobject import registry
@@ -19,10 +21,10 @@ from windows.winobject import wmi
 from windows.winobject import object_manager
 from windows.winobject import handle
 from windows.winobject import event_log
+from windows.winobject import event_trace
 from windows.winobject import task_scheduler
 from windows.winobject import system_module
 
-from windows.generated_def.winstructs import *
 from windows.dbgprint import dbgprint
 
 class System(object):
@@ -104,6 +106,10 @@ class System(object):
     def event_log(self):
         return event_log.EvtlogManager()
 
+    @utils.fixedpropety
+    def etw(self):
+        return event_trace.EtwManager()
+
 
     @utils.fixedpropety
     def task_scheduler(self):
@@ -135,7 +141,7 @@ class System(object):
 
         :type: :class:`str`
         """
-        size = DWORD(0x1000)
+        size = gdef.DWORD(0x1000)
         buf = ctypes.c_buffer(size.value)
         winproxy.GetComputerNameA(buf, ctypes.byref(size))
         return buf[:size.value]
@@ -179,7 +185,7 @@ class System(object):
         :type: :class:`str`
         """
         version = self.version
-        is_workstation = self.product_type == VER_NT_WORKSTATION
+        is_workstation = self.product_type == gdef.VER_NT_WORKSTATION
         if version == (10, 0):
             return ["Windows Server 2016", "Windows 10"][is_workstation]
         elif version == (6, 3):
@@ -191,7 +197,7 @@ class System(object):
         elif version == (6, 0):
             return ["Windows Server 2008", "Windows Vista"][is_workstation]
         elif version == (5, 2):
-            metric = winproxy.GetSystemMetrics(SM_SERVERR2)
+            metric = winproxy.GetSystemMetrics(gdef.SM_SERVERR2)
             if is_workstation:
                 if self.bitness == 64:
                     return "Windows XP Professional x64 Edition"
@@ -208,7 +214,7 @@ class System(object):
         else:
             return "Unknow Windows <version={0} | is_workstation={1}>".format(version, is_workstation)
 
-    VERSION_MAPPER = gdef.FlagMapper(VER_NT_WORKSTATION, VER_NT_DOMAIN_CONTROLLER, VER_NT_SERVER)
+    VERSION_MAPPER = gdef.FlagMapper(gdef.VER_NT_WORKSTATION, gdef.VER_NT_DOMAIN_CONTROLLER, gdef.VER_NT_SERVER)
     @utils.fixedpropety
     def product_type(self):
         """The product type, value might be:
@@ -223,97 +229,97 @@ class System(object):
         return self.VERSION_MAPPER[version.wProductType]
 
 
-    EDITION_MAPPER = gdef.FlagMapper(PRODUCT_UNDEFINED,
-        PRODUCT_ULTIMATE,
-        PRODUCT_HOME_BASIC,
-        PRODUCT_HOME_PREMIUM,
-        PRODUCT_ENTERPRISE,
-        PRODUCT_HOME_BASIC_N,
-        PRODUCT_BUSINESS,
-        PRODUCT_STANDARD_SERVER,
-        PRODUCT_DATACENTER_SERVER,
-        PRODUCT_SMALLBUSINESS_SERVER,
-        PRODUCT_ENTERPRISE_SERVER,
-        PRODUCT_STARTER,
-        PRODUCT_DATACENTER_SERVER_CORE,
-        PRODUCT_STANDARD_SERVER_CORE,
-        PRODUCT_ENTERPRISE_SERVER_CORE,
-        PRODUCT_ENTERPRISE_SERVER_IA64,
-        PRODUCT_BUSINESS_N,
-        PRODUCT_WEB_SERVER,
-        PRODUCT_CLUSTER_SERVER,
-        PRODUCT_HOME_SERVER,
-        PRODUCT_STORAGE_EXPRESS_SERVER,
-        PRODUCT_STORAGE_STANDARD_SERVER,
-        PRODUCT_STORAGE_WORKGROUP_SERVER,
-        PRODUCT_STORAGE_ENTERPRISE_SERVER,
-        PRODUCT_SERVER_FOR_SMALLBUSINESS,
-        PRODUCT_SMALLBUSINESS_SERVER_PREMIUM,
-        PRODUCT_HOME_PREMIUM_N,
-        PRODUCT_ENTERPRISE_N,
-        PRODUCT_ULTIMATE_N,
-        PRODUCT_WEB_SERVER_CORE,
-        PRODUCT_MEDIUMBUSINESS_SERVER_MANAGEMENT,
-        PRODUCT_MEDIUMBUSINESS_SERVER_SECURITY,
-        PRODUCT_MEDIUMBUSINESS_SERVER_MESSAGING,
-        PRODUCT_SERVER_FOUNDATION,
-        PRODUCT_HOME_PREMIUM_SERVER,
-        PRODUCT_SERVER_FOR_SMALLBUSINESS_V,
-        PRODUCT_STANDARD_SERVER_V,
-        PRODUCT_DATACENTER_SERVER_V,
-        PRODUCT_ENTERPRISE_SERVER_V,
-        PRODUCT_DATACENTER_SERVER_CORE_V,
-        PRODUCT_STANDARD_SERVER_CORE_V,
-        PRODUCT_ENTERPRISE_SERVER_CORE_V,
-        PRODUCT_HYPERV,
-        PRODUCT_STORAGE_EXPRESS_SERVER_CORE,
-        PRODUCT_STORAGE_STANDARD_SERVER_CORE,
-        PRODUCT_STORAGE_WORKGROUP_SERVER_CORE,
-        PRODUCT_STORAGE_ENTERPRISE_SERVER_CORE,
-        PRODUCT_STARTER_N,
-        PRODUCT_PROFESSIONAL,
-        PRODUCT_PROFESSIONAL_N,
-        PRODUCT_SB_SOLUTION_SERVER,
-        PRODUCT_SERVER_FOR_SB_SOLUTIONS,
-        PRODUCT_STANDARD_SERVER_SOLUTIONS,
-        PRODUCT_STANDARD_SERVER_SOLUTIONS_CORE,
-        PRODUCT_SB_SOLUTION_SERVER_EM,
-        PRODUCT_SERVER_FOR_SB_SOLUTIONS_EM,
-        PRODUCT_SOLUTION_EMBEDDEDSERVER,
-        PRODUCT_SOLUTION_EMBEDDEDSERVER_CORE,
-        PRODUCT_SMALLBUSINESS_SERVER_PREMIUM_CORE,
-        PRODUCT_ESSENTIALBUSINESS_SERVER_MGMT,
-        PRODUCT_ESSENTIALBUSINESS_SERVER_ADDL,
-        PRODUCT_ESSENTIALBUSINESS_SERVER_MGMTSVC,
-        PRODUCT_ESSENTIALBUSINESS_SERVER_ADDLSVC,
-        PRODUCT_CLUSTER_SERVER_V,
-        PRODUCT_EMBEDDED,
-        PRODUCT_STARTER_E,
-        PRODUCT_HOME_BASIC_E,
-        PRODUCT_HOME_PREMIUM_E,
-        PRODUCT_PROFESSIONAL_E,
-        PRODUCT_ENTERPRISE_E,
-        PRODUCT_ULTIMATE_E,
-        PRODUCT_ENTERPRISE_EVALUATION,
-        PRODUCT_MULTIPOINT_STANDARD_SERVER,
-        PRODUCT_MULTIPOINT_PREMIUM_SERVER,
-        PRODUCT_STANDARD_EVALUATION_SERVER,
-        PRODUCT_DATACENTER_EVALUATION_SERVER,
-        PRODUCT_ENTERPRISE_N_EVALUATION,
-        PRODUCT_STORAGE_WORKGROUP_EVALUATION_SERVER,
-        PRODUCT_STORAGE_STANDARD_EVALUATION_SERVER,
-        PRODUCT_CORE_ARM,
-        PRODUCT_CORE_N,
-        PRODUCT_CORE_COUNTRYSPECIFIC,
-        PRODUCT_CORE_LANGUAGESPECIFIC,
-        PRODUCT_CORE,
-        PRODUCT_PROFESSIONAL_WMC,
-        PRODUCT_UNLICENSED)
+    EDITION_MAPPER = gdef.FlagMapper(gdef.PRODUCT_UNDEFINED,
+        gdef.PRODUCT_ULTIMATE,
+        gdef.PRODUCT_HOME_BASIC,
+        gdef.PRODUCT_HOME_PREMIUM,
+        gdef.PRODUCT_ENTERPRISE,
+        gdef.PRODUCT_HOME_BASIC_N,
+        gdef.PRODUCT_BUSINESS,
+        gdef.PRODUCT_STANDARD_SERVER,
+        gdef.PRODUCT_DATACENTER_SERVER,
+        gdef.PRODUCT_SMALLBUSINESS_SERVER,
+        gdef.PRODUCT_ENTERPRISE_SERVER,
+        gdef.PRODUCT_STARTER,
+        gdef.PRODUCT_DATACENTER_SERVER_CORE,
+        gdef.PRODUCT_STANDARD_SERVER_CORE,
+        gdef.PRODUCT_ENTERPRISE_SERVER_CORE,
+        gdef.PRODUCT_ENTERPRISE_SERVER_IA64,
+        gdef.PRODUCT_BUSINESS_N,
+        gdef.PRODUCT_WEB_SERVER,
+        gdef.PRODUCT_CLUSTER_SERVER,
+        gdef.PRODUCT_HOME_SERVER,
+        gdef.PRODUCT_STORAGE_EXPRESS_SERVER,
+        gdef.PRODUCT_STORAGE_STANDARD_SERVER,
+        gdef.PRODUCT_STORAGE_WORKGROUP_SERVER,
+        gdef.PRODUCT_STORAGE_ENTERPRISE_SERVER,
+        gdef.PRODUCT_SERVER_FOR_SMALLBUSINESS,
+        gdef.PRODUCT_SMALLBUSINESS_SERVER_PREMIUM,
+        gdef.PRODUCT_HOME_PREMIUM_N,
+        gdef.PRODUCT_ENTERPRISE_N,
+        gdef.PRODUCT_ULTIMATE_N,
+        gdef.PRODUCT_WEB_SERVER_CORE,
+        gdef.PRODUCT_MEDIUMBUSINESS_SERVER_MANAGEMENT,
+        gdef.PRODUCT_MEDIUMBUSINESS_SERVER_SECURITY,
+        gdef.PRODUCT_MEDIUMBUSINESS_SERVER_MESSAGING,
+        gdef.PRODUCT_SERVER_FOUNDATION,
+        gdef.PRODUCT_HOME_PREMIUM_SERVER,
+        gdef.PRODUCT_SERVER_FOR_SMALLBUSINESS_V,
+        gdef.PRODUCT_STANDARD_SERVER_V,
+        gdef.PRODUCT_DATACENTER_SERVER_V,
+        gdef.PRODUCT_ENTERPRISE_SERVER_V,
+        gdef.PRODUCT_DATACENTER_SERVER_CORE_V,
+        gdef.PRODUCT_STANDARD_SERVER_CORE_V,
+        gdef.PRODUCT_ENTERPRISE_SERVER_CORE_V,
+        gdef.PRODUCT_HYPERV,
+        gdef.PRODUCT_STORAGE_EXPRESS_SERVER_CORE,
+        gdef.PRODUCT_STORAGE_STANDARD_SERVER_CORE,
+        gdef.PRODUCT_STORAGE_WORKGROUP_SERVER_CORE,
+        gdef.PRODUCT_STORAGE_ENTERPRISE_SERVER_CORE,
+        gdef.PRODUCT_STARTER_N,
+        gdef.PRODUCT_PROFESSIONAL,
+        gdef.PRODUCT_PROFESSIONAL_N,
+        gdef.PRODUCT_SB_SOLUTION_SERVER,
+        gdef.PRODUCT_SERVER_FOR_SB_SOLUTIONS,
+        gdef.PRODUCT_STANDARD_SERVER_SOLUTIONS,
+        gdef.PRODUCT_STANDARD_SERVER_SOLUTIONS_CORE,
+        gdef.PRODUCT_SB_SOLUTION_SERVER_EM,
+        gdef.PRODUCT_SERVER_FOR_SB_SOLUTIONS_EM,
+        gdef.PRODUCT_SOLUTION_EMBEDDEDSERVER,
+        gdef.PRODUCT_SOLUTION_EMBEDDEDSERVER_CORE,
+        gdef.PRODUCT_SMALLBUSINESS_SERVER_PREMIUM_CORE,
+        gdef.PRODUCT_ESSENTIALBUSINESS_SERVER_MGMT,
+        gdef.PRODUCT_ESSENTIALBUSINESS_SERVER_ADDL,
+        gdef.PRODUCT_ESSENTIALBUSINESS_SERVER_MGMTSVC,
+        gdef.PRODUCT_ESSENTIALBUSINESS_SERVER_ADDLSVC,
+        gdef.PRODUCT_CLUSTER_SERVER_V,
+        gdef.PRODUCT_EMBEDDED,
+        gdef.PRODUCT_STARTER_E,
+        gdef.PRODUCT_HOME_BASIC_E,
+        gdef.PRODUCT_HOME_PREMIUM_E,
+        gdef.PRODUCT_PROFESSIONAL_E,
+        gdef.PRODUCT_ENTERPRISE_E,
+        gdef.PRODUCT_ULTIMATE_E,
+        gdef.PRODUCT_ENTERPRISE_EVALUATION,
+        gdef.PRODUCT_MULTIPOINT_STANDARD_SERVER,
+        gdef.PRODUCT_MULTIPOINT_PREMIUM_SERVER,
+        gdef.PRODUCT_STANDARD_EVALUATION_SERVER,
+        gdef.PRODUCT_DATACENTER_EVALUATION_SERVER,
+        gdef.PRODUCT_ENTERPRISE_N_EVALUATION,
+        gdef.PRODUCT_STORAGE_WORKGROUP_EVALUATION_SERVER,
+        gdef.PRODUCT_STORAGE_STANDARD_EVALUATION_SERVER,
+        gdef.PRODUCT_CORE_ARM,
+        gdef.PRODUCT_CORE_N,
+        gdef.PRODUCT_CORE_COUNTRYSPECIFIC,
+        gdef.PRODUCT_CORE_LANGUAGESPECIFIC,
+        gdef.PRODUCT_CORE,
+        gdef.PRODUCT_PROFESSIONAL_WMC,
+        gdef.PRODUCT_UNLICENSED)
 
     @utils.fixedpropety
     def edition(self): # Find a better name ?
         version = self.get_version()
-        edition = DWORD()
+        edition = gdef.DWORD()
         try:
             winproxy.GetProductInfo(version.dwMajorVersion,
                                         version.dwMinorVersion,
@@ -329,8 +335,8 @@ class System(object):
     def _edition_windows_xp(self):
         # Emulate standard response from IsOS(gdef.OS_PROFESSIONAL)
         if winproxy.IsOS(gdef.OS_PROFESSIONAL):
-            return PRODUCT_PROFESSIONAL
-        return PRODUCT_HOME_BASIC
+            return gdef.PRODUCT_PROFESSIONAL
+        return gdef.PRODUCT_HOME_BASIC
 
     @utils.fixedpropety
     def windir(self):
@@ -339,9 +345,9 @@ class System(object):
         return buffer[:reslen]
 
     def get_version(self):
-        data = windows.generated_def.OSVERSIONINFOEXA()
+        data = gdef.OSVERSIONINFOEXA()
         data.dwOSVersionInfoSize = ctypes.sizeof(data)
-        winproxy.GetVersionExA(ctypes.cast(ctypes.pointer(data), ctypes.POINTER(windows.generated_def.OSVERSIONINFOA)))
+        winproxy.GetVersionExA(ctypes.cast(ctypes.pointer(data), ctypes.POINTER(gdef.OSVERSIONINFOA)))
         return data
 
     def get_file_version(self, name):
@@ -349,14 +355,14 @@ class System(object):
         buf = ctypes.c_buffer(size)
         winproxy.GetFileVersionInfoA(name, 0, size, buf)
 
-        bufptr = PVOID()
-        bufsize = UINT()
+        bufptr = gdef.PVOID()
+        bufsize = gdef.UINT()
         winproxy.VerQueryValueA(buf, "\\VarFileInfo\\Translation", ctypes.byref(bufptr), ctypes.byref(bufsize))
-        bufstr = ctypes.cast(bufptr, LPCSTR)
+        bufstr = ctypes.cast(bufptr, gdef.LPCSTR)
         tup = struct.unpack("<HH", bufstr.value[:4])
         req = "{0:04x}{1:04x}".format(*tup)
         winproxy.VerQueryValueA(buf, "\\StringFileInfo\\{0}\\ProductVersion".format(req), ctypes.byref(bufptr), ctypes.byref(bufsize))
-        bufstr = ctypes.cast(bufptr, LPCSTR)
+        bufstr = ctypes.cast(bufptr, gdef.LPCSTR)
         return bufstr.value
 
     @utils.fixedpropety
@@ -371,7 +377,7 @@ class System(object):
     @staticmethod
     def enumerate_processes():
         dbgprint("Enumerating processes with CreateToolhelp32Snapshot", "SLOW")
-        process_entry = PROCESSENTRY32()
+        process_entry = gdef.PROCESSENTRY32()
         process_entry.dwSize = ctypes.sizeof(process_entry)
         snap = winproxy.CreateToolhelp32Snapshot(gdef.TH32CS_SNAPPROCESS, 0)
         winproxy.Process32First(snap, process_entry)
@@ -386,7 +392,7 @@ class System(object):
     def enumerate_threads_generator():
         # Ptet dangereux, parce que on yield la meme THREADENTRY32 a chaque fois
         dbgprint("Enumerating threads with CreateToolhelp32Snapshot <generator>", "SLOW")
-        thread_entry = THREADENTRY32()
+        thread_entry = gdef.THREADENTRY32()
         thread_entry.dwSize = ctypes.sizeof(thread_entry)
         snap = winproxy.CreateToolhelp32Snapshot(gdef.TH32CS_SNAPTHREAD, 0)
         dbgprint("New handle CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD) <generator> | {0:#x}".format(snap), "HANDLE")
@@ -415,7 +421,7 @@ class System(object):
         # One snap for both enum to be prevent race
         snap = winproxy.CreateToolhelp32Snapshot(gdef.TH32CS_SNAPTHREAD | gdef.TH32CS_SNAPPROCESS, 0)
 
-        process_entry = PROCESSENTRY32()
+        process_entry = gdef.PROCESSENTRY32()
         process_entry.dwSize = ctypes.sizeof(process_entry)
         winproxy.Process32First(snap, process_entry)
         processes = []
@@ -426,7 +432,7 @@ class System(object):
         # Forge a dict pid -> process
         proc_dict = {proc.pid: proc for proc in processes}
 
-        thread_entry = THREADENTRY32()
+        thread_entry = gdef.THREADENTRY32()
         thread_entry.dwSize = ctypes.sizeof(thread_entry)
         threads = []
         winproxy.Thread32First(snap, thread_entry)

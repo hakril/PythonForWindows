@@ -159,3 +159,70 @@ BOOL AccessCheck(
   LPBOOL               AccessStatus
 );
 
+
+DWORD WINAPI GetNamedSecurityInfoA(
+  _In_      LPCSTR               pObjectName,
+  _In_      SE_OBJECT_TYPE       ObjectType,
+  _In_      SECURITY_INFORMATION SecurityInfo,
+  _Out_opt_ PSID                 *ppsidOwner,
+  _Out_opt_ PSID                 *ppsidGroup,
+  _Out_opt_ PACL                 *ppDacl,
+  _Out_opt_ PACL                 *ppSacl,
+  _Out_opt_ PSECURITY_DESCRIPTOR *ppSecurityDescriptor
+);
+
+
+DWORD WINAPI GetNamedSecurityInfoW(
+  _In_      LPWSTR               pObjectName,
+  _In_      SE_OBJECT_TYPE       ObjectType,
+  _In_      SECURITY_INFORMATION SecurityInfo,
+  _Out_opt_ PSID                 *ppsidOwner,
+  _Out_opt_ PSID                 *ppsidGroup,
+  _Out_opt_ PACL                 *ppDacl,
+  _Out_opt_ PACL                 *ppSacl,
+  _Out_opt_ PSECURITY_DESCRIPTOR *ppSecurityDescriptor
+);
+
+
+DWORD WINAPI GetSecurityInfo(
+  _In_      HANDLE               handle,
+  _In_      SE_OBJECT_TYPE       ObjectType,
+  _In_      SECURITY_INFORMATION SecurityInfo,
+  _Out_opt_ PSID                 *ppsidOwner,
+  _Out_opt_ PSID                 *ppsidGroup,
+  _Out_opt_ PACL                 *ppDacl,
+  _Out_opt_ PACL                 *ppSacl,
+  _Out_opt_ PSECURITY_DESCRIPTOR *ppSecurityDescriptor
+);
+
+DWORD SetSecurityInfo(
+  HANDLE               handle,
+  SE_OBJECT_TYPE       ObjectType,
+  SECURITY_INFORMATION SecurityInfo,
+  PSID                 psidOwner,
+  PSID                 psidGroup,
+  PACL                 pDacl,
+  PACL                 pSacl
+);
+
+
+DWORD SetNamedSecurityInfoA(
+  LPSTR                pObjectName,
+  SE_OBJECT_TYPE       ObjectType,
+  SECURITY_INFORMATION SecurityInfo,
+  PSID                 psidOwner,
+  PSID                 psidGroup,
+  PACL                 pDacl,
+  PACL                 pSacl
+);
+
+
+DWORD SetNamedSecurityInfoW(
+  LPWSTR               pObjectName,
+  SE_OBJECT_TYPE       ObjectType,
+  SECURITY_INFORMATION SecurityInfo,
+  PSID                 psidOwner,
+  PSID                 psidGroup,
+  PACL                 pDacl,
+  PACL                 pSacl
+);

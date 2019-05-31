@@ -38,6 +38,10 @@
 #define SE_DACL_DEFAULTED       0x00000008
 #define SE_SACL_PRESENT         0x00000010
 #define SE_SACL_DEFAULTED       0x00000020
+// end_winnt
+#define SE_DACL_UNTRUSTED                (0x0040)
+#define SE_SERVER_SECURITY               (0x0080)
+// begin_winnt
 #define SE_DACL_AUTO_INHERIT_REQ    0x00000100
 #define SE_SACL_AUTO_INHERIT_REQ    0x00000200
 #define SE_DACL_AUTO_INHERITED      0x00000400

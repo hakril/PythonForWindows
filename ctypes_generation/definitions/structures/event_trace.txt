@@ -263,7 +263,7 @@ typedef struct _EVENT_DESCRIPTOR {
   BYTE     Opcode;
   USHORT    Task;
   ULONGLONG Keyword;
-} EVENT_DESCRIPTOR, *PEVENT_DESCRIPTOR;
+} EVENT_DESCRIPTOR, *PEVENT_DESCRIPTOR, *PCEVENT_DESCRIPTOR;
 
 typedef struct _EVENT_HEADER {
   USHORT           Size;
@@ -306,3 +306,9 @@ typedef struct _EVENT_RECORD {
   PVOID                            UserData;
   PVOID                            UserContext;
 } EVENT_RECORD, *PEVENT_RECORD;
+
+
+typedef struct  _TRACE_GUID_REGISTRATION {
+    LPCGUID Guid;           // Guid of data block being registered or updated.
+    HANDLE RegHandle;      // Guid Registration Handle is returned.
+} TRACE_GUID_REGISTRATION, *PTRACE_GUID_REGISTRATION;

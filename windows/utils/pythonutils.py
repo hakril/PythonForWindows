@@ -20,6 +20,8 @@ def fixedpropety(f):
             return getattr(self, cache_name)
     return property(prop, doc=f.__doc__)
 
+# Slow fix of the typo :)
+fixedproperty = fixedpropety
 
 # type replacement based on name
 def transform_ctypes_fields(struct, replacement):
@@ -57,7 +59,14 @@ def print_ctypes_struct(struct, name="", hexa=False):
         print("{0} -> {1}".format(name, value))
         return
 
-    for fname, ftype in struct._fields_:
+    for field in struct._fields_:
+        if len(field) == 2:
+            fname, ftype = field
+            nb_bits = None
+        elif len(field) == 3:
+            fname, ftype, nb_bits = field
+        else:
+            raise ValueError("Unknown ctypes field entry format <{0}>".format(field))
         try:
             value = getattr(struct, fname)
         except Exception as e:

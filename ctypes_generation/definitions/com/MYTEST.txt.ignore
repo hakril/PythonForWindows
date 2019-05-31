@@ -1,0 +1,28 @@
+typedef struct MyClsVtbl
+{
+    BEGIN_INTERFACE
+
+    HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+        MyCls * This,
+        /* [in] */ REFIID riid,
+        /* [annotation][iid_is][out] */
+        __RPC__deref_out  void **ppvObject);
+
+    ULONG ( STDMETHODCALLTYPE *AddRef )(
+        MyCls * This);
+
+    ULONG ( STDMETHODCALLTYPE *Release )(
+        MyCls * This);
+
+    HRESULT ( STDMETHODCALLTYPE *add )(
+        MyCls * This,
+        /* [in] */ UINT x,
+        /* [in] */ UINT y,
+        /* [out] */ UINT *res);
+
+    HRESULT ( STDMETHODCALLTYPE *print_state )(
+        MyCls * This);
+
+    END_INTERFACE
+} MyClsVtbl;
+

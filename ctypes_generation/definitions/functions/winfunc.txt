@@ -1243,41 +1243,6 @@ BOOL WINAPI GetProcessDEPPolicy(
 );
 
 
-DWORD WINAPI GetNamedSecurityInfoA(
-  _In_      LPCSTR               pObjectName,
-  _In_      SE_OBJECT_TYPE       ObjectType,
-  _In_      SECURITY_INFORMATION SecurityInfo,
-  _Out_opt_ PSID                 *ppsidOwner,
-  _Out_opt_ PSID                 *ppsidGroup,
-  _Out_opt_ PACL                 *ppDacl,
-  _Out_opt_ PACL                 *ppSacl,
-  _Out_opt_ PSECURITY_DESCRIPTOR *ppSecurityDescriptor
-);
-
-
-DWORD WINAPI GetNamedSecurityInfoW(
-  _In_      LPWSTR               pObjectName,
-  _In_      SE_OBJECT_TYPE       ObjectType,
-  _In_      SECURITY_INFORMATION SecurityInfo,
-  _Out_opt_ PSID                 *ppsidOwner,
-  _Out_opt_ PSID                 *ppsidGroup,
-  _Out_opt_ PACL                 *ppDacl,
-  _Out_opt_ PACL                 *ppSacl,
-  _Out_opt_ PSECURITY_DESCRIPTOR *ppSecurityDescriptor
-);
-
-
-DWORD WINAPI GetSecurityInfo(
-  _In_      HANDLE               handle,
-  _In_      SE_OBJECT_TYPE       ObjectType,
-  _In_      SECURITY_INFORMATION SecurityInfo,
-  _Out_opt_ PSID                 *ppsidOwner,
-  _Out_opt_ PSID                 *ppsidGroup,
-  _Out_opt_ PACL                 *ppDacl,
-  _Out_opt_ PACL                 *ppSacl,
-  _Out_opt_ PSECURITY_DESCRIPTOR *ppSecurityDescriptor
-);
-
 
 BOOL WINAPI ConvertStringSidToSidA(
   _In_  LPCSTR StringSid,

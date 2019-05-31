@@ -132,3 +132,38 @@ ULONG WINAPI TraceSetInformation(
   _In_ PVOID            TraceInformation,
   _In_ ULONG            InformationLength
 );
+
+
+
+ULONG WINAPI RegisterTraceGuidsW(
+    __in PVOID  RequestAddress, // WMIDPREQUEST -> func ptr
+    __in_opt PVOID     RequestContext,
+    __in LPCGUID       ControlGuid,
+    __in ULONG         GuidCount,
+    __in PTRACE_GUID_REGISTRATION TraceGuidReg,
+    __in_opt LPCWSTR       MofImagePath,
+    __in_opt LPCWSTR       MofResourceName,
+    __out PTRACEHANDLE RegistrationHandle
+);
+
+
+ULONG WINAPI RegisterTraceGuidsA(
+    __in PVOID  RequestAddress, // WMIDPREQUEST -> func ptr
+    __in_opt PVOID     RequestContext,
+    __in LPCGUID       ControlGuid,
+    __in ULONG         GuidCount,
+    __in PTRACE_GUID_REGISTRATION TraceGuidReg,
+    __in_opt LPCSTR        MofImagePath,
+    __in_opt LPCSTR        MofResourceName,
+    __out PTRACEHANDLE RegistrationHandle
+);
+
+ULONG WINAPI TraceEvent(
+  _In_ TRACEHANDLE         SessionHandle,
+  _In_ PEVENT_TRACE_HEADER EventTrace
+);
+
+
+TRACEHANDLE WINAPI GetTraceLoggerHandle(
+  _In_ PVOID Buffer
+);

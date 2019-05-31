@@ -209,3 +209,14 @@ typedef struct tagVS_FIXEDFILEINFO {
   DWORD dwFileDateMS;
   DWORD dwFileDateLS;
 } VS_FIXEDFILEINFO;
+
+
+typedef struct _FILE_LINK_INFORMATION {
+    union {
+        BOOLEAN ReplaceIfExists;  // FileLinkInformation
+        ULONG Flags;              // FileLinkInformationEx
+    } ;
+    HANDLE RootDirectory;
+    ULONG FileNameLength;
+    WCHAR FileName[1];
+} FILE_LINK_INFORMATION, *PFILE_LINK_INFORMATION;

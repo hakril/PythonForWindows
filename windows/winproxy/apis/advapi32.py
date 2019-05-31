@@ -171,6 +171,19 @@ def GetNamedSecurityInfoW(pObjectName, ObjectType, SecurityInfo, ppsidOwner=None
 def GetSecurityInfo(handle, ObjectType, SecurityInfo, ppsidOwner=None, ppsidGroup=None, ppDacl=None, ppSacl=None, ppSecurityDescriptor=None):
     return GetSecurityInfo.ctypes_function(handle, ObjectType, SecurityInfo, ppsidOwner, ppsidGroup, ppDacl, ppSacl, ppSecurityDescriptor)
 
+@Advapi32Proxy(error_check=succeed_on_zero)
+def SetSecurityInfo(handle, ObjectType, SecurityInfo, psidOwner, psidGroup, pDacl, pSacl):
+    return SetSecurityInfo.ctypes_function(handle, ObjectType, SecurityInfo, psidOwner, psidGroup, pDacl, pSacl)
+
+@Advapi32Proxy(error_check=succeed_on_zero)
+def SetNamedSecurityInfoA(pObjectName, ObjectType, SecurityInfo, psidOwner, psidGroup, pDacl, pSacl):
+    return SetNamedSecurityInfoA.ctypes_function(pObjectName, ObjectType, SecurityInfo, psidOwner, psidGroup, pDacl, pSacl)
+
+@Advapi32Proxy(error_check=succeed_on_zero)
+def SetNamedSecurityInfoW(pObjectName, ObjectType, SecurityInfo, psidOwner, psidGroup, pDacl, pSacl):
+    return SetNamedSecurityInfoW.ctypes_function(pObjectName, ObjectType, SecurityInfo, psidOwner, psidGroup, pDacl, pSacl)
+
+
 @Advapi32Proxy()
 def IsValidSecurityDescriptor(pSecurityDescriptor):
    return IsValidSecurityDescriptor.ctypes_function(pSecurityDescriptor)
@@ -443,3 +456,19 @@ def TraceQueryInformation(SessionHandle, InformationClass, TraceInformation, Inf
 @Advapi32Proxy(error_check=result_is_error_code)
 def TraceSetInformation(SessionHandle, InformationClass, TraceInformation, InformationLength):
     return TraceSetInformation.ctypes_function(SessionHandle, InformationClass, TraceInformation, InformationLength)
+
+@Advapi32Proxy(error_check=result_is_error_code)
+def RegisterTraceGuidsW(RequestAddress, RequestContext, ControlGuid, GuidCount, TraceGuidReg, MofImagePath, MofResourceName, RegistrationHandle):
+    return RegisterTraceGuidsW.ctypes_function(RequestAddress, RequestContext, ControlGuid, GuidCount, TraceGuidReg, MofImagePath, MofResourceName, RegistrationHandle)
+
+@Advapi32Proxy(error_check=result_is_error_code)
+def RegisterTraceGuidsA(RequestAddress, RequestContext, ControlGuid, GuidCount, TraceGuidReg, MofImagePath, MofResourceName, RegistrationHandle):
+    return RegisterTraceGuidsA.ctypes_function(RequestAddress, RequestContext, ControlGuid, GuidCount, TraceGuidReg, MofImagePath, MofResourceName, RegistrationHandle)
+
+@Advapi32Proxy(error_check=result_is_error_code)
+def TraceEvent(SessionHandle, EventTrace):
+    return TraceEvent.ctypes_function(SessionHandle, EventTrace)
+
+@Advapi32Proxy(error_check=result_is_handle)
+def GetTraceLoggerHandle(Buffer):
+    return GetTraceLoggerHandle.ctypes_function(Buffer)
