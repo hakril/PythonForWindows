@@ -808,26 +808,14 @@ class SecurityDescriptor(gdef.PSECURITY_DESCRIPTOR):
 
 
     def _apply_to_handle_and_type(self, handle, objtype, flags=None):
-        if flags is None: # Guess
-            flags = 0
-            if self.owner:
-                flags |= gdef.OWNER_SECURITY_INFORMATION
-                print(gdef.OWNER_SECURITY_INFORMATION)
-            if self.group:
-                flags |= gdef.GROUP_SECURITY_INFORMATION
-                print(gdef.GROUP_SECURITY_INFORMATION)
-            if self.dacl:
-                flags |= gdef.DACL_SECURITY_INFORMATION
-                print(gdef.DACL_SECURITY_INFORMATION)
-            if self.sacl:
-                if set(ace.Header.AceType for ace in self.sacl) == {gdef.SYSTEM_MANDATORY_LABEL_ACE_TYPE}:
-                    # Only mandatory label -> ask only for mandatory setting
-                    flags |= gdef.LABEL_SECURITY_INFORMATION
-                    print(gdef.LABEL_SECURITY_INFORMATION)
-                else:
-                    flags |= gdef.SACL_SECURITY_INFORMATION
-                    print(gdef.SACL_SECURITY_INFORMATION)
-            # LABEL ?
+        # Make SecurityDescriptor method has_audit_ace ?
+
+        if flags is None:
+            flags = gdef.OWNER_SECURITY_INFORMATION | gdef.GROUP_SECURITY_INFORMATION | gdef.DACL_SECURITY_INFORMATION | gdef.LABEL_SECURITY_INFORMATION
+            if (self.sacl and
+                any(ace.Header.AceType != gdef.SYSTEM_MANDATORY_LABEL_ACE_TYPE for ace in self.sacl)):
+                flags |= gdef.SACL_SECURITY_INFORMATION
+
         return winproxy.SetSecurityInfo(
                 handle,
                 objtype,

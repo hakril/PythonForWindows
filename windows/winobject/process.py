@@ -473,16 +473,29 @@ class Process(utils.AutoHandle):
     token = property(open_token, doc="The process :class:`~windows.winobject.token.Token`")
 
     def get_security_descriptor(self,  query_sacl=False, flags=security.SecurityDescriptor.DEFAULT_SECURITY_INFORMATION):
-        return security.SecurityDescriptor.from_handle(self.handle, query_sacl=query_sacl, flags=flags, obj_type="process")
+        open_flags = gdef.READ_CONTROL
+        if query_sacl:
+            open_flags |= gdef.ACCESS_SYSTEM_SECURITY
+        tmp_handle = windows.winproxy.OpenProcess(open_flags, 0, self.pid)
+        try:
+            return security.SecurityDescriptor.from_handle(tmp_handle, query_sacl=query_sacl, flags=flags, obj_type="process")
+        finally:
+            windows.winproxy.CloseHandle(tmp_handle)
 
-    print("TODO: FIX SET SECURITY DESCRIPTOR PROCESS")
 
     def set_security_descriptor(self, sd):
         if  isinstance(sd, basestring):
             sd = security.SecurityDescriptor.from_string(sd)
-        tmp_handle = windows.winproxy.OpenProcess(gdef.PROCESS_ALL_ACCESS | gdef.ACCESS_SYSTEM_SECURITY , 0, self.pid)
-        sd._apply_to_handle_and_type(tmp_handle, gdef.SE_KERNEL_OBJECT)
-        windows.winproxy.CloseHandle(tmp_handle)
+        open_flags = gdef.WRITE_OWNER | gdef.WRITE_DAC
+        if (sd.sacl and
+            any(ace.Header.AceType != gdef.SYSTEM_MANDATORY_LABEL_ACE_TYPE for ace in sd.sacl)):
+            # Print error if requested but no SecurityPrivilege ?
+            open_flags |= gdef.ACCESS_SYSTEM_SECURITY
+        tmp_handle = windows.winproxy.OpenProcess(open_flags, 0, self.pid)
+        try:
+            sd._apply_to_handle_and_type(tmp_handle, gdef.SE_KERNEL_OBJECT)
+        finally:
+            windows.winproxy.CloseHandle(tmp_handle)
 
     security_descriptor = property(get_security_descriptor, set_security_descriptor)
 
