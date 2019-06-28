@@ -27,6 +27,7 @@ from windows.generated_def.ntstatus import NtStatusException
 from windows.winobject import exception
 from windows.winobject import apisetmap
 from windows.winobject import token
+from windows import security
 
 
 TimeInfo = namedtuple("TimeInfo", ["creation", "exit", "kernel", "user"])
@@ -144,12 +145,12 @@ class Process(utils.AutoHandle):
         return self.exit_code != STILL_ACTIVE
 
     @contextmanager
-    def allocated_memory(self, size):
+    def allocated_memory(self, size, prot=PAGE_EXECUTE_READWRITE):
         """ContextManager to allocate memory and free it
 
         :type: :class:`int` -- the address of the allocated memory
 		"""
-        addr = self.virtual_alloc(size)
+        addr = self.virtual_alloc(size, prot=prot)
         try:
             yield addr
         finally:
@@ -471,6 +472,20 @@ class Process(utils.AutoHandle):
 
     token = property(open_token, doc="The process :class:`~windows.winobject.token.Token`")
 
+    def get_security_descriptor(self,  query_sacl=False, flags=security.SecurityDescriptor.DEFAULT_SECURITY_INFORMATION):
+        return security.SecurityDescriptor.from_handle(self.handle, query_sacl=query_sacl, flags=flags, obj_type="process")
+
+    print("TODO: FIX SET SECURITY DESCRIPTOR PROCESS")
+
+    def set_security_descriptor(self, sd):
+        if  isinstance(sd, basestring):
+            sd = security.SecurityDescriptor.from_string(sd)
+        tmp_handle = windows.winproxy.OpenProcess(gdef.PROCESS_ALL_ACCESS | gdef.ACCESS_SYSTEM_SECURITY , 0, self.pid)
+        sd._apply_to_handle_and_type(tmp_handle, gdef.SE_KERNEL_OBJECT)
+        windows.winproxy.CloseHandle(tmp_handle)
+
+    security_descriptor = property(get_security_descriptor, set_security_descriptor)
+
     @property # Document ?
     def handles(self):
         pid = self.pid
@@ -590,6 +605,11 @@ class CurrentProcess(Process):
 
     def _get_handle(self):
         return winproxy.GetCurrentProcess()
+
+    @utils.fixedpropety
+    def limited_handle(self):
+        return winproxy.GetCurrentProcess()
+
 
     def __del__(self):
         pass

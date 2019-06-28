@@ -5,7 +5,7 @@ import windows
 import windows.generated_def as gdef
 from windows import winproxy
 
-from windows.winobject.token import Token
+from windows.winobject.token import Token, KNOW_INTEGRITY_LEVEL
 
 
 # Specific access right
@@ -86,7 +86,7 @@ SEMAPHORE_ACCESS_RIGHT = gdef.FlagMapper(
     gdef.SEMAPHORE_MODIFY_STATE,
 )
 
-SEMAPHORE_ACCESS_RIGHT = gdef.FlagMapper(
+TIMER_ACCESS_RIGHT = gdef.FlagMapper(
     gdef.TIMER_QUERY_STATE,
     gdef.TIMER_QUERY_STATE,
 )
@@ -145,23 +145,86 @@ THREAD_ACCESS_RIGHT = gdef.FlagMapper(
 )
 
 JOB_ACCESS_RIGHT = gdef.FlagMapper(
-    gdef.JOB_OBJECT_ASSIGN_PROCESS         ,
-    gdef.JOB_OBJECT_SET_ATTRIBUTES         ,
-    gdef.JOB_OBJECT_QUERY                  ,
-    gdef.JOB_OBJECT_TERMINATE              ,
+    gdef.JOB_OBJECT_ASSIGN_PROCESS,
+    gdef.JOB_OBJECT_SET_ATTRIBUTES,
+    gdef.JOB_OBJECT_QUERY,
+    gdef.JOB_OBJECT_TERMINATE,
     gdef.JOB_OBJECT_SET_SECURITY_ATTRIBUTES,
 )
 
 KEY_ACCESS_RIGHT = gdef.FlagMapper(
-    gdef.KEY_QUERY_VALUE         ,
-    gdef.KEY_SET_VALUE           ,
-    gdef.KEY_CREATE_SUB_KEY      ,
-    gdef.KEY_ENUMERATE_SUB_KEYS  ,
-    gdef.KEY_NOTIFY              ,
-    gdef.KEY_CREATE_LINK         ,
-    gdef.KEY_WOW64_64KEY         ,
-    gdef.KEY_WOW64_32KEY         ,
+    gdef.KEY_QUERY_VALUE,
+    gdef.KEY_SET_VALUE,
+    gdef.KEY_CREATE_SUB_KEY,
+    gdef.KEY_ENUMERATE_SUB_KEYS,
+    gdef.KEY_NOTIFY,
+    gdef.KEY_CREATE_LINK,
+    gdef.KEY_WOW64_64KEY,
+    gdef.KEY_WOW64_32KEY,
     # KEY_WOW64_RES           (0x0300) # Just a mask of the 2 last
+)
+
+SECTION_ACCESS_RIGHT = gdef.FlagMapper(
+    gdef.SECTION_QUERY,
+    gdef.SECTION_MAP_WRITE,
+    gdef.SECTION_MAP_READ,
+    gdef.SECTION_MAP_EXECUTE,
+    gdef.SECTION_EXTEND_SIZE,
+    gdef.SECTION_MAP_EXECUTE_EXPLICIT,
+)
+
+COM_ACCESS_RIGHT = gdef.FlagMapper(
+    gdef.COM_EXECUTE,
+    gdef.COM_EXECUTE_LOCAL,
+    gdef.COM_EXECUTE_REMOTE,
+    gdef.COM_ACTIVATE_LOCAL,
+    gdef.COM_ACTIVATE_REMOTE,
+)
+
+
+SPECIFIC_ACCESS_RIGTH_BY_TYPE = {
+    None: gdef.FlagMapper(),
+    "file": FILE_ACCESS_RIGHT,
+    "directory": DIRECTORY_ACCESS_RIGHT,
+    "named_pipe": NAMED_PIPE_ACCESS_RIGHT,
+    "token": TOKEN_ACCESS_RIGHT,
+    "cluster_api": CLUSTER_API_ACCESS_RIGH,
+    "fax": FAX_ACCESS_RIGHT,
+    "callback": CALLBACK_ACCESS_RIGHT,
+    "mutant": MUTANT_ACCESS_RIGHT,
+    "event": EVENT_ACCESS_RIGHT,
+    "semaphore": SEMAPHORE_ACCESS_RIGHT,
+    "io_completion": IO_COMPLETION_ACCESS_RIGHT,
+    "port": PORT_ACCESS_RIGHT,
+    "object_manager_type": OBJECT_MANAGER_TYPE_ACCESS_RIGHT,
+    "object_manager_directory": OBJECT_MANAGER_DIRECTORY_ACCESS_RIGHT,
+    "object_manager_symlink": OBJECT_MANAGER_SIMLINK_ACCESS_RIGHT,
+    "process": PROCESS_ACCESS_RIGHT,
+    "thread": THREAD_ACCESS_RIGHT,
+    "job": JOB_ACCESS_RIGHT,
+    "key": KEY_ACCESS_RIGHT,
+    "com": COM_ACCESS_RIGHT,
+}
+
+# SD
+
+SD_CONTROL_FLAGS = gdef.FlagMapper(
+    gdef.SE_OWNER_DEFAULTED,
+    gdef.SE_GROUP_DEFAULTED,
+    gdef.SE_DACL_PRESENT,
+    gdef.SE_DACL_DEFAULTED,
+    gdef.SE_SACL_PRESENT,
+    gdef.SE_SACL_DEFAULTED,
+    gdef.SE_DACL_UNTRUSTED,
+    gdef.SE_SERVER_SECURITY,
+    gdef.SE_DACL_AUTO_INHERIT_REQ,
+    gdef.SE_SACL_AUTO_INHERIT_REQ,
+    gdef.SE_DACL_AUTO_INHERITED,
+    gdef.SE_SACL_AUTO_INHERITED,
+    gdef.SE_DACL_PROTECTED,
+    gdef.SE_SACL_PROTECTED,
+    gdef.SE_RM_CONTROL_VALID,
+    gdef.SE_SELF_RELATIVE,
 )
 
 # ACE
@@ -186,6 +249,13 @@ ACE_MASKS = gdef.FlagMapper(
     gdef.DELETE                           ,
     gdef.WRITE_DAC                        ,
     gdef.WRITE_OWNER                      ,
+    gdef.SYNCHRONIZE                      ,
+)
+
+MANDATORY_LABEL_ACE_MASK = gdef.FlagMapper(
+    gdef.SYSTEM_MANDATORY_LABEL_NO_WRITE_UP,
+    gdef.SYSTEM_MANDATORY_LABEL_NO_READ_UP,
+    gdef.SYSTEM_MANDATORY_LABEL_NO_EXECUTE_UP,
 )
 
 class AceHeader(gdef.ACE_HEADER):
@@ -571,6 +641,7 @@ class SecurityDescriptor(gdef.PSECURITY_DESCRIPTOR):
         gdef.GROUP_SECURITY_INFORMATION     |
         gdef.DACL_SECURITY_INFORMATION      |
         gdef.ATTRIBUTE_SECURITY_INFORMATION |
+        gdef.LABEL_SECURITY_INFORMATION     | # Integrity
         # gdef.SACL_SECURITY_INFORMATION  | # Need special rights
         gdef.SCOPE_SECURITY_INFORMATION     |
         gdef.PROCESS_TRUST_LABEL_SECURITY_INFORMATION
@@ -586,6 +657,7 @@ class SecurityDescriptor(gdef.PSECURITY_DESCRIPTOR):
         - ``ATTRIBUTE_SECURITY_INFORMATION``
         - ``SCOPE_SECURITY_INFORMATION``
         - ``PROCESS_TRUST_LABEL_SECURITY_INFORMATION``
+        - ``LABEL_SECURITY_INFORMATION``
 
     .. warning::
 
@@ -734,15 +806,49 @@ class SecurityDescriptor(gdef.PSECURITY_DESCRIPTOR):
         )
         return self
 
+
+    def _apply_to_handle_and_type(self, handle, objtype, flags=None):
+        if flags is None: # Guess
+            flags = 0
+            if self.owner:
+                flags |= gdef.OWNER_SECURITY_INFORMATION
+                print(gdef.OWNER_SECURITY_INFORMATION)
+            if self.group:
+                flags |= gdef.GROUP_SECURITY_INFORMATION
+                print(gdef.GROUP_SECURITY_INFORMATION)
+            if self.dacl:
+                flags |= gdef.DACL_SECURITY_INFORMATION
+                print(gdef.DACL_SECURITY_INFORMATION)
+            if self.sacl:
+                if set(ace.Header.AceType for ace in self.sacl) == {gdef.SYSTEM_MANDATORY_LABEL_ACE_TYPE}:
+                    # Only mandatory label -> ask only for mandatory setting
+                    flags |= gdef.LABEL_SECURITY_INFORMATION
+                    print(gdef.LABEL_SECURITY_INFORMATION)
+                else:
+                    flags |= gdef.SACL_SECURITY_INFORMATION
+                    print(gdef.SACL_SECURITY_INFORMATION)
+            # LABEL ?
+        return winproxy.SetSecurityInfo(
+                handle,
+                objtype,
+                flags,
+                self.owner,
+                self.group,
+                self.dacl,
+                self.sacl
+            )
+
     @classmethod
     def from_filename(cls, filename, query_sacl=False, flags=DEFAULT_SECURITY_INFORMATION):
         """Retrieve the security descriptor for the file ``filename``"""
         return cls._from_name_and_type(filename, gdef.SE_FILE_OBJECT, flags=flags, query_sacl=query_sacl)
 
     @classmethod
-    def from_handle(cls, handle, query_sacl=False, flags=DEFAULT_SECURITY_INFORMATION):
+    def from_handle(cls, handle, query_sacl=False, flags=DEFAULT_SECURITY_INFORMATION, obj_type=None):
         """Retrieve the security descriptor for the kernel object described by``handle``"""
-        return cls._from_handle_and_type(handle, gdef.SE_KERNEL_OBJECT, flags=flags, query_sacl=query_sacl)
+        sd = cls._from_handle_and_type(handle, gdef.SE_KERNEL_OBJECT, flags=flags, query_sacl=query_sacl)
+        sd.obj_type = obj_type # Test
+        return sd
 
     @classmethod
     def from_binary(cls, data):
@@ -784,3 +890,87 @@ class SecurityDescriptor(gdef.PSECURITY_DESCRIPTOR):
             # print("FREE SELF")
             # self._close_function(self)
 
+    def explain(self, type=None):
+        if type is  None:
+            type = getattr(self, "obj_type", None)
+        return explain_sd(self, sdtype=type)
+
+# Explain SD POC
+# If ok -> new file
+
+
+def explain_sid(sid):
+    if sid is None:
+        return "None"
+    try:
+        info = u"\\".join(windows.utils.lookup_sid(sid))
+    except WindowsError as e:
+        print(e)
+        info = u"<lookup failed>"
+    return u"{0} ({1})".format(info, sid)
+
+def explain_simple_ace(ace, sdtype):
+    yield u"Type:"
+    yield u"  " + str(ace.Header.AceType)
+    yield u"Flags:"
+    yield u"  {0:#x}".format(ace.Header.AceFlags)
+    yield u"SID:"
+    yield u"  " + explain_sid(ace.sid)
+    yield u"Mask:"
+    mapper = windows.security.SPECIFIC_ACCESS_RIGTH_BY_TYPE[sdtype]
+    yield u"  " + str(list(mapper[x] for x in ace.mask))
+
+def explain_mandatory_label_ace(ace, sdtype):
+    assert ace.Header.AceType == gdef.SYSTEM_MANDATORY_LABEL_ACE_TYPE
+    yield u"Type:"
+    yield u"  {0} (Integrity Level)".format(ace.Header.AceType)
+    yield u"Flags:"
+    yield u"  {0:#x}".format(ace.Header.AceFlags)
+    yield u"SID:"
+    sid = ace.sid
+    count = windows.winproxy.GetSidSubAuthorityCount(sid)
+    integrity = windows.winproxy.GetSidSubAuthority(sid, count[0] - 1)[0]
+    yield u"  {0} (Integrity Level: {1})".format(sid, KNOW_INTEGRITY_LEVEL[integrity])
+    yield u"Mask:"
+    mapper = MANDATORY_LABEL_ACE_MASK
+    yield u"  " + str(list(mapper[x] for x in ace.mask))
+
+ACE_EXPLAINER = {
+    gdef.ACCESS_ALLOWED_ACE_TYPE: explain_simple_ace,
+    gdef.ACCESS_DENIED_ACE_TYPE: explain_simple_ace,
+    gdef.SYSTEM_MANDATORY_LABEL_ACE_TYPE: explain_mandatory_label_ace,
+    gdef.SYSTEM_AUDIT_ACE_TYPE: explain_simple_ace,
+}
+
+
+def explain_acl(acl, sdtype=None):
+    if acl is None:
+        yield u"None"
+    for ace in acl.aces:
+        yield unicode(ace)
+        for line in ACE_EXPLAINER[ace.Header.AceType](ace, sdtype):
+            yield u"  " + line
+
+def explain_sd(sd, sdtype=None):
+    print(u"Security Descriptor: {0}".format(sd))
+    print(u"  Owner:")
+    print(u"    " + explain_sid(sd.owner))
+    print(u"  Group:")
+    print(u"    " + explain_sid(sd.group))
+    print(u"  Control:")
+    control = sd.control
+    print("     {0}".format([flag for flag in SD_CONTROL_FLAGS if control & flag]))
+    print(u"  Dacl: {0}".format(sd.dacl))
+    if sd.dacl:
+        for line in explain_acl(sd.dacl, sdtype):
+            try:
+                print(u"    " + line)
+            except UnicodeError:
+                print("    " + line.encode("cp1252"))
+    print(u"  Sacl: {0}".format(sd.sacl))
+    if sd.sacl:
+        for line in explain_acl(sd.sacl, sdtype):
+            try:
+                print(u"    " + line)
+            except UnicodeError:
+                print("    " + line.encode("cp1252"))
