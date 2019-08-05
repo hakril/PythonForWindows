@@ -201,3 +201,11 @@ def CryptMsgVerifyCountersignatureEncodedEx(hCryptProv, dwEncodingType, pbSigner
 @Crypt32Proxy()
 def CryptMsgClose(hCryptMsg):
     return CryptMsgClose.ctypes_function(hCryptMsg)
+
+@Crypt32Proxy()
+def CryptEnumOIDFunction(dwEncodingType, pszFuncName, pszOID, dwFlags, pvArg, pfnEnumOIDFunc):
+    return CryptEnumOIDFunction.ctypes_function(dwEncodingType, pszFuncName, pszOID, dwFlags, pvArg, pfnEnumOIDFunc)
+
+@Crypt32Proxy()
+def CryptGetOIDFunctionValue(dwEncodingType, pszFuncName, pszOID, pwszValueName, pdwValueType, pbValueData, pcbValueData):
+    return CryptGetOIDFunctionValue.ctypes_function(dwEncodingType, pszFuncName, pszOID, pwszValueName, pdwValueType, pbValueData, pcbValueData)

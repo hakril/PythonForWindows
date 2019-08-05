@@ -9,6 +9,12 @@ class WevtapiProxy(ApiProxy):
     default_error_check = staticmethod(fail_on_zero)
 
 
+# Session
+
+@WevtapiProxy()
+def EvtOpenSession(LoginClass, Login, Timeout=0, Flags=0):
+    return EvtOpenSession.ctypes_function(LoginClass, Login, Timeout, Flags)
+
 # Event
 
 @WevtapiProxy()

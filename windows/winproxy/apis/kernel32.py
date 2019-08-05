@@ -504,6 +504,31 @@ def MapViewOfFile(hFileMappingObject, dwDesiredAccess=gdef.FILE_MAP_ALL_ACCESS, 
     return MapViewOfFile.ctypes_function(hFileMappingObject, dwDesiredAccess, dwFileOffsetHigh, dwFileOffsetLow, dwNumberOfBytesToMap)
 
 
+@Kernel32Proxy()
+def FindFirstFileA(lpFileName, lpFindFileData):
+    return FindFirstFileA.ctypes_function(lpFileName, lpFindFileData)
+
+
+@Kernel32Proxy()
+def FindFirstFileW(lpFileName, lpFindFileData):
+    return FindFirstFileW.ctypes_function(lpFileName, lpFindFileData)
+
+
+@Kernel32Proxy()
+def FindNextFileA(hFindFile, lpFindFileData):
+    return FindNextFileA.ctypes_function(hFindFile, lpFindFileData)
+
+
+@Kernel32Proxy()
+def FindNextFileW(hFindFile, lpFindFileData):
+    return FindNextFileW.ctypes_function(hFindFile, lpFindFileData)
+
+
+@Kernel32Proxy()
+def FindClose(hFindFile):
+    return FindClose.ctypes_function(hFindFile)
+
+
 ## Tlhelp (snapshoot)
 
 @Kernel32Proxy()

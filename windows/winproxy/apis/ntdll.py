@@ -363,6 +363,12 @@ def NtEnumerateValueKey(KeyHandle, Index, KeyValueInformationClass, KeyValueInfo
     return NtEnumerateValueKey.ctypes_function(KeyHandle, Index, KeyValueInformationClass, KeyValueInformation, Length, ResultLength)
 
 @NtdllProxy()
+def NtDeleteValueKey(KeyHandle, ValueName):
+    if isinstance(ValueName, basestring):
+        ValueName = gdef.UNICODE_STRING.from_string(ValueName)
+    return NtDeleteValueKey.ctypes_function(KeyHandle, ValueName)
+
+@NtdllProxy()
 def NtQueryLicenseValue(Name, Type, Buffer, Length=None, DataLength=NeededParameter):
     if Length is None and Buffer:
         Length = len(buffer)

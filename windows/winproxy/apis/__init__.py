@@ -17,3 +17,4 @@ from wevtapi import *
 from wintrust import *
 from tdh import *
 from dnsapi import *
+from virtdisk import *
