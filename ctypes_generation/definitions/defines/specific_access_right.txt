@@ -222,7 +222,6 @@
 #define KEY_ALL_ACCESS          ((STANDARD_RIGHTS_ALL|KEY_QUERY_VALUE|KEY_SET_VALUE|KEY_CREATE_SUB_KEY|KEY_ENUMERATE_SUB_KEYS|KEY_NOTIFY|KEY_CREATE_LINK)&(~SYNCHRONIZE))
 
 
-
 //
 // Token Specific Access Rights.
 ////  Documentation purpose only real define are in token.txt

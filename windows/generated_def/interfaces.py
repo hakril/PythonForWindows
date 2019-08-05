@@ -141,6 +141,39 @@ class IEnumBackgroundCopyFiles(COMInterface):
 class IEnumBackgroundCopyJobs(COMInterface):
     IID = generate_IID(0x1AF4F612, 0x3B71, 0x466F, 0x8F, 0x58, 0x7B, 0x6F, 0x73, 0xAC, 0x57, 0xAD, name="IEnumBackgroundCopyJobs", strid="1AF4F612-3B71-466F-8F58-7B6F73AC57AD")
 
+class IBindCtx(COMInterface):
+    IID = generate_IID(0x0000000E, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IBindCtx", strid="0000000E-0000-0000-C000-000000000046")
+
+class IEnumExplorerCommand(COMInterface):
+    IID = generate_IID(0xA88826F8, 0x186F, 0x4987, 0xAA, 0xDE, 0xEA, 0x0C, 0xEF, 0x8F, 0xBF, 0xE8, name="IEnumExplorerCommand", strid="A88826F8-186F-4987-AADE-EA0CEF8FBFE8")
+
+class IEnumMoniker(COMInterface):
+    IID = generate_IID(0x00000102, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IEnumMoniker", strid="00000102-0000-0000-C000-000000000046")
+
+class IEnumShellItems(COMInterface):
+    IID = generate_IID(0x70629033, 0xE363, 0x4A28, 0xA5, 0x67, 0x0D, 0xB7, 0x80, 0x06, 0xE6, 0xD7, name="IEnumShellItems", strid="70629033-E363-4A28-A567-0DB78006E6D7")
+
+class IEnumString(COMInterface):
+    IID = generate_IID(0x00000101, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IEnumString", strid="00000101-0000-0000-C000-000000000046")
+
+class IExplorerCommand(COMInterface):
+    IID = generate_IID(0xA08CE4D0, 0xFA25, 0x44AB, 0xB5, 0x7C, 0xC7, 0xB1, 0xC3, 0x23, 0xE0, 0xB9, name="IExplorerCommand", strid="A08CE4D0-FA25-44AB-B57C-C7B1C323E0B9")
+
+class IMoniker(COMInterface):
+    IID = generate_IID(0x0000000F, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IMoniker", strid="0000000F-0000-0000-C000-000000000046")
+
+class IRunningObjectTable(COMInterface):
+    IID = generate_IID(0x00000010, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IRunningObjectTable", strid="00000010-0000-0000-C000-000000000046")
+
+class IShellItem(COMInterface):
+    IID = generate_IID(0x43826D1E, 0xE718, 0x42EE, 0xBC, 0x55, 0xA1, 0xE2, 0x61, 0xC3, 0x7B, 0xFE, name="IShellItem", strid="43826D1E-E718-42EE-BC55-A1E261C37BFE")
+
+class IShellItemArray(COMInterface):
+    IID = generate_IID(0xB63EA76D, 0x1F85, 0x456F, 0xA1, 0x9C, 0x48, 0x15, 0x9E, 0xFA, 0x85, 0x8B, name="IShellItemArray", strid="B63EA76D-1F85-456F-A19C-48159EFA858B")
+
+class IStream(COMInterface):
+    IID = generate_IID(0x0000000C, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IStream", strid="0000000C-0000-0000-C000-000000000046")
+
 class IAction(COMInterface):
     IID = generate_IID(0xBAE54997, 0x48B1, 0x4CBE, 0x99, 0x65, 0xD6, 0xBE, 0x26, 0x3E, 0xBE, 0xA4, name="IAction", strid="BAE54997-48B1-4CBE-9965-D6BE263EBEA4")
 
@@ -212,6 +245,15 @@ class ITrigger(COMInterface):
 
 class ITriggerCollection(COMInterface):
     IID = generate_IID(0x85DF5081, 0x1B24, 0x4F32, 0x87, 0x8A, 0xD9, 0xD1, 0x4D, 0xF4, 0xCB, 0x77, name="ITriggerCollection", strid="85DF5081-1B24-4F32-878A-D9D14DF4CB77")
+
+class IApplicationActivationManager(COMInterface):
+    IID = generate_IID(0x2E941141, 0x7F97, 0x4756, 0xBA, 0x1D, 0x9D, 0xEC, 0xDE, 0x89, 0x4A, 0x3D, name="IApplicationActivationManager", strid="2E941141-7F97-4756-BA1D-9DECDE894A3D")
+
+class IPackageDebugSettings(COMInterface):
+    IID = generate_IID(0xF27C3930, 0x8029, 0x4AD1, 0x94, 0xE3, 0x3D, 0xBA, 0x41, 0x78, 0x10, 0xC1, name="IPackageDebugSettings", strid="F27C3930-8029-4AD1-94E3-3DBA417810C1")
+
+class IPackageExecutionStateChangeNotification(COMInterface):
+    IID = generate_IID(0x1BB12A62, 0x2AD8, 0x432B, 0x8C, 0xCF, 0x0C, 0x2C, 0x52, 0xAF, 0xCD, 0x5B, name="IPackageExecutionStateChangeNotification", strid="1BB12A62-2AD8-432B-8CCF-0C2C52AFCD5B")
 
 class IWebBrowser2(COMInterface):
     IID = generate_IID(0xD30C1661, 0xCDAF, 0x11D0, 0x8A, 0x3E, 0x00, 0xC0, 0x4F, 0xC9, 0xE2, 0x6E, name="IWebBrowser2", strid="D30C1661-CDAF-11D0-8A3E-00C04FC9E26E")
@@ -1094,6 +1136,273 @@ IEnumBackgroundCopyJobs._functions_ = {
         "Clone": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumBackgroundCopyJobs))(6, "Clone"),
         # GetCount -> puCount:*ULONG
         "GetCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(ULONG))(7, "GetCount"),
+    }
+
+IBindCtx._functions_ = {
+        # QueryInterface -> riid:REFIID, ppvObject:**void
+        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        # AddRef -> 
+        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        # Release -> 
+        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        # RegisterObjectBound -> punk:*IUnknown
+        "RegisterObjectBound": ctypes.WINFUNCTYPE(HRESULT, IUnknown)(3, "RegisterObjectBound"),
+        # RevokeObjectBound -> punk:*IUnknown
+        "RevokeObjectBound": ctypes.WINFUNCTYPE(HRESULT, IUnknown)(4, "RevokeObjectBound"),
+        # ReleaseBoundObjects -> 
+        "ReleaseBoundObjects": ctypes.WINFUNCTYPE(HRESULT)(5, "ReleaseBoundObjects"),
+        # SetBindOptions -> pbindopts:*BIND_OPTS
+        "SetBindOptions": ctypes.WINFUNCTYPE(HRESULT, POINTER(BIND_OPTS))(6, "SetBindOptions"),
+        # GetBindOptions -> pbindopts:*BIND_OPTS
+        "GetBindOptions": ctypes.WINFUNCTYPE(HRESULT, POINTER(BIND_OPTS))(7, "GetBindOptions"),
+        # GetRunningObjectTable -> pprot:**IRunningObjectTable
+        "GetRunningObjectTable": ctypes.WINFUNCTYPE(HRESULT, POINTER(IRunningObjectTable))(8, "GetRunningObjectTable"),
+        # RegisterObjectParam -> pszKey:LPOLESTR, punk:*IUnknown
+        "RegisterObjectParam": ctypes.WINFUNCTYPE(HRESULT, LPOLESTR, IUnknown)(9, "RegisterObjectParam"),
+        # GetObjectParam -> pszKey:LPOLESTR, ppunk:**IUnknown
+        "GetObjectParam": ctypes.WINFUNCTYPE(HRESULT, LPOLESTR, POINTER(IUnknown))(10, "GetObjectParam"),
+        # EnumObjectParam -> ppenum:**IEnumString
+        "EnumObjectParam": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumString))(11, "EnumObjectParam"),
+        # RevokeObjectParam -> pszKey:LPOLESTR
+        "RevokeObjectParam": ctypes.WINFUNCTYPE(HRESULT, LPOLESTR)(12, "RevokeObjectParam"),
+    }
+
+IEnumExplorerCommand._functions_ = {
+        # QueryInterface -> riid:REFIID, ppvObject:**void
+        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        # AddRef -> 
+        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        # Release -> 
+        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        # Next -> celt:ULONG, pUICommand:**IExplorerCommand, pceltFetched:*ULONG
+        "Next": ctypes.WINFUNCTYPE(HRESULT, ULONG, POINTER(IExplorerCommand), POINTER(ULONG))(3, "Next"),
+        # Skip -> celt:ULONG
+        "Skip": ctypes.WINFUNCTYPE(HRESULT, ULONG)(4, "Skip"),
+        # Reset -> 
+        "Reset": ctypes.WINFUNCTYPE(HRESULT)(5, "Reset"),
+        # Clone -> ppenum:**IEnumExplorerCommand
+        "Clone": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumExplorerCommand))(6, "Clone"),
+    }
+
+IEnumMoniker._functions_ = {
+        # QueryInterface -> riid:REFIID, ppvObject:**void
+        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        # AddRef -> 
+        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        # Release -> 
+        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        # Next -> celt:ULONG, rgelt:**IMoniker, pceltFetched:*ULONG
+        "Next": ctypes.WINFUNCTYPE(HRESULT, ULONG, POINTER(IMoniker), POINTER(ULONG))(3, "Next"),
+        # Skip -> celt:ULONG
+        "Skip": ctypes.WINFUNCTYPE(HRESULT, ULONG)(4, "Skip"),
+        # Reset -> 
+        "Reset": ctypes.WINFUNCTYPE(HRESULT)(5, "Reset"),
+        # Clone -> ppenum:**IEnumMoniker
+        "Clone": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumMoniker))(6, "Clone"),
+    }
+
+IEnumShellItems._functions_ = {
+        # QueryInterface -> riid:REFIID, ppvObject:**void
+        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        # AddRef -> 
+        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        # Release -> 
+        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        # Next -> celt:ULONG, rgelt:**IShellItem, pceltFetched:*ULONG
+        "Next": ctypes.WINFUNCTYPE(HRESULT, ULONG, POINTER(IShellItem), POINTER(ULONG))(3, "Next"),
+        # Skip -> celt:ULONG
+        "Skip": ctypes.WINFUNCTYPE(HRESULT, ULONG)(4, "Skip"),
+        # Reset -> 
+        "Reset": ctypes.WINFUNCTYPE(HRESULT)(5, "Reset"),
+        # Clone -> ppenum:**IEnumShellItems
+        "Clone": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumShellItems))(6, "Clone"),
+    }
+
+IEnumString._functions_ = {
+        # QueryInterface -> riid:REFIID, ppvObject:**void
+        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        # AddRef -> 
+        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        # Release -> 
+        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        # Next -> celt:ULONG, rgelt:*LPOLESTR, pceltFetched:*ULONG
+        "Next": ctypes.WINFUNCTYPE(HRESULT, ULONG, POINTER(LPOLESTR), POINTER(ULONG))(3, "Next"),
+        # Skip -> celt:ULONG
+        "Skip": ctypes.WINFUNCTYPE(HRESULT, ULONG)(4, "Skip"),
+        # Reset -> 
+        "Reset": ctypes.WINFUNCTYPE(HRESULT)(5, "Reset"),
+        # Clone -> ppenum:**IEnumString
+        "Clone": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumString))(6, "Clone"),
+    }
+
+IExplorerCommand._functions_ = {
+        # QueryInterface -> riid:REFIID, ppvObject:**void
+        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        # AddRef -> 
+        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        # Release -> 
+        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        # GetTitle -> psiItemArray:*IShellItemArray, ppszName:*LPWSTR
+        "GetTitle": ctypes.WINFUNCTYPE(HRESULT, IShellItemArray, POINTER(LPWSTR))(3, "GetTitle"),
+        # GetIcon -> psiItemArray:*IShellItemArray, ppszIcon:*LPWSTR
+        "GetIcon": ctypes.WINFUNCTYPE(HRESULT, IShellItemArray, POINTER(LPWSTR))(4, "GetIcon"),
+        # GetToolTip -> psiItemArray:*IShellItemArray, ppszInfotip:*LPWSTR
+        "GetToolTip": ctypes.WINFUNCTYPE(HRESULT, IShellItemArray, POINTER(LPWSTR))(5, "GetToolTip"),
+        # GetCanonicalName -> pguidCommandName:*GUID
+        "GetCanonicalName": ctypes.WINFUNCTYPE(HRESULT, POINTER(GUID))(6, "GetCanonicalName"),
+        # GetState -> psiItemArray:*IShellItemArray, fOkToBeSlow:BOOL, pCmdState:*EXPCMDSTATE
+        "GetState": ctypes.WINFUNCTYPE(HRESULT, IShellItemArray, BOOL, POINTER(EXPCMDSTATE))(7, "GetState"),
+        # Invoke -> psiItemArray:*IShellItemArray, pbc:*IBindCtx
+        "Invoke": ctypes.WINFUNCTYPE(HRESULT, IShellItemArray, IBindCtx)(8, "Invoke"),
+        # GetFlags -> pFlags:*EXPCMDFLAGS
+        "GetFlags": ctypes.WINFUNCTYPE(HRESULT, POINTER(EXPCMDFLAGS))(9, "GetFlags"),
+        # EnumSubCommands -> ppEnum:**IEnumExplorerCommand
+        "EnumSubCommands": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumExplorerCommand))(10, "EnumSubCommands"),
+    }
+
+IMoniker._functions_ = {
+        # QueryInterface -> riid:REFIID, ppvObject:**void
+        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        # AddRef -> 
+        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        # Release -> 
+        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        # GetClassID -> pClassID:*CLSID
+        "GetClassID": ctypes.WINFUNCTYPE(HRESULT, POINTER(CLSID))(3, "GetClassID"),
+        # IsDirty -> 
+        "IsDirty": ctypes.WINFUNCTYPE(HRESULT)(4, "IsDirty"),
+        # Load -> pStm:*IStream
+        "Load": ctypes.WINFUNCTYPE(HRESULT, IStream)(5, "Load"),
+        # Save -> pStm:*IStream, fClearDirty:BOOL
+        "Save": ctypes.WINFUNCTYPE(HRESULT, IStream, BOOL)(6, "Save"),
+        # GetSizeMax -> pcbSize:*ULARGE_INTEGER
+        "GetSizeMax": ctypes.WINFUNCTYPE(HRESULT, POINTER(ULARGE_INTEGER))(7, "GetSizeMax"),
+        # BindToObject -> pbc:*IBindCtx, pmkToLeft:*IMoniker, riidResult:REFIID, ppvResult:**void
+        "BindToObject": ctypes.WINFUNCTYPE(HRESULT, IBindCtx, IMoniker, REFIID, POINTER(PVOID))(8, "BindToObject"),
+        # BindToStorage -> pbc:*IBindCtx, pmkToLeft:*IMoniker, riid:REFIID, ppvObj:**void
+        "BindToStorage": ctypes.WINFUNCTYPE(HRESULT, IBindCtx, IMoniker, REFIID, POINTER(PVOID))(9, "BindToStorage"),
+        # Reduce -> pbc:*IBindCtx, dwReduceHowFar:DWORD, ppmkToLeft:**IMoniker, ppmkReduced:**IMoniker
+        "Reduce": ctypes.WINFUNCTYPE(HRESULT, IBindCtx, DWORD, POINTER(IMoniker), POINTER(IMoniker))(10, "Reduce"),
+        # ComposeWith -> pmkRight:*IMoniker, fOnlyIfNotGeneric:BOOL, ppmkComposite:**IMoniker
+        "ComposeWith": ctypes.WINFUNCTYPE(HRESULT, IMoniker, BOOL, POINTER(IMoniker))(11, "ComposeWith"),
+        # Enum -> fForward:BOOL, ppenumMoniker:**IEnumMoniker
+        "Enum": ctypes.WINFUNCTYPE(HRESULT, BOOL, POINTER(IEnumMoniker))(12, "Enum"),
+        # IsEqual -> pmkOtherMoniker:*IMoniker
+        "IsEqual": ctypes.WINFUNCTYPE(HRESULT, IMoniker)(13, "IsEqual"),
+        # Hash -> pdwHash:*DWORD
+        "Hash": ctypes.WINFUNCTYPE(HRESULT, POINTER(DWORD))(14, "Hash"),
+        # IsRunning -> pbc:*IBindCtx, pmkToLeft:*IMoniker, pmkNewlyRunning:*IMoniker
+        "IsRunning": ctypes.WINFUNCTYPE(HRESULT, IBindCtx, IMoniker, IMoniker)(15, "IsRunning"),
+        # GetTimeOfLastChange -> pbc:*IBindCtx, pmkToLeft:*IMoniker, pFileTime:*FILETIME
+        "GetTimeOfLastChange": ctypes.WINFUNCTYPE(HRESULT, IBindCtx, IMoniker, POINTER(FILETIME))(16, "GetTimeOfLastChange"),
+        # Inverse -> ppmk:**IMoniker
+        "Inverse": ctypes.WINFUNCTYPE(HRESULT, POINTER(IMoniker))(17, "Inverse"),
+        # CommonPrefixWith -> pmkOther:*IMoniker, ppmkPrefix:**IMoniker
+        "CommonPrefixWith": ctypes.WINFUNCTYPE(HRESULT, IMoniker, POINTER(IMoniker))(18, "CommonPrefixWith"),
+        # RelativePathTo -> pmkOther:*IMoniker, ppmkRelPath:**IMoniker
+        "RelativePathTo": ctypes.WINFUNCTYPE(HRESULT, IMoniker, POINTER(IMoniker))(19, "RelativePathTo"),
+        # GetDisplayName -> pbc:*IBindCtx, pmkToLeft:*IMoniker, ppszDisplayName:*LPOLESTR
+        "GetDisplayName": ctypes.WINFUNCTYPE(HRESULT, IBindCtx, IMoniker, POINTER(LPOLESTR))(20, "GetDisplayName"),
+        # ParseDisplayName -> pbc:*IBindCtx, pmkToLeft:*IMoniker, pszDisplayName:LPOLESTR, pchEaten:*ULONG, ppmkOut:**IMoniker
+        "ParseDisplayName": ctypes.WINFUNCTYPE(HRESULT, IBindCtx, IMoniker, LPOLESTR, POINTER(ULONG), POINTER(IMoniker))(21, "ParseDisplayName"),
+        # IsSystemMoniker -> pdwMksys:*DWORD
+        "IsSystemMoniker": ctypes.WINFUNCTYPE(HRESULT, POINTER(DWORD))(22, "IsSystemMoniker"),
+    }
+
+IRunningObjectTable._functions_ = {
+        # QueryInterface -> riid:REFIID, ppvObject:**void
+        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        # AddRef -> 
+        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        # Release -> 
+        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        # Register -> grfFlags:DWORD, punkObject:*IUnknown, pmkObjectName:*IMoniker, pdwRegister:*DWORD
+        "Register": ctypes.WINFUNCTYPE(HRESULT, DWORD, IUnknown, IMoniker, POINTER(DWORD))(3, "Register"),
+        # Revoke -> dwRegister:DWORD
+        "Revoke": ctypes.WINFUNCTYPE(HRESULT, DWORD)(4, "Revoke"),
+        # IsRunning -> pmkObjectName:*IMoniker
+        "IsRunning": ctypes.WINFUNCTYPE(HRESULT, IMoniker)(5, "IsRunning"),
+        # GetObject -> pmkObjectName:*IMoniker, ppunkObject:**IUnknown
+        "GetObject": ctypes.WINFUNCTYPE(HRESULT, IMoniker, POINTER(IUnknown))(6, "GetObject"),
+        # NoteChangeTime -> dwRegister:DWORD, pfiletime:*FILETIME
+        "NoteChangeTime": ctypes.WINFUNCTYPE(HRESULT, DWORD, POINTER(FILETIME))(7, "NoteChangeTime"),
+        # GetTimeOfLastChange -> pmkObjectName:*IMoniker, pfiletime:*FILETIME
+        "GetTimeOfLastChange": ctypes.WINFUNCTYPE(HRESULT, IMoniker, POINTER(FILETIME))(8, "GetTimeOfLastChange"),
+        # EnumRunning -> ppenumMoniker:**IEnumMoniker
+        "EnumRunning": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumMoniker))(9, "EnumRunning"),
+    }
+
+IShellItem._functions_ = {
+        # QueryInterface -> riid:REFIID, ppvObject:**void
+        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        # AddRef -> 
+        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        # Release -> 
+        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        # BindToHandler -> pbc:*IBindCtx, bhid:REFGUID, riid:REFIID, ppv:**void
+        "BindToHandler": ctypes.WINFUNCTYPE(HRESULT, IBindCtx, REFGUID, REFIID, POINTER(PVOID))(3, "BindToHandler"),
+        # GetParent -> ppsi:**IShellItem
+        "GetParent": ctypes.WINFUNCTYPE(HRESULT, POINTER(IShellItem))(4, "GetParent"),
+        # GetDisplayName -> sigdnName:SIGDN, ppszName:*LPWSTR
+        "GetDisplayName": ctypes.WINFUNCTYPE(HRESULT, SIGDN, POINTER(LPWSTR))(5, "GetDisplayName"),
+        # GetAttributes -> sfgaoMask:SFGAOF, psfgaoAttribs:*SFGAOF
+        "GetAttributes": ctypes.WINFUNCTYPE(HRESULT, SFGAOF, POINTER(SFGAOF))(6, "GetAttributes"),
+        # Compare -> psi:*IShellItem, hint:SICHINTF, piOrder:*INT
+        "Compare": ctypes.WINFUNCTYPE(HRESULT, IShellItem, SICHINTF, POINTER(INT))(7, "Compare"),
+    }
+
+IShellItemArray._functions_ = {
+        # QueryInterface -> riid:REFIID, ppvObject:**void
+        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        # AddRef -> 
+        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        # Release -> 
+        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        # BindToHandler -> pbc:*IBindCtx, bhid:REFGUID, riid:REFIID, ppvOut:**void
+        "BindToHandler": ctypes.WINFUNCTYPE(HRESULT, IBindCtx, REFGUID, REFIID, POINTER(PVOID))(3, "BindToHandler"),
+        # GetPropertyStore -> flags:GETPROPERTYSTOREFLAGS, riid:REFIID, ppv:**void
+        "GetPropertyStore": ctypes.WINFUNCTYPE(HRESULT, GETPROPERTYSTOREFLAGS, REFIID, POINTER(PVOID))(4, "GetPropertyStore"),
+        # GetPropertyDescriptionList -> keyType:REFPROPERTYKEY, riid:REFIID, ppv:**void
+        "GetPropertyDescriptionList": ctypes.WINFUNCTYPE(HRESULT, REFPROPERTYKEY, REFIID, POINTER(PVOID))(5, "GetPropertyDescriptionList"),
+        # GetAttributes -> AttribFlags:SIATTRIBFLAGS, sfgaoMask:SFGAOF, psfgaoAttribs:*SFGAOF
+        "GetAttributes": ctypes.WINFUNCTYPE(HRESULT, SIATTRIBFLAGS, SFGAOF, POINTER(SFGAOF))(6, "GetAttributes"),
+        # GetCount -> pdwNumItems:*DWORD
+        "GetCount": ctypes.WINFUNCTYPE(HRESULT, POINTER(DWORD))(7, "GetCount"),
+        # GetItemAt -> dwIndex:DWORD, ppsi:**IShellItem
+        "GetItemAt": ctypes.WINFUNCTYPE(HRESULT, DWORD, POINTER(IShellItem))(8, "GetItemAt"),
+        # EnumItems -> ppenumShellItems:**IEnumShellItems
+        "EnumItems": ctypes.WINFUNCTYPE(HRESULT, POINTER(IEnumShellItems))(9, "EnumItems"),
+    }
+
+IStream._functions_ = {
+        # QueryInterface -> riid:REFIID, ppvObject:**void
+        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        # AddRef -> 
+        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        # Release -> 
+        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        # Read -> pv:*void, cb:ULONG, pcbRead:*ULONG
+        "Read": ctypes.WINFUNCTYPE(HRESULT, PVOID, ULONG, POINTER(ULONG))(3, "Read"),
+        # Write -> pv:*void, cb:ULONG, pcbWritten:*ULONG
+        "Write": ctypes.WINFUNCTYPE(HRESULT, PVOID, ULONG, POINTER(ULONG))(4, "Write"),
+        # Seek -> dlibMove:LARGE_INTEGER, dwOrigin:DWORD, plibNewPosition:*ULARGE_INTEGER
+        "Seek": ctypes.WINFUNCTYPE(HRESULT, LARGE_INTEGER, DWORD, POINTER(ULARGE_INTEGER))(5, "Seek"),
+        # SetSize -> libNewSize:ULARGE_INTEGER
+        "SetSize": ctypes.WINFUNCTYPE(HRESULT, ULARGE_INTEGER)(6, "SetSize"),
+        # CopyTo -> pstm:*IStream, cb:ULARGE_INTEGER, pcbRead:*ULARGE_INTEGER, pcbWritten:*ULARGE_INTEGER
+        "CopyTo": ctypes.WINFUNCTYPE(HRESULT, IStream, ULARGE_INTEGER, POINTER(ULARGE_INTEGER), POINTER(ULARGE_INTEGER))(7, "CopyTo"),
+        # Commit -> grfCommitFlags:DWORD
+        "Commit": ctypes.WINFUNCTYPE(HRESULT, DWORD)(8, "Commit"),
+        # Revert -> 
+        "Revert": ctypes.WINFUNCTYPE(HRESULT)(9, "Revert"),
+        # LockRegion -> libOffset:ULARGE_INTEGER, cb:ULARGE_INTEGER, dwLockType:DWORD
+        "LockRegion": ctypes.WINFUNCTYPE(HRESULT, ULARGE_INTEGER, ULARGE_INTEGER, DWORD)(10, "LockRegion"),
+        # UnlockRegion -> libOffset:ULARGE_INTEGER, cb:ULARGE_INTEGER, dwLockType:DWORD
+        "UnlockRegion": ctypes.WINFUNCTYPE(HRESULT, ULARGE_INTEGER, ULARGE_INTEGER, DWORD)(11, "UnlockRegion"),
+        # Stat -> pstatstg:*STATSTG, grfStatFlag:DWORD
+        "Stat": ctypes.WINFUNCTYPE(HRESULT, POINTER(STATSTG), DWORD)(12, "Stat"),
+        # Clone -> ppstm:**IStream
+        "Clone": ctypes.WINFUNCTYPE(HRESULT, POINTER(IStream))(13, "Clone"),
     }
 
 IAction._functions_ = {
@@ -1996,6 +2305,71 @@ ITriggerCollection._functions_ = {
         "Remove": ctypes.WINFUNCTYPE(HRESULT, VARIANT)(11, "Remove"),
         # Clear -> 
         "Clear": ctypes.WINFUNCTYPE(HRESULT)(12, "Clear"),
+    }
+
+IApplicationActivationManager._functions_ = {
+        # QueryInterface -> riid:REFIID, ppvObject:**void
+        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        # AddRef -> 
+        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        # Release -> 
+        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        # ActivateApplication -> appUserModelId:LPCWSTR, arguments:LPCWSTR, options:ACTIVATEOPTIONS, processId:*DWORD
+        "ActivateApplication": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LPCWSTR, ACTIVATEOPTIONS, POINTER(DWORD))(3, "ActivateApplication"),
+        # ActivateForFile -> appUserModelId:LPCWSTR, itemArray:*IShellItemArray, verb:LPCWSTR, processId:*DWORD
+        "ActivateForFile": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, IShellItemArray, LPCWSTR, POINTER(DWORD))(4, "ActivateForFile"),
+        # ActivateForProtocol -> appUserModelId:LPCWSTR, itemArray:*IShellItemArray, processId:*DWORD
+        "ActivateForProtocol": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, IShellItemArray, POINTER(DWORD))(5, "ActivateForProtocol"),
+    }
+
+IPackageDebugSettings._functions_ = {
+        # QueryInterface -> riid:REFIID, ppvObject:**void
+        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        # AddRef -> 
+        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        # Release -> 
+        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        # EnableDebugging -> packageFullName:LPCWSTR, debuggerCommandLine:LPCWSTR, environment:PZZWSTR
+        "EnableDebugging": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LPCWSTR, PZZWSTR)(3, "EnableDebugging"),
+        # DisableDebugging -> packageFullName:LPCWSTR
+        "DisableDebugging": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(4, "DisableDebugging"),
+        # Suspend -> packageFullName:LPCWSTR
+        "Suspend": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(5, "Suspend"),
+        # Resume -> packageFullName:LPCWSTR
+        "Resume": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(6, "Resume"),
+        # TerminateAllProcesses -> packageFullName:LPCWSTR
+        "TerminateAllProcesses": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(7, "TerminateAllProcesses"),
+        # SetTargetSessionId -> sessionId:ULONG
+        "SetTargetSessionId": ctypes.WINFUNCTYPE(HRESULT, ULONG)(8, "SetTargetSessionId"),
+        # EnumerateBackgroundTasks -> packageFullName:LPCWSTR, taskCount:*ULONG, taskIds:*LPCGUID, taskNames:**LPCWSTR
+        "EnumerateBackgroundTasks": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, POINTER(ULONG), POINTER(LPCGUID), POINTER(POINTER(LPCWSTR)))(9, "EnumerateBackgroundTasks"),
+        # ActivateBackgroundTask -> taskId:LPCGUID
+        "ActivateBackgroundTask": ctypes.WINFUNCTYPE(HRESULT, LPCGUID)(10, "ActivateBackgroundTask"),
+        # StartServicing -> packageFullName:LPCWSTR
+        "StartServicing": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(11, "StartServicing"),
+        # StopServicing -> packageFullName:LPCWSTR
+        "StopServicing": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(12, "StopServicing"),
+        # StartSessionRedirection -> packageFullName:LPCWSTR, sessionId:ULONG
+        "StartSessionRedirection": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, ULONG)(13, "StartSessionRedirection"),
+        # StopSessionRedirection -> packageFullName:LPCWSTR
+        "StopSessionRedirection": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(14, "StopSessionRedirection"),
+        # GetPackageExecutionState -> packageFullName:LPCWSTR, packageExecutionState:*PACKAGE_EXECUTION_STATE
+        "GetPackageExecutionState": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, POINTER(PACKAGE_EXECUTION_STATE))(15, "GetPackageExecutionState"),
+        # RegisterForPackageStateChanges -> packageFullName:LPCWSTR, pPackageExecutionStateChangeNotification:*IPackageExecutionStateChangeNotification, pdwCookie:*DWORD
+        "RegisterForPackageStateChanges": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, IPackageExecutionStateChangeNotification, POINTER(DWORD))(16, "RegisterForPackageStateChanges"),
+        # UnregisterForPackageStateChanges -> dwCookie:DWORD
+        "UnregisterForPackageStateChanges": ctypes.WINFUNCTYPE(HRESULT, DWORD)(17, "UnregisterForPackageStateChanges"),
+    }
+
+IPackageExecutionStateChangeNotification._functions_ = {
+        # QueryInterface -> riid:REFIID, ppvObject:**void
+        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        # AddRef -> 
+        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        # Release -> 
+        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        # OnStateChanged -> pszPackageFullName:LPCWSTR, pesNewState:PACKAGE_EXECUTION_STATE
+        "OnStateChanged": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, PACKAGE_EXECUTION_STATE)(3, "OnStateChanged"),
     }
 
 IWebBrowser2._functions_ = {

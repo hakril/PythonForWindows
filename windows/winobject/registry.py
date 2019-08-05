@@ -12,8 +12,7 @@ from windows import winproxy
 WENCODING = "utf-16-le"
 
 # So _winreg does not handle unicode stuff in Py2 :(
-# Need to rewrite some stuff manually :(
-import _winreg
+# Need to rewrite everything to get it working with unicode
 
 class WinRegistryKey(gdef.HKEY):
     _close_function = staticmethod(winproxy.RegCloseKey)
@@ -22,8 +21,9 @@ class WinRegistryKey(gdef.HKEY):
         if sys.path is None: # Late shutdown (not sur winproxy is still up
             return
         if self: # Not NULL handle ?
-            dbgprint("Closing registry key handle {0:#x}".format(self.value), 'REGISTRY')
+            dbgprint(u"Closing registry key handle {0:#x}".format(self.value), 'REGISTRY')
             self._close_function(self)
+
 
 
 
@@ -126,12 +126,14 @@ class PyHKey(object):
     def _open_key(self, handle, name, sam):
         result = WinRegistryKey()
         winproxy.RegOpenKeyExW(handle, name, 0, sam, result)
+        dbgprint(u"Opening registry key <{0}> (handle={1:#x})".format(name, result.value), "REGISTRY")
         return result
 
     def _create_key(self, parent, name, sam):
         result = WinRegistryKey()
         flags = 0
         winproxy.RegCreateKeyExW(parent, name, 0, None, flags, sam, None, result, None)
+        dbgprint(u"Creating registry key <{0}> (handle={1:#x})".format(name, result.value), "REGISTRY")
         return result
 
     @property
@@ -160,7 +162,7 @@ class PyHKey(object):
             tmpphkey = self._open_key(self.surkey.phkey, self.name, gdef.KEY_READ)
         except WindowsError as e:
             return False
-        winproxy.RegCloseKey(tmpphkey)
+        # tmpphkey will be garbage collected and auto-closed
         return True
 
     @property
@@ -179,26 +181,6 @@ class PyHKey(object):
                 res.append(name_buffer.value)
         return [PyHKey(self, n) for n in  res]
 
-    @property
-    def values(self):
-        """The values of the registry key
-
-        :type: [:class:`KeyValue`] - A list of values"""
-        res = []
-        with ExpectWindowsError(259):
-            for i in itertools.count():
-                #
-                name_value_type = _winreg.EnumValue(self.phkey, i)
-                # _winreg doest not support REG_QWORD in python2
-                # See http://bugs.python.org/issue23026
-                if name_value_type[2] == gdef.REG_QWORD:
-                    name = name_value_type[0]
-                    value = struct.unpack("<Q", name_value_type[1])[0]
-                    type = name_value_type[2]
-                    name_value_type = name, value, type
-                res.append(name_value_type)
-        return [KeyValue(*r) for r in res]
-
     def get_key_size_info(self):
         max_name_len = gdef.DWORD()
         max_value_len = gdef.DWORD()
@@ -207,7 +189,9 @@ class PyHKey(object):
 
     @property
     def values(self):
-        """TST VERSION"""
+        """The values of the registry key
+
+        :type: [:class:`KeyValue`] - A list of values"""
         res = []
         # Get max info keys
 
@@ -263,7 +247,6 @@ class PyHKey(object):
 
         :rtype: :class:`KeyValue`
         """
-        # value, type = _winreg.QueryValueEx(self.phkey, value_name)
 
         type = gdef.DWORD(0)
         size = gdef.DWORD(0x100)
@@ -283,9 +266,9 @@ class PyHKey(object):
 
     def _guess_value_type(self, value):
         if isinstance(value, basestring):
-            return _winreg.REG_SZ
+            return gdef.REG_SZ
         elif isinstance(value, (int, long)):
-            return _winreg.REG_DWORD
+            return gdef.REG_DWORD
         # elif isinstance(value, (list, tuple)):
             # if all(isinstance(v, basestring) in value):
                 # return _winreg.REG_MULTI_SZ
@@ -361,12 +344,12 @@ class DummyPHKEY(object):
         self.name = name
 
 
-HKEY_LOCAL_MACHINE = PyHKey(DummyPHKEY(_winreg.HKEY_LOCAL_MACHINE, "HKEY_LOCAL_MACHINE"), "", _winreg.KEY_READ)
-HKEY_CLASSES_ROOT = PyHKey(DummyPHKEY(_winreg.HKEY_CLASSES_ROOT, "HKEY_CLASSES_ROOT"), "", _winreg.KEY_READ )
-HKEY_CURRENT_USER = PyHKey(DummyPHKEY(_winreg.HKEY_CURRENT_USER, "HKEY_CURRENT_USER"), "", _winreg.KEY_READ)
-HKEY_DYN_DATA = PyHKey(DummyPHKEY(_winreg.HKEY_DYN_DATA, "HKEY_DYN_DATA"), "", _winreg.KEY_READ)
-HKEY_PERFORMANCE_DATA = PyHKey(DummyPHKEY(_winreg.HKEY_PERFORMANCE_DATA, "HKEY_PERFORMANCE_DATA"), "", _winreg.KEY_READ)
-HKEY_USERS = PyHKey(DummyPHKEY(_winreg.HKEY_USERS, "HKEY_USERS"), "", _winreg.KEY_READ )
+HKEY_LOCAL_MACHINE = PyHKey(DummyPHKEY(gdef.HKEY_LOCAL_MACHINE, "HKEY_LOCAL_MACHINE"), "", gdef.KEY_READ)
+HKEY_CLASSES_ROOT = PyHKey(DummyPHKEY(gdef.HKEY_CLASSES_ROOT, "HKEY_CLASSES_ROOT"), "", gdef.KEY_READ )
+HKEY_CURRENT_USER = PyHKey(DummyPHKEY(gdef.HKEY_CURRENT_USER, "HKEY_CURRENT_USER"), "", gdef.KEY_READ)
+HKEY_DYN_DATA = PyHKey(DummyPHKEY(gdef.HKEY_DYN_DATA, "HKEY_DYN_DATA"), "", gdef.KEY_READ)
+HKEY_PERFORMANCE_DATA = PyHKey(DummyPHKEY(gdef.HKEY_PERFORMANCE_DATA, "HKEY_PERFORMANCE_DATA"), "", gdef.KEY_READ)
+HKEY_USERS = PyHKey(DummyPHKEY(gdef.HKEY_USERS, "HKEY_USERS"), "", gdef.KEY_READ )
 
 
 class Registry(object):

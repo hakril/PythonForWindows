@@ -318,15 +318,6 @@
 #define FILE_SUPPORTS_USN_JOURNAL           0x02000000
 
 
-#define HKEY_CLASSES_ROOT                   (0x80000000)
-#define HKEY_CURRENT_USER                   (0x80000001)
-#define HKEY_LOCAL_MACHINE                  (0x80000002)
-#define HKEY_USERS                          (0x80000003)
-#define HKEY_PERFORMANCE_DATA               (0x80000004)
-#define HKEY_PERFORMANCE_TEXT               (0x80000050)
-#define HKEY_PERFORMANCE_NLSTEXT            (0x80000060)
-
-
 #define RRF_RT_REG_NONE        0x00000001
 #define RRF_RT_REG_SZ          0x00000002
 #define RRF_RT_REG_EXPAND_SZ   0x00000004
