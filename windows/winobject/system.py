@@ -24,6 +24,7 @@ from windows.winobject import event_log
 from windows.winobject import event_trace
 from windows.winobject import task_scheduler
 from windows.winobject import system_module
+from windows.winobject import bits
 
 from windows.dbgprint import dbgprint
 
@@ -133,6 +134,10 @@ class System(object):
         :type: :class:`~windows.winobject.object_manager.ObjectManager`
         """
         return windows.winobject.object_manager.ObjectManager()
+
+    @utils.fixedpropety
+    def bits(self):
+        return bits.create_manager()
 
     #TODO: use GetComputerNameExA ? and recover other names ?
     @utils.fixedpropety
