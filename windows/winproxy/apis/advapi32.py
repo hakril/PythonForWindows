@@ -167,19 +167,19 @@ def GetNamedSecurityInfoA(pObjectName, ObjectType, SecurityInfo, ppsidOwner=None
 def GetNamedSecurityInfoW(pObjectName, ObjectType, SecurityInfo, ppsidOwner=None, ppsidGroup=None, ppDacl=None, ppSacl=None, ppSecurityDescriptor=None):
     return GetNamedSecurityInfoW.ctypes_function(pObjectName, ObjectType, SecurityInfo, ppsidOwner, ppsidGroup, ppDacl, ppSacl, ppSecurityDescriptor)
 
-@Advapi32Proxy(error_check=succeed_on_zero)
+@Advapi32Proxy(error_check=result_is_error_code)
 def GetSecurityInfo(handle, ObjectType, SecurityInfo, ppsidOwner=None, ppsidGroup=None, ppDacl=None, ppSacl=None, ppSecurityDescriptor=None):
     return GetSecurityInfo.ctypes_function(handle, ObjectType, SecurityInfo, ppsidOwner, ppsidGroup, ppDacl, ppSacl, ppSecurityDescriptor)
 
-@Advapi32Proxy(error_check=succeed_on_zero)
+@Advapi32Proxy(error_check=result_is_error_code)
 def SetSecurityInfo(handle, ObjectType, SecurityInfo, psidOwner, psidGroup, pDacl, pSacl):
     return SetSecurityInfo.ctypes_function(handle, ObjectType, SecurityInfo, psidOwner, psidGroup, pDacl, pSacl)
 
-@Advapi32Proxy(error_check=succeed_on_zero)
+@Advapi32Proxy(error_check=result_is_error_code)
 def SetNamedSecurityInfoA(pObjectName, ObjectType, SecurityInfo, psidOwner, psidGroup, pDacl, pSacl):
     return SetNamedSecurityInfoA.ctypes_function(pObjectName, ObjectType, SecurityInfo, psidOwner, psidGroup, pDacl, pSacl)
 
-@Advapi32Proxy(error_check=succeed_on_zero)
+@Advapi32Proxy(error_check=result_is_error_code)
 def SetNamedSecurityInfoW(pObjectName, ObjectType, SecurityInfo, psidOwner, psidGroup, pDacl, pSacl):
     return SetNamedSecurityInfoW.ctypes_function(pObjectName, ObjectType, SecurityInfo, psidOwner, psidGroup, pDacl, pSacl)
 
@@ -240,33 +240,110 @@ def GetAce(pAcl, dwAceIndex, pAce):
 
 # Registry
 
-@Advapi32Proxy(error_check=succeed_on_zero)
+@Advapi32Proxy(error_check=result_is_error_code)
 def RegOpenKeyExA(hKey, lpSubKey, ulOptions, samDesired, phkResult):
     return RegOpenKeyExA.ctypes_function(hKey, lpSubKey, ulOptions, samDesired, phkResult)
 
-@Advapi32Proxy(error_check=succeed_on_zero)
+@Advapi32Proxy(error_check=result_is_error_code)
 def RegOpenKeyExW(hKey, lpSubKey, ulOptions, samDesired, phkResult):
     return RegOpenKeyExW.ctypes_function(hKey, lpSubKey, ulOptions, samDesired, phkResult)
 
-@Advapi32Proxy(error_check=succeed_on_zero)
+@Advapi32Proxy(error_check=result_is_error_code)
+def RegCreateKeyExA(hKey, lpSubKey, Reserved, lpClass, dwOptions, samDesired, lpSecurityAttributes, phkResult, lpdwDisposition):
+    return RegCreateKeyExA.ctypes_function(hKey, lpSubKey, Reserved, lpClass, dwOptions, samDesired, lpSecurityAttributes, phkResult, lpdwDisposition)
+
+@Advapi32Proxy(error_check=result_is_error_code)
+def RegCreateKeyExW(hKey, lpSubKey, Reserved, lpClass, dwOptions, samDesired, lpSecurityAttributes, phkResult, lpdwDisposition):
+    return RegCreateKeyExW.ctypes_function(hKey, lpSubKey, Reserved, lpClass, dwOptions, samDesired, lpSecurityAttributes, phkResult, lpdwDisposition)
+
+@Advapi32Proxy(error_check=result_is_error_code)
 def RegGetValueA(hkey, lpSubKey, lpValue, dwFlags, pdwType, pvData, pcbData):
     return RegGetValueA.ctypes_function(hkey, lpSubKey, lpValue, dwFlags, pdwType, pvData, pcbData)
 
-@Advapi32Proxy(error_check=succeed_on_zero)
+@Advapi32Proxy(error_check=result_is_error_code)
 def RegGetValueW(hkey, lpSubKey=None, lpValue=NeededParameter, dwFlags=0, pdwType=None, pvData=None, pcbData=None):
     return RegGetValueW.ctypes_function(hkey, lpSubKey, lpValue, dwFlags, pdwType, pvData, pcbData)
 
-@Advapi32Proxy(error_check=succeed_on_zero)
+@Advapi32Proxy(error_check=result_is_error_code)
 def RegQueryValueExA(hKey, lpValueName, lpReserved, lpType, lpData, lpcbData):
     return RegQueryValueExA.ctypes_function(hKey, lpValueName, lpReserved, lpType, lpData, lpcbData)
 
-@Advapi32Proxy(error_check=succeed_on_zero)
+@Advapi32Proxy(error_check=result_is_error_code)
 def RegQueryValueExW(hKey, lpValueName, lpReserved, lpType, lpData, lpcbData):
-    return RegQueryValueExA.ctypes_function(hKey, lpValueName, lpReserved, lpType, lpData, lpcbData)
+    return RegQueryValueExW.ctypes_function(hKey, lpValueName, lpReserved, lpType, lpData, lpcbData)
 
-@Advapi32Proxy(error_check=succeed_on_zero)
+@Advapi32Proxy(error_check=result_is_error_code)
 def RegCloseKey(hKey):
     return RegCloseKey.ctypes_function(hKey)
+
+@Advapi32Proxy(error_check=result_is_error_code)
+def RegSetValueExW(hKey, lpValueName, Reserved, dwType, lpData, cbData):
+    return RegSetValueExW.ctypes_function(hKey, lpValueName, Reserved, dwType, lpData, cbData)
+
+@Advapi32Proxy(error_check=result_is_error_code)
+def RegSetValueExA(hKey, lpValueName, Reserved, dwType, lpData, cbData):
+    return RegSetValueExA.ctypes_function(hKey, lpValueName, Reserved, dwType, lpData, cbData)
+
+@Advapi32Proxy(error_check=result_is_error_code)
+def RegSetKeyValueA(hKey, lpSubKey, lpValueName, dwType, lpData, cbData):
+    return RegSetKeyValueA.ctypes_function(hKey, lpSubKey, lpValueName, dwType, lpData, cbData)
+
+@Advapi32Proxy(error_check=result_is_error_code)
+def RegSetKeyValueW(hKey, lpSubKey, lpValueName, dwType, lpData, cbData):
+    return RegSetKeyValueW.ctypes_function(hKey, lpSubKey, lpValueName, dwType, lpData, cbData)
+
+@Advapi32Proxy(error_check=result_is_error_code)
+def RegEnumKeyExA(hKey, dwIndex, lpName, lpcchName, lpReserved, lpClass, lpcchClass, lpftLastWriteTime):
+    return RegEnumKeyExA.ctypes_function(hKey, dwIndex, lpName, lpcchName, lpReserved, lpClass, lpcchClass, lpftLastWriteTime)
+
+@Advapi32Proxy(error_check=result_is_error_code)
+def RegEnumKeyExW(hKey, dwIndex, lpName, lpcchName, lpReserved, lpClass, lpcchClass, lpftLastWriteTime):
+    return RegEnumKeyExW.ctypes_function(hKey, dwIndex, lpName, lpcchName, lpReserved, lpClass, lpcchClass, lpftLastWriteTime)
+
+@Advapi32Proxy(error_check=result_is_error_code)
+def RegGetKeySecurity(hKey, SecurityInformation, pSecurityDescriptor, lpcbSecurityDescriptor):
+    return RegGetKeySecurity.ctypes_function(hKey, SecurityInformation, pSecurityDescriptor, lpcbSecurityDescriptor)
+
+@Advapi32Proxy(error_check=result_is_error_code)
+def RegQueryInfoKeyA(hKey, lpClass, lpcchClass, lpReserved, lpcSubKeys, lpcbMaxSubKeyLen, lpcbMaxClassLen, lpcValues, lpcbMaxValueNameLen, lpcbMaxValueLen, lpcbSecurityDescriptor, lpftLastWriteTime):
+    return RegQueryInfoKeyA.ctypes_function(hKey, lpClass, lpcchClass, lpReserved, lpcSubKeys, lpcbMaxSubKeyLen, lpcbMaxClassLen, lpcValues, lpcbMaxValueNameLen, lpcbMaxValueLen, lpcbSecurityDescriptor, lpftLastWriteTime)
+
+@Advapi32Proxy(error_check=result_is_error_code)
+def RegQueryInfoKeyW(hKey, lpClass, lpcchClass, lpReserved, lpcSubKeys, lpcbMaxSubKeyLen, lpcbMaxClassLen, lpcValues, lpcbMaxValueNameLen, lpcbMaxValueLen, lpcbSecurityDescriptor, lpftLastWriteTime):
+    return RegQueryInfoKeyW.ctypes_function(hKey, lpClass, lpcchClass, lpReserved, lpcSubKeys, lpcbMaxSubKeyLen, lpcbMaxClassLen, lpcValues, lpcbMaxValueNameLen, lpcbMaxValueLen, lpcbSecurityDescriptor, lpftLastWriteTime)
+
+@Advapi32Proxy(error_check=result_is_error_code)
+def RegDeleteKeyValueW(hKey, lpSubKey, lpValueName):
+    return RegDeleteKeyValueW.ctypes_function(hKey, lpSubKey, lpValueName)
+
+@Advapi32Proxy(error_check=result_is_error_code)
+def RegDeleteKeyValueA(hKey, lpSubKey, lpValueName):
+    return RegDeleteKeyValueA.ctypes_function(hKey, lpSubKey, lpValueName)
+
+@Advapi32Proxy(error_check=result_is_error_code)
+def RegDeleteKeyExA(hKey, lpSubKey, samDesired, Reserved):
+    return RegDeleteKeyExA.ctypes_function(hKey, lpSubKey, samDesired, Reserved)
+
+@Advapi32Proxy(error_check=result_is_error_code)
+def RegDeleteKeyExW(hKey, lpSubKey, samDesired, Reserved):
+    return RegDeleteKeyExW.ctypes_function(hKey, lpSubKey, samDesired, Reserved)
+
+@Advapi32Proxy(error_check=result_is_error_code)
+def RegDeleteValueA(hKey, lpValueName):
+    return RegDeleteValueA.ctypes_function(hKey, lpValueName)
+
+@Advapi32Proxy(error_check=result_is_error_code)
+def RegDeleteValueW(hKey, lpValueName):
+    return RegDeleteValueW.ctypes_function(hKey, lpValueName)
+
+@Advapi32Proxy(error_check=result_is_error_code)
+def RegEnumValueA(hKey, dwIndex, lpValueName, lpcchValueName, lpReserved, lpType, lpData, lpcbData):
+    return RegEnumValueA.ctypes_function(hKey, dwIndex, lpValueName, lpcchValueName, lpReserved, lpType, lpData, lpcbData)
+
+@Advapi32Proxy(error_check=result_is_error_code)
+def RegEnumValueW(hKey, dwIndex, lpValueName, lpcchValueName, lpReserved, lpType, lpData, lpcbData):
+    return RegEnumValueW.ctypes_function(hKey, dwIndex, lpValueName, lpcchValueName, lpReserved, lpType, lpData, lpcbData)
+
 
 # Service
 
