@@ -26,7 +26,7 @@ def query_link(linkpath):
 
 class KernelObject(object):
     """Represent an object in the Object Manager namespace"""
-    def __init__(self, path, name, type):
+    def __init__(self, path, name, type=None):
         self.path = path
         self.name = name
         if path and not path.endswith("\\"):
@@ -177,8 +177,7 @@ class KernelObject(object):
             elif name == "\\": # Ask for root ? return ourself
                 return self
             else:
-                name = name[1:]
-
+                name = name[1:] # Strip the leading \ and go to normal case
         obj = self
         for part in name.split("\\"):
             try:
@@ -187,6 +186,7 @@ class KernelObject(object):
                 if e.code == gdef.STATUS_OBJECT_TYPE_MISMATCH:
                     raise KeyError("Could not find object <{0}> under <{1}> because it is a <{2}>".format(
                                     part, obj.name, obj.type))
+                raise # Something smart to do ?
         return obj
 
 

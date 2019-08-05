@@ -239,7 +239,7 @@ def ntquerysysteminformation_syswow64_error_check(result, func, args):
     # Ignore STATUS_INFO_LENGTH_MISMATCH if SystemInformation is None
     if result == STATUS_INFO_LENGTH_MISMATCH and not args[1]:
         return args
-    raise WinproxyError("{0} failed with NTStatus {1}".format(func_name, hex(result)))
+    raise winproxy.WinproxyError("NtQuerySystemInformation failed with NTStatus {0}".format(hex(result)))
 
 @Syswow64ApiProxy(winproxy.NtQuerySystemInformation, errcheck=ntquerysysteminformation_syswow64_error_check)
 # @Syswow64ApiProxy(winproxy.NtQuerySystemInformation)
