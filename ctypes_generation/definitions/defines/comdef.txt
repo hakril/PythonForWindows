@@ -1,7 +1,5 @@
 #define CWCSTORAGENAME 32
 
-#define RPC_E_CHANGED_MODE      0x80010106L
-
 /* Storage instantiation modes */
 #define STGM_DIRECT             0x00000000L
 #define STGM_TRANSACTED         0x00010000L

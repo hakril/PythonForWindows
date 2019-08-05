@@ -695,3 +695,20 @@ typedef struct _CMSG_CTRL_DECRYPT_PARA {
   DWORD dwKeySpec;
   DWORD dwRecipientIndex;
 } CMSG_CTRL_DECRYPT_PARA, *PCMSG_CTRL_DECRYPT_PARA;
+
+
+
+typedef struct _SPC_PE_IMAGE_DATA
+{
+    CRYPT_BIT_BLOB            Flags;
+    PSPC_LINK                 pFile;
+
+} SPC_PE_IMAGE_DATA, *PSPC_PE_IMAGE_DATA;
+
+typedef struct _SPC_INDIRECT_DATA_CONTENT
+{
+    CRYPT_ATTRIBUTE_TYPE_VALUE  Data;
+    CRYPT_ALGORITHM_IDENTIFIER  DigestAlgorithm;
+    CRYPT_HASH_BLOB             Digest;
+
+} SPC_INDIRECT_DATA_CONTENT, *PSPC_INDIRECT_DATA_CONTENT;

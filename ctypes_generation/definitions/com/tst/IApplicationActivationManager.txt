@@ -1,0 +1,38 @@
+typedef struct IApplicationActivationManagerVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            __RPC__in IApplicationActivationManager * This,
+            /* [in] */ __RPC__in REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            _COM_Outptr_  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            __RPC__in IApplicationActivationManager * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            __RPC__in IApplicationActivationManager * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *ActivateApplication )( 
+            __RPC__in IApplicationActivationManager * This,
+            /* [in] */ __RPC__in LPCWSTR appUserModelId,
+            /* [unique][in] */ __RPC__in_opt LPCWSTR arguments,
+            /* [in] */ ACTIVATEOPTIONS options,
+            /* [out] */ __RPC__out DWORD *processId);
+        
+        HRESULT ( STDMETHODCALLTYPE *ActivateForFile )( 
+            __RPC__in IApplicationActivationManager * This,
+            /* [in] */ __RPC__in LPCWSTR appUserModelId,
+            /* [in] */ __RPC__in_opt IShellItemArray *itemArray,
+            /* [unique][in] */ __RPC__in_opt LPCWSTR verb,
+            /* [out] */ __RPC__out DWORD *processId);
+        
+        HRESULT ( STDMETHODCALLTYPE *ActivateForProtocol )( 
+            __RPC__in IApplicationActivationManager * This,
+            /* [in] */ __RPC__in LPCWSTR appUserModelId,
+            /* [in] */ __RPC__in_opt IShellItemArray *itemArray,
+            /* [out] */ __RPC__out DWORD *processId);
+        
+        END_INTERFACE
+    } IApplicationActivationManagerVtbl;

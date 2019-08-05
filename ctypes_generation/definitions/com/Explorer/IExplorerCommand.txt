@@ -1,0 +1,56 @@
+typedef struct IExplorerCommandVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            __RPC__in IExplorerCommand * This,
+            /* [in] */ __RPC__in REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            __RPC__deref_out  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            __RPC__in IExplorerCommand * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            __RPC__in IExplorerCommand * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTitle )( 
+            __RPC__in IExplorerCommand * This,
+            /* [unique][in] */ __RPC__in_opt IShellItemArray *psiItemArray,
+            /* [string][out] */ __RPC__deref_out_opt_string LPWSTR *ppszName);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIcon )( 
+            __RPC__in IExplorerCommand * This,
+            /* [unique][in] */ __RPC__in_opt IShellItemArray *psiItemArray,
+            /* [string][out] */ __RPC__deref_out_opt_string LPWSTR *ppszIcon);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetToolTip )( 
+            __RPC__in IExplorerCommand * This,
+            /* [unique][in] */ __RPC__in_opt IShellItemArray *psiItemArray,
+            /* [string][out] */ __RPC__deref_out_opt_string LPWSTR *ppszInfotip);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetCanonicalName )( 
+            __RPC__in IExplorerCommand * This,
+            /* [out] */ __RPC__out GUID *pguidCommandName);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetState )( 
+            __RPC__in IExplorerCommand * This,
+            /* [in] */ __RPC__in_opt IShellItemArray *psiItemArray,
+            /* [in] */ BOOL fOkToBeSlow,
+            /* [out] */ __RPC__out EXPCMDSTATE *pCmdState);
+        
+        HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            __RPC__in IExplorerCommand * This,
+            /* [in] */ __RPC__in_opt IShellItemArray *psiItemArray,
+            /* [unique][in] */ __RPC__in_opt IBindCtx *pbc);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetFlags )( 
+            __RPC__in IExplorerCommand * This,
+            /* [out] */ __RPC__out EXPCMDFLAGS *pFlags);
+        
+        HRESULT ( STDMETHODCALLTYPE *EnumSubCommands )( 
+            __RPC__in IExplorerCommand * This,
+            /* [out] */ __RPC__deref_out_opt IEnumExplorerCommand **ppEnum);
+        
+        END_INTERFACE
+    } IExplorerCommandVtbl;

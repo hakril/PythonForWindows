@@ -1,0 +1,37 @@
+typedef struct IEnumStringVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            __RPC__in IEnumString * This,
+            /* [in] */ __RPC__in REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            __RPC__deref_out  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            __RPC__in IEnumString * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            __RPC__in IEnumString * This);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Next )( 
+            IEnumString * This,
+            /* [in] */ ULONG celt,
+            /* [annotation] */ 
+            __RPC__out_ecount_part(celt,*pceltFetched)  LPOLESTR *rgelt,
+            /* [annotation] */ 
+            __out_opt  ULONG *pceltFetched);
+        
+        HRESULT ( STDMETHODCALLTYPE *Skip )( 
+            __RPC__in IEnumString * This,
+            /* [in] */ ULONG celt);
+        
+        HRESULT ( STDMETHODCALLTYPE *Reset )( 
+            __RPC__in IEnumString * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *Clone )( 
+            __RPC__in IEnumString * This,
+            /* [out] */ __RPC__deref_out_opt IEnumString **ppenum);
+        
+        END_INTERFACE
+    } IEnumStringVtbl;

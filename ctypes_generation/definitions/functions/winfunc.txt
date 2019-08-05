@@ -588,45 +588,6 @@ BOOL WINAPI GetTokenInformation(
   _Out_     PDWORD                  ReturnLength
 );
 
-LONG WINAPI RegOpenKeyExA(
-  _In_     HKEY    hKey,
-  _In_opt_ LPCSTR lpSubKey,
-  _In_     DWORD   ulOptions,
-  _In_     REGSAM  samDesired,
-  _Out_    PHKEY   phkResult
-);
-
-LONG WINAPI RegOpenKeyExW(
-  _In_     HKEY    hKey,
-  _In_opt_ LPWSTR lpSubKey,
-  _In_     DWORD   ulOptions,
-  _In_     REGSAM  samDesired,
-  _Out_    PHKEY   phkResult
-);
-
-LONG WINAPI RegGetValueA(
-  _In_        HKEY    hkey,
-  _In_opt_    LPCSTR lpSubKey,
-  _In_opt_    LPCSTR lpValue,
-  _In_opt_    DWORD   dwFlags,
-  _Out_opt_   LPDWORD pdwType,
-  _Out_opt_   PVOID   pvData,
-  _Inout_opt_ LPDWORD pcbData
-);
-
-LONG WINAPI RegGetValueW(
-  _In_        HKEY    hkey,
-  _In_opt_    LPWSTR lpSubKey,
-  _In_opt_    LPWSTR lpValue,
-  _In_opt_    DWORD   dwFlags,
-  _Out_opt_   LPDWORD pdwType,
-  _Out_opt_   PVOID   pvData,
-  _Inout_opt_ LPDWORD pcbData
-);
-
-LONG WINAPI RegCloseKey(
-  _In_ HKEY hKey
-);
 
 BOOL WINAPI Wow64DisableWow64FsRedirection(
   _Out_ PVOID *OldValue
@@ -1269,26 +1230,6 @@ BOOL WINAPI ConvertSidToStringSidW(
 HLOCAL WINAPI LocalFree(
   _In_ HLOCAL hMem
 );
-
-LONG WINAPI RegQueryValueExA(
-  _In_        HKEY    hKey,
-  _In_opt_    LPCSTR lpValueName,
-  _Reserved_  LPDWORD lpReserved,
-  _Out_opt_   LPDWORD lpType,
-  _Out_opt_   LPBYTE  lpData,
-  _Inout_opt_ LPDWORD lpcbData
-);
-
-
-LONG WINAPI RegQueryValueExW(
-  _In_        HKEY    hKey,
-  _In_opt_    LPWSTR lpValueName,
-  _Reserved_  LPDWORD lpReserved,
-  _Out_opt_   LPDWORD lpType,
-  _Out_opt_   LPBYTE  lpData,
-  _Inout_opt_ LPDWORD lpcbData
-);
-
 
 BOOL WINAPI InitializeProcThreadAttributeList(
   _Out_opt_  LPPROC_THREAD_ATTRIBUTE_LIST lpAttributeList,

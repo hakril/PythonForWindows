@@ -1,0 +1,18 @@
+DWORD OpenVirtualDisk(
+  PVIRTUAL_STORAGE_TYPE         VirtualStorageType,
+  PCWSTR                        Path,
+  VIRTUAL_DISK_ACCESS_MASK      VirtualDiskAccessMask,
+  OPEN_VIRTUAL_DISK_FLAG        Flags,
+  POPEN_VIRTUAL_DISK_PARAMETERS Parameters,
+  PHANDLE                       Handle
+);
+
+
+DWORD AttachVirtualDisk(
+  HANDLE                          VirtualDiskHandle,
+  PSECURITY_DESCRIPTOR            SecurityDescriptor,
+  ATTACH_VIRTUAL_DISK_FLAG        Flags,
+  ULONG                           ProviderSpecificFlags,
+  PATTACH_VIRTUAL_DISK_PARAMETERS Parameters,
+  LPOVERLAPPED                    Overlapped
+);

@@ -1,0 +1,59 @@
+typedef struct IBindCtxVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            __RPC__in IBindCtx * This,
+            /* [in] */ __RPC__in REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            __RPC__deref_out  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            __RPC__in IBindCtx * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            __RPC__in IBindCtx * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *RegisterObjectBound )( 
+            __RPC__in IBindCtx * This,
+            /* [unique][in] */ __RPC__in_opt IUnknown *punk);
+        
+        HRESULT ( STDMETHODCALLTYPE *RevokeObjectBound )( 
+            __RPC__in IBindCtx * This,
+            /* [unique][in] */ __RPC__in_opt IUnknown *punk);
+        
+        HRESULT ( STDMETHODCALLTYPE *ReleaseBoundObjects )( 
+            __RPC__in IBindCtx * This);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *SetBindOptions )( 
+            IBindCtx * This,
+            /* [in] */ BIND_OPTS *pbindopts);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetBindOptions )( 
+            IBindCtx * This,
+            /* [out][in] */ BIND_OPTS *pbindopts);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetRunningObjectTable )( 
+            __RPC__in IBindCtx * This,
+            /* [out] */ __RPC__deref_out_opt IRunningObjectTable **pprot);
+        
+        HRESULT ( STDMETHODCALLTYPE *RegisterObjectParam )( 
+            __RPC__in IBindCtx * This,
+            /* [in] */ __RPC__in LPOLESTR pszKey,
+            /* [unique][in] */ __RPC__in_opt IUnknown *punk);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetObjectParam )( 
+            __RPC__in IBindCtx * This,
+            /* [in] */ __RPC__in LPOLESTR pszKey,
+            /* [out] */ __RPC__deref_out_opt IUnknown **ppunk);
+        
+        HRESULT ( STDMETHODCALLTYPE *EnumObjectParam )( 
+            __RPC__in IBindCtx * This,
+            /* [out] */ __RPC__deref_out_opt IEnumString **ppenum);
+        
+        HRESULT ( STDMETHODCALLTYPE *RevokeObjectParam )( 
+            __RPC__in IBindCtx * This,
+            /* [in] */ __RPC__in LPOLESTR pszKey);
+        
+        END_INTERFACE
+    } IBindCtxVtbl;

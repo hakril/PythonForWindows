@@ -1,0 +1,122 @@
+typedef struct IMonikerVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            __RPC__in IMoniker * This,
+            /* [in] */ __RPC__in REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            __RPC__deref_out  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            __RPC__in IMoniker * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            __RPC__in IMoniker * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetClassID )( 
+            __RPC__in IMoniker * This,
+            /* [out] */ __RPC__out CLSID *pClassID);
+        
+        HRESULT ( STDMETHODCALLTYPE *IsDirty )( 
+            __RPC__in IMoniker * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *Load )( 
+            __RPC__in IMoniker * This,
+            /* [unique][in] */ __RPC__in_opt IStream *pStm);
+        
+        HRESULT ( STDMETHODCALLTYPE *Save )( 
+            __RPC__in IMoniker * This,
+            /* [unique][in] */ __RPC__in_opt IStream *pStm,
+            /* [in] */ BOOL fClearDirty);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetSizeMax )( 
+            __RPC__in IMoniker * This,
+            /* [out] */ __RPC__out ULARGE_INTEGER *pcbSize);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *BindToObject )( 
+            IMoniker * This,
+            /* [unique][in] */ IBindCtx *pbc,
+            /* [unique][in] */ IMoniker *pmkToLeft,
+            /* [in] */ REFIID riidResult,
+            /* [iid_is][out] */ void **ppvResult);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *BindToStorage )( 
+            IMoniker * This,
+            /* [unique][in] */ IBindCtx *pbc,
+            /* [unique][in] */ IMoniker *pmkToLeft,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObj);
+        
+        HRESULT ( STDMETHODCALLTYPE *Reduce )( 
+            __RPC__in IMoniker * This,
+            /* [unique][in] */ __RPC__in_opt IBindCtx *pbc,
+            /* [in] */ DWORD dwReduceHowFar,
+            /* [unique][out][in] */ __RPC__deref_opt_inout_opt IMoniker **ppmkToLeft,
+            /* [out] */ __RPC__deref_out_opt IMoniker **ppmkReduced);
+        
+        HRESULT ( STDMETHODCALLTYPE *ComposeWith )( 
+            __RPC__in IMoniker * This,
+            /* [unique][in] */ __RPC__in_opt IMoniker *pmkRight,
+            /* [in] */ BOOL fOnlyIfNotGeneric,
+            /* [out] */ __RPC__deref_out_opt IMoniker **ppmkComposite);
+        
+        HRESULT ( STDMETHODCALLTYPE *Enum )( 
+            __RPC__in IMoniker * This,
+            /* [in] */ BOOL fForward,
+            /* [out] */ __RPC__deref_out_opt IEnumMoniker **ppenumMoniker);
+        
+        HRESULT ( STDMETHODCALLTYPE *IsEqual )( 
+            __RPC__in IMoniker * This,
+            /* [unique][in] */ __RPC__in_opt IMoniker *pmkOtherMoniker);
+        
+        HRESULT ( STDMETHODCALLTYPE *Hash )( 
+            __RPC__in IMoniker * This,
+            /* [out] */ __RPC__out DWORD *pdwHash);
+        
+        HRESULT ( STDMETHODCALLTYPE *IsRunning )( 
+            __RPC__in IMoniker * This,
+            /* [unique][in] */ __RPC__in_opt IBindCtx *pbc,
+            /* [unique][in] */ __RPC__in_opt IMoniker *pmkToLeft,
+            /* [unique][in] */ __RPC__in_opt IMoniker *pmkNewlyRunning);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTimeOfLastChange )( 
+            __RPC__in IMoniker * This,
+            /* [unique][in] */ __RPC__in_opt IBindCtx *pbc,
+            /* [unique][in] */ __RPC__in_opt IMoniker *pmkToLeft,
+            /* [out] */ __RPC__out FILETIME *pFileTime);
+        
+        HRESULT ( STDMETHODCALLTYPE *Inverse )( 
+            __RPC__in IMoniker * This,
+            /* [out] */ __RPC__deref_out_opt IMoniker **ppmk);
+        
+        HRESULT ( STDMETHODCALLTYPE *CommonPrefixWith )( 
+            __RPC__in IMoniker * This,
+            /* [unique][in] */ __RPC__in_opt IMoniker *pmkOther,
+            /* [out] */ __RPC__deref_out_opt IMoniker **ppmkPrefix);
+        
+        HRESULT ( STDMETHODCALLTYPE *RelativePathTo )( 
+            __RPC__in IMoniker * This,
+            /* [unique][in] */ __RPC__in_opt IMoniker *pmkOther,
+            /* [out] */ __RPC__deref_out_opt IMoniker **ppmkRelPath);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetDisplayName )( 
+            __RPC__in IMoniker * This,
+            /* [unique][in] */ __RPC__in_opt IBindCtx *pbc,
+            /* [unique][in] */ __RPC__in_opt IMoniker *pmkToLeft,
+            /* [out] */ __RPC__deref_out_opt LPOLESTR *ppszDisplayName);
+        
+        HRESULT ( STDMETHODCALLTYPE *ParseDisplayName )( 
+            __RPC__in IMoniker * This,
+            /* [unique][in] */ __RPC__in_opt IBindCtx *pbc,
+            /* [unique][in] */ __RPC__in_opt IMoniker *pmkToLeft,
+            /* [in] */ __RPC__in LPOLESTR pszDisplayName,
+            /* [out] */ __RPC__out ULONG *pchEaten,
+            /* [out] */ __RPC__deref_out_opt IMoniker **ppmkOut);
+        
+        HRESULT ( STDMETHODCALLTYPE *IsSystemMoniker )( 
+            __RPC__in IMoniker * This,
+            /* [out] */ __RPC__out DWORD *pdwMksys);
+        
+        END_INTERFACE
+    } IMonikerVtbl;

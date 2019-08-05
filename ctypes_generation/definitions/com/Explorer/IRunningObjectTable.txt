@@ -1,0 +1,52 @@
+typedef struct IRunningObjectTableVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            __RPC__in IRunningObjectTable * This,
+            /* [in] */ __RPC__in REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            __RPC__deref_out  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            __RPC__in IRunningObjectTable * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            __RPC__in IRunningObjectTable * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *Register )( 
+            __RPC__in IRunningObjectTable * This,
+            /* [in] */ DWORD grfFlags,
+            /* [unique][in] */ __RPC__in_opt IUnknown *punkObject,
+            /* [unique][in] */ __RPC__in_opt IMoniker *pmkObjectName,
+            /* [out] */ __RPC__out DWORD *pdwRegister);
+        
+        HRESULT ( STDMETHODCALLTYPE *Revoke )( 
+            __RPC__in IRunningObjectTable * This,
+            /* [in] */ DWORD dwRegister);
+        
+        HRESULT ( STDMETHODCALLTYPE *IsRunning )( 
+            __RPC__in IRunningObjectTable * This,
+            /* [unique][in] */ __RPC__in_opt IMoniker *pmkObjectName);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetObject )( 
+            __RPC__in IRunningObjectTable * This,
+            /* [unique][in] */ __RPC__in_opt IMoniker *pmkObjectName,
+            /* [out] */ __RPC__deref_out_opt IUnknown **ppunkObject);
+        
+        HRESULT ( STDMETHODCALLTYPE *NoteChangeTime )( 
+            __RPC__in IRunningObjectTable * This,
+            /* [in] */ DWORD dwRegister,
+            /* [in] */ __RPC__in FILETIME *pfiletime);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTimeOfLastChange )( 
+            __RPC__in IRunningObjectTable * This,
+            /* [unique][in] */ __RPC__in_opt IMoniker *pmkObjectName,
+            /* [out] */ __RPC__out FILETIME *pfiletime);
+        
+        HRESULT ( STDMETHODCALLTYPE *EnumRunning )( 
+            __RPC__in IRunningObjectTable * This,
+            /* [out] */ __RPC__deref_out_opt IEnumMoniker **ppenumMoniker);
+        
+        END_INTERFACE
+    } IRunningObjectTableVtbl;

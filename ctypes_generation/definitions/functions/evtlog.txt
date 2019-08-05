@@ -19,6 +19,12 @@ HANDLE WINAPI OpenBackupEventLogW(
   _In_ LPWSTR lpSourceName
 );
 
+EVT_HANDLE EvtOpenSession(
+  EVT_LOGIN_CLASS LoginClass,
+  PVOID           Login,
+  DWORD           Timeout,
+  DWORD           Flags
+);
 
 BOOL WINAPI ReadEventLogA(
   _In_  HANDLE hEventLog,
@@ -222,4 +228,7 @@ BOOL WINAPI EvtFormatMessage(
   _In_  LPWSTR       Buffer,
   _Out_ PDWORD       BufferUsed
 );
+
+
+
 

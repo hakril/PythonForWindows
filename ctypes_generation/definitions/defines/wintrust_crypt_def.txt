@@ -335,8 +335,6 @@
 #define CERT_STORE_PROV_LDAP                CERT_STORE_PROV_LDAP_W
 #define CERT_STORE_PROV_PKCS12              (17)
 
-#define CRYPT_E_NOT_FOUND                (0x80092004L)
-
 
 #define CERT_STORE_NO_CRYPT_RELEASE_FLAG                0x00000001
 #define CERT_STORE_SET_LOCALIZED_NAME_FLAG              0x00000002

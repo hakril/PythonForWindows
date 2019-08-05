@@ -1,0 +1,45 @@
+typedef struct IShellItemVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            __RPC__in IShellItem * This,
+            /* [in] */ __RPC__in REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            __RPC__deref_out  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            __RPC__in IShellItem * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            __RPC__in IShellItem * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *BindToHandler )( 
+            __RPC__in IShellItem * This,
+            /* [unique][in] */ __RPC__in_opt IBindCtx *pbc,
+            /* [in] */ __RPC__in REFGUID bhid,
+            /* [in] */ __RPC__in REFIID riid,
+            /* [iid_is][out] */ __RPC__deref_out_opt void **ppv);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetParent )( 
+            __RPC__in IShellItem * This,
+            /* [out] */ __RPC__deref_out_opt IShellItem **ppsi);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetDisplayName )( 
+            __RPC__in IShellItem * This,
+            /* [in] */ SIGDN sigdnName,
+            /* [string][out] */ __RPC__deref_out_opt_string LPWSTR *ppszName);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetAttributes )( 
+            __RPC__in IShellItem * This,
+            /* [in] */ SFGAOF sfgaoMask,
+            /* [out] */ __RPC__out SFGAOF *psfgaoAttribs);
+        
+        HRESULT ( STDMETHODCALLTYPE *Compare )( 
+            __RPC__in IShellItem * This,
+            /* [in] */ __RPC__in_opt IShellItem *psi,
+            /* [in] */ SICHINTF hint,
+            /* [out] */ __RPC__out int *piOrder);
+        
+        END_INTERFACE
+    } IShellItemVtbl;

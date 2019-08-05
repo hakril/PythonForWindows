@@ -1,0 +1,37 @@
+typedef struct IEnumMonikerVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            __RPC__in IEnumMoniker * This,
+            /* [in] */ __RPC__in REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            __RPC__deref_out  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            __RPC__in IEnumMoniker * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            __RPC__in IEnumMoniker * This);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Next )( 
+            IEnumMoniker * This,
+            /* [in] */ ULONG celt,
+            /* [annotation] */ 
+            __out_ecount_part(celt,*pceltFetched)  IMoniker **rgelt,
+            /* [annotation] */ 
+            __out_opt  ULONG *pceltFetched);
+        
+        HRESULT ( STDMETHODCALLTYPE *Skip )( 
+            __RPC__in IEnumMoniker * This,
+            /* [in] */ ULONG celt);
+        
+        HRESULT ( STDMETHODCALLTYPE *Reset )( 
+            __RPC__in IEnumMoniker * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *Clone )( 
+            __RPC__in IEnumMoniker * This,
+            /* [out] */ __RPC__deref_out_opt IEnumMoniker **ppenum);
+        
+        END_INTERFACE
+    } IEnumMonikerVtbl;

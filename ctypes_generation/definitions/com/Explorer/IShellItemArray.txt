@@ -1,0 +1,56 @@
+typedef struct IShellItemArrayVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            __RPC__in IShellItemArray * This,
+            /* [in] */ __RPC__in REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            __RPC__deref_out  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            __RPC__in IShellItemArray * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            __RPC__in IShellItemArray * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *BindToHandler )( 
+            __RPC__in IShellItemArray * This,
+            /* [unique][in] */ __RPC__in_opt IBindCtx *pbc,
+            /* [in] */ __RPC__in REFGUID bhid,
+            /* [in] */ __RPC__in REFIID riid,
+            /* [iid_is][out] */ __RPC__deref_out_opt void **ppvOut);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetPropertyStore )( 
+            __RPC__in IShellItemArray * This,
+            /* [in] */ GETPROPERTYSTOREFLAGS flags,
+            /* [in] */ __RPC__in REFIID riid,
+            /* [iid_is][out] */ __RPC__deref_out_opt void **ppv);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetPropertyDescriptionList )( 
+            __RPC__in IShellItemArray * This,
+            /* [in] */ __RPC__in REFPROPERTYKEY keyType,
+            /* [in] */ __RPC__in REFIID riid,
+            /* [iid_is][out] */ __RPC__deref_out_opt void **ppv);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetAttributes )( 
+            __RPC__in IShellItemArray * This,
+            /* [in] */ SIATTRIBFLAGS AttribFlags,
+            /* [in] */ SFGAOF sfgaoMask,
+            /* [out] */ __RPC__out SFGAOF *psfgaoAttribs);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetCount )( 
+            __RPC__in IShellItemArray * This,
+            /* [out] */ __RPC__out DWORD *pdwNumItems);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetItemAt )( 
+            __RPC__in IShellItemArray * This,
+            /* [in] */ DWORD dwIndex,
+            /* [out] */ __RPC__deref_out_opt IShellItem **ppsi);
+        
+        HRESULT ( STDMETHODCALLTYPE *EnumItems )( 
+            __RPC__in IShellItemArray * This,
+            /* [out] */ __RPC__deref_out_opt IEnumShellItems **ppenumShellItems);
+        
+        END_INTERFACE
+    } IShellItemArrayVtbl;

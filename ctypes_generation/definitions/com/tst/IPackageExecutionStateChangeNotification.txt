@@ -1,0 +1,23 @@
+typedef struct IPackageExecutionStateChangeNotificationVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            __RPC__in IPackageExecutionStateChangeNotification * This,
+            /* [in] */ __RPC__in REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            _COM_Outptr_  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            __RPC__in IPackageExecutionStateChangeNotification * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            __RPC__in IPackageExecutionStateChangeNotification * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *OnStateChanged )( 
+            __RPC__in IPackageExecutionStateChangeNotification * This,
+            /* [string][in] */ __RPC__in_string LPCWSTR pszPackageFullName,
+            /* [in] */ PACKAGE_EXECUTION_STATE pesNewState);
+        
+        END_INTERFACE
+    } IPackageExecutionStateChangeNotificationVtbl;

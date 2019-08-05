@@ -515,3 +515,24 @@ BOOL CryptMsgControl(
 BOOL CryptMsgClose(
   HCRYPTMSG hCryptMsg
 );
+
+
+BOOL CryptEnumOIDFunction(
+  DWORD                   dwEncodingType,
+  LPCSTR                  pszFuncName,
+  LPCSTR                  pszOID,
+  DWORD                   dwFlags,
+  PVOID                   pvArg,
+  PFN_CRYPT_ENUM_OID_FUNC pfnEnumOIDFunc
+);
+
+
+BOOL CryptGetOIDFunctionValue(
+  DWORD   dwEncodingType,
+  LPCSTR  pszFuncName,
+  LPCSTR  pszOID,
+  LPCWSTR pwszValueName,
+  DWORD   *pdwValueType,
+  BYTE    *pbValueData,
+  DWORD   *pcbValueData
+);

@@ -1,0 +1,111 @@
+typedef struct IPackageDebugSettingsVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IPackageDebugSettings * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            _COM_Outptr_  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IPackageDebugSettings * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IPackageDebugSettings * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *EnableDebugging )( 
+            IPackageDebugSettings * This,
+            /* [annotation][in] */ 
+            _In_  LPCWSTR packageFullName,
+            /* [annotation][in] */ 
+            _In_opt_  LPCWSTR debuggerCommandLine,
+            /* [annotation][in] */ 
+            _In_opt_  PZZWSTR environment);
+        
+        HRESULT ( STDMETHODCALLTYPE *DisableDebugging )( 
+            IPackageDebugSettings * This,
+            /* [annotation][in] */ 
+            _In_  LPCWSTR packageFullName);
+        
+        HRESULT ( STDMETHODCALLTYPE *Suspend )( 
+            IPackageDebugSettings * This,
+            /* [annotation][in] */ 
+            _In_  LPCWSTR packageFullName);
+        
+        HRESULT ( STDMETHODCALLTYPE *Resume )( 
+            IPackageDebugSettings * This,
+            /* [annotation][in] */ 
+            _In_  LPCWSTR packageFullName);
+        
+        HRESULT ( STDMETHODCALLTYPE *TerminateAllProcesses )( 
+            IPackageDebugSettings * This,
+            /* [annotation][in] */ 
+            _In_  LPCWSTR packageFullName);
+        
+        HRESULT ( STDMETHODCALLTYPE *SetTargetSessionId )( 
+            IPackageDebugSettings * This,
+            /* [annotation][in] */ 
+            _In_  ULONG sessionId);
+        
+        HRESULT ( STDMETHODCALLTYPE *EnumerateBackgroundTasks )( 
+            IPackageDebugSettings * This,
+            /* [annotation][in] */ 
+            _In_  LPCWSTR packageFullName,
+            /* [annotation][out] */ 
+            _Out_  ULONG *taskCount,
+            /* [annotation][size_is][size_is][out] */ 
+            _Outptr_result_buffer_(*taskCount)  LPCGUID *taskIds,
+            /* [annotation][size_is][size_is][out] */ 
+            _Outptr_result_buffer_(*taskCount)  LPCWSTR **taskNames);
+        
+        HRESULT ( STDMETHODCALLTYPE *ActivateBackgroundTask )( 
+            IPackageDebugSettings * This,
+            /* [annotation][in] */ 
+            _In_  LPCGUID taskId);
+        
+        HRESULT ( STDMETHODCALLTYPE *StartServicing )( 
+            IPackageDebugSettings * This,
+            /* [annotation][in] */ 
+            _In_  LPCWSTR packageFullName);
+        
+        HRESULT ( STDMETHODCALLTYPE *StopServicing )( 
+            IPackageDebugSettings * This,
+            /* [annotation][in] */ 
+            _In_  LPCWSTR packageFullName);
+        
+        HRESULT ( STDMETHODCALLTYPE *StartSessionRedirection )( 
+            IPackageDebugSettings * This,
+            /* [annotation][in] */ 
+            _In_  LPCWSTR packageFullName,
+            /* [annotation][in] */ 
+            _In_  ULONG sessionId);
+        
+        HRESULT ( STDMETHODCALLTYPE *StopSessionRedirection )( 
+            IPackageDebugSettings * This,
+            /* [annotation][in] */ 
+            _In_  LPCWSTR packageFullName);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetPackageExecutionState )( 
+            IPackageDebugSettings * This,
+            /* [annotation][in] */ 
+            _In_  LPCWSTR packageFullName,
+            /* [annotation][out] */ 
+            _Out_  PACKAGE_EXECUTION_STATE *packageExecutionState);
+        
+        HRESULT ( STDMETHODCALLTYPE *RegisterForPackageStateChanges )( 
+            IPackageDebugSettings * This,
+            /* [annotation][in] */ 
+            _In_  LPCWSTR packageFullName,
+            /* [annotation][in] */ 
+            _In_  IPackageExecutionStateChangeNotification *pPackageExecutionStateChangeNotification,
+            /* [annotation][out] */ 
+            _Out_  DWORD *pdwCookie);
+        
+        HRESULT ( STDMETHODCALLTYPE *UnregisterForPackageStateChanges )( 
+            IPackageDebugSettings * This,
+            /* [annotation][in] */ 
+            _In_  DWORD dwCookie);
+        
+        END_INTERFACE
+    } IPackageDebugSettingsVtbl;

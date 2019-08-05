@@ -1,0 +1,246 @@
+LSTATUS WINAPI RegQueryValueExA(
+  _In_        HKEY    hKey,
+  _In_opt_    LPCSTR lpValueName,
+  _Reserved_  LPDWORD lpReserved,
+  _Out_opt_   LPDWORD lpType,
+  _Out_opt_   LPBYTE  lpData,
+  _Inout_opt_ LPDWORD lpcbData
+);
+
+
+LSTATUS WINAPI RegQueryValueExW(
+  _In_        HKEY    hKey,
+  _In_opt_    LPWSTR lpValueName,
+  _Reserved_  LPDWORD lpReserved,
+  _Out_opt_   LPDWORD lpType,
+  _Out_opt_   LPBYTE  lpData,
+  _Inout_opt_ LPDWORD lpcbData
+);
+
+
+LSTATUS WINAPI RegOpenKeyExA(
+  _In_     HKEY    hKey,
+  _In_opt_ LPCSTR lpSubKey,
+  _In_     DWORD   ulOptions,
+  _In_     REGSAM  samDesired,
+  _Out_    PHKEY   phkResult
+);
+
+LSTATUS WINAPI RegOpenKeyExW(
+  _In_     HKEY    hKey,
+  _In_opt_ LPWSTR lpSubKey,
+  _In_     DWORD   ulOptions,
+  _In_     REGSAM  samDesired,
+  _Out_    PHKEY   phkResult
+);
+
+LSTATUS RegCreateKeyExA(
+  HKEY                        hKey,
+  LPCSTR                      lpSubKey,
+  DWORD                       Reserved,
+  LPSTR                       lpClass,
+  DWORD                       dwOptions,
+  REGSAM                      samDesired,
+  LPSECURITY_ATTRIBUTES lpSecurityAttributes,
+  PHKEY                       phkResult,
+  LPDWORD                     lpdwDisposition
+);
+
+LSTATUS RegCreateKeyExW(
+  HKEY                        hKey,
+  LPCWSTR                     lpSubKey,
+  DWORD                       Reserved,
+  LPWSTR                      lpClass,
+  DWORD                       dwOptions,
+  REGSAM                      samDesired,
+  LPSECURITY_ATTRIBUTES lpSecurityAttributes,
+  PHKEY                       phkResult,
+  LPDWORD                     lpdwDisposition
+);
+
+LSTATUS WINAPI RegGetValueA(
+  _In_        HKEY    hkey,
+  _In_opt_    LPCSTR lpSubKey,
+  _In_opt_    LPCSTR lpValue,
+  _In_opt_    DWORD   dwFlags,
+  _Out_opt_   LPDWORD pdwType,
+  _Out_opt_   PVOID   pvData,
+  _Inout_opt_ LPDWORD pcbData
+);
+
+LSTATUS WINAPI RegGetValueW(
+  _In_        HKEY    hkey,
+  _In_opt_    LPWSTR lpSubKey,
+  _In_opt_    LPWSTR lpValue,
+  _In_opt_    DWORD   dwFlags,
+  _Out_opt_   LPDWORD pdwType,
+  _Out_opt_   PVOID   pvData,
+  _Inout_opt_ LPDWORD pcbData
+);
+
+LSTATUS WINAPI RegCloseKey(
+  _In_ HKEY hKey
+);
+
+LSTATUS RegSetValueExW(
+  HKEY       hKey,
+  LPCWSTR    lpValueName,
+  DWORD      Reserved,
+  DWORD      dwType,
+  BYTE *lpData,
+  DWORD      cbData
+);
+
+
+LSTATUS RegSetValueExA(
+  HKEY       hKey,
+  LPCSTR     lpValueName,
+  DWORD      Reserved,
+  DWORD      dwType,
+  BYTE *lpData,
+  DWORD      cbData
+);
+
+
+LSTATUS RegSetKeyValueA(
+  HKEY    hKey,
+  LPCSTR  lpSubKey,
+  LPCSTR  lpValueName,
+  DWORD   dwType,
+  LPCVOID lpData,
+  DWORD   cbData
+);
+
+
+LSTATUS RegSetKeyValueW(
+  HKEY    hKey,
+  LPCWSTR lpSubKey,
+  LPCWSTR lpValueName,
+  DWORD   dwType,
+  LPCVOID lpData,
+  DWORD   cbData
+);
+
+LSTATUS RegEnumKeyExA(
+  HKEY      hKey,
+  DWORD     dwIndex,
+  LPSTR     lpName,
+  LPDWORD   lpcchName,
+  LPDWORD   lpReserved,
+  LPSTR     lpClass,
+  LPDWORD   lpcchClass,
+  PFILETIME lpftLastWriteTime
+);
+
+LSTATUS RegEnumKeyExW(
+  HKEY      hKey,
+  DWORD     dwIndex,
+  LPWSTR    lpName,
+  LPDWORD   lpcchName,
+  LPDWORD   lpReserved,
+  LPWSTR    lpClass,
+  LPDWORD   lpcchClass,
+  PFILETIME lpftLastWriteTime
+);
+
+LSTATUS RegGetKeySecurity(
+  HKEY                 hKey,
+  SECURITY_INFORMATION SecurityInformation,
+  PSECURITY_DESCRIPTOR pSecurityDescriptor,
+  LPDWORD              lpcbSecurityDescriptor
+);
+
+
+LSTATUS RegQueryInfoKeyA(
+  HKEY      hKey,
+  LPSTR     lpClass,
+  LPDWORD   lpcchClass,
+  LPDWORD   lpReserved,
+  LPDWORD   lpcSubKeys,
+  LPDWORD   lpcbMaxSubKeyLen,
+  LPDWORD   lpcbMaxClassLen,
+  LPDWORD   lpcValues,
+  LPDWORD   lpcbMaxValueNameLen,
+  LPDWORD   lpcbMaxValueLen,
+  LPDWORD   lpcbSecurityDescriptor,
+  PFILETIME lpftLastWriteTime
+);
+
+
+LSTATUS RegQueryInfoKeyW(
+  HKEY      hKey,
+  LPWSTR    lpClass,
+  LPDWORD   lpcchClass,
+  LPDWORD   lpReserved,
+  LPDWORD   lpcSubKeys,
+  LPDWORD   lpcbMaxSubKeyLen,
+  LPDWORD   lpcbMaxClassLen,
+  LPDWORD   lpcValues,
+  LPDWORD   lpcbMaxValueNameLen,
+  LPDWORD   lpcbMaxValueLen,
+  LPDWORD   lpcbSecurityDescriptor,
+  PFILETIME lpftLastWriteTime
+);
+
+
+LSTATUS RegDeleteKeyValueW(
+  HKEY    hKey,
+  LPCWSTR lpSubKey,
+  LPCWSTR lpValueName
+);
+
+LSTATUS RegDeleteKeyValueA(
+  HKEY   hKey,
+  LPCSTR lpSubKey,
+  LPCSTR lpValueName
+);
+
+
+LSTATUS RegDeleteKeyExA(
+  HKEY   hKey,
+  LPCSTR lpSubKey,
+  REGSAM samDesired,
+  DWORD  Reserved
+);
+
+
+LSTATUS RegDeleteKeyExW(
+  HKEY    hKey,
+  LPCWSTR lpSubKey,
+  REGSAM  samDesired,
+  DWORD   Reserved
+);
+
+LSTATUS RegDeleteValueA(
+  HKEY   hKey,
+  LPCSTR lpValueName
+);
+
+LSTATUS RegDeleteValueW(
+  HKEY    hKey,
+  LPCWSTR lpValueName
+);
+
+
+LSTATUS RegEnumValueA(
+  HKEY    hKey,
+  DWORD   dwIndex,
+  LPSTR   lpValueName,
+  LPDWORD lpcchValueName,
+  LPDWORD lpReserved,
+  LPDWORD lpType,
+  LPBYTE  lpData,
+  LPDWORD lpcbData
+);
+
+
+LSTATUS RegEnumValueW(
+  HKEY    hKey,
+  DWORD   dwIndex,
+  LPWSTR  lpValueName,
+  LPDWORD lpcchValueName,
+  LPDWORD lpReserved,
+  LPDWORD lpType,
+  LPBYTE  lpData,
+  LPDWORD lpcbData
+);

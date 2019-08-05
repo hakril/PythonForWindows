@@ -50,3 +50,8 @@ NTSTATUS NtEnumerateValueKey(
   ULONG                       Length,
   PULONG                      ResultLength
 );
+
+NTSTATUS NtDeleteValueKey(
+  HANDLE          KeyHandle,
+  PUNICODE_STRING ValueName
+);

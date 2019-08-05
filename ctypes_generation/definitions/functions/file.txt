@@ -1,0 +1,26 @@
+HANDLE FindFirstFileA(
+  LPCSTR             lpFileName,
+  LPWIN32_FIND_DATAA lpFindFileData
+);
+
+HANDLE FindFirstFileW(
+  LPCWSTR            lpFileName,
+  LPWIN32_FIND_DATAW lpFindFileData
+);
+
+
+BOOL FindNextFileA(
+  HANDLE             hFindFile,
+  LPWIN32_FIND_DATAA lpFindFileData
+);
+
+
+BOOL FindNextFileW(
+  HANDLE             hFindFile,
+  LPWIN32_FIND_DATAW lpFindFileData
+);
+
+
+BOOL FindClose(
+  HANDLE hFindFile
+);

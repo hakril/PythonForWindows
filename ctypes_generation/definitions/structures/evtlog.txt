@@ -1,3 +1,7 @@
+typedef enum _EVT_LOGIN_CLASS {
+  EvtRpcLogin = 1
+} EVT_LOGIN_CLASS;
+
 typedef struct _EVENTLOGRECORD {
   DWORD Length;
   DWORD Reserved;
@@ -261,3 +265,10 @@ typedef enum _EVT_FORMAT_MESSAGE_FLAGS {
   EvtFormatMessageXml       = 9
 } EVT_FORMAT_MESSAGE_FLAGS;
 
+typedef struct _EVT_RPC_LOGIN {
+  LPWSTR Server;
+  LPWSTR User;
+  LPWSTR Domain;
+  LPWSTR Password;
+  DWORD  Flags;
+} EVT_RPC_LOGIN;

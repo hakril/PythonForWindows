@@ -1,0 +1,82 @@
+typedef struct IStreamVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            __RPC__in IStream * This,
+            /* [in] */ __RPC__in REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            __RPC__deref_out  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            __RPC__in IStream * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            __RPC__in IStream * This);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Read )( 
+            IStream * This,
+            /* [annotation] */ 
+            __out_bcount_part(cb, *pcbRead)  void *pv,
+            /* [in] */ ULONG cb,
+            /* [annotation] */ 
+            __out_opt  ULONG *pcbRead);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Write )( 
+            IStream * This,
+            /* [annotation] */ 
+            __in_bcount(cb)  const void *pv,
+            /* [in] */ ULONG cb,
+            /* [annotation] */ 
+            __out_opt  ULONG *pcbWritten);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Seek )( 
+            IStream * This,
+            /* [in] */ LARGE_INTEGER dlibMove,
+            /* [in] */ DWORD dwOrigin,
+            /* [annotation] */ 
+            __out_opt  ULARGE_INTEGER *plibNewPosition);
+        
+        HRESULT ( STDMETHODCALLTYPE *SetSize )( 
+            __RPC__in IStream * This,
+            /* [in] */ ULARGE_INTEGER libNewSize);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *CopyTo )( 
+            IStream * This,
+            /* [unique][in] */ IStream *pstm,
+            /* [in] */ ULARGE_INTEGER cb,
+            /* [annotation] */ 
+            __out_opt  ULARGE_INTEGER *pcbRead,
+            /* [annotation] */ 
+            __out_opt  ULARGE_INTEGER *pcbWritten);
+        
+        HRESULT ( STDMETHODCALLTYPE *Commit )( 
+            __RPC__in IStream * This,
+            /* [in] */ DWORD grfCommitFlags);
+        
+        HRESULT ( STDMETHODCALLTYPE *Revert )( 
+            __RPC__in IStream * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *LockRegion )( 
+            __RPC__in IStream * This,
+            /* [in] */ ULARGE_INTEGER libOffset,
+            /* [in] */ ULARGE_INTEGER cb,
+            /* [in] */ DWORD dwLockType);
+        
+        HRESULT ( STDMETHODCALLTYPE *UnlockRegion )( 
+            __RPC__in IStream * This,
+            /* [in] */ ULARGE_INTEGER libOffset,
+            /* [in] */ ULARGE_INTEGER cb,
+            /* [in] */ DWORD dwLockType);
+        
+        HRESULT ( STDMETHODCALLTYPE *Stat )( 
+            __RPC__in IStream * This,
+            /* [out] */ __RPC__out STATSTG *pstatstg,
+            /* [in] */ DWORD grfStatFlag);
+        
+        HRESULT ( STDMETHODCALLTYPE *Clone )( 
+            __RPC__in IStream * This,
+            /* [out] */ __RPC__deref_out_opt IStream **ppstm);
+        
+        END_INTERFACE
+    } IStreamVtbl;

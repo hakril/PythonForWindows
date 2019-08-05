@@ -241,7 +241,8 @@ class BasicTypeNodes(object):
     def exports(self):
         # Let allow ourself to redefine the bugged BYTE define & MAX_PATH which is NOT A TYPE !
         # Also ourself to redifine FILETIME (to trigger the extended struct generation)
-        return set(dummy_wintypes.names) - set(["BYTE", "MAX_PATH", "_FILETIME", "FILETIME"])
+        # We redefine <WIN32_FIND_DATA[A/W]> for consistency of LPDWORD definition
+        return set(dummy_wintypes.names) - set(["BYTE", "MAX_PATH", "_FILETIME", "FILETIME", "WIN32_FIND_DATAA", "WIN32_FIND_DATAW"])
 
 class FakeExporter(object):
     def __init__(self, exports):
@@ -330,15 +331,25 @@ class NoTemplatedGenerator(CtypesGenerator):
        pass
 
 NTSTATUS_MODULE = "ntstatus"
+WINERROR_MODULE = "winerror"
 
 class DefineCtypesGenerator(CtypesGenerator):
     def after_emit_template(self):
         self.emitline("from {0} import *".format(NTSTATUS_MODULE))
+        self.emitline("from {0} import *".format(WINERROR_MODULE))
 
     def generate_for_file(self, file):
         for define in file.data:
             self.emitline(define.generate_ctypes())
 
+class WinErrorCtypesGenerator(DefineCtypesGenerator):
+    def after_emit_template(self):
+        return
+
+    # def generate_for_file(self, file):
+        # super(WinErrorCtypesGenerator, self).generate_for_file(file)
+        # for define in file.data:
+            # self.emitline(define.generate_ctypes())
 
 # TEST Documentation generator
 class DefineDocGenerator(NoTemplatedGenerator):
@@ -731,11 +742,18 @@ definemodulegenerator.generate_doc(from_here(r"..\docs\source\windef_generated.r
 
 print("== Generating NTSTATUS ==")
 # Generate Ntstatus
-ntstatus_module_generator = ModuleGenerator("ntstatus", NtStatusParsedFile, NtStatusCtypesGenerator, NtStatusDocGenerator, from_here(r"definitions\ntstatus.txt"))
+ntstatus_module_generator = ModuleGenerator(NTSTATUS_MODULE, NtStatusParsedFile, NtStatusCtypesGenerator, NtStatusDocGenerator, from_here(r"definitions\ntstatus.txt"))
 # Hardcoded template file (no dir for ntstatus) -- Need one dir ?
 ntstatus_module_generator.get_template_filename = lambda : from_here(r"definitions\ntstatus_template.py")
 ntstatus_module_generator.generate()
 ntstatus_module_generator.generate_doc(from_here(r"..\docs\source\ntstatus_generated.rst"))
+
+print("== Generating WinError ==")
+winerror_module_generator = ModuleGenerator(WINERROR_MODULE, DefinitionParsedFile, WinErrorCtypesGenerator, DefineDocGenerator, from_here(r"definitions\winerror.txt"))
+# Hardcoded template file (no dir for ntstatus) -- Need one dir ?
+winerror_module_generator.get_template_filename = lambda : from_here(r"definitions\winerror_template.py")
+winerror_module_generator.generate()
+winerror_module_generator.generate_doc(from_here(r"..\docs\source\winerror_generated.rst"))
 
 print("== Generating structures ==")
 # Parse the simple type file
@@ -789,7 +807,8 @@ for node in structure_module_generator.nodes:
         enums_exports.update(enum.typedef)
 
 meta = MetaFileGenerator()
-meta.add_exportlist("windef", definemodulegenerator.name, definemodulegenerator.modules_exports() | ntstatus_module_generator.modules_exports())
+meta.add_exportlist("windef", definemodulegenerator.name, definemodulegenerator.modules_exports())
+meta.add_exportlist("errors", definemodulegenerator.name, ntstatus_module_generator.modules_exports() | winerror_module_generator.modules_exports())
 # Add structs / enums as 2 differents lists
 meta.add_exportlist("structs", structure_module_generator.name, structs_exports)
 meta.add_exportlist("enums", structure_module_generator.name, enums_exports)
