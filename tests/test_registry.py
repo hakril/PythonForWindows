@@ -34,15 +34,45 @@ def test_registry_set_get_simple_values(value):
 
 # TODO: test with other registry type (the stranges ones)
 @pytest.mark.parametrize("value, type", [
-    (0x11223344, gdef.REG_DWORD),
-    (0x1122334455667788, gdef.REG_QWORD),
+    (0x11223344, gdef.REG_DWORD), # same as gdef.REG_DWORD_LITTLE_ENDIAN
+    (0x11223344, gdef.REG_DWORD_BIG_ENDIAN),
+    (0x1122334455667788, gdef.REG_QWORD), # same as gdef.REG_QWORD_LITTLE_ENDIAN
     ("", gdef.REG_SZ),
+    ("Hello world", gdef.REG_SZ),
+    ("Hello world %path%", gdef.REG_EXPAND_SZ),
     (["AAAA", "BBBB", "CCCC"], gdef.REG_MULTI_SZ),
+    # Binary format and associated
     ("123\x00123" + "".join(chr(c) for c in range(256)), gdef.REG_BINARY),
+    ("Hello world", gdef.REG_LINK),
+    ("", gdef.REG_NONE),
+    ("Not really None :)\x11\x22\x00ABCD", gdef.REG_NONE),
+    ("Test-Unknown-format", 0x11223344), # Unknown registry type
+    ("Test-Unknown-format\x00\x01\xff\xfe Lol", 0xffffffff), # Unknown registry type
 ])
 def test_registry_set_get_simple_values_with_types(value, type):
     basekeytest["tst2"] = (value, type)
     assert basekeytest["tst2"].value == value
+
+
+@pytest.mark.parametrize("value, type", [
+    # "\xff\xd8".decode("utf-16") -> UnicodeDecodeError
+    ("\xff\xd8", gdef.REG_MULTI_SZ),
+    # Is NOT valid UTF-16 (len == 33)
+    ("Hello\x00World\x00This is not unicode\x00\x00", gdef.REG_MULTI_SZ),
+    # Is valid UTF-16 (len == 40)
+    # Should the decoding be completly different ?
+    ("Hello\x00World\x00This is not really unicode\x00\x00", gdef.REG_MULTI_SZ),
+])
+def test_registry_badly_encoded_values(value, type):
+    # Bypass any encoding logic to setup bad key
+    keyname = "bad_encoding"
+    buffer = windows.utils.BUFFER(gdef.BYTE).from_buffer_copy(value)
+    windows.winproxy.RegSetValueExW(basekeytest.phkey, keyname, 0, type, buffer, len(buffer))
+    # Not the best decoded value
+    # But should not crash
+    assert basekeytest[keyname]
+
+
 
 UNICODE_PATH_NAME = u'\u4e2d\u56fd\u94f6\u884c\u7f51\u94f6\u52a9\u624b'
 UNICODE_RU_STRING = u"\u0441\u0443\u043a\u0430\u0020\u0431\u043b\u044f\u0442\u044c" # CYKA BLYAT in Cyrillic
@@ -51,7 +81,13 @@ UNICODE_RU_STRING = u"\u0441\u0443\u043a\u0430\u0020\u0431\u043b\u044f\u0442\u04
 # But was the cause a special bug / reimplem due to _winreg using ANSI functions
 # So create a special test with a very identifiable name / bug cause
 
-@pytest.mark.parametrize("unistr", ['\u52a9' * 126, UNICODE_PATH_NAME, UNICODE_RU_STRING, u""])
+@pytest.mark.parametrize("unistr", [
+    u'c:\\users\\hakril\\appdata\\local\\temp\\test_unicode_\u4e2d\u56fd\u94f6\u884c\u7f51\u94f6\u52a9\u624bdbqsm3',
+    '\u52a9' * 126,
+    UNICODE_PATH_NAME,
+    UNICODE_RU_STRING,
+    u""
+])
 def test_registry_unicode_string_value(unistr):
     basekeytest["tst3"] = unistr
     assert basekeytest["tst3"].value == unistr

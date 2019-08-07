@@ -2,7 +2,7 @@ import sys
 import ctypes
 import itertools
 import struct
-from collections import namedtuple
+from collections import namedtuple, defaultdict
 
 import windows
 from windows.dbgprint import dbgprint
@@ -51,6 +51,15 @@ def Reg2Py_DWORD(buffer, size):
 def Py2Reg_DWORD(obj):
     return struct.pack("<I", obj)
 
+
+def Reg2Py_DWORD_BIG_ENDIAN(buffer, size):
+    # Check size ?
+    return (buffer[0] << 24) + (buffer[1] << 16) + (buffer[2] << 8) + buffer[3]
+
+def Py2Reg_DWORD_BIG_ENDIAN(obj):
+    return struct.pack(">I", obj)
+
+
 def Reg2Py_BINARY(buffer, size):
     return str(bytearray(buffer[:size]))
 
@@ -74,14 +83,18 @@ def Py2Reg_SZ(obj):
 def Reg2Py_Multi_SZ(buffer, size):
     if not size:
         return []
+    # Simple path
     rawstr = "".join([chr(c) for c in buffer[:size]])
-    if rawstr[-4:] != "\x00\x00\x00\x00": # 2 UNICODE NULL bytes (4 \x00)
-        rawstr += "\x00\x00\x00\x00"
-    # Decode as utf-16 to get multiple unicode string sepated by NULL BYTE
-    unistr = rawstr.decode(WENCODING)
-    # Remove final \x00
-    unistr = unistr[:-2] # 2 UTF-16 NULL BITS (was 4 bits in encoded)
-    return unistr.split(u"\x00") # Return as list of string
+    try:
+        unistr = rawstr.decode(WENCODING)
+        return unistr.rstrip(u"\x00").split(u"\x00")
+    except UnicodeDecodeError as e:
+        pass
+    # Complexe-path
+    # This is not some valide UTF-16
+    # Try our best to extract some stuff from raw
+    return rawstr.rstrip("\x00").split("\x00")
+
 
 def Py2Reg_Multi_SZ(obj):
     # Work on encoded values (to prevent str/unicode errors)
@@ -91,19 +104,33 @@ def Py2Reg_Multi_SZ(obj):
     # Add UTF-16 NULL byte for final string + final UTF-16 \x00 (4 \x00)
     return uni_str + "\x00\x00\x00\x00"
 
-
-
 DECODE_METHOD = 0
 ENCODE_METHOD = 1
 
-ENCODE_DECODE_METHODS = {
+
+KNOWN_ENCODE_DECODE_METHODS = {
     gdef.REG_SZ: (Reg2Py_SZ, Py2Reg_SZ),
+    gdef.REG_EXPAND_SZ: (Reg2Py_SZ, Py2Reg_SZ),
     gdef.REG_MULTI_SZ: (Reg2Py_Multi_SZ, Py2Reg_Multi_SZ),
-    gdef.REG_BINARY: (Reg2Py_BINARY, Py2Reg_BINARY),
     gdef.REG_DWORD: (Reg2Py_DWORD, Py2Reg_DWORD),
+    gdef.REG_DWORD_BIG_ENDIAN: (Reg2Py_DWORD_BIG_ENDIAN, Py2Reg_DWORD_BIG_ENDIAN),
     gdef.REG_QWORD: (Reg2Py_QWORD, Py2Reg_QWORD),
+    # Binary formats
+    gdef.REG_LINK: (Reg2Py_BINARY, Py2Reg_BINARY), # TESTING
+    gdef.REG_BINARY: (Reg2Py_BINARY, Py2Reg_BINARY),
+    gdef.REG_NONE: (Reg2Py_BINARY, Py2Reg_BINARY),
 }
 
+# All unknown format are seens as binary data
+UNKNOWM_FORMAT = (Reg2Py_BINARY, Py2Reg_BINARY)
+ENCODE_DECODE_METHODS = defaultdict(lambda: UNKNOWM_FORMAT, KNOWN_ENCODE_DECODE_METHODS)
+
+def decode_registry_buffer(type, buffer, size):
+    try:
+        return ENCODE_DECODE_METHODS[type][DECODE_METHOD](buffer, size)
+    except UnicodeDecodeError as e:
+        # Best effort if any decoding error happen
+        return "".join(chr(c) for c in buffer[:size])
 
 
 KeyValue = namedtuple("KeyValue", ["name", "value", "type"])
@@ -178,7 +205,7 @@ class PyHKey(object):
             for i in itertools.count():
                 name_size.value = default_name_size
                 winproxy.RegEnumKeyExW(self.phkey, i, name_buffer, name_size, None, None, None, None)
-                res.append(name_buffer.value)
+                res.append(name_buffer[:name_size.value]) # Will allow key name with \x00 inside
         return [PyHKey(self, n) for n in  res]
 
     def get_key_size_info(self):
@@ -223,7 +250,7 @@ class PyHKey(object):
                         keyname = ctypes.create_unicode_buffer(namesize.value)
                         datasize = gdef.DWORD(max_data_size)
                         databuffer = windows.utils.BUFFER(gdef.BYTE, nbelt=datasize.value)()
-                vobj = ENCODE_DECODE_METHODS[value_type.value][DECODE_METHOD](databuffer, datasize.value)
+                vobj = decode_registry_buffer(value_type.value, databuffer, datasize.value)
                 res.append(KeyValue(keyname.value, vobj, value_type.value))
         return res
 
@@ -260,7 +287,7 @@ class PyHKey(object):
                 size.value *= 2
                 buffer = windows.utils.BUFFER(gdef.BYTE, nbelt=size.value)()
                 continue
-        vobj = ENCODE_DECODE_METHODS[type.value][DECODE_METHOD](buffer, size.value)
+        vobj = decode_registry_buffer(type.value, buffer, size.value)
         return KeyValue(value_name, vobj, type.value)
 
     def _guess_value_type(self, value):
