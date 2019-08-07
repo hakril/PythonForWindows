@@ -51,10 +51,26 @@ UNICODE_RU_STRING = u"\u0441\u0443\u043a\u0430\u0020\u0431\u043b\u044f\u0442\u04
 # But was the cause a special bug / reimplem due to _winreg using ANSI functions
 # So create a special test with a very identifiable name / bug cause
 
-@pytest.mark.parametrize("unistr", [UNICODE_PATH_NAME, UNICODE_RU_STRING, u""])
+@pytest.mark.parametrize("unistr", ['\u52a9' * 126, UNICODE_PATH_NAME, UNICODE_RU_STRING, u""])
 def test_registry_unicode_string_value(unistr):
     basekeytest["tst3"] = unistr
     assert basekeytest["tst3"].value == unistr
+
+@pytest.mark.parametrize("unistr", [
+    # Looks like this value with this size MAY lead to non-existing NULL BYTE ?
+    # This bug is tested in test_registry_Reg2Py_SZ
+    u'c:\\users\\hakril\\appdata\\local\\temp\\test_unicode_\u4e2d\u56fd\u94f6\u884c\u7f51\u94f6\u52a9\u624bdbqsm3',
+    u'\u52a9' * 126,
+    UNICODE_PATH_NAME,
+    UNICODE_PATH_NAME * 10,
+    UNICODE_RU_STRING * 10,
+    UNICODE_RU_STRING
+])
+def test_registry_unicode_string_values_enumeration(unistr):
+    basekeytest["tst5"] = unistr
+    values_by_name = {x.name: x for x in basekeytest.values}
+    assert values_by_name["tst5"].value == unistr
+
 
 def test_registry_unicode_multi_string():
     TST_MULTI = [UNICODE_PATH_NAME, "Hello World", UNICODE_RU_STRING]
@@ -164,4 +180,9 @@ def test_registry_unicode_subkeys_enumerate():
     assert name2 in subkey_names
 
 
+# Test Py<->REG conversion bug
+
+# [99, 0, 58, 0, 92, 0, 117, 0, 115, 0, 101, 0, 114, 0, 115, 0, 92, 0, 104, 0, 97, 0, 107, 0, 114, 0, 105, 0, 108, 0, 92, 0, 97, 0, 112, 0, 112, 0, 100, 0, 97, 0, 116, 0, 97, 0, 92, 0, 108, 0, 111, 0, 99, 0, 97, 0, 108, 0, 92, 0, 116, 0, 101, 0, 109, 0, 112, 0, 92, 0, 116, 0, 101, 0, 115, 0, 116, 0, 95, 0, 117, 0, 110, 0, 105, 0, 99, 0, 111, 0, 100, 0, 101, 0, 95, 0, 45, 78, 253, 86, 246, 148, 76, 136, 81, 127, 246, 148, 169, 82, 75, 98, 100, 0, 98, 0, 113, 0, 115, 0, 109, 0, 51, 0, 0]
+# 124
+# def test_registry_Reg2Py_SZ(
 

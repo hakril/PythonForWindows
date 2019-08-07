@@ -18,7 +18,7 @@ class WinRegistryKey(gdef.HKEY):
     _close_function = staticmethod(winproxy.RegCloseKey)
 
     def __del__(self):
-        if sys.path is None: # Late shutdown (not sur winproxy is still up
+        if sys is None or sys.path is None: # Late shutdown (not sur winproxy is still up)
             return
         if self: # Not NULL handle ?
             dbgprint(u"Closing registry key handle {0:#x}".format(self.value), 'REGISTRY')
@@ -62,7 +62,7 @@ def Reg2Py_SZ(buffer, size):
     # Buffer is UTF16. buffer is extended-buffer
     if size == 0:
         return u""
-    if buffer[size] == 0 and buffer[size - 1] == 0:
+    if buffer[size - 1] == 0 and buffer[size - 2] == 0:
         # NULL TERMINATED: EASY
         return buffer.as_wstring()
     # Not null terminated: keep last byte
@@ -198,7 +198,7 @@ class PyHKey(object):
         max_name_size, max_data_size = self.get_key_size_info()
         # Null terminators
         max_name_size += 1
-        max_data_size += 1
+        max_data_size += 2
         with ExpectWindowsError(259):
             for i in itertools.count():
                 value_type = gdef.DWORD()
@@ -218,14 +218,13 @@ class PyHKey(object):
                         # Update the sizes / buffers & try again :)
                         max_name_size, max_data_size = self.get_key_size_info()
                         max_name_size += 1
-                        max_data_size += 1
+                        max_data_size += 2
                         namesize = gdef.DWORD(max_name_size)
                         keyname = ctypes.create_unicode_buffer(namesize.value)
                         datasize = gdef.DWORD(max_data_size)
                         databuffer = windows.utils.BUFFER(gdef.BYTE, nbelt=datasize.value)()
                 vobj = ENCODE_DECODE_METHODS[value_type.value][DECODE_METHOD](databuffer, datasize.value)
                 res.append(KeyValue(keyname.value, vobj, value_type.value))
-                # res.append(vobj)
         return res
 
 
