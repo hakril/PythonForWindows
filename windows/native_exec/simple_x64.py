@@ -1059,6 +1059,16 @@ def JmpAt(addr):
     code += Jmp('RAX')
     return code
 
+class Raw(Instruction):
+    """Output raw data"""
+    def __init__(self, *initial_args):
+        if len(initial_args) != 1:
+            raise ValueError("raw 'opcode' only accept one argument")
+        # Accept space
+        self.data = initial_args[0].replace(" ", "").decode("hex")
+
+    def get_code(self):
+        return self.data
 
 class Label(object):
     def __init__(self, name):

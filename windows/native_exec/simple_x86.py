@@ -858,7 +858,8 @@ class Raw(Instruction):
     def __init__(self, *initial_args):
         if len(initial_args) != 1:
             raise ValueError("raw 'opcode' only accept one argument")
-        self.data = initial_args[0].decode("hex")
+        # Accept space
+        self.data = initial_args[0].replace(" ", "").decode("hex")
 
     def get_code(self):
         return self.data

@@ -12,6 +12,14 @@ if capstone:
     disassembleur = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_64)
     disassembleur.detail = True
 
+@pytest.fixture
+def need_capstone():
+    if capstone is None:
+        raise pytest.Skip("Capstone is not installed")
+    return True
+
+pytestmark = pytest.mark.usefixtures("need_capstone")
+
 
 def disas(x):
     return list(disassembleur.disasm(x, 0))
@@ -264,6 +272,7 @@ def test_assembler():
     CheckInstr(Add, must_fail=True)('RAX', 0xffffffff)
 
 
+
     code = MultipleInstr()
     code += Nop()
     code += Rep + Nop()
@@ -271,10 +280,10 @@ def test_assembler():
     print(repr(code.get_code()))
     assert code.get_code() == "\x90\xf3\x90\xc3"
 
-if capstone is None:
-    test_assembler = pytest.mark.skip("Capstone not installed")(test_assembler)
-
-# pytestmark = pytest.mark.skip("YOLO")
+def test_simple_x64_raw_instruction():
+    # Test the fake instruction "raw"
+    # By emetting a multi-char nop manually
+    CheckInstr(Raw, expected_result="nop word ptr [rax + rax]")("66 0F 1F 84 00 00 00 00 00")
 
 if __name__ == "__main__":
     test_assembler()
