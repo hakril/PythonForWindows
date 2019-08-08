@@ -93,13 +93,25 @@ class Service(object):
 class ServiceA(Service, ENUM_SERVICE_STATUS_PROCESSA):
     """A Service object with ascii data"""
     def start(self, args=None):
+        nbelt = 0
         if args is not None:
-            raise NotImplementedError("Start service with args != None")
+            if isinstance(args, basestring):
+                args = [args]
+            nbelt = len(args)
+            args = (gdef.LPCSTR * (nbelt))(*args)
+
         with scmanagera(SC_MANAGER_CONNECT) as scm:
-            # windows.winproxy.StartServiceA()
             servh = windows.winproxy.OpenServiceA(scm, self.name, SERVICE_START)
-            windows.winproxy.StartServiceA(servh, 0, None)
+            windows.winproxy.StartServiceA(servh, nbelt, args)
             windows.winproxy.CloseServiceHandle(servh)
+
+    def stop(self):
+        status = SERVICE_STATUS()
+        with scmanagera(SC_MANAGER_CONNECT) as scm:
+            servh = windows.winproxy.OpenServiceA(scm, self.name, SERVICE_STOP)
+            windows.winproxy.ControlService(servh, SERVICE_CONTROL_STOP, status)
+            windows.winproxy.CloseServiceHandle(servh)
+        return status
 
 
 @contextmanager

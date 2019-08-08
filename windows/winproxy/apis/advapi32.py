@@ -380,6 +380,10 @@ def OpenServiceW(hSCManager, lpServiceName, dwDesiredAccess):
     return OpenServiceW.ctypes_function(hSCManager, lpServiceName, dwDesiredAccess)
 
 @Advapi32Proxy()
+def ControlService(hService, dwControl, lpServiceStatus):
+   return ControlService.ctypes_function(hService, dwControl, lpServiceStatus)
+
+@Advapi32Proxy()
 def CloseServiceHandle(hSCObject):
     return CloseServiceHandle.ctypes_function(hSCObject)
 
