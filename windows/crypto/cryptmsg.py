@@ -101,3 +101,29 @@ class CryptMessage(gdef.HCRYPTMSG):
     def recipients(self):
         """TODO: DOC"""
         return [self.get_recipient_data(i) for i in range(self.nb_recipient)]
+
+    @property
+    def content(self):
+        return self.get_param(gdef.CMSG_CONTENT_PARAM)[:]
+
+    @property
+    def content_type(self):
+        data = self.get_param(gdef.CMSG_INNER_CONTENT_TYPE_PARAM)
+        assert data[-1] == "\x00", "CMSG_INNER_CONTENT_TYPE_PARAM not NULL TERMINATED"
+        return data[:-1]
+
+
+    def update(self, blob, final):
+        # Test isinstance string ?
+        if isinstance(blob, (basestring, bytearray)):
+            buffer = windows.utils.BUFFER(gdef.BYTE).from_buffer_copy(blob)
+            return winproxy.CryptMsgUpdate(self, buffer, len(blob), final)
+        return winproxy.CryptMsgUpdate(self, blob.pbData, blob.cbData, final)
+
+    # constructor
+    @classmethod
+    def from_data(self, data):
+        hmsg = winproxy.CryptMsgOpenToDecode(windows.crypto.DEFAULT_ENCODING, 0, 0, None, None, None)
+        newmsg = CryptMessage(hmsg)
+        newmsg.update(data, final=True)
+        return newmsg
