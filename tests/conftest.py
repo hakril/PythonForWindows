@@ -58,6 +58,14 @@ else:
     proc32_64_suspended =  generate_pop_and_exit_fixtures([pop_proc_32, pop_proc_64], ids=["proc32", "proc64"],
                                                             dwCreationFlags=gdef.CREATE_SUSPENDED)
 
+@pytest.fixture(scope="session")
+def init_com_security():
+    # Init com security if not done
+    try:
+        windows.com.init()
+        return windows.com.initsecurity()
+    except WindowsError:
+        pass
 
 
 class HandleDebugger(object):

@@ -69,4 +69,29 @@ def test_new_event():
     assert any(evt.pid == p.pid for evt in new_events)
 
 
+def test_event_close():
+    chan = windows.system.event_log["System"]
+    start_usage = windows.current_process.memory_info.PrivateUsage
+    count_max = 0x10000
+    count = 0
+    while count < count_max:
+        for i,e  in enumerate(chan.query()):
+            count += 1
+    post_usage = windows.current_process.memory_info.PrivateUsage
+    memory_usage_in_mo = (post_usage - start_usage) / 1024 / 1024
+    memory_usage_in_ko = (post_usage - start_usage) / 1024
+    # With auto-evtclose of evt there should not be too much memory used when
+    # Variable are not accessible anymore
+    assert memory_usage_in_mo == 0
 
+def test_evthandle_close():
+    start_usage = windows.current_process.memory_info.PrivateUsage
+    for i in range(0x2000):
+        chan = windows.system.event_log["System"]
+        query = chan.query()
+        config = chan.config # Config is an EVT_HANDLE
+        pubm = config.publisher.metadata
+        # windows.winproxy.EvtClose(chan)
+    post_usage = windows.current_process.memory_info.PrivateUsage
+    memory_usage_in_mo = (post_usage - start_usage) / 1024 / 1024
+    assert memory_usage_in_mo == 0

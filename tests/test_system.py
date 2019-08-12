@@ -11,6 +11,16 @@ class TestSystemWithCheckGarbage(object):
     def test_version_name(self):
         return windows.system.version_name
 
+    def test_version_product_type(self):
+        return windows.system.product_type
+
+    def test_version_edition(self):
+        return windows.system.edition
+
+    def test_version_windir(self):
+        return windows.system.windir
+
+
     def test_computer_name(self):
         return windows.system.computer_name
 
@@ -26,11 +36,17 @@ class TestSystemWithCheckGarbage(object):
     def test_handles(self):
         return windows.system.handles
 
-    def test_handle_process(self):
-        handle_with_process = [h for h in windows.system.handles if h.dwProcessId]
-        handle = handle_with_process[-1]
-        proc = handle.process
-        assert proc.pid == handle.dwProcessId
+    def test_bitness(self):
+        return windows.system.bitness
+
+    def test_evtlog(self):
+        return windows.system.event_log
+
+    def test_task_scheduler(self):
+        return windows.system.task_scheduler
+
+    def test_task_object_manager(self):
+        return windows.system.object_manager
 
     def test_system_modules_ntosk(self):
         assert windows.system.modules[0].name.endswith("ntoskrnl.exe")
