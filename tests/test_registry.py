@@ -7,7 +7,7 @@ import windows
 
 
 testbasekeypath = r"HKEY_CURRENT_USER\SOFTWARE\PythonForWindows\Test"
-basekeytest = windows.system.registry(testbasekeypath, gdef.KEY_WOW64_64KEY | gdef.KEY_READ | gdef.KEY_WRITE)
+basekeytest = windows.system.registry(testbasekeypath, gdef.KEY_WOW64_64KEY | gdef.KEY_ALL_ACCESS)
 
 if not basekeytest.exists:
     basekeytest.create()
@@ -15,13 +15,8 @@ if not basekeytest.exists:
 @pytest.fixture()
 def empty_test_base_key():
     assert basekeytest.exists
-    for subkey in basekeytest.subkeys:
-            subkey.delete()
-    # Use of lowlevel_value_enum allow deleting value with NULL bytes
-    for value in basekeytest.values:
-        del basekeytest[value.name]
-    assert not basekeytest.subkeys
-    assert not basekeytest.values
+    # Depends on test_registry_key_empty :)
+    basekeytest.empty()
 
 # Clean registry before everytest
 pytestmark = pytest.mark.usefixtures("empty_test_base_key")
@@ -143,6 +138,22 @@ def test_registry_get_key_info():
     assert other_info[1] == 2 # Nb values
     assert isinstance(other_info[2], (int, long)) # Last write
 
+def test_registry_key_empty():
+    subname = "MyTestKeyEmpty"
+    subkey = basekeytest(subname).create()
+    # Add some non-empty subkeys
+    subkey("AAA").create()["LOL"] = 2
+    subkey("BBBB").create()["value"] = "hello"
+    # Add some values
+    subkey["42"] = 43
+    subkey["XXX"] = "42_42"
+    assert subkey.values
+    assert subkey.subkeys
+    subkey.empty()
+    # Check everythin disappeared
+    assert not subkey.values
+    assert not subkey.subkeys
+
 
 def test_registry_unicode_value_name_enumerate():
     name1 = u"enum_" + UNICODE_PATH_NAME
@@ -216,9 +227,5 @@ def test_registry_unicode_subkeys_enumerate():
     assert name2 in subkey_names
 
 
-# Test Py<->REG conversion bug
 
-# [99, 0, 58, 0, 92, 0, 117, 0, 115, 0, 101, 0, 114, 0, 115, 0, 92, 0, 104, 0, 97, 0, 107, 0, 114, 0, 105, 0, 108, 0, 92, 0, 97, 0, 112, 0, 112, 0, 100, 0, 97, 0, 116, 0, 97, 0, 92, 0, 108, 0, 111, 0, 99, 0, 97, 0, 108, 0, 92, 0, 116, 0, 101, 0, 109, 0, 112, 0, 92, 0, 116, 0, 101, 0, 115, 0, 116, 0, 95, 0, 117, 0, 110, 0, 105, 0, 99, 0, 111, 0, 100, 0, 101, 0, 95, 0, 45, 78, 253, 86, 246, 148, 76, 136, 81, 127, 246, 148, 169, 82, 75, 98, 100, 0, 98, 0, 113, 0, 115, 0, 109, 0, 51, 0, 0]
-# 124
-# def test_registry_Reg2Py_SZ(
 

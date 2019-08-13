@@ -244,3 +244,13 @@ LSTATUS RegEnumValueW(
   LPBYTE  lpData,
   LPDWORD lpcbData
 );
+
+LSTATUS RegDeleteTreeA(
+  HKEY   hKey,
+  LPCSTR lpSubKey
+);
+
+LSTATUS RegDeleteTreeW(
+  HKEY    hKey,
+  LPCWSTR lpSubKey
+);

@@ -343,11 +343,15 @@ class PyHKey(object):
 
     def delete(self):
         """Delete the registry key"""
+        # Allow a 'recursive' param to empty before delete ?
         try:
             windows.winproxy.RegDeleteKeyExW(self.surkey.phkey, self.name, self.sam, 0)
         except WindowsError as e:
             raise WindowsError(e.winerror, "Could not delete registry key <{0}> ({1})".format(self.fullname, e.strerror))
         return None
+
+    def empty(self):
+        windows.winproxy.RegDeleteTreeW(self.phkey, None)
 
 
 

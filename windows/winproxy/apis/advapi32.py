@@ -337,6 +337,14 @@ def RegDeleteValueW(hKey, lpValueName):
     return RegDeleteValueW.ctypes_function(hKey, lpValueName)
 
 @Advapi32Proxy(error_check=result_is_error_code)
+def RegDeleteTreeA(hKey, lpSubKey):
+    return RegDeleteTreeA.ctypes_function(hKey, lpSubKey)
+
+@Advapi32Proxy(error_check=result_is_error_code)
+def RegDeleteTreeW(hKey, lpSubKey):
+    return RegDeleteTreeW.ctypes_function(hKey, lpSubKey)
+
+@Advapi32Proxy(error_check=result_is_error_code)
 def RegEnumValueA(hKey, dwIndex, lpValueName, lpcchValueName, lpReserved, lpType, lpData, lpcbData):
     return RegEnumValueA.ctypes_function(hKey, dwIndex, lpValueName, lpcchValueName, lpReserved, lpType, lpData, lpcbData)
 
