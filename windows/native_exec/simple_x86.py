@@ -1020,9 +1020,15 @@ class MultipleInstr(object):
     def __iadd__(self, other):
         if isinstance(other, MultipleInstr):
             self.merge_shellcode(other)
+        elif isinstance(other, basestring):
+            self.assemble(other)
         else:
             self.add_instruction(other)
         return self
+
+    def assemble(self, code):
+        for instr in assemble_instructions_generator(code):
+            self.add_instruction(instr)
 
 
 def split_in_instruction(str):
@@ -1034,9 +1040,7 @@ def split_in_instruction(str):
                 continue
             yield instr.strip()
 
-def assemble(str):
-    """Play test"""
-    shellcode = MultipleInstr()
+def assemble_instructions_generator(str):
     for instr in split_in_instruction(str):
         data = instr.split(" ", 1)
         mnemo, args_raw = data[0], data[1:]
@@ -1057,8 +1061,18 @@ def assemble(str):
                     except ValueError:
                         pass
                 args.append(arg)
-        shellcode += instr_object(*args)
+        yield instr_object(*args)
+
+def assemble(str):
+    """Play test"""
+    shellcode = MultipleInstr()
+    shellcode += str
     return shellcode.get_code()
+
+def shellcode(str):
+    shellcode = MultipleInstr()
+    shellcode += str
+    return shellcode
 
 # IDA : import windows.native_exec.simple_x86 as x86
 # IDA testing

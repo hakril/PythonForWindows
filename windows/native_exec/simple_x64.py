@@ -532,6 +532,7 @@ class SubModRM(object):
         self.is_32bits_addressing = False
 
     def setup_reg_as_register(self, name):
+        name = name.upper()
         if name in registers_32_bits:
             name = registers_32_bits[name]
             self.setup_as_32bit_operation()
@@ -546,6 +547,7 @@ class SubModRM(object):
             self.rex[5] = 1
 
     def setup_rm_as_register(self, name):
+        name = name.upper()
         if name in registers_32_bits:
             name = registers_32_bits[name]
             self.setup_as_32bit_operation()
@@ -560,6 +562,7 @@ class SubModRM(object):
             self.rex[7] = 1
 
     def setup_rm_as_mem_base(self, name):
+        name = name.upper()
         if name in registers_32_bits:
             name = registers_32_bits[name]
             self.setup_as_32bits_addressing()
@@ -573,6 +576,7 @@ class SubModRM(object):
 
 
     def setup_sib_base_rex(self, baseregister):
+        baseregister = baseregister.upper()
         if baseregister in registers_32_bits:
             baseregister = registers_32_bits[baseregister]
             self.setup_as_32bits_addressing()
@@ -585,6 +589,7 @@ class SubModRM(object):
         return X64RegisterSelector.get_reg_bits(baseregister)
 
     def setup_sib_index_rex(self, indexregister):
+        indexregister = indexregister.upper()
         if indexregister in registers_32_bits:
             indexregister = registers_32_bits[indexregister]
             self.setup_as_32bits_addressing()
@@ -711,6 +716,7 @@ class REG64__MEM_Slash(ModRM_REG64__MEM):
     # A ModRM_REG64__MEM where the setup_reg_as_register() does
     # not set the REX (as the register is hardcoded in the Slash
     def setup_reg_as_register(self, name):
+        name = name.upper()
         if name in registers_32_bits:
             name = registers_32_bits[name]
             self.setup_as_32bit_operation()
@@ -1216,9 +1222,16 @@ class MultipleInstr(object):
     def __iadd__(self, other):
         if isinstance(other, MultipleInstr):
             self.merge_shellcode(other)
+        elif isinstance(other, basestring):
+            self.assemble(other)
         else:
             self.add_instruction(other)
         return self
+
+    def assemble(self, code):
+        for instr in assemble_instructions_generator(code):
+            self.add_instruction(instr)
+
 
 
 def split_in_instruction(str):
@@ -1230,9 +1243,7 @@ def split_in_instruction(str):
                 continue
             yield instr.strip()
 
-def assemble(str):
-    """Play test"""
-    shellcode = MultipleInstr()
+def assemble_instructions_generator(str):
     for instr in split_in_instruction(str):
         data = instr.split(" ", 1)
         mnemo, args_raw = data[0], data[1:]
@@ -1253,10 +1264,21 @@ def assemble(str):
                     except ValueError:
                         pass
                 args.append(arg)
-        shellcode += instr_object(*args)
+        yield instr_object(*args) # Yield the currently parsed instruction
+
+
+def assemble(str):
+    """Play test"""
+    shellcode = MultipleInstr()
+    shellcode += str
     return shellcode.get_code()
 
-# import windows.native_exec.simple_x64 as x64
+def shellcode(str):
+    shellcode = MultipleInstr()
+    shellcode += str
+    return shellcode
+
+
 try:
     import midap
     import idc

@@ -285,5 +285,19 @@ def test_simple_x64_raw_instruction():
     # By emetting a multi-char nop manually
     CheckInstr(Raw, expected_result="nop word ptr [rax + rax]")("66 0F 1F 84 00 00 00 00 00")
 
+def test_x64_32b_register_lower_upper():
+    assert x64.assemble("mov eax, 42") == x64.assemble("mov EAX, 42")
+    assert x64.Mov("eax", 42).get_code() == x64.Mov("EAX", 42).get_code()
+    assert x64.assemble("mov Eax, [eAx + eaX * 4 + 12]")
+
+def test_x64_multiple_instr_add_instr_and_str():
+    res = x64.MultipleInstr()
+    res += x64.Nop()
+    res += "ret; ret; label :offset_3; ret"
+    res += x64.Nop()
+    res += x64.Label(":offset_5")
+    assert res.get_code() == "\x90\xc3\xc3\xc3\x90"
+    assert res.labels == {":offset_3": 3, ":offset_5": 5}
+
 if __name__ == "__main__":
     test_assembler()
