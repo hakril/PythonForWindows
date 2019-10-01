@@ -409,6 +409,10 @@ class ChannelConfig(EvtHandle):
         return [EvtPublisher(pub) for pub in chaninfo(self, gdef.EvtChannelPublisherList).value]
 
     @property
+    def keywords(self):
+        return int(chaninfo(self, gdef.EvtChannelPublishingConfigKeywords).value)
+
+    @property
     def enabled(self):
         return bool(chaninfo(self, gdef.EvtChannelConfigEnabled).value)
 
@@ -510,6 +514,15 @@ class PublisherMetadata(EvtHandle):
             if e.winerror != gdef.ERROR_EVT_UNRESOLVED_VALUE_INSERT:
                 raise
         return sbuff.value
+
+    @property
+    def guid(self):
+        """The GUID associated with this provider
+
+        :type:  [:class:`GUID`] -- the GUID in a XXXXXXXXXX-YYYY-ZZZZ-TTTT-VVVVVVVVVV form
+        """
+        return publishinfo(self, gdef.EvtPublisherMetadataPublisherGuid).value
+
 
     def __repr__(self):
         return '<{0} "{1}">'.format(type(self).__name__, self.name)
