@@ -203,6 +203,19 @@ class EtwTrace(object):
             guid = gdef.GUID.from_string(guid)
         return windows.winproxy.EnableTrace(1, flags, level, guid, self.handle) # EnableTraceEx ?
 
+    def enable_ex(self, guid, flags=0xff, level=0xff, any_keyword = 0xffffffff, all_keyword=0x00):
+        if isinstance(guid, basestring):
+            guid = gdef.GUID.from_string(guid)
+
+        # TODO : implement EnableParameters
+        EVENT_CONTROL_CODE_ENABLE_PROVIDER = 1
+
+        # EnableTraceEx only accept a UCHAR for the level param
+        # TODO : maybe raise an Exception instead of silently masking the value ?
+        level = gdef.UCHAR(chr(level & 0xff))
+
+        return windows.winproxy.EnableTraceEx2(self.handle, guid, EVENT_CONTROL_CODE_ENABLE_PROVIDER, level , any_keyword, all_keyword, 0, None) 
+
 
     def process(self, callback, begin=None, end=None):
         if end == "now":
