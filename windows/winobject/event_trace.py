@@ -49,6 +49,10 @@ class EventRecord(gdef.EVENT_RECORD):
         return self.EventHeader.EventDescriptor.Level
 
     @property
+    def context(self):
+        return ctypes.py_object.from_address(self.UserContext).value
+
+    @property
     def user_data(self):
         """Event specific data
 
@@ -217,7 +221,7 @@ class EtwTrace(object):
         return windows.winproxy.EnableTraceEx2(self.handle, guid, EVENT_CONTROL_CODE_ENABLE_PROVIDER, level , any_keyword, all_keyword, 0, None) 
 
 
-    def process(self, callback, begin=None, end=None):
+    def process(self, callback, begin=None, end=None, context = None):
         if end == "now":
             end = gdef.FILETIME()
             windows.winproxy.GetSystemTimeAsFileTime(end)
@@ -232,6 +236,10 @@ class EtwTrace(object):
         else:
             # logfile.ProcessTraceMode |= gdef.PROCESS_TRACE_MODE_REAL_TIME
             logfile.LogFileName = self.logfile
+
+        if context:
+            context_ptr = ctypes.pointer(ctypes.py_object(context))
+            logfile.Context = ctypes.cast(context_ptr, ctypes.c_void_p)
 
         @ctypes.WINFUNCTYPE(gdef.PVOID, PEventRecord)
         def real_callback(record_ptr):
