@@ -762,6 +762,18 @@ class PublisherMetadata(EvtHandle):
         """
         return publishinfo(self, gdef.EvtPublisherMetadataMessageFilePath).value
 
+    @property
+    def message_resource_filepath(self):
+        """
+        """
+        return publishinfo(self, gdef.EvtPublisherMetadataResourceFilePath).value
+
+    @property
+    def message_parameter_filepath(self):
+        """
+        """
+        return publishinfo(self, gdef.EvtPublisherMetadataParameterFilePath).value
+
 
     def __repr__(self):
         return '<{0} "{1}">'.format(type(self).__name__, self.name)
