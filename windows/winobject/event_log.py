@@ -450,6 +450,10 @@ class PublisherMetadataChannel(object):
     def index(self):
         return int(self._query_channel_metadata_property(gdef.EvtPublisherMetadataChannelReferenceIndex))
 
+    @property
+    def message_id(self):
+        return int(self._query_channel_metadata_property(gdef.EvtPublisherMetadataChannelReferenceMessageID))
+
 
 class PublisherMetadataLevel(object):
 
