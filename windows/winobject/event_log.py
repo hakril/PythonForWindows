@@ -479,6 +479,14 @@ class PublisherMetadata(EvtHandle):
         return cls(winproxy.EvtOpenPublisherMetadata(None, name, None, 0, 0), name)
 
     @property
+    def guid(self):
+        """The GUID associated with this provider
+
+        :type:  [:class:`GUID`] -- the GUID in a XXXXXXXXXX-YYYY-ZZZZ-TTTT-VVVVVVVVVV form
+        """
+        return publishinfo(self, gdef.EvtPublisherMetadataPublisherGuid).value
+
+    @property
     def chanrefs(self):
         """Identifies the channels child element of the provider.
 
@@ -550,12 +558,16 @@ class PublisherMetadata(EvtHandle):
         return sbuff.value
 
     @property
-    def guid(self):
-        """The GUID associated with this provider
-
-        :type:  [:class:`GUID`] -- the GUID in a XXXXXXXXXX-YYYY-ZZZZ-TTTT-VVVVVVVVVV form
+    def message_name(self):
         """
-        return publishinfo(self, gdef.EvtPublisherMetadataPublisherGuid).value
+        """
+        return self.message(publishinfo(self, gdef.EvtPublisherMetadataPublisherMessageID).value)
+
+    @property
+    def message_filepath(self):
+        """
+        """
+        return publishinfo(self, gdef.EvtPublisherMetadataMessageFilePath).value
 
 
     def __repr__(self):
