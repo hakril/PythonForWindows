@@ -781,8 +781,28 @@ class EventMetadata(EvtHandle):
 
     @property
     def channel_id(self):
-        """The the Channel attribute of the Event definition"""
+        """The Channel attribute of the Event definition"""
         return eventinfo(self, gdef.EventMetadataEventChannel).value
+
+    @property
+    def keyword(self):
+        """The keyword attribute of the Event definition"""
+        return eventinfo(self, gdef.EventMetadataEventKeyword).value
+
+    @property
+    def opcode(self):
+        """The opcode attribute of the Event definition"""
+        return eventinfo(self, gdef.EventMetadataEventOpcode).value
+
+    @property
+    def level(self):
+        """The level attribute of the Event definition"""
+        return eventinfo(self, gdef.EventMetadataEventLevel).value
+
+    @property
+    def task(self):
+        """The task attribute of the Event definition"""
+        return eventinfo(self, gdef.EventMetadataEventTask).value
 
     @property
     def message_id(self):
