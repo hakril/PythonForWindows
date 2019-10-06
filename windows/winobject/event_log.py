@@ -459,15 +459,15 @@ class ChannelConfig(EvtHandle):
     def __repr__(self):
         return '<{0} "{1}">'.format(type(self).__name__, self.name)
 
-class ChannelMetadata(object):
+class PublisherMetadataChannel(object):
 
-    def __init__(self, pub_metada, channel_id):
-        super(ChannelMetadata, self).__init__()
-        self.pub_metada = pub_metada
+    def __init__(self, pub_metadata, channel_id):
+        super(PublisherMetadataChannel, self).__init__()
+        self.pub_metadata = pub_metadata
         self._id = channel_id
 
     def _query_channel_metadata_property(self, propertyid):
-        return self.pub_metada.chanrefs.property(propertyid, self._id)
+        return self.pub_metadata.chanrefs.property(propertyid, self._id)
 
     @property
     def flags(self):
@@ -484,6 +484,101 @@ class ChannelMetadata(object):
     @property
     def index(self):
         return int(self._query_channel_metadata_property(gdef.EvtPublisherMetadataChannelReferenceIndex))
+
+
+class PublisherMetadataLevel(object):
+
+    def __init__(self, pub_metadata, channel_id):
+        super(PublisherMetadataLevel, self).__init__()
+        self.pub_metadata = pub_metadata
+        self._id = channel_id
+
+    def _query_level_metadata_property(self, propertyid):
+        return self.pub_metadata.levelrefs.property(propertyid, self._id)
+
+    @property
+    def name(self):
+        return str(self._query_level_metadata_property(gdef.EvtPublisherMetadataLevelName))
+
+    @property
+    def value(self):
+        return int(self._query_level_metadata_property(gdef.EvtPublisherMetadataLevelValue))
+
+    @property
+    def message_id(self):
+        return int(self._query_level_metadata_property(gdef.EvtPublisherMetadataLevelMessageID))
+
+
+class PublisherMetadataOpcode(object):
+
+    def __init__(self, pub_metadata, channel_id):
+        super(PublisherMetadataOpcode, self).__init__()
+        self.pub_metadata = pub_metadata
+        self._id = channel_id
+
+    def _query_opcode_metadata_property(self, propertyid):
+        return self.pub_metadata.opcoderefs.property(propertyid, self._id)
+
+    @property
+    def name(self):
+        return str(self._query_opcode_metadata_property(gdef.EvtPublisherMetadataOpcodeName))
+
+    @property
+    def value(self):
+        return int(self._query_opcode_metadata_property(gdef.EvtPublisherMetadataOpcodeValue))
+
+    @property
+    def message_id(self):
+        return int(self._query_opcode_metadata_property(gdef.EvtPublisherMetadataOpcodeMessageID))
+
+
+class PublisherMetadataKeyword(object):
+
+    def __init__(self, pub_metadata, channel_id):
+        super(PublisherMetadataKeyword, self).__init__()
+        self.pub_metadata = pub_metadata
+        self._id = channel_id
+
+    def _query_keyword_metadata_property(self, propertyid):
+        return self.pub_metadata.keywordrefs.property(propertyid, self._id)
+
+    @property
+    def name(self):
+        return str(self._query_keyword_metadata_property(gdef.EvtPublisherMetadataKeywordName))
+
+    @property
+    def value(self):
+        return int(self._query_keyword_metadata_property(gdef.EvtPublisherMetadataKeywordValue))
+
+    @property
+    def message_id(self):
+        return int(self._query_keyword_metadata_property(gdef.EvtPublisherMetadataKeywordMessageID))
+
+class PublisherMetadataTask(object):
+
+    def __init__(self, pub_metadata, channel_id):
+        super(PublisherMetadataTask, self).__init__()
+        self.pub_metadata = pub_metadata
+        self._id = channel_id
+
+    def _query_keyword_metadata_property(self, propertyid):
+        return self.pub_metadata.taskrefs.property(propertyid, self._id)
+
+    @property
+    def name(self):
+        return str(self._query_keyword_metadata_property(gdef.EvtPublisherMetadataTaskName))
+
+    @property
+    def value(self):
+        return int(self._query_keyword_metadata_property(gdef.EvtPublisherMetadataTaskValue))
+
+    @property
+    def event_guid(self):
+        return self._query_keyword_metadata_property(gdef.EvtPublisherMetadataTaskEventGuid)
+
+    @property
+    def message_id(self):
+        return int(self._query_keyword_metadata_property(gdef.EvtPublisherMetadataTaskMessageID))
 
 class EvtPublisher(object):
     """An Event provider"""
@@ -530,13 +625,76 @@ class PublisherMetadata(EvtHandle):
         return PropertyArray(publishinfo(self, gdef.EvtPublisherMetadataChannelReferences).value)
 
     @property
-    def channels_metadata(self):
-        """The :class:`ChannelMetadata` for each event this provider defines
+    def levelrefs(self):
+        """Identifies the levels child element of the provider.
 
-        :yield: :class:`ChannelMetadata`
+        :type: :class:`PropertyArray`
         """
-        return [ChannelMetadata(self, i) for i in range(self.chanrefs.size)]
+        return PropertyArray(publishinfo(self, gdef.EvtPublisherMetadataLevels).value)
 
+    @property
+    def opcoderefs(self):
+        """Identifies the opcodes child element of the provider.
+
+        :type: :class:`PropertyArray`
+        """
+        return PropertyArray(publishinfo(self, gdef.EvtPublisherMetadataOpcodes).value)
+
+    @property
+    def keywordrefs(self):
+        """The list of keywords defined by this provider
+
+        :type: :class:`PropertyArray`
+        """
+        return PropertyArray(publishinfo(self, gdef.EvtPublisherMetadataKeywords).value)
+
+    @property
+    def taskrefs(self):
+        """The list of tasks defined by this provider
+
+        :type: :class:`PropertyArray`
+        """
+        return PropertyArray(publishinfo(self, gdef.EvtPublisherMetadataTasks).value)
+
+    @property
+    def channels_metadata(self):
+        """The :class:`PublisherMetadataChannel` for each channel this provider defines
+
+        :yield: :class:`PublisherMetadataChannel`
+        """
+        return [PublisherMetadataChannel(self, i) for i in range(self.chanrefs.size)]
+
+    @property
+    def levels_metadata(self):
+        """The :class:`PublisherMetadataLevel` for each level this provider defines
+
+        :yield: :class:`PublisherMetadataLevel`
+        """
+        return [PublisherMetadataLevel(self, i) for i in range(self.levelrefs.size)]
+
+    @property
+    def opcodes_metadata(self):
+        """The :class:`PublisherMetadataOpcode` for each opcode this provider defines
+
+        :yield: :class:`PublisherMetadataOpcode`
+        """
+        return [PublisherMetadataOpcode(self, i) for i in range(self.opcoderefs.size)]
+
+    @property
+    def tasks_metadata(self):
+        """The :class:`PublisherMetadataTask` for each opcode this provider defines
+
+        :yield: :class:`PublisherMetadataTask`
+        """
+        return [PublisherMetadataTask(self, i) for i in range(self.taskrefs.size)]
+
+    @property
+    def keywords_metadata(self):
+        """The :class:`PublisherMetadataKeyword` for each opcode this provider defines
+
+        :yield: :class:`PublisherMetadataKeyword`
+        """
+        return [PublisherMetadataKeyword(self, i) for i in range(self.keywordrefs.size)]
 
     @property
     def events_metadata(self):
