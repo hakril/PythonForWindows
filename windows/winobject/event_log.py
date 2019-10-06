@@ -459,6 +459,31 @@ class ChannelConfig(EvtHandle):
     def __repr__(self):
         return '<{0} "{1}">'.format(type(self).__name__, self.name)
 
+class ChannelMetadata(object):
+
+    def __init__(self, pub_metada, channel_id):
+        super(ChannelMetadata, self).__init__()
+        self.pub_metada = pub_metada
+        self._id = channel_id
+
+    def _query_channel_metadata_property(self, propertyid):
+        return self.pub_metada.chanrefs.property(propertyid, self._id)
+
+    @property
+    def flags(self):
+        return int(self._query_channel_metadata_property(gdef.EvtPublisherMetadataChannelReferenceFlags))
+
+    @property
+    def name(self):
+        return str(self._query_channel_metadata_property(gdef.EvtPublisherMetadataChannelReferencePath))
+
+    @property
+    def id(self):
+        return int(self._query_channel_metadata_property(gdef.EvtPublisherMetadataChannelReferenceID))
+
+    @property
+    def index(self):
+        return int(self._query_channel_metadata_property(gdef.EvtPublisherMetadataChannelReferenceIndex))
 
 class EvtPublisher(object):
     """An Event provider"""
@@ -495,6 +520,15 @@ class PublisherMetadata(EvtHandle):
         :type: :class:`PropertyArray`
         """
         return PropertyArray(publishinfo(self, gdef.EvtPublisherMetadataChannelReferences).value)
+
+    @property
+    def channels_metadata(self):
+        """The :class:`ChannelMetadata` for each event this provider defines
+
+        :yield: :class:`ChannelMetadata`
+        """
+        return [ChannelMetadata(self, i) for i in range(self.chanrefs.size)]
+
 
     @property
     def events_metadata(self):
