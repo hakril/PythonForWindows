@@ -720,10 +720,10 @@ class PublisherMetadata(EvtHandle):
         return sbuff.value
 
     @property
-    def message_name(self):
+    def message_id(self):
         """
         """
-        return self.message(publishinfo(self, gdef.EvtPublisherMetadataPublisherMessageID).value)
+        return publishinfo(self, gdef.EvtPublisherMetadataPublisherMessageID).value
 
     @property
     def message_filepath(self):
