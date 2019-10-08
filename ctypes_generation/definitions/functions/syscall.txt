@@ -100,7 +100,7 @@ NTSTATUS WINAPI NtCreateSymbolicLinkObject (
 
 NTSTATUS WINAPI NtSetInformationProcess(
   _In_ HANDLE               ProcessHandle,
-  _In_ PROCESS_INFORMATION_CLASS ProcessInformationClass,
+  _In_ PROCESSINFOCLASS ProcessInformationClass,
   _In_ PVOID                ProcessInformation,
   _In_ ULONG                ProcessInformationLength
 );
