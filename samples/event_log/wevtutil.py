@@ -387,16 +387,16 @@ def format_event_metadata(publisher_metadata, event_metadata, args):
     )
 
 def enum_publishers(args):
-
+    """ enum-publishers verb implementation """
     manager = event_log.EvtlogManager()
     for publisher in sorted(list(manager.publishers), key=lambda pub:pub.name.lower()):    
         print(publisher.name)        
 
 def get_publisher(args):
+    """ get-publisher verb implementation """
     
     manager = event_log.EvtlogManager()
     publisher = manager.open_publisher(args.publisher_name)
-
 
     channels_info = "\n".join(map(lambda c: format_channel_metadata(publisher.metadata, c, args), publisher.metadata.channels_metadata))
     levels_info = "\n".join(map(lambda l: format_level_metadata(publisher.metadata, l, args), publisher.metadata.levels_metadata))
@@ -493,6 +493,7 @@ if __name__ == '__main__':
 
     import argparse
     parser = argparse.ArgumentParser("wevtutil script reimplementation using PythonForWindows")
+    parser.add_argument("-v", "--verbose", action="store_true", help="active verbose logging")
     action_parsers = parser.add_subparsers(dest="action", help="subparsers for action specific arguments")
 
     # we can't express shorthands easily like ep for enum-publishers since only Python3's argparse surpport parser "aliases"
@@ -516,6 +517,12 @@ if __name__ == '__main__':
 
 
     args = parser.parse_args()
+
+    if args.verbose:
+        logging.basicConfig(level=logging.DEBUG)
+    else:
+        logging.basicConfig(level=logging.INFO)
+
     main(args)
 
 
