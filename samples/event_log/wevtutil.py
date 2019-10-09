@@ -114,11 +114,18 @@ class RealtimeEventLogger(RealtimeEventLoggerBase):
                 # Deserialize event.user_data based on the event_metadata xml template
                 message_data = event.user_data
                 message_params = self.parse_user_data(event_metadata.template, message_data)
-
                 logging.debug("message params : %s" %  message_params)
 
+
+                try:
+                    template_message = self.publisher.metadata.message(event_metadata.message_id)
+                    logging.debug("template_message : %s" %  message_params)
+                except WindowsError as e:
+                    if e.winerror != gdef.ERROR_INVALID_PARAMETER:
+                        raise
+                    return
+
                 # "sprintf" the message using the event format message as well as the deserialized elements
-                template_message = self.publisher.metadata.message(event_metadata.message_id)
                 event_message = self.format_event_log_message(template_message, message_params)
                 
                 print(event_message)
