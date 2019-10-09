@@ -340,7 +340,7 @@ def format_opcode_metadata(publisher_metadata, opcode_metadata, args):
         #"      opcode: {opcode.task_value:d}",  # TODO
         "    message: {opcode_message:s}", 
     ]).format(
-        level=opcode_metadata, 
+        opcode=opcode_metadata, 
         opcode_message=get_message(publisher_metadata, opcode_metadata.message_id, args.gm)
     )
 
