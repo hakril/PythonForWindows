@@ -416,6 +416,7 @@ class ChannelConfig(EvtHandle):
     def enabled(self):
         return bool(chaninfo(self, gdef.EvtChannelConfigEnabled).value)
 
+
     @property
     def classic(self):
         """``True`` if the channel is a classic event channel (for example the Application or System log)"""

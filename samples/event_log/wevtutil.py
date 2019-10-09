@@ -158,16 +158,26 @@ class RealtimeEventLogger(RealtimeEventLoggerBase):
             value = self.parse_unicode_string(stream)
         elif in_type == "win:UInt8":
             value = struct.unpack("B", stream.read(1))[0]
+
+        elif in_type == "win:Int32":
+            value = struct.unpack("I", stream.read(4))[0]
         elif in_type == "win:UInt32":
             value = struct.unpack("I", stream.read(4))[0]
         elif in_type == "win:HexInt32":
             value = struct.unpack("I", stream.read(4))[0]
         elif in_type == "xs:unsignedLong":
             value = struct.unpack("I", stream.read(4))[0]
+
         elif in_type == "win:UInt64":
             value = struct.unpack("Q", stream.read(8))[0]
         elif in_type == "win:Pointer":
             value = struct.unpack("Q", stream.read(8))[0]
+        elif in_type == "win:Double":
+            value = struct.unpack("Q", stream.read(8))[0]
+
+        elif in_type == "win:Boolean":
+            value = struct.unpack("I", stream.read(4))[0] == 1
+
         elif in_type == "win:Binary":
             if not length:
                 raise ValueError(" param_in_type (%s) cannot be used with a null length value" % in_type)
@@ -175,6 +185,7 @@ class RealtimeEventLogger(RealtimeEventLoggerBase):
             # TODO : we should return the raw bytes buffer, since get_param_str_format is too crude 
             #        to properly display win:SocketAddress parameters
             value = binascii.hexlify(stream.read(length)) 
+
         elif in_type == "win:GUID":
             guid_data = struct.unpack("IHHBBBBBBBB", stream.read(16))
             value = gdef.GUID.from_raw(*guid_data).to_string()
@@ -185,7 +196,10 @@ class RealtimeEventLogger(RealtimeEventLoggerBase):
 
     def get_param_str_format(self, param_out_type):
         PYTHON_FORMAT_DICT = {
+            "xs:boolean" : "s", # "True" or "False"
             "xs:unsignedByte" : "02x",
+            "xs:int" : "d",
+            "xs:double" : "f",
             "xs:unsignedInt" : "d",
             "xs:unsignedLong" : "d",
             "win:ErrorCode"  : "x",
