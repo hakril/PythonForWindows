@@ -1,0 +1,46 @@
+ATOM AddAtomA(
+  LPCSTR lpString
+);
+
+
+ATOM AddAtomW(
+  LPCWSTR lpString
+);
+
+
+ATOM GlobalAddAtomA(
+  LPCSTR lpString
+);
+
+ATOM GlobalAddAtomExA(
+  LPCSTR lpString,
+  DWORD  Flags
+);
+
+ATOM GlobalAddAtomExW(
+  LPCWSTR lpString,
+  DWORD   Flags
+);
+
+
+ATOM GlobalAddAtomW(
+  LPCWSTR lpString
+);
+
+
+ATOM GlobalDeleteAtom(
+  ATOM nAtom
+);
+
+
+UINT GlobalGetAtomNameA(
+  ATOM  nAtom,
+  LPSTR lpBuffer,
+  INT   nSize
+);
+
+UINT GlobalGetAtomNameW(
+  ATOM   nAtom,
+  LPWSTR lpBuffer,
+  INT    nSize
+);

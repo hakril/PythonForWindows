@@ -181,6 +181,18 @@ COM_ACCESS_RIGHT = gdef.FlagMapper(
     gdef.COM_ACTIVATE_REMOTE,
 )
 
+SERVICE_ACCESS_RIGHT = gdef.FlagMapper(
+    gdef.SERVICE_QUERY_CONFIG,
+    gdef.SERVICE_CHANGE_CONFIG,
+    gdef.SERVICE_QUERY_STATUS,
+    gdef.SERVICE_ENUMERATE_DEPENDENTS,
+    gdef.SERVICE_START,
+    gdef.SERVICE_STOP,
+    gdef.SERVICE_PAUSE_CONTINUE,
+    gdef.SERVICE_INTERROGATE,
+    gdef.SERVICE_USER_DEFINED_CONTROL,
+)
+
 
 SPECIFIC_ACCESS_RIGTH_BY_TYPE = {
     None: gdef.FlagMapper(),
@@ -204,6 +216,7 @@ SPECIFIC_ACCESS_RIGTH_BY_TYPE = {
     "job": JOB_ACCESS_RIGHT,
     "key": KEY_ACCESS_RIGHT,
     "com": COM_ACCESS_RIGHT,
+    "service": SERVICE_ACCESS_RIGHT,
 }
 
 # SD
@@ -646,6 +659,15 @@ class SecurityDescriptor(gdef.PSECURITY_DESCRIPTOR):
         gdef.SCOPE_SECURITY_INFORMATION     |
         gdef.PROCESS_TRUST_LABEL_SECURITY_INFORMATION
     )
+
+    # https://docs.microsoft.com/en-us/windows/win32/api/winsvc/nf-winsvc-queryserviceobjectsecurity
+    # Default flags for services
+    SERVICE_SECURITY_INFORMATION = (
+        gdef.OWNER_SECURITY_INFORMATION     |
+        gdef.GROUP_SECURITY_INFORMATION     |
+        gdef.DACL_SECURITY_INFORMATION
+    )
+
     """The default ``flags`` value for functions expecting a
     `SECURITY_INFORMATION <https://docs.microsoft.com/en-us/windows/desktop/SecAuthZ/security-information>`_.
 
@@ -830,6 +852,13 @@ class SecurityDescriptor(gdef.PSECURITY_DESCRIPTOR):
     def from_filename(cls, filename, query_sacl=False, flags=DEFAULT_SECURITY_INFORMATION):
         """Retrieve the security descriptor for the file ``filename``"""
         return cls._from_name_and_type(filename, gdef.SE_FILE_OBJECT, flags=flags, query_sacl=query_sacl)
+
+    @classmethod
+    def from_service(cls, filename, query_sacl=False, flags=SERVICE_SECURITY_INFORMATION):
+        """Retrieve the security descriptor for the service named ``service``"""
+        sd = cls._from_name_and_type(filename, gdef.SE_SERVICE, flags=flags, query_sacl=query_sacl)
+        sd.obj_type = "service"
+        return sd
 
     @classmethod
     def from_handle(cls, handle, query_sacl=False, flags=DEFAULT_SECURITY_INFORMATION, obj_type=None):
