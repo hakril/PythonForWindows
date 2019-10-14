@@ -165,7 +165,23 @@ class EvtEvent(EvtHandle):
         result = self.render(ctx, gdef.EvtRenderEventValues)
         return [r.value for r in result]
 
+    def get_raw_values(self, values, flags=gdef.EvtRenderContextValues):
+        nbelt = len(values)
+        pwstr_values = tuple(gdef.LPWSTR(v) for v in values)
+        pwstr_rarray = (gdef.LPWSTR * nbelt)(*pwstr_values)
+        # https://msdn.microsoft.com/en-us/library/windows/desktop/aa385352(v=vs.85).aspx
+        # An array of XPath expressions that uniquely identify a node or attribute in the event that you want to render.
+        # Each value will return 1 node :)
+        ctx = windows.winproxy.EvtCreateRenderContext(nbelt, pwstr_rarray, gdef.EvtRenderContextValues)
+        result = self.render(ctx, gdef.EvtRenderEventValues)
+        return list(result)
+
+
     # Properties arround common Event/System values
+    @property
+    def provider(self):
+        return self.system_values()[gdef.EvtSystemProviderName]
+
     @property
     def id(self):
         """The ID of the Event"""
@@ -207,7 +223,16 @@ class EvtEvent(EvtHandle):
 
         :type: :class:`EventMetadata`
         """
-        return self.channel.get_event_metadata(self.id)
+        try:
+            return self.channel.get_event_metadata(self.id)
+        except KeyError as e:
+            if not self.channel.config.classic:
+                raise
+        # id not found: try via the Provider in the event (classic channel)
+        return self.channel.get_classic_event_metadata(self.id, self.provider)
+
+
+
 
     # Test
     @property
@@ -218,6 +243,7 @@ class EvtEvent(EvtHandle):
         """
         # What about classic channels where there is no event_metadata ?
         # Return a dict with [0-1-2-3-4] as key ? raise ?
+        # Juste use the render_xml ?
         return {k:v for k,v in zip(self.metadata.event_data, self.event_values())}
 
 
@@ -311,6 +337,7 @@ class EvtChannel(object):
     def __init__(self, name):
         self.name = name
         self.event_metadata_by_id = {}
+        self.classic_event_metadata_by_id = {} # For classic only
 
     def query(self, filter=None, ids=None):
         """Query the event with the ``ids`` or perform a query with the raw query ``filter``
@@ -369,6 +396,14 @@ class EvtChannel(object):
         pub_metada = self.config.publisher.metadata
         self.event_metadata_by_id = {evtm.id: evtm for evtm in pub_metada.events_metadata}
         return self.event_metadata_by_id[id]
+
+    def get_classic_event_metadata(self, id, providername):
+        if providername not in self.classic_event_metadata_by_id:
+            # print("CALCUL FOR PROVIDER: <{0}> !!!!!!!!!!!!!!".format(providername))
+            publisher = EvtPublisher(providername)
+            events_metadata = {x.id: x for x in publisher.metadata.events_metadata}
+            self.classic_event_metadata_by_id[providername] = events_metadata
+        return self.classic_event_metadata_by_id[providername][id]
 
 
     def __repr__(self):
@@ -579,6 +614,13 @@ class EventMetadata(EvtHandle):
             result.append(data.attributes["name"].value)
         return result
 
+    def yolo(self):
+        template = self.template
+        if not template:
+            return None
+        xmltemplate = xml.dom.minidom.parseString(template)
+        return xmltemplate
+
 
 class EvtlogManager(object):
     """The main Evt class to open Evt channel/publisher and evtx file"""
@@ -668,12 +710,14 @@ class EvtlogManager(object):
         try:
             return self.open_channel(name)
         except WindowsError as e:
-            pass
+            if e.winerror == gdef.ERROR_ACCESS_DENIED:
+                raise
 
         try:
             return self.open_publisher(name)
         except WindowsError as e:
-            pass
+            if e.winerror == gdef.ERROR_ACCESS_DENIED:
+                raise
         # Raise FILE_NOT_FOUND if not found (last chance)
         return self.open_evtx_file(name)
 
