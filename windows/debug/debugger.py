@@ -3,7 +3,9 @@ from collections import defaultdict, namedtuple
 from contextlib import contextmanager
 
 import windows
+import windows.generated_def as gdef
 import windows.winobject.exception as winexception
+
 import windows.native_exec.simple_x86 as x86
 import windows.native_exec.simple_x64 as x64
 
@@ -72,6 +74,7 @@ class Debugger(object):
 
         # [start] -> (size, current_proctection, original_prot)
         self._virtual_protected_memory = [] # List of memory-range modified by a MemBP
+        self._current_debug_event = None
 
 
     @classmethod
@@ -132,8 +135,8 @@ class Debugger(object):
         del self._watched_pages[target.pid]
         del self._module_by_process[target.pid]
 
-        if target is self.current_process:
-            self._finish_debug_event(self.REMOVE_ME_debug_event, DBG_CONTINUE)
+        if target is self.current_process: # Bug if CTRL+C and current_process changed ?
+            self._finish_debug_event(self._current_debug_event, DBG_CONTINUE)
             self.current_process = None
             self.current_thread = None
 
@@ -171,13 +174,35 @@ class Debugger(object):
     def _debug_event_generator(self):
         while True:
             debug_event = DEBUG_EVENT()
-            winproxy.WaitForDebugEvent(debug_event)
+            try:
+                winproxy.WaitForDebugEvent(debug_event)
+            except KeyboardInterrupt as e:
+                # So we will go out of the loop because of a Ctrl+c
+                # BP trigger will not be called.
+                # So AT LEAST quit loop with a coherent context
+                # Fix thread PC if we just triggered a BP
+                if (debug_event.code == gdef.EXCEPTION_DEBUG_EVENT and
+                    debug_event.u.Exception.ExceptionRecord.ExceptionCode in [gdef.EXCEPTION_BREAKPOINT, gdef.STATUS_WX86_BREAKPOINT]):
+                        # This is a breakpoint:  One of ours ?
+                        bp_addr = debug_event.u.Exception.ExceptionRecord.ExceptionAddress
+                        if bp_addr in self.breakpoints[debug_event.dwProcessId]:
+                            # Leave the thread in a coherent state for detach
+                            # Should it be done in detach ?
+                            # And just stock the "Interrupted debug_event" here ?
+                            thread = self.threads[debug_event.dwThreadId]
+                            ctx = thread.context
+                            ctx.pc -= 1
+                            thread.set_context(ctx)
+                raise
+            finally: # If user Ctrl+c -> we could raise just at the return of WaitForDebugEvent
+                self._current_debug_event = debug_event
             yield debug_event
 
     def _finish_debug_event(self, event, action):
         if action not in [windef.DBG_CONTINUE, windef.DBG_EXCEPTION_NOT_HANDLED]:
             raise ValueError('Unknow action : <0>'.format(action))
         winproxy.ContinueDebugEvent(event.dwProcessId, event.dwThreadId, action)
+        self._current_debug_event = None
 
     def _add_exe_to_module_list(self, create_process_event):
         """Add the intial exe file described by create_process_event to the list of module in the process"""
@@ -262,6 +287,7 @@ class Debugger(object):
         addr = self._resolve(bp.addr, target)
         if addr is None:
             return False
+        dbgprint("Setting soft-BP at <{0:#x}> in <{1}>".format(addr, target), "DBG")
         bp._addr = addr
         self._memory_save[target.pid][addr] = target.read_memory(addr, 1)
         self.breakpoints[target.pid][addr] = bp
@@ -303,6 +329,7 @@ class Debugger(object):
         x[int(empty_drx)] = bp
         target.set_context(ctx)
         self.breakpoints[target.owner.pid][addr] = bp
+        dbgprint("Setting HXBP at <{0:#x}> in <{1}> (Dr{2})".format(addr, target, empty_drx), "DBG")
         return True
 
     def _remove_breakpoint_HXBP(self, bp, target):
@@ -496,6 +523,12 @@ class Debugger(object):
 
     def _handle_exception_breakpoint(self, exception, excp_addr):
         excp_bitness = self.get_exception_bitness(exception)
+        YOLO = False
+        if self.current_thread.context.EEFlags.TF:
+            dbgprint("Single step as begin of _handle_exception_breakpoint", "DBG")
+            # import pdb;pdb.set_trace()
+            YOLO = True
+
         # Sub-method _do_setup() ?
         dbg_has_setup = None
         if not self.first_bp_encoutered:
@@ -521,7 +554,9 @@ class Debugger(object):
             continue_flag = self._dispatch_breakpoint(exception, excp_addr)
             if self._killed_in_action():
                 return continue_flag
-            self._explicit_single_step[self.current_thread.tid] = self.current_thread.context.EEFlags.TF
+            self._explicit_single_step[self.current_thread.tid] = self.current_thread.context.EEFlags.TF and not YOLO
+            if self._explicit_single_step[self.current_thread.tid]:
+                dbgprint("Someone ask for an explicit Single step", "DBG")
             if excp_addr in self.breakpoints[self.current_process.pid]:
                 # Setup BP if not suppressed
                 self._pass_breakpoint(excp_addr)
@@ -539,6 +574,8 @@ class Debugger(object):
                     self.on_single_step(exception)
             if not self._killed_in_action():
                 self._explicit_single_step[self.current_thread.tid] = self.current_thread.context.EEFlags.TF
+                if self._explicit_single_step[self.current_thread.tid]:
+                    dbgprint("Someone ask for an explicit Single step - 7", "DBG")
             return DBG_CONTINUE
         elif excp_addr in self.breakpoints[self.current_process.pid]:
             # Verif that's not a standard BP ?
@@ -549,6 +586,8 @@ class Debugger(object):
                 return DBG_CONTINUE
             ctx = self.current_thread.context
             self._explicit_single_step[self.current_thread.tid] = ctx.EEFlags.TF
+            if self._explicit_single_step[self.current_thread.tid]:
+                dbgprint("Someone ask for an explicit Single step - 2", "DBG")
             if excp_addr in self.breakpoints[self.current_process.pid]:
                 ctx.EEFlags.RF = 1
                 self.current_thread.set_context(ctx)
@@ -561,6 +600,8 @@ class Debugger(object):
             # Does not handle case where EEFlags.TF was by the debugge before trigering the exception
             # Should set the flag explicitly in single_step ? and not just use EEFlags.TF ?
             self._explicit_single_step[self.current_thread.tid] = self.current_thread.context.EEFlags.TF
+            if self._explicit_single_step[self.current_thread.tid]:
+                dbgprint("Someone ask for an explicit Single step - 3", "DBG")
             return continue_flag
         else:
             with self.DisabledMemoryBreakpoint():
@@ -570,6 +611,8 @@ class Debugger(object):
             # Does not handle case where EEFlags.TF was by the debugge before trigering the exception
             # Should set the flag explicitly in single_step ? and not just use EEFlags.TF ?
             self._explicit_single_step[self.current_thread.tid] = self.current_thread.context.EEFlags.TF
+            if self._explicit_single_step[self.current_thread.tid]:
+                dbgprint("Someone ask for an explicit Single step - 4", "DBG")
             return continue_flag
 
     #  === Testing PAGE_NOACCESS(0x1L) ===
@@ -616,6 +659,8 @@ class Debugger(object):
         if self._killed_in_action():
             return continue_flag
         self._explicit_single_step[self.current_thread.tid] = self.current_thread.context.EEFlags.TF
+        if self._explicit_single_step[self.current_thread.tid]:
+            dbgprint("Someone ask for an explicit Single step - 5", "DBG")
         # If BP has not been removed in trigger, pas it
         if fault_page in cp_watch_page and mem_bp in cp_watch_page[fault_page].bps:
             self._pass_memory_breakpoint(mem_bp, original_prot, fault_page)
@@ -636,17 +681,23 @@ class Debugger(object):
         excp_code = exception.ExceptionRecord.ExceptionCode
         excp_addr = exception.ExceptionRecord.ExceptionAddress
         if excp_code in [EXCEPTION_BREAKPOINT, STATUS_WX86_BREAKPOINT]:
+            dbgprint("Handle exception as breakpoint", "DBG")
             return self._handle_exception_breakpoint(exception, excp_addr)
         elif excp_code in [EXCEPTION_SINGLE_STEP, STATUS_WX86_SINGLE_STEP]:
+            dbgprint("Handle exception as single step", "DBG")
             return self._handle_exception_singlestep(exception, excp_addr)
         elif excp_code == EXCEPTION_ACCESS_VIOLATION:
+            dbgprint("Handle exception as access_violation", "DBG")
             return self._handle_exception_access_violation(exception, excp_addr)
         else:
             with self.DisabledMemoryBreakpoint():
+                dbgprint("Handle exception as on_exception", "DBG")
                 continue_flag = self.on_exception(exception)
             if self._killed_in_action():
                 return continue_flag
             self._explicit_single_step[self.current_thread.tid] = self.current_thread.context.EEFlags.TF
+            if self._explicit_single_step[self.current_thread.tid]:
+                dbgprint("Someone ask for an explicit Single step - 6", "DBG")
             return continue_flag
 
 
@@ -817,7 +868,6 @@ class Debugger(object):
     def loop(self):
         """Debugging loop: handle event / dispatch to breakpoint. Returns when all targets are dead/detached"""
         for debug_event in self._debug_event_generator():
-            self.REMOVE_ME_debug_event = debug_event
             dbg_continue_flag = self._dispatch_debug_event(debug_event)
             if dbg_continue_flag is None:
                 dbg_continue_flag = DBG_CONTINUE
@@ -965,6 +1015,15 @@ class Debugger(object):
         if exc.ExceptionRecord.ExceptionCode in [STATUS_WX86_BREAKPOINT, STATUS_WX86_SINGLE_STEP]:
             return 32
         return 64
+
+    @staticmethod
+    def kill_on_exit(choice):
+        """If set to True(default in Windows) will kill all attached process on thread exit.
+        Otherwise, the thread detaches from all processes being debugged on exit.
+
+        See: https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-debugsetprocesskillonexit
+        """
+        return windows.winproxy.DebugSetProcessKillOnExit(choice)
 
     # Public callback
     def on_setup(self):

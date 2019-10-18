@@ -396,6 +396,7 @@ def test_standard_breakpoint_remove(proc32_64_debug, bptype):
     class TSTBP(bptype):
         TARGET = windows.winproxy.CreateFileW
         def trigger(self, dbg, exc):
+            # import pdb;pdb.set_trace()
             addr = exc.ExceptionRecord.ExceptionAddress
             ctx = dbg.current_thread.context
             filename = self.extract_arguments(dbg.current_process, dbg.current_thread)["lpFileName"]
@@ -403,6 +404,7 @@ def test_standard_breakpoint_remove(proc32_64_debug, bptype):
 
     d = windows.debug.Debugger(proc32_64_debug)
     the_bp = TSTBP("kernel32!CreateFileW")
+    # import pdb;pdb.set_trace()
     d.add_bp(the_bp)
     threading.Thread(target=do_check).start()
     d.loop()
@@ -565,3 +567,48 @@ def test_bp_exe_by_name(proc32_64_debug):
     d.add_bp(TSTBP("{name}!{offset}".format(name=exename, offset=entrypoint)))
     d.loop()
     assert TSTBP.COUNTER == 1
+
+
+def test_keyboardinterrupt_when_bp_event(proc32_64_debug, monkeypatch):
+    class ShouldNotTrigger(windows.debug.Breakpoint):
+        COUNTER = 0
+        def trigger(self, dbg, exc):
+            raise ValueError("This BP should not trigger in this test !")
+
+    real_WaitForDebugEvent = windows.winproxy.WaitForDebugEvent
+
+    def WaitForDebugEvent_KeyboardInterrupt(debug_event):
+        real_WaitForDebugEvent(debug_event)
+        if not debug_event.code == gdef.EXCEPTION_DEBUG_EVENT:
+            return
+        if not debug_event.u.Exception.ExceptionRecord.ExceptionCode in [gdef.EXCEPTION_BREAKPOINT, gdef.STATUS_WX86_BREAKPOINT]:
+            return # Not a BP
+        if debug_event.u.Exception.ExceptionRecord.ExceptionAddress == addr:
+            # Our own breakpoint
+            # Trigger the fake Ctrl+c
+            raise KeyboardInterrupt("TEST BP")
+
+    xx = monkeypatch.setattr(windows.winproxy, "WaitForDebugEvent", WaitForDebugEvent_KeyboardInterrupt)
+
+    # This should emultate a ctrl+c on when waiting for the event
+    # Our goal is to set the target back to a good state :)
+    TEST_CODE = "\xeb\xfe\xff\xff\xff\xff\xff" # Loop + invalid instr
+    addr = proc32_64_debug.virtual_alloc(0x1000)
+    proc32_64_debug.write_memory(addr, TEST_CODE)
+    d = windows.debug.Debugger(proc32_64_debug)
+    bad_thread = proc32_64_debug.create_thread(addr, 0)
+    d.add_bp(ShouldNotTrigger(addr))
+    d.kill_on_exit(False)
+    try:
+        d.loop()
+    except KeyboardInterrupt as e:
+        for t in proc32_64_debug.threads:
+            t.suspend()
+        d.detach()
+        # So we have detached when a BP was triggered
+        # We should have the original memory under the BP
+        # We should have EIP/RIP decremented by one (should be at <addr> not <addr+1>
+        assert proc32_64_debug.read_memory(addr, len(TEST_CODE)) == TEST_CODE
+        assert bad_thread.context.pc == addr
+    else:
+        raise ValueError("Should have raised")
