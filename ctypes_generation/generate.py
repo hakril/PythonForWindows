@@ -87,8 +87,9 @@ class StructureParsedFile(ParsedFile):
                 self.imports_by_struct[field_type.name] = struct.name
             try:
                 int(nb_rep)
-            except:
-                self.add_imports(nb_rep)
+            except TypeError:
+                # nb_rep is a ComplexArrayExpression
+                self.add_imports(*nb_rep.get_names())
 
     def asser_struct_not_already_in_import(self, struct):
         for sname in [struct.name] + struct.typedef.keys():

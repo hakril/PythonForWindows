@@ -39,6 +39,10 @@ class StarToken(NoValueToken):
     value = "*"
     pass
 
+class PlusToken(NoValueToken):
+    value = "+"
+    pass
+
 class OpenBracketToken(NoValueToken):
     value = "{"
     pass
@@ -79,7 +83,7 @@ class Lexer(object):
     token_chr = {"*" : StarToken, "[" : OpenSquareBracketToken, "]" : CloseSquareBracketToken,
                     "{" : OpenBracketToken, "}" : CloseBracketToken, ";" : SemiColonToken,
                     "," : CommaToken, "(" : OpenParenthesisToken, ")" :  CloseParenthesisToken, "#" : SharpToken, "=" : EqualToken,
-                    ":": ColonToken}
+                    ":": ColonToken, "+": PlusToken}
 
     def __init__(self, code, newlinetoken=False):
         self.code = code

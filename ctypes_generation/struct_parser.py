@@ -1,6 +1,6 @@
 import dummy_wintypes
 import itertools
-from winstruct import WinStruct, WinUnion, WinStructType, Ptr, WinEnum, BitFieldValue
+from winstruct import WinStruct, WinUnion, WinStructType, Ptr, WinEnum, BitFieldValue, ComplexArrayExpression
 from simpleparser import *
 
 
@@ -14,9 +14,15 @@ class WinStructParser(Parser):
         if type(self.peek()) == OpenSquareBracketToken:
             # Array
             self.assert_token_type(OpenSquareBracketToken)
-            number = self.assert_token_type(NameToken).value
+            nb_rep = ComplexArrayExpression()
+            while type(self.peek()) != CloseSquareBracketToken:
+                tok = self.next_token()
+                if type(tok) not in (NameToken, PlusToken):
+                    raise ValueError("Array expression only accept names/+")
+                is_name = (type(tok) == NameToken)
+                nb_rep.add_token_to_expression(tok.value, is_name)
             self.assert_token_type(CloseSquareBracketToken)
-            return number
+            return nb_rep # YOLO, import
         # Bitfield
         self.assert_token_type(ColonToken)
         nb_bits = self.promote_to_int(self.next_token())

@@ -14,6 +14,30 @@ class BitFieldValue(object):
     def __int__(self):
         return self.nb_bits
 
+    def generate_ctypes(self):
+        return self.nb_bits
+
+class ComplexArrayExpression(object):
+    def __init__(self):
+        self.values = []
+        self.names = []
+
+    def add_token_to_expression(self, value, isname=False):
+        self.values.append(value)
+        if isname:
+            try:
+                int(value) # An INT ? ignore
+            except ValueError:
+                self.names.append(value)
+
+    def get_names(self):
+        return self.names
+
+    def generate_ctypes(self):
+        # if len(self.values) > 1:
+            # import pdb;pdb.set_trace()
+        return "({0})".format(" ".join(self.values))
+
 class WinStructType(object):
     def __init__(self, name):
         self.name = name
@@ -107,9 +131,9 @@ class WinStruct(object):
             res += ["{0}._pack_ = ".format(self.pack)]
         res += ["{0}._fields_ = [".format(self.name)]
         for (ftype, name, nb_rep) in self.fields:
-            if isinstance(nb_rep, BitFieldValue):
-                res += ['    ("{0}", {1}, {2}),'.format(name, ftype.generate_ctypes(), nb_rep.nb_bits)]
-            elif  nb_rep == 1:
+            if isinstance(nb_rep, (BitFieldValue, ComplexArrayExpression)):
+                nb_rep = nb_rep.generate_ctypes()
+            if nb_rep == 1:
                 res+= ['    ("{0}", {1}),'.format(name, ftype.generate_ctypes())]
             else:
                 res+= ['    ("{0}", {1} * {2}),'.format(name, ftype.generate_ctypes(), nb_rep)]
@@ -135,10 +159,10 @@ class WinStruct(object):
 
 
         for (ftype, name, nb_rep) in self.fields:
-            if isinstance(nb_rep, BitFieldValue):
+            if isinstance(nb_rep, (BitFieldValue, ComplexArrayExpression)):
                 # Should I check 'ftype' somewhere when we have a bitfield ?
-                res+= '        ("{0}", {1}, {2}),\n'.format(name, ftype.generate_ctypes(), nb_rep.nb_bits)
-            elif  nb_rep == 1:
+                nb_rep = nb_rep.generate_ctypes()
+            if nb_rep == 1:
                 res+= '        ("{0}", {1}),\n'.format(name, ftype.generate_ctypes())
             else:
                 res+= '        ("{0}", {1} * {2}),\n'.format(name, ftype.generate_ctypes(), nb_rep)
