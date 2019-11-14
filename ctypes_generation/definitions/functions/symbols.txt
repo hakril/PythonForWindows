@@ -105,6 +105,148 @@ BOOL WINAPI SymEnumerateModules64(
   _In_ PVOID                       UserContext
 );
 
+BOOL SymNext(
+  HANDLE       hProcess,
+  PSYMBOL_INFO si
+);
+
+BOOL SymNextW(
+  HANDLE        hProcess,
+  PSYMBOL_INFOW siw
+);
+
+BOOL SymPrev(
+  HANDLE       hProcess,
+  PSYMBOL_INFO si
+);
+
+BOOL SymPrevW(
+  HANDLE        hProcess,
+  PSYMBOL_INFOW siw
+);
+
+BOOL SymSetContext(
+  HANDLE                hProcess,
+  PIMAGEHLP_STACK_FRAME StackFrame,
+  PIMAGEHLP_CONTEXT     Context
+);
+
+BOOL SymSetExtendedOption(
+  IMAGEHLP_EXTENDED_OPTIONS option,
+  BOOL                      value
+);
+
+BOOL SymSrvGetFileIndexes(
+  PCSTR  File,
+  GUID   *Id,
+  PDWORD Val1,
+  PDWORD Val2,
+  DWORD  Flags
+);
+
+
+BOOL SymSrvGetFileIndexesW(
+  PCWSTR File,
+  GUID   *Id,
+  PDWORD Val1,
+  PDWORD Val2,
+  DWORD  Flags
+);
+
+BOOL SymSrvGetFileIndexInfo(
+  PCSTR              File,
+  PSYMSRV_INDEX_INFO Info,
+  DWORD              Flags
+);
+
+BOOL SymSrvGetFileIndexInfoW(
+  PCWSTR              File,
+  PSYMSRV_INDEX_INFOW Info,
+  DWORD               Flags
+);
+
+BOOL SymSrvGetFileIndexString(
+  HANDLE hProcess,
+  PCSTR  SrvPath,
+  PCSTR  File,
+  PSTR   Index,
+  SIZE_T Size,
+  DWORD  Flags
+);
+
+BOOL SymSrvGetFileIndexStringW(
+  HANDLE hProcess,
+  PCWSTR SrvPath,
+  PCWSTR File,
+  PWSTR  Index,
+  SIZE_T Size,
+  DWORD  Flags
+);
+
+BOOL SymUnDName(
+  PIMAGEHLP_SYMBOL sym,
+  PSTR             UnDecName,
+  DWORD            UnDecNameLength
+);
+
+BOOL SymUnDName64(
+  PIMAGEHLP_SYMBOL64 sym,
+  PSTR               UnDecName,
+  DWORD              UnDecNameLength
+);
+
+
+BOOL SymUnloadModule(
+  HANDLE hProcess,
+  DWORD  BaseOfDll
+);
+
+BOOL SymUnloadModule64(
+  HANDLE  hProcess,
+  DWORD64 BaseOfDll
+);
+
+DWORD UnDecorateSymbolName(
+  PCSTR name,
+  PSTR  outputString,
+  DWORD maxStringLength,
+  DWORD flags
+);
+
+DWORD UnDecorateSymbolNameW(
+  PCWSTR name,
+  PWSTR  outputString,
+  DWORD  maxStringLength,
+  DWORD  flags
+);
+
+BOOL SymCleanup(
+  HANDLE hProcess
+);
+
+
+BOOL SymEnumProcesses(
+  PSYM_ENUMPROCESSES_CALLBACK EnumProcessesCallback,
+  PVOID                       UserContext
+);
+
+
+BOOL SymEnumSymbolsForAddr(
+  HANDLE                         hProcess,
+  DWORD64                        Address,
+  PSYM_ENUMERATESYMBOLS_CALLBACK EnumSymbolsCallback,
+  PVOID                          UserContext
+);
+
+
+BOOL SymEnumSymbolsForAddrW(
+  HANDLE                          hProcess,
+  DWORD64                         Address,
+  PSYM_ENUMERATESYMBOLS_CALLBACKW EnumSymbolsCallback,
+  PVOID                           UserContext
+);
+
+
 
 BOOL WINAPI SymGetTypeFromName(
   _In_ HANDLE hProcess,
@@ -146,4 +288,77 @@ BOOL SymSearchW(
   PSYM_ENUMERATESYMBOLS_CALLBACKW EnumSymbolsCallback,
   PVOID                           UserContext,
   DWORD                           Options
+);
+
+PVOID SymFunctionTableAccess(
+  HANDLE hProcess,
+  DWORD  AddrBase
+);
+
+DWORD SymGetModuleBase(
+  HANDLE hProcess,
+  DWORD  dwAddr
+);
+
+BOOL SymRefreshModuleList(
+  HANDLE hProcess
+);
+
+BOOL SymRegisterCallback(
+  HANDLE                      hProcess,
+  PSYMBOL_REGISTERED_CALLBACK CallbackFunction,
+  PVOID                       UserContext
+);
+
+BOOL SymRegisterCallback64(
+  HANDLE                        hProcess,
+  PSYMBOL_REGISTERED_CALLBACK64 CallbackFunction,
+  ULONG64                       UserContext
+);
+
+
+BOOL SymRegisterCallbackW64(
+  HANDLE                        hProcess,
+  PSYMBOL_REGISTERED_CALLBACK64 CallbackFunction,
+  ULONG64                       UserContext
+);
+
+/* Stack walking */
+
+BOOL StackWalk64(
+  DWORD                            MachineType,
+  HANDLE                           hProcess,
+  HANDLE                           hThread,
+  LPSTACKFRAME64                   StackFrame,
+  PVOID                            ContextRecord,
+  PREAD_PROCESS_MEMORY_ROUTINE64   ReadMemoryRoutine,
+  PFUNCTION_TABLE_ACCESS_ROUTINE64 FunctionTableAccessRoutine,
+  PGET_MODULE_BASE_ROUTINE64       GetModuleBaseRoutine,
+  PTRANSLATE_ADDRESS_ROUTINE64     TranslateAddress
+);
+
+BOOL StackWalkEx(
+  DWORD                            MachineType,
+  HANDLE                           hProcess,
+  HANDLE                           hThread,
+  LPSTACKFRAME_EX                  StackFrame,
+  PVOID                            ContextRecord,
+  PREAD_PROCESS_MEMORY_ROUTINE64   ReadMemoryRoutine,
+  PFUNCTION_TABLE_ACCESS_ROUTINE64 FunctionTableAccessRoutine,
+  PGET_MODULE_BASE_ROUTINE64       GetModuleBaseRoutine,
+  PTRANSLATE_ADDRESS_ROUTINE64     TranslateAddress,
+  DWORD                            Flags
+);
+
+
+BOOL StackWalk(
+  DWORD                          MachineType,
+  HANDLE                         hProcess,
+  HANDLE                         hThread,
+  LPSTACKFRAME                   StackFrame,
+  PVOID                          ContextRecord,
+  PREAD_PROCESS_MEMORY_ROUTINE   ReadMemoryRoutine,
+  PFUNCTION_TABLE_ACCESS_ROUTINE FunctionTableAccessRoutine,
+  PGET_MODULE_BASE_ROUTINE       GetModuleBaseRoutine,
+  PTRANSLATE_ADDRESS_ROUTINE     TranslateAddress
 );

@@ -395,6 +395,26 @@ def ControlService(hService, dwControl, lpServiceStatus):
 def CloseServiceHandle(hSCObject):
     return CloseServiceHandle.ctypes_function(hSCObject)
 
+@Advapi32Proxy()
+def QueryServiceStatus(hService, lpServiceStatus):
+    return QueryServiceStatus.ctypes_function(hService, lpServiceStatus)
+
+@Advapi32Proxy()
+def QueryServiceStatusEx(hService, InfoLevel, lpBuffer, cbBufSize, pcbBytesNeeded):
+    return QueryServiceStatusEx.ctypes_function(hService, InfoLevel, lpBuffer, cbBufSize, pcbBytesNeeded)
+
+@Advapi32Proxy()
+def DeleteService(hService):
+    return DeleteService.ctypes_function(hService)
+
+@Advapi32Proxy()
+def GetServiceDisplayNameA(hSCManager, lpServiceName, lpDisplayName, lpcchBuffer):
+    return GetServiceDisplayNameA.ctypes_function(hSCManager, lpServiceName, lpDisplayName, lpcchBuffer)
+
+@Advapi32Proxy()
+def GetServiceDisplayNameW(hSCManager, lpServiceName, lpDisplayName, lpcchBuffer):
+    return GetServiceDisplayNameW.ctypes_function(hSCManager, lpServiceName, lpDisplayName, lpcchBuffer)
+
 # Event log
 
 @Advapi32Proxy()

@@ -1,0 +1,5 @@
+LPVOID HeapAlloc(
+  HANDLE hHeap,
+  DWORD  dwFlags,
+  SIZE_T dwBytes
+);

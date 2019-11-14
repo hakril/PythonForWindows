@@ -1,0 +1,85 @@
+//
+// Info levels for QueryServiceStatusEx
+//
+
+typedef enum _SC_STATUS_TYPE {
+    SC_STATUS_PROCESS_INFO      = 0
+} SC_STATUS_TYPE;
+
+//
+// Info levels for EnumServicesStatusEx
+//
+typedef enum _SC_ENUM_TYPE {
+    SC_ENUM_PROCESS_INFO        = 0
+} SC_ENUM_TYPE;
+
+typedef struct _SERVICE_STATUS {
+    DWORD   dwServiceType;
+    DWORD   dwCurrentState;
+    DWORD   dwControlsAccepted;
+    DWORD   dwWin32ExitCode;
+    DWORD   dwServiceSpecificExitCode;
+    DWORD   dwCheckPoint;
+    DWORD   dwWaitHint;
+} SERVICE_STATUS, *LPSERVICE_STATUS;
+
+typedef struct _SERVICE_STATUS_PROCESS {
+    DWORD   dwServiceType;
+    DWORD   dwCurrentState;
+    DWORD   dwControlsAccepted;
+    DWORD   dwWin32ExitCode;
+    DWORD   dwServiceSpecificExitCode;
+    DWORD   dwCheckPoint;
+    DWORD   dwWaitHint;
+    DWORD   dwProcessId;
+    DWORD   dwServiceFlags;
+} SERVICE_STATUS_PROCESS, *LPSERVICE_STATUS_PROCESS;
+
+typedef struct _ENUM_SERVICE_STATUS_PROCESSA {
+    LPSTR                     lpServiceName;
+    LPSTR                     lpDisplayName;
+    SERVICE_STATUS_PROCESS    ServiceStatusProcess;
+} ENUM_SERVICE_STATUS_PROCESSA, *LPENUM_SERVICE_STATUS_PROCESSA;
+
+
+typedef struct _ENUM_SERVICE_STATUS_PROCESSW {
+    LPWSTR                    lpServiceName;
+    LPWSTR                    lpDisplayName;
+    SERVICE_STATUS_PROCESS    ServiceStatusProcess;
+} ENUM_SERVICE_STATUS_PROCESSW, *LPENUM_SERVICE_STATUS_PROCESSW;
+
+typedef struct _ENUM_SERVICE_STATUSA {
+  LPSTR          lpServiceName;
+  LPSTR          lpDisplayName;
+  SERVICE_STATUS ServiceStatus;
+} ENUM_SERVICE_STATUSA, *LPENUM_SERVICE_STATUSA;
+
+typedef struct _ENUM_SERVICE_STATUSW {
+  LPWSTR         lpServiceName;
+  LPWSTR         lpDisplayName;
+  SERVICE_STATUS ServiceStatus;
+} ENUM_SERVICE_STATUSW, *LPENUM_SERVICE_STATUSW;
+
+typedef struct _QUERY_SERVICE_CONFIGA {
+  DWORD dwServiceType;
+  DWORD dwStartType;
+  DWORD dwErrorControl;
+  LPSTR lpBinaryPathName;
+  LPSTR lpLoadOrderGroup;
+  DWORD dwTagId;
+  LPSTR lpDependencies;
+  LPSTR lpServiceStartName;
+  LPSTR lpDisplayName;
+} QUERY_SERVICE_CONFIGA, *LPQUERY_SERVICE_CONFIGA;
+
+typedef struct _QUERY_SERVICE_CONFIGW {
+  DWORD  dwServiceType;
+  DWORD  dwStartType;
+  DWORD  dwErrorControl;
+  LPWSTR lpBinaryPathName;
+  LPWSTR lpLoadOrderGroup;
+  DWORD  dwTagId;
+  LPWSTR lpDependencies;
+  LPWSTR lpServiceStartName;
+  LPWSTR lpDisplayName;
+} QUERY_SERVICE_CONFIGW, *LPQUERY_SERVICE_CONFIGW;

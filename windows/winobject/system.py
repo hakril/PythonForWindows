@@ -61,12 +61,12 @@ class System(object):
         """
         return volume.enum_logical_drive()
 
-    @property
+    @utils.fixedpropety
     def services(self):
         """The list of services
 
         :type: [:class:`~windows.winobject.service.ServiceA`] -- A list of Service"""
-        return service.enumerate_services()
+        return service.ServiceManager()
 
     @property
     def handles(self):

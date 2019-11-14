@@ -72,3 +72,196 @@ BOOL ControlService(
   DWORD            dwControl,
   LPSERVICE_STATUS lpServiceStatus
 );
+
+BOOL QueryServiceStatus(
+  SC_HANDLE        hService,
+  LPSERVICE_STATUS lpServiceStatus
+);
+
+BOOL QueryServiceStatusEx(
+  SC_HANDLE      hService,
+  SC_STATUS_TYPE InfoLevel,
+  LPBYTE         lpBuffer,
+  DWORD          cbBufSize,
+  LPDWORD        pcbBytesNeeded
+);
+
+
+BOOL ChangeServiceConfig2A(
+  SC_HANDLE hService,
+  DWORD     dwInfoLevel,
+  LPVOID    lpInfo
+);
+
+BOOL ChangeServiceConfig2W(
+  SC_HANDLE hService,
+  DWORD     dwInfoLevel,
+  LPVOID    lpInfo
+);
+
+BOOL ChangeServiceConfigA(
+  SC_HANDLE hService,
+  DWORD     dwServiceType,
+  DWORD     dwStartType,
+  DWORD     dwErrorControl,
+  LPCSTR    lpBinaryPathName,
+  LPCSTR    lpLoadOrderGroup,
+  LPDWORD   lpdwTagId,
+  LPCSTR    lpDependencies,
+  LPCSTR    lpServiceStartName,
+  LPCSTR    lpPassword,
+  LPCSTR    lpDisplayName
+);
+
+BOOL ChangeServiceConfigW(
+  SC_HANDLE hService,
+  DWORD     dwServiceType,
+  DWORD     dwStartType,
+  DWORD     dwErrorControl,
+  LPCWSTR   lpBinaryPathName,
+  LPCWSTR   lpLoadOrderGroup,
+  LPDWORD   lpdwTagId,
+  LPCWSTR   lpDependencies,
+  LPCWSTR   lpServiceStartName,
+  LPCWSTR   lpPassword,
+  LPCWSTR   lpDisplayName
+);
+
+BOOL QueryServiceConfig2A(
+  SC_HANDLE hService,
+  DWORD     dwInfoLevel,
+  LPBYTE    lpBuffer,
+  DWORD     cbBufSize,
+  LPDWORD   pcbBytesNeeded
+);
+
+BOOL QueryServiceConfig2W(
+  SC_HANDLE hService,
+  DWORD     dwInfoLevel,
+  LPBYTE    lpBuffer,
+  DWORD     cbBufSize,
+  LPDWORD   pcbBytesNeeded
+);
+
+BOOL QueryServiceConfigA(
+  SC_HANDLE               hService,
+  LPQUERY_SERVICE_CONFIGA lpServiceConfig,
+  DWORD                   cbBufSize,
+  LPDWORD                 pcbBytesNeeded
+);
+
+BOOL QueryServiceConfigW(
+  SC_HANDLE               hService,
+  LPQUERY_SERVICE_CONFIGW lpServiceConfig,
+  DWORD                   cbBufSize,
+  LPDWORD                 pcbBytesNeeded
+);
+
+BOOL QueryServiceDynamicInformation(
+  SERVICE_STATUS_HANDLE hServiceStatus,
+  DWORD                 dwInfoLevel,
+  PVOID                 *ppDynamicInfo
+);
+
+BOOL GetServiceDisplayNameA(
+  SC_HANDLE hSCManager,
+  LPCSTR    lpServiceName,
+  LPSTR     lpDisplayName,
+  LPDWORD   lpcchBuffer
+);
+
+BOOL GetServiceDisplayNameW(
+  SC_HANDLE hSCManager,
+  LPCWSTR   lpServiceName,
+  LPWSTR    lpDisplayName,
+  LPDWORD   lpcchBuffer
+);
+
+BOOL GetServiceKeyNameA(
+  SC_HANDLE hSCManager,
+  LPCSTR    lpDisplayName,
+  LPSTR     lpServiceName,
+  LPDWORD   lpcchBuffer
+);
+
+BOOL GetServiceKeyNameW(
+  SC_HANDLE hSCManager,
+  LPCWSTR   lpDisplayName,
+  LPWSTR    lpServiceName,
+  LPDWORD   lpcchBuffer
+);
+
+
+BOOL EnumDependentServicesA(
+  SC_HANDLE              hService,
+  DWORD                  dwServiceState,
+  LPENUM_SERVICE_STATUSA lpServices,
+  DWORD                  cbBufSize,
+  LPDWORD                pcbBytesNeeded,
+  LPDWORD                lpServicesReturned
+);
+
+BOOL EnumDependentServicesW(
+  SC_HANDLE              hService,
+  DWORD                  dwServiceState,
+  LPENUM_SERVICE_STATUSW lpServices,
+  DWORD                  cbBufSize,
+  LPDWORD                pcbBytesNeeded,
+  LPDWORD                lpServicesReturned
+);
+
+BOOL ControlService(
+  SC_HANDLE        hService,
+  DWORD            dwControl,
+  LPSERVICE_STATUS lpServiceStatus
+);
+
+BOOL ControlServiceExA(
+  SC_HANDLE hService,
+  DWORD     dwControl,
+  DWORD     dwInfoLevel,
+  PVOID     pControlParams
+);
+
+BOOL ControlServiceExW(
+  SC_HANDLE hService,
+  DWORD     dwControl,
+  DWORD     dwInfoLevel,
+  PVOID     pControlParams
+);
+
+SC_HANDLE CreateServiceA(
+  SC_HANDLE hSCManager,
+  LPCSTR    lpServiceName,
+  LPCSTR    lpDisplayName,
+  DWORD     dwDesiredAccess,
+  DWORD     dwServiceType,
+  DWORD     dwStartType,
+  DWORD     dwErrorControl,
+  LPCSTR    lpBinaryPathName,
+  LPCSTR    lpLoadOrderGroup,
+  LPDWORD   lpdwTagId,
+  LPCSTR    lpDependencies,
+  LPCSTR    lpServiceStartName,
+  LPCSTR    lpPassword
+);
+
+SC_HANDLE CreateServiceW(
+  SC_HANDLE hSCManager,
+  LPCWSTR   lpServiceName,
+  LPCWSTR   lpDisplayName,
+  DWORD     dwDesiredAccess,
+  DWORD     dwServiceType,
+  DWORD     dwStartType,
+  DWORD     dwErrorControl,
+  LPCWSTR   lpBinaryPathName,
+  LPCWSTR   lpLoadOrderGroup,
+  LPDWORD   lpdwTagId,
+  LPCWSTR   lpDependencies,
+  LPCWSTR   lpServiceStartName,
+  LPCWSTR   lpPassword
+);
+
+BOOL DeleteService(
+  SC_HANDLE hService
+);

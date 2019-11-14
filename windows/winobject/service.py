@@ -7,14 +7,9 @@ from contextlib import contextmanager
 from windows import utils
 import windows.generated_def as gdef
 from windows.generated_def import *
+from windows import security
 
-
-SERVICE_TYPE = gdef.FlagMapper(SERVICE_KERNEL_DRIVER, SERVICE_FILE_SYSTEM_DRIVER, SERVICE_WIN32_OWN_PROCESS, SERVICE_WIN32_SHARE_PROCESS, SERVICE_INTERACTIVE_PROCESS)
-SERVICE_STATE = gdef.FlagMapper(SERVICE_STOPPED, SERVICE_START_PENDING, SERVICE_STOP_PENDING, SERVICE_RUNNING, SERVICE_CONTINUE_PENDING, SERVICE_PAUSE_PENDING, SERVICE_PAUSED)
-SERVICE_CONTROLE_ACCEPTED = gdef.FlagMapper()
-SERVICE_FLAGS = gdef.FlagMapper(SERVICE_RUNS_IN_SYSTEM_PROCESS)
-
-
+# TODO: RM :)
 ServiceStatus = namedtuple("ServiceStatus", ["type", "state", "control_accepted", "flags"])
 """
 ``type`` might be one of:
@@ -42,94 +37,37 @@ ServiceStatus = namedtuple("ServiceStatus", ["type", "state", "control_accepted"
 
 """
 
-class Service(object):
-    handle = None
 
-    def __repr__(self):
-        return '<{0} "{1}" {2}>'.format(type(self).__name__, self.name, self.status.state)
+class ServiceManager(utils.AutoHandle):
+    _close_function = staticmethod(windows.winproxy.CloseServiceHandle)
 
-    @utils.fixedpropety
-    def name(self):
-        """The name of the service
+    def _get_handle(self):
+        return windows.winproxy.OpenSCManagerA(dwDesiredAccess=gdef.MAXIMUM_ALLOWED)
 
-        :type: :class:`str`
-        """
-        return self.lpServiceName
+    def open_service(self, name, access=gdef.MAXIMUM_ALLOWED):
+        return windows.winproxy.OpenServiceA(self.handle, name, access) # Check service exists :)
 
-    @utils.fixedpropety
-    def description(self):
-        """The description of the service
+    def get_service(self, name, access=gdef.MAXIMUM_ALLOWED):
+        handle = self.open_service(name, access)
+        return NewService(name=name, handle=handle)
 
-        :type: :class:`str`
-        """
-        return self.lpDisplayName
+    __getitem__ = get_service
 
-    @property
-    def status(self):
-        """The status of the service
+    def get_service_display_name(self, name):
+        # This API is strange..
+        # Why can't we retrieve the display name for a service handle ?
+        BUFFER_SIZE = 0x1000
+        result = (CHAR * BUFFER_SIZE)()
+        size_needed = gdef.DWORD(BUFFER_SIZE)
+        windows.winproxy.GetServiceDisplayNameA(self.handle, name, result, size_needed)
+        return result.value
 
-        :type: :class:`ServiceStatus`
-        """
-        status = self.ServiceStatusProcess
-        stype = SERVICE_TYPE[status.dwServiceType]
-        sstate = SERVICE_STATE[status.dwCurrentState]
-        scontrol = status.dwControlsAccepted
-        sflags = SERVICE_FLAGS[status.dwServiceFlags]
-        return ServiceStatus(stype, sstate, scontrol, sflags)
-
-    @utils.fixedpropety
-    def process(self):
-        """The process running the service (if any)
-
-        :type: :class:`WinProcess <windows.winobject.process.WinProcess>` or ``None``
-        """
-        pid = self.ServiceStatusProcess.dwProcessId
-        if not pid:
-            return None
-        l = windows.WinProcess(pid=pid)
-        return l
-
-
-class ServiceA(Service, ENUM_SERVICE_STATUS_PROCESSA):
-    """A Service object with ascii data"""
-    def start(self, args=None):
-        nbelt = 0
-        if args is not None:
-            if isinstance(args, basestring):
-                args = [args]
-            nbelt = len(args)
-            args = (gdef.LPCSTR * (nbelt))(*args)
-
-        with scmanagera(SC_MANAGER_CONNECT) as scm:
-            servh = windows.winproxy.OpenServiceA(scm, self.name, SERVICE_START)
-            windows.winproxy.StartServiceA(servh, nbelt, args)
-            windows.winproxy.CloseServiceHandle(servh)
-
-    def stop(self):
-        status = SERVICE_STATUS()
-        with scmanagera(SC_MANAGER_CONNECT) as scm:
-            servh = windows.winproxy.OpenServiceA(scm, self.name, SERVICE_STOP)
-            windows.winproxy.ControlService(servh, SERVICE_CONTROL_STOP, status)
-            windows.winproxy.CloseServiceHandle(servh)
-        return status
-
-
-@contextmanager
-def scmanagera(access):
-    # scmanager = windows.winproxy.OpenSCManagerA(dwDesiredAccess=SC_MANAGER_ENUMERATE_SERVICE)
-    scmanager = windows.winproxy.OpenSCManagerA(dwDesiredAccess=access)
-    try:
-        yield scmanager
-    finally:
-        windows.winproxy.CloseServiceHandle(scmanager)
-
-def enumerate_services():
-    with scmanagera(SC_MANAGER_ENUMERATE_SERVICE) as scm:
-        size_needed = DWORD()
-        nb_services = DWORD()
-        counter = DWORD()
+    def _enumerate_services_generator(self):
+        size_needed = gdef.DWORD()
+        nb_services =  gdef.DWORD()
+        counter =  gdef.DWORD()
         try:
-            windows.winproxy.EnumServicesStatusExA(scm, SC_ENUM_PROCESS_INFO, SERVICE_TYPE_ALL, SERVICE_STATE_ALL, None, 0, ctypes.byref(size_needed), ctypes.byref(nb_services), byref(counter), None)
+            windows.winproxy.EnumServicesStatusExA(self.handle, SC_ENUM_PROCESS_INFO, SERVICE_TYPE_ALL, SERVICE_STATE_ALL, None, 0, ctypes.byref(size_needed), ctypes.byref(nb_services), byref(counter), None)
         except WindowsError:
             pass
 
@@ -137,8 +75,82 @@ def enumerate_services():
             size = size_needed.value
             buffer = (BYTE * size)()
             try:
-                windows.winproxy.EnumServicesStatusExA(scm, SC_ENUM_PROCESS_INFO, SERVICE_TYPE_ALL, SERVICE_STATE_ALL, buffer, size, ctypes.byref(size_needed), ctypes.byref(nb_services), byref(counter), None)
+                windows.winproxy.EnumServicesStatusExA(self.handle, SC_ENUM_PROCESS_INFO, SERVICE_TYPE_ALL, SERVICE_STATE_ALL, buffer, size, ctypes.byref(size_needed), ctypes.byref(nb_services), byref(counter), None)
             except WindowsError as e:
                 continue
-            return_type = (ServiceA * nb_services.value)
-            return list(return_type.from_buffer(buffer))
+            break
+        services_array = (gdef.ENUM_SERVICE_STATUS_PROCESSA * nb_services.value).from_buffer(buffer)
+        for service_info in services_array:
+            shandle = self.open_service(service_info.lpServiceName)
+            yield NewService(handle=shandle, name=service_info.lpServiceName, description=service_info.lpDisplayName)
+        return
+
+    __iter__ = _enumerate_services_generator
+
+    def enumerate_services(self):
+        return list(self._enumerate_services_generator())
+
+
+class NewService(gdef.SC_HANDLE):
+    # close_function = windows.winproxy.CloseServiceHandle
+
+    def __init__(self, handle, name, description=None):
+        super(NewService, self).__init__(handle)
+        self.name = name
+        """The name of the service
+
+        :type: :class:`str`
+        """
+        if description is not None:
+            self._description = description # Setup fixedpropety
+
+    @property
+    def description(self):
+        """The description of the service
+
+        :type: :class:`str`
+        """
+        return ServiceManager().get_service_display_name(self.name)
+
+    @property
+    def status(self):
+        buffer = windows.utils.BUFFER(gdef.SERVICE_STATUS_PROCESS)()
+        size_needed = gdef.DWORD()
+        windows.winproxy.QueryServiceStatusEx(self, gdef.SC_STATUS_PROCESS_INFO, buffer.cast(gdef.LPBYTE), ctypes.sizeof(buffer), size_needed)
+        return buffer[0]
+
+    @utils.fixedpropety
+    def process(self):
+        """The process running the service (if any)
+
+        :type: :class:`WinProcess <windows.winobject.process.WinProcess>` or ``None``
+        """
+        pid = self.status.dwProcessId
+        if not pid:
+            return None
+        l = windows.WinProcess(pid=pid)
+        return l
+
+    @property
+    def security_descriptor(self):
+        return security.SecurityDescriptor.from_service(self.name)
+
+    def start(self, args=None):
+        nbelt = 0
+        if args is not None:
+            if isinstance(args, basestring):
+                args = [args]
+            nbelt = len(args)
+            args = (gdef.LPCSTR * (nbelt))(*args)
+        return windows.winproxy.StartServiceA(self, nbelt, args)
+
+    def stop(self):
+        status = SERVICE_STATUS()
+        windows.winproxy.ControlService(self, gdef.SERVICE_CONTROL_STOP, status)
+        return status
+
+    def __repr__(self):
+        return """<{0} "{1}" {2}>""".format(type(self).__name__, self.name, self.status.state)
+
+    def __del__(self):
+        return windows.winproxy.CloseServiceHandle(self)

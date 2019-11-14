@@ -85,6 +85,12 @@ typedef enum _SymTagEnum {
    SymTagDimension
 }SymTagEnum;
 
+typedef enum  _IMAGEHLP_EXTENDED_OPTIONS {
+  SYMOPT_EX_DISABLEACCESSTIMEUPDATE,
+  SYMOPT_EX_MAX,
+  SYMOPT_EX_LASTVALIDDEBUGDIRECTORY
+} IMAGEHLP_EXTENDED_OPTIONS;
+
 typedef struct _IMAGEHLP_MODULE64 {
   DWORD    SizeOfStruct;
   DWORD64  BaseOfImage;
@@ -166,3 +172,269 @@ typedef struct _SYMBOL_INFO {
   ULONG   MaxNameLen;
   CHAR   Name[1];
 } SYMBOL_INFO, *PSYMBOL_INFO;
+
+typedef struct _SYMBOL_INFOW {
+  ULONG   SizeOfStruct;
+  ULONG   TypeIndex;
+  ULONG64 Reserved[2];
+  ULONG   Index;
+  ULONG   Size;
+  ULONG64 ModBase;
+  ULONG   Flags;
+  ULONG64 Value;
+  ULONG64 Address;
+  ULONG   Register;
+  ULONG   Scope;
+  ULONG   Tag;
+  ULONG   NameLen;
+  ULONG   MaxNameLen;
+  WCHAR   Name[1];
+} SYMBOL_INFOW, *PSYMBOL_INFOW;
+
+typedef struct {
+  DWORD sizeofstruct;
+  WCHAR file[MAX_PATH + 1];
+  BOOL  stripped;
+  DWORD timestamp;
+  DWORD size;
+  WCHAR dbgfile[MAX_PATH + 1];
+  WCHAR pdbfile[MAX_PATH + 1];
+  GUID  guid;
+  DWORD sig;
+  DWORD age;
+} SYMSRV_INDEX_INFOW, *PSYMSRV_INDEX_INFOW;
+
+typedef struct {
+  DWORD sizeofstruct;
+  CHAR  file[MAX_PATH + 1];
+  BOOL  stripped;
+  DWORD timestamp;
+  DWORD size;
+  CHAR  dbgfile[MAX_PATH + 1];
+  CHAR  pdbfile[MAX_PATH + 1];
+  GUID  guid;
+  DWORD sig;
+  DWORD age;
+} SYMSRV_INDEX_INFO, *PSYMSRV_INDEX_INFO;
+
+typedef struct _IMAGEHLP_SYMBOL {
+  DWORD SizeOfStruct;
+  DWORD Address;
+  DWORD Size;
+  DWORD Flags;
+  DWORD MaxNameLength;
+  CHAR  Name[1];
+} IMAGEHLP_SYMBOL, *PIMAGEHLP_SYMBOL;
+
+typedef struct _IMAGEHLP_SYMBOL64 {
+  DWORD   SizeOfStruct;
+  DWORD64 Address;
+  DWORD   Size;
+  DWORD   Flags;
+  DWORD   MaxNameLength;
+  CHAR    Name[1];
+} IMAGEHLP_SYMBOL64, *PIMAGEHLP_SYMBOL64;
+
+typedef struct _IMAGEHLP_SYMBOLW64 {
+  DWORD   SizeOfStruct;
+  DWORD64 Address;
+  DWORD   Size;
+  DWORD   Flags;
+  DWORD   MaxNameLength;
+  WCHAR   Name[1];
+} IMAGEHLP_SYMBOLW64, *PIMAGEHLP_SYMBOLW64;
+
+typedef struct _IMAGEHLP_STACK_FRAME {
+  ULONG64 InstructionOffset;
+  ULONG64 ReturnOffset;
+  ULONG64 FrameOffset;
+  ULONG64 StackOffset;
+  ULONG64 BackingStoreOffset;
+  ULONG64 FuncTableEntry;
+  ULONG64 Params[4];
+  ULONG64 Reserved[5];
+  BOOL    Virtual;
+  ULONG   Reserved2;
+} IMAGEHLP_STACK_FRAME, *PIMAGEHLP_STACK_FRAME;
+
+/* SymRegisterCallbackProc* related */
+
+// Anonyme in DbgHelp.h
+enum _CBA_EVENT_SEVERITY {
+    sevInfo = 0,
+    sevProblem,
+    sevAttn,
+    sevFatal,
+    sevMax  // unused
+} CBA_EVENT_SEVERITY;
+
+typedef struct _IMAGEHLP_CBA_EVENT {
+    CBA_EVENT_SEVERITY severity;                        // values from sevInfo to sevFatal
+    DWORD code;                                         // numerical code IDs the error
+    PCHAR desc;                                         // may contain a text description of the error
+    PVOID object;                                       // value dependant upon the error code
+} IMAGEHLP_CBA_EVENT, *PIMAGEHLP_CBA_EVENT;
+
+typedef struct _IMAGEHLP_CBA_EVENTW {
+    CBA_EVENT_SEVERITY  severity;                        // values from sevInfo to sevFatal
+    DWORD  code;                                         // numerical code IDs the error
+    PCWSTR desc;                                         // may contain a text description of the error
+    PVOID  object;                                       // value dependant upon the error code
+} IMAGEHLP_CBA_EVENTW, *PIMAGEHLP_CBA_EVENTW;
+
+typedef struct _IMAGEHLP_CBA_READ_MEMORY {
+    DWORD64   addr;                                     // address to read from
+    PVOID     buf;                                      // buffer to read to
+    DWORD     bytes;                                    // amount of bytes to read
+    DWORD    *bytesread;                                // pointer to store amount of bytes read
+} IMAGEHLP_CBA_READ_MEMORY, *PIMAGEHLP_CBA_READ_MEMORY;
+
+typedef struct _IMAGEHLP_DEFERRED_SYMBOL_LOAD {
+    DWORD    SizeOfStruct;           // set to sizeof(IMAGEHLP_DEFERRED_SYMBOL_LOAD)
+    DWORD    BaseOfImage;            // base load address of module
+    DWORD    CheckSum;               // checksum from the pe header
+    DWORD    TimeDateStamp;          // date/time stamp from pe header
+    CHAR     FileName[MAX_PATH];     // symbols file or image name
+    BOOLEAN  Reparse;                // load failure reparse
+    HANDLE   hFile;                  // file handle, if passed
+} IMAGEHLP_DEFERRED_SYMBOL_LOAD, *PIMAGEHLP_DEFERRED_SYMBOL_LOAD;
+
+typedef struct _IMAGEHLP_DEFERRED_SYMBOL_LOAD64 {
+  DWORD   SizeOfStruct;
+  DWORD64 BaseOfImage;
+  DWORD   CheckSum;
+  DWORD   TimeDateStamp;
+  CHAR    FileName[MAX_PATH];
+  BOOLEAN Reparse;
+  HANDLE  hFile;
+  DWORD   Flags;
+} IMAGEHLP_DEFERRED_SYMBOL_LOAD64, *PIMAGEHLP_DEFERRED_SYMBOL_LOAD64;
+
+typedef struct _IMAGEHLP_DEFERRED_SYMBOL_LOADW64 {
+    DWORD    SizeOfStruct;           // set to sizeof(IMAGEHLP_DEFERRED_SYMBOL_LOADW64)
+    DWORD64  BaseOfImage;            // base load address of module
+    DWORD    CheckSum;               // checksum from the pe header
+    DWORD    TimeDateStamp;          // date/time stamp from pe header
+    WCHAR    FileName[MAX_PATH + 1]; // symbols file or image name
+    BOOLEAN  Reparse;                // load failure reparse
+    HANDLE   hFile;                  // file handle, if passed
+    DWORD    Flags;         //
+} IMAGEHLP_DEFERRED_SYMBOL_LOADW64, *PIMAGEHLP_DEFERRED_SYMBOL_LOADW64;
+
+
+typedef struct _IMAGEHLP_DUPLICATE_SYMBOL64 {
+    DWORD              SizeOfStruct;           // set to sizeof(IMAGEHLP_DUPLICATE_SYMBOL64)
+    DWORD              NumberOfDups;           // number of duplicates in the Symbol array
+    PIMAGEHLP_SYMBOL64 Symbol;                 // array of duplicate symbols
+    DWORD              SelectedSymbol;         // symbol selected (-1 to start)
+} IMAGEHLP_DUPLICATE_SYMBOL64, *PIMAGEHLP_DUPLICATE_SYMBOL64;
+
+typedef struct _IMAGEHLP_DUPLICATE_SYMBOL {
+    DWORD            SizeOfStruct;           // set to sizeof(IMAGEHLP_DUPLICATE_SYMBOL)
+    DWORD            NumberOfDups;           // number of duplicates in the Symbol array
+    PIMAGEHLP_SYMBOL Symbol;                 // array of duplicate symbols
+    DWORD            SelectedSymbol;         // symbol selected (-1 to start)
+} IMAGEHLP_DUPLICATE_SYMBOL, *PIMAGEHLP_DUPLICATE_SYMBOL;
+
+
+
+/* StackWalk related structs */
+
+typedef enum {
+    AddrMode1616,
+    AddrMode1632,
+    AddrModeReal,
+    AddrModeFlat
+} ADDRESS_MODE;
+
+typedef struct _tagADDRESS {
+  DWORD        Offset;
+  WORD         Segment;
+  ADDRESS_MODE Mode;
+} ADDRESS, *LPADDRESS;
+
+typedef struct _tagADDRESS64 {
+  DWORD64      Offset;
+  WORD         Segment;
+  ADDRESS_MODE Mode;
+} ADDRESS64, *LPADDRESS64;
+
+typedef struct _KDHELP {
+  DWORD Thread;
+  DWORD ThCallbackStack;
+  DWORD NextCallback;
+  DWORD FramePointer;
+  DWORD KiCallUserMode;
+  DWORD KeUserCallbackDispatcher;
+  DWORD SystemRangeStart;
+  DWORD ThCallbackBStore;
+  DWORD KiUserExceptionDispatcher;
+  DWORD StackBase;
+  DWORD StackLimit;
+  DWORD Reserved[5];
+} KDHELP, *PKDHELP;
+
+typedef struct _KDHELP64 {
+  DWORD64 Thread;
+  DWORD   ThCallbackStack;
+  DWORD   ThCallbackBStore;
+  DWORD   NextCallback;
+  DWORD   FramePointer;
+  DWORD64 KiCallUserMode;
+  DWORD64 KeUserCallbackDispatcher;
+  DWORD64 SystemRangeStart;
+  DWORD64 KiUserExceptionDispatcher;
+  DWORD64 StackBase;
+  DWORD64 StackLimit;
+  DWORD   BuildVersion;
+  DWORD   RetpolineStubFunctionTableSize;
+  DWORD64 RetpolineStubFunctionTable;
+  DWORD   RetpolineStubOffset;
+  DWORD   RetpolineStubSize;
+  DWORD64 Reserved0[2];
+} KDHELP64, *PKDHELP64;
+
+typedef struct _tagSTACKFRAME {
+  ADDRESS AddrPC;
+  ADDRESS AddrReturn;
+  ADDRESS AddrFrame;
+  ADDRESS AddrStack;
+  PVOID   FuncTableEntry;
+  DWORD   Params[4];
+  BOOL    Far;
+  BOOL    Virtual;
+  DWORD   Reserved[3];
+  KDHELP  KdHelp;
+  ADDRESS AddrBStore;
+} STACKFRAME, *LPSTACKFRAME;
+
+
+typedef struct _tagSTACKFRAME64 {
+  ADDRESS64 AddrPC;
+  ADDRESS64 AddrReturn;
+  ADDRESS64 AddrFrame;
+  ADDRESS64 AddrStack;
+  ADDRESS64 AddrBStore;
+  PVOID     FuncTableEntry;
+  DWORD64   Params[4];
+  BOOL      Far;
+  BOOL      Virtual;
+  DWORD64   Reserved[3];
+  KDHELP64  KdHelp;
+} STACKFRAME64, *LPSTACKFRAME64;
+
+typedef struct _tagSTACKFRAME_EX {
+  ADDRESS64 AddrPC;
+  ADDRESS64 AddrReturn;
+  ADDRESS64 AddrFrame;
+  ADDRESS64 AddrStack;
+  ADDRESS64 AddrBStore;
+  PVOID     FuncTableEntry;
+  DWORD64   Params[4];
+  BOOL      Far;
+  BOOL      Virtual;
+  DWORD64   Reserved[3];
+  KDHELP64  KdHelp;
+  DWORD     StackFrameSize;
+  DWORD     InlineFrameContext;
+} STACKFRAME_EX, *LPSTACKFRAME_EX;
