@@ -17,8 +17,8 @@ class WinStructParser(Parser):
             nb_rep = ComplexArrayExpression()
             while type(self.peek()) != CloseSquareBracketToken:
                 tok = self.next_token()
-                if type(tok) not in (NameToken, PlusToken):
-                    raise ValueError("Array expression only accept names/+")
+                if type(tok) not in (NameToken, PlusToken, StarToken):
+                    raise ValueError("Array expression only accept names/+/*")
                 is_name = (type(tok) == NameToken)
                 nb_rep.add_token_to_expression(tok.value, is_name)
             self.assert_token_type(CloseSquareBracketToken)

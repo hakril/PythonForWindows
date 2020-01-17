@@ -14,8 +14,8 @@ class BitFieldValue(object):
     def __int__(self):
         return self.nb_bits
 
-    def generate_ctypes(self):
-        return self.nb_bits
+    # def generate_ctypes(self):
+        # return self.nb_bits
 
 class ComplexArrayExpression(object):
     def __init__(self):
@@ -131,7 +131,10 @@ class WinStruct(object):
             res += ["{0}._pack_ = ".format(self.pack)]
         res += ["{0}._fields_ = [".format(self.name)]
         for (ftype, name, nb_rep) in self.fields:
-            if isinstance(nb_rep, (BitFieldValue, ComplexArrayExpression)):
+            if isinstance(nb_rep, BitFieldValue):
+                res += ['    ("{0}", {1}, {2}),'.format(name, ftype.generate_ctypes(), nb_rep.nb_bits)]
+                continue
+            elif isinstance(nb_rep, ComplexArrayExpression):
                 nb_rep = nb_rep.generate_ctypes()
             if nb_rep == 1:
                 res+= ['    ("{0}", {1}),'.format(name, ftype.generate_ctypes())]
@@ -157,11 +160,14 @@ class WinStruct(object):
         res += self.generate_anonymous_union()
         res += "    _fields_ = [\n"""
 
-
         for (ftype, name, nb_rep) in self.fields:
-            if isinstance(nb_rep, (BitFieldValue, ComplexArrayExpression)):
+            if isinstance(nb_rep, BitFieldValue):
+                res += '    ("{0}", {1}, {2}),\n'.format(name, ftype.generate_ctypes(), nb_rep.nb_bits)
+                continue
+            elif isinstance(nb_rep, ComplexArrayExpression):
                 # Should I check 'ftype' somewhere when we have a bitfield ?
                 nb_rep = nb_rep.generate_ctypes()
+
             if nb_rep == 1:
                 res+= '        ("{0}", {1}),\n'.format(name, ftype.generate_ctypes())
             else:
