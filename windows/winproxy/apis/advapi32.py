@@ -2,7 +2,7 @@ import ctypes
 import windows.generated_def as gdef
 
 from ..apiproxy import ApiProxy, NeededParameter
-from ..error import fail_on_zero, succeed_on_zero, result_is_error_code, result_is_handle
+from ..error import fail_on_zero, succeed_on_zero, result_is_error_code, result_is_handle, no_error_check
 
 class Advapi32Proxy(ApiProxy):
     APIDLL = "advapi32"
@@ -124,7 +124,8 @@ def CreateWellKnownSid(WellKnownSidType, DomainSid=None, pSid=None, cbSid=Needed
 def GetLengthSid(pSid):
     return GetLengthSid.ctypes_function(pSid)
 
-@Advapi32Proxy()
+
+@Advapi32Proxy(error_check=no_error_check)
 def EqualSid(pSid1, pSid2):
     return EqualSid.ctypes_function(pSid1, pSid2)
 
@@ -237,6 +238,13 @@ def GetAclInformation(pAcl, pAclInformation, nAclInformationLength, dwAclInforma
 @Advapi32Proxy()
 def GetAce(pAcl, dwAceIndex, pAce):
    return GetAce.ctypes_function(pAcl, dwAceIndex, pAce)
+
+
+@Advapi32Proxy()
+def GetStringConditionFromBinary(BinaryAceCondition, BinaryAceConditionSize=None, Reserved1=0, StringAceCondition=NeededParameter):
+    if BinaryAceConditionSize is None:
+        BinaryAceConditionSize = len(BinaryAceCondition)
+    return GetStringConditionFromBinary.ctypes_function(BinaryAceCondition, BinaryAceConditionSize, Reserved1, StringAceCondition)
 
 # Registry
 

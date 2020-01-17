@@ -109,6 +109,11 @@ def GetCursorPos(lpPoint):
 
 # System
 
-@User32Proxy()
+
+# If the function succeeds, the return value is the requested system metric or configuration setting.
+# If the function fails, the return value is 0. GetLastError does not provide extended error information.
+# And 0 is also a valid return value.. Thanks a lot..
+
+@User32Proxy(error_check=no_error_check)
 def GetSystemMetrics(nIndex):
     return GetSystemMetrics.ctypes_function(nIndex)

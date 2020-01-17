@@ -102,6 +102,10 @@ def PFXImportCertStore(pPFX, szPassword, dwFlags):
 def CertEnumCTLsInStore(hCertStore, pPrevCtlContext):
     return CertEnumCTLsInStore.ctypes_function(hCertStore, pPrevCtlContext)
 
+@Crypt32Proxy()
+def CertCloseStore(hCertStore, dwFlags):
+    return CertCloseStore.ctypes_function(hCertStore, dwFlags)
+
 
 # Key
 
@@ -208,4 +212,5 @@ def CryptEnumOIDFunction(dwEncodingType, pszFuncName, pszOID, dwFlags, pvArg, pf
 
 @Crypt32Proxy()
 def CryptGetOIDFunctionValue(dwEncodingType, pszFuncName, pszOID, pwszValueName, pdwValueType, pbValueData, pcbValueData):
-    return CryptGetOIDFunctionValue.ctypes_function(dwEncodingType, pszFuncName, pszOID, pwszValueName, pdwValueType, pbValueData, pcbValueData)
+    return Cry
+    ptGetOIDFunctionValue.ctypes_function(dwEncodingType, pszFuncName, pszOID, pwszValueName, pdwValueType, pbValueData, pcbValueData)

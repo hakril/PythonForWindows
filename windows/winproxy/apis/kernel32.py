@@ -781,3 +781,12 @@ def GetSystemTime(lpSystemTime):
 @Kernel32Proxy(error_check=None)
 def GetSystemTimeAsFileTime(lpSystemTimeAsFileTime):
    return GetSystemTimeAsFileTime.ctypes_function(lpSystemTimeAsFileTime)
+
+
+#####
+
+# Heap
+
+@Kernel32Proxy(error_check=fail_on_zero)
+def HeapAlloc(hHeap, dwFlags, dwBytes):
+    return HeapAlloc.ctypes_function(hHeap, dwFlags, dwBytes)
