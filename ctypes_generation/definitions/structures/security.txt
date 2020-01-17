@@ -5,6 +5,7 @@ typedef enum _ACL_INFORMATION_CLASS {
     AclSizeInformation = 2,
 } ACL_INFORMATION_CLASS;
 
+
 /* ACL Stuff */
 
 typedef struct _ACL {

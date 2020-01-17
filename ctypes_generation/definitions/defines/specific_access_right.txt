@@ -335,3 +335,26 @@
                                         SC_MANAGER_LOCK               | \
                                         SC_MANAGER_QUERY_LOCK_STATUS  | \
                                         SC_MANAGER_MODIFY_BOOT_CONFIG)
+
+
+/// Active Directory
+
+#define ADS_RIGHT_DELETE                     0x10000
+#define ADS_RIGHT_READ_CONTROL               0x20000
+#define ADS_RIGHT_WRITE_DAC                  0x40000
+#define ADS_RIGHT_WRITE_OWNER                0x80000
+#define ADS_RIGHT_SYNCHRONIZE                0x100000
+#define ADS_RIGHT_ACCESS_SYSTEM_SECURITY     0x1000000
+#define ADS_RIGHT_GENERIC_READ               0x80000000
+#define ADS_RIGHT_GENERIC_WRITE              0x40000000
+#define ADS_RIGHT_GENERIC_EXECUTE            0x20000000
+#define ADS_RIGHT_GENERIC_ALL                0x10000000
+#define ADS_RIGHT_DS_CREATE_CHILD            0x1
+#define ADS_RIGHT_DS_DELETE_CHILD            0x2
+#define ADS_RIGHT_ACTRL_DS_LIST              0x4
+#define ADS_RIGHT_DS_SELF                    0x8
+#define ADS_RIGHT_DS_READ_PROP               0x10
+#define ADS_RIGHT_DS_WRITE_PROP              0x20
+#define ADS_RIGHT_DS_DELETE_TREE             0x40
+#define ADS_RIGHT_DS_LIST_OBJECT             0x80
+#define ADS_RIGHT_DS_CONTROL_ACCESS          0x100

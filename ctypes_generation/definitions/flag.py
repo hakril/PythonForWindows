@@ -14,7 +14,12 @@ class Flag(long):
     def __repr__(self):
         return "{0}({1:#x})".format(self.name, self)
 
-    __str__ = __repr__
+    # Custom __str__ removed for multiple reason
+    # Main one -> it breaks the json encoding of structure with flags :)
+    # Moving to a new politic -> if people want the name in a string use {x!r}
+    # The __str__ of security descriptor & guid will change soon as well :)
+
+    # __str__ = __repr__
 
    # Fix pickling with protocol 2
     def __getnewargs__(self, *args):

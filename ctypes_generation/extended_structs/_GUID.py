@@ -26,10 +26,13 @@ class _GUID(INITIAL_GUID):
 
     __sprint__ = __repr__
 
+
     def to_string(self):
         data4_format = "{0:02X}{1:02X}-" + "".join("{{{i}:02X}}".format(i=i + 2) for i in range(6))
         data4_str = data4_format.format(*self.Data4)
         return "{0:08X}-{1:04X}-{2:04X}-".format(self.Data1, self.Data2, self.Data3) + data4_str
+
+    __str__ = to_string
 
     def update_strid(self):
        new_strid = self.to_string()

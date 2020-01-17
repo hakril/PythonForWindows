@@ -1,0 +1,39 @@
+/* From ntdbg.h */
+
+#define X86_KGDT_NULL       0
+#define X86_KGDT_R0_CODE    8
+#define X86_KGDT_R0_DATA    16
+#define X86_KGDT_R3_CODE    24
+#define X86_KGDT_R3_DATA    32
+#define X86_KGDT_TSS        40
+#define X86_KGDT_R0_PCR     48
+#define X86_KGDT_R3_TEB     56
+#define X86_KGDT_VDM_TILE   64
+#define X86_KGDT_LDT        72
+#define X86_KGDT_DF_TSS     80
+#define X86_KGDT_NMI_TSS    88
+
+#define X86_FRAME_EDITED            0xfff8
+#define X86_MODE_MASK               1
+#define X86_EFLAGS_V86_MASK         0x00020000
+
+#define AMD64_KGDT64_NULL (0 * 16)            // NULL descriptor
+#define AMD64_KGDT64_R0_CODE (1 * 16)         // kernel mode 64-bit code
+#define AMD64_KGDT64_R0_DATA (1 * 16) + 8     // kernel mode 64-bit data (stack)
+#define AMD64_KGDT64_R3_CMCODE (2 * 16)       // user mode 32-bit code
+#define AMD64_KGDT64_R3_DATA (2 * 16) + 8     // user mode 32-bit data
+#define AMD64_KGDT64_R3_CODE (3 * 16)         // user mode 64-bit code
+#define AMD64_KGDT64_SYS_TSS (4 * 16)         // kernel mode system task state
+#define AMD64_KGDT64_R3_CMTEB (5 * 16)        // user mode 32-bit TEB
+#define AMD64_KGDT64_LAST (6 * 16)
+
+/* From i386.h & amd64.h */
+
+#define MODE_BIT 0
+#define MODE_MASK 1                                                 // ntosp
+#define RPL_MASK 3
+
+/* Custom usefull define for CS userland values 0x23 * 0x33 */
+
+#define CS_USER_32B (AMD64_KGDT64_R3_CMCODE |  RPL_MASK)
+#define CS_USER_64B (AMD64_KGDT64_R3_CODE |  RPL_MASK)

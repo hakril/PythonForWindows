@@ -1,0 +1,75 @@
+typedef struct _EXCEPTION_DEBUG_INFO {
+    EXCEPTION_RECORD ExceptionRecord;
+    DWORD dwFirstChance;
+} EXCEPTION_DEBUG_INFO, *LPEXCEPTION_DEBUG_INFO;
+
+typedef struct _CREATE_THREAD_DEBUG_INFO {
+    HANDLE hThread;
+    LPVOID lpThreadLocalBase;
+    LPTHREAD_START_ROUTINE lpStartAddress;
+} CREATE_THREAD_DEBUG_INFO, *LPCREATE_THREAD_DEBUG_INFO;
+
+typedef struct _CREATE_PROCESS_DEBUG_INFO {
+    HANDLE hFile;
+    HANDLE hProcess;
+    HANDLE hThread;
+    LPVOID lpBaseOfImage;
+    DWORD dwDebugInfoFileOffset;
+    DWORD nDebugInfoSize;
+    LPVOID lpThreadLocalBase;
+    LPTHREAD_START_ROUTINE lpStartAddress;
+    LPVOID lpImageName;
+    WORD fUnicode;
+} CREATE_PROCESS_DEBUG_INFO, *LPCREATE_PROCESS_DEBUG_INFO;
+
+
+typedef struct _EXIT_THREAD_DEBUG_INFO {
+    DWORD dwExitCode;
+} EXIT_THREAD_DEBUG_INFO, *LPEXIT_THREAD_DEBUG_INFO;
+
+typedef struct _EXIT_PROCESS_DEBUG_INFO {
+    DWORD dwExitCode;
+} EXIT_PROCESS_DEBUG_INFO, *LPEXIT_PROCESS_DEBUG_INFO;
+
+typedef struct _LOAD_DLL_DEBUG_INFO {
+    HANDLE hFile;
+    LPVOID lpBaseOfDll;
+    DWORD dwDebugInfoFileOffset;
+    DWORD nDebugInfoSize;
+    LPVOID lpImageName;
+    WORD fUnicode;
+} LOAD_DLL_DEBUG_INFO, *LPLOAD_DLL_DEBUG_INFO;
+
+typedef struct _UNLOAD_DLL_DEBUG_INFO {
+    LPVOID lpBaseOfDll;
+} UNLOAD_DLL_DEBUG_INFO, *LPUNLOAD_DLL_DEBUG_INFO;
+
+typedef struct _OUTPUT_DEBUG_STRING_INFO {
+    LPSTR lpDebugStringData;
+    WORD fUnicode;
+    WORD nDebugStringLength;
+} OUTPUT_DEBUG_STRING_INFO, *LPOUTPUT_DEBUG_STRING_INFO;
+
+typedef struct _RIP_INFO {
+    DWORD dwError;
+    DWORD dwType;
+} RIP_INFO, *LPRIP_INFO;
+
+typedef union _TMP_UNION_DEBUG_INFO {
+        EXCEPTION_DEBUG_INFO Exception;
+        CREATE_THREAD_DEBUG_INFO CreateThread;
+        CREATE_PROCESS_DEBUG_INFO CreateProcessInfo;
+        EXIT_THREAD_DEBUG_INFO ExitThread;
+        EXIT_PROCESS_DEBUG_INFO ExitProcess;
+        LOAD_DLL_DEBUG_INFO LoadDll;
+        UNLOAD_DLL_DEBUG_INFO UnloadDll;
+        OUTPUT_DEBUG_STRING_INFO DebugString;
+        RIP_INFO RipInfo;
+} TMP_UNION_DEBUG_INFO;
+
+typedef struct _DEBUG_EVENT {
+    DWORD dwDebugEventCode;
+    DWORD dwProcessId;
+    DWORD dwThreadId;
+    _TMP_UNION_DEBUG_INFO u;
+} DEBUG_EVENT, *LPDEBUG_EVENT;

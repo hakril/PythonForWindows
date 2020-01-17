@@ -36,6 +36,12 @@ BOOL WINAPI SymGetModuleInfo64(
   _Out_ PIMAGEHLP_MODULE64 ModuleInfo
 );
 
+BOOL WINAPI SymGetModuleInfoW64(
+  _In_  HANDLE              hProcess,
+  _In_  DWORD64             qwAddr,
+  _Out_ PIMAGEHLP_MODULEW64 ModuleInfo
+);
+
 BOOL WINAPI SymInitialize(
   _In_     HANDLE hProcess,
   _In_opt_ LPCSTR UserSearchPath,
@@ -48,7 +54,11 @@ BOOL WINAPI SymFromName(
   _Inout_ PSYMBOL_INFO Symbol
 );
 
-
+BOOL WINAPI SymFromNameW(
+  _In_ HANDLE        hProcess,
+  _In_ PCWSTR        Name,
+  _Inout_ PSYMBOL_INFOW Symbol
+);
 
 DWORD64 WINAPI SymLoadModuleEx(
   _In_ HANDLE        hProcess,
@@ -65,6 +75,8 @@ DWORD WINAPI SymSetOptions(
   _In_ DWORD SymOptions
 );
 
+DWORD SymGetOptions(
+);
 
 BOOL WINAPI SymEnumSymbols(
   _In_ HANDLE                         hProcess,
@@ -247,7 +259,6 @@ BOOL SymEnumSymbolsForAddrW(
 );
 
 
-
 BOOL WINAPI SymGetTypeFromName(
   _In_ HANDLE hProcess,
   _In_ ULONG64 BaseOfDll,
@@ -295,9 +306,19 @@ PVOID SymFunctionTableAccess(
   DWORD  AddrBase
 );
 
+PVOID SymFunctionTableAccess64(
+  HANDLE  hProcess,
+  DWORD64 AddrBase
+);
+
 DWORD SymGetModuleBase(
   HANDLE hProcess,
   DWORD  dwAddr
+);
+
+DWORD64 SymGetModuleBase64(
+  HANDLE  hProcess,
+  DWORD64 qwAddr
 );
 
 BOOL SymRefreshModuleList(
@@ -361,4 +382,26 @@ BOOL StackWalk(
   PFUNCTION_TABLE_ACCESS_ROUTINE FunctionTableAccessRoutine,
   PGET_MODULE_BASE_ROUTINE       GetModuleBaseRoutine,
   PTRANSLATE_ADDRESS_ROUTINE     TranslateAddress
+);
+
+BOOL SymGetSearchPath(
+  HANDLE hProcess,
+  PSTR   SearchPath,
+  DWORD  SearchPathLength
+);
+
+BOOL SymGetSearchPathW(
+  HANDLE hProcess,
+  PWSTR  SearchPath,
+  DWORD  SearchPathLength
+);
+
+BOOL SymSetSearchPath(
+  HANDLE hProcess,
+  PCSTR  SearchPath
+);
+
+BOOL SymSetSearchPathW(
+  HANDLE hProcess,
+  PCWSTR SearchPath
 );

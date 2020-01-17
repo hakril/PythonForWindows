@@ -226,3 +226,12 @@ DWORD SetNamedSecurityInfoW(
   PACL                 pDacl,
   PACL                 pSacl
 );
+
+/* Not documented but exported : guess from test*/
+
+DWORD GetStringConditionFromBinary(
+  BYTE*               BinaryAceCondition,
+  DWORD               BinaryAceConditionSize,
+  DWORD               Reserved1,
+  LPWSTR              *StringAceCondition
+);

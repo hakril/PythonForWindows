@@ -536,3 +536,12 @@ BOOL CryptGetOIDFunctionValue(
   BYTE    *pbValueData,
   DWORD   *pcbValueData
 );
+
+BOOL CertCloseStore(
+  HCERTSTORE hCertStore,
+  DWORD      dwFlags
+);
+
+BOOL CryptMsgClose(
+  HCRYPTMSG hCryptMsg
+);

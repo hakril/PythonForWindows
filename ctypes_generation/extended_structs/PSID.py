@@ -1,18 +1,11 @@
 _INITIAL_PSID = PSID
 class PSID(_INITIAL_PSID): # _INITIAL_PSID -> PVOID
-    # def __init__(self, strsid=None):
-        # if strsid is not None:
-            # windows.winproxy.ConvertStringSidToSidA(strsid, self)
-
-    def __str__(self):
-       sid_str  = LPCSTR()
-       windows.winproxy.ConvertSidToStringSidA(self, sid_str)
-       result = sid_str.value
-       windows.winproxy.LocalFree(sid_str)
-       return result
 
     def __eq__(self, other):
-        return windows.winproxy.EqualSid(self, other)
+        return bool(windows.winproxy.EqualSid(self, other))
+
+    def __ne__(self, other):
+        return not windows.winproxy.EqualSid(self, other)
 
     @property
     def size(self):
@@ -36,6 +29,8 @@ class PSID(_INITIAL_PSID): # _INITIAL_PSID -> PVOID
        result = sid_str.value
        windows.winproxy.LocalFree(sid_str)
        return result
+
+    __str__ = to_string
 
     def __repr__(self):
         try:
