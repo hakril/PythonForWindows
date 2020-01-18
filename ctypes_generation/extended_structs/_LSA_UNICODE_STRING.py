@@ -12,7 +12,7 @@ class _LSA_UNICODE_STRING(INITIAL_LSA_UNICODE_STRING):
         if getattr(self, "_target", None) is not None: #remote ctypes :D -> TRICKS OF THE YEAR
             raw_data = self._target.read_memory(self.Buffer, self.Length)
             return raw_data.decode("utf16")
-        size = self.Length / 2
+        size = int(self.Length / 2)
         return (ctypes.c_wchar * size).from_address(self.Buffer)[:]
 
     @classmethod

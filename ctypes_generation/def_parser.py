@@ -9,6 +9,8 @@ class WinDef(object):
         self.code = code
 
     def generate_ctypes(self):
+        if self.code[-1] == "L" and self.code[0].isdigit():
+            self.code = self.code[:-1]
         return """{0} = make_flag("{0}", {1})""".format(self.name, self.code)
 
 class WinDefParser(Parser):

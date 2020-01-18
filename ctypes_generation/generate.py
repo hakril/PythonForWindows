@@ -296,7 +296,7 @@ class CtypesGenerator(object):
 
     def emit_import_dependancies(self):
         for name in self.imported_name:
-            self.emitline("from {0} import *".format(name))
+            self.emitline("from .{0} import *".format(name))
 
     def copy_template(self):
         with open(self.template) as f:
@@ -336,8 +336,8 @@ WINERROR_MODULE = "winerror"
 
 class DefineCtypesGenerator(CtypesGenerator):
     def after_emit_template(self):
-        self.emitline("from {0} import *".format(NTSTATUS_MODULE))
-        self.emitline("from {0} import *".format(WINERROR_MODULE))
+        self.emitline("from .{0} import *".format(NTSTATUS_MODULE))
+        self.emitline("from .{0} import *".format(WINERROR_MODULE))
 
     def generate_for_file(self, file):
         for define in file.data:
@@ -626,7 +626,7 @@ class MetaFileGenerator(NoTemplatedGenerator):
         self.emitline(META_WALKER)
 
         for name, modname, exports in self.modules:
-                self.emitline("import {0} as {0}_module".format(modname))
+                self.emitline("from . import {0} as {0}_module".format(modname))
                 self.emitline("{0}_walker = generate_walker({0}, {1}_module)".format(name, modname))
 
 class ModuleGenerator(object):

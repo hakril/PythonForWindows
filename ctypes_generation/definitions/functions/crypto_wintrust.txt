@@ -516,7 +516,6 @@ BOOL CryptMsgClose(
   HCRYPTMSG hCryptMsg
 );
 
-
 BOOL CryptEnumOIDFunction(
   DWORD                   dwEncodingType,
   LPCSTR                  pszFuncName,
@@ -540,8 +539,4 @@ BOOL CryptGetOIDFunctionValue(
 BOOL CertCloseStore(
   HCERTSTORE hCertStore,
   DWORD      dwFlags
-);
-
-BOOL CryptMsgClose(
-  HCRYPTMSG hCryptMsg
 );

@@ -1,2 +1,2 @@
-from flag import make_flag, FlagMapper
+from .flag import make_flag, FlagMapper
 
