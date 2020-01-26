@@ -20,13 +20,16 @@ class PSID(_INITIAL_PSID): # _INITIAL_PSID -> PVOID
     @classmethod
     def from_string(cls, strsid):
         self = cls()
+        if not isinstance(strsid, bytes):
+            strsid = strsid.encode("ascii")
+        # Pass to ConvertStringSidToSidW ?
         windows.winproxy.ConvertStringSidToSidA(strsid, self)
         return self
 
     def to_string(self):
        sid_str  = LPCSTR()
        windows.winproxy.ConvertSidToStringSidA(self, sid_str)
-       result = sid_str.value
+       result = sid_str.value.decode("ascii") # ConvertSidToStringSidW ?
        windows.winproxy.LocalFree(sid_str)
        return result
 

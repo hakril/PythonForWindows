@@ -1,5 +1,5 @@
 import ctypes
-from flag import Flag
+from .flag import Flag
 
 class NtStatusException(WindowsError):
     ALL_STATUS = {}

@@ -1,4 +1,4 @@
-from winstructs import *
+from .winstructs import *
 import functools
 import ctypes
 
