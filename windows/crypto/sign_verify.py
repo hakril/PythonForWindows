@@ -7,10 +7,10 @@ import ctypes
 
 __all__ = ["sign", "verify_signature"]
 
-def sign(cert, msg, detached_signature=False):
+def sign(cert, msg, detached_signature=False, algo=gdef.szOID_RSA_SHA256RSA):
     # hash algorithm
     alg_hash = gdef.CRYPT_ALGORITHM_IDENTIFIER()
-    alg_hash.pszObjId = gdef.szOID_RSA_SHA256RSA # Set as parameter ?
+    alg_hash.pszObjId = algo.encode()
 
     # Signing parameters
     sign_para = gdef.CRYPT_SIGN_MESSAGE_PARA()
