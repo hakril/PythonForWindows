@@ -96,6 +96,22 @@ def create_process(path, args=None, dwCreationFlags=0, show_windows=True):
     return windows.winobject.process.WinProcess(pid=proc_info.dwProcessId, handle=proc_info.hProcess)
 
 
+def device_io_control(handle, iocode, buffer):
+    outbuffer = ctypes.c_buffer(0x1000)
+    returned_size = gdef.DWORD()
+    windows.winproxy.DeviceIoControl(handle, iocode, buffer, lpOutBuffer=outbuffer, lpBytesReturned=returned_size)
+    return outbuffer[:returned_size.value]
+
+
+
+def tmp_cp_as(path, token):
+    proc_info = PROCESS_INFORMATION()
+    windows.winproxy.CreateProcessAsUserA(token, path, lpCommandLine=None, dwCreationFlags=gdef.CREATE_NEW_CONSOLE, lpProcessInformation=ctypes.byref(proc_info), lpStartupInfo=None)
+    return windows.winobject.process.WinProcess(pid=proc_info.dwProcessId, handle=proc_info.hProcess)
+
+def find_handle(proc, value):
+    return [h for h in windows.system.handles if h.dwProcessId == proc.pid and h.wValue == value]
+
 def lookup_privilege_value(privilege_name):
     luid = LUID()
     winproxy.LookupPrivilegeValueA(None, privilege_name, byref(luid))
@@ -244,8 +260,30 @@ def get_kernel_modules_syswow64():
     modules = (SYSTEM_MODULE64 * buffer.ModulesCount).from_address(addressof(buffer) + SYSTEM_MODULE_INFORMATION64.Modules.offset)
     return list(modules)
 
+class FileStreamInformation(gdef.FILE_STREAM_INFORMATION):
+    @property
+    def name(self):
+        return gdef.LPWSTR(ctypes.addressof(self) + type(self).StreamName.offset).value
 
-# Split winutils.py ?
+    @property
+    def next(self):
+        if not self.NextEntryOffset:
+            return None
+        return type(self).from_address(ctypes.addressof(self) + self.NextEntryOffset)
+
+
+    def all(self):
+        return list(self)
+
+    def __iter__(self):
+        while self:
+            yield self
+            self = self.next
+
+    def __repr__(self):
+        return "<ADS name='{0}'>".format(self.name)
+
+
 ntqueryinformationfile_info_structs = {
     gdef.FileAccessInformation: gdef.FILE_ACCESS_INFORMATION,
     gdef.FileAlignmentInformation: gdef.FILE_ALIGNMENT_INFORMATION,
@@ -261,11 +299,12 @@ ntqueryinformationfile_info_structs = {
     gdef.FilePositionInformation: gdef.FILE_POSITION_INFORMATION,
     gdef.FileStandardInformation: gdef.FILE_STANDARD_INFORMATION,
     gdef.FileIsRemoteDeviceInformation: gdef.FILE_IS_REMOTE_DEVICE_INFORMATION,
+    gdef.FileStreamInformation: FileStreamInformation,
 }
 
 def query_file_information(file_or_handle, file_info_class):
     if isinstance(file_or_handle, file):
-        file_or_handle = get_handle_from_file(file_or_handle)
+        file_or_handle = windows.utils.get_handle_from_file(file_or_handle)
     handle = file_or_handle
     io_status = gdef.IO_STATUS_BLOCK()
     info = ntqueryinformationfile_info_structs[file_info_class]()
@@ -274,6 +313,7 @@ def query_file_information(file_or_handle, file_info_class):
     try:
         windows.winproxy.NtQueryInformationFile(handle, io_status, pinfo, ctypes.sizeof(info), FileInformationClass=file_info_class)
     except Exception as e:
+        # import pdb;pdb.set_trace()
         if not (e.winerror & 0xffffffff) == gdef.STATUS_BUFFER_OVERFLOW:
             raise
         # STATUS_BUFFER_OVERFLOW -> Guess we have a FILE_NAME_INFORMATION somewhere that need a bigger buffer
@@ -281,6 +321,8 @@ def query_file_information(file_or_handle, file_info_class):
             file_name_length = pinfo[0].FileNameLength
         elif file_info_class == gdef.FileAllInformation:
             file_name_length = pinfo[0].NameInformation.FileNameLength
+        elif file_info_class == gdef.FileStreamInformation:
+            file_name_length = 0x10000
         else:
             raise
         full_size = ctypes.sizeof(info) + file_name_length # We add a little too much size for the sake of simplicity
@@ -288,7 +330,65 @@ def query_file_information(file_or_handle, file_info_class):
         windows.winproxy.NtQueryInformationFile(handle, io_status, buffer, full_size, FileInformationClass=file_info_class)
         pinfo = ctypes.cast(buffer,  ctypes.POINTER(ntqueryinformationfile_info_structs[file_info_class]))
         info = pinfo[0]
+    # return list of ADS if FileStreamInformation ?
     return info
+
+
+class EAInfo(gdef.FILE_FULL_EA_INFORMATION):
+    @property
+    def name(self):
+        return gdef.LPCSTR(ctypes.addressof(self) + type(self).EaName.offset).value
+
+    @property
+    def value(self):
+        value_addr = ctypes.addressof(self) + type(self).EaName.offset + self.EaNameLength + 1 # +1 -> Name \x00
+        return (ctypes.c_char * self.EaValueLength).from_address(value_addr)[:]
+
+    @property
+    def next(self):
+        # NextEntryOffset is Relative to our current offset
+        if not self.NextEntryOffset:
+            return None
+        try: # First entry
+            raw_buffer = self._b_base_._raw_buffer_
+        except AttributeError as e:
+            raw_buffer = self._raw_buffer_
+        curoffset = getattr(self, "_raw_buffer_offset_", 0)
+        new = type(self).from_buffer(raw_buffer, curoffset + self.NextEntryOffset)
+        # Keep the underlying buffer easily accessible
+        new._raw_buffer_ = raw_buffer
+        new._raw_buffer_offset_ = curoffset + self.NextEntryOffset
+        return new
+
+
+    def __iter__(self):
+        while self:
+            yield self
+            self = self.next
+
+    def __repr__(self):
+        return '<{0} name="{1}">'.format(type(self).__name__, self.name)
+
+
+MAXIMUM_EA_SIZE = 0x0000ffff
+
+def query_extended_attributes(file_or_handle):
+    if isinstance(file_or_handle, file):
+        file_or_handle = windows.utils.get_handle_from_file(file_or_handle)
+    # Check EaSize
+    x = windows.utils.query_file_information(file_or_handle, gdef.FileEaInformation)
+    if not x.EaSize:
+        return
+    io_status = gdef.IO_STATUS_BLOCK()
+    # Handle Win10 / Win7
+    # Saw on Win10 -> EaSize > MAXIMUM_EA_SIZE
+    # Saw on Win7 -> EaSize not enought (STATUS_BUFFER_OVERFLOW)
+    buffsize = max(MAXIMUM_EA_SIZE, x.EaSize)
+    buffer = windows.utils.BUFFER(EAInfo)(size=buffsize)
+    windows.winproxy.NtQueryEaFile(file_or_handle, io_status, buffer, buffsize, False, None, 0, None, True)
+    return buffer[0]
+
+
 
 
 ntqueryvolumeinformationfile_info_structs = {
@@ -339,6 +439,18 @@ def ntstatus(code):
     return windows.generated_def.ntstatus.NtStatusException(code)
 
 
+_WINERROR_BY_VALUE = None
+def winerror(code):
+    global _WINERROR_BY_VALUE
+    if not _WINERROR_BY_VALUE: # Lazy init
+        _WINERROR_BY_VALUE = gdef.FlagMapper(*(getattr(gdef, error) for error in gdef.meta.errors))
+    val = _WINERROR_BY_VALUE[code]
+    if val is code: # Not found
+        val = _WINERROR_BY_VALUE[code & 0xffff] # Hresult: extract code (https://en.wikipedia.org/wiki/HRESULT)
+    return val
+
+
+
 def get_long_path(path):
     """Return the long path form for ``path``.
 
@@ -380,11 +492,15 @@ def dospath_to_ntpath(dospath):
     return ustring.str
 
 
-def get_shared_mapping(name, size=0x1000):
+def get_shared_mapping(name=None, handle=INVALID_HANDLE_VALUE, size=0x1000):
     # TODO: real code
-    h = windows.winproxy.CreateFileMappingA(INVALID_HANDLE_VALUE, dwMaximumSizeLow=size, lpName=name)
+    h = windows.winproxy.CreateFileMappingA(handle, dwMaximumSizeLow=size, lpName=name)
     addr = windows.winproxy.MapViewOfFile(h, dwNumberOfBytesToMap=size)
     return addr
+
+
+def create_file(name, access=gdef.GENERIC_READ, share=gdef.FILE_SHARE_READ, security=None, creation=gdef.OPEN_EXISTING, flags=gdef.FILE_ATTRIBUTE_NORMAL):
+    return windows.winproxy.CreateFileA(name, access, share, security, creation, flags, 0)
 
 #def mapfile(file):
 #    fhandle = get_handle_from_file(file)

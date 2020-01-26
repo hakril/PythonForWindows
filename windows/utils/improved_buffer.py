@@ -1,3 +1,4 @@
+import sys
 import ctypes
 import _ctypes
 import windows.generated_def as gdef
@@ -16,6 +17,9 @@ import windows.generated_def as gdef
 
     # On peut vouloir creer un buffer avec 12 elts de type X
     # Ou creer un buffer avec 12 elt de type X mais une sub-size de 1000
+
+if sys.version_info.major >= 3:
+    long = int
 
 class ImprovedCtypesBufferBase(object):
     def cast(self, type):
