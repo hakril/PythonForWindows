@@ -3,6 +3,7 @@ import functools
 
 import windows.generated_def as gdef
 from .error import ExportNotFound
+from windows.pycompat import is_py3
 
 # Utils
 def is_implemented(apiproxy):
@@ -22,7 +23,7 @@ def get_target(apiproxy):
 def resolve(apiproxy):
     """Resolve the address of ``apiproxy``. Might raise if ``apiproxy`` is not implemented"""
     apiproxy.force_resolution()
-    func = ctypes.WinDLL(dll_name)[func_name]
+    func = ctypes.WinDLL(apiproxy.target_dll)[apiproxy.target_func]
     return ctypes.cast(func, gdef.PVOID).value
 
 
@@ -103,7 +104,7 @@ class ApiProxy(object):
 
                 # "argument 2: <type 'exceptions.TypeError'>: wrong type"
                 # Thx ctypes..
-                argnbstr, ecx, reason = e.message.split(":")
+                argnbstr, ecx, reason = e.args[0].split(":") # py2 / py3 compat :)
                 if not argnbstr.startswith("argument "):
                     raise # Don't knnow if it can happen
                 argnb = int(argnbstr[len("argument "):])
