@@ -1,6 +1,11 @@
+import sys
 import collections
 import struct
 
+# py3
+is_py3 = (sys.version_info.major >= 3)
+if is_py3:
+    basestring = str
 
 class BitArray(object):
     def __init__(self, size, bits):
@@ -72,8 +77,14 @@ class Prefix(object):
     def __add__(self, other):
         return type(self)(other)
 
+    def get_code_py3(self):
+        return bytes([self.PREFIX_VALUE]) + self.next.get_code()
+
     def get_code(self):
         return chr(self.PREFIX_VALUE) + self.next.get_code()
+
+    if is_py3:
+        get_code = get_code_py3
 
 
 def create_prefix(name, value):
@@ -100,6 +111,15 @@ x86_16bits_regs = ['AX', 'CX', 'DX', 'BX', 'SP', 'BP', 'SI', 'DI']
 x86_segment_selectors = {'CS': CSPrefix, 'DS': DSPrefix, 'ES': ESPrefix, 'SS': SSPrefix,
                          'FS': FSPrefix, 'GS': GSPrefix}
 
+# Man intel -> Sreg (Vol 2.a 3-6)
+x86_segment_selectors_number = {
+    "ES": "000",
+    "CS": "001",
+    "SS": "010",
+    "DS": "011",
+    "FS": "100",
+    "GS": "101",
+ }
 
 class X86(object):
     @staticmethod
@@ -107,6 +127,13 @@ class X86(object):
         try:
             return name.upper() in x86_regs + x86_16bits_regs
         except AttributeError:  # Not a string
+            return False
+
+    @staticmethod
+    def is_seg_reg(name):
+        try:
+            return name.upper() in x86_segment_selectors_number
+        except AttributeError:
             return False
 
     @staticmethod
@@ -372,6 +399,9 @@ class SegmentSelectorAbsoluteAddr(object):
         return (sizess + sizeabs, dataabs + datass)
 
 
+
+
+
 class ModRM(object):
     def __init__(self, sub_modrm, accept_reverse=True, has_direction_bit=True):
         self.accept_reverse = accept_reverse
@@ -404,6 +434,7 @@ class ModRM_REG__REG(object):
     def match(cls, arg1, arg2):
         return X86.is_reg(arg1) and X86.is_reg(arg2)
 
+
     def __init__(self, arg1, arg2, reversed, instr_state):
         self.mod = BitArray(2, "11")
         if X86.reg_size(arg1) != X86.reg_size(arg2):
@@ -414,6 +445,18 @@ class ModRM_REG__REG(object):
         self.rm = X86RegisterSelector.get_reg_bits(arg1)
         self.after = BitArray(0, "")
         self.direction = 0
+
+class ModRM_REG__SEGREG(object):
+    @classmethod
+    def match(cls, arg1, arg2):
+        return X86.is_reg(arg1) and X86.is_seg_reg(arg2)
+
+    def __init__(self, arg1, arg2, reversed, instr_state):
+        self.mod = BitArray(2, "11")
+        self.rm = X86RegisterSelector.get_reg_bits(arg1)
+        self.reg = BitArray(3, x86_segment_selectors_number[arg2.upper()])
+        self.after = BitArray(0, "")
+        self.direction = reversed
 
 
 class ModRM_REG__MEM(object):
@@ -576,6 +619,13 @@ class Instruction(object):
         prefix_opcode = b"".join(chr(p.PREFIX_VALUE) for p in self.prefix)
         return prefix_opcode + bytes(self.value.dump())
 
+    def get_code_py3(self):
+        prefix_opcode = b"".join(bytes([p.PREFIX_VALUE]) for p in self.prefix)
+        return prefix_opcode + bytes(self.value.dump())
+
+    if is_py3:
+        get_code = get_code_py3
+
     #def __add__(self, other):
     #    res = MultipleInstr()
     #    res += self
@@ -720,7 +770,8 @@ class Sub(Instruction):
 class Mov(Instruction):
     encoding = [(RawBits.from_int(8, 0x89), ModRM([ModRM_REG__REG, ModRM_REG__MEM])),
                 (RawBits.from_int(8, 0xc7), Slash(0), Imm32()),
-                (RawBits.from_int(5, 0xb8 >> 3), X86RegisterSelector(), Imm32()),
+                (RawBits.from_int(5, 0xB8 >> 3), X86RegisterSelector(), Imm32()),
+                (RawBits.from_int(8, 0x8C), ModRM([ModRM_REG__SEGREG])),
                 (RawBits.from_int(16, 0x0f20), ControlRegisterModRM(writecr=False)),
                 (RawBits.from_int(16, 0x0f22), ControlRegisterModRM(writecr=True))]
 

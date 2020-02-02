@@ -7,10 +7,10 @@ import functools
 import windows
 import windows.native_exec.simple_x86 as x86
 import windows.native_exec.simple_x64 as x64
-from generated_def.winstructs import *
+from .generated_def.winstructs import *
 from windows.winobject import process
 from windows import winproxy
-from winproxy import NeededParameter
+from .winproxy import NeededParameter
 
 # Special code for syswow64 process
 CS_32bits = 0x23
@@ -33,6 +33,12 @@ def generate_64bits_execution_stub_from_syswow(x64shellcode):
 
     transition =     x86.MultipleInstr()
     transition +=    x86.Call(CS_64bits, x64shellcodeaddr)
+    # Reset the SS segment selector.
+    # We need to do that due to a bug in AMD CPUs with RETF & SS
+    # https://github.com/hakril/PythonForWindows/issues/10
+    # http://blog.rewolf.pl/blog/?p=1484
+    transition +=    x86.Mov("ECX", "SS")
+    transition +=    x86.Mov("SS", "ECX")
     transition +=    x86.Ret()
 
     stubaddr = windows.current_process.allocator.write_code(transition.get_code())
