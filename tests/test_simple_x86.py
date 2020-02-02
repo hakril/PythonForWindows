@@ -9,6 +9,8 @@ import windows.native_exec.simple_x86 as x86
 from windows.native_exec.simple_x86 import *
 del Test # Prevent pytest warning
 
+VERBOSE = False
+
 if capstone:
     disassembleur = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_32)
     disassembleur.detail = True
@@ -16,7 +18,7 @@ if capstone:
 @pytest.fixture
 def need_capstone():
     if capstone is None:
-        raise pytest.Skip("Capstone is not installed")
+        raise pytest.skip("Capstone is not installed")
     return True
 
 pytestmark = pytest.mark.usefixtures("need_capstone")
@@ -47,6 +49,9 @@ class CheckInstr(object):
         if len(res) != len(capres.bytes):
             raise AssertionError("Not all bytes have been used by the disassembler")
 
+        if VERBOSE:
+            print("  * [CODE] {0}".format(repr(res)))
+            print("  * [DISAS] {0} {1}".format(capres.mnemonic, capres.op_str))
 
         if self.expected_result is not None:
             if "{0} {1}".format(capres.mnemonic, capres.op_str) == self.expected_result:
@@ -129,6 +134,17 @@ def test_assembler():
     CheckInstr(Mov)('AX', mem('fs:[0x30]'))
     CheckInstr(Mov)('AX', mem('fs:[EAX + 0x30]'))
     CheckInstr(Mov)('AX', mem('fs:[EAX + ECX * 4+0x30]'))
+    # Segment selector
+    CheckInstr(Mov)('SS', 'ECX')
+    CheckInstr(Mov)('ECX', 'SS')
+    CheckInstr(Mov)('EDX', 'es')
+    CheckInstr(Mov)('EDX', 'cs')
+    CheckInstr(Mov)('EDX', 'ds')
+    CheckInstr(Mov)('EDX', 'fs')
+    CheckInstr(Mov)('fs', 'eax')
+    CheckInstr(Mov)('fs', 'eax')
+
+
     CheckInstr(Add)('EAX', 8)
     CheckInstr(Add)('EAX', 0xffffffff)
     CheckInstr(Add)("ECX", mem("[EAX + 0xff]"))

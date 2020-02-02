@@ -5,10 +5,10 @@ import windows.generated_def as gdef
 
 
 def test_services_process():
-    services_with_process = [s for s in windows.system.services if s.ServiceStatusProcess.dwProcessId]
+    services_with_process = [s for s in windows.system.services if s.status.dwProcessId]
     service = services_with_process[0]
     proc = service.process
-    assert proc.pid == service.ServiceStatusProcess.dwProcessId
+    assert proc.pid == service.status.dwProcessId
 
 
 def test_service_appinfo():

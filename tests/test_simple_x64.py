@@ -15,7 +15,7 @@ if capstone:
 @pytest.fixture
 def need_capstone():
     if capstone is None:
-        raise pytest.Skip("Capstone is not installed")
+        raise pytest.skip("Capstone is not installed")
     return True
 
 pytestmark = pytest.mark.usefixtures("need_capstone")

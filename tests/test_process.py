@@ -12,7 +12,7 @@ import windows.generated_def as gdef
 import windows.native_exec.simple_x86 as x86
 import windows.native_exec.simple_x64 as x64
 
-from pfwtest import *
+from .pfwtest import *
 
 @check_for_gc_garbage
 class TestCurrentProcessWithCheckGarbage(object):
@@ -330,7 +330,7 @@ class TestProcessWithCheckGarbage(object):
         assert len(dlls) == 1
         injecteddll = dlls[0]
         # Check that the DLL is the one we asked to load
-        assert injecteddll.fullname == targetname
+        assert injecteddll.fullname.lower() == targetname.lower()
 
 # UNICODE_PATH_NAME = u'\u4e2d\u56fd\u94f6\u884c\u7f51\u94f6\u52a9\u624b'
 
