@@ -3,6 +3,7 @@ from windows import winproxy
 import windows.generated_def as gdef
 
 import _multiprocessing
+import ctypes
 
 # Inspired from 'multiprocessing\connection.py'
 
@@ -29,19 +30,31 @@ class PipeConnection(object): # Cannot inherit: crash the interpreter
         return cls(connection, *args, **kwargs)
 
     @classmethod
-    def create(cls, addr):
+    def create(cls, addr, security_descriptor=None):
         """Create a namedpipe pipe ``addr``
 
         :returns type: :class:`PipeConnection`
         """
         addr = full_pipe_address(addr)
+
+        security_attributes = None
+        if security_descriptor is not None:
+            if isinstance(security_descriptor, str):
+                security_descriptor = windows.security.SecurityDescriptor.from_string(security_descriptor)
+            security_attributes = gdef.SECURITY_ATTRIBUTES()
+            security_attributes.nLength = ctypes.sizeof(security_attributes)
+            security_attributes.lpSecurityDescriptor = security_descriptor # Accept as arg ?
+            security_attributes.bInheritHandle = True # Accept as arg ?
+
+
         pipehandle = winproxy.CreateNamedPipeA(
             addr, gdef.PIPE_ACCESS_DUPLEX,
             gdef.PIPE_TYPE_MESSAGE | gdef.PIPE_READMODE_MESSAGE |
             gdef.PIPE_WAIT,
             gdef.PIPE_UNLIMITED_INSTANCES, cls.BUFFER_SIZE, cls.BUFFER_SIZE,
-            gdef.NMPWAIT_WAIT_FOREVER, None
+            gdef.NMPWAIT_WAIT_FOREVER, security_attributes
             )
+        import pdb;pdb.set_trace()
         return cls.from_handle(pipehandle, name=addr, server=True)
 
     @classmethod
@@ -66,6 +79,16 @@ class PipeConnection(object): # Cannot inherit: crash the interpreter
     def wait_connection(self):
         """Wait for a client process to connect to the named pipe"""
         return winproxy.ConnectNamedPipe(self.handle, None)
+
+    def get_security_descriptor(self):
+        return windows.security.SecurityDescriptor.from_handle(self.handle)
+
+    def set_security_descriptor(self, sd):
+        if isinstance(sd, basestring):
+            sd = windows.security.SecurityDescriptor.from_string(sd)
+        sd._apply_to_handle_and_type(self.handle)
+
+    security_descriptor = property(get_security_descriptor, set_security_descriptor)
 
     def close(self):
         """Close the handle of the pipe"""
