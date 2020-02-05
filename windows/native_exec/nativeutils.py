@@ -71,7 +71,6 @@ GetProcAddress64 +=     x64.Call(":FUNC_STRLENW64")
 GetProcAddress64 +=     x64.Mov("RDI", "RCX")
 GetProcAddress64 +=     x64.Mov("RCX", "RAX")
 GetProcAddress64 +=     x64.Mov("RSI", "R11")
-#GetProcAddress64 +=     x64.Int3()
 GetProcAddress64 +=     x64.Rep + x64.CmpsW() #;cmp with current dll name (unicode)
 GetProcAddress64 +=     x64.Test("RCX", "RCX")
 GetProcAddress64 +=     x64.Jz(":DLL_FOUND")
@@ -250,7 +249,6 @@ GetProcAddress32 +=     x86.Test("EAX", "EAX")
 GetProcAddress32 += x86.Jnz(":SEARCH_LOOP")
 
 GetProcAddress32 += x86.Dec("ECX")
-#GetProcAddress32 += x86.Int3()
 #GetProcAddress32 += x86.Int3() # da poi(edx + (ecx * 4)) + ebx; da esi
 GetProcAddress32 += x86.Pop("EAX") # ;Restore export_dir addr
 GetProcAddress32 += x86.Mov("EDX", x86.mem("[EAX + 36]")) # ;EDX = AddressOfNameOrdinals RVX

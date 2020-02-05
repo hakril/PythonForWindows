@@ -1,17 +1,19 @@
 import struct
 import ctypes
 import os
+import sys
 
 import windows
 import windows.utils as utils
+import windows.generated_def as gdef
 
 from .native_exec import simple_x86 as x86
 from .native_exec import simple_x64 as x64
 
 from windows.generated_def import STATUS_THREAD_IS_TERMINATING
 from windows.native_exec.nativeutils import GetProcAddress64, GetProcAddress32
-
 from windows.dbgprint import dbgprint
+
 
 class InjectionFailedError(WindowsError):
     pass
@@ -105,7 +107,6 @@ def perform_manual_getproc_loadlib_64(target, dll_name):
 
 def generate_simple_LoadLibraryW_64(load_libraryW, remote_store):
     code = RemoteLoadLibrayStub = x64.MultipleInstr()
-    # code += x64.Int3()
     code += x64.Mov("RAX", load_libraryW)
     code += (x64.Push("RDI") * 5) # Prepare stack
     code += x64.Call("RAX")
@@ -122,14 +123,12 @@ def perform_manual_getproc_loadlib(target, *args, **kwargs):
     return perform_manual_getproc_loadlib_64(target, *args, **kwargs)
 
 
-def load_dll_in_remote_process(target, dll_name):
-    # if target.bitness == 64:
-        # import pdb;pdb.set_trace()
+def load_dll_in_remote_process(target, dll_path):
     rpeb = target.peb
     if rpeb.Ldr:
         # LDR est parcourable, ca va etre deja plus simple..
         modules = rpeb.modules
-        if any(mod.name == dll_name for mod in modules):
+        if any(mod.fullname.lower() == dll_path.lower() for mod in modules):
             # DLL already loaded
             dbgprint("DLL already present in target", "DLLINJECT")
             return False
@@ -144,7 +143,7 @@ def load_dll_in_remote_process(target, dll_name):
 
             with target.allocated_memory(0x1000) as addr:
                 if target.bitness == 32:
-                    target.write_memory(addr, (dll_name + "\x00").encode('utf-16le'))
+                    target.write_memory(addr, (dll_path + "\x00").encode('utf-16le'))
                     t = target.create_thread(load_libraryW, addr)
                     t.wait()
                     module_baseaddr = t.exit_code
@@ -154,7 +153,7 @@ def load_dll_in_remote_process(target, dll_name):
                     retval_addr = addr
                     target.write_ptr(retval_addr, 0)
                     addr += ctypes.sizeof(ctypes.c_ulonglong)
-                    full_dll_name = (dll_name + "\x00").encode('utf-16le')
+                    full_dll_name = (dll_path + "\x00").encode('utf-16le')
                     target.write_memory(addr, full_dll_name)
                     param_addr = addr
                     addr += len(full_dll_name)
@@ -166,7 +165,7 @@ def load_dll_in_remote_process(target, dll_name):
                     module_baseaddr = target.read_ptr(retval_addr)
 
             if not module_baseaddr:
-                raise InjectionFailedError(u"Injection of <{0}> failed".format(dll_name))
+                raise InjectionFailedError(u"Injection of <{0}> failed".format(dll_path))
             dbgprint("DLL Injected via LoadLibray", "DLLINJECT")
             # Cannot return the full return value of load_libraryW in 64b target.. (exit_code is a DWORD)
             return module_baseaddr
@@ -175,8 +174,8 @@ def load_dll_in_remote_process(target, dll_name):
     # Go inject a GetProcAddress(LoadLib) + LoadLib shellcode :D
     dbgprint("DLL Via manual getproc / loadlib", "DLLINJECT")
     if target.bitness == 32:
-        return perform_manual_getproc_loadlib_32(target, dll_name)
-    return perform_manual_getproc_loadlib_64(target, dll_name)
+        return perform_manual_getproc_loadlib_32(target, dll_path)
+    return perform_manual_getproc_loadlib_64(target, dll_path)
 
 python_function_32_bits = {}
 
@@ -207,11 +206,9 @@ def generate_python_exec_shellcode_32(target, PyDll):
     code += x86.Mov("EDI", "EAX")
     code += x86.Cmp("EAX", 0)
     code += x86.Jnz(":DO_ENSURE")
-    # Python Initilisation code
-    # init multithread (for other injection)
-    code +=     x86.Mov('EAX', PyEval_InitThreads)
-    code +=     x86.Call('EAX')
     code +=     x86.Mov('EAX', Py_Initialize)
+    code +=     x86.Call('EAX')
+    code +=     x86.Mov('EAX', PyEval_InitThreads)
     code +=     x86.Call('EAX')
     code += x86.Label(":DO_ENSURE")
     code += x86.Mov('EAX', PyGILState_Ensure)
@@ -273,9 +270,9 @@ def generate_python_exec_shellcode_64(target, PyDll):
     code += x64.Mov("RDI", "RAX")
     code += x64.Cmp("RAX", 0)
     code += x64.Jnz(":DO_ENSURE")
-    code +=     x64.Mov('RAX', PyEval_InitThreads)
-    code +=     x64.Call('RAX')
     code +=     x64.Mov('RAX', Py_Initialize)
+    code +=     x64.Call('RAX')
+    code +=     x64.Mov('RAX', PyEval_InitThreads)
     code +=     x64.Call('RAX')
     code += x64.Label(":DO_ENSURE")
     code += x64.Mov('RAX', PyGILState_Ensure)
@@ -323,25 +320,70 @@ def inject_python_command(target, code_injected, PYDLL):
     target._execute_python_shellcode = shellcode_addr
     return shellcode_addr, remote_python_code_addr
 
+def get_dll_name_from_python_version():
+    version = sys.version_info
+    return "python{v.major}{v.minor}.dll".format(v=version)
 
-def validate_python_dll_presence_on_disk(process):
-    if windows.current_process.bitness == process.bitness:
-        return True
-    if windows.current_process.bitness == 32 and process.bitness == 64:
-        with windows.utils.DisableWow64FsRedirection():
-            if not os.path.exists(r"C:\Windows\system32\python27.dll"):
-                raise IOError("Could not find Python DLL to inject")
-            return True
-    if windows.current_process.bitness == 64 and process.bitness == 32:
-        if not os.path.exists(r"C:\Windows\SysWOW64\python27.dll"):
+def find_python_dll_to_inject(target_bitness):
+    pydll_name = get_dll_name_from_python_version()
+    if windows.current_process.bitness == target_bitness:
+        # We can inject our own DLL
+        pymodules = [m for m in windows.current_process.peb.modules if m.name == pydll_name]
+        assert len(pymodules) == 1
+        return pymodules[0].fullname
+    # Okay, so we need to find the DLL to inject.
+    # Problem is, for py3 the DLL is not un system32, so we need for search for it
+    # Simpler solution is the registry
+    # Add a check using %PATH% ?
+    assert windows.system.bitness == 64, "How can we have process of different bitness on 32b system ?"
+    if sys.version_info.major == 2:
+        # Python2 DLL are located in system32/syswow64
+        # We know that we are looking to DLL of the other bitness
+        if windows.current_process.bitness == 32:
+            # We need to check that the real system32\pythonXX.dll exists
+            systempath = "sysnative"
+        else:
+            # We need to check that the wow64 system32\pythonXX.dll exists
+            systempath = "syswow64"
+        if not os.path.exists(os.path.join(os.environ["windir"], systempath, pydll_name)):
             raise IOError("Could not find Python DLL to inject")
-        return True
-    raise NotImplementedError("Unknown bitness")
+        # In any way (32b ou 64b) the target process will load system32\pydll
+        # If the target is 32b the wow64 layer will translate it
+        return os.path.join(os.environ["windir"], "system32", pydll_name)
+    # Python 3 dll must be located using the registry
+    for base_key in "HKEY_LOCAL_MACHINE", "HKEY_CURRENT_USER":
+        # Open the registry in 64b view regardless of current process bitness
+        regbase = windows.system.registry(base_key, gdef.KEY_WOW64_64KEY | gdef.KEY_READ)
+        # we cannot use sys.winver as we are looking for the OTHER version
+        # But from Python <PCbuild/python.props> it looks like format is
+        # {Major}.{Minor}{-32}(for 32b build)
+        # This code do not handle -test version
+        winver_base = sys.winver[:3] # major-minor
+        if target_bitness == 64:
+            pyinstallkey = regbase("SOFTWARE\Python\PythonCore")(winver_base)
+        else:
+            pyinstallkey = regbase("SOFTWARE\WOW6432Node\Python\PythonCore")(winver_base + "-32")
+        try:
+            pyinstallpath = pyinstallkey("InstallPath")[""].value
+            final_path = os.path.join(pyinstallpath, pydll_name)
+            assert os.path.exists(final_path), "Could not find <{0}> pydll referenced from registry".format(final_path)
+            return final_path
+        except WindowsError as e:
+            if e.winerror != gdef.ERROR_FILE_NOT_FOUND:
+                raise
+            # Not found
+            continue
+    # Could not find a valid installation
+    raise ValueError("Could not find a path for python-dll <{0}>({1}bits)".format(sys.winver, target_bitness))
+
+
 
 def execute_python_code(process, code):
-    validate_python_dll_presence_on_disk(process)
-    load_dll_in_remote_process(process, "python27.dll")
-    shellcode, pythoncode = inject_python_command(process, code, "python27.dll")
+    # Cache the value ?
+    py_dll_name = get_dll_name_from_python_version()
+    pydll_path = find_python_dll_to_inject(process.bitness)
+    load_dll_in_remote_process(process, pydll_path)
+    shellcode, pythoncode = inject_python_command(process, code, py_dll_name)
     t = process.create_thread(shellcode, pythoncode)
     return t
 
