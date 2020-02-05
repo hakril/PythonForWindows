@@ -8,6 +8,8 @@ import windows.native_exec.simple_x64 as x64
 from windows.native_exec.simple_x64 import *
 del Test # Prevent pytest warning
 
+from windows.pycompat import int_types
+
 if capstone:
     disassembleur = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_64)
     disassembleur.detail = True
@@ -25,8 +27,6 @@ def disas(x):
     return list(disassembleur.disasm(x, 0))
 
 mnemonic_name_exception = {'movabs': 'mov'}
-
-
 
 
 class CheckInstr(object):
@@ -87,7 +87,7 @@ class CheckInstr(object):
                     raise AssertionError("Expected args {0} operands got {1}".format(op_args, capres_op))
                 if op_args.lower() != capres.reg_name(cap_op.reg).lower():
                     raise AssertionError("Expected register <{0}> got {1}".format(op_args.lower(), capres.reg_name(cap_op.reg).lower()))
-            elif isinstance(op_args, (int, long)):
+            elif isinstance(op_args, int_types):
                 if (op_args != cap_op.imm) and not (self.immediat_accepted and self.immediat_accepted == cap_op.imm):
                     raise AssertionError("Expected Immediat <{0}> got {1}".format(op_args, cap_op.imm))
             elif isinstance(op_args, mem_access):
@@ -272,13 +272,18 @@ def test_assembler():
     CheckInstr(Add, must_fail=True)('RAX', 0xffffffff)
 
 
+    # Test some prefix / REP
+    assert (x64.Rep + x64.Nop()).get_code() == b"\xf3\x90"
+    assert (x64.GSPrefix + x64.Nop()).get_code() == b"\x65\x90"
+    assert (x64.OperandSizeOverride + x64.Nop()).get_code() == b"\x66\x90"
+    assert (x64.Repne + x64.Nop()).get_code() == b"\xf2\x90"
 
     code = MultipleInstr()
     code += Nop()
     code += Rep + Nop()
     code += Ret()
     print(repr(code.get_code()))
-    assert code.get_code() == "\x90\xf3\x90\xc3"
+    assert code.get_code() == b"\x90\xf3\x90\xc3"
 
 def test_simple_x64_raw_instruction():
     # Test the fake instruction "raw"
@@ -296,8 +301,14 @@ def test_x64_multiple_instr_add_instr_and_str():
     res += "ret; ret; label :offset_3; ret"
     res += x64.Nop()
     res += x64.Label(":offset_5")
-    assert res.get_code() == "\x90\xc3\xc3\xc3\x90"
+    assert res.get_code() == b"\x90\xc3\xc3\xc3\x90"
     assert res.labels == {":offset_3": 3, ":offset_5": 5}
+
+def test_x64_instr_multiply():
+    res = x64.MultipleInstr()
+    res += (x64.Nop() * 5)
+    res += x64.Ret()
+    assert res.get_code() == b"\x90\x90\x90\x90\x90\xc3"
 
 if __name__ == "__main__":
     test_assembler()

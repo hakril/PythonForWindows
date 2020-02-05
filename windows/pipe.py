@@ -54,7 +54,6 @@ class PipeConnection(object): # Cannot inherit: crash the interpreter
             gdef.PIPE_UNLIMITED_INSTANCES, cls.BUFFER_SIZE, cls.BUFFER_SIZE,
             gdef.NMPWAIT_WAIT_FOREVER, security_attributes
             )
-        import pdb;pdb.set_trace()
         return cls.from_handle(pipehandle, name=addr, server=True)
 
     @classmethod

@@ -9,6 +9,8 @@ import windows.native_exec.simple_x86 as x86
 from windows.native_exec.simple_x86 import *
 del Test # Prevent pytest warning
 
+from windows.pycompat import int_types
+
 VERBOSE = False
 
 if capstone:
@@ -77,7 +79,7 @@ class CheckInstr(object):
                     raise AssertionError("Expected args {0} operands got {1}".format(op_args, capres_op))
                 if op_args.lower() != capres.reg_name(cap_op.reg).lower():
                     raise AssertionError("Expected register <{0}> got {1}".format(op_args.lower(), capres.reg_name(cap_op.reg).lower()))
-            elif isinstance(op_args, (int, long)):
+            elif isinstance(op_args, int_types):
                 if (op_args != cap_op.imm) and not (self.immediat_accepted and self.immediat_accepted == cap_op.imm):
                     raise AssertionError("Expected Immediat <{0}> got {1}".format(op_args, cap_op.imm))
             elif isinstance(op_args, mem_access):
@@ -226,7 +228,7 @@ def test_assembler():
     code += Rep + Nop()
     code += Ret()
     print(repr(code.get_code()))
-    assert code.get_code() == "\x90\xf3\x90\xc3"
+    assert code.get_code() == b"\x90\xf3\x90\xc3"
 
 def test_simple_x64_raw_instruction():
     # Test the fake instruction "raw"
@@ -239,8 +241,14 @@ def test_x86_multiple_instr_add_instr_and_str():
     res += "ret; ret; label :offset_3; ret"
     res += x86.Nop()
     res += x86.Label(":offset_5")
-    assert res.get_code() == "\x90\xc3\xc3\xc3\x90"
+    assert res.get_code() == b"\x90\xc3\xc3\xc3\x90"
     assert res.labels == {":offset_3": 3, ":offset_5": 5}
+
+def test_x86_instr_multiply():
+    res = x86.MultipleInstr()
+    res += (x86.Nop() * 5)
+    res += x86.Ret()
+    assert res.get_code() == b"\x90\x90\x90\x90\x90\xc3"
 
 if capstone is None:
     test_assembler = pytest.mark.skip("Capstone not installed")(test_assembler)

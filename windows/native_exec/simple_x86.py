@@ -1,11 +1,15 @@
 import sys
 import collections
 import struct
+import binascii
 
 # py3
 is_py3 = (sys.version_info.major >= 3)
 if is_py3:
     basestring = str
+    int_types = int
+else:
+    int_types = (int, long)
 
 class BitArray(object):
     def __init__(self, size, bits):
@@ -633,7 +637,7 @@ class Instruction(object):
     #    return res
 
     def __mul__(self, value):
-        if not isinstance(value, (int, long)):
+        if not isinstance(value, int_types):
             return NotImplemented
         res = MultipleInstr()
         for i in range(value):
@@ -910,7 +914,7 @@ class Raw(Instruction):
         if len(initial_args) != 1:
             raise ValueError("raw 'opcode' only accept one argument")
         # Accept space
-        self.data = initial_args[0].replace(" ", "").decode("hex")
+        self.data = binascii.unhexlify(initial_args[0].replace(" ", ""))
 
     def get_code(self):
         return self.data

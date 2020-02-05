@@ -1,7 +1,18 @@
+import sys
 import collections
 import struct
+import binascii
 
 DEBUG = False
+
+
+# py3
+is_py3 = (sys.version_info.major >= 3)
+if is_py3:
+    basestring = str
+    int_types = int
+else:
+    int_types = (int, long)
 
 class BitArray(object):
     def __init__(self, size, bits):
@@ -73,6 +84,16 @@ class BitArray(object):
     def copy(self):
         return type(self)(self.size, self.array)
 
+    def __eq__(self, other):
+        if not isinstance(other, BitArray):
+            return NotImplemented
+        return self.array == other.array
+
+    def __ne__(self, other):
+        if not isinstance(other, BitArray):
+            return NotImplemented
+        return self.array != other.array
+
 
 # Prefix
 class Prefix(object):
@@ -84,8 +105,14 @@ class Prefix(object):
     def __add__(self, other):
         return type(self)(other)
 
+    def get_code_py3(self):
+        return bytes([self.PREFIX_VALUE]) + self.next.get_code()
+
     def get_code(self):
         return chr(self.PREFIX_VALUE) + self.next.get_code()
+
+    if is_py3:
+        get_code = get_code_py3
 
 
 def create_prefix(name, value):
@@ -763,6 +790,9 @@ class Instruction(object):
     default_rex = BitArray.from_int(8, 0x40)
 
     def __init__(self, *initial_args):
+        # if (type(self) is Push):
+            # import pdb;pdb.set_trace()
+
         for type_encoding in self.encoding:
             args = list(initial_args)
             res = []
@@ -783,7 +813,7 @@ class Instruction(object):
                     continue
                 self.prefix = prefix
                 self.value = sum(res, BitArray(0, ""))
-                if str(full_rex.dump()) != "\x40":
+                if full_rex != self.default_rex:
                     self.value = full_rex + self.value
                 return
         raise ValueError("Cannot encode <{0} {1}>:(".format(type(self).__name__, initial_args))
@@ -792,8 +822,15 @@ class Instruction(object):
         prefix_opcode = b"".join(chr(p.PREFIX_VALUE) for p in self.prefix)
         return prefix_opcode + bytes(self.value.dump())
 
+    def get_code_py3(self):
+        prefix_opcode = b"".join(bytes([p.PREFIX_VALUE]) for p in self.prefix)
+        return prefix_opcode + bytes(self.value.dump())
+
+    if is_py3:
+        get_code = get_code_py3
+
     def __mul__(self, value):
-        if not isinstance(value, (int, long)):
+        if not isinstance(value, int_types):
             return NotImplemented
         res = MultipleInstr()
         for i in range(value):
@@ -1071,7 +1108,7 @@ class Raw(Instruction):
         if len(initial_args) != 1:
             raise ValueError("raw 'opcode' only accept one argument")
         # Accept space
-        self.data = initial_args[0].replace(" ", "").decode("hex")
+        self.data = binascii.unhexlify(initial_args[0].replace(" ", ""))
 
     def get_code(self):
         return self.data
