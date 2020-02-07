@@ -19,9 +19,13 @@ from .breakpoints import *
 #from windows.syswow64 import CS_32bits
 from windows.winobject.exception import VectoredException
 
+from windows.pycompat import basestring
+
 
 PAGE_SIZE = 0x1000
 
+class DebuggerError(Exception):
+    pass
 
 class DEBUG_EVENT(DEBUG_EVENT):
     KNOWN_EVENT_CODE = dict((x,x) for x in [EXCEPTION_DEBUG_EVENT,
@@ -102,7 +106,7 @@ class Debugger(object):
                     self.target = None  # Remove ref to process -> GC -> CloseHandle -> process is destroyed
                     windows.winproxy.DebugActiveProcessStop(tpid)
                 return
-            for proc in targets:
+            for proc in list(targets):
                 self.detach(proc)
             del targets
             return
@@ -110,7 +114,7 @@ class Debugger(object):
             raise ValueError("Detach accept only WinProcess")
 
         self.disable_all_memory_breakpoints(target)
-        for bp in self.breakpoints[target.pid].values():
+        for bp in list(self.breakpoints[target.pid].values()):
             if not bp.apply_to_target(target):
                 target_threads = [t for t in target.threads if t.tid in self.threads]
                 bp_threads = []
@@ -173,7 +177,7 @@ class Debugger(object):
 
     def _debug_event_generator(self):
         while True:
-            debug_event = DEBUG_EVENT()
+            debug_event = gdef.DEBUG_EVENT()
             try:
                 winproxy.WaitForDebugEvent(debug_event)
             except KeyboardInterrupt as e:
@@ -181,7 +185,7 @@ class Debugger(object):
                 # BP trigger will not be called.
                 # So AT LEAST quit loop with a coherent context
                 # Fix thread PC if we just triggered a BP
-                if (debug_event.code == gdef.EXCEPTION_DEBUG_EVENT and
+                if (debug_event.dwDebugEventCode == gdef.EXCEPTION_DEBUG_EVENT and
                     debug_event.u.Exception.ExceptionRecord.ExceptionCode in [gdef.EXCEPTION_BREAKPOINT, gdef.STATUS_WX86_BREAKPOINT]):
                         # This is a breakpoint:  One of ours ?
                         bp_addr = debug_event.u.Exception.ExceptionRecord.ExceptionAddress
@@ -207,7 +211,9 @@ class Debugger(object):
     def _add_exe_to_module_list(self, create_process_event):
         """Add the intial exe file described by create_process_event to the list of module in the process"""
         exe_path = self.current_process.get_mapped_filename(create_process_event.lpBaseOfImage)
-        exe_name = os.path.basename(exe_path)
+        exe_name = os.path.basename(exe_path).lower()
+        if exe_name.endswith(".exe"):
+            exe_name = exe_name[:-len(".exe")]
         #print("Exe name is {0}".format(exe_name))
         self._module_by_process[self.current_process.pid][exe_name] = windows.pe_parse.GetPEFile(create_process_event.lpBaseOfImage, self.current_process)
         #self._setup_pending_breakpoints_load_dll(exe_name) # Already setup in _setup_pending_breakpoints_new_process
@@ -251,7 +257,13 @@ class Debugger(object):
         if api not in exports:
             dbgprint("Error resolving <{0}> in <{1}>".format(addr, target), "DBG")
             raise ValueError("Unknown API <{0}> in DLL {1}".format(api, dll))
-        return exports[api]
+        target_addr = exports[api]
+        if isinstance(target_addr, basestring):
+            target_string = target_addr.replace(".", "!")
+            dbgprint("<{0}> is export proxy to <{1}>".format(addr, target_string), "DBG")
+            # Possible infinite loop ?
+            return self._resolve(target_string, target)
+        return target_addr
 
     def add_pending_breakpoint(self, bp, target):
         self._pending_breakpoints_new[target].append(bp)
@@ -285,6 +297,9 @@ class Debugger(object):
             raise ValueError("Cannot setup STANDARD_BP on {0}".format(target))
 
         addr = self._resolve(bp.addr, target)
+
+        # raise DebuggerError("Could not set breakpoint {0} at <{1}>".format(bp, bp.addr))
+
         if addr is None:
             return False
         dbgprint("Setting soft-BP at <{0:#x}> in <{1}>".format(addr, target), "DBG")
@@ -821,6 +836,9 @@ class Debugger(object):
         del self._breakpoint_to_reput[self.current_thread.tid]
         return retvalue
 
+    def _internal_on_load_dll(self, load_dll):
+        return None
+
     def _handle_load_dll(self, debug_event):
         """Handle LOAD_DLL_DEBUG_EVENT"""
         self._update_debugger_state(debug_event)
@@ -835,6 +853,7 @@ class Debugger(object):
             dll_name = dll_name[:-6] +  "64" # Crade..
         #print("Load {0} -> {1}".format(dll, dll_name))
         self._module_by_process[self.current_process.pid][dll_name] = windows.pe_parse.GetPEFile(load_dll.lpBaseOfDll, self.current_process)
+        self._internal_on_load_dll(load_dll) # Allow hook for symbol-debugger
         self._setup_pending_breakpoints_load_dll(dll_name)
         with self.DisabledMemoryBreakpoint():
             try:

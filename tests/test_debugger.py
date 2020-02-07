@@ -8,8 +8,8 @@ import windows.generated_def as gdef
 import windows.native_exec.simple_x86 as x86
 import windows.native_exec.simple_x64 as x64
 
-from conftest import generate_pop_and_exit_fixtures, pop_proc_32, pop_proc_64
-from pfwtest import *
+from .conftest import generate_pop_and_exit_fixtures, pop_proc_32, pop_proc_64
+from .pfwtest import *
 
 proc32_debug = generate_pop_and_exit_fixtures([pop_proc_32], ids=["proc32dbg"], dwCreationFlags=gdef.DEBUG_PROCESS)
 proc64_debug = generate_pop_and_exit_fixtures([pop_proc_64], ids=["proc64dbg"], dwCreationFlags=gdef.DEBUG_PROCESS)
@@ -46,7 +46,7 @@ def test_simple_standard_breakpoint(proc32_64_debug):
     class TSTBP(windows.debug.Breakpoint):
         def trigger(self, dbg, exc):
             assert dbg.current_process.pid == proc32_64_debug.pid
-            assert dbg.current_process.read_memory(self.addr, 1) ==  "\xcc"
+            assert dbg.current_process.read_memory(self.addr, 1) ==  b"\xcc"
             assert dbg.current_thread.context.pc ==  self.addr
             d.current_process.exit()
 
@@ -85,7 +85,7 @@ def test_multiple_hwx_breakpoint(proc32_64_debug):
             assert dbg.current_thread.context.pc == self.addr
             assert dbg.current_thread.context.Dr7 != 0
             assert TSTBP.COUNTER == self.expec_before
-            assert dbg.current_process.read_memory(self.addr, 1) != "\xcc"
+            assert dbg.current_process.read_memory(self.addr, 1) != b"\xcc"
             TSTBP.COUNTER += 1
             if TSTBP.COUNTER == 4:
                 d.current_process.exit()
@@ -126,7 +126,7 @@ def test_four_hwx_breakpoint_fail(proc32_64_debug):
     proc32_64_debug.create_thread(addr, 0)
     with pytest.raises(ValueError) as e:
         d.loop()
-    assert "DRx" in e.value.message
+    assert "DRx" in e.value.args[0]
 
 
 def test_hwx_breakpoint_are_on_all_thread(proc32_64_debug):
@@ -182,7 +182,7 @@ def test_simple_breakpoint_name_addr(proc32_64_debug, bptype):
     d.loop()
     assert TSTBP.COUNTER == 1
 
-import dbg_injection
+from . import dbg_injection
 
 def test_hardware_breakpoint_name_addr(proc32_64_debug):
     """Check that name addr in HXBP are trigger in all threads"""
@@ -357,7 +357,7 @@ import threading
 @python_injection
 @pytest.mark.parametrize("bptype", [windows.debug.FunctionParamDumpHXBP, windows.debug.FunctionParamDumpBP])
 def test_standard_breakpoint_self_remove(proc32_64_debug, bptype):
-    data = []
+    data = set()
 
     def do_check():
         proc32_64_debug.execute_python_unsafe("open(u'FILENAME1')").wait()
@@ -371,20 +371,21 @@ def test_standard_breakpoint_self_remove(proc32_64_debug, bptype):
             addr = exc.ExceptionRecord.ExceptionAddress
             ctx = dbg.current_thread.context
             filename = self.extract_arguments(dbg.current_process, dbg.current_thread)["lpFileName"]
-            data.append(filename)
+            data.add(filename)
             if filename == u"FILENAME2":
                 dbg.del_bp(self)
 
     d = windows.debug.Debugger(proc32_64_debug)
-    d.add_bp(TSTBP("kernel32!CreateFileW"))
+    d.add_bp(TSTBP("kernelbase!CreateFileW"))
     threading.Thread(target=do_check).start()
     d.loop()
-    assert data == [u"FILENAME1", u"FILENAME2"]
+    assert data >= set([u"FILENAME1", u"FILENAME2"])
+    assert u"FILENAME3" not in data
 
 @python_injection
 @pytest.mark.parametrize("bptype", [windows.debug.FunctionParamDumpHXBP, windows.debug.FunctionParamDumpBP])
 def test_standard_breakpoint_remove(proc32_64_debug, bptype):
-    data = []
+    data = set()
 
     def do_check():
         proc32_64_debug.execute_python_unsafe("open(u'FILENAME1')").wait()
@@ -396,19 +397,19 @@ def test_standard_breakpoint_remove(proc32_64_debug, bptype):
     class TSTBP(bptype):
         TARGET = windows.winproxy.CreateFileW
         def trigger(self, dbg, exc):
-            # import pdb;pdb.set_trace()
             addr = exc.ExceptionRecord.ExceptionAddress
             ctx = dbg.current_thread.context
             filename = self.extract_arguments(dbg.current_process, dbg.current_thread)["lpFileName"]
-            data.append(filename)
+            data.add(filename)
 
     d = windows.debug.Debugger(proc32_64_debug)
-    the_bp = TSTBP("kernel32!CreateFileW")
+    the_bp = TSTBP("kernelbase!CreateFileW")
     # import pdb;pdb.set_trace()
     d.add_bp(the_bp)
     threading.Thread(target=do_check).start()
     d.loop()
-    assert data == [u"FILENAME1", u"FILENAME2"]
+    assert data >= set([u"FILENAME1", u"FILENAME2"])
+    assert u"FILENAME3" not in data
 
 
 def get_generate_read_at_for_proc(target):
@@ -540,6 +541,8 @@ def test_exe_in_module_list(proc32_64_debug):
     class MyDbg(windows.debug.Debugger):
         def on_exception(self, exception):
             exename = os.path.basename(proc32_64_debug.peb.imagepath.str)
+            assert exename.endswith(".exe")
+            exename = exename[:-len(".exe")] # Remove the .exe from the module name
             this_process_modules = self._module_by_process[self.current_process.pid]
             assert exename and exename in this_process_modules.keys()
             self.current_process.exit()
@@ -562,6 +565,8 @@ def test_bp_exe_by_name(proc32_64_debug):
     exepe = proc32_64_debug.peb.exe
     entrypoint = exepe.get_OptionalHeader().AddressOfEntryPoint
     exename = os.path.basename(proc32_64_debug.peb.imagepath.str)
+    assert exename.endswith(".exe")
+    exename = exename[:-len(".exe")] # Remove the .exe from the module name
     d = windows.debug.Debugger(proc32_64_debug)
     # The goal is to test bp of format 'exename!offset' so we craft a string based on the entrypoint
     d.add_bp(TSTBP("{name}!{offset}".format(name=exename, offset=entrypoint)))
@@ -579,7 +584,7 @@ def test_keyboardinterrupt_when_bp_event(proc32_64_debug, monkeypatch):
 
     def WaitForDebugEvent_KeyboardInterrupt(debug_event):
         real_WaitForDebugEvent(debug_event)
-        if not debug_event.code == gdef.EXCEPTION_DEBUG_EVENT:
+        if not debug_event.dwDebugEventCode == gdef.EXCEPTION_DEBUG_EVENT:
             return
         if not debug_event.u.Exception.ExceptionRecord.ExceptionCode in [gdef.EXCEPTION_BREAKPOINT, gdef.STATUS_WX86_BREAKPOINT]:
             return # Not a BP
@@ -592,7 +597,7 @@ def test_keyboardinterrupt_when_bp_event(proc32_64_debug, monkeypatch):
 
     # This should emultate a ctrl+c on when waiting for the event
     # Our goal is to set the target back to a good state :)
-    TEST_CODE = "\xeb\xfe\xff\xff\xff\xff\xff" # Loop + invalid instr
+    TEST_CODE = b"\xeb\xfe\xff\xff\xff\xff\xff" # Loop + invalid instr
     addr = proc32_64_debug.virtual_alloc(0x1000)
     proc32_64_debug.write_memory(addr, TEST_CODE)
     d = windows.debug.Debugger(proc32_64_debug)
