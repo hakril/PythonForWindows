@@ -29,6 +29,7 @@ from windows.winobject import apisetmap
 from windows.winobject import token
 from windows import security
 
+from windows.pycompat import raw_encode, raw_decode
 
 TimeInfo = namedtuple("TimeInfo", ["creation", "exit", "kernel", "user"])
 """Time information about a process"""
@@ -356,11 +357,11 @@ class Process(utils.AutoHandle):
                 read_size = read_size / 2
                 continue
             readden += read_size
-            if "\x00" in x:
-                res.append(x.split("\x00", 1)[0])
+            if b"\x00" in x:
+                res.append(x.split(b"\x00", 1)[0])
                 break
             res.append(x)
-        return "".join(res)
+        return b"".join(res).decode("ascii")
 
     def read_wstring(self, addr):
         """Read a windows UTF16 string at ``addr``"""
@@ -380,12 +381,16 @@ class Process(utils.AutoHandle):
                 read_size = read_size / 2
                 continue
             readden += read_size
-            utf16_chars = ["".join(c) for c in zip(*[iter(x)] * 2)]
-            if "\x00\x00" in utf16_chars:
-                res.extend(utf16_chars[:utf16_chars.index("\x00\x00")])
+            # Bytearray will work on py2 & py3
+            # Py2: bytearray((0, 0)) == b"\x00\x00"
+            # Py2: bytearray((0, 0)) == b"\x00\x00"
+            utf16_chars = [bytearray(c) for c in zip(*[iter(x)] * 2)]
+            if b"\x00\x00" in utf16_chars:
+                # Translate bytearray to str/bytes for both py2 & py3
+                res.extend(bytes(x) for x in utf16_chars[:utf16_chars.index(b"\x00\x00")])
                 break
             res.extend(x)
-        return "".join(res).decode('utf16')
+        return b"".join(res).decode('utf16')
 
     def write_byte(self, addr, byte):
         """write a byte at ``addr``"""
@@ -667,6 +672,7 @@ class CurrentProcess(Process):
 
     def write_memory(self, addr, data):
         """Write data at addr"""
+        data = raw_encode(data)
         # buffertype = (c_char * len(data)).from_address(addr)
         # buffertype[:len(data)] = data
         ctypes.memmove(addr, data, len(data))
@@ -1002,13 +1008,13 @@ class WinProcess(Process):
             pass
         return '<{0} "{1}" pid {2} at {3}>'.format(self.__class__.__name__, exe_name, self.pid, hex(id(self)))
 
-    def virtual_alloc(self, size, prot=PAGE_EXECUTE_READWRITE):
+    def virtual_alloc(self, size, prot=PAGE_EXECUTE_READWRITE, addr=None):
         """Allocate memory in the process
 
         :return: The address of the allocated memory
         :rtype: :class:`int`
 		"""
-        return winproxy.VirtualAllocEx(self.handle, dwSize=size, flProtect=prot)
+        return winproxy.VirtualAllocEx(self.handle, lpAddress=addr, dwSize=size, flProtect=prot)
 
     def virtual_free(self, addr):
         """Free memory in the process by virtual_alloc"""
@@ -1016,6 +1022,7 @@ class WinProcess(Process):
 
     def write_memory(self, addr, data):
         """Write `data` at `addr`"""
+        data = raw_encode(data)
         if windows.current_process.bitness == 32 and self.bitness == 64:
             if not winproxy.is_implemented(winproxy.NtWow64WriteVirtualMemory64):
                 raise ValueError("NtWow64WriteVirtualMemory64 non available in ntdll: cannot write into 64bits processus")

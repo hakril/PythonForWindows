@@ -286,7 +286,7 @@ class ECONTEXT64(ECONTEXTBase, CONTEXT64):
            temporary workaround or horrible hack ? choose your side
         """
         size = ctypes.sizeof(cls)
-        nb_qword = (size + 8) / ctypes.sizeof(ULONGLONG)
+        nb_qword = int((size + 8) / ctypes.sizeof(ULONGLONG))
         buffer = (nb_qword * ULONGLONG)()
         struct_address = ctypes.addressof(buffer)
         if (struct_address & 0xf) not in [0, 8]:
