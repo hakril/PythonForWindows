@@ -7,6 +7,14 @@ import ctypes.wintypes
 import itertools
 from _ctypes import _SimpleCData
 
+# No PFW deps in this file
+import sys
+is_py3 = (sys.version_info.major >= 3)
+if is_py3:
+    int_types = int
+else:
+    int_types = (int, long)
+
 
 # ## Utils ### #
 def is_pointer(x):
@@ -168,7 +176,7 @@ def create_remote_array(subtype, len):
 
         def __getitem__(self, slice):
             # import pdb;pdb.set_trace()
-            if not isinstance(slice, (int, long)):
+            if not isinstance(slice, int_types):
                 raise NotImplementedError("RemoteArray slice __getitem__")
             if slice >= len:
                 raise IndexError("Access to {0} for a RemoteArray of size {1}".format(slice, len))

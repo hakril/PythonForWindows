@@ -5,6 +5,7 @@ import windows
 import windows.generated_def as gdef
 from windows.rpc import ndr
 from windows.dbgprint import dbgprint
+from windows.pycompat import basestring
 
 
 
@@ -85,14 +86,15 @@ def explode_alpc_tower(tower):
 
     lhs, rhs = parse_floor(stream)
     if not (rhs[-1] == 0):
-        raise ValueError("ALPC Port name doest not end by \\x00")
-    return UnpackTower("ncalrpc", rhs[:-1], None, object, syntax)
+        rhs = rhs[:rhs.find("\x00")]
+        # raise ValueError("ALPC Port name doest not end by \\x00")
+    return UnpackTower("ncalrpc", bytes(rhs[:-1]), None, object, syntax)
 
 # http://pubs.opengroup.org/onlinepubs/9629399/apdxi.htm#tagcjh_28
 # Octet 0 contains the hexadecimal value 0d. This is a reserved protocol identifier prefix that indicates that the protocol ID is UUID derived
-TOWER_PROTOCOL_IS_UUID = "\x0d"
-TOWER_EMPTY_RHS = "\x00\x00"
-TOWER_PROTOCOL_ID_ALPC = "\x0c" # From RE
+TOWER_PROTOCOL_IS_UUID = b"\x0d"
+TOWER_EMPTY_RHS = b"\x00\x00"
+TOWER_PROTOCOL_ID_ALPC = b"\x0c" # From RE
 
 def construct_alpc_tower(object, syntax, protseq, endpoint, address):
     if address is not None:
@@ -113,11 +115,11 @@ def construct_alpc_tower(object, syntax, protseq, endpoint, address):
     floor_2 = craft_floor(floor_2_lsh, floor_2_rsh)
     # Floor 3
     if endpoint is None:
-        floor_3_lsh = "\xff"
+        floor_3_lsh = b"\xff"
         floor_3_rsh = TOWER_EMPTY_RHS
         floor_3 = craft_floor(floor_3_lsh, floor_3_rsh)
     else:
-        floor_3_lsh = "\x10"
+        floor_3_lsh = b"\x10"
         floor_3_rsh = endpoint
         floor_3 = craft_floor(floor_3_lsh, floor_3_rsh)
     towerarray = struct.pack("<H", 4) +  floor_0 + floor_1 + floor_2 + floor_3
@@ -147,7 +149,7 @@ def find_alpc_endpoints(targetiid, version=(1,0), nb_response=1, sid=gdef.WinLoc
     syntax_iid = gdef.IID.from_string("8a885d04-1ceb-11c9-9fe8-08002b104860")
     rpc_syntax = gdef.RPC_IF_ID(syntax_iid, 2, 0)
     ## Forge tower
-    tower_array_size, towerarray = construct_alpc_tower(rpc_object, rpc_syntax, "ncalrpc", "", None)
+    tower_array_size, towerarray = construct_alpc_tower(rpc_object, rpc_syntax, "ncalrpc", b"", None)
 
     # parameters
     local_system_psid = windows.utils.get_known_sid(sid)
@@ -183,7 +185,7 @@ def find_alpc_endpoint_and_connect(targetiid, version=(1,0), sid=gdef.WinLocalSy
     dbgprint("ALPC endpoints list: <{0}>".format(alpctowers), "RPC")
     for tower in alpctowers:
         dbgprint("Trying to connect to endpoint <{0}>".format(tower.endpoint), "RPC")
-        alpc_port = r"\RPC Control\{0}".format(tower.endpoint)
+        alpc_port = r"\RPC Control\{0}".format(tower.endpoint.decode())
         try:
             client = windows.rpc.RPCClient(alpc_port)
         except Exception as e:

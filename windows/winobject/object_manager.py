@@ -18,7 +18,7 @@ def query_link(linkpath):
     obj_attr.SecurityQualityOfService = 0
     res = gdef.HANDLE()
     x = winproxy.NtOpenSymbolicLinkObject(res, gdef.DIRECTORY_QUERY | gdef.READ_CONTROL , obj_attr)
-    v = gdef.LSA_UNICODE_STRING.from_string("\x00" * 1000)
+    v = gdef.LSA_UNICODE_STRING.from_size(1000)
     s = gdef.ULONG()
     winproxy.NtQuerySymbolicLinkObject(res, v, s) # Handle Buffer-too-small ?
     return v.str

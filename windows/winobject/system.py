@@ -147,8 +147,13 @@ class System(object):
         :type: :class:`str`
         """
         size = gdef.DWORD(0x1000)
-        buf = ctypes.c_buffer(size.value)
-        winproxy.GetComputerNameA(buf, ctypes.byref(size))
+        # For now I don't know what is best as A vs W APIs...
+        if windows.pycompat.is_py3:
+            buf = ctypes.create_unicode_buffer(size.value)
+            winproxy.GetComputerNameW(buf, ctypes.byref(size))
+        else:
+            buf = ctypes.create_string_buffer(size.value)
+            winproxy.GetComputerNameA(buf, ctypes.byref(size))
         return buf[:size.value]
 
     @utils.fixedpropety
@@ -372,12 +377,30 @@ class System(object):
 
     @utils.fixedpropety
     def build_number(self):
-        # This returns the last version where ntdll was updated
-        # Should look at HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion
-        # values:  CurrentBuild + UBR
-        # windows.system.registry(r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion")["CurrentBuild"].value
-        # windows.system.registry(r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion")["UBR"].value
-        return self.get_file_version("comctl32")
+        # Best effort. use get_file_version if registry code fails
+        try:
+            # Does not works on Win7..
+            # Missing CurrentMajorVersionNumber/CurrentMinorVersionNumber/UBR
+            # We have CurrentVersion instead
+            # Use this code and get_file_version as a backup ?
+            curver_key = windows.system.registry(r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion")
+            try:
+                major = curver_key["CurrentMajorVersionNumber"].value
+                minor = curver_key["CurrentMinorVersionNumber"].value
+            except WindowsError as e:
+                version = curver_key["CurrentVersion"].value
+                # May raise ValueError if no "."
+                major, minor = version.split(".")
+            build = curver_key["CurrentBuildNumber"].value
+            # Update Build Revision
+            try:
+                ubr = curver_key["UBR"].value
+            except WindowsError as e:
+                ubr = 0 # Not present on Win7
+            return "{0}.{1}.{2}.{3}".format(major, minor, build, ubr)
+        except (WindowsError, ValueError):
+            return self.get_file_version("ntdll")
+
 
     @staticmethod
     def enumerate_processes():

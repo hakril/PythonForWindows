@@ -80,13 +80,13 @@ class PartialBufferType(object):
     def from_buffer(self, buffer): # size as kwargs ?
         if  len(buffer) % ctypes.sizeof(self.type):
             raise NotImplementedError("Buffer size of not a multiple of sizeof({0})".format(self.type.__name__))
-        nbelt = len(buffer) / ctypes.sizeof(self.type)
+        nbelt = int(len(buffer) / ctypes.sizeof(self.type))
         return self.create_real_implem(self.type, nbelt).from_buffer(buffer)
 
     def from_buffer_copy(self, buffer): # size as kwargs ?
         if  len(buffer) % ctypes.sizeof(self.type):
             raise NotImplementedError("Buffer size of not a multiple of sizeof({0})".format(self.type.__name__))
-        nbelt = len(buffer) / ctypes.sizeof(self.type)
+        nbelt = int(len(buffer) / ctypes.sizeof(self.type))
         return self.create_real_implem(self.type, nbelt).from_buffer_copy(buffer)
 
     def create(self, nbelt):

@@ -191,7 +191,7 @@ class BitsCopyJob(IBackgroundCopyJob):
 
 
     def __repr__(self):
-        return '<{0} iid="{1}" at {2:#08x}>'.format(type(self).__name__, self.iid.to_string(), id(self))
+        return '<{0} iid="{1}" at {2:#08x}>'.format(type(self).__name__, self.iid, id(self))
 
 
 class BitsCopyJob2(gdef.IBackgroundCopyJob2, BitsCopyJob):

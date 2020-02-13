@@ -5,6 +5,7 @@ from collections import namedtuple
 import windows
 from windows import winproxy
 from windows import generated_def as gdef
+import windows.pycompat
 
 
 ## For 64b python
@@ -21,7 +22,7 @@ class AlpcMessage(object):
     # PORT_MESSAGE + MessageAttribute
     def __init__(self, msg_or_size=0x1000, attributes=None):
         # Init the PORT_MESSAGE
-        if isinstance(msg_or_size, (long, int)):
+        if isinstance(msg_or_size, windows.pycompat.int_types):
             self.port_message_buffer_size = msg_or_size
             self.port_message_raw_buffer = ctypes.c_buffer(msg_or_size)
             self.port_message = AlpcMessagePort.from_buffer(self.port_message_raw_buffer)
@@ -301,9 +302,11 @@ class AlpcTransportBase(object):
             :type receive_msg: AlpcMessage or None
             :param int flags: The flags for :func:`NtAlpcSendWaitReceivePort`
         """
-        if isinstance(alpc_message, basestring):
+        if isinstance(alpc_message, windows.pycompat.anybuff):
             raw_alpc_message = alpc_message
-            alpc_message = AlpcMessage(max(0x1000, len(alpc_message)))
+            if len(alpc_message) > 0x1000:
+                import pdb;pdb.set_trace()
+            alpc_message = AlpcMessage(max(0x1000, len(alpc_message) + 0x200))
             alpc_message.port_message.data = raw_alpc_message
 
         if receive_msg is None:
@@ -319,7 +322,7 @@ class AlpcTransportBase(object):
             :type alpc_message: AlpcMessage or str
             :param int flags: The flags for :func:`NtAlpcSendWaitReceivePort`
         """
-        if isinstance(alpc_message, basestring):
+        if isinstance(alpc_message, windows.pycompat.anybuff):
             raw_alpc_message = alpc_message
             alpc_message = AlpcMessage(max(0x1000, len(alpc_message)))
             alpc_message.port_message.data = raw_alpc_message
@@ -346,7 +349,7 @@ class AlpcTransportBase(object):
 
 class AlpcClient(AlpcTransportBase):
     "An ALPC client able to connect to a port and send/receive messages"
-    DEFAULT_MAX_MESSAGE_LENGTH = 0x1000
+    DEFAULT_MAX_MESSAGE_LENGTH = 0x9000
 
     def __init__(self, port_name=None):
         """Init the :class:`AlpcClient` automatically connect to ``port_name`` using default values if given"""
@@ -396,7 +399,7 @@ class AlpcClient(AlpcTransportBase):
             send_msg = None
             send_msg_attr = None
             buffersize = None
-        elif isinstance(connect_message, basestring):
+        elif isinstance(connect_message, windows.pycompat.anybuff):
             buffersize = gdef.DWORD(len(connect_message) + 0x1000)
             send_msg = AlpcMessagePort.from_buffer_size(buffersize.value)
             send_msg.data = connect_message

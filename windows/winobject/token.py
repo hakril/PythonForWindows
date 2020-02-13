@@ -1,12 +1,12 @@
 import ctypes
 import functools
-from __builtin__ import type as bltn_type
 
 import windows
 from windows import utils
 from windows import winproxy
 import windows.generated_def as gdef
 
+bltn_type = type
 
 KNOW_INTEGRITY_LEVEL = gdef.FlagMapper(
     gdef.SECURITY_MANDATORY_UNTRUSTED_RID,
@@ -465,7 +465,8 @@ class Token(utils.AutoHandle):
 		"""
         mandatory_label = gdef.TOKEN_MANDATORY_LABEL()
         mandatory_label.Label.Attributes = 0x60
-        mandatory_label.Label.Sid = gdef.PSID.from_string("S-1-16-{0}".format(integrity))
+        # cast integrity to int to accept SECURITY_MANDATORY_LOW_RID & other Flags
+        mandatory_label.Label.Sid = gdef.PSID.from_string("S-1-16-{0}".format(int(integrity)))
         return self.set_informations(gdef.TokenIntegrityLevel, mandatory_label)
 
     _INTEGRITY_PROPERTY_DOC = """The integrity of the token as an int (extracted from integrity PSID)

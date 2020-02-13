@@ -1,17 +1,24 @@
 import windows
 from windows import winproxy
 import windows.generated_def as gdef
-
-import _multiprocessing
 import ctypes
+
+from windows.pycompat import is_py3
+
+if is_py3:
+    from multiprocessing.connection import PipeConnection as native_PipeConnection
+else:
+    from _multiprocessing import PipeConnection as native_PipeConnection
 
 # Inspired from 'multiprocessing\connection.py'
 
 def full_pipe_address(addr):
     """Return the full address of the pipe `addr`"""
-    if addr.startswith("\\\\"):
+    if not isinstance(addr, bytes):
+        addr = addr.encode("ascii")
+    if addr.startswith(b"\\\\"):
         return addr
-    return r"\\.\pipe\{addr}".format(addr=addr)
+    return br"\\.\pipe" + "\\".encode() + addr
 
 class PipeConnection(object): # Cannot inherit: crash the interpreter
     """A wrapper arround :class:`_multiprocessing.PipeConnection` able to work as a ContextManager"""
@@ -26,7 +33,7 @@ class PipeConnection(object): # Cannot inherit: crash the interpreter
     @classmethod
     def from_handle(cls, phandle, *args, **kwargs):
         """Create a :class:`PipeConnection` from pipe handle `phandle`"""
-        connection = _multiprocessing.PipeConnection(phandle)
+        connection = native_PipeConnection(phandle)
         return cls(connection, *args, **kwargs)
 
     @classmethod

@@ -98,7 +98,7 @@ class CryptObject(object):
         return list(self._signers_and_certs_generator())
 
     def __repr__(self):
-        return '<{0} "{1}" content_type={2}>'.format(type(self).__name__, self.filename, self.content_type)
+        return '<{0} "{1}" content_type={2!r}>'.format(type(self).__name__, self.filename, self.content_type)
 
 
 # https://msdn.microsoft.com/en-us/library/windows/desktop/aa382037(v=vs.85).aspx
@@ -176,6 +176,9 @@ class CertificateStore(gdef.HCERTSTORE):
             return None
         return Certificate.from_pointer(rawcertcontext)
 
+    def __del__(self):
+        return winproxy.CertCloseStore(self, 0)
+
 
 # PKCS12_NO_PERSIST_KEY -> do not save it in a key container on disk
 # Without it, a key container is created at 'C:\Users\USERNAME\AppData\Roaming\Microsoft\Crypto\RSA\S-1-5-21-3241049326-165485355-1070449050-1001'
@@ -189,6 +192,7 @@ class CertificateStore(gdef.HCERTSTORE):
 # By forcing PKCS12_ALWAYS_CNG_KSP we remove this as the key are directly linked to the correct CNG_KSP in the CertStore
 # Look like it's based on this part of the PFX:
 # Microsoft CSP Name: Microsoft Enhanced Cryptographic Provider v1.0
+# BUT this will not allow to decrypt RSA_RC4 ?
 
 def import_pfx(pfx, password=None, flags=gdef.CRYPT_USER_KEYSET | gdef.PKCS12_NO_PERSIST_KEY | gdef.PKCS12_ALWAYS_CNG_KSP):
     """Import the file ``pfx`` with the ``password``.
@@ -199,7 +203,7 @@ def import_pfx(pfx, password=None, flags=gdef.CRYPT_USER_KEYSET | gdef.PKCS12_NO
 
     :return: :class:`CertificateStore`
     """
-    if isinstance(pfx, (basestring, bytearray)):
+    if isinstance(pfx, windows.pycompat.anybuff) or isinstance(pfx,  bytearray):
         pfx = gdef.CRYPT_DATA_BLOB.from_string(pfx)
     cert_store = winproxy.PFXImportCertStore(pfx, password, flags)
     return CertificateStore(cert_store)
@@ -480,6 +484,8 @@ class Certificate(gdef.CERT_CONTEXT):
 
     def __repr__(self):
         return '<{0} "{1}" serial="{2}">'.format(type(self).__name__, self.name, self.serial)
+
+
 
 
 

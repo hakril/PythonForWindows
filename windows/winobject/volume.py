@@ -71,7 +71,7 @@ def get_logical_drive_names():
     size = 0x100
     buffer = ctypes.c_buffer(size)
     rsize = winproxy.GetLogicalDriveStringsA(0x1000, buffer)
-    return buffer[:rsize].rstrip("\x00").split("\x00")
+    return buffer[:rsize].rstrip(b"\x00").split(b"\x00")
 
 def get_info(drivename):
     size = 0x1000
@@ -85,4 +85,4 @@ def query_dos_device(name):
     size = 0x1000
     buffer = ctypes.c_buffer(size)
     rsize = winproxy.QueryDosDeviceA(name, buffer, size)
-    return buffer[:rsize].rstrip("\x00").split("\x00")
+    return buffer[:rsize].rstrip(b"\x00").split(b"\x00")

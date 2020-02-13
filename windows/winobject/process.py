@@ -378,7 +378,7 @@ class Process(utils.AutoHandle):
                 # handle read_wstring at end of page
                 # Of read failed: read only the half of size
                 # read_size must remain a multiple of 2
-                read_size = read_size / 2
+                read_size = int(read_size / 2)
                 continue
             readden += read_size
             # Bytearray will work on py2 & py3

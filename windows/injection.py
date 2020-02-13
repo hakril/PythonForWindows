@@ -208,6 +208,7 @@ def generate_python_exec_shellcode_32(target, PyDll):
     code += x86.Jnz(":DO_ENSURE")
     code +=     x86.Mov('EAX', Py_Initialize)
     code +=     x86.Call('EAX')
+    # https://docs.python.org/3/c-api/init.html#c.PyEval_InitThreads
     code +=     x86.Mov('EAX', PyEval_InitThreads)
     code +=     x86.Call('EAX')
     code += x86.Label(":DO_ENSURE")
@@ -272,6 +273,7 @@ def generate_python_exec_shellcode_64(target, PyDll):
     code += x64.Jnz(":DO_ENSURE")
     code +=     x64.Mov('RAX', Py_Initialize)
     code +=     x64.Call('RAX')
+    # https://docs.python.org/3/c-api/init.html#c.PyEval_InitThreads
     code +=     x64.Mov('RAX', PyEval_InitThreads)
     code +=     x64.Call('RAX')
     code += x64.Label(":DO_ENSURE")
@@ -398,7 +400,7 @@ import ctypes
 size = ctypes.c_uint.from_address(addr)
 size.value = len(txt)
 buff = (ctypes.c_char * len(txt)).from_address(addr + ctypes.sizeof(ctypes.c_uint))
-buff[:] = txt
+buff[:] = txt.encode()
 """
 
 def retrieve_last_exception_data(process):

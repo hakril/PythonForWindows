@@ -127,3 +127,6 @@ class CryptMessage(gdef.HCRYPTMSG):
         newmsg = CryptMessage(hmsg)
         newmsg.update(data, final=True)
         return newmsg
+
+    def __del__(self):
+        return winproxy.CryptMsgClose(self)

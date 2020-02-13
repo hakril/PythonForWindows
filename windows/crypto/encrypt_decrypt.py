@@ -48,7 +48,7 @@ def encrypt(cert_or_certlist, msg, algo=szOID_NIST_AES256_CBC, initvector=genini
        :return: :class:`bytearray`: The encrypted message
     """
     alg_ident = CRYPT_ALGORITHM_IDENTIFIER()
-    alg_ident.pszObjId = algo
+    alg_ident.pszObjId = algo.encode("ascii")
     # We want to have automatique translation of Certificate -> PCERT_CONTEXT
     # In order to simple create the  'PCERT_CONTEXT[] certs'
     # For that we need a tuple of X * 1-item-tuple
@@ -114,6 +114,6 @@ def decrypt(cert_store, encrypted):
     dcryptsize = DWORD()
     winproxy.CryptDecryptMessage(dparam, buf, ctypes.sizeof(buf), None, dcryptsize, None)
     #Decrypt the msg
-    dcryptbuff = (BYTE * dcryptsize.value)()
+    dcryptbuff = (BYTE * (dcryptsize.value + 0x1000))()
     winproxy.CryptDecryptMessage(dparam, buf, ctypes.sizeof(buf), dcryptbuff, dcryptsize, None)
-    return str(bytearray(dcryptbuff[:dcryptsize.value]))
+    return bytes(bytearray(dcryptbuff[:dcryptsize.value]))

@@ -24,7 +24,7 @@ def pack_dword(x):
 def dword_pad(s):
     if (len(s) % 4) == 0:
         return s
-    return s + ("P" * (4 - len(s) % 4))
+    return s + (b"P" * (4 - len(s) % 4))
 
 
 class NdrUniquePTR(object):
@@ -55,7 +55,7 @@ class NdrUniquePTR(object):
     def unpack_in_struct(self, stream):
         ptr = NdrLong.unpack(stream)
         if not ptr:
-            return 0, None
+            return 0, NdrUnpackNone
         return ptr, self.subcls
 
     def parse(self, stream):
@@ -63,6 +63,22 @@ class NdrUniquePTR(object):
         if data[0] == 0:
             return None
         return self.subcls.parse(stream)
+
+class NdrUnpackNone(object):
+    @classmethod
+    def unpack(cls, stream):
+        return None
+
+class NdrRef(object):
+    # TESTING
+    def __init__(self, subcls):
+        self.subcls = subcls
+
+    def unpack(self, stream):
+        ptr = NdrLong.unpack(stream)
+        if not ptr:
+            raise ValueError("Ndr REF cannot be NULL")
+        return self.subcls.unpack(stream)
 
 class NdrFixedArray(object):
     def __init__(self, subcls, size):
@@ -72,7 +88,7 @@ class NdrFixedArray(object):
     def pack(self, data):
         data = list(data)
         assert len(data) == self.size
-        return dword_pad("".join([self.subcls.pack(elt) for elt in data]))
+        return dword_pad(b"".join([self.subcls.pack(elt) for elt in data]))
 
 
     def unpack(self, stream):
@@ -119,7 +135,7 @@ class NdrWString(object):
         if not data.endswith('\x00'):
             data += '\x00'
         data = data.encode("utf-16-le")
-        l = (len(data) / 2)
+        l = (len(data) // 2)
         result = struct.pack("<3I", l, 0, l)
         result += data
         return dword_pad(result)
@@ -249,7 +265,7 @@ class NdrStructure(object):
             else:
                 packed_member = member.pack(memberdata)
                 res.append(packed_member)
-        return dword_pad("".join(conformant_size)) + dword_pad("".join(res)) + dword_pad("".join(pointed))
+        return dword_pad(b"".join(conformant_size)) + dword_pad(b"".join(res)) + dword_pad(b"".join(pointed))
 
     @classmethod
     def unpack(cls, stream):
@@ -257,7 +273,6 @@ class NdrStructure(object):
         conformant_members = [hasattr(m, "pack_conformant") for m in cls.MEMBERS]
         is_conformant = any(conformant_members)
         assert(conformant_members.count(True) <= 1), "Unpack conformant struct with more that one conformant MEMBER not implem"
-
         data = []
         if is_conformant:
             conformant_size = NdrLong.unpack(stream)
@@ -279,7 +294,11 @@ class NdrStructure(object):
                     data.append(member.unpack(stream))
         # print("Applying deref unpack")
         for i, entry in post_subcls:
-            data[i] = entry.unpack(stream)
+            new_data = entry.unpack(stream)
+            if getattr(entry, "post_unpack", None):
+                new_data = entry.post_unpack(new_data)
+            data[i] = new_data
+
         return cls.post_unpack(data)
 
     @classmethod
@@ -305,7 +324,7 @@ class NdrParameters(object):
         for (member, memberdata) in zip(cls.MEMBERS, data):
             packed_member = member.pack(memberdata)
             res.append(packed_member)
-        return "".join(dword_pad(elt) for elt in res)
+        return b"".join(dword_pad(elt) for elt in res)
 
     @classmethod
     def unpack(cls, stream):
@@ -321,13 +340,23 @@ class NdrConformantArray(object):
     @classmethod
     def pack(cls, data):
         ndrsize = NdrLong.pack(len(data))
-        return dword_pad(ndrsize + "".join([cls.MEMBER_TYPE.pack(memberdata) for memberdata in data]))
+        return dword_pad(ndrsize + b"".join([cls.MEMBER_TYPE.pack(memberdata) for memberdata in data]))
 
     @classmethod
     def pack_conformant(cls, data):
         ndrsize = NdrLong.pack(len(data))
-        ndrdata = dword_pad("".join([cls.MEMBER_TYPE.pack(memberdata) for memberdata in data]))
+        ndrdata = dword_pad(b"".join([cls.MEMBER_TYPE.pack(memberdata) for memberdata in data]))
         return ndrsize, ndrdata
+
+    @classmethod
+    def unpack(cls, stream):
+        nbelt = NdrLong.unpack(stream)
+        result = cls.unpack_conformant(stream, nbelt)
+        return cls._post_unpack(result)
+
+    @classmethod
+    def _post_unpack(cls, result):
+        return result
 
     @classmethod
     def unpack_conformant(cls, stream, size):
@@ -342,7 +371,7 @@ class NdrConformantVaryingArrays(object):
     def pack(cls, data):
         ndrsize = NdrLong.pack(len(data))
         offset =  NdrLong.pack(0)
-        return dword_pad(ndrsize + offset + ndrsize + "".join([cls.MEMBER_TYPE.pack(memberdata) for memberdata in data]))
+        return dword_pad(ndrsize + offset + ndrsize + b"".join([cls.MEMBER_TYPE.pack(memberdata) for memberdata in data]))
 
     @classmethod
     def unpack(cls, stream):
@@ -385,6 +414,8 @@ class NdrWcharConformantVaryingArrays(NdrConformantVaryingArrays):
     def _post_unpack(self, result):
         return u"".join(unichr(c) for c in result)
 
+class NdrCharConformantVaryingArrays(NdrConformantVaryingArrays):
+    MEMBER_TYPE = NdrByte
 
 class NdrHyperConformantVaryingArrays(NdrConformantVaryingArrays):
     MEMBER_TYPE = NdrHyper
@@ -400,6 +431,13 @@ class NdrShortConformantArray(NdrConformantArray):
 
 class NdrByteConformantArray(NdrConformantArray):
     MEMBER_TYPE = NdrByte
+
+    @classmethod
+    def _post_unpack(self, result):
+        return bytearray(result)
+
+class NdrWcharConformantArray(NdrConformantArray):
+    MEMBER_TYPE = NdrShort
 
     @classmethod
     def _post_unpack(self, result):
@@ -438,12 +476,15 @@ class NdrStream(object):
 
     def align(self, size):
         """Discard some bytes to align the remaining stream on ``size``"""
+
         already_read = len(self.fulldata) - len(self.data)
         if already_read % size:
             # Realign
             size_to_align = (size - (already_read % size))
             self.data = self.data[size_to_align:]
+            # print("align {0}: {1}".format(size, size_to_align))
             return size_to_align
+        # print("align {0}: 0".format(size))
         return 0
 
 

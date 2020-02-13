@@ -51,7 +51,15 @@ def create_file_from_handle(handle, mode="r"):
     """Return a Python :class:`file` around a ``Windows`` HANDLE"""
     flags = os.O_BINARY if "b" in mode else os.O_TEXT
     fd = msvcrt.open_osfhandle(handle, flags)
-    return os.fdopen(fd, mode, 0)
+    kwargs = {}
+    if windows.pycompat.is_py3 and flags == os.O_TEXT:
+        # Buffering, encoding
+        args = (100, "ascii")
+    else:
+        # Buffering
+        args = (0,)
+    # In py2 os.fdopen do not accept kwargs
+    return os.fdopen(fd, mode, *args)
 
 
 def get_handle_from_file(f):
@@ -68,7 +76,7 @@ def create_console():
     sys.stdout = console_stdout
 
     stdin_handle = winproxy.GetStdHandle(gdef.STD_INPUT_HANDLE)
-    console_stdin = create_file_from_handle(stdin_handle, "r+")
+    console_stdin = create_file_from_handle(stdin_handle, "r")
     sys.stdin = console_stdin
 
     stderr_handle = winproxy.GetStdHandle(gdef.STD_ERROR_HANDLE)
@@ -87,7 +95,7 @@ def create_process(path, args=None, dwCreationFlags=0, show_windows=True):
         lpStartupInfo = ctypes.byref(StartupInfo)
     lpCommandLine = None
     if args:
-        lpCommandLine = (" ".join([str(a) for a in args]))
+        lpCommandLine = (b" ".join([a for a in args]))
     windows.winproxy.CreateProcessA(path, lpCommandLine=lpCommandLine, dwCreationFlags=dwCreationFlags, lpProcessInformation=ctypes.byref(proc_info), lpStartupInfo=lpStartupInfo)
     dbgprint("CreateProcessA new process handle {:#x}".format(proc_info.hProcess), "HANDLE")
     dbgprint("CreateProcessA new thread handle {:#x}".format(proc_info.hThread), "HANDLE")
@@ -213,13 +221,29 @@ WIN_TO_UNIX_EPOCH_WIN_TICKS = WIN_TO_UNIX_EPOCH_SECOND * WIN_TICK_PER_SECOND_INT
 
 def unix_timestamp_from_filetime(filetime):
     # Round the filetime
-    round_win_ticks = ((filetime / 10) + int(round((filetime % 10) / 10.0))) * 10
+    last_number = (filetime % 10)
+    # We do some sort of "manual rounding cause of py2 vs py3
+    # PY2: round(0.5) == 1
+    # PY3: round(0.5) == 0
+    if last_number == 5:
+        rounding = 1
+    else:
+        rounding = round(last_number / 10.0)
+    round_win_ticks = ((filetime // 10) + int(rounding)) * 10
     return round((round_win_ticks - WIN_TO_UNIX_EPOCH_WIN_TICKS) / WIN_TICK_PER_SECOND_FLOAT, 7)
 
 def datetime_from_filetime(filetime):
     """return a :class:`datetime.datetime` from a ``windows`` FILETIME int"""
     # Manual non-approx rounding as filetime will not have a perfect representation as Python float
-    round_microsecond = (filetime / 10) + int(round((filetime % 10) / 10.0))
+    # We do some sort of "manual rounding cause of py2 vs py3
+    # PY2: round(0.5) == 1
+    # PY3: round(0.5) == 0
+    last_number = (filetime % 10)
+    if last_number == 5:
+        rounding = 1
+    else:
+        rounding = round(last_number / 10.0)
+    round_microsecond = (filetime // 10) + int(rounding)
     return WINDOWS_EPOCH + datetime.timedelta(microseconds=round_microsecond)
 
 def filetime_from_datetime(dtime):
@@ -303,7 +327,7 @@ ntqueryinformationfile_info_structs = {
 }
 
 def query_file_information(file_or_handle, file_info_class):
-    if isinstance(file_or_handle, file):
+    if not isinstance(file_or_handle, windows.pycompat.int_types):
         file_or_handle = windows.utils.get_handle_from_file(file_or_handle)
     handle = file_or_handle
     io_status = gdef.IO_STATUS_BLOCK()
@@ -313,7 +337,6 @@ def query_file_information(file_or_handle, file_info_class):
     try:
         windows.winproxy.NtQueryInformationFile(handle, io_status, pinfo, ctypes.sizeof(info), FileInformationClass=file_info_class)
     except Exception as e:
-        # import pdb;pdb.set_trace()
         if not (e.winerror & 0xffffffff) == gdef.STATUS_BUFFER_OVERFLOW:
             raise
         # STATUS_BUFFER_OVERFLOW -> Guess we have a FILE_NAME_INFORMATION somewhere that need a bigger buffer
@@ -407,7 +430,7 @@ ntqueryvolumeinformationfile_info_structs = {
 # TODO: FileFsDriverPathInformation
 # TODO: Extended FILE_FS_VOLUME_INFORMATION that can read the real value of 'VolumeLabel'
 def query_volume_information(file_or_handle, volume_info_class):
-    if isinstance(file_or_handle, file):
+    if not isinstance(file_or_handle, windows.pycompat.int_types):
         file_or_handle = get_handle_from_file(file_or_handle)
     handle = file_or_handle
     io_status = gdef.IO_STATUS_BLOCK()
@@ -460,12 +483,8 @@ def get_long_path(path):
         :returns: :class:`str` | :obj:`unicode` -- same type as ``path`` parameter
     """
     size = 0x1000
-    if isinstance(path, unicode):
-        buffer = ctypes.create_unicode_buffer(size)
-        rsize = winproxy.GetLongPathNameW(path, buffer, size)
-    else:
-        buffer = ctypes.c_buffer(size)
-        rsize = winproxy.GetLongPathNameA(path, buffer, size)
+    buffer = ctypes.create_unicode_buffer(size)
+    rsize = winproxy.GetLongPathNameW(path, buffer, size)
     return buffer[:rsize]
 
 
@@ -478,12 +497,8 @@ def get_short_path(path):
         :returns: :class:`str` | :obj:`unicode` -- same type as ``path`` parameter
     """
     size = 0x1000
-    if isinstance(path, unicode):
-        buffer = ctypes.create_unicode_buffer(size)
-        rsize = winproxy.GetShortPathNameW(path, buffer, size)
-    else:
-        buffer = ctypes.c_buffer(size)
-        rsize = winproxy.GetShortPathNameA(path, buffer, size)
+    buffer = ctypes.create_unicode_buffer(size)
+    rsize = winproxy.GetShortPathNameW(path, buffer, size)
     return buffer[:rsize]
 
 def dospath_to_ntpath(dospath):

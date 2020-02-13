@@ -4,6 +4,9 @@ import windows.generated_def as gdef
 from ..apiproxy import ApiProxy, NeededParameter
 from ..error import no_error_check, fail_on_zero
 
+import windows.pycompat
+from windows.pycompat import int_types
+
 class Crypt32Proxy(ApiProxy):
     APIDLL = "crypt32"
     default_error_check = staticmethod(fail_on_zero)
@@ -74,7 +77,7 @@ def CryptHashCertificate(hCryptProv, Algid, dwFlags, pbEncoded, cbEncoded, pbCom
 
 @Crypt32Proxy()
 def CertOpenStore(lpszStoreProvider, dwMsgAndCertEncodingType, hCryptProv, dwFlags, pvPara):
-    if isinstance(lpszStoreProvider, (long, int)):
+    if isinstance(lpszStoreProvider, int_types):
         lpszStoreProvider = gdef.LPCSTR(lpszStoreProvider)
     return CertOpenStore.ctypes_function(lpszStoreProvider, dwMsgAndCertEncodingType, hCryptProv, dwFlags, pvPara)
 
@@ -119,7 +122,7 @@ def CryptAcquireCertificatePrivateKey(pCert, dwFlags, pvParameters, phCryptProvO
 
 @Crypt32Proxy()
 def CryptEncryptMessage(pEncryptPara, cRecipientCert, rgpRecipientCert, pbToBeEncrypted, cbToBeEncrypted, pbEncryptedBlob, pcbEncryptedBlob):
-    if isinstance(pbToBeEncrypted, basestring):
+    if isinstance(pbToBeEncrypted, windows.pycompat.anybuff):
         # Transform string to array of byte
         pbToBeEncrypted = (gdef.BYTE * len(pbToBeEncrypted))(*bytearray(pbToBeEncrypted))
     if cbToBeEncrypted is None and pbToBeEncrypted is not None:
@@ -161,7 +164,7 @@ def CryptVerifyMessageHash(pHashPara, pbHashedBlob, cbHashedBlob, pbToBeHashed, 
 
 @Crypt32Proxy()
 def CryptEncodeObjectEx(dwCertEncodingType, lpszStructType, pvStructInfo, dwFlags, pEncodePara, pvEncoded, pcbEncoded):
-    lpszStructType = gdef.LPCSTR(lpszStructType) if isinstance(lpszStructType, (int, long)) else lpszStructType
+    lpszStructType = gdef.LPCSTR(lpszStructType) if isinstance(lpszStructType, int_types) else lpszStructType
     return CryptEncodeObjectEx.ctypes_function(dwCertEncodingType, lpszStructType, pvStructInfo, dwFlags, pEncodePara, pvEncoded, pcbEncoded)
 
 @Crypt32Proxy()

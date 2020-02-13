@@ -8,6 +8,7 @@ import windows
 from windows.dbgprint import dbgprint
 import windows.generated_def as gdef
 from windows import winproxy
+from windows.pycompat import basestring, int_types, is_py3
 
 WENCODING = "utf-16-le"
 
@@ -61,9 +62,10 @@ def Py2Reg_DWORD_BIG_ENDIAN(obj):
 
 
 def Reg2Py_BINARY(buffer, size):
-    return str(bytearray(buffer[:size]))
+    return bytes(bytearray(buffer[:size]))
 
 def Py2Reg_BINARY(obj):
+    # latin-1 encoding if py3 & type is str ?
     return obj
 
 
@@ -75,7 +77,8 @@ def Reg2Py_SZ(buffer, size):
         # NULL TERMINATED: EASY
         return buffer.as_wstring()
     # Not null terminated: keep last byte
-    return (gdef.WCHAR * (size / 2)).from_buffer(buffer)[:]
+    assert not size % 2
+    return (gdef.WCHAR * (size // 2)).from_buffer(buffer)[:]
 
 def Py2Reg_SZ(obj):
     return obj.encode(WENCODING)
@@ -84,7 +87,10 @@ def Reg2Py_Multi_SZ(buffer, size):
     if not size:
         return []
     # Simple path
-    rawstr = "".join([chr(c) for c in buffer[:size]])
+    if is_py3:
+        rawstr = bytes(buffer)
+    else:
+        rawstr = "".join([chr(c) for c in buffer[:size]])
     try:
         unistr = rawstr.decode(WENCODING)
         return unistr.rstrip(u"\x00").split(u"\x00")
@@ -93,16 +99,16 @@ def Reg2Py_Multi_SZ(buffer, size):
     # Complexe-path
     # This is not some valide UTF-16
     # Try our best to extract some stuff from raw
-    return rawstr.rstrip("\x00").split("\x00")
+    return rawstr.rstrip(b"\x00").split(b"\x00")
 
 
 def Py2Reg_Multi_SZ(obj):
     # Work on encoded values (to prevent str/unicode errors)
     uni_list = [s.encode(WENCODING) for s in obj]
     # Separate by UTF-16 NULL BYTE (2 \x00)
-    uni_str = "\x00\x00".join(uni_list)
+    uni_str = b"\x00\x00".join(uni_list)
     # Add UTF-16 NULL byte for final string + final UTF-16 \x00 (4 \x00)
-    return uni_str + "\x00\x00\x00\x00"
+    return uni_str + b"\x00\x00\x00\x00"
 
 DECODE_METHOD = 0
 ENCODE_METHOD = 1
@@ -293,7 +299,7 @@ class PyHKey(object):
     def _guess_value_type(self, value):
         if isinstance(value, basestring):
             return gdef.REG_SZ
-        elif isinstance(value, (int, long)):
+        elif isinstance(value, int_types):
             return gdef.REG_DWORD
         # elif isinstance(value, (list, tuple)):
             # if all(isinstance(v, basestring) in value):
@@ -308,7 +314,7 @@ class PyHKey(object):
 
 
         buffer = ENCODE_DECODE_METHODS[type][ENCODE_METHOD](value)
-        if isinstance(buffer, str): # Should not be unicode at this point
+        if isinstance(buffer, bytes): # Should not be unicode at this point
             buffer = windows.utils.BUFFER(gdef.BYTE).from_buffer_copy(buffer)
         return winproxy.RegSetValueExW(self.phkey, name, 0, type, buffer, len(buffer))
 
@@ -357,7 +363,7 @@ class PyHKey(object):
 
     def __setitem__(self, name, value):
         rtype = None
-        if not isinstance(value, (int, long, basestring)):
+        if not (isinstance(value, basestring) or isinstance(value, int_types)):
             value, rtype = value
         return self.set(name, value, rtype)
 

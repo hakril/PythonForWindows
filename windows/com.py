@@ -1,3 +1,4 @@
+import sys
 import struct
 import ctypes
 import functools
@@ -11,6 +12,8 @@ import windows.generated_def as gdef
 from windows.generated_def import RPC_C_IMP_LEVEL_IMPERSONATE, CLSCTX_INPROC_SERVER
 from windows.generated_def import interfaces
 from windows.generated_def.interfaces import generate_IID, IID
+
+from windows.pycompat import int_types, basestring
 
 # We have    windows.com.COMImplementation
 # So we need windows.com.COMInterface
@@ -109,11 +112,11 @@ def check_type_null(value):
 
 def check_type_i4(value):
     # 31 ? as we may want to keep sign :)
-    return isinstance(value, (int, long)) and (value).bit_length() <= 32
+    return isinstance(value, int_types) and (value).bit_length() <= 32
 
 def check_type_i8(value):
     # 63 ? as we may want to keep sign :)
-    return isinstance(value, (int, long)) and (value).bit_length() <= 64
+    return isinstance(value, int_types) and (value).bit_length() <= 64
 
 def check_type_bstr(value):
     return isinstance(value, basestring)
@@ -299,7 +302,7 @@ class COMImplementation(object):
 
     def QueryInterface(self, this, piid, result):
         """Default ``QueryInterface`` implementation that returns ``self`` if piid is the implemented interface"""
-        if piid[0] in (IUnknown.IID, self.IMPLEMENT.IID):
+        if piid[0] in (gdef.IUnknown.IID, self.IMPLEMENT.IID):
             result[0] = this
             return 1
         return E_NOINTERFACE
