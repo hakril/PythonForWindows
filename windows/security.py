@@ -193,6 +193,18 @@ SERVICE_ACCESS_RIGHT = gdef.FlagMapper(
     gdef.SERVICE_USER_DEFINED_CONTROL,
 )
 
+ADS_ACCESS_RIGHT = gdef.FlagMapper(
+    gdef.ADS_RIGHT_DS_CREATE_CHILD,
+    gdef.ADS_RIGHT_DS_DELETE_CHILD,
+    gdef.ADS_RIGHT_ACTRL_DS_LIST,
+    gdef.ADS_RIGHT_DS_SELF,
+    gdef.ADS_RIGHT_DS_READ_PROP,
+    gdef.ADS_RIGHT_DS_WRITE_PROP,
+    gdef.ADS_RIGHT_DS_DELETE_TREE,
+    gdef.ADS_RIGHT_DS_LIST_OBJECT,
+    gdef.ADS_RIGHT_DS_CONTROL_ACCESS,
+)
+
 
 SPECIFIC_ACCESS_RIGTH_BY_TYPE = {
     None: gdef.FlagMapper(),
@@ -217,6 +229,7 @@ SPECIFIC_ACCESS_RIGTH_BY_TYPE = {
     "key": KEY_ACCESS_RIGHT,
     "com": COM_ACCESS_RIGHT,
     "service": SERVICE_ACCESS_RIGHT,
+    "ad": ADS_ACCESS_RIGHT,
 }
 
 # SD
@@ -370,6 +383,15 @@ class CallbackACE(MaskAndSidACE):
         datastart = ctypes.sizeof(self) + self.sid.size - 4
         dataend = self.Header.AceSize
         return selfptr[datastart: dataend]
+
+    @property
+    def condition(self):
+        buff = windows.utils.BUFFER(gdef.BYTE).from_buffer_copy(self.application_data)
+        resstr = gdef.LPWSTR()
+        winproxy.GetStringConditionFromBinary(buff, StringAceCondition=resstr)
+        condition = resstr.value
+        winproxy.LocalFree(resstr)
+        return condition
 
 
 class ObjectRelatedACE(MaskAndSidACE):
@@ -782,7 +804,7 @@ class SecurityDescriptor(gdef.PSECURITY_DESCRIPTOR):
         """
         self = cls()
         winproxy.ConvertStringSecurityDescriptorToSecurityDescriptorA(
-            sddl,
+            sddl.encode("ascii"),
             gdef.SDDL_REVISION_1,
             self,
             None)
@@ -829,7 +851,7 @@ class SecurityDescriptor(gdef.PSECURITY_DESCRIPTOR):
         return self
 
 
-    def _apply_to_handle_and_type(self, handle, objtype, flags=None):
+    def _apply_to_handle_and_type(self, handle, objtype=gdef.SE_KERNEL_OBJECT, flags=None):
         # Make SecurityDescriptor method has_audit_ace ?
 
         if flags is None:
@@ -852,6 +874,21 @@ class SecurityDescriptor(gdef.PSECURITY_DESCRIPTOR):
     def from_filename(cls, filename, query_sacl=False, flags=DEFAULT_SECURITY_INFORMATION):
         """Retrieve the security descriptor for the file ``filename``"""
         return cls._from_name_and_type(filename, gdef.SE_FILE_OBJECT, flags=flags, query_sacl=query_sacl)
+
+
+    def to_filename(self, filename, flags=0):
+        "Test method: WILL CHANGE"
+        if not flags:
+            if self.owner:
+                flags |= gdef.OWNER_SECURITY_INFORMATION
+            if self.group:
+                flags |= gdef.GROUP_SECURITY_INFORMATION
+            if self.dacl:
+                flags |= gdef.DACL_SECURITY_INFORMATION
+            if self.sacl:
+                flags |= gdef.SACL_SECURITY_INFORMATION
+        winproxy.SetNamedSecurityInfoW(filename, gdef.SE_FILE_OBJECT, flags, self.owner, self.group, self.dacl, self.sacl)
+
 
     @classmethod
     def from_service(cls, filename, query_sacl=False, flags=SERVICE_SECURITY_INFORMATION):
@@ -892,6 +929,8 @@ class SecurityDescriptor(gdef.PSECURITY_DESCRIPTOR):
         winproxy.LocalFree(result_cstr)
         return result
 
+    __str__ = to_string
+
 
     # TST
 
@@ -926,6 +965,15 @@ def explain_sid(sid):
         info = u"<lookup failed>"
     return u"{0} ({1})".format(info, sid)
 
+def explain_mask(mask, sdtype):
+    mapper = windows.security.SPECIFIC_ACCESS_RIGTH_BY_TYPE[sdtype]
+    res = []
+    for i in range(32): # sizeof ACCESS_MASK * 8
+        v = mask & (1 << i)
+        if v:
+            res.append(mapper[ACE_MASKS[v]])
+    return res
+
 def explain_simple_ace(ace, sdtype):
     yield u"Type:"
     yield u"  " + str(ace.Header.AceType)
@@ -952,11 +1000,55 @@ def explain_mandatory_label_ace(ace, sdtype):
     mapper = MANDATORY_LABEL_ACE_MASK
     yield u"  " + str(list(mapper[x] for x in ace.mask))
 
+def explain_object_related_ace(ace, sdtype):
+    yield u"Type:"
+    yield u"  " + str(ace.Header.AceType)
+    yield u"HeaderFlags:"
+    yield u"  {0:#x}".format(ace.Header.AceFlags)
+    yield u"SID:"
+    yield u"  " + explain_sid(ace.sid)
+    yield u"Mask:"
+    mapper = windows.security.SPECIFIC_ACCESS_RIGTH_BY_TYPE[sdtype]
+    yield u"  " + str(list(mapper[x] for x in ace.mask))
+    yield u"Flag:"
+    yield u"  " + str(ace.flags)
+    object_type = ace.object_type
+    inherited_object_type = ace.inherited_object_type
+    if object_type:
+        yield u"ObjectType"
+        yield u"  " + object_type
+    if inherited_object_type:
+        yield u"InheritedObjectType"
+        yield u"  " + inherited_object_type
+
+def explain_callback_ace(ace, sdtype):
+    yield u"Type:"
+    yield u"  " + str(ace.Header.AceType)
+    yield u"HeaderFlags:"
+    yield u"  {0:#x}".format(ace.Header.AceFlags)
+    yield u"SID:"
+    yield u"  " + explain_sid(ace.sid)
+    yield u"Mask:"
+    mapper = windows.security.SPECIFIC_ACCESS_RIGTH_BY_TYPE[sdtype]
+    yield u"  " + str(list(mapper[x] for x in ace.mask))
+    yield "Application data:"
+    yield "  " + repr(ace.application_data.replace("\x00", ""))
+    try:
+        condition = ace.condition
+        yield "Condition:"
+        yield "  " + condition
+    except ValueError:
+        pass
+
+
 ACE_EXPLAINER = {
     gdef.ACCESS_ALLOWED_ACE_TYPE: explain_simple_ace,
     gdef.ACCESS_DENIED_ACE_TYPE: explain_simple_ace,
     gdef.SYSTEM_MANDATORY_LABEL_ACE_TYPE: explain_mandatory_label_ace,
     gdef.SYSTEM_AUDIT_ACE_TYPE: explain_simple_ace,
+    gdef.ACCESS_ALLOWED_OBJECT_ACE_TYPE: explain_object_related_ace,
+    gdef.ACCESS_DENIED_OBJECT_ACE_TYPE: explain_object_related_ace,
+    gdef.ACCESS_ALLOWED_CALLBACK_ACE_TYPE: explain_callback_ace,
 }
 
 
