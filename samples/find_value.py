@@ -34,6 +34,12 @@ def search_name_in_windef(target):
         if match(target, name):
             print(repr(windef))
 
+def search_name_in_winerror(target):
+    for name, windef in meta.errors_walker():
+        if match(target, name):
+            print(repr(windef))
+
+
 def search_name_in_interface(target):
     for name, interface in meta.interfaces_walker():
         if not issubclass(interface, windows.generated_def.interfaces.COMInterface):
@@ -54,17 +60,23 @@ def search_name(target):
     search_name_in_struct(target)
     print("== Windef ==")
     search_name_in_windef(target)
+    print("== Winerror ==")
+    search_name_in_winerror(target)
     print("== Interfaces ==")
     search_name_in_interface(target)
 
 def search_value(target):
     for name, windef in meta.windef_walker():
         if target == windef:
-            print(windef)
+            print(repr(windef))
 
     for status in gdef.ntstatus.NtStatusException.ALL_STATUS.values():
         if target == status[0]:
-            print(status)
+            print(repr(windef))
+
+    for name, windef in meta.errors_walker():
+        if target == windef:
+            print(repr(windef))
 
 parser = argparse.ArgumentParser(prog=__file__)
 parser.add_argument('target', help='The name or value to research in PythonForWindows generated definition')

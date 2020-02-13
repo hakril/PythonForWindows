@@ -1,7 +1,8 @@
 import hashlib
+import base64
 import windows.crypto
 
-windowscert = """-----BEGIN CERTIFICATE-----
+windowscert = b"""-----BEGIN CERTIFICATE-----
 MIIFBDCCA+ygAwIBAgITMwAAAQZuwyXEMckYDgAAAAABBjANBgkqhkiG9w0BAQsF
 ADCBhDELMAkGA1UEBhMCVVMxEzARBgNVBAgTCldhc2hpbmd0b24xEDAOBgNVBAcT
 B1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3JhdGlvbjEuMCwGA1UE
@@ -32,7 +33,7 @@ l2ec6CyjDQc6HcQBNCsbJVq6qGtQbYNE+ih+KhIU4tO5jf25xthf2g==
 -----END CERTIFICATE-----"""
 
 
-raw_cert = ("".join(windowscert.split("\n")[1:-1])).decode('base64')
+raw_cert = base64.decodestring(b"".join(windowscert.split(b"\n")[1:-1]))
 cert = windows.crypto.Certificate.from_buffer(raw_cert)
 
 print("Analysing certificate: {0}".format(cert))
@@ -42,7 +43,7 @@ print("    * raw_serial: <{0}>".format(cert.raw_serial))
 print("    * serial: <{0}>".format(cert.serial))
 print("    * encoded start: <{0!r}>".format(cert.encoded[:20]))
 
-print ""
+print("")
 chains = cert.chains
 print("This certificate has {0} certificate chain(s)".format(len(chains)))
 for i, chain in enumerate(chains):
@@ -52,7 +53,7 @@ for i, chain in enumerate(chains):
         print("  {0}:".format(ccert))
         print("    * issuer: <{0}>".format(ccert.issuer))
 
-print ""
+print ("")
 cert_to_verif = ccert
 print("Looking for <{0}> in trusted certificates".format(cert_to_verif.name))
 root_store = windows.crypto.CertificateStore.from_system_store("Root")
@@ -78,7 +79,7 @@ print("Analysing {0}".format(cryptobj))
 print("File has {0} signer(s):".format(cryptobj.crypt_msg.nb_signer))
 for i, signer in enumerate(cryptobj.crypt_msg.signers):
     print("Signer {0}:".format(i))
-    print("   * Issuer: {0!r}".format(windows.crypto.ECRYPT_DATA_BLOB(signer.Issuer.cbData, signer.Issuer.pbData).data))
+    print("   * Issuer: {0!r}".format(signer.Issuer.data))
     print("   * HashAlgorithme: {0}".format(signer.HashAlgorithm.pszObjId))
     cert = cryptobj.cert_store.find(signer.Issuer, signer.SerialNumber)
     print("   * Certificate: {0}".format(cert))

@@ -30,7 +30,7 @@ print("   * Definition: <{task.definition}>".format(task=task))
 print("Listing actions:")
 for action in task.definition.actions:
     print("   * Action: <{action}>".format(action=action))
-    print("     * Type: <{action.type}>".format(action=action))
+    print("     * Type: <{action.type!r}>".format(action=action))
     if getattr(action, "path", None):
         print("     * path: <{action.path}>".format(action=action))
         print("     * arguments: <{action.arguments}>".format(action=action))
@@ -38,7 +38,7 @@ for action in task.definition.actions:
     # import pdb;pdb.set_trace()
 print("Listing triggers:")
 for trigger in task.definition.triggers:
-    print("   * Trigger type: <{trigger.type}>".format(trigger=trigger))
+    print("   * Trigger type: <{trigger.type!r}>".format(trigger=trigger))
 
 print("")
 DEMO_FOLDER_NAME = "PFW_DEMO_FOLDER"
