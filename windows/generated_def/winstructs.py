@@ -417,131 +417,6 @@ class TASK_RUN_FLAGS(EnumType):
     mapper = FlagMapper(*values)
 
 
-class _API_SET_VALUE_ENTRY(Structure):
-    _fields_ = [
-        ("Flags", ULONG),
-        ("NameOffset", ULONG),
-        ("NameLength", ULONG),
-        ("ValueOffset", ULONG),
-        ("ValueLength", ULONG),
-    ]
-API_SET_VALUE_ENTRY = _API_SET_VALUE_ENTRY
-PAPI_SET_VALUE_ENTRY = POINTER(_API_SET_VALUE_ENTRY)
-
-class _API_SET_NAMESPACE_ENTRY(Structure):
-    _fields_ = [
-        ("Flags", ULONG),
-        ("NameOffset", ULONG),
-        ("NameLength", ULONG),
-        ("AliasOffset", ULONG),
-        ("AliasLength", ULONG),
-        ("DataOffset", ULONG),
-    ]
-PAPI_SET_NAMESPACE_ENTRY = POINTER(_API_SET_NAMESPACE_ENTRY)
-API_SET_NAMESPACE_ENTRY = _API_SET_NAMESPACE_ENTRY
-
-class _API_SET_NAMESPACE_ARRAY(Structure):
-    _fields_ = [
-        ("Version", ULONG),
-        ("Size", ULONG),
-        ("Flags", ULONG),
-        ("Count", ULONG),
-        ("Array", API_SET_NAMESPACE_ENTRY * (ANYSIZE_ARRAY)),
-    ]
-PAPI_SET_NAMESPACE_ARRAY = POINTER(_API_SET_NAMESPACE_ARRAY)
-API_SET_NAMESPACE_ARRAY = _API_SET_NAMESPACE_ARRAY
-
-class _API_SET_VALUE_ENTRY_V2(Structure):
-    _fields_ = [
-        ("NameOffset", ULONG),
-        ("NameLength", ULONG),
-        ("ValueOffset", ULONG),
-        ("ValueLength", ULONG),
-    ]
-PAPI_SET_VALUE_ENTRY_V2 = POINTER(_API_SET_VALUE_ENTRY_V2)
-API_SET_VALUE_ENTRY_V2 = _API_SET_VALUE_ENTRY_V2
-
-class _API_SET_VALUE_ARRAY_V2(Structure):
-    _fields_ = [
-        ("Count", ULONG),
-        ("Array", API_SET_VALUE_ENTRY_V2 * (ANYSIZE_ARRAY)),
-    ]
-API_SET_VALUE_ARRAY_V2 = _API_SET_VALUE_ARRAY_V2
-PAPI_SET_VALUE_ARRAY_V2 = POINTER(_API_SET_VALUE_ARRAY_V2)
-
-class _API_SET_NAMESPACE_ENTRY_V2(Structure):
-    _fields_ = [
-        ("NameOffset", ULONG),
-        ("NameLength", ULONG),
-        ("DataOffset", ULONG),
-    ]
-PAPI_SET_NAMESPACE_ENTRY_V2 = POINTER(_API_SET_NAMESPACE_ENTRY_V2)
-API_SET_NAMESPACE_ENTRY_V2 = _API_SET_NAMESPACE_ENTRY_V2
-
-class _API_SET_NAMESPACE_ARRAY_V2(Structure):
-    _fields_ = [
-        ("Version", ULONG),
-        ("Count", ULONG),
-        ("Array", API_SET_NAMESPACE_ENTRY_V2 * (ANYSIZE_ARRAY)),
-    ]
-API_SET_NAMESPACE_ARRAY_V2 = _API_SET_NAMESPACE_ARRAY_V2
-PAPI_SET_NAMESPACE_ARRAY_V2 = POINTER(_API_SET_NAMESPACE_ARRAY_V2)
-
-class _API_SET_VALUE_ARRAY_V4(Structure):
-    _fields_ = [
-        ("GuessFlags", ULONG),
-        ("Count", ULONG),
-        ("Array", API_SET_VALUE_ENTRY_V2 * (ANYSIZE_ARRAY)),
-    ]
-API_SET_VALUE_ARRAY_V4 = _API_SET_VALUE_ARRAY_V4
-PAPI_SET_VALUE_ARRAY_V2 = POINTER(_API_SET_VALUE_ARRAY_V4)
-
-class _API_SET_NAMESPACE_ARRAY_V4(Structure):
-    _fields_ = [
-        ("Version", ULONG),
-        ("Size", ULONG),
-        ("Flags", ULONG),
-        ("Count", ULONG),
-        ("Array", API_SET_NAMESPACE_ENTRY * (ANYSIZE_ARRAY)),
-    ]
-API_SET_NAMESPACE_ARRAY_V4 = _API_SET_NAMESPACE_ARRAY_V4
-PAPI_SET_NAMESPACE_ARRAY_V4 = POINTER(_API_SET_NAMESPACE_ARRAY_V4)
-
-class _API_SET_NAMESPACE_ENTRY_V4(Structure):
-    _fields_ = [
-        ("Flags", ULONG),
-        ("NameOffset", ULONG),
-        ("NameLength", ULONG),
-        ("AliasOffset", ULONG),
-        ("AliasLength", ULONG),
-        ("DataOffset", ULONG),
-    ]
-PAPI_SET_NAMESPACE_ENTRY_V4 = POINTER(_API_SET_NAMESPACE_ENTRY_V4)
-API_SET_NAMESPACE_ENTRY_V4 = _API_SET_NAMESPACE_ENTRY_V4
-
-class _API_SET_NAMESPACE_ENTRY_V6(Structure):
-    _fields_ = [
-        ("Flags", ULONG),
-        ("NameOffset", ULONG),
-        ("NameLength", ULONG),
-        ("HashedLength", ULONG),
-        ("ValueOffset", ULONG),
-        ("ValueCount", ULONG),
-    ]
-API_SET_NAMESPACE_ENTRY_V6 = _API_SET_NAMESPACE_ENTRY_V6
-
-class _API_SET_NAMESPACE_V6(Structure):
-    _fields_ = [
-        ("Version", ULONG),
-        ("Size", ULONG),
-        ("Flags", ULONG),
-        ("Count", ULONG),
-        ("EntryOffset", ULONG),
-        ("HashOffset", ULONG),
-        ("HashFactor", ULONG),
-    ]
-API_SET_NAMESPACE_V6 = _API_SET_NAMESPACE_V6
-
 WBEM_GENUS_CLASS = EnumValue("tag_WBEM_GENUS_TYPE", "WBEM_GENUS_CLASS", 0x1)
 WBEM_GENUS_INSTANCE = EnumValue("tag_WBEM_GENUS_TYPE", "WBEM_GENUS_INSTANCE", 0x2)
 class tag_WBEM_GENUS_TYPE(EnumType):
@@ -826,6 +701,131 @@ class WMIDPREQUESTCODE(EnumType):
     mapper = FlagMapper(*values)
 
 
+class _API_SET_VALUE_ENTRY(Structure):
+    _fields_ = [
+        ("Flags", ULONG),
+        ("NameOffset", ULONG),
+        ("NameLength", ULONG),
+        ("ValueOffset", ULONG),
+        ("ValueLength", ULONG),
+    ]
+API_SET_VALUE_ENTRY = _API_SET_VALUE_ENTRY
+PAPI_SET_VALUE_ENTRY = POINTER(_API_SET_VALUE_ENTRY)
+
+class _API_SET_NAMESPACE_ENTRY(Structure):
+    _fields_ = [
+        ("Flags", ULONG),
+        ("NameOffset", ULONG),
+        ("NameLength", ULONG),
+        ("AliasOffset", ULONG),
+        ("AliasLength", ULONG),
+        ("DataOffset", ULONG),
+    ]
+PAPI_SET_NAMESPACE_ENTRY = POINTER(_API_SET_NAMESPACE_ENTRY)
+API_SET_NAMESPACE_ENTRY = _API_SET_NAMESPACE_ENTRY
+
+class _API_SET_NAMESPACE_ARRAY(Structure):
+    _fields_ = [
+        ("Version", ULONG),
+        ("Size", ULONG),
+        ("Flags", ULONG),
+        ("Count", ULONG),
+        ("Array", API_SET_NAMESPACE_ENTRY * (ANYSIZE_ARRAY)),
+    ]
+PAPI_SET_NAMESPACE_ARRAY = POINTER(_API_SET_NAMESPACE_ARRAY)
+API_SET_NAMESPACE_ARRAY = _API_SET_NAMESPACE_ARRAY
+
+class _API_SET_VALUE_ENTRY_V2(Structure):
+    _fields_ = [
+        ("NameOffset", ULONG),
+        ("NameLength", ULONG),
+        ("ValueOffset", ULONG),
+        ("ValueLength", ULONG),
+    ]
+PAPI_SET_VALUE_ENTRY_V2 = POINTER(_API_SET_VALUE_ENTRY_V2)
+API_SET_VALUE_ENTRY_V2 = _API_SET_VALUE_ENTRY_V2
+
+class _API_SET_VALUE_ARRAY_V2(Structure):
+    _fields_ = [
+        ("Count", ULONG),
+        ("Array", API_SET_VALUE_ENTRY_V2 * (ANYSIZE_ARRAY)),
+    ]
+API_SET_VALUE_ARRAY_V2 = _API_SET_VALUE_ARRAY_V2
+PAPI_SET_VALUE_ARRAY_V2 = POINTER(_API_SET_VALUE_ARRAY_V2)
+
+class _API_SET_NAMESPACE_ENTRY_V2(Structure):
+    _fields_ = [
+        ("NameOffset", ULONG),
+        ("NameLength", ULONG),
+        ("DataOffset", ULONG),
+    ]
+PAPI_SET_NAMESPACE_ENTRY_V2 = POINTER(_API_SET_NAMESPACE_ENTRY_V2)
+API_SET_NAMESPACE_ENTRY_V2 = _API_SET_NAMESPACE_ENTRY_V2
+
+class _API_SET_NAMESPACE_ARRAY_V2(Structure):
+    _fields_ = [
+        ("Version", ULONG),
+        ("Count", ULONG),
+        ("Array", API_SET_NAMESPACE_ENTRY_V2 * (ANYSIZE_ARRAY)),
+    ]
+API_SET_NAMESPACE_ARRAY_V2 = _API_SET_NAMESPACE_ARRAY_V2
+PAPI_SET_NAMESPACE_ARRAY_V2 = POINTER(_API_SET_NAMESPACE_ARRAY_V2)
+
+class _API_SET_VALUE_ARRAY_V4(Structure):
+    _fields_ = [
+        ("GuessFlags", ULONG),
+        ("Count", ULONG),
+        ("Array", API_SET_VALUE_ENTRY_V2 * (ANYSIZE_ARRAY)),
+    ]
+API_SET_VALUE_ARRAY_V4 = _API_SET_VALUE_ARRAY_V4
+PAPI_SET_VALUE_ARRAY_V2 = POINTER(_API_SET_VALUE_ARRAY_V4)
+
+class _API_SET_NAMESPACE_ARRAY_V4(Structure):
+    _fields_ = [
+        ("Version", ULONG),
+        ("Size", ULONG),
+        ("Flags", ULONG),
+        ("Count", ULONG),
+        ("Array", API_SET_NAMESPACE_ENTRY * (ANYSIZE_ARRAY)),
+    ]
+API_SET_NAMESPACE_ARRAY_V4 = _API_SET_NAMESPACE_ARRAY_V4
+PAPI_SET_NAMESPACE_ARRAY_V4 = POINTER(_API_SET_NAMESPACE_ARRAY_V4)
+
+class _API_SET_NAMESPACE_ENTRY_V4(Structure):
+    _fields_ = [
+        ("Flags", ULONG),
+        ("NameOffset", ULONG),
+        ("NameLength", ULONG),
+        ("AliasOffset", ULONG),
+        ("AliasLength", ULONG),
+        ("DataOffset", ULONG),
+    ]
+PAPI_SET_NAMESPACE_ENTRY_V4 = POINTER(_API_SET_NAMESPACE_ENTRY_V4)
+API_SET_NAMESPACE_ENTRY_V4 = _API_SET_NAMESPACE_ENTRY_V4
+
+class _API_SET_NAMESPACE_ENTRY_V6(Structure):
+    _fields_ = [
+        ("Flags", ULONG),
+        ("NameOffset", ULONG),
+        ("NameLength", ULONG),
+        ("HashedLength", ULONG),
+        ("ValueOffset", ULONG),
+        ("ValueCount", ULONG),
+    ]
+API_SET_NAMESPACE_ENTRY_V6 = _API_SET_NAMESPACE_ENTRY_V6
+
+class _API_SET_NAMESPACE_V6(Structure):
+    _fields_ = [
+        ("Version", ULONG),
+        ("Size", ULONG),
+        ("Flags", ULONG),
+        ("Count", ULONG),
+        ("EntryOffset", ULONG),
+        ("HashOffset", ULONG),
+        ("HashFactor", ULONG),
+    ]
+API_SET_NAMESPACE_V6 = _API_SET_NAMESPACE_V6
+
 VOID = DWORD
 BYTE = c_ubyte
 PWSTR = LPWSTR
@@ -1027,40 +1027,59 @@ HCERTSTORE = PVOID
 HCRYPTMSG = PVOID
 PALPC_PORT_ATTRIBUTES = PVOID
 PPORT_MESSAGE = PVOID
-AO_NONE = EnumValue("ACTIVATEOPTIONS", "AO_NONE", 0x0)
-AO_DESIGNMODE = EnumValue("ACTIVATEOPTIONS", "AO_DESIGNMODE", 0x1)
-AO_NOERRORUI = EnumValue("ACTIVATEOPTIONS", "AO_NOERRORUI", 0x2)
-AO_NOSPLASHSCREEN = EnumValue("ACTIVATEOPTIONS", "AO_NOSPLASHSCREEN", 0x4)
-AO_PRELAUNCH = EnumValue("ACTIVATEOPTIONS", "AO_PRELAUNCH", 0x2000000)
-class ACTIVATEOPTIONS(EnumType):
-    values = [AO_NONE, AO_DESIGNMODE, AO_NOERRORUI, AO_NOSPLASHSCREEN, AO_PRELAUNCH]
+BG_AUTH_SCHEME_BASIC = EnumValue("__MIDL_IBackgroundCopyJob2_0002", "BG_AUTH_SCHEME_BASIC", 0x0)
+BG_AUTH_SCHEME_DIGEST = EnumValue("__MIDL_IBackgroundCopyJob2_0002", "BG_AUTH_SCHEME_DIGEST", 0x1)
+BG_AUTH_SCHEME_NTLM = EnumValue("__MIDL_IBackgroundCopyJob2_0002", "BG_AUTH_SCHEME_NTLM", 0x2)
+BG_AUTH_SCHEME_NEGOTIATE = EnumValue("__MIDL_IBackgroundCopyJob2_0002", "BG_AUTH_SCHEME_NEGOTIATE", 0x3)
+BG_AUTH_SCHEME_PASSPORT = EnumValue("__MIDL_IBackgroundCopyJob2_0002", "BG_AUTH_SCHEME_PASSPORT", 0x4)
+class __MIDL_IBackgroundCopyJob2_0002(EnumType):
+    values = [BG_AUTH_SCHEME_BASIC, BG_AUTH_SCHEME_DIGEST, BG_AUTH_SCHEME_NTLM, BG_AUTH_SCHEME_NEGOTIATE, BG_AUTH_SCHEME_PASSPORT]
     mapper = FlagMapper(*values)
+BG_AUTH_SCHEME = __MIDL_IBackgroundCopyJob2_0002
 
 
-PES_UNKNOWN = EnumValue("PACKAGE_EXECUTION_STATE", "PES_UNKNOWN", 0x0)
-PES_RUNNING = EnumValue("PACKAGE_EXECUTION_STATE", "PES_RUNNING", 0x1)
-PES_SUSPENDING = EnumValue("PACKAGE_EXECUTION_STATE", "PES_SUSPENDING", 0x2)
-PES_SUSPENDED = EnumValue("PACKAGE_EXECUTION_STATE", "PES_SUSPENDED", 0x3)
-PES_TERMINATED = EnumValue("PACKAGE_EXECUTION_STATE", "PES_TERMINATED", 0x4)
-class PACKAGE_EXECUTION_STATE(EnumType):
-    values = [PES_UNKNOWN, PES_RUNNING, PES_SUSPENDING, PES_SUSPENDED, PES_TERMINATED]
+BG_AUTH_TARGET_SERVER = EnumValue("__MIDL_IBackgroundCopyJob2_0001", "BG_AUTH_TARGET_SERVER", 0x0)
+BG_AUTH_TARGET_PROXY = EnumValue("__MIDL_IBackgroundCopyJob2_0001", "BG_AUTH_TARGET_PROXY", 0x1)
+class __MIDL_IBackgroundCopyJob2_0001(EnumType):
+    values = [BG_AUTH_TARGET_SERVER, BG_AUTH_TARGET_PROXY]
     mapper = FlagMapper(*values)
+BG_AUTH_TARGET = __MIDL_IBackgroundCopyJob2_0001
 
 
-class _SHITEMID(Structure):
+class __MIDL_IBackgroundCopyJob2_0003(Structure):
     _fields_ = [
-        ("cb", USHORT),
-        ("abID", BYTE * (1)),
+        ("UserName", LPWSTR),
+        ("Password", LPWSTR),
     ]
-SHITEMID = _SHITEMID
+BG_BASIC_CREDENTIALS = __MIDL_IBackgroundCopyJob2_0003
 
-class _ITEMIDLIST(Structure):
+class __MIDL_IBackgroundCopyJob2_0004(Union):
     _fields_ = [
-        ("mkid", SHITEMID),
+        ("Basic", BG_BASIC_CREDENTIALS),
     ]
-ITEMIDLIST = _ITEMIDLIST
-PCIDLIST_ABSOLUTE = POINTER(_ITEMIDLIST)
-PIDLIST_ABSOLUTE = POINTER(_ITEMIDLIST)
+BG_AUTH_CREDENTIALS_UNION = __MIDL_IBackgroundCopyJob2_0004
+
+class BG_AUTH_CREDENTIALS(Structure):
+    _fields_ = [
+        ("Target", BG_AUTH_TARGET),
+        ("Scheme", BG_AUTH_SCHEME),
+        ("Credentials", BG_AUTH_CREDENTIALS_UNION),
+    ]
+
+
+class _BG_JOB_REPLY_PROGRESS(Structure):
+    _fields_ = [
+        ("BytesTotal", UINT64),
+        ("BytesTransferred", UINT64),
+    ]
+BG_JOB_REPLY_PROGRESS = _BG_JOB_REPLY_PROGRESS
+
+class _BG_FILE_RANGE(Structure):
+    _fields_ = [
+        ("InitialOffset", UINT64),
+        ("Length", UINT64),
+    ]
+BG_FILE_RANGE = _BG_FILE_RANGE
 
 KeyValueBasicInformation = EnumValue("_KEY_VALUE_INFORMATION_CLASS", "KeyValueBasicInformation", 0x0)
 KeyValueFullInformation = EnumValue("_KEY_VALUE_INFORMATION_CLASS", "KeyValueFullInformation", 0x1)
@@ -1124,59 +1143,1060 @@ class _KEY_VALUE_PARTIAL_INFORMATION(Structure):
 PKEY_VALUE_PARTIAL_INFORMATION = POINTER(_KEY_VALUE_PARTIAL_INFORMATION)
 KEY_VALUE_PARTIAL_INFORMATION = _KEY_VALUE_PARTIAL_INFORMATION
 
-BG_AUTH_SCHEME_BASIC = EnumValue("__MIDL_IBackgroundCopyJob2_0002", "BG_AUTH_SCHEME_BASIC", 0x0)
-BG_AUTH_SCHEME_DIGEST = EnumValue("__MIDL_IBackgroundCopyJob2_0002", "BG_AUTH_SCHEME_DIGEST", 0x1)
-BG_AUTH_SCHEME_NTLM = EnumValue("__MIDL_IBackgroundCopyJob2_0002", "BG_AUTH_SCHEME_NTLM", 0x2)
-BG_AUTH_SCHEME_NEGOTIATE = EnumValue("__MIDL_IBackgroundCopyJob2_0002", "BG_AUTH_SCHEME_NEGOTIATE", 0x3)
-BG_AUTH_SCHEME_PASSPORT = EnumValue("__MIDL_IBackgroundCopyJob2_0002", "BG_AUTH_SCHEME_PASSPORT", 0x4)
-class __MIDL_IBackgroundCopyJob2_0002(EnumType):
-    values = [BG_AUTH_SCHEME_BASIC, BG_AUTH_SCHEME_DIGEST, BG_AUTH_SCHEME_NTLM, BG_AUTH_SCHEME_NEGOTIATE, BG_AUTH_SCHEME_PASSPORT]
+TCP_TABLE_BASIC_LISTENER = EnumValue("_TCP_TABLE_CLASS", "TCP_TABLE_BASIC_LISTENER", 0x0)
+TCP_TABLE_BASIC_CONNECTIONS = EnumValue("_TCP_TABLE_CLASS", "TCP_TABLE_BASIC_CONNECTIONS", 0x1)
+TCP_TABLE_BASIC_ALL = EnumValue("_TCP_TABLE_CLASS", "TCP_TABLE_BASIC_ALL", 0x2)
+TCP_TABLE_OWNER_PID_LISTENER = EnumValue("_TCP_TABLE_CLASS", "TCP_TABLE_OWNER_PID_LISTENER", 0x3)
+TCP_TABLE_OWNER_PID_CONNECTIONS = EnumValue("_TCP_TABLE_CLASS", "TCP_TABLE_OWNER_PID_CONNECTIONS", 0x4)
+TCP_TABLE_OWNER_PID_ALL = EnumValue("_TCP_TABLE_CLASS", "TCP_TABLE_OWNER_PID_ALL", 0x5)
+TCP_TABLE_OWNER_MODULE_LISTENER = EnumValue("_TCP_TABLE_CLASS", "TCP_TABLE_OWNER_MODULE_LISTENER", 0x6)
+TCP_TABLE_OWNER_MODULE_CONNECTIONS = EnumValue("_TCP_TABLE_CLASS", "TCP_TABLE_OWNER_MODULE_CONNECTIONS", 0x7)
+TCP_TABLE_OWNER_MODULE_ALL = EnumValue("_TCP_TABLE_CLASS", "TCP_TABLE_OWNER_MODULE_ALL", 0x8)
+class _TCP_TABLE_CLASS(EnumType):
+    values = [TCP_TABLE_BASIC_LISTENER, TCP_TABLE_BASIC_CONNECTIONS, TCP_TABLE_BASIC_ALL, TCP_TABLE_OWNER_PID_LISTENER, TCP_TABLE_OWNER_PID_CONNECTIONS, TCP_TABLE_OWNER_PID_ALL, TCP_TABLE_OWNER_MODULE_LISTENER, TCP_TABLE_OWNER_MODULE_CONNECTIONS, TCP_TABLE_OWNER_MODULE_ALL]
     mapper = FlagMapper(*values)
-BG_AUTH_SCHEME = __MIDL_IBackgroundCopyJob2_0002
+TCP_TABLE_CLASS = _TCP_TABLE_CLASS
 
 
-BG_AUTH_TARGET_SERVER = EnumValue("__MIDL_IBackgroundCopyJob2_0001", "BG_AUTH_TARGET_SERVER", 0x0)
-BG_AUTH_TARGET_PROXY = EnumValue("__MIDL_IBackgroundCopyJob2_0001", "BG_AUTH_TARGET_PROXY", 0x1)
-class __MIDL_IBackgroundCopyJob2_0001(EnumType):
-    values = [BG_AUTH_TARGET_SERVER, BG_AUTH_TARGET_PROXY]
+MIB_TCP_STATE_CLOSED = EnumValue("_MIB_TCP_STATE", "MIB_TCP_STATE_CLOSED", 0x1)
+MIB_TCP_STATE_LISTEN = EnumValue("_MIB_TCP_STATE", "MIB_TCP_STATE_LISTEN", 0x2)
+MIB_TCP_STATE_SYN_SENT = EnumValue("_MIB_TCP_STATE", "MIB_TCP_STATE_SYN_SENT", 0x3)
+MIB_TCP_STATE_SYN_RCVD = EnumValue("_MIB_TCP_STATE", "MIB_TCP_STATE_SYN_RCVD", 0x4)
+MIB_TCP_STATE_ESTAB = EnumValue("_MIB_TCP_STATE", "MIB_TCP_STATE_ESTAB", 0x5)
+MIB_TCP_STATE_FIN_WAIT1 = EnumValue("_MIB_TCP_STATE", "MIB_TCP_STATE_FIN_WAIT1", 0x6)
+MIB_TCP_STATE_FIN_WAIT2 = EnumValue("_MIB_TCP_STATE", "MIB_TCP_STATE_FIN_WAIT2", 0x7)
+MIB_TCP_STATE_CLOSE_WAIT = EnumValue("_MIB_TCP_STATE", "MIB_TCP_STATE_CLOSE_WAIT", 0x8)
+MIB_TCP_STATE_CLOSING = EnumValue("_MIB_TCP_STATE", "MIB_TCP_STATE_CLOSING", 0x9)
+MIB_TCP_STATE_LAST_ACK = EnumValue("_MIB_TCP_STATE", "MIB_TCP_STATE_LAST_ACK", 0xa)
+MIB_TCP_STATE_TIME_WAIT = EnumValue("_MIB_TCP_STATE", "MIB_TCP_STATE_TIME_WAIT", 0xb)
+MIB_TCP_STATE_DELETE_TCB = EnumValue("_MIB_TCP_STATE", "MIB_TCP_STATE_DELETE_TCB", 0xc)
+class _MIB_TCP_STATE(EnumType):
+    values = [MIB_TCP_STATE_CLOSED, MIB_TCP_STATE_LISTEN, MIB_TCP_STATE_SYN_SENT, MIB_TCP_STATE_SYN_RCVD, MIB_TCP_STATE_ESTAB, MIB_TCP_STATE_FIN_WAIT1, MIB_TCP_STATE_FIN_WAIT2, MIB_TCP_STATE_CLOSE_WAIT, MIB_TCP_STATE_CLOSING, MIB_TCP_STATE_LAST_ACK, MIB_TCP_STATE_TIME_WAIT, MIB_TCP_STATE_DELETE_TCB]
     mapper = FlagMapper(*values)
-BG_AUTH_TARGET = __MIDL_IBackgroundCopyJob2_0001
+MIB_TCP_STATE = _MIB_TCP_STATE
 
 
-class __MIDL_IBackgroundCopyJob2_0003(Structure):
+NET_FW_IP_PROTOCOL_TCP = EnumValue("NET_FW_IP_PROTOCOL_", "NET_FW_IP_PROTOCOL_TCP", 0x6)
+NET_FW_IP_PROTOCOL_UDP = EnumValue("NET_FW_IP_PROTOCOL_", "NET_FW_IP_PROTOCOL_UDP", 0x11)
+NET_FW_IP_PROTOCOL_ANY = EnumValue("NET_FW_IP_PROTOCOL_", "NET_FW_IP_PROTOCOL_ANY", 0x100)
+class NET_FW_IP_PROTOCOL_(EnumType):
+    values = [NET_FW_IP_PROTOCOL_TCP, NET_FW_IP_PROTOCOL_UDP, NET_FW_IP_PROTOCOL_ANY]
+    mapper = FlagMapper(*values)
+NET_FW_IP_PROTOCOL = NET_FW_IP_PROTOCOL_
+
+
+IF_OPER_STATUS_NON_OPERATIONAL = EnumValue("_INTERNAL_IF_OPER_STATUS", "IF_OPER_STATUS_NON_OPERATIONAL", 0x0)
+IF_OPER_STATUS_UNREACHABLE = EnumValue("_INTERNAL_IF_OPER_STATUS", "IF_OPER_STATUS_UNREACHABLE", 0x1)
+IF_OPER_STATUS_DISCONNECTED = EnumValue("_INTERNAL_IF_OPER_STATUS", "IF_OPER_STATUS_DISCONNECTED", 0x2)
+IF_OPER_STATUS_CONNECTING = EnumValue("_INTERNAL_IF_OPER_STATUS", "IF_OPER_STATUS_CONNECTING", 0x3)
+IF_OPER_STATUS_CONNECTED = EnumValue("_INTERNAL_IF_OPER_STATUS", "IF_OPER_STATUS_CONNECTED", 0x4)
+IF_OPER_STATUS_OPERATIONAL = EnumValue("_INTERNAL_IF_OPER_STATUS", "IF_OPER_STATUS_OPERATIONAL", 0x5)
+class _INTERNAL_IF_OPER_STATUS(EnumType):
+    values = [IF_OPER_STATUS_NON_OPERATIONAL, IF_OPER_STATUS_UNREACHABLE, IF_OPER_STATUS_DISCONNECTED, IF_OPER_STATUS_CONNECTING, IF_OPER_STATUS_CONNECTED, IF_OPER_STATUS_OPERATIONAL]
+    mapper = FlagMapper(*values)
+INTERNAL_IF_OPER_STATUS = _INTERNAL_IF_OPER_STATUS
+
+
+DnsFreeFlat = EnumValue("DNS_FREE_TYPE", "DnsFreeFlat", 0x0)
+DnsFreeRecordList = EnumValue("DNS_FREE_TYPE", "DnsFreeRecordList", 0x1)
+DnsFreeParsedMessageFields = EnumValue("DNS_FREE_TYPE", "DnsFreeParsedMessageFields", 0x2)
+class DNS_FREE_TYPE(EnumType):
+    values = [DnsFreeFlat, DnsFreeRecordList, DnsFreeParsedMessageFields]
+    mapper = FlagMapper(*values)
+
+
+class IP6_ADDRESS(Structure):
     _fields_ = [
-        ("UserName", LPWSTR),
-        ("Password", LPWSTR),
+        ("IP6Qword", ULONGLONG * (2)),
     ]
-BG_BASIC_CREDENTIALS = __MIDL_IBackgroundCopyJob2_0003
+PIP6_ADDRESS = POINTER(IP6_ADDRESS)
 
-class __MIDL_IBackgroundCopyJob2_0004(Union):
+class _MIB_IPADDRROW_XP(Structure):
     _fields_ = [
-        ("Basic", BG_BASIC_CREDENTIALS),
+        ("dwAddr", DWORD),
+        ("dwIndex", IF_INDEX),
+        ("dwMask", DWORD),
+        ("dwBCastAddr", DWORD),
+        ("dwReasmSize", DWORD),
+        ("unused1", USHORT),
+        ("wType", USHORT),
     ]
-BG_AUTH_CREDENTIALS_UNION = __MIDL_IBackgroundCopyJob2_0004
+MIB_IPADDRROW = _MIB_IPADDRROW_XP
+PMIB_IPADDRROW_XP = POINTER(_MIB_IPADDRROW_XP)
+MIB_IPADDRROW_XP = _MIB_IPADDRROW_XP
 
-class BG_AUTH_CREDENTIALS(Structure):
+class _MIB_IPADDRTABLE(Structure):
     _fields_ = [
-        ("Target", BG_AUTH_TARGET),
-        ("Scheme", BG_AUTH_SCHEME),
-        ("Credentials", BG_AUTH_CREDENTIALS_UNION),
+        ("dwNumEntries", DWORD),
+        ("table", MIB_IPADDRROW * (ANY_SIZE)),
     ]
+PMIB_IPADDRTABLE = POINTER(_MIB_IPADDRTABLE)
+MIB_IPADDRTABLE = _MIB_IPADDRTABLE
 
-
-class _BG_JOB_REPLY_PROGRESS(Structure):
+class _MIB_IFROW(Structure):
     _fields_ = [
-        ("BytesTotal", UINT64),
-        ("BytesTransferred", UINT64),
+        ("wszName", WCHAR * (MAX_INTERFACE_NAME_LEN)),
+        ("dwIndex", IF_INDEX),
+        ("dwType", IFTYPE),
+        ("dwMtu", DWORD),
+        ("dwSpeed", DWORD),
+        ("dwPhysAddrLen", DWORD),
+        ("bPhysAddr", BYTE * (MAXLEN_PHYSADDR)),
+        ("dwAdminStatus", DWORD),
+        ("dwOperStatus", INTERNAL_IF_OPER_STATUS),
+        ("dwLastChange", DWORD),
+        ("dwInOctets", DWORD),
+        ("dwInUcastPkts", DWORD),
+        ("dwInNUcastPkts", DWORD),
+        ("dwInDiscards", DWORD),
+        ("dwInErrors", DWORD),
+        ("dwInUnknownProtos", DWORD),
+        ("dwOutOctets", DWORD),
+        ("dwOutUcastPkts", DWORD),
+        ("dwOutNUcastPkts", DWORD),
+        ("dwOutDiscards", DWORD),
+        ("dwOutErrors", DWORD),
+        ("dwOutQLen", DWORD),
+        ("dwDescrLen", DWORD),
+        ("bDescr", UCHAR * (MAXLEN_IFDESCR)),
     ]
-BG_JOB_REPLY_PROGRESS = _BG_JOB_REPLY_PROGRESS
+PMIB_IFROW = POINTER(_MIB_IFROW)
+MIB_IFROW = _MIB_IFROW
 
-class _BG_FILE_RANGE(Structure):
+class _MIB_IFTABLE(Structure):
     _fields_ = [
-        ("InitialOffset", UINT64),
-        ("Length", UINT64),
+        ("dwNumEntries", DWORD),
+        ("table", MIB_IFROW * (ANY_SIZE)),
     ]
-BG_FILE_RANGE = _BG_FILE_RANGE
+PMIB_IFTABLE = POINTER(_MIB_IFTABLE)
+MIB_IFTABLE = _MIB_IFTABLE
+
+class _MIB_TCPROW_OWNER_PID(Structure):
+    _fields_ = [
+        ("dwState", DWORD),
+        ("dwLocalAddr", DWORD),
+        ("dwLocalPort", DWORD),
+        ("dwRemoteAddr", DWORD),
+        ("dwRemotePort", DWORD),
+        ("dwOwningPid", DWORD),
+    ]
+MIB_TCPROW_OWNER_PID = _MIB_TCPROW_OWNER_PID
+PMIB_TCPROW_OWNER_PID = POINTER(_MIB_TCPROW_OWNER_PID)
+
+class _MIB_TCPTABLE_OWNER_PID(Structure):
+    _fields_ = [
+        ("dwNumEntries", DWORD),
+        ("table", MIB_TCPROW_OWNER_PID * (ANY_SIZE)),
+    ]
+MIB_TCPTABLE_OWNER_PID = _MIB_TCPTABLE_OWNER_PID
+PMIB_TCPTABLE_OWNER_PID = POINTER(_MIB_TCPTABLE_OWNER_PID)
+
+class _MIB_UDPROW_OWNER_PID(Structure):
+    _fields_ = [
+        ("dwLocalAddr", DWORD),
+        ("dwLocalPort", DWORD),
+        ("dwOwningPid", DWORD),
+    ]
+MIB_UDPROW_OWNER_PID = _MIB_UDPROW_OWNER_PID
+PMIB_UDPROW_OWNER_PID = POINTER(_MIB_UDPROW_OWNER_PID)
+
+class _MIB_UDPTABLE_OWNER_PID(Structure):
+    _fields_ = [
+        ("dwNumEntries", DWORD),
+        ("table", MIB_UDPROW_OWNER_PID * (ANY_SIZE)),
+    ]
+MIB_UDPTABLE_OWNER_PID = _MIB_UDPTABLE_OWNER_PID
+PMIB_UDPTABLE_OWNER_PID = POINTER(_MIB_UDPTABLE_OWNER_PID)
+
+class _MIB_UDP6ROW_OWNER_PID(Structure):
+    _fields_ = [
+        ("ucLocalAddr", UCHAR * (16)),
+        ("dwLocalScopeId", DWORD),
+        ("dwLocalPort", DWORD),
+        ("dwOwningPid", DWORD),
+    ]
+MIB_UDP6ROW_OWNER_PID = _MIB_UDP6ROW_OWNER_PID
+PMIB_UDP6ROW_OWNER_PID = POINTER(_MIB_UDP6ROW_OWNER_PID)
+
+class _MIB_UDP6TABLE_OWNER_PID(Structure):
+    _fields_ = [
+        ("dwNumEntries", DWORD),
+        ("table", MIB_UDP6ROW_OWNER_PID * (ANY_SIZE)),
+    ]
+PMIB_UDP6TABLE_OWNER_PID = POINTER(_MIB_UDP6TABLE_OWNER_PID)
+MIB_UDP6TABLE_OWNER_PID = _MIB_UDP6TABLE_OWNER_PID
+
+class _MIB_TCP6ROW_OWNER_PID(Structure):
+    _fields_ = [
+        ("ucLocalAddr", UCHAR * (16)),
+        ("dwLocalScopeId", DWORD),
+        ("dwLocalPort", DWORD),
+        ("ucRemoteAddr", UCHAR * (16)),
+        ("dwRemoteScopeId", DWORD),
+        ("dwRemotePort", DWORD),
+        ("dwState", DWORD),
+        ("dwOwningPid", DWORD),
+    ]
+MIB_TCP6ROW_OWNER_PID = _MIB_TCP6ROW_OWNER_PID
+PMIB_TCP6ROW_OWNER_PID = POINTER(_MIB_TCP6ROW_OWNER_PID)
+
+class _MIB_TCP6TABLE_OWNER_PID(Structure):
+    _fields_ = [
+        ("dwNumEntries", DWORD),
+        ("table", MIB_TCP6ROW_OWNER_PID * (ANY_SIZE)),
+    ]
+MIB_TCP6TABLE_OWNER_PID = _MIB_TCP6TABLE_OWNER_PID
+PMIB_TCP6TABLE_OWNER_PID = POINTER(_MIB_TCP6TABLE_OWNER_PID)
+
+class _MIB_TCPROW(Structure):
+    _fields_ = [
+        ("dwState", DWORD),
+        ("dwLocalAddr", DWORD),
+        ("dwLocalPort", DWORD),
+        ("dwRemoteAddr", DWORD),
+        ("dwRemotePort", DWORD),
+    ]
+MIB_TCPROW = _MIB_TCPROW
+PMIB_TCPROW = POINTER(_MIB_TCPROW)
+
+class _IP_ADAPTER_INDEX_MAP(Structure):
+    _fields_ = [
+        ("Index", ULONG),
+        ("Name", WCHAR * (MAX_ADAPTER_NAME)),
+    ]
+PIP_ADAPTER_INDEX_MAP = POINTER(_IP_ADAPTER_INDEX_MAP)
+IP_ADAPTER_INDEX_MAP = _IP_ADAPTER_INDEX_MAP
+
+class _IP_INTERFACE_INFO(Structure):
+    _fields_ = [
+        ("NumAdapters", LONG),
+        ("Adapter", IP_ADAPTER_INDEX_MAP * (1)),
+    ]
+PIP_INTERFACE_INFO = POINTER(_IP_INTERFACE_INFO)
+IP_INTERFACE_INFO = _IP_INTERFACE_INFO
+
+# Self referencing struct tricks
+class _DNS_CACHE_ENTRY(Structure): pass
+PDNS_CACHE_ENTRY = POINTER(_DNS_CACHE_ENTRY)
+DNS_CACHE_ENTRY = _DNS_CACHE_ENTRY
+_DNS_CACHE_ENTRY._fields_ = [
+    ("pNext", POINTER(_DNS_CACHE_ENTRY)),
+    ("pszName", PCWSTR),
+    ("wType", USHORT),
+    ("wDataLength", USHORT),
+    ("dwFlags", ULONG),
+]
+
+class DNS_A_DATA(Structure):
+    _fields_ = [
+        ("IpAddress", IP4_ADDRESS),
+    ]
+PDNS_A_DATA = POINTER(DNS_A_DATA)
+
+class DNS_PTR_DATAW(Structure):
+    _fields_ = [
+        ("pNameHost", PWSTR),
+    ]
+PDNS_PTR_DATAW = POINTER(DNS_PTR_DATAW)
+
+class DNS_PTR_DATAA(Structure):
+    _fields_ = [
+        ("pNameHost", PSTR),
+    ]
+PDNS_PTR_DATAA = POINTER(DNS_PTR_DATAA)
+
+class DNS_SOA_DATAW(Structure):
+    _fields_ = [
+        ("pNamePrimaryServer", PWSTR),
+        ("pNameAdministrator", PWSTR),
+        ("dwSerialNo", DWORD),
+        ("dwRefresh", DWORD),
+        ("dwRetry", DWORD),
+        ("dwExpire", DWORD),
+        ("dwDefaultTtl", DWORD),
+    ]
+PDNS_SOA_DATAW = POINTER(DNS_SOA_DATAW)
+
+class DNS_SOA_DATAA(Structure):
+    _fields_ = [
+        ("pNamePrimaryServer", PSTR),
+        ("pNameAdministrator", PSTR),
+        ("dwSerialNo", DWORD),
+        ("dwRefresh", DWORD),
+        ("dwRetry", DWORD),
+        ("dwExpire", DWORD),
+        ("dwDefaultTtl", DWORD),
+    ]
+PDNS_SOA_DATAA = POINTER(DNS_SOA_DATAA)
+
+class DNS_MINFO_DATAW(Structure):
+    _fields_ = [
+        ("pNameMailbox", PWSTR),
+        ("pNameErrorsMailbox", PWSTR),
+    ]
+PDNS_MINFO_DATAW = POINTER(DNS_MINFO_DATAW)
+
+class DNS_MINFO_DATAA(Structure):
+    _fields_ = [
+        ("pNameMailbox", PSTR),
+        ("pNameErrorsMailbox", PSTR),
+    ]
+PDNS_MINFO_DATAA = POINTER(DNS_MINFO_DATAA)
+
+class DNS_MX_DATAW(Structure):
+    _fields_ = [
+        ("pNameExchange", PWSTR),
+        ("wPreference", WORD),
+        ("Pad", WORD),
+    ]
+PDNS_MX_DATAW = POINTER(DNS_MX_DATAW)
+
+class DNS_MX_DATAA(Structure):
+    _fields_ = [
+        ("pNameExchange", PSTR),
+        ("wPreference", WORD),
+        ("Pad", WORD),
+    ]
+PDNS_MX_DATAA = POINTER(DNS_MX_DATAA)
+
+class DNS_TXT_DATAW(Structure):
+    _fields_ = [
+        ("dwStringCount", DWORD),
+        ("pStringArray", PWSTR * (1)),
+    ]
+PDNS_TXT_DATAW = POINTER(DNS_TXT_DATAW)
+
+class DNS_TXT_DATAA(Structure):
+    _fields_ = [
+        ("dwStringCount", DWORD),
+        ("pStringArray", PSTR * (1)),
+    ]
+PDNS_TXT_DATAA = POINTER(DNS_TXT_DATAA)
+
+class DNS_NULL_DATA(Structure):
+    _fields_ = [
+        ("dwByteCount", DWORD),
+        ("Data", BYTE * (1)),
+    ]
+PDNS_NULL_DATA = POINTER(DNS_NULL_DATA)
+
+class DNS_WKS_DATA(Structure):
+    _fields_ = [
+        ("IpAddress", IP4_ADDRESS),
+        ("chProtocol", UCHAR),
+        ("BitMask", BYTE * (1)),
+    ]
+PDNS_WKS_DATA = POINTER(DNS_WKS_DATA)
+
+class DNS_AAAA_DATA(Structure):
+    _fields_ = [
+        ("Ip6Address", IP6_ADDRESS),
+    ]
+PDNS_AAAA_DATA = POINTER(DNS_AAAA_DATA)
+
+class DNS_SIG_DATAW(Structure):
+    _fields_ = [
+        ("wTypeCovered", WORD),
+        ("chAlgorithm", BYTE),
+        ("chLabelCount", BYTE),
+        ("dwOriginalTtl", DWORD),
+        ("dwExpiration", DWORD),
+        ("dwTimeSigned", DWORD),
+        ("wKeyTag", WORD),
+        ("wSignatureLength", WORD),
+        ("pNameSigner", PWSTR),
+        ("Signature", BYTE * (1)),
+    ]
+DNS_RRSIG_DATAW = DNS_SIG_DATAW
+PDNS_RRSIG_DATAW = POINTER(DNS_SIG_DATAW)
+PDNS_SIG_DATAW = POINTER(DNS_SIG_DATAW)
+
+class DNS_SIG_DATAA(Structure):
+    _fields_ = [
+        ("wTypeCovered", WORD),
+        ("chAlgorithm", BYTE),
+        ("chLabelCount", BYTE),
+        ("dwOriginalTtl", DWORD),
+        ("dwExpiration", DWORD),
+        ("dwTimeSigned", DWORD),
+        ("wKeyTag", WORD),
+        ("wSignatureLength", WORD),
+        ("pNameSigner", PSTR),
+        ("Signature", BYTE * (1)),
+    ]
+PDNS_SIG_DATAA = POINTER(DNS_SIG_DATAA)
+PDNS_RRSIG_DATAA = POINTER(DNS_SIG_DATAA)
+DNS_RRSIG_DATAA = DNS_SIG_DATAA
+
+class DNS_KEY_DATA(Structure):
+    _fields_ = [
+        ("wFlags", WORD),
+        ("chProtocol", BYTE),
+        ("chAlgorithm", BYTE),
+        ("wKeyLength", WORD),
+        ("wPad", WORD),
+        ("Key", BYTE * (1)),
+    ]
+PDNS_DNSKEY_DATA = POINTER(DNS_KEY_DATA)
+PDNS_KEY_DATA = POINTER(DNS_KEY_DATA)
+DNS_DNSKEY_DATA = DNS_KEY_DATA
+
+class DNS_DHCID_DATA(Structure):
+    _fields_ = [
+        ("dwByteCount", DWORD),
+        ("DHCID", BYTE * (1)),
+    ]
+PDNS_DHCID_DATA = POINTER(DNS_DHCID_DATA)
+
+class DNS_NSEC_DATAW(Structure):
+    _fields_ = [
+        ("pNextDomainName", PWSTR),
+        ("wTypeBitMapsLength", WORD),
+        ("wPad", WORD),
+        ("TypeBitMaps", BYTE * (1)),
+    ]
+PDNS_NSEC_DATAW = POINTER(DNS_NSEC_DATAW)
+
+class DNS_NSEC_DATAA(Structure):
+    _fields_ = [
+        ("pNextDomainName", PSTR),
+        ("wTypeBitMapsLength", WORD),
+        ("wPad", WORD),
+        ("TypeBitMaps", BYTE * (1)),
+    ]
+PDNS_NSEC_DATAA = POINTER(DNS_NSEC_DATAA)
+
+class DNS_NSEC3_DATA(Structure):
+    _fields_ = [
+        ("chAlgorithm", BYTE),
+        ("bFlags", BYTE),
+        ("wIterations", WORD),
+        ("bSaltLength", BYTE),
+        ("bHashLength", BYTE),
+        ("wTypeBitMapsLength", WORD),
+        ("chData", BYTE * (1)),
+    ]
+PDNS_NSEC3_DATA = POINTER(DNS_NSEC3_DATA)
+
+class DNS_NSEC3PARAM_DATA(Structure):
+    _fields_ = [
+        ("chAlgorithm", BYTE),
+        ("bFlags", BYTE),
+        ("wIterations", WORD),
+        ("bSaltLength", BYTE),
+        ("bPad", BYTE * (3)),
+        ("pbSalt", BYTE * (1)),
+    ]
+PDNS_NSEC3PARAM_DATA = POINTER(DNS_NSEC3PARAM_DATA)
+
+class DNS_DS_DATA(Structure):
+    _fields_ = [
+        ("wKeyTag", WORD),
+        ("chAlgorithm", BYTE),
+        ("chDigestType", BYTE),
+        ("wDigestLength", WORD),
+        ("wPad", WORD),
+        ("Digest", BYTE * (1)),
+    ]
+PDNS_DS_DATA = POINTER(DNS_DS_DATA)
+
+class DNS_OPT_DATA(Structure):
+    _fields_ = [
+        ("wDataLength", WORD),
+        ("wPad", WORD),
+        ("Data", BYTE * (1)),
+    ]
+PDNS_OPT_DATA = POINTER(DNS_OPT_DATA)
+
+class DNS_LOC_DATA(Structure):
+    _fields_ = [
+        ("wVersion", WORD),
+        ("wSize", WORD),
+        ("wHorPrec", WORD),
+        ("wVerPrec", WORD),
+        ("dwLatitude", DWORD),
+        ("dwLongitude", DWORD),
+        ("dwAltitude", DWORD),
+    ]
+PDNS_LOC_DATA = POINTER(DNS_LOC_DATA)
+
+class DNS_NXT_DATAW(Structure):
+    _fields_ = [
+        ("pNameNext", PWSTR),
+        ("wNumTypes", WORD),
+        ("wTypes", WORD * (1)),
+    ]
+PDNS_NXT_DATAW = POINTER(DNS_NXT_DATAW)
+
+class DNS_NXT_DATAA(Structure):
+    _fields_ = [
+        ("pNameNext", PSTR),
+        ("wNumTypes", WORD),
+        ("wTypes", WORD * (1)),
+    ]
+PDNS_NXT_DATAA = POINTER(DNS_NXT_DATAA)
+
+class DNS_SRV_DATAW(Structure):
+    _fields_ = [
+        ("pNameTarget", PWSTR),
+        ("wPriority", WORD),
+        ("wWeight", WORD),
+        ("wPort", WORD),
+        ("Pad", WORD),
+    ]
+PDNS_SRV_DATAW = POINTER(DNS_SRV_DATAW)
+
+class DNS_SRV_DATAA(Structure):
+    _fields_ = [
+        ("pNameTarget", PSTR),
+        ("wPriority", WORD),
+        ("wWeight", WORD),
+        ("wPort", WORD),
+        ("Pad", WORD),
+    ]
+PDNS_SRV_DATAA = POINTER(DNS_SRV_DATAA)
+
+class DNS_NAPTR_DATAW(Structure):
+    _fields_ = [
+        ("wOrder", WORD),
+        ("wPreference", WORD),
+        ("pFlags", PWSTR),
+        ("pService", PWSTR),
+        ("pRegularExpression", PWSTR),
+        ("pReplacement", PWSTR),
+    ]
+PDNS_NAPTR_DATAW = POINTER(DNS_NAPTR_DATAW)
+
+class DNS_NAPTR_DATAA(Structure):
+    _fields_ = [
+        ("wOrder", WORD),
+        ("wPreference", WORD),
+        ("pFlags", PSTR),
+        ("pService", PSTR),
+        ("pRegularExpression", PSTR),
+        ("pReplacement", PSTR),
+    ]
+PDNS_NAPTR_DATAA = POINTER(DNS_NAPTR_DATAA)
+
+class DNS_ATMA_DATA(Structure):
+    _fields_ = [
+        ("AddressType", BYTE),
+        ("Address", BYTE * (DNS_ATMA_MAX_ADDR_LENGTH)),
+    ]
+PDNS_ATMA_DATA = POINTER(DNS_ATMA_DATA)
+
+class DNS_TKEY_DATAW(Structure):
+    _fields_ = [
+        ("pNameAlgorithm", PWSTR),
+        ("pAlgorithmPacket", PBYTE),
+        ("pKey", PBYTE),
+        ("pOtherData", PBYTE),
+        ("dwCreateTime", DWORD),
+        ("dwExpireTime", DWORD),
+        ("wMode", WORD),
+        ("wError", WORD),
+        ("wKeyLength", WORD),
+        ("wOtherLength", WORD),
+        ("cAlgNameLength", UCHAR),
+        ("bPacketPointers", BOOL),
+    ]
+PDNS_TKEY_DATAW = POINTER(DNS_TKEY_DATAW)
+
+class DNS_TKEY_DATAA(Structure):
+    _fields_ = [
+        ("pNameAlgorithm", PSTR),
+        ("pAlgorithmPacket", PBYTE),
+        ("pKey", PBYTE),
+        ("pOtherData", PBYTE),
+        ("dwCreateTime", DWORD),
+        ("dwExpireTime", DWORD),
+        ("wMode", WORD),
+        ("wError", WORD),
+        ("wKeyLength", WORD),
+        ("wOtherLength", WORD),
+        ("cAlgNameLength", UCHAR),
+        ("bPacketPointers", BOOL),
+    ]
+PDNS_TKEY_DATAA = POINTER(DNS_TKEY_DATAA)
+
+class DNS_TSIG_DATAW(Structure):
+    _fields_ = [
+        ("pNameAlgorithm", PWSTR),
+        ("pAlgorithmPacket", PBYTE),
+        ("pSignature", PBYTE),
+        ("pOtherData", PBYTE),
+        ("i64CreateTime", LONGLONG),
+        ("wFudgeTime", WORD),
+        ("wOriginalXid", WORD),
+        ("wError", WORD),
+        ("wSigLength", WORD),
+        ("wOtherLength", WORD),
+        ("cAlgNameLength", UCHAR),
+        ("bPacketPointers", BOOL),
+    ]
+PDNS_TSIG_DATAW = POINTER(DNS_TSIG_DATAW)
+
+class DNS_TSIG_DATAA(Structure):
+    _fields_ = [
+        ("pNameAlgorithm", PSTR),
+        ("pAlgorithmPacket", PBYTE),
+        ("pSignature", PBYTE),
+        ("pOtherData", PBYTE),
+        ("i64CreateTime", LONGLONG),
+        ("wFudgeTime", WORD),
+        ("wOriginalXid", WORD),
+        ("wError", WORD),
+        ("wSigLength", WORD),
+        ("wOtherLength", WORD),
+        ("cAlgNameLength", UCHAR),
+        ("bPacketPointers", BOOL),
+    ]
+PDNS_TSIG_DATAA = POINTER(DNS_TSIG_DATAA)
+
+class DNS_WINS_DATA(Structure):
+    _fields_ = [
+        ("dwMappingFlag", DWORD),
+        ("dwLookupTimeout", DWORD),
+        ("dwCacheTimeout", DWORD),
+        ("cWinsServerCount", DWORD),
+        ("WinsServers", IP4_ADDRESS * (1)),
+    ]
+PDNS_WINS_DATA = POINTER(DNS_WINS_DATA)
+
+class DNS_WINSR_DATAW(Structure):
+    _fields_ = [
+        ("dwMappingFlag", DWORD),
+        ("dwLookupTimeout", DWORD),
+        ("dwCacheTimeout", DWORD),
+        ("pNameResultDomain", PWSTR),
+    ]
+PDNS_WINSR_DATAW = POINTER(DNS_WINSR_DATAW)
+
+class DNS_WINSR_DATAA(Structure):
+    _fields_ = [
+        ("dwMappingFlag", DWORD),
+        ("dwLookupTimeout", DWORD),
+        ("dwCacheTimeout", DWORD),
+        ("pNameResultDomain", PSTR),
+    ]
+PDNS_WINSR_DATAA = POINTER(DNS_WINSR_DATAA)
+
+class DNS_TLSA_DATA(Structure):
+    _fields_ = [
+        ("bCertUsage", BYTE),
+        ("bSelector", BYTE),
+        ("bMatchingType", BYTE),
+        ("bCertificateAssociationDataLength", WORD),
+        ("bPad", BYTE * (3)),
+        ("bCertificateAssociationData", BYTE * (1)),
+    ]
+PDNS_TLSA_DATA = POINTER(DNS_TLSA_DATA)
+
+class DNS_UNKNOWN_DATA(Structure):
+    _fields_ = [
+        ("dwByteCount", DWORD),
+        ("bData", BYTE * (1)),
+    ]
+PDNS_UNKNOWN_DATA = POINTER(DNS_UNKNOWN_DATA)
+
+class _DnsRecordFlags(Structure):
+    _fields_ = [
+    ("Section", DWORD, 2),
+    ("Delete", DWORD, 1),
+    ("CharSet", DWORD, 2),
+    ("Unused", DWORD, 3),
+    ("Reserved", DWORD, 24),
+    ]
+DNS_RECORD_FLAGS = _DnsRecordFlags
+
+class _ANON__DNSRECORDA_SUB_UNION_1(Union):
+    _fields_ = [
+        ("DW", DWORD),
+        ("S", DNS_RECORD_FLAGS),
+    ]
+
+
+class _ANON__DNSRECORDA_SUB_UNION_2(Union):
+    _fields_ = [
+        ("A", DNS_A_DATA),
+        ("SOA", DNS_SOA_DATAA),
+        ("Soa", DNS_SOA_DATAA),
+        ("PTR", DNS_PTR_DATAA),
+        ("Ptr", DNS_PTR_DATAA),
+        ("NS", DNS_PTR_DATAA),
+        ("Ns", DNS_PTR_DATAA),
+        ("CNAME", DNS_PTR_DATAA),
+        ("Cname", DNS_PTR_DATAA),
+        ("DNAME", DNS_PTR_DATAA),
+        ("Dname", DNS_PTR_DATAA),
+        ("MB", DNS_PTR_DATAA),
+        ("Mb", DNS_PTR_DATAA),
+        ("MD", DNS_PTR_DATAA),
+        ("Md", DNS_PTR_DATAA),
+        ("MF", DNS_PTR_DATAA),
+        ("Mf", DNS_PTR_DATAA),
+        ("MG", DNS_PTR_DATAA),
+        ("Mg", DNS_PTR_DATAA),
+        ("MR", DNS_PTR_DATAA),
+        ("Mr", DNS_PTR_DATAA),
+        ("MINFO", DNS_MINFO_DATAA),
+        ("Minfo", DNS_MINFO_DATAA),
+        ("RP", DNS_MINFO_DATAA),
+        ("Rp", DNS_MINFO_DATAA),
+        ("MX", DNS_MX_DATAA),
+        ("Mx", DNS_MX_DATAA),
+        ("AFSDB", DNS_MX_DATAA),
+        ("Afsdb", DNS_MX_DATAA),
+        ("RT", DNS_MX_DATAA),
+        ("Rt", DNS_MX_DATAA),
+        ("HINFO", DNS_TXT_DATAA),
+        ("Hinfo", DNS_TXT_DATAA),
+        ("ISDN", DNS_TXT_DATAA),
+        ("Isdn", DNS_TXT_DATAA),
+        ("TXT", DNS_TXT_DATAA),
+        ("Txt", DNS_TXT_DATAA),
+        ("X25", DNS_TXT_DATAA),
+        ("Null", DNS_NULL_DATA),
+        ("WKS", DNS_WKS_DATA),
+        ("Wks", DNS_WKS_DATA),
+        ("AAAA", DNS_AAAA_DATA),
+        ("KEY", DNS_KEY_DATA),
+        ("Key", DNS_KEY_DATA),
+        ("SIG", DNS_SIG_DATAA),
+        ("Sig", DNS_SIG_DATAA),
+        ("ATMA", DNS_ATMA_DATA),
+        ("Atma", DNS_ATMA_DATA),
+        ("NXT", DNS_NXT_DATAA),
+        ("Nxt", DNS_NXT_DATAA),
+        ("SRV", DNS_SRV_DATAA),
+        ("Srv", DNS_SRV_DATAA),
+        ("NAPTR", DNS_NAPTR_DATAA),
+        ("Naptr", DNS_NAPTR_DATAA),
+        ("OPT", DNS_OPT_DATA),
+        ("Opt", DNS_OPT_DATA),
+        ("DS", DNS_DS_DATA),
+        ("Ds", DNS_DS_DATA),
+        ("RRSIG", DNS_RRSIG_DATAA),
+        ("Rrsig", DNS_RRSIG_DATAA),
+        ("NSEC", DNS_NSEC_DATAA),
+        ("Nsec", DNS_NSEC_DATAA),
+        ("DNSKEY", DNS_DNSKEY_DATA),
+        ("Dnskey", DNS_DNSKEY_DATA),
+        ("TKEY", DNS_TKEY_DATAA),
+        ("Tkey", DNS_TKEY_DATAA),
+        ("TSIG", DNS_TSIG_DATAA),
+        ("Tsig", DNS_TSIG_DATAA),
+        ("WINS", DNS_WINS_DATA),
+        ("Wins", DNS_WINS_DATA),
+        ("WINSR", DNS_WINSR_DATAA),
+        ("WinsR", DNS_WINSR_DATAA),
+        ("NBSTAT", DNS_WINSR_DATAA),
+        ("Nbstat", DNS_WINSR_DATAA),
+        ("DHCID", DNS_DHCID_DATA),
+        ("NSEC3", DNS_NSEC3_DATA),
+        ("Nsec3", DNS_NSEC3_DATA),
+        ("NSEC3PARAM", DNS_NSEC3PARAM_DATA),
+        ("Nsec3Param", DNS_NSEC3PARAM_DATA),
+        ("TLSA", DNS_TLSA_DATA),
+        ("Tlsa", DNS_TLSA_DATA),
+        ("UNKNOWN", DNS_UNKNOWN_DATA),
+        ("Unknown", DNS_UNKNOWN_DATA),
+        ("pDataPtr", PBYTE),
+    ]
+
+# Self referencing struct tricks
+class _DnsRecordA(Structure): pass
+PDNS_RECORDA = POINTER(_DnsRecordA)
+DNS_RECORDA = _DnsRecordA
+_DnsRecordA._fields_ = [
+    ("pNext", POINTER(_DnsRecordA)),
+    ("pName", PSTR),
+    ("wType", WORD),
+    ("wDataLength", WORD),
+    ("Flags", _ANON__DNSRECORDA_SUB_UNION_1),
+    ("dwTtl", DWORD),
+    ("dwReserved", DWORD),
+    ("Data", _ANON__DNSRECORDA_SUB_UNION_2),
+]
+
+class _ANON__DNSRECORDW_SUB_UNION_1(Union):
+    _fields_ = [
+        ("DW", DWORD),
+        ("S", DNS_RECORD_FLAGS),
+    ]
+
+
+class _ANON__DNSRECORDW_SUB_UNION_2(Union):
+    _fields_ = [
+        ("A", DNS_A_DATA),
+        ("SOA", DNS_SOA_DATAW),
+        ("Soa", DNS_SOA_DATAW),
+        ("PTR", DNS_PTR_DATAW),
+        ("Ptr", DNS_PTR_DATAW),
+        ("NS", DNS_PTR_DATAW),
+        ("Ns", DNS_PTR_DATAW),
+        ("CNAME", DNS_PTR_DATAW),
+        ("Cname", DNS_PTR_DATAW),
+        ("DNAME", DNS_PTR_DATAW),
+        ("Dname", DNS_PTR_DATAW),
+        ("MB", DNS_PTR_DATAW),
+        ("Mb", DNS_PTR_DATAW),
+        ("MD", DNS_PTR_DATAW),
+        ("Md", DNS_PTR_DATAW),
+        ("MF", DNS_PTR_DATAW),
+        ("Mf", DNS_PTR_DATAW),
+        ("MG", DNS_PTR_DATAW),
+        ("Mg", DNS_PTR_DATAW),
+        ("MR", DNS_PTR_DATAW),
+        ("Mr", DNS_PTR_DATAW),
+        ("MINFO", DNS_MINFO_DATAW),
+        ("Minfo", DNS_MINFO_DATAW),
+        ("RP", DNS_MINFO_DATAW),
+        ("Rp", DNS_MINFO_DATAW),
+        ("MX", DNS_MX_DATAW),
+        ("Mx", DNS_MX_DATAW),
+        ("AFSDB", DNS_MX_DATAW),
+        ("Afsdb", DNS_MX_DATAW),
+        ("RT", DNS_MX_DATAW),
+        ("Rt", DNS_MX_DATAW),
+        ("HINFO", DNS_TXT_DATAW),
+        ("Hinfo", DNS_TXT_DATAW),
+        ("ISDN", DNS_TXT_DATAW),
+        ("Isdn", DNS_TXT_DATAW),
+        ("TXT", DNS_TXT_DATAW),
+        ("Txt", DNS_TXT_DATAW),
+        ("X25", DNS_TXT_DATAW),
+        ("Null", DNS_NULL_DATA),
+        ("WKS", DNS_WKS_DATA),
+        ("Wks", DNS_WKS_DATA),
+        ("AAAA", DNS_AAAA_DATA),
+        ("KEY", DNS_KEY_DATA),
+        ("Key", DNS_KEY_DATA),
+        ("SIG", DNS_SIG_DATAW),
+        ("Sig", DNS_SIG_DATAW),
+        ("ATMA", DNS_ATMA_DATA),
+        ("Atma", DNS_ATMA_DATA),
+        ("NXT", DNS_NXT_DATAW),
+        ("Nxt", DNS_NXT_DATAW),
+        ("SRV", DNS_SRV_DATAW),
+        ("Srv", DNS_SRV_DATAW),
+        ("NAPTR", DNS_NAPTR_DATAW),
+        ("Naptr", DNS_NAPTR_DATAW),
+        ("OPT", DNS_OPT_DATA),
+        ("Opt", DNS_OPT_DATA),
+        ("DS", DNS_DS_DATA),
+        ("Ds", DNS_DS_DATA),
+        ("RRSIG", DNS_RRSIG_DATAW),
+        ("Rrsig", DNS_RRSIG_DATAW),
+        ("NSEC", DNS_NSEC_DATAW),
+        ("Nsec", DNS_NSEC_DATAW),
+        ("DNSKEY", DNS_DNSKEY_DATA),
+        ("Dnskey", DNS_DNSKEY_DATA),
+        ("TKEY", DNS_TKEY_DATAW),
+        ("Tkey", DNS_TKEY_DATAW),
+        ("TSIG", DNS_TSIG_DATAW),
+        ("Tsig", DNS_TSIG_DATAW),
+        ("WINS", DNS_WINS_DATA),
+        ("Wins", DNS_WINS_DATA),
+        ("WINSR", DNS_WINSR_DATAW),
+        ("WinsR", DNS_WINSR_DATAW),
+        ("NBSTAT", DNS_WINSR_DATAW),
+        ("Nbstat", DNS_WINSR_DATAW),
+        ("DHCID", DNS_DHCID_DATA),
+        ("NSEC3", DNS_NSEC3_DATA),
+        ("Nsec3", DNS_NSEC3_DATA),
+        ("NSEC3PARAM", DNS_NSEC3PARAM_DATA),
+        ("Nsec3Param", DNS_NSEC3PARAM_DATA),
+        ("TLSA", DNS_TLSA_DATA),
+        ("Tlsa", DNS_TLSA_DATA),
+        ("UNKNOWN", DNS_UNKNOWN_DATA),
+        ("Unknown", DNS_UNKNOWN_DATA),
+        ("pDataPtr", PBYTE),
+    ]
+
+# Self referencing struct tricks
+class _DnsRecordW(Structure): pass
+DNS_RECORDW = _DnsRecordW
+PDNS_RECORDW = POINTER(_DnsRecordW)
+_DnsRecordW._fields_ = [
+    ("pNext", POINTER(_DnsRecordW)),
+    ("pName", PWSTR),
+    ("wType", WORD),
+    ("wDataLength", WORD),
+    ("Flags", _ANON__DNSRECORDW_SUB_UNION_1),
+    ("dwTtl", DWORD),
+    ("dwReserved", DWORD),
+    ("Data", _ANON__DNSRECORDW_SUB_UNION_2),
+]
+
+AO_NONE = EnumValue("ACTIVATEOPTIONS", "AO_NONE", 0x0)
+AO_DESIGNMODE = EnumValue("ACTIVATEOPTIONS", "AO_DESIGNMODE", 0x1)
+AO_NOERRORUI = EnumValue("ACTIVATEOPTIONS", "AO_NOERRORUI", 0x2)
+AO_NOSPLASHSCREEN = EnumValue("ACTIVATEOPTIONS", "AO_NOSPLASHSCREEN", 0x4)
+AO_PRELAUNCH = EnumValue("ACTIVATEOPTIONS", "AO_PRELAUNCH", 0x2000000)
+class ACTIVATEOPTIONS(EnumType):
+    values = [AO_NONE, AO_DESIGNMODE, AO_NOERRORUI, AO_NOSPLASHSCREEN, AO_PRELAUNCH]
+    mapper = FlagMapper(*values)
+
+
+PES_UNKNOWN = EnumValue("PACKAGE_EXECUTION_STATE", "PES_UNKNOWN", 0x0)
+PES_RUNNING = EnumValue("PACKAGE_EXECUTION_STATE", "PES_RUNNING", 0x1)
+PES_SUSPENDING = EnumValue("PACKAGE_EXECUTION_STATE", "PES_SUSPENDING", 0x2)
+PES_SUSPENDED = EnumValue("PACKAGE_EXECUTION_STATE", "PES_SUSPENDED", 0x3)
+PES_TERMINATED = EnumValue("PACKAGE_EXECUTION_STATE", "PES_TERMINATED", 0x4)
+class PACKAGE_EXECUTION_STATE(EnumType):
+    values = [PES_UNKNOWN, PES_RUNNING, PES_SUSPENDING, PES_SUSPENDED, PES_TERMINATED]
+    mapper = FlagMapper(*values)
+
+
+class _SHITEMID(Structure):
+    _fields_ = [
+        ("cb", USHORT),
+        ("abID", BYTE * (1)),
+    ]
+SHITEMID = _SHITEMID
+
+class _ITEMIDLIST(Structure):
+    _fields_ = [
+        ("mkid", SHITEMID),
+    ]
+ITEMIDLIST = _ITEMIDLIST
+PCIDLIST_ABSOLUTE = POINTER(_ITEMIDLIST)
+PIDLIST_ABSOLUTE = POINTER(_ITEMIDLIST)
+
+class tagRGBTRIPLE(Structure):
+    _fields_ = [
+        ("rgbtBlue", BYTE),
+        ("rgbtGreen", BYTE),
+        ("rgbtRed", BYTE),
+    ]
+NPRGBTRIPLE = POINTER(tagRGBTRIPLE)
+LPRGBTRIPLE = POINTER(tagRGBTRIPLE)
+RGBTRIPLE = tagRGBTRIPLE
+PRGBTRIPLE = POINTER(tagRGBTRIPLE)
+
+class tagBITMAPFILEHEADER(Structure):
+    _pack_ = 2
+    _fields_ = [
+        ("bfType", WORD),
+        ("bfSize", DWORD),
+        ("bfReserved1", WORD),
+        ("bfReserved2", WORD),
+        ("bfOffBits", DWORD),
+    ]
+BITMAPFILEHEADER = tagBITMAPFILEHEADER
+PBITMAPFILEHEADER = POINTER(tagBITMAPFILEHEADER)
+LPBITMAPFILEHEADER = POINTER(tagBITMAPFILEHEADER)
+
+class tagBITMAPCOREHEADER(Structure):
+    _fields_ = [
+        ("bcSize", DWORD),
+        ("bcWidth", WORD),
+        ("bcHeight", WORD),
+        ("bcPlanes", WORD),
+        ("bcBitCount", WORD),
+    ]
+LPBITMAPCOREHEADER = POINTER(tagBITMAPCOREHEADER)
+PBITMAPCOREHEADER = POINTER(tagBITMAPCOREHEADER)
+BITMAPCOREHEADER = tagBITMAPCOREHEADER
+
+class tagBITMAP(Structure):
+    _fields_ = [
+        ("bmType", LONG),
+        ("bmWidth", LONG),
+        ("bmHeight", LONG),
+        ("bmWidthBytes", LONG),
+        ("bmPlanes", WORD),
+        ("bmBitsPixel", WORD),
+        ("bmBits", LPVOID),
+    ]
+NPBITMAP = POINTER(tagBITMAP)
+LPBITMAP = POINTER(tagBITMAP)
+PBITMAP = POINTER(tagBITMAP)
+BITMAP = tagBITMAP
+
+class tagBITMAPINFOHEADER(Structure):
+    _fields_ = [
+        ("biSize", DWORD),
+        ("biWidth", LONG),
+        ("biHeight", LONG),
+        ("biPlanes", WORD),
+        ("biBitCount", WORD),
+        ("biCompression", DWORD),
+        ("biSizeImage", DWORD),
+        ("biXPelsPerMeter", LONG),
+        ("biYPelsPerMeter", LONG),
+        ("biClrUsed", DWORD),
+        ("biClrImportant", DWORD),
+    ]
+BITMAPINFOHEADER = tagBITMAPINFOHEADER
+PBITMAPINFOHEADER = POINTER(tagBITMAPINFOHEADER)
+LPBITMAPINFOHEADER = POINTER(tagBITMAPINFOHEADER)
+
+class tagRGBQUAD(Structure):
+    _fields_ = [
+        ("rgbBlue", BYTE),
+        ("rgbGreen", BYTE),
+        ("rgbRed", BYTE),
+        ("rgbReserved", BYTE),
+    ]
+RGBQUAD = tagRGBQUAD
+
+class tagBITMAPINFO(Structure):
+    _fields_ = [
+        ("bmiHeader", BITMAPINFOHEADER),
+        ("bmiColors", RGBQUAD * (1)),
+    ]
+LPBITMAPINFO = POINTER(tagBITMAPINFO)
+PBITMAPINFO = POINTER(tagBITMAPINFO)
+BITMAPINFO = tagBITMAPINFO
+
+class tagBITMAPCOREINFO(Structure):
+    _fields_ = [
+        ("bmciHeader", BITMAPCOREHEADER),
+        ("bmciColors", RGBTRIPLE * (1)),
+    ]
+LPBITMAPCOREINFO = POINTER(tagBITMAPCOREINFO)
+BITMAPCOREINFO = tagBITMAPCOREINFO
+PBITMAPCOREINFO = POINTER(tagBITMAPCOREINFO)
+
+class tagWNDCLASSEXA(Structure):
+    _fields_ = [
+        ("cbSize", UINT),
+        ("style", UINT),
+        ("lpfnWndProc", WNDPROC),
+        ("cbClsExtra", INT),
+        ("cbWndExtra", INT),
+        ("hInstance", HINSTANCE),
+        ("hIcon", HICON),
+        ("hCursor", HCURSOR),
+        ("hbrBackground", HBRUSH),
+        ("lpszMenuName", LPCSTR),
+        ("lpszClassName", LPCSTR),
+        ("hIconSm", HICON),
+    ]
+PWNDCLASSEXA = POINTER(tagWNDCLASSEXA)
+LPWNDCLASSEXA = POINTER(tagWNDCLASSEXA)
+WNDCLASSEXA = tagWNDCLASSEXA
+
+class tagWNDCLASSEXW(Structure):
+    _fields_ = [
+        ("cbSize", UINT),
+        ("style", UINT),
+        ("lpfnWndProc", WNDPROC),
+        ("cbClsExtra", INT),
+        ("cbWndExtra", INT),
+        ("hInstance", HINSTANCE),
+        ("hIcon", HICON),
+        ("hCursor", HCURSOR),
+        ("hbrBackground", HBRUSH),
+        ("lpszMenuName", LPWSTR),
+        ("lpszClassName", LPWSTR),
+        ("hIconSm", HICON),
+    ]
+WNDCLASSEXW = tagWNDCLASSEXW
+LPWNDCLASSEXW = POINTER(tagWNDCLASSEXW)
+PWNDCLASSEXW = POINTER(tagWNDCLASSEXW)
 
 class _GUID(Structure):
     _fields_ = [
@@ -1264,6 +2284,23 @@ CLSID = _GUID
 LPCLSID = POINTER(_GUID)
 GUID = _GUID
 REFIID = POINTER(_GUID)
+class _TRACE_PROVIDER_INFO(Structure):
+    _fields_ = [
+        ("ProviderGuid", GUID),
+        ("SchemaSource", ULONG),
+        ("ProviderNameOffset", ULONG),
+    ]
+TRACE_PROVIDER_INFO = _TRACE_PROVIDER_INFO
+
+class _PROVIDER_ENUMERATION_INFO(Structure):
+    _fields_ = [
+        ("NumberOfProviders", ULONG),
+        ("Reserved", ULONG),
+        ("TraceProviderInfoArray", TRACE_PROVIDER_INFO * (ANYSIZE_ARRAY)),
+    ]
+PPROVIDER_ENUMERATION_INFO = POINTER(_PROVIDER_ENUMERATION_INFO)
+PROVIDER_ENUMERATION_INFO = _PROVIDER_ENUMERATION_INFO
+
 CALLFRAME_COPY_NESTED = EnumValue("_CALLFRAME_COPY", "CALLFRAME_COPY_NESTED", 0x1)
 CALLFRAME_COPY_INDEPENDENT = EnumValue("_CALLFRAME_COPY", "CALLFRAME_COPY_INDEPENDENT", 0x2)
 class _CALLFRAME_COPY(EnumType):
@@ -1458,875 +2495,6 @@ VARIANTARG = __tagVARIANT
 VARIANT = __tagVARIANT
 LPVARIANT = POINTER(__tagVARIANT)
 _tagVARIANT = __tagVARIANT
-
-SymNone = EnumValue("SYM_TYPE", "SymNone", 0x0)
-SymCoff = EnumValue("SYM_TYPE", "SymCoff", 0x1)
-SymCv = EnumValue("SYM_TYPE", "SymCv", 0x2)
-SymPdb = EnumValue("SYM_TYPE", "SymPdb", 0x3)
-SymExport = EnumValue("SYM_TYPE", "SymExport", 0x4)
-SymDeferred = EnumValue("SYM_TYPE", "SymDeferred", 0x5)
-SymSym = EnumValue("SYM_TYPE", "SymSym", 0x6)
-SymDia = EnumValue("SYM_TYPE", "SymDia", 0x7)
-SymVirtual = EnumValue("SYM_TYPE", "SymVirtual", 0x8)
-NumSymTypes = EnumValue("SYM_TYPE", "NumSymTypes", 0x9)
-class SYM_TYPE(EnumType):
-    values = [SymNone, SymCoff, SymCv, SymPdb, SymExport, SymDeferred, SymSym, SymDia, SymVirtual, NumSymTypes]
-    mapper = FlagMapper(*values)
-
-
-btNoType = EnumValue("BasicType", "btNoType", 0x0)
-btVoid = EnumValue("BasicType", "btVoid", 0x1)
-btChar = EnumValue("BasicType", "btChar", 0x2)
-btWChar = EnumValue("BasicType", "btWChar", 0x3)
-btInt = EnumValue("BasicType", "btInt", 0x6)
-btUInt = EnumValue("BasicType", "btUInt", 0x7)
-btFloat = EnumValue("BasicType", "btFloat", 0x8)
-btBCD = EnumValue("BasicType", "btBCD", 0x9)
-btBool = EnumValue("BasicType", "btBool", 0xa)
-btLong = EnumValue("BasicType", "btLong", 0xd)
-btULong = EnumValue("BasicType", "btULong", 0xe)
-btCurrency = EnumValue("BasicType", "btCurrency", 0x19)
-btDate = EnumValue("BasicType", "btDate", 0x1a)
-btVariant = EnumValue("BasicType", "btVariant", 0x1b)
-btComplex = EnumValue("BasicType", "btComplex", 0x1c)
-btBit = EnumValue("BasicType", "btBit", 0x1d)
-btBSTR = EnumValue("BasicType", "btBSTR", 0x1e)
-btHresult = EnumValue("BasicType", "btHresult", 0x1f)
-class BasicType(EnumType):
-    values = [btNoType, btVoid, btChar, btWChar, btInt, btUInt, btFloat, btBCD, btBool, btLong, btULong, btCurrency, btDate, btVariant, btComplex, btBit, btBSTR, btHresult]
-    mapper = FlagMapper(*values)
-
-
-DataIsUnknown = EnumValue("DataKind", "DataIsUnknown", 0x0)
-DataIsLocal = EnumValue("DataKind", "DataIsLocal", 0x1)
-DataIsStaticLocal = EnumValue("DataKind", "DataIsStaticLocal", 0x2)
-DataIsParam = EnumValue("DataKind", "DataIsParam", 0x3)
-DataIsObjectPtr = EnumValue("DataKind", "DataIsObjectPtr", 0x4)
-DataIsFileStatic = EnumValue("DataKind", "DataIsFileStatic", 0x5)
-DataIsGlobal = EnumValue("DataKind", "DataIsGlobal", 0x6)
-DataIsMember = EnumValue("DataKind", "DataIsMember", 0x7)
-DataIsStaticMember = EnumValue("DataKind", "DataIsStaticMember", 0x8)
-DataIsConstant = EnumValue("DataKind", "DataIsConstant", 0x9)
-class DataKind(EnumType):
-    values = [DataIsUnknown, DataIsLocal, DataIsStaticLocal, DataIsParam, DataIsObjectPtr, DataIsFileStatic, DataIsGlobal, DataIsMember, DataIsStaticMember, DataIsConstant]
-    mapper = FlagMapper(*values)
-
-
-UdtStruct = EnumValue("UdtKind", "UdtStruct", 0x0)
-UdtClass = EnumValue("UdtKind", "UdtClass", 0x1)
-UdtUnion = EnumValue("UdtKind", "UdtUnion", 0x2)
-class UdtKind(EnumType):
-    values = [UdtStruct, UdtClass, UdtUnion]
-    mapper = FlagMapper(*values)
-
-
-SymTagNull = EnumValue("_SymTagEnum", "SymTagNull", 0x0)
-SymTagExe = EnumValue("_SymTagEnum", "SymTagExe", 0x1)
-SymTagCompiland = EnumValue("_SymTagEnum", "SymTagCompiland", 0x2)
-SymTagCompilandDetails = EnumValue("_SymTagEnum", "SymTagCompilandDetails", 0x3)
-SymTagCompilandEnv = EnumValue("_SymTagEnum", "SymTagCompilandEnv", 0x4)
-SymTagFunction = EnumValue("_SymTagEnum", "SymTagFunction", 0x5)
-SymTagBlock = EnumValue("_SymTagEnum", "SymTagBlock", 0x6)
-SymTagData = EnumValue("_SymTagEnum", "SymTagData", 0x7)
-SymTagAnnotation = EnumValue("_SymTagEnum", "SymTagAnnotation", 0x8)
-SymTagLabel = EnumValue("_SymTagEnum", "SymTagLabel", 0x9)
-SymTagPublicSymbol = EnumValue("_SymTagEnum", "SymTagPublicSymbol", 0xa)
-SymTagUDT = EnumValue("_SymTagEnum", "SymTagUDT", 0xb)
-SymTagEnum = EnumValue("_SymTagEnum", "SymTagEnum", 0xc)
-SymTagFunctionType = EnumValue("_SymTagEnum", "SymTagFunctionType", 0xd)
-SymTagPointerType = EnumValue("_SymTagEnum", "SymTagPointerType", 0xe)
-SymTagArrayType = EnumValue("_SymTagEnum", "SymTagArrayType", 0xf)
-SymTagBaseType = EnumValue("_SymTagEnum", "SymTagBaseType", 0x10)
-SymTagTypedef = EnumValue("_SymTagEnum", "SymTagTypedef", 0x11)
-SymTagBaseClass = EnumValue("_SymTagEnum", "SymTagBaseClass", 0x12)
-SymTagFriend = EnumValue("_SymTagEnum", "SymTagFriend", 0x13)
-SymTagFunctionArgType = EnumValue("_SymTagEnum", "SymTagFunctionArgType", 0x14)
-SymTagFuncDebugStart = EnumValue("_SymTagEnum", "SymTagFuncDebugStart", 0x15)
-SymTagFuncDebugEnd = EnumValue("_SymTagEnum", "SymTagFuncDebugEnd", 0x16)
-SymTagUsingNamespace = EnumValue("_SymTagEnum", "SymTagUsingNamespace", 0x17)
-SymTagVTableShape = EnumValue("_SymTagEnum", "SymTagVTableShape", 0x18)
-SymTagVTable = EnumValue("_SymTagEnum", "SymTagVTable", 0x19)
-SymTagCustom = EnumValue("_SymTagEnum", "SymTagCustom", 0x1a)
-SymTagThunk = EnumValue("_SymTagEnum", "SymTagThunk", 0x1b)
-SymTagCustomType = EnumValue("_SymTagEnum", "SymTagCustomType", 0x1c)
-SymTagManagedType = EnumValue("_SymTagEnum", "SymTagManagedType", 0x1d)
-SymTagDimension = EnumValue("_SymTagEnum", "SymTagDimension", 0x1e)
-class _SymTagEnum(EnumType):
-    values = [SymTagNull, SymTagExe, SymTagCompiland, SymTagCompilandDetails, SymTagCompilandEnv, SymTagFunction, SymTagBlock, SymTagData, SymTagAnnotation, SymTagLabel, SymTagPublicSymbol, SymTagUDT, SymTagEnum, SymTagFunctionType, SymTagPointerType, SymTagArrayType, SymTagBaseType, SymTagTypedef, SymTagBaseClass, SymTagFriend, SymTagFunctionArgType, SymTagFuncDebugStart, SymTagFuncDebugEnd, SymTagUsingNamespace, SymTagVTableShape, SymTagVTable, SymTagCustom, SymTagThunk, SymTagCustomType, SymTagManagedType, SymTagDimension]
-    mapper = FlagMapper(*values)
-SymTagEnum = _SymTagEnum
-
-
-SYMOPT_EX_DISABLEACCESSTIMEUPDATE = EnumValue("_IMAGEHLP_EXTENDED_OPTIONS", "SYMOPT_EX_DISABLEACCESSTIMEUPDATE", 0x0)
-SYMOPT_EX_MAX = EnumValue("_IMAGEHLP_EXTENDED_OPTIONS", "SYMOPT_EX_MAX", 0x1)
-SYMOPT_EX_LASTVALIDDEBUGDIRECTORY = EnumValue("_IMAGEHLP_EXTENDED_OPTIONS", "SYMOPT_EX_LASTVALIDDEBUGDIRECTORY", 0x2)
-class _IMAGEHLP_EXTENDED_OPTIONS(EnumType):
-    values = [SYMOPT_EX_DISABLEACCESSTIMEUPDATE, SYMOPT_EX_MAX, SYMOPT_EX_LASTVALIDDEBUGDIRECTORY]
-    mapper = FlagMapper(*values)
-IMAGEHLP_EXTENDED_OPTIONS = _IMAGEHLP_EXTENDED_OPTIONS
-
-
-TI_GET_SYMTAG = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_SYMTAG", 0x0)
-TI_GET_SYMNAME = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_SYMNAME", 0x1)
-TI_GET_LENGTH = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_LENGTH", 0x2)
-TI_GET_TYPE = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_TYPE", 0x3)
-TI_GET_TYPEID = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_TYPEID", 0x4)
-TI_GET_BASETYPE = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_BASETYPE", 0x5)
-TI_GET_ARRAYINDEXTYPEID = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_ARRAYINDEXTYPEID", 0x6)
-TI_FINDCHILDREN = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_FINDCHILDREN", 0x7)
-TI_GET_DATAKIND = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_DATAKIND", 0x8)
-TI_GET_ADDRESSOFFSET = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_ADDRESSOFFSET", 0x9)
-TI_GET_OFFSET = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_OFFSET", 0xa)
-TI_GET_VALUE = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_VALUE", 0xb)
-TI_GET_COUNT = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_COUNT", 0xc)
-TI_GET_CHILDRENCOUNT = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_CHILDRENCOUNT", 0xd)
-TI_GET_BITPOSITION = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_BITPOSITION", 0xe)
-TI_GET_VIRTUALBASECLASS = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_VIRTUALBASECLASS", 0xf)
-TI_GET_VIRTUALTABLESHAPEID = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_VIRTUALTABLESHAPEID", 0x10)
-TI_GET_VIRTUALBASEPOINTEROFFSET = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_VIRTUALBASEPOINTEROFFSET", 0x11)
-TI_GET_CLASSPARENTID = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_CLASSPARENTID", 0x12)
-TI_GET_NESTED = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_NESTED", 0x13)
-TI_GET_SYMINDEX = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_SYMINDEX", 0x14)
-TI_GET_LEXICALPARENT = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_LEXICALPARENT", 0x15)
-TI_GET_ADDRESS = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_ADDRESS", 0x16)
-TI_GET_THISADJUST = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_THISADJUST", 0x17)
-TI_GET_UDTKIND = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_UDTKIND", 0x18)
-TI_IS_EQUIV_TO = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_IS_EQUIV_TO", 0x19)
-TI_GET_CALLING_CONVENTION = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_CALLING_CONVENTION", 0x1a)
-TI_IS_CLOSE_EQUIV_TO = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_IS_CLOSE_EQUIV_TO", 0x1b)
-TI_GTIEX_REQS_VALID = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GTIEX_REQS_VALID", 0x1c)
-TI_GET_VIRTUALBASEOFFSET = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_VIRTUALBASEOFFSET", 0x1d)
-TI_GET_VIRTUALBASEDISPINDEX = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_VIRTUALBASEDISPINDEX", 0x1e)
-TI_GET_IS_REFERENCE = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_IS_REFERENCE", 0x1f)
-TI_GET_INDIRECTVIRTUALBASECLASS = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_INDIRECTVIRTUALBASECLASS", 0x20)
-IMAGEHLP_SYMBOL_TYPE_INFO_MAX = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "IMAGEHLP_SYMBOL_TYPE_INFO_MAX", 0x21)
-class _IMAGEHLP_SYMBOL_TYPE_INFO(EnumType):
-    values = [TI_GET_SYMTAG, TI_GET_SYMNAME, TI_GET_LENGTH, TI_GET_TYPE, TI_GET_TYPEID, TI_GET_BASETYPE, TI_GET_ARRAYINDEXTYPEID, TI_FINDCHILDREN, TI_GET_DATAKIND, TI_GET_ADDRESSOFFSET, TI_GET_OFFSET, TI_GET_VALUE, TI_GET_COUNT, TI_GET_CHILDRENCOUNT, TI_GET_BITPOSITION, TI_GET_VIRTUALBASECLASS, TI_GET_VIRTUALTABLESHAPEID, TI_GET_VIRTUALBASEPOINTEROFFSET, TI_GET_CLASSPARENTID, TI_GET_NESTED, TI_GET_SYMINDEX, TI_GET_LEXICALPARENT, TI_GET_ADDRESS, TI_GET_THISADJUST, TI_GET_UDTKIND, TI_IS_EQUIV_TO, TI_GET_CALLING_CONVENTION, TI_IS_CLOSE_EQUIV_TO, TI_GTIEX_REQS_VALID, TI_GET_VIRTUALBASEOFFSET, TI_GET_VIRTUALBASEDISPINDEX, TI_GET_IS_REFERENCE, TI_GET_INDIRECTVIRTUALBASECLASS, IMAGEHLP_SYMBOL_TYPE_INFO_MAX]
-    mapper = FlagMapper(*values)
-IMAGEHLP_SYMBOL_TYPE_INFO = _IMAGEHLP_SYMBOL_TYPE_INFO
-
-
-sevInfo = EnumValue("_CBA_EVENT_SEVERITY", "sevInfo", 0x0)
-sevProblem = EnumValue("_CBA_EVENT_SEVERITY", "sevProblem", 0x1)
-sevAttn = EnumValue("_CBA_EVENT_SEVERITY", "sevAttn", 0x2)
-sevFatal = EnumValue("_CBA_EVENT_SEVERITY", "sevFatal", 0x3)
-sevMax = EnumValue("_CBA_EVENT_SEVERITY", "sevMax", 0x4)
-class _CBA_EVENT_SEVERITY(EnumType):
-    values = [sevInfo, sevProblem, sevAttn, sevFatal, sevMax]
-    mapper = FlagMapper(*values)
-CBA_EVENT_SEVERITY = _CBA_EVENT_SEVERITY
-
-
-AddrMode1616 = EnumValue("ADDRESS_MODE", "AddrMode1616", 0x0)
-AddrMode1632 = EnumValue("ADDRESS_MODE", "AddrMode1632", 0x1)
-AddrModeReal = EnumValue("ADDRESS_MODE", "AddrModeReal", 0x2)
-AddrModeFlat = EnumValue("ADDRESS_MODE", "AddrModeFlat", 0x3)
-class ADDRESS_MODE(EnumType):
-    values = [AddrMode1616, AddrMode1632, AddrModeReal, AddrModeFlat]
-    mapper = FlagMapper(*values)
-
-
-class _IMAGEHLP_MODULE64(Structure):
-    _fields_ = [
-        ("SizeOfStruct", DWORD),
-        ("BaseOfImage", DWORD64),
-        ("ImageSize", DWORD),
-        ("TimeDateStamp", DWORD),
-        ("CheckSum", DWORD),
-        ("NumSyms", DWORD),
-        ("SymType", SYM_TYPE),
-        ("ModuleName", CHAR * (32)),
-        ("ImageName", CHAR * (256)),
-        ("LoadedImageName", CHAR * (256)),
-        ("LoadedPdbName", CHAR * (256)),
-        ("CVSig", DWORD),
-        ("CVData", CHAR * (MAX_PATH * 3)),
-        ("PdbSig", DWORD),
-        ("PdbSig70", GUID),
-        ("PdbAge", DWORD),
-        ("PdbUnmatched", BOOL),
-        ("DbgUnmatched", BOOL),
-        ("LineNumbers", BOOL),
-        ("GlobalSymbols", BOOL),
-        ("TypeInfo", BOOL),
-        ("SourceIndexed", BOOL),
-        ("Publics", BOOL),
-    ]
-PIMAGEHLP_MODULE64 = POINTER(_IMAGEHLP_MODULE64)
-IMAGEHLP_MODULE64 = _IMAGEHLP_MODULE64
-
-class _IMAGEHLP_MODULEW64(Structure):
-    _fields_ = [
-        ("SizeOfStruct", DWORD),
-        ("BaseOfImage", DWORD64),
-        ("ImageSize", DWORD),
-        ("TimeDateStamp", DWORD),
-        ("CheckSum", DWORD),
-        ("NumSyms", DWORD),
-        ("SymType", SYM_TYPE),
-        ("ModuleName", WCHAR * (32)),
-        ("ImageName", WCHAR * (256)),
-        ("LoadedImageName", WCHAR * (256)),
-        ("LoadedPdbName", WCHAR * (256)),
-        ("CVSig", DWORD),
-        ("CVData", POINTER(WCHAR) * (MAX_PATH * 3)),
-        ("PdbSig", DWORD),
-        ("PdbSig70", GUID),
-        ("PdbAge", DWORD),
-        ("PdbUnmatched", BOOL),
-        ("DbgUnmatched", BOOL),
-        ("LineNumbers", BOOL),
-        ("GlobalSymbols", BOOL),
-        ("TypeInfo", BOOL),
-        ("SourceIndexed", BOOL),
-        ("Publics", BOOL),
-        ("MachineType", DWORD),
-        ("Reserved", DWORD),
-    ]
-PIMAGEHLP_MODULEW64 = POINTER(_IMAGEHLP_MODULEW64)
-IMAGEHLP_MODULEW64 = _IMAGEHLP_MODULEW64
-
-class _SYMBOL_INFO(Structure):
-    _fields_ = [
-        ("SizeOfStruct", ULONG),
-        ("TypeIndex", ULONG),
-        ("Reserved", ULONG64 * (2)),
-        ("Index", ULONG),
-        ("Size", ULONG),
-        ("ModBase", ULONG64),
-        ("Flags", ULONG),
-        ("Value", ULONG64),
-        ("Address", ULONG64),
-        ("Register", ULONG),
-        ("Scope", ULONG),
-        ("Tag", ULONG),
-        ("NameLen", ULONG),
-        ("MaxNameLen", ULONG),
-        ("Name", CHAR * (1)),
-    ]
-SYMBOL_INFO = _SYMBOL_INFO
-PSYMBOL_INFO = POINTER(_SYMBOL_INFO)
-
-old_SYMBOL_INFO = _SYMBOL_INFO
-class _SYMBOL_INFO(old_SYMBOL_INFO):
-    @property
-    def tag(self):
-        return SymTagEnum.mapper[self.Tag]
-SYMBOL_INFO = _SYMBOL_INFO
-PSYMBOL_INFO = POINTER(_SYMBOL_INFO)
-class _SYMBOL_INFOW(Structure):
-    _fields_ = [
-        ("SizeOfStruct", ULONG),
-        ("TypeIndex", ULONG),
-        ("Reserved", ULONG64 * (2)),
-        ("Index", ULONG),
-        ("Size", ULONG),
-        ("ModBase", ULONG64),
-        ("Flags", ULONG),
-        ("Value", ULONG64),
-        ("Address", ULONG64),
-        ("Register", ULONG),
-        ("Scope", ULONG),
-        ("Tag", ULONG),
-        ("NameLen", ULONG),
-        ("MaxNameLen", ULONG),
-        ("Name", WCHAR * (1)),
-    ]
-SYMBOL_INFOW = _SYMBOL_INFOW
-PSYMBOL_INFOW = POINTER(_SYMBOL_INFOW)
-
-old_SYMBOL_INFOW = _SYMBOL_INFOW
-class _SYMBOL_INFOW(old_SYMBOL_INFOW):
-    @property
-    def tag(self):
-        return SymTagEnum.mapper[self.Tag]
-SYMBOL_INFOW = _SYMBOL_INFOW
-PSYMBOL_INFOW = POINTER(_SYMBOL_INFOW)
-class SYMSRV_INDEX_INFOW(Structure):
-    _fields_ = [
-        ("sizeofstruct", DWORD),
-        ("file", WCHAR * (MAX_PATH + 1)),
-        ("stripped", BOOL),
-        ("timestamp", DWORD),
-        ("size", DWORD),
-        ("dbgfile", WCHAR * (MAX_PATH + 1)),
-        ("pdbfile", WCHAR * (MAX_PATH + 1)),
-        ("guid", GUID),
-        ("sig", DWORD),
-        ("age", DWORD),
-    ]
-PSYMSRV_INDEX_INFOW = POINTER(SYMSRV_INDEX_INFOW)
-
-class SYMSRV_INDEX_INFO(Structure):
-    _fields_ = [
-        ("sizeofstruct", DWORD),
-        ("file", CHAR * (MAX_PATH + 1)),
-        ("stripped", BOOL),
-        ("timestamp", DWORD),
-        ("size", DWORD),
-        ("dbgfile", CHAR * (MAX_PATH + 1)),
-        ("pdbfile", CHAR * (MAX_PATH + 1)),
-        ("guid", GUID),
-        ("sig", DWORD),
-        ("age", DWORD),
-    ]
-PSYMSRV_INDEX_INFO = POINTER(SYMSRV_INDEX_INFO)
-
-class _IMAGEHLP_SYMBOL(Structure):
-    _fields_ = [
-        ("SizeOfStruct", DWORD),
-        ("Address", DWORD),
-        ("Size", DWORD),
-        ("Flags", DWORD),
-        ("MaxNameLength", DWORD),
-        ("Name", CHAR * (1)),
-    ]
-PIMAGEHLP_SYMBOL = POINTER(_IMAGEHLP_SYMBOL)
-IMAGEHLP_SYMBOL = _IMAGEHLP_SYMBOL
-
-class _IMAGEHLP_SYMBOL64(Structure):
-    _fields_ = [
-        ("SizeOfStruct", DWORD),
-        ("Address", DWORD64),
-        ("Size", DWORD),
-        ("Flags", DWORD),
-        ("MaxNameLength", DWORD),
-        ("Name", CHAR * (1)),
-    ]
-PIMAGEHLP_SYMBOL64 = POINTER(_IMAGEHLP_SYMBOL64)
-IMAGEHLP_SYMBOL64 = _IMAGEHLP_SYMBOL64
-
-class _IMAGEHLP_SYMBOLW64(Structure):
-    _fields_ = [
-        ("SizeOfStruct", DWORD),
-        ("Address", DWORD64),
-        ("Size", DWORD),
-        ("Flags", DWORD),
-        ("MaxNameLength", DWORD),
-        ("Name", WCHAR * (1)),
-    ]
-PIMAGEHLP_SYMBOLW64 = POINTER(_IMAGEHLP_SYMBOLW64)
-IMAGEHLP_SYMBOLW64 = _IMAGEHLP_SYMBOLW64
-
-class _IMAGEHLP_STACK_FRAME(Structure):
-    _fields_ = [
-        ("InstructionOffset", ULONG64),
-        ("ReturnOffset", ULONG64),
-        ("FrameOffset", ULONG64),
-        ("StackOffset", ULONG64),
-        ("BackingStoreOffset", ULONG64),
-        ("FuncTableEntry", ULONG64),
-        ("Params", ULONG64 * (4)),
-        ("Reserved", ULONG64 * (5)),
-        ("Virtual", BOOL),
-        ("Reserved2", ULONG),
-    ]
-IMAGEHLP_STACK_FRAME = _IMAGEHLP_STACK_FRAME
-PIMAGEHLP_STACK_FRAME = POINTER(_IMAGEHLP_STACK_FRAME)
-
-class _IMAGEHLP_CBA_EVENT(Structure):
-    _fields_ = [
-        ("severity", CBA_EVENT_SEVERITY),
-        ("code", DWORD),
-        ("desc", PCHAR),
-        ("object", PVOID),
-    ]
-PIMAGEHLP_CBA_EVENT = POINTER(_IMAGEHLP_CBA_EVENT)
-IMAGEHLP_CBA_EVENT = _IMAGEHLP_CBA_EVENT
-
-class _IMAGEHLP_CBA_EVENTW(Structure):
-    _fields_ = [
-        ("severity", CBA_EVENT_SEVERITY),
-        ("code", DWORD),
-        ("desc", PCWSTR),
-        ("object", PVOID),
-    ]
-PIMAGEHLP_CBA_EVENTW = POINTER(_IMAGEHLP_CBA_EVENTW)
-IMAGEHLP_CBA_EVENTW = _IMAGEHLP_CBA_EVENTW
-
-class _IMAGEHLP_CBA_READ_MEMORY(Structure):
-    _fields_ = [
-        ("addr", DWORD64),
-        ("buf", PVOID),
-        ("bytes", DWORD),
-        ("bytesread", POINTER(DWORD)),
-    ]
-PIMAGEHLP_CBA_READ_MEMORY = POINTER(_IMAGEHLP_CBA_READ_MEMORY)
-IMAGEHLP_CBA_READ_MEMORY = _IMAGEHLP_CBA_READ_MEMORY
-
-class _IMAGEHLP_DEFERRED_SYMBOL_LOAD(Structure):
-    _fields_ = [
-        ("SizeOfStruct", DWORD),
-        ("BaseOfImage", DWORD),
-        ("CheckSum", DWORD),
-        ("TimeDateStamp", DWORD),
-        ("FileName", CHAR * (MAX_PATH)),
-        ("Reparse", BOOLEAN),
-        ("hFile", HANDLE),
-    ]
-PIMAGEHLP_DEFERRED_SYMBOL_LOAD = POINTER(_IMAGEHLP_DEFERRED_SYMBOL_LOAD)
-IMAGEHLP_DEFERRED_SYMBOL_LOAD = _IMAGEHLP_DEFERRED_SYMBOL_LOAD
-
-class _IMAGEHLP_DEFERRED_SYMBOL_LOAD64(Structure):
-    _fields_ = [
-        ("SizeOfStruct", DWORD),
-        ("BaseOfImage", DWORD64),
-        ("CheckSum", DWORD),
-        ("TimeDateStamp", DWORD),
-        ("FileName", CHAR * (MAX_PATH)),
-        ("Reparse", BOOLEAN),
-        ("hFile", HANDLE),
-        ("Flags", DWORD),
-    ]
-IMAGEHLP_DEFERRED_SYMBOL_LOAD64 = _IMAGEHLP_DEFERRED_SYMBOL_LOAD64
-PIMAGEHLP_DEFERRED_SYMBOL_LOAD64 = POINTER(_IMAGEHLP_DEFERRED_SYMBOL_LOAD64)
-
-class _IMAGEHLP_DEFERRED_SYMBOL_LOADW64(Structure):
-    _fields_ = [
-        ("SizeOfStruct", DWORD),
-        ("BaseOfImage", DWORD64),
-        ("CheckSum", DWORD),
-        ("TimeDateStamp", DWORD),
-        ("FileName", WCHAR * (MAX_PATH + 1)),
-        ("Reparse", BOOLEAN),
-        ("hFile", HANDLE),
-        ("Flags", DWORD),
-    ]
-IMAGEHLP_DEFERRED_SYMBOL_LOADW64 = _IMAGEHLP_DEFERRED_SYMBOL_LOADW64
-PIMAGEHLP_DEFERRED_SYMBOL_LOADW64 = POINTER(_IMAGEHLP_DEFERRED_SYMBOL_LOADW64)
-
-class _IMAGEHLP_DUPLICATE_SYMBOL64(Structure):
-    _fields_ = [
-        ("SizeOfStruct", DWORD),
-        ("NumberOfDups", DWORD),
-        ("Symbol", PIMAGEHLP_SYMBOL64),
-        ("SelectedSymbol", DWORD),
-    ]
-PIMAGEHLP_DUPLICATE_SYMBOL64 = POINTER(_IMAGEHLP_DUPLICATE_SYMBOL64)
-IMAGEHLP_DUPLICATE_SYMBOL64 = _IMAGEHLP_DUPLICATE_SYMBOL64
-
-class _IMAGEHLP_DUPLICATE_SYMBOL(Structure):
-    _fields_ = [
-        ("SizeOfStruct", DWORD),
-        ("NumberOfDups", DWORD),
-        ("Symbol", PIMAGEHLP_SYMBOL),
-        ("SelectedSymbol", DWORD),
-    ]
-PIMAGEHLP_DUPLICATE_SYMBOL = POINTER(_IMAGEHLP_DUPLICATE_SYMBOL)
-IMAGEHLP_DUPLICATE_SYMBOL = _IMAGEHLP_DUPLICATE_SYMBOL
-
-class _tagADDRESS(Structure):
-    _fields_ = [
-        ("Offset", DWORD),
-        ("Segment", WORD),
-        ("Mode", ADDRESS_MODE),
-    ]
-LPADDRESS = POINTER(_tagADDRESS)
-ADDRESS = _tagADDRESS
-
-class _tagADDRESS64(Structure):
-    _fields_ = [
-        ("Offset", DWORD64),
-        ("Segment", WORD),
-        ("Mode", ADDRESS_MODE),
-    ]
-LPADDRESS64 = POINTER(_tagADDRESS64)
-ADDRESS64 = _tagADDRESS64
-
-class _tagADDRESS64(_tagADDRESS64):
-    def __repr__(self):
-        if not self.Segment:
-            return "<{0} {offset:#x}>".format(type(self).__name__, offset=self.Offset)
-        return "<{0} {seg:#x}:{offset:#x}>".format(type(self).__name__, seg=self.Segment, offset=self.Offset)
-LPADDRESS64 = POINTER(_tagADDRESS64)
-ADDRESS64 = _tagADDRESS64
-class _KDHELP(Structure):
-    _fields_ = [
-        ("Thread", DWORD),
-        ("ThCallbackStack", DWORD),
-        ("NextCallback", DWORD),
-        ("FramePointer", DWORD),
-        ("KiCallUserMode", DWORD),
-        ("KeUserCallbackDispatcher", DWORD),
-        ("SystemRangeStart", DWORD),
-        ("ThCallbackBStore", DWORD),
-        ("KiUserExceptionDispatcher", DWORD),
-        ("StackBase", DWORD),
-        ("StackLimit", DWORD),
-        ("Reserved", DWORD * (5)),
-    ]
-KDHELP = _KDHELP
-PKDHELP = POINTER(_KDHELP)
-
-class _KDHELP64(Structure):
-    _fields_ = [
-        ("Thread", DWORD64),
-        ("ThCallbackStack", DWORD),
-        ("ThCallbackBStore", DWORD),
-        ("NextCallback", DWORD),
-        ("FramePointer", DWORD),
-        ("KiCallUserMode", DWORD64),
-        ("KeUserCallbackDispatcher", DWORD64),
-        ("SystemRangeStart", DWORD64),
-        ("KiUserExceptionDispatcher", DWORD64),
-        ("StackBase", DWORD64),
-        ("StackLimit", DWORD64),
-        ("BuildVersion", DWORD),
-        ("RetpolineStubFunctionTableSize", DWORD),
-        ("RetpolineStubFunctionTable", DWORD64),
-        ("RetpolineStubOffset", DWORD),
-        ("RetpolineStubSize", DWORD),
-        ("Reserved0", DWORD64 * (2)),
-    ]
-KDHELP64 = _KDHELP64
-PKDHELP64 = POINTER(_KDHELP64)
-
-class _tagSTACKFRAME(Structure):
-    _fields_ = [
-        ("AddrPC", ADDRESS),
-        ("AddrReturn", ADDRESS),
-        ("AddrFrame", ADDRESS),
-        ("AddrStack", ADDRESS),
-        ("FuncTableEntry", PVOID),
-        ("Params", DWORD * (4)),
-        ("Far", BOOL),
-        ("Virtual", BOOL),
-        ("Reserved", DWORD * (3)),
-        ("KdHelp", KDHELP),
-        ("AddrBStore", ADDRESS),
-    ]
-STACKFRAME = _tagSTACKFRAME
-LPSTACKFRAME = POINTER(_tagSTACKFRAME)
-
-class _tagSTACKFRAME64(Structure):
-    _fields_ = [
-        ("AddrPC", ADDRESS64),
-        ("AddrReturn", ADDRESS64),
-        ("AddrFrame", ADDRESS64),
-        ("AddrStack", ADDRESS64),
-        ("AddrBStore", ADDRESS64),
-        ("FuncTableEntry", PVOID),
-        ("Params", DWORD64 * (4)),
-        ("Far", BOOL),
-        ("Virtual", BOOL),
-        ("Reserved", DWORD64 * (3)),
-        ("KdHelp", KDHELP64),
-    ]
-STACKFRAME64 = _tagSTACKFRAME64
-LPSTACKFRAME64 = POINTER(_tagSTACKFRAME64)
-
-class _tagSTACKFRAME_EX(Structure):
-    _fields_ = [
-        ("AddrPC", ADDRESS64),
-        ("AddrReturn", ADDRESS64),
-        ("AddrFrame", ADDRESS64),
-        ("AddrStack", ADDRESS64),
-        ("AddrBStore", ADDRESS64),
-        ("FuncTableEntry", PVOID),
-        ("Params", DWORD64 * (4)),
-        ("Far", BOOL),
-        ("Virtual", BOOL),
-        ("Reserved", DWORD64 * (3)),
-        ("KdHelp", KDHELP64),
-        ("StackFrameSize", DWORD),
-        ("InlineFrameContext", DWORD),
-    ]
-LPSTACKFRAME_EX = POINTER(_tagSTACKFRAME_EX)
-STACKFRAME_EX = _tagSTACKFRAME_EX
-
-VIRTUAL_DISK_ACCESS_NONE = EnumValue("_VIRTUAL_DISK_ACCESS_MASK", "VIRTUAL_DISK_ACCESS_NONE", 0x0)
-VIRTUAL_DISK_ACCESS_ATTACH_RO = EnumValue("_VIRTUAL_DISK_ACCESS_MASK", "VIRTUAL_DISK_ACCESS_ATTACH_RO", 0x1)
-VIRTUAL_DISK_ACCESS_ATTACH_RW = EnumValue("_VIRTUAL_DISK_ACCESS_MASK", "VIRTUAL_DISK_ACCESS_ATTACH_RW", 0x2)
-VIRTUAL_DISK_ACCESS_DETACH = EnumValue("_VIRTUAL_DISK_ACCESS_MASK", "VIRTUAL_DISK_ACCESS_DETACH", 0x3)
-VIRTUAL_DISK_ACCESS_GET_INFO = EnumValue("_VIRTUAL_DISK_ACCESS_MASK", "VIRTUAL_DISK_ACCESS_GET_INFO", 0x4)
-VIRTUAL_DISK_ACCESS_CREATE = EnumValue("_VIRTUAL_DISK_ACCESS_MASK", "VIRTUAL_DISK_ACCESS_CREATE", 0x5)
-VIRTUAL_DISK_ACCESS_METAOPS = EnumValue("_VIRTUAL_DISK_ACCESS_MASK", "VIRTUAL_DISK_ACCESS_METAOPS", 0x6)
-VIRTUAL_DISK_ACCESS_READ = EnumValue("_VIRTUAL_DISK_ACCESS_MASK", "VIRTUAL_DISK_ACCESS_READ", 0x7)
-VIRTUAL_DISK_ACCESS_ALL = EnumValue("_VIRTUAL_DISK_ACCESS_MASK", "VIRTUAL_DISK_ACCESS_ALL", 0x8)
-VIRTUAL_DISK_ACCESS_WRITABLE = EnumValue("_VIRTUAL_DISK_ACCESS_MASK", "VIRTUAL_DISK_ACCESS_WRITABLE", 0x9)
-class _VIRTUAL_DISK_ACCESS_MASK(EnumType):
-    values = [VIRTUAL_DISK_ACCESS_NONE, VIRTUAL_DISK_ACCESS_ATTACH_RO, VIRTUAL_DISK_ACCESS_ATTACH_RW, VIRTUAL_DISK_ACCESS_DETACH, VIRTUAL_DISK_ACCESS_GET_INFO, VIRTUAL_DISK_ACCESS_CREATE, VIRTUAL_DISK_ACCESS_METAOPS, VIRTUAL_DISK_ACCESS_READ, VIRTUAL_DISK_ACCESS_ALL, VIRTUAL_DISK_ACCESS_WRITABLE]
-    mapper = FlagMapper(*values)
-VIRTUAL_DISK_ACCESS_MASK = _VIRTUAL_DISK_ACCESS_MASK
-
-
-OPEN_VIRTUAL_DISK_FLAG_NONE = EnumValue("_OPEN_VIRTUAL_DISK_FLAG", "OPEN_VIRTUAL_DISK_FLAG_NONE", 0x0)
-OPEN_VIRTUAL_DISK_FLAG_NO_PARENTS = EnumValue("_OPEN_VIRTUAL_DISK_FLAG", "OPEN_VIRTUAL_DISK_FLAG_NO_PARENTS", 0x1)
-OPEN_VIRTUAL_DISK_FLAG_BLANK_FILE = EnumValue("_OPEN_VIRTUAL_DISK_FLAG", "OPEN_VIRTUAL_DISK_FLAG_BLANK_FILE", 0x2)
-OPEN_VIRTUAL_DISK_FLAG_BOOT_DRIVE = EnumValue("_OPEN_VIRTUAL_DISK_FLAG", "OPEN_VIRTUAL_DISK_FLAG_BOOT_DRIVE", 0x3)
-OPEN_VIRTUAL_DISK_FLAG_CACHED_IO = EnumValue("_OPEN_VIRTUAL_DISK_FLAG", "OPEN_VIRTUAL_DISK_FLAG_CACHED_IO", 0x4)
-OPEN_VIRTUAL_DISK_FLAG_CUSTOM_DIFF_CHAIN = EnumValue("_OPEN_VIRTUAL_DISK_FLAG", "OPEN_VIRTUAL_DISK_FLAG_CUSTOM_DIFF_CHAIN", 0x5)
-OPEN_VIRTUAL_DISK_FLAG_PARENT_CACHED_IO = EnumValue("_OPEN_VIRTUAL_DISK_FLAG", "OPEN_VIRTUAL_DISK_FLAG_PARENT_CACHED_IO", 0x6)
-OPEN_VIRTUAL_DISK_FLAG_VHDSET_FILE_ONLY = EnumValue("_OPEN_VIRTUAL_DISK_FLAG", "OPEN_VIRTUAL_DISK_FLAG_VHDSET_FILE_ONLY", 0x7)
-OPEN_VIRTUAL_DISK_FLAG_IGNORE_RELATIVE_PARENT_LOCATOR = EnumValue("_OPEN_VIRTUAL_DISK_FLAG", "OPEN_VIRTUAL_DISK_FLAG_IGNORE_RELATIVE_PARENT_LOCATOR", 0x8)
-OPEN_VIRTUAL_DISK_FLAG_NO_WRITE_HARDENING = EnumValue("_OPEN_VIRTUAL_DISK_FLAG", "OPEN_VIRTUAL_DISK_FLAG_NO_WRITE_HARDENING", 0x9)
-class _OPEN_VIRTUAL_DISK_FLAG(EnumType):
-    values = [OPEN_VIRTUAL_DISK_FLAG_NONE, OPEN_VIRTUAL_DISK_FLAG_NO_PARENTS, OPEN_VIRTUAL_DISK_FLAG_BLANK_FILE, OPEN_VIRTUAL_DISK_FLAG_BOOT_DRIVE, OPEN_VIRTUAL_DISK_FLAG_CACHED_IO, OPEN_VIRTUAL_DISK_FLAG_CUSTOM_DIFF_CHAIN, OPEN_VIRTUAL_DISK_FLAG_PARENT_CACHED_IO, OPEN_VIRTUAL_DISK_FLAG_VHDSET_FILE_ONLY, OPEN_VIRTUAL_DISK_FLAG_IGNORE_RELATIVE_PARENT_LOCATOR, OPEN_VIRTUAL_DISK_FLAG_NO_WRITE_HARDENING]
-    mapper = FlagMapper(*values)
-OPEN_VIRTUAL_DISK_FLAG = _OPEN_VIRTUAL_DISK_FLAG
-
-
-ATTACH_VIRTUAL_DISK_FLAG_NONE = EnumValue("_ATTACH_VIRTUAL_DISK_FLAG", "ATTACH_VIRTUAL_DISK_FLAG_NONE", 0x0)
-ATTACH_VIRTUAL_DISK_FLAG_READ_ONLY = EnumValue("_ATTACH_VIRTUAL_DISK_FLAG", "ATTACH_VIRTUAL_DISK_FLAG_READ_ONLY", 0x1)
-ATTACH_VIRTUAL_DISK_FLAG_NO_DRIVE_LETTER = EnumValue("_ATTACH_VIRTUAL_DISK_FLAG", "ATTACH_VIRTUAL_DISK_FLAG_NO_DRIVE_LETTER", 0x2)
-ATTACH_VIRTUAL_DISK_FLAG_PERMANENT_LIFETIME = EnumValue("_ATTACH_VIRTUAL_DISK_FLAG", "ATTACH_VIRTUAL_DISK_FLAG_PERMANENT_LIFETIME", 0x3)
-ATTACH_VIRTUAL_DISK_FLAG_NO_LOCAL_HOST = EnumValue("_ATTACH_VIRTUAL_DISK_FLAG", "ATTACH_VIRTUAL_DISK_FLAG_NO_LOCAL_HOST", 0x4)
-ATTACH_VIRTUAL_DISK_FLAG_NO_SECURITY_DESCRIPTOR = EnumValue("_ATTACH_VIRTUAL_DISK_FLAG", "ATTACH_VIRTUAL_DISK_FLAG_NO_SECURITY_DESCRIPTOR", 0x5)
-ATTACH_VIRTUAL_DISK_FLAG_BYPASS_DEFAULT_ENCRYPTION_POLICY = EnumValue("_ATTACH_VIRTUAL_DISK_FLAG", "ATTACH_VIRTUAL_DISK_FLAG_BYPASS_DEFAULT_ENCRYPTION_POLICY", 0x6)
-ATTACH_VIRTUAL_DISK_FLAG_NON_PNP = EnumValue("_ATTACH_VIRTUAL_DISK_FLAG", "ATTACH_VIRTUAL_DISK_FLAG_NON_PNP", 0x7)
-ATTACH_VIRTUAL_DISK_FLAG_RESTRICTED_RANGE = EnumValue("_ATTACH_VIRTUAL_DISK_FLAG", "ATTACH_VIRTUAL_DISK_FLAG_RESTRICTED_RANGE", 0x8)
-ATTACH_VIRTUAL_DISK_FLAG_SINGLE_PARTITION = EnumValue("_ATTACH_VIRTUAL_DISK_FLAG", "ATTACH_VIRTUAL_DISK_FLAG_SINGLE_PARTITION", 0x9)
-ATTACH_VIRTUAL_DISK_FLAG_REGISTER_VOLUME = EnumValue("_ATTACH_VIRTUAL_DISK_FLAG", "ATTACH_VIRTUAL_DISK_FLAG_REGISTER_VOLUME", 0xa)
-class _ATTACH_VIRTUAL_DISK_FLAG(EnumType):
-    values = [ATTACH_VIRTUAL_DISK_FLAG_NONE, ATTACH_VIRTUAL_DISK_FLAG_READ_ONLY, ATTACH_VIRTUAL_DISK_FLAG_NO_DRIVE_LETTER, ATTACH_VIRTUAL_DISK_FLAG_PERMANENT_LIFETIME, ATTACH_VIRTUAL_DISK_FLAG_NO_LOCAL_HOST, ATTACH_VIRTUAL_DISK_FLAG_NO_SECURITY_DESCRIPTOR, ATTACH_VIRTUAL_DISK_FLAG_BYPASS_DEFAULT_ENCRYPTION_POLICY, ATTACH_VIRTUAL_DISK_FLAG_NON_PNP, ATTACH_VIRTUAL_DISK_FLAG_RESTRICTED_RANGE, ATTACH_VIRTUAL_DISK_FLAG_SINGLE_PARTITION, ATTACH_VIRTUAL_DISK_FLAG_REGISTER_VOLUME]
-    mapper = FlagMapper(*values)
-ATTACH_VIRTUAL_DISK_FLAG = _ATTACH_VIRTUAL_DISK_FLAG
-
-
-OPEN_VIRTUAL_DISK_VERSION_UNSPECIFIED = EnumValue("_OPEN_VIRTUAL_DISK_VERSION", "OPEN_VIRTUAL_DISK_VERSION_UNSPECIFIED", 0x0)
-OPEN_VIRTUAL_DISK_VERSION_1 = EnumValue("_OPEN_VIRTUAL_DISK_VERSION", "OPEN_VIRTUAL_DISK_VERSION_1", 0x1)
-OPEN_VIRTUAL_DISK_VERSION_2 = EnumValue("_OPEN_VIRTUAL_DISK_VERSION", "OPEN_VIRTUAL_DISK_VERSION_2", 0x2)
-OPEN_VIRTUAL_DISK_VERSION_3 = EnumValue("_OPEN_VIRTUAL_DISK_VERSION", "OPEN_VIRTUAL_DISK_VERSION_3", 0x3)
-class _OPEN_VIRTUAL_DISK_VERSION(EnumType):
-    values = [OPEN_VIRTUAL_DISK_VERSION_UNSPECIFIED, OPEN_VIRTUAL_DISK_VERSION_1, OPEN_VIRTUAL_DISK_VERSION_2, OPEN_VIRTUAL_DISK_VERSION_3]
-    mapper = FlagMapper(*values)
-OPEN_VIRTUAL_DISK_VERSION = _OPEN_VIRTUAL_DISK_VERSION
-
-
-ATTACH_VIRTUAL_DISK_VERSION_UNSPECIFIED = EnumValue("_ATTACH_VIRTUAL_DISK_VERSION", "ATTACH_VIRTUAL_DISK_VERSION_UNSPECIFIED", 0x0)
-ATTACH_VIRTUAL_DISK_VERSION_1 = EnumValue("_ATTACH_VIRTUAL_DISK_VERSION", "ATTACH_VIRTUAL_DISK_VERSION_1", 0x1)
-ATTACH_VIRTUAL_DISK_VERSION_2 = EnumValue("_ATTACH_VIRTUAL_DISK_VERSION", "ATTACH_VIRTUAL_DISK_VERSION_2", 0x2)
-class _ATTACH_VIRTUAL_DISK_VERSION(EnumType):
-    values = [ATTACH_VIRTUAL_DISK_VERSION_UNSPECIFIED, ATTACH_VIRTUAL_DISK_VERSION_1, ATTACH_VIRTUAL_DISK_VERSION_2]
-    mapper = FlagMapper(*values)
-ATTACH_VIRTUAL_DISK_VERSION = _ATTACH_VIRTUAL_DISK_VERSION
-
-
-class _VIRTUAL_STORAGE_TYPE(Structure):
-    _fields_ = [
-        ("DeviceId", ULONG),
-        ("VendorId", GUID),
-    ]
-VIRTUAL_STORAGE_TYPE = _VIRTUAL_STORAGE_TYPE
-PVIRTUAL_STORAGE_TYPE = POINTER(_VIRTUAL_STORAGE_TYPE)
-
-class _ANON__ANON__OPEN_VIRTUAL_DISK_PARAMETERS_SUB_UNION_1_SUB_STRUCTURE_1(Structure):
-    _fields_ = [
-        ("RWDepth", ULONG),
-    ]
-
-
-class _ANON__ANON__OPEN_VIRTUAL_DISK_PARAMETERS_SUB_UNION_1_SUB_STRUCTURE_2(Structure):
-    _fields_ = [
-        ("GetInfoOnly", BOOL),
-        ("ReadOnly", BOOL),
-        ("ResiliencyGuid", GUID),
-    ]
-
-
-class _ANON__ANON__OPEN_VIRTUAL_DISK_PARAMETERS_SUB_UNION_1_SUB_STRUCTURE_3(Structure):
-    _fields_ = [
-        ("GetInfoOnly", BOOL),
-        ("ReadOnly", BOOL),
-        ("ResiliencyGuid", GUID),
-        ("SnapshotId", GUID),
-    ]
-
-class _ANON__OPEN_VIRTUAL_DISK_PARAMETERS_SUB_UNION_1(Union):
-    _anonymous_ = ("Version1","Version2","Version3")
-    _fields_ = [
-        ("Version1", _ANON__ANON__OPEN_VIRTUAL_DISK_PARAMETERS_SUB_UNION_1_SUB_STRUCTURE_1),
-        ("Version2", _ANON__ANON__OPEN_VIRTUAL_DISK_PARAMETERS_SUB_UNION_1_SUB_STRUCTURE_2),
-        ("Version3", _ANON__ANON__OPEN_VIRTUAL_DISK_PARAMETERS_SUB_UNION_1_SUB_STRUCTURE_3),
-    ]
-
-class _OPEN_VIRTUAL_DISK_PARAMETERS(Structure):
-    _anonymous_ = ("anon_01",)
-    _fields_ = [
-        ("Version", OPEN_VIRTUAL_DISK_VERSION),
-        ("anon_01", _ANON__OPEN_VIRTUAL_DISK_PARAMETERS_SUB_UNION_1),
-    ]
-POPEN_VIRTUAL_DISK_PARAMETERS = POINTER(_OPEN_VIRTUAL_DISK_PARAMETERS)
-OPEN_VIRTUAL_DISK_PARAMETERS = _OPEN_VIRTUAL_DISK_PARAMETERS
-
-class _ANON__ANON__ATTACH_VIRTUAL_DISK_PARAMETERS_SUB_UNION_1_SUB_STRUCTURE_1(Structure):
-    _fields_ = [
-        ("Reserved", ULONG),
-    ]
-
-
-class _ANON__ANON__ATTACH_VIRTUAL_DISK_PARAMETERS_SUB_UNION_1_SUB_STRUCTURE_2(Structure):
-    _fields_ = [
-        ("RestrictedOffset", ULONGLONG),
-        ("RestrictedLength", ULONGLONG),
-    ]
-
-class _ANON__ATTACH_VIRTUAL_DISK_PARAMETERS_SUB_UNION_1(Union):
-    _anonymous_ = ("Version1","Version2")
-    _fields_ = [
-        ("Version1", _ANON__ANON__ATTACH_VIRTUAL_DISK_PARAMETERS_SUB_UNION_1_SUB_STRUCTURE_1),
-        ("Version2", _ANON__ANON__ATTACH_VIRTUAL_DISK_PARAMETERS_SUB_UNION_1_SUB_STRUCTURE_2),
-    ]
-
-class _ATTACH_VIRTUAL_DISK_PARAMETERS(Structure):
-    _anonymous_ = ("anon_01",)
-    _fields_ = [
-        ("Version", ATTACH_VIRTUAL_DISK_VERSION),
-        ("anon_01", _ANON__ATTACH_VIRTUAL_DISK_PARAMETERS_SUB_UNION_1),
-    ]
-ATTACH_VIRTUAL_DISK_PARAMETERS = _ATTACH_VIRTUAL_DISK_PARAMETERS
-PATTACH_VIRTUAL_DISK_PARAMETERS = POINTER(_ATTACH_VIRTUAL_DISK_PARAMETERS)
-
-class _TRACE_PROVIDER_INFO(Structure):
-    _fields_ = [
-        ("ProviderGuid", GUID),
-        ("SchemaSource", ULONG),
-        ("ProviderNameOffset", ULONG),
-    ]
-TRACE_PROVIDER_INFO = _TRACE_PROVIDER_INFO
-
-class _PROVIDER_ENUMERATION_INFO(Structure):
-    _fields_ = [
-        ("NumberOfProviders", ULONG),
-        ("Reserved", ULONG),
-        ("TraceProviderInfoArray", TRACE_PROVIDER_INFO * (ANYSIZE_ARRAY)),
-    ]
-PPROVIDER_ENUMERATION_INFO = POINTER(_PROVIDER_ENUMERATION_INFO)
-PROVIDER_ENUMERATION_INFO = _PROVIDER_ENUMERATION_INFO
-
-class tagRGBTRIPLE(Structure):
-    _fields_ = [
-        ("rgbtBlue", BYTE),
-        ("rgbtGreen", BYTE),
-        ("rgbtRed", BYTE),
-    ]
-NPRGBTRIPLE = POINTER(tagRGBTRIPLE)
-LPRGBTRIPLE = POINTER(tagRGBTRIPLE)
-RGBTRIPLE = tagRGBTRIPLE
-PRGBTRIPLE = POINTER(tagRGBTRIPLE)
-
-class tagBITMAPFILEHEADER(Structure):
-    _pack_ = 2
-    _fields_ = [
-        ("bfType", WORD),
-        ("bfSize", DWORD),
-        ("bfReserved1", WORD),
-        ("bfReserved2", WORD),
-        ("bfOffBits", DWORD),
-    ]
-BITMAPFILEHEADER = tagBITMAPFILEHEADER
-PBITMAPFILEHEADER = POINTER(tagBITMAPFILEHEADER)
-LPBITMAPFILEHEADER = POINTER(tagBITMAPFILEHEADER)
-
-class tagBITMAPCOREHEADER(Structure):
-    _fields_ = [
-        ("bcSize", DWORD),
-        ("bcWidth", WORD),
-        ("bcHeight", WORD),
-        ("bcPlanes", WORD),
-        ("bcBitCount", WORD),
-    ]
-LPBITMAPCOREHEADER = POINTER(tagBITMAPCOREHEADER)
-PBITMAPCOREHEADER = POINTER(tagBITMAPCOREHEADER)
-BITMAPCOREHEADER = tagBITMAPCOREHEADER
-
-class tagBITMAP(Structure):
-    _fields_ = [
-        ("bmType", LONG),
-        ("bmWidth", LONG),
-        ("bmHeight", LONG),
-        ("bmWidthBytes", LONG),
-        ("bmPlanes", WORD),
-        ("bmBitsPixel", WORD),
-        ("bmBits", LPVOID),
-    ]
-NPBITMAP = POINTER(tagBITMAP)
-LPBITMAP = POINTER(tagBITMAP)
-PBITMAP = POINTER(tagBITMAP)
-BITMAP = tagBITMAP
-
-class tagBITMAPINFOHEADER(Structure):
-    _fields_ = [
-        ("biSize", DWORD),
-        ("biWidth", LONG),
-        ("biHeight", LONG),
-        ("biPlanes", WORD),
-        ("biBitCount", WORD),
-        ("biCompression", DWORD),
-        ("biSizeImage", DWORD),
-        ("biXPelsPerMeter", LONG),
-        ("biYPelsPerMeter", LONG),
-        ("biClrUsed", DWORD),
-        ("biClrImportant", DWORD),
-    ]
-BITMAPINFOHEADER = tagBITMAPINFOHEADER
-PBITMAPINFOHEADER = POINTER(tagBITMAPINFOHEADER)
-LPBITMAPINFOHEADER = POINTER(tagBITMAPINFOHEADER)
-
-class tagRGBQUAD(Structure):
-    _fields_ = [
-        ("rgbBlue", BYTE),
-        ("rgbGreen", BYTE),
-        ("rgbRed", BYTE),
-        ("rgbReserved", BYTE),
-    ]
-RGBQUAD = tagRGBQUAD
-
-class tagBITMAPINFO(Structure):
-    _fields_ = [
-        ("bmiHeader", BITMAPINFOHEADER),
-        ("bmiColors", RGBQUAD * (1)),
-    ]
-LPBITMAPINFO = POINTER(tagBITMAPINFO)
-PBITMAPINFO = POINTER(tagBITMAPINFO)
-BITMAPINFO = tagBITMAPINFO
-
-class tagBITMAPCOREINFO(Structure):
-    _fields_ = [
-        ("bmciHeader", BITMAPCOREHEADER),
-        ("bmciColors", RGBTRIPLE * (1)),
-    ]
-LPBITMAPCOREINFO = POINTER(tagBITMAPCOREINFO)
-BITMAPCOREINFO = tagBITMAPCOREINFO
-PBITMAPCOREINFO = POINTER(tagBITMAPCOREINFO)
-
-class tagWNDCLASSEXA(Structure):
-    _fields_ = [
-        ("cbSize", UINT),
-        ("style", UINT),
-        ("lpfnWndProc", WNDPROC),
-        ("cbClsExtra", INT),
-        ("cbWndExtra", INT),
-        ("hInstance", HINSTANCE),
-        ("hIcon", HICON),
-        ("hCursor", HCURSOR),
-        ("hbrBackground", HBRUSH),
-        ("lpszMenuName", LPCSTR),
-        ("lpszClassName", LPCSTR),
-        ("hIconSm", HICON),
-    ]
-PWNDCLASSEXA = POINTER(tagWNDCLASSEXA)
-LPWNDCLASSEXA = POINTER(tagWNDCLASSEXA)
-WNDCLASSEXA = tagWNDCLASSEXA
-
-class tagWNDCLASSEXW(Structure):
-    _fields_ = [
-        ("cbSize", UINT),
-        ("style", UINT),
-        ("lpfnWndProc", WNDPROC),
-        ("cbClsExtra", INT),
-        ("cbWndExtra", INT),
-        ("hInstance", HINSTANCE),
-        ("hIcon", HICON),
-        ("hCursor", HCURSOR),
-        ("hbrBackground", HBRUSH),
-        ("lpszMenuName", LPWSTR),
-        ("lpszClassName", LPWSTR),
-        ("hIconSm", HICON),
-    ]
-WNDCLASSEXW = tagWNDCLASSEXW
-LPWNDCLASSEXW = POINTER(tagWNDCLASSEXW)
-PWNDCLASSEXW = POINTER(tagWNDCLASSEXW)
 
 SystemBasicInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemBasicInformation", 0x0)
 SystemProcessorInformation = EnumValue("_SYSTEM_INFORMATION_CLASS", "SystemProcessorInformation", 0x1)
@@ -2962,6 +3130,11 @@ class _LSA_UNICODE_STRING(INITIAL_LSA_UNICODE_STRING):
     def from_string(cls, s):
         utf16_len = len(s) * 2
         return cls(utf16_len, utf16_len, ctypes.cast(PWSTR(s), PVOID))
+
+    @classmethod
+    def from_size(cls, size):
+        buffer = ctypes.create_string_buffer(size)
+        return cls(size, size, ctypes.cast(buffer, PVOID))
 
     def __repr__(self):
         return """<{0} "{1}" at {2}>""".format(type(self).__name__, self.str, hex(id(self)))
@@ -5343,1221 +5516,6 @@ class _PRIVILEGE_SET(Structure):
 PRIVILEGE_SET = _PRIVILEGE_SET
 PPRIVILEGE_SET = POINTER(_PRIVILEGE_SET)
 
-TokenInvalid = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenInvalid", 0x0)
-TokenUser = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenUser", 0x1)
-TokenGroups = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenGroups", 0x2)
-TokenPrivileges = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenPrivileges", 0x3)
-TokenOwner = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenOwner", 0x4)
-TokenPrimaryGroup = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenPrimaryGroup", 0x5)
-TokenDefaultDacl = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenDefaultDacl", 0x6)
-TokenSource = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenSource", 0x7)
-TokenType = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenType", 0x8)
-TokenImpersonationLevel = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenImpersonationLevel", 0x9)
-TokenStatistics = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenStatistics", 0xa)
-TokenRestrictedSids = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenRestrictedSids", 0xb)
-TokenSessionId = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenSessionId", 0xc)
-TokenGroupsAndPrivileges = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenGroupsAndPrivileges", 0xd)
-TokenSessionReference = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenSessionReference", 0xe)
-TokenSandBoxInert = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenSandBoxInert", 0xf)
-TokenAuditPolicy = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenAuditPolicy", 0x10)
-TokenOrigin = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenOrigin", 0x11)
-TokenElevationType = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenElevationType", 0x12)
-TokenLinkedToken = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenLinkedToken", 0x13)
-TokenElevation = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenElevation", 0x14)
-TokenHasRestrictions = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenHasRestrictions", 0x15)
-TokenAccessInformation = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenAccessInformation", 0x16)
-TokenVirtualizationAllowed = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenVirtualizationAllowed", 0x17)
-TokenVirtualizationEnabled = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenVirtualizationEnabled", 0x18)
-TokenIntegrityLevel = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenIntegrityLevel", 0x19)
-TokenUIAccess = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenUIAccess", 0x1a)
-TokenMandatoryPolicy = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenMandatoryPolicy", 0x1b)
-TokenLogonSid = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenLogonSid", 0x1c)
-TokenIsAppContainer = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenIsAppContainer", 0x1d)
-TokenCapabilities = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenCapabilities", 0x1e)
-TokenAppContainerSid = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenAppContainerSid", 0x1f)
-TokenAppContainerNumber = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenAppContainerNumber", 0x20)
-TokenUserClaimAttributes = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenUserClaimAttributes", 0x21)
-TokenDeviceClaimAttributes = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenDeviceClaimAttributes", 0x22)
-TokenRestrictedUserClaimAttributes = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenRestrictedUserClaimAttributes", 0x23)
-TokenRestrictedDeviceClaimAttributes = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenRestrictedDeviceClaimAttributes", 0x24)
-TokenDeviceGroups = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenDeviceGroups", 0x25)
-TokenRestrictedDeviceGroups = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenRestrictedDeviceGroups", 0x26)
-TokenSecurityAttributes = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenSecurityAttributes", 0x27)
-TokenIsRestricted = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenIsRestricted", 0x28)
-TokenProcessTrustLevel = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenProcessTrustLevel", 0x29)
-TokenPrivateNameSpace = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenPrivateNameSpace", 0x2a)
-TokenSingletonAttributes = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenSingletonAttributes", 0x2b)
-TokenBnoIsolation = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenBnoIsolation", 0x2c)
-TokenChildProcessFlags = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenChildProcessFlags", 0x2d)
-MaxTokenInfoClass = EnumValue("_TOKEN_INFORMATION_CLASS", "MaxTokenInfoClass", 0x2e)
-class _TOKEN_INFORMATION_CLASS(EnumType):
-    values = [TokenInvalid, TokenUser, TokenGroups, TokenPrivileges, TokenOwner, TokenPrimaryGroup, TokenDefaultDacl, TokenSource, TokenType, TokenImpersonationLevel, TokenStatistics, TokenRestrictedSids, TokenSessionId, TokenGroupsAndPrivileges, TokenSessionReference, TokenSandBoxInert, TokenAuditPolicy, TokenOrigin, TokenElevationType, TokenLinkedToken, TokenElevation, TokenHasRestrictions, TokenAccessInformation, TokenVirtualizationAllowed, TokenVirtualizationEnabled, TokenIntegrityLevel, TokenUIAccess, TokenMandatoryPolicy, TokenLogonSid, TokenIsAppContainer, TokenCapabilities, TokenAppContainerSid, TokenAppContainerNumber, TokenUserClaimAttributes, TokenDeviceClaimAttributes, TokenRestrictedUserClaimAttributes, TokenRestrictedDeviceClaimAttributes, TokenDeviceGroups, TokenRestrictedDeviceGroups, TokenSecurityAttributes, TokenIsRestricted, TokenProcessTrustLevel, TokenPrivateNameSpace, TokenSingletonAttributes, TokenBnoIsolation, TokenChildProcessFlags, MaxTokenInfoClass]
-    mapper = FlagMapper(*values)
-TOKEN_INFORMATION_CLASS = _TOKEN_INFORMATION_CLASS
-PTOKEN_INFORMATION_CLASS = POINTER(_TOKEN_INFORMATION_CLASS)
-
-
-TokenElevationTypeDefault = EnumValue("_TOKEN_ELEVATION_TYPE", "TokenElevationTypeDefault", 0x1)
-TokenElevationTypeFull = EnumValue("_TOKEN_ELEVATION_TYPE", "TokenElevationTypeFull", 0x2)
-TokenElevationTypeLimited = EnumValue("_TOKEN_ELEVATION_TYPE", "TokenElevationTypeLimited", 0x3)
-class _TOKEN_ELEVATION_TYPE(EnumType):
-    values = [TokenElevationTypeDefault, TokenElevationTypeFull, TokenElevationTypeLimited]
-    mapper = FlagMapper(*values)
-TOKEN_ELEVATION_TYPE = _TOKEN_ELEVATION_TYPE
-PTOKEN_ELEVATION_TYPE = POINTER(_TOKEN_ELEVATION_TYPE)
-
-
-class _TOKEN_PRIVILEGES(Structure):
-    _fields_ = [
-        ("PrivilegeCount", DWORD),
-        ("Privileges", LUID_AND_ATTRIBUTES * (ANYSIZE_ARRAY)),
-    ]
-TOKEN_PRIVILEGES = _TOKEN_PRIVILEGES
-PTOKEN_PRIVILEGES = POINTER(_TOKEN_PRIVILEGES)
-
-class _TOKEN_ELEVATION(Structure):
-    _fields_ = [
-        ("TokenIsElevated", DWORD),
-    ]
-TOKEN_ELEVATION = _TOKEN_ELEVATION
-PTOKEN_ELEVATION = POINTER(_TOKEN_ELEVATION)
-
-class _SID_AND_ATTRIBUTES(Structure):
-    _fields_ = [
-        ("Sid", PSID),
-        ("Attributes", DWORD),
-    ]
-SID_AND_ATTRIBUTES = _SID_AND_ATTRIBUTES
-PSID_AND_ATTRIBUTES = POINTER(_SID_AND_ATTRIBUTES)
-
-_INITIAL_SID_AND_ATTRIBUTES = _SID_AND_ATTRIBUTES
-class _SID_AND_ATTRIBUTES(_INITIAL_SID_AND_ATTRIBUTES):
-    pass
-
-    # Only in TOKEN_GROUPS
-    # attributes = FlagExatractor(_INITIAL_SID_AND_ATTRIBUTES.Attributes,
-        # (SE_GROUP_MANDATORY,
-        # SE_GROUP_ENABLED_BY_DEFAULT,
-        # SE_GROUP_ENABLED,
-        # SE_GROUP_OWNER,
-        # SE_GROUP_USE_FOR_DENY_ONLY,
-        # SE_GROUP_INTEGRITY,
-        # SE_GROUP_INTEGRITY_ENABLED,
-        # SE_GROUP_LOGON_ID,
-        # SE_GROUP_RESOURCE))
-SID_AND_ATTRIBUTES = _SID_AND_ATTRIBUTES
-PSID_AND_ATTRIBUTES = POINTER(_SID_AND_ATTRIBUTES)
-class _TOKEN_MANDATORY_LABEL(Structure):
-    _fields_ = [
-        ("Label", SID_AND_ATTRIBUTES),
-    ]
-TOKEN_MANDATORY_LABEL = _TOKEN_MANDATORY_LABEL
-PTOKEN_MANDATORY_LABEL = POINTER(_TOKEN_MANDATORY_LABEL)
-
-class _TOKEN_USER(Structure):
-    _fields_ = [
-        ("User", SID_AND_ATTRIBUTES),
-    ]
-PTOKEN_USER = POINTER(_TOKEN_USER)
-TOKEN_USER = _TOKEN_USER
-
-class _TOKEN_DEFAULT_DACL(Structure):
-    _fields_ = [
-        ("DefaultDacl", PACL),
-    ]
-TOKEN_DEFAULT_DACL = _TOKEN_DEFAULT_DACL
-PTOKEN_DEFAULT_DACL = POINTER(_TOKEN_DEFAULT_DACL)
-
-class _TOKEN_GROUPS(Structure):
-    _fields_ = [
-        ("GroupCount", DWORD),
-        ("Groups", SID_AND_ATTRIBUTES * (ANYSIZE_ARRAY)),
-    ]
-TOKEN_GROUPS = _TOKEN_GROUPS
-PTOKEN_GROUPS = POINTER(_TOKEN_GROUPS)
-
-class _TOKEN_OWNER(Structure):
-    _fields_ = [
-        ("Owner", PSID),
-    ]
-TOKEN_OWNER = _TOKEN_OWNER
-PTOKEN_OWNER = POINTER(_TOKEN_OWNER)
-
-class _TOKEN_PRIMARY_GROUP(Structure):
-    _fields_ = [
-        ("PrimaryGroup", PSID),
-    ]
-PTOKEN_PRIMARY_GROUP = POINTER(_TOKEN_PRIMARY_GROUP)
-TOKEN_PRIMARY_GROUP = _TOKEN_PRIMARY_GROUP
-
-class _TOKEN_SOURCE(Structure):
-    _fields_ = [
-        ("SourceName", CHAR * (TOKEN_SOURCE_LENGTH)),
-        ("SourceIdentifier", LUID),
-    ]
-PTOKEN_SOURCE = POINTER(_TOKEN_SOURCE)
-TOKEN_SOURCE = _TOKEN_SOURCE
-
-class _TOKEN_STATISTICS(Structure):
-    _fields_ = [
-        ("TokenId", LUID),
-        ("AuthenticationId", LUID),
-        ("ExpirationTime", LARGE_INTEGER),
-        ("TokenType", TOKEN_TYPE),
-        ("ImpersonationLevel", SECURITY_IMPERSONATION_LEVEL),
-        ("DynamicCharged", DWORD),
-        ("DynamicAvailable", DWORD),
-        ("GroupCount", DWORD),
-        ("PrivilegeCount", DWORD),
-        ("ModifiedId", LUID),
-    ]
-PTOKEN_STATISTICS = POINTER(_TOKEN_STATISTICS)
-TOKEN_STATISTICS = _TOKEN_STATISTICS
-
-class _TOKEN_ORIGIN(Structure):
-    _fields_ = [
-        ("OriginatingLogonSession", LUID),
-    ]
-TOKEN_ORIGIN = _TOKEN_ORIGIN
-PTOKEN_ORIGIN = POINTER(_TOKEN_ORIGIN)
-
-class _TOKEN_LINKED_TOKEN(Structure):
-    _fields_ = [
-        ("LinkedToken", HANDLE),
-    ]
-PTOKEN_LINKED_TOKEN = POINTER(_TOKEN_LINKED_TOKEN)
-TOKEN_LINKED_TOKEN = _TOKEN_LINKED_TOKEN
-
-class _TOKEN_MANDATORY_POLICY(Structure):
-    _fields_ = [
-        ("Policy", DWORD),
-    ]
-TOKEN_MANDATORY_POLICY = _TOKEN_MANDATORY_POLICY
-PTOKEN_MANDATORY_POLICY = POINTER(_TOKEN_MANDATORY_POLICY)
-
-class _SID_AND_ATTRIBUTES_HASH(Structure):
-    _fields_ = [
-        ("SidCount", DWORD),
-        ("SidAttr", PSID_AND_ATTRIBUTES),
-        ("Hash", SID_HASH_ENTRY * (SID_HASH_SIZE)),
-    ]
-SID_AND_ATTRIBUTES_HASH = _SID_AND_ATTRIBUTES_HASH
-PSID_AND_ATTRIBUTES_HASH = POINTER(_SID_AND_ATTRIBUTES_HASH)
-
-class _TOKEN_APPCONTAINER_INFORMATION(Structure):
-    _fields_ = [
-        ("TokenAppContainer", PSID),
-    ]
-PTOKEN_APPCONTAINER_INFORMATION = POINTER(_TOKEN_APPCONTAINER_INFORMATION)
-TOKEN_APPCONTAINER_INFORMATION = _TOKEN_APPCONTAINER_INFORMATION
-
-class _TOKEN_ACCESS_INFORMATION(Structure):
-    _fields_ = [
-        ("SidHash", PSID_AND_ATTRIBUTES_HASH),
-        ("RestrictedSidHash", PSID_AND_ATTRIBUTES_HASH),
-        ("Privileges", PTOKEN_PRIVILEGES),
-        ("AuthenticationId", LUID),
-        ("TokenType", TOKEN_TYPE),
-        ("ImpersonationLevel", SECURITY_IMPERSONATION_LEVEL),
-        ("MandatoryPolicy", TOKEN_MANDATORY_POLICY),
-        ("Flags", DWORD),
-        ("AppContainerNumber", DWORD),
-        ("PackageSid", PSID),
-        ("CapabilitiesHash", PSID_AND_ATTRIBUTES_HASH),
-        ("TrustLevelSid", PSID),
-        ("SecurityAttributes", PSECURITY_ATTRIBUTES_OPAQUE),
-    ]
-PTOKEN_ACCESS_INFORMATION = POINTER(_TOKEN_ACCESS_INFORMATION)
-TOKEN_ACCESS_INFORMATION = _TOKEN_ACCESS_INFORMATION
-
-class _TOKEN_GROUPS_AND_PRIVILEGES(Structure):
-    _fields_ = [
-        ("SidCount", DWORD),
-        ("SidLength", DWORD),
-        ("Sids", PSID_AND_ATTRIBUTES),
-        ("RestrictedSidCount", DWORD),
-        ("RestrictedSidLength", DWORD),
-        ("RestrictedSids", PSID_AND_ATTRIBUTES),
-        ("PrivilegeCount", DWORD),
-        ("PrivilegeLength", DWORD),
-        ("Privileges", PLUID_AND_ATTRIBUTES),
-        ("AuthenticationId", LUID),
-    ]
-TOKEN_GROUPS_AND_PRIVILEGES = _TOKEN_GROUPS_AND_PRIVILEGES
-PTOKEN_GROUPS_AND_PRIVILEGES = POINTER(_TOKEN_GROUPS_AND_PRIVILEGES)
-
-class _TOKEN_SECURITY_ATTRIBUTE_FQBN_VALUE(Structure):
-    _fields_ = [
-        ("Version", ULONG64),
-        ("Name", UNICODE_STRING),
-    ]
-PTOKEN_SECURITY_ATTRIBUTE_FQBN_VALUE = POINTER(_TOKEN_SECURITY_ATTRIBUTE_FQBN_VALUE)
-TOKEN_SECURITY_ATTRIBUTE_FQBN_VALUE = _TOKEN_SECURITY_ATTRIBUTE_FQBN_VALUE
-
-class _TOKEN_SECURITY_ATTRIBUTE_OCTET_STRING_VALUE(Structure):
-    _fields_ = [
-        ("pValue", PVOID),
-        ("ValueLength", ULONG),
-    ]
-PTOKEN_SECURITY_ATTRIBUTE_OCTET_STRING_VALUE = POINTER(_TOKEN_SECURITY_ATTRIBUTE_OCTET_STRING_VALUE)
-TOKEN_SECURITY_ATTRIBUTE_OCTET_STRING_VALUE = _TOKEN_SECURITY_ATTRIBUTE_OCTET_STRING_VALUE
-
-class _TOKEN_SECURITY_ATTRIBUTE_V1_UNION(Union):
-    _fields_ = [
-        ("pInt64", PLONG64),
-        ("pUint64", PULONG64),
-        ("pString", PUNICODE_STRING),
-        ("pFqbn", PTOKEN_SECURITY_ATTRIBUTE_FQBN_VALUE),
-        ("pOctetString", PTOKEN_SECURITY_ATTRIBUTE_OCTET_STRING_VALUE),
-    ]
-TOKEN_SECURITY_ATTRIBUTE_V1_UNION = _TOKEN_SECURITY_ATTRIBUTE_V1_UNION
-
-class _TOKEN_SECURITY_ATTRIBUTE_V1(Structure):
-    _fields_ = [
-        ("Name", UNICODE_STRING),
-        ("ValueType", USHORT),
-        ("Reserved", USHORT),
-        ("Flags", ULONG),
-        ("ValueCount", ULONG),
-        ("Values", TOKEN_SECURITY_ATTRIBUTE_V1_UNION),
-    ]
-TOKEN_SECURITY_ATTRIBUTE_V1 = _TOKEN_SECURITY_ATTRIBUTE_V1
-PTOKEN_SECURITY_ATTRIBUTE_V1 = POINTER(_TOKEN_SECURITY_ATTRIBUTE_V1)
-
-class _TOKEN_SECURITY_ATTRIBUTES_INFORMATION_UNION(Union):
-    _fields_ = [
-        ("pAttributeV1", PTOKEN_SECURITY_ATTRIBUTE_V1),
-    ]
-TOKEN_SECURITY_ATTRIBUTES_INFORMATION_UNION = _TOKEN_SECURITY_ATTRIBUTES_INFORMATION_UNION
-
-class _TOKEN_SECURITY_ATTRIBUTES_INFORMATION(Structure):
-    _fields_ = [
-        ("Version", USHORT),
-        ("Reserved", USHORT),
-        ("AttributeCount", ULONG),
-        ("Attribute", TOKEN_SECURITY_ATTRIBUTES_INFORMATION_UNION),
-    ]
-PTOKEN_SECURITY_ATTRIBUTES_INFORMATION = POINTER(_TOKEN_SECURITY_ATTRIBUTES_INFORMATION)
-TOKEN_SECURITY_ATTRIBUTES_INFORMATION = _TOKEN_SECURITY_ATTRIBUTES_INFORMATION
-
-VAR_PERINSTANCE = EnumValue("tagVARKIND", "VAR_PERINSTANCE", 0x0)
-VAR_STATIC = EnumValue("tagVARKIND", "VAR_STATIC", 0x1)
-VAR_CONST = EnumValue("tagVARKIND", "VAR_CONST", 0x2)
-VAR_DISPATCH = EnumValue("tagVARKIND", "VAR_DISPATCH", 0x3)
-class tagVARKIND(EnumType):
-    values = [VAR_PERINSTANCE, VAR_STATIC, VAR_CONST, VAR_DISPATCH]
-    mapper = FlagMapper(*values)
-VARKIND = tagVARKIND
-
-
-INVOKE_FUNC = EnumValue("tagINVOKEKIND", "INVOKE_FUNC", 0x0)
-INVOKE_PROPERTYGET = EnumValue("tagINVOKEKIND", "INVOKE_PROPERTYGET", 0x1)
-INVOKE_PROPERTYPUT = EnumValue("tagINVOKEKIND", "INVOKE_PROPERTYPUT", 0x2)
-INVOKE_PROPERTYPUTREF = EnumValue("tagINVOKEKIND", "INVOKE_PROPERTYPUTREF", 0x3)
-class tagINVOKEKIND(EnumType):
-    values = [INVOKE_FUNC, INVOKE_PROPERTYGET, INVOKE_PROPERTYPUT, INVOKE_PROPERTYPUTREF]
-    mapper = FlagMapper(*values)
-INVOKEKIND = tagINVOKEKIND
-
-
-FUNC_VIRTUAL = EnumValue("tagFUNCKIND", "FUNC_VIRTUAL", 0x0)
-FUNC_PUREVIRTUAL = EnumValue("tagFUNCKIND", "FUNC_PUREVIRTUAL", 0x1)
-FUNC_NONVIRTUAL = EnumValue("tagFUNCKIND", "FUNC_NONVIRTUAL", 0x2)
-FUNC_STATIC = EnumValue("tagFUNCKIND", "FUNC_STATIC", 0x3)
-FUNC_DISPATCH = EnumValue("tagFUNCKIND", "FUNC_DISPATCH", 0x4)
-class tagFUNCKIND(EnumType):
-    values = [FUNC_VIRTUAL, FUNC_PUREVIRTUAL, FUNC_NONVIRTUAL, FUNC_STATIC, FUNC_DISPATCH]
-    mapper = FlagMapper(*values)
-FUNCKIND = tagFUNCKIND
-
-
-SYS_WIN16 = EnumValue("tagSYSKIND", "SYS_WIN16", 0x0)
-SYS_WIN32 = EnumValue("tagSYSKIND", "SYS_WIN32", 0x1)
-SYS_MAC = EnumValue("tagSYSKIND", "SYS_MAC", 0x2)
-SYS_WIN64 = EnumValue("tagSYSKIND", "SYS_WIN64", 0x3)
-class tagSYSKIND(EnumType):
-    values = [SYS_WIN16, SYS_WIN32, SYS_MAC, SYS_WIN64]
-    mapper = FlagMapper(*values)
-SYSKIND = tagSYSKIND
-
-
-CC_FASTCALL = EnumValue("tagCALLCONV", "CC_FASTCALL", 0x0)
-CC_CDECL = EnumValue("tagCALLCONV", "CC_CDECL", 0x1)
-CC_MSCPASCAL = EnumValue("tagCALLCONV", "CC_MSCPASCAL", 0x2)
-CC_PASCAL = EnumValue("tagCALLCONV", "CC_PASCAL", 0x3)
-CC_MACPASCAL = EnumValue("tagCALLCONV", "CC_MACPASCAL", 0x4)
-CC_STDCALL = EnumValue("tagCALLCONV", "CC_STDCALL", 0x5)
-CC_FPFASTCALL = EnumValue("tagCALLCONV", "CC_FPFASTCALL", 0x6)
-CC_SYSCALL = EnumValue("tagCALLCONV", "CC_SYSCALL", 0x7)
-CC_MPWCDECL = EnumValue("tagCALLCONV", "CC_MPWCDECL", 0x8)
-CC_MPWPASCAL = EnumValue("tagCALLCONV", "CC_MPWPASCAL", 0x9)
-CC_MAX = EnumValue("tagCALLCONV", "CC_MAX", 0xa)
-class tagCALLCONV(EnumType):
-    values = [CC_FASTCALL, CC_CDECL, CC_MSCPASCAL, CC_PASCAL, CC_MACPASCAL, CC_STDCALL, CC_FPFASTCALL, CC_SYSCALL, CC_MPWCDECL, CC_MPWPASCAL, CC_MAX]
-    mapper = FlagMapper(*values)
-CALLCONV = tagCALLCONV
-
-
-DESCKIND_NONE = EnumValue("tagDESCKIND", "DESCKIND_NONE", 0x0)
-DESCKIND_FUNCDESC = EnumValue("tagDESCKIND", "DESCKIND_FUNCDESC", 0x1)
-DESCKIND_VARDESC = EnumValue("tagDESCKIND", "DESCKIND_VARDESC", 0x2)
-DESCKIND_TYPECOMP = EnumValue("tagDESCKIND", "DESCKIND_TYPECOMP", 0x3)
-DESCKIND_IMPLICITAPPOBJ = EnumValue("tagDESCKIND", "DESCKIND_IMPLICITAPPOBJ", 0x4)
-DESCKIND_MAX = EnumValue("tagDESCKIND", "DESCKIND_MAX", 0x5)
-class tagDESCKIND(EnumType):
-    values = [DESCKIND_NONE, DESCKIND_FUNCDESC, DESCKIND_VARDESC, DESCKIND_TYPECOMP, DESCKIND_IMPLICITAPPOBJ, DESCKIND_MAX]
-    mapper = FlagMapper(*values)
-DESCKIND = tagDESCKIND
-
-
-class tagPARAMDESCEX(Structure):
-    _fields_ = [
-        ("cBytes", ULONG),
-        ("varDefaultValue", VARIANTARG),
-    ]
-PARAMDESCEX = tagPARAMDESCEX
-LPPARAMDESCEX = POINTER(tagPARAMDESCEX)
-
-class tagPARAMDESC(Structure):
-    _fields_ = [
-        ("pparamdescex", LPPARAMDESCEX),
-        ("wParamFlags", USHORT),
-    ]
-LPPARAMDESC = POINTER(tagPARAMDESC)
-PARAMDESC = tagPARAMDESC
-
-class _TMP_TYPEDESC_UNION(Union):
-    _fields_ = [
-        ("lptdesc", PVOID),
-        ("lpadesc", PVOID),
-        ("hreftype", HREFTYPE),
-    ]
-TMP_TYPEDESC_UNION = _TMP_TYPEDESC_UNION
-
-class tagTYPEDESC(Structure):
-    _fields_ = [
-        ("DUMMYUNIONNAME", TMP_TYPEDESC_UNION),
-        ("vt", VARTYPE),
-    ]
-TYPEDESC = tagTYPEDESC
-
-class tagARRAYDESC(Structure):
-    _fields_ = [
-        ("tdescElem", TYPEDESC),
-        ("cDims", USHORT),
-        ("rgbounds", SAFEARRAYBOUND * (1)),
-    ]
-ARRAYDESC = tagARRAYDESC
-
-class tagELEMDESC(Structure):
-    _fields_ = [
-        ("tdesc", TYPEDESC),
-        ("paramdesc", PARAMDESC),
-    ]
-ELEMDESC = tagELEMDESC
-LPELEMDESC = POINTER(tagELEMDESC)
-
-class tagFUNCDESC(Structure):
-    _fields_ = [
-        ("memid", MEMBERID),
-        ("lprgscode", POINTER(SCODE)),
-        ("lprgelemdescParam", POINTER(ELEMDESC)),
-        ("funckind", FUNCKIND),
-        ("invkind", INVOKEKIND),
-        ("callconv", CALLCONV),
-        ("cParams", SHORT),
-        ("cParamsOpt", SHORT),
-        ("oVft", SHORT),
-        ("cScodes", SHORT),
-        ("elemdescFunc", ELEMDESC),
-        ("wFuncFlags", WORD),
-    ]
-LPFUNCDESC = POINTER(tagFUNCDESC)
-FUNCDESC = tagFUNCDESC
-
-class _TMP_VARDESC_UNION(Union):
-    _fields_ = [
-        ("oInst", ULONG),
-        ("lpvarValue", POINTER(VARIANT)),
-    ]
-TMP_VARDESC_UNION = _TMP_VARDESC_UNION
-
-class tagVARDESC(Structure):
-    _fields_ = [
-        ("memid", MEMBERID),
-        ("lpstrSchema", LPOLESTR),
-        ("DUMMYUNIONNAME", TMP_VARDESC_UNION),
-        ("elemdescVar", ELEMDESC),
-        ("wVarFlags", WORD),
-        ("varkind", VARKIND),
-    ]
-LPVARDESC = POINTER(tagVARDESC)
-VARDESC = tagVARDESC
-
-class tagBINDPTR(Union):
-    _fields_ = [
-        ("lpfuncdesc", POINTER(FUNCDESC)),
-        ("lpvardesc", POINTER(VARDESC)),
-        ("lptcomp", PVOID),
-    ]
-LPBINDPTR = POINTER(tagBINDPTR)
-BINDPTR = tagBINDPTR
-
-class tagIDLDESC(Structure):
-    _fields_ = [
-        ("dwReserved", ULONG_PTR),
-        ("wIDLFlags", USHORT),
-    ]
-IDLDESC = tagIDLDESC
-LPIDLDESC = POINTER(tagIDLDESC)
-
-class tagTLIBATTR(Structure):
-    _fields_ = [
-        ("guid", GUID),
-        ("lcid", LCID),
-        ("syskind", SYSKIND),
-        ("wMajorVerNum", WORD),
-        ("wMinorVerNum", WORD),
-        ("wLibFlags", WORD),
-    ]
-LPTLIBATTR = POINTER(tagTLIBATTR)
-TLIBATTR = tagTLIBATTR
-
-class tagTYPEATTR(Structure):
-    _fields_ = [
-        ("guid", GUID),
-        ("lcid", LCID),
-        ("dwReserved", DWORD),
-        ("memidConstructor", MEMBERID),
-        ("memidDestructor", MEMBERID),
-        ("lpstrSchema", LPOLESTR),
-        ("cbSizeInstance", ULONG),
-        ("typekind", TYPEKIND),
-        ("cFuncs", WORD),
-        ("cVars", WORD),
-        ("cImplTypes", WORD),
-        ("cbSizeVft", WORD),
-        ("cbAlignment", WORD),
-        ("wTypeFlags", WORD),
-        ("wMajorVerNum", WORD),
-        ("wMinorVerNum", WORD),
-        ("tdescAlias", TYPEDESC),
-        ("idldescType", IDLDESC),
-    ]
-TYPEATTR = tagTYPEATTR
-LPTYPEATTR = POINTER(tagTYPEATTR)
-
-ECS_ENABLED = EnumValue("_EXPCMDSTATE", "ECS_ENABLED", 0x0)
-ECS_DISABLED = EnumValue("_EXPCMDSTATE", "ECS_DISABLED", 0x1)
-ECS_HIDDEN = EnumValue("_EXPCMDSTATE", "ECS_HIDDEN", 0x2)
-ECS_CHECKBOX = EnumValue("_EXPCMDSTATE", "ECS_CHECKBOX", 0x3)
-ECS_CHECKED = EnumValue("_EXPCMDSTATE", "ECS_CHECKED", 0x4)
-ECS_RADIOCHECK = EnumValue("_EXPCMDSTATE", "ECS_RADIOCHECK", 0x5)
-class _EXPCMDSTATE(EnumType):
-    values = [ECS_ENABLED, ECS_DISABLED, ECS_HIDDEN, ECS_CHECKBOX, ECS_CHECKED, ECS_RADIOCHECK]
-    mapper = FlagMapper(*values)
-EXPCMDSTATE = _EXPCMDSTATE
-
-
-ECF_DEFAULT = EnumValue("_EXPCMDFLAGS", "ECF_DEFAULT", 0x0)
-ECF_HASSUBCOMMANDS = EnumValue("_EXPCMDFLAGS", "ECF_HASSUBCOMMANDS", 0x1)
-ECF_HASSPLITBUTTON = EnumValue("_EXPCMDFLAGS", "ECF_HASSPLITBUTTON", 0x2)
-ECF_HIDELABEL = EnumValue("_EXPCMDFLAGS", "ECF_HIDELABEL", 0x4)
-ECF_ISSEPARATOR = EnumValue("_EXPCMDFLAGS", "ECF_ISSEPARATOR", 0x8)
-ECF_HASLUASHIELD = EnumValue("_EXPCMDFLAGS", "ECF_HASLUASHIELD", 0x10)
-ECF_SEPARATORBEFORE = EnumValue("_EXPCMDFLAGS", "ECF_SEPARATORBEFORE", 0x20)
-ECF_SEPARATORAFTER = EnumValue("_EXPCMDFLAGS", "ECF_SEPARATORAFTER", 0x40)
-ECF_ISDROPDOWN = EnumValue("_EXPCMDFLAGS", "ECF_ISDROPDOWN", 0x80)
-ECF_TOGGLEABLE = EnumValue("_EXPCMDFLAGS", "ECF_TOGGLEABLE", 0x100)
-ECF_AUTOMENUICONS = EnumValue("_EXPCMDFLAGS", "ECF_AUTOMENUICONS", 0x200)
-class _EXPCMDFLAGS(EnumType):
-    values = [ECF_DEFAULT, ECF_HASSUBCOMMANDS, ECF_HASSPLITBUTTON, ECF_HIDELABEL, ECF_ISSEPARATOR, ECF_HASLUASHIELD, ECF_SEPARATORBEFORE, ECF_SEPARATORAFTER, ECF_ISDROPDOWN, ECF_TOGGLEABLE, ECF_AUTOMENUICONS]
-    mapper = FlagMapper(*values)
-EXPCMDFLAGS = _EXPCMDFLAGS
-
-
-SIGDN_NORMALDISPLAY = EnumValue("_SIGDN", "SIGDN_NORMALDISPLAY", 0x0)
-SIGDN_PARENTRELATIVEPARSING = EnumValue("_SIGDN", "SIGDN_PARENTRELATIVEPARSING", 0x80018001)
-SIGDN_DESKTOPABSOLUTEPARSING = EnumValue("_SIGDN", "SIGDN_DESKTOPABSOLUTEPARSING", 0x80028000)
-SIGDN_PARENTRELATIVEEDITING = EnumValue("_SIGDN", "SIGDN_PARENTRELATIVEEDITING", 0x80031001)
-SIGDN_DESKTOPABSOLUTEEDITING = EnumValue("_SIGDN", "SIGDN_DESKTOPABSOLUTEEDITING", 0x8004c000)
-SIGDN_FILESYSPATH = EnumValue("_SIGDN", "SIGDN_FILESYSPATH", 0x80058000)
-SIGDN_URL = EnumValue("_SIGDN", "SIGDN_URL", 0x80068000)
-SIGDN_PARENTRELATIVEFORADDRESSBAR = EnumValue("_SIGDN", "SIGDN_PARENTRELATIVEFORADDRESSBAR", 0x8007c001)
-SIGDN_PARENTRELATIVE = EnumValue("_SIGDN", "SIGDN_PARENTRELATIVE", 0x80080001)
-SIGDN_PARENTRELATIVEFORUI = EnumValue("_SIGDN", "SIGDN_PARENTRELATIVEFORUI", 0x80094001)
-class _SIGDN(EnumType):
-    values = [SIGDN_NORMALDISPLAY, SIGDN_PARENTRELATIVEPARSING, SIGDN_DESKTOPABSOLUTEPARSING, SIGDN_PARENTRELATIVEEDITING, SIGDN_DESKTOPABSOLUTEEDITING, SIGDN_FILESYSPATH, SIGDN_URL, SIGDN_PARENTRELATIVEFORADDRESSBAR, SIGDN_PARENTRELATIVE, SIGDN_PARENTRELATIVEFORUI]
-    mapper = FlagMapper(*values)
-SIGDN = _SIGDN
-
-
-SICHINT_DISPLAY = EnumValue("SICHINTF", "SICHINT_DISPLAY", 0x0)
-SICHINT_ALLFIELDS = EnumValue("SICHINTF", "SICHINT_ALLFIELDS", 0x80000000)
-SICHINT_CANONICAL = EnumValue("SICHINTF", "SICHINT_CANONICAL", 0x10000000)
-SICHINT_TEST_FILESYSPATH_IF_NOT_EQUAL = EnumValue("SICHINTF", "SICHINT_TEST_FILESYSPATH_IF_NOT_EQUAL", 0x20000000)
-class SICHINTF(EnumType):
-    values = [SICHINT_DISPLAY, SICHINT_ALLFIELDS, SICHINT_CANONICAL, SICHINT_TEST_FILESYSPATH_IF_NOT_EQUAL]
-    mapper = FlagMapper(*values)
-
-
-GPS_DEFAULT = EnumValue("GETPROPERTYSTOREFLAGS", "GPS_DEFAULT", 0x0)
-GPS_HANDLERPROPERTIESONLY = EnumValue("GETPROPERTYSTOREFLAGS", "GPS_HANDLERPROPERTIESONLY", 0x1)
-GPS_READWRITE = EnumValue("GETPROPERTYSTOREFLAGS", "GPS_READWRITE", 0x2)
-GPS_TEMPORARY = EnumValue("GETPROPERTYSTOREFLAGS", "GPS_TEMPORARY", 0x4)
-GPS_FASTPROPERTIESONLY = EnumValue("GETPROPERTYSTOREFLAGS", "GPS_FASTPROPERTIESONLY", 0x8)
-GPS_OPENSLOWITEM = EnumValue("GETPROPERTYSTOREFLAGS", "GPS_OPENSLOWITEM", 0x10)
-GPS_DELAYCREATION = EnumValue("GETPROPERTYSTOREFLAGS", "GPS_DELAYCREATION", 0x20)
-GPS_BESTEFFORT = EnumValue("GETPROPERTYSTOREFLAGS", "GPS_BESTEFFORT", 0x40)
-GPS_NO_OPLOCK = EnumValue("GETPROPERTYSTOREFLAGS", "GPS_NO_OPLOCK", 0x80)
-GPS_PREFERQUERYPROPERTIES = EnumValue("GETPROPERTYSTOREFLAGS", "GPS_PREFERQUERYPROPERTIES", 0x100)
-GPS_EXTRINSICPROPERTIES = EnumValue("GETPROPERTYSTOREFLAGS", "GPS_EXTRINSICPROPERTIES", 0x200)
-GPS_EXTRINSICPROPERTIESONLY = EnumValue("GETPROPERTYSTOREFLAGS", "GPS_EXTRINSICPROPERTIESONLY", 0x400)
-GPS_MASK_VALID = EnumValue("GETPROPERTYSTOREFLAGS", "GPS_MASK_VALID", 0x7ff)
-class GETPROPERTYSTOREFLAGS(EnumType):
-    values = [GPS_DEFAULT, GPS_HANDLERPROPERTIESONLY, GPS_READWRITE, GPS_TEMPORARY, GPS_FASTPROPERTIESONLY, GPS_OPENSLOWITEM, GPS_DELAYCREATION, GPS_BESTEFFORT, GPS_NO_OPLOCK, GPS_PREFERQUERYPROPERTIES, GPS_EXTRINSICPROPERTIES, GPS_EXTRINSICPROPERTIESONLY, GPS_MASK_VALID]
-    mapper = FlagMapper(*values)
-
-
-SIATTRIBFLAGS_AND = EnumValue("SIATTRIBFLAGS", "SIATTRIBFLAGS_AND", 0x1)
-SIATTRIBFLAGS_OR = EnumValue("SIATTRIBFLAGS", "SIATTRIBFLAGS_OR", 0x2)
-SIATTRIBFLAGS_APPCOMPAT = EnumValue("SIATTRIBFLAGS", "SIATTRIBFLAGS_APPCOMPAT", 0x3)
-SIATTRIBFLAGS_MASK = EnumValue("SIATTRIBFLAGS", "SIATTRIBFLAGS_MASK", 0x3)
-SIATTRIBFLAGS_ALLITEMS = EnumValue("SIATTRIBFLAGS", "SIATTRIBFLAGS_ALLITEMS", 0x4000)
-class SIATTRIBFLAGS(EnumType):
-    values = [SIATTRIBFLAGS_AND, SIATTRIBFLAGS_OR, SIATTRIBFLAGS_APPCOMPAT, SIATTRIBFLAGS_MASK, SIATTRIBFLAGS_ALLITEMS]
-    mapper = FlagMapper(*values)
-
-
-class tagBIND_OPTS(Structure):
-    _fields_ = [
-        ("cbStruct", DWORD),
-        ("grfFlags", DWORD),
-        ("grfMode", DWORD),
-        ("dwTickCountDeadline", DWORD),
-    ]
-BIND_OPTS = tagBIND_OPTS
-LPBIND_OPTS = POINTER(tagBIND_OPTS)
-
-class _tagpropertykey(Structure):
-    _fields_ = [
-        ("fmtid", GUID),
-        ("pid", DWORD),
-    ]
-PROPERTYKEY = _tagpropertykey
-REFPROPERTYKEY = POINTER(_tagpropertykey)
-
-class tagSTATSTG(Structure):
-    _fields_ = [
-        ("pwcsName", LPOLESTR),
-        ("type", DWORD),
-        ("cbSize", ULARGE_INTEGER),
-        ("mtime", FILETIME),
-        ("ctime", FILETIME),
-        ("atime", FILETIME),
-        ("grfMode", DWORD),
-        ("grfLocksSupported", DWORD),
-        ("clsid", CLSID),
-        ("grfStateBits", DWORD),
-        ("reserved", DWORD),
-    ]
-STATSTG = tagSTATSTG
-
-BG_JOB_STATE_QUEUED = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_QUEUED", 0x0)
-BG_JOB_STATE_CONNECTING = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_CONNECTING", 0x1)
-BG_JOB_STATE_TRANSFERRING = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_TRANSFERRING", 0x2)
-BG_JOB_STATE_SUSPENDED = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_SUSPENDED", 0x3)
-BG_JOB_STATE_ERROR = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_ERROR", 0x4)
-BG_JOB_STATE_TRANSIENT_ERROR = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_TRANSIENT_ERROR", 0x5)
-BG_JOB_STATE_TRANSFERRED = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_TRANSFERRED", 0x6)
-BG_JOB_STATE_ACKNOWLEDGED = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_ACKNOWLEDGED", 0x7)
-BG_JOB_STATE_CANCELLED = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_CANCELLED", 0x8)
-class _BG_JOB_STATE(EnumType):
-    values = [BG_JOB_STATE_QUEUED, BG_JOB_STATE_CONNECTING, BG_JOB_STATE_TRANSFERRING, BG_JOB_STATE_SUSPENDED, BG_JOB_STATE_ERROR, BG_JOB_STATE_TRANSIENT_ERROR, BG_JOB_STATE_TRANSFERRED, BG_JOB_STATE_ACKNOWLEDGED, BG_JOB_STATE_CANCELLED]
-    mapper = FlagMapper(*values)
-BG_JOB_STATE = _BG_JOB_STATE
-
-
-BG_JOB_PROXY_USAGE_PRECONFIG = EnumValue("_BG_JOB_PROXY_USAGE", "BG_JOB_PROXY_USAGE_PRECONFIG", 0x0)
-BG_JOB_PROXY_USAGE_NO_PROXY = EnumValue("_BG_JOB_PROXY_USAGE", "BG_JOB_PROXY_USAGE_NO_PROXY", 0x1)
-BG_JOB_PROXY_USAGE_OVERRIDE = EnumValue("_BG_JOB_PROXY_USAGE", "BG_JOB_PROXY_USAGE_OVERRIDE", 0x2)
-BG_JOB_PROXY_USAGE_AUTODETECT = EnumValue("_BG_JOB_PROXY_USAGE", "BG_JOB_PROXY_USAGE_AUTODETECT", 0x3)
-class _BG_JOB_PROXY_USAGE(EnumType):
-    values = [BG_JOB_PROXY_USAGE_PRECONFIG, BG_JOB_PROXY_USAGE_NO_PROXY, BG_JOB_PROXY_USAGE_OVERRIDE, BG_JOB_PROXY_USAGE_AUTODETECT]
-    mapper = FlagMapper(*values)
-BG_JOB_PROXY_USAGE = _BG_JOB_PROXY_USAGE
-
-
-BG_JOB_PRIORITY_FOREGROUND = EnumValue("_BG_JOB_PRIORITY", "BG_JOB_PRIORITY_FOREGROUND", 0x0)
-BG_JOB_PRIORITY_HIGH = EnumValue("_BG_JOB_PRIORITY", "BG_JOB_PRIORITY_HIGH", 0x1)
-BG_JOB_PRIORITY_NORMAL = EnumValue("_BG_JOB_PRIORITY", "BG_JOB_PRIORITY_NORMAL", 0x2)
-BG_JOB_PRIORITY_LOW = EnumValue("_BG_JOB_PRIORITY", "BG_JOB_PRIORITY_LOW", 0x3)
-class _BG_JOB_PRIORITY(EnumType):
-    values = [BG_JOB_PRIORITY_FOREGROUND, BG_JOB_PRIORITY_HIGH, BG_JOB_PRIORITY_NORMAL, BG_JOB_PRIORITY_LOW]
-    mapper = FlagMapper(*values)
-BG_JOB_PRIORITY = _BG_JOB_PRIORITY
-
-
-BG_ERROR_CONTEXT_NONE = EnumValue("_BG_ERROR_CONTEXT", "BG_ERROR_CONTEXT_NONE", 0x0)
-BG_ERROR_CONTEXT_UNKNOWN = EnumValue("_BG_ERROR_CONTEXT", "BG_ERROR_CONTEXT_UNKNOWN", 0x1)
-BG_ERROR_CONTEXT_GENERAL_QUEUE_MANAGER = EnumValue("_BG_ERROR_CONTEXT", "BG_ERROR_CONTEXT_GENERAL_QUEUE_MANAGER", 0x2)
-BG_ERROR_CONTEXT_QUEUE_MANAGER_NOTIFICATION = EnumValue("_BG_ERROR_CONTEXT", "BG_ERROR_CONTEXT_QUEUE_MANAGER_NOTIFICATION", 0x3)
-BG_ERROR_CONTEXT_LOCAL_FILE = EnumValue("_BG_ERROR_CONTEXT", "BG_ERROR_CONTEXT_LOCAL_FILE", 0x4)
-BG_ERROR_CONTEXT_REMOTE_FILE = EnumValue("_BG_ERROR_CONTEXT", "BG_ERROR_CONTEXT_REMOTE_FILE", 0x5)
-BG_ERROR_CONTEXT_GENERAL_TRANSPORT = EnumValue("_BG_ERROR_CONTEXT", "BG_ERROR_CONTEXT_GENERAL_TRANSPORT", 0x6)
-BG_ERROR_CONTEXT_REMOTE_APPLICATION = EnumValue("_BG_ERROR_CONTEXT", "BG_ERROR_CONTEXT_REMOTE_APPLICATION", 0x7)
-class _BG_ERROR_CONTEXT(EnumType):
-    values = [BG_ERROR_CONTEXT_NONE, BG_ERROR_CONTEXT_UNKNOWN, BG_ERROR_CONTEXT_GENERAL_QUEUE_MANAGER, BG_ERROR_CONTEXT_QUEUE_MANAGER_NOTIFICATION, BG_ERROR_CONTEXT_LOCAL_FILE, BG_ERROR_CONTEXT_REMOTE_FILE, BG_ERROR_CONTEXT_GENERAL_TRANSPORT, BG_ERROR_CONTEXT_REMOTE_APPLICATION]
-    mapper = FlagMapper(*values)
-BG_ERROR_CONTEXT = _BG_ERROR_CONTEXT
-
-
-BG_JOB_TYPE_DOWNLOAD = EnumValue("_BG_JOB_TYPE", "BG_JOB_TYPE_DOWNLOAD", 0x0)
-BG_JOB_TYPE_UPLOAD = EnumValue("_BG_JOB_TYPE", "BG_JOB_TYPE_UPLOAD", 0x1)
-BG_JOB_TYPE_UPLOAD_REPLY = EnumValue("_BG_JOB_TYPE", "BG_JOB_TYPE_UPLOAD_REPLY", 0x2)
-class _BG_JOB_TYPE(EnumType):
-    values = [BG_JOB_TYPE_DOWNLOAD, BG_JOB_TYPE_UPLOAD, BG_JOB_TYPE_UPLOAD_REPLY]
-    mapper = FlagMapper(*values)
-BG_JOB_TYPE = _BG_JOB_TYPE
-
-
-class _BG_FILE_PROGRESS(Structure):
-    _fields_ = [
-        ("BytesTotal", UINT64),
-        ("BytesTransferred", UINT64),
-        ("Completed", BOOL),
-    ]
-BG_FILE_PROGRESS = _BG_FILE_PROGRESS
-
-class _BG_JOB_PROGRESS(Structure):
-    _fields_ = [
-        ("BytesTotal", UINT64),
-        ("BytesTransferred", UINT64),
-        ("FilesTotal", ULONG),
-        ("FilesTransferred", ULONG),
-    ]
-BG_JOB_PROGRESS = _BG_JOB_PROGRESS
-
-class _BG_FILE_INFO(Structure):
-    _fields_ = [
-        ("RemoteName", LPWSTR),
-        ("LocalName", LPWSTR),
-    ]
-BG_FILE_INFO = _BG_FILE_INFO
-
-class _BG_JOB_TIMES(Structure):
-    _fields_ = [
-        ("CreationTime", FILETIME),
-        ("ModificationTime", FILETIME),
-        ("TransferCompletionTime", FILETIME),
-    ]
-BG_JOB_TIMES = _BG_JOB_TIMES
-
-class _EXCEPTION_DEBUG_INFO(Structure):
-    _fields_ = [
-        ("ExceptionRecord", EXCEPTION_RECORD),
-        ("dwFirstChance", DWORD),
-    ]
-LPEXCEPTION_DEBUG_INFO = POINTER(_EXCEPTION_DEBUG_INFO)
-EXCEPTION_DEBUG_INFO = _EXCEPTION_DEBUG_INFO
-
-class _CREATE_THREAD_DEBUG_INFO(Structure):
-    _fields_ = [
-        ("hThread", HANDLE),
-        ("lpThreadLocalBase", LPVOID),
-        ("lpStartAddress", LPTHREAD_START_ROUTINE),
-    ]
-LPCREATE_THREAD_DEBUG_INFO = POINTER(_CREATE_THREAD_DEBUG_INFO)
-CREATE_THREAD_DEBUG_INFO = _CREATE_THREAD_DEBUG_INFO
-
-class _CREATE_PROCESS_DEBUG_INFO(Structure):
-    _fields_ = [
-        ("hFile", HANDLE),
-        ("hProcess", HANDLE),
-        ("hThread", HANDLE),
-        ("lpBaseOfImage", LPVOID),
-        ("dwDebugInfoFileOffset", DWORD),
-        ("nDebugInfoSize", DWORD),
-        ("lpThreadLocalBase", LPVOID),
-        ("lpStartAddress", LPTHREAD_START_ROUTINE),
-        ("lpImageName", LPVOID),
-        ("fUnicode", WORD),
-    ]
-CREATE_PROCESS_DEBUG_INFO = _CREATE_PROCESS_DEBUG_INFO
-LPCREATE_PROCESS_DEBUG_INFO = POINTER(_CREATE_PROCESS_DEBUG_INFO)
-
-class _EXIT_THREAD_DEBUG_INFO(Structure):
-    _fields_ = [
-        ("dwExitCode", DWORD),
-    ]
-EXIT_THREAD_DEBUG_INFO = _EXIT_THREAD_DEBUG_INFO
-LPEXIT_THREAD_DEBUG_INFO = POINTER(_EXIT_THREAD_DEBUG_INFO)
-
-class _EXIT_PROCESS_DEBUG_INFO(Structure):
-    _fields_ = [
-        ("dwExitCode", DWORD),
-    ]
-LPEXIT_PROCESS_DEBUG_INFO = POINTER(_EXIT_PROCESS_DEBUG_INFO)
-EXIT_PROCESS_DEBUG_INFO = _EXIT_PROCESS_DEBUG_INFO
-
-class _LOAD_DLL_DEBUG_INFO(Structure):
-    _fields_ = [
-        ("hFile", HANDLE),
-        ("lpBaseOfDll", LPVOID),
-        ("dwDebugInfoFileOffset", DWORD),
-        ("nDebugInfoSize", DWORD),
-        ("lpImageName", LPVOID),
-        ("fUnicode", WORD),
-    ]
-LPLOAD_DLL_DEBUG_INFO = POINTER(_LOAD_DLL_DEBUG_INFO)
-LOAD_DLL_DEBUG_INFO = _LOAD_DLL_DEBUG_INFO
-
-# typedef struct _LOAD_DLL_DEBUG_INFO {
-#     HANDLE hFile;
-#     LPVOID lpBaseOfDll;
-#     DWORD dwDebugInfoFileOffset;
-#     DWORD nDebugInfoSize;
-#     LPVOID lpImageName;
-#     WORD fUnicode;
-# } LOAD_DLL_DEBUG_INFO, *LPLOAD_DLL_DEBUG_INFO;
-
-class _LOAD_DLL_DEBUG_INFO(_LOAD_DLL_DEBUG_INFO):
-    def hello(self):
-        return "hello"
-LPLOAD_DLL_DEBUG_INFO = POINTER(_LOAD_DLL_DEBUG_INFO)
-LOAD_DLL_DEBUG_INFO = _LOAD_DLL_DEBUG_INFO
-class _UNLOAD_DLL_DEBUG_INFO(Structure):
-    _fields_ = [
-        ("lpBaseOfDll", LPVOID),
-    ]
-UNLOAD_DLL_DEBUG_INFO = _UNLOAD_DLL_DEBUG_INFO
-LPUNLOAD_DLL_DEBUG_INFO = POINTER(_UNLOAD_DLL_DEBUG_INFO)
-
-class _OUTPUT_DEBUG_STRING_INFO(Structure):
-    _fields_ = [
-        ("lpDebugStringData", LPSTR),
-        ("fUnicode", WORD),
-        ("nDebugStringLength", WORD),
-    ]
-OUTPUT_DEBUG_STRING_INFO = _OUTPUT_DEBUG_STRING_INFO
-LPOUTPUT_DEBUG_STRING_INFO = POINTER(_OUTPUT_DEBUG_STRING_INFO)
-
-class _RIP_INFO(Structure):
-    _fields_ = [
-        ("dwError", DWORD),
-        ("dwType", DWORD),
-    ]
-LPRIP_INFO = POINTER(_RIP_INFO)
-RIP_INFO = _RIP_INFO
-
-class _TMP_UNION_DEBUG_INFO(Union):
-    _fields_ = [
-        ("Exception", EXCEPTION_DEBUG_INFO),
-        ("CreateThread", CREATE_THREAD_DEBUG_INFO),
-        ("CreateProcessInfo", CREATE_PROCESS_DEBUG_INFO),
-        ("ExitThread", EXIT_THREAD_DEBUG_INFO),
-        ("ExitProcess", EXIT_PROCESS_DEBUG_INFO),
-        ("LoadDll", LOAD_DLL_DEBUG_INFO),
-        ("UnloadDll", UNLOAD_DLL_DEBUG_INFO),
-        ("DebugString", OUTPUT_DEBUG_STRING_INFO),
-        ("RipInfo", RIP_INFO),
-    ]
-TMP_UNION_DEBUG_INFO = _TMP_UNION_DEBUG_INFO
-
-class _DEBUG_EVENT(Structure):
-    _fields_ = [
-        ("dwDebugEventCode", DWORD),
-        ("dwProcessId", DWORD),
-        ("dwThreadId", DWORD),
-        ("u", _TMP_UNION_DEBUG_INFO),
-    ]
-LPDEBUG_EVENT = POINTER(_DEBUG_EVENT)
-DEBUG_EVENT = _DEBUG_EVENT
-
-AlpcBasicInformation = EnumValue("_ALPC_PORT_INFORMATION_CLASS", "AlpcBasicInformation", 0x0)
-AlpcPortInformation = EnumValue("_ALPC_PORT_INFORMATION_CLASS", "AlpcPortInformation", 0x1)
-AlpcAssociateCompletionPortInformation = EnumValue("_ALPC_PORT_INFORMATION_CLASS", "AlpcAssociateCompletionPortInformation", 0x2)
-AlpcConnectedSIDInformation = EnumValue("_ALPC_PORT_INFORMATION_CLASS", "AlpcConnectedSIDInformation", 0x3)
-AlpcServerInformation = EnumValue("_ALPC_PORT_INFORMATION_CLASS", "AlpcServerInformation", 0x4)
-AlpcMessageZoneInformation = EnumValue("_ALPC_PORT_INFORMATION_CLASS", "AlpcMessageZoneInformation", 0x5)
-AlpcRegisterCompletionListInformation = EnumValue("_ALPC_PORT_INFORMATION_CLASS", "AlpcRegisterCompletionListInformation", 0x6)
-AlpcUnregisterCompletionListInformation = EnumValue("_ALPC_PORT_INFORMATION_CLASS", "AlpcUnregisterCompletionListInformation", 0x7)
-AlpcAdjustCompletionListConcurrencyCountInformation = EnumValue("_ALPC_PORT_INFORMATION_CLASS", "AlpcAdjustCompletionListConcurrencyCountInformation", 0x8)
-AlpcRegisterCallbackInformation = EnumValue("_ALPC_PORT_INFORMATION_CLASS", "AlpcRegisterCallbackInformation", 0x9)
-AlpcCompletionListRundownInformation = EnumValue("_ALPC_PORT_INFORMATION_CLASS", "AlpcCompletionListRundownInformation", 0xa)
-AlpcWaitForPortReferences = EnumValue("_ALPC_PORT_INFORMATION_CLASS", "AlpcWaitForPortReferences", 0xb)
-MaxAlpcPortInfoClass = EnumValue("_ALPC_PORT_INFORMATION_CLASS", "MaxAlpcPortInfoClass", 0xc)
-class _ALPC_PORT_INFORMATION_CLASS(EnumType):
-    values = [AlpcBasicInformation, AlpcPortInformation, AlpcAssociateCompletionPortInformation, AlpcConnectedSIDInformation, AlpcServerInformation, AlpcMessageZoneInformation, AlpcRegisterCompletionListInformation, AlpcUnregisterCompletionListInformation, AlpcAdjustCompletionListConcurrencyCountInformation, AlpcRegisterCallbackInformation, AlpcCompletionListRundownInformation, AlpcWaitForPortReferences, MaxAlpcPortInfoClass]
-    mapper = FlagMapper(*values)
-ALPC_PORT_INFORMATION_CLASS = _ALPC_PORT_INFORMATION_CLASS
-
-
-AlpcMessageSidInformation = EnumValue("_ALPC_MESSAGE_INFORMATION_CLASS", "AlpcMessageSidInformation", 0x0)
-AlpcMessageTokenModifiedIdInformation = EnumValue("_ALPC_MESSAGE_INFORMATION_CLASS", "AlpcMessageTokenModifiedIdInformation", 0x1)
-MaxAlpcMessageInfoClass = EnumValue("_ALPC_MESSAGE_INFORMATION_CLASS", "MaxAlpcMessageInfoClass", 0x2)
-AlpcMessageHandleInformation = EnumValue("_ALPC_MESSAGE_INFORMATION_CLASS", "AlpcMessageHandleInformation", 0x3)
-class _ALPC_MESSAGE_INFORMATION_CLASS(EnumType):
-    values = [AlpcMessageSidInformation, AlpcMessageTokenModifiedIdInformation, MaxAlpcMessageInfoClass, AlpcMessageHandleInformation]
-    mapper = FlagMapper(*values)
-ALPC_MESSAGE_INFORMATION_CLASS = _ALPC_MESSAGE_INFORMATION_CLASS
-PALPC_MESSAGE_INFORMATION_CLASS = POINTER(_ALPC_MESSAGE_INFORMATION_CLASS)
-
-
-class _ALPC_PORT_ATTRIBUTES32(Structure):
-    _fields_ = [
-        ("Flags", ULONG),
-        ("SecurityQos", SECURITY_QUALITY_OF_SERVICE),
-        ("MaxMessageLength", SIZE_T),
-        ("MemoryBandwidth", SIZE_T),
-        ("MaxPoolUsage", SIZE_T),
-        ("MaxSectionSize", SIZE_T),
-        ("MaxViewSize", SIZE_T),
-        ("MaxTotalSectionSize", SIZE_T),
-        ("DupObjectTypes", ULONG),
-    ]
-PALPC_PORT_ATTRIBUTES32 = POINTER(_ALPC_PORT_ATTRIBUTES32)
-ALPC_PORT_ATTRIBUTES32 = _ALPC_PORT_ATTRIBUTES32
-
-class _ALPC_PORT_ATTRIBUTES64(Structure):
-    _fields_ = [
-        ("Flags", ULONG),
-        ("SecurityQos", SECURITY_QUALITY_OF_SERVICE),
-        ("MaxMessageLength", SIZE_T),
-        ("MemoryBandwidth", SIZE_T),
-        ("MaxPoolUsage", SIZE_T),
-        ("MaxSectionSize", SIZE_T),
-        ("MaxViewSize", SIZE_T),
-        ("MaxTotalSectionSize", SIZE_T),
-        ("DupObjectTypes", ULONG),
-        ("Reserved", ULONG),
-    ]
-ALPC_PORT_ATTRIBUTES64 = _ALPC_PORT_ATTRIBUTES64
-PALPC_PORT_ATTRIBUTES64 = POINTER(_ALPC_PORT_ATTRIBUTES64)
-
-class _ALPC_MESSAGE_ATTRIBUTES(Structure):
-    _fields_ = [
-        ("AllocatedAttributes", ULONG),
-        ("ValidAttributes", ULONG),
-    ]
-ALPC_MESSAGE_ATTRIBUTES = _ALPC_MESSAGE_ATTRIBUTES
-PALPC_MESSAGE_ATTRIBUTES = POINTER(_ALPC_MESSAGE_ATTRIBUTES)
-
-class _PORT_MESSAGE32_TMP_UNION(Union):
-    _fields_ = [
-        ("ClientViewSize", ULONG),
-        ("CallbackId", ULONG),
-    ]
-PORT_MESSAGE_TMP_UNION = _PORT_MESSAGE32_TMP_UNION
-
-class _PORT_MESSAGE64_TMP_UNION(Union):
-    _fields_ = [
-        ("ClientViewSize", ULONGLONG),
-        ("CallbackId", ULONG),
-    ]
-PORT_MESSAGE_TMP_UNION = _PORT_MESSAGE64_TMP_UNION
-
-class _PORT_MESSAGE_TMP_SUBSTRUCT_S1(Structure):
-    _fields_ = [
-        ("DataLength", CSHORT),
-        ("TotalLength", CSHORT),
-    ]
-
-
-class _PORT_MESSAGE_TMP_UNION_U1(Union):
-    _fields_ = [
-        ("Length", ULONG),
-        ("s1", _PORT_MESSAGE_TMP_SUBSTRUCT_S1),
-    ]
-
-
-class _PORT_MESSAGE_TMP_SUBSTRUCT_S2(Structure):
-    _fields_ = [
-        ("Type", CSHORT),
-        ("DataInfoOffset", CSHORT),
-    ]
-
-
-class _PORT_MESSAGE_TMP_UNION_U2(Union):
-    _fields_ = [
-        ("ZeroInit", ULONG),
-        ("s2", _PORT_MESSAGE_TMP_SUBSTRUCT_S2),
-    ]
-
-
-class _PORT_MESSAGE32(Structure):
-    _fields_ = [
-        ("u1", _PORT_MESSAGE_TMP_UNION_U1),
-        ("u2", _PORT_MESSAGE_TMP_UNION_U2),
-        ("ClientId", CLIENT_ID32),
-        ("MessageId", ULONG),
-        ("tmp_union", _PORT_MESSAGE32_TMP_UNION),
-    ]
-PORT_MESSAGE32 = _PORT_MESSAGE32
-PPORT_MESSAGE32 = POINTER(_PORT_MESSAGE32)
-
-class _PORT_MESSAGE64(Structure):
-    _fields_ = [
-        ("u1", _PORT_MESSAGE_TMP_UNION_U1),
-        ("u2", _PORT_MESSAGE_TMP_UNION_U2),
-        ("ClientId", CLIENT_ID64),
-        ("MessageId", ULONG),
-        ("tmp_union", _PORT_MESSAGE64_TMP_UNION),
-    ]
-PPORT_MESSAGE64 = POINTER(_PORT_MESSAGE64)
-PORT_MESSAGE64 = _PORT_MESSAGE64
-
-class _ALPC_SERVER_INFORMATION_TMP_IN(Structure):
-    _fields_ = [
-        ("ThreadHandle", HANDLE),
-    ]
-ALPC_SERVER_INFORMATION_TMP_IN = _ALPC_SERVER_INFORMATION_TMP_IN
-
-class _ALPC_SERVER_INFORMATION_TMP_OUT(Structure):
-    _fields_ = [
-        ("ThreadBlocked", BOOLEAN),
-        ("ConnectedProcessId", HANDLE),
-        ("ConnectionPortName", UNICODE_STRING),
-    ]
-ALPC_SERVER_INFORMATION_TMP_OUT = _ALPC_SERVER_INFORMATION_TMP_OUT
-
-class ALPC_SERVER_INFORMATION(Union):
-    _fields_ = [
-        ("In", ALPC_SERVER_INFORMATION_TMP_IN),
-        ("Out", ALPC_SERVER_INFORMATION_TMP_OUT),
-    ]
-
-
-class _ALPC_CONTEXT_ATTR(Structure):
-    _fields_ = [
-        ("PortContext", PVOID),
-        ("MessageContext", PVOID),
-        ("Sequence", ULONG),
-        ("MessageId", ULONG),
-        ("CallbackId", ULONG),
-    ]
-PALPC_CONTEXT_ATTR = POINTER(_ALPC_CONTEXT_ATTR)
-ALPC_CONTEXT_ATTR = _ALPC_CONTEXT_ATTR
-
-class _ALPC_CONTEXT_ATTR32(Structure):
-    _fields_ = [
-        ("PortContext", ULONG),
-        ("MessageContext", ULONG),
-        ("Sequence", ULONG),
-        ("MessageId", ULONG),
-        ("CallbackId", ULONG),
-    ]
-ALPC_CONTEXT_ATTR32 = _ALPC_CONTEXT_ATTR32
-PALPC_CONTEXT_ATTR32 = POINTER(_ALPC_CONTEXT_ATTR32)
-
-class _ALPC_CONTEXT_ATTR64(Structure):
-    _fields_ = [
-        ("PortContext", ULONGLONG),
-        ("MessageContext", ULONGLONG),
-        ("Sequence", ULONG),
-        ("MessageId", ULONG),
-        ("CallbackId", ULONG),
-    ]
-ALPC_CONTEXT_ATTR64 = _ALPC_CONTEXT_ATTR64
-PALPC_CONTEXT_ATTR64 = POINTER(_ALPC_CONTEXT_ATTR64)
-
-class _ALPC_HANDLE_ATTR(Structure):
-    _fields_ = [
-        ("Flags", ULONG),
-        ("Handle", HANDLE),
-        ("ObjectType", ULONG),
-        ("DesiredAccess", ACCESS_MASK),
-    ]
-PALPC_HANDLE_ATTR = POINTER(_ALPC_HANDLE_ATTR)
-ALPC_HANDLE_ATTR = _ALPC_HANDLE_ATTR
-
-class _ALPC_HANDLE_ATTR32(Structure):
-    _fields_ = [
-        ("Flags", ULONG),
-        ("Handle", ULONG),
-        ("ObjectType", ULONG),
-        ("DesiredAccess", ACCESS_MASK),
-    ]
-ALPC_HANDLE_ATTR32 = _ALPC_HANDLE_ATTR32
-PALPC_HANDLE_ATTR32 = POINTER(_ALPC_HANDLE_ATTR32)
-
-class _ALPC_HANDLE_ATTR64(Structure):
-    _fields_ = [
-        ("Flags", ULONG),
-        ("Handle", ULONGLONG),
-        ("ObjectType", ULONG),
-        ("DesiredAccess", ACCESS_MASK),
-    ]
-PALPC_HANDLE_ATTR64 = POINTER(_ALPC_HANDLE_ATTR64)
-ALPC_HANDLE_ATTR64 = _ALPC_HANDLE_ATTR64
-
-class _ALPC_SECURITY_ATTR(Structure):
-    _fields_ = [
-        ("Flags", ULONG),
-        ("QoS", PSECURITY_QUALITY_OF_SERVICE),
-        ("ContextHandle", ALPC_HANDLE),
-    ]
-PALPC_SECURITY_ATTR = POINTER(_ALPC_SECURITY_ATTR)
-ALPC_SECURITY_ATTR = _ALPC_SECURITY_ATTR
-
-class _ALPC_SECURITY_ATTR32(Structure):
-    _fields_ = [
-        ("Flags", ULONG),
-        ("QoS", ULONG),
-        ("ContextHandle", ULONG),
-    ]
-ALPC_SECURITY_ATTR32 = _ALPC_SECURITY_ATTR32
-PALPC_SECURITY_ATTR32 = POINTER(_ALPC_SECURITY_ATTR32)
-
-class _ALPC_SECURITY_ATTR64(Structure):
-    _fields_ = [
-        ("Flags", ULONGLONG),
-        ("QoS", ULONGLONG),
-        ("ContextHandle", ULONGLONG),
-    ]
-PALPC_SECURITY_ATTR64 = POINTER(_ALPC_SECURITY_ATTR64)
-ALPC_SECURITY_ATTR64 = _ALPC_SECURITY_ATTR64
-
-class _ALPC_DATA_VIEW_ATTR(Structure):
-    _fields_ = [
-        ("Flags", ULONG),
-        ("SectionHandle", ALPC_HANDLE),
-        ("ViewBase", PVOID),
-        ("ViewSize", PVOID),
-    ]
-PALPC_DATA_VIEW_ATTR = POINTER(_ALPC_DATA_VIEW_ATTR)
-ALPC_DATA_VIEW_ATTR = _ALPC_DATA_VIEW_ATTR
-
-class _ALPC_DATA_VIEW_ATTR32(Structure):
-    _fields_ = [
-        ("Flags", ULONG),
-        ("SectionHandle", ULONG),
-        ("ViewBase", ULONG),
-        ("ViewSize", ULONG),
-    ]
-PALPC_DATA_VIEW_ATTR32 = POINTER(_ALPC_DATA_VIEW_ATTR32)
-ALPC_DATA_VIEW_ATTR32 = _ALPC_DATA_VIEW_ATTR32
-
-class _ALPC_DATA_VIEW_ATTR64(Structure):
-    _fields_ = [
-        ("Flags", ULONG),
-        ("SectionHandle", ULONGLONG),
-        ("ViewBase", ULONGLONG),
-        ("ViewSize", ULONGLONG),
-    ]
-PALPC_DATA_VIEW_ATTR64 = POINTER(_ALPC_DATA_VIEW_ATTR64)
-ALPC_DATA_VIEW_ATTR64 = _ALPC_DATA_VIEW_ATTR64
-
-class _ALPC_TOKEN_ATTR(Structure):
-    _fields_ = [
-        ("TokenId", ULONGLONG),
-        ("AuthenticationId", ULONGLONG),
-        ("ModifiedId", ULONGLONG),
-    ]
-ALPC_TOKEN_ATTR = _ALPC_TOKEN_ATTR
-PALPC_TOKEN_ATTR = POINTER(_ALPC_TOKEN_ATTR)
-
-class _ALPC_DIRECT_ATTR(Structure):
-    _fields_ = [
-        ("Event", HANDLE),
-    ]
-ALPC_DIRECT_ATTR = _ALPC_DIRECT_ATTR
-PALPC_DIRECT_ATTR = POINTER(_ALPC_DIRECT_ATTR)
-
-class _ALPC_DIRECT_ATTR32(Structure):
-    _fields_ = [
-        ("Event", ULONG),
-    ]
-PALPC_DIRECT_ATTR32 = POINTER(_ALPC_DIRECT_ATTR32)
-ALPC_DIRECT_ATTR32 = _ALPC_DIRECT_ATTR32
-
-class _ALPC_DIRECT_ATTR64(Structure):
-    _fields_ = [
-        ("Event", ULONGLONG),
-    ]
-ALPC_DIRECT_ATTR64 = _ALPC_DIRECT_ATTR64
-PALPC_DIRECT_ATTR64 = POINTER(_ALPC_DIRECT_ATTR64)
-
-class _ALPC_WORK_ON_BEHALF_ATTR(Structure):
-    _fields_ = [
-        ("Ticket", ULONGLONG),
-    ]
-PALPC_WORK_ON_BEHALF_ATTR = POINTER(_ALPC_WORK_ON_BEHALF_ATTR)
-ALPC_WORK_ON_BEHALF_ATTR = _ALPC_WORK_ON_BEHALF_ATTR
-
-class _RPC_IF_ID(Structure):
-    _fields_ = [
-        ("Uuid", IID),
-        ("VersMajor", USHORT),
-        ("VersMinor", USHORT),
-    ]
-RPC_IF_ID = _RPC_IF_ID
-
-INITIAL_RPC_IF_ID = RPC_IF_ID
-
-class _RPC_IF_ID(INITIAL_RPC_IF_ID):
-    def __repr__(self):
-        return '<RPC_IF_ID "{0}" ({1}, {2})>'.format(self.Uuid.to_string(), self.VersMajor, self.VersMinor)
-RPC_IF_ID = _RPC_IF_ID
-class _PORT_VIEW(Structure):
-    _fields_ = [
-        ("Length", ULONG),
-        ("SectionHandle", HANDLE),
-        ("SectionOffset", ULONG),
-        ("ViewSize", ULONG),
-        ("ViewBase", PVOID),
-        ("TargetViewBase", PVOID),
-    ]
-PPORT_VIEW = POINTER(_PORT_VIEW)
-PORT_VIEW = _PORT_VIEW
-
-class _REMOTE_PORT_VIEW(Structure):
-    _fields_ = [
-        ("Length", ULONG),
-        ("ViewSize", ULONG),
-        ("ViewBase", PVOID),
-    ]
-REMOTE_PORT_VIEW = _REMOTE_PORT_VIEW
-PREMOTE_PORT_VIEW = POINTER(_REMOTE_PORT_VIEW)
-
-class tagCOMVERSION(Structure):
-    _fields_ = [
-        ("MajorVersion", USHORT),
-        ("MinorVersion", USHORT),
-    ]
-COMVERSION = tagCOMVERSION
-
-class tagORPCTHIS(Structure):
-    _fields_ = [
-        ("version", COMVERSION),
-        ("flags", ULONG),
-        ("reserved1", ULONG),
-        ("cid", GUID),
-        ("extensions", PVOID),
-    ]
-ORPCTHIS = tagORPCTHIS
-
-class __MIDL_XmitDefs_0001(Structure):
-    _fields_ = [
-        ("asyncOperationId", GUID),
-        ("oxidClientProcessNA", ULONG64),
-        ("originalClientLogicalThreadId", GUID),
-        ("uClientCausalityTraceId", ULONG64),
-    ]
-MIDL_XmitDefs_0001 = __MIDL_XmitDefs_0001
-
-class _LOCALTHIS(Structure):
-    _fields_ = [
-        ("dwFlags", DWORD),
-        ("dwClientThread", DWORD),
-        ("passthroughTraceActivity", GUID),
-        ("callTraceActivity", GUID),
-        ("asyncRequestBlock", MIDL_XmitDefs_0001),
-        ("reserved", DWORD),
-        ("pTouchedAstaArray", PVOID),
-    ]
-LOCALTHIS = _LOCALTHIS
-
 class _CERT_STRONG_SIGN_SERIALIZED_INFO(Structure):
     _fields_ = [
         ("dwFlags", DWORD),
@@ -7539,6 +6497,975 @@ class _SPC_INDIRECT_DATA_CONTENT(Structure):
 PSPC_INDIRECT_DATA_CONTENT = POINTER(_SPC_INDIRECT_DATA_CONTENT)
 SPC_INDIRECT_DATA_CONTENT = _SPC_INDIRECT_DATA_CONTENT
 
+ECS_ENABLED = EnumValue("_EXPCMDSTATE", "ECS_ENABLED", 0x0)
+ECS_DISABLED = EnumValue("_EXPCMDSTATE", "ECS_DISABLED", 0x1)
+ECS_HIDDEN = EnumValue("_EXPCMDSTATE", "ECS_HIDDEN", 0x2)
+ECS_CHECKBOX = EnumValue("_EXPCMDSTATE", "ECS_CHECKBOX", 0x3)
+ECS_CHECKED = EnumValue("_EXPCMDSTATE", "ECS_CHECKED", 0x4)
+ECS_RADIOCHECK = EnumValue("_EXPCMDSTATE", "ECS_RADIOCHECK", 0x5)
+class _EXPCMDSTATE(EnumType):
+    values = [ECS_ENABLED, ECS_DISABLED, ECS_HIDDEN, ECS_CHECKBOX, ECS_CHECKED, ECS_RADIOCHECK]
+    mapper = FlagMapper(*values)
+EXPCMDSTATE = _EXPCMDSTATE
+
+
+ECF_DEFAULT = EnumValue("_EXPCMDFLAGS", "ECF_DEFAULT", 0x0)
+ECF_HASSUBCOMMANDS = EnumValue("_EXPCMDFLAGS", "ECF_HASSUBCOMMANDS", 0x1)
+ECF_HASSPLITBUTTON = EnumValue("_EXPCMDFLAGS", "ECF_HASSPLITBUTTON", 0x2)
+ECF_HIDELABEL = EnumValue("_EXPCMDFLAGS", "ECF_HIDELABEL", 0x4)
+ECF_ISSEPARATOR = EnumValue("_EXPCMDFLAGS", "ECF_ISSEPARATOR", 0x8)
+ECF_HASLUASHIELD = EnumValue("_EXPCMDFLAGS", "ECF_HASLUASHIELD", 0x10)
+ECF_SEPARATORBEFORE = EnumValue("_EXPCMDFLAGS", "ECF_SEPARATORBEFORE", 0x20)
+ECF_SEPARATORAFTER = EnumValue("_EXPCMDFLAGS", "ECF_SEPARATORAFTER", 0x40)
+ECF_ISDROPDOWN = EnumValue("_EXPCMDFLAGS", "ECF_ISDROPDOWN", 0x80)
+ECF_TOGGLEABLE = EnumValue("_EXPCMDFLAGS", "ECF_TOGGLEABLE", 0x100)
+ECF_AUTOMENUICONS = EnumValue("_EXPCMDFLAGS", "ECF_AUTOMENUICONS", 0x200)
+class _EXPCMDFLAGS(EnumType):
+    values = [ECF_DEFAULT, ECF_HASSUBCOMMANDS, ECF_HASSPLITBUTTON, ECF_HIDELABEL, ECF_ISSEPARATOR, ECF_HASLUASHIELD, ECF_SEPARATORBEFORE, ECF_SEPARATORAFTER, ECF_ISDROPDOWN, ECF_TOGGLEABLE, ECF_AUTOMENUICONS]
+    mapper = FlagMapper(*values)
+EXPCMDFLAGS = _EXPCMDFLAGS
+
+
+SIGDN_NORMALDISPLAY = EnumValue("_SIGDN", "SIGDN_NORMALDISPLAY", 0x0)
+SIGDN_PARENTRELATIVEPARSING = EnumValue("_SIGDN", "SIGDN_PARENTRELATIVEPARSING", 0x80018001)
+SIGDN_DESKTOPABSOLUTEPARSING = EnumValue("_SIGDN", "SIGDN_DESKTOPABSOLUTEPARSING", 0x80028000)
+SIGDN_PARENTRELATIVEEDITING = EnumValue("_SIGDN", "SIGDN_PARENTRELATIVEEDITING", 0x80031001)
+SIGDN_DESKTOPABSOLUTEEDITING = EnumValue("_SIGDN", "SIGDN_DESKTOPABSOLUTEEDITING", 0x8004c000)
+SIGDN_FILESYSPATH = EnumValue("_SIGDN", "SIGDN_FILESYSPATH", 0x80058000)
+SIGDN_URL = EnumValue("_SIGDN", "SIGDN_URL", 0x80068000)
+SIGDN_PARENTRELATIVEFORADDRESSBAR = EnumValue("_SIGDN", "SIGDN_PARENTRELATIVEFORADDRESSBAR", 0x8007c001)
+SIGDN_PARENTRELATIVE = EnumValue("_SIGDN", "SIGDN_PARENTRELATIVE", 0x80080001)
+SIGDN_PARENTRELATIVEFORUI = EnumValue("_SIGDN", "SIGDN_PARENTRELATIVEFORUI", 0x80094001)
+class _SIGDN(EnumType):
+    values = [SIGDN_NORMALDISPLAY, SIGDN_PARENTRELATIVEPARSING, SIGDN_DESKTOPABSOLUTEPARSING, SIGDN_PARENTRELATIVEEDITING, SIGDN_DESKTOPABSOLUTEEDITING, SIGDN_FILESYSPATH, SIGDN_URL, SIGDN_PARENTRELATIVEFORADDRESSBAR, SIGDN_PARENTRELATIVE, SIGDN_PARENTRELATIVEFORUI]
+    mapper = FlagMapper(*values)
+SIGDN = _SIGDN
+
+
+SICHINT_DISPLAY = EnumValue("SICHINTF", "SICHINT_DISPLAY", 0x0)
+SICHINT_ALLFIELDS = EnumValue("SICHINTF", "SICHINT_ALLFIELDS", 0x80000000)
+SICHINT_CANONICAL = EnumValue("SICHINTF", "SICHINT_CANONICAL", 0x10000000)
+SICHINT_TEST_FILESYSPATH_IF_NOT_EQUAL = EnumValue("SICHINTF", "SICHINT_TEST_FILESYSPATH_IF_NOT_EQUAL", 0x20000000)
+class SICHINTF(EnumType):
+    values = [SICHINT_DISPLAY, SICHINT_ALLFIELDS, SICHINT_CANONICAL, SICHINT_TEST_FILESYSPATH_IF_NOT_EQUAL]
+    mapper = FlagMapper(*values)
+
+
+GPS_DEFAULT = EnumValue("GETPROPERTYSTOREFLAGS", "GPS_DEFAULT", 0x0)
+GPS_HANDLERPROPERTIESONLY = EnumValue("GETPROPERTYSTOREFLAGS", "GPS_HANDLERPROPERTIESONLY", 0x1)
+GPS_READWRITE = EnumValue("GETPROPERTYSTOREFLAGS", "GPS_READWRITE", 0x2)
+GPS_TEMPORARY = EnumValue("GETPROPERTYSTOREFLAGS", "GPS_TEMPORARY", 0x4)
+GPS_FASTPROPERTIESONLY = EnumValue("GETPROPERTYSTOREFLAGS", "GPS_FASTPROPERTIESONLY", 0x8)
+GPS_OPENSLOWITEM = EnumValue("GETPROPERTYSTOREFLAGS", "GPS_OPENSLOWITEM", 0x10)
+GPS_DELAYCREATION = EnumValue("GETPROPERTYSTOREFLAGS", "GPS_DELAYCREATION", 0x20)
+GPS_BESTEFFORT = EnumValue("GETPROPERTYSTOREFLAGS", "GPS_BESTEFFORT", 0x40)
+GPS_NO_OPLOCK = EnumValue("GETPROPERTYSTOREFLAGS", "GPS_NO_OPLOCK", 0x80)
+GPS_PREFERQUERYPROPERTIES = EnumValue("GETPROPERTYSTOREFLAGS", "GPS_PREFERQUERYPROPERTIES", 0x100)
+GPS_EXTRINSICPROPERTIES = EnumValue("GETPROPERTYSTOREFLAGS", "GPS_EXTRINSICPROPERTIES", 0x200)
+GPS_EXTRINSICPROPERTIESONLY = EnumValue("GETPROPERTYSTOREFLAGS", "GPS_EXTRINSICPROPERTIESONLY", 0x400)
+GPS_MASK_VALID = EnumValue("GETPROPERTYSTOREFLAGS", "GPS_MASK_VALID", 0x7ff)
+class GETPROPERTYSTOREFLAGS(EnumType):
+    values = [GPS_DEFAULT, GPS_HANDLERPROPERTIESONLY, GPS_READWRITE, GPS_TEMPORARY, GPS_FASTPROPERTIESONLY, GPS_OPENSLOWITEM, GPS_DELAYCREATION, GPS_BESTEFFORT, GPS_NO_OPLOCK, GPS_PREFERQUERYPROPERTIES, GPS_EXTRINSICPROPERTIES, GPS_EXTRINSICPROPERTIESONLY, GPS_MASK_VALID]
+    mapper = FlagMapper(*values)
+
+
+SIATTRIBFLAGS_AND = EnumValue("SIATTRIBFLAGS", "SIATTRIBFLAGS_AND", 0x1)
+SIATTRIBFLAGS_OR = EnumValue("SIATTRIBFLAGS", "SIATTRIBFLAGS_OR", 0x2)
+SIATTRIBFLAGS_APPCOMPAT = EnumValue("SIATTRIBFLAGS", "SIATTRIBFLAGS_APPCOMPAT", 0x3)
+SIATTRIBFLAGS_MASK = EnumValue("SIATTRIBFLAGS", "SIATTRIBFLAGS_MASK", 0x3)
+SIATTRIBFLAGS_ALLITEMS = EnumValue("SIATTRIBFLAGS", "SIATTRIBFLAGS_ALLITEMS", 0x4000)
+class SIATTRIBFLAGS(EnumType):
+    values = [SIATTRIBFLAGS_AND, SIATTRIBFLAGS_OR, SIATTRIBFLAGS_APPCOMPAT, SIATTRIBFLAGS_MASK, SIATTRIBFLAGS_ALLITEMS]
+    mapper = FlagMapper(*values)
+
+
+class tagBIND_OPTS(Structure):
+    _fields_ = [
+        ("cbStruct", DWORD),
+        ("grfFlags", DWORD),
+        ("grfMode", DWORD),
+        ("dwTickCountDeadline", DWORD),
+    ]
+BIND_OPTS = tagBIND_OPTS
+LPBIND_OPTS = POINTER(tagBIND_OPTS)
+
+class _tagpropertykey(Structure):
+    _fields_ = [
+        ("fmtid", GUID),
+        ("pid", DWORD),
+    ]
+PROPERTYKEY = _tagpropertykey
+REFPROPERTYKEY = POINTER(_tagpropertykey)
+
+class tagSTATSTG(Structure):
+    _fields_ = [
+        ("pwcsName", LPOLESTR),
+        ("type", DWORD),
+        ("cbSize", ULARGE_INTEGER),
+        ("mtime", FILETIME),
+        ("ctime", FILETIME),
+        ("atime", FILETIME),
+        ("grfMode", DWORD),
+        ("grfLocksSupported", DWORD),
+        ("clsid", CLSID),
+        ("grfStateBits", DWORD),
+        ("reserved", DWORD),
+    ]
+STATSTG = tagSTATSTG
+
+FakeFileInformationZero = EnumValue("_FILE_INFORMATION_CLASS", "FakeFileInformationZero", 0x0)
+FileDirectoryInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileDirectoryInformation", 0x1)
+FileFullDirectoryInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileFullDirectoryInformation", 0x2)
+FileBothDirectoryInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileBothDirectoryInformation", 0x3)
+FileBasicInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileBasicInformation", 0x4)
+FileStandardInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileStandardInformation", 0x5)
+FileInternalInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileInternalInformation", 0x6)
+FileEaInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileEaInformation", 0x7)
+FileAccessInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileAccessInformation", 0x8)
+FileNameInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileNameInformation", 0x9)
+FileRenameInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileRenameInformation", 0xa)
+FileLinkInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileLinkInformation", 0xb)
+FileNamesInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileNamesInformation", 0xc)
+FileDispositionInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileDispositionInformation", 0xd)
+FilePositionInformation = EnumValue("_FILE_INFORMATION_CLASS", "FilePositionInformation", 0xe)
+FileFullEaInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileFullEaInformation", 0xf)
+FileModeInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileModeInformation", 0x10)
+FileAlignmentInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileAlignmentInformation", 0x11)
+FileAllInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileAllInformation", 0x12)
+FileAllocationInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileAllocationInformation", 0x13)
+FileEndOfFileInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileEndOfFileInformation", 0x14)
+FileAlternateNameInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileAlternateNameInformation", 0x15)
+FileStreamInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileStreamInformation", 0x16)
+FilePipeInformation = EnumValue("_FILE_INFORMATION_CLASS", "FilePipeInformation", 0x17)
+FilePipeLocalInformation = EnumValue("_FILE_INFORMATION_CLASS", "FilePipeLocalInformation", 0x18)
+FilePipeRemoteInformation = EnumValue("_FILE_INFORMATION_CLASS", "FilePipeRemoteInformation", 0x19)
+FileMailslotQueryInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileMailslotQueryInformation", 0x1a)
+FileMailslotSetInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileMailslotSetInformation", 0x1b)
+FileCompressionInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileCompressionInformation", 0x1c)
+FileObjectIdInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileObjectIdInformation", 0x1d)
+FileCompletionInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileCompletionInformation", 0x1e)
+FileMoveClusterInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileMoveClusterInformation", 0x1f)
+FileQuotaInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileQuotaInformation", 0x20)
+FileReparsePointInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileReparsePointInformation", 0x21)
+FileNetworkOpenInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileNetworkOpenInformation", 0x22)
+FileAttributeTagInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileAttributeTagInformation", 0x23)
+FileTrackingInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileTrackingInformation", 0x24)
+FileIdBothDirectoryInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileIdBothDirectoryInformation", 0x25)
+FileIdFullDirectoryInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileIdFullDirectoryInformation", 0x26)
+FileValidDataLengthInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileValidDataLengthInformation", 0x27)
+FileShortNameInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileShortNameInformation", 0x28)
+FileIoCompletionNotificationInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileIoCompletionNotificationInformation", 0x29)
+FileIoStatusBlockRangeInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileIoStatusBlockRangeInformation", 0x2a)
+FileIoPriorityHintInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileIoPriorityHintInformation", 0x2b)
+FileSfioReserveInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileSfioReserveInformation", 0x2c)
+FileSfioVolumeInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileSfioVolumeInformation", 0x2d)
+FileHardLinkInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileHardLinkInformation", 0x2e)
+FileProcessIdsUsingFileInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileProcessIdsUsingFileInformation", 0x2f)
+FileNormalizedNameInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileNormalizedNameInformation", 0x30)
+FileNetworkPhysicalNameInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileNetworkPhysicalNameInformation", 0x31)
+FileIdGlobalTxDirectoryInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileIdGlobalTxDirectoryInformation", 0x32)
+FileIsRemoteDeviceInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileIsRemoteDeviceInformation", 0x33)
+FileUnusedInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileUnusedInformation", 0x34)
+FileNumaNodeInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileNumaNodeInformation", 0x35)
+FileStandardLinkInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileStandardLinkInformation", 0x36)
+FileRemoteProtocolInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileRemoteProtocolInformation", 0x37)
+FileRenameInformationBypassAccessCheck = EnumValue("_FILE_INFORMATION_CLASS", "FileRenameInformationBypassAccessCheck", 0x38)
+FileLinkInformationBypassAccessCheck = EnumValue("_FILE_INFORMATION_CLASS", "FileLinkInformationBypassAccessCheck", 0x39)
+FileVolumeNameInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileVolumeNameInformation", 0x3a)
+FileIdInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileIdInformation", 0x3b)
+FileIdExtdDirectoryInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileIdExtdDirectoryInformation", 0x3c)
+FileReplaceCompletionInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileReplaceCompletionInformation", 0x3d)
+FileHardLinkFullIdInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileHardLinkFullIdInformation", 0x3e)
+FileIdExtdBothDirectoryInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileIdExtdBothDirectoryInformation", 0x3f)
+FileDispositionInformationEx = EnumValue("_FILE_INFORMATION_CLASS", "FileDispositionInformationEx", 0x40)
+FileRenameInformationEx = EnumValue("_FILE_INFORMATION_CLASS", "FileRenameInformationEx", 0x41)
+FileRenameInformationExBypassAccessCheck = EnumValue("_FILE_INFORMATION_CLASS", "FileRenameInformationExBypassAccessCheck", 0x42)
+FileMaximumInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileMaximumInformation", 0x43)
+class _FILE_INFORMATION_CLASS(EnumType):
+    values = [FakeFileInformationZero, FileDirectoryInformation, FileFullDirectoryInformation, FileBothDirectoryInformation, FileBasicInformation, FileStandardInformation, FileInternalInformation, FileEaInformation, FileAccessInformation, FileNameInformation, FileRenameInformation, FileLinkInformation, FileNamesInformation, FileDispositionInformation, FilePositionInformation, FileFullEaInformation, FileModeInformation, FileAlignmentInformation, FileAllInformation, FileAllocationInformation, FileEndOfFileInformation, FileAlternateNameInformation, FileStreamInformation, FilePipeInformation, FilePipeLocalInformation, FilePipeRemoteInformation, FileMailslotQueryInformation, FileMailslotSetInformation, FileCompressionInformation, FileObjectIdInformation, FileCompletionInformation, FileMoveClusterInformation, FileQuotaInformation, FileReparsePointInformation, FileNetworkOpenInformation, FileAttributeTagInformation, FileTrackingInformation, FileIdBothDirectoryInformation, FileIdFullDirectoryInformation, FileValidDataLengthInformation, FileShortNameInformation, FileIoCompletionNotificationInformation, FileIoStatusBlockRangeInformation, FileIoPriorityHintInformation, FileSfioReserveInformation, FileSfioVolumeInformation, FileHardLinkInformation, FileProcessIdsUsingFileInformation, FileNormalizedNameInformation, FileNetworkPhysicalNameInformation, FileIdGlobalTxDirectoryInformation, FileIsRemoteDeviceInformation, FileUnusedInformation, FileNumaNodeInformation, FileStandardLinkInformation, FileRemoteProtocolInformation, FileRenameInformationBypassAccessCheck, FileLinkInformationBypassAccessCheck, FileVolumeNameInformation, FileIdInformation, FileIdExtdDirectoryInformation, FileReplaceCompletionInformation, FileHardLinkFullIdInformation, FileIdExtdBothDirectoryInformation, FileDispositionInformationEx, FileRenameInformationEx, FileRenameInformationExBypassAccessCheck, FileMaximumInformation]
+    mapper = FlagMapper(*values)
+FILE_INFORMATION_CLASS = _FILE_INFORMATION_CLASS
+PFILE_INFORMATION_CLASS = POINTER(_FILE_INFORMATION_CLASS)
+
+
+IoPriorityVeryLow = EnumValue("_IO_PRIORITY_HINT", "IoPriorityVeryLow", 0x0)
+IoPriorityLow = EnumValue("_IO_PRIORITY_HINT", "IoPriorityLow", 0x1)
+IoPriorityNormal = EnumValue("_IO_PRIORITY_HINT", "IoPriorityNormal", 0x2)
+IoPriorityHigh = EnumValue("_IO_PRIORITY_HINT", "IoPriorityHigh", 0x3)
+IoPriorityCritical = EnumValue("_IO_PRIORITY_HINT", "IoPriorityCritical", 0x4)
+MaxIoPriorityTypes = EnumValue("_IO_PRIORITY_HINT", "MaxIoPriorityTypes", 0x5)
+class _IO_PRIORITY_HINT(EnumType):
+    values = [IoPriorityVeryLow, IoPriorityLow, IoPriorityNormal, IoPriorityHigh, IoPriorityCritical, MaxIoPriorityTypes]
+    mapper = FlagMapper(*values)
+IO_PRIORITY_HINT = _IO_PRIORITY_HINT
+
+
+class _FILE_INTERNAL_INFORMATION(Structure):
+    _fields_ = [
+        ("IndexNumber", LARGE_INTEGER),
+    ]
+FILE_INTERNAL_INFORMATION = _FILE_INTERNAL_INFORMATION
+PFILE_INTERNAL_INFORMATION = POINTER(_FILE_INTERNAL_INFORMATION)
+
+class _FILE_ALIGNMENT_INFORMATION(Structure):
+    _fields_ = [
+        ("AlignmentRequirement", ULONG),
+    ]
+PFILE_ALIGNMENT_INFORMATION = POINTER(_FILE_ALIGNMENT_INFORMATION)
+FILE_ALIGNMENT_INFORMATION = _FILE_ALIGNMENT_INFORMATION
+
+class _FILE_ATTRIBUTE_TAG_INFORMATION(Structure):
+    _fields_ = [
+        ("FileAttributes", ULONG),
+        ("ReparseTag", ULONG),
+    ]
+PFILE_ATTRIBUTE_TAG_INFORMATION = POINTER(_FILE_ATTRIBUTE_TAG_INFORMATION)
+FILE_ATTRIBUTE_TAG_INFORMATION = _FILE_ATTRIBUTE_TAG_INFORMATION
+
+class _FILE_BASIC_INFORMATION(Structure):
+    _fields_ = [
+        ("CreationTime", LARGE_INTEGER),
+        ("LastAccessTime", LARGE_INTEGER),
+        ("LastWriteTime", LARGE_INTEGER),
+        ("ChangeTime", LARGE_INTEGER),
+        ("FileAttributes", ULONG),
+    ]
+FILE_BASIC_INFORMATION = _FILE_BASIC_INFORMATION
+PFILE_BASIC_INFORMATION = POINTER(_FILE_BASIC_INFORMATION)
+
+class _FILE_EA_INFORMATION(Structure):
+    _fields_ = [
+        ("EaSize", ULONG),
+    ]
+PFILE_EA_INFORMATION = POINTER(_FILE_EA_INFORMATION)
+FILE_EA_INFORMATION = _FILE_EA_INFORMATION
+
+class _FILE_IO_PRIORITY_HINT_INFORMATION(Structure):
+    _fields_ = [
+        ("PriorityHint", IO_PRIORITY_HINT),
+    ]
+PFILE_IO_PRIORITY_HINT_INFORMATION = POINTER(_FILE_IO_PRIORITY_HINT_INFORMATION)
+FILE_IO_PRIORITY_HINT_INFORMATION = _FILE_IO_PRIORITY_HINT_INFORMATION
+
+class _FILE_MODE_INFORMATION(Structure):
+    _fields_ = [
+        ("Mode", ULONG),
+    ]
+PFILE_MODE_INFORMATION = POINTER(_FILE_MODE_INFORMATION)
+FILE_MODE_INFORMATION = _FILE_MODE_INFORMATION
+
+class _FILE_NAME_INFORMATION(Structure):
+    _fields_ = [
+        ("FileNameLength", ULONG),
+        ("FileName", WCHAR * (1)),
+    ]
+PFILE_NAME_INFORMATION = POINTER(_FILE_NAME_INFORMATION)
+FILE_NAME_INFORMATION = _FILE_NAME_INFORMATION
+
+class _FILE_NETWORK_OPEN_INFORMATION(Structure):
+    _fields_ = [
+        ("CreationTime", LARGE_INTEGER),
+        ("LastAccessTime", LARGE_INTEGER),
+        ("LastWriteTime", LARGE_INTEGER),
+        ("ChangeTime", LARGE_INTEGER),
+        ("AllocationSize", LARGE_INTEGER),
+        ("EndOfFile", LARGE_INTEGER),
+        ("FileAttributes", ULONG),
+    ]
+PFILE_NETWORK_OPEN_INFORMATION = POINTER(_FILE_NETWORK_OPEN_INFORMATION)
+FILE_NETWORK_OPEN_INFORMATION = _FILE_NETWORK_OPEN_INFORMATION
+
+class _FILE_STANDARD_INFORMATION(Structure):
+    _fields_ = [
+        ("AllocationSize", LARGE_INTEGER),
+        ("EndOfFile", LARGE_INTEGER),
+        ("NumberOfLinks", ULONG),
+        ("DeletePending", BOOLEAN),
+        ("Directory", BOOLEAN),
+    ]
+FILE_STANDARD_INFORMATION = _FILE_STANDARD_INFORMATION
+PFILE_STANDARD_INFORMATION = POINTER(_FILE_STANDARD_INFORMATION)
+
+class _FILE_ACCESS_INFORMATION(Structure):
+    _fields_ = [
+        ("AccessFlags", ACCESS_MASK),
+    ]
+FILE_ACCESS_INFORMATION = _FILE_ACCESS_INFORMATION
+PFILE_ACCESS_INFORMATION = POINTER(_FILE_ACCESS_INFORMATION)
+
+class _FILE_POSITION_INFORMATION(Structure):
+    _fields_ = [
+        ("CurrentByteOffset", LARGE_INTEGER),
+    ]
+PFILE_POSITION_INFORMATION = POINTER(_FILE_POSITION_INFORMATION)
+FILE_POSITION_INFORMATION = _FILE_POSITION_INFORMATION
+
+class _FILE_IS_REMOTE_DEVICE_INFORMATION(Structure):
+    _fields_ = [
+        ("IsRemote", BOOLEAN),
+    ]
+FILE_IS_REMOTE_DEVICE_INFORMATION = _FILE_IS_REMOTE_DEVICE_INFORMATION
+PFILE_IS_REMOTE_DEVICE_INFORMATION = POINTER(_FILE_IS_REMOTE_DEVICE_INFORMATION)
+
+class _FILE_ALL_INFORMATION(Structure):
+    _fields_ = [
+        ("BasicInformation", FILE_BASIC_INFORMATION),
+        ("StandardInformation", FILE_STANDARD_INFORMATION),
+        ("InternalInformation", FILE_INTERNAL_INFORMATION),
+        ("EaInformation", FILE_EA_INFORMATION),
+        ("AccessInformation", FILE_ACCESS_INFORMATION),
+        ("PositionInformation", FILE_POSITION_INFORMATION),
+        ("ModeInformation", FILE_MODE_INFORMATION),
+        ("AlignmentInformation", FILE_ALIGNMENT_INFORMATION),
+        ("NameInformation", FILE_NAME_INFORMATION),
+    ]
+PFILE_ALL_INFORMATION = POINTER(_FILE_ALL_INFORMATION)
+FILE_ALL_INFORMATION = _FILE_ALL_INFORMATION
+
+class _FILE_STREAM_INFORMATION(Structure):
+    _fields_ = [
+        ("NextEntryOffset", ULONG),
+        ("StreamNameLength", ULONG),
+        ("StreamSize", LARGE_INTEGER),
+        ("StreamAllocationSize", LARGE_INTEGER),
+        ("StreamName", WCHAR * (1)),
+    ]
+FILE_STREAM_INFORMATION = _FILE_STREAM_INFORMATION
+PFILE_STREAM_INFORMATION = POINTER(_FILE_STREAM_INFORMATION)
+
+class _FILE_DISPOSITION_INFORMATION(Structure):
+    _fields_ = [
+        ("DeleteFile", BOOLEAN),
+    ]
+PFILE_DISPOSITION_INFORMATION = POINTER(_FILE_DISPOSITION_INFORMATION)
+FILE_DISPOSITION_INFORMATION = _FILE_DISPOSITION_INFORMATION
+
+class _FILE_FULL_EA_INFORMATION(Structure):
+    _fields_ = [
+        ("NextEntryOffset", ULONG),
+        ("Flags", BYTE),
+        ("EaNameLength", BYTE),
+        ("EaValueLength", USHORT),
+        ("EaName", CHAR * (1)),
+    ]
+FILE_FULL_EA_INFORMATION = _FILE_FULL_EA_INFORMATION
+PFILE_FULL_EA_INFORMATION = POINTER(_FILE_FULL_EA_INFORMATION)
+
+class _FILE_GET_EA_INFORMATION(Structure):
+    _fields_ = [
+        ("NextEntryOffset", ULONG),
+        ("EaNameLength", UCHAR),
+        ("EaName", CHAR * (1)),
+    ]
+FILE_GET_EA_INFORMATION = _FILE_GET_EA_INFORMATION
+PFILE_GET_EA_INFORMATION = POINTER(_FILE_GET_EA_INFORMATION)
+
+class tagVS_FIXEDFILEINFO(Structure):
+    _fields_ = [
+        ("dwSignature", DWORD),
+        ("dwStrucVersion", DWORD),
+        ("dwFileVersionMS", DWORD),
+        ("dwFileVersionLS", DWORD),
+        ("dwProductVersionMS", DWORD),
+        ("dwProductVersionLS", DWORD),
+        ("dwFileFlagsMask", DWORD),
+        ("dwFileFlags", DWORD),
+        ("dwFileOS", DWORD),
+        ("dwFileType", DWORD),
+        ("dwFileSubtype", DWORD),
+        ("dwFileDateMS", DWORD),
+        ("dwFileDateLS", DWORD),
+    ]
+VS_FIXEDFILEINFO = tagVS_FIXEDFILEINFO
+
+class _ANON__FILE_LINK_INFORMATION_SUB_UNION_1(Union):
+    _fields_ = [
+        ("ReplaceIfExists", BOOLEAN),
+        ("Flags", ULONG),
+    ]
+
+class _FILE_LINK_INFORMATION(Structure):
+    _anonymous_ = ("anon_01",)
+    _fields_ = [
+        ("anon_01", _ANON__FILE_LINK_INFORMATION_SUB_UNION_1),
+        ("RootDirectory", HANDLE),
+        ("FileNameLength", ULONG),
+        ("FileName", WCHAR * (1)),
+    ]
+PFILE_LINK_INFORMATION = POINTER(_FILE_LINK_INFORMATION)
+FILE_LINK_INFORMATION = _FILE_LINK_INFORMATION
+
+class _WIN32_FIND_DATAA(Structure):
+    _fields_ = [
+        ("dwFileAttributes", DWORD),
+        ("ftCreationTime", FILETIME),
+        ("ftLastAccessTime", FILETIME),
+        ("ftLastWriteTime", FILETIME),
+        ("nFileSizeHigh", DWORD),
+        ("nFileSizeLow", DWORD),
+        ("dwReserved0", DWORD),
+        ("dwReserved1", DWORD),
+        ("cFileName", CHAR * (MAX_PATH)),
+        ("cAlternateFileName", CHAR * (14)),
+        ("dwFileType", DWORD),
+        ("dwCreatorType", DWORD),
+        ("wFinderFlags", WORD),
+    ]
+LPWIN32_FIND_DATAA = POINTER(_WIN32_FIND_DATAA)
+PWIN32_FIND_DATAA = POINTER(_WIN32_FIND_DATAA)
+WIN32_FIND_DATAA = _WIN32_FIND_DATAA
+
+class _WIN32_FIND_DATAW(Structure):
+    _fields_ = [
+        ("dwFileAttributes", DWORD),
+        ("ftCreationTime", FILETIME),
+        ("ftLastAccessTime", FILETIME),
+        ("ftLastWriteTime", FILETIME),
+        ("nFileSizeHigh", DWORD),
+        ("nFileSizeLow", DWORD),
+        ("dwReserved0", DWORD),
+        ("dwReserved1", DWORD),
+        ("cFileName", WCHAR * (MAX_PATH)),
+        ("cAlternateFileName", WCHAR * (14)),
+        ("dwFileType", DWORD),
+        ("dwCreatorType", DWORD),
+        ("wFinderFlags", WORD),
+    ]
+PWIN32_FIND_DATAW = POINTER(_WIN32_FIND_DATAW)
+WIN32_FIND_DATAW = _WIN32_FIND_DATAW
+LPWIN32_FIND_DATAW = POINTER(_WIN32_FIND_DATAW)
+
+BG_JOB_STATE_QUEUED = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_QUEUED", 0x0)
+BG_JOB_STATE_CONNECTING = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_CONNECTING", 0x1)
+BG_JOB_STATE_TRANSFERRING = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_TRANSFERRING", 0x2)
+BG_JOB_STATE_SUSPENDED = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_SUSPENDED", 0x3)
+BG_JOB_STATE_ERROR = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_ERROR", 0x4)
+BG_JOB_STATE_TRANSIENT_ERROR = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_TRANSIENT_ERROR", 0x5)
+BG_JOB_STATE_TRANSFERRED = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_TRANSFERRED", 0x6)
+BG_JOB_STATE_ACKNOWLEDGED = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_ACKNOWLEDGED", 0x7)
+BG_JOB_STATE_CANCELLED = EnumValue("_BG_JOB_STATE", "BG_JOB_STATE_CANCELLED", 0x8)
+class _BG_JOB_STATE(EnumType):
+    values = [BG_JOB_STATE_QUEUED, BG_JOB_STATE_CONNECTING, BG_JOB_STATE_TRANSFERRING, BG_JOB_STATE_SUSPENDED, BG_JOB_STATE_ERROR, BG_JOB_STATE_TRANSIENT_ERROR, BG_JOB_STATE_TRANSFERRED, BG_JOB_STATE_ACKNOWLEDGED, BG_JOB_STATE_CANCELLED]
+    mapper = FlagMapper(*values)
+BG_JOB_STATE = _BG_JOB_STATE
+
+
+BG_JOB_PROXY_USAGE_PRECONFIG = EnumValue("_BG_JOB_PROXY_USAGE", "BG_JOB_PROXY_USAGE_PRECONFIG", 0x0)
+BG_JOB_PROXY_USAGE_NO_PROXY = EnumValue("_BG_JOB_PROXY_USAGE", "BG_JOB_PROXY_USAGE_NO_PROXY", 0x1)
+BG_JOB_PROXY_USAGE_OVERRIDE = EnumValue("_BG_JOB_PROXY_USAGE", "BG_JOB_PROXY_USAGE_OVERRIDE", 0x2)
+BG_JOB_PROXY_USAGE_AUTODETECT = EnumValue("_BG_JOB_PROXY_USAGE", "BG_JOB_PROXY_USAGE_AUTODETECT", 0x3)
+class _BG_JOB_PROXY_USAGE(EnumType):
+    values = [BG_JOB_PROXY_USAGE_PRECONFIG, BG_JOB_PROXY_USAGE_NO_PROXY, BG_JOB_PROXY_USAGE_OVERRIDE, BG_JOB_PROXY_USAGE_AUTODETECT]
+    mapper = FlagMapper(*values)
+BG_JOB_PROXY_USAGE = _BG_JOB_PROXY_USAGE
+
+
+BG_JOB_PRIORITY_FOREGROUND = EnumValue("_BG_JOB_PRIORITY", "BG_JOB_PRIORITY_FOREGROUND", 0x0)
+BG_JOB_PRIORITY_HIGH = EnumValue("_BG_JOB_PRIORITY", "BG_JOB_PRIORITY_HIGH", 0x1)
+BG_JOB_PRIORITY_NORMAL = EnumValue("_BG_JOB_PRIORITY", "BG_JOB_PRIORITY_NORMAL", 0x2)
+BG_JOB_PRIORITY_LOW = EnumValue("_BG_JOB_PRIORITY", "BG_JOB_PRIORITY_LOW", 0x3)
+class _BG_JOB_PRIORITY(EnumType):
+    values = [BG_JOB_PRIORITY_FOREGROUND, BG_JOB_PRIORITY_HIGH, BG_JOB_PRIORITY_NORMAL, BG_JOB_PRIORITY_LOW]
+    mapper = FlagMapper(*values)
+BG_JOB_PRIORITY = _BG_JOB_PRIORITY
+
+
+BG_ERROR_CONTEXT_NONE = EnumValue("_BG_ERROR_CONTEXT", "BG_ERROR_CONTEXT_NONE", 0x0)
+BG_ERROR_CONTEXT_UNKNOWN = EnumValue("_BG_ERROR_CONTEXT", "BG_ERROR_CONTEXT_UNKNOWN", 0x1)
+BG_ERROR_CONTEXT_GENERAL_QUEUE_MANAGER = EnumValue("_BG_ERROR_CONTEXT", "BG_ERROR_CONTEXT_GENERAL_QUEUE_MANAGER", 0x2)
+BG_ERROR_CONTEXT_QUEUE_MANAGER_NOTIFICATION = EnumValue("_BG_ERROR_CONTEXT", "BG_ERROR_CONTEXT_QUEUE_MANAGER_NOTIFICATION", 0x3)
+BG_ERROR_CONTEXT_LOCAL_FILE = EnumValue("_BG_ERROR_CONTEXT", "BG_ERROR_CONTEXT_LOCAL_FILE", 0x4)
+BG_ERROR_CONTEXT_REMOTE_FILE = EnumValue("_BG_ERROR_CONTEXT", "BG_ERROR_CONTEXT_REMOTE_FILE", 0x5)
+BG_ERROR_CONTEXT_GENERAL_TRANSPORT = EnumValue("_BG_ERROR_CONTEXT", "BG_ERROR_CONTEXT_GENERAL_TRANSPORT", 0x6)
+BG_ERROR_CONTEXT_REMOTE_APPLICATION = EnumValue("_BG_ERROR_CONTEXT", "BG_ERROR_CONTEXT_REMOTE_APPLICATION", 0x7)
+class _BG_ERROR_CONTEXT(EnumType):
+    values = [BG_ERROR_CONTEXT_NONE, BG_ERROR_CONTEXT_UNKNOWN, BG_ERROR_CONTEXT_GENERAL_QUEUE_MANAGER, BG_ERROR_CONTEXT_QUEUE_MANAGER_NOTIFICATION, BG_ERROR_CONTEXT_LOCAL_FILE, BG_ERROR_CONTEXT_REMOTE_FILE, BG_ERROR_CONTEXT_GENERAL_TRANSPORT, BG_ERROR_CONTEXT_REMOTE_APPLICATION]
+    mapper = FlagMapper(*values)
+BG_ERROR_CONTEXT = _BG_ERROR_CONTEXT
+
+
+BG_JOB_TYPE_DOWNLOAD = EnumValue("_BG_JOB_TYPE", "BG_JOB_TYPE_DOWNLOAD", 0x0)
+BG_JOB_TYPE_UPLOAD = EnumValue("_BG_JOB_TYPE", "BG_JOB_TYPE_UPLOAD", 0x1)
+BG_JOB_TYPE_UPLOAD_REPLY = EnumValue("_BG_JOB_TYPE", "BG_JOB_TYPE_UPLOAD_REPLY", 0x2)
+class _BG_JOB_TYPE(EnumType):
+    values = [BG_JOB_TYPE_DOWNLOAD, BG_JOB_TYPE_UPLOAD, BG_JOB_TYPE_UPLOAD_REPLY]
+    mapper = FlagMapper(*values)
+BG_JOB_TYPE = _BG_JOB_TYPE
+
+
+class _BG_FILE_PROGRESS(Structure):
+    _fields_ = [
+        ("BytesTotal", UINT64),
+        ("BytesTransferred", UINT64),
+        ("Completed", BOOL),
+    ]
+BG_FILE_PROGRESS = _BG_FILE_PROGRESS
+
+class _BG_JOB_PROGRESS(Structure):
+    _fields_ = [
+        ("BytesTotal", UINT64),
+        ("BytesTransferred", UINT64),
+        ("FilesTotal", ULONG),
+        ("FilesTransferred", ULONG),
+    ]
+BG_JOB_PROGRESS = _BG_JOB_PROGRESS
+
+class _BG_FILE_INFO(Structure):
+    _fields_ = [
+        ("RemoteName", LPWSTR),
+        ("LocalName", LPWSTR),
+    ]
+BG_FILE_INFO = _BG_FILE_INFO
+
+class _BG_JOB_TIMES(Structure):
+    _fields_ = [
+        ("CreationTime", FILETIME),
+        ("ModificationTime", FILETIME),
+        ("TransferCompletionTime", FILETIME),
+    ]
+BG_JOB_TIMES = _BG_JOB_TIMES
+
+class _EXCEPTION_DEBUG_INFO(Structure):
+    _fields_ = [
+        ("ExceptionRecord", EXCEPTION_RECORD),
+        ("dwFirstChance", DWORD),
+    ]
+LPEXCEPTION_DEBUG_INFO = POINTER(_EXCEPTION_DEBUG_INFO)
+EXCEPTION_DEBUG_INFO = _EXCEPTION_DEBUG_INFO
+
+class _CREATE_THREAD_DEBUG_INFO(Structure):
+    _fields_ = [
+        ("hThread", HANDLE),
+        ("lpThreadLocalBase", LPVOID),
+        ("lpStartAddress", LPTHREAD_START_ROUTINE),
+    ]
+LPCREATE_THREAD_DEBUG_INFO = POINTER(_CREATE_THREAD_DEBUG_INFO)
+CREATE_THREAD_DEBUG_INFO = _CREATE_THREAD_DEBUG_INFO
+
+class _CREATE_PROCESS_DEBUG_INFO(Structure):
+    _fields_ = [
+        ("hFile", HANDLE),
+        ("hProcess", HANDLE),
+        ("hThread", HANDLE),
+        ("lpBaseOfImage", LPVOID),
+        ("dwDebugInfoFileOffset", DWORD),
+        ("nDebugInfoSize", DWORD),
+        ("lpThreadLocalBase", LPVOID),
+        ("lpStartAddress", LPTHREAD_START_ROUTINE),
+        ("lpImageName", LPVOID),
+        ("fUnicode", WORD),
+    ]
+CREATE_PROCESS_DEBUG_INFO = _CREATE_PROCESS_DEBUG_INFO
+LPCREATE_PROCESS_DEBUG_INFO = POINTER(_CREATE_PROCESS_DEBUG_INFO)
+
+class _EXIT_THREAD_DEBUG_INFO(Structure):
+    _fields_ = [
+        ("dwExitCode", DWORD),
+    ]
+EXIT_THREAD_DEBUG_INFO = _EXIT_THREAD_DEBUG_INFO
+LPEXIT_THREAD_DEBUG_INFO = POINTER(_EXIT_THREAD_DEBUG_INFO)
+
+class _EXIT_PROCESS_DEBUG_INFO(Structure):
+    _fields_ = [
+        ("dwExitCode", DWORD),
+    ]
+LPEXIT_PROCESS_DEBUG_INFO = POINTER(_EXIT_PROCESS_DEBUG_INFO)
+EXIT_PROCESS_DEBUG_INFO = _EXIT_PROCESS_DEBUG_INFO
+
+class _LOAD_DLL_DEBUG_INFO(Structure):
+    _fields_ = [
+        ("hFile", HANDLE),
+        ("lpBaseOfDll", LPVOID),
+        ("dwDebugInfoFileOffset", DWORD),
+        ("nDebugInfoSize", DWORD),
+        ("lpImageName", LPVOID),
+        ("fUnicode", WORD),
+    ]
+LPLOAD_DLL_DEBUG_INFO = POINTER(_LOAD_DLL_DEBUG_INFO)
+LOAD_DLL_DEBUG_INFO = _LOAD_DLL_DEBUG_INFO
+
+# typedef struct _LOAD_DLL_DEBUG_INFO {
+#     HANDLE hFile;
+#     LPVOID lpBaseOfDll;
+#     DWORD dwDebugInfoFileOffset;
+#     DWORD nDebugInfoSize;
+#     LPVOID lpImageName;
+#     WORD fUnicode;
+# } LOAD_DLL_DEBUG_INFO, *LPLOAD_DLL_DEBUG_INFO;
+
+class _LOAD_DLL_DEBUG_INFO(_LOAD_DLL_DEBUG_INFO):
+    def hello(self):
+        return "hello"
+LPLOAD_DLL_DEBUG_INFO = POINTER(_LOAD_DLL_DEBUG_INFO)
+LOAD_DLL_DEBUG_INFO = _LOAD_DLL_DEBUG_INFO
+class _UNLOAD_DLL_DEBUG_INFO(Structure):
+    _fields_ = [
+        ("lpBaseOfDll", LPVOID),
+    ]
+UNLOAD_DLL_DEBUG_INFO = _UNLOAD_DLL_DEBUG_INFO
+LPUNLOAD_DLL_DEBUG_INFO = POINTER(_UNLOAD_DLL_DEBUG_INFO)
+
+class _OUTPUT_DEBUG_STRING_INFO(Structure):
+    _fields_ = [
+        ("lpDebugStringData", LPSTR),
+        ("fUnicode", WORD),
+        ("nDebugStringLength", WORD),
+    ]
+OUTPUT_DEBUG_STRING_INFO = _OUTPUT_DEBUG_STRING_INFO
+LPOUTPUT_DEBUG_STRING_INFO = POINTER(_OUTPUT_DEBUG_STRING_INFO)
+
+class _RIP_INFO(Structure):
+    _fields_ = [
+        ("dwError", DWORD),
+        ("dwType", DWORD),
+    ]
+LPRIP_INFO = POINTER(_RIP_INFO)
+RIP_INFO = _RIP_INFO
+
+class _TMP_UNION_DEBUG_INFO(Union):
+    _fields_ = [
+        ("Exception", EXCEPTION_DEBUG_INFO),
+        ("CreateThread", CREATE_THREAD_DEBUG_INFO),
+        ("CreateProcessInfo", CREATE_PROCESS_DEBUG_INFO),
+        ("ExitThread", EXIT_THREAD_DEBUG_INFO),
+        ("ExitProcess", EXIT_PROCESS_DEBUG_INFO),
+        ("LoadDll", LOAD_DLL_DEBUG_INFO),
+        ("UnloadDll", UNLOAD_DLL_DEBUG_INFO),
+        ("DebugString", OUTPUT_DEBUG_STRING_INFO),
+        ("RipInfo", RIP_INFO),
+    ]
+TMP_UNION_DEBUG_INFO = _TMP_UNION_DEBUG_INFO
+
+class _DEBUG_EVENT(Structure):
+    _fields_ = [
+        ("dwDebugEventCode", DWORD),
+        ("dwProcessId", DWORD),
+        ("dwThreadId", DWORD),
+        ("u", _TMP_UNION_DEBUG_INFO),
+    ]
+LPDEBUG_EVENT = POINTER(_DEBUG_EVENT)
+DEBUG_EVENT = _DEBUG_EVENT
+
+EvtRpcLogin = EnumValue("_EVT_LOGIN_CLASS", "EvtRpcLogin", 0x1)
+class _EVT_LOGIN_CLASS(EnumType):
+    values = [EvtRpcLogin]
+    mapper = FlagMapper(*values)
+EVT_LOGIN_CLASS = _EVT_LOGIN_CLASS
+
+
+EvtVarTypeNull = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeNull", 0x0)
+EvtVarTypeString = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeString", 0x1)
+EvtVarTypeAnsiString = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeAnsiString", 0x2)
+EvtVarTypeSByte = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeSByte", 0x3)
+EvtVarTypeByte = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeByte", 0x4)
+EvtVarTypeInt16 = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeInt16", 0x5)
+EvtVarTypeUInt16 = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeUInt16", 0x6)
+EvtVarTypeInt32 = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeInt32", 0x7)
+EvtVarTypeUInt32 = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeUInt32", 0x8)
+EvtVarTypeInt64 = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeInt64", 0x9)
+EvtVarTypeUInt64 = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeUInt64", 0xa)
+EvtVarTypeSingle = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeSingle", 0xb)
+EvtVarTypeDouble = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeDouble", 0xc)
+EvtVarTypeBoolean = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeBoolean", 0xd)
+EvtVarTypeBinary = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeBinary", 0xe)
+EvtVarTypeGuid = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeGuid", 0xf)
+EvtVarTypeSizeT = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeSizeT", 0x10)
+EvtVarTypeFileTime = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeFileTime", 0x11)
+EvtVarTypeSysTime = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeSysTime", 0x12)
+EvtVarTypeSid = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeSid", 0x13)
+EvtVarTypeHexInt32 = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeHexInt32", 0x14)
+EvtVarTypeHexInt64 = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeHexInt64", 0x15)
+EvtVarTypeEvtHandle = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeEvtHandle", 0x20)
+EvtVarTypeEvtXml = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeEvtXml", 0x23)
+class _EVT_VARIANT_TYPE(EnumType):
+    values = [EvtVarTypeNull, EvtVarTypeString, EvtVarTypeAnsiString, EvtVarTypeSByte, EvtVarTypeByte, EvtVarTypeInt16, EvtVarTypeUInt16, EvtVarTypeInt32, EvtVarTypeUInt32, EvtVarTypeInt64, EvtVarTypeUInt64, EvtVarTypeSingle, EvtVarTypeDouble, EvtVarTypeBoolean, EvtVarTypeBinary, EvtVarTypeGuid, EvtVarTypeSizeT, EvtVarTypeFileTime, EvtVarTypeSysTime, EvtVarTypeSid, EvtVarTypeHexInt32, EvtVarTypeHexInt64, EvtVarTypeEvtHandle, EvtVarTypeEvtXml]
+    mapper = FlagMapper(*values)
+EVT_VARIANT_TYPE = _EVT_VARIANT_TYPE
+
+
+EvtRenderContextValues = EnumValue("_EVT_RENDER_CONTEXT_FLAGS", "EvtRenderContextValues", 0x0)
+EvtRenderContextSystem = EnumValue("_EVT_RENDER_CONTEXT_FLAGS", "EvtRenderContextSystem", 0x1)
+EvtRenderContextUser = EnumValue("_EVT_RENDER_CONTEXT_FLAGS", "EvtRenderContextUser", 0x2)
+class _EVT_RENDER_CONTEXT_FLAGS(EnumType):
+    values = [EvtRenderContextValues, EvtRenderContextSystem, EvtRenderContextUser]
+    mapper = FlagMapper(*values)
+EVT_RENDER_CONTEXT_FLAGS = _EVT_RENDER_CONTEXT_FLAGS
+
+
+EvtSystemProviderName = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemProviderName", 0x0)
+EvtSystemProviderGuid = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemProviderGuid", 0x1)
+EvtSystemEventID = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemEventID", 0x2)
+EvtSystemQualifiers = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemQualifiers", 0x3)
+EvtSystemLevel = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemLevel", 0x4)
+EvtSystemTask = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemTask", 0x5)
+EvtSystemOpcode = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemOpcode", 0x6)
+EvtSystemKeywords = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemKeywords", 0x7)
+EvtSystemTimeCreated = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemTimeCreated", 0x8)
+EvtSystemEventRecordId = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemEventRecordId", 0x9)
+EvtSystemActivityID = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemActivityID", 0xa)
+EvtSystemRelatedActivityID = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemRelatedActivityID", 0xb)
+EvtSystemProcessID = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemProcessID", 0xc)
+EvtSystemThreadID = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemThreadID", 0xd)
+EvtSystemChannel = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemChannel", 0xe)
+EvtSystemComputer = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemComputer", 0xf)
+EvtSystemUserID = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemUserID", 0x10)
+EvtSystemVersion = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemVersion", 0x11)
+EvtSystemPropertyIdEND = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemPropertyIdEND", 0x12)
+class _EVT_SYSTEM_PROPERTY_ID(EnumType):
+    values = [EvtSystemProviderName, EvtSystemProviderGuid, EvtSystemEventID, EvtSystemQualifiers, EvtSystemLevel, EvtSystemTask, EvtSystemOpcode, EvtSystemKeywords, EvtSystemTimeCreated, EvtSystemEventRecordId, EvtSystemActivityID, EvtSystemRelatedActivityID, EvtSystemProcessID, EvtSystemThreadID, EvtSystemChannel, EvtSystemComputer, EvtSystemUserID, EvtSystemVersion, EvtSystemPropertyIdEND]
+    mapper = FlagMapper(*values)
+EVT_SYSTEM_PROPERTY_ID = _EVT_SYSTEM_PROPERTY_ID
+
+
+EvtRenderEventValues = EnumValue("_EVT_RENDER_FLAGS", "EvtRenderEventValues", 0x0)
+EvtRenderEventXml = EnumValue("_EVT_RENDER_FLAGS", "EvtRenderEventXml", 0x1)
+EvtRenderBookmark = EnumValue("_EVT_RENDER_FLAGS", "EvtRenderBookmark", 0x2)
+class _EVT_RENDER_FLAGS(EnumType):
+    values = [EvtRenderEventValues, EvtRenderEventXml, EvtRenderBookmark]
+    mapper = FlagMapper(*values)
+EVT_RENDER_FLAGS = _EVT_RENDER_FLAGS
+
+
+EvtQueryChannelPath = EnumValue("_EVT_QUERY_FLAGS", "EvtQueryChannelPath", 0x1)
+EvtQueryFilePath = EnumValue("_EVT_QUERY_FLAGS", "EvtQueryFilePath", 0x2)
+EvtQueryForwardDirection = EnumValue("_EVT_QUERY_FLAGS", "EvtQueryForwardDirection", 0x100)
+EvtQueryReverseDirection = EnumValue("_EVT_QUERY_FLAGS", "EvtQueryReverseDirection", 0x200)
+EvtQueryTolerateQueryErrors = EnumValue("_EVT_QUERY_FLAGS", "EvtQueryTolerateQueryErrors", 0x1000)
+class _EVT_QUERY_FLAGS(EnumType):
+    values = [EvtQueryChannelPath, EvtQueryFilePath, EvtQueryForwardDirection, EvtQueryReverseDirection, EvtQueryTolerateQueryErrors]
+    mapper = FlagMapper(*values)
+EVT_QUERY_FLAGS = _EVT_QUERY_FLAGS
+
+
+EvtLogCreationTime = EnumValue("_EVT_LOG_PROPERTY_ID", "EvtLogCreationTime", 0x0)
+EvtLogLastAccessTime = EnumValue("_EVT_LOG_PROPERTY_ID", "EvtLogLastAccessTime", 0x1)
+EvtLogLastWriteTime = EnumValue("_EVT_LOG_PROPERTY_ID", "EvtLogLastWriteTime", 0x2)
+EvtLogFileSize = EnumValue("_EVT_LOG_PROPERTY_ID", "EvtLogFileSize", 0x3)
+EvtLogAttributes = EnumValue("_EVT_LOG_PROPERTY_ID", "EvtLogAttributes", 0x4)
+EvtLogNumberOfLogRecords = EnumValue("_EVT_LOG_PROPERTY_ID", "EvtLogNumberOfLogRecords", 0x5)
+EvtLogOldestRecordNumber = EnumValue("_EVT_LOG_PROPERTY_ID", "EvtLogOldestRecordNumber", 0x6)
+EvtLogFull = EnumValue("_EVT_LOG_PROPERTY_ID", "EvtLogFull", 0x7)
+class _EVT_LOG_PROPERTY_ID(EnumType):
+    values = [EvtLogCreationTime, EvtLogLastAccessTime, EvtLogLastWriteTime, EvtLogFileSize, EvtLogAttributes, EvtLogNumberOfLogRecords, EvtLogOldestRecordNumber, EvtLogFull]
+    mapper = FlagMapper(*values)
+EVT_LOG_PROPERTY_ID = _EVT_LOG_PROPERTY_ID
+
+
+EvtOpenChannelPath = EnumValue("_EVT_OPEN_LOG_FLAGS", "EvtOpenChannelPath", 0x1)
+EvtOpenFilePath = EnumValue("_EVT_OPEN_LOG_FLAGS", "EvtOpenFilePath", 0x2)
+class _EVT_OPEN_LOG_FLAGS(EnumType):
+    values = [EvtOpenChannelPath, EvtOpenFilePath]
+    mapper = FlagMapper(*values)
+EVT_OPEN_LOG_FLAGS = _EVT_OPEN_LOG_FLAGS
+
+
+EvtChannelConfigEnabled = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelConfigEnabled", 0x0)
+EvtChannelConfigIsolation = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelConfigIsolation", 0x1)
+EvtChannelConfigType = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelConfigType", 0x2)
+EvtChannelConfigOwningPublisher = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelConfigOwningPublisher", 0x3)
+EvtChannelConfigClassicEventlog = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelConfigClassicEventlog", 0x4)
+EvtChannelConfigAccess = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelConfigAccess", 0x5)
+EvtChannelLoggingConfigRetention = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelLoggingConfigRetention", 0x6)
+EvtChannelLoggingConfigAutoBackup = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelLoggingConfigAutoBackup", 0x7)
+EvtChannelLoggingConfigMaxSize = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelLoggingConfigMaxSize", 0x8)
+EvtChannelLoggingConfigLogFilePath = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelLoggingConfigLogFilePath", 0x9)
+EvtChannelPublishingConfigLevel = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelPublishingConfigLevel", 0xa)
+EvtChannelPublishingConfigKeywords = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelPublishingConfigKeywords", 0xb)
+EvtChannelPublishingConfigControlGuid = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelPublishingConfigControlGuid", 0xc)
+EvtChannelPublishingConfigBufferSize = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelPublishingConfigBufferSize", 0xd)
+EvtChannelPublishingConfigMinBuffers = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelPublishingConfigMinBuffers", 0xe)
+EvtChannelPublishingConfigMaxBuffers = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelPublishingConfigMaxBuffers", 0xf)
+EvtChannelPublishingConfigLatency = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelPublishingConfigLatency", 0x10)
+EvtChannelPublishingConfigClockType = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelPublishingConfigClockType", 0x11)
+EvtChannelPublishingConfigSidType = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelPublishingConfigSidType", 0x12)
+EvtChannelPublisherList = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelPublisherList", 0x13)
+EvtChannelPublishingConfigFileMax = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelPublishingConfigFileMax", 0x14)
+EvtChannelConfigPropertyIdEND = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelConfigPropertyIdEND", 0x15)
+class _EVT_CHANNEL_CONFIG_PROPERTY_ID(EnumType):
+    values = [EvtChannelConfigEnabled, EvtChannelConfigIsolation, EvtChannelConfigType, EvtChannelConfigOwningPublisher, EvtChannelConfigClassicEventlog, EvtChannelConfigAccess, EvtChannelLoggingConfigRetention, EvtChannelLoggingConfigAutoBackup, EvtChannelLoggingConfigMaxSize, EvtChannelLoggingConfigLogFilePath, EvtChannelPublishingConfigLevel, EvtChannelPublishingConfigKeywords, EvtChannelPublishingConfigControlGuid, EvtChannelPublishingConfigBufferSize, EvtChannelPublishingConfigMinBuffers, EvtChannelPublishingConfigMaxBuffers, EvtChannelPublishingConfigLatency, EvtChannelPublishingConfigClockType, EvtChannelPublishingConfigSidType, EvtChannelPublisherList, EvtChannelPublishingConfigFileMax, EvtChannelConfigPropertyIdEND]
+    mapper = FlagMapper(*values)
+EVT_CHANNEL_CONFIG_PROPERTY_ID = _EVT_CHANNEL_CONFIG_PROPERTY_ID
+
+
+EvtChannelTypeAdmin = EnumValue("_EVT_CHANNEL_TYPE", "EvtChannelTypeAdmin", 0x0)
+EvtChannelTypeOperational = EnumValue("_EVT_CHANNEL_TYPE", "EvtChannelTypeOperational", 0x1)
+EvtChannelTypeAnalytic = EnumValue("_EVT_CHANNEL_TYPE", "EvtChannelTypeAnalytic", 0x2)
+EvtChannelTypeDebug = EnumValue("_EVT_CHANNEL_TYPE", "EvtChannelTypeDebug", 0x3)
+class _EVT_CHANNEL_TYPE(EnumType):
+    values = [EvtChannelTypeAdmin, EvtChannelTypeOperational, EvtChannelTypeAnalytic, EvtChannelTypeDebug]
+    mapper = FlagMapper(*values)
+EVT_CHANNEL_TYPE = _EVT_CHANNEL_TYPE
+
+
+EvtChannelIsolationTypeApplication = EnumValue("_EVT_CHANNEL_ISOLATION_TYPE", "EvtChannelIsolationTypeApplication", 0x0)
+EvtChannelIsolationTypeSystem = EnumValue("_EVT_CHANNEL_ISOLATION_TYPE", "EvtChannelIsolationTypeSystem", 0x1)
+EvtChannelIsolationTypeCustom = EnumValue("_EVT_CHANNEL_ISOLATION_TYPE", "EvtChannelIsolationTypeCustom", 0x2)
+class _EVT_CHANNEL_ISOLATION_TYPE(EnumType):
+    values = [EvtChannelIsolationTypeApplication, EvtChannelIsolationTypeSystem, EvtChannelIsolationTypeCustom]
+    mapper = FlagMapper(*values)
+EVT_CHANNEL_ISOLATION_TYPE = _EVT_CHANNEL_ISOLATION_TYPE
+
+
+EventMetadataEventID = EnumValue("_EVT_EVENT_METADATA_PROPERTY_ID", "EventMetadataEventID", 0x0)
+EventMetadataEventVersion = EnumValue("_EVT_EVENT_METADATA_PROPERTY_ID", "EventMetadataEventVersion", 0x1)
+EventMetadataEventChannel = EnumValue("_EVT_EVENT_METADATA_PROPERTY_ID", "EventMetadataEventChannel", 0x2)
+EventMetadataEventLevel = EnumValue("_EVT_EVENT_METADATA_PROPERTY_ID", "EventMetadataEventLevel", 0x3)
+EventMetadataEventOpcode = EnumValue("_EVT_EVENT_METADATA_PROPERTY_ID", "EventMetadataEventOpcode", 0x4)
+EventMetadataEventTask = EnumValue("_EVT_EVENT_METADATA_PROPERTY_ID", "EventMetadataEventTask", 0x5)
+EventMetadataEventKeyword = EnumValue("_EVT_EVENT_METADATA_PROPERTY_ID", "EventMetadataEventKeyword", 0x6)
+EventMetadataEventMessageID = EnumValue("_EVT_EVENT_METADATA_PROPERTY_ID", "EventMetadataEventMessageID", 0x7)
+EventMetadataEventTemplate = EnumValue("_EVT_EVENT_METADATA_PROPERTY_ID", "EventMetadataEventTemplate", 0x8)
+EvtEventMetadataPropertyIdEND = EnumValue("_EVT_EVENT_METADATA_PROPERTY_ID", "EvtEventMetadataPropertyIdEND", 0x9)
+class _EVT_EVENT_METADATA_PROPERTY_ID(EnumType):
+    values = [EventMetadataEventID, EventMetadataEventVersion, EventMetadataEventChannel, EventMetadataEventLevel, EventMetadataEventOpcode, EventMetadataEventTask, EventMetadataEventKeyword, EventMetadataEventMessageID, EventMetadataEventTemplate, EvtEventMetadataPropertyIdEND]
+    mapper = FlagMapper(*values)
+EVT_EVENT_METADATA_PROPERTY_ID = _EVT_EVENT_METADATA_PROPERTY_ID
+
+
+EvtPublisherMetadataPublisherGuid = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataPublisherGuid", 0x0)
+EvtPublisherMetadataResourceFilePath = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataResourceFilePath", 0x1)
+EvtPublisherMetadataParameterFilePath = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataParameterFilePath", 0x2)
+EvtPublisherMetadataMessageFilePath = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataMessageFilePath", 0x3)
+EvtPublisherMetadataHelpLink = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataHelpLink", 0x4)
+EvtPublisherMetadataPublisherMessageID = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataPublisherMessageID", 0x5)
+EvtPublisherMetadataChannelReferences = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataChannelReferences", 0x6)
+EvtPublisherMetadataChannelReferencePath = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataChannelReferencePath", 0x7)
+EvtPublisherMetadataChannelReferenceIndex = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataChannelReferenceIndex", 0x8)
+EvtPublisherMetadataChannelReferenceID = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataChannelReferenceID", 0x9)
+EvtPublisherMetadataChannelReferenceFlags = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataChannelReferenceFlags", 0xa)
+EvtPublisherMetadataChannelReferenceMessageID = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataChannelReferenceMessageID", 0xb)
+EvtPublisherMetadataLevels = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataLevels", 0xc)
+EvtPublisherMetadataLevelName = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataLevelName", 0xd)
+EvtPublisherMetadataLevelValue = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataLevelValue", 0xe)
+EvtPublisherMetadataLevelMessageID = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataLevelMessageID", 0xf)
+EvtPublisherMetadataTasks = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataTasks", 0x10)
+EvtPublisherMetadataTaskName = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataTaskName", 0x11)
+EvtPublisherMetadataTaskEventGuid = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataTaskEventGuid", 0x12)
+EvtPublisherMetadataTaskValue = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataTaskValue", 0x13)
+EvtPublisherMetadataTaskMessageID = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataTaskMessageID", 0x14)
+EvtPublisherMetadataOpcodes = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataOpcodes", 0x15)
+EvtPublisherMetadataOpcodeName = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataOpcodeName", 0x16)
+EvtPublisherMetadataOpcodeValue = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataOpcodeValue", 0x17)
+EvtPublisherMetadataOpcodeMessageID = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataOpcodeMessageID", 0x18)
+EvtPublisherMetadataKeywords = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataKeywords", 0x19)
+EvtPublisherMetadataKeywordName = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataKeywordName", 0x1a)
+EvtPublisherMetadataKeywordValue = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataKeywordValue", 0x1b)
+EvtPublisherMetadataKeywordMessageID = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataKeywordMessageID", 0x1c)
+EvtPublisherMetadataPropertyIdEND = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataPropertyIdEND", 0x1d)
+class _EVT_PUBLISHER_METADATA_PROPERTY_ID(EnumType):
+    values = [EvtPublisherMetadataPublisherGuid, EvtPublisherMetadataResourceFilePath, EvtPublisherMetadataParameterFilePath, EvtPublisherMetadataMessageFilePath, EvtPublisherMetadataHelpLink, EvtPublisherMetadataPublisherMessageID, EvtPublisherMetadataChannelReferences, EvtPublisherMetadataChannelReferencePath, EvtPublisherMetadataChannelReferenceIndex, EvtPublisherMetadataChannelReferenceID, EvtPublisherMetadataChannelReferenceFlags, EvtPublisherMetadataChannelReferenceMessageID, EvtPublisherMetadataLevels, EvtPublisherMetadataLevelName, EvtPublisherMetadataLevelValue, EvtPublisherMetadataLevelMessageID, EvtPublisherMetadataTasks, EvtPublisherMetadataTaskName, EvtPublisherMetadataTaskEventGuid, EvtPublisherMetadataTaskValue, EvtPublisherMetadataTaskMessageID, EvtPublisherMetadataOpcodes, EvtPublisherMetadataOpcodeName, EvtPublisherMetadataOpcodeValue, EvtPublisherMetadataOpcodeMessageID, EvtPublisherMetadataKeywords, EvtPublisherMetadataKeywordName, EvtPublisherMetadataKeywordValue, EvtPublisherMetadataKeywordMessageID, EvtPublisherMetadataPropertyIdEND]
+    mapper = FlagMapper(*values)
+EVT_PUBLISHER_METADATA_PROPERTY_ID = _EVT_PUBLISHER_METADATA_PROPERTY_ID
+
+
+EvtFormatMessageEvent = EnumValue("_EVT_FORMAT_MESSAGE_FLAGS", "EvtFormatMessageEvent", 0x1)
+EvtFormatMessageLevel = EnumValue("_EVT_FORMAT_MESSAGE_FLAGS", "EvtFormatMessageLevel", 0x2)
+EvtFormatMessageTask = EnumValue("_EVT_FORMAT_MESSAGE_FLAGS", "EvtFormatMessageTask", 0x3)
+EvtFormatMessageOpcode = EnumValue("_EVT_FORMAT_MESSAGE_FLAGS", "EvtFormatMessageOpcode", 0x4)
+EvtFormatMessageKeyword = EnumValue("_EVT_FORMAT_MESSAGE_FLAGS", "EvtFormatMessageKeyword", 0x5)
+EvtFormatMessageChannel = EnumValue("_EVT_FORMAT_MESSAGE_FLAGS", "EvtFormatMessageChannel", 0x6)
+EvtFormatMessageProvider = EnumValue("_EVT_FORMAT_MESSAGE_FLAGS", "EvtFormatMessageProvider", 0x7)
+EvtFormatMessageId = EnumValue("_EVT_FORMAT_MESSAGE_FLAGS", "EvtFormatMessageId", 0x8)
+EvtFormatMessageXml = EnumValue("_EVT_FORMAT_MESSAGE_FLAGS", "EvtFormatMessageXml", 0x9)
+class _EVT_FORMAT_MESSAGE_FLAGS(EnumType):
+    values = [EvtFormatMessageEvent, EvtFormatMessageLevel, EvtFormatMessageTask, EvtFormatMessageOpcode, EvtFormatMessageKeyword, EvtFormatMessageChannel, EvtFormatMessageProvider, EvtFormatMessageId, EvtFormatMessageXml]
+    mapper = FlagMapper(*values)
+EVT_FORMAT_MESSAGE_FLAGS = _EVT_FORMAT_MESSAGE_FLAGS
+
+
+class _EVENTLOGRECORD(Structure):
+    _fields_ = [
+        ("Length", DWORD),
+        ("Reserved", DWORD),
+        ("RecordNumber", DWORD),
+        ("TimeGenerated", DWORD),
+        ("TimeWritten", DWORD),
+        ("EventID", DWORD),
+        ("EventType", WORD),
+        ("NumStrings", WORD),
+        ("EventCategory", WORD),
+        ("ReservedFlags", WORD),
+        ("ClosingRecordNumber", DWORD),
+        ("StringOffset", DWORD),
+        ("UserSidLength", DWORD),
+        ("UserSidOffset", DWORD),
+        ("DataLength", DWORD),
+        ("DataOffset", DWORD),
+    ]
+PEVENTLOGRECORD = POINTER(_EVENTLOGRECORD)
+EVENTLOGRECORD = _EVENTLOGRECORD
+
+class _EVENTLOG_FULL_INFORMATION(Structure):
+    _fields_ = [
+        ("dwFull", DWORD),
+    ]
+EVENTLOG_FULL_INFORMATION = _EVENTLOG_FULL_INFORMATION
+LPEVENTLOG_FULL_INFORMATION = POINTER(_EVENTLOG_FULL_INFORMATION)
+
+class _ANON__EVT_VARIANT_SUB_UNION_1(Union):
+    _fields_ = [
+        ("BooleanVal", BOOL),
+        ("SByteVal", INT8),
+        ("Int16Val", INT16),
+        ("Int32Val", INT32),
+        ("Int64Val", INT64),
+        ("ByteVal", UINT8),
+        ("UInt16Val", UINT16),
+        ("UInt32Val", UINT32),
+        ("UInt64Val", UINT64),
+        ("SingleVal", FLOAT),
+        ("DoubleVal", DOUBLE),
+        ("FileTimeVal", ULONGLONG),
+        ("SysTimeVal", POINTER(SYSTEMTIME)),
+        ("GuidVal", POINTER(GUID)),
+        ("StringVal", LPCWSTR),
+        ("AnsiStringVal", LPCSTR),
+        ("BinaryVal", PBYTE),
+        ("SidVal", PSID),
+        ("SizeTVal", SIZE_T),
+        ("BooleanArr", POINTER(BOOL)),
+        ("SByteArr", POINTER(INT8)),
+        ("Int16Arr", POINTER(INT16)),
+        ("Int32Arr", POINTER(INT32)),
+        ("Int64Arr", POINTER(INT64)),
+        ("ByteArr", POINTER(UINT8)),
+        ("UInt16Arr", POINTER(UINT16)),
+        ("UInt32Arr", POINTER(UINT32)),
+        ("UInt64Arr", POINTER(UINT64)),
+        ("SingleArr", POINTER(FLOAT)),
+        ("DoubleArr", POINTER(DOUBLE)),
+        ("FileTimeArr", POINTER(FILETIME)),
+        ("SysTimeArr", POINTER(SYSTEMTIME)),
+        ("GuidArr", POINTER(GUID)),
+        ("StringArr", POINTER(LPWSTR)),
+        ("AnsiStringArr", POINTER(LPSTR)),
+        ("SidArr", POINTER(PSID)),
+        ("SizeTArr", POINTER(SIZE_T)),
+        ("EvtHandleVal", EVT_HANDLE),
+        ("XmlVal", LPCWSTR),
+        ("XmlValArr", POINTER(LPCWSTR)),
+    ]
+
+class _EVT_VARIANT(Structure):
+    _anonymous_ = ("anon_01",)
+    _fields_ = [
+        ("anon_01", _ANON__EVT_VARIANT_SUB_UNION_1),
+        ("Count", DWORD),
+        ("Type", DWORD),
+    ]
+PEVT_VARIANT = POINTER(_EVT_VARIANT)
+EVT_VARIANT = _EVT_VARIANT
+
+class _EVT_RPC_LOGIN(Structure):
+    _fields_ = [
+        ("Server", LPWSTR),
+        ("User", LPWSTR),
+        ("Domain", LPWSTR),
+        ("Password", LPWSTR),
+        ("Flags", DWORD),
+    ]
+EVT_RPC_LOGIN = _EVT_RPC_LOGIN
+
 class _TIME_ZONE_INFORMATION(Structure):
     _fields_ = [
         ("Bias", LONG),
@@ -8056,6 +7983,1612 @@ class _EVENT_DATA_DESCRIPTOR(Structure):
 EVENT_DATA_DESCRIPTOR = _EVENT_DATA_DESCRIPTOR
 PEVENT_DATA_DESCRIPTOR = POINTER(_EVENT_DATA_DESCRIPTOR)
 
+VIRTUAL_DISK_ACCESS_NONE = EnumValue("_VIRTUAL_DISK_ACCESS_MASK", "VIRTUAL_DISK_ACCESS_NONE", 0x0)
+VIRTUAL_DISK_ACCESS_ATTACH_RO = EnumValue("_VIRTUAL_DISK_ACCESS_MASK", "VIRTUAL_DISK_ACCESS_ATTACH_RO", 0x1)
+VIRTUAL_DISK_ACCESS_ATTACH_RW = EnumValue("_VIRTUAL_DISK_ACCESS_MASK", "VIRTUAL_DISK_ACCESS_ATTACH_RW", 0x2)
+VIRTUAL_DISK_ACCESS_DETACH = EnumValue("_VIRTUAL_DISK_ACCESS_MASK", "VIRTUAL_DISK_ACCESS_DETACH", 0x3)
+VIRTUAL_DISK_ACCESS_GET_INFO = EnumValue("_VIRTUAL_DISK_ACCESS_MASK", "VIRTUAL_DISK_ACCESS_GET_INFO", 0x4)
+VIRTUAL_DISK_ACCESS_CREATE = EnumValue("_VIRTUAL_DISK_ACCESS_MASK", "VIRTUAL_DISK_ACCESS_CREATE", 0x5)
+VIRTUAL_DISK_ACCESS_METAOPS = EnumValue("_VIRTUAL_DISK_ACCESS_MASK", "VIRTUAL_DISK_ACCESS_METAOPS", 0x6)
+VIRTUAL_DISK_ACCESS_READ = EnumValue("_VIRTUAL_DISK_ACCESS_MASK", "VIRTUAL_DISK_ACCESS_READ", 0x7)
+VIRTUAL_DISK_ACCESS_ALL = EnumValue("_VIRTUAL_DISK_ACCESS_MASK", "VIRTUAL_DISK_ACCESS_ALL", 0x8)
+VIRTUAL_DISK_ACCESS_WRITABLE = EnumValue("_VIRTUAL_DISK_ACCESS_MASK", "VIRTUAL_DISK_ACCESS_WRITABLE", 0x9)
+class _VIRTUAL_DISK_ACCESS_MASK(EnumType):
+    values = [VIRTUAL_DISK_ACCESS_NONE, VIRTUAL_DISK_ACCESS_ATTACH_RO, VIRTUAL_DISK_ACCESS_ATTACH_RW, VIRTUAL_DISK_ACCESS_DETACH, VIRTUAL_DISK_ACCESS_GET_INFO, VIRTUAL_DISK_ACCESS_CREATE, VIRTUAL_DISK_ACCESS_METAOPS, VIRTUAL_DISK_ACCESS_READ, VIRTUAL_DISK_ACCESS_ALL, VIRTUAL_DISK_ACCESS_WRITABLE]
+    mapper = FlagMapper(*values)
+VIRTUAL_DISK_ACCESS_MASK = _VIRTUAL_DISK_ACCESS_MASK
+
+
+OPEN_VIRTUAL_DISK_FLAG_NONE = EnumValue("_OPEN_VIRTUAL_DISK_FLAG", "OPEN_VIRTUAL_DISK_FLAG_NONE", 0x0)
+OPEN_VIRTUAL_DISK_FLAG_NO_PARENTS = EnumValue("_OPEN_VIRTUAL_DISK_FLAG", "OPEN_VIRTUAL_DISK_FLAG_NO_PARENTS", 0x1)
+OPEN_VIRTUAL_DISK_FLAG_BLANK_FILE = EnumValue("_OPEN_VIRTUAL_DISK_FLAG", "OPEN_VIRTUAL_DISK_FLAG_BLANK_FILE", 0x2)
+OPEN_VIRTUAL_DISK_FLAG_BOOT_DRIVE = EnumValue("_OPEN_VIRTUAL_DISK_FLAG", "OPEN_VIRTUAL_DISK_FLAG_BOOT_DRIVE", 0x3)
+OPEN_VIRTUAL_DISK_FLAG_CACHED_IO = EnumValue("_OPEN_VIRTUAL_DISK_FLAG", "OPEN_VIRTUAL_DISK_FLAG_CACHED_IO", 0x4)
+OPEN_VIRTUAL_DISK_FLAG_CUSTOM_DIFF_CHAIN = EnumValue("_OPEN_VIRTUAL_DISK_FLAG", "OPEN_VIRTUAL_DISK_FLAG_CUSTOM_DIFF_CHAIN", 0x5)
+OPEN_VIRTUAL_DISK_FLAG_PARENT_CACHED_IO = EnumValue("_OPEN_VIRTUAL_DISK_FLAG", "OPEN_VIRTUAL_DISK_FLAG_PARENT_CACHED_IO", 0x6)
+OPEN_VIRTUAL_DISK_FLAG_VHDSET_FILE_ONLY = EnumValue("_OPEN_VIRTUAL_DISK_FLAG", "OPEN_VIRTUAL_DISK_FLAG_VHDSET_FILE_ONLY", 0x7)
+OPEN_VIRTUAL_DISK_FLAG_IGNORE_RELATIVE_PARENT_LOCATOR = EnumValue("_OPEN_VIRTUAL_DISK_FLAG", "OPEN_VIRTUAL_DISK_FLAG_IGNORE_RELATIVE_PARENT_LOCATOR", 0x8)
+OPEN_VIRTUAL_DISK_FLAG_NO_WRITE_HARDENING = EnumValue("_OPEN_VIRTUAL_DISK_FLAG", "OPEN_VIRTUAL_DISK_FLAG_NO_WRITE_HARDENING", 0x9)
+class _OPEN_VIRTUAL_DISK_FLAG(EnumType):
+    values = [OPEN_VIRTUAL_DISK_FLAG_NONE, OPEN_VIRTUAL_DISK_FLAG_NO_PARENTS, OPEN_VIRTUAL_DISK_FLAG_BLANK_FILE, OPEN_VIRTUAL_DISK_FLAG_BOOT_DRIVE, OPEN_VIRTUAL_DISK_FLAG_CACHED_IO, OPEN_VIRTUAL_DISK_FLAG_CUSTOM_DIFF_CHAIN, OPEN_VIRTUAL_DISK_FLAG_PARENT_CACHED_IO, OPEN_VIRTUAL_DISK_FLAG_VHDSET_FILE_ONLY, OPEN_VIRTUAL_DISK_FLAG_IGNORE_RELATIVE_PARENT_LOCATOR, OPEN_VIRTUAL_DISK_FLAG_NO_WRITE_HARDENING]
+    mapper = FlagMapper(*values)
+OPEN_VIRTUAL_DISK_FLAG = _OPEN_VIRTUAL_DISK_FLAG
+
+
+ATTACH_VIRTUAL_DISK_FLAG_NONE = EnumValue("_ATTACH_VIRTUAL_DISK_FLAG", "ATTACH_VIRTUAL_DISK_FLAG_NONE", 0x0)
+ATTACH_VIRTUAL_DISK_FLAG_READ_ONLY = EnumValue("_ATTACH_VIRTUAL_DISK_FLAG", "ATTACH_VIRTUAL_DISK_FLAG_READ_ONLY", 0x1)
+ATTACH_VIRTUAL_DISK_FLAG_NO_DRIVE_LETTER = EnumValue("_ATTACH_VIRTUAL_DISK_FLAG", "ATTACH_VIRTUAL_DISK_FLAG_NO_DRIVE_LETTER", 0x2)
+ATTACH_VIRTUAL_DISK_FLAG_PERMANENT_LIFETIME = EnumValue("_ATTACH_VIRTUAL_DISK_FLAG", "ATTACH_VIRTUAL_DISK_FLAG_PERMANENT_LIFETIME", 0x3)
+ATTACH_VIRTUAL_DISK_FLAG_NO_LOCAL_HOST = EnumValue("_ATTACH_VIRTUAL_DISK_FLAG", "ATTACH_VIRTUAL_DISK_FLAG_NO_LOCAL_HOST", 0x4)
+ATTACH_VIRTUAL_DISK_FLAG_NO_SECURITY_DESCRIPTOR = EnumValue("_ATTACH_VIRTUAL_DISK_FLAG", "ATTACH_VIRTUAL_DISK_FLAG_NO_SECURITY_DESCRIPTOR", 0x5)
+ATTACH_VIRTUAL_DISK_FLAG_BYPASS_DEFAULT_ENCRYPTION_POLICY = EnumValue("_ATTACH_VIRTUAL_DISK_FLAG", "ATTACH_VIRTUAL_DISK_FLAG_BYPASS_DEFAULT_ENCRYPTION_POLICY", 0x6)
+ATTACH_VIRTUAL_DISK_FLAG_NON_PNP = EnumValue("_ATTACH_VIRTUAL_DISK_FLAG", "ATTACH_VIRTUAL_DISK_FLAG_NON_PNP", 0x7)
+ATTACH_VIRTUAL_DISK_FLAG_RESTRICTED_RANGE = EnumValue("_ATTACH_VIRTUAL_DISK_FLAG", "ATTACH_VIRTUAL_DISK_FLAG_RESTRICTED_RANGE", 0x8)
+ATTACH_VIRTUAL_DISK_FLAG_SINGLE_PARTITION = EnumValue("_ATTACH_VIRTUAL_DISK_FLAG", "ATTACH_VIRTUAL_DISK_FLAG_SINGLE_PARTITION", 0x9)
+ATTACH_VIRTUAL_DISK_FLAG_REGISTER_VOLUME = EnumValue("_ATTACH_VIRTUAL_DISK_FLAG", "ATTACH_VIRTUAL_DISK_FLAG_REGISTER_VOLUME", 0xa)
+class _ATTACH_VIRTUAL_DISK_FLAG(EnumType):
+    values = [ATTACH_VIRTUAL_DISK_FLAG_NONE, ATTACH_VIRTUAL_DISK_FLAG_READ_ONLY, ATTACH_VIRTUAL_DISK_FLAG_NO_DRIVE_LETTER, ATTACH_VIRTUAL_DISK_FLAG_PERMANENT_LIFETIME, ATTACH_VIRTUAL_DISK_FLAG_NO_LOCAL_HOST, ATTACH_VIRTUAL_DISK_FLAG_NO_SECURITY_DESCRIPTOR, ATTACH_VIRTUAL_DISK_FLAG_BYPASS_DEFAULT_ENCRYPTION_POLICY, ATTACH_VIRTUAL_DISK_FLAG_NON_PNP, ATTACH_VIRTUAL_DISK_FLAG_RESTRICTED_RANGE, ATTACH_VIRTUAL_DISK_FLAG_SINGLE_PARTITION, ATTACH_VIRTUAL_DISK_FLAG_REGISTER_VOLUME]
+    mapper = FlagMapper(*values)
+ATTACH_VIRTUAL_DISK_FLAG = _ATTACH_VIRTUAL_DISK_FLAG
+
+
+OPEN_VIRTUAL_DISK_VERSION_UNSPECIFIED = EnumValue("_OPEN_VIRTUAL_DISK_VERSION", "OPEN_VIRTUAL_DISK_VERSION_UNSPECIFIED", 0x0)
+OPEN_VIRTUAL_DISK_VERSION_1 = EnumValue("_OPEN_VIRTUAL_DISK_VERSION", "OPEN_VIRTUAL_DISK_VERSION_1", 0x1)
+OPEN_VIRTUAL_DISK_VERSION_2 = EnumValue("_OPEN_VIRTUAL_DISK_VERSION", "OPEN_VIRTUAL_DISK_VERSION_2", 0x2)
+OPEN_VIRTUAL_DISK_VERSION_3 = EnumValue("_OPEN_VIRTUAL_DISK_VERSION", "OPEN_VIRTUAL_DISK_VERSION_3", 0x3)
+class _OPEN_VIRTUAL_DISK_VERSION(EnumType):
+    values = [OPEN_VIRTUAL_DISK_VERSION_UNSPECIFIED, OPEN_VIRTUAL_DISK_VERSION_1, OPEN_VIRTUAL_DISK_VERSION_2, OPEN_VIRTUAL_DISK_VERSION_3]
+    mapper = FlagMapper(*values)
+OPEN_VIRTUAL_DISK_VERSION = _OPEN_VIRTUAL_DISK_VERSION
+
+
+ATTACH_VIRTUAL_DISK_VERSION_UNSPECIFIED = EnumValue("_ATTACH_VIRTUAL_DISK_VERSION", "ATTACH_VIRTUAL_DISK_VERSION_UNSPECIFIED", 0x0)
+ATTACH_VIRTUAL_DISK_VERSION_1 = EnumValue("_ATTACH_VIRTUAL_DISK_VERSION", "ATTACH_VIRTUAL_DISK_VERSION_1", 0x1)
+ATTACH_VIRTUAL_DISK_VERSION_2 = EnumValue("_ATTACH_VIRTUAL_DISK_VERSION", "ATTACH_VIRTUAL_DISK_VERSION_2", 0x2)
+class _ATTACH_VIRTUAL_DISK_VERSION(EnumType):
+    values = [ATTACH_VIRTUAL_DISK_VERSION_UNSPECIFIED, ATTACH_VIRTUAL_DISK_VERSION_1, ATTACH_VIRTUAL_DISK_VERSION_2]
+    mapper = FlagMapper(*values)
+ATTACH_VIRTUAL_DISK_VERSION = _ATTACH_VIRTUAL_DISK_VERSION
+
+
+class _VIRTUAL_STORAGE_TYPE(Structure):
+    _fields_ = [
+        ("DeviceId", ULONG),
+        ("VendorId", GUID),
+    ]
+VIRTUAL_STORAGE_TYPE = _VIRTUAL_STORAGE_TYPE
+PVIRTUAL_STORAGE_TYPE = POINTER(_VIRTUAL_STORAGE_TYPE)
+
+class _ANON__ANON__OPEN_VIRTUAL_DISK_PARAMETERS_SUB_UNION_1_SUB_STRUCTURE_1(Structure):
+    _fields_ = [
+        ("RWDepth", ULONG),
+    ]
+
+
+class _ANON__ANON__OPEN_VIRTUAL_DISK_PARAMETERS_SUB_UNION_1_SUB_STRUCTURE_2(Structure):
+    _fields_ = [
+        ("GetInfoOnly", BOOL),
+        ("ReadOnly", BOOL),
+        ("ResiliencyGuid", GUID),
+    ]
+
+
+class _ANON__ANON__OPEN_VIRTUAL_DISK_PARAMETERS_SUB_UNION_1_SUB_STRUCTURE_3(Structure):
+    _fields_ = [
+        ("GetInfoOnly", BOOL),
+        ("ReadOnly", BOOL),
+        ("ResiliencyGuid", GUID),
+        ("SnapshotId", GUID),
+    ]
+
+class _ANON__OPEN_VIRTUAL_DISK_PARAMETERS_SUB_UNION_1(Union):
+    _anonymous_ = ("Version1","Version2","Version3")
+    _fields_ = [
+        ("Version1", _ANON__ANON__OPEN_VIRTUAL_DISK_PARAMETERS_SUB_UNION_1_SUB_STRUCTURE_1),
+        ("Version2", _ANON__ANON__OPEN_VIRTUAL_DISK_PARAMETERS_SUB_UNION_1_SUB_STRUCTURE_2),
+        ("Version3", _ANON__ANON__OPEN_VIRTUAL_DISK_PARAMETERS_SUB_UNION_1_SUB_STRUCTURE_3),
+    ]
+
+class _OPEN_VIRTUAL_DISK_PARAMETERS(Structure):
+    _anonymous_ = ("anon_01",)
+    _fields_ = [
+        ("Version", OPEN_VIRTUAL_DISK_VERSION),
+        ("anon_01", _ANON__OPEN_VIRTUAL_DISK_PARAMETERS_SUB_UNION_1),
+    ]
+POPEN_VIRTUAL_DISK_PARAMETERS = POINTER(_OPEN_VIRTUAL_DISK_PARAMETERS)
+OPEN_VIRTUAL_DISK_PARAMETERS = _OPEN_VIRTUAL_DISK_PARAMETERS
+
+class _ANON__ANON__ATTACH_VIRTUAL_DISK_PARAMETERS_SUB_UNION_1_SUB_STRUCTURE_1(Structure):
+    _fields_ = [
+        ("Reserved", ULONG),
+    ]
+
+
+class _ANON__ANON__ATTACH_VIRTUAL_DISK_PARAMETERS_SUB_UNION_1_SUB_STRUCTURE_2(Structure):
+    _fields_ = [
+        ("RestrictedOffset", ULONGLONG),
+        ("RestrictedLength", ULONGLONG),
+    ]
+
+class _ANON__ATTACH_VIRTUAL_DISK_PARAMETERS_SUB_UNION_1(Union):
+    _anonymous_ = ("Version1","Version2")
+    _fields_ = [
+        ("Version1", _ANON__ANON__ATTACH_VIRTUAL_DISK_PARAMETERS_SUB_UNION_1_SUB_STRUCTURE_1),
+        ("Version2", _ANON__ANON__ATTACH_VIRTUAL_DISK_PARAMETERS_SUB_UNION_1_SUB_STRUCTURE_2),
+    ]
+
+class _ATTACH_VIRTUAL_DISK_PARAMETERS(Structure):
+    _anonymous_ = ("anon_01",)
+    _fields_ = [
+        ("Version", ATTACH_VIRTUAL_DISK_VERSION),
+        ("anon_01", _ANON__ATTACH_VIRTUAL_DISK_PARAMETERS_SUB_UNION_1),
+    ]
+ATTACH_VIRTUAL_DISK_PARAMETERS = _ATTACH_VIRTUAL_DISK_PARAMETERS
+PATTACH_VIRTUAL_DISK_PARAMETERS = POINTER(_ATTACH_VIRTUAL_DISK_PARAMETERS)
+
+SymNone = EnumValue("SYM_TYPE", "SymNone", 0x0)
+SymCoff = EnumValue("SYM_TYPE", "SymCoff", 0x1)
+SymCv = EnumValue("SYM_TYPE", "SymCv", 0x2)
+SymPdb = EnumValue("SYM_TYPE", "SymPdb", 0x3)
+SymExport = EnumValue("SYM_TYPE", "SymExport", 0x4)
+SymDeferred = EnumValue("SYM_TYPE", "SymDeferred", 0x5)
+SymSym = EnumValue("SYM_TYPE", "SymSym", 0x6)
+SymDia = EnumValue("SYM_TYPE", "SymDia", 0x7)
+SymVirtual = EnumValue("SYM_TYPE", "SymVirtual", 0x8)
+NumSymTypes = EnumValue("SYM_TYPE", "NumSymTypes", 0x9)
+class SYM_TYPE(EnumType):
+    values = [SymNone, SymCoff, SymCv, SymPdb, SymExport, SymDeferred, SymSym, SymDia, SymVirtual, NumSymTypes]
+    mapper = FlagMapper(*values)
+
+
+btNoType = EnumValue("BasicType", "btNoType", 0x0)
+btVoid = EnumValue("BasicType", "btVoid", 0x1)
+btChar = EnumValue("BasicType", "btChar", 0x2)
+btWChar = EnumValue("BasicType", "btWChar", 0x3)
+btInt = EnumValue("BasicType", "btInt", 0x6)
+btUInt = EnumValue("BasicType", "btUInt", 0x7)
+btFloat = EnumValue("BasicType", "btFloat", 0x8)
+btBCD = EnumValue("BasicType", "btBCD", 0x9)
+btBool = EnumValue("BasicType", "btBool", 0xa)
+btLong = EnumValue("BasicType", "btLong", 0xd)
+btULong = EnumValue("BasicType", "btULong", 0xe)
+btCurrency = EnumValue("BasicType", "btCurrency", 0x19)
+btDate = EnumValue("BasicType", "btDate", 0x1a)
+btVariant = EnumValue("BasicType", "btVariant", 0x1b)
+btComplex = EnumValue("BasicType", "btComplex", 0x1c)
+btBit = EnumValue("BasicType", "btBit", 0x1d)
+btBSTR = EnumValue("BasicType", "btBSTR", 0x1e)
+btHresult = EnumValue("BasicType", "btHresult", 0x1f)
+class BasicType(EnumType):
+    values = [btNoType, btVoid, btChar, btWChar, btInt, btUInt, btFloat, btBCD, btBool, btLong, btULong, btCurrency, btDate, btVariant, btComplex, btBit, btBSTR, btHresult]
+    mapper = FlagMapper(*values)
+
+
+DataIsUnknown = EnumValue("DataKind", "DataIsUnknown", 0x0)
+DataIsLocal = EnumValue("DataKind", "DataIsLocal", 0x1)
+DataIsStaticLocal = EnumValue("DataKind", "DataIsStaticLocal", 0x2)
+DataIsParam = EnumValue("DataKind", "DataIsParam", 0x3)
+DataIsObjectPtr = EnumValue("DataKind", "DataIsObjectPtr", 0x4)
+DataIsFileStatic = EnumValue("DataKind", "DataIsFileStatic", 0x5)
+DataIsGlobal = EnumValue("DataKind", "DataIsGlobal", 0x6)
+DataIsMember = EnumValue("DataKind", "DataIsMember", 0x7)
+DataIsStaticMember = EnumValue("DataKind", "DataIsStaticMember", 0x8)
+DataIsConstant = EnumValue("DataKind", "DataIsConstant", 0x9)
+class DataKind(EnumType):
+    values = [DataIsUnknown, DataIsLocal, DataIsStaticLocal, DataIsParam, DataIsObjectPtr, DataIsFileStatic, DataIsGlobal, DataIsMember, DataIsStaticMember, DataIsConstant]
+    mapper = FlagMapper(*values)
+
+
+UdtStruct = EnumValue("UdtKind", "UdtStruct", 0x0)
+UdtClass = EnumValue("UdtKind", "UdtClass", 0x1)
+UdtUnion = EnumValue("UdtKind", "UdtUnion", 0x2)
+class UdtKind(EnumType):
+    values = [UdtStruct, UdtClass, UdtUnion]
+    mapper = FlagMapper(*values)
+
+
+SymTagNull = EnumValue("_SymTagEnum", "SymTagNull", 0x0)
+SymTagExe = EnumValue("_SymTagEnum", "SymTagExe", 0x1)
+SymTagCompiland = EnumValue("_SymTagEnum", "SymTagCompiland", 0x2)
+SymTagCompilandDetails = EnumValue("_SymTagEnum", "SymTagCompilandDetails", 0x3)
+SymTagCompilandEnv = EnumValue("_SymTagEnum", "SymTagCompilandEnv", 0x4)
+SymTagFunction = EnumValue("_SymTagEnum", "SymTagFunction", 0x5)
+SymTagBlock = EnumValue("_SymTagEnum", "SymTagBlock", 0x6)
+SymTagData = EnumValue("_SymTagEnum", "SymTagData", 0x7)
+SymTagAnnotation = EnumValue("_SymTagEnum", "SymTagAnnotation", 0x8)
+SymTagLabel = EnumValue("_SymTagEnum", "SymTagLabel", 0x9)
+SymTagPublicSymbol = EnumValue("_SymTagEnum", "SymTagPublicSymbol", 0xa)
+SymTagUDT = EnumValue("_SymTagEnum", "SymTagUDT", 0xb)
+SymTagEnum = EnumValue("_SymTagEnum", "SymTagEnum", 0xc)
+SymTagFunctionType = EnumValue("_SymTagEnum", "SymTagFunctionType", 0xd)
+SymTagPointerType = EnumValue("_SymTagEnum", "SymTagPointerType", 0xe)
+SymTagArrayType = EnumValue("_SymTagEnum", "SymTagArrayType", 0xf)
+SymTagBaseType = EnumValue("_SymTagEnum", "SymTagBaseType", 0x10)
+SymTagTypedef = EnumValue("_SymTagEnum", "SymTagTypedef", 0x11)
+SymTagBaseClass = EnumValue("_SymTagEnum", "SymTagBaseClass", 0x12)
+SymTagFriend = EnumValue("_SymTagEnum", "SymTagFriend", 0x13)
+SymTagFunctionArgType = EnumValue("_SymTagEnum", "SymTagFunctionArgType", 0x14)
+SymTagFuncDebugStart = EnumValue("_SymTagEnum", "SymTagFuncDebugStart", 0x15)
+SymTagFuncDebugEnd = EnumValue("_SymTagEnum", "SymTagFuncDebugEnd", 0x16)
+SymTagUsingNamespace = EnumValue("_SymTagEnum", "SymTagUsingNamespace", 0x17)
+SymTagVTableShape = EnumValue("_SymTagEnum", "SymTagVTableShape", 0x18)
+SymTagVTable = EnumValue("_SymTagEnum", "SymTagVTable", 0x19)
+SymTagCustom = EnumValue("_SymTagEnum", "SymTagCustom", 0x1a)
+SymTagThunk = EnumValue("_SymTagEnum", "SymTagThunk", 0x1b)
+SymTagCustomType = EnumValue("_SymTagEnum", "SymTagCustomType", 0x1c)
+SymTagManagedType = EnumValue("_SymTagEnum", "SymTagManagedType", 0x1d)
+SymTagDimension = EnumValue("_SymTagEnum", "SymTagDimension", 0x1e)
+class _SymTagEnum(EnumType):
+    values = [SymTagNull, SymTagExe, SymTagCompiland, SymTagCompilandDetails, SymTagCompilandEnv, SymTagFunction, SymTagBlock, SymTagData, SymTagAnnotation, SymTagLabel, SymTagPublicSymbol, SymTagUDT, SymTagEnum, SymTagFunctionType, SymTagPointerType, SymTagArrayType, SymTagBaseType, SymTagTypedef, SymTagBaseClass, SymTagFriend, SymTagFunctionArgType, SymTagFuncDebugStart, SymTagFuncDebugEnd, SymTagUsingNamespace, SymTagVTableShape, SymTagVTable, SymTagCustom, SymTagThunk, SymTagCustomType, SymTagManagedType, SymTagDimension]
+    mapper = FlagMapper(*values)
+SymTagEnum = _SymTagEnum
+
+
+SYMOPT_EX_DISABLEACCESSTIMEUPDATE = EnumValue("_IMAGEHLP_EXTENDED_OPTIONS", "SYMOPT_EX_DISABLEACCESSTIMEUPDATE", 0x0)
+SYMOPT_EX_MAX = EnumValue("_IMAGEHLP_EXTENDED_OPTIONS", "SYMOPT_EX_MAX", 0x1)
+SYMOPT_EX_LASTVALIDDEBUGDIRECTORY = EnumValue("_IMAGEHLP_EXTENDED_OPTIONS", "SYMOPT_EX_LASTVALIDDEBUGDIRECTORY", 0x2)
+class _IMAGEHLP_EXTENDED_OPTIONS(EnumType):
+    values = [SYMOPT_EX_DISABLEACCESSTIMEUPDATE, SYMOPT_EX_MAX, SYMOPT_EX_LASTVALIDDEBUGDIRECTORY]
+    mapper = FlagMapper(*values)
+IMAGEHLP_EXTENDED_OPTIONS = _IMAGEHLP_EXTENDED_OPTIONS
+
+
+TI_GET_SYMTAG = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_SYMTAG", 0x0)
+TI_GET_SYMNAME = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_SYMNAME", 0x1)
+TI_GET_LENGTH = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_LENGTH", 0x2)
+TI_GET_TYPE = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_TYPE", 0x3)
+TI_GET_TYPEID = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_TYPEID", 0x4)
+TI_GET_BASETYPE = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_BASETYPE", 0x5)
+TI_GET_ARRAYINDEXTYPEID = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_ARRAYINDEXTYPEID", 0x6)
+TI_FINDCHILDREN = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_FINDCHILDREN", 0x7)
+TI_GET_DATAKIND = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_DATAKIND", 0x8)
+TI_GET_ADDRESSOFFSET = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_ADDRESSOFFSET", 0x9)
+TI_GET_OFFSET = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_OFFSET", 0xa)
+TI_GET_VALUE = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_VALUE", 0xb)
+TI_GET_COUNT = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_COUNT", 0xc)
+TI_GET_CHILDRENCOUNT = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_CHILDRENCOUNT", 0xd)
+TI_GET_BITPOSITION = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_BITPOSITION", 0xe)
+TI_GET_VIRTUALBASECLASS = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_VIRTUALBASECLASS", 0xf)
+TI_GET_VIRTUALTABLESHAPEID = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_VIRTUALTABLESHAPEID", 0x10)
+TI_GET_VIRTUALBASEPOINTEROFFSET = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_VIRTUALBASEPOINTEROFFSET", 0x11)
+TI_GET_CLASSPARENTID = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_CLASSPARENTID", 0x12)
+TI_GET_NESTED = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_NESTED", 0x13)
+TI_GET_SYMINDEX = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_SYMINDEX", 0x14)
+TI_GET_LEXICALPARENT = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_LEXICALPARENT", 0x15)
+TI_GET_ADDRESS = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_ADDRESS", 0x16)
+TI_GET_THISADJUST = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_THISADJUST", 0x17)
+TI_GET_UDTKIND = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_UDTKIND", 0x18)
+TI_IS_EQUIV_TO = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_IS_EQUIV_TO", 0x19)
+TI_GET_CALLING_CONVENTION = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_CALLING_CONVENTION", 0x1a)
+TI_IS_CLOSE_EQUIV_TO = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_IS_CLOSE_EQUIV_TO", 0x1b)
+TI_GTIEX_REQS_VALID = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GTIEX_REQS_VALID", 0x1c)
+TI_GET_VIRTUALBASEOFFSET = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_VIRTUALBASEOFFSET", 0x1d)
+TI_GET_VIRTUALBASEDISPINDEX = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_VIRTUALBASEDISPINDEX", 0x1e)
+TI_GET_IS_REFERENCE = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_IS_REFERENCE", 0x1f)
+TI_GET_INDIRECTVIRTUALBASECLASS = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "TI_GET_INDIRECTVIRTUALBASECLASS", 0x20)
+IMAGEHLP_SYMBOL_TYPE_INFO_MAX = EnumValue("_IMAGEHLP_SYMBOL_TYPE_INFO", "IMAGEHLP_SYMBOL_TYPE_INFO_MAX", 0x21)
+class _IMAGEHLP_SYMBOL_TYPE_INFO(EnumType):
+    values = [TI_GET_SYMTAG, TI_GET_SYMNAME, TI_GET_LENGTH, TI_GET_TYPE, TI_GET_TYPEID, TI_GET_BASETYPE, TI_GET_ARRAYINDEXTYPEID, TI_FINDCHILDREN, TI_GET_DATAKIND, TI_GET_ADDRESSOFFSET, TI_GET_OFFSET, TI_GET_VALUE, TI_GET_COUNT, TI_GET_CHILDRENCOUNT, TI_GET_BITPOSITION, TI_GET_VIRTUALBASECLASS, TI_GET_VIRTUALTABLESHAPEID, TI_GET_VIRTUALBASEPOINTEROFFSET, TI_GET_CLASSPARENTID, TI_GET_NESTED, TI_GET_SYMINDEX, TI_GET_LEXICALPARENT, TI_GET_ADDRESS, TI_GET_THISADJUST, TI_GET_UDTKIND, TI_IS_EQUIV_TO, TI_GET_CALLING_CONVENTION, TI_IS_CLOSE_EQUIV_TO, TI_GTIEX_REQS_VALID, TI_GET_VIRTUALBASEOFFSET, TI_GET_VIRTUALBASEDISPINDEX, TI_GET_IS_REFERENCE, TI_GET_INDIRECTVIRTUALBASECLASS, IMAGEHLP_SYMBOL_TYPE_INFO_MAX]
+    mapper = FlagMapper(*values)
+IMAGEHLP_SYMBOL_TYPE_INFO = _IMAGEHLP_SYMBOL_TYPE_INFO
+
+
+sevInfo = EnumValue("_CBA_EVENT_SEVERITY", "sevInfo", 0x0)
+sevProblem = EnumValue("_CBA_EVENT_SEVERITY", "sevProblem", 0x1)
+sevAttn = EnumValue("_CBA_EVENT_SEVERITY", "sevAttn", 0x2)
+sevFatal = EnumValue("_CBA_EVENT_SEVERITY", "sevFatal", 0x3)
+sevMax = EnumValue("_CBA_EVENT_SEVERITY", "sevMax", 0x4)
+class _CBA_EVENT_SEVERITY(EnumType):
+    values = [sevInfo, sevProblem, sevAttn, sevFatal, sevMax]
+    mapper = FlagMapper(*values)
+CBA_EVENT_SEVERITY = _CBA_EVENT_SEVERITY
+
+
+AddrMode1616 = EnumValue("ADDRESS_MODE", "AddrMode1616", 0x0)
+AddrMode1632 = EnumValue("ADDRESS_MODE", "AddrMode1632", 0x1)
+AddrModeReal = EnumValue("ADDRESS_MODE", "AddrModeReal", 0x2)
+AddrModeFlat = EnumValue("ADDRESS_MODE", "AddrModeFlat", 0x3)
+class ADDRESS_MODE(EnumType):
+    values = [AddrMode1616, AddrMode1632, AddrModeReal, AddrModeFlat]
+    mapper = FlagMapper(*values)
+
+
+class _IMAGEHLP_MODULE64(Structure):
+    _fields_ = [
+        ("SizeOfStruct", DWORD),
+        ("BaseOfImage", DWORD64),
+        ("ImageSize", DWORD),
+        ("TimeDateStamp", DWORD),
+        ("CheckSum", DWORD),
+        ("NumSyms", DWORD),
+        ("SymType", SYM_TYPE),
+        ("ModuleName", CHAR * (32)),
+        ("ImageName", CHAR * (256)),
+        ("LoadedImageName", CHAR * (256)),
+        ("LoadedPdbName", CHAR * (256)),
+        ("CVSig", DWORD),
+        ("CVData", CHAR * (MAX_PATH * 3)),
+        ("PdbSig", DWORD),
+        ("PdbSig70", GUID),
+        ("PdbAge", DWORD),
+        ("PdbUnmatched", BOOL),
+        ("DbgUnmatched", BOOL),
+        ("LineNumbers", BOOL),
+        ("GlobalSymbols", BOOL),
+        ("TypeInfo", BOOL),
+        ("SourceIndexed", BOOL),
+        ("Publics", BOOL),
+    ]
+PIMAGEHLP_MODULE64 = POINTER(_IMAGEHLP_MODULE64)
+IMAGEHLP_MODULE64 = _IMAGEHLP_MODULE64
+
+class _IMAGEHLP_MODULEW64(Structure):
+    _fields_ = [
+        ("SizeOfStruct", DWORD),
+        ("BaseOfImage", DWORD64),
+        ("ImageSize", DWORD),
+        ("TimeDateStamp", DWORD),
+        ("CheckSum", DWORD),
+        ("NumSyms", DWORD),
+        ("SymType", SYM_TYPE),
+        ("ModuleName", WCHAR * (32)),
+        ("ImageName", WCHAR * (256)),
+        ("LoadedImageName", WCHAR * (256)),
+        ("LoadedPdbName", WCHAR * (256)),
+        ("CVSig", DWORD),
+        ("CVData", POINTER(WCHAR) * (MAX_PATH * 3)),
+        ("PdbSig", DWORD),
+        ("PdbSig70", GUID),
+        ("PdbAge", DWORD),
+        ("PdbUnmatched", BOOL),
+        ("DbgUnmatched", BOOL),
+        ("LineNumbers", BOOL),
+        ("GlobalSymbols", BOOL),
+        ("TypeInfo", BOOL),
+        ("SourceIndexed", BOOL),
+        ("Publics", BOOL),
+        ("MachineType", DWORD),
+        ("Reserved", DWORD),
+    ]
+PIMAGEHLP_MODULEW64 = POINTER(_IMAGEHLP_MODULEW64)
+IMAGEHLP_MODULEW64 = _IMAGEHLP_MODULEW64
+
+class _SYMBOL_INFO(Structure):
+    _fields_ = [
+        ("SizeOfStruct", ULONG),
+        ("TypeIndex", ULONG),
+        ("Reserved", ULONG64 * (2)),
+        ("Index", ULONG),
+        ("Size", ULONG),
+        ("ModBase", ULONG64),
+        ("Flags", ULONG),
+        ("Value", ULONG64),
+        ("Address", ULONG64),
+        ("Register", ULONG),
+        ("Scope", ULONG),
+        ("Tag", ULONG),
+        ("NameLen", ULONG),
+        ("MaxNameLen", ULONG),
+        ("Name", CHAR * (1)),
+    ]
+SYMBOL_INFO = _SYMBOL_INFO
+PSYMBOL_INFO = POINTER(_SYMBOL_INFO)
+
+old_SYMBOL_INFO = _SYMBOL_INFO
+class _SYMBOL_INFO(old_SYMBOL_INFO):
+    @property
+    def tag(self):
+        return SymTagEnum.mapper[self.Tag]
+SYMBOL_INFO = _SYMBOL_INFO
+PSYMBOL_INFO = POINTER(_SYMBOL_INFO)
+class _SYMBOL_INFOW(Structure):
+    _fields_ = [
+        ("SizeOfStruct", ULONG),
+        ("TypeIndex", ULONG),
+        ("Reserved", ULONG64 * (2)),
+        ("Index", ULONG),
+        ("Size", ULONG),
+        ("ModBase", ULONG64),
+        ("Flags", ULONG),
+        ("Value", ULONG64),
+        ("Address", ULONG64),
+        ("Register", ULONG),
+        ("Scope", ULONG),
+        ("Tag", ULONG),
+        ("NameLen", ULONG),
+        ("MaxNameLen", ULONG),
+        ("Name", WCHAR * (1)),
+    ]
+SYMBOL_INFOW = _SYMBOL_INFOW
+PSYMBOL_INFOW = POINTER(_SYMBOL_INFOW)
+
+old_SYMBOL_INFOW = _SYMBOL_INFOW
+class _SYMBOL_INFOW(old_SYMBOL_INFOW):
+    @property
+    def tag(self):
+        return SymTagEnum.mapper[self.Tag]
+SYMBOL_INFOW = _SYMBOL_INFOW
+PSYMBOL_INFOW = POINTER(_SYMBOL_INFOW)
+class SYMSRV_INDEX_INFOW(Structure):
+    _fields_ = [
+        ("sizeofstruct", DWORD),
+        ("file", WCHAR * (MAX_PATH + 1)),
+        ("stripped", BOOL),
+        ("timestamp", DWORD),
+        ("size", DWORD),
+        ("dbgfile", WCHAR * (MAX_PATH + 1)),
+        ("pdbfile", WCHAR * (MAX_PATH + 1)),
+        ("guid", GUID),
+        ("sig", DWORD),
+        ("age", DWORD),
+    ]
+PSYMSRV_INDEX_INFOW = POINTER(SYMSRV_INDEX_INFOW)
+
+class SYMSRV_INDEX_INFO(Structure):
+    _fields_ = [
+        ("sizeofstruct", DWORD),
+        ("file", CHAR * (MAX_PATH + 1)),
+        ("stripped", BOOL),
+        ("timestamp", DWORD),
+        ("size", DWORD),
+        ("dbgfile", CHAR * (MAX_PATH + 1)),
+        ("pdbfile", CHAR * (MAX_PATH + 1)),
+        ("guid", GUID),
+        ("sig", DWORD),
+        ("age", DWORD),
+    ]
+PSYMSRV_INDEX_INFO = POINTER(SYMSRV_INDEX_INFO)
+
+class _IMAGEHLP_SYMBOL(Structure):
+    _fields_ = [
+        ("SizeOfStruct", DWORD),
+        ("Address", DWORD),
+        ("Size", DWORD),
+        ("Flags", DWORD),
+        ("MaxNameLength", DWORD),
+        ("Name", CHAR * (1)),
+    ]
+PIMAGEHLP_SYMBOL = POINTER(_IMAGEHLP_SYMBOL)
+IMAGEHLP_SYMBOL = _IMAGEHLP_SYMBOL
+
+class _IMAGEHLP_SYMBOL64(Structure):
+    _fields_ = [
+        ("SizeOfStruct", DWORD),
+        ("Address", DWORD64),
+        ("Size", DWORD),
+        ("Flags", DWORD),
+        ("MaxNameLength", DWORD),
+        ("Name", CHAR * (1)),
+    ]
+PIMAGEHLP_SYMBOL64 = POINTER(_IMAGEHLP_SYMBOL64)
+IMAGEHLP_SYMBOL64 = _IMAGEHLP_SYMBOL64
+
+class _IMAGEHLP_SYMBOLW64(Structure):
+    _fields_ = [
+        ("SizeOfStruct", DWORD),
+        ("Address", DWORD64),
+        ("Size", DWORD),
+        ("Flags", DWORD),
+        ("MaxNameLength", DWORD),
+        ("Name", WCHAR * (1)),
+    ]
+PIMAGEHLP_SYMBOLW64 = POINTER(_IMAGEHLP_SYMBOLW64)
+IMAGEHLP_SYMBOLW64 = _IMAGEHLP_SYMBOLW64
+
+class _IMAGEHLP_STACK_FRAME(Structure):
+    _fields_ = [
+        ("InstructionOffset", ULONG64),
+        ("ReturnOffset", ULONG64),
+        ("FrameOffset", ULONG64),
+        ("StackOffset", ULONG64),
+        ("BackingStoreOffset", ULONG64),
+        ("FuncTableEntry", ULONG64),
+        ("Params", ULONG64 * (4)),
+        ("Reserved", ULONG64 * (5)),
+        ("Virtual", BOOL),
+        ("Reserved2", ULONG),
+    ]
+IMAGEHLP_STACK_FRAME = _IMAGEHLP_STACK_FRAME
+PIMAGEHLP_STACK_FRAME = POINTER(_IMAGEHLP_STACK_FRAME)
+
+class _IMAGEHLP_CBA_EVENT(Structure):
+    _fields_ = [
+        ("severity", CBA_EVENT_SEVERITY),
+        ("code", DWORD),
+        ("desc", PCHAR),
+        ("object", PVOID),
+    ]
+PIMAGEHLP_CBA_EVENT = POINTER(_IMAGEHLP_CBA_EVENT)
+IMAGEHLP_CBA_EVENT = _IMAGEHLP_CBA_EVENT
+
+class _IMAGEHLP_CBA_EVENTW(Structure):
+    _fields_ = [
+        ("severity", CBA_EVENT_SEVERITY),
+        ("code", DWORD),
+        ("desc", PCWSTR),
+        ("object", PVOID),
+    ]
+PIMAGEHLP_CBA_EVENTW = POINTER(_IMAGEHLP_CBA_EVENTW)
+IMAGEHLP_CBA_EVENTW = _IMAGEHLP_CBA_EVENTW
+
+class _IMAGEHLP_CBA_READ_MEMORY(Structure):
+    _fields_ = [
+        ("addr", DWORD64),
+        ("buf", PVOID),
+        ("bytes", DWORD),
+        ("bytesread", POINTER(DWORD)),
+    ]
+PIMAGEHLP_CBA_READ_MEMORY = POINTER(_IMAGEHLP_CBA_READ_MEMORY)
+IMAGEHLP_CBA_READ_MEMORY = _IMAGEHLP_CBA_READ_MEMORY
+
+class _IMAGEHLP_DEFERRED_SYMBOL_LOAD(Structure):
+    _fields_ = [
+        ("SizeOfStruct", DWORD),
+        ("BaseOfImage", DWORD),
+        ("CheckSum", DWORD),
+        ("TimeDateStamp", DWORD),
+        ("FileName", CHAR * (MAX_PATH)),
+        ("Reparse", BOOLEAN),
+        ("hFile", HANDLE),
+    ]
+PIMAGEHLP_DEFERRED_SYMBOL_LOAD = POINTER(_IMAGEHLP_DEFERRED_SYMBOL_LOAD)
+IMAGEHLP_DEFERRED_SYMBOL_LOAD = _IMAGEHLP_DEFERRED_SYMBOL_LOAD
+
+class _IMAGEHLP_DEFERRED_SYMBOL_LOAD64(Structure):
+    _fields_ = [
+        ("SizeOfStruct", DWORD),
+        ("BaseOfImage", DWORD64),
+        ("CheckSum", DWORD),
+        ("TimeDateStamp", DWORD),
+        ("FileName", CHAR * (MAX_PATH)),
+        ("Reparse", BOOLEAN),
+        ("hFile", HANDLE),
+        ("Flags", DWORD),
+    ]
+IMAGEHLP_DEFERRED_SYMBOL_LOAD64 = _IMAGEHLP_DEFERRED_SYMBOL_LOAD64
+PIMAGEHLP_DEFERRED_SYMBOL_LOAD64 = POINTER(_IMAGEHLP_DEFERRED_SYMBOL_LOAD64)
+
+class _IMAGEHLP_DEFERRED_SYMBOL_LOADW64(Structure):
+    _fields_ = [
+        ("SizeOfStruct", DWORD),
+        ("BaseOfImage", DWORD64),
+        ("CheckSum", DWORD),
+        ("TimeDateStamp", DWORD),
+        ("FileName", WCHAR * (MAX_PATH + 1)),
+        ("Reparse", BOOLEAN),
+        ("hFile", HANDLE),
+        ("Flags", DWORD),
+    ]
+IMAGEHLP_DEFERRED_SYMBOL_LOADW64 = _IMAGEHLP_DEFERRED_SYMBOL_LOADW64
+PIMAGEHLP_DEFERRED_SYMBOL_LOADW64 = POINTER(_IMAGEHLP_DEFERRED_SYMBOL_LOADW64)
+
+class _IMAGEHLP_DUPLICATE_SYMBOL64(Structure):
+    _fields_ = [
+        ("SizeOfStruct", DWORD),
+        ("NumberOfDups", DWORD),
+        ("Symbol", PIMAGEHLP_SYMBOL64),
+        ("SelectedSymbol", DWORD),
+    ]
+PIMAGEHLP_DUPLICATE_SYMBOL64 = POINTER(_IMAGEHLP_DUPLICATE_SYMBOL64)
+IMAGEHLP_DUPLICATE_SYMBOL64 = _IMAGEHLP_DUPLICATE_SYMBOL64
+
+class _IMAGEHLP_DUPLICATE_SYMBOL(Structure):
+    _fields_ = [
+        ("SizeOfStruct", DWORD),
+        ("NumberOfDups", DWORD),
+        ("Symbol", PIMAGEHLP_SYMBOL),
+        ("SelectedSymbol", DWORD),
+    ]
+PIMAGEHLP_DUPLICATE_SYMBOL = POINTER(_IMAGEHLP_DUPLICATE_SYMBOL)
+IMAGEHLP_DUPLICATE_SYMBOL = _IMAGEHLP_DUPLICATE_SYMBOL
+
+class _tagADDRESS(Structure):
+    _fields_ = [
+        ("Offset", DWORD),
+        ("Segment", WORD),
+        ("Mode", ADDRESS_MODE),
+    ]
+LPADDRESS = POINTER(_tagADDRESS)
+ADDRESS = _tagADDRESS
+
+class _tagADDRESS64(Structure):
+    _fields_ = [
+        ("Offset", DWORD64),
+        ("Segment", WORD),
+        ("Mode", ADDRESS_MODE),
+    ]
+LPADDRESS64 = POINTER(_tagADDRESS64)
+ADDRESS64 = _tagADDRESS64
+
+class _tagADDRESS64(_tagADDRESS64):
+    def __repr__(self):
+        if not self.Segment:
+            return "<{0} {offset:#x}>".format(type(self).__name__, offset=self.Offset)
+        return "<{0} {seg:#x}:{offset:#x}>".format(type(self).__name__, seg=self.Segment, offset=self.Offset)
+LPADDRESS64 = POINTER(_tagADDRESS64)
+ADDRESS64 = _tagADDRESS64
+class _KDHELP(Structure):
+    _fields_ = [
+        ("Thread", DWORD),
+        ("ThCallbackStack", DWORD),
+        ("NextCallback", DWORD),
+        ("FramePointer", DWORD),
+        ("KiCallUserMode", DWORD),
+        ("KeUserCallbackDispatcher", DWORD),
+        ("SystemRangeStart", DWORD),
+        ("ThCallbackBStore", DWORD),
+        ("KiUserExceptionDispatcher", DWORD),
+        ("StackBase", DWORD),
+        ("StackLimit", DWORD),
+        ("Reserved", DWORD * (5)),
+    ]
+KDHELP = _KDHELP
+PKDHELP = POINTER(_KDHELP)
+
+class _KDHELP64(Structure):
+    _fields_ = [
+        ("Thread", DWORD64),
+        ("ThCallbackStack", DWORD),
+        ("ThCallbackBStore", DWORD),
+        ("NextCallback", DWORD),
+        ("FramePointer", DWORD),
+        ("KiCallUserMode", DWORD64),
+        ("KeUserCallbackDispatcher", DWORD64),
+        ("SystemRangeStart", DWORD64),
+        ("KiUserExceptionDispatcher", DWORD64),
+        ("StackBase", DWORD64),
+        ("StackLimit", DWORD64),
+        ("BuildVersion", DWORD),
+        ("RetpolineStubFunctionTableSize", DWORD),
+        ("RetpolineStubFunctionTable", DWORD64),
+        ("RetpolineStubOffset", DWORD),
+        ("RetpolineStubSize", DWORD),
+        ("Reserved0", DWORD64 * (2)),
+    ]
+KDHELP64 = _KDHELP64
+PKDHELP64 = POINTER(_KDHELP64)
+
+class _tagSTACKFRAME(Structure):
+    _fields_ = [
+        ("AddrPC", ADDRESS),
+        ("AddrReturn", ADDRESS),
+        ("AddrFrame", ADDRESS),
+        ("AddrStack", ADDRESS),
+        ("FuncTableEntry", PVOID),
+        ("Params", DWORD * (4)),
+        ("Far", BOOL),
+        ("Virtual", BOOL),
+        ("Reserved", DWORD * (3)),
+        ("KdHelp", KDHELP),
+        ("AddrBStore", ADDRESS),
+    ]
+STACKFRAME = _tagSTACKFRAME
+LPSTACKFRAME = POINTER(_tagSTACKFRAME)
+
+class _tagSTACKFRAME64(Structure):
+    _fields_ = [
+        ("AddrPC", ADDRESS64),
+        ("AddrReturn", ADDRESS64),
+        ("AddrFrame", ADDRESS64),
+        ("AddrStack", ADDRESS64),
+        ("AddrBStore", ADDRESS64),
+        ("FuncTableEntry", PVOID),
+        ("Params", DWORD64 * (4)),
+        ("Far", BOOL),
+        ("Virtual", BOOL),
+        ("Reserved", DWORD64 * (3)),
+        ("KdHelp", KDHELP64),
+    ]
+STACKFRAME64 = _tagSTACKFRAME64
+LPSTACKFRAME64 = POINTER(_tagSTACKFRAME64)
+
+class _tagSTACKFRAME_EX(Structure):
+    _fields_ = [
+        ("AddrPC", ADDRESS64),
+        ("AddrReturn", ADDRESS64),
+        ("AddrFrame", ADDRESS64),
+        ("AddrStack", ADDRESS64),
+        ("AddrBStore", ADDRESS64),
+        ("FuncTableEntry", PVOID),
+        ("Params", DWORD64 * (4)),
+        ("Far", BOOL),
+        ("Virtual", BOOL),
+        ("Reserved", DWORD64 * (3)),
+        ("KdHelp", KDHELP64),
+        ("StackFrameSize", DWORD),
+        ("InlineFrameContext", DWORD),
+    ]
+LPSTACKFRAME_EX = POINTER(_tagSTACKFRAME_EX)
+STACKFRAME_EX = _tagSTACKFRAME_EX
+
+TokenInvalid = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenInvalid", 0x0)
+TokenUser = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenUser", 0x1)
+TokenGroups = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenGroups", 0x2)
+TokenPrivileges = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenPrivileges", 0x3)
+TokenOwner = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenOwner", 0x4)
+TokenPrimaryGroup = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenPrimaryGroup", 0x5)
+TokenDefaultDacl = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenDefaultDacl", 0x6)
+TokenSource = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenSource", 0x7)
+TokenType = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenType", 0x8)
+TokenImpersonationLevel = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenImpersonationLevel", 0x9)
+TokenStatistics = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenStatistics", 0xa)
+TokenRestrictedSids = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenRestrictedSids", 0xb)
+TokenSessionId = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenSessionId", 0xc)
+TokenGroupsAndPrivileges = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenGroupsAndPrivileges", 0xd)
+TokenSessionReference = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenSessionReference", 0xe)
+TokenSandBoxInert = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenSandBoxInert", 0xf)
+TokenAuditPolicy = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenAuditPolicy", 0x10)
+TokenOrigin = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenOrigin", 0x11)
+TokenElevationType = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenElevationType", 0x12)
+TokenLinkedToken = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenLinkedToken", 0x13)
+TokenElevation = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenElevation", 0x14)
+TokenHasRestrictions = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenHasRestrictions", 0x15)
+TokenAccessInformation = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenAccessInformation", 0x16)
+TokenVirtualizationAllowed = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenVirtualizationAllowed", 0x17)
+TokenVirtualizationEnabled = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenVirtualizationEnabled", 0x18)
+TokenIntegrityLevel = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenIntegrityLevel", 0x19)
+TokenUIAccess = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenUIAccess", 0x1a)
+TokenMandatoryPolicy = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenMandatoryPolicy", 0x1b)
+TokenLogonSid = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenLogonSid", 0x1c)
+TokenIsAppContainer = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenIsAppContainer", 0x1d)
+TokenCapabilities = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenCapabilities", 0x1e)
+TokenAppContainerSid = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenAppContainerSid", 0x1f)
+TokenAppContainerNumber = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenAppContainerNumber", 0x20)
+TokenUserClaimAttributes = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenUserClaimAttributes", 0x21)
+TokenDeviceClaimAttributes = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenDeviceClaimAttributes", 0x22)
+TokenRestrictedUserClaimAttributes = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenRestrictedUserClaimAttributes", 0x23)
+TokenRestrictedDeviceClaimAttributes = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenRestrictedDeviceClaimAttributes", 0x24)
+TokenDeviceGroups = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenDeviceGroups", 0x25)
+TokenRestrictedDeviceGroups = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenRestrictedDeviceGroups", 0x26)
+TokenSecurityAttributes = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenSecurityAttributes", 0x27)
+TokenIsRestricted = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenIsRestricted", 0x28)
+TokenProcessTrustLevel = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenProcessTrustLevel", 0x29)
+TokenPrivateNameSpace = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenPrivateNameSpace", 0x2a)
+TokenSingletonAttributes = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenSingletonAttributes", 0x2b)
+TokenBnoIsolation = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenBnoIsolation", 0x2c)
+TokenChildProcessFlags = EnumValue("_TOKEN_INFORMATION_CLASS", "TokenChildProcessFlags", 0x2d)
+MaxTokenInfoClass = EnumValue("_TOKEN_INFORMATION_CLASS", "MaxTokenInfoClass", 0x2e)
+class _TOKEN_INFORMATION_CLASS(EnumType):
+    values = [TokenInvalid, TokenUser, TokenGroups, TokenPrivileges, TokenOwner, TokenPrimaryGroup, TokenDefaultDacl, TokenSource, TokenType, TokenImpersonationLevel, TokenStatistics, TokenRestrictedSids, TokenSessionId, TokenGroupsAndPrivileges, TokenSessionReference, TokenSandBoxInert, TokenAuditPolicy, TokenOrigin, TokenElevationType, TokenLinkedToken, TokenElevation, TokenHasRestrictions, TokenAccessInformation, TokenVirtualizationAllowed, TokenVirtualizationEnabled, TokenIntegrityLevel, TokenUIAccess, TokenMandatoryPolicy, TokenLogonSid, TokenIsAppContainer, TokenCapabilities, TokenAppContainerSid, TokenAppContainerNumber, TokenUserClaimAttributes, TokenDeviceClaimAttributes, TokenRestrictedUserClaimAttributes, TokenRestrictedDeviceClaimAttributes, TokenDeviceGroups, TokenRestrictedDeviceGroups, TokenSecurityAttributes, TokenIsRestricted, TokenProcessTrustLevel, TokenPrivateNameSpace, TokenSingletonAttributes, TokenBnoIsolation, TokenChildProcessFlags, MaxTokenInfoClass]
+    mapper = FlagMapper(*values)
+TOKEN_INFORMATION_CLASS = _TOKEN_INFORMATION_CLASS
+PTOKEN_INFORMATION_CLASS = POINTER(_TOKEN_INFORMATION_CLASS)
+
+
+TokenElevationTypeDefault = EnumValue("_TOKEN_ELEVATION_TYPE", "TokenElevationTypeDefault", 0x1)
+TokenElevationTypeFull = EnumValue("_TOKEN_ELEVATION_TYPE", "TokenElevationTypeFull", 0x2)
+TokenElevationTypeLimited = EnumValue("_TOKEN_ELEVATION_TYPE", "TokenElevationTypeLimited", 0x3)
+class _TOKEN_ELEVATION_TYPE(EnumType):
+    values = [TokenElevationTypeDefault, TokenElevationTypeFull, TokenElevationTypeLimited]
+    mapper = FlagMapper(*values)
+TOKEN_ELEVATION_TYPE = _TOKEN_ELEVATION_TYPE
+PTOKEN_ELEVATION_TYPE = POINTER(_TOKEN_ELEVATION_TYPE)
+
+
+class _TOKEN_PRIVILEGES(Structure):
+    _fields_ = [
+        ("PrivilegeCount", DWORD),
+        ("Privileges", LUID_AND_ATTRIBUTES * (ANYSIZE_ARRAY)),
+    ]
+TOKEN_PRIVILEGES = _TOKEN_PRIVILEGES
+PTOKEN_PRIVILEGES = POINTER(_TOKEN_PRIVILEGES)
+
+class _TOKEN_ELEVATION(Structure):
+    _fields_ = [
+        ("TokenIsElevated", DWORD),
+    ]
+TOKEN_ELEVATION = _TOKEN_ELEVATION
+PTOKEN_ELEVATION = POINTER(_TOKEN_ELEVATION)
+
+class _SID_AND_ATTRIBUTES(Structure):
+    _fields_ = [
+        ("Sid", PSID),
+        ("Attributes", DWORD),
+    ]
+SID_AND_ATTRIBUTES = _SID_AND_ATTRIBUTES
+PSID_AND_ATTRIBUTES = POINTER(_SID_AND_ATTRIBUTES)
+
+_INITIAL_SID_AND_ATTRIBUTES = _SID_AND_ATTRIBUTES
+class _SID_AND_ATTRIBUTES(_INITIAL_SID_AND_ATTRIBUTES):
+    pass
+
+    # Only in TOKEN_GROUPS
+    # attributes = FlagExatractor(_INITIAL_SID_AND_ATTRIBUTES.Attributes,
+        # (SE_GROUP_MANDATORY,
+        # SE_GROUP_ENABLED_BY_DEFAULT,
+        # SE_GROUP_ENABLED,
+        # SE_GROUP_OWNER,
+        # SE_GROUP_USE_FOR_DENY_ONLY,
+        # SE_GROUP_INTEGRITY,
+        # SE_GROUP_INTEGRITY_ENABLED,
+        # SE_GROUP_LOGON_ID,
+        # SE_GROUP_RESOURCE))
+SID_AND_ATTRIBUTES = _SID_AND_ATTRIBUTES
+PSID_AND_ATTRIBUTES = POINTER(_SID_AND_ATTRIBUTES)
+class _TOKEN_MANDATORY_LABEL(Structure):
+    _fields_ = [
+        ("Label", SID_AND_ATTRIBUTES),
+    ]
+TOKEN_MANDATORY_LABEL = _TOKEN_MANDATORY_LABEL
+PTOKEN_MANDATORY_LABEL = POINTER(_TOKEN_MANDATORY_LABEL)
+
+class _TOKEN_USER(Structure):
+    _fields_ = [
+        ("User", SID_AND_ATTRIBUTES),
+    ]
+PTOKEN_USER = POINTER(_TOKEN_USER)
+TOKEN_USER = _TOKEN_USER
+
+class _TOKEN_DEFAULT_DACL(Structure):
+    _fields_ = [
+        ("DefaultDacl", PACL),
+    ]
+TOKEN_DEFAULT_DACL = _TOKEN_DEFAULT_DACL
+PTOKEN_DEFAULT_DACL = POINTER(_TOKEN_DEFAULT_DACL)
+
+class _TOKEN_GROUPS(Structure):
+    _fields_ = [
+        ("GroupCount", DWORD),
+        ("Groups", SID_AND_ATTRIBUTES * (ANYSIZE_ARRAY)),
+    ]
+TOKEN_GROUPS = _TOKEN_GROUPS
+PTOKEN_GROUPS = POINTER(_TOKEN_GROUPS)
+
+class _TOKEN_OWNER(Structure):
+    _fields_ = [
+        ("Owner", PSID),
+    ]
+TOKEN_OWNER = _TOKEN_OWNER
+PTOKEN_OWNER = POINTER(_TOKEN_OWNER)
+
+class _TOKEN_PRIMARY_GROUP(Structure):
+    _fields_ = [
+        ("PrimaryGroup", PSID),
+    ]
+PTOKEN_PRIMARY_GROUP = POINTER(_TOKEN_PRIMARY_GROUP)
+TOKEN_PRIMARY_GROUP = _TOKEN_PRIMARY_GROUP
+
+class _TOKEN_SOURCE(Structure):
+    _fields_ = [
+        ("SourceName", CHAR * (TOKEN_SOURCE_LENGTH)),
+        ("SourceIdentifier", LUID),
+    ]
+PTOKEN_SOURCE = POINTER(_TOKEN_SOURCE)
+TOKEN_SOURCE = _TOKEN_SOURCE
+
+class _TOKEN_STATISTICS(Structure):
+    _fields_ = [
+        ("TokenId", LUID),
+        ("AuthenticationId", LUID),
+        ("ExpirationTime", LARGE_INTEGER),
+        ("TokenType", TOKEN_TYPE),
+        ("ImpersonationLevel", SECURITY_IMPERSONATION_LEVEL),
+        ("DynamicCharged", DWORD),
+        ("DynamicAvailable", DWORD),
+        ("GroupCount", DWORD),
+        ("PrivilegeCount", DWORD),
+        ("ModifiedId", LUID),
+    ]
+PTOKEN_STATISTICS = POINTER(_TOKEN_STATISTICS)
+TOKEN_STATISTICS = _TOKEN_STATISTICS
+
+class _TOKEN_ORIGIN(Structure):
+    _fields_ = [
+        ("OriginatingLogonSession", LUID),
+    ]
+TOKEN_ORIGIN = _TOKEN_ORIGIN
+PTOKEN_ORIGIN = POINTER(_TOKEN_ORIGIN)
+
+class _TOKEN_LINKED_TOKEN(Structure):
+    _fields_ = [
+        ("LinkedToken", HANDLE),
+    ]
+PTOKEN_LINKED_TOKEN = POINTER(_TOKEN_LINKED_TOKEN)
+TOKEN_LINKED_TOKEN = _TOKEN_LINKED_TOKEN
+
+class _TOKEN_MANDATORY_POLICY(Structure):
+    _fields_ = [
+        ("Policy", DWORD),
+    ]
+TOKEN_MANDATORY_POLICY = _TOKEN_MANDATORY_POLICY
+PTOKEN_MANDATORY_POLICY = POINTER(_TOKEN_MANDATORY_POLICY)
+
+class _SID_AND_ATTRIBUTES_HASH(Structure):
+    _fields_ = [
+        ("SidCount", DWORD),
+        ("SidAttr", PSID_AND_ATTRIBUTES),
+        ("Hash", SID_HASH_ENTRY * (SID_HASH_SIZE)),
+    ]
+SID_AND_ATTRIBUTES_HASH = _SID_AND_ATTRIBUTES_HASH
+PSID_AND_ATTRIBUTES_HASH = POINTER(_SID_AND_ATTRIBUTES_HASH)
+
+class _TOKEN_APPCONTAINER_INFORMATION(Structure):
+    _fields_ = [
+        ("TokenAppContainer", PSID),
+    ]
+PTOKEN_APPCONTAINER_INFORMATION = POINTER(_TOKEN_APPCONTAINER_INFORMATION)
+TOKEN_APPCONTAINER_INFORMATION = _TOKEN_APPCONTAINER_INFORMATION
+
+class _TOKEN_ACCESS_INFORMATION(Structure):
+    _fields_ = [
+        ("SidHash", PSID_AND_ATTRIBUTES_HASH),
+        ("RestrictedSidHash", PSID_AND_ATTRIBUTES_HASH),
+        ("Privileges", PTOKEN_PRIVILEGES),
+        ("AuthenticationId", LUID),
+        ("TokenType", TOKEN_TYPE),
+        ("ImpersonationLevel", SECURITY_IMPERSONATION_LEVEL),
+        ("MandatoryPolicy", TOKEN_MANDATORY_POLICY),
+        ("Flags", DWORD),
+        ("AppContainerNumber", DWORD),
+        ("PackageSid", PSID),
+        ("CapabilitiesHash", PSID_AND_ATTRIBUTES_HASH),
+        ("TrustLevelSid", PSID),
+        ("SecurityAttributes", PSECURITY_ATTRIBUTES_OPAQUE),
+    ]
+PTOKEN_ACCESS_INFORMATION = POINTER(_TOKEN_ACCESS_INFORMATION)
+TOKEN_ACCESS_INFORMATION = _TOKEN_ACCESS_INFORMATION
+
+class _TOKEN_GROUPS_AND_PRIVILEGES(Structure):
+    _fields_ = [
+        ("SidCount", DWORD),
+        ("SidLength", DWORD),
+        ("Sids", PSID_AND_ATTRIBUTES),
+        ("RestrictedSidCount", DWORD),
+        ("RestrictedSidLength", DWORD),
+        ("RestrictedSids", PSID_AND_ATTRIBUTES),
+        ("PrivilegeCount", DWORD),
+        ("PrivilegeLength", DWORD),
+        ("Privileges", PLUID_AND_ATTRIBUTES),
+        ("AuthenticationId", LUID),
+    ]
+TOKEN_GROUPS_AND_PRIVILEGES = _TOKEN_GROUPS_AND_PRIVILEGES
+PTOKEN_GROUPS_AND_PRIVILEGES = POINTER(_TOKEN_GROUPS_AND_PRIVILEGES)
+
+class _TOKEN_SECURITY_ATTRIBUTE_FQBN_VALUE(Structure):
+    _fields_ = [
+        ("Version", ULONG64),
+        ("Name", UNICODE_STRING),
+    ]
+PTOKEN_SECURITY_ATTRIBUTE_FQBN_VALUE = POINTER(_TOKEN_SECURITY_ATTRIBUTE_FQBN_VALUE)
+TOKEN_SECURITY_ATTRIBUTE_FQBN_VALUE = _TOKEN_SECURITY_ATTRIBUTE_FQBN_VALUE
+
+class _TOKEN_SECURITY_ATTRIBUTE_OCTET_STRING_VALUE(Structure):
+    _fields_ = [
+        ("pValue", PVOID),
+        ("ValueLength", ULONG),
+    ]
+PTOKEN_SECURITY_ATTRIBUTE_OCTET_STRING_VALUE = POINTER(_TOKEN_SECURITY_ATTRIBUTE_OCTET_STRING_VALUE)
+TOKEN_SECURITY_ATTRIBUTE_OCTET_STRING_VALUE = _TOKEN_SECURITY_ATTRIBUTE_OCTET_STRING_VALUE
+
+class _TOKEN_SECURITY_ATTRIBUTE_V1_UNION(Union):
+    _fields_ = [
+        ("pInt64", PLONG64),
+        ("pUint64", PULONG64),
+        ("pString", PUNICODE_STRING),
+        ("pFqbn", PTOKEN_SECURITY_ATTRIBUTE_FQBN_VALUE),
+        ("pOctetString", PTOKEN_SECURITY_ATTRIBUTE_OCTET_STRING_VALUE),
+    ]
+TOKEN_SECURITY_ATTRIBUTE_V1_UNION = _TOKEN_SECURITY_ATTRIBUTE_V1_UNION
+
+class _TOKEN_SECURITY_ATTRIBUTE_V1(Structure):
+    _fields_ = [
+        ("Name", UNICODE_STRING),
+        ("ValueType", USHORT),
+        ("Reserved", USHORT),
+        ("Flags", ULONG),
+        ("ValueCount", ULONG),
+        ("Values", TOKEN_SECURITY_ATTRIBUTE_V1_UNION),
+    ]
+TOKEN_SECURITY_ATTRIBUTE_V1 = _TOKEN_SECURITY_ATTRIBUTE_V1
+PTOKEN_SECURITY_ATTRIBUTE_V1 = POINTER(_TOKEN_SECURITY_ATTRIBUTE_V1)
+
+class _TOKEN_SECURITY_ATTRIBUTES_INFORMATION_UNION(Union):
+    _fields_ = [
+        ("pAttributeV1", PTOKEN_SECURITY_ATTRIBUTE_V1),
+    ]
+TOKEN_SECURITY_ATTRIBUTES_INFORMATION_UNION = _TOKEN_SECURITY_ATTRIBUTES_INFORMATION_UNION
+
+class _TOKEN_SECURITY_ATTRIBUTES_INFORMATION(Structure):
+    _fields_ = [
+        ("Version", USHORT),
+        ("Reserved", USHORT),
+        ("AttributeCount", ULONG),
+        ("Attribute", TOKEN_SECURITY_ATTRIBUTES_INFORMATION_UNION),
+    ]
+PTOKEN_SECURITY_ATTRIBUTES_INFORMATION = POINTER(_TOKEN_SECURITY_ATTRIBUTES_INFORMATION)
+TOKEN_SECURITY_ATTRIBUTES_INFORMATION = _TOKEN_SECURITY_ATTRIBUTES_INFORMATION
+
+AlpcBasicInformation = EnumValue("_ALPC_PORT_INFORMATION_CLASS", "AlpcBasicInformation", 0x0)
+AlpcPortInformation = EnumValue("_ALPC_PORT_INFORMATION_CLASS", "AlpcPortInformation", 0x1)
+AlpcAssociateCompletionPortInformation = EnumValue("_ALPC_PORT_INFORMATION_CLASS", "AlpcAssociateCompletionPortInformation", 0x2)
+AlpcConnectedSIDInformation = EnumValue("_ALPC_PORT_INFORMATION_CLASS", "AlpcConnectedSIDInformation", 0x3)
+AlpcServerInformation = EnumValue("_ALPC_PORT_INFORMATION_CLASS", "AlpcServerInformation", 0x4)
+AlpcMessageZoneInformation = EnumValue("_ALPC_PORT_INFORMATION_CLASS", "AlpcMessageZoneInformation", 0x5)
+AlpcRegisterCompletionListInformation = EnumValue("_ALPC_PORT_INFORMATION_CLASS", "AlpcRegisterCompletionListInformation", 0x6)
+AlpcUnregisterCompletionListInformation = EnumValue("_ALPC_PORT_INFORMATION_CLASS", "AlpcUnregisterCompletionListInformation", 0x7)
+AlpcAdjustCompletionListConcurrencyCountInformation = EnumValue("_ALPC_PORT_INFORMATION_CLASS", "AlpcAdjustCompletionListConcurrencyCountInformation", 0x8)
+AlpcRegisterCallbackInformation = EnumValue("_ALPC_PORT_INFORMATION_CLASS", "AlpcRegisterCallbackInformation", 0x9)
+AlpcCompletionListRundownInformation = EnumValue("_ALPC_PORT_INFORMATION_CLASS", "AlpcCompletionListRundownInformation", 0xa)
+AlpcWaitForPortReferences = EnumValue("_ALPC_PORT_INFORMATION_CLASS", "AlpcWaitForPortReferences", 0xb)
+MaxAlpcPortInfoClass = EnumValue("_ALPC_PORT_INFORMATION_CLASS", "MaxAlpcPortInfoClass", 0xc)
+class _ALPC_PORT_INFORMATION_CLASS(EnumType):
+    values = [AlpcBasicInformation, AlpcPortInformation, AlpcAssociateCompletionPortInformation, AlpcConnectedSIDInformation, AlpcServerInformation, AlpcMessageZoneInformation, AlpcRegisterCompletionListInformation, AlpcUnregisterCompletionListInformation, AlpcAdjustCompletionListConcurrencyCountInformation, AlpcRegisterCallbackInformation, AlpcCompletionListRundownInformation, AlpcWaitForPortReferences, MaxAlpcPortInfoClass]
+    mapper = FlagMapper(*values)
+ALPC_PORT_INFORMATION_CLASS = _ALPC_PORT_INFORMATION_CLASS
+
+
+AlpcMessageSidInformation = EnumValue("_ALPC_MESSAGE_INFORMATION_CLASS", "AlpcMessageSidInformation", 0x0)
+AlpcMessageTokenModifiedIdInformation = EnumValue("_ALPC_MESSAGE_INFORMATION_CLASS", "AlpcMessageTokenModifiedIdInformation", 0x1)
+MaxAlpcMessageInfoClass = EnumValue("_ALPC_MESSAGE_INFORMATION_CLASS", "MaxAlpcMessageInfoClass", 0x2)
+AlpcMessageHandleInformation = EnumValue("_ALPC_MESSAGE_INFORMATION_CLASS", "AlpcMessageHandleInformation", 0x3)
+class _ALPC_MESSAGE_INFORMATION_CLASS(EnumType):
+    values = [AlpcMessageSidInformation, AlpcMessageTokenModifiedIdInformation, MaxAlpcMessageInfoClass, AlpcMessageHandleInformation]
+    mapper = FlagMapper(*values)
+ALPC_MESSAGE_INFORMATION_CLASS = _ALPC_MESSAGE_INFORMATION_CLASS
+PALPC_MESSAGE_INFORMATION_CLASS = POINTER(_ALPC_MESSAGE_INFORMATION_CLASS)
+
+
+class _ALPC_PORT_ATTRIBUTES32(Structure):
+    _fields_ = [
+        ("Flags", ULONG),
+        ("SecurityQos", SECURITY_QUALITY_OF_SERVICE),
+        ("MaxMessageLength", SIZE_T),
+        ("MemoryBandwidth", SIZE_T),
+        ("MaxPoolUsage", SIZE_T),
+        ("MaxSectionSize", SIZE_T),
+        ("MaxViewSize", SIZE_T),
+        ("MaxTotalSectionSize", SIZE_T),
+        ("DupObjectTypes", ULONG),
+    ]
+PALPC_PORT_ATTRIBUTES32 = POINTER(_ALPC_PORT_ATTRIBUTES32)
+ALPC_PORT_ATTRIBUTES32 = _ALPC_PORT_ATTRIBUTES32
+
+class _ALPC_PORT_ATTRIBUTES64(Structure):
+    _fields_ = [
+        ("Flags", ULONG),
+        ("SecurityQos", SECURITY_QUALITY_OF_SERVICE),
+        ("MaxMessageLength", SIZE_T),
+        ("MemoryBandwidth", SIZE_T),
+        ("MaxPoolUsage", SIZE_T),
+        ("MaxSectionSize", SIZE_T),
+        ("MaxViewSize", SIZE_T),
+        ("MaxTotalSectionSize", SIZE_T),
+        ("DupObjectTypes", ULONG),
+        ("Reserved", ULONG),
+    ]
+ALPC_PORT_ATTRIBUTES64 = _ALPC_PORT_ATTRIBUTES64
+PALPC_PORT_ATTRIBUTES64 = POINTER(_ALPC_PORT_ATTRIBUTES64)
+
+class _ALPC_MESSAGE_ATTRIBUTES(Structure):
+    _fields_ = [
+        ("AllocatedAttributes", ULONG),
+        ("ValidAttributes", ULONG),
+    ]
+ALPC_MESSAGE_ATTRIBUTES = _ALPC_MESSAGE_ATTRIBUTES
+PALPC_MESSAGE_ATTRIBUTES = POINTER(_ALPC_MESSAGE_ATTRIBUTES)
+
+class _PORT_MESSAGE32_TMP_UNION(Union):
+    _fields_ = [
+        ("ClientViewSize", ULONG),
+        ("CallbackId", ULONG),
+    ]
+PORT_MESSAGE_TMP_UNION = _PORT_MESSAGE32_TMP_UNION
+
+class _PORT_MESSAGE64_TMP_UNION(Union):
+    _fields_ = [
+        ("ClientViewSize", ULONGLONG),
+        ("CallbackId", ULONG),
+    ]
+PORT_MESSAGE_TMP_UNION = _PORT_MESSAGE64_TMP_UNION
+
+class _PORT_MESSAGE_TMP_SUBSTRUCT_S1(Structure):
+    _fields_ = [
+        ("DataLength", CSHORT),
+        ("TotalLength", CSHORT),
+    ]
+
+
+class _PORT_MESSAGE_TMP_UNION_U1(Union):
+    _fields_ = [
+        ("Length", ULONG),
+        ("s1", _PORT_MESSAGE_TMP_SUBSTRUCT_S1),
+    ]
+
+
+class _PORT_MESSAGE_TMP_SUBSTRUCT_S2(Structure):
+    _fields_ = [
+        ("Type", CSHORT),
+        ("DataInfoOffset", CSHORT),
+    ]
+
+
+class _PORT_MESSAGE_TMP_UNION_U2(Union):
+    _fields_ = [
+        ("ZeroInit", ULONG),
+        ("s2", _PORT_MESSAGE_TMP_SUBSTRUCT_S2),
+    ]
+
+
+class _PORT_MESSAGE32(Structure):
+    _fields_ = [
+        ("u1", _PORT_MESSAGE_TMP_UNION_U1),
+        ("u2", _PORT_MESSAGE_TMP_UNION_U2),
+        ("ClientId", CLIENT_ID32),
+        ("MessageId", ULONG),
+        ("tmp_union", _PORT_MESSAGE32_TMP_UNION),
+    ]
+PORT_MESSAGE32 = _PORT_MESSAGE32
+PPORT_MESSAGE32 = POINTER(_PORT_MESSAGE32)
+
+class _PORT_MESSAGE64(Structure):
+    _fields_ = [
+        ("u1", _PORT_MESSAGE_TMP_UNION_U1),
+        ("u2", _PORT_MESSAGE_TMP_UNION_U2),
+        ("ClientId", CLIENT_ID64),
+        ("MessageId", ULONG),
+        ("tmp_union", _PORT_MESSAGE64_TMP_UNION),
+    ]
+PPORT_MESSAGE64 = POINTER(_PORT_MESSAGE64)
+PORT_MESSAGE64 = _PORT_MESSAGE64
+
+class _ALPC_SERVER_INFORMATION_TMP_IN(Structure):
+    _fields_ = [
+        ("ThreadHandle", HANDLE),
+    ]
+ALPC_SERVER_INFORMATION_TMP_IN = _ALPC_SERVER_INFORMATION_TMP_IN
+
+class _ALPC_SERVER_INFORMATION_TMP_OUT(Structure):
+    _fields_ = [
+        ("ThreadBlocked", BOOLEAN),
+        ("ConnectedProcessId", HANDLE),
+        ("ConnectionPortName", UNICODE_STRING),
+    ]
+ALPC_SERVER_INFORMATION_TMP_OUT = _ALPC_SERVER_INFORMATION_TMP_OUT
+
+class ALPC_SERVER_INFORMATION(Union):
+    _fields_ = [
+        ("In", ALPC_SERVER_INFORMATION_TMP_IN),
+        ("Out", ALPC_SERVER_INFORMATION_TMP_OUT),
+    ]
+
+
+class _ALPC_CONTEXT_ATTR(Structure):
+    _fields_ = [
+        ("PortContext", PVOID),
+        ("MessageContext", PVOID),
+        ("Sequence", ULONG),
+        ("MessageId", ULONG),
+        ("CallbackId", ULONG),
+    ]
+PALPC_CONTEXT_ATTR = POINTER(_ALPC_CONTEXT_ATTR)
+ALPC_CONTEXT_ATTR = _ALPC_CONTEXT_ATTR
+
+class _ALPC_CONTEXT_ATTR32(Structure):
+    _fields_ = [
+        ("PortContext", ULONG),
+        ("MessageContext", ULONG),
+        ("Sequence", ULONG),
+        ("MessageId", ULONG),
+        ("CallbackId", ULONG),
+    ]
+ALPC_CONTEXT_ATTR32 = _ALPC_CONTEXT_ATTR32
+PALPC_CONTEXT_ATTR32 = POINTER(_ALPC_CONTEXT_ATTR32)
+
+class _ALPC_CONTEXT_ATTR64(Structure):
+    _fields_ = [
+        ("PortContext", ULONGLONG),
+        ("MessageContext", ULONGLONG),
+        ("Sequence", ULONG),
+        ("MessageId", ULONG),
+        ("CallbackId", ULONG),
+    ]
+ALPC_CONTEXT_ATTR64 = _ALPC_CONTEXT_ATTR64
+PALPC_CONTEXT_ATTR64 = POINTER(_ALPC_CONTEXT_ATTR64)
+
+class _ALPC_HANDLE_ATTR(Structure):
+    _fields_ = [
+        ("Flags", ULONG),
+        ("Handle", HANDLE),
+        ("ObjectType", ULONG),
+        ("DesiredAccess", ACCESS_MASK),
+    ]
+PALPC_HANDLE_ATTR = POINTER(_ALPC_HANDLE_ATTR)
+ALPC_HANDLE_ATTR = _ALPC_HANDLE_ATTR
+
+class _ALPC_HANDLE_ATTR32(Structure):
+    _fields_ = [
+        ("Flags", ULONG),
+        ("Handle", ULONG),
+        ("ObjectType", ULONG),
+        ("DesiredAccess", ACCESS_MASK),
+    ]
+ALPC_HANDLE_ATTR32 = _ALPC_HANDLE_ATTR32
+PALPC_HANDLE_ATTR32 = POINTER(_ALPC_HANDLE_ATTR32)
+
+class _ALPC_HANDLE_ATTR64(Structure):
+    _fields_ = [
+        ("Flags", ULONG),
+        ("Handle", ULONGLONG),
+        ("ObjectType", ULONG),
+        ("DesiredAccess", ACCESS_MASK),
+    ]
+PALPC_HANDLE_ATTR64 = POINTER(_ALPC_HANDLE_ATTR64)
+ALPC_HANDLE_ATTR64 = _ALPC_HANDLE_ATTR64
+
+class _ALPC_SECURITY_ATTR(Structure):
+    _fields_ = [
+        ("Flags", ULONG),
+        ("QoS", PSECURITY_QUALITY_OF_SERVICE),
+        ("ContextHandle", ALPC_HANDLE),
+    ]
+PALPC_SECURITY_ATTR = POINTER(_ALPC_SECURITY_ATTR)
+ALPC_SECURITY_ATTR = _ALPC_SECURITY_ATTR
+
+class _ALPC_SECURITY_ATTR32(Structure):
+    _fields_ = [
+        ("Flags", ULONG),
+        ("QoS", ULONG),
+        ("ContextHandle", ULONG),
+    ]
+ALPC_SECURITY_ATTR32 = _ALPC_SECURITY_ATTR32
+PALPC_SECURITY_ATTR32 = POINTER(_ALPC_SECURITY_ATTR32)
+
+class _ALPC_SECURITY_ATTR64(Structure):
+    _fields_ = [
+        ("Flags", ULONGLONG),
+        ("QoS", ULONGLONG),
+        ("ContextHandle", ULONGLONG),
+    ]
+PALPC_SECURITY_ATTR64 = POINTER(_ALPC_SECURITY_ATTR64)
+ALPC_SECURITY_ATTR64 = _ALPC_SECURITY_ATTR64
+
+class _ALPC_DATA_VIEW_ATTR(Structure):
+    _fields_ = [
+        ("Flags", ULONG),
+        ("SectionHandle", ALPC_HANDLE),
+        ("ViewBase", PVOID),
+        ("ViewSize", PVOID),
+    ]
+PALPC_DATA_VIEW_ATTR = POINTER(_ALPC_DATA_VIEW_ATTR)
+ALPC_DATA_VIEW_ATTR = _ALPC_DATA_VIEW_ATTR
+
+class _ALPC_DATA_VIEW_ATTR32(Structure):
+    _fields_ = [
+        ("Flags", ULONG),
+        ("SectionHandle", ULONG),
+        ("ViewBase", ULONG),
+        ("ViewSize", ULONG),
+    ]
+PALPC_DATA_VIEW_ATTR32 = POINTER(_ALPC_DATA_VIEW_ATTR32)
+ALPC_DATA_VIEW_ATTR32 = _ALPC_DATA_VIEW_ATTR32
+
+class _ALPC_DATA_VIEW_ATTR64(Structure):
+    _fields_ = [
+        ("Flags", ULONG),
+        ("SectionHandle", ULONGLONG),
+        ("ViewBase", ULONGLONG),
+        ("ViewSize", ULONGLONG),
+    ]
+PALPC_DATA_VIEW_ATTR64 = POINTER(_ALPC_DATA_VIEW_ATTR64)
+ALPC_DATA_VIEW_ATTR64 = _ALPC_DATA_VIEW_ATTR64
+
+class _ALPC_TOKEN_ATTR(Structure):
+    _fields_ = [
+        ("TokenId", ULONGLONG),
+        ("AuthenticationId", ULONGLONG),
+        ("ModifiedId", ULONGLONG),
+    ]
+ALPC_TOKEN_ATTR = _ALPC_TOKEN_ATTR
+PALPC_TOKEN_ATTR = POINTER(_ALPC_TOKEN_ATTR)
+
+class _ALPC_DIRECT_ATTR(Structure):
+    _fields_ = [
+        ("Event", HANDLE),
+    ]
+ALPC_DIRECT_ATTR = _ALPC_DIRECT_ATTR
+PALPC_DIRECT_ATTR = POINTER(_ALPC_DIRECT_ATTR)
+
+class _ALPC_DIRECT_ATTR32(Structure):
+    _fields_ = [
+        ("Event", ULONG),
+    ]
+PALPC_DIRECT_ATTR32 = POINTER(_ALPC_DIRECT_ATTR32)
+ALPC_DIRECT_ATTR32 = _ALPC_DIRECT_ATTR32
+
+class _ALPC_DIRECT_ATTR64(Structure):
+    _fields_ = [
+        ("Event", ULONGLONG),
+    ]
+ALPC_DIRECT_ATTR64 = _ALPC_DIRECT_ATTR64
+PALPC_DIRECT_ATTR64 = POINTER(_ALPC_DIRECT_ATTR64)
+
+class _ALPC_WORK_ON_BEHALF_ATTR(Structure):
+    _fields_ = [
+        ("Ticket", ULONGLONG),
+    ]
+PALPC_WORK_ON_BEHALF_ATTR = POINTER(_ALPC_WORK_ON_BEHALF_ATTR)
+ALPC_WORK_ON_BEHALF_ATTR = _ALPC_WORK_ON_BEHALF_ATTR
+
+class _RPC_IF_ID(Structure):
+    _fields_ = [
+        ("Uuid", IID),
+        ("VersMajor", USHORT),
+        ("VersMinor", USHORT),
+    ]
+RPC_IF_ID = _RPC_IF_ID
+
+INITIAL_RPC_IF_ID = RPC_IF_ID
+
+class _RPC_IF_ID(INITIAL_RPC_IF_ID):
+    def __repr__(self):
+        return '<RPC_IF_ID "{0}" ({1}, {2})>'.format(self.Uuid.to_string(), self.VersMajor, self.VersMinor)
+RPC_IF_ID = _RPC_IF_ID
+class _PORT_VIEW(Structure):
+    _fields_ = [
+        ("Length", ULONG),
+        ("SectionHandle", HANDLE),
+        ("SectionOffset", ULONG),
+        ("ViewSize", ULONG),
+        ("ViewBase", PVOID),
+        ("TargetViewBase", PVOID),
+    ]
+PPORT_VIEW = POINTER(_PORT_VIEW)
+PORT_VIEW = _PORT_VIEW
+
+class _REMOTE_PORT_VIEW(Structure):
+    _fields_ = [
+        ("Length", ULONG),
+        ("ViewSize", ULONG),
+        ("ViewBase", PVOID),
+    ]
+REMOTE_PORT_VIEW = _REMOTE_PORT_VIEW
+PREMOTE_PORT_VIEW = POINTER(_REMOTE_PORT_VIEW)
+
+class tagCOMVERSION(Structure):
+    _fields_ = [
+        ("MajorVersion", USHORT),
+        ("MinorVersion", USHORT),
+    ]
+COMVERSION = tagCOMVERSION
+
+class tagORPCTHIS(Structure):
+    _fields_ = [
+        ("version", COMVERSION),
+        ("flags", ULONG),
+        ("reserved1", ULONG),
+        ("cid", GUID),
+        ("extensions", PVOID),
+    ]
+ORPCTHIS = tagORPCTHIS
+
+class __MIDL_XmitDefs_0001(Structure):
+    _fields_ = [
+        ("asyncOperationId", GUID),
+        ("oxidClientProcessNA", ULONG64),
+        ("originalClientLogicalThreadId", GUID),
+        ("uClientCausalityTraceId", ULONG64),
+    ]
+MIDL_XmitDefs_0001 = __MIDL_XmitDefs_0001
+
+class _LOCALTHIS(Structure):
+    _fields_ = [
+        ("dwFlags", DWORD),
+        ("dwClientThread", DWORD),
+        ("passthroughTraceActivity", GUID),
+        ("callTraceActivity", GUID),
+        ("asyncRequestBlock", MIDL_XmitDefs_0001),
+        ("reserved", DWORD),
+        ("pTouchedAstaArray", PVOID),
+    ]
+LOCALTHIS = _LOCALTHIS
+
+VAR_PERINSTANCE = EnumValue("tagVARKIND", "VAR_PERINSTANCE", 0x0)
+VAR_STATIC = EnumValue("tagVARKIND", "VAR_STATIC", 0x1)
+VAR_CONST = EnumValue("tagVARKIND", "VAR_CONST", 0x2)
+VAR_DISPATCH = EnumValue("tagVARKIND", "VAR_DISPATCH", 0x3)
+class tagVARKIND(EnumType):
+    values = [VAR_PERINSTANCE, VAR_STATIC, VAR_CONST, VAR_DISPATCH]
+    mapper = FlagMapper(*values)
+VARKIND = tagVARKIND
+
+
+INVOKE_FUNC = EnumValue("tagINVOKEKIND", "INVOKE_FUNC", 0x0)
+INVOKE_PROPERTYGET = EnumValue("tagINVOKEKIND", "INVOKE_PROPERTYGET", 0x1)
+INVOKE_PROPERTYPUT = EnumValue("tagINVOKEKIND", "INVOKE_PROPERTYPUT", 0x2)
+INVOKE_PROPERTYPUTREF = EnumValue("tagINVOKEKIND", "INVOKE_PROPERTYPUTREF", 0x3)
+class tagINVOKEKIND(EnumType):
+    values = [INVOKE_FUNC, INVOKE_PROPERTYGET, INVOKE_PROPERTYPUT, INVOKE_PROPERTYPUTREF]
+    mapper = FlagMapper(*values)
+INVOKEKIND = tagINVOKEKIND
+
+
+FUNC_VIRTUAL = EnumValue("tagFUNCKIND", "FUNC_VIRTUAL", 0x0)
+FUNC_PUREVIRTUAL = EnumValue("tagFUNCKIND", "FUNC_PUREVIRTUAL", 0x1)
+FUNC_NONVIRTUAL = EnumValue("tagFUNCKIND", "FUNC_NONVIRTUAL", 0x2)
+FUNC_STATIC = EnumValue("tagFUNCKIND", "FUNC_STATIC", 0x3)
+FUNC_DISPATCH = EnumValue("tagFUNCKIND", "FUNC_DISPATCH", 0x4)
+class tagFUNCKIND(EnumType):
+    values = [FUNC_VIRTUAL, FUNC_PUREVIRTUAL, FUNC_NONVIRTUAL, FUNC_STATIC, FUNC_DISPATCH]
+    mapper = FlagMapper(*values)
+FUNCKIND = tagFUNCKIND
+
+
+SYS_WIN16 = EnumValue("tagSYSKIND", "SYS_WIN16", 0x0)
+SYS_WIN32 = EnumValue("tagSYSKIND", "SYS_WIN32", 0x1)
+SYS_MAC = EnumValue("tagSYSKIND", "SYS_MAC", 0x2)
+SYS_WIN64 = EnumValue("tagSYSKIND", "SYS_WIN64", 0x3)
+class tagSYSKIND(EnumType):
+    values = [SYS_WIN16, SYS_WIN32, SYS_MAC, SYS_WIN64]
+    mapper = FlagMapper(*values)
+SYSKIND = tagSYSKIND
+
+
+CC_FASTCALL = EnumValue("tagCALLCONV", "CC_FASTCALL", 0x0)
+CC_CDECL = EnumValue("tagCALLCONV", "CC_CDECL", 0x1)
+CC_MSCPASCAL = EnumValue("tagCALLCONV", "CC_MSCPASCAL", 0x2)
+CC_PASCAL = EnumValue("tagCALLCONV", "CC_PASCAL", 0x3)
+CC_MACPASCAL = EnumValue("tagCALLCONV", "CC_MACPASCAL", 0x4)
+CC_STDCALL = EnumValue("tagCALLCONV", "CC_STDCALL", 0x5)
+CC_FPFASTCALL = EnumValue("tagCALLCONV", "CC_FPFASTCALL", 0x6)
+CC_SYSCALL = EnumValue("tagCALLCONV", "CC_SYSCALL", 0x7)
+CC_MPWCDECL = EnumValue("tagCALLCONV", "CC_MPWCDECL", 0x8)
+CC_MPWPASCAL = EnumValue("tagCALLCONV", "CC_MPWPASCAL", 0x9)
+CC_MAX = EnumValue("tagCALLCONV", "CC_MAX", 0xa)
+class tagCALLCONV(EnumType):
+    values = [CC_FASTCALL, CC_CDECL, CC_MSCPASCAL, CC_PASCAL, CC_MACPASCAL, CC_STDCALL, CC_FPFASTCALL, CC_SYSCALL, CC_MPWCDECL, CC_MPWPASCAL, CC_MAX]
+    mapper = FlagMapper(*values)
+CALLCONV = tagCALLCONV
+
+
+DESCKIND_NONE = EnumValue("tagDESCKIND", "DESCKIND_NONE", 0x0)
+DESCKIND_FUNCDESC = EnumValue("tagDESCKIND", "DESCKIND_FUNCDESC", 0x1)
+DESCKIND_VARDESC = EnumValue("tagDESCKIND", "DESCKIND_VARDESC", 0x2)
+DESCKIND_TYPECOMP = EnumValue("tagDESCKIND", "DESCKIND_TYPECOMP", 0x3)
+DESCKIND_IMPLICITAPPOBJ = EnumValue("tagDESCKIND", "DESCKIND_IMPLICITAPPOBJ", 0x4)
+DESCKIND_MAX = EnumValue("tagDESCKIND", "DESCKIND_MAX", 0x5)
+class tagDESCKIND(EnumType):
+    values = [DESCKIND_NONE, DESCKIND_FUNCDESC, DESCKIND_VARDESC, DESCKIND_TYPECOMP, DESCKIND_IMPLICITAPPOBJ, DESCKIND_MAX]
+    mapper = FlagMapper(*values)
+DESCKIND = tagDESCKIND
+
+
+class tagPARAMDESCEX(Structure):
+    _fields_ = [
+        ("cBytes", ULONG),
+        ("varDefaultValue", VARIANTARG),
+    ]
+PARAMDESCEX = tagPARAMDESCEX
+LPPARAMDESCEX = POINTER(tagPARAMDESCEX)
+
+class tagPARAMDESC(Structure):
+    _fields_ = [
+        ("pparamdescex", LPPARAMDESCEX),
+        ("wParamFlags", USHORT),
+    ]
+LPPARAMDESC = POINTER(tagPARAMDESC)
+PARAMDESC = tagPARAMDESC
+
+class _TMP_TYPEDESC_UNION(Union):
+    _fields_ = [
+        ("lptdesc", PVOID),
+        ("lpadesc", PVOID),
+        ("hreftype", HREFTYPE),
+    ]
+TMP_TYPEDESC_UNION = _TMP_TYPEDESC_UNION
+
+class tagTYPEDESC(Structure):
+    _fields_ = [
+        ("DUMMYUNIONNAME", TMP_TYPEDESC_UNION),
+        ("vt", VARTYPE),
+    ]
+TYPEDESC = tagTYPEDESC
+
+class tagARRAYDESC(Structure):
+    _fields_ = [
+        ("tdescElem", TYPEDESC),
+        ("cDims", USHORT),
+        ("rgbounds", SAFEARRAYBOUND * (1)),
+    ]
+ARRAYDESC = tagARRAYDESC
+
+class tagELEMDESC(Structure):
+    _fields_ = [
+        ("tdesc", TYPEDESC),
+        ("paramdesc", PARAMDESC),
+    ]
+ELEMDESC = tagELEMDESC
+LPELEMDESC = POINTER(tagELEMDESC)
+
+class tagFUNCDESC(Structure):
+    _fields_ = [
+        ("memid", MEMBERID),
+        ("lprgscode", POINTER(SCODE)),
+        ("lprgelemdescParam", POINTER(ELEMDESC)),
+        ("funckind", FUNCKIND),
+        ("invkind", INVOKEKIND),
+        ("callconv", CALLCONV),
+        ("cParams", SHORT),
+        ("cParamsOpt", SHORT),
+        ("oVft", SHORT),
+        ("cScodes", SHORT),
+        ("elemdescFunc", ELEMDESC),
+        ("wFuncFlags", WORD),
+    ]
+LPFUNCDESC = POINTER(tagFUNCDESC)
+FUNCDESC = tagFUNCDESC
+
+class _TMP_VARDESC_UNION(Union):
+    _fields_ = [
+        ("oInst", ULONG),
+        ("lpvarValue", POINTER(VARIANT)),
+    ]
+TMP_VARDESC_UNION = _TMP_VARDESC_UNION
+
+class tagVARDESC(Structure):
+    _fields_ = [
+        ("memid", MEMBERID),
+        ("lpstrSchema", LPOLESTR),
+        ("DUMMYUNIONNAME", TMP_VARDESC_UNION),
+        ("elemdescVar", ELEMDESC),
+        ("wVarFlags", WORD),
+        ("varkind", VARKIND),
+    ]
+LPVARDESC = POINTER(tagVARDESC)
+VARDESC = tagVARDESC
+
+class tagBINDPTR(Union):
+    _fields_ = [
+        ("lpfuncdesc", POINTER(FUNCDESC)),
+        ("lpvardesc", POINTER(VARDESC)),
+        ("lptcomp", PVOID),
+    ]
+LPBINDPTR = POINTER(tagBINDPTR)
+BINDPTR = tagBINDPTR
+
+class tagIDLDESC(Structure):
+    _fields_ = [
+        ("dwReserved", ULONG_PTR),
+        ("wIDLFlags", USHORT),
+    ]
+IDLDESC = tagIDLDESC
+LPIDLDESC = POINTER(tagIDLDESC)
+
+class tagTLIBATTR(Structure):
+    _fields_ = [
+        ("guid", GUID),
+        ("lcid", LCID),
+        ("syskind", SYSKIND),
+        ("wMajorVerNum", WORD),
+        ("wMinorVerNum", WORD),
+        ("wLibFlags", WORD),
+    ]
+LPTLIBATTR = POINTER(tagTLIBATTR)
+TLIBATTR = tagTLIBATTR
+
+class tagTYPEATTR(Structure):
+    _fields_ = [
+        ("guid", GUID),
+        ("lcid", LCID),
+        ("dwReserved", DWORD),
+        ("memidConstructor", MEMBERID),
+        ("memidDestructor", MEMBERID),
+        ("lpstrSchema", LPOLESTR),
+        ("cbSizeInstance", ULONG),
+        ("typekind", TYPEKIND),
+        ("cFuncs", WORD),
+        ("cVars", WORD),
+        ("cImplTypes", WORD),
+        ("cbSizeVft", WORD),
+        ("cbAlignment", WORD),
+        ("wTypeFlags", WORD),
+        ("wMajorVerNum", WORD),
+        ("wMinorVerNum", WORD),
+        ("tdescAlias", TYPEDESC),
+        ("idldescType", IDLDESC),
+    ]
+TYPEATTR = tagTYPEATTR
+LPTYPEATTR = POINTER(tagTYPEATTR)
+
 ProcessDEPPolicy = EnumValue("_PROCESS_MITIGATION_POLICY", "ProcessDEPPolicy", 0x0)
 ProcessASLRPolicy = EnumValue("_PROCESS_MITIGATION_POLICY", "ProcessASLRPolicy", 0x1)
 ProcessDynamicCodePolicy = EnumValue("_PROCESS_MITIGATION_POLICY", "ProcessDynamicCodePolicy", 0x2)
@@ -8281,1532 +9814,4 @@ class _PROCESS_MITIGATION_IMAGE_LOAD_POLICY(Structure):
     ]
 PPROCESS_MITIGATION_IMAGE_LOAD_POLICY = POINTER(_PROCESS_MITIGATION_IMAGE_LOAD_POLICY)
 PROCESS_MITIGATION_IMAGE_LOAD_POLICY = _PROCESS_MITIGATION_IMAGE_LOAD_POLICY
-
-FakeFileInformationZero = EnumValue("_FILE_INFORMATION_CLASS", "FakeFileInformationZero", 0x0)
-FileDirectoryInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileDirectoryInformation", 0x1)
-FileFullDirectoryInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileFullDirectoryInformation", 0x2)
-FileBothDirectoryInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileBothDirectoryInformation", 0x3)
-FileBasicInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileBasicInformation", 0x4)
-FileStandardInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileStandardInformation", 0x5)
-FileInternalInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileInternalInformation", 0x6)
-FileEaInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileEaInformation", 0x7)
-FileAccessInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileAccessInformation", 0x8)
-FileNameInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileNameInformation", 0x9)
-FileRenameInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileRenameInformation", 0xa)
-FileLinkInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileLinkInformation", 0xb)
-FileNamesInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileNamesInformation", 0xc)
-FileDispositionInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileDispositionInformation", 0xd)
-FilePositionInformation = EnumValue("_FILE_INFORMATION_CLASS", "FilePositionInformation", 0xe)
-FileFullEaInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileFullEaInformation", 0xf)
-FileModeInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileModeInformation", 0x10)
-FileAlignmentInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileAlignmentInformation", 0x11)
-FileAllInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileAllInformation", 0x12)
-FileAllocationInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileAllocationInformation", 0x13)
-FileEndOfFileInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileEndOfFileInformation", 0x14)
-FileAlternateNameInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileAlternateNameInformation", 0x15)
-FileStreamInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileStreamInformation", 0x16)
-FilePipeInformation = EnumValue("_FILE_INFORMATION_CLASS", "FilePipeInformation", 0x17)
-FilePipeLocalInformation = EnumValue("_FILE_INFORMATION_CLASS", "FilePipeLocalInformation", 0x18)
-FilePipeRemoteInformation = EnumValue("_FILE_INFORMATION_CLASS", "FilePipeRemoteInformation", 0x19)
-FileMailslotQueryInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileMailslotQueryInformation", 0x1a)
-FileMailslotSetInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileMailslotSetInformation", 0x1b)
-FileCompressionInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileCompressionInformation", 0x1c)
-FileObjectIdInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileObjectIdInformation", 0x1d)
-FileCompletionInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileCompletionInformation", 0x1e)
-FileMoveClusterInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileMoveClusterInformation", 0x1f)
-FileQuotaInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileQuotaInformation", 0x20)
-FileReparsePointInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileReparsePointInformation", 0x21)
-FileNetworkOpenInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileNetworkOpenInformation", 0x22)
-FileAttributeTagInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileAttributeTagInformation", 0x23)
-FileTrackingInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileTrackingInformation", 0x24)
-FileIdBothDirectoryInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileIdBothDirectoryInformation", 0x25)
-FileIdFullDirectoryInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileIdFullDirectoryInformation", 0x26)
-FileValidDataLengthInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileValidDataLengthInformation", 0x27)
-FileShortNameInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileShortNameInformation", 0x28)
-FileIoCompletionNotificationInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileIoCompletionNotificationInformation", 0x29)
-FileIoStatusBlockRangeInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileIoStatusBlockRangeInformation", 0x2a)
-FileIoPriorityHintInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileIoPriorityHintInformation", 0x2b)
-FileSfioReserveInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileSfioReserveInformation", 0x2c)
-FileSfioVolumeInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileSfioVolumeInformation", 0x2d)
-FileHardLinkInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileHardLinkInformation", 0x2e)
-FileProcessIdsUsingFileInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileProcessIdsUsingFileInformation", 0x2f)
-FileNormalizedNameInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileNormalizedNameInformation", 0x30)
-FileNetworkPhysicalNameInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileNetworkPhysicalNameInformation", 0x31)
-FileIdGlobalTxDirectoryInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileIdGlobalTxDirectoryInformation", 0x32)
-FileIsRemoteDeviceInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileIsRemoteDeviceInformation", 0x33)
-FileUnusedInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileUnusedInformation", 0x34)
-FileNumaNodeInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileNumaNodeInformation", 0x35)
-FileStandardLinkInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileStandardLinkInformation", 0x36)
-FileRemoteProtocolInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileRemoteProtocolInformation", 0x37)
-FileRenameInformationBypassAccessCheck = EnumValue("_FILE_INFORMATION_CLASS", "FileRenameInformationBypassAccessCheck", 0x38)
-FileLinkInformationBypassAccessCheck = EnumValue("_FILE_INFORMATION_CLASS", "FileLinkInformationBypassAccessCheck", 0x39)
-FileVolumeNameInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileVolumeNameInformation", 0x3a)
-FileIdInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileIdInformation", 0x3b)
-FileIdExtdDirectoryInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileIdExtdDirectoryInformation", 0x3c)
-FileReplaceCompletionInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileReplaceCompletionInformation", 0x3d)
-FileHardLinkFullIdInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileHardLinkFullIdInformation", 0x3e)
-FileIdExtdBothDirectoryInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileIdExtdBothDirectoryInformation", 0x3f)
-FileDispositionInformationEx = EnumValue("_FILE_INFORMATION_CLASS", "FileDispositionInformationEx", 0x40)
-FileRenameInformationEx = EnumValue("_FILE_INFORMATION_CLASS", "FileRenameInformationEx", 0x41)
-FileRenameInformationExBypassAccessCheck = EnumValue("_FILE_INFORMATION_CLASS", "FileRenameInformationExBypassAccessCheck", 0x42)
-FileMaximumInformation = EnumValue("_FILE_INFORMATION_CLASS", "FileMaximumInformation", 0x43)
-class _FILE_INFORMATION_CLASS(EnumType):
-    values = [FakeFileInformationZero, FileDirectoryInformation, FileFullDirectoryInformation, FileBothDirectoryInformation, FileBasicInformation, FileStandardInformation, FileInternalInformation, FileEaInformation, FileAccessInformation, FileNameInformation, FileRenameInformation, FileLinkInformation, FileNamesInformation, FileDispositionInformation, FilePositionInformation, FileFullEaInformation, FileModeInformation, FileAlignmentInformation, FileAllInformation, FileAllocationInformation, FileEndOfFileInformation, FileAlternateNameInformation, FileStreamInformation, FilePipeInformation, FilePipeLocalInformation, FilePipeRemoteInformation, FileMailslotQueryInformation, FileMailslotSetInformation, FileCompressionInformation, FileObjectIdInformation, FileCompletionInformation, FileMoveClusterInformation, FileQuotaInformation, FileReparsePointInformation, FileNetworkOpenInformation, FileAttributeTagInformation, FileTrackingInformation, FileIdBothDirectoryInformation, FileIdFullDirectoryInformation, FileValidDataLengthInformation, FileShortNameInformation, FileIoCompletionNotificationInformation, FileIoStatusBlockRangeInformation, FileIoPriorityHintInformation, FileSfioReserveInformation, FileSfioVolumeInformation, FileHardLinkInformation, FileProcessIdsUsingFileInformation, FileNormalizedNameInformation, FileNetworkPhysicalNameInformation, FileIdGlobalTxDirectoryInformation, FileIsRemoteDeviceInformation, FileUnusedInformation, FileNumaNodeInformation, FileStandardLinkInformation, FileRemoteProtocolInformation, FileRenameInformationBypassAccessCheck, FileLinkInformationBypassAccessCheck, FileVolumeNameInformation, FileIdInformation, FileIdExtdDirectoryInformation, FileReplaceCompletionInformation, FileHardLinkFullIdInformation, FileIdExtdBothDirectoryInformation, FileDispositionInformationEx, FileRenameInformationEx, FileRenameInformationExBypassAccessCheck, FileMaximumInformation]
-    mapper = FlagMapper(*values)
-FILE_INFORMATION_CLASS = _FILE_INFORMATION_CLASS
-PFILE_INFORMATION_CLASS = POINTER(_FILE_INFORMATION_CLASS)
-
-
-IoPriorityVeryLow = EnumValue("_IO_PRIORITY_HINT", "IoPriorityVeryLow", 0x0)
-IoPriorityLow = EnumValue("_IO_PRIORITY_HINT", "IoPriorityLow", 0x1)
-IoPriorityNormal = EnumValue("_IO_PRIORITY_HINT", "IoPriorityNormal", 0x2)
-IoPriorityHigh = EnumValue("_IO_PRIORITY_HINT", "IoPriorityHigh", 0x3)
-IoPriorityCritical = EnumValue("_IO_PRIORITY_HINT", "IoPriorityCritical", 0x4)
-MaxIoPriorityTypes = EnumValue("_IO_PRIORITY_HINT", "MaxIoPriorityTypes", 0x5)
-class _IO_PRIORITY_HINT(EnumType):
-    values = [IoPriorityVeryLow, IoPriorityLow, IoPriorityNormal, IoPriorityHigh, IoPriorityCritical, MaxIoPriorityTypes]
-    mapper = FlagMapper(*values)
-IO_PRIORITY_HINT = _IO_PRIORITY_HINT
-
-
-class _FILE_INTERNAL_INFORMATION(Structure):
-    _fields_ = [
-        ("IndexNumber", LARGE_INTEGER),
-    ]
-FILE_INTERNAL_INFORMATION = _FILE_INTERNAL_INFORMATION
-PFILE_INTERNAL_INFORMATION = POINTER(_FILE_INTERNAL_INFORMATION)
-
-class _FILE_ALIGNMENT_INFORMATION(Structure):
-    _fields_ = [
-        ("AlignmentRequirement", ULONG),
-    ]
-PFILE_ALIGNMENT_INFORMATION = POINTER(_FILE_ALIGNMENT_INFORMATION)
-FILE_ALIGNMENT_INFORMATION = _FILE_ALIGNMENT_INFORMATION
-
-class _FILE_ATTRIBUTE_TAG_INFORMATION(Structure):
-    _fields_ = [
-        ("FileAttributes", ULONG),
-        ("ReparseTag", ULONG),
-    ]
-PFILE_ATTRIBUTE_TAG_INFORMATION = POINTER(_FILE_ATTRIBUTE_TAG_INFORMATION)
-FILE_ATTRIBUTE_TAG_INFORMATION = _FILE_ATTRIBUTE_TAG_INFORMATION
-
-class _FILE_BASIC_INFORMATION(Structure):
-    _fields_ = [
-        ("CreationTime", LARGE_INTEGER),
-        ("LastAccessTime", LARGE_INTEGER),
-        ("LastWriteTime", LARGE_INTEGER),
-        ("ChangeTime", LARGE_INTEGER),
-        ("FileAttributes", ULONG),
-    ]
-FILE_BASIC_INFORMATION = _FILE_BASIC_INFORMATION
-PFILE_BASIC_INFORMATION = POINTER(_FILE_BASIC_INFORMATION)
-
-class _FILE_EA_INFORMATION(Structure):
-    _fields_ = [
-        ("EaSize", ULONG),
-    ]
-PFILE_EA_INFORMATION = POINTER(_FILE_EA_INFORMATION)
-FILE_EA_INFORMATION = _FILE_EA_INFORMATION
-
-class _FILE_IO_PRIORITY_HINT_INFORMATION(Structure):
-    _fields_ = [
-        ("PriorityHint", IO_PRIORITY_HINT),
-    ]
-PFILE_IO_PRIORITY_HINT_INFORMATION = POINTER(_FILE_IO_PRIORITY_HINT_INFORMATION)
-FILE_IO_PRIORITY_HINT_INFORMATION = _FILE_IO_PRIORITY_HINT_INFORMATION
-
-class _FILE_MODE_INFORMATION(Structure):
-    _fields_ = [
-        ("Mode", ULONG),
-    ]
-PFILE_MODE_INFORMATION = POINTER(_FILE_MODE_INFORMATION)
-FILE_MODE_INFORMATION = _FILE_MODE_INFORMATION
-
-class _FILE_NAME_INFORMATION(Structure):
-    _fields_ = [
-        ("FileNameLength", ULONG),
-        ("FileName", WCHAR * (1)),
-    ]
-PFILE_NAME_INFORMATION = POINTER(_FILE_NAME_INFORMATION)
-FILE_NAME_INFORMATION = _FILE_NAME_INFORMATION
-
-class _FILE_NETWORK_OPEN_INFORMATION(Structure):
-    _fields_ = [
-        ("CreationTime", LARGE_INTEGER),
-        ("LastAccessTime", LARGE_INTEGER),
-        ("LastWriteTime", LARGE_INTEGER),
-        ("ChangeTime", LARGE_INTEGER),
-        ("AllocationSize", LARGE_INTEGER),
-        ("EndOfFile", LARGE_INTEGER),
-        ("FileAttributes", ULONG),
-    ]
-PFILE_NETWORK_OPEN_INFORMATION = POINTER(_FILE_NETWORK_OPEN_INFORMATION)
-FILE_NETWORK_OPEN_INFORMATION = _FILE_NETWORK_OPEN_INFORMATION
-
-class _FILE_STANDARD_INFORMATION(Structure):
-    _fields_ = [
-        ("AllocationSize", LARGE_INTEGER),
-        ("EndOfFile", LARGE_INTEGER),
-        ("NumberOfLinks", ULONG),
-        ("DeletePending", BOOLEAN),
-        ("Directory", BOOLEAN),
-    ]
-FILE_STANDARD_INFORMATION = _FILE_STANDARD_INFORMATION
-PFILE_STANDARD_INFORMATION = POINTER(_FILE_STANDARD_INFORMATION)
-
-class _FILE_ACCESS_INFORMATION(Structure):
-    _fields_ = [
-        ("AccessFlags", ACCESS_MASK),
-    ]
-FILE_ACCESS_INFORMATION = _FILE_ACCESS_INFORMATION
-PFILE_ACCESS_INFORMATION = POINTER(_FILE_ACCESS_INFORMATION)
-
-class _FILE_POSITION_INFORMATION(Structure):
-    _fields_ = [
-        ("CurrentByteOffset", LARGE_INTEGER),
-    ]
-PFILE_POSITION_INFORMATION = POINTER(_FILE_POSITION_INFORMATION)
-FILE_POSITION_INFORMATION = _FILE_POSITION_INFORMATION
-
-class _FILE_IS_REMOTE_DEVICE_INFORMATION(Structure):
-    _fields_ = [
-        ("IsRemote", BOOLEAN),
-    ]
-FILE_IS_REMOTE_DEVICE_INFORMATION = _FILE_IS_REMOTE_DEVICE_INFORMATION
-PFILE_IS_REMOTE_DEVICE_INFORMATION = POINTER(_FILE_IS_REMOTE_DEVICE_INFORMATION)
-
-class _FILE_ALL_INFORMATION(Structure):
-    _fields_ = [
-        ("BasicInformation", FILE_BASIC_INFORMATION),
-        ("StandardInformation", FILE_STANDARD_INFORMATION),
-        ("InternalInformation", FILE_INTERNAL_INFORMATION),
-        ("EaInformation", FILE_EA_INFORMATION),
-        ("AccessInformation", FILE_ACCESS_INFORMATION),
-        ("PositionInformation", FILE_POSITION_INFORMATION),
-        ("ModeInformation", FILE_MODE_INFORMATION),
-        ("AlignmentInformation", FILE_ALIGNMENT_INFORMATION),
-        ("NameInformation", FILE_NAME_INFORMATION),
-    ]
-PFILE_ALL_INFORMATION = POINTER(_FILE_ALL_INFORMATION)
-FILE_ALL_INFORMATION = _FILE_ALL_INFORMATION
-
-class _FILE_STREAM_INFORMATION(Structure):
-    _fields_ = [
-        ("NextEntryOffset", ULONG),
-        ("StreamNameLength", ULONG),
-        ("StreamSize", LARGE_INTEGER),
-        ("StreamAllocationSize", LARGE_INTEGER),
-        ("StreamName", WCHAR * (1)),
-    ]
-FILE_STREAM_INFORMATION = _FILE_STREAM_INFORMATION
-PFILE_STREAM_INFORMATION = POINTER(_FILE_STREAM_INFORMATION)
-
-class _FILE_DISPOSITION_INFORMATION(Structure):
-    _fields_ = [
-        ("DeleteFile", BOOLEAN),
-    ]
-PFILE_DISPOSITION_INFORMATION = POINTER(_FILE_DISPOSITION_INFORMATION)
-FILE_DISPOSITION_INFORMATION = _FILE_DISPOSITION_INFORMATION
-
-class _FILE_FULL_EA_INFORMATION(Structure):
-    _fields_ = [
-        ("NextEntryOffset", ULONG),
-        ("Flags", BYTE),
-        ("EaNameLength", BYTE),
-        ("EaValueLength", USHORT),
-        ("EaName", CHAR * (1)),
-    ]
-FILE_FULL_EA_INFORMATION = _FILE_FULL_EA_INFORMATION
-PFILE_FULL_EA_INFORMATION = POINTER(_FILE_FULL_EA_INFORMATION)
-
-class _FILE_GET_EA_INFORMATION(Structure):
-    _fields_ = [
-        ("NextEntryOffset", ULONG),
-        ("EaNameLength", UCHAR),
-        ("EaName", CHAR * (1)),
-    ]
-FILE_GET_EA_INFORMATION = _FILE_GET_EA_INFORMATION
-PFILE_GET_EA_INFORMATION = POINTER(_FILE_GET_EA_INFORMATION)
-
-class tagVS_FIXEDFILEINFO(Structure):
-    _fields_ = [
-        ("dwSignature", DWORD),
-        ("dwStrucVersion", DWORD),
-        ("dwFileVersionMS", DWORD),
-        ("dwFileVersionLS", DWORD),
-        ("dwProductVersionMS", DWORD),
-        ("dwProductVersionLS", DWORD),
-        ("dwFileFlagsMask", DWORD),
-        ("dwFileFlags", DWORD),
-        ("dwFileOS", DWORD),
-        ("dwFileType", DWORD),
-        ("dwFileSubtype", DWORD),
-        ("dwFileDateMS", DWORD),
-        ("dwFileDateLS", DWORD),
-    ]
-VS_FIXEDFILEINFO = tagVS_FIXEDFILEINFO
-
-class _ANON__FILE_LINK_INFORMATION_SUB_UNION_1(Union):
-    _fields_ = [
-        ("ReplaceIfExists", BOOLEAN),
-        ("Flags", ULONG),
-    ]
-
-class _FILE_LINK_INFORMATION(Structure):
-    _anonymous_ = ("anon_01",)
-    _fields_ = [
-        ("anon_01", _ANON__FILE_LINK_INFORMATION_SUB_UNION_1),
-        ("RootDirectory", HANDLE),
-        ("FileNameLength", ULONG),
-        ("FileName", WCHAR * (1)),
-    ]
-PFILE_LINK_INFORMATION = POINTER(_FILE_LINK_INFORMATION)
-FILE_LINK_INFORMATION = _FILE_LINK_INFORMATION
-
-class _WIN32_FIND_DATAA(Structure):
-    _fields_ = [
-        ("dwFileAttributes", DWORD),
-        ("ftCreationTime", FILETIME),
-        ("ftLastAccessTime", FILETIME),
-        ("ftLastWriteTime", FILETIME),
-        ("nFileSizeHigh", DWORD),
-        ("nFileSizeLow", DWORD),
-        ("dwReserved0", DWORD),
-        ("dwReserved1", DWORD),
-        ("cFileName", CHAR * (MAX_PATH)),
-        ("cAlternateFileName", CHAR * (14)),
-        ("dwFileType", DWORD),
-        ("dwCreatorType", DWORD),
-        ("wFinderFlags", WORD),
-    ]
-LPWIN32_FIND_DATAA = POINTER(_WIN32_FIND_DATAA)
-PWIN32_FIND_DATAA = POINTER(_WIN32_FIND_DATAA)
-WIN32_FIND_DATAA = _WIN32_FIND_DATAA
-
-class _WIN32_FIND_DATAW(Structure):
-    _fields_ = [
-        ("dwFileAttributes", DWORD),
-        ("ftCreationTime", FILETIME),
-        ("ftLastAccessTime", FILETIME),
-        ("ftLastWriteTime", FILETIME),
-        ("nFileSizeHigh", DWORD),
-        ("nFileSizeLow", DWORD),
-        ("dwReserved0", DWORD),
-        ("dwReserved1", DWORD),
-        ("cFileName", WCHAR * (MAX_PATH)),
-        ("cAlternateFileName", WCHAR * (14)),
-        ("dwFileType", DWORD),
-        ("dwCreatorType", DWORD),
-        ("wFinderFlags", WORD),
-    ]
-PWIN32_FIND_DATAW = POINTER(_WIN32_FIND_DATAW)
-WIN32_FIND_DATAW = _WIN32_FIND_DATAW
-LPWIN32_FIND_DATAW = POINTER(_WIN32_FIND_DATAW)
-
-EvtRpcLogin = EnumValue("_EVT_LOGIN_CLASS", "EvtRpcLogin", 0x1)
-class _EVT_LOGIN_CLASS(EnumType):
-    values = [EvtRpcLogin]
-    mapper = FlagMapper(*values)
-EVT_LOGIN_CLASS = _EVT_LOGIN_CLASS
-
-
-EvtVarTypeNull = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeNull", 0x0)
-EvtVarTypeString = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeString", 0x1)
-EvtVarTypeAnsiString = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeAnsiString", 0x2)
-EvtVarTypeSByte = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeSByte", 0x3)
-EvtVarTypeByte = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeByte", 0x4)
-EvtVarTypeInt16 = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeInt16", 0x5)
-EvtVarTypeUInt16 = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeUInt16", 0x6)
-EvtVarTypeInt32 = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeInt32", 0x7)
-EvtVarTypeUInt32 = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeUInt32", 0x8)
-EvtVarTypeInt64 = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeInt64", 0x9)
-EvtVarTypeUInt64 = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeUInt64", 0xa)
-EvtVarTypeSingle = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeSingle", 0xb)
-EvtVarTypeDouble = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeDouble", 0xc)
-EvtVarTypeBoolean = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeBoolean", 0xd)
-EvtVarTypeBinary = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeBinary", 0xe)
-EvtVarTypeGuid = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeGuid", 0xf)
-EvtVarTypeSizeT = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeSizeT", 0x10)
-EvtVarTypeFileTime = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeFileTime", 0x11)
-EvtVarTypeSysTime = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeSysTime", 0x12)
-EvtVarTypeSid = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeSid", 0x13)
-EvtVarTypeHexInt32 = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeHexInt32", 0x14)
-EvtVarTypeHexInt64 = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeHexInt64", 0x15)
-EvtVarTypeEvtHandle = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeEvtHandle", 0x20)
-EvtVarTypeEvtXml = EnumValue("_EVT_VARIANT_TYPE", "EvtVarTypeEvtXml", 0x23)
-class _EVT_VARIANT_TYPE(EnumType):
-    values = [EvtVarTypeNull, EvtVarTypeString, EvtVarTypeAnsiString, EvtVarTypeSByte, EvtVarTypeByte, EvtVarTypeInt16, EvtVarTypeUInt16, EvtVarTypeInt32, EvtVarTypeUInt32, EvtVarTypeInt64, EvtVarTypeUInt64, EvtVarTypeSingle, EvtVarTypeDouble, EvtVarTypeBoolean, EvtVarTypeBinary, EvtVarTypeGuid, EvtVarTypeSizeT, EvtVarTypeFileTime, EvtVarTypeSysTime, EvtVarTypeSid, EvtVarTypeHexInt32, EvtVarTypeHexInt64, EvtVarTypeEvtHandle, EvtVarTypeEvtXml]
-    mapper = FlagMapper(*values)
-EVT_VARIANT_TYPE = _EVT_VARIANT_TYPE
-
-
-EvtRenderContextValues = EnumValue("_EVT_RENDER_CONTEXT_FLAGS", "EvtRenderContextValues", 0x0)
-EvtRenderContextSystem = EnumValue("_EVT_RENDER_CONTEXT_FLAGS", "EvtRenderContextSystem", 0x1)
-EvtRenderContextUser = EnumValue("_EVT_RENDER_CONTEXT_FLAGS", "EvtRenderContextUser", 0x2)
-class _EVT_RENDER_CONTEXT_FLAGS(EnumType):
-    values = [EvtRenderContextValues, EvtRenderContextSystem, EvtRenderContextUser]
-    mapper = FlagMapper(*values)
-EVT_RENDER_CONTEXT_FLAGS = _EVT_RENDER_CONTEXT_FLAGS
-
-
-EvtSystemProviderName = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemProviderName", 0x0)
-EvtSystemProviderGuid = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemProviderGuid", 0x1)
-EvtSystemEventID = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemEventID", 0x2)
-EvtSystemQualifiers = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemQualifiers", 0x3)
-EvtSystemLevel = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemLevel", 0x4)
-EvtSystemTask = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemTask", 0x5)
-EvtSystemOpcode = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemOpcode", 0x6)
-EvtSystemKeywords = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemKeywords", 0x7)
-EvtSystemTimeCreated = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemTimeCreated", 0x8)
-EvtSystemEventRecordId = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemEventRecordId", 0x9)
-EvtSystemActivityID = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemActivityID", 0xa)
-EvtSystemRelatedActivityID = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemRelatedActivityID", 0xb)
-EvtSystemProcessID = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemProcessID", 0xc)
-EvtSystemThreadID = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemThreadID", 0xd)
-EvtSystemChannel = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemChannel", 0xe)
-EvtSystemComputer = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemComputer", 0xf)
-EvtSystemUserID = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemUserID", 0x10)
-EvtSystemVersion = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemVersion", 0x11)
-EvtSystemPropertyIdEND = EnumValue("_EVT_SYSTEM_PROPERTY_ID", "EvtSystemPropertyIdEND", 0x12)
-class _EVT_SYSTEM_PROPERTY_ID(EnumType):
-    values = [EvtSystemProviderName, EvtSystemProviderGuid, EvtSystemEventID, EvtSystemQualifiers, EvtSystemLevel, EvtSystemTask, EvtSystemOpcode, EvtSystemKeywords, EvtSystemTimeCreated, EvtSystemEventRecordId, EvtSystemActivityID, EvtSystemRelatedActivityID, EvtSystemProcessID, EvtSystemThreadID, EvtSystemChannel, EvtSystemComputer, EvtSystemUserID, EvtSystemVersion, EvtSystemPropertyIdEND]
-    mapper = FlagMapper(*values)
-EVT_SYSTEM_PROPERTY_ID = _EVT_SYSTEM_PROPERTY_ID
-
-
-EvtRenderEventValues = EnumValue("_EVT_RENDER_FLAGS", "EvtRenderEventValues", 0x0)
-EvtRenderEventXml = EnumValue("_EVT_RENDER_FLAGS", "EvtRenderEventXml", 0x1)
-EvtRenderBookmark = EnumValue("_EVT_RENDER_FLAGS", "EvtRenderBookmark", 0x2)
-class _EVT_RENDER_FLAGS(EnumType):
-    values = [EvtRenderEventValues, EvtRenderEventXml, EvtRenderBookmark]
-    mapper = FlagMapper(*values)
-EVT_RENDER_FLAGS = _EVT_RENDER_FLAGS
-
-
-EvtQueryChannelPath = EnumValue("_EVT_QUERY_FLAGS", "EvtQueryChannelPath", 0x1)
-EvtQueryFilePath = EnumValue("_EVT_QUERY_FLAGS", "EvtQueryFilePath", 0x2)
-EvtQueryForwardDirection = EnumValue("_EVT_QUERY_FLAGS", "EvtQueryForwardDirection", 0x100)
-EvtQueryReverseDirection = EnumValue("_EVT_QUERY_FLAGS", "EvtQueryReverseDirection", 0x200)
-EvtQueryTolerateQueryErrors = EnumValue("_EVT_QUERY_FLAGS", "EvtQueryTolerateQueryErrors", 0x1000)
-class _EVT_QUERY_FLAGS(EnumType):
-    values = [EvtQueryChannelPath, EvtQueryFilePath, EvtQueryForwardDirection, EvtQueryReverseDirection, EvtQueryTolerateQueryErrors]
-    mapper = FlagMapper(*values)
-EVT_QUERY_FLAGS = _EVT_QUERY_FLAGS
-
-
-EvtLogCreationTime = EnumValue("_EVT_LOG_PROPERTY_ID", "EvtLogCreationTime", 0x0)
-EvtLogLastAccessTime = EnumValue("_EVT_LOG_PROPERTY_ID", "EvtLogLastAccessTime", 0x1)
-EvtLogLastWriteTime = EnumValue("_EVT_LOG_PROPERTY_ID", "EvtLogLastWriteTime", 0x2)
-EvtLogFileSize = EnumValue("_EVT_LOG_PROPERTY_ID", "EvtLogFileSize", 0x3)
-EvtLogAttributes = EnumValue("_EVT_LOG_PROPERTY_ID", "EvtLogAttributes", 0x4)
-EvtLogNumberOfLogRecords = EnumValue("_EVT_LOG_PROPERTY_ID", "EvtLogNumberOfLogRecords", 0x5)
-EvtLogOldestRecordNumber = EnumValue("_EVT_LOG_PROPERTY_ID", "EvtLogOldestRecordNumber", 0x6)
-EvtLogFull = EnumValue("_EVT_LOG_PROPERTY_ID", "EvtLogFull", 0x7)
-class _EVT_LOG_PROPERTY_ID(EnumType):
-    values = [EvtLogCreationTime, EvtLogLastAccessTime, EvtLogLastWriteTime, EvtLogFileSize, EvtLogAttributes, EvtLogNumberOfLogRecords, EvtLogOldestRecordNumber, EvtLogFull]
-    mapper = FlagMapper(*values)
-EVT_LOG_PROPERTY_ID = _EVT_LOG_PROPERTY_ID
-
-
-EvtOpenChannelPath = EnumValue("_EVT_OPEN_LOG_FLAGS", "EvtOpenChannelPath", 0x1)
-EvtOpenFilePath = EnumValue("_EVT_OPEN_LOG_FLAGS", "EvtOpenFilePath", 0x2)
-class _EVT_OPEN_LOG_FLAGS(EnumType):
-    values = [EvtOpenChannelPath, EvtOpenFilePath]
-    mapper = FlagMapper(*values)
-EVT_OPEN_LOG_FLAGS = _EVT_OPEN_LOG_FLAGS
-
-
-EvtChannelConfigEnabled = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelConfigEnabled", 0x0)
-EvtChannelConfigIsolation = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelConfigIsolation", 0x1)
-EvtChannelConfigType = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelConfigType", 0x2)
-EvtChannelConfigOwningPublisher = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelConfigOwningPublisher", 0x3)
-EvtChannelConfigClassicEventlog = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelConfigClassicEventlog", 0x4)
-EvtChannelConfigAccess = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelConfigAccess", 0x5)
-EvtChannelLoggingConfigRetention = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelLoggingConfigRetention", 0x6)
-EvtChannelLoggingConfigAutoBackup = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelLoggingConfigAutoBackup", 0x7)
-EvtChannelLoggingConfigMaxSize = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelLoggingConfigMaxSize", 0x8)
-EvtChannelLoggingConfigLogFilePath = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelLoggingConfigLogFilePath", 0x9)
-EvtChannelPublishingConfigLevel = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelPublishingConfigLevel", 0xa)
-EvtChannelPublishingConfigKeywords = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelPublishingConfigKeywords", 0xb)
-EvtChannelPublishingConfigControlGuid = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelPublishingConfigControlGuid", 0xc)
-EvtChannelPublishingConfigBufferSize = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelPublishingConfigBufferSize", 0xd)
-EvtChannelPublishingConfigMinBuffers = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelPublishingConfigMinBuffers", 0xe)
-EvtChannelPublishingConfigMaxBuffers = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelPublishingConfigMaxBuffers", 0xf)
-EvtChannelPublishingConfigLatency = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelPublishingConfigLatency", 0x10)
-EvtChannelPublishingConfigClockType = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelPublishingConfigClockType", 0x11)
-EvtChannelPublishingConfigSidType = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelPublishingConfigSidType", 0x12)
-EvtChannelPublisherList = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelPublisherList", 0x13)
-EvtChannelPublishingConfigFileMax = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelPublishingConfigFileMax", 0x14)
-EvtChannelConfigPropertyIdEND = EnumValue("_EVT_CHANNEL_CONFIG_PROPERTY_ID", "EvtChannelConfigPropertyIdEND", 0x15)
-class _EVT_CHANNEL_CONFIG_PROPERTY_ID(EnumType):
-    values = [EvtChannelConfigEnabled, EvtChannelConfigIsolation, EvtChannelConfigType, EvtChannelConfigOwningPublisher, EvtChannelConfigClassicEventlog, EvtChannelConfigAccess, EvtChannelLoggingConfigRetention, EvtChannelLoggingConfigAutoBackup, EvtChannelLoggingConfigMaxSize, EvtChannelLoggingConfigLogFilePath, EvtChannelPublishingConfigLevel, EvtChannelPublishingConfigKeywords, EvtChannelPublishingConfigControlGuid, EvtChannelPublishingConfigBufferSize, EvtChannelPublishingConfigMinBuffers, EvtChannelPublishingConfigMaxBuffers, EvtChannelPublishingConfigLatency, EvtChannelPublishingConfigClockType, EvtChannelPublishingConfigSidType, EvtChannelPublisherList, EvtChannelPublishingConfigFileMax, EvtChannelConfigPropertyIdEND]
-    mapper = FlagMapper(*values)
-EVT_CHANNEL_CONFIG_PROPERTY_ID = _EVT_CHANNEL_CONFIG_PROPERTY_ID
-
-
-EvtChannelTypeAdmin = EnumValue("_EVT_CHANNEL_TYPE", "EvtChannelTypeAdmin", 0x0)
-EvtChannelTypeOperational = EnumValue("_EVT_CHANNEL_TYPE", "EvtChannelTypeOperational", 0x1)
-EvtChannelTypeAnalytic = EnumValue("_EVT_CHANNEL_TYPE", "EvtChannelTypeAnalytic", 0x2)
-EvtChannelTypeDebug = EnumValue("_EVT_CHANNEL_TYPE", "EvtChannelTypeDebug", 0x3)
-class _EVT_CHANNEL_TYPE(EnumType):
-    values = [EvtChannelTypeAdmin, EvtChannelTypeOperational, EvtChannelTypeAnalytic, EvtChannelTypeDebug]
-    mapper = FlagMapper(*values)
-EVT_CHANNEL_TYPE = _EVT_CHANNEL_TYPE
-
-
-EvtChannelIsolationTypeApplication = EnumValue("_EVT_CHANNEL_ISOLATION_TYPE", "EvtChannelIsolationTypeApplication", 0x0)
-EvtChannelIsolationTypeSystem = EnumValue("_EVT_CHANNEL_ISOLATION_TYPE", "EvtChannelIsolationTypeSystem", 0x1)
-EvtChannelIsolationTypeCustom = EnumValue("_EVT_CHANNEL_ISOLATION_TYPE", "EvtChannelIsolationTypeCustom", 0x2)
-class _EVT_CHANNEL_ISOLATION_TYPE(EnumType):
-    values = [EvtChannelIsolationTypeApplication, EvtChannelIsolationTypeSystem, EvtChannelIsolationTypeCustom]
-    mapper = FlagMapper(*values)
-EVT_CHANNEL_ISOLATION_TYPE = _EVT_CHANNEL_ISOLATION_TYPE
-
-
-EventMetadataEventID = EnumValue("_EVT_EVENT_METADATA_PROPERTY_ID", "EventMetadataEventID", 0x0)
-EventMetadataEventVersion = EnumValue("_EVT_EVENT_METADATA_PROPERTY_ID", "EventMetadataEventVersion", 0x1)
-EventMetadataEventChannel = EnumValue("_EVT_EVENT_METADATA_PROPERTY_ID", "EventMetadataEventChannel", 0x2)
-EventMetadataEventLevel = EnumValue("_EVT_EVENT_METADATA_PROPERTY_ID", "EventMetadataEventLevel", 0x3)
-EventMetadataEventOpcode = EnumValue("_EVT_EVENT_METADATA_PROPERTY_ID", "EventMetadataEventOpcode", 0x4)
-EventMetadataEventTask = EnumValue("_EVT_EVENT_METADATA_PROPERTY_ID", "EventMetadataEventTask", 0x5)
-EventMetadataEventKeyword = EnumValue("_EVT_EVENT_METADATA_PROPERTY_ID", "EventMetadataEventKeyword", 0x6)
-EventMetadataEventMessageID = EnumValue("_EVT_EVENT_METADATA_PROPERTY_ID", "EventMetadataEventMessageID", 0x7)
-EventMetadataEventTemplate = EnumValue("_EVT_EVENT_METADATA_PROPERTY_ID", "EventMetadataEventTemplate", 0x8)
-EvtEventMetadataPropertyIdEND = EnumValue("_EVT_EVENT_METADATA_PROPERTY_ID", "EvtEventMetadataPropertyIdEND", 0x9)
-class _EVT_EVENT_METADATA_PROPERTY_ID(EnumType):
-    values = [EventMetadataEventID, EventMetadataEventVersion, EventMetadataEventChannel, EventMetadataEventLevel, EventMetadataEventOpcode, EventMetadataEventTask, EventMetadataEventKeyword, EventMetadataEventMessageID, EventMetadataEventTemplate, EvtEventMetadataPropertyIdEND]
-    mapper = FlagMapper(*values)
-EVT_EVENT_METADATA_PROPERTY_ID = _EVT_EVENT_METADATA_PROPERTY_ID
-
-
-EvtPublisherMetadataPublisherGuid = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataPublisherGuid", 0x0)
-EvtPublisherMetadataResourceFilePath = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataResourceFilePath", 0x1)
-EvtPublisherMetadataParameterFilePath = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataParameterFilePath", 0x2)
-EvtPublisherMetadataMessageFilePath = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataMessageFilePath", 0x3)
-EvtPublisherMetadataHelpLink = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataHelpLink", 0x4)
-EvtPublisherMetadataPublisherMessageID = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataPublisherMessageID", 0x5)
-EvtPublisherMetadataChannelReferences = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataChannelReferences", 0x6)
-EvtPublisherMetadataChannelReferencePath = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataChannelReferencePath", 0x7)
-EvtPublisherMetadataChannelReferenceIndex = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataChannelReferenceIndex", 0x8)
-EvtPublisherMetadataChannelReferenceID = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataChannelReferenceID", 0x9)
-EvtPublisherMetadataChannelReferenceFlags = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataChannelReferenceFlags", 0xa)
-EvtPublisherMetadataChannelReferenceMessageID = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataChannelReferenceMessageID", 0xb)
-EvtPublisherMetadataLevels = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataLevels", 0xc)
-EvtPublisherMetadataLevelName = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataLevelName", 0xd)
-EvtPublisherMetadataLevelValue = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataLevelValue", 0xe)
-EvtPublisherMetadataLevelMessageID = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataLevelMessageID", 0xf)
-EvtPublisherMetadataTasks = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataTasks", 0x10)
-EvtPublisherMetadataTaskName = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataTaskName", 0x11)
-EvtPublisherMetadataTaskEventGuid = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataTaskEventGuid", 0x12)
-EvtPublisherMetadataTaskValue = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataTaskValue", 0x13)
-EvtPublisherMetadataTaskMessageID = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataTaskMessageID", 0x14)
-EvtPublisherMetadataOpcodes = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataOpcodes", 0x15)
-EvtPublisherMetadataOpcodeName = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataOpcodeName", 0x16)
-EvtPublisherMetadataOpcodeValue = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataOpcodeValue", 0x17)
-EvtPublisherMetadataOpcodeMessageID = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataOpcodeMessageID", 0x18)
-EvtPublisherMetadataKeywords = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataKeywords", 0x19)
-EvtPublisherMetadataKeywordName = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataKeywordName", 0x1a)
-EvtPublisherMetadataKeywordValue = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataKeywordValue", 0x1b)
-EvtPublisherMetadataKeywordMessageID = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataKeywordMessageID", 0x1c)
-EvtPublisherMetadataPropertyIdEND = EnumValue("_EVT_PUBLISHER_METADATA_PROPERTY_ID", "EvtPublisherMetadataPropertyIdEND", 0x1d)
-class _EVT_PUBLISHER_METADATA_PROPERTY_ID(EnumType):
-    values = [EvtPublisherMetadataPublisherGuid, EvtPublisherMetadataResourceFilePath, EvtPublisherMetadataParameterFilePath, EvtPublisherMetadataMessageFilePath, EvtPublisherMetadataHelpLink, EvtPublisherMetadataPublisherMessageID, EvtPublisherMetadataChannelReferences, EvtPublisherMetadataChannelReferencePath, EvtPublisherMetadataChannelReferenceIndex, EvtPublisherMetadataChannelReferenceID, EvtPublisherMetadataChannelReferenceFlags, EvtPublisherMetadataChannelReferenceMessageID, EvtPublisherMetadataLevels, EvtPublisherMetadataLevelName, EvtPublisherMetadataLevelValue, EvtPublisherMetadataLevelMessageID, EvtPublisherMetadataTasks, EvtPublisherMetadataTaskName, EvtPublisherMetadataTaskEventGuid, EvtPublisherMetadataTaskValue, EvtPublisherMetadataTaskMessageID, EvtPublisherMetadataOpcodes, EvtPublisherMetadataOpcodeName, EvtPublisherMetadataOpcodeValue, EvtPublisherMetadataOpcodeMessageID, EvtPublisherMetadataKeywords, EvtPublisherMetadataKeywordName, EvtPublisherMetadataKeywordValue, EvtPublisherMetadataKeywordMessageID, EvtPublisherMetadataPropertyIdEND]
-    mapper = FlagMapper(*values)
-EVT_PUBLISHER_METADATA_PROPERTY_ID = _EVT_PUBLISHER_METADATA_PROPERTY_ID
-
-
-EvtFormatMessageEvent = EnumValue("_EVT_FORMAT_MESSAGE_FLAGS", "EvtFormatMessageEvent", 0x1)
-EvtFormatMessageLevel = EnumValue("_EVT_FORMAT_MESSAGE_FLAGS", "EvtFormatMessageLevel", 0x2)
-EvtFormatMessageTask = EnumValue("_EVT_FORMAT_MESSAGE_FLAGS", "EvtFormatMessageTask", 0x3)
-EvtFormatMessageOpcode = EnumValue("_EVT_FORMAT_MESSAGE_FLAGS", "EvtFormatMessageOpcode", 0x4)
-EvtFormatMessageKeyword = EnumValue("_EVT_FORMAT_MESSAGE_FLAGS", "EvtFormatMessageKeyword", 0x5)
-EvtFormatMessageChannel = EnumValue("_EVT_FORMAT_MESSAGE_FLAGS", "EvtFormatMessageChannel", 0x6)
-EvtFormatMessageProvider = EnumValue("_EVT_FORMAT_MESSAGE_FLAGS", "EvtFormatMessageProvider", 0x7)
-EvtFormatMessageId = EnumValue("_EVT_FORMAT_MESSAGE_FLAGS", "EvtFormatMessageId", 0x8)
-EvtFormatMessageXml = EnumValue("_EVT_FORMAT_MESSAGE_FLAGS", "EvtFormatMessageXml", 0x9)
-class _EVT_FORMAT_MESSAGE_FLAGS(EnumType):
-    values = [EvtFormatMessageEvent, EvtFormatMessageLevel, EvtFormatMessageTask, EvtFormatMessageOpcode, EvtFormatMessageKeyword, EvtFormatMessageChannel, EvtFormatMessageProvider, EvtFormatMessageId, EvtFormatMessageXml]
-    mapper = FlagMapper(*values)
-EVT_FORMAT_MESSAGE_FLAGS = _EVT_FORMAT_MESSAGE_FLAGS
-
-
-class _EVENTLOGRECORD(Structure):
-    _fields_ = [
-        ("Length", DWORD),
-        ("Reserved", DWORD),
-        ("RecordNumber", DWORD),
-        ("TimeGenerated", DWORD),
-        ("TimeWritten", DWORD),
-        ("EventID", DWORD),
-        ("EventType", WORD),
-        ("NumStrings", WORD),
-        ("EventCategory", WORD),
-        ("ReservedFlags", WORD),
-        ("ClosingRecordNumber", DWORD),
-        ("StringOffset", DWORD),
-        ("UserSidLength", DWORD),
-        ("UserSidOffset", DWORD),
-        ("DataLength", DWORD),
-        ("DataOffset", DWORD),
-    ]
-PEVENTLOGRECORD = POINTER(_EVENTLOGRECORD)
-EVENTLOGRECORD = _EVENTLOGRECORD
-
-class _EVENTLOG_FULL_INFORMATION(Structure):
-    _fields_ = [
-        ("dwFull", DWORD),
-    ]
-EVENTLOG_FULL_INFORMATION = _EVENTLOG_FULL_INFORMATION
-LPEVENTLOG_FULL_INFORMATION = POINTER(_EVENTLOG_FULL_INFORMATION)
-
-class _ANON__EVT_VARIANT_SUB_UNION_1(Union):
-    _fields_ = [
-        ("BooleanVal", BOOL),
-        ("SByteVal", INT8),
-        ("Int16Val", INT16),
-        ("Int32Val", INT32),
-        ("Int64Val", INT64),
-        ("ByteVal", UINT8),
-        ("UInt16Val", UINT16),
-        ("UInt32Val", UINT32),
-        ("UInt64Val", UINT64),
-        ("SingleVal", FLOAT),
-        ("DoubleVal", DOUBLE),
-        ("FileTimeVal", ULONGLONG),
-        ("SysTimeVal", POINTER(SYSTEMTIME)),
-        ("GuidVal", POINTER(GUID)),
-        ("StringVal", LPCWSTR),
-        ("AnsiStringVal", LPCSTR),
-        ("BinaryVal", PBYTE),
-        ("SidVal", PSID),
-        ("SizeTVal", SIZE_T),
-        ("BooleanArr", POINTER(BOOL)),
-        ("SByteArr", POINTER(INT8)),
-        ("Int16Arr", POINTER(INT16)),
-        ("Int32Arr", POINTER(INT32)),
-        ("Int64Arr", POINTER(INT64)),
-        ("ByteArr", POINTER(UINT8)),
-        ("UInt16Arr", POINTER(UINT16)),
-        ("UInt32Arr", POINTER(UINT32)),
-        ("UInt64Arr", POINTER(UINT64)),
-        ("SingleArr", POINTER(FLOAT)),
-        ("DoubleArr", POINTER(DOUBLE)),
-        ("FileTimeArr", POINTER(FILETIME)),
-        ("SysTimeArr", POINTER(SYSTEMTIME)),
-        ("GuidArr", POINTER(GUID)),
-        ("StringArr", POINTER(LPWSTR)),
-        ("AnsiStringArr", POINTER(LPSTR)),
-        ("SidArr", POINTER(PSID)),
-        ("SizeTArr", POINTER(SIZE_T)),
-        ("EvtHandleVal", EVT_HANDLE),
-        ("XmlVal", LPCWSTR),
-        ("XmlValArr", POINTER(LPCWSTR)),
-    ]
-
-class _EVT_VARIANT(Structure):
-    _anonymous_ = ("anon_01",)
-    _fields_ = [
-        ("anon_01", _ANON__EVT_VARIANT_SUB_UNION_1),
-        ("Count", DWORD),
-        ("Type", DWORD),
-    ]
-PEVT_VARIANT = POINTER(_EVT_VARIANT)
-EVT_VARIANT = _EVT_VARIANT
-
-class _EVT_RPC_LOGIN(Structure):
-    _fields_ = [
-        ("Server", LPWSTR),
-        ("User", LPWSTR),
-        ("Domain", LPWSTR),
-        ("Password", LPWSTR),
-        ("Flags", DWORD),
-    ]
-EVT_RPC_LOGIN = _EVT_RPC_LOGIN
-
-TCP_TABLE_BASIC_LISTENER = EnumValue("_TCP_TABLE_CLASS", "TCP_TABLE_BASIC_LISTENER", 0x0)
-TCP_TABLE_BASIC_CONNECTIONS = EnumValue("_TCP_TABLE_CLASS", "TCP_TABLE_BASIC_CONNECTIONS", 0x1)
-TCP_TABLE_BASIC_ALL = EnumValue("_TCP_TABLE_CLASS", "TCP_TABLE_BASIC_ALL", 0x2)
-TCP_TABLE_OWNER_PID_LISTENER = EnumValue("_TCP_TABLE_CLASS", "TCP_TABLE_OWNER_PID_LISTENER", 0x3)
-TCP_TABLE_OWNER_PID_CONNECTIONS = EnumValue("_TCP_TABLE_CLASS", "TCP_TABLE_OWNER_PID_CONNECTIONS", 0x4)
-TCP_TABLE_OWNER_PID_ALL = EnumValue("_TCP_TABLE_CLASS", "TCP_TABLE_OWNER_PID_ALL", 0x5)
-TCP_TABLE_OWNER_MODULE_LISTENER = EnumValue("_TCP_TABLE_CLASS", "TCP_TABLE_OWNER_MODULE_LISTENER", 0x6)
-TCP_TABLE_OWNER_MODULE_CONNECTIONS = EnumValue("_TCP_TABLE_CLASS", "TCP_TABLE_OWNER_MODULE_CONNECTIONS", 0x7)
-TCP_TABLE_OWNER_MODULE_ALL = EnumValue("_TCP_TABLE_CLASS", "TCP_TABLE_OWNER_MODULE_ALL", 0x8)
-class _TCP_TABLE_CLASS(EnumType):
-    values = [TCP_TABLE_BASIC_LISTENER, TCP_TABLE_BASIC_CONNECTIONS, TCP_TABLE_BASIC_ALL, TCP_TABLE_OWNER_PID_LISTENER, TCP_TABLE_OWNER_PID_CONNECTIONS, TCP_TABLE_OWNER_PID_ALL, TCP_TABLE_OWNER_MODULE_LISTENER, TCP_TABLE_OWNER_MODULE_CONNECTIONS, TCP_TABLE_OWNER_MODULE_ALL]
-    mapper = FlagMapper(*values)
-TCP_TABLE_CLASS = _TCP_TABLE_CLASS
-
-
-MIB_TCP_STATE_CLOSED = EnumValue("_MIB_TCP_STATE", "MIB_TCP_STATE_CLOSED", 0x1)
-MIB_TCP_STATE_LISTEN = EnumValue("_MIB_TCP_STATE", "MIB_TCP_STATE_LISTEN", 0x2)
-MIB_TCP_STATE_SYN_SENT = EnumValue("_MIB_TCP_STATE", "MIB_TCP_STATE_SYN_SENT", 0x3)
-MIB_TCP_STATE_SYN_RCVD = EnumValue("_MIB_TCP_STATE", "MIB_TCP_STATE_SYN_RCVD", 0x4)
-MIB_TCP_STATE_ESTAB = EnumValue("_MIB_TCP_STATE", "MIB_TCP_STATE_ESTAB", 0x5)
-MIB_TCP_STATE_FIN_WAIT1 = EnumValue("_MIB_TCP_STATE", "MIB_TCP_STATE_FIN_WAIT1", 0x6)
-MIB_TCP_STATE_FIN_WAIT2 = EnumValue("_MIB_TCP_STATE", "MIB_TCP_STATE_FIN_WAIT2", 0x7)
-MIB_TCP_STATE_CLOSE_WAIT = EnumValue("_MIB_TCP_STATE", "MIB_TCP_STATE_CLOSE_WAIT", 0x8)
-MIB_TCP_STATE_CLOSING = EnumValue("_MIB_TCP_STATE", "MIB_TCP_STATE_CLOSING", 0x9)
-MIB_TCP_STATE_LAST_ACK = EnumValue("_MIB_TCP_STATE", "MIB_TCP_STATE_LAST_ACK", 0xa)
-MIB_TCP_STATE_TIME_WAIT = EnumValue("_MIB_TCP_STATE", "MIB_TCP_STATE_TIME_WAIT", 0xb)
-MIB_TCP_STATE_DELETE_TCB = EnumValue("_MIB_TCP_STATE", "MIB_TCP_STATE_DELETE_TCB", 0xc)
-class _MIB_TCP_STATE(EnumType):
-    values = [MIB_TCP_STATE_CLOSED, MIB_TCP_STATE_LISTEN, MIB_TCP_STATE_SYN_SENT, MIB_TCP_STATE_SYN_RCVD, MIB_TCP_STATE_ESTAB, MIB_TCP_STATE_FIN_WAIT1, MIB_TCP_STATE_FIN_WAIT2, MIB_TCP_STATE_CLOSE_WAIT, MIB_TCP_STATE_CLOSING, MIB_TCP_STATE_LAST_ACK, MIB_TCP_STATE_TIME_WAIT, MIB_TCP_STATE_DELETE_TCB]
-    mapper = FlagMapper(*values)
-MIB_TCP_STATE = _MIB_TCP_STATE
-
-
-NET_FW_IP_PROTOCOL_TCP = EnumValue("NET_FW_IP_PROTOCOL_", "NET_FW_IP_PROTOCOL_TCP", 0x6)
-NET_FW_IP_PROTOCOL_UDP = EnumValue("NET_FW_IP_PROTOCOL_", "NET_FW_IP_PROTOCOL_UDP", 0x11)
-NET_FW_IP_PROTOCOL_ANY = EnumValue("NET_FW_IP_PROTOCOL_", "NET_FW_IP_PROTOCOL_ANY", 0x100)
-class NET_FW_IP_PROTOCOL_(EnumType):
-    values = [NET_FW_IP_PROTOCOL_TCP, NET_FW_IP_PROTOCOL_UDP, NET_FW_IP_PROTOCOL_ANY]
-    mapper = FlagMapper(*values)
-NET_FW_IP_PROTOCOL = NET_FW_IP_PROTOCOL_
-
-
-IF_OPER_STATUS_NON_OPERATIONAL = EnumValue("_INTERNAL_IF_OPER_STATUS", "IF_OPER_STATUS_NON_OPERATIONAL", 0x0)
-IF_OPER_STATUS_UNREACHABLE = EnumValue("_INTERNAL_IF_OPER_STATUS", "IF_OPER_STATUS_UNREACHABLE", 0x1)
-IF_OPER_STATUS_DISCONNECTED = EnumValue("_INTERNAL_IF_OPER_STATUS", "IF_OPER_STATUS_DISCONNECTED", 0x2)
-IF_OPER_STATUS_CONNECTING = EnumValue("_INTERNAL_IF_OPER_STATUS", "IF_OPER_STATUS_CONNECTING", 0x3)
-IF_OPER_STATUS_CONNECTED = EnumValue("_INTERNAL_IF_OPER_STATUS", "IF_OPER_STATUS_CONNECTED", 0x4)
-IF_OPER_STATUS_OPERATIONAL = EnumValue("_INTERNAL_IF_OPER_STATUS", "IF_OPER_STATUS_OPERATIONAL", 0x5)
-class _INTERNAL_IF_OPER_STATUS(EnumType):
-    values = [IF_OPER_STATUS_NON_OPERATIONAL, IF_OPER_STATUS_UNREACHABLE, IF_OPER_STATUS_DISCONNECTED, IF_OPER_STATUS_CONNECTING, IF_OPER_STATUS_CONNECTED, IF_OPER_STATUS_OPERATIONAL]
-    mapper = FlagMapper(*values)
-INTERNAL_IF_OPER_STATUS = _INTERNAL_IF_OPER_STATUS
-
-
-DnsFreeFlat = EnumValue("DNS_FREE_TYPE", "DnsFreeFlat", 0x0)
-DnsFreeRecordList = EnumValue("DNS_FREE_TYPE", "DnsFreeRecordList", 0x1)
-DnsFreeParsedMessageFields = EnumValue("DNS_FREE_TYPE", "DnsFreeParsedMessageFields", 0x2)
-class DNS_FREE_TYPE(EnumType):
-    values = [DnsFreeFlat, DnsFreeRecordList, DnsFreeParsedMessageFields]
-    mapper = FlagMapper(*values)
-
-
-class IP6_ADDRESS(Structure):
-    _fields_ = [
-        ("IP6Qword", ULONGLONG * (2)),
-    ]
-PIP6_ADDRESS = POINTER(IP6_ADDRESS)
-
-class _MIB_IPADDRROW_XP(Structure):
-    _fields_ = [
-        ("dwAddr", DWORD),
-        ("dwIndex", IF_INDEX),
-        ("dwMask", DWORD),
-        ("dwBCastAddr", DWORD),
-        ("dwReasmSize", DWORD),
-        ("unused1", USHORT),
-        ("wType", USHORT),
-    ]
-MIB_IPADDRROW = _MIB_IPADDRROW_XP
-PMIB_IPADDRROW_XP = POINTER(_MIB_IPADDRROW_XP)
-MIB_IPADDRROW_XP = _MIB_IPADDRROW_XP
-
-class _MIB_IPADDRTABLE(Structure):
-    _fields_ = [
-        ("dwNumEntries", DWORD),
-        ("table", MIB_IPADDRROW * (ANY_SIZE)),
-    ]
-PMIB_IPADDRTABLE = POINTER(_MIB_IPADDRTABLE)
-MIB_IPADDRTABLE = _MIB_IPADDRTABLE
-
-class _MIB_IFROW(Structure):
-    _fields_ = [
-        ("wszName", WCHAR * (MAX_INTERFACE_NAME_LEN)),
-        ("dwIndex", IF_INDEX),
-        ("dwType", IFTYPE),
-        ("dwMtu", DWORD),
-        ("dwSpeed", DWORD),
-        ("dwPhysAddrLen", DWORD),
-        ("bPhysAddr", BYTE * (MAXLEN_PHYSADDR)),
-        ("dwAdminStatus", DWORD),
-        ("dwOperStatus", INTERNAL_IF_OPER_STATUS),
-        ("dwLastChange", DWORD),
-        ("dwInOctets", DWORD),
-        ("dwInUcastPkts", DWORD),
-        ("dwInNUcastPkts", DWORD),
-        ("dwInDiscards", DWORD),
-        ("dwInErrors", DWORD),
-        ("dwInUnknownProtos", DWORD),
-        ("dwOutOctets", DWORD),
-        ("dwOutUcastPkts", DWORD),
-        ("dwOutNUcastPkts", DWORD),
-        ("dwOutDiscards", DWORD),
-        ("dwOutErrors", DWORD),
-        ("dwOutQLen", DWORD),
-        ("dwDescrLen", DWORD),
-        ("bDescr", UCHAR * (MAXLEN_IFDESCR)),
-    ]
-PMIB_IFROW = POINTER(_MIB_IFROW)
-MIB_IFROW = _MIB_IFROW
-
-class _MIB_IFTABLE(Structure):
-    _fields_ = [
-        ("dwNumEntries", DWORD),
-        ("table", MIB_IFROW * (ANY_SIZE)),
-    ]
-PMIB_IFTABLE = POINTER(_MIB_IFTABLE)
-MIB_IFTABLE = _MIB_IFTABLE
-
-class _MIB_TCPROW_OWNER_PID(Structure):
-    _fields_ = [
-        ("dwState", DWORD),
-        ("dwLocalAddr", DWORD),
-        ("dwLocalPort", DWORD),
-        ("dwRemoteAddr", DWORD),
-        ("dwRemotePort", DWORD),
-        ("dwOwningPid", DWORD),
-    ]
-MIB_TCPROW_OWNER_PID = _MIB_TCPROW_OWNER_PID
-PMIB_TCPROW_OWNER_PID = POINTER(_MIB_TCPROW_OWNER_PID)
-
-class _MIB_TCPTABLE_OWNER_PID(Structure):
-    _fields_ = [
-        ("dwNumEntries", DWORD),
-        ("table", MIB_TCPROW_OWNER_PID * (ANY_SIZE)),
-    ]
-MIB_TCPTABLE_OWNER_PID = _MIB_TCPTABLE_OWNER_PID
-PMIB_TCPTABLE_OWNER_PID = POINTER(_MIB_TCPTABLE_OWNER_PID)
-
-class _MIB_UDPROW_OWNER_PID(Structure):
-    _fields_ = [
-        ("dwLocalAddr", DWORD),
-        ("dwLocalPort", DWORD),
-        ("dwOwningPid", DWORD),
-    ]
-MIB_UDPROW_OWNER_PID = _MIB_UDPROW_OWNER_PID
-PMIB_UDPROW_OWNER_PID = POINTER(_MIB_UDPROW_OWNER_PID)
-
-class _MIB_UDPTABLE_OWNER_PID(Structure):
-    _fields_ = [
-        ("dwNumEntries", DWORD),
-        ("table", MIB_UDPROW_OWNER_PID * (ANY_SIZE)),
-    ]
-MIB_UDPTABLE_OWNER_PID = _MIB_UDPTABLE_OWNER_PID
-PMIB_UDPTABLE_OWNER_PID = POINTER(_MIB_UDPTABLE_OWNER_PID)
-
-class _MIB_UDP6ROW_OWNER_PID(Structure):
-    _fields_ = [
-        ("ucLocalAddr", UCHAR * (16)),
-        ("dwLocalScopeId", DWORD),
-        ("dwLocalPort", DWORD),
-        ("dwOwningPid", DWORD),
-    ]
-MIB_UDP6ROW_OWNER_PID = _MIB_UDP6ROW_OWNER_PID
-PMIB_UDP6ROW_OWNER_PID = POINTER(_MIB_UDP6ROW_OWNER_PID)
-
-class _MIB_UDP6TABLE_OWNER_PID(Structure):
-    _fields_ = [
-        ("dwNumEntries", DWORD),
-        ("table", MIB_UDP6ROW_OWNER_PID * (ANY_SIZE)),
-    ]
-PMIB_UDP6TABLE_OWNER_PID = POINTER(_MIB_UDP6TABLE_OWNER_PID)
-MIB_UDP6TABLE_OWNER_PID = _MIB_UDP6TABLE_OWNER_PID
-
-class _MIB_TCP6ROW_OWNER_PID(Structure):
-    _fields_ = [
-        ("ucLocalAddr", UCHAR * (16)),
-        ("dwLocalScopeId", DWORD),
-        ("dwLocalPort", DWORD),
-        ("ucRemoteAddr", UCHAR * (16)),
-        ("dwRemoteScopeId", DWORD),
-        ("dwRemotePort", DWORD),
-        ("dwState", DWORD),
-        ("dwOwningPid", DWORD),
-    ]
-MIB_TCP6ROW_OWNER_PID = _MIB_TCP6ROW_OWNER_PID
-PMIB_TCP6ROW_OWNER_PID = POINTER(_MIB_TCP6ROW_OWNER_PID)
-
-class _MIB_TCP6TABLE_OWNER_PID(Structure):
-    _fields_ = [
-        ("dwNumEntries", DWORD),
-        ("table", MIB_TCP6ROW_OWNER_PID * (ANY_SIZE)),
-    ]
-MIB_TCP6TABLE_OWNER_PID = _MIB_TCP6TABLE_OWNER_PID
-PMIB_TCP6TABLE_OWNER_PID = POINTER(_MIB_TCP6TABLE_OWNER_PID)
-
-class _MIB_TCPROW(Structure):
-    _fields_ = [
-        ("dwState", DWORD),
-        ("dwLocalAddr", DWORD),
-        ("dwLocalPort", DWORD),
-        ("dwRemoteAddr", DWORD),
-        ("dwRemotePort", DWORD),
-    ]
-MIB_TCPROW = _MIB_TCPROW
-PMIB_TCPROW = POINTER(_MIB_TCPROW)
-
-class _IP_ADAPTER_INDEX_MAP(Structure):
-    _fields_ = [
-        ("Index", ULONG),
-        ("Name", WCHAR * (MAX_ADAPTER_NAME)),
-    ]
-PIP_ADAPTER_INDEX_MAP = POINTER(_IP_ADAPTER_INDEX_MAP)
-IP_ADAPTER_INDEX_MAP = _IP_ADAPTER_INDEX_MAP
-
-class _IP_INTERFACE_INFO(Structure):
-    _fields_ = [
-        ("NumAdapters", LONG),
-        ("Adapter", IP_ADAPTER_INDEX_MAP * (1)),
-    ]
-PIP_INTERFACE_INFO = POINTER(_IP_INTERFACE_INFO)
-IP_INTERFACE_INFO = _IP_INTERFACE_INFO
-
-# Self referencing struct tricks
-class _DNS_CACHE_ENTRY(Structure): pass
-PDNS_CACHE_ENTRY = POINTER(_DNS_CACHE_ENTRY)
-DNS_CACHE_ENTRY = _DNS_CACHE_ENTRY
-_DNS_CACHE_ENTRY._fields_ = [
-    ("pNext", POINTER(_DNS_CACHE_ENTRY)),
-    ("pszName", PCWSTR),
-    ("wType", USHORT),
-    ("wDataLength", USHORT),
-    ("dwFlags", ULONG),
-]
-
-class DNS_A_DATA(Structure):
-    _fields_ = [
-        ("IpAddress", IP4_ADDRESS),
-    ]
-PDNS_A_DATA = POINTER(DNS_A_DATA)
-
-class DNS_PTR_DATAW(Structure):
-    _fields_ = [
-        ("pNameHost", PWSTR),
-    ]
-PDNS_PTR_DATAW = POINTER(DNS_PTR_DATAW)
-
-class DNS_PTR_DATAA(Structure):
-    _fields_ = [
-        ("pNameHost", PSTR),
-    ]
-PDNS_PTR_DATAA = POINTER(DNS_PTR_DATAA)
-
-class DNS_SOA_DATAW(Structure):
-    _fields_ = [
-        ("pNamePrimaryServer", PWSTR),
-        ("pNameAdministrator", PWSTR),
-        ("dwSerialNo", DWORD),
-        ("dwRefresh", DWORD),
-        ("dwRetry", DWORD),
-        ("dwExpire", DWORD),
-        ("dwDefaultTtl", DWORD),
-    ]
-PDNS_SOA_DATAW = POINTER(DNS_SOA_DATAW)
-
-class DNS_SOA_DATAA(Structure):
-    _fields_ = [
-        ("pNamePrimaryServer", PSTR),
-        ("pNameAdministrator", PSTR),
-        ("dwSerialNo", DWORD),
-        ("dwRefresh", DWORD),
-        ("dwRetry", DWORD),
-        ("dwExpire", DWORD),
-        ("dwDefaultTtl", DWORD),
-    ]
-PDNS_SOA_DATAA = POINTER(DNS_SOA_DATAA)
-
-class DNS_MINFO_DATAW(Structure):
-    _fields_ = [
-        ("pNameMailbox", PWSTR),
-        ("pNameErrorsMailbox", PWSTR),
-    ]
-PDNS_MINFO_DATAW = POINTER(DNS_MINFO_DATAW)
-
-class DNS_MINFO_DATAA(Structure):
-    _fields_ = [
-        ("pNameMailbox", PSTR),
-        ("pNameErrorsMailbox", PSTR),
-    ]
-PDNS_MINFO_DATAA = POINTER(DNS_MINFO_DATAA)
-
-class DNS_MX_DATAW(Structure):
-    _fields_ = [
-        ("pNameExchange", PWSTR),
-        ("wPreference", WORD),
-        ("Pad", WORD),
-    ]
-PDNS_MX_DATAW = POINTER(DNS_MX_DATAW)
-
-class DNS_MX_DATAA(Structure):
-    _fields_ = [
-        ("pNameExchange", PSTR),
-        ("wPreference", WORD),
-        ("Pad", WORD),
-    ]
-PDNS_MX_DATAA = POINTER(DNS_MX_DATAA)
-
-class DNS_TXT_DATAW(Structure):
-    _fields_ = [
-        ("dwStringCount", DWORD),
-        ("pStringArray", PWSTR * (1)),
-    ]
-PDNS_TXT_DATAW = POINTER(DNS_TXT_DATAW)
-
-class DNS_TXT_DATAA(Structure):
-    _fields_ = [
-        ("dwStringCount", DWORD),
-        ("pStringArray", PSTR * (1)),
-    ]
-PDNS_TXT_DATAA = POINTER(DNS_TXT_DATAA)
-
-class DNS_NULL_DATA(Structure):
-    _fields_ = [
-        ("dwByteCount", DWORD),
-        ("Data", BYTE * (1)),
-    ]
-PDNS_NULL_DATA = POINTER(DNS_NULL_DATA)
-
-class DNS_WKS_DATA(Structure):
-    _fields_ = [
-        ("IpAddress", IP4_ADDRESS),
-        ("chProtocol", UCHAR),
-        ("BitMask", BYTE * (1)),
-    ]
-PDNS_WKS_DATA = POINTER(DNS_WKS_DATA)
-
-class DNS_AAAA_DATA(Structure):
-    _fields_ = [
-        ("Ip6Address", IP6_ADDRESS),
-    ]
-PDNS_AAAA_DATA = POINTER(DNS_AAAA_DATA)
-
-class DNS_SIG_DATAW(Structure):
-    _fields_ = [
-        ("wTypeCovered", WORD),
-        ("chAlgorithm", BYTE),
-        ("chLabelCount", BYTE),
-        ("dwOriginalTtl", DWORD),
-        ("dwExpiration", DWORD),
-        ("dwTimeSigned", DWORD),
-        ("wKeyTag", WORD),
-        ("wSignatureLength", WORD),
-        ("pNameSigner", PWSTR),
-        ("Signature", BYTE * (1)),
-    ]
-DNS_RRSIG_DATAW = DNS_SIG_DATAW
-PDNS_RRSIG_DATAW = POINTER(DNS_SIG_DATAW)
-PDNS_SIG_DATAW = POINTER(DNS_SIG_DATAW)
-
-class DNS_SIG_DATAA(Structure):
-    _fields_ = [
-        ("wTypeCovered", WORD),
-        ("chAlgorithm", BYTE),
-        ("chLabelCount", BYTE),
-        ("dwOriginalTtl", DWORD),
-        ("dwExpiration", DWORD),
-        ("dwTimeSigned", DWORD),
-        ("wKeyTag", WORD),
-        ("wSignatureLength", WORD),
-        ("pNameSigner", PSTR),
-        ("Signature", BYTE * (1)),
-    ]
-PDNS_SIG_DATAA = POINTER(DNS_SIG_DATAA)
-PDNS_RRSIG_DATAA = POINTER(DNS_SIG_DATAA)
-DNS_RRSIG_DATAA = DNS_SIG_DATAA
-
-class DNS_KEY_DATA(Structure):
-    _fields_ = [
-        ("wFlags", WORD),
-        ("chProtocol", BYTE),
-        ("chAlgorithm", BYTE),
-        ("wKeyLength", WORD),
-        ("wPad", WORD),
-        ("Key", BYTE * (1)),
-    ]
-PDNS_DNSKEY_DATA = POINTER(DNS_KEY_DATA)
-PDNS_KEY_DATA = POINTER(DNS_KEY_DATA)
-DNS_DNSKEY_DATA = DNS_KEY_DATA
-
-class DNS_DHCID_DATA(Structure):
-    _fields_ = [
-        ("dwByteCount", DWORD),
-        ("DHCID", BYTE * (1)),
-    ]
-PDNS_DHCID_DATA = POINTER(DNS_DHCID_DATA)
-
-class DNS_NSEC_DATAW(Structure):
-    _fields_ = [
-        ("pNextDomainName", PWSTR),
-        ("wTypeBitMapsLength", WORD),
-        ("wPad", WORD),
-        ("TypeBitMaps", BYTE * (1)),
-    ]
-PDNS_NSEC_DATAW = POINTER(DNS_NSEC_DATAW)
-
-class DNS_NSEC_DATAA(Structure):
-    _fields_ = [
-        ("pNextDomainName", PSTR),
-        ("wTypeBitMapsLength", WORD),
-        ("wPad", WORD),
-        ("TypeBitMaps", BYTE * (1)),
-    ]
-PDNS_NSEC_DATAA = POINTER(DNS_NSEC_DATAA)
-
-class DNS_NSEC3_DATA(Structure):
-    _fields_ = [
-        ("chAlgorithm", BYTE),
-        ("bFlags", BYTE),
-        ("wIterations", WORD),
-        ("bSaltLength", BYTE),
-        ("bHashLength", BYTE),
-        ("wTypeBitMapsLength", WORD),
-        ("chData", BYTE * (1)),
-    ]
-PDNS_NSEC3_DATA = POINTER(DNS_NSEC3_DATA)
-
-class DNS_NSEC3PARAM_DATA(Structure):
-    _fields_ = [
-        ("chAlgorithm", BYTE),
-        ("bFlags", BYTE),
-        ("wIterations", WORD),
-        ("bSaltLength", BYTE),
-        ("bPad", BYTE * (3)),
-        ("pbSalt", BYTE * (1)),
-    ]
-PDNS_NSEC3PARAM_DATA = POINTER(DNS_NSEC3PARAM_DATA)
-
-class DNS_DS_DATA(Structure):
-    _fields_ = [
-        ("wKeyTag", WORD),
-        ("chAlgorithm", BYTE),
-        ("chDigestType", BYTE),
-        ("wDigestLength", WORD),
-        ("wPad", WORD),
-        ("Digest", BYTE * (1)),
-    ]
-PDNS_DS_DATA = POINTER(DNS_DS_DATA)
-
-class DNS_OPT_DATA(Structure):
-    _fields_ = [
-        ("wDataLength", WORD),
-        ("wPad", WORD),
-        ("Data", BYTE * (1)),
-    ]
-PDNS_OPT_DATA = POINTER(DNS_OPT_DATA)
-
-class DNS_LOC_DATA(Structure):
-    _fields_ = [
-        ("wVersion", WORD),
-        ("wSize", WORD),
-        ("wHorPrec", WORD),
-        ("wVerPrec", WORD),
-        ("dwLatitude", DWORD),
-        ("dwLongitude", DWORD),
-        ("dwAltitude", DWORD),
-    ]
-PDNS_LOC_DATA = POINTER(DNS_LOC_DATA)
-
-class DNS_NXT_DATAW(Structure):
-    _fields_ = [
-        ("pNameNext", PWSTR),
-        ("wNumTypes", WORD),
-        ("wTypes", WORD * (1)),
-    ]
-PDNS_NXT_DATAW = POINTER(DNS_NXT_DATAW)
-
-class DNS_NXT_DATAA(Structure):
-    _fields_ = [
-        ("pNameNext", PSTR),
-        ("wNumTypes", WORD),
-        ("wTypes", WORD * (1)),
-    ]
-PDNS_NXT_DATAA = POINTER(DNS_NXT_DATAA)
-
-class DNS_SRV_DATAW(Structure):
-    _fields_ = [
-        ("pNameTarget", PWSTR),
-        ("wPriority", WORD),
-        ("wWeight", WORD),
-        ("wPort", WORD),
-        ("Pad", WORD),
-    ]
-PDNS_SRV_DATAW = POINTER(DNS_SRV_DATAW)
-
-class DNS_SRV_DATAA(Structure):
-    _fields_ = [
-        ("pNameTarget", PSTR),
-        ("wPriority", WORD),
-        ("wWeight", WORD),
-        ("wPort", WORD),
-        ("Pad", WORD),
-    ]
-PDNS_SRV_DATAA = POINTER(DNS_SRV_DATAA)
-
-class DNS_NAPTR_DATAW(Structure):
-    _fields_ = [
-        ("wOrder", WORD),
-        ("wPreference", WORD),
-        ("pFlags", PWSTR),
-        ("pService", PWSTR),
-        ("pRegularExpression", PWSTR),
-        ("pReplacement", PWSTR),
-    ]
-PDNS_NAPTR_DATAW = POINTER(DNS_NAPTR_DATAW)
-
-class DNS_NAPTR_DATAA(Structure):
-    _fields_ = [
-        ("wOrder", WORD),
-        ("wPreference", WORD),
-        ("pFlags", PSTR),
-        ("pService", PSTR),
-        ("pRegularExpression", PSTR),
-        ("pReplacement", PSTR),
-    ]
-PDNS_NAPTR_DATAA = POINTER(DNS_NAPTR_DATAA)
-
-class DNS_ATMA_DATA(Structure):
-    _fields_ = [
-        ("AddressType", BYTE),
-        ("Address", BYTE * (DNS_ATMA_MAX_ADDR_LENGTH)),
-    ]
-PDNS_ATMA_DATA = POINTER(DNS_ATMA_DATA)
-
-class DNS_TKEY_DATAW(Structure):
-    _fields_ = [
-        ("pNameAlgorithm", PWSTR),
-        ("pAlgorithmPacket", PBYTE),
-        ("pKey", PBYTE),
-        ("pOtherData", PBYTE),
-        ("dwCreateTime", DWORD),
-        ("dwExpireTime", DWORD),
-        ("wMode", WORD),
-        ("wError", WORD),
-        ("wKeyLength", WORD),
-        ("wOtherLength", WORD),
-        ("cAlgNameLength", UCHAR),
-        ("bPacketPointers", BOOL),
-    ]
-PDNS_TKEY_DATAW = POINTER(DNS_TKEY_DATAW)
-
-class DNS_TKEY_DATAA(Structure):
-    _fields_ = [
-        ("pNameAlgorithm", PSTR),
-        ("pAlgorithmPacket", PBYTE),
-        ("pKey", PBYTE),
-        ("pOtherData", PBYTE),
-        ("dwCreateTime", DWORD),
-        ("dwExpireTime", DWORD),
-        ("wMode", WORD),
-        ("wError", WORD),
-        ("wKeyLength", WORD),
-        ("wOtherLength", WORD),
-        ("cAlgNameLength", UCHAR),
-        ("bPacketPointers", BOOL),
-    ]
-PDNS_TKEY_DATAA = POINTER(DNS_TKEY_DATAA)
-
-class DNS_TSIG_DATAW(Structure):
-    _fields_ = [
-        ("pNameAlgorithm", PWSTR),
-        ("pAlgorithmPacket", PBYTE),
-        ("pSignature", PBYTE),
-        ("pOtherData", PBYTE),
-        ("i64CreateTime", LONGLONG),
-        ("wFudgeTime", WORD),
-        ("wOriginalXid", WORD),
-        ("wError", WORD),
-        ("wSigLength", WORD),
-        ("wOtherLength", WORD),
-        ("cAlgNameLength", UCHAR),
-        ("bPacketPointers", BOOL),
-    ]
-PDNS_TSIG_DATAW = POINTER(DNS_TSIG_DATAW)
-
-class DNS_TSIG_DATAA(Structure):
-    _fields_ = [
-        ("pNameAlgorithm", PSTR),
-        ("pAlgorithmPacket", PBYTE),
-        ("pSignature", PBYTE),
-        ("pOtherData", PBYTE),
-        ("i64CreateTime", LONGLONG),
-        ("wFudgeTime", WORD),
-        ("wOriginalXid", WORD),
-        ("wError", WORD),
-        ("wSigLength", WORD),
-        ("wOtherLength", WORD),
-        ("cAlgNameLength", UCHAR),
-        ("bPacketPointers", BOOL),
-    ]
-PDNS_TSIG_DATAA = POINTER(DNS_TSIG_DATAA)
-
-class DNS_WINS_DATA(Structure):
-    _fields_ = [
-        ("dwMappingFlag", DWORD),
-        ("dwLookupTimeout", DWORD),
-        ("dwCacheTimeout", DWORD),
-        ("cWinsServerCount", DWORD),
-        ("WinsServers", IP4_ADDRESS * (1)),
-    ]
-PDNS_WINS_DATA = POINTER(DNS_WINS_DATA)
-
-class DNS_WINSR_DATAW(Structure):
-    _fields_ = [
-        ("dwMappingFlag", DWORD),
-        ("dwLookupTimeout", DWORD),
-        ("dwCacheTimeout", DWORD),
-        ("pNameResultDomain", PWSTR),
-    ]
-PDNS_WINSR_DATAW = POINTER(DNS_WINSR_DATAW)
-
-class DNS_WINSR_DATAA(Structure):
-    _fields_ = [
-        ("dwMappingFlag", DWORD),
-        ("dwLookupTimeout", DWORD),
-        ("dwCacheTimeout", DWORD),
-        ("pNameResultDomain", PSTR),
-    ]
-PDNS_WINSR_DATAA = POINTER(DNS_WINSR_DATAA)
-
-class DNS_TLSA_DATA(Structure):
-    _fields_ = [
-        ("bCertUsage", BYTE),
-        ("bSelector", BYTE),
-        ("bMatchingType", BYTE),
-        ("bCertificateAssociationDataLength", WORD),
-        ("bPad", BYTE * (3)),
-        ("bCertificateAssociationData", BYTE * (1)),
-    ]
-PDNS_TLSA_DATA = POINTER(DNS_TLSA_DATA)
-
-class DNS_UNKNOWN_DATA(Structure):
-    _fields_ = [
-        ("dwByteCount", DWORD),
-        ("bData", BYTE * (1)),
-    ]
-PDNS_UNKNOWN_DATA = POINTER(DNS_UNKNOWN_DATA)
-
-class _DnsRecordFlags(Structure):
-    _fields_ = [
-    ("Section", DWORD, 2),
-    ("Delete", DWORD, 1),
-    ("CharSet", DWORD, 2),
-    ("Unused", DWORD, 3),
-    ("Reserved", DWORD, 24),
-    ]
-DNS_RECORD_FLAGS = _DnsRecordFlags
-
-class _ANON__DNSRECORDA_SUB_UNION_1(Union):
-    _fields_ = [
-        ("DW", DWORD),
-        ("S", DNS_RECORD_FLAGS),
-    ]
-
-
-class _ANON__DNSRECORDA_SUB_UNION_2(Union):
-    _fields_ = [
-        ("A", DNS_A_DATA),
-        ("SOA", DNS_SOA_DATAA),
-        ("Soa", DNS_SOA_DATAA),
-        ("PTR", DNS_PTR_DATAA),
-        ("Ptr", DNS_PTR_DATAA),
-        ("NS", DNS_PTR_DATAA),
-        ("Ns", DNS_PTR_DATAA),
-        ("CNAME", DNS_PTR_DATAA),
-        ("Cname", DNS_PTR_DATAA),
-        ("DNAME", DNS_PTR_DATAA),
-        ("Dname", DNS_PTR_DATAA),
-        ("MB", DNS_PTR_DATAA),
-        ("Mb", DNS_PTR_DATAA),
-        ("MD", DNS_PTR_DATAA),
-        ("Md", DNS_PTR_DATAA),
-        ("MF", DNS_PTR_DATAA),
-        ("Mf", DNS_PTR_DATAA),
-        ("MG", DNS_PTR_DATAA),
-        ("Mg", DNS_PTR_DATAA),
-        ("MR", DNS_PTR_DATAA),
-        ("Mr", DNS_PTR_DATAA),
-        ("MINFO", DNS_MINFO_DATAA),
-        ("Minfo", DNS_MINFO_DATAA),
-        ("RP", DNS_MINFO_DATAA),
-        ("Rp", DNS_MINFO_DATAA),
-        ("MX", DNS_MX_DATAA),
-        ("Mx", DNS_MX_DATAA),
-        ("AFSDB", DNS_MX_DATAA),
-        ("Afsdb", DNS_MX_DATAA),
-        ("RT", DNS_MX_DATAA),
-        ("Rt", DNS_MX_DATAA),
-        ("HINFO", DNS_TXT_DATAA),
-        ("Hinfo", DNS_TXT_DATAA),
-        ("ISDN", DNS_TXT_DATAA),
-        ("Isdn", DNS_TXT_DATAA),
-        ("TXT", DNS_TXT_DATAA),
-        ("Txt", DNS_TXT_DATAA),
-        ("X25", DNS_TXT_DATAA),
-        ("Null", DNS_NULL_DATA),
-        ("WKS", DNS_WKS_DATA),
-        ("Wks", DNS_WKS_DATA),
-        ("AAAA", DNS_AAAA_DATA),
-        ("KEY", DNS_KEY_DATA),
-        ("Key", DNS_KEY_DATA),
-        ("SIG", DNS_SIG_DATAA),
-        ("Sig", DNS_SIG_DATAA),
-        ("ATMA", DNS_ATMA_DATA),
-        ("Atma", DNS_ATMA_DATA),
-        ("NXT", DNS_NXT_DATAA),
-        ("Nxt", DNS_NXT_DATAA),
-        ("SRV", DNS_SRV_DATAA),
-        ("Srv", DNS_SRV_DATAA),
-        ("NAPTR", DNS_NAPTR_DATAA),
-        ("Naptr", DNS_NAPTR_DATAA),
-        ("OPT", DNS_OPT_DATA),
-        ("Opt", DNS_OPT_DATA),
-        ("DS", DNS_DS_DATA),
-        ("Ds", DNS_DS_DATA),
-        ("RRSIG", DNS_RRSIG_DATAA),
-        ("Rrsig", DNS_RRSIG_DATAA),
-        ("NSEC", DNS_NSEC_DATAA),
-        ("Nsec", DNS_NSEC_DATAA),
-        ("DNSKEY", DNS_DNSKEY_DATA),
-        ("Dnskey", DNS_DNSKEY_DATA),
-        ("TKEY", DNS_TKEY_DATAA),
-        ("Tkey", DNS_TKEY_DATAA),
-        ("TSIG", DNS_TSIG_DATAA),
-        ("Tsig", DNS_TSIG_DATAA),
-        ("WINS", DNS_WINS_DATA),
-        ("Wins", DNS_WINS_DATA),
-        ("WINSR", DNS_WINSR_DATAA),
-        ("WinsR", DNS_WINSR_DATAA),
-        ("NBSTAT", DNS_WINSR_DATAA),
-        ("Nbstat", DNS_WINSR_DATAA),
-        ("DHCID", DNS_DHCID_DATA),
-        ("NSEC3", DNS_NSEC3_DATA),
-        ("Nsec3", DNS_NSEC3_DATA),
-        ("NSEC3PARAM", DNS_NSEC3PARAM_DATA),
-        ("Nsec3Param", DNS_NSEC3PARAM_DATA),
-        ("TLSA", DNS_TLSA_DATA),
-        ("Tlsa", DNS_TLSA_DATA),
-        ("UNKNOWN", DNS_UNKNOWN_DATA),
-        ("Unknown", DNS_UNKNOWN_DATA),
-        ("pDataPtr", PBYTE),
-    ]
-
-# Self referencing struct tricks
-class _DnsRecordA(Structure): pass
-PDNS_RECORDA = POINTER(_DnsRecordA)
-DNS_RECORDA = _DnsRecordA
-_DnsRecordA._fields_ = [
-    ("pNext", POINTER(_DnsRecordA)),
-    ("pName", PSTR),
-    ("wType", WORD),
-    ("wDataLength", WORD),
-    ("Flags", _ANON__DNSRECORDA_SUB_UNION_1),
-    ("dwTtl", DWORD),
-    ("dwReserved", DWORD),
-    ("Data", _ANON__DNSRECORDA_SUB_UNION_2),
-]
-
-class _ANON__DNSRECORDW_SUB_UNION_1(Union):
-    _fields_ = [
-        ("DW", DWORD),
-        ("S", DNS_RECORD_FLAGS),
-    ]
-
-
-class _ANON__DNSRECORDW_SUB_UNION_2(Union):
-    _fields_ = [
-        ("A", DNS_A_DATA),
-        ("SOA", DNS_SOA_DATAW),
-        ("Soa", DNS_SOA_DATAW),
-        ("PTR", DNS_PTR_DATAW),
-        ("Ptr", DNS_PTR_DATAW),
-        ("NS", DNS_PTR_DATAW),
-        ("Ns", DNS_PTR_DATAW),
-        ("CNAME", DNS_PTR_DATAW),
-        ("Cname", DNS_PTR_DATAW),
-        ("DNAME", DNS_PTR_DATAW),
-        ("Dname", DNS_PTR_DATAW),
-        ("MB", DNS_PTR_DATAW),
-        ("Mb", DNS_PTR_DATAW),
-        ("MD", DNS_PTR_DATAW),
-        ("Md", DNS_PTR_DATAW),
-        ("MF", DNS_PTR_DATAW),
-        ("Mf", DNS_PTR_DATAW),
-        ("MG", DNS_PTR_DATAW),
-        ("Mg", DNS_PTR_DATAW),
-        ("MR", DNS_PTR_DATAW),
-        ("Mr", DNS_PTR_DATAW),
-        ("MINFO", DNS_MINFO_DATAW),
-        ("Minfo", DNS_MINFO_DATAW),
-        ("RP", DNS_MINFO_DATAW),
-        ("Rp", DNS_MINFO_DATAW),
-        ("MX", DNS_MX_DATAW),
-        ("Mx", DNS_MX_DATAW),
-        ("AFSDB", DNS_MX_DATAW),
-        ("Afsdb", DNS_MX_DATAW),
-        ("RT", DNS_MX_DATAW),
-        ("Rt", DNS_MX_DATAW),
-        ("HINFO", DNS_TXT_DATAW),
-        ("Hinfo", DNS_TXT_DATAW),
-        ("ISDN", DNS_TXT_DATAW),
-        ("Isdn", DNS_TXT_DATAW),
-        ("TXT", DNS_TXT_DATAW),
-        ("Txt", DNS_TXT_DATAW),
-        ("X25", DNS_TXT_DATAW),
-        ("Null", DNS_NULL_DATA),
-        ("WKS", DNS_WKS_DATA),
-        ("Wks", DNS_WKS_DATA),
-        ("AAAA", DNS_AAAA_DATA),
-        ("KEY", DNS_KEY_DATA),
-        ("Key", DNS_KEY_DATA),
-        ("SIG", DNS_SIG_DATAW),
-        ("Sig", DNS_SIG_DATAW),
-        ("ATMA", DNS_ATMA_DATA),
-        ("Atma", DNS_ATMA_DATA),
-        ("NXT", DNS_NXT_DATAW),
-        ("Nxt", DNS_NXT_DATAW),
-        ("SRV", DNS_SRV_DATAW),
-        ("Srv", DNS_SRV_DATAW),
-        ("NAPTR", DNS_NAPTR_DATAW),
-        ("Naptr", DNS_NAPTR_DATAW),
-        ("OPT", DNS_OPT_DATA),
-        ("Opt", DNS_OPT_DATA),
-        ("DS", DNS_DS_DATA),
-        ("Ds", DNS_DS_DATA),
-        ("RRSIG", DNS_RRSIG_DATAW),
-        ("Rrsig", DNS_RRSIG_DATAW),
-        ("NSEC", DNS_NSEC_DATAW),
-        ("Nsec", DNS_NSEC_DATAW),
-        ("DNSKEY", DNS_DNSKEY_DATA),
-        ("Dnskey", DNS_DNSKEY_DATA),
-        ("TKEY", DNS_TKEY_DATAW),
-        ("Tkey", DNS_TKEY_DATAW),
-        ("TSIG", DNS_TSIG_DATAW),
-        ("Tsig", DNS_TSIG_DATAW),
-        ("WINS", DNS_WINS_DATA),
-        ("Wins", DNS_WINS_DATA),
-        ("WINSR", DNS_WINSR_DATAW),
-        ("WinsR", DNS_WINSR_DATAW),
-        ("NBSTAT", DNS_WINSR_DATAW),
-        ("Nbstat", DNS_WINSR_DATAW),
-        ("DHCID", DNS_DHCID_DATA),
-        ("NSEC3", DNS_NSEC3_DATA),
-        ("Nsec3", DNS_NSEC3_DATA),
-        ("NSEC3PARAM", DNS_NSEC3PARAM_DATA),
-        ("Nsec3Param", DNS_NSEC3PARAM_DATA),
-        ("TLSA", DNS_TLSA_DATA),
-        ("Tlsa", DNS_TLSA_DATA),
-        ("UNKNOWN", DNS_UNKNOWN_DATA),
-        ("Unknown", DNS_UNKNOWN_DATA),
-        ("pDataPtr", PBYTE),
-    ]
-
-# Self referencing struct tricks
-class _DnsRecordW(Structure): pass
-DNS_RECORDW = _DnsRecordW
-PDNS_RECORDW = POINTER(_DnsRecordW)
-_DnsRecordW._fields_ = [
-    ("pNext", POINTER(_DnsRecordW)),
-    ("pName", PWSTR),
-    ("wType", WORD),
-    ("wDataLength", WORD),
-    ("Flags", _ANON__DNSRECORDW_SUB_UNION_1),
-    ("dwTtl", DWORD),
-    ("dwReserved", DWORD),
-    ("Data", _ANON__DNSRECORDW_SUB_UNION_2),
-]
 
