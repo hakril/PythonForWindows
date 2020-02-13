@@ -5,7 +5,7 @@ import time
 import windows.alpc
 import windows.generated_def as gdef
 
-from pfwtest import *
+from .pfwtest import *
 
 
 def generate_client_server_test(client_function, server_function):
@@ -19,8 +19,12 @@ def generate_client_server_test(client_function, server_function):
     return generated_test
 
 PORT_NAME = r"\RPC Control\PythonForWindowsTestPort"
-CLIENT_MESSAGE = "Message 1\x00\xffABCD"
-SERVER_MESSAGE = "Message 2-" + "".join(chr(i) for i in range(256))
+CLIENT_MESSAGE = b"Message 1\x00\xffABCD"
+
+if windows.pycompat.is_py3:
+    SERVER_MESSAGE = b"Message 2-" + bytes(range(256))
+else:
+    SERVER_MESSAGE = "Message 2-" + "".join(chr(i) for i in range(256))
 
 def alpc_simple_test_server():
     server = windows.alpc.AlpcServer(PORT_NAME)
@@ -58,8 +62,11 @@ def send_message_with_view(client, message_data, view_data):
     return client.send_receive(msg)
 
 
-CLIENT_VIEW_MESSAGE = "Message 1\x00\xffABCD"
-CLIENT_VIEW_DATA = "Message Data-view" + "".join(chr(i) for i in range(256))
+CLIENT_VIEW_MESSAGE = b"Message 1\x00\xffABCD"
+if windows.pycompat.is_py3:
+    CLIENT_VIEW_DATA = b"Message Data-view" + bytes(range(256))
+else:
+    CLIENT_VIEW_DATA = "Message Data-view" + "".join(chr(i) for i in range(256))
 
 
 def alpc_view_test_server():

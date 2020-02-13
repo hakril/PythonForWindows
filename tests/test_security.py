@@ -1,7 +1,9 @@
 import windows.security
 from windows.security import SecurityDescriptor
-from pfwtest import *
+from .pfwtest import *
 import ctypes
+
+
 
 # CC -> Create-Child -> 1
 # GR -> Generic read -> 0x80000000L
@@ -88,7 +90,6 @@ COMPLEXE_SDDL_GUID = [
 
 @pytest.mark.parametrize("sddl, obj_guid, inherited_object_guid", COMPLEXE_SDDL_GUID)
 def test_complex_ace_guid_sid(sddl, obj_guid, inherited_object_guid):
-    print(sddl)
     sd = SecurityDescriptor.from_string(sddl)
     assert sd.dacl is not None
     ace = sd.dacl[0]
@@ -165,7 +166,7 @@ RESOURCE_ATTRIBUTES_SDDLS = [
      gdef.PSID.from_string("S-1-2-3-4-5-6-7-8-9"))),
 
 ("""S:(RA;;;;;WD; ("TestName",TX,0, 42000042, 0123456789abcdef))""",
-    ("B\x00\x00B", "\x01\x23\x45\x67\x89\xab\xcd\xef")),
+    (b"B\x00\x00B", b"\x01\x23\x45\x67\x89\xab\xcd\xef")),
 
 ("""S:(RA;;;;;WD; ("TestName",TB,0, 0, 1, 0, 0, 1))""",
     (False, True, False, False, True)),
@@ -176,15 +177,14 @@ def test_ace_resource_attribute(sddl, expected_values):
     sd = SecurityDescriptor.from_string(sddl)
     ra = sd.sacl[0]
     assert ra.Header.AceType == gdef.SYSTEM_RESOURCE_ATTRIBUTE_ACE_TYPE
-
     attr = ra.attribute
     assert attr.name == "TestName"
     assert attr.values == expected_values
 
 CONDITIONAL_SDDLS = [
-    ("D:AI(XA;;GR;;;WD;(ATTR1))", "ATTR1"),
-    ("D:AI(XD;;GR;;;WD;(ATTR2))", "ATTR2"),
-    ("S:AI(XU;;GR;;;WD;(ATTR3))", "ATTR3")
+    ("D:AI(XA;;GR;;;WD;(ATTR1))", b"ATTR1"),
+    ("D:AI(XD;;GR;;;WD;(ATTR2))", b"ATTR2"),
+    ("S:AI(XU;;GR;;;WD;(ATTR3))", b"ATTR3")
 ]
 
 @pytest.mark.parametrize("sddl, expected_value", CONDITIONAL_SDDLS)
@@ -196,8 +196,8 @@ def test_conditional_ace_applicationdata(sddl, expected_value):
     ace = acl[0]
     appdata = ace.application_data
     # https://msdn.microsoft.com/en-us/library/hh877860.aspx
-    assert appdata.startswith("artx")
-    assert expected_value in appdata.replace("\x00", "")
+    assert appdata.startswith(b"artx")
+    assert expected_value in appdata.replace(b"\x00", b"")
 
 
 

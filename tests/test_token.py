@@ -13,10 +13,16 @@ def curtok():
 def newtok():
     return windows.current_process.token.duplicate()
 
+
+if windows.pycompat.is_py3:
+    unicode_type = str
+else:
+    unicode_type = unicode
+
 def test_token_info(curtok):
-    assert isinstance(curtok.computername, basestring)
-    assert isinstance(curtok.username, basestring)
-    assert isinstance(curtok.integrity, (int, long))
+    assert isinstance(curtok.computername, unicode_type)
+    assert isinstance(curtok.username, unicode_type)
+    assert isinstance(curtok.integrity, windows.pycompat.int_types)
     assert isinstance(curtok.is_elevated, (bool))
 
 def test_lower_integrity(newtok):
@@ -38,7 +44,7 @@ def test_token_id(curtok):
     assert ntok.id != curtok.id
     mid = ntok.modified_id
     aid = ntok.authentication_id
-    ntok.enable_privilege("SeShutDownPrivilege")
+    ntok.enable_privilege(b"SeShutDownPrivilege")
     mid2 = ntok.modified_id
     aid2 = ntok.authentication_id
     ntok.integrity -= 1
@@ -47,15 +53,15 @@ def test_token_id(curtok):
 
 
 def test_enable_privilege(newtok):
-    PRIVILEGE_NAME = "SeShutdownPrivilege"
+    PRIVILEGE_NAME = b"SeShutdownPrivilege"
     assert not newtok.privileges[PRIVILEGE_NAME] & gdef.SE_PRIVILEGE_ENABLED
     newtok.enable_privilege(PRIVILEGE_NAME)
     assert newtok.privileges[PRIVILEGE_NAME] & gdef.SE_PRIVILEGE_ENABLED
 
 
 def test_adjust_privilege(newtok):
-    PRIVILEGE_NAME = "SeShutdownPrivilege"
-    PRIVILEGE2_NAME = "SeTimeZonePrivilege"
+    PRIVILEGE_NAME = b"SeShutdownPrivilege"
+    PRIVILEGE2_NAME = b"SeTimeZonePrivilege"
     tok_dup = newtok.duplicate()
     assert not tok_dup.privileges[PRIVILEGE_NAME] & gdef.SE_PRIVILEGE_ENABLED
     assert not tok_dup.privileges[PRIVILEGE2_NAME] & gdef.SE_PRIVILEGE_ENABLED

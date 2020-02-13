@@ -38,16 +38,16 @@ class TestCurrentProcessWithCheckGarbage(object):
         imp = python_module.pe.imports
         assert "kernel32.dll" in imp.keys(), 'Kernel32.dll not in python imports'
         current_proc_id_iat = [f for f in imp["kernel32.dll"] if f.name == "GetCurrentProcessId"][0]
-        k32_base = windows.winproxy.LoadLibraryA("kernel32.dll")
-        assert windows.winproxy.GetProcAddress(k32_base, "GetCurrentProcessId") == current_proc_id_iat.value
+        k32_base = windows.winproxy.LoadLibraryA(b"kernel32.dll")
+        assert windows.winproxy.GetProcAddress(k32_base, b"GetCurrentProcessId") == current_proc_id_iat.value
 
     def test_current_process_pe_exports(self):
         mods = [m for m in windows.current_process.peb.modules if m.name == "kernel32.dll"]
         assert mods, 'Could not find "kernel32.dll" in current process modules'
         k32 = mods[0]
         get_current_proc_id = k32.pe.exports['GetCurrentProcessId']
-        k32_base = windows.winproxy.LoadLibraryA("kernel32.dll")
-        assert windows.winproxy.GetProcAddress(k32_base, "GetCurrentProcessId") ==  get_current_proc_id
+        k32_base = windows.winproxy.LoadLibraryA(b"kernel32.dll")
+        assert windows.winproxy.GetProcAddress(k32_base, b"GetCurrentProcessId") ==  get_current_proc_id
 
     def test_local_process_pe_sections(self):
         mods = [m for m in windows.current_process.peb.modules if m.name == "kernel32.dll"]
@@ -84,13 +84,13 @@ class TestProcessWithCheckGarbage(object):
 
     def test_read_memory(self, proc32_64):
         k32 = [m for m in proc32_64.peb.modules if m.name == "kernel32.dll"][0]
-        assert proc32_64.read_memory(k32.baseaddr, 2), "MZ"
+        assert proc32_64.read_memory(k32.baseaddr, 2), b"MZ"
 
     def test_write_memory(self, proc32_64):
         k32 = [m for m in proc32_64.peb.modules if m.name == "kernel32.dll"][0]
         with proc32_64.virtual_protected(k32.baseaddr, 2, gdef.PAGE_EXECUTE_READWRITE):
-            proc32_64.write_memory(k32.baseaddr, "XD")
-        assert proc32_64.read_memory(k32.baseaddr, 2) ==  "XD"
+            proc32_64.write_memory(k32.baseaddr, b"XD")
+        assert proc32_64.read_memory(k32.baseaddr, 2) ==  b"XD"
 
     def test_read_string(self, proc32_64):
         test_string = "TEST_STRING"
@@ -112,7 +112,8 @@ class TestProcessWithCheckGarbage(object):
         test_string = "TEST_STRING"
         string_to_write = test_string + "\x00"
         with proc32_64.allocated_memory(0x1000) as addr:
-            proc32_64.write_memory(addr, "\x00".join(string_to_write))
+            # Just check based on previous 'encoding' method
+            proc32_64.write_memory(addr, test_string.encode("utf-16"))
             assert proc32_64.read_wstring(addr) ==  test_string
 
     def test_read_wstring_end_page(self, proc32_64):
@@ -165,6 +166,17 @@ class TestProcessWithCheckGarbage(object):
             proc32_64.execute_python('import ctypes; ctypes.c_uint.from_address({0}).value = 0x42424242'.format(addr))
             dword = proc32_64.read_dword(addr)
             assert dword == 0x42424242
+
+    def test_execute_python_good_version(self, proc32_64):
+        PIPE_NAME = "PFW_TEST_Pipe"
+        rcode = r"""import sys; import windows; windows.pipe.send_object("{pipe}", list(sys.version_info))"""
+
+        with windows.pipe.create(PIPE_NAME) as np:
+            proc32_64.execute_python(rcode.format(pipe=PIPE_NAME))
+            version = np.recv()
+            # Check only major/minor
+            assert version[:2] == list(sys.version_info[:2])
+
 
     @python_injection
     def test_execute_python_suspended(self, proc32_64_suspended):
@@ -230,7 +242,12 @@ class TestProcessWithCheckGarbage(object):
         res = proc32_64.execute_python("import time;time.sleep(0.1); 2")
         assert res == True
         with pytest.raises(windows.injection.RemotePythonError) as ar:
-            t = proc32_64.execute_python("import time;time.sleep(0.1); raise ValueError('BYE')")
+            t = proc32_64.execute_python("import time;time.sleep(0.1); raise ValueError('EXCEPTION_MESSAGE')")
+        # Check the RemotePythonError contains the remote exception text
+        assert b"ValueError: EXCEPTION_MESSAGE" in ar.value.args[0]
+
+    def test_execute_python_create_console(self, proc32_64):
+        res = proc32_64.execute_python("import windows; windows.utils.create_console()")
 
     def test_thread_start_address(self, proc32_64):
         t = proc32_64.threads[0]

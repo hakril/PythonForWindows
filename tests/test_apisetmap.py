@@ -5,7 +5,8 @@ import pytest
 import windows.generated_def as gdef
 from windows.winobject.apisetmap import get_api_set_map_for_current_process
 
-from pfwtest import *
+from .pfwtest import *
+
 
 # Late getattr param si these can be at the end od the file
 @pytest.fixture(params=[
@@ -15,7 +16,7 @@ from pfwtest import *
     ],ids=["Version6", "Version4","Version2"])
 def dumped_apisetmap_base_and_version(request):
     variable_name, version = request.param
-    data = getattr(sys.modules[__name__],variable_name ).decode("base64")
+    data = b64decode(getattr(sys.modules[__name__], variable_name))
     ctypes_data = ctypes.c_buffer(data)
     yield ctypes.addressof(ctypes_data), version
 
@@ -44,7 +45,7 @@ def test_apisetmap_parsing_current_process():
 def test_apisetmap_parsing_from_dump(dumped_apisetmap_base_and_version):
     return verify_apisetmap_parsing(*dumped_apisetmap_base_and_version)
 
-APISETMAP_V2 = """
+APISETMAP_V2 = b"""
 AgAAACMAAACsAQAANAAAAOABAAAMAgAANgAAAEQCAABYAgAAMAAAAIgCAAC4AgAAOAAAAPACAAAE
 AwAAQAAAAEQDAABoAwAAMgAAAJwDAACwAwAALgAAAOADAAAEBAAAMgAAADgEAABcBAAALgAAAIwE
 AACgBAAAPAAAANwEAADwBAAAKgAAABwFAABABQAAQAAAAIAFAACUBQAAPgAAANQFAADoBQAAQAAA
@@ -119,7 +120,7 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
 """
 
-APISETMAP_V4 = """
+APISETMAP_V4 = b"""
 BAAAAKzlAAAAAAAA9gEAAAMAAACMlQAANgAAAIyVAAAuAAAAxJUAAAMAAADglQAASAAAAOCVAABA
 AAAAKJYAAAMAAABElgAAUgAAAESWAABKAAAAmJYAAAMAAAC0lgAAPgAAALSWAAA2AAAA9JYAAAMA
 AAAQlwAAPgAAABCXAAA2AAAAUJcAAAMAAABslwAANAAAAGyXAAAsAAAAoJcAAAMAAAC8lwAANAAA
@@ -1200,7 +1201,7 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 """
 
-APISETMAP_V6 = """
+APISETMAP_V6 = b"""
 BgAAAKxdAQAAAAAAswIAABwAAAAUSAEAHwAAAAEAAADkQAAASgAAAEYAAAAwQQAAAQAAAAEAAABw
 QQAAVgAAAFIAAADIQQAAAQAAAAEAAAAEQgAARgAAAEIAAABMQgAAAQAAAAEAAACEQgAAVgAAAFIA
 AADcQgAAAQAAAAEAAADwQgAARAAAAEAAAAA0QwAAAQAAAAEAAABIQwAAQAAAADwAAACIQwAAAQAA

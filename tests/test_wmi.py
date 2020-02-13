@@ -2,8 +2,9 @@ import pytest
 
 import windows
 import windows.generated_def as gdef
+from windows.pycompat import basestring
 
-from pfwtest import *
+from .pfwtest import *
 
 ## This comment was in test_system.py: still revelant ?
 # Well, pytest initialize COM with its own parameters

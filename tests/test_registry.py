@@ -1,7 +1,7 @@
 import datetime
 
 import pytest
-from pfwtest import *
+from .pfwtest import *
 
 import windows
 
@@ -11,6 +11,11 @@ basekeytest = windows.system.registry(testbasekeypath, gdef.KEY_WOW64_64KEY | gd
 
 if not basekeytest.exists:
     basekeytest.create()
+
+if windows.pycompat.is_py3:
+    REG_TEST_BINARY_DATA = b"BIN_DATA\x01\x02\x03\x00" + bytes(range(256))
+else:
+    REG_TEST_BINARY_DATA = "BIN_DATA\x01\x02\x03\x00" + "".join(chr(i) for i in range(256))
 
 @pytest.fixture()
 def empty_test_base_key():
@@ -27,6 +32,7 @@ def test_registry_set_get_simple_values(value):
     basekeytest["tst1"] = value
     assert basekeytest["tst1"].value == value
 
+
 # TODO: test with other registry type (the stranges ones)
 @pytest.mark.parametrize("value, type", [
     (0x11223344, gdef.REG_DWORD), # same as gdef.REG_DWORD_LITTLE_ENDIAN
@@ -37,12 +43,12 @@ def test_registry_set_get_simple_values(value):
     ("Hello world %path%", gdef.REG_EXPAND_SZ),
     (["AAAA", "BBBB", "CCCC"], gdef.REG_MULTI_SZ),
     # Binary format and associated
-    ("123\x00123" + "".join(chr(c) for c in range(256)), gdef.REG_BINARY),
-    ("Hello world", gdef.REG_LINK),
-    ("", gdef.REG_NONE),
-    ("Not really None :)\x11\x22\x00ABCD", gdef.REG_NONE),
-    ("Test-Unknown-format", 0x11223344), # Unknown registry type
-    ("Test-Unknown-format\x00\x01\xff\xfe Lol", 0xffffffff), # Unknown registry type
+    (REG_TEST_BINARY_DATA, gdef.REG_BINARY),
+    (b"Hello-world", gdef.REG_LINK),
+    (b"", gdef.REG_NONE),
+    (b"Not really None :)\x11\x22\x00ABCD", gdef.REG_NONE),
+    (b"Test-Unknown-format", 0x11223344), # Unknown registry type
+    (b"Test-Unknown-format\x00\x01\xff\xfe Lol", 0xffffffff), # Unknown registry type
 ])
 def test_registry_set_get_simple_values_with_types(value, type):
     basekeytest["tst2"] = (value, type)
@@ -51,12 +57,12 @@ def test_registry_set_get_simple_values_with_types(value, type):
 
 @pytest.mark.parametrize("value, type", [
     # "\xff\xd8".decode("utf-16") -> UnicodeDecodeError
-    ("\xff\xd8", gdef.REG_MULTI_SZ),
+    (b"\xff\xd8", gdef.REG_MULTI_SZ),
     # Is NOT valid UTF-16 (len == 33)
-    ("Hello\x00World\x00This is not unicode\x00\x00", gdef.REG_MULTI_SZ),
+    (b"Hello\x00World\x00This is not unicode\x00\x00", gdef.REG_MULTI_SZ),
     # Is valid UTF-16 (len == 40)
     # Should the decoding be completly different ?
-    ("Hello\x00World\x00This is not really unicode\x00\x00", gdef.REG_MULTI_SZ),
+    (b"Hello\x00World\x00This is not really unicode\x00\x00", gdef.REG_MULTI_SZ),
 ])
 def test_registry_badly_encoded_values(value, type):
     # Bypass any encoding logic to setup bad key
@@ -136,7 +142,7 @@ def test_registry_get_key_info():
     other_info = subkey.info
     assert other_info[0] == 0 # Nb subkeys
     assert other_info[1] == 2 # Nb values
-    assert isinstance(other_info[2], (int, long)) # Last write
+    assert isinstance(other_info[2], windows.pycompat.int_types) # Last write
 
 def test_registry_key_empty():
     subname = "MyTestKeyEmpty"
@@ -208,7 +214,10 @@ def test_registry_unicode_value_name_enumerate_with_race_condition(monkeypatch):
         subkey.delete()
 
 def test_registry_unicode_subkeys_create_delete():
-    subname =  UNICODE_RU_STRING + unicode(datetime.datetime.now())
+    if windows.pycompat.is_py3:
+        subname =  UNICODE_RU_STRING + str(datetime.datetime.now())
+    else:
+        subname =  UNICODE_RU_STRING + unicode(datetime.datetime.now())
     subkey = basekeytest(subname)
     assert not subkey.exists
     subkey.create()

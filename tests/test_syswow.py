@@ -6,7 +6,7 @@ import windows.generated_def as gdef
 import windows.native_exec.simple_x86 as x86
 import windows.native_exec.simple_x64 as x64
 
-from pfwtest import *
+from .pfwtest import *
 
 pytestmark = pytest.mark.usefixtures('check_for_gc_garbage')
 
@@ -44,10 +44,8 @@ class TestSyswowRemoteProcess(object):
         remote_python_code = """
         import windows
         import windows.native_exec.simple_x64 as x64
-        windows.utils.create_console()
         x64_code = x64.assemble("mov r11, 0x1122334455667788; mov rax, 0x8877665544332211; mov [{0}], rax ;label :loop; jmp :loop; nop; nop; ret")
         res = windows.syswow64.execute_64bits_code_from_syswow(x64_code)
-        print("res = {{0}}".format(hex(res)))
         windows.current_process.write_qword({0},  res)
         """.format(addr)
 

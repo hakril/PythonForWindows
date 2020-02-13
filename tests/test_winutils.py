@@ -1,3 +1,4 @@
+import sys
 import pytest
 import os
 import tempfile
@@ -5,10 +6,12 @@ import tempfile
 from datetime import datetime, timedelta
 import windows.utils
 import windows.generated_def as gdef
-from pfwtest import *
+from .pfwtest import *
+
+if sys.version_info.major >= 3:
+    unicode = str
 
 pytestmark = pytest.mark.usefixtures('check_for_gc_garbage')
-
 
 ntqueryinformationfile_info_structs = {
     gdef.FileAccessInformation: gdef.FILE_ACCESS_INFORMATION,
@@ -116,21 +119,21 @@ def test_unix_timestamp_from_filetime():
 
     assert datetime.utcfromtimestamp(1504765968.072731) == datetime(2017, 9, 7, 6, 32, 48, 72731)
     assert windows.utils.unix_timestamp_from_filetime(131492395680727309) == 1504765968.072731
+    # Well py3 will round it to 1504765968.07273
+    # Because round(0.5) == 0 (vs 1 in py2)
     assert windows.utils.unix_timestamp_from_filetime(131492395680727305) == 1504765968.072731
 
-@pytest.mark.parametrize("prefix,prefixtype", [
-    ("long_ascii_prefix", str),
-    (u'\u4e2d\u56fd\u94f6\u884c\u7f51\u94f6\u52a9\u624b', unicode),
+@pytest.mark.parametrize("prefix", [
+    ("long_ascii_prefix"),
+    (u'\u4e2d\u56fd\u94f6\u884c\u7f51\u94f6\u52a9\u624b'),
     ])
-def test_long_short_path_str_unicode(prefix, prefixtype):
+def test_long_short_path_str_unicode(prefix):
     """Test that get_short_path/get_long_path works with str/unicode path and preserve path type"""
-    assert isinstance(prefix, prefixtype)
     with tempfile.NamedTemporaryFile(prefix=prefix) as f:
         basename = f.name.lower()
-        assert isinstance(basename, prefixtype)
         short_name = windows.utils.get_short_path(basename).lower()
-        assert isinstance(short_name, prefixtype)
+        assert isinstance(short_name, unicode)
         assert short_name != basename
         full_name = windows.utils.get_long_path(short_name).lower()
-        assert isinstance(full_name, prefixtype)
+        assert isinstance(full_name, unicode)
         assert full_name == basename

@@ -1,5 +1,6 @@
 import os.path
 import pytest
+import base64
 
 import windows
 import windows.generated_def as gdef
@@ -47,7 +48,7 @@ if windows.current_process.bitness == 64:
 @pytest.fixture
 def check_injected_python_installed(request):
     # Find the process parameter
-    procparams = [argname for argname in request.funcargnames if argname.startswith("proc")]
+    procparams = [argname for argname in request.fixturenames if argname.startswith("proc")]
     if len(procparams) != 1:
         raise ValueError("Could not find the fixture name of the injected python")
     procparam = procparams[0]
@@ -58,3 +59,11 @@ def check_injected_python_installed(request):
 
 
 python_injection =  pytest.mark.usefixtures("check_injected_python_installed")
+
+
+## P2 VS PY3
+
+if windows.pycompat.is_py3:
+    b64decode = base64.decodebytes
+else:
+    b64decode = base64.decodestring

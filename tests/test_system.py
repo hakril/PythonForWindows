@@ -1,7 +1,7 @@
 import pytest
 import windows
 
-from pfwtest import *
+from .pfwtest import *
 
 @check_for_gc_garbage
 class TestSystemWithCheckGarbage(object):
@@ -22,7 +22,9 @@ class TestSystemWithCheckGarbage(object):
 
 
     def test_computer_name(self):
-        return windows.system.computer_name
+        computer_name = windows.system.computer_name
+        assert computer_name
+        assert isinstance(computer_name, str)
 
     def test_services(self):
         return windows.system.services
@@ -49,7 +51,7 @@ class TestSystemWithCheckGarbage(object):
         return windows.system.object_manager
 
     def test_system_modules_ntosk(self):
-        assert windows.system.modules[0].name.endswith("ntoskrnl.exe")
+        assert windows.system.modules[0].name.endswith(b"ntoskrnl.exe")
 
 
 @check_for_gc_garbage

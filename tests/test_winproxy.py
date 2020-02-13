@@ -10,12 +10,12 @@ pytestmark = pytest.mark.usefixtures('check_for_gc_garbage')
 
 def test_createfileA_fail():
     with pytest.raises(WindowsError) as ar:
-        windows.winproxy.CreateFileA("NONEXISTFILE.FILE")
+        windows.winproxy.CreateFileA(b"NONEXISTFILE.FILE")
 
 
 def test_lstrcmpa():
-    assert windows.winproxy.lstrcmpA("LOL", "NO-LOL")
-    assert not windows.winproxy.lstrcmpA("LOL", "LOL")
+    assert windows.winproxy.lstrcmpA(b"LOL", b"NO-LOL")
+    assert not windows.winproxy.lstrcmpA(b"LOL", b"LOL")
 
 def test_getsystemmetrics():
     """Test nothing is raised when GetSystemMetrics() returns 0"""
@@ -28,6 +28,10 @@ def test_getsystemmetrics():
     windows.winproxy.GetSystemMetrics(gdef.SM_SWAPBUTTON)
     windows.winproxy.GetSystemMetrics(gdef.SM_TABLETPC)
 
+
+def test_NtStatusException_winerror():
+    assert gdef.NtStatusException(2).winerror == 2
+    assert gdef.NtStatusException(1234).winerror == 1234
 
 def test_resolve():
     ntdll = windows.current_process.peb.modules[1]

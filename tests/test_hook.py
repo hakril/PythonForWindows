@@ -7,29 +7,41 @@ import windows.generated_def as gdef
 import windows.native_exec.simple_x86 as x86
 import windows.native_exec.simple_x64 as x64
 
+try:
+    import _winreg as winreg
+except ImportError as e:
+    import winreg
 
-from pfwtest import *
+
+from .pfwtest import *
 
 pytestmark = pytest.mark.usefixtures('check_for_gc_garbage')
+
+if windows.pycompat.is_py3:
+    function_to_hook = "RegOpenKeyExW"
+    callback_type = windows.hooks.RegOpenKeyExWCallback
+else:
+    function_to_hook = "RegOpenKeyExA"
+    callback_type = windows.hooks.RegOpenKeyExACallback
 
 
 def test_self_iat_hook_success():
     """Test hook success in single(self) thread"""
     pythondll_mod = [m for m in windows.current_process.peb.modules if m.name.startswith("python") and m.name.endswith(".dll")][0]
-    RegOpenKeyExA = [n for n in pythondll_mod.pe.imports['advapi32.dll'] if n.name == "RegOpenKeyExA"][0]
+    RegOpenKeyEx = [n for n in pythondll_mod.pe.imports['advapi32.dll'] if n.name == function_to_hook][0]
 
     hook_value = []
 
-    @windows.hooks.RegOpenKeyExACallback
+    @callback_type
     def open_reg_hook(hKey, lpSubKey, ulOptions, samDesired, phkResult, real_function):
         hook_value.append((hKey, lpSubKey.value))
         phkResult[0] = 12345678
         return 0
 
-    x = RegOpenKeyExA.set_hook(open_reg_hook)
-    import _winreg
+    x = RegOpenKeyEx.set_hook(open_reg_hook)
+
     open_args = (0x12345678, "MY_KEY_VALUE")
-    k = _winreg.OpenKey(*open_args)
+    k = winreg.OpenKey(*open_args)
     assert k.handle == 12345678
     assert hook_value[0] == open_args
     # Remove the hook
@@ -38,17 +50,16 @@ def test_self_iat_hook_success():
 def test_self_iat_hook_fail_return():
     """Test hook fail in single(self) thread"""
     pythondll_mod = [m for m in windows.current_process.peb.modules if m.name.startswith("python") and m.name.endswith(".dll")][0]
-    RegOpenKeyExA = [n for n in pythondll_mod.pe.imports['advapi32.dll'] if n.name == "RegOpenKeyExA"][0]
+    RegOpenKeyEx = [n for n in pythondll_mod.pe.imports['advapi32.dll'] if n.name == function_to_hook][0]
 
-    @windows.hooks.RegOpenKeyExACallback
+    @callback_type
     def open_reg_hook_fail(hKey, lpSubKey, ulOptions, samDesired, phkResult, real_function):
         return 0x11223344
 
-    x = RegOpenKeyExA.set_hook(open_reg_hook_fail)
-    import _winreg
+    x = RegOpenKeyEx.set_hook(open_reg_hook_fail)
     open_args = (0x12345678, "MY_KEY_VALUE")
     with pytest.raises(WindowsError) as ar:
-        _winreg.OpenKey(*open_args)
+        winreg.OpenKey(*open_args)
     assert ar.value.winerror == 0x11223344
     x.disable()
 
@@ -73,6 +84,7 @@ def test_self_iat_hook_multithread():
     # Trigger from another thread
     k32 = [m for m in cp.peb.modules if m.name == "kernel32.dll"][0]
     load_libraryA = k32.pe.exports["LoadLibraryA"]
+
     with cp.allocated_memory(0x1000) as addr:
         cp.write_memory(addr, "DLLNOTFOUND.NOT_A_REAL_DLL" + "\x00")
         t = cp.create_thread(load_libraryA, addr)

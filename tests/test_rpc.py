@@ -6,7 +6,7 @@ import windows.rpc as rpc
 from windows.rpc import ndr
 import windows.generated_def as gdef
 
-from pfwtest import *
+from .pfwtest import *
 
 
 

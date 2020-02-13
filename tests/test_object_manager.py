@@ -1,7 +1,7 @@
 import pytest
 import windows
 
-from pfwtest import *
+from .pfwtest import *
 
 
 KNOWN_DIRECTORY_OBJECT = ("KnownDLLs", "\\KnownDLLs")
