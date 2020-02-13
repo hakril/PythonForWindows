@@ -20,6 +20,11 @@ class _LSA_UNICODE_STRING(INITIAL_LSA_UNICODE_STRING):
         utf16_len = len(s) * 2
         return cls(utf16_len, utf16_len, ctypes.cast(PWSTR(s), PVOID))
 
+    @classmethod
+    def from_size(cls, size):
+        buffer = ctypes.create_string_buffer(size)
+        return cls(size, size, ctypes.cast(buffer, PVOID))
+
     def __repr__(self):
         return """<{0} "{1}" at {2}>""".format(type(self).__name__, self.str, hex(id(self)))
 

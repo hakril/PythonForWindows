@@ -33,10 +33,14 @@ HANDLE WINAPI CreateFileW(
 
 
 
+/*
+Flags is directly dereferenced if non-null on windows 10
+Let's assert it's a PVOID for now on
 
+*/
 NTSTATUS WINAPI LdrLoadDll(
   __in_opt LPCWSTR               PathToFile,
-  __in_opt ULONG                Flags,
+  __in_opt PVOID                Flags,
   _In_ PUNICODE_STRING      ModuleFileName,
   _Out_ PHANDLE             ModuleHandle
 );
