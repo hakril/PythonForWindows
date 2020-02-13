@@ -51,7 +51,6 @@ for func in windows.generated_def.meta.functions:
 
 class IATHook(object):
     """Look at my hook <3"""
-    yolo = []
 
     def __init__(self, IAT_entry, callback, types=None):
         if types is None:
@@ -62,11 +61,14 @@ class IATHook(object):
         self.callback_types = self.transform_arguments(self.original_types)
         self.entry = IAT_entry
         self.callback = callback
+        ## No more circular ref -> but stub is destroyed -> segv :(
         self.stub = ctypes.WINFUNCTYPE(*self.callback_types)(self.hook_callback)
-        self.stub_addr = ctypes.cast(self.stub, PVOID).value
+        # stub = ctypes.WINFUNCTYPE(*self.callback_types)(self.hook_callback)
+        # self.stub_addr = ctypes.cast(stub, PVOID) # Same problem as keep stub... (GC..)
+        self.stub_addr = ctypes.cast(self.stub, PVOID).value # Same problem as keep stub... (GC..)
+        # IAT_entry.stub = stub
         self.realfunction = ctypes.WINFUNCTYPE(*types)(IAT_entry.nonhookvalue)
         self.is_enable = False
-        #IATHook.yolo.append(self)
 
     def transform_arguments(self, types):
         res = []
@@ -82,12 +84,14 @@ class IATHook(object):
         with utils.VirtualProtected(self.entry.addr, ctypes.sizeof(PVOID), PAGE_EXECUTE_READWRITE):
             self.entry.value = self.stub_addr
         self.is_enable = True
+        self.entry.enabled = True
 
     def disable(self):
         """Disable the IAT hook"""
         with utils.VirtualProtected(self.entry.addr, ctypes.sizeof(PVOID), PAGE_EXECUTE_READWRITE):
             self.entry.value = self.entry.nonhookvalue
         self.is_enable = False
+        self.entry.enabled = True
 
     def hook_callback(self, *args):
         adapted_args = []
@@ -104,11 +108,6 @@ class IATHook(object):
                 args = adapted_args
             return self.realfunction(*args)
         return self.callback(*adapted_args, real_function=real_function)
-
-    # Use this tricks to prevent garbage collection of hook ?
-    #def __del__(self):
-    #    pass
-
 
 ## New simple hook API based on winproxy
 def setup_hook(target, hook, dll_to_hook):

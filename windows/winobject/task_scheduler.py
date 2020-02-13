@@ -203,6 +203,11 @@ class Task(gdef.IRegisteredTask):
         self.RunEx(params, flags, sessionid, user, result)
         return result
 
+    def get_security_descriptor(self, secinfo):
+        res = gdef.BSTR()
+        self.GetSecurityDescriptor(secinfo, res)
+        return res.value
+
     def __repr__(self):
         return """<{0} "{1}" at {2:#x}>""".format(type(self).__name__, self.name, id(self))
 

@@ -6,6 +6,7 @@ from contextlib import contextmanager
 import windows
 import windows.generated_def as gdef
 from windows import winproxy
+from windows.pycompat import int_types
 
 
 # Helpers
@@ -244,7 +245,8 @@ class EvtEvent(EvtHandle):
         # What about classic channels where there is no event_metadata ?
         # Return a dict with [0-1-2-3-4] as key ? raise ?
         # Juste use the render_xml ?
-        return {k:v for k,v in zip(self.metadata.event_data, self.event_values())}
+        event_data_name = (i["name"] for i in self.metadata.event_data if i["type"] == "data")
+        return {k:v for k,v in zip(event_data_name, self.event_values())}
 
 
     def __repr__(self):
@@ -305,6 +307,27 @@ class ImprovedEVT_VARIANT(gdef.EVT_VARIANT):
             v = v[:self.Count]
         return v
 
+    @classmethod
+    def from_value(cls, value, vtype=None):
+        if vtype is None:
+            # Guess type
+            if isinstance(value, int_types):
+                vtype = gdef.EvtVarTypeUInt64
+            elif isinstance(value, basestring):
+                vtype = gdef.EvtVarTypeString
+            else:
+                raise NotImplementedError("LATER")
+        self = cls()
+        # import pdb;pdb.set_trace()
+        # Yolo test :)
+        super(ImprovedEVT_VARIANT, ImprovedEVT_VARIANT).Type.__set__(self, vtype)
+        # super(ImprovedEVT_VARIANT, self).Type = vtype
+        attrname = self.VALUE_MAPPER[self.Type]
+        setattr(self, attrname, value)
+        if self.Type in (gdef.EvtVarTypeBinary, gdef.EvtVarTypeString):
+            self.Count = len(value)
+        return self
+
     def __repr__(self):
         return "<{0} of type={1}>".format(type(self).__name__, self.Type)
 
@@ -360,7 +383,7 @@ class EvtChannel(object):
         if ids and filter:
             raise ValueError("<ids> and <filter> are mutually exclusive")
         if ids is not None:
-            if isinstance(ids, (long, int)):
+            if isinstance(ids, int_types):
                 ids = (ids,)
             ids_filter = " or ".join("EventID={0}".format(id) for id in ids)
             filter = "Event/System[{0}]".format(ids_filter)
@@ -854,19 +877,45 @@ class EventMetadata(EvtHandle):
         """Identifies the template attribute of the event definition which is an XML string"""
         return eventinfo(self, gdef.EventMetadataEventTemplate).value
 
+    def _parse_event_template_data_element(self, element):
+        res = {"type": "data"}
+        res["name"] = element.attributes["name"].value
+        res["inType"] = element.attributes["inType"].value
+        res["outType"] = element.attributes["outType"].value
+        count = element.attributes.get("count", None)
+        if count:
+            res["count"]  = count.value
+        length = element.attributes.get("length", None)
+        if length:
+            res["length"]  = length.value
+        return res
+
+    def _parse_event_template_struct_element(self, element):
+        res = {"type": "struct"}
+        res["name"] = element.attributes["name"].value
+        res["fields"] = [self._parse_event_template_data_element(elt) for elt in element.childNodes if elt.nodeType == elt.ELEMENT_NODE]
+        return res
+
+    def _event_data_generator(self, template):
+        xmldoc = xml.dom.minidom.parseString(template)
+        xmltemplate = xmldoc.getElementsByTagName("template")[0]
+        for element in (n for n in xmltemplate.childNodes if n.nodeType == n.ELEMENT_NODE):
+            if element.tagName == "data":
+                yield self._parse_event_template_data_element(element)
+            elif element.tagName == "struct":
+                yield self._parse_event_template_struct_element(element)
+            else:
+                raise ValueError("Unexpected XML element <{0}> in event template".format(element.tagName))
+
     @property
     def event_data(self):
         """The list of attribute specifique for this event.
         Retrieved by parsing :data:`EventMetadata.template`
         """
-        result = []
         template = self.template
         if not template:
-            return {}
-        xmltemplate = xml.dom.minidom.parseString(template)
-        for data in xmltemplate.getElementsByTagName("data"):
-            result.append(data.attributes["name"].value)
-        return result
+            return []
+        return list(self._event_data_generator(template))
 
     def yolo(self):
         template = self.template

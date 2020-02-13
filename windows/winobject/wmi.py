@@ -2,6 +2,7 @@ import windows
 import ctypes
 import struct
 import functools
+from functools import partial
 from collections import namedtuple
 
 from ctypes.wintypes import *
@@ -9,7 +10,8 @@ from ctypes.wintypes import *
 import windows.com
 import windows.generated_def as gdef
 from windows.generated_def.winstructs import *
-from functools import partial
+
+from windows.pycompat import basestring
 
 # Common error check for all WMI COM interfaces
 # This 'just' add the corresponding 'WBEMSTATUS' to the hresult error code
@@ -18,8 +20,43 @@ class WmiComInterface(object):
     def errcheck(self, result, func, args):
         if result < 0:
             wmitag = gdef.WBEMSTATUS.mapper[result & 0xffffffff]
-            raise WindowsError(result, wmitag)
+            raise ctypes.WinError(result, wmitag)
         return args
+
+sentinel = object()
+# POC
+class QualifierSet(gdef.IWbemQualifierSet):
+    def get_variant(self, name):
+        """Retrieve the value of property ``name`` as a :class:`~windows.com.Variant`
+
+        :return: :class:`~windows.com.Variant`
+        """
+        if not isinstance(name, basestring):
+            nametype = type(name).__name__
+            raise TypeError("WmiObject attributes name must be str, not <{0}>".format(nametype))
+        variant_res = windows.com.Variant()
+        self.Get(name, 0, variant_res, None)
+        return variant_res
+
+    def get(self, name, default=sentinel):
+        """Return the value of the property ``name``. The return value depends of the type of the property and can vary"""
+        try:
+            return self.get_variant(name).value
+        except WindowsError as e:
+            if (e.winerror & 0xffffffff) != gdef.WBEM_E_NOT_FOUND:
+                raise
+            if default is sentinel:
+                raise
+            return default
+
+    def names(self):
+        res = POINTER(windows.com.SafeArray)()
+        x = ctypes.pointer(res)
+        self.GetNames(0, cast(x, POINTER(POINTER(gdef.SAFEARRAY))))
+        # need to free the safearray / unlock ?
+        properties = [p for p in res[0].to_list(BSTR)]
+        return properties
+
 
 # https://docs.microsoft.com/en-us/windows/desktop/api/wbemcli/nn-wbemcli-iwbemclassobject
 
@@ -88,7 +125,6 @@ class WmiObject(gdef.IWbemClassObject, WmiComInterface):
         return gdef.tag_WBEM_GENUS_TYPE.mapper[self.get("__GENUS")]
 
     ## Higher level API
-
     def get_properties(self, system_properties=False):
         """Return the list of properties names available for the current object.
         If ``system_properties`` is ``False`` property names begining with ``_`` are ignored.
@@ -107,6 +143,17 @@ class WmiObject(gdef.IWbemClassObject, WmiComInterface):
         return properties
 
     properties = property(get_properties) #: The properties of the object (exclude system properties)
+
+    @property
+    def qualifier_set(self): # changer de nom ?
+        res = QualifierSet()
+        self.GetQualifierSet(res)
+        return res
+
+    def get_p_set(self, name): # Changer de nom ?
+        res = QualifierSet()
+        self.GetPropertyQualifierSet(name, res)
+        return res
 
     # Make WmiObject a mapping object
 
@@ -133,6 +180,11 @@ class WmiObject(gdef.IWbemClassObject, WmiComInterface):
             return """<{0} class "{1}">""".format(type(self).__name__, self.get("__Class"))
         return """<{0} instance of "{1}">""".format(type(self).__name__, self.get("__Class"))
 
+    def __sprint__(self):
+        return """ {0}\n
+        {1}
+        """.format(repr(self), "\n".join(": ".join([x[0], str(x[1])]) for x in sorted(self.items())))
+
 
 class WmiEnumeration(gdef.IEnumWbemClassObject, WmiComInterface):
     """Represent an enumeration of object that can be itered"""
@@ -150,7 +202,7 @@ class WmiEnumeration(gdef.IEnumWbemClassObject, WmiComInterface):
         return_count = gdef.ULONG(0)
         error = self.Next(timeout, 1, obj, return_count)
         if error == gdef.WBEM_S_TIMEDOUT:
-            raise WindowsError(gdef.WBEM_S_TIMEDOUT, "Wmi timeout")
+            raise ctypes.WinError(gdef.WBEM_S_TIMEDOUT, "Wmi timeout")
         elif error == WBEM_S_FALSE:
             return None
         else:
@@ -336,6 +388,12 @@ class WmiNamespace(gdef.IWbemServices, WmiComInterface):
         res = WmiCallResult(result_type="string")
         self.PutInstance(instance, flags, None, res)
         return res
+
+    def delete_instance(self, instance, flags=0):
+        """TODO: Document"""
+        if isinstance(instance, gdef.IWbemClassObject):
+            instance = instance["__Path"]
+        return self.DeleteInstance(instance, flags, None, None)
 
     def exec_method(self, obj, method, inparam, flags=0):
         """Exec method named on ``object`` with ``inparam``.

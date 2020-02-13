@@ -66,7 +66,7 @@ class EventRecord(gdef.EVENT_RECORD):
     # def match(self, provider=None, id=None, opcode=None):
 
     def __repr__(self):
-        guid = self.EventHeader.ProviderId.to_string()
+        guid = self.EventHeader.ProviderId
         return """<{0} provider="{1}" id={2}>""".format(type(self).__name__, guid, self.id)
 
 
@@ -218,7 +218,7 @@ class EtwTrace(object):
         # TODO : maybe raise an Exception instead of silently masking the value ?
         level = gdef.UCHAR(chr(level & 0xff))
 
-        return windows.winproxy.EnableTraceEx2(self.handle, guid, EVENT_CONTROL_CODE_ENABLE_PROVIDER, level , any_keyword, all_keyword, 0, None) 
+        return windows.winproxy.EnableTraceEx2(self.handle, guid, EVENT_CONTROL_CODE_ENABLE_PROVIDER, level , any_keyword, all_keyword, 0, None)
 
 
     def process(self, callback, begin=None, end=None, context = None):
@@ -295,7 +295,7 @@ class TraceProvider(object):
         return self.infos.instances
 
     def __repr__(self):
-        return """<{0} for "{1}">""".format(type(self).__name__, self.guid.to_string())
+        return """<{0} for "{1}">""".format(type(self).__name__, self.guid)
 
 
 class TraceGuidInfo(gdef.TRACE_GUID_INFO):
