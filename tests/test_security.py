@@ -28,6 +28,12 @@ def test_empty_security_descriptor():
     assert esd.dacl is None
     assert esd.sacl is None
 
+def test_security_descriptor__str__():
+    sddl = "D:(A;;FA;;;WD)"
+    sd = SecurityDescriptor.from_string(sddl)
+    assert str(sd) == sddl
+
+
 
 def test_pacl_object():
     SDDL = "O:ANG:S-1-2-3D:(A;;;;;S-1-42-42)(A;;;;;S-1-42-43)(A;;;;;S-1-42-44)"

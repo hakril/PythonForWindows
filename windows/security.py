@@ -927,7 +927,7 @@ class SecurityDescriptor(gdef.PSECURITY_DESCRIPTOR):
             None)
         result = result_cstr.value # Retrieve a python-str copy
         winproxy.LocalFree(result_cstr)
-        return result
+        return result.decode()
 
     __str__ = to_string
 
@@ -1056,7 +1056,7 @@ def explain_acl(acl, sdtype=None):
     if acl is None:
         yield u"None"
     for ace in acl.aces:
-        yield unicode(ace)
+        yield str(ace)
         for line in ACE_EXPLAINER[ace.Header.AceType](ace, sdtype):
             yield u"  " + line
 
