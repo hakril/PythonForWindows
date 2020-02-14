@@ -1,5 +1,7 @@
 # PythonForWindows
 
+[![Join the chat at https://gitter.im/PythonForWindows/community](https://badges.gitter.im/PythonForWindows/community.svg)](https://gitter.im/PythonForWindows/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 PythonForWindows is a base of code aimed to make interaction with `Windows` (on X86/X64) easier (for both 32 and 64 bits Python).
 Its goal is to offer abstractions around some of the OS features in a (I hope) pythonic way.
 It also tries to make the barrier between python and native execution thinner in both ways.
