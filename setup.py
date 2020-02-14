@@ -6,7 +6,7 @@ PKG_NAME = "PythonForWindows"
 VERSION  = "0.5"
 
 if sys.version_info[0] != 2:
-    raise NotImplementedError("PythonForWindows only support Python2 for now")
+    print("PythonForWindows python3 support is still in beta, feel free to send feedback")
 
 
 setup(
