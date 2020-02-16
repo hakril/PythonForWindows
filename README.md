@@ -1,5 +1,7 @@
 # PythonForWindows
 
+[![Join the chat at https://gitter.im/PythonForWindows/general](https://badges.gitter.im/PythonForWindows/general.svg)](https://gitter.im/PythonForWindows/general)
+
 PythonForWindows is a base of code aimed to make interaction with `Windows` (on X86/X64) easier (for both 32 and 64 bits Python).
 Its goal is to offer abstractions around some of the OS features in a (I hope) pythonic way.
 It also tries to make the barrier between python and native execution thinner in both ways.
@@ -12,9 +14,10 @@ Let's say that the codebase evolves with my needs and my curiosity.
 Complete online documentation is available [here][ONLINE_DOC]
 You can find some examples of code in the [samples directory][SAMPLE_DIR] or [online][ONLINE_SAMPLE].
 
-Parts of PythonForWindows are used in the [LKD project][LKD_GITHUB].
+PythonForWindows is principally known for its ALPC-RPC Client (see [samples](http://hakril.github.io/PythonForWindows/build/html/sample.html#windows-rpc)).
 
-If you have any issue, question, suggestion do not hesitate to contact me.
+
+If you have any issue, question or suggestion do not hesitate to join [the Gitter channel](https://gitter.im/PythonForWindows/general).
 I am always glad to have feedbacks from people using this project.
 
 ## Installation
