@@ -16,6 +16,9 @@ import sys
 if sys.platform != "win32":
     raise NotImplementedError("It's called PythonForWindows not PythonFor{0}".format(sys.platform.capitalize()))
 
+import warnings
+warnings.filterwarnings('once', category=DeprecationWarning, module=__name__)
+
 from windows import winproxy
 from windows import winobject
 

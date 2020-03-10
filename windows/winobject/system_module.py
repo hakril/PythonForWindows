@@ -40,7 +40,7 @@ def enumerate_kernel_modules():
     raw_buffer = (cbsize.value * gdef.BYTE)()
     buffer = gdef.SYSTEM_MODULE_INFORMATION.from_address(ctypes.addressof(raw_buffer))
     winproxy.NtQuerySystemInformation(gdef.SystemModuleInformation, ctypes.byref(raw_buffer), ctypes.sizeof(raw_buffer), ctypes.byref(cbsize))
-    modules = (SystemModule * buffer.ModulesCount).from_address(ctypes.addressof(buffer) + gdef.SYSTEM_MODULE_INFORMATION.Modules.offset)
+    modules = (SystemModule * buffer.ModulesCount).from_buffer(raw_buffer, gdef.SYSTEM_MODULE_INFORMATION.Modules.offset)
     return list(modules)
 
 def enumerate_kernel_modules_syswow64():
@@ -49,5 +49,5 @@ def enumerate_kernel_modules_syswow64():
     raw_buffer = (cbsize.value * gdef.BYTE)()
     buffer = gdef.SYSTEM_MODULE_INFORMATION64.from_address(ctypes.addressof(raw_buffer))
     windows.syswow64.NtQuerySystemInformation_32_to_64(gdef.SystemModuleInformation, ctypes.byref(raw_buffer), ctypes.sizeof(raw_buffer), ctypes.byref(cbsize))
-    modules = (SystemModuleWow64 * buffer.ModulesCount).from_address(ctypes.addressof(buffer) + gdef.SYSTEM_MODULE_INFORMATION64.Modules.offset)
+    modules = (SystemModuleWow64 * buffer.ModulesCount).from_buffer(raw_buffer, gdef.SYSTEM_MODULE_INFORMATION64.Modules.offset)
     return list(modules)

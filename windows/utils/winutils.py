@@ -3,7 +3,9 @@ import msvcrt
 import os
 import sys
 import code
+import math
 import datetime
+import warnings
 from collections import namedtuple
 
 import windows
@@ -265,24 +267,8 @@ def pop_shell(locs=None):
     FixedInteractiveConsole(locs).interact()
 
 def get_kernel_modules():
-    if windows.current_process.is_wow_64:
-        return get_kernel_modules_syswow64()
-    cbsize = DWORD()
-    winproxy.NtQuerySystemInformation(SystemModuleInformation, None, 0, byref(cbsize))
-    raw_buffer = (cbsize.value * c_char)()
-    buffer = SYSTEM_MODULE_INFORMATION.from_address(ctypes.addressof(raw_buffer))
-    winproxy.NtQuerySystemInformation(SystemModuleInformation, byref(raw_buffer), sizeof(raw_buffer), byref(cbsize))
-    modules = (SYSTEM_MODULE * buffer.ModulesCount).from_address(addressof(buffer) + SYSTEM_MODULE_INFORMATION.Modules.offset)
-    return list(modules)
-
-def get_kernel_modules_syswow64():
-    cbsize = DWORD()
-    windows.syswow64.NtQuerySystemInformation_32_to_64(SystemModuleInformation, None, 0, ctypes.addressof(cbsize))
-    raw_buffer = (cbsize.value * c_char)()
-    buffer = SYSTEM_MODULE_INFORMATION64.from_address(ctypes.addressof(raw_buffer))
-    windows.syswow64.NtQuerySystemInformation_32_to_64(SystemModuleInformation, byref(raw_buffer), sizeof(raw_buffer), byref(cbsize))
-    modules = (SYSTEM_MODULE64 * buffer.ModulesCount).from_address(addressof(buffer) + SYSTEM_MODULE_INFORMATION64.Modules.offset)
-    return list(modules)
+    warnings.warn("get_kernel_modules() will be removed: use windows.system.modules instead", DeprecationWarning)
+    return windows.system.modules
 
 class FileStreamInformation(gdef.FILE_STREAM_INFORMATION):
     @property
