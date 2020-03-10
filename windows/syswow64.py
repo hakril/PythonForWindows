@@ -11,6 +11,7 @@ from .generated_def.winstructs import *
 from windows.winobject import process
 from windows import winproxy
 from .winproxy import NeededParameter
+from .pycompat import int_types
 
 # Special code for syswow64 process
 CS_32bits = 0x23
@@ -129,7 +130,7 @@ def try_generate_stub_target(shellcode, argument_buffer, target, errcheck=None):
         # Transform args (ctypes byref possibly) to int
         writable_args = []
         for i, value in enumerate(args):
-            if not isinstance(value, (int, long)):
+            if not isinstance(value, int_types):
                 try:
                     value = ctypes.cast(value, ctypes.c_void_p).value
                 except ctypes.ArgumentError as e:
