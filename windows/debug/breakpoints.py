@@ -213,6 +213,7 @@ class FunctionRetBP(Breakpoint):
 
 
 class FunctionCallBP(Breakpoint):
+    """A Breakpoint that allow to trigger at the return of a function"""
     def break_on_ret(self, dbg, exception):
         """Setup a breakpoint at the return address of the function, this breakpoint will call :func:`ret_trigger`"""
         cproc = dbg.current_process
