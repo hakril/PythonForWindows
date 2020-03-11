@@ -1,0 +1,4 @@
+(cmd) python debug\change_function_ret_value.py
+[DEBUGGE] IsDebuggerPresent=42
+[DEBUGGE] IsDebuggerPresent=43
+[DEBUGGE] IsDebuggerPresent=44

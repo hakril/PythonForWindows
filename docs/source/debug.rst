@@ -88,7 +88,15 @@ When a breakpoint is hit, its ``trigger`` function is called with the debugger a
     :inherited-members:
     :special-members: __init__
 
+.. note::
+
+    See sample :ref:`sample_debugger_bp_functioncallbp`
+
 .. autoclass:: FunctionBP
     :members:
     :inherited-members:
     :special-members: __init__
+
+.. note::
+
+    See sample :ref:`sample_debugger_bp_functionbp`

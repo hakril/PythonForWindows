@@ -261,6 +261,20 @@ Output
 .. literalinclude:: samples_output\debug_debugger_membp_singlestep.txt
 
 
+
+.. _sample_debugger_bp_functioncallbp:
+
+:class:`windows.debug.FunctionCallBP`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. literalinclude:: ..\..\samples\debug\change_function_ret_value.py
+
+Output
+
+.. literalinclude:: samples_output\debug_change_function_ret_value.txt
+
+.. _sample_debugger_bp_functionbp:
+
 :class:`windows.debug.FunctionBP`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
