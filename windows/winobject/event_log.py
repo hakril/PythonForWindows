@@ -248,6 +248,10 @@ class EvtEvent(EvtHandle):
         event_data_name = (i["name"] for i in self.metadata.event_data if i["type"] == "data")
         return {k:v for k,v in zip(event_data_name, self.event_values())}
 
+    @property
+    def date(self):
+        """Event.time_created as a datetime"""
+        return windows.utils.datetime_from_filetime(self.time_created)
 
     def __repr__(self):
         creation_time = windows.utils.datetime_from_filetime(self.time_created)
