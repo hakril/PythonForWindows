@@ -230,5 +230,11 @@ BOOL WINAPI EvtFormatMessage(
 );
 
 
-
+BOOL EvtSeek(
+  EVT_HANDLE ResultSet,
+  LONGLONG   Position,
+  EVT_HANDLE Bookmark,
+  DWORD      Timeout,
+  DWORD      Flags
+);
 

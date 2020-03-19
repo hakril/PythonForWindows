@@ -613,6 +613,10 @@ def GetShortPathNameW(lpszLongPath, lpszShortPath, cchBuffer=None):
 
 # Debug-API
 
+@Kernel32Proxy(error_check=no_error_check)
+def IsDebuggerPresent():
+   return IsDebuggerPresent.ctypes_function()
+
 @Kernel32Proxy()
 def WaitForDebugEvent(lpDebugEvent, dwMilliseconds=gdef.INFINITE):
     return WaitForDebugEvent.ctypes_function(lpDebugEvent, dwMilliseconds)

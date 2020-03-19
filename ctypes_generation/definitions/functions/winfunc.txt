@@ -1326,6 +1326,6 @@ DWORD WINAPI GetFirmwareEnvironmentVariableExW(
   _Out_ PDWORD pdwAttribubutes
 );
 
-
+BOOL IsDebuggerPresent();
 
 

@@ -33,6 +33,11 @@ def EvtQuery(Session, Path, Query, Flags):
 def EvtNext(ResultSet, EventArraySize, EventArray, Timeout, Flags, Returned):
     return EvtNext.ctypes_function(ResultSet, EventArraySize, EventArray, Timeout, Flags, Returned)
 
+@WevtapiProxy()
+def EvtSeek(ResultSet, Position, Bookmark, Timeout, Flags):
+    return EvtSeek.ctypes_function(ResultSet, Position, Bookmark, Timeout, Flags)
+
+
 # Channel
 
 @WevtapiProxy()

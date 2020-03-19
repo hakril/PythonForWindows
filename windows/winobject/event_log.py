@@ -87,6 +87,18 @@ class EvtQuery(EvtHandle):
     def __iter__(self):
         return self
 
+    def seek(self, position, seek_flags=None):
+        if seek_flags is None:
+            if position >= 0:
+                seek_flags = gdef.EvtSeekRelativeToFirst
+            else:
+                # -1 + EvtSeekRelativeToLast will give us the last 2 events
+                # So passing (-1, None) will give us the last event only
+                # If user do not want this calcul it can directly pass seek_flags
+                seek_flags = gdef.EvtSeekRelativeToLast
+                position += 1
+        windows.winproxy.EvtSeek(self, position, 0, 0, seek_flags)
+
     next = __next__ # Yep.. real name is 'next' in Py2 :D
 
     def all(self): # SqlAlchemy like :)
@@ -102,6 +114,8 @@ class EvtQuery(EvtHandle):
         :rtype: :class:`EvtEvent` -- An Event
         """
         return next(iter(self))
+
+
 
 
 class EvtEvent(EvtHandle):

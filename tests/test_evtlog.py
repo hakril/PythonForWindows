@@ -1,4 +1,5 @@
 import pytest
+import uuid
 
 import windows
 import windows.generated_def as gdef
@@ -97,3 +98,32 @@ def test_evthandle_close():
     post_usage = windows.current_process.memory_info.PrivateUsage
     memory_usage_in_mo = (post_usage - start_usage) / 1024 / 1024
     assert memory_usage_in_mo <= 0.5
+
+tscheduler = windows.system.task_scheduler
+troot = tscheduler.root
+
+def generated_evt_log(id):
+    uid = uuid.uuid4()
+    task_name = "PFW_test_{0}_{1}".format(id, uid)
+    new_task_definition = tscheduler.create()
+    actions = new_task_definition.actions
+    new_action = actions.create(gdef.TASK_ACTION_EXEC)
+    new_action.path = r"c:\windows\system32\notepad.exe"
+    new_task = troot.register(task_name, new_task_definition)
+    task_path = new_task.path
+    # Remove task immediatly, event was generated
+    del troot[task_name]
+    return task_path
+
+TEST_TASK_EVENTLOG_CHANNEL = "Microsoft-Windows-TaskScheduler/Operational"
+TEST_TASK_EVENTLOG_ID = 106 # Task registered
+
+def test_evtlog_query_seek():
+    taskpath = generated_evt_log("query_seek")
+    import time; time.sleep(1)
+    chan = windows.system.event_log[TEST_TASK_EVENTLOG_CHANNEL]
+    query = chan.query(ids=106)
+    query.seek(-1)
+    events = query.all()
+    assert len(events) == 1
+    assert events[0].data["TaskName"] == taskpath
