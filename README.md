@@ -28,7 +28,11 @@ You can install PythonForWindows using the ``setup.py`` script:
 python setup.py install
 ``
 
-Note that PythonForWindows only support Python2 at the moment.
+#### Python3
+
+python3 support is still in beta.
+All the tests pass on master, but I did not test it heavily on real case.
+Do not hesitate report bugs and issues.
 
 ## Overview
 
