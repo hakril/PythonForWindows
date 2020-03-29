@@ -196,6 +196,14 @@ Useful when debugingg a 32b process from a 64bits one</p>
 </table>
 </dd></dl>
 
+<dl class="staticmethod">
+<dt id="windows.debug.Debugger.kill_on_exit">
+<em class="property">static </em><code class="descname">kill_on_exit</code><span class="sig-paren">(</span><em>choice</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/debugger.html#Debugger.kill_on_exit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.Debugger.kill_on_exit" title="Permalink to this definition">¶</a></dt>
+<dd><p>If set to True(default in Windows) will kill all attached process on thread exit.
+Otherwise, the thread detaches from all processes being debugged on exit.</p>
+<p>See: <a class="reference external" href="https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-debugsetprocesskillonexit">https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-debugsetprocesskillonexit</a></p>
+</dd></dl>
+
 <dl class="method">
 <dt id="windows.debug.Debugger.on_setup">
 <code class="descname">on_setup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/debugger.html#Debugger.on_setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.Debugger.on_setup" title="Permalink to this definition">¶</a></dt>
@@ -483,6 +491,40 @@ It is based on <code class="xref py py-func docutils literal notranslate"><span 
 <p class="last">This means that a MEMBP at address <code class="docutils literal notranslate"><span class="pre">X</span></code> won’t be triggered by a write of size 4 at address <code class="docutils literal notranslate"><span class="pre">X</span> <span class="pre">-</span> <span class="pre">1</span></code>. it’s sad I know.</p>
 </div>
 <dl class="class">
+<dt id="windows.debug.FunctionCallBP">
+<em class="property">class </em><code class="descclassname">windows.debug.</code><code class="descname">FunctionCallBP</code><span class="sig-paren">(</span><em>addr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/breakpoints.html#FunctionCallBP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.FunctionCallBP" title="Permalink to this definition">¶</a></dt>
+<dd><p>A Breakpoint that allow to trigger at the return of a function</p>
+<dl class="method">
+<dt id="windows.debug.FunctionCallBP.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>addr</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.debug.FunctionCallBP.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>x.__init__(…) initializes x; see help(type(x)) for signature</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.debug.FunctionCallBP.break_on_ret">
+<code class="descname">break_on_ret</code><span class="sig-paren">(</span><em>dbg</em>, <em>exception</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/breakpoints.html#FunctionCallBP.break_on_ret"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.FunctionCallBP.break_on_ret" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setup a breakpoint at the return address of the function, this breakpoint will call <a class="reference internal" href="#windows.debug.FunctionCallBP.ret_trigger" title="windows.debug.FunctionCallBP.ret_trigger"><code class="xref py py-func docutils literal notranslate"><span class="pre">ret_trigger()</span></code></a></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.debug.FunctionCallBP.ret_trigger">
+<code class="descname">ret_trigger</code><span class="sig-paren">(</span><em>dbg</em>, <em>exception</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/breakpoints.html#FunctionCallBP.ret_trigger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.FunctionCallBP.ret_trigger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called at the return of the function if <a class="reference internal" href="#windows.debug.FunctionCallBP.break_on_ret" title="windows.debug.FunctionCallBP.break_on_ret"><code class="xref py py-func docutils literal notranslate"><span class="pre">break_on_ret()</span></code></a> was called</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.debug.FunctionCallBP.trigger">
+<code class="descname">trigger</code><span class="sig-paren">(</span><em>dbg</em>, <em>exception</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.debug.FunctionCallBP.trigger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when breakpoint is hit</p>
+</dd></dl>
+
+</dd></dl>
+
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">See sample <a class="reference internal" href="sample.html#sample-debugger-bp-functioncallbp"><span class="std std-ref">windows.debug.FunctionCallBP</span></a></p>
+</div>
+<dl class="class">
 <dt id="windows.debug.FunctionBP">
 <em class="property">class </em><code class="descclassname">windows.debug.</code><code class="descname">FunctionBP</code><span class="sig-paren">(</span><em>addr=None</em>, <em>target=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/debug/breakpoints.html#FunctionBP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.debug.FunctionBP" title="Permalink to this definition">¶</a></dt>
 <dd><p>A breakpoint that accepts a function from <a class="reference internal" href="winproxy.html#module-windows.winproxy" title="windows.winproxy"><code class="xref py py-mod docutils literal notranslate"><span class="pre">windows.winproxy</span></code></a> and able to:</p>
@@ -528,6 +570,10 @@ It is based on <code class="xref py py-func docutils literal notranslate"><span 
 
 </dd></dl>
 
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">See sample <a class="reference internal" href="sample.html#sample-debugger-bp-functionbp"><span class="std std-ref">windows.debug.FunctionBP</span></a></p>
+</div>
 </div>
 </div>
 

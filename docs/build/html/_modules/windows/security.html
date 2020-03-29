@@ -44,7 +44,7 @@
 <span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
 <span class="kn">from</span> <span class="nn">windows</span> <span class="k">import</span> <span class="n">winproxy</span>
 
-<span class="kn">from</span> <span class="nn">windows.winobject.token</span> <span class="k">import</span> <span class="n">Token</span>
+<span class="kn">from</span> <span class="nn">windows.winobject.token</span> <span class="k">import</span> <span class="n">Token</span><span class="p">,</span> <span class="n">KNOW_INTEGRITY_LEVEL</span>
 
 
 <span class="c1"># Specific access right</span>
@@ -125,7 +125,7 @@
     <span class="n">gdef</span><span class="o">.</span><span class="n">SEMAPHORE_MODIFY_STATE</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="n">SEMAPHORE_ACCESS_RIGHT</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span>
+<span class="n">TIMER_ACCESS_RIGHT</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span>
     <span class="n">gdef</span><span class="o">.</span><span class="n">TIMER_QUERY_STATE</span><span class="p">,</span>
     <span class="n">gdef</span><span class="o">.</span><span class="n">TIMER_QUERY_STATE</span><span class="p">,</span>
 <span class="p">)</span>
@@ -184,23 +184,112 @@
 <span class="p">)</span>
 
 <span class="n">JOB_ACCESS_RIGHT</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span>
-    <span class="n">gdef</span><span class="o">.</span><span class="n">JOB_OBJECT_ASSIGN_PROCESS</span>         <span class="p">,</span>
-    <span class="n">gdef</span><span class="o">.</span><span class="n">JOB_OBJECT_SET_ATTRIBUTES</span>         <span class="p">,</span>
-    <span class="n">gdef</span><span class="o">.</span><span class="n">JOB_OBJECT_QUERY</span>                  <span class="p">,</span>
-    <span class="n">gdef</span><span class="o">.</span><span class="n">JOB_OBJECT_TERMINATE</span>              <span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">JOB_OBJECT_ASSIGN_PROCESS</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">JOB_OBJECT_SET_ATTRIBUTES</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">JOB_OBJECT_QUERY</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">JOB_OBJECT_TERMINATE</span><span class="p">,</span>
     <span class="n">gdef</span><span class="o">.</span><span class="n">JOB_OBJECT_SET_SECURITY_ATTRIBUTES</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="n">KEY_ACCESS_RIGHT</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span>
-    <span class="n">gdef</span><span class="o">.</span><span class="n">KEY_QUERY_VALUE</span>         <span class="p">,</span>
-    <span class="n">gdef</span><span class="o">.</span><span class="n">KEY_SET_VALUE</span>           <span class="p">,</span>
-    <span class="n">gdef</span><span class="o">.</span><span class="n">KEY_CREATE_SUB_KEY</span>      <span class="p">,</span>
-    <span class="n">gdef</span><span class="o">.</span><span class="n">KEY_ENUMERATE_SUB_KEYS</span>  <span class="p">,</span>
-    <span class="n">gdef</span><span class="o">.</span><span class="n">KEY_NOTIFY</span>              <span class="p">,</span>
-    <span class="n">gdef</span><span class="o">.</span><span class="n">KEY_CREATE_LINK</span>         <span class="p">,</span>
-    <span class="n">gdef</span><span class="o">.</span><span class="n">KEY_WOW64_64KEY</span>         <span class="p">,</span>
-    <span class="n">gdef</span><span class="o">.</span><span class="n">KEY_WOW64_32KEY</span>         <span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">KEY_QUERY_VALUE</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">KEY_SET_VALUE</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">KEY_CREATE_SUB_KEY</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">KEY_ENUMERATE_SUB_KEYS</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">KEY_NOTIFY</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">KEY_CREATE_LINK</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">KEY_WOW64_64KEY</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">KEY_WOW64_32KEY</span><span class="p">,</span>
     <span class="c1"># KEY_WOW64_RES           (0x0300) # Just a mask of the 2 last</span>
+<span class="p">)</span>
+
+<span class="n">SECTION_ACCESS_RIGHT</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">SECTION_QUERY</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">SECTION_MAP_WRITE</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">SECTION_MAP_READ</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">SECTION_MAP_EXECUTE</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">SECTION_EXTEND_SIZE</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">SECTION_MAP_EXECUTE_EXPLICIT</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">COM_ACCESS_RIGHT</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">COM_EXECUTE</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">COM_EXECUTE_LOCAL</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">COM_EXECUTE_REMOTE</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">COM_ACTIVATE_LOCAL</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">COM_ACTIVATE_REMOTE</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">SERVICE_ACCESS_RIGHT</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">SERVICE_QUERY_CONFIG</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">SERVICE_CHANGE_CONFIG</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">SERVICE_QUERY_STATUS</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">SERVICE_ENUMERATE_DEPENDENTS</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">SERVICE_START</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">SERVICE_STOP</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">SERVICE_PAUSE_CONTINUE</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">SERVICE_INTERROGATE</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">SERVICE_USER_DEFINED_CONTROL</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">ADS_ACCESS_RIGHT</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">ADS_RIGHT_DS_CREATE_CHILD</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">ADS_RIGHT_DS_DELETE_CHILD</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">ADS_RIGHT_ACTRL_DS_LIST</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">ADS_RIGHT_DS_SELF</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">ADS_RIGHT_DS_READ_PROP</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">ADS_RIGHT_DS_WRITE_PROP</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">ADS_RIGHT_DS_DELETE_TREE</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">ADS_RIGHT_DS_LIST_OBJECT</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">ADS_RIGHT_DS_CONTROL_ACCESS</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<span class="n">SPECIFIC_ACCESS_RIGTH_BY_TYPE</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="kc">None</span><span class="p">:</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(),</span>
+    <span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="n">FILE_ACCESS_RIGHT</span><span class="p">,</span>
+    <span class="s2">&quot;directory&quot;</span><span class="p">:</span> <span class="n">DIRECTORY_ACCESS_RIGHT</span><span class="p">,</span>
+    <span class="s2">&quot;named_pipe&quot;</span><span class="p">:</span> <span class="n">NAMED_PIPE_ACCESS_RIGHT</span><span class="p">,</span>
+    <span class="s2">&quot;token&quot;</span><span class="p">:</span> <span class="n">TOKEN_ACCESS_RIGHT</span><span class="p">,</span>
+    <span class="s2">&quot;cluster_api&quot;</span><span class="p">:</span> <span class="n">CLUSTER_API_ACCESS_RIGH</span><span class="p">,</span>
+    <span class="s2">&quot;fax&quot;</span><span class="p">:</span> <span class="n">FAX_ACCESS_RIGHT</span><span class="p">,</span>
+    <span class="s2">&quot;callback&quot;</span><span class="p">:</span> <span class="n">CALLBACK_ACCESS_RIGHT</span><span class="p">,</span>
+    <span class="s2">&quot;mutant&quot;</span><span class="p">:</span> <span class="n">MUTANT_ACCESS_RIGHT</span><span class="p">,</span>
+    <span class="s2">&quot;event&quot;</span><span class="p">:</span> <span class="n">EVENT_ACCESS_RIGHT</span><span class="p">,</span>
+    <span class="s2">&quot;semaphore&quot;</span><span class="p">:</span> <span class="n">SEMAPHORE_ACCESS_RIGHT</span><span class="p">,</span>
+    <span class="s2">&quot;io_completion&quot;</span><span class="p">:</span> <span class="n">IO_COMPLETION_ACCESS_RIGHT</span><span class="p">,</span>
+    <span class="s2">&quot;port&quot;</span><span class="p">:</span> <span class="n">PORT_ACCESS_RIGHT</span><span class="p">,</span>
+    <span class="s2">&quot;object_manager_type&quot;</span><span class="p">:</span> <span class="n">OBJECT_MANAGER_TYPE_ACCESS_RIGHT</span><span class="p">,</span>
+    <span class="s2">&quot;object_manager_directory&quot;</span><span class="p">:</span> <span class="n">OBJECT_MANAGER_DIRECTORY_ACCESS_RIGHT</span><span class="p">,</span>
+    <span class="s2">&quot;object_manager_symlink&quot;</span><span class="p">:</span> <span class="n">OBJECT_MANAGER_SIMLINK_ACCESS_RIGHT</span><span class="p">,</span>
+    <span class="s2">&quot;process&quot;</span><span class="p">:</span> <span class="n">PROCESS_ACCESS_RIGHT</span><span class="p">,</span>
+    <span class="s2">&quot;thread&quot;</span><span class="p">:</span> <span class="n">THREAD_ACCESS_RIGHT</span><span class="p">,</span>
+    <span class="s2">&quot;job&quot;</span><span class="p">:</span> <span class="n">JOB_ACCESS_RIGHT</span><span class="p">,</span>
+    <span class="s2">&quot;key&quot;</span><span class="p">:</span> <span class="n">KEY_ACCESS_RIGHT</span><span class="p">,</span>
+    <span class="s2">&quot;com&quot;</span><span class="p">:</span> <span class="n">COM_ACCESS_RIGHT</span><span class="p">,</span>
+    <span class="s2">&quot;service&quot;</span><span class="p">:</span> <span class="n">SERVICE_ACCESS_RIGHT</span><span class="p">,</span>
+    <span class="s2">&quot;ad&quot;</span><span class="p">:</span> <span class="n">ADS_ACCESS_RIGHT</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="c1"># SD</span>
+
+<span class="n">SD_CONTROL_FLAGS</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">SE_OWNER_DEFAULTED</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">SE_GROUP_DEFAULTED</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">SE_DACL_PRESENT</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">SE_DACL_DEFAULTED</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">SE_SACL_PRESENT</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">SE_SACL_DEFAULTED</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">SE_DACL_UNTRUSTED</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">SE_SERVER_SECURITY</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">SE_DACL_AUTO_INHERIT_REQ</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">SE_SACL_AUTO_INHERIT_REQ</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">SE_DACL_AUTO_INHERITED</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">SE_SACL_AUTO_INHERITED</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">SE_DACL_PROTECTED</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">SE_SACL_PROTECTED</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">SE_RM_CONTROL_VALID</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">SE_SELF_RELATIVE</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="c1"># ACE</span>
@@ -225,6 +314,13 @@
     <span class="n">gdef</span><span class="o">.</span><span class="n">DELETE</span>                           <span class="p">,</span>
     <span class="n">gdef</span><span class="o">.</span><span class="n">WRITE_DAC</span>                        <span class="p">,</span>
     <span class="n">gdef</span><span class="o">.</span><span class="n">WRITE_OWNER</span>                      <span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">SYNCHRONIZE</span>                      <span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">MANDATORY_LABEL_ACE_MASK</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">SYSTEM_MANDATORY_LABEL_NO_WRITE_UP</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">SYSTEM_MANDATORY_LABEL_NO_READ_UP</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">SYSTEM_MANDATORY_LABEL_NO_EXECUTE_UP</span><span class="p">,</span>
 <span class="p">)</span>
 
 <div class="viewcode-block" id="AceHeader"><a class="viewcode-back" href="../../security.html#windows.security.AceHeader">[docs]</a><span class="k">class</span> <span class="nc">AceHeader</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">ACE_HEADER</span><span class="p">):</span>
@@ -325,7 +421,16 @@
         <span class="n">selfptr</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">addressof</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PUCHAR</span><span class="p">)</span>
         <span class="n">datastart</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">sid</span><span class="o">.</span><span class="n">size</span> <span class="o">-</span> <span class="mi">4</span>
         <span class="n">dataend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Header</span><span class="o">.</span><span class="n">AceSize</span>
-        <span class="k">return</span> <span class="n">selfptr</span><span class="p">[</span><span class="n">datastart</span><span class="p">:</span> <span class="n">dataend</span><span class="p">]</span></div>
+        <span class="k">return</span> <span class="n">selfptr</span><span class="p">[</span><span class="n">datastart</span><span class="p">:</span> <span class="n">dataend</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">condition</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">buff</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">BUFFER</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">BYTE</span><span class="p">)</span><span class="o">.</span><span class="n">from_buffer_copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">application_data</span><span class="p">)</span>
+        <span class="n">resstr</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">LPWSTR</span><span class="p">()</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">GetStringConditionFromBinary</span><span class="p">(</span><span class="n">buff</span><span class="p">,</span> <span class="n">StringAceCondition</span><span class="o">=</span><span class="n">resstr</span><span class="p">)</span>
+        <span class="n">condition</span> <span class="o">=</span> <span class="n">resstr</span><span class="o">.</span><span class="n">value</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">LocalFree</span><span class="p">(</span><span class="n">resstr</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">condition</span></div>
 
 
 <div class="viewcode-block" id="ObjectRelatedACE"><a class="viewcode-back" href="../../security.html#windows.security.ObjectRelatedACE">[docs]</a><span class="k">class</span> <span class="nc">ObjectRelatedACE</span><span class="p">(</span><span class="n">MaskAndSidACE</span><span class="p">):</span>
@@ -610,10 +715,20 @@
         <span class="n">gdef</span><span class="o">.</span><span class="n">GROUP_SECURITY_INFORMATION</span>     <span class="o">|</span>
         <span class="n">gdef</span><span class="o">.</span><span class="n">DACL_SECURITY_INFORMATION</span>      <span class="o">|</span>
         <span class="n">gdef</span><span class="o">.</span><span class="n">ATTRIBUTE_SECURITY_INFORMATION</span> <span class="o">|</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">LABEL_SECURITY_INFORMATION</span>     <span class="o">|</span> <span class="c1"># Integrity</span>
         <span class="c1"># gdef.SACL_SECURITY_INFORMATION  | # Need special rights</span>
         <span class="n">gdef</span><span class="o">.</span><span class="n">SCOPE_SECURITY_INFORMATION</span>     <span class="o">|</span>
         <span class="n">gdef</span><span class="o">.</span><span class="n">PROCESS_TRUST_LABEL_SECURITY_INFORMATION</span>
     <span class="p">)</span>
+
+    <span class="c1"># https://docs.microsoft.com/en-us/windows/win32/api/winsvc/nf-winsvc-queryserviceobjectsecurity</span>
+    <span class="c1"># Default flags for services</span>
+    <span class="n">SERVICE_SECURITY_INFORMATION</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">OWNER_SECURITY_INFORMATION</span>     <span class="o">|</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">GROUP_SECURITY_INFORMATION</span>     <span class="o">|</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">DACL_SECURITY_INFORMATION</span>
+    <span class="p">)</span>
+
     <span class="sd">&quot;&quot;&quot;The default ``flags`` value for functions expecting a</span>
 <span class="sd">    `SECURITY_INFORMATION &lt;https://docs.microsoft.com/en-us/windows/desktop/SecAuthZ/security-information&gt;`_.</span>
 
@@ -625,6 +740,7 @@
 <span class="sd">        - ``ATTRIBUTE_SECURITY_INFORMATION``</span>
 <span class="sd">        - ``SCOPE_SECURITY_INFORMATION``</span>
 <span class="sd">        - ``PROCESS_TRUST_LABEL_SECURITY_INFORMATION``</span>
+<span class="sd">        - ``LABEL_SECURITY_INFORMATION``</span>
 
 <span class="sd">    .. warning::</span>
 
@@ -727,7 +843,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
         <span class="n">winproxy</span><span class="o">.</span><span class="n">ConvertStringSecurityDescriptorToSecurityDescriptorA</span><span class="p">(</span>
-            <span class="n">sddl</span><span class="p">,</span>
+            <span class="n">sddl</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;ascii&quot;</span><span class="p">),</span>
             <span class="n">gdef</span><span class="o">.</span><span class="n">SDDL_REVISION_1</span><span class="p">,</span>
             <span class="bp">self</span><span class="p">,</span>
             <span class="kc">None</span><span class="p">)</span>
@@ -773,15 +889,59 @@
         <span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span>
 
+
+    <span class="k">def</span> <span class="nf">_apply_to_handle_and_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handle</span><span class="p">,</span> <span class="n">objtype</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">SE_KERNEL_OBJECT</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="c1"># Make SecurityDescriptor method has_audit_ace ?</span>
+
+        <span class="k">if</span> <span class="n">flags</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">flags</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">OWNER_SECURITY_INFORMATION</span> <span class="o">|</span> <span class="n">gdef</span><span class="o">.</span><span class="n">GROUP_SECURITY_INFORMATION</span> <span class="o">|</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DACL_SECURITY_INFORMATION</span> <span class="o">|</span> <span class="n">gdef</span><span class="o">.</span><span class="n">LABEL_SECURITY_INFORMATION</span>
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sacl</span> <span class="ow">and</span>
+                <span class="nb">any</span><span class="p">(</span><span class="n">ace</span><span class="o">.</span><span class="n">Header</span><span class="o">.</span><span class="n">AceType</span> <span class="o">!=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SYSTEM_MANDATORY_LABEL_ACE_TYPE</span> <span class="k">for</span> <span class="n">ace</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sacl</span><span class="p">)):</span>
+                <span class="n">flags</span> <span class="o">|=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SACL_SECURITY_INFORMATION</span>
+
+        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">SetSecurityInfo</span><span class="p">(</span>
+                <span class="n">handle</span><span class="p">,</span>
+                <span class="n">objtype</span><span class="p">,</span>
+                <span class="n">flags</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">owner</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dacl</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sacl</span>
+            <span class="p">)</span>
+
 <div class="viewcode-block" id="SecurityDescriptor.from_filename"><a class="viewcode-back" href="../../security.html#windows.security.SecurityDescriptor.from_filename">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">from_filename</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">query_sacl</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">DEFAULT_SECURITY_INFORMATION</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Retrieve the security descriptor for the file ``filename``&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_from_name_and_type</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SE_FILE_OBJECT</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">flags</span><span class="p">,</span> <span class="n">query_sacl</span><span class="o">=</span><span class="n">query_sacl</span><span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="SecurityDescriptor.to_filename"><a class="viewcode-back" href="../../security.html#windows.security.SecurityDescriptor.to_filename">[docs]</a>    <span class="k">def</span> <span class="nf">to_filename</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="s2">&quot;Test method: WILL CHANGE&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">flags</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">owner</span><span class="p">:</span>
+                <span class="n">flags</span> <span class="o">|=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">OWNER_SECURITY_INFORMATION</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">:</span>
+                <span class="n">flags</span> <span class="o">|=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">GROUP_SECURITY_INFORMATION</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dacl</span><span class="p">:</span>
+                <span class="n">flags</span> <span class="o">|=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DACL_SECURITY_INFORMATION</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sacl</span><span class="p">:</span>
+                <span class="n">flags</span> <span class="o">|=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SACL_SECURITY_INFORMATION</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">SetNamedSecurityInfoW</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SE_FILE_OBJECT</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">owner</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dacl</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sacl</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SecurityDescriptor.from_service"><a class="viewcode-back" href="../../security.html#windows.security.SecurityDescriptor.from_service">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_service</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">query_sacl</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">SERVICE_SECURITY_INFORMATION</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Retrieve the security descriptor for the service named ``service``&quot;&quot;&quot;</span>
+        <span class="n">sd</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_from_name_and_type</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SE_SERVICE</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">flags</span><span class="p">,</span> <span class="n">query_sacl</span><span class="o">=</span><span class="n">query_sacl</span><span class="p">)</span>
+        <span class="n">sd</span><span class="o">.</span><span class="n">obj_type</span> <span class="o">=</span> <span class="s2">&quot;service&quot;</span>
+        <span class="k">return</span> <span class="n">sd</span></div>
+
 <div class="viewcode-block" id="SecurityDescriptor.from_handle"><a class="viewcode-back" href="../../security.html#windows.security.SecurityDescriptor.from_handle">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">from_handle</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">handle</span><span class="p">,</span> <span class="n">query_sacl</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">DEFAULT_SECURITY_INFORMATION</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">from_handle</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">handle</span><span class="p">,</span> <span class="n">query_sacl</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">DEFAULT_SECURITY_INFORMATION</span><span class="p">,</span> <span class="n">obj_type</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Retrieve the security descriptor for the kernel object described by``handle``&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_from_handle_and_type</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SE_KERNEL_OBJECT</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">flags</span><span class="p">,</span> <span class="n">query_sacl</span><span class="o">=</span><span class="n">query_sacl</span><span class="p">)</span></div>
+        <span class="n">sd</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_from_handle_and_type</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SE_KERNEL_OBJECT</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">flags</span><span class="p">,</span> <span class="n">query_sacl</span><span class="o">=</span><span class="n">query_sacl</span><span class="p">)</span>
+        <span class="n">sd</span><span class="o">.</span><span class="n">obj_type</span> <span class="o">=</span> <span class="n">obj_type</span> <span class="c1"># Test</span>
+        <span class="k">return</span> <span class="n">sd</span></div>
 
 <div class="viewcode-block" id="SecurityDescriptor.from_binary"><a class="viewcode-back" href="../../security.html#windows.security.SecurityDescriptor.from_binary">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">from_binary</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
@@ -806,7 +966,9 @@
             <span class="kc">None</span><span class="p">)</span>
         <span class="n">result</span> <span class="o">=</span> <span class="n">result_cstr</span><span class="o">.</span><span class="n">value</span> <span class="c1"># Retrieve a python-str copy</span>
         <span class="n">winproxy</span><span class="o">.</span><span class="n">LocalFree</span><span class="p">(</span><span class="n">result_cstr</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">result</span></div></div>
+        <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span></div>
+
+    <span class="fm">__str__</span> <span class="o">=</span> <span class="n">to_string</span>
 
 
     <span class="c1"># TST</span>
@@ -823,6 +985,143 @@
             <span class="c1"># print(&quot;FREE SELF&quot;)</span>
             <span class="c1"># self._close_function(self)</span>
 
+    <span class="k">def</span> <span class="nf">explain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">type</span> <span class="ow">is</span>  <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">type</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;obj_type&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">explain_sd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sdtype</span><span class="o">=</span><span class="nb">type</span><span class="p">)</span></div>
+
+<span class="c1"># Explain SD POC</span>
+<span class="c1"># If ok -&gt; new file</span>
+
+
+<span class="k">def</span> <span class="nf">explain_sid</span><span class="p">(</span><span class="n">sid</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">sid</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;None&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">info</span> <span class="o">=</span> <span class="sa">u</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">lookup_sid</span><span class="p">(</span><span class="n">sid</span><span class="p">))</span>
+    <span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+        <span class="n">info</span> <span class="o">=</span> <span class="sa">u</span><span class="s2">&quot;&lt;lookup failed&gt;&quot;</span>
+    <span class="k">return</span> <span class="sa">u</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="s2"> (</span><span class="si">{1}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="n">sid</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">explain_mask</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">sdtype</span><span class="p">):</span>
+    <span class="n">mapper</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">security</span><span class="o">.</span><span class="n">SPECIFIC_ACCESS_RIGTH_BY_TYPE</span><span class="p">[</span><span class="n">sdtype</span><span class="p">]</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">32</span><span class="p">):</span> <span class="c1"># sizeof ACCESS_MASK * 8</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">mask</span> <span class="o">&amp;</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">i</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">v</span><span class="p">:</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mapper</span><span class="p">[</span><span class="n">ACE_MASKS</span><span class="p">[</span><span class="n">v</span><span class="p">]])</span>
+    <span class="k">return</span> <span class="n">res</span>
+
+<span class="k">def</span> <span class="nf">explain_simple_ace</span><span class="p">(</span><span class="n">ace</span><span class="p">,</span> <span class="n">sdtype</span><span class="p">):</span>
+    <span class="k">yield</span> <span class="sa">u</span><span class="s2">&quot;Type:&quot;</span>
+    <span class="k">yield</span> <span class="sa">u</span><span class="s2">&quot;  &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ace</span><span class="o">.</span><span class="n">Header</span><span class="o">.</span><span class="n">AceType</span><span class="p">)</span>
+    <span class="k">yield</span> <span class="sa">u</span><span class="s2">&quot;Flags:&quot;</span>
+    <span class="k">yield</span> <span class="sa">u</span><span class="s2">&quot;  </span><span class="si">{0:#x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ace</span><span class="o">.</span><span class="n">Header</span><span class="o">.</span><span class="n">AceFlags</span><span class="p">)</span>
+    <span class="k">yield</span> <span class="sa">u</span><span class="s2">&quot;SID:&quot;</span>
+    <span class="k">yield</span> <span class="sa">u</span><span class="s2">&quot;  &quot;</span> <span class="o">+</span> <span class="n">explain_sid</span><span class="p">(</span><span class="n">ace</span><span class="o">.</span><span class="n">sid</span><span class="p">)</span>
+    <span class="k">yield</span> <span class="sa">u</span><span class="s2">&quot;Mask:&quot;</span>
+    <span class="n">mapper</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">security</span><span class="o">.</span><span class="n">SPECIFIC_ACCESS_RIGTH_BY_TYPE</span><span class="p">[</span><span class="n">sdtype</span><span class="p">]</span>
+    <span class="k">yield</span> <span class="sa">u</span><span class="s2">&quot;  &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">mapper</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">ace</span><span class="o">.</span><span class="n">mask</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">explain_mandatory_label_ace</span><span class="p">(</span><span class="n">ace</span><span class="p">,</span> <span class="n">sdtype</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="n">ace</span><span class="o">.</span><span class="n">Header</span><span class="o">.</span><span class="n">AceType</span> <span class="o">==</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SYSTEM_MANDATORY_LABEL_ACE_TYPE</span>
+    <span class="k">yield</span> <span class="sa">u</span><span class="s2">&quot;Type:&quot;</span>
+    <span class="k">yield</span> <span class="sa">u</span><span class="s2">&quot;  </span><span class="si">{0}</span><span class="s2"> (Integrity Level)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ace</span><span class="o">.</span><span class="n">Header</span><span class="o">.</span><span class="n">AceType</span><span class="p">)</span>
+    <span class="k">yield</span> <span class="sa">u</span><span class="s2">&quot;Flags:&quot;</span>
+    <span class="k">yield</span> <span class="sa">u</span><span class="s2">&quot;  </span><span class="si">{0:#x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ace</span><span class="o">.</span><span class="n">Header</span><span class="o">.</span><span class="n">AceFlags</span><span class="p">)</span>
+    <span class="k">yield</span> <span class="sa">u</span><span class="s2">&quot;SID:&quot;</span>
+    <span class="n">sid</span> <span class="o">=</span> <span class="n">ace</span><span class="o">.</span><span class="n">sid</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">GetSidSubAuthorityCount</span><span class="p">(</span><span class="n">sid</span><span class="p">)</span>
+    <span class="n">integrity</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">GetSidSubAuthority</span><span class="p">(</span><span class="n">sid</span><span class="p">,</span> <span class="n">count</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">yield</span> <span class="sa">u</span><span class="s2">&quot;  </span><span class="si">{0}</span><span class="s2"> (Integrity Level: </span><span class="si">{1}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sid</span><span class="p">,</span> <span class="n">KNOW_INTEGRITY_LEVEL</span><span class="p">[</span><span class="n">integrity</span><span class="p">])</span>
+    <span class="k">yield</span> <span class="sa">u</span><span class="s2">&quot;Mask:&quot;</span>
+    <span class="n">mapper</span> <span class="o">=</span> <span class="n">MANDATORY_LABEL_ACE_MASK</span>
+    <span class="k">yield</span> <span class="sa">u</span><span class="s2">&quot;  &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">mapper</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">ace</span><span class="o">.</span><span class="n">mask</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">explain_object_related_ace</span><span class="p">(</span><span class="n">ace</span><span class="p">,</span> <span class="n">sdtype</span><span class="p">):</span>
+    <span class="k">yield</span> <span class="sa">u</span><span class="s2">&quot;Type:&quot;</span>
+    <span class="k">yield</span> <span class="sa">u</span><span class="s2">&quot;  &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ace</span><span class="o">.</span><span class="n">Header</span><span class="o">.</span><span class="n">AceType</span><span class="p">)</span>
+    <span class="k">yield</span> <span class="sa">u</span><span class="s2">&quot;HeaderFlags:&quot;</span>
+    <span class="k">yield</span> <span class="sa">u</span><span class="s2">&quot;  </span><span class="si">{0:#x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ace</span><span class="o">.</span><span class="n">Header</span><span class="o">.</span><span class="n">AceFlags</span><span class="p">)</span>
+    <span class="k">yield</span> <span class="sa">u</span><span class="s2">&quot;SID:&quot;</span>
+    <span class="k">yield</span> <span class="sa">u</span><span class="s2">&quot;  &quot;</span> <span class="o">+</span> <span class="n">explain_sid</span><span class="p">(</span><span class="n">ace</span><span class="o">.</span><span class="n">sid</span><span class="p">)</span>
+    <span class="k">yield</span> <span class="sa">u</span><span class="s2">&quot;Mask:&quot;</span>
+    <span class="n">mapper</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">security</span><span class="o">.</span><span class="n">SPECIFIC_ACCESS_RIGTH_BY_TYPE</span><span class="p">[</span><span class="n">sdtype</span><span class="p">]</span>
+    <span class="k">yield</span> <span class="sa">u</span><span class="s2">&quot;  &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">mapper</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">ace</span><span class="o">.</span><span class="n">mask</span><span class="p">))</span>
+    <span class="k">yield</span> <span class="sa">u</span><span class="s2">&quot;Flag:&quot;</span>
+    <span class="k">yield</span> <span class="sa">u</span><span class="s2">&quot;  &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ace</span><span class="o">.</span><span class="n">flags</span><span class="p">)</span>
+    <span class="n">object_type</span> <span class="o">=</span> <span class="n">ace</span><span class="o">.</span><span class="n">object_type</span>
+    <span class="n">inherited_object_type</span> <span class="o">=</span> <span class="n">ace</span><span class="o">.</span><span class="n">inherited_object_type</span>
+    <span class="k">if</span> <span class="n">object_type</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="sa">u</span><span class="s2">&quot;ObjectType&quot;</span>
+        <span class="k">yield</span> <span class="sa">u</span><span class="s2">&quot;  &quot;</span> <span class="o">+</span> <span class="n">object_type</span>
+    <span class="k">if</span> <span class="n">inherited_object_type</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="sa">u</span><span class="s2">&quot;InheritedObjectType&quot;</span>
+        <span class="k">yield</span> <span class="sa">u</span><span class="s2">&quot;  &quot;</span> <span class="o">+</span> <span class="n">inherited_object_type</span>
+
+<span class="k">def</span> <span class="nf">explain_callback_ace</span><span class="p">(</span><span class="n">ace</span><span class="p">,</span> <span class="n">sdtype</span><span class="p">):</span>
+    <span class="k">yield</span> <span class="sa">u</span><span class="s2">&quot;Type:&quot;</span>
+    <span class="k">yield</span> <span class="sa">u</span><span class="s2">&quot;  &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ace</span><span class="o">.</span><span class="n">Header</span><span class="o">.</span><span class="n">AceType</span><span class="p">)</span>
+    <span class="k">yield</span> <span class="sa">u</span><span class="s2">&quot;HeaderFlags:&quot;</span>
+    <span class="k">yield</span> <span class="sa">u</span><span class="s2">&quot;  </span><span class="si">{0:#x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ace</span><span class="o">.</span><span class="n">Header</span><span class="o">.</span><span class="n">AceFlags</span><span class="p">)</span>
+    <span class="k">yield</span> <span class="sa">u</span><span class="s2">&quot;SID:&quot;</span>
+    <span class="k">yield</span> <span class="sa">u</span><span class="s2">&quot;  &quot;</span> <span class="o">+</span> <span class="n">explain_sid</span><span class="p">(</span><span class="n">ace</span><span class="o">.</span><span class="n">sid</span><span class="p">)</span>
+    <span class="k">yield</span> <span class="sa">u</span><span class="s2">&quot;Mask:&quot;</span>
+    <span class="n">mapper</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">security</span><span class="o">.</span><span class="n">SPECIFIC_ACCESS_RIGTH_BY_TYPE</span><span class="p">[</span><span class="n">sdtype</span><span class="p">]</span>
+    <span class="k">yield</span> <span class="sa">u</span><span class="s2">&quot;  &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">mapper</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">ace</span><span class="o">.</span><span class="n">mask</span><span class="p">))</span>
+    <span class="k">yield</span> <span class="s2">&quot;Application data:&quot;</span>
+    <span class="k">yield</span> <span class="s2">&quot;  &quot;</span> <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="n">ace</span><span class="o">.</span><span class="n">application_data</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">condition</span> <span class="o">=</span> <span class="n">ace</span><span class="o">.</span><span class="n">condition</span>
+        <span class="k">yield</span> <span class="s2">&quot;Condition:&quot;</span>
+        <span class="k">yield</span> <span class="s2">&quot;  &quot;</span> <span class="o">+</span> <span class="n">condition</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+
+<span class="n">ACE_EXPLAINER</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">ACCESS_ALLOWED_ACE_TYPE</span><span class="p">:</span> <span class="n">explain_simple_ace</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">ACCESS_DENIED_ACE_TYPE</span><span class="p">:</span> <span class="n">explain_simple_ace</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">SYSTEM_MANDATORY_LABEL_ACE_TYPE</span><span class="p">:</span> <span class="n">explain_mandatory_label_ace</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">SYSTEM_AUDIT_ACE_TYPE</span><span class="p">:</span> <span class="n">explain_simple_ace</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">ACCESS_ALLOWED_OBJECT_ACE_TYPE</span><span class="p">:</span> <span class="n">explain_object_related_ace</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">ACCESS_DENIED_OBJECT_ACE_TYPE</span><span class="p">:</span> <span class="n">explain_object_related_ace</span><span class="p">,</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">ACCESS_ALLOWED_CALLBACK_ACE_TYPE</span><span class="p">:</span> <span class="n">explain_callback_ace</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<span class="k">def</span> <span class="nf">explain_acl</span><span class="p">(</span><span class="n">acl</span><span class="p">,</span> <span class="n">sdtype</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">acl</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="sa">u</span><span class="s2">&quot;None&quot;</span>
+    <span class="k">for</span> <span class="n">ace</span> <span class="ow">in</span> <span class="n">acl</span><span class="o">.</span><span class="n">aces</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="nb">str</span><span class="p">(</span><span class="n">ace</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">ACE_EXPLAINER</span><span class="p">[</span><span class="n">ace</span><span class="o">.</span><span class="n">Header</span><span class="o">.</span><span class="n">AceType</span><span class="p">](</span><span class="n">ace</span><span class="p">,</span> <span class="n">sdtype</span><span class="p">):</span>
+            <span class="k">yield</span> <span class="sa">u</span><span class="s2">&quot;  &quot;</span> <span class="o">+</span> <span class="n">line</span>
+
+<span class="k">def</span> <span class="nf">explain_sd</span><span class="p">(</span><span class="n">sd</span><span class="p">,</span> <span class="n">sdtype</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">u</span><span class="s2">&quot;Security Descriptor: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sd</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">u</span><span class="s2">&quot;  Owner:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">u</span><span class="s2">&quot;    &quot;</span> <span class="o">+</span> <span class="n">explain_sid</span><span class="p">(</span><span class="n">sd</span><span class="o">.</span><span class="n">owner</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">u</span><span class="s2">&quot;  Group:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">u</span><span class="s2">&quot;    &quot;</span> <span class="o">+</span> <span class="n">explain_sid</span><span class="p">(</span><span class="n">sd</span><span class="o">.</span><span class="n">group</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">u</span><span class="s2">&quot;  Control:&quot;</span><span class="p">)</span>
+    <span class="n">control</span> <span class="o">=</span> <span class="n">sd</span><span class="o">.</span><span class="n">control</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;     </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">([</span><span class="n">flag</span> <span class="k">for</span> <span class="n">flag</span> <span class="ow">in</span> <span class="n">SD_CONTROL_FLAGS</span> <span class="k">if</span> <span class="n">control</span> <span class="o">&amp;</span> <span class="n">flag</span><span class="p">]))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">u</span><span class="s2">&quot;  Dacl: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sd</span><span class="o">.</span><span class="n">dacl</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">sd</span><span class="o">.</span><span class="n">dacl</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">explain_acl</span><span class="p">(</span><span class="n">sd</span><span class="o">.</span><span class="n">dacl</span><span class="p">,</span> <span class="n">sdtype</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">u</span><span class="s2">&quot;    &quot;</span> <span class="o">+</span> <span class="n">line</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">UnicodeError</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    &quot;</span> <span class="o">+</span> <span class="n">line</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;cp1252&quot;</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">u</span><span class="s2">&quot;  Sacl: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sd</span><span class="o">.</span><span class="n">sacl</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">sd</span><span class="o">.</span><span class="n">sacl</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">explain_acl</span><span class="p">(</span><span class="n">sd</span><span class="o">.</span><span class="n">sacl</span><span class="p">,</span> <span class="n">sdtype</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">u</span><span class="s2">&quot;    &quot;</span> <span class="o">+</span> <span class="n">line</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">UnicodeError</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    &quot;</span> <span class="o">+</span> <span class="n">line</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;cp1252&quot;</span><span class="p">))</span>
 </pre></div>
 
           </div>

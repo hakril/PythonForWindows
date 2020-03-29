@@ -41,6 +41,7 @@
 <span class="kn">import</span> <span class="nn">ctypes</span>
 <span class="kn">import</span> <span class="nn">struct</span>
 <span class="kn">import</span> <span class="nn">functools</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">partial</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">namedtuple</span>
 
 <span class="kn">from</span> <span class="nn">ctypes.wintypes</span> <span class="k">import</span> <span class="o">*</span>
@@ -48,7 +49,8 @@
 <span class="kn">import</span> <span class="nn">windows.com</span>
 <span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
 <span class="kn">from</span> <span class="nn">windows.generated_def.winstructs</span> <span class="k">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">partial</span>
+
+<span class="kn">from</span> <span class="nn">windows.pycompat</span> <span class="k">import</span> <span class="n">basestring</span>
 
 <span class="c1"># Common error check for all WMI COM interfaces</span>
 <span class="c1"># This &#39;just&#39; add the corresponding &#39;WBEMSTATUS&#39; to the hresult error code</span>
@@ -57,8 +59,43 @@
     <span class="k">def</span> <span class="nf">errcheck</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">result</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">wmitag</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">WBEMSTATUS</span><span class="o">.</span><span class="n">mapper</span><span class="p">[</span><span class="n">result</span> <span class="o">&amp;</span> <span class="mh">0xffffffff</span><span class="p">]</span>
-            <span class="k">raise</span> <span class="ne">WindowsError</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">wmitag</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">WinError</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">wmitag</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">args</span>
+
+<span class="n">sentinel</span> <span class="o">=</span> <span class="nb">object</span><span class="p">()</span>
+<span class="c1"># POC</span>
+<span class="k">class</span> <span class="nc">QualifierSet</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">IWbemQualifierSet</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_variant</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Retrieve the value of property ``name`` as a :class:`~windows.com.Variant`</span>
+
+<span class="sd">        :return: :class:`~windows.com.Variant`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
+            <span class="n">nametype</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;WmiObject attributes name must be str, not &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nametype</span><span class="p">))</span>
+        <span class="n">variant_res</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">com</span><span class="o">.</span><span class="n">Variant</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">variant_res</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">variant_res</span>
+
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">sentinel</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the value of the property ``name``. The return value depends of the type of the property and can vary&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_variant</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
+        <span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">winerror</span> <span class="o">&amp;</span> <span class="mh">0xffffffff</span><span class="p">)</span> <span class="o">!=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">WBEM_E_NOT_FOUND</span><span class="p">:</span>
+                <span class="k">raise</span>
+            <span class="k">if</span> <span class="n">default</span> <span class="ow">is</span> <span class="n">sentinel</span><span class="p">:</span>
+                <span class="k">raise</span>
+            <span class="k">return</span> <span class="n">default</span>
+
+    <span class="k">def</span> <span class="nf">names</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">windows</span><span class="o">.</span><span class="n">com</span><span class="o">.</span><span class="n">SafeArray</span><span class="p">)()</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">pointer</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">GetNames</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">cast</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">POINTER</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">SAFEARRAY</span><span class="p">))))</span>
+        <span class="c1"># need to free the safearray / unlock ?</span>
+        <span class="n">properties</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">to_list</span><span class="p">(</span><span class="n">BSTR</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="n">properties</span>
+
 
 <span class="c1"># https://docs.microsoft.com/en-us/windows/desktop/api/wbemcli/nn-wbemcli-iwbemclassobject</span>
 
@@ -127,7 +164,6 @@
         <span class="k">return</span> <span class="n">gdef</span><span class="o">.</span><span class="n">tag_WBEM_GENUS_TYPE</span><span class="o">.</span><span class="n">mapper</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;__GENUS&quot;</span><span class="p">)]</span>
 
     <span class="c1">## Higher level API</span>
-
 <div class="viewcode-block" id="WmiObject.get_properties"><a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiObject.get_properties">[docs]</a>    <span class="k">def</span> <span class="nf">get_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system_properties</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the list of properties names available for the current object.</span>
 <span class="sd">        If ``system_properties`` is ``False`` property names begining with ``_`` are ignored.</span>
@@ -146,6 +182,17 @@
         <span class="k">return</span> <span class="n">properties</span></div>
 
     <span class="n">properties</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_properties</span><span class="p">)</span> <span class="c1">#: The properties of the object (exclude system properties)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">qualifier_set</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="c1"># changer de nom ?</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">QualifierSet</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">GetQualifierSet</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">res</span>
+
+    <span class="k">def</span> <span class="nf">get_p_set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span> <span class="c1"># Changer de nom ?</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">QualifierSet</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">GetPropertyQualifierSet</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">res</span>
 
     <span class="c1"># Make WmiObject a mapping object</span>
 
@@ -170,7 +217,12 @@
             <span class="k">return</span> <span class="s2">&quot;&quot;&quot;&lt;</span><span class="si">{0}</span><span class="s2"> (NULL)&gt;&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">genus</span> <span class="o">==</span> <span class="n">gdef</span><span class="o">.</span><span class="n">WBEM_GENUS_CLASS</span><span class="p">:</span>
             <span class="k">return</span> <span class="s2">&quot;&quot;&quot;&lt;</span><span class="si">{0}</span><span class="s2"> class &quot;</span><span class="si">{1}</span><span class="s2">&quot;&gt;&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;__Class&quot;</span><span class="p">))</span>
-        <span class="k">return</span> <span class="s2">&quot;&quot;&quot;&lt;</span><span class="si">{0}</span><span class="s2"> instance of &quot;</span><span class="si">{1}</span><span class="s2">&quot;&gt;&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;__Class&quot;</span><span class="p">))</span></div>
+        <span class="k">return</span> <span class="s2">&quot;&quot;&quot;&lt;</span><span class="si">{0}</span><span class="s2"> instance of &quot;</span><span class="si">{1}</span><span class="s2">&quot;&gt;&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;__Class&quot;</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">__sprint__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;&quot; </span><span class="si">{0}</span><span class="se">\n</span><span class="s2"></span>
+<span class="s2">        </span><span class="si">{1}</span><span class="s2"></span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;: &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])])</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">())))</span></div>
 
 
 <div class="viewcode-block" id="WmiEnumeration"><a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiEnumeration">[docs]</a><span class="k">class</span> <span class="nc">WmiEnumeration</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">IEnumWbemClassObject</span><span class="p">,</span> <span class="n">WmiComInterface</span><span class="p">):</span>
@@ -189,7 +241,7 @@
         <span class="n">return_count</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ULONG</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">error</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Next</span><span class="p">(</span><span class="n">timeout</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">return_count</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">error</span> <span class="o">==</span> <span class="n">gdef</span><span class="o">.</span><span class="n">WBEM_S_TIMEDOUT</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">WindowsError</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">WBEM_S_TIMEDOUT</span><span class="p">,</span> <span class="s2">&quot;Wmi timeout&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">WinError</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">WBEM_S_TIMEDOUT</span><span class="p">,</span> <span class="s2">&quot;Wmi timeout&quot;</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">error</span> <span class="o">==</span> <span class="n">WBEM_S_FALSE</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
         <span class="k">else</span><span class="p">:</span>
@@ -375,6 +427,12 @@
         <span class="n">res</span> <span class="o">=</span> <span class="n">WmiCallResult</span><span class="p">(</span><span class="n">result_type</span><span class="o">=</span><span class="s2">&quot;string&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">PutInstance</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">res</span></div>
+
+<div class="viewcode-block" id="WmiNamespace.delete_instance"><a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiNamespace.delete_instance">[docs]</a>    <span class="k">def</span> <span class="nf">delete_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;TODO: Document&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">IWbemClassObject</span><span class="p">):</span>
+            <span class="n">instance</span> <span class="o">=</span> <span class="n">instance</span><span class="p">[</span><span class="s2">&quot;__Path&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">DeleteInstance</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="WmiNamespace.exec_method"><a class="viewcode-back" href="../../../wmi.html#windows.winobject.wmi.WmiNamespace.exec_method">[docs]</a>    <span class="k">def</span> <span class="nf">exec_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">inparam</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Exec method named on ``object`` with ``inparam``.</span>

@@ -37,7 +37,8 @@
           <div class="body" role="main">
             
   <h1>Source code for windows.com</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">struct</span>
+<span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">struct</span>
 <span class="kn">import</span> <span class="nn">ctypes</span>
 <span class="kn">import</span> <span class="nn">functools</span>
 <span class="kn">from</span> <span class="nn">ctypes</span> <span class="k">import</span> <span class="n">HRESULT</span><span class="p">,</span> <span class="n">byref</span><span class="p">,</span> <span class="n">cast</span>
@@ -51,6 +52,11 @@
 <span class="kn">from</span> <span class="nn">windows.generated_def</span> <span class="k">import</span> <span class="n">interfaces</span>
 <span class="kn">from</span> <span class="nn">windows.generated_def.interfaces</span> <span class="k">import</span> <span class="n">generate_IID</span><span class="p">,</span> <span class="n">IID</span>
 
+<span class="kn">from</span> <span class="nn">windows.pycompat</span> <span class="k">import</span> <span class="n">int_types</span><span class="p">,</span> <span class="n">basestring</span>
+
+<span class="c1"># We have    windows.com.COMImplementation</span>
+<span class="c1"># So we need windows.com.COMInterface</span>
+<span class="n">COMInterface</span> <span class="o">=</span> <span class="n">interfaces</span><span class="o">.</span><span class="n">COMInterface</span>
 
 <span class="c1"># Simple raw -&gt; UUID</span>
 <span class="c1"># &quot;-&quot;.join(&quot;{:02X}&quot;.format(c) for c in struct.unpack(&quot;&lt;IHHHBBBBBB&quot;, x))</span>
@@ -62,18 +68,54 @@
     <span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="n">t</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">winerror</span>
     <span class="k">if</span> <span class="n">t</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">t</span>
+        <span class="k">return</span> <span class="n">t</span> <span class="o">&amp;</span> <span class="mh">0xffffffff</span>
     <span class="k">return</span> <span class="n">initsecurity</span><span class="p">()</span></div>
 
 <span class="k">def</span> <span class="nf">initsecurity</span><span class="p">():</span> <span class="c1"># Should take some parameters..</span>
     <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CoInitializeSecurity</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">RPC_C_IMP_LEVEL_IMPERSONATE</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
 
 
+<span class="k">class</span> <span class="nc">Dispatch</span><span class="p">(</span><span class="n">interfaces</span><span class="o">.</span><span class="n">IDispatch</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">TypeInfoCount</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">UINT</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">GetTypeInfoCount</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">count</span>
+
+    <span class="k">def</span> <span class="nf">type_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+        <span class="n">type_info</span> <span class="o">=</span> <span class="n">TypeInfo</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">GetTypeInfo</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">type_info</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">type_info</span>
+
+<span class="k">class</span> <span class="nc">TypeInfo</span><span class="p">(</span><span class="n">interfaces</span><span class="o">.</span><span class="n">ITypeInfo</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">LPFUNCDESC</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">GetFuncDesc</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">res</span>
+
+    <span class="k">def</span> <span class="nf">attr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">LPTYPEATTR</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">GetTypeAttr</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">res</span>
+
+    <span class="k">def</span> <span class="nf">names</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">memid</span><span class="p">):</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">UINT</span><span class="p">()</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span> <span class="o">*</span> <span class="mi">10</span><span class="p">)(</span><span class="o">*</span><span class="nb">tuple</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">GetNames</span><span class="p">(</span><span class="n">memid</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">[:</span><span class="n">size</span><span class="o">.</span><span class="n">value</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">docu</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">GetDocumentation</span><span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="n">res</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">res</span>
+
 <div class="viewcode-block" id="create_instance"><a class="viewcode-back" href="../../com.html#windows.com.create_instance">[docs]</a><span class="k">def</span> <span class="nf">create_instance</span><span class="p">(</span><span class="n">clsiid</span><span class="p">,</span> <span class="n">targetinterface</span><span class="p">,</span> <span class="n">custom_iid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="n">CLSCTX_INPROC_SERVER</span> <span class="o">|</span> <span class="n">CLSCTX_LOCAL_SERVER</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A simple wrapper around ``CoCreateInstance &lt;https://msdn.microsoft.com/en-us/library/windows/desktop/ms686615(v=vs.85).aspx&gt;``&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">custom_iid</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">custom_iid</span> <span class="o">=</span> <span class="n">targetinterface</span><span class="o">.</span><span class="n">IID</span>
-    <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CoCreateInstance</span><span class="p">(</span><span class="n">byref</span><span class="p">(</span><span class="n">clsiid</span><span class="p">),</span> <span class="kc">None</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">byref</span><span class="p">(</span><span class="n">custom_iid</span><span class="p">),</span> <span class="n">byref</span><span class="p">(</span><span class="n">targetinterface</span><span class="p">))</span></div>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">clsiid</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
+        <span class="n">clsiid</span> <span class="o">=</span> <span class="n">IID</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">clsiid</span><span class="p">)</span>
+    <span class="n">winproxy</span><span class="o">.</span><span class="n">CoCreateInstance</span><span class="p">(</span><span class="n">byref</span><span class="p">(</span><span class="n">clsiid</span><span class="p">),</span> <span class="kc">None</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">byref</span><span class="p">(</span><span class="n">custom_iid</span><span class="p">),</span> <span class="n">byref</span><span class="p">(</span><span class="n">targetinterface</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">targetinterface</span></div>
 
 
 <span class="k">def</span> <span class="nf">resolve_progid</span><span class="p">(</span><span class="n">progid</span><span class="p">):</span>
@@ -142,11 +184,11 @@
 
 <span class="k">def</span> <span class="nf">check_type_i4</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
     <span class="c1"># 31 ? as we may want to keep sign :)</span>
-    <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">long</span><span class="p">))</span> <span class="ow">and</span> <span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="mi">32</span>
+    <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">int_types</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="mi">32</span>
 
 <span class="k">def</span> <span class="nf">check_type_i8</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
     <span class="c1"># 63 ? as we may want to keep sign :)</span>
-    <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">long</span><span class="p">))</span> <span class="ow">and</span> <span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="mi">64</span>
+    <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">int_types</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="mi">64</span>
 
 <span class="k">def</span> <span class="nf">check_type_bstr</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
     <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">basestring</span><span class="p">)</span>
@@ -226,6 +268,12 @@
         <span class="n">attr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">QUICK_CHECK_TYPE</span><span class="p">[</span><span class="n">rawvt</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">attr</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">attr</span> <span class="o">==</span> <span class="s2">&quot;punkVal&quot;</span><span class="p">:</span>
+            <span class="c1"># Quick hack for COM interface type</span>
+            <span class="c1"># Do something clean with CHECK_TYPE ?</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">IUnknown</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">punkVal</span><span class="p">)</span>
+            <span class="n">x</span><span class="o">.</span><span class="n">AddRef</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">x</span>
         <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">guess_type_and_set_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
@@ -332,7 +380,7 @@
 
 <div class="viewcode-block" id="COMImplementation.QueryInterface"><a class="viewcode-back" href="../../com.html#windows.com.COMImplementation.QueryInterface">[docs]</a>    <span class="k">def</span> <span class="nf">QueryInterface</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">this</span><span class="p">,</span> <span class="n">piid</span><span class="p">,</span> <span class="n">result</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Default ``QueryInterface`` implementation that returns ``self`` if piid is the implemented interface&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">piid</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="n">IUnknown</span><span class="o">.</span><span class="n">IID</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">IMPLEMENT</span><span class="o">.</span><span class="n">IID</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">piid</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">IUnknown</span><span class="o">.</span><span class="n">IID</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">IMPLEMENT</span><span class="o">.</span><span class="n">IID</span><span class="p">):</span>
             <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">this</span>
             <span class="k">return</span> <span class="mi">1</span>
         <span class="k">return</span> <span class="n">E_NOINTERFACE</span></div>

@@ -128,11 +128,6 @@
     <span class="p">]</span>
     <span class="n">_SetConsoleTitleW</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">wintypes</span><span class="o">.</span><span class="n">BOOL</span>
 
-    <span class="n">handles</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="n">STDOUT</span><span class="p">:</span> <span class="n">_GetStdHandle</span><span class="p">(</span><span class="n">STDOUT</span><span class="p">),</span>
-        <span class="n">STDERR</span><span class="p">:</span> <span class="n">_GetStdHandle</span><span class="p">(</span><span class="n">STDERR</span><span class="p">),</span>
-    <span class="p">}</span>
-
     <span class="k">def</span> <span class="nf">_winapi_test</span><span class="p">(</span><span class="n">handle</span><span class="p">):</span>
         <span class="n">csbi</span> <span class="o">=</span> <span class="n">CONSOLE_SCREEN_BUFFER_INFO</span><span class="p">()</span>
         <span class="n">success</span> <span class="o">=</span> <span class="n">_GetConsoleScreenBufferInfo</span><span class="p">(</span>
@@ -140,17 +135,18 @@
         <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">success</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">winapi_test</span><span class="p">():</span>
-        <span class="k">return</span> <span class="nb">any</span><span class="p">(</span><span class="n">_winapi_test</span><span class="p">(</span><span class="n">h</span><span class="p">)</span> <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">handles</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+        <span class="k">return</span> <span class="nb">any</span><span class="p">(</span><span class="n">_winapi_test</span><span class="p">(</span><span class="n">h</span><span class="p">)</span> <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span>
+                   <span class="p">(</span><span class="n">_GetStdHandle</span><span class="p">(</span><span class="n">STDOUT</span><span class="p">),</span> <span class="n">_GetStdHandle</span><span class="p">(</span><span class="n">STDERR</span><span class="p">)))</span>
 
     <span class="k">def</span> <span class="nf">GetConsoleScreenBufferInfo</span><span class="p">(</span><span class="n">stream_id</span><span class="o">=</span><span class="n">STDOUT</span><span class="p">):</span>
-        <span class="n">handle</span> <span class="o">=</span> <span class="n">handles</span><span class="p">[</span><span class="n">stream_id</span><span class="p">]</span>
+        <span class="n">handle</span> <span class="o">=</span> <span class="n">_GetStdHandle</span><span class="p">(</span><span class="n">stream_id</span><span class="p">)</span>
         <span class="n">csbi</span> <span class="o">=</span> <span class="n">CONSOLE_SCREEN_BUFFER_INFO</span><span class="p">()</span>
         <span class="n">success</span> <span class="o">=</span> <span class="n">_GetConsoleScreenBufferInfo</span><span class="p">(</span>
             <span class="n">handle</span><span class="p">,</span> <span class="n">byref</span><span class="p">(</span><span class="n">csbi</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">csbi</span>
 
     <span class="k">def</span> <span class="nf">SetConsoleTextAttribute</span><span class="p">(</span><span class="n">stream_id</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
-        <span class="n">handle</span> <span class="o">=</span> <span class="n">handles</span><span class="p">[</span><span class="n">stream_id</span><span class="p">]</span>
+        <span class="n">handle</span> <span class="o">=</span> <span class="n">_GetStdHandle</span><span class="p">(</span><span class="n">stream_id</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">_SetConsoleTextAttribute</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">SetConsoleCursorPosition</span><span class="p">(</span><span class="n">stream_id</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">adjust</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
@@ -168,11 +164,11 @@
             <span class="n">adjusted_position</span><span class="o">.</span><span class="n">Y</span> <span class="o">+=</span> <span class="n">sr</span><span class="o">.</span><span class="n">Top</span>
             <span class="n">adjusted_position</span><span class="o">.</span><span class="n">X</span> <span class="o">+=</span> <span class="n">sr</span><span class="o">.</span><span class="n">Left</span>
         <span class="c1"># Resume normal processing</span>
-        <span class="n">handle</span> <span class="o">=</span> <span class="n">handles</span><span class="p">[</span><span class="n">stream_id</span><span class="p">]</span>
+        <span class="n">handle</span> <span class="o">=</span> <span class="n">_GetStdHandle</span><span class="p">(</span><span class="n">stream_id</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">_SetConsoleCursorPosition</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">adjusted_position</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">FillConsoleOutputCharacter</span><span class="p">(</span><span class="n">stream_id</span><span class="p">,</span> <span class="n">char</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">start</span><span class="p">):</span>
-        <span class="n">handle</span> <span class="o">=</span> <span class="n">handles</span><span class="p">[</span><span class="n">stream_id</span><span class="p">]</span>
+        <span class="n">handle</span> <span class="o">=</span> <span class="n">_GetStdHandle</span><span class="p">(</span><span class="n">stream_id</span><span class="p">)</span>
         <span class="n">char</span> <span class="o">=</span> <span class="n">c_char</span><span class="p">(</span><span class="n">char</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
         <span class="n">length</span> <span class="o">=</span> <span class="n">wintypes</span><span class="o">.</span><span class="n">DWORD</span><span class="p">(</span><span class="n">length</span><span class="p">)</span>
         <span class="n">num_written</span> <span class="o">=</span> <span class="n">wintypes</span><span class="o">.</span><span class="n">DWORD</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
@@ -183,7 +179,7 @@
 
     <span class="k">def</span> <span class="nf">FillConsoleOutputAttribute</span><span class="p">(</span><span class="n">stream_id</span><span class="p">,</span> <span class="n">attr</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">start</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39; FillConsoleOutputAttribute( hConsole, csbi.wAttributes, dwConSize, coordScreen, &amp;cCharsWritten )&#39;&#39;&#39;</span>
-        <span class="n">handle</span> <span class="o">=</span> <span class="n">handles</span><span class="p">[</span><span class="n">stream_id</span><span class="p">]</span>
+        <span class="n">handle</span> <span class="o">=</span> <span class="n">_GetStdHandle</span><span class="p">(</span><span class="n">stream_id</span><span class="p">)</span>
         <span class="n">attribute</span> <span class="o">=</span> <span class="n">wintypes</span><span class="o">.</span><span class="n">WORD</span><span class="p">(</span><span class="n">attr</span><span class="p">)</span>
         <span class="n">length</span> <span class="o">=</span> <span class="n">wintypes</span><span class="o">.</span><span class="n">DWORD</span><span class="p">(</span><span class="n">length</span><span class="p">)</span>
         <span class="n">num_written</span> <span class="o">=</span> <span class="n">wintypes</span><span class="o">.</span><span class="n">DWORD</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>

@@ -59,6 +59,8 @@
             <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cache_name</span><span class="p">)</span>
     <span class="k">return</span> <span class="nb">property</span><span class="p">(</span><span class="n">prop</span><span class="p">,</span> <span class="n">doc</span><span class="o">=</span><span class="n">f</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>
 
+<span class="c1"># Slow fix of the typo :)</span>
+<span class="n">fixedproperty</span> <span class="o">=</span> <span class="n">fixedpropety</span>
 
 <span class="c1"># type replacement based on name</span>
 <span class="k">def</span> <span class="nf">transform_ctypes_fields</span><span class="p">(</span><span class="n">struct</span><span class="p">,</span> <span class="n">replacement</span><span class="p">):</span>
@@ -96,7 +98,14 @@
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="s2"> -&gt; </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
         <span class="k">return</span>
 
-    <span class="k">for</span> <span class="n">fname</span><span class="p">,</span> <span class="n">ftype</span> <span class="ow">in</span> <span class="n">struct</span><span class="o">.</span><span class="n">_fields_</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">struct</span><span class="o">.</span><span class="n">_fields_</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">field</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">fname</span><span class="p">,</span> <span class="n">ftype</span> <span class="o">=</span> <span class="n">field</span>
+            <span class="n">nb_bits</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">field</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">fname</span><span class="p">,</span> <span class="n">ftype</span><span class="p">,</span> <span class="n">nb_bits</span> <span class="o">=</span> <span class="n">field</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown ctypes field entry format &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">field</span><span class="p">))</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">struct</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>

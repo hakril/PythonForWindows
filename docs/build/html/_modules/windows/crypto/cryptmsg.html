@@ -139,7 +139,36 @@
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">recipients</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;TODO: DOC&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">get_recipient_data</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nb_recipient</span><span class="p">)]</span></div>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">get_recipient_data</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nb_recipient</span><span class="p">)]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">content</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">CMSG_CONTENT_PARAM</span><span class="p">)[:]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">content_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">CMSG_INNER_CONTENT_TYPE_PARAM</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">data</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;CMSG_INNER_CONTENT_TYPE_PARAM not NULL TERMINATED&quot;</span>
+        <span class="k">return</span> <span class="n">data</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">blob</span><span class="p">,</span> <span class="n">final</span><span class="p">):</span>
+        <span class="c1"># Test isinstance string ?</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">blob</span><span class="p">,</span> <span class="p">(</span><span class="n">basestring</span><span class="p">,</span> <span class="nb">bytearray</span><span class="p">)):</span>
+            <span class="n">buffer</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">BUFFER</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">BYTE</span><span class="p">)</span><span class="o">.</span><span class="n">from_buffer_copy</span><span class="p">(</span><span class="n">blob</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CryptMsgUpdate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">blob</span><span class="p">),</span> <span class="n">final</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CryptMsgUpdate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">blob</span><span class="o">.</span><span class="n">pbData</span><span class="p">,</span> <span class="n">blob</span><span class="o">.</span><span class="n">cbData</span><span class="p">,</span> <span class="n">final</span><span class="p">)</span>
+
+    <span class="c1"># constructor</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="n">hmsg</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CryptMsgOpenToDecode</span><span class="p">(</span><span class="n">windows</span><span class="o">.</span><span class="n">crypto</span><span class="o">.</span><span class="n">DEFAULT_ENCODING</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">newmsg</span> <span class="o">=</span> <span class="n">CryptMessage</span><span class="p">(</span><span class="n">hmsg</span><span class="p">)</span>
+        <span class="n">newmsg</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">final</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">newmsg</span>
+
+    <span class="k">def</span> <span class="nf">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CryptMsgClose</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
 </pre></div>
 
           </div>

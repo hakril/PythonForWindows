@@ -85,345 +85,6 @@
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknow PE target machine &lt;0x</span><span class="si">{0:x}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">machine</span><span class="p">))</span>
 
 
-<span class="c1"># def GetPEFile(baseaddr, target=None, force_bitness=None):</span>
-<span class="c1">#     &quot;&quot;&quot;Returns a :class:`PEFile` to explore a PE loaded at `baseaddr` in process `target`.</span>
-<span class="c1">#</span>
-<span class="c1">#     :rtype: :class:`PEFile`</span>
-<span class="c1">#</span>
-<span class="c1">#     .. note::</span>
-<span class="c1">#</span>
-<span class="c1">#         If target is ``None`` it refers to the curent process</span>
-<span class="c1">#     &quot;&quot;&quot;</span>
-<span class="c1">#     proc_bitness = windows.current_process.bitness</span>
-<span class="c1">#</span>
-<span class="c1">#     if force_bitness is None:</span>
-<span class="c1">#         targetedbitness = get_pe_bitness(baseaddr, target)</span>
-<span class="c1">#     else:</span>
-<span class="c1">#         targetedbitness = force_bitness</span>
-<span class="c1">#</span>
-<span class="c1">#     transformers = get_structure_transformer_for_target(target, targetedbitness)</span>
-<span class="c1">#     ctypes_structure_transformer, create_structure_at = transformers</span>
-<span class="c1">#</span>
-<span class="c1">#     if targetedbitness == 32:</span>
-<span class="c1">#         IMAGE_ORDINAL_FLAG = IMAGE_ORDINAL_FLAG32</span>
-<span class="c1">#     else:</span>
-<span class="c1">#         IMAGE_ORDINAL_FLAG = IMAGE_ORDINAL_FLAG64</span>
-<span class="c1">#</span>
-<span class="c1">#     def get_string(addr):</span>
-<span class="c1">#         if target is None:</span>
-<span class="c1">#             return ctypes.c_char_p(addr).value</span>
-<span class="c1">#         return target.read_string(addr)</span>
-<span class="c1">#</span>
-<span class="c1">#     class RVA(DWORD):</span>
-<span class="c1">#         @property</span>
-<span class="c1">#         def addr(self):</span>
-<span class="c1">#             return baseaddr + self.value</span>
-<span class="c1">#</span>
-<span class="c1">#         def __repr__(self):</span>
-<span class="c1">#             return &quot;&lt;DWORD {0} (RVA to &#39;{1}&#39;)&gt;&quot;.format(self.value, hex(self.addr))</span>
-<span class="c1">#</span>
-<span class="c1">#     class StringRVa(RVA):</span>
-<span class="c1">#         if target is None:</span>
-<span class="c1">#             @property</span>
-<span class="c1">#             def str(self):</span>
-<span class="c1">#                 return get_string(self.addr).decode()</span>
-<span class="c1">#         else:</span>
-<span class="c1">#             @property</span>
-<span class="c1">#             def str(self):</span>
-<span class="c1">#                 return get_string(self.addr).decode()</span>
-<span class="c1">#</span>
-<span class="c1">#         def __repr__(self):</span>
-<span class="c1">#             return &quot;&lt;DWORD {0} (String RVA to &#39;{1}&#39;)&gt;&quot;.format(self.value, self.str)</span>
-<span class="c1">#</span>
-<span class="c1">#         def __int__(self):</span>
-<span class="c1">#             return self.value</span>
-<span class="c1">#</span>
-<span class="c1">#     class IMPORT_BY_NAME(ctypes.Structure):</span>
-<span class="c1">#         _fields_ = [</span>
-<span class="c1">#             (&quot;Hint&quot;, WORD),</span>
-<span class="c1">#             (&quot;Name&quot;, BYTE)</span>
-<span class="c1">#         ]</span>
-<span class="c1">#</span>
-<span class="c1">#     class THUNK_DATA(ctypes.Union):</span>
-<span class="c1">#         _fields_ = [</span>
-<span class="c1">#             (&quot;Ordinal&quot;, PVOID),</span>
-<span class="c1">#             (&quot;AddressOfData&quot;, PVOID)</span>
-<span class="c1">#         ]</span>
-<span class="c1">#</span>
-<span class="c1">#     class IATEntry(ctypes.Structure):</span>
-<span class="c1">#         &quot;&quot;&quot;Represent an entry in the IAT of a module</span>
-<span class="c1">#         Can be used to get resolved value and setup hook</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         _fields_ = [</span>
-<span class="c1">#             (&quot;value&quot;, PVOID)]</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1">#         @classmethod</span>
-<span class="c1">#         def create(cls, addr, ord, name):</span>
-<span class="c1">#             self = create_structure_at(cls, addr)</span>
-<span class="c1">#             self.addr = addr</span>
-<span class="c1">#             self.ord = ord</span>
-<span class="c1">#             self.name = name</span>
-<span class="c1">#             self.hook = None</span>
-<span class="c1">#             self.nonhookvalue = self.value</span>
-<span class="c1">#             return self</span>
-<span class="c1">#</span>
-<span class="c1">#         def __repr__(self):</span>
-<span class="c1">#             return &#39;&lt;{0} &quot;{1}&quot; ordinal {2}&gt;&#39;.format(self.__class__.__name__, self.name, self.ord)</span>
-<span class="c1">#</span>
-<span class="c1">#         def set_hook(self, callback, types=None):</span>
-<span class="c1">#             &quot;&quot;&quot;Setup a hook on the entry and return it.</span>
-<span class="c1">#             You MUST keep a reference to the hook while the hook is enabled.</span>
-<span class="c1">#</span>
-<span class="c1">#             :param callback: the hook</span>
-<span class="c1">#</span>
-<span class="c1">#                 .. note::</span>
-<span class="c1">#</span>
-<span class="c1">#                     see :ref:`hook_protocol`</span>
-<span class="c1">#</span>
-<span class="c1">#             :rtype: :class:`windows.hooks.IATHook`</span>
-<span class="c1">#</span>
-<span class="c1">#             .. warning::</span>
-<span class="c1">#</span>
-<span class="c1">#                 This works only for PEFile with the current process as target.</span>
-<span class="c1">#             &quot;&quot;&quot;</span>
-<span class="c1">#             if target is not None:</span>
-<span class="c1">#                 raise NotImplementedError(&quot;Setting hook in remote process (use python code injection)&quot;)</span>
-<span class="c1">#</span>
-<span class="c1">#             hook = hooks.IATHook(self, callback, types)</span>
-<span class="c1">#             self.hook = hook</span>
-<span class="c1">#             hook.enable()</span>
-<span class="c1">#             return hook</span>
-<span class="c1">#</span>
-<span class="c1">#         def remove_hook(self):</span>
-<span class="c1">#             &quot;&quot;&quot;Remove the hook on the entry&quot;&quot;&quot;</span>
-<span class="c1">#             if self.hook is None:</span>
-<span class="c1">#                 return False</span>
-<span class="c1">#             self.hook.disable()</span>
-<span class="c1">#             self.hook = None</span>
-<span class="c1">#             return True</span>
-<span class="c1">#</span>
-<span class="c1">#     class PEFile(object):</span>
-<span class="c1">#         &quot;&quot;&quot;Represent a PE loaded in a process (current or remote)&quot;&quot;&quot;</span>
-<span class="c1">#         #def __del__(self):</span>
-<span class="c1">#         #    print(&quot;YOLODEL&quot;)</span>
-<span class="c1">#         #    import pprint</span>
-<span class="c1">#         #    pprint.pprint(vars(self))</span>
-<span class="c1">#</span>
-<span class="c1">#         def __init__(self):</span>
-<span class="c1">#             self.baseaddr = baseaddr</span>
-<span class="c1">#             self.bitness = targetedbitness</span>
-<span class="c1">#</span>
-<span class="c1">#         def get_DOS_HEADER(self):</span>
-<span class="c1">#             return create_structure_at(IMAGE_DOS_HEADER, baseaddr)</span>
-<span class="c1">#</span>
-<span class="c1">#         def get_NT_HEADER(self):</span>
-<span class="c1">#             return self.get_DOS_HEADER().get_NT_HEADER()</span>
-<span class="c1">#</span>
-<span class="c1">#         def get_OptionalHeader(self):</span>
-<span class="c1">#             return self.get_NT_HEADER().OptionalHeader</span>
-<span class="c1">#</span>
-<span class="c1">#         def get_DataDirectory(self):</span>
-<span class="c1">#             # This won&#39;t work if we load a PE32 in a 64bit process</span>
-<span class="c1">#             # PE32 .NET...</span>
-<span class="c1">#             #return self.get_OptionalHeader().DataDirectory</span>
-<span class="c1">#             DataDirectory_type = IMAGE_DATA_DIRECTORY * IMAGE_NUMBEROF_DIRECTORY_ENTRIES</span>
-<span class="c1">#             SizeOfOptionalHeader = self.get_NT_HEADER().FileHeader.SizeOfOptionalHeader</span>
-<span class="c1">#             if target is None:</span>
-<span class="c1">#                 opt_header_addr = ctypes.addressof(self.get_NT_HEADER().OptionalHeader)</span>
-<span class="c1">#             else:</span>
-<span class="c1">#                 opt_header_addr = self.get_NT_HEADER().OptionalHeader._base_addr</span>
-<span class="c1">#             DataDirectory_addr = opt_header_addr + SizeOfOptionalHeader - ctypes.sizeof(DataDirectory_type)</span>
-<span class="c1">#             return create_structure_at(DataDirectory_type, DataDirectory_addr)</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1">#         def get_IMPORT_DESCRIPTORS(self):</span>
-<span class="c1">#             import_datadir = self.get_DataDirectory()[IMAGE_DIRECTORY_ENTRY_IMPORT]</span>
-<span class="c1">#             if import_datadir.VirtualAddress == 0:</span>
-<span class="c1">#                 return []</span>
-<span class="c1">#             import_descriptor_addr = RVA(import_datadir.VirtualAddress).addr</span>
-<span class="c1">#             current_import_descriptor = create_structure_at(self.IMAGE_IMPORT_DESCRIPTOR, import_descriptor_addr)</span>
-<span class="c1">#             res = []</span>
-<span class="c1">#             while current_import_descriptor.FirstThunk:</span>
-<span class="c1">#                 res.append(current_import_descriptor)</span>
-<span class="c1">#                 import_descriptor_addr += ctypes.sizeof(self.IMAGE_IMPORT_DESCRIPTOR)</span>
-<span class="c1">#                 current_import_descriptor = create_structure_at(self.IMAGE_IMPORT_DESCRIPTOR, import_descriptor_addr)</span>
-<span class="c1">#             return res</span>
-<span class="c1">#</span>
-<span class="c1">#         def get_EXPORT_DIRECTORY(self):</span>
-<span class="c1">#             export_directory_rva = self.get_DataDirectory()[IMAGE_DIRECTORY_ENTRY_EXPORT].VirtualAddress</span>
-<span class="c1">#             if export_directory_rva == 0:</span>
-<span class="c1">#                 return None</span>
-<span class="c1">#             export_directory_addr = baseaddr + export_directory_rva</span>
-<span class="c1">#             return create_structure_at(self._IMAGE_EXPORT_DIRECTORY, export_directory_addr)</span>
-<span class="c1">#</span>
-<span class="c1">#         class PESection((IMAGE_SECTION_HEADER)):</span>
-<span class="c1">#             if target is None:</span>
-<span class="c1">#                 @property</span>
-<span class="c1">#                 def name(self):</span>
-<span class="c1">#                     return get_string(ctypes.addressof(self.Name))[:8]</span>
-<span class="c1">#             else:</span>
-<span class="c1">#                 @property</span>
-<span class="c1">#                 def name(self):</span>
-<span class="c1">#                     return get_string(self._base_addr)[:8]</span>
-<span class="c1">#</span>
-<span class="c1">#             @property</span>
-<span class="c1">#             def start(self):</span>
-<span class="c1">#                 return baseaddr + self.VirtualAddress</span>
-<span class="c1">#</span>
-<span class="c1">#             @property</span>
-<span class="c1">#             def size(self):</span>
-<span class="c1">#                 return self.VirtualSize</span>
-<span class="c1">#</span>
-<span class="c1">#             def __repr__(self):</span>
-<span class="c1">#                 return &quot;&lt;PESection \&quot;{0}\&quot;&gt;&quot;.format(self.name)</span>
-<span class="c1">#</span>
-<span class="c1">#         @utils.fixedpropety</span>
-<span class="c1">#         def sections(self):</span>
-<span class="c1">#             nt_header = self.get_NT_HEADER()</span>
-<span class="c1">#             nb_section = nt_header.FileHeader.NumberOfSections</span>
-<span class="c1">#             SizeOfOptionalHeader = self.get_NT_HEADER().FileHeader.SizeOfOptionalHeader</span>
-<span class="c1">#             if target is None:</span>
-<span class="c1">#                 opt_header_addr = ctypes.addressof(self.get_NT_HEADER().OptionalHeader)</span>
-<span class="c1">#             else:</span>
-<span class="c1">#                 opt_header_addr = self.get_NT_HEADER().OptionalHeader._base_addr</span>
-<span class="c1">#             base_section = opt_header_addr + SizeOfOptionalHeader</span>
-<span class="c1">#             sections_array = create_structure_at((self.PESection * nb_section), base_section)</span>
-<span class="c1">#             return list(sections_array)</span>
-<span class="c1">#</span>
-<span class="c1">#         @utils.fixedpropety</span>
-<span class="c1">#         def exports(self):</span>
-<span class="c1">#             &quot;&quot;&quot;The exports of the PE in a dict. Keys are ordinal (:class:`int`) and name (:class:`str`).</span>
-<span class="c1">#              The values are the addresses of the exports.</span>
-<span class="c1">#</span>
-<span class="c1">#                 :type: {(:class:`int` or :class:`str`) : :class:`int`}&quot;&quot;&quot;</span>
-<span class="c1">#             res = {}</span>
-<span class="c1">#             exp_dir = self.get_EXPORT_DIRECTORY()</span>
-<span class="c1">#             if exp_dir is None:</span>
-<span class="c1">#                 return res</span>
-<span class="c1">#             raw_exports = exp_dir.get_exports()</span>
-<span class="c1">#             for id, rva_addr, rva_name in raw_exports:</span>
-<span class="c1">#                 res[id] = rva_addr.addr</span>
-<span class="c1">#                 if rva_name is not None:</span>
-<span class="c1">#                     res[rva_name.str] = rva_addr.addr</span>
-<span class="c1">#             return res</span>
-<span class="c1">#</span>
-<span class="c1">#         @utils.fixedpropety</span>
-<span class="c1">#         def export_name(self):</span>
-<span class="c1">#             &quot;&quot;&quot;The Name attribute of the ``EXPORT_DIRECTORY``&quot;&quot;&quot;</span>
-<span class="c1">#             try:</span>
-<span class="c1">#                 return self.get_EXPORT_DIRECTORY().Name.str</span>
-<span class="c1">#             except AttributeError:</span>
-<span class="c1">#                 return None</span>
-<span class="c1">#</span>
-<span class="c1">#         # TODO: get imports by parsing other modules exports if no INT</span>
-<span class="c1">#         @utils.fixedpropety</span>
-<span class="c1">#         def imports(self):</span>
-<span class="c1">#             &quot;&quot;&quot;The imports of the PE in a dict.</span>
-<span class="c1">#             Keys are the names of DLL to import from and values are :class:`list`</span>
-<span class="c1">#             of :class:`IATEntry`</span>
-<span class="c1">#</span>
-<span class="c1">#                 :type: {:class:`str` : [:class:`IATEntry`]}&quot;&quot;&quot;</span>
-<span class="c1">#             res = {}</span>
-<span class="c1">#             for import_descriptor in self.get_IMPORT_DESCRIPTORS():</span>
-<span class="c1">#                 INT = import_descriptor.get_INT()</span>
-<span class="c1">#                 IAT = import_descriptor.get_IAT()</span>
-<span class="c1">#                 if INT is not None:</span>
-<span class="c1">#                     for iat_entry, (ord, name) in zip(IAT, INT):</span>
-<span class="c1">#                         # str(name.decode()) -&gt; python2 and python3 compatible for str result</span>
-<span class="c1">#                         iat_entry.ord = ord</span>
-<span class="c1">#                         iat_entry.name = str(name.decode()) if name else &quot;&quot;</span>
-<span class="c1">#                 res.setdefault(import_descriptor.Name.str.lower(), []).extend(IAT)</span>
-<span class="c1">#             return res</span>
-<span class="c1">#</span>
-<span class="c1">#         # Will be usable as `self.IMAGE_IMPORT_DESCRIPTOR`</span>
-<span class="c1">#         class IMAGE_IMPORT_DESCRIPTOR(ctypes.Structure):</span>
-<span class="c1">#             _fields_ = transform_ctypes_fields(IMAGE_IMPORT_DESCRIPTOR, {&quot;Name&quot;: StringRVa, &quot;OriginalFirstThunk&quot;: RVA, &quot;FirstThunk&quot;: RVA})</span>
-<span class="c1">#</span>
-<span class="c1">#             def get_INT(self):</span>
-<span class="c1">#                 if not self.OriginalFirstThunk.value:</span>
-<span class="c1">#                     return None</span>
-<span class="c1">#                 int_addr = self.OriginalFirstThunk.addr</span>
-<span class="c1">#                 int_entry = create_structure_at(THUNK_DATA, int_addr)</span>
-<span class="c1">#                 res = []</span>
-<span class="c1">#                 while int_entry.Ordinal:</span>
-<span class="c1">#                     if int_entry.Ordinal &amp; IMAGE_ORDINAL_FLAG:</span>
-<span class="c1">#                         res += [(int_entry.Ordinal &amp; 0x7fffffff, None)]</span>
-<span class="c1">#                     else:</span>
-<span class="c1">#                         import_by_name = create_structure_at(IMPORT_BY_NAME, baseaddr + int_entry.AddressOfData)</span>
-<span class="c1">#                         name_address = baseaddr + int_entry.AddressOfData + type(import_by_name).Name.offset</span>
-<span class="c1">#                         if target is None:</span>
-<span class="c1">#                             name = get_string(name_address)</span>
-<span class="c1">#                         else:</span>
-<span class="c1">#                             name = get_string(name_address).decode()</span>
-<span class="c1">#                         res.append((import_by_name.Hint, name))</span>
-<span class="c1">#                     int_addr += ctypes.sizeof(type(int_entry))</span>
-<span class="c1">#                     int_entry = create_structure_at(THUNK_DATA, int_addr)</span>
-<span class="c1">#                 return res</span>
-<span class="c1">#</span>
-<span class="c1">#             def get_IAT(self):</span>
-<span class="c1">#                 iat_addr = self.FirstThunk.addr</span>
-<span class="c1">#                 iat_entry = create_structure_at(THUNK_DATA, iat_addr)</span>
-<span class="c1">#                 res = []</span>
-<span class="c1">#                 while iat_entry.Ordinal:</span>
-<span class="c1">#                     res.append(IATEntry.create(iat_addr, -1, &quot;??&quot;))</span>
-<span class="c1">#                     iat_addr += ctypes.sizeof(type(iat_entry))</span>
-<span class="c1">#                     iat_entry = create_structure_at(THUNK_DATA, iat_addr)</span>
-<span class="c1">#                 return res</span>
-<span class="c1">#</span>
-<span class="c1">#         # Will be usable as `self._IMAGE_EXPORT_DIRECTORY`</span>
-<span class="c1">#         class _IMAGE_EXPORT_DIRECTORY(ctypes.Structure):</span>
-<span class="c1">#             _fields_ = transform_ctypes_fields(IMAGE_EXPORT_DIRECTORY, {&quot;Name&quot;: StringRVa, &quot;AddressOfFunctions&quot;: RVA, &quot;AddressOfNames&quot;: RVA, &quot;AddressOfNameOrdinals&quot;: RVA})</span>
-<span class="c1">#</span>
-<span class="c1">#             def get_exports(self):</span>
-<span class="c1">#                 NameOrdinals = create_structure_at((WORD * self.NumberOfNames), self.AddressOfNameOrdinals.addr)</span>
-<span class="c1">#                 NameOrdinals = list(NameOrdinals)</span>
-<span class="c1">#                 Functions = create_structure_at((RVA * self.NumberOfFunctions), self.AddressOfFunctions.addr)</span>
-<span class="c1">#                 Names = create_structure_at((StringRVa * self.NumberOfNames), self.AddressOfNames.addr)</span>
-<span class="c1">#                 res = []</span>
-<span class="c1">#                 for nb, func in enumerate(Functions):</span>
-<span class="c1">#                     if nb in NameOrdinals:</span>
-<span class="c1">#                         name = Names[NameOrdinals.index(nb)]</span>
-<span class="c1">#                     else:</span>
-<span class="c1">#                         name = None</span>
-<span class="c1">#                     res.append((nb, func, name))</span>
-<span class="c1">#                 return res</span>
-<span class="c1">#</span>
-<span class="c1">#     current_pe = PEFile()</span>
-<span class="c1">#</span>
-<span class="c1">#     class IMAGE_DOS_HEADER(ctypes.Structure):</span>
-<span class="c1">#         _fields_ = [</span>
-<span class="c1">#             (&quot;e_magic&quot;, CHAR * 2),</span>
-<span class="c1">#             (&quot;e_cblp&quot;, WORD),</span>
-<span class="c1">#             (&quot;e_cp&quot;, WORD),</span>
-<span class="c1">#             (&quot;e_crlc&quot;, WORD),</span>
-<span class="c1">#             (&quot;e_cparhdr&quot;, WORD),</span>
-<span class="c1">#             (&quot;e_minalloc&quot;, WORD),</span>
-<span class="c1">#             (&quot;e_maxalloc&quot;, WORD),</span>
-<span class="c1">#             (&quot;e_ss&quot;, WORD),</span>
-<span class="c1">#             (&quot;e_sp&quot;, WORD),</span>
-<span class="c1">#             (&quot;e_csum&quot;, WORD),</span>
-<span class="c1">#             (&quot;e_ip&quot;, WORD),</span>
-<span class="c1">#             (&quot;e_cs&quot;, WORD),</span>
-<span class="c1">#             (&quot;e_lfarlc&quot;, WORD),</span>
-<span class="c1">#             (&quot;e_ovno&quot;, WORD),</span>
-<span class="c1">#             (&quot;e_res&quot;, WORD * 4),</span>
-<span class="c1">#             (&quot;e_oemid&quot;, WORD),</span>
-<span class="c1">#             (&quot;e_oeminfo&quot;, WORD),</span>
-<span class="c1">#             (&quot;e_res2&quot;, WORD * 10),</span>
-<span class="c1">#             (&quot;e_lfanew&quot;, DWORD),</span>
-<span class="c1">#         ]</span>
-<span class="c1">#</span>
-<span class="c1">#         def get_NT_HEADER(self):</span>
-<span class="c1">#             if targetedbitness == 32:</span>
-<span class="c1">#                 return create_structure_at(IMAGE_NT_HEADERS32, baseaddr + self.e_lfanew)</span>
-<span class="c1">#             return create_structure_at(IMAGE_NT_HEADERS64, baseaddr + self.e_lfanew)</span>
-<span class="c1">#     return current_pe</span>
-
-
-
-
 <span class="c1">## == PEPARSE V2 ==</span>
 
 
@@ -467,7 +128,7 @@
 
 <span class="k">def</span> <span class="nf">get_string</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">addr</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_char_p</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
+        <span class="k">return</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_char_p</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;latin1&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">target</span><span class="o">.</span><span class="n">read_string</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span>
 
 
@@ -476,8 +137,11 @@
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">get_string</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">addressof</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Name</span><span class="p">))[:</span><span class="mi">8</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">get_string</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_base_addr</span><span class="p">)[:</span><span class="mi">8</span><span class="p">]</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">get_string</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">addressof</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Name</span><span class="p">))[:</span><span class="mi">8</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">get_string</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_base_addr</span><span class="p">)[:</span><span class="mi">8</span><span class="p">]</span>
+        <span class="c1"># Decode as UTF-8 as the MS doc say ?</span>
+        <span class="k">return</span> <span class="n">name</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -590,7 +254,7 @@
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="n">name</span> <span class="o">=</span> <span class="n">get_string</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">name_address</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">name</span> <span class="o">=</span> <span class="n">get_string</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">name_address</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+                    <span class="n">name</span> <span class="o">=</span> <span class="n">get_string</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">name_address</span><span class="p">)</span>
                 <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">import_by_name</span><span class="o">.</span><span class="n">Hint</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
             <span class="n">int_addr</span> <span class="o">+=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">int_entry</span><span class="p">))</span>
             <span class="n">int_entry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transformers</span><span class="o">.</span><span class="n">create_structure_at</span><span class="p">(</span><span class="n">THUNK_DATA</span><span class="p">,</span> <span class="n">int_addr</span><span class="p">)</span>
@@ -626,6 +290,9 @@
             <span class="n">func</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">baseaddr</span>
             <span class="k">if</span> <span class="n">nb</span> <span class="ow">in</span> <span class="n">NameOrdinals</span><span class="p">:</span>
                 <span class="n">name</span> <span class="o">=</span> <span class="n">get_string</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">Names</span><span class="p">[</span><span class="n">NameOrdinals</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">nb</span><span class="p">)]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">baseaddr</span><span class="p">)</span>
+                <span class="c1"># Export name should be ascii</span>
+                <span class="c1"># Decode from ascii or return bytes ?</span>
+                <span class="c1"># https://docs.microsoft.com/en-us/windows/win32/debug/pe-format#export-address-table</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">name</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">nb</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
@@ -676,11 +343,6 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">IMAGE_ORDINAL_FLAG</span> <span class="o">=</span> <span class="n">IMAGE_ORDINAL_FLAG32</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">IMAGE_ORDINAL_FLAG</span> <span class="o">=</span> <span class="n">IMAGE_ORDINAL_FLAG64</span>
-
-    <span class="k">def</span> <span class="nf">get_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addr</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_char_p</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">read_string</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">get_DOS_HEADER</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">transformers</span><span class="o">.</span><span class="n">create_structure_at</span><span class="p">(</span><span class="n">IMAGE_DOS_HEADER</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">baseaddr</span><span class="p">)</span>
@@ -752,10 +414,19 @@
 <span class="sd">            :type: {(:class:`int` or :class:`str`) : :class:`int`}&quot;&quot;&quot;</span>
         <span class="n">res</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">exp_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_EXPORT_DIRECTORY</span><span class="p">()</span>
+        <span class="n">export_datadir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_DataDirectory</span><span class="p">()[</span><span class="n">IMAGE_DIRECTORY_ENTRY_EXPORT</span><span class="p">]</span>
+        <span class="n">export_start</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">baseaddr</span> <span class="o">+</span> <span class="n">export_datadir</span><span class="o">.</span><span class="n">VirtualAddress</span>
+        <span class="n">export_end</span> <span class="o">=</span> <span class="n">export_start</span> <span class="o">+</span> <span class="n">export_datadir</span><span class="o">.</span><span class="n">Size</span>
         <span class="k">if</span> <span class="n">exp_dir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">res</span>
+        <span class="c1"># import pdb;pdb.set_trace()</span>
         <span class="n">raw_exports</span> <span class="o">=</span> <span class="n">exp_dir</span><span class="o">.</span><span class="n">get_exports</span><span class="p">()</span>
         <span class="k">for</span> <span class="nb">id</span><span class="p">,</span> <span class="n">rva_addr</span><span class="p">,</span> <span class="n">rva_name</span> <span class="ow">in</span> <span class="n">raw_exports</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">export_start</span> <span class="o">&lt;=</span> <span class="n">rva_addr</span> <span class="o">&lt;</span> <span class="n">export_end</span><span class="p">:</span>
+                <span class="c1"># Export proxy...</span>
+                <span class="c1"># Contains the string to another Dll.Function</span>
+                <span class="n">rva_addr</span> <span class="o">=</span> <span class="n">get_string</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">rva_addr</span><span class="p">)</span> <span class="c1"># Put the string proxy instead</span>
+
             <span class="n">res</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">rva_addr</span>
             <span class="k">if</span> <span class="n">rva_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">res</span><span class="p">[</span><span class="n">rva_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">rva_addr</span>
@@ -787,7 +458,7 @@
                 <span class="k">for</span> <span class="n">iat_entry</span><span class="p">,</span> <span class="p">(</span><span class="nb">ord</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">IAT</span><span class="p">,</span> <span class="n">INT</span><span class="p">):</span>
                     <span class="c1"># str(name.decode()) -&gt; python2 and python3 compatible for str result</span>
                     <span class="n">iat_entry</span><span class="o">.</span><span class="n">ord</span> <span class="o">=</span> <span class="nb">ord</span>
-                    <span class="n">iat_entry</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span> <span class="k">if</span> <span class="n">name</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+                    <span class="n">iat_entry</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">if</span> <span class="n">name</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
             <span class="n">name</span> <span class="o">=</span> <span class="n">get_string</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">baseaddr</span> <span class="o">+</span> <span class="n">import_descriptor</span><span class="o">.</span><span class="n">Name</span><span class="p">)</span>
             <span class="n">res</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="p">[])</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">IAT</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">res</span></div>

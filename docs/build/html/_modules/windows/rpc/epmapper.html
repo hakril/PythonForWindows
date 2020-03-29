@@ -44,6 +44,7 @@
 <span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
 <span class="kn">from</span> <span class="nn">windows.rpc</span> <span class="k">import</span> <span class="n">ndr</span>
 <span class="kn">from</span> <span class="nn">windows.dbgprint</span> <span class="k">import</span> <span class="n">dbgprint</span>
+<span class="kn">from</span> <span class="nn">windows.pycompat</span> <span class="k">import</span> <span class="n">basestring</span>
 
 
 
@@ -126,13 +127,13 @@
     <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">rhs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
         <span class="n">rhs</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">[:</span><span class="n">rhs</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">)]</span>
         <span class="c1"># raise ValueError(&quot;ALPC Port name doest not end by \\x00&quot;)</span>
-    <span class="k">return</span> <span class="n">UnpackTower</span><span class="p">(</span><span class="s2">&quot;ncalrpc&quot;</span><span class="p">,</span> <span class="n">rhs</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="kc">None</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">syntax</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">UnpackTower</span><span class="p">(</span><span class="s2">&quot;ncalrpc&quot;</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">rhs</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span> <span class="kc">None</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">syntax</span><span class="p">)</span>
 
 <span class="c1"># http://pubs.opengroup.org/onlinepubs/9629399/apdxi.htm#tagcjh_28</span>
 <span class="c1"># Octet 0 contains the hexadecimal value 0d. This is a reserved protocol identifier prefix that indicates that the protocol ID is UUID derived</span>
-<span class="n">TOWER_PROTOCOL_IS_UUID</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\x0d</span><span class="s2">&quot;</span>
-<span class="n">TOWER_EMPTY_RHS</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\x00\x00</span><span class="s2">&quot;</span>
-<span class="n">TOWER_PROTOCOL_ID_ALPC</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\x0c</span><span class="s2">&quot;</span> <span class="c1"># From RE</span>
+<span class="n">TOWER_PROTOCOL_IS_UUID</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x0d</span><span class="s2">&quot;</span>
+<span class="n">TOWER_EMPTY_RHS</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00\x00</span><span class="s2">&quot;</span>
+<span class="n">TOWER_PROTOCOL_ID_ALPC</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x0c</span><span class="s2">&quot;</span> <span class="c1"># From RE</span>
 
 <span class="k">def</span> <span class="nf">construct_alpc_tower</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">syntax</span><span class="p">,</span> <span class="n">protseq</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">,</span> <span class="n">address</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">address</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -153,11 +154,11 @@
     <span class="n">floor_2</span> <span class="o">=</span> <span class="n">craft_floor</span><span class="p">(</span><span class="n">floor_2_lsh</span><span class="p">,</span> <span class="n">floor_2_rsh</span><span class="p">)</span>
     <span class="c1"># Floor 3</span>
     <span class="k">if</span> <span class="n">endpoint</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">floor_3_lsh</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\xff</span><span class="s2">&quot;</span>
+        <span class="n">floor_3_lsh</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\xff</span><span class="s2">&quot;</span>
         <span class="n">floor_3_rsh</span> <span class="o">=</span> <span class="n">TOWER_EMPTY_RHS</span>
         <span class="n">floor_3</span> <span class="o">=</span> <span class="n">craft_floor</span><span class="p">(</span><span class="n">floor_3_lsh</span><span class="p">,</span> <span class="n">floor_3_rsh</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">floor_3_lsh</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\x10</span><span class="s2">&quot;</span>
+        <span class="n">floor_3_lsh</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x10</span><span class="s2">&quot;</span>
         <span class="n">floor_3_rsh</span> <span class="o">=</span> <span class="n">endpoint</span>
         <span class="n">floor_3</span> <span class="o">=</span> <span class="n">craft_floor</span><span class="p">(</span><span class="n">floor_3_lsh</span><span class="p">,</span> <span class="n">floor_3_rsh</span><span class="p">)</span>
     <span class="n">towerarray</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s2">&quot;&lt;H&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="o">+</span>  <span class="n">floor_0</span> <span class="o">+</span> <span class="n">floor_1</span> <span class="o">+</span> <span class="n">floor_2</span> <span class="o">+</span> <span class="n">floor_3</span>
@@ -187,7 +188,7 @@
     <span class="n">syntax_iid</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">IID</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s2">&quot;8a885d04-1ceb-11c9-9fe8-08002b104860&quot;</span><span class="p">)</span>
     <span class="n">rpc_syntax</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">RPC_IF_ID</span><span class="p">(</span><span class="n">syntax_iid</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
     <span class="c1">## Forge tower</span>
-    <span class="n">tower_array_size</span><span class="p">,</span> <span class="n">towerarray</span> <span class="o">=</span> <span class="n">construct_alpc_tower</span><span class="p">(</span><span class="n">rpc_object</span><span class="p">,</span> <span class="n">rpc_syntax</span><span class="p">,</span> <span class="s2">&quot;ncalrpc&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">tower_array_size</span><span class="p">,</span> <span class="n">towerarray</span> <span class="o">=</span> <span class="n">construct_alpc_tower</span><span class="p">(</span><span class="n">rpc_object</span><span class="p">,</span> <span class="n">rpc_syntax</span><span class="p">,</span> <span class="s2">&quot;ncalrpc&quot;</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
     <span class="c1"># parameters</span>
     <span class="n">local_system_psid</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">get_known_sid</span><span class="p">(</span><span class="n">sid</span><span class="p">)</span>
@@ -223,7 +224,7 @@
     <span class="n">dbgprint</span><span class="p">(</span><span class="s2">&quot;ALPC endpoints list: &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">alpctowers</span><span class="p">),</span> <span class="s2">&quot;RPC&quot;</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">tower</span> <span class="ow">in</span> <span class="n">alpctowers</span><span class="p">:</span>
         <span class="n">dbgprint</span><span class="p">(</span><span class="s2">&quot;Trying to connect to endpoint &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tower</span><span class="o">.</span><span class="n">endpoint</span><span class="p">),</span> <span class="s2">&quot;RPC&quot;</span><span class="p">)</span>
-        <span class="n">alpc_port</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;\RPC Control\</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tower</span><span class="o">.</span><span class="n">endpoint</span><span class="p">)</span>
+        <span class="n">alpc_port</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;\RPC Control\</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tower</span><span class="o">.</span><span class="n">endpoint</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">client</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">rpc</span><span class="o">.</span><span class="n">RPCClient</span><span class="p">(</span><span class="n">alpc_port</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>

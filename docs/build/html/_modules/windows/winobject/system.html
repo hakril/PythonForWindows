@@ -48,6 +48,8 @@
 
 <span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
 
+
+
 <span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="k">import</span> <span class="n">process</span>
 <span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="k">import</span> <span class="n">network</span>
 <span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="k">import</span> <span class="n">registry</span>
@@ -58,10 +60,11 @@
 <span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="k">import</span> <span class="n">object_manager</span>
 <span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="k">import</span> <span class="n">handle</span>
 <span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="k">import</span> <span class="n">event_log</span>
+<span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="k">import</span> <span class="n">event_trace</span>
 <span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="k">import</span> <span class="n">task_scheduler</span>
 <span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="k">import</span> <span class="n">system_module</span>
+<span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="k">import</span> <span class="n">bits</span>
 
-<span class="kn">from</span> <span class="nn">windows.generated_def.winstructs</span> <span class="k">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">windows.dbgprint</span> <span class="k">import</span> <span class="n">dbgprint</span>
 
 <div class="viewcode-block" id="System"><a class="viewcode-back" href="../../../windows.html#windows.winobject.system.System">[docs]</a><span class="k">class</span> <span class="nc">System</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -97,12 +100,12 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">volume</span><span class="o">.</span><span class="n">enum_logical_drive</span><span class="p">()</span>
 
-    <span class="nd">@property</span>
+    <span class="nd">@utils</span><span class="o">.</span><span class="n">fixedpropety</span>
     <span class="k">def</span> <span class="nf">services</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The list of services</span>
 
 <span class="sd">        :type: [:class:`~windows.winobject.service.ServiceA`] -- A list of Service&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">service</span><span class="o">.</span><span class="n">enumerate_services</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">service</span><span class="o">.</span><span class="n">ServiceManager</span><span class="p">()</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">handles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -143,6 +146,10 @@
     <span class="k">def</span> <span class="nf">event_log</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">event_log</span><span class="o">.</span><span class="n">EvtlogManager</span><span class="p">()</span>
 
+    <span class="nd">@utils</span><span class="o">.</span><span class="n">fixedpropety</span>
+    <span class="k">def</span> <span class="nf">etw</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">event_trace</span><span class="o">.</span><span class="n">EtwManager</span><span class="p">()</span>
+
 
     <span class="nd">@utils</span><span class="o">.</span><span class="n">fixedpropety</span>
     <span class="k">def</span> <span class="nf">task_scheduler</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -167,6 +174,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">winobject</span><span class="o">.</span><span class="n">object_manager</span><span class="o">.</span><span class="n">ObjectManager</span><span class="p">()</span>
 
+    <span class="nd">@utils</span><span class="o">.</span><span class="n">fixedpropety</span>
+    <span class="k">def</span> <span class="nf">bits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">bits</span><span class="o">.</span><span class="n">create_manager</span><span class="p">()</span>
+
     <span class="c1">#TODO: use GetComputerNameExA ? and recover other names ?</span>
     <span class="nd">@utils</span><span class="o">.</span><span class="n">fixedpropety</span>
     <span class="k">def</span> <span class="nf">computer_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -174,9 +185,14 @@
 
 <span class="sd">        :type: :class:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">size</span> <span class="o">=</span> <span class="n">DWORD</span><span class="p">(</span><span class="mh">0x1000</span><span class="p">)</span>
-        <span class="n">buf</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_buffer</span><span class="p">(</span><span class="n">size</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
-        <span class="n">winproxy</span><span class="o">.</span><span class="n">GetComputerNameA</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">size</span><span class="p">))</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">(</span><span class="mh">0x1000</span><span class="p">)</span>
+        <span class="c1"># For now I don&#39;t know what is best as A vs W APIs...</span>
+        <span class="k">if</span> <span class="n">windows</span><span class="o">.</span><span class="n">pycompat</span><span class="o">.</span><span class="n">is_py3</span><span class="p">:</span>
+            <span class="n">buf</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">create_unicode_buffer</span><span class="p">(</span><span class="n">size</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+            <span class="n">winproxy</span><span class="o">.</span><span class="n">GetComputerNameW</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">size</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">buf</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">create_string_buffer</span><span class="p">(</span><span class="n">size</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+            <span class="n">winproxy</span><span class="o">.</span><span class="n">GetComputerNameA</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">size</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">buf</span><span class="p">[:</span><span class="n">size</span><span class="o">.</span><span class="n">value</span><span class="p">]</span>
 
     <span class="nd">@utils</span><span class="o">.</span><span class="n">fixedpropety</span>
@@ -218,7 +234,7 @@
 <span class="sd">        :type: :class:`str`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">version</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">version</span>
-        <span class="n">is_workstation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">product_type</span> <span class="o">==</span> <span class="n">VER_NT_WORKSTATION</span>
+        <span class="n">is_workstation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">product_type</span> <span class="o">==</span> <span class="n">gdef</span><span class="o">.</span><span class="n">VER_NT_WORKSTATION</span>
         <span class="k">if</span> <span class="n">version</span> <span class="o">==</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span>
             <span class="k">return</span> <span class="p">[</span><span class="s2">&quot;Windows Server 2016&quot;</span><span class="p">,</span> <span class="s2">&quot;Windows 10&quot;</span><span class="p">][</span><span class="n">is_workstation</span><span class="p">]</span>
         <span class="k">elif</span> <span class="n">version</span> <span class="o">==</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">3</span><span class="p">):</span>
@@ -230,7 +246,7 @@
         <span class="k">elif</span> <span class="n">version</span> <span class="o">==</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span>
             <span class="k">return</span> <span class="p">[</span><span class="s2">&quot;Windows Server 2008&quot;</span><span class="p">,</span> <span class="s2">&quot;Windows Vista&quot;</span><span class="p">][</span><span class="n">is_workstation</span><span class="p">]</span>
         <span class="k">elif</span> <span class="n">version</span> <span class="o">==</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
-            <span class="n">metric</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">GetSystemMetrics</span><span class="p">(</span><span class="n">SM_SERVERR2</span><span class="p">)</span>
+            <span class="n">metric</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">GetSystemMetrics</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">SM_SERVERR2</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">is_workstation</span><span class="p">:</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">64</span><span class="p">:</span>
                     <span class="k">return</span> <span class="s2">&quot;Windows XP Professional x64 Edition&quot;</span>
@@ -247,7 +263,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="s2">&quot;Unknow Windows &lt;version=</span><span class="si">{0}</span><span class="s2"> | is_workstation=</span><span class="si">{1}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">version</span><span class="p">,</span> <span class="n">is_workstation</span><span class="p">)</span>
 
-    <span class="n">VERSION_MAPPER</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span><span class="n">VER_NT_WORKSTATION</span><span class="p">,</span> <span class="n">VER_NT_DOMAIN_CONTROLLER</span><span class="p">,</span> <span class="n">VER_NT_SERVER</span><span class="p">)</span>
+    <span class="n">VERSION_MAPPER</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">VER_NT_WORKSTATION</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">VER_NT_DOMAIN_CONTROLLER</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">VER_NT_SERVER</span><span class="p">)</span>
     <span class="nd">@utils</span><span class="o">.</span><span class="n">fixedpropety</span>
     <span class="k">def</span> <span class="nf">product_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The product type, value might be:</span>
@@ -262,97 +278,97 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">VERSION_MAPPER</span><span class="p">[</span><span class="n">version</span><span class="o">.</span><span class="n">wProductType</span><span class="p">]</span>
 
 
-    <span class="n">EDITION_MAPPER</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span><span class="n">PRODUCT_UNDEFINED</span><span class="p">,</span>
-        <span class="n">PRODUCT_ULTIMATE</span><span class="p">,</span>
-        <span class="n">PRODUCT_HOME_BASIC</span><span class="p">,</span>
-        <span class="n">PRODUCT_HOME_PREMIUM</span><span class="p">,</span>
-        <span class="n">PRODUCT_ENTERPRISE</span><span class="p">,</span>
-        <span class="n">PRODUCT_HOME_BASIC_N</span><span class="p">,</span>
-        <span class="n">PRODUCT_BUSINESS</span><span class="p">,</span>
-        <span class="n">PRODUCT_STANDARD_SERVER</span><span class="p">,</span>
-        <span class="n">PRODUCT_DATACENTER_SERVER</span><span class="p">,</span>
-        <span class="n">PRODUCT_SMALLBUSINESS_SERVER</span><span class="p">,</span>
-        <span class="n">PRODUCT_ENTERPRISE_SERVER</span><span class="p">,</span>
-        <span class="n">PRODUCT_STARTER</span><span class="p">,</span>
-        <span class="n">PRODUCT_DATACENTER_SERVER_CORE</span><span class="p">,</span>
-        <span class="n">PRODUCT_STANDARD_SERVER_CORE</span><span class="p">,</span>
-        <span class="n">PRODUCT_ENTERPRISE_SERVER_CORE</span><span class="p">,</span>
-        <span class="n">PRODUCT_ENTERPRISE_SERVER_IA64</span><span class="p">,</span>
-        <span class="n">PRODUCT_BUSINESS_N</span><span class="p">,</span>
-        <span class="n">PRODUCT_WEB_SERVER</span><span class="p">,</span>
-        <span class="n">PRODUCT_CLUSTER_SERVER</span><span class="p">,</span>
-        <span class="n">PRODUCT_HOME_SERVER</span><span class="p">,</span>
-        <span class="n">PRODUCT_STORAGE_EXPRESS_SERVER</span><span class="p">,</span>
-        <span class="n">PRODUCT_STORAGE_STANDARD_SERVER</span><span class="p">,</span>
-        <span class="n">PRODUCT_STORAGE_WORKGROUP_SERVER</span><span class="p">,</span>
-        <span class="n">PRODUCT_STORAGE_ENTERPRISE_SERVER</span><span class="p">,</span>
-        <span class="n">PRODUCT_SERVER_FOR_SMALLBUSINESS</span><span class="p">,</span>
-        <span class="n">PRODUCT_SMALLBUSINESS_SERVER_PREMIUM</span><span class="p">,</span>
-        <span class="n">PRODUCT_HOME_PREMIUM_N</span><span class="p">,</span>
-        <span class="n">PRODUCT_ENTERPRISE_N</span><span class="p">,</span>
-        <span class="n">PRODUCT_ULTIMATE_N</span><span class="p">,</span>
-        <span class="n">PRODUCT_WEB_SERVER_CORE</span><span class="p">,</span>
-        <span class="n">PRODUCT_MEDIUMBUSINESS_SERVER_MANAGEMENT</span><span class="p">,</span>
-        <span class="n">PRODUCT_MEDIUMBUSINESS_SERVER_SECURITY</span><span class="p">,</span>
-        <span class="n">PRODUCT_MEDIUMBUSINESS_SERVER_MESSAGING</span><span class="p">,</span>
-        <span class="n">PRODUCT_SERVER_FOUNDATION</span><span class="p">,</span>
-        <span class="n">PRODUCT_HOME_PREMIUM_SERVER</span><span class="p">,</span>
-        <span class="n">PRODUCT_SERVER_FOR_SMALLBUSINESS_V</span><span class="p">,</span>
-        <span class="n">PRODUCT_STANDARD_SERVER_V</span><span class="p">,</span>
-        <span class="n">PRODUCT_DATACENTER_SERVER_V</span><span class="p">,</span>
-        <span class="n">PRODUCT_ENTERPRISE_SERVER_V</span><span class="p">,</span>
-        <span class="n">PRODUCT_DATACENTER_SERVER_CORE_V</span><span class="p">,</span>
-        <span class="n">PRODUCT_STANDARD_SERVER_CORE_V</span><span class="p">,</span>
-        <span class="n">PRODUCT_ENTERPRISE_SERVER_CORE_V</span><span class="p">,</span>
-        <span class="n">PRODUCT_HYPERV</span><span class="p">,</span>
-        <span class="n">PRODUCT_STORAGE_EXPRESS_SERVER_CORE</span><span class="p">,</span>
-        <span class="n">PRODUCT_STORAGE_STANDARD_SERVER_CORE</span><span class="p">,</span>
-        <span class="n">PRODUCT_STORAGE_WORKGROUP_SERVER_CORE</span><span class="p">,</span>
-        <span class="n">PRODUCT_STORAGE_ENTERPRISE_SERVER_CORE</span><span class="p">,</span>
-        <span class="n">PRODUCT_STARTER_N</span><span class="p">,</span>
-        <span class="n">PRODUCT_PROFESSIONAL</span><span class="p">,</span>
-        <span class="n">PRODUCT_PROFESSIONAL_N</span><span class="p">,</span>
-        <span class="n">PRODUCT_SB_SOLUTION_SERVER</span><span class="p">,</span>
-        <span class="n">PRODUCT_SERVER_FOR_SB_SOLUTIONS</span><span class="p">,</span>
-        <span class="n">PRODUCT_STANDARD_SERVER_SOLUTIONS</span><span class="p">,</span>
-        <span class="n">PRODUCT_STANDARD_SERVER_SOLUTIONS_CORE</span><span class="p">,</span>
-        <span class="n">PRODUCT_SB_SOLUTION_SERVER_EM</span><span class="p">,</span>
-        <span class="n">PRODUCT_SERVER_FOR_SB_SOLUTIONS_EM</span><span class="p">,</span>
-        <span class="n">PRODUCT_SOLUTION_EMBEDDEDSERVER</span><span class="p">,</span>
-        <span class="n">PRODUCT_SOLUTION_EMBEDDEDSERVER_CORE</span><span class="p">,</span>
-        <span class="n">PRODUCT_SMALLBUSINESS_SERVER_PREMIUM_CORE</span><span class="p">,</span>
-        <span class="n">PRODUCT_ESSENTIALBUSINESS_SERVER_MGMT</span><span class="p">,</span>
-        <span class="n">PRODUCT_ESSENTIALBUSINESS_SERVER_ADDL</span><span class="p">,</span>
-        <span class="n">PRODUCT_ESSENTIALBUSINESS_SERVER_MGMTSVC</span><span class="p">,</span>
-        <span class="n">PRODUCT_ESSENTIALBUSINESS_SERVER_ADDLSVC</span><span class="p">,</span>
-        <span class="n">PRODUCT_CLUSTER_SERVER_V</span><span class="p">,</span>
-        <span class="n">PRODUCT_EMBEDDED</span><span class="p">,</span>
-        <span class="n">PRODUCT_STARTER_E</span><span class="p">,</span>
-        <span class="n">PRODUCT_HOME_BASIC_E</span><span class="p">,</span>
-        <span class="n">PRODUCT_HOME_PREMIUM_E</span><span class="p">,</span>
-        <span class="n">PRODUCT_PROFESSIONAL_E</span><span class="p">,</span>
-        <span class="n">PRODUCT_ENTERPRISE_E</span><span class="p">,</span>
-        <span class="n">PRODUCT_ULTIMATE_E</span><span class="p">,</span>
-        <span class="n">PRODUCT_ENTERPRISE_EVALUATION</span><span class="p">,</span>
-        <span class="n">PRODUCT_MULTIPOINT_STANDARD_SERVER</span><span class="p">,</span>
-        <span class="n">PRODUCT_MULTIPOINT_PREMIUM_SERVER</span><span class="p">,</span>
-        <span class="n">PRODUCT_STANDARD_EVALUATION_SERVER</span><span class="p">,</span>
-        <span class="n">PRODUCT_DATACENTER_EVALUATION_SERVER</span><span class="p">,</span>
-        <span class="n">PRODUCT_ENTERPRISE_N_EVALUATION</span><span class="p">,</span>
-        <span class="n">PRODUCT_STORAGE_WORKGROUP_EVALUATION_SERVER</span><span class="p">,</span>
-        <span class="n">PRODUCT_STORAGE_STANDARD_EVALUATION_SERVER</span><span class="p">,</span>
-        <span class="n">PRODUCT_CORE_ARM</span><span class="p">,</span>
-        <span class="n">PRODUCT_CORE_N</span><span class="p">,</span>
-        <span class="n">PRODUCT_CORE_COUNTRYSPECIFIC</span><span class="p">,</span>
-        <span class="n">PRODUCT_CORE_LANGUAGESPECIFIC</span><span class="p">,</span>
-        <span class="n">PRODUCT_CORE</span><span class="p">,</span>
-        <span class="n">PRODUCT_PROFESSIONAL_WMC</span><span class="p">,</span>
-        <span class="n">PRODUCT_UNLICENSED</span><span class="p">)</span>
+    <span class="n">EDITION_MAPPER</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FlagMapper</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_UNDEFINED</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_ULTIMATE</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_HOME_BASIC</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_HOME_PREMIUM</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_ENTERPRISE</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_HOME_BASIC_N</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_BUSINESS</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_STANDARD_SERVER</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_DATACENTER_SERVER</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_SMALLBUSINESS_SERVER</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_ENTERPRISE_SERVER</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_STARTER</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_DATACENTER_SERVER_CORE</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_STANDARD_SERVER_CORE</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_ENTERPRISE_SERVER_CORE</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_ENTERPRISE_SERVER_IA64</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_BUSINESS_N</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_WEB_SERVER</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_CLUSTER_SERVER</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_HOME_SERVER</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_STORAGE_EXPRESS_SERVER</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_STORAGE_STANDARD_SERVER</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_STORAGE_WORKGROUP_SERVER</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_STORAGE_ENTERPRISE_SERVER</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_SERVER_FOR_SMALLBUSINESS</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_SMALLBUSINESS_SERVER_PREMIUM</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_HOME_PREMIUM_N</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_ENTERPRISE_N</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_ULTIMATE_N</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_WEB_SERVER_CORE</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_MEDIUMBUSINESS_SERVER_MANAGEMENT</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_MEDIUMBUSINESS_SERVER_SECURITY</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_MEDIUMBUSINESS_SERVER_MESSAGING</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_SERVER_FOUNDATION</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_HOME_PREMIUM_SERVER</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_SERVER_FOR_SMALLBUSINESS_V</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_STANDARD_SERVER_V</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_DATACENTER_SERVER_V</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_ENTERPRISE_SERVER_V</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_DATACENTER_SERVER_CORE_V</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_STANDARD_SERVER_CORE_V</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_ENTERPRISE_SERVER_CORE_V</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_HYPERV</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_STORAGE_EXPRESS_SERVER_CORE</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_STORAGE_STANDARD_SERVER_CORE</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_STORAGE_WORKGROUP_SERVER_CORE</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_STORAGE_ENTERPRISE_SERVER_CORE</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_STARTER_N</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_PROFESSIONAL</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_PROFESSIONAL_N</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_SB_SOLUTION_SERVER</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_SERVER_FOR_SB_SOLUTIONS</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_STANDARD_SERVER_SOLUTIONS</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_STANDARD_SERVER_SOLUTIONS_CORE</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_SB_SOLUTION_SERVER_EM</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_SERVER_FOR_SB_SOLUTIONS_EM</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_SOLUTION_EMBEDDEDSERVER</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_SOLUTION_EMBEDDEDSERVER_CORE</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_SMALLBUSINESS_SERVER_PREMIUM_CORE</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_ESSENTIALBUSINESS_SERVER_MGMT</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_ESSENTIALBUSINESS_SERVER_ADDL</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_ESSENTIALBUSINESS_SERVER_MGMTSVC</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_ESSENTIALBUSINESS_SERVER_ADDLSVC</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_CLUSTER_SERVER_V</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_EMBEDDED</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_STARTER_E</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_HOME_BASIC_E</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_HOME_PREMIUM_E</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_PROFESSIONAL_E</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_ENTERPRISE_E</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_ULTIMATE_E</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_ENTERPRISE_EVALUATION</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_MULTIPOINT_STANDARD_SERVER</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_MULTIPOINT_PREMIUM_SERVER</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_STANDARD_EVALUATION_SERVER</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_DATACENTER_EVALUATION_SERVER</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_ENTERPRISE_N_EVALUATION</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_STORAGE_WORKGROUP_EVALUATION_SERVER</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_STORAGE_STANDARD_EVALUATION_SERVER</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_CORE_ARM</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_CORE_N</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_CORE_COUNTRYSPECIFIC</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_CORE_LANGUAGESPECIFIC</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_CORE</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_PROFESSIONAL_WMC</span><span class="p">,</span>
+        <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_UNLICENSED</span><span class="p">)</span>
 
     <span class="nd">@utils</span><span class="o">.</span><span class="n">fixedpropety</span>
     <span class="k">def</span> <span class="nf">edition</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="c1"># Find a better name ?</span>
         <span class="n">version</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_version</span><span class="p">()</span>
-        <span class="n">edition</span> <span class="o">=</span> <span class="n">DWORD</span><span class="p">()</span>
+        <span class="n">edition</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">()</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">winproxy</span><span class="o">.</span><span class="n">GetProductInfo</span><span class="p">(</span><span class="n">version</span><span class="o">.</span><span class="n">dwMajorVersion</span><span class="p">,</span>
                                         <span class="n">version</span><span class="o">.</span><span class="n">dwMinorVersion</span><span class="p">,</span>
@@ -368,8 +384,8 @@
     <span class="k">def</span> <span class="nf">_edition_windows_xp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># Emulate standard response from IsOS(gdef.OS_PROFESSIONAL)</span>
         <span class="k">if</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">IsOS</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">OS_PROFESSIONAL</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">PRODUCT_PROFESSIONAL</span>
-        <span class="k">return</span> <span class="n">PRODUCT_HOME_BASIC</span>
+            <span class="k">return</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_PROFESSIONAL</span>
+        <span class="k">return</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PRODUCT_HOME_BASIC</span>
 
     <span class="nd">@utils</span><span class="o">.</span><span class="n">fixedpropety</span>
     <span class="k">def</span> <span class="nf">windir</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -378,9 +394,9 @@
         <span class="k">return</span> <span class="n">buffer</span><span class="p">[:</span><span class="n">reslen</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">get_version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">generated_def</span><span class="o">.</span><span class="n">OSVERSIONINFOEXA</span><span class="p">()</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">OSVERSIONINFOEXA</span><span class="p">()</span>
         <span class="n">data</span><span class="o">.</span><span class="n">dwOSVersionInfoSize</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-        <span class="n">winproxy</span><span class="o">.</span><span class="n">GetVersionExA</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">pointer</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">windows</span><span class="o">.</span><span class="n">generated_def</span><span class="o">.</span><span class="n">OSVERSIONINFOA</span><span class="p">)))</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">GetVersionExA</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">pointer</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">OSVERSIONINFOA</span><span class="p">)))</span>
         <span class="k">return</span> <span class="n">data</span>
 
     <span class="k">def</span> <span class="nf">get_file_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
@@ -388,35 +404,47 @@
         <span class="n">buf</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_buffer</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
         <span class="n">winproxy</span><span class="o">.</span><span class="n">GetFileVersionInfoA</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">buf</span><span class="p">)</span>
 
-        <span class="n">bufptr</span> <span class="o">=</span> <span class="n">PVOID</span><span class="p">()</span>
-        <span class="n">bufsize</span> <span class="o">=</span> <span class="n">UINT</span><span class="p">()</span>
+        <span class="n">bufptr</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PVOID</span><span class="p">()</span>
+        <span class="n">bufsize</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">UINT</span><span class="p">()</span>
         <span class="n">winproxy</span><span class="o">.</span><span class="n">VerQueryValueA</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">VarFileInfo</span><span class="se">\\</span><span class="s2">Translation&quot;</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">bufptr</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">bufsize</span><span class="p">))</span>
-        <span class="n">bufstr</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">bufptr</span><span class="p">,</span> <span class="n">LPCSTR</span><span class="p">)</span>
+        <span class="n">bufstr</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">bufptr</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">LPCSTR</span><span class="p">)</span>
         <span class="n">tup</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&lt;HH&quot;</span><span class="p">,</span> <span class="n">bufstr</span><span class="o">.</span><span class="n">value</span><span class="p">[:</span><span class="mi">4</span><span class="p">])</span>
         <span class="n">req</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{0:04x}{1:04x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="n">tup</span><span class="p">)</span>
         <span class="n">winproxy</span><span class="o">.</span><span class="n">VerQueryValueA</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">StringFileInfo</span><span class="se">\\</span><span class="si">{0}</span><span class="se">\\</span><span class="s2">ProductVersion&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">req</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">bufptr</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">bufsize</span><span class="p">))</span>
-        <span class="n">bufstr</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">bufptr</span><span class="p">,</span> <span class="n">LPCSTR</span><span class="p">)</span>
+        <span class="n">bufstr</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">bufptr</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">LPCSTR</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">bufstr</span><span class="o">.</span><span class="n">value</span>
 
     <span class="nd">@utils</span><span class="o">.</span><span class="n">fixedpropety</span>
     <span class="k">def</span> <span class="nf">build_number</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># This returns the last version where ntdll was updated</span>
-        <span class="c1"># return self.get_file_version(&quot;comctl32&quot;)</span>
-
-        <span class="c1"># Fallback on self.get_file_version(&quot;comctl32&quot;) is key/values not presents ?</span>
-        <span class="n">curver_key</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">registry</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion&quot;</span><span class="p">)</span>
-        <span class="n">major</span> <span class="o">=</span> <span class="n">curver_key</span><span class="p">[</span><span class="s2">&quot;CurrentMajorVersionNumber&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
-        <span class="n">minor</span> <span class="o">=</span> <span class="n">curver_key</span><span class="p">[</span><span class="s2">&quot;CurrentMinorVersionNumber&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
-        <span class="n">build</span> <span class="o">=</span> <span class="n">curver_key</span><span class="p">[</span><span class="s2">&quot;CurrentBuildNumber&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
-        <span class="c1"># Update Build Revision</span>
-        <span class="n">ubr</span> <span class="o">=</span> <span class="n">curver_key</span><span class="p">[</span><span class="s2">&quot;UBR&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
-        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">.</span><span class="si">{1}</span><span class="s2">.</span><span class="si">{2}</span><span class="s2">.</span><span class="si">{3}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">major</span><span class="p">,</span> <span class="n">minor</span><span class="p">,</span> <span class="n">build</span><span class="p">,</span> <span class="n">ubr</span><span class="p">)</span>
+        <span class="c1"># Best effort. use get_file_version if registry code fails</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Does not works on Win7..</span>
+            <span class="c1"># Missing CurrentMajorVersionNumber/CurrentMinorVersionNumber/UBR</span>
+            <span class="c1"># We have CurrentVersion instead</span>
+            <span class="c1"># Use this code and get_file_version as a backup ?</span>
+            <span class="n">curver_key</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">registry</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion&quot;</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">major</span> <span class="o">=</span> <span class="n">curver_key</span><span class="p">[</span><span class="s2">&quot;CurrentMajorVersionNumber&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+                <span class="n">minor</span> <span class="o">=</span> <span class="n">curver_key</span><span class="p">[</span><span class="s2">&quot;CurrentMinorVersionNumber&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+            <span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">version</span> <span class="o">=</span> <span class="n">curver_key</span><span class="p">[</span><span class="s2">&quot;CurrentVersion&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+                <span class="c1"># May raise ValueError if no &quot;.&quot;</span>
+                <span class="n">major</span><span class="p">,</span> <span class="n">minor</span> <span class="o">=</span> <span class="n">version</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+            <span class="n">build</span> <span class="o">=</span> <span class="n">curver_key</span><span class="p">[</span><span class="s2">&quot;CurrentBuildNumber&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+            <span class="c1"># Update Build Revision</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">ubr</span> <span class="o">=</span> <span class="n">curver_key</span><span class="p">[</span><span class="s2">&quot;UBR&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+            <span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">ubr</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># Not present on Win7</span>
+            <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">.</span><span class="si">{1}</span><span class="s2">.</span><span class="si">{2}</span><span class="s2">.</span><span class="si">{3}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">major</span><span class="p">,</span> <span class="n">minor</span><span class="p">,</span> <span class="n">build</span><span class="p">,</span> <span class="n">ubr</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">WindowsError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_file_version</span><span class="p">(</span><span class="s2">&quot;ntdll&quot;</span><span class="p">)</span>
 
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">enumerate_processes</span><span class="p">():</span>
         <span class="n">dbgprint</span><span class="p">(</span><span class="s2">&quot;Enumerating processes with CreateToolhelp32Snapshot&quot;</span><span class="p">,</span> <span class="s2">&quot;SLOW&quot;</span><span class="p">)</span>
-        <span class="n">process_entry</span> <span class="o">=</span> <span class="n">PROCESSENTRY32</span><span class="p">()</span>
+        <span class="n">process_entry</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PROCESSENTRY32</span><span class="p">()</span>
         <span class="n">process_entry</span><span class="o">.</span><span class="n">dwSize</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">process_entry</span><span class="p">)</span>
         <span class="n">snap</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CreateToolhelp32Snapshot</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TH32CS_SNAPPROCESS</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
         <span class="n">winproxy</span><span class="o">.</span><span class="n">Process32First</span><span class="p">(</span><span class="n">snap</span><span class="p">,</span> <span class="n">process_entry</span><span class="p">)</span>
@@ -431,7 +459,7 @@
     <span class="k">def</span> <span class="nf">enumerate_threads_generator</span><span class="p">():</span>
         <span class="c1"># Ptet dangereux, parce que on yield la meme THREADENTRY32 a chaque fois</span>
         <span class="n">dbgprint</span><span class="p">(</span><span class="s2">&quot;Enumerating threads with CreateToolhelp32Snapshot &lt;generator&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;SLOW&quot;</span><span class="p">)</span>
-        <span class="n">thread_entry</span> <span class="o">=</span> <span class="n">THREADENTRY32</span><span class="p">()</span>
+        <span class="n">thread_entry</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">THREADENTRY32</span><span class="p">()</span>
         <span class="n">thread_entry</span><span class="o">.</span><span class="n">dwSize</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">thread_entry</span><span class="p">)</span>
         <span class="n">snap</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CreateToolhelp32Snapshot</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TH32CS_SNAPTHREAD</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
         <span class="n">dbgprint</span><span class="p">(</span><span class="s2">&quot;New handle CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD) &lt;generator&gt; | </span><span class="si">{0:#x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">snap</span><span class="p">),</span> <span class="s2">&quot;HANDLE&quot;</span><span class="p">)</span>
@@ -460,7 +488,7 @@
         <span class="c1"># One snap for both enum to be prevent race</span>
         <span class="n">snap</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CreateToolhelp32Snapshot</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">TH32CS_SNAPTHREAD</span> <span class="o">|</span> <span class="n">gdef</span><span class="o">.</span><span class="n">TH32CS_SNAPPROCESS</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
-        <span class="n">process_entry</span> <span class="o">=</span> <span class="n">PROCESSENTRY32</span><span class="p">()</span>
+        <span class="n">process_entry</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PROCESSENTRY32</span><span class="p">()</span>
         <span class="n">process_entry</span><span class="o">.</span><span class="n">dwSize</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">process_entry</span><span class="p">)</span>
         <span class="n">winproxy</span><span class="o">.</span><span class="n">Process32First</span><span class="p">(</span><span class="n">snap</span><span class="p">,</span> <span class="n">process_entry</span><span class="p">)</span>
         <span class="n">processes</span> <span class="o">=</span> <span class="p">[]</span>
@@ -471,7 +499,7 @@
         <span class="c1"># Forge a dict pid -&gt; process</span>
         <span class="n">proc_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">proc</span><span class="o">.</span><span class="n">pid</span><span class="p">:</span> <span class="n">proc</span> <span class="k">for</span> <span class="n">proc</span> <span class="ow">in</span> <span class="n">processes</span><span class="p">}</span>
 
-        <span class="n">thread_entry</span> <span class="o">=</span> <span class="n">THREADENTRY32</span><span class="p">()</span>
+        <span class="n">thread_entry</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">THREADENTRY32</span><span class="p">()</span>
         <span class="n">thread_entry</span><span class="o">.</span><span class="n">dwSize</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">thread_entry</span><span class="p">)</span>
         <span class="n">threads</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">winproxy</span><span class="o">.</span><span class="n">Thread32First</span><span class="p">(</span><span class="n">snap</span><span class="p">,</span> <span class="n">thread_entry</span><span class="p">)</span>

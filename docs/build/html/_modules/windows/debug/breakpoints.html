@@ -147,11 +147,17 @@
                 <span class="n">t</span> <span class="o">=</span> <span class="n">rt</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">cproc</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">t</span> <span class="o">=</span> <span class="n">rt</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="s2">&quot;contents&quot;</span><span class="p">):</span>
-                <span class="k">try</span><span class="p">:</span>
-                    <span class="n">t</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">value</span>
-                <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
-                    <span class="k">pass</span>
+            <span class="c1"># Will fail in py3..</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">content</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">contents</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="c1"># contents will fail on basic type</span>
+                <span class="c1"># Not really an expected behavior</span>
+                <span class="c1"># But it works for now.. (and since a while)</span>
+                <span class="k">pass</span>
+            <span class="k">if</span> <span class="n">content</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">t</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">value</span>
             <span class="n">res</span><span class="p">[</span><span class="n">name</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">t</span>
         <span class="k">return</span> <span class="n">res</span>
 
@@ -251,16 +257,17 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_breakpoint</span><span class="o">.</span><span class="n">ret_trigger</span><span class="p">(</span><span class="n">dbg</span><span class="p">,</span> <span class="n">exc</span><span class="p">)</span>
 
 
-<span class="k">class</span> <span class="nc">FunctionCallBP</span><span class="p">(</span><span class="n">Breakpoint</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">break_on_ret</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbg</span><span class="p">,</span> <span class="n">exception</span><span class="p">):</span>
+<div class="viewcode-block" id="FunctionCallBP"><a class="viewcode-back" href="../../../debug.html#windows.debug.FunctionCallBP">[docs]</a><span class="k">class</span> <span class="nc">FunctionCallBP</span><span class="p">(</span><span class="n">Breakpoint</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A Breakpoint that allow to trigger at the return of a function&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="FunctionCallBP.break_on_ret"><a class="viewcode-back" href="../../../debug.html#windows.debug.FunctionCallBP.break_on_ret">[docs]</a>    <span class="k">def</span> <span class="nf">break_on_ret</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbg</span><span class="p">,</span> <span class="n">exception</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Setup a breakpoint at the return address of the function, this breakpoint will call :func:`ret_trigger`&quot;&quot;&quot;</span>
         <span class="n">cproc</span> <span class="o">=</span> <span class="n">dbg</span><span class="o">.</span><span class="n">current_process</span>
         <span class="n">return_addr</span> <span class="o">=</span> <span class="n">dbg</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">read_ptr</span><span class="p">(</span><span class="n">dbg</span><span class="o">.</span><span class="n">current_thread</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">sp</span><span class="p">)</span>
-        <span class="n">dbg</span><span class="o">.</span><span class="n">add_bp</span><span class="p">(</span><span class="n">FunctionRetBP</span><span class="p">(</span><span class="n">return_addr</span><span class="p">,</span> <span class="bp">self</span><span class="p">),</span> <span class="n">target</span><span class="o">=</span><span class="n">dbg</span><span class="o">.</span><span class="n">current_process</span><span class="p">)</span>
+        <span class="n">dbg</span><span class="o">.</span><span class="n">add_bp</span><span class="p">(</span><span class="n">FunctionRetBP</span><span class="p">(</span><span class="n">return_addr</span><span class="p">,</span> <span class="bp">self</span><span class="p">),</span> <span class="n">target</span><span class="o">=</span><span class="n">dbg</span><span class="o">.</span><span class="n">current_process</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">ret_trigger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbg</span><span class="p">,</span> <span class="n">exception</span><span class="p">):</span>
+<div class="viewcode-block" id="FunctionCallBP.ret_trigger"><a class="viewcode-back" href="../../../debug.html#windows.debug.FunctionCallBP.ret_trigger">[docs]</a>    <span class="k">def</span> <span class="nf">ret_trigger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbg</span><span class="p">,</span> <span class="n">exception</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Called at the return of the function if :func:`break_on_ret` was called&quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;ret_trigger&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;ret_trigger&quot;</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="FunctionBP"><a class="viewcode-back" href="../../../debug.html#windows.debug.FunctionBP">[docs]</a><span class="k">class</span> <span class="nc">FunctionBP</span><span class="p">(</span><span class="n">FunctionCallBP</span><span class="p">,</span> <span class="n">FunctionParamDumpBP</span><span class="p">):</span>

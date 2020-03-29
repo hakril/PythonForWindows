@@ -42,6 +42,15 @@
 <span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
 <span class="kn">from</span> <span class="nn">windows.generated_def.ntstatus</span> <span class="k">import</span> <span class="n">NtStatusException</span>
 
+
+<span class="c1"># ApiProxy stuff</span>
+<span class="k">class</span> <span class="nc">ExportNotFound</span><span class="p">(</span><span class="ne">RuntimeError</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func_name</span><span class="p">,</span> <span class="n">api_name</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">func_name</span> <span class="o">=</span> <span class="n">func_name</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">api_name</span> <span class="o">=</span> <span class="n">api_name</span>
+            <span class="nb">super</span><span class="p">(</span><span class="n">ExportNotFound</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s2">&quot;Function </span><span class="si">{0}</span><span class="s2"> not found into </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">func_name</span><span class="p">,</span> <span class="n">api_name</span><span class="p">))</span>
+
+
 <span class="c1"># PFW Winproxy Exception type</span>
 <div class="viewcode-block" id="WinproxyError"><a class="viewcode-back" href="../../../winproxy.html#windows.winproxy.WinproxyError">[docs]</a><span class="k">class</span> <span class="nc">WinproxyError</span><span class="p">(</span><span class="ne">WindowsError</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">func_name</span><span class="p">,</span> <span class="n">error_code</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>

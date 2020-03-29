@@ -41,6 +41,8 @@
 <span class="kn">import</span> <span class="nn">functools</span>
 
 <span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
+<span class="kn">from</span> <span class="nn">.error</span> <span class="k">import</span> <span class="n">ExportNotFound</span>
+<span class="kn">from</span> <span class="nn">windows.pycompat</span> <span class="k">import</span> <span class="n">is_py3</span>
 
 <span class="c1"># Utils</span>
 <div class="viewcode-block" id="is_implemented"><a class="viewcode-back" href="../../../winproxy.html#windows.winproxy.is_implemented">[docs]</a><span class="k">def</span> <span class="nf">is_implemented</span><span class="p">(</span><span class="n">apiproxy</span><span class="p">):</span>
@@ -60,16 +62,8 @@
 <div class="viewcode-block" id="resolve"><a class="viewcode-back" href="../../../winproxy.html#windows.winproxy.resolve">[docs]</a><span class="k">def</span> <span class="nf">resolve</span><span class="p">(</span><span class="n">apiproxy</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Resolve the address of ``apiproxy``. Might raise if ``apiproxy`` is not implemented&quot;&quot;&quot;</span>
     <span class="n">apiproxy</span><span class="o">.</span><span class="n">force_resolution</span><span class="p">()</span>
-    <span class="n">func</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">WinDLL</span><span class="p">(</span><span class="n">dll_name</span><span class="p">)[</span><span class="n">func_name</span><span class="p">]</span>
+    <span class="n">func</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">WinDLL</span><span class="p">(</span><span class="n">apiproxy</span><span class="o">.</span><span class="n">target_dll</span><span class="p">)[</span><span class="n">apiproxy</span><span class="o">.</span><span class="n">target_func</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PVOID</span><span class="p">)</span><span class="o">.</span><span class="n">value</span></div>
-
-
-<span class="c1"># ApiProxy stuff</span>
-<span class="k">class</span> <span class="nc">ExportNotFound</span><span class="p">(</span><span class="ne">RuntimeError</span><span class="p">):</span>
-        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func_name</span><span class="p">,</span> <span class="n">api_name</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">func_name</span> <span class="o">=</span> <span class="n">func_name</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">api_name</span> <span class="o">=</span> <span class="n">api_name</span>
-            <span class="nb">super</span><span class="p">(</span><span class="n">ExportNotFound</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s2">&quot;Function </span><span class="si">{0}</span><span class="s2"> not found into </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">func_name</span><span class="p">,</span> <span class="n">api_name</span><span class="p">))</span>
 
 
 <span class="k">class</span> <span class="nc">NeededParameterType</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -149,7 +143,7 @@
 
                 <span class="c1"># &quot;argument 2: &lt;type &#39;exceptions.TypeError&#39;&gt;: wrong type&quot;</span>
                 <span class="c1"># Thx ctypes..</span>
-                <span class="n">argnbstr</span><span class="p">,</span> <span class="n">ecx</span><span class="p">,</span> <span class="n">reason</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
+                <span class="n">argnbstr</span><span class="p">,</span> <span class="n">ecx</span><span class="p">,</span> <span class="n">reason</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span> <span class="c1"># py2 / py3 compat :)</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">argnbstr</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;argument &quot;</span><span class="p">):</span>
                     <span class="k">raise</span> <span class="c1"># Don&#39;t knnow if it can happen</span>
                 <span class="n">argnb</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">argnbstr</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="s2">&quot;argument &quot;</span><span class="p">):])</span>

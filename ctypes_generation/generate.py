@@ -354,16 +354,20 @@ class WinErrorCtypesGenerator(DefineCtypesGenerator):
 
 # TEST Documentation generator
 class DefineDocGenerator(NoTemplatedGenerator):
+    DOCNAME = "WinDef"
+
     def copy_template(self):
         self.emitline(".. currentmodule:: windows.generated_def")
         self.emitline("")
-        self.emitline("Windef")
+        self.emitline(self.DOCNAME)
         self.emitline("------")
 
     def generate_for_file(self, file):
         for define in file.data:
             self.emitline(".. autodata:: {define.name}".format(define=define))
 
+class WinErrorDocGenerator(DefineDocGenerator):
+    DOCNAME = "WinError"
 
 class NtStatusCtypesGenerator(CtypesGenerator):
     def generate_for_file(self, file):
@@ -750,7 +754,7 @@ ntstatus_module_generator.generate()
 ntstatus_module_generator.generate_doc(from_here(r"..\docs\source\ntstatus_generated.rst"))
 
 print("== Generating WinError ==")
-winerror_module_generator = ModuleGenerator(WINERROR_MODULE, DefinitionParsedFile, WinErrorCtypesGenerator, DefineDocGenerator, from_here(r"definitions\winerror.txt"))
+winerror_module_generator = ModuleGenerator(WINERROR_MODULE, DefinitionParsedFile, WinErrorCtypesGenerator, WinErrorDocGenerator, from_here(r"definitions\winerror.txt"))
 # Hardcoded template file (no dir for ntstatus) -- Need one dir ?
 winerror_module_generator.get_template_filename = lambda : from_here(r"definitions\winerror_template.py")
 winerror_module_generator.generate()

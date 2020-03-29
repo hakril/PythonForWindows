@@ -359,7 +359,7 @@ ALPC messages over an ALPC port and the classes representing these messages.</p>
 
 <dl class="method">
 <dt id="windows.alpc.AlpcClient.send_receive">
-<code class="descname">send_receive</code><span class="sig-paren">(</span><em>alpc_message</em>, <em>receive_msg=None</em>, <em>flags=ALPC_MSGFLG_SYNC_REQUEST(0x20000)</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.alpc.AlpcClient.send_receive" title="Permalink to this definition">¶</a></dt>
+<code class="descname">send_receive</code><span class="sig-paren">(</span><em>alpc_message</em>, <em>receive_msg=None</em>, <em>flags=ALPC_MSGFLG_SYNC_REQUEST(0x20000)</em>, <em>timeout=None</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.alpc.AlpcClient.send_receive" title="Permalink to this definition">¶</a></dt>
 <dd><p>Send and receive a message with <code class="docutils literal notranslate"><span class="pre">flags</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -464,7 +464,7 @@ ALPC messages over an ALPC port and the classes representing these messages.</p>
 
 <dl class="method">
 <dt id="windows.alpc.AlpcServer.send_receive">
-<code class="descname">send_receive</code><span class="sig-paren">(</span><em>alpc_message</em>, <em>receive_msg=None</em>, <em>flags=ALPC_MSGFLG_SYNC_REQUEST(0x20000)</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.alpc.AlpcServer.send_receive" title="Permalink to this definition">¶</a></dt>
+<code class="descname">send_receive</code><span class="sig-paren">(</span><em>alpc_message</em>, <em>receive_msg=None</em>, <em>flags=ALPC_MSGFLG_SYNC_REQUEST(0x20000)</em>, <em>timeout=None</em><span class="sig-paren">)</span><a class="headerlink" href="#windows.alpc.AlpcServer.send_receive" title="Permalink to this definition">¶</a></dt>
 <dd><p>Send and receive a message with <code class="docutils literal notranslate"><span class="pre">flags</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />

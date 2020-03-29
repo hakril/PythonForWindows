@@ -783,7 +783,7 @@ Current thread token is &lt;Token TokenId=0x3f1fac85 Type=TokenImpersonation(0x2
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Listing actions:&quot;</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="n">task</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">actions</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   * Action: &lt;</span><span class="si">{action}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="n">action</span><span class="p">))</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;     * Type: &lt;</span><span class="si">{action.type}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="n">action</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;     * Type: &lt;</span><span class="si">{action.type!r}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="n">action</span><span class="p">))</span>
     <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">action</span><span class="p">,</span> <span class="s2">&quot;path&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;     * path: &lt;</span><span class="si">{action.path}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="n">action</span><span class="p">))</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;     * arguments: &lt;</span><span class="si">{action.arguments}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="n">action</span><span class="p">))</span>
@@ -791,7 +791,7 @@ Current thread token is &lt;Token TokenId=0x3f1fac85 Type=TokenImpersonation(0x2
     <span class="c1"># import pdb;pdb.set_trace()</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Listing triggers:&quot;</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">trigger</span> <span class="ow">in</span> <span class="n">task</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">triggers</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   * Trigger type: &lt;</span><span class="si">{trigger.type}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">trigger</span><span class="o">=</span><span class="n">trigger</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   * Trigger type: &lt;</span><span class="si">{trigger.type!r}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">trigger</span><span class="o">=</span><span class="n">trigger</span><span class="p">))</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
 <span class="n">DEMO_FOLDER_NAME</span> <span class="o">=</span> <span class="s2">&quot;PFW_DEMO_FOLDER&quot;</span>
@@ -1076,7 +1076,7 @@ Current thread token is &lt;Token TokenId=0x3f1fac85 Type=TokenImpersonation(0x2
     <span class="k">while</span> <span class="n">TODO</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">TODO</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                <span class="k">if</span> <span class="n">findname</span> <span class="ow">in</span> <span class="n">name</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">findname</span> <span class="ow">in</span> <span class="n">name</span> <span class="ow">or</span> <span class="n">findname</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">type</span><span class="p">:</span>
                     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;* </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">obj_with_link</span><span class="p">(</span><span class="n">obj</span><span class="p">)))</span>
                 <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">&quot;Directory&quot;</span><span class="p">:</span>
                     <span class="n">TODO</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
@@ -1562,8 +1562,71 @@ No more tracing !
 </pre></div>
 </div>
 </div>
+<div class="section" id="windows-debug-functioncallbp">
+<span id="sample-debugger-bp-functioncallbp"></span><h4>18.11.1.3. <a class="reference internal" href="debug.html#windows.debug.FunctionCallBP" title="windows.debug.FunctionCallBP"><code class="xref py py-class docutils literal notranslate"><span class="pre">windows.debug.FunctionCallBP</span></code></a><a class="headerlink" href="#windows-debug-functioncallbp" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os.path</span>
+<span class="kn">import</span> <span class="nn">pprint</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span> <span class="o">+</span> <span class="s2">&quot;\..\..&quot;</span><span class="p">))</span>
+
+<span class="kn">import</span> <span class="nn">windows</span>
+<span class="kn">import</span> <span class="nn">windows.test</span>
+<span class="kn">import</span> <span class="nn">windows.debug</span>
+<span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
+
+<span class="c1"># The debugge python will just print the result of</span>
+<span class="c1"># 3 call to IsDebuggerPresent</span>
+<span class="n">TARGET_PYTHON_CODE</span> <span class="o">=</span> <span class="s1">&#39;&quot;</span><span class="se">\</span>
+<span class="s1">import ctypes;</span><span class="se">\</span>
+<span class="s1">import time;</span><span class="se">\</span>
+<span class="s1">IsDebuggerPresent = ctypes.windll.kernel32.IsDebuggerPresent;</span><span class="se">\</span>
+<span class="s1">print(</span><span class="se">\&#39;</span><span class="s1">[DEBUGGE] IsDebuggerPresent=</span><span class="si">{0}</span><span class="se">\&#39;</span><span class="s1">.format(IsDebuggerPresent()));</span><span class="se">\</span>
+<span class="s1">time.sleep(1);</span><span class="se">\</span>
+<span class="s1">print(</span><span class="se">\&#39;</span><span class="s1">[DEBUGGE] IsDebuggerPresent=</span><span class="si">{0}</span><span class="se">\&#39;</span><span class="s1">.format(IsDebuggerPresent()));</span><span class="se">\</span>
+<span class="s1">time.sleep(1);</span><span class="se">\</span>
+<span class="s1">print(</span><span class="se">\&#39;</span><span class="s1">[DEBUGGE] IsDebuggerPresent=</span><span class="si">{0}</span><span class="se">\&#39;</span><span class="s1">.format(IsDebuggerPresent()));</span><span class="se">\</span>
+<span class="s1">&quot;&#39;</span>
+
+<span class="c1"># This breakpoint now nothing about its target argument</span>
+<span class="c1"># It only now how to break at the return of the function</span>
+<span class="c1"># This allow us to change the return value of any function</span>
+<span class="k">class</span> <span class="nc">IncrementReturnValue</span><span class="p">(</span><span class="n">windows</span><span class="o">.</span><span class="n">debug</span><span class="o">.</span><span class="n">FunctionCallBP</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">initialvalue</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">IncrementReturnValue</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initialvalue</span> <span class="o">=</span> <span class="n">initialvalue</span>
+
+    <span class="k">def</span> <span class="nf">trigger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbg</span><span class="p">,</span> <span class="n">exc</span><span class="p">):</span>
+        <span class="c1"># Ask to break a the return of the function</span>
+        <span class="c1"># callback is ret_trigger</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">break_on_ret</span><span class="p">(</span><span class="n">dbg</span><span class="p">,</span> <span class="n">exc</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">ret_trigger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbg</span><span class="p">,</span> <span class="n">exc</span><span class="p">):</span>
+        <span class="n">ctx</span> <span class="o">=</span> <span class="n">dbg</span><span class="o">.</span><span class="n">current_thread</span><span class="o">.</span><span class="n">context</span>
+        <span class="c1"># Func result is an alias to EAX/RAX</span>
+        <span class="n">ctx</span><span class="o">.</span><span class="n">func_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initialvalue</span>
+        <span class="c1"># Set the new context for the target thread</span>
+        <span class="n">dbg</span><span class="o">.</span><span class="n">current_thread</span><span class="o">.</span><span class="n">set_context</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initialvalue</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="n">d</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">debug</span><span class="o">.</span><span class="n">Debugger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">executable</span><span class="p">,</span> <span class="p">[</span><span class="n">sys</span><span class="o">.</span><span class="n">executable</span><span class="p">,</span> <span class="s2">&quot;-c&quot;</span><span class="p">,</span> <span class="n">TARGET_PYTHON_CODE</span><span class="p">])</span>
+<span class="c1"># We could also give the direct address of the function</span>
+<span class="c1"># But it would require to wait for the module to be loaded</span>
+<span class="n">d</span><span class="o">.</span><span class="n">add_bp</span><span class="p">(</span><span class="n">IncrementReturnValue</span><span class="p">(</span><span class="s2">&quot;kernelbase!IsDebuggerPresent&quot;</span><span class="p">,</span> <span class="mi">42</span><span class="p">))</span>
+<span class="n">d</span><span class="o">.</span><span class="n">loop</span><span class="p">()</span>
+
+</pre></div>
+</div>
+<p>Output</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span> <span class="n">python</span> <span class="n">debug</span>\<span class="n">change_function_ret_value</span><span class="o">.</span><span class="n">py</span>
+<span class="p">[</span><span class="n">DEBUGGE</span><span class="p">]</span> <span class="n">IsDebuggerPresent</span><span class="o">=</span><span class="mi">42</span>
+<span class="p">[</span><span class="n">DEBUGGE</span><span class="p">]</span> <span class="n">IsDebuggerPresent</span><span class="o">=</span><span class="mi">43</span>
+<span class="p">[</span><span class="n">DEBUGGE</span><span class="p">]</span> <span class="n">IsDebuggerPresent</span><span class="o">=</span><span class="mi">44</span>
+</pre></div>
+</div>
+</div>
 <div class="section" id="windows-debug-functionbp">
-<h4>18.11.1.3. <a class="reference internal" href="debug.html#windows.debug.FunctionBP" title="windows.debug.FunctionBP"><code class="xref py py-class docutils literal notranslate"><span class="pre">windows.debug.FunctionBP</span></code></a><a class="headerlink" href="#windows-debug-functionbp" title="Permalink to this headline">¶</a></h4>
+<span id="sample-debugger-bp-functionbp"></span><h4>18.11.1.4. <a class="reference internal" href="debug.html#windows.debug.FunctionBP" title="windows.debug.FunctionBP"><code class="xref py py-class docutils literal notranslate"><span class="pre">windows.debug.FunctionBP</span></code></a><a class="headerlink" href="#windows-debug-functionbp" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
@@ -1630,7 +1693,7 @@ Exiting process
 </div>
 </div>
 <div class="section" id="debugger-attach">
-<span id="sample-debugger-attach"></span><h4>18.11.1.4. <a class="reference internal" href="debug.html#windows.debug.Debugger.attach" title="windows.debug.Debugger.attach"><code class="xref py py-func docutils literal notranslate"><span class="pre">Debugger.attach</span></code></a><a class="headerlink" href="#debugger-attach" title="Permalink to this headline">¶</a></h4>
+<span id="sample-debugger-attach"></span><h4>18.11.1.5. <a class="reference internal" href="debug.html#windows.debug.Debugger.attach" title="windows.debug.Debugger.attach"><code class="xref py py-func docutils literal notranslate"><span class="pre">Debugger.attach</span></code></a><a class="headerlink" href="#debugger-attach" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
@@ -1683,7 +1746,7 @@ Exiting process
 </div>
 </div>
 <div class="section" id="native-code-tester">
-<h4>18.11.1.5. Native code tester<a class="headerlink" href="#native-code-tester" title="Permalink to this headline">¶</a></h4>
+<h4>18.11.1.6. Native code tester<a class="headerlink" href="#native-code-tester" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">argparse</span>
 
@@ -2631,9 +2694,10 @@ Result = &lt;my secret message&gt;
 <div class="section" id="certificate-demo">
 <span id="sample-crypto-certificate"></span><h3>18.14.2. Certificate demo<a class="headerlink" href="#certificate-demo" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">hashlib</span>
+<span class="kn">import</span> <span class="nn">base64</span>
 <span class="kn">import</span> <span class="nn">windows.crypto</span>
 
-<span class="n">windowscert</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;-----BEGIN CERTIFICATE-----</span>
+<span class="n">windowscert</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;&quot;&quot;-----BEGIN CERTIFICATE-----</span>
 <span class="s2">MIIFBDCCA+ygAwIBAgITMwAAAQZuwyXEMckYDgAAAAABBjANBgkqhkiG9w0BAQsF</span>
 <span class="s2">ADCBhDELMAkGA1UEBhMCVVMxEzARBgNVBAgTCldhc2hpbmd0b24xEDAOBgNVBAcT</span>
 <span class="s2">B1JlZG1vbmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3JhdGlvbjEuMCwGA1UE</span>
@@ -2664,7 +2728,7 @@ Result = &lt;my secret message&gt;
 <span class="s2">-----END CERTIFICATE-----&quot;&quot;&quot;</span>
 
 
-<span class="n">raw_cert</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">windowscert</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;base64&#39;</span><span class="p">)</span>
+<span class="n">raw_cert</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">decodestring</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">windowscert</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
 <span class="n">cert</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">crypto</span><span class="o">.</span><span class="n">Certificate</span><span class="o">.</span><span class="n">from_buffer</span><span class="p">(</span><span class="n">raw_cert</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Analysing certificate: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cert</span><span class="p">))</span>
@@ -2674,7 +2738,7 @@ Result = &lt;my secret message&gt;
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    * serial: &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cert</span><span class="o">.</span><span class="n">serial</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    * encoded start: &lt;</span><span class="si">{0!r}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cert</span><span class="o">.</span><span class="n">encoded</span><span class="p">[:</span><span class="mi">20</span><span class="p">]))</span>
 
-<span class="nb">print</span> <span class="s2">&quot;&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
 <span class="n">chains</span> <span class="o">=</span> <span class="n">cert</span><span class="o">.</span><span class="n">chains</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;This certificate has </span><span class="si">{0}</span><span class="s2"> certificate chain(s)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">chains</span><span class="p">)))</span>
 <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">chain</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">chains</span><span class="p">):</span>
@@ -2684,7 +2748,7 @@ Result = &lt;my secret message&gt;
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  </span><span class="si">{0}</span><span class="s2">:&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ccert</span><span class="p">))</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    * issuer: &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ccert</span><span class="o">.</span><span class="n">issuer</span><span class="p">))</span>
 
-<span class="nb">print</span> <span class="s2">&quot;&quot;</span>
+<span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
 <span class="n">cert_to_verif</span> <span class="o">=</span> <span class="n">ccert</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Looking for &lt;</span><span class="si">{0}</span><span class="s2">&gt; in trusted certificates&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cert_to_verif</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
 <span class="n">root_store</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">crypto</span><span class="o">.</span><span class="n">CertificateStore</span><span class="o">.</span><span class="n">from_system_store</span><span class="p">(</span><span class="s2">&quot;Root&quot;</span><span class="p">)</span>
@@ -2710,7 +2774,7 @@ Result = &lt;my secret message&gt;
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;File has </span><span class="si">{0}</span><span class="s2"> signer(s):&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cryptobj</span><span class="o">.</span><span class="n">crypt_msg</span><span class="o">.</span><span class="n">nb_signer</span><span class="p">))</span>
 <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">signer</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cryptobj</span><span class="o">.</span><span class="n">crypt_msg</span><span class="o">.</span><span class="n">signers</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Signer </span><span class="si">{0}</span><span class="s2">:&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   * Issuer: </span><span class="si">{0!r}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">windows</span><span class="o">.</span><span class="n">crypto</span><span class="o">.</span><span class="n">ECRYPT_DATA_BLOB</span><span class="p">(</span><span class="n">signer</span><span class="o">.</span><span class="n">Issuer</span><span class="o">.</span><span class="n">cbData</span><span class="p">,</span> <span class="n">signer</span><span class="o">.</span><span class="n">Issuer</span><span class="o">.</span><span class="n">pbData</span><span class="p">)</span><span class="o">.</span><span class="n">data</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   * Issuer: </span><span class="si">{0!r}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">signer</span><span class="o">.</span><span class="n">Issuer</span><span class="o">.</span><span class="n">data</span><span class="p">))</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   * HashAlgorithme: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">signer</span><span class="o">.</span><span class="n">HashAlgorithm</span><span class="o">.</span><span class="n">pszObjId</span><span class="p">))</span>
     <span class="n">cert</span> <span class="o">=</span> <span class="n">cryptobj</span><span class="o">.</span><span class="n">cert_store</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">signer</span><span class="o">.</span><span class="n">Issuer</span><span class="p">,</span> <span class="n">signer</span><span class="o">.</span><span class="n">SerialNumber</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   * Certificate: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cert</span><span class="p">))</span>
@@ -2771,24 +2835,16 @@ File embdeds 2 certificate(s):
 <span class="n">PORT_NAME</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;\RPC Control\PythonForWindowsPORT&quot;</span>
 
 
-<span class="k">def</span> <span class="nf">print_alpc_handle</span><span class="p">():</span>
-    <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">windows</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">handles</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">h</span><span class="o">.</span><span class="n">dwProcessId</span> <span class="o">!=</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">pid</span><span class="p">:</span>
-            <span class="k">continue</span>
-        <span class="k">if</span> <span class="n">h</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">&quot;ALPC Port&quot;</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">h</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">h</span><span class="o">.</span><span class="n">wValue</span><span class="p">)</span>
-
 <span class="k">def</span> <span class="nf">alpc_server</span><span class="p">():</span>
     <span class="n">server</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">alpc</span><span class="o">.</span><span class="n">AlpcServer</span><span class="p">(</span><span class="n">PORT_NAME</span><span class="p">)</span> <span class="c1"># Create the ALPC Port</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[SERV] PORT &lt;</span><span class="si">{0}</span><span class="s2">&gt; CREATED&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">PORT_NAME</span><span class="p">))</span>
-    <span class="n">print_alpc_handle</span><span class="p">()</span>
+
     <span class="n">msg</span> <span class="o">=</span> <span class="n">server</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span> <span class="c1"># Wait for a message</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[SERV] Message type = </span><span class="si">{0:#x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">type</span><span class="p">))</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[SERV] Received data: &lt;</span><span class="si">{0}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">data</span><span class="p">))</span>
     <span class="k">assert</span> <span class="n">msg</span><span class="o">.</span><span class="n">type</span> <span class="o">&amp;</span> <span class="mh">0xfff</span>  <span class="o">==</span> <span class="n">LPC_CONNECTION_REQUEST</span> <span class="c1"># Check that message is a connection request</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[SERV] Connection request&quot;</span><span class="p">)</span>
     <span class="n">server</span><span class="o">.</span><span class="n">accept_connection</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
-    <span class="n">print_alpc_handle</span><span class="p">()</span>
 
     <span class="n">msg</span> <span class="o">=</span> <span class="n">server</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span> <span class="c1"># Wait for a real message</span>
     <span class="nb">print</span> <span class="s2">&quot;&quot;</span>
@@ -2800,7 +2856,6 @@ File embdeds 2 certificate(s):
     <span class="c1">#    - Recreate a Message and copy the MessageId</span>
     <span class="n">msg</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;REQUEST &#39;</span><span class="si">{0}</span><span class="s2">&#39; DONE&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
     <span class="n">server</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
-    <span class="n">print_alpc_handle</span><span class="p">()</span>
 
 
 
@@ -3563,9 +3618,10 @@ BYE
 <li><a class="reference internal" href="#debugger">18.11.1. <code class="docutils literal notranslate"><span class="pre">Debugger</span></code></a><ul>
 <li><a class="reference internal" href="#on-setup">18.11.1.1. on_setup</a></li>
 <li><a class="reference internal" href="#single-stepping">18.11.1.2. Single stepping</a></li>
-<li><a class="reference internal" href="#windows-debug-functionbp">18.11.1.3. <code class="docutils literal notranslate"><span class="pre">windows.debug.FunctionBP</span></code></a></li>
-<li><a class="reference internal" href="#debugger-attach">18.11.1.4. <code class="docutils literal notranslate"><span class="pre">Debugger.attach</span></code></a></li>
-<li><a class="reference internal" href="#native-code-tester">18.11.1.5. Native code tester</a></li>
+<li><a class="reference internal" href="#windows-debug-functioncallbp">18.11.1.3. <code class="docutils literal notranslate"><span class="pre">windows.debug.FunctionCallBP</span></code></a></li>
+<li><a class="reference internal" href="#windows-debug-functionbp">18.11.1.4. <code class="docutils literal notranslate"><span class="pre">windows.debug.FunctionBP</span></code></a></li>
+<li><a class="reference internal" href="#debugger-attach">18.11.1.5. <code class="docutils literal notranslate"><span class="pre">Debugger.attach</span></code></a></li>
+<li><a class="reference internal" href="#native-code-tester">18.11.1.6. Native code tester</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#localdebugger">18.11.2. <code class="docutils literal notranslate"><span class="pre">LocalDebugger</span></code></a><ul>

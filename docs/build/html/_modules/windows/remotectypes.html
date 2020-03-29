@@ -46,6 +46,14 @@
 <span class="kn">import</span> <span class="nn">itertools</span>
 <span class="kn">from</span> <span class="nn">_ctypes</span> <span class="k">import</span> <span class="n">_SimpleCData</span>
 
+<span class="c1"># No PFW deps in this file</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">is_py3</span> <span class="o">=</span> <span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">is_py3</span><span class="p">:</span>
+    <span class="n">int_types</span> <span class="o">=</span> <span class="nb">int</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">int_types</span> <span class="o">=</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">long</span><span class="p">)</span>
+
 
 <span class="c1"># ## Utils ### #</span>
 <span class="k">def</span> <span class="nf">is_pointer</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
@@ -136,11 +144,11 @@
         <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">count</span><span class="p">():</span>
             <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">read_memory</span><span class="p">(</span><span class="n">base</span> <span class="o">+</span> <span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="mh">0x100</span><span class="p">),</span> <span class="mh">0x100</span><span class="p">)</span>
-            <span class="k">if</span> <span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span> <span class="ow">in</span> <span class="n">x</span><span class="p">:</span>
-                <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">if</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span> <span class="ow">in</span> <span class="n">x</span><span class="p">:</span>
+                <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
                 <span class="k">break</span>
             <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-        <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+        <span class="k">return</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
 
 
 <span class="k">class</span> <span class="nc">RemoteWCharP</span><span class="p">(</span><span class="n">RemotePtr</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_char_p</span><span class="p">):</span>
@@ -207,7 +215,7 @@
 
         <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">slice</span><span class="p">):</span>
             <span class="c1"># import pdb;pdb.set_trace()</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">slice</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">long</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">slice</span><span class="p">,</span> <span class="n">int_types</span><span class="p">):</span>
                 <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;RemoteArray slice __getitem__&quot;</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">slice</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s2">&quot;Access to </span><span class="si">{0}</span><span class="s2"> for a RemoteArray of size </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">slice</span><span class="p">,</span> <span class="nb">len</span><span class="p">))</span>
@@ -332,6 +340,21 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">contents</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># What if we have a non-struct pointer</span>
+        <span class="c1"># Like a Ptr(DWORD) we would like to get the underlying value</span>
+        <span class="n">realtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">real_pointer_type</span><span class="o">.</span><span class="n">_sub_ctypes_</span>
+        <span class="c1"># if _SimpleCData in realtype.__bases__:</span>
+            <span class="c1"># A ctypes original value.</span>
+            <span class="c1"># Returnthe real pointed value</span>
+            <span class="c1"># Kind of a tricks for now compared to the real ctypes behavior</span>
+            <span class="c1"># import pdb;pdb.set_trace()</span>
+            <span class="c1"># if not self.value:</span>
+                <span class="c1"># return None</span>
+            <span class="c1"># targetptr = self.target.read_ptr(self.value)</span>
+            <span class="c1"># if not targetptr:</span>
+                <span class="c1"># return None</span>
+            <span class="c1"># ss = self.target.read_memory(targetptr, ctypes.sizeof(realtype))</span>
+            <span class="c1"># return realtype.from_buffer(bytearray(ss)).value</span>
         <span class="n">remote_pointed_type</span> <span class="o">=</span> <span class="n">transform_type_to_remote32bits</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">real_pointer_type</span><span class="o">.</span><span class="n">_sub_ctypes_</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">remote_pointed_type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">raw_value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">)</span>
 
@@ -393,7 +416,7 @@
         <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">ftype</span><span class="p">,</span> <span class="n">_ctypes</span><span class="o">.</span><span class="n">Array</span><span class="p">):</span>  <span class="c1"># Arrays</span>
             <span class="c1"># if this is a string: just cast the read value to string</span>
             <span class="k">if</span> <span class="n">ftype</span><span class="o">.</span><span class="n">_type_</span> <span class="o">==</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_char</span><span class="p">:</span> <span class="c1"># Use issubclass instead ?</span>
-                <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
             <span class="k">elif</span> <span class="n">ftype</span><span class="o">.</span><span class="n">_type_</span> <span class="o">==</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_wchar</span><span class="p">:</span> <span class="c1"># Use issubclass instead ?</span>
                 <span class="c1"># Decode from utf16 -&gt; size /=2 | put it in a wchar array | split at the first &quot;\x00&quot;</span>
                 <span class="k">return</span> <span class="p">(</span><span class="n">ftype</span><span class="o">.</span><span class="n">_type_</span> <span class="o">*</span> <span class="p">(</span><span class="n">fsize</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span><span class="o">.</span><span class="n">from_buffer_copy</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf16&#39;</span><span class="p">))[:]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># Sorry..</span>

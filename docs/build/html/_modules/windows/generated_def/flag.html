@@ -39,7 +39,7 @@
   <h1>Source code for windows.generated_def.flag</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">sys</span>
 
-<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
     <span class="n">long</span> <span class="o">=</span> <span class="nb">int</span>
 
 
@@ -53,7 +53,12 @@
     <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">(</span><span class="si">{1:#x}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
 
-    <span class="fm">__str__</span> <span class="o">=</span> <span class="fm">__repr__</span>
+    <span class="c1"># Custom __str__ removed for multiple reason</span>
+    <span class="c1"># Main one -&gt; it breaks the json encoding of structure with flags :)</span>
+    <span class="c1"># Moving to a new politic -&gt; if people want the name in a string use {x!r}</span>
+    <span class="c1"># The __str__ of security descriptor &amp; guid will change soon as well :)</span>
+
+    <span class="c1"># __str__ = __repr__</span>
 
    <span class="c1"># Fix pickling with protocol 2</span>
     <span class="k">def</span> <span class="nf">__getnewargs__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>

@@ -206,6 +206,27 @@
     <span class="n">ITEM_TYPE</span> <span class="o">=</span> <span class="n">Trigger</span></div>
 
 
+<span class="k">class</span> <span class="nc">TaskRegistrationInfo</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">IRegistrationInfo</span><span class="p">):</span>
+    <span class="n">author</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_Author&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_Description&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
+    <span class="n">date</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_Date&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
+    <span class="n">source</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_Source&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
+    <span class="n">documentation</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_Documentation&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
+    <span class="n">uri</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_URI&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
+    <span class="n">version</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_Version&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
+
+    <span class="c1"># Return WindowsError: [Error -2147467263] Not implemented</span>
+    <span class="n">xml</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_XmlText&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
+    <span class="c1"># security_descriptor = generate_simple_getter(&quot;get_SecurityDescriptor&quot;, gdef.BSTR)</span>
+
+<span class="k">class</span> <span class="nc">TaskPrincipal</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">IPrincipal</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_DisplayName&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_Id&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
+    <span class="n">user_id</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_UserId&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
+    <span class="n">group_id</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_GroupId&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
+    <span class="n">run_level</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_RunLevel&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">TASK_RUNLEVEL_TYPE</span><span class="p">)</span>
+    <span class="n">logon_type</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_LogonType&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">TASK_LOGON_TYPE</span><span class="p">)</span>
+
 <div class="viewcode-block" id="TaskDefinition"><a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.TaskDefinition">[docs]</a><span class="k">class</span> <span class="nc">TaskDefinition</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">ITaskDefinition</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;The definition of a task&quot;&quot;&quot;</span>
     <span class="n">actions</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_Actions&quot;</span><span class="p">,</span> <span class="n">ActionCollection</span><span class="p">,</span> <span class="n">extract_value</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -217,7 +238,17 @@
     <span class="sd">&quot;&quot;&quot;The list of triggers of the task</span>
 
 <span class="sd">    :type: :class:`TriggerCollection`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">registration_info</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_RegistrationInfo&quot;</span><span class="p">,</span> <span class="n">TaskRegistrationInfo</span><span class="p">,</span> <span class="n">extract_value</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">principal</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_Principal&quot;</span><span class="p">,</span> <span class="n">TaskPrincipal</span><span class="p">,</span> <span class="n">extract_value</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">xml</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_XmlText&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;The XML representig the task definition</span>
+
+<span class="sd">        :type: :class:`str`</span>
 <span class="sd">    &quot;&quot;&quot;</span></div>
+
+
 
 <div class="viewcode-block" id="Task"><a class="viewcode-back" href="../../../task_scheduler.html#windows.winobject.task_scheduler.Task">[docs]</a><span class="k">class</span> <span class="nc">Task</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">IRegisteredTask</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A scheduled task&quot;&quot;&quot;</span>
@@ -228,12 +259,26 @@
     <span class="n">state</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_State&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">TASK_STATE</span><span class="p">)</span>
     <span class="sd">&quot;&quot;&quot;The state of the task</span>
 
+
 <span class="sd">        :type: :class:`~windows.generated_def.winstructs.TASK_STATE`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">enabled</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_Enabled&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">VARIANT_BOOL</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;``True`` is the task is enabled&quot;&quot;&quot;</span>
+    <span class="n">last_runtime</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_LastRunTime&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DATE</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;Gets the last time the registered task was last run.&quot;&quot;&quot;</span>
+    <span class="n">next_runtime</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_NextRunTime&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DATE</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;Gets the next time the registered task will be run.&quot;&quot;&quot;</span>
+
     <span class="n">definition</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_Definition&quot;</span><span class="p">,</span> <span class="n">TaskDefinition</span><span class="p">,</span> <span class="n">extract_value</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="sd">&quot;&quot;&quot;The definition of the task</span>
 
 <span class="sd">        :type: :class:`TaskDefinition`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">xml</span> <span class="o">=</span> <span class="n">generate_simple_getter</span><span class="p">(</span><span class="s2">&quot;get_Xml&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;The XML representig the task</span>
+
+<span class="sd">        :type: :class:`str`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">TASK_RUN_NO_FLAGS</span><span class="p">,</span> <span class="n">sessionid</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -241,6 +286,11 @@
         <span class="n">result</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">IRunningTask</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">RunEx</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="n">sessionid</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">result</span>
+
+    <span class="k">def</span> <span class="nf">get_security_descriptor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">secinfo</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">BSTR</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">GetSecurityDescriptor</span><span class="p">(</span><span class="n">secinfo</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">res</span><span class="o">.</span><span class="n">value</span>
 
     <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;&quot;&quot;&lt;</span><span class="si">{0}</span><span class="s2"> &quot;</span><span class="si">{1}</span><span class="s2">&quot; at </span><span class="si">{2:#x}</span><span class="s2">&gt;&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span></div>

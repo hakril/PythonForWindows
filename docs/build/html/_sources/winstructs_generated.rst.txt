@@ -849,6 +849,276 @@ _RPC_IF_ID
 
         :class:`USHORT`
 
+_PORT_VIEW
+''''''''''
+.. class:: PPORT_VIEW
+
+    Pointer to :class:`_PORT_VIEW`
+
+.. class:: PORT_VIEW
+
+    Alias for :class:`_PORT_VIEW`
+
+.. class:: _PORT_VIEW
+
+    .. attribute:: Length
+
+        :class:`ULONG`
+
+
+    .. attribute:: SectionHandle
+
+        :class:`HANDLE`
+
+
+    .. attribute:: SectionOffset
+
+        :class:`ULONG`
+
+
+    .. attribute:: ViewSize
+
+        :class:`ULONG`
+
+
+    .. attribute:: ViewBase
+
+        :class:`PVOID`
+
+
+    .. attribute:: TargetViewBase
+
+        :class:`PVOID`
+
+_REMOTE_PORT_VIEW
+'''''''''''''''''
+.. class:: REMOTE_PORT_VIEW
+
+    Alias for :class:`_REMOTE_PORT_VIEW`
+
+.. class:: PREMOTE_PORT_VIEW
+
+    Pointer to :class:`_REMOTE_PORT_VIEW`
+
+.. class:: _REMOTE_PORT_VIEW
+
+    .. attribute:: Length
+
+        :class:`ULONG`
+
+
+    .. attribute:: ViewSize
+
+        :class:`ULONG`
+
+
+    .. attribute:: ViewBase
+
+        :class:`PVOID`
+
+tagCOMVERSION
+'''''''''''''
+.. class:: COMVERSION
+
+    Alias for :class:`tagCOMVERSION`
+
+.. class:: tagCOMVERSION
+
+    .. attribute:: MajorVersion
+
+        :class:`USHORT`
+
+
+    .. attribute:: MinorVersion
+
+        :class:`USHORT`
+
+tagORPCTHIS
+'''''''''''
+.. class:: ORPCTHIS
+
+    Alias for :class:`tagORPCTHIS`
+
+.. class:: tagORPCTHIS
+
+    .. attribute:: version
+
+        :class:`COMVERSION`
+
+
+    .. attribute:: flags
+
+        :class:`ULONG`
+
+
+    .. attribute:: reserved1
+
+        :class:`ULONG`
+
+
+    .. attribute:: cid
+
+        :class:`GUID`
+
+
+    .. attribute:: extensions
+
+        :class:`PVOID`
+
+__MIDL_XmitDefs_0001
+''''''''''''''''''''
+.. class:: MIDL_XmitDefs_0001
+
+    Alias for :class:`__MIDL_XmitDefs_0001`
+
+.. class:: __MIDL_XmitDefs_0001
+
+    .. attribute:: asyncOperationId
+
+        :class:`GUID`
+
+
+    .. attribute:: oxidClientProcessNA
+
+        :class:`ULONG64`
+
+
+    .. attribute:: originalClientLogicalThreadId
+
+        :class:`GUID`
+
+
+    .. attribute:: uClientCausalityTraceId
+
+        :class:`ULONG64`
+
+_LOCALTHIS
+''''''''''
+.. class:: LOCALTHIS
+
+    Alias for :class:`_LOCALTHIS`
+
+.. class:: _LOCALTHIS
+
+    .. attribute:: dwFlags
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwClientThread
+
+        :class:`DWORD`
+
+
+    .. attribute:: passthroughTraceActivity
+
+        :class:`GUID`
+
+
+    .. attribute:: callTraceActivity
+
+        :class:`GUID`
+
+
+    .. attribute:: asyncRequestBlock
+
+        :class:`MIDL_XmitDefs_0001`
+
+
+    .. attribute:: reserved
+
+        :class:`DWORD`
+
+
+    .. attribute:: pTouchedAstaArray
+
+        :class:`PVOID`
+
+__MIDL_IBackgroundCopyJob2_0003
+'''''''''''''''''''''''''''''''
+.. class:: BG_BASIC_CREDENTIALS
+
+    Alias for :class:`__MIDL_IBackgroundCopyJob2_0003`
+
+.. class:: __MIDL_IBackgroundCopyJob2_0003
+
+    .. attribute:: UserName
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: Password
+
+        :class:`LPWSTR`
+
+__MIDL_IBackgroundCopyJob2_0004
+'''''''''''''''''''''''''''''''
+.. class:: BG_AUTH_CREDENTIALS_UNION
+
+    Alias for :class:`__MIDL_IBackgroundCopyJob2_0004`
+
+.. class:: __MIDL_IBackgroundCopyJob2_0004
+
+    .. attribute:: Basic
+
+        :class:`BG_BASIC_CREDENTIALS`
+
+BG_AUTH_CREDENTIALS
+'''''''''''''''''''
+.. class:: BG_AUTH_CREDENTIALS
+
+    Alias for :class:`BG_AUTH_CREDENTIALS`
+
+.. class:: BG_AUTH_CREDENTIALS
+
+    .. attribute:: Target
+
+        :class:`BG_AUTH_TARGET`
+
+
+    .. attribute:: Scheme
+
+        :class:`BG_AUTH_SCHEME`
+
+
+    .. attribute:: Credentials
+
+        :class:`BG_AUTH_CREDENTIALS_UNION`
+
+_BG_JOB_REPLY_PROGRESS
+''''''''''''''''''''''
+.. class:: BG_JOB_REPLY_PROGRESS
+
+    Alias for :class:`_BG_JOB_REPLY_PROGRESS`
+
+.. class:: _BG_JOB_REPLY_PROGRESS
+
+    .. attribute:: BytesTotal
+
+        :class:`UINT64`
+
+
+    .. attribute:: BytesTransferred
+
+        :class:`UINT64`
+
+_BG_FILE_RANGE
+''''''''''''''
+.. class:: BG_FILE_RANGE
+
+    Alias for :class:`_BG_FILE_RANGE`
+
+.. class:: _BG_FILE_RANGE
+
+    .. attribute:: InitialOffset
+
+        :class:`UINT64`
+
+
+    .. attribute:: Length
+
+        :class:`UINT64`
+
 tagMULTI_QI
 '''''''''''
 .. class:: MULTI_QI
@@ -1164,7 +1434,7 @@ tagSAFEARRAY
 
     .. attribute:: rgsabound
 
-        :class:`SAFEARRAYBOUND` ``[1]``
+        :class:`SAFEARRAYBOUND` ``[<winstruct.ComplexArrayExpression object at 0x03C19AD0>]``
 
 __tagBRECORD
 ''''''''''''
@@ -1408,6 +1678,562 @@ __tagVARIANT
     .. attribute:: _VARIANT_NAME_3
 
         :class:`_ANON_TMP_variant_sub_union`
+
+tagBIND_OPTS
+''''''''''''
+.. class:: BIND_OPTS
+
+    Alias for :class:`tagBIND_OPTS`
+
+.. class:: LPBIND_OPTS
+
+    Pointer to :class:`tagBIND_OPTS`
+
+.. class:: tagBIND_OPTS
+
+    .. attribute:: cbStruct
+
+        :class:`DWORD`
+
+
+    .. attribute:: grfFlags
+
+        :class:`DWORD`
+
+
+    .. attribute:: grfMode
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwTickCountDeadline
+
+        :class:`DWORD`
+
+_tagpropertykey
+'''''''''''''''
+.. class:: PROPERTYKEY
+
+    Alias for :class:`_tagpropertykey`
+
+.. class:: REFPROPERTYKEY
+
+    Pointer to :class:`_tagpropertykey`
+
+.. class:: _tagpropertykey
+
+    .. attribute:: fmtid
+
+        :class:`GUID`
+
+
+    .. attribute:: pid
+
+        :class:`DWORD`
+
+tagSTATSTG
+''''''''''
+.. class:: STATSTG
+
+    Alias for :class:`tagSTATSTG`
+
+.. class:: tagSTATSTG
+
+    .. attribute:: pwcsName
+
+        :class:`LPOLESTR`
+
+
+    .. attribute:: type
+
+        :class:`DWORD`
+
+
+    .. attribute:: cbSize
+
+        :class:`ULARGE_INTEGER`
+
+
+    .. attribute:: mtime
+
+        :class:`FILETIME`
+
+
+    .. attribute:: ctime
+
+        :class:`FILETIME`
+
+
+    .. attribute:: atime
+
+        :class:`FILETIME`
+
+
+    .. attribute:: grfMode
+
+        :class:`DWORD`
+
+
+    .. attribute:: grfLocksSupported
+
+        :class:`DWORD`
+
+
+    .. attribute:: clsid
+
+        :class:`CLSID`
+
+
+    .. attribute:: grfStateBits
+
+        :class:`DWORD`
+
+
+    .. attribute:: reserved
+
+        :class:`DWORD`
+
+tagPARAMDESCEX
+''''''''''''''
+.. class:: PARAMDESCEX
+
+    Alias for :class:`tagPARAMDESCEX`
+
+.. class:: LPPARAMDESCEX
+
+    Pointer to :class:`tagPARAMDESCEX`
+
+.. class:: tagPARAMDESCEX
+
+    .. attribute:: cBytes
+
+        :class:`ULONG`
+
+
+    .. attribute:: varDefaultValue
+
+        :class:`VARIANTARG`
+
+tagPARAMDESC
+''''''''''''
+.. class:: LPPARAMDESC
+
+    Pointer to :class:`tagPARAMDESC`
+
+.. class:: PARAMDESC
+
+    Alias for :class:`tagPARAMDESC`
+
+.. class:: tagPARAMDESC
+
+    .. attribute:: pparamdescex
+
+        :class:`LPPARAMDESCEX`
+
+
+    .. attribute:: wParamFlags
+
+        :class:`USHORT`
+
+_TMP_TYPEDESC_UNION
+'''''''''''''''''''
+.. class:: TMP_TYPEDESC_UNION
+
+    Alias for :class:`_TMP_TYPEDESC_UNION`
+
+.. class:: _TMP_TYPEDESC_UNION
+
+    .. attribute:: lptdesc
+
+        :class:`PVOID`
+
+
+    .. attribute:: lpadesc
+
+        :class:`PVOID`
+
+
+    .. attribute:: hreftype
+
+        :class:`HREFTYPE`
+
+tagTYPEDESC
+'''''''''''
+.. class:: TYPEDESC
+
+    Alias for :class:`tagTYPEDESC`
+
+.. class:: tagTYPEDESC
+
+    .. attribute:: DUMMYUNIONNAME
+
+        :class:`TMP_TYPEDESC_UNION`
+
+
+    .. attribute:: vt
+
+        :class:`VARTYPE`
+
+tagARRAYDESC
+''''''''''''
+.. class:: ARRAYDESC
+
+    Alias for :class:`tagARRAYDESC`
+
+.. class:: tagARRAYDESC
+
+    .. attribute:: tdescElem
+
+        :class:`TYPEDESC`
+
+
+    .. attribute:: cDims
+
+        :class:`USHORT`
+
+
+    .. attribute:: rgbounds
+
+        :class:`SAFEARRAYBOUND` ``[<winstruct.ComplexArrayExpression object at 0x03C2B130>]``
+
+tagELEMDESC
+'''''''''''
+.. class:: ELEMDESC
+
+    Alias for :class:`tagELEMDESC`
+
+.. class:: LPELEMDESC
+
+    Pointer to :class:`tagELEMDESC`
+
+.. class:: tagELEMDESC
+
+    .. attribute:: tdesc
+
+        :class:`TYPEDESC`
+
+
+    .. attribute:: paramdesc
+
+        :class:`PARAMDESC`
+
+tagFUNCDESC
+'''''''''''
+.. class:: LPFUNCDESC
+
+    Pointer to :class:`tagFUNCDESC`
+
+.. class:: FUNCDESC
+
+    Alias for :class:`tagFUNCDESC`
+
+.. class:: tagFUNCDESC
+
+    .. attribute:: memid
+
+        :class:`MEMBERID`
+
+
+    .. attribute:: lprgscode
+
+        :class:`SCODE`
+
+
+    .. attribute:: lprgelemdescParam
+
+        :class:`ELEMDESC`
+
+
+    .. attribute:: funckind
+
+        :class:`FUNCKIND`
+
+
+    .. attribute:: invkind
+
+        :class:`INVOKEKIND`
+
+
+    .. attribute:: callconv
+
+        :class:`CALLCONV`
+
+
+    .. attribute:: cParams
+
+        :class:`SHORT`
+
+
+    .. attribute:: cParamsOpt
+
+        :class:`SHORT`
+
+
+    .. attribute:: oVft
+
+        :class:`SHORT`
+
+
+    .. attribute:: cScodes
+
+        :class:`SHORT`
+
+
+    .. attribute:: elemdescFunc
+
+        :class:`ELEMDESC`
+
+
+    .. attribute:: wFuncFlags
+
+        :class:`WORD`
+
+_TMP_VARDESC_UNION
+''''''''''''''''''
+.. class:: TMP_VARDESC_UNION
+
+    Alias for :class:`_TMP_VARDESC_UNION`
+
+.. class:: _TMP_VARDESC_UNION
+
+    .. attribute:: oInst
+
+        :class:`ULONG`
+
+
+    .. attribute:: lpvarValue
+
+        :class:`VARIANT`
+
+tagVARDESC
+''''''''''
+.. class:: LPVARDESC
+
+    Pointer to :class:`tagVARDESC`
+
+.. class:: VARDESC
+
+    Alias for :class:`tagVARDESC`
+
+.. class:: tagVARDESC
+
+    .. attribute:: memid
+
+        :class:`MEMBERID`
+
+
+    .. attribute:: lpstrSchema
+
+        :class:`LPOLESTR`
+
+
+    .. attribute:: DUMMYUNIONNAME
+
+        :class:`TMP_VARDESC_UNION`
+
+
+    .. attribute:: elemdescVar
+
+        :class:`ELEMDESC`
+
+
+    .. attribute:: wVarFlags
+
+        :class:`WORD`
+
+
+    .. attribute:: varkind
+
+        :class:`VARKIND`
+
+tagBINDPTR
+''''''''''
+.. class:: LPBINDPTR
+
+    Pointer to :class:`tagBINDPTR`
+
+.. class:: BINDPTR
+
+    Alias for :class:`tagBINDPTR`
+
+.. class:: tagBINDPTR
+
+    .. attribute:: lpfuncdesc
+
+        :class:`FUNCDESC`
+
+
+    .. attribute:: lpvardesc
+
+        :class:`VARDESC`
+
+
+    .. attribute:: lptcomp
+
+        :class:`PVOID`
+
+tagIDLDESC
+''''''''''
+.. class:: IDLDESC
+
+    Alias for :class:`tagIDLDESC`
+
+.. class:: LPIDLDESC
+
+    Pointer to :class:`tagIDLDESC`
+
+.. class:: tagIDLDESC
+
+    .. attribute:: dwReserved
+
+        :class:`ULONG_PTR`
+
+
+    .. attribute:: wIDLFlags
+
+        :class:`USHORT`
+
+tagTLIBATTR
+'''''''''''
+.. class:: LPTLIBATTR
+
+    Pointer to :class:`tagTLIBATTR`
+
+.. class:: TLIBATTR
+
+    Alias for :class:`tagTLIBATTR`
+
+.. class:: tagTLIBATTR
+
+    .. attribute:: guid
+
+        :class:`GUID`
+
+
+    .. attribute:: lcid
+
+        :class:`LCID`
+
+
+    .. attribute:: syskind
+
+        :class:`SYSKIND`
+
+
+    .. attribute:: wMajorVerNum
+
+        :class:`WORD`
+
+
+    .. attribute:: wMinorVerNum
+
+        :class:`WORD`
+
+
+    .. attribute:: wLibFlags
+
+        :class:`WORD`
+
+tagTYPEATTR
+'''''''''''
+.. class:: TYPEATTR
+
+    Alias for :class:`tagTYPEATTR`
+
+.. class:: LPTYPEATTR
+
+    Pointer to :class:`tagTYPEATTR`
+
+.. class:: tagTYPEATTR
+
+    .. attribute:: guid
+
+        :class:`GUID`
+
+
+    .. attribute:: lcid
+
+        :class:`LCID`
+
+
+    .. attribute:: dwReserved
+
+        :class:`DWORD`
+
+
+    .. attribute:: memidConstructor
+
+        :class:`MEMBERID`
+
+
+    .. attribute:: memidDestructor
+
+        :class:`MEMBERID`
+
+
+    .. attribute:: lpstrSchema
+
+        :class:`LPOLESTR`
+
+
+    .. attribute:: cbSizeInstance
+
+        :class:`ULONG`
+
+
+    .. attribute:: typekind
+
+        :class:`TYPEKIND`
+
+
+    .. attribute:: cFuncs
+
+        :class:`WORD`
+
+
+    .. attribute:: cVars
+
+        :class:`WORD`
+
+
+    .. attribute:: cImplTypes
+
+        :class:`WORD`
+
+
+    .. attribute:: cbSizeVft
+
+        :class:`WORD`
+
+
+    .. attribute:: cbAlignment
+
+        :class:`WORD`
+
+
+    .. attribute:: wTypeFlags
+
+        :class:`WORD`
+
+
+    .. attribute:: wMajorVerNum
+
+        :class:`WORD`
+
+
+    .. attribute:: wMinorVerNum
+
+        :class:`WORD`
+
+
+    .. attribute:: tdescAlias
+
+        :class:`TYPEDESC`
+
+
+    .. attribute:: idldescType
+
+        :class:`IDLDESC`
 
 _CERT_STRONG_SIGN_SERIALIZED_INFO
 '''''''''''''''''''''''''''''''''
@@ -2675,27 +3501,27 @@ _TMP_WINTRUST_UNION_TYPE
 
     .. attribute:: pFile
 
-        :class:`WINTRUST_FILE_INFO_`
+        :class:`WINTRUST_FILE_INFO`
 
 
     .. attribute:: pCatalog
 
-        :class:`WINTRUST_CATALOG_INFO_`
+        :class:`WINTRUST_CATALOG_INFO`
 
 
     .. attribute:: pBlob
 
-        :class:`WINTRUST_BLOB_INFO_`
+        :class:`WINTRUST_BLOB_INFO`
 
 
     .. attribute:: pSgnr
 
-        :class:`WINTRUST_SGNR_INFO_`
+        :class:`WINTRUST_SGNR_INFO`
 
 
     .. attribute:: pCert
 
-        :class:`WINTRUST_CERT_INFO_`
+        :class:`WINTRUST_CERT_INFO`
 
 _WINTRUST_DATA
 ''''''''''''''
@@ -3050,12 +3876,12 @@ _SPC_SP_OPUS_INFO
 
     .. attribute:: pMoreInfo
 
-        :class:`SPC_LINK_`
+        :class:`SPC_LINK`
 
 
     .. attribute:: pPublisherInfo
 
-        :class:`SPC_LINK_`
+        :class:`SPC_LINK`
 
 _CERT_TRUST_STATUS
 ''''''''''''''''''
@@ -4248,6 +5074,1551 @@ _CMSG_CTRL_DECRYPT_PARA
 
         :class:`DWORD`
 
+_SPC_PE_IMAGE_DATA
+''''''''''''''''''
+.. class:: PSPC_PE_IMAGE_DATA
+
+    Pointer to :class:`_SPC_PE_IMAGE_DATA`
+
+.. class:: SPC_PE_IMAGE_DATA
+
+    Alias for :class:`_SPC_PE_IMAGE_DATA`
+
+.. class:: _SPC_PE_IMAGE_DATA
+
+    .. attribute:: Flags
+
+        :class:`CRYPT_BIT_BLOB`
+
+
+    .. attribute:: pFile
+
+        :class:`PSPC_LINK`
+
+_SPC_INDIRECT_DATA_CONTENT
+''''''''''''''''''''''''''
+.. class:: PSPC_INDIRECT_DATA_CONTENT
+
+    Pointer to :class:`_SPC_INDIRECT_DATA_CONTENT`
+
+.. class:: SPC_INDIRECT_DATA_CONTENT
+
+    Alias for :class:`_SPC_INDIRECT_DATA_CONTENT`
+
+.. class:: _SPC_INDIRECT_DATA_CONTENT
+
+    .. attribute:: Data
+
+        :class:`CRYPT_ATTRIBUTE_TYPE_VALUE`
+
+
+    .. attribute:: DigestAlgorithm
+
+        :class:`CRYPT_ALGORITHM_IDENTIFIER`
+
+
+    .. attribute:: Digest
+
+        :class:`CRYPT_HASH_BLOB`
+
+_EXCEPTION_DEBUG_INFO
+'''''''''''''''''''''
+.. class:: LPEXCEPTION_DEBUG_INFO
+
+    Pointer to :class:`_EXCEPTION_DEBUG_INFO`
+
+.. class:: EXCEPTION_DEBUG_INFO
+
+    Alias for :class:`_EXCEPTION_DEBUG_INFO`
+
+.. class:: _EXCEPTION_DEBUG_INFO
+
+    .. attribute:: ExceptionRecord
+
+        :class:`EXCEPTION_RECORD`
+
+
+    .. attribute:: dwFirstChance
+
+        :class:`DWORD`
+
+_CREATE_THREAD_DEBUG_INFO
+'''''''''''''''''''''''''
+.. class:: LPCREATE_THREAD_DEBUG_INFO
+
+    Pointer to :class:`_CREATE_THREAD_DEBUG_INFO`
+
+.. class:: CREATE_THREAD_DEBUG_INFO
+
+    Alias for :class:`_CREATE_THREAD_DEBUG_INFO`
+
+.. class:: _CREATE_THREAD_DEBUG_INFO
+
+    .. attribute:: hThread
+
+        :class:`HANDLE`
+
+
+    .. attribute:: lpThreadLocalBase
+
+        :class:`LPVOID`
+
+
+    .. attribute:: lpStartAddress
+
+        :class:`LPTHREAD_START_ROUTINE`
+
+_CREATE_PROCESS_DEBUG_INFO
+''''''''''''''''''''''''''
+.. class:: CREATE_PROCESS_DEBUG_INFO
+
+    Alias for :class:`_CREATE_PROCESS_DEBUG_INFO`
+
+.. class:: LPCREATE_PROCESS_DEBUG_INFO
+
+    Pointer to :class:`_CREATE_PROCESS_DEBUG_INFO`
+
+.. class:: _CREATE_PROCESS_DEBUG_INFO
+
+    .. attribute:: hFile
+
+        :class:`HANDLE`
+
+
+    .. attribute:: hProcess
+
+        :class:`HANDLE`
+
+
+    .. attribute:: hThread
+
+        :class:`HANDLE`
+
+
+    .. attribute:: lpBaseOfImage
+
+        :class:`LPVOID`
+
+
+    .. attribute:: dwDebugInfoFileOffset
+
+        :class:`DWORD`
+
+
+    .. attribute:: nDebugInfoSize
+
+        :class:`DWORD`
+
+
+    .. attribute:: lpThreadLocalBase
+
+        :class:`LPVOID`
+
+
+    .. attribute:: lpStartAddress
+
+        :class:`LPTHREAD_START_ROUTINE`
+
+
+    .. attribute:: lpImageName
+
+        :class:`LPVOID`
+
+
+    .. attribute:: fUnicode
+
+        :class:`WORD`
+
+_EXIT_THREAD_DEBUG_INFO
+'''''''''''''''''''''''
+.. class:: EXIT_THREAD_DEBUG_INFO
+
+    Alias for :class:`_EXIT_THREAD_DEBUG_INFO`
+
+.. class:: LPEXIT_THREAD_DEBUG_INFO
+
+    Pointer to :class:`_EXIT_THREAD_DEBUG_INFO`
+
+.. class:: _EXIT_THREAD_DEBUG_INFO
+
+    .. attribute:: dwExitCode
+
+        :class:`DWORD`
+
+_EXIT_PROCESS_DEBUG_INFO
+''''''''''''''''''''''''
+.. class:: LPEXIT_PROCESS_DEBUG_INFO
+
+    Pointer to :class:`_EXIT_PROCESS_DEBUG_INFO`
+
+.. class:: EXIT_PROCESS_DEBUG_INFO
+
+    Alias for :class:`_EXIT_PROCESS_DEBUG_INFO`
+
+.. class:: _EXIT_PROCESS_DEBUG_INFO
+
+    .. attribute:: dwExitCode
+
+        :class:`DWORD`
+
+_LOAD_DLL_DEBUG_INFO
+''''''''''''''''''''
+.. class:: LPLOAD_DLL_DEBUG_INFO
+
+    Pointer to :class:`_LOAD_DLL_DEBUG_INFO`
+
+.. class:: LOAD_DLL_DEBUG_INFO
+
+    Alias for :class:`_LOAD_DLL_DEBUG_INFO`
+
+.. class:: _LOAD_DLL_DEBUG_INFO
+
+    .. attribute:: hFile
+
+        :class:`HANDLE`
+
+
+    .. attribute:: lpBaseOfDll
+
+        :class:`LPVOID`
+
+
+    .. attribute:: dwDebugInfoFileOffset
+
+        :class:`DWORD`
+
+
+    .. attribute:: nDebugInfoSize
+
+        :class:`DWORD`
+
+
+    .. attribute:: lpImageName
+
+        :class:`LPVOID`
+
+
+    .. attribute:: fUnicode
+
+        :class:`WORD`
+
+_UNLOAD_DLL_DEBUG_INFO
+''''''''''''''''''''''
+.. class:: UNLOAD_DLL_DEBUG_INFO
+
+    Alias for :class:`_UNLOAD_DLL_DEBUG_INFO`
+
+.. class:: LPUNLOAD_DLL_DEBUG_INFO
+
+    Pointer to :class:`_UNLOAD_DLL_DEBUG_INFO`
+
+.. class:: _UNLOAD_DLL_DEBUG_INFO
+
+    .. attribute:: lpBaseOfDll
+
+        :class:`LPVOID`
+
+_OUTPUT_DEBUG_STRING_INFO
+'''''''''''''''''''''''''
+.. class:: OUTPUT_DEBUG_STRING_INFO
+
+    Alias for :class:`_OUTPUT_DEBUG_STRING_INFO`
+
+.. class:: LPOUTPUT_DEBUG_STRING_INFO
+
+    Pointer to :class:`_OUTPUT_DEBUG_STRING_INFO`
+
+.. class:: _OUTPUT_DEBUG_STRING_INFO
+
+    .. attribute:: lpDebugStringData
+
+        :class:`LPSTR`
+
+
+    .. attribute:: fUnicode
+
+        :class:`WORD`
+
+
+    .. attribute:: nDebugStringLength
+
+        :class:`WORD`
+
+_RIP_INFO
+'''''''''
+.. class:: LPRIP_INFO
+
+    Pointer to :class:`_RIP_INFO`
+
+.. class:: RIP_INFO
+
+    Alias for :class:`_RIP_INFO`
+
+.. class:: _RIP_INFO
+
+    .. attribute:: dwError
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwType
+
+        :class:`DWORD`
+
+_TMP_UNION_DEBUG_INFO
+'''''''''''''''''''''
+.. class:: TMP_UNION_DEBUG_INFO
+
+    Alias for :class:`_TMP_UNION_DEBUG_INFO`
+
+.. class:: _TMP_UNION_DEBUG_INFO
+
+    .. attribute:: Exception
+
+        :class:`EXCEPTION_DEBUG_INFO`
+
+
+    .. attribute:: CreateThread
+
+        :class:`CREATE_THREAD_DEBUG_INFO`
+
+
+    .. attribute:: CreateProcessInfo
+
+        :class:`CREATE_PROCESS_DEBUG_INFO`
+
+
+    .. attribute:: ExitThread
+
+        :class:`EXIT_THREAD_DEBUG_INFO`
+
+
+    .. attribute:: ExitProcess
+
+        :class:`EXIT_PROCESS_DEBUG_INFO`
+
+
+    .. attribute:: LoadDll
+
+        :class:`LOAD_DLL_DEBUG_INFO`
+
+
+    .. attribute:: UnloadDll
+
+        :class:`UNLOAD_DLL_DEBUG_INFO`
+
+
+    .. attribute:: DebugString
+
+        :class:`OUTPUT_DEBUG_STRING_INFO`
+
+
+    .. attribute:: RipInfo
+
+        :class:`RIP_INFO`
+
+_DEBUG_EVENT
+''''''''''''
+.. class:: LPDEBUG_EVENT
+
+    Pointer to :class:`_DEBUG_EVENT`
+
+.. class:: DEBUG_EVENT
+
+    Alias for :class:`_DEBUG_EVENT`
+
+.. class:: _DEBUG_EVENT
+
+    .. attribute:: dwDebugEventCode
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwProcessId
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwThreadId
+
+        :class:`DWORD`
+
+
+    .. attribute:: u
+
+        :class:`_TMP_UNION_DEBUG_INFO`
+
+_VIRTUAL_STORAGE_TYPE
+'''''''''''''''''''''
+.. class:: VIRTUAL_STORAGE_TYPE
+
+    Alias for :class:`_VIRTUAL_STORAGE_TYPE`
+
+.. class:: PVIRTUAL_STORAGE_TYPE
+
+    Pointer to :class:`_VIRTUAL_STORAGE_TYPE`
+
+.. class:: _VIRTUAL_STORAGE_TYPE
+
+    .. attribute:: DeviceId
+
+        :class:`ULONG`
+
+
+    .. attribute:: VendorId
+
+        :class:`GUID`
+
+_OPEN_VIRTUAL_DISK_PARAMETERS
+'''''''''''''''''''''''''''''
+.. class:: POPEN_VIRTUAL_DISK_PARAMETERS
+
+    Pointer to :class:`_OPEN_VIRTUAL_DISK_PARAMETERS`
+
+.. class:: OPEN_VIRTUAL_DISK_PARAMETERS
+
+    Alias for :class:`_OPEN_VIRTUAL_DISK_PARAMETERS`
+
+.. class:: _OPEN_VIRTUAL_DISK_PARAMETERS
+
+    .. attribute:: Version
+
+        :class:`OPEN_VIRTUAL_DISK_VERSION`
+
+
+    .. attribute:: anon_01
+
+        :class:`_ANON__OPEN_VIRTUAL_DISK_PARAMETERS_SUB_UNION_1`
+
+_ATTACH_VIRTUAL_DISK_PARAMETERS
+'''''''''''''''''''''''''''''''
+.. class:: ATTACH_VIRTUAL_DISK_PARAMETERS
+
+    Alias for :class:`_ATTACH_VIRTUAL_DISK_PARAMETERS`
+
+.. class:: PATTACH_VIRTUAL_DISK_PARAMETERS
+
+    Pointer to :class:`_ATTACH_VIRTUAL_DISK_PARAMETERS`
+
+.. class:: _ATTACH_VIRTUAL_DISK_PARAMETERS
+
+    .. attribute:: Version
+
+        :class:`ATTACH_VIRTUAL_DISK_VERSION`
+
+
+    .. attribute:: anon_01
+
+        :class:`_ANON__ATTACH_VIRTUAL_DISK_PARAMETERS_SUB_UNION_1`
+
+_TRACE_GUID_INFO
+''''''''''''''''
+.. class:: PTRACE_GUID_INFO
+
+    Pointer to :class:`_TRACE_GUID_INFO`
+
+.. class:: TRACE_GUID_INFO
+
+    Alias for :class:`_TRACE_GUID_INFO`
+
+.. class:: _TRACE_GUID_INFO
+
+    .. attribute:: InstanceCount
+
+        :class:`ULONG`
+
+
+    .. attribute:: Reserved
+
+        :class:`ULONG`
+
+_TRACE_PROVIDER_INSTANCE_INFO
+'''''''''''''''''''''''''''''
+.. class:: TRACE_PROVIDER_INSTANCE_INFO
+
+    Alias for :class:`_TRACE_PROVIDER_INSTANCE_INFO`
+
+.. class:: PTRACE_PROVIDER_INSTANCE_INFO
+
+    Pointer to :class:`_TRACE_PROVIDER_INSTANCE_INFO`
+
+.. class:: _TRACE_PROVIDER_INSTANCE_INFO
+
+    .. attribute:: NextOffset
+
+        :class:`ULONG`
+
+
+    .. attribute:: EnableCount
+
+        :class:`ULONG`
+
+
+    .. attribute:: Pid
+
+        :class:`ULONG`
+
+
+    .. attribute:: Flags
+
+        :class:`ULONG`
+
+_TRACE_ENABLE_INFO
+''''''''''''''''''
+.. class:: PTRACE_ENABLE_INFO
+
+    Pointer to :class:`_TRACE_ENABLE_INFO`
+
+.. class:: TRACE_ENABLE_INFO
+
+    Alias for :class:`_TRACE_ENABLE_INFO`
+
+.. class:: _TRACE_ENABLE_INFO
+
+    .. attribute:: IsEnabled
+
+        :class:`ULONG`
+
+
+    .. attribute:: Level
+
+        :class:`UCHAR`
+
+
+    .. attribute:: Reserved1
+
+        :class:`UCHAR`
+
+
+    .. attribute:: LoggerId
+
+        :class:`USHORT`
+
+
+    .. attribute:: EnableProperty
+
+        :class:`ULONG`
+
+
+    .. attribute:: Reserved2
+
+        :class:`ULONG`
+
+
+    .. attribute:: MatchAnyKeyword
+
+        :class:`ULONGLONG`
+
+
+    .. attribute:: MatchAllKeyword
+
+        :class:`ULONGLONG`
+
+_WNODE_HEADER
+'''''''''''''
+.. class:: PWNODE_HEADER
+
+    Pointer to :class:`_WNODE_HEADER`
+
+.. class:: WNODE_HEADER
+
+    Alias for :class:`_WNODE_HEADER`
+
+.. class:: _WNODE_HEADER
+
+    .. attribute:: BufferSize
+
+        :class:`ULONG`
+
+
+    .. attribute:: ProviderId
+
+        :class:`ULONG`
+
+
+    .. attribute:: anon_01
+
+        :class:`_ANON__WNODE_HEADER_SUB_UNION_1`
+
+
+    .. attribute:: anon_02
+
+        :class:`_ANON__WNODE_HEADER_SUB_UNION_2`
+
+
+    .. attribute:: Guid
+
+        :class:`GUID`
+
+
+    .. attribute:: ClientContext
+
+        :class:`ULONG`
+
+
+    .. attribute:: Flags
+
+        :class:`ULONG`
+
+_EVENT_TRACE_PROPERTIES
+'''''''''''''''''''''''
+.. class:: EVENT_TRACE_PROPERTIES
+
+    Alias for :class:`_EVENT_TRACE_PROPERTIES`
+
+.. class:: PEVENT_TRACE_PROPERTIES
+
+    Pointer to :class:`_EVENT_TRACE_PROPERTIES`
+
+.. class:: _EVENT_TRACE_PROPERTIES
+
+    .. attribute:: Wnode
+
+        :class:`WNODE_HEADER`
+
+
+    .. attribute:: BufferSize
+
+        :class:`ULONG`
+
+
+    .. attribute:: MinimumBuffers
+
+        :class:`ULONG`
+
+
+    .. attribute:: MaximumBuffers
+
+        :class:`ULONG`
+
+
+    .. attribute:: MaximumFileSize
+
+        :class:`ULONG`
+
+
+    .. attribute:: LogFileMode
+
+        :class:`ULONG`
+
+
+    .. attribute:: FlushTimer
+
+        :class:`ULONG`
+
+
+    .. attribute:: EnableFlags
+
+        :class:`ULONG`
+
+
+    .. attribute:: AgeLimit
+
+        :class:`LONG`
+
+
+    .. attribute:: NumberOfBuffers
+
+        :class:`ULONG`
+
+
+    .. attribute:: FreeBuffers
+
+        :class:`ULONG`
+
+
+    .. attribute:: EventsLost
+
+        :class:`ULONG`
+
+
+    .. attribute:: BuffersWritten
+
+        :class:`ULONG`
+
+
+    .. attribute:: LogBuffersLost
+
+        :class:`ULONG`
+
+
+    .. attribute:: RealTimeBuffersLost
+
+        :class:`ULONG`
+
+
+    .. attribute:: LoggerThreadId
+
+        :class:`HANDLE`
+
+
+    .. attribute:: LogFileNameOffset
+
+        :class:`ULONG`
+
+
+    .. attribute:: LoggerNameOffset
+
+        :class:`ULONG`
+
+_EVENT_TRACE_HEADER
+'''''''''''''''''''
+.. class:: EVENT_TRACE_HEADER
+
+    Alias for :class:`_EVENT_TRACE_HEADER`
+
+.. class:: PEVENT_TRACE_HEADER
+
+    Pointer to :class:`_EVENT_TRACE_HEADER`
+
+.. class:: _EVENT_TRACE_HEADER
+
+    .. attribute:: Size
+
+        :class:`USHORT`
+
+
+    .. attribute:: anon_01
+
+        :class:`_ANON__EVENT_TRACE_HEADER_SUB_UNION_1`
+
+
+    .. attribute:: anon_02
+
+        :class:`_ANON__EVENT_TRACE_HEADER_SUB_UNION_2`
+
+
+    .. attribute:: ThreadId
+
+        :class:`ULONG`
+
+
+    .. attribute:: ProcessId
+
+        :class:`ULONG`
+
+
+    .. attribute:: TimeStamp
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: anon_03
+
+        :class:`_ANON__EVENT_TRACE_HEADER_SUB_UNION_3`
+
+
+    .. attribute:: anon_04
+
+        :class:`_ANON__EVENT_TRACE_HEADER_SUB_UNION_4`
+
+_ETW_BUFFER_CONTEXT
+'''''''''''''''''''
+.. class:: PETW_BUFFER_CONTEXT
+
+    Pointer to :class:`_ETW_BUFFER_CONTEXT`
+
+.. class:: ETW_BUFFER_CONTEXT
+
+    Alias for :class:`_ETW_BUFFER_CONTEXT`
+
+.. class:: _ETW_BUFFER_CONTEXT
+
+    .. attribute:: anon_01
+
+        :class:`_ANON__ETW_BUFFER_CONTEXT_SUB_UNION_1`
+
+
+    .. attribute:: LoggerId
+
+        :class:`USHORT`
+
+_EVENT_TRACE
+''''''''''''
+.. class:: EVENT_TRACE
+
+    Alias for :class:`_EVENT_TRACE`
+
+.. class:: PEVENT_TRACE
+
+    Pointer to :class:`_EVENT_TRACE`
+
+.. class:: _EVENT_TRACE
+
+    .. attribute:: Header
+
+        :class:`EVENT_TRACE_HEADER`
+
+
+    .. attribute:: InstanceId
+
+        :class:`ULONG`
+
+
+    .. attribute:: ParentInstanceId
+
+        :class:`ULONG`
+
+
+    .. attribute:: ParentGuid
+
+        :class:`GUID`
+
+
+    .. attribute:: MofData
+
+        :class:`PVOID`
+
+
+    .. attribute:: MofLength
+
+        :class:`ULONG`
+
+
+    .. attribute:: anon_01
+
+        :class:`_ANON__EVENT_TRACE_SUB_UNION_1`
+
+_TRACE_LOGFILE_HEADER
+'''''''''''''''''''''
+.. class:: TRACE_LOGFILE_HEADER
+
+    Alias for :class:`_TRACE_LOGFILE_HEADER`
+
+.. class:: PTRACE_LOGFILE_HEADER
+
+    Pointer to :class:`_TRACE_LOGFILE_HEADER`
+
+.. class:: _TRACE_LOGFILE_HEADER
+
+    .. attribute:: BufferSize
+
+        :class:`ULONG`
+
+
+    .. attribute:: DUMMYUNIONNAME
+
+        :class:`_ANON__TRACE_LOGFILE_HEADER_SUB_UNION_1`
+
+
+    .. attribute:: ProviderVersion
+
+        :class:`ULONG`
+
+
+    .. attribute:: NumberOfProcessors
+
+        :class:`ULONG`
+
+
+    .. attribute:: EndTime
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: TimerResolution
+
+        :class:`ULONG`
+
+
+    .. attribute:: MaximumFileSize
+
+        :class:`ULONG`
+
+
+    .. attribute:: LogFileMode
+
+        :class:`ULONG`
+
+
+    .. attribute:: BuffersWritten
+
+        :class:`ULONG`
+
+
+    .. attribute:: DUMMYUNIONNAME2
+
+        :class:`_ANON__TRACE_LOGFILE_HEADER_SUB_UNION_2`
+
+
+    .. attribute:: LoggerName
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: LogFileName
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: TimeZone
+
+        :class:`TIME_ZONE_INFORMATION`
+
+
+    .. attribute:: BootTime
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: PerfFreq
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: StartTime
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: ReservedFlags
+
+        :class:`ULONG`
+
+
+    .. attribute:: BuffersLost
+
+        :class:`ULONG`
+
+_EVENT_TRACE_LOGFILEA
+'''''''''''''''''''''
+.. class:: EVENT_TRACE_LOGFILEA
+
+    Alias for :class:`_EVENT_TRACE_LOGFILEA`
+
+.. class:: PEVENT_TRACE_LOGFILEA
+
+    Pointer to :class:`_EVENT_TRACE_LOGFILEA`
+
+.. class:: _EVENT_TRACE_LOGFILEA
+
+    .. attribute:: LogFileName
+
+        :class:`LPSTR`
+
+
+    .. attribute:: LoggerName
+
+        :class:`LPSTR`
+
+
+    .. attribute:: CurrentTime
+
+        :class:`LONGLONG`
+
+
+    .. attribute:: BuffersRead
+
+        :class:`ULONG`
+
+
+    .. attribute:: anon_01
+
+        :class:`_ANON__EVENT_TRACE_LOGFILEA_SUB_UNION_1`
+
+
+    .. attribute:: CurrentEvent
+
+        :class:`EVENT_TRACE`
+
+
+    .. attribute:: LogfileHeader
+
+        :class:`TRACE_LOGFILE_HEADER`
+
+
+    .. attribute:: BufferCallback
+
+        :class:`PEVENT_TRACE_BUFFER_CALLBACKA`
+
+
+    .. attribute:: BufferSize
+
+        :class:`ULONG`
+
+
+    .. attribute:: Filled
+
+        :class:`ULONG`
+
+
+    .. attribute:: EventsLost
+
+        :class:`ULONG`
+
+
+    .. attribute:: anon_02
+
+        :class:`_ANON__EVENT_TRACE_LOGFILEA_SUB_UNION_2`
+
+
+    .. attribute:: IsKernelTrace
+
+        :class:`ULONG`
+
+
+    .. attribute:: Context
+
+        :class:`PVOID`
+
+_EVENT_TRACE_LOGFILEW
+'''''''''''''''''''''
+.. class:: EVENT_TRACE_LOGFILEW
+
+    Alias for :class:`_EVENT_TRACE_LOGFILEW`
+
+.. class:: PEVENT_TRACE_LOGFILEW
+
+    Pointer to :class:`_EVENT_TRACE_LOGFILEW`
+
+.. class:: _EVENT_TRACE_LOGFILEW
+
+    .. attribute:: LogFileName
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: LoggerName
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: CurrentTime
+
+        :class:`LONGLONG`
+
+
+    .. attribute:: BuffersRead
+
+        :class:`ULONG`
+
+
+    .. attribute:: anon_01
+
+        :class:`_ANON__EVENT_TRACE_LOGFILEW_SUB_UNION_1`
+
+
+    .. attribute:: CurrentEvent
+
+        :class:`EVENT_TRACE`
+
+
+    .. attribute:: LogfileHeader
+
+        :class:`TRACE_LOGFILE_HEADER`
+
+
+    .. attribute:: BufferCallback
+
+        :class:`PEVENT_TRACE_BUFFER_CALLBACKW`
+
+
+    .. attribute:: BufferSize
+
+        :class:`ULONG`
+
+
+    .. attribute:: Filled
+
+        :class:`ULONG`
+
+
+    .. attribute:: EventsLost
+
+        :class:`ULONG`
+
+
+    .. attribute:: anon_02
+
+        :class:`_ANON__EVENT_TRACE_LOGFILEW_SUB_UNION_2`
+
+
+    .. attribute:: IsKernelTrace
+
+        :class:`ULONG`
+
+
+    .. attribute:: Context
+
+        :class:`PVOID`
+
+_EVENT_FILTER_DESCRIPTOR
+''''''''''''''''''''''''
+.. class:: PEVENT_FILTER_DESCRIPTOR
+
+    Pointer to :class:`_EVENT_FILTER_DESCRIPTOR`
+
+.. class:: EVENT_FILTER_DESCRIPTOR
+
+    Alias for :class:`_EVENT_FILTER_DESCRIPTOR`
+
+.. class:: _EVENT_FILTER_DESCRIPTOR
+
+    .. attribute:: Ptr
+
+        :class:`ULONGLONG`
+
+
+    .. attribute:: Size
+
+        :class:`ULONG`
+
+
+    .. attribute:: Type
+
+        :class:`ULONG`
+
+_ENABLE_TRACE_PARAMETERS
+''''''''''''''''''''''''
+.. class:: ENABLE_TRACE_PARAMETERS
+
+    Alias for :class:`_ENABLE_TRACE_PARAMETERS`
+
+.. class:: PENABLE_TRACE_PARAMETERS
+
+    Pointer to :class:`_ENABLE_TRACE_PARAMETERS`
+
+.. class:: _ENABLE_TRACE_PARAMETERS
+
+    .. attribute:: Version
+
+        :class:`ULONG`
+
+
+    .. attribute:: EnableProperty
+
+        :class:`ULONG`
+
+
+    .. attribute:: ControlFlags
+
+        :class:`ULONG`
+
+
+    .. attribute:: SourceId
+
+        :class:`GUID`
+
+
+    .. attribute:: EnableFilterDesc
+
+        :class:`PEVENT_FILTER_DESCRIPTOR`
+
+
+    .. attribute:: FilterDescCount
+
+        :class:`ULONG`
+
+_EVENT_DESCRIPTOR
+'''''''''''''''''
+.. class:: EVENT_DESCRIPTOR
+
+    Alias for :class:`_EVENT_DESCRIPTOR`
+
+.. class:: PEVENT_DESCRIPTOR
+
+    Pointer to :class:`_EVENT_DESCRIPTOR`
+
+.. class:: PCEVENT_DESCRIPTOR
+
+    Pointer to :class:`_EVENT_DESCRIPTOR`
+
+.. class:: _EVENT_DESCRIPTOR
+
+    .. attribute:: Id
+
+        :class:`USHORT`
+
+
+    .. attribute:: Version
+
+        :class:`BYTE`
+
+
+    .. attribute:: Channel
+
+        :class:`BYTE`
+
+
+    .. attribute:: Level
+
+        :class:`BYTE`
+
+
+    .. attribute:: Opcode
+
+        :class:`BYTE`
+
+
+    .. attribute:: Task
+
+        :class:`USHORT`
+
+
+    .. attribute:: Keyword
+
+        :class:`ULONGLONG`
+
+_EVENT_HEADER
+'''''''''''''
+.. class:: EVENT_HEADER
+
+    Alias for :class:`_EVENT_HEADER`
+
+.. class:: PEVENT_HEADER
+
+    Pointer to :class:`_EVENT_HEADER`
+
+.. class:: _EVENT_HEADER
+
+    .. attribute:: Size
+
+        :class:`USHORT`
+
+
+    .. attribute:: HeaderType
+
+        :class:`USHORT`
+
+
+    .. attribute:: Flags
+
+        :class:`USHORT`
+
+
+    .. attribute:: EventProperty
+
+        :class:`USHORT`
+
+
+    .. attribute:: ThreadId
+
+        :class:`ULONG`
+
+
+    .. attribute:: ProcessId
+
+        :class:`ULONG`
+
+
+    .. attribute:: TimeStamp
+
+        :class:`LARGE_INTEGER`
+
+
+    .. attribute:: ProviderId
+
+        :class:`GUID`
+
+
+    .. attribute:: EventDescriptor
+
+        :class:`EVENT_DESCRIPTOR`
+
+
+    .. attribute:: DUMMYUNIONNAME
+
+        :class:`_ANON__EVENT_HEADER_SUB_UNION_1`
+
+
+    .. attribute:: ActivityId
+
+        :class:`GUID`
+
+_EVENT_HEADER_EXTENDED_DATA_ITEM
+''''''''''''''''''''''''''''''''
+.. class:: EVENT_HEADER_EXTENDED_DATA_ITEM
+
+    Alias for :class:`_EVENT_HEADER_EXTENDED_DATA_ITEM`
+
+.. class:: PEVENT_HEADER_EXTENDED_DATA_ITEM
+
+    Pointer to :class:`_EVENT_HEADER_EXTENDED_DATA_ITEM`
+
+.. class:: _EVENT_HEADER_EXTENDED_DATA_ITEM
+
+    .. attribute:: Reserved1
+
+        :class:`USHORT`
+
+
+    .. attribute:: ExtType
+
+        :class:`USHORT`
+
+
+    .. attribute:: anon_01
+
+        :class:`_ANON__EVENT_HEADER_EXTENDED_DATA_ITEM_SUB_STRUCTURE_1`
+
+
+    .. attribute:: DataSize
+
+        :class:`USHORT`
+
+
+    .. attribute:: DataPtr
+
+        :class:`ULONGLONG`
+
+_EVENT_RECORD
+'''''''''''''
+.. class:: EVENT_RECORD
+
+    Alias for :class:`_EVENT_RECORD`
+
+.. class:: PEVENT_RECORD
+
+    Pointer to :class:`_EVENT_RECORD`
+
+.. class:: _EVENT_RECORD
+
+    .. attribute:: EventHeader
+
+        :class:`EVENT_HEADER`
+
+
+    .. attribute:: BufferContext
+
+        :class:`ETW_BUFFER_CONTEXT`
+
+
+    .. attribute:: ExtendedDataCount
+
+        :class:`USHORT`
+
+
+    .. attribute:: UserDataLength
+
+        :class:`USHORT`
+
+
+    .. attribute:: ExtendedData
+
+        :class:`PEVENT_HEADER_EXTENDED_DATA_ITEM`
+
+
+    .. attribute:: UserData
+
+        :class:`PVOID`
+
+
+    .. attribute:: UserContext
+
+        :class:`PVOID`
+
+_TRACE_GUID_REGISTRATION
+''''''''''''''''''''''''
+.. class:: TRACE_GUID_REGISTRATION
+
+    Alias for :class:`_TRACE_GUID_REGISTRATION`
+
+.. class:: PTRACE_GUID_REGISTRATION
+
+    Pointer to :class:`_TRACE_GUID_REGISTRATION`
+
+.. class:: _TRACE_GUID_REGISTRATION
+
+    .. attribute:: Guid
+
+        :class:`LPCGUID`
+
+
+    .. attribute:: RegHandle
+
+        :class:`HANDLE`
+
+_EVENT_DATA_DESCRIPTOR
+''''''''''''''''''''''
+.. class:: EVENT_DATA_DESCRIPTOR
+
+    Alias for :class:`_EVENT_DATA_DESCRIPTOR`
+
+.. class:: PEVENT_DATA_DESCRIPTOR
+
+    Pointer to :class:`_EVENT_DATA_DESCRIPTOR`
+
+.. class:: _EVENT_DATA_DESCRIPTOR
+
+    .. attribute:: Ptr
+
+        :class:`ULONGLONG`
+
+
+    .. attribute:: Size
+
+        :class:`ULONG`
+
+
+    .. attribute:: DUMMYUNIONNAME
+
+        :class:`_ANON__EVENT_DATA_DESCRIPTOR_SUB_UNION_1`
+
+_EVENTLOGRECORD
+'''''''''''''''
+.. class:: PEVENTLOGRECORD
+
+    Pointer to :class:`_EVENTLOGRECORD`
+
+.. class:: EVENTLOGRECORD
+
+    Alias for :class:`_EVENTLOGRECORD`
+
+.. class:: _EVENTLOGRECORD
+
+    .. attribute:: Length
+
+        :class:`DWORD`
+
+
+    .. attribute:: Reserved
+
+        :class:`DWORD`
+
+
+    .. attribute:: RecordNumber
+
+        :class:`DWORD`
+
+
+    .. attribute:: TimeGenerated
+
+        :class:`DWORD`
+
+
+    .. attribute:: TimeWritten
+
+        :class:`DWORD`
+
+
+    .. attribute:: EventID
+
+        :class:`DWORD`
+
+
+    .. attribute:: EventType
+
+        :class:`WORD`
+
+
+    .. attribute:: NumStrings
+
+        :class:`WORD`
+
+
+    .. attribute:: EventCategory
+
+        :class:`WORD`
+
+
+    .. attribute:: ReservedFlags
+
+        :class:`WORD`
+
+
+    .. attribute:: ClosingRecordNumber
+
+        :class:`DWORD`
+
+
+    .. attribute:: StringOffset
+
+        :class:`DWORD`
+
+
+    .. attribute:: UserSidLength
+
+        :class:`DWORD`
+
+
+    .. attribute:: UserSidOffset
+
+        :class:`DWORD`
+
+
+    .. attribute:: DataLength
+
+        :class:`DWORD`
+
+
+    .. attribute:: DataOffset
+
+        :class:`DWORD`
+
+_EVENTLOG_FULL_INFORMATION
+''''''''''''''''''''''''''
+.. class:: EVENTLOG_FULL_INFORMATION
+
+    Alias for :class:`_EVENTLOG_FULL_INFORMATION`
+
+.. class:: LPEVENTLOG_FULL_INFORMATION
+
+    Pointer to :class:`_EVENTLOG_FULL_INFORMATION`
+
+.. class:: _EVENTLOG_FULL_INFORMATION
+
+    .. attribute:: dwFull
+
+        :class:`DWORD`
+
+_EVT_VARIANT
+''''''''''''
+.. class:: PEVT_VARIANT
+
+    Pointer to :class:`_EVT_VARIANT`
+
+.. class:: EVT_VARIANT
+
+    Alias for :class:`_EVT_VARIANT`
+
+.. class:: _EVT_VARIANT
+
+    .. attribute:: anon_01
+
+        :class:`_ANON__EVT_VARIANT_SUB_UNION_1`
+
+
+    .. attribute:: Count
+
+        :class:`DWORD`
+
+
+    .. attribute:: Type
+
+        :class:`DWORD`
+
+_EVT_RPC_LOGIN
+''''''''''''''
+.. class:: EVT_RPC_LOGIN
+
+    Alias for :class:`_EVT_RPC_LOGIN`
+
+.. class:: _EVT_RPC_LOGIN
+
+    .. attribute:: Server
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: User
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: Domain
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: Password
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: Flags
+
+        :class:`DWORD`
+
 _FILE_INTERNAL_INFORMATION
 ''''''''''''''''''''''''''
 .. class:: FILE_INTERNAL_INFORMATION
@@ -4404,7 +6775,7 @@ _FILE_NAME_INFORMATION
 
     .. attribute:: FileName
 
-        :class:`WCHAR` ``[1]``
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03D47E70>]``
 
 _FILE_NETWORK_OPEN_INFORMATION
 ''''''''''''''''''''''''''''''
@@ -4626,7 +6997,7 @@ _FILE_STREAM_INFORMATION
 
     .. attribute:: StreamName
 
-        :class:`WCHAR` ``[1]``
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03D51630>]``
 
 _FILE_DISPOSITION_INFORMATION
 '''''''''''''''''''''''''''''
@@ -4663,12 +7034,12 @@ _FILE_FULL_EA_INFORMATION
 
     .. attribute:: Flags
 
-        :class:`UCHAR`
+        :class:`BYTE`
 
 
     .. attribute:: EaNameLength
 
-        :class:`UCHAR`
+        :class:`BYTE`
 
 
     .. attribute:: EaValueLength
@@ -4678,7 +7049,7 @@ _FILE_FULL_EA_INFORMATION
 
     .. attribute:: EaName
 
-        :class:`CHAR` ``[1]``
+        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x03D518D0>]``
 
 _FILE_GET_EA_INFORMATION
 ''''''''''''''''''''''''
@@ -4704,11 +7075,278 @@ _FILE_GET_EA_INFORMATION
 
     .. attribute:: EaName
 
-        :class:`CHAR` ``[1]``
+        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x03D51A10>]``
+
+tagVS_FIXEDFILEINFO
+'''''''''''''''''''
+.. class:: VS_FIXEDFILEINFO
+
+    Alias for :class:`tagVS_FIXEDFILEINFO`
+
+.. class:: tagVS_FIXEDFILEINFO
+
+    .. attribute:: dwSignature
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwStrucVersion
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwFileVersionMS
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwFileVersionLS
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwProductVersionMS
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwProductVersionLS
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwFileFlagsMask
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwFileFlags
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwFileOS
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwFileType
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwFileSubtype
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwFileDateMS
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwFileDateLS
+
+        :class:`DWORD`
+
+_FILE_LINK_INFORMATION
+''''''''''''''''''''''
+.. class:: PFILE_LINK_INFORMATION
+
+    Pointer to :class:`_FILE_LINK_INFORMATION`
+
+.. class:: FILE_LINK_INFORMATION
+
+    Alias for :class:`_FILE_LINK_INFORMATION`
+
+.. class:: _FILE_LINK_INFORMATION
+
+    .. attribute:: anon_01
+
+        :class:`_ANON__FILE_LINK_INFORMATION_SUB_UNION_1`
+
+
+    .. attribute:: RootDirectory
+
+        :class:`HANDLE`
+
+
+    .. attribute:: FileNameLength
+
+        :class:`ULONG`
+
+
+    .. attribute:: FileName
+
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03D51FD0>]``
+
+_WIN32_FIND_DATAA
+'''''''''''''''''
+.. class:: LPWIN32_FIND_DATAA
+
+    Pointer to :class:`_WIN32_FIND_DATAA`
+
+.. class:: PWIN32_FIND_DATAA
+
+    Pointer to :class:`_WIN32_FIND_DATAA`
+
+.. class:: WIN32_FIND_DATAA
+
+    Alias for :class:`_WIN32_FIND_DATAA`
+
+.. class:: _WIN32_FIND_DATAA
+
+    .. attribute:: dwFileAttributes
+
+        :class:`DWORD`
+
+
+    .. attribute:: ftCreationTime
+
+        :class:`FILETIME`
+
+
+    .. attribute:: ftLastAccessTime
+
+        :class:`FILETIME`
+
+
+    .. attribute:: ftLastWriteTime
+
+        :class:`FILETIME`
+
+
+    .. attribute:: nFileSizeHigh
+
+        :class:`DWORD`
+
+
+    .. attribute:: nFileSizeLow
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwReserved0
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwReserved1
+
+        :class:`DWORD`
+
+
+    .. attribute:: cFileName
+
+        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x03D57310>]``
+
+
+    .. attribute:: cAlternateFileName
+
+        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x03D57390>]``
+
+
+    .. attribute:: dwFileType
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwCreatorType
+
+        :class:`DWORD`
+
+
+    .. attribute:: wFinderFlags
+
+        :class:`WORD`
+
+_WIN32_FIND_DATAW
+'''''''''''''''''
+.. class:: PWIN32_FIND_DATAW
+
+    Pointer to :class:`_WIN32_FIND_DATAW`
+
+.. class:: WIN32_FIND_DATAW
+
+    Alias for :class:`_WIN32_FIND_DATAW`
+
+.. class:: LPWIN32_FIND_DATAW
+
+    Pointer to :class:`_WIN32_FIND_DATAW`
+
+.. class:: _WIN32_FIND_DATAW
+
+    .. attribute:: dwFileAttributes
+
+        :class:`DWORD`
+
+
+    .. attribute:: ftCreationTime
+
+        :class:`FILETIME`
+
+
+    .. attribute:: ftLastAccessTime
+
+        :class:`FILETIME`
+
+
+    .. attribute:: ftLastWriteTime
+
+        :class:`FILETIME`
+
+
+    .. attribute:: nFileSizeHigh
+
+        :class:`DWORD`
+
+
+    .. attribute:: nFileSizeLow
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwReserved0
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwReserved1
+
+        :class:`DWORD`
+
+
+    .. attribute:: cFileName
+
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03D57790>]``
+
+
+    .. attribute:: cAlternateFileName
+
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03D57810>]``
+
+
+    .. attribute:: dwFileType
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwCreatorType
+
+        :class:`DWORD`
+
+
+    .. attribute:: wFinderFlags
+
+        :class:`WORD`
 
 _GUID
 '''''
 .. class:: REFCLSID
+
+    Pointer to :class:`_GUID`
+
+.. class:: LPCGUID
 
     Pointer to :class:`_GUID`
 
@@ -4759,38 +7397,7 @@ _GUID
 
     .. attribute:: Data4
 
-        :class:`BYTE` ``[8]``
-
-_ANON_PROCESS_MITIGATION_DEP_POLICY_BITFIELD
-''''''''''''''''''''''''''''''''''''''''''''
-.. class:: _ANON_PROCESS_MITIGATION_DEP_POLICY_BITFIELD
-
-    .. attribute:: Enable
-
-        :class:`DWORD`
-
-
-    .. attribute:: DisableAtlThunkEmulation
-
-        :class:`DWORD`
-
-
-    .. attribute:: ReservedFlags
-
-        :class:`DWORD`
-
-_ANON_PROCESS_MITIGATION_DEP_POLICY_UNION
-'''''''''''''''''''''''''''''''''''''''''
-.. class:: _ANON_PROCESS_MITIGATION_DEP_POLICY_UNION
-
-    .. attribute:: Flags
-
-        :class:`DWORD`
-
-
-    .. attribute:: anon
-
-        :class:`_ANON_PROCESS_MITIGATION_DEP_POLICY_BITFIELD`
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03D57AF0>]``
 
 _PROCESS_MITIGATION_DEP_POLICY
 ''''''''''''''''''''''''''''''
@@ -4804,55 +7411,14 @@ _PROCESS_MITIGATION_DEP_POLICY
 
 .. class:: _PROCESS_MITIGATION_DEP_POLICY
 
-    .. attribute:: anon
+    .. attribute:: anon_01
 
-        :class:`_ANON_PROCESS_MITIGATION_DEP_POLICY_UNION`
+        :class:`_ANON__PROCESS_MITIGATION_DEP_POLICY_SUB_UNION_1`
 
 
     .. attribute:: Permanent
 
         :class:`BOOLEAN`
-
-_ANON_PROCESS_MITIGATION_ASLR_POLICY_BITFIELD
-'''''''''''''''''''''''''''''''''''''''''''''
-.. class:: _ANON_PROCESS_MITIGATION_ASLR_POLICY_BITFIELD
-
-    .. attribute:: EnableBottomUpRandomization
-
-        :class:`DWORD`
-
-
-    .. attribute:: EnableForceRelocateImages
-
-        :class:`DWORD`
-
-
-    .. attribute:: EnableHighEntropy
-
-        :class:`DWORD`
-
-
-    .. attribute:: DisallowStrippedImages
-
-        :class:`DWORD`
-
-
-    .. attribute:: ReservedFlags
-
-        :class:`DWORD`
-
-_ANON_PROCESS_MITIGATION_ASLR_POLICY_UNION
-''''''''''''''''''''''''''''''''''''''''''
-.. class:: _ANON_PROCESS_MITIGATION_ASLR_POLICY_UNION
-
-    .. attribute:: Flags
-
-        :class:`DWORD`
-
-
-    .. attribute:: anon
-
-        :class:`_ANON_PROCESS_MITIGATION_ASLR_POLICY_BITFIELD`
 
 _PROCESS_MITIGATION_ASLR_POLICY
 '''''''''''''''''''''''''''''''
@@ -4866,45 +7432,9 @@ _PROCESS_MITIGATION_ASLR_POLICY
 
 .. class:: _PROCESS_MITIGATION_ASLR_POLICY
 
-    .. attribute:: anon
+    .. attribute:: anon_01
 
-        :class:`_ANON_PROCESS_MITIGATION_ASLR_POLICY_UNION`
-
-_ANON_PROCESS_MITIGATION_DYNAMIC_CODE_POLICY_BITFIELD
-'''''''''''''''''''''''''''''''''''''''''''''''''''''
-.. class:: _ANON_PROCESS_MITIGATION_DYNAMIC_CODE_POLICY_BITFIELD
-
-    .. attribute:: ProhibitDynamicCode
-
-        :class:`DWORD`
-
-
-    .. attribute:: AllowThreadOptOut
-
-        :class:`DWORD`
-
-
-    .. attribute:: AllowRemoteDowngrade
-
-        :class:`DWORD`
-
-
-    .. attribute:: ReservedFlags
-
-        :class:`DWORD`
-
-_ANON_PROCESS_MITIGATION_DYNAMIC_CODE_POLICY_UNION
-''''''''''''''''''''''''''''''''''''''''''''''''''
-.. class:: _ANON_PROCESS_MITIGATION_DYNAMIC_CODE_POLICY_UNION
-
-    .. attribute:: Flags
-
-        :class:`DWORD`
-
-
-    .. attribute:: anon
-
-        :class:`_ANON_PROCESS_MITIGATION_DYNAMIC_CODE_POLICY_BITFIELD`
+        :class:`_ANON__PROCESS_MITIGATION_ASLR_POLICY_SUB_UNION_1`
 
 _PROCESS_MITIGATION_DYNAMIC_CODE_POLICY
 '''''''''''''''''''''''''''''''''''''''
@@ -4918,40 +7448,9 @@ _PROCESS_MITIGATION_DYNAMIC_CODE_POLICY
 
 .. class:: _PROCESS_MITIGATION_DYNAMIC_CODE_POLICY
 
-    .. attribute:: anon
+    .. attribute:: anon_01
 
-        :class:`_ANON_PROCESS_MITIGATION_DYNAMIC_CODE_POLICY_UNION`
-
-_ANON_PROCESS_MITIGATION_STRICT_HANDLE_CHECK_POLICY_BITFIELD
-''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-.. class:: _ANON_PROCESS_MITIGATION_STRICT_HANDLE_CHECK_POLICY_BITFIELD
-
-    .. attribute:: RaiseExceptionOnInvalidHandleReference
-
-        :class:`DWORD`
-
-
-    .. attribute:: HandleExceptionsPermanentlyEnabled
-
-        :class:`DWORD`
-
-
-    .. attribute:: ReservedFlags
-
-        :class:`DWORD`
-
-_ANON_PROCESS_MITIGATION_STRICT_HANDLE_CHECK_POLICY_UNION
-'''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-.. class:: _ANON_PROCESS_MITIGATION_STRICT_HANDLE_CHECK_POLICY_UNION
-
-    .. attribute:: Flags
-
-        :class:`DWORD`
-
-
-    .. attribute:: ANON_STRUCT
-
-        :class:`_ANON_PROCESS_MITIGATION_STRICT_HANDLE_CHECK_POLICY_BITFIELD`
+        :class:`_ANON__PROCESS_MITIGATION_DYNAMIC_CODE_POLICY_SUB_UNION_1`
 
 _PROCESS_MITIGATION_STRICT_HANDLE_CHECK_POLICY
 ''''''''''''''''''''''''''''''''''''''''''''''
@@ -4965,35 +7464,9 @@ _PROCESS_MITIGATION_STRICT_HANDLE_CHECK_POLICY
 
 .. class:: _PROCESS_MITIGATION_STRICT_HANDLE_CHECK_POLICY
 
-    .. attribute:: anon
+    .. attribute:: anon_01
 
-        :class:`_ANON_PROCESS_MITIGATION_STRICT_HANDLE_CHECK_POLICY_UNION`
-
-_ANON_PROCESS_MITIGATION_SYSTEM_CALL_DISABLE_POLICY_BITFIELD
-''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-.. class:: _ANON_PROCESS_MITIGATION_SYSTEM_CALL_DISABLE_POLICY_BITFIELD
-
-    .. attribute:: DisallowWin32kSystemCalls
-
-        :class:`DWORD`
-
-
-    .. attribute:: ReservedFlags
-
-        :class:`DWORD`
-
-_ANON_PROCESS_MITIGATION_SYSTEM_CALL_DISABLE_POLICY_UNION
-'''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-.. class:: _ANON_PROCESS_MITIGATION_SYSTEM_CALL_DISABLE_POLICY_UNION
-
-    .. attribute:: Flags
-
-        :class:`DWORD`
-
-
-    .. attribute:: ANON_STRUCT
-
-        :class:`_ANON_PROCESS_MITIGATION_SYSTEM_CALL_DISABLE_POLICY_BITFIELD`
+        :class:`_ANON__PROCESS_MITIGATION_STRICT_HANDLE_CHECK_POLICY_SUB_UNION_1`
 
 _PROCESS_MITIGATION_SYSTEM_CALL_DISABLE_POLICY
 ''''''''''''''''''''''''''''''''''''''''''''''
@@ -5007,35 +7480,9 @@ _PROCESS_MITIGATION_SYSTEM_CALL_DISABLE_POLICY
 
 .. class:: _PROCESS_MITIGATION_SYSTEM_CALL_DISABLE_POLICY
 
-    .. attribute:: anon
+    .. attribute:: anon_01
 
-        :class:`_ANON_PROCESS_MITIGATION_SYSTEM_CALL_DISABLE_POLICY_UNION`
-
-_ANON_PROCESS_MITIGATION_EXTENSION_POINT_DISABLE_POLICY_BITFIELD
-''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-.. class:: _ANON_PROCESS_MITIGATION_EXTENSION_POINT_DISABLE_POLICY_BITFIELD
-
-    .. attribute:: DisableExtensionPoints
-
-        :class:`DWORD`
-
-
-    .. attribute:: ReservedFlags
-
-        :class:`DWORD`
-
-_ANON_PROCESS_MITIGATION_EXTENSION_POINT_DISABLE_POLICY_UNION
-'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-.. class:: _ANON_PROCESS_MITIGATION_EXTENSION_POINT_DISABLE_POLICY_UNION
-
-    .. attribute:: Flags
-
-        :class:`DWORD`
-
-
-    .. attribute:: ANON_STRUCT
-
-        :class:`_ANON_PROCESS_MITIGATION_EXTENSION_POINT_DISABLE_POLICY_BITFIELD`
+        :class:`_ANON__PROCESS_MITIGATION_SYSTEM_CALL_DISABLE_POLICY_SUB_UNION_1`
 
 _PROCESS_MITIGATION_EXTENSION_POINT_DISABLE_POLICY
 ''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -5049,45 +7496,9 @@ _PROCESS_MITIGATION_EXTENSION_POINT_DISABLE_POLICY
 
 .. class:: _PROCESS_MITIGATION_EXTENSION_POINT_DISABLE_POLICY
 
-    .. attribute:: anon
+    .. attribute:: anon_01
 
-        :class:`_ANON_PROCESS_MITIGATION_EXTENSION_POINT_DISABLE_POLICY_UNION`
-
-_ANON_PROCESS_MITIGATION_CONTROL_FLOW_GUARD_POLICY_BITFIELD
-'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-.. class:: _ANON_PROCESS_MITIGATION_CONTROL_FLOW_GUARD_POLICY_BITFIELD
-
-    .. attribute:: EnableControlFlowGuard
-
-        :class:`DWORD`
-
-
-    .. attribute:: EnableExportSuppression
-
-        :class:`DWORD`
-
-
-    .. attribute:: StrictMode
-
-        :class:`DWORD`
-
-
-    .. attribute:: ReservedFlags
-
-        :class:`DWORD`
-
-_ANON_PROCESS_MITIGATION_CONTROL_FLOW_GUARD_POLICY_UNION
-''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-.. class:: _ANON_PROCESS_MITIGATION_CONTROL_FLOW_GUARD_POLICY_UNION
-
-    .. attribute:: Flags
-
-        :class:`DWORD`
-
-
-    .. attribute:: ANON_STRUCT
-
-        :class:`_ANON_PROCESS_MITIGATION_CONTROL_FLOW_GUARD_POLICY_BITFIELD`
+        :class:`_ANON__PROCESS_MITIGATION_EXTENSION_POINT_DISABLE_POLICY_SUB_UNION_1`
 
 _PROCESS_MITIGATION_CONTROL_FLOW_GUARD_POLICY
 '''''''''''''''''''''''''''''''''''''''''''''
@@ -5101,45 +7512,9 @@ _PROCESS_MITIGATION_CONTROL_FLOW_GUARD_POLICY
 
 .. class:: _PROCESS_MITIGATION_CONTROL_FLOW_GUARD_POLICY
 
-    .. attribute:: anon
+    .. attribute:: anon_01
 
-        :class:`_ANON_PROCESS_MITIGATION_CONTROL_FLOW_GUARD_POLICY_UNION`
-
-_ANON_PROCESS_MITIGATION_BINARY_SIGNATURE_POLICY_BITFIELD
-'''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-.. class:: _ANON_PROCESS_MITIGATION_BINARY_SIGNATURE_POLICY_BITFIELD
-
-    .. attribute:: MicrosoftSignedOnly
-
-        :class:`DWORD`
-
-
-    .. attribute:: StoreSignedOnly
-
-        :class:`DWORD`
-
-
-    .. attribute:: MitigationOptIn
-
-        :class:`DWORD`
-
-
-    .. attribute:: ReservedFlags
-
-        :class:`DWORD`
-
-_ANON_PROCESS_MITIGATION_BINARY_SIGNATURE_POLICY_UNION
-''''''''''''''''''''''''''''''''''''''''''''''''''''''
-.. class:: _ANON_PROCESS_MITIGATION_BINARY_SIGNATURE_POLICY_UNION
-
-    .. attribute:: Flags
-
-        :class:`DWORD`
-
-
-    .. attribute:: ANON_STRUCT
-
-        :class:`_ANON_PROCESS_MITIGATION_BINARY_SIGNATURE_POLICY_BITFIELD`
+        :class:`_ANON__PROCESS_MITIGATION_CONTROL_FLOW_GUARD_POLICY_SUB_UNION_1`
 
 _PROCESS_MITIGATION_BINARY_SIGNATURE_POLICY
 '''''''''''''''''''''''''''''''''''''''''''
@@ -5153,45 +7528,9 @@ _PROCESS_MITIGATION_BINARY_SIGNATURE_POLICY
 
 .. class:: _PROCESS_MITIGATION_BINARY_SIGNATURE_POLICY
 
-    .. attribute:: anon
+    .. attribute:: anon_01
 
-        :class:`_ANON_PROCESS_MITIGATION_BINARY_SIGNATURE_POLICY_UNION`
-
-_ANON_PROCESS_MITIGATION_IMAGE_LOAD_POLICY_BITFIELD
-'''''''''''''''''''''''''''''''''''''''''''''''''''
-.. class:: _ANON_PROCESS_MITIGATION_IMAGE_LOAD_POLICY_BITFIELD
-
-    .. attribute:: NoRemoteImages
-
-        :class:`DWORD`
-
-
-    .. attribute:: NoLowMandatoryLabelImages
-
-        :class:`DWORD`
-
-
-    .. attribute:: PreferSystem32Images
-
-        :class:`DWORD`
-
-
-    .. attribute:: ReservedFlags
-
-        :class:`DWORD`
-
-_ANON_PROCESS_MITIGATION_IMAGE_LOAD_POLICY_UNION
-''''''''''''''''''''''''''''''''''''''''''''''''
-.. class:: _ANON_PROCESS_MITIGATION_IMAGE_LOAD_POLICY_UNION
-
-    .. attribute:: Flags
-
-        :class:`DWORD`
-
-
-    .. attribute:: ANON_STRUCT
-
-        :class:`_ANON_PROCESS_MITIGATION_IMAGE_LOAD_POLICY_BITFIELD`
+        :class:`_ANON__PROCESS_MITIGATION_BINARY_SIGNATURE_POLICY_SUB_UNION_1`
 
 _PROCESS_MITIGATION_IMAGE_LOAD_POLICY
 '''''''''''''''''''''''''''''''''''''
@@ -5205,9 +7544,2209 @@ _PROCESS_MITIGATION_IMAGE_LOAD_POLICY
 
 .. class:: _PROCESS_MITIGATION_IMAGE_LOAD_POLICY
 
-    .. attribute:: anon
+    .. attribute:: anon_01
 
-        :class:`_ANON_PROCESS_MITIGATION_IMAGE_LOAD_POLICY_UNION`
+        :class:`_ANON__PROCESS_MITIGATION_IMAGE_LOAD_POLICY_SUB_UNION_1`
+
+IP6_ADDRESS
+'''''''''''
+.. class:: IP6_ADDRESS
+
+    Alias for :class:`IP6_ADDRESS`
+
+.. class:: PIP6_ADDRESS
+
+    Pointer to :class:`IP6_ADDRESS`
+
+.. class:: IP6_ADDRESS
+
+    .. attribute:: IP6Qword
+
+        :class:`ULONGLONG` ``[<winstruct.ComplexArrayExpression object at 0x03D5A710>]``
+
+_MIB_IPADDRROW_XP
+'''''''''''''''''
+.. class:: MIB_IPADDRROW
+
+    Alias for :class:`_MIB_IPADDRROW_XP`
+
+.. class:: PMIB_IPADDRROW_XP
+
+    Pointer to :class:`_MIB_IPADDRROW_XP`
+
+.. class:: MIB_IPADDRROW_XP
+
+    Alias for :class:`_MIB_IPADDRROW_XP`
+
+.. class:: _MIB_IPADDRROW_XP
+
+    .. attribute:: dwAddr
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwIndex
+
+        :class:`IF_INDEX`
+
+
+    .. attribute:: dwMask
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwBCastAddr
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwReasmSize
+
+        :class:`DWORD`
+
+
+    .. attribute:: unused1
+
+        :class:`USHORT`
+
+
+    .. attribute:: wType
+
+        :class:`USHORT`
+
+_MIB_IPADDRTABLE
+''''''''''''''''
+.. class:: PMIB_IPADDRTABLE
+
+    Pointer to :class:`_MIB_IPADDRTABLE`
+
+.. class:: MIB_IPADDRTABLE
+
+    Alias for :class:`_MIB_IPADDRTABLE`
+
+.. class:: _MIB_IPADDRTABLE
+
+    .. attribute:: dwNumEntries
+
+        :class:`DWORD`
+
+
+    .. attribute:: table
+
+        :class:`MIB_IPADDRROW` ``[<winstruct.ComplexArrayExpression object at 0x03CC6210>]``
+
+_MIB_IFROW
+''''''''''
+.. class:: PMIB_IFROW
+
+    Pointer to :class:`_MIB_IFROW`
+
+.. class:: MIB_IFROW
+
+    Alias for :class:`_MIB_IFROW`
+
+.. class:: _MIB_IFROW
+
+    .. attribute:: wszName
+
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03CC6310>]``
+
+
+    .. attribute:: dwIndex
+
+        :class:`IF_INDEX`
+
+
+    .. attribute:: dwType
+
+        :class:`IFTYPE`
+
+
+    .. attribute:: dwMtu
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwSpeed
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwPhysAddrLen
+
+        :class:`DWORD`
+
+
+    .. attribute:: bPhysAddr
+
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03CC6550>]``
+
+
+    .. attribute:: dwAdminStatus
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwOperStatus
+
+        :class:`INTERNAL_IF_OPER_STATUS`
+
+
+    .. attribute:: dwLastChange
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwInOctets
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwInUcastPkts
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwInNUcastPkts
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwInDiscards
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwInErrors
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwInUnknownProtos
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwOutOctets
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwOutUcastPkts
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwOutNUcastPkts
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwOutDiscards
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwOutErrors
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwOutQLen
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwDescrLen
+
+        :class:`DWORD`
+
+
+    .. attribute:: bDescr
+
+        :class:`UCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03CC6A70>]``
+
+_MIB_IFTABLE
+''''''''''''
+.. class:: PMIB_IFTABLE
+
+    Pointer to :class:`_MIB_IFTABLE`
+
+.. class:: MIB_IFTABLE
+
+    Alias for :class:`_MIB_IFTABLE`
+
+.. class:: _MIB_IFTABLE
+
+    .. attribute:: dwNumEntries
+
+        :class:`DWORD`
+
+
+    .. attribute:: table
+
+        :class:`MIB_IFROW` ``[<winstruct.ComplexArrayExpression object at 0x03CC6BD0>]``
+
+_MIB_TCPROW_OWNER_PID
+'''''''''''''''''''''
+.. class:: MIB_TCPROW_OWNER_PID
+
+    Alias for :class:`_MIB_TCPROW_OWNER_PID`
+
+.. class:: PMIB_TCPROW_OWNER_PID
+
+    Pointer to :class:`_MIB_TCPROW_OWNER_PID`
+
+.. class:: _MIB_TCPROW_OWNER_PID
+
+    .. attribute:: dwState
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwLocalAddr
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwLocalPort
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwRemoteAddr
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwRemotePort
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwOwningPid
+
+        :class:`DWORD`
+
+_MIB_TCPTABLE_OWNER_PID
+'''''''''''''''''''''''
+.. class:: MIB_TCPTABLE_OWNER_PID
+
+    Alias for :class:`_MIB_TCPTABLE_OWNER_PID`
+
+.. class:: PMIB_TCPTABLE_OWNER_PID
+
+    Pointer to :class:`_MIB_TCPTABLE_OWNER_PID`
+
+.. class:: _MIB_TCPTABLE_OWNER_PID
+
+    .. attribute:: dwNumEntries
+
+        :class:`DWORD`
+
+
+    .. attribute:: table
+
+        :class:`MIB_TCPROW_OWNER_PID` ``[<winstruct.ComplexArrayExpression object at 0x03CC6F30>]``
+
+_MIB_UDPROW_OWNER_PID
+'''''''''''''''''''''
+.. class:: MIB_UDPROW_OWNER_PID
+
+    Alias for :class:`_MIB_UDPROW_OWNER_PID`
+
+.. class:: PMIB_UDPROW_OWNER_PID
+
+    Pointer to :class:`_MIB_UDPROW_OWNER_PID`
+
+.. class:: _MIB_UDPROW_OWNER_PID
+
+    .. attribute:: dwLocalAddr
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwLocalPort
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwOwningPid
+
+        :class:`DWORD`
+
+_MIB_UDPTABLE_OWNER_PID
+'''''''''''''''''''''''
+.. class:: MIB_UDPTABLE_OWNER_PID
+
+    Alias for :class:`_MIB_UDPTABLE_OWNER_PID`
+
+.. class:: PMIB_UDPTABLE_OWNER_PID
+
+    Pointer to :class:`_MIB_UDPTABLE_OWNER_PID`
+
+.. class:: _MIB_UDPTABLE_OWNER_PID
+
+    .. attribute:: dwNumEntries
+
+        :class:`DWORD`
+
+
+    .. attribute:: table
+
+        :class:`MIB_UDPROW_OWNER_PID` ``[<winstruct.ComplexArrayExpression object at 0x03CCB1B0>]``
+
+_MIB_UDP6ROW_OWNER_PID
+''''''''''''''''''''''
+.. class:: MIB_UDP6ROW_OWNER_PID
+
+    Alias for :class:`_MIB_UDP6ROW_OWNER_PID`
+
+.. class:: PMIB_UDP6ROW_OWNER_PID
+
+    Pointer to :class:`_MIB_UDP6ROW_OWNER_PID`
+
+.. class:: _MIB_UDP6ROW_OWNER_PID
+
+    .. attribute:: ucLocalAddr
+
+        :class:`UCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03CCB290>]``
+
+
+    .. attribute:: dwLocalScopeId
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwLocalPort
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwOwningPid
+
+        :class:`DWORD`
+
+_MIB_UDP6TABLE_OWNER_PID
+''''''''''''''''''''''''
+.. class:: PMIB_UDP6TABLE_OWNER_PID
+
+    Pointer to :class:`_MIB_UDP6TABLE_OWNER_PID`
+
+.. class:: MIB_UDP6TABLE_OWNER_PID
+
+    Alias for :class:`_MIB_UDP6TABLE_OWNER_PID`
+
+.. class:: _MIB_UDP6TABLE_OWNER_PID
+
+    .. attribute:: dwNumEntries
+
+        :class:`DWORD`
+
+
+    .. attribute:: table
+
+        :class:`MIB_UDP6ROW_OWNER_PID` ``[<winstruct.ComplexArrayExpression object at 0x03CCB470>]``
+
+_MIB_TCP6ROW_OWNER_PID
+''''''''''''''''''''''
+.. class:: MIB_TCP6ROW_OWNER_PID
+
+    Alias for :class:`_MIB_TCP6ROW_OWNER_PID`
+
+.. class:: PMIB_TCP6ROW_OWNER_PID
+
+    Pointer to :class:`_MIB_TCP6ROW_OWNER_PID`
+
+.. class:: _MIB_TCP6ROW_OWNER_PID
+
+    .. attribute:: ucLocalAddr
+
+        :class:`UCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03CCB550>]``
+
+
+    .. attribute:: dwLocalScopeId
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwLocalPort
+
+        :class:`DWORD`
+
+
+    .. attribute:: ucRemoteAddr
+
+        :class:`UCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03CCB650>]``
+
+
+    .. attribute:: dwRemoteScopeId
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwRemotePort
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwState
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwOwningPid
+
+        :class:`DWORD`
+
+_MIB_TCP6TABLE_OWNER_PID
+''''''''''''''''''''''''
+.. class:: MIB_TCP6TABLE_OWNER_PID
+
+    Alias for :class:`_MIB_TCP6TABLE_OWNER_PID`
+
+.. class:: PMIB_TCP6TABLE_OWNER_PID
+
+    Pointer to :class:`_MIB_TCP6TABLE_OWNER_PID`
+
+.. class:: _MIB_TCP6TABLE_OWNER_PID
+
+    .. attribute:: dwNumEntries
+
+        :class:`DWORD`
+
+
+    .. attribute:: table
+
+        :class:`MIB_TCP6ROW_OWNER_PID` ``[<winstruct.ComplexArrayExpression object at 0x03CCB870>]``
+
+_MIB_TCPROW
+'''''''''''
+.. class:: MIB_TCPROW
+
+    Alias for :class:`_MIB_TCPROW`
+
+.. class:: PMIB_TCPROW
+
+    Pointer to :class:`_MIB_TCPROW`
+
+.. class:: _MIB_TCPROW
+
+    .. attribute:: dwState
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwLocalAddr
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwLocalPort
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwRemoteAddr
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwRemotePort
+
+        :class:`DWORD`
+
+_IP_ADAPTER_INDEX_MAP
+'''''''''''''''''''''
+.. class:: PIP_ADAPTER_INDEX_MAP
+
+    Pointer to :class:`_IP_ADAPTER_INDEX_MAP`
+
+.. class:: IP_ADAPTER_INDEX_MAP
+
+    Alias for :class:`_IP_ADAPTER_INDEX_MAP`
+
+.. class:: _IP_ADAPTER_INDEX_MAP
+
+    .. attribute:: Index
+
+        :class:`ULONG`
+
+
+    .. attribute:: Name
+
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03CCBBD0>]``
+
+_IP_INTERFACE_INFO
+''''''''''''''''''
+.. class:: PIP_INTERFACE_INFO
+
+    Pointer to :class:`_IP_INTERFACE_INFO`
+
+.. class:: IP_INTERFACE_INFO
+
+    Alias for :class:`_IP_INTERFACE_INFO`
+
+.. class:: _IP_INTERFACE_INFO
+
+    .. attribute:: NumAdapters
+
+        :class:`LONG`
+
+
+    .. attribute:: Adapter
+
+        :class:`IP_ADAPTER_INDEX_MAP` ``[<winstruct.ComplexArrayExpression object at 0x03CCBCF0>]``
+
+_DNS_CACHE_ENTRY
+''''''''''''''''
+.. class:: PDNS_CACHE_ENTRY
+
+    Pointer to :class:`_DNS_CACHE_ENTRY`
+
+.. class:: DNS_CACHE_ENTRY
+
+    Alias for :class:`_DNS_CACHE_ENTRY`
+
+.. class:: _DNS_CACHE_ENTRY
+
+    .. attribute:: pNext
+
+        :class:`_DNS_CACHE_ENTRY`
+
+
+    .. attribute:: pszName
+
+        :class:`PCWSTR`
+
+
+    .. attribute:: wType
+
+        :class:`USHORT`
+
+
+    .. attribute:: wDataLength
+
+        :class:`USHORT`
+
+
+    .. attribute:: dwFlags
+
+        :class:`ULONG`
+
+DNS_A_DATA
+''''''''''
+.. class:: DNS_A_DATA
+
+    Alias for :class:`DNS_A_DATA`
+
+.. class:: PDNS_A_DATA
+
+    Pointer to :class:`DNS_A_DATA`
+
+.. class:: DNS_A_DATA
+
+    .. attribute:: IpAddress
+
+        :class:`IP4_ADDRESS`
+
+DNS_PTR_DATAW
+'''''''''''''
+.. class:: DNS_PTR_DATAW
+
+    Alias for :class:`DNS_PTR_DATAW`
+
+.. class:: PDNS_PTR_DATAW
+
+    Pointer to :class:`DNS_PTR_DATAW`
+
+.. class:: DNS_PTR_DATAW
+
+    .. attribute:: pNameHost
+
+        :class:`PWSTR`
+
+DNS_PTR_DATAA
+'''''''''''''
+.. class:: PDNS_PTR_DATAA
+
+    Pointer to :class:`DNS_PTR_DATAA`
+
+.. class:: DNS_PTR_DATAA
+
+    Alias for :class:`DNS_PTR_DATAA`
+
+.. class:: DNS_PTR_DATAA
+
+    .. attribute:: pNameHost
+
+        :class:`PSTR`
+
+DNS_SOA_DATAW
+'''''''''''''
+.. class:: DNS_SOA_DATAW
+
+    Alias for :class:`DNS_SOA_DATAW`
+
+.. class:: PDNS_SOA_DATAW
+
+    Pointer to :class:`DNS_SOA_DATAW`
+
+.. class:: DNS_SOA_DATAW
+
+    .. attribute:: pNamePrimaryServer
+
+        :class:`PWSTR`
+
+
+    .. attribute:: pNameAdministrator
+
+        :class:`PWSTR`
+
+
+    .. attribute:: dwSerialNo
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwRefresh
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwRetry
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwExpire
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwDefaultTtl
+
+        :class:`DWORD`
+
+DNS_SOA_DATAA
+'''''''''''''
+.. class:: PDNS_SOA_DATAA
+
+    Pointer to :class:`DNS_SOA_DATAA`
+
+.. class:: DNS_SOA_DATAA
+
+    Alias for :class:`DNS_SOA_DATAA`
+
+.. class:: DNS_SOA_DATAA
+
+    .. attribute:: pNamePrimaryServer
+
+        :class:`PSTR`
+
+
+    .. attribute:: pNameAdministrator
+
+        :class:`PSTR`
+
+
+    .. attribute:: dwSerialNo
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwRefresh
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwRetry
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwExpire
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwDefaultTtl
+
+        :class:`DWORD`
+
+DNS_MINFO_DATAW
+'''''''''''''''
+.. class:: PDNS_MINFO_DATAW
+
+    Pointer to :class:`DNS_MINFO_DATAW`
+
+.. class:: DNS_MINFO_DATAW
+
+    Alias for :class:`DNS_MINFO_DATAW`
+
+.. class:: DNS_MINFO_DATAW
+
+    .. attribute:: pNameMailbox
+
+        :class:`PWSTR`
+
+
+    .. attribute:: pNameErrorsMailbox
+
+        :class:`PWSTR`
+
+DNS_MINFO_DATAA
+'''''''''''''''
+.. class:: DNS_MINFO_DATAA
+
+    Alias for :class:`DNS_MINFO_DATAA`
+
+.. class:: PDNS_MINFO_DATAA
+
+    Pointer to :class:`DNS_MINFO_DATAA`
+
+.. class:: DNS_MINFO_DATAA
+
+    .. attribute:: pNameMailbox
+
+        :class:`PSTR`
+
+
+    .. attribute:: pNameErrorsMailbox
+
+        :class:`PSTR`
+
+DNS_MX_DATAW
+''''''''''''
+.. class:: PDNS_MX_DATAW
+
+    Pointer to :class:`DNS_MX_DATAW`
+
+.. class:: DNS_MX_DATAW
+
+    Alias for :class:`DNS_MX_DATAW`
+
+.. class:: DNS_MX_DATAW
+
+    .. attribute:: pNameExchange
+
+        :class:`PWSTR`
+
+
+    .. attribute:: wPreference
+
+        :class:`WORD`
+
+
+    .. attribute:: Pad
+
+        :class:`WORD`
+
+DNS_MX_DATAA
+''''''''''''
+.. class:: PDNS_MX_DATAA
+
+    Pointer to :class:`DNS_MX_DATAA`
+
+.. class:: DNS_MX_DATAA
+
+    Alias for :class:`DNS_MX_DATAA`
+
+.. class:: DNS_MX_DATAA
+
+    .. attribute:: pNameExchange
+
+        :class:`PSTR`
+
+
+    .. attribute:: wPreference
+
+        :class:`WORD`
+
+
+    .. attribute:: Pad
+
+        :class:`WORD`
+
+DNS_TXT_DATAW
+'''''''''''''
+.. class:: PDNS_TXT_DATAW
+
+    Pointer to :class:`DNS_TXT_DATAW`
+
+.. class:: DNS_TXT_DATAW
+
+    Alias for :class:`DNS_TXT_DATAW`
+
+.. class:: DNS_TXT_DATAW
+
+    .. attribute:: dwStringCount
+
+        :class:`DWORD`
+
+
+    .. attribute:: pStringArray
+
+        :class:`PWSTR` ``[<winstruct.ComplexArrayExpression object at 0x03CD0B10>]``
+
+DNS_TXT_DATAA
+'''''''''''''
+.. class:: DNS_TXT_DATAA
+
+    Alias for :class:`DNS_TXT_DATAA`
+
+.. class:: PDNS_TXT_DATAA
+
+    Pointer to :class:`DNS_TXT_DATAA`
+
+.. class:: DNS_TXT_DATAA
+
+    .. attribute:: dwStringCount
+
+        :class:`DWORD`
+
+
+    .. attribute:: pStringArray
+
+        :class:`PSTR` ``[<winstruct.ComplexArrayExpression object at 0x03CD0BF0>]``
+
+DNS_NULL_DATA
+'''''''''''''
+.. class:: PDNS_NULL_DATA
+
+    Pointer to :class:`DNS_NULL_DATA`
+
+.. class:: DNS_NULL_DATA
+
+    Alias for :class:`DNS_NULL_DATA`
+
+.. class:: DNS_NULL_DATA
+
+    .. attribute:: dwByteCount
+
+        :class:`DWORD`
+
+
+    .. attribute:: Data
+
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03CD0D30>]``
+
+DNS_WKS_DATA
+''''''''''''
+.. class:: DNS_WKS_DATA
+
+    Alias for :class:`DNS_WKS_DATA`
+
+.. class:: PDNS_WKS_DATA
+
+    Pointer to :class:`DNS_WKS_DATA`
+
+.. class:: DNS_WKS_DATA
+
+    .. attribute:: IpAddress
+
+        :class:`IP4_ADDRESS`
+
+
+    .. attribute:: chProtocol
+
+        :class:`UCHAR`
+
+
+    .. attribute:: BitMask
+
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03CD0EB0>]``
+
+DNS_AAAA_DATA
+'''''''''''''
+.. class:: PDNS_AAAA_DATA
+
+    Pointer to :class:`DNS_AAAA_DATA`
+
+.. class:: DNS_AAAA_DATA
+
+    Alias for :class:`DNS_AAAA_DATA`
+
+.. class:: DNS_AAAA_DATA
+
+    .. attribute:: Ip6Address
+
+        :class:`IP6_ADDRESS`
+
+DNS_SIG_DATAW
+'''''''''''''
+.. class:: DNS_RRSIG_DATAW
+
+    Alias for :class:`DNS_SIG_DATAW`
+
+.. class:: DNS_SIG_DATAW
+
+    Alias for :class:`DNS_SIG_DATAW`
+
+.. class:: PDNS_RRSIG_DATAW
+
+    Pointer to :class:`DNS_SIG_DATAW`
+
+.. class:: PDNS_SIG_DATAW
+
+    Pointer to :class:`DNS_SIG_DATAW`
+
+.. class:: DNS_SIG_DATAW
+
+    .. attribute:: wTypeCovered
+
+        :class:`WORD`
+
+
+    .. attribute:: chAlgorithm
+
+        :class:`BYTE`
+
+
+    .. attribute:: chLabelCount
+
+        :class:`BYTE`
+
+
+    .. attribute:: dwOriginalTtl
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwExpiration
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwTimeSigned
+
+        :class:`DWORD`
+
+
+    .. attribute:: wKeyTag
+
+        :class:`WORD`
+
+
+    .. attribute:: wSignatureLength
+
+        :class:`WORD`
+
+
+    .. attribute:: pNameSigner
+
+        :class:`PWSTR`
+
+
+    .. attribute:: Signature
+
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03CD52B0>]``
+
+DNS_SIG_DATAA
+'''''''''''''
+.. class:: PDNS_SIG_DATAA
+
+    Pointer to :class:`DNS_SIG_DATAA`
+
+.. class:: DNS_SIG_DATAA
+
+    Alias for :class:`DNS_SIG_DATAA`
+
+.. class:: PDNS_RRSIG_DATAA
+
+    Pointer to :class:`DNS_SIG_DATAA`
+
+.. class:: DNS_RRSIG_DATAA
+
+    Alias for :class:`DNS_SIG_DATAA`
+
+.. class:: DNS_SIG_DATAA
+
+    .. attribute:: wTypeCovered
+
+        :class:`WORD`
+
+
+    .. attribute:: chAlgorithm
+
+        :class:`BYTE`
+
+
+    .. attribute:: chLabelCount
+
+        :class:`BYTE`
+
+
+    .. attribute:: dwOriginalTtl
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwExpiration
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwTimeSigned
+
+        :class:`DWORD`
+
+
+    .. attribute:: wKeyTag
+
+        :class:`WORD`
+
+
+    .. attribute:: wSignatureLength
+
+        :class:`WORD`
+
+
+    .. attribute:: pNameSigner
+
+        :class:`PSTR`
+
+
+    .. attribute:: Signature
+
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03CD5630>]``
+
+DNS_KEY_DATA
+''''''''''''
+.. class:: PDNS_DNSKEY_DATA
+
+    Pointer to :class:`DNS_KEY_DATA`
+
+.. class:: DNS_KEY_DATA
+
+    Alias for :class:`DNS_KEY_DATA`
+
+.. class:: PDNS_KEY_DATA
+
+    Pointer to :class:`DNS_KEY_DATA`
+
+.. class:: DNS_DNSKEY_DATA
+
+    Alias for :class:`DNS_KEY_DATA`
+
+.. class:: DNS_KEY_DATA
+
+    .. attribute:: wFlags
+
+        :class:`WORD`
+
+
+    .. attribute:: chProtocol
+
+        :class:`BYTE`
+
+
+    .. attribute:: chAlgorithm
+
+        :class:`BYTE`
+
+
+    .. attribute:: wKeyLength
+
+        :class:`WORD`
+
+
+    .. attribute:: wPad
+
+        :class:`WORD`
+
+
+    .. attribute:: Key
+
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03CD58F0>]``
+
+DNS_DHCID_DATA
+''''''''''''''
+.. class:: PDNS_DHCID_DATA
+
+    Pointer to :class:`DNS_DHCID_DATA`
+
+.. class:: DNS_DHCID_DATA
+
+    Alias for :class:`DNS_DHCID_DATA`
+
+.. class:: DNS_DHCID_DATA
+
+    .. attribute:: dwByteCount
+
+        :class:`DWORD`
+
+
+    .. attribute:: DHCID
+
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03CD5A30>]``
+
+DNS_NSEC_DATAW
+''''''''''''''
+.. class:: PDNS_NSEC_DATAW
+
+    Pointer to :class:`DNS_NSEC_DATAW`
+
+.. class:: DNS_NSEC_DATAW
+
+    Alias for :class:`DNS_NSEC_DATAW`
+
+.. class:: DNS_NSEC_DATAW
+
+    .. attribute:: pNextDomainName
+
+        :class:`PWSTR`
+
+
+    .. attribute:: wTypeBitMapsLength
+
+        :class:`WORD`
+
+
+    .. attribute:: wPad
+
+        :class:`WORD`
+
+
+    .. attribute:: TypeBitMaps
+
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03CD5BB0>]``
+
+DNS_NSEC_DATAA
+''''''''''''''
+.. class:: PDNS_NSEC_DATAA
+
+    Pointer to :class:`DNS_NSEC_DATAA`
+
+.. class:: DNS_NSEC_DATAA
+
+    Alias for :class:`DNS_NSEC_DATAA`
+
+.. class:: DNS_NSEC_DATAA
+
+    .. attribute:: pNextDomainName
+
+        :class:`PSTR`
+
+
+    .. attribute:: wTypeBitMapsLength
+
+        :class:`WORD`
+
+
+    .. attribute:: wPad
+
+        :class:`WORD`
+
+
+    .. attribute:: TypeBitMaps
+
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03CD5D50>]``
+
+DNS_NSEC3_DATA
+''''''''''''''
+.. class:: PDNS_NSEC3_DATA
+
+    Pointer to :class:`DNS_NSEC3_DATA`
+
+.. class:: DNS_NSEC3_DATA
+
+    Alias for :class:`DNS_NSEC3_DATA`
+
+.. class:: DNS_NSEC3_DATA
+
+    .. attribute:: chAlgorithm
+
+        :class:`BYTE`
+
+
+    .. attribute:: bFlags
+
+        :class:`BYTE`
+
+
+    .. attribute:: wIterations
+
+        :class:`WORD`
+
+
+    .. attribute:: bSaltLength
+
+        :class:`BYTE`
+
+
+    .. attribute:: bHashLength
+
+        :class:`BYTE`
+
+
+    .. attribute:: wTypeBitMapsLength
+
+        :class:`WORD`
+
+
+    .. attribute:: chData
+
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03CD9070>]``
+
+DNS_NSEC3PARAM_DATA
+'''''''''''''''''''
+.. class:: PDNS_NSEC3PARAM_DATA
+
+    Pointer to :class:`DNS_NSEC3PARAM_DATA`
+
+.. class:: DNS_NSEC3PARAM_DATA
+
+    Alias for :class:`DNS_NSEC3PARAM_DATA`
+
+.. class:: DNS_NSEC3PARAM_DATA
+
+    .. attribute:: chAlgorithm
+
+        :class:`BYTE`
+
+
+    .. attribute:: bFlags
+
+        :class:`BYTE`
+
+
+    .. attribute:: wIterations
+
+        :class:`WORD`
+
+
+    .. attribute:: bSaltLength
+
+        :class:`BYTE`
+
+
+    .. attribute:: bPad
+
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03CD92B0>]``
+
+
+    .. attribute:: pbSalt
+
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03CD9330>]``
+
+DNS_DS_DATA
+'''''''''''
+.. class:: DNS_DS_DATA
+
+    Alias for :class:`DNS_DS_DATA`
+
+.. class:: PDNS_DS_DATA
+
+    Pointer to :class:`DNS_DS_DATA`
+
+.. class:: DNS_DS_DATA
+
+    .. attribute:: wKeyTag
+
+        :class:`WORD`
+
+
+    .. attribute:: chAlgorithm
+
+        :class:`BYTE`
+
+
+    .. attribute:: chDigestType
+
+        :class:`BYTE`
+
+
+    .. attribute:: wDigestLength
+
+        :class:`WORD`
+
+
+    .. attribute:: wPad
+
+        :class:`WORD`
+
+
+    .. attribute:: Digest
+
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03CD9590>]``
+
+DNS_OPT_DATA
+''''''''''''
+.. class:: DNS_OPT_DATA
+
+    Alias for :class:`DNS_OPT_DATA`
+
+.. class:: PDNS_OPT_DATA
+
+    Pointer to :class:`DNS_OPT_DATA`
+
+.. class:: DNS_OPT_DATA
+
+    .. attribute:: wDataLength
+
+        :class:`WORD`
+
+
+    .. attribute:: wPad
+
+        :class:`WORD`
+
+
+    .. attribute:: Data
+
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03CD9730>]``
+
+DNS_LOC_DATA
+''''''''''''
+.. class:: PDNS_LOC_DATA
+
+    Pointer to :class:`DNS_LOC_DATA`
+
+.. class:: DNS_LOC_DATA
+
+    Alias for :class:`DNS_LOC_DATA`
+
+.. class:: DNS_LOC_DATA
+
+    .. attribute:: wVersion
+
+        :class:`WORD`
+
+
+    .. attribute:: wSize
+
+        :class:`WORD`
+
+
+    .. attribute:: wHorPrec
+
+        :class:`WORD`
+
+
+    .. attribute:: wVerPrec
+
+        :class:`WORD`
+
+
+    .. attribute:: dwLatitude
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwLongitude
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwAltitude
+
+        :class:`DWORD`
+
+DNS_NXT_DATAW
+'''''''''''''
+.. class:: DNS_NXT_DATAW
+
+    Alias for :class:`DNS_NXT_DATAW`
+
+.. class:: PDNS_NXT_DATAW
+
+    Pointer to :class:`DNS_NXT_DATAW`
+
+.. class:: DNS_NXT_DATAW
+
+    .. attribute:: pNameNext
+
+        :class:`PWSTR`
+
+
+    .. attribute:: wNumTypes
+
+        :class:`WORD`
+
+
+    .. attribute:: wTypes
+
+        :class:`WORD` ``[<winstruct.ComplexArrayExpression object at 0x03CD9B90>]``
+
+DNS_NXT_DATAA
+'''''''''''''
+.. class:: PDNS_NXT_DATAA
+
+    Pointer to :class:`DNS_NXT_DATAA`
+
+.. class:: DNS_NXT_DATAA
+
+    Alias for :class:`DNS_NXT_DATAA`
+
+.. class:: DNS_NXT_DATAA
+
+    .. attribute:: pNameNext
+
+        :class:`PSTR`
+
+
+    .. attribute:: wNumTypes
+
+        :class:`WORD`
+
+
+    .. attribute:: wTypes
+
+        :class:`WORD` ``[<winstruct.ComplexArrayExpression object at 0x03CD9D10>]``
+
+DNS_SRV_DATAW
+'''''''''''''
+.. class:: DNS_SRV_DATAW
+
+    Alias for :class:`DNS_SRV_DATAW`
+
+.. class:: PDNS_SRV_DATAW
+
+    Pointer to :class:`DNS_SRV_DATAW`
+
+.. class:: DNS_SRV_DATAW
+
+    .. attribute:: pNameTarget
+
+        :class:`PWSTR`
+
+
+    .. attribute:: wPriority
+
+        :class:`WORD`
+
+
+    .. attribute:: wWeight
+
+        :class:`WORD`
+
+
+    .. attribute:: wPort
+
+        :class:`WORD`
+
+
+    .. attribute:: Pad
+
+        :class:`WORD`
+
+DNS_SRV_DATAA
+'''''''''''''
+.. class:: PDNS_SRV_DATAA
+
+    Pointer to :class:`DNS_SRV_DATAA`
+
+.. class:: DNS_SRV_DATAA
+
+    Alias for :class:`DNS_SRV_DATAA`
+
+.. class:: DNS_SRV_DATAA
+
+    .. attribute:: pNameTarget
+
+        :class:`PSTR`
+
+
+    .. attribute:: wPriority
+
+        :class:`WORD`
+
+
+    .. attribute:: wWeight
+
+        :class:`WORD`
+
+
+    .. attribute:: wPort
+
+        :class:`WORD`
+
+
+    .. attribute:: Pad
+
+        :class:`WORD`
+
+DNS_NAPTR_DATAW
+'''''''''''''''
+.. class:: PDNS_NAPTR_DATAW
+
+    Pointer to :class:`DNS_NAPTR_DATAW`
+
+.. class:: DNS_NAPTR_DATAW
+
+    Alias for :class:`DNS_NAPTR_DATAW`
+
+.. class:: DNS_NAPTR_DATAW
+
+    .. attribute:: wOrder
+
+        :class:`WORD`
+
+
+    .. attribute:: wPreference
+
+        :class:`WORD`
+
+
+    .. attribute:: pFlags
+
+        :class:`PWSTR`
+
+
+    .. attribute:: pService
+
+        :class:`PWSTR`
+
+
+    .. attribute:: pRegularExpression
+
+        :class:`PWSTR`
+
+
+    .. attribute:: pReplacement
+
+        :class:`PWSTR`
+
+DNS_NAPTR_DATAA
+'''''''''''''''
+.. class:: DNS_NAPTR_DATAA
+
+    Alias for :class:`DNS_NAPTR_DATAA`
+
+.. class:: PDNS_NAPTR_DATAA
+
+    Pointer to :class:`DNS_NAPTR_DATAA`
+
+.. class:: DNS_NAPTR_DATAA
+
+    .. attribute:: wOrder
+
+        :class:`WORD`
+
+
+    .. attribute:: wPreference
+
+        :class:`WORD`
+
+
+    .. attribute:: pFlags
+
+        :class:`PSTR`
+
+
+    .. attribute:: pService
+
+        :class:`PSTR`
+
+
+    .. attribute:: pRegularExpression
+
+        :class:`PSTR`
+
+
+    .. attribute:: pReplacement
+
+        :class:`PSTR`
+
+DNS_ATMA_DATA
+'''''''''''''
+.. class:: DNS_ATMA_DATA
+
+    Alias for :class:`DNS_ATMA_DATA`
+
+.. class:: PDNS_ATMA_DATA
+
+    Pointer to :class:`DNS_ATMA_DATA`
+
+.. class:: DNS_ATMA_DATA
+
+    .. attribute:: AddressType
+
+        :class:`BYTE`
+
+
+    .. attribute:: Address
+
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03CDD6D0>]``
+
+DNS_TKEY_DATAW
+''''''''''''''
+.. class:: PDNS_TKEY_DATAW
+
+    Pointer to :class:`DNS_TKEY_DATAW`
+
+.. class:: DNS_TKEY_DATAW
+
+    Alias for :class:`DNS_TKEY_DATAW`
+
+.. class:: DNS_TKEY_DATAW
+
+    .. attribute:: pNameAlgorithm
+
+        :class:`PWSTR`
+
+
+    .. attribute:: pAlgorithmPacket
+
+        :class:`PBYTE`
+
+
+    .. attribute:: pKey
+
+        :class:`PBYTE`
+
+
+    .. attribute:: pOtherData
+
+        :class:`PBYTE`
+
+
+    .. attribute:: dwCreateTime
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwExpireTime
+
+        :class:`DWORD`
+
+
+    .. attribute:: wMode
+
+        :class:`WORD`
+
+
+    .. attribute:: wError
+
+        :class:`WORD`
+
+
+    .. attribute:: wKeyLength
+
+        :class:`WORD`
+
+
+    .. attribute:: wOtherLength
+
+        :class:`WORD`
+
+
+    .. attribute:: cAlgNameLength
+
+        :class:`UCHAR`
+
+
+    .. attribute:: bPacketPointers
+
+        :class:`BOOL`
+
+DNS_TKEY_DATAA
+''''''''''''''
+.. class:: PDNS_TKEY_DATAA
+
+    Pointer to :class:`DNS_TKEY_DATAA`
+
+.. class:: DNS_TKEY_DATAA
+
+    Alias for :class:`DNS_TKEY_DATAA`
+
+.. class:: DNS_TKEY_DATAA
+
+    .. attribute:: pNameAlgorithm
+
+        :class:`PSTR`
+
+
+    .. attribute:: pAlgorithmPacket
+
+        :class:`PBYTE`
+
+
+    .. attribute:: pKey
+
+        :class:`PBYTE`
+
+
+    .. attribute:: pOtherData
+
+        :class:`PBYTE`
+
+
+    .. attribute:: dwCreateTime
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwExpireTime
+
+        :class:`DWORD`
+
+
+    .. attribute:: wMode
+
+        :class:`WORD`
+
+
+    .. attribute:: wError
+
+        :class:`WORD`
+
+
+    .. attribute:: wKeyLength
+
+        :class:`WORD`
+
+
+    .. attribute:: wOtherLength
+
+        :class:`WORD`
+
+
+    .. attribute:: cAlgNameLength
+
+        :class:`UCHAR`
+
+
+    .. attribute:: bPacketPointers
+
+        :class:`BOOL`
+
+DNS_TSIG_DATAW
+''''''''''''''
+.. class:: PDNS_TSIG_DATAW
+
+    Pointer to :class:`DNS_TSIG_DATAW`
+
+.. class:: DNS_TSIG_DATAW
+
+    Alias for :class:`DNS_TSIG_DATAW`
+
+.. class:: DNS_TSIG_DATAW
+
+    .. attribute:: pNameAlgorithm
+
+        :class:`PWSTR`
+
+
+    .. attribute:: pAlgorithmPacket
+
+        :class:`PBYTE`
+
+
+    .. attribute:: pSignature
+
+        :class:`PBYTE`
+
+
+    .. attribute:: pOtherData
+
+        :class:`PBYTE`
+
+
+    .. attribute:: i64CreateTime
+
+        :class:`LONGLONG`
+
+
+    .. attribute:: wFudgeTime
+
+        :class:`WORD`
+
+
+    .. attribute:: wOriginalXid
+
+        :class:`WORD`
+
+
+    .. attribute:: wError
+
+        :class:`WORD`
+
+
+    .. attribute:: wSigLength
+
+        :class:`WORD`
+
+
+    .. attribute:: wOtherLength
+
+        :class:`WORD`
+
+
+    .. attribute:: cAlgNameLength
+
+        :class:`UCHAR`
+
+
+    .. attribute:: bPacketPointers
+
+        :class:`BOOL`
+
+DNS_TSIG_DATAA
+''''''''''''''
+.. class:: PDNS_TSIG_DATAA
+
+    Pointer to :class:`DNS_TSIG_DATAA`
+
+.. class:: DNS_TSIG_DATAA
+
+    Alias for :class:`DNS_TSIG_DATAA`
+
+.. class:: DNS_TSIG_DATAA
+
+    .. attribute:: pNameAlgorithm
+
+        :class:`PSTR`
+
+
+    .. attribute:: pAlgorithmPacket
+
+        :class:`PBYTE`
+
+
+    .. attribute:: pSignature
+
+        :class:`PBYTE`
+
+
+    .. attribute:: pOtherData
+
+        :class:`PBYTE`
+
+
+    .. attribute:: i64CreateTime
+
+        :class:`LONGLONG`
+
+
+    .. attribute:: wFudgeTime
+
+        :class:`WORD`
+
+
+    .. attribute:: wOriginalXid
+
+        :class:`WORD`
+
+
+    .. attribute:: wError
+
+        :class:`WORD`
+
+
+    .. attribute:: wSigLength
+
+        :class:`WORD`
+
+
+    .. attribute:: wOtherLength
+
+        :class:`WORD`
+
+
+    .. attribute:: cAlgNameLength
+
+        :class:`UCHAR`
+
+
+    .. attribute:: bPacketPointers
+
+        :class:`BOOL`
+
+DNS_WINS_DATA
+'''''''''''''
+.. class:: DNS_WINS_DATA
+
+    Alias for :class:`DNS_WINS_DATA`
+
+.. class:: PDNS_WINS_DATA
+
+    Pointer to :class:`DNS_WINS_DATA`
+
+.. class:: DNS_WINS_DATA
+
+    .. attribute:: dwMappingFlag
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwLookupTimeout
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwCacheTimeout
+
+        :class:`DWORD`
+
+
+    .. attribute:: cWinsServerCount
+
+        :class:`DWORD`
+
+
+    .. attribute:: WinsServers
+
+        :class:`IP4_ADDRESS` ``[<winstruct.ComplexArrayExpression object at 0x03CE2810>]``
+
+DNS_WINSR_DATAW
+'''''''''''''''
+.. class:: DNS_WINSR_DATAW
+
+    Alias for :class:`DNS_WINSR_DATAW`
+
+.. class:: PDNS_WINSR_DATAW
+
+    Pointer to :class:`DNS_WINSR_DATAW`
+
+.. class:: DNS_WINSR_DATAW
+
+    .. attribute:: dwMappingFlag
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwLookupTimeout
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwCacheTimeout
+
+        :class:`DWORD`
+
+
+    .. attribute:: pNameResultDomain
+
+        :class:`PWSTR`
+
+DNS_WINSR_DATAA
+'''''''''''''''
+.. class:: PDNS_WINSR_DATAA
+
+    Pointer to :class:`DNS_WINSR_DATAA`
+
+.. class:: DNS_WINSR_DATAA
+
+    Alias for :class:`DNS_WINSR_DATAA`
+
+.. class:: DNS_WINSR_DATAA
+
+    .. attribute:: dwMappingFlag
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwLookupTimeout
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwCacheTimeout
+
+        :class:`DWORD`
+
+
+    .. attribute:: pNameResultDomain
+
+        :class:`PSTR`
+
+DNS_TLSA_DATA
+'''''''''''''
+.. class:: PDNS_TLSA_DATA
+
+    Pointer to :class:`DNS_TLSA_DATA`
+
+.. class:: DNS_TLSA_DATA
+
+    Alias for :class:`DNS_TLSA_DATA`
+
+.. class:: DNS_TLSA_DATA
+
+    .. attribute:: bCertUsage
+
+        :class:`BYTE`
+
+
+    .. attribute:: bSelector
+
+        :class:`BYTE`
+
+
+    .. attribute:: bMatchingType
+
+        :class:`BYTE`
+
+
+    .. attribute:: bCertificateAssociationDataLength
+
+        :class:`WORD`
+
+
+    .. attribute:: bPad
+
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03CE2CB0>]``
+
+
+    .. attribute:: bCertificateAssociationData
+
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03CE2CF0>]``
+
+DNS_UNKNOWN_DATA
+''''''''''''''''
+.. class:: PDNS_UNKNOWN_DATA
+
+    Pointer to :class:`DNS_UNKNOWN_DATA`
+
+.. class:: DNS_UNKNOWN_DATA
+
+    Alias for :class:`DNS_UNKNOWN_DATA`
+
+.. class:: DNS_UNKNOWN_DATA
+
+    .. attribute:: dwByteCount
+
+        :class:`DWORD`
+
+
+    .. attribute:: bData
+
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03CE2E30>]``
+
+_DnsRecordFlags
+'''''''''''''''
+.. class:: DNS_RECORD_FLAGS
+
+    Alias for :class:`_DnsRecordFlags`
+
+.. class:: _DnsRecordFlags
+
+    .. attribute:: Section
+
+        :class:`DWORD`
+
+
+    .. attribute:: Delete
+
+        :class:`DWORD`
+
+
+    .. attribute:: CharSet
+
+        :class:`DWORD`
+
+
+    .. attribute:: Unused
+
+        :class:`DWORD`
+
+
+    .. attribute:: Reserved
+
+        :class:`DWORD`
+
+_DnsRecordA
+'''''''''''
+.. class:: PDNS_RECORDA
+
+    Pointer to :class:`_DnsRecordA`
+
+.. class:: DNS_RECORDA
+
+    Alias for :class:`_DnsRecordA`
+
+.. class:: _DnsRecordA
+
+    .. attribute:: pNext
+
+        :class:`_DnsRecordA`
+
+
+    .. attribute:: pName
+
+        :class:`PSTR`
+
+
+    .. attribute:: wType
+
+        :class:`WORD`
+
+
+    .. attribute:: wDataLength
+
+        :class:`WORD`
+
+
+    .. attribute:: Flags
+
+        :class:`_ANON__DNSRECORDA_SUB_UNION_1`
+
+
+    .. attribute:: dwTtl
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwReserved
+
+        :class:`DWORD`
+
+
+    .. attribute:: Data
+
+        :class:`_ANON__DNSRECORDA_SUB_UNION_2`
+
+_DnsRecordW
+'''''''''''
+.. class:: DNS_RECORDW
+
+    Alias for :class:`_DnsRecordW`
+
+.. class:: PDNS_RECORDW
+
+    Pointer to :class:`_DnsRecordW`
+
+.. class:: _DnsRecordW
+
+    .. attribute:: pNext
+
+        :class:`_DnsRecordW`
+
+
+    .. attribute:: pName
+
+        :class:`PWSTR`
+
+
+    .. attribute:: wType
+
+        :class:`WORD`
+
+
+    .. attribute:: wDataLength
+
+        :class:`WORD`
+
+
+    .. attribute:: Flags
+
+        :class:`_ANON__DNSRECORDW_SUB_UNION_1`
+
+
+    .. attribute:: dwTtl
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwReserved
+
+        :class:`DWORD`
+
+
+    .. attribute:: Data
+
+        :class:`_ANON__DNSRECORDW_SUB_UNION_2`
 
 _KEY_VALUE_BASIC_INFORMATION
 ''''''''''''''''''''''''''''
@@ -5238,7 +9777,7 @@ _KEY_VALUE_BASIC_INFORMATION
 
     .. attribute:: Name
 
-        :class:`WCHAR` ``[1]``
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03CF0A30>]``
 
 _KEY_VALUE_FULL_INFORMATION
 '''''''''''''''''''''''''''
@@ -5279,7 +9818,7 @@ _KEY_VALUE_FULL_INFORMATION
 
     .. attribute:: Name
 
-        :class:`WCHAR` ``[1]``
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03CF0CD0>]``
 
 _KEY_VALUE_PARTIAL_INFORMATION
 ''''''''''''''''''''''''''''''
@@ -5310,7 +9849,7 @@ _KEY_VALUE_PARTIAL_INFORMATION
 
     .. attribute:: Data
 
-        :class:`UCHAR` ``[1]``
+        :class:`UCHAR` ``[<winstruct.ComplexArrayExpression object at 0x03CF0EB0>]``
 
 _ACL
 ''''
@@ -6058,27 +10597,27 @@ _CLAIM_SECURITY_ATTRIBUTE_RELATIVE_V1_UNION
 
     .. attribute:: pInt64
 
-        :class:`DWORD` ``[ANYSIZE_ARRAY]``
+        :class:`DWORD` ``[<winstruct.ComplexArrayExpression object at 0x03CFB950>]``
 
 
     .. attribute:: pUint64
 
-        :class:`DWORD` ``[ANYSIZE_ARRAY]``
+        :class:`DWORD` ``[<winstruct.ComplexArrayExpression object at 0x03CFB9D0>]``
 
 
     .. attribute:: ppString
 
-        :class:`DWORD` ``[ANYSIZE_ARRAY]``
+        :class:`DWORD` ``[<winstruct.ComplexArrayExpression object at 0x03CFBA50>]``
 
 
     .. attribute:: pFqbn
 
-        :class:`DWORD` ``[ANYSIZE_ARRAY]``
+        :class:`DWORD` ``[<winstruct.ComplexArrayExpression object at 0x03CFBAD0>]``
 
 
     .. attribute:: pOctetString
 
-        :class:`DWORD` ``[ANYSIZE_ARRAY]``
+        :class:`DWORD` ``[<winstruct.ComplexArrayExpression object at 0x03CFBB30>]``
 
 _CLAIM_SECURITY_ATTRIBUTE_RELATIVE_V1
 '''''''''''''''''''''''''''''''''''''
@@ -6182,7 +10721,7 @@ _CLAIM_SECURITY_ATTRIBUTE_OCTET_STRING_RELATIVE
 
     .. attribute:: OctetString
 
-        :class:`BYTE` ``[ANYSIZE_ARRAY]``
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x03CFE0B0>]``
 
 _CLAIM_SECURITY_ATTRIBUTE_V1_UNION
 ''''''''''''''''''''''''''''''''''
@@ -6346,6 +10885,381 @@ _SECURITY_DESCRIPTOR
 
         :class:`PACL`
 
+_GENERIC_MAPPING
+''''''''''''''''
+.. class:: PGENERIC_MAPPING
+
+    Pointer to :class:`_GENERIC_MAPPING`
+
+.. class:: GENERIC_MAPPING
+
+    Alias for :class:`_GENERIC_MAPPING`
+
+.. class:: _GENERIC_MAPPING
+
+    .. attribute:: GenericRead
+
+        :class:`ACCESS_MASK`
+
+
+    .. attribute:: GenericWrite
+
+        :class:`ACCESS_MASK`
+
+
+    .. attribute:: GenericExecute
+
+        :class:`ACCESS_MASK`
+
+
+    .. attribute:: GenericAll
+
+        :class:`ACCESS_MASK`
+
+_PRIVILEGE_SET
+''''''''''''''
+.. class:: PRIVILEGE_SET
+
+    Alias for :class:`_PRIVILEGE_SET`
+
+.. class:: PPRIVILEGE_SET
+
+    Pointer to :class:`_PRIVILEGE_SET`
+
+.. class:: _PRIVILEGE_SET
+
+    .. attribute:: PrivilegeCount
+
+        :class:`DWORD`
+
+
+    .. attribute:: Control
+
+        :class:`DWORD`
+
+
+    .. attribute:: Privilege
+
+        :class:`LUID_AND_ATTRIBUTES` ``[<winstruct.ComplexArrayExpression object at 0x03CFEC10>]``
+
+_SERVICE_STATUS
+'''''''''''''''
+.. class:: SERVICE_STATUS
+
+    Alias for :class:`_SERVICE_STATUS`
+
+.. class:: LPSERVICE_STATUS
+
+    Pointer to :class:`_SERVICE_STATUS`
+
+.. class:: _SERVICE_STATUS
+
+    .. attribute:: dwServiceType
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwCurrentState
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwControlsAccepted
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwWin32ExitCode
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwServiceSpecificExitCode
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwCheckPoint
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwWaitHint
+
+        :class:`DWORD`
+
+_SERVICE_STATUS_PROCESS
+'''''''''''''''''''''''
+.. class:: LPSERVICE_STATUS_PROCESS
+
+    Pointer to :class:`_SERVICE_STATUS_PROCESS`
+
+.. class:: SERVICE_STATUS_PROCESS
+
+    Alias for :class:`_SERVICE_STATUS_PROCESS`
+
+.. class:: _SERVICE_STATUS_PROCESS
+
+    .. attribute:: dwServiceType
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwCurrentState
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwControlsAccepted
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwWin32ExitCode
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwServiceSpecificExitCode
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwCheckPoint
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwWaitHint
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwProcessId
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwServiceFlags
+
+        :class:`DWORD`
+
+_ENUM_SERVICE_STATUS_PROCESSA
+'''''''''''''''''''''''''''''
+.. class:: LPENUM_SERVICE_STATUS_PROCESSA
+
+    Pointer to :class:`_ENUM_SERVICE_STATUS_PROCESSA`
+
+.. class:: ENUM_SERVICE_STATUS_PROCESSA
+
+    Alias for :class:`_ENUM_SERVICE_STATUS_PROCESSA`
+
+.. class:: _ENUM_SERVICE_STATUS_PROCESSA
+
+    .. attribute:: lpServiceName
+
+        :class:`LPSTR`
+
+
+    .. attribute:: lpDisplayName
+
+        :class:`LPSTR`
+
+
+    .. attribute:: ServiceStatusProcess
+
+        :class:`SERVICE_STATUS_PROCESS`
+
+_ENUM_SERVICE_STATUS_PROCESSW
+'''''''''''''''''''''''''''''
+.. class:: ENUM_SERVICE_STATUS_PROCESSW
+
+    Alias for :class:`_ENUM_SERVICE_STATUS_PROCESSW`
+
+.. class:: LPENUM_SERVICE_STATUS_PROCESSW
+
+    Pointer to :class:`_ENUM_SERVICE_STATUS_PROCESSW`
+
+.. class:: _ENUM_SERVICE_STATUS_PROCESSW
+
+    .. attribute:: lpServiceName
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: lpDisplayName
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: ServiceStatusProcess
+
+        :class:`SERVICE_STATUS_PROCESS`
+
+_ENUM_SERVICE_STATUSA
+'''''''''''''''''''''
+.. class:: LPENUM_SERVICE_STATUSA
+
+    Pointer to :class:`_ENUM_SERVICE_STATUSA`
+
+.. class:: ENUM_SERVICE_STATUSA
+
+    Alias for :class:`_ENUM_SERVICE_STATUSA`
+
+.. class:: _ENUM_SERVICE_STATUSA
+
+    .. attribute:: lpServiceName
+
+        :class:`LPSTR`
+
+
+    .. attribute:: lpDisplayName
+
+        :class:`LPSTR`
+
+
+    .. attribute:: ServiceStatus
+
+        :class:`SERVICE_STATUS`
+
+_ENUM_SERVICE_STATUSW
+'''''''''''''''''''''
+.. class:: ENUM_SERVICE_STATUSW
+
+    Alias for :class:`_ENUM_SERVICE_STATUSW`
+
+.. class:: LPENUM_SERVICE_STATUSW
+
+    Pointer to :class:`_ENUM_SERVICE_STATUSW`
+
+.. class:: _ENUM_SERVICE_STATUSW
+
+    .. attribute:: lpServiceName
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: lpDisplayName
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: ServiceStatus
+
+        :class:`SERVICE_STATUS`
+
+_QUERY_SERVICE_CONFIGA
+''''''''''''''''''''''
+.. class:: QUERY_SERVICE_CONFIGA
+
+    Alias for :class:`_QUERY_SERVICE_CONFIGA`
+
+.. class:: LPQUERY_SERVICE_CONFIGA
+
+    Pointer to :class:`_QUERY_SERVICE_CONFIGA`
+
+.. class:: _QUERY_SERVICE_CONFIGA
+
+    .. attribute:: dwServiceType
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwStartType
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwErrorControl
+
+        :class:`DWORD`
+
+
+    .. attribute:: lpBinaryPathName
+
+        :class:`LPSTR`
+
+
+    .. attribute:: lpLoadOrderGroup
+
+        :class:`LPSTR`
+
+
+    .. attribute:: dwTagId
+
+        :class:`DWORD`
+
+
+    .. attribute:: lpDependencies
+
+        :class:`LPSTR`
+
+
+    .. attribute:: lpServiceStartName
+
+        :class:`LPSTR`
+
+
+    .. attribute:: lpDisplayName
+
+        :class:`LPSTR`
+
+_QUERY_SERVICE_CONFIGW
+''''''''''''''''''''''
+.. class:: LPQUERY_SERVICE_CONFIGW
+
+    Pointer to :class:`_QUERY_SERVICE_CONFIGW`
+
+.. class:: QUERY_SERVICE_CONFIGW
+
+    Alias for :class:`_QUERY_SERVICE_CONFIGW`
+
+.. class:: _QUERY_SERVICE_CONFIGW
+
+    .. attribute:: dwServiceType
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwStartType
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwErrorControl
+
+        :class:`DWORD`
+
+
+    .. attribute:: lpBinaryPathName
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: lpLoadOrderGroup
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: dwTagId
+
+        :class:`DWORD`
+
+
+    .. attribute:: lpDependencies
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: lpServiceStartName
+
+        :class:`LPWSTR`
+
+
+    .. attribute:: lpDisplayName
+
+        :class:`LPWSTR`
+
 _SHITEMID
 '''''''''
 .. class:: SHITEMID
@@ -6361,7 +11275,7 @@ _SHITEMID
 
     .. attribute:: abID
 
-        :class:`BYTE` ``[1]``
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x04002BF0>]``
 
 _ITEMIDLIST
 '''''''''''
@@ -6432,22 +11346,22 @@ _IMAGEHLP_MODULE64
 
     .. attribute:: ModuleName
 
-        :class:`CHAR` ``[32]``
+        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x040097F0>]``
 
 
     .. attribute:: ImageName
 
-        :class:`CHAR` ``[256]``
+        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x04009870>]``
 
 
     .. attribute:: LoadedImageName
 
-        :class:`CHAR` ``[256]``
+        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x040098D0>]``
 
 
     .. attribute:: LoadedPdbName
 
-        :class:`CHAR` ``[256]``
+        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x04009930>]``
 
 
     .. attribute:: CVSig
@@ -6457,7 +11371,7 @@ _IMAGEHLP_MODULE64
 
     .. attribute:: CVData
 
-        :class:`CHAR` ``[780]``
+        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x04009A10>]``
 
 
     .. attribute:: PdbSig
@@ -6509,6 +11423,1400 @@ _IMAGEHLP_MODULE64
 
         :class:`BOOL`
 
+_IMAGEHLP_MODULEW64
+'''''''''''''''''''
+.. class:: PIMAGEHLP_MODULEW64
+
+    Pointer to :class:`_IMAGEHLP_MODULEW64`
+
+.. class:: IMAGEHLP_MODULEW64
+
+    Alias for :class:`_IMAGEHLP_MODULEW64`
+
+.. class:: _IMAGEHLP_MODULEW64
+
+    .. attribute:: SizeOfStruct
+
+        :class:`DWORD`
+
+
+    .. attribute:: BaseOfImage
+
+        :class:`DWORD64`
+
+
+    .. attribute:: ImageSize
+
+        :class:`DWORD`
+
+
+    .. attribute:: TimeDateStamp
+
+        :class:`DWORD`
+
+
+    .. attribute:: CheckSum
+
+        :class:`DWORD`
+
+
+    .. attribute:: NumSyms
+
+        :class:`DWORD`
+
+
+    .. attribute:: SymType
+
+        :class:`SYM_TYPE`
+
+
+    .. attribute:: ModuleName
+
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x0400D0B0>]``
+
+
+    .. attribute:: ImageName
+
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x0400D130>]``
+
+
+    .. attribute:: LoadedImageName
+
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x0400D190>]``
+
+
+    .. attribute:: LoadedPdbName
+
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x0400D1F0>]``
+
+
+    .. attribute:: CVSig
+
+        :class:`DWORD`
+
+
+    .. attribute:: CVData
+
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x0400D2F0>]``
+
+
+    .. attribute:: PdbSig
+
+        :class:`DWORD`
+
+
+    .. attribute:: PdbSig70
+
+        :class:`GUID`
+
+
+    .. attribute:: PdbAge
+
+        :class:`DWORD`
+
+
+    .. attribute:: PdbUnmatched
+
+        :class:`BOOL`
+
+
+    .. attribute:: DbgUnmatched
+
+        :class:`BOOL`
+
+
+    .. attribute:: LineNumbers
+
+        :class:`BOOL`
+
+
+    .. attribute:: GlobalSymbols
+
+        :class:`BOOL`
+
+
+    .. attribute:: TypeInfo
+
+        :class:`BOOL`
+
+
+    .. attribute:: SourceIndexed
+
+        :class:`BOOL`
+
+
+    .. attribute:: Publics
+
+        :class:`BOOL`
+
+
+    .. attribute:: MachineType
+
+        :class:`DWORD`
+
+
+    .. attribute:: Reserved
+
+        :class:`DWORD`
+
+_SYMBOL_INFO
+''''''''''''
+.. class:: SYMBOL_INFO
+
+    Alias for :class:`_SYMBOL_INFO`
+
+.. class:: PSYMBOL_INFO
+
+    Pointer to :class:`_SYMBOL_INFO`
+
+.. class:: _SYMBOL_INFO
+
+    .. attribute:: SizeOfStruct
+
+        :class:`ULONG`
+
+
+    .. attribute:: TypeIndex
+
+        :class:`ULONG`
+
+
+    .. attribute:: Reserved
+
+        :class:`ULONG64` ``[<winstruct.ComplexArrayExpression object at 0x0400D890>]``
+
+
+    .. attribute:: Index
+
+        :class:`ULONG`
+
+
+    .. attribute:: Size
+
+        :class:`ULONG`
+
+
+    .. attribute:: ModBase
+
+        :class:`ULONG64`
+
+
+    .. attribute:: Flags
+
+        :class:`ULONG`
+
+
+    .. attribute:: Value
+
+        :class:`ULONG64`
+
+
+    .. attribute:: Address
+
+        :class:`ULONG64`
+
+
+    .. attribute:: Register
+
+        :class:`ULONG`
+
+
+    .. attribute:: Scope
+
+        :class:`ULONG`
+
+
+    .. attribute:: Tag
+
+        :class:`ULONG`
+
+
+    .. attribute:: NameLen
+
+        :class:`ULONG`
+
+
+    .. attribute:: MaxNameLen
+
+        :class:`ULONG`
+
+
+    .. attribute:: Name
+
+        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x0400DD30>]``
+
+_SYMBOL_INFOW
+'''''''''''''
+.. class:: SYMBOL_INFOW
+
+    Alias for :class:`_SYMBOL_INFOW`
+
+.. class:: PSYMBOL_INFOW
+
+    Pointer to :class:`_SYMBOL_INFOW`
+
+.. class:: _SYMBOL_INFOW
+
+    .. attribute:: SizeOfStruct
+
+        :class:`ULONG`
+
+
+    .. attribute:: TypeIndex
+
+        :class:`ULONG`
+
+
+    .. attribute:: Reserved
+
+        :class:`ULONG64` ``[<winstruct.ComplexArrayExpression object at 0x0400DE90>]``
+
+
+    .. attribute:: Index
+
+        :class:`ULONG`
+
+
+    .. attribute:: Size
+
+        :class:`ULONG`
+
+
+    .. attribute:: ModBase
+
+        :class:`ULONG64`
+
+
+    .. attribute:: Flags
+
+        :class:`ULONG`
+
+
+    .. attribute:: Value
+
+        :class:`ULONG64`
+
+
+    .. attribute:: Address
+
+        :class:`ULONG64`
+
+
+    .. attribute:: Register
+
+        :class:`ULONG`
+
+
+    .. attribute:: Scope
+
+        :class:`ULONG`
+
+
+    .. attribute:: Tag
+
+        :class:`ULONG`
+
+
+    .. attribute:: NameLen
+
+        :class:`ULONG`
+
+
+    .. attribute:: MaxNameLen
+
+        :class:`ULONG`
+
+
+    .. attribute:: Name
+
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x04011350>]``
+
+SYMSRV_INDEX_INFOW
+''''''''''''''''''
+.. class:: PSYMSRV_INDEX_INFOW
+
+    Pointer to :class:`SYMSRV_INDEX_INFOW`
+
+.. class:: SYMSRV_INDEX_INFOW
+
+    Alias for :class:`SYMSRV_INDEX_INFOW`
+
+.. class:: SYMSRV_INDEX_INFOW
+
+    .. attribute:: sizeofstruct
+
+        :class:`DWORD`
+
+
+    .. attribute:: file
+
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x04011450>]``
+
+
+    .. attribute:: stripped
+
+        :class:`BOOL`
+
+
+    .. attribute:: timestamp
+
+        :class:`DWORD`
+
+
+    .. attribute:: size
+
+        :class:`DWORD`
+
+
+    .. attribute:: dbgfile
+
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x04011610>]``
+
+
+    .. attribute:: pdbfile
+
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x040116B0>]``
+
+
+    .. attribute:: guid
+
+        :class:`GUID`
+
+
+    .. attribute:: sig
+
+        :class:`DWORD`
+
+
+    .. attribute:: age
+
+        :class:`DWORD`
+
+SYMSRV_INDEX_INFO
+'''''''''''''''''
+.. class:: SYMSRV_INDEX_INFO
+
+    Alias for :class:`SYMSRV_INDEX_INFO`
+
+.. class:: PSYMSRV_INDEX_INFO
+
+    Pointer to :class:`SYMSRV_INDEX_INFO`
+
+.. class:: SYMSRV_INDEX_INFO
+
+    .. attribute:: sizeofstruct
+
+        :class:`DWORD`
+
+
+    .. attribute:: file
+
+        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x040118B0>]``
+
+
+    .. attribute:: stripped
+
+        :class:`BOOL`
+
+
+    .. attribute:: timestamp
+
+        :class:`DWORD`
+
+
+    .. attribute:: size
+
+        :class:`DWORD`
+
+
+    .. attribute:: dbgfile
+
+        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x04011A70>]``
+
+
+    .. attribute:: pdbfile
+
+        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x04011B10>]``
+
+
+    .. attribute:: guid
+
+        :class:`GUID`
+
+
+    .. attribute:: sig
+
+        :class:`DWORD`
+
+
+    .. attribute:: age
+
+        :class:`DWORD`
+
+_IMAGEHLP_SYMBOL
+''''''''''''''''
+.. class:: PIMAGEHLP_SYMBOL
+
+    Pointer to :class:`_IMAGEHLP_SYMBOL`
+
+.. class:: IMAGEHLP_SYMBOL
+
+    Alias for :class:`_IMAGEHLP_SYMBOL`
+
+.. class:: _IMAGEHLP_SYMBOL
+
+    .. attribute:: SizeOfStruct
+
+        :class:`DWORD`
+
+
+    .. attribute:: Address
+
+        :class:`DWORD`
+
+
+    .. attribute:: Size
+
+        :class:`DWORD`
+
+
+    .. attribute:: Flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: MaxNameLength
+
+        :class:`DWORD`
+
+
+    .. attribute:: Name
+
+        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x04011E70>]``
+
+_IMAGEHLP_SYMBOL64
+''''''''''''''''''
+.. class:: PIMAGEHLP_SYMBOL64
+
+    Pointer to :class:`_IMAGEHLP_SYMBOL64`
+
+.. class:: IMAGEHLP_SYMBOL64
+
+    Alias for :class:`_IMAGEHLP_SYMBOL64`
+
+.. class:: _IMAGEHLP_SYMBOL64
+
+    .. attribute:: SizeOfStruct
+
+        :class:`DWORD`
+
+
+    .. attribute:: Address
+
+        :class:`DWORD64`
+
+
+    .. attribute:: Size
+
+        :class:`DWORD`
+
+
+    .. attribute:: Flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: MaxNameLength
+
+        :class:`DWORD`
+
+
+    .. attribute:: Name
+
+        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x040150F0>]``
+
+_IMAGEHLP_SYMBOLW64
+'''''''''''''''''''
+.. class:: PIMAGEHLP_SYMBOLW64
+
+    Pointer to :class:`_IMAGEHLP_SYMBOLW64`
+
+.. class:: IMAGEHLP_SYMBOLW64
+
+    Alias for :class:`_IMAGEHLP_SYMBOLW64`
+
+.. class:: _IMAGEHLP_SYMBOLW64
+
+    .. attribute:: SizeOfStruct
+
+        :class:`DWORD`
+
+
+    .. attribute:: Address
+
+        :class:`DWORD64`
+
+
+    .. attribute:: Size
+
+        :class:`DWORD`
+
+
+    .. attribute:: Flags
+
+        :class:`DWORD`
+
+
+    .. attribute:: MaxNameLength
+
+        :class:`DWORD`
+
+
+    .. attribute:: Name
+
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x04015350>]``
+
+_IMAGEHLP_STACK_FRAME
+'''''''''''''''''''''
+.. class:: IMAGEHLP_STACK_FRAME
+
+    Alias for :class:`_IMAGEHLP_STACK_FRAME`
+
+.. class:: PIMAGEHLP_STACK_FRAME
+
+    Pointer to :class:`_IMAGEHLP_STACK_FRAME`
+
+.. class:: _IMAGEHLP_STACK_FRAME
+
+    .. attribute:: InstructionOffset
+
+        :class:`ULONG64`
+
+
+    .. attribute:: ReturnOffset
+
+        :class:`ULONG64`
+
+
+    .. attribute:: FrameOffset
+
+        :class:`ULONG64`
+
+
+    .. attribute:: StackOffset
+
+        :class:`ULONG64`
+
+
+    .. attribute:: BackingStoreOffset
+
+        :class:`ULONG64`
+
+
+    .. attribute:: FuncTableEntry
+
+        :class:`ULONG64`
+
+
+    .. attribute:: Params
+
+        :class:`ULONG64` ``[<winstruct.ComplexArrayExpression object at 0x040155D0>]``
+
+
+    .. attribute:: Reserved
+
+        :class:`ULONG64` ``[<winstruct.ComplexArrayExpression object at 0x04015630>]``
+
+
+    .. attribute:: Virtual
+
+        :class:`BOOL`
+
+
+    .. attribute:: Reserved2
+
+        :class:`ULONG`
+
+_IMAGEHLP_CBA_EVENT
+'''''''''''''''''''
+.. class:: PIMAGEHLP_CBA_EVENT
+
+    Pointer to :class:`_IMAGEHLP_CBA_EVENT`
+
+.. class:: IMAGEHLP_CBA_EVENT
+
+    Alias for :class:`_IMAGEHLP_CBA_EVENT`
+
+.. class:: _IMAGEHLP_CBA_EVENT
+
+    .. attribute:: severity
+
+        :class:`CBA_EVENT_SEVERITY`
+
+
+    .. attribute:: code
+
+        :class:`DWORD`
+
+
+    .. attribute:: desc
+
+        :class:`PCHAR`
+
+
+    .. attribute:: object
+
+        :class:`PVOID`
+
+_IMAGEHLP_CBA_EVENTW
+''''''''''''''''''''
+.. class:: PIMAGEHLP_CBA_EVENTW
+
+    Pointer to :class:`_IMAGEHLP_CBA_EVENTW`
+
+.. class:: IMAGEHLP_CBA_EVENTW
+
+    Alias for :class:`_IMAGEHLP_CBA_EVENTW`
+
+.. class:: _IMAGEHLP_CBA_EVENTW
+
+    .. attribute:: severity
+
+        :class:`CBA_EVENT_SEVERITY`
+
+
+    .. attribute:: code
+
+        :class:`DWORD`
+
+
+    .. attribute:: desc
+
+        :class:`PCWSTR`
+
+
+    .. attribute:: object
+
+        :class:`PVOID`
+
+_IMAGEHLP_CBA_READ_MEMORY
+'''''''''''''''''''''''''
+.. class:: PIMAGEHLP_CBA_READ_MEMORY
+
+    Pointer to :class:`_IMAGEHLP_CBA_READ_MEMORY`
+
+.. class:: IMAGEHLP_CBA_READ_MEMORY
+
+    Alias for :class:`_IMAGEHLP_CBA_READ_MEMORY`
+
+.. class:: _IMAGEHLP_CBA_READ_MEMORY
+
+    .. attribute:: addr
+
+        :class:`DWORD64`
+
+
+    .. attribute:: buf
+
+        :class:`PVOID`
+
+
+    .. attribute:: bytes
+
+        :class:`DWORD`
+
+
+    .. attribute:: bytesread
+
+        :class:`DWORD`
+
+_IMAGEHLP_DEFERRED_SYMBOL_LOAD
+''''''''''''''''''''''''''''''
+.. class:: PIMAGEHLP_DEFERRED_SYMBOL_LOAD
+
+    Pointer to :class:`_IMAGEHLP_DEFERRED_SYMBOL_LOAD`
+
+.. class:: IMAGEHLP_DEFERRED_SYMBOL_LOAD
+
+    Alias for :class:`_IMAGEHLP_DEFERRED_SYMBOL_LOAD`
+
+.. class:: _IMAGEHLP_DEFERRED_SYMBOL_LOAD
+
+    .. attribute:: SizeOfStruct
+
+        :class:`DWORD`
+
+
+    .. attribute:: BaseOfImage
+
+        :class:`DWORD`
+
+
+    .. attribute:: CheckSum
+
+        :class:`DWORD`
+
+
+    .. attribute:: TimeDateStamp
+
+        :class:`DWORD`
+
+
+    .. attribute:: FileName
+
+        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x04015ED0>]``
+
+
+    .. attribute:: Reparse
+
+        :class:`BOOLEAN`
+
+
+    .. attribute:: hFile
+
+        :class:`HANDLE`
+
+_IMAGEHLP_DEFERRED_SYMBOL_LOAD64
+''''''''''''''''''''''''''''''''
+.. class:: IMAGEHLP_DEFERRED_SYMBOL_LOAD64
+
+    Alias for :class:`_IMAGEHLP_DEFERRED_SYMBOL_LOAD64`
+
+.. class:: PIMAGEHLP_DEFERRED_SYMBOL_LOAD64
+
+    Pointer to :class:`_IMAGEHLP_DEFERRED_SYMBOL_LOAD64`
+
+.. class:: _IMAGEHLP_DEFERRED_SYMBOL_LOAD64
+
+    .. attribute:: SizeOfStruct
+
+        :class:`DWORD`
+
+
+    .. attribute:: BaseOfImage
+
+        :class:`DWORD64`
+
+
+    .. attribute:: CheckSum
+
+        :class:`DWORD`
+
+
+    .. attribute:: TimeDateStamp
+
+        :class:`DWORD`
+
+
+    .. attribute:: FileName
+
+        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x0401A1D0>]``
+
+
+    .. attribute:: Reparse
+
+        :class:`BOOLEAN`
+
+
+    .. attribute:: hFile
+
+        :class:`HANDLE`
+
+
+    .. attribute:: Flags
+
+        :class:`DWORD`
+
+_IMAGEHLP_DEFERRED_SYMBOL_LOADW64
+'''''''''''''''''''''''''''''''''
+.. class:: IMAGEHLP_DEFERRED_SYMBOL_LOADW64
+
+    Alias for :class:`_IMAGEHLP_DEFERRED_SYMBOL_LOADW64`
+
+.. class:: PIMAGEHLP_DEFERRED_SYMBOL_LOADW64
+
+    Pointer to :class:`_IMAGEHLP_DEFERRED_SYMBOL_LOADW64`
+
+.. class:: _IMAGEHLP_DEFERRED_SYMBOL_LOADW64
+
+    .. attribute:: SizeOfStruct
+
+        :class:`DWORD`
+
+
+    .. attribute:: BaseOfImage
+
+        :class:`DWORD64`
+
+
+    .. attribute:: CheckSum
+
+        :class:`DWORD`
+
+
+    .. attribute:: TimeDateStamp
+
+        :class:`DWORD`
+
+
+    .. attribute:: FileName
+
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x0401A510>]``
+
+
+    .. attribute:: Reparse
+
+        :class:`BOOLEAN`
+
+
+    .. attribute:: hFile
+
+        :class:`HANDLE`
+
+
+    .. attribute:: Flags
+
+        :class:`DWORD`
+
+_IMAGEHLP_DUPLICATE_SYMBOL64
+''''''''''''''''''''''''''''
+.. class:: PIMAGEHLP_DUPLICATE_SYMBOL64
+
+    Pointer to :class:`_IMAGEHLP_DUPLICATE_SYMBOL64`
+
+.. class:: IMAGEHLP_DUPLICATE_SYMBOL64
+
+    Alias for :class:`_IMAGEHLP_DUPLICATE_SYMBOL64`
+
+.. class:: _IMAGEHLP_DUPLICATE_SYMBOL64
+
+    .. attribute:: SizeOfStruct
+
+        :class:`DWORD`
+
+
+    .. attribute:: NumberOfDups
+
+        :class:`DWORD`
+
+
+    .. attribute:: Symbol
+
+        :class:`PIMAGEHLP_SYMBOL64`
+
+
+    .. attribute:: SelectedSymbol
+
+        :class:`DWORD`
+
+_IMAGEHLP_DUPLICATE_SYMBOL
+''''''''''''''''''''''''''
+.. class:: PIMAGEHLP_DUPLICATE_SYMBOL
+
+    Pointer to :class:`_IMAGEHLP_DUPLICATE_SYMBOL`
+
+.. class:: IMAGEHLP_DUPLICATE_SYMBOL
+
+    Alias for :class:`_IMAGEHLP_DUPLICATE_SYMBOL`
+
+.. class:: _IMAGEHLP_DUPLICATE_SYMBOL
+
+    .. attribute:: SizeOfStruct
+
+        :class:`DWORD`
+
+
+    .. attribute:: NumberOfDups
+
+        :class:`DWORD`
+
+
+    .. attribute:: Symbol
+
+        :class:`PIMAGEHLP_SYMBOL`
+
+
+    .. attribute:: SelectedSymbol
+
+        :class:`DWORD`
+
+_tagADDRESS
+'''''''''''
+.. class:: LPADDRESS
+
+    Pointer to :class:`_tagADDRESS`
+
+.. class:: ADDRESS
+
+    Alias for :class:`_tagADDRESS`
+
+.. class:: _tagADDRESS
+
+    .. attribute:: Offset
+
+        :class:`DWORD`
+
+
+    .. attribute:: Segment
+
+        :class:`WORD`
+
+
+    .. attribute:: Mode
+
+        :class:`ADDRESS_MODE`
+
+_tagADDRESS64
+'''''''''''''
+.. class:: LPADDRESS64
+
+    Pointer to :class:`_tagADDRESS64`
+
+.. class:: ADDRESS64
+
+    Alias for :class:`_tagADDRESS64`
+
+.. class:: _tagADDRESS64
+
+    .. attribute:: Offset
+
+        :class:`DWORD64`
+
+
+    .. attribute:: Segment
+
+        :class:`WORD`
+
+
+    .. attribute:: Mode
+
+        :class:`ADDRESS_MODE`
+
+_KDHELP
+'''''''
+.. class:: KDHELP
+
+    Alias for :class:`_KDHELP`
+
+.. class:: PKDHELP
+
+    Pointer to :class:`_KDHELP`
+
+.. class:: _KDHELP
+
+    .. attribute:: Thread
+
+        :class:`DWORD`
+
+
+    .. attribute:: ThCallbackStack
+
+        :class:`DWORD`
+
+
+    .. attribute:: NextCallback
+
+        :class:`DWORD`
+
+
+    .. attribute:: FramePointer
+
+        :class:`DWORD`
+
+
+    .. attribute:: KiCallUserMode
+
+        :class:`DWORD`
+
+
+    .. attribute:: KeUserCallbackDispatcher
+
+        :class:`DWORD`
+
+
+    .. attribute:: SystemRangeStart
+
+        :class:`DWORD`
+
+
+    .. attribute:: ThCallbackBStore
+
+        :class:`DWORD`
+
+
+    .. attribute:: KiUserExceptionDispatcher
+
+        :class:`DWORD`
+
+
+    .. attribute:: StackBase
+
+        :class:`DWORD`
+
+
+    .. attribute:: StackLimit
+
+        :class:`DWORD`
+
+
+    .. attribute:: Reserved
+
+        :class:`DWORD` ``[<winstruct.ComplexArrayExpression object at 0x0401AFF0>]``
+
+_KDHELP64
+'''''''''
+.. class:: KDHELP64
+
+    Alias for :class:`_KDHELP64`
+
+.. class:: PKDHELP64
+
+    Pointer to :class:`_KDHELP64`
+
+.. class:: _KDHELP64
+
+    .. attribute:: Thread
+
+        :class:`DWORD64`
+
+
+    .. attribute:: ThCallbackStack
+
+        :class:`DWORD`
+
+
+    .. attribute:: ThCallbackBStore
+
+        :class:`DWORD`
+
+
+    .. attribute:: NextCallback
+
+        :class:`DWORD`
+
+
+    .. attribute:: FramePointer
+
+        :class:`DWORD`
+
+
+    .. attribute:: KiCallUserMode
+
+        :class:`DWORD64`
+
+
+    .. attribute:: KeUserCallbackDispatcher
+
+        :class:`DWORD64`
+
+
+    .. attribute:: SystemRangeStart
+
+        :class:`DWORD64`
+
+
+    .. attribute:: KiUserExceptionDispatcher
+
+        :class:`DWORD64`
+
+
+    .. attribute:: StackBase
+
+        :class:`DWORD64`
+
+
+    .. attribute:: StackLimit
+
+        :class:`DWORD64`
+
+
+    .. attribute:: BuildVersion
+
+        :class:`DWORD`
+
+
+    .. attribute:: RetpolineStubFunctionTableSize
+
+        :class:`DWORD`
+
+
+    .. attribute:: RetpolineStubFunctionTable
+
+        :class:`DWORD64`
+
+
+    .. attribute:: RetpolineStubOffset
+
+        :class:`DWORD`
+
+
+    .. attribute:: RetpolineStubSize
+
+        :class:`DWORD`
+
+
+    .. attribute:: Reserved0
+
+        :class:`DWORD64` ``[<winstruct.ComplexArrayExpression object at 0x0401E590>]``
+
+_tagSTACKFRAME
+''''''''''''''
+.. class:: STACKFRAME
+
+    Alias for :class:`_tagSTACKFRAME`
+
+.. class:: LPSTACKFRAME
+
+    Pointer to :class:`_tagSTACKFRAME`
+
+.. class:: _tagSTACKFRAME
+
+    .. attribute:: AddrPC
+
+        :class:`ADDRESS`
+
+
+    .. attribute:: AddrReturn
+
+        :class:`ADDRESS`
+
+
+    .. attribute:: AddrFrame
+
+        :class:`ADDRESS`
+
+
+    .. attribute:: AddrStack
+
+        :class:`ADDRESS`
+
+
+    .. attribute:: FuncTableEntry
+
+        :class:`PVOID`
+
+
+    .. attribute:: Params
+
+        :class:`DWORD` ``[<winstruct.ComplexArrayExpression object at 0x0401E870>]``
+
+
+    .. attribute:: Far
+
+        :class:`BOOL`
+
+
+    .. attribute:: Virtual
+
+        :class:`BOOL`
+
+
+    .. attribute:: Reserved
+
+        :class:`DWORD` ``[<winstruct.ComplexArrayExpression object at 0x0401E970>]``
+
+
+    .. attribute:: KdHelp
+
+        :class:`KDHELP`
+
+
+    .. attribute:: AddrBStore
+
+        :class:`ADDRESS`
+
+_tagSTACKFRAME64
+''''''''''''''''
+.. class:: STACKFRAME64
+
+    Alias for :class:`_tagSTACKFRAME64`
+
+.. class:: LPSTACKFRAME64
+
+    Pointer to :class:`_tagSTACKFRAME64`
+
+.. class:: _tagSTACKFRAME64
+
+    .. attribute:: AddrPC
+
+        :class:`ADDRESS64`
+
+
+    .. attribute:: AddrReturn
+
+        :class:`ADDRESS64`
+
+
+    .. attribute:: AddrFrame
+
+        :class:`ADDRESS64`
+
+
+    .. attribute:: AddrStack
+
+        :class:`ADDRESS64`
+
+
+    .. attribute:: AddrBStore
+
+        :class:`ADDRESS64`
+
+
+    .. attribute:: FuncTableEntry
+
+        :class:`PVOID`
+
+
+    .. attribute:: Params
+
+        :class:`DWORD64` ``[<winstruct.ComplexArrayExpression object at 0x0401ED50>]``
+
+
+    .. attribute:: Far
+
+        :class:`BOOL`
+
+
+    .. attribute:: Virtual
+
+        :class:`BOOL`
+
+
+    .. attribute:: Reserved
+
+        :class:`DWORD64` ``[<winstruct.ComplexArrayExpression object at 0x0401EE50>]``
+
+
+    .. attribute:: KdHelp
+
+        :class:`KDHELP64`
+
+_tagSTACKFRAME_EX
+'''''''''''''''''
+.. class:: LPSTACKFRAME_EX
+
+    Pointer to :class:`_tagSTACKFRAME_EX`
+
+.. class:: STACKFRAME_EX
+
+    Alias for :class:`_tagSTACKFRAME_EX`
+
+.. class:: _tagSTACKFRAME_EX
+
+    .. attribute:: AddrPC
+
+        :class:`ADDRESS64`
+
+
+    .. attribute:: AddrReturn
+
+        :class:`ADDRESS64`
+
+
+    .. attribute:: AddrFrame
+
+        :class:`ADDRESS64`
+
+
+    .. attribute:: AddrStack
+
+        :class:`ADDRESS64`
+
+
+    .. attribute:: AddrBStore
+
+        :class:`ADDRESS64`
+
+
+    .. attribute:: FuncTableEntry
+
+        :class:`PVOID`
+
+
+    .. attribute:: Params
+
+        :class:`DWORD64` ``[<winstruct.ComplexArrayExpression object at 0x040211D0>]``
+
+
+    .. attribute:: Far
+
+        :class:`BOOL`
+
+
+    .. attribute:: Virtual
+
+        :class:`BOOL`
+
+
+    .. attribute:: Reserved
+
+        :class:`DWORD64` ``[<winstruct.ComplexArrayExpression object at 0x040212D0>]``
+
+
+    .. attribute:: KdHelp
+
+        :class:`KDHELP64`
+
+
+    .. attribute:: StackFrameSize
+
+        :class:`DWORD`
+
+
+    .. attribute:: InlineFrameContext
+
+        :class:`DWORD`
+
+_TIME_ZONE_INFORMATION
+''''''''''''''''''''''
+.. class:: LPTIME_ZONE_INFORMATION
+
+    Pointer to :class:`_TIME_ZONE_INFORMATION`
+
+.. class:: PTIME_ZONE_INFORMATION
+
+    Pointer to :class:`_TIME_ZONE_INFORMATION`
+
+.. class:: TIME_ZONE_INFORMATION
+
+    Alias for :class:`_TIME_ZONE_INFORMATION`
+
+.. class:: _TIME_ZONE_INFORMATION
+
+    .. attribute:: Bias
+
+        :class:`LONG`
+
+
+    .. attribute:: StandardName
+
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x04021630>]``
+
+
+    .. attribute:: StandardDate
+
+        :class:`SYSTEMTIME`
+
+
+    .. attribute:: StandardBias
+
+        :class:`LONG`
+
+
+    .. attribute:: DaylightName
+
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x04021710>]``
+
+
+    .. attribute:: DaylightDate
+
+        :class:`SYSTEMTIME`
+
+
+    .. attribute:: DaylightBias
+
+        :class:`LONG`
+
 _TOKEN_PRIVILEGES
 '''''''''''''''''
 .. class:: TOKEN_PRIVILEGES
@@ -6528,7 +12836,7 @@ _TOKEN_PRIVILEGES
 
     .. attribute:: Privileges
 
-        :class:`LUID_AND_ATTRIBUTES` ``[ANYSIZE_ARRAY]``
+        :class:`LUID_AND_ATTRIBUTES` ``[<winstruct.ComplexArrayExpression object at 0x040219D0>]``
 
 _TOKEN_ELEVATION
 ''''''''''''''''
@@ -6634,7 +12942,7 @@ _TOKEN_GROUPS
 
     .. attribute:: Groups
 
-        :class:`SID_AND_ATTRIBUTES` ``[ANYSIZE_ARRAY]``
+        :class:`SID_AND_ATTRIBUTES` ``[<winstruct.ComplexArrayExpression object at 0x04021E30>]``
 
 _TOKEN_OWNER
 ''''''''''''
@@ -6682,7 +12990,7 @@ _TOKEN_SOURCE
 
     .. attribute:: SourceName
 
-        :class:`CHAR` ``[TOKEN_SOURCE_LENGTH]``
+        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x04028050>]``
 
 
     .. attribute:: SourceIdentifier
@@ -6822,7 +13130,7 @@ _SID_AND_ATTRIBUTES_HASH
 
     .. attribute:: Hash
 
-        :class:`SID_HASH_ENTRY` ``[SID_HASH_SIZE]``
+        :class:`SID_HASH_ENTRY` ``[<winstruct.ComplexArrayExpression object at 0x04028690>]``
 
 _TOKEN_APPCONTAINER_INFORMATION
 '''''''''''''''''''''''''''''''
@@ -7135,6 +13443,54 @@ _TOKEN_SECURITY_ATTRIBUTES_INFORMATION
 
         :class:`TOKEN_SECURITY_ATTRIBUTES_INFORMATION_UNION`
 
+_TRACE_PROVIDER_INFO
+''''''''''''''''''''
+.. class:: TRACE_PROVIDER_INFO
+
+    Alias for :class:`_TRACE_PROVIDER_INFO`
+
+.. class:: _TRACE_PROVIDER_INFO
+
+    .. attribute:: ProviderGuid
+
+        :class:`GUID`
+
+
+    .. attribute:: SchemaSource
+
+        :class:`ULONG`
+
+
+    .. attribute:: ProviderNameOffset
+
+        :class:`ULONG`
+
+_PROVIDER_ENUMERATION_INFO
+''''''''''''''''''''''''''
+.. class:: PPROVIDER_ENUMERATION_INFO
+
+    Pointer to :class:`_PROVIDER_ENUMERATION_INFO`
+
+.. class:: PROVIDER_ENUMERATION_INFO
+
+    Alias for :class:`_PROVIDER_ENUMERATION_INFO`
+
+.. class:: _PROVIDER_ENUMERATION_INFO
+
+    .. attribute:: NumberOfProviders
+
+        :class:`ULONG`
+
+
+    .. attribute:: Reserved
+
+        :class:`ULONG`
+
+
+    .. attribute:: TraceProviderInfoArray
+
+        :class:`TRACE_PROVIDER_INFO` ``[<winstruct.ComplexArrayExpression object at 0x0402D6D0>]``
+
 tagRGBTRIPLE
 ''''''''''''
 .. class:: NPRGBTRIPLE
@@ -7423,7 +13779,7 @@ tagBITMAPINFO
 
     .. attribute:: bmiColors
 
-        :class:`RGBQUAD` ``[1]``
+        :class:`RGBQUAD` ``[<winstruct.ComplexArrayExpression object at 0x04031850>]``
 
 tagBITMAPCOREINFO
 '''''''''''''''''
@@ -7448,7 +13804,7 @@ tagBITMAPCOREINFO
 
     .. attribute:: bmciColors
 
-        :class:`RGBTRIPLE` ``[1]``
+        :class:`RGBTRIPLE` ``[<winstruct.ComplexArrayExpression object at 0x040319B0>]``
 
 tagWNDCLASSEXA
 ''''''''''''''
@@ -7639,12 +13995,12 @@ _PEB_LDR_DATA
 
     .. attribute:: Reserved1
 
-        :class:`BYTE` ``[8]``
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x04035670>]``
 
 
     .. attribute:: Reserved2
 
-        :class:`PVOID` ``[3]``
+        :class:`PVOID` ``[<winstruct.ComplexArrayExpression object at 0x040356F0>]``
 
 
     .. attribute:: InMemoryOrderModuleList
@@ -7886,7 +14242,7 @@ _RTL_USER_PROCESS_PARAMETERS
 
     .. attribute:: CurrentDirectores
 
-        :class:`RTL_DRIVE_LETTER_CURDIR` ``[32]``
+        :class:`RTL_DRIVE_LETTER_CURDIR` ``[<winstruct.ComplexArrayExpression object at 0x0404F430>]``
 
 _ANON_PEB_SYSTEM_DEPENDENT_02
 '''''''''''''''''''''''''''''
@@ -8000,7 +14356,7 @@ _PEB
 
     .. attribute:: Reserved1
 
-        :class:`BYTE` ``[2]``
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x0404FA70>]``
 
 
     .. attribute:: BeingDebugged
@@ -8010,7 +14366,7 @@ _PEB
 
     .. attribute:: Reserved2
 
-        :class:`BYTE` ``[1]``
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x0404FB30>]``
 
 
     .. attribute:: Mutant
@@ -8063,9 +14419,9 @@ _PEB
         :class:`PVOID`
 
 
-    .. attribute:: anon_union_1
+    .. attribute:: anon_01
 
-        :class:`_ANON_PEB_UNION_1`
+        :class:`_ANON__PEB_SUB_UNION_1`
 
 
     .. attribute:: SystemReserved
@@ -8095,7 +14451,7 @@ _PEB
 
     .. attribute:: TlsBitmapBits
 
-        :class:`DWORD` ``[2]``
+        :class:`DWORD` ``[<winstruct.ComplexArrayExpression object at 0x0404FFD0>]``
 
 
     .. attribute:: ReadOnlySharedMemoryBase
@@ -8238,19 +14594,19 @@ _PEB
         :class:`PVOID`
 
 
-    .. attribute:: anon_union_2
+    .. attribute:: anon_02
 
-        :class:`_ANON_PEB_UNION_2`
+        :class:`_ANON__PEB_SUB_UNION_2`
 
 
     .. attribute:: GdiHandleBuffer
 
-        :class:`PVOID` ``[26]``
+        :class:`PVOID` ``[<winstruct.ComplexArrayExpression object at 0x040537F0>]``
 
 
     .. attribute:: GdiHandleBuffer2
 
-        :class:`BYTE` ``[32]``
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x04053850>]``
 
 
     .. attribute:: PostProcessInitRoutine
@@ -8265,7 +14621,7 @@ _PEB
 
     .. attribute:: TlsExpansionBitmapBits
 
-        :class:`DWORD` ``[32]``
+        :class:`DWORD` ``[<winstruct.ComplexArrayExpression object at 0x04053930>]``
 
 
     .. attribute:: SessionId
@@ -8553,7 +14909,7 @@ _LDR_DATA_TABLE_ENTRY
 
     .. attribute:: Reserved1
 
-        :class:`PVOID` ``[2]``
+        :class:`PVOID` ``[<winstruct.ComplexArrayExpression object at 0x040642F0>]``
 
 
     .. attribute:: InMemoryOrderLinks
@@ -8563,7 +14919,7 @@ _LDR_DATA_TABLE_ENTRY
 
     .. attribute:: Reserved2
 
-        :class:`PVOID` ``[2]``
+        :class:`PVOID` ``[<winstruct.ComplexArrayExpression object at 0x040643B0>]``
 
 
     .. attribute:: DllBase
@@ -8593,7 +14949,7 @@ _LDR_DATA_TABLE_ENTRY
 
     .. attribute:: Reserved5
 
-        :class:`PVOID` ``[3]``
+        :class:`PVOID` ``[<winstruct.ComplexArrayExpression object at 0x040645D0>]``
 
 
     .. attribute:: CheckSum
@@ -8686,7 +15042,7 @@ _IMAGE_SECTION_HEADER
 
     .. attribute:: Name
 
-        :class:`BYTE` ``[IMAGE_SIZEOF_SHORT_NAME]``
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x04064A30>]``
 
 
     .. attribute:: VirtualSize
@@ -8892,7 +15248,7 @@ _IMAGE_OPTIONAL_HEADER64
 
     .. attribute:: DataDirectory
 
-        :class:`IMAGE_DATA_DIRECTORY` ``[IMAGE_NUMBEROF_DIRECTORY_ENTRIES]``
+        :class:`IMAGE_DATA_DIRECTORY` ``[<winstruct.ComplexArrayExpression object at 0x04068570>]``
 
 _IMAGE_OPTIONAL_HEADER
 ''''''''''''''''''''''
@@ -9058,7 +15414,7 @@ _IMAGE_OPTIONAL_HEADER
 
     .. attribute:: DataDirectory
 
-        :class:`IMAGE_DATA_DIRECTORY` ``[IMAGE_NUMBEROF_DIRECTORY_ENTRIES]``
+        :class:`IMAGE_DATA_DIRECTORY` ``[<winstruct.ComplexArrayExpression object at 0x04068E90>]``
 
 _IMAGE_NT_HEADERS64
 '''''''''''''''''''
@@ -9167,7 +15523,7 @@ _IMAGE_IMPORT_BY_NAME
 
     .. attribute:: Name
 
-        :class:`BYTE` ``[1]``
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x0406E3B0>]``
 
 _IMAGE_EXPORT_DIRECTORY
 '''''''''''''''''''''''
@@ -9512,7 +15868,7 @@ _PSAPI_WORKING_SET_INFORMATION
 
     .. attribute:: WorkingSetInfo
 
-        :class:`PSAPI_WORKING_SET_BLOCK` ``[1]``
+        :class:`PSAPI_WORKING_SET_BLOCK` ``[<winstruct.ComplexArrayExpression object at 0x040714F0>]``
 
 _PSAPI_WORKING_SET_INFORMATION32
 ''''''''''''''''''''''''''''''''
@@ -9533,7 +15889,7 @@ _PSAPI_WORKING_SET_INFORMATION32
 
     .. attribute:: WorkingSetInfo
 
-        :class:`PSAPI_WORKING_SET_BLOCK32` ``[1]``
+        :class:`PSAPI_WORKING_SET_BLOCK32` ``[<winstruct.ComplexArrayExpression object at 0x040715B0>]``
 
 _PSAPI_WORKING_SET_INFORMATION64
 ''''''''''''''''''''''''''''''''
@@ -9554,7 +15910,7 @@ _PSAPI_WORKING_SET_INFORMATION64
 
     .. attribute:: WorkingSetInfo
 
-        :class:`PSAPI_WORKING_SET_BLOCK64` ``[1]``
+        :class:`PSAPI_WORKING_SET_BLOCK64` ``[<winstruct.ComplexArrayExpression object at 0x04071670>]``
 
 _PSAPI_WORKING_SET_EX_BLOCK
 '''''''''''''''''''''''''''
@@ -9991,7 +16347,7 @@ _FLOATING_SAVE_AREA
 
     .. attribute:: RegisterArea
 
-        :class:`BYTE` ``[80]``
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x04077D10>]``
 
 
     .. attribute:: Cr0NpxState
@@ -10136,7 +16492,7 @@ _CONTEXT32
 
     .. attribute:: ExtendedRegisters
 
-        :class:`BYTE` ``[512]``
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x0407C510>]``
 
 _WOW64_FLOATING_SAVE_AREA
 '''''''''''''''''''''''''
@@ -10183,7 +16539,7 @@ _WOW64_FLOATING_SAVE_AREA
 
     .. attribute:: RegisterArea
 
-        :class:`BYTE` ``[WOW64_SIZE_OF_80387_REGISTERS]``
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x0407C870>]``
 
 
     .. attribute:: Cr0NpxState
@@ -10324,7 +16680,7 @@ _WOW64_CONTEXT
 
     .. attribute:: ExtendedRegisters
 
-        :class:`BYTE` ``[WOW64_MAXIMUM_SUPPORTED_EXTENSION]``
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x0407F050>]``
 
 _M128A
 ''''''
@@ -10426,17 +16782,17 @@ _XSAVE_FORMAT_64
 
     .. attribute:: FloatRegisters
 
-        :class:`M128A` ``[8]``
+        :class:`M128A` ``[<winstruct.ComplexArrayExpression object at 0x0407F6D0>]``
 
 
     .. attribute:: XmmRegisters
 
-        :class:`M128A` ``[16]``
+        :class:`M128A` ``[<winstruct.ComplexArrayExpression object at 0x0407F750>]``
 
 
     .. attribute:: Reserved4
 
-        :class:`BYTE` ``[96]``
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x0407F7D0>]``
 
 _XSAVE_FORMAT_32
 ''''''''''''''''
@@ -10517,22 +16873,22 @@ _XSAVE_FORMAT_32
 
     .. attribute:: FloatRegisters
 
-        :class:`M128A` ``[8]``
+        :class:`M128A` ``[<winstruct.ComplexArrayExpression object at 0x0407FCF0>]``
 
 
     .. attribute:: XmmRegisters
 
-        :class:`M128A` ``[8]``
+        :class:`M128A` ``[<winstruct.ComplexArrayExpression object at 0x0407FD50>]``
 
 
     .. attribute:: Reserved4
 
-        :class:`BYTE` ``[192]``
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x0407FDF0>]``
 
 
     .. attribute:: StackControl
 
-        :class:`DWORD` ``[7]``
+        :class:`DWORD` ``[<winstruct.ComplexArrayExpression object at 0x0407FE30>]``
 
 
     .. attribute:: Cr0NpxState
@@ -10549,12 +16905,12 @@ _TMP_DUMMYSTRUCTNAME
 
     .. attribute:: Header
 
-        :class:`M128A` ``[2]``
+        :class:`M128A` ``[<winstruct.ComplexArrayExpression object at 0x0407FF70>]``
 
 
     .. attribute:: Legacy
 
-        :class:`M128A` ``[8]``
+        :class:`M128A` ``[<winstruct.ComplexArrayExpression object at 0x0407FFF0>]``
 
 
     .. attribute:: Xmm0
@@ -10866,7 +17222,7 @@ _CONTEXT64
 
     .. attribute:: VectorRegister
 
-        :class:`M128A` ``[26]``
+        :class:`M128A` ``[<winstruct.ComplexArrayExpression object at 0x0408A2B0>]``
 
 
     .. attribute:: VectorControl
@@ -10961,7 +17317,7 @@ tagPROCESSENTRY32W
 
     .. attribute:: szExeFile
 
-        :class:`WCHAR` ``[MAX_PATH]``
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x0408A830>]``
 
 tagPROCESSENTRY32
 '''''''''''''''''
@@ -11026,7 +17382,7 @@ tagPROCESSENTRY32
 
     .. attribute:: szExeFile
 
-        :class:`CHAR` ``[MAX_PATH]``
+        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x0408ABF0>]``
 
 tagTHREADENTRY32
 ''''''''''''''''
@@ -11163,7 +17519,7 @@ _OSVERSIONINFOA
 
     .. attribute:: szCSDVersion
 
-        :class:`CHAR` ``[128]``
+        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x0408E330>]``
 
 _OSVERSIONINFOW
 '''''''''''''''
@@ -11216,7 +17572,7 @@ _OSVERSIONINFOW
 
     .. attribute:: szCSDVersion
 
-        :class:`WCHAR` ``[128]``
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x0408E530>]``
 
 _OSVERSIONINFOEXA
 '''''''''''''''''
@@ -11261,7 +17617,7 @@ _OSVERSIONINFOEXA
 
     .. attribute:: szCSDVersion
 
-        :class:`CHAR` ``[128]``
+        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x0408E750>]``
 
 
     .. attribute:: wServicePackMajor
@@ -11339,7 +17695,7 @@ _OSVERSIONINFOEXW
 
     .. attribute:: szCSDVersion
 
-        :class:`WCHAR` ``[128]``
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x0408EAD0>]``
 
 
     .. attribute:: wServicePackMajor
@@ -11397,540 +17753,6 @@ _OVERLAPPED
 
         :class:`HANDLE`
 
-_MIB_IPADDRROW_XP
-'''''''''''''''''
-.. class:: MIB_IPADDRROW
-
-    Alias for :class:`_MIB_IPADDRROW_XP`
-
-.. class:: PMIB_IPADDRROW_XP
-
-    Pointer to :class:`_MIB_IPADDRROW_XP`
-
-.. class:: MIB_IPADDRROW_XP
-
-    Alias for :class:`_MIB_IPADDRROW_XP`
-
-.. class:: _MIB_IPADDRROW_XP
-
-    .. attribute:: dwAddr
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwIndex
-
-        :class:`IF_INDEX`
-
-
-    .. attribute:: dwMask
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwBCastAddr
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwReasmSize
-
-        :class:`DWORD`
-
-
-    .. attribute:: unused1
-
-        :class:`USHORT`
-
-
-    .. attribute:: wType
-
-        :class:`USHORT`
-
-_MIB_IPADDRTABLE
-''''''''''''''''
-.. class:: PMIB_IPADDRTABLE
-
-    Pointer to :class:`_MIB_IPADDRTABLE`
-
-.. class:: MIB_IPADDRTABLE
-
-    Alias for :class:`_MIB_IPADDRTABLE`
-
-.. class:: _MIB_IPADDRTABLE
-
-    .. attribute:: dwNumEntries
-
-        :class:`DWORD`
-
-
-    .. attribute:: table
-
-        :class:`MIB_IPADDRROW` ``[ANY_SIZE]``
-
-_MIB_IFROW
-''''''''''
-.. class:: PMIB_IFROW
-
-    Pointer to :class:`_MIB_IFROW`
-
-.. class:: MIB_IFROW
-
-    Alias for :class:`_MIB_IFROW`
-
-.. class:: _MIB_IFROW
-
-    .. attribute:: wszName
-
-        :class:`WCHAR` ``[MAX_INTERFACE_NAME_LEN]``
-
-
-    .. attribute:: dwIndex
-
-        :class:`IF_INDEX`
-
-
-    .. attribute:: dwType
-
-        :class:`IFTYPE`
-
-
-    .. attribute:: dwMtu
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwSpeed
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwPhysAddrLen
-
-        :class:`DWORD`
-
-
-    .. attribute:: bPhysAddr
-
-        :class:`BYTE` ``[MAXLEN_PHYSADDR]``
-
-
-    .. attribute:: dwAdminStatus
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwOperStatus
-
-        :class:`INTERNAL_IF_OPER_STATUS`
-
-
-    .. attribute:: dwLastChange
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwInOctets
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwInUcastPkts
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwInNUcastPkts
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwInDiscards
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwInErrors
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwInUnknownProtos
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwOutOctets
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwOutUcastPkts
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwOutNUcastPkts
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwOutDiscards
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwOutErrors
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwOutQLen
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwDescrLen
-
-        :class:`DWORD`
-
-
-    .. attribute:: bDescr
-
-        :class:`UCHAR` ``[MAXLEN_IFDESCR]``
-
-_MIB_IFTABLE
-''''''''''''
-.. class:: PMIB_IFTABLE
-
-    Pointer to :class:`_MIB_IFTABLE`
-
-.. class:: MIB_IFTABLE
-
-    Alias for :class:`_MIB_IFTABLE`
-
-.. class:: _MIB_IFTABLE
-
-    .. attribute:: dwNumEntries
-
-        :class:`DWORD`
-
-
-    .. attribute:: table
-
-        :class:`MIB_IFROW` ``[ANY_SIZE]``
-
-_MIB_TCPROW_OWNER_PID
-'''''''''''''''''''''
-.. class:: MIB_TCPROW_OWNER_PID
-
-    Alias for :class:`_MIB_TCPROW_OWNER_PID`
-
-.. class:: PMIB_TCPROW_OWNER_PID
-
-    Pointer to :class:`_MIB_TCPROW_OWNER_PID`
-
-.. class:: _MIB_TCPROW_OWNER_PID
-
-    .. attribute:: dwState
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwLocalAddr
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwLocalPort
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwRemoteAddr
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwRemotePort
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwOwningPid
-
-        :class:`DWORD`
-
-_MIB_TCPTABLE_OWNER_PID
-'''''''''''''''''''''''
-.. class:: MIB_TCPTABLE_OWNER_PID
-
-    Alias for :class:`_MIB_TCPTABLE_OWNER_PID`
-
-.. class:: PMIB_TCPTABLE_OWNER_PID
-
-    Pointer to :class:`_MIB_TCPTABLE_OWNER_PID`
-
-.. class:: _MIB_TCPTABLE_OWNER_PID
-
-    .. attribute:: dwNumEntries
-
-        :class:`DWORD`
-
-
-    .. attribute:: table
-
-        :class:`MIB_TCPROW_OWNER_PID` ``[ANY_SIZE]``
-
-_MIB_UDPROW_OWNER_PID
-'''''''''''''''''''''
-.. class:: MIB_UDPROW_OWNER_PID
-
-    Alias for :class:`_MIB_UDPROW_OWNER_PID`
-
-.. class:: PMIB_UDPROW_OWNER_PID
-
-    Pointer to :class:`_MIB_UDPROW_OWNER_PID`
-
-.. class:: _MIB_UDPROW_OWNER_PID
-
-    .. attribute:: dwLocalAddr
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwLocalPort
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwOwningPid
-
-        :class:`DWORD`
-
-_MIB_UDPTABLE_OWNER_PID
-'''''''''''''''''''''''
-.. class:: MIB_UDPTABLE_OWNER_PID
-
-    Alias for :class:`_MIB_UDPTABLE_OWNER_PID`
-
-.. class:: PMIB_UDPTABLE_OWNER_PID
-
-    Pointer to :class:`_MIB_UDPTABLE_OWNER_PID`
-
-.. class:: _MIB_UDPTABLE_OWNER_PID
-
-    .. attribute:: dwNumEntries
-
-        :class:`DWORD`
-
-
-    .. attribute:: table
-
-        :class:`MIB_UDPROW_OWNER_PID` ``[ANY_SIZE]``
-
-_MIB_UDP6ROW_OWNER_PID
-''''''''''''''''''''''
-.. class:: MIB_UDP6ROW_OWNER_PID
-
-    Alias for :class:`_MIB_UDP6ROW_OWNER_PID`
-
-.. class:: PMIB_UDP6ROW_OWNER_PID
-
-    Pointer to :class:`_MIB_UDP6ROW_OWNER_PID`
-
-.. class:: _MIB_UDP6ROW_OWNER_PID
-
-    .. attribute:: ucLocalAddr
-
-        :class:`UCHAR` ``[16]``
-
-
-    .. attribute:: dwLocalScopeId
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwLocalPort
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwOwningPid
-
-        :class:`DWORD`
-
-_MIB_UDP6TABLE_OWNER_PID
-''''''''''''''''''''''''
-.. class:: PMIB_UDP6TABLE_OWNER_PID
-
-    Pointer to :class:`_MIB_UDP6TABLE_OWNER_PID`
-
-.. class:: MIB_UDP6TABLE_OWNER_PID
-
-    Alias for :class:`_MIB_UDP6TABLE_OWNER_PID`
-
-.. class:: _MIB_UDP6TABLE_OWNER_PID
-
-    .. attribute:: dwNumEntries
-
-        :class:`DWORD`
-
-
-    .. attribute:: table
-
-        :class:`MIB_UDP6ROW_OWNER_PID` ``[ANY_SIZE]``
-
-_MIB_TCP6ROW_OWNER_PID
-''''''''''''''''''''''
-.. class:: MIB_TCP6ROW_OWNER_PID
-
-    Alias for :class:`_MIB_TCP6ROW_OWNER_PID`
-
-.. class:: PMIB_TCP6ROW_OWNER_PID
-
-    Pointer to :class:`_MIB_TCP6ROW_OWNER_PID`
-
-.. class:: _MIB_TCP6ROW_OWNER_PID
-
-    .. attribute:: ucLocalAddr
-
-        :class:`UCHAR` ``[16]``
-
-
-    .. attribute:: dwLocalScopeId
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwLocalPort
-
-        :class:`DWORD`
-
-
-    .. attribute:: ucRemoteAddr
-
-        :class:`UCHAR` ``[16]``
-
-
-    .. attribute:: dwRemoteScopeId
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwRemotePort
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwState
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwOwningPid
-
-        :class:`DWORD`
-
-_MIB_TCP6TABLE_OWNER_PID
-''''''''''''''''''''''''
-.. class:: MIB_TCP6TABLE_OWNER_PID
-
-    Alias for :class:`_MIB_TCP6TABLE_OWNER_PID`
-
-.. class:: PMIB_TCP6TABLE_OWNER_PID
-
-    Pointer to :class:`_MIB_TCP6TABLE_OWNER_PID`
-
-.. class:: _MIB_TCP6TABLE_OWNER_PID
-
-    .. attribute:: dwNumEntries
-
-        :class:`DWORD`
-
-
-    .. attribute:: table
-
-        :class:`MIB_TCP6ROW_OWNER_PID` ``[ANY_SIZE]``
-
-_MIB_TCPROW
-'''''''''''
-.. class:: MIB_TCPROW
-
-    Alias for :class:`_MIB_TCPROW`
-
-.. class:: PMIB_TCPROW
-
-    Pointer to :class:`_MIB_TCPROW`
-
-.. class:: _MIB_TCPROW
-
-    .. attribute:: dwState
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwLocalAddr
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwLocalPort
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwRemoteAddr
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwRemotePort
-
-        :class:`DWORD`
-
-_IP_ADAPTER_INDEX_MAP
-'''''''''''''''''''''
-.. class:: PIP_ADAPTER_INDEX_MAP
-
-    Pointer to :class:`_IP_ADAPTER_INDEX_MAP`
-
-.. class:: IP_ADAPTER_INDEX_MAP
-
-    Alias for :class:`_IP_ADAPTER_INDEX_MAP`
-
-.. class:: _IP_ADAPTER_INDEX_MAP
-
-    .. attribute:: Index
-
-        :class:`ULONG`
-
-
-    .. attribute:: Name
-
-        :class:`WCHAR` ``[MAX_ADAPTER_NAME]``
-
-_IP_INTERFACE_INFO
-''''''''''''''''''
-.. class:: PIP_INTERFACE_INFO
-
-    Pointer to :class:`_IP_INTERFACE_INFO`
-
-.. class:: IP_INTERFACE_INFO
-
-    Alias for :class:`_IP_INTERFACE_INFO`
-
-.. class:: _IP_INTERFACE_INFO
-
-    .. attribute:: NumAdapters
-
-        :class:`LONG`
-
-
-    .. attribute:: Adapter
-
-        :class:`IP_ADAPTER_INDEX_MAP` ``[1]``
-
 _EXCEPTION_RECORD
 '''''''''''''''''
 .. class:: PEXCEPTION_RECORD
@@ -11970,7 +17792,7 @@ _EXCEPTION_RECORD
 
     .. attribute:: ExceptionInformation
 
-        :class:`ULONG_PTR` ``[EXCEPTION_MAXIMUM_PARAMETERS]``
+        :class:`ULONG_PTR` ``[<winstruct.ComplexArrayExpression object at 0x04093070>]``
 
 _EXCEPTION_RECORD32
 '''''''''''''''''''
@@ -12011,7 +17833,7 @@ _EXCEPTION_RECORD32
 
     .. attribute:: ExceptionInformation
 
-        :class:`DWORD` ``[EXCEPTION_MAXIMUM_PARAMETERS]``
+        :class:`DWORD` ``[<winstruct.ComplexArrayExpression object at 0x04093250>]``
 
 _EXCEPTION_RECORD64
 '''''''''''''''''''
@@ -12057,7 +17879,7 @@ _EXCEPTION_RECORD64
 
     .. attribute:: ExceptionInformation
 
-        :class:`DWORD64` ``[EXCEPTION_MAXIMUM_PARAMETERS]``
+        :class:`DWORD64` ``[<winstruct.ComplexArrayExpression object at 0x04093470>]``
 
 _EXCEPTION_POINTERS64
 '''''''''''''''''''''
@@ -12151,7 +17973,7 @@ _DEBUG_PROCESSOR_IDENTIFICATION_AMD64
 
     .. attribute:: VendorString
 
-        :class:`CHAR` ``[16]``
+        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x04093890>]``
 
 _DEBUG_PROCESSOR_IDENTIFICATION_IA64
 ''''''''''''''''''''''''''''''''''''
@@ -12187,7 +18009,7 @@ _DEBUG_PROCESSOR_IDENTIFICATION_IA64
 
     .. attribute:: VendorString
 
-        :class:`CHAR` ``[16]``
+        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x04093AB0>]``
 
 _DEBUG_PROCESSOR_IDENTIFICATION_X86
 '''''''''''''''''''''''''''''''''''
@@ -12218,7 +18040,7 @@ _DEBUG_PROCESSOR_IDENTIFICATION_X86
 
     .. attribute:: VendorString
 
-        :class:`CHAR` ``[16]``
+        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x04093C70>]``
 
 _DEBUG_PROCESSOR_IDENTIFICATION_ARM
 '''''''''''''''''''''''''''''''''''
@@ -12277,92 +18099,6 @@ _DEBUG_PROCESSOR_IDENTIFICATION_ALL
 
         :class:`DEBUG_PROCESSOR_IDENTIFICATION_ARM`
 
-_SYMBOL_INFO
-''''''''''''
-.. class:: SYMBOL_INFO
-
-    Alias for :class:`_SYMBOL_INFO`
-
-.. class:: PSYMBOL_INFO
-
-    Pointer to :class:`_SYMBOL_INFO`
-
-.. class:: _SYMBOL_INFO
-
-    .. attribute:: SizeOfStruct
-
-        :class:`ULONG`
-
-
-    .. attribute:: TypeIndex
-
-        :class:`ULONG`
-
-
-    .. attribute:: Reserved
-
-        :class:`ULONG64` ``[2]``
-
-
-    .. attribute:: Index
-
-        :class:`ULONG`
-
-
-    .. attribute:: Size
-
-        :class:`ULONG`
-
-
-    .. attribute:: ModBase
-
-        :class:`ULONG64`
-
-
-    .. attribute:: Flags
-
-        :class:`ULONG`
-
-
-    .. attribute:: Value
-
-        :class:`ULONG64`
-
-
-    .. attribute:: Address
-
-        :class:`ULONG64`
-
-
-    .. attribute:: Register
-
-        :class:`ULONG`
-
-
-    .. attribute:: Scope
-
-        :class:`ULONG`
-
-
-    .. attribute:: Tag
-
-        :class:`ULONG`
-
-
-    .. attribute:: NameLen
-
-        :class:`ULONG`
-
-
-    .. attribute:: MaxNameLen
-
-        :class:`ULONG`
-
-
-    .. attribute:: Name
-
-        :class:`CHAR` ``[1]``
-
 _MODLOAD_DATA
 '''''''''''''
 .. class:: PMODLOAD_DATA
@@ -12413,7 +18149,7 @@ _SYSTEM_MODULE32
 
     .. attribute:: Reserved
 
-        :class:`ULONG` ``[2]``
+        :class:`ULONG` ``[<winstruct.ComplexArrayExpression object at 0x04097190>]``
 
 
     .. attribute:: Base
@@ -12453,7 +18189,7 @@ _SYSTEM_MODULE32
 
     .. attribute:: ImageName
 
-        :class:`CHAR` ``[256]``
+        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x040974B0>]``
 
 _SYSTEM_MODULE64
 ''''''''''''''''
@@ -12469,7 +18205,7 @@ _SYSTEM_MODULE64
 
     .. attribute:: Reserved
 
-        :class:`ULONG` ``[4]``
+        :class:`ULONG` ``[<winstruct.ComplexArrayExpression object at 0x04097550>]``
 
 
     .. attribute:: Base
@@ -12509,7 +18245,7 @@ _SYSTEM_MODULE64
 
     .. attribute:: ImageName
 
-        :class:`CHAR` ``[256]``
+        :class:`CHAR` ``[<winstruct.ComplexArrayExpression object at 0x04097870>]``
 
 _SYSTEM_MODULE_INFORMATION32
 ''''''''''''''''''''''''''''
@@ -12530,7 +18266,7 @@ _SYSTEM_MODULE_INFORMATION32
 
     .. attribute:: Modules
 
-        :class:`SYSTEM_MODULE32` ``[0]``
+        :class:`SYSTEM_MODULE32` ``[<winstruct.ComplexArrayExpression object at 0x04097950>]``
 
 _SYSTEM_MODULE_INFORMATION64
 ''''''''''''''''''''''''''''
@@ -12551,7 +18287,7 @@ _SYSTEM_MODULE_INFORMATION64
 
     .. attribute:: Modules
 
-        :class:`SYSTEM_MODULE64` ``[0]``
+        :class:`SYSTEM_MODULE64` ``[<winstruct.ComplexArrayExpression object at 0x04097A30>]``
 
 _DEBUG_BREAKPOINT_PARAMETERS
 ''''''''''''''''''''''''''''
@@ -12709,12 +18445,12 @@ _DEBUG_STACK_FRAME
 
     .. attribute:: Params
 
-        :class:`ULONG64` ``[4]``
+        :class:`ULONG64` ``[<winstruct.ComplexArrayExpression object at 0x0409C370>]``
 
 
     .. attribute:: Reserved
 
-        :class:`ULONG64` ``[6]``
+        :class:`ULONG64` ``[<winstruct.ComplexArrayExpression object at 0x0409C3D0>]``
 
 
     .. attribute:: Virtual
@@ -13184,334 +18920,7 @@ _SID_IDENTIFIER_AUTHORITY
 
     .. attribute:: Value
 
-        :class:`BYTE` ``[6]``
-
-_EXCEPTION_DEBUG_INFO
-'''''''''''''''''''''
-.. class:: LPEXCEPTION_DEBUG_INFO
-
-    Pointer to :class:`_EXCEPTION_DEBUG_INFO`
-
-.. class:: EXCEPTION_DEBUG_INFO
-
-    Alias for :class:`_EXCEPTION_DEBUG_INFO`
-
-.. class:: _EXCEPTION_DEBUG_INFO
-
-    .. attribute:: ExceptionRecord
-
-        :class:`EXCEPTION_RECORD`
-
-
-    .. attribute:: dwFirstChance
-
-        :class:`DWORD`
-
-_CREATE_THREAD_DEBUG_INFO
-'''''''''''''''''''''''''
-.. class:: LPCREATE_THREAD_DEBUG_INFO
-
-    Pointer to :class:`_CREATE_THREAD_DEBUG_INFO`
-
-.. class:: CREATE_THREAD_DEBUG_INFO
-
-    Alias for :class:`_CREATE_THREAD_DEBUG_INFO`
-
-.. class:: _CREATE_THREAD_DEBUG_INFO
-
-    .. attribute:: hThread
-
-        :class:`HANDLE`
-
-
-    .. attribute:: lpThreadLocalBase
-
-        :class:`LPVOID`
-
-
-    .. attribute:: lpStartAddress
-
-        :class:`LPTHREAD_START_ROUTINE`
-
-_CREATE_PROCESS_DEBUG_INFO
-''''''''''''''''''''''''''
-.. class:: CREATE_PROCESS_DEBUG_INFO
-
-    Alias for :class:`_CREATE_PROCESS_DEBUG_INFO`
-
-.. class:: LPCREATE_PROCESS_DEBUG_INFO
-
-    Pointer to :class:`_CREATE_PROCESS_DEBUG_INFO`
-
-.. class:: _CREATE_PROCESS_DEBUG_INFO
-
-    .. attribute:: hFile
-
-        :class:`HANDLE`
-
-
-    .. attribute:: hProcess
-
-        :class:`HANDLE`
-
-
-    .. attribute:: hThread
-
-        :class:`HANDLE`
-
-
-    .. attribute:: lpBaseOfImage
-
-        :class:`LPVOID`
-
-
-    .. attribute:: dwDebugInfoFileOffset
-
-        :class:`DWORD`
-
-
-    .. attribute:: nDebugInfoSize
-
-        :class:`DWORD`
-
-
-    .. attribute:: lpThreadLocalBase
-
-        :class:`LPVOID`
-
-
-    .. attribute:: lpStartAddress
-
-        :class:`LPTHREAD_START_ROUTINE`
-
-
-    .. attribute:: lpImageName
-
-        :class:`LPVOID`
-
-
-    .. attribute:: fUnicode
-
-        :class:`WORD`
-
-_EXIT_THREAD_DEBUG_INFO
-'''''''''''''''''''''''
-.. class:: EXIT_THREAD_DEBUG_INFO
-
-    Alias for :class:`_EXIT_THREAD_DEBUG_INFO`
-
-.. class:: LPEXIT_THREAD_DEBUG_INFO
-
-    Pointer to :class:`_EXIT_THREAD_DEBUG_INFO`
-
-.. class:: _EXIT_THREAD_DEBUG_INFO
-
-    .. attribute:: dwExitCode
-
-        :class:`DWORD`
-
-_EXIT_PROCESS_DEBUG_INFO
-''''''''''''''''''''''''
-.. class:: LPEXIT_PROCESS_DEBUG_INFO
-
-    Pointer to :class:`_EXIT_PROCESS_DEBUG_INFO`
-
-.. class:: EXIT_PROCESS_DEBUG_INFO
-
-    Alias for :class:`_EXIT_PROCESS_DEBUG_INFO`
-
-.. class:: _EXIT_PROCESS_DEBUG_INFO
-
-    .. attribute:: dwExitCode
-
-        :class:`DWORD`
-
-_LOAD_DLL_DEBUG_INFO
-''''''''''''''''''''
-.. class:: LPLOAD_DLL_DEBUG_INFO
-
-    Pointer to :class:`_LOAD_DLL_DEBUG_INFO`
-
-.. class:: LOAD_DLL_DEBUG_INFO
-
-    Alias for :class:`_LOAD_DLL_DEBUG_INFO`
-
-.. class:: _LOAD_DLL_DEBUG_INFO
-
-    .. attribute:: hFile
-
-        :class:`HANDLE`
-
-
-    .. attribute:: lpBaseOfDll
-
-        :class:`LPVOID`
-
-
-    .. attribute:: dwDebugInfoFileOffset
-
-        :class:`DWORD`
-
-
-    .. attribute:: nDebugInfoSize
-
-        :class:`DWORD`
-
-
-    .. attribute:: lpImageName
-
-        :class:`LPVOID`
-
-
-    .. attribute:: fUnicode
-
-        :class:`WORD`
-
-_UNLOAD_DLL_DEBUG_INFO
-''''''''''''''''''''''
-.. class:: UNLOAD_DLL_DEBUG_INFO
-
-    Alias for :class:`_UNLOAD_DLL_DEBUG_INFO`
-
-.. class:: LPUNLOAD_DLL_DEBUG_INFO
-
-    Pointer to :class:`_UNLOAD_DLL_DEBUG_INFO`
-
-.. class:: _UNLOAD_DLL_DEBUG_INFO
-
-    .. attribute:: lpBaseOfDll
-
-        :class:`LPVOID`
-
-_OUTPUT_DEBUG_STRING_INFO
-'''''''''''''''''''''''''
-.. class:: OUTPUT_DEBUG_STRING_INFO
-
-    Alias for :class:`_OUTPUT_DEBUG_STRING_INFO`
-
-.. class:: LPOUTPUT_DEBUG_STRING_INFO
-
-    Pointer to :class:`_OUTPUT_DEBUG_STRING_INFO`
-
-.. class:: _OUTPUT_DEBUG_STRING_INFO
-
-    .. attribute:: lpDebugStringData
-
-        :class:`LPSTR`
-
-
-    .. attribute:: fUnicode
-
-        :class:`WORD`
-
-
-    .. attribute:: nDebugStringLength
-
-        :class:`WORD`
-
-_RIP_INFO
-'''''''''
-.. class:: LPRIP_INFO
-
-    Pointer to :class:`_RIP_INFO`
-
-.. class:: RIP_INFO
-
-    Alias for :class:`_RIP_INFO`
-
-.. class:: _RIP_INFO
-
-    .. attribute:: dwError
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwType
-
-        :class:`DWORD`
-
-_TMP_UNION_DEBUG_INFO
-'''''''''''''''''''''
-.. class:: TMP_UNION_DEBUG_INFO
-
-    Alias for :class:`_TMP_UNION_DEBUG_INFO`
-
-.. class:: _TMP_UNION_DEBUG_INFO
-
-    .. attribute:: Exception
-
-        :class:`EXCEPTION_DEBUG_INFO`
-
-
-    .. attribute:: CreateThread
-
-        :class:`CREATE_THREAD_DEBUG_INFO`
-
-
-    .. attribute:: CreateProcessInfo
-
-        :class:`CREATE_PROCESS_DEBUG_INFO`
-
-
-    .. attribute:: ExitThread
-
-        :class:`EXIT_THREAD_DEBUG_INFO`
-
-
-    .. attribute:: ExitProcess
-
-        :class:`EXIT_PROCESS_DEBUG_INFO`
-
-
-    .. attribute:: LoadDll
-
-        :class:`LOAD_DLL_DEBUG_INFO`
-
-
-    .. attribute:: UnloadDll
-
-        :class:`UNLOAD_DLL_DEBUG_INFO`
-
-
-    .. attribute:: DebugString
-
-        :class:`OUTPUT_DEBUG_STRING_INFO`
-
-
-    .. attribute:: RipInfo
-
-        :class:`RIP_INFO`
-
-_DEBUG_EVENT
-''''''''''''
-.. class:: LPDEBUG_EVENT
-
-    Pointer to :class:`_DEBUG_EVENT`
-
-.. class:: DEBUG_EVENT
-
-    Alias for :class:`_DEBUG_EVENT`
-
-.. class:: _DEBUG_EVENT
-
-    .. attribute:: dwDebugEventCode
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwProcessId
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwThreadId
-
-        :class:`DWORD`
-
-
-    .. attribute:: u
-
-        :class:`_TMP_UNION_DEBUG_INFO`
+        :class:`BYTE` ``[<winstruct.ComplexArrayExpression object at 0x040A1D30>]``
 
 _STRING
 '''''''
@@ -13657,160 +19066,6 @@ _SECURITY_QUALITY_OF_SERVICE
 
         :class:`BOOLEAN`
 
-_SERVICE_STATUS
-'''''''''''''''
-.. class:: SERVICE_STATUS
-
-    Alias for :class:`_SERVICE_STATUS`
-
-.. class:: LPSERVICE_STATUS
-
-    Pointer to :class:`_SERVICE_STATUS`
-
-.. class:: _SERVICE_STATUS
-
-    .. attribute:: dwServiceType
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwCurrentState
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwControlsAccepted
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwWin32ExitCode
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwServiceSpecificExitCode
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwCheckPoint
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwWaitHint
-
-        :class:`DWORD`
-
-_SERVICE_STATUS_PROCESS
-'''''''''''''''''''''''
-.. class:: LPSERVICE_STATUS_PROCESS
-
-    Pointer to :class:`_SERVICE_STATUS_PROCESS`
-
-.. class:: SERVICE_STATUS_PROCESS
-
-    Alias for :class:`_SERVICE_STATUS_PROCESS`
-
-.. class:: _SERVICE_STATUS_PROCESS
-
-    .. attribute:: dwServiceType
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwCurrentState
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwControlsAccepted
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwWin32ExitCode
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwServiceSpecificExitCode
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwCheckPoint
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwWaitHint
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwProcessId
-
-        :class:`DWORD`
-
-
-    .. attribute:: dwServiceFlags
-
-        :class:`DWORD`
-
-_ENUM_SERVICE_STATUS_PROCESSA
-'''''''''''''''''''''''''''''
-.. class:: LPENUM_SERVICE_STATUS_PROCESSA
-
-    Pointer to :class:`_ENUM_SERVICE_STATUS_PROCESSA`
-
-.. class:: ENUM_SERVICE_STATUS_PROCESSA
-
-    Alias for :class:`_ENUM_SERVICE_STATUS_PROCESSA`
-
-.. class:: _ENUM_SERVICE_STATUS_PROCESSA
-
-    .. attribute:: lpServiceName
-
-        :class:`LPSTR`
-
-
-    .. attribute:: lpDisplayName
-
-        :class:`LPSTR`
-
-
-    .. attribute:: ServiceStatusProcess
-
-        :class:`SERVICE_STATUS_PROCESS`
-
-_ENUM_SERVICE_STATUS_PROCESSW
-'''''''''''''''''''''''''''''
-.. class:: ENUM_SERVICE_STATUS_PROCESSW
-
-    Alias for :class:`_ENUM_SERVICE_STATUS_PROCESSW`
-
-.. class:: LPENUM_SERVICE_STATUS_PROCESSW
-
-    Pointer to :class:`_ENUM_SERVICE_STATUS_PROCESSW`
-
-.. class:: _ENUM_SERVICE_STATUS_PROCESSW
-
-    .. attribute:: lpServiceName
-
-        :class:`LPWSTR`
-
-
-    .. attribute:: lpDisplayName
-
-        :class:`LPWSTR`
-
-
-    .. attribute:: ServiceStatusProcess
-
-        :class:`SERVICE_STATUS_PROCESS`
-
 CATALOG_INFO_
 '''''''''''''
 .. class:: CATALOG_INFO
@@ -13826,7 +19081,7 @@ CATALOG_INFO_
 
     .. attribute:: wszCatalogFile
 
-        :class:`WCHAR` ``[MAX_PATH]``
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x040A54F0>]``
 
 _SYSTEM_HANDLE
 ''''''''''''''
@@ -13865,6 +19120,43 @@ _SYSTEM_HANDLE
 
         :class:`DWORD`
 
+_SYSTEM_HANDLE64
+''''''''''''''''
+.. class:: SYSTEM_HANDLE64
+
+    Alias for :class:`_SYSTEM_HANDLE64`
+
+.. class:: _SYSTEM_HANDLE64
+
+    .. attribute:: dwProcessId
+
+        :class:`DWORD`
+
+
+    .. attribute:: bObjectType
+
+        :class:`BYTE`
+
+
+    .. attribute:: bFlags
+
+        :class:`BYTE`
+
+
+    .. attribute:: wValue
+
+        :class:`WORD`
+
+
+    .. attribute:: pAddress
+
+        :class:`ULONG64`
+
+
+    .. attribute:: GrantedAccess
+
+        :class:`DWORD`
+
 _SYSTEM_HANDLE_INFORMATION
 ''''''''''''''''''''''''''
 .. class:: PSYSTEM_HANDLE_INFORMATION
@@ -13884,7 +19176,28 @@ _SYSTEM_HANDLE_INFORMATION
 
     .. attribute:: Handles
 
-        :class:`SYSTEM_HANDLE` ``[1]``
+        :class:`SYSTEM_HANDLE` ``[<winstruct.ComplexArrayExpression object at 0x040A5A70>]``
+
+_SYSTEM_HANDLE_INFORMATION64
+''''''''''''''''''''''''''''
+.. class:: SYSTEM_HANDLE_INFORMATION64
+
+    Alias for :class:`_SYSTEM_HANDLE_INFORMATION64`
+
+.. class:: PSYSTEM_HANDLE_INFORMATION64
+
+    Pointer to :class:`_SYSTEM_HANDLE_INFORMATION64`
+
+.. class:: _SYSTEM_HANDLE_INFORMATION64
+
+    .. attribute:: HandleCount
+
+        :class:`ULONG`
+
+
+    .. attribute:: Handles
+
+        :class:`SYSTEM_HANDLE64` ``[<winstruct.ComplexArrayExpression object at 0x040A5B70>]``
 
 __PUBLIC_OBJECT_TYPE_INFORMATION
 ''''''''''''''''''''''''''''''''
@@ -13905,7 +19218,7 @@ __PUBLIC_OBJECT_TYPE_INFORMATION
 
     .. attribute:: Reserved
 
-        :class:`ULONG` ``[22]``
+        :class:`ULONG` ``[<winstruct.ComplexArrayExpression object at 0x040A5C90>]``
 
 _PUBLIC_OBJECT_BASIC_INFORMATION
 ''''''''''''''''''''''''''''''''
@@ -13941,7 +19254,23 @@ _PUBLIC_OBJECT_BASIC_INFORMATION
 
     .. attribute:: Reserved
 
-        :class:`ULONG` ``[10]``
+        :class:`ULONG` ``[<winstruct.ComplexArrayExpression object at 0x040A5E70>]``
+
+_OBJECT_TYPES_INFORMATION
+'''''''''''''''''''''''''
+.. class:: OBJECT_TYPES_INFORMATION
+
+    Alias for :class:`_OBJECT_TYPES_INFORMATION`
+
+.. class:: POBJECT_TYPES_INFORMATION
+
+    Pointer to :class:`_OBJECT_TYPES_INFORMATION`
+
+.. class:: _OBJECT_TYPES_INFORMATION
+
+    .. attribute:: NumberOfTypes
+
+        :class:`ULONG`
 
 tagSOLE_AUTHENTICATION_SERVICE
 ''''''''''''''''''''''''''''''
@@ -14086,47 +19415,47 @@ _DEBUG_VALUE_TMP_UNION
 
     .. attribute:: F80Bytes
 
-        :class:`UCHAR` ``[10]``
+        :class:`UCHAR` ``[<winstruct.ComplexArrayExpression object at 0x040AB5F0>]``
 
 
     .. attribute:: F82Bytes
 
-        :class:`UCHAR` ``[11]``
+        :class:`UCHAR` ``[<winstruct.ComplexArrayExpression object at 0x040AB670>]``
 
 
     .. attribute:: F128Bytes
 
-        :class:`UCHAR` ``[16]``
+        :class:`UCHAR` ``[<winstruct.ComplexArrayExpression object at 0x040AB6F0>]``
 
 
     .. attribute:: VI8
 
-        :class:`UCHAR` ``[16]``
+        :class:`UCHAR` ``[<winstruct.ComplexArrayExpression object at 0x040AB770>]``
 
 
     .. attribute:: VI16
 
-        :class:`USHORT` ``[8]``
+        :class:`USHORT` ``[<winstruct.ComplexArrayExpression object at 0x040AB7D0>]``
 
 
     .. attribute:: VI32
 
-        :class:`ULONG` ``[4]``
+        :class:`ULONG` ``[<winstruct.ComplexArrayExpression object at 0x040AB850>]``
 
 
     .. attribute:: VI64
 
-        :class:`ULONG64` ``[2]``
+        :class:`ULONG64` ``[<winstruct.ComplexArrayExpression object at 0x040AB8D0>]``
 
 
     .. attribute:: VF32
 
-        :class:`FLOAT` ``[4]``
+        :class:`FLOAT` ``[<winstruct.ComplexArrayExpression object at 0x040AB950>]``
 
 
     .. attribute:: VF64
 
-        :class:`DOUBLE` ``[2]``
+        :class:`DOUBLE` ``[<winstruct.ComplexArrayExpression object at 0x040AB9D0>]``
 
 
     .. attribute:: I64Parts32
@@ -14141,7 +19470,7 @@ _DEBUG_VALUE_TMP_UNION
 
     .. attribute:: RawBytes
 
-        :class:`UCHAR` ``[24]``
+        :class:`UCHAR` ``[<winstruct.ComplexArrayExpression object at 0x040ABAD0>]``
 
 _DEBUG_VALUE
 ''''''''''''
@@ -14350,7 +19679,7 @@ _DEBUG_MODULE_PARAMETERS
 
     .. attribute:: Reserved
 
-        :class:`ULONG64` ``[2]``
+        :class:`ULONG64` ``[<winstruct.ComplexArrayExpression object at 0x040AF6D0>]``
 
 _DEBUG_MODULE_AND_ID
 ''''''''''''''''''''
@@ -14504,12 +19833,12 @@ _RTL_UNLOAD_EVENT_TRACE
 
     .. attribute:: ImageName
 
-        :class:`WCHAR` ``[32]``
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x040AFFD0>]``
 
 
     .. attribute:: Version
 
-        :class:`ULONG` ``[2]``
+        :class:`ULONG` ``[<winstruct.ComplexArrayExpression object at 0x040B2070>]``
 
 _RTL_UNLOAD_EVENT_TRACE32
 '''''''''''''''''''''''''
@@ -14550,12 +19879,12 @@ _RTL_UNLOAD_EVENT_TRACE32
 
     .. attribute:: ImageName
 
-        :class:`WCHAR` ``[32]``
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x040B22F0>]``
 
 
     .. attribute:: Version
 
-        :class:`ULONG` ``[2]``
+        :class:`ULONG` ``[<winstruct.ComplexArrayExpression object at 0x040B2370>]``
 
 _RTL_UNLOAD_EVENT_TRACE64
 '''''''''''''''''''''''''
@@ -14596,12 +19925,12 @@ _RTL_UNLOAD_EVENT_TRACE64
 
     .. attribute:: ImageName
 
-        :class:`WCHAR` ``[32]``
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x040B25F0>]``
 
 
     .. attribute:: Version
 
-        :class:`ULONG` ``[2]``
+        :class:`ULONG` ``[<winstruct.ComplexArrayExpression object at 0x040B2670>]``
 
 _FILE_FS_ATTRIBUTE_INFORMATION
 ''''''''''''''''''''''''''''''
@@ -14632,7 +19961,7 @@ _FILE_FS_ATTRIBUTE_INFORMATION
 
     .. attribute:: FileSystemName
 
-        :class:`WCHAR` ``[1]``
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x040B27B0>]``
 
 _FILE_FS_LABEL_INFORMATION
 ''''''''''''''''''''''''''
@@ -14653,7 +19982,7 @@ _FILE_FS_LABEL_INFORMATION
 
     .. attribute:: VolumeLabel
 
-        :class:`WCHAR` ``[1]``
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x040B28B0>]``
 
 _FILE_FS_SIZE_INFORMATION
 '''''''''''''''''''''''''
@@ -14798,12 +20127,12 @@ _FILE_FS_OBJECTID_INFORMATION
 
     .. attribute:: ObjectId
 
-        :class:`UCHAR` ``[16]``
+        :class:`UCHAR` ``[<winstruct.ComplexArrayExpression object at 0x040B2DB0>]``
 
 
     .. attribute:: ExtendedInfo
 
-        :class:`UCHAR` ``[48]``
+        :class:`UCHAR` ``[<winstruct.ComplexArrayExpression object at 0x040B2E10>]``
 
 _FILE_FS_DRIVER_PATH_INFORMATION
 ''''''''''''''''''''''''''''''''
@@ -14829,7 +20158,7 @@ _FILE_FS_DRIVER_PATH_INFORMATION
 
     .. attribute:: DriverName
 
-        :class:`WCHAR` ``[1]``
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x040B2F30>]``
 
 _FILE_FS_DRIVER_PATH_INFORMATION
 ''''''''''''''''''''''''''''''''
@@ -14855,7 +20184,7 @@ _FILE_FS_DRIVER_PATH_INFORMATION
 
     .. attribute:: DriverName
 
-        :class:`WCHAR` ``[1]``
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x040B8090>]``
 
 _FILE_FS_VOLUME_INFORMATION
 '''''''''''''''''''''''''''
@@ -14891,7 +20220,7 @@ _FILE_FS_VOLUME_INFORMATION
 
     .. attribute:: VolumeLabel
 
-        :class:`WCHAR` ``[1]``
+        :class:`WCHAR` ``[<winstruct.ComplexArrayExpression object at 0x040B8230>]``
 
 _FILE_FS_SECTOR_SIZE_INFORMATION
 ''''''''''''''''''''''''''''''''
@@ -15135,6 +20464,31 @@ _PROCESS_MEMORY_COUNTERS_EX
 
         :class:`SIZE_T`
 
+_FILETIME
+'''''''''
+.. class:: LPFILETIME
+
+    Pointer to :class:`_FILETIME`
+
+.. class:: PFILETIME
+
+    Pointer to :class:`_FILETIME`
+
+.. class:: FILETIME
+
+    Alias for :class:`_FILETIME`
+
+.. class:: _FILETIME
+
+    .. attribute:: dwLowDateTime
+
+        :class:`DWORD`
+
+
+    .. attribute:: dwHighDateTime
+
+        :class:`DWORD`
+
 _API_SET_VALUE_ENTRY
 ''''''''''''''''''''
 .. class:: API_SET_VALUE_ENTRY
@@ -15246,7 +20600,7 @@ _API_SET_NAMESPACE_ARRAY
 
     .. attribute:: Array
 
-        :class:`API_SET_NAMESPACE_ENTRY` ``[ANYSIZE_ARRAY]``
+        :class:`API_SET_NAMESPACE_ENTRY` ``[<winstruct.ComplexArrayExpression object at 0x04044470>]``
 
 _API_SET_VALUE_ENTRY_V2
 '''''''''''''''''''''''
@@ -15298,7 +20652,7 @@ _API_SET_VALUE_ARRAY_V2
 
     .. attribute:: Array
 
-        :class:`API_SET_VALUE_ENTRY_V2` ``[ANYSIZE_ARRAY]``
+        :class:`API_SET_VALUE_ENTRY_V2` ``[<winstruct.ComplexArrayExpression object at 0x04044730>]``
 
 _API_SET_NAMESPACE_ENTRY_V2
 '''''''''''''''''''''''''''
@@ -15350,7 +20704,7 @@ _API_SET_NAMESPACE_ARRAY_V2
 
     .. attribute:: Array
 
-        :class:`API_SET_NAMESPACE_ENTRY_V2` ``[ANYSIZE_ARRAY]``
+        :class:`API_SET_NAMESPACE_ENTRY_V2` ``[<winstruct.ComplexArrayExpression object at 0x040449F0>]``
 
 _API_SET_VALUE_ARRAY_V4
 '''''''''''''''''''''''
@@ -15376,7 +20730,7 @@ _API_SET_VALUE_ARRAY_V4
 
     .. attribute:: Array
 
-        :class:`API_SET_VALUE_ENTRY_V2` ``[ANYSIZE_ARRAY]``
+        :class:`API_SET_VALUE_ENTRY_V2` ``[<winstruct.ComplexArrayExpression object at 0x04044B50>]``
 
 _API_SET_NAMESPACE_ARRAY_V4
 '''''''''''''''''''''''''''
@@ -15412,7 +20766,7 @@ _API_SET_NAMESPACE_ARRAY_V4
 
     .. attribute:: Array
 
-        :class:`API_SET_NAMESPACE_ENTRY` ``[ANYSIZE_ARRAY]``
+        :class:`API_SET_NAMESPACE_ENTRY` ``[<winstruct.ComplexArrayExpression object at 0x04044D70>]``
 
 _API_SET_NAMESPACE_ENTRY_V4
 '''''''''''''''''''''''''''
@@ -15622,342 +20976,6 @@ _BG_JOB_TIMES
 
         :class:`FILETIME`
 
-_EVENTLOGRECORD
-'''''''''''''''
-.. class:: PEVENTLOGRECORD
-
-    Pointer to :class:`_EVENTLOGRECORD`
-
-.. class:: EVENTLOGRECORD
-
-    Alias for :class:`_EVENTLOGRECORD`
-
-.. class:: _EVENTLOGRECORD
-
-    .. attribute:: Length
-
-        :class:`DWORD`
-
-
-    .. attribute:: Reserved
-
-        :class:`DWORD`
-
-
-    .. attribute:: RecordNumber
-
-        :class:`DWORD`
-
-
-    .. attribute:: TimeGenerated
-
-        :class:`DWORD`
-
-
-    .. attribute:: TimeWritten
-
-        :class:`DWORD`
-
-
-    .. attribute:: EventID
-
-        :class:`DWORD`
-
-
-    .. attribute:: EventType
-
-        :class:`WORD`
-
-
-    .. attribute:: NumStrings
-
-        :class:`WORD`
-
-
-    .. attribute:: EventCategory
-
-        :class:`WORD`
-
-
-    .. attribute:: ReservedFlags
-
-        :class:`WORD`
-
-
-    .. attribute:: ClosingRecordNumber
-
-        :class:`DWORD`
-
-
-    .. attribute:: StringOffset
-
-        :class:`DWORD`
-
-
-    .. attribute:: UserSidLength
-
-        :class:`DWORD`
-
-
-    .. attribute:: UserSidOffset
-
-        :class:`DWORD`
-
-
-    .. attribute:: DataLength
-
-        :class:`DWORD`
-
-
-    .. attribute:: DataOffset
-
-        :class:`DWORD`
-
-_EVENTLOG_FULL_INFORMATION
-''''''''''''''''''''''''''
-.. class:: EVENTLOG_FULL_INFORMATION
-
-    Alias for :class:`_EVENTLOG_FULL_INFORMATION`
-
-.. class:: LPEVENTLOG_FULL_INFORMATION
-
-    Pointer to :class:`_EVENTLOG_FULL_INFORMATION`
-
-.. class:: _EVENTLOG_FULL_INFORMATION
-
-    .. attribute:: dwFull
-
-        :class:`DWORD`
-
-_ANON_evt_variant_sub_union
-'''''''''''''''''''''''''''
-.. class:: _ANON_evt_variant_sub_union
-
-    .. attribute:: BooleanVal
-
-        :class:`BOOL`
-
-
-    .. attribute:: SByteVal
-
-        :class:`INT8`
-
-
-    .. attribute:: Int16Val
-
-        :class:`INT16`
-
-
-    .. attribute:: Int32Val
-
-        :class:`INT32`
-
-
-    .. attribute:: Int64Val
-
-        :class:`INT64`
-
-
-    .. attribute:: ByteVal
-
-        :class:`UINT8`
-
-
-    .. attribute:: UInt16Val
-
-        :class:`UINT16`
-
-
-    .. attribute:: UInt32Val
-
-        :class:`UINT32`
-
-
-    .. attribute:: UInt64Val
-
-        :class:`UINT64`
-
-
-    .. attribute:: SingleVal
-
-        :class:`FLOAT`
-
-
-    .. attribute:: DoubleVal
-
-        :class:`DOUBLE`
-
-
-    .. attribute:: FileTimeVal
-
-        :class:`ULONGLONG`
-
-
-    .. attribute:: SysTimeVal
-
-        :class:`SYSTEMTIME`
-
-
-    .. attribute:: GuidVal
-
-        :class:`GUID`
-
-
-    .. attribute:: StringVal
-
-        :class:`LPCWSTR`
-
-
-    .. attribute:: AnsiStringVal
-
-        :class:`LPCSTR`
-
-
-    .. attribute:: BinaryVal
-
-        :class:`PBYTE`
-
-
-    .. attribute:: SidVal
-
-        :class:`PSID`
-
-
-    .. attribute:: SizeTVal
-
-        :class:`SIZE_T`
-
-
-    .. attribute:: EvtHandleVal
-
-        :class:`EVT_HANDLE`
-
-
-    .. attribute:: BooleanArr
-
-        :class:`BOOL`
-
-
-    .. attribute:: SByteArr
-
-        :class:`INT8`
-
-
-    .. attribute:: Int16Arr
-
-        :class:`INT16`
-
-
-    .. attribute:: Int32Arr
-
-        :class:`INT32`
-
-
-    .. attribute:: Int64Arr
-
-        :class:`INT64`
-
-
-    .. attribute:: ByteArr
-
-        :class:`UINT8`
-
-
-    .. attribute:: UInt16Arr
-
-        :class:`UINT16`
-
-
-    .. attribute:: UInt32Arr
-
-        :class:`UINT32`
-
-
-    .. attribute:: UInt64Arr
-
-        :class:`UINT64`
-
-
-    .. attribute:: SingleArr
-
-        :class:`FLOAT`
-
-
-    .. attribute:: DoubleArr
-
-        :class:`DOUBLE`
-
-
-    .. attribute:: FileTimeArr
-
-        :class:`FILETIME`
-
-
-    .. attribute:: SysTimeArr
-
-        :class:`SYSTEMTIME`
-
-
-    .. attribute:: GuidArr
-
-        :class:`GUID`
-
-
-    .. attribute:: StringArr
-
-        :class:`LPWSTR`
-
-
-    .. attribute:: AnsiStringArr
-
-        :class:`LPSTR`
-
-
-    .. attribute:: SidArr
-
-        :class:`PSID`
-
-
-    .. attribute:: SizeTArr
-
-        :class:`SIZE_T`
-
-
-    .. attribute:: XmlVal
-
-        :class:`LPCWSTR`
-
-
-    .. attribute:: XmlValArr
-
-        :class:`LPCWSTR`
-
-_EVT_VARIANT
-''''''''''''
-.. class:: PEVT_VARIANT
-
-    Pointer to :class:`_EVT_VARIANT`
-
-.. class:: EVT_VARIANT
-
-    Alias for :class:`_EVT_VARIANT`
-
-.. class:: _EVT_VARIANT
-
-    .. attribute:: _VARIANT_VALUE
-
-        :class:`_ANON_evt_variant_sub_union`
-
-
-    .. attribute:: Count
-
-        :class:`DWORD`
-
-
-    .. attribute:: Type
-
-        :class:`DWORD`
-
 Simple types
 ''''''''''''
 .. autoclass:: VOID
@@ -15977,6 +20995,12 @@ Simple types
 .. autoclass:: PVOID
 
 .. autoclass:: NTSTATUS
+
+.. autoclass:: TDHSTATUS
+
+.. autoclass:: DNS_STATUS
+
+.. autoclass:: LSTATUS
 
 .. autoclass:: SECURITY_INFORMATION
 
@@ -16012,6 +21036,10 @@ Simple types
 
 .. autoclass:: CHAR
 
+.. class:: PCHAR
+
+    Pointer to :class:`CHAR`
+
 .. autoclass:: UCHAR
 
 .. autoclass:: CSHORT
@@ -16039,6 +21067,8 @@ Simple types
 .. autoclass:: OLECHAR
 
 .. autoclass:: POLECHAR
+
+.. autoclass:: PZZWSTR
 
 .. class:: PUCHAR
 
@@ -16132,10 +21162,6 @@ Simple types
 
     Pointer to :class:`PVOID`
 
-.. class:: LPFILETIME
-
-    Pointer to :class:`FILETIME`
-
 .. class:: LPPOINT
 
     Pointer to :class:`POINT`
@@ -16161,6 +21187,14 @@ Simple types
 .. autoclass:: NCRYPT_HASH_HANDLE
 
 .. autoclass:: NCRYPT_SECRET_HANDLE
+
+.. autoclass:: TRACEHANDLE
+
+.. class:: PTRACEHANDLE
+
+    Pointer to :class:`TRACEHANDLE`
+
+.. autoclass:: PIMAGEHLP_CONTEXT
 
 .. autoclass:: INT8
 
@@ -16208,6 +21242,8 @@ Simple types
 
 .. autoclass:: EVT_OBJECT_ARRAY_PROPERTY_HANDLE
 
+.. autoclass:: IP4_ADDRESS
+
 .. autoclass:: PSECURITY_DESCRIPTOR
 
 .. autoclass:: SECURITY_DESCRIPTOR_CONTROL
@@ -16240,6 +21276,10 @@ Simple types
 
 .. autoclass:: RPCOLEDATAREP
 
+.. autoclass:: HREFTYPE
+
+.. autoclass:: SFGAOF
+
 .. autoclass:: WNDPROC
 
 .. autoclass:: LPPROC_THREAD_ATTRIBUTE_LIST
@@ -16259,6 +21299,42 @@ Simple types
 .. autoclass:: PVECTORED_EXCEPTION_HANDLER
 
 .. autoclass:: PFN_CRYPT_GET_SIGNER_CERTIFICATE
+
+.. autoclass:: PSYM_ENUMERATESYMBOLS_CALLBACK
+
+.. autoclass:: PSYM_ENUMERATESYMBOLS_CALLBACKW
+
+.. autoclass:: PEVENT_CALLBACK
+
+.. autoclass:: PEVENT_TRACE_BUFFER_CALLBACKA
+
+.. autoclass:: PEVENT_TRACE_BUFFER_CALLBACKW
+
+.. autoclass:: PEVENT_RECORD_CALLBACK
+
+.. autoclass:: PFN_CRYPT_ENUM_OID_FUNC
+
+.. autoclass:: PGET_MODULE_BASE_ROUTINE64
+
+.. autoclass:: PGET_MODULE_BASE_ROUTINE
+
+.. autoclass:: PREAD_PROCESS_MEMORY_ROUTINE
+
+.. autoclass:: PREAD_PROCESS_MEMORY_ROUTINE64
+
+.. autoclass:: PFUNCTION_TABLE_ACCESS_ROUTINE
+
+.. autoclass:: PFUNCTION_TABLE_ACCESS_ROUTINE64
+
+.. autoclass:: PTRANSLATE_ADDRESS_ROUTINE
+
+.. autoclass:: PTRANSLATE_ADDRESS_ROUTINE64
+
+.. autoclass:: PSYMBOL_REGISTERED_CALLBACK64
+
+.. autoclass:: PSYMBOL_REGISTERED_CALLBACK
+
+.. autoclass:: PSYM_ENUMPROCESSES_CALLBACK
 
 .. autoclass:: LPCONTEXT
 
@@ -16346,6 +21422,45 @@ _ALPC_MESSAGE_INFORMATION_CLASS
 
     .. attribute:: AlpcMessageHandleInformation(3)
 
+__MIDL_IBackgroundCopyJob2_0002
+'''''''''''''''''''''''''''''''
+.. class:: BG_AUTH_SCHEME
+
+    Alias for :class:`__MIDL_IBackgroundCopyJob2_0002`
+
+
+.. class:: __MIDL_IBackgroundCopyJob2_0002
+
+
+    .. attribute:: BG_AUTH_SCHEME_BASIC(0)
+
+
+    .. attribute:: BG_AUTH_SCHEME_DIGEST(1)
+
+
+    .. attribute:: BG_AUTH_SCHEME_NTLM(2)
+
+
+    .. attribute:: BG_AUTH_SCHEME_NEGOTIATE(3)
+
+
+    .. attribute:: BG_AUTH_SCHEME_PASSPORT(4)
+
+__MIDL_IBackgroundCopyJob2_0001
+'''''''''''''''''''''''''''''''
+.. class:: BG_AUTH_TARGET
+
+    Alias for :class:`__MIDL_IBackgroundCopyJob2_0001`
+
+
+.. class:: __MIDL_IBackgroundCopyJob2_0001
+
+
+    .. attribute:: BG_AUTH_TARGET_SERVER(0)
+
+
+    .. attribute:: BG_AUTH_TARGET_PROXY(1)
+
 _CALLFRAME_COPY
 '''''''''''''''
 .. class:: CALLFRAME_COPY
@@ -16399,6 +21514,1192 @@ tagCALLFRAME_WALK
 
 
     .. attribute:: CALLFRAME_WALK_OUT(4)
+
+tagCOMSD
+''''''''
+.. class:: COMSD
+
+    Alias for :class:`tagCOMSD`
+
+
+.. class:: tagCOMSD
+
+
+    .. attribute:: SD_LAUNCHPERMISSIONS(0)
+
+
+    .. attribute:: SD_ACCESSPERMISSIONS(1)
+
+
+    .. attribute:: SD_LAUNCHRESTRICTIONS(2)
+
+
+    .. attribute:: SD_ACCESSRESTRICTIONS(3)
+
+_EXPCMDSTATE
+''''''''''''
+.. class:: EXPCMDSTATE
+
+    Alias for :class:`_EXPCMDSTATE`
+
+
+.. class:: _EXPCMDSTATE
+
+
+    .. attribute:: ECS_ENABLED(0)
+
+
+    .. attribute:: ECS_DISABLED(1)
+
+
+    .. attribute:: ECS_HIDDEN(2)
+
+
+    .. attribute:: ECS_CHECKBOX(3)
+
+
+    .. attribute:: ECS_CHECKED(4)
+
+
+    .. attribute:: ECS_RADIOCHECK(5)
+
+_EXPCMDFLAGS
+''''''''''''
+.. class:: EXPCMDFLAGS
+
+    Alias for :class:`_EXPCMDFLAGS`
+
+
+.. class:: _EXPCMDFLAGS
+
+
+    .. attribute:: ECF_DEFAULT(0)
+
+
+    .. attribute:: ECF_HASSUBCOMMANDS(1)
+
+
+    .. attribute:: ECF_HASSPLITBUTTON(2)
+
+
+    .. attribute:: ECF_HIDELABEL(4)
+
+
+    .. attribute:: ECF_ISSEPARATOR(8)
+
+
+    .. attribute:: ECF_HASLUASHIELD(16)
+
+
+    .. attribute:: ECF_SEPARATORBEFORE(32)
+
+
+    .. attribute:: ECF_SEPARATORAFTER(64)
+
+
+    .. attribute:: ECF_ISDROPDOWN(128)
+
+
+    .. attribute:: ECF_TOGGLEABLE(256)
+
+
+    .. attribute:: ECF_AUTOMENUICONS(512)
+
+_SIGDN
+''''''
+.. class:: SIGDN
+
+    Alias for :class:`_SIGDN`
+
+
+.. class:: _SIGDN
+
+
+    .. attribute:: SIGDN_NORMALDISPLAY(0)
+
+
+    .. attribute:: SIGDN_PARENTRELATIVEPARSING(2147581953)
+
+
+    .. attribute:: SIGDN_DESKTOPABSOLUTEPARSING(2147647488)
+
+
+    .. attribute:: SIGDN_PARENTRELATIVEEDITING(2147684353)
+
+
+    .. attribute:: SIGDN_DESKTOPABSOLUTEEDITING(2147794944)
+
+
+    .. attribute:: SIGDN_FILESYSPATH(2147844096)
+
+
+    .. attribute:: SIGDN_URL(2147909632)
+
+
+    .. attribute:: SIGDN_PARENTRELATIVEFORADDRESSBAR(2147991553)
+
+
+    .. attribute:: SIGDN_PARENTRELATIVE(2148007937)
+
+
+    .. attribute:: SIGDN_PARENTRELATIVEFORUI(2148089857)
+
+SICHINTF
+''''''''
+.. class:: SICHINTF
+
+
+    .. attribute:: SICHINT_DISPLAY(0)
+
+
+    .. attribute:: SICHINT_ALLFIELDS(2147483648)
+
+
+    .. attribute:: SICHINT_CANONICAL(268435456)
+
+
+    .. attribute:: SICHINT_TEST_FILESYSPATH_IF_NOT_EQUAL(536870912)
+
+GETPROPERTYSTOREFLAGS
+'''''''''''''''''''''
+.. class:: GETPROPERTYSTOREFLAGS
+
+    Alias for :class:`GETPROPERTYSTOREFLAGS`
+
+
+.. class:: GETPROPERTYSTOREFLAGS
+
+
+    .. attribute:: GPS_DEFAULT(0)
+
+
+    .. attribute:: GPS_HANDLERPROPERTIESONLY(1)
+
+
+    .. attribute:: GPS_READWRITE(2)
+
+
+    .. attribute:: GPS_TEMPORARY(4)
+
+
+    .. attribute:: GPS_FASTPROPERTIESONLY(8)
+
+
+    .. attribute:: GPS_OPENSLOWITEM(16)
+
+
+    .. attribute:: GPS_DELAYCREATION(32)
+
+
+    .. attribute:: GPS_BESTEFFORT(64)
+
+
+    .. attribute:: GPS_NO_OPLOCK(128)
+
+
+    .. attribute:: GPS_PREFERQUERYPROPERTIES(256)
+
+
+    .. attribute:: GPS_EXTRINSICPROPERTIES(512)
+
+
+    .. attribute:: GPS_EXTRINSICPROPERTIESONLY(1024)
+
+
+    .. attribute:: GPS_MASK_VALID(2047)
+
+SIATTRIBFLAGS
+'''''''''''''
+.. class:: SIATTRIBFLAGS
+
+
+    .. attribute:: SIATTRIBFLAGS_AND(1)
+
+
+    .. attribute:: SIATTRIBFLAGS_OR(2)
+
+
+    .. attribute:: SIATTRIBFLAGS_APPCOMPAT(3)
+
+
+    .. attribute:: SIATTRIBFLAGS_MASK(3)
+
+
+    .. attribute:: SIATTRIBFLAGS_ALLITEMS(16384)
+
+tagVARKIND
+''''''''''
+.. class:: VARKIND
+
+    Alias for :class:`tagVARKIND`
+
+
+.. class:: tagVARKIND
+
+
+    .. attribute:: VAR_PERINSTANCE(0)
+
+
+    .. attribute:: VAR_STATIC(1)
+
+
+    .. attribute:: VAR_CONST(2)
+
+
+    .. attribute:: VAR_DISPATCH(3)
+
+tagINVOKEKIND
+'''''''''''''
+.. class:: INVOKEKIND
+
+    Alias for :class:`tagINVOKEKIND`
+
+
+.. class:: tagINVOKEKIND
+
+
+    .. attribute:: INVOKE_FUNC(0)
+
+
+    .. attribute:: INVOKE_PROPERTYGET(1)
+
+
+    .. attribute:: INVOKE_PROPERTYPUT(2)
+
+
+    .. attribute:: INVOKE_PROPERTYPUTREF(3)
+
+tagFUNCKIND
+'''''''''''
+.. class:: FUNCKIND
+
+    Alias for :class:`tagFUNCKIND`
+
+
+.. class:: tagFUNCKIND
+
+
+    .. attribute:: FUNC_VIRTUAL(0)
+
+
+    .. attribute:: FUNC_PUREVIRTUAL(1)
+
+
+    .. attribute:: FUNC_NONVIRTUAL(2)
+
+
+    .. attribute:: FUNC_STATIC(3)
+
+
+    .. attribute:: FUNC_DISPATCH(4)
+
+tagSYSKIND
+''''''''''
+.. class:: SYSKIND
+
+    Alias for :class:`tagSYSKIND`
+
+
+.. class:: tagSYSKIND
+
+
+    .. attribute:: SYS_WIN16(0)
+
+
+    .. attribute:: SYS_WIN32(1)
+
+
+    .. attribute:: SYS_MAC(2)
+
+
+    .. attribute:: SYS_WIN64(3)
+
+tagCALLCONV
+'''''''''''
+.. class:: CALLCONV
+
+    Alias for :class:`tagCALLCONV`
+
+
+.. class:: tagCALLCONV
+
+
+    .. attribute:: CC_FASTCALL(0)
+
+
+    .. attribute:: CC_CDECL(1)
+
+
+    .. attribute:: CC_MSCPASCAL(2)
+
+
+    .. attribute:: CC_PASCAL(3)
+
+
+    .. attribute:: CC_MACPASCAL(4)
+
+
+    .. attribute:: CC_STDCALL(5)
+
+
+    .. attribute:: CC_FPFASTCALL(6)
+
+
+    .. attribute:: CC_SYSCALL(7)
+
+
+    .. attribute:: CC_MPWCDECL(8)
+
+
+    .. attribute:: CC_MPWPASCAL(9)
+
+
+    .. attribute:: CC_MAX(10)
+
+tagDESCKIND
+'''''''''''
+.. class:: DESCKIND
+
+    Alias for :class:`tagDESCKIND`
+
+
+.. class:: tagDESCKIND
+
+
+    .. attribute:: DESCKIND_NONE(0)
+
+
+    .. attribute:: DESCKIND_FUNCDESC(1)
+
+
+    .. attribute:: DESCKIND_VARDESC(2)
+
+
+    .. attribute:: DESCKIND_TYPECOMP(3)
+
+
+    .. attribute:: DESCKIND_IMPLICITAPPOBJ(4)
+
+
+    .. attribute:: DESCKIND_MAX(5)
+
+_VIRTUAL_DISK_ACCESS_MASK
+'''''''''''''''''''''''''
+.. class:: VIRTUAL_DISK_ACCESS_MASK
+
+    Alias for :class:`_VIRTUAL_DISK_ACCESS_MASK`
+
+
+.. class:: _VIRTUAL_DISK_ACCESS_MASK
+
+
+    .. attribute:: VIRTUAL_DISK_ACCESS_NONE(0)
+
+
+    .. attribute:: VIRTUAL_DISK_ACCESS_ATTACH_RO(1)
+
+
+    .. attribute:: VIRTUAL_DISK_ACCESS_ATTACH_RW(2)
+
+
+    .. attribute:: VIRTUAL_DISK_ACCESS_DETACH(3)
+
+
+    .. attribute:: VIRTUAL_DISK_ACCESS_GET_INFO(4)
+
+
+    .. attribute:: VIRTUAL_DISK_ACCESS_CREATE(5)
+
+
+    .. attribute:: VIRTUAL_DISK_ACCESS_METAOPS(6)
+
+
+    .. attribute:: VIRTUAL_DISK_ACCESS_READ(7)
+
+
+    .. attribute:: VIRTUAL_DISK_ACCESS_ALL(8)
+
+
+    .. attribute:: VIRTUAL_DISK_ACCESS_WRITABLE(9)
+
+_OPEN_VIRTUAL_DISK_FLAG
+'''''''''''''''''''''''
+.. class:: OPEN_VIRTUAL_DISK_FLAG
+
+    Alias for :class:`_OPEN_VIRTUAL_DISK_FLAG`
+
+
+.. class:: _OPEN_VIRTUAL_DISK_FLAG
+
+
+    .. attribute:: OPEN_VIRTUAL_DISK_FLAG_NONE(0)
+
+
+    .. attribute:: OPEN_VIRTUAL_DISK_FLAG_NO_PARENTS(1)
+
+
+    .. attribute:: OPEN_VIRTUAL_DISK_FLAG_BLANK_FILE(2)
+
+
+    .. attribute:: OPEN_VIRTUAL_DISK_FLAG_BOOT_DRIVE(3)
+
+
+    .. attribute:: OPEN_VIRTUAL_DISK_FLAG_CACHED_IO(4)
+
+
+    .. attribute:: OPEN_VIRTUAL_DISK_FLAG_CUSTOM_DIFF_CHAIN(5)
+
+
+    .. attribute:: OPEN_VIRTUAL_DISK_FLAG_PARENT_CACHED_IO(6)
+
+
+    .. attribute:: OPEN_VIRTUAL_DISK_FLAG_VHDSET_FILE_ONLY(7)
+
+
+    .. attribute:: OPEN_VIRTUAL_DISK_FLAG_IGNORE_RELATIVE_PARENT_LOCATOR(8)
+
+
+    .. attribute:: OPEN_VIRTUAL_DISK_FLAG_NO_WRITE_HARDENING(9)
+
+_ATTACH_VIRTUAL_DISK_FLAG
+'''''''''''''''''''''''''
+.. class:: ATTACH_VIRTUAL_DISK_FLAG
+
+    Alias for :class:`_ATTACH_VIRTUAL_DISK_FLAG`
+
+
+.. class:: _ATTACH_VIRTUAL_DISK_FLAG
+
+
+    .. attribute:: ATTACH_VIRTUAL_DISK_FLAG_NONE(0)
+
+
+    .. attribute:: ATTACH_VIRTUAL_DISK_FLAG_READ_ONLY(1)
+
+
+    .. attribute:: ATTACH_VIRTUAL_DISK_FLAG_NO_DRIVE_LETTER(2)
+
+
+    .. attribute:: ATTACH_VIRTUAL_DISK_FLAG_PERMANENT_LIFETIME(3)
+
+
+    .. attribute:: ATTACH_VIRTUAL_DISK_FLAG_NO_LOCAL_HOST(4)
+
+
+    .. attribute:: ATTACH_VIRTUAL_DISK_FLAG_NO_SECURITY_DESCRIPTOR(5)
+
+
+    .. attribute:: ATTACH_VIRTUAL_DISK_FLAG_BYPASS_DEFAULT_ENCRYPTION_POLICY(6)
+
+
+    .. attribute:: ATTACH_VIRTUAL_DISK_FLAG_NON_PNP(7)
+
+
+    .. attribute:: ATTACH_VIRTUAL_DISK_FLAG_RESTRICTED_RANGE(8)
+
+
+    .. attribute:: ATTACH_VIRTUAL_DISK_FLAG_SINGLE_PARTITION(9)
+
+
+    .. attribute:: ATTACH_VIRTUAL_DISK_FLAG_REGISTER_VOLUME(10)
+
+_OPEN_VIRTUAL_DISK_VERSION
+''''''''''''''''''''''''''
+.. class:: OPEN_VIRTUAL_DISK_VERSION
+
+    Alias for :class:`_OPEN_VIRTUAL_DISK_VERSION`
+
+
+.. class:: _OPEN_VIRTUAL_DISK_VERSION
+
+
+    .. attribute:: OPEN_VIRTUAL_DISK_VERSION_UNSPECIFIED(0)
+
+
+    .. attribute:: OPEN_VIRTUAL_DISK_VERSION_1(1)
+
+
+    .. attribute:: OPEN_VIRTUAL_DISK_VERSION_2(2)
+
+
+    .. attribute:: OPEN_VIRTUAL_DISK_VERSION_3(3)
+
+_ATTACH_VIRTUAL_DISK_VERSION
+''''''''''''''''''''''''''''
+.. class:: ATTACH_VIRTUAL_DISK_VERSION
+
+    Alias for :class:`_ATTACH_VIRTUAL_DISK_VERSION`
+
+
+.. class:: _ATTACH_VIRTUAL_DISK_VERSION
+
+
+    .. attribute:: ATTACH_VIRTUAL_DISK_VERSION_UNSPECIFIED(0)
+
+
+    .. attribute:: ATTACH_VIRTUAL_DISK_VERSION_1(1)
+
+
+    .. attribute:: ATTACH_VIRTUAL_DISK_VERSION_2(2)
+
+TRACE_INFO_CLASS
+''''''''''''''''
+.. class:: TRACE_INFO_CLASS
+
+    Alias for :class:`TRACE_INFO_CLASS`
+
+
+.. class:: TRACE_QUERY_INFO_CLASS
+
+    Alias for :class:`TRACE_INFO_CLASS`
+
+
+.. class:: TRACE_INFO_CLASS
+
+
+    .. attribute:: TraceGuidQueryList(0)
+
+
+    .. attribute:: TraceGuidQueryInfo(1)
+
+
+    .. attribute:: TraceGuidQueryProcess(2)
+
+
+    .. attribute:: TraceStackTracingInfo(3)
+
+
+    .. attribute:: TraceSystemTraceEnableFlagsInfo(4)
+
+
+    .. attribute:: TraceSampledProfileIntervalInfo(5)
+
+
+    .. attribute:: TraceProfileSourceConfigInfo(6)
+
+
+    .. attribute:: TraceProfileSourceListInfo(7)
+
+
+    .. attribute:: TracePmcEventListInfo(8)
+
+
+    .. attribute:: TracePmcCounterListInfo(9)
+
+
+    .. attribute:: TraceSetDisallowList(10)
+
+
+    .. attribute:: TraceVersionInfo(11)
+
+
+    .. attribute:: TraceGroupQueryList(12)
+
+
+    .. attribute:: TraceGroupQueryInfo(13)
+
+
+    .. attribute:: TraceDisallowListQuery(14)
+
+
+    .. attribute:: TraceInfoReserved15(15)
+
+
+    .. attribute:: TracePeriodicCaptureStateListInfo(16)
+
+
+    .. attribute:: TracePeriodicCaptureStateInfo(17)
+
+
+    .. attribute:: TraceProviderBinaryTracking(18)
+
+
+    .. attribute:: TraceMaxLoggersQuery(19)
+
+
+    .. attribute:: MaxTraceSetInfoClass(20)
+
+_EVT_LOGIN_CLASS
+''''''''''''''''
+.. class:: EVT_LOGIN_CLASS
+
+    Alias for :class:`_EVT_LOGIN_CLASS`
+
+
+.. class:: _EVT_LOGIN_CLASS
+
+
+    .. attribute:: EvtRpcLogin(1)
+
+_EVT_VARIANT_TYPE
+'''''''''''''''''
+.. class:: EVT_VARIANT_TYPE
+
+    Alias for :class:`_EVT_VARIANT_TYPE`
+
+
+.. class:: _EVT_VARIANT_TYPE
+
+
+    .. attribute:: EvtVarTypeNull(0)
+
+
+    .. attribute:: EvtVarTypeString(1)
+
+
+    .. attribute:: EvtVarTypeAnsiString(2)
+
+
+    .. attribute:: EvtVarTypeSByte(3)
+
+
+    .. attribute:: EvtVarTypeByte(4)
+
+
+    .. attribute:: EvtVarTypeInt16(5)
+
+
+    .. attribute:: EvtVarTypeUInt16(6)
+
+
+    .. attribute:: EvtVarTypeInt32(7)
+
+
+    .. attribute:: EvtVarTypeUInt32(8)
+
+
+    .. attribute:: EvtVarTypeInt64(9)
+
+
+    .. attribute:: EvtVarTypeUInt64(10)
+
+
+    .. attribute:: EvtVarTypeSingle(11)
+
+
+    .. attribute:: EvtVarTypeDouble(12)
+
+
+    .. attribute:: EvtVarTypeBoolean(13)
+
+
+    .. attribute:: EvtVarTypeBinary(14)
+
+
+    .. attribute:: EvtVarTypeGuid(15)
+
+
+    .. attribute:: EvtVarTypeSizeT(16)
+
+
+    .. attribute:: EvtVarTypeFileTime(17)
+
+
+    .. attribute:: EvtVarTypeSysTime(18)
+
+
+    .. attribute:: EvtVarTypeSid(19)
+
+
+    .. attribute:: EvtVarTypeHexInt32(20)
+
+
+    .. attribute:: EvtVarTypeHexInt64(21)
+
+
+    .. attribute:: EvtVarTypeEvtHandle(32)
+
+
+    .. attribute:: EvtVarTypeEvtXml(35)
+
+_EVT_SEEK_FLAGS
+'''''''''''''''
+.. class:: EVT_SEEK_FLAGS
+
+    Alias for :class:`_EVT_SEEK_FLAGS`
+
+
+.. class:: _EVT_SEEK_FLAGS
+
+
+    .. attribute:: EvtSeekRelativeToFirst(1)
+
+
+    .. attribute:: EvtSeekRelativeToLast(2)
+
+
+    .. attribute:: EvtSeekRelativeToCurrent(3)
+
+
+    .. attribute:: EvtSeekRelativeToBookmark(4)
+
+
+    .. attribute:: EvtSeekOriginMask(7)
+
+
+    .. attribute:: EvtSeekStrict(65536)
+
+_EVT_RENDER_CONTEXT_FLAGS
+'''''''''''''''''''''''''
+.. class:: EVT_RENDER_CONTEXT_FLAGS
+
+    Alias for :class:`_EVT_RENDER_CONTEXT_FLAGS`
+
+
+.. class:: _EVT_RENDER_CONTEXT_FLAGS
+
+
+    .. attribute:: EvtRenderContextValues(0)
+
+
+    .. attribute:: EvtRenderContextSystem(1)
+
+
+    .. attribute:: EvtRenderContextUser(2)
+
+_EVT_SYSTEM_PROPERTY_ID
+'''''''''''''''''''''''
+.. class:: EVT_SYSTEM_PROPERTY_ID
+
+    Alias for :class:`_EVT_SYSTEM_PROPERTY_ID`
+
+
+.. class:: _EVT_SYSTEM_PROPERTY_ID
+
+
+    .. attribute:: EvtSystemProviderName(0)
+
+
+    .. attribute:: EvtSystemProviderGuid(1)
+
+
+    .. attribute:: EvtSystemEventID(2)
+
+
+    .. attribute:: EvtSystemQualifiers(3)
+
+
+    .. attribute:: EvtSystemLevel(4)
+
+
+    .. attribute:: EvtSystemTask(5)
+
+
+    .. attribute:: EvtSystemOpcode(6)
+
+
+    .. attribute:: EvtSystemKeywords(7)
+
+
+    .. attribute:: EvtSystemTimeCreated(8)
+
+
+    .. attribute:: EvtSystemEventRecordId(9)
+
+
+    .. attribute:: EvtSystemActivityID(10)
+
+
+    .. attribute:: EvtSystemRelatedActivityID(11)
+
+
+    .. attribute:: EvtSystemProcessID(12)
+
+
+    .. attribute:: EvtSystemThreadID(13)
+
+
+    .. attribute:: EvtSystemChannel(14)
+
+
+    .. attribute:: EvtSystemComputer(15)
+
+
+    .. attribute:: EvtSystemUserID(16)
+
+
+    .. attribute:: EvtSystemVersion(17)
+
+
+    .. attribute:: EvtSystemPropertyIdEND(18)
+
+_EVT_RENDER_FLAGS
+'''''''''''''''''
+.. class:: EVT_RENDER_FLAGS
+
+    Alias for :class:`_EVT_RENDER_FLAGS`
+
+
+.. class:: _EVT_RENDER_FLAGS
+
+
+    .. attribute:: EvtRenderEventValues(0)
+
+
+    .. attribute:: EvtRenderEventXml(1)
+
+
+    .. attribute:: EvtRenderBookmark(2)
+
+_EVT_QUERY_FLAGS
+''''''''''''''''
+.. class:: EVT_QUERY_FLAGS
+
+    Alias for :class:`_EVT_QUERY_FLAGS`
+
+
+.. class:: _EVT_QUERY_FLAGS
+
+
+    .. attribute:: EvtQueryChannelPath(1)
+
+
+    .. attribute:: EvtQueryFilePath(2)
+
+
+    .. attribute:: EvtQueryForwardDirection(256)
+
+
+    .. attribute:: EvtQueryReverseDirection(512)
+
+
+    .. attribute:: EvtQueryTolerateQueryErrors(4096)
+
+_EVT_LOG_PROPERTY_ID
+''''''''''''''''''''
+.. class:: EVT_LOG_PROPERTY_ID
+
+    Alias for :class:`_EVT_LOG_PROPERTY_ID`
+
+
+.. class:: _EVT_LOG_PROPERTY_ID
+
+
+    .. attribute:: EvtLogCreationTime(0)
+
+
+    .. attribute:: EvtLogLastAccessTime(1)
+
+
+    .. attribute:: EvtLogLastWriteTime(2)
+
+
+    .. attribute:: EvtLogFileSize(3)
+
+
+    .. attribute:: EvtLogAttributes(4)
+
+
+    .. attribute:: EvtLogNumberOfLogRecords(5)
+
+
+    .. attribute:: EvtLogOldestRecordNumber(6)
+
+
+    .. attribute:: EvtLogFull(7)
+
+_EVT_OPEN_LOG_FLAGS
+'''''''''''''''''''
+.. class:: EVT_OPEN_LOG_FLAGS
+
+    Alias for :class:`_EVT_OPEN_LOG_FLAGS`
+
+
+.. class:: _EVT_OPEN_LOG_FLAGS
+
+
+    .. attribute:: EvtOpenChannelPath(1)
+
+
+    .. attribute:: EvtOpenFilePath(2)
+
+_EVT_CHANNEL_CONFIG_PROPERTY_ID
+'''''''''''''''''''''''''''''''
+.. class:: EVT_CHANNEL_CONFIG_PROPERTY_ID
+
+    Alias for :class:`_EVT_CHANNEL_CONFIG_PROPERTY_ID`
+
+
+.. class:: _EVT_CHANNEL_CONFIG_PROPERTY_ID
+
+
+    .. attribute:: EvtChannelConfigEnabled(0)
+
+
+    .. attribute:: EvtChannelConfigIsolation(1)
+
+
+    .. attribute:: EvtChannelConfigType(2)
+
+
+    .. attribute:: EvtChannelConfigOwningPublisher(3)
+
+
+    .. attribute:: EvtChannelConfigClassicEventlog(4)
+
+
+    .. attribute:: EvtChannelConfigAccess(5)
+
+
+    .. attribute:: EvtChannelLoggingConfigRetention(6)
+
+
+    .. attribute:: EvtChannelLoggingConfigAutoBackup(7)
+
+
+    .. attribute:: EvtChannelLoggingConfigMaxSize(8)
+
+
+    .. attribute:: EvtChannelLoggingConfigLogFilePath(9)
+
+
+    .. attribute:: EvtChannelPublishingConfigLevel(10)
+
+
+    .. attribute:: EvtChannelPublishingConfigKeywords(11)
+
+
+    .. attribute:: EvtChannelPublishingConfigControlGuid(12)
+
+
+    .. attribute:: EvtChannelPublishingConfigBufferSize(13)
+
+
+    .. attribute:: EvtChannelPublishingConfigMinBuffers(14)
+
+
+    .. attribute:: EvtChannelPublishingConfigMaxBuffers(15)
+
+
+    .. attribute:: EvtChannelPublishingConfigLatency(16)
+
+
+    .. attribute:: EvtChannelPublishingConfigClockType(17)
+
+
+    .. attribute:: EvtChannelPublishingConfigSidType(18)
+
+
+    .. attribute:: EvtChannelPublisherList(19)
+
+
+    .. attribute:: EvtChannelPublishingConfigFileMax(20)
+
+
+    .. attribute:: EvtChannelConfigPropertyIdEND(21)
+
+_EVT_CHANNEL_TYPE
+'''''''''''''''''
+.. class:: EVT_CHANNEL_TYPE
+
+    Alias for :class:`_EVT_CHANNEL_TYPE`
+
+
+.. class:: _EVT_CHANNEL_TYPE
+
+
+    .. attribute:: EvtChannelTypeAdmin(0)
+
+
+    .. attribute:: EvtChannelTypeOperational(1)
+
+
+    .. attribute:: EvtChannelTypeAnalytic(2)
+
+
+    .. attribute:: EvtChannelTypeDebug(3)
+
+_EVT_CHANNEL_ISOLATION_TYPE
+'''''''''''''''''''''''''''
+.. class:: EVT_CHANNEL_ISOLATION_TYPE
+
+    Alias for :class:`_EVT_CHANNEL_ISOLATION_TYPE`
+
+
+.. class:: _EVT_CHANNEL_ISOLATION_TYPE
+
+
+    .. attribute:: EvtChannelIsolationTypeApplication(0)
+
+
+    .. attribute:: EvtChannelIsolationTypeSystem(1)
+
+
+    .. attribute:: EvtChannelIsolationTypeCustom(2)
+
+_EVT_EVENT_METADATA_PROPERTY_ID
+'''''''''''''''''''''''''''''''
+.. class:: EVT_EVENT_METADATA_PROPERTY_ID
+
+    Alias for :class:`_EVT_EVENT_METADATA_PROPERTY_ID`
+
+
+.. class:: _EVT_EVENT_METADATA_PROPERTY_ID
+
+
+    .. attribute:: EventMetadataEventID(0)
+
+
+    .. attribute:: EventMetadataEventVersion(1)
+
+
+    .. attribute:: EventMetadataEventChannel(2)
+
+
+    .. attribute:: EventMetadataEventLevel(3)
+
+
+    .. attribute:: EventMetadataEventOpcode(4)
+
+
+    .. attribute:: EventMetadataEventTask(5)
+
+
+    .. attribute:: EventMetadataEventKeyword(6)
+
+
+    .. attribute:: EventMetadataEventMessageID(7)
+
+
+    .. attribute:: EventMetadataEventTemplate(8)
+
+
+    .. attribute:: EvtEventMetadataPropertyIdEND(9)
+
+_EVT_PUBLISHER_METADATA_PROPERTY_ID
+'''''''''''''''''''''''''''''''''''
+.. class:: EVT_PUBLISHER_METADATA_PROPERTY_ID
+
+    Alias for :class:`_EVT_PUBLISHER_METADATA_PROPERTY_ID`
+
+
+.. class:: _EVT_PUBLISHER_METADATA_PROPERTY_ID
+
+
+    .. attribute:: EvtPublisherMetadataPublisherGuid(0)
+
+
+    .. attribute:: EvtPublisherMetadataResourceFilePath(1)
+
+
+    .. attribute:: EvtPublisherMetadataParameterFilePath(2)
+
+
+    .. attribute:: EvtPublisherMetadataMessageFilePath(3)
+
+
+    .. attribute:: EvtPublisherMetadataHelpLink(4)
+
+
+    .. attribute:: EvtPublisherMetadataPublisherMessageID(5)
+
+
+    .. attribute:: EvtPublisherMetadataChannelReferences(6)
+
+
+    .. attribute:: EvtPublisherMetadataChannelReferencePath(7)
+
+
+    .. attribute:: EvtPublisherMetadataChannelReferenceIndex(8)
+
+
+    .. attribute:: EvtPublisherMetadataChannelReferenceID(9)
+
+
+    .. attribute:: EvtPublisherMetadataChannelReferenceFlags(10)
+
+
+    .. attribute:: EvtPublisherMetadataChannelReferenceMessageID(11)
+
+
+    .. attribute:: EvtPublisherMetadataLevels(12)
+
+
+    .. attribute:: EvtPublisherMetadataLevelName(13)
+
+
+    .. attribute:: EvtPublisherMetadataLevelValue(14)
+
+
+    .. attribute:: EvtPublisherMetadataLevelMessageID(15)
+
+
+    .. attribute:: EvtPublisherMetadataTasks(16)
+
+
+    .. attribute:: EvtPublisherMetadataTaskName(17)
+
+
+    .. attribute:: EvtPublisherMetadataTaskEventGuid(18)
+
+
+    .. attribute:: EvtPublisherMetadataTaskValue(19)
+
+
+    .. attribute:: EvtPublisherMetadataTaskMessageID(20)
+
+
+    .. attribute:: EvtPublisherMetadataOpcodes(21)
+
+
+    .. attribute:: EvtPublisherMetadataOpcodeName(22)
+
+
+    .. attribute:: EvtPublisherMetadataOpcodeValue(23)
+
+
+    .. attribute:: EvtPublisherMetadataOpcodeMessageID(24)
+
+
+    .. attribute:: EvtPublisherMetadataKeywords(25)
+
+
+    .. attribute:: EvtPublisherMetadataKeywordName(26)
+
+
+    .. attribute:: EvtPublisherMetadataKeywordValue(27)
+
+
+    .. attribute:: EvtPublisherMetadataKeywordMessageID(28)
+
+
+    .. attribute:: EvtPublisherMetadataPropertyIdEND(29)
+
+_EVT_FORMAT_MESSAGE_FLAGS
+'''''''''''''''''''''''''
+.. class:: EVT_FORMAT_MESSAGE_FLAGS
+
+    Alias for :class:`_EVT_FORMAT_MESSAGE_FLAGS`
+
+
+.. class:: _EVT_FORMAT_MESSAGE_FLAGS
+
+
+    .. attribute:: EvtFormatMessageEvent(1)
+
+
+    .. attribute:: EvtFormatMessageLevel(2)
+
+
+    .. attribute:: EvtFormatMessageTask(3)
+
+
+    .. attribute:: EvtFormatMessageOpcode(4)
+
+
+    .. attribute:: EvtFormatMessageKeyword(5)
+
+
+    .. attribute:: EvtFormatMessageChannel(6)
+
+
+    .. attribute:: EvtFormatMessageProvider(7)
+
+
+    .. attribute:: EvtFormatMessageId(8)
+
+
+    .. attribute:: EvtFormatMessageXml(9)
 
 _FILE_INFORMATION_CLASS
 '''''''''''''''''''''''
@@ -16645,6 +22946,342 @@ _IO_PRIORITY_HINT
 
     .. attribute:: MaxIoPriorityTypes(5)
 
+NDR_FORMAT_CHARACTER
+''''''''''''''''''''
+.. class:: NDR_FORMAT_CHARACTER
+
+    Alias for :class:`NDR_FORMAT_CHARACTER`
+
+
+.. class:: NDR_FORMAT_CHARACTER
+
+
+    .. attribute:: FC_ZERO(0)
+
+
+    .. attribute:: FC_BYTE(1)
+
+
+    .. attribute:: FC_CHAR(2)
+
+
+    .. attribute:: FC_SMALL(3)
+
+
+    .. attribute:: FC_USMALL(4)
+
+
+    .. attribute:: FC_WCHAR(5)
+
+
+    .. attribute:: FC_SHORT(6)
+
+
+    .. attribute:: FC_USHORT(7)
+
+
+    .. attribute:: FC_LONG(8)
+
+
+    .. attribute:: FC_ULONG(9)
+
+
+    .. attribute:: FC_FLOAT(10)
+
+
+    .. attribute:: FC_HYPER(11)
+
+
+    .. attribute:: FC_DOUBLE(12)
+
+
+    .. attribute:: FC_ENUM16(13)
+
+
+    .. attribute:: FC_ENUM32(14)
+
+
+    .. attribute:: FC_IGNORE(15)
+
+
+    .. attribute:: FC_ERROR_STATUS_T(16)
+
+
+    .. attribute:: FC_RP(17)
+
+
+    .. attribute:: FC_UP(18)
+
+
+    .. attribute:: FC_OP(19)
+
+
+    .. attribute:: FC_FP(20)
+
+
+    .. attribute:: FC_STRUCT(21)
+
+
+    .. attribute:: FC_PSTRUCT(22)
+
+
+    .. attribute:: FC_CSTRUCT(23)
+
+
+    .. attribute:: FC_CPSTRUCT(24)
+
+
+    .. attribute:: FC_CVSTRUCT(25)
+
+
+    .. attribute:: FC_BOGUS_STRUCT(26)
+
+
+    .. attribute:: FC_CARRAY(27)
+
+
+    .. attribute:: FC_CVARRAY(28)
+
+
+    .. attribute:: FC_SMFARRAY(29)
+
+
+    .. attribute:: FC_LGFARRAY(30)
+
+
+    .. attribute:: FC_SMVARRAY(31)
+
+
+    .. attribute:: FC_LGVARRAY(32)
+
+
+    .. attribute:: FC_BOGUS_ARRAY(33)
+
+
+    .. attribute:: FC_C_CSTRING(34)
+
+
+    .. attribute:: FC_C_BSTRING(35)
+
+
+    .. attribute:: FC_C_SSTRING(36)
+
+
+    .. attribute:: FC_C_WSTRING(37)
+
+
+    .. attribute:: FC_CSTRING(38)
+
+
+    .. attribute:: FC_BSTRING(39)
+
+
+    .. attribute:: FC_SSTRING(40)
+
+
+    .. attribute:: FC_WSTRING(41)
+
+
+    .. attribute:: FC_ENCAPSULATED_UNION(42)
+
+
+    .. attribute:: FC_NON_ENCAPSULATED_UNION(43)
+
+
+    .. attribute:: FC_BYTE_COUNT_POINTER(44)
+
+
+    .. attribute:: FC_TRANSMIT_AS(45)
+
+
+    .. attribute:: FC_REPRESENT_AS(46)
+
+
+    .. attribute:: FC_IP(47)
+
+
+    .. attribute:: FC_BIND_CONTEXT(48)
+
+
+    .. attribute:: FC_BIND_GENERIC(49)
+
+
+    .. attribute:: FC_BIND_PRIMITIVE(50)
+
+
+    .. attribute:: FC_AUTO_HANDLE(51)
+
+
+    .. attribute:: FC_CALLBACK_HANDLE(52)
+
+
+    .. attribute:: FC_UNUSED1(53)
+
+
+    .. attribute:: FC_POINTER(54)
+
+
+    .. attribute:: FC_ALIGNM2(55)
+
+
+    .. attribute:: FC_ALIGNM4(56)
+
+
+    .. attribute:: FC_ALIGNM8(57)
+
+
+    .. attribute:: FC_UNUSED2(58)
+
+
+    .. attribute:: FC_UNUSED3(59)
+
+
+    .. attribute:: FC_UNUSED4(60)
+
+
+    .. attribute:: FC_STRUCTPAD1(61)
+
+
+    .. attribute:: FC_STRUCTPAD2(62)
+
+
+    .. attribute:: FC_STRUCTPAD3(63)
+
+
+    .. attribute:: FC_STRUCTPAD4(64)
+
+
+    .. attribute:: FC_STRUCTPAD5(65)
+
+
+    .. attribute:: FC_STRUCTPAD6(66)
+
+
+    .. attribute:: FC_STRUCTPAD7(67)
+
+
+    .. attribute:: FC_STRING_SIZED(68)
+
+
+    .. attribute:: FC_UNUSED5(69)
+
+
+    .. attribute:: FC_NO_REPEAT(70)
+
+
+    .. attribute:: FC_FIXED_REPEAT(71)
+
+
+    .. attribute:: FC_VARIABLE_REPEAT(72)
+
+
+    .. attribute:: FC_FIXED_OFFSET(73)
+
+
+    .. attribute:: FC_VARIABLE_OFFSET(74)
+
+
+    .. attribute:: FC_PP(75)
+
+
+    .. attribute:: FC_EMBEDDED_COMPLEX(76)
+
+
+    .. attribute:: FC_IN_PARAM(77)
+
+
+    .. attribute:: FC_IN_PARAM_BASETYPE(78)
+
+
+    .. attribute:: FC_IN_PARAM_NO_FREE_INST(79)
+
+
+    .. attribute:: FC_IN_OUT_PARAM(80)
+
+
+    .. attribute:: FC_OUT_PARAM(81)
+
+
+    .. attribute:: FC_RETURN_PARAM(82)
+
+
+    .. attribute:: FC_RETURN_PARAM_BASETYPE(83)
+
+
+    .. attribute:: FC_DEREFERENCE(84)
+
+
+    .. attribute:: FC_DIV_2(85)
+
+
+    .. attribute:: FC_MULT_2(86)
+
+
+    .. attribute:: FC_ADD_1(87)
+
+
+    .. attribute:: FC_SUB_1(88)
+
+
+    .. attribute:: FC_CALLBACK(89)
+
+
+    .. attribute:: FC_CONSTANT_IID(90)
+
+
+    .. attribute:: FC_END(91)
+
+
+    .. attribute:: FC_PAD(92)
+
+
+    .. attribute:: FC_SPLIT_DEREFERENCE(116)
+
+
+    .. attribute:: FC_SPLIT_DIV_2(117)
+
+
+    .. attribute:: FC_SPLIT_MULT_2(118)
+
+
+    .. attribute:: FC_SPLIT_ADD_1(119)
+
+
+    .. attribute:: FC_SPLIT_SUB_1(120)
+
+
+    .. attribute:: FC_SPLIT_CALLBACK(121)
+
+
+    .. attribute:: FC_HARD_STRUCT(177)
+
+
+    .. attribute:: FC_TRANSMIT_AS_PTR(178)
+
+
+    .. attribute:: FC_REPRESENT_AS_PTR(179)
+
+
+    .. attribute:: FC_USER_MARSHAL(180)
+
+
+    .. attribute:: FC_PIPE(181)
+
+
+    .. attribute:: FC_BLKHOLE(182)
+
+
+    .. attribute:: FC_RANGE(183)
+
+
+    .. attribute:: FC_INT3264(184)
+
+
+    .. attribute:: FC_UINT3264(185)
+
+
+    .. attribute:: FC_END_OF_UNIVERSE(186)
+
 _PROCESS_MITIGATION_POLICY
 ''''''''''''''''''''''''''
 .. class:: PROCESS_MITIGATION_POLICY
@@ -16689,6 +23326,150 @@ _PROCESS_MITIGATION_POLICY
 
     .. attribute:: MaxProcessMitigationPolicy(9)
 
+_TCP_TABLE_CLASS
+''''''''''''''''
+.. class:: TCP_TABLE_CLASS
+
+    Alias for :class:`_TCP_TABLE_CLASS`
+
+
+.. class:: _TCP_TABLE_CLASS
+
+
+    .. attribute:: TCP_TABLE_BASIC_LISTENER(0)
+
+
+    .. attribute:: TCP_TABLE_BASIC_CONNECTIONS(1)
+
+
+    .. attribute:: TCP_TABLE_BASIC_ALL(2)
+
+
+    .. attribute:: TCP_TABLE_OWNER_PID_LISTENER(3)
+
+
+    .. attribute:: TCP_TABLE_OWNER_PID_CONNECTIONS(4)
+
+
+    .. attribute:: TCP_TABLE_OWNER_PID_ALL(5)
+
+
+    .. attribute:: TCP_TABLE_OWNER_MODULE_LISTENER(6)
+
+
+    .. attribute:: TCP_TABLE_OWNER_MODULE_CONNECTIONS(7)
+
+
+    .. attribute:: TCP_TABLE_OWNER_MODULE_ALL(8)
+
+_MIB_TCP_STATE
+''''''''''''''
+.. class:: MIB_TCP_STATE
+
+    Alias for :class:`_MIB_TCP_STATE`
+
+
+.. class:: _MIB_TCP_STATE
+
+
+    .. attribute:: MIB_TCP_STATE_CLOSED(1)
+
+
+    .. attribute:: MIB_TCP_STATE_LISTEN(2)
+
+
+    .. attribute:: MIB_TCP_STATE_SYN_SENT(3)
+
+
+    .. attribute:: MIB_TCP_STATE_SYN_RCVD(4)
+
+
+    .. attribute:: MIB_TCP_STATE_ESTAB(5)
+
+
+    .. attribute:: MIB_TCP_STATE_FIN_WAIT1(6)
+
+
+    .. attribute:: MIB_TCP_STATE_FIN_WAIT2(7)
+
+
+    .. attribute:: MIB_TCP_STATE_CLOSE_WAIT(8)
+
+
+    .. attribute:: MIB_TCP_STATE_CLOSING(9)
+
+
+    .. attribute:: MIB_TCP_STATE_LAST_ACK(10)
+
+
+    .. attribute:: MIB_TCP_STATE_TIME_WAIT(11)
+
+
+    .. attribute:: MIB_TCP_STATE_DELETE_TCB(12)
+
+NET_FW_IP_PROTOCOL_
+'''''''''''''''''''
+.. class:: NET_FW_IP_PROTOCOL
+
+    Alias for :class:`NET_FW_IP_PROTOCOL_`
+
+
+.. class:: NET_FW_IP_PROTOCOL_
+
+
+    .. attribute:: NET_FW_IP_PROTOCOL_TCP(6)
+
+
+    .. attribute:: NET_FW_IP_PROTOCOL_UDP(17)
+
+
+    .. attribute:: NET_FW_IP_PROTOCOL_ANY(256)
+
+_INTERNAL_IF_OPER_STATUS
+''''''''''''''''''''''''
+.. class:: INTERNAL_IF_OPER_STATUS
+
+    Alias for :class:`_INTERNAL_IF_OPER_STATUS`
+
+
+.. class:: _INTERNAL_IF_OPER_STATUS
+
+
+    .. attribute:: IF_OPER_STATUS_NON_OPERATIONAL(0)
+
+
+    .. attribute:: IF_OPER_STATUS_UNREACHABLE(1)
+
+
+    .. attribute:: IF_OPER_STATUS_DISCONNECTED(2)
+
+
+    .. attribute:: IF_OPER_STATUS_CONNECTING(3)
+
+
+    .. attribute:: IF_OPER_STATUS_CONNECTED(4)
+
+
+    .. attribute:: IF_OPER_STATUS_OPERATIONAL(5)
+
+DNS_FREE_TYPE
+'''''''''''''
+.. class:: DNS_FREE_TYPE
+
+    Alias for :class:`DNS_FREE_TYPE`
+
+
+.. class:: DNS_FREE_TYPE
+
+
+    .. attribute:: DnsFreeFlat(0)
+
+
+    .. attribute:: DnsFreeRecordList(1)
+
+
+    .. attribute:: DnsFreeParsedMessageFields(2)
+
 _KEY_VALUE_INFORMATION_CLASS
 ''''''''''''''''''''''''''''
 .. class:: KEY_VALUE_INFORMATION_CLASS
@@ -16719,6 +23500,48 @@ _KEY_VALUE_INFORMATION_CLASS
 
     .. attribute:: MaxKeyValueInfoClass(6)
 
+_KEY_INFORMATION_CLASS
+''''''''''''''''''''''
+.. class:: KEY_INFORMATION_CLASS
+
+    Alias for :class:`_KEY_INFORMATION_CLASS`
+
+
+.. class:: _KEY_INFORMATION_CLASS
+
+
+    .. attribute:: KeyBasicInformation(0)
+
+
+    .. attribute:: KeyNodeInformation(1)
+
+
+    .. attribute:: KeyFullInformation(2)
+
+
+    .. attribute:: KeyNameInformation(3)
+
+
+    .. attribute:: KeyCachedInformation(4)
+
+
+    .. attribute:: KeyFlagsInformation(5)
+
+
+    .. attribute:: KeyVirtualizationInformation(6)
+
+
+    .. attribute:: KeyHandleTagsInformation(7)
+
+
+    .. attribute:: KeyTrustInformation(8)
+
+
+    .. attribute:: KeyLayerInformation(9)
+
+
+    .. attribute:: MaxKeyInfoClass(10)
+
 _ACL_INFORMATION_CLASS
 ''''''''''''''''''''''
 .. class:: ACL_INFORMATION_CLASS
@@ -16733,6 +23556,78 @@ _ACL_INFORMATION_CLASS
 
 
     .. attribute:: AclSizeInformation(2)
+
+_SC_STATUS_TYPE
+'''''''''''''''
+.. class:: SC_STATUS_TYPE
+
+    Alias for :class:`_SC_STATUS_TYPE`
+
+
+.. class:: _SC_STATUS_TYPE
+
+
+    .. attribute:: SC_STATUS_PROCESS_INFO(0)
+
+_SC_ENUM_TYPE
+'''''''''''''
+.. class:: SC_ENUM_TYPE
+
+    Alias for :class:`_SC_ENUM_TYPE`
+
+
+.. class:: _SC_ENUM_TYPE
+
+
+    .. attribute:: SC_ENUM_PROCESS_INFO(0)
+
+ACTIVATEOPTIONS
+'''''''''''''''
+.. class:: ACTIVATEOPTIONS
+
+    Alias for :class:`ACTIVATEOPTIONS`
+
+
+.. class:: ACTIVATEOPTIONS
+
+
+    .. attribute:: AO_NONE(0)
+
+
+    .. attribute:: AO_DESIGNMODE(1)
+
+
+    .. attribute:: AO_NOERRORUI(2)
+
+
+    .. attribute:: AO_NOSPLASHSCREEN(4)
+
+
+    .. attribute:: AO_PRELAUNCH(33554432)
+
+PACKAGE_EXECUTION_STATE
+'''''''''''''''''''''''
+.. class:: PACKAGE_EXECUTION_STATE
+
+    Alias for :class:`PACKAGE_EXECUTION_STATE`
+
+
+.. class:: PACKAGE_EXECUTION_STATE
+
+
+    .. attribute:: PES_UNKNOWN(0)
+
+
+    .. attribute:: PES_RUNNING(1)
+
+
+    .. attribute:: PES_SUSPENDING(2)
+
+
+    .. attribute:: PES_SUSPENDED(3)
+
+
+    .. attribute:: PES_TERMINATED(4)
 
 SYM_TYPE
 ''''''''
@@ -16772,6 +23667,387 @@ SYM_TYPE
 
 
     .. attribute:: NumSymTypes(9)
+
+BasicType
+'''''''''
+.. class:: BasicType
+
+
+    .. attribute:: btNoType(0)
+
+
+    .. attribute:: btVoid(1)
+
+
+    .. attribute:: btChar(2)
+
+
+    .. attribute:: btWChar(3)
+
+
+    .. attribute:: btInt(6)
+
+
+    .. attribute:: btUInt(7)
+
+
+    .. attribute:: btFloat(8)
+
+
+    .. attribute:: btBCD(9)
+
+
+    .. attribute:: btBool(10)
+
+
+    .. attribute:: btLong(13)
+
+
+    .. attribute:: btULong(14)
+
+
+    .. attribute:: btCurrency(25)
+
+
+    .. attribute:: btDate(26)
+
+
+    .. attribute:: btVariant(27)
+
+
+    .. attribute:: btComplex(28)
+
+
+    .. attribute:: btBit(29)
+
+
+    .. attribute:: btBSTR(30)
+
+
+    .. attribute:: btHresult(31)
+
+DataKind
+''''''''
+.. class:: DataKind
+
+
+    .. attribute:: DataIsUnknown(0)
+
+
+    .. attribute:: DataIsLocal(1)
+
+
+    .. attribute:: DataIsStaticLocal(2)
+
+
+    .. attribute:: DataIsParam(3)
+
+
+    .. attribute:: DataIsObjectPtr(4)
+
+
+    .. attribute:: DataIsFileStatic(5)
+
+
+    .. attribute:: DataIsGlobal(6)
+
+
+    .. attribute:: DataIsMember(7)
+
+
+    .. attribute:: DataIsStaticMember(8)
+
+
+    .. attribute:: DataIsConstant(9)
+
+UdtKind
+'''''''
+.. class:: UdtKind
+
+
+    .. attribute:: UdtStruct(0)
+
+
+    .. attribute:: UdtClass(1)
+
+
+    .. attribute:: UdtUnion(2)
+
+_SymTagEnum
+'''''''''''
+.. class:: SymTagEnum
+
+    Alias for :class:`_SymTagEnum`
+
+
+.. class:: _SymTagEnum
+
+
+    .. attribute:: SymTagNull(0)
+
+
+    .. attribute:: SymTagExe(1)
+
+
+    .. attribute:: SymTagCompiland(2)
+
+
+    .. attribute:: SymTagCompilandDetails(3)
+
+
+    .. attribute:: SymTagCompilandEnv(4)
+
+
+    .. attribute:: SymTagFunction(5)
+
+
+    .. attribute:: SymTagBlock(6)
+
+
+    .. attribute:: SymTagData(7)
+
+
+    .. attribute:: SymTagAnnotation(8)
+
+
+    .. attribute:: SymTagLabel(9)
+
+
+    .. attribute:: SymTagPublicSymbol(10)
+
+
+    .. attribute:: SymTagUDT(11)
+
+
+    .. attribute:: SymTagEnum(12)
+
+
+    .. attribute:: SymTagFunctionType(13)
+
+
+    .. attribute:: SymTagPointerType(14)
+
+
+    .. attribute:: SymTagArrayType(15)
+
+
+    .. attribute:: SymTagBaseType(16)
+
+
+    .. attribute:: SymTagTypedef(17)
+
+
+    .. attribute:: SymTagBaseClass(18)
+
+
+    .. attribute:: SymTagFriend(19)
+
+
+    .. attribute:: SymTagFunctionArgType(20)
+
+
+    .. attribute:: SymTagFuncDebugStart(21)
+
+
+    .. attribute:: SymTagFuncDebugEnd(22)
+
+
+    .. attribute:: SymTagUsingNamespace(23)
+
+
+    .. attribute:: SymTagVTableShape(24)
+
+
+    .. attribute:: SymTagVTable(25)
+
+
+    .. attribute:: SymTagCustom(26)
+
+
+    .. attribute:: SymTagThunk(27)
+
+
+    .. attribute:: SymTagCustomType(28)
+
+
+    .. attribute:: SymTagManagedType(29)
+
+
+    .. attribute:: SymTagDimension(30)
+
+_IMAGEHLP_EXTENDED_OPTIONS
+''''''''''''''''''''''''''
+.. class:: IMAGEHLP_EXTENDED_OPTIONS
+
+    Alias for :class:`_IMAGEHLP_EXTENDED_OPTIONS`
+
+
+.. class:: _IMAGEHLP_EXTENDED_OPTIONS
+
+
+    .. attribute:: SYMOPT_EX_DISABLEACCESSTIMEUPDATE(0)
+
+
+    .. attribute:: SYMOPT_EX_MAX(1)
+
+
+    .. attribute:: SYMOPT_EX_LASTVALIDDEBUGDIRECTORY(2)
+
+_IMAGEHLP_SYMBOL_TYPE_INFO
+''''''''''''''''''''''''''
+.. class:: IMAGEHLP_SYMBOL_TYPE_INFO
+
+    Alias for :class:`_IMAGEHLP_SYMBOL_TYPE_INFO`
+
+
+.. class:: _IMAGEHLP_SYMBOL_TYPE_INFO
+
+
+    .. attribute:: TI_GET_SYMTAG(0)
+
+
+    .. attribute:: TI_GET_SYMNAME(1)
+
+
+    .. attribute:: TI_GET_LENGTH(2)
+
+
+    .. attribute:: TI_GET_TYPE(3)
+
+
+    .. attribute:: TI_GET_TYPEID(4)
+
+
+    .. attribute:: TI_GET_BASETYPE(5)
+
+
+    .. attribute:: TI_GET_ARRAYINDEXTYPEID(6)
+
+
+    .. attribute:: TI_FINDCHILDREN(7)
+
+
+    .. attribute:: TI_GET_DATAKIND(8)
+
+
+    .. attribute:: TI_GET_ADDRESSOFFSET(9)
+
+
+    .. attribute:: TI_GET_OFFSET(10)
+
+
+    .. attribute:: TI_GET_VALUE(11)
+
+
+    .. attribute:: TI_GET_COUNT(12)
+
+
+    .. attribute:: TI_GET_CHILDRENCOUNT(13)
+
+
+    .. attribute:: TI_GET_BITPOSITION(14)
+
+
+    .. attribute:: TI_GET_VIRTUALBASECLASS(15)
+
+
+    .. attribute:: TI_GET_VIRTUALTABLESHAPEID(16)
+
+
+    .. attribute:: TI_GET_VIRTUALBASEPOINTEROFFSET(17)
+
+
+    .. attribute:: TI_GET_CLASSPARENTID(18)
+
+
+    .. attribute:: TI_GET_NESTED(19)
+
+
+    .. attribute:: TI_GET_SYMINDEX(20)
+
+
+    .. attribute:: TI_GET_LEXICALPARENT(21)
+
+
+    .. attribute:: TI_GET_ADDRESS(22)
+
+
+    .. attribute:: TI_GET_THISADJUST(23)
+
+
+    .. attribute:: TI_GET_UDTKIND(24)
+
+
+    .. attribute:: TI_IS_EQUIV_TO(25)
+
+
+    .. attribute:: TI_GET_CALLING_CONVENTION(26)
+
+
+    .. attribute:: TI_IS_CLOSE_EQUIV_TO(27)
+
+
+    .. attribute:: TI_GTIEX_REQS_VALID(28)
+
+
+    .. attribute:: TI_GET_VIRTUALBASEOFFSET(29)
+
+
+    .. attribute:: TI_GET_VIRTUALBASEDISPINDEX(30)
+
+
+    .. attribute:: TI_GET_IS_REFERENCE(31)
+
+
+    .. attribute:: TI_GET_INDIRECTVIRTUALBASECLASS(32)
+
+
+    .. attribute:: IMAGEHLP_SYMBOL_TYPE_INFO_MAX(33)
+
+_CBA_EVENT_SEVERITY
+'''''''''''''''''''
+.. class:: CBA_EVENT_SEVERITY
+
+    Alias for :class:`_CBA_EVENT_SEVERITY`
+
+
+.. class:: _CBA_EVENT_SEVERITY
+
+
+    .. attribute:: sevInfo(0)
+
+
+    .. attribute:: sevProblem(1)
+
+
+    .. attribute:: sevAttn(2)
+
+
+    .. attribute:: sevFatal(3)
+
+
+    .. attribute:: sevMax(4)
+
+ADDRESS_MODE
+''''''''''''
+.. class:: ADDRESS_MODE
+
+    Alias for :class:`ADDRESS_MODE`
+
+
+.. class:: ADDRESS_MODE
+
+
+    .. attribute:: AddrMode1616(0)
+
+
+    .. attribute:: AddrMode1632(1)
+
+
+    .. attribute:: AddrModeReal(2)
+
+
+    .. attribute:: AddrModeFlat(3)
 
 _TASK_ACTION_TYPE
 '''''''''''''''''
@@ -17757,11 +25033,6 @@ _SECTION_INHERIT
 
 _PROCESSINFOCLASS
 '''''''''''''''''
-.. class:: PROCESS_INFORMATION_CLASS
-
-    Alias for :class:`_PROCESSINFOCLASS`
-
-
 .. class:: PROCESSINFOCLASS
 
     Alias for :class:`_PROCESSINFOCLASS`
@@ -17875,7 +25146,7 @@ _PROCESSINFOCLASS
     .. attribute:: ProcessExecuteFlags(34)
 
 
-    .. attribute:: ProcessResourceManagement(35)
+    .. attribute:: ProcessTlsInformation(35)
 
 
     .. attribute:: ProcessCookie(36)
@@ -17884,16 +25155,115 @@ _PROCESSINFOCLASS
     .. attribute:: ProcessImageInformation(37)
 
 
-    .. attribute:: ProcessInformation38(38)
+    .. attribute:: ProcessCycleTime(38)
 
 
-    .. attribute:: ProcessInformation39(39)
+    .. attribute:: ProcessPagePriority(39)
 
 
     .. attribute:: ProcessInstrumentationCallback(40)
 
 
-    .. attribute:: MaxProcessInfoClass(41)
+    .. attribute:: ProcessThreadStackAllocation(41)
+
+
+    .. attribute:: ProcessWorkingSetWatchEx(42)
+
+
+    .. attribute:: ProcessImageFileNameWin32(43)
+
+
+    .. attribute:: ProcessImageFileMapping(44)
+
+
+    .. attribute:: ProcessAffinityUpdateMode(45)
+
+
+    .. attribute:: ProcessMemoryAllocationMode(46)
+
+
+    .. attribute:: ProcessGroupInformation(47)
+
+
+    .. attribute:: ProcessTokenVirtualizationEnabled(48)
+
+
+    .. attribute:: ProcessOwnerInformation(49)
+
+
+    .. attribute:: ProcessWindowInformation(50)
+
+
+    .. attribute:: ProcessHandleInformation(51)
+
+
+    .. attribute:: ProcessMitigationPolicy(52)
+
+
+    .. attribute:: ProcessDynamicFunctionTableInformation(53)
+
+
+    .. attribute:: ProcessHandleCheckingMode(54)
+
+
+    .. attribute:: ProcessKeepAliveCount(55)
+
+
+    .. attribute:: ProcessRevokeFileHandles(56)
+
+
+    .. attribute:: ProcessWorkingSetControl(57)
+
+
+    .. attribute:: ProcessHandleTable(58)
+
+
+    .. attribute:: ProcessCheckStackExtentsMode(59)
+
+
+    .. attribute:: ProcessCommandLineInformation(60)
+
+
+    .. attribute:: ProcessProtectionInformation(61)
+
+
+    .. attribute:: ProcessMemoryExhaustion(62)
+
+
+    .. attribute:: ProcessFaultInformation(63)
+
+
+    .. attribute:: ProcessTelemetryIdInformation(64)
+
+
+    .. attribute:: ProcessCommitReleaseInformation(65)
+
+
+    .. attribute:: ProcessReserved1Information(66)
+
+
+    .. attribute:: ProcessReserved2Information(67)
+
+
+    .. attribute:: ProcessSubsystemProcess(68)
+
+
+    .. attribute:: ProcessInPrivate(70)
+
+
+    .. attribute:: ProcessRaiseUMExceptionOnInvalidHandleClose(71)
+
+
+    .. attribute:: ProcessSubsystemInformation(75)
+
+
+    .. attribute:: ProcessWin32kSyscallFilterInformation(79)
+
+
+    .. attribute:: ProcessEnergyTrackingState(82)
+
+
+    .. attribute:: MaxProcessInfoClass(83)
 
 _MEMORY_INFORMATION_CLASS
 '''''''''''''''''''''''''
@@ -17986,42 +25356,6 @@ _THREAD_INFORMATION_CLASS
 
 
     .. attribute:: ThreadHideFromDebugger(17)
-
-_TCP_TABLE_CLASS
-''''''''''''''''
-.. class:: TCP_TABLE_CLASS
-
-    Alias for :class:`_TCP_TABLE_CLASS`
-
-
-.. class:: _TCP_TABLE_CLASS
-
-
-    .. attribute:: TCP_TABLE_BASIC_LISTENER(0)
-
-
-    .. attribute:: TCP_TABLE_BASIC_CONNECTIONS(1)
-
-
-    .. attribute:: TCP_TABLE_BASIC_ALL(2)
-
-
-    .. attribute:: TCP_TABLE_OWNER_PID_LISTENER(3)
-
-
-    .. attribute:: TCP_TABLE_OWNER_PID_CONNECTIONS(4)
-
-
-    .. attribute:: TCP_TABLE_OWNER_PID_ALL(5)
-
-
-    .. attribute:: TCP_TABLE_OWNER_MODULE_LISTENER(6)
-
-
-    .. attribute:: TCP_TABLE_OWNER_MODULE_CONNECTIONS(7)
-
-
-    .. attribute:: TCP_TABLE_OWNER_MODULE_ALL(8)
 
 _VARENUM
 ''''''''
@@ -18245,69 +25579,6 @@ NET_FW_PROFILE_TYPE2_
 
     .. attribute:: NET_FW_PROFILE2_ALL(2147483647)
 
-_MIB_TCP_STATE
-''''''''''''''
-.. class:: MIB_TCP_STATE
-
-    Alias for :class:`_MIB_TCP_STATE`
-
-
-.. class:: _MIB_TCP_STATE
-
-
-    .. attribute:: MIB_TCP_STATE_CLOSED(1)
-
-
-    .. attribute:: MIB_TCP_STATE_LISTEN(2)
-
-
-    .. attribute:: MIB_TCP_STATE_SYN_SENT(3)
-
-
-    .. attribute:: MIB_TCP_STATE_SYN_RCVD(4)
-
-
-    .. attribute:: MIB_TCP_STATE_ESTAB(5)
-
-
-    .. attribute:: MIB_TCP_STATE_FIN_WAIT1(6)
-
-
-    .. attribute:: MIB_TCP_STATE_FIN_WAIT2(7)
-
-
-    .. attribute:: MIB_TCP_STATE_CLOSE_WAIT(8)
-
-
-    .. attribute:: MIB_TCP_STATE_CLOSING(9)
-
-
-    .. attribute:: MIB_TCP_STATE_LAST_ACK(10)
-
-
-    .. attribute:: MIB_TCP_STATE_TIME_WAIT(11)
-
-
-    .. attribute:: MIB_TCP_STATE_DELETE_TCB(12)
-
-NET_FW_IP_PROTOCOL_
-'''''''''''''''''''
-.. class:: NET_FW_IP_PROTOCOL
-
-    Alias for :class:`NET_FW_IP_PROTOCOL_`
-
-
-.. class:: NET_FW_IP_PROTOCOL_
-
-
-    .. attribute:: NET_FW_IP_PROTOCOL_TCP(6)
-
-
-    .. attribute:: NET_FW_IP_PROTOCOL_UDP(17)
-
-
-    .. attribute:: NET_FW_IP_PROTOCOL_ANY(256)
-
 tagTOKEN_TYPE
 '''''''''''''
 .. class:: TOKEN_TYPE
@@ -18396,30 +25667,6 @@ _SECURITY_IMPERSONATION_LEVEL
 
     .. attribute:: SecurityDelegation(3)
 
-_SC_ENUM_TYPE
-'''''''''''''
-.. class:: SC_ENUM_TYPE
-
-    Alias for :class:`_SC_ENUM_TYPE`
-
-
-.. class:: _SC_ENUM_TYPE
-
-
-    .. attribute:: SC_ENUM_PROCESS_INFO(0)
-
-_SC_STATUS_TYPE
-'''''''''''''''
-.. class:: SC_STATUS_TYPE
-
-    Alias for :class:`_SC_STATUS_TYPE`
-
-
-.. class:: _SC_STATUS_TYPE
-
-
-    .. attribute:: SC_STATUS_PROCESS_INFO(0)
-
 _OBJECT_INFORMATION_CLASS
 '''''''''''''''''''''''''
 .. class:: OBJECT_INFORMATION_CLASS
@@ -18437,6 +25684,21 @@ _OBJECT_INFORMATION_CLASS
 
 
     .. attribute:: ObjectTypeInformation(2)
+
+
+    .. attribute:: ObjectTypesInformation(3)
+
+
+    .. attribute:: ObjectHandleFlagInformation(4)
+
+
+    .. attribute:: ObjectSessionInformation(5)
+
+
+    .. attribute:: ObjectSessionObjectInformation(6)
+
+
+    .. attribute:: MaxObjectInfoClass(7)
 
 _SID_NAME_USE
 '''''''''''''
@@ -18662,159 +25924,6 @@ _SECTION_INHERIT
 
     .. attribute:: ViewUnmap(2)
 
-_INTERNAL_IF_OPER_STATUS
-''''''''''''''''''''''''
-.. class:: INTERNAL_IF_OPER_STATUS
-
-    Alias for :class:`_INTERNAL_IF_OPER_STATUS`
-
-
-.. class:: _INTERNAL_IF_OPER_STATUS
-
-
-    .. attribute:: IF_OPER_STATUS_NON_OPERATIONAL(0)
-
-
-    .. attribute:: IF_OPER_STATUS_UNREACHABLE(1)
-
-
-    .. attribute:: IF_OPER_STATUS_DISCONNECTED(2)
-
-
-    .. attribute:: IF_OPER_STATUS_CONNECTING(3)
-
-
-    .. attribute:: IF_OPER_STATUS_CONNECTED(4)
-
-
-    .. attribute:: IF_OPER_STATUS_OPERATIONAL(5)
-
-_IMAGEHLP_SYMBOL_TYPE_INFO
-''''''''''''''''''''''''''
-.. class:: IMAGEHLP_SYMBOL_TYPE_INFO
-
-    Alias for :class:`_IMAGEHLP_SYMBOL_TYPE_INFO`
-
-
-.. class:: _IMAGEHLP_SYMBOL_TYPE_INFO
-
-
-    .. attribute:: TI_GET_SYMTAG(0)
-
-
-    .. attribute:: TI_GET_SYMNAME(1)
-
-
-    .. attribute:: TI_GET_LENGTH(2)
-
-
-    .. attribute:: TI_GET_TYPE(3)
-
-
-    .. attribute:: TI_GET_TYPEID(4)
-
-
-    .. attribute:: TI_GET_BASETYPE(5)
-
-
-    .. attribute:: TI_GET_ARRAYINDEXTYPEID(6)
-
-
-    .. attribute:: TI_FINDCHILDREN(7)
-
-
-    .. attribute:: TI_GET_DATAKIND(8)
-
-
-    .. attribute:: TI_GET_ADDRESSOFFSET(9)
-
-
-    .. attribute:: TI_GET_OFFSET(10)
-
-
-    .. attribute:: TI_GET_VALUE(11)
-
-
-    .. attribute:: TI_GET_COUNT(12)
-
-
-    .. attribute:: TI_GET_CHILDRENCOUNT(13)
-
-
-    .. attribute:: TI_GET_BITPOSITION(14)
-
-
-    .. attribute:: TI_GET_VIRTUALBASECLASS(15)
-
-
-    .. attribute:: TI_GET_VIRTUALTABLESHAPEID(16)
-
-
-    .. attribute:: TI_GET_VIRTUALBASEPOINTEROFFSET(17)
-
-
-    .. attribute:: TI_GET_CLASSPARENTID(18)
-
-
-    .. attribute:: TI_GET_NESTED(19)
-
-
-    .. attribute:: TI_GET_SYMINDEX(20)
-
-
-    .. attribute:: TI_GET_LEXICALPARENT(21)
-
-
-    .. attribute:: TI_GET_ADDRESS(22)
-
-
-    .. attribute:: TI_GET_THISADJUST(23)
-
-
-    .. attribute:: TI_GET_UDTKIND(24)
-
-
-    .. attribute:: TI_IS_EQUIV_TO(25)
-
-
-    .. attribute:: TI_GET_CALLING_CONVENTION(26)
-
-
-    .. attribute:: TI_IS_CLOSE_EQUIV_TO(27)
-
-
-    .. attribute:: TI_GTIEX_REQS_VALID(28)
-
-
-    .. attribute:: TI_GET_VIRTUALBASEOFFSET(29)
-
-
-    .. attribute:: TI_GET_VIRTUALBASEDISPINDEX(30)
-
-
-    .. attribute:: TI_GET_IS_REFERENCE(31)
-
-
-    .. attribute:: TI_GET_INDIRECTVIRTUALBASECLASS(32)
-
-
-    .. attribute:: IMAGEHLP_SYMBOL_TYPE_INFO_MAX(33)
-
-_PROCESSINFOCLASS
-'''''''''''''''''
-.. class:: PROCESSINFOCLASS
-
-    Alias for :class:`_PROCESSINFOCLASS`
-
-
-.. class:: _PROCESSINFOCLASS
-
-
-    .. attribute:: ProcessBasicInformation(0)
-
-
-    .. attribute:: ProcessWow64Information(26)
-
 tagCOINIT
 '''''''''
 .. class:: COINIT
@@ -19033,549 +26142,6 @@ _BG_JOB_TYPE
 
 
     .. attribute:: BG_JOB_TYPE_UPLOAD_REPLY(2)
-
-_EVT_VARIANT_TYPE
-'''''''''''''''''
-.. class:: EVT_VARIANT_TYPE
-
-    Alias for :class:`_EVT_VARIANT_TYPE`
-
-
-.. class:: _EVT_VARIANT_TYPE
-
-
-    .. attribute:: EvtVarTypeNull(0)
-
-
-    .. attribute:: EvtVarTypeString(1)
-
-
-    .. attribute:: EvtVarTypeAnsiString(2)
-
-
-    .. attribute:: EvtVarTypeSByte(3)
-
-
-    .. attribute:: EvtVarTypeByte(4)
-
-
-    .. attribute:: EvtVarTypeInt16(5)
-
-
-    .. attribute:: EvtVarTypeUInt16(6)
-
-
-    .. attribute:: EvtVarTypeInt32(7)
-
-
-    .. attribute:: EvtVarTypeUInt32(8)
-
-
-    .. attribute:: EvtVarTypeInt64(9)
-
-
-    .. attribute:: EvtVarTypeUInt64(10)
-
-
-    .. attribute:: EvtVarTypeSingle(11)
-
-
-    .. attribute:: EvtVarTypeDouble(12)
-
-
-    .. attribute:: EvtVarTypeBoolean(13)
-
-
-    .. attribute:: EvtVarTypeBinary(14)
-
-
-    .. attribute:: EvtVarTypeGuid(15)
-
-
-    .. attribute:: EvtVarTypeSizeT(16)
-
-
-    .. attribute:: EvtVarTypeFileTime(17)
-
-
-    .. attribute:: EvtVarTypeSysTime(18)
-
-
-    .. attribute:: EvtVarTypeSid(19)
-
-
-    .. attribute:: EvtVarTypeHexInt32(20)
-
-
-    .. attribute:: EvtVarTypeHexInt64(21)
-
-
-    .. attribute:: EvtVarTypeEvtHandle(32)
-
-
-    .. attribute:: EvtVarTypeEvtXml(35)
-
-_EVT_RENDER_CONTEXT_FLAGS
-'''''''''''''''''''''''''
-.. class:: EVT_RENDER_CONTEXT_FLAGS
-
-    Alias for :class:`_EVT_RENDER_CONTEXT_FLAGS`
-
-
-.. class:: _EVT_RENDER_CONTEXT_FLAGS
-
-
-    .. attribute:: EvtRenderContextValues(0)
-
-
-    .. attribute:: EvtRenderContextSystem(1)
-
-
-    .. attribute:: EvtRenderContextUser(2)
-
-_EVT_SYSTEM_PROPERTY_ID
-'''''''''''''''''''''''
-.. class:: EVT_SYSTEM_PROPERTY_ID
-
-    Alias for :class:`_EVT_SYSTEM_PROPERTY_ID`
-
-
-.. class:: _EVT_SYSTEM_PROPERTY_ID
-
-
-    .. attribute:: EvtSystemProviderName(0)
-
-
-    .. attribute:: EvtSystemProviderGuid(1)
-
-
-    .. attribute:: EvtSystemEventID(2)
-
-
-    .. attribute:: EvtSystemQualifiers(3)
-
-
-    .. attribute:: EvtSystemLevel(4)
-
-
-    .. attribute:: EvtSystemTask(5)
-
-
-    .. attribute:: EvtSystemOpcode(6)
-
-
-    .. attribute:: EvtSystemKeywords(7)
-
-
-    .. attribute:: EvtSystemTimeCreated(8)
-
-
-    .. attribute:: EvtSystemEventRecordId(9)
-
-
-    .. attribute:: EvtSystemActivityID(10)
-
-
-    .. attribute:: EvtSystemRelatedActivityID(11)
-
-
-    .. attribute:: EvtSystemProcessID(12)
-
-
-    .. attribute:: EvtSystemThreadID(13)
-
-
-    .. attribute:: EvtSystemChannel(14)
-
-
-    .. attribute:: EvtSystemComputer(15)
-
-
-    .. attribute:: EvtSystemUserID(16)
-
-
-    .. attribute:: EvtSystemVersion(17)
-
-
-    .. attribute:: EvtSystemPropertyIdEND(18)
-
-_EVT_RENDER_FLAGS
-'''''''''''''''''
-.. class:: EVT_RENDER_FLAGS
-
-    Alias for :class:`_EVT_RENDER_FLAGS`
-
-
-.. class:: _EVT_RENDER_FLAGS
-
-
-    .. attribute:: EvtRenderEventValues(0)
-
-
-    .. attribute:: EvtRenderEventXml(1)
-
-
-    .. attribute:: EvtRenderBookmark(2)
-
-_EVT_QUERY_FLAGS
-''''''''''''''''
-.. class:: EVT_QUERY_FLAGS
-
-    Alias for :class:`_EVT_QUERY_FLAGS`
-
-
-.. class:: _EVT_QUERY_FLAGS
-
-
-    .. attribute:: EvtQueryChannelPath(1)
-
-
-    .. attribute:: EvtQueryFilePath(2)
-
-
-    .. attribute:: EvtQueryForwardDirection(256)
-
-
-    .. attribute:: EvtQueryReverseDirection(512)
-
-
-    .. attribute:: EvtQueryTolerateQueryErrors(4096)
-
-_EVT_LOG_PROPERTY_ID
-''''''''''''''''''''
-.. class:: EVT_LOG_PROPERTY_ID
-
-    Alias for :class:`_EVT_LOG_PROPERTY_ID`
-
-
-.. class:: _EVT_LOG_PROPERTY_ID
-
-
-    .. attribute:: EvtLogCreationTime(0)
-
-
-    .. attribute:: EvtLogLastAccessTime(1)
-
-
-    .. attribute:: EvtLogLastWriteTime(2)
-
-
-    .. attribute:: EvtLogFileSize(3)
-
-
-    .. attribute:: EvtLogAttributes(4)
-
-
-    .. attribute:: EvtLogNumberOfLogRecords(5)
-
-
-    .. attribute:: EvtLogOldestRecordNumber(6)
-
-
-    .. attribute:: EvtLogFull(7)
-
-_EVT_OPEN_LOG_FLAGS
-'''''''''''''''''''
-.. class:: EVT_OPEN_LOG_FLAGS
-
-    Alias for :class:`_EVT_OPEN_LOG_FLAGS`
-
-
-.. class:: _EVT_OPEN_LOG_FLAGS
-
-
-    .. attribute:: EvtOpenChannelPath(1)
-
-
-    .. attribute:: EvtOpenFilePath(2)
-
-_EVT_CHANNEL_CONFIG_PROPERTY_ID
-'''''''''''''''''''''''''''''''
-.. class:: EVT_CHANNEL_CONFIG_PROPERTY_ID
-
-    Alias for :class:`_EVT_CHANNEL_CONFIG_PROPERTY_ID`
-
-
-.. class:: _EVT_CHANNEL_CONFIG_PROPERTY_ID
-
-
-    .. attribute:: EvtChannelConfigEnabled(0)
-
-
-    .. attribute:: EvtChannelConfigIsolation(1)
-
-
-    .. attribute:: EvtChannelConfigType(2)
-
-
-    .. attribute:: EvtChannelConfigOwningPublisher(3)
-
-
-    .. attribute:: EvtChannelConfigClassicEventlog(4)
-
-
-    .. attribute:: EvtChannelConfigAccess(5)
-
-
-    .. attribute:: EvtChannelLoggingConfigRetention(6)
-
-
-    .. attribute:: EvtChannelLoggingConfigAutoBackup(7)
-
-
-    .. attribute:: EvtChannelLoggingConfigMaxSize(8)
-
-
-    .. attribute:: EvtChannelLoggingConfigLogFilePath(9)
-
-
-    .. attribute:: EvtChannelPublishingConfigLevel(10)
-
-
-    .. attribute:: EvtChannelPublishingConfigKeywords(11)
-
-
-    .. attribute:: EvtChannelPublishingConfigControlGuid(12)
-
-
-    .. attribute:: EvtChannelPublishingConfigBufferSize(13)
-
-
-    .. attribute:: EvtChannelPublishingConfigMinBuffers(14)
-
-
-    .. attribute:: EvtChannelPublishingConfigMaxBuffers(15)
-
-
-    .. attribute:: EvtChannelPublishingConfigLatency(16)
-
-
-    .. attribute:: EvtChannelPublishingConfigClockType(17)
-
-
-    .. attribute:: EvtChannelPublishingConfigSidType(18)
-
-
-    .. attribute:: EvtChannelPublisherList(19)
-
-
-    .. attribute:: EvtChannelPublishingConfigFileMax(20)
-
-
-    .. attribute:: EvtChannelConfigPropertyIdEND(21)
-
-_EVT_CHANNEL_TYPE
-'''''''''''''''''
-.. class:: EVT_CHANNEL_TYPE
-
-    Alias for :class:`_EVT_CHANNEL_TYPE`
-
-
-.. class:: _EVT_CHANNEL_TYPE
-
-
-    .. attribute:: EvtChannelTypeAdmin(0)
-
-
-    .. attribute:: EvtChannelTypeOperational(1)
-
-
-    .. attribute:: EvtChannelTypeAnalytic(2)
-
-
-    .. attribute:: EvtChannelTypeDebug(3)
-
-_EVT_CHANNEL_ISOLATION_TYPE
-'''''''''''''''''''''''''''
-.. class:: EVT_CHANNEL_ISOLATION_TYPE
-
-    Alias for :class:`_EVT_CHANNEL_ISOLATION_TYPE`
-
-
-.. class:: _EVT_CHANNEL_ISOLATION_TYPE
-
-
-    .. attribute:: EvtChannelIsolationTypeApplication(0)
-
-
-    .. attribute:: EvtChannelIsolationTypeSystem(1)
-
-
-    .. attribute:: EvtChannelIsolationTypeCustom(2)
-
-_EVT_EVENT_METADATA_PROPERTY_ID
-'''''''''''''''''''''''''''''''
-.. class:: EVT_EVENT_METADATA_PROPERTY_ID
-
-    Alias for :class:`_EVT_EVENT_METADATA_PROPERTY_ID`
-
-
-.. class:: _EVT_EVENT_METADATA_PROPERTY_ID
-
-
-    .. attribute:: EventMetadataEventID(0)
-
-
-    .. attribute:: EventMetadataEventVersion(1)
-
-
-    .. attribute:: EventMetadataEventChannel(2)
-
-
-    .. attribute:: EventMetadataEventLevel(3)
-
-
-    .. attribute:: EventMetadataEventOpcode(4)
-
-
-    .. attribute:: EventMetadataEventTask(5)
-
-
-    .. attribute:: EventMetadataEventKeyword(6)
-
-
-    .. attribute:: EventMetadataEventMessageID(7)
-
-
-    .. attribute:: EventMetadataEventTemplate(8)
-
-
-    .. attribute:: EvtEventMetadataPropertyIdEND(9)
-
-_EVT_PUBLISHER_METADATA_PROPERTY_ID
-'''''''''''''''''''''''''''''''''''
-.. class:: EVT_PUBLISHER_METADATA_PROPERTY_ID
-
-    Alias for :class:`_EVT_PUBLISHER_METADATA_PROPERTY_ID`
-
-
-.. class:: _EVT_PUBLISHER_METADATA_PROPERTY_ID
-
-
-    .. attribute:: EvtPublisherMetadataPublisherGuid(0)
-
-
-    .. attribute:: EvtPublisherMetadataResourceFilePath(1)
-
-
-    .. attribute:: EvtPublisherMetadataParameterFilePath(2)
-
-
-    .. attribute:: EvtPublisherMetadataMessageFilePath(3)
-
-
-    .. attribute:: EvtPublisherMetadataHelpLink(4)
-
-
-    .. attribute:: EvtPublisherMetadataPublisherMessageID(5)
-
-
-    .. attribute:: EvtPublisherMetadataChannelReferences(6)
-
-
-    .. attribute:: EvtPublisherMetadataChannelReferencePath(7)
-
-
-    .. attribute:: EvtPublisherMetadataChannelReferenceIndex(8)
-
-
-    .. attribute:: EvtPublisherMetadataChannelReferenceID(9)
-
-
-    .. attribute:: EvtPublisherMetadataChannelReferenceFlags(10)
-
-
-    .. attribute:: EvtPublisherMetadataChannelReferenceMessageID(11)
-
-
-    .. attribute:: EvtPublisherMetadataLevels(12)
-
-
-    .. attribute:: EvtPublisherMetadataLevelName(13)
-
-
-    .. attribute:: EvtPublisherMetadataLevelValue(14)
-
-
-    .. attribute:: EvtPublisherMetadataLevelMessageID(15)
-
-
-    .. attribute:: EvtPublisherMetadataTasks(16)
-
-
-    .. attribute:: EvtPublisherMetadataTaskName(17)
-
-
-    .. attribute:: EvtPublisherMetadataTaskEventGuid(18)
-
-
-    .. attribute:: EvtPublisherMetadataTaskValue(19)
-
-
-    .. attribute:: EvtPublisherMetadataTaskMessageID(20)
-
-
-    .. attribute:: EvtPublisherMetadataOpcodes(21)
-
-
-    .. attribute:: EvtPublisherMetadataOpcodeName(22)
-
-
-    .. attribute:: EvtPublisherMetadataOpcodeValue(23)
-
-
-    .. attribute:: EvtPublisherMetadataOpcodeMessageID(24)
-
-
-    .. attribute:: EvtPublisherMetadataKeywords(25)
-
-
-    .. attribute:: EvtPublisherMetadataKeywordName(26)
-
-
-    .. attribute:: EvtPublisherMetadataKeywordValue(27)
-
-
-    .. attribute:: EvtPublisherMetadataKeywordMessageID(28)
-
-
-    .. attribute:: EvtPublisherMetadataPropertyIdEND(29)
-
-_EVT_FORMAT_MESSAGE_FLAGS
-'''''''''''''''''''''''''
-.. class:: EVT_FORMAT_MESSAGE_FLAGS
-
-    Alias for :class:`_EVT_FORMAT_MESSAGE_FLAGS`
-
-
-.. class:: _EVT_FORMAT_MESSAGE_FLAGS
-
-
-    .. attribute:: EvtFormatMessageEvent(1)
-
-
-    .. attribute:: EvtFormatMessageLevel(2)
-
-
-    .. attribute:: EvtFormatMessageTask(3)
-
-
-    .. attribute:: EvtFormatMessageOpcode(4)
-
-
-    .. attribute:: EvtFormatMessageKeyword(5)
-
-
-    .. attribute:: EvtFormatMessageChannel(6)
-
-
-    .. attribute:: EvtFormatMessageProvider(7)
-
-
-    .. attribute:: EvtFormatMessageId(8)
-
-
-    .. attribute:: EvtFormatMessageXml(9)
 
 tag_WBEM_GENUS_TYPE
 '''''''''''''''''''
@@ -20320,4 +26886,43 @@ tag_WBEM_QUERY_FLAG_TYPE
 
 
     .. attribute:: WBEM_FLAG_PROTOTYPE(2)
+
+WMIDPREQUESTCODE
+''''''''''''''''
+.. class:: WMIDPREQUESTCODE
+
+    Alias for :class:`WMIDPREQUESTCODE`
+
+
+.. class:: WMIDPREQUESTCODE
+
+
+    .. attribute:: WMI_GET_ALL_DATA(0)
+
+
+    .. attribute:: WMI_GET_SINGLE_INSTANCE(1)
+
+
+    .. attribute:: WMI_SET_SINGLE_INSTANCE(2)
+
+
+    .. attribute:: WMI_SET_SINGLE_ITEM(3)
+
+
+    .. attribute:: WMI_ENABLE_EVENTS(4)
+
+
+    .. attribute:: WMI_DISABLE_EVENTS(5)
+
+
+    .. attribute:: WMI_ENABLE_COLLECTION(6)
+
+
+    .. attribute:: WMI_DISABLE_COLLECTION(7)
+
+
+    .. attribute:: WMI_REGINFO(8)
+
+
+    .. attribute:: WMI_EXECUTE_METHOD(9)
 

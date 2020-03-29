@@ -37,9 +37,18 @@
           <div class="body" role="main">
             
   <h1>Source code for windows.native_exec.simple_x86</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">collections</span>
+<span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">collections</span>
 <span class="kn">import</span> <span class="nn">struct</span>
+<span class="kn">import</span> <span class="nn">binascii</span>
 
+<span class="c1"># py3</span>
+<span class="n">is_py3</span> <span class="o">=</span> <span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">is_py3</span><span class="p">:</span>
+    <span class="n">basestring</span> <span class="o">=</span> <span class="nb">str</span>
+    <span class="n">int_types</span> <span class="o">=</span> <span class="nb">int</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">int_types</span> <span class="o">=</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">long</span><span class="p">)</span>
 
 <span class="k">class</span> <span class="nc">BitArray</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">bits</span><span class="p">):</span>
@@ -111,8 +120,14 @@
     <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)(</span><span class="n">other</span><span class="p">)</span>
 
+    <span class="k">def</span> <span class="nf">get_code_py3</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">bytes</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">PREFIX_VALUE</span><span class="p">])</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">next</span><span class="o">.</span><span class="n">get_code</span><span class="p">()</span>
+
     <span class="k">def</span> <span class="nf">get_code</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">chr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">PREFIX_VALUE</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">next</span><span class="o">.</span><span class="n">get_code</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">is_py3</span><span class="p">:</span>
+        <span class="n">get_code</span> <span class="o">=</span> <span class="n">get_code_py3</span>
 
 
 <span class="k">def</span> <span class="nf">create_prefix</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
@@ -139,6 +154,15 @@
 <span class="n">x86_segment_selectors</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;CS&#39;</span><span class="p">:</span> <span class="n">CSPrefix</span><span class="p">,</span> <span class="s1">&#39;DS&#39;</span><span class="p">:</span> <span class="n">DSPrefix</span><span class="p">,</span> <span class="s1">&#39;ES&#39;</span><span class="p">:</span> <span class="n">ESPrefix</span><span class="p">,</span> <span class="s1">&#39;SS&#39;</span><span class="p">:</span> <span class="n">SSPrefix</span><span class="p">,</span>
                          <span class="s1">&#39;FS&#39;</span><span class="p">:</span> <span class="n">FSPrefix</span><span class="p">,</span> <span class="s1">&#39;GS&#39;</span><span class="p">:</span> <span class="n">GSPrefix</span><span class="p">}</span>
 
+<span class="c1"># Man intel -&gt; Sreg (Vol 2.a 3-6)</span>
+<span class="n">x86_segment_selectors_number</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;ES&quot;</span><span class="p">:</span> <span class="s2">&quot;000&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;CS&quot;</span><span class="p">:</span> <span class="s2">&quot;001&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;SS&quot;</span><span class="p">:</span> <span class="s2">&quot;010&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;DS&quot;</span><span class="p">:</span> <span class="s2">&quot;011&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;FS&quot;</span><span class="p">:</span> <span class="s2">&quot;100&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;GS&quot;</span><span class="p">:</span> <span class="s2">&quot;101&quot;</span><span class="p">,</span>
+ <span class="p">}</span>
 
 <span class="k">class</span> <span class="nc">X86</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="nd">@staticmethod</span>
@@ -146,6 +170,13 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">name</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="ow">in</span> <span class="n">x86_regs</span> <span class="o">+</span> <span class="n">x86_16bits_regs</span>
         <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>  <span class="c1"># Not a string</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">is_seg_reg</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">name</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="ow">in</span> <span class="n">x86_segment_selectors_number</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span>
 
     <span class="nd">@staticmethod</span>
@@ -411,6 +442,9 @@
         <span class="k">return</span> <span class="p">(</span><span class="n">sizess</span> <span class="o">+</span> <span class="n">sizeabs</span><span class="p">,</span> <span class="n">dataabs</span> <span class="o">+</span> <span class="n">datass</span><span class="p">)</span>
 
 
+
+
+
 <span class="k">class</span> <span class="nc">ModRM</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sub_modrm</span><span class="p">,</span> <span class="n">accept_reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">has_direction_bit</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">accept_reverse</span> <span class="o">=</span> <span class="n">accept_reverse</span>
@@ -443,6 +477,7 @@
     <span class="k">def</span> <span class="nf">match</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">X86</span><span class="o">.</span><span class="n">is_reg</span><span class="p">(</span><span class="n">arg1</span><span class="p">)</span> <span class="ow">and</span> <span class="n">X86</span><span class="o">.</span><span class="n">is_reg</span><span class="p">(</span><span class="n">arg2</span><span class="p">)</span>
 
+
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">,</span> <span class="nb">reversed</span><span class="p">,</span> <span class="n">instr_state</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mod</span> <span class="o">=</span> <span class="n">BitArray</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;11&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">X86</span><span class="o">.</span><span class="n">reg_size</span><span class="p">(</span><span class="n">arg1</span><span class="p">)</span> <span class="o">!=</span> <span class="n">X86</span><span class="o">.</span><span class="n">reg_size</span><span class="p">(</span><span class="n">arg2</span><span class="p">):</span>
@@ -453,6 +488,18 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">rm</span> <span class="o">=</span> <span class="n">X86RegisterSelector</span><span class="o">.</span><span class="n">get_reg_bits</span><span class="p">(</span><span class="n">arg1</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">after</span> <span class="o">=</span> <span class="n">BitArray</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="k">class</span> <span class="nc">ModRM_REG__SEGREG</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">match</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">X86</span><span class="o">.</span><span class="n">is_reg</span><span class="p">(</span><span class="n">arg1</span><span class="p">)</span> <span class="ow">and</span> <span class="n">X86</span><span class="o">.</span><span class="n">is_seg_reg</span><span class="p">(</span><span class="n">arg2</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">,</span> <span class="nb">reversed</span><span class="p">,</span> <span class="n">instr_state</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mod</span> <span class="o">=</span> <span class="n">BitArray</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;11&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rm</span> <span class="o">=</span> <span class="n">X86RegisterSelector</span><span class="o">.</span><span class="n">get_reg_bits</span><span class="p">(</span><span class="n">arg1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reg</span> <span class="o">=</span> <span class="n">BitArray</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">x86_segment_selectors_number</span><span class="p">[</span><span class="n">arg2</span><span class="o">.</span><span class="n">upper</span><span class="p">()])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">after</span> <span class="o">=</span> <span class="n">BitArray</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="nb">reversed</span>
 
 
 <span class="k">class</span> <span class="nc">ModRM_REG__MEM</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -615,6 +662,13 @@
         <span class="n">prefix_opcode</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">chr</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">PREFIX_VALUE</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">prefix_opcode</span> <span class="o">+</span> <span class="nb">bytes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">dump</span><span class="p">())</span>
 
+    <span class="k">def</span> <span class="nf">get_code_py3</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">prefix_opcode</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">bytes</span><span class="p">([</span><span class="n">p</span><span class="o">.</span><span class="n">PREFIX_VALUE</span><span class="p">])</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">prefix_opcode</span> <span class="o">+</span> <span class="nb">bytes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">dump</span><span class="p">())</span>
+
+    <span class="k">if</span> <span class="n">is_py3</span><span class="p">:</span>
+        <span class="n">get_code</span> <span class="o">=</span> <span class="n">get_code_py3</span>
+
     <span class="c1">#def __add__(self, other):</span>
     <span class="c1">#    res = MultipleInstr()</span>
     <span class="c1">#    res += self</span>
@@ -622,7 +676,7 @@
     <span class="c1">#    return res</span>
 
     <span class="k">def</span> <span class="nf">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">long</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">int_types</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">NotImplemented</span>
         <span class="n">res</span> <span class="o">=</span> <span class="n">MultipleInstr</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
@@ -759,7 +813,8 @@
 <span class="k">class</span> <span class="nc">Mov</span><span class="p">(</span><span class="n">Instruction</span><span class="p">):</span>
     <span class="n">encoding</span> <span class="o">=</span> <span class="p">[(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0x89</span><span class="p">),</span> <span class="n">ModRM</span><span class="p">([</span><span class="n">ModRM_REG__REG</span><span class="p">,</span> <span class="n">ModRM_REG__MEM</span><span class="p">])),</span>
                 <span class="p">(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0xc7</span><span class="p">),</span> <span class="n">Slash</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">Imm32</span><span class="p">()),</span>
-                <span class="p">(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mh">0xb8</span> <span class="o">&gt;&gt;</span> <span class="mi">3</span><span class="p">),</span> <span class="n">X86RegisterSelector</span><span class="p">(),</span> <span class="n">Imm32</span><span class="p">()),</span>
+                <span class="p">(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mh">0xB8</span> <span class="o">&gt;&gt;</span> <span class="mi">3</span><span class="p">),</span> <span class="n">X86RegisterSelector</span><span class="p">(),</span> <span class="n">Imm32</span><span class="p">()),</span>
+                <span class="p">(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mh">0x8C</span><span class="p">),</span> <span class="n">ModRM</span><span class="p">([</span><span class="n">ModRM_REG__SEGREG</span><span class="p">])),</span>
                 <span class="p">(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mh">0x0f20</span><span class="p">),</span> <span class="n">ControlRegisterModRM</span><span class="p">(</span><span class="n">writecr</span><span class="o">=</span><span class="kc">False</span><span class="p">)),</span>
                 <span class="p">(</span><span class="n">RawBits</span><span class="o">.</span><span class="n">from_int</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mh">0x0f22</span><span class="p">),</span> <span class="n">ControlRegisterModRM</span><span class="p">(</span><span class="n">writecr</span><span class="o">=</span><span class="kc">True</span><span class="p">))]</span>
 
@@ -897,7 +952,8 @@
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">initial_args</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">initial_args</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;raw &#39;opcode&#39; only accept one argument&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">initial_args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;hex&quot;</span><span class="p">)</span>
+        <span class="c1"># Accept space</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">binascii</span><span class="o">.</span><span class="n">unhexlify</span><span class="p">(</span><span class="n">initial_args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
 
     <span class="k">def</span> <span class="nf">get_code</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span>
@@ -1058,9 +1114,15 @@
     <span class="k">def</span> <span class="nf">__iadd__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">MultipleInstr</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">merge_shellcode</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assemble</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">add_instruction</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">assemble</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">code</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">instr</span> <span class="ow">in</span> <span class="n">assemble_instructions_generator</span><span class="p">(</span><span class="n">code</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_instruction</span><span class="p">(</span><span class="n">instr</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">split_in_instruction</span><span class="p">(</span><span class="nb">str</span><span class="p">):</span>
@@ -1072,9 +1134,7 @@
                 <span class="k">continue</span>
             <span class="k">yield</span> <span class="n">instr</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
 
-<span class="k">def</span> <span class="nf">assemble</span><span class="p">(</span><span class="nb">str</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Play test&quot;&quot;&quot;</span>
-    <span class="n">shellcode</span> <span class="o">=</span> <span class="n">MultipleInstr</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">assemble_instructions_generator</span><span class="p">(</span><span class="nb">str</span><span class="p">):</span>
     <span class="k">for</span> <span class="n">instr</span> <span class="ow">in</span> <span class="n">split_in_instruction</span><span class="p">(</span><span class="nb">str</span><span class="p">):</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">instr</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="n">mnemo</span><span class="p">,</span> <span class="n">args_raw</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
@@ -1095,8 +1155,18 @@
                     <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
                         <span class="k">pass</span>
                 <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
-        <span class="n">shellcode</span> <span class="o">+=</span> <span class="n">instr_object</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+        <span class="k">yield</span> <span class="n">instr_object</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">assemble</span><span class="p">(</span><span class="nb">str</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Play test&quot;&quot;&quot;</span>
+    <span class="n">shellcode</span> <span class="o">=</span> <span class="n">MultipleInstr</span><span class="p">()</span>
+    <span class="n">shellcode</span> <span class="o">+=</span> <span class="nb">str</span>
     <span class="k">return</span> <span class="n">shellcode</span><span class="o">.</span><span class="n">get_code</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">shellcode</span><span class="p">(</span><span class="nb">str</span><span class="p">):</span>
+    <span class="n">shellcode</span> <span class="o">=</span> <span class="n">MultipleInstr</span><span class="p">()</span>
+    <span class="n">shellcode</span> <span class="o">+=</span> <span class="nb">str</span>
+    <span class="k">return</span> <span class="n">shellcode</span>
 
 <span class="c1"># IDA : import windows.native_exec.simple_x86 as x86</span>
 <span class="c1"># IDA testing</span>

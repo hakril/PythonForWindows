@@ -46,10 +46,11 @@
 <span class="kn">import</span> <span class="nn">windows</span>
 <span class="kn">import</span> <span class="nn">windows.native_exec.simple_x86</span> <span class="k">as</span> <span class="nn">x86</span>
 <span class="kn">import</span> <span class="nn">windows.native_exec.simple_x64</span> <span class="k">as</span> <span class="nn">x64</span>
-<span class="kn">from</span> <span class="nn">generated_def.winstructs</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.generated_def.winstructs</span> <span class="k">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="k">import</span> <span class="n">process</span>
 <span class="kn">from</span> <span class="nn">windows</span> <span class="k">import</span> <span class="n">winproxy</span>
-<span class="kn">from</span> <span class="nn">winproxy</span> <span class="k">import</span> <span class="n">NeededParameter</span>
+<span class="kn">from</span> <span class="nn">.winproxy</span> <span class="k">import</span> <span class="n">NeededParameter</span>
+<span class="kn">from</span> <span class="nn">.pycompat</span> <span class="k">import</span> <span class="n">int_types</span>
 
 <span class="c1"># Special code for syswow64 process</span>
 <span class="n">CS_32bits</span> <span class="o">=</span> <span class="mh">0x23</span>
@@ -72,6 +73,12 @@
 
     <span class="n">transition</span> <span class="o">=</span>     <span class="n">x86</span><span class="o">.</span><span class="n">MultipleInstr</span><span class="p">()</span>
     <span class="n">transition</span> <span class="o">+=</span>    <span class="n">x86</span><span class="o">.</span><span class="n">Call</span><span class="p">(</span><span class="n">CS_64bits</span><span class="p">,</span> <span class="n">x64shellcodeaddr</span><span class="p">)</span>
+    <span class="c1"># Reset the SS segment selector.</span>
+    <span class="c1"># We need to do that due to a bug in AMD CPUs with RETF &amp; SS</span>
+    <span class="c1"># https://github.com/hakril/PythonForWindows/issues/10</span>
+    <span class="c1"># http://blog.rewolf.pl/blog/?p=1484</span>
+    <span class="n">transition</span> <span class="o">+=</span>    <span class="n">x86</span><span class="o">.</span><span class="n">Mov</span><span class="p">(</span><span class="s2">&quot;ECX&quot;</span><span class="p">,</span> <span class="s2">&quot;SS&quot;</span><span class="p">)</span>
+    <span class="n">transition</span> <span class="o">+=</span>    <span class="n">x86</span><span class="o">.</span><span class="n">Mov</span><span class="p">(</span><span class="s2">&quot;SS&quot;</span><span class="p">,</span> <span class="s2">&quot;ECX&quot;</span><span class="p">)</span>
     <span class="n">transition</span> <span class="o">+=</span>    <span class="n">x86</span><span class="o">.</span><span class="n">Ret</span><span class="p">()</span>
 
     <span class="n">stubaddr</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">allocator</span><span class="o">.</span><span class="n">write_code</span><span class="p">(</span><span class="n">transition</span><span class="o">.</span><span class="n">get_code</span><span class="p">())</span>
@@ -162,7 +169,7 @@
         <span class="c1"># Transform args (ctypes byref possibly) to int</span>
         <span class="n">writable_args</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">long</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">int_types</span><span class="p">):</span>
                 <span class="k">try</span><span class="p">:</span>
                     <span class="n">value</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
                 <span class="k">except</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">ArgumentError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
@@ -278,7 +285,7 @@
     <span class="c1"># Ignore STATUS_INFO_LENGTH_MISMATCH if SystemInformation is None</span>
     <span class="k">if</span> <span class="n">result</span> <span class="o">==</span> <span class="n">STATUS_INFO_LENGTH_MISMATCH</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
         <span class="k">return</span> <span class="n">args</span>
-    <span class="k">raise</span> <span class="n">WinproxyError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="s2"> failed with NTStatus </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">func_name</span><span class="p">,</span> <span class="nb">hex</span><span class="p">(</span><span class="n">result</span><span class="p">)))</span>
+    <span class="k">raise</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">WinproxyError</span><span class="p">(</span><span class="s2">&quot;NtQuerySystemInformation failed with NTStatus </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="n">result</span><span class="p">)))</span>
 
 <span class="nd">@Syswow64ApiProxy</span><span class="p">(</span><span class="n">winproxy</span><span class="o">.</span><span class="n">NtQuerySystemInformation</span><span class="p">,</span> <span class="n">errcheck</span><span class="o">=</span><span class="n">ntquerysysteminformation_syswow64_error_check</span><span class="p">)</span>
 <span class="c1"># @Syswow64ApiProxy(winproxy.NtQuerySystemInformation)</span>

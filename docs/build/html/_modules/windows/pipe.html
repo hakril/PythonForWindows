@@ -40,16 +40,24 @@
 <span></span><span class="kn">import</span> <span class="nn">windows</span>
 <span class="kn">from</span> <span class="nn">windows</span> <span class="k">import</span> <span class="n">winproxy</span>
 <span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
+<span class="kn">import</span> <span class="nn">ctypes</span>
 
-<span class="kn">import</span> <span class="nn">_multiprocessing</span>
+<span class="kn">from</span> <span class="nn">windows.pycompat</span> <span class="k">import</span> <span class="n">is_py3</span>
+
+<span class="k">if</span> <span class="n">is_py3</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">multiprocessing.connection</span> <span class="k">import</span> <span class="n">PipeConnection</span> <span class="k">as</span> <span class="n">native_PipeConnection</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">_multiprocessing</span> <span class="k">import</span> <span class="n">PipeConnection</span> <span class="k">as</span> <span class="n">native_PipeConnection</span>
 
 <span class="c1"># Inspired from &#39;multiprocessing\connection.py&#39;</span>
 
 <div class="viewcode-block" id="full_pipe_address"><a class="viewcode-back" href="../../pipe.html#windows.pipe.full_pipe_address">[docs]</a><span class="k">def</span> <span class="nf">full_pipe_address</span><span class="p">(</span><span class="n">addr</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Return the full address of the pipe `addr`&quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">addr</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\\\</span><span class="s2">&quot;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
+        <span class="n">addr</span> <span class="o">=</span> <span class="n">addr</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;ascii&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">addr</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;</span><span class="se">\\\\</span><span class="s2">&quot;</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">addr</span>
-    <span class="k">return</span> <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">.\pipe\</span><span class="si">{addr}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">addr</span><span class="o">=</span><span class="n">addr</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="sa">br</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">.\pipe&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span> <span class="o">+</span> <span class="n">addr</span></div>
 
 <div class="viewcode-block" id="PipeConnection"><a class="viewcode-back" href="../../pipe.html#windows.pipe.PipeConnection">[docs]</a><span class="k">class</span> <span class="nc">PipeConnection</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span> <span class="c1"># Cannot inherit: crash the interpreter</span>
     <span class="sd">&quot;&quot;&quot;A wrapper arround :class:`_multiprocessing.PipeConnection` able to work as a ContextManager&quot;&quot;&quot;</span>
@@ -64,22 +72,33 @@
 <div class="viewcode-block" id="PipeConnection.from_handle"><a class="viewcode-back" href="../../pipe.html#windows.pipe.PipeConnection.from_handle">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">from_handle</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">phandle</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Create a :class:`PipeConnection` from pipe handle `phandle`&quot;&quot;&quot;</span>
-        <span class="n">connection</span> <span class="o">=</span> <span class="n">_multiprocessing</span><span class="o">.</span><span class="n">PipeConnection</span><span class="p">(</span><span class="n">phandle</span><span class="p">)</span>
+        <span class="n">connection</span> <span class="o">=</span> <span class="n">native_PipeConnection</span><span class="p">(</span><span class="n">phandle</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="PipeConnection.create"><a class="viewcode-back" href="../../pipe.html#windows.pipe.PipeConnection.create">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">addr</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">security_descriptor</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Create a namedpipe pipe ``addr``</span>
 
 <span class="sd">        :returns type: :class:`PipeConnection`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">addr</span> <span class="o">=</span> <span class="n">full_pipe_address</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span>
+
+        <span class="n">security_attributes</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">security_descriptor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">security_descriptor</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="n">security_descriptor</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">security</span><span class="o">.</span><span class="n">SecurityDescriptor</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">security_descriptor</span><span class="p">)</span>
+            <span class="n">security_attributes</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SECURITY_ATTRIBUTES</span><span class="p">()</span>
+            <span class="n">security_attributes</span><span class="o">.</span><span class="n">nLength</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">security_attributes</span><span class="p">)</span>
+            <span class="n">security_attributes</span><span class="o">.</span><span class="n">lpSecurityDescriptor</span> <span class="o">=</span> <span class="n">security_descriptor</span> <span class="c1"># Accept as arg ?</span>
+            <span class="n">security_attributes</span><span class="o">.</span><span class="n">bInheritHandle</span> <span class="o">=</span> <span class="kc">True</span> <span class="c1"># Accept as arg ?</span>
+
+
         <span class="n">pipehandle</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CreateNamedPipeA</span><span class="p">(</span>
             <span class="n">addr</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PIPE_ACCESS_DUPLEX</span><span class="p">,</span>
             <span class="n">gdef</span><span class="o">.</span><span class="n">PIPE_TYPE_MESSAGE</span> <span class="o">|</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PIPE_READMODE_MESSAGE</span> <span class="o">|</span>
             <span class="n">gdef</span><span class="o">.</span><span class="n">PIPE_WAIT</span><span class="p">,</span>
             <span class="n">gdef</span><span class="o">.</span><span class="n">PIPE_UNLIMITED_INSTANCES</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="n">BUFFER_SIZE</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="n">BUFFER_SIZE</span><span class="p">,</span>
-            <span class="n">gdef</span><span class="o">.</span><span class="n">NMPWAIT_WAIT_FOREVER</span><span class="p">,</span> <span class="kc">None</span>
+            <span class="n">gdef</span><span class="o">.</span><span class="n">NMPWAIT_WAIT_FOREVER</span><span class="p">,</span> <span class="n">security_attributes</span>
             <span class="p">)</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_handle</span><span class="p">(</span><span class="n">pipehandle</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">addr</span><span class="p">,</span> <span class="n">server</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
 
@@ -105,6 +124,16 @@
 <div class="viewcode-block" id="PipeConnection.wait_connection"><a class="viewcode-back" href="../../pipe.html#windows.pipe.PipeConnection.wait_connection">[docs]</a>    <span class="k">def</span> <span class="nf">wait_connection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Wait for a client process to connect to the named pipe&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">ConnectNamedPipe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">get_security_descriptor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">security</span><span class="o">.</span><span class="n">SecurityDescriptor</span><span class="o">.</span><span class="n">from_handle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">set_security_descriptor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sd</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sd</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
+            <span class="n">sd</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">security</span><span class="o">.</span><span class="n">SecurityDescriptor</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">sd</span><span class="p">)</span>
+        <span class="n">sd</span><span class="o">.</span><span class="n">_apply_to_handle_and_type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">)</span>
+
+    <span class="n">security_descriptor</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_security_descriptor</span><span class="p">,</span> <span class="n">set_security_descriptor</span><span class="p">)</span>
 
 <div class="viewcode-block" id="PipeConnection.close"><a class="viewcode-back" href="../../pipe.html#windows.pipe.PipeConnection.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Close the handle of the pipe&quot;&quot;&quot;</span>

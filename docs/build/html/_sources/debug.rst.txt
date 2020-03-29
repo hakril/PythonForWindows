@@ -82,7 +82,21 @@ When a breakpoint is hit, its ``trigger`` function is called with the debugger a
 
     This means that a MEMBP at address ``X`` won't be triggered by a write of size 4 at address ``X - 1``. it's sad I know.
 
+
+.. autoclass:: FunctionCallBP
+    :members:
+    :inherited-members:
+    :special-members: __init__
+
+.. note::
+
+    See sample :ref:`sample_debugger_bp_functioncallbp`
+
 .. autoclass:: FunctionBP
     :members:
     :inherited-members:
     :special-members: __init__
+
+.. note::
+
+    See sample :ref:`sample_debugger_bp_functionbp`

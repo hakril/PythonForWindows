@@ -70,8 +70,8 @@
 <p class="last">TODO: free the underliying buffer when not needed anymore for now the underliying memory is never freed.</p>
 </div>
 <dl class="attribute">
-<dt id="windows.security.SecurityDescriptor.DEFAULT_SECURITY_INFORMATION">
-<code class="descname">DEFAULT_SECURITY_INFORMATION</code><em class="property"> = 231L</em><a class="headerlink" href="#windows.security.SecurityDescriptor.DEFAULT_SECURITY_INFORMATION" title="Permalink to this definition">¶</a></dt>
+<dt id="windows.security.SecurityDescriptor.SERVICE_SECURITY_INFORMATION">
+<code class="descname">SERVICE_SECURITY_INFORMATION</code><em class="property"> = 7L</em><a class="headerlink" href="#windows.security.SecurityDescriptor.SERVICE_SECURITY_INFORMATION" title="Permalink to this definition">¶</a></dt>
 <dd><p>The default <code class="docutils literal notranslate"><span class="pre">flags</span></code> value for functions expecting a
 <a class="reference external" href="https://docs.microsoft.com/en-us/windows/desktop/SecAuthZ/security-information">SECURITY_INFORMATION</a>.</p>
 <p>This value regroups the followings flags:</p>
@@ -83,6 +83,7 @@
 <li><code class="docutils literal notranslate"><span class="pre">ATTRIBUTE_SECURITY_INFORMATION</span></code></li>
 <li><code class="docutils literal notranslate"><span class="pre">SCOPE_SECURITY_INFORMATION</span></code></li>
 <li><code class="docutils literal notranslate"><span class="pre">PROCESS_TRUST_LABEL_SECURITY_INFORMATION</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">LABEL_SECURITY_INFORMATION</span></code></li>
 </ul>
 </div></blockquote>
 <div class="admonition warning">
@@ -130,14 +131,20 @@ Binary security descriptor can be found in the registry for example</p>
 
 <dl class="classmethod">
 <dt id="windows.security.SecurityDescriptor.from_filename">
-<em class="property">classmethod </em><code class="descname">from_filename</code><span class="sig-paren">(</span><em>filename</em>, <em>query_sacl=False</em>, <em>flags=231L</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/security.html#SecurityDescriptor.from_filename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.security.SecurityDescriptor.from_filename" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="descname">from_filename</code><span class="sig-paren">(</span><em>filename</em>, <em>query_sacl=False</em>, <em>flags=247L</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/security.html#SecurityDescriptor.from_filename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.security.SecurityDescriptor.from_filename" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve the security descriptor for the file <code class="docutils literal notranslate"><span class="pre">filename</span></code></p>
 </dd></dl>
 
 <dl class="classmethod">
 <dt id="windows.security.SecurityDescriptor.from_handle">
-<em class="property">classmethod </em><code class="descname">from_handle</code><span class="sig-paren">(</span><em>handle</em>, <em>query_sacl=False</em>, <em>flags=231L</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/security.html#SecurityDescriptor.from_handle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.security.SecurityDescriptor.from_handle" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="descname">from_handle</code><span class="sig-paren">(</span><em>handle</em>, <em>query_sacl=False</em>, <em>flags=247L</em>, <em>obj_type=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/security.html#SecurityDescriptor.from_handle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.security.SecurityDescriptor.from_handle" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve the security descriptor for the kernel object described by``handle``</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="windows.security.SecurityDescriptor.from_service">
+<em class="property">classmethod </em><code class="descname">from_service</code><span class="sig-paren">(</span><em>filename</em>, <em>query_sacl=False</em>, <em>flags=7L</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/security.html#SecurityDescriptor.from_service"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.security.SecurityDescriptor.from_service" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the security descriptor for the service named <code class="docutils literal notranslate"><span class="pre">service</span></code></p>
 </dd></dl>
 
 <dl class="classmethod">
@@ -204,7 +211,7 @@ Binary security descriptor can be found in the registry for example</p>
 <dl class="attribute">
 <dt id="windows.security.SecurityDescriptor.sacl">
 <code class="descname">sacl</code><a class="headerlink" href="#windows.security.SecurityDescriptor.sacl" title="Permalink to this definition">¶</a></dt>
-<dd><p>The SACL of the security descriptor. You may need special attention to retrieve it (see <a class="reference internal" href="#windows.security.SecurityDescriptor.DEFAULT_SECURITY_INFORMATION" title="windows.security.SecurityDescriptor.DEFAULT_SECURITY_INFORMATION"><code class="xref any py py-attr docutils literal notranslate"><span class="pre">DEFAULT_SECURITY_INFORMATION</span></code></a>)</p>
+<dd><p>The SACL of the security descriptor. You may need special attention to retrieve it (see <code class="xref any docutils literal notranslate"><span class="pre">DEFAULT_SECURITY_INFORMATION</span></code>)</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -216,8 +223,14 @@ Binary security descriptor can be found in the registry for example</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="windows.security.SecurityDescriptor.to_filename">
+<code class="descname">to_filename</code><span class="sig-paren">(</span><em>filename</em>, <em>flags=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/security.html#SecurityDescriptor.to_filename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.security.SecurityDescriptor.to_filename" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test method: WILL CHANGE</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="windows.security.SecurityDescriptor.to_string">
-<code class="descname">to_string</code><span class="sig-paren">(</span><em>security_information=231L</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/security.html#SecurityDescriptor.to_string"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.security.SecurityDescriptor.to_string" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_string</code><span class="sig-paren">(</span><em>security_information=247L</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/security.html#SecurityDescriptor.to_string"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.security.SecurityDescriptor.to_string" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the SDDL representation of the security descriptor</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />

@@ -87,7 +87,7 @@
 
 <dl class="method">
 <dt id="windows.rpc.RPCClient.call">
-<code class="descname">call</code><span class="sig-paren">(</span><em>IID</em>, <em>method_offset</em>, <em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/rpc/client.html#RPCClient.call"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.rpc.RPCClient.call" title="Permalink to this definition">¶</a></dt>
+<code class="descname">call</code><span class="sig-paren">(</span><em>IID</em>, <em>method_offset</em>, <em>params</em>, <em>ipid=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/rpc/client.html#RPCClient.call"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.rpc.RPCClient.call" title="Permalink to this definition">¶</a></dt>
 <dd><p>Call method number <code class="docutils literal notranslate"><span class="pre">method_offset</span></code> of interface <code class="docutils literal notranslate"><span class="pre">IID</span></code> with mashalled <code class="docutils literal notranslate"><span class="pre">params</span></code></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -105,6 +105,14 @@
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="method">
+<dt id="windows.rpc.RPCClient.forge_alpc_request">
+<code class="descname">forge_alpc_request</code><span class="sig-paren">(</span><em>IID</em>, <em>method_offset</em>, <em>params</em>, <em>ipid=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/rpc/client.html#RPCClient.forge_alpc_request"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.rpc.RPCClient.forge_alpc_request" title="Permalink to this definition">¶</a></dt>
+<dd><p>Craft an ALPC message containing an RPC request to call <code class="docutils literal notranslate"><span class="pre">method_offset</span></code> of interface <code class="docutils literal notranslate"><span class="pre">IID`</span>
+<span class="pre">with</span> <span class="pre">``params</span></code>.
+Can be used to craft request without directly sending it</p>
 </dd></dl>
 
 </dd></dl>

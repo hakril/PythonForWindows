@@ -37,13 +37,33 @@
           <div class="body" role="main">
             
   <h1>Source code for windows.winobject.registry</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">_winreg</span>
+<span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">ctypes</span>
 <span class="kn">import</span> <span class="nn">itertools</span>
 <span class="kn">import</span> <span class="nn">struct</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">namedtuple</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">namedtuple</span><span class="p">,</span> <span class="n">defaultdict</span>
 
 <span class="kn">import</span> <span class="nn">windows</span>
-<span class="kn">from</span> <span class="nn">windows.generated_def.windef</span> <span class="k">import</span> <span class="n">KEY_READ</span><span class="p">,</span> <span class="n">REG_QWORD</span>
+<span class="kn">from</span> <span class="nn">windows.dbgprint</span> <span class="k">import</span> <span class="n">dbgprint</span>
+<span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
+<span class="kn">from</span> <span class="nn">windows</span> <span class="k">import</span> <span class="n">winproxy</span>
+<span class="kn">from</span> <span class="nn">windows.pycompat</span> <span class="k">import</span> <span class="n">basestring</span><span class="p">,</span> <span class="n">int_types</span><span class="p">,</span> <span class="n">is_py3</span>
+
+<span class="n">WENCODING</span> <span class="o">=</span> <span class="s2">&quot;utf-16-le&quot;</span>
+
+<span class="c1"># So _winreg does not handle unicode stuff in Py2 :(</span>
+<span class="c1"># Need to rewrite everything to get it working with unicode</span>
+
+<span class="k">class</span> <span class="nc">WinRegistryKey</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">HKEY</span><span class="p">):</span>
+    <span class="n">_close_function</span> <span class="o">=</span> <span class="nb">staticmethod</span><span class="p">(</span><span class="n">winproxy</span><span class="o">.</span><span class="n">RegCloseKey</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">sys</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="c1"># Late shutdown (not sur winproxy is still up)</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="p">:</span> <span class="c1"># Not NULL handle ?</span>
+            <span class="n">dbgprint</span><span class="p">(</span><span class="sa">u</span><span class="s2">&quot;Closing registry key handle </span><span class="si">{0:#x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">),</span> <span class="s1">&#39;REGISTRY&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_close_function</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
 
 
 
@@ -55,7 +75,107 @@
         <span class="k">pass</span>
 
     <span class="k">def</span> <span class="nf">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">etype</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">tb</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">(</span><span class="n">etype</span> <span class="o">==</span> <span class="ne">WindowsError</span> <span class="ow">and</span> <span class="n">e</span><span class="o">.</span><span class="n">winerror</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">errornumber</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">etype</span> <span class="ow">in</span> <span class="p">(</span><span class="n">winproxy</span><span class="o">.</span><span class="n">WinproxyError</span><span class="p">,</span> <span class="ne">WindowsError</span><span class="p">)</span> <span class="ow">and</span> <span class="n">e</span><span class="o">.</span><span class="n">winerror</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">errornumber</span><span class="p">)</span>
+
+<span class="c1"># Translation reg-buffer &lt;-&gt; python methodes</span>
+<span class="k">def</span> <span class="nf">Reg2Py_QWORD</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">buffer</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">PULONG64</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">Py2Reg_QWORD</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s2">&quot;&lt;Q&quot;</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">Reg2Py_DWORD</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
+    <span class="c1"># Check size ?</span>
+    <span class="k">return</span> <span class="n">buffer</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">LPDWORD</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">Py2Reg_DWORD</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s2">&quot;&lt;I&quot;</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">Reg2Py_DWORD_BIG_ENDIAN</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
+    <span class="c1"># Check size ?</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">buffer</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="mi">24</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">buffer</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="mi">16</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">buffer</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">+</span> <span class="n">buffer</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">Py2Reg_DWORD_BIG_ENDIAN</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s2">&quot;&gt;I&quot;</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">Reg2Py_BINARY</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">bytes</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">(</span><span class="n">buffer</span><span class="p">[:</span><span class="n">size</span><span class="p">]))</span>
+
+<span class="k">def</span> <span class="nf">Py2Reg_BINARY</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+    <span class="c1"># latin-1 encoding if py3 &amp; type is str ?</span>
+    <span class="k">return</span> <span class="n">obj</span>
+
+
+<span class="k">def</span> <span class="nf">Reg2Py_SZ</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
+    <span class="c1"># Buffer is UTF16. buffer is extended-buffer</span>
+    <span class="k">if</span> <span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">u</span><span class="s2">&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">buffer</span><span class="p">[</span><span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">buffer</span><span class="p">[</span><span class="n">size</span> <span class="o">-</span> <span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c1"># NULL TERMINATED: EASY</span>
+        <span class="k">return</span> <span class="n">buffer</span><span class="o">.</span><span class="n">as_wstring</span><span class="p">()</span>
+    <span class="c1"># Not null terminated: keep last byte</span>
+    <span class="k">assert</span> <span class="ow">not</span> <span class="n">size</span> <span class="o">%</span> <span class="mi">2</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">WCHAR</span> <span class="o">*</span> <span class="p">(</span><span class="n">size</span> <span class="o">//</span> <span class="mi">2</span><span class="p">))</span><span class="o">.</span><span class="n">from_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">)[:]</span>
+
+<span class="k">def</span> <span class="nf">Py2Reg_SZ</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">WENCODING</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">Reg2Py_Multi_SZ</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">size</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[]</span>
+    <span class="c1"># Simple path</span>
+    <span class="k">if</span> <span class="n">is_py3</span><span class="p">:</span>
+        <span class="n">rawstr</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">rawstr</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">chr</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">buffer</span><span class="p">[:</span><span class="n">size</span><span class="p">]])</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">unistr</span> <span class="o">=</span> <span class="n">rawstr</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">WENCODING</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">unistr</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="sa">u</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">u</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">UnicodeDecodeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="c1"># Complexe-path</span>
+    <span class="c1"># This is not some valide UTF-16</span>
+    <span class="c1"># Try our best to extract some stuff from raw</span>
+    <span class="k">return</span> <span class="n">rawstr</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">Py2Reg_Multi_SZ</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+    <span class="c1"># Work on encoded values (to prevent str/unicode errors)</span>
+    <span class="n">uni_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">WENCODING</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">]</span>
+    <span class="c1"># Separate by UTF-16 NULL BYTE (2 \x00)</span>
+    <span class="n">uni_str</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00\x00</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">uni_list</span><span class="p">)</span>
+    <span class="c1"># Add UTF-16 NULL byte for final string + final UTF-16 \x00 (4 \x00)</span>
+    <span class="k">return</span> <span class="n">uni_str</span> <span class="o">+</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00\x00\x00\x00</span><span class="s2">&quot;</span>
+
+<span class="n">DECODE_METHOD</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">ENCODE_METHOD</span> <span class="o">=</span> <span class="mi">1</span>
+
+
+<span class="n">KNOWN_ENCODE_DECODE_METHODS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">REG_SZ</span><span class="p">:</span> <span class="p">(</span><span class="n">Reg2Py_SZ</span><span class="p">,</span> <span class="n">Py2Reg_SZ</span><span class="p">),</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">REG_EXPAND_SZ</span><span class="p">:</span> <span class="p">(</span><span class="n">Reg2Py_SZ</span><span class="p">,</span> <span class="n">Py2Reg_SZ</span><span class="p">),</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">REG_MULTI_SZ</span><span class="p">:</span> <span class="p">(</span><span class="n">Reg2Py_Multi_SZ</span><span class="p">,</span> <span class="n">Py2Reg_Multi_SZ</span><span class="p">),</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">REG_DWORD</span><span class="p">:</span> <span class="p">(</span><span class="n">Reg2Py_DWORD</span><span class="p">,</span> <span class="n">Py2Reg_DWORD</span><span class="p">),</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">REG_DWORD_BIG_ENDIAN</span><span class="p">:</span> <span class="p">(</span><span class="n">Reg2Py_DWORD_BIG_ENDIAN</span><span class="p">,</span> <span class="n">Py2Reg_DWORD_BIG_ENDIAN</span><span class="p">),</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">REG_QWORD</span><span class="p">:</span> <span class="p">(</span><span class="n">Reg2Py_QWORD</span><span class="p">,</span> <span class="n">Py2Reg_QWORD</span><span class="p">),</span>
+    <span class="c1"># Binary formats</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">REG_LINK</span><span class="p">:</span> <span class="p">(</span><span class="n">Reg2Py_BINARY</span><span class="p">,</span> <span class="n">Py2Reg_BINARY</span><span class="p">),</span> <span class="c1"># TESTING</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">REG_BINARY</span><span class="p">:</span> <span class="p">(</span><span class="n">Reg2Py_BINARY</span><span class="p">,</span> <span class="n">Py2Reg_BINARY</span><span class="p">),</span>
+    <span class="n">gdef</span><span class="o">.</span><span class="n">REG_NONE</span><span class="p">:</span> <span class="p">(</span><span class="n">Reg2Py_BINARY</span><span class="p">,</span> <span class="n">Py2Reg_BINARY</span><span class="p">),</span>
+<span class="p">}</span>
+
+<span class="c1"># All unknown format are seens as binary data</span>
+<span class="n">UNKNOWM_FORMAT</span> <span class="o">=</span> <span class="p">(</span><span class="n">Reg2Py_BINARY</span><span class="p">,</span> <span class="n">Py2Reg_BINARY</span><span class="p">)</span>
+<span class="n">ENCODE_DECODE_METHODS</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">UNKNOWM_FORMAT</span><span class="p">,</span> <span class="n">KNOWN_ENCODE_DECODE_METHODS</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">decode_registry_buffer</span><span class="p">(</span><span class="nb">type</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ENCODE_DECODE_METHODS</span><span class="p">[</span><span class="nb">type</span><span class="p">][</span><span class="n">DECODE_METHOD</span><span class="p">](</span><span class="n">buffer</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">UnicodeDecodeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="c1"># Best effort if any decoding error happen</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">chr</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">buffer</span><span class="p">[:</span><span class="n">size</span><span class="p">])</span>
 
 
 <span class="n">KeyValue</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s2">&quot;KeyValue&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">])</span>
@@ -64,7 +184,7 @@
 
 <div class="viewcode-block" id="PyHKey"><a class="viewcode-back" href="../../../registry.html#windows.winobject.registry.PyHKey">[docs]</a><span class="k">class</span> <span class="nc">PyHKey</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A windows registry key&quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">surkey</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">sam</span><span class="o">=</span><span class="n">KEY_READ</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">surkey</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">sam</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">KEY_READ</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">surkey</span> <span class="o">=</span> <span class="n">surkey</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fullname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">surkey</span><span class="o">.</span><span class="n">fullname</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">surkey</span><span class="o">.</span><span class="n">name</span>
@@ -75,27 +195,46 @@
     <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;&lt;PyHKey &quot;</span><span class="si">{0}</span><span class="s1">&quot;&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fullname</span><span class="p">)</span>
 
+    <span class="k">def</span> <span class="nf">_open_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handle</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">sam</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">WinRegistryKey</span><span class="p">()</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">RegOpenKeyExW</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">sam</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+        <span class="n">dbgprint</span><span class="p">(</span><span class="sa">u</span><span class="s2">&quot;Opening registry key &lt;</span><span class="si">{0}</span><span class="s2">&gt; (handle=</span><span class="si">{1:#x}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">value</span><span class="p">),</span> <span class="s2">&quot;REGISTRY&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="k">def</span> <span class="nf">_create_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">sam</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">WinRegistryKey</span><span class="p">()</span>
+        <span class="n">flags</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">RegCreateKeyExW</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="n">sam</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">dbgprint</span><span class="p">(</span><span class="sa">u</span><span class="s2">&quot;Creating registry key &lt;</span><span class="si">{0}</span><span class="s2">&gt; (handle=</span><span class="si">{1:#x}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">value</span><span class="p">),</span> <span class="s2">&quot;REGISTRY&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span>
+
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">phkey</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_phkey</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_phkey</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_phkey</span> <span class="o">=</span> <span class="n">_winreg</span><span class="o">.</span><span class="n">OpenKeyEx</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">surkey</span><span class="o">.</span><span class="n">phkey</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sam</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_phkey</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_open_key</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">surkey</span><span class="o">.</span><span class="n">phkey</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sam</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">WindowsError</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">winerror</span><span class="p">,</span> <span class="s2">&quot;Could not open registry key &lt;</span><span class="si">{0}</span><span class="s2">&gt; (</span><span class="si">{1}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fullname</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">strerror</span><span class="p">))</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_phkey</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">exists</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># Best way todo ?</span>
-        <span class="c1"># TODO: document</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_phkey</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># May have been deleted in between</span>
+        <span class="c1"># So &lt;self._phkey&gt; tells use nothing</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_phkey</span><span class="p">:</span> <span class="c1"># Not None + pointer not NULL</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">get_key_size_info</span><span class="p">()</span>
+            <span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">winerror</span> <span class="o">==</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ERROR_KEY_DELETED</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="kc">False</span>
+                <span class="k">raise</span>
             <span class="k">return</span> <span class="kc">True</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">tmpphkey</span> <span class="o">=</span> <span class="n">_winreg</span><span class="o">.</span><span class="n">OpenKeyEx</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">surkey</span><span class="o">.</span><span class="n">phkey</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">tmpphkey</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_open_key</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">surkey</span><span class="o">.</span><span class="n">phkey</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">KEY_READ</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span>
-        <span class="n">_winreg</span><span class="o">.</span><span class="n">CloseKey</span><span class="p">(</span><span class="n">tmpphkey</span><span class="p">)</span>
+        <span class="c1"># tmpphkey will be garbage collected and auto-closed</span>
         <span class="k">return</span> <span class="kc">True</span>
 
     <span class="nd">@property</span>
@@ -105,9 +244,20 @@
 <span class="sd">        :type: [:class:`PyHKey`] - A list of keys&quot;&quot;&quot;</span>
         <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">with</span> <span class="n">ExpectWindowsError</span><span class="p">(</span><span class="mi">259</span><span class="p">):</span>
+            <span class="n">default_name_size</span> <span class="o">=</span> <span class="mi">256</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">name_size</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">(</span><span class="n">default_name_size</span><span class="p">)</span>
+            <span class="n">name_buffer</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">create_unicode_buffer</span><span class="p">(</span><span class="n">name_size</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">count</span><span class="p">():</span>
-                <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_winreg</span><span class="o">.</span><span class="n">EnumKey</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phkey</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span>
+                <span class="n">name_size</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">default_name_size</span>
+                <span class="n">winproxy</span><span class="o">.</span><span class="n">RegEnumKeyExW</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phkey</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">name_buffer</span><span class="p">,</span> <span class="n">name_size</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name_buffer</span><span class="p">[:</span><span class="n">name_size</span><span class="o">.</span><span class="n">value</span><span class="p">])</span> <span class="c1"># Will allow key name with \x00 inside</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">PyHKey</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span>  <span class="n">res</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">get_key_size_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">max_name_len</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">()</span>
+        <span class="n">max_value_len</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">()</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">RegQueryInfoKeyW</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phkey</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">max_name_len</span><span class="p">,</span> <span class="n">max_value_len</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">max_name_len</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">max_value_len</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -115,22 +265,49 @@
 
 <span class="sd">        :type: [:class:`KeyValue`] - A list of values&quot;&quot;&quot;</span>
         <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># Get max info keys</span>
+
+        <span class="n">max_name_size</span><span class="p">,</span> <span class="n">max_data_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_key_size_info</span><span class="p">()</span>
+        <span class="c1"># Null terminators</span>
+        <span class="n">max_name_size</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">max_data_size</span> <span class="o">+=</span> <span class="mi">2</span>
         <span class="k">with</span> <span class="n">ExpectWindowsError</span><span class="p">(</span><span class="mi">259</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">count</span><span class="p">():</span>
-                <span class="n">name_value_type</span> <span class="o">=</span> <span class="n">_winreg</span><span class="o">.</span><span class="n">EnumValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phkey</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
-                <span class="c1"># _winreg doest not support REG_QWORD in python2</span>
-                <span class="c1"># See http://bugs.python.org/issue23026</span>
-                <span class="k">if</span> <span class="n">name_value_type</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="n">REG_QWORD</span><span class="p">:</span>
-                    <span class="n">name</span> <span class="o">=</span> <span class="n">name_value_type</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                    <span class="n">value</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&lt;Q&quot;</span><span class="p">,</span> <span class="n">name_value_type</span><span class="p">[</span><span class="mi">1</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
-                    <span class="nb">type</span> <span class="o">=</span> <span class="n">name_value_type</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-                    <span class="n">name_value_type</span> <span class="o">=</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="nb">type</span>
-                <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name_value_type</span><span class="p">)</span>
-        <span class="k">return</span> <span class="p">[</span><span class="n">KeyValue</span><span class="p">(</span><span class="o">*</span><span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">res</span><span class="p">]</span>
+                <span class="n">value_type</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">()</span>
+                <span class="n">namesize</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">(</span><span class="n">max_name_size</span><span class="p">)</span>
+                <span class="n">keyname</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">create_unicode_buffer</span><span class="p">(</span><span class="n">namesize</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+                <span class="n">datasize</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">(</span><span class="n">max_data_size</span><span class="p">)</span>
+                <span class="n">databuffer</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">BUFFER</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">BYTE</span><span class="p">,</span> <span class="n">nbelt</span><span class="o">=</span><span class="n">datasize</span><span class="o">.</span><span class="n">value</span><span class="p">)()</span>
+                <span class="c1"># A value can have been added in-between.</span>
+                <span class="c1"># So recheck the size given by get_key_size_info :)</span>
+                <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">winproxy</span><span class="o">.</span><span class="n">RegEnumValueW</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phkey</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">keyname</span><span class="p">,</span> <span class="n">namesize</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">value_type</span><span class="p">,</span> <span class="n">databuffer</span><span class="p">,</span> <span class="n">datasize</span><span class="p">)</span>
+                        <span class="k">break</span>
+                    <span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">winerror</span> <span class="o">!=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ERROR_MORE_DATA</span><span class="p">:</span>
+                            <span class="k">raise</span>
+                        <span class="c1"># Update the sizes / buffers &amp; try again :)</span>
+                        <span class="n">max_name_size</span><span class="p">,</span> <span class="n">max_data_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_key_size_info</span><span class="p">()</span>
+                        <span class="n">max_name_size</span> <span class="o">+=</span> <span class="mi">1</span>
+                        <span class="n">max_data_size</span> <span class="o">+=</span> <span class="mi">2</span>
+                        <span class="n">namesize</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">(</span><span class="n">max_name_size</span><span class="p">)</span>
+                        <span class="n">keyname</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">create_unicode_buffer</span><span class="p">(</span><span class="n">namesize</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+                        <span class="n">datasize</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">(</span><span class="n">max_data_size</span><span class="p">)</span>
+                        <span class="n">databuffer</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">BUFFER</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">BYTE</span><span class="p">,</span> <span class="n">nbelt</span><span class="o">=</span><span class="n">datasize</span><span class="o">.</span><span class="n">value</span><span class="p">)()</span>
+                <span class="n">vobj</span> <span class="o">=</span> <span class="n">decode_registry_buffer</span><span class="p">(</span><span class="n">value_type</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">databuffer</span><span class="p">,</span> <span class="n">datasize</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+                <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">KeyValue</span><span class="p">(</span><span class="n">keyname</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">vobj</span><span class="p">,</span> <span class="n">value_type</span><span class="o">.</span><span class="n">value</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">res</span>
+
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">_winreg</span><span class="o">.</span><span class="n">QueryInfoKey</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phkey</span><span class="p">)</span>
+        <span class="c1"># Need other stuff ?</span>
+        <span class="n">nb_key</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">()</span>
+        <span class="n">nb_values</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">()</span>
+        <span class="n">last_modif</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">FILETIME</span><span class="p">()</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">RegQueryInfoKeyW</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phkey</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">nb_key</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">nb_values</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">last_modif</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">nb_key</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">nb_values</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">last_modif</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">last_write</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -141,16 +318,28 @@
 
 <span class="sd">        :rtype: :class:`KeyValue`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">value</span><span class="p">,</span> <span class="nb">type</span> <span class="o">=</span> <span class="n">_winreg</span><span class="o">.</span><span class="n">QueryValueEx</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phkey</span><span class="p">,</span> <span class="n">value_name</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">REG_QWORD</span><span class="p">:</span>
-            <span class="n">value</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&lt;Q&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">KeyValue</span><span class="p">(</span><span class="n">value_name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span></div>
+
+        <span class="nb">type</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">(</span><span class="mh">0x100</span><span class="p">)</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">buffer</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">BUFFER</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">BYTE</span><span class="p">,</span> <span class="n">nbelt</span><span class="o">=</span><span class="n">size</span><span class="o">.</span><span class="n">value</span><span class="p">)()</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">winproxy</span><span class="o">.</span><span class="n">RegQueryValueExW</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phkey</span><span class="p">,</span> <span class="n">value_name</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+                <span class="k">break</span>
+            <span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">winerror</span> <span class="o">!=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ERROR_MORE_DATA</span><span class="p">:</span>
+                    <span class="k">raise</span>
+                <span class="n">size</span><span class="o">.</span><span class="n">value</span> <span class="o">*=</span> <span class="mi">2</span>
+                <span class="n">buffer</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">BUFFER</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">BYTE</span><span class="p">,</span> <span class="n">nbelt</span><span class="o">=</span><span class="n">size</span><span class="o">.</span><span class="n">value</span><span class="p">)()</span>
+                <span class="k">continue</span>
+        <span class="n">vobj</span> <span class="o">=</span> <span class="n">decode_registry_buffer</span><span class="p">(</span><span class="nb">type</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">size</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">KeyValue</span><span class="p">(</span><span class="n">value_name</span><span class="p">,</span> <span class="n">vobj</span><span class="p">,</span> <span class="nb">type</span><span class="o">.</span><span class="n">value</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_guess_value_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">_winreg</span><span class="o">.</span><span class="n">REG_SZ</span>
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">long</span><span class="p">)):</span>
-            <span class="k">return</span> <span class="n">_winreg</span><span class="o">.</span><span class="n">REG_DWORD</span>
+            <span class="k">return</span> <span class="n">gdef</span><span class="o">.</span><span class="n">REG_SZ</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">int_types</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">gdef</span><span class="o">.</span><span class="n">REG_DWORD</span>
         <span class="c1"># elif isinstance(value, (list, tuple)):</span>
             <span class="c1"># if all(isinstance(v, basestring) in value):</span>
                 <span class="c1"># return _winreg.REG_MULTI_SZ</span>
@@ -161,13 +350,16 @@
         <span class="sd">&quot;&quot;&quot;Set the value for ``name`` to ``value``. if ``type`` is None try to guess items&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">type</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="nb">type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_guess_value_type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">REG_QWORD</span><span class="p">:</span>
-            <span class="n">value</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s2">&quot;&lt;Q&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">_winreg</span><span class="o">.</span><span class="n">SetValueEx</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phkey</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div>
+
+
+        <span class="n">buffer</span> <span class="o">=</span> <span class="n">ENCODE_DECODE_METHODS</span><span class="p">[</span><span class="nb">type</span><span class="p">][</span><span class="n">ENCODE_METHOD</span><span class="p">](</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span> <span class="c1"># Should not be unicode at this point</span>
+            <span class="n">buffer</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">BUFFER</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">BYTE</span><span class="p">)</span><span class="o">.</span><span class="n">from_buffer_copy</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">RegSetValueExW</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phkey</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">buffer</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="PyHKey.delete_value"><a class="viewcode-back" href="../../../registry.html#windows.winobject.registry.PyHKey.delete_value">[docs]</a>    <span class="k">def</span> <span class="nf">delete_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Delete the value with ``name``&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">_winreg</span><span class="o">.</span><span class="n">DeleteValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phkey</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">RegDeleteValueW</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phkey</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="PyHKey.open_subkey"><a class="viewcode-back" href="../../../registry.html#windows.winobject.registry.PyHKey.open_subkey">[docs]</a>    <span class="k">def</span> <span class="nf">open_subkey</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">sam</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -189,24 +381,28 @@
 <div class="viewcode-block" id="PyHKey.create"><a class="viewcode-back" href="../../../registry.html#windows.winobject.registry.PyHKey.create">[docs]</a>    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Create the registry key&quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_phkey</span> <span class="o">=</span> <span class="n">_winreg</span><span class="o">.</span><span class="n">CreateKeyEx</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">surkey</span><span class="o">.</span><span class="n">phkey</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sam</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_phkey</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_key</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">surkey</span><span class="o">.</span><span class="n">phkey</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sam</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">WindowsError</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">winerror</span><span class="p">,</span> <span class="s2">&quot;Could not create registry key &lt;</span><span class="si">{0}</span><span class="s2">&gt; (</span><span class="si">{1}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fullname</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">strerror</span><span class="p">))</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
 <div class="viewcode-block" id="PyHKey.delete"><a class="viewcode-back" href="../../../registry.html#windows.winobject.registry.PyHKey.delete">[docs]</a>    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Delete the registry key&quot;&quot;&quot;</span>
+        <span class="c1"># Allow a &#39;recursive&#39; param to empty before delete ?</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">_winreg</span><span class="o">.</span><span class="n">DeleteKeyEx</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">surkey</span><span class="o">.</span><span class="n">phkey</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sam</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">RegDeleteKeyExW</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">surkey</span><span class="o">.</span><span class="n">phkey</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sam</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">WindowsError</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">winerror</span><span class="p">,</span> <span class="s2">&quot;Could not delete registry key &lt;</span><span class="si">{0}</span><span class="s2">&gt; (</span><span class="si">{1}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fullname</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">strerror</span><span class="p">))</span>
         <span class="k">return</span> <span class="kc">None</span></div>
+
+    <span class="k">def</span> <span class="nf">empty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">RegDeleteTreeW</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phkey</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
 
 
 <div class="viewcode-block" id="PyHKey.__setitem__"><a class="viewcode-back" href="../../../registry.html#windows.winobject.registry.PyHKey.__setitem__">[docs]</a>    <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="n">rtype</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">long</span><span class="p">,</span> <span class="n">basestring</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">basestring</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">int_types</span><span class="p">)):</span>
             <span class="n">value</span><span class="p">,</span> <span class="n">rtype</span> <span class="o">=</span> <span class="n">value</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">rtype</span><span class="p">)</span></div>
 
@@ -223,12 +419,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
 
 
-<span class="n">HKEY_LOCAL_MACHINE</span> <span class="o">=</span> <span class="n">PyHKey</span><span class="p">(</span><span class="n">DummyPHKEY</span><span class="p">(</span><span class="n">_winreg</span><span class="o">.</span><span class="n">HKEY_LOCAL_MACHINE</span><span class="p">,</span> <span class="s2">&quot;HKEY_LOCAL_MACHINE&quot;</span><span class="p">),</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">_winreg</span><span class="o">.</span><span class="n">KEY_READ</span><span class="p">)</span>
-<span class="n">HKEY_CLASSES_ROOT</span> <span class="o">=</span> <span class="n">PyHKey</span><span class="p">(</span><span class="n">DummyPHKEY</span><span class="p">(</span><span class="n">_winreg</span><span class="o">.</span><span class="n">HKEY_CLASSES_ROOT</span><span class="p">,</span> <span class="s2">&quot;HKEY_CLASSES_ROOT&quot;</span><span class="p">),</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">_winreg</span><span class="o">.</span><span class="n">KEY_READ</span> <span class="p">)</span>
-<span class="n">HKEY_CURRENT_USER</span> <span class="o">=</span> <span class="n">PyHKey</span><span class="p">(</span><span class="n">DummyPHKEY</span><span class="p">(</span><span class="n">_winreg</span><span class="o">.</span><span class="n">HKEY_CURRENT_USER</span><span class="p">,</span> <span class="s2">&quot;HKEY_CURRENT_USER&quot;</span><span class="p">),</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">_winreg</span><span class="o">.</span><span class="n">KEY_READ</span><span class="p">)</span>
-<span class="n">HKEY_DYN_DATA</span> <span class="o">=</span> <span class="n">PyHKey</span><span class="p">(</span><span class="n">DummyPHKEY</span><span class="p">(</span><span class="n">_winreg</span><span class="o">.</span><span class="n">HKEY_DYN_DATA</span><span class="p">,</span> <span class="s2">&quot;HKEY_DYN_DATA&quot;</span><span class="p">),</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">_winreg</span><span class="o">.</span><span class="n">KEY_READ</span><span class="p">)</span>
-<span class="n">HKEY_PERFORMANCE_DATA</span> <span class="o">=</span> <span class="n">PyHKey</span><span class="p">(</span><span class="n">DummyPHKEY</span><span class="p">(</span><span class="n">_winreg</span><span class="o">.</span><span class="n">HKEY_PERFORMANCE_DATA</span><span class="p">,</span> <span class="s2">&quot;HKEY_PERFORMANCE_DATA&quot;</span><span class="p">),</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">_winreg</span><span class="o">.</span><span class="n">KEY_READ</span><span class="p">)</span>
-<span class="n">HKEY_USERS</span> <span class="o">=</span> <span class="n">PyHKey</span><span class="p">(</span><span class="n">DummyPHKEY</span><span class="p">(</span><span class="n">_winreg</span><span class="o">.</span><span class="n">HKEY_USERS</span><span class="p">,</span> <span class="s2">&quot;HKEY_USERS&quot;</span><span class="p">),</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">_winreg</span><span class="o">.</span><span class="n">KEY_READ</span> <span class="p">)</span>
+<span class="n">HKEY_LOCAL_MACHINE</span> <span class="o">=</span> <span class="n">PyHKey</span><span class="p">(</span><span class="n">DummyPHKEY</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">HKEY_LOCAL_MACHINE</span><span class="p">,</span> <span class="s2">&quot;HKEY_LOCAL_MACHINE&quot;</span><span class="p">),</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">KEY_READ</span><span class="p">)</span>
+<span class="n">HKEY_CLASSES_ROOT</span> <span class="o">=</span> <span class="n">PyHKey</span><span class="p">(</span><span class="n">DummyPHKEY</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">HKEY_CLASSES_ROOT</span><span class="p">,</span> <span class="s2">&quot;HKEY_CLASSES_ROOT&quot;</span><span class="p">),</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">KEY_READ</span> <span class="p">)</span>
+<span class="n">HKEY_CURRENT_USER</span> <span class="o">=</span> <span class="n">PyHKey</span><span class="p">(</span><span class="n">DummyPHKEY</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">HKEY_CURRENT_USER</span><span class="p">,</span> <span class="s2">&quot;HKEY_CURRENT_USER&quot;</span><span class="p">),</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">KEY_READ</span><span class="p">)</span>
+<span class="n">HKEY_DYN_DATA</span> <span class="o">=</span> <span class="n">PyHKey</span><span class="p">(</span><span class="n">DummyPHKEY</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">HKEY_DYN_DATA</span><span class="p">,</span> <span class="s2">&quot;HKEY_DYN_DATA&quot;</span><span class="p">),</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">KEY_READ</span><span class="p">)</span>
+<span class="n">HKEY_PERFORMANCE_DATA</span> <span class="o">=</span> <span class="n">PyHKey</span><span class="p">(</span><span class="n">DummyPHKEY</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">HKEY_PERFORMANCE_DATA</span><span class="p">,</span> <span class="s2">&quot;HKEY_PERFORMANCE_DATA&quot;</span><span class="p">),</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">KEY_READ</span><span class="p">)</span>
+<span class="n">HKEY_USERS</span> <span class="o">=</span> <span class="n">PyHKey</span><span class="p">(</span><span class="n">DummyPHKEY</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">HKEY_USERS</span><span class="p">,</span> <span class="s2">&quot;HKEY_USERS&quot;</span><span class="p">),</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">KEY_READ</span> <span class="p">)</span>
 
 
 <div class="viewcode-block" id="Registry"><a class="viewcode-back" href="../../../registry.html#windows.winobject.registry.Registry">[docs]</a><span class="k">class</span> <span class="nc">Registry</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -243,7 +439,7 @@
         <span class="s2">&quot;HKEY_USERS&quot;</span> <span class="p">:</span> <span class="n">HKEY_USERS</span>
     <span class="p">}</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sam</span><span class="o">=</span><span class="n">KEY_READ</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sam</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">KEY_READ</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sam</span> <span class="o">=</span> <span class="n">sam</span>
 
 <div class="viewcode-block" id="Registry.reopen"><a class="viewcode-back" href="../../../registry.html#windows.winobject.registry.Registry.reopen">[docs]</a>    <span class="nd">@classmethod</span>

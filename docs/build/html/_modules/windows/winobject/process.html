@@ -66,7 +66,9 @@
 <span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="k">import</span> <span class="n">exception</span>
 <span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="k">import</span> <span class="n">apisetmap</span>
 <span class="kn">from</span> <span class="nn">windows.winobject</span> <span class="k">import</span> <span class="n">token</span>
+<span class="kn">from</span> <span class="nn">windows</span> <span class="k">import</span> <span class="n">security</span>
 
+<span class="kn">from</span> <span class="nn">windows.pycompat</span> <span class="k">import</span> <span class="n">raw_encode</span><span class="p">,</span> <span class="n">raw_decode</span>
 
 <span class="n">TimeInfo</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s2">&quot;TimeInfo&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;creation&quot;</span><span class="p">,</span> <span class="s2">&quot;exit&quot;</span><span class="p">,</span> <span class="s2">&quot;kernel&quot;</span><span class="p">,</span> <span class="s2">&quot;user&quot;</span><span class="p">])</span>
 <span class="sd">&quot;&quot;&quot;Time information about a process&quot;&quot;&quot;</span>
@@ -183,12 +185,12 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">exit_code</span> <span class="o">!=</span> <span class="n">STILL_ACTIVE</span>
 
     <span class="nd">@contextmanager</span>
-    <span class="k">def</span> <span class="nf">allocated_memory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">allocated_memory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">prot</span><span class="o">=</span><span class="n">PAGE_EXECUTE_READWRITE</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;ContextManager to allocate memory and free it</span>
 
 <span class="sd">        :type: :class:`int` -- the address of the allocated memory</span>
 <span class="sd">		&quot;&quot;&quot;</span>
-        <span class="n">addr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">virtual_alloc</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
+        <span class="n">addr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">virtual_alloc</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">prot</span><span class="o">=</span><span class="n">prot</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">yield</span> <span class="n">addr</span>
         <span class="k">finally</span><span class="p">:</span>
@@ -394,11 +396,11 @@
                 <span class="n">read_size</span> <span class="o">=</span> <span class="n">read_size</span> <span class="o">/</span> <span class="mi">2</span>
                 <span class="k">continue</span>
             <span class="n">readden</span> <span class="o">+=</span> <span class="n">read_size</span>
-            <span class="k">if</span> <span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span> <span class="ow">in</span> <span class="n">x</span><span class="p">:</span>
-                <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">if</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span> <span class="ow">in</span> <span class="n">x</span><span class="p">:</span>
+                <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
                 <span class="k">break</span>
             <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-        <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+        <span class="k">return</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">res</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;ascii&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">read_wstring</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addr</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Read a windows UTF16 string at ``addr``&quot;&quot;&quot;</span>
@@ -415,15 +417,19 @@
                 <span class="c1"># handle read_wstring at end of page</span>
                 <span class="c1"># Of read failed: read only the half of size</span>
                 <span class="c1"># read_size must remain a multiple of 2</span>
-                <span class="n">read_size</span> <span class="o">=</span> <span class="n">read_size</span> <span class="o">/</span> <span class="mi">2</span>
+                <span class="n">read_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">read_size</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
                 <span class="k">continue</span>
             <span class="n">readden</span> <span class="o">+=</span> <span class="n">read_size</span>
-            <span class="n">utf16_chars</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="nb">iter</span><span class="p">(</span><span class="n">x</span><span class="p">)]</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)]</span>
-            <span class="k">if</span> <span class="s2">&quot;</span><span class="se">\x00\x00</span><span class="s2">&quot;</span> <span class="ow">in</span> <span class="n">utf16_chars</span><span class="p">:</span>
-                <span class="n">res</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">utf16_chars</span><span class="p">[:</span><span class="n">utf16_chars</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\x00\x00</span><span class="s2">&quot;</span><span class="p">)])</span>
+            <span class="c1"># Bytearray will work on py2 &amp; py3</span>
+            <span class="c1"># Py2: bytearray((0, 0)) == b&quot;\x00\x00&quot;</span>
+            <span class="c1"># Py2: bytearray((0, 0)) == b&quot;\x00\x00&quot;</span>
+            <span class="n">utf16_chars</span> <span class="o">=</span> <span class="p">[</span><span class="nb">bytearray</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="nb">iter</span><span class="p">(</span><span class="n">x</span><span class="p">)]</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)]</span>
+            <span class="k">if</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00\x00</span><span class="s2">&quot;</span> <span class="ow">in</span> <span class="n">utf16_chars</span><span class="p">:</span>
+                <span class="c1"># Translate bytearray to str/bytes for both py2 &amp; py3</span>
+                <span class="n">res</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">utf16_chars</span><span class="p">[:</span><span class="n">utf16_chars</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00\x00</span><span class="s2">&quot;</span><span class="p">)])</span>
                 <span class="k">break</span>
             <span class="n">res</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-        <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">res</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf16&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">res</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf16&#39;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">write_byte</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">byte</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;write a byte at ``addr``&quot;&quot;&quot;</span>
@@ -509,6 +515,38 @@
         <span class="k">return</span> <span class="n">token</span><span class="o">.</span><span class="n">Token</span><span class="p">(</span><span class="n">token_handle</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 
     <span class="n">token</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">open_token</span><span class="p">,</span> <span class="n">doc</span><span class="o">=</span><span class="s2">&quot;The process :class:`~windows.winobject.token.Token`&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_security_descriptor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>  <span class="n">query_sacl</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">security</span><span class="o">.</span><span class="n">SecurityDescriptor</span><span class="o">.</span><span class="n">DEFAULT_SECURITY_INFORMATION</span><span class="p">):</span>
+        <span class="n">open_flags</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">READ_CONTROL</span>
+        <span class="k">if</span> <span class="n">query_sacl</span><span class="p">:</span>
+            <span class="n">open_flags</span> <span class="o">|=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ACCESS_SYSTEM_SECURITY</span>
+        <span class="n">tmp_handle</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">OpenProcess</span><span class="p">(</span><span class="n">open_flags</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pid</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">security</span><span class="o">.</span><span class="n">SecurityDescriptor</span><span class="o">.</span><span class="n">from_handle</span><span class="p">(</span><span class="n">tmp_handle</span><span class="p">,</span> <span class="n">query_sacl</span><span class="o">=</span><span class="n">query_sacl</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">flags</span><span class="p">,</span> <span class="n">obj_type</span><span class="o">=</span><span class="s2">&quot;process&quot;</span><span class="p">)</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">CloseHandle</span><span class="p">(</span><span class="n">tmp_handle</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">set_security_descriptor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sd</span><span class="p">):</span>
+        <span class="k">if</span>  <span class="nb">isinstance</span><span class="p">(</span><span class="n">sd</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
+            <span class="n">sd</span> <span class="o">=</span> <span class="n">security</span><span class="o">.</span><span class="n">SecurityDescriptor</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">sd</span><span class="p">)</span>
+        <span class="n">open_flags</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">WRITE_OWNER</span> <span class="o">|</span> <span class="n">gdef</span><span class="o">.</span><span class="n">WRITE_DAC</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">sd</span><span class="o">.</span><span class="n">sacl</span> <span class="ow">and</span>
+            <span class="nb">any</span><span class="p">(</span><span class="n">ace</span><span class="o">.</span><span class="n">Header</span><span class="o">.</span><span class="n">AceType</span> <span class="o">!=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SYSTEM_MANDATORY_LABEL_ACE_TYPE</span> <span class="k">for</span> <span class="n">ace</span> <span class="ow">in</span> <span class="n">sd</span><span class="o">.</span><span class="n">sacl</span><span class="p">)):</span>
+            <span class="c1"># Print error if requested but no SecurityPrivilege ?</span>
+            <span class="n">open_flags</span> <span class="o">|=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ACCESS_SYSTEM_SECURITY</span>
+        <span class="n">tmp_handle</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">OpenProcess</span><span class="p">(</span><span class="n">open_flags</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pid</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">sd</span><span class="o">.</span><span class="n">_apply_to_handle_and_type</span><span class="p">(</span><span class="n">tmp_handle</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SE_KERNEL_OBJECT</span><span class="p">)</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">windows</span><span class="o">.</span><span class="n">winproxy</span><span class="o">.</span><span class="n">CloseHandle</span><span class="p">(</span><span class="n">tmp_handle</span><span class="p">)</span>
+
+    <span class="n">security_descriptor</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_security_descriptor</span><span class="p">,</span> <span class="n">set_security_descriptor</span><span class="p">)</span>
+
+    <span class="nd">@property</span> <span class="c1"># Document ?</span>
+    <span class="k">def</span> <span class="nf">handles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">pid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pid</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">h</span> <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">windows</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">handles</span> <span class="k">if</span> <span class="n">h</span><span class="o">.</span><span class="n">dwProcessId</span> <span class="o">==</span> <span class="n">pid</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Process</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__del__</span><span class="p">()</span>
@@ -625,6 +663,11 @@
     <span class="k">def</span> <span class="nf">_get_handle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">GetCurrentProcess</span><span class="p">()</span>
 
+    <span class="nd">@utils</span><span class="o">.</span><span class="n">fixedpropety</span>
+    <span class="k">def</span> <span class="nf">limited_handle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">GetCurrentProcess</span><span class="p">()</span>
+
+
     <span class="k">def</span> <span class="nf">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">pass</span>
 
@@ -668,6 +711,7 @@
 
 <div class="viewcode-block" id="CurrentProcess.write_memory"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.CurrentProcess.write_memory">[docs]</a>    <span class="k">def</span> <span class="nf">write_memory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Write data at addr&quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">raw_encode</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
         <span class="c1"># buffertype = (c_char * len(data)).from_address(addr)</span>
         <span class="c1"># buffertype[:len(data)] = data</span>
         <span class="n">ctypes</span><span class="o">.</span><span class="n">memmove</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
@@ -1003,13 +1047,13 @@
             <span class="k">pass</span>
         <span class="k">return</span> <span class="s1">&#39;&lt;</span><span class="si">{0}</span><span class="s1"> &quot;</span><span class="si">{1}</span><span class="s1">&quot; pid </span><span class="si">{2}</span><span class="s1"> at </span><span class="si">{3}</span><span class="s1">&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">exe_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pid</span><span class="p">,</span> <span class="nb">hex</span><span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">)))</span>
 
-<div class="viewcode-block" id="WinProcess.virtual_alloc"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.WinProcess.virtual_alloc">[docs]</a>    <span class="k">def</span> <span class="nf">virtual_alloc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">prot</span><span class="o">=</span><span class="n">PAGE_EXECUTE_READWRITE</span><span class="p">):</span>
+<div class="viewcode-block" id="WinProcess.virtual_alloc"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.WinProcess.virtual_alloc">[docs]</a>    <span class="k">def</span> <span class="nf">virtual_alloc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">prot</span><span class="o">=</span><span class="n">PAGE_EXECUTE_READWRITE</span><span class="p">,</span> <span class="n">addr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Allocate memory in the process</span>
 
 <span class="sd">        :return: The address of the allocated memory</span>
 <span class="sd">        :rtype: :class:`int`</span>
 <span class="sd">		&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">VirtualAllocEx</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">dwSize</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">flProtect</span><span class="o">=</span><span class="n">prot</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">VirtualAllocEx</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">lpAddress</span><span class="o">=</span><span class="n">addr</span><span class="p">,</span> <span class="n">dwSize</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">flProtect</span><span class="o">=</span><span class="n">prot</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="WinProcess.virtual_free"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.WinProcess.virtual_free">[docs]</a>    <span class="k">def</span> <span class="nf">virtual_free</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addr</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Free memory in the process by virtual_alloc&quot;&quot;&quot;</span>
@@ -1017,6 +1061,7 @@
 
 <div class="viewcode-block" id="WinProcess.write_memory"><a class="viewcode-back" href="../../../process.html#windows.winobject.process.WinProcess.write_memory">[docs]</a>    <span class="k">def</span> <span class="nf">write_memory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Write `data` at `addr`&quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">raw_encode</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">32</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">bitness</span> <span class="o">==</span> <span class="mi">64</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">is_implemented</span><span class="p">(</span><span class="n">winproxy</span><span class="o">.</span><span class="n">NtWow64WriteVirtualMemory64</span><span class="p">):</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;NtWow64WriteVirtualMemory64 non available in ntdll: cannot write into 64bits processus&quot;</span><span class="p">)</span>

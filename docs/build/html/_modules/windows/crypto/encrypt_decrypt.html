@@ -87,7 +87,7 @@
 <span class="sd">       :return: :class:`bytearray`: The encrypted message</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">alg_ident</span> <span class="o">=</span> <span class="n">CRYPT_ALGORITHM_IDENTIFIER</span><span class="p">()</span>
-    <span class="n">alg_ident</span><span class="o">.</span><span class="n">pszObjId</span> <span class="o">=</span> <span class="n">algo</span>
+    <span class="n">alg_ident</span><span class="o">.</span><span class="n">pszObjId</span> <span class="o">=</span> <span class="n">algo</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;ascii&quot;</span><span class="p">)</span>
     <span class="c1"># We want to have automatique translation of Certificate -&gt; PCERT_CONTEXT</span>
     <span class="c1"># In order to simple create the  &#39;PCERT_CONTEXT[] certs&#39;</span>
     <span class="c1"># For that we need a tuple of X * 1-item-tuple</span>
@@ -153,9 +153,9 @@
     <span class="n">dcryptsize</span> <span class="o">=</span> <span class="n">DWORD</span><span class="p">()</span>
     <span class="n">winproxy</span><span class="o">.</span><span class="n">CryptDecryptMessage</span><span class="p">(</span><span class="n">dparam</span><span class="p">,</span> <span class="n">buf</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">buf</span><span class="p">),</span> <span class="kc">None</span><span class="p">,</span> <span class="n">dcryptsize</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
     <span class="c1">#Decrypt the msg</span>
-    <span class="n">dcryptbuff</span> <span class="o">=</span> <span class="p">(</span><span class="n">BYTE</span> <span class="o">*</span> <span class="n">dcryptsize</span><span class="o">.</span><span class="n">value</span><span class="p">)()</span>
+    <span class="n">dcryptbuff</span> <span class="o">=</span> <span class="p">(</span><span class="n">BYTE</span> <span class="o">*</span> <span class="p">(</span><span class="n">dcryptsize</span><span class="o">.</span><span class="n">value</span> <span class="o">+</span> <span class="mh">0x1000</span><span class="p">))()</span>
     <span class="n">winproxy</span><span class="o">.</span><span class="n">CryptDecryptMessage</span><span class="p">(</span><span class="n">dparam</span><span class="p">,</span> <span class="n">buf</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">buf</span><span class="p">),</span> <span class="n">dcryptbuff</span><span class="p">,</span> <span class="n">dcryptsize</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-    <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">(</span><span class="n">dcryptbuff</span><span class="p">[:</span><span class="n">dcryptsize</span><span class="o">.</span><span class="n">value</span><span class="p">]))</span></div>
+    <span class="k">return</span> <span class="nb">bytes</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">(</span><span class="n">dcryptbuff</span><span class="p">[:</span><span class="n">dcryptsize</span><span class="o">.</span><span class="n">value</span><span class="p">]))</span></div>
 </pre></div>
 
           </div>

@@ -57,7 +57,7 @@
     <span class="n">obj_attr</span><span class="o">.</span><span class="n">SecurityQualityOfService</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">res</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">HANDLE</span><span class="p">()</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">NtOpenSymbolicLinkObject</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DIRECTORY_QUERY</span> <span class="o">|</span> <span class="n">gdef</span><span class="o">.</span><span class="n">READ_CONTROL</span> <span class="p">,</span> <span class="n">obj_attr</span><span class="p">)</span>
-    <span class="n">v</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">LSA_UNICODE_STRING</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">LSA_UNICODE_STRING</span><span class="o">.</span><span class="n">from_size</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
     <span class="n">s</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ULONG</span><span class="p">()</span>
     <span class="n">winproxy</span><span class="o">.</span><span class="n">NtQuerySymbolicLinkObject</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span> <span class="c1"># Handle Buffer-too-small ?</span>
     <span class="k">return</span> <span class="n">v</span><span class="o">.</span><span class="n">str</span>
@@ -65,7 +65,7 @@
 
 <div class="viewcode-block" id="KernelObject"><a class="viewcode-back" href="../../../object_manager.html#windows.winobject.object_manager.KernelObject">[docs]</a><span class="k">class</span> <span class="nc">KernelObject</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Represent an object in the Object Manager namespace&quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="nb">type</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">path</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="k">if</span> <span class="n">path</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">):</span>
@@ -216,8 +216,7 @@
             <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">:</span> <span class="c1"># Ask for root ? return ourself</span>
                 <span class="k">return</span> <span class="bp">self</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
-
+                <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="c1"># Strip the leading \ and go to normal case</span>
         <span class="n">obj</span> <span class="o">=</span> <span class="bp">self</span>
         <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">):</span>
             <span class="k">try</span><span class="p">:</span>
@@ -226,6 +225,7 @@
                 <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">code</span> <span class="o">==</span> <span class="n">gdef</span><span class="o">.</span><span class="n">STATUS_OBJECT_TYPE_MISMATCH</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;Could not find object &lt;</span><span class="si">{0}</span><span class="s2">&gt; under &lt;</span><span class="si">{1}</span><span class="s2">&gt; because it is a &lt;</span><span class="si">{2}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                                     <span class="n">part</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">type</span><span class="p">))</span>
+                <span class="k">raise</span> <span class="c1"># Something smart to do ?</span>
         <span class="k">return</span> <span class="n">obj</span></div></div>
 
 

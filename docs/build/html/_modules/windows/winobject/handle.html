@@ -43,15 +43,11 @@
 <span class="kn">import</span> <span class="nn">windows</span>
 <span class="kn">from</span> <span class="nn">windows</span> <span class="k">import</span> <span class="n">winproxy</span>
 <span class="kn">from</span> <span class="nn">windows.generated_def</span> <span class="k">import</span> <span class="n">windef</span>
-<span class="kn">from</span> <span class="nn">windows.generated_def.winstructs</span> <span class="k">import</span> <span class="o">*</span>
-
-<span class="c1"># Remove this ?</span>
-<span class="k">class</span> <span class="nc">EPUBLIC_OBJECT_TYPE_INFORMATION</span><span class="p">(</span><span class="n">PUBLIC_OBJECT_TYPE_INFORMATION</span><span class="p">):</span>
-    <span class="k">pass</span>
+<span class="kn">import</span> <span class="nn">windows.generated_def</span> <span class="k">as</span> <span class="nn">gdef</span>
 
 <span class="n">current_process_pid</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">()</span>
 
-<div class="viewcode-block" id="Handle"><a class="viewcode-back" href="../../../handle.html#windows.winobject.handle.Handle">[docs]</a><span class="k">class</span> <span class="nc">Handle</span><span class="p">(</span><span class="n">SYSTEM_HANDLE</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">BaseSystemHandle</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A handle of the system&quot;&quot;&quot;</span>
     <span class="nd">@windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">fixedpropety</span>
     <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -61,6 +57,15 @@
         <span class="c1"># &quot;TODO: something smart ? :D&quot;</span>
         <span class="c1"># return [p for p in windows.system.processes if p.pid == self.dwProcessId][0]</span>
         <span class="k">return</span> <span class="n">windows</span><span class="o">.</span><span class="n">WinProcess</span><span class="p">(</span><span class="n">pid</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dwProcessId</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">pid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dwProcessId</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wValue</span>
+
 
     <span class="nd">@windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">fixedpropety</span>
     <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -83,35 +88,33 @@
 
     <span class="k">def</span> <span class="nf">_get_object_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">lh</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">local_handle</span>
-        <span class="n">size_needed</span> <span class="o">=</span> <span class="n">DWORD</span><span class="p">()</span>
+        <span class="n">size_needed</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">()</span>
         <span class="n">yyy</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_buffer</span><span class="p">(</span><span class="mh">0x1000</span><span class="p">)</span>
-        <span class="n">winproxy</span><span class="o">.</span><span class="n">NtQueryObject</span><span class="p">(</span><span class="n">lh</span><span class="p">,</span> <span class="n">ObjectNameInformation</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">yyy</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">yyy</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">size_needed</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">LSA_UNICODE_STRING</span><span class="o">.</span><span class="n">from_buffer_copy</span><span class="p">(</span><span class="n">yyy</span><span class="p">[:</span><span class="n">size_needed</span><span class="o">.</span><span class="n">value</span><span class="p">])</span><span class="o">.</span><span class="n">str</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">NtQueryObject</span><span class="p">(</span><span class="n">lh</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ObjectNameInformation</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">yyy</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">yyy</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">size_needed</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">gdef</span><span class="o">.</span><span class="n">LSA_UNICODE_STRING</span><span class="o">.</span><span class="n">from_buffer_copy</span><span class="p">(</span><span class="n">yyy</span><span class="p">[:</span><span class="n">size_needed</span><span class="o">.</span><span class="n">value</span><span class="p">])</span><span class="o">.</span><span class="n">str</span>
 
     <span class="k">def</span> <span class="nf">_get_object_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">lh</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">local_handle</span>
-        <span class="n">xxx</span> <span class="o">=</span> <span class="n">EPUBLIC_OBJECT_TYPE_INFORMATION</span><span class="p">()</span>
-        <span class="n">size_needed</span> <span class="o">=</span> <span class="n">DWORD</span><span class="p">()</span>
+        <span class="n">xxx</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PUBLIC_OBJECT_TYPE_INFORMATION</span><span class="p">()</span>
+        <span class="n">size_needed</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">()</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">winproxy</span><span class="o">.</span><span class="n">NtQueryObject</span><span class="p">(</span><span class="n">lh</span><span class="p">,</span> <span class="n">ObjectTypeInformation</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">xxx</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">xxx</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">size_needed</span><span class="p">))</span>
+            <span class="n">winproxy</span><span class="o">.</span><span class="n">NtQueryObject</span><span class="p">(</span><span class="n">lh</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ObjectTypeInformation</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">xxx</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">xxx</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">size_needed</span><span class="p">))</span>
         <span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">code</span> <span class="o">!=</span> <span class="n">STATUS_INFO_LENGTH_MISMATCH</span><span class="p">:</span>
-                <span class="c1"># print(&quot;ERROR WITH {0:x}&quot;.format(lh))</span>
+            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">code</span> <span class="o">!=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">STATUS_INFO_LENGTH_MISMATCH</span><span class="p">:</span>
                 <span class="k">raise</span>
             <span class="n">size</span> <span class="o">=</span> <span class="n">size_needed</span><span class="o">.</span><span class="n">value</span>
             <span class="n">buffer</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_buffer</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
-            <span class="n">winproxy</span><span class="o">.</span><span class="n">NtQueryObject</span><span class="p">(</span><span class="n">lh</span><span class="p">,</span> <span class="n">ObjectTypeInformation</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">size_needed</span><span class="p">))</span>
-            <span class="n">xxx</span> <span class="o">=</span> <span class="n">EPUBLIC_OBJECT_TYPE_INFORMATION</span><span class="o">.</span><span class="n">from_buffer_copy</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
+            <span class="n">winproxy</span><span class="o">.</span><span class="n">NtQueryObject</span><span class="p">(</span><span class="n">lh</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ObjectTypeInformation</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">size_needed</span><span class="p">))</span>
+            <span class="n">xxx</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PUBLIC_OBJECT_TYPE_INFORMATION</span><span class="o">.</span><span class="n">from_buffer_copy</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">xxx</span><span class="o">.</span><span class="n">TypeName</span><span class="o">.</span><span class="n">str</span>
 
     <span class="k">def</span> <span class="nf">_get_object_basic_infos</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">pass</span>
         <span class="n">lh</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">local_handle</span>
-        <span class="n">size_needed</span> <span class="o">=</span> <span class="n">DWORD</span><span class="p">()</span>
-        <span class="n">basic_infos</span> <span class="o">=</span> <span class="n">PUBLIC_OBJECT_BASIC_INFORMATION</span><span class="p">()</span>
-        <span class="n">winproxy</span><span class="o">.</span><span class="n">NtQueryObject</span><span class="p">(</span><span class="n">lh</span><span class="p">,</span> <span class="n">ObjectBasicInformation</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">basic_infos</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">basic_infos</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">size_needed</span><span class="p">))</span>
+        <span class="n">size_needed</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">()</span>
+        <span class="n">basic_infos</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PUBLIC_OBJECT_BASIC_INFORMATION</span><span class="p">()</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">NtQueryObject</span><span class="p">(</span><span class="n">lh</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ObjectBasicInformation</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">basic_infos</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">basic_infos</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">size_needed</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">basic_infos</span>
-        <span class="c1">#PUBLIC_OBJECT_BASIC_INFORMATION</span>
 
     <span class="nd">@windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">fixedpropety</span>
     <span class="k">def</span> <span class="nf">local_handle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -120,8 +123,8 @@
 <span class="sd">        :type: :class:`int`&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dwProcessId</span> <span class="o">==</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">pid</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wValue</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="n">HANDLE</span><span class="p">()</span>
-        <span class="n">winproxy</span><span class="o">.</span><span class="n">DuplicateHandle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">wValue</span><span class="p">,</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">res</span><span class="p">),</span> <span class="n">dwOptions</span><span class="o">=</span><span class="n">DUPLICATE_SAME_ACCESS</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">HANDLE</span><span class="p">()</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">DuplicateHandle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">wValue</span><span class="p">,</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">res</span><span class="p">),</span> <span class="n">dwOptions</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">DUPLICATE_SAME_ACCESS</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">res</span><span class="o">.</span><span class="n">value</span>
 
     <span class="k">def</span> <span class="nf">description</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -150,30 +153,83 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dwProcessId</span> <span class="o">==</span> <span class="n">current_process_pid</span><span class="p">:</span>
             <span class="k">return</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_local_handle&quot;</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CloseHandle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_local_handle</span><span class="p">)</span></div>
+            <span class="k">return</span> <span class="n">winproxy</span><span class="o">.</span><span class="n">CloseHandle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_local_handle</span><span class="p">)</span>
 
+<div class="viewcode-block" id="Handle"><a class="viewcode-back" href="../../../handle.html#windows.winobject.handle.Handle">[docs]</a><span class="k">class</span> <span class="nc">Handle</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">SYSTEM_HANDLE</span><span class="p">,</span> <span class="n">BaseSystemHandle</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+<span class="k">class</span> <span class="nc">HandleWow64</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">SYSTEM_HANDLE64</span><span class="p">,</span> <span class="n">BaseSystemHandle</span><span class="p">):</span>
+    <span class="k">pass</span> <span class="c1"># For wow64 process</span>
 
 <span class="k">def</span> <span class="nf">enumerate_handles</span><span class="p">():</span>
-    <span class="n">size_needed</span> <span class="o">=</span> <span class="n">ULONG</span><span class="p">()</span>
-    <span class="n">size</span> <span class="o">=</span> <span class="mh">0x1000</span>
-    <span class="n">buffer</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_buffer</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
-
+    <span class="k">if</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">is_wow_64</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">enumerate_handles_syswow64</span><span class="p">()</span>
+    <span class="n">size_needed</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ULONG</span><span class="p">()</span>
+    <span class="c1"># Should at least be sizeof(gdef.SYSTEM_HANDLE_INFORMATION)</span>
+    <span class="n">tmp_buffer</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">BUFFER</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">SYSTEM_HANDLE_INFORMATION</span><span class="p">)()</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">winproxy</span><span class="o">.</span><span class="n">NtQuerySystemInformation</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">ReturnLength</span><span class="o">=</span><span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">size_needed</span><span class="p">))</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">NtQuerySystemInformation</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">SystemHandleInformation</span><span class="p">,</span> <span class="n">tmp_buffer</span><span class="p">,</span> <span class="n">tmp_buffer</span><span class="o">.</span><span class="n">real_size</span><span class="p">,</span> <span class="n">ReturnLength</span><span class="o">=</span><span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">size_needed</span><span class="p">))</span>
     <span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="k">pass</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="n">size_needed</span><span class="o">.</span><span class="n">value</span> <span class="o">+</span> <span class="mh">0x1000</span> <span class="c1"># In case we have some more handle created</span>
+    <span class="n">buf</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">BUFFER</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">SYSTEM_HANDLE_INFORMATION</span><span class="p">)(</span><span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">)</span>
+    <span class="n">size_needed</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">winproxy</span><span class="o">.</span><span class="n">NtQuerySystemInformation</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">SystemHandleInformation</span><span class="p">,</span> <span class="n">buf</span><span class="p">,</span> <span class="n">buf</span><span class="o">.</span><span class="n">real_size</span><span class="p">,</span> <span class="n">ReturnLength</span><span class="o">=</span><span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">size_needed</span><span class="p">))</span>
+    <span class="n">handle_array</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">resized_array</span><span class="p">(</span><span class="n">buf</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">Handles</span><span class="p">,</span> <span class="n">buf</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">HandleCount</span><span class="p">,</span> <span class="n">Handle</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">handle_array</span><span class="p">)</span>
 
-    <span class="n">size</span> <span class="o">=</span> <span class="n">size_needed</span><span class="o">.</span><span class="n">value</span> <span class="o">+</span> <span class="mh">0x1000</span>
-    <span class="n">buffer</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_buffer</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
-    <span class="n">winproxy</span><span class="o">.</span><span class="n">NtQuerySystemInformation</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">ReturnLength</span><span class="o">=</span><span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">size_needed</span><span class="p">))</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">SYSTEM_HANDLE_INFORMATION</span><span class="o">.</span><span class="n">from_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
-    <span class="k">class</span> <span class="nc">_GENERATED_SYSTEM_HANDLE_INFORMATION</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">Structure</span><span class="p">):</span>
-        <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="p">(</span><span class="s2">&quot;HandleCount&quot;</span><span class="p">,</span> <span class="n">ULONG</span><span class="p">),</span>
-            <span class="p">(</span><span class="s2">&quot;Handles&quot;</span><span class="p">,</span> <span class="n">Handle</span> <span class="o">*</span> <span class="n">x</span><span class="o">.</span><span class="n">HandleCount</span><span class="p">),</span>
-        <span class="p">]</span>
-    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">_GENERATED_SYSTEM_HANDLE_INFORMATION</span><span class="o">.</span><span class="n">from_buffer_copy</span><span class="p">(</span><span class="n">buffer</span><span class="p">[:</span><span class="n">size_needed</span><span class="o">.</span><span class="n">value</span><span class="p">])</span><span class="o">.</span><span class="n">Handles</span><span class="p">)</span>
 
+<span class="k">def</span> <span class="nf">enumerate_handles_syswow64</span><span class="p">():</span>
+    <span class="n">size_needed</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ULONG</span><span class="p">()</span>
+    <span class="c1"># Should at least be sizeof(gdef.SYSTEM_HANDLE_INFORMATION)</span>
+    <span class="n">tmp_buffer</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">BUFFER</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">SYSTEM_HANDLE_INFORMATION64</span><span class="p">)()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">windows</span><span class="o">.</span><span class="n">syswow64</span><span class="o">.</span><span class="n">NtQuerySystemInformation_32_to_64</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">SystemHandleInformation</span><span class="p">,</span> <span class="n">tmp_buffer</span><span class="p">,</span> <span class="n">tmp_buffer</span><span class="o">.</span><span class="n">real_size</span><span class="p">,</span> <span class="n">ReturnLength</span><span class="o">=</span><span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">size_needed</span><span class="p">))</span>
+    <span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="n">size_needed</span><span class="o">.</span><span class="n">value</span> <span class="o">+</span> <span class="mh">0x1000</span> <span class="c1"># In case we have some more handle created</span>
+    <span class="n">buf</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">BUFFER</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">SYSTEM_HANDLE_INFORMATION64</span><span class="p">)(</span><span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">)</span>
+    <span class="n">size_needed</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">windows</span><span class="o">.</span><span class="n">syswow64</span><span class="o">.</span><span class="n">NtQuerySystemInformation_32_to_64</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">SystemHandleInformation</span><span class="p">,</span> <span class="n">buf</span><span class="p">,</span> <span class="n">buf</span><span class="o">.</span><span class="n">real_size</span><span class="p">,</span> <span class="n">ReturnLength</span><span class="o">=</span><span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">size_needed</span><span class="p">))</span>
+    <span class="n">handle_array</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">resized_array</span><span class="p">(</span><span class="n">buf</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">Handles</span><span class="p">,</span> <span class="n">buf</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">HandleCount</span><span class="p">,</span> <span class="n">HandleWow64</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">handle_array</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">enumerate_type</span><span class="p">():</span>
+        <span class="s2">&quot;WIP: DO NOT USE&quot;</span>
+        <span class="n">size_needed</span> <span class="o">=</span> <span class="n">DWORD</span><span class="p">()</span>
+        <span class="n">fsize</span> <span class="o">=</span> <span class="mi">8</span>
+        <span class="n">fbuffer</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_buffer</span><span class="p">(</span><span class="n">fsize</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">winproxy</span><span class="o">.</span><span class="n">NtQueryObject</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ObjectTypesInformation</span><span class="p">,</span> <span class="n">fbuffer</span><span class="p">,</span> <span class="n">fsize</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">size_needed</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">WindowsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">code</span> <span class="o">!=</span> <span class="n">STATUS_INFO_LENGTH_MISMATCH</span><span class="p">:</span>
+                <span class="k">raise</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># We had enought memory ?</span>
+            <span class="k">return</span>
+
+        <span class="c1"># Looks like the Wow64 syscall emulation is broken :D</span>
+        <span class="c1"># It write AFTER the buffer if we are a wow64 process :D</span>
+        <span class="c1"># So better allocate a standalone buffer (triggering a ACCESS_VIOLATION) that corrupting the heap</span>
+        <span class="c1"># This is a worst case scenario, as we allocation more space it should not happen !</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="n">size_needed</span><span class="o">.</span><span class="n">value</span> <span class="o">+</span> <span class="mh">0x200</span>
+        <span class="n">size_needed</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">with</span> <span class="n">windows</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">allocated_memory</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PAGE_READWRITE</span><span class="p">)</span> <span class="k">as</span> <span class="n">buffer_base</span><span class="p">:</span>
+            <span class="n">winproxy</span><span class="o">.</span><span class="n">NtQueryObject</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">gdef</span><span class="o">.</span><span class="n">ObjectTypesInformation</span><span class="p">,</span> <span class="n">buffer_base</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">size_needed</span><span class="p">))</span>
+            <span class="c1"># Cache some exceptions ?</span>
+            <span class="c1"># Parse the buffer data in-place as string are addr-dependant</span>
+            <span class="n">types_info</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">OBJECT_TYPES_INFORMATION</span><span class="o">.</span><span class="n">from_address</span><span class="p">(</span><span class="n">buffer_base</span><span class="p">)</span>
+            <span class="n">offset</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">PVOID</span><span class="p">)</span> <span class="c1"># Looks like the size of the struct is PTR aligned as the struct is follower by other stuff</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">types_info</span><span class="o">.</span><span class="n">NumberOfTypes</span><span class="p">):</span>
+                <span class="n">info</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">PUBLIC_OBJECT_TYPE_INFORMATION</span><span class="o">.</span><span class="n">from_address</span><span class="p">(</span><span class="n">buffer_base</span> <span class="o">+</span> <span class="n">offset</span><span class="p">)</span>
+                <span class="k">yield</span> <span class="n">info</span>
+                <span class="n">offset</span> <span class="o">+=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">PUBLIC_OBJECT_TYPE_INFORMATION</span><span class="p">)</span> <span class="o">+</span> <span class="n">info</span><span class="o">.</span><span class="n">TypeName</span><span class="o">.</span><span class="n">MaximumLength</span>
+                <span class="k">if</span> <span class="n">offset</span> <span class="o">%</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">PVOID</span><span class="p">):</span>
+                    <span class="n">offset</span> <span class="o">+=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">PVOID</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">offset</span> <span class="o">%</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">gdef</span><span class="o">.</span><span class="n">PVOID</span><span class="p">))</span>
+        <span class="c1"># End-of ctx-manager</span>
+        <span class="k">return</span>
 </pre></div>
 
           </div>

@@ -44,6 +44,7 @@
 <span class="kn">import</span> <span class="nn">windows</span>
 <span class="kn">from</span> <span class="nn">windows</span> <span class="k">import</span> <span class="n">winproxy</span>
 <span class="kn">from</span> <span class="nn">windows</span> <span class="k">import</span> <span class="n">generated_def</span> <span class="k">as</span> <span class="n">gdef</span>
+<span class="kn">import</span> <span class="nn">windows.pycompat</span>
 
 
 <span class="c1">## For 64b python</span>
@@ -60,7 +61,7 @@
     <span class="c1"># PORT_MESSAGE + MessageAttribute</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg_or_size</span><span class="o">=</span><span class="mh">0x1000</span><span class="p">,</span> <span class="n">attributes</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="c1"># Init the PORT_MESSAGE</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">msg_or_size</span><span class="p">,</span> <span class="p">(</span><span class="n">long</span><span class="p">,</span> <span class="nb">int</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">msg_or_size</span><span class="p">,</span> <span class="n">windows</span><span class="o">.</span><span class="n">pycompat</span><span class="o">.</span><span class="n">int_types</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">port_message_buffer_size</span> <span class="o">=</span> <span class="n">msg_or_size</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">port_message_raw_buffer</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_buffer</span><span class="p">(</span><span class="n">msg_or_size</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">port_message</span> <span class="o">=</span> <span class="n">AlpcMessagePort</span><span class="o">.</span><span class="n">from_buffer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">port_message_raw_buffer</span><span class="p">)</span>
@@ -331,7 +332,7 @@
 <span class="n">AlpcSection</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s2">&quot;AlpcSection&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;handle&quot;</span><span class="p">,</span> <span class="s2">&quot;size&quot;</span><span class="p">])</span>
 
 <span class="k">class</span> <span class="nc">AlpcTransportBase</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">send_receive</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpc_message</span><span class="p">,</span> <span class="n">receive_msg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_MSGFLG_SYNC_REQUEST</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">send_receive</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpc_message</span><span class="p">,</span> <span class="n">receive_msg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">gdef</span><span class="o">.</span><span class="n">ALPC_MSGFLG_SYNC_REQUEST</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Send and receive a message with ``flags``.</span>
 
 <span class="sd">            :param alpc_message: The message to send. If ``alpc_message`` is a :class:`str` it build an AlpcMessage with the message as data.</span>
@@ -340,15 +341,17 @@
 <span class="sd">            :type receive_msg: AlpcMessage or None</span>
 <span class="sd">            :param int flags: The flags for :func:`NtAlpcSendWaitReceivePort`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">alpc_message</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">alpc_message</span><span class="p">,</span> <span class="n">windows</span><span class="o">.</span><span class="n">pycompat</span><span class="o">.</span><span class="n">anybuff</span><span class="p">):</span>
             <span class="n">raw_alpc_message</span> <span class="o">=</span> <span class="n">alpc_message</span>
-            <span class="n">alpc_message</span> <span class="o">=</span> <span class="n">AlpcMessage</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mh">0x1000</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">alpc_message</span><span class="p">)))</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">alpc_message</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mh">0x1000</span><span class="p">:</span>
+                <span class="kn">import</span> <span class="nn">pdb</span><span class="p">;</span><span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
+            <span class="n">alpc_message</span> <span class="o">=</span> <span class="n">AlpcMessage</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mh">0x1000</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">alpc_message</span><span class="p">)</span> <span class="o">+</span> <span class="mh">0x200</span><span class="p">))</span>
             <span class="n">alpc_message</span><span class="o">.</span><span class="n">port_message</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">raw_alpc_message</span>
 
         <span class="k">if</span> <span class="n">receive_msg</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">receive_msg</span> <span class="o">=</span> <span class="n">AlpcMessage</span><span class="p">(</span><span class="mh">0x1000</span><span class="p">)</span>
         <span class="n">receive_size</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">SIZE_T</span><span class="p">(</span><span class="n">receive_msg</span><span class="o">.</span><span class="n">port_message_buffer_size</span><span class="p">)</span>
-        <span class="n">winproxy</span><span class="o">.</span><span class="n">NtAlpcSendWaitReceivePort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="n">alpc_message</span><span class="o">.</span><span class="n">port_message</span><span class="p">,</span> <span class="n">alpc_message</span><span class="o">.</span><span class="n">attributes</span><span class="p">,</span> <span class="n">receive_msg</span><span class="o">.</span><span class="n">port_message</span><span class="p">,</span> <span class="n">receive_size</span><span class="p">,</span> <span class="n">receive_msg</span><span class="o">.</span><span class="n">attributes</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">winproxy</span><span class="o">.</span><span class="n">NtAlpcSendWaitReceivePort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="n">alpc_message</span><span class="o">.</span><span class="n">port_message</span><span class="p">,</span> <span class="n">alpc_message</span><span class="o">.</span><span class="n">attributes</span><span class="p">,</span> <span class="n">receive_msg</span><span class="o">.</span><span class="n">port_message</span><span class="p">,</span> <span class="n">receive_size</span><span class="p">,</span> <span class="n">receive_msg</span><span class="o">.</span><span class="n">attributes</span><span class="p">,</span> <span class="n">timeout</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">receive_msg</span>
 
     <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpc_message</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
@@ -358,7 +361,7 @@
 <span class="sd">            :type alpc_message: AlpcMessage or str</span>
 <span class="sd">            :param int flags: The flags for :func:`NtAlpcSendWaitReceivePort`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">alpc_message</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">alpc_message</span><span class="p">,</span> <span class="n">windows</span><span class="o">.</span><span class="n">pycompat</span><span class="o">.</span><span class="n">anybuff</span><span class="p">):</span>
             <span class="n">raw_alpc_message</span> <span class="o">=</span> <span class="n">alpc_message</span>
             <span class="n">alpc_message</span> <span class="o">=</span> <span class="n">AlpcMessage</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mh">0x1000</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">alpc_message</span><span class="p">)))</span>
             <span class="n">alpc_message</span><span class="o">.</span><span class="n">port_message</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">raw_alpc_message</span>
@@ -385,7 +388,7 @@
 
 <div class="viewcode-block" id="AlpcClient"><a class="viewcode-back" href="../../alpc.html#windows.alpc.AlpcClient">[docs]</a><span class="k">class</span> <span class="nc">AlpcClient</span><span class="p">(</span><span class="n">AlpcTransportBase</span><span class="p">):</span>
     <span class="s2">&quot;An ALPC client able to connect to a port and send/receive messages&quot;</span>
-    <span class="n">DEFAULT_MAX_MESSAGE_LENGTH</span> <span class="o">=</span> <span class="mh">0x1000</span>
+    <span class="n">DEFAULT_MAX_MESSAGE_LENGTH</span> <span class="o">=</span> <span class="mh">0x9000</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">port_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Init the :class:`AlpcClient` automatically connect to ``port_name`` using default values if given&quot;&quot;&quot;</span>
@@ -435,7 +438,7 @@
             <span class="n">send_msg</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="n">send_msg_attr</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="n">buffersize</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">connect_message</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">connect_message</span><span class="p">,</span> <span class="n">windows</span><span class="o">.</span><span class="n">pycompat</span><span class="o">.</span><span class="n">anybuff</span><span class="p">):</span>
             <span class="n">buffersize</span> <span class="o">=</span> <span class="n">gdef</span><span class="o">.</span><span class="n">DWORD</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">connect_message</span><span class="p">)</span> <span class="o">+</span> <span class="mh">0x1000</span><span class="p">)</span>
             <span class="n">send_msg</span> <span class="o">=</span> <span class="n">AlpcMessagePort</span><span class="o">.</span><span class="n">from_buffer_size</span><span class="p">(</span><span class="n">buffersize</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
             <span class="n">send_msg</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">connect_message</span>
@@ -471,7 +474,8 @@
         <span class="k">return</span> <span class="n">view_attributes</span>
 
     <span class="k">def</span> <span class="nf">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_close_port</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_close_port</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -485,6 +489,7 @@
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">port_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">port_name</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">communication_port_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">handle</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="n">port_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">create_port</span><span class="p">(</span><span class="n">port_name</span><span class="p">)</span>
 
@@ -564,7 +569,8 @@
         <span class="k">return</span> <span class="n">msg</span></div>
 
     <span class="k">def</span> <span class="nf">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_close_port</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_close_port</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">com_port_handle</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">communication_port_list</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_close_port</span><span class="p">(</span><span class="n">com_port_handle</span><span class="p">)</span>
 

@@ -310,6 +310,20 @@
 </dd></dl>
 
 <dl class="attribute">
+<dt id="windows.winobject.event_log.PublisherMetadata.channels_metadata">
+<code class="descname">channels_metadata</code><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.channels_metadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <code class="xref py py-class docutils literal notranslate"><span class="pre">PublisherMetadataChannel</span></code> for each channel this provider defines</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Yield:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">PublisherMetadataChannel</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
 <dt id="windows.winobject.event_log.PublisherMetadata.chanrefs">
 <code class="descname">chanrefs</code><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.chanrefs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Identifies the channels child element of the provider.</p>
@@ -343,10 +357,156 @@
 <dd><p>The <a class="reference internal" href="#windows.winobject.event_log.PublisherMetadata" title="windows.winobject.event_log.PublisherMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">PublisherMetadata</span></code></a> for the publisher <code class="docutils literal notranslate"><span class="pre">name</span></code></p>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="windows.winobject.event_log.PublisherMetadata.guid">
+<code class="descname">guid</code><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.guid" title="Permalink to this definition">¶</a></dt>
+<dd><p>The GUID associated with this provider</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">[<code class="xref py py-class docutils literal notranslate"><span class="pre">GUID</span></code>] – the GUID in a XXXXXXXXXX-YYYY-ZZZZ-TTTT-VVVVVVVVVV form</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.event_log.PublisherMetadata.keywordrefs">
+<code class="descname">keywordrefs</code><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.keywordrefs" title="Permalink to this definition">¶</a></dt>
+<dd><p>The list of keywords defined by this provider</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.event_log.PropertyArray" title="windows.winobject.event_log.PropertyArray"><code class="xref py py-class docutils literal notranslate"><span class="pre">PropertyArray</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.event_log.PublisherMetadata.keywords_metadata">
+<code class="descname">keywords_metadata</code><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.keywords_metadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <code class="xref py py-class docutils literal notranslate"><span class="pre">PublisherMetadataKeyword</span></code> for each opcode this provider defines</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Yield:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">PublisherMetadataKeyword</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.event_log.PublisherMetadata.levelrefs">
+<code class="descname">levelrefs</code><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.levelrefs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Identifies the levels child element of the provider.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.event_log.PropertyArray" title="windows.winobject.event_log.PropertyArray"><code class="xref py py-class docutils literal notranslate"><span class="pre">PropertyArray</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.event_log.PublisherMetadata.levels_metadata">
+<code class="descname">levels_metadata</code><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.levels_metadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <code class="xref py py-class docutils literal notranslate"><span class="pre">PublisherMetadataLevel</span></code> for each level this provider defines</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Yield:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">PublisherMetadataLevel</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="method">
 <dt id="windows.winobject.event_log.PublisherMetadata.message">
 <code class="descname">message</code><span class="sig-paren">(</span><em>msgid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/windows/winobject/event_log.html#PublisherMetadata.message"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.message" title="Permalink to this definition">¶</a></dt>
 <dd><p>TODO</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.event_log.PublisherMetadata.message_filepath">
+<code class="descname">message_filepath</code><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.message_filepath" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.event_log.PublisherMetadata.message_id">
+<code class="descname">message_id</code><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.message_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.event_log.PublisherMetadata.message_parameter_filepath">
+<code class="descname">message_parameter_filepath</code><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.message_parameter_filepath" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.event_log.PublisherMetadata.message_resource_filepath">
+<code class="descname">message_resource_filepath</code><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.message_resource_filepath" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.event_log.PublisherMetadata.opcoderefs">
+<code class="descname">opcoderefs</code><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.opcoderefs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Identifies the opcodes child element of the provider.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.event_log.PropertyArray" title="windows.winobject.event_log.PropertyArray"><code class="xref py py-class docutils literal notranslate"><span class="pre">PropertyArray</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.event_log.PublisherMetadata.opcodes_metadata">
+<code class="descname">opcodes_metadata</code><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.opcodes_metadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <code class="xref py py-class docutils literal notranslate"><span class="pre">PublisherMetadataOpcode</span></code> for each opcode this provider defines</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Yield:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">PublisherMetadataOpcode</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.event_log.PublisherMetadata.taskrefs">
+<code class="descname">taskrefs</code><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.taskrefs" title="Permalink to this definition">¶</a></dt>
+<dd><p>The list of tasks defined by this provider</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="#windows.winobject.event_log.PropertyArray" title="windows.winobject.event_log.PropertyArray"><code class="xref py py-class docutils literal notranslate"><span class="pre">PropertyArray</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.event_log.PublisherMetadata.tasks_metadata">
+<code class="descname">tasks_metadata</code><a class="headerlink" href="#windows.winobject.event_log.PublisherMetadata.tasks_metadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <code class="xref py py-class docutils literal notranslate"><span class="pre">PublisherMetadataTask</span></code> for each opcode this provider defines</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Yield:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">PublisherMetadataTask</span></code></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="attribute">
@@ -460,6 +620,12 @@
 </dd></dl>
 
 <dl class="attribute">
+<dt id="windows.winobject.event_log.EvtEvent.date">
+<code class="descname">date</code><a class="headerlink" href="#windows.winobject.event_log.EvtEvent.date" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event.time_created as a datetime</p>
+</dd></dl>
+
+<dl class="attribute">
 <dt id="windows.winobject.event_log.EvtEvent.id">
 <code class="descname">id</code><a class="headerlink" href="#windows.winobject.event_log.EvtEvent.id" title="Permalink to this definition">¶</a></dt>
 <dd><p>The ID of the Event</p>
@@ -536,7 +702,7 @@
 <dl class="attribute">
 <dt id="windows.winobject.event_log.EventMetadata.channel_id">
 <code class="descname">channel_id</code><a class="headerlink" href="#windows.winobject.event_log.EventMetadata.channel_id" title="Permalink to this definition">¶</a></dt>
-<dd><p>The the Channel attribute of the Event definition</p>
+<dd><p>The Channel attribute of the Event definition</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -553,9 +719,33 @@ Retrieved by parsing <a class="reference internal" href="#windows.winobject.even
 </dd></dl>
 
 <dl class="attribute">
+<dt id="windows.winobject.event_log.EventMetadata.keyword">
+<code class="descname">keyword</code><a class="headerlink" href="#windows.winobject.event_log.EventMetadata.keyword" title="Permalink to this definition">¶</a></dt>
+<dd><p>The keyword attribute of the Event definition</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.event_log.EventMetadata.level">
+<code class="descname">level</code><a class="headerlink" href="#windows.winobject.event_log.EventMetadata.level" title="Permalink to this definition">¶</a></dt>
+<dd><p>The level attribute of the Event definition</p>
+</dd></dl>
+
+<dl class="attribute">
 <dt id="windows.winobject.event_log.EventMetadata.message_id">
 <code class="descname">message_id</code><a class="headerlink" href="#windows.winobject.event_log.EventMetadata.message_id" title="Permalink to this definition">¶</a></dt>
 <dd><p>Identifies the message attribute of the event definition.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.event_log.EventMetadata.opcode">
+<code class="descname">opcode</code><a class="headerlink" href="#windows.winobject.event_log.EventMetadata.opcode" title="Permalink to this definition">¶</a></dt>
+<dd><p>The opcode attribute of the Event definition</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="windows.winobject.event_log.EventMetadata.task">
+<code class="descname">task</code><a class="headerlink" href="#windows.winobject.event_log.EventMetadata.task" title="Permalink to this definition">¶</a></dt>
+<dd><p>The task attribute of the Event definition</p>
 </dd></dl>
 
 <dl class="attribute">

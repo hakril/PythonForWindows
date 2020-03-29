@@ -22,6 +22,7 @@ Here is every generated definition by type:
    windef_generated.rst
    ntstatus_generated.rst
    winstructs_generated.rst
+   winerror_generated.rst
 
 
 
