@@ -108,11 +108,17 @@ class FunctionParamDumpBPAbstract(object):
                 t = rt(value, cproc)
             else:
                 t = rt(value)
-            if not hasattr(t, "contents"):
-                try:
-                    t = t.value
-                except AttributeError:
-                    pass
+            # Will fail in py3..
+            content = None
+            try:
+                content = t.contents
+            except Exception as e:
+                # contents will fail on basic type
+                # Not really an expected behavior
+                # But it works for now.. (and since a while)
+                pass
+            if content is None:
+                t = t.value
             res[name[1]] = t
         return res
 

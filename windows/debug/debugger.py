@@ -924,7 +924,7 @@ class Debugger(object):
             self.add_pending_breakpoint(bp, None)
         elif target is not None:
             # Check that targets are accepted
-            if target not in self.processes.values() + self.threads.values():
+            if target not in list(self.processes.values()) + list(self.threads.values()):
             #    if target == self.target: # Original target (that have not been lauched yet)
                     return self.add_pending_breakpoint(bp, target)
             #    else:
