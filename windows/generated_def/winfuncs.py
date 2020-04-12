@@ -3155,3 +3155,6 @@ FindNextFileWParams = ((1, 'hFindFile'), (1, 'lpFindFileData'))
 FindClosePrototype = WINFUNCTYPE(BOOL, HANDLE)
 FindCloseParams = ((1, 'hFindFile'),)
 
+CM_Enumerate_ClassesPrototype = WINFUNCTYPE(CR_STATUS, DWORD, POINTER(GUID), DWORD)
+CM_Enumerate_ClassesParams = ((1, 'ClassIndex'), (1, 'pGUID'), (1,'Params'),)
+
