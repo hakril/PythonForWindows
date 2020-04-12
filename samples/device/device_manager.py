@@ -4,7 +4,7 @@ from windows.winobject.device import DeviceManager
 def main():
 
     for device_class in DeviceManager.enumerate_active_class():
-        print("-Class : %s" % (device_class))
+        print("-[%s] Class %s" % (device_class.guid, device_class.name))
 
         # for device in device_class.devices:
         #     print("  -Device : %s" % (device.name))

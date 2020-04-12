@@ -4,6 +4,59 @@ from windows.generated_def import windef
 import windows.generated_def as gdef
 
 
+class DeviceClass(object):
+    
+    def __init__(self, guid):
+
+        self._guid = guid
+
+        self._name = None 
+        
+        # self._devices = None 
+        # self._h_devs = None
+
+    @property
+    def name(self):
+        if not self._name:
+            self._name = self._get_class_name()
+
+        return self._name
+
+    @property
+    def guid(self):
+    	return self._guid
+
+    # @property
+    # def devices(self):
+    #     if not self._devices:
+
+    #         with OpenDeviceClass(self):
+    #             self._devices = list(do for do in self._get_devices())
+
+    #     return self._devices
+    
+    # def _get_devices(self):
+
+    #     if not self._h_devs:
+    #         return
+
+    #     device_index = 0
+            
+    #     while True:
+
+    #         device_data = winproxy.SetupDiEnumDeviceInfo(self._h_devs, device_index)
+    #         if not device_data:
+    #             return # stop iterating
+
+
+    #         device_index+=1
+    #         yield DeviceObject.from_device_info(self._h_devs, device_data)
+
+
+    def _get_class_name(self):
+        return winproxy.SetupDiClassNameFromGuidW(self.guid)
+        
+
 class DeviceManager(object):
 
     @staticmethod
@@ -28,8 +81,7 @@ class DeviceManager(object):
                 if not class_guid:
                     return # stop iterating
 
-                #yield DeviceClass(class_guid)
-                yield class_guid
+                yield DeviceClass(class_guid)
 
 
 

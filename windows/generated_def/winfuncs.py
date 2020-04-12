@@ -3158,3 +3158,11 @@ FindCloseParams = ((1, 'hFindFile'),)
 CM_Enumerate_ClassesPrototype = WINFUNCTYPE(CR_STATUS, DWORD, POINTER(GUID), DWORD)
 CM_Enumerate_ClassesParams = ((1, 'ClassIndex'), (1, 'pGUID'), (1,'Params'),)
 
+
+
+
+SetupDiClassNameFromGuidAPrototype = WINFUNCTYPE(BOOL, POINTER(GUID), LPCSTR, DWORD , POINTER(DWORD))
+SetupDiClassNameFromGuidAParams = ((1, 'ClassGuid'),(1, 'ClassName'),(1, 'ClassNameSize'),(1, 'RequiredSize'))
+
+SetupDiClassNameFromGuidWPrototype = WINFUNCTYPE(BOOL, POINTER(GUID), LPCWSTR, DWORD , POINTER(DWORD))
+SetupDiClassNameFromGuidWParams = ((1, 'ClassGuid'),(1, 'ClassName'),(1, 'ClassNameSize'),(1, 'RequiredSize'))
