@@ -165,6 +165,7 @@ SIZE_T = c_size_t
 PSIZE_T = POINTER(SIZE_T)
 PVOID = c_void_p
 NTSTATUS = DWORD
+CR_STATUS = DWORD
 TDHSTATUS = ULONG
 DNS_STATUS = ULONG
 LSTATUS = LONG#Registryfunctionsreturnvalue|typedef_Return_type_success_(return==ERROR_SUCCESS)LONGLSTATUS;
