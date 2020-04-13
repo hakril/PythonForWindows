@@ -3166,3 +3166,21 @@ SetupDiClassNameFromGuidAParams = ((1, 'ClassGuid'),(1, 'ClassName'),(1, 'ClassN
 
 SetupDiClassNameFromGuidWPrototype = WINFUNCTYPE(BOOL, POINTER(GUID), LPCWSTR, DWORD , POINTER(DWORD))
 SetupDiClassNameFromGuidWParams = ((1, 'ClassGuid'),(1, 'ClassName'),(1, 'ClassNameSize'),(1, 'RequiredSize'))
+
+SetupDiGetClassDevsAPrototype = WINFUNCTYPE(HANDLE, POINTER(GUID), LPCSTR, HANDLE , DWORD)
+SetupDiGetClassDevsAParams = ((1, 'ClassGuid'), (1, 'Enumerator'), (1, 'hwndParent'), (1, 'Flags'),)
+
+SetupDiGetClassDevsWPrototype = WINFUNCTYPE(HANDLE, POINTER(GUID), LPCWSTR, HANDLE , DWORD)
+SetupDiGetClassDevsWParams = ((1, 'ClassGuid'), (1, 'Enumerator'), (1, 'hwndParent'), (1, 'Flags'),)
+
+SetupDiDestroyDeviceInfoListPrototype = WINFUNCTYPE(BOOL, HANDLE)
+SetupDiDestroyDeviceInfoListParams = ((1, 'DeviceInfoSet'),)
+
+SetupDiEnumDeviceInfoPrototype = WINFUNCTYPE(BOOL, HANDLE, DWORD, PSP_DEVINFO_DATA)
+SetupDiEnumDeviceInfoParams = ((1, 'DeviceInfoSet'),(1, 'MemberIndex'),(1, 'DeviceInfoData'),)
+
+SetupDiGetDeviceRegistryPropertyAPrototype = WINFUNCTYPE(BOOL, HANDLE, PSP_DEVINFO_DATA, DWORD, PDWORD, PBYTE, DWORD, PDWORD)
+SetupDiGetDeviceRegistryPropertyAParams = ((1, 'DeviceInfoSet'),(1, 'DeviceInfoData'),(1, 'Property'),(1, 'PropertyRegDataType'),(1, 'PropertyBuffer'),(1, 'PropertyBufferSize'),(1, 'RequiredSize'),)
+
+SetupDiGetDeviceRegistryPropertyWPrototype = WINFUNCTYPE(BOOL, HANDLE, PSP_DEVINFO_DATA, DWORD, PDWORD, PBYTE, DWORD, PDWORD)
+SetupDiGetDeviceRegistryPropertyWParams = ((1, 'DeviceInfoSet'),(1, 'DeviceInfoData'),(1, 'Property'),(1, 'PropertyRegDataType'),(1, 'PropertyBuffer'),(1, 'PropertyBufferSize'),(1, 'RequiredSize'),)
