@@ -112,9 +112,6 @@ def SetupDiGetDeviceRegistryPropertyA(hDevInfo, DevData, Property, PropertyType,
         ctypes.byref(bytes_written),
     )
 
-    if not success:
-        return None
-
     # Truncate read data
     registry_data = bytes(property_buffer)
     registry_data = registry_data[0:bytes_written.value]
@@ -137,9 +134,6 @@ def SetupDiGetDeviceRegistryPropertyW(hDevInfo, DevData, Property, PropertyType,
         wintypes.DWORD(PropertySize),
         ctypes.byref(bytes_written),
     )
-
-    if not success:
-        return None
 
     # Truncate read data
     registry_data = bytes(property_buffer)

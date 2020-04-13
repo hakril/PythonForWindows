@@ -3158,7 +3158,20 @@ FindCloseParams = ((1, 'hFindFile'),)
 CM_Enumerate_ClassesPrototype = WINFUNCTYPE(CR_STATUS, DWORD, POINTER(GUID), DWORD)
 CM_Enumerate_ClassesParams = ((1, 'ClassIndex'), (1, 'pGUID'), (1,'Params'),)
 
+CM_Get_First_Log_ConfPrototype = WINFUNCTYPE(CR_STATUS, PHANDLE, HANDLE, ULONG)
+CM_Get_First_Log_ConfParams = ((1, 'plcLogConf'), (1, 'dnDevInst'), (1,'ulFlags'),)
 
+CM_Get_Next_Res_DesPrototype = WINFUNCTYPE(CR_STATUS, PHANDLE, HANDLE, ULONG, PULONG, ULONG)
+CM_Get_Next_Res_DesParams = ((1, 'prdResDes'),(1, 'rdResDes'),(1, 'ForResource'),(1, 'pResourceID'),(1, 'ulFlags'),)
+
+CM_Free_Res_Des_HandlePrototype = WINFUNCTYPE(CR_STATUS, HANDLE)
+CM_Free_Res_Des_HandleParams = ((1, 'rdResDes'),)
+
+CM_Get_Res_Des_Data_SizePrototype = WINFUNCTYPE(CR_STATUS, PULONG, HANDLE, ULONG)
+CM_Get_Res_Des_Data_SizeParams = ((1, 'pulSize'),(1, 'rdResDes'),(1, 'ulFlags'),)
+
+CM_Get_Res_Des_DataPrototype = WINFUNCTYPE(CR_STATUS, HANDLE, PVOID, ULONG, ULONG)
+CM_Get_Res_Des_DataParams = ((1, 'rdResDes'), (1, 'Buffer'), (1, 'BufferLen'), (1, 'ulFlags'),)
 
 
 SetupDiClassNameFromGuidAPrototype = WINFUNCTYPE(BOOL, POINTER(GUID), LPCSTR, DWORD , POINTER(DWORD))
