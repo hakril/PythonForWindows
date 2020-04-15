@@ -7,8 +7,45 @@ from windows import winproxy
 from windows.generated_def import windef
 import windows.generated_def as gdef
 
-SPDRP_DEVICEDESC    = 0x0000000
-SPDRP_FRIENDLYNAME  = 0x000000C
+SPDRP_DEVICEDESC                    = 0x00000000
+SPDRP_HARDWAREID                    = 0x00000001
+SPDRP_COMPATIBLEIDS                 = 0x00000002
+SPDRP_UNUSED0                       = 0x00000003
+SPDRP_SERVICE                       = 0x00000004
+SPDRP_UNUSED1                       = 0x00000005
+SPDRP_UNUSED2                       = 0x00000006
+SPDRP_CLASS                         = 0x00000007
+SPDRP_CLASSGUID                     = 0x00000008
+SPDRP_DRIVER                        = 0x00000009
+SPDRP_CONFIGFLAGS                   = 0x0000000A
+SPDRP_MFG                           = 0x0000000B
+SPDRP_FRIENDLYNAME                  = 0x0000000C
+SPDRP_LOCATION_INFORMATION          = 0x0000000D
+SPDRP_PHYSICAL_DEVICE_OBJECT_NAME   = 0x0000000E
+SPDRP_CAPABILITIES                  = 0x0000000F
+SPDRP_UI_NUMBER                     = 0x00000010
+SPDRP_UPPERFILTERS                  = 0x00000011
+SPDRP_LOWERFILTERS                  = 0x00000012
+SPDRP_BUSTYPEGUID                   = 0x00000013
+SPDRP_LEGACYBUSTYPE                 = 0x00000014
+SPDRP_BUSNUMBER                     = 0x00000015
+SPDRP_ENUMERATOR_NAME               = 0x00000016
+SPDRP_SECURITY                      = 0x00000017
+SPDRP_SECURITY_SDS                  = 0x00000018
+SPDRP_DEVTYPE                       = 0x00000019
+SPDRP_EXCLUSIVE                     = 0x0000001a
+SPDRP_CHARACTERISTICS               = 0x0000001b
+SPDRP_ADDRESS                       = 0x0000001c
+SPDRP_UI_NUMBER_DESC_FORMAT         = 0x0000001d
+SPDRP_DEVICE_POWER_DATA             = 0x0000001e
+SPDRP_REMOVAL_POLICY                = 0x0000001f
+SPDRP_REMOVAL_POLICY_HW_DEFAULT     = 0x00000020
+SPDRP_REMOVAL_POLICY_OVERRIDE       = 0x00000021
+SPDRP_INSTALL_STATE                 = 0x00000022
+SPDRP_LOCATION_PATHS                = 0x00000023
+SPDRP_BASE_CONTAINERID              = 0x00000024
+SPDRP_MAXIMUM_PROPERTY              = 0x00000025
+
 
 # Resource types
 # source : 
@@ -328,21 +365,20 @@ class DeviceObject(object):
     def from_device_info(cls, h_devs, device_data):
 
         # DO NOT STORE h_devs since it may be invalidated in the future
-        try:
-            device_name = winproxy.SetupDiGetDeviceRegistryPropertyW(h_devs, device_data, SPDRP_FRIENDLYNAME, None)
-            if device_name:
-                device_name = device_name.decode('utf-16-le').rstrip('\x00')
-            else:
-                device_name = winproxy.SetupDiGetDeviceRegistryPropertyW(h_devs, device_data, SPDRP_DEVICEDESC, None)
+        device_name = None
+
+        for name_params in [SPDRP_FRIENDLYNAME, SPDRP_DEVICEDESC, SPDRP_PHYSICAL_DEVICE_OBJECT_NAME]:
+                
+            try:
+                device_name = winproxy.SetupDiGetDeviceRegistryPropertyW(h_devs, device_data, name_params, None)
                 if device_name:
                     device_name = device_name.decode('utf-16-le').rstrip('\x00')
-                else:
-                    device_name = None
+                    break        
 
-        except WindowsError as e:
-            if e.winerror == gdef.ERROR_INVALID_DATA:
-                return cls(device_data,  None)
-            raise
+            except WindowsError as e:
+                if e.winerror == gdef.ERROR_INVALID_DATA:
+                    continue
+                raise
                 
 
         return cls(device_data, device_name)
