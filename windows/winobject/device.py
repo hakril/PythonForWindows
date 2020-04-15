@@ -338,7 +338,7 @@ class DeviceResource(object):
 class DeviceObject(object):
     """ A Python object representing a setup device instance. """
 
-    def __init__(self, dev_data, device_name):
+    def __init__(self, dev_data, device_name, physical_object_name = None):
 
         # gdef.winstructs.SP_DEVINFO_DATA: associated device info
         self.dev_data = dev_data
@@ -349,9 +349,17 @@ class DeviceObject(object):
         # list(AbstractDeviceResource): list of resources registered by the device
         self._resources = None
 
+        # str: Physical object name (optional)
+        self._device_object = physical_object_name
+
+
     @property
     def name(self):
         return self._name
+
+    @property
+    def device_object(self):
+        return self._device_object
 
     @property
     def resources(self):
@@ -364,10 +372,11 @@ class DeviceObject(object):
     @classmethod
     def from_device_info(cls, h_devs, device_data):
 
-        # DO NOT STORE h_devs since it may be invalidated in the future
-        device_name = None
+        # TODO : check if we can store h_devs in the class, and use it later
 
-        for name_params in [SPDRP_FRIENDLYNAME, SPDRP_DEVICEDESC, SPDRP_PHYSICAL_DEVICE_OBJECT_NAME]:
+        # Try to retrieve some name associated with the device
+        device_name = None
+        for name_params in [SPDRP_FRIENDLYNAME, SPDRP_DEVICEDESC]:
                 
             try:
                 device_name = winproxy.SetupDiGetDeviceRegistryPropertyW(h_devs, device_data, name_params, None)
@@ -376,12 +385,22 @@ class DeviceObject(object):
                     break        
 
             except WindowsError as e:
-                if e.winerror == gdef.ERROR_INVALID_DATA:
-                    continue
+                if e.winerror != gdef.ERROR_INVALID_DATA:
+                    raise
+        
+        # Read other useful infos such as PDO, BusParam, etc.
+        ERROR_NO_SUCH_DEVINST = 0xe000020b
+        pdo = None
+        try:
+            pdo = winproxy.SetupDiGetDeviceRegistryPropertyW(h_devs, device_data, SPDRP_PHYSICAL_DEVICE_OBJECT_NAME, None)
+            if pdo:
+                pdo = pdo.decode('utf-16-le').rstrip('\x00')
+        except WindowsError as e:
+            if e.winerror not in [gdef.ERROR_INVALID_DATA, ERROR_NO_SUCH_DEVINST]:
                 raise
-                
-
-        return cls(device_data, device_name)
+        
+                    
+        return cls(device_data, device_name, pdo)
 
     def get_resources(self, resource_type = None):
 
