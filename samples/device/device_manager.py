@@ -8,13 +8,15 @@ def main():
 
         for device in device_class.devices:
             if device.name != None:
-                print("  -Device : %s" % (device.name))
+                if device.device_object != None:
+                    print("  -Device : %s (%s)" % (device.name, device.device_object))
+                else:
+                    print("  -Device : %s" % (device.name))
             else:
                 print("  -Device : N/A")
         
             for resource in device.resources:
                 print('    -%s' % (resource))
-                # print('    -%s : [0x%08x - 0x%08x] (0x%04x)' % (resource.type, resource.start, resource.end, resource.flags))
 
 
 
