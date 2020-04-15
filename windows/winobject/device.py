@@ -1,3 +1,6 @@
+import struct
+import ctypes
+from ctypes import wintypes
 
 import windows
 from windows import winproxy
@@ -27,6 +30,153 @@ BOOT_LOG_CONF       = 0x00000003 # boot configuration information.
 FORCED_LOG_CONF     = 0x00000004 # forced configuration information.
 OVERRIDE_LOG_CONF   = 0x00000005 # override configuration information. 
 
+class _IO_DES(ctypes.Structure):
+    """ 
+        The IO_DES structure is used for specifying either a resource list or a resource requirements list that describes I/O port usage for a device instance. 
+        Source : https://docs.microsoft.com/en-gb/windows/win32/api/cfgmgr32/ns-cfgmgr32-io_des
+    """
+
+    _fields_ = [
+        ('IOD_Count', gdef.DWORD),     
+        ('IOD_Type', gdef.DWORD),     
+        ('IOD_Alloc_Base', gdef.UINT64), 
+        ('IOD_Alloc_End', gdef.UINT64), 
+        ('IOD_DesFlags', gdef.DWORD),     
+    ]
+IO_DES = _IO_DES
+PIO_DES = ctypes.POINTER(_IO_DES)
+
+class _IO_RANGE(ctypes.Structure):
+    """ 
+        The IO_RANGE structure specifies a resource requirements list that describes I/O port usage for a device instance. 
+        Source : https://docs.microsoft.com/en-gb/windows/win32/api/cfgmgr32/ns-cfgmgr32-io_range
+    """
+
+    _fields_ = [
+        ('IOR_Align', gdef.UINT64),
+        ('IOR_nPorts', gdef.DWORD),
+        ('IOR_Min', gdef.UINT64),
+        ('IOR_Max', gdef.UINT64),
+        ('IOR_RangeFlags', gdef.DWORD),
+        ('IOR_Alias', gdef.UINT64),
+    ]
+IO_RANGE = _IO_RANGE
+PIO_RANGE = ctypes.POINTER(_IO_RANGE)
+
+class _MEM_DES(ctypes.Structure):
+    """ 
+        The MEM_DES structure is used for specifying either a resource list or a resource requirements list that describes memory usage for a device instance.
+        Source : https://docs.microsoft.com/en-gb/windows/win32/api/cfgmgr32/ns-cfgmgr32-mem_des
+    """
+
+    _fields_ = [
+        ('MD_Count', gdef.DWORD),     
+        ('MD_Type', gdef.DWORD),     
+        ('MD_Alloc_Base', gdef.UINT64), 
+        ('MD_Alloc_End', gdef.UINT64), 
+        ('MD_DesFlags', gdef.DWORD),     
+    ]
+MEM_DES = _MEM_DES
+PMEM_DES = ctypes.POINTER(_MEM_DES)
+
+
+class _MEM_RANGE(ctypes.Structure):
+    """ 
+        The MEM_RANGE structure specifies a resource requirements list that describes memory usage for a device instance. 
+        Source : https://docs.microsoft.com/en-gb/windows/win32/api/cfgmgr32/ns-cfgmgr32-mem_range
+    """
+
+    _fields_ = [
+        ('MR_Align', gdef.UINT64),
+        ('MR_nBytes', gdef.ULONG),
+        ('MR_Min', gdef.UINT64),
+        ('MR_Max', gdef.UINT64),
+        ('MR_Flags', gdef.DWORD),
+        ('MR_Reserved', gdef.DWORD),
+    ]
+
+MEM_RANGE = _MEM_RANGE
+PMEM_RANGE = ctypes.POINTER(_MEM_RANGE)
+
+class _DMA_DES(ctypes.Structure):
+    """ 
+        The DMA_DES structure is used for specifying either a resource list or a resource requirements list that describes direct memory access (DMA) channel usage for a device instance.
+        Source : https://docs.microsoft.com/en-gb/windows/win32/api/cfgmgr32/ns-cfgmgr32-dma_des
+    """
+
+    _fields_ = [
+        ('DD_Count', gdef.DWORD),     
+        ('DD_Type', gdef.DWORD),     
+        ('DD_Flags', gdef.DWORD),     
+        ('DD_Alloc_Chan', gdef.ULONG),     
+    ]
+DMA_DES = _DMA_DES
+PDMA_DES = ctypes.POINTER(_DMA_DES)
+
+
+class _DMA_RANGE(ctypes.Structure):
+    """ 
+        The MEM_RANGE structure specifies a resource requirements list that describes memory usage for a device instance. 
+        Source : https://docs.microsoft.com/en-gb/windows/win32/api/cfgmgr32/ns-cfgmgr32-dma_range
+    """
+
+    _fields_ = [
+        ('DR_Min', gdef.ULONG),
+        ('DR_Max', gdef.ULONG),
+        ('DR_Flags', gdef.ULONG),
+    ]
+
+DMA_RANGE = _DMA_RANGE
+PDMA_RANGE = ctypes.POINTER(_DMA_RANGE)
+
+class _IRQ_DES_64(ctypes.Structure):
+    """ 
+        The IRQ_DES structure is used for specifying either a resource list or a resource requirements list that describes IRQ line usage for a device instance.
+        Source : https://docs.microsoft.com/en-gb/windows/win32/api/cfgmgr32/ns-cfgmgr32-irq_des_64
+    """
+
+    _fields_ = [
+        ('IRQD_Count', gdef.DWORD),     
+        ('IRQD_Type', gdef.DWORD),     
+        ('IRQD_Flags', gdef.DWORD),     
+        ('IRQD_Alloc_Num', gdef.ULONG),     
+        ('IRQD_Affinity', gdef.ULONG64),     
+    ]
+IRQ_DES_64 = _IRQ_DES_64
+PIRQ_DES_64 = ctypes.POINTER(_IRQ_DES_64)
+
+class _IRQ_DES_32(ctypes.Structure):
+    """ 
+        The IRQ_DES structure is used for specifying either a resource list or a resource requirements list that describes IRQ line usage for a device instance.
+        Source : https://docs.microsoft.com/en-gb/windows/win32/api/cfgmgr32/ns-cfgmgr32-irq_des_32
+    """
+
+    _fields_ = [
+        ('IRQD_Count', gdef.DWORD),     
+        ('IRQD_Type', gdef.DWORD),     
+        ('IRQD_Flags', gdef.DWORD),     
+        ('IRQD_Alloc_Num', gdef.ULONG),     
+        ('IRQD_Affinity', gdef.DWORD),     
+    ]
+IRQ_DES_32 = _IRQ_DES_32
+PIRQ_DES_32 = ctypes.POINTER(_IRQ_DES_32)
+
+
+class _IRQ_RANGE(ctypes.Structure):
+    """ 
+        The IRQ_RANGE structure specifies a resource requirements list that describes IRQ line usage for a device instance. 
+        Source : https://docs.microsoft.com/en-gb/windows/win32/api/cfgmgr32/ns-cfgmgr32-irq_range
+    """
+
+    _fields_ = [
+        ('IRQR_Min', gdef.ULONG),
+        ('IRQR_Max', gdef.ULONG),
+        ('IRQR_Flags', gdef.ULONG),
+    ]
+
+IRQ_RANGE = _IRQ_RANGE
+PIRQ_RANGE = ctypes.POINTER(_IRQ_RANGE)
+
 class AbstractDeviceResource(object):
     """ An abstract Python object representing a setup device resource. """
     pass
@@ -34,26 +184,103 @@ class AbstractDeviceResource(object):
 class MmioDeviceResource(AbstractDeviceResource):
     """ A Python object representing a setup device MMIO resource. """
     
-    def __init__(self, data):
-        pass
+    def __init__(self, data):     
+
+        # check before casting into MEM_DES
+        assert (len(data) >= ctypes.sizeof(MEM_DES))
+
+        self.header = MEM_DES()   
+        ctypes.memmove(ctypes.byref(self.header), data, ctypes.sizeof(MEM_DES))
+
+        # check before casting into MEM_RANGES
+        assert (len(data) >= ctypes.sizeof(MEM_DES) + self.header.MD_Count*ctypes.sizeof(MEM_RANGE))
+
+        # only for requirements list (not our case)
+        self.ranges = ()
+        for i in range(self.header.MD_Count):
+            mem_range = MEM_RANGE()
+            ctypes.memmove(ctypes.byref(mem_range), data + ctypes.sizeof(MEM_DES) + i*ctypes.sizeof(MEM_RANGE), ctypes.sizeof(MEM_RANGE))
+            self.ranges.append(mem_range)
+
+    def __str__(self):
+        return 'MmioDeviceResource : [%016x-%016x]' % (self.header.MD_Alloc_Base, self.header.MD_Alloc_End)
+
 
 class IoDeviceResource(AbstractDeviceResource):
     """ A Python object representing a setup device IO port resource. """
     
-    def __init__(self, data):
-        pass
+    def __init__(self, data):     
+
+        # check before casting into IO_DES
+        assert (len(data) >= ctypes.sizeof(IO_DES))
+
+        self.header = IO_DES()   
+        ctypes.memmove(ctypes.byref(self.header), data, ctypes.sizeof(IO_DES))
+
+        # check before casting into IO_RANGES
+        assert (len(data) >= ctypes.sizeof(IO_DES) + self.header.IOD_Count*ctypes.sizeof(IO_RANGE))
+
+        # only for requirements list (not our case)
+        self.ranges = ()
+        for i in range(self.header.IOD_Count):
+            io_range = IO_RANGE()
+            ctypes.memmove(ctypes.byref(io_range), data + ctypes.sizeof(IO_DES) + i*ctypes.sizeof(IO_RANGE), ctypes.sizeof(IO_RANGE))
+            self.ranges.append(io_range)
+
+
+    def __str__(self):
+        return 'IoDeviceResource   : [%016x-%016x]' % (self.header.IOD_Alloc_Base, self.header.IOD_Alloc_End)
+
 
 class DmaDeviceResource(AbstractDeviceResource):
     """ A Python object representing a setup device DMA resource. """
     
-    def __init__(self, data):
-        pass
+    def __init__(self, data):     
+
+        # check before casting into DMA_DES
+        assert (len(data) >= ctypes.sizeof(DMA_DES))
+
+        self.header = DMA_DES()   
+        ctypes.memmove(ctypes.byref(self.header), data, ctypes.sizeof(DMA_DES))
+
+        # check before casting into MEM_RANGES
+        assert (len(data) >= ctypes.sizeof(DMA_DES) + self.header.DD_Count*ctypes.sizeof(DMA_RANGE))
+
+        # only for requirements list (not our case)
+        self.ranges = ()
+        for i in range(self.header.DD_Count):
+            dma_range = DMA_RANGE()
+            ctypes.memmove(ctypes.byref(mem_range), data + ctypes.sizeof(DMA_DES) + i*ctypes.sizeof(DMA_RANGE), ctypes.sizeof(DMA_RANGE))
+            self.ranges.append(dma_range)
+
+    def __str__(self):
+        return 'DmaDeviceResource  : [%016x]' % (self.header.DD_Alloc_Chan)
 
 class IrqDeviceResource(AbstractDeviceResource):
     """ A Python object representing a setup device Irq resource. """
     
     def __init__(self, data):
-        pass
+
+        # TODO : check 32/64 bitness before casting
+        
+        # check before casting into IRQ_DES_64
+        assert (len(data) >= ctypes.sizeof(IRQ_DES_64))
+
+        self.header = IRQ_DES_64()   
+        ctypes.memmove(ctypes.byref(self.header), data, ctypes.sizeof(IRQ_DES_64))
+
+        # check before casting into MEM_RANGES
+        assert (len(data) >= ctypes.sizeof(IRQ_DES_64) + self.header.IRQD_Count*ctypes.sizeof(IRQ_RANGE))
+
+        # only for requirements list (not our case)
+        self.ranges = ()
+        for i in range(self.header.IRQD_Count):
+            irq_range = IRQ_RANGE()
+            ctypes.memmove(ctypes.byref(mem_range), data + ctypes.sizeof(IRQ_DES_64) + i*ctypes.sizeof(IRQ_RANGE), ctypes.sizeof(DMA_RANGE))
+            self.ranges.append(irq_range)
+
+    def __str__(self):
+        return 'IrqDeviceResource  : [%016x]' % (self.header.IRQD_Alloc_Num)
 
 class DeviceResource(object):
     """ A Python object representing a setup device resource. """
