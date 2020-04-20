@@ -5,13 +5,12 @@ from collections import namedtuple
 from contextlib import contextmanager
 
 from windows import utils
+from windows.pycompat import int_types
 import windows.generated_def as gdef
 from windows.generated_def import *
 from windows import security
 from windows.pycompat import basestring
 
-# TODO: RM :)
-ServiceStatus = namedtuple("ServiceStatus", ["type", "state", "control_accepted", "flags"])
 """
 ``type`` might be one of:
 
@@ -40,17 +39,24 @@ ServiceStatus = namedtuple("ServiceStatus", ["type", "state", "control_accepted"
 
 
 class ServiceManager(utils.AutoHandle):
-    _close_function = staticmethod(windows.winproxy.CloseServiceHandle)
-
     def _get_handle(self):
         return windows.winproxy.OpenSCManagerA(dwDesiredAccess=gdef.MAXIMUM_ALLOWED)
 
     def open_service(self, name, access=gdef.MAXIMUM_ALLOWED):
         return windows.winproxy.OpenServiceA(self.handle, name, access) # Check service exists :)
 
-    def get_service(self, name, access=gdef.MAXIMUM_ALLOWED):
-        handle = self.open_service(name, access)
-        return NewService(name=name, handle=handle)
+    def get_service(self, key, access=gdef.MAXIMUM_ALLOWED):
+        if isinstance(key, int_types):
+            return self.enumerate_services()[key]
+        if isinstance(key, slice):
+            # Get service list
+            servlist = self.enumerate_services()
+            # Extract indexes matching the slice
+            indexes = key.indices(len(servlist))
+            return [servlist[idx] for idx in range(*indexes)]
+        # Retrieve service by its name
+        handle = self.open_service(key, access)
+        return Service(name=key, handle=handle)
 
     __getitem__ = get_service
 
@@ -83,7 +89,7 @@ class ServiceManager(utils.AutoHandle):
         services_array = (gdef.ENUM_SERVICE_STATUS_PROCESSA * nb_services.value).from_buffer(buffer)
         for service_info in services_array:
             shandle = self.open_service(service_info.lpServiceName)
-            yield NewService(handle=shandle, name=service_info.lpServiceName, description=service_info.lpDisplayName)
+            yield Service(handle=shandle, name=service_info.lpServiceName, description=service_info.lpDisplayName)
         return
 
     __iter__ = _enumerate_services_generator
@@ -92,11 +98,9 @@ class ServiceManager(utils.AutoHandle):
         return list(self._enumerate_services_generator())
 
 
-class NewService(gdef.SC_HANDLE):
-    # close_function = windows.winproxy.CloseServiceHandle
-
+class Service(gdef.SC_HANDLE):
     def __init__(self, handle, name, description=None):
-        super(NewService, self).__init__(handle)
+        super(Service, self).__init__(handle)
         self.name = name
         """The name of the service
 
@@ -115,12 +119,16 @@ class NewService(gdef.SC_HANDLE):
 
     @property
     def status(self):
+        """The status of the service
+
+        :type: :class:`~windows.generated_def.winstructs.SERVICE_STATUS_PROCESS`
+        """
         buffer = windows.utils.BUFFER(gdef.SERVICE_STATUS_PROCESS)()
         size_needed = gdef.DWORD()
         windows.winproxy.QueryServiceStatusEx(self, gdef.SC_STATUS_PROCESS_INFO, buffer.cast(gdef.LPBYTE), ctypes.sizeof(buffer), size_needed)
         return buffer[0]
 
-    @utils.fixedpropety
+    @property # Can change if service is started/stopped when the object exist
     def process(self):
         """The process running the service (if any)
 
@@ -134,6 +142,10 @@ class NewService(gdef.SC_HANDLE):
 
     @property
     def security_descriptor(self):
+        """The security descriptor of the service
+
+        :type: :class:`~windows.security.SecurityDescriptor`
+        """
         return security.SecurityDescriptor.from_service(self.name)
 
     def start(self, args=None):
@@ -151,7 +163,7 @@ class NewService(gdef.SC_HANDLE):
         return status
 
     def __repr__(self):
-        return """<{0} "{1}" {2}>""".format(type(self).__name__, self.name, self.status.state)
+        return """<{0} "{1}" {2!r}>""".format(type(self).__name__, self.name, self.status.state)
 
     def __del__(self):
         return windows.winproxy.CloseServiceHandle(self)

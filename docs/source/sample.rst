@@ -92,6 +92,20 @@ Output
 .. literalinclude:: samples_output\system.txt
 
 
+.. _sample_services_demo:
+
+Services
+""""""""
+
+.. literalinclude:: ..\..\samples\service\service_demo.py
+
+Output
+
+.. literalinclude:: samples_output\service_service_demo.txt
+
+
+
+
 .. _sample_network_exploration:
 
 :class:`Network` - socket exploration
