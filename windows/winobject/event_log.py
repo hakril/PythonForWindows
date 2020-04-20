@@ -88,6 +88,21 @@ class EvtQuery(EvtHandle):
         return self
 
     def seek(self, position, seek_flags=None):
+        """Seek to ``position``.
+        ``seek_flags`` can be one of:
+
+            * ``None``
+            * ``EvtSeekRelativeToFirst``
+            * ``EvtSeekRelativeToLast``
+            * ``EvtSeekRelativeToBookmark``
+
+        If ``seek_flags`` is None:
+
+            * ``position >= 0`` will use ``EvtSeekRelativeToFirst``
+            * ``position < 0`` will use ``EvtSeekRelativeToLast`` and with ``position+1``
+                * This allow retrieve the ``position`` lasts events
+        """
+
         if seek_flags is None:
             if position >= 0:
                 seek_flags = gdef.EvtSeekRelativeToFirst
@@ -176,6 +191,7 @@ class EvtEvent(EvtHandle):
         return [r.value for r in result]
 
     def event_values(self):
+        """The values of the event in a list"""
         ctx = windows.winproxy.EvtCreateRenderContext(0, None, gdef.EvtRenderContextUser)
         result = self.render(ctx, gdef.EvtRenderEventValues)
         return [r.value for r in result]
@@ -195,6 +211,7 @@ class EvtEvent(EvtHandle):
     # Properties arround common Event/System values
     @property
     def provider(self):
+        """The provider of the event"""
         return self.system_values()[gdef.EvtSystemProviderName]
 
     @property
@@ -246,9 +263,6 @@ class EvtEvent(EvtHandle):
         # id not found: try via the Provider in the event (classic channel)
         return self.channel.get_classic_event_metadata(self.id, self.provider)
 
-
-
-
     # Test
     @property
     def data(self): # user/event specifique data
@@ -264,7 +278,7 @@ class EvtEvent(EvtHandle):
 
     @property
     def date(self):
-        """Event.time_created as a datetime"""
+        """``Event.time_created`` as a :class:``datetime``"""
         return windows.utils.datetime_from_filetime(self.time_created)
 
     def __repr__(self):
@@ -354,26 +368,6 @@ class ImprovedEVT_VARIANT(gdef.EVT_VARIANT):
         return "<{0} of type={1}>".format(type(self).__name__, self.Type)
 
 
-
-
-
-
-# x = windows.winproxy.EvtQuery(None,
-                # "Microsoft-Windows-Windows Firewall With Advanced Security/Firewall",
-                # "Event/System[EventID=2004 or EventID=2006]",
-                # gdef.EvtQueryChannelPath + gdef.EvtQueryForwardDirection)
-# print(x)
-# eq = EvtQuery(x)
-# event = next(eq)
-
-# xx = gdef.LPWSTR("ModifyingApplication")
-# xx = gdef.LPWSTR("Event/System/Channel")
-# xx = gdef.LPWSTR('Event/EventData/Data[@Name="ModifyingApplication"]')
-# xx = gdef.LPWSTR('Event/System/EventID')
-
-# event = next(eq)
-
-# list(channels())
 
 class EvtChannel(object):
     """An Event Log channel"""
@@ -505,7 +499,9 @@ class ChannelConfig(EvtHandle):
     def __repr__(self):
         return '<{0} "{1}">'.format(type(self).__name__, self.name)
 
+
 class PublisherMetadataChannel(object):
+    """Represent a PublisherMetadataChannel (see https://docs.microsoft.com/en-us/windows/win32/api/winevt/ne-winevt-evt_publisher_metadata_property_id)"""
 
     def __init__(self, pub_metadata, channel_id):
         super(PublisherMetadataChannel, self).__init__()
@@ -517,27 +513,32 @@ class PublisherMetadataChannel(object):
 
     @property
     def flags(self):
+        """The flags of the ``PublisherMetadataChannel``"""
         return int(self._query_channel_metadata_property(gdef.EvtPublisherMetadataChannelReferenceFlags))
 
     @property
     def name(self):
+        """The name of the ``PublisherMetadataChannel``"""
         return str(self._query_channel_metadata_property(gdef.EvtPublisherMetadataChannelReferencePath))
 
     @property
     def id(self):
+        """The reference id of the ``PublisherMetadataChannel``"""
         return int(self._query_channel_metadata_property(gdef.EvtPublisherMetadataChannelReferenceID))
 
     @property
     def index(self):
+        """The reference index of the ``PublisherMetadataChannel``"""
         return int(self._query_channel_metadata_property(gdef.EvtPublisherMetadataChannelReferenceIndex))
 
     @property
     def message_id(self):
+        """The message id of the ``PublisherMetadataChannel``"""
         return int(self._query_channel_metadata_property(gdef.EvtPublisherMetadataChannelReferenceMessageID))
 
 
 class PublisherMetadataLevel(object):
-
+    """Represent a PublisherMetadataLevel (see https://docs.microsoft.com/en-us/windows/win32/api/winevt/ne-winevt-evt_publisher_metadata_property_id)"""
     def __init__(self, pub_metadata, channel_id):
         super(PublisherMetadataLevel, self).__init__()
         self.pub_metadata = pub_metadata
@@ -560,7 +561,7 @@ class PublisherMetadataLevel(object):
 
 
 class PublisherMetadataOpcode(object):
-
+    """Represent a PublisherMetadataOpcode (see https://docs.microsoft.com/en-us/windows/win32/api/winevt/ne-winevt-evt_publisher_metadata_property_id)"""
     def __init__(self, pub_metadata, channel_id):
         super(PublisherMetadataOpcode, self).__init__()
         self.pub_metadata = pub_metadata
@@ -571,18 +572,22 @@ class PublisherMetadataOpcode(object):
 
     @property
     def name(self):
+        """The name of the ``PublisherMetadataOpcode``"""
         return str(self._query_opcode_metadata_property(gdef.EvtPublisherMetadataOpcodeName))
 
     @property
     def value(self):
+        """The opcode value of the ``PublisherMetadataOpcode``"""
         return int(self._query_opcode_metadata_property(gdef.EvtPublisherMetadataOpcodeValue))
 
     @property
     def message_id(self):
+        """The message id of the ``PublisherMetadataOpcode``"""
         return int(self._query_opcode_metadata_property(gdef.EvtPublisherMetadataOpcodeMessageID))
 
 
 class PublisherMetadataKeyword(object):
+    """Represent a PublisherMetadataKeyword (see https://docs.microsoft.com/en-us/windows/win32/api/winevt/ne-winevt-evt_publisher_metadata_property_id)"""
 
     def __init__(self, pub_metadata, channel_id):
         super(PublisherMetadataKeyword, self).__init__()
@@ -594,18 +599,21 @@ class PublisherMetadataKeyword(object):
 
     @property
     def name(self):
+        """The name of the ``PublisherMetadataKeyword``"""
         return str(self._query_keyword_metadata_property(gdef.EvtPublisherMetadataKeywordName))
 
     @property
     def value(self):
+        """The value of the ``PublisherMetadataKeyword``"""
         return int(self._query_keyword_metadata_property(gdef.EvtPublisherMetadataKeywordValue))
 
     @property
     def message_id(self):
+        """The message id of the ``PublisherMetadataKeyword``"""
         return int(self._query_keyword_metadata_property(gdef.EvtPublisherMetadataKeywordMessageID))
 
 class PublisherMetadataTask(object):
-
+    """Represent a PublisherMetadataTask (see https://docs.microsoft.com/en-us/windows/win32/api/winevt/ne-winevt-evt_publisher_metadata_property_id)"""
     def __init__(self, pub_metadata, channel_id):
         super(PublisherMetadataTask, self).__init__()
         self.pub_metadata = pub_metadata
@@ -616,18 +624,22 @@ class PublisherMetadataTask(object):
 
     @property
     def name(self):
+        """The name of the ``PublisherMetadataTask``"""
         return str(self._query_keyword_metadata_property(gdef.EvtPublisherMetadataTaskName))
 
     @property
     def value(self):
+        """The value of the ``PublisherMetadataTask``"""
         return int(self._query_keyword_metadata_property(gdef.EvtPublisherMetadataTaskValue))
 
     @property
     def event_guid(self):
+        """The event GUId of the ``PublisherMetadataTask``"""
         return self._query_keyword_metadata_property(gdef.EvtPublisherMetadataTaskEventGuid)
 
     @property
     def message_id(self):
+        """The message ID GUId of the ``PublisherMetadataTask``"""
         return int(self._query_keyword_metadata_property(gdef.EvtPublisherMetadataTaskMessageID))
 
 class EvtPublisher(object):
@@ -1046,37 +1058,3 @@ class EvtlogManager(object):
         # Raise FILE_NOT_FOUND if not found (last chance)
         return self.open_evtx_file(name)
 
-
-
-
-# CHANNAME = "Microsoft-Windows-Windows Firewall With Advanced Security/Firewall"
-# CHANNAME = r"Microsoft-Windows-Windows Defender/Operational"
-
-# print("Working of channel: <{0}>".format(CHANNAME))
-
-# channel = EvtChannel(CHANNAME)
-# chanconf = channel.config
-# publisher = chanconf.publisher
-
-# open publisher metadata
-
-# print("Provider is <{0}>".format(publisher.name))
-
-# pmd = publisher.metadata
-# chansref = pmd.chanrefs
-
-# channame_by_value_id  = pmd.channel_name_by_id()
-
-# for event_metadata in pmd.events_metadata:
-     # id = event_metadata.id
-     # if id == 2004:
-        # print("LOL")
-     # chan = event_metadata.channel_id
-     # channame = channame_by_value_id[chan]
-     # print("   * {0}) {1}".format(id, channame))
-     # if "unexpected" in pmd.message(event_metadata.message_id).lower():
-        # print("UNEXPECTED in message :D")
-
-
-# query = channel.query(ids=5008)
-# evts = list(query)
