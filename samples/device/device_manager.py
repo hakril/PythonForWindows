@@ -1,24 +1,32 @@
 import windows
-from windows.winobject.device import DeviceManager
+import windows.generated_def as gdef
 
-def main():
+manager = windows.system.device_manager
+print(manager)
+for devcls in manager.classes:
+    print("- {0!r}".format(devcls))
+    for device in devcls.devices:
+        print(u"    - [{dev.name}] <{dev.description}> ({dev.device_object_name})".format(dev=device))
+        devconf = device.get_first_logical_configuration(gdef.ALLOC_LOG_CONF)
+        if devconf:
+            # import pdb;pdb.set_trace()
+            # print(devconf)
+            print("      <config:>")
+            for resource in devconf.resources:
+                print("        - {0}".format(resource))
 
-    for device_class in DeviceManager.enumerate_active_class():
-        print("-Class %s  %s  [%s]" % (device_class.name, " "*(60 - min(60,len(device_class.name))), device_class.guid))
+        # print(dev.description)
+        # print(dev.device_object_name)
+        # # x = dev.get_first_logical_configuration(gdef.ALLOC_LOG_CONF)
+        # x = dev.get_first_logical_configuration(gdef.BOOT_LOG_CONF)
+        # if x:
+        #     print(x)
+        #     for res in x.resources:
+        #         print(res)
+        #         # print(repr(res.rawdata))
+        #         print(res.header)
+        #         assert not res.data
+        #         # import pdb;pdb.set_trace()
+        #     import pdb;pdb.set_trace()
+        #     print("BYE")
 
-        for device in device_class.devices:
-            if device.name != None:
-                if device.device_object != None:
-                    print("  -Device : %s (%s)" % (device.name, device.device_object))
-                else:
-                    print("  -Device : %s" % (device.name))
-            else:
-                print("  -Device : N/A")
-        
-            for resource in device.resources:
-                print('    -%s' % (resource))
-
-
-
-if __name__ == '__main__':
-    main()
