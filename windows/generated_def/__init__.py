@@ -24,6 +24,9 @@ if bitness() == 32:
     winstructs.PORT_MESSAGE = winstructs.PORT_MESSAGE32
     winstructs.PPORT_MESSAGE = winstructs.PPORT_MESSAGE32
 
+    # CFGMGR32
+    winstructs.IRQ_RESOURCE = winstructs.IRQ_RESOURCE_32
+
 else:
     winstructs.CONTEXT = winstructs.CONTEXT64
     winstructs.PCONTEXT = winstructs.PCONTEXT64
@@ -41,6 +44,8 @@ else:
     winstructs.PORT_MESSAGE = winstructs.PORT_MESSAGE64
     winstructs.PPORT_MESSAGE = winstructs.PPORT_MESSAGE64
 
+    # CFGMGR32
+    winstructs.IRQ_RESOURCE = winstructs.IRQ_RESOURCE_64
 
 from . import winfuncs
 from . import windef

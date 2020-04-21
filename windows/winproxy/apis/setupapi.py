@@ -16,130 +16,60 @@ class SetupApiProxy(ApiProxy):
 
 
 @SetupApiProxy()
-def SetupDiClassNameFromGuidA(Guid):
-    """ 
+def SetupDiClassNameFromGuidA(ClassGuid, ClassName, ClassNameSize=None, RequiredSize=None):
+    """
         Given a class Guid, return the name associated or raise an Exception
     """
+    if ClassNameSize is None:
+        ClassNameSize = ctypes.sizeof(ClassName)
+    return SetupDiClassNameFromGuidA.ctypes_function(ClassGuid, ClassName, ClassNameSize, RequiredSize)
 
-    class_name = ctypes.create_string_buffer(MAX_CLASS_NAME_LEN)
-
-    success = SetupDiClassNameFromGuidA.ctypes_function(
-        ctypes.byref(Guid),
-        ctypes.cast(ctypes.byref(class_name), wintypes.LPCSTR),
-        MAX_CLASS_NAME_LEN,
-        None
-    )
-
-    raw_class_name = bytes(class_name)
-    return raw_class_name.decode("utf-8").rstrip("\x00")
 
 @SetupApiProxy()
 def SetupDiClassNameFromGuidW(Guid):
 
-    """ 
+    """
         Given a class Guid, return the name associated or raise an Exception
     """
+    if ClassNameSize is None:
+        ClassNameSize = ctypes.sizeof(ClassName)
+    return SetupDiClassNameFromGuidW.ctypes_function(ClassGuid, ClassName, ClassNameSize, RequiredSize)
 
-    class_name = ctypes.create_unicode_buffer(MAX_CLASS_NAME_LEN)
-
-    success = SetupDiClassNameFromGuidW.ctypes_function(
-        ctypes.byref(Guid),
-        ctypes.cast(ctypes.byref(class_name), wintypes.LPCWSTR),
-        MAX_CLASS_NAME_LEN,
-        None
-    )
-
-    raw_class_name = bytes(class_name)
-    return raw_class_name.decode("utf-16-le").rstrip("\x00")
 
 @SetupApiProxy(error_check=result_is_handle)
-def SetupDiGetClassDevsA(Guid, Enumerator = None, hwndParent = None, Flags=0):
-    """ 
+def SetupDiGetClassDevsA(Guid, Enumerator=None, hwndParent=None, Flags=0):
+    """
         Given a class GUID, return a HANDLE to the device's information set or raise an Exception
     """
-
-    return SetupDiGetClassDevsA.ctypes_function(
-        ctypes.byref(Guid),
-        Enumerator,
-        hwndParent,
-        Flags
-    )
+    return SetupDiGetClassDevsA.ctypes_function(Guid, Enumerator, hwndParent, Flags)
 
 @SetupApiProxy(error_check=result_is_handle)
-def SetupDiGetClassDevsW(Guid, Enumerator = None, hwndParent = None, Flags=0):
-    """ 
+def SetupDiGetClassDevsW(Guid, Enumerator=None, hwndParent=None, Flags=0):
+    """
         Given a class GUID, return a HANDLE to the device's information set or raise an Exception
     """
-
-    return SetupDiGetClassDevsW.ctypes_function(
-        ctypes.byref(Guid),
-        Enumerator,
-        hwndParent,
-        Flags
-    )
+    return SetupDiGetClassDevsW.ctypes_function(Guid, Enumerator, hwndParent, Flags)
 
 @SetupApiProxy()
-def SetupDiEnumDeviceInfo(hDevInfo, MemberIndex):
+def SetupDiEnumDeviceInfo(DeviceInfoSet, MemberIndex, DeviceInfoData):
     """
         Given a device information set, return the info associated with the index
         or raise ERROR_NO_MORE_ITEMS if there is none anymore.
     """
-
-    data = gdef.winstructs.SP_DEVINFO_DATA()
-    data.cbSize = ctypes.sizeof(gdef.winstructs.SP_DEVINFO_DATA)
-
-    success = SetupDiEnumDeviceInfo.ctypes_function(
-        hDevInfo,
-        MemberIndex,
-        ctypes.byref(data)
-    )
-
-    return data
+    return SetupDiEnumDeviceInfo.ctypes_function(DeviceInfoSet, MemberIndex, DeviceInfoData)
 
 @SetupApiProxy()
-def SetupDiGetDeviceRegistryPropertyA(hDevInfo, DevData, Property, PropertyType, PropertySize = MAX_DEV_LEN*ctypes.sizeof(wintypes.CHAR)):
-    
-    property_buffer = ctypes.create_string_buffer(PropertySize)
-    bytes_written = wintypes.DWORD(0)
-
-    success = SetupDiGetDeviceRegistryPropertyA.ctypes_function(
-        hDevInfo,
-        ctypes.byref(DevData),
-        Property,
-        PropertyType,
-        ctypes.cast(ctypes.byref(property_buffer), gdef.winstructs.PBYTE),
-        wintypes.DWORD(PropertySize),
-        ctypes.byref(bytes_written),
-    )
-
-    # Truncate read data
-    registry_data = bytes(property_buffer)
-    registry_data = registry_data[0:bytes_written.value]
-
-    return registry_data
-
+def SetupDiEnumDeviceInterfaces(DeviceInfoSet, DeviceInfoData, InterfaceClassGuid, MemberIndex, DeviceInterfaceData):
+    return SetupDiEnumDeviceInterfaces.ctypes_function(DeviceInfoSet, DeviceInfoData, InterfaceClassGuid, MemberIndex, DeviceInterfaceData)
 
 @SetupApiProxy()
-def SetupDiGetDeviceRegistryPropertyW(hDevInfo, DevData, Property, PropertyType, PropertySize = MAX_DEV_LEN*ctypes.sizeof(wintypes.WCHAR)):
-    
-    property_buffer = ctypes.create_unicode_buffer(PropertySize)
-    bytes_written = wintypes.DWORD(0)
-    
-    success = SetupDiGetDeviceRegistryPropertyW.ctypes_function(
-        hDevInfo,
-        ctypes.byref(DevData),
-        Property,
-        PropertyType,
-        ctypes.cast(ctypes.byref(property_buffer), gdef.winstructs.PBYTE),
-        wintypes.DWORD(PropertySize),
-        ctypes.byref(bytes_written),
-    )
+def SetupDiGetDeviceRegistryPropertyA(DeviceInfoSet, DeviceInfoData, Property, PropertyRegDataType, PropertyBuffer, PropertyBufferSize, RequiredSize):
+    return SetupDiGetDeviceRegistryPropertyA.ctypes_function(DeviceInfoSet, DeviceInfoData, Property, PropertyRegDataType, PropertyBuffer, PropertyBufferSize, RequiredSize)
 
-    # Truncate read data
-    registry_data = bytes(property_buffer)
-    registry_data = registry_data[0:bytes_written.value]
-    
-    return registry_data
+@SetupApiProxy()
+def SetupDiGetDeviceRegistryPropertyW(DeviceInfoSet, DeviceInfoData, Property, PropertyRegDataType, PropertyBuffer, PropertyBufferSize, RequiredSize):
+    return SetupDiGetDeviceRegistryPropertyW.ctypes_function(DeviceInfoSet, DeviceInfoData, Property, PropertyRegDataType, PropertyBuffer, PropertyBufferSize, RequiredSize)
+
 
 
 
