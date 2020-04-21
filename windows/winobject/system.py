@@ -19,6 +19,7 @@ from windows.winobject import service
 from windows.winobject import volume
 from windows.winobject import wmi
 from windows.winobject import object_manager
+from windows.winobject import device_manager
 from windows.winobject import handle
 from windows.winobject import event_log
 from windows.winobject import event_trace
@@ -134,6 +135,14 @@ class System(object):
         :type: :class:`~windows.winobject.object_manager.ObjectManager`
         """
         return windows.winobject.object_manager.ObjectManager()
+
+    @utils.fixedpropety
+    def device_manager(self):
+        """An object to query the device&driver configured on the computer.
+
+        :type: :class:`~windows.winobject.device_manager.DeviceManager`
+        """
+        return windows.winobject.device_manager.DeviceManager()
 
     @utils.fixedpropety
     def bits(self):
