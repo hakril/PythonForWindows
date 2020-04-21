@@ -1,0 +1,163 @@
+CONFIGRET WINAPI CM_Enumerate_Classes(
+    _In_  ULONG         ulClassIndex,
+    _Out_ LPGUID        ClassGuid,
+    _In_  ULONG         ulFlags
+    );
+
+CONFIGRET WINAPI CM_Enumerate_Classes_Ex(
+    _In_  ULONG         ulClassIndex,
+    _Out_ LPGUID        ClassGuid,
+    _In_  ULONG         ulFlags,
+    _In_opt_ HMACHINE   hMachine
+    );
+
+CONFIGRET WINAPI CM_Get_First_Log_Conf(
+    _Out_opt_ PLOG_CONF plcLogConf,
+    _In_  DEVINST       dnDevInst,
+    _In_  ULONG         ulFlags
+    );
+
+CONFIGRET WINAPI CM_Get_First_Log_Conf_Ex(
+    _Out_opt_ PLOG_CONF plcLogConf,
+    _In_  DEVINST       dnDevInst,
+    _In_  ULONG         ulFlags,
+    _In_opt_ HMACHINE   hMachine
+    );
+
+CONFIGRET WINAPI CM_Get_Log_Conf_Priority(
+    _In_  LOG_CONF      lcLogConf,
+    _Out_ PPRIORITY     pPriority,
+    _In_  ULONG         ulFlags
+    );
+
+CONFIGRET WINAPI CM_Get_Log_Conf_Priority_Ex(
+    _In_  LOG_CONF      lcLogConf,
+    _Out_ PPRIORITY     pPriority,
+    _In_  ULONG         ulFlags,
+    _In_opt_ HMACHINE   hMachine
+    );
+
+CONFIGRET WINAPI CM_Get_Next_Log_Conf(
+    _Out_opt_ PLOG_CONF plcLogConf,
+    _In_  LOG_CONF      lcLogConf,
+    _In_  ULONG         ulFlags
+    );
+
+CONFIGRET WINAPI CM_Get_Next_Log_Conf_Ex(
+    _Out_opt_ PLOG_CONF plcLogConf,
+    _In_  LOG_CONF      lcLogConf,
+    _In_  ULONG         ulFlags,
+    _In_opt_ HMACHINE   hMachine
+    );
+
+CONFIGRET WINAPI CM_Free_Res_Des_Handle(
+    _In_  RES_DES       rdResDes
+    );
+
+CONFIGRET WINAPI CM_Get_Child(
+    _Out_ PDEVINST      pdnDevInst,
+    _In_  DEVINST       dnDevInst,
+    _In_  ULONG         ulFlags
+    );
+
+CONFIGRET WINAPI CM_Get_Child_Ex(
+    _Out_ PDEVINST      pdnDevInst,
+    _In_  DEVINST       dnDevInst,
+    _In_  ULONG         ulFlags,
+    _In_opt_ HMACHINE   hMachine
+    );
+
+CONFIGRET WINAPI CM_Get_Next_Res_Des(
+    _Out_ PRES_DES      prdResDes,
+    _In_  RES_DES       rdResDes,
+    _In_  RESOURCEID    ForResource,
+    _Out_opt_ PRESOURCEID pResourceID,
+    _In_  ULONG         ulFlags
+    );
+
+CONFIGRET WINAPI CM_Get_Parent(
+    _Out_ PDEVINST      pdnDevInst,
+    _In_  DEVINST       dnDevInst,
+    _In_  ULONG         ulFlags
+    );
+
+CONFIGRET WINAPI CM_Get_Parent_Ex(
+    _Out_ PDEVINST      pdnDevInst,
+    _In_  DEVINST       dnDevInst,
+    _In_  ULONG         ulFlags,
+    _In_opt_ HMACHINE   hMachine
+    );
+
+CONFIGRET WINAPI CM_Get_Res_Des_Data(
+    _In_  RES_DES       rdResDes,
+    _Out_writes_bytes_(BufferLen) PVOID Buffer,
+    _In_  ULONG         BufferLen,
+    _In_  ULONG         ulFlags
+    );
+
+CONFIGRET WINAPI CM_Get_Next_Res_Des_Ex(
+    _Out_ PRES_DES      prdResDes,
+    _In_  RES_DES       rdResDes,
+    _In_  RESOURCEID    ForResource,
+    _Out_opt_ PRESOURCEID pResourceID,
+    _In_  ULONG         ulFlags,
+    _In_opt_ HMACHINE   hMachine
+    );
+
+CONFIGRET WINAPI CM_Get_Res_Des_Data_Size(
+    _Out_ PULONG        pulSize,
+    _In_  RES_DES       rdResDes,
+    _In_  ULONG         ulFlags
+    );
+
+CONFIGRET WINAPI CM_Get_Res_Des_Data_Size_Ex(
+    _Out_ PULONG        pulSize,
+    _In_  RES_DES       rdResDes,
+    _In_  ULONG         ulFlags,
+    _In_opt_ HMACHINE   hMachine
+    );
+
+CONFIGRET WINAPI CM_Get_Sibling(
+    _Out_ PDEVINST      pdnDevInst,
+    _In_  DEVINST       dnDevInst,
+    _In_  ULONG         ulFlags
+    );
+
+CONFIGRET WINAPI CM_Get_Sibling_Ex(
+    _Out_ PDEVINST      pdnDevInst,
+    _In_  DEVINST       dnDevInst,
+    _In_  ULONG         ulFlags,
+    _In_opt_ HMACHINE   hMachine
+    );
+
+WORD WINAPI CM_Get_Version();
+
+WORD WINAPI CM_Get_Version_Ex(
+    _In_opt_ HMACHINE   hMachine
+    );
+
+CONFIGRET WINAPI CM_Locate_DevNodeA(
+    _Out_ PDEVINST      pdnDevInst,
+    _In_opt_ DEVINSTID_A pDeviceID,
+    _In_  ULONG         ulFlags
+    );
+
+CONFIGRET WINAPI CM_Locate_DevNodeW(
+    _Out_ PDEVINST      pdnDevInst,
+    _In_opt_ DEVINSTID_W pDeviceID,
+    _In_  ULONG         ulFlags
+    );
+
+CONFIGRET WINAPI CM_Locate_DevNode_ExA(
+    _Out_ PDEVINST      pdnDevInst,
+    _In_opt_ DEVINSTID_A pDeviceID,
+    _In_  ULONG         ulFlags,
+    _In_opt_ HMACHINE   hMachine
+    );
+
+CONFIGRET WINAPI CM_Locate_DevNode_ExW(
+    _Out_ PDEVINST      pdnDevInst,
+    _In_opt_ DEVINSTID_W pDeviceID,
+    _In_  ULONG         ulFlags,
+    _In_opt_ HMACHINE   hMachine
+    );

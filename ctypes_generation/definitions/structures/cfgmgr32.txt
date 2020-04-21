@@ -1,0 +1,300 @@
+
+/*
+    The IO_DES structure is used for specifying either a resource list or a resource requirements list that describes I/O port usage for a device instance.
+    Source : https://docs.microsoft.com/en-gb/windows/win32/api/cfgmgr32/ns-cfgmgr32-io_des
+*/
+typedef struct IO_Des_s {
+  DWORD     IOD_Count;
+  DWORD     IOD_Type;
+  DWORDLONG IOD_Alloc_Base;
+  DWORDLONG IOD_Alloc_End;
+  DWORD     IOD_DesFlags;
+} IO_DES, *PIO_DES;
+
+
+/*
+    The IO_RANGE structure specifies a resource requirements list that describes I/O port usage for a device instance.
+    Source : https://docs.microsoft.com/en-gb/windows/win32/api/cfgmgr32/ns-cfgmgr32-io_range
+*/
+
+typedef struct IO_Range_s {
+  DWORDLONG IOR_Align;
+  DWORD     IOR_nPorts;
+  DWORDLONG IOR_Min;
+  DWORDLONG IOR_Max;
+  DWORD     IOR_RangeFlags;
+  DWORDLONG IOR_Alias;
+} IO_RANGE, *PIO_RANGE;
+
+
+/*
+    The MEM_DES structure is used for specifying either a resource list or a resource requirements list that describes memory usage for a device instance.
+    Source : https://docs.microsoft.com/en-gb/windows/win32/api/cfgmgr32/ns-cfgmgr32-mem_des
+*/
+typedef struct Mem_Des_s {
+  DWORD     MD_Count;
+  DWORD     MD_Type;
+  DWORDLONG MD_Alloc_Base;
+  DWORDLONG MD_Alloc_End;
+  DWORD     MD_Flags;
+  DWORD     MD_Reserved;
+} MEM_DES, *PMEM_DES;
+
+
+/*
+    The MEM_RANGE structure specifies a resource requirements list that describes memory usage for a device instance.
+    Source : https://docs.microsoft.com/en-gb/windows/win32/api/cfgmgr32/ns-cfgmgr32-mem_range
+*/
+
+typedef struct Mem_Range_s {
+  DWORDLONG MR_Align;
+  ULONG     MR_nBytes;
+  DWORDLONG MR_Min;
+  DWORDLONG MR_Max;
+  DWORD     MR_Flags;
+  DWORD     MR_Reserved;
+} MEM_RANGE, *PMEM_RANGE;
+
+
+/*
+    The DMA_DES structure is used for specifying either a resource list or a resource requirements list that describes direct memory access (DMA) channel usage for a device instance.
+    Source : https://docs.microsoft.com/en-gb/windows/win32/api/cfgmgr32/ns-cfgmgr32-dma_des
+*/
+
+typedef struct DMA_Des_s {
+  DWORD DD_Count;
+  DWORD DD_Type;
+  DWORD DD_Flags;
+  ULONG DD_Alloc_Chan;
+} DMA_DES, *PDMA_DES;
+
+/*
+    The DMA_RANGE structure specifies a resource requirements list that describes DMA channel usage for a device instance
+    Source : https://docs.microsoft.com/en-gb/windows/win32/api/cfgmgr32/ns-cfgmgr32-dma_range
+*/
+
+typedef struct DMA_Range_s {
+  ULONG DR_Min;
+  ULONG DR_Max;
+  ULONG DR_Flags;
+} DMA_RANGE, *PDMA_RANGE;
+
+
+/*
+    The IRQ_DES structure is used for specifying either a resource list or a resource requirements list that describes IRQ line usage for a device instance.
+    Source : https://docs.microsoft.com/en-gb/windows/win32/api/cfgmgr32/ns-cfgmgr32-irq_des_64
+
+The structure from the header looks like:
+
+#if defined(NT_PROCESSOR_GROUPS)
+  USHORT  IRQD_Flags;
+  USHORT  IRQD_Group;
+#else
+  DWORD   IRQD_Flags;
+#endif
+
+Let's ignore IRQD_Group it and only have a flag for now.
+*/
+
+
+typedef struct IRQ_Des_64_s {
+  DWORD   IRQD_Count;
+  DWORD   IRQD_Type;
+  DWORD   IRQD_Flags;
+  ULONG   IRQD_Alloc_Num;
+  ULONG64 IRQD_Affinity;
+} IRQ_DES_64, *PIRQ_DES_64;
+
+/*
+    The IRQ_DES structure is used for specifying either a resource list or a resource requirements list that describes IRQ line usage for a device instance.
+    Source : https://docs.microsoft.com/en-gb/windows/win32/api/cfgmgr32/ns-cfgmgr32-irq_des_32
+
+The structure from the header looks like:
+
+#if defined(NT_PROCESSOR_GROUPS)
+  USHORT  IRQD_Flags;
+  USHORT  IRQD_Group;
+#else
+  DWORD   IRQD_Flags;
+#endif
+
+Let's ignore IRQD_Group it and only have a flag for now.
+*/
+
+typedef struct IRQ_Des_32_s {
+  DWORD   IRQD_Count;
+  DWORD   IRQD_Type;
+  DWORD   IRQD_Flags;
+  ULONG   IRQD_Alloc_Num;
+  ULONG32 IRQD_Affinity;
+} IRQ_DES_32, *PIRQ_DES_32;
+
+
+/*
+    The IRQ_RANGE structure specifies a resource requirements list that describes IRQ line usage for a device instance.
+    Source : https://docs.microsoft.com/en-gb/windows/win32/api/cfgmgr32/ns-cfgmgr32-irq_range
+
+The definition from the header is:
+
+typedef struct IRQ_Range_s {
+   ULONG IRQR_Min;      // minimum IRQ in the range
+   ULONG IRQR_Max;      // maximum IRQ in the range
+#if defined(NT_PROCESSOR_GROUPS)
+   USHORT IRQR_Flags;   // flags describing the range (fIRQD flags)
+   USHORT IRQR_Rsvdz;   // Reserved, must be zero.
+#else
+   ULONG IRQR_Flags;    // flags describing the range (fIRQD flags)
+#endif
+} IRQ_RANGE, *PIRQ_RANGE;
+
+Let's ignore IRQR_Rsvdz for now
+*/
+
+typedef struct IRQ_Range_s {
+   ULONG IRQR_Min;      // minimum IRQ in the range
+   ULONG IRQR_Max;      // maximum IRQ in the range
+   ULONG IRQR_Flags;    // flags describing the range (fIRQD flags)
+} IRQ_RANGE, *PIRQ_RANGE;
+
+
+// Ressources
+
+// BUSNUMBER_DES structure
+typedef struct BusNumber_Des_s {
+   DWORD BUSD_Count;       // number of BUSNUMBER_RANGE structs in BUSNUMBER_RESOURCE
+   DWORD BUSD_Type;        // size (in bytes) of BUSNUMBER_RANGE (BusNumberType_Range)
+   DWORD BUSD_Flags;       // flags describing the range (currently unused)
+   ULONG BUSD_Alloc_Base;  // specifies the first Bus that was allocated
+   ULONG BUSD_Alloc_End;   // specifies the last Bus number that was allocated
+} BUSNUMBER_DES, *PBUSNUMBER_DES;
+
+typedef struct BusNumber_Range_s {
+  ULONG BUSR_Min;
+  ULONG BUSR_Max;
+  ULONG BUSR_nBusNumbers;
+  ULONG BUSR_Flags;
+} BUSNUMBER_RANGE, *PBUSNUMBER_RANGE;
+
+typedef struct BusNumber_Resource_s {
+  BUSNUMBER_DES   BusNumber_Header;
+  BUSNUMBER_RANGE BusNumber_Data[ANYSIZE_ARRAY];
+} BUSNUMBER_RESOURCE, *PBUSNUMBER_RESOURCE;
+
+typedef struct CS_Des_s {
+  DWORD CSD_SignatureLength;
+  DWORD CSD_LegacyDataOffset;
+  DWORD CSD_LegacyDataSize;
+  DWORD CSD_Flags;
+  GUID  CSD_ClassGuid;
+  BYTE  CSD_Signature[ANYSIZE_ARRAY];
+} CS_DES, *PCS_DES;
+
+typedef struct CS_Resource_s {
+  CS_DES CS_Header;
+} CS_RESOURCE, *PCS_RESOURCE;
+
+typedef struct DMA_Des_s {
+  DWORD DD_Count;
+  DWORD DD_Type;
+  DWORD DD_Flags;
+  ULONG DD_Alloc_Chan;
+} DMA_DES, *PDMA_DES;
+
+typedef struct DMA_Resource_s {
+  DMA_DES   DMA_Header;
+  DMA_RANGE DMA_Data[ANYSIZE_ARRAY];
+} DMA_RESOURCE, *PDMA_RESOURCE;
+
+typedef struct IO_Des_s {
+  DWORD     IOD_Count;
+  DWORD     IOD_Type;
+  DWORDLONG IOD_Alloc_Base;
+  DWORDLONG IOD_Alloc_End;
+  DWORD     IOD_DesFlags;
+} IO_DES, *PIO_DES;
+
+typedef struct IO_Resource_s {
+  IO_DES   IO_Header;
+  IO_RANGE IO_Data[ANYSIZE_ARRAY];
+} IO_RESOURCE, *PIO_RESOURCE;
+
+
+typedef struct IRQ_Resource_32_s {
+  IRQ_DES_32 IRQ_Header;
+  IRQ_RANGE  IRQ_Data[ANYSIZE_ARRAY];
+} IRQ_RESOURCE_32, *PIRQ_RESOURCE_32;
+
+
+typedef struct IRQ_Resource_64_s {
+   IRQ_DES_64   IRQ_Header;               // info about IRQ range list
+   IRQ_RANGE    IRQ_Data[ANYSIZE_ARRAY];  // list of IRQ ranges
+} IRQ_RESOURCE_64, *PIRQ_RESOURCE_64;
+
+typedef struct Mem_Resource_s {
+  MEM_DES   MEM_Header;
+  MEM_RANGE MEM_Data[ANYSIZE_ARRAY];
+} MEM_RESOURCE, *PMEM_RESOURCE;
+
+typedef struct MfCard_Des_s {
+  DWORD PMF_Count;
+  DWORD PMF_Type;
+  DWORD PMF_Flags;
+  BYTE  PMF_ConfigOptions;
+  BYTE  PMF_IoResourceIndex;
+  BYTE  PMF_Reserved[2];
+  DWORD PMF_ConfigRegisterBase;
+} MFCARD_DES, *PMFCARD_DES;
+
+typedef struct MfCard_Resource_s {
+  MFCARD_DES MfCard_Header;
+} MFCARD_RESOURCE, *PMFCARD_RESOURCE;
+
+typedef struct PcCard_Des_s {
+  DWORD PCD_Count;
+  DWORD PCD_Type;
+  DWORD PCD_Flags;
+  BYTE  PCD_ConfigIndex;
+  BYTE  PCD_Reserved[3];
+  DWORD PCD_MemoryCardBase1;
+  DWORD PCD_MemoryCardBase2;
+  DWORD PCD_MemoryCardBase[PCD_MAX_MEMORY];
+  WORD  PCD_MemoryFlags[PCD_MAX_MEMORY];
+  BYTE  PCD_IoFlags[PCD_MAX_IO];
+} PCCARD_DES, *PPCCARD_DES;
+
+typedef struct PcCard_Resource_s {
+  PCCARD_DES PcCard_Header;
+} PCCARD_RESOURCE, *PPCCARD_RESOURCE;
+
+
+//
+// MEM_LARGE_RANGE Structure
+//
+typedef struct Mem_Large_Range_s {
+   DWORDLONG MLR_Align;     // specifies mask for base alignment
+   ULONGLONG MLR_nBytes;    // specifies number of bytes required
+   DWORDLONG MLR_Min;       // specifies minimum address of the range
+   DWORDLONG MLR_Max;       // specifies maximum address of the range
+   DWORD     MLR_Flags;     // specifies flags describing range (fMD flags)
+   DWORD     MLR_Reserved;
+} MEM_LARGE_RANGE, *PMEM_LARGE_RANGE;
+
+//
+// MEM_LARGE_DES structure
+//
+typedef struct Mem_Large_Des_s {
+   DWORD     MLD_Count;        // number of LARGE_MEM_RANGE structs in LARGE_MEM_RESOURCE
+   DWORD     MLD_Type;         // size (in bytes) of MEM_RANGE (MType_Range)
+   DWORDLONG MLD_Alloc_Base;   // base memory address of range allocated
+   DWORDLONG MLD_Alloc_End;    // end of allocated range
+   DWORD     MLD_Flags;        // flags describing allocated range (fMD flags)
+   DWORD     MLD_Reserved;
+} MEM_LARGE_DES, *PMEM_LARGE_DES;
+
+//
+// MEM_LARGE_RESOURCE structure
+//
+typedef struct Mem_Large_Resource_s {
+   MEM_LARGE_DES   MEM_LARGE_Header;               // info about memory range list
+   MEM_LARGE_RANGE MEM_LARGE_Data[ANYSIZE_ARRAY];  // list of memory ranges
+} MEM_LARGE_RESOURCE, *PMEM_LARGE_RESOURCE;

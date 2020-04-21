@@ -1,0 +1,23 @@
+//
+// Device interface information structure (references a device
+// interface that is associated with the device information
+// element that owns it).
+//
+typedef struct _SP_DEVICE_INTERFACE_DATA {
+    DWORD cbSize;
+    GUID  InterfaceClassGuid;
+    DWORD Flags;
+    ULONG_PTR Reserved;
+} SP_DEVICE_INTERFACE_DATA, *PSP_DEVICE_INTERFACE_DATA;
+
+
+//
+// Device information structure (references a device instance
+// that is a member of a device information set)
+//
+typedef struct _SP_DEVINFO_DATA {
+    DWORD cbSize;
+    GUID  ClassGuid;
+    DWORD DevInst;    // DEVINST handle
+    ULONG_PTR Reserved;
+} SP_DEVINFO_DATA, *PSP_DEVINFO_DATA;
