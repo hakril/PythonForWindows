@@ -6,7 +6,7 @@ from contextlib import contextmanager
 import windows
 import windows.generated_def as gdef
 from windows import winproxy
-from windows.pycompat import int_types
+from windows.pycompat import int_types, basestring
 
 
 # Helpers
@@ -333,6 +333,10 @@ class ImprovedEVT_VARIANT(gdef.EVT_VARIANT):
                 vtype = gdef.EvtVarTypeUInt64
             elif isinstance(value, basestring):
                 vtype = gdef.EvtVarTypeString
+            elif isinstance(value, bytes):
+                # not basestring and bytes -> py3 bytes
+                vtype = gdef.EvtVarTypeBinary
+                value = windows.utils.BUFFER(gdef.BYTE).from_buffer_copy(value)
             else:
                 raise NotImplementedError("LATER")
         self = cls()

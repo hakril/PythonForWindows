@@ -29,7 +29,7 @@ from windows.winobject import apisetmap
 from windows.winobject import token
 from windows import security
 
-from windows.pycompat import raw_encode, raw_decode
+from windows.pycompat import raw_encode, raw_decode, basestring
 
 TimeInfo = namedtuple("TimeInfo", ["creation", "exit", "kernel", "user"])
 """Time information about a process"""

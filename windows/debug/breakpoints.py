@@ -4,6 +4,7 @@ import windows
 from windows.generated_def.winstructs import *
 from windows.generated_def import windef
 from windows.winobject.process import WinProcess, WinThread
+from windows.pycompat import basestring
 
 
 STANDARD_BP = "BP"
@@ -222,9 +223,14 @@ class FunctionCallBP(Breakpoint):
     """A Breakpoint that allow to trigger at the return of a function"""
     def break_on_ret(self, dbg, exception):
         """Setup a breakpoint at the return address of the function, this breakpoint will call :func:`ret_trigger`"""
-        cproc = dbg.current_process
-        return_addr = dbg.current_process.read_ptr(dbg.current_thread.context.sp)
+        return_addr = self.get_ret_addr(dbg, exception)
         dbg.add_bp(FunctionRetBP(return_addr, self), target=dbg.current_process)
+
+    def get_ret_addr(self, dbg, exception):
+        """Get the return address of the current target, only valid in the trigger() function."""
+        cproc = dbg.current_process
+        return dbg.current_process.read_ptr(dbg.current_thread.context.sp)
+
 
     def ret_trigger(self, dbg, exception):
         """Called at the return of the function if :func:`break_on_ret` was called"""

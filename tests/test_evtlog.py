@@ -127,3 +127,12 @@ def test_evtlog_query_seek():
     events = query.all()
     assert len(events) == 1
     assert events[0].data["TaskName"] == taskpath
+
+
+@pytest.mark.parametrize("value", [
+    12,
+    "HELLO WORLD",
+    b"BYTES HELLO WORLD",
+])
+def test_evtlog_improved_variant_from_value(value):
+    assert evtl.ImprovedEVT_VARIANT.from_value(value)

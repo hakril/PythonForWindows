@@ -1,6 +1,7 @@
 import ctypes
 import windows
 import windows.generated_def as gdef
+from windows.pycompat import basestring
 
 # Renommer le fichier etw ?
 
@@ -154,7 +155,7 @@ class CtxProcess(object):
 
 class EtwTrace(object):
     def __init__(self, name, logfile=None, guid=None):
-        self.name = name
+        self.name = windows.pycompat.raw_encode(name)
         self.logfile = logfile
         if guid and isinstance(guid, basestring):
             guid = gdef.GUID.from_string(guid)
@@ -221,14 +222,14 @@ class EtwTrace(object):
         return windows.winproxy.EnableTraceEx2(self.handle, guid, EVENT_CONTROL_CODE_ENABLE_PROVIDER, level , any_keyword, all_keyword, 0, None)
 
 
-    def process(self, callback, begin=None, end=None, context = None):
+    def process(self, callback, begin=None, end=None, context=None):
         if end == "now":
             end = gdef.FILETIME()
             windows.winproxy.GetSystemTimeAsFileTime(end)
             windows.utils.sprint(end)
 
         logfile = gdef.EVENT_TRACE_LOGFILEW()
-        logfile.LoggerName = self.name
+        logfile.LoggerName = windows.pycompat.raw_decode(self.name)
         # logfile.ProcessTraceMode = gdef.PROCESS_TRACE_MODE_EVENT_RECORD | gdef.PROCESS_TRACE_MODE_RAW_TIMESTAMP
         logfile.ProcessTraceMode = gdef.PROCESS_TRACE_MODE_EVENT_RECORD
         if not self.logfile:

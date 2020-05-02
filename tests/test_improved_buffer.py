@@ -36,3 +36,8 @@ def test_partial_buffer_size_guess(c_type, buffer, expected_size):
     assert len(buf) == expected_size
 
 
+def test_partial_buffer_string_call():
+    buffer = windows.utils.BUFFER(gdef.WCHAR)("LOL")
+    assert buffer[:] == "LOL"
+    assert len(buffer) == 3
+

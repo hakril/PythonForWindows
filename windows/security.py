@@ -4,6 +4,7 @@ import sys
 import windows
 import windows.generated_def as gdef
 from windows import winproxy
+from windows.pycompat import basestring
 
 from windows.winobject.token import Token, KNOW_INTEGRITY_LEVEL
 

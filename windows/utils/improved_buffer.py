@@ -2,6 +2,7 @@ import sys
 import ctypes
 import _ctypes
 import windows.generated_def as gdef
+from windows.pycompat import basestring
 
 ## TESTING Improved Buffer code ###
 ## This code is not stable and WILL CHANGE ##

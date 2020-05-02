@@ -123,6 +123,23 @@ def test_unix_timestamp_from_filetime():
     # Because round(0.5) == 0 (vs 1 in py2)
     assert windows.utils.unix_timestamp_from_filetime(131492395680727305) == 1504765968.072731
 
+# Test values from https://docs.microsoft.com/en-us/cpp/atl-mfc-shared/date-type?view=vs-2019
+@pytest.mark.parametrize("comtime, date", [
+    (0, datetime(1899, 12, 30)),
+    (2, datetime(1900, 1, 1)),
+    (5, datetime(1900, 1, 4)),
+    (5.25, datetime(1900, 1, 4, hour=6)),
+    (5.5, datetime(1900, 1, 4, hour=12)),
+    (5.875, datetime(1900, 1, 4, hour=21)),
+    (-0.25, datetime(1899, 12, 30, hour=6)),
+    (-0.5, datetime(1899, 12, 30, hour=12)),
+    (-2, datetime(1899, 12, 28)),
+    (-2.5, datetime(1899, 12, 28, hour=12)),
+    (-2.75, datetime(1899, 12, 28, hour=18)),
+])
+def test_datetime_from_comtime(comtime, date):
+    assert windows.utils.datetime_from_comdate(comtime) == date
+
 @pytest.mark.parametrize("prefix", [
     ("long_ascii_prefix"),
     (u'\u4e2d\u56fd\u94f6\u884c\u7f51\u94f6\u52a9\u624b'),
@@ -137,3 +154,21 @@ def test_long_short_path_str_unicode(prefix):
         full_name = windows.utils.get_long_path(short_name).lower()
         assert isinstance(full_name, unicode)
         assert full_name == basename
+
+TEST_CERT = b"""
+MIIBwTCCASqgAwIBAgIQG46Uyws+67ZBOfPJCbFrRjANBgkqhkiG9w0BAQsFADAfMR0wGwYDVQQD
+ExRQeXRob25Gb3JXaW5kb3dzVGVzdDAeFw0xNzA0MTIxNDM5MjNaFw0xODA0MTIyMDM5MjNaMB8x
+HTAbBgNVBAMTFFB5dGhvbkZvcldpbmRvd3NUZXN0MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKB
+gQCRHwC/sRfXh5pc4poc85aidrudbPdya+0OeonQlf1JQ1ekf7KSfADV5FLkSQu2BzgBK9DIWTGX
+XknBJIzZF03UZsVg5D67V2mnSClXucc0cGFcK4pDDt0tHeabA2GPinVe7Z6qDT4ZxPR8lKaXDdV2
+Pg2hTdcGSpqaltHxph7G/QIDAQABMA0GCSqGSIb3DQEBCwUAA4GBACcQFdOlVjYICOIyAXowQaEN
+qcLpN1iWoL9UijNhTY37+U5+ycFT8QksT3Xmh9lEIqXMh121uViy2P/3p+Ek31AN9bB+BhWIM6PQ
+gy+ApYDdSwTtWFARSrMqk7rRHUveYEfMw72yaOWDxCzcopEuADKrrYEute4CzZuXF9PbbgK6"""
+
+
+def test_sprint_certificate():
+    cert = windows.crypto.Certificate.from_buffer(b64decode(TEST_CERT))
+    # Certificate is quite a complexe Windows structure
+    # With Sub-struct / Pointer & string
+    # It was broken on py3 -> ense this test
+    windows.utils.sprint(cert)

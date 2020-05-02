@@ -115,14 +115,15 @@ class CryptMessage(gdef.HCRYPTMSG):
 
     def update(self, blob, final):
         # Test isinstance string ?
-        if isinstance(blob, (basestring, bytearray)):
+        if isinstance(blob, (windows.pycompat.anybuff, bytearray)):
+            blob = windows.pycompat.raw_encode(blob)
             buffer = windows.utils.BUFFER(gdef.BYTE).from_buffer_copy(blob)
             return winproxy.CryptMsgUpdate(self, buffer, len(blob), final)
         return winproxy.CryptMsgUpdate(self, blob.pbData, blob.cbData, final)
 
     # constructor
     @classmethod
-    def from_data(self, data):
+    def from_buffer(self, data):
         hmsg = winproxy.CryptMsgOpenToDecode(windows.crypto.DEFAULT_ENCODING, 0, 0, None, None, None)
         newmsg = CryptMessage(hmsg)
         newmsg.update(data, final=True)

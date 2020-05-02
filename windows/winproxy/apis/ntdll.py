@@ -364,8 +364,6 @@ def NtEnumerateValueKey(KeyHandle, Index, KeyValueInformationClass, KeyValueInfo
 
 @NtdllProxy()
 def NtDeleteValueKey(KeyHandle, ValueName):
-    if isinstance(ValueName, basestring):
-        ValueName = gdef.UNICODE_STRING.from_string(ValueName)
     return NtDeleteValueKey.ctypes_function(KeyHandle, ValueName)
 
 @NtdllProxy()

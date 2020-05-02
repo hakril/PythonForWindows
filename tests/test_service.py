@@ -12,10 +12,16 @@ def test_services_process():
 
 
 def test_service_appinfo():
-    appinfos = [x for x in windows.system.services if x.name == b"Appinfo"]
-    assert len(appinfos) == 1
-    appinfo = appinfos[0]
+    appinfo = windows.system.services[b"Appinfo"]
     assert appinfo.status.type & gdef.SERVICE_WIN32_OWN_PROCESS
     # Check other fields
     assert appinfo.name == b"Appinfo"
     assert appinfo.description == b"Application Information"
+
+
+def test_service_start():
+    faxservice = windows.system.services[b"Fax"]
+    # Just start a random serivce with a string
+    # Used to check string compat in py2/py3
+    faxservice.start(b"TEST STRING")
+

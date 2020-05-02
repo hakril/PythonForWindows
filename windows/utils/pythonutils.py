@@ -4,8 +4,9 @@ import ctypes
 import _ctypes
 import windows.generated_def as gdef
 
-from windows.dbgprint import dbgprint
 from windows import winproxy
+from windows.dbgprint import dbgprint
+from windows.pycompat import basestring
 
 
 

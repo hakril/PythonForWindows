@@ -222,3 +222,19 @@ def test_sign_verify_fail(rawcert, rawpfx):
     assert excinfo.value.winerror == gdef.STATUS_INVALID_SIGNATURE
 
 
+# str(windows.crypto.encrypt(TEST_CERT, "Hello crypto")).encode("base64")
+# Target serial == TEST_CERT.Serial == 1b 8e 94 cb 0b 3e eb b6 41 39 f3 c9 09 b1 6b 46
+TEST_CRYPTMSG = b"""MIIBJAYJKoZIhvcNAQcDoIIBFTCCARECAQAxgc0wgcoCAQAwMzAfMR0wGwYDVQQDExRQeXRob25G
+b3JXaW5kb3dzVGVzdAIQG46Uyws+67ZBOfPJCbFrRjANBgkqhkiG9w0BAQcwAASBgA1fwFY8w4Bb
+fOMer94JhazbJxaUnV305QzF27w4GwNQ2UIpl9KWJoJJaF7azU3nVhP33agAxlxmr9fP48B6DeE1
+pbu1jX9tEWlTJC6O0TmKcRPjblEaU6VJXXlpKlKZCmwCUuHR9VtcXGnxEU1Hy7FmHM96lvDRmYQT
+Y0MnRJLyMDwGCSqGSIb3DQEHATAdBglghkgBZQMEASoEEEdEGEzKBrDO/zC8z6q6HLaAEGbjGCay
+s6u32YhUxQ4/QhI="""
+
+def test_cryptmsg_from_data():
+    rawdata = b64decode(TEST_CRYPTMSG)
+    cryptmsg = windows.crypto.CryptMessage.from_buffer(rawdata)
+    rawtarget = b"\x1b\x8e\x94\xcb\x0b>\xeb\xb6A9\xf3\xc9\t\xb1kF"
+    assert cryptmsg.get_recipient_data(0).SerialNumber.data[::-1] == rawtarget
+
+

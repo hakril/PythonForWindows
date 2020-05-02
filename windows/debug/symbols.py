@@ -7,8 +7,10 @@ from collections import namedtuple
 import windows
 import windows.generated_def as gdef
 from windows import winproxy
+from windows.pycompat import basestring
 
 DEFAULT_DBG_OPTION = gdef.SYMOPT_DEFERRED_LOADS + gdef.SYMOPT_UNDNAME
+
 
 def set_dbghelp_path(path):
     loaded_modules =  [m.name.lower() for m in windows.current_process.peb.modules]
@@ -234,6 +236,8 @@ class SymbolHandler(object):
                 path = name
             except Exception as e:
                 pass
+        # Expect a-string
+        path = windows.pycompat.raw_encode(path)
         try:
             load_addr = winproxy.SymLoadModuleEx(self.handle, file_handle, path, name, addr, size, data, flags)
         except WindowsError as e:
@@ -294,6 +298,8 @@ class SymbolHandler(object):
         sym = buff[0]
         sym.SizeOfStruct = ctypes.sizeof(SymbolInfo)
         sym.MaxNameLen  = max_len_size
+        # Expect a-string
+        name = windows.pycompat.raw_encode(name)
         windows.winproxy.SymFromName(self.handle, name, buff)
         sym.resolver = self
         sym.displacement = 0
@@ -301,7 +307,7 @@ class SymbolHandler(object):
 
     def resolve(self, name_or_addr):
         # Only returns None if symbol is not Found ?
-        if isinstance(name_or_addr, basestring):
+        if isinstance(name_or_addr, windows.pycompat.anybuff):
             return self.symbol_from_name(name_or_addr)
         try:
             return self.symbol_and_displacement_from_address(name_or_addr)

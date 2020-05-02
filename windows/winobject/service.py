@@ -8,6 +8,7 @@ from windows import utils
 import windows.generated_def as gdef
 from windows.generated_def import *
 from windows import security
+from windows.pycompat import basestring
 
 # TODO: RM :)
 ServiceStatus = namedtuple("ServiceStatus", ["type", "state", "control_accepted", "flags"])
@@ -138,7 +139,7 @@ class NewService(gdef.SC_HANDLE):
     def start(self, args=None):
         nbelt = 0
         if args is not None:
-            if isinstance(args, basestring):
+            if isinstance(args, windows.pycompat.anybuff):
                 args = [args]
             nbelt = len(args)
             args = (gdef.LPCSTR * (nbelt))(*args)

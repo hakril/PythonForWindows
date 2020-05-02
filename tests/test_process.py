@@ -443,3 +443,14 @@ class TestProcessWithCheckGarbage(object):
         proc32.execute_python("assert 1 == 1")
         with pytest.raises(windows.injection.RemotePythonError):
             proc32.execute_python("assert 1 == 2")
+
+
+    def test_process_set_security_descriptor(self, proc32_64):
+        current_user_sid = str(windows.current_process.token.user)
+        # Same Owner/Group -> ALL acces to all
+        SSDL_GR_EVERYONE = "O:{user}G:{user}D:(A;;0x1fffff;;;WD)".format(user=current_user_sid)
+        SD_GR_EVERYONE = windows.security.SecurityDescriptor.from_string(SSDL_GR_EVERYONE)
+        # Via string
+        proc32_64.security_descriptor = SSDL_GR_EVERYONE
+        # Via SD obj
+        proc32_64.security_descriptor = SD_GR_EVERYONE
