@@ -22,6 +22,15 @@ def set_dbghelp_path(path):
     winproxy.DbgHelpProxy.APIDLL = path
     return
 
+# Load symbol config from ENV if present
+try:
+    env_dbghelp_path = os.environ["PFW_DBGHELP_PATH"]
+    # Setup the dbghelp path used by PFW
+    set_dbghelp_path(env_dbghelp_path)
+except KeyError as e:
+    pass
+
+
 
 class SymbolInfoBase(object):
     # Init on ctypes struct is not always called
@@ -202,18 +211,14 @@ class SymbolModule(gdef.IMAGEHLP_MODULE64):
 # https://docs.microsoft.com/en-us/windows/win32/debug/symbol-handler-initialization
 class SymbolHandler(object):
     """Base class of symbol handler"""
-    INIT_SYMBOL_OPTION = False
 
     def __init__(self, handle, search_path=None, invade_process=False):
         # https://docs.microsoft.com/en-us/windows/desktop/api/dbghelp/nf-dbghelp-syminitialize
         # This value should be unique and nonzero, but need not be a process handle.
         # be sure to use the correct handle.
         self.handle = handle
-        if not SymbolHandler.INIT_SYMBOL_OPTION:
-            # Normally the first real call to DbgHelp -> setup our options
-            # Should check if  SymSetOptions was not called by someone else
-            # windows.winproxy.SymSetOptions(DEFAULT_DBG_OPTION)
-            SymbolHandler.INIT_SYMBOL_OPTION = True
+        if not engine.options_already_setup:
+            engine.set_options(DEFAULT_DBG_OPTION)
         winproxy.SymInitialize(handle, search_path, invade_process)
 
 
@@ -509,7 +514,13 @@ class ProcessSymbolHandler(SymbolHandler):
 
 
 class SymbolEngine(object):
+    def __init__(self):
+        # use to now if we need to call the setup of options
+        # At the first DbgHelp call
+        self.options_already_setup = False
+
     def set_options(self, options):
+        self.options_already_setup = True
         return windows.winproxy.SymSetOptions(options)
 
     def get_options(self):
@@ -519,6 +530,7 @@ class SymbolEngine(object):
 
 engine = SymbolEngine()
 
+
 TST_TYPE_RES_TYPE = {
     gdef.TI_GET_SYMNAME: gdef.LPWSTR,
     gdef.TI_GET_LENGTH: gdef.ULONG64,
@@ -526,19 +538,5 @@ TST_TYPE_RES_TYPE = {
     gdef.TI_GTIEX_REQS_VALID: gdef.ULONG64,
     gdef.TI_GET_SYMTAG: gdef.SymTagEnum,
 }
-
-
-# class ProcessSymbolResolver(SymbolResolver):
-
-    # def load_all(self):
-        # result = []
-        # for mod in self.target.peb.modules:
-            # try:
-                # result.append(self.load_module(BaseOfDll=mod.baseaddr, ImageName=mod.fullname))
-            # except WindowsError as e:
-                # # Already loaded: ignore the error
-                # if e.winerror == gdef.ERROR_SUCCESS:
-                    # continue
-        # return result
 
 
