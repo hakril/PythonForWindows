@@ -64,7 +64,7 @@ Example:
     >>> client = windows.rpc.find_alpc_endpoint_and_connect(UAC_UIID)
     >>> client
     <windows.rpc.client.RPCClient object at 0x046A1470>
-    >>> client.alpc_client.portname
+    >>> client.alpc_client.port_name
     '\\RPC Control\\LRPC-c30c67fef2afa1612b'
     >>> iid = client.bind(UAC_UIID)
     >>> iid
