@@ -64,7 +64,7 @@ class RPCClient(object):
     """A client for RPC-over-ALPC able to bind to interface and perform calls using NDR32 marshalling"""
     REQUEST_IDENTIFIER = 0x11223344
     def __init__(self, port):
-        self.alpc_client = alpc.AlpcClient(port)
+        self.alpc_client = alpc.AlpcClient(port) #: The :class:`windows.alpc.AlpcClient` used to communicate with the server
         self.number_of_bind_if = 0 # if -> interface
         self.if_bind_number = {}
 

@@ -354,7 +354,7 @@ class AlpcClient(AlpcTransportBase):
     def __init__(self, port_name=None):
         """Init the :class:`AlpcClient` automatically connect to ``port_name`` using default values if given"""
         self.handle = None
-        self.port_name = None
+        self.port_name = None #: The name of the ALPC port the client is connect to.
         if port_name is not None:
             x = self.connect_to_port(port_name, "")
 
