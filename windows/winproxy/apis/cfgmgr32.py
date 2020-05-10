@@ -136,3 +136,7 @@ def CM_Get_Res_Des_Data_Size(pulSize, rdResDes, ulFlags=0):
 def CM_Get_Res_Des_Data(rdResDes, Buffer, BufferLen, ulFlags=0):
     return CM_Get_Res_Des_Data.ctypes_function(rdResDes, Buffer, BufferLen, ulFlags)
 
+
+@CfgMgr32Proxy()
+def CM_Get_Parent(pdnDevInst, dnDevInst, ulFlags=0):
+    return CM_Get_Parent.ctypes_function(pdnDevInst, dnDevInst, ulFlags)

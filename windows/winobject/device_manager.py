@@ -11,6 +11,9 @@ from windows.utils import fixedproperty
 class DeviceManager(object):
     @property
     def classes(self):
+        return list(self._classes_generator())
+
+    def _classes_generator(self):
         for index in itertools.count():
             try:
                 yield self._enumerate_classes(index, 0)
@@ -55,7 +58,7 @@ class DeviceClass(gdef.GUID):
 
     def __repr__(self):
         guid_cls = self.to_string()
-        return """<{0} {2} name="{1}">""".format(type(self).__name__, self.name, guid_cls)
+        return """<{0} name="{1}" guid={2}>""".format(type(self).__name__, self.name, guid_cls)
 
     __str__ = __repr__ # Overwrite default GUID str
 
@@ -79,6 +82,9 @@ class DeviceInformationSet(gdef.HDEVINFO):
 
     def enum_device_interface(self, index):
         raise NotImplementedError("enum_device_interface")
+
+    def all(self):
+        return list(self)
 
 
 class DeviceInstance(gdef.SP_DEVINFO_DATA):
@@ -148,6 +154,9 @@ class DeviceInstance(gdef.SP_DEVINFO_DATA):
                 raise
 
 
+    # https://docs.microsoft.com/en-us/windows-hardware/drivers/kernel/hardware-resources
+    # Explanation of types:
+        # - https://docs.microsoft.com/en-us/windows-hardware/drivers/kernel/hardware-resources#logical-configuration-types-for-resource-requirements-lists
     def get_first_logical_configuration(self, type):
         res = LogicalConfiguration()
         try:
@@ -163,6 +172,49 @@ class DeviceInstance(gdef.SP_DEVINFO_DATA):
         winproxy.CM_Get_Next_Log_Conf(res, logconf)
         return res
 
+    def _logical_configuration_generator(self, type):
+        x = self.get_first_logical_configuration(type)
+        while x:
+            yield x
+            try:
+                x = self.get_next_logical_configuration(x)
+            except WindowsError as e:
+                if e.winerror == gdef.CR_NO_MORE_LOG_CONF:
+                    return
+                raise
+
+    def get_logical_configuration(self, type):
+        return list(self._logical_configuration_generator(type))
+
+
+    # Allocated Configuration
+    # From https://docs.microsoft.com/en-us/windows-hardware/drivers/kernel/hardware-resources#logical-configuration-types-for-resource-lists
+    # A resource list identifying resources currently in use by a device instance.
+    # !!! Only one allocated configuration can exist for each device instance.
+    @property
+    def allocated_configuration(self):
+        allocconfs = self.get_logical_configuration(gdef.ALLOC_LOG_CONF)
+        if not allocconfs:
+            return allocconfs
+        assert len(allocconfs) == 1 # Only one allocated configuration can exist for each device instance.
+        return allocconfs[0]
+
+    # Boot Configuration
+    # From https://docs.microsoft.com/en-us/windows-hardware/drivers/kernel/hardware-resources#logical-configuration-types-for-resource-lists
+    # A resource list identifying the resources assigned to a device instance when the system is booted
+    # Only one boot configuration can exist for each device instance.
+
+    @property
+    def boot_configuration(self):
+        bootconfs = self.get_logical_configuration(gdef.BOOT_LOG_CONF)
+        if not bootconfs:
+            return bootconfs
+        assert len(bootconfs) == 1 # Only one boot configuration can exist for each device instance.
+        return bootconfs[0]
+
+
+
+    # Make properties for Each type of logical configuration ?
 
     # 'advanced' attributes extrapolated from properties
     @property
@@ -170,7 +222,7 @@ class DeviceInstance(gdef.SP_DEVINFO_DATA):
         return SecurityDescriptor.from_binary(self.raw_security_descriptor)
 
     def __repr__(self):
-        return """<{0} {1}>""".format(type(self).__name__, self.DevInst)
+        return """<{0} "{1}" (id={2})>""".format(type(self).__name__, self.description, self.DevInst)
 
 
 class LogicalConfiguration(gdef.HANDLE):
@@ -305,7 +357,6 @@ class DmaResource(ResourceDescriptorWithHeaderAndRanges):
     DATA_TYPE = gdef.DMA_RESOURCE
 
     def __str__(self):
-        import pdb;pdb.set_trace()
         return "<{0} : [{1:#016x}]>".format(type(self).__name__, self.header.DD_Alloc_Chan)
 
 
