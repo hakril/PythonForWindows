@@ -11,13 +11,33 @@ Namespace(clsfilter=None, no_print_devices=True, print_resources=False)
 <DeviceClass name="SystemRecovery" guid=2DB15374-706E-4131-A0C7-D7C78EB0289A>
 ....
 
-$ python64 device_manager\enum_devices.py --class Processor
-Namespace(clsfilter='Processor', no_print_devices=False, print_resources=False)
+$ python64 device_manager\enum_devices.py --class Processor --attributes name manufacturer device_object_name location_paths
+Namespace(attributes=['name', 'manufacturer', 'device_object_name', 'location_paths'], clsfilter='Processor', no_print_devices=False, print_resources=False)
 <DeviceClass name="Processor" guid=50127DC3-0F36-415E-A6CC-4CB3BE910B65>
   * <DeviceInstance "Intel Processor" (id=1)>
+    Attributes:
+    * name=Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz
+    * manufacturer=Intel
+    * device_object_name=\Device\00000017
+    * location_paths=[u'ACPI(_SB_)#ACPI(CPU0)']
   * <DeviceInstance "Intel Processor" (id=2)>
+    Attributes:
+    * name=Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz
+    * manufacturer=Intel
+    * device_object_name=\Device\00000018
+    * location_paths=[u'ACPI(_SB_)#ACPI(CPU1)']
   * <DeviceInstance "Intel Processor" (id=3)>
+    Attributes:
+    * name=Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz
+    * manufacturer=Intel
+    * device_object_name=\Device\00000019
+    * location_paths=[u'ACPI(_SB_)#ACPI(CPU2)']
   * <DeviceInstance "Intel Processor" (id=4)>
+    Attributes:
+    * name=Intel(R) Core(TM) i5-6600 CPU @ 3.30GHz
+    * manufacturer=Intel
+    * device_object_name=\Device\0000001a
+    * location_paths=[u'ACPI(_SB_)#ACPI(CPU3)']
 
 
 $ python64 device_manager\enum_devices.py --class Display --print-resources
