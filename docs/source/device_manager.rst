@@ -18,7 +18,6 @@ DeviceManager
 
 .. autoclass:: DeviceManager
    :members:
-   :undoc-members:
 
 
 DeviceClass
@@ -27,7 +26,7 @@ DeviceClass
 
 .. autoclass:: DeviceClass
    :members:
-   :undoc-members:
+   :no-inherited-members:
 
 
 
@@ -37,7 +36,7 @@ DeviceInformationSet
 
 .. autoclass:: DeviceInformationSet
    :members:
-   :undoc-members:
+   :special-members: __iter__
 
 
 
@@ -45,6 +44,78 @@ DeviceInstance
 """"""""""""""
 
 
-.. autoclass:: DeviceInformationSet
+.. autoclass:: DeviceInstance
    :members:
-   :undoc-members:
+
+
+LogicalConfiguration
+""""""""""""""""""""
+
+.. autoclass:: LogicalConfiguration
+   :members:
+
+
+ResourceDescriptor
+""""""""""""""""""
+
+.. autoclass:: ResourceDescriptor
+   :members:
+
+
+Concrete ResourceDescriptor
+''''''''''''''''''''''''''
+
+ResourceNoType
+------------------
+
+.. autoclass:: ResourceNoType
+
+MemoryResource
+--------------
+
+.. autoclass:: MemoryResource
+
+IoResource
+----------
+
+.. autoclass:: IoResource
+
+DmaResource
+-----------
+
+.. autoclass:: DmaResource
+
+IrqResource
+-----------
+
+.. autoclass:: IrqResource
+
+BusNumberResource
+-----------------
+
+.. autoclass:: BusNumberResource
+
+MemLargeResource
+----------------
+
+.. autoclass:: MemLargeResource
+
+ClassSpecificResource
+---------------------
+
+.. autoclass:: ClassSpecificResource
+
+DevicePrivateResource
+---------------------
+
+.. autoclass:: DevicePrivateResource
+
+MfCardConfigResource
+--------------------
+
+.. autoclass:: MfCardConfigResource
+
+PcCardConfigResource
+--------------------
+
+.. autoclass:: PcCardConfigResource

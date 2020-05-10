@@ -9,8 +9,15 @@ from windows.utils import fixedproperty
 
 
 class DeviceManager(object):
+    """Represent the device manager"""
+
+
     @property
     def classes(self):
+        """The list of installed device classes.
+
+        :return: [:class:`DeviceClass`] -- A list of :class:`DeviceClass`
+        """
         return list(self._classes_generator())
 
     def _classes_generator(self):
@@ -35,16 +42,22 @@ class DeviceManager(object):
 
 
 class DeviceClass(gdef.GUID):
+    """A Device class, which is mainly a :class:`GUID` with additional attributes"""
     def __init__(self):
         # Bypass GUID __init__ that is not revelant here
         pass
 
     @fixedproperty
     def name(self):
+        """The name of the device class"""
         return self._get_device_class_name()
 
     @property
     def devices(self):
+        """The set of devices of the current class.
+
+        :type: :class:`DeviceInformationSet`
+        """
         return self.enumerate_devices()
 
     def enumerate_devices(self, flags=0):
@@ -63,6 +76,8 @@ class DeviceClass(gdef.GUID):
     __str__ = __repr__ # Overwrite default GUID str
 
 class DeviceInformationSet(gdef.HDEVINFO):
+    """A device instances, can be itered to retrieve the underliyings :class:`DeviceInstance`"""
+
     def all_device_infos(self):
         for index in itertools.count():
             try:
@@ -81,6 +96,7 @@ class DeviceInformationSet(gdef.HDEVINFO):
         return res
 
     def enum_device_interface(self, index):
+        """Not Implemented Yet"""
         raise NotImplementedError("enum_device_interface")
 
     def all(self):
@@ -88,6 +104,10 @@ class DeviceInformationSet(gdef.HDEVINFO):
 
 
 class DeviceInstance(gdef.SP_DEVINFO_DATA):
+    """An instance of a Device.
+
+    The properties are from the page https://docs.microsoft.com/en-us/windows/win32/api/setupapi/nf-setupapi-setupdigetdeviceregistrypropertya#spdrp_address
+    """
     def __init__(self, information_set=None):
         self.information_set = information_set
 
@@ -118,35 +138,65 @@ class DeviceInstance(gdef.SP_DEVINFO_DATA):
         return property(getter)
 
     name = _generate_property_getter(gdef.SPDRP_FRIENDLYNAME)
+    """The name of the device"""
     description = _generate_property_getter(gdef.SPDRP_DEVICEDESC)
+    """The description of the device"""
     hardware_id = _generate_property_getter(gdef.SPDRP_HARDWAREID)
+    """The list of hardware IDs for the device.
+    (https://docs.microsoft.com/en-us/windows/win32/api/setupapi/nf-setupapi-setupdigetdeviceregistrypropertya#spdrp_hardwareid)
+    """
     enumerator_name = _generate_property_getter(gdef.SPDRP_ENUMERATOR_NAME)
+    """The enumerator name of the devices
+    (https://docs.microsoft.com/en-us/windows/win32/api/setupapi/nf-setupapi-setupdigetdeviceregistrypropertya#spdrp_enumerator_name)
+    """
     driver = _generate_property_getter(gdef.SPDRP_DRIVER)
+    """The driver of the device
+    https://docs.microsoft.com/en-us/windows/win32/api/setupapi/nf-setupapi-setupdigetdeviceregistrypropertya#spdrp_driver
+    """
     # Map on Device type ?
     # https://docs.microsoft.com/en-us/windows-hardware/drivers/kernel/specifying-device-types
     type = _generate_property_getter(gdef.SPDRP_DEVTYPE)
+    """The type of device
+    (https://docs.microsoft.com/en-us/windows-hardware/drivers/kernel/specifying-device-types)
+    """
     upper_filters = _generate_property_getter(gdef.SPDRP_UPPERFILTERS)
+    """A list of string that contains the names of a device's upper filter drivers."""
     lower_filters = _generate_property_getter(gdef.SPDRP_LOWERFILTERS)
+    """A list of string that contains the names of a device's lower filter drivers."""
     raw_security_descriptor = _generate_property_getter(gdef.SPDRP_SECURITY)
+    """The raw (binary) security descriptor of the device"""
     # I would prefer to use the security_descriptor sddl
     # ssdl = _generate_property_getter(gdef.SPDRP_SECURITY_SDS)
     service_name = _generate_property_getter(gdef.SPDRP_SERVICE)
+    """The name of the service for the device
+    (https://docs.microsoft.com/en-us/windows/win32/api/setupapi/nf-setupapi-setupdigetdeviceregistrypropertya#spdrp_service)
+    """
     manufacturer = _generate_property_getter(gdef.SPDRP_MFG)
+    """The name of the device manufacturer."""
     location_information = _generate_property_getter(gdef.SPDRP_LOCATION_INFORMATION)
+    """The hardware location of a device."""
     location_paths = _generate_property_getter(gdef.SPDRP_LOCATION_PATHS)
+    """A list of strings that represents the location of the device in the device tree."""
     # Looks like it can raise ERROR_NO_SUCH_DEVINST
     # install_date = _generate_property_getter(gdef.SPDRP_INSTALL_STATE)
     capabilites = _generate_property_getter(gdef.SPDRP_CAPABILITIES)
+    """The device capabilites
+    (https://docs.microsoft.com/en-us/windows/win32/api/setupapi/nf-setupapi-setupdigetdeviceregistrypropertya#spdrp_capabilities)
+    """
     bus_type = _generate_property_getter(gdef.SPDRP_BUSTYPEGUID)
+    """The function retrieves the GUID for the device's bus type."""
     bus_number = _generate_property_getter(gdef.SPDRP_BUSNUMBER)
+    """The device's bus number."""
     address = _generate_property_getter(gdef.SPDRP_ADDRESS)
+    """The device's address."""
     ui_number = _generate_property_getter(gdef.SPDRP_UI_NUMBER)
+    """Retrieves a DWORD value set to the value of the UINumber member of the device's"""
     ui_number_desc_format = _generate_property_getter(gdef.SPDRP_UI_NUMBER_DESC_FORMAT)
 
     # Getter with special error handling
-
     @property
     def device_object_name(self):
+        """The function retrieves a string that contains the name that is associated with the device's PDO."""
         try:
             return self.get_property(gdef.SPDRP_PHYSICAL_DEVICE_OBJECT_NAME)
         except WindowsError as e:
@@ -193,6 +243,12 @@ class DeviceInstance(gdef.SP_DEVINFO_DATA):
     # !!! Only one allocated configuration can exist for each device instance.
     @property
     def allocated_configuration(self):
+        """The allocated configuration of the device.
+        (https://docs.microsoft.com/en-us/windows-hardware/drivers/kernel/hardware-resources#logical-configuration-types-for-resource-lists)
+
+        :type: :class:`LogicalConfiguration`
+        """
+
         allocconfs = self.get_logical_configuration(gdef.ALLOC_LOG_CONF)
         if not allocconfs:
             return allocconfs
@@ -206,6 +262,11 @@ class DeviceInstance(gdef.SP_DEVINFO_DATA):
 
     @property
     def boot_configuration(self):
+        """The boot configuration of the device.
+        (https://docs.microsoft.com/en-us/windows-hardware/drivers/kernel/hardware-resources#logical-configuration-types-for-resource-lists)
+
+        :type: :class:`LogicalConfiguration`
+        """
         bootconfs = self.get_logical_configuration(gdef.BOOT_LOG_CONF)
         if not bootconfs:
             return bootconfs
@@ -219,6 +280,11 @@ class DeviceInstance(gdef.SP_DEVINFO_DATA):
     # 'advanced' attributes extrapolated from properties
     @property
     def security_descriptor(self):
+        """The security descriptor of the device.
+
+        :type: :class:`~windows.security.SecurityDescriptor`
+        """
+
         return SecurityDescriptor.from_binary(self.raw_security_descriptor)
 
     def __repr__(self):
@@ -255,6 +321,10 @@ class LogicalConfiguration(gdef.HANDLE):
 
     @property
     def resources(self):
+        """The list of resources in the current logical configuration
+
+        :type: [:class:`ResourceDescriptor`] -- A list of [:class:`ResourceDescriptor`]
+        """
         return list(self.get_resources_for_type(gdef.ResType_All))
 
     def __repr__(self):
@@ -277,6 +347,21 @@ ResType_Mapper = gdef.FlagMapper(
 )
 
 class ResourceDescriptor(gdef.HANDLE):
+    """Describe a resource allocated or reserved by a device instance.
+    This class is a base class, all resources returned by :class:`LogicalConfiguration` should be one of the following:
+
+        * :class:`ResourceNoType`
+        * :class:`MemoryResource`
+        * :class:`IoResource`
+        * :class:`DmaResource`
+        * :class:`IrqResource`
+        * :class:`BusNumberResource`
+        * :class:`MemLargeResource`
+        * :class:`ClassSpecificResource`
+        * :class:`DevicePrivateResource`
+        * :class:`MfCardConfigResource`
+        * :class:`PcCardConfigResource`
+    """
     SUBCLASSES = {}
 
     def __init__(self, handle, type):
@@ -290,6 +375,7 @@ class ResourceDescriptor(gdef.HANDLE):
 
     @property
     def rawdata(self):
+        """The raw data describing the resource"""
         data_size = gdef.ULONG()
         winproxy.CM_Get_Res_Des_Data_Size(data_size, self)
         if not self:
@@ -341,19 +427,21 @@ class ResourceNoType(ResourceDescriptor):
         return self.rawdata
 
 class MemoryResource(ResourceDescriptorWithHeaderAndRanges):
-    # Assert hea
+    """A resource of type MEM_RESOURCE"""
     DATA_TYPE = gdef.MEM_RESOURCE
 
     def __str__(self):
         return "<{0} : [{1:#016x}-{2:#016x}]>".format(type(self).__name__, self.header.MD_Alloc_Base, self.header.MD_Alloc_End)
 
 class IoResource(ResourceDescriptorWithHeaderAndRanges):
+    """A resource of type IO_RESOURCE"""
     DATA_TYPE = gdef.IO_RESOURCE
 
     def __str__(self):
         return "<{0} : [{1:#016x}-{2:#016x}]>".format(type(self).__name__, self.header.IOD_Alloc_Base, self.header.IOD_Alloc_End)
 
 class DmaResource(ResourceDescriptorWithHeaderAndRanges):
+    """A resource of type DMA_RESOURCE"""
     DATA_TYPE = gdef.DMA_RESOURCE
 
     def __str__(self):
@@ -361,6 +449,7 @@ class DmaResource(ResourceDescriptorWithHeaderAndRanges):
 
 
 class IrqResource(ResourceDescriptorWithHeaderAndRanges):
+    """A resource of type IRQ_RESOURCE"""
     # 32/64 based on current process bitness
     # Cross bitness cannot be implemented as >=Win8 block it
     DATA_TYPE = gdef.IRQ_RESOURCE
@@ -370,6 +459,7 @@ class IrqResource(ResourceDescriptorWithHeaderAndRanges):
 
 
 class BusNumberResource(ResourceDescriptorWithHeaderAndRanges):
+    """A resource of type BUSNUMBER_RESOURCE"""
     DATA_TYPE = gdef.BUSNUMBER_RESOURCE
 
     def __str__(self):
@@ -377,16 +467,22 @@ class BusNumberResource(ResourceDescriptorWithHeaderAndRanges):
 
 
 class MemLargeResource(ResourceDescriptor):
+    """A resource of type MEM_LARGE_RESOURCE"""
     DATA_TYPE = gdef.MEM_LARGE_RESOURCE
 
     def __str__(self):
         return "<{0} : [{1:#016x}-{2:#016x}]>".format(type(self).__name__, self.header.MLD_Alloc_Base, self.header.MLD_Alloc_End)
 
 class ClassSpecificResource(ResourceDescriptorWithHeader):
+    """A resource of type CS_RESOURCE"""
     DATA_TYPE = gdef.CS_RESOURCE
     # Any idea for __str__ ?
 
 class DevicePrivateResource(ResourceDescriptor):
+    """A device private resource
+    (https://docs.microsoft.com/en-us/windows-hardware/drivers/install/devprivate-resource)
+    """
+
     @property
     def header(self):
         return None
@@ -394,10 +490,12 @@ class DevicePrivateResource(ResourceDescriptor):
     # Any idea for __str__ ?
 
 class MfCardConfigResource(ResourceDescriptorWithHeader):
+    """A resource of type MFCARD_RESOURCE"""
     DATA_TYPE = gdef.MFCARD_RESOURCE
     # Any idea for __str__ ?
 
 class PcCardConfigResource(ResourceDescriptorWithHeader):
+    """A resource of type PCCARD_RESOURCE"""
     DATA_TYPE = gdef.PCCARD_RESOURCE
     # Any idea for __str__ ?
 
