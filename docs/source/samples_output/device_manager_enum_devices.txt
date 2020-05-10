@@ -1,0 +1,34 @@
+$ python64 device_manager\enum_devices.py --no-print-devices
+Namespace(clsfilter=None, no_print_devices=True, print_resources=False)
+<DeviceClass name="XboxComposite" guid=05F5CFE2-4733-4950-A6BB-07AAD01A3A84>
+<DeviceClass name="DXGKrnl" guid=1264760F-A5C8-4BFE-B314-D56A7B44A362>
+<DeviceClass name="RemotePosDevice" guid=13E42DFA-85D9-424D-8646-28A70F864F9C>
+<DeviceClass name="DigitalMediaDevices" guid=14B62F50-3F15-11DD-AE16-0800200C9A66>
+<DeviceClass name="PrintQueue" guid=1ED2BBF9-11F0-4084-B21F-AD83A8E6DCDC>
+<DeviceClass name="WCEUSBS" guid=25DBCE51-6C8F-4A72-8A6D-B54C2B4FC835>
+<DeviceClass name="SecurityAccelerator" guid=268C95A1-EDFE-11D3-95C3-0010DC4050A5>
+<DeviceClass name="HidMsr" guid=2A9FE532-0CDC-44F9-9827-76192F2CA2FB>
+<DeviceClass name="SystemRecovery" guid=2DB15374-706E-4131-A0C7-D7C78EB0289A>
+....
+
+$ python64 device_manager\enum_devices.py --class Processor
+Namespace(clsfilter='Processor', no_print_devices=False, print_resources=False)
+<DeviceClass name="Processor" guid=50127DC3-0F36-415E-A6CC-4CB3BE910B65>
+  * <DeviceInstance "Intel Processor" (id=1)>
+  * <DeviceInstance "Intel Processor" (id=2)>
+  * <DeviceInstance "Intel Processor" (id=3)>
+  * <DeviceInstance "Intel Processor" (id=4)>
+
+
+$ python64 device_manager\enum_devices.py --class Display --print-resources
+Namespace(clsfilter='Display', no_print_devices=False, print_resources=True)
+<DeviceClass name="Display" guid=4D36E968-E325-11CE-BFC1-08002BE10318>
+  * <DeviceInstance "NVIDIA GeForce GTX 1070" (id=1)>
+    * <MemoryResource : [0x000000f6000000-0x000000f6ffffff]>
+    * <DevicePrivateResource type=ResType_DevicePrivate(0x8001)>
+    * <MemoryResource : [0x000000e0000000-0x000000efffffff]>
+    * <DevicePrivateResource type=ResType_DevicePrivate(0x8001)>
+    * <MemoryResource : [0x000000f0000000-0x000000f1ffffff]>
+    * <DevicePrivateResource type=ResType_DevicePrivate(0x8001)>
+    * <IoResource : [0x0000000000e000-0x0000000000e07f]>
+    ...

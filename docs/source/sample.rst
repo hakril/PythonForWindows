@@ -162,6 +162,27 @@ Output
 .. literalinclude:: samples_output\object_manager_findobj.txt
 
 
+.. _sample_device_manager:
+
+Device manager
+""""""""""""""
+
+.. literalinclude:: ..\..\samples\device_manager\device_manager.py
+
+Output
+
+.. literalinclude:: samples_output\device_manager_device_manager.txt
+
+
+Enumerate devices
+'''''''''''''''''
+
+.. literalinclude:: ..\..\samples\device_manager\enum_devices.py
+
+
+.. literalinclude:: samples_output\device_manager_enum_devices.txt
+
+
 .. _sample_wintrust:
 
 ``windows.wintrust``
