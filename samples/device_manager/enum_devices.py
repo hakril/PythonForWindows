@@ -7,7 +7,7 @@ devmgr = windows.system.device_manager
 
 def class_generator(filter=None):
     for cls in devmgr.classes:
-        if filter and cls.name != filter:
+        if filter and cls.name != filter.encode():
             continue
         yield cls
 
