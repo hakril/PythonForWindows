@@ -64,9 +64,10 @@ class System(object):
 
     @utils.fixedpropety
     def services(self):
-        """The list of services
+        """An object to query, list and explore services
 
-        :type: [:class:`~windows.winobject.service.ServiceA`] -- A list of Service"""
+        :type: :class:`~windows.winobject.service.ServiceManager`
+        """
         return service.ServiceManager()
 
     @property

@@ -3,45 +3,45 @@ Basic system infos:
     version = (10, 0)
     bitness = 64
     computer_name = WILLIE
-    product_type = VER_NT_WORKSTATION(0x1L)
+    product_type = 1
     version_name = Windows 10
 
-There is 194 processes
-There is 2324 threads
+There is 331 processes
+There is 4010 threads
 
 Dumping first logical drive:
-    <LogicalDrive "C:\" (DRIVE_FIXED)>
-        name = C:\
-        type = DRIVE_FIXED(0x3L)
-        path = \Device\HarddiskVolume2
+    <LogicalDrive "B:\" (DRIVE_FIXED)>
+        name = B:\
+        type = 3
+        path = \Device\HarddiskVolume7
 
 Dumping first service:
-    <ServiceA "1394ohci" SERVICE_STOPPED(0x1L)>
+    <Service "1394ohci" SERVICE_STOPPED(0x1)>
         name = 1394ohci
         description = 1394 OHCI Compliant Host Controller
-        status = ServiceStatus(type=SERVICE_KERNEL_DRIVER(0x1L), state=SERVICE_STOPPED(0x1L), control_accepted=0L, flags=0L)
+        status = <_SERVICE_STATUS_PROCESS type=SERVICE_KERNEL_DRIVER(0x1) state=SERVICE_STOPPED(0x1)>
         process = None
 
 Finding a service in a user process:
-    <ServiceA "AppIDSvc" SERVICE_RUNNING(0x4L)>
+    <Service "AppIDSvc" SERVICE_RUNNING(0x4)>
         name = AppIDSvc
         description = Application Identity
-        status = ServiceStatus(type=48L, state=SERVICE_RUNNING(0x4L), control_accepted=5L, flags=0L)
-        process = <WinProcess "!cannot-retrieve-name" pid 7076 at 0x631eb70>
+        status = <_SERVICE_STATUS_PROCESS type=48L state=SERVICE_RUNNING(0x4)>
+        process = <WinProcess "!cannot-retrieve-name" pid 6060 at 0x35851d0>
 
 Enumerating handles:
-    There are 78079 handles:
-    First handle is: <Handle value=<0x4> in process pid=4>
+    There are 208332 handles:
+    First handle is: <HandleWow64 value=<0x4> in process pid=4>
     Enumerating handles of the current process:
-        There are 260 handles for this process
+        There are 275 handles for this process
     Looking for a File handle:
-        Handle is <Handle value=<0x4> in process pid=10968>
+        Handle is <HandleWow64 value=<0x4> in process pid=15236>
         Name is <\Device\ConDrv>
 
 Dumping the first system module
-    <SystemModuleWow64 name="\SystemRoot\system32\ntoskrnl.exe" base=0xfffff803f9697000>
+    <SystemModuleWow64 name="\SystemRoot\system32\ntoskrnl.exe" base=0xfffff80023000000>
         ImageName = \SystemRoot\system32\ntoskrnl.exe
-        Base = 0xfffff803f9697000
-        Size = 0x8d5000
+        Base = 0xfffff80023000000
+        Size = 0xab7000
         Flags = 0x8804000
-        LoadCount = 139
+        LoadCount = 240

@@ -1,7 +1,7 @@
 Service
 =======
 
-The list of services is accessible via :py:attr:`windows.system.services
+The services manager is accessible via :py:attr:`windows.system.services
 <windows.winobject.system.System.services>`
 
 .. note::
@@ -10,6 +10,18 @@ The list of services is accessible via :py:attr:`windows.system.services
 
 .. module:: windows.winobject.service
 
-.. autoclass:: Service
+
+ServiceManager
+""""""""""""""
+
+.. autoclass:: ServiceManager
    :show-inheritance:
+   :inherited-members:
+   :special-members: __getitem__, __iter__
+
+
+Service
+"""""""
+
+.. autoclass:: Service
    :inherited-members:

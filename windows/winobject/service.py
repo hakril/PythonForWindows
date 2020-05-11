@@ -39,6 +39,7 @@ from windows.pycompat import basestring
 
 
 class ServiceManager(utils.AutoHandle):
+    """An object to query, list and explore services"""
     def _get_handle(self):
         return windows.winproxy.OpenSCManagerA(dwDesiredAccess=gdef.MAXIMUM_ALLOWED)
 
@@ -46,6 +47,10 @@ class ServiceManager(utils.AutoHandle):
         return windows.winproxy.OpenServiceA(self.handle, name, access) # Check service exists :)
 
     def get_service(self, key, access=gdef.MAXIMUM_ALLOWED):
+        """Get a service by its name/index or a list of services via a slice
+
+        :return: :class:`Service` or [:class:`Service`] -- A :class:`Service` or list of :class:`Service`
+        """
         if isinstance(key, int_types):
             return self.enumerate_services()[key]
         if isinstance(key, slice):
@@ -59,6 +64,10 @@ class ServiceManager(utils.AutoHandle):
         return Service(name=key, handle=handle)
 
     __getitem__ = get_service
+    """Get a service by its name/index or a list of services via a slice
+
+    :return: :class:`Service` or [:class:`Service`] -- A :class:`Service` or list of :class:`Service`
+    """
 
     def get_service_display_name(self, name):
         # This API is strange..
@@ -70,6 +79,9 @@ class ServiceManager(utils.AutoHandle):
         return result.value
 
     def _enumerate_services_generator(self):
+        """The generator code behind __iter__.
+        Allow to iter over the services on the system
+        """
         size_needed = gdef.DWORD()
         nb_services =  gdef.DWORD()
         counter =  gdef.DWORD()
@@ -93,12 +105,17 @@ class ServiceManager(utils.AutoHandle):
         return
 
     __iter__ = _enumerate_services_generator
+    """Iter over the services on the system
+
+    :yield: :class:`Service`
+    """
 
     def enumerate_services(self):
         return list(self._enumerate_services_generator())
 
 
 class Service(gdef.SC_HANDLE):
+    """Represent a service on the system"""
     def __init__(self, handle, name, description=None):
         super(Service, self).__init__(handle)
         self.name = name
@@ -149,6 +166,10 @@ class Service(gdef.SC_HANDLE):
         return security.SecurityDescriptor.from_service(self.name)
 
     def start(self, args=None):
+        """Start the service
+
+        :param args: a list of :class:`str`
+        """
         nbelt = 0
         if args is not None:
             if isinstance(args, windows.pycompat.anybuff):
@@ -158,6 +179,7 @@ class Service(gdef.SC_HANDLE):
         return windows.winproxy.StartServiceA(self, nbelt, args)
 
     def stop(self):
+        """Stop the service"""
         status = SERVICE_STATUS()
         windows.winproxy.ControlService(self, gdef.SERVICE_CONTROL_STOP, status)
         return status

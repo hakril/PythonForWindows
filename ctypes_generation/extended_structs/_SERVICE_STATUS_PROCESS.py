@@ -40,3 +40,9 @@ class _SERVICE_STATUS_PROCESS(_SERVICE_STATUS_PROCESS):
     type = dwServiceType
     control_accepted = dwControlsAccepted
     flags = dwServiceFlags
+
+
+    def __repr__(self):
+        return """<{0} type={1!r} state={2!r}>""".format(type(self).__name__,
+            self.type,
+            self.state)

@@ -1,0 +1,19 @@
+(cmd) python service\service_demo.py
+Listing the first 3 services:
+ * <Service "1394ohci" SERVICE_STOPPED(0x1)>
+ * <Service "3ware" SERVICE_STOPPED(0x1)>
+ * <Service "ACPI" SERVICE_RUNNING(0x4)>
+
+Retriving service <TapiSrv>
+<Service "TapiSrv" SERVICE_STOPPED(0x1)>
+ - name: 'TapiSrv'
+ - description: 'Telephony'
+ - state: SERVICE_STOPPED(0x1)
+ - type: 48L
+ - process: None
+ - security-description: O:SYG:SYD:(A;;CCLCSWRPWPDTLOCRRC;;;SY)(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;BA)(A;;CCLCSWRPLOCRRC;;;IU)(A;;CCLCSWRPLOCRRC;;;SU)
+Trying to start the service
+Service started !
+<Service "TapiSrv" SERVICE_RUNNING(0x4)>
+ - state: SERVICE_RUNNING(0x4)
+ - process: <WinProcess "!cannot-retrieve-name" pid 14700 at 0x4a2c4f0>
