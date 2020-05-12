@@ -778,7 +778,7 @@ class SecurityDescriptor(gdef.PSECURITY_DESCRIPTOR):
 
     @property
     def sacl(self):
-        """The SACL of the security descriptor. You may need special attention to retrieve it (see :any:`DEFAULT_SECURITY_INFORMATION`)
+        """The SACL of the security descriptor. You may need special attention to retrieve it (see :class:`DEFAULT_SECURITY_INFORMATION`)
 
         :type: :class:`Acl` or ``None`` if the SACL was ``NULL`` or not present
         """

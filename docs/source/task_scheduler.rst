@@ -44,6 +44,19 @@ TaskDefinition
     :show-inheritance:
     :special-members: __getitem__, __delitem__, __call__
 
+
+TaskPrincipal
+'''''''''''''
+
+.. autoclass:: TaskPrincipal
+    :show-inheritance:
+
+TaskRegistrationInfo
+''''''''''''''''''''
+
+.. autoclass:: TaskRegistrationInfo
+    :show-inheritance:
+
 Action
 """"""
 

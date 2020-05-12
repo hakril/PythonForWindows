@@ -167,6 +167,69 @@ class TriggerCollection(gdef.ITriggerCollection,  TaskCollectionType):
     ITEM_TYPE = Trigger
 
 
+class TaskRegistrationInfo(gdef.IRegistrationInfo):
+    """Provides the administrative information that can be used to describe the task.
+
+    This information includes details such as a description of the task,
+    the author of the task, the date the task is registered,
+    and the security descriptor of the task.
+    """
+    author = generate_simple_getter("get_Author", gdef.BSTR)
+    """The author of the task"""
+    description = generate_simple_getter("get_Description", gdef.BSTR)
+    """The description of the task"""
+    date = generate_simple_getter("get_Date", gdef.BSTR)
+    """The registration date of the task"""
+    source = generate_simple_getter("get_Source", gdef.BSTR)
+    """Where the task originated from.
+
+    For example, a task may originate from a component, service, application, or user.
+    """
+    documentation = generate_simple_getter("get_Documentation", gdef.BSTR)
+    """Any additional documentation for the task"""
+    uri = generate_simple_getter("get_URI", gdef.BSTR)
+    """the URI of the task."""
+    version = generate_simple_getter("get_Version", gdef.BSTR)
+    """The version number of the task."""
+
+    # Return WindowsError: [Error -2147467263] Not implemented
+    # xml = generate_simple_getter("get_XmlText", gdef.BSTR)
+
+    sddl = generate_simple_getter("get_SecurityDescriptor", windows.com.Variant)
+
+    @property
+    def security_descriptor(self):
+        sddl = self.sddl
+        if not sddl:
+            return None
+        return windows.security.SecurityDescriptor.from_string(sddl)
+
+
+
+class TaskPrincipal(gdef.IPrincipal):
+    """Provides the security credentials for a principal.
+    These security credentials define the security context for the tasks that are associated with the principal.
+    """
+
+    name = generate_simple_getter("get_DisplayName", gdef.BSTR)
+    """The name of the principal"""
+    id = generate_simple_getter("get_Id", gdef.BSTR)
+    """the identifier of the principal."""
+    user_id = generate_simple_getter("get_UserId", gdef.BSTR)
+    """the user identifier that is required to run the task"""
+    group_id = generate_simple_getter("get_GroupId", gdef.BSTR)
+    """the user group that is required to run the task"""
+    run_level = generate_simple_getter("get_RunLevel", gdef.TASK_RUNLEVEL_TYPE)
+    """the privilege level that is required to run the tasks
+
+    :type: :class:`~windows.generated_def.winstructs.TASK_RUNLEVEL_TYPE`
+    """
+    logon_type = generate_simple_getter("get_LogonType", gdef.TASK_LOGON_TYPE)
+    """ logon method that is required to run the task
+
+    :type: :class:`~windows.generated_def.winstructs.TASK_LOGON_TYPE`
+    """
+
 class TaskDefinition(gdef.ITaskDefinition):
     """The definition of a task"""
     actions = generate_simple_getter("get_Actions", ActionCollection, extract_value=False)
@@ -180,6 +243,27 @@ class TaskDefinition(gdef.ITaskDefinition):
     :type: :class:`TriggerCollection`
     """
 
+    registration_info = generate_simple_getter("get_RegistrationInfo", TaskRegistrationInfo, extract_value=False)
+    """The registration information of the task
+
+    :type: :class:`TaskRegistrationInfo`
+    """
+
+    principal = generate_simple_getter("get_Principal", TaskPrincipal, extract_value=False)
+    """The principal that provides the security credentials for the task.
+    These security credentials define the security context for the tasks that are associated with the principal.
+
+    :type: :class:`TaskPrincipal`
+    """
+
+    xml = generate_simple_getter("get_XmlText", gdef.BSTR)
+    """The XML representig the task definition
+
+        :type: :class:`str`
+    """
+
+
+
 class Task(gdef.IRegisteredTask):
     """A scheduled task"""
     name = generate_simple_getter("get_Name", gdef.BSTR)
@@ -189,12 +273,26 @@ class Task(gdef.IRegisteredTask):
     state = generate_simple_getter("get_State", gdef.TASK_STATE)
     """The state of the task
 
+
         :type: :class:`~windows.generated_def.winstructs.TASK_STATE`
     """
+    enabled = generate_simple_getter("get_Enabled", gdef.VARIANT_BOOL)
+    """``True`` is the task is enabled"""
+    last_runtime = generate_simple_getter("get_LastRunTime", gdef.DATE)
+    """Gets the last time the registered task was last run."""
+    next_runtime = generate_simple_getter("get_NextRunTime", gdef.DATE)
+    """Gets the next time the registered task will be run."""
+
     definition = generate_simple_getter("get_Definition", TaskDefinition, extract_value=False)
     """The definition of the task
 
         :type: :class:`TaskDefinition`
+    """
+
+    xml = generate_simple_getter("get_Xml", gdef.BSTR)
+    """The XML representig the task
+
+        :type: :class:`str`
     """
 
     def run(self, params=None, flags=gdef.TASK_RUN_NO_FLAGS, sessionid=0, user=None):
