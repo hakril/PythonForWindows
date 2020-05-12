@@ -213,6 +213,11 @@ def check_debug():
 
 UNIX_EPOCH = datetime.datetime(1970, 1, 1, 0, 0)
 WINDOWS_EPOCH = datetime.datetime(1601, 1, 1, 0, 0)
+# https://docs.microsoft.com/en-us/cpp/atl-mfc-shared/date-type?view=vs-2019
+# Why keep it simple and have only one epoch ? :D
+# I don't want to name this "DATE_EPOCH" as everything is a DATE
+# So let's go with COMDATE as this structure seems very related to COM/AUTOMATION
+COMDATE_EPOCH = datetime.datetime(1899, 12, 30, 0, 0)
 
 WIN_TO_UNIX_EPOCH_SECOND = int((UNIX_EPOCH - WINDOWS_EPOCH).total_seconds())
 WIN_TICK_PER_SECOND_INT = 10**7
@@ -252,6 +257,16 @@ def filetime_from_datetime(dtime):
     """Return the FILETIME value from a :class:`datetime.datetime` in a python :class:`int`"""
     return int((dtime - WINDOWS_EPOCH).total_seconds()) * WIN_TICK_PER_SECOND_INT
 
+def datetime_from_comdate(comtime):
+    # Hour values are expressed as the absolute value of the fractional part of the number.
+    if comtime < 0:
+        # The date timeline becomes discontinuous for date values less than 0 (before 30 December 1899). This is because the whole-number portion of the date value is treated as signed, while the fractional part is treated as unsigned.
+        # other words, the whole-number part of the date value may be positive or negative, while the fractional part of the date value is always added to the overall logical date.
+        # WTF :D
+        dec, nb = math.modf(comtime)
+        final_delta = nb + abs(dec)
+        return COMDATE_EPOCH + datetime.timedelta(final_delta)
+    return COMDATE_EPOCH + datetime.timedelta(comtime)
 
 class FixedInteractiveConsole(code.InteractiveConsole):
     def raw_input(self, prompt=">>>"):
@@ -573,14 +588,14 @@ class DisableWow64FsRedirection(object):
                     return windows.utils.create_process(r"C:\Windows\system32\calc.exe", True)
     """
     def __enter__(self):
-        if windows.current_process.bitness == 64:
+        if windows.current_process.bitness == 64 or windows.system.bitness == 32:
             return self
         self.OldValue = PVOID()
         winproxy.Wow64DisableWow64FsRedirection(ctypes.byref(self.OldValue))
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
-        if windows.current_process.bitness == 64:
+        if windows.current_process.bitness == 64 or windows.system.bitness == 32:
             return False
         winproxy.Wow64RevertWow64FsRedirection(self.OldValue)
         return False
