@@ -105,11 +105,11 @@ class RemoteCCharP(RemotePtr, ctypes.c_char_p):
         res = []
         for i in itertools.count():
             x = self.target.read_memory(base + (i * 0x100), 0x100)
-            if "\x00" in x:
-                res.append(x.split("\x00", 1)[0])
+            if b"\x00" in x:
+                res.append(x.split(b"\x00", 1)[0])
                 break
             res.append(x)
-        return "".join(res)
+        return b"".join(res)
 
 
 class RemoteWCharP(RemotePtr, ctypes.c_char_p):
@@ -362,7 +362,7 @@ class RemoteStructureUnion(object):
         if issubclass(ftype, _ctypes.Array):  # Arrays
             # if this is a string: just cast the read value to string
             if ftype._type_ == ctypes.c_char: # Use issubclass instead ?
-                return s.split("\x00", 1)[0]
+                return s.split(b"\x00", 1)[0]
             elif ftype._type_ == ctypes.c_wchar: # Use issubclass instead ?
                 # Decode from utf16 -> size /=2 | put it in a wchar array | split at the first "\x00"
                 return (ftype._type_ * (fsize / 2)).from_buffer_copy(s.decode('utf16'))[:].split("\x00", 1)[0] # Sorry..
