@@ -13,6 +13,13 @@ DEFAULT_DBG_OPTION = gdef.SYMOPT_DEFERRED_LOADS + gdef.SYMOPT_UNDNAME
 
 
 def set_dbghelp_path(path):
+    """Set the path of the ``dbghelp.dll`` file to use. It allow to configure a different version of the DLL handling PDB downloading.
+
+    If ``path`` is a directory, the final ``dbghelp.dll`` will be computed as
+    ``path\<current_process_bitness>\dbghelp.dll``.
+
+    This allow to use the same script transparently in both 32b & 64b python interpreters.
+    """
     loaded_modules =  [m.name.lower() for m in windows.current_process.peb.modules]
     if os.path.isdir(path):
         path = os.path.join(path, str(windows.current_process.bitness), "dbghelp.dll")
@@ -33,6 +40,9 @@ except KeyError as e:
 
 
 class SymbolInfoBase(object):
+    """Represent a Symbol.
+    This class in based on the class `SYMBOL_INFO<https://docs.microsoft.com/en-us/windows/win32/api/dbghelp/ns-dbghelp-symbol_info>`_
+    with the handling on displacement embeded into it."""
     # Init on ctypes struct is not always called
     # resolver & displacement should be set manually
     CHAR_TYPE = None
@@ -47,6 +57,7 @@ class SymbolInfoBase(object):
 
     @property
     def name(self):
+        """The name of the symbol"""
         if not self.NameLen:
             return None
         size = self.NameLen
@@ -55,34 +66,55 @@ class SymbolInfoBase(object):
 
     @property
     def fullname(self):
+        """The fullname of the symbol in the windbg format ``mod!sym+displacement``"""
         return str(self)
 
     @property
     def addr(self):
+        """The address of the symbol"""
+        return self.Address + self.displacement
+
+    @property
+    def start(self):
+        """The address of the start of the symbol
+        If the symbol include a displacement, it is not taken into account
+        """
         return self.Address
 
     @property # Fixed ?
     def module(self):
+        """The module containing the symbol
+
+        :type: :class:`SymbolModule`
+        """
         return self.resolver.get_module(self.ModBase)
 
     def __int__(self):
-        return self.addr + self.displacement
+        """An alias for ``addr``"""
+        return self.addr
 
     def __str__(self):
+        """The fullname of the symbol in the windbg format ``mod!sym+displacement``"""
         if self.displacement:
             return "{self.module.name}!{self.name}+{self.displacement:#x}".format(self=self)
         return "{self.module.name}!{self.name}".format(self=self)
 
     def __repr__(self):
         if self.displacement:
-            return '<{0} name="{1}" addr={2:#x} displacement={3:#x} tag={4}>'.format(type(self).__name__, self.name, self.addr, self.displacement, self.tag)
-        return '<{0} name="{1}" addr={2:#x} tag={3}>'.format(type(self).__name__, self.name, self.addr, self.tag)
+            return '<{0} name="{1}" start={2:#x} displacement={3:#x} tag={4}>'.format(type(self).__name__, self.name, self.start, self.displacement, self.tag)
+        return '<{0} name="{1}" start={2:#x} tag={3}>'.format(type(self).__name__, self.name, self.start, self.tag)
 
 
 class SymbolInfoA(gdef.SYMBOL_INFO, SymbolInfoBase):
+    """Represent a Symbol.
+    This class in based on the class `SYMBOL_INFO <https://docs.microsoft.com/en-us/windows/win32/api/dbghelp/ns-dbghelp-symbol_info>`_
+    with the handling on displacement embeded into it."""
     CHAR_TYPE = gdef.CHAR
 
 class SymbolInfoW(gdef.SYMBOL_INFOW, SymbolInfoBase):
+    """Represent a Symbol.
+    This class in based on the class `SYMBOL_INFO <https://docs.microsoft.com/en-us/windows/win32/api/dbghelp/ns-dbghelp-symbol_infow>`_
+    with the handling on displacement embeded into it."""
     CHAR_TYPE = gdef.WCHAR
 
 # We use the A Api in our code (for now)
@@ -175,6 +207,14 @@ class SymbolType(object):
 
 
 class SymbolModule(gdef.IMAGEHLP_MODULE64):
+    """Represent a loaded symbol module
+    (see `MSDN IMAGEHLP_MODULE64 <https://docs.microsoft.com/en-us/windows/win32/api/dbghelp/ns-dbghelp-imagehlp_module64>`_)
+
+    .. note::
+
+        This represent a module in the ``symbol space`` for symbol resolution.
+        This can be completly virtual (particularly in the case of :class:`VirtualSymbolHandler`
+    """
     # Init on ctypes struct is not always called
     # resolver should be set manually
     def __init__(self, resolver):
@@ -182,22 +222,48 @@ class SymbolModule(gdef.IMAGEHLP_MODULE64):
 
     @property
     def addr(self):
+        """The load address of the module"""
         return self.BaseOfImage
 
     @property
     def name(self):
+        """The name of the module"""
         return self.ModuleName
 
     @property
     def path(self):
+        """The full path and file name of the file from which symbols were loaded."""
         return self.LoadedImageName
 
     @property
     def type(self):
+        """The type of module (:class:`~windows.generated_def.winstructs.SYM_TYPE`),
+        which can be one of:
+
+            =========== =========================
+            SymCoff     COFF symbols.
+            SymCv       CodeView symbols.
+            SymDeferred Symbol loading deferred.
+            SymDia      DIA symbols.
+            SymExport   Symbols generated from a DLL export table.
+            SymNone     No symbols are loaded.
+            SymPdb      PDB symbols.
+            SymSym      .sym file.
+            SymVirtual  The virtual module created by SymLoadModuleEx with SLMFLAG_VIRTUAL.
+            =========== =========================
+        """
         return self.SymType
 
     @property
     def pdb(self):
+        """The local path of the loaded PDB if present
+
+        Exemple:
+            >>> sh = windows.debug.symbols.VirtualSymbolHandler()
+            >>> mod = sh.load_file(r"c:\windows\system32\kernelbase.dll")
+            >>> mod.pdb
+            'd:\\symbols\\wkernelbase.pdb\\017FA9C5278235B7E6BFBA74A9A5AAD91\\wkernelbase.pdb'
+        """
         LoadedPdbName = self.LoadedPdbName
         if not LoadedPdbName:
             return None
@@ -216,20 +282,26 @@ class SymbolHandler(object):
         # https://docs.microsoft.com/en-us/windows/desktop/api/dbghelp/nf-dbghelp-syminitialize
         # This value should be unique and nonzero, but need not be a process handle.
         # be sure to use the correct handle.
-        self.handle = handle
+        self.handle = handle #: The handle of the symbol handler
         if not engine.options_already_setup:
             engine.set_options(DEFAULT_DBG_OPTION)
         winproxy.SymInitialize(handle, search_path, invade_process)
 
 
-    # Config
-
-    # def get_search_path(): ?
-
-
-    # Loading
-
     def load_module(self, file_handle=None, path=None, name=None, addr=0, size=0, data=None, flags=0):
+        """Load a module at a given ``addr``. The module to load can be pass via a ``file_handle``
+        or the direct ``path`` of the file to load.
+
+        :return: :class:`SymbolModule` -- The loaded module
+
+        .. note::
+
+            The logic of ``SymLoadModuleEx`` seems somewhat strange about the naming of the loaded module.
+            A custom module ``name`` is only taken into account if the file is passed via a File handle.
+            To make it more intuitive, if this function is call with a ``path`` and ``name`` and no ``file_handle``,
+            it will open the path and directly call ``SymLoadModuleEx`` with a file handle and a name.
+        """
+
         # Is that a bug in SymLoadModuleEx ?
         # To get a custom name for a module it use "path"
         # So we need to use file_handle and set a custom path
@@ -254,9 +326,14 @@ class SymbolHandler(object):
         return self.get_module(load_addr)
 
     def load_file(self, path, name=None, addr=0, size=0, data=None, flags=0):
+        """Load the module ``path`` at ``addr``
+
+        :return: :class:`SymbolModule` -- The loaded module
+        """
         return self.load_module(path=path, name=name, addr=addr, size=size, data=data, flags=flags)
 
     def unload(self, addr):
+        """Unload the module at ``addr``"""
         return winproxy.SymUnloadModule64(self.handle, addr)
 
 
@@ -268,6 +345,10 @@ class SymbolHandler(object):
 
     @property
     def modules(self):
+        """The list of loaded modules
+
+        :return: [:class:`SymbolModule`] -- A list of modules
+        """
         res = []
         windows.winproxy.SymEnumerateModules64(self.handle, self.modules_aggregator, res)
         return [self.get_module(addr) for addr in res]
@@ -292,9 +373,6 @@ class SymbolHandler(object):
         sym.displacement = displacement.value
         return sym
 
-    # Keep it ?
-    # def get_symbol(self, addr):
-        # return self.symbol_and_displacement_from_address(addr)
 
     def symbol_from_name(self, name):
         max_len_size = 0x1000
@@ -311,6 +389,30 @@ class SymbolHandler(object):
         return sym
 
     def resolve(self, name_or_addr):
+        """Resolve ``name_or_addr``.
+
+        If its an int -> Return the :class:`SymbolInfo` at the address.
+        If its a string -> Return the :class:`SymbolInfo` corresponding to the symbol name
+
+        :return: :class:`SymbolInfo`
+
+        .. note::
+
+            ``__getitem__`` is an alias for ``resolve()``
+
+        Exemple:
+
+            >>> sh = windows.debug.symbols.VirtualSymbolHandler()
+            >>> mod = sh.load_file(r"c:\windows\system32\kernelbase.dll")
+            >>> mod
+            <SymbolModule name="kernelbase" type=SymPdb pdb="wkernelbase.pdb" addr=0x10000000>
+            >>> sh.resolve("kernelbase!CreateFileInternal")
+            <SymbolInfoA name="CreateFileInternal" addr=0x100f2120 tag=5>
+            >>> sh[0x100f2042]
+            <SymbolInfoA name="ReadFile" addr=0x100f1ee0 displacement=0x162 tag=5>
+            >>> str(sh[0x100f2042])
+            'kernelbase!ReadFile+0x162'
+        """
         # Only returns None if symbol is not Found ?
         if isinstance(name_or_addr, windows.pycompat.anybuff):
             return self.symbol_from_name(name_or_addr)
@@ -323,6 +425,7 @@ class SymbolHandler(object):
             return None
 
     __getitem__ = resolve
+    """Alias to resolve for simpler use"""
 
     @staticmethod
     @ctypes.WINFUNCTYPE(gdef.BOOL, ctypes.POINTER(SymbolInfo), gdef.ULONG , ctypes.py_object)
@@ -335,6 +438,18 @@ class SymbolHandler(object):
         return True
 
     def search(self, mask, mod=0, tag=0, options=gdef.SYMSEARCH_ALLITEMS, callback=None):
+        """Search the symbols matching ``mask`` (``Windbg`` like).
+
+        :return: [:class:`SymbolInfo`] -- A list of :class:`SymbolInfo`
+
+        >>> sh = windows.debug.symbols.VirtualSymbolHandler()
+        >>> mod = sh.load_file(r"c:\windows\system32\kernelbase.dll")
+        >>> sh.search("kernelbase!CreateFile*")
+        [<SymbolInfoA name="CreateFileInternal" addr=0x100f2120 tag=5>,
+            <SymbolInfoA name="CreateFileMoniker" addr=0x10117d80 tag=5>,
+            <SymbolInfoA name="CreateFile2" addr=0x1011e690 tag=5>,
+            ...]
+        """
         res = []
         if callback is None:
             callback = self.simple_aggregator
@@ -364,7 +479,6 @@ class SymbolHandler(object):
             sym.displacement = 0
         return res
 
-
     # Type stuff
     def get_type(self, name, mod=0):
         max_len_size = 0x1000
@@ -375,18 +489,6 @@ class SymbolHandler(object):
         windows.winproxy.SymGetTypeFromName(self.handle, mod, name, buff)
         return SymbolType.from_symbol_info(buff[0], resolver=self)
 
-    # SymbolInfo info ?
-    # def type_info(self, mod, typeid, typeinfo, ires=None):
-        # res = ires
-        # if res is None:
-            # res = TST_TYPE_RES_TYPE.get(typeinfo, gdef.DWORD)()
-        # windows.winproxy.SymGetTypeInfo(self.handle, mod, typeid, typeinfo, ctypes.byref(res))
-        # if ires is not None:
-            # return ires
-        # newres = res.value
-        # if isinstance(res, gdef.LPWSTR):
-            # windows.winproxy.LocalFree(res)
-        # return newres
 
 class StackWalker(object):
     def __init__(self, resolver, process=None, thread=None, context=None):
@@ -482,9 +584,10 @@ class VirtualSymbolHandler(SymbolHandler):
     # The VirtualSymbolHandler is not based on an existing process
     # So load() in its simplest for should just take the path of the file to load
     load = SymbolHandler.load_file
+    """An alias for :func:`VirtualSymbolHandler.load_file`"""
 
     def refresh(self):
-        # Do nothing on a VirtualSymbolHandler
+        """Do nothing for a :class:`VirtualSymbolHandler`"""
         return False
 
 
@@ -498,6 +601,22 @@ class ProcessSymbolHandler(SymbolHandler):
     # module that is already loaded
     # Question: should be able to load other module at other address ?
     def load(self, name):
+        """Load the :class:`SymbolModule` associated with the loaded module ``name`` (as found in the PEB)
+
+        :return: :class:`SymbolModule`
+
+        Exemple:
+
+            >>> x = windows.debug.symbols.ProcessSymbolHandler(windows.test.pop_proc_64())
+            <windows.debug.symbols.ProcessSymbolHandler object at 0x033A2C30>
+            >>> x
+            <windows.debug.symbols.ProcessSymbolHandler object at 0x033A2C30>
+            >>> x.load("kernelbase.dll")
+            <SymbolModule name="kernelbase" type=SymDeferred pdb="" addr=0x7ffb5b090000>
+            >>> x["kernelbase!CreateProcessA"]
+            <SymbolInfoA name="CreateProcessA" start=0x7ffb5b2371f0 tag=10>
+
+        """
         mods = [x for x in self.target.peb.modules if x.name == name]
         if not mods:
             raise ValueError("Could not find module <{0}>".format(name))
@@ -506,6 +625,28 @@ class ProcessSymbolHandler(SymbolHandler):
         return self.load_module(addr=mod.baseaddr, path=mod.fullname)
 
     def refresh(self):
+        """Update the list of loaded modules to match the modules present in the target process
+
+        .. note::
+            This function only call `SymRefreshModuleList <https://docs.microsoft.com/en-us/windows/win32/api/dbghelp/nf-dbghelp-symrefreshmodulelist>`_ for now.
+            It seems that this function do not handle refreshing a 64b target from a 32b python
+
+            Also, on a 32b target from a 64b python it seems to only load symbols for the 64b modules (ntdll + syswow dll)
+
+        Exemple:
+
+            >>> x = windows.debug.symbols.ProcessSymbolHandler(windows.test.pop_proc_64())
+            >>> x.modules
+            []
+            >>> x.refresh()
+            44
+            >>> x.modules
+            [<SymbolModule name="notepad" type=SymDeferred pdb="" addr=0x7ff772b80000>,
+                <SymbolModule name="ntdll" type=SymDeferred pdb="" addr=0x7ffb5d860000>,
+                <SymbolModule name="KERNEL32" type=SymDeferred pdb="" addr=0x7ffb5bb90000>,
+                <SymbolModule name="KERNELBASE" type=SymDeferred pdb="" addr=0x7ffb5b090000>,
+                ...]
+        """
         return windows.winproxy.SymRefreshModuleList(self.handle)
 
 
@@ -514,6 +655,19 @@ class ProcessSymbolHandler(SymbolHandler):
 
 
 class SymbolEngine(object):
+    """Represent the global symbol engine. Just a proxy to get/set global engine options
+
+    Its instance can be accessed using ``windows.debug.symbols.engine``
+
+    Exemple:
+
+        >>> windows.debug.symbols.engine.options
+        6L
+        >>> windows.debug.symbols.engine.options = gdef.SYMOPT_UNDNAME
+        >>> windows.debug.symbols.engine.options
+        2L
+
+    """
     def __init__(self):
         # use to now if we need to call the setup of options
         # At the first DbgHelp call
@@ -527,8 +681,12 @@ class SymbolEngine(object):
         return windows.winproxy.SymGetOptions()
 
     options = property(get_options, set_options)
+    """The options of the Symbol engine
+    (`see options <https://docs.microsoft.com/en-us/windows/win32/api/dbghelp/nf-dbghelp-symsetoptions#parameters>`_)
+    """
 
 engine = SymbolEngine()
+"""The instance of the :class:`SymbolEngine`"""
 
 
 TST_TYPE_RES_TYPE = {
@@ -538,5 +696,3 @@ TST_TYPE_RES_TYPE = {
     gdef.TI_GTIEX_REQS_VALID: gdef.ULONG64,
     gdef.TI_GET_SYMTAG: gdef.SymTagEnum,
 }
-
-

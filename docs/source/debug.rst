@@ -7,6 +7,10 @@
 
     See sample :ref:`sample_debugger`
 
+.. note::
+
+    If you are interrested by symbols (PDB) handling, go to subsection :ref:`debug_symbols_module`
+
 :class:`Debugger`
 """""""""""""""""
 
@@ -23,6 +27,13 @@ This means that those methods see the original ``current_process`` memory access
 
     .. automethod:: __init__
 
+
+:class:`SymbolDebugger`
+"""""""""""""""""""""""
+
+.. autoclass:: SymbolDebugger
+    :members:
+    :no-inherited-members:
 
 
 :class:`LocalDebugger`
@@ -41,7 +52,6 @@ There is not much documentation for now as the code might change soon.
 
 .. autoclass:: LocalDebugger
     :members:
-
 
 
 :class:`Breakpoint`
@@ -100,3 +110,107 @@ When a breakpoint is hit, its ``trigger`` function is called with the debugger a
 .. note::
 
     See sample :ref:`sample_debugger_bp_functionbp`
+
+
+.. _debug_symbols_module:
+
+:mod:`windows.debug.symbols` -- Using symbols
+"""""""""""""""""""""""""""""""""""""""""""""
+
+.. module:: windows.debug.symbols
+
+The :mod:`windows.debug.symbols` module provide classes to load PDB and resolve name/address.
+In its current state, this module does not handle types.
+
+.. note::
+
+    See sample <TODO>
+
+
+Configuration
+'''''''''''''
+
+In order to be able to automatically download PDB and parse remote ``_NT_SYMBOL_PATH``, a debug version of the DLL `dbghelp.dll` must be used.
+(See `MSDN: DbgHelp Versions <https://docs.microsoft.com/en-us/windows/win32/debug/dbghelp-versions>`_)
+
+As it is NOT recommended to replace ``system32/dbghelp.dll``, its path must be provided to PythonForWindows.
+This path must be provided before any call to the ``dbghelp.dll`` APIs.
+Also, the ``symsrv.dll`` DLL should be present in the same directory as ``dbghelp.dll`` (See `SymSrv Installation <https://docs.microsoft.com/en-us/windows/win32/debug/using-symsrv#installation>`_)
+
+There is 2 ways to pass this information to ``PythonForWindows``:
+
+    * Using the function :func:`set_dbghelp_path`
+    * Using the environment variable ``PFW_DBGHELP_PATH``
+        * If this variable exists it will simply trigger a call to ``set_dbghelp_path(PFW_DBGHELP_PATH)``
+
+
+If the given path is a directory, the final path will be computer as ``path\<current_process_bitness>\dbghelp.dll``.
+This allow to use the same script (or environment variable) transparently in bot 32b & 64b python interpreters.
+
+.. note::
+
+    For example, on my computer my setup is done through the environment variable: ``PFW_DBGHELP_PATH=D:\pysym\bin``
+
+    This directory have the following layout:
+
+        | $ tree /A /F %PFW_DBGHELP_PATH%
+        |     D:\\PYSYM\\BIN
+        |     \| symsrv.yes
+        |     \|
+        |     +\\-\\-\\-32
+        |     \| dbghelp.dll
+        |     \| symsrv.dll
+        |     \|
+        |     \\\\-\\-\\-64
+        |        dbghelp.dll
+        |        symsrv.dll
+
+
+Helpers
+'''''''
+
+.. autofunction:: set_dbghelp_path
+
+.. autoclass:: SymbolEngine
+    :members:
+
+
+:class:`VirtualSymbolHandler`
+'''''''''''''''''''''''''''''
+
+.. autoclass:: VirtualSymbolHandler
+    :show-inheritance:
+    :members:
+    :inherited-members:
+    :special-members: __getitem__
+
+
+:class:`ProcessSymbolHandler`
+'''''''''''''''''''''''''''''
+
+.. autoclass:: ProcessSymbolHandler
+    :show-inheritance:
+    :members:
+    :inherited-members:
+    :special-members: __getitem__
+
+
+:class:`SymbolModule`
+'''''''''''''''''''''
+
+.. autoclass:: SymbolModule
+    :show-inheritance:
+    :members:
+    :inherited-members:
+
+
+:class:`SymbolInfo`
+'''''''''''''''''''
+
+.. autoclass:: SymbolInfo
+    :members:
+
+
+.. autoclass:: SymbolInfoA
+    :members:
+    :special-members: __str__, __int__
