@@ -1,0 +1,8 @@
+/*
+    FILE_VER_GET_... flags are for use by
+    GetFileVersionInfoSizeEx
+    GetFileVersionInfoExW
+*/
+#define FILE_VER_GET_LOCALISED  0x01
+#define FILE_VER_GET_NEUTRAL    0x02
+#define FILE_VER_GET_PREFETCHED 0x04

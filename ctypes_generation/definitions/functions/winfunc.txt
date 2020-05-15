@@ -1008,44 +1008,6 @@ DWORD WINAPI GetProcessImageFileNameW(
   _In_  DWORD  nSize
 );
 
-BOOL WINAPI GetFileVersionInfoA(
-  _In_       LPCSTR lptstrFilename,
-  _Reserved_ DWORD   dwHandle,
-  _In_       DWORD   dwLen,
-  _Out_      LPVOID  lpData
-);
-
-BOOL WINAPI GetFileVersionInfoW(
-  _In_       LPWSTR lptstrFilename,
-  _Reserved_ DWORD   dwHandle,
-  _In_       DWORD   dwLen,
-  _Out_      LPVOID  lpData
-);
-
-DWORD WINAPI GetFileVersionInfoSizeA(
-  _In_      LPCSTR lptstrFilename,
-  _Out_opt_ LPDWORD lpdwHandle
-);
-
-DWORD WINAPI GetFileVersionInfoSizeW(
-  _In_      LPWSTR lptstrFilename,
-  _Out_opt_ LPDWORD lpdwHandle
-);
-
-BOOL WINAPI VerQueryValueA(
-  _In_  LPCVOID pBlock,
-  _In_  LPCSTR lpSubBlock,
-  _Out_ LPVOID  *lplpBuffer,
-  _Out_ PUINT   puLen
-);
-
-BOOL WINAPI VerQueryValueW(
-  _In_  LPCVOID pBlock,
-  _In_  LPWSTR lpSubBlock,
-  _Out_ LPVOID  *lplpBuffer,
-  _Out_ PUINT   puLen
-);
-
 INT WINAPI GetSystemMetrics(
   _In_ INT nIndex
 );
