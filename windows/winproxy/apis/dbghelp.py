@@ -1,5 +1,6 @@
 import ctypes
 import windows.generated_def as gdef
+from windows.pycompat import int_types
 
 from ..apiproxy import ApiProxy, NeededParameter
 from ..error import fail_on_zero
@@ -14,7 +15,7 @@ class DbgHelpProxy(ApiProxy):
 # !! this code loose a ref to obj.
 # Should still work as our calling-caller method keep a ref
 def transform_pyobject_to_pvoid(obj):
-    if obj is None or isinstance(obj, (int, long)):
+    if obj is None or isinstance(obj, int_types):
         return obj
     return ctypes.POINTER(gdef.PVOID)(ctypes.py_object(obj))[0]
 

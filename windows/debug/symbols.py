@@ -296,7 +296,7 @@ class SymbolModule(gdef.IMAGEHLP_MODULE64):
         return LoadedPdbName
 
     def __repr__(self):
-        pdb_basename = self.LoadedPdbName.split("\\")[-1]
+        pdb_basename = self.LoadedPdbName.split(b"\\")[-1]
         return '<{0} name="{1}" type={2} pdb="{3}" addr={4:#x}>'.format(type(self).__name__, self.name, self.type.value.name, pdb_basename, self.addr)
 
 
@@ -483,7 +483,8 @@ class SymbolHandler(object):
             callback = ctypes.WINFUNCTYPE(gdef.BOOL, ctypes.POINTER(SymbolInfo), gdef.ULONG , ctypes.py_object)(callback)
 
         addr = getattr(mod, "addr", mod) # Retrieve mod.addr, else us the value directly
-
+        # Expect A-string
+        mask = windows.pycompat.raw_encode(mask)
         windows.winproxy.SymSearch(self.handle, gdef.DWORD64(addr), 0, tag, mask, 0, callback, res, options)
         for sym in res:
             sym.resolver = self
