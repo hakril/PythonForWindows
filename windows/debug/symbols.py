@@ -41,15 +41,18 @@ except KeyError as e:
 
 class SymbolInfoBase(object):
     """Represent a Symbol.
-    This class in based on the class `SYMBOL_INFO<https://docs.microsoft.com/en-us/windows/win32/api/dbghelp/ns-dbghelp-symbol_info>`_
-    with the handling on displacement embeded into it."""
+    This class in based on the class `SYMBOL_INFO <https://docs.microsoft.com/en-us/windows/win32/api/dbghelp/ns-dbghelp-symbol_info>`_
+    with the handling on displacement embeded into it.
+    """
     # Init on ctypes struct is not always called
     # resolver & displacement should be set manually
     CHAR_TYPE = None
 
     def __init__(self, *args, **kwargs):
         self.resolver = kwargs.get("resolver", None)
-        self.displacement = kwargs.get("displacement", 0)
+        #: POUET POUET
+        self.displacement = kwargs.get("displacement", 0) #: POUET POUET
+
 
     def as_type(self):
         # assert self.Address == 0 ?
@@ -89,6 +92,14 @@ class SymbolInfoBase(object):
         """
         return self.resolver.get_module(self.ModBase)
 
+    @property
+    def tag(self):
+        """The Tag of the module
+
+        :type: :class:`~windows.generated_def.winstructs.SymTagEnum`
+        """
+        return gdef.SymTagEnum.mapper[self.Tag]
+
     def __int__(self):
         """An alias for ``addr``"""
         return self.addr
@@ -101,20 +112,35 @@ class SymbolInfoBase(object):
 
     def __repr__(self):
         if self.displacement:
-            return '<{0} name="{1}" start={2:#x} displacement={3:#x} tag={4}>'.format(type(self).__name__, self.name, self.start, self.displacement, self.tag)
-        return '<{0} name="{1}" start={2:#x} tag={3}>'.format(type(self).__name__, self.name, self.start, self.tag)
+            return '<{0} name="{1}" start={2:#x} displacement={3:#x} tag={4}>'.format(type(self).__name__, self.name, self.start, self.displacement, self.tag.name)
+        return '<{0} name="{1}" start={2:#x} tag={3}>'.format(type(self).__name__, self.name, self.start, self.tag.name)
 
 
 class SymbolInfoA(gdef.SYMBOL_INFO, SymbolInfoBase):
     """Represent a Symbol.
     This class in based on the class `SYMBOL_INFO <https://docs.microsoft.com/en-us/windows/win32/api/dbghelp/ns-dbghelp-symbol_info>`_
-    with the handling on displacement embeded into it."""
+    with the handling on displacement embeded into it.s
+
+    Exemple:
+
+        >>> sh = windows.debug.symbols.VirtualSymbolHandler()
+        >>> mod = sh.load_file(r"c:\windows\system32\kernelbase.dll")
+        >>> sym1 = sh["kernelbase!CreateFileW"]
+        >>> sym2 = sh[int(sym1) + 3]
+        >>> sym2
+        <SymbolInfoA name="CreateFileW" start=0x100f20b0 displacement=0x3 tag=SymTagPublicSymbol>
+        >>> hex(sym2.start)
+        '0x100f20b0L'
+        >>> hex(sym2.addr)
+        '0x100f20b3L'
+        >>> hex(sym2.displacement)
+        '0x3L'
+        >>> str(sym2)
+        'kernelbase!CreateFileW+0x3'
+    """
     CHAR_TYPE = gdef.CHAR
 
 class SymbolInfoW(gdef.SYMBOL_INFOW, SymbolInfoBase):
-    """Represent a Symbol.
-    This class in based on the class `SYMBOL_INFO <https://docs.microsoft.com/en-us/windows/win32/api/dbghelp/ns-dbghelp-symbol_infow>`_
-    with the handling on displacement embeded into it."""
     CHAR_TYPE = gdef.WCHAR
 
 # We use the A Api in our code (for now)
@@ -407,9 +433,9 @@ class SymbolHandler(object):
             >>> mod
             <SymbolModule name="kernelbase" type=SymPdb pdb="wkernelbase.pdb" addr=0x10000000>
             >>> sh.resolve("kernelbase!CreateFileInternal")
-            <SymbolInfoA name="CreateFileInternal" addr=0x100f2120 tag=5>
+            <SymbolInfoA name="CreateFileInternal" addr=0x100f2120 tag=SymTagFunction>
             >>> sh[0x100f2042]
-            <SymbolInfoA name="ReadFile" addr=0x100f1ee0 displacement=0x162 tag=5>
+            <SymbolInfoA name="ReadFile" addr=0x100f1ee0 displacement=0x162 tag=SymTagFunction>
             >>> str(sh[0x100f2042])
             'kernelbase!ReadFile+0x162'
         """
@@ -445,9 +471,9 @@ class SymbolHandler(object):
         >>> sh = windows.debug.symbols.VirtualSymbolHandler()
         >>> mod = sh.load_file(r"c:\windows\system32\kernelbase.dll")
         >>> sh.search("kernelbase!CreateFile*")
-        [<SymbolInfoA name="CreateFileInternal" addr=0x100f2120 tag=5>,
-            <SymbolInfoA name="CreateFileMoniker" addr=0x10117d80 tag=5>,
-            <SymbolInfoA name="CreateFile2" addr=0x1011e690 tag=5>,
+        [<SymbolInfoA name="CreateFileInternal" addr=0x100f2120 tag=SymTagFunction>,
+            <SymbolInfoA name="CreateFileMoniker" addr=0x10117d80 tag=SymTagFunction>,
+            <SymbolInfoA name="CreateFile2" addr=0x1011e690 tag=SymTagFunction>,
             ...]
         """
         res = []
@@ -455,7 +481,10 @@ class SymbolHandler(object):
             callback = self.simple_aggregator
         else:
             callback = ctypes.WINFUNCTYPE(gdef.BOOL, ctypes.POINTER(SymbolInfo), gdef.ULONG , ctypes.py_object)(callback)
-        windows.winproxy.SymSearch(self.handle, gdef.DWORD64(mod), 0, tag, mask, 0, callback, res, options)
+
+        addr = getattr(mod, "addr", mod) # Retrieve mod.addr, else us the value directly
+
+        windows.winproxy.SymSearch(self.handle, gdef.DWORD64(addr), 0, tag, mask, 0, callback, res, options)
         for sym in res:
             sym.resolver = self
             sym.displacement = 0
@@ -490,6 +519,7 @@ class SymbolHandler(object):
         return SymbolType.from_symbol_info(buff[0], resolver=self)
 
 
+# TODO: mets de l'huile pour w4kfu
 class StackWalker(object):
     def __init__(self, resolver, process=None, thread=None, context=None):
         self.resolver = resolver
@@ -607,15 +637,14 @@ class ProcessSymbolHandler(SymbolHandler):
 
         Exemple:
 
-            >>> x = windows.debug.symbols.ProcessSymbolHandler(windows.test.pop_proc_64())
+            >>> sh = windows.debug.symbols.ProcessSymbolHandler(windows.test.pop_proc_64())
             <windows.debug.symbols.ProcessSymbolHandler object at 0x033A2C30>
-            >>> x
+            >>> sh
             <windows.debug.symbols.ProcessSymbolHandler object at 0x033A2C30>
-            >>> x.load("kernelbase.dll")
+            >>> sh.load("kernelbase.dll")
             <SymbolModule name="kernelbase" type=SymDeferred pdb="" addr=0x7ffb5b090000>
-            >>> x["kernelbase!CreateProcessA"]
-            <SymbolInfoA name="CreateProcessA" start=0x7ffb5b2371f0 tag=10>
-
+            >>> sh["kernelbase!CreateProcessA"]
+            <SymbolInfoA name="CreateProcessA" start=0x7ffb5b2371f0 tag=SymTagPublicSymbol>
         """
         mods = [x for x in self.target.peb.modules if x.name == name]
         if not mods:
@@ -635,12 +664,12 @@ class ProcessSymbolHandler(SymbolHandler):
 
         Exemple:
 
-            >>> x = windows.debug.symbols.ProcessSymbolHandler(windows.test.pop_proc_64())
-            >>> x.modules
+            >>> sh = windows.debug.symbols.ProcessSymbolHandler(windows.test.pop_proc_64())
+            >>> sh.modules
             []
-            >>> x.refresh()
+            >>> sh.refresh()
             44
-            >>> x.modules
+            >>> sh.modules
             [<SymbolModule name="notepad" type=SymDeferred pdb="" addr=0x7ff772b80000>,
                 <SymbolModule name="ntdll" type=SymDeferred pdb="" addr=0x7ffb5d860000>,
                 <SymbolModule name="KERNEL32" type=SymDeferred pdb="" addr=0x7ffb5bb90000>,
@@ -683,6 +712,10 @@ class SymbolEngine(object):
     options = property(get_options, set_options)
     """The options of the Symbol engine
     (`see options <https://docs.microsoft.com/en-us/windows/win32/api/dbghelp/nf-dbghelp-symsetoptions#parameters>`_)
+
+    .. note::
+
+        Default options are: ``gdef.SYMOPT_DEFERRED_LOADS + gdef.SYMOPT_UNDNAME``
     """
 
 engine = SymbolEngine()

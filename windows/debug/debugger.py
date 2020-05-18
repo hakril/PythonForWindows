@@ -771,6 +771,7 @@ class Debugger(object):
         self.breakpoints[self.current_process.pid] = {}
         self._memory_save[self.current_process.pid] = {}
         self._module_by_process[self.current_process.pid] = {}
+        self._internal_on_create_process(create_process) # Allow hook for symbol-debugger
         self._update_debugger_state(debug_event)
         self._add_exe_to_module_list(create_process)
         self._setup_pending_breakpoints_new_process(self.current_process)
@@ -835,6 +836,9 @@ class Debugger(object):
         del self._explicit_single_step[self.current_thread.tid]
         del self._breakpoint_to_reput[self.current_thread.tid]
         return retvalue
+
+    def _internal_on_create_process(self, create_process):
+        return None
 
     def _internal_on_load_dll(self, load_dll):
         return None
