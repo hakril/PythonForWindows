@@ -15,7 +15,7 @@ def find_name(root, findname):
     while TODO:
         try:
             for name, obj in TODO.pop().items():
-                if findname in name:
+                if findname in name or findname in obj.type:
                     print("* {0}".format(obj_with_link(obj)))
                 if obj.type == "Directory":
                     TODO.append(obj)
