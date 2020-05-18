@@ -1,0 +1,15 @@
+(cmd) python debug\symbol_debugger.py
+Namespace(dbghelp=None)
+Breakpoint triggered at: ntdll!LdrpInitializeProcess
+<SymbolInfoA name="LdrpInitializeProcess" start=0x77c676c0 tag=SymTagPublicSymbol>
+
+Breakpoint triggered at: KERNELBASE!CreateFileInternal+0x2
+<SymbolInfoA name="CreateFileInternal" start=0x75be2120 displacement=0x2 tag=SymTagFunction>
+
+Breakpoint triggered at: KERNELBASE!CreateFileInternal+0x2
+<SymbolInfoA name="CreateFileInternal" start=0x75be2120 displacement=0x2 tag=SymTagFunction>
+
+Breakpoint triggered at: KERNELBASE!CreateFileInternal+0x2
+<SymbolInfoA name="CreateFileInternal" start=0x75be2120 displacement=0x2 tag=SymTagFunction>
+Quitting
+

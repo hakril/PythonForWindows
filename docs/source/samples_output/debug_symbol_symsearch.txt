@@ -1,0 +1,34 @@
+$ python64  debug\symbols\symsearch.py "CreateFile*" c:\windows\system32\kernelbase.dll
+Namespace(addr=0, dbghelp=None, file='c:\\windows\\system32\\kernelbase.dll', pattern='CreateFile*', tag=0)
+16 symbols found:
+ * <SymbolInfoA name="CreateFileInternal" start=0x180024250 tag=SymTagFunction>
+ * <SymbolInfoA name="CreateFileMappingFromApp" start=0x1800809d0 tag=SymTagFunction>
+ * <SymbolInfoA name="CreateFileMoniker" start=0x180087e40 tag=SymTagFunction>
+ * <SymbolInfoA name="CreateFile2" start=0x180074550 tag=SymTagFunction>
+ * <SymbolInfoA name="CreateFileA" start=0x1800240d0 tag=SymTagFunction>
+ * <SymbolInfoA name="CreateFileMappingNumaW" start=0x18002ca40 tag=SymTagFunction>
+ * <SymbolInfoA name="CreateFileMapping2" start=0x1800fb6d0 tag=SymTagPublicSymbol>
+ * <SymbolInfoA name="CreateFileInternal" start=0x180024250 tag=SymTagPublicSymbol>
+ * <SymbolInfoA name="CreateFileMappingW" start=0x18002cd00 tag=SymTagPublicSymbol>
+ * <SymbolInfoA name="CreateFileDowngrade_Win7" start=0x180082ff0 tag=SymTagPublicSymbol>
+ * <SymbolInfoA name="CreateFileDowngrade_Vista" start=0x18007eba0 tag=SymTagPublicSymbol>
+ * <SymbolInfoA name="CreateFileMappingFromApp" start=0x1800809d0 tag=SymTagPublicSymbol>
+ * <SymbolInfoA name="CreateFile2" start=0x180074550 tag=SymTagPublicSymbol>
+ * <SymbolInfoA name="CreateFileW" start=0x1800241d0 tag=SymTagPublicSymbol>
+ * <SymbolInfoA name="CreateFileA" start=0x1800240d0 tag=SymTagPublicSymbol>
+ * <SymbolInfoA name="CreateFileMappingNumaW" start=0x18002ca40 tag=SymTagPublicSymbol>
+
+
+$ python64 debug\symbols\symsearch.py "NtCreate*" c:\windows\system32\ntdll.dll --addr 0x42000000
+Namespace(addr=1107296256, dbghelp=None, file='c:\\windows\\system32\\ntdll.dll', pattern='NtCreate*', tag=0)
+47 symbols found:
+ * <SymbolInfoA name="NtCreateProcessEx" start=0x4209ca00 tag=SymTagPublicSymbol>
+ * <SymbolInfoA name="NtCreateIRTimer" start=0x4209d530 tag=SymTagPublicSymbol>
+ * <SymbolInfoA name="NtCreateRegistryTransaction" start=0x4209d750 tag=SymTagPublicSymbol>
+ * <SymbolInfoA name="NtCreateTimer" start=0x4209d810 tag=SymTagPublicSymbol>
+ * <SymbolInfoA name="NtCreateKeyedEvent" start=0x4209d5d0 tag=SymTagPublicSymbol>
+ * <SymbolInfoA name="NtCreateFile" start=0x4209cb00 tag=SymTagPublicSymbol>
+ * <SymbolInfoA name="NtCreateSymbolicLinkObject" start=0x4209d7d0 tag=SymTagPublicSymbol>
+ * <SymbolInfoA name="NtCreatePrivateNamespace" start=0x4209d6d0 tag=SymTagPublicSymbol>
+ * <SymbolInfoA name="NtCreateKey" start=0x4209c400 tag=SymTagPublicSymbol>
+ ...
