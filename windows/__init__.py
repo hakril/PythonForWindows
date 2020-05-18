@@ -39,7 +39,6 @@ del CurrentThread
 # Do not move it: risk of circular import
 
 import windows.utils
-import windows.debug
 import windows.wintrust
 import windows.syswow64
 import windows.com

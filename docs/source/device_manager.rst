@@ -63,7 +63,7 @@ ResourceDescriptor
 
 
 Concrete ResourceDescriptor
-''''''''''''''''''''''''''
+'''''''''''''''''''''''''''
 
 ResourceNoType
 ------------------

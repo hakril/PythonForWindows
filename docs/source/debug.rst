@@ -9,7 +9,9 @@
 
 .. note::
 
-    If you are interrested by symbols (PDB) handling, go to subsection :ref:`debug_symbols_module`
+    If you are interrested by symbols (PDB) handling, go to subsection :ref:`debug_symbols_module`.
+
+    You can also look at the symbols-related samples: :ref:`sample_symbols`
 
 :class:`Debugger`
 """""""""""""""""
@@ -31,7 +33,12 @@ This means that those methods see the original ``current_process`` memory access
 :class:`SymbolDebugger`
 """""""""""""""""""""""
 
+.. note::
+
+    See sample :ref:`sample_symbol_debugger`
+
 .. autoclass:: SymbolDebugger
+    :show-inheritance:
     :members:
     :no-inherited-members:
 
@@ -124,7 +131,7 @@ In its current state, this module does not handle types.
 
 .. note::
 
-    See sample <TODO>
+    See samples :ref:`sample_symbols`
 
 
 Configuration
@@ -208,9 +215,15 @@ Helpers
 '''''''''''''''''''
 
 .. autoclass:: SymbolInfo
+    :show-inheritance:
     :members:
-
 
 .. autoclass:: SymbolInfoA
+    :show-inheritance:
     :members:
+    :inherited-members: displacement
     :special-members: __str__, __int__
+
+    .. py:attribute:: displacement
+
+        The displacement between the addresse and the start of the symbol (name)

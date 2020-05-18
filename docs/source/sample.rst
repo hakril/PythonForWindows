@@ -344,6 +344,18 @@ Ouput
 .. literalinclude:: samples_output\test_code.txt
 
 
+.. _sample_symbol_debugger:
+
+:class:`SymbolDebugger`
+'''''''''''''''''''''''
+
+.. literalinclude:: ..\..\samples\debug\symbol_debugger.py
+
+Output
+
+.. literalinclude:: samples_output\debug_symbol_debugger.txt
+
+
 .. _sample_local_debugger:
 
 
@@ -390,6 +402,43 @@ Ouput::
     I AM LOADING <C:\Windows\system32\shell32.dll>
     I AM LOADING <C:\Windows\SYSTEM32\WINMM.dll>
     I AM LOADING <C:\Windows\system32\ole32.dll>
+
+
+.. _sample_symbols:
+
+Symbols
+"""""""
+
+VirtualSymbolHandler
+''''''''''''''''''''
+
+.. literalinclude:: ..\..\samples\debug\symbols\virtsymdemo.py
+
+Output
+
+.. literalinclude:: samples_output\debug_symbol_virtsymdemo.txt
+
+
+ProcessSymbolHandler
+''''''''''''''''''''
+
+.. literalinclude:: ..\..\samples\debug\symbols\processsymdemo.py
+
+Output
+
+.. literalinclude:: samples_output\debug_symbol_processsymdemo.txt
+
+
+
+Symbol search
+'''''''''''''
+
+.. literalinclude:: ..\..\samples\debug\symbols\symsearch.py
+
+Output
+
+.. literalinclude:: samples_output\debug_symbol_symsearch.txt
+
 
 
 .. _wmi_samples:
