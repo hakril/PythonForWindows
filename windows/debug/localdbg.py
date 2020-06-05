@@ -46,7 +46,7 @@ class LocalDebugger(object):
         winproxy.AddVectoredExceptionHandler(0, self.callback_vectored)
         self.setup_hxbp_callback_vectored =  winexception.VectoredException(self.setup_hxbp_callback)
         self.hxbp_info = None
-        self.code = windows.native_exec.create_function("\xcc\xc3", [PVOID])
+        self.code = windows.native_exec.create_function(b"\xcc\xc3", [PVOID])
         self.veh_depth = 0
         self.current_exception = None
         self.exceptions_stack = [None]
@@ -128,7 +128,7 @@ class LocalDebugger(object):
             bp, single_step = self._reput_breakpoint[windows.current_thread.tid]
             self._memory_save[bp._addr] = windows.current_process.read_memory(bp._addr, 1)
             with windows.utils.VirtualProtected(bp._addr, 1, PAGE_EXECUTE_READWRITE):
-                windows.current_process.write_memory(bp._addr, "\xcc")
+                windows.current_process.write_memory(bp._addr, b"\xcc")
             del self._reput_breakpoint[windows.current_thread.tid]
             if single_step:
                 return self.on_exception(exc)
@@ -184,7 +184,7 @@ class LocalDebugger(object):
         self.breakpoints[addr] = bp
         self._memory_save[addr] = windows.current_process.read_memory(addr, 1)
         with windows.utils.VirtualProtected(addr, 1, PAGE_EXECUTE_READWRITE):
-            windows.current_process.write_memory(addr, "\xcc")
+            windows.current_process.write_memory(addr, b"\xcc")
         return
 
     def add_bp_hxbp(self, bp, targets=None):
@@ -204,16 +204,18 @@ class LocalDebugger(object):
     def setup_hxbp_callback(self, exc):
         with self.NewCurrentException(exc):
             exp_code = self.get_exception_code()
+            if exp_code != windef.EXCEPTION_BREAKPOINT:
+                 return windef.EXCEPTION_CONTINUE_SEARCH
             context = self.get_exception_context()
             exp_addr = context.pc
             hxbp_used = self.setup_hxbp_in_context(context, self.data)
-            windows.current_process.write_memory(exp_addr, "\x90")
+            windows.current_process.write_memory(exp_addr, b"\x90")
             # Raising in the VEH is a bad idea..
             # So better give the information to triggerer..
             if hxbp_used is not None:
-                self.get_exception_context().Eax = exp_addr
+                self.get_exception_context().func_result = exp_addr
             else:
-                self.get_exception_context().Eax = 0
+                self.get_exception_context().func_result = 0
             return windef.EXCEPTION_CONTINUE_EXECUTION
 
     def remove_hxbp_callback(self, exc):
@@ -222,7 +224,7 @@ class LocalDebugger(object):
             context = self.get_exception_context()
             exp_addr = context.pc
             hxbp_used = self.remove_hxbp_in_context(context, self.data)
-            windows.current_process.write_memory(exp_addr, "\x90")
+            windows.current_process.write_memory(exp_addr, b"\x90")
             # Raising in the VEH is a bad idea..
             # So better give the information to triggerer..
             if hxbp_used is not None:
@@ -267,7 +269,7 @@ class LocalDebugger(object):
             x = self.code()
             if x is None:
                 raise ValueError("Could not setup HXBP")
-            windows.current_process.write_memory(x, "\xcc")
+            windows.current_process.write_memory(x, b"\xcc")
         return
 
     def setup_hxbp_other_thread(self, addr, thread):
@@ -290,7 +292,7 @@ class LocalDebugger(object):
             x = self.code()
             if x is None:
                 raise ValueError("Could not remove HXBP")
-            windows.current_process.write_memory(x, "\xcc")
+            windows.current_process.write_memory(x, b"\xcc")
         return
 
     def remove_hxbp_other_thread(self, addr, thread):

@@ -4,6 +4,7 @@ import pprint
 sys.path.append(os.path.abspath(__file__ + "\..\.."))
 
 import windows
+import windows.debug
 from windows.generated_def.winstructs import *
 import windows.native_exec.simple_x86 as x86
 
@@ -12,7 +13,7 @@ class SingleSteppingDebugger(windows.debug.LocalDebugger):
     def on_exception(self, exc):
         code = self.get_exception_code()
         context = self.get_exception_context()
-        print("EXCEPTION !!!! Got a {0} at 0x{1:x}".format(code, context.pc))
+        print("EXCEPTION !!!! Got a {0!r} at 0x{1:x}".format(code, context.pc))
         self.SINGLE_STEP_COUNT -= 1
         if self.SINGLE_STEP_COUNT:
             return self.single_step()
@@ -23,7 +24,7 @@ class RewriteBreakpoint(windows.debug.HXBreakpoint):
         context = dbg.get_exception_context()
         print("GOT AN HXBP at 0x{0:x}".format(context.pc))
         # Rewrite the infinite loop with 2 nop
-        windows.current_process.write_memory(self.addr, "\x90\x90")
+        windows.current_process.write_memory(self.addr, b"\x90\x90")
         # Ask for a single stepping
         return dbg.single_step()
 
