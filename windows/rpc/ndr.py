@@ -64,6 +64,11 @@ class NdrUniquePTR(object):
             return None
         return self.subcls.parse(stream)
 
+    def get_alignment(self):
+        # 14.3.2 Alignment of Constructed Types
+        # Pointer alignment is always modulo 4.
+        return 4
+
 class NdrUnpackNone(object):
     @classmethod
     def unpack(cls, stream):
@@ -94,6 +99,9 @@ class NdrFixedArray(object):
     def unpack(self, stream):
         return [self.subcls.unpack(stream) for i in range(self.size)]
 
+    def get_alignment(self):
+        return self.subcls.get_alignment()
+
 
 class NdrSID(object):
     @classmethod
@@ -113,6 +121,11 @@ class NdrSID(object):
         subcount = NdrLong.unpack(stream)
         return stream.read(8 + (subcount * 4))
 
+    @classmethod
+    def get_alignment(self):
+        # Not sur, but it seems to contain an array of long
+        return 4
+
 class NdrVaryingCString(object):
     @classmethod
     def pack(cls, data):
@@ -125,6 +138,11 @@ class NdrVaryingCString(object):
         result = struct.pack("<2I", 0, l)
         result += data
         return dword_pad(result)
+
+    @classmethod
+    def get_alignment(self):
+        # Not sur, but size is on 4 bytes so...
+        return 4
 
 class NdrWString(object):
     @classmethod
@@ -149,6 +167,11 @@ class NdrWString(object):
         s = stream.read(size1 * 2)
         return s.decode("utf-16-le")
 
+    @classmethod
+    def get_alignment(self):
+        # Not sur, but size is on 4 bytes so...
+        return 4
+
 class NdrCString(object):
     @classmethod
     def pack(cls, data):
@@ -161,6 +184,11 @@ class NdrCString(object):
         result = struct.pack("<3I", l, 0, l)
         result += data
         return dword_pad(result)
+
+    @classmethod
+    def get_alignment(self):
+        # Not sur, but size is on 4 bytes so...
+        return 4
 
     # @classmethod
     # def unpack(self, stream):
@@ -180,6 +208,10 @@ class NdrLong(object):
         stream.align(4)
         return stream.partial_unpack("<I")[0]
 
+    @classmethod
+    def get_alignment(self):
+        return 4
+
 class NdrHyper(object):
     @classmethod
     def pack(cls, data):
@@ -190,6 +222,10 @@ class NdrHyper(object):
         stream.align(8)
         return stream.partial_unpack("<Q")[0]
 
+    @classmethod
+    def get_alignment(self):
+        return 8
+
 class NdrShort(object):
     @classmethod
     def pack(cls, data):
@@ -198,6 +234,10 @@ class NdrShort(object):
     @classmethod
     def unpack(self, stream):
         return stream.partial_unpack("<H")[0]
+
+    @classmethod
+    def get_alignment(self):
+        return 2
 
 
 class NdrByte(object):
@@ -208,6 +248,10 @@ class NdrByte(object):
     @classmethod
     def unpack(self, stream):
         return stream.partial_unpack("<B")[0]
+
+    @classmethod
+    def get_alignment(self):
+        return 1
 
 
 class NdrGuid(object):
@@ -251,21 +295,30 @@ class NdrStructure(object):
             raise ValueError("NdrStructure packing number elements mismatch: structure has <{0}> members got <{1}>".format(len(cls.MEMBERS), len(data)))
         conformant_size = []
         res = []
+        res_size = 0
         pointed = []
+        outstream = NdrWriteStream()
         for i, (member, memberdata) in enumerate(zip(cls.MEMBERS, data)):
             if hasattr(member, "pack_in_struct"):
                 x, y = member.pack_in_struct(memberdata, i)
-                res.append(x)
+                outstream.align(member.get_alignment())
+                outstream.write(x)
+                # res.append(x)
+                # res_size += len(x)
                 if y is not None:
                     pointed.append(y)
             elif hasattr(member, "pack_conformant"):
                 size, data = member.pack_conformant(memberdata)
+                outstream.align(member.get_alignment())
+                outstream.write(data)
                 conformant_size.append(size)
-                res.append(data)
+                # res.append(data)
+                # res_size += len(data)
             else:
                 packed_member = member.pack(memberdata)
-                res.append(packed_member)
-        return dword_pad(b"".join(conformant_size)) + dword_pad(b"".join(res)) + dword_pad(b"".join(pointed))
+                outstream.align(member.get_alignment())
+                outstream.write(packed_member)
+        return dword_pad(b"".join(conformant_size)) + outstream.get_data() + dword_pad(b"".join(pointed))
 
     @classmethod
     def unpack(cls, stream):
@@ -305,6 +358,10 @@ class NdrStructure(object):
     def post_unpack(cls, data):
         return data
 
+    @classmethod
+    def get_alignment(self):
+        return max([x.get_alignment() for x in self.MEMBERS])
+
 
 
 class NdrParameters(object):
@@ -320,11 +377,17 @@ class NdrParameters(object):
             print("   * data {0}".format(data))
             print("   * members = {0}".format(cls.MEMBERS))
             raise ValueError("NdrParameters packing number elements mismatch: structure has <{0}> members got <{1}>".format(len(cls.MEMBERS), len(data)))
-        res = []
+
+
+        outstream = NdrWriteStream()
         for (member, memberdata) in zip(cls.MEMBERS, data):
+            alignment = member.get_alignment()
+            outstream.align(alignment)
             packed_member = member.pack(memberdata)
-            res.append(packed_member)
-        return b"".join(dword_pad(elt) for elt in res)
+            outstream.write(packed_member)
+        return outstream.get_data()
+
+
 
     @classmethod
     def unpack(cls, stream):
@@ -333,6 +396,9 @@ class NdrParameters(object):
             unpacked_member = member.unpack(stream)
             res.append(unpacked_member)
         return res
+
+    def get_alignment(self):
+        raise ValueError("NdrParameters should always be top type in NDR description")
 
 
 class NdrConformantArray(object):
@@ -363,6 +429,11 @@ class NdrConformantArray(object):
         res = [cls.MEMBER_TYPE.unpack(stream) for i in range(size)]
         stream.align(4)
         return res
+
+    @classmethod
+    def get_alignment(self):
+        # TODO: test on array of Hyper
+        return max(4, self.MEMBER_TYPE.get_alignment())
 
 
 class NdrConformantVaryingArrays(object):
@@ -406,6 +477,9 @@ class NdrConformantVaryingArrays(object):
     def _post_unpack(cls, result):
         return result
 
+    def get_alignment(self):
+        # TODO: test on array of Hyper
+        return max(4, self.MEMBER_TYPE.get_alignment())
 
 class NdrWcharConformantVaryingArrays(NdrConformantVaryingArrays):
     MEMBER_TYPE = NdrShort
@@ -487,6 +561,27 @@ class NdrStream(object):
         # print("align {0}: 0".format(size))
         return 0
 
+class NdrWriteStream(object):
+    def __init__(self):
+        self.data_parts = []
+        self.data_size = 0
+
+    def get_data(self):
+        data = b"".join(self.data_parts)
+        assert len(data) == self.data_size
+        return data
+
+    def write(self, data):
+        self.data_parts.append(data)
+        self.data_size += len(data)
+        return None
+
+    def align(self, alignement):
+        if self.data_size % alignement == 0:
+            return
+        topadsize = (alignement) - (self.data_size  % alignement)
+        self.write(b"P" * topadsize)
+        return
 
 def make_parameters(types, name=None):
     class NdrCustomParameters(NdrParameters):
