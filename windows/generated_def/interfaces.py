@@ -174,6 +174,15 @@ class IShellItemArray(COMInterface):
 class IStream(COMInterface):
     IID = generate_IID(0x0000000C, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46, name="IStream", strid="0000000C-0000-0000-C000-000000000046")
 
+class IApplicationActivationManager(COMInterface):
+    IID = generate_IID(0x2E941141, 0x7F97, 0x4756, 0xBA, 0x1D, 0x9D, 0xEC, 0xDE, 0x89, 0x4A, 0x3D, name="IApplicationActivationManager", strid="2E941141-7F97-4756-BA1D-9DECDE894A3D")
+
+class IPackageDebugSettings(COMInterface):
+    IID = generate_IID(0xF27C3930, 0x8029, 0x4AD1, 0x94, 0xE3, 0x3D, 0xBA, 0x41, 0x78, 0x10, 0xC1, name="IPackageDebugSettings", strid="F27C3930-8029-4AD1-94E3-3DBA417810C1")
+
+class IPackageExecutionStateChangeNotification(COMInterface):
+    IID = generate_IID(0x1BB12A62, 0x2AD8, 0x432B, 0x8C, 0xCF, 0x0C, 0x2C, 0x52, 0xAF, 0xCD, 0x5B, name="IPackageExecutionStateChangeNotification", strid="1BB12A62-2AD8-432B-8CCF-0C2C52AFCD5B")
+
 class IAction(COMInterface):
     IID = generate_IID(0xBAE54997, 0x48B1, 0x4CBE, 0x99, 0x65, 0xD6, 0xBE, 0x26, 0x3E, 0xBE, 0xA4, name="IAction", strid="BAE54997-48B1-4CBE-9965-D6BE263EBEA4")
 
@@ -245,15 +254,6 @@ class ITrigger(COMInterface):
 
 class ITriggerCollection(COMInterface):
     IID = generate_IID(0x85DF5081, 0x1B24, 0x4F32, 0x87, 0x8A, 0xD9, 0xD1, 0x4D, 0xF4, 0xCB, 0x77, name="ITriggerCollection", strid="85DF5081-1B24-4F32-878A-D9D14DF4CB77")
-
-class IApplicationActivationManager(COMInterface):
-    IID = generate_IID(0x2E941141, 0x7F97, 0x4756, 0xBA, 0x1D, 0x9D, 0xEC, 0xDE, 0x89, 0x4A, 0x3D, name="IApplicationActivationManager", strid="2E941141-7F97-4756-BA1D-9DECDE894A3D")
-
-class IPackageDebugSettings(COMInterface):
-    IID = generate_IID(0xF27C3930, 0x8029, 0x4AD1, 0x94, 0xE3, 0x3D, 0xBA, 0x41, 0x78, 0x10, 0xC1, name="IPackageDebugSettings", strid="F27C3930-8029-4AD1-94E3-3DBA417810C1")
-
-class IPackageExecutionStateChangeNotification(COMInterface):
-    IID = generate_IID(0x1BB12A62, 0x2AD8, 0x432B, 0x8C, 0xCF, 0x0C, 0x2C, 0x52, 0xAF, 0xCD, 0x5B, name="IPackageExecutionStateChangeNotification", strid="1BB12A62-2AD8-432B-8CCF-0C2C52AFCD5B")
 
 class IWebBrowser2(COMInterface):
     IID = generate_IID(0xD30C1661, 0xCDAF, 0x11D0, 0x8A, 0x3E, 0x00, 0xC0, 0x4F, 0xC9, 0xE2, 0x6E, name="IWebBrowser2", strid="D30C1661-CDAF-11D0-8A3E-00C04FC9E26E")
@@ -1405,6 +1405,71 @@ IStream._functions_ = {
         "Clone": ctypes.WINFUNCTYPE(HRESULT, POINTER(IStream))(13, "Clone"),
     }
 
+IApplicationActivationManager._functions_ = {
+        # QueryInterface -> riid:REFIID, ppvObject:**void
+        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        # AddRef -> 
+        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        # Release -> 
+        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        # ActivateApplication -> appUserModelId:LPCWSTR, arguments:LPCWSTR, options:ACTIVATEOPTIONS, processId:*DWORD
+        "ActivateApplication": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LPCWSTR, ACTIVATEOPTIONS, POINTER(DWORD))(3, "ActivateApplication"),
+        # ActivateForFile -> appUserModelId:LPCWSTR, itemArray:*IShellItemArray, verb:LPCWSTR, processId:*DWORD
+        "ActivateForFile": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, IShellItemArray, LPCWSTR, POINTER(DWORD))(4, "ActivateForFile"),
+        # ActivateForProtocol -> appUserModelId:LPCWSTR, itemArray:*IShellItemArray, processId:*DWORD
+        "ActivateForProtocol": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, IShellItemArray, POINTER(DWORD))(5, "ActivateForProtocol"),
+    }
+
+IPackageDebugSettings._functions_ = {
+        # QueryInterface -> riid:REFIID, ppvObject:**void
+        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        # AddRef -> 
+        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        # Release -> 
+        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        # EnableDebugging -> packageFullName:LPCWSTR, debuggerCommandLine:LPCWSTR, environment:PZZWSTR
+        "EnableDebugging": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LPCWSTR, PZZWSTR)(3, "EnableDebugging"),
+        # DisableDebugging -> packageFullName:LPCWSTR
+        "DisableDebugging": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(4, "DisableDebugging"),
+        # Suspend -> packageFullName:LPCWSTR
+        "Suspend": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(5, "Suspend"),
+        # Resume -> packageFullName:LPCWSTR
+        "Resume": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(6, "Resume"),
+        # TerminateAllProcesses -> packageFullName:LPCWSTR
+        "TerminateAllProcesses": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(7, "TerminateAllProcesses"),
+        # SetTargetSessionId -> sessionId:ULONG
+        "SetTargetSessionId": ctypes.WINFUNCTYPE(HRESULT, ULONG)(8, "SetTargetSessionId"),
+        # EnumerateBackgroundTasks -> packageFullName:LPCWSTR, taskCount:*ULONG, taskIds:*LPCGUID, taskNames:**LPCWSTR
+        "EnumerateBackgroundTasks": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, POINTER(ULONG), POINTER(LPCGUID), POINTER(POINTER(LPCWSTR)))(9, "EnumerateBackgroundTasks"),
+        # ActivateBackgroundTask -> taskId:LPCGUID
+        "ActivateBackgroundTask": ctypes.WINFUNCTYPE(HRESULT, LPCGUID)(10, "ActivateBackgroundTask"),
+        # StartServicing -> packageFullName:LPCWSTR
+        "StartServicing": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(11, "StartServicing"),
+        # StopServicing -> packageFullName:LPCWSTR
+        "StopServicing": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(12, "StopServicing"),
+        # StartSessionRedirection -> packageFullName:LPCWSTR, sessionId:ULONG
+        "StartSessionRedirection": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, ULONG)(13, "StartSessionRedirection"),
+        # StopSessionRedirection -> packageFullName:LPCWSTR
+        "StopSessionRedirection": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(14, "StopSessionRedirection"),
+        # GetPackageExecutionState -> packageFullName:LPCWSTR, packageExecutionState:*PACKAGE_EXECUTION_STATE
+        "GetPackageExecutionState": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, POINTER(PACKAGE_EXECUTION_STATE))(15, "GetPackageExecutionState"),
+        # RegisterForPackageStateChanges -> packageFullName:LPCWSTR, pPackageExecutionStateChangeNotification:*IPackageExecutionStateChangeNotification, pdwCookie:*DWORD
+        "RegisterForPackageStateChanges": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, IPackageExecutionStateChangeNotification, POINTER(DWORD))(16, "RegisterForPackageStateChanges"),
+        # UnregisterForPackageStateChanges -> dwCookie:DWORD
+        "UnregisterForPackageStateChanges": ctypes.WINFUNCTYPE(HRESULT, DWORD)(17, "UnregisterForPackageStateChanges"),
+    }
+
+IPackageExecutionStateChangeNotification._functions_ = {
+        # QueryInterface -> riid:REFIID, ppvObject:**void
+        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
+        # AddRef -> 
+        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
+        # Release -> 
+        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
+        # OnStateChanged -> pszPackageFullName:LPCWSTR, pesNewState:PACKAGE_EXECUTION_STATE
+        "OnStateChanged": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, PACKAGE_EXECUTION_STATE)(3, "OnStateChanged"),
+    }
+
 IAction._functions_ = {
         # QueryInterface -> riid:REFIID, ppvObject:**void
         "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
@@ -2305,71 +2370,6 @@ ITriggerCollection._functions_ = {
         "Remove": ctypes.WINFUNCTYPE(HRESULT, VARIANT)(11, "Remove"),
         # Clear -> 
         "Clear": ctypes.WINFUNCTYPE(HRESULT)(12, "Clear"),
-    }
-
-IApplicationActivationManager._functions_ = {
-        # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
-        # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
-        # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
-        # ActivateApplication -> appUserModelId:LPCWSTR, arguments:LPCWSTR, options:ACTIVATEOPTIONS, processId:*DWORD
-        "ActivateApplication": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LPCWSTR, ACTIVATEOPTIONS, POINTER(DWORD))(3, "ActivateApplication"),
-        # ActivateForFile -> appUserModelId:LPCWSTR, itemArray:*IShellItemArray, verb:LPCWSTR, processId:*DWORD
-        "ActivateForFile": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, IShellItemArray, LPCWSTR, POINTER(DWORD))(4, "ActivateForFile"),
-        # ActivateForProtocol -> appUserModelId:LPCWSTR, itemArray:*IShellItemArray, processId:*DWORD
-        "ActivateForProtocol": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, IShellItemArray, POINTER(DWORD))(5, "ActivateForProtocol"),
-    }
-
-IPackageDebugSettings._functions_ = {
-        # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
-        # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
-        # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
-        # EnableDebugging -> packageFullName:LPCWSTR, debuggerCommandLine:LPCWSTR, environment:PZZWSTR
-        "EnableDebugging": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, LPCWSTR, PZZWSTR)(3, "EnableDebugging"),
-        # DisableDebugging -> packageFullName:LPCWSTR
-        "DisableDebugging": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(4, "DisableDebugging"),
-        # Suspend -> packageFullName:LPCWSTR
-        "Suspend": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(5, "Suspend"),
-        # Resume -> packageFullName:LPCWSTR
-        "Resume": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(6, "Resume"),
-        # TerminateAllProcesses -> packageFullName:LPCWSTR
-        "TerminateAllProcesses": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(7, "TerminateAllProcesses"),
-        # SetTargetSessionId -> sessionId:ULONG
-        "SetTargetSessionId": ctypes.WINFUNCTYPE(HRESULT, ULONG)(8, "SetTargetSessionId"),
-        # EnumerateBackgroundTasks -> packageFullName:LPCWSTR, taskCount:*ULONG, taskIds:*LPCGUID, taskNames:**LPCWSTR
-        "EnumerateBackgroundTasks": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, POINTER(ULONG), POINTER(LPCGUID), POINTER(POINTER(LPCWSTR)))(9, "EnumerateBackgroundTasks"),
-        # ActivateBackgroundTask -> taskId:LPCGUID
-        "ActivateBackgroundTask": ctypes.WINFUNCTYPE(HRESULT, LPCGUID)(10, "ActivateBackgroundTask"),
-        # StartServicing -> packageFullName:LPCWSTR
-        "StartServicing": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(11, "StartServicing"),
-        # StopServicing -> packageFullName:LPCWSTR
-        "StopServicing": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(12, "StopServicing"),
-        # StartSessionRedirection -> packageFullName:LPCWSTR, sessionId:ULONG
-        "StartSessionRedirection": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, ULONG)(13, "StartSessionRedirection"),
-        # StopSessionRedirection -> packageFullName:LPCWSTR
-        "StopSessionRedirection": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR)(14, "StopSessionRedirection"),
-        # GetPackageExecutionState -> packageFullName:LPCWSTR, packageExecutionState:*PACKAGE_EXECUTION_STATE
-        "GetPackageExecutionState": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, POINTER(PACKAGE_EXECUTION_STATE))(15, "GetPackageExecutionState"),
-        # RegisterForPackageStateChanges -> packageFullName:LPCWSTR, pPackageExecutionStateChangeNotification:*IPackageExecutionStateChangeNotification, pdwCookie:*DWORD
-        "RegisterForPackageStateChanges": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, IPackageExecutionStateChangeNotification, POINTER(DWORD))(16, "RegisterForPackageStateChanges"),
-        # UnregisterForPackageStateChanges -> dwCookie:DWORD
-        "UnregisterForPackageStateChanges": ctypes.WINFUNCTYPE(HRESULT, DWORD)(17, "UnregisterForPackageStateChanges"),
-    }
-
-IPackageExecutionStateChangeNotification._functions_ = {
-        # QueryInterface -> riid:REFIID, ppvObject:**void
-        "QueryInterface": ctypes.WINFUNCTYPE(HRESULT, REFIID, POINTER(PVOID))(0, "QueryInterface"),
-        # AddRef -> 
-        "AddRef": ctypes.WINFUNCTYPE(ULONG)(1, "AddRef"),
-        # Release -> 
-        "Release": ctypes.WINFUNCTYPE(ULONG)(2, "Release"),
-        # OnStateChanged -> pszPackageFullName:LPCWSTR, pesNewState:PACKAGE_EXECUTION_STATE
-        "OnStateChanged": ctypes.WINFUNCTYPE(HRESULT, LPCWSTR, PACKAGE_EXECUTION_STATE)(3, "OnStateChanged"),
     }
 
 IWebBrowser2._functions_ = {
