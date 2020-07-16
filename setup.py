@@ -3,11 +3,7 @@ import sys
 from setuptools import setup
 
 PKG_NAME = "PythonForWindows"
-VERSION  = "0.5"
-
-if sys.version_info[0] != 2:
-    print("PythonForWindows python3 support is still in beta, feel free to send feedback")
-
+VERSION  = "0.6"
 
 setup(
     name = PKG_NAME,
@@ -28,6 +24,6 @@ setup(
                 'windows.winobject',
                 'windows.winproxy',
                 'windows.winproxy.apis'],
-    classifiers = ['Programming Language :: Python :: 2 :: Only',
+    classifiers = ['Programming Language :: Python :: 3',
                    'Programming Language :: Python :: 2.7']
 )

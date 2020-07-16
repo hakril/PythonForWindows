@@ -2,7 +2,7 @@
 
 [![Join the chat at https://gitter.im/PythonForWindows/general](https://badges.gitter.im/PythonForWindows/general.svg)](https://gitter.im/PythonForWindows/general)
 
-PythonForWindows is a base of code aimed to make interaction with `Windows` (on X86/X64) easier (for both 32 and 64 bits Python).
+PythonForWindows (PFW) is a base of code aimed to make interaction with `Windows` (on X86/X64) easier (for both 32 and 64 bits Python).
 Its goal is to offer abstractions around some of the OS features in a (I hope) pythonic way.
 It also tries to make the barrier between python and native execution thinner in both ways.
 There is no external dependencies but it relies heavily on the `ctypes` module.
